@@ -1,0 +1,70 @@
+# Node dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Dependency directories
+vendor/
+
+# Output directories
+build/
+dist/
+bin/
+
+# Wails build files
+wails.json
+wails.log
+
+# IDE and Editor directories/files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Go related files
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Coverage files
+*.coverprofile
+*.cover.out
+
+# Wails specific files
+frontend/dist/
+frontend/node_modules/
+frontend/yarn.lock
+
+# Ignore build files created by Wails
+frontend/build/
+frontend/.parcel-cache/
+
+# Local environment configuration
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Optional: Ignore binary files (uncomment if applicable)
+# myapp.exe
+# myapp
+
+# Ignore compiled Go files
+*.o
+*.a
+*.out
