@@ -1,12 +1,11 @@
-import './App.css';
-import OnboardingView from './pages/onboarding/OnboardingView';
+import OnboardingView from "./pages/onboarding/OnboardingView";
 
 function App() {
-    return (
-        <div id="App">
-            <OnboardingView/>
-        </div>
-    )
+  return (
+    <>
+      <OnboardingView />
+    </>
+  );
 }
 
-export default App
+export default App;

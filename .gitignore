@@ -48,6 +48,7 @@ Thumbs.db
 frontend/dist/
 frontend/node_modules/
 frontend/yarn.lock
+frontend/package-lock.json
 
 # Ignore build files created by Wails
 frontend/build/
