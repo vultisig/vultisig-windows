@@ -6,6 +6,7 @@ import (
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"github.com/wailsapp/wails/v2/pkg/options/mac"
 
 	"github.com/vultisig/vultisig-win/tss"
 )
@@ -13,15 +14,20 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
+//go:embed build/appicon.png
+var icon []byte
+
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
 	tssIns := tss.NewTssService()
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:  "vultisig",
-		Width:  1024,
-		Height: 768,
+		Title:     "Vultisig",
+		Width:     1024,
+		Height:    768,
+		MinHeight: 768,
+		MinWidth:  1024,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
@@ -30,6 +36,17 @@ func main() {
 		Bind: []interface{}{
 			app,
 			tssIns,
+		},
+		Mac: &mac.Options{
+			Appearance:           mac.DefaultAppearance,
+			WebviewIsTransparent: true,
+			WindowIsTranslucent:  false,
+			DisableZoom:          false,
+			About: &mac.AboutInfo{
+				Title:   "Vultisig",
+				Message: "Vultisig Application",
+				Icon:    icon,
+			},
 		},
 	})
 
