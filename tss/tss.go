@@ -36,3 +36,8 @@ func (t *TssService) StartTssInstance() error {
 	}
 	return nil
 }
+
+// GetDerivedPubKey returns the derived public key
+func (t *TssService) GetDerivedPubKey(hexPubKey, hexChainCode, path string, isEdDSA bool) (string, error) {
+	return mtss.GetDerivedPubKey(hexPubKey, hexChainCode, path, isEdDSA)
+}

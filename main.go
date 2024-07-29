@@ -8,6 +8,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 
+	"github.com/vultisig/vultisig-win/storage"
 	"github.com/vultisig/vultisig-win/tss"
 )
 
@@ -21,8 +22,13 @@ func main() {
 	// Create an instance of the app structure
 	app := NewApp()
 	tssIns := tss.NewTssService()
+	store, err := storage.NewStore()
+	if err != nil {
+		panic(err)
+	}
+
 	// Create application with options
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title:     "Vultisig",
 		Width:     1024,
 		Height:    768,
@@ -36,7 +42,10 @@ func main() {
 		Bind: []interface{}{
 			app,
 			tssIns,
+			store,
 		},
+		EnumBind: []interface{}{},
+
 		Mac: &mac.Options{
 			Appearance:           mac.DefaultAppearance,
 			WebviewIsTransparent: true,
