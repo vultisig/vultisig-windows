@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS vaults (
     reshare_prefix TEXT NOT NULL DEFAULT '',
     signers TEXT NOT NULL,
     is_backedup INTEGER NOT NULL DEFAULT 0,
-    order INTEGER NOT NULL DEFAULT 0,
+    listorder INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
