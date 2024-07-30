@@ -1,0 +1,3 @@
+[submodule "frontend/commondata"]
+	path = frontend/commondata
+	url = https://github.com/vultisig/commondata
