@@ -1,5 +1,5 @@
-import "./OnboardingView.css"
-import logo from "../../assets/images/logoWithTitle.svg"
+import "./OnboardingView.css";
+import logo from "../../assets/images/logoWithTitle.svg";
 
 function OnboardingView(){
     return (

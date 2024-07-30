@@ -2,7 +2,7 @@ import './App.css';
 import OnboardingView from './pages/onboarding/OnboardingView';
 import {KeygenMessage} from './gen/vultisig/keygen/v1/keygen_message_pb';
 function App() {
-    let keygenMessage = new KeygenMessage({
+    const keygenMessage = new KeygenMessage({
         sessionId: "sessionId",
         }
     );
