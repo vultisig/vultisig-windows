@@ -27,6 +27,10 @@ func main() {
 		panic(err)
 	}
 
+	// migrate db , ensure db is in correct state
+	if err := store.Migrate(); err != nil {
+		panic(err)
+	}
 	// Create application with options
 	err = wails.Run(&options.App{
 		Title:     "Vultisig",

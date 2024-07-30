@@ -1,6 +1,7 @@
 export namespace storage {
 	
 	export class Coin {
+	    id: string;
 	    chain: string;
 	    address: string;
 	    hex_public_key: string;
@@ -18,6 +19,7 @@ export namespace storage {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
 	        this.chain = source["chain"];
 	        this.address = source["address"];
 	        this.hex_public_key = source["hex_public_key"];
@@ -45,6 +47,7 @@ export namespace storage {
 	    }
 	}
 	export class Vault {
+	    id: string;
 	    name: string;
 	    public_key_ecdsa: string;
 	    public_key_eddsa: string;
@@ -65,6 +68,7 @@ export namespace storage {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
 	        this.name = source["name"];
 	        this.public_key_ecdsa = source["public_key_ecdsa"];
 	        this.public_key_eddsa = source["public_key_eddsa"];
