@@ -3,6 +3,11 @@ module github.com/vultisig/vultisig-win
 go 1.21.1
 
 require (
+	github.com/ethereum/go-ethereum v1.13.15
+	github.com/golang-migrate/migrate/v4 v4.17.1
+	github.com/google/uuid v1.4.0
+	github.com/mattn/go-sqlite3 v1.14.22
+	github.com/rs/zerolog v1.32.0
 	github.com/vultisig/mobile-tss-lib v0.0.0-20240720084109-0abbb4fb701b
 	github.com/wailsapp/wails/v2 v2.9.1
 )
@@ -17,12 +22,12 @@ require (
 	github.com/btcsuite/btcutil v1.0.3-0.20201208143702-a53e38424cce // indirect
 	github.com/decred/dcrd/dcrec/edwards/v2 v2.0.3 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.2.0 // indirect
-	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/gogo/protobuf v1.3.3 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/holiman/uint256 v1.2.4 // indirect
 	github.com/ipfs/go-log v1.0.5 // indirect
 	github.com/ipfs/go-log/v2 v2.1.3 // indirect
 	github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e // indirect
@@ -53,7 +58,7 @@ require (
 	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/text v0.15.0 // indirect
-	google.golang.org/protobuf v1.32.0 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
 )
 
 replace (
@@ -62,5 +67,3 @@ replace (
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 	github.com/gogo/protobuf/proto => github.com/gogo/protobuf/proto v1.3.2
 )
-
-// replace github.com/wailsapp/wails/v2 v2.9.1 => /Users/johnnyluo/go/pkg/mod

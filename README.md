@@ -1,11 +1,9 @@
 # README
 
-## About
+This is Vultisig windows application
 
-This is the official Wails React-TS template.
-
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+## Install wails
+This project is using a tool call wails, please refer to https://wails.io/docs/gettingstarted/installation/ to install wails
 
 ## Live Development
 
@@ -17,3 +15,13 @@ to this in your browser, and you can call your Go code from devtools.
 ## Building
 
 To build a redistributable, production mode package, use `wails build`.
+
+## Generate protobuf files for type script
+The keysign / keygen related messages are defined in https://github.com/vultisig/commondata , it is shared between IOS/Android/Windows , and also other projects
+If you need to make an update to the proto file, make sure you raise a PR in https://github.com/vultisig/commondata
+
+To generate the proto files for typescript, run the following command in the frontend directory
+```bash
+cd frontend
+npm buf generate commondata/proto
+```
