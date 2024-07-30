@@ -11,6 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@bufbuild/buf": "^1.35.1",
+    "@bufbuild/protobuf": "^1.10.0",
+    "@bufbuild/protoc-gen-es": "^1.10.0",
     "@trustwallet/wallet-core": "^4.1.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "react": "^18.2.0",
