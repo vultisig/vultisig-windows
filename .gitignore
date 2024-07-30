@@ -12,7 +12,6 @@ dist/
 bin/
 
 # Wails build files
-wails.json
 wails.log
 
 # IDE and Editor directories/files
@@ -68,3 +67,5 @@ frontend/.parcel-cache/
 *.o
 *.a
 *.out
+vultisig.db
+vultisig-win

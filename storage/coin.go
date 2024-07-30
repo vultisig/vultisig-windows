@@ -5,6 +5,7 @@ import (
 )
 
 type Coin struct {
+	ID              string         `json:"id"`
 	Chain           string         `json:"chain"`
 	Address         string         `json:"address"`
 	HexPublicKey    string         `json:"hex_public_key"`
