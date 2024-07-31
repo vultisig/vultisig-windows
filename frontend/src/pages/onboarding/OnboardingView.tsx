@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const OnboardingView: React.FC = () => {
+  const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState(0);
 
   const nextScreen = () => {
@@ -175,13 +177,13 @@ const OnboardingView: React.FC = () => {
             className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[180px] font-bold"
             onClick={nextScreen}
           >
-            Next
+            {t("Next")}
           </button>
           <button
             className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[180px] font-bold"
             onClick={skipScreen}
           >
-            Skip
+            {t("Skip")}
           </button>
         </div>
       )}
