@@ -1,0 +1,12 @@
+{
+  "secure_crypto_vault": "CÁMARA ACORAZADA CRIPTO SEGURA",
+  "vultisig": "Vultisig",
+  "vultisig_description": "Vultisig es una cámara acorazada cripto segura, compatible con todas las principales blockchains y más de 10,000 tokens. Vultisig es totalmente autocustodial.",
+  "no_tracking": "Vultisig no rastrea tus actividades ni requiere ningún registro. Vultisig es completamente de código abierto, lo que garantiza transparencia y confianza.",
+  "multi_device": "Vultisig es una aplicación nativa para múltiples dispositivos. Requiere al menos dos dispositivos para crear una cámara acorazada segura. Un dispositivo iniciador y un dispositivo emparejador.",
+  "no_seed_phrases": "Vultisig es una billetera sin frases de recuperación. En su lugar, utiliza acciones de cámara acorazada fáciles de gestionar. Cada dispositivo tiene su propia acción de cámara acorazada que necesita una copia de seguridad separada.",
+  "create_new_vault": "Crear una Nueva Cámara Acorazada",
+  "import_existing_vault": "Importar una Cámara Acorazada Existente",
+  "next": "Siguiente",
+  "skip": "Omitir"
+}
