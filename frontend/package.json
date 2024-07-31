@@ -16,12 +16,14 @@
     "@bufbuild/protoc-gen-es": "^1.10.0",
     "@trustwallet/wallet-core": "^4.1.0",
     "eslint-config-airbnb-base": "^15.0.0",
+    "i18next": "^23.12.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-i18next": "^15.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
-    "@types/react": "^18.0.17",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
