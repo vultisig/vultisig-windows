@@ -13,12 +13,10 @@ const OnboardingView: React.FC = () => {
 
   useEffect(() => {
     const flag = localStorage.getItem("isFirstTime");
-    if (!flag) {
-      localStorage.setItem("isFirstTime", "no");
-    }
     setTimeout(() => {
       if (!flag) {
         setCurrentScreen(1);
+        localStorage.setItem("isFirstTime", "no");
       } else {
         setCurrentScreen(screens.length - 1);
       }
@@ -154,10 +152,10 @@ const OnboardingView: React.FC = () => {
           <h1 className="text-3xl font-bold mb-8">Vultisig</h1>
           <p className="text-xl">SECURE CRYPTO VAULT</p>
           <div className="flex justify-center mt-24">
-            <button className="bg-cyan-400 text-blue-950 mr-20 rounded-full w-[250px]">
+            <button className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold">
               Create a New Vault
             </button>
-            <button className="text-cyan-400 border border-cyan-400 border-solid py-2 px-4 rounded-full w-[250px]">
+            <button className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[250px] font-bold">
               Import an Existing Vault
             </button>
           </div>
@@ -174,13 +172,13 @@ const OnboardingView: React.FC = () => {
       {currentScreen > 0 && currentScreen < screens.length - 1 && (
         <div className="flex justify-center mt-10">
           <button
-            className="bg-cyan-400 text-blue-950 mr-20 rounded-full w-[180px]"
+            className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[180px] font-bold"
             onClick={nextScreen}
           >
             Next
           </button>
           <button
-            className="text-cyan-400 border border-cyan-400 border-solid py-2 px-4 rounded-full w-[180px]"
+            className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[180px] font-bold"
             onClick={skipScreen}
           >
             Skip

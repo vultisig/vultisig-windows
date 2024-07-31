@@ -8,7 +8,7 @@ function App() {
   const bytes = keygenMessage.toBinary();
   console.log(bytes);
   return (
-    <div className="w-full min-h-screen bg-blue-950">
+    <div className="w-full min-h-screen bg-[#02122B]">
       <OnboardingView />
     </div>
   );
