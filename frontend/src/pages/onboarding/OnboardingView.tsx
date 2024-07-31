@@ -34,8 +34,8 @@ const OnboardingView: React.FC = () => {
             className="mx-auto mb-4 h-[220px]"
             alt="Logo"
           />
-          <h1 className="text-3xl font-bold mb-8">Vultisig</h1>
-          <p className="text-xl">SECURE CRYPTO VAULT</p>
+          <h1 className="text-3xl font-bold mb-8">{t("vultisig")}</h1>
+          <p className="text-xl">{t("secure_crypto_vault")}</p>
         </div>
       ),
     },
@@ -52,11 +52,7 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding1.svg"
             alt="Onboarding1"
           />
-          <h2 className="text-xl w-[500px]">
-            Vultisig is a secure, multi-device crypto vault, compatible with all
-            major blockchains and 10,000+ tokens.
-            <br /> Vultisig is fully self-custodial.
-          </h2>
+          <h2 className="text-xl w-[500px]">{t("vultisig_description")}</h2>
           <img
             className="mx-auto mt-10"
             src="assets/images/pageSlider1.svg"
@@ -78,11 +74,7 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding2.svg"
             alt="Onboarding2"
           />
-          <h2 className="text-xl w-[500px]">
-            Vultisig does not track your activities or require any
-            registrations. Vultisig is fully open-source, ensuring transparency
-            and trust.
-          </h2>
+          <h2 className="text-xl w-[500px]">{t("no_tracking")}</h2>
           <img
             className="mx-auto mt-10"
             src="assets/images/pageSlider2.svg"
@@ -104,11 +96,7 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding3.svg"
             alt="Onboarding3"
           />
-          <h2 className="text-xl w-[500px]">
-            Vultisig is natively a multi-device application. Requiring at least
-            two devices to create a secure vault. One initiating and one pairing
-            device.
-          </h2>
+          <h2 className="text-xl w-[500px]">{t("multi_device")}</h2>
           <img
             className="mx-auto mt-10"
             src="assets/images/pageSlider3.svg"
@@ -130,11 +118,7 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding4.svg"
             alt="Onboarding4"
           />
-          <h2 className="text-xl w-[500px]">
-            Vultisig is a wallet without seed phrases. It uses easy-to-manage
-            vault shares instead. Every device has its unique vault share that
-            needs a separate backup.
-          </h2>
+          <h2 className="text-xl w-[500px]">{t("no_seed_phrases")}</h2>
           <img
             className="mx-auto mt-10"
             src="assets/images/pageSlider4.svg"
@@ -151,14 +135,14 @@ const OnboardingView: React.FC = () => {
             className="mx-auto mb-4 h-[220px]"
             alt="Logo"
           />
-          <h1 className="text-3xl font-bold mb-8">Vultisig</h1>
-          <p className="text-xl">SECURE CRYPTO VAULT</p>
+          <h1 className="text-3xl font-bold mb-8">{t("vultisig")}</h1>
+          <p className="text-xl">{t("secure_crypto_vault")}</p>
           <div className="flex justify-center mt-24">
             <button className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold">
-              Create a New Vault
+              {t("create_new_vault")}
             </button>
             <button className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[250px] font-bold">
-              Import an Existing Vault
+              {t("import_existing_vault")}
             </button>
           </div>
         </div>
@@ -177,13 +161,13 @@ const OnboardingView: React.FC = () => {
             className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[180px] font-bold"
             onClick={nextScreen}
           >
-            {t("Next")}
+            {t("next")}
           </button>
           <button
             className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[180px] font-bold"
             onClick={skipScreen}
           >
-            {t("Skip")}
+            {t("skip")}
           </button>
         </div>
       )}
