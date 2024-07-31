@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const OnboardingView: React.FC = () => {
+  const navigate = useNavigate();
   const [currentScreen, setCurrentScreen] = useState(0);
 
   const nextScreen = () => {
@@ -155,7 +157,12 @@ const OnboardingView: React.FC = () => {
             <button className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold">
               Create a New Vault
             </button>
-            <button className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[250px] font-bold">
+            <button
+              className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[250px] font-bold"
+              onClick={() => {
+                navigate("/vault/import");
+              }}
+            >
               Import an Existing Vault
             </button>
           </div>

@@ -15,9 +15,11 @@
     "@bufbuild/protobuf": "^1.10.0",
     "@bufbuild/protoc-gen-es": "^1.10.0",
     "@trustwallet/wallet-core": "^4.1.0",
+    "@types/react-router-dom": "^5.3.3",
     "eslint-config-airbnb-base": "^15.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.25.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
