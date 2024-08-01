@@ -54,7 +54,9 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding1.svg"
             alt="Onboarding1"
           />
-          <h2 className="text-xl w-[500px]">{t("vultisig_description")}</h2>
+          <h2 className="text-xl w-[500px]">
+            {t("onboarding_view1_description")}
+          </h2>
           <img
             className="mx-auto mt-10"
             src="assets/images/pageSlider1.svg"
@@ -76,7 +78,9 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding2.svg"
             alt="Onboarding2"
           />
-          <h2 className="text-xl w-[500px]">{t("no_tracking")}</h2>
+          <h2 className="text-xl w-[500px]">
+            {t("onboarding_view2_description")}
+          </h2>
           <img
             className="mx-auto mt-10"
             src="assets/images/pageSlider2.svg"
@@ -98,7 +102,9 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding3.svg"
             alt="Onboarding3"
           />
-          <h2 className="text-xl w-[500px]">{t("multi_device")}</h2>
+          <h2 className="text-xl w-[500px]">
+            {t("onboarding_view3_description")}
+          </h2>
           <img
             className="mx-auto mt-10"
             src="assets/images/pageSlider3.svg"
@@ -120,7 +126,9 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding4.svg"
             alt="Onboarding4"
           />
-          <h2 className="text-xl w-[500px]">{t("no_seed_phrases")}</h2>
+          <h2 className="text-xl w-[500px]">
+            {t("onboarding_view4_description")}
+          </h2>
           <img
             className="mx-auto mt-10"
             src="assets/images/pageSlider4.svg"

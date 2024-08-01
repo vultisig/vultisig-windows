@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface DialogProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
   onClose,
   onOk,
 }) => {
+  const { t } = useTranslation();
   const [passwd, setPasswd] = React.useState("");
 
   if (!isOpen) return null;
@@ -47,13 +49,13 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
                 onClick={onClose}
                 className="px-4 py-2 bg-gray-500 rounded-lg w-1/2 mr-4"
               >
-                Cancel
+                {t("cancel")}
               </button>
               <button
                 onClick={handleOk}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg w-1/2"
               >
-                OK
+                {t("ok")}
               </button>
             </div>
           </div>
@@ -65,7 +67,7 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
               onClick={onClose}
               className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg w-full"
             >
-              OK
+              {t("ok")}
             </button>
           </div>
         )}

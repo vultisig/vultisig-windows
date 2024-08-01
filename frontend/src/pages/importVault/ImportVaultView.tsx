@@ -1,7 +1,9 @@
 import React, { useRef, useState } from "react";
 import ImportVaultDialog from "../../components/dialog/ImportVaultDialog";
+import { useTranslation } from "react-i18next";
 
 const ImportVaultView: React.FC = () => {
+  const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileContent, setFileContent] = useState("");
@@ -31,13 +33,11 @@ const ImportVaultView: React.FC = () => {
           const isVerified = true;
           if (isVerified) {
             setFileContent(data.toString());
-            setDialogTitle("Enter Password");
+            setDialogTitle(t("enter_password"));
             setDialogContent("");
           } else {
-            setDialogTitle("Invalid File Format");
-            setDialogContent(
-              "Please make sure that you selected the correct backup file with .bak extension."
-            );
+            setDialogTitle(t("invalid_file_format"));
+            setDialogContent(t("invalid_file_format_message"));
           }
           setDialogOpen(true);
         }
@@ -66,8 +66,8 @@ const ImportVaultView: React.FC = () => {
       setContinue(true);
     } else {
       setFileContent("");
-      setDialogTitle("Incorrect Password");
-      setDialogContent("Failed to decrypt the backup");
+      setDialogTitle(t("incorrect_password"));
+      setDialogContent(t("backup_decryption_failed"));
       setTimeout(() => {
         setDialogOpen(true);
       }, 0);
@@ -89,9 +89,7 @@ const ImportVaultView: React.FC = () => {
       />
       <div className="text-white pt-[10vh]">
         <div className="text-center px-20">
-          <h6 className="text-lg mb-8">
-            Enter your previously created vault share
-          </h6>
+          <h6 className="text-lg mb-8">{t("enter_previous_vault")}</h6>
           <div
             className="w-full bg-[#33E6BF]/[.14] h-[250px] border-2 border-dashed border-[#33E6BF] rounded-lg font-bold cursor-pointer"
             onClick={handleUpload}
@@ -101,7 +99,7 @@ const ImportVaultView: React.FC = () => {
               className="mx-auto mb-4 mt-20"
               alt="file"
             />
-            Upload backup file
+            {t("upload_backup_file")}
           </div>
           {selectedFile && fileContent && isContinue && (
             <div className="flex justify-between mt-8">
@@ -130,7 +128,7 @@ const ImportVaultView: React.FC = () => {
             disabled={!isContinue}
             onClick={handleContinue}
           >
-            Continue
+            {t("continue")}
           </button>
         </div>
       </div>
