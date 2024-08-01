@@ -7,7 +7,9 @@ yarn-error.log
 vendor/
 
 # Output directories
-build/
+build/bin
+build/darwin
+build/windows
 dist/
 bin/
 
