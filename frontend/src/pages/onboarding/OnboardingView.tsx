@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const OnboardingView: React.FC = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState(0);
 
   const nextScreen = () => {
@@ -32,8 +36,8 @@ const OnboardingView: React.FC = () => {
             className="mx-auto mb-4 h-[220px]"
             alt="Logo"
           />
-          <h1 className="text-3xl font-bold mb-8">Vultisig</h1>
-          <p className="text-xl">SECURE CRYPTO VAULT</p>
+          <h1 className="text-3xl font-bold mb-8">{t("vultisig")}</h1>
+          <p className="text-xl">{t("secure_crypto_vault")}</p>
         </div>
       ),
     },
@@ -51,9 +55,7 @@ const OnboardingView: React.FC = () => {
             alt="Onboarding1"
           />
           <h2 className="text-xl w-[500px]">
-            Vultisig is a secure, multi-device crypto vault, compatible with all
-            major blockchains and 10,000+ tokens.
-            <br /> Vultisig is fully self-custodial.
+            {t("onboarding_view1_description")}
           </h2>
           <img
             className="mx-auto mt-10"
@@ -77,9 +79,7 @@ const OnboardingView: React.FC = () => {
             alt="Onboarding2"
           />
           <h2 className="text-xl w-[500px]">
-            Vultisig does not track your activities or require any
-            registrations. Vultisig is fully open-source, ensuring transparency
-            and trust.
+            {t("onboarding_view2_description")}
           </h2>
           <img
             className="mx-auto mt-10"
@@ -103,9 +103,7 @@ const OnboardingView: React.FC = () => {
             alt="Onboarding3"
           />
           <h2 className="text-xl w-[500px]">
-            Vultisig is natively a multi-device application. Requiring at least
-            two devices to create a secure vault. One initiating and one pairing
-            device.
+            {t("onboarding_view3_description")}
           </h2>
           <img
             className="mx-auto mt-10"
@@ -129,9 +127,7 @@ const OnboardingView: React.FC = () => {
             alt="Onboarding4"
           />
           <h2 className="text-xl w-[500px]">
-            Vultisig is a wallet without seed phrases. It uses easy-to-manage
-            vault shares instead. Every device has its unique vault share that
-            needs a separate backup.
+            {t("onboarding_view4_description")}
           </h2>
           <img
             className="mx-auto mt-10"
@@ -149,14 +145,19 @@ const OnboardingView: React.FC = () => {
             className="mx-auto mb-4 h-[220px]"
             alt="Logo"
           />
-          <h1 className="text-3xl font-bold mb-8">Vultisig</h1>
-          <p className="text-xl">SECURE CRYPTO VAULT</p>
+          <h1 className="text-3xl font-bold mb-8">{t("vultisig")}</h1>
+          <p className="text-xl">{t("secure_crypto_vault")}</p>
           <div className="flex justify-center mt-24">
             <button className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold">
-              Create a New Vault
+              {t("create_new_vault")}
             </button>
-            <button className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[250px] font-bold">
-              Import an Existing Vault
+            <button
+              className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[250px] font-bold"
+              onClick={() => {
+                navigate("/vault/import");
+              }}
+            >
+              {t("import_existing_vault")}
             </button>
           </div>
         </div>
@@ -175,13 +176,13 @@ const OnboardingView: React.FC = () => {
             className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[180px] font-bold"
             onClick={nextScreen}
           >
-            Next
+            {t("next")}
           </button>
           <button
             className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[180px] font-bold"
             onClick={skipScreen}
           >
-            Skip
+            {t("skip")}
           </button>
         </div>
       )}
