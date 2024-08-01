@@ -1,6 +1,15 @@
 import React, { useRef, useState } from "react";
 import ImportVaultDialog from "../../components/dialog/ImportVaultDialog";
 import { useTranslation } from "react-i18next";
+import {
+  decryptVault,
+  isBase64Encoded,
+  stringToUint8Array,
+  uint8ArrayToBase64,
+} from "../../utils/util";
+import { VaultContainer } from "../../gen/vultisig/vault/v1/vault_container_pb";
+import { Vault } from "../../gen/vultisig/vault/v1/vault_pb";
+import { SaveVault } from "../../../wailsjs/go/storage/Store";
 
 const ImportVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -11,6 +20,7 @@ const ImportVaultView: React.FC = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogContent, setDialogContent] = useState("");
+  const [decryptedContent, setDecryptedContent] = useState<Uint8Array | null>();
 
   const handleUpload = () => {
     const fileInput = document.getElementById("file_upload");
@@ -21,29 +31,40 @@ const ImportVaultView: React.FC = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      setSelectedFile(event.target.files[0]);
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const data = reader.result;
-        setFileContent("");
-        setContinue(false);
-        if (data) {
-          // basic verify
-          const isVerified = true;
-          if (isVerified) {
+      if (!event.target.files[0].name.endsWith(".bak")) {
+        setDialogTitle(t("invalid_file_format"));
+        setDialogContent(t("invalid_file_format_message"));
+        setDialogOpen(true);
+      } else {
+        setSelectedFile(event.target.files[0]);
+        const reader = new FileReader();
+        reader.onload = () => {
+          const data = reader.result;
+          setFileContent("");
+          setContinue(false);
+          if (data && isBase64Encoded(data.toString())) {
             setFileContent(data.toString());
-            setDialogTitle(t("enter_password"));
-            setDialogContent("");
-          } else {
-            setDialogTitle(t("invalid_file_format"));
-            setDialogContent(t("invalid_file_format_message"));
+            const decodedData = uint8ArrayToBase64(
+              stringToUint8Array(data.toString())
+            );
+            const vaultContainer = VaultContainer.fromBinary(
+              stringToUint8Array(decodedData)
+            );
+            if (isBase64Encoded(vaultContainer.vault)) {
+              const decodedVault = uint8ArrayToBase64(
+                stringToUint8Array(vaultContainer.vault.toString())
+              );
+              setDecryptedContent(stringToUint8Array(decodedVault));
+              if (vaultContainer.isEncrypted) {
+                setDialogTitle(t("enter_password"));
+                setDialogContent("");
+                setDialogOpen(true);
+              }
+            }
           }
-          setDialogOpen(true);
-        }
-      };
-
-      reader.readAsText(event.target.files[0]);
+        };
+        reader.readAsText(event.target.files[0]);
+      }
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -59,23 +80,48 @@ const ImportVaultView: React.FC = () => {
   const handleCloseDialog = () => setDialogOpen(false);
 
   const handleOk = (passwd: string) => {
-    // verify vault
-    console.log(passwd);
-    const isVerified = false;
-    if (isVerified) {
-      setContinue(true);
-    } else {
-      setFileContent("");
-      setDialogTitle(t("incorrect_password"));
-      setDialogContent(t("backup_decryption_failed"));
-      setTimeout(() => {
-        setDialogOpen(true);
-      }, 0);
+    if (decryptedContent) {
+      decryptVault(passwd, decryptedContent).then((decrptedVault) => {
+        if (decrptedVault) {
+          setContinue(true);
+        }
+      });
+      return;
     }
+    setFileContent("");
+    setDialogTitle(t("incorrect_password"));
+    setDialogContent(t("backup_decryption_failed"));
+    setTimeout(() => {
+      setDialogOpen(true);
+    }, 0);
   };
 
   const handleContinue = () => {
-    // save vault
+    if (decryptedContent) {
+      const vault = Vault.fromBinary(decryptedContent);
+      console.log("vault", vault);
+      SaveVault({
+        id: "",
+        name: vault.name,
+        public_key_ecdsa: vault.publicKeyEcdsa,
+        public_key_eddsa: vault.publicKeyEddsa,
+        signers: vault.signers,
+        created_at: vault.createdAt,
+        hex_chain_code: vault.hexChainCode,
+        keyshares: vault.keyShares.map((share) => ({
+          public_key: share.publicKey,
+          keyshare: share.keyshare,
+        })),
+        local_party_id: vault.localPartyId,
+        reshare_prefix: vault.resharePrefix,
+        order: 0,
+        is_backed_up: true,
+        coins: [],
+        convertValues: () => {},
+      }).then((vaultId: string) => {
+        console.log("vaultId", vaultId);
+      });
+    }
   };
 
   return (
