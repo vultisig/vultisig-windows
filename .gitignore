@@ -8,6 +8,8 @@ vendor/
 
 # Output directories
 build/bin
+build/bin/darwin
+build/bin/windows
 dist/
 bin/
 
