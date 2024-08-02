@@ -63,6 +63,7 @@ func main() {
 			app,
 			tssIns,
 			store,
+			mediator,
 		},
 		EnumBind: []interface{}{},
 

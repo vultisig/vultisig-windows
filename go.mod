@@ -8,6 +8,7 @@ require (
 	github.com/ethereum/go-ethereum v1.13.15
 	github.com/golang-migrate/migrate/v4 v4.17.1
 	github.com/google/uuid v1.4.0
+	github.com/hashicorp/mdns v1.0.5
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/rs/zerolog v1.32.0
 	github.com/vultisig/mobile-tss-lib v0.0.0-20240720084109-0abbb4fb701b
@@ -45,6 +46,7 @@ require (
 	github.com/leaanthony/u v1.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/miekg/dns v1.1.41 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/otiai10/primes v0.0.0-20210501021515-f1b2be525a11 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
