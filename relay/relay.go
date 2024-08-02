@@ -2,6 +2,8 @@ package relay
 
 import (
 	"fmt"
+	"sync"
+	"time"
 
 	m "github.com/hashicorp/mdns"
 	"github.com/vultisig/vultisig-relay/server"
@@ -38,7 +40,9 @@ func (r *Server) StopServer() error {
 }
 
 func (r *Server) AdvertiseMediator(name string) error {
-	mdns, err := m.NewMDNSService(name, "_http._tcp", "", "", MediatorPort, nil, nil)
+	mdns, err := m.NewMDNSService(name, "_http._tcp", "", "", MediatorPort, nil, []string{
+		name,
+	})
 	if err != nil {
 		return err
 	}
@@ -59,4 +63,39 @@ func (r *Server) StopAdvertiseMediator() error {
 		}
 	}
 	return nil
+}
+func (r *Server) DiscoveryService(name string) (string, error) {
+	entriesCh := make(chan *m.ServiceEntry, 4)
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+	var err error
+	var serviceHost string
+	go func() {
+		defer wg.Done()
+		for {
+			select {
+			case <-time.After(2 * time.Second):
+				err = fmt.Errorf("fail to find service, timeout")
+				return
+			case entry := <-entriesCh:
+				if entry.Info == name {
+					serviceHost = fmt.Sprintf("%s:%d", entry.AddrV4, entry.Port)
+					return
+				}
+			}
+		}
+	}()
+
+	param := &m.QueryParam{
+		Service:     "_http._tcp",
+		Timeout:     2 * time.Second,
+		Entries:     entriesCh,
+		DisableIPv6: true,
+	}
+
+	if err := m.Query(param); err != nil {
+		return "", fmt.Errorf("fail to query service,err:%w", err)
+	}
+	wg.Wait()
+	return serviceHost, err
 }
