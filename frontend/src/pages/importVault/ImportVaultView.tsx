@@ -1,12 +1,7 @@
 import React, { useRef, useState } from "react";
 import ImportVaultDialog from "../../components/dialog/ImportVaultDialog";
 import { useTranslation } from "react-i18next";
-import {
-  decryptVault,
-  isBase64Encoded,
-  stringToUint8Array,
-  uint8ArrayToBase64,
-} from "../../utils/util";
+import { base64Decode, decryptVault, isBase64Encoded } from "../../utils/util";
 import { VaultContainer } from "../../gen/vultisig/vault/v1/vault_container_pb";
 import { Vault } from "../../gen/vultisig/vault/v1/vault_pb";
 import { SaveVault } from "../../../wailsjs/go/storage/Store";
@@ -44,17 +39,13 @@ const ImportVaultView: React.FC = () => {
           setContinue(false);
           if (data && isBase64Encoded(data.toString())) {
             setFileContent(data.toString());
-            const decodedData = uint8ArrayToBase64(
-              stringToUint8Array(data.toString())
-            );
-            const vaultContainer = VaultContainer.fromBinary(
-              stringToUint8Array(decodedData)
-            );
+            const decodedData = base64Decode(data.toString());
+            const vaultContainer = VaultContainer.fromBinary(decodedData);
             if (isBase64Encoded(vaultContainer.vault)) {
-              const decodedVault = uint8ArrayToBase64(
-                stringToUint8Array(vaultContainer.vault.toString())
+              const decodedVault = base64Decode(
+                vaultContainer.vault.toString()
               );
-              setDecryptedContent(stringToUint8Array(decodedVault));
+              setDecryptedContent(decodedVault);
               if (vaultContainer.isEncrypted) {
                 setDialogTitle(t("enter_password"));
                 setDialogContent("");
@@ -81,25 +72,23 @@ const ImportVaultView: React.FC = () => {
 
   const handleOk = (passwd: string) => {
     if (decryptedContent) {
-      decryptVault(passwd, decryptedContent).then((decrptedVault) => {
-        if (decrptedVault) {
-          setContinue(true);
-        }
-      });
-      return;
+      const decrptedVault = decryptVault(passwd, decryptedContent);
+      if (decrptedVault) {
+        setDecryptedContent(decrptedVault);
+        setContinue(true);
+      } else {
+        setDialogTitle(t("incorrect_password"));
+        setDialogContent(t("backup_decryption_failed"));
+        setTimeout(() => {
+          setDialogOpen(true);
+        }, 0);
+      }
     }
-    setFileContent("");
-    setDialogTitle(t("incorrect_password"));
-    setDialogContent(t("backup_decryption_failed"));
-    setTimeout(() => {
-      setDialogOpen(true);
-    }, 0);
   };
 
   const handleContinue = () => {
     if (decryptedContent) {
       const vault = Vault.fromBinary(decryptedContent);
-      console.log("vault", vault);
       SaveVault({
         id: "",
         name: vault.name,
@@ -140,12 +129,28 @@ const ImportVaultView: React.FC = () => {
             className="w-full bg-[#33E6BF]/[.14] h-[250px] border-2 border-dashed border-[#33E6BF] rounded-lg font-bold cursor-pointer"
             onClick={handleUpload}
           >
-            <img
-              src="/assets/images/file.svg"
-              className="mx-auto mb-4 mt-20"
-              alt="file"
-            />
-            {t("upload_backup_file")}
+            {isContinue && (
+              <div
+                className="break-all h-[230px] px-4 py-4 overflow-hidden overflow-ellipsis text-base font-normal"
+                style={{
+                  display: "-webkit-box",
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 9,
+                }}
+              >
+                {Buffer.from(decryptedContent!).toString("hex")}
+              </div>
+            )}
+            {!isContinue && (
+              <>
+                <img
+                  src="/assets/images/file.svg"
+                  className="mx-auto mb-4 mt-20"
+                  alt="file"
+                />
+                {t("upload_backup_file")}
+              </>
+            )}
           </div>
           {selectedFile && fileContent && isContinue && (
             <div className="flex justify-between mt-8">

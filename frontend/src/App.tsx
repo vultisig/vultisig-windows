@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { KeygenMessage } from "./gen/vultisig/keygen/v1/keygen_message_pb";
 import OnboardingView from "./pages/onboarding/OnboardingView";

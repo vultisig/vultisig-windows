@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 export const isBase64Encoded = (str: string): boolean => {
   // Regular expression to check if the string is base64
   const base64Regex =
@@ -7,64 +9,40 @@ export const isBase64Encoded = (str: string): boolean => {
   return base64Regex.test(str);
 };
 
-export const stringToUint8Array = (str: string): Uint8Array => {
-  return new Uint8Array(new Uint8Array(new TextEncoder().encode(str)));
-};
-
-export const uint8ArrayToBase64 = (arr: Uint8Array): string => {
-  return btoa(String.fromCharCode(...arr));
-};
-
-export const decryptVault = async (
-  passwd: string,
-  encryptedVault: Uint8Array
-): Promise<Uint8Array | null> => {
-  try {
-    // Derive a key from the password
-    const keyMaterial = await window.crypto.subtle.importKey(
-      "raw",
-      new TextEncoder().encode(passwd),
-      { name: "PBKDF2" },
-      false,
-      ["deriveKey"]
-    );
-
-    const key = await window.crypto.subtle.deriveKey(
-      {
-        name: "PBKDF2",
-        salt: new Uint8Array(16), // Use a salt of your choice or derive from your data
-        iterations: 100000, // Iterations count for PBKDF2
-        hash: "SHA-256",
-      },
-      keyMaterial,
-      { name: "AES-GCM", length: 256 },
-      true,
-      ["decrypt"]
-    );
-
-    // Extract the nonce size
-    const nonceSize = 12; // AES-GCM standard nonce size is 12 bytes
-    if (encryptedVault.length < nonceSize) {
-      throw new Error("Ciphertext too short");
-    }
-
-    // Extract the nonce and ciphertext from the encrypted vault
-    const nonce = encryptedVault.slice(0, nonceSize);
-    const ciphertext = encryptedVault.slice(nonceSize);
-
-    // Decrypt the data
-    const decryptedArrayBuffer = await window.crypto.subtle.decrypt(
-      {
-        name: "AES-GCM",
-        iv: nonce,
-      },
-      key,
-      ciphertext
-    );
-
-    return new Uint8Array(decryptedArrayBuffer);
-  } catch (error) {
-    console.error("Decryption failed:", error);
-    return null;
+export const base64Decode = (input: string): Uint8Array => {
+  const binaryString = window.atob(input);
+  const len = binaryString.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
   }
+  return bytes;
+};
+
+export const decryptVault = (passwd: string, vault: Uint8Array): Uint8Array => {
+  // Hash the password to create a key
+  const key = crypto.createHash("sha256").update(passwd).digest();
+
+  // Create a new AES cipher using the key
+  const decipher = crypto.createDecipheriv(
+    "aes-256-gcm",
+    key,
+    vault.slice(0, 12)
+  );
+
+  // Extract the nonce from the vault
+  // const nonce = vault.slice(0, 12);
+  const ciphertext = vault.slice(12, -16); // Exclude the nonce and the auth tag
+  const authTag = vault.slice(-16); // Last 16 bytes is the auth tag
+
+  // Set the authentication tag
+  decipher.setAuthTag(authTag);
+
+  // Decrypt the vault
+  const decrypted = Buffer.concat([
+    decipher.update(ciphertext),
+    decipher.final(),
+  ]);
+
+  return decrypted;
 };
