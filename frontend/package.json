@@ -20,10 +20,12 @@
     "i18next": "^23.12.2",
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-xhr-backend": "^3.2.2",
+    "lottie-react": "^2.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.25.1",
-    "react-i18next": "^15.0.0"
+    "react-i18next": "^15.0.0",
+    "react-qr-code": "^2.0.15",
+    "react-router-dom": "^6.25.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",

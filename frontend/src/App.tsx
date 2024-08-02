@@ -3,6 +3,8 @@ import { KeygenMessage } from "./gen/vultisig/keygen/v1/keygen_message_pb";
 import OnboardingView from "./pages/onboarding/OnboardingView";
 import ImportVaultView from "./pages/importVault/ImportVaultView";
 import "./i18n/config";
+import KeygenPeerDiscoveryView from "./pages/keygenPeerDiscovery/KeygenPeerDiscoveryView";
+
 
 function App() {
   const keygenMessage = new KeygenMessage({
@@ -16,6 +18,8 @@ function App() {
         <Routes>
           <Route path="/" index element={<OnboardingView />} />
           <Route path="/vault/import" element={<ImportVaultView />} />
+          {/* sample */}
+          <Route path="/keygen/peer-discovery" element={<KeygenPeerDiscoveryView vaultType="2/2" />} />
         </Routes>
       </Router>
     </div>
