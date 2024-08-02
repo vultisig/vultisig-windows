@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import ImportVaultDialog from "../../components/dialog/ImportVaultDialog";
 import { useTranslation } from "react-i18next";
-import { base64Decode, decryptVault, isBase64Encoded } from "../../utils/util";
+import { decryptVault, isBase64Encoded } from "../../utils/util";
 import { VaultContainer } from "../../gen/vultisig/vault/v1/vault_container_pb";
 import { Vault } from "../../gen/vultisig/vault/v1/vault_pb";
 import { SaveVault } from "../../../wailsjs/go/storage/Store";
@@ -15,7 +15,7 @@ const ImportVaultView: React.FC = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogContent, setDialogContent] = useState("");
-  const [decryptedContent, setDecryptedContent] = useState<Uint8Array | null>();
+  const [decryptedContent, setDecryptedContent] = useState<Buffer | null>();
 
   const handleUpload = () => {
     const fileInput = document.getElementById("file_upload");
@@ -39,11 +39,12 @@ const ImportVaultView: React.FC = () => {
           setContinue(false);
           if (data && isBase64Encoded(data.toString())) {
             setFileContent(data.toString());
-            const decodedData = base64Decode(data.toString());
+            const decodedData = Buffer.from(data.toString(), "base64");
             const vaultContainer = VaultContainer.fromBinary(decodedData);
             if (isBase64Encoded(vaultContainer.vault)) {
-              const decodedVault = base64Decode(
-                vaultContainer.vault.toString()
+              const decodedVault = Buffer.from(
+                vaultContainer.vault.toString(),
+                "base64"
               );
               setDecryptedContent(decodedVault);
               if (vaultContainer.isEncrypted) {
@@ -129,7 +130,7 @@ const ImportVaultView: React.FC = () => {
             className="w-full bg-[#33E6BF]/[.14] h-[250px] border-2 border-dashed border-[#33E6BF] rounded-lg font-bold cursor-pointer"
             onClick={handleUpload}
           >
-            {isContinue && (
+            {isContinue && decryptedContent && (
               <div
                 className="break-all h-[230px] px-4 py-4 overflow-hidden overflow-ellipsis text-base font-normal"
                 style={{
@@ -138,7 +139,7 @@ const ImportVaultView: React.FC = () => {
                   WebkitLineClamp: 9,
                 }}
               >
-                {Buffer.from(decryptedContent!).toString("hex")}
+                {decryptedContent.toString("hex")}
               </div>
             )}
             {!isContinue && (

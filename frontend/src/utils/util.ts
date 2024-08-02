@@ -9,17 +9,7 @@ export const isBase64Encoded = (str: string): boolean => {
   return base64Regex.test(str);
 };
 
-export const base64Decode = (input: string): Uint8Array => {
-  const binaryString = window.atob(input);
-  const len = binaryString.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-  return bytes;
-};
-
-export const decryptVault = (passwd: string, vault: Uint8Array): Uint8Array => {
+export const decryptVault = (passwd: string, vault: Buffer): Buffer => {
   // Hash the password to create a key
   const key = crypto.createHash("sha256").update(passwd).digest();
 
