@@ -71,7 +71,7 @@ func (s *Store) SaveVault(vault *Vault) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("could not marshal signers, err: %w", err)
 	}
-	query := `INSERT OR REPLACE INTO vaults (id, name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, list_order, is_backed_up)
+	query := `INSERT OR REPLACE INTO vaults (id, name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, listorder, is_backedup)
 							  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 	_, err = s.db.Exec(query,
 		vault.ID,
@@ -110,7 +110,7 @@ func (s *Store) UpdateVaultName(vaultID, name string) error {
 
 // GetVault gets a vault
 func (s *Store) GetVault(id string) (*Vault, error) {
-	query := `SELECT id, name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, list_order, is_backed_up FROM vaults WHERE id = ?`
+	query := `SELECT id, name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, listorder, is_backedup FROM vaults WHERE id = ?`
 	row := s.db.QueryRow(query, id)
 	var signers string
 	var vault Vault
@@ -181,7 +181,7 @@ func (s *Store) getKeyShares(vaultID string) ([]KeyShare, error) {
 
 // GetVaults gets all vaults
 func (s *Store) GetVaults() ([]*Vault, error) {
-	query := `SELECT id, name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, reshare_prefix, list_order, is_backed_up FROM vaults`
+	query := `SELECT id, name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, reshare_prefix, listorder, is_backedup FROM vaults`
 	rows, err := s.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("could not query vaults, err: %w", err)
