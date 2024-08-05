@@ -4,6 +4,7 @@ import { KeygenMessage } from "./gen/vultisig/keygen/v1/keygen_message_pb";
 import OnboardingView from "./pages/onboarding/OnboardingView";
 import ImportVaultView from "./pages/importVault/ImportVaultView";
 import "./i18n/config";
+import SetupVaultView from "./pages/setupVault/SetupVaultView";
 
 function App() {
   const keygenMessage = new KeygenMessage({
@@ -16,6 +17,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" index element={<OnboardingView />} />
+          <Route path="/vault/setup" element={<SetupVaultView />} />
           <Route path="/vault/import" element={<ImportVaultView />} />
         </Routes>
       </Router>

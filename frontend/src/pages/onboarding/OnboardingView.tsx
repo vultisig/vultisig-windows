@@ -148,7 +148,12 @@ const OnboardingView: React.FC = () => {
           <h1 className="text-3xl font-bold mb-8">{t("vultisig")}</h1>
           <p className="text-xl">{t("secure_crypto_vault")}</p>
           <div className="flex justify-center mt-24">
-            <button className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold">
+            <button
+              className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold"
+              onClick={() => {
+                navigate("/vault/setup");
+              }}
+            >
               {t("create_new_vault")}
             </button>
             <button
