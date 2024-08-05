@@ -21,16 +21,21 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
 
   if (!isOpen) return null;
 
+  const handleClose = () => {
+    setPasswd("");
+    onClose();
+  };
+
   const handleOk = () => {
     onOk(passwd);
-    onClose();
+    handleClose();
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-neutral-800 p-6 rounded-lg shadow-lg w-full w-[350px] text-white border border-gray-700">
         <img
-          src="/assets/images/LogoRadiation.svg"
+          src="/assets/images/logoRadiation.svg"
           alt="Logo"
           className="w-24 mx-auto object-cover mb-4"
         />
@@ -46,7 +51,7 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
             />
             <div className="flex justify-between">
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 className="px-4 py-2 bg-gray-500 rounded-lg w-1/2 mr-4"
               >
                 {t("cancel")}

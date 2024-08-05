@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { KeygenMessage } from "./gen/vultisig/keygen/v1/keygen_message_pb";
 import OnboardingView from "./pages/onboarding/OnboardingView";
@@ -7,11 +8,6 @@ import KeygenPeerDiscoveryView from "./pages/keygenPeerDiscovery/KeygenPeerDisco
 
 
 function App() {
-  const keygenMessage = new KeygenMessage({
-    sessionId: "sessionId",
-  });
-  const bytes = keygenMessage.toBinary();
-  console.log(bytes);
   return (
     <div className="w-full min-h-screen bg-[#02122B]">
       <Router>
