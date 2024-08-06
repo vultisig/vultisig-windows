@@ -32,5 +32,7 @@
   "device": "device",
   "devices_on_same_wifi": "Keep devices on the same Network with Vultisig open",
   "start": "Start",
-  "pair": "Pair"
+  "pair": "Pair",
+  "vault_name": "Vault Name",
+  "main_vault": "Main Vault"
 }

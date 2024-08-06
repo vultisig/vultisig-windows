@@ -13,6 +13,7 @@ const TabbedContent: React.FC = () => {
   const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [vaultName, setVaultName] = useState<string>(t("main_vault"));
 
   const tabs: TabContent[] = [
     {
@@ -40,6 +41,11 @@ const TabbedContent: React.FC = () => {
     },
   ];
 
+  // screens
+  // 0 - vault setup view
+  // 1 - vault name setup
+  // 2 - keygen peer discovery screens
+  // ...
   const screens = [
     {
       content: (
@@ -93,6 +99,37 @@ const TabbedContent: React.FC = () => {
               {t("pair")}
             </button>
           </div>
+        </div>
+      ),
+    },
+    {
+      content: (
+        <div className="text-white flex flex-col items-center justify-center h-screen">
+          <div className="-mt-4">
+            <label htmlFor="input" className="block text-md mb-2">
+              {t("vault_name")}
+            </label>
+            <input
+              id="input"
+              type="text"
+              value={vaultName}
+              onChange={(e) => {
+                setVaultName(e.target.value);
+              }}
+              className="font-bold bg-white/[.10] rounded-lg w-80 py-2 px-3"
+            />
+          </div>
+          <button
+            className={`text-lg rounded-full w-80 font-bold py-2 mt-16 ${
+              vaultName !== ""
+                ? "text-[#061B3A] bg-[#33E6BF]"
+                : "text-[#BDBDBD] bg-white/[.10]"
+            }`}
+            disabled={vaultName === ""}
+            onClick={() => {}}
+          >
+            {t("continue")}
+          </button>
         </div>
       ),
     },
