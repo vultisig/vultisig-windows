@@ -34,5 +34,7 @@
   "start": "Start",
   "pair": "Pair",
   "vault_name": "Vault Name",
-  "main_vault": "Main Vault"
+  "main_vault": "Main Vault",
+  "setup": "Setup",
+  "import": "Import"
 }

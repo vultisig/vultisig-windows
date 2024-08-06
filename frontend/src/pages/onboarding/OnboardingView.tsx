@@ -16,15 +16,21 @@ const OnboardingView: React.FC = () => {
   };
 
   useEffect(() => {
-    const flag = localStorage.getItem("isFirstTime");
-    setTimeout(() => {
-      if (!flag) {
-        setCurrentScreen(1);
-        localStorage.setItem("isFirstTime", "no");
-      } else {
-        setCurrentScreen(screens.length - 1);
-      }
-    }, 1000);
+    const visitedBefore = sessionStorage.getItem("homePageVisited");
+    if (!visitedBefore) {
+      setTimeout(() => {
+        sessionStorage.setItem("homePageVisited", "true");
+        const flag = localStorage.getItem("isFirstTime");
+        if (!flag) {
+          setCurrentScreen(1);
+          localStorage.setItem("isFirstTime", "no");
+        } else {
+          skipScreen();
+        }
+      }, 1000);
+    } else {
+      skipScreen();
+    }
   }, []);
 
   const screens = [
