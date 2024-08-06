@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import NavBar from "../../components/navbar/NavBar";
 
 interface TabContent {
   title: string;
@@ -49,7 +50,7 @@ const TabbedContent: React.FC = () => {
   const screens = [
     {
       content: (
-        <div className="text-white mx-auto max-w-4xl pt-16">
+        <div className="text-white mx-auto max-w-4xl pt-8">
           <div className="flex justify-center space-x-4">
             {tabs.map((tab, index) => (
               <button
@@ -104,8 +105,8 @@ const TabbedContent: React.FC = () => {
     },
     {
       content: (
-        <div className="text-white flex flex-col items-center justify-center h-screen">
-          <div className="-mt-4">
+        <div className="text-white flex flex-col items-center justify-center mt-60">
+          <div>
             <label htmlFor="input" className="block text-md mb-2">
               {t("vault_name")}
             </label>
@@ -135,7 +136,15 @@ const TabbedContent: React.FC = () => {
     },
   ];
 
-  return <>{screens[currentScreen].content}</>;
+  return (
+    <>
+      <NavBar
+        title={t("setup")}
+        questionLink="https://docs.vultisig.com/vultisig-user-actions/creating-a-vault"
+      />
+      {screens[currentScreen].content}
+    </>
+  );
 };
 
 export default TabbedContent;
