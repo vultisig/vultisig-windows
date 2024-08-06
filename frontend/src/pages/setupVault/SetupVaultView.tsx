@@ -11,9 +11,23 @@ interface TabContent {
 
 const TabbedContent: React.FC = () => {
   const { t } = useTranslation();
-  const [currentScreen, setCurrentScreen] = useState<number>(0);
+  const [currentScreen, setCurrentScreen] = useState<number>(3);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [vaultName, setVaultName] = useState<string>(t("main_vault"));
+  const [devices, setDevices] = useState<string[]>([
+    "hello",
+    "macbook 123123",
+    "test",
+  ]);
+  const [localPartyId, setLocalPartyId] = useState<string>("");
+
+  const nextScreen = () => {
+    setCurrentScreen((prev) => (prev < screens.length - 1 ? prev + 1 : prev));
+  };
+
+  // const prevScreen = () => {
+  //   setCurrentScreen((prev) => (prev > 0 ? prev - 1 : prev));
+  // };
 
   const tabs: TabContent[] = [
     {
@@ -45,6 +59,7 @@ const TabbedContent: React.FC = () => {
   // 0 - vault setup view
   // 1 - vault name setup
   // 2 - keygen peer discovery screens
+  // 3 - keygen verify
   // ...
   const screens = [
     {
@@ -87,7 +102,7 @@ const TabbedContent: React.FC = () => {
             <button
               className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold"
               onClick={() => {
-                setCurrentScreen(1);
+                nextScreen();
               }}
             >
               {t("start")}
@@ -126,7 +141,64 @@ const TabbedContent: React.FC = () => {
                 : "text-[#BDBDBD] bg-white/[.10]"
             }`}
             disabled={vaultName === ""}
-            onClick={() => {}}
+            onClick={() => {
+              nextScreen();
+            }}
+          >
+            {t("continue")}
+          </button>
+        </div>
+      ),
+    },
+    {
+      content: <></>, // keygen peer discovery view
+    },
+    {
+      content: (
+        <div className="text-white flex flex-col items-center justify-center">
+          <div className="mt-4">
+            {Math.ceil((2 * devices.length) / 3)}
+            {" of "}
+            {devices.length}
+          </div>
+          <div>
+            <p>{t("with_these_devices")}</p>
+            {devices.map((device, index) => {
+              let pairDeviceCount = Math.ceil((2 * devices.length) / 3);
+              pairDeviceCount -= device === localPartyId ? 0 : 1;
+              const deviceState =
+                device === localPartyId
+                  ? t("this_device")
+                  : pairDeviceCount > 0
+                  ? t("pair_device")
+                  : t("backup_device");
+              return (
+                <>
+                  {index}
+                  {". "}
+                  {device}
+                  {" ("}
+                  {deviceState}
+                  {")"}
+                </>
+              );
+            })}
+          </div>
+          <div className="mt-8">
+            {t("pair_device_disclaimers_first")}{" "}
+            {Math.ceil((2 * devices.length) / 3)}{" "}
+            {t("pair_device_disclaimers_second")}
+          </div>
+          <div className="mt-8">
+            {devices.length > 2
+              ? t("backup_not_needed_disclaimer")
+              : t("no_backup_device_disclaimer")}
+          </div>
+          <button
+            className="text-lg rounded-full w-80 font-bold py-2 mt-4 text-[#061B3A] bg-[#33E6BF]"
+            onClick={() => {
+              nextScreen();
+            }}
           >
             {t("continue")}
           </button>
