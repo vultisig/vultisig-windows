@@ -5,12 +5,15 @@ import OnboardingView from "./pages/onboarding/OnboardingView";
 import ImportVaultView from "./pages/importVault/ImportVaultView";
 import "./i18n/config";
 import KeygenPeerDiscoveryView from "./pages/keygenPeerDiscovery/KeygenPeerDiscoveryView";
+import SetupVaultView from "./pages/setupVault/SetupVaultView";
+
 function App() {
   return (
     <div className="w-full min-h-screen bg-[#02122B]">
       <Router>
         <Routes>
           <Route path="/" index element={<OnboardingView />} />
+          <Route path="/vault/setup" element={<SetupVaultView />} />
           <Route path="/vault/import" element={<ImportVaultView />} />
           {/* sample */}
           <Route

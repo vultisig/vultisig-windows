@@ -16,15 +16,21 @@ const OnboardingView: React.FC = () => {
   };
 
   useEffect(() => {
-    const flag = localStorage.getItem("isFirstTime");
-    setTimeout(() => {
-      if (!flag) {
-        setCurrentScreen(1);
-        localStorage.setItem("isFirstTime", "no");
-      } else {
-        setCurrentScreen(screens.length - 1);
-      }
-    }, 1000);
+    const visitedBefore = sessionStorage.getItem("homePageVisited");
+    if (!visitedBefore) {
+      setTimeout(() => {
+        sessionStorage.setItem("homePageVisited", "true");
+        const flag = localStorage.getItem("isFirstTime");
+        if (!flag) {
+          setCurrentScreen(1);
+          localStorage.setItem("isFirstTime", "no");
+        } else {
+          skipScreen();
+        }
+      }, 1000);
+    } else {
+      skipScreen();
+    }
   }, []);
 
   const screens = [
@@ -148,11 +154,12 @@ const OnboardingView: React.FC = () => {
           <h1 className="text-3xl font-bold mb-8">{t("vultisig")}</h1>
           <p className="text-xl">{t("secure_crypto_vault")}</p>
           <div className="flex justify-center mt-24">
-            {/* sample onclick*/}
-            <button className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold"
+            <button
+              className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold"
               onClick={() => {
-                navigate("/keygen/peer-discovery");
-              }}>
+                navigate("/vault/setup");
+              }}
+            >
               {t("create_new_vault")}
             </button>
             <button
