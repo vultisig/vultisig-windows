@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import crypto from "crypto";
 import { KeygenMessage } from "../gen/vultisig/keygen/v1/keygen_message_pb";
 import SevenZip from "7z-wasm";
