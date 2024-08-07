@@ -1,10 +1,10 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-import Backend from "i18next-xhr-backend";
-import LanguageDetector from "i18next-browser-languagedetector";
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import Backend from 'i18next-xhr-backend';
+import LanguageDetector from 'i18next-browser-languagedetector';
 
-import enTranslation from "./locales/en/translation.json";
-import esTranslation from "./locales/es/translation.json";
+import enTranslation from './locales/en/translation.json';
+import esTranslation from './locales/es/translation.json';
 
 // Initialization
 i18n
@@ -20,7 +20,7 @@ i18n
         translation: esTranslation,
       },
     },
-    fallbackLng: "en",
+    fallbackLng: 'en',
     debug: false,
     interpolation: {
       escapeValue: false,

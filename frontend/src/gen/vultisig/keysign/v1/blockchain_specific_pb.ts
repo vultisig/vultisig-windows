@@ -3,8 +3,15 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf';
+import { Message, proto3, protoInt64 } from '@bufbuild/protobuf';
 
 /**
  * @generated from enum vultisig.keysign.v1.TransactionType
@@ -26,11 +33,15 @@ export enum TransactionType {
   PROPOSAL = 2,
 }
 // Retrieve enum metadata with: proto3.getEnumType(TransactionType)
-proto3.util.setEnumType(TransactionType, "vultisig.keysign.v1.TransactionType", [
-  { no: 0, name: "TRANSACTION_TYPE_UNSPECIFIED" },
-  { no: 1, name: "TRANSACTION_TYPE_VOTE" },
-  { no: 2, name: "TRANSACTION_TYPE_PROPOSAL" },
-]);
+proto3.util.setEnumType(
+  TransactionType,
+  'vultisig.keysign.v1.TransactionType',
+  [
+    { no: 0, name: 'TRANSACTION_TYPE_UNSPECIFIED' },
+    { no: 1, name: 'TRANSACTION_TYPE_VOTE' },
+    { no: 2, name: 'TRANSACTION_TYPE_PROPOSAL' },
+  ]
+);
 
 /**
  * @generated from message vultisig.keysign.v1.UTXOSpecific
@@ -39,7 +50,7 @@ export class UTXOSpecific extends Message<UTXOSpecific> {
   /**
    * @generated from field: string byte_fee = 1;
    */
-  byteFee = "";
+  byteFee = '';
 
   /**
    * @generated from field: bool send_max_amount = 2;
@@ -52,25 +63,42 @@ export class UTXOSpecific extends Message<UTXOSpecific> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.UTXOSpecific";
+  static readonly typeName = 'vultisig.keysign.v1.UTXOSpecific';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "byte_fee", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "send_max_amount", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 1, name: 'byte_fee', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 2,
+      name: 'send_max_amount',
+      kind: 'scalar',
+      T: 8 /* ScalarType.BOOL */,
+    },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UTXOSpecific {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): UTXOSpecific {
     return new UTXOSpecific().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UTXOSpecific {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): UTXOSpecific {
     return new UTXOSpecific().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UTXOSpecific {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): UTXOSpecific {
     return new UTXOSpecific().fromJsonString(jsonString, options);
   }
 
-  static equals(a: UTXOSpecific | PlainMessage<UTXOSpecific> | undefined, b: UTXOSpecific | PlainMessage<UTXOSpecific> | undefined): boolean {
+  static equals(
+    a: UTXOSpecific | PlainMessage<UTXOSpecific> | undefined,
+    b: UTXOSpecific | PlainMessage<UTXOSpecific> | undefined
+  ): boolean {
     return proto3.util.equals(UTXOSpecific, a, b);
   }
 }
@@ -82,12 +110,12 @@ export class EthereumSpecific extends Message<EthereumSpecific> {
   /**
    * @generated from field: string max_fee_per_gas_wei = 1;
    */
-  maxFeePerGasWei = "";
+  maxFeePerGasWei = '';
 
   /**
    * @generated from field: string priority_fee = 2;
    */
-  priorityFee = "";
+  priorityFee = '';
 
   /**
    * @generated from field: int64 nonce = 3;
@@ -97,7 +125,7 @@ export class EthereumSpecific extends Message<EthereumSpecific> {
   /**
    * @generated from field: string gas_limit = 4;
    */
-  gasLimit = "";
+  gasLimit = '';
 
   constructor(data?: PartialMessage<EthereumSpecific>) {
     super();
@@ -105,27 +133,49 @@ export class EthereumSpecific extends Message<EthereumSpecific> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.EthereumSpecific";
+  static readonly typeName = 'vultisig.keysign.v1.EthereumSpecific';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "max_fee_per_gas_wei", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "priority_fee", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "nonce", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
-    { no: 4, name: "gas_limit", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    {
+      no: 1,
+      name: 'max_fee_per_gas_wei',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 2,
+      name: 'priority_fee',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 3, name: 'nonce', kind: 'scalar', T: 3 /* ScalarType.INT64 */ },
+    { no: 4, name: 'gas_limit', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): EthereumSpecific {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): EthereumSpecific {
     return new EthereumSpecific().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): EthereumSpecific {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): EthereumSpecific {
     return new EthereumSpecific().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): EthereumSpecific {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): EthereumSpecific {
     return new EthereumSpecific().fromJsonString(jsonString, options);
   }
 
-  static equals(a: EthereumSpecific | PlainMessage<EthereumSpecific> | undefined, b: EthereumSpecific | PlainMessage<EthereumSpecific> | undefined): boolean {
+  static equals(
+    a: EthereumSpecific | PlainMessage<EthereumSpecific> | undefined,
+    b: EthereumSpecific | PlainMessage<EthereumSpecific> | undefined
+  ): boolean {
     return proto3.util.equals(EthereumSpecific, a, b);
   }
 }
@@ -160,27 +210,44 @@ export class THORChainSpecific extends Message<THORChainSpecific> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.THORChainSpecific";
+  static readonly typeName = 'vultisig.keysign.v1.THORChainSpecific';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "account_number", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 2, name: "sequence", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 3, name: "fee", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 4, name: "is_deposit", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    {
+      no: 1,
+      name: 'account_number',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+    { no: 2, name: 'sequence', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 3, name: 'fee', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 4, name: 'is_deposit', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): THORChainSpecific {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): THORChainSpecific {
     return new THORChainSpecific().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): THORChainSpecific {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): THORChainSpecific {
     return new THORChainSpecific().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): THORChainSpecific {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): THORChainSpecific {
     return new THORChainSpecific().fromJsonString(jsonString, options);
   }
 
-  static equals(a: THORChainSpecific | PlainMessage<THORChainSpecific> | undefined, b: THORChainSpecific | PlainMessage<THORChainSpecific> | undefined): boolean {
+  static equals(
+    a: THORChainSpecific | PlainMessage<THORChainSpecific> | undefined,
+    b: THORChainSpecific | PlainMessage<THORChainSpecific> | undefined
+  ): boolean {
     return proto3.util.equals(THORChainSpecific, a, b);
   }
 }
@@ -210,26 +277,43 @@ export class MAYAChainSpecific extends Message<MAYAChainSpecific> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.MAYAChainSpecific";
+  static readonly typeName = 'vultisig.keysign.v1.MAYAChainSpecific';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "account_number", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 2, name: "sequence", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 3, name: "is_deposit", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    {
+      no: 1,
+      name: 'account_number',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+    { no: 2, name: 'sequence', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 3, name: 'is_deposit', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): MAYAChainSpecific {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): MAYAChainSpecific {
     return new MAYAChainSpecific().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): MAYAChainSpecific {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): MAYAChainSpecific {
     return new MAYAChainSpecific().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): MAYAChainSpecific {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): MAYAChainSpecific {
     return new MAYAChainSpecific().fromJsonString(jsonString, options);
   }
 
-  static equals(a: MAYAChainSpecific | PlainMessage<MAYAChainSpecific> | undefined, b: MAYAChainSpecific | PlainMessage<MAYAChainSpecific> | undefined): boolean {
+  static equals(
+    a: MAYAChainSpecific | PlainMessage<MAYAChainSpecific> | undefined,
+    b: MAYAChainSpecific | PlainMessage<MAYAChainSpecific> | undefined
+  ): boolean {
     return proto3.util.equals(MAYAChainSpecific, a, b);
   }
 }
@@ -264,27 +348,49 @@ export class CosmosSpecific extends Message<CosmosSpecific> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.CosmosSpecific";
+  static readonly typeName = 'vultisig.keysign.v1.CosmosSpecific';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "account_number", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 2, name: "sequence", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 3, name: "gas", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 4, name: "transaction_type", kind: "enum", T: proto3.getEnumType(TransactionType) },
+    {
+      no: 1,
+      name: 'account_number',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+    { no: 2, name: 'sequence', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 3, name: 'gas', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    {
+      no: 4,
+      name: 'transaction_type',
+      kind: 'enum',
+      T: proto3.getEnumType(TransactionType),
+    },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CosmosSpecific {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): CosmosSpecific {
     return new CosmosSpecific().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CosmosSpecific {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): CosmosSpecific {
     return new CosmosSpecific().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CosmosSpecific {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): CosmosSpecific {
     return new CosmosSpecific().fromJsonString(jsonString, options);
   }
 
-  static equals(a: CosmosSpecific | PlainMessage<CosmosSpecific> | undefined, b: CosmosSpecific | PlainMessage<CosmosSpecific> | undefined): boolean {
+  static equals(
+    a: CosmosSpecific | PlainMessage<CosmosSpecific> | undefined,
+    b: CosmosSpecific | PlainMessage<CosmosSpecific> | undefined
+  ): boolean {
     return proto3.util.equals(CosmosSpecific, a, b);
   }
 }
@@ -296,12 +402,12 @@ export class SolanaSpecific extends Message<SolanaSpecific> {
   /**
    * @generated from field: string recent_block_hash = 1;
    */
-  recentBlockHash = "";
+  recentBlockHash = '';
 
   /**
    * @generated from field: string priority_fee = 2;
    */
-  priorityFee = "";
+  priorityFee = '';
 
   /**
    * @generated from field: optional string from_token_associated_address = 3;
@@ -319,27 +425,61 @@ export class SolanaSpecific extends Message<SolanaSpecific> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.SolanaSpecific";
+  static readonly typeName = 'vultisig.keysign.v1.SolanaSpecific';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "recent_block_hash", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "priority_fee", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "from_token_associated_address", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
-    { no: 4, name: "to_token_associated_address", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    {
+      no: 1,
+      name: 'recent_block_hash',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 2,
+      name: 'priority_fee',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 3,
+      name: 'from_token_associated_address',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+      opt: true,
+    },
+    {
+      no: 4,
+      name: 'to_token_associated_address',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+      opt: true,
+    },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SolanaSpecific {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): SolanaSpecific {
     return new SolanaSpecific().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SolanaSpecific {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): SolanaSpecific {
     return new SolanaSpecific().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SolanaSpecific {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): SolanaSpecific {
     return new SolanaSpecific().fromJsonString(jsonString, options);
   }
 
-  static equals(a: SolanaSpecific | PlainMessage<SolanaSpecific> | undefined, b: SolanaSpecific | PlainMessage<SolanaSpecific> | undefined): boolean {
+  static equals(
+    a: SolanaSpecific | PlainMessage<SolanaSpecific> | undefined,
+    b: SolanaSpecific | PlainMessage<SolanaSpecific> | undefined
+  ): boolean {
     return proto3.util.equals(SolanaSpecific, a, b);
   }
 }
@@ -351,7 +491,7 @@ export class PolkadotSpecific extends Message<PolkadotSpecific> {
   /**
    * @generated from field: string recent_block_hash = 1;
    */
-  recentBlockHash = "";
+  recentBlockHash = '';
 
   /**
    * @generated from field: uint64 nonce = 2;
@@ -361,7 +501,7 @@ export class PolkadotSpecific extends Message<PolkadotSpecific> {
   /**
    * @generated from field: string current_block_number = 3;
    */
-  currentBlockNumber = "";
+  currentBlockNumber = '';
 
   /**
    * @generated from field: uint32 spec_version = 4;
@@ -376,7 +516,7 @@ export class PolkadotSpecific extends Message<PolkadotSpecific> {
   /**
    * @generated from field: string genesis_hash = 6;
    */
-  genesisHash = "";
+  genesisHash = '';
 
   constructor(data?: PartialMessage<PolkadotSpecific>) {
     super();
@@ -384,29 +524,66 @@ export class PolkadotSpecific extends Message<PolkadotSpecific> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.PolkadotSpecific";
+  static readonly typeName = 'vultisig.keysign.v1.PolkadotSpecific';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "recent_block_hash", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "nonce", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 3, name: "current_block_number", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "spec_version", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 5, name: "transaction_version", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 6, name: "genesis_hash", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    {
+      no: 1,
+      name: 'recent_block_hash',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 2, name: 'nonce', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    {
+      no: 3,
+      name: 'current_block_number',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 4,
+      name: 'spec_version',
+      kind: 'scalar',
+      T: 13 /* ScalarType.UINT32 */,
+    },
+    {
+      no: 5,
+      name: 'transaction_version',
+      kind: 'scalar',
+      T: 13 /* ScalarType.UINT32 */,
+    },
+    {
+      no: 6,
+      name: 'genesis_hash',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PolkadotSpecific {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): PolkadotSpecific {
     return new PolkadotSpecific().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PolkadotSpecific {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): PolkadotSpecific {
     return new PolkadotSpecific().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PolkadotSpecific {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): PolkadotSpecific {
     return new PolkadotSpecific().fromJsonString(jsonString, options);
   }
 
-  static equals(a: PolkadotSpecific | PlainMessage<PolkadotSpecific> | undefined, b: PolkadotSpecific | PlainMessage<PolkadotSpecific> | undefined): boolean {
+  static equals(
+    a: PolkadotSpecific | PlainMessage<PolkadotSpecific> | undefined,
+    b: PolkadotSpecific | PlainMessage<PolkadotSpecific> | undefined
+  ): boolean {
     return proto3.util.equals(PolkadotSpecific, a, b);
   }
 }
@@ -418,12 +595,12 @@ export class CoinKeyValuePair extends Message<CoinKeyValuePair> {
   /**
    * @generated from field: string key = 1;
    */
-  key = "";
+  key = '';
 
   /**
    * @generated from field: string value = 2;
    */
-  value = "";
+  value = '';
 
   constructor(data?: PartialMessage<CoinKeyValuePair>) {
     super();
@@ -431,25 +608,37 @@ export class CoinKeyValuePair extends Message<CoinKeyValuePair> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.CoinKeyValuePair";
+  static readonly typeName = 'vultisig.keysign.v1.CoinKeyValuePair';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 1, name: 'key', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'value', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CoinKeyValuePair {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): CoinKeyValuePair {
     return new CoinKeyValuePair().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CoinKeyValuePair {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): CoinKeyValuePair {
     return new CoinKeyValuePair().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CoinKeyValuePair {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): CoinKeyValuePair {
     return new CoinKeyValuePair().fromJsonString(jsonString, options);
   }
 
-  static equals(a: CoinKeyValuePair | PlainMessage<CoinKeyValuePair> | undefined, b: CoinKeyValuePair | PlainMessage<CoinKeyValuePair> | undefined): boolean {
+  static equals(
+    a: CoinKeyValuePair | PlainMessage<CoinKeyValuePair> | undefined,
+    b: CoinKeyValuePair | PlainMessage<CoinKeyValuePair> | undefined
+  ): boolean {
     return proto3.util.equals(CoinKeyValuePair, a, b);
   }
 }
@@ -461,7 +650,7 @@ export class SuiSpecific extends Message<SuiSpecific> {
   /**
    * @generated from field: string reference_gas_price = 1;
    */
-  referenceGasPrice = "";
+  referenceGasPrice = '';
 
   /**
    * @generated from field: repeated vultisig.keysign.v1.CoinKeyValuePair coin_key_value_pairs = 2;
@@ -474,26 +663,48 @@ export class SuiSpecific extends Message<SuiSpecific> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.SuiSpecific";
+  static readonly typeName = 'vultisig.keysign.v1.SuiSpecific';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "reference_gas_price", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "coin_key_value_pairs", kind: "message", T: CoinKeyValuePair, repeated: true },
+    {
+      no: 1,
+      name: 'reference_gas_price',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 2,
+      name: 'coin_key_value_pairs',
+      kind: 'message',
+      T: CoinKeyValuePair,
+      repeated: true,
+    },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SuiSpecific {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): SuiSpecific {
     return new SuiSpecific().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SuiSpecific {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): SuiSpecific {
     return new SuiSpecific().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SuiSpecific {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): SuiSpecific {
     return new SuiSpecific().fromJsonString(jsonString, options);
   }
 
-  static equals(a: SuiSpecific | PlainMessage<SuiSpecific> | undefined, b: SuiSpecific | PlainMessage<SuiSpecific> | undefined): boolean {
+  static equals(
+    a: SuiSpecific | PlainMessage<SuiSpecific> | undefined,
+    b: SuiSpecific | PlainMessage<SuiSpecific> | undefined
+  ): boolean {
     return proto3.util.equals(SuiSpecific, a, b);
   }
 }
-

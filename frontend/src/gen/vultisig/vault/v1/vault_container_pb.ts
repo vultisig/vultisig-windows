@@ -3,8 +3,15 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf';
+import { Message, proto3, protoInt64 } from '@bufbuild/protobuf';
 
 /**
  * @generated from message vultisig.vault.v1.VaultContainer
@@ -22,7 +29,7 @@ export class VaultContainer extends Message<VaultContainer> {
    *
    * @generated from field: string vault = 2;
    */
-  vault = "";
+  vault = '';
 
   /**
    * is vault encrypted with password
@@ -37,27 +44,38 @@ export class VaultContainer extends Message<VaultContainer> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.vault.v1.VaultContainer";
+  static readonly typeName = 'vultisig.vault.v1.VaultContainer';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "version", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 2, name: "vault", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "is_encrypted", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
+    { no: 1, name: 'version', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: 'vault', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: 'is_encrypted', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): VaultContainer {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): VaultContainer {
     return new VaultContainer().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): VaultContainer {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): VaultContainer {
     return new VaultContainer().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): VaultContainer {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): VaultContainer {
     return new VaultContainer().fromJsonString(jsonString, options);
   }
 
-  static equals(a: VaultContainer | PlainMessage<VaultContainer> | undefined, b: VaultContainer | PlainMessage<VaultContainer> | undefined): boolean {
+  static equals(
+    a: VaultContainer | PlainMessage<VaultContainer> | undefined,
+    b: VaultContainer | PlainMessage<VaultContainer> | undefined
+  ): boolean {
     return proto3.util.equals(VaultContainer, a, b);
   }
 }
-

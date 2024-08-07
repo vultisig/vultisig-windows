@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import NavBar from "../../components/navbar/NavBar";
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import NavBar from '../../components/navbar/NavBar';
 
 interface TabContent {
   title: string;
@@ -12,48 +12,48 @@ interface TabContent {
 
 const TabbedContent: React.FC = () => {
   const { t } = useTranslation();
-  const [currentScreen, setCurrentScreen] = useState<number>(3);
+  const [currentScreen, setCurrentScreen] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [vaultName, setVaultName] = useState<string>(t("main_vault"));
+  const [vaultName, setVaultName] = useState<string>(t('main_vault'));
   const [devices, setDevices] = useState<string[]>([]);
-  const [localPartyId, setLocalPartyId] = useState<string>("");
+  const [localPartyId, setLocalPartyId] = useState<string>('');
 
   useEffect(() => {
     setDevices([]);
-    setLocalPartyId("");
+    setLocalPartyId('');
   }, []);
 
   const nextScreen = () => {
-    setCurrentScreen((prev) => (prev < screens.length - 1 ? prev + 1 : prev));
+    setCurrentScreen(prev => (prev < screens.length - 1 ? prev + 1 : prev));
   };
 
   const prevScreen = () => {
-    setCurrentScreen((prev) => (prev > 0 ? prev - 1 : prev));
+    setCurrentScreen(prev => (prev > 0 ? prev - 1 : prev));
   };
 
   const tabs: TabContent[] = [
     {
-      title: t("2_of_2_vault"),
-      description1: `${t("need_min_devices")} 2 ${t("devices")}`,
-      description2: `1. ${t("start_from_one_device")}`,
-      description3: `2. ${t("pair_from_the")} ${t("second")} ${t("device")}`,
-      image: "/assets/images/vaultSetup1.svg",
+      title: t('2_of_2_vault'),
+      description1: `${t('need_min_devices')} 2 ${t('devices')}`,
+      description2: `1. ${t('start_from_one_device')}`,
+      description3: `2. ${t('pair_from_the')} ${t('second')} ${t('device')}`,
+      image: '/assets/images/vaultSetup1.svg',
     },
     {
-      title: t("2_of_3_vault"),
-      description1: `${t("need_min_devices")} 3 ${t("devices")}`,
-      description2: `1. ${t("start_from_one_device")}`,
-      description3: `2. ${t("pair_from_the")} ${t("second_and_third")} ${t(
-        "device"
+      title: t('2_of_3_vault'),
+      description1: `${t('need_min_devices')} 3 ${t('devices')}`,
+      description2: `1. ${t('start_from_one_device')}`,
+      description3: `2. ${t('pair_from_the')} ${t('second_and_third')} ${t(
+        'device'
       )}`,
-      image: "/assets/images/vaultSetup2.svg",
+      image: '/assets/images/vaultSetup2.svg',
     },
     {
-      title: t("m_of_n_vault"),
-      description1: t("m_of_n_vault"),
-      description2: `1. ${t("start_from_one_device")}`,
-      description3: `2. ${t("pair_from_the")} ${t("other")} ${t("device")}`,
-      image: "/assets/images/vaultSetup3.svg",
+      title: t('m_of_n_vault'),
+      description1: t('m_of_n_vault'),
+      description2: `1. ${t('start_from_one_device')}`,
+      description3: `2. ${t('pair_from_the')} ${t('other')} ${t('device')}`,
+      image: '/assets/images/vaultSetup3.svg',
     },
   ];
 
@@ -63,21 +63,21 @@ const TabbedContent: React.FC = () => {
       pairDeviceCount = pairDeviceCount - (device === localPartyId ? 0 : 1);
       const deviceState =
         device === localPartyId
-          ? t("this_device")
+          ? t('this_device')
           : pairDeviceCount > 0
-          ? t("pair_device")
-          : t("backup_device");
+            ? t('pair_device')
+            : t('backup_device');
       return (
         <div
           key={device + index}
           className="w-full bg-[#061B3A] p-4 mb-2 rounded-2xl"
         >
           {index + 1}
-          {". "}
+          {'. '}
           {device}
-          {" ("}
+          {' ('}
           {deviceState}
-          {")"}
+          {')'}
         </div>
       );
     });
@@ -91,7 +91,7 @@ const TabbedContent: React.FC = () => {
   // ...
   const screens = [
     {
-      title: t("setup"),
+      title: t('setup'),
       content: (
         <div className="text-white mx-auto max-w-4xl pt-8">
           <div className="flex justify-center space-x-4">
@@ -99,7 +99,7 @@ const TabbedContent: React.FC = () => {
               <button
                 key={index}
                 className={`py-2 px-4 border-b-2 ${
-                  activeTab === index ? "border-blue-500" : "border-transparent"
+                  activeTab === index ? 'border-blue-500' : 'border-transparent'
                 }`}
                 onClick={() => setActiveTab(index)}
               >
@@ -117,7 +117,7 @@ const TabbedContent: React.FC = () => {
             </p>
             <img
               src={tabs[activeTab].image}
-              alt="image"
+              alt="vault_setup"
               className="mx-auto mb-4 w-60"
             />
             <img
@@ -125,7 +125,7 @@ const TabbedContent: React.FC = () => {
               alt="wifi"
               className="mx-auto mb-4 w-8"
             />
-            <p className="mb-4">{t("devices_on_same_wifi")}</p>
+            <p className="mb-4">{t('devices_on_same_wifi')}</p>
           </div>
           <div className="flex justify-center mt-12">
             <button
@@ -134,31 +134,31 @@ const TabbedContent: React.FC = () => {
                 nextScreen();
               }}
             >
-              {t("start")}
+              {t('start')}
             </button>
             <button
               className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[250px] font-bold"
               onClick={() => {}}
             >
-              {t("pair")}
+              {t('pair')}
             </button>
           </div>
         </div>
       ),
     },
     {
-      title: t("name_your_vault"),
+      title: t('name_your_vault'),
       content: (
         <div className="text-white flex flex-col items-center justify-center mt-60">
           <div>
             <label htmlFor="input" className="block text-md mb-2">
-              {t("vault_name")}
+              {t('vault_name')}
             </label>
             <input
               id="input"
               type="text"
               value={vaultName}
-              onChange={(e) => {
+              onChange={e => {
                 setVaultName(e.target.value);
               }}
               className="font-bold bg-white/[.10] rounded-lg w-80 py-2 px-3"
@@ -166,51 +166,51 @@ const TabbedContent: React.FC = () => {
           </div>
           <button
             className={`text-lg rounded-full w-80 font-bold py-2 mt-16 ${
-              vaultName !== ""
-                ? "text-[#061B3A] bg-[#33E6BF]"
-                : "text-[#BDBDBD] bg-white/[.10]"
+              vaultName !== ''
+                ? 'text-[#061B3A] bg-[#33E6BF]'
+                : 'text-[#BDBDBD] bg-white/[.10]'
             }`}
-            disabled={vaultName === ""}
+            disabled={vaultName === ''}
             onClick={() => {
               nextScreen();
             }}
           >
-            {t("continue")}
+            {t('continue')}
           </button>
         </div>
       ),
     },
     {
-      title: t("setup"), // need to be updated
+      title: t('setup'), // need to be updated
       content: <></>, // keygen peer discovery view
     },
     {
-      title: t("keygen"),
+      title: t('keygen'),
       content: (
         <div className="text-white text-sm flex flex-col items-center justify-center">
           <div className="mt-8 text-lg mb-2">
             {Math.ceil((2 * devices.length) / 3)}
-            {" of "}
-            {devices.length} {t("vault")}
+            {' of '}
+            {devices.length} {t('vault')}
           </div>
           <div className="flex flex-col items-center justify-center w-80">
-            <div className="mb-8">{t("with_these_devices")}</div>
+            <div className="mb-8">{t('with_these_devices')}</div>
             {renderDevicesList()}
           </div>
           <div className="w-80 flex mt-2 px-3 py-2 border border-[#33E6BF]/[.5] rounded-2xl">
             <img src="/assets/images/info.svg" alt="info" />
             <p className="ml-2">
-              {t("pair_device_disclaimers_first")}{" "}
-              {Math.ceil((2 * devices.length) / 3)}{" "}
-              {t("pair_device_disclaimers_second")}
+              {t('pair_device_disclaimers_first')}{' '}
+              {Math.ceil((2 * devices.length) / 3)}{' '}
+              {t('pair_device_disclaimers_second')}
             </p>
           </div>
           <div className="w-80 flex mt-2 px-3 py-2 border border-[#33E6BF]/[.5] rounded-2xl">
             <img src="/assets/images/info.svg" alt="info" />
             <p className="ml-2">
               {devices.length > 2
-                ? t("backup_not_needed_disclaimer")
-                : t("no_backup_device_disclaimer")}
+                ? t('backup_not_needed_disclaimer')
+                : t('no_backup_device_disclaimer')}
             </p>
           </div>
           <button
@@ -219,7 +219,7 @@ const TabbedContent: React.FC = () => {
               nextScreen();
             }}
           >
-            {t("continue")}
+            {t('continue')}
           </button>
         </div>
       ),
@@ -232,7 +232,7 @@ const TabbedContent: React.FC = () => {
         title={screens[currentScreen].title}
         questionLink={
           currentScreen === 0
-            ? "https://docs.vultisig.com/vultisig-user-actions/creating-a-vault"
+            ? 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
             : undefined
         }
         handleBack={currentScreen !== 0 ? prevScreen : undefined}
