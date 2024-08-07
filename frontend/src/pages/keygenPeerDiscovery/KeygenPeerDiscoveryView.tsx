@@ -90,7 +90,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
     <>
       <div>
         <img
-          src="/assets/images/CaretLeft.svg"
+          src="/assets/images/caretLeft.svg"
           alt="Back"
           className="absolute left-5 top-5 cursor-pointer"
           onClick={() => navigate(-1)}
