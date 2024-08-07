@@ -6,7 +6,7 @@ import ImportVaultView from './pages/importVault/ImportVaultView';
 import './i18n/config';
 import SetupVaultView from './pages/setupVault/SetupVaultView';
 
-function App() {
+const App: React.FC = () => {
   const keygenMessage = new KeygenMessage({
     sessionId: 'sessionId',
   });
@@ -23,6 +23,6 @@ function App() {
       </Router>
     </div>
   );
-}
+};
 
 export default App;

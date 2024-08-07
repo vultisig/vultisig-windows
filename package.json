@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.8"
+  },
+  "lint-staged": {
+    "frontend/src/**/*.{js,jsx,ts,tsx}": [
+      "cd frontend && npm run lint:fix",
+      "cd frontend && npm run format",
+      "git add"
+    ]
+  }
+}
