@@ -55,6 +55,32 @@ const TabbedContent: React.FC = () => {
     },
   ];
 
+  const renderDevicesList = () => {
+    let pairDeviceCount = Math.ceil((2 * devices.length) / 3);
+    return devices.map((device, index) => {
+      pairDeviceCount = pairDeviceCount - (device === localPartyId ? 0 : 1);
+      const deviceState =
+        device === localPartyId
+          ? t("this_device")
+          : pairDeviceCount > 0
+          ? t("pair_device")
+          : t("backup_device");
+      return (
+        <div
+          key={device + index}
+          className="w-full bg-[#061B3A] p-4 mb-2 rounded-2xl"
+        >
+          {index + 1}
+          {". "}
+          {device}
+          {" ("}
+          {deviceState}
+          {")"}
+        </div>
+      );
+    });
+  };
+
   // screens
   // 0 - vault setup view
   // 1 - vault name setup
@@ -155,47 +181,34 @@ const TabbedContent: React.FC = () => {
     },
     {
       content: (
-        <div className="text-white flex flex-col items-center justify-center">
-          <div className="mt-4">
+        <div className="text-white text-sm flex flex-col items-center justify-center">
+          <div className="mt-16 text-lg mb-2">
             {Math.ceil((2 * devices.length) / 3)}
             {" of "}
-            {devices.length}
+            {devices.length} {t("vault")}
           </div>
-          <div>
-            <p>{t("with_these_devices")}</p>
-            {devices.map((device, index) => {
-              let pairDeviceCount = Math.ceil((2 * devices.length) / 3);
-              pairDeviceCount -= device === localPartyId ? 0 : 1;
-              const deviceState =
-                device === localPartyId
-                  ? t("this_device")
-                  : pairDeviceCount > 0
-                  ? t("pair_device")
-                  : t("backup_device");
-              return (
-                <>
-                  {index}
-                  {". "}
-                  {device}
-                  {" ("}
-                  {deviceState}
-                  {")"}
-                </>
-              );
-            })}
+          <div className="flex flex-col items-center justify-center w-80">
+            <div className="mb-8">{t("with_these_devices")}</div>
+            {renderDevicesList()}
           </div>
-          <div className="mt-8">
-            {t("pair_device_disclaimers_first")}{" "}
-            {Math.ceil((2 * devices.length) / 3)}{" "}
-            {t("pair_device_disclaimers_second")}
+          <div className="w-80 flex mt-2 px-3 py-2 border border-[#33E6BF]/[.5] rounded-2xl">
+            <img src="/assets/images/info.svg" alt="info" />
+            <p className="ml-2">
+              {t("pair_device_disclaimers_first")}{" "}
+              {Math.ceil((2 * devices.length) / 3)}{" "}
+              {t("pair_device_disclaimers_second")}
+            </p>
           </div>
-          <div className="mt-8">
-            {devices.length > 2
-              ? t("backup_not_needed_disclaimer")
-              : t("no_backup_device_disclaimer")}
+          <div className="w-80 flex mt-2 px-3 py-2 border border-[#33E6BF]/[.5] rounded-2xl">
+            <img src="/assets/images/info.svg" alt="info" />
+            <p className="ml-2">
+              {devices.length > 2
+                ? t("backup_not_needed_disclaimer")
+                : t("no_backup_device_disclaimer")}
+            </p>
           </div>
           <button
-            className="text-lg rounded-full w-80 font-bold py-2 mt-4 text-[#061B3A] bg-[#33E6BF]"
+            className="fixed bottom-8 text-lg rounded-full w-80 font-bold py-2 text-[#061B3A] bg-[#33E6BF]"
             onClick={() => {
               nextScreen();
             }}
