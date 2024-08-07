@@ -2,7 +2,10 @@
   "name": "vultisig-win",
   "version": "0.1.0",
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint:frontend": "cd frontend && eslint 'src/**/*.{ts,tsx,js,jsx}'",
+    "lint:frontend:fix": "cd frontend && eslint 'src/**/*.{ts,tsx,js,jsx}' --fix",
+    "format:frontend": "cd frontend && prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'"
   },
   "devDependencies": {
     "eslint": "^9.8.0",
