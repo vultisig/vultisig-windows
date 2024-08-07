@@ -129,7 +129,7 @@ const ImportVaultView: React.FC = () => {
         <div className="text-center px-20">
           <h6 className="text-lg mb-8">{t('enter_previous_vault')}</h6>
           <div
-            className="w-full bg-[#33E6BF]/[.14] h-[250px] border-2 border-dashed border-[#33E6BF] rounded-lg font-bold cursor-pointer"
+            className="bg-[#33E6BF]/[.14] h-[250px] border-2 border-dashed border-[#33E6BF] rounded-lg font-bold cursor-pointer"
             onClick={handleUpload}
           >
             {isContinue && decryptedContent && (
