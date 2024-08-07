@@ -9,8 +9,7 @@
   "lint-staged": {
     "frontend/src/**/*.{js,jsx,ts,tsx}": [
       "cd frontend && npm run lint:fix",
-      "cd frontend && npm run format",
-      "git add"
+      "cd frontend && npm run format"
     ]
   }
 }

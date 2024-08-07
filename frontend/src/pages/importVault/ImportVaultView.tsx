@@ -131,7 +131,6 @@ const ImportVaultView: React.FC = () => {
           <div
             className="w-full bg-[#33E6BF]/[.14] h-[250px] border-2 border-dashed border-[#33E6BF] rounded-lg font-bold cursor-pointer"
             onClick={handleUpload}
-            role="none"
           >
             {isContinue && decryptedContent && (
               <div

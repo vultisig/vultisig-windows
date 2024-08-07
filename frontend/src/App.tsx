@@ -19,7 +19,6 @@ const App: React.FC = () => {
           <Route path="/" index element={<OnboardingView />} />
           <Route path="/vault/setup" element={<SetupVaultView />} />
           <Route path="/vault/import" element={<ImportVaultView />} />
-          <Route path="/vault/import" element={<ImportVaultView />} />
         </Routes>
       </Router>
     </div>
