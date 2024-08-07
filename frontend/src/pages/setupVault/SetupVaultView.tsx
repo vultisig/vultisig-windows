@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import NavBar from "../../components/navbar/NavBar";
 
@@ -15,20 +15,21 @@ const TabbedContent: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<number>(3);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [vaultName, setVaultName] = useState<string>(t("main_vault"));
-  const [devices, setDevices] = useState<string[]>([
-    "hello",
-    "macbook 123123",
-    "test",
-  ]);
+  const [devices, setDevices] = useState<string[]>([]);
   const [localPartyId, setLocalPartyId] = useState<string>("");
+
+  useEffect(() => {
+    setDevices([]);
+    setLocalPartyId("");
+  }, []);
 
   const nextScreen = () => {
     setCurrentScreen((prev) => (prev < screens.length - 1 ? prev + 1 : prev));
   };
 
-  // const prevScreen = () => {
-  //   setCurrentScreen((prev) => (prev > 0 ? prev - 1 : prev));
-  // };
+  const prevScreen = () => {
+    setCurrentScreen((prev) => (prev > 0 ? prev - 1 : prev));
+  };
 
   const tabs: TabContent[] = [
     {
@@ -90,6 +91,7 @@ const TabbedContent: React.FC = () => {
   // ...
   const screens = [
     {
+      title: t("setup"),
       content: (
         <div className="text-white mx-auto max-w-4xl pt-8">
           <div className="flex justify-center space-x-4">
@@ -145,6 +147,7 @@ const TabbedContent: React.FC = () => {
       ),
     },
     {
+      title: t("name_your_vault"),
       content: (
         <div className="text-white flex flex-col items-center justify-center mt-60">
           <div>
@@ -178,12 +181,14 @@ const TabbedContent: React.FC = () => {
       ),
     },
     {
+      title: t("setup"), // need to be updated
       content: <></>, // keygen peer discovery view
     },
     {
+      title: t("keygen"),
       content: (
         <div className="text-white text-sm flex flex-col items-center justify-center">
-          <div className="mt-16 text-lg mb-2">
+          <div className="mt-8 text-lg mb-2">
             {Math.ceil((2 * devices.length) / 3)}
             {" of "}
             {devices.length} {t("vault")}
@@ -209,7 +214,7 @@ const TabbedContent: React.FC = () => {
             </p>
           </div>
           <button
-            className="fixed bottom-8 text-lg rounded-full w-80 font-bold py-2 text-[#061B3A] bg-[#33E6BF]"
+            className="fixed bottom-16 text-lg rounded-full w-80 font-bold py-2 text-[#061B3A] bg-[#33E6BF]"
             onClick={() => {
               nextScreen();
             }}
@@ -224,8 +229,13 @@ const TabbedContent: React.FC = () => {
   return (
     <>
       <NavBar
-        title={t("setup")}
-        questionLink="https://docs.vultisig.com/vultisig-user-actions/creating-a-vault"
+        title={screens[currentScreen].title}
+        questionLink={
+          currentScreen === 0
+            ? "https://docs.vultisig.com/vultisig-user-actions/creating-a-vault"
+            : undefined
+        }
+        handleBack={currentScreen !== 0 ? prevScreen : undefined}
       />
       {screens[currentScreen].content}
     </>

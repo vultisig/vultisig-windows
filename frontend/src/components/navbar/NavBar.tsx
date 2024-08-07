@@ -5,14 +5,11 @@ import { BrowserOpenURL } from "../../../wailsjs/runtime";
 interface NavBarProps {
   title: string;
   questionLink?: string;
+  handleBack?: () => void;
 }
 
-const NavBar: React.FC<NavBarProps> = ({ title, questionLink }) => {
+const NavBar: React.FC<NavBarProps> = ({ title, questionLink, handleBack }) => {
   const navigate = useNavigate();
-
-  const handleBack = () => {
-    navigate(-1);
-  };
 
   const openHelp = () => {
     if (questionLink) {
@@ -25,7 +22,13 @@ const NavBar: React.FC<NavBarProps> = ({ title, questionLink }) => {
       <img
         src="/assets/images/caretLeft.svg"
         alt="Back"
-        onClick={handleBack}
+        onClick={() => {
+          if (handleBack) {
+            handleBack();
+          } else {
+            navigate(-1);
+          }
+        }}
         className="cursor-pointer"
       />
       <h1 className="text-xl font-bold">{title}</h1>

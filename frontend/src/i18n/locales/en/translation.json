@@ -46,5 +46,7 @@
   "of": "of",
   "vault": "vault",
   "setup": "Setup",
-  "import": "Import"
+  "import": "Import",
+  "keygen": "Keygen",
+  "name_your_vault": "Name your Vault"
 }
