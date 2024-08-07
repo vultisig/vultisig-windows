@@ -35,6 +35,18 @@
   "pair": "Pair",
   "vault_name": "Vault Name",
   "main_vault": "Main Vault",
+  "with_these_devices": "With these devices",
+  "this_device": "This Device",
+  "pair_device": "Pair Device",
+  "backup_device": "Backup Device",
+  "pair_device_disclaimers_first": "You can only send transactions with",
+  "pair_device_disclaimers_second": "of these devices present.",
+  "backup_not_needed_disclaimer": "Your backup device is not needed unless you lose one of your main devices.",
+  "no_backup_device_disclaimer": "You do not have a 3rd backup device - so you should backup one vault share securely later.",
+  "of": "of",
+  "vault": "vault",
   "setup": "Setup",
-  "import": "Import"
+  "import": "Import",
+  "keygen": "Keygen",
+  "name_your_vault": "Name your Vault"
 }
