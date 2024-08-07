@@ -2,12 +2,12 @@ package relay
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 
 	m "github.com/hashicorp/mdns"
 	"github.com/vultisig/vultisig-relay/server"
-	"github.com/vultisig/vultisig-relay/storage"
 )
 
 const (
@@ -21,7 +21,7 @@ type Server struct {
 }
 
 func NewRelayServer() (*Server, error) {
-	store, err := storage.NewInMemoryStorage()
+	store, err := NewInMemoryStorage()
 	if err != nil {
 		return nil, err
 	}
@@ -74,14 +74,19 @@ func (r *Server) DiscoveryService(name string) (string, error) {
 		defer wg.Done()
 		for {
 			select {
-			case <-time.After(2 * time.Second):
+			case <-time.After(5 * time.Second):
 				err = fmt.Errorf("fail to find service, timeout")
 				return
 			case entry := <-entriesCh:
-				if entry.Info == name {
+				if strings.Index(entry.Name, "Vulti") >= 0 {
 					serviceHost = fmt.Sprintf("%s:%d", entry.AddrV4, entry.Port)
 					return
 				}
+
+				// if entry.Info == name {
+				// 	serviceHost = fmt.Sprintf("%s:%d", entry.AddrV4, entry.Port)
+				// 	return
+				// }
 			}
 		}
 	}()

@@ -6,35 +6,83 @@ import loadingAnimation from "../../../public/assets/images/loadingAnimation.jso
 import SelectDevice from "../../components/selectDevice/SelectDevice";
 import { useNavigate } from "react-router-dom";
 import { createKeygenMsg } from "../../utils/QRGen";
+import { v4 as uuidv4 } from "uuid";
+import { generateRandomNumber } from "../../utils/util";
+import {
+  AdvertiseMediator,
+} from "../../../wailsjs/go/relay/Server";
+import {
+  checkForDevices,
+  clearCheckingInterval,
+  getSession,
+  postSession,
+  startkeygen,
+} from "../../services/Keygen/Keygen";
+
 interface KeygenPeerDiscoveryViewProps {
   vaultType: string;
+  vaultName: string;
 }
 const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
   vaultType,
+  vaultName,
 }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [network, setNetwork] = useState("cellular");
   const [qrData, setQrData] = useState("");
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
+  const [serviceName, setServiceName] = useState<string>();
+  const [devices, setDevices] = useState<string[]>([]);
+  const [sessionID, setSessionID] = useState<string>();
+  const [isRelay, setIsRelay] = useState(true);
+
   useEffect(() => {
+    setSessionID(uuidv4());
+    setServiceName(`VultisigWindows-${generateRandomNumber()}`);
+    return () => {
+      clearCheckingInterval();
+    };
+  }, []);
+
+  useEffect(() => {
+    setDevices([]);
+    setSelectedDevices([]);
     async function createQR() {
-      // sample vault
-      setQrData(await createKeygenMsg("sample"));
+      setQrData(
+        await createKeygenMsg(isRelay, vaultName, serviceName, sessionID)
+      );
     }
+    clearCheckingInterval();
     createQR();
-  }, [network]);
-  // sample
-  const devices = ["iPhone", "Phone2"];
-  const handleContinue = () => {
+  }, [isRelay, sessionID, serviceName]);
+
+  useEffect(() => {
+    if (sessionID && serviceName) {
+      discoverService(serviceName);
+    }
+  }, [isRelay, sessionID, serviceName]);
+
+  const discoverService = async (name: string) => {
+    if (!isRelay) await AdvertiseMediator(name);
+    await postSession(isRelay, sessionID, serviceName);
+    checkForDevices(isRelay, sessionID, setDevices);
+  };
+
+  const handleCanContinue = () => {
     const minDevices = vaultType.split("/")[1];
     switch (minDevices) {
       case "n":
-        return selectedDevices.length + 1 >= 2 ? false : true;
+        return selectedDevices.length >= 1 ? false : true;
       case "3":
-        return selectedDevices.length + 1 == 3 ? false : true;
+        return selectedDevices.length == 2 ? false : true;
       case "2":
-        return selectedDevices.length + 1 == 2 ? false : true;
+        return selectedDevices.length == 1 ? false : true;
+    }
+  };
+
+  const startKeygen = async () => {
+    if (handleCanContinue()) {
+      await startkeygen(isRelay, sessionID, selectedDevices);
     }
   };
 
@@ -55,22 +103,22 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
       <div className="mx-auto w-full  text-white text-center">
         <div>
           {/* sample data */}
-          <KeygenQRCode data={qrData} />
+          <KeygenQRCode data={qrData} serviceName={serviceName} />
         </div>
         <div className="flex gap-10 justify-center mt-5">
           <button
-            onClick={() => setNetwork("cellular")}
+            onClick={() => setIsRelay(true)}
             className={`${
-              network == "cellular" ? "bg-[#1B3F73]" : "bg-[#11284A]"
+              isRelay ? "bg-[#1B3F73]" : "bg-[#11284A]"
             } rounded-3xl flex items-center justify-center w-[150px] py-2 gap-2`}
           >
             <img src="/assets/images/cellular.svg" alt="cellular" />{" "}
             {t("internet")}
           </button>
           <button
-            onClick={() => setNetwork("wifi")}
+            onClick={() => setIsRelay(false)}
             className={`${
-              network == "wifi" ? "bg-[#1B3F73]" : "bg-[#11284A]"
+              !isRelay ? "bg-[#1B3F73]" : "bg-[#11284A]"
             } rounded-3xl flex items-center justify-center w-[150px] py-2 gap-2`}
           >
             <img src="/assets/images/wifi.svg" alt="wifi" /> {t("local")}
@@ -94,7 +142,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
           />
         )}
 
-        {network == "cellular" ? (
+        {isRelay ? (
           <div>
             <img
               src="/assets/images/cellular.svg"
@@ -114,7 +162,10 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
           </div>
         )}
         <button
-          disabled={handleContinue()}
+          disabled={handleCanContinue()}
+          onClick={() => {
+            startKeygen();
+          }}
           className="w-[400px] disabled:opacity-30  bg-[#11284A] rounded-3xl mt-5 py-2 font-bold"
         >
           {t("continue")}
