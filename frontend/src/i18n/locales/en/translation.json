@@ -44,5 +44,7 @@
   "backup_not_needed_disclaimer": "Your backup device is not needed unless you lose one of your main devices.",
   "no_backup_device_disclaimer": "You do not have a 3rd backup device - so you should backup one vault share securely later.",
   "of": "of",
-  "vault": "vault"
+  "vault": "vault",
+  "setup": "Setup",
+  "import": "Import"
 }

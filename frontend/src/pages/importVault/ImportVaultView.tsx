@@ -5,6 +5,7 @@ import { decryptVault, isBase64Encoded } from "../../utils/util";
 import { VaultContainer } from "../../gen/vultisig/vault/v1/vault_container_pb";
 import { Vault } from "../../gen/vultisig/vault/v1/vault_pb";
 import { SaveVault } from "../../../wailsjs/go/storage/Store";
+import NavBar from "../../components/navbar/NavBar";
 
 const ImportVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -116,6 +117,7 @@ const ImportVaultView: React.FC = () => {
 
   return (
     <>
+      <NavBar title={t("import")} />
       <input
         id="file_upload"
         type="file"
@@ -123,7 +125,7 @@ const ImportVaultView: React.FC = () => {
         onChange={handleFileChange}
         className="hidden"
       />
-      <div className="text-white pt-[10vh]">
+      <div className="text-white pt-[5vh]">
         <div className="text-center px-20">
           <h6 className="text-lg mb-8">{t("enter_previous_vault")}</h6>
           <div
