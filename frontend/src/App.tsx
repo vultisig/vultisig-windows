@@ -15,13 +15,6 @@ function App() {
           <Route path="/" index element={<OnboardingView />} />
           <Route path="/vault/setup" element={<SetupVaultView />} />
           <Route path="/vault/import" element={<ImportVaultView />} />
-          {/* sample */}
-          <Route
-            path="/keygen/peer-discovery"
-            element={
-              <KeygenPeerDiscoveryView vaultName="test" vaultType="2/2" />
-            }
-          />
         </Routes>
       </Router>
     </div>
