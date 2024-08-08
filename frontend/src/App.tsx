@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const bytes = keygenMessage.toBinary();
   console.log(bytes);
   return (
-    <div className="w-full min-h-screen bg-[#02122B]">
+    <div className="w-full min-h-screen bg-primary">
       <Router>
         <Routes>
           <Route path="/" index element={<OnboardingView />} />

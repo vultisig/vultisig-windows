@@ -74,7 +74,7 @@ const TabbedContent: React.FC = () => {
       return (
         <div
           key={device + index}
-          className="w-full bg-[#061B3A] p-4 mb-2 rounded-2xl"
+          className="w-full bg-btn-primary p-4 mb-2 rounded-2xl"
         >
           {index + 1}
           {'. '}
@@ -135,7 +135,7 @@ const TabbedContent: React.FC = () => {
           </div>
           <div className="flex justify-center mt-12">
             <button
-              className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold"
+              className="bg-secondary text-btn-primary mr-20 rounded-full w-[250px] font-bold"
               onClick={() => {
                 setCurrentScreen(1);
               }}
@@ -143,7 +143,7 @@ const TabbedContent: React.FC = () => {
               {t('start')}
             </button>
             <button
-              className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[250px] font-bold"
+              className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[250px] font-bold"
               onClick={() => {}}
             >
               {t('pair')}
@@ -173,8 +173,8 @@ const TabbedContent: React.FC = () => {
           <button
             className={`text-lg rounded-full w-80 font-bold py-2 mt-16 ${
               vaultName
-                ? 'text-[#061B3A] bg-[#33E6BF]'
-                : 'text-[#BDBDBD] bg-white/[.10]'
+                ? 'text-btn-primary bg-secondary'
+                : 'text-btn-secondary bg-white/[.10]'
             }`}
             disabled={vaultName === ''}
             onClick={() => {
@@ -203,7 +203,7 @@ const TabbedContent: React.FC = () => {
             <div className="mb-8">{t('with_these_devices')}</div>
             {renderDevicesList()}
           </div>
-          <div className="w-80 flex mt-2 px-3 py-2 border border-[#33E6BF]/[.5] rounded-2xl">
+          <div className="w-80 flex mt-2 px-3 py-2 border border-secondary/[.5] rounded-2xl">
             <img src="/assets/images/info.svg" alt="info" />
             <p className="ml-2">
               {t('pair_device_disclaimers_first')}{' '}
@@ -211,7 +211,7 @@ const TabbedContent: React.FC = () => {
               {t('pair_device_disclaimers_second')}
             </p>
           </div>
-          <div className="w-80 flex mt-2 px-3 py-2 border border-[#33E6BF]/[.5] rounded-2xl">
+          <div className="w-80 flex mt-2 px-3 py-2 border border-secondary/[.5] rounded-2xl">
             <img src="/assets/images/info.svg" alt="info" />
             <p className="ml-2">
               {devices.length > 2
@@ -220,7 +220,7 @@ const TabbedContent: React.FC = () => {
             </p>
           </div>
           <button
-            className="fixed bottom-16 text-lg rounded-full w-80 font-bold py-2 text-[#061B3A] bg-[#33E6BF]"
+            className="fixed bottom-16 text-lg rounded-full w-80 font-bold py-2 text-btn-primary bg-secondary"
             onClick={() => {
               setCurrentScreen(4);
             }}
@@ -273,7 +273,7 @@ const TabbedContent: React.FC = () => {
           </p>
           <div className="w-full fixed bottom-16 text-sm">
             <div className="w-[330px] mx-auto">
-              <div className="w-full flex mb-4 px-3 py-2 border border-[#F7961B] bg-[#F7961B]/[.35] rounded-2xl">
+              <div className="w-full flex mb-4 px-3 py-2 border border-warning bg-warning/[.35] rounded-2xl">
                 <img src="/assets/images/warning.svg" alt="warning" />
                 <p className="ml-2 text-left">
                   {t('information_note1')}
@@ -282,7 +282,7 @@ const TabbedContent: React.FC = () => {
                 </p>
               </div>
               <button
-                className="text-lg rounded-full w-full font-bold py-2 text-[#061B3A] bg-[#33E6BF]"
+                className="text-lg rounded-full w-full font-bold py-2 text-btn-primary bg-secondary"
                 onClick={() => {
                   setCurrentScreen(3);
                 }}
