@@ -18,6 +18,6 @@ export function Migrate():Promise<void>;
 
 export function SaveCoin(arg1:string,arg2:storage.Coin):Promise<string>;
 
-export function SaveVault(arg1:storage.Vault):Promise<string>;
+export function SaveVault(arg1:storage.Vault):Promise<void>;
 
 export function UpdateVaultName(arg1:string,arg2:string):Promise<void>;

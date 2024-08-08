@@ -11,7 +11,6 @@ type KeyShare struct {
 
 // Vault represent the vault
 type Vault struct {
-	ID             string     `json:"id"`
 	Name           string     `json:"name"`
 	PublicKeyECDSA string     `json:"public_key_ecdsa"`
 	PublicKeyEdDSA string     `json:"public_key_eddsa"`
