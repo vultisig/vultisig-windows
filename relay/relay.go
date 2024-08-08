@@ -2,10 +2,9 @@ package relay
 
 import (
 	"fmt"
-	"strings"
 	"sync"
 	"time"
-
+	
 	m "github.com/hashicorp/mdns"
 	"github.com/vultisig/vultisig-relay/server"
 	"github.com/vultisig/vultisig-relay/storage"
