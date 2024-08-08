@@ -129,7 +129,7 @@ const ImportVaultView: React.FC = () => {
         <div className="text-center px-20">
           <h6 className="text-lg mb-8">{t('enter_previous_vault')}</h6>
           <div
-            className="w-full bg-[#33E6BF]/[.14] h-[250px] border-2 border-dashed border-[#33E6BF] rounded-lg font-bold cursor-pointer"
+            className="w-full bg-secondary/[.14] h-[250px] border-2 border-dashed border-secondary rounded-lg font-bold cursor-pointer"
             onClick={handleUpload}
             role="none"
           >
@@ -178,8 +178,8 @@ const ImportVaultView: React.FC = () => {
           <button
             className={`text-lg rounded-full w-full font-bold py-2 mt-48 ${
               isContinue
-                ? 'text-[#061B3A] bg-[#33E6BF]'
-                : 'text-[#BDBDBD] bg-white/[.10]'
+                ? 'text-btn-primary bg-secondary'
+                : 'text-btn-secondary bg-white/[.10]'
             }`}
             disabled={!isContinue}
             onClick={handleContinue}
