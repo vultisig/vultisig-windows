@@ -75,19 +75,14 @@ func (r *Server) DiscoveryService(name string) (string, error) {
 		defer wg.Done()
 		for {
 			select {
-			case <-time.After(5 * time.Second):
+			case <-time.After(2 * time.Second):
 				err = fmt.Errorf("fail to find service, timeout")
 				return
 			case entry := <-entriesCh:
-				if strings.Index(entry.Name, "Vulti") >= 0 {
+				if entry.Info == name {
 					serviceHost = fmt.Sprintf("%s:%d", entry.AddrV4, entry.Port)
 					return
 				}
-
-				// if entry.Info == name {
-				// 	serviceHost = fmt.Sprintf("%s:%d", entry.AddrV4, entry.Port)
-				// 	return
-				// }
 			}
 		}
 	}()
