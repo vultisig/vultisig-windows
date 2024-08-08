@@ -48,5 +48,11 @@
   "setup": "Setup",
   "import": "Import",
   "keygen": "Keygen",
-  "name_your_vault": "Name your Vault"
+  "name_your_vault": "Name your Vault",
+  "join": "Join",
+  "done": "Done",
+  "information_note1": "Keep devices on the same WiFi Network, correct vault and pair devices.",
+  "information_note2": "Make sure no other devices are running Vultisig.",
+  "try_again": "Try Again",
+  "keygen_failed": "Key generation failed"
 }
