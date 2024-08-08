@@ -88,18 +88,6 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
 
   return (
     <>
-      {/* <div>
-        <img
-          src="/assets/images/caretLeft.svg"
-          alt="Back"
-          className="absolute left-5 top-5 cursor-pointer"
-          onClick={() => navigate(-1)}
-        />
-        <h1 className="text-white text-xl font-semibold text-center pt-5">
-          {t("keygen_peer_discovery_keygen_for")} {vaultType} {t("vault")}
-        </h1>
-      </div> */}
-
       <div className="mx-auto w-full  text-white text-center">
         <div>
           {/* sample data */}

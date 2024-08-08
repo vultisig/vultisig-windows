@@ -1,6 +1,6 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { BrowserOpenURL } from '../../../wailsjs/runtime';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { BrowserOpenURL } from "../../../wailsjs/runtime";
 
 interface NavBarProps {
   title: string;
@@ -18,11 +18,11 @@ const NavBar: React.FC<NavBarProps> = ({ title, questionLink, handleBack }) => {
   };
 
   return (
-    <nav className="bg-primary text-white p-4 flex justify-between items-center border-b border-gray-400">
+    <nav className="bg-[#02122B] text-white p-4 flex justify-between items-center border-b border-gray-400">
       <img
-        src="/assets/images/caretLeft.svg"
+      
+        src="/assets/images/icon-caretLeft.svg"
         alt="Back"
-        role="presentation"
         onClick={() => {
           if (handleBack) {
             handleBack();
@@ -36,9 +36,8 @@ const NavBar: React.FC<NavBarProps> = ({ title, questionLink, handleBack }) => {
       <img
         src="/assets/images/question.svg"
         alt="Question"
-        role="presentation"
         onClick={openHelp}
-        className={questionLink ? 'cursor-pointer' : 'invisible'}
+        className={questionLink ? "cursor-pointer" : "invisible"}
       />
     </nav>
   );
