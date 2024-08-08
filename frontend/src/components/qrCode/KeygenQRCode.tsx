@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import QRCode from "react-qr-code";
-import styles from "./KeygenQRCode.module.css";
+import React, { useEffect } from 'react';
+import QRCode from 'react-qr-code';
+import styles from './KeygenQRCode.module.css';
 
-import { generateRandomNumber } from "../../utils/util";
+import { generateRandomNumber } from '../../utils/util';
 interface KeygenQRCode {
   data: string;
   serviceName: string;

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import NavBar from "../../components/navbar/NavBar";
-import KeygenPeerDiscoveryView from "../keygenPeerDiscovery/KeygenPeerDiscoveryView";
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import NavBar from '../../components/navbar/NavBar';
+import KeygenPeerDiscoveryView from '../keygenPeerDiscovery/KeygenPeerDiscoveryView';
 
 interface TabContent {
   title: string;
@@ -16,8 +16,8 @@ const TabbedContent: React.FC = () => {
   const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [vaultName, setVaultName] = useState<string>(t("main_vault"));
-  const [vaultType, setVaultType] = useState<string>("2/3");
+  const [vaultName, setVaultName] = useState<string>(t('main_vault'));
+  const [vaultType, setVaultType] = useState<string>('2/3');
   const [devices, setDevices] = useState<string[]>([]);
   const [localPartyId, setLocalPartyId] = useState<string>('');
   const [keygenError, setKeygenError] = useState<string>('');
@@ -40,30 +40,30 @@ const TabbedContent: React.FC = () => {
 
   const tabs: TabContent[] = [
     {
-      title: t("2_of_2_vault"),
-      type: "2/2",
-      description1: `${t("need_min_devices")} 2 ${t("devices")}`,
-      description2: `1. ${t("start_from_one_device")}`,
-      description3: `2. ${t("pair_from_the")} ${t("second")} ${t("device")}`,
-      image: "/assets/images/vaultSetup1.svg",
+      title: t('2_of_2_vault'),
+      type: '2/2',
+      description1: `${t('need_min_devices')} 2 ${t('devices')}`,
+      description2: `1. ${t('start_from_one_device')}`,
+      description3: `2. ${t('pair_from_the')} ${t('second')} ${t('device')}`,
+      image: '/assets/images/vaultSetup1.svg',
     },
     {
-      title: t("2_of_3_vault"),
-      type: "2/3",
-      description1: `${t("need_min_devices")} 3 ${t("devices")}`,
-      description2: `1. ${t("start_from_one_device")}`,
-      description3: `2. ${t("pair_from_the")} ${t("second_and_third")} ${t(
-        "device"
+      title: t('2_of_3_vault'),
+      type: '2/3',
+      description1: `${t('need_min_devices')} 3 ${t('devices')}`,
+      description2: `1. ${t('start_from_one_device')}`,
+      description3: `2. ${t('pair_from_the')} ${t('second_and_third')} ${t(
+        'device'
       )}`,
       image: '/assets/images/vaultSetup2.svg',
     },
     {
-      title: t("m_of_n_vault"),
-      type: "m/n",
-      description1: t("m_of_n_vault"),
-      description2: `1. ${t("start_from_one_device")}`,
-      description3: `2. ${t("pair_from_the")} ${t("other")} ${t("device")}`,
-      image: "/assets/images/vaultSetup3.svg",
+      title: t('m_of_n_vault'),
+      type: 'm/n',
+      description1: t('m_of_n_vault'),
+      description2: `1. ${t('start_from_one_device')}`,
+      description3: `2. ${t('pair_from_the')} ${t('other')} ${t('device')}`,
+      image: '/assets/images/vaultSetup3.svg',
     },
   ];
 
@@ -196,7 +196,7 @@ const TabbedContent: React.FC = () => {
       ),
     },
     {
-      title: `${t("keygen_peer_discovery_keygen_for")} ${vaultType} ${t("vault")}`,
+      title: `${t('keygen_peer_discovery_keygen_for')} ${vaultType} ${t('vault')}`,
       content: (
         <>
           <KeygenPeerDiscoveryView

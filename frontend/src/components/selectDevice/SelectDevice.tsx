@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import QRCode from "react-qr-code";
-import styles from "./KeygenQRCode.module.css";
+import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import QRCode from 'react-qr-code';
+import styles from './KeygenQRCode.module.css';
 interface KeygenQRCodeProps {
   devices: string[];
   selectedDevices: string[];
@@ -15,9 +15,9 @@ const SelectDevice: React.FC<KeygenQRCodeProps> = ({
 
   const checkHandler = (index: number) => {
     const device = devices[index];
-    setSelectedDevices((prevSelectedDevices) =>
+    setSelectedDevices(prevSelectedDevices =>
       prevSelectedDevices.includes(device)
-        ? prevSelectedDevices.filter((d) => d !== device)
+        ? prevSelectedDevices.filter(d => d !== device)
         : [...prevSelectedDevices, device]
     );
   };
@@ -25,7 +25,7 @@ const SelectDevice: React.FC<KeygenQRCodeProps> = ({
   return (
     <>
       <h3 className="mt-5 font-semibold">
-        {t("keygen_peer_discovery_select_the_pairing_devices")}
+        {t('keygen_peer_discovery_select_the_pairing_devices')}
       </h3>
       <div className="flex flex-wrap justify-center w-full items-center gap-10 my-2">
         {devices.map((device, index) => (
@@ -36,13 +36,13 @@ const SelectDevice: React.FC<KeygenQRCodeProps> = ({
             <div className="inline-flex items-center">
               <label
                 className="py-3 rounded-full cursor-pointer"
-                htmlFor={"device-" + index}
+                htmlFor={'device-' + index}
               >
                 <input
                   type="checkbox"
                   onChange={() => checkHandler(index)}
                   className="absolute right-1 top-1 before:content[''] peer h-4 w-4 cursor-pointer appearance-none rounded-full border border-gray-900/20 bg-white transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity  checked:border-gray-900  checked:before:bg-gray-900 hover:scale-105 hover:before:opacity-0"
-                  id={"device-" + index}
+                  id={'device-' + index}
                 />
                 <span className="absolute right-1 top-2 text-white transition-opacity opacity-0 pointer-events-none   -translate-x-2/4 peer-checked:opacity-100">
                   <svg

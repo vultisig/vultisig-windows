@@ -1,4 +1,4 @@
-import { ENDPOINTS } from "../../config";
+import { ENDPOINTS } from '../../config';
 // Interval ref
 let intervalId: any = null;
 
@@ -12,9 +12,9 @@ export function postSession(
       isRelay ? ENDPOINTS.VULTISIG_RELAY : ENDPOINTS.LOCAL_MEDIATOR_URL
     }/${sessionID}`,
     {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify([serviceName]),
     }
@@ -39,9 +39,9 @@ export function startkeygen(
       isRelay ? ENDPOINTS.VULTISIG_RELAY : ENDPOINTS.LOCAL_MEDIATOR_URL
     }/start/${sessionID}`,
     {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(devices),
     }
