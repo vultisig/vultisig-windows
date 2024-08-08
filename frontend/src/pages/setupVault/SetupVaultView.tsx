@@ -17,18 +17,22 @@ const TabbedContent: React.FC = () => {
   const [vaultName, setVaultName] = useState<string>(t('main_vault'));
   const [devices, setDevices] = useState<string[]>([]);
   const [localPartyId, setLocalPartyId] = useState<string>('');
+  const [keygenError, setKeygenError] = useState<string>('');
 
   useEffect(() => {
     setDevices([]);
     setLocalPartyId('');
+    setKeygenError('');
   }, []);
 
-  const nextScreen = () => {
-    setCurrentScreen(prev => (prev < screens.length - 1 ? prev + 1 : prev));
-  };
-
   const prevScreen = () => {
-    setCurrentScreen(prev => (prev > 0 ? prev - 1 : prev));
+    setCurrentScreen(prev => {
+      if (prev > 4) {
+        return 3;
+      } else {
+        return prev > 0 ? prev - 1 : prev;
+      }
+    });
   };
 
   const tabs: TabContent[] = [
@@ -88,7 +92,9 @@ const TabbedContent: React.FC = () => {
   // 1 - vault name setup
   // 2 - keygen peer discovery screens
   // 3 - keygen verify
-  // ...
+  // 4 - keygen view
+  // 5 - keygen done
+  // 6 - keygen error
   const screens = [
     {
       title: t('setup'),
@@ -131,7 +137,7 @@ const TabbedContent: React.FC = () => {
             <button
               className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold"
               onClick={() => {
-                nextScreen();
+                setCurrentScreen(1);
               }}
             >
               {t('start')}
@@ -166,13 +172,13 @@ const TabbedContent: React.FC = () => {
           </div>
           <button
             className={`text-lg rounded-full w-80 font-bold py-2 mt-16 ${
-              vaultName !== ''
+              vaultName
                 ? 'text-[#061B3A] bg-[#33E6BF]'
                 : 'text-[#BDBDBD] bg-white/[.10]'
             }`}
             disabled={vaultName === ''}
             onClick={() => {
-              nextScreen();
+              setCurrentScreen(2);
             }}
           >
             {t('continue')}
@@ -216,11 +222,75 @@ const TabbedContent: React.FC = () => {
           <button
             className="fixed bottom-16 text-lg rounded-full w-80 font-bold py-2 text-[#061B3A] bg-[#33E6BF]"
             onClick={() => {
-              nextScreen();
+              setCurrentScreen(4);
             }}
           >
             {t('continue')}
           </button>
+        </div>
+      ),
+    },
+    {
+      title: `${t('join')} ${t('keygen')}`,
+      content: <></>, // keygen view
+    },
+    {
+      title: `${t('join')} ${t('keygen')}`,
+      content: (
+        <div className="text-center text-white">
+          <img
+            src="/assets/images/done.svg"
+            alt="done"
+            className="mx-auto mt-[30vh] mb-6"
+          />
+          <p className="text-2xl font-bold">{t('done')}</p>
+          <div className="w-full fixed bottom-16 text-center">
+            <img
+              src="/assets/images/wifi.svg"
+              alt="wifi"
+              className="mx-auto mb-4 w-8"
+            />
+            <p className="mb-4">{t('devices_on_same_wifi')}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: t('keygen'), // need to be updated
+      content: (
+        <div className="text-center text-white">
+          <img
+            src="/assets/images/warningYellow.svg"
+            alt="warning"
+            className="mx-auto mt-[25vh] mb-6"
+          />
+          <p className="text-2xl font-bold">
+            {t('keygen_failed')}
+            <br />
+            {keygenError && (
+              <p className="text-sm font-normal mt-2">{keygenError}</p>
+            )}
+          </p>
+          <div className="w-full fixed bottom-16 text-sm">
+            <div className="w-[330px] mx-auto">
+              <div className="w-full flex mb-4 px-3 py-2 border border-[#F7961B] bg-[#F7961B]/[.35] rounded-2xl">
+                <img src="/assets/images/warning.svg" alt="warning" />
+                <p className="ml-2 text-left">
+                  {t('information_note1')}
+                  <br />
+                  {t('information_note2')}
+                </p>
+              </div>
+              <button
+                className="text-lg rounded-full w-full font-bold py-2 text-[#061B3A] bg-[#33E6BF]"
+                onClick={() => {
+                  setCurrentScreen(3);
+                }}
+              >
+                {t('try_again')}
+              </button>
+            </div>
+          </div>
         </div>
       ),
     },
@@ -231,7 +301,7 @@ const TabbedContent: React.FC = () => {
       <NavBar
         title={screens[currentScreen].title}
         questionLink={
-          currentScreen === 0
+          currentScreen === 0 || currentScreen > 3
             ? 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
             : undefined
         }

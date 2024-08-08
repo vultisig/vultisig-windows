@@ -65,7 +65,7 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
             </div>
           </div>
         )}
-        {content !== '' && (
+        {content && (
           <div className="text-sm text-center">
             {content}
             <button
