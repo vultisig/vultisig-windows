@@ -8,6 +8,7 @@ import (
 
 	m "github.com/hashicorp/mdns"
 	"github.com/vultisig/vultisig-relay/server"
+	"github.com/vultisig/vultisig-relay/storage"
 )
 
 const (
@@ -21,7 +22,7 @@ type Server struct {
 }
 
 func NewRelayServer() (*Server, error) {
-	store, err := NewInMemoryStorage()
+	store, err := storage.NewInMemoryStorage()
 	if err != nil {
 		return nil, err
 	}

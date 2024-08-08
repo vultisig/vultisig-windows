@@ -10,7 +10,6 @@ require (
 	github.com/google/uuid v1.4.0
 	github.com/hashicorp/mdns v1.0.5
 	github.com/mattn/go-sqlite3 v1.14.22
-	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/rs/zerolog v1.32.0
 	github.com/vultisig/mobile-tss-lib v0.0.0-20240720084109-0abbb4fb701b
 	github.com/vultisig/vultisig-relay v0.0.0-20240801091101-21447505c96a
@@ -50,6 +49,7 @@ require (
 	github.com/miekg/dns v1.1.41 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/otiai10/primes v0.0.0-20210501021515-f1b2be525a11 // indirect
+	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/redis/go-redis/v9 v9.5.1 // indirect
