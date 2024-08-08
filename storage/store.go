@@ -63,18 +63,18 @@ func (s *Store) Migrate() error {
 }
 
 // SaveVault saves a vault
-func (s *Store) SaveVault(vault *Vault) (string, error) {
-	if vault.ID == "" {
-		vault.ID = uuid.New().String()
+func (s *Store) SaveVault(vault *Vault) error {
+	if vault.PublicKeyECDSA == "" {
+		return fmt.Errorf("invalid , vault's public key ecdsa is required")
 	}
+
 	buf, err := json.Marshal(vault.Signers)
 	if err != nil {
-		return "", fmt.Errorf("could not marshal signers, err: %w", err)
+		return fmt.Errorf("could not marshal signers, err: %w", err)
 	}
-	query := `INSERT OR REPLACE INTO vaults (id, name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, listorder, is_backedup)
-							  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	query := `INSERT OR REPLACE INTO vaults (name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, listorder, is_backedup)
+							  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 	_, err = s.db.Exec(query,
-		vault.ID,
 		vault.Name,
 		vault.PublicKeyECDSA,
 		vault.PublicKeyEdDSA,
@@ -86,36 +86,35 @@ func (s *Store) SaveVault(vault *Vault) (string, error) {
 		vault.Order,
 		vault.IsBackedUp)
 	if err != nil {
-		return "", fmt.Errorf("could not upsert vault, err: %w", err)
+		return fmt.Errorf("could not upsert vault, err: %w", err)
 	}
 	for _, keyShare := range vault.KeyShares {
-		if err := s.saveKeyshare(vault.ID, keyShare); err != nil {
-			return "", fmt.Errorf("could not save keyshare, err: %w", err)
+		if err := s.saveKeyshare(vault.PublicKeyECDSA, keyShare); err != nil {
+			return fmt.Errorf("could not save keyshare, err: %w", err)
 		}
 	}
 	for _, coin := range vault.Coins {
-		if _, err := s.SaveCoin(vault.ID, coin); err != nil {
-			return "", fmt.Errorf("could not save coin, err: %w", err)
+		if _, err := s.SaveCoin(vault.PublicKeyECDSA, coin); err != nil {
+			return fmt.Errorf("could not save coin, err: %w", err)
 		}
 	}
-	return vault.ID, nil
+	return nil
 }
 
 // UpdateVaultName updates the vault name
-func (s *Store) UpdateVaultName(vaultID, name string) error {
-	query := `UPDATE vaults SET name = ? WHERE id = ?`
-	_, err := s.db.Exec(query, name, vaultID)
+func (s *Store) UpdateVaultName(publicKeyECDSA, name string) error {
+	query := `UPDATE vaults SET name = ? WHERE public_key_ecdsa = ?`
+	_, err := s.db.Exec(query, name, publicKeyECDSA)
 	return err
 }
 
 // GetVault gets a vault
-func (s *Store) GetVault(id string) (*Vault, error) {
-	query := `SELECT id, name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, listorder, is_backedup FROM vaults WHERE id = ?`
-	row := s.db.QueryRow(query, id)
+func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
+	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, listorder, is_backedup FROM vaults WHERE public_key_ecdsa = ?`
+	row := s.db.QueryRow(query, publicKeyEcdsa)
 	var signers string
 	var vault Vault
-	err := row.Scan(&vault.ID,
-		&vault.Name,
+	err := row.Scan(&vault.Name,
 		&vault.PublicKeyECDSA,
 		&vault.PublicKeyEdDSA,
 		&vault.CreatedAt,
@@ -135,12 +134,12 @@ func (s *Store) GetVault(id string) (*Vault, error) {
 		return nil, fmt.Errorf("could not unmarshal signers, err: %w", err)
 	}
 
-	keyShares, err := s.getKeyShares(id)
+	keyShares, err := s.getKeyShares(publicKeyEcdsa)
 	if err != nil {
 		return nil, fmt.Errorf("could not get keyshares, err: %w", err)
 	}
 	vault.KeyShares = keyShares
-	coins, err := s.GetCoins(id)
+	coins, err := s.GetCoins(publicKeyEcdsa)
 	if err != nil {
 		return nil, fmt.Errorf("could not get coins, err: %w", err)
 	}
@@ -153,17 +152,17 @@ func (s *Store) closeRows(rows *sql.Rows) {
 		s.log.Error().Err(err).Msg("could not close rows")
 	}
 }
-func (s *Store) saveKeyshare(vaultID string, keyShare KeyShare) error {
-	query := `INSERT OR REPLACE INTO keyshares (vault_id, public_key, keyshare) VALUES (?, ?, ?)`
-	_, err := s.db.Exec(query, vaultID, keyShare.PublicKey, keyShare.KeyShare)
+func (s *Store) saveKeyshare(vaultPublicKeyECDSA string, keyShare KeyShare) error {
+	query := `INSERT OR REPLACE INTO keyshares (public_key_ecdsa, public_key, keyshare) VALUES (?, ?, ?)`
+	_, err := s.db.Exec(query, vaultPublicKeyECDSA, keyShare.PublicKey, keyShare.KeyShare)
 	if err != nil {
 		return fmt.Errorf("could not upsert keyshare, err: %w", err)
 	}
 	return nil
 }
-func (s *Store) getKeyShares(vaultID string) ([]KeyShare, error) {
-	keySharesQuery := `SELECT public_key, keyshare FROM keyshares WHERE vault_id = ?`
-	keySharesRows, err := s.db.Query(keySharesQuery, vaultID)
+func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
+	keySharesQuery := `SELECT public_key, keyshare FROM keyshares WHERE public_key_ecdsa = ?`
+	keySharesRows, err := s.db.Query(keySharesQuery, vaultPublicKeyECDSA)
 	if err != nil {
 		return nil, fmt.Errorf("could not query keyshares, err: %w", err)
 	}
@@ -181,7 +180,7 @@ func (s *Store) getKeyShares(vaultID string) ([]KeyShare, error) {
 
 // GetVaults gets all vaults
 func (s *Store) GetVaults() ([]*Vault, error) {
-	query := `SELECT id, name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, reshare_prefix, listorder, is_backedup FROM vaults`
+	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, reshare_prefix, listorder, is_backedup FROM vaults`
 	rows, err := s.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("could not query vaults, err: %w", err)
@@ -191,8 +190,7 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 	var vaults []*Vault
 	for rows.Next() {
 		var vault Vault
-		err := rows.Scan(&vault.ID,
-			&vault.Name,
+		err := rows.Scan(&vault.Name,
 			&vault.PublicKeyECDSA,
 			&vault.PublicKeyEdDSA,
 			&vault.CreatedAt,
@@ -205,12 +203,12 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 			return nil, fmt.Errorf("could not scan vault, err: %w", err)
 		}
 
-		keyShares, err := s.getKeyShares(vault.ID)
+		keyShares, err := s.getKeyShares(vault.PublicKeyECDSA)
 		if err != nil {
 			return nil, fmt.Errorf("could not get keyshares, err: %w", err)
 		}
 		vault.KeyShares = keyShares
-		coins, err := s.GetCoins(vault.ID)
+		coins, err := s.GetCoins(vault.PublicKeyECDSA)
 		if err != nil {
 			return nil, fmt.Errorf("could not get coins, err: %w", err)
 		}
@@ -223,16 +221,16 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 }
 
 // DeleteVault deletes a vault
-func (s *Store) DeleteVault(id string) error {
-	_, err := s.db.Exec("DELETE FROM vaults WHERE id = ?", id)
+func (s *Store) DeleteVault(publicKeyECDSA string) error {
+	_, err := s.db.Exec("DELETE FROM vaults WHERE public_key_ecdsa = ?", publicKeyECDSA)
 	return err
 }
 
 // GetCoins gets all coins belongs to the vault
-func (s *Store) GetCoins(vaultID string) ([]Coin, error) {
+func (s *Store) GetCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 	var coins []Coin
-	coinsQuery := `SELECT id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, raw_balance, price_rate FROM coins WHERE vault_id = ?`
-	coinsRows, err := s.db.Query(coinsQuery, vaultID)
+	coinsQuery := `SELECT id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, raw_balance, price_rate FROM coins WHERE public_key_ecdsa = ?`
+	coinsRows, err := s.db.Query(coinsQuery, vaultPublicKeyECDSA)
 	if err != nil {
 		return nil, fmt.Errorf("could not query coins, err: %w", err)
 	}
@@ -257,18 +255,18 @@ func (s *Store) GetCoins(vaultID string) ([]Coin, error) {
 	return coins, nil
 }
 
-func (s *Store) DeleteCoin(vaultID, coinID string) error {
-	_, err := s.db.Exec("DELETE FROM coins WHERE id = ? AND vault_id = ?", coinID, vaultID)
+func (s *Store) DeleteCoin(vaultPublicKeyECDSA, coinID string) error {
+	_, err := s.db.Exec("DELETE FROM coins WHERE id = ? AND public_key_ecdsa = ?", coinID, vaultPublicKeyECDSA)
 	return err
 }
 
-func (s *Store) SaveCoin(vaultID string, coin Coin) (string, error) {
+func (s *Store) SaveCoin(vaultPublicKeyECDSA string, coin Coin) (string, error) {
 	if coin.ID == "" {
 		coin.ID = uuid.New().String()
 	}
-	query := `INSERT OR REPLACE INTO coins (id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, raw_balance, price_rate, vault_id)
+	query := `INSERT OR REPLACE INTO coins (id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, raw_balance, price_rate, public_key_ecdsa)
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-	_, err := s.db.Exec(query, coin.ID, coin.Chain, coin.Address, coin.HexPublicKey, coin.Ticker, coin.ContractAddress, coin.IsNativeToken, coin.Logo, coin.PriceProviderID, coin.RawBalance, coin.PriceRate, vaultID)
+	_, err := s.db.Exec(query, coin.ID, coin.Chain, coin.Address, coin.HexPublicKey, coin.Ticker, coin.ContractAddress, coin.IsNativeToken, coin.Logo, coin.PriceProviderID, coin.RawBalance, coin.PriceRate, vaultPublicKeyECDSA)
 	if err != nil {
 		return "", fmt.Errorf("could not upsert coin, err: %w", err)
 	}
