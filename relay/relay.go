@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 	"time"
-	
+
 	m "github.com/hashicorp/mdns"
 	"github.com/vultisig/vultisig-relay/server"
 	"github.com/vultisig/vultisig-relay/storage"
