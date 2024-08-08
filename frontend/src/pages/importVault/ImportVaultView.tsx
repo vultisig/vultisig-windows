@@ -52,6 +52,8 @@ const ImportVaultView: React.FC = () => {
                 setDialogTitle(t('enter_password'));
                 setDialogContent('');
                 setDialogOpen(true);
+              } else {
+                setContinue(true);
               }
             }
           }
@@ -92,7 +94,6 @@ const ImportVaultView: React.FC = () => {
     if (decryptedContent) {
       const vault = Vault.fromBinary(decryptedContent);
       SaveVault({
-        id: '',
         name: vault.name,
         public_key_ecdsa: vault.publicKeyEcdsa,
         public_key_eddsa: vault.publicKeyEddsa,
@@ -109,8 +110,8 @@ const ImportVaultView: React.FC = () => {
         is_backed_up: true,
         coins: [],
         convertValues: () => {},
-      }).then((vaultId: string) => {
-        console.log('vaultId', vaultId);
+      }).then(() => {
+        console.log('Vault saved');
       });
     }
   };
