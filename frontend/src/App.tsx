@@ -1,14 +1,14 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { KeygenMessage } from "./gen/vultisig/keygen/v1/keygen_message_pb";
-import OnboardingView from "./pages/onboarding/OnboardingView";
-import ImportVaultView from "./pages/importVault/ImportVaultView";
-import "./i18n/config";
-import SetupVaultView from "./pages/setupVault/SetupVaultView";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { KeygenMessage } from './gen/vultisig/keygen/v1/keygen_message_pb';
+import OnboardingView from './pages/onboarding/OnboardingView';
+import ImportVaultView from './pages/importVault/ImportVaultView';
+import './i18n/config';
+import SetupVaultView from './pages/setupVault/SetupVaultView';
 
-function App() {
+const App: React.FC = () => {
   const keygenMessage = new KeygenMessage({
-    sessionId: "sessionId",
+    sessionId: 'sessionId',
   });
   const bytes = keygenMessage.toBinary();
   console.log(bytes);
@@ -23,6 +23,6 @@ function App() {
       </Router>
     </div>
   );
-}
+};
 
 export default App;

@@ -3,8 +3,15 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3 } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf';
+import { Message, proto3 } from '@bufbuild/protobuf';
 
 /**
  * @generated from message vultisig.keygen.v1.KeygenMessage
@@ -13,22 +20,22 @@ export class KeygenMessage extends Message<KeygenMessage> {
   /**
    * @generated from field: string session_id = 1;
    */
-  sessionId = "";
+  sessionId = '';
 
   /**
    * @generated from field: string hex_chain_code = 2;
    */
-  hexChainCode = "";
+  hexChainCode = '';
 
   /**
    * @generated from field: string service_name = 3;
    */
-  serviceName = "";
+  serviceName = '';
 
   /**
    * @generated from field: string encryption_key_hex = 4;
    */
-  encryptionKeyHex = "";
+  encryptionKeyHex = '';
 
   /**
    * @generated from field: bool use_vultisig_relay = 5;
@@ -38,7 +45,7 @@ export class KeygenMessage extends Message<KeygenMessage> {
   /**
    * @generated from field: string vault_name = 6;
    */
-  vaultName = "";
+  vaultName = '';
 
   constructor(data?: PartialMessage<KeygenMessage>) {
     super();
@@ -46,30 +53,61 @@ export class KeygenMessage extends Message<KeygenMessage> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keygen.v1.KeygenMessage";
+  static readonly typeName = 'vultisig.keygen.v1.KeygenMessage';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "session_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "hex_chain_code", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "service_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "encryption_key_hex", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "use_vultisig_relay", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 6, name: "vault_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 1, name: 'session_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 2,
+      name: 'hex_chain_code',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 3,
+      name: 'service_name',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 4,
+      name: 'encryption_key_hex',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 5,
+      name: 'use_vultisig_relay',
+      kind: 'scalar',
+      T: 8 /* ScalarType.BOOL */,
+    },
+    { no: 6, name: 'vault_name', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): KeygenMessage {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): KeygenMessage {
     return new KeygenMessage().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): KeygenMessage {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): KeygenMessage {
     return new KeygenMessage().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): KeygenMessage {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): KeygenMessage {
     return new KeygenMessage().fromJsonString(jsonString, options);
   }
 
-  static equals(a: KeygenMessage | PlainMessage<KeygenMessage> | undefined, b: KeygenMessage | PlainMessage<KeygenMessage> | undefined): boolean {
+  static equals(
+    a: KeygenMessage | PlainMessage<KeygenMessage> | undefined,
+    b: KeygenMessage | PlainMessage<KeygenMessage> | undefined
+  ): boolean {
     return proto3.util.equals(KeygenMessage, a, b);
   }
 }
-

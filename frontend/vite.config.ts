@@ -1,23 +1,23 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import stdLibBrowser from "vite-plugin-node-stdlib-browser";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import stdLibBrowser from 'vite-plugin-node-stdlib-browser';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), stdLibBrowser()],
   build: {
-    outDir: "dist",
-    assetsDir: "assets",
+    outDir: 'dist',
+    assetsDir: 'assets',
   },
-  publicDir: "public",
+  publicDir: 'public',
   resolve: {
     alias: {
-      crypto: "crypto-browserify",
-      stream: "stream-browserify",
-      buffer: "buffer",
+      crypto: 'crypto-browserify',
+      stream: 'stream-browserify',
+      buffer: 'buffer',
     },
   },
   optimizeDeps: {
-    include: ["crypto-browserify", "stream-browserify", "buffer"],
+    include: ['crypto-browserify', 'stream-browserify', 'buffer'],
   },
 });
