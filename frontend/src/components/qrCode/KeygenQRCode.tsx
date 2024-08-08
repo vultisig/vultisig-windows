@@ -7,7 +7,7 @@ interface KeygenQRCode {
 const KeygenQRCode: React.FC<KeygenQRCode> = ({ data }) => {
   return (
     <>
-      <div className="h-auto mx-auto max-w-xs w-full p-5 bg-btn-primary mt-2 border border-4 rounded-xl border-tertiary border-dashed">
+      <div className="h-auto mx-auto max-w-xs w-full p-5 bg-btn-primary mt-2 border border-4 rounded-xl border-tertiary border-dashed ">
         <div className="bg-white p-2">
           <QRCode
             size={256}
