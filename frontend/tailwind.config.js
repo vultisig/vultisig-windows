@@ -5,6 +5,7 @@ export const theme = {
     colors: {
       primary: '#02122B',
       secondary: '#33E6BF',
+      tertiary: '#33E6BF',
       btn: {
         primary: '#061B3A',
         secondary: '#BDBDBD',

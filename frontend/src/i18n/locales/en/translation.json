@@ -21,7 +21,7 @@
   "cancel": "Cancel",
   "internet": "Internet",
   "local": "Local",
-  "keygen_peer_discovery_looking_for": "Looking for",
+  "looking_for_devices": "Looking for devices... ",
   "keygen_peer_discovery_more_devices": "more devices ...",
   "peer_discovery_hint_connect_to_internet": "Connect all devices to the Internet with Vultisig open",
   "peer_discovery_hint_connect_to_same_wifi": "Connect all devices to the same Network with Vultisig open",

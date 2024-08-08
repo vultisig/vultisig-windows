@@ -18,10 +18,10 @@ const NavBar: React.FC<NavBarProps> = ({ title, questionLink, handleBack }) => {
   };
 
   return (
-    <nav className="bg-[#02122B] text-white p-4 flex justify-between items-center border-b border-gray-400">
+    <nav className="bg-primary text-white p-4 flex justify-between items-center border-b border-gray-400">
       <img
       
-        src="/assets/images/icon-caretLeft.svg"
+        src="/assets/images/icons/caretLeft.svg"
         alt="Back"
         onClick={() => {
           if (handleBack) {
@@ -34,7 +34,7 @@ const NavBar: React.FC<NavBarProps> = ({ title, questionLink, handleBack }) => {
       />
       <h1 className="text-xl font-bold">{title}</h1>
       <img
-        src="/assets/images/question.svg"
+        src="/assets/images/icons/question.svg"
         alt="Question"
         onClick={openHelp}
         className={questionLink ? "cursor-pointer" : "invisible"}

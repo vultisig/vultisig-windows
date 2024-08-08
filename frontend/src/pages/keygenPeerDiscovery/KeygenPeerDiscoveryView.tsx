@@ -49,7 +49,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
     setSelectedDevices([]);
     async function createQR() {
       setQrData(
-        await createKeygenMsg(isRelay, vaultName, serviceName, sessionID)
+        await createKeygenMsg(isRelay, vaultName, serviceName!, sessionID!)
       );
     }
     clearCheckingInterval();
@@ -64,8 +64,8 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
 
   const discoverService = async (name: string) => {
     if (!isRelay) await AdvertiseMediator(name);
-    await postSession(isRelay, sessionID, serviceName);
-    checkForDevices(isRelay, sessionID, setDevices);
+    await postSession(isRelay, sessionID!, serviceName!);
+    checkForDevices(isRelay, sessionID!, setDevices);
   };
 
   const handleCanContinue = () => {
@@ -82,7 +82,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
 
   const startKeygen = async () => {
     if (handleCanContinue()) {
-      await startkeygen(isRelay, sessionID, selectedDevices);
+      await startkeygen(isRelay, sessionID!, selectedDevices);
     }
   };
 
@@ -91,7 +91,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
       <div className="mx-auto w-full  text-white text-center">
         <div>
           {/* sample data */}
-          <KeygenQRCode data={qrData} serviceName={serviceName} />
+          <KeygenQRCode data={qrData} serviceName={serviceName!} />
         </div>
         <div className="flex gap-10 justify-center mt-5">
           <button
@@ -100,7 +100,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
               isRelay ? "bg-[#1B3F73]" : "bg-[#11284A]"
             } rounded-3xl flex items-center justify-center w-[150px] py-2 gap-2`}
           >
-            <img src="/assets/images/cellular.svg" alt="cellular" />{" "}
+            <img src="/assets/images/icons/cellular.svg" alt="cellular" />{" "}
             {t("internet")}
           </button>
           <button
@@ -109,14 +109,13 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
               !isRelay ? "bg-[#1B3F73]" : "bg-[#11284A]"
             } rounded-3xl flex items-center justify-center w-[150px] py-2 gap-2`}
           >
-            <img src="/assets/images/wifi.svg" alt="wifi" /> {t("local")}
+            <img src="/assets/images/icons/wifi.svg" alt="wifi" /> {t("local")}
           </button>
         </div>
         {devices.length == 0 ? (
           <>
             <h3 className="mt-5 font-semibold">
-              {t("keygen_peer_discovery_looking_for")} {1}{" "}
-              {t("keygen_peer_discovery_more_devices")}
+              {t("looking_for_devices")}
             </h3>
             <div className="w-[100px] h-auto mx-auto">
               <Lottie animationData={loadingAnimation} loop={true} />
@@ -133,7 +132,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
         {isRelay ? (
           <div>
             <img
-              src="/assets/images/cellular.svg"
+              src="/assets/images/icons/cellular.svg"
               alt="cellular"
               className="mx-auto my-2"
             />
@@ -142,7 +141,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
         ) : (
           <div>
             <img
-              src="/assets/images/wifi.svg"
+              src="/assets/images/icons/wifi.svg"
               alt="wifi"
               className="mx-auto my-2"
             />

@@ -136,7 +136,7 @@ const TabbedContent: React.FC = () => {
               className="mx-auto mb-4 w-60"
             />
             <img
-              src="/assets/images/wifi.svg"
+              src="/assets/images/icons/wifi.svg"
               alt="wifi"
               className="mx-auto mb-4 w-8"
             />
@@ -196,7 +196,7 @@ const TabbedContent: React.FC = () => {
       ),
     },
     {
-      title: `${t("keygen_peer_discovery_keygen_for")} ${vaultType} ${t("vault")}`, // need to be updated
+      title: `${t("keygen_peer_discovery_keygen_for")} ${vaultType} ${t("vault")}`,
       content: (
         <>
           <KeygenPeerDiscoveryView
@@ -204,7 +204,7 @@ const TabbedContent: React.FC = () => {
             vaultType={vaultType}
           />
         </>
-      ), // keygen peer discovery view
+      ),
     },
     {
       title: t('keygen'),
@@ -220,7 +220,7 @@ const TabbedContent: React.FC = () => {
             {renderDevicesList()}
           </div>
           <div className="w-80 flex mt-2 px-3 py-2 border border-secondary/[.5] rounded-2xl">
-            <img src="/assets/images/info.svg" alt="info" />
+            <img src="/assets/images/icons/info.svg" alt="info" />
             <p className="ml-2">
               {t('pair_device_disclaimers_first')}{' '}
               {Math.ceil((2 * devices.length) / 3)}{' '}
@@ -228,7 +228,7 @@ const TabbedContent: React.FC = () => {
             </p>
           </div>
           <div className="w-80 flex mt-2 px-3 py-2 border border-secondary/[.5] rounded-2xl">
-            <img src="/assets/images/info.svg" alt="info" />
+            <img src="/assets/images/icons/info.svg" alt="info" />
             <p className="ml-2">
               {devices.length > 2
                 ? t('backup_not_needed_disclaimer')
@@ -255,14 +255,14 @@ const TabbedContent: React.FC = () => {
       content: (
         <div className="text-center text-white">
           <img
-            src="/assets/images/done.svg"
+            src="/assets/images/icons/done.svg"
             alt="done"
             className="mx-auto mt-[30vh] mb-6"
           />
           <p className="text-2xl font-bold">{t('done')}</p>
           <div className="w-full fixed bottom-16 text-center">
             <img
-              src="/assets/images/wifi.svg"
+              src="/assets/images/icons/wifi.svg"
               alt="wifi"
               className="mx-auto mb-4 w-8"
             />
