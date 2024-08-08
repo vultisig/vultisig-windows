@@ -4,20 +4,55 @@ import {
   AnyAddress,
   CoinType,
   CoinTypeExt,
+  DataVector,
   HexCoding,
+  PublicKey,
+  PublicKeyType,
   TransactionCompiler,
 } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { THORChainSpecific } from '../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { TW } from '@trustwallet/wallet-core';
+import { tss } from '../../wailsjs/go/models';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import TxCompiler = TW.TxCompiler;
+import PublicKeyHelper from './public_key_helper';
+import SignatureProvider from './signature_provider';
+import { createHash } from 'crypto';
 
 class THORChainHelper {
   static coinType = CoinType.thorchain;
   static isTHORChainSpecific(obj: any): boolean {
     return obj instanceof THORChainSpecific;
   }
+
+  static getSwapPreSignedInputData(
+    keysignPayload: KeysignPayload,
+    signingInput: TW.Cosmos.Proto.SigningInput
+  ): Uint8Array {
+    if (!this.isTHORChainSpecific(keysignPayload.blockchainSpecific)) {
+      throw new Error('Invalid blockchain specific');
+    }
+    const pubKeyData = Buffer.from(
+      keysignPayload.coin?.hexPublicKey || '',
+      'hex'
+    );
+    if (!pubKeyData) {
+      throw new Error('invalid hex public key');
+    }
+    const thorchainSpecific =
+      keysignPayload.blockchainSpecific as unknown as THORChainSpecific;
+    const input = signingInput;
+    input.publicKey = pubKeyData;
+    input.accountNumber = thorchainSpecific.accountNumber;
+    input.sequence = thorchainSpecific.sequence;
+    input.mode = BroadcastMode.SYNC;
+    input.fee = TW.Cosmos.Proto.Fee.create({
+      gas: 20000000,
+    });
+    return TW.Cosmos.Proto.SigningInput.encode(input).finish();
+  }
+
   static getPreSignedInputData(keysignPayload: KeysignPayload): Uint8Array {
     if (keysignPayload.coin?.chain !== Chain.THORChain.toString()) {
       throw new Error('Invalid chain');
@@ -33,7 +68,7 @@ class THORChainHelper {
       throw new Error('Invalid blockchain specific');
     }
     const thorchainSpecific =
-      keysignPayload.blockchainSpecific as THORChainSpecific;
+      keysignPayload.blockchainSpecific as unknown as THORChainSpecific;
     const pubKeyData = Buffer.from(keysignPayload.coin.hexPublicKey, 'hex');
     if (!pubKeyData) {
       throw new Error('invalid hex public key');
@@ -113,5 +148,65 @@ class THORChainHelper {
     }
     return [HexCoding.encode(preSigningOutput.dataHash)];
   }
+
+  static async getSignedTransaction(
+    vaultHexPublicKey: string,
+    vaultHexChainCode: string,
+    inputData: Uint8Array,
+    signatures: { [key: string]: tss.KeysignResponse }
+  ): Promise<SignedTransactionResult> {
+    const thorPublicKey = await PublicKeyHelper.getDerivedPubKey(
+      vaultHexPublicKey,
+      vaultHexChainCode,
+      CoinTypeExt.derivationPath(this.coinType)
+    );
+    const publicKeyData = Buffer.from(thorPublicKey, 'hex');
+    const publicKey = PublicKey.createWithData(
+      publicKeyData,
+      PublicKeyType.secp256k1
+    );
+    try {
+      const hashes = TransactionCompiler.preImageHashes(
+        this.coinType,
+        inputData
+      );
+      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
+      const allSignatures = DataVector.create();
+      const publicKeys = DataVector.create();
+      const signatureProvider = new SignatureProvider(signatures);
+      const signature = signatureProvider.getSignatureWithRecoveryId(
+        preSigningOutput.dataHash
+      );
+      if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
+        throw new Error('Invalid signature');
+      }
+      allSignatures.add(signature);
+      publicKeys.add(publicKeyData);
+      const compileWithSignatures = TransactionCompiler.compileWithSignatures(
+        this.coinType,
+        inputData,
+        allSignatures,
+        publicKeys
+      );
+      const output = TW.Cosmos.Proto.SigningOutput.decode(
+        compileWithSignatures
+      );
+      const serializedData = output.serialized;
+      const parsedData = JSON.parse(serializedData);
+      const txBytes = parsedData.tx_bytes;
+      const decodedTxBytes = Buffer.from(txBytes, 'base64');
+      const hash = createHash('sha256').update(decodedTxBytes).digest('hex');
+      const result = new SignedTransactionResult(
+        serializedData,
+        hash,
+        undefined
+      );
+      return result;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
 }
+
 export default THORChainHelper;

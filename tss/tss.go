@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/vultisig/mobile-tss-lib/tss"
 	mtss "github.com/vultisig/mobile-tss-lib/tss"
 )
 
@@ -35,6 +36,9 @@ func (t *TssService) StartTssInstance() error {
 		return fmt.Errorf("fail to create Tss instance,err:%w", err)
 	}
 	return nil
+}
+func (t *TssService) KeysignECDSA(req *mtss.KeysignRequest) (*tss.KeysignResponse, error) {
+	return t.serviceIns.KeysignECDSA(req)
 }
 
 // GetDerivedPubKey returns the derived public key
