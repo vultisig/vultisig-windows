@@ -3,8 +3,15 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3 } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf';
+import { Message, proto3 } from '@bufbuild/protobuf';
 
 /**
  * @generated from message vultisig.keysign.v1.Erc20ApprovePayload
@@ -13,12 +20,12 @@ export class Erc20ApprovePayload extends Message<Erc20ApprovePayload> {
   /**
    * @generated from field: string amount = 1;
    */
-  amount = "";
+  amount = '';
 
   /**
    * @generated from field: string spender = 2;
    */
-  spender = "";
+  spender = '';
 
   constructor(data?: PartialMessage<Erc20ApprovePayload>) {
     super();
@@ -26,26 +33,37 @@ export class Erc20ApprovePayload extends Message<Erc20ApprovePayload> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.Erc20ApprovePayload";
+  static readonly typeName = 'vultisig.keysign.v1.Erc20ApprovePayload';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "amount", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "spender", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 1, name: 'amount', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'spender', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Erc20ApprovePayload {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): Erc20ApprovePayload {
     return new Erc20ApprovePayload().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Erc20ApprovePayload {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): Erc20ApprovePayload {
     return new Erc20ApprovePayload().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Erc20ApprovePayload {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): Erc20ApprovePayload {
     return new Erc20ApprovePayload().fromJsonString(jsonString, options);
   }
 
-  static equals(a: Erc20ApprovePayload | PlainMessage<Erc20ApprovePayload> | undefined, b: Erc20ApprovePayload | PlainMessage<Erc20ApprovePayload> | undefined): boolean {
+  static equals(
+    a: Erc20ApprovePayload | PlainMessage<Erc20ApprovePayload> | undefined,
+    b: Erc20ApprovePayload | PlainMessage<Erc20ApprovePayload> | undefined
+  ): boolean {
     return proto3.util.equals(Erc20ApprovePayload, a, b);
   }
 }
-

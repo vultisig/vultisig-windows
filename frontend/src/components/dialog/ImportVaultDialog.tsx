@@ -1,5 +1,5 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface DialogProps {
   isOpen: boolean;
@@ -17,12 +17,12 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
   onOk,
 }) => {
   const { t } = useTranslation();
-  const [passwd, setPasswd] = React.useState("");
+  const [passwd, setPasswd] = React.useState('');
 
   if (!isOpen) return null;
 
   const handleClose = () => {
-    setPasswd("");
+    setPasswd('');
     onClose();
   };
 
@@ -40,12 +40,12 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
           className="w-24 mx-auto object-cover mb-4"
         />
         <h2 className="text-base font-bold mb-4 text-center">{title}</h2>
-        {content === "" && (
+        {content === '' && (
           <div className="text-sm">
             <input
               type="password"
               value={passwd}
-              onChange={(e) => setPasswd(e.target.value)}
+              onChange={e => setPasswd(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded mb-4 text-gray bg-neutral-700"
               placeholder="Password"
             />
@@ -54,13 +54,13 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
                 onClick={handleClose}
                 className="px-4 py-2 bg-gray-500 rounded-lg w-1/2 mr-4"
               >
-                {t("cancel")}
+                {t('cancel')}
               </button>
               <button
                 onClick={handleOk}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg w-1/2"
               >
-                {t("ok")}
+                {t('ok')}
               </button>
             </div>
           </div>
@@ -72,7 +72,7 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
               onClick={onClose}
               className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg w-full"
             >
-              {t("ok")}
+              {t('ok')}
             </button>
           </div>
         )}

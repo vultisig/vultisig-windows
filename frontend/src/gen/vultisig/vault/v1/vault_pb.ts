@@ -3,8 +3,15 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, Timestamp } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf';
+import { Message, proto3, Timestamp } from '@bufbuild/protobuf';
 
 /**
  * @generated from message vultisig.vault.v1.Vault
@@ -13,17 +20,17 @@ export class Vault extends Message<Vault> {
   /**
    * @generated from field: string name = 1;
    */
-  name = "";
+  name = '';
 
   /**
    * @generated from field: string public_key_ecdsa = 2;
    */
-  publicKeyEcdsa = "";
+  publicKeyEcdsa = '';
 
   /**
    * @generated from field: string public_key_eddsa = 3;
    */
-  publicKeyEddsa = "";
+  publicKeyEddsa = '';
 
   /**
    * @generated from field: repeated string signers = 4;
@@ -38,7 +45,7 @@ export class Vault extends Message<Vault> {
   /**
    * @generated from field: string hex_chain_code = 6;
    */
-  hexChainCode = "";
+  hexChainCode = '';
 
   /**
    * @generated from field: repeated vultisig.vault.v1.Vault.KeyShare key_shares = 7;
@@ -48,12 +55,12 @@ export class Vault extends Message<Vault> {
   /**
    * @generated from field: string local_party_id = 8;
    */
-  localPartyId = "";
+  localPartyId = '';
 
   /**
    * @generated from field: string reshare_prefix = 9;
    */
-  resharePrefix = "";
+  resharePrefix = '';
 
   constructor(data?: PartialMessage<Vault>) {
     super();
@@ -61,32 +68,81 @@ export class Vault extends Message<Vault> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.vault.v1.Vault";
+  static readonly typeName = 'vultisig.vault.v1.Vault';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "public_key_ecdsa", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "public_key_eddsa", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "signers", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 5, name: "created_at", kind: "message", T: Timestamp },
-    { no: 6, name: "hex_chain_code", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 7, name: "key_shares", kind: "message", T: Vault_KeyShare, repeated: true },
-    { no: 8, name: "local_party_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 9, name: "reshare_prefix", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 1, name: 'name', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 2,
+      name: 'public_key_ecdsa',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 3,
+      name: 'public_key_eddsa',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 4,
+      name: 'signers',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+      repeated: true,
+    },
+    { no: 5, name: 'created_at', kind: 'message', T: Timestamp },
+    {
+      no: 6,
+      name: 'hex_chain_code',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 7,
+      name: 'key_shares',
+      kind: 'message',
+      T: Vault_KeyShare,
+      repeated: true,
+    },
+    {
+      no: 8,
+      name: 'local_party_id',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 9,
+      name: 'reshare_prefix',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Vault {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): Vault {
     return new Vault().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Vault {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): Vault {
     return new Vault().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Vault {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): Vault {
     return new Vault().fromJsonString(jsonString, options);
   }
 
-  static equals(a: Vault | PlainMessage<Vault> | undefined, b: Vault | PlainMessage<Vault> | undefined): boolean {
+  static equals(
+    a: Vault | PlainMessage<Vault> | undefined,
+    b: Vault | PlainMessage<Vault> | undefined
+  ): boolean {
     return proto3.util.equals(Vault, a, b);
   }
 }
@@ -98,12 +154,12 @@ export class Vault_KeyShare extends Message<Vault_KeyShare> {
   /**
    * @generated from field: string public_key = 1;
    */
-  publicKey = "";
+  publicKey = '';
 
   /**
    * @generated from field: string keyshare = 2;
    */
-  keyshare = "";
+  keyshare = '';
 
   constructor(data?: PartialMessage<Vault_KeyShare>) {
     super();
@@ -111,26 +167,37 @@ export class Vault_KeyShare extends Message<Vault_KeyShare> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.vault.v1.Vault.KeyShare";
+  static readonly typeName = 'vultisig.vault.v1.Vault.KeyShare';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "public_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "keyshare", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 1, name: 'public_key', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'keyshare', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Vault_KeyShare {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): Vault_KeyShare {
     return new Vault_KeyShare().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Vault_KeyShare {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): Vault_KeyShare {
     return new Vault_KeyShare().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Vault_KeyShare {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): Vault_KeyShare {
     return new Vault_KeyShare().fromJsonString(jsonString, options);
   }
 
-  static equals(a: Vault_KeyShare | PlainMessage<Vault_KeyShare> | undefined, b: Vault_KeyShare | PlainMessage<Vault_KeyShare> | undefined): boolean {
+  static equals(
+    a: Vault_KeyShare | PlainMessage<Vault_KeyShare> | undefined,
+    b: Vault_KeyShare | PlainMessage<Vault_KeyShare> | undefined
+  ): boolean {
     return proto3.util.equals(Vault_KeyShare, a, b);
   }
 }
-

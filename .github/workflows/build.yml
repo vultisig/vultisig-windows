@@ -2,9 +2,9 @@ name: Wails build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 env:
   # Necessary for most environments as build failure can occur due to OOM issues
@@ -17,12 +17,12 @@ jobs:
       fail-fast: false
       matrix:
         build:
-          - name: 'App'
-            platform:  'linux/amd64'
-            os: 'ubuntu-latest'
-          - name: 'App'
-            platform:  'windows/amd64'
-            os: 'windows-latest'
+          - name: "App"
+            platform: "linux/amd64"
+            os: "ubuntu-latest"
+          - name: "App"
+            platform: "windows/amd64"
+            os: "windows-latest"
 
     runs-on: ${{ matrix.build.os }}
     steps:
@@ -38,4 +38,4 @@ jobs:
           build-name: ${{ matrix.build.name }}
           build-platform: ${{ matrix.build.platform }}
           package: false
-          go-version: '1.21'
+          go-version: "1.21"
