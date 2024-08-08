@@ -155,7 +155,7 @@ const OnboardingView: React.FC = () => {
           <p className="text-xl">{t('secure_crypto_vault')}</p>
           <div className="flex justify-center mt-24">
             <button
-              className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold"
+              className="bg-secondary text-btn-primary mr-20 rounded-full w-[250px] font-bold"
               onClick={() => {
                 navigate('/vault/setup');
               }}
@@ -163,7 +163,7 @@ const OnboardingView: React.FC = () => {
               {t('create_new_vault')}
             </button>
             <button
-              className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[250px] font-bold"
+              className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[250px] font-bold"
               onClick={() => {
                 navigate('/vault/import');
               }}
@@ -184,13 +184,13 @@ const OnboardingView: React.FC = () => {
       {currentScreen > 0 && currentScreen < screens.length - 1 && (
         <div className="flex justify-center mt-10">
           <button
-            className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[180px] font-bold"
+            className="bg-secondary text-btn-primary mr-20 rounded-full w-[180px] font-bold"
             onClick={nextScreen}
           >
             {t('next')}
           </button>
           <button
-            className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[180px] font-bold"
+            className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[180px] font-bold"
             onClick={skipScreen}
           >
             {t('skip')}
