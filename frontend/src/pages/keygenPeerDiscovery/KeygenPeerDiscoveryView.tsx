@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import KeygenQRCode from '../../components/qrCode/KeygenQRCode';
 import Lottie from 'lottie-react';
 import loadingAnimation from '../../../public/assets/images/loadingAnimation.json';
 import SelectDevice from '../../components/selectDevice/SelectDevice';
-import { useNavigate } from 'react-router-dom';
 import { createKeygenMsg } from '../../utils/QRGen';
 import { v4 as uuidv4 } from 'uuid';
 import { generateRandomNumber } from '../../utils/util';
@@ -12,7 +11,6 @@ import { AdvertiseMediator } from '../../../wailsjs/go/relay/Server';
 import {
   checkForDevices,
   clearCheckingInterval,
-  getSession,
   postSession,
   startkeygen,
 } from '../../services/Keygen/Keygen';
@@ -25,7 +23,6 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
   vaultType,
   vaultName,
 }) => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const [qrData, setQrData] = useState('');
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
@@ -70,7 +67,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
     const minDevices = vaultType.split('/')[1];
     switch (minDevices) {
       case 'n':
-        return selectedDevices.length >= 1 ? false : true;
+        return selectedDevices.length < 1;
       case '3':
         return selectedDevices.length == 2 ? false : true;
       case '2':
@@ -95,7 +92,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
           <button
             onClick={() => setIsRelay(true)}
             className={`${
-              isRelay ? 'bg-[#1B3F73]' : 'bg-[#11284A]'
+              isRelay ? 'bg-switchBtn-secondary' : 'bg-switchBtn-primary'
             } rounded-3xl flex items-center justify-center w-[150px] py-2 gap-2`}
           >
             <img src="/assets/images/icons/cellular.svg" alt="cellular" />{' '}
@@ -104,7 +101,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
           <button
             onClick={() => setIsRelay(false)}
             className={`${
-              !isRelay ? 'bg-[#1B3F73]' : 'bg-[#11284A]'
+              !isRelay ? 'bg-switchBtn-secondary' : 'bg-switchBtn-primary'
             } rounded-3xl flex items-center justify-center w-[150px] py-2 gap-2`}
           >
             <img src="/assets/images/icons/wifi.svg" alt="wifi" /> {t('local')}
@@ -132,7 +129,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
               alt="cellular"
               className="mx-auto my-2"
             />
-            {t('peer_discovery_hint_connect_to_internet')}
+            {t('devices_on_same_internet')}
           </div>
         ) : (
           <div>
@@ -149,7 +146,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
           onClick={() => {
             startKeygen();
           }}
-          className="w-[400px] disabled:opacity-30  bg-[#11284A] rounded-3xl mt-5 py-2 font-bold"
+          className="w-[400px] disabled:opacity-30  bg-switchBtn-primary rounded-3xl mt-5 py-2 font-bold"
         >
           {t('continue')}
         </button>

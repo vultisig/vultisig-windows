@@ -1,13 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { KeygenMessage } from './gen/vultisig/keygen/v1/keygen_message_pb';
 import OnboardingView from './pages/onboarding/OnboardingView';
 import ImportVaultView from './pages/importVault/ImportVaultView';
 import './i18n/config';
-import KeygenPeerDiscoveryView from './pages/keygenPeerDiscovery/KeygenPeerDiscoveryView';
 import SetupVaultView from './pages/setupVault/SetupVaultView';
 
-function App() {
+const App: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-primary">
       <Router>
@@ -19,6 +17,6 @@ function App() {
       </Router>
     </div>
   );
-}
+};
 
 export default App;

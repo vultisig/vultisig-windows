@@ -1,4 +1,4 @@
-import { ENDPOINTS } from '../../config';
+import { ENDPOINTS } from '../../utils/config';
 // Interval ref
 let intervalId: any = null;
 
@@ -51,14 +51,14 @@ export function startkeygen(
 export function checkForDevices(
   isRelay: boolean,
   sessionID: string,
-  setDevices: Function
+  setDevices: (devices: string[]) => void
 ) {
   clearCheckingInterval();
   intervalId = setInterval(async () => {
     try {
       const response = await getSession(isRelay, sessionID);
       try {
-        let data = (await response.json()) as string[];
+        const data = (await response.json()) as string[];
         const uniqueDevices: any = Array.from(new Set(data));
         if (uniqueDevices.length > 0) {
           uniqueDevices.shift();

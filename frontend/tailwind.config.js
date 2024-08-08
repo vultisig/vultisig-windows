@@ -10,6 +10,10 @@ export const theme = {
         primary: '#061B3A',
         secondary: '#BDBDBD',
       },
+      switchBtn: {
+        primary: '#11284A',
+        secondary: '#1B3F73',
+      },
       warning: '#F7961B',
     },
   },

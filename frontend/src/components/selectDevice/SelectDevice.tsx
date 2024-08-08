@@ -1,7 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import QRCode from 'react-qr-code';
-import styles from './KeygenQRCode.module.css';
 interface KeygenQRCodeProps {
   devices: string[];
   selectedDevices: string[];
@@ -24,9 +22,7 @@ const SelectDevice: React.FC<KeygenQRCodeProps> = ({
 
   return (
     <>
-      <h3 className="mt-5 font-semibold">
-        {t('keygen_peer_discovery_select_the_pairing_devices')}
-      </h3>
+      <h3 className="mt-5 font-semibold">{t('select_the_pairing_devices')}</h3>
       <div className="flex flex-wrap justify-center w-full items-center gap-10 my-2">
         {devices.map((device, index) => (
           <div
