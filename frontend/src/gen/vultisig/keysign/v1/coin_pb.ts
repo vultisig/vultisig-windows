@@ -3,8 +3,15 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3 } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf';
+import { Message, proto3 } from '@bufbuild/protobuf';
 
 /**
  * Coin only contains information that the app can use it to identify the relevant coin in the vault
@@ -15,22 +22,22 @@ export class Coin extends Message<Coin> {
   /**
    * @generated from field: string chain = 1;
    */
-  chain = "";
+  chain = '';
 
   /**
    * @generated from field: string ticker = 2;
    */
-  ticker = "";
+  ticker = '';
 
   /**
    * @generated from field: string address = 3;
    */
-  address = "";
+  address = '';
 
   /**
    * @generated from field: string contract_address = 4;
    */
-  contractAddress = "";
+  contractAddress = '';
 
   /**
    * @generated from field: int32 decimals = 5;
@@ -40,7 +47,7 @@ export class Coin extends Message<Coin> {
   /**
    * @generated from field: string price_provider_id = 6;
    */
-  priceProviderId = "";
+  priceProviderId = '';
 
   /**
    * @generated from field: bool is_native_token = 7;
@@ -50,12 +57,12 @@ export class Coin extends Message<Coin> {
   /**
    * @generated from field: string hex_public_key = 8;
    */
-  hexPublicKey = "";
+  hexPublicKey = '';
 
   /**
    * @generated from field: string logo = 9;
    */
-  logo = "";
+  logo = '';
 
   constructor(data?: PartialMessage<Coin>) {
     super();
@@ -63,33 +70,64 @@ export class Coin extends Message<Coin> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.Coin";
+  static readonly typeName = 'vultisig.keysign.v1.Coin';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "chain", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "ticker", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "address", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "contract_address", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "decimals", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-    { no: 6, name: "price_provider_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 7, name: "is_native_token", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 8, name: "hex_public_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 9, name: "logo", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 1, name: 'chain', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'ticker', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: 'address', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 4,
+      name: 'contract_address',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 5, name: 'decimals', kind: 'scalar', T: 5 /* ScalarType.INT32 */ },
+    {
+      no: 6,
+      name: 'price_provider_id',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 7,
+      name: 'is_native_token',
+      kind: 'scalar',
+      T: 8 /* ScalarType.BOOL */,
+    },
+    {
+      no: 8,
+      name: 'hex_public_key',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 9, name: 'logo', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Coin {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): Coin {
     return new Coin().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Coin {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): Coin {
     return new Coin().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Coin {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): Coin {
     return new Coin().fromJsonString(jsonString, options);
   }
 
-  static equals(a: Coin | PlainMessage<Coin> | undefined, b: Coin | PlainMessage<Coin> | undefined): boolean {
+  static equals(
+    a: Coin | PlainMessage<Coin> | undefined,
+    b: Coin | PlainMessage<Coin> | undefined
+  ): boolean {
     return proto3.util.equals(Coin, a, b);
   }
 }
-

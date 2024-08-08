@@ -3,9 +3,16 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
-import { Coin } from "./coin_pb.js";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf';
+import { Message, proto3, protoInt64 } from '@bufbuild/protobuf';
+import { Coin } from './coin_pb.js';
 
 /**
  * @generated from message vultisig.keysign.v1.OneInchTransaction
@@ -14,27 +21,27 @@ export class OneInchTransaction extends Message<OneInchTransaction> {
   /**
    * @generated from field: string from = 1;
    */
-  from = "";
+  from = '';
 
   /**
    * @generated from field: string to = 2;
    */
-  to = "";
+  to = '';
 
   /**
    * @generated from field: string data = 3;
    */
-  data = "";
+  data = '';
 
   /**
    * @generated from field: string value = 4;
    */
-  value = "";
+  value = '';
 
   /**
    * @generated from field: string gas_price = 5;
    */
-  gasPrice = "";
+  gasPrice = '';
 
   /**
    * @generated from field: int64 gas = 6;
@@ -47,29 +54,41 @@ export class OneInchTransaction extends Message<OneInchTransaction> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.OneInchTransaction";
+  static readonly typeName = 'vultisig.keysign.v1.OneInchTransaction';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "from", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "to", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "data", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "value", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "gas_price", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 6, name: "gas", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
+    { no: 1, name: 'from', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'to', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: 'data', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: 'value', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: 'gas_price', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: 'gas', kind: 'scalar', T: 3 /* ScalarType.INT64 */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OneInchTransaction {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): OneInchTransaction {
     return new OneInchTransaction().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OneInchTransaction {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): OneInchTransaction {
     return new OneInchTransaction().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OneInchTransaction {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): OneInchTransaction {
     return new OneInchTransaction().fromJsonString(jsonString, options);
   }
 
-  static equals(a: OneInchTransaction | PlainMessage<OneInchTransaction> | undefined, b: OneInchTransaction | PlainMessage<OneInchTransaction> | undefined): boolean {
+  static equals(
+    a: OneInchTransaction | PlainMessage<OneInchTransaction> | undefined,
+    b: OneInchTransaction | PlainMessage<OneInchTransaction> | undefined
+  ): boolean {
     return proto3.util.equals(OneInchTransaction, a, b);
   }
 }
@@ -81,7 +100,7 @@ export class OneInchQuote extends Message<OneInchQuote> {
   /**
    * @generated from field: string dst_amount = 1;
    */
-  dstAmount = "";
+  dstAmount = '';
 
   /**
    * @generated from field: vultisig.keysign.v1.OneInchTransaction tx = 2;
@@ -94,25 +113,37 @@ export class OneInchQuote extends Message<OneInchQuote> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.OneInchQuote";
+  static readonly typeName = 'vultisig.keysign.v1.OneInchQuote';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "dst_amount", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "tx", kind: "message", T: OneInchTransaction },
+    { no: 1, name: 'dst_amount', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'tx', kind: 'message', T: OneInchTransaction },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OneInchQuote {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): OneInchQuote {
     return new OneInchQuote().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OneInchQuote {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): OneInchQuote {
     return new OneInchQuote().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OneInchQuote {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): OneInchQuote {
     return new OneInchQuote().fromJsonString(jsonString, options);
   }
 
-  static equals(a: OneInchQuote | PlainMessage<OneInchQuote> | undefined, b: OneInchQuote | PlainMessage<OneInchQuote> | undefined): boolean {
+  static equals(
+    a: OneInchQuote | PlainMessage<OneInchQuote> | undefined,
+    b: OneInchQuote | PlainMessage<OneInchQuote> | undefined
+  ): boolean {
     return proto3.util.equals(OneInchQuote, a, b);
   }
 }
@@ -134,12 +165,12 @@ export class OneInchSwapPayload extends Message<OneInchSwapPayload> {
   /**
    * @generated from field: string from_amount = 3;
    */
-  fromAmount = "";
+  fromAmount = '';
 
   /**
    * @generated from field: string to_amount_decimal = 4;
    */
-  toAmountDecimal = "";
+  toAmountDecimal = '';
 
   /**
    * @generated from field: vultisig.keysign.v1.OneInchQuote quote = 5;
@@ -152,29 +183,50 @@ export class OneInchSwapPayload extends Message<OneInchSwapPayload> {
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = "vultisig.keysign.v1.OneInchSwapPayload";
+  static readonly typeName = 'vultisig.keysign.v1.OneInchSwapPayload';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "from_coin", kind: "message", T: Coin },
-    { no: 2, name: "to_coin", kind: "message", T: Coin },
-    { no: 3, name: "from_amount", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "to_amount_decimal", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "quote", kind: "message", T: OneInchQuote },
+    { no: 1, name: 'from_coin', kind: 'message', T: Coin },
+    { no: 2, name: 'to_coin', kind: 'message', T: Coin },
+    {
+      no: 3,
+      name: 'from_amount',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 4,
+      name: 'to_amount_decimal',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 5, name: 'quote', kind: 'message', T: OneInchQuote },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): OneInchSwapPayload {
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): OneInchSwapPayload {
     return new OneInchSwapPayload().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): OneInchSwapPayload {
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): OneInchSwapPayload {
     return new OneInchSwapPayload().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): OneInchSwapPayload {
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): OneInchSwapPayload {
     return new OneInchSwapPayload().fromJsonString(jsonString, options);
   }
 
-  static equals(a: OneInchSwapPayload | PlainMessage<OneInchSwapPayload> | undefined, b: OneInchSwapPayload | PlainMessage<OneInchSwapPayload> | undefined): boolean {
+  static equals(
+    a: OneInchSwapPayload | PlainMessage<OneInchSwapPayload> | undefined,
+    b: OneInchSwapPayload | PlainMessage<OneInchSwapPayload> | undefined
+  ): boolean {
     return proto3.util.equals(OneInchSwapPayload, a, b);
   }
 }
-

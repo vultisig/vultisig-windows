@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from 'crypto';
 
 export const isBase64Encoded = (str: string): boolean => {
   // Regular expression to check if the string is base64
@@ -11,11 +11,11 @@ export const isBase64Encoded = (str: string): boolean => {
 
 export const decryptVault = (passwd: string, vault: Buffer): Buffer => {
   // Hash the password to create a key
-  const key = crypto.createHash("sha256").update(passwd).digest();
+  const key = crypto.createHash('sha256').update(passwd).digest();
 
   // Create a new AES cipher using the key
   const decipher = crypto.createDecipheriv(
-    "aes-256-gcm",
+    'aes-256-gcm',
     key,
     vault.slice(0, 12)
   );

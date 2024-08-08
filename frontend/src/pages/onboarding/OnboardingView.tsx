@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const OnboardingView: React.FC = () => {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ const OnboardingView: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState(0);
 
   const nextScreen = () => {
-    setCurrentScreen((prev) => (prev < screens.length - 1 ? prev + 1 : prev));
+    setCurrentScreen(prev => (prev < screens.length - 1 ? prev + 1 : prev));
   };
 
   const skipScreen = () => {
@@ -16,14 +16,14 @@ const OnboardingView: React.FC = () => {
   };
 
   useEffect(() => {
-    const visitedBefore = sessionStorage.getItem("homePageVisited");
+    const visitedBefore = sessionStorage.getItem('homePageVisited');
     if (!visitedBefore) {
       setTimeout(() => {
-        sessionStorage.setItem("homePageVisited", "true");
-        const flag = localStorage.getItem("isFirstTime");
+        sessionStorage.setItem('homePageVisited', 'true');
+        const flag = localStorage.getItem('isFirstTime');
         if (!flag) {
           setCurrentScreen(1);
-          localStorage.setItem("isFirstTime", "no");
+          localStorage.setItem('isFirstTime', 'no');
         } else {
           skipScreen();
         }
@@ -42,8 +42,8 @@ const OnboardingView: React.FC = () => {
             className="mx-auto mb-4 h-[220px]"
             alt="Logo"
           />
-          <h1 className="text-3xl font-bold mb-8">{t("vultisig")}</h1>
-          <p className="text-xl">{t("secure_crypto_vault")}</p>
+          <h1 className="text-3xl font-bold mb-8">{t('vultisig')}</h1>
+          <p className="text-xl">{t('secure_crypto_vault')}</p>
         </div>
       ),
     },
@@ -61,7 +61,7 @@ const OnboardingView: React.FC = () => {
             alt="Onboarding1"
           />
           <h2 className="text-xl w-[500px]">
-            {t("onboarding_view1_description")}
+            {t('onboarding_view1_description')}
           </h2>
           <img
             className="mx-auto mt-10"
@@ -85,7 +85,7 @@ const OnboardingView: React.FC = () => {
             alt="Onboarding2"
           />
           <h2 className="text-xl w-[500px]">
-            {t("onboarding_view2_description")}
+            {t('onboarding_view2_description')}
           </h2>
           <img
             className="mx-auto mt-10"
@@ -109,7 +109,7 @@ const OnboardingView: React.FC = () => {
             alt="Onboarding3"
           />
           <h2 className="text-xl w-[500px]">
-            {t("onboarding_view3_description")}
+            {t('onboarding_view3_description')}
           </h2>
           <img
             className="mx-auto mt-10"
@@ -133,7 +133,7 @@ const OnboardingView: React.FC = () => {
             alt="Onboarding4"
           />
           <h2 className="text-xl w-[500px]">
-            {t("onboarding_view4_description")}
+            {t('onboarding_view4_description')}
           </h2>
           <img
             className="mx-auto mt-10"
@@ -151,24 +151,24 @@ const OnboardingView: React.FC = () => {
             className="mx-auto mb-4 h-[220px]"
             alt="Logo"
           />
-          <h1 className="text-3xl font-bold mb-8">{t("vultisig")}</h1>
-          <p className="text-xl">{t("secure_crypto_vault")}</p>
+          <h1 className="text-3xl font-bold mb-8">{t('vultisig')}</h1>
+          <p className="text-xl">{t('secure_crypto_vault')}</p>
           <div className="flex justify-center mt-24">
             <button
-              className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[250px] font-bold"
+              className="bg-secondary text-btn-primary mr-20 rounded-full w-[250px] font-bold"
               onClick={() => {
-                navigate("/vault/setup");
+                navigate('/vault/setup');
               }}
             >
-              {t("create_new_vault")}
+              {t('create_new_vault')}
             </button>
             <button
-              className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[250px] font-bold"
+              className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[250px] font-bold"
               onClick={() => {
-                navigate("/vault/import");
+                navigate('/vault/import');
               }}
             >
-              {t("import_existing_vault")}
+              {t('import_existing_vault')}
             </button>
           </div>
         </div>
@@ -184,16 +184,16 @@ const OnboardingView: React.FC = () => {
       {currentScreen > 0 && currentScreen < screens.length - 1 && (
         <div className="flex justify-center mt-10">
           <button
-            className="bg-[#33E6BF] text-[#061B3A] mr-20 rounded-full w-[180px] font-bold"
+            className="bg-secondary text-btn-primary mr-20 rounded-full w-[180px] font-bold"
             onClick={nextScreen}
           >
-            {t("next")}
+            {t('next')}
           </button>
           <button
-            className="text-[#33E6BF] border border-[#33E6BF] border-solid py-2 px-4 rounded-full w-[180px] font-bold"
+            className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[180px] font-bold"
             onClick={skipScreen}
           >
-            {t("skip")}
+            {t('skip')}
           </button>
         </div>
       )}
