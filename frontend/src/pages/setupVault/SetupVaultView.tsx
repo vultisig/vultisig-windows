@@ -4,9 +4,7 @@ import NavBar from '../../components/navbar/NavBar';
 
 interface TabContent {
   title: string;
-  description1: string;
-  description2: string;
-  description3: string;
+  description: string;
   image: string;
 }
 
@@ -27,8 +25,8 @@ const TabbedContent: React.FC = () => {
 
   const prevScreen = () => {
     setCurrentScreen(prev => {
-      if (prev > 4) {
-        return 3;
+      if (prev > 5) {
+        return 4;
       } else {
         return prev > 0 ? prev - 1 : prev;
       }
@@ -38,25 +36,17 @@ const TabbedContent: React.FC = () => {
   const tabs: TabContent[] = [
     {
       title: t('2_of_2_vault'),
-      description1: `${t('need_min_devices')} 2 ${t('devices')}`,
-      description2: `1. ${t('start_from_one_device')}`,
-      description3: `2. ${t('pair_from_the')} ${t('second')} ${t('device')}`,
+      description: t('vault_type_1_description'),
       image: '/assets/images/vaultSetup1.svg',
     },
     {
       title: t('2_of_3_vault'),
-      description1: `${t('need_min_devices')} 3 ${t('devices')}`,
-      description2: `1. ${t('start_from_one_device')}`,
-      description3: `2. ${t('pair_from_the')} ${t('second_and_third')} ${t(
-        'device'
-      )}`,
+      description: t('vault_type_2_description'),
       image: '/assets/images/vaultSetup2.svg',
     },
     {
       title: t('m_of_n_vault'),
-      description1: t('m_of_n_vault'),
-      description2: `1. ${t('start_from_one_device')}`,
-      description3: `2. ${t('pair_from_the')} ${t('other')} ${t('device')}`,
+      description: t('vault_type_3_description'),
       image: '/assets/images/vaultSetup3.svg',
     },
   ];
@@ -88,18 +78,63 @@ const TabbedContent: React.FC = () => {
   };
 
   // screens
-  // 0 - vault setup view
-  // 1 - vault name setup
-  // 2 - keygen peer discovery screens
-  // 3 - keygen verify
-  // 4 - keygen view
-  // 5 - keygen done
-  // 6 - keygen error
+  // 0 - vault setup initial view
+  // 1 - vault setup view
+  // 2 - vault name setup
+  // 3 - keygen peer discovery screens
+  // 4 - keygen verify
+  // 5 - keygen view
+  // 6 - keygen done
+  // 7 - keygen error
   const screens = [
     {
       title: t('setup'),
       content: (
+        <div className="flex items-center justify-around mt-48 px-20">
+          <div className="w-80 h-80 bg-btn-primary rounded-2xl p-8 flex flex-col items-center justify-center">
+            <img
+              src="/assets/icons/initiate.svg"
+              alt="create_qr"
+              className="mt-12"
+            />
+            <p className="mt-4 text-sm text-[#BBC1C7]">
+              {t('this_device_is_the')}
+            </p>
+            <p className="mt-2 text-xl font-bold text-white">
+              {t('initiating_device')}
+            </p>
+            <button
+              className="text-lg rounded-full w-full font-bold py-2 mt-12 text-sm text-btn-primary bg-secondary"
+              onClick={() => {
+                setCurrentScreen(1);
+              }}
+            >
+              {t('create_qr')}
+            </button>
+          </div>
+          <div className="w-80 h-80 bg-btn-primary rounded-2xl p-8 flex flex-col items-center justify-center">
+            <img src="/assets/icons/pair.svg" alt="scan_qr" className="mt-12" />
+            <p className="mt-4 text-sm text-[#BBC1C7]">
+              {t('this_device_is_the')}
+            </p>
+            <p className="mt-2 text-xl font-bold text-white">
+              {t('pairing_device')}
+            </p>
+            <button
+              className="text-lg rounded-full w-full font-bold py-2 mt-12 text-sm text-btn-primary bg-secondary"
+              onClick={() => {}}
+            >
+              {t('scan_qr')}
+            </button>
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: t('setup'),
+      content: (
         <div className="text-white mx-auto max-w-4xl pt-8">
+          <p className="text-center mb-8">{t('select_your_vault_type')}</p>
           <div className="flex justify-center space-x-4">
             {tabs.map((tab, index) => (
               <button
@@ -114,13 +149,7 @@ const TabbedContent: React.FC = () => {
             ))}
           </div>
           <div className="mt-12 text-center">
-            <p className="mb-8">
-              {tabs[activeTab].description1}
-              <br />
-              {tabs[activeTab].description2}
-              <br />
-              {tabs[activeTab].description3}
-            </p>
+            <p className="mb-8 text-sm">{tabs[activeTab].description}</p>
             <img
               src={tabs[activeTab].image}
               alt="vault_setup"
@@ -133,20 +162,14 @@ const TabbedContent: React.FC = () => {
             />
             <p className="mb-4">{t('devices_on_same_wifi')}</p>
           </div>
-          <div className="flex justify-center mt-12">
+          <div className="flex justify-center mt-8">
             <button
-              className="bg-secondary text-btn-primary mr-20 rounded-full w-[250px] font-bold"
+              className="bg-secondary text-btn-primary rounded-full w-[250px] py-2 font-bold"
               onClick={() => {
-                setCurrentScreen(1);
+                setCurrentScreen(2);
               }}
             >
               {t('start')}
-            </button>
-            <button
-              className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[250px] font-bold"
-              onClick={() => {}}
-            >
-              {t('pair')}
             </button>
           </div>
         </div>
@@ -178,7 +201,7 @@ const TabbedContent: React.FC = () => {
             }`}
             disabled={vaultName === ''}
             onClick={() => {
-              setCurrentScreen(2);
+              setCurrentScreen(3);
             }}
           >
             {t('continue')}
@@ -213,16 +236,12 @@ const TabbedContent: React.FC = () => {
           </div>
           <div className="w-80 flex mt-2 px-3 py-2 border border-secondary/[.5] rounded-2xl">
             <img src="/assets/images/info.svg" alt="info" />
-            <p className="ml-2">
-              {devices.length > 2
-                ? t('backup_not_needed_disclaimer')
-                : t('no_backup_device_disclaimer')}
-            </p>
+            <p className="ml-2">{t('backup_disclaimer')}</p>
           </div>
           <button
             className="fixed bottom-16 text-lg rounded-full w-80 font-bold py-2 text-btn-primary bg-secondary"
             onClick={() => {
-              setCurrentScreen(4);
+              setCurrentScreen(5);
             }}
           >
             {t('continue')}
@@ -284,7 +303,7 @@ const TabbedContent: React.FC = () => {
               <button
                 className="text-lg rounded-full w-full font-bold py-2 text-btn-primary bg-secondary"
                 onClick={() => {
-                  setCurrentScreen(3);
+                  setCurrentScreen(4);
                 }}
               >
                 {t('try_again')}
@@ -301,7 +320,7 @@ const TabbedContent: React.FC = () => {
       <NavBar
         title={screens[currentScreen].title}
         questionLink={
-          currentScreen === 0 || currentScreen > 3
+          currentScreen === 5
             ? 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
             : undefined
         }
