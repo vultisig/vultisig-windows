@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface DialogProps {
@@ -17,9 +17,14 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
   onOk,
 }) => {
   const { t } = useTranslation();
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [passwd, setPasswd] = React.useState('');
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]); // Dependency array includes isVisible
 
   const handleClose = () => {
     setPasswd('');
@@ -31,9 +36,9 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
     handleClose();
   };
 
-  return (
+  return isOpen ? (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-neutral-800 p-6 rounded-lg shadow-lg w-full w-[350px] text-white border border-gray-700">
+      <div className="bg-neutral-800 p-6 rounded-lg shadow-lg w-[350px] text-white border border-gray-700">
         <img
           src="/assets/images/logoRadiation.svg"
           alt="Logo"
@@ -44,6 +49,7 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
           <div className="text-sm">
             <input
               type="password"
+              ref={inputRef}
               value={passwd}
               onChange={e => setPasswd(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded mb-4 text-gray bg-neutral-700"
@@ -78,7 +84,7 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
         )}
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default ImportVaultDialog;
