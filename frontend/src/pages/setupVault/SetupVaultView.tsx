@@ -11,7 +11,7 @@ import KeygenInitial from '../../components/keygen/KeygenInitial';
 const TabbedContent: React.FC = () => {
   const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState<number>(0);
-  const [vaultName, setVaultName] = useState<string>(t('main_vault'));
+  const [vaultName, setVaultName] = useState<string>('');
   const [devices, setDevices] = useState<string[]>([]);
   const [localPartyId, setLocalPartyId] = useState<string>('');
   const [keygenError, setKeygenError] = useState<string>('');

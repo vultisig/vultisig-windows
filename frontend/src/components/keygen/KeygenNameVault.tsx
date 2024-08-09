@@ -7,7 +7,7 @@ interface KeygenNameVaultProps {
 
 const KeygenNameVault: React.FC<KeygenNameVaultProps> = ({ onContinue }) => {
   const { t } = useTranslation();
-  const [vaultName, setVaultName] = useState<string>('');
+  const [vaultName, setVaultName] = useState<string>(t('main_vault'));
 
   return (
     <div className="text-white flex flex-col items-center justify-center mt-60">
