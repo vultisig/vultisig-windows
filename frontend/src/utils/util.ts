@@ -36,3 +36,8 @@ export const decryptVault = (passwd: string, vault: Buffer): Buffer => {
 
   return decrypted;
 };
+
+
+export function generateRandomNumber(): number {
+  return Math.floor(Math.random() * 900) + 100;
+}
