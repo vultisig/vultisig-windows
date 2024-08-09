@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import NavBar from '../../components/navbar/NavBar';
+import KeygenView from '../../components/keygen/KeygenView';
 
 interface TabContent {
   title: string;
@@ -12,7 +13,7 @@ interface TabContent {
 
 const TabbedContent: React.FC = () => {
   const { t } = useTranslation();
-  const [currentScreen, setCurrentScreen] = useState<number>(0);
+  const [currentScreen, setCurrentScreen] = useState<number>(4);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [vaultName, setVaultName] = useState<string>(t('main_vault'));
   const [devices, setDevices] = useState<string[]>([]);
@@ -232,7 +233,7 @@ const TabbedContent: React.FC = () => {
     },
     {
       title: `${t('join')} ${t('keygen')}`,
-      content: <></>, // keygen view
+      content: <KeygenView />,
     },
     {
       title: `${t('join')} ${t('keygen')}`,
