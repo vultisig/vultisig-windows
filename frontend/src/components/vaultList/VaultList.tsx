@@ -36,7 +36,7 @@ const VaultList: React.FC = () => {
         className={`absolute pt-12  top-full left-0 w-full h-screen bg-gray-900 text-white transition-transform duration-500 ease-in-out transform ${isOpen ? 'translate-y-0' : '-translate-y-full'} overflow-y-auto z-40`}
       >
         <ul className="space-y-4 px-4 py-4 overflow-y-auto h-[90%]">
-          {vaults && 
+          {vaults &&
             vaults.map((vault, index) => (
               <li
                 key={index}
@@ -50,7 +50,7 @@ const VaultList: React.FC = () => {
                   }}
                   className="no-underline text-white w-full items-center flex justify-between"
                 >
-                  <div>{"hi"}</div>
+                  <div>{vault.name}</div>
                   <img
                     src="/assets/icons/chevron-right.svg"
                     alt="details"
