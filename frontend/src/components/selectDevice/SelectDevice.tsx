@@ -27,7 +27,7 @@ const SelectDevice: React.FC<KeygenQRCodeProps> = ({
         {devices.map((device, index) => (
           <div
             key={index}
-            className="relative bg-primary rounded-lg text-center w-[120px] p-3 rounded-lg hover:border hover:border-white"
+            className="relative bg-btn-primary rounded-lg text-center w-[120px] p-3 rounded-lg hover:border hover:border-white"
           >
             <div className="inline-flex items-center">
               <label
