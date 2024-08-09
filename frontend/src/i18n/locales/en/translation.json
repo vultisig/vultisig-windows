@@ -45,6 +45,7 @@
   "no_backup_device_disclaimer": "You do not have a 3rd backup device - so you should backup one vault share securely later.",
   "of": "of",
   "vault": "vault",
+  "vaults": "Vaults",
   "setup": "Setup",
   "import": "Import",
   "keygen": "Keygen",
@@ -54,5 +55,6 @@
   "information_note1": "Keep devices on the same WiFi Network, correct vault and pair devices.",
   "information_note2": "Make sure no other devices are running Vultisig.",
   "try_again": "Try Again",
-  "keygen_failed": "Key generation failed"
+  "keygen_failed": "Key generation failed",
+  "addNewVault": "Add New Vault"
 }
