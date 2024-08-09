@@ -198,12 +198,7 @@ const TabbedContent: React.FC = () => {
     {
       title: `${t('keygen_for')} ${vaultType} ${t('vault')}`,
       content: (
-        <>
-          <KeygenPeerDiscoveryView
-            vaultName={vaultName}
-            vaultType={vaultType}
-          />
-        </>
+        <KeygenPeerDiscoveryView vaultName={vaultName} vaultType={vaultType} />
       ),
     },
     {

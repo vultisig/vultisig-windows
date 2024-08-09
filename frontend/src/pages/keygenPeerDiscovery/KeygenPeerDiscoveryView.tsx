@@ -63,20 +63,20 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
     checkForDevices(isRelay, sessionID!, setDevices);
   };
 
-  const handleCanContinue = () => {
+  const handleDisabled = () => {
     const minDevices = vaultType.split('/')[1];
     switch (minDevices) {
       case 'n':
         return selectedDevices.length < 1;
       case '3':
-        return selectedDevices.length == 2 ? false : true;
+        return selectedDevices.length != 2;
       case '2':
-        return selectedDevices.length == 1 ? false : true;
+        return selectedDevices.length != 1;
     }
   };
 
   const startKeygen = async () => {
-    if (handleCanContinue()) {
+    if (!handleDisabled()) {
       await startkeygen(isRelay, sessionID!, selectedDevices);
     }
   };
@@ -142,7 +142,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
           </div>
         )}
         <button
-          disabled={handleCanContinue()}
+          disabled={handleDisabled()}
           onClick={() => {
             startKeygen();
           }}
