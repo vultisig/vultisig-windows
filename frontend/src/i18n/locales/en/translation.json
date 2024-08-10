@@ -61,5 +61,8 @@
   "information_note1": "Keep devices on the same WiFi Network, correct vault and pair devices.",
   "information_note2": "Make sure no other devices are running Vultisig.",
   "try_again": "Try Again",
-  "keygen_failed": "Key generation failed"
+  "keygen_failed": "Key generation failed",
+  "backupnow_description": "Each device has its own unique share. Please Backup all of your Vault Shares now.",
+  "backupnow_note": "Note: Never store Vault Shares from different devices in the same location.",
+  "backup": "Backup"
 }
