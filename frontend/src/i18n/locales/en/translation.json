@@ -56,5 +56,8 @@
   "information_note2": "Make sure no other devices are running Vultisig.",
   "try_again": "Try Again",
   "keygen_failed": "Key generation failed",
-  "addNewVault": "Add New Vault"
+  "addNewVault": "Add New Vault",
+  "backupnow_description": "Each device has its own unique share. Please Backup all of your Vault Shares now.",
+  "backupnow_note": "Note: Never store Vault Shares from different devices in the same location.",
+  "backup": "Backup"
 }
