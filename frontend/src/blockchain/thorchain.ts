@@ -6,8 +6,8 @@ import { tss } from '../../wailsjs/go/models';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import TxCompiler = TW.TxCompiler;
-import PublicKeyHelper from './public_key_helper';
-import SignatureProvider from './signature_provider';
+import PublicKeyHelper from './public-key-helper';
+import SignatureProvider from './signature-provider';
 import { createHash } from 'crypto';
 import { SignedTransactionResult } from './signed-transaction-result';
 
@@ -147,15 +147,23 @@ class THORChainHelper {
       console.log('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
-    return [this.walletCore.HexCoding.encode(preSigningOutput.dataHash)];
+    return [
+      this.walletCore.HexCoding.encode(preSigningOutput.dataHash).substring(2),
+    ];
   }
 
   async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    inputData: Uint8Array,
+    data: KeysignPayload | Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
+    let inputData: Uint8Array;
+    if (data instanceof Uint8Array) {
+      inputData = data;
+    } else {
+      inputData = this.getPreSignedInputData(data);
+    }
     const coinType = this.walletCore.CoinType.thorchain;
     const thorPublicKey = await PublicKeyHelper.getDerivedPubKey(
       vaultHexPublicKey,
