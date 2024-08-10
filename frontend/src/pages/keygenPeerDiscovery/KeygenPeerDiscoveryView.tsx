@@ -138,7 +138,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
               alt="wifi"
               className="mx-auto my-2"
             />
-            {t('peer_discovery_hint_connect_to_same_wifi')}
+            {t('devices_on_same_wifi')}
           </div>
         )}
         <button
