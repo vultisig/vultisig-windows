@@ -9,6 +9,7 @@ export const theme = {
       btn: {
         primary: '#061B3A',
         secondary: '#BDBDBD',
+        tertiary: '#33E6BF'
       },
       switchBtn: {
         primary: '#11284A',
