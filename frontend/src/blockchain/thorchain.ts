@@ -1,17 +1,7 @@
 import { KeysignPayload } from '../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../model/chain';
-import {
-  AnyAddress,
-  CoinType,
-  CoinTypeExt,
-  DataVector,
-  HexCoding,
-  PublicKey,
-  PublicKeyType,
-  TransactionCompiler,
-} from '@trustwallet/wallet-core/dist/src/wallet-core';
+import { WalletCore, TW } from '@trustwallet/wallet-core';
 import { THORChainSpecific } from '../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { TW } from '@trustwallet/wallet-core';
 import { tss } from '../../wailsjs/go/models';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
@@ -19,14 +9,19 @@ import TxCompiler = TW.TxCompiler;
 import PublicKeyHelper from './public_key_helper';
 import SignatureProvider from './signature_provider';
 import { createHash } from 'crypto';
+import { SignedTransactionResult } from './signed-transaction-result';
 
 class THORChainHelper {
-  static coinType = CoinType.thorchain;
-  static isTHORChainSpecific(obj: any): boolean {
+  private walletCore: WalletCore;
+  constructor(walletCore: WalletCore) {
+    this.walletCore = walletCore;
+  }
+
+  isTHORChainSpecific(obj: any): boolean {
     return obj instanceof THORChainSpecific;
   }
 
-  static getSwapPreSignedInputData(
+  getSwapPreSignedInputData(
     keysignPayload: KeysignPayload,
     signingInput: TW.Cosmos.Proto.SigningInput
   ): Uint8Array {
@@ -53,18 +48,19 @@ class THORChainHelper {
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();
   }
 
-  static getPreSignedInputData(keysignPayload: KeysignPayload): Uint8Array {
+  getPreSignedInputData(keysignPayload: KeysignPayload): Uint8Array {
+    const coinType = this.walletCore.CoinType.thorchain;
     if (keysignPayload.coin?.chain !== Chain.THORChain.toString()) {
       throw new Error('Invalid chain');
     }
-    const fromAddr = AnyAddress.createWithString(
+    const fromAddr = this.walletCore.AnyAddress.createWithString(
       keysignPayload.coin.address,
-      this.coinType
+      this.walletCore.CoinType.thorchain
     );
     if (!fromAddr) {
       throw new Error(`${keysignPayload.coin.address} is invalid`);
     }
-    if (!this.isTHORChainSpecific(keysignPayload.blockchainSpecific)) {
+    if (!this.isTHORChainSpecific(keysignPayload.blockchainSpecific.value)) {
       throw new Error('Invalid blockchain specific');
     }
     const thorchainSpecific =
@@ -101,9 +97,9 @@ class THORChainHelper {
         }),
       ];
     } else {
-      const toAddress = AnyAddress.createWithString(
+      const toAddress = this.walletCore.AnyAddress.createWithString(
         keysignPayload.toAddress,
-        this.coinType
+        coinType
       );
       if (!toAddress) {
         throw new Error('invalid to address');
@@ -126,7 +122,7 @@ class THORChainHelper {
     const input = TW.Cosmos.Proto.SigningInput.create({
       publicKey: pubKeyData,
       signingMode: SigningMode.Protobuf,
-      chainId: CoinTypeExt.chainId(this.coinType),
+      chainId: this.walletCore.CoinTypeExt.chainId(coinType),
       accountNumber: thorchainSpecific.accountNumber,
       sequence: thorchainSpecific.sequence,
       mode: BroadcastMode.SYNC,
@@ -139,41 +135,50 @@ class THORChainHelper {
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();
   }
 
-  static getPreSignedImageHash(keysignPayload: KeysignPayload): [string] {
+  getPreSignedImageHash(keysignPayload: KeysignPayload): [string] {
+    const coinType = this.walletCore.CoinType.thorchain;
     const inputData = this.getPreSignedInputData(keysignPayload);
-    const hashes = TransactionCompiler.preImageHashes(this.coinType, inputData);
+    const hashes = this.walletCore.TransactionCompiler.preImageHashes(
+      coinType,
+      inputData
+    );
     const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
     if (preSigningOutput.errorMessage !== '') {
+      console.log('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
-    return [HexCoding.encode(preSigningOutput.dataHash)];
+    return [this.walletCore.HexCoding.encode(preSigningOutput.dataHash)];
   }
 
-  static async getSignedTransaction(
+  async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
     inputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
+    const coinType = this.walletCore.CoinType.thorchain;
     const thorPublicKey = await PublicKeyHelper.getDerivedPubKey(
       vaultHexPublicKey,
       vaultHexChainCode,
-      CoinTypeExt.derivationPath(this.coinType)
+      this.walletCore.CoinTypeExt.derivationPath(coinType)
     );
     const publicKeyData = Buffer.from(thorPublicKey, 'hex');
-    const publicKey = PublicKey.createWithData(
+    const publicKey = this.walletCore.PublicKey.createWithData(
       publicKeyData,
-      PublicKeyType.secp256k1
+      this.walletCore.PublicKeyType.secp256k1
     );
     try {
-      const hashes = TransactionCompiler.preImageHashes(
-        this.coinType,
+      const hashes = this.walletCore.TransactionCompiler.preImageHashes(
+        coinType,
         inputData
       );
       const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
-      const allSignatures = DataVector.create();
-      const publicKeys = DataVector.create();
-      const signatureProvider = new SignatureProvider(signatures);
+      const allSignatures = this.walletCore.DataVector.create();
+      const publicKeys = this.walletCore.DataVector.create();
+      const signatureProvider = new SignatureProvider(
+        this.walletCore,
+        signatures
+      );
       const signature = signatureProvider.getSignatureWithRecoveryId(
         preSigningOutput.dataHash
       );
@@ -182,12 +187,13 @@ class THORChainHelper {
       }
       allSignatures.add(signature);
       publicKeys.add(publicKeyData);
-      const compileWithSignatures = TransactionCompiler.compileWithSignatures(
-        this.coinType,
-        inputData,
-        allSignatures,
-        publicKeys
-      );
+      const compileWithSignatures =
+        this.walletCore.TransactionCompiler.compileWithSignatures(
+          coinType,
+          inputData,
+          allSignatures,
+          publicKeys
+        );
       const output = TW.Cosmos.Proto.SigningOutput.decode(
         compileWithSignatures
       );

@@ -1,5 +1,3 @@
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
-
 export enum Chain {
   THORChain = 'THORChain',
   MayaChain = 'MayaChain',
@@ -31,54 +29,8 @@ export enum TssAction {
   KEYGEN,
   RESHARE,
 }
-export class ChainUtils {
-  static getCoinType(chain: Chain): CoinType {
-    switch (chain) {
-      case Chain.THORChain:
-        return CoinType.thorchain;
-      case Chain.MayaChain:
-        return CoinType.thorchain;
-      case Chain.Arbitrum:
-        return CoinType.arbitrum;
-      case Chain.Avalanche:
-        return CoinType.avalancheCChain;
-      case Chain.Base:
-        return CoinType.base;
-      case Chain.CronosChain:
-        return CoinType.cronosChain;
-      case Chain.BSC:
-        return CoinType.smartChain;
-      case Chain.Blast:
-        return CoinType.blast;
-      case Chain.Ethereum:
-        return CoinType.ethereum;
-      case Chain.Optimism:
-        return CoinType.optimism;
-      case Chain.Polygon:
-        return CoinType.polygon;
-      case Chain.Bitcoin:
-        return CoinType.bitcoin;
-      case Chain.BitcoinCash:
-        return CoinType.bitcoinCash;
-      case Chain.Litecoin:
-        return CoinType.litecoin;
-      case Chain.Dogecoin:
-        return CoinType.dogecoin;
-      case Chain.Dash:
-        return CoinType.dash;
-      case Chain.Solana:
-        return CoinType.solana;
-      case Chain.Gaia:
-        return CoinType.cosmos;
-      case Chain.Kujira:
-        return CoinType.kujira;
-      case Chain.Dydx:
-        return CoinType.dydx;
-      case Chain.Polkadot:
-        return CoinType.polkadot;
-    }
-  }
 
+export class ChainUtils {
   static getTssKeysignType(chain: Chain): TssKeysignType {
     switch (chain) {
       case (Chain.Solana, Chain.Polkadot):
