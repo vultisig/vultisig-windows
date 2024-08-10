@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import NavBar from '../../components/navbar/NavBar';
+import KeygenPeerDiscoveryView from '../keygenPeerDiscovery/KeygenPeerDiscoveryView';
 import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
 
 interface TabContent {
   title: string;
+  type: string;
   description1: string;
   description2: string;
   description3: string;
@@ -16,6 +18,7 @@ const TabbedContent: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [vaultName, setVaultName] = useState<string>(t('main_vault'));
+  const [vaultType, setVaultType] = useState<string>('2/3');
   const [devices, setDevices] = useState<string[]>([]);
   const [localPartyId, setLocalPartyId] = useState<string>('');
   const [keygenError, setKeygenError] = useState<string>('');
@@ -39,6 +42,7 @@ const TabbedContent: React.FC = () => {
   const tabs: TabContent[] = [
     {
       title: t('2_of_2_vault'),
+      type: '2/2',
       description1: `${t('need_min_devices')} 2 ${t('devices')}`,
       description2: `1. ${t('start_from_one_device')}`,
       description3: `2. ${t('pair_from_the')} ${t('second')} ${t('device')}`,
@@ -46,6 +50,7 @@ const TabbedContent: React.FC = () => {
     },
     {
       title: t('2_of_3_vault'),
+      type: '2/3',
       description1: `${t('need_min_devices')} 3 ${t('devices')}`,
       description2: `1. ${t('start_from_one_device')}`,
       description3: `2. ${t('pair_from_the')} ${t('second_and_third')} ${t(
@@ -55,6 +60,7 @@ const TabbedContent: React.FC = () => {
     },
     {
       title: t('m_of_n_vault'),
+      type: 'm/n',
       description1: t('m_of_n_vault'),
       description2: `1. ${t('start_from_one_device')}`,
       description3: `2. ${t('pair_from_the')} ${t('other')} ${t('device')}`,
@@ -109,7 +115,10 @@ const TabbedContent: React.FC = () => {
                 className={`py-2 px-4 border-b-2 ${
                   activeTab === index ? 'border-blue-500' : 'border-transparent'
                 }`}
-                onClick={() => setActiveTab(index)}
+                onClick={() => {
+                  setActiveTab(index);
+                  setVaultType(tab.type);
+                }}
               >
                 {tab.title}
               </button>
@@ -129,7 +138,7 @@ const TabbedContent: React.FC = () => {
               className="mx-auto mb-4 w-60"
             />
             <img
-              src="/assets/images/wifi.svg"
+              src="/assets/images/icons/wifi.svg"
               alt="wifi"
               className="mx-auto mb-4 w-8"
             />
@@ -189,8 +198,10 @@ const TabbedContent: React.FC = () => {
       ),
     },
     {
-      title: t('setup'), // need to be updated
-      content: <></>, // keygen peer discovery view
+      title: `${t('keygen_for')} ${vaultType} ${t('vault')}`,
+      content: (
+        <KeygenPeerDiscoveryView vaultName={vaultName} vaultType={vaultType} />
+      ),
     },
     {
       title: t('keygen'),
@@ -206,7 +217,7 @@ const TabbedContent: React.FC = () => {
             {renderDevicesList()}
           </div>
           <div className="w-80 flex mt-2 px-3 py-2 border border-secondary/[.5] rounded-2xl">
-            <img src="/assets/images/info.svg" alt="info" />
+            <img src="/assets/images/icons/info.svg" alt="info" />
             <p className="ml-2">
               {t('pair_device_disclaimers_first')}{' '}
               {Math.ceil((2 * devices.length) / 3)}{' '}
@@ -214,7 +225,7 @@ const TabbedContent: React.FC = () => {
             </p>
           </div>
           <div className="w-80 flex mt-2 px-3 py-2 border border-secondary/[.5] rounded-2xl">
-            <img src="/assets/images/info.svg" alt="info" />
+            <img src="/assets/images/icons/info.svg" alt="info" />
             <p className="ml-2">
               {devices.length > 2
                 ? t('backup_not_needed_disclaimer')
@@ -241,14 +252,14 @@ const TabbedContent: React.FC = () => {
       content: (
         <div className="text-center text-white">
           <img
-            src="/assets/images/done.svg"
+            src="/assets/images/icons/done.svg"
             alt="done"
             className="mx-auto mt-[30vh] mb-6"
           />
           <p className="text-2xl font-bold">{t('done')}</p>
           <div className="w-full fixed bottom-16 text-center">
             <img
-              src="/assets/images/wifi.svg"
+              src="/assets/images/icons/wifi.svg"
               alt="wifi"
               className="mx-auto mb-4 w-8"
             />

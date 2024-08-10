@@ -168,7 +168,7 @@ const ImportVaultView: React.FC = () => {
                 {selectedFile.name}
               </div>
               <img
-                src="/assets/images/cancel.svg"
+                src="/assets/images/icons/cancel.svg"
                 className="mr-4 w-4 cursor-pointer"
                 alt="cancel"
                 role="presentation"
