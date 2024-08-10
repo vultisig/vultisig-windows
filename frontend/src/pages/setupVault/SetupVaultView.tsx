@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import NavBar from '../../components/navbar/NavBar';
+import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
 
 interface TabContent {
   title: string;
@@ -95,6 +96,7 @@ const TabbedContent: React.FC = () => {
   // 4 - keygen view
   // 5 - keygen done
   // 6 - keygen error
+  // 7 - backup view
   const screens = [
     {
       title: t('setup'),
@@ -294,19 +296,25 @@ const TabbedContent: React.FC = () => {
         </div>
       ),
     },
+    {
+      title: '',
+      content: <KeygenBackupNow />,
+    },
   ];
 
   return (
     <>
-      <NavBar
-        title={screens[currentScreen].title}
-        questionLink={
-          currentScreen === 0 || currentScreen > 3
-            ? 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
-            : undefined
-        }
-        handleBack={currentScreen !== 0 ? prevScreen : undefined}
-      />
+      {screens[currentScreen].title && (
+        <NavBar
+          title={screens[currentScreen].title}
+          questionLink={
+            currentScreen === 0 || currentScreen > 3
+              ? 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
+              : undefined
+          }
+          handleBack={currentScreen !== 0 ? prevScreen : undefined}
+        />
+      )}
       {screens[currentScreen].content}
     </>
   );
