@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-interface KeygenQRCodeProps {
+interface SelectDeviceProps {
   devices: string[];
   selectedDevices: string[];
   setSelectedDevices: React.Dispatch<React.SetStateAction<string[]>>;
 }
-const SelectDevice: React.FC<KeygenQRCodeProps> = ({
+const SelectDevice: React.FC<SelectDeviceProps> = ({
   devices,
   setSelectedDevices,
 }) => {

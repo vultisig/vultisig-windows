@@ -6,7 +6,6 @@ interface NavBarProps {
   title: string;
   questionLink?: string;
   handleBack?: () => void;
-  test?: string;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ title, questionLink, handleBack }) => {
