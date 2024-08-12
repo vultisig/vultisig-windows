@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const OnboardingView: React.FC = () => {
   const navigate = useNavigate();
+  const hasMounted = useRef(false);
   const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState(0);
 
@@ -16,20 +17,23 @@ const OnboardingView: React.FC = () => {
   };
 
   useEffect(() => {
-    const visitedBefore = sessionStorage.getItem('homePageVisited');
-    if (!visitedBefore) {
-      setTimeout(() => {
-        sessionStorage.setItem('homePageVisited', 'true');
-        const flag = localStorage.getItem('isFirstTime');
-        if (!flag) {
-          setCurrentScreen(1);
-          localStorage.setItem('isFirstTime', 'no');
-        } else {
-          skipScreen();
-        }
-      }, 1000);
-    } else {
-      skipScreen();
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      const visitedBefore = sessionStorage.getItem('homePageVisited');
+      if (!visitedBefore) {
+        setTimeout(() => {
+          sessionStorage.setItem('homePageVisited', 'true');
+          const flag = localStorage.getItem('isFirstTime');
+          if (!flag) {
+            setCurrentScreen(1);
+            localStorage.setItem('isFirstTime', 'no');
+          } else {
+            skipScreen();
+          }
+        }, 1000);
+      } else {
+        skipScreen();
+      }
     }
   }, []);
 

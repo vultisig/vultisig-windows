@@ -22,7 +22,6 @@ export enum Chain {
   Dydx = 'Dydx',
   Polkadot = 'Polkadot',
   ZkSync = 'ZkSync',
-
 }
 export enum TssKeysignType {
   ECDSA,
@@ -88,9 +87,9 @@ export class ChainUtils {
       case Chain.Polkadot:
         return 'DOT';
       case Chain.ZkSync:
-        return "ZK";
+        return 'ZK';
       case Chain.Sui:
-        return "SUI";
+        return 'SUI';
     }
   }
 }

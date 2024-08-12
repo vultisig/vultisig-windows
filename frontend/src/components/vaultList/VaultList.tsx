@@ -67,7 +67,7 @@ const VaultList: React.FC = () => {
           className="absolute bottom-5 w-full bg-btn-tertiary font-bold text-btn-primary px-5 py-2 rounded-3xl flex items-center justify-center "
         >
           <img src="/assets/icons/plus.svg" alt="add" className="w-[15px]" />
-          <span className="px-2">{t('addNewVault')}</span>
+          <span className="px-2">{t('add_new_vault')}</span>
         </button>
       </div>
     </div>
