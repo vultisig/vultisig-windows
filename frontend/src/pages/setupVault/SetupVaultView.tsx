@@ -7,6 +7,7 @@ import KeygenVerify from '../../components/keygen/KeygenVerify';
 import KeygenNameVault from '../../components/keygen/KeygenNameVault';
 import KeygenTypeSelector from '../../components/keygen/KeygenTypeSelector';
 import KeygenInitial from '../../components/keygen/KeygenInitial';
+import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
 
 const TabbedContent: React.FC = () => {
   const { t } = useTranslation();
@@ -42,6 +43,8 @@ const TabbedContent: React.FC = () => {
   // 5 - keygen view
   // 6 - keygen done
   // 7 - keygen error
+  // 8 - backup view
+
   const screens = [
     {
       title: t('setup'),
@@ -93,19 +96,25 @@ const TabbedContent: React.FC = () => {
         />
       ),
     },
+    {
+      title: '',
+      content: <KeygenBackupNow />,
+    },
   ];
 
   return (
     <>
-      <NavBar
-        title={screens[currentScreen].title}
-        questionLink={
-          currentScreen === 5
-            ? 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
-            : undefined
-        }
-        handleBack={currentScreen !== 0 ? prevScreen : undefined}
-      />
+      {screens[currentScreen].title && (
+        <NavBar
+          title={screens[currentScreen].title}
+          questionLink={
+            currentScreen === 5
+              ? 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
+              : undefined
+          }
+          handleBack={currentScreen !== 0 ? prevScreen : undefined}
+        />
+      )}
       {screens[currentScreen].content}
     </>
   );

@@ -8,6 +8,7 @@ export const theme = {
       btn: {
         primary: '#061B3A',
         secondary: '#BDBDBD',
+        tertiary: '#33E6BF'
       },
       warning: '#F7961B',
     },

@@ -9,13 +9,14 @@
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'",
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
-    "@bufbuild/buf": "^1.35.1",
+    "@bufbuild/buf": "^1.36.0",
     "@bufbuild/protobuf": "^1.10.0",
     "@bufbuild/protoc-gen-es": "^1.10.0",
-    "@trustwallet/wallet-core": "^4.1.0",
+    "@trustwallet/wallet-core": "^4.1.4",
     "@types/react-router-dom": "^5.3.3",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
@@ -24,8 +25,8 @@
     "i18next-xhr-backend": "^3.2.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-i18next": "^15.0.0",
-    "react-router-dom": "^6.25.1",
+    "react-i18next": "^15.0.1",
+    "react-router-dom": "^6.26.0",
     "stream-browserify": "^3.0.0",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vite-plugin-node-stdlib-browser": "^0.2.1"
@@ -43,11 +44,12 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "globals": "^15.8.0",
+    "globals": "^15.9.0",
     "postcss": "^8.4.41",
     "prettier": "^3.3.3",
-    "tailwindcss": "^3.4.8",
+    "tailwindcss": "^3.4.9",
     "typescript": "^4.6.4",
-    "vite": "^4.0.0"
+    "vite": "^4.0.0",
+    "vitest": "^2.0.5"
   }
 }

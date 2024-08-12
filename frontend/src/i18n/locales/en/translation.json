@@ -38,6 +38,7 @@
   "backup_disclaimer": "You should backup all vault shares in separate locations.",
   "of": "of",
   "vault": "Vault",
+  "vaults": "Vaults",
   "setup": "Setup",
   "import": "Import",
   "keygen": "Keygen",
@@ -54,5 +55,9 @@
   "scan_qr": "Scan QR / Pair device",
   "this_device_is_the": "This device is the",
   "initiating_device": "Initiating device",
-  "pairing_device": "Pairing device"
+  "pairing_device": "Pairing device",
+  "add_new_vault": "Add New Vault",
+  "backupnow_description": "Each device has its own unique share. Please Backup all of your Vault Shares now.",
+  "backupnow_note": "Note: Never store Vault Shares from different devices in the same location.",
+  "backup": "Backup"
 }

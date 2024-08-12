@@ -10,6 +10,10 @@ export function GetLocalState(arg1) {
   return window['go']['tss']['TssService']['GetLocalState'](arg1);
 }
 
+export function KeysignECDSA(arg1) {
+  return window['go']['tss']['TssService']['KeysignECDSA'](arg1);
+}
+
 export function SaveLocalState(arg1, arg2) {
   return window['go']['tss']['TssService']['SaveLocalState'](arg1, arg2);
 }
