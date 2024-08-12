@@ -5,6 +5,7 @@ export enum Chain {
   Avalanche = 'Avalanche',
   Base = 'Base',
   CronosChain = 'CronosChain',
+  Sui = 'Sui',
   BSC = 'BSC',
   Blast = 'Blast',
   Ethereum = 'Ethereum',
@@ -20,6 +21,7 @@ export enum Chain {
   Kujira = 'Kujira',
   Dydx = 'Dydx',
   Polkadot = 'Polkadot',
+  ZkSync = 'ZkSync',
 }
 export enum TssKeysignType {
   ECDSA,
@@ -39,6 +41,7 @@ export class ChainUtils {
         return TssKeysignType.ECDSA;
     }
   }
+
   static getTicker(chain: Chain): string {
     switch (chain) {
       case Chain.THORChain:
@@ -83,6 +86,10 @@ export class ChainUtils {
         return 'DYDX';
       case Chain.Polkadot:
         return 'DOT';
+      case Chain.ZkSync:
+        return 'ZK';
+      case Chain.Sui:
+        return 'SUI';
     }
   }
 }

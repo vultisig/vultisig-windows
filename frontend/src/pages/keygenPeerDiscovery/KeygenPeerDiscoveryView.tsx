@@ -95,7 +95,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
               isRelay ? 'bg-switchBtn-secondary' : 'bg-switchBtn-primary'
             } rounded-3xl flex items-center justify-center w-[150px] py-2 gap-2`}
           >
-            <img src="/assets/images/icons/cellular.svg" alt="cellular" />{' '}
+            <img src="/assets/icons/cellular.svg" alt="cellular" />{' '}
             {t('internet')}
           </button>
           <button
@@ -104,7 +104,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
               !isRelay ? 'bg-switchBtn-secondary' : 'bg-switchBtn-primary'
             } rounded-3xl flex items-center justify-center w-[150px] py-2 gap-2`}
           >
-            <img src="/assets/images/icons/wifi.svg" alt="wifi" /> {t('local')}
+            <img src="/assets/icons/wifi.svg" alt="wifi" /> {t('local')}
           </button>
         </div>
         {devices.length == 0 ? (
@@ -125,7 +125,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
         {isRelay ? (
           <div>
             <img
-              src="/assets/images/icons/cellular.svg"
+              src="/assets/icons/cellular.svg"
               alt="cellular"
               className="mx-auto my-2"
             />
@@ -134,7 +134,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
         ) : (
           <div>
             <img
-              src="/assets/images/icons/wifi.svg"
+              src="/assets/icons/wifi.svg"
               alt="wifi"
               className="mx-auto my-2"
             />

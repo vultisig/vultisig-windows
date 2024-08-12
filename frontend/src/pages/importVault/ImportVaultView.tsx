@@ -128,7 +128,7 @@ const ImportVaultView: React.FC = () => {
       />
       <div className="text-white pt-[5vh]">
         <div className="text-center px-20">
-          <h6 className="text-lg mb-8">{t('enter_previous_vault')}</h6>
+          <h6 className="text-lg mb-8">{t('upload_previous_vault')}</h6>
           <div
             className="w-full bg-secondary/[.14] h-[250px] border-2 border-dashed border-secondary rounded-lg font-bold cursor-pointer"
             onClick={handleUpload}
@@ -153,7 +153,7 @@ const ImportVaultView: React.FC = () => {
                   className="mx-auto mb-4 mt-20"
                   alt="file"
                 />
-                {t('upload_backup_file')}
+                {t('select_backup_file')}
               </>
             )}
           </div>
@@ -168,7 +168,7 @@ const ImportVaultView: React.FC = () => {
                 {selectedFile.name}
               </div>
               <img
-                src="/assets/images/icons/cancel.svg"
+                src="/assets/icons/cancel.svg"
                 className="mr-4 w-4 cursor-pointer"
                 alt="cancel"
                 role="presentation"
@@ -177,7 +177,7 @@ const ImportVaultView: React.FC = () => {
             </div>
           )}
           <button
-            className={`text-lg rounded-full w-full font-bold py-2 mt-48 ${
+            className={`text-lg rounded-full w-full font-bold py-2 mt-60 ${
               isContinue
                 ? 'text-btn-primary bg-secondary'
                 : 'text-btn-secondary bg-white/[.10]'
