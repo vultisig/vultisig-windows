@@ -7,14 +7,14 @@ const KeygenDone: React.FC = () => {
   return (
     <div className="text-center text-white">
       <img
-        src="/assets/images/done.svg"
+        src="/assets/icons/done.svg"
         alt="done"
         className="mx-auto mt-[30vh] mb-6"
       />
       <p className="text-2xl font-bold">{t('done')}</p>
       <div className="w-full fixed bottom-16 text-center">
         <img
-          src="/assets/images/wifi.svg"
+          src="/assets/icons/wifi.svg"
           alt="wifi"
           className="mx-auto mb-4 w-8"
         />
