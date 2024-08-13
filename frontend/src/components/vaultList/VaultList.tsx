@@ -30,6 +30,11 @@ const VaultList: React.FC<VaultListProps> = ({ onSelectVault }) => {
     getVaultList();
   }, []);
 
+  const handleVaultSelect = (vault: storage.Vault) => {
+    onSelectVault(vault);
+    setIsOpen(false); // Close the dropdown
+  };
+
   return (
     <div className="relative">
       <button
@@ -55,7 +60,7 @@ const VaultList: React.FC<VaultListProps> = ({ onSelectVault }) => {
                 className="py-2 px-2 bg-btn-primary rounded-lg font-bold cursor-pointer"
               >
                 <button
-                  onClick={() => onSelectVault(vault)}
+                  onClick={() => handleVaultSelect(vault)}
                   className="no-underline text-white w-full items-center flex justify-between"
                 >
                   <div>{vault.name}</div>
@@ -72,7 +77,7 @@ const VaultList: React.FC<VaultListProps> = ({ onSelectVault }) => {
           onClick={() => {
             navigate('/vault/setup');
           }}
-          className="absolute bottom-5 w-full bg-btn-tertiary font-bold text-btn-primary px-5 py-2 rounded-3xl flex items-center justify-center"
+          className="absolute bottom-5 w-full bg-btn-tertiary font-bold text-btn-primary px-5 py-2 rounded-3xl flex items-center justify-center "
         >
           <img src="/assets/icons/plus.svg" alt="add" className="w-[15px]" />
           <span className="px-2">{t('add_new_vault')}</span>
