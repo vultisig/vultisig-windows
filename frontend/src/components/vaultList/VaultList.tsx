@@ -27,16 +27,21 @@ const VaultList: React.FC<VaultListProps> = ({
       try {
         const vaults = await GetVaults();
         setVaults(vaults);
+
+        // Automatically select the first vault if there's only one
+        if (vaults.length === 1) {
+          onSelectVault(vaults[0]);
+        }
       } catch (error) {
         console.error(error);
       }
     }
     getVaultList();
-  }, []);
+  }, [onSelectVault]);
 
   const handleVaultSelect = (vault: storage.Vault) => {
     onSelectVault(vault);
-    setIsOpen(false); // Close the dropdown
+    setIsOpen(false);
   };
 
   return (
