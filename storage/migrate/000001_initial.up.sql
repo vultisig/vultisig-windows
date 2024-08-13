@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS keyshares (
     keyshare TEXT NOT NULL,
     FOREIGN KEY (public_key_ecdsa) REFERENCES vaults(public_key_ecdsa) ON DELETE CASCADE
 );
+
 CREATE TABLE Coins (
     id TEXT PRIMARY KEY,
     public_key_ecdsa TEXT NOT NULL,
@@ -29,5 +30,20 @@ CREATE TABLE Coins (
     logo  TEXT NOT NULL,
     price_provider_id TEXT NOT NULL,
     decimals INTEGER NOT NULL,
+    raw_balance TEXT NOT NULL,
+    price_rate TEXT NOT NULL
     FOREIGN KEY (public_key_ecdsa) REFERENCES vaults(public_key_ecdsa) ON DELETE CASCADE
 );
+
+CREATE INDEX idx_vaults_public_key_ecdsa ON vaults(public_key_ecdsa);
+
+CREATE INDEX idx_keyshares_public_key_ecdsa ON keyshares(public_key_ecdsa);
+
+CREATE INDEX idx_coins_public_key_ecdsa ON coins(public_key_ecdsa);
+
+CREATE INDEX idx_coins_chain ON coins(chain);
+
+CREATE INDEX idx_coins_ticker ON coins(ticker);
+
+CREATE INDEX idx_coins_public_key_ecdsa_chain ON coins(public_key_ecdsa, chain);
+

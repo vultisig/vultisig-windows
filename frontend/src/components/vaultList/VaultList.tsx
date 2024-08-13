@@ -14,7 +14,13 @@ const VaultList: React.FC = () => {
   };
   useEffect(() => {
     async function getVaultList() {
-      setVaults(await GetVaults());
+      try {
+        const vaults = await GetVaults();
+        console.log(vaults);
+        setVaults(vaults);
+      } catch (error) {
+        console.error(error);
+      }
     }
     getVaultList();
   }, []);
