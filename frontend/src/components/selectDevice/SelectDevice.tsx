@@ -23,15 +23,15 @@ const SelectDevice: React.FC<SelectDeviceProps> = ({
   return (
     <>
       <h3 className="mt-5 font-semibold">{t('select_the_pairing_devices')}</h3>
-      <div className="flex flex-wrap justify-center w-full items-center gap-10 my-2">
+      <div className="flex flex-wrap justify-center w-full items-center gap-10 my-5">
         {devices.map((device, index) => (
           <div
             key={index}
-            className="relative bg-btn-primary rounded-lg text-center w-[120px] p-3 rounded-lg hover:border hover:border-white"
+            className="relative bg-btn-primary rounded-lg text-center w-28 h-28 p-1 rounded-lg hover:border hover:border-white"
           >
             <div className="inline-flex items-center">
               <label
-                className="py-3 rounded-full cursor-pointer"
+                className="py-1 rounded-full cursor-pointer"
                 htmlFor={'device-' + index}
               >
                 <input

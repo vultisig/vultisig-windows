@@ -8,22 +8,22 @@ import KeygenDone from '../../components/keygen/KeygenDone';
 import KeygenInitial from '../../components/keygen/KeygenInitial';
 import KeygenTypeSelector from '../../components/keygen/KeygenTypeSelector';
 import KeygenVerify from '../../components/keygen/KeygenVerify';
-import KeygenPeerDiscoveryView from '../keygenPeerDiscovery/KeygenPeerDiscoveryView';
+import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
+import { startkeygen } from '../../services/Keygen/Keygen';
 
 const TabbedContent: React.FC = () => {
   const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState<number>(0);
   const [vaultName, setVaultName] = useState<string>('');
+  const [sessionID, setSessionID] = useState<string>();
   const [devices, setDevices] = useState<string[]>([]);
   const [localPartyId, setLocalPartyId] = useState<string>('');
   const [keygenError, setKeygenError] = useState<string>('');
-  const [vaultType, setVaultType] = useState<string>('2/3');
+  const [vaultType, setVaultType] = useState<string>('2/2');
 
   useEffect(() => {
-    setDevices([]);
-    setLocalPartyId('');
     setKeygenError('');
-    console.log(vaultName);
+    console.log(sessionID);
   }, []);
 
   const prevScreen = () => {
@@ -36,6 +36,18 @@ const TabbedContent: React.FC = () => {
     });
   };
 
+  const keygenStart = async (
+    isRelay: boolean,
+    sessionID: string,
+    serviceName: string,
+    devices: string[]
+  ) => {
+    setSessionID(sessionID);
+    setLocalPartyId(serviceName);
+    setDevices(devices);
+    await startkeygen(isRelay, sessionID, devices);
+  };
+
   // screens
   // 0 - vault setup initial view
   // 1 - vault setup view
@@ -46,7 +58,6 @@ const TabbedContent: React.FC = () => {
   // 6 - keygen done
   // 7 - keygen error
   // 8 - backup view
-
   const screens = [
     {
       title: t('setup'),
@@ -75,7 +86,11 @@ const TabbedContent: React.FC = () => {
     {
       title: `${t('keygen_for')} ${vaultType} ${t('vault')}`,
       content: (
-        <KeygenPeerDiscoveryView vaultName={vaultName} vaultType={vaultType} />
+        <KeygenPeerDiscovery
+          vaultName={vaultName}
+          vaultType={vaultType}
+          keygenStart={keygenStart}
+        />
       ),
     },
     {

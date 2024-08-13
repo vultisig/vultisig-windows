@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import KeygenQRCode from '../../components/qrCode/KeygenQRCode';
+import KeygenQRCode from '../qrCode/KeygenQRCode';
 import Lottie from 'lottie-react';
 import loadingAnimation from '../../../public/assets/images/loadingAnimation.json';
-import SelectDevice from '../../components/selectDevice/SelectDevice';
+import SelectDevice from '../selectDevice/SelectDevice';
 import { createKeygenMsg } from '../../utils/QRGen';
 import { v4 as uuidv4 } from 'uuid';
 import { generateRandomNumber } from '../../utils/util';
@@ -12,16 +12,22 @@ import {
   checkForDevices,
   clearCheckingInterval,
   postSession,
-  startkeygen,
 } from '../../services/Keygen/Keygen';
 
-interface KeygenPeerDiscoveryViewProps {
+interface KeygenPeerDiscoveryProps {
   vaultType: string;
   vaultName: string;
+  keygenStart: (
+    isRelay: boolean,
+    sessionID: string,
+    serviceName: string,
+    devices: string[]
+  ) => void;
 }
-const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
+const KeygenPeerDiscovery: React.FC<KeygenPeerDiscoveryProps> = ({
   vaultType,
   vaultName,
+  keygenStart,
 }) => {
   const { t } = useTranslation();
   const [qrData, setQrData] = useState('');
@@ -75,17 +81,10 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
     }
   };
 
-  const startKeygen = async () => {
-    if (!handleDisabled()) {
-      await startkeygen(isRelay, sessionID!, selectedDevices);
-    }
-  };
-
   return (
     <>
-      <div className="mx-auto w-full  text-white text-center">
+      <div className="mx-auto w-full mt-5 text-white text-center">
         <div>
-          {/* sample data */}
           <KeygenQRCode data={qrData} serviceName={serviceName!} />
         </div>
         <div className="flex gap-10 justify-center mt-5">
@@ -110,7 +109,7 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
         {devices.length == 0 ? (
           <>
             <h3 className="mt-5 font-semibold">{t('looking_for_devices')}</h3>
-            <div className="w-[100px] h-auto mx-auto">
+            <div className="w-28 h-auto mx-auto my-5">
               <Lottie animationData={loadingAnimation} loop={true} />
             </div>
           </>
@@ -144,9 +143,9 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
         <button
           disabled={handleDisabled()}
           onClick={() => {
-            startKeygen();
+            keygenStart(isRelay, sessionID!, serviceName!, selectedDevices);
           }}
-          className="w-[400px] disabled:opacity-30  bg-switchBtn-primary rounded-3xl mt-5 py-2 font-bold"
+          className="w-[400px] disabled:opacity-30  bg-switchBtn-primary rounded-3xl mt-10 py-2 font-bold"
         >
           {t('continue')}
         </button>
@@ -155,4 +154,4 @@ const KeygenPeerDiscoveryView: React.FC<KeygenPeerDiscoveryViewProps> = ({
   );
 };
 
-export default KeygenPeerDiscoveryView;
+export default KeygenPeerDiscovery;
