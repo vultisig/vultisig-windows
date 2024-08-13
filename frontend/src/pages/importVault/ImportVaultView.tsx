@@ -10,6 +10,7 @@ import NavBar from '../../components/navbar/NavBar';
 
 const ImportVaultView: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileContent, setFileContent] = useState('');
@@ -18,8 +19,6 @@ const ImportVaultView: React.FC = () => {
   const [dialogTitle, setDialogTitle] = useState('');
   const [dialogContent, setDialogContent] = useState('');
   const [decryptedContent, setDecryptedContent] = useState<Buffer | null>();
-
-  const navigate = useNavigate();
 
   const handleUpload = () => {
     const fileInput = document.getElementById('file_upload');

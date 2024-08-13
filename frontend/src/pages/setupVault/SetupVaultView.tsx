@@ -21,6 +21,7 @@ const SetupVaultView: React.FC = () => {
   const [localPartyId, setLocalPartyId] = useState<string>('');
   const [keygenError, setKeygenError] = useState<string>('');
   const [vaultType, setVaultType] = useState<string>('2/2');
+  const [isRelay, setIsRelay] = useState(true);
 
   useEffect(() => {
     setKeygenError('');
@@ -37,16 +38,22 @@ const SetupVaultView: React.FC = () => {
     });
   };
 
-  const keygenStart = async (
+  const onKeygenPeerDiscoveryContinue = (
     isRelay: boolean,
     sessionID: string,
     serviceName: string,
     devices: string[]
   ) => {
+    setIsRelay(isRelay);
     setSessionID(sessionID);
     setLocalPartyId(serviceName);
     setDevices(devices);
-    await startkeygen(isRelay, sessionID, devices);
+    setCurrentScreen(4);
+  };
+
+  const keygenStart = async () => {
+    setCurrentScreen(5);
+    await startkeygen(isRelay, localPartyId, devices);
   };
 
   // screens
@@ -90,7 +97,7 @@ const SetupVaultView: React.FC = () => {
         <KeygenPeerDiscovery
           vaultName={vaultName}
           vaultType={vaultType}
-          keygenStart={keygenStart}
+          onContinue={onKeygenPeerDiscoveryContinue}
         />
       ),
     },
@@ -100,17 +107,33 @@ const SetupVaultView: React.FC = () => {
         <KeygenVerify
           localPartyId={localPartyId}
           devices={devices}
-          onContinue={() => setCurrentScreen(5)}
+          onContinue={keygenStart}
         />
       ),
     },
     {
       title: `${t('join')} ${t('keygen')}`,
-      content: <KeygenView />,
+      content: (
+        <KeygenView
+          onDone={() => {
+            setCurrentScreen(6);
+          }}
+          onError={(err: string) => {
+            setKeygenError(err);
+            setCurrentScreen(7);
+          }}
+        />
+      ),
     },
     {
       title: `${t('join')} ${t('keygen')}`,
-      content: <KeygenDone />,
+      content: (
+        <KeygenDone
+          onNext={() => {
+            setCurrentScreen(8);
+          }}
+        />
+      ),
     },
     {
       title: t('keygen'),

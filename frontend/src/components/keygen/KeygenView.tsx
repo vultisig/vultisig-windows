@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import RingProgress from '../ringProgress/RingProgress';
 
-const KeygenView: React.FC = () => {
+interface KeygenViewProps {
+  onDone: () => void;
+  onError: (err: string) => void;
+}
+
+const KeygenView: React.FC<KeygenViewProps> = () => {
   const { t } = useTranslation();
   const [contentIndex, setContentIndex] = useState<number>(0);
 

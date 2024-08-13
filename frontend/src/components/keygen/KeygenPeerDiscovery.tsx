@@ -17,7 +17,7 @@ import {
 interface KeygenPeerDiscoveryProps {
   vaultType: string;
   vaultName: string;
-  keygenStart: (
+  onContinue: (
     isRelay: boolean,
     sessionID: string,
     serviceName: string,
@@ -27,7 +27,7 @@ interface KeygenPeerDiscoveryProps {
 const KeygenPeerDiscovery: React.FC<KeygenPeerDiscoveryProps> = ({
   vaultType,
   vaultName,
-  keygenStart,
+  onContinue,
 }) => {
   const { t } = useTranslation();
   const [qrData, setQrData] = useState('');
@@ -143,7 +143,7 @@ const KeygenPeerDiscovery: React.FC<KeygenPeerDiscoveryProps> = ({
         <button
           disabled={handleDisabled()}
           onClick={() => {
-            keygenStart(isRelay, sessionID!, serviceName!, selectedDevices);
+            onContinue(isRelay, sessionID!, serviceName!, selectedDevices);
           }}
           className="w-[400px] disabled:opacity-30  bg-switchBtn-primary rounded-3xl mt-10 py-2 font-bold"
         >
