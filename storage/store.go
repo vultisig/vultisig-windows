@@ -264,7 +264,19 @@ func (s *Store) SaveCoin(vaultPublicKeyECDSA string, coin Coin) (string, error) 
 	if coin.ID == "" {
 		coin.ID = uuid.New().String()
 	}
-	query := `INSERT OR REPLACE INTO coins (id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, raw_balance, price_rate, public_key_ecdsa)
+	query := `INSERT OR REPLACE INTO coins (
+				id, 
+				chain, 
+				address, 
+				hex_public_key, 
+				ticker, 
+				contract_address, 
+				is_native_token, 
+				logo, 
+				price_provider_id, 
+				raw_balance, 
+				price_rate, 
+				public_key_ecdsa)
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 	_, err := s.db.Exec(query, coin.ID, coin.Chain, coin.Address, coin.HexPublicKey, coin.Ticker, coin.ContractAddress, coin.IsNativeToken, coin.Logo, coin.PriceProviderID, coin.RawBalance, coin.PriceRate, vaultPublicKeyECDSA)
 	if err != nil {
