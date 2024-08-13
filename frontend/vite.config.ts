@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import stdLibBrowser from 'vite-plugin-node-stdlib-browser';
+import wasm from 'vite-plugin-wasm';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), stdLibBrowser()],
+  plugins: [react(), stdLibBrowser(), wasm()],
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -15,6 +16,7 @@ export default defineConfig({
       crypto: 'crypto-browserify',
       stream: 'stream-browserify',
       buffer: 'buffer',
+      'fs/promises': 'node-stdlib-browser/mock/empty',
     },
   },
   optimizeDeps: {
