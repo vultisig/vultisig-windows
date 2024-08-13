@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import ImportVaultDialog from '../../components/dialog/ImportVaultDialog';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { decryptVault, isBase64Encoded } from '../../utils/util';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
@@ -17,6 +18,8 @@ const ImportVaultView: React.FC = () => {
   const [dialogTitle, setDialogTitle] = useState('');
   const [dialogContent, setDialogContent] = useState('');
   const [decryptedContent, setDecryptedContent] = useState<Buffer | null>();
+
+  const navigate = useNavigate();
 
   const handleUpload = () => {
     const fileInput = document.getElementById('file_upload');
@@ -111,6 +114,7 @@ const ImportVaultView: React.FC = () => {
         coins: [],
         convertValues: () => {},
       }).then(() => {
+        navigate('/vault/details');
         console.log('Vault saved');
       });
     }

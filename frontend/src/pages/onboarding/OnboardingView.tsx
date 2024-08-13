@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { GetVaults } from '../../../wailsjs/go/storage/Store';
 
 const OnboardingView: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,20 @@ const OnboardingView: React.FC = () => {
   const skipScreen = () => {
     setCurrentScreen(screens.length - 1);
   };
+
+  useEffect(() => {
+    async function getVaultList() {
+      try {
+        const vaults = await GetVaults();
+        if (vaults.length > 0) {
+          navigate('/vault/details');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getVaultList();
+  }, []);
 
   useEffect(() => {
     if (!hasMounted.current) {
