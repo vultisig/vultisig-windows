@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS vaults (
     name TEXT NOT NULL,
     local_party_id TEXT NOT NULL,
     public_key_eddsa TEXT NOT NULL,
-    hex_chain_code  TEXT NOT NULL ,
+    hex_chain_code  TEXT NOT NULL,
     reshare_prefix TEXT NOT NULL DEFAULT '',
     signers TEXT NOT NULL,
     is_backedup INTEGER NOT NULL DEFAULT 0,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS keyshares (
     FOREIGN KEY (public_key_ecdsa) REFERENCES vaults(public_key_ecdsa) ON DELETE CASCADE
 );
 
-CREATE TABLE Coins (
+CREATE TABLE IF NOT EXISTS Coins (
     id TEXT PRIMARY KEY,
     public_key_ecdsa TEXT NOT NULL,
     chain TEXT NOT NULL,
@@ -27,23 +27,22 @@ CREATE TABLE Coins (
     ticker TEXT NOT NULL,
     contract_address TEXT NULL,
     is_native_token INTEGER NOT NULL DEFAULT 0,
-    logo  TEXT NOT NULL,
+    logo TEXT NOT NULL,
     price_provider_id TEXT NOT NULL,
     decimals INTEGER NOT NULL,
     raw_balance TEXT NOT NULL,
-    price_rate TEXT NOT NULL
+    price_rate TEXT NOT NULL,
     FOREIGN KEY (public_key_ecdsa) REFERENCES vaults(public_key_ecdsa) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_vaults_public_key_ecdsa ON vaults(public_key_ecdsa);
+CREATE INDEX IF NOT EXISTS idx_vaults_public_key_ecdsa ON vaults(public_key_ecdsa);
 
-CREATE INDEX idx_keyshares_public_key_ecdsa ON keyshares(public_key_ecdsa);
+CREATE INDEX IF NOT EXISTS idx_keyshares_public_key_ecdsa ON keyshares(public_key_ecdsa);
 
-CREATE INDEX idx_coins_public_key_ecdsa ON coins(public_key_ecdsa);
+CREATE INDEX IF NOT EXISTS idx_coins_public_key_ecdsa ON coins(public_key_ecdsa);
 
-CREATE INDEX idx_coins_chain ON coins(chain);
+CREATE INDEX IF NOT EXISTS idx_coins_chain ON coins(chain);
 
-CREATE INDEX idx_coins_ticker ON coins(ticker);
+CREATE INDEX IF NOT EXISTS idx_coins_ticker ON coins(ticker);
 
-CREATE INDEX idx_coins_public_key_ecdsa_chain ON coins(public_key_ecdsa, chain);
-
+CREATE INDEX IF NOT EXISTS idx_coins_public_key_ecdsa_chain ON coins(public_key_ecdsa, chain);
