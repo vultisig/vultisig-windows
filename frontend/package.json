@@ -13,11 +13,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@bufbuild/buf": "^1.36.0",
-    "@bufbuild/protobuf": "^1.10.0",
-    "@bufbuild/protoc-gen-es": "^1.10.0",
     "@trustwallet/wallet-core": "^4.1.4",
-    "@types/react-router-dom": "^5.3.3",
     "7z-wasm": "^1.1.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
@@ -31,14 +27,15 @@
     "react-qr-code": "^2.0.15",
     "react-router-dom": "^6.26.0",
     "stream-browserify": "^3.0.0",
-    "uuid": "^10.0.0",
-    "vite-plugin-node-polyfills": "^0.22.0",
-    "vite-plugin-node-stdlib-browser": "^0.2.1",
-    "vite-plugin-wasm": "^3.3.0"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@bufbuild/buf": "^1.36.0",
+    "@bufbuild/protobuf": "^1.10.0",
+    "@bufbuild/protoc-gen-es": "^1.10.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/react-router-dom": "^5.3.3",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.1",
     "@typescript-eslint/parser": "^8.0.1",
@@ -56,6 +53,9 @@
     "tailwindcss": "^3.4.9",
     "typescript": "^4.6.4",
     "vite": "^4.0.0",
+    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite-plugin-node-stdlib-browser": "^0.2.1",
+    "vite-plugin-static-copy": "0.17.0",
     "vitest": "^2.0.5"
   }
 }
