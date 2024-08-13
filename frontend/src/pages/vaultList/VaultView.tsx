@@ -24,7 +24,10 @@ const VaultView: React.FC = () => {
 
   return (
     <div className="relative">
-      <VaultList onSelectVault={setSelectedVault} />
+      <VaultList
+        onSelectVault={setSelectedVault}
+        selectedVaultName={selectedVault ? selectedVault.name : null}
+      />
       {selectedVault && (
         <div>
           <h2>{selectedVault.name} Coins</h2>
