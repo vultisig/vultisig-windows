@@ -1,22 +1,22 @@
-import React, { useEffect } from 'react';
-//import { GetVaults } from '../../../wailsjs/go/storage/Store';
-//import { storage } from '../../../wailsjs/go/models';
-// import { useNavigate } from 'react-router-dom';
-// import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
 import VaultList from '../../components/vaultList/VaultList';
+import { storage } from '../../../wailsjs/go/models';
 
 const VaultView: React.FC = () => {
-  // const navigate = useNavigate();
-  // const { t } = useTranslation();
+  const [selectedVault, setSelectedVault] = useState<storage.Vault | null>(
+    null
+  );
 
   useEffect(() => {
-    async function getVaultList() {}
-    getVaultList();
-  }, []);
+    if (selectedVault) {
+      console.log('Selected vault:', selectedVault);
+    }
+  }, [selectedVault]);
 
   return (
     <div className="relative">
-      <VaultList />
+      <VaultList onSelectVault={setSelectedVault} />
+      {/* You can use selectedVault to render additional details here */}
     </div>
   );
 };

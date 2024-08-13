@@ -4,19 +4,24 @@ import { storage } from '../../../wailsjs/go/models';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const VaultList: React.FC = () => {
+interface VaultListProps {
+  onSelectVault: (vault: storage.Vault) => void;
+}
+
+const VaultList: React.FC<VaultListProps> = ({ onSelectVault }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [vaults, setVaults] = useState<storage.Vault[]>([]);
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
   useEffect(() => {
     async function getVaultList() {
       try {
         const vaults = await GetVaults();
-        console.log(vaults);
         setVaults(vaults);
       } catch (error) {
         console.error(error);
@@ -24,6 +29,7 @@ const VaultList: React.FC = () => {
     }
     getVaultList();
   }, []);
+
   return (
     <div className="relative">
       <button
@@ -46,14 +52,10 @@ const VaultList: React.FC = () => {
             vaults.map((vault, index) => (
               <li
                 key={index}
-                className="py-2 px-2 bg-btn-primary rounded-lg  font-bold cursor-pointer"
+                className="py-2 px-2 bg-btn-primary rounded-lg font-bold cursor-pointer"
               >
                 <button
-                  onClick={() => {
-                    /**
-                  @todo: Vault details
-                  **/
-                  }}
+                  onClick={() => onSelectVault(vault)}
                   className="no-underline text-white w-full items-center flex justify-between"
                 >
                   <div>{vault.name}</div>
@@ -70,7 +72,7 @@ const VaultList: React.FC = () => {
           onClick={() => {
             navigate('/vault/setup');
           }}
-          className="absolute bottom-5 w-full bg-btn-tertiary font-bold text-btn-primary px-5 py-2 rounded-3xl flex items-center justify-center "
+          className="absolute bottom-5 w-full bg-btn-tertiary font-bold text-btn-primary px-5 py-2 rounded-3xl flex items-center justify-center"
         >
           <img src="/assets/icons/plus.svg" alt="add" className="w-[15px]" />
           <span className="px-2">{t('add_new_vault')}</span>
