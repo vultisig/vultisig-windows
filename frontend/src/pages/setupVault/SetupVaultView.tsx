@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import NavBar from '../../components/navbar/NavBar';
-import KeygenDone from '../../components/keygen/KeygenDone';
 import KeygenError from '../../components/keygen/KeygenError';
-import KeygenVerify from '../../components/keygen/KeygenVerify';
 import KeygenNameVault from '../../components/keygen/KeygenNameVault';
-import KeygenTypeSelector from '../../components/keygen/KeygenTypeSelector';
-import KeygenInitial from '../../components/keygen/KeygenInitial';
 import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
 import KeygenView from '../../components/keygen/KeygenView';
+import KeygenDone from '../../components/keygen/KeygenDone';
+import KeygenInitial from '../../components/keygen/KeygenInitial';
+import KeygenTypeSelector from '../../components/keygen/KeygenTypeSelector';
+import KeygenVerify from '../../components/keygen/KeygenVerify';
+import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
+import { startkeygen } from '../../services/Keygen/Keygen';
 
 const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState<number>(4);
   const [vaultName, setVaultName] = useState<string>(t('main_vault'));
+  const [sessionID, setSessionID] = useState<string>();
   const [devices, setDevices] = useState<string[]>([]);
   const [localPartyId, setLocalPartyId] = useState<string>('');
   const [keygenError, setKeygenError] = useState<string>('');
+  const [vaultType, setVaultType] = useState<string>('2/2');
 
   useEffect(() => {
-    setDevices([]);
-    setLocalPartyId('');
     setKeygenError('');
-    console.log(vaultName);
+    console.log(sessionID);
   }, []);
 
   const prevScreen = () => {
@@ -35,6 +37,18 @@ const SetupVaultView: React.FC = () => {
     });
   };
 
+  const keygenStart = async (
+    isRelay: boolean,
+    sessionID: string,
+    serviceName: string,
+    devices: string[]
+  ) => {
+    setSessionID(sessionID);
+    setLocalPartyId(serviceName);
+    setDevices(devices);
+    await startkeygen(isRelay, sessionID, devices);
+  };
+
   // screens
   // 0 - vault setup initial view
   // 1 - vault setup view
@@ -45,7 +59,6 @@ const SetupVaultView: React.FC = () => {
   // 6 - keygen done
   // 7 - keygen error
   // 8 - backup view
-
   const screens = [
     {
       title: t('setup'),
@@ -53,7 +66,12 @@ const SetupVaultView: React.FC = () => {
     },
     {
       title: t('setup'),
-      content: <KeygenTypeSelector onContinue={() => setCurrentScreen(2)} />,
+      content: (
+        <KeygenTypeSelector
+          setVaultType={setVaultType}
+          onContinue={() => setCurrentScreen(2)}
+        />
+      ),
     },
     {
       title: t('name_your_vault'),
@@ -67,8 +85,14 @@ const SetupVaultView: React.FC = () => {
       ),
     },
     {
-      title: t('setup'), // need to be updated
-      content: <></>, // keygen peer discovery view
+      title: `${t('keygen_for')} ${vaultType} ${t('vault')}`,
+      content: (
+        <KeygenPeerDiscovery
+          vaultName={vaultName}
+          vaultType={vaultType}
+          keygenStart={keygenStart}
+        />
+      ),
     },
     {
       title: t('keygen'),

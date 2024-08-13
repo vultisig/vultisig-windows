@@ -52,7 +52,7 @@ const KeygenVerify: React.FC<KeygenVerifyProps> = ({
         {renderDevicesList()}
       </div>
       <div className="w-80 flex mt-2 px-3 py-2 border border-secondary/[.5] rounded-2xl">
-        <img src="/assets/images/info.svg" alt="info" />
+        <img src="/assets/icons/info.svg" alt="info" />
         <p className="ml-2">
           {t('pair_device_disclaimers_first')}{' '}
           {Math.ceil((2 * devices.length) / 3)}{' '}
@@ -60,7 +60,7 @@ const KeygenVerify: React.FC<KeygenVerifyProps> = ({
         </p>
       </div>
       <div className="w-80 flex mt-2 px-3 py-2 border border-secondary/[.5] rounded-2xl">
-        <img src="/assets/images/info.svg" alt="info" />
+        <img src="/assets/icons/info.svg" alt="info" />
         <p className="ml-2">{t('backup_disclaimer')}</p>
       </div>
       <button

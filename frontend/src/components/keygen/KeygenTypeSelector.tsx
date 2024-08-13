@@ -3,16 +3,19 @@ import { useTranslation } from 'react-i18next';
 
 interface KeygenTypeSelectorProps {
   onContinue: () => void;
+  setVaultType: (vaultType: string) => void;
 }
 
 interface TabContent {
   title: string;
+  type: string;
   description: string;
   image: string;
 }
 
 const KeygenTypeSelector: React.FC<KeygenTypeSelectorProps> = ({
   onContinue,
+  setVaultType,
 }) => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -20,16 +23,19 @@ const KeygenTypeSelector: React.FC<KeygenTypeSelectorProps> = ({
   const tabs: TabContent[] = [
     {
       title: t('2_of_2_vault'),
+      type: '2/2',
       description: t('vault_type_1_description'),
       image: '/assets/images/vaultSetup1.svg',
     },
     {
       title: t('2_of_3_vault'),
+      type: '2/3',
       description: t('vault_type_2_description'),
       image: '/assets/images/vaultSetup2.svg',
     },
     {
       title: t('m_of_n_vault'),
+      type: 'm/n',
       description: t('vault_type_3_description'),
       image: '/assets/images/vaultSetup3.svg',
     },
@@ -45,7 +51,10 @@ const KeygenTypeSelector: React.FC<KeygenTypeSelectorProps> = ({
             className={`py-2 px-4 border-b-2 ${
               activeTab === index ? 'border-blue-500' : 'border-transparent'
             }`}
-            onClick={() => setActiveTab(index)}
+            onClick={() => {
+              setActiveTab(index);
+              setVaultType(tab.type);
+            }}
           >
             {tab.title}
           </button>
@@ -59,7 +68,7 @@ const KeygenTypeSelector: React.FC<KeygenTypeSelectorProps> = ({
           className="mx-auto mb-4 w-60"
         />
         <img
-          src="/assets/images/wifi.svg"
+          src="/assets/icons/wifi.svg"
           alt="wifi"
           className="mx-auto mb-4 w-8"
         />
