@@ -10,7 +10,7 @@ import KeygenInitial from '../../components/keygen/KeygenInitial';
 import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
 import KeygenView from '../../components/keygen/KeygenView';
 
-const TabbedContent: React.FC = () => {
+const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState<number>(4);
   const [vaultName, setVaultName] = useState<string>(t('main_vault'));
@@ -121,4 +121,4 @@ const TabbedContent: React.FC = () => {
   );
 };
 
-export default TabbedContent;
+export default SetupVaultView;
