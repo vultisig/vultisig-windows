@@ -14,7 +14,7 @@ import { startkeygen } from '../../services/Keygen/Keygen';
 
 const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();
-  const [currentScreen, setCurrentScreen] = useState<number>(4);
+  const [currentScreen, setCurrentScreen] = useState<number>(5);
   const [vaultName, setVaultName] = useState<string>(t('main_vault'));
   const [sessionID, setSessionID] = useState<string>();
   const [devices, setDevices] = useState<string[]>([]);
