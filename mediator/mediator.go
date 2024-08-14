@@ -1,4 +1,4 @@
-package relay
+package mediator
 
 import (
 	"fmt"

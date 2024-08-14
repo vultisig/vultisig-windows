@@ -10,7 +10,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 
-	"github.com/vultisig/vultisig-win/relay"
+	"github.com/vultisig/vultisig-win/mediator"
 	"github.com/vultisig/vultisig-win/storage"
 	"github.com/vultisig/vultisig-win/tss"
 )
@@ -29,7 +29,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	mediator, err := relay.NewRelayServer()
+	mediator, err := mediator.NewRelayServer()
 	if err != nil {
 		panic(err)
 	}
