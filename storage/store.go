@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
@@ -146,12 +147,14 @@ func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 	vault.Coins = coins
 	return &vault, nil
 }
+
 func (s *Store) closeRows(rows *sql.Rows) {
 	err := rows.Close()
 	if err != nil {
 		s.log.Error().Err(err).Msg("could not close rows")
 	}
 }
+
 func (s *Store) saveKeyshare(vaultPublicKeyECDSA string, keyShare KeyShare) error {
 	query := `INSERT OR REPLACE INTO keyshares (public_key_ecdsa, public_key, keyshare) VALUES (?, ?, ?)`
 	_, err := s.db.Exec(query, vaultPublicKeyECDSA, keyShare.PublicKey, keyShare.KeyShare)
@@ -160,6 +163,7 @@ func (s *Store) saveKeyshare(vaultPublicKeyECDSA string, keyShare KeyShare) erro
 	}
 	return nil
 }
+
 func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
 	keySharesQuery := `SELECT public_key, keyshare FROM keyshares WHERE public_key_ecdsa = ?`
 	keySharesRows, err := s.db.Query(keySharesQuery, vaultPublicKeyECDSA)
@@ -253,6 +257,109 @@ func (s *Store) GetCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 		coins = append(coins, coin)
 	}
 	return coins, nil
+}
+
+// Settings is for all vaults, so no need to pass public key ecdsa
+func (s *Store) SaveSettings(setting Settings) (*Settings, error) {
+
+	query := `INSERT OR REPLACE INTO setttings (
+				language,
+				currency,
+				default_chains
+				)
+              VALUES (?, ?, ?)`
+
+	if setting.DefaultChains == nil {
+		setting.DefaultChains = []string{}
+	}
+
+	var stringDefaultChain string = ""
+	if len(setting.DefaultChains) > 0 {
+		stringDefaultChain = strings.Join(setting.DefaultChains, ",")
+	}
+
+	_, err := s.db.Exec(query, setting.Language, setting.Currency, stringDefaultChain)
+
+	if err != nil {
+		return nil, fmt.Errorf("could not upsert settings, err: %w", err)
+	}
+
+	return &setting, nil
+}
+
+// GetSettings retrieves all settings from the database.
+func (s *Store) GetSettings() ([]Settings, error) {
+	var settings []Settings
+	query := `SELECT language, currency, default_chains FROM settings`
+	rows, err := s.db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("could not query the settings, err: %w", err)
+	}
+	defer s.closeRows(rows)
+
+	for rows.Next() {
+		var (
+			language      string
+			currency      string
+			defaultChains string
+		)
+
+		if err := rows.Scan(
+			&language,
+			&currency,
+			&defaultChains,
+		); err != nil {
+			return nil, fmt.Errorf("could not scan settings, err: %w", err)
+		}
+
+		// Split the defaultChains string into an array
+		chainArray := []string{}
+		if defaultChains != "" {
+			chainArray = strings.Split(defaultChains, ",")
+		}
+
+		setting := Settings{
+			Language:      language,
+			Currency:      currency,
+			DefaultChains: chainArray,
+		}
+
+		settings = append(settings, setting)
+	}
+	return settings, nil
+}
+
+func (s *Store) SaveAddressBookItem(item AddressBookItem) (string, error) {
+	if item.ID == uuid.Nil {
+		item.ID = uuid.New()
+	}
+	query := `INSERT OR REPLACE INTO address_book (id, title, address, chain, "order") VALUES (?, ?, ?, ?, ?)`
+	_, err := s.db.Exec(query, item.ID, item.Title, item.Address, item.Chain, item.Order)
+	if err != nil {
+		return "", fmt.Errorf("could not upsert address book item, err: %w", err)
+	}
+	return item.ID.String(), nil
+}
+
+func (s *Store) GetAddressBookItems(chain string) ([]AddressBookItem, error) {
+	query := `SELECT id, title, address, chain, "order" FROM address_book WHERE chain = ?`
+	rows, err := s.db.Query(query, chain)
+	if err != nil {
+		return nil, fmt.Errorf("could not query address book, err: %w", err)
+	}
+	defer s.closeRows(rows)
+
+	var addressBookItems []AddressBookItem
+	for rows.Next() {
+		var addressBookItem AddressBookItem
+		if err := rows.Scan(&addressBookItem.ID, &addressBookItem.Title, &addressBookItem.Address, &addressBookItem.Chain, &addressBookItem.Order); err != nil {
+			return nil, fmt.Errorf("could not scan address book item, err: %w", err)
+		}
+		addressBookItems = append(addressBookItems, addressBookItem)
+	}
+
+	return addressBookItems, nil
+
 }
 
 func (s *Store) DeleteCoin(vaultPublicKeyECDSA, coinID string) error {

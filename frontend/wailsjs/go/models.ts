@@ -1,5 +1,17 @@
 export namespace storage {
 	
+	export class AddressBookItem {
+	
+	
+	    static createFrom(source: any = {}) {
+	        return new AddressBookItem(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	
+	    }
+	}
 	export class Coin {
 	    id: string;
 	    chain: string;
@@ -44,6 +56,22 @@ export namespace storage {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.public_key = source["public_key"];
 	        this.keyshare = source["keyshare"];
+	    }
+	}
+	export class Settings {
+	    language: string;
+	    currency: string;
+	    default_chains: string[];
+	
+	    static createFrom(source: any = {}) {
+	        return new Settings(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.language = source["language"];
+	        this.currency = source["currency"];
+	        this.default_chains = source["default_chains"];
 	    }
 	}
 	export class Vault {
