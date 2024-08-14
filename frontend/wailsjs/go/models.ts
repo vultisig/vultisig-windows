@@ -1,5 +1,17 @@
 export namespace storage {
 	
+	export class AddressBookItem {
+	
+	
+	    static createFrom(source: any = {}) {
+	        return new AddressBookItem(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	
+	    }
+	}
 	export class Coin {
 	    id: string;
 	    chain: string;

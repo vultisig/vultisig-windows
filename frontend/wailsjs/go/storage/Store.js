@@ -14,6 +14,10 @@ export function DeleteVault(arg1) {
   return window['go']['storage']['Store']['DeleteVault'](arg1);
 }
 
+export function GetAddressBookItems(arg1) {
+  return window['go']['storage']['Store']['GetAddressBookItems'](arg1);
+}
+
 export function GetCoins(arg1) {
   return window['go']['storage']['Store']['GetCoins'](arg1);
 }
@@ -32,6 +36,10 @@ export function GetVaults() {
 
 export function Migrate() {
   return window['go']['storage']['Store']['Migrate']();
+}
+
+export function SaveAddressBookItem(arg1) {
+  return window['go']['storage']['Store']['SaveAddressBookItem'](arg1);
 }
 
 export function SaveCoin(arg1, arg2) {

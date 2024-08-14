@@ -329,6 +329,39 @@ func (s *Store) GetSettings() ([]Settings, error) {
 	return settings, nil
 }
 
+func (s *Store) SaveAddressBookItem(item AddressBookItem) (string, error) {
+	if item.ID == uuid.Nil {
+		item.ID = uuid.New()
+	}
+	query := `INSERT OR REPLACE INTO address_book (id, title, address, chain, "order") VALUES (?, ?, ?, ?, ?)`
+	_, err := s.db.Exec(query, item.ID, item.Title, item.Address, item.Chain, item.Order)
+	if err != nil {
+		return "", fmt.Errorf("could not upsert address book item, err: %w", err)
+	}
+	return item.ID.String(), nil
+}
+
+func (s *Store) GetAddressBookItems(chain string) ([]AddressBookItem, error) {
+	query := `SELECT id, title, address, chain, "order" FROM address_book WHERE chain = ?`
+	rows, err := s.db.Query(query, chain)
+	if err != nil {
+		return nil, fmt.Errorf("could not query address book, err: %w", err)
+	}
+	defer s.closeRows(rows)
+
+	var addressBookItems []AddressBookItem
+	for rows.Next() {
+		var addressBookItem AddressBookItem
+		if err := rows.Scan(&addressBookItem.ID, &addressBookItem.Title, &addressBookItem.Address, &addressBookItem.Chain, &addressBookItem.Order); err != nil {
+			return nil, fmt.Errorf("could not scan address book item, err: %w", err)
+		}
+		addressBookItems = append(addressBookItems, addressBookItem)
+	}
+
+	return addressBookItems, nil
+
+}
+
 func (s *Store) DeleteCoin(vaultPublicKeyECDSA, coinID string) error {
 	_, err := s.db.Exec("DELETE FROM coins WHERE id = ? AND public_key_ecdsa = ?", coinID, vaultPublicKeyECDSA)
 	return err
