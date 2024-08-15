@@ -27,24 +27,24 @@ type MessengerImp struct {
 	HexEncryptionKey string
 }
 
-var messageCache sync.Map
-
 func (m *MessengerImp) Send(from, to, body string) error {
-	if m.HexEncryptionKey != "" {
-		encryptedBody, err := encrypt(body, m.HexEncryptionKey)
+	if body == "" {
+		return fmt.Errorf("body is empty")
+	}
+
+	if m.HexEncryptionKey == "" {
+		return fmt.Errorf("HexEncryptionKey is none")
+	}
+
+	encryptedBody, err := encrypt(body, m.HexEncryptionKey)
 		if err != nil {
 			return fmt.Errorf("failed to encrypt body: %w", err)
 		}
 		body = base64.StdEncoding.EncodeToString([]byte(encryptedBody))
-	}
 
 	hash := md5.New()
 	hash.Write([]byte(body))
 	hashStr := hex.EncodeToString(hash.Sum(nil))
-
-	if hashStr == "" {
-		return fmt.Errorf("hash is empty")
-	}
 
 	buf, err := json.MarshalIndent(struct {
 		SessionID string   `json:"session_id,omitempty"`
@@ -64,13 +64,9 @@ func (m *MessengerImp) Send(from, to, body string) error {
 	}
 
 	url := fmt.Sprintf("%s/message/%s", m.Server, m.SessionID)
-	req, err := http.NewRequest("POST", url, bytes.NewReader(buf))
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(buf))
 	if err != nil {
 		return fmt.Errorf("failed to create request: %w", err)
-	}
-
-	if body == "" {
-		return fmt.Errorf("body is empty")
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -85,7 +81,7 @@ func (m *MessengerImp) Send(from, to, body string) error {
 		}
 	}()
 
-	if resp.Status != "202 Accepted" {
+	if resp.StatusCode != 202 {
 		return fmt.Errorf("fail to send message, response code is not 202 Accepted: %s", resp.Status)
 	}
 
@@ -99,6 +95,7 @@ func (m *MessengerImp) Send(from, to, body string) error {
 }
 
 func DownloadMessage(server, session, key, hexEncryptionKey string, tssServerImp tss.Service, endCh chan struct{}, wg *sync.WaitGroup) {
+	var messageCache sync.Map
 	defer wg.Done()
 	for {
 		select {

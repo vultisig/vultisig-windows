@@ -7,7 +7,7 @@ import SelectDevice from '../selectDevice/SelectDevice';
 import { createKeygenMsg } from '../../utils/QRGen';
 import { v4 as uuidv4 } from 'uuid';
 import { generateRandomNumber } from '../../utils/util';
-import { AdvertiseMediator } from '../../../wailsjs/go/relay/Server';
+import { AdvertiseMediator } from '../../../wailsjs/go/mediator/Server';
 import {
   checkForDevices,
   clearCheckingInterval,
