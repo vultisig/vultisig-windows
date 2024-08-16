@@ -3,11 +3,16 @@
 import { initWasm } from '@trustwallet/wallet-core';
 import { IAddressService } from '../IAddressService';
 import { AddressService } from '../AddressService';
+import { Chain } from '../../../model/chain';
 
 export class AddressServiceSolana
   extends AddressService
   implements IAddressService
 {
+  constructor(chain: Chain) {
+    super(chain);
+  }
+
   async getPublicKey(
     _publicKeyECDSA: string,
     publicKeyEdDSA: string

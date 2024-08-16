@@ -8,6 +8,10 @@ export class AddressServiceMaya
   extends AddressService
   implements IAddressService
 {
+  constructor(chain: Chain) {
+    super(chain);
+  }
+
   async deriveAddressFromPublicKey(
     publicKey: any,
     chain: Chain
