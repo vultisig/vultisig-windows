@@ -18,28 +18,28 @@ export class RpcServiceSolana implements IRpcService {
   }
   getGasInfo?(
     fromAddress: string
-  ): Promise<{ gasPrice: BigInt; priorityFee: BigInt; nonce: number }> {
+  ): Promise<{ gasPrice: bigint; priorityFee: bigint; nonce: number }> {
     throw new Error('Method not implemented and does not apply to this chain.');
   }
   estimateGas?(
     senderAddress: string,
     recipientAddress: string,
-    value: BigInt,
+    value: bigint,
     memo?: string
-  ): Promise<BigInt> {
+  ): Promise<bigint> {
     throw new Error('Method not implemented and does not apply to this chain.');
   }
   fetchTokenBalance?(
     contractAddress: string,
     walletAddress: string
-  ): Promise<BigInt> {
+  ): Promise<bigint> {
     throw new Error('Method not implemented, but must.');
   }
   fetchAllowance?(
     contractAddress: string,
     owner: string,
     spender: string
-  ): Promise<BigInt> {
+  ): Promise<bigint> {
     throw new Error('Method not implemented and does not apply to this chain.');
   }
   getTokenInfo?(

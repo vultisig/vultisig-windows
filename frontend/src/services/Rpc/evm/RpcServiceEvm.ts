@@ -26,28 +26,28 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
   }
   getGasInfo?(
     fromAddress: string
-  ): Promise<{ gasPrice: BigInt; priorityFee: BigInt; nonce: number }> {
+  ): Promise<{ gasPrice: bigint; priorityFee: bigint; nonce: number }> {
     throw new Error('Method not implemented.');
   }
   estimateGas?(
     senderAddress: string,
     recipientAddress: string,
-    value: BigInt,
+    value: bigint,
     memo?: string
-  ): Promise<BigInt> {
+  ): Promise<bigint> {
     throw new Error('Method not implemented.');
   }
   fetchTokenBalance?(
     contractAddress: string,
     walletAddress: string
-  ): Promise<BigInt> {
+  ): Promise<bigint> {
     throw new Error('Method not implemented.');
   }
   fetchAllowance?(
     contractAddress: string,
     owner: string,
     spender: string
-  ): Promise<BigInt> {
+  ): Promise<bigint> {
     throw new Error('Method not implemented.');
   }
   getTokenInfo?(
