@@ -6,10 +6,10 @@ import { tss } from '../../../../wailsjs/go/models';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import TxCompiler = TW.TxCompiler;
-import PublicKeyHelper from '../public-key-helper';
 import SignatureProvider from '../signature-provider';
 import { createHash } from 'crypto';
 import { SignedTransactionResult } from '../signed-transaction-result';
+import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 
 class THORChainHelper {
   private walletCore: WalletCore;
@@ -165,7 +165,10 @@ class THORChainHelper {
       inputData = this.getPreSignedInputData(data);
     }
     const coinType = this.walletCore.CoinType.thorchain;
-    const thorPublicKey = await PublicKeyHelper.getDerivedPubKey(
+    const addressService = AddressServiceFactory.createAddressService(
+      Chain.THORChain
+    );
+    const thorPublicKey = await addressService.getDerivedPubKey(
       vaultHexPublicKey,
       vaultHexChainCode,
       this.walletCore.CoinTypeExt.derivationPath(coinType)

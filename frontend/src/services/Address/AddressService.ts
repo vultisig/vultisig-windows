@@ -7,9 +7,11 @@ import { CoinServiceFactory } from '../Coin/CoinServiceFactory';
 import { GetDerivedPubKey } from '../../../wailsjs/go/tss/TssService';
 
 export class AddressService implements IAddressService {
-  private chain: Chain;
+  private coinService: any;
+  private coinType: any;
   constructor(chain: Chain) {
-    this.chain = chain;
+    this.coinService = CoinServiceFactory.createCoinService(chain);
+    this.coinType = this.coinService.getCoinType();
   }
 
   resolveDomainAddress(address: string): Promise<string> {
@@ -18,11 +20,10 @@ export class AddressService implements IAddressService {
     );
   }
 
+  // this should work for all chains
   async validateAddress(address: string): Promise<boolean> {
     const walletCore = await initWasm();
-    const coinType = await CoinServiceFactory.createCoinService(
-      this.chain
-    ).getCoinType();
+    const coinType = await this.coinType;
     return walletCore.AnyAddress.isValid(address, coinType);
   }
 
@@ -31,9 +32,7 @@ export class AddressService implements IAddressService {
     publicKeyEdDSA: string
   ): Promise<any> {
     const walletCore = await initWasm();
-    const coinType = await CoinServiceFactory.createCoinService(
-      this.chain
-    ).getCoinType();
+    const coinType = await this.coinType;
 
     const childPublicKey = await this.getDerivedPubKey(
       publicKeyECDSA,
@@ -61,9 +60,7 @@ export class AddressService implements IAddressService {
   ): Promise<string> {
     const publicKey = await this.getPublicKey(publicKeyECDSA, publicKeyEdDSA);
 
-    const coinType = await CoinServiceFactory.createCoinService(
-      this.chain
-    ).getCoinType();
+    const coinType = await this.coinType;
     return coinType.deriveAddressFromPublicKey(publicKey);
   }
 }
