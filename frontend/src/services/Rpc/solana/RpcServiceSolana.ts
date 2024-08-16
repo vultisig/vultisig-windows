@@ -4,6 +4,9 @@ import { CoinMeta } from '../../../model/coin-meta';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceSolana implements IRpcService {
+  resolveENS?(ensName: string): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
   sendTransaction(encodedTransaction: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
