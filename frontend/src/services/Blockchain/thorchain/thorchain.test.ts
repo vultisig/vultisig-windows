@@ -1,11 +1,11 @@
 import { describe, it, beforeAll, expect, vi } from 'vitest';
-import { Coin } from '../gen/vultisig/keysign/v1/coin_pb';
-import { KeysignPayload } from '../gen/vultisig/keysign/v1/keysign_message_pb';
+import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import THORChainHelper from './thorchain';
 import { initWasm } from '@trustwallet/wallet-core';
-import { THORChainSpecific } from '../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { protoInt64 } from '@bufbuild/protobuf';
-import { tss } from '../../wailsjs/go/models';
+import { tss } from '../../../../wailsjs/go/models';
 
 vi.mock('./public-key-helper', () => {
   return {

@@ -1,13 +1,7 @@
 /* eslint-disable */
-
-import { Chain } from '../../../model/chain';
 import { IAddressService } from '../IAddressService';
+import { AddressService } from '../AddressService';
 
-export class AddressServiceThorchain implements IAddressService {
-  resolveDomainAddress(address: string, chain: Chain): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
-  validateAddress(address: string, chain: Chain): boolean {
-    throw new Error('Method not implemented.');
-  }
-}
+export class AddressServiceThorchain
+  extends AddressService
+  implements IAddressService {}

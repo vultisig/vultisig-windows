@@ -1,15 +1,15 @@
-import { KeysignPayload } from '../gen/vultisig/keysign/v1/keysign_message_pb';
-import { Chain } from '../model/chain';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { Chain } from '../../../model/chain';
 import { WalletCore, TW } from '@trustwallet/wallet-core';
-import { THORChainSpecific } from '../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { tss } from '../../wailsjs/go/models';
+import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { tss } from '../../../../wailsjs/go/models';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import TxCompiler = TW.TxCompiler;
-import PublicKeyHelper from './public-key-helper';
-import SignatureProvider from './signature-provider';
+import PublicKeyHelper from '../public-key-helper';
+import SignatureProvider from '../signature-provider';
 import { createHash } from 'crypto';
-import { SignedTransactionResult } from './signed-transaction-result';
+import { SignedTransactionResult } from '../signed-transaction-result';
 
 class THORChainHelper {
   private walletCore: WalletCore;
