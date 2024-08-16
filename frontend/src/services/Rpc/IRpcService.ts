@@ -10,22 +10,22 @@ export interface IRpcService {
   // Ethereum-specific methods
   getGasInfo?(
     fromAddress: string
-  ): Promise<{ gasPrice: bigint; priorityFee: bigint; nonce: number }>;
+  ): Promise<{ gasPrice: BigInt; priorityFee: BigInt; nonce: number }>;
   estimateGas?(
     senderAddress: string,
     recipientAddress: string,
-    value: bigint,
+    value: BigInt,
     memo?: string
-  ): Promise<bigint>;
+  ): Promise<BigInt>;
   fetchTokenBalance?(
     contractAddress: string,
     walletAddress: string
-  ): Promise<bigint>;
+  ): Promise<BigInt>;
   fetchAllowance?(
     contractAddress: string,
     owner: string,
     spender: string
-  ): Promise<bigint>;
+  ): Promise<BigInt>;
   getTokenInfo?(
     contractAddress: string
   ): Promise<{ name: string; symbol: string; decimals: number }>;
