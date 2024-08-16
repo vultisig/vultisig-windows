@@ -6,11 +6,12 @@ import { IRpcService } from '../IRpcService';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   private rpcUrl: string;
-
   constructor(rpcUrl: string) {
     this.rpcUrl = rpcUrl;
   }
-
+  resolveENS?(ensName: string): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
   getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
     throw new Error('Method not implemented.');
   }
