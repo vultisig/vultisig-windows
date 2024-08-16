@@ -1,6 +1,7 @@
 import { Chain } from '../../model/chain';
 import { AddressService } from './AddressService';
 import { AddressServiceEvm } from './evm/AddressServiceEvm';
+import { AddressServiceMaya } from './maya/AddressServiceMaya';
 import { AddressServicePolkadot } from './polkadot/AddressServicePolkadot';
 import { AddressServiceSolana } from './solana/AddressServiceSolana';
 import { AddressServiceThorchain } from './thorchain/AddressServiceThorchain';
@@ -8,8 +9,10 @@ import { AddressServiceThorchain } from './thorchain/AddressServiceThorchain';
 export class AddressServiceFactory {
   static createAddressService(chain: Chain) {
     switch (chain) {
-      case (Chain.THORChain, Chain.MayaChain):
+      case Chain.THORChain:
         return new AddressServiceThorchain(chain);
+      case Chain.MayaChain:
+        return new AddressServiceMaya(chain);
       case Chain.Solana:
         return new AddressServiceSolana(chain);
       case Chain.Polkadot:
