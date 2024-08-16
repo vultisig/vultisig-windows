@@ -10,9 +10,9 @@ export interface IBlockchainService {
     signingInput: any // Each chain has its own signing input
   ): Uint8Array;
 
-  getPreSignedInputData(keysignPayload: KeysignPayload): Uint8Array;
+  getPreSignedInputData(keysignPayload: KeysignPayload): Promise<Uint8Array>;
 
-  getPreSignedImageHash(keysignPayload: KeysignPayload): [string];
+  getPreSignedImageHash(keysignPayload: KeysignPayload): Promise<[string]>;
 
   getSignedTransaction(
     vaultHexPublicKey: string,

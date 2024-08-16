@@ -1,11 +1,11 @@
 import { describe, it, beforeAll, expect, vi } from 'vitest';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import THORChainHelper from './thorchain';
 import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { protoInt64 } from '@bufbuild/protobuf';
 import { tss } from '../../../../wailsjs/go/models';
-import { initWasm } from '@trustwallet/wallet-core';
+import { BlockchainServiceFactory } from '../BlockchainServiceFactory';
+import { Chain } from '../../../model/chain';
 
 // Mock the AddressServiceFactory and the AddressService
 vi.mock('../../Address/AddressServiceFactory', () => {
@@ -68,9 +68,13 @@ describe('thorchain.ts', () => {
 
   it('should process keysign payload', async () => {
     const keysignPayload = getTestKeysignPayload();
-    const result = new THORChainHelper(await initWasm()).getPreSignedImageHash(
-      keysignPayload
+
+    const blockchainService = BlockchainServiceFactory.createAddressService(
+      Chain.THORChain
     );
+
+    const result =
+      await blockchainService.getPreSignedImageHash(keysignPayload);
     expect(result).toStrictEqual([
       '4a4dfce117748df028592b46bc9af7e48e6f5b4ae26d3e5b77d9677b521908e1',
     ]);
@@ -84,10 +88,12 @@ describe('thorchain.ts', () => {
     const signatures1: { [key: string]: tss.KeysignResponse } = {
       // Populate with appropriate data
     };
-    const walletCore = await initWasm();
-    const thorChainHelper = new THORChainHelper(walletCore);
+
     await expect(async () => {
-      const result = await thorChainHelper.getSignedTransaction(
+      const blockchainService = BlockchainServiceFactory.createAddressService(
+        Chain.THORChain
+      );
+      const result = await blockchainService.getSignedTransaction(
         keysignPayload.vaultPublicKeyEcdsa,
         vaultHexChainCode,
         keysignPayload,
