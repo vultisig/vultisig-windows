@@ -1,3 +1,4 @@
+import { WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../model/chain';
 import { AddressServiceFactory } from './Address/AddressServiceFactory';
 import { CoinServiceFactory } from './Coin/CoinServiceFactory';
@@ -7,10 +8,13 @@ import { SendServiceFactory } from './Send/SendServiceFactory';
 import { Service } from './Service';
 
 export class ServiceFactory {
-  static getService(chain: Chain): IService {
+  static getService(chain: Chain, walletCore: WalletCore): IService {
     const rpcService = RpcServiceFactory.createRpcService(chain);
-    const addressService = AddressServiceFactory.createAddressService(chain);
-    const coinService = CoinServiceFactory.createCoinService(chain);
+    const addressService = AddressServiceFactory.createAddressService(
+      chain,
+      walletCore
+    );
+    const coinService = CoinServiceFactory.createCoinService(chain, walletCore);
     const keygenService = null; // I need to understand how it works and is used
     const sendService = SendServiceFactory.createSendService(chain);
 

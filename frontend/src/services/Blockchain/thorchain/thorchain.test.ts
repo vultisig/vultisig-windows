@@ -6,6 +6,7 @@ import { protoInt64 } from '@bufbuild/protobuf';
 import { tss } from '../../../../wailsjs/go/models';
 import { BlockchainServiceFactory } from '../BlockchainServiceFactory';
 import { Chain } from '../../../model/chain';
+import { initWasm, WalletCore } from '@trustwallet/wallet-core';
 
 // Mock the AddressServiceFactory and the AddressService
 vi.mock('../../Address/AddressServiceFactory', () => {
@@ -31,9 +32,13 @@ vi.mock('../../Address/AddressServiceFactory', () => {
 });
 
 describe('thorchain.ts', () => {
+  let walletCore: WalletCore;
+
   beforeAll(async () => {
     console.log('beforeAll');
     global.window = {} as any;
+
+    walletCore = await initWasm();
   });
 
   const getTestKeysignPayload = () => {
@@ -70,7 +75,8 @@ describe('thorchain.ts', () => {
     const keysignPayload = getTestKeysignPayload();
 
     const blockchainService = BlockchainServiceFactory.createAddressService(
-      Chain.THORChain
+      Chain.THORChain,
+      walletCore
     );
 
     const result =
@@ -91,7 +97,8 @@ describe('thorchain.ts', () => {
 
     await expect(async () => {
       const blockchainService = BlockchainServiceFactory.createAddressService(
-        Chain.THORChain
+        Chain.THORChain,
+        walletCore
       );
       const result = await blockchainService.getSignedTransaction(
         keysignPayload.vaultPublicKeyEcdsa,

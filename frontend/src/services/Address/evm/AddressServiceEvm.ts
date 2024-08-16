@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../../../model/chain';
 import { IRpcService } from '../../Rpc/IRpcService';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
@@ -11,8 +12,8 @@ export class AddressServiceEvm
 {
   private rpcServiceFactory: IRpcService;
 
-  constructor(chain: Chain) {
-    super(chain);
+  constructor(chain: Chain, walletCore: WalletCore) {
+    super(chain, walletCore);
     this.rpcServiceFactory = RpcServiceFactory.createRpcService(chain);
   }
 

@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { initWasm } from '@trustwallet/wallet-core';
+import { initWasm, WalletCore } from '@trustwallet/wallet-core';
 import { IAddressService } from '../IAddressService';
 import { AddressService } from '../AddressService';
 import { Chain } from '../../../model/chain';
@@ -9,8 +9,8 @@ export class AddressServicePolkadot
   extends AddressService
   implements IAddressService
 {
-  constructor(chain: Chain) {
-    super(chain);
+  constructor(chain: Chain, walletCore: WalletCore) {
+    super(chain, walletCore);
   }
 
   async getPublicKey(

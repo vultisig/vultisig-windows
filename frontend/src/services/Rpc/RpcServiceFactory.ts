@@ -36,7 +36,7 @@ export class RpcServiceFactory {
       case Chain.ZkSync:
         return new RpcServiceZksync();
       default:
-        throw new Error('Chain not supported');
+        throw new Error(`Chain not supported ${chain}`);
     }
   }
 }

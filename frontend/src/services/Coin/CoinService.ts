@@ -1,15 +1,18 @@
-import { initWasm } from '@trustwallet/wallet-core';
+import { WalletCore } from '@trustwallet/wallet-core';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
 import { ICoinService } from './ICoinService';
 import { AddressServiceFactory } from '../Address/AddressServiceFactory';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 export class CoinService implements ICoinService {
   private chain: Chain;
+  private walletCore: WalletCore;
 
-  constructor(chain: Chain) {
+  constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
+    this.walletCore = walletCore;
   }
 
   async createCoin(
@@ -18,7 +21,8 @@ export class CoinService implements ICoinService {
     publicKeyEdDSA: string
   ): Promise<Coin> {
     const addressService = AddressServiceFactory.createAddressService(
-      this.chain
+      this.chain,
+      this.walletCore
     );
 
     const publicKey = await addressService.getPublicKey(
@@ -44,51 +48,52 @@ export class CoinService implements ICoinService {
     });
   }
 
-  async getCoinType(): Promise<any> {
-    const walletCore = await initWasm();
+  getCoinType(): CoinType {
     switch (this.chain) {
       case Chain.THORChain:
-        return walletCore.CoinType.thorchain;
+        return this.walletCore.CoinType.thorchain;
       case Chain.MayaChain:
-        return walletCore.CoinType.thorchain;
+        return this.walletCore.CoinType.thorchain;
       case Chain.Arbitrum:
-        return walletCore.CoinType.arbitrum;
+        return this.walletCore.CoinType.arbitrum;
       case Chain.Avalanche:
-        return walletCore.CoinType.avalancheCChain;
+        return this.walletCore.CoinType.avalancheCChain;
       case Chain.Base:
-        return walletCore.CoinType.base;
+        return this.walletCore.CoinType.base;
       case Chain.CronosChain:
-        return walletCore.CoinType.cronosChain;
+        return this.walletCore.CoinType.cronosChain;
       case Chain.BSC:
-        return walletCore.CoinType.smartChain;
+        return this.walletCore.CoinType.smartChain;
       case Chain.Blast:
-        return walletCore.CoinType.blast;
+        return this.walletCore.CoinType.blast;
       case Chain.Ethereum:
-        return walletCore.CoinType.ethereum;
+        return this.walletCore.CoinType.ethereum;
       case Chain.Optimism:
-        return walletCore.CoinType.optimism;
+        return this.walletCore.CoinType.optimism;
       case Chain.Polygon:
-        return walletCore.CoinType.polygon;
+        return this.walletCore.CoinType.polygon;
       case Chain.Bitcoin:
-        return walletCore.CoinType.bitcoin;
+        return this.walletCore.CoinType.bitcoin;
       case Chain.BitcoinCash:
-        return walletCore.CoinType.bitcoinCash;
+        return this.walletCore.CoinType.bitcoinCash;
       case Chain.Litecoin:
-        return walletCore.CoinType.litecoin;
+        return this.walletCore.CoinType.litecoin;
       case Chain.Dogecoin:
-        return walletCore.CoinType.dogecoin;
+        return this.walletCore.CoinType.dogecoin;
       case Chain.Dash:
-        return walletCore.CoinType.dash;
+        return this.walletCore.CoinType.dash;
       case Chain.Solana:
-        return walletCore.CoinType.solana;
+        return this.walletCore.CoinType.solana;
       case Chain.Gaia:
-        return walletCore.CoinType.cosmos;
+        return this.walletCore.CoinType.cosmos;
       case Chain.Kujira:
-        return walletCore.CoinType.kujira;
+        return this.walletCore.CoinType.kujira;
       case Chain.Dydx:
-        return walletCore.CoinType.dydx;
+        return this.walletCore.CoinType.dydx;
       case Chain.Polkadot:
-        return walletCore.CoinType.polkadot;
+        return this.walletCore.CoinType.polkadot;
+      default:
+        throw new Error('Invalid chain');
     }
   }
 }

@@ -1,4 +1,4 @@
-import { TW, initWasm } from '@trustwallet/wallet-core';
+import { TW, WalletCore } from '@trustwallet/wallet-core';
 import { tss } from '../../../../wailsjs/go/models';
 import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -14,8 +14,10 @@ import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 
 export class BlockchainServiceThorchain implements IBlockchainService {
   private chain: Chain;
-  constructor(chain: Chain) {
+  private walletCore: WalletCore;
+  constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
+    this.walletCore = walletCore;
   }
   isTHORChainSpecific(obj: any): boolean {
     return obj instanceof THORChainSpecific;
@@ -49,7 +51,7 @@ export class BlockchainServiceThorchain implements IBlockchainService {
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
-    const walletCore = await initWasm();
+    const walletCore = this.walletCore;
     const coinType = walletCore.CoinType.thorchain;
     if (keysignPayload.coin?.chain !== Chain.THORChain.toString()) {
       throw new Error('Invalid chain');
@@ -138,7 +140,7 @@ export class BlockchainServiceThorchain implements IBlockchainService {
   async getPreSignedImageHash(
     keysignPayload: KeysignPayload
   ): Promise<[string]> {
-    const walletCore = await initWasm();
+    const walletCore = this.walletCore;
     const coinType = walletCore.CoinType.thorchain;
     const inputData = await this.getPreSignedInputData(keysignPayload);
     const hashes = walletCore.TransactionCompiler.preImageHashes(
@@ -160,7 +162,7 @@ export class BlockchainServiceThorchain implements IBlockchainService {
     data: KeysignPayload | Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const walletCore = await initWasm();
+    const walletCore = this.walletCore;
     let inputData: Uint8Array;
     if (data instanceof Uint8Array) {
       inputData = data;
@@ -169,7 +171,8 @@ export class BlockchainServiceThorchain implements IBlockchainService {
     }
     const coinType = walletCore.CoinType.thorchain;
     const addressService = AddressServiceFactory.createAddressService(
-      Chain.THORChain
+      Chain.THORChain,
+      walletCore
     );
     const thorPublicKey = await addressService.getDerivedPubKey(
       vaultHexPublicKey,

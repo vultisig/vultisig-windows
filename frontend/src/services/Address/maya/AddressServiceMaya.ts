@@ -1,15 +1,15 @@
 /* eslint-disable */
 import { IAddressService } from '../IAddressService';
 import { AddressService } from '../AddressService';
-import { initWasm } from '@trustwallet/wallet-core';
+import { initWasm, WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../../../model/chain';
 
 export class AddressServiceMaya
   extends AddressService
   implements IAddressService
 {
-  constructor(chain: Chain) {
-    super(chain);
+  constructor(chain: Chain, walletCore: WalletCore) {
+    super(chain, walletCore);
   }
 
   async deriveAddressFromPublicKey(

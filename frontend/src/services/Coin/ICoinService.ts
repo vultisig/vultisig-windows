@@ -1,6 +1,6 @@
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../model/coin-meta';
-import { Chain } from '../../model/chain';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 export interface ICoinService {
   createCoin(
@@ -9,5 +9,5 @@ export interface ICoinService {
     publicKeyEdDSA: string
   ): Promise<Coin>;
 
-  getCoinType(chain: Chain): any;
+  getCoinType(): CoinType;
 }

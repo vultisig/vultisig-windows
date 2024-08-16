@@ -1,6 +1,4 @@
-/* eslint-disable */
-
-import { initWasm } from '@trustwallet/wallet-core';
+import { WalletCore } from '@trustwallet/wallet-core';
 import { IAddressService } from '../IAddressService';
 import { AddressService } from '../AddressService';
 import { Chain } from '../../../model/chain';
@@ -9,18 +7,17 @@ export class AddressServiceSolana
   extends AddressService
   implements IAddressService
 {
-  constructor(chain: Chain) {
-    super(chain);
+  constructor(chain: Chain, walletCore: WalletCore) {
+    super(chain, walletCore);
   }
 
   async getPublicKey(
     _publicKeyECDSA: string,
     publicKeyEdDSA: string
   ): Promise<any> {
-    const walletCore = await initWasm();
-    return walletCore.PublicKey.createWithData(
+    return this.walletCore.PublicKey.createWithData(
       Buffer.from(publicKeyEdDSA, 'hex'),
-      walletCore.PublicKeyType.ed25519
+      this.walletCore.PublicKeyType.ed25519
     );
   }
 }

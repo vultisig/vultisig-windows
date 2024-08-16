@@ -1,17 +1,23 @@
 /* eslint-disable */
 
-import { initWasm } from '@trustwallet/wallet-core';
+import { initWasm, WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../../model/chain';
 import { IAddressService } from './IAddressService';
 import { CoinServiceFactory } from '../Coin/CoinServiceFactory';
 import { GetDerivedPubKey } from '../../../wailsjs/go/tss/TssService';
+import { ICoinService } from '../Coin/ICoinService';
 
 export class AddressService implements IAddressService {
-  private coinService: any;
+  private coinService: ICoinService;
   private coinType: any;
-  constructor(chain: Chain) {
-    this.coinService = CoinServiceFactory.createCoinService(chain);
+  protected walletCore: WalletCore;
+
+  constructor(chain: Chain, walletCore: WalletCore) {
+    this.walletCore = walletCore;
+    this.coinService = CoinServiceFactory.createCoinService(chain, walletCore);
     this.coinType = this.coinService.getCoinType();
+
+    console.log(this.coinType);
   }
 
   resolveDomainAddress(address: string): Promise<string> {
@@ -22,16 +28,15 @@ export class AddressService implements IAddressService {
 
   // this should work for all chains
   async validateAddress(address: string): Promise<boolean> {
-    const walletCore = await initWasm();
     const coinType = await this.coinType;
-    return walletCore.AnyAddress.isValid(address, coinType);
+    return this.walletCore.AnyAddress.isValid(address, coinType);
   }
 
   async getPublicKey(
     publicKeyECDSA: string,
     publicKeyEdDSA: string
   ): Promise<any> {
-    const walletCore = await initWasm();
+    const walletCore = this.walletCore;
     const coinType = await this.coinType;
 
     const childPublicKey = await this.getDerivedPubKey(
@@ -59,8 +64,9 @@ export class AddressService implements IAddressService {
     publicKeyEdDSA: string
   ): Promise<string> {
     const publicKey = await this.getPublicKey(publicKeyECDSA, publicKeyEdDSA);
-
-    const coinType = await this.coinType;
-    return coinType.deriveAddressFromPublicKey(publicKey);
+    return this.walletCore.CoinTypeExt.deriveAddressFromPublicKey(
+      this.coinType,
+      publicKey
+    );
   }
 }
