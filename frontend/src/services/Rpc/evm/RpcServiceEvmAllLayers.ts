@@ -93,3 +93,16 @@ export class RpcServiceBsc extends RpcServiceEvm implements ITokenService {
     return await super.getTokens(nativeToken);
   }
 }
+
+export class RpcServiceAvalanche
+  extends RpcServiceEvm
+  implements ITokenService
+{
+  constructor() {
+    super(Endpoint.arbitrumOneServiceRpcService);
+  }
+
+  async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
+    return await super.getTokens(nativeToken);
+  }
+}

@@ -24,7 +24,9 @@ const useVaultViewModel = (walletCore: WalletCore | null) => {
     const allChains: Chain[] = Object.values(Chain) as Chain[];
     console.log('All chains:', allChains);
 
-    const filteredChains = allChains.filter(f => f == Chain.Arbitrum);
+    const chains = [Chain.Arbitrum, Chain.Ethereum, Chain.Solana];
+
+    const filteredChains = allChains.filter(f => chains.includes(f));
 
     const coinPromises = filteredChains.map(async chain => {
       console.log('Fetching coin for chain:', chain);
