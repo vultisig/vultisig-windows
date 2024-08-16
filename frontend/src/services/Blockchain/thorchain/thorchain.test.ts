@@ -2,25 +2,30 @@ import { describe, it, beforeAll, expect, vi } from 'vitest';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import THORChainHelper from './thorchain';
-import { initWasm } from '@trustwallet/wallet-core';
 import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { protoInt64 } from '@bufbuild/protobuf';
 import { tss } from '../../../../wailsjs/go/models';
+import { initWasm } from '@trustwallet/wallet-core';
 
-vi.mock('./public-key-helper', () => {
+// Mock the AddressServiceFactory and the AddressService
+vi.mock('../../Address/AddressServiceFactory', () => {
   return {
-    default: {
-      getDerivedPubKey: vi
-        .fn()
-        .mockImplementation(
-          async (vaultHexPublicKey, vaultHexChainCode, derivationPath) => {
-            console.log('mocked getDerivedPubKey');
-            console.log('vaultHexPublicKey', vaultHexPublicKey);
-            console.log('vaultHexChainCode', vaultHexChainCode);
-            console.log('derivationPath', derivationPath);
-            return '0204fa2732a07d65222b9484c45d7f32319498d0ea8748e198ef2c9001f8db3d91';
-          }
-        ),
+    AddressServiceFactory: {
+      createAddressService: vi.fn().mockImplementation(() => {
+        return {
+          getDerivedPubKey: vi
+            .fn()
+            .mockImplementation(
+              async (vaultHexPublicKey, vaultHexChainCode, derivationPath) => {
+                console.log('mocked getDerivedPubKey');
+                console.log('vaultHexPublicKey', vaultHexPublicKey);
+                console.log('vaultHexChainCode', vaultHexChainCode);
+                console.log('derivationPath', derivationPath);
+                return '0204fa2732a07d65222b9484c45d7f32319498d0ea8748e198ef2c9001f8db3d91';
+              }
+            ),
+        };
+      }),
     },
   };
 });
