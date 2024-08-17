@@ -12,29 +12,41 @@ const VaultView: React.FC = () => {
     return <div>Loading WalletCore...</div>;
   }
 
-  console.log('selected vault FRONT END', selectedVault);
-  console.log('coins FRONT END', coins);
-
   return (
     <div className="relative">
-      <VaultList
-        onSelectVault={setSelectedVault}
-        selectedVaultName={selectedVault ? selectedVault.name : null}
-      />
-      <br />
-      <br />
-      <br />
+      <div className="mb-12">
+        <VaultList
+          onSelectVault={setSelectedVault}
+          selectedVaultName={selectedVault ? selectedVault.name : null}
+        />
+      </div>
       {selectedVault && (
-        <div>
-          <h2>{selectedVault.name} Coins</h2>
+        <div className="text-white px-4 py-4">
           {coins.length === 0 ? (
             <p>No coins available for this vault.</p>
           ) : (
             <ul>
-              {/* Remove the console.log statement */}
               {coins.map((coin, index) => (
-                <li key={index} className="text-white">
-                  {coin.address} - {coin.chain.toString()}
+                <li
+                  key={index}
+                  className="flex items-center space-x-4 bg-blue-600 p-4 rounded-lg mb-4"
+                >
+                  <div className="logo">
+                    <div className="flex items-center justify-center w-12 h-12 bg-white text-black rounded-full">
+                      {coin.chain.toString().substring(0, 1)}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col flex-1">
+                    <div className="flex items-center justify-between">
+                      <div className="chain-name">{coin.chain.toString()}</div>
+                      <div className="flex items-center space-x-2 justify-end">
+                        <div className="priceInDecimal text-right">0.0</div>
+                        <div className="priceInFiat text-right">{'$ 0.00'}</div>
+                      </div>
+                    </div>
+                    <div className="address mt-2">{coin.address}</div>
+                  </div>
                 </li>
               ))}
             </ul>
