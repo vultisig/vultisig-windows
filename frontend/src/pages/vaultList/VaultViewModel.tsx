@@ -20,16 +20,16 @@ const useVaultViewModel = (walletCore: WalletCore | null) => {
       return;
     }
 
-    console.log('Fetching coins for vault:', vault);
+    //console.log('Fetching coins for vault:', vault);
     const allChains: Chain[] = Object.values(Chain) as Chain[];
-    console.log('All chains:', allChains);
+    //console.log('All chains:', allChains);
 
-    const chains = [Chain.Arbitrum, Chain.Ethereum, Chain.Solana];
+    //const chains = [Chain.Arbitrum, Chain.Ethereum, Chain.Solana, Chain.Bitcoin, Chain.BitcoinCash];
 
-    const filteredChains = allChains.filter(f => chains.includes(f));
+    const filteredChains = allChains; //.filter(f => chains.includes(f));
 
     const coinPromises = filteredChains.map(async chain => {
-      console.log('Fetching coin for chain:', chain);
+      //console.log('Fetching coin for chain:', chain);
       const service = ServiceFactory.getService(chain, walletCore);
 
       const coinMeta: CoinMeta = {
@@ -42,13 +42,13 @@ const useVaultViewModel = (walletCore: WalletCore | null) => {
         ticker: '',
       };
 
-      console.log('CoinMeta:', coinMeta);
+      //console.log('CoinMeta:', coinMeta);
       const coin = await service.coinService.createCoin(
         coinMeta,
         vault.public_key_ecdsa || '',
         vault.public_key_eddsa || ''
       );
-      console.log('Created coin:', coin);
+      //console.log('Created coin:', coin);
       return coin;
     });
 

@@ -17,7 +17,7 @@ export class AddressServicePolkadot
     _publicKeyECDSA: string,
     publicKeyEdDSA: string
   ): Promise<any> {
-    const walletCore = await initWasm();
+    const walletCore = this.walletCore;
     return walletCore.PublicKey.createWithData(
       Buffer.from(publicKeyEdDSA, 'hex'),
       walletCore.PublicKeyType.ed25519

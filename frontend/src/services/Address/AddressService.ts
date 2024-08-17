@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { initWasm, WalletCore } from '@trustwallet/wallet-core';
+import { WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../../model/chain';
 import { IAddressService } from './IAddressService';
 import { CoinServiceFactory } from '../Coin/CoinServiceFactory';
