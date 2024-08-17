@@ -50,6 +50,7 @@ describe('thorchain.ts', () => {
       accountNumber: protoInt64.parse('1024'),
       sequence: protoInt64.zero,
     });
+
     const keysignPayload = new KeysignPayload({
       coin: new Coin({
         chain: 'THORChain',

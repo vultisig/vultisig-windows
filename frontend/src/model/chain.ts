@@ -33,6 +33,12 @@ export enum TssAction {
 }
 
 export class ChainUtils {
+  static stringToChain(chain: string): Chain | undefined {
+    if (Object.values(Chain).includes(chain as Chain)) {
+      return chain as Chain;
+    }
+    return undefined;
+  }
   static getTssKeysignType(chain: Chain): TssKeysignType {
     switch (chain) {
       case (Chain.Solana, Chain.Polkadot):
