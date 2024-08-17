@@ -1,26 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import VaultList from '../../components/vaultList/VaultList';
-import { storage } from '../../../wailsjs/go/models';
+import useVaultViewModel from './VaultViewModel';
+import { useWalletCore } from '../../main';
 
 const VaultView: React.FC = () => {
-  const [selectedVault, setSelectedVault] = useState<storage.Vault | null>(
-    null
-  );
-  const [coins, setCoins] = useState<storage.Coin[]>([]); // Assuming you have a Coin type
+  const walletCore = useWalletCore();
+  const { selectedVault, setSelectedVault, coins } =
+    useVaultViewModel(walletCore);
 
-  const fetchCoins = async (vault: storage.Vault) => {
-    try {
-      setCoins(vault.coins || []);
-    } catch (error) {
-      console.error('Failed to fetch coins:', error);
-    }
-  };
+  if (!walletCore) {
+    return <div>Loading WalletCore...</div>;
+  }
 
-  useEffect(() => {
-    if (selectedVault) {
-      fetchCoins(selectedVault);
-    }
-  }, [selectedVault]);
+  console.log('selected vault FRONT END', selectedVault);
+  console.log('coins FRONT END', coins);
 
   return (
     <div className="relative">
@@ -28,16 +21,24 @@ const VaultView: React.FC = () => {
         onSelectVault={setSelectedVault}
         selectedVaultName={selectedVault ? selectedVault.name : null}
       />
+      <br />
+      <br />
+      <br />
       {selectedVault && (
         <div>
           <h2>{selectedVault.name} Coins</h2>
-          <ul>
-            {coins.map((coin, index) => (
-              <li key={index}>
-                {coin.ticker} - {coin.raw_balance}
-              </li>
-            ))}
-          </ul>
+          {coins.length === 0 ? (
+            <p>No coins available for this vault.</p>
+          ) : (
+            <ul>
+              {/* Remove the console.log statement */}
+              {coins.map((coin, index) => (
+                <li key={index} className="text-white">
+                  {coin.address} - {coin.chain.toString()}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
     </div>

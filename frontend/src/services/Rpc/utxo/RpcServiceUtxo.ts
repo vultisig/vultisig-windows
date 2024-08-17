@@ -1,20 +1,9 @@
 /* eslint-disable */
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../../model/coin-meta';
-import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
 
-export class RpcServiceEvm implements IRpcService, ITokenService {
-  private rpcUrl: string;
-  constructor(rpcUrl: string) {
-    this.rpcUrl = rpcUrl;
-  }
-  resolveENS?(ensName: string): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
-  getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
-    throw new Error('Method not implemented.');
-  }
+export class RpcServiceUtxo implements IRpcService {
   sendTransaction(encodedTransaction: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
@@ -22,6 +11,9 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     throw new Error('Method not implemented.');
   }
   broadcastTransaction(hex: string): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
+  resolveENS?(ensName: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
   getGasInfo?(
@@ -59,18 +51,18 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     throw new Error('Method not implemented.');
   }
   fetchRecentBlockhash?(): Promise<string> {
-    throw new Error('Method not implemented and does not apply to this chain.');
+    throw new Error('Method not implemented.');
   }
   fetchTokenAssociatedAccountByOwner?(
     walletAddress: string,
     mintAddress: string
   ): Promise<string> {
-    throw new Error('Method not implemented and does not apply to this chain.');
+    throw new Error('Method not implemented.');
   }
   fetchTokenAccountsByOwner?(walletAddress: string): Promise<[]> {
-    throw new Error('Method not implemented and does not apply to this chain.');
+    throw new Error('Method not implemented.');
   }
   fetchHighPriorityFee?(account: string): Promise<number> {
-    throw new Error('Method not implemented and does not apply to this chain.');
+    throw new Error('Method not implemented.');
   }
 }

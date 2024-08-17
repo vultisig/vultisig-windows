@@ -1,29 +1,30 @@
-import { KeysignPayload } from '../gen/vultisig/keysign/v1/keysign_message_pb';
-import { Chain } from '../model/chain';
-import { WalletCore, TW } from '@trustwallet/wallet-core';
-import { THORChainSpecific } from '../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { tss } from '../../wailsjs/go/models';
+import { TW, WalletCore } from '@trustwallet/wallet-core';
+import { tss } from '../../../../wailsjs/go/models';
+import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { Chain } from '../../../model/chain';
+import { IBlockchainService } from '../IBlockchainService';
+import { SignedTransactionResult } from '../signed-transaction-result';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import TxCompiler = TW.TxCompiler;
-import PublicKeyHelper from './public-key-helper';
-import SignatureProvider from './signature-provider';
+import SignatureProvider from '../signature-provider';
 import { createHash } from 'crypto';
-import { SignedTransactionResult } from './signed-transaction-result';
+import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 
-class THORChainHelper {
+export class BlockchainServiceThorchain implements IBlockchainService {
+  private chain: Chain;
   private walletCore: WalletCore;
-  constructor(walletCore: WalletCore) {
+  constructor(chain: Chain, walletCore: WalletCore) {
+    this.chain = chain;
     this.walletCore = walletCore;
   }
-
   isTHORChainSpecific(obj: any): boolean {
     return obj instanceof THORChainSpecific;
   }
-
   getSwapPreSignedInputData(
     keysignPayload: KeysignPayload,
-    signingInput: TW.Cosmos.Proto.SigningInput
+    signingInput: any
   ): Uint8Array {
     if (!this.isTHORChainSpecific(keysignPayload.blockchainSpecific)) {
       throw new Error('Invalid blockchain specific');
@@ -47,15 +48,17 @@ class THORChainHelper {
     });
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();
   }
-
-  getPreSignedInputData(keysignPayload: KeysignPayload): Uint8Array {
-    const coinType = this.walletCore.CoinType.thorchain;
+  async getPreSignedInputData(
+    keysignPayload: KeysignPayload
+  ): Promise<Uint8Array> {
+    const walletCore = this.walletCore;
+    const coinType = walletCore.CoinType.thorchain;
     if (keysignPayload.coin?.chain !== Chain.THORChain.toString()) {
       throw new Error('Invalid chain');
     }
-    const fromAddr = this.walletCore.AnyAddress.createWithString(
+    const fromAddr = walletCore.AnyAddress.createWithString(
       keysignPayload.coin.address,
-      this.walletCore.CoinType.thorchain
+      walletCore.CoinType.thorchain
     );
     if (!fromAddr) {
       throw new Error(`${keysignPayload.coin.address} is invalid`);
@@ -97,7 +100,7 @@ class THORChainHelper {
         }),
       ];
     } else {
-      const toAddress = this.walletCore.AnyAddress.createWithString(
+      const toAddress = walletCore.AnyAddress.createWithString(
         keysignPayload.toAddress,
         coinType
       );
@@ -122,7 +125,7 @@ class THORChainHelper {
     const input = TW.Cosmos.Proto.SigningInput.create({
       publicKey: pubKeyData,
       signingMode: SigningMode.Protobuf,
-      chainId: this.walletCore.CoinTypeExt.chainId(coinType),
+      chainId: walletCore.CoinTypeExt.chainId(coinType),
       accountNumber: thorchainSpecific.accountNumber,
       sequence: thorchainSpecific.sequence,
       mode: BroadcastMode.SYNC,
@@ -134,11 +137,13 @@ class THORChainHelper {
     });
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();
   }
-
-  getPreSignedImageHash(keysignPayload: KeysignPayload): [string] {
-    const coinType = this.walletCore.CoinType.thorchain;
-    const inputData = this.getPreSignedInputData(keysignPayload);
-    const hashes = this.walletCore.TransactionCompiler.preImageHashes(
+  async getPreSignedImageHash(
+    keysignPayload: KeysignPayload
+  ): Promise<string[]> {
+    const walletCore = this.walletCore;
+    const coinType = walletCore.CoinType.thorchain;
+    const inputData = await this.getPreSignedInputData(keysignPayload);
+    const hashes = walletCore.TransactionCompiler.preImageHashes(
       coinType,
       inputData
     );
@@ -148,45 +153,46 @@ class THORChainHelper {
       throw new Error(preSigningOutput.errorMessage);
     }
     return [
-      this.walletCore.HexCoding.encode(preSigningOutput.dataHash).substring(2),
+      walletCore.HexCoding.encode(preSigningOutput.dataHash).substring(2),
     ];
   }
-
   async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
     data: KeysignPayload | Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
+    const walletCore = this.walletCore;
     let inputData: Uint8Array;
     if (data instanceof Uint8Array) {
       inputData = data;
     } else {
-      inputData = this.getPreSignedInputData(data);
+      inputData = await this.getPreSignedInputData(data);
     }
-    const coinType = this.walletCore.CoinType.thorchain;
-    const thorPublicKey = await PublicKeyHelper.getDerivedPubKey(
+    const coinType = walletCore.CoinType.thorchain;
+    const addressService = AddressServiceFactory.createAddressService(
+      Chain.THORChain,
+      walletCore
+    );
+    const thorPublicKey = await addressService.getDerivedPubKey(
       vaultHexPublicKey,
       vaultHexChainCode,
-      this.walletCore.CoinTypeExt.derivationPath(coinType)
+      walletCore.CoinTypeExt.derivationPath(coinType)
     );
     const publicKeyData = Buffer.from(thorPublicKey, 'hex');
-    const publicKey = this.walletCore.PublicKey.createWithData(
+    const publicKey = walletCore.PublicKey.createWithData(
       publicKeyData,
-      this.walletCore.PublicKeyType.secp256k1
+      walletCore.PublicKeyType.secp256k1
     );
     try {
-      const hashes = this.walletCore.TransactionCompiler.preImageHashes(
+      const hashes = walletCore.TransactionCompiler.preImageHashes(
         coinType,
         inputData
       );
       const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
-      const allSignatures = this.walletCore.DataVector.create();
-      const publicKeys = this.walletCore.DataVector.create();
-      const signatureProvider = new SignatureProvider(
-        this.walletCore,
-        signatures
-      );
+      const allSignatures = walletCore.DataVector.create();
+      const publicKeys = walletCore.DataVector.create();
+      const signatureProvider = new SignatureProvider(walletCore, signatures);
       const signature = signatureProvider.getSignatureWithRecoveryId(
         preSigningOutput.dataHash
       );
@@ -196,7 +202,7 @@ class THORChainHelper {
       allSignatures.add(signature);
       publicKeys.add(publicKeyData);
       const compileWithSignatures =
-        this.walletCore.TransactionCompiler.compileWithSignatures(
+        walletCore.TransactionCompiler.compileWithSignatures(
           coinType,
           inputData,
           allSignatures,
@@ -222,5 +228,3 @@ class THORChainHelper {
     }
   }
 }
-
-export default THORChainHelper;
