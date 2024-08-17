@@ -2,7 +2,11 @@ export interface IAddressService {
   resolveDomainAddress(address: string): Promise<string>;
   validateAddress(address: string): Promise<boolean>; // Each chain validates different things, so this method should be implemented in each service
 
-  getPublicKey(publicKeyECDSA: string, publicKeyEdDSA: string): Promise<any>;
+  getPublicKey(
+    publicKeyECDSA: string,
+    publicKeyEdDSA: string,
+    hexChainCode: string
+  ): Promise<any>;
 
   getDerivedPubKey(
     hexPubKey: string,
@@ -12,6 +16,7 @@ export interface IAddressService {
 
   deriveAddressFromPublicKey(
     publicKeyECDSA: string,
-    publicKeyEdDSA: string
+    publicKeyEdDSA: string,
+    hexChainCode: string
   ): Promise<string>;
 }

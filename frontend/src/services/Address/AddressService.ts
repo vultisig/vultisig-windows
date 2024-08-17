@@ -34,14 +34,15 @@ export class AddressService implements IAddressService {
 
   async getPublicKey(
     publicKeyECDSA: string,
-    publicKeyEdDSA: string
+    publicKeyEdDSA: string,
+    hexChainCode: string
   ): Promise<any> {
     const walletCore = this.walletCore;
     const coinType = await this.coinType;
 
     const childPublicKey = await this.getDerivedPubKey(
       publicKeyECDSA,
-      publicKeyEdDSA,
+      hexChainCode,
       walletCore.CoinTypeExt.derivationPath(coinType)
     );
 
@@ -61,9 +62,14 @@ export class AddressService implements IAddressService {
 
   async deriveAddressFromPublicKey(
     publicKeyECDSA: string,
-    publicKeyEdDSA: string
+    publicKeyEdDSA: string,
+    hexChainCode: string
   ): Promise<string> {
-    const publicKey = await this.getPublicKey(publicKeyECDSA, publicKeyEdDSA);
+    const publicKey = await this.getPublicKey(
+      publicKeyECDSA,
+      publicKeyEdDSA,
+      hexChainCode
+    );
     return this.walletCore.CoinTypeExt.deriveAddressFromPublicKey(
       this.coinType,
       publicKey

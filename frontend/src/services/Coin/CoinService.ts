@@ -18,7 +18,8 @@ export class CoinService implements ICoinService {
   async createCoin(
     asset: CoinMeta,
     publicKeyECDSA: string,
-    publicKeyEdDSA: string
+    publicKeyEdDSA: string, // TODO this is not correct
+    hexChainCode: string
   ): Promise<Coin> {
     const addressService = AddressServiceFactory.createAddressService(
       this.chain,
@@ -27,12 +28,14 @@ export class CoinService implements ICoinService {
 
     const publicKey = await addressService.getPublicKey(
       publicKeyECDSA,
-      publicKeyEdDSA
+      publicKeyEdDSA,
+      hexChainCode
     );
 
     const address = await addressService.deriveAddressFromPublicKey(
       publicKeyECDSA,
-      publicKeyEdDSA
+      publicKeyEdDSA,
+      hexChainCode
     );
 
     return new Coin({

@@ -43,10 +43,15 @@ const useVaultViewModel = (walletCore: WalletCore | null) => {
       };
 
       //console.log('CoinMeta:', coinMeta);
+
+      console.log('Vault vault.public_key_ecdsa:', vault.public_key_ecdsa);
+      console.log('Vault vault.public_key_eddsa:', vault.public_key_eddsa);
+
       const coin = await service.coinService.createCoin(
         coinMeta,
         vault.public_key_ecdsa || '',
-        vault.public_key_eddsa || ''
+        vault.public_key_eddsa || '',
+        vault.hex_chain_code || ''
       );
       //console.log('Created coin:', coin);
       return coin;

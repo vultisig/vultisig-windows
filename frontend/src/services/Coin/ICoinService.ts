@@ -6,7 +6,8 @@ export interface ICoinService {
   createCoin(
     asset: CoinMeta,
     publicKeyECDSA: string,
-    publicKeyEdDSA: string
+    publicKeyEdDSA: string,
+    hexChainCode: string
   ): Promise<Coin>;
 
   getCoinType(): CoinType;
