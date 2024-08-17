@@ -139,7 +139,7 @@ export class BlockchainServiceThorchain implements IBlockchainService {
   }
   async getPreSignedImageHash(
     keysignPayload: KeysignPayload
-  ): Promise<[string]> {
+  ): Promise<string[]> {
     const walletCore = this.walletCore;
     const coinType = walletCore.CoinType.thorchain;
     const inputData = await this.getPreSignedInputData(keysignPayload);

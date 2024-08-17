@@ -4,6 +4,7 @@ import './App.css';
 import App from './App';
 import { Buffer } from 'buffer';
 import { initWasm, WalletCore } from '@trustwallet/wallet-core';
+import './extensions/string';
 
 // Make sure Buffer is available globally
 window.Buffer = Buffer;

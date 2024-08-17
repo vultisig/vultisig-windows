@@ -12,7 +12,7 @@ export interface IBlockchainService {
 
   getPreSignedInputData(keysignPayload: KeysignPayload): Promise<Uint8Array>;
 
-  getPreSignedImageHash(keysignPayload: KeysignPayload): Promise<[string]>;
+  getPreSignedImageHash(keysignPayload: KeysignPayload): Promise<string[]>;
 
   getSignedTransaction(
     vaultHexPublicKey: string,

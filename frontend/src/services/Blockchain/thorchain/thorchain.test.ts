@@ -75,7 +75,7 @@ describe('thorchain.ts', () => {
   it('should process keysign payload', async () => {
     const keysignPayload = getTestKeysignPayload();
 
-    const blockchainService = BlockchainServiceFactory.createAddressService(
+    const blockchainService = BlockchainServiceFactory.createService(
       Chain.THORChain,
       walletCore
     );
@@ -97,7 +97,7 @@ describe('thorchain.ts', () => {
     };
 
     await expect(async () => {
-      const blockchainService = BlockchainServiceFactory.createAddressService(
+      const blockchainService = BlockchainServiceFactory.createService(
         Chain.THORChain,
         walletCore
       );
