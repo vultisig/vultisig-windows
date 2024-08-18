@@ -1270,14 +1270,20 @@ export class TokensStore {
     TokensStore.Token.litecoin(),
     TokensStore.Token.dogecoin(),
     TokensStore.Token.dash(),
+
     TokensStore.Token.thorChain(),
+
     TokensStore.Token.mayaChainCacao(),
     TokensStore.Token.mayaChainMaya(),
+
     TokensStore.Token.solana(),
+
     TokensStore.Token.gaiaChainAtom(),
     TokensStore.Token.kujira(),
     TokensStore.Token.dydx(),
+
     TokensStore.Token.suiSUI(),
+
     TokensStore.Token.dotDOT(),
 
     // START EVMS

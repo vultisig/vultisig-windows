@@ -39,7 +39,7 @@ const VaultView: React.FC = () => {
 
                   <div className="flex flex-col flex-1">
                     <div className="flex items-center justify-between">
-                      <div className="chain-name">{coin.chain.toString()}</div>
+                      <div className="chain-name">{coin.ticker}</div>
                       <div className="flex items-center space-x-2 justify-end">
                         <div className="priceInDecimal text-right">0.0</div>
                         <div className="priceInFiat text-right">{'$ 0.00'}</div>
