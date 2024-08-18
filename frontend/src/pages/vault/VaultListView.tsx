@@ -65,7 +65,7 @@ const VaultListView: React.FC = () => {
                                     0.0
                                   </div>
                                 ) : (
-                                  <div className="badgeTokenCount text-right">
+                                  <div className="badgeTokenCount text-right text-neutral-100 bg-blue-400 px-3 py-1 rounded-full">
                                     {
                                       coinArray.filter(f => !f.isNativeToken)
                                         .length

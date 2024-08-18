@@ -3,7 +3,13 @@ import React from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy, faQrcode, faCube } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCopy,
+  faQrcode,
+  faCube,
+  faArrowLeft,
+  faSyncAlt,
+} from '@fortawesome/free-solid-svg-icons';
 
 const VaultItemView: React.FC = () => {
   const { chain } = useParams<{ chain: string }>(); // Get the chain from the URL
@@ -16,7 +22,24 @@ const VaultItemView: React.FC = () => {
 
   return (
     <div className="relative text-white p-4">
-      <h2 className="text-lg font-bold mb-4">Details for Chain: {chain}</h2>
+      {/* TODO: Make this a component */}
+      <div className="flex items-center justify-between mb-4">
+        {/* Back Button */}
+        <button
+          onClick={() => window.history.back()}
+          className="flex items-center justify-center w-8 h-8 bg-transparent text-white"
+        >
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
+
+        {/* Chain Name */}
+        <span className="text-lg font-bold text-center flex-1">{chain}</span>
+
+        {/* Refresh Button */}
+        <button className="flex items-center justify-center w-4 h-4 bg-white text-black text-xs rounded-full">
+          <FontAwesomeIcon icon={faSyncAlt} />
+        </button>
+      </div>
 
       <div className="flex flex-col space-y-4 bg-blue-600 rounded-lg">
         {/* Display native token first */}
