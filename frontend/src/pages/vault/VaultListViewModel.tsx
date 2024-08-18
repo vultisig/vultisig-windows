@@ -8,11 +8,11 @@ import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { WalletCore } from '@trustwallet/wallet-core';
 import { TokensStore } from '../../services/Coin/CoinList';
 
-const useVaultViewModel = (walletCore: WalletCore | null) => {
+const useVaultListViewModel = (walletCore: WalletCore | null) => {
   const [selectedVault, setSelectedVault] = useState<storage.Vault | null>(
     null
   );
-  const [coins, setCoins] = useState<Coin[]>([]);
+  const [coins, setCoins] = useState<Map<Chain, Coin[]>>(new Map());
   const [services, setServices] = useState<IService[]>([]);
 
   const fetchCoins = async (vault: storage.Vault) => {
@@ -25,6 +25,8 @@ const useVaultViewModel = (walletCore: WalletCore | null) => {
 
     const filteredChains = allChains;
 
+    const newCoinsMap = new Map<Chain, Coin[]>(); // Create a new Map instance
+
     const coinPromises = filteredChains.map(async chain => {
       const service = ServiceFactory.getService(chain, walletCore);
 
@@ -34,7 +36,7 @@ const useVaultViewModel = (walletCore: WalletCore | null) => {
 
       if (!tokensPerChain || tokensPerChain.length === 0) {
         console.error('No tokens found for chain:', chain);
-        return;
+        return [];
       }
 
       const tokens = await Promise.all(
@@ -60,20 +62,18 @@ const useVaultViewModel = (walletCore: WalletCore | null) => {
         })
       );
 
+      newCoinsMap.set(chain, tokens); // Set the chain's tokens in the new Map
+
       return tokens;
     });
 
     try {
-      const coinList = (await Promise.all(coinPromises)) || [];
+      await Promise.all(coinPromises);
 
-      console.log('Coin list:', coinList);
+      setCoins(newCoinsMap);
 
-      const flattenedCoinList = coinList.flatMap(f => f || []);
-
-      setCoins([...flattenedCoinList]); // Use spread operator to ensure new reference
-
-      const servicesList = coinList.map((_, index) =>
-        ServiceFactory.getService(filteredChains[index], walletCore)
+      const servicesList = filteredChains.map(chain =>
+        ServiceFactory.getService(chain, walletCore)
       );
 
       setServices(servicesList);
@@ -102,4 +102,4 @@ const useVaultViewModel = (walletCore: WalletCore | null) => {
   };
 };
 
-export default useVaultViewModel;
+export default useVaultListViewModel;

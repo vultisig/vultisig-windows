@@ -114,7 +114,7 @@ const ImportVaultView: React.FC = () => {
         coins: [],
         convertValues: () => {},
       }).then(() => {
-        navigate('/vault/details');
+        navigate('/vault/list');
         console.log('Vault saved');
       });
     }
