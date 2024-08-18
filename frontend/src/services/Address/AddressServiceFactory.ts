@@ -5,6 +5,7 @@ import { IAddressService } from './IAddressService';
 import { AddressServiceMaya } from './maya/AddressServiceMaya';
 import { AddressServicePolkadot } from './polkadot/AddressServicePolkadot';
 import { AddressServiceSolana } from './solana/AddressServiceSolana';
+import { AddressServiceSui } from './sui/AddressServiceSui';
 import { AddressServiceThorchain } from './thorchain/AddressServiceThorchain';
 
 export class AddressServiceFactory {
@@ -18,6 +19,8 @@ export class AddressServiceFactory {
         return new AddressServiceSolana(chain, walletCore);
       case Chain.Polkadot:
         return new AddressServicePolkadot(chain, walletCore);
+      case Chain.Sui:
+        return new AddressServiceSui(chain, walletCore);
       case (Chain.Ethereum,
       Chain.Optimism,
       Chain.Polygon,
