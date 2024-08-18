@@ -22,7 +22,7 @@ const OnboardingView: React.FC = () => {
       try {
         const vaults = await GetVaults();
         if (vaults.length > 0) {
-          navigate('/vault/details');
+          navigate('/vault/list');
         }
       } catch (error) {
         console.error(error);
