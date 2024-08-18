@@ -1,17 +1,27 @@
+/* eslint-disable */
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 import VaultList from '../../components/vaultList/VaultList';
 import useVaultListViewModel from './VaultListViewModel';
 import { useWalletCore } from '../../main';
 import { Chain } from '../../model/chain';
+import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 
 const VaultListView: React.FC = () => {
   const walletCore = useWalletCore();
+  const navigate = useNavigate(); // Initialize useNavigate hook
   const { selectedVault, setSelectedVault, coins } =
     useVaultListViewModel(walletCore);
 
   if (!walletCore) {
     return <div>Loading WalletCore...</div>;
   }
+
+  const handleChainClick = (chain: Chain, coinArray: Coin[]) => {
+    navigate(`/vault/item/detail/${chain}`, {
+      state: { coins: coinArray }, // Passing the coin array as state
+    });
+  };
 
   return (
     <div className="relative">
@@ -28,7 +38,7 @@ const VaultListView: React.FC = () => {
           ) : (
             <ul>
               {Array.from(coins.entries()).map(([chain, coinArray]) => {
-                const chainName = Chain[chain as keyof typeof Chain]; // Ensure correct access
+                const chainName = Chain[chain as keyof typeof Chain];
                 return (
                   <React.Fragment key={chain}>
                     {coinArray
@@ -36,7 +46,8 @@ const VaultListView: React.FC = () => {
                       .map((coin, index) => (
                         <li
                           key={index}
-                          className="flex items-center space-x-4 bg-blue-600 p-4 rounded-lg mb-4"
+                          className="flex items-center space-x-4 bg-blue-600 p-4 rounded-lg mb-4 cursor-pointer"
+                          onClick={() => handleChainClick(chain, coinArray)}
                         >
                           <div className="logo">
                             <div className="flex items-center justify-center w-12 h-12 bg-white text-black rounded-full">
@@ -49,7 +60,7 @@ const VaultListView: React.FC = () => {
                               <div className="chain-name">{chainName}</div>
                               <div className="flex items-center space-x-2 justify-end">
                                 {coinArray.filter(f => !f.isNativeToken)
-                                  .length == 0 ? (
+                                  .length === 0 ? (
                                   <div className="priceInDecimal text-right">
                                     0.0
                                   </div>
@@ -63,11 +74,13 @@ const VaultListView: React.FC = () => {
                                   </div>
                                 )}
                                 <div className="priceInFiat text-right">
-                                  {'$ 0.00'}
+                                  <strong>{'US$ 0.00'}</strong>
                                 </div>
                               </div>
                             </div>
-                            <div className="address mt-2">{coin.address}</div>
+                            <div className="address mt-2 text-turquoise-600">
+                              {coin.address}
+                            </div>
                           </div>
                         </li>
                       ))}

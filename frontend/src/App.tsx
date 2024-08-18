@@ -16,7 +16,7 @@ const App: React.FC = () => {
           <Route path="/vault/setup" element={<SetupVaultView />} />
           <Route path="/vault/import" element={<ImportVaultView />} />
           <Route path="/vault/list" element={<VaultListView />} />
-          <Route path="/vault/item/detail" element={<VaultItemView />} />
+          <Route path="/vault/item/detail/:chain" element={<VaultItemView />} />
         </Routes>
       </Router>
     </div>
