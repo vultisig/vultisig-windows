@@ -62,7 +62,7 @@ const VaultItemView: React.FC = () => {
         {otherTokens.map((coin, index) => (
           <div key={index}>
             <div className="flex items-center px-4">
-              <div className="flex items-center justify-center w-12 h-12 bg-white text-black rounded-full">
+              <div className="flex items-center justify-center w-9 h-9 bg-white text-black text-xs rounded-full">
                 {coin.ticker}
               </div>
 
