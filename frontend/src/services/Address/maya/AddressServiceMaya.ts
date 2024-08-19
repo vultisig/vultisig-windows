@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { IAddressService } from '../IAddressService';
 import { AddressService } from '../AddressService';
-import { initWasm, WalletCore } from '@trustwallet/wallet-core';
+import { WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../../../model/chain';
 
 export class AddressServiceMaya
