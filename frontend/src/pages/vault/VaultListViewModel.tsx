@@ -7,6 +7,8 @@ import { CoinMeta } from '../../model/coin-meta';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { WalletCore } from '@trustwallet/wallet-core';
 import { TokensStore } from '../../services/Coin/CoinList';
+import { BalanceServiceFactory } from '../../services/Balance/BalanceServiceFactory';
+import { Balance } from '../../model/balance';
 
 const useVaultListViewModel = (walletCore: WalletCore | null) => {
   const [selectedVault, setSelectedVault] = useState<storage.Vault | null>(
@@ -14,6 +16,7 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
   );
   const [coins, setCoins] = useState<Map<Chain, Coin[]>>(new Map());
   const [services, setServices] = useState<IService[]>([]);
+  const [balances, setBalances] = useState<Map<Coin, Balance>>(new Map());
 
   const fetchCoins = async (vault: storage.Vault) => {
     if (!walletCore) {
@@ -27,8 +30,12 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
 
     const newCoinsMap = new Map<Chain, Coin[]>();
 
+    const newBalances = new Map<Coin, Balance>();
+
     const coinPromises = filteredChains.map(async chain => {
       const service = ServiceFactory.getService(chain, walletCore);
+
+      const tokensBalances = BalanceServiceFactory.createBalanceService(chain);
 
       const tokensPerChain = TokensStore.TokenSelectionAssets.filter(
         f => f.chain === chain
@@ -58,6 +65,10 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
             vault.hex_chain_code || ''
           );
 
+          const balance = await tokensBalances.getBalance(coin);
+
+          newBalances.set(coin, balance);
+
           return coin;
         })
       );
@@ -77,6 +88,8 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
       );
 
       setServices(servicesList);
+
+      setBalances(newBalances);
     } catch (error) {
       console.error('Failed to fetch coins:', error);
     }
@@ -93,12 +106,18 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
     console.log('Coins state updated:', coins);
   }, [coins]);
 
+  useEffect(() => {
+    console.log('Coins state updated:', balances);
+  }, [balances]);
+
   return {
     selectedVault,
     setSelectedVault,
     coins,
     services,
     setServices,
+    balances,
+    setBalances,
   };
 };
 
