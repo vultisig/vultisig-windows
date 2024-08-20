@@ -25,7 +25,7 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
 
     const filteredChains = allChains;
 
-    const newCoinsMap = new Map<Chain, Coin[]>(); // Create a new Map instance
+    const newCoinsMap = new Map<Chain, Coin[]>();
 
     const coinPromises = filteredChains.map(async chain => {
       const service = ServiceFactory.getService(chain, walletCore);
