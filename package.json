@@ -7,8 +7,5 @@
   },
   "scripts": {
     "prepare": "husky"
-  },
-  "dependencies": {
-    "idb": "^8.0.0"
   }
 }
