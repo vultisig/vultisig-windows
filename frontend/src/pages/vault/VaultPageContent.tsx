@@ -5,6 +5,8 @@ import { useWalletCore } from '../../main';
 import { VaultBalances } from './VaultBalances';
 import { useCurrentVault } from '../../vault/components/CurrentVaultProvider';
 import { Match } from '../../lib/ui/base/Match';
+import { useTranslation } from 'react-i18next';
+import { match } from '../../lib/utils/match';
 
 type VaultPageView = 'balances' | 'vaults';
 
@@ -15,6 +17,8 @@ export const VaultPageContent: React.FC = () => {
 
   const [view, setView] = useState<VaultPageView>('balances');
 
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col">
       <button
@@ -23,7 +27,10 @@ export const VaultPageContent: React.FC = () => {
         }}
         className="px-4 py-4 bg-primary font-bold text-white w-full flex items-center justify-center"
       >
-        {selectedVault.name}
+        {match(view, {
+          balances: () => selectedVault.name,
+          vaults: () => t('vaults'),
+        })}
         <img
           src="/assets/icons/chevron-down.svg"
           alt="open"
