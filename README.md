@@ -25,3 +25,31 @@ To generate the proto files for typescript, run the following command in the fro
 cd frontend
 npm buf generate commondata/proto
 ```
+
+# DEVELOPMENT GUIDE
+
+We are developing using VIEW, VIEW MODELS, FACTORIES, SEVICES, and Interfaces;
+
+Correct:
+```
+VIEW -> VIEW MODELS -> FACTORIES -> SEVICES
+```
+
+Incorrect:
+```
+VIEW -> FACTORIES -> SEVICES (The view must call a view model, then follow the correct flow)
+VIEW -> SEVICES (The view must call a view model, then follow the correct flow)
+VIEW MODELS -> SEVICES (The view must call a factory passing the chain)
+```
+
+We have multiple chains, and we must avoid IF and else, so we use interfaces to implement the functionality per chain;
+
+Once we create a new pageView, this page must have a pageViewModel; only the view model must have access to the Services.
+
+The services must be initialized using the FACTORIES, and inside the Factory class, the SWITCHES cases must be exhaustive so we can cover all chains.
+
+The view model should only know the chain from which it wants to get the data and pass it to the factory. E.g.:
+
+```RpcServiceFactory.createService(chain).getBalance(coin);```
+
+So, from the front-end perspective, we should use CHAIN for everything, and if there is a very specific implementation, we implement it using the services.
