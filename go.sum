@@ -223,8 +223,12 @@ github.com/valyala/fasttemplate v1.2.2 h1:lxLXG0uE3Qnshl9QyaK6XJxMXlQZELvChBOCmQ
 github.com/valyala/fasttemplate v1.2.2/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
 github.com/vultisig/mobile-tss-lib v0.0.0-20240720084109-0abbb4fb701b h1:ZYAgwI/UUssG6IxJ7AyJ1BxlW9+2BpIBZa19PyQpxwY=
 github.com/vultisig/mobile-tss-lib v0.0.0-20240720084109-0abbb4fb701b/go.mod h1:0fSJ0evW+p18BvHHeIii/daRU0DMMPqgj+ht+aX1oho=
+github.com/vultisig/vultisig-relay v0.0.0-20240814070259-8ab868ffe044 h1:uyLX+QiVhLiqRbjFEnaFQDYlTlECGku03abfbnST2m4=
+github.com/vultisig/vultisig-relay v0.0.0-20240814070259-8ab868ffe044/go.mod h1:J1EuDKnvaPSWSwxkEgKz6EMiGnuCmSfKsgELpA+XgHg=
 github.com/vultisig/vultisig-relay v0.0.0-20240821095913-26876e1e1ae7 h1:QVcnzNSES1Fjiguj1WPMMnuIWrftrZkNCQAq1OxAneU=
 github.com/vultisig/vultisig-relay v0.0.0-20240821095913-26876e1e1ae7/go.mod h1:J1EuDKnvaPSWSwxkEgKz6EMiGnuCmSfKsgELpA+XgHg=
+github.com/vultisig/vultisig-relay v0.0.0-20240821122755-7048cea80d2c h1:9GnAP1wSxVdVFr1HR359ztdUmWrNXHRWZF2DLeazARU=
+github.com/vultisig/vultisig-relay v0.0.0-20240821122755-7048cea80d2c/go.mod h1:J1EuDKnvaPSWSwxkEgKz6EMiGnuCmSfKsgELpA+XgHg=
 github.com/wailsapp/go-webview2 v1.0.10 h1:PP5Hug6pnQEAhfRzLCoOh2jJaPdrqeRgJKZhyYyDV/w=
 github.com/wailsapp/go-webview2 v1.0.10/go.mod h1:Uk2BePfCRzttBBjFrBmqKGJd41P6QIHeV9kTgIeOZNo=
 github.com/wailsapp/mimetype v1.4.1 h1:pQN9ycO7uo4vsUUuPeHEYoUkLVkaRntMnHJxVwYhwHs=
