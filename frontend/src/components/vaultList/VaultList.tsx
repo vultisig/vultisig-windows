@@ -1,37 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { GetVaults } from '../../../wailsjs/go/storage/Store';
+import React from 'react';
 import { storage } from '../../../wailsjs/go/models';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useCurrentVault } from '../../vault/components/CurrentVaultProvider';
+import { useCurrentVaults } from '../../vault/components/CurrentVaultsProvider';
 
 interface VaultListProps {
-  onSelectVault: (vault: storage.Vault) => void;
+  onFinish: () => void;
 }
 
-const VaultList: React.FC<VaultListProps> = ({ onSelectVault }) => {
+const VaultList: React.FC<VaultListProps> = ({ onFinish }) => {
+  const [, setSelectedVault] = useCurrentVault();
+  const vaults = useCurrentVaults();
+
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [vaults, setVaults] = useState<storage.Vault[]>([]);
-
-  useEffect(() => {
-    async function getVaultList() {
-      try {
-        const vaults = await GetVaults();
-        setVaults(vaults);
-
-        // Automatically select the first vault if there's only one
-        if (vaults.length === 1) {
-          onSelectVault(vaults[0]);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    getVaultList();
-  }, [onSelectVault]);
 
   const handleVaultSelect = (vault: storage.Vault) => {
-    onSelectVault(vault);
+    setSelectedVault(vault);
+    onFinish();
   };
 
   return (

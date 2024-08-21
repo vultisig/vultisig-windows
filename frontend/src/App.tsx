@@ -4,10 +4,10 @@ import OnboardingView from './pages/onboarding/OnboardingView';
 import ImportVaultView from './pages/importVault/ImportVaultView';
 import './i18n/config';
 import SetupVaultView from './pages/setupVault/SetupVaultView';
-import VaultListView from './pages/vault/VaultListView';
 import VaultItemView from './pages/vault/VaultItemView';
 import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { VaultPage } from './pages/vault/VaultPage';
 
 const queryClient = new QueryClient();
 
@@ -24,7 +24,7 @@ const App: React.FC = () => {
               path="/vault/list"
               element={
                 <InitializedWalletOnly>
-                  <VaultListView />
+                  <VaultPage />
                 </InitializedWalletOnly>
               }
             />

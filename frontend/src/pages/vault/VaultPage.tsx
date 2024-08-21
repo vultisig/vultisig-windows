@@ -1,8 +1,9 @@
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
 import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { CurrentVaultProvider } from '../../vault/components/CurrentVaultProvider';
+import { CurrentVaultsProvider } from '../../vault/components/CurrentVaultsProvider';
 import { useVaultsQuery } from '../../vault/queries/useVaultsQuery';
-import VaultListView from './VaultListView';
+import { VaultPageContent } from './VaultPageContent';
 
 export const VaultPage = () => {
   const vaultsQuery = useVaultsQuery();
@@ -18,9 +19,11 @@ export const VaultPage = () => {
         }
 
         return (
-          <CurrentVaultProvider initialValue={vaults[0]}>
-            <VaultListView />
-          </CurrentVaultProvider>
+          <CurrentVaultsProvider value={vaults}>
+            <CurrentVaultProvider initialValue={vaults[0]}>
+              <VaultPageContent />
+            </CurrentVaultProvider>
+          </CurrentVaultsProvider>
         );
       }}
     />
