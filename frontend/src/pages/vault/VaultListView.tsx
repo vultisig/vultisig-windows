@@ -61,7 +61,11 @@ const VaultListView: React.FC = () => {
                               <div className="chain-name">{chainName}</div>
                               <div className="flex items-center space-x-2 justify-end">
                                 <div className="priceInDecimal text-right">
-                                  {balances.get(coin)?.decimalAmount || 0}
+                                  {balances.has(coin) ? (
+                                    balances.get(coin)?.decimalAmount || 0
+                                  ) : (
+                                    <div className="loader">Loading...</div>
+                                  )}
                                 </div>
                                 {/* {coinArray.filter(f => !f.isNativeToken)
                                   .length === 0 ? (

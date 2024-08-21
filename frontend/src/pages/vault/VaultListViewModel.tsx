@@ -24,11 +24,10 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
     }
 
     const allChains: Chain[] = Object.values(Chain) as Chain[];
-    const newCoinsMap = new Map<Chain, Coin[]>();
-    const newBalances = new Map<Coin, Balance>();
     const serviceMap = new Map<Chain, IService>();
+    const balancePromises: Promise<void>[] = [];
 
-    const coinPromises = allChains.map(async chain => {
+    allChains.forEach(chain => {
       let service = serviceMap.get(chain);
       if (!service) {
         service = ServiceFactory.getService(chain, walletCore);
@@ -37,61 +36,75 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
 
       if (!service) {
         console.error(`Service for chain ${chain} could not be initialized`);
-        return [];
+        return;
       }
 
-      //const tokensBalances = BalanceServiceFactory.createBalanceService(chain);
       const tokensPerChain = TokensStore.TokenSelectionAssets.filter(
         f => f.chain === chain
       );
 
       if (!tokensPerChain || tokensPerChain.length === 0) {
         console.error('No tokens found for chain:', chain);
-        return [];
+        return;
       }
 
-      const tokens = await Promise.all(
-        tokensPerChain.map(async f => {
-          const coinMeta: CoinMeta = {
-            chain,
-            contractAddress: f.contractAddress,
-            decimals: f.decimals,
-            isNativeToken: f.isNativeToken,
-            logo: f.logo,
-            priceProviderId: f.priceProviderId,
-            ticker: f.ticker,
-          };
+      const coinPromises = tokensPerChain.map(async f => {
+        const coinMeta: CoinMeta = {
+          chain,
+          contractAddress: f.contractAddress,
+          decimals: f.decimals,
+          isNativeToken: f.isNativeToken,
+          logo: f.logo,
+          priceProviderId: f.priceProviderId,
+          ticker: f.ticker,
+        };
 
-          const coin = await service!.coinService.createCoin(
-            // Use non-null assertion
-            coinMeta,
-            vault.public_key_ecdsa || '',
-            vault.public_key_eddsa || '',
-            vault.hex_chain_code || ''
-          );
+        const coinPromise = service!.coinService.createCoin(
+          coinMeta,
+          vault.public_key_ecdsa || '',
+          vault.public_key_eddsa || '',
+          vault.hex_chain_code || ''
+        );
 
-          const balance = await service?.balanceService?.getBalance(coin);
-          if (balance) {
-            newBalances.set(coin, balance);
+        return coinPromise.then(coin => {
+          setCoins(prevCoins => {
+            const updatedCoins = new Map(prevCoins);
+            const existingCoins = updatedCoins.get(chain) || [];
+            updatedCoins.set(chain, [...existingCoins, coin]);
+            return updatedCoins;
+          });
+
+          const balancePromise = service?.balanceService?.getBalance(coin);
+          if (balancePromise) {
+            balancePromises.push(
+              balancePromise.then(balance => {
+                setBalances(prevBalances => {
+                  const updatedBalances = new Map(prevBalances);
+                  updatedBalances.set(coin, balance);
+                  return updatedBalances;
+                });
+              })
+            );
           }
+        });
+      });
 
-          return coin;
-        })
-      );
-
-      newCoinsMap.set(chain, tokens);
-      return tokens;
+      // Store the coin creation promises
+      Promise.all(coinPromises).catch(error => {
+        console.error(`Failed to fetch coins for chain ${chain}:`, error);
+      });
     });
 
-    try {
-      await Promise.all(coinPromises);
+    // Resolve all balance promises as they complete
+    Promise.allSettled(balancePromises).then(results => {
+      results.forEach(result => {
+        if (result.status === 'rejected') {
+          console.error('Failed to fetch balance:', result.reason);
+        }
+      });
+    });
 
-      setCoins(newCoinsMap);
-      setServices(Array.from(serviceMap.values()));
-      setBalances(newBalances);
-    } catch (error) {
-      console.error('Failed to fetch coins:', error);
-    }
+    setServices(Array.from(serviceMap.values()));
   };
 
   useEffect(() => {
