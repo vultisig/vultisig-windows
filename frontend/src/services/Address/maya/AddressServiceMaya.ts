@@ -12,19 +12,24 @@ export class AddressServiceMaya
     super(chain, walletCore);
   }
 
-  // TODO: Implement this method correctly
   async deriveAddressFromPublicKey(
-    publicKey: any,
-    chain: Chain
+    publicKeyECDSA: string,
+    publicKeyEdDSA: string,
+    hexChainCode: string
   ): Promise<string> {
     const walletCore = this.walletCore;
-    const address = walletCore.AnyAddress.createBech32(
+    const publicKey = await this.getPublicKey(
+      publicKeyECDSA,
+      publicKeyEdDSA,
+      hexChainCode
+    );
+
+    const address = walletCore.AnyAddress.createBech32WithPublicKey(
       publicKey,
       walletCore.CoinType.thorchain,
       'maya'
     );
 
-    console.log('Derived address:', address);
-    return '';
+    return address.description();
   }
 }
