@@ -6,4 +6,5 @@ export type Balance = {
   chain: Chain;
   rawAmount: number;
   decimalAmount?: number;
+  expiryDate: Date;
 };
