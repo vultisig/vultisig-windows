@@ -70,7 +70,11 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
           setCoins(prevCoins => {
             const updatedCoins = new Map(prevCoins);
             const existingCoins = updatedCoins.get(chain) || [];
-            updatedCoins.set(chain, [...existingCoins, coin]);
+
+            // Use a Set to remove duplicates
+            const uniqueCoins = Array.from(new Set([...existingCoins, coin]));
+
+            updatedCoins.set(chain, uniqueCoins);
             return updatedCoins;
           });
 
