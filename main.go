@@ -53,7 +53,10 @@ func main() {
 			Assets: assets,
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup:        app.startup,
+		OnStartup: func(ctx context.Context) {
+			app.startup(ctx)
+			tssIns.Startup(ctx)
+		},
 		OnShutdown: func(ctx context.Context) {
 			if err := mediator.StopServer(); err != nil {
 				log.Err(err).Msg("fail to stop mediator")

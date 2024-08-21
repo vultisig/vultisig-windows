@@ -13,10 +13,8 @@ import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
 import { startkeygen } from '../../services/Keygen/Keygen';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { KeygenType } from '../../model/TssType';
-import {
-  AdvertiseMediator,
-  StartServer,
-} from '../../../wailsjs/go/mediator/Server';
+import { generateRandomNumber } from '../../utils/util';
+import { ENDPOINTS } from '../../utils/config';
 
 const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -29,23 +27,20 @@ const SetupVaultView: React.FC = () => {
   const [vaultType, setVaultType] = useState<string>('2/2');
   const [isRelay, setIsRelay] = useState(true);
   const [hexEncryptionKey, setHexEncryptionKey] = useState<string>('');
-  const [mediatorName, setMediatorName] = useState<string>('');
+  const [serverURL, setServerURL] = useState<string>('http://localhost:18080');
   const vault = useRef<Vault>(new Vault());
   const keygenType = useRef<KeygenType>(KeygenType.Keygen);
 
   useEffect(() => {
     setKeygenError('');
-    console.log(sessionID);
-  }, []);
 
-  useEffect(() => {
-    if (isRelay) {
-      // need to start local mediator
-      setMediatorName('Vultisig-Windows-' + Math.floor(Math.random() * 1000));
-      StartServer();
-      AdvertiseMediator(mediatorName);
+    // when current vault's local party is empty , means it is a new vault
+    if (vault.current.localPartyId === '') {
+      // new vault
+      vault.current.localPartyId = 'windows-' + generateRandomNumber();
     }
-  }, [isRelay]);
+    setLocalPartyId(vault.current.localPartyId);
+  }, []);
 
   const prevScreen = () => {
     setCurrentScreen(prev => {
@@ -66,9 +61,12 @@ const SetupVaultView: React.FC = () => {
     hexChainCode: string
   ) => {
     setIsRelay(isRelay);
+    setServerURL(
+      isRelay ? ENDPOINTS.VULTISIG_RELAY : ENDPOINTS.LOCAL_MEDIATOR_URL
+    );
     setSessionID(sessionID);
-    setLocalPartyId(serviceName);
-    devices.push(serviceName);
+
+    devices.push(localPartyId);
     setDevices(devices);
     setHexEncryptionKey(hexEncryptionKey);
     vault.current.localPartyId = localPartyId;
@@ -79,8 +77,9 @@ const SetupVaultView: React.FC = () => {
   };
 
   const keygenStart = async () => {
-    setCurrentScreen(5);
-    await startkeygen(isRelay, localPartyId, devices);
+    await startkeygen(isRelay, sessionID!, devices).then(() => {
+      setCurrentScreen(5);
+    });
   };
 
   // screens
@@ -148,7 +147,7 @@ const SetupVaultView: React.FC = () => {
           devices={devices}
           hexEncryptionKey={hexEncryptionKey}
           keygenType={keygenType.current}
-          serverURL="http://localhost:18080"
+          serverURL={serverURL}
           onDone={() => {
             setCurrentScreen(6);
           }}

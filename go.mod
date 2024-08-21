@@ -12,7 +12,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/rs/zerolog v1.32.0
 	github.com/vultisig/mobile-tss-lib v0.0.0-20240720084109-0abbb4fb701b
-	github.com/vultisig/vultisig-relay v0.0.0-20240801091101-21447505c96a
+	github.com/vultisig/vultisig-relay v0.0.0-20240821095913-26876e1e1ae7
 	github.com/wailsapp/wails/v2 v2.9.1
 )
 

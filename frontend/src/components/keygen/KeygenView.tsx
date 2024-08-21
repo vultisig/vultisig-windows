@@ -4,6 +4,8 @@ import RingProgress from '../ringProgress/RingProgress';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { KeygenType } from '../../model/TssType';
 import { StartKeygen } from '../../../wailsjs/go/tss/TssService';
+import { use } from 'i18next';
+import { EventsOn } from '../../../wailsjs/runtime/runtime';
 interface KeygenViewProps {
   vault: Vault;
   sessionID: string;
@@ -26,12 +28,32 @@ const KeygenView: React.FC<KeygenViewProps> = ({
 }) => {
   const { t } = useTranslation();
   const [contentIndex, setContentIndex] = useState<number>(0);
-  const [allSigners, setAllSigners] = useState<string[]>(devices);
+  const [allSigners] = useState<string[]>(devices);
+  const [currentProgress, setCurrentProgress] = useState<number>();
+  const [currentStatus, setCurrentStatus] = useState<string>('');
 
   useEffect(() => {
+    EventsOn('PrepareVault', data => {
+      console.log('PrepareVault', data);
+      setCurrentProgress(25);
+      setCurrentStatus(t('prepareVault'));
+    });
+    EventsOn('ECDSA', data => {
+      console.log('Generating ECDSA', data);
+      setCurrentProgress(50);
+      setCurrentStatus(t('generating_ecdsa_key'));
+    });
+    EventsOn('EdDSA', data => {
+      console.log('Generating EDDSA', data);
+      setCurrentProgress(70);
+      setCurrentStatus(t('generating_eddsa_key'));
+    });
+  }, []);
+  useEffect(() => {
+    console.log('start keygen.....');
     // when isRelay = false , need to discover the local mediator
-    if (keygenType === KeygenType.Keygen) {
-      const neVault = StartKeygen(
+    async function kickoffKeygen() {
+      const newVault = await StartKeygen(
         vault.name,
         vault.localPartyId,
         sessionID,
@@ -39,11 +61,18 @@ const KeygenView: React.FC<KeygenViewProps> = ({
         hexEncryptionKey,
         serverURL
       ).catch(err => {
+        console.log(err);
         onError(err);
       });
-      if (neVault !== undefined) {
+      setCurrentProgress(100);
+      if (newVault !== undefined) {
+        console.log(allSigners);
         onDone();
       }
+    }
+    if (keygenType === KeygenType.Keygen) {
+      console.log('sessionID', sessionID);
+      kickoffKeygen();
     }
   }, []);
 
@@ -155,8 +184,8 @@ const KeygenView: React.FC<KeygenViewProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center pt-20 text-white text-sm">
-      <RingProgress size={100} strokeWidth={10} progress={40} />
-      <p className="mt-5">{t('prepareVault')}</p>
+      <RingProgress size={100} strokeWidth={10} progress={currentProgress!} />
+      <p className="mt-5">{currentStatus}</p>
       <p className="mt-10 font-bold text-xl">{contents[contentIndex].title}</p>
       <p className="mt-5 w-80 h-28 text-center">
         {contents[contentIndex].note}

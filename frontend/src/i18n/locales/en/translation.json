@@ -93,5 +93,7 @@
   "join_keygen_slider7_title": "Feature Highlight",
   "join_keygen_slider7_note1": "Multi-Device Compatibility. Access your Vultisig vault",
   "join_keygen_slider7_note2": "from multiple devices",
-  "join_keygen_slider7_note3": "enhancing flexibility without compromising security."
+  "join_keygen_slider7_note3": "enhancing flexibility without compromising security.",
+  "generating_ecdsa_key": "Generating ECDSA Key",
+  "generating_eddsa_key": "Generating EdDSA Key"
 }

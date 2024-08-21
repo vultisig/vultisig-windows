@@ -10,12 +10,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sort"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/sirupsen/logrus"
 	mtss "github.com/vultisig/mobile-tss-lib/tss"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 
 	"github.com/vultisig/vultisig-win/relay"
 	"github.com/vultisig/vultisig-win/storage"
@@ -25,6 +27,7 @@ const VULTISIG_ROUTER_URL = "https://api.vultisig.com/router"
 
 // TssService is the service for TSS
 type TssService struct {
+	ctx        context.Context
 	serviceIns *mtss.ServiceImpl
 	Logger     *logrus.Logger
 }
@@ -34,16 +37,18 @@ func NewTssService() *TssService {
 		Logger: logrus.WithField("module", "tss").Logger,
 	}
 }
+func (t *TssService) Startup(ctx context.Context) {
+	t.ctx = ctx
+}
 
 // GetDerivedPubKey returns the derived public key
 func (t *TssService) GetDerivedPubKey(hexPubKey, hexChainCode, path string, isEdDSA bool) (string, error) {
 	return mtss.GetDerivedPubKey(hexPubKey, hexChainCode, path, isEdDSA)
 }
 
-func (t *TssService) StartKeygen(name, localPartID, sessionID, hexChainCode, hexEncryptionKey string, localMediator string) (*storage.Vault, error) {
-	serverURL := VULTISIG_ROUTER_URL
-	if len(localMediator) > 0 {
-		serverURL = localMediator
+func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, hexEncryptionKey string, serverURL string) (*storage.Vault, error) {
+	if serverURL == "" {
+		return nil, fmt.Errorf("serverURL is empty")
 	}
 	client := relay.NewClient(serverURL)
 
@@ -60,22 +65,20 @@ func (t *TssService) StartKeygen(name, localPartID, sessionID, hexChainCode, hex
 		return nil, fmt.Errorf("failed to wait for session start: %w", err)
 	}
 
-	localStateAccessor, err := NewLocalStateAccessorImp(localPartID, "vaults")
+	localStateAccessor, err := NewLocalStateAccessorImp(map[string]string{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to create localStateAccessor: %w", err)
 	}
-
+	runtime.EventsEmit(t.ctx, "PrepareVault")
 	tssServerImp, err := t.createTSSService(serverURL, sessionID, hexEncryptionKey, localStateAccessor, true)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create TSS service: %w", err)
 	}
-
+	endCh, wg := t.startMessageDownload(serverURL, sessionID, localPartyID, hexEncryptionKey, tssServerImp)
 	ecdsaPubkey, eddsaPubkey := "", ""
 	for attempt := 0; attempt < 3; attempt++ {
-		ecdsaPubkey, eddsaPubkey, err = t.keygenWithRetry(serverURL,
-			sessionID,
-			localPartID,
-			hexEncryptionKey,
+		ecdsaPubkey, eddsaPubkey, err = t.keygenWithRetry(
+			localPartyID,
 			hexChainCode,
 			partiesJoined,
 			tssServerImp)
@@ -92,7 +95,10 @@ func (t *TssService) StartKeygen(name, localPartID, sessionID, hexChainCode, hex
 		return nil, err
 	}
 
-	if err := client.CompleteSession(sessionID, localPartID); err != nil {
+	close(endCh)
+	wg.Wait()
+
+	if err := client.CompleteSession(sessionID, localPartyID); err != nil {
 		t.Logger.WithFields(logrus.Fields{
 			"session": sessionID,
 			"error":   err,
@@ -134,28 +140,21 @@ func (t *TssService) StartKeygen(name, localPartID, sessionID, hexChainCode, hex
 				KeyShare:  eddsaKeyShare,
 			},
 		},
-		LocalPartyID:  localPartID,
+		LocalPartyID:  localPartyID,
 		ResharePrefix: "",
 		Order:         0,
 		IsBackedUp:    false,
 		Coins:         []storage.Coin{},
 	}
 
-	err = localStateAccessor.RemoveLocalState(ecdsaPubkey)
-	if err != nil {
-		return nil, fmt.Errorf("failed to remove local state: %w", err)
-	}
-
 	return vault, nil
 }
 
 func (t *TssService) createTSSService(serverURL, Session, HexEncryptionKey string, localStateAccessor mtss.LocalStateAccessor, createPreParam bool) (mtss.Service, error) {
-	messenger := &relay.MessengerImp{
-		Server:           serverURL,
-		SessionID:        Session,
-		HexEncryptionKey: HexEncryptionKey,
+	messenger, err := relay.NewMessengerImp(serverURL, Session, HexEncryptionKey)
+	if err != nil {
+		return nil, fmt.Errorf("create messenger: %w", err)
 	}
-
 	tssService, err := mtss.NewService(messenger, localStateAccessor, createPreParam)
 	if err != nil {
 		return nil, fmt.Errorf("create TSS service: %w", err)
@@ -163,16 +162,17 @@ func (t *TssService) createTSSService(serverURL, Session, HexEncryptionKey strin
 	return tssService, nil
 }
 
-func (t *TssService) startMessageDownload(serverURL, session, key, hexEncryptionKey string, tssService mtss.Service) (chan struct{}, *sync.WaitGroup) {
+func (t *TssService) startMessageDownload(serverURL, session, localPartyID, hexEncryptionKey string, tssService mtss.Service) (chan struct{}, *sync.WaitGroup) {
 	t.Logger.WithFields(logrus.Fields{
-		"session": session,
-		"key":     key,
+		"session":          session,
+		"localPartyID":     localPartyID,
+		"hexEncryptionKey": hexEncryptionKey,
 	}).Info("Start downloading messages")
 
 	endCh := make(chan struct{})
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
-	go t.downloadMessages(serverURL, session, key, hexEncryptionKey, tssService, endCh, wg)
+	go t.downloadMessages(serverURL, session, localPartyID, hexEncryptionKey, tssService, endCh, wg)
 	return endCh, wg
 }
 
@@ -208,11 +208,12 @@ func (t *TssService) downloadMessages(server,
 			}
 			decoder := json.NewDecoder(resp.Body)
 			var messages []struct {
-				SessionID string   `json:"session_id,omitempty"`
-				From      string   `json:"from,omitempty"`
-				To        []string `json:"to,omitempty"`
-				Body      string   `json:"body,omitempty"`
-				Hash      string   `json:"hash,omitempty"`
+				SessionID  string   `json:"session_id,omitempty"`
+				From       string   `json:"from,omitempty"`
+				To         []string `json:"to,omitempty"`
+				Body       string   `json:"body,omitempty"`
+				Hash       string   `json:"hash,omitempty"`
+				SequenceNo int64    `json:"sequence_no,omitempty"`
 			}
 			if err := decoder.Decode(&messages); err != nil {
 				t.Logger.WithFields(logrus.Fields{
@@ -222,10 +223,10 @@ func (t *TssService) downloadMessages(server,
 				}).Error("Failed to decode data")
 				continue
 			}
+			sort.Slice(messages, func(i, j int) bool {
+				return messages[i].SequenceNo < messages[j].SequenceNo
+			})
 			for _, message := range messages {
-				if message.From == localPartyID {
-					continue
-				}
 				cacheKey := fmt.Sprintf("%s-%s-%s", session, localPartyID, message.Hash)
 				if _, found := messageCache.Load(cacheKey); found {
 					t.Logger.WithFields(logrus.Fields{
@@ -235,32 +236,28 @@ func (t *TssService) downloadMessages(server,
 					}).Info("Message already applied, skipping")
 					continue
 				}
-
-				decryptedBody := message.Body
-				if hexEncryptionKey != "" {
-					decodedBody, err := base64.StdEncoding.DecodeString(message.Body)
-					if err != nil {
-						t.Logger.WithFields(logrus.Fields{
-							"session":      session,
-							"localPartyID": localPartyID,
-							"hash":         message.Hash,
-							"error":        err,
-						}).Error("Failed to base64 decode data")
-						continue
-					}
-
-					decryptedBody, err = decrypt(string(decodedBody), hexEncryptionKey)
-					if err != nil {
-						t.Logger.WithFields(logrus.Fields{
-							"session":      session,
-							"localPartyID": localPartyID,
-							"hash":         message.Hash,
-							"error":        err,
-						}).Error("Failed to decrypt data")
-						continue
-					}
+				decodedBody, err := base64.StdEncoding.DecodeString(message.Body)
+				if err != nil {
+					t.Logger.WithFields(logrus.Fields{
+						"session":      session,
+						"localPartyID": localPartyID,
+						"hash":         message.Hash,
+						"error":        err,
+					}).Error("Failed to base64 decode data")
+					continue
 				}
 
+				decryptedBody, err := decrypt(string(decodedBody), hexEncryptionKey)
+				if err != nil {
+					t.Logger.WithFields(logrus.Fields{
+						"session":      session,
+						"localPartyID": localPartyID,
+						"hash":         message.Hash,
+						"error":        err,
+					}).Error("Failed to decrypt data")
+					continue
+				}
+				t.Logger.Infof("Got message from: %s to: %s key: %s", message.From, message.To, message.Hash)
 				if err := tssServerImp.ApplyData(decryptedBody); err != nil {
 					t.Logger.WithFields(logrus.Fields{
 						"session":      session,
@@ -271,7 +268,6 @@ func (t *TssService) downloadMessages(server,
 				}
 
 				messageCache.Store(cacheKey, true)
-				client := http.Client{}
 				req, err := http.NewRequest(http.MethodDelete, server+"/message/"+session+"/"+localPartyID+"/"+message.Hash, nil)
 				if err != nil {
 					t.Logger.WithFields(logrus.Fields{
@@ -282,7 +278,7 @@ func (t *TssService) downloadMessages(server,
 					continue
 				}
 
-				resp, err := client.Do(req)
+				resp, err := http.DefaultClient.Do(req)
 				if err != nil {
 					t.Logger.WithFields(logrus.Fields{
 						"session":      session,
@@ -303,25 +299,21 @@ func (t *TssService) downloadMessages(server,
 		}
 	}
 }
-func (t *TssService) keygenWithRetry(serverURL, sessionID, key, hexEncryptionKey, hexChainCode string, partiesJoined []string, tssService mtss.Service) (string, string, error) {
-	endCh, wg := t.startMessageDownload(serverURL, sessionID, key, hexEncryptionKey, tssService)
-	resp, err := t.generateECDSAKey(tssService, key, hexChainCode, partiesJoined)
+func (t *TssService) keygenWithRetry(localPartyID, hexChainCode string, partiesJoined []string, tssService mtss.Service) (string, string, error) {
+	resp, err := t.generateECDSAKey(tssService, localPartyID, hexChainCode, partiesJoined)
 	if err != nil {
 		return "", "", fmt.Errorf("failed to generate ECDSA key: %w", err)
 	}
 	time.Sleep(time.Second)
-	respEDDSA, err := t.generateEDDSAKey(tssService, key, hexChainCode, partiesJoined)
+	respEDDSA, err := t.generateEDDSAKey(tssService, localPartyID, hexChainCode, partiesJoined)
 	if err != nil {
 		return "", "", fmt.Errorf("failed to generate EDDSA key: %w", err)
 	}
-
-	close(endCh)
-	wg.Wait()
-
 	return resp.PubKey, respEDDSA.PubKey, nil
 }
 
 func (t *TssService) generateECDSAKey(tssService mtss.Service, key, hexChainCode string, partiesJoined []string) (*mtss.KeygenResponse, error) {
+	runtime.EventsEmit(t.ctx, "ECDSA")
 	t.Logger.WithFields(logrus.Fields{
 		"key":            key,
 		"chain_code":     hexChainCode,
@@ -344,6 +336,7 @@ func (t *TssService) generateECDSAKey(tssService mtss.Service, key, hexChainCode
 }
 
 func (t *TssService) generateEDDSAKey(tssService mtss.Service, key, hexChainCode string, partiesJoined []string) (*mtss.KeygenResponse, error) {
+	runtime.EventsEmit(t.ctx, "EdDSA")
 	t.Logger.WithFields(logrus.Fields{
 		"key":            key,
 		"chain_code":     hexChainCode,

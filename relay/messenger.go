@@ -21,6 +21,7 @@ type MessengerImp struct {
 	SessionID        string
 	HexEncryptionKey string
 	Logger           *logrus.Logger
+	Counter          int64
 }
 
 func NewMessengerImp(server, sessionID, hexEncryptionKey string) (*MessengerImp, error) {
@@ -38,6 +39,7 @@ func NewMessengerImp(server, sessionID, hexEncryptionKey string) (*MessengerImp,
 		SessionID:        sessionID,
 		HexEncryptionKey: hexEncryptionKey,
 		Logger:           logrus.WithField("module", "messenger").Logger,
+		Counter:          0,
 	}, nil
 }
 func (m *MessengerImp) Send(from, to, body string) error {
@@ -54,19 +56,21 @@ func (m *MessengerImp) Send(from, to, body string) error {
 	hash := md5.New()
 	hash.Write([]byte(body))
 	hashStr := hex.EncodeToString(hash.Sum(nil))
-
+	m.Counter = m.Counter + 1
 	buf, err := json.MarshalIndent(struct {
-		SessionID string   `json:"session_id,omitempty"`
-		From      string   `json:"from,omitempty"`
-		To        []string `json:"to,omitempty"`
-		Body      string   `json:"body,omitempty"`
-		Hash      string   `json:"hash,omitempty"`
+		SessionID  string   `json:"session_id,omitempty"`
+		From       string   `json:"from,omitempty"`
+		To         []string `json:"to,omitempty"`
+		Body       string   `json:"body,omitempty"`
+		Hash       string   `json:"hash,omitempty"`
+		SequenceNo int64    `json:"sequence_no,omitempty"`
 	}{
-		SessionID: m.SessionID,
-		From:      from,
-		To:        []string{to},
-		Body:      body,
-		Hash:      hashStr,
+		SessionID:  m.SessionID,
+		From:       from,
+		To:         []string{to},
+		Body:       body,
+		Hash:       hashStr,
+		SequenceNo: m.Counter,
 	}, "", "  ")
 	if err != nil {
 		return fmt.Errorf("fail to marshal message: %w", err)

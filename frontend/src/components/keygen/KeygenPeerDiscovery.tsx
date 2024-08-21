@@ -32,6 +32,7 @@ interface KeygenPeerDiscoveryProps {
     hexChainCode: string
   ) => void;
 }
+
 const KeygenPeerDiscovery: React.FC<KeygenPeerDiscoveryProps> = ({
   vaultType,
   vaultName,
