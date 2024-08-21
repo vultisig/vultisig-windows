@@ -4,7 +4,8 @@ import OnboardingView from './pages/onboarding/OnboardingView';
 import ImportVaultView from './pages/importVault/ImportVaultView';
 import './i18n/config';
 import SetupVaultView from './pages/setupVault/SetupVaultView';
-import VaultView from './pages/vaultList/VaultView';
+import VaultListView from './pages/vault/VaultListView';
+import VaultItemView from './pages/vault/VaultItemView';
 
 const App: React.FC = () => {
   return (
@@ -14,7 +15,8 @@ const App: React.FC = () => {
           <Route path="/" index element={<OnboardingView />} />
           <Route path="/vault/setup" element={<SetupVaultView />} />
           <Route path="/vault/import" element={<ImportVaultView />} />
-          <Route path="/vault/details" element={<VaultView />} />
+          <Route path="/vault/list" element={<VaultListView />} />
+          <Route path="/vault/item/detail/:chain" element={<VaultItemView />} />
         </Routes>
       </Router>
     </div>

@@ -7,6 +7,8 @@ export interface IRpcService {
   getBalance(coin: Coin): Promise<string>;
   broadcastTransaction(hex: string): Promise<string>;
 
+  resolveENS?(ensName: string): Promise<string>;
+
   // Ethereum-specific methods
   getGasInfo?(
     fromAddress: string

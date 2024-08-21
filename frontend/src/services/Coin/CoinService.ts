@@ -1,43 +1,45 @@
 import { WalletCore } from '@trustwallet/wallet-core';
-import { Coin } from '../gen/vultisig/keysign/v1/coin_pb';
-import { CoinMeta } from '../model/coin-meta';
-import { Chain } from '../model/chain';
-import PublicKeyHelper from './public-key-helper';
+import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Chain } from '../../model/chain';
+import { CoinMeta } from '../../model/coin-meta';
+import { ICoinService } from './ICoinService';
+import { AddressServiceFactory } from '../Address/AddressServiceFactory';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
-export class CoinFactory {
+export class CoinService implements ICoinService {
+  private chain: Chain;
   private walletCore: WalletCore;
 
-  constructor(walletCore: WalletCore) {
+  constructor(chain: Chain, walletCore: WalletCore) {
+    this.chain = chain;
     this.walletCore = walletCore;
   }
 
   async createCoin(
     asset: CoinMeta,
     publicKeyECDSA: string,
-    publicKeyEdDSA: string
+    publicKeyEdDSA: string, // TODO this is not correct
+    hexChainCode: string
   ): Promise<Coin> {
-    const publicKey = await this.getPublicKey(
-      asset,
-      publicKeyECDSA,
-      publicKeyEdDSA
+    const addressService = AddressServiceFactory.createAddressService(
+      this.chain,
+      this.walletCore
     );
-    let address;
-    switch (asset.chain) {
-      case Chain.MayaChain:
-        address = this.walletCore.AnyAddress.createBech32(
-          publicKey,
-          this.walletCore.CoinType.thorchain,
-          'maya'
-        );
-        break;
-      default: {
-        const coinType = this.getCoinType(asset.chain);
-        address = coinType.deriveAddressFromPublicKey(publicKey);
-        break;
-      }
-    }
+
+    const publicKey = await addressService.getPublicKey(
+      publicKeyECDSA,
+      publicKeyEdDSA,
+      hexChainCode
+    );
+
+    const address = await addressService.deriveAddressFromPublicKey(
+      publicKeyECDSA,
+      publicKeyEdDSA,
+      hexChainCode
+    );
+
     return new Coin({
-      chain: asset.chain.toString(),
+      chain: this.chain.toString(),
       ticker: asset.ticker,
       address: address,
       contractAddress: asset.contractAddress,
@@ -49,34 +51,8 @@ export class CoinFactory {
     });
   }
 
-  async getPublicKey(
-    asset: CoinMeta,
-    publicKeyECDSA: string,
-    publicKeyEdDSA: string
-  ): Promise<any> {
-    switch (asset.chain) {
-      case (Chain.Polkadot, Chain.Solana):
-        return this.walletCore.PublicKey.createWithData(
-          Buffer.from(publicKeyEdDSA, 'hex'),
-          this.walletCore.PublicKeyType.ed25519
-        );
-      default: {
-        const coinType = this.getCoinType(asset.chain);
-        const childPublicKey = await PublicKeyHelper.getDerivedPubKey(
-          publicKeyECDSA,
-          publicKeyEdDSA,
-          this.walletCore.CoinTypeExt.derivationPath(coinType)
-        );
-        return this.walletCore.PublicKey.createWithData(
-          Buffer.from(childPublicKey, 'hex'),
-          this.walletCore.PublicKeyType.secp256k1
-        );
-      }
-    }
-  }
-
-  getCoinType(chain: Chain): any {
-    switch (chain) {
+  getCoinType(): CoinType {
+    switch (this.chain) {
       case Chain.THORChain:
         return this.walletCore.CoinType.thorchain;
       case Chain.MayaChain:
@@ -119,6 +95,12 @@ export class CoinFactory {
         return this.walletCore.CoinType.dydx;
       case Chain.Polkadot:
         return this.walletCore.CoinType.polkadot;
+      case Chain.Sui:
+        return this.walletCore.CoinType.sui;
+      case Chain.ZkSync:
+        return this.walletCore.CoinType.zksync;
+      default:
+        throw new Error(`Invalid chain ${this.chain}`);
     }
   }
 }
