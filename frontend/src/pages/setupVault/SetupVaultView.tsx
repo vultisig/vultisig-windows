@@ -13,6 +13,10 @@ import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
 import { startkeygen } from '../../services/Keygen/Keygen';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { KeygenType } from '../../model/TssType';
+import {
+  AdvertiseMediator,
+  StartServer,
+} from '../../../wailsjs/go/mediator/Server';
 
 const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -25,6 +29,7 @@ const SetupVaultView: React.FC = () => {
   const [vaultType, setVaultType] = useState<string>('2/2');
   const [isRelay, setIsRelay] = useState(true);
   const [hexEncryptionKey, setHexEncryptionKey] = useState<string>('');
+  const [mediatorName, setMediatorName] = useState<string>('');
   const vault = useRef<Vault>(new Vault());
   const keygenType = useRef<KeygenType>(KeygenType.Keygen);
 
@@ -36,6 +41,9 @@ const SetupVaultView: React.FC = () => {
   useEffect(() => {
     if (isRelay) {
       // need to start local mediator
+      setMediatorName('Vultisig-Windows-' + Math.floor(Math.random() * 1000));
+      StartServer();
+      AdvertiseMediator(mediatorName);
     }
   }, [isRelay]);
 
@@ -135,12 +143,12 @@ const SetupVaultView: React.FC = () => {
       title: `${t('keygen')}`,
       content: (
         <KeygenView
-          isRelay={isRelay}
           vault={vault.current}
           sessionID={sessionID!}
           devices={devices}
           hexEncryptionKey={hexEncryptionKey}
           keygenType={keygenType.current}
+          serverURL="http://localhost:18080"
           onDone={() => {
             setCurrentScreen(6);
           }}
