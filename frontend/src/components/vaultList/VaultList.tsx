@@ -6,21 +6,12 @@ import { useTranslation } from 'react-i18next';
 
 interface VaultListProps {
   onSelectVault: (vault: storage.Vault) => void;
-  selectedVaultName: string | null;
 }
 
-const VaultList: React.FC<VaultListProps> = ({
-  onSelectVault,
-  selectedVaultName,
-}) => {
+const VaultList: React.FC<VaultListProps> = ({ onSelectVault }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [isOpen, setIsOpen] = useState(false);
   const [vaults, setVaults] = useState<storage.Vault[]>([]);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
 
   useEffect(() => {
     async function getVaultList() {
@@ -41,25 +32,12 @@ const VaultList: React.FC<VaultListProps> = ({
 
   const handleVaultSelect = (vault: storage.Vault) => {
     onSelectVault(vault);
-    setIsOpen(false);
   };
 
   return (
     <div className="relative">
-      <button
-        onClick={toggleDropdown}
-        className="px-4 py-4 bg-primary font-bold text-white w-full fixed top-0 z-50 flex items-center justify-center"
-      >
-        {selectedVaultName ? selectedVaultName : t('vaults')}
-        <img
-          src="/assets/icons/chevron-down.svg"
-          alt="open"
-          className={`ml-2 transition-transform w-[15px] duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}
-        />
-      </button>
-
       <div
-        className={`absolute pt-12 top-full left-0 w-full h-screen bg-gray-900 text-white transition-transform duration-500 ease-in-out transform ${isOpen ? 'translate-y-0' : '-translate-y-full'} overflow-y-auto z-40`}
+        className={`absolute pt-12 top-full left-0 w-full h-screen bg-gray-900 text-white transition-transform duration-500 ease-in-out transform overflow-y-auto z-40`}
       >
         <ul className="space-y-4 px-4 py-4 overflow-y-auto h-[90%]">
           {vaults &&
