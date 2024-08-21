@@ -6,11 +6,12 @@ import useVaultListViewModel from './VaultListViewModel';
 import { useWalletCore } from '../../main';
 import { Chain } from '../../model/chain';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Balance } from '../../model/balance';
 
 const VaultListView: React.FC = () => {
   const walletCore = useWalletCore();
   const navigate = useNavigate(); // Initialize useNavigate hook
-  const { selectedVault, setSelectedVault, coins } =
+  const { selectedVault, setSelectedVault, coins, balances } =
     useVaultListViewModel(walletCore);
 
   if (!walletCore) {
@@ -19,7 +20,7 @@ const VaultListView: React.FC = () => {
 
   const handleChainClick = (chain: Chain, coinArray: Coin[]) => {
     navigate(`/vault/item/detail/${chain}`, {
-      state: { coins: coinArray }, // Passing the coin array as state
+      state: { coins: coinArray, balances },
     });
   };
 
@@ -59,10 +60,17 @@ const VaultListView: React.FC = () => {
                             <div className="flex items-center justify-between">
                               <div className="chain-name">{chainName}</div>
                               <div className="flex items-center space-x-2 justify-end">
-                                {coinArray.filter(f => !f.isNativeToken)
+                                <div className="priceInDecimal text-right">
+                                  {balances.has(coin) ? (
+                                    balances.get(coin)?.decimalAmount || 0
+                                  ) : (
+                                    <div className="loader">Loading...</div>
+                                  )}
+                                </div>
+                                {/* {coinArray.filter(f => !f.isNativeToken)
                                   .length === 0 ? (
                                   <div className="priceInDecimal text-right">
-                                    0.0
+                                    {balances.get(coin)?.rawAmount || 0}
                                   </div>
                                 ) : (
                                   <div className="badgeTokenCount text-right text-neutral-100 bg-blue-400 px-3 py-1 rounded-full">
@@ -72,7 +80,7 @@ const VaultListView: React.FC = () => {
                                     }{' '}
                                     assets
                                   </div>
-                                )}
+                                )} */}
                                 <div className="priceInFiat text-right">
                                   <strong>{'US$ 0.00'}</strong>
                                 </div>
