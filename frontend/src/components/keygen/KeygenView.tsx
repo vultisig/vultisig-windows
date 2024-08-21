@@ -4,8 +4,8 @@ import RingProgress from '../ringProgress/RingProgress';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { KeygenType } from '../../model/TssType';
 import { StartKeygen } from '../../../wailsjs/go/tss/TssService';
-import { use } from 'i18next';
 import { EventsOn } from '../../../wailsjs/runtime/runtime';
+import { SaveVault } from '../../../wailsjs/go/storage/Store';
 interface KeygenViewProps {
   vault: Vault;
   sessionID: string;
@@ -67,6 +67,7 @@ const KeygenView: React.FC<KeygenViewProps> = ({
       setCurrentProgress(100);
       if (newVault !== undefined) {
         console.log(allSigners);
+        SaveVault(newVault);
         onDone();
       }
     }
