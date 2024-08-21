@@ -1,15 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import RingProgress from '../ringProgress/RingProgress';
-
+import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
+import { KeygenType } from '../../model/TssType';
+import { StartKeygen } from '../../../wailsjs/go/tss/TssService';
 interface KeygenViewProps {
+  vault: Vault;
+  sessionID: string;
+  devices: string[];
+  hexEncryptionKey: string;
+  keygenType: KeygenType; // is keygen / Reshare
+  serverURL: string;
   onDone: () => void;
   onError: (err: string) => void;
 }
-
-const KeygenView: React.FC<KeygenViewProps> = () => {
+const KeygenView: React.FC<KeygenViewProps> = ({
+  vault,
+  sessionID,
+  devices,
+  hexEncryptionKey,
+  keygenType,
+  serverURL,
+  onDone,
+  onError,
+}) => {
   const { t } = useTranslation();
   const [contentIndex, setContentIndex] = useState<number>(0);
+  const [allSigners, setAllSigners] = useState<string[]>(devices);
+
+  useEffect(() => {
+    // when isRelay = false , need to discover the local mediator
+    if (keygenType === KeygenType.Keygen) {
+      const neVault = StartKeygen(
+        vault.name,
+        vault.localPartyId,
+        sessionID,
+        vault.hexChainCode,
+        hexEncryptionKey,
+        serverURL
+      ).catch(err => {
+        onError(err);
+      });
+      if (neVault !== undefined) {
+        onDone();
+      }
+    }
+  }, []);
 
   const runSliders = () => {
     if (contentIndex < contents.length - 1) {

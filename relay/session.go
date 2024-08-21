@@ -14,28 +14,34 @@ import (
 	"github.com/vultisig/vultisig-win/utils"
 )
 
-type Server struct {
+// Client is the client for the relay server
+type Client struct {
 	vultisigRelay string
 	client        http.Client
+	Logger        *logrus.Logger
 }
 
-func NewServer(vultisigRelay string) *Server {
-	return &Server{
+// NewClient creates a new client for the relay server
+func NewClient(vultisigRelay string) *Client {
+	return &Client{
 		vultisigRelay: vultisigRelay,
 		client: http.Client{
 			Timeout: 5 * time.Second,
 		},
+		Logger: logrus.WithField("module", "relay").Logger,
 	}
 }
 
-func (s *Server) StartSession(sessionID string, parties []string) error {
+func (s *Client) StartSession(sessionID string, parties []string) error {
+	if sessionID == "" {
+		return fmt.Errorf("sessionID is empty")
+	}
 	sessionURL := s.vultisigRelay + "/start/" + sessionID
 	body, err := json.Marshal(parties)
 	if err != nil {
 		return fmt.Errorf("fail to start session: %w", err)
 	}
-	bodyReader := bytes.NewReader(body)
-	req, err := http.NewRequest(http.MethodPost, sessionURL, bodyReader)
+	req, err := http.NewRequest(http.MethodPost, sessionURL, bytes.NewBuffer(body))
 	if err != nil {
 		return fmt.Errorf("fail to start session: %w", err)
 	}
@@ -44,40 +50,51 @@ func (s *Server) StartSession(sessionID string, parties []string) error {
 	if err != nil {
 		return fmt.Errorf("fail to start session: %w", err)
 	}
+	defer s.closer(resp.Body)
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("fail to start session: %s", resp.Status)
 	}
 	return nil
 }
 
-func (s *Server) RegisterSession(sessionID string, key string) error {
+func (s *Client) RegisterSession(sessionID string, key string) error {
+	if sessionID == "" {
+		return fmt.Errorf("sessionID is empty")
+	}
 	sessionURL := s.vultisigRelay + "/" + sessionID
-	body := []byte("[\"" + key + "\"]")
-	utils.Logger.WithFields(logrus.Fields{
-		"session": sessionID,
-		"key":     key,
-		"body":    string(body),
-	}).Info("Registering session")
-	bodyReader := bytes.NewReader(body)
-	resp, err := s.client.Post(sessionURL, "application/json", bodyReader)
+	buf, err := json.Marshal([]string{key})
 	if err != nil {
 		return fmt.Errorf("fail to register session: %w", err)
 	}
+	s.Logger.WithFields(logrus.Fields{
+		"session": sessionID,
+		"key":     key,
+	}).Info("Registering session")
+	resp, err := s.client.Post(sessionURL, "application/json", bytes.NewBuffer(buf))
+	if err != nil {
+		return fmt.Errorf("fail to register session: %w", err)
+	}
+	defer s.closer(resp.Body)
 	if resp.StatusCode != http.StatusCreated {
 		return fmt.Errorf("fail to register session: %s", resp.Status)
 	}
 
 	return nil
 }
+func (s *Client) closer(closer io.Closer) {
+	if err := closer.Close(); err != nil {
+		s.Logger.Error("Failed to close response body")
+	}
+}
 
-func (s *Server) WaitForSessionStart(ctx context.Context, sessionID string) ([]string, error) {
+func (s *Client) WaitForSessionStart(ctx context.Context, sessionID string) ([]string, error) {
 	sessionURL := s.vultisigRelay + "/start/" + sessionID
 	for {
 		select {
 		case <-ctx.Done():
 			return nil, ctx.Err()
 		default:
-			utils.Logger.WithFields(logrus.Fields{
+			s.Logger.WithFields(logrus.Fields{
 				"session": sessionID,
 			}).Info("Waiting for session start")
 			resp, err := s.client.Get(sessionURL)
@@ -91,6 +108,9 @@ func (s *Server) WaitForSessionStart(ctx context.Context, sessionID string) ([]s
 			buff, err := io.ReadAll(resp.Body)
 			if err != nil {
 				return nil, fmt.Errorf("fail to read session body: %w", err)
+			}
+			if err := resp.Body.Close(); err != nil {
+				s.Logger.Errorf("fail to close response body, %w", err)
 			}
 			if err := json.Unmarshal(buff, &parties); err != nil {
 				return nil, fmt.Errorf("fail to unmarshal session body: %w", err)
@@ -106,14 +126,14 @@ func (s *Server) WaitForSessionStart(ctx context.Context, sessionID string) ([]s
 			}
 			// We need to hold expected parties to start session
 			if len(parties) > 1 {
-				utils.Logger.WithFields(logrus.Fields{
+				s.Logger.WithFields(logrus.Fields{
 					"session": sessionID,
 					"parties": parties,
 				}).Info("All parties joined")
 				return parties, nil
 			}
 
-			utils.Logger.WithFields(logrus.Fields{
+			s.Logger.WithFields(logrus.Fields{
 				"session": sessionID,
 			}).Info("Waiting for someone to start session")
 
@@ -123,38 +143,32 @@ func (s *Server) WaitForSessionStart(ctx context.Context, sessionID string) ([]s
 	}
 }
 
-func (s *Server) GetSession(sessionID string) ([]string, error) {
+func (s *Client) GetSession(sessionID string) ([]string, error) {
 	sessionURL := s.vultisigRelay + "/" + sessionID
-
 	resp, err := s.client.Get(sessionURL)
 	if err != nil {
 		return nil, fmt.Errorf("fail to get session: %w", err)
 	}
-
+	defer s.closer(resp.Body)
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("fail to get session: %s", resp.Status)
 	}
-
 	var parties []string
-	buff, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("fail to read session body: %w", err)
-	}
-	if err := json.Unmarshal(buff, &parties); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&parties); err != nil {
 		return nil, fmt.Errorf("fail to unmarshal session body: %w", err)
 	}
 	return parties, nil
 }
 
-func (s *Server) CompleteSession(sessionID, localPartyID string) error {
+// CompleteSession sends a request to the relay server to complete the session
+func (s *Client) CompleteSession(sessionID, localPartyID string) error {
 	sessionURL := s.vultisigRelay + "/complete/" + sessionID
 	parties := []string{localPartyID}
 	body, err := json.Marshal(parties)
 	if err != nil {
 		return fmt.Errorf("fail to complete session: %w", err)
 	}
-	bodyReader := bytes.NewReader(body)
-	req, err := http.NewRequest(http.MethodPost, sessionURL, bodyReader)
+	req, err := http.NewRequest(http.MethodPost, sessionURL, bytes.NewBuffer(body))
 	if err != nil {
 		return fmt.Errorf("fail to complete session: %w", err)
 	}
@@ -163,17 +177,17 @@ func (s *Server) CompleteSession(sessionID, localPartyID string) error {
 	if err != nil {
 		return fmt.Errorf("fail to complete session: %w", err)
 	}
+	defer s.closer(resp.Body)
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("fail to complete session: %s", resp.Status)
 	}
 	return nil
 }
 
-func (s *Server) CheckCompletedParties(sessionID string, partiesJoined []string) (bool, error) {
+func (s *Client) CheckCompletedParties(sessionID string, partiesJoined []string) (bool, error) {
 	sessionURL := s.vultisigRelay + "/complete/" + sessionID
 	start := time.Now()
 	timeout := time.Minute
-
 	for {
 		req, err := http.NewRequest(http.MethodGet, sessionURL, nil)
 		if err != nil {
@@ -188,8 +202,6 @@ func (s *Server) CheckCompletedParties(sessionID string, partiesJoined []string)
 		if resp.StatusCode != http.StatusOK {
 			return false, fmt.Errorf("fail to check completed parties: %s", resp.Status)
 		}
-		defer resp.Body.Close()
-
 		result, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return false, fmt.Errorf("fail to fetch request: %w", err)
@@ -197,16 +209,15 @@ func (s *Server) CheckCompletedParties(sessionID string, partiesJoined []string)
 
 		if len(result) > 0 {
 			var peers []string
-			err := json.Unmarshal(result, &peers)
-			if err != nil {
-				utils.Logger.WithFields(logrus.Fields{
+			if err := json.Unmarshal(result, &peers); err != nil {
+				s.Logger.WithFields(logrus.Fields{
 					"error": err,
 				}).Error("Failed to decode response to JSON")
 				continue
 			}
 
 			if utils.IsSubset(partiesJoined, peers) {
-				utils.Logger.Info("All parties have completed keygen successfully")
+				s.Logger.Info("All parties have completed keygen successfully")
 				return true, nil
 			}
 		}
@@ -220,7 +231,7 @@ func (s *Server) CheckCompletedParties(sessionID string, partiesJoined []string)
 	return false, nil
 }
 
-func (s *Server) EndSession(sessionID string) error {
+func (s *Client) EndSession(sessionID string) error {
 	sessionURL := s.vultisigRelay + "/" + sessionID
 	req, err := http.NewRequest(http.MethodDelete, sessionURL, nil)
 	if err != nil {
@@ -230,6 +241,7 @@ func (s *Server) EndSession(sessionID string) error {
 	if err != nil {
 		return fmt.Errorf("fail to end session: %w", err)
 	}
+	defer s.closer(resp.Body)
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("fail to end session: %s", resp.Status)
 	}

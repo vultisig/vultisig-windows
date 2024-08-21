@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import NavBar from '../../components/navbar/NavBar';
 import KeygenError from '../../components/keygen/KeygenError';
@@ -11,10 +11,12 @@ import KeygenTypeSelector from '../../components/keygen/KeygenTypeSelector';
 import KeygenVerify from '../../components/keygen/KeygenVerify';
 import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
 import { startkeygen } from '../../services/Keygen/Keygen';
+import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
+import { KeygenType } from '../../model/TssType';
 
 const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();
-  const [currentScreen, setCurrentScreen] = useState<number>(5);
+  const [currentScreen, setCurrentScreen] = useState<number>(0);
   const [vaultName, setVaultName] = useState<string>(t('main_vault'));
   const [sessionID, setSessionID] = useState<string>();
   const [devices, setDevices] = useState<string[]>([]);
@@ -22,11 +24,20 @@ const SetupVaultView: React.FC = () => {
   const [keygenError, setKeygenError] = useState<string>('');
   const [vaultType, setVaultType] = useState<string>('2/2');
   const [isRelay, setIsRelay] = useState(true);
+  const [hexEncryptionKey, setHexEncryptionKey] = useState<string>('');
+  const vault = useRef<Vault>(new Vault());
+  const keygenType = useRef<KeygenType>(KeygenType.Keygen);
 
   useEffect(() => {
     setKeygenError('');
     console.log(sessionID);
   }, []);
+
+  useEffect(() => {
+    if (isRelay) {
+      // need to start local mediator
+    }
+  }, [isRelay]);
 
   const prevScreen = () => {
     setCurrentScreen(prev => {
@@ -42,12 +53,20 @@ const SetupVaultView: React.FC = () => {
     isRelay: boolean,
     sessionID: string,
     serviceName: string,
-    devices: string[]
+    devices: string[],
+    hexEncryptionKey: string,
+    hexChainCode: string
   ) => {
     setIsRelay(isRelay);
     setSessionID(sessionID);
     setLocalPartyId(serviceName);
+    devices.push(serviceName);
     setDevices(devices);
+    setHexEncryptionKey(hexEncryptionKey);
+    vault.current.localPartyId = localPartyId;
+    vault.current.name = vaultName;
+    vault.current.signers = devices;
+    vault.current.hexChainCode = hexChainCode;
     setCurrentScreen(4);
   };
 
@@ -86,6 +105,7 @@ const SetupVaultView: React.FC = () => {
         <KeygenNameVault
           onContinue={vaultName => {
             setVaultName(vaultName);
+
             setCurrentScreen(3);
           }}
         />
@@ -112,9 +132,15 @@ const SetupVaultView: React.FC = () => {
       ),
     },
     {
-      title: `${t('join')} ${t('keygen')}`,
+      title: `${t('keygen')}`,
       content: (
         <KeygenView
+          isRelay={isRelay}
+          vault={vault.current}
+          sessionID={sessionID!}
+          devices={devices}
+          hexEncryptionKey={hexEncryptionKey}
+          keygenType={keygenType.current}
           onDone={() => {
             setCurrentScreen(6);
           }}

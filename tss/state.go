@@ -1,4 +1,4 @@
-package relay
+package tss
 
 import (
 	"fmt"
@@ -50,6 +50,5 @@ func (l *LocalStateAccessorImp) SaveLocalState(pubKey, localState string) error 
 
 func (l *LocalStateAccessorImp) RemoveLocalState(pubKey string) error {
 	fileName := filepath.Join(l.Folder, pubKey+"-"+l.Key+".json")
-
 	return os.Remove(fileName)
 }

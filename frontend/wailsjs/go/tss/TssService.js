@@ -10,6 +10,6 @@ export function KeysignECDSA(arg1) {
   return window['go']['tss']['TssService']['KeysignECDSA'](arg1);
 }
 
-export function StartKeygen(arg1, arg2, arg3, arg4, arg5) {
-  return window['go']['tss']['TssService']['StartKeygen'](arg1, arg2, arg3, arg4, arg5);
+export function StartKeygen(arg1, arg2, arg3, arg4, arg5, arg6) {
+  return window['go']['tss']['TssService']['StartKeygen'](arg1, arg2, arg3, arg4, arg5, arg6);
 }
