@@ -7,7 +7,6 @@ import { CoinMeta } from '../../model/coin-meta';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { WalletCore } from '@trustwallet/wallet-core';
 import { TokensStore } from '../../services/Coin/CoinList';
-import { BalanceServiceFactory } from '../../services/Balance/BalanceServiceFactory';
 import { Balance } from '../../model/balance';
 
 const useVaultListViewModel = (walletCore: WalletCore | null) => {
@@ -25,18 +24,23 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
     }
 
     const allChains: Chain[] = Object.values(Chain) as Chain[];
-
-    const filteredChains = allChains;
-
     const newCoinsMap = new Map<Chain, Coin[]>();
-
     const newBalances = new Map<Coin, Balance>();
+    const serviceMap = new Map<Chain, IService>();
 
-    const coinPromises = filteredChains.map(async chain => {
-      const service = ServiceFactory.getService(chain, walletCore);
+    const coinPromises = allChains.map(async chain => {
+      let service = serviceMap.get(chain);
+      if (!service) {
+        service = ServiceFactory.getService(chain, walletCore);
+        serviceMap.set(chain, service);
+      }
 
-      const tokensBalances = BalanceServiceFactory.createBalanceService(chain);
+      if (!service) {
+        console.error(`Service for chain ${chain} could not be initialized`);
+        return [];
+      }
 
+      //const tokensBalances = BalanceServiceFactory.createBalanceService(chain);
       const tokensPerChain = TokensStore.TokenSelectionAssets.filter(
         f => f.chain === chain
       );
@@ -49,7 +53,7 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
       const tokens = await Promise.all(
         tokensPerChain.map(async f => {
           const coinMeta: CoinMeta = {
-            chain: chain,
+            chain,
             contractAddress: f.contractAddress,
             decimals: f.decimals,
             isNativeToken: f.isNativeToken,
@@ -58,23 +62,24 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
             ticker: f.ticker,
           };
 
-          const coin = await service.coinService.createCoin(
+          const coin = await service!.coinService.createCoin(
+            // Use non-null assertion
             coinMeta,
             vault.public_key_ecdsa || '',
             vault.public_key_eddsa || '',
             vault.hex_chain_code || ''
           );
 
-          const balance = await tokensBalances.getBalance(coin);
-
-          newBalances.set(coin, balance);
+          const balance = await service?.balanceService?.getBalance(coin);
+          if (balance) {
+            newBalances.set(coin, balance);
+          }
 
           return coin;
         })
       );
 
-      newCoinsMap.set(chain, tokens); // Set the chain's tokens in the new Map
-
+      newCoinsMap.set(chain, tokens);
       return tokens;
     });
 
@@ -82,13 +87,7 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
       await Promise.all(coinPromises);
 
       setCoins(newCoinsMap);
-
-      const servicesList = filteredChains.map(chain =>
-        ServiceFactory.getService(chain, walletCore)
-      );
-
-      setServices(servicesList);
-
+      setServices(Array.from(serviceMap.values()));
       setBalances(newBalances);
     } catch (error) {
       console.error('Failed to fetch coins:', error);
@@ -107,7 +106,7 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
   }, [coins]);
 
   useEffect(() => {
-    console.log('Coins state updated:', balances);
+    console.log('Balances state updated:', balances);
   }, [balances]);
 
   return {

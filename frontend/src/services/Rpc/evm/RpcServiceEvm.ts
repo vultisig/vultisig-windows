@@ -7,9 +7,11 @@ import { IRpcService } from '../IRpcService';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   private provider: ethers.JsonRpcProvider;
+  private rpcUrl: string;
 
   constructor(rpcUrl: string) {
     this.provider = new ethers.JsonRpcProvider(rpcUrl);
+    this.rpcUrl = rpcUrl;
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
@@ -116,7 +118,8 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     try {
       if (coin.isNativeToken) {
         const balance = await this.provider.getBalance(coin.address);
-        return balance.toString();
+        const strBalance = balance.toString();
+        return strBalance;
       } else {
         return await this.fetchERC20TokenBalance(
           coin.contractAddress,
@@ -124,7 +127,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         );
       }
     } catch (error) {
-      console.error('getBalance::', error);
+      console.error(this.rpcUrl, 'getBalance::', error);
       return '0';
     }
   }
@@ -193,9 +196,24 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       );
 
       const balance = await erc20Contract.balanceOf(walletAddress);
+
+      // Check if the balance is an empty response
+      if (!balance || balance.toString() === '0x') {
+        console.warn(
+          'fetchERC20TokenBalance:: Empty or invalid balance response'
+        );
+        return '0';
+      }
+
       return balance.toString();
     } catch (error) {
-      console.error('fetchERC20TokenBalance::', error);
+      // Enhanced error logging
+      console.error('fetchERC20TokenBalance:: Error occurred');
+      console.error('Contract Address:', contractAddress);
+      console.error('Wallet Address:', walletAddress);
+      console.error('Network:', await this.provider.getNetwork());
+      console.error('Provider URL:', this.rpcUrl);
+
       return '0';
     }
   }

@@ -13,7 +13,9 @@ export class BalanceServiceEvm implements IBalanceService {
   async getBalance(coin: Coin): Promise<Balance> {
     const rpcService = RpcServiceFactory.createRpcService(this.chain);
 
-    const balance: string = await rpcService.getBalance(coin);
+    const balance = await rpcService.getBalance(coin);
+
+    console.log('BalanceServiceEvm.getBalance', balance);
 
     return {
       address: coin.address,

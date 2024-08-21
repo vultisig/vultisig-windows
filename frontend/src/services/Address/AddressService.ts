@@ -16,8 +16,6 @@ export class AddressService implements IAddressService {
     this.walletCore = walletCore;
     this.coinService = CoinServiceFactory.createCoinService(chain, walletCore);
     this.coinType = this.coinService.getCoinType();
-
-    console.log(this.coinType);
   }
 
   resolveDomainAddress(address: string): Promise<string> {

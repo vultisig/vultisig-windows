@@ -6,6 +6,7 @@ import { IService } from './IService';
 import { RpcServiceFactory } from './Rpc/RpcServiceFactory';
 import { SendServiceFactory } from './Send/SendServiceFactory';
 import { Service } from './Service';
+import { BalanceServiceFactory } from './Balance/BalanceServiceFactory';
 
 export class ServiceFactory {
   static getService(chain: Chain, walletCore: WalletCore): IService {
@@ -17,13 +18,15 @@ export class ServiceFactory {
     const coinService = CoinServiceFactory.createCoinService(chain, walletCore);
     const keygenService = null; // I need to understand how it works and is used
     const sendService = SendServiceFactory.createSendService(chain);
+    const balanceService = BalanceServiceFactory.createBalanceService(chain);
 
     return new Service(
       rpcService,
       addressService,
       coinService,
       keygenService,
-      sendService
+      sendService,
+      balanceService
     );
   }
 }

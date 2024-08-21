@@ -10,11 +10,15 @@ import {
   faArrowLeft,
   faSyncAlt,
 } from '@fortawesome/free-solid-svg-icons';
+import { Balance } from '../../model/balance';
 
 const VaultItemView: React.FC = () => {
   const { chain } = useParams<{ chain: string }>(); // Get the chain from the URL
   const location = useLocation();
-  const { coins } = location.state as { coins: Coin[] }; // Get the coins from the state
+  const { coins, balances } = location.state as {
+    coins: Coin[];
+    balances: Map<Coin, Balance>;
+  };
 
   // Separate native token and other tokens
   const nativeToken = coins.find(coin => coin.isNativeToken);
@@ -98,7 +102,9 @@ const VaultItemView: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="priceInDecimal text-left">0.0</div>
+                <div className="priceInDecimal text-left">
+                  {balances.get(coin)?.rawAmount}
+                </div>
               </div>
             </div>
             <hr className="w-full border-t border-gray-200 mt-6 mb-4" />
