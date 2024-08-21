@@ -85,6 +85,32 @@ const VaultItemView: React.FC = () => {
           </div>
         )}
 
+        {/* Display native token */}
+        {nativeToken && (
+          <div>
+            <div className="flex items-center px-4">
+              <div className="flex items-center justify-center w-9 h-9 bg-white text-black text-xs rounded-full">
+                {nativeToken.ticker}
+              </div>
+
+              <div className="flex flex-col flex-1 ml-4">
+                <div className="flex items-center justify-between">
+                  <div className="chain-name">{nativeToken.ticker}</div>
+                  <div className="flex items-center space-x-2 justify-end">
+                    <div className="priceInFiat text-right">
+                      <strong>{'US$ 0.00'}</strong>
+                    </div>
+                  </div>
+                </div>
+                <div className="priceInDecimal text-left">
+                  {balances.get(nativeToken)?.decimalAmount}
+                </div>
+              </div>
+            </div>
+            <hr className="w-full border-t border-gray-200 mt-6 mb-4" />
+          </div>
+        )}
+
         {/* Display other tokens */}
         {otherTokens.map((coin, index) => (
           <div key={index}>
@@ -103,7 +129,7 @@ const VaultItemView: React.FC = () => {
                   </div>
                 </div>
                 <div className="priceInDecimal text-left">
-                  {balances.get(coin)?.rawAmount}
+                  {balances.get(coin)?.decimalAmount}
                 </div>
               </div>
             </div>

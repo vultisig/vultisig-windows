@@ -16,6 +16,7 @@ export class BalanceService implements IBalanceService {
       contractAddress: coin.contractAddress,
       chain: this.chain,
       rawAmount: 0,
+      decimalAmount: 0,
     };
   }
 }

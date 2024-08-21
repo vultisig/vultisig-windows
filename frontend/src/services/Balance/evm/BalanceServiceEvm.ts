@@ -15,13 +15,12 @@ export class BalanceServiceEvm implements IBalanceService {
 
     const balance = await rpcService.getBalance(coin);
 
-    console.log('BalanceServiceEvm.getBalance', balance);
-
     return {
       address: coin.address,
       contractAddress: coin.contractAddress,
       chain: this.chain,
       rawAmount: parseInt(balance),
+      decimalAmount: parseInt(balance) / Math.pow(10, coin.decimals),
     };
   }
 }

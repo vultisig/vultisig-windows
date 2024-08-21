@@ -5,4 +5,5 @@ export type Balance = {
   contractAddress: string | undefined;
   chain: Chain;
   rawAmount: number;
+  decimalAmount?: number;
 };
