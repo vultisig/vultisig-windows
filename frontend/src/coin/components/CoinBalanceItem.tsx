@@ -11,6 +11,8 @@ import { getColor } from '../../lib/ui/theme/getters';
 import { CoverImage } from '../../lib/ui/images/CoverImage';
 import { PictureIcon } from '../../lib/ui/icons/PictureIcon';
 import { Text } from '../../lib/ui/text';
+import { formatAmount } from '../../lib/utils/formatAmount';
+import { fromChainAmount } from '../../lib/chain/utils/fromChainAmount';
 
 type CoinBalanceItemProps = ClickableComponentProps & {
   name: string;
@@ -33,12 +35,14 @@ export const CoinBalanceItem = ({
   icon,
   name,
   address,
+  amount,
+  decimals,
   onClick,
 }: CoinBalanceItemProps) => {
   return (
     <UnstyledButton onClick={onClick}>
       <Panel>
-        <HStack alignItems="center" gap={12}>
+        <HStack fullWidth alignItems="center" gap={12}>
           <ImageContainer>
             <SafeImage
               src={icon}
@@ -46,10 +50,16 @@ export const CoinBalanceItem = ({
               fallback={<PictureIcon />}
             />
           </ImageContainer>
-          <VStack alignItems="start" gap={16}>
-            <Text color="regular" weight="700" size={16}>
-              {name}
-            </Text>
+
+          <VStack fullWidth alignItems="start" gap={16}>
+            <HStack fullWidth alignItems="center" gap={20}>
+              <Text color="regular" weight="700" size={16}>
+                {name}
+              </Text>
+              <Text color="regular" weight="400" size={12}>
+                {formatAmount(fromChainAmount(amount, decimals))}
+              </Text>
+            </HStack>
             <Text color="primary" weight="400" size={12}>
               {address}
             </Text>
