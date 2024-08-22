@@ -36,9 +36,9 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 
 root.render(
-  <React.StrictMode>
-    <WalletCoreProvider>
-      <App />
-    </WalletCoreProvider>
-  </React.StrictMode>
+  //<React.StrictMode>
+  <WalletCoreProvider>
+    <App />
+  </WalletCoreProvider>
+  //</React.StrictMode>
 );

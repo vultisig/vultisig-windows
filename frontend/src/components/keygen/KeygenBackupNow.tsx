@@ -32,7 +32,7 @@ const KeygenBackupNow: React.FC = () => {
         <button
           className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[250px] font-bold"
           onClick={() => {
-            navigate(''); // update later: go to vault view
+            navigate('/vault/list'); // update later: go to vault view
           }}
         >
           {t('skip')}

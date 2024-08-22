@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import KeygenQRCode from '../qrCode/KeygenQRCode';
 import Lottie from 'lottie-react';
@@ -7,27 +7,36 @@ import SelectDevice from '../selectDevice/SelectDevice';
 import { createKeygenMsg } from '../../utils/QRGen';
 import { v4 as uuidv4 } from 'uuid';
 import { generateRandomNumber } from '../../utils/util';
-import { AdvertiseMediator } from '../../../wailsjs/go/relay/Server';
+import { AdvertiseMediator } from '../../../wailsjs/go/mediator/Server';
 import {
   checkForDevices,
   clearCheckingInterval,
   postSession,
 } from '../../services/Keygen/Keygen';
+import crypto from 'crypto';
+
+function getHexEncodedRandomBytes(length: number): string {
+  const bytes = crypto.randomBytes(length);
+  return bytes.toString('hex');
+}
 
 interface KeygenPeerDiscoveryProps {
   vaultType: string;
   vaultName: string;
-  keygenStart: (
+  onContinue: (
     isRelay: boolean,
     sessionID: string,
     serviceName: string,
-    devices: string[]
+    devices: string[],
+    hexEncryptionKey: string,
+    hexChainCode: string
   ) => void;
 }
+
 const KeygenPeerDiscovery: React.FC<KeygenPeerDiscoveryProps> = ({
   vaultType,
   vaultName,
-  keygenStart,
+  onContinue,
 }) => {
   const { t } = useTranslation();
   const [qrData, setQrData] = useState('');
@@ -36,10 +45,12 @@ const KeygenPeerDiscovery: React.FC<KeygenPeerDiscoveryProps> = ({
   const [devices, setDevices] = useState<string[]>([]);
   const [sessionID, setSessionID] = useState<string>();
   const [isRelay, setIsRelay] = useState(true);
+  const hexEncryptionKey = useRef(getHexEncodedRandomBytes(32));
+  const hexChainCode = useRef(getHexEncodedRandomBytes(32));
 
   useEffect(() => {
     setSessionID(uuidv4());
-    setServiceName(`VultisigWindows-${generateRandomNumber()}`);
+    setServiceName(`Vultisig-Windows-${generateRandomNumber()}`);
     return () => {
       clearCheckingInterval();
     };
@@ -50,16 +61,23 @@ const KeygenPeerDiscovery: React.FC<KeygenPeerDiscoveryProps> = ({
     setSelectedDevices([]);
     async function createQR() {
       setQrData(
-        await createKeygenMsg(isRelay, vaultName, serviceName!, sessionID!)
+        await createKeygenMsg(
+          isRelay,
+          vaultName,
+          serviceName!,
+          sessionID!,
+          hexEncryptionKey.current,
+          hexChainCode.current
+        )
       );
     }
     clearCheckingInterval();
-    createQR();
+    createQR().catch(console.error);
   }, [isRelay, sessionID, serviceName]);
 
   useEffect(() => {
     if (sessionID && serviceName) {
-      discoverService(serviceName);
+      discoverService(serviceName).catch(console.error);
     }
   }, [isRelay, sessionID, serviceName]);
 
@@ -143,7 +161,14 @@ const KeygenPeerDiscovery: React.FC<KeygenPeerDiscoveryProps> = ({
         <button
           disabled={handleDisabled()}
           onClick={() => {
-            keygenStart(isRelay, sessionID!, serviceName!, selectedDevices);
+            onContinue(
+              isRelay,
+              sessionID!,
+              serviceName!,
+              selectedDevices,
+              hexEncryptionKey.current,
+              hexChainCode.current
+            );
           }}
           className="w-[400px] disabled:opacity-30  bg-switchBtn-primary rounded-3xl mt-10 py-2 font-bold"
         >

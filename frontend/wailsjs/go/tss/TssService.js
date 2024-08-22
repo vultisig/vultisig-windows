@@ -6,22 +6,14 @@ export function GetDerivedPubKey(arg1, arg2, arg3, arg4) {
   return window['go']['tss']['TssService']['GetDerivedPubKey'](arg1, arg2, arg3, arg4);
 }
 
-export function GetLocalState(arg1) {
-  return window['go']['tss']['TssService']['GetLocalState'](arg1);
-}
-
 export function KeysignECDSA(arg1) {
   return window['go']['tss']['TssService']['KeysignECDSA'](arg1);
 }
 
-export function SaveLocalState(arg1, arg2) {
-  return window['go']['tss']['TssService']['SaveLocalState'](arg1, arg2);
+export function StartKeygen(arg1, arg2, arg3, arg4, arg5, arg6) {
+  return window['go']['tss']['TssService']['StartKeygen'](arg1, arg2, arg3, arg4, arg5, arg6);
 }
 
-export function Send(arg1, arg2, arg3) {
-  return window['go']['tss']['TssService']['Send'](arg1, arg2, arg3);
-}
-
-export function StartTssInstance() {
-  return window['go']['tss']['TssService']['StartTssInstance']();
+export function Startup(arg1) {
+  return window['go']['tss']['TssService']['Startup'](arg1);
 }

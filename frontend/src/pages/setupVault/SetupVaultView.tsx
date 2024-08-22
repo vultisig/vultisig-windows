@@ -1,29 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import NavBar from '../../components/navbar/NavBar';
 import KeygenError from '../../components/keygen/KeygenError';
 import KeygenNameVault from '../../components/keygen/KeygenNameVault';
 import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
+import KeygenView from '../../components/keygen/KeygenView';
 import KeygenDone from '../../components/keygen/KeygenDone';
 import KeygenInitial from '../../components/keygen/KeygenInitial';
 import KeygenTypeSelector from '../../components/keygen/KeygenTypeSelector';
 import KeygenVerify from '../../components/keygen/KeygenVerify';
 import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
 import { startkeygen } from '../../services/Keygen/Keygen';
+import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
+import { KeygenType } from '../../model/TssType';
+import { generateRandomNumber } from '../../utils/util';
+import { ENDPOINTS } from '../../utils/config';
 
-const TabbedContent: React.FC = () => {
+const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState<number>(0);
-  const [vaultName, setVaultName] = useState<string>('');
+  const [vaultName, setVaultName] = useState<string>(t('main_vault'));
   const [sessionID, setSessionID] = useState<string>();
   const [devices, setDevices] = useState<string[]>([]);
   const [localPartyId, setLocalPartyId] = useState<string>('');
   const [keygenError, setKeygenError] = useState<string>('');
   const [vaultType, setVaultType] = useState<string>('2/2');
+  const [isRelay, setIsRelay] = useState(true);
+  const [hexEncryptionKey, setHexEncryptionKey] = useState<string>('');
+  const [serverURL, setServerURL] = useState<string>('http://localhost:18080');
+  const vault = useRef<Vault>(new Vault());
+  const keygenType = useRef<KeygenType>(KeygenType.Keygen);
 
   useEffect(() => {
     setKeygenError('');
-    console.log(sessionID);
+
+    // when current vault's local party is empty , means it is a new vault
+    if (vault.current.localPartyId === '') {
+      // new vault
+      vault.current.localPartyId = 'windows-' + generateRandomNumber();
+    }
+    setLocalPartyId(vault.current.localPartyId);
   }, []);
 
   const prevScreen = () => {
@@ -36,16 +52,34 @@ const TabbedContent: React.FC = () => {
     });
   };
 
-  const keygenStart = async (
+  const onKeygenPeerDiscoveryContinue = (
     isRelay: boolean,
     sessionID: string,
     serviceName: string,
-    devices: string[]
+    devices: string[],
+    hexEncryptionKey: string,
+    hexChainCode: string
   ) => {
+    setIsRelay(isRelay);
+    setServerURL(
+      isRelay ? ENDPOINTS.VULTISIG_RELAY : ENDPOINTS.LOCAL_MEDIATOR_URL
+    );
     setSessionID(sessionID);
-    setLocalPartyId(serviceName);
+
+    devices.push(localPartyId);
     setDevices(devices);
-    await startkeygen(isRelay, sessionID, devices);
+    setHexEncryptionKey(hexEncryptionKey);
+    vault.current.localPartyId = localPartyId;
+    vault.current.name = vaultName;
+    vault.current.signers = devices;
+    vault.current.hexChainCode = hexChainCode;
+    setCurrentScreen(4);
+  };
+
+  const keygenStart = async () => {
+    await startkeygen(isRelay, sessionID!, devices).then(() => {
+      setCurrentScreen(5);
+    });
   };
 
   // screens
@@ -78,6 +112,7 @@ const TabbedContent: React.FC = () => {
         <KeygenNameVault
           onContinue={vaultName => {
             setVaultName(vaultName);
+
             setCurrentScreen(3);
           }}
         />
@@ -89,7 +124,7 @@ const TabbedContent: React.FC = () => {
         <KeygenPeerDiscovery
           vaultName={vaultName}
           vaultType={vaultType}
-          keygenStart={keygenStart}
+          onContinue={onKeygenPeerDiscoveryContinue}
         />
       ),
     },
@@ -99,17 +134,39 @@ const TabbedContent: React.FC = () => {
         <KeygenVerify
           localPartyId={localPartyId}
           devices={devices}
-          onContinue={() => setCurrentScreen(5)}
+          onContinue={keygenStart}
+        />
+      ),
+    },
+    {
+      title: `${t('keygen')}`,
+      content: (
+        <KeygenView
+          vault={vault.current}
+          sessionID={sessionID!}
+          devices={devices}
+          hexEncryptionKey={hexEncryptionKey}
+          keygenType={keygenType.current}
+          serverURL={serverURL}
+          onDone={() => {
+            setCurrentScreen(6);
+          }}
+          onError={(err: string) => {
+            setKeygenError(err);
+            setCurrentScreen(7);
+          }}
         />
       ),
     },
     {
       title: `${t('join')} ${t('keygen')}`,
-      content: <></>, // keygen view
-    },
-    {
-      title: `${t('join')} ${t('keygen')}`,
-      content: <KeygenDone />,
+      content: (
+        <KeygenDone
+          onNext={() => {
+            setCurrentScreen(8);
+          }}
+        />
+      ),
     },
     {
       title: t('keygen'),
@@ -144,4 +201,4 @@ const TabbedContent: React.FC = () => {
   );
 };
 
-export default TabbedContent;
+export default SetupVaultView;

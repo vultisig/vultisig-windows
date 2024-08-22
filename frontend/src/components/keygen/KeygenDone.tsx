@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const KeygenDone: React.FC = () => {
+interface KeygenDoneProps {
+  onNext: () => void;
+}
+
+const KeygenDone: React.FC<KeygenDoneProps> = ({ onNext }) => {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    setTimeout(() => {
+      onNext();
+    }, 3000);
+  }, []);
 
   return (
     <div className="text-center text-white">
