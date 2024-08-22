@@ -4,6 +4,9 @@ import { CoinMeta } from '../../../model/coin-meta';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceSui implements IRpcService {
+  calculateFee(coin: Coin): number {
+    throw new Error('Method not implemented.');
+  }
   sendTransaction(encodedTransaction: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
@@ -16,9 +19,14 @@ export class RpcServiceSui implements IRpcService {
   resolveENS?(ensName: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
-  getGasInfo?(
-    fromAddress: string
-  ): Promise<{ gasPrice: bigint; priorityFee: bigint; nonce: number }> {
+  getGasInfo(
+    coin: Coin
+  ): Promise<{
+    gasPrice: bigint;
+    priorityFee: bigint;
+    nonce: number;
+    fee: number;
+  }> {
     throw new Error('Method not implemented.');
   }
   estimateGas?(

@@ -13,7 +13,7 @@ export class SendServiceEvm extends SendService implements ISendService {
     this.chain = chain;
   }
 
-  async setMaxValues(
+  async getMaxValues(
     tx: ISendTransaction,
     percentage: number
   ): Promise<number> {
@@ -22,14 +22,22 @@ export class SendServiceEvm extends SendService implements ISendService {
         const rpcService: IRpcService = RpcServiceFactory.createRpcService(
           this.chain
         );
-        let gasInfo = { gasPrice: BigInt(0), priorityFee: BigInt(0), nonce: 0 };
+
+        let gasInfo = {
+          gasPrice: BigInt(0),
+          priorityFee: BigInt(0),
+          nonce: 0,
+          fee: 0,
+        };
         if (rpcService && rpcService.getGasInfo) {
-          gasInfo = await rpcService.getGasInfo(tx.fromAddress);
+          gasInfo = await rpcService.getGasInfo(tx.coin);
         }
 
         console.log('gasInfo', gasInfo);
 
         const amount = this.setPercentageAmount(tx.amount, percentage);
+
+        //this.calculateMaxValue()
 
         // let evm = try await blockchainService.fetchSpecific(for: tx.coin, sendMaxAmount: tx.sendMaxAmount, isDeposit: tx.isDeposit, transactionType: tx.transactionType)
         // let totalFeeWei = evm.fee

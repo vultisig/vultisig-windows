@@ -10,9 +10,9 @@ export class SendServiceFactory {
   static createSendService(chain: Chain) {
     switch (chain) {
       case Chain.THORChain:
-        return new SendServiceThorchain();
+        return new SendServiceThorchain(chain);
       case Chain.MayaChain:
-        return new SendServiceThorchain();
+        return new SendServiceThorchain(chain);
       case Chain.Arbitrum:
         return new SendServiceEvm(chain);
       case Chain.Avalanche:
@@ -34,25 +34,25 @@ export class SendServiceFactory {
       case Chain.ZkSync:
         return new SendServiceEvm(chain);
       case Chain.Bitcoin:
-        return new SendServiceUtxo();
+        return new SendServiceUtxo(chain);
       case Chain.BitcoinCash:
-        return new SendServiceUtxo();
+        return new SendServiceUtxo(chain);
       case Chain.Litecoin:
-        return new SendServiceUtxo();
+        return new SendServiceUtxo(chain);
       case Chain.Dogecoin:
-        return new SendServiceUtxo();
+        return new SendServiceUtxo(chain);
       case Chain.Dash:
-        return new SendServiceUtxo();
+        return new SendServiceUtxo(chain);
       case Chain.Solana:
-        return new SendServiceSolana();
+        return new SendServiceSolana(chain);
       case Chain.Sui:
         return new SendService(chain); // TODO: implement Sui
       case Chain.Gaia:
-        return new SendServiceCosmos();
+        return new SendServiceCosmos(chain);
       case Chain.Kujira:
-        return new SendServiceCosmos();
+        return new SendServiceCosmos(chain);
       case Chain.Dydx:
-        return new SendServiceCosmos();
+        return new SendServiceCosmos(chain);
       case Chain.Polkadot:
         return new SendService(chain); // TODO: implement Polkadot
       default:

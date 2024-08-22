@@ -4,6 +4,7 @@ import { ISendService } from './ISendService';
 import { ISendTransaction } from '../../model/send-transaction';
 import { Chain } from '../../model/chain';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Balance } from '../../model/balance';
 
 export class SendService implements ISendService {
   chain: Chain;
@@ -11,7 +12,7 @@ export class SendService implements ISendService {
     this.chain = chain;
   }
 
-  setMaxValues(tx: ISendTransaction, percentage: number): Promise<number> {
+  getMaxValues(tx: ISendTransaction, percentage: number): Promise<number> {
     throw new Error('Method not implemented.');
   }
 
@@ -57,6 +58,19 @@ export class SendService implements ISendService {
     } else {
       return 0;
     }
+  }
+
+  calculateMaxValue(fee: number, balance: Balance, coin: Coin): number {
+    let totalFeeAdjusted = fee;
+    let maxValue = balance.rawAmount - totalFeeAdjusted;
+    let maxValueCalculated = maxValue / Math.pow(10, coin.decimals);
+    let truncated = this.truncateToPlaces(maxValueCalculated, coin.decimals);
+
+    if (truncated < 0) {
+      return 0;
+    }
+
+    return truncated;
   }
 
   private truncateToPlaces(value: number, places: number): number {

@@ -10,27 +10,37 @@ export interface IRpcService {
   resolveENS?(ensName: string): Promise<string>;
 
   // Ethereum-specific methods
-  getGasInfo?(
-    fromAddress: string
-  ): Promise<{ gasPrice: bigint; priorityFee: bigint; nonce: number }>;
+  getGasInfo(coin: Coin): Promise<{
+    gasPrice: bigint;
+    priorityFee: bigint;
+    nonce: number;
+    fee: number;
+  }>;
+
+  calculateFee(coin: Coin): number;
+
   estimateGas?(
     senderAddress: string,
     recipientAddress: string,
     value: bigint,
     memo?: string
   ): Promise<bigint>;
+
   fetchTokenBalance?(
     contractAddress: string,
     walletAddress: string
   ): Promise<bigint>;
+
   fetchAllowance?(
     contractAddress: string,
     owner: string,
     spender: string
   ): Promise<bigint>;
+
   getTokenInfo?(
     contractAddress: string
   ): Promise<{ name: string; symbol: string; decimals: number }>;
+
   fetchTokens?(nativeToken: Coin): Promise<CoinMeta[]>;
 
   // Solana-specific methods
