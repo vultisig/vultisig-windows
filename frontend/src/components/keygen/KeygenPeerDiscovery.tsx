@@ -26,7 +26,6 @@ interface KeygenPeerDiscoveryProps {
   onContinue: (
     isRelay: boolean,
     sessionID: string,
-    serviceName: string,
     devices: string[],
     hexEncryptionKey: string,
     hexChainCode: string
@@ -164,7 +163,6 @@ const KeygenPeerDiscovery: React.FC<KeygenPeerDiscoveryProps> = ({
             onContinue(
               isRelay,
               sessionID!,
-              serviceName!,
               selectedDevices,
               hexEncryptionKey.current,
               hexChainCode.current

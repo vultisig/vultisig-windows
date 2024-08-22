@@ -150,7 +150,7 @@ func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, he
 	return vault, nil
 }
 
-func (t *TssService) createTSSService(serverURL, Session, HexEncryptionKey string, localStateAccessor mtss.LocalStateAccessor, createPreParam bool) (mtss.Service, error) {
+func (t *TssService) createTSSService(serverURL, Session, HexEncryptionKey string, localStateAccessor mtss.LocalStateAccessor, createPreParam bool) (*mtss.ServiceImpl, error) {
 	messenger, err := relay.NewMessengerImp(serverURL, Session, HexEncryptionKey)
 	if err != nil {
 		return nil, fmt.Errorf("create messenger: %w", err)
