@@ -74,6 +74,8 @@ const KeygenView: React.FC<KeygenViewProps> = ({
     if (keygenType === KeygenType.Keygen) {
       console.log('sessionID', sessionID);
       kickoffKeygen();
+    } else if (keygenType === KeygenType.Reshare) {
+      // TODO, trigger reshare
     }
   }, []);
 
