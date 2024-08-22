@@ -33,6 +33,7 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
                     .map((coin, index) => {
                       const balance = balances.get(coin);
                       const amount = balance?.rawAmount || 0;
+                      const icon = `/assets/icons/coins/${coin.logo}.svg`;
 
                       return (
                         <CoinBalanceItem
@@ -41,6 +42,7 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
                           address={coin.address}
                           amount={amount}
                           decimals={coin.decimals}
+                          icon={icon}
                           onClick={() => {
                             navigate(`/vault/item/detail/${chain}`, {
                               state: { coins: coinArray, balances },
