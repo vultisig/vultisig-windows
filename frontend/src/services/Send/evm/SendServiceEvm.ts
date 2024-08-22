@@ -57,6 +57,7 @@ export class SendServiceEvm extends SendService implements ISendService {
   loadGasInfoForSending(tx: ISendTransaction): Promise<void> {
     throw new Error('Method not implemented.');
   }
+
   getPriceRate(tx: ISendTransaction): Promise<number> {
     throw new Error('Method not implemented.');
   }
