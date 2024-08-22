@@ -55,7 +55,6 @@ const SetupVaultView: React.FC = () => {
   const onKeygenPeerDiscoveryContinue = (
     isRelay: boolean,
     sessionID: string,
-    serviceName: string,
     devices: string[],
     hexEncryptionKey: string,
     hexChainCode: string
