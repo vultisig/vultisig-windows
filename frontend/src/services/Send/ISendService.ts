@@ -1,15 +1,14 @@
-import { ISendTransaction } from './ISendTransaction';
+import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Balance } from '../../model/balance';
+import { ISendTransaction } from '../../model/send-transaction';
 
 export interface ISendService {
-  setMaxValues(tx: ISendTransaction, percentage: number): void;
+  calculateMaxValue(fee: number, balance: Balance, coin: Coin): number;
+  getMaxValues(tx: ISendTransaction, percentage: number): Promise<number>;
   loadGasInfoForSending(tx: ISendTransaction): Promise<void>;
   getPriceRate(tx: ISendTransaction): Promise<number>;
-  convertFiatToCoin(newValue: string, tx: ISendTransaction): Promise<void>;
-  convertToFiat(
-    newValue: string,
-    tx: ISendTransaction,
-    setMaxValue: boolean
-  ): Promise<void>;
-  validateAddress(tx: ISendTransaction, address: string): boolean; // This method should call the Address Service which will validate correcly the address
-  validateForm(tx: ISendTransaction): Promise<boolean>; // Each chain validates different things, so this method should be implemented in each service
+  convertFiatToCoin(newValue: string, coin: Coin, priceRate: number): number;
+  convertToFiat(newValue: string, priceRate: number): number;
+  validateForm(tx: ISendTransaction): Promise<boolean>;
+  // Each chain validates different things, so this method should be implemented in each service
 }

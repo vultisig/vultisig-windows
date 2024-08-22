@@ -14,6 +14,18 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     this.rpcUrl = rpcUrl;
   }
 
+  calculateFee(coin: Coin): number {
+    let gasLimit = 21000;
+    if (coin.isNativeToken) {
+      gasLimit = 120000;
+    }
+
+    const baseFee = 1;
+    const priorityFee = 1;
+
+    return gasLimit * (baseFee + priorityFee);
+  }
+
   async sendTransaction(encodedTransaction: string): Promise<string> {
     try {
       const txResponse = await this.provider.send('eth_sendRawTransaction', [
@@ -133,12 +145,17 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
   }
 
   async getGasInfo(
-    fromAddress: string
-  ): Promise<{ gasPrice: bigint; priorityFee: bigint; nonce: number }> {
+    coin: Coin
+  ): Promise<{
+    gasPrice: bigint;
+    priorityFee: bigint;
+    nonce: number;
+    fee: number;
+  }> {
     try {
       const gasPrice = await this.provider.send('eth_gasPrice', []);
       const [nonce, priorityFee] = await Promise.all([
-        this.provider.getTransactionCount(fromAddress),
+        this.provider.getTransactionCount(coin.address),
         this.provider.send('eth_maxPriorityFeePerGas', []),
       ]);
 
@@ -146,6 +163,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         gasPrice: BigInt(gasPrice.toString()),
         priorityFee: BigInt(priorityFee.toString()),
         nonce: nonce,
+        fee: this.calculateFee(coin),
       };
     } catch (error) {
       console.error('getGasInfo::', error);
