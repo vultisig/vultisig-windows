@@ -17,7 +17,7 @@ export class ServiceFactory {
     );
     const coinService = CoinServiceFactory.createCoinService(chain, walletCore);
     const keygenService = null; // I need to understand how it works and is used
-    const sendService = SendServiceFactory.createSendService(chain);
+    const sendService = SendServiceFactory.createSendService(chain, walletCore);
     const balanceService = BalanceServiceFactory.createBalanceService(chain);
 
     return new Service(

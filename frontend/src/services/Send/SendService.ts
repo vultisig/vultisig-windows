@@ -5,11 +5,14 @@ import { ISendTransaction } from '../../model/send-transaction';
 import { Chain } from '../../model/chain';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
+import { WalletCore } from '@trustwallet/wallet-core';
 
 export class SendService implements ISendService {
   chain: Chain;
-  constructor(chain: Chain) {
+  walletCore: WalletCore;
+  constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
+    this.walletCore = walletCore;
   }
 
   getMaxValues(tx: ISendTransaction, percentage: number): Promise<number> {

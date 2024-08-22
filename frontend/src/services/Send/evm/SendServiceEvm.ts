@@ -3,60 +3,57 @@
 import { ISendService } from '../ISendService';
 import { ISendTransaction } from '../../../model/send-transaction';
 import { Chain } from '../../../model/chain';
-import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { IRpcService } from '../../Rpc/IRpcService';
 import { SendService } from '../SendService';
+import { GasInfo, getDefaultGasInfo } from '../../../model/gas-info';
+import { IService } from '../../IService';
+import { ServiceFactory } from '../../ServiceFactory';
+import { WalletCore } from '@trustwallet/wallet-core';
+import { Balance } from '../../../model/balance';
 
 export class SendServiceEvm extends SendService implements ISendService {
-  constructor(chain: Chain) {
-    super(chain);
+  constructor(chain: Chain, walletCore: WalletCore) {
+    super(chain, walletCore);
     this.chain = chain;
+    this.walletCore = walletCore;
   }
 
   async getMaxValues(
     tx: ISendTransaction,
     percentage: number
   ): Promise<number> {
+    const service: IService = ServiceFactory.getService(
+      this.chain,
+      this.walletCore
+    );
+    const rpcService: IRpcService = service.rpcService;
+    const balanceService = service.balanceService;
+    const balance: Balance = await balanceService.getBalance(tx.coin);
+
     try {
+      let gasInfo: GasInfo = getDefaultGasInfo();
+      if (rpcService && rpcService.getGasInfo) {
+        gasInfo = await rpcService.getGasInfo(tx.coin);
+      }
+
       if (tx.coin.isNativeToken) {
-        const rpcService: IRpcService = RpcServiceFactory.createRpcService(
-          this.chain
-        );
-
-        let gasInfo = {
-          gasPrice: BigInt(0),
-          priorityFee: BigInt(0),
-          nonce: 0,
-          fee: 0,
-        };
-        if (rpcService && rpcService.getGasInfo) {
-          gasInfo = await rpcService.getGasInfo(tx.coin);
-        }
-
-        console.log('gasInfo', gasInfo);
-
-        const amount = this.setPercentageAmount(tx.amount, percentage);
-
-        //this.calculateMaxValue()
-
-        // let evm = try await blockchainService.fetchSpecific(for: tx.coin, sendMaxAmount: tx.sendMaxAmount, isDeposit: tx.isDeposit, transactionType: tx.transactionType)
-        // let totalFeeWei = evm.fee
-        // tx.amount = "\(tx.coin.getMaxValue(totalFeeWei))" // the decimals must be truncaded otherwise the give us precisions errors
-        // setPercentageAmount(tx: tx, for: percentage)
+        const max = this.calculateMaxValue(gasInfo.fee, balance, tx.coin);
+        const amount = this.setPercentageAmount(max, percentage);
+        return amount;
       } else {
-        // tx.amount = "\(tx.coin.getMaxValue(0))"
-        // setPercentageAmount(tx: tx, for: percentage)
+        const max = this.calculateMaxValue(0, balance, tx.coin);
+        const amount = this.setPercentageAmount(max, percentage);
+        return amount;
       }
     } catch (ex) {
-      // tx.amount = "\(tx.coin.getMaxValue(0))"
-      // setPercentageAmount(tx: tx, for: percentage)
       console.error('Failed to get EVM balance, error: ', ex);
+
+      const max = this.calculateMaxValue(0, balance, tx.coin);
+      const amount = this.setPercentageAmount(max, percentage);
+      return amount;
     }
-
-    // await convertToFiat(newValue: tx.amount, tx: tx)
-
-    throw new Error('Method not implemented.');
   }
+
   loadGasInfoForSending(tx: ISendTransaction): Promise<void> {
     throw new Error('Method not implemented.');
   }
