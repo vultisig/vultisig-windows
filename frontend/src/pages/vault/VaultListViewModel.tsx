@@ -8,11 +8,10 @@ import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { WalletCore } from '@trustwallet/wallet-core';
 import { TokensStore } from '../../services/Coin/CoinList';
 import { Balance } from '../../model/balance';
+import { useCurrentVault } from '../../vault/components/CurrentVaultProvider';
 
 const useVaultListViewModel = (walletCore: WalletCore | null) => {
-  const [selectedVault, setSelectedVault] = useState<storage.Vault | null>(
-    null
-  );
+  const [selectedVault] = useCurrentVault();
   const [coins, setCoins] = useState<Map<Chain, Coin[]>>(new Map());
   const [services, setServices] = useState<IService[]>([]);
   const [balances, setBalances] = useState<Map<Coin, Balance>>(new Map());
@@ -127,8 +126,6 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
   }, [balances]);
 
   return {
-    selectedVault,
-    setSelectedVault,
     coins,
     services,
     setServices,
