@@ -8,6 +8,8 @@ export function GetDerivedPubKey(arg1:string,arg2:string,arg3:string,arg4:boolea
 
 export function KeysignECDSA(arg1:tss.KeysignRequest):Promise<tss.KeysignResponse>;
 
+export function Reshare(arg1:storage.Vault,arg2:string,arg3:string,arg4:string):Promise<storage.Vault>;
+
 export function StartKeygen(arg1:string,arg2:string,arg3:string,arg4:string,arg5:string,arg6:string):Promise<storage.Vault>;
 
 export function Startup(arg1:context.Context):Promise<void>;
