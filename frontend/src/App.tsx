@@ -14,7 +14,7 @@ const queryClient = new QueryClient();
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="w-full min-h-screen bg-primary">
+      <div className="w-full min-h-screen bg-primary h-full flex flex-col">
         <Router>
           <Routes>
             <Route path="/" index element={<OnboardingView />} />
