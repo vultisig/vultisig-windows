@@ -52,13 +52,23 @@ export const CoinBalanceItem = ({
           </ImageContainer>
 
           <VStack fullWidth alignItems="start" gap={16}>
-            <HStack fullWidth alignItems="center" gap={20}>
+            <HStack
+              fullWidth
+              alignItems="center"
+              justifyContent="space-between"
+              gap={20}
+            >
               <Text color="regular" weight="700" size={16}>
                 {name}
               </Text>
-              <Text color="regular" weight="400" size={12}>
-                {formatAmount(fromChainAmount(amount, decimals))}
-              </Text>
+              <HStack alignItems="center" gap={12}>
+                <Text color="regular" weight="400" size={12}>
+                  {formatAmount(fromChainAmount(amount, decimals))}
+                </Text>
+                <Text color="regular" weight="700" size={16}>
+                  $65,899
+                </Text>
+              </HStack>
             </HStack>
             <Text color="primary" weight="400" size={12}>
               {address}
