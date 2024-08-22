@@ -46,12 +46,17 @@ export class RpcServiceFactory {
       case Chain.ZkSync:
         return new RpcServiceZksync();
       case Chain.THORChain:
+        return new RpcServiceThorchain();
       case Chain.MayaChain:
         return new RpcServiceThorchain();
       case Chain.Bitcoin:
+        return new RpcServiceUtxo();
       case Chain.BitcoinCash:
+        return new RpcServiceUtxo();
       case Chain.Litecoin:
+        return new RpcServiceUtxo();
       case Chain.Dash:
+        return new RpcServiceUtxo();
       case Chain.Dogecoin:
         return new RpcServiceUtxo();
       case Chain.Avalanche:
