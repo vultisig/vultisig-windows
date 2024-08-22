@@ -26,7 +26,7 @@ const ImageContainer = styled.div`
   ${round};
   background: ${getColor('mist')};
   overflow: hidden;
-  font-size: 16px;
+  font-size: 14px;
 `;
 
 export const CoinBalanceItem = ({
@@ -47,7 +47,7 @@ export const CoinBalanceItem = ({
             />
           </ImageContainer>
           <VStack alignItems="start" gap={16}>
-            <Text weight="700" size={16}>
+            <Text color="regular" weight="700" size={16}>
               {name}
             </Text>
             <Text color="primary" weight="400" size={12}>
