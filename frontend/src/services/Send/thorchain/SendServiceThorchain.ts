@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { ISendService } from '../ISendService';
-import { ISendTransaction } from '../ISendTransaction';
+import { ISendTransaction } from '../../../model/send-transaction';
 
 export class SendServiceThorchain implements ISendService {
   setMaxValues(tx: ISendTransaction, percentage: number): void {

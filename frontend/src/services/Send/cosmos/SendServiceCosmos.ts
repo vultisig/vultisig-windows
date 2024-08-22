@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { ISendService } from '../ISendService';
-import { ISendTransaction } from '../ISendTransaction';
+import { ISendTransaction } from '../../../model/send-transaction';
 
 export class SendServiceCosmos implements ISendService {
   setMaxValues(tx: ISendTransaction, percentage: number): void {
