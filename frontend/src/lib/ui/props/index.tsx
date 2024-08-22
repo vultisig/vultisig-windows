@@ -8,3 +8,7 @@ export type UIComponentProps = {
   style?: React.CSSProperties;
   className?: string;
 };
+
+export type ClickableComponentProps = {
+  onClick: () => void;
+};
