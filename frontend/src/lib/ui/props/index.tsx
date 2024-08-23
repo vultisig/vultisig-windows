@@ -16,3 +16,8 @@ export type ClickableComponentProps = {
 export type ComponentWithValueProps<T> = {
   value: T;
 };
+
+export type InputProps<T> = {
+  value: T;
+  onChange: (value: T) => void;
+};

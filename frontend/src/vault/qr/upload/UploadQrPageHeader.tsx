@@ -7,8 +7,10 @@ import { sameDimensions } from '../../../lib/ui/css/sameDimensions';
 import { ChevronLeftIcon } from '../../../lib/ui/icons/ChevronLeftIcon';
 import { useNavigate } from 'react-router-dom';
 import { getColor } from '../../../lib/ui/theme/getters';
+import { HStack } from '../../../lib/ui/layout/Stack';
 
-const Container = styled.div`
+const Container = styled(HStack)`
+  align-items: center;
   position: relative;
   height: 60px;
   width: 100%;
