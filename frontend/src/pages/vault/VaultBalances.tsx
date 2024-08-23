@@ -42,6 +42,7 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
                           address={coin.address}
                           amount={amount}
                           decimals={coin.decimals}
+                          chainId={coin.priceProviderId}
                           icon={icon}
                           onClick={() => {
                             navigate(`/vault/item/detail/${chain}`, {

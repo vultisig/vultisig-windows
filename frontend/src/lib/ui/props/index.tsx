@@ -12,3 +12,7 @@ export type UIComponentProps = {
 export type ClickableComponentProps = {
   onClick: () => void;
 };
+
+export type ComponentWithValueProps<T> = {
+  value: T;
+};

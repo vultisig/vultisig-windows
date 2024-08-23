@@ -13,6 +13,7 @@ import { PictureIcon } from '../../lib/ui/icons/PictureIcon';
 import { Text } from '../../lib/ui/text';
 import { formatAmount } from '../../lib/utils/formatAmount';
 import { fromChainAmount } from '../../lib/chain/utils/fromChainAmount';
+import { CoinUsdBalance } from './CoinUsdBalance';
 
 type CoinBalanceItemProps = ClickableComponentProps & {
   name: string;
@@ -20,6 +21,7 @@ type CoinBalanceItemProps = ClickableComponentProps & {
   amount: number;
   decimals: number;
   icon?: string;
+  chainId: string;
 };
 
 const ImageContainer = styled.div`
@@ -38,6 +40,7 @@ export const CoinBalanceItem = ({
   amount,
   decimals,
   onClick,
+  chainId,
 }: CoinBalanceItemProps) => {
   return (
     <UnstyledButton onClick={onClick}>
@@ -66,7 +69,13 @@ export const CoinBalanceItem = ({
                   {formatAmount(fromChainAmount(amount, decimals))}
                 </Text>
                 <Text color="regular" weight="700" size={16}>
-                  $65,899
+                  {amount > 0 ? (
+                    <CoinUsdBalance
+                      value={{ amount, decimals, chainId, id: address }}
+                    />
+                  ) : (
+                    `$${formatAmount(0)}`
+                  )}
                 </Text>
               </HStack>
             </HStack>
