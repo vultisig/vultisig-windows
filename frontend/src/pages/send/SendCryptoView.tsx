@@ -50,8 +50,8 @@ const SendCryptoView: React.FC = () => {
   }, [walletCore, chain, sendCryptoViewModel]);
 
   return (
-    <div className="relative text-white p-4">
-      {/* TODO: Make this a component */}
+    <div className="relative text-white p-4 min-h-screen flex flex-col">
+      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         {/* Back Button */}
         <button
@@ -70,7 +70,8 @@ const SendCryptoView: React.FC = () => {
         </button>
       </div>
 
-      <div className="flex flex-col space-y-4 rounded-lg p-4">
+      {/* Form */}
+      <div className="flex flex-col space-y-4 rounded-lg p-4 flex-grow">
         <div className="flex flex-col space-y-2">
           <label htmlFor="fromAddress" className="text-neutral-0 text-sm">
             From:
@@ -83,7 +84,6 @@ const SendCryptoView: React.FC = () => {
             className="text-body-12 font-menlo text-neutral-0 h-12 w-full text-left px-3 bg-blue-600 rounded-lg overflow-hidden"
           />
         </div>
-
         <div className="flex flex-col space-y-2">
           <label htmlFor="toAddress" className="text-neutral-0 text-sm">
             To:
@@ -95,14 +95,20 @@ const SendCryptoView: React.FC = () => {
             className="text-body-12 font-menlo text-neutral-0 placeholder-neutral-300 h-12 w-full px-3 bg-blue-600 rounded-lg"
           />
         </div>
-
         {sendCryptoViewModel.showMemoField && (
           <div className="flex flex-col space-y-2">
             <label htmlFor="memo">Memo (optional):</label>
-            <input id="memo" type="text" value={tx.memo} />
+            <input
+              id="memo"
+              type="text"
+              value={tx.memo}
+              className="text-body-12 font-menlo text-neutral-0 placeholder-neutral-300 h-12 w-full px-3 bg-blue-600 rounded-lg"
+              // onChange={e =>
+              //   sendCryptoViewModel.handleMemoChange(e.target.value)
+              // }
+            />
           </div>
         )}
-
         <div className="flex items-center">
           <label htmlFor="amount" className="text-neutral-0 text-sm">
             Amount:
@@ -125,7 +131,6 @@ const SendCryptoView: React.FC = () => {
             50%
           </button>
         </div>
-
         <div className="flex flex-col space-y-2">
           <div className="relative">
             <input
@@ -146,7 +151,6 @@ const SendCryptoView: React.FC = () => {
             </button>
           </div>
         </div>
-
         <div className="flex flex-col space-y-2">
           <label htmlFor="amountInFiat" className="text-neutral-0 text-sm">
             Amount (in Fiat):
@@ -156,24 +160,21 @@ const SendCryptoView: React.FC = () => {
               id="amountInFiat"
               type="text"
               value={tx.amountInFiat}
-              onChange={e =>
-                sendCryptoViewModel.handleAmountChange(e.target.value)
-              }
+              // onChange={e =>
+              //   sendCryptoViewModel.handleFiatAmountChange(e.target.value)
+              // }
               className="text-body-12 font-menlo text-neutral-0 placeholder-neutral-300 h-12 w-full px-3 bg-blue-600 rounded-lg"
               placeholder="Enter Amount In Fiat"
             />
           </div>
         </div>
-
-        <div className="flex flex-col h-full">
-          <div className="flex-grow"></div> {/* Spacer */}
-          <button
-            className="mt-4 text-body-14 font-montserrat font-bold text-blue-600 placeholder-neutral-300 h-12 w-full px-3 bg-turquoise-600 rounded-full"
-            onClick={sendCryptoViewModel.validateForm}
-          >
-            Continue
-          </button>
-        </div>
+        <div className="flex-grow"></div> {/* Spacer */}
+        <button
+          className="mt-4 text-body-14 font-montserrat font-bold text-blue-600 placeholder-neutral-300 h-12 w-full px-3 bg-turquoise-600 rounded-full"
+          onClick={sendCryptoViewModel.validateForm}
+        >
+          Continue
+        </button>
       </div>
 
       {sendCryptoViewModel.isLoading && <div>Loading...</div>}
