@@ -8,33 +8,37 @@ import VaultItemView from './pages/vault/VaultItemView';
 import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { VaultPage } from './pages/vault/VaultPage';
+import { ThemeProvider } from 'styled-components';
+import { darkTheme } from './lib/ui/theme/darkTheme';
 
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="w-full min-h-screen bg-primary h-full flex flex-col">
-        <Router>
-          <Routes>
-            <Route path="/" index element={<OnboardingView />} />
-            <Route path="/vault/setup" element={<SetupVaultView />} />
-            <Route path="/vault/import" element={<ImportVaultView />} />
-            <Route
-              path="/vault/list"
-              element={
-                <InitializedWalletOnly>
-                  <VaultPage />
-                </InitializedWalletOnly>
-              }
-            />
-            <Route
-              path="/vault/item/detail/:chain"
-              element={<VaultItemView />}
-            />
-          </Routes>
-        </Router>
-      </div>
+      <ThemeProvider theme={darkTheme}>
+        <div className="w-full min-h-screen bg-primary h-full flex flex-col">
+          <Router>
+            <Routes>
+              <Route path="/" index element={<OnboardingView />} />
+              <Route path="/vault/setup" element={<SetupVaultView />} />
+              <Route path="/vault/import" element={<ImportVaultView />} />
+              <Route
+                path="/vault/list"
+                element={
+                  <InitializedWalletOnly>
+                    <VaultPage />
+                  </InitializedWalletOnly>
+                }
+              />
+              <Route
+                path="/vault/item/detail/:chain"
+                element={<VaultItemView />}
+              />
+            </Routes>
+          </Router>
+        </div>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };
