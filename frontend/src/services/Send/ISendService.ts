@@ -1,11 +1,12 @@
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
+import { GasInfo } from '../../model/gas-info';
 import { ISendTransaction } from '../../model/send-transaction';
 
 export interface ISendService {
   calculateMaxValue(fee: number, balance: Balance, coin: Coin): number;
   getMaxValues(tx: ISendTransaction, percentage: number): Promise<number>;
-  loadGasInfoForSending(tx: ISendTransaction): Promise<void>;
+  loadGasInfoForSending(tx: ISendTransaction): Promise<GasInfo>;
   getPriceRate(tx: ISendTransaction): Promise<number>;
   convertFiatToCoin(newValue: string, coin: Coin, priceRate: number): number;
   convertToFiat(newValue: string, priceRate: number): number;

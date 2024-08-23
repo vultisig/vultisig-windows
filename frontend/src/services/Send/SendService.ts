@@ -6,6 +6,9 @@ import { Chain } from '../../model/chain';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
 import { WalletCore } from '@trustwallet/wallet-core';
+import { ServiceFactory } from '../ServiceFactory';
+import { IService } from '../IService';
+import { GasInfo, getDefaultGasInfo } from '../../model/gas-info';
 
 export class SendService implements ISendService {
   chain: Chain;
@@ -19,8 +22,18 @@ export class SendService implements ISendService {
     throw new Error('Method not implemented.');
   }
 
-  loadGasInfoForSending(tx: ISendTransaction): Promise<void> {
-    throw new Error('Method not implemented.');
+  async loadGasInfoForSending(tx: ISendTransaction): Promise<GasInfo> {
+    const service: IService = ServiceFactory.getService(
+      this.chain,
+      this.walletCore
+    );
+
+    try {
+      return await service.rpcService.getGasInfo(tx.coin);
+    } catch (ex) {
+      console.error('Failed to get EVM balance, error: ', ex);
+      return getDefaultGasInfo();
+    }
   }
 
   getPriceRate(tx: ISendTransaction): Promise<number> {

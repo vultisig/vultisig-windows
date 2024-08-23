@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -13,7 +13,8 @@ import {
 import { Balance } from '../../model/balance';
 
 const VaultItemView: React.FC = () => {
-  const { chain } = useParams<{ chain: string }>(); // Get the chain from the URL
+  const navigate = useNavigate();
+  const { chain } = useParams<{ chain: string }>();
   const location = useLocation();
   const { coins, balances } = location.state as {
     coins: Coin[];
@@ -23,6 +24,16 @@ const VaultItemView: React.FC = () => {
   // Separate native token and other tokens
   const nativeToken = coins.find(coin => coin.isNativeToken);
   const otherTokens = coins.filter(coin => !coin.isNativeToken);
+
+  const handleChainClick = (
+    chain: string,
+    coin: Coin,
+    balances: Map<Coin, Balance>
+  ) => {
+    navigate(`/vault/item/send/${chain}`, {
+      state: { coin: coin, balances },
+    });
+  };
 
   return (
     <div className="relative text-white p-4">
@@ -87,7 +98,9 @@ const VaultItemView: React.FC = () => {
 
         {/* Display native token */}
         {nativeToken && (
-          <div>
+          <div
+            onClick={() => handleChainClick(chain ?? '', nativeToken, balances)}
+          >
             <div className="flex items-center px-4">
               <div className="flex items-center justify-center w-9 h-9 bg-white text-black text-xs rounded-full">
                 {nativeToken.ticker}
@@ -113,7 +126,10 @@ const VaultItemView: React.FC = () => {
 
         {/* Display other tokens */}
         {otherTokens.map((coin, index) => (
-          <div key={index}>
+          <div
+            key={index}
+            onClick={() => handleChainClick(chain ?? '', coin, balances)}
+          >
             <div className="flex items-center px-4">
               <div className="flex items-center justify-center w-9 h-9 bg-white text-black text-xs rounded-full">
                 {coin.ticker}

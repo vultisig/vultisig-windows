@@ -11,3 +11,17 @@ export interface ISendTransaction {
   coin: Coin;
   transactionType: string; // Used for deposits
 }
+
+export function getDefaultSendTransaction(): ISendTransaction {
+  return {
+    fromAddress: '',
+    toAddress: '',
+    amount: 0,
+    amountInFiat: 0,
+    memo: '',
+    gas: 0,
+    sendMaxAmount: false,
+    coin: new Coin(),
+    transactionType: '',
+  };
+}
