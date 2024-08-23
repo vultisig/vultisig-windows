@@ -73,6 +73,23 @@ const SendCryptoView: React.FC = () => {
       {/* Form */}
       <div className="flex flex-col space-y-4 rounded-lg p-4 flex-grow">
         <div className="flex flex-col space-y-2">
+          <div className="text-body-12 font-menlo text-neutral-0 placeholder-neutral-300 h-12 w-full px-3 bg-blue-600 rounded-lg">
+            <div className="flex items-center justify-between pt-3">
+              <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-center w-6 h-6 bg-white text-black rounded-full">
+                  {coin.ticker?.substring(0, 3)}
+                </div>
+                <div className="flex flex-col ml-4">
+                  <div className="chain-name">{coin.ticker}</div>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                balance: {balances.get(coin)?.decimalAmount}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col space-y-2">
           <label htmlFor="fromAddress" className="text-neutral-0 text-sm">
             From:
           </label>
@@ -93,6 +110,7 @@ const SendCryptoView: React.FC = () => {
             type="text"
             value={tx.toAddress}
             className="text-body-12 font-menlo text-neutral-0 placeholder-neutral-300 h-12 w-full px-3 bg-blue-600 rounded-lg"
+            placeholder="Enter Address"
           />
         </div>
         {sendCryptoViewModel.showMemoField && (
