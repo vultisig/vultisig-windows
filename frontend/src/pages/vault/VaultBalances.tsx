@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chain } from '../../model/chain';
@@ -38,7 +39,7 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
                       return (
                         <CoinBalanceItem
                           key={index}
-                          name={coin.ticker}
+                          name={coin.chain}
                           address={coin.address}
                           amount={amount}
                           decimals={coin.decimals}

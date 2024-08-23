@@ -12,6 +12,8 @@ interface SendCryptoViewModel {
   showAlert: boolean;
   errorMessage: string;
   amount: string;
+  amountInFiat: string;
+  toAddress: string;
   isLoading: boolean;
   isCoinPickerActive: boolean;
   showMemoField: boolean;
@@ -22,6 +24,8 @@ interface SendCryptoViewModel {
   moveToNextView(): void;
   handleCoinSelect(coin: Coin): void;
   handleAmountChange(newAmount: string): void;
+  handleAmountInFiatChange(amountInFiat: string): void;
+  handleToAddressChange(address: string): void;
   handleMaxPressed(percentage: number): void;
   setLoading(isLoading: boolean): void;
   setCoinPickerActive(isActive: boolean): void;
@@ -37,6 +41,8 @@ export function useSendCryptoViewModel(
   const [showAlert, setShowAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [amount, setAmount] = useState('');
+  const [amountInFiat, setAmountInFiat] = useState('');
+  const [toAddress, setToAddress] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [isCoinPickerActive, setCoinPickerActive] = useState(false);
   const [showMemoField, setShowMemoField] = useState(false);
@@ -68,6 +74,15 @@ export function useSendCryptoViewModel(
     convertToFiat(newAmount);
   };
 
+  const handleAmountInFiatChange = (amontInFiat: string) => {
+    setAmountInFiat(amontInFiat);
+    convertToFiat(amontInFiat);
+  };
+
+  const handleToAddressChange = (toAddress: string) => {
+    setToAddress(toAddress);
+  };
+
   const handleMaxPressed = (percentage: number) => {
     setMaxValues(percentage);
   };
@@ -78,6 +93,8 @@ export function useSendCryptoViewModel(
     showAlert,
     errorMessage,
     amount,
+    amountInFiat,
+    toAddress,
     isLoading,
     isCoinPickerActive,
     showMemoField,
@@ -87,6 +104,8 @@ export function useSendCryptoViewModel(
     moveToNextView,
     handleCoinSelect,
     handleAmountChange,
+    handleAmountInFiatChange,
+    handleToAddressChange,
     handleMaxPressed,
     setLoading,
     setCoinPickerActive,
