@@ -165,8 +165,17 @@ const SendCryptoView: React.FC = () => {
           </div>
         </div>
 
-        <button onClick={sendCryptoViewModel.validateForm}>Continue</button>
+        <div className="flex flex-col h-full">
+          <div className="flex-grow"></div> {/* Spacer */}
+          <button
+            className="mt-4 text-body-14 font-montserrat font-bold text-blue-600 placeholder-neutral-300 h-12 w-full px-3 bg-turquoise-600 rounded-full"
+            onClick={sendCryptoViewModel.validateForm}
+          >
+            Continue
+          </button>
+        </div>
       </div>
+
       {sendCryptoViewModel.isLoading && <div>Loading...</div>}
       {sendCryptoViewModel.errorMessage && (
         <div>{sendCryptoViewModel.errorMessage}</div>
