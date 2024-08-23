@@ -7,8 +7,19 @@ import { useCurrentVault } from '../../vault/components/CurrentVaultProvider';
 import { Match } from '../../lib/ui/base/Match';
 import { useTranslation } from 'react-i18next';
 import { match } from '../../lib/utils/match';
+import styled from 'styled-components';
+import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt';
 
 type VaultPageView = 'balances' | 'vaults';
+
+const PositionQrPrompt = styled.div`
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  z-index: 1;
+`;
 
 export const VaultPageContent: React.FC = () => {
   const walletCore = useWalletCore();
@@ -41,11 +52,16 @@ export const VaultPageContent: React.FC = () => {
         <Match
           value={view}
           balances={() => (
-            <VaultBalances
-              coins={coins}
-              balances={balances}
-              priceRates={priceRates}
-            />
+            <>
+              <PositionQrPrompt>
+                <ProvideQrPrompt />
+              </PositionQrPrompt>
+              <VaultBalances
+                coins={coins}
+                balances={balances}
+                priceRates={priceRates}
+              />
+            </>
           )}
           vaults={() => (
             <VaultList
