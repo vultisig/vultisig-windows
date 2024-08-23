@@ -1,24 +1,30 @@
 import React, { useEffect } from 'react';
-import { ISendTransaction } from '../../model/send-transaction';
+import {
+  getDefaultSendTransaction,
+  ISendTransaction,
+} from '../../model/send-transaction';
 import { ServiceFactory } from '../../services/ServiceFactory';
 import { useWalletCore } from '../../main';
-import { Chain } from '../../model/chain';
-import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { useSendCryptoViewModel } from './SendCryptoViewModel';
+import { useLocation, useParams } from 'react-router-dom';
+import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Balance } from '../../model/balance';
+import { ChainUtils } from '../../model/chain';
 
-interface SendCryptoDetailsViewProps {
-  tx: ISendTransaction;
-  vault: Vault;
-  chain: Chain;
-}
-
-const SendCryptoView: React.FC<SendCryptoDetailsViewProps> = ({
-  tx,
-  vault,
-  chain,
-}) => {
+const SendCryptoView: React.FC = () => {
   const walletCore = useWalletCore();
-  const sendCryptoViewModel = useSendCryptoViewModel(tx, vault);
+  const { chain } = useParams<{ chain: string }>();
+  const location = useLocation();
+  const { coin, balances } = location.state as {
+    coin: Coin;
+    balances: Map<Coin, Balance>;
+  };
+
+  const tx: ISendTransaction = getDefaultSendTransaction();
+  tx.coin = coin;
+  tx.fromAddress = coin.address;
+
+  const sendCryptoViewModel = useSendCryptoViewModel(tx, balances);
 
   useEffect(() => {
     if (!walletCore) {
@@ -26,7 +32,18 @@ const SendCryptoView: React.FC<SendCryptoDetailsViewProps> = ({
       return;
     }
 
-    const service = ServiceFactory.getService(chain, walletCore);
+    if (!chain) {
+      console.error('Chain is not provided');
+      return;
+    }
+
+    const chainEnum = ChainUtils.stringToChain(chain);
+    if (!chainEnum) {
+      console.error('Chain is not supported');
+      return;
+    }
+
+    const service = ServiceFactory.getService(chainEnum, walletCore);
     sendCryptoViewModel.setService(service);
   }, [walletCore, chain, sendCryptoViewModel]);
 

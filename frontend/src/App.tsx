@@ -8,6 +8,7 @@ import VaultItemView from './pages/vault/VaultItemView';
 import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { VaultPage } from './pages/vault/VaultPage';
+import SendCryptoView from './pages/send/SendCryptoView';
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,10 @@ const App: React.FC = () => {
             <Route
               path="/vault/item/detail/:chain"
               element={<VaultItemView />}
+            />
+            <Route
+              path="/vault/item/send/:chain"
+              element={<SendCryptoView />}
             />
           </Routes>
         </Router>

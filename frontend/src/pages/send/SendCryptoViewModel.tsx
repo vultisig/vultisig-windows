@@ -4,10 +4,10 @@ import { IService } from '../../services/IService';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { ISendTransaction } from '../../model/send-transaction';
+import { Balance } from '../../model/balance';
 
 interface SendCryptoViewModel {
   tx: ISendTransaction;
-  vault: Vault;
   service: IService | null;
   showAlert: boolean;
   errorMessage: string;
@@ -31,7 +31,7 @@ interface SendCryptoViewModel {
 
 export function useSendCryptoViewModel(
   tx: ISendTransaction,
-  vault: Vault
+  balances: Map<Coin, Balance>
 ): SendCryptoViewModel {
   const [service, setService] = useState<IService | null>(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -74,7 +74,6 @@ export function useSendCryptoViewModel(
 
   return {
     tx,
-    vault,
     service,
     showAlert,
     errorMessage,
