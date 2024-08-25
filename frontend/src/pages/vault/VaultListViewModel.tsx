@@ -9,12 +9,23 @@ import { WalletCore } from '@trustwallet/wallet-core';
 import { TokensStore } from '../../services/Coin/CoinList';
 import { Balance } from '../../model/balance';
 import { useCurrentVault } from '../../vault/components/CurrentVaultProvider';
+import { Rate } from '../../model/price-rate';
 
 const useVaultListViewModel = (walletCore: WalletCore | null) => {
   const [selectedVault] = useCurrentVault();
   const [coins, setCoins] = useState<Map<Chain, Coin[]>>(new Map());
+
+  const [servicesMap, setServicesMap] = useState<Map<Chain, IService>>(
+    new Map()
+  );
+
   const [services, setServices] = useState<IService[]>([]);
   const [balances, setBalances] = useState<Map<Coin, Balance>>(new Map());
+
+  const [priceProviderIds, setPriceProviderIds] = useState<Map<Coin, string>>(
+    new Map()
+  );
+  const [priceRates, setPriceRates] = useState<Map<Coin, Rate[]>>(new Map());
 
   const fetchCoins = async (vault: storage.Vault) => {
     if (!walletCore) {
@@ -89,6 +100,16 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
               })
             );
           }
+
+          const priceProviderId =
+            service?.priceService?.getPriceProviderId(coin);
+          if (priceProviderId) {
+            setPriceProviderIds(prevPriceProviderIds => {
+              const updatedPriceProviderIds = new Map(prevPriceProviderIds);
+              updatedPriceProviderIds.set(coin, priceProviderId);
+              return updatedPriceProviderIds;
+            });
+          }
         });
       });
 
@@ -107,6 +128,7 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
       });
     });
 
+    setServicesMap(serviceMap);
     setServices(Array.from(serviceMap.values()));
   };
 
@@ -125,12 +147,26 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
     console.log('Balances state updated:', balances);
   }, [balances]);
 
+  useEffect(() => {
+    console.log('Price Provider Ids state updated:', priceProviderIds);
+  }, [priceProviderIds]);
+
+  useEffect(() => {
+    console.log('Service Map state updated:', servicesMap);
+  }, [servicesMap]);
+
   return {
     coins,
     services,
     setServices,
     balances,
     setBalances,
+    priceProviderIds,
+    setPriceProviderIds,
+    priceRates,
+    setPriceRates,
+    servicesMap,
+    setServicesMap,
   };
 };
 
