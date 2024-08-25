@@ -5,6 +5,7 @@ import { PriceService } from './PriceService';
 import { Rate } from '../../model/price-rate';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
+import { StorageService, StoreName } from '../Storage/StorageService';
 import { Endpoint } from '../Endpoint';
 
 export class PriceServiceEvm extends PriceService implements IPriceService {
@@ -15,11 +16,32 @@ export class PriceServiceEvm extends PriceService implements IPriceService {
     super(chain, walletCore);
     this.chain = chain;
     this.walletCore = walletCore;
+    this.storageService = new StorageService<{
+      prices: Map<CoinMeta, Rate[]>;
+      expiryDate: Date;
+    }>(StoreName.PRICE);
   }
 
   async getPrices(coins: CoinMeta[]): Promise<Map<CoinMeta, Rate[]>> {
-    console.log('getPrices', coins);
+    const cacheKey = JSON.stringify(this.chain);
 
+    if (this.storageService === null) {
+      this.storageService = new StorageService<{
+        prices: Map<CoinMeta, Rate[]>;
+        expiryDate: Date;
+      }>(StoreName.PRICE);
+    }
+
+    // Check the cache first
+    const cachedData = await this.storageService.getFromStorage(cacheKey);
+    if (cachedData) {
+      const { prices, expiryDate } = cachedData;
+      if (new Date(expiryDate) > new Date()) {
+        return prices;
+      }
+    }
+
+    // Fetch the prices if not cached
     const nativeCoins = coins.filter(
       coin => coin.isNativeToken && coin.priceProviderId
     );
@@ -27,14 +49,16 @@ export class PriceServiceEvm extends PriceService implements IPriceService {
       coin => !coin.isNativeToken && coin.contractAddress
     );
 
-    const nativePricesPromise = this.getNativePrices(nativeCoins);
-    const tokenPricesPromise = this.getTokenPrices(tokenCoins);
-
     const [nativePrices, tokenPrices] = await Promise.all([
-      nativePricesPromise,
-      tokenPricesPromise,
+      this.getNativePrices(nativeCoins),
+      this.getTokenPrices(tokenCoins),
     ]);
+
     const prices = new Map([...nativePrices, ...tokenPrices]);
+
+    // Cache the fetched prices with an expiration date
+    const expiryDate = new Date(Date.now() + 60000 * 60); // 60 minutes
+    await this.storageService.saveToStorage(cacheKey, { prices, expiryDate });
 
     return prices;
   }
@@ -53,7 +77,6 @@ export class PriceServiceEvm extends PriceService implements IPriceService {
       Object.values(Fiat)
         .map(m => m.toString().toLowerCase())
         .join(',')
-        .toLowerCase()
     );
 
     const response = await fetch(endpoint);

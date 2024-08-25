@@ -6,14 +6,23 @@ import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
 import { Endpoint } from '../Endpoint';
 import { ChainRates, CurrencyRates } from '../../model/chain-rates';
+import { StorageService, StoreName } from '../Storage/StorageService';
 
 export class PriceService implements IPriceService {
   chain: Chain;
   walletCore: WalletCore;
+  storageService: StorageService<{
+    prices: Map<CoinMeta, Rate[]>;
+    expiryDate: Date;
+  }>;
 
   constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
     this.walletCore = walletCore;
+    this.storageService = new StorageService<{
+      prices: Map<CoinMeta, Rate[]>;
+      expiryDate: Date;
+    }>(StoreName.PRICE);
   }
 
   async getNativePrices(coins: CoinMeta[]): Promise<Map<CoinMeta, Rate[]>> {
@@ -40,16 +49,33 @@ export class PriceService implements IPriceService {
 
     const json = await response.json();
 
-    // console.log('PriceService.getNativePrices', endpoint);
-    // console.log('PriceService.getNativePrices', json);
-
     return this.mapRates(json, coins);
   }
 
   async getPrices(coins: CoinMeta[]): Promise<Map<CoinMeta, Rate[]>> {
+    const cacheKey = JSON.stringify(this.chain);
+
+    // Check the cache first
+    const cachedData = await this.storageService.getFromStorage(cacheKey);
+    if (cachedData) {
+      const { prices, expiryDate } = cachedData;
+      if (new Date(expiryDate) > new Date()) {
+        return prices;
+      }
+    }
+
+    // Fetch the prices if not cached
     const nativeCoins = coins.filter(coin => coin.isNativeToken);
-    const nativePricesPromise = this.getNativePrices(nativeCoins);
-    return await nativePricesPromise;
+    const nativePrices = await this.getNativePrices(nativeCoins);
+
+    // Cache the fetched prices with an expiration date
+    const expiryDate = new Date(Date.now() + 60000 * 60); // 60 minutes
+    await this.storageService.saveToStorage(cacheKey, {
+      prices: nativePrices,
+      expiryDate,
+    });
+
+    return nativePrices;
   }
 
   mapRates(response: ChainRates, coins: CoinMeta[]): Map<CoinMeta, Rate[]> {
@@ -60,13 +86,6 @@ export class PriceService implements IPriceService {
         coinMeta.isNativeToken && coinMeta.priceProviderId
           ? response[coinMeta.priceProviderId]
           : response[coinMeta.contractAddress];
-
-      console.log(
-        coinMeta.isNativeToken
-          ? 'PriceService.mapRates.priceProviderId'
-          : 'PriceService.mapRates.contractAddress',
-        fiatMap
-      );
 
       if (fiatMap) {
         const rateList: Rate[] = [];
