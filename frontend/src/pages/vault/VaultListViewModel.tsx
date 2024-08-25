@@ -59,22 +59,39 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
 
       const priceRatesPromise = service.priceService.getPrices(tokensPerChain);
       if (priceRatesPromise) {
-        priceRatePromises.push(
-          priceRatesPromise.then((priceRates: Map<CoinMeta, Rate[]>) => {
-            priceRates.forEach((rates, coinMeta) => {
-              setPriceRates(prevPriceRates => {
-                const updatedPriceRates = new Map(prevPriceRates);
-                const existingRates = updatedPriceRates.get(coinMeta) || [];
-                // Use a Set to remove duplicates
-                const uniqueRates = Array.from(
-                  new Set([...existingRates, ...rates])
-                );
-                updatedPriceRates.set(coinMeta, uniqueRates);
-                return updatedPriceRates;
-              });
-            });
-          })
+        console.log(
+          `Fetching prices for chain ${chain} with tokens:`,
+          tokensPerChain
         );
+        priceRatePromises.push(
+          priceRatesPromise
+            .then((priceRates: Map<CoinMeta, Rate[]>) => {
+              console.log(
+                `Received price rates for chain ${chain}:`,
+                priceRates
+              );
+              priceRates.forEach((rates, coinMeta) => {
+                setPriceRates(prevPriceRates => {
+                  const updatedPriceRates = new Map(prevPriceRates);
+                  const existingRates = updatedPriceRates.get(coinMeta) || [];
+                  // Use a Set to remove duplicates
+                  const uniqueRates = Array.from(
+                    new Set([...existingRates, ...rates])
+                  );
+                  updatedPriceRates.set(coinMeta, uniqueRates);
+                  return updatedPriceRates;
+                });
+              });
+            })
+            .catch(error => {
+              console.error(
+                `Failed to fetch prices for chain ${chain}:`,
+                error
+              );
+            })
+        );
+      } else {
+        console.error(`getPrices returned undefined for chain ${chain}`);
       }
 
       const coinPromises = tokensPerChain.map(async f => {
@@ -168,6 +185,10 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
   useEffect(() => {
     console.log('Service Map state updated:', servicesMap);
   }, [servicesMap]);
+
+  useEffect(() => {
+    console.log('Price Rates state updated:', priceRates);
+  }, [priceRates]);
 
   return {
     coins,

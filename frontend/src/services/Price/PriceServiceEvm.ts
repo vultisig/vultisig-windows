@@ -18,8 +18,14 @@ export class PriceServiceEvm extends PriceService implements IPriceService {
   }
 
   async getPrices(coins: CoinMeta[]): Promise<Map<CoinMeta, Rate[]>> {
-    const nativeCoins = coins.filter(coin => coin.isNativeToken);
-    const tokenCoins = coins.filter(coin => !coin.isNativeToken);
+    console.log('getPrices', coins);
+
+    const nativeCoins = coins.filter(
+      coin => coin.isNativeToken && coin.priceProviderId
+    );
+    const tokenCoins = coins.filter(
+      coin => !coin.isNativeToken && coin.contractAddress
+    );
 
     const nativePricesPromise = this.getNativePrices(nativeCoins);
     const tokenPricesPromise = this.getTokenPrices(tokenCoins);
@@ -35,11 +41,17 @@ export class PriceServiceEvm extends PriceService implements IPriceService {
 
   async getTokenPrices(coins: CoinMeta[]): Promise<Map<CoinMeta, Rate[]>> {
     const contractAddresses = coins.map(coin => coin.contractAddress);
+
+    if (contractAddresses.length === 0) {
+      console.error('No contractAddresses to fetch prices for', coins);
+      return new Map();
+    }
+
     const endpoint = Endpoint.fetchTokenPrice(
       this.coinGeckoPlatform(this.chain),
       contractAddresses,
       Object.values(Fiat)
-        .map(m => m.toLowerCase())
+        .map(m => m.toString().toLowerCase())
         .join(',')
         .toLowerCase()
     );
@@ -47,7 +59,7 @@ export class PriceServiceEvm extends PriceService implements IPriceService {
     const response = await fetch(endpoint);
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch prices from ${endpoint}`);
+      console.error(`Failed to fetch prices from ${endpoint}`);
     }
 
     const json = await response.json();

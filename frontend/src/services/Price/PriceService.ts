@@ -5,6 +5,7 @@ import { IPriceService } from './IPriceService';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
 import { Endpoint } from '../Endpoint';
+import { ChainRates, CurrencyRates } from '../../model/chain-rates';
 
 export class PriceService implements IPriceService {
   chain: Chain;
@@ -17,10 +18,16 @@ export class PriceService implements IPriceService {
 
   async getNativePrices(coins: CoinMeta[]): Promise<Map<CoinMeta, Rate[]>> {
     const coinProviderIds = coins.map(coin => coin.priceProviderId);
+
+    if (coinProviderIds.length === 0) {
+      console.error('No coinProviderIds to fetch prices for', coins);
+      return new Map();
+    }
+
     const endpoint = Endpoint.fetchCryptoPrices(
       coinProviderIds.join(','),
       Object.values(Fiat)
-        .map(m => m.toLowerCase())
+        .map(m => m.toString().toLowerCase())
         .join(',')
         .toLowerCase()
     );
@@ -28,10 +35,13 @@ export class PriceService implements IPriceService {
     const response = await fetch(endpoint);
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch prices from ${endpoint}`);
+      console.error(`Failed to fetch prices from ${endpoint}`);
     }
 
     const json = await response.json();
+
+    console.log('PriceService.getNativePrices', endpoint);
+    console.log('PriceService.getNativePrices', json);
 
     return this.mapRates(json, coins);
   }
@@ -42,23 +52,31 @@ export class PriceService implements IPriceService {
     return await nativePricesPromise;
   }
 
-  // This function maps the API response to a Map of CoinMeta to Rate[].
-  mapRates(
-    response: { [key: string]: { [key: string]: number } },
-    coins: CoinMeta[]
-  ): Map<CoinMeta, Rate[]> {
+  mapRates(response: ChainRates, coins: CoinMeta[]): Map<CoinMeta, Rate[]> {
     const rates = new Map<CoinMeta, Rate[]>();
 
     coins.forEach(coinMeta => {
-      const fiatMap = response[coinMeta.priceProviderId];
+      const fiatMap =
+        coinMeta.isNativeToken && coinMeta.priceProviderId
+          ? response[coinMeta.priceProviderId]
+          : response[coinMeta.contractAddress];
+
+      console.log(
+        coinMeta.isNativeToken
+          ? 'PriceService.mapRates.priceProviderId'
+          : 'PriceService.mapRates.contractAddress',
+        fiatMap
+      );
+
       if (fiatMap) {
         const rateList: Rate[] = [];
 
         for (const fiat of Object.values(Fiat)) {
-          if (fiatMap[fiat] !== undefined) {
+          const lowerCaseFiat = fiat.toLowerCase();
+          if (fiatMap[lowerCaseFiat as keyof CurrencyRates] !== undefined) {
             rateList.push({
               fiat,
-              value: fiatMap[fiat.toLowerCase()],
+              value: fiatMap[lowerCaseFiat as keyof CurrencyRates],
               expiryDate: new Date(Date.now() + 60000 * 60),
             });
           }
