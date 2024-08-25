@@ -59,17 +59,17 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
 
       const priceRatesPromise = service.priceService.getPrices(tokensPerChain);
       if (priceRatesPromise) {
-        console.log(
-          `Fetching prices for chain ${chain} with tokens:`,
-          tokensPerChain
-        );
+        // console.log(
+        //   `Fetching prices for chain ${chain} with tokens:`,
+        //   tokensPerChain
+        // );
         priceRatePromises.push(
           priceRatesPromise
             .then((priceRates: Map<CoinMeta, Rate[]>) => {
-              console.log(
-                `Received price rates for chain ${chain}:`,
-                priceRates
-              );
+              // console.log(
+              //   `Received price rates for chain ${chain}:`,
+              //   priceRates
+              // );
               priceRates.forEach((rates, coinMeta) => {
                 setPriceRates(prevPriceRates => {
                   const updatedPriceRates = new Map(prevPriceRates);
@@ -169,21 +169,21 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
 
   useEffect(() => {
     if (selectedVault) {
-      console.log('Selected vault changed:', selectedVault);
+      // console.log('Selected vault changed:', selectedVault);
       fetchCoins(selectedVault);
     }
   }, [selectedVault]);
 
   useEffect(() => {
-    console.log('Coins state updated:', coins);
+    // console.log('Coins state updated:', coins);
   }, [coins]);
 
   useEffect(() => {
-    console.log('Balances state updated:', balances);
+    // console.log('Balances state updated:', balances);
   }, [balances]);
 
   useEffect(() => {
-    console.log('Service Map state updated:', servicesMap);
+    // console.log('Service Map state updated:', servicesMap);
   }, [servicesMap]);
 
   useEffect(() => {

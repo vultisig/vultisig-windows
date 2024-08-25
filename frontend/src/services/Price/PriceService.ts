@@ -40,8 +40,8 @@ export class PriceService implements IPriceService {
 
     const json = await response.json();
 
-    console.log('PriceService.getNativePrices', endpoint);
-    console.log('PriceService.getNativePrices', json);
+    // console.log('PriceService.getNativePrices', endpoint);
+    // console.log('PriceService.getNativePrices', json);
 
     return this.mapRates(json, coins);
   }
