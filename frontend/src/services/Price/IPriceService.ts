@@ -1,7 +1,6 @@
-import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { CoinMeta } from '../../model/coin-meta';
 import { Rate } from '../../model/price-rate';
 
 export interface IPriceService {
-  getPriceRates(coin: Coin): Promise<Map<Coin, Rate>>;
-  getPriceProviderId(coin: Coin): string;
+  getPrices(coins: CoinMeta[]): Promise<Map<CoinMeta, Rate[]>>;
 }

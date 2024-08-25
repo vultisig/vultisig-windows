@@ -21,11 +21,9 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
 
   const [services, setServices] = useState<IService[]>([]);
   const [balances, setBalances] = useState<Map<Coin, Balance>>(new Map());
-
-  const [priceProviderIds, setPriceProviderIds] = useState<Map<Coin, string>>(
+  const [priceRates, setPriceRates] = useState<Map<CoinMeta, Rate[]>>(
     new Map()
   );
-  const [priceRates, setPriceRates] = useState<Map<Coin, Rate[]>>(new Map());
 
   const fetchCoins = async (vault: storage.Vault) => {
     if (!walletCore) {
@@ -36,6 +34,7 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
     const allChains: Chain[] = Object.values(Chain) as Chain[];
     const serviceMap = new Map<Chain, IService>();
     const balancePromises: Promise<void>[] = [];
+    const priceRatePromises: Promise<void>[] = [];
 
     allChains.forEach(chain => {
       let service = serviceMap.get(chain);
@@ -56,6 +55,26 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
       if (!tokensPerChain || tokensPerChain.length === 0) {
         console.error('No tokens found for chain:', chain);
         return;
+      }
+
+      const priceRatesPromise = service.priceService.getPrices(tokensPerChain);
+      if (priceRatesPromise) {
+        priceRatePromises.push(
+          priceRatesPromise.then((priceRates: Map<CoinMeta, Rate[]>) => {
+            priceRates.forEach((rates, coinMeta) => {
+              setPriceRates(prevPriceRates => {
+                const updatedPriceRates = new Map(prevPriceRates);
+                const existingRates = updatedPriceRates.get(coinMeta) || [];
+                // Use a Set to remove duplicates
+                const uniqueRates = Array.from(
+                  new Set([...existingRates, ...rates])
+                );
+                updatedPriceRates.set(coinMeta, uniqueRates);
+                return updatedPriceRates;
+              });
+            });
+          })
+        );
       }
 
       const coinPromises = tokensPerChain.map(async f => {
@@ -100,16 +119,6 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
               })
             );
           }
-
-          const priceProviderId =
-            service?.priceService?.getPriceProviderId(coin);
-          if (priceProviderId) {
-            setPriceProviderIds(prevPriceProviderIds => {
-              const updatedPriceProviderIds = new Map(prevPriceProviderIds);
-              updatedPriceProviderIds.set(coin, priceProviderId);
-              return updatedPriceProviderIds;
-            });
-          }
         });
       });
 
@@ -124,6 +133,15 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
       results.forEach(result => {
         if (result.status === 'rejected') {
           console.error('Failed to fetch balance:', result.reason);
+        }
+      });
+    });
+
+    // Resolve all price promises as they complete
+    Promise.allSettled(priceRatePromises).then(results => {
+      results.forEach(result => {
+        if (result.status === 'rejected') {
+          console.error('Failed to fetch price:', result.reason);
         }
       });
     });
@@ -148,10 +166,6 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
   }, [balances]);
 
   useEffect(() => {
-    console.log('Price Provider Ids state updated:', priceProviderIds);
-  }, [priceProviderIds]);
-
-  useEffect(() => {
     console.log('Service Map state updated:', servicesMap);
   }, [servicesMap]);
 
@@ -161,10 +175,10 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
     setServices,
     balances,
     setBalances,
-    priceProviderIds,
-    setPriceProviderIds,
+
     priceRates,
     setPriceRates,
+
     servicesMap,
     setServicesMap,
   };
