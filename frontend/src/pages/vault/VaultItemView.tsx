@@ -11,14 +11,17 @@ import {
   faSyncAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { Balance } from '../../model/balance';
+import { CoinMeta } from '../../model/coin-meta';
+import { Rate } from '../../model/price-rate';
 
 const VaultItemView: React.FC = () => {
   const navigate = useNavigate();
   const { chain } = useParams<{ chain: string }>();
   const location = useLocation();
-  const { coins, balances } = location.state as {
+  const { coins, balances, priceRates } = location.state as {
     coins: Coin[];
     balances: Map<Coin, Balance>;
+    priceRates: Map<CoinMeta, Rate[]>;
   };
 
   // Separate native token and other tokens
