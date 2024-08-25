@@ -14,7 +14,8 @@ export class PriceService implements IPriceService {
   }
 
   getPriceRates(coin: Coin): Promise<Map<Coin, Rate>> {
-    throw new Error('Method not implemented.', coin);
+    console.log('Fetching price rates for coin', coin);
+    throw new Error('Method not implemented.');
   }
 
   getPriceProviderId(coin: Coin): string {
