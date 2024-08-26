@@ -7,6 +7,7 @@ import { QrImageDropZone } from './QrImageDropZone';
 import { useState } from 'react';
 import { UploadedQr } from './UploadedQr';
 import { Button } from '../../../lib/ui/buttons/Button';
+import { useProcessQrMutation } from './useProcessQrMutation';
 
 const Container = styled(VStack)`
   flex: 1;
@@ -18,11 +19,15 @@ const Container = styled(VStack)`
 export const UploadQrPage = () => {
   const [file, setFile] = useState<File | null>(null);
 
+  const { mutate, isPending, error } = useProcessQrMutation();
+
+  console.log({ isPending, error });
+
   return (
     <Container>
       <UploadQrPageHeader />
       <VStack fill justifyContent="space-between" gap={20}>
-        <VStack fill gap={20}>
+        <VStack alignItems="center" fill gap={20}>
           <VStack alignItems="center">
             <Text color="contrast" size={16} weight="700">
               Upload QR-Code to join Keysign
@@ -33,8 +38,20 @@ export const UploadQrPage = () => {
           ) : (
             <QrImageDropZone onFinish={setFile} />
           )}
+          {error && <Text color="regular">Failed to process QR</Text>}
         </VStack>
-        <Button isDisabled={!file}>Continue</Button>
+
+        <Button
+          isLoading={isPending}
+          onClick={() => {
+            if (file) {
+              mutate(file);
+            }
+          }}
+          isDisabled={!file}
+        >
+          Continue
+        </Button>
       </VStack>
     </Container>
   );

@@ -9,9 +9,9 @@ import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { VaultPage } from './pages/vault/VaultPage';
 import SendCryptoView from './pages/send/SendCryptoView';
-import { ThemeProvider } from 'styled-components';
 import { darkTheme } from './lib/ui/theme/darkTheme';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
+import { ThemeProvider } from './lib/ui/theme/ThemeProvider';
 
 const queryClient = new QueryClient();
 

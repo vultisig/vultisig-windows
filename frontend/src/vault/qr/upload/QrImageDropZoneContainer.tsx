@@ -6,6 +6,7 @@ import { borderRadius } from '../../../lib/ui/css/borderRadius';
 export const QrImageDropZoneContainer = styled.div`
   flex: 1;
   height: 400px;
+  width: 100%;
   max-height: 400px;
   ${centerContent};
   ${borderRadius.m};
