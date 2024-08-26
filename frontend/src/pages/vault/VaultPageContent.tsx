@@ -13,7 +13,7 @@ type VaultPageView = 'balances' | 'vaults';
 export const VaultPageContent: React.FC = () => {
   const walletCore = useWalletCore();
   const [selectedVault] = useCurrentVault();
-  const { coins, balances } = useVaultListViewModel(walletCore);
+  const { coins, balances, priceRates } = useVaultListViewModel(walletCore);
 
   const [view, setView] = useState<VaultPageView>('balances');
 
@@ -40,7 +40,13 @@ export const VaultPageContent: React.FC = () => {
       <div className="flex-1 flex flex-col">
         <Match
           value={view}
-          balances={() => <VaultBalances coins={coins} balances={balances} />}
+          balances={() => (
+            <VaultBalances
+              coins={coins}
+              balances={balances}
+              priceRates={priceRates}
+            />
+          )}
           vaults={() => (
             <VaultList
               onFinish={() => {

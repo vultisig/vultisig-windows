@@ -7,3 +7,7 @@ export type CoinAmount = {
   amount: number;
   decimals: number;
 };
+
+export type CoinAmountInFiat = {
+  amountInFiat: number;
+};
