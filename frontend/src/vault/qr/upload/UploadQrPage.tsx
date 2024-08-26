@@ -4,6 +4,8 @@ import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding';
 import { UploadQrPageHeader } from './UploadQrPageHeader';
 import { Text } from '../../../lib/ui/text';
 import { QrImageDropZone } from './QrImageDropZone';
+import { useState } from 'react';
+import { UploadedQr } from './UploadedQr';
 
 const Container = styled(VStack)`
   flex: 1;
@@ -13,6 +15,8 @@ const Container = styled(VStack)`
 `;
 
 export const UploadQrPage = () => {
+  const [file, setFile] = useState<File | null>(null);
+
   return (
     <Container>
       <UploadQrPageHeader />
@@ -23,7 +27,11 @@ export const UploadQrPage = () => {
               Upload QR-Code to join Keysign
             </Text>
           </VStack>
-          <QrImageDropZone onFinish={data => console.log(data)} />
+          {file ? (
+            <UploadedQr value={file} onRemove={() => setFile(null)} />
+          ) : (
+            <QrImageDropZone onFinish={setFile} />
+          )}
         </VStack>
       </VStack>
     </Container>
