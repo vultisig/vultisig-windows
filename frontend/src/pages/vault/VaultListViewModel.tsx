@@ -21,9 +21,7 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
 
   const [services, setServices] = useState<IService[]>([]);
   const [balances, setBalances] = useState<Map<Coin, Balance>>(new Map());
-  const [priceRates, setPriceRates] = useState<Map<CoinMeta, Rate[]>>(
-    new Map()
-  );
+  const [priceRates, setPriceRates] = useState<Map<string, Rate[]>>(new Map());
 
   const fetchCoins = async (vault: storage.Vault) => {
     if (!walletCore) {
@@ -61,7 +59,7 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
       if (priceRatesPromise) {
         priceRatePromises.push(
           priceRatesPromise
-            .then((priceRates: Map<CoinMeta, Rate[]>) => {
+            .then((priceRates: Map<string, Rate[]>) => {
               priceRates.forEach((rates, coinMeta) => {
                 setPriceRates(prevPriceRates => {
                   const updatedPriceRates = new Map(prevPriceRates);

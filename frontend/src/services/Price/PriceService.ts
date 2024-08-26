@@ -12,7 +12,7 @@ export class PriceService implements IPriceService {
   chain: Chain;
   walletCore: WalletCore;
   storageService: StorageService<{
-    prices: Map<CoinMeta, Rate[]>;
+    prices: Map<string, Rate[]>;
     expiryDate: Date;
   }>;
 
@@ -20,12 +20,41 @@ export class PriceService implements IPriceService {
     this.chain = chain;
     this.walletCore = walletCore;
     this.storageService = new StorageService<{
-      prices: Map<CoinMeta, Rate[]>;
+      prices: Map<string, Rate[]>;
       expiryDate: Date;
     }>(StoreName.PRICE);
   }
 
-  async getNativePrices(coins: CoinMeta[]): Promise<Map<CoinMeta, Rate[]>> {
+  async getPriceInFiat(
+    coin: CoinMeta,
+    amount: number,
+    fiat: Fiat
+  ): Promise<number> {
+    const cacheKey = JSON.stringify(this.chain);
+    const cachedData = await this.storageService.getFromStorage(cacheKey);
+
+    if (!cachedData) {
+      throw new Error(
+        'You must initialize the prices before utilizing this conversor.'
+      );
+    }
+
+    const { prices, expiryDate } = cachedData;
+    if (new Date(expiryDate) > new Date()) {
+      const rate = prices
+        .get(CoinMeta.sortedStringify(coin))
+        ?.find(rate => rate.fiat === fiat);
+      if (rate) {
+        return rate.value * amount;
+      }
+    }
+
+    throw new Error(
+      'You must initialize the prices before utilizing this conversor.'
+    );
+  }
+
+  async getNativePrices(coins: CoinMeta[]): Promise<Map<string, Rate[]>> {
     const coinProviderIds = coins.map(coin => coin.priceProviderId);
 
     if (coinProviderIds.length === 0) {
@@ -52,7 +81,7 @@ export class PriceService implements IPriceService {
     return this.mapRates(json, coins);
   }
 
-  async getPrices(coins: CoinMeta[]): Promise<Map<CoinMeta, Rate[]>> {
+  async getPrices(coins: CoinMeta[]): Promise<Map<string, Rate[]>> {
     const cacheKey = JSON.stringify(this.chain);
 
     // Check the cache first
@@ -78,8 +107,8 @@ export class PriceService implements IPriceService {
     return nativePrices;
   }
 
-  mapRates(response: ChainRates, coins: CoinMeta[]): Map<CoinMeta, Rate[]> {
-    const rates = new Map<CoinMeta, Rate[]>();
+  mapRates(response: ChainRates, coins: CoinMeta[]): Map<string, Rate[]> {
+    const rates = new Map<string, Rate[]>();
 
     coins.forEach(coinMeta => {
       const fiatMap =
@@ -101,7 +130,7 @@ export class PriceService implements IPriceService {
           }
         }
 
-        rates.set(coinMeta, rateList);
+        rates.set(CoinMeta.sortedStringify(coinMeta), rateList);
       }
     });
 

@@ -17,17 +17,17 @@ export class PriceServiceEvm extends PriceService implements IPriceService {
     this.chain = chain;
     this.walletCore = walletCore;
     this.storageService = new StorageService<{
-      prices: Map<CoinMeta, Rate[]>;
+      prices: Map<string, Rate[]>;
       expiryDate: Date;
     }>(StoreName.PRICE);
   }
 
-  async getPrices(coins: CoinMeta[]): Promise<Map<CoinMeta, Rate[]>> {
+  async getPrices(coins: CoinMeta[]): Promise<Map<string, Rate[]>> {
     const cacheKey = JSON.stringify(this.chain);
 
     if (this.storageService === null) {
       this.storageService = new StorageService<{
-        prices: Map<CoinMeta, Rate[]>;
+        prices: Map<string, Rate[]>;
         expiryDate: Date;
       }>(StoreName.PRICE);
     }
@@ -63,7 +63,7 @@ export class PriceServiceEvm extends PriceService implements IPriceService {
     return prices;
   }
 
-  async getTokenPrices(coins: CoinMeta[]): Promise<Map<CoinMeta, Rate[]>> {
+  async getTokenPrices(coins: CoinMeta[]): Promise<Map<string, Rate[]>> {
     const contractAddresses = coins.map(coin => coin.contractAddress);
 
     if (contractAddresses.length === 0) {

@@ -21,7 +21,7 @@ const VaultItemView: React.FC = () => {
   const { coins, balances, priceRates } = location.state as {
     coins: Coin[];
     balances: Map<Coin, Balance>;
-    priceRates: Map<CoinMeta, Rate[]>;
+    priceRates: Map<string, Rate[]>;
   };
 
   // Separate native token and other tokens
