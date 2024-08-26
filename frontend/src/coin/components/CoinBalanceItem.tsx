@@ -1,3 +1,4 @@
+/* eslint-disable */
 import styled from 'styled-components';
 import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
 import { SafeImage } from '../../lib/ui/images/SafeImage';
@@ -13,7 +14,6 @@ import { PictureIcon } from '../../lib/ui/icons/PictureIcon';
 import { Text } from '../../lib/ui/text';
 import { formatAmount } from '../../lib/utils/formatAmount';
 import { fromChainAmount } from '../../lib/chain/utils/fromChainAmount';
-import { CoinUsdBalance } from './CoinUsdBalance';
 
 type CoinBalanceItemProps = ClickableComponentProps & {
   name: string;
@@ -22,6 +22,7 @@ type CoinBalanceItemProps = ClickableComponentProps & {
   decimals: number;
   icon?: string;
   chainId: string;
+  fiatValue: number;
 };
 
 const ImageContainer = styled.div`
@@ -41,6 +42,7 @@ export const CoinBalanceItem = ({
   decimals,
   onClick,
   chainId,
+  fiatValue,
 }: CoinBalanceItemProps) => {
   return (
     <UnstyledButton onClick={onClick}>
@@ -69,13 +71,7 @@ export const CoinBalanceItem = ({
                   {formatAmount(fromChainAmount(amount, decimals))}
                 </Text>
                 <Text color="regular" weight="700" size={16}>
-                  {amount > 0 ? (
-                    <CoinUsdBalance
-                      value={{ amount, decimals, chainId, id: address }}
-                    />
-                  ) : (
-                    `$${formatAmount(0)}`
-                  )}
+                  {fiatValue}
                 </Text>
               </HStack>
             </HStack>

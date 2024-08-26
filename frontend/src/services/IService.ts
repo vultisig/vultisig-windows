@@ -3,6 +3,7 @@ import { IBalanceService } from './Balance/IBalanceService';
 import { ICoinService } from './Coin/ICoinService';
 import { IRpcService } from './Rpc/IRpcService';
 import { ISendService } from './Send/ISendService';
+import { IPriceService } from './Price/IPriceService';
 
 export interface IService {
   rpcService: IRpcService;
@@ -11,4 +12,5 @@ export interface IService {
   keygenService: any;
   sendService: ISendService;
   balanceService: IBalanceService;
+  priceService: IPriceService;
 }
