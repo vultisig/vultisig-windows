@@ -6,6 +6,7 @@ import { Text } from '../../../lib/ui/text';
 import { QrImageDropZone } from './QrImageDropZone';
 import { useState } from 'react';
 import { UploadedQr } from './UploadedQr';
+import { Button } from '../../../lib/ui/buttons/Button';
 
 const Container = styled(VStack)`
   flex: 1;
@@ -33,6 +34,7 @@ export const UploadQrPage = () => {
             <QrImageDropZone onFinish={setFile} />
           )}
         </VStack>
+        <Button isDisabled={!file}>Continue</Button>
       </VStack>
     </Container>
   );
