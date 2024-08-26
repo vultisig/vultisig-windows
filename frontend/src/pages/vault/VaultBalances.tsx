@@ -1,5 +1,4 @@
-/* eslint-disable */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chain } from '../../model/chain';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
@@ -28,15 +27,31 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
     const rate = priceRates
       .get(CoinMeta.sortedStringify(coin))
       ?.find(rate => rate.fiat === fiat);
-    console.log(rate);
+
     if (rate) {
       const amountInDecimal = amount / Math.pow(10, coin.decimals);
       const convertedAmount = rate.value * amountInDecimal;
-      // round it to 2 decimal places, fiat value is in USD
-      // right now it has 18 decimal places
       return Math.round((convertedAmount + Number.EPSILON) * 100) / 100;
     }
     return -1;
+  }
+
+  function getTotalFiatValue(coins: Coin[], fiat: Fiat): number {
+    let totalFiatValue = 0;
+
+    // Calculate the fiat value for each coin and sum them up
+    coins.forEach(coin => {
+      const balance = balances.get(coin);
+      if (balance) {
+        const coinMeta = CoinMeta.fromCoin(coin);
+        const fiatValue = getPriceInFiat(coinMeta, balance.rawAmount, fiat);
+        if (fiatValue > 0) {
+          totalFiatValue += fiatValue;
+        }
+      }
+    });
+
+    return totalFiatValue;
   }
 
   return (
@@ -47,6 +62,9 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
         ) : (
           <VStack gap={16}>
             {Array.from(coins.entries()).map(([chain, coinArray]) => {
+              // Calculate the total fiat value for the current chain's coins
+              const totalFiatValue = getTotalFiatValue(coinArray, Fiat.USD);
+
               return (
                 <React.Fragment key={chain}>
                   {coinArray
@@ -55,15 +73,9 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
                       const balance = balances.get(coin);
                       const amount = balance?.rawAmount || 0;
                       const icon = `/assets/icons/coins/${coin.logo}.svg`;
-                      const coinMeta = CoinMeta.fromCoin(coin);
-
-                      // Calculate the fiat value for the coin
-                      // TODO: We must get the fiat from the settings in the future
-                      const fiatValue = balance
-                        ? getPriceInFiat(coinMeta, amount, Fiat.USD)
-                        : -1;
-
-                      console.log(fiatValue);
+                      //const coinMeta = CoinMeta.fromCoin(coin);
+                      // Calculate the fiat value for the individual coin
+                      // const fiatValue = getPriceInFiat(coinMeta, amount, Fiat.USD);
 
                       return (
                         <CoinBalanceItem
@@ -74,7 +86,7 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
                           decimals={coin.decimals}
                           chainId={coin.priceProviderId}
                           icon={icon}
-                          fiatValue={fiatValue}
+                          fiatValue={totalFiatValue}
                           onClick={() => {
                             navigate(`/vault/item/detail/${chain}`, {
                               state: { coins: coinArray, balances },
