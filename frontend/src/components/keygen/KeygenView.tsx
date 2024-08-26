@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import RingProgress from '../ringProgress/RingProgress';
-import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { KeygenType } from '../../model/TssType';
-import { StartKeygen } from '../../../wailsjs/go/tss/TssService';
+import { Reshare, StartKeygen } from '../../../wailsjs/go/tss/TssService';
 import { EventsOn } from '../../../wailsjs/runtime/runtime';
 import { SaveVault } from '../../../wailsjs/go/storage/Store';
+import { storage } from '../../../wailsjs/go/models';
 interface KeygenViewProps {
-  vault: Vault;
+  vault: storage.Vault;
   sessionID: string;
-  devices: string[];
   hexEncryptionKey: string;
   keygenType: KeygenType; // is keygen / Reshare
   serverURL: string;
@@ -19,7 +18,6 @@ interface KeygenViewProps {
 const KeygenView: React.FC<KeygenViewProps> = ({
   vault,
   sessionID,
-  devices,
   hexEncryptionKey,
   keygenType,
   serverURL,
@@ -28,7 +26,6 @@ const KeygenView: React.FC<KeygenViewProps> = ({
 }) => {
   const { t } = useTranslation();
   const [contentIndex, setContentIndex] = useState<number>(0);
-  const [allSigners] = useState<string[]>(devices);
   const [currentProgress, setCurrentProgress] = useState<number>();
   const [currentStatus, setCurrentStatus] = useState<string>('');
 
@@ -55,9 +52,9 @@ const KeygenView: React.FC<KeygenViewProps> = ({
     async function kickoffKeygen() {
       const newVault = await StartKeygen(
         vault.name,
-        vault.localPartyId,
+        vault.local_party_id,
         sessionID,
-        vault.hexChainCode,
+        vault.hex_chain_code,
         hexEncryptionKey,
         serverURL
       ).catch(err => {
@@ -66,16 +63,34 @@ const KeygenView: React.FC<KeygenViewProps> = ({
       });
       setCurrentProgress(100);
       if (newVault !== undefined) {
-        console.log(allSigners);
         SaveVault(newVault);
         onDone();
       }
     }
+
+    async function kickoffReshare() {
+      // let's convert the vault to
+      const newVault = await Reshare(
+        vault,
+        sessionID,
+        hexEncryptionKey,
+        serverURL
+      ).catch(err => {
+        console.log(err);
+        onError(err);
+      });
+      setCurrentProgress(100);
+      if (newVault !== undefined) {
+        SaveVault(newVault);
+        onDone();
+      }
+    }
+
     if (keygenType === KeygenType.Keygen) {
       console.log('sessionID', sessionID);
       kickoffKeygen();
     } else if (keygenType === KeygenType.Reshare) {
-      // TODO, trigger reshare
+      kickoffReshare();
     }
   }, []);
 
