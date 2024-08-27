@@ -108,12 +108,16 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
             const updatedCoins = new Map(prevCoins);
             const existingCoins = updatedCoins.get(chain) || [];
 
-            // Ensure there are no duplicates by filtering out any coins with the same identifier
-            const filteredCoins = existingCoins.filter(existingCoin =>
+            // Use compareCoins to ensure we don't add duplicates
+            const duplicateCoin = existingCoins.find(existingCoin =>
               compareCoins(existingCoin, coin)
             );
 
-            updatedCoins.set(chain, [...filteredCoins, coin]);
+            // Only add the coin if it doesn't already exist
+            if (!duplicateCoin) {
+              updatedCoins.set(chain, [...existingCoins, coin]);
+            }
+
             return updatedCoins;
           });
 
@@ -162,25 +166,24 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
 
   useEffect(() => {
     if (selectedVault) {
-      // console.log('Selected vault changed:', selectedVault);
       fetchCoins(selectedVault);
     }
   }, [selectedVault]);
 
   useEffect(() => {
-    // console.log('Coins state updated:', coins);
+    // Optional: Handle updates when coins change
   }, [coins]);
 
   useEffect(() => {
-    // console.log('Balances state updated:', balances);
+    // Optional: Handle updates when balances change
   }, [balances]);
 
   useEffect(() => {
-    // console.log('Service Map state updated:', servicesMap);
+    // Optional: Handle updates when service map changes
   }, [servicesMap]);
 
   useEffect(() => {
-    // console.log('Price Rates state updated:', priceRates);
+    // Optional: Handle updates when price rates change
   }, [priceRates]);
 
   return {
@@ -189,10 +192,8 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
     setServices,
     balances,
     setBalances,
-
     priceRates,
     setPriceRates,
-
     servicesMap,
     setServicesMap,
   };
