@@ -23,7 +23,6 @@ type QrQueryParams =
 export const useProcessQrMutation = () => {
   return useMutation({
     mutationFn: async (file: File) => {
-      console.log('start mutation');
       const imageBitmap = await createImageBitmap(file);
 
       // Create a canvas to draw the image
@@ -51,8 +50,8 @@ export const useProcessQrMutation = () => {
       const queryParams = getQueryParams<QrQueryParams>(url);
       const { jsonData } = queryParams;
 
-      const payload = decompressQrPayload(jsonData);
-      console.log('payload: ', payload);
+      const payload = await decompressQrPayload(jsonData);
+      console.log(payload);
 
       if ('type' in queryParams) {
         console.log('payload with type');
