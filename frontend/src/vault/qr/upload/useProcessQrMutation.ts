@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import jsQR from 'jsqr';
-import { getQueryParams } from '../../../lib/utils/query/getQueryParams';
+import { getRawQueryParams } from '../../../lib/utils/query/getRawQueryParams';
 import { decompressQrPayload } from './utils/decompressQrPayload';
 
 type QrTtsType = 'Keygen' | 'Reshare';
@@ -47,7 +47,7 @@ export const useProcessQrMutation = () => {
 
       const url = code.data;
 
-      const queryParams = getQueryParams<QrQueryParams>(url);
+      const queryParams = getRawQueryParams<QrQueryParams>(url);
       const { jsonData } = queryParams;
 
       const payload = await decompressQrPayload(jsonData);

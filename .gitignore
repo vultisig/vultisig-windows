@@ -49,7 +49,7 @@ Thumbs.db
 frontend/dist/
 frontend/node_modules/
 frontend/yarn.lock
-fronted/package.json.md5
+frontend/package.json.md5
 
 # Ignore build files created by Wails
 frontend/build/

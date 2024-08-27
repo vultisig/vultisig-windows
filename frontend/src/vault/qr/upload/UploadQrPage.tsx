@@ -26,13 +26,11 @@ export const UploadQrPage = () => {
   return (
     <Container>
       <UploadQrPageHeader />
-      <VStack fill justifyContent="space-between" gap={20}>
-        <VStack alignItems="center" fill gap={20}>
-          <VStack alignItems="center">
-            <Text color="contrast" size={16} weight="700">
-              Upload QR-Code to join Keysign
-            </Text>
-          </VStack>
+      <VStack fill justifyContent="space-between" fullWidth gap={20}>
+        <VStack fullWidth alignItems="center" fill gap={20}>
+          <Text color="contrast" size={16} weight="700">
+            Upload QR-Code to join Keysign
+          </Text>
           {file ? (
             <UploadedQr value={file} onRemove={() => setFile(null)} />
           ) : (
