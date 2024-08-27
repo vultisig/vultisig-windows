@@ -66,8 +66,8 @@ export const useProcessQrMutation = () => {
       if ('type' in queryParams) {
         return match(queryParams.type, {
           NewVault: async () => {
-            console.log('todo: handle new vault');
             const vault = Vault.fromBinary(stringToUint8Array(payload));
+
             await SaveVault({
               name: vault.name,
               public_key_ecdsa: vault.publicKeyEcdsa,
@@ -87,6 +87,7 @@ export const useProcessQrMutation = () => {
               coins: [],
               convertValues: () => {},
             });
+
             navigate('/vault/list');
           },
           Keysign: async () => {
@@ -100,8 +101,6 @@ export const useProcessQrMutation = () => {
           },
           Reshare: () => {
             console.log('todo: handle reshare');
-            const vault = Vault.fromBinary(stringToUint8Array(payload));
-            console.log(vault);
           },
         });
       }
