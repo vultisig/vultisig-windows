@@ -10,6 +10,7 @@ import { TokensStore } from '../../services/Coin/CoinList';
 import { Balance } from '../../model/balance';
 import { useCurrentVault } from '../../vault/components/CurrentVaultProvider';
 import { Rate } from '../../model/price-rate';
+import { compareCoins } from '../../model/coin';
 
 const useVaultListViewModel = (walletCore: WalletCore | null) => {
   const [selectedVault] = useCurrentVault();
@@ -107,10 +108,12 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
             const updatedCoins = new Map(prevCoins);
             const existingCoins = updatedCoins.get(chain) || [];
 
-            // Use a Set to remove duplicates
-            const uniqueCoins = Array.from(new Set([...existingCoins, coin]));
+            // Ensure there are no duplicates by filtering out any coins with the same identifier
+            const filteredCoins = existingCoins.filter(existingCoin =>
+              compareCoins(existingCoin, coin)
+            );
 
-            updatedCoins.set(chain, uniqueCoins);
+            updatedCoins.set(chain, [...filteredCoins, coin]);
             return updatedCoins;
           });
 
