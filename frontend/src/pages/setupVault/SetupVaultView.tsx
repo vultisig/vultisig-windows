@@ -33,9 +33,11 @@ const SetupVaultView: React.FC = () => {
 
   useEffect(() => {
     setKeygenError('');
-
     // when current vault's local party is empty , means it is a new vault
-    if (vault.current.local_party_id === '') {
+    if (
+      vault.current.local_party_id === undefined ||
+      vault.current.local_party_id === ''
+    ) {
       // new vault
       vault.current.local_party_id = 'windows-' + generateRandomNumber();
     }

@@ -1,7 +1,7 @@
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { storage } from '../../../wailsjs/go/models';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { useEffect, useRef, useState } from 'react';
 import crypto from 'crypto';
 import { generateRandomNumber } from '../../utils/util';
 import { v4 as uuidv4 } from 'uuid';
@@ -41,12 +41,14 @@ const KeysignPeerDiscovery: React.FC<KeysignPeerDiscoveryProps> = ({
   const [sessionID, setSessionID] = useState<string>();
   const [isRelay, setIsRelay] = useState(true);
   const hexEncryptionKey = useRef(getHexEncodedRandomBytes(32));
-
   useEffect(() => {
+    console.log('keysign peer discovery');
     setDevices([]);
     setSelectedDevices([]);
     setSessionID(uuidv4());
     setServiceName(`Vultisig-Windows-${generateRandomNumber()}`);
+  }, []);
+  useEffect(() => {
     async function createQR() {
       setQrData(
         await createKeysignMessage(
@@ -58,6 +60,7 @@ const KeysignPeerDiscovery: React.FC<KeysignPeerDiscoveryProps> = ({
         )
       );
     }
+    console.log('setup qr code');
     createQR();
   }, [isRelay, sessionID, serviceName, hexEncryptionKey]);
   useEffect(() => {
@@ -72,6 +75,7 @@ const KeysignPeerDiscovery: React.FC<KeysignPeerDiscoveryProps> = ({
     checkForDevices(isRelay, sessionID!, setDevices);
   };
   const handleDisabled = () => {
+    if (vault.signers == undefined || vault.signers.length == 0) return true;
     const minDevices = (vault.signers.length * 2) / 3;
     return selectedDevices.length + 1 < minDevices;
   };

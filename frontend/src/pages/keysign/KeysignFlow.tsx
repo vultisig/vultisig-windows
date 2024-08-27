@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { storage } from '../../../wailsjs/go/models';
-import KeysignPeerDiscovery from './KeysignPeerDiscovery';
+import KeysignPeerDiscovery from '../../components/keysign/KeysignPeerDiscovery';
 import NavBar from '../../components/navbar/NavBar';
-import KeysignView from './KeysignView';
+import KeysignView from '../../components/keysign/KeysignView';
 import { ENDPOINTS } from '../../utils/config';
 import { KeysignPayloadUtils } from '../../extensions/KeysignPayload';
 import { useLocation } from 'react-router-dom';
@@ -23,10 +23,12 @@ const KeysignFlowView: React.FC = () => {
     vault: storage.Vault;
     keysignPayload: KeysignPayload;
   };
-  console.log('KeysignFlowView', vault, keysignPayload);
+
   useEffect(() => {
+    console.log('testtest...');
     currentVault.current = vault;
     setCurrentScreen(0);
+    console.log('testtest...111');
     console.log('current screen:title', screens[currentScreen].title);
   }, []);
 
@@ -59,7 +61,7 @@ const KeysignFlowView: React.FC = () => {
   };
   const screens = [
     {
-      title: t('Send'),
+      title: t('send'),
       content: (
         <KeysignPeerDiscovery
           vault={vault}
@@ -69,7 +71,7 @@ const KeysignFlowView: React.FC = () => {
       ),
     },
     {
-      title: t('Keysign'),
+      title: t('keysign'),
       content: (
         <KeysignView
           vault={vault}
@@ -88,12 +90,13 @@ const KeysignFlowView: React.FC = () => {
   return (
     <>
       <div>
-        {/* {screens[currentScreen].title && (
+        {screens[currentScreen].title && (
           <NavBar
             title={screens[currentScreen].title}
+            questionLink={undefined}
             handleBack={currentScreen !== 0 ? prevScreen : undefined}
           />
-        )} */}
+        )}
         {screens[currentScreen].content}
       </div>
     </>

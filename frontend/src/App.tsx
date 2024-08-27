@@ -11,7 +11,7 @@ import { VaultPage } from './pages/vault/VaultPage';
 import SendCryptoView from './pages/send/SendCryptoView';
 import { ThemeProvider } from 'styled-components';
 import { darkTheme } from './lib/ui/theme/darkTheme';
-import KeysignFlowView from './components/keysign/KeysignFlow';
+import KeysignFlowView from './pages/keysign/KeysignFlow';
 
 const queryClient = new QueryClient();
 
@@ -25,6 +25,7 @@ const App: React.FC = () => {
               <Route path="/" index element={<OnboardingView />} />
               <Route path="/vault/setup" element={<SetupVaultView />} />
               <Route path="/vault/import" element={<ImportVaultView />} />
+              <Route path="/vault/keysign" element={<KeysignFlowView />} />
               <Route
                 path="/vault/list"
                 element={
@@ -41,7 +42,6 @@ const App: React.FC = () => {
                 path="/vault/item/send/:chain"
                 element={<SendCryptoView />}
               />
-              <Route path="/vault/keysign" element={<KeysignFlowView />} />
             </Routes>
           </Router>
         </div>

@@ -97,5 +97,7 @@
   "generating_ecdsa_key": "Generating ECDSA Key",
   "generating_eddsa_key": "Generating EdDSA Key",
   "signing_ecdsa_key": "Signing using ECDSA Key...",
-  "signing_eddsa_key": "Signing using EdDSA Key..."
+  "signing_eddsa_key": "Signing using EdDSA Key...",
+  "send": "Send",
+  "keysign": "Keysign"
 }

@@ -27,7 +27,6 @@ export const VaultPageContent: React.FC = () => {
 
   const handleTest = () => {
     console.log('test');
-    console.log('current vault:', selectedVault);
     const coin = coins.get(Chain.THORChain);
     navigate('/vault/keysign', {
       state: {
@@ -43,6 +42,8 @@ export const VaultPageContent: React.FC = () => {
               sequence: protoInt64.zero,
             }),
           },
+          vaultLocalPartyId: selectedVault.local_party_id,
+          vaultPublicKeyEcdsa: selectedVault.public_key_ecdsa,
         }),
       },
     });
