@@ -33,7 +33,7 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
       const convertedAmount = rate.value * amountInDecimal;
       return Math.round((convertedAmount + Number.EPSILON) * 100) / 100;
     }
-    return -1;
+    return 0;
   }
 
   function getTotalFiatValue(coins: Coin[], fiat: Fiat): number {
@@ -89,7 +89,7 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
                           fiatValue={totalFiatValue}
                           onClick={() => {
                             navigate(`/vault/item/detail/${chain}`, {
-                              state: { coins: coinArray, balances },
+                              state: { coins: coinArray, balances, priceRates },
                             });
                           }}
                         />

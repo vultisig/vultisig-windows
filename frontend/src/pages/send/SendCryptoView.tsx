@@ -16,6 +16,7 @@ import { faArrowLeft, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
 import SendCryptoForm from '../../components/sendCrypto/SendCryptoForm';
 import VerifyTransaction from '../../components/sendCrypto/VerifyTransaction';
+import { Rate } from '../../model/price-rate';
 
 const SendCryptoView: React.FC = () => {
   const [step, setStep] = useState<'Send Crypto' | 'Verify Transaction'>(
@@ -26,16 +27,17 @@ const SendCryptoView: React.FC = () => {
   const { chain } = useParams<{ chain: string }>();
   const location = useLocation();
 
-  const { coin, balances } = location.state as {
+  const { coin, balances, priceRates } = location.state as {
     coin: Coin;
     balances: Map<Coin, Balance>;
+    priceRates: Map<string, Rate[]>;
   };
 
   const tx: ISendTransaction = getDefaultSendTransaction();
   tx.coin = coin;
   tx.fromAddress = coin.address;
 
-  const sendCryptoViewModel = useSendCryptoViewModel(tx, balances);
+  const sendCryptoViewModel = useSendCryptoViewModel(tx, balances, priceRates);
 
   useEffect(() => {
     if (!walletCore) {
@@ -79,6 +81,7 @@ const SendCryptoView: React.FC = () => {
         <SendCryptoForm
           coin={coin}
           balances={balances}
+          priceRates={priceRates}
           tx={tx}
           onContinue={() => setStep('Verify Transaction')}
           sendCryptoViewModel={sendCryptoViewModel}
