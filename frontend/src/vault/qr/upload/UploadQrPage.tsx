@@ -21,8 +21,6 @@ export const UploadQrPage = () => {
 
   const { mutate, isPending, error } = useProcessQrMutation();
 
-  console.log({ isPending, error });
-
   return (
     <Container>
       <UploadQrPageHeader />
