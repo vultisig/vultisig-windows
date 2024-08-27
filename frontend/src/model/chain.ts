@@ -28,14 +28,20 @@ export enum TssKeysignType {
   EdDSA,
 }
 export enum TssAction {
-  KEYGEN,
-  RESHARE,
+  KEYGEN = 'KEYGEN',
+  RESHARE = 'RESHARE',
 }
 
 export class ChainUtils {
   static stringToChain(chain: string): Chain | undefined {
     if (Object.values(Chain).includes(chain as Chain)) {
       return chain as Chain;
+    }
+    return undefined;
+  }
+  static stringToTssAction(action: string): TssAction | undefined {
+    if (Object.values(TssAction).includes(action as TssAction)) {
+      return action as TssAction;
     }
     return undefined;
   }

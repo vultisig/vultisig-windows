@@ -156,3 +156,5 @@ const KeysignPeerDiscovery: React.FC<KeysignPeerDiscoveryProps> = ({
     </>
   );
 };
+
+export default KeysignPeerDiscovery;

@@ -99,3 +99,4 @@ const KeysignView: React.FC<KeysignViewProps> = ({
     </div>
   );
 };
+export default KeysignView;
