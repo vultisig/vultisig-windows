@@ -107,6 +107,30 @@ export function useSendCryptoViewModel(
       return false;
     }
 
+    if (amount === '') {
+      alert('Amount is not provided');
+      setErrorMessage('Amount is not provided');
+      setShowAlert(true);
+      console.error('Amount is not provided');
+      return false;
+    }
+
+    if (isNaN(Number(amount))) {
+      alert('Invalid amount');
+      setErrorMessage('Invalid amount');
+      setShowAlert(true);
+      console.error('Invalid amount');
+      return false;
+    }
+
+    if (Number(amount) <= 0) {
+      alert('Amount should be greater than 0');
+      setErrorMessage('Amount should be greater than 0');
+      setShowAlert(true);
+      console.error('Amount should be greater than 0');
+      return false;
+    }
+
     const isAddressValid =
       await service?.addressService.validateAddress(toAddress);
     if (!isAddressValid) {
