@@ -25,29 +25,42 @@ const SendCryptoForm: React.FC<SendCryptoFormProps> = ({
 
   return (
     <div className="flex flex-col space-y-4 rounded-lg p-4 flex-grow">
-      {/* Custom Alert */}
+      {/* Custom Floating Alert */}
       {sendCryptoViewModel.showAlert && (
         <div
-          className="bg-red-500 text-white text-sm font-bold px-4 py-3 rounded relative"
+          className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border border-gray-300 shadow-lg rounded-lg p-6 text-gray-800 max-w-md w-full"
           role="alert"
         >
-          <span className="block sm:inline">
-            {sendCryptoViewModel.errorMessage}
-          </span>
-          <span
-            className="absolute top-0 bottom-0 right-0 px-4 py-3"
-            onClick={() => sendCryptoViewModel.setShowAlert(false)}
-          >
-            <svg
-              className="fill-current h-6 w-6 text-white"
-              role="button"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-lg font-bold">Error</span>
+            <span
+              className="text-gray-500 cursor-pointer"
+              onClick={() => sendCryptoViewModel.setShowAlert(false)}
             >
-              <title>Close</title>
-              <path d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 10-.707.707L9.293 10l-3.64 3.64a.5.5 0 10.707.707L10 10.707l3.64 3.64a.5.5 0 00.707-.707L10.707 10l3.64-3.64a.5.5 0 000-.708z" />
-            </svg>
-          </span>
+              <svg
+                className="fill-current h-6 w-6"
+                role="button"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <title>Close</title>
+                <path d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 10-.707.707L9.293 10l-3.64 3.64a.5.5 0 10.707.707L10 10.707l3.64 3.64a.5.5 0 00.707-.707L10.707 10l3.64-3.64a.5.5 0 000-.708z" />
+              </svg>
+            </span>
+          </div>
+          <div>
+            <span className="block text-sm">
+              {sendCryptoViewModel.errorMessage}
+            </span>
+          </div>
+          <div className="mt-4 text-right">
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring"
+              onClick={() => sendCryptoViewModel.setShowAlert(false)}
+            >
+              OK
+            </button>
+          </div>
         </div>
       )}
 

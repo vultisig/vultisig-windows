@@ -82,64 +82,50 @@ export function useSendCryptoViewModel(
     setService(service);
   };
 
+  const Alert = (message: string) => {
+    setErrorMessage(message);
+    setShowAlert(true);
+    console.error(message);
+  };
+
   const validateForm = async (): Promise<boolean> => {
     if (!toAddress) {
-      alert('To address is not provided');
-      setErrorMessage('To address is not provided');
-      setShowAlert(true);
-      console.error('To address is not provided');
+      Alert('To address is not provided');
       return false;
     }
 
     if (!tx.coin) {
-      alert('Coin is not selected');
-      setErrorMessage('Coin is not selected');
-      setShowAlert(true);
-      console.error('Coin is not selected');
+      Alert('Coin is not selected');
       return false;
     }
 
     if (!service) {
-      alert('Service is not initialized');
-      setErrorMessage('Service is not initialized');
-      setShowAlert(true);
-      console.error('Service is not initialized');
+      Alert('Service is not initialized');
       return false;
     }
 
     if (amount === '') {
-      alert('Amount is not provided');
-      setErrorMessage('Amount is not provided');
-      setShowAlert(true);
-      console.error('Amount is not provided');
+      Alert('Amount is not provided');
       return false;
     }
 
     if (isNaN(Number(amount))) {
-      alert('Invalid amount');
-      setErrorMessage('Invalid amount');
-      setShowAlert(true);
-      console.error('Invalid amount');
+      Alert('Invalid amount');
       return false;
     }
 
     if (Number(amount) <= 0) {
-      alert('Amount should be greater than 0');
-      setErrorMessage('Amount should be greater than 0');
-      setShowAlert(true);
-      console.error('Amount should be greater than 0');
+      Alert('Amount should be greater than 0');
       return false;
     }
 
     const isAddressValid =
       await service?.addressService.validateAddress(toAddress);
     if (!isAddressValid) {
-      alert('Invalid address');
-      setErrorMessage('Invalid address');
-      setShowAlert(true);
-      console.error('Invalid address');
+      Alert('Invalid address');
       return false;
     }
+
     return true;
   };
 
