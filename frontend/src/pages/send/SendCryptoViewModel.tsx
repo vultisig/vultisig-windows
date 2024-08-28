@@ -7,6 +7,8 @@ import { Balance } from '../../model/balance';
 import { Rate } from '../../model/price-rate';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
+import { ChainUtils } from '../../model/chain';
+import { ServiceFactory } from '../../services/ServiceFactory';
 
 interface SendCryptoViewModel {
   tx: ISendTransaction;
@@ -19,12 +21,14 @@ interface SendCryptoViewModel {
   isLoading: boolean;
   isCoinPickerActive: boolean;
   showMemoField: boolean;
+  step: 'Send Crypto' | 'Verify Transaction';
 
+  initializeService(walletCore: any, chain: string): void;
   validateForm(): Promise<boolean>;
   setMaxValues(percentage: number): void;
   convertToFiat(amount: number): Promise<void>;
   convertFromFiat(amount: number): Promise<void>;
-  moveToNextView(): void;
+  moveToNextView(step: string): void;
   handleCoinSelect(coin: Coin): void;
   handleAmountChange(newAmount: string): void;
   handleAmountInFiatChange(amountInFiat: string): void;
@@ -34,6 +38,7 @@ interface SendCryptoViewModel {
   setCoinPickerActive(isActive: boolean): void;
   setShowMemoField(show: boolean): void;
   setService(service: IService): void;
+  setStep(step: 'Send Crypto' | 'Verify Transaction'): void;
 }
 
 export function useSendCryptoViewModel(
@@ -51,8 +56,66 @@ export function useSendCryptoViewModel(
   const [isCoinPickerActive, setCoinPickerActive] = useState(false);
   const [showMemoField, setShowMemoField] = useState(false);
 
+  const [step, setStep] = useState<'Send Crypto' | 'Verify Transaction'>(
+    'Send Crypto'
+  );
+
+  const initializeService = async (walletCore: any, chain: string) => {
+    if (!walletCore) {
+      console.error('WalletCore is not initialized');
+      return;
+    }
+
+    if (!chain) {
+      console.error('Chain is not provided');
+      return;
+    }
+
+    const chainEnum = ChainUtils.stringToChain(chain);
+    if (!chainEnum) {
+      console.error('Chain is not supported');
+      return;
+    }
+
+    const service = ServiceFactory.getService(chainEnum, walletCore);
+    setService(service);
+  };
+
   const validateForm = async (): Promise<boolean> => {
-    // implement validation logic here
+    if (!tx.toAddress) {
+      alert('To address is not provided');
+      setErrorMessage('To address is not provided');
+      setShowAlert(true);
+      console.error('To address is not provided');
+      return false;
+    }
+
+    if (!tx.coin) {
+      alert('Coin is not selected');
+      setErrorMessage('Coin is not selected');
+      setShowAlert(true);
+      console.error('Coin is not selected');
+      return false;
+    }
+
+    if (!service) {
+      alert('Service is not initialized');
+      setErrorMessage('Service is not initialized');
+      setShowAlert(true);
+      console.error('Service is not initialized');
+      return false;
+    }
+
+    const isAddressValid = await service?.addressService.validateAddress(
+      tx.toAddress
+    );
+    if (!isAddressValid) {
+      alert('Invalid address');
+      setErrorMessage('Invalid address');
+      setShowAlert(true);
+      console.error('Invalid address');
+      return false;
+    }
     return true;
   };
 
@@ -96,8 +159,19 @@ export function useSendCryptoViewModel(
     }
   };
 
-  const moveToNextView = () => {
-    // implement move to next view logic here
+  const moveToNextView = async (step: string) => {
+    if (await validateForm()) {
+      switch (step) {
+        case 'Send Crypto':
+          setStep('Verify Transaction');
+          break;
+        case 'Verify Transaction':
+          setStep('Send Crypto');
+          break;
+        default:
+          break;
+      }
+    }
   };
 
   const handleCoinSelect = (coin: Coin) => {
@@ -134,6 +208,7 @@ export function useSendCryptoViewModel(
     isLoading,
     isCoinPickerActive,
     showMemoField,
+    initializeService,
     validateForm,
     setMaxValues,
     convertToFiat,
@@ -148,5 +223,7 @@ export function useSendCryptoViewModel(
     setCoinPickerActive,
     setShowMemoField,
     setService,
+    setStep,
+    step,
   };
 }
