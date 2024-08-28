@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React from 'react';
-import SolSvg from '../../../public/assets/icons/coins/sol.svg';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
 import { ISendTransaction } from '../../model/send-transaction';
@@ -12,7 +11,6 @@ interface SendCryptoFormProps {
   balances: Map<Coin, Balance>;
   priceRates: Map<string, Rate[]>;
   tx: ISendTransaction;
-  onContinue: () => void;
   sendCryptoViewModel: ReturnType<typeof useSendCryptoViewModel>;
 }
 
@@ -21,7 +19,6 @@ const SendCryptoForm: React.FC<SendCryptoFormProps> = ({
   balances,
   priceRates,
   tx,
-  onContinue,
   sendCryptoViewModel,
 }) => {
   const icon = `/assets/icons/coins/${coin.logo}.svg`;
@@ -160,8 +157,7 @@ const SendCryptoForm: React.FC<SendCryptoFormProps> = ({
       <button
         className="mt-4 text-body-14 font-montserrat font-bold text-blue-600 placeholder-neutral-300 h-12 w-full px-3 bg-turquoise-600 rounded-full"
         onClick={() => {
-          sendCryptoViewModel.validateForm();
-          onContinue();
+          sendCryptoViewModel.moveToNextView('Verify Transaction');
         }}
       >
         Continue

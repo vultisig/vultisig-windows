@@ -31,7 +31,7 @@ const SendCryptoView: React.FC = () => {
 
   useEffect(() => {
     sendCryptoViewModel.initializeService(walletCore, chain ?? '');
-  }, [walletCore, chain, sendCryptoViewModel]);
+  }, []);
 
   return (
     sendCryptoViewModel &&
@@ -58,9 +58,6 @@ const SendCryptoView: React.FC = () => {
             balances={balances}
             priceRates={priceRates}
             tx={tx}
-            onContinue={async () =>
-              sendCryptoViewModel.moveToNextView('Verify Transaction')
-            }
             sendCryptoViewModel={sendCryptoViewModel}
           />
         )}

@@ -82,7 +82,7 @@ export function useSendCryptoViewModel(
   };
 
   const validateForm = async (): Promise<boolean> => {
-    if (!tx.toAddress) {
+    if (!toAddress) {
       alert('To address is not provided');
       setErrorMessage('To address is not provided');
       setShowAlert(true);
@@ -106,9 +106,8 @@ export function useSendCryptoViewModel(
       return false;
     }
 
-    const isAddressValid = await service?.addressService.validateAddress(
-      tx.toAddress
-    );
+    const isAddressValid =
+      await service?.addressService.validateAddress(toAddress);
     if (!isAddressValid) {
       alert('Invalid address');
       setErrorMessage('Invalid address');
@@ -125,6 +124,8 @@ export function useSendCryptoViewModel(
     const amountInDecimal = amount / Math.pow(10, tx.coin.decimals);
     setAmount(amountInDecimal.toString());
     convertToFiat(amountInDecimal);
+    tx.amount = amountInDecimal;
+    tx.amountInFiat = Number(amountInFiat);
   };
 
   const convertToFiat = async (amount: number): Promise<void> => {
@@ -140,6 +141,8 @@ export function useSendCryptoViewModel(
     if (rate) {
       const fiatAmount = amount * rate.value;
       setAmountInFiat(fiatAmount.toString());
+      tx.amount = amount;
+      tx.amountInFiat = Number(amountInFiat);
     }
   };
 
@@ -156,21 +159,17 @@ export function useSendCryptoViewModel(
     if (rate) {
       const tokenAmount = amountInFiat / rate.value;
       setAmount(tokenAmount.toString());
+
+      tx.amount = tokenAmount;
+      tx.amountInFiat = Number(amountInFiat);
     }
   };
 
-  const moveToNextView = async (step: string) => {
+  const moveToNextView = async (
+    nextStep: 'Send Crypto' | 'Verify Transaction'
+  ) => {
     if (await validateForm()) {
-      switch (step) {
-        case 'Send Crypto':
-          setStep('Verify Transaction');
-          break;
-        case 'Verify Transaction':
-          setStep('Send Crypto');
-          break;
-        default:
-          break;
-      }
+      setStep(nextStep);
     }
   };
 
@@ -182,15 +181,18 @@ export function useSendCryptoViewModel(
   const handleAmountChange = (newAmount: string) => {
     setAmount(newAmount);
     convertToFiat(Number(newAmount));
+    tx.amount = Number(amount);
   };
 
   const handleAmountInFiatChange = (amontInFiat: string) => {
     setAmountInFiat(amontInFiat);
     convertFromFiat(Number(amontInFiat));
+    tx.amountInFiat = Number(amontInFiat);
   };
 
   const handleToAddressChange = (toAddress: string) => {
     setToAddress(toAddress);
+    tx.toAddress = toAddress;
   };
 
   const handleMaxPressed = (percentage: number) => {
