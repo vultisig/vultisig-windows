@@ -1,0 +1,51 @@
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+interface KeysignErrorProps {
+  keysignError: string;
+  onTryAgain: () => void;
+}
+
+const KeysignError: React.FC<KeysignErrorProps> = ({
+  keysignError,
+  onTryAgain,
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="text-center text-white">
+      <img
+        src="/assets/images/warningYellow.svg"
+        alt="warning"
+        className="mx-auto mt-[25vh] mb-6"
+      />
+      <p className="text-2xl font-bold">
+        {t('keygen_failed')}
+        <br />
+        {keysignError && (
+          <p className="text-sm font-normal mt-2">{keysignError}</p>
+        )}
+      </p>
+      <div className="w-full fixed bottom-16 text-sm">
+        <div className="w-[330px] mx-auto">
+          <div className="w-full flex mb-4 px-3 py-2 border border-warning bg-warning/[.35] rounded-2xl">
+            <img src="/assets/images/warning.svg" alt="warning" />
+            <p className="ml-2 text-left">
+              {t('information_note1')}
+              <br />
+              {t('information_note2')}
+            </p>
+          </div>
+          <button
+            className="text-lg rounded-full w-full font-bold py-2 text-btn-primary bg-secondary"
+            onClick={onTryAgain}
+          >
+            {t('try_again')}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default KeysignError;

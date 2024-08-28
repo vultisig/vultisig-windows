@@ -29,7 +29,7 @@ export function getSession(isRelay: boolean, sessionID: string) {
   );
 }
 
-export function startkeygen(
+export function startSession(
   isRelay: boolean,
   sessionID: string,
   devices: string[]

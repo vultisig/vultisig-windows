@@ -10,11 +10,11 @@ import KeygenInitial from '../../components/keygen/KeygenInitial';
 import KeygenTypeSelector from '../../components/keygen/KeygenTypeSelector';
 import KeygenVerify from '../../components/keygen/KeygenVerify';
 import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
-import { startkeygen } from '../../services/Keygen/Keygen';
 import { KeygenType } from '../../model/TssType';
 import { generateRandomNumber } from '../../utils/util';
 import { ENDPOINTS } from '../../utils/config';
 import { storage } from '../../../wailsjs/go/models';
+import { startSession } from '../../services/Keygen/Keygen';
 
 const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -33,9 +33,11 @@ const SetupVaultView: React.FC = () => {
 
   useEffect(() => {
     setKeygenError('');
-
     // when current vault's local party is empty , means it is a new vault
-    if (vault.current.local_party_id === '') {
+    if (
+      vault.current.local_party_id === undefined ||
+      vault.current.local_party_id === ''
+    ) {
       // new vault
       vault.current.local_party_id = 'windows-' + generateRandomNumber();
     }
@@ -76,7 +78,7 @@ const SetupVaultView: React.FC = () => {
   };
 
   const keygenStart = async () => {
-    await startkeygen(isRelay, sessionID!, devices).then(() => {
+    await startSession(isRelay, sessionID!, devices).then(() => {
       setCurrentScreen(5);
     });
   };
