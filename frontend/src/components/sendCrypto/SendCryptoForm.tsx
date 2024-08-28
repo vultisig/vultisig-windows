@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React from 'react';
-import SolSvg from '../../../public/assets/icons/coins/sol.svg';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
 import { ISendTransaction } from '../../model/send-transaction';
@@ -12,21 +11,59 @@ interface SendCryptoFormProps {
   balances: Map<Coin, Balance>;
   priceRates: Map<string, Rate[]>;
   tx: ISendTransaction;
-  onContinue: () => void;
   sendCryptoViewModel: ReturnType<typeof useSendCryptoViewModel>;
 }
 
 const SendCryptoForm: React.FC<SendCryptoFormProps> = ({
   coin,
   balances,
-  priceRates,
+  //priceRates,
   tx,
-  onContinue,
   sendCryptoViewModel,
 }) => {
   const icon = `/assets/icons/coins/${coin.logo}.svg`;
+
   return (
     <div className="flex flex-col space-y-4 rounded-lg p-4 flex-grow">
+      {/* Custom Floating Alert */}
+      {sendCryptoViewModel.showAlert && (
+        <div
+          className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border border-gray-300 shadow-lg rounded-lg p-6 text-gray-800 max-w-md w-full"
+          role="alert"
+        >
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-lg font-bold">Error</span>
+            <span
+              className="text-gray-500 cursor-pointer"
+              onClick={() => sendCryptoViewModel.setShowAlert(false)}
+            >
+              <svg
+                className="fill-current h-6 w-6"
+                role="button"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <title>Close</title>
+                <path d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 10-.707.707L9.293 10l-3.64 3.64a.5.5 0 10.707.707L10 10.707l3.64 3.64a.5.5 0 00.707-.707L10.707 10l3.64-3.64a.5.5 0 000-.708z" />
+              </svg>
+            </span>
+          </div>
+          <div>
+            <span className="block text-sm">
+              {sendCryptoViewModel.errorMessage}
+            </span>
+          </div>
+          <div className="mt-4 text-right">
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring"
+              onClick={() => sendCryptoViewModel.setShowAlert(false)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col space-y-2">
         <div className="text-body-12 font-menlo text-neutral-0 placeholder-neutral-300 w-full py-3 px-3 bg-blue-600 rounded-lg">
           <div className="flex items-center justify-between">
@@ -160,8 +197,7 @@ const SendCryptoForm: React.FC<SendCryptoFormProps> = ({
       <button
         className="mt-4 text-body-14 font-montserrat font-bold text-blue-600 placeholder-neutral-300 h-12 w-full px-3 bg-turquoise-600 rounded-full"
         onClick={() => {
-          sendCryptoViewModel.validateForm();
-          onContinue();
+          sendCryptoViewModel.moveToNextView('Verify Transaction');
         }}
       >
         Continue

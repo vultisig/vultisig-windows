@@ -7,6 +7,8 @@ import { Balance } from '../../model/balance';
 import { Rate } from '../../model/price-rate';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
+import { ChainUtils } from '../../model/chain';
+import { ServiceFactory } from '../../services/ServiceFactory';
 
 interface SendCryptoViewModel {
   tx: ISendTransaction;
@@ -19,12 +21,14 @@ interface SendCryptoViewModel {
   isLoading: boolean;
   isCoinPickerActive: boolean;
   showMemoField: boolean;
+  step: 'Send Crypto' | 'Verify Transaction';
 
+  initializeService(walletCore: any, chain: string): void;
   validateForm(): Promise<boolean>;
   setMaxValues(percentage: number): void;
   convertToFiat(amount: number): Promise<void>;
   convertFromFiat(amount: number): Promise<void>;
-  moveToNextView(): void;
+  moveToNextView(step: string): void;
   handleCoinSelect(coin: Coin): void;
   handleAmountChange(newAmount: string): void;
   handleAmountInFiatChange(amountInFiat: string): void;
@@ -34,6 +38,8 @@ interface SendCryptoViewModel {
   setCoinPickerActive(isActive: boolean): void;
   setShowMemoField(show: boolean): void;
   setService(service: IService): void;
+  setStep(step: 'Send Crypto' | 'Verify Transaction'): void;
+  setShowAlert(showAlert: boolean): void;
 }
 
 export function useSendCryptoViewModel(
@@ -51,8 +57,75 @@ export function useSendCryptoViewModel(
   const [isCoinPickerActive, setCoinPickerActive] = useState(false);
   const [showMemoField, setShowMemoField] = useState(false);
 
+  const [step, setStep] = useState<'Send Crypto' | 'Verify Transaction'>(
+    'Send Crypto'
+  );
+
+  const initializeService = async (walletCore: any, chain: string) => {
+    if (!walletCore) {
+      console.error('WalletCore is not initialized');
+      return;
+    }
+
+    if (!chain) {
+      console.error('Chain is not provided');
+      return;
+    }
+
+    const chainEnum = ChainUtils.stringToChain(chain);
+    if (!chainEnum) {
+      console.error('Chain is not supported');
+      return;
+    }
+
+    const service = ServiceFactory.getService(chainEnum, walletCore);
+    setService(service);
+  };
+
+  const Alert = (message: string) => {
+    setErrorMessage(message);
+    setShowAlert(true);
+    console.error(message);
+  };
+
   const validateForm = async (): Promise<boolean> => {
-    // implement validation logic here
+    if (!toAddress) {
+      Alert('To address is not provided');
+      return false;
+    }
+
+    if (!tx.coin) {
+      Alert('Coin is not selected');
+      return false;
+    }
+
+    if (!service) {
+      Alert('Service is not initialized');
+      return false;
+    }
+
+    if (amount === '') {
+      Alert('Amount is not provided');
+      return false;
+    }
+
+    if (isNaN(Number(amount))) {
+      Alert('Invalid amount');
+      return false;
+    }
+
+    if (Number(amount) <= 0) {
+      Alert('Amount should be greater than 0');
+      return false;
+    }
+
+    const isAddressValid =
+      await service?.addressService.validateAddress(toAddress);
+    if (!isAddressValid) {
+      Alert('Invalid address');
+      return false;
+    }
+
     return true;
   };
 
@@ -62,6 +135,8 @@ export function useSendCryptoViewModel(
     const amountInDecimal = amount / Math.pow(10, tx.coin.decimals);
     setAmount(amountInDecimal.toString());
     convertToFiat(amountInDecimal);
+    tx.amount = amountInDecimal;
+    tx.amountInFiat = Number(amountInFiat);
   };
 
   const convertToFiat = async (amount: number): Promise<void> => {
@@ -77,6 +152,8 @@ export function useSendCryptoViewModel(
     if (rate) {
       const fiatAmount = amount * rate.value;
       setAmountInFiat(fiatAmount.toString());
+      tx.amount = amount;
+      tx.amountInFiat = Number(amountInFiat);
     }
   };
 
@@ -93,11 +170,18 @@ export function useSendCryptoViewModel(
     if (rate) {
       const tokenAmount = amountInFiat / rate.value;
       setAmount(tokenAmount.toString());
+
+      tx.amount = tokenAmount;
+      tx.amountInFiat = Number(amountInFiat);
     }
   };
 
-  const moveToNextView = () => {
-    // implement move to next view logic here
+  const moveToNextView = async (
+    nextStep: 'Send Crypto' | 'Verify Transaction'
+  ) => {
+    if (await validateForm()) {
+      setStep(nextStep);
+    }
   };
 
   const handleCoinSelect = (coin: Coin) => {
@@ -108,15 +192,18 @@ export function useSendCryptoViewModel(
   const handleAmountChange = (newAmount: string) => {
     setAmount(newAmount);
     convertToFiat(Number(newAmount));
+    tx.amount = Number(amount);
   };
 
   const handleAmountInFiatChange = (amontInFiat: string) => {
     setAmountInFiat(amontInFiat);
     convertFromFiat(Number(amontInFiat));
+    tx.amountInFiat = Number(amontInFiat);
   };
 
   const handleToAddressChange = (toAddress: string) => {
     setToAddress(toAddress);
+    tx.toAddress = toAddress;
   };
 
   const handleMaxPressed = (percentage: number) => {
@@ -134,6 +221,7 @@ export function useSendCryptoViewModel(
     isLoading,
     isCoinPickerActive,
     showMemoField,
+    initializeService,
     validateForm,
     setMaxValues,
     convertToFiat,
@@ -147,6 +235,9 @@ export function useSendCryptoViewModel(
     setLoading,
     setCoinPickerActive,
     setShowMemoField,
+    setShowAlert,
     setService,
+    setStep,
+    step,
   };
 }
