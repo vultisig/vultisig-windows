@@ -159,7 +159,9 @@ const useVaultListViewModel = (walletCore: WalletCore | null) => {
 
   useEffect(() => {
     if (selectedVault) {
-      // console.log('Selected vault changed:', selectedVault);
+      setCoins(new Map());
+      setBalances(new Map());
+      setPriceRates(new Map());
       fetchCoins(selectedVault);
     }
   }, [selectedVault]);
