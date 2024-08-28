@@ -26,9 +26,6 @@ export class BlockchainServiceThorchain implements IBlockchainService {
     keysignPayload: KeysignPayload,
     signingInput: any
   ): Uint8Array {
-    if (!this.isTHORChainSpecific(keysignPayload.blockchainSpecific)) {
-      throw new Error('Invalid blockchain specific');
-    }
     const pubKeyData = Buffer.from(
       keysignPayload.coin?.hexPublicKey || '',
       'hex'
@@ -36,12 +33,12 @@ export class BlockchainServiceThorchain implements IBlockchainService {
     if (!pubKeyData) {
       throw new Error('invalid hex public key');
     }
-    const thorchainSpecific =
-      keysignPayload.blockchainSpecific as unknown as THORChainSpecific;
+    const thorchainSpecific = keysignPayload.blockchainSpecific
+      .value as unknown as THORChainSpecific;
     const input = signingInput;
     input.publicKey = pubKeyData;
-    input.accountNumber = thorchainSpecific.accountNumber;
-    input.sequence = thorchainSpecific.sequence;
+    input.accountNumber = Number(thorchainSpecific.accountNumber);
+    input.sequence = Number(thorchainSpecific.sequence);
     input.mode = BroadcastMode.SYNC;
     input.fee = TW.Cosmos.Proto.Fee.create({
       gas: 20000000,
@@ -63,11 +60,8 @@ export class BlockchainServiceThorchain implements IBlockchainService {
     if (!fromAddr) {
       throw new Error(`${keysignPayload.coin.address} is invalid`);
     }
-    if (!this.isTHORChainSpecific(keysignPayload.blockchainSpecific.value)) {
-      throw new Error('Invalid blockchain specific');
-    }
-    const thorchainSpecific =
-      keysignPayload.blockchainSpecific as unknown as THORChainSpecific;
+    const thorchainSpecific = keysignPayload.blockchainSpecific
+      .value as unknown as THORChainSpecific;
     const pubKeyData = Buffer.from(keysignPayload.coin.hexPublicKey, 'hex');
     if (!pubKeyData) {
       throw new Error('invalid hex public key');
@@ -94,7 +88,7 @@ export class BlockchainServiceThorchain implements IBlockchainService {
           thorchainDepositMessage:
             TW.Cosmos.Proto.Message.THORChainDeposit.create({
               signer: fromAddr.data(),
-              memo: keysignPayload.memo,
+              memo: keysignPayload.memo || '',
               coins: [thorchainCoin],
             }),
         }),
@@ -126,10 +120,10 @@ export class BlockchainServiceThorchain implements IBlockchainService {
       publicKey: pubKeyData,
       signingMode: SigningMode.Protobuf,
       chainId: walletCore.CoinTypeExt.chainId(coinType),
-      accountNumber: thorchainSpecific.accountNumber,
-      sequence: thorchainSpecific.sequence,
+      accountNumber: Number(thorchainSpecific.accountNumber),
+      sequence: Number(thorchainSpecific.sequence),
       mode: BroadcastMode.SYNC,
-      memo: keysignPayload.memo,
+      memo: keysignPayload.memo || '',
       messages: message,
       fee: TW.Cosmos.Proto.Fee.create({
         gas: 20000000,
@@ -153,7 +147,7 @@ export class BlockchainServiceThorchain implements IBlockchainService {
       throw new Error(preSigningOutput.errorMessage);
     }
     return [
-      walletCore.HexCoding.encode(preSigningOutput.dataHash).substring(2),
+      walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix(),
     ];
   }
   async getSignedTransaction(

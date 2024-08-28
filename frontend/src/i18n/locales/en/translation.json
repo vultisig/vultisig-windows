@@ -95,5 +95,11 @@
   "join_keygen_slider7_note2": "from multiple devices",
   "join_keygen_slider7_note3": "enhancing flexibility without compromising security.",
   "generating_ecdsa_key": "Generating ECDSA Key",
-  "generating_eddsa_key": "Generating EdDSA Key"
+  "generating_eddsa_key": "Generating EdDSA Key",
+  "signing_ecdsa_key": "Signing using ECDSA Key...",
+  "signing_eddsa_key": "Signing using EdDSA Key...",
+  "send": "Send",
+  "keysign": "Keysign",
+  "keysign_error": "Keysign Error",
+  "keysign_done": "Done"
 }

@@ -132,26 +132,6 @@ export namespace storage {
 
 export namespace tss {
 	
-	export class KeysignRequest {
-	    pub_key: string;
-	    message_to_sign: string;
-	    keysign_committee_keys: string;
-	    local_party_key: string;
-	    derive_path: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new KeysignRequest(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.pub_key = source["pub_key"];
-	        this.message_to_sign = source["message_to_sign"];
-	        this.keysign_committee_keys = source["keysign_committee_keys"];
-	        this.local_party_key = source["local_party_key"];
-	        this.derive_path = source["derive_path"];
-	    }
-	}
 	export class KeysignResponse {
 	    msg: string;
 	    r: string;

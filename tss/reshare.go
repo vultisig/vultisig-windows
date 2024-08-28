@@ -9,9 +9,10 @@ import (
 
 	"github.com/sirupsen/logrus"
 	mtss "github.com/vultisig/mobile-tss-lib/tss"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
+
 	"github.com/vultisig/vultisig-win/relay"
 	"github.com/vultisig/vultisig-win/storage"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 func (t *TssService) Reshare(vault storage.Vault,
@@ -55,7 +56,7 @@ func (t *TssService) Reshare(vault storage.Vault,
 		return nil, fmt.Errorf("failed to create TSS service: %w", err)
 	}
 	localPartyID := vault.LocalPartyID
-	endCh, wg := t.startMessageDownload(serverURL, sessionID, localPartyID, hexEncryptionKey, tssServerImp)
+	endCh, wg := t.startMessageDownload(serverURL, sessionID, localPartyID, hexEncryptionKey, tssServerImp, "")
 	ecdsaPubkey, eddsaPubkey, newResharePrefix := "", "", ""
 	for attempt := 0; attempt < 3; attempt++ {
 		ecdsaPubkey, eddsaPubkey, newResharePrefix, err = t.reshareWithRetry(

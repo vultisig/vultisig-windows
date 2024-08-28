@@ -12,6 +12,7 @@ import SendCryptoView from './pages/send/SendCryptoView';
 import { darkTheme } from './lib/ui/theme/darkTheme';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
 import { ThemeProvider } from './lib/ui/theme/ThemeProvider';
+import KeysignFlowView from './pages/keysign/KeysignFlow';
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App: React.FC = () => {
               <Route path="/vault/setup" element={<SetupVaultView />} />
               <Route path="/vault/import" element={<ImportVaultView />} />
               <Route path="/vault/qr/upload" element={<UploadQrPage />} />
+              <Route path="/vault/keysign" element={<KeysignFlowView />} />
               <Route
                 path="/vault/list"
                 element={

@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+	"github.com/vultisig/mobile-tss-lib/tss"
 
 	"github.com/vultisig/vultisig-win/utils"
 )
@@ -246,4 +247,49 @@ func (s *Client) EndSession(sessionID string) error {
 		return fmt.Errorf("fail to end session: %s", resp.Status)
 	}
 	return nil
+}
+
+func (s *Client) MarkKeysignComplete(sessionID string, messageID string, sig tss.KeysignResponse) error {
+	sessionURL := s.vultisigRelay + "/complete/" + sessionID + "/keysign"
+	body, err := json.Marshal(sig)
+	if err != nil {
+		return fmt.Errorf("fail to marshal keysign to json: %w", err)
+	}
+	req, err := http.NewRequest(http.MethodPost, sessionURL, bytes.NewBuffer(body))
+	if err != nil {
+		return fmt.Errorf("fail to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("message_id", messageID)
+	resp, err := s.client.Do(req)
+	if err != nil {
+		return fmt.Errorf("fail to mark keysign complete: %w", err)
+	}
+	defer s.closer(resp.Body)
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("fail to mark keysign complete: %s", resp.Status)
+	}
+	return nil
+}
+func (s *Client) CheckKeysignComplete(sessionID string, messageID string) (*tss.KeysignResponse, error) {
+	sessionURL := s.vultisigRelay + "/complete/" + sessionID + "/keysign"
+	req, err := http.NewRequest(http.MethodGet, sessionURL, nil)
+	if err != nil {
+		return nil, fmt.Errorf("fail to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("message_id", messageID)
+	resp, err := s.client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("fail to check keysign complete: %w", err)
+	}
+	defer s.closer(resp.Body)
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("fail to check keysign complete: %s", resp.Status)
+	}
+	var sig tss.KeysignResponse
+	if err := json.NewDecoder(resp.Body).Decode(&sig); err != nil {
+		return nil, fmt.Errorf("fail to unmarshal keysign response: %w", err)
+	}
+	return &sig, nil
 }

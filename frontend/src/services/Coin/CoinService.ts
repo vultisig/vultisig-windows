@@ -37,7 +37,7 @@ export class CoinService implements ICoinService {
       publicKeyEdDSA,
       hexChainCode
     );
-
+    const hexPublicKey = this.walletCore.HexCoding.encode(publicKey.data());
     return new Coin({
       chain: this.chain.toString(),
       ticker: asset.ticker,
@@ -46,7 +46,7 @@ export class CoinService implements ICoinService {
       decimals: asset.decimals,
       priceProviderId: asset.priceProviderId,
       isNativeToken: asset.isNativeToken,
-      hexPublicKey: publicKey.data.toString('hex'),
+      hexPublicKey: hexPublicKey.stripHexPrefix(),
       logo: asset.logo,
     });
   }

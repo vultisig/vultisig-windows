@@ -134,7 +134,6 @@ func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 	if err := json.Unmarshal([]byte(signers), &vault.Signers); err != nil {
 		return nil, fmt.Errorf("could not unmarshal signers, err: %w", err)
 	}
-
 	keyShares, err := s.getKeyShares(publicKeyEcdsa)
 	if err != nil {
 		return nil, fmt.Errorf("could not get keyshares, err: %w", err)
@@ -184,7 +183,7 @@ func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
 
 // GetVaults gets all vaults
 func (s *Store) GetVaults() ([]*Vault, error) {
-	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, reshare_prefix, listorder, is_backedup FROM vaults`
+	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, listorder, is_backedup FROM vaults`
 	rows, err := s.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("could not query vaults, err: %w", err)
@@ -194,19 +193,23 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 	var vaults []*Vault
 	for rows.Next() {
 		var vault Vault
+		var signers string
 		err := rows.Scan(&vault.Name,
 			&vault.PublicKeyECDSA,
 			&vault.PublicKeyEdDSA,
 			&vault.CreatedAt,
 			&vault.HexChainCode,
 			&vault.LocalPartyID,
+			&signers,
 			&vault.ResharePrefix,
 			&vault.Order,
 			&vault.IsBackedUp)
 		if err != nil {
 			return nil, fmt.Errorf("could not scan vault, err: %w", err)
 		}
-
+		if err := json.Unmarshal([]byte(signers), &vault.Signers); err != nil {
+			return nil, fmt.Errorf("could not unmarshal signers, err: %w", err)
+		}
 		keyShares, err := s.getKeyShares(vault.PublicKeyECDSA)
 		if err != nil {
 			return nil, fmt.Errorf("could not get keyshares, err: %w", err)
