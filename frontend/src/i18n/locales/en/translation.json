@@ -99,5 +99,7 @@
   "signing_ecdsa_key": "Signing using ECDSA Key...",
   "signing_eddsa_key": "Signing using EdDSA Key...",
   "send": "Send",
-  "keysign": "Keysign"
+  "keysign": "Keysign",
+  "keysign_error": "Keysign Error",
+  "keysign_done": "Done"
 }

@@ -7,7 +7,11 @@ import NavBar from '../../components/navbar/NavBar';
 import KeysignView from '../../components/keysign/KeysignView';
 import { ENDPOINTS } from '../../utils/config';
 import { KeysignPayloadUtils } from '../../extensions/KeysignPayload';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { startSession } from '../../services/Keygen/Keygen';
+import { useWalletCore } from '../../main';
+import KeysignError from '../../components/keysign/KeysignError';
+import KeysignDone from '../../components/keysign/KeysignDone';
 
 const KeysignFlowView: React.FC = () => {
   const { t } = useTranslation();
@@ -17,19 +21,18 @@ const KeysignFlowView: React.FC = () => {
   const [hexEncryptionKey, setHexEncryptionKey] = useState<string>('');
   const [serverURL, setServerURL] = useState<string>('http://localhost:18080');
   const [messagesToSign, setMessagesToSign] = useState<string[]>([]);
+  const [keysignErr, setKeysignErr] = useState<string>('');
+  const walletCore = useWalletCore();
   const currentVault = useRef<storage.Vault>(new storage.Vault());
   const location = useLocation();
   const { vault, keysignPayload } = location.state as {
     vault: storage.Vault;
     keysignPayload: KeysignPayload;
   };
-
+  const navigate = useNavigate();
   useEffect(() => {
-    console.log('testtest...');
     currentVault.current = vault;
     setCurrentScreen(0);
-    console.log('testtest...111');
-    console.log('current screen:title', screens[currentScreen].title);
   }, []);
 
   const onKeysignPeerDiscoveryContinue = (
@@ -38,15 +41,21 @@ const KeysignFlowView: React.FC = () => {
     devices: string[],
     hexEncryptionKey: string
   ) => {
-    console.log('KeysignPeerDiscoveryContinue');
     setServerURL(
       isRelay ? ENDPOINTS.VULTISIG_RELAY : ENDPOINTS.LOCAL_MEDIATOR_URL
     );
     setSessionID(sessionID);
+    devices.push(currentVault.current.local_party_id!);
     setDevices(devices);
     setHexEncryptionKey(hexEncryptionKey);
-    KeysignPayloadUtils.getPreKeysignImages(keysignPayload).then(msgs => {
-      setMessagesToSign(msgs);
+    KeysignPayloadUtils.getPreKeysignImages(walletCore!, keysignPayload).then(
+      msgs => {
+        setMessagesToSign(msgs);
+      }
+    );
+    console.log('keysign payload:', keysignPayload);
+    startSession(isRelay, sessionID, devices).then(() => {
+      setCurrentScreen(1);
     });
   };
 
@@ -58,6 +67,13 @@ const KeysignFlowView: React.FC = () => {
         return prev > 0 ? prev - 1 : prev;
       }
     });
+  };
+  const onKeysignError = (err: string) => {
+    setKeysignErr(err);
+    setCurrentScreen(2);
+  };
+  const onKeysignDone = () => {
+    setCurrentScreen(3);
   };
   const screens = [
     {
@@ -81,8 +97,23 @@ const KeysignFlowView: React.FC = () => {
           messagesToSign={messagesToSign}
           keysignPayload={keysignPayload}
           serverURL={serverURL}
-          onDone={() => {}}
-          onError={() => {}}
+          onDone={onKeysignDone}
+          onError={onKeysignError}
+        />
+      ),
+    },
+    {
+      title: t('keysign_error'),
+      content: <KeysignError keysignError={keysignErr} onTryAgain={() => {}} />,
+    },
+    {
+      title: t('keysign_done'),
+      content: (
+        <KeysignDone
+          onNext={() => {
+            //TODO: navigate to current vault
+            navigate('/vault/list');
+          }}
         />
       ),
     },

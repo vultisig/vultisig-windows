@@ -43,31 +43,33 @@ describe('thorchain.ts', () => {
 
   const getTestKeysignPayload = () => {
     const vaultHexPublicKey =
-      '02d2142480ff0461b4755574e760f06abec0b9bfbe1112137627e031cc085f60c7';
+      '020503826804dcf347bb5c98331f10ad388fdbc935adf775154089acd89f2ce9dd';
     const thorPublicKey =
-      '0204fa2732a07d65222b9484c45d7f32319498d0ea8748e198ef2c9001f8db3d91';
+      '02bd71faf6447dd28ecc7936729c543e8de0483c9641ed65fcd4f223b010263c67';
     const thorchainSpecific = new THORChainSpecific({
-      accountNumber: protoInt64.parse('1024'),
+      accountNumber: protoInt64.parse('1'),
       sequence: protoInt64.zero,
+      fee: protoInt64.zero,
+      isDeposit: false,
     });
 
     const keysignPayload = new KeysignPayload({
       coin: new Coin({
         chain: 'THORChain',
         ticker: 'RUNE',
-        address: 'thor1jnwfjsytm8j79s66et35etv542q7eyah807gk5',
+        address: 'thor10stcxwypezd4pqwsdymu2p9hq90wtau6j4uljg',
         decimals: 8,
         isNativeToken: true,
         hexPublicKey: thorPublicKey,
       }),
-      toAddress: 'thor1jnwfjsytm8j79s66et35etv542q7eyah807gk5',
-      toAmount: '100000000',
+      toAddress: 'thor1vzltn37rqccwk95tny657au9j2z072dhgstcmn',
+      toAmount: '1000000',
       blockchainSpecific: {
         case: 'thorchainSpecific',
         value: thorchainSpecific,
       },
       vaultPublicKeyEcdsa: vaultHexPublicKey,
-      vaultLocalPartyId: 'test-party',
+      vaultLocalPartyId: 'windows-689',
     });
     return keysignPayload;
   };
@@ -83,7 +85,7 @@ describe('thorchain.ts', () => {
     const result =
       await blockchainService.getPreSignedImageHash(keysignPayload);
     expect(result).toStrictEqual([
-      '4a4dfce117748df028592b46bc9af7e48e6f5b4ae26d3e5b77d9677b521908e1',
+      'cac1691056905f68cec68ac322b4a067c511030996c876bd47d52fdbab34dd4a',
     ]);
     console.log('result', result);
   });

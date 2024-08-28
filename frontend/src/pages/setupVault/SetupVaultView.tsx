@@ -10,11 +10,11 @@ import KeygenInitial from '../../components/keygen/KeygenInitial';
 import KeygenTypeSelector from '../../components/keygen/KeygenTypeSelector';
 import KeygenVerify from '../../components/keygen/KeygenVerify';
 import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
-import { startkeygen } from '../../services/Keygen/Keygen';
 import { KeygenType } from '../../model/TssType';
 import { generateRandomNumber } from '../../utils/util';
 import { ENDPOINTS } from '../../utils/config';
 import { storage } from '../../../wailsjs/go/models';
+import { startSession } from '../../services/Keygen/Keygen';
 
 const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -78,7 +78,7 @@ const SetupVaultView: React.FC = () => {
   };
 
   const keygenStart = async () => {
-    await startkeygen(isRelay, sessionID!, devices).then(() => {
+    await startSession(isRelay, sessionID!, devices).then(() => {
       setCurrentScreen(5);
     });
   };

@@ -1,13 +1,13 @@
+import { WalletCore } from '@trustwallet/wallet-core';
 import { KeysignPayload } from '../gen/vultisig/keysign/v1/keysign_message_pb';
-import { useWalletCore } from '../main';
 import { ChainUtils } from '../model/chain';
 import { BlockchainServiceFactory } from '../services/Blockchain/BlockchainServiceFactory';
 
 export class KeysignPayloadUtils {
   static async getPreKeysignImages(
+    walletCore: WalletCore,
     keysignPayload: KeysignPayload
   ): Promise<string[]> {
-    const walletCore = useWalletCore();
     if (keysignPayload.coin === undefined) {
       return [];
     }

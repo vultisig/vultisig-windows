@@ -74,6 +74,7 @@ const KeysignPeerDiscovery: React.FC<KeysignPeerDiscoveryProps> = ({
     await postSession(isRelay, sessionID!, serviceName!);
     checkForDevices(isRelay, sessionID!, setDevices);
   };
+
   const handleDisabled = () => {
     if (vault.signers == undefined || vault.signers.length == 0) return true;
     const minDevices = (vault.signers.length * 2) / 3;

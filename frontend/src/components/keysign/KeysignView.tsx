@@ -71,19 +71,23 @@ const KeysignView: React.FC<KeysignViewProps> = ({
         walletCore!
       );
       const tssType = ChainUtils.getTssKeysignType(chain);
-
-      const sigs = await Keysign(
-        vault,
-        messagesToSign,
-        vault.local_party_id,
-        walletCore!.CoinTypeExt.derivationPath(coinService.getCoinType()),
-        sessionID,
-        hexEncryptionKey,
-        serverURL,
-        tssType.toString()
-      );
-      console.log('sigs:', sigs);
-      onDone();
+      try {
+        const sigs = await Keysign(
+          vault,
+          messagesToSign,
+          vault.local_party_id,
+          walletCore!.CoinTypeExt.derivationPath(coinService.getCoinType()),
+          sessionID,
+          hexEncryptionKey,
+          serverURL,
+          tssType.toString()
+        );
+        console.log('sigs:', sigs);
+        onDone();
+      } catch (e) {
+        console.error(e);
+        onError(String(e));
+      }
     }
     kickoffKeygen();
   }, []);
