@@ -5,10 +5,12 @@ import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
 import { ISendTransaction } from '../../model/send-transaction';
 import { useSendCryptoViewModel } from '../../pages/send/SendCryptoViewModel';
+import { Rate } from '../../model/price-rate';
 
 interface SendCryptoFormProps {
   coin: Coin;
   balances: Map<Coin, Balance>;
+  priceRates: Map<string, Rate[]>;
   tx: ISendTransaction;
   onContinue: () => void;
   sendCryptoViewModel: ReturnType<typeof useSendCryptoViewModel>;
@@ -17,19 +19,31 @@ interface SendCryptoFormProps {
 const SendCryptoForm: React.FC<SendCryptoFormProps> = ({
   coin,
   balances,
+  priceRates,
   tx,
   onContinue,
   sendCryptoViewModel,
 }) => {
+  const icon = `/assets/icons/coins/${coin.logo}.svg`;
   return (
     <div className="flex flex-col space-y-4 rounded-lg p-4 flex-grow">
       <div className="flex flex-col space-y-2">
         <div className="text-body-12 font-menlo text-neutral-0 placeholder-neutral-300 w-full py-3 px-3 bg-blue-600 rounded-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2.5">
-              <div className="flex items-center justify-center bg-black p-1.5 rounded-full">
-                <img src={SolSvg} alt="" className="w-4 h-4" />
+              <div
+                className="flex items-center justify-center w-9 h-9 text-black text-xs rounded-full"
+                style={{
+                  backgroundImage: `url(${icon})`,
+                  backgroundSize: 'contain',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                }}
+              >
+                {/* Optionally keep the ticker as a fallback or overlay */}
+                {/* <span className="sr-only">{coin.ticker}</span> */}
               </div>
+
               <div className="flex flex-col ml-4">
                 <div className="chain-name">{coin.ticker}</div>
               </div>

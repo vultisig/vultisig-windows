@@ -9,8 +9,9 @@ import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { VaultPage } from './pages/vault/VaultPage';
 import SendCryptoView from './pages/send/SendCryptoView';
-import { ThemeProvider } from 'styled-components';
 import { darkTheme } from './lib/ui/theme/darkTheme';
+import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
+import { ThemeProvider } from './lib/ui/theme/ThemeProvider';
 import KeysignFlowView from './pages/keysign/KeysignFlow';
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App: React.FC = () => {
               <Route path="/" index element={<OnboardingView />} />
               <Route path="/vault/setup" element={<SetupVaultView />} />
               <Route path="/vault/import" element={<ImportVaultView />} />
+              <Route path="/vault/qr/upload" element={<UploadQrPage />} />
               <Route path="/vault/keysign" element={<KeysignFlowView />} />
               <Route
                 path="/vault/list"
