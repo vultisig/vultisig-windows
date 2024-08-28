@@ -39,6 +39,7 @@ interface SendCryptoViewModel {
   setShowMemoField(show: boolean): void;
   setService(service: IService): void;
   setStep(step: 'Send Crypto' | 'Verify Transaction'): void;
+  setShowAlert(showAlert: boolean): void;
 }
 
 export function useSendCryptoViewModel(
@@ -224,6 +225,7 @@ export function useSendCryptoViewModel(
     setLoading,
     setCoinPickerActive,
     setShowMemoField,
+    setShowAlert,
     setService,
     setStep,
     step,

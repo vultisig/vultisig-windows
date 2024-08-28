@@ -17,13 +17,40 @@ interface SendCryptoFormProps {
 const SendCryptoForm: React.FC<SendCryptoFormProps> = ({
   coin,
   balances,
-  priceRates,
+  //priceRates,
   tx,
   sendCryptoViewModel,
 }) => {
   const icon = `/assets/icons/coins/${coin.logo}.svg`;
+
   return (
     <div className="flex flex-col space-y-4 rounded-lg p-4 flex-grow">
+      {/* Custom Alert */}
+      {sendCryptoViewModel.showAlert && (
+        <div
+          className="bg-red-500 text-white text-sm font-bold px-4 py-3 rounded relative"
+          role="alert"
+        >
+          <span className="block sm:inline">
+            {sendCryptoViewModel.errorMessage}
+          </span>
+          <span
+            className="absolute top-0 bottom-0 right-0 px-4 py-3"
+            onClick={() => sendCryptoViewModel.setShowAlert(false)}
+          >
+            <svg
+              className="fill-current h-6 w-6 text-white"
+              role="button"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <title>Close</title>
+              <path d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 10-.707.707L9.293 10l-3.64 3.64a.5.5 0 10.707.707L10 10.707l3.64 3.64a.5.5 0 00.707-.707L10.707 10l3.64-3.64a.5.5 0 000-.708z" />
+            </svg>
+          </span>
+        </div>
+      )}
+
       <div className="flex flex-col space-y-2">
         <div className="text-body-12 font-menlo text-neutral-0 placeholder-neutral-300 w-full py-3 px-3 bg-blue-600 rounded-lg">
           <div className="flex items-center justify-between">
