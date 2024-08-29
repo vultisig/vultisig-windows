@@ -9,6 +9,7 @@ import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
 import { ChainUtils } from '../../model/chain';
 import { ServiceFactory } from '../../services/ServiceFactory';
+import { FeeGasInfo } from '../../model/gas-info';
 
 interface SendCryptoViewModel {
   tx: ISendTransaction;
@@ -22,6 +23,9 @@ interface SendCryptoViewModel {
   isCoinPickerActive: boolean;
   showMemoField: boolean;
   step: 'Send Crypto' | 'Verify Transaction';
+  gasInfo: FeeGasInfo | null;
+  gas: number;
+  isGasInfoLoaded: boolean;
 
   initializeService(walletCore: any, chain: string): void;
   validateForm(): Promise<boolean>;
@@ -40,6 +44,10 @@ interface SendCryptoViewModel {
   setService(service: IService): void;
   setStep(step: 'Send Crypto' | 'Verify Transaction'): void;
   setShowAlert(showAlert: boolean): void;
+  loadGasInfoForSending(tx: ISendTransaction): Promise<void>;
+  setGasInfo(gasInfo: FeeGasInfo | null): void;
+  setGas(gas: number): void;
+  setIsGasInfoLoaded(isLoaded: boolean): void;
 }
 
 export function useSendCryptoViewModel(
@@ -56,6 +64,9 @@ export function useSendCryptoViewModel(
   const [isLoading, setLoading] = useState(false);
   const [isCoinPickerActive, setCoinPickerActive] = useState(false);
   const [showMemoField, setShowMemoField] = useState(false);
+  const [gasInfo, setGasInfo] = useState<FeeGasInfo | null>(null);
+  const [gas, setGas] = useState<number>(0);
+  const [isGasInfoLoaded, setIsGasInfoLoaded] = useState(false);
 
   const [step, setStep] = useState<'Send Crypto' | 'Verify Transaction'>(
     'Send Crypto'
@@ -210,6 +221,22 @@ export function useSendCryptoViewModel(
     setMaxValues(percentage);
   };
 
+  const loadGasInfoForSending = async (tx: ISendTransaction) => {
+    if (!service) {
+      console.error('Service is not initialized');
+      return;
+    }
+
+    try {
+      const gasInfo = await service.feeService.getFee(tx.coin);
+      tx.gas = gasInfo.gasPrice;
+      setGasInfo(gasInfo);
+      setGas(tx.gas);
+    } catch (ex) {
+      console.error('Failed to get gas info for sending, error: ', ex);
+    }
+  };
+
   return {
     tx,
     service,
@@ -221,6 +248,10 @@ export function useSendCryptoViewModel(
     isLoading,
     isCoinPickerActive,
     showMemoField,
+    gasInfo,
+    gas,
+    isGasInfoLoaded,
+    step,
     initializeService,
     validateForm,
     setMaxValues,
@@ -238,6 +269,9 @@ export function useSendCryptoViewModel(
     setShowAlert,
     setService,
     setStep,
-    step,
+    loadGasInfoForSending,
+    setGasInfo,
+    setGas,
+    setIsGasInfoLoaded,
   };
 }

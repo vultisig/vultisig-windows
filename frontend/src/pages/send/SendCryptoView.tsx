@@ -33,6 +33,22 @@ const SendCryptoView: React.FC = () => {
     sendCryptoViewModel.initializeService(walletCore, chain ?? '');
   }, []);
 
+  useEffect(() => {
+    if (
+      sendCryptoViewModel.service &&
+      !sendCryptoViewModel.isGasInfoLoaded &&
+      tx.coin
+    ) {
+      sendCryptoViewModel.loadGasInfoForSending(tx).then(() => {
+        sendCryptoViewModel.setIsGasInfoLoaded(true);
+      });
+    }
+  }, [
+    sendCryptoViewModel.service,
+    sendCryptoViewModel.isGasInfoLoaded,
+    tx.coin,
+  ]);
+
   return (
     sendCryptoViewModel &&
     sendCryptoViewModel.service && (

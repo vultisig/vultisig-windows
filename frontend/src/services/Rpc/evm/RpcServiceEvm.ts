@@ -154,8 +154,8 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       ]);
 
       return {
-        gasPrice: BigInt(gasPrice.toString()),
-        priorityFee: BigInt(priorityFee.toString()),
+        gasPrice: Number(gasPrice),
+        priorityFee: Number(priorityFee),
         nonce: nonce,
         fee: this.calculateFee(coin),
       };

@@ -4,6 +4,7 @@ import { WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../../model/chain';
 import { FeeGasInfo } from '../../model/gas-info';
 import { IFeeService } from './IFeeService';
+import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 
 export class FeeService implements IFeeService {
   chain: Chain;
@@ -13,7 +14,7 @@ export class FeeService implements IFeeService {
     this.walletCore = walletCore;
   }
 
-  getFee(): Promise<FeeGasInfo> {
+  getFee(coin: Coin): Promise<FeeGasInfo> {
     throw new Error('Method not implemented.');
   }
 }

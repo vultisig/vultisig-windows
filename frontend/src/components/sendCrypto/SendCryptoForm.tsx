@@ -17,7 +17,6 @@ interface SendCryptoFormProps {
 const SendCryptoForm: React.FC<SendCryptoFormProps> = ({
   coin,
   balances,
-  //priceRates,
   tx,
   sendCryptoViewModel,
 }) => {
@@ -192,6 +191,18 @@ const SendCryptoForm: React.FC<SendCryptoFormProps> = ({
             placeholder="Enter Amount In Fiat"
           />
         </div>
+      </div>
+      <div className="flex flex-col space-y-2">
+        <label htmlFor="gas" className="text-neutral-0 text-sm font-medium">
+          Gas:
+        </label>
+        <input
+          id="gas"
+          type="text"
+          value={sendCryptoViewModel.gas}
+          className="text-body-12 font-menlo text-neutral-0 placeholder-neutral-300 h-12 w-full px-3 bg-blue-600 rounded-lg"
+          disabled={true}
+        />
       </div>
       <div className="flex-grow"></div>
       <button
