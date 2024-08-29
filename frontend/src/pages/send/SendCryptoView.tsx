@@ -37,7 +37,8 @@ const SendCryptoView: React.FC = () => {
     if (
       sendCryptoViewModel.service &&
       !sendCryptoViewModel.isGasInfoLoaded &&
-      tx.coin
+      tx.coin &&
+      sendCryptoViewModel.gas === 0
     ) {
       sendCryptoViewModel.loadGasInfoForSending(tx).then(() => {
         sendCryptoViewModel.setIsGasInfoLoaded(true);
