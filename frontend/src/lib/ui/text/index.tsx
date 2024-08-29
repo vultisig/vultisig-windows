@@ -6,6 +6,7 @@ const getTextColorRecord = ({ colors }: DefaultTheme) =>
   ({
     regular: colors.text,
     primary: colors.primary,
+    primarAlt: colors.primaryAlt,
     contrast: colors.contrast,
   }) as const;
 

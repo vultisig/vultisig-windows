@@ -21,8 +21,7 @@ type CoinBalanceItemProps = ClickableComponentProps & {
   amount: number;
   decimals: number;
   icon?: string;
-  chainId: string;
-  fiatValue: number;
+  fiatPrice?: number;
 };
 
 const ImageContainer = styled.div`
@@ -41,8 +40,7 @@ export const CoinBalanceItem = ({
   amount,
   decimals,
   onClick,
-  chainId,
-  fiatValue,
+  fiatPrice,
 }: CoinBalanceItemProps) => {
   return (
     <UnstyledButton onClick={onClick}>
@@ -70,9 +68,14 @@ export const CoinBalanceItem = ({
                 <Text color="regular" weight="400" size={12}>
                   {formatAmount(fromChainAmount(amount, decimals))}
                 </Text>
-                <Text color="regular" weight="700" size={16}>
-                  {fiatValue}
-                </Text>
+                {fiatPrice && (
+                  <Text color="regular" weight="700" size={16}>
+                    $
+                    {formatAmount(
+                      fromChainAmount(amount, decimals) * fiatPrice
+                    )}
+                  </Text>
+                )}
               </HStack>
             </HStack>
             <Text color="primary" weight="400" size={12}>

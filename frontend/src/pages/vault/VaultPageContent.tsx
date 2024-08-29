@@ -9,16 +9,31 @@ import { useTranslation } from 'react-i18next';
 import { match } from '../../lib/utils/match';
 import styled from 'styled-components';
 import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt';
+import { PageHeader } from '../../ui/page/PageHeader';
+import { getColor } from '../../lib/ui/theme/getters';
+import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
+import { MenuIcon } from '../../lib/ui/icons/MenuIcon';
+import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle';
+import { VStack } from '../../lib/ui/layout/Stack';
+import { toSizeUnit } from '../../lib/ui/css/toSizeUnit';
+import { pageConfig } from '../../ui/page/config';
+import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
+import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
+import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 
 type VaultPageView = 'balances' | 'vaults';
 
 const PositionQrPrompt = styled.div`
   position: fixed;
-  bottom: 40px;
+  bottom: ${toSizeUnit(pageConfig.verticalPadding)};
   left: 50%;
   transform: translateX(-50%);
   width: auto;
   z-index: 1;
+`;
+
+const Header = styled(PageHeader)`
+  border-bottom: 1px solid ${getColor('mistExtra')};
 `;
 
 export const VaultPageContent: React.FC = () => {
@@ -31,24 +46,29 @@ export const VaultPageContent: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex-1 flex flex-col">
-      <button
-        onClick={() => {
-          setView(view === 'balances' ? 'vaults' : 'balances');
-        }}
-        className="px-4 py-4 bg-primary font-bold text-white w-full flex items-center justify-center sticky top-0 z-10"
-      >
-        {match(view, {
-          balances: () => selectedVault.name,
-          vaults: () => t('vaults'),
-        })}
-        <img
-          src="/assets/icons/chevron-down.svg"
-          alt="open"
-          className={`ml-2 transition-transform w-[15px] duration-300 ${view === 'vaults' ? 'rotate-180' : 'rotate-0'}`}
-        />
-      </button>
-      <div className="flex-1 flex flex-col">
+    <VStack fill>
+      <Header
+        primaryControls={<PageHeaderIconButton icon={<MenuIcon />} />}
+        secondaryControls={
+          <PageHeaderIconButtons>
+            <PageHeaderIconButton icon={<QrCodeIcon />} />
+            <PageHeaderIconButton icon={<RefreshIcon />} />
+          </PageHeaderIconButtons>
+        }
+        title={
+          <PageHeaderToggleTitle
+            value={view === 'vaults'}
+            onChange={value => setView(value ? 'vaults' : 'balances')}
+          >
+            {match(view, {
+              balances: () => selectedVault.name,
+              vaults: () => t('vaults'),
+            })}
+          </PageHeaderToggleTitle>
+        }
+      />
+
+      <VStack fill>
         <Match
           value={view}
           balances={() => (
@@ -71,7 +91,7 @@ export const VaultPageContent: React.FC = () => {
             />
           )}
         />
-      </div>
-    </div>
+      </VStack>
+    </VStack>
   );
 };

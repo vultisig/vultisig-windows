@@ -13,6 +13,7 @@ import { darkTheme } from './lib/ui/theme/darkTheme';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
 import { ThemeProvider } from './lib/ui/theme/ThemeProvider';
 import KeysignFlowView from './pages/keysign/KeysignFlow';
+import { GlobalStyle } from './lib/ui/css/GlobalStyle';
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={darkTheme}>
+        <GlobalStyle />
         <div className="w-full min-h-screen bg-primary h-full flex flex-col">
           <Router>
             <Routes>

@@ -1,6 +1,4 @@
-import styled from 'styled-components';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding';
 import { UploadQrPageHeader } from './UploadQrPageHeader';
 import { Text } from '../../../lib/ui/text';
 import { QrImageDropZone } from './QrImageDropZone';
@@ -8,13 +6,7 @@ import { useState } from 'react';
 import { UploadedQr } from './UploadedQr';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { useProcessQrMutation } from './useProcessQrMutation';
-
-const Container = styled(VStack)`
-  flex: 1;
-  ${horizontalPadding(40)};
-  padding-bottom: 40px;
-  gap: 40px;
-`;
+import { PageContent } from '../../../ui/page/PageContent';
 
 export const UploadQrPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -22,9 +14,9 @@ export const UploadQrPage = () => {
   const { mutate, isPending, error } = useProcessQrMutation();
 
   return (
-    <Container>
+    <VStack fill>
       <UploadQrPageHeader />
-      <VStack fill justifyContent="space-between" fullWidth gap={20}>
+      <PageContent fill justifyContent="space-between" fullWidth gap={20}>
         <VStack fullWidth alignItems="center" fill gap={20}>
           <Text color="contrast" size={16} weight="700">
             Upload QR-Code to join Keysign
@@ -48,7 +40,7 @@ export const UploadQrPage = () => {
         >
           Continue
         </Button>
-      </VStack>
-    </Container>
+      </PageContent>
+    </VStack>
   );
 };
