@@ -8,11 +8,12 @@ import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { WalletCore } from '@trustwallet/wallet-core';
 import { TokensStore } from '../../services/Coin/CoinList';
 import { Balance } from '../../model/balance';
-import { useCurrentVault } from '../../vault/components/CurrentVaultProvider';
 import { Rate } from '../../model/price-rate';
+import { useCurrentVault } from '../../vault/state/useCurrentVault';
+import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 
 const useVaultListViewModel = (walletCore: WalletCore | null) => {
-  const [selectedVault] = useCurrentVault();
+  const selectedVault = shouldBePresent(useCurrentVault());
   const [coins, setCoins] = useState<Map<Chain, Coin[]>>(new Map());
 
   const [servicesMap, setServicesMap] = useState<Map<Chain, IService>>(

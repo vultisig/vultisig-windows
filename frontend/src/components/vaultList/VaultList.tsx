@@ -2,8 +2,6 @@ import React from 'react';
 import { storage } from '../../../wailsjs/go/models';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useCurrentVault } from '../../vault/components/CurrentVaultProvider';
-import { useCurrentVaults } from '../../vault/components/CurrentVaultsProvider';
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { PageSlice } from '../../ui/page/PageSlice';
@@ -13,6 +11,9 @@ import { pageConfig } from '../../ui/page/config';
 import { VaultListOption } from '../../vault/list/VaultListOption';
 import { Button } from '../../lib/ui/buttons/Button';
 import { PlusIcon } from '../../lib/ui/icons/PlusIcon';
+import { useVaults } from '../../vault/queries/useVaultsQuery';
+import { useCurrentVaultId } from '../../vault/state/useCurrentVaultId';
+import { getVaultId } from '../../vault/utils/getVaultId';
 
 interface VaultListProps {
   onFinish: () => void;
@@ -24,14 +25,14 @@ const Container = styled(VStack)`
 `;
 
 export const VaultList: React.FC<VaultListProps> = ({ onFinish }) => {
-  const [, setSelectedVault] = useCurrentVault();
-  const vaults = useCurrentVaults();
+  const [, setSelectedVault] = useCurrentVaultId();
+  const vaults = useVaults();
 
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const handleVaultSelect = (vault: storage.Vault) => {
-    setSelectedVault(vault);
+    setSelectedVault(getVaultId(vault));
     onFinish();
   };
 
