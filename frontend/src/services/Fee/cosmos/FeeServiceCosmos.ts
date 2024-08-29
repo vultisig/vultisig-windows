@@ -1,11 +1,12 @@
 /* eslint-disable */
 
-import { FeeGasInfo } from '../../../model/gas-info';
+import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { FeeGasInfo, getDefaultGasInfo } from '../../../model/gas-info';
 import { FeeService } from '../FeeService';
 import { IFeeService } from '../IFeeService';
 
 export class FeeServiceCosmos extends FeeService implements IFeeService {
-  getFee(): Promise<FeeGasInfo> {
-    throw new Error('Method not implemented.');
+  async getFee(coin: Coin): Promise<FeeGasInfo> {
+    return getDefaultGasInfo();
   }
 }
