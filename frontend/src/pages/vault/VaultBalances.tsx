@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chain } from '../../model/chain';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
@@ -9,6 +9,11 @@ import { VStack } from '../../lib/ui/layout/Stack';
 import { CoinMeta } from '../../model/coin-meta';
 import { Rate } from '../../model/price-rate';
 import { Fiat } from '../../model/fiat';
+import { PageContent } from '../../ui/page/PageContent';
+import { VaultPrimaryActions } from './VaultPrimaryActions';
+import { VaultTotalBalance } from './VaultTotalBalance';
+import { sum } from '../../lib/utils/array/sum';
+import { fromChainAmount } from '../../lib/chain/utils/fromChainAmount';
 
 type VaultBalancesProps = {
   coins: Map<Chain, Coin[]>;
@@ -23,84 +28,82 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
 }: VaultBalancesProps) => {
   const navigate = useNavigate();
 
-  function getPriceInFiat(coin: CoinMeta, amount: number, fiat: Fiat): number {
-    const rate = priceRates
-      .get(CoinMeta.sortedStringify(coin))
-      ?.find(rate => rate.fiat === fiat);
+  const totalBalance = useMemo(() => {
+    const items = Array.from(coins.values())
+      .flat()
+      .filter(f => f.isNativeToken);
 
-    if (rate) {
-      const amountInDecimal = amount / Math.pow(10, coin.decimals);
-      const convertedAmount = rate.value * amountInDecimal;
-      return Math.round((convertedAmount + Number.EPSILON) * 100) / 100;
-    }
-    return 0;
-  }
-
-  function getTotalFiatValue(coins: Coin[], fiat: Fiat): number {
-    let totalFiatValue = 0;
-
-    // Calculate the fiat value for each coin and sum them up
-    coins.forEach(coin => {
-      const balance = balances.get(coin);
-      if (balance) {
+    return sum(
+      items.map(coin => {
         const coinMeta = CoinMeta.fromCoin(coin);
-        const fiatValue = getPriceInFiat(coinMeta, balance.rawAmount, fiat);
-        if (fiatValue > 0) {
-          totalFiatValue += fiatValue;
-        }
-      }
-    });
+        const fiatPrice = priceRates
+          .get(CoinMeta.sortedStringify(coinMeta))
+          ?.find(rate => rate.fiat === Fiat.USD)?.value;
 
-    return totalFiatValue;
-  }
+        if (!fiatPrice) {
+          return 0;
+        }
+
+        const amount = balances.get(coin)?.rawAmount || 0;
+        if (!amount) {
+          return 0;
+        }
+
+        return fromChainAmount(amount, coin.decimals) * fiatPrice;
+      })
+    );
+  }, [coins, balances, priceRates]);
 
   return (
     <ScrollableFlexboxFiller>
-      <div className="text-white px-4 py-4">
-        {coins.size === 0 ? (
-          <p>No coins available for this vault.</p>
-        ) : (
-          <VStack gap={16}>
-            {Array.from(coins.entries()).map(([chain, coinArray]) => {
-              // Calculate the total fiat value for the current chain's coins
-              const totalFiatValue = getTotalFiatValue(coinArray, Fiat.USD);
-
-              return (
-                <React.Fragment key={chain}>
-                  {coinArray
-                    .filter(f => f.isNativeToken)
-                    .map((coin, index) => {
-                      const balance = balances.get(coin);
-                      const amount = balance?.rawAmount || 0;
-                      const icon = `/assets/icons/coins/${coin.logo}.svg`;
-                      //const coinMeta = CoinMeta.fromCoin(coin);
-                      // Calculate the fiat value for the individual coin
-                      // const fiatValue = getPriceInFiat(coinMeta, amount, Fiat.USD);
-
-                      return (
-                        <CoinBalanceItem
-                          key={index}
-                          name={coin.chain}
-                          address={coin.address}
-                          amount={amount}
-                          decimals={coin.decimals}
-                          chainId={coin.priceProviderId}
-                          icon={icon}
-                          fiatValue={totalFiatValue}
-                          onClick={() => {
-                            navigate(`/vault/item/detail/${chain}`, {
-                              state: { coins: coinArray, balances, priceRates },
-                            });
-                          }}
-                        />
-                      );
-                    })}
-                </React.Fragment>
-              );
-            })}
+      <PageContent>
+        <VStack gap={32}>
+          <VStack gap={24} alignItems="center">
+            <VaultTotalBalance value={totalBalance} />
+            <VaultPrimaryActions />
           </VStack>
-        )}
-      </div>
+          {coins.size === 0 ? (
+            <p>No coins available for this vault.</p>
+          ) : (
+            <VStack gap={16}>
+              {Array.from(coins.entries()).map(([chain, coinArray]) => {
+                return (
+                  <React.Fragment key={chain}>
+                    {coinArray
+                      .filter(f => f.isNativeToken)
+                      .map((coin, index) => {
+                        const balance = balances.get(coin);
+                        const amount = balance?.rawAmount || 0;
+                        const icon = `/assets/icons/coins/${coin.logo}.svg`;
+                        const coinMeta = CoinMeta.fromCoin(coin);
+                        const fiatPrice = priceRates
+                          .get(CoinMeta.sortedStringify(coinMeta))
+                          ?.find(rate => rate.fiat === Fiat.USD)?.value;
+
+                        return (
+                          <CoinBalanceItem
+                            key={index}
+                            name={coin.chain}
+                            address={coin.address}
+                            amount={amount}
+                            decimals={coin.decimals}
+                            icon={icon}
+                            fiatPrice={fiatPrice}
+                            onClick={() => {
+                              navigate(`/vault/item/detail/${chain}`, {
+                                state: { coins: coinArray, balances },
+                              });
+                            }}
+                          />
+                        );
+                      })}
+                  </React.Fragment>
+                );
+              })}
+            </VStack>
+          )}
+        </VStack>
+      </PageContent>
     </ScrollableFlexboxFiller>
   );
 };

@@ -8,7 +8,7 @@ module.exports = {
     'prettier',
     'plugin:prettier/recommended',
   ],
-  plugins: ['react', '@typescript-eslint', 'jsx-a11y'],
+  plugins: ['react', '@typescript-eslint', 'jsx-a11y', 'react-hooks'],
   settings: {
     react: {
       version: 'detect',
@@ -25,5 +25,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
     'react/prop-types': 'off',
+    'react-hooks/rules-of-hooks': 'error',
   },
 };
