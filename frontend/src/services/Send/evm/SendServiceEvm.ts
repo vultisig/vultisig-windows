@@ -5,7 +5,7 @@ import { ISendTransaction } from '../../../model/send-transaction';
 import { Chain } from '../../../model/chain';
 import { IRpcService } from '../../Rpc/IRpcService';
 import { SendService } from '../SendService';
-import { GasInfo, getDefaultGasInfo } from '../../../model/gas-info';
+import { FeeGasInfo, getDefaultGasInfo } from '../../../model/gas-info';
 import { IService } from '../../IService';
 import { ServiceFactory } from '../../ServiceFactory';
 import { WalletCore } from '@trustwallet/wallet-core';
@@ -31,7 +31,7 @@ export class SendServiceEvm extends SendService implements ISendService {
     const balance: Balance = await balanceService.getBalance(tx.coin);
 
     try {
-      let gasInfo: GasInfo = getDefaultGasInfo();
+      let gasInfo: FeeGasInfo = getDefaultGasInfo();
       if (rpcService && rpcService.getGasInfo) {
         gasInfo = await rpcService.getGasInfo(tx.coin);
       }

@@ -1,11 +1,11 @@
-export type GasInfo = {
+export type FeeGasInfo = {
   gasPrice: bigint;
   priorityFee: bigint;
   nonce: number;
   fee: number;
 };
 
-export function getDefaultGasInfo(): GasInfo {
+export function getDefaultGasInfo(): FeeGasInfo {
   return {
     gasPrice: BigInt(0),
     priorityFee: BigInt(0),

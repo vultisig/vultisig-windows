@@ -1,6 +1,6 @@
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../model/coin-meta';
-import { GasInfo } from '../../model/gas-info';
+import { FeeGasInfo } from '../../model/gas-info';
 
 export interface IRpcService {
   // Common methods
@@ -11,7 +11,7 @@ export interface IRpcService {
   resolveENS?(ensName: string): Promise<string>;
 
   // Ethereum-specific methods
-  getGasInfo(coin: Coin): Promise<GasInfo>;
+  getGasInfo(coin: Coin): Promise<FeeGasInfo>;
 
   calculateFee(coin: Coin): number;
 
