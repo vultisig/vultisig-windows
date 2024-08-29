@@ -8,6 +8,7 @@ import { SendServiceFactory } from './Send/SendServiceFactory';
 import { Service } from './Service';
 import { BalanceServiceFactory } from './Balance/BalanceServiceFactory';
 import { PriceServiceFactory } from './Price/PriceServiceFactory';
+import { FeeServiceFactory } from './Fee/FeeServiceFactory';
 
 export class ServiceFactory {
   static getService(chain: Chain, walletCore: WalletCore): IService {
@@ -24,6 +25,7 @@ export class ServiceFactory {
       chain,
       walletCore
     );
+    const feeService = FeeServiceFactory.createFeeService(chain, walletCore);
 
     return new Service(
       rpcService,
@@ -32,7 +34,8 @@ export class ServiceFactory {
       keygenService,
       sendService,
       balanceService,
-      priceService
+      priceService,
+      feeService
     );
   }
 }

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../../model/coin-meta';
+import { FeeGasInfo } from '../../../model/gas-info';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceSui implements IRpcService {
@@ -19,14 +20,7 @@ export class RpcServiceSui implements IRpcService {
   resolveENS?(ensName: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
-  getGasInfo(
-    coin: Coin
-  ): Promise<{
-    gasPrice: bigint;
-    priorityFee: bigint;
-    nonce: number;
-    fee: number;
-  }> {
+  getGasInfo(coin: Coin): Promise<FeeGasInfo> {
     throw new Error('Method not implemented.');
   }
   estimateGas?(
