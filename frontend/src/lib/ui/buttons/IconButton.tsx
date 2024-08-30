@@ -22,8 +22,8 @@ export const iconButtonSizeRecord: Record<IconButtonSize, number> = {
 
 export const iconButtonIconSizeRecord: Record<IconButtonSize, number> = {
   s: 14,
-  m: 14,
-  l: 16,
+  m: 16,
+  l: 18,
 };
 
 interface ContainerProps {

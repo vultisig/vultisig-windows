@@ -4,7 +4,6 @@ import OnboardingView from './pages/onboarding/OnboardingView';
 import ImportVaultView from './pages/importVault/ImportVaultView';
 import './i18n/config';
 import SetupVaultView from './pages/setupVault/SetupVaultView';
-import VaultItemView from './pages/vault/VaultItemView';
 import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SendCryptoView from './pages/send/SendCryptoView';
@@ -16,6 +15,7 @@ import { GlobalStyle } from './lib/ui/css/GlobalStyle';
 import { VaultsDependant } from './vault/components/VaultsDependant';
 import { VaultPage } from './pages/vault/VaultPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
+import { VaultChainPage } from './vault/chain/VaultChainPage';
 
 const queryClient = new QueryClient();
 
@@ -51,7 +51,7 @@ const App: React.FC = () => {
                 />
                 <Route
                   path="/vault/item/detail/:chain"
-                  element={<VaultItemView />}
+                  element={<VaultChainPage />}
                 />
                 <Route
                   path="/vault/item/send/:chain"
