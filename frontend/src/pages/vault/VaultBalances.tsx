@@ -14,6 +14,7 @@ import { VaultPrimaryActions } from './VaultPrimaryActions';
 import { VaultTotalBalance } from './VaultTotalBalance';
 import { sum } from '../../lib/utils/array/sum';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
+import { getChainEntityIconPath } from '../../chain/utils/getChainEntityIconPath';
 
 type VaultBalancesProps = {
   coins: Map<Chain, Coin[]>;
@@ -74,7 +75,7 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
                       .map((coin, index) => {
                         const balance = balances.get(coin);
                         const amount = balance?.rawAmount || 0;
-                        const icon = `/assets/icons/coins/${coin.logo}.svg`;
+                        const icon = getChainEntityIconPath(coin.logo);
                         const coinMeta = CoinMeta.fromCoin(coin);
                         const fiatPrice = priceRates
                           .get(CoinMeta.sortedStringify(coinMeta))

@@ -28,6 +28,7 @@ export const Panel = styled.div<PanelProps>`
           display: flex;
           flex-direction: column;
           gap: 1px;
+          overflow: hidden;
 
           > * {
             ${panelPadding}

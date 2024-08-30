@@ -1,4 +1,6 @@
-import { ChainIcon } from '../../chain/ui/ChainIcon';
+import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
+import { fromChainAmount } from '../../chain/utils/fromChainAmount';
+import { getChainEntityIconPath } from '../../chain/utils/getChainEntityIconPath';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { BoxIcon } from '../../lib/ui/icons/BoxIcon';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
@@ -9,6 +11,8 @@ import { Panel } from '../../lib/ui/panel/Panel';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
 import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { Text } from '../../lib/ui/text';
+import { sum } from '../../lib/utils/array/sum';
+import { formatAmount } from '../../lib/utils/formatAmount';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
@@ -16,12 +20,15 @@ import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
+import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
 
 export const VaultChainPage = () => {
   const chainId = useCurrentVaultChainId();
 
   const vaultAddressQuery = useVaultAddressQuery(chainId);
+
+  const vaultCoinsQuery = useVaultChainCoinsQuery(chainId);
 
   return (
     <VStack fill>
@@ -43,7 +50,7 @@ export const VaultChainPage = () => {
               justifyContent="space-between"
             >
               <HStack alignItems="center" gap={12}>
-                <ChainIcon value={chainId} />
+                <ChainEntityIcon value={getChainEntityIconPath(chainId)} />
                 <Text weight="600" color="contrast">
                   {chainId}
                 </Text>
@@ -66,9 +73,24 @@ export const VaultChainPage = () => {
                 />
               </HStack>
             </HStack>
-            <Text color="contrast" weight="600" size={20}>
-              $ TODO
-            </Text>
+            <QueryDependant
+              query={vaultCoinsQuery}
+              {...getQueryDependantDefaultProps('vault address')}
+              success={coins => {
+                const total = sum(
+                  coins.map(
+                    ({ amount, decimals, price = 0 }) =>
+                      fromChainAmount(amount, decimals) * price
+                  )
+                );
+
+                return (
+                  <Text size={20} weight="600" color="contrast">
+                    ${formatAmount(total)}
+                  </Text>
+                );
+              }}
+            />
             <QueryDependant
               query={vaultAddressQuery}
               {...getQueryDependantDefaultProps('vault address')}
