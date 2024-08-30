@@ -26,16 +26,26 @@ const VaultItemView: React.FC = () => {
   };
 
   function getPriceInFiat(coin: CoinMeta, amount: number, fiat: Fiat): number {
-    const rate = priceRates
-      .get(CoinMeta.sortedStringify(coin))
-      ?.find(rate => rate.fiat === fiat);
+    try {
+      if (!priceRates) {
+        console.error('Price rates not available');
+        return 0;
+      }
 
-    if (rate) {
-      const amountInDecimal = amount / Math.pow(10, coin.decimals);
-      const convertedAmount = rate.value * amountInDecimal;
-      return Math.round((convertedAmount + Number.EPSILON) * 100) / 100;
+      const rate = priceRates
+        .get(CoinMeta.sortedStringify(coin))
+        ?.find(rate => rate.fiat === fiat);
+
+      if (rate) {
+        const amountInDecimal = amount / Math.pow(10, coin.decimals);
+        const convertedAmount = rate.value * amountInDecimal;
+        return Math.round((convertedAmount + Number.EPSILON) * 100) / 100;
+      }
+      return 0;
+    } catch (error) {
+      console.error('Failed to calculate fiat value:', error);
+      return 0;
     }
-    return 0;
   }
 
   function getTotalFiatValue(coins: Coin[], fiat: Fiat): number {

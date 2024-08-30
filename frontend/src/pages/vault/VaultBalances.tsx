@@ -91,7 +91,11 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
                             fiatPrice={fiatPrice}
                             onClick={() => {
                               navigate(`/vault/item/detail/${chain}`, {
-                                state: { coins: coinArray, balances },
+                                state: {
+                                  coins: coinArray,
+                                  balances,
+                                  priceRates,
+                                },
                               });
                             }}
                           />
