@@ -142,49 +142,31 @@ export function useSendCryptoViewModel(
 
   const setMaxValues = (percentage: number) => {
     const amountInDecimal =
-      service?.sendService.calculateMaxValue(tx, percentage, balances) ?? 0;
+      service?.sendService.calculateMaxValue(tx, percentage, balances, 0) ?? 0;
 
     setAmount(amountInDecimal.toString());
     convertToFiat(amountInDecimal);
-    tx.amount = amountInDecimal;
-    tx.amountInFiat = Number(amountInFiat);
+    updateTrasanctionAmounts();
   };
 
   const convertToFiat = async (amount: number): Promise<void> => {
-    // implement convert to fiat logic here
-    const toCoinMeta = CoinMeta.fromCoin(tx.coin);
-    const toSortedCoin = CoinMeta.sortedStringify(toCoinMeta);
-    const rates: Rate[] = priceRates.get(toSortedCoin) ?? [];
-
-    // TODO: Get the rate for the selected fiat on settings
-    const rate = rates.find(rate => {
-      return rate.fiat === Fiat.USD;
-    });
-    if (rate) {
-      const fiatAmount = amount * rate.value;
-      setAmountInFiat(fiatAmount.toString());
-      tx.amount = amount;
-      tx.amountInFiat = Number(amountInFiat);
-    }
+    const fiatAmount =
+      (await service?.sendService.convertToFiat(tx.coin, priceRates, amount)) ??
+      0;
+    setAmountInFiat(fiatAmount.toString());
+    updateTrasanctionAmounts();
   };
 
   const convertFromFiat = async (amountInFiat: number): Promise<void> => {
-    // implement convert to fiat logic here
-    const toCoinMeta = CoinMeta.fromCoin(tx.coin);
-    const toSortedCoin = CoinMeta.sortedStringify(toCoinMeta);
-    const rates: Rate[] = priceRates.get(toSortedCoin) ?? [];
+    const tokenAmount =
+      (await service?.sendService.convertFromFiat(
+        tx.coin,
+        priceRates,
+        amountInFiat
+      )) ?? 0;
 
-    // TODO: Get the rate for the selected fiat on settings
-    const rate = rates.find(rate => {
-      return rate.fiat === Fiat.USD;
-    });
-    if (rate) {
-      const tokenAmount = amountInFiat / rate.value;
-      setAmount(tokenAmount.toString());
-
-      tx.amount = tokenAmount;
-      tx.amountInFiat = Number(amountInFiat);
-    }
+    setAmount(tokenAmount.toString());
+    updateTrasanctionAmounts();
   };
 
   const moveToNextView = async (
@@ -200,16 +182,21 @@ export function useSendCryptoViewModel(
     tx.fromAddress = coin.address;
   };
 
+  const updateTrasanctionAmounts = () => {
+    tx.amount = Number(amount);
+    tx.amountInFiat = Number(amountInFiat);
+  };
+
   const handleAmountChange = (newAmount: string) => {
     setAmount(newAmount);
     convertToFiat(Number(newAmount));
-    tx.amount = Number(amount);
+    updateTrasanctionAmounts();
   };
 
   const handleAmountInFiatChange = (amontInFiat: string) => {
     setAmountInFiat(amontInFiat);
     convertFromFiat(Number(amontInFiat));
-    tx.amountInFiat = Number(amontInFiat);
+    updateTrasanctionAmounts();
   };
 
   const handleToAddressChange = (toAddress: string) => {

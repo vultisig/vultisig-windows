@@ -4,11 +4,12 @@ import { AddressServiceFactory } from './Address/AddressServiceFactory';
 import { CoinServiceFactory } from './Coin/CoinServiceFactory';
 import { IService } from './IService';
 import { RpcServiceFactory } from './Rpc/RpcServiceFactory';
-import { SendServiceFactory } from './Send/SendServiceFactory';
+//import { SendServiceFactory } from './Send/SendServiceFactory';
 import { Service } from './Service';
 import { BalanceServiceFactory } from './Balance/BalanceServiceFactory';
 import { PriceServiceFactory } from './Price/PriceServiceFactory';
 import { FeeServiceFactory } from './Fee/FeeServiceFactory';
+import { SendService } from './Send/SendService';
 
 export class ServiceFactory {
   static getService(chain: Chain, walletCore: WalletCore): IService {
@@ -19,7 +20,12 @@ export class ServiceFactory {
     );
     const coinService = CoinServiceFactory.createCoinService(chain, walletCore);
     const keygenService = null; // I need to understand how it works and is used
-    const sendService = SendServiceFactory.createSendService(chain, walletCore);
+    const sendService = new SendService(chain, walletCore);
+    // try {
+    //   sendService = SendServiceFactory.createSendService(chain, walletCore);
+    // } catch (e) {
+    //   console.error(e);
+    // }
     const balanceService = BalanceServiceFactory.createBalanceService(chain);
     const priceService = PriceServiceFactory.createPriceService(
       chain,

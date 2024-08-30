@@ -9,7 +9,8 @@ export interface ISendService {
   calculateMaxValue(
     tx: ISendTransaction,
     percentage: number,
-    balances: Map<Coin, Balance>
+    balances: Map<Coin, Balance>,
+    fee: number
   ): number;
   convertToFiat(
     coin: Coin,

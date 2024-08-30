@@ -26,7 +26,8 @@ export class SendService implements ISendService {
   calculateMaxValue(
     tx: ISendTransaction,
     percentage: number,
-    balances: Map<Coin, Balance>
+    balances: Map<Coin, Balance>,
+    fee: number
   ): number {
     const balance = balances.get(tx.coin)?.rawAmount ?? 0;
     const amount = balance * (percentage / 100);
@@ -80,8 +81,7 @@ export class SendService implements ISendService {
     }
 
     try {
-      const gasInfo = await this.service.feeService.getFee(coin);
-      return gasInfo;
+      return await this.service.feeService.getFee(coin);
     } catch (error) {
       throw new Error('Failed to load gas info');
     }
