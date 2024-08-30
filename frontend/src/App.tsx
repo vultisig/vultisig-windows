@@ -26,39 +26,34 @@ const App: React.FC = () => {
         <GlobalStyle />
         <div className="w-full min-h-screen bg-primary h-full flex flex-col">
           <VaultsDependant>
-            <Router>
-              <Routes>
-                <Route
-                  path="/"
-                  index
-                  element={
-                    <EmptyVaultsOnly>
-                      <OnboardingView />
-                    </EmptyVaultsOnly>
-                  }
-                />
-                <Route path="/vault/setup" element={<SetupVaultView />} />
-                <Route path="/vault/import" element={<ImportVaultView />} />
-                <Route path="/vault/qr/upload" element={<UploadQrPage />} />
-                <Route path="/vault/keysign" element={<KeysignFlowView />} />
-                <Route
-                  path="/vault/list"
-                  element={
-                    <InitializedWalletOnly>
-                      <VaultPage />
-                    </InitializedWalletOnly>
-                  }
-                />
-                <Route
-                  path="/vault/item/detail/:chain"
-                  element={<VaultChainPage />}
-                />
-                <Route
-                  path="/vault/item/send/:chain"
-                  element={<SendCryptoView />}
-                />
-              </Routes>
-            </Router>
+            <InitializedWalletOnly>
+              <Router>
+                <Routes>
+                  <Route
+                    path="/"
+                    index
+                    element={
+                      <EmptyVaultsOnly>
+                        <OnboardingView />
+                      </EmptyVaultsOnly>
+                    }
+                  />
+                  <Route path="/vault/setup" element={<SetupVaultView />} />
+                  <Route path="/vault/import" element={<ImportVaultView />} />
+                  <Route path="/vault/qr/upload" element={<UploadQrPage />} />
+                  <Route path="/vault/keysign" element={<KeysignFlowView />} />
+                  <Route path="/vault/list" element={<VaultPage />} />
+                  <Route
+                    path="/vault/item/detail/:chain"
+                    element={<VaultChainPage />}
+                  />
+                  <Route
+                    path="/vault/item/send/:chain"
+                    element={<SendCryptoView />}
+                  />
+                </Routes>
+              </Router>
+            </InitializedWalletOnly>
           </VaultsDependant>
         </div>
       </ThemeProvider>

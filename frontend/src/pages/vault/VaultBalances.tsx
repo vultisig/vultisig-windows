@@ -13,7 +13,7 @@ import { PageContent } from '../../ui/page/PageContent';
 import { VaultPrimaryActions } from './VaultPrimaryActions';
 import { VaultTotalBalance } from './VaultTotalBalance';
 import { sum } from '../../lib/utils/array/sum';
-import { fromChainAmount } from '../../lib/chain/utils/fromChainAmount';
+import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 
 type VaultBalancesProps = {
   coins: Map<Chain, Coin[]>;

@@ -1,4 +1,4 @@
-import { fromChainAmount } from '../../lib/chain/utils/fromChainAmount';
+import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { ComponentWithValueProps } from '../../lib/ui/props';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
 import { formatAmount } from '../../lib/utils/formatAmount';
