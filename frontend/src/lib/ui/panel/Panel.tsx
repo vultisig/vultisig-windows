@@ -8,7 +8,7 @@ type PanelProps = {
   withSections?: boolean;
 };
 
-export const panelPaddingInPx = 12;
+export const panelPaddingInPx = 16;
 
 export const panelPadding = css`
   padding: ${toSizeUnit(panelPaddingInPx)};

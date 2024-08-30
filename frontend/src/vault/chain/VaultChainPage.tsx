@@ -22,6 +22,7 @@ import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
+import { VaultChainCoinItem } from './VaultChainCoinItem';
 
 export const VaultChainPage = () => {
   const chainId = useCurrentVaultChainId();
@@ -51,7 +52,7 @@ export const VaultChainPage = () => {
             >
               <HStack alignItems="center" gap={12}>
                 <ChainEntityIcon value={getChainEntityIconPath(chainId)} />
-                <Text weight="600" color="contrast">
+                <Text weight="700" color="contrast">
                   {chainId}
                 </Text>
               </HStack>
@@ -85,7 +86,7 @@ export const VaultChainPage = () => {
                 );
 
                 return (
-                  <Text size={20} weight="600" color="contrast">
+                  <Text size={20} weight="700" color="contrast">
                     ${formatAmount(total)}
                   </Text>
                 );
@@ -101,7 +102,19 @@ export const VaultChainPage = () => {
               )}
             />
           </VStack>
-          <div>second sections</div>
+          <QueryDependant
+            query={vaultCoinsQuery}
+            {...getQueryDependantDefaultProps('vault address')}
+            success={coins => {
+              return (
+                <>
+                  {coins.map(coin => (
+                    <VaultChainCoinItem key={coin.id} value={coin} />
+                  ))}
+                </>
+              );
+            }}
+          />
         </Panel>
       </PageContent>
     </VStack>
