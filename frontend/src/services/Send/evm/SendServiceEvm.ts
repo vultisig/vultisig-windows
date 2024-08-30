@@ -18,47 +18,39 @@ export class SendServiceEvm extends SendService implements ISendService {
     this.walletCore = walletCore;
   }
 
-  async getMaxValues(
-    tx: ISendTransaction,
-    percentage: number
-  ): Promise<number> {
-    const service: IService = ServiceFactory.getService(
-      this.chain,
-      this.walletCore
-    );
-    const rpcService: IRpcService = service.rpcService;
-    const balanceService = service.balanceService;
-    const balance: Balance = await balanceService.getBalance(tx.coin);
+  // async getMaxValues(
+  //   tx: ISendTransaction,
+  //   percentage: number
+  // ): Promise<number> {
+  //   const service: IService = ServiceFactory.getService(
+  //     this.chain,
+  //     this.walletCore
+  //   );
+  //   const rpcService: IRpcService = service.rpcService;
+  //   const balanceService = service.balanceService;
+  //   const balance: Balance = await balanceService.getBalance(tx.coin);
 
-    try {
-      let gasInfo: FeeGasInfo = getDefaultGasInfo();
-      if (rpcService && rpcService.getGasInfo) {
-        gasInfo = await rpcService.getGasInfo(tx.coin);
-      }
+  //   try {
+  //     let gasInfo: FeeGasInfo = getDefaultGasInfo();
+  //     if (rpcService && rpcService.getGasInfo) {
+  //       gasInfo = await rpcService.getGasInfo(tx.coin);
+  //     }
 
-      if (tx.coin.isNativeToken) {
-        const max = this.calculateMaxValue(gasInfo.fee, balance, tx.coin);
-        const amount = this.setPercentageAmount(max, percentage);
-        return amount;
-      } else {
-        const max = this.calculateMaxValue(0, balance, tx.coin);
-        const amount = this.setPercentageAmount(max, percentage);
-        return amount;
-      }
-    } catch (ex) {
-      console.error('Failed to get EVM balance, error: ', ex);
+  //     if (tx.coin.isNativeToken) {
+  //       const max = this.calculateMaxValue(gasInfo.fee, balance, tx.coin);
+  //       const amount = this.setPercentageAmount(max, percentage);
+  //       return amount;
+  //     } else {
+  //       const max = this.calculateMaxValue(0, balance, tx.coin);
+  //       const amount = this.setPercentageAmount(max, percentage);
+  //       return amount;
+  //     }
+  //   } catch (ex) {
+  //     console.error('Failed to get EVM balance, error: ', ex);
 
-      const max = this.calculateMaxValue(0, balance, tx.coin);
-      const amount = this.setPercentageAmount(max, percentage);
-      return amount;
-    }
-  }
-
-  getPriceRate(tx: ISendTransaction): Promise<number> {
-    throw new Error('Method not implemented.');
-  }
-
-  validateForm(tx: ISendTransaction): Promise<boolean> {
-    throw new Error('Method not implemented.');
-  }
+  //     const max = this.calculateMaxValue(0, balance, tx.coin);
+  //     const amount = this.setPercentageAmount(max, percentage);
+  //     return amount;
+  //   }
+  // }
 }

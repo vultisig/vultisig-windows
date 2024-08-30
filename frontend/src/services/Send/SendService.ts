@@ -1,47 +1,130 @@
 /* eslint-disable */
-
-import { ISendService } from './ISendService';
-import { ISendTransaction } from '../../model/send-transaction';
-import { Chain } from '../../model/chain';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
+import { FeeGasInfo } from '../../model/gas-info';
+import { ISendTransaction } from '../../model/send-transaction';
+import { Rate } from '../../model/price-rate';
+import { CoinMeta } from '../../model/coin-meta';
+import { Fiat } from '../../model/fiat';
+import { IService } from '../../services/IService';
+import { ISendService } from './ISendService';
+import { Chain } from '../../model/chain';
 import { WalletCore } from '@trustwallet/wallet-core';
 import { ServiceFactory } from '../ServiceFactory';
-import { IService } from '../IService';
-import { FeeGasInfo, getDefaultGasInfo } from '../../model/gas-info';
 
 export class SendService implements ISendService {
   chain: Chain;
   walletCore: WalletCore;
+  service: IService | null = null;
+
   constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
     this.walletCore = walletCore;
+    this.service = ServiceFactory.getService(chain, walletCore);
   }
 
-  getMaxValues(tx: ISendTransaction, percentage: number): Promise<number> {
-    throw new Error('Method not implemented.');
+  calculateMaxValue(
+    tx: ISendTransaction,
+    percentage: number,
+    balances: Map<Coin, Balance>
+  ): number {
+    const balance = balances.get(tx.coin)?.rawAmount ?? 0;
+    const amount = balance * (percentage / 100);
+    const amountInDecimal = amount / Math.pow(10, tx.coin.decimals);
+    return amountInDecimal;
   }
 
-  async loadGasInfoForSending(tx: ISendTransaction): Promise<FeeGasInfo> {
-    const service: IService = ServiceFactory.getService(
-      this.chain,
-      this.walletCore
-    );
+  async convertToFiat(
+    coin: Coin,
+    priceRates: Map<string, Rate[]>,
+    amount: number
+  ): Promise<number> {
+    const toCoinMeta = CoinMeta.fromCoin(coin);
+    const toSortedCoin = CoinMeta.sortedStringify(toCoinMeta);
+    const rates: Rate[] = priceRates.get(toSortedCoin) ?? [];
+
+    // TODO: Get the rate for the selected fiat on settings
+    const rate = rates.find(rate => {
+      return rate.fiat === Fiat.USD;
+    });
+    if (rate) {
+      const fiatAmount = amount * rate.value;
+      return fiatAmount;
+    }
+    return 0;
+  }
+
+  async convertFromFiat(
+    coin: Coin,
+    priceRates: Map<string, Rate[]>,
+    amountInFiat: number
+  ): Promise<number> {
+    const toCoinMeta = CoinMeta.fromCoin(coin);
+    const toSortedCoin = CoinMeta.sortedStringify(toCoinMeta);
+    const rates: Rate[] = priceRates.get(toSortedCoin) ?? [];
+
+    // TODO: Get the rate for the selected fiat on settings
+    const rate = rates.find(rate => {
+      return rate.fiat === Fiat.USD;
+    });
+    if (rate) {
+      const tokenAmount = amountInFiat / rate.value;
+      return tokenAmount;
+    }
+    return 0;
+  }
+
+  async loadGasInfoForSending(coin: Coin): Promise<FeeGasInfo> {
+    if (!this.service) {
+      throw new Error('Service is not initialized');
+    }
 
     try {
-      return await service.rpcService.getGasInfo(tx.coin);
-    } catch (ex) {
-      console.error('Failed to get EVM balance, error: ', ex);
-      return getDefaultGasInfo();
+      const gasInfo = await this.service.feeService.getFee(coin);
+      return gasInfo;
+    } catch (error) {
+      throw new Error('Failed to load gas info');
     }
   }
 
-  getPriceRate(tx: ISendTransaction): Promise<number> {
-    throw new Error('Method not implemented.');
-  }
+  // Maybe this will be different depending on the coin
+  async validateForm(
+    tx: ISendTransaction,
+    toAddress: string,
+    amount: string,
+    service: IService | null
+  ): Promise<boolean> {
+    if (!toAddress) {
+      throw new Error('To address is not provided');
+    }
 
-  validateForm(tx: ISendTransaction): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    if (!tx.coin) {
+      throw new Error('Coin is not selected');
+    }
+
+    if (!service) {
+      throw new Error('Service is not initialized');
+    }
+
+    if (amount === '') {
+      throw new Error('Amount is not provided');
+    }
+
+    if (isNaN(Number(amount))) {
+      throw new Error('Invalid amount');
+    }
+
+    if (Number(amount) <= 0) {
+      throw new Error('Amount should be greater than 0');
+    }
+
+    const isAddressValid =
+      await service.addressService.validateAddress(toAddress);
+    if (!isAddressValid) {
+      throw new Error('Invalid address');
+    }
+
+    return true;
   }
 
   setPercentageAmount(amount: number, percentage: number): number {
@@ -49,48 +132,5 @@ export class SendService implements ISendService {
     let multiplier = percentage / 100;
     let amountDecimal = max * multiplier;
     return amountDecimal;
-  }
-
-  convertFiatToCoin(newValue: string, coin: Coin, priceRate: number): number {
-    const newValueDecimal = parseFloat(newValue);
-    if (!isNaN(newValueDecimal)) {
-      const newValueCoin = newValueDecimal / priceRate;
-      const truncatedValueCoin = this.truncateToPlaces(
-        newValueCoin,
-        coin.decimals
-      );
-      return truncatedValueCoin;
-    } else {
-      return 0;
-    }
-  }
-
-  convertToFiat(newValue: string, priceRate: number): number {
-    const newValueDecimal = parseFloat(newValue);
-    if (!isNaN(newValueDecimal)) {
-      const newValueFiat = newValueDecimal * priceRate;
-      const truncatedValueFiat = this.truncateToPlaces(newValueFiat, 2); // Assuming 2 decimal places for fiat
-      return truncatedValueFiat;
-    } else {
-      return 0;
-    }
-  }
-
-  calculateMaxValue(fee: number, balance: Balance, coin: Coin): number {
-    let totalFeeAdjusted = fee;
-    let maxValue = balance.rawAmount - totalFeeAdjusted;
-    let maxValueCalculated = maxValue / Math.pow(10, coin.decimals);
-    let truncated = this.truncateToPlaces(maxValueCalculated, coin.decimals);
-
-    if (truncated < 0) {
-      return 0;
-    }
-
-    return truncated;
-  }
-
-  private truncateToPlaces(value: number, places: number): number {
-    const factor = Math.pow(10, places);
-    return Math.floor(value * factor) / factor;
   }
 }

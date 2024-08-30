@@ -141,9 +141,9 @@ export function useSendCryptoViewModel(
   };
 
   const setMaxValues = (percentage: number) => {
-    const balance = balances.get(tx.coin)?.rawAmount ?? 0;
-    const amount = balance * (percentage / 100);
-    const amountInDecimal = amount / Math.pow(10, tx.coin.decimals);
+    const amountInDecimal =
+      service?.sendService.calculateMaxValue(tx, percentage, balances) ?? 0;
+
     setAmount(amountInDecimal.toString());
     convertToFiat(amountInDecimal);
     tx.amount = amountInDecimal;
