@@ -30,37 +30,37 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
 }: VaultBalancesProps) => {
   const navigate = useNavigate();
 
-  const thorchainCoin = useMemo(() => {
+  const coin = useMemo(() => {
     return (
       Array.from(coins.values())
         .flat()
-        .find(coin => coin.chain === 'THORChain') || null
+        .find(coin => coin.chain === Chain.Ethereum && coin.isNativeToken) ||
+      null
     );
   }, [coins]);
 
-  const thorchainBalances = useMemo(() => {
-    if (!thorchainCoin) return new Map<Coin, Balance>();
+  const coinBalances = useMemo(() => {
+    if (!coin) return new Map<Coin, Balance>();
     return new Map(
       Array.from(balances.entries()).filter(
-        ([coin]) => coin.chain === 'THORChain'
+        ([coin]) => coin.chain === Chain.Ethereum && coin.isNativeToken
       )
     );
-  }, [balances, thorchainCoin]);
+  }, [balances, coin]);
 
-  const thorchainPriceRates = useMemo(() => {
-    if (!thorchainCoin) return new Map<string, Rate[]>();
-    const coinMeta = CoinMeta.fromCoin(thorchainCoin);
+  const coinPriceRates = useMemo(() => {
+    if (!coin) return new Map<string, Rate[]>();
+    const coinMeta = CoinMeta.fromCoin(coin);
     return new Map(
       Array.from(priceRates.entries()).filter(
         ([key]) => key === CoinMeta.sortedStringify(coinMeta)
       )
     );
-  }, [priceRates, thorchainCoin]);
+  }, [priceRates, coin]);
 
   const totalBalance = useMemo(() => {
-    const items = Array.from(coins.values())
-      .flat()
-      .filter(f => f.isNativeToken);
+    const items = Array.from(coins.values()).flat();
+    //.filter(f => f.isNativeToken);
 
     const total = sum(
       items.map(coin => {
@@ -91,11 +91,11 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
         <VStack gap={32}>
           <VStack gap={24} alignItems="center">
             <VaultTotalBalance value={totalBalance} />
-            {thorchainCoin && (
+            {coin && (
               <VaultPrimaryActions
-                thorchainCoin={thorchainCoin}
-                thorchainBalances={thorchainBalances}
-                thorchainPriceRates={thorchainPriceRates}
+                coin={coin}
+                balances={coinBalances}
+                priceRates={coinPriceRates}
               />
             )}
           </VStack>
@@ -127,7 +127,23 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
                             icon={icon}
                             fiatPrice={fiatPrice}
                             onClick={() => {
-                              navigate(`/vault/item/detail/${chain}`);
+                              navigate(`/vault/item/detail/${chain}`, {
+                                state: {
+                                  coins: Array.from(coins.entries()).filter(
+                                    f => f[0] === chain
+                                  ),
+                                  balances: balances,
+                                  priceRates: priceRates,
+                                },
+                              });
+
+                              // navigate(`/vault/item/send/${chain}`, {
+                              //   state: {
+                              //     coin: coin,
+                              //     balances: balances,
+                              //     priceRates: priceRates,
+                              //   },
+                              // });
                             }}
                           />
                         );

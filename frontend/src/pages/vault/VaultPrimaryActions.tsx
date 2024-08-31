@@ -6,26 +6,27 @@ import { Text } from '../../lib/ui/text';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
 import { Rate } from '../../model/price-rate';
+import { Chain } from '../../model/chain';
 
 type VaultPrimaryActionsProps = {
-  thorchainCoin: Coin;
-  thorchainBalances: Map<Coin, Balance>;
-  thorchainPriceRates: Map<string, Rate[]>;
+  coin: Coin;
+  balances: Map<Coin, Balance>;
+  priceRates: Map<string, Rate[]>;
 };
 
 export const VaultPrimaryActions: React.FC<VaultPrimaryActionsProps> = ({
-  thorchainCoin,
-  thorchainBalances,
-  thorchainPriceRates,
+  coin,
+  balances,
+  priceRates,
 }) => {
   const navigate = useNavigate();
 
   function handleGoSendCrypto() {
-    navigate(`/vault/item/send/${thorchainCoin.chain}`, {
+    navigate(`/vault/item/send/${Chain.Ethereum}`, {
       state: {
-        coin: thorchainCoin,
-        balances: thorchainBalances,
-        priceRates: thorchainPriceRates,
+        coin: coin,
+        balances: balances,
+        priceRates: priceRates,
       },
     });
   }
