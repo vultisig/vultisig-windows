@@ -5,6 +5,7 @@ import App from './App';
 import { Buffer } from 'buffer';
 import { initWasm, WalletCore } from '@trustwallet/wallet-core';
 import './extensions/string';
+import { shouldBePresent } from './lib/utils/assert/shouldBePresent';
 
 // Make sure Buffer is available globally
 window.Buffer = Buffer;
@@ -30,6 +31,8 @@ export const WalletCoreProvider = ({ children }: { children: any }) => {
 };
 
 export const useWalletCore = () => useContext(WalletCoreContext);
+
+export const useAsserWalletCore = () => shouldBePresent(useWalletCore());
 
 const container = document.getElementById('root');
 

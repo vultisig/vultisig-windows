@@ -8,6 +8,8 @@ export type CoinAmount = {
   decimals: number;
 };
 
-export type CoinAmountInFiat = {
-  amountInFiat: number;
+export type CoinInfo = {
+  name: string;
+  symbol: string;
+  icon?: string;
 };
