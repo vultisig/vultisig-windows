@@ -7,6 +7,7 @@ import { Balance } from '../../model/balance';
 import { Rate } from '../../model/price-rate';
 import { ChainUtils } from '../../model/chain';
 import { FeeGasInfo } from '../../model/gas-info';
+import { ServiceFactory } from '../../services/ServiceFactory';
 
 interface SendCryptoViewModel {
   tx: ISendTransaction;
@@ -86,8 +87,8 @@ export function useSendCryptoViewModel(
       return;
     }
 
-    // const service = ServiceFactory.getService(chainEnum, walletCore);
-    // setService(service);
+    const service = ServiceFactory.getService(chainEnum, walletCore);
+    setService(service);
   };
 
   const Alert = (message: string) => {

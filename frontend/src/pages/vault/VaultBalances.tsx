@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chain } from '../../model/chain';
@@ -29,12 +30,39 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
 }: VaultBalancesProps) => {
   const navigate = useNavigate();
 
+  const thorchainCoin = useMemo(() => {
+    return (
+      Array.from(coins.values())
+        .flat()
+        .find(coin => coin.chain === 'THORChain') || null
+    );
+  }, [coins]);
+
+  const thorchainBalances = useMemo(() => {
+    if (!thorchainCoin) return new Map<Coin, Balance>();
+    return new Map(
+      Array.from(balances.entries()).filter(
+        ([coin]) => coin.chain === 'THORChain'
+      )
+    );
+  }, [balances, thorchainCoin]);
+
+  const thorchainPriceRates = useMemo(() => {
+    if (!thorchainCoin) return new Map<string, Rate[]>();
+    const coinMeta = CoinMeta.fromCoin(thorchainCoin);
+    return new Map(
+      Array.from(priceRates.entries()).filter(
+        ([key]) => key === CoinMeta.sortedStringify(coinMeta)
+      )
+    );
+  }, [priceRates, thorchainCoin]);
+
   const totalBalance = useMemo(() => {
     const items = Array.from(coins.values())
       .flat()
       .filter(f => f.isNativeToken);
 
-    return sum(
+    const total = sum(
       items.map(coin => {
         const coinMeta = CoinMeta.fromCoin(coin);
         const fiatPrice = priceRates
@@ -53,6 +81,8 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
         return fromChainAmount(amount, coin.decimals) * fiatPrice;
       })
     );
+
+    return total;
   }, [coins, balances, priceRates]);
 
   return (
@@ -61,7 +91,13 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
         <VStack gap={32}>
           <VStack gap={24} alignItems="center">
             <VaultTotalBalance value={totalBalance} />
-            <VaultPrimaryActions />
+            {thorchainCoin && (
+              <VaultPrimaryActions
+                thorchainCoin={thorchainCoin}
+                thorchainBalances={thorchainBalances}
+                thorchainPriceRates={thorchainPriceRates}
+              />
+            )}
           </VStack>
           {coins.size === 0 ? (
             <p>No coins available for this vault.</p>
