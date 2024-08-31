@@ -10,17 +10,25 @@ import { IService } from '../../services/IService';
 import { ISendService } from './ISendService';
 import { Chain } from '../../model/chain';
 import { WalletCore } from '@trustwallet/wallet-core';
-import { ServiceFactory } from '../ServiceFactory';
+import { IAddressService } from '../Address/IAddressService';
+import { AddressServiceFactory } from '../Address/AddressServiceFactory';
+import { IFeeService } from '../Fee/IFeeService';
+import { FeeServiceFactory } from '../Fee/FeeServiceFactory';
 
 export class SendService implements ISendService {
   chain: Chain;
   walletCore: WalletCore;
-  service: IService | null = null;
+  addressService: IAddressService | null = null;
+  feeService: IFeeService | null = null;
 
   constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
     this.walletCore = walletCore;
-    this.service = ServiceFactory.getService(chain, walletCore);
+    this.addressService = AddressServiceFactory.createAddressService(
+      chain,
+      walletCore
+    );
+    this.feeService = FeeServiceFactory.createFeeService(chain, walletCore);
   }
 
   calculateMaxValue(
@@ -76,12 +84,16 @@ export class SendService implements ISendService {
   }
 
   async loadGasInfoForSending(coin: Coin): Promise<FeeGasInfo> {
-    if (!this.service) {
+    if (!this.addressService) {
       throw new Error('Service is not initialized');
     }
 
     try {
-      return await this.service.feeService.getFee(coin);
+      if (this.feeService) {
+        return await this.feeService.getFee(coin);
+      } else {
+        throw new Error('Fee service is not initialized');
+      }
     } catch (error) {
       throw new Error('Failed to load gas info');
     }

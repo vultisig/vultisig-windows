@@ -5,10 +5,7 @@ import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { ISendTransaction } from '../../model/send-transaction';
 import { Balance } from '../../model/balance';
 import { Rate } from '../../model/price-rate';
-import { CoinMeta } from '../../model/coin-meta';
-import { Fiat } from '../../model/fiat';
 import { ChainUtils } from '../../model/chain';
-import { ServiceFactory } from '../../services/ServiceFactory';
 import { FeeGasInfo } from '../../model/gas-info';
 
 interface SendCryptoViewModel {
@@ -89,8 +86,8 @@ export function useSendCryptoViewModel(
       return;
     }
 
-    const service = ServiceFactory.getService(chainEnum, walletCore);
-    setService(service);
+    // const service = ServiceFactory.getService(chainEnum, walletCore);
+    // setService(service);
   };
 
   const Alert = (message: string) => {
