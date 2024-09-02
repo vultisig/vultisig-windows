@@ -144,7 +144,7 @@ export function useSendCryptoViewModel(
 
     setAmount(amountInDecimal.toString());
     convertToFiat(amountInDecimal);
-    updateTrasanctionAmounts();
+    updateTransactionAmounts();
   };
 
   const convertToFiat = async (amount: number): Promise<void> => {
@@ -152,7 +152,7 @@ export function useSendCryptoViewModel(
       (await service?.sendService.convertToFiat(tx.coin, priceRates, amount)) ??
       0;
     setAmountInFiat(fiatAmount.toString());
-    updateTrasanctionAmounts();
+    updateTransactionAmounts();
   };
 
   const convertFromFiat = async (amountInFiat: number): Promise<void> => {
@@ -164,7 +164,7 @@ export function useSendCryptoViewModel(
       )) ?? 0;
 
     setAmount(tokenAmount.toString());
-    updateTrasanctionAmounts();
+    updateTransactionAmounts();
   };
 
   const moveToNextView = async (
@@ -180,7 +180,7 @@ export function useSendCryptoViewModel(
     tx.fromAddress = coin.address;
   };
 
-  const updateTrasanctionAmounts = () => {
+  const updateTransactionAmounts = () => {
     tx.amount = Number(amount);
     tx.amountInFiat = Number(amountInFiat);
   };
@@ -188,13 +188,13 @@ export function useSendCryptoViewModel(
   const handleAmountChange = (newAmount: string) => {
     setAmount(newAmount);
     convertToFiat(Number(newAmount));
-    updateTrasanctionAmounts();
+    updateTransactionAmounts();
   };
 
   const handleAmountInFiatChange = (amontInFiat: string) => {
     setAmountInFiat(amontInFiat);
     convertFromFiat(Number(amontInFiat));
-    updateTrasanctionAmounts();
+    updateTransactionAmounts();
   };
 
   const handleToAddressChange = (toAddress: string) => {
