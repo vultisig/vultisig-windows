@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { IService } from '../../services/IService';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
-import { ISendTransaction } from '../../model/send-transaction';
+import { ISendTransaction } from '../../model/transaction';
 import { Balance } from '../../model/balance';
 import { Rate } from '../../model/price-rate';
 import { ChainUtils } from '../../model/chain';

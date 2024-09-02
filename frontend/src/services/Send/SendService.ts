@@ -2,7 +2,7 @@
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
 import { FeeGasInfo } from '../../model/gas-info';
-import { ISendTransaction } from '../../model/send-transaction';
+import { ISendTransaction } from '../../model/transaction';
 import { Rate } from '../../model/price-rate';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';

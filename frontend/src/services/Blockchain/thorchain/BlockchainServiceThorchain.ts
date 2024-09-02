@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 import { tss } from '../../../../wailsjs/go/models';
 import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
@@ -11,14 +12,18 @@ import TxCompiler = TW.TxCompiler;
 import SignatureProvider from '../signature-provider';
 import { createHash } from 'crypto';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { BlockchainService } from '../BlockchainService';
 
-export class BlockchainServiceThorchain implements IBlockchainService {
-  private chain: Chain;
-  private walletCore: WalletCore;
-  constructor(chain: Chain, walletCore: WalletCore) {
-    this.chain = chain;
-    this.walletCore = walletCore;
+export class BlockchainServiceThorchain
+  extends BlockchainService
+  implements IBlockchainService
+{
+  createKeysignPayload(obj: any): KeysignPayload {
+    let payload = super.createKeysignPayload(obj);
+
+    throw new Error('Method not implemented.');
   }
+
   isTHORChainSpecific(obj: any): boolean {
     return obj instanceof THORChainSpecific;
   }

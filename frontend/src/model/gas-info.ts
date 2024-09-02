@@ -3,6 +3,12 @@ export type FeeGasInfo = {
   priorityFee: number;
   nonce: number;
   fee: number;
+
+  // specifics for EVM
+
+  // specifics for UTXO
+
+  // specifics
 };
 
 export function getDefaultGasInfo(): FeeGasInfo {

@@ -20,4 +20,6 @@ export interface IBlockchainService {
     data: KeysignPayload | Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult>;
+
+  createKeysignPayload(obj: any): KeysignPayload;
 }

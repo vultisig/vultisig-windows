@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { ISendService } from '../ISendService';
-import { ISendTransaction } from '../../../model/send-transaction';
+import { ISendTransaction } from '../../../model/transaction';
 import { SendService } from '../SendService';
 import { Balance } from '../../../model/balance';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
