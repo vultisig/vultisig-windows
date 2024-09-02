@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect } from 'react';
 import { useSendCryptoViewModel } from './SendCryptoViewModel';
 import { useLocation, useParams } from 'react-router-dom';
@@ -17,6 +18,8 @@ const SendCryptoView: React.FC = () => {
   const { chain } = useParams<{ chain: string }>();
   const location = useLocation();
 
+  const selectedChain = chain || 'THORChain';
+
   const { coin, balances, priceRates } = location.state as {
     coin: Coin;
     balances: Map<Coin, Balance>;
@@ -30,7 +33,7 @@ const SendCryptoView: React.FC = () => {
   const sendCryptoViewModel = useSendCryptoViewModel(tx, balances, priceRates);
 
   useEffect(() => {
-    sendCryptoViewModel.initializeService(walletCore, chain ?? '');
+    sendCryptoViewModel.initializeService(walletCore, selectedChain);
   }, []);
 
   useEffect(() => {

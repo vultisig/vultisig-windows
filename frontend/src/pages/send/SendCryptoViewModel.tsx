@@ -5,11 +5,9 @@ import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { ISendTransaction } from '../../model/send-transaction';
 import { Balance } from '../../model/balance';
 import { Rate } from '../../model/price-rate';
-import { CoinMeta } from '../../model/coin-meta';
-import { Fiat } from '../../model/fiat';
 import { ChainUtils } from '../../model/chain';
-import { ServiceFactory } from '../../services/ServiceFactory';
 import { FeeGasInfo } from '../../model/gas-info';
+import { ServiceFactory } from '../../services/ServiceFactory';
 
 interface SendCryptoViewModel {
   tx: ISendTransaction;
@@ -141,50 +139,32 @@ export function useSendCryptoViewModel(
   };
 
   const setMaxValues = (percentage: number) => {
-    const balance = balances.get(tx.coin)?.rawAmount ?? 0;
-    const amount = balance * (percentage / 100);
-    const amountInDecimal = amount / Math.pow(10, tx.coin.decimals);
+    const amountInDecimal =
+      service?.sendService.calculateMaxValue(tx, percentage, balances, 0) ?? 0;
+
     setAmount(amountInDecimal.toString());
     convertToFiat(amountInDecimal);
-    tx.amount = amountInDecimal;
-    tx.amountInFiat = Number(amountInFiat);
+    updateTransactionAmounts();
   };
 
   const convertToFiat = async (amount: number): Promise<void> => {
-    // implement convert to fiat logic here
-    const toCoinMeta = CoinMeta.fromCoin(tx.coin);
-    const toSortedCoin = CoinMeta.sortedStringify(toCoinMeta);
-    const rates: Rate[] = priceRates.get(toSortedCoin) ?? [];
-
-    // TODO: Get the rate for the selected fiat on settings
-    const rate = rates.find(rate => {
-      return rate.fiat === Fiat.USD;
-    });
-    if (rate) {
-      const fiatAmount = amount * rate.value;
-      setAmountInFiat(fiatAmount.toString());
-      tx.amount = amount;
-      tx.amountInFiat = Number(amountInFiat);
-    }
+    const fiatAmount =
+      (await service?.sendService.convertToFiat(tx.coin, priceRates, amount)) ??
+      0;
+    setAmountInFiat(fiatAmount.toString());
+    updateTransactionAmounts();
   };
 
   const convertFromFiat = async (amountInFiat: number): Promise<void> => {
-    // implement convert to fiat logic here
-    const toCoinMeta = CoinMeta.fromCoin(tx.coin);
-    const toSortedCoin = CoinMeta.sortedStringify(toCoinMeta);
-    const rates: Rate[] = priceRates.get(toSortedCoin) ?? [];
+    const tokenAmount =
+      (await service?.sendService.convertFromFiat(
+        tx.coin,
+        priceRates,
+        amountInFiat
+      )) ?? 0;
 
-    // TODO: Get the rate for the selected fiat on settings
-    const rate = rates.find(rate => {
-      return rate.fiat === Fiat.USD;
-    });
-    if (rate) {
-      const tokenAmount = amountInFiat / rate.value;
-      setAmount(tokenAmount.toString());
-
-      tx.amount = tokenAmount;
-      tx.amountInFiat = Number(amountInFiat);
-    }
+    setAmount(tokenAmount.toString());
+    updateTransactionAmounts();
   };
 
   const moveToNextView = async (
@@ -200,16 +180,21 @@ export function useSendCryptoViewModel(
     tx.fromAddress = coin.address;
   };
 
+  const updateTransactionAmounts = () => {
+    tx.amount = Number(amount);
+    tx.amountInFiat = Number(amountInFiat);
+  };
+
   const handleAmountChange = (newAmount: string) => {
     setAmount(newAmount);
     convertToFiat(Number(newAmount));
-    tx.amount = Number(amount);
+    updateTransactionAmounts();
   };
 
   const handleAmountInFiatChange = (amontInFiat: string) => {
     setAmountInFiat(amontInFiat);
     convertFromFiat(Number(amontInFiat));
-    tx.amountInFiat = Number(amontInFiat);
+    updateTransactionAmounts();
   };
 
   const handleToAddressChange = (toAddress: string) => {

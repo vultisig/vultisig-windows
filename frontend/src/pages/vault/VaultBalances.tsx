@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Chain } from '../../model/chain';
@@ -29,12 +30,39 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
 }: VaultBalancesProps) => {
   const navigate = useNavigate();
 
-  const totalBalance = useMemo(() => {
-    const items = Array.from(coins.values())
-      .flat()
-      .filter(f => f.isNativeToken);
+  const coin = useMemo(() => {
+    return (
+      Array.from(coins.values())
+        .flat()
+        .find(coin => coin.chain === Chain.Ethereum && coin.isNativeToken) ||
+      null
+    );
+  }, [coins]);
 
-    return sum(
+  const coinBalances = useMemo(() => {
+    if (!coin) return new Map<Coin, Balance>();
+    return new Map(
+      Array.from(balances.entries()).filter(
+        ([coin]) => coin.chain === Chain.Ethereum && coin.isNativeToken
+      )
+    );
+  }, [balances, coin]);
+
+  const coinPriceRates = useMemo(() => {
+    if (!coin) return new Map<string, Rate[]>();
+    const coinMeta = CoinMeta.fromCoin(coin);
+    return new Map(
+      Array.from(priceRates.entries()).filter(
+        ([key]) => key === CoinMeta.sortedStringify(coinMeta)
+      )
+    );
+  }, [priceRates, coin]);
+
+  const totalBalance = useMemo(() => {
+    const items = Array.from(coins.values()).flat();
+    //.filter(f => f.isNativeToken);
+
+    const total = sum(
       items.map(coin => {
         const coinMeta = CoinMeta.fromCoin(coin);
         const fiatPrice = priceRates
@@ -53,6 +81,8 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
         return fromChainAmount(amount, coin.decimals) * fiatPrice;
       })
     );
+
+    return total;
   }, [coins, balances, priceRates]);
 
   return (
@@ -61,7 +91,13 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
         <VStack gap={32}>
           <VStack gap={24} alignItems="center">
             <VaultTotalBalance value={totalBalance} />
-            <VaultPrimaryActions />
+            {coin && (
+              <VaultPrimaryActions
+                coin={coin}
+                balances={coinBalances}
+                priceRates={coinPriceRates}
+              />
+            )}
           </VStack>
           {coins.size === 0 ? (
             <p>No coins available for this vault.</p>
@@ -91,7 +127,23 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
                             icon={icon}
                             fiatPrice={fiatPrice}
                             onClick={() => {
-                              navigate(`/vault/item/detail/${chain}`);
+                              navigate(`/vault/item/detail/${chain}`, {
+                                state: {
+                                  coins: Array.from(coins.entries()).filter(
+                                    f => f[0] === chain
+                                  ),
+                                  balances: balances,
+                                  priceRates: priceRates,
+                                },
+                              });
+
+                              // navigate(`/vault/item/send/${chain}`, {
+                              //   state: {
+                              //     coin: coin,
+                              //     balances: balances,
+                              //     priceRates: priceRates,
+                              //   },
+                              // });
                             }}
                           />
                         );

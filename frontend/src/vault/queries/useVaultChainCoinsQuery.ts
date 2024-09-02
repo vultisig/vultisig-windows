@@ -4,12 +4,14 @@ import { useCurrentVaultId } from '../state/useCurrentVaultId';
 import { useAsserWalletCore } from '../../main';
 import { Chain } from '../../model/chain';
 import { useAssertCurrentVault } from '../state/useCurrentVault';
-import { ServiceFactory } from '../../services/ServiceFactory';
 import { CoinAmount, CoinInfo, CoinKey } from '../../coin/Coin';
 import { EntityWithPrice } from '../../chain/EntityWithPrice';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
 import { getChainEntityIconPath } from '../../chain/utils/getChainEntityIconPath';
+import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
+import { PriceServiceFactory } from '../../services/Price/PriceServiceFactory';
+import { BalanceServiceFactory } from '../../services/Balance/BalanceServiceFactory';
 
 export type VaultChainCoin = CoinKey &
   CoinAmount &
@@ -29,8 +31,23 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
         token => token.chain === chain
       );
 
-      const { coinService, priceService, balanceService } =
-        ServiceFactory.getService(chain, walletCore!);
+      if (!walletCore) {
+        throw new Error('WalletCore is not initialized');
+      }
+
+      if (!chain) {
+        throw new Error('Chain is not provided');
+      }
+
+      const coinService = CoinServiceFactory.createCoinService(
+        chain,
+        walletCore
+      );
+      const priceService = PriceServiceFactory.createPriceService(
+        chain,
+        walletCore
+      );
+      const balanceService = BalanceServiceFactory.createBalanceService(chain);
 
       const prices = await priceService.getPrices(tokens);
 
