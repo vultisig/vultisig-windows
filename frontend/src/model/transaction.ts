@@ -4,7 +4,7 @@ import { SpecificGasInfo } from './gas-info';
 export enum TransactionType {
   SEND = 'send',
   SWAP = 'swap',
-  DEPOIST = 'deposit',
+  DEPOSIT = 'deposit',
 }
 
 export interface ITransaction {

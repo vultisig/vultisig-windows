@@ -14,6 +14,7 @@ import { BlockchainService } from '../BlockchainService';
 import SignatureProvider from '../signature-provider';
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
+import { SpecificUtxo } from '../../../model/gas-info';
 
 export class BlockchainServiceUtxo
   extends BlockchainService
@@ -22,10 +23,12 @@ export class BlockchainServiceUtxo
   createKeysignPayload(obj: ITransaction): KeysignPayload {
     const payload: KeysignPayload = super.createKeysignPayload(obj);
     const utxoSpecific = new UTXOSpecific();
+    const gasInfoSpecific: SpecificUtxo = obj.specificGasInfo as SpecificUtxo;
     switch (obj.transactionType) {
       case TransactionType.SEND:
         const sendTx = obj as ISendTransaction;
         utxoSpecific.sendMaxAmount = sendTx.sendMaxAmount;
+        utxoSpecific.byteFee = gasInfoSpecific.byteFee.toString() ?? '';
         payload.blockchainSpecific = {
           case: 'utxoSpecific',
           value: utxoSpecific,
