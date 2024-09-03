@@ -1,4 +1,5 @@
 import { Coin } from '../gen/vultisig/keysign/v1/coin_pb';
+import { SpecificGasInfo } from './gas-info';
 
 export enum TransactionType {
   SEND = 'send',
@@ -15,6 +16,7 @@ export interface ITransaction {
   gas: number;
   coin: Coin;
   transactionType: TransactionType;
+  specificGasInfo?: SpecificGasInfo;
 }
 
 export interface ISendTransaction extends ITransaction {
