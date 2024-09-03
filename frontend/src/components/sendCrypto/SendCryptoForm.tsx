@@ -2,7 +2,7 @@
 import React from 'react';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
-import { ISendTransaction } from '../../model/send-transaction';
+import { ISendTransaction } from '../../model/transaction';
 import { useSendCryptoViewModel } from '../../pages/send/SendCryptoViewModel';
 import { Rate } from '../../model/price-rate';
 import { getChainEntityIconPath } from '../../chain/utils/getChainEntityIconPath';

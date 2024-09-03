@@ -1,8 +1,8 @@
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
-import { FeeGasInfo } from '../../model/gas-info';
+import { SpecificGasInfo } from '../../model/gas-info';
 import { Rate } from '../../model/price-rate';
-import { ISendTransaction } from '../../model/send-transaction';
+import { ISendTransaction } from '../../model/transaction';
 import { IService } from '../IService';
 
 export interface ISendService {
@@ -22,7 +22,7 @@ export interface ISendService {
     priceRates: Map<string, Rate[]>,
     amountInFiat: number
   ): Promise<number>;
-  loadGasInfoForSending(coin: Coin): Promise<FeeGasInfo>;
+  loadGasInfoForSending(coin: Coin): Promise<SpecificGasInfo>;
   validateForm(
     tx: ISendTransaction,
     toAddress: string,

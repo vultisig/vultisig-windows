@@ -2,12 +2,12 @@
 import { useState } from 'react';
 import { IService } from '../../services/IService';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
-import { ISendTransaction } from '../../model/send-transaction';
+import { ISendTransaction } from '../../model/transaction';
 import { Balance } from '../../model/balance';
 import { Rate } from '../../model/price-rate';
 import { ChainUtils } from '../../model/chain';
-import { FeeGasInfo } from '../../model/gas-info';
 import { ServiceFactory } from '../../services/ServiceFactory';
+import { SpecificGasInfo } from '../../model/gas-info';
 
 interface SendCryptoViewModel {
   tx: ISendTransaction;
@@ -21,7 +21,7 @@ interface SendCryptoViewModel {
   isCoinPickerActive: boolean;
   showMemoField: boolean;
   step: 'Send Crypto' | 'Verify Transaction';
-  gasInfo: FeeGasInfo | null;
+  gasInfo: SpecificGasInfo | null;
   gas: number;
   isGasInfoLoaded: boolean;
 
@@ -43,7 +43,7 @@ interface SendCryptoViewModel {
   setStep(step: 'Send Crypto' | 'Verify Transaction'): void;
   setShowAlert(showAlert: boolean): void;
   loadGasInfoForSending(tx: ISendTransaction): Promise<void>;
-  setGasInfo(gasInfo: FeeGasInfo | null): void;
+  setGasInfo(gasInfo: SpecificGasInfo | null): void;
   setGas(gas: number): void;
   setIsGasInfoLoaded(isLoaded: boolean): void;
 }
@@ -62,7 +62,7 @@ export function useSendCryptoViewModel(
   const [isLoading, setLoading] = useState(false);
   const [isCoinPickerActive, setCoinPickerActive] = useState(false);
   const [showMemoField, setShowMemoField] = useState(false);
-  const [gasInfo, setGasInfo] = useState<FeeGasInfo | null>(null);
+  const [gasInfo, setGasInfo] = useState<SpecificGasInfo | null>(null);
   const [gas, setGas] = useState<number>(0);
   const [isGasInfoLoaded, setIsGasInfoLoaded] = useState(false);
 
@@ -213,10 +213,10 @@ export function useSendCryptoViewModel(
     }
 
     try {
-      const gasInfo = await service.feeService.getFee(tx.coin);
-      tx.gas = gasInfo.gasPrice;
+      const gasInfo: SpecificGasInfo = await service.feeService.getFee(tx.coin);
+      tx.specificGasInfo = gasInfo;
       setGasInfo(gasInfo);
-      setGas(tx.gas);
+      setGas(tx.specificGasInfo.gasPrice);
     } catch (ex) {
       console.error('Failed to get gas info for sending, error: ', ex);
     }

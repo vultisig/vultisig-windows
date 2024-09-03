@@ -1,33 +1,54 @@
+/* eslint-disable */
 import { tss } from '../../../../wailsjs/go/models';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { Chain } from '../../../model/chain';
 import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
-import { TW, WalletCore } from '@trustwallet/wallet-core';
-import { CoinServiceFactory } from '../../Coin/CoinServiceFactory';
-import { IAddressService } from '../../Address/IAddressService';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
-import SignatureProvider from '../signature-provider';
 import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import {
+  ISendTransaction,
+  ISwapTransaction,
+  ITransaction,
+  TransactionType,
+} from '../../../model/transaction';
+import { BlockchainService } from '../BlockchainService';
+import SignatureProvider from '../signature-provider';
+import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
-import '../../../extensions/string';
+import { SpecificUtxo } from '../../../model/gas-info';
 
-export class BlockchainServiceUtxo implements IBlockchainService {
-  chain: Chain;
-  walletCore: WalletCore;
-  coinType: any;
-  addressService: IAddressService;
-  constructor(chain: Chain, walletCore: WalletCore) {
-    this.chain = chain;
-    this.walletCore = walletCore;
-    this.coinType = CoinServiceFactory.createCoinService(
-      this.chain,
-      walletCore
-    ).getCoinType();
-    this.addressService = AddressServiceFactory.createAddressService(
-      this.chain,
-      walletCore
-    );
+export class BlockchainServiceUtxo
+  extends BlockchainService
+  implements IBlockchainService
+{
+  createKeysignPayload(obj: ITransaction): KeysignPayload {
+    const payload: KeysignPayload = super.createKeysignPayload(obj);
+    const utxoSpecific = new UTXOSpecific();
+    const gasInfoSpecific: SpecificUtxo = obj.specificGasInfo as SpecificUtxo;
+    switch (obj.transactionType) {
+      case TransactionType.SEND:
+        const sendTx = obj as ISendTransaction;
+        utxoSpecific.sendMaxAmount = sendTx.sendMaxAmount;
+        utxoSpecific.byteFee = gasInfoSpecific.byteFee.toString() ?? '';
+        payload.blockchainSpecific = {
+          case: 'utxoSpecific',
+          value: utxoSpecific,
+        };
+        break;
+
+      // We will have to check how the swap transaction is structured for UTXO chains
+      case TransactionType.SWAP:
+        const swapTx = obj as ISwapTransaction;
+        payload.blockchainSpecific = {
+          case: 'utxoSpecific',
+          value: utxoSpecific,
+        };
+        break;
+
+      default:
+        throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
+    }
+
+    return payload;
   }
 
   isTHORChainSpecific(obj: any): boolean {

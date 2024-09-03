@@ -4,7 +4,7 @@ import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../../model/coin-meta';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
-import { FeeGasInfo } from '../../../model/gas-info';
+import { SpecificEvm } from '../../../model/gas-info';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   private provider: ethers.JsonRpcProvider;
@@ -145,7 +145,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async getGasInfo(coin: Coin): Promise<FeeGasInfo> {
+  async getGasInfo(coin: Coin): Promise<SpecificEvm> {
     try {
       const gasPrice = await this.provider.send('eth_gasPrice', []);
       const [nonce, priorityFee] = await Promise.all([
@@ -154,10 +154,10 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       ]);
 
       return {
+        fee: this.calculateFee(coin),
         gasPrice: Number(gasPrice),
         priorityFee: Number(priorityFee),
         nonce: nonce,
-        fee: this.calculateFee(coin),
       };
     } catch (error) {
       console.error('getGasInfo::', error);

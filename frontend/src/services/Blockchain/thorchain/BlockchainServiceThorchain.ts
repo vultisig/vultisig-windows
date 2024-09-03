@@ -1,4 +1,5 @@
-import { TW, WalletCore } from '@trustwallet/wallet-core';
+/* eslint-disable */
+import { TW } from '@trustwallet/wallet-core';
 import { tss } from '../../../../wailsjs/go/models';
 import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -11,14 +12,45 @@ import TxCompiler = TW.TxCompiler;
 import SignatureProvider from '../signature-provider';
 import { createHash } from 'crypto';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { BlockchainService } from '../BlockchainService';
+import { SpecificThorchain } from '../../../model/gas-info';
+import { ITransaction, TransactionType } from '../../../model/transaction';
 
-export class BlockchainServiceThorchain implements IBlockchainService {
-  private chain: Chain;
-  private walletCore: WalletCore;
-  constructor(chain: Chain, walletCore: WalletCore) {
-    this.chain = chain;
-    this.walletCore = walletCore;
+export class BlockchainServiceThorchain
+  extends BlockchainService
+  implements IBlockchainService
+{
+  createKeysignPayload(obj: ITransaction): KeysignPayload {
+    const payload: KeysignPayload = super.createKeysignPayload(obj);
+    const specific = new THORChainSpecific();
+    const gasInfoSpecific: SpecificThorchain =
+      obj.specificGasInfo as SpecificThorchain;
+    specific.accountNumber = BigInt(gasInfoSpecific.accountNumber);
+    specific.fee = BigInt(gasInfoSpecific.fee);
+    specific.sequence = BigInt(gasInfoSpecific.sequence);
+
+    switch (obj.transactionType) {
+      case TransactionType.SEND:
+        specific.isDeposit = false;
+
+        break;
+      case TransactionType.DEPOSIT:
+        specific.isDeposit = true;
+
+        break;
+
+      default:
+        throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
+    }
+
+    payload.blockchainSpecific = {
+      case: 'thorchainSpecific',
+      value: specific,
+    };
+
+    return payload;
   }
+
   isTHORChainSpecific(obj: any): boolean {
     return obj instanceof THORChainSpecific;
   }

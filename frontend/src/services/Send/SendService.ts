@@ -1,8 +1,7 @@
 /* eslint-disable */
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
-import { FeeGasInfo } from '../../model/gas-info';
-import { ISendTransaction } from '../../model/send-transaction';
+import { ISendTransaction } from '../../model/transaction';
 import { Rate } from '../../model/price-rate';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
@@ -14,6 +13,7 @@ import { IAddressService } from '../Address/IAddressService';
 import { AddressServiceFactory } from '../Address/AddressServiceFactory';
 import { IFeeService } from '../Fee/IFeeService';
 import { FeeServiceFactory } from '../Fee/FeeServiceFactory';
+import { SpecificGasInfo } from '../../model/gas-info';
 
 export class SendService implements ISendService {
   chain: Chain;
@@ -83,7 +83,7 @@ export class SendService implements ISendService {
     return 0;
   }
 
-  async loadGasInfoForSending(coin: Coin): Promise<FeeGasInfo> {
+  async loadGasInfoForSending(coin: Coin): Promise<SpecificGasInfo> {
     if (!this.addressService) {
       throw new Error('Service is not initialized');
     }
