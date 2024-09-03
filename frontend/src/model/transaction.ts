@@ -13,7 +13,6 @@ export interface ITransaction {
   amount: number;
   amountInFiat: number;
   memo: string;
-  gas: number;
   coin: Coin;
   transactionType: TransactionType;
   specificGasInfo?: SpecificGasInfo;
@@ -38,10 +37,10 @@ export function getDefaultSendTransaction(): ISendTransaction {
     amount: 0,
     amountInFiat: 0,
     memo: '',
-    gas: 0,
     sendMaxAmount: false,
     coin: new Coin(),
     transactionType: TransactionType.SEND,
+    specificGasInfo: undefined,
   };
 }
 
@@ -52,10 +51,10 @@ export function getDefaultSwapTransaction(): ISwapTransaction {
     amount: 0,
     amountInFiat: 0,
     memo: '',
-    gas: 0,
     coin: new Coin(),
     swapCoin: new Coin(),
     slippage: 0,
     transactionType: TransactionType.SWAP,
+    specificGasInfo: undefined,
   };
 }
