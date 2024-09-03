@@ -1,21 +1,59 @@
-export type FeeGasInfo = {
+export type SpecificGasInfo =
+  | BasicGasInfo
+  | SpecificEvm
+  | SpecificCosmos
+  | SpecificPolkadot
+  | SpecificSolana
+  | SpecificSui
+  | SpecificThorchain
+  | SpecificUtxo;
+
+export interface BasicGasInfo {
+  gasPrice: number;
+  fee: number;
+}
+
+export interface SpecificEvm extends BasicGasInfo {
   gasPrice: number;
   priorityFee: number;
   nonce: number;
-  fee: number;
+}
 
-  // specifics for EVM
+export interface SpecificThorchain extends BasicGasInfo {
+  accountNumber: number;
+  sequence: number;
+  isDeposit: boolean;
+}
 
-  // specifics for UTXO
+export interface SpecificUtxo extends BasicGasInfo {
+  byteFee: number;
+  sendMaxAmount: boolean;
+}
 
-  // specifics
-};
+export interface SpecificCosmos extends BasicGasInfo {
+  accountNumber: number;
+  sequence: number;
+  gas: number;
+  transactionType: number;
+}
 
-export function getDefaultGasInfo(): FeeGasInfo {
-  return {
-    gasPrice: 0,
-    priorityFee: 0,
-    nonce: 0,
-    fee: 0,
-  };
+export interface SpecificSolana extends BasicGasInfo {
+  recentBlockHash: string;
+  priorityFee: number;
+  fromAddressPubKey: string | undefined;
+  toAddressPubKey: string | undefined;
+}
+
+export interface SpecificSui extends BasicGasInfo {
+  referenceGasPrice: number;
+  coins: Map<string, string>[];
+}
+
+export interface SpecificPolkadot extends BasicGasInfo {
+  recentBlockHash: string;
+  nonce: number;
+  currentBlockNumber: number;
+  specVersion: number;
+  transactionVersion: number;
+  genesisHash: string;
 }
