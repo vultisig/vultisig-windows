@@ -236,7 +236,7 @@ func (s *Store) DeleteVault(publicKeyECDSA string) error {
 // GetCoins gets all coins belongs to the vault
 func (s *Store) GetCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 	var coins []Coin
-	coinsQuery := `SELECT id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, raw_balance, price_rate FROM coins WHERE public_key_ecdsa = ?`
+	coinsQuery := `SELECT id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, raw_balance, price_rate, decimals FROM coins WHERE public_key_ecdsa = ?`
 	coinsRows, err := s.db.Query(coinsQuery, vaultPublicKeyECDSA)
 	if err != nil {
 		return nil, fmt.Errorf("could not query coins, err: %w", err)
@@ -254,6 +254,7 @@ func (s *Store) GetCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 			&coin.IsNativeToken,
 			&coin.Logo,
 			&coin.PriceProviderID,
+			&coin.Decimals,
 		); err != nil {
 			return nil, fmt.Errorf("could not scan coin, err: %w", err)
 		}
@@ -386,9 +387,11 @@ func (s *Store) SaveCoin(vaultPublicKeyECDSA string, coin Coin) (string, error) 
 				price_provider_id, 
 				raw_balance, 
 				price_rate, 
-				public_key_ecdsa)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-	_, err := s.db.Exec(query, coin.ID, coin.Chain, coin.Address, coin.HexPublicKey, coin.Ticker, coin.ContractAddress, coin.IsNativeToken, coin.Logo, coin.PriceProviderID, coin.RawBalance, coin.PriceRate, vaultPublicKeyECDSA)
+				public_key_ecdsa,
+				decimals
+			
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	_, err := s.db.Exec(query, coin.ID, coin.Chain, coin.Address, coin.HexPublicKey, coin.Ticker, coin.ContractAddress, coin.IsNativeToken, coin.Logo, coin.PriceProviderID, coin.RawBalance, coin.PriceRate, vaultPublicKeyECDSA, coin.Decimals)
 	if err != nil {
 		return "", fmt.Errorf("could not upsert coin, err: %w", err)
 	}
