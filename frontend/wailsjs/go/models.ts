@@ -22,6 +22,7 @@ export namespace storage {
 	    is_native_token: boolean;
 	    logo: string;
 	    price_provider_id: string;
+	    decimals: number;
 	    raw_balance: string;
 	    price_rate: number;
 	
@@ -40,6 +41,7 @@ export namespace storage {
 	        this.is_native_token = source["is_native_token"];
 	        this.logo = source["logo"];
 	        this.price_provider_id = source["price_provider_id"];
+	        this.decimals = source["decimals"];
 	        this.raw_balance = source["raw_balance"];
 	        this.price_rate = source["price_rate"];
 	    }

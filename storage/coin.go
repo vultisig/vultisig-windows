@@ -14,6 +14,7 @@ type Coin struct {
 	IsNativeToken   bool           `json:"is_native_token"`
 	Logo            string         `json:"logo"`
 	PriceProviderID string         `json:"price_provider_id"`
+	Decimals        int32          `json:"decimals"` // Add the missing field
 	RawBalance      string         `json:"raw_balance"`
 	PriceRate       common.Decimal `json:"price_rate"`
 }
