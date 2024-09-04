@@ -22,6 +22,10 @@ export class BlockchainServiceThorchain
 {
   createKeysignPayload(obj: ITransaction): KeysignPayload {
     const payload: KeysignPayload = super.createKeysignPayload(obj);
+
+    console.log('createKeysignPayload', obj);
+    console.log('createKeysignPayload', obj.specificGasInfo);
+
     const specific = new THORChainSpecific();
     const gasInfoSpecific: SpecificThorchain =
       obj.specificGasInfo as SpecificThorchain;

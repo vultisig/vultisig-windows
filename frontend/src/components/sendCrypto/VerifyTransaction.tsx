@@ -2,22 +2,32 @@
 import { faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCurrentVault } from '../../vault/state/useCurrentVault';
+import {
+  ISendTransaction,
+  ISwapTransaction,
+  ITransaction,
+} from '../../model/transaction';
+import { BlockchainServiceFactory } from '../../services/Blockchain/BlockchainServiceFactory';
+import { useAsserWalletCore } from '../../main';
+import { ChainUtils } from '../../model/chain';
 
 interface VerifyTransactionViewProps {
-  fromAddress: string;
-  toAddress: string;
-  amount: string;
-  amountInFiat: string;
-  gas: string;
+  tx: ITransaction | ISendTransaction | ISwapTransaction;
 }
 
-const VerifyTransaction: React.FC<VerifyTransactionViewProps> = ({
-  fromAddress,
-  toAddress,
-  amount,
-  amountInFiat,
-  gas,
-}) => {
+const VerifyTransaction: React.FC<VerifyTransactionViewProps> = ({ tx }) => {
+  const currentVault = useCurrentVault();
+
+  if (!currentVault) {
+    throw new Error('No vault found');
+  }
+
+  const walletCore = useAsserWalletCore();
+
+  const navigate = useNavigate();
+
   const [isChecked, setIsChecked] = useState({
     address: false,
     amount: false,
@@ -38,31 +48,31 @@ const VerifyTransaction: React.FC<VerifyTransactionViewProps> = ({
         <div className="border-b border-white/10 pb-2">
           <div className="text-lg font-semibold">From</div>
           <div className="text-body-12 font-menlo text-secondary break-all">
-            {fromAddress}
+            {tx.fromAddress}
           </div>
         </div>
         <div className="border-b border-white/10 pb-2">
           <div className="text-lg font-semibold">To</div>
           <div className="text-body-12 font-menlo text-secondary break-all">
-            {toAddress}
+            {tx.toAddress}
           </div>
         </div>
         <div className="border-b border-white/10 pb-2 flex items-center justify-between">
           <div className="text-lg font-semibold">Amount</div>
           <div className="text-body-12 font-menlo text-neutral-0 font-medium">
-            {amount} SOL
+            {tx.amount}
           </div>
         </div>
         <div className="border-b border-white/10 pb-2 flex items-center justify-between">
           <div className="text-lg font-semibold">Amount (in USD)</div>
           <div className="text-body-12 font-menlo text-neutral-0 font-medium">
-            US${amountInFiat}
+            {tx.amountInFiat}
           </div>
         </div>
         <div className="flex items-center justify-between">
           <div className="text-lg font-semibold">Gas</div>
           <div className="text-body-12 font-menlo text-neutral-0 font-medium">
-            {gas}
+            {tx.specificGasInfo?.gasPrice}
           </div>
         </div>
       </div>
@@ -115,6 +125,22 @@ const VerifyTransaction: React.FC<VerifyTransactionViewProps> = ({
         disabled={
           !isChecked.address || !isChecked.amount || !isChecked.scamCheck
         }
+        onClick={() => {
+          const chainEnum = ChainUtils.stringToChain(tx.coin.chain);
+          if (chainEnum === undefined) {
+            throw new Error('Chain is not defined');
+          }
+
+          const payload = BlockchainServiceFactory.createService(
+            chainEnum,
+            walletCore
+          ).createKeysignPayload(tx);
+          navigate(`/vault/keysign`, {
+            state: {
+              keysignPayload: payload,
+            },
+          });
+        }}
       >
         Sign
       </button>
