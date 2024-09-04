@@ -11,6 +11,8 @@ export const useVaultsQuery = () => {
 
 export const useVaults = () => {
   const { data } = useVaultsQuery();
-
+  if (!data || data.length === 0) {
+    return [];
+  }
   return shouldBePresent(data);
 };
