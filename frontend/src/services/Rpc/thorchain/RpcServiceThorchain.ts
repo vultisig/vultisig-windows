@@ -71,15 +71,16 @@ export class RpcServiceThorchain implements IRpcService {
 
   async getGasInfo(coin: Coin): Promise<SpecificThorchain> {
     const account = await this.fetchAccountNumber(coin.address);
+
     const fee = await this.calculateFee(coin);
 
-    const specificThorchain = {
+    const specificThorchain: SpecificThorchain = {
       fee, // sometimes the fee is calculated like EVMs, so we need to add it here
       gasPrice: fee, //The gas price is the price per byte of the transaction
-      accountNumber: account?.accountNumber,
-      sequence: account?.sequence ?? 0,
+      accountNumber: Number(account?.account_number),
+      sequence: Number(account?.sequence ?? 0),
       isDeposit: false,
-    };
+    } as SpecificThorchain;
 
     return specificThorchain;
   }
