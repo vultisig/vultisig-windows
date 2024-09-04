@@ -141,6 +141,7 @@ const VerifyTransaction = () => {
           ).createKeysignPayload(tx);
           navigate(`/vault/keysign`, {
             state: {
+              vault: currentVault,
               keysignPayload: payload,
             },
           });
