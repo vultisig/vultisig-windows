@@ -5,6 +5,9 @@ import { CoinMeta } from '../../model/coin-meta';
 import { ICoinService } from './ICoinService';
 import { AddressServiceFactory } from '../Address/AddressServiceFactory';
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
+import { SaveCoin } from '../../../wailsjs/go/storage/Store';
+import { storage } from '../../../wailsjs/go/models';
 
 export class CoinService implements ICoinService {
   private chain: Chain;
@@ -13,6 +16,12 @@ export class CoinService implements ICoinService {
   constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
     this.walletCore = walletCore;
+  }
+
+  async saveCoin(coin: Coin, vault: Vault): Promise<void> {
+    const storageCoin = storage.Coin.createFrom(coin);
+    const response = SaveCoin(vault.publicKeyEcdsa, storageCoin);
+    console.log(response);
   }
 
   async createCoin(
