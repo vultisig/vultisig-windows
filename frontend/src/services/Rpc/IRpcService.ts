@@ -13,7 +13,7 @@ export interface IRpcService {
   // Ethereum-specific methods
   getGasInfo(coin: Coin): Promise<SpecificGasInfo>;
 
-  calculateFee(coin: Coin): number;
+  calculateFee(coin?: Coin): Promise<number>;
 
   estimateGas?(
     senderAddress: string,

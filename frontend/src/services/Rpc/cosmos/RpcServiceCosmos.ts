@@ -5,7 +5,7 @@ import { SpecificCosmos } from '../../../model/gas-info';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceCosmos implements IRpcService {
-  calculateFee(coin: Coin): number {
+  calculateFee(coin: Coin): Promise<number> {
     throw new Error('Method not implemented.');
   }
   sendTransaction(encodedTransaction: string): Promise<string> {

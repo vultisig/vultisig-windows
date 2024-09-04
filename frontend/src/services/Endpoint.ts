@@ -40,6 +40,10 @@ export class Endpoint {
     return `https://mayanode.mayachain.info/cosmos/bank/v1beta1/balances/${address}`;
   }
 
+  static resolveTNS(name: string) {
+    return `https://midgard.ninerealms.com/v2/thorname/lookup/${name}`;
+  }
+
   // static fetchSwapQuoteThorchain(chain: SwapChain, address: string, fromAsset: string, toAsset: string, amount: string, interval: string, isAffiliate: boolean): URL {
   //     const isAffiliateParams = isAffiliate
   //         ? `&affiliate=${THORChainSwaps.affiliateFeeAddress}&affiliate_bps=${THORChainSwaps.affiliateFeeRateBp}`

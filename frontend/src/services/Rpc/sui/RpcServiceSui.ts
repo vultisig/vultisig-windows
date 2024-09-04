@@ -5,7 +5,7 @@ import { SpecificGasInfo } from '../../../model/gas-info';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceSui implements IRpcService {
-  calculateFee(coin: Coin): number {
+  calculateFee(coin: Coin): Promise<number> {
     throw new Error('Method not implemented.');
   }
   sendTransaction(encodedTransaction: string): Promise<string> {

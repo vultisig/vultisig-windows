@@ -15,7 +15,8 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     this.rpcUrl = rpcUrl;
   }
 
-  calculateFee(coin: Coin): number {
+  // TODO: Implement the following methods
+  async calculateFee(coin: Coin): Promise<number> {
     let gasLimit = 21000;
     if (coin.isNativeToken) {
       gasLimit = 120000;
@@ -154,7 +155,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       ]);
 
       return {
-        fee: this.calculateFee(coin),
+        fee: await this.calculateFee(coin),
         gasPrice: Number(gasPrice),
         priorityFee: Number(priorityFee),
         nonce: nonce,

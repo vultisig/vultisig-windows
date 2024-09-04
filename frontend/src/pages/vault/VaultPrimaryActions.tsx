@@ -22,7 +22,7 @@ export const VaultPrimaryActions: React.FC<VaultPrimaryActionsProps> = ({
   const navigate = useNavigate();
 
   function handleGoSendCrypto() {
-    navigate(`/vault/item/send/${Chain.Ethereum}`, {
+    navigate(`/vault/item/send/${Chain.THORChain}`, {
       state: {
         coin: coin,
         balances: balances,

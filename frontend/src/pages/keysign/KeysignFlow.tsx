@@ -68,13 +68,16 @@ const KeysignFlowView: React.FC = () => {
       }
     });
   };
+
   const onKeysignError = (err: string) => {
     setKeysignErr(err);
     setCurrentScreen(2);
   };
+
   const onKeysignDone = () => {
     setCurrentScreen(3);
   };
+
   const screens = [
     {
       title: t('send'),
@@ -118,6 +121,7 @@ const KeysignFlowView: React.FC = () => {
       ),
     },
   ];
+
   return (
     <>
       <div>

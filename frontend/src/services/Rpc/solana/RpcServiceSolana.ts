@@ -5,7 +5,7 @@ import { SpecificGasInfo } from '../../../model/gas-info';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceSolana implements IRpcService {
-  calculateFee(coin: Coin): number {
+  calculateFee(coin: Coin): Promise<number> {
     throw new Error('Method not implemented.');
   }
   resolveENS?(ensName: string): Promise<string> {

@@ -1,23 +1,37 @@
 /* eslint-disable */
-import { faShieldHalved } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useCurrentVault } from '../../vault/state/useCurrentVault';
+import {
+  ISendTransaction,
+  ISwapTransaction,
+  ITransaction,
+} from '../../model/transaction';
+import { BlockchainServiceFactory } from '../../services/Blockchain/BlockchainServiceFactory';
+import { useAsserWalletCore } from '../../main';
+import { ChainUtils } from '../../model/chain';
 
 interface VerifyTransactionViewProps {
-  fromAddress: string;
-  toAddress: string;
-  amount: string;
-  amountInFiat: string;
-  gas: string;
+  tx: ITransaction | ISendTransaction | ISwapTransaction;
 }
 
-const VerifyTransaction: React.FC<VerifyTransactionViewProps> = ({
-  fromAddress,
-  toAddress,
-  amount,
-  amountInFiat,
-  gas,
-}) => {
+const VerifyTransaction = () => {
+  const currentVault = useCurrentVault();
+
+  const location = useLocation();
+
+  const { tx } = location.state;
+
+  if (!currentVault) {
+    throw new Error('No vault found');
+  }
+
+  const walletCore = useAsserWalletCore();
+
+  const navigate = useNavigate();
+
   const [isChecked, setIsChecked] = useState({
     address: false,
     amount: false,
@@ -33,36 +47,47 @@ const VerifyTransaction: React.FC<VerifyTransactionViewProps> = ({
 
   return (
     <div className="relative text-white font-menlo p-4 flex flex-col flex-grow bg-dark-800">
+      <div className="flex items-center justify-between mb-4">
+        <button
+          onClick={() => window.history.back()}
+          className="flex items-center justify-center w-8 h-8 bg-transparent text-white"
+        >
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
+        <span className="text-base font-semibold text-center flex-1">
+          Verify
+        </span>
+      </div>
       {/* Transaction Details */}
       <div className="bg-blue-600 rounded-lg p-4 space-y-3">
         <div className="border-b border-white/10 pb-2">
           <div className="text-lg font-semibold">From</div>
           <div className="text-body-12 font-menlo text-secondary break-all">
-            {fromAddress}
+            {tx.fromAddress}
           </div>
         </div>
         <div className="border-b border-white/10 pb-2">
           <div className="text-lg font-semibold">To</div>
           <div className="text-body-12 font-menlo text-secondary break-all">
-            {toAddress}
+            {tx.toAddress}
           </div>
         </div>
         <div className="border-b border-white/10 pb-2 flex items-center justify-between">
           <div className="text-lg font-semibold">Amount</div>
           <div className="text-body-12 font-menlo text-neutral-0 font-medium">
-            {amount} SOL
+            {tx.amount}
           </div>
         </div>
         <div className="border-b border-white/10 pb-2 flex items-center justify-between">
           <div className="text-lg font-semibold">Amount (in USD)</div>
           <div className="text-body-12 font-menlo text-neutral-0 font-medium">
-            US${amountInFiat}
+            {tx.amountInFiat}
           </div>
         </div>
         <div className="flex items-center justify-between">
           <div className="text-lg font-semibold">Gas</div>
           <div className="text-body-12 font-menlo text-neutral-0 font-medium">
-            {gas}
+            {tx.specificGasInfo?.gasPrice}
           </div>
         </div>
       </div>
@@ -115,6 +140,23 @@ const VerifyTransaction: React.FC<VerifyTransactionViewProps> = ({
         disabled={
           !isChecked.address || !isChecked.amount || !isChecked.scamCheck
         }
+        onClick={() => {
+          const chainEnum = ChainUtils.stringToChain(tx.coin.chain);
+          if (chainEnum === undefined) {
+            throw new Error('Chain is not defined');
+          }
+
+          const payload = BlockchainServiceFactory.createService(
+            chainEnum,
+            walletCore
+          ).createKeysignPayload(tx);
+          navigate(`/vault/keysign`, {
+            state: {
+              vault: currentVault,
+              keysignPayload: payload,
+            },
+          });
+        }}
       >
         Sign
       </button>
