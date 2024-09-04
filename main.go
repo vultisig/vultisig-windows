@@ -6,9 +6,11 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/wailsapp/wails/v2"
+	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
+	"github.com/wailsapp/wails/v2/pkg/options/windows"
 
 	"github.com/vultisig/vultisig-win/mediator"
 	"github.com/vultisig/vultisig-win/storage"
@@ -69,7 +71,8 @@ func main() {
 			mediator,
 		},
 		EnumBind: []interface{}{},
-
+		LogLevel: logger.ERROR,
+		Windows:  &windows.Options{},
 		Mac: &mac.Options{
 			Appearance:           mac.DefaultAppearance,
 			WebviewIsTransparent: true,
