@@ -14,4 +14,6 @@ export interface ICoinService {
   getCoinType(): CoinType;
 
   saveCoin(coin: Coin, vault: Vault): Promise<void>;
+
+  deleteCoin(coinId: string, vault: Vault): Promise<void>;
 }
