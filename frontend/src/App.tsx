@@ -16,6 +16,7 @@ import { VaultsDependant } from './vault/components/VaultsDependant';
 import { VaultPage } from './pages/vault/VaultPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { VaultChainPage } from './vault/chain/VaultChainPage';
+import VerifyTransaction from './components/sendCrypto/VerifyTransaction';
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,11 @@ const App: React.FC = () => {
                   <Route
                     path="/vault/item/send/:chain"
                     element={<SendCryptoView />}
+                  />
+
+                  <Route
+                    path="/vault/item/send/verify"
+                    element={<VerifyTransaction />}
                   />
                 </Routes>
               </Router>

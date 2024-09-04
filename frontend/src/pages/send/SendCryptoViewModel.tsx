@@ -8,6 +8,7 @@ import { Rate } from '../../model/price-rate';
 import { ChainUtils } from '../../model/chain';
 import { ServiceFactory } from '../../services/ServiceFactory';
 import { SpecificGasInfo } from '../../model/gas-info';
+import { useNavigate, useNavigation } from 'react-router-dom';
 
 interface SendCryptoViewModel {
   tx: ISendTransaction;
@@ -69,6 +70,8 @@ export function useSendCryptoViewModel(
   const [step, setStep] = useState<'Send Crypto' | 'Verify Transaction'>(
     'Send Crypto'
   );
+
+  const navigate = useNavigate();
 
   const initializeService = async (walletCore: any, chain: string) => {
     if (!walletCore) {
@@ -171,7 +174,17 @@ export function useSendCryptoViewModel(
     nextStep: 'Send Crypto' | 'Verify Transaction'
   ) => {
     if (await validateForm()) {
-      setStep(nextStep);
+      tx.amount = Number(amount);
+      tx.amountInFiat = Number(amountInFiat);
+      tx.toAddress = toAddress;
+      tx.specificGasInfo = gasInfo!;
+
+      navigate('/vault/item/send/verify', {
+        state: {
+          tx: tx,
+        },
+      });
+      // setStep(nextStep);
     }
   };
 

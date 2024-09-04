@@ -2,7 +2,7 @@
 import { faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useCurrentVault } from '../../vault/state/useCurrentVault';
 import {
   ISendTransaction,
@@ -17,8 +17,12 @@ interface VerifyTransactionViewProps {
   tx: ITransaction | ISendTransaction | ISwapTransaction;
 }
 
-const VerifyTransaction: React.FC<VerifyTransactionViewProps> = ({ tx }) => {
+const VerifyTransaction = () => {
   const currentVault = useCurrentVault();
+
+  const location = useLocation();
+
+  const { tx } = location.state;
 
   if (!currentVault) {
     throw new Error('No vault found');
