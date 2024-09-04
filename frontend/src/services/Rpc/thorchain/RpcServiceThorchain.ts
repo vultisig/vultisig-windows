@@ -103,7 +103,7 @@ export class RpcServiceThorchain implements IRpcService {
       return chainID;
     }
 
-    let urlString = Endpoint.fetchThorchainNetworkInfoNineRealms;
+    let urlString = Endpoint.thorchainNetworkInfo;
     const response = await fetch(urlString);
     const data = await response.json();
     const network = data.result.node_info.network;
