@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { faShieldHalved } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -47,6 +47,17 @@ const VerifyTransaction = () => {
 
   return (
     <div className="relative text-white font-menlo p-4 flex flex-col flex-grow bg-dark-800">
+      <div className="flex items-center justify-between mb-4">
+        <button
+          onClick={() => window.history.back()}
+          className="flex items-center justify-center w-8 h-8 bg-transparent text-white"
+        >
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
+        <span className="text-base font-semibold text-center flex-1">
+          Verify
+        </span>
+      </div>
       {/* Transaction Details */}
       <div className="bg-blue-600 rounded-lg p-4 space-y-3">
         <div className="border-b border-white/10 pb-2">

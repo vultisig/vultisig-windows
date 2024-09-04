@@ -81,10 +81,6 @@ const SendCryptoView: React.FC = () => {
             sendCryptoViewModel={sendCryptoViewModel}
           />
         )}
-
-        {/* {sendCryptoViewModel.step === 'Verify Transaction' && (
-          <VerifyTransaction tx={tx} />
-        )} */}
       </div>
     )
   );

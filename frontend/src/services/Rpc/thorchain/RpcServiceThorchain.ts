@@ -32,9 +32,9 @@ export class RpcServiceThorchain implements IRpcService {
     const data = await response.json();
 
     return (
-      data.balances.find(
+      data?.balances?.find(
         (b: any) => b.denom.toLowerCase() === coin.ticker.toLowerCase()
-      ).amount ?? 0
+      )?.amount ?? 0
     );
   }
 
