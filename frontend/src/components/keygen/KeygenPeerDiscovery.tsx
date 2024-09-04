@@ -23,6 +23,7 @@ function getHexEncodedRandomBytes(length: number): string {
 interface KeygenPeerDiscoveryProps {
   vaultType: string;
   vaultName: string;
+  localPartyID: string;
   onContinue: (
     isRelay: boolean,
     sessionID: string,
@@ -35,6 +36,7 @@ interface KeygenPeerDiscoveryProps {
 const KeygenPeerDiscovery: React.FC<KeygenPeerDiscoveryProps> = ({
   vaultType,
   vaultName,
+  localPartyID,
   onContinue,
 }) => {
   const { t } = useTranslation();
@@ -82,7 +84,7 @@ const KeygenPeerDiscovery: React.FC<KeygenPeerDiscoveryProps> = ({
 
   const discoverService = async (name: string) => {
     if (!isRelay) await AdvertiseMediator(name);
-    await postSession(isRelay, sessionID!, serviceName!);
+    await postSession(isRelay, sessionID!, localPartyID!);
     checkForDevices(isRelay, sessionID!, setDevices);
   };
 

@@ -5,7 +5,7 @@ let intervalId: any = null;
 export function postSession(
   isRelay: boolean,
   sessionID: string,
-  serviceName: string
+  localPartyID: string
 ) {
   return fetch(
     `${
@@ -16,7 +16,7 @@ export function postSession(
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify([serviceName]),
+      body: JSON.stringify([localPartyID]),
     }
   );
 }

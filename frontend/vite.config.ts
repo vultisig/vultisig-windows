@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, normalizePath } from 'vite';
 import react from '@vitejs/plugin-react';
 import stdLibBrowser from 'vite-plugin-node-stdlib-browser';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
@@ -12,14 +12,18 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: path.resolve(
-            __dirname,
-            'node_modules/@trustwallet/wallet-core/dist/lib/wallet-core.wasm'
+          src: normalizePath(
+            path.resolve(
+              __dirname,
+              'node_modules/@trustwallet/wallet-core/dist/lib/wallet-core.wasm'
+            )
           ),
           dest: '',
         },
         {
-          src: path.resolve(__dirname, 'node_modules/7z-wasm/7zz.wasm'),
+          src: normalizePath(
+            path.resolve(__dirname, 'node_modules/7z-wasm/7zz.wasm')
+          ),
           dest: '7z-wasm',
         },
       ],
