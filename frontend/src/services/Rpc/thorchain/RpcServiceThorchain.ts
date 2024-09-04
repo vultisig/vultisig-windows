@@ -2,7 +2,7 @@
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { SpecificGasInfo, SpecificThorchain } from '../../../model/gas-info';
+import { SpecificThorchain } from '../../../model/gas-info';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 
