@@ -19,6 +19,7 @@ export class CoinService implements ICoinService {
   }
 
   async saveCoin(coin: Coin, vault: Vault): Promise<void> {
+    // IF you need to add any other logic to make it work, you can do it here
     const storageCoin = storage.Coin.createFrom(coin);
     const response = SaveCoin(vault.publicKeyEcdsa, storageCoin);
     console.log(response);
