@@ -125,6 +125,7 @@ const SetupVaultView: React.FC = () => {
         <KeygenPeerDiscovery
           vaultName={vaultName}
           vaultType={vaultType}
+          localPartyID={localPartyId}
           onContinue={onKeygenPeerDiscoveryContinue}
         />
       ),
