@@ -97,21 +97,21 @@ export class RpcServiceThorchain implements IRpcService {
     return data.result.value;
   }
 
-  /*
-  
-  Not sure why we have to get the network id
-
-  func getTHORChainChainID() async throws -> String  {
-        if !network.isEmpty {
-            print("network id\(network)")
-            return network
-        }
-        let (data, _) = try await URLSession.shared.data(from: Endpoint.thorchainNetworkInfo)
-        let response = try JSONDecoder().decode(THORChainNetworkStatus.self, from: data)
-        network = response.result.node_info.network
-        return response.result.node_info.network
+  static async getTHORChainChainID(): Promise<string> {
+    const chainID = localStorage.getItem('THORChainChainID');
+    if (chainID) {
+      return chainID;
     }
-  */
+
+    let urlString = Endpoint.fetchThorchainNetworkInfoNineRealms;
+    const response = await fetch(urlString);
+    const data = await response.json();
+    const network = data.result.node_info.network;
+
+    localStorage.setItem('THORChainChainID', network);
+
+    return network;
+  }
 
   estimateGas?(
     _senderAddress: string,

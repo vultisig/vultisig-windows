@@ -15,6 +15,7 @@ import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import { BlockchainService } from '../BlockchainService';
 import { SpecificThorchain } from '../../../model/gas-info';
 import { ITransaction, TransactionType } from '../../../model/transaction';
+import { RpcServiceThorchain } from '../../Rpc/thorchain/RpcServiceThorchain';
 
 export class BlockchainServiceThorchain
   extends BlockchainService
@@ -148,10 +149,17 @@ export class BlockchainServiceThorchain
         }),
       ];
     }
+
+    var chainID = walletCore.CoinTypeExt.chainId(coinType);
+    const thorChainId = await RpcServiceThorchain.getTHORChainChainID();
+    if (thorChainId && chainID != thorChainId) {
+      chainID = thorChainId;
+    }
+
     const input = TW.Cosmos.Proto.SigningInput.create({
       publicKey: pubKeyData,
       signingMode: SigningMode.Protobuf,
-      chainId: walletCore.CoinTypeExt.chainId(coinType),
+      chainId: chainID,
       accountNumber: Number(thorchainSpecific.accountNumber),
       sequence: Number(thorchainSpecific.sequence),
       mode: BroadcastMode.SYNC,
