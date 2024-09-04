@@ -166,7 +166,7 @@ export class TokensStore {
     ethereumFlip: (): CoinMeta => ({
       chain: Chain.Ethereum,
       ticker: 'FLIP',
-      logo: 'flip',
+      logo: 'ChainFlip',
       decimals: 18,
       priceProviderId: 'chainflip',
       contractAddress: '0x826180541412d574cf1336d22c0c0a287822678a',
@@ -536,7 +536,7 @@ export class TokensStore {
     baseEth: (): CoinMeta => ({
       chain: Chain.Base,
       ticker: 'ETH',
-      logo: 'eth_base',
+      logo: 'base',
       decimals: 18,
       priceProviderId: 'ethereum',
       contractAddress: '',
@@ -656,7 +656,7 @@ export class TokensStore {
     arbETH: (): CoinMeta => ({
       chain: Chain.Arbitrum,
       ticker: 'ETH',
-      logo: 'eth_arbitrum',
+      logo: 'arbitrum',
       decimals: 18,
       priceProviderId: 'ethereum',
       contractAddress: '',
@@ -816,7 +816,7 @@ export class TokensStore {
     optETH: (): CoinMeta => ({
       chain: Chain.Optimism,
       ticker: 'ETH',
-      logo: 'eth_optimism',
+      logo: 'optimism',
       decimals: 18,
       priceProviderId: 'ethereum',
       contractAddress: '',
@@ -1066,7 +1066,7 @@ export class TokensStore {
     blastETH: (): CoinMeta => ({
       chain: Chain.Blast,
       ticker: 'ETH',
-      logo: 'eth_blast',
+      logo: 'blast',
       decimals: 18,
       priceProviderId: 'ethereum',
       contractAddress: '',
@@ -1256,7 +1256,7 @@ export class TokensStore {
     zksyncETH: (): CoinMeta => ({
       chain: Chain.ZkSync,
       ticker: 'ETH',
-      logo: 'zsync_era',
+      logo: 'zksync',
       decimals: 18,
       priceProviderId: 'ethereum',
       contractAddress: '',
