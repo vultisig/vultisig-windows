@@ -34,7 +34,7 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
     return (
       Array.from(coins.values())
         .flat()
-        .find(coin => coin.chain === Chain.Ethereum && coin.isNativeToken) ||
+        .find(coin => coin.chain === Chain.THORChain && coin.isNativeToken) ||
       null
     );
   }, [coins]);
@@ -43,7 +43,7 @@ export const VaultBalances: React.FC<VaultBalancesProps> = ({
     if (!coin) return new Map<Coin, Balance>();
     return new Map(
       Array.from(balances.entries()).filter(
-        ([coin]) => coin.chain === Chain.Ethereum && coin.isNativeToken
+        ([coin]) => coin.chain === Chain.THORChain && coin.isNativeToken
       )
     );
   }, [balances, coin]);

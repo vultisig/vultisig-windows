@@ -1,5 +1,6 @@
 import { Chain } from '../../model/chain';
 import { BalanceService } from './BalanceService';
+import { BalanceServiceThorchain } from './BalanceServiceThorchain';
 import { BalanceServiceEvm } from './evm/BalanceServiceEvm';
 
 export class BalanceServiceFactory {
@@ -23,6 +24,8 @@ export class BalanceServiceFactory {
         return new BalanceServiceEvm(chain);
       case Chain.Base:
         return new BalanceServiceEvm(chain);
+      case Chain.THORChain:
+        return new BalanceServiceThorchain(chain);
       default:
         return new BalanceService(chain);
     }
