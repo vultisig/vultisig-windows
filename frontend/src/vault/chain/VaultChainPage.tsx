@@ -1,6 +1,7 @@
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { hasMultipleCoinsSupport } from '../../chain/utils/hasMultipleCoinsSupport';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { BoxIcon } from '../../lib/ui/icons/BoxIcon';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
@@ -120,7 +121,9 @@ export const VaultChainPage = () => {
             }}
           />
         </Panel>
-        <ManageVaultChainCoinsPrompt value={chainId} />
+        {hasMultipleCoinsSupport[chainId] && (
+          <ManageVaultChainCoinsPrompt value={chainId} />
+        )}
       </PageContent>
     </VStack>
   );
