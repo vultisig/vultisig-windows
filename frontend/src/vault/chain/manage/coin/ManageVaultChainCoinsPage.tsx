@@ -1,11 +1,25 @@
+import { useMemo } from 'react';
 import { ScrollableFlexboxFiller } from '../../../../lib/ui/layout/ScrollableFlexboxFiller';
 import { VStack } from '../../../../lib/ui/layout/Stack';
 import { PageContent } from '../../../../ui/page/PageContent';
 import { PageHeader } from '../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
+import { TokensStore } from '../../../../services/Coin/CoinList';
+import { useCurrentVaultChainId } from '../../useCurrentVaultChainId';
+import { ManageVaultChainCoin } from './ManageVaultChainCoin';
 
 export const ManageVaultChainCoinsPage = () => {
+  const chainId = useCurrentVaultChainId();
+
+  const options = useMemo(() => {
+    const tokens = TokensStore.TokenSelectionAssets.filter(
+      token => token.chain === chainId
+    );
+
+    return tokens.filter(token => !token.isNativeToken);
+  }, []);
+
   return (
     <VStack fill>
       <PageHeader
@@ -14,7 +28,11 @@ export const ManageVaultChainCoinsPage = () => {
       />
       <ScrollableFlexboxFiller>
         <PageContent>
-          <VStack gap={16}>Coming soon...</VStack>
+          <VStack gap={16}>
+            {options.map(option => (
+              <ManageVaultChainCoin key={option.ticker} value={option} />
+            ))}
+          </VStack>
         </PageContent>
       </ScrollableFlexboxFiller>
     </VStack>

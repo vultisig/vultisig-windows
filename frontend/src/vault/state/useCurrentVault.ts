@@ -40,7 +40,10 @@ export const useAssertCurrentVaultChainIds = () => {
   const coins = useAssertCurrentVaultCoins();
 
   return useMemo(
-    () => withoutDuplicates(coins.map(coin => coin.chain)),
+    () =>
+      withoutDuplicates(
+        coins.filter(coin => coin.is_native_token).map(coin => coin.chain)
+      ),
     [coins]
   );
 };
