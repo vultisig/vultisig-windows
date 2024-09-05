@@ -12,7 +12,7 @@ import { sameDimensions } from '../../../lib/ui/css/sameDimensions';
 import { useAssertCurrentVault } from '../../state/useCurrentVault';
 import { useSaveCoinMutation } from '../../mutations/useSaveCoinMutation';
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation';
-import { areEqualCoins, coinKeyToString } from '../../../coin/Coin';
+import { areEqualCoins } from '../../../coin/Coin';
 import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import {
   getCoinMetaIconSrc,
@@ -44,7 +44,7 @@ export const ManageVaultChain = ({ value }: ComponentWithValueProps<Chain>) => {
     <Container
       onClick={() => {
         if (isChecked) {
-          deleteCoin(coinKeyToString(key));
+          deleteCoin(key);
         } else {
           saveCoin(coin);
         }

@@ -10,7 +10,7 @@ import {
   ITransaction,
 } from '../../model/transaction';
 import { BlockchainServiceFactory } from '../../services/Blockchain/BlockchainServiceFactory';
-import { useAsserWalletCore } from '../../main';
+import { useAssertWalletCore } from '../../main';
 import { ChainUtils } from '../../model/chain';
 
 interface VerifyTransactionViewProps {
@@ -28,7 +28,7 @@ const VerifyTransaction = () => {
     throw new Error('No vault found');
   }
 
-  const walletCore = useAsserWalletCore();
+  const walletCore = useAssertWalletCore();
 
   const navigate = useNavigate();
 

@@ -32,7 +32,7 @@ export const WalletCoreProvider = ({ children }: { children: any }) => {
 
 export const useWalletCore = () => useContext(WalletCoreContext);
 
-export const useAsserWalletCore = () => shouldBePresent(useWalletCore());
+export const useAssertWalletCore = () => shouldBePresent(useWalletCore());
 
 const container = document.getElementById('root');
 

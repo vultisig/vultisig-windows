@@ -3,7 +3,7 @@ import { CoinMeta } from '../../model/coin-meta';
 import { getCoinMetaKey } from '../utils/coinMeta';
 import { toEntries } from '../../lib/utils/record/toEntries';
 import { PriceServiceFactory } from '../../services/Price/PriceServiceFactory';
-import { useAsserWalletCore } from '../../main';
+import { useAssertWalletCore } from '../../main';
 import { Fiat } from '../../model/fiat';
 import { CoinKey } from '../Coin';
 import { groupItems } from '../../lib/utils/array/groupItems';
@@ -13,7 +13,7 @@ import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEag
 type PriceQueryResult = CoinKey & EntityWithPrice;
 
 export const useCoinPricesQuery = (coins: CoinMeta[]) => {
-  const walletCore = useAsserWalletCore();
+  const walletCore = useAssertWalletCore();
 
   const groups = groupItems(coins, item => item.chain);
 

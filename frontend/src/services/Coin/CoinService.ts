@@ -5,7 +5,6 @@ import { CoinMeta } from '../../model/coin-meta';
 import { ICoinService } from './ICoinService';
 import { AddressServiceFactory } from '../Address/AddressServiceFactory';
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
-import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { DeleteCoin, SaveCoin } from '../../../wailsjs/go/storage/Store';
 import { storage } from '../../../wailsjs/go/models';
 
@@ -18,16 +17,13 @@ export class CoinService implements ICoinService {
     this.walletCore = walletCore;
   }
 
-  async saveCoin(coin: Coin, vault: Vault): Promise<void> {
-    // IF you need to add any other logic to make it work, you can do it here
+  async saveCoin(vaultId: string, coin: Coin): Promise<void> {
     const storageCoin = storage.Coin.createFrom(coin);
-    const response = SaveCoin(vault.publicKeyEcdsa, storageCoin);
-    console.log(response);
+    await SaveCoin(vaultId, storageCoin);
   }
 
-  async deleteCoin(coinId: string, vault: Vault): Promise<void> {
-    // IF you need to add any other logic to make it work, you can do it here
-    DeleteCoin(vault.publicKeyEcdsa, coinId);
+  async deleteCoin(vaultId: string, coinId: string): Promise<void> {
+    await DeleteCoin(vaultId, coinId);
   }
 
   async createCoin(
