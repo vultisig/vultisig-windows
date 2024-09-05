@@ -12,13 +12,16 @@ export const VaultsDependant = ({ children }: ComponentWithChildrenProps) => {
     <QueryDependant
       query={query}
       success={() => children}
-      error={() => (
-        <Center>
-          <Text size={16} weight="500" color="contrast">
-            Failed to load vaults
-          </Text>
-        </Center>
-      )}
+      error={err => {
+        console.log('vautls query: ', err);
+        return (
+          <Center>
+            <Text size={16} weight="500" color="contrast">
+              Failed to load vaults
+            </Text>
+          </Center>
+        );
+      }}
       pending={() => (
         <Center>
           <Spinner />

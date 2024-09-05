@@ -15,7 +15,7 @@ export const VaultChainCoinItem = ({
 
   return (
     <HStack fullWidth alignItems="center" gap={12}>
-      <ChainEntityIcon value={icon} />
+      <ChainEntityIcon value={icon} style={{ fontSize: 32 }} />
       <VStack fullWidth gap={8}>
         <HStack fullWidth justifyContent="space-between" alignItems="center">
           <Text color="contrast" size={20} weight="500">

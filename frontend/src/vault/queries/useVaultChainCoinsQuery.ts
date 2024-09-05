@@ -1,17 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { TokensStore } from '../../services/Coin/CoinList';
 import { useCurrentVaultId } from '../state/useCurrentVaultId';
-import { useAsserWalletCore } from '../../main';
+import { useAssertWalletCore } from '../../main';
 import { Chain } from '../../model/chain';
 import { useAssertCurrentVault } from '../state/useCurrentVault';
 import { CoinAmount, CoinInfo, CoinKey } from '../../coin/Coin';
 import { EntityWithPrice } from '../../chain/EntityWithPrice';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
-import { getChainEntityIconPath } from '../../chain/utils/getChainEntityIconPath';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 import { PriceServiceFactory } from '../../services/Price/PriceServiceFactory';
 import { BalanceServiceFactory } from '../../services/Balance/BalanceServiceFactory';
+import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
 
 export type VaultChainCoin = CoinKey &
   CoinAmount &
@@ -22,7 +22,7 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
   const vaultId = useCurrentVaultId();
   const vault = useAssertCurrentVault();
 
-  const walletCore = useAsserWalletCore();
+  const walletCore = useAssertWalletCore();
 
   return useQuery({
     queryKey: ['vaultChainCoins', vaultId, chain],
@@ -30,14 +30,6 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
       const tokens = TokensStore.TokenSelectionAssets.filter(
         token => token.chain === chain
       );
-
-      if (!walletCore) {
-        throw new Error('WalletCore is not initialized');
-      }
-
-      if (!chain) {
-        throw new Error('Chain is not provided');
-      }
 
       const coinService = CoinServiceFactory.createCoinService(
         chain,
@@ -73,7 +65,7 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
             decimals: token.decimals,
             name: token.logo,
             symbol: token.ticker,
-            icon: getChainEntityIconPath(coin.logo),
+            icon: getCoinMetaIconSrc(token),
             price,
           };
 

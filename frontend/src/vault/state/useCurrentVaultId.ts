@@ -5,8 +5,8 @@ import {
 } from '../../state/persistentState';
 import { useVaults } from '../queries/useVaultsQuery';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
-import { getVaultId } from '../utils/getVaultId';
 import { useStateCorrector } from '../../lib/ui/state/useStateCorrector';
+import { getStorageVaultId } from '../utils/storageVault';
 
 export const useCurrentVaultId = () => {
   const vaults = useVaults();
@@ -14,7 +14,7 @@ export const useCurrentVaultId = () => {
   const getInitialVaultId = useCallback(() => {
     if (isEmpty(vaults)) return null;
 
-    return getVaultId(vaults[0]);
+    return getStorageVaultId(vaults[0]);
   }, [vaults]);
 
   return useStateCorrector(
@@ -23,7 +23,7 @@ export const useCurrentVaultId = () => {
       getInitialVaultId
     ),
     id => {
-      const vault = vaults.find(vault => getVaultId(vault) === id);
+      const vault = vaults.find(vault => getStorageVaultId(vault) === id);
       if (!vault) {
         return getInitialVaultId();
       }

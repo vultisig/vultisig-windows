@@ -23,8 +23,6 @@ export namespace storage {
 	    logo: string;
 	    price_provider_id: string;
 	    decimals: number;
-	    raw_balance: string;
-	    price_rate: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new Coin(source);
@@ -42,8 +40,6 @@ export namespace storage {
 	        this.logo = source["logo"];
 	        this.price_provider_id = source["price_provider_id"];
 	        this.decimals = source["decimals"];
-	        this.raw_balance = source["raw_balance"];
-	        this.price_rate = source["price_rate"];
 	    }
 	}
 	export class KeyShare {
