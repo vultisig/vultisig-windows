@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { ScrollableFlexboxFiller } from '../../../../lib/ui/layout/ScrollableFlexboxFiller';
 import { VStack } from '../../../../lib/ui/layout/Stack';
 import { PageContent } from '../../../../ui/page/PageContent';
@@ -12,13 +11,9 @@ import { ManageVaultChainCoin } from './ManageVaultChainCoin';
 export const ManageVaultChainCoinsPage = () => {
   const chainId = useCurrentVaultChainId();
 
-  const options = useMemo(() => {
-    const tokens = TokensStore.TokenSelectionAssets.filter(
-      token => token.chain === chainId
-    );
-
-    return tokens.filter(token => !token.isNativeToken);
-  }, []);
+  const options = TokensStore.TokenSelectionAssets.filter(
+    token => token.chain === chainId && !token.isNativeToken
+  );
 
   return (
     <VStack fill>
