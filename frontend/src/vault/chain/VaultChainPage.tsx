@@ -21,6 +21,7 @@ import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
+import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
 
@@ -42,7 +43,7 @@ export const VaultChainPage = () => {
         }
         title={<PageHeaderTitle>{chainId}</PageHeaderTitle>}
       />
-      <PageContent>
+      <PageContent gap={16}>
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
@@ -119,6 +120,7 @@ export const VaultChainPage = () => {
             }}
           />
         </Panel>
+        <ManageVaultChainCoinsPrompt value={chainId} />
       </PageContent>
     </VStack>
   );
