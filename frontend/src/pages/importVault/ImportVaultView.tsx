@@ -7,6 +7,8 @@ import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { SaveVault } from '../../../wailsjs/go/storage/Store';
 import NavBar from '../../components/navbar/NavBar';
+import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
+import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
 
 const ImportVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -19,6 +21,8 @@ const ImportVaultView: React.FC = () => {
   const [dialogTitle, setDialogTitle] = useState('');
   const [dialogContent, setDialogContent] = useState('');
   const [decryptedContent, setDecryptedContent] = useState<Buffer | null>();
+
+  const invalidateQueries = useInvalidateQueries();
 
   const handleUpload = () => {
     const fileInput = document.getElementById('file_upload');
@@ -92,10 +96,10 @@ const ImportVaultView: React.FC = () => {
     }
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (decryptedContent) {
       const vault = Vault.fromBinary(decryptedContent);
-      SaveVault({
+      await SaveVault({
         name: vault.name,
         public_key_ecdsa: vault.publicKeyEcdsa,
         public_key_eddsa: vault.publicKeyEddsa,
@@ -112,10 +116,9 @@ const ImportVaultView: React.FC = () => {
         is_backed_up: true,
         coins: [],
         convertValues: () => {},
-      }).then(() => {
-        navigate('/vault/list');
-        console.log('Vault saved');
       });
+      await invalidateQueries(vaultsQueryKey);
+      navigate('/vault/list');
     }
   };
 

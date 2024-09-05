@@ -6,6 +6,8 @@ import { Reshare, StartKeygen } from '../../../wailsjs/go/tss/TssService';
 import { EventsOn } from '../../../wailsjs/runtime/runtime';
 import { SaveVault } from '../../../wailsjs/go/storage/Store';
 import { storage } from '../../../wailsjs/go/models';
+import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
+import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
 interface KeygenViewProps {
   vault: storage.Vault;
   sessionID: string;
@@ -28,6 +30,8 @@ const KeygenView: React.FC<KeygenViewProps> = ({
   const [contentIndex, setContentIndex] = useState<number>(0);
   const [currentProgress, setCurrentProgress] = useState<number>();
   const [currentStatus, setCurrentStatus] = useState<string>('');
+
+  const invalidateQueries = useInvalidateQueries();
 
   useEffect(() => {
     EventsOn('PrepareVault', data => {
@@ -63,7 +67,9 @@ const KeygenView: React.FC<KeygenViewProps> = ({
       });
       setCurrentProgress(100);
       if (newVault !== undefined) {
-        SaveVault(newVault);
+        await SaveVault(newVault);
+        await invalidateQueries(vaultsQueryKey);
+
         onDone();
       }
     }
@@ -81,7 +87,8 @@ const KeygenView: React.FC<KeygenViewProps> = ({
       });
       setCurrentProgress(100);
       if (newVault !== undefined) {
-        SaveVault(newVault);
+        await SaveVault(newVault);
+        await invalidateQueries(vaultsQueryKey);
         onDone();
       }
     }

@@ -233,15 +233,18 @@ func (s *Store) DeleteVault(publicKeyECDSA string) error {
 	return err
 }
 
-// GetCoins gets all coins belongs to the vault
 func (s *Store) GetCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 	var coins []Coin
-	coinsQuery := `SELECT id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, raw_balance, price_rate, decimals FROM coins WHERE public_key_ecdsa = ?`
+	coinsQuery := `SELECT id, chain, address, hex_public_key, ticker, contract_address, is_native_token, logo, price_provider_id, decimals FROM coins WHERE public_key_ecdsa = ?`
 	coinsRows, err := s.db.Query(coinsQuery, vaultPublicKeyECDSA)
 	if err != nil {
-		return nil, fmt.Errorf("could not query coins, err: %w", err)
+		return nil, fmt.Errorf("could not query coins: %w", err)
 	}
-	defer s.closeRows(coinsRows)
+	defer func() {
+		if err := coinsRows.Close(); err != nil {
+			fmt.Printf("could not close rows: %v\n", err)
+		}
+	}()
 
 	for coinsRows.Next() {
 		var coin Coin
@@ -256,12 +259,18 @@ func (s *Store) GetCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 			&coin.PriceProviderID,
 			&coin.Decimals,
 		); err != nil {
-			return nil, fmt.Errorf("could not scan coin, err: %w", err)
+			return nil, fmt.Errorf("could not scan coin: %w", err)
 		}
 		coins = append(coins, coin)
 	}
+
+	if err = coinsRows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
+	}
+
 	return coins, nil
 }
+
 
 // Settings is for all vaults, so no need to pass public key ecdsa
 func (s *Store) SaveSettings(setting Settings) (*Settings, error) {
@@ -378,20 +387,17 @@ func (s *Store) SaveCoin(vaultPublicKeyECDSA string, coin Coin) (string, error) 
 	query := `INSERT OR REPLACE INTO coins (
 				id, 
 				chain, 
-				address, 
+				address,
 				hex_public_key, 
 				ticker, 
 				contract_address, 
 				is_native_token, 
 				logo, 
-				price_provider_id, 
-				raw_balance, 
-				price_rate, 
-				public_key_ecdsa,
-				decimals
-			
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-	_, err := s.db.Exec(query, coin.ID, coin.Chain, coin.Address, coin.HexPublicKey, coin.Ticker, coin.ContractAddress, coin.IsNativeToken, coin.Logo, coin.PriceProviderID, coin.RawBalance, coin.PriceRate, vaultPublicKeyECDSA, coin.Decimals)
+				price_provider_id,
+				decimals,
+				public_key_ecdsa
+				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	_, err := s.db.Exec(query, coin.ID, coin.Chain, coin.Address, coin.HexPublicKey, coin.Ticker, coin.ContractAddress, coin.IsNativeToken, coin.Logo, coin.PriceProviderID, coin.Decimals, vaultPublicKeyECDSA)
 	if err != nil {
 		return "", fmt.Errorf("could not upsert coin, err: %w", err)
 	}

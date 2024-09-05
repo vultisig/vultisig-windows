@@ -17,6 +17,7 @@ import { VaultPage } from './pages/vault/VaultPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { VaultChainPage } from './vault/chain/VaultChainPage';
 import VerifyTransaction from './components/sendCrypto/VerifyTransaction';
+import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPage';
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,10 @@ const App: React.FC = () => {
                   <Route path="/vault/qr/upload" element={<UploadQrPage />} />
                   <Route path="/vault/keysign" element={<KeysignFlowView />} />
                   <Route path="/vault/list" element={<VaultPage />} />
+                  <Route
+                    path="/vault/chains"
+                    element={<ManageVaultChainsPage />}
+                  />
                   <Route
                     path="/vault/item/detail/:chain"
                     element={<VaultChainPage />}

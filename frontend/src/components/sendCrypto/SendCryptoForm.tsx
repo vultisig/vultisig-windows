@@ -5,7 +5,8 @@ import { Balance } from '../../model/balance';
 import { ISendTransaction } from '../../model/transaction';
 import { useSendCryptoViewModel } from '../../pages/send/SendCryptoViewModel';
 import { Rate } from '../../model/price-rate';
-import { getChainEntityIconPath } from '../../chain/utils/getChainEntityIconPath';
+import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
 
 interface SendCryptoFormProps {
   coin: Coin;
@@ -21,7 +22,7 @@ const SendCryptoForm: React.FC<SendCryptoFormProps> = ({
   tx,
   sendCryptoViewModel,
 }) => {
-  const icon = getChainEntityIconPath(coin.logo);
+  const icon = getCoinMetaIconSrc(coin);
 
   return (
     <div className="flex flex-col space-y-4 rounded-lg p-4 flex-grow">

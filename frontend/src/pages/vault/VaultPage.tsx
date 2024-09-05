@@ -1,8 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { VaultList } from '../../components/vaultList/VaultList';
-import useVaultListViewModel from './VaultListViewModel';
-import { useWalletCore } from '../../main';
-import { VaultBalances } from './VaultBalances';
 import { Match } from '../../lib/ui/base/Match';
 import { useTranslation } from 'react-i18next';
 import { match } from '../../lib/utils/match';
@@ -20,6 +17,7 @@ import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
 import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
 import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 import { useAssertCurrentVault } from '../../vault/state/useCurrentVault';
+import { VaultOverview } from '../../vault/components/VaultOverview';
 
 type VaultPageView = 'balances' | 'vaults';
 
@@ -36,10 +34,8 @@ const Header = styled(PageHeader)`
   border-bottom: 1px solid ${getColor('mistExtra')};
 `;
 
-export const VaultPage: React.FC = () => {
-  const walletCore = useWalletCore();
+export const VaultPage = () => {
   const selectedVault = useAssertCurrentVault();
-  const { coins, balances, priceRates } = useVaultListViewModel(walletCore);
 
   const [view, setView] = useState<VaultPageView>('balances');
 
@@ -76,11 +72,7 @@ export const VaultPage: React.FC = () => {
               <PositionQrPrompt>
                 <ProvideQrPrompt />
               </PositionQrPrompt>
-              <VaultBalances
-                coins={coins}
-                balances={balances}
-                priceRates={priceRates}
-              />
+              <VaultOverview />
             </>
           )}
           vaults={() => (

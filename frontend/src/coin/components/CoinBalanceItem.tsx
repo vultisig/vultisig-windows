@@ -29,7 +29,7 @@ export const CoinBalanceItem = ({
     <UnstyledButton onClick={onClick}>
       <Panel>
         <HStack fullWidth alignItems="center" gap={12}>
-          <ChainEntityIcon value={icon} />
+          <ChainEntityIcon value={icon} style={{ fontSize: 32 }} />
 
           <VStack fullWidth alignItems="start" gap={16}>
             <HStack

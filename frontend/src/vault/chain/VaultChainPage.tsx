@@ -1,6 +1,6 @@
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
-import { getChainEntityIconPath } from '../../chain/utils/getChainEntityIconPath';
+import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { BoxIcon } from '../../lib/ui/icons/BoxIcon';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
@@ -51,7 +51,10 @@ export const VaultChainPage = () => {
               justifyContent="space-between"
             >
               <HStack alignItems="center" gap={12}>
-                <ChainEntityIcon value={getChainEntityIconPath(chainId)} />
+                <ChainEntityIcon
+                  value={getChainEntityIconSrc(chainId)}
+                  style={{ fontSize: 32 }}
+                />
                 <Text weight="700" color="contrast">
                   {chainId}
                 </Text>

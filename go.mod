@@ -5,7 +5,6 @@ go 1.21.7
 toolchain go1.22.5
 
 require (
-	github.com/ethereum/go-ethereum v1.13.15
 	github.com/golang-migrate/migrate/v4 v4.17.1
 	github.com/google/uuid v1.4.0
 	github.com/hashicorp/mdns v1.0.5
@@ -34,7 +33,6 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
-	github.com/holiman/uint256 v1.2.4 // indirect
 	github.com/ipfs/go-log v1.0.5 // indirect
 	github.com/ipfs/go-log/v2 v2.1.3 // indirect
 	github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e // indirect

@@ -33,8 +33,6 @@ CREATE TABLE
         logo TEXT NOT NULL,
         price_provider_id TEXT NOT NULL,
         decimals INTEGER NOT NULL,
-        raw_balance TEXT NOT NULL,
-        price_rate TEXT NOT NULL,
         FOREIGN KEY (public_key_ecdsa) REFERENCES vaults (public_key_ecdsa) ON DELETE CASCADE
     );
 
