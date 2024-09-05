@@ -24,20 +24,10 @@ export const useAssertCurrentVault = () => {
   return shouldBePresent(useCurrentVault());
 };
 
-export const useAssertCurrentVaultCoins = () => {
+export const useAssertCurrentVaultChainIds = () => {
   const vault = useAssertCurrentVault();
 
-  return vault.coins || [];
-};
-
-export const useAsserCurrentVaultChainCoins = (chainId: string) => {
-  const coins = useAssertCurrentVaultCoins();
-
-  return useMemo(() => coins.filter(coin => coin.chain === chainId), [coins]);
-};
-
-export const useAssertCurrentVaultChainIds = () => {
-  const coins = useAssertCurrentVaultCoins();
+  const coins = vault.coins || [];
 
   return useMemo(
     () =>
@@ -46,4 +36,23 @@ export const useAssertCurrentVaultChainIds = () => {
       ),
     [coins]
   );
+};
+
+export const useAssertCurrentVaultCoins = () => {
+  const chains = useAssertCurrentVaultChainIds();
+
+  const vault = useAssertCurrentVault();
+
+  const allCoins = vault.coins || [];
+
+  return useMemo(
+    () => allCoins.filter(coin => chains.includes(coin.chain)),
+    [allCoins, chains]
+  );
+};
+
+export const useAsserCurrentVaultChainCoins = (chainId: string) => {
+  const coins = useAssertCurrentVaultCoins();
+
+  return useMemo(() => coins.filter(coin => coin.chain === chainId), [coins]);
 };
