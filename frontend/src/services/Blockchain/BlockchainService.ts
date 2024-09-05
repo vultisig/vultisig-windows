@@ -3,7 +3,11 @@ import { WalletCore } from '@trustwallet/wallet-core';
 import { tss } from '../../../wailsjs/go/models';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../../model/chain';
-import { ITransaction } from '../../model/transaction';
+import {
+  ISendTransaction,
+  ISwapTransaction,
+  ITransaction,
+} from '../../model/transaction';
 import { AddressServiceFactory } from '../Address/AddressServiceFactory';
 import { IAddressService } from '../Address/IAddressService';
 import { CoinServiceFactory } from '../Coin/CoinServiceFactory';
@@ -28,12 +32,19 @@ export class BlockchainService implements IBlockchainService {
     );
   }
 
-  createKeysignPayload(obj: ITransaction): KeysignPayload {
+  createKeysignPayload(
+    obj: ITransaction | ISendTransaction | ISwapTransaction,
+    localPartyId: string,
+    publicKeyEcdsa: string
+  ): KeysignPayload {
     const payload = new KeysignPayload();
     payload.coin = obj.coin;
     payload.toAddress = obj.toAddress;
     payload.toAmount = (obj.amount * 10 ** obj.coin.decimals).toString();
     payload.memo = obj.memo;
+
+    payload.vaultLocalPartyId = localPartyId;
+    payload.vaultPublicKeyEcdsa = publicKeyEcdsa;
 
     return payload;
   }

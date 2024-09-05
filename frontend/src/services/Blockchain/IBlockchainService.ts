@@ -1,6 +1,11 @@
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { SignedTransactionResult } from './signed-transaction-result';
 import { tss } from '../../../wailsjs/go/models';
+import {
+  ITransaction,
+  ISendTransaction,
+  ISwapTransaction,
+} from '../../model/transaction';
 
 export interface IBlockchainService {
   isTHORChainSpecific(obj: any): boolean;
@@ -21,5 +26,9 @@ export interface IBlockchainService {
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult>;
 
-  createKeysignPayload(obj: any): KeysignPayload;
+  createKeysignPayload(
+    obj: ITransaction | ISendTransaction | ISwapTransaction,
+    localPartyId: string,
+    publicKeyEcdsa: string
+  ): KeysignPayload;
 }

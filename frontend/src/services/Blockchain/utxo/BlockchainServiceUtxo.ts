@@ -20,8 +20,16 @@ export class BlockchainServiceUtxo
   extends BlockchainService
   implements IBlockchainService
 {
-  createKeysignPayload(obj: ITransaction): KeysignPayload {
-    const payload: KeysignPayload = super.createKeysignPayload(obj);
+  createKeysignPayload(
+    obj: ITransaction | ISendTransaction | ISwapTransaction,
+    localPartyId: string,
+    publicKeyEcdsa: string
+  ): KeysignPayload {
+    const payload: KeysignPayload = super.createKeysignPayload(
+      obj,
+      localPartyId,
+      publicKeyEcdsa
+    );
     const utxoSpecific = new UTXOSpecific();
     const gasInfoSpecific: SpecificUtxo = obj.specificGasInfo as SpecificUtxo;
     switch (obj.transactionType) {
