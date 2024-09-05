@@ -12,7 +12,7 @@ export const useDeleteCoinMutation = () => {
 
   return useMutation({
     mutationFn: async (coinId: string) => {
-      DeleteCoin(getVaultId(vault), coinId);
+      await DeleteCoin(getVaultId(vault), coinId);
 
       await invalidate(vaultsQueryKey);
     },
