@@ -146,10 +146,15 @@ const VerifyTransaction = () => {
             throw new Error('Chain is not defined');
           }
 
-          const payload = BlockchainServiceFactory.createService(
+          let payload = BlockchainServiceFactory.createService(
             chainEnum,
             walletCore
-          ).createKeysignPayload(tx);
+          ).createKeysignPayload(
+            tx,
+            currentVault.local_party_id,
+            currentVault.public_key_ecdsa
+          );
+
           navigate(`/vault/keysign`, {
             state: {
               vault: currentVault,
