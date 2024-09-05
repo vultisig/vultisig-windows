@@ -240,11 +240,7 @@ func (s *Store) GetCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not query coins: %w", err)
 	}
-	defer func() {
-		if err := coinsRows.Close(); err != nil {
-			fmt.Printf("could not close rows: %v\n", err)
-		}
-	}()
+	defer s.closeRows(coinsRows)
 
 	for coinsRows.Next() {
 		var coin Coin

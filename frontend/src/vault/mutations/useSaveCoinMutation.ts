@@ -17,10 +17,6 @@ export const useSaveCoinMutation = () => {
   const invalidate = useInvalidateQueries();
 
   return useMutation({
-    onError: error => {
-      // todo: remove this handler
-      console.error('useSaveCoinMutation error', error);
-    },
     mutationFn: async (coinMeta: CoinMeta) => {
       const coinService = CoinServiceFactory.createCoinService(
         coinMeta.chain,
