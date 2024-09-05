@@ -9,7 +9,7 @@ import { getChainPrimaryCoin } from '../../../chain/utils/getChainPrimaryCoin';
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon';
 import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus';
 import { sameDimensions } from '../../../lib/ui/css/sameDimensions';
-import { useAssertCurrentVault } from '../../state/useCurrentVault';
+import { useAssertCurrentVaultCoins } from '../../state/useCurrentVault';
 import { useSaveCoinMutation } from '../../mutations/useSaveCoinMutation';
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation';
 import { areEqualCoins } from '../../../coin/Coin';
@@ -32,8 +32,7 @@ export const ManageVaultChain = ({ value }: ComponentWithValueProps<Chain>) => {
   const coin = getChainPrimaryCoin(value);
   const key = getCoinMetaKey(coin);
 
-  const vault = useAssertCurrentVault();
-  const coins = vault.coins ?? [];
+  const coins = useAssertCurrentVaultCoins();
 
   const { mutate: saveCoin } = useSaveCoinMutation();
   const { mutate: deleteCoin } = useDeleteCoinMutation();

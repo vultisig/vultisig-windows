@@ -5,7 +5,7 @@ import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 import { useAssertWalletCore } from '../../main';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
-import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
+import { getStorageVaultId } from '../utils/storageVault';
 
 export const useSaveCoinMutation = () => {
   const vault = useAssertCurrentVault();
@@ -15,6 +15,9 @@ export const useSaveCoinMutation = () => {
   const invalidate = useInvalidateQueries();
 
   return useMutation({
+    onError: error => {
+      console.log('save coin error: ', error);
+    },
     mutationFn: async (coinMeta: CoinMeta) => {
       const coinService = CoinServiceFactory.createCoinService(
         coinMeta.chain,
@@ -28,7 +31,7 @@ export const useSaveCoinMutation = () => {
         vault.hex_chain_code || ''
       );
 
-      await coinService.saveCoin(coin, new Vault(vault));
+      await coinService.saveCoin(coin, getStorageVaultId(vault));
 
       await invalidate(vaultsQueryKey);
     },

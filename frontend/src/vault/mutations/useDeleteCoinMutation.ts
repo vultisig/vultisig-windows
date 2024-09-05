@@ -6,7 +6,7 @@ import { useAssertWalletCore } from '../../main';
 import { CoinKey, coinKeyToString } from '../../coin/Coin';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 import { Chain } from '../../model/chain';
-import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
+import { getStorageVaultId } from '../utils/storageVault';
 
 export const useDeleteCoinMutation = () => {
   const vault = useAssertCurrentVault();
@@ -22,7 +22,10 @@ export const useDeleteCoinMutation = () => {
         walletCore
       );
 
-      await coinService.deleteCoin(coinKeyToString(key), new Vault(vault));
+      await coinService.deleteCoin(
+        coinKeyToString(key),
+        getStorageVaultId(vault)
+      );
 
       await invalidate(vaultsQueryKey);
     },
