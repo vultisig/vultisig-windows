@@ -7,6 +7,8 @@ import { AddressServiceFactory } from '../Address/AddressServiceFactory';
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { DeleteCoin, SaveCoin } from '../../../wailsjs/go/storage/Store';
 import { storage } from '../../../wailsjs/go/models';
+import { getVaultId } from '../../vault/utils/getVaultId';
+import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 
 export class CoinService implements ICoinService {
   private chain: Chain;
@@ -17,13 +19,13 @@ export class CoinService implements ICoinService {
     this.walletCore = walletCore;
   }
 
-  async saveCoin(vaultId: string, coin: Coin): Promise<void> {
+  async saveCoin(coin: Coin, vault: Vault): Promise<void> {
     const storageCoin = storage.Coin.createFrom(coin);
-    await SaveCoin(vaultId, storageCoin);
+    await SaveCoin(getVaultId(vault), storageCoin);
   }
 
-  async deleteCoin(vaultId: string, coinId: string): Promise<void> {
-    await DeleteCoin(vaultId, coinId);
+  async deleteCoin(coinId: string, vault: Vault): Promise<void> {
+    await DeleteCoin(getVaultId(vault), coinId);
   }
 
   async createCoin(

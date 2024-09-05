@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useVaults } from '../queries/useVaultsQuery';
 import { useCurrentVaultId } from './useCurrentVaultId';
-import { getVaultId } from '../utils/getVaultId';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
+import { getStorageVaultId } from '../utils/storageVault';
 
 export const useCurrentVault = () => {
   const vaults = useVaults();
@@ -13,7 +13,7 @@ export const useCurrentVault = () => {
     if (!currentVaultId) return null;
 
     const vault = shouldBePresent(
-      vaults.find(vault => getVaultId(vault) === currentVaultId)
+      vaults.find(vault => getStorageVaultId(vault) === currentVaultId)
     );
 
     return vault;

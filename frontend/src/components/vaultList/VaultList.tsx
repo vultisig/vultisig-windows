@@ -13,7 +13,7 @@ import { Button } from '../../lib/ui/buttons/Button';
 import { PlusIcon } from '../../lib/ui/icons/PlusIcon';
 import { useVaults } from '../../vault/queries/useVaultsQuery';
 import { useCurrentVaultId } from '../../vault/state/useCurrentVaultId';
-import { getVaultId } from '../../vault/utils/getVaultId';
+import { getStorageVaultId } from '../../vault/utils/storageVault';
 
 interface VaultListProps {
   onFinish: () => void;
@@ -32,7 +32,7 @@ export const VaultList: React.FC<VaultListProps> = ({ onFinish }) => {
   const { t } = useTranslation();
 
   const handleVaultSelect = (vault: storage.Vault) => {
-    setSelectedVault(getVaultId(vault));
+    setSelectedVault(getStorageVaultId(vault));
     onFinish();
   };
 

@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { useAssertCurrentVault } from '../state/useCurrentVault';
-import { getVaultId } from '../utils/getVaultId';
 import { CoinMeta } from '../../model/coin-meta';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 import { useAssertWalletCore } from '../../main';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
+import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 
 export const useSaveCoinMutation = () => {
   const vault = useAssertCurrentVault();
@@ -28,7 +28,7 @@ export const useSaveCoinMutation = () => {
         vault.hex_chain_code || ''
       );
 
-      await coinService.saveCoin(getVaultId(vault), coin);
+      await coinService.saveCoin(coin, new Vault(vault));
 
       await invalidate(vaultsQueryKey);
     },
