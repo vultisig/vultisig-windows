@@ -28,6 +28,13 @@ export interface SpecificThorchain extends BasicGasInfo {
 export interface SpecificUtxo extends BasicGasInfo {
   byteFee: number;
   sendMaxAmount: boolean;
+  utxos: SpecificUtxoInfo[];
+}
+
+export interface SpecificUtxoInfo {
+  hash: string;
+  amount: bigint;
+  index: number;
 }
 
 export interface SpecificCosmos extends BasicGasInfo {

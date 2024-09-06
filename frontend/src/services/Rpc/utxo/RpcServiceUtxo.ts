@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../../model/coin-meta';
-import { SpecificUtxo } from '../../../model/gas-info';
+import { SpecificUtxo, SpecificUtxoInfo } from '../../../model/gas-info';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
@@ -24,6 +24,20 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
     return balance;
   }
 
+  private async getUtxos(coin: Coin): Promise<SpecificUtxoInfo[]> {
+    let coinName = coin.chain.toLowerCase();
+    let url = Endpoint.blockchairDashboard(coin.address, coinName);
+    let request = await fetch(url);
+    let response = await request.json();
+    return response.data[coin.address].utxo.map((utxo: any) => {
+      return {
+        hash: utxo.transaction_hash,
+        amount: BigInt(utxo.value),
+        index: Number(utxo.index),
+      } as SpecificUtxoInfo;
+    });
+  }
+
   async getGasInfo(coin: Coin): Promise<SpecificUtxo> {
     const byteFeePrice = await this.calculateFee(coin);
     const gasInfo: SpecificUtxo = {
@@ -31,6 +45,7 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
       fee: 0,
       byteFee: byteFeePrice,
       sendMaxAmount: false, // By default, we don't send as the max amount
+      utxos: await this.getUtxos(coin),
     };
 
     return gasInfo;
