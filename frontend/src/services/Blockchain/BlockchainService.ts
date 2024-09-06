@@ -49,6 +49,7 @@ export class BlockchainService implements IBlockchainService {
     return payload;
   }
 
+  // TODO: remove and create a IBlockchainService interface for Thor that only thor uses
   isTHORChainSpecific(obj: any): boolean {
     throw new Error('Method not implemented.');
   }
