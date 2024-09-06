@@ -12,6 +12,14 @@ export class BlockchainServiceFactory {
     switch (chain) {
       case Chain.THORChain:
         return new BlockchainServiceThorchain(chain, walletCore);
+      case Chain.Bitcoin:
+        return new BlockchainServiceUtxo(chain, walletCore);
+      case Chain.BitcoinCash:
+        return new BlockchainServiceUtxo(chain, walletCore);
+      case Chain.Litecoin:
+        return new BlockchainServiceUtxo(chain, walletCore);
+      case Chain.Dash:
+        return new BlockchainServiceUtxo(chain, walletCore);
       case Chain.Dogecoin:
         return new BlockchainServiceUtxo(chain, walletCore);
       default:

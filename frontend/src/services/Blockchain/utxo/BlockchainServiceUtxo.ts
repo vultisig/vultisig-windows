@@ -15,6 +15,7 @@ import SignatureProvider from '../signature-provider';
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 import { SpecificUtxo } from '../../../model/gas-info';
+import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
 
 export class BlockchainServiceUtxo
   extends BlockchainService
@@ -31,12 +32,22 @@ export class BlockchainServiceUtxo
       publicKeyEcdsa
     );
     const utxoSpecific = new UTXOSpecific();
-    const gasInfoSpecific: SpecificUtxo = obj.specificGasInfo as SpecificUtxo;
+    const transactionInfoSpecific: SpecificUtxo =
+      obj.specificGasInfo as SpecificUtxo;
     switch (obj.transactionType) {
       case TransactionType.SEND:
         const sendTx = obj as ISendTransaction;
         utxoSpecific.sendMaxAmount = sendTx.sendMaxAmount;
-        utxoSpecific.byteFee = gasInfoSpecific.byteFee.toString() ?? '';
+        utxoSpecific.byteFee = transactionInfoSpecific.byteFee.toString() ?? '';
+
+        payload.utxoInfo = transactionInfoSpecific.utxos.map(utxo => {
+          return new UtxoInfo({
+            hash: utxo.hash,
+            amount: utxo.amount,
+            index: utxo.index,
+          });
+        });
+
         payload.blockchainSpecific = {
           case: 'utxoSpecific',
           value: utxoSpecific,

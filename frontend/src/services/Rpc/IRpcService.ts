@@ -7,14 +7,14 @@ export interface IRpcService {
   sendTransaction(encodedTransaction: string): Promise<string>;
   getBalance(coin: Coin): Promise<string>;
   broadcastTransaction(hex: string): Promise<string>;
-
   resolveENS?(ensName: string): Promise<string>;
-
-  // Ethereum-specific methods
   getGasInfo(coin: Coin): Promise<SpecificGasInfo>;
-
   calculateFee(coin?: Coin): Promise<number>;
 
+  // Speficic methods
+  // TODO: remove and create a IRpcService interface for EVM and Solana
+  // But maybe I will simply remove it because it might not be used at all
+  // Once I implment Solana and EVM I will remove them
   estimateGas?(
     senderAddress: string,
     recipientAddress: string,

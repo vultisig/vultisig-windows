@@ -73,3 +73,7 @@ frontend/.parcel-cache/
 vultisig.db
 vultisig-win
 
+frontend/vite.config.ts.timestamp-*
+frontend/wailsjs/runtime/package.json
+frontend/wailsjs/runtime/runtime.d.ts
+frontend/wailsjs/runtime/runtime.js
