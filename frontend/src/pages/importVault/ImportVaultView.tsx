@@ -9,6 +9,8 @@ import { SaveVault } from '../../../wailsjs/go/storage/Store';
 import NavBar from '../../components/navbar/NavBar';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
+import { DefaultCoinsService } from '../../services/Coin/DefaultCoinsService';
+import { useAssertWalletCore } from '../../main';
 
 const ImportVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -21,6 +23,7 @@ const ImportVaultView: React.FC = () => {
   const [dialogTitle, setDialogTitle] = useState('');
   const [dialogContent, setDialogContent] = useState('');
   const [decryptedContent, setDecryptedContent] = useState<Buffer | null>();
+  const walletcore = useAssertWalletCore();
 
   const invalidateQueries = useInvalidateQueries();
 
@@ -99,7 +102,7 @@ const ImportVaultView: React.FC = () => {
   const handleContinue = async () => {
     if (decryptedContent) {
       const vault = Vault.fromBinary(decryptedContent);
-      await SaveVault({
+      const storageVault = {
         name: vault.name,
         public_key_ecdsa: vault.publicKeyEcdsa,
         public_key_eddsa: vault.publicKeyEddsa,
@@ -116,7 +119,9 @@ const ImportVaultView: React.FC = () => {
         is_backed_up: true,
         coins: [],
         convertValues: () => {},
-      });
+      };
+      await SaveVault(storageVault);
+      new DefaultCoinsService(walletcore).applyDefaultCoins(storageVault);
       await invalidateQueries(vaultsQueryKey);
       navigate('/vault/list');
     }
