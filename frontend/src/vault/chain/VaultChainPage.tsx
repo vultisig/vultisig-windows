@@ -1,7 +1,6 @@
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
-import { hasMultipleCoinsSupport } from '../../chain/utils/hasMultipleCoinsSupport';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { BoxIcon } from '../../lib/ui/icons/BoxIcon';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
@@ -12,8 +11,10 @@ import { Panel } from '../../lib/ui/panel/Panel';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
 import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { Text } from '../../lib/ui/text';
+import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { sum } from '../../lib/utils/array/sum';
 import { formatAmount } from '../../lib/utils/formatAmount';
+import { TokensStore } from '../../services/Coin/CoinList';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
@@ -32,6 +33,12 @@ export const VaultChainPage = () => {
   const vaultAddressQuery = useVaultAddressQuery(chainId);
 
   const vaultCoinsQuery = useVaultChainCoinsQuery(chainId);
+
+  const hasMultipleCoinsSupport = !isEmpty(
+    TokensStore.TokenSelectionAssets.filter(
+      token => token.chain === chainId && !token.isNativeToken
+    )
+  );
 
   return (
     <VStack fill>
@@ -121,7 +128,7 @@ export const VaultChainPage = () => {
             }}
           />
         </Panel>
-        {hasMultipleCoinsSupport[chainId] && (
+        {hasMultipleCoinsSupport && (
           <ManageVaultChainCoinsPrompt value={chainId} />
         )}
       </PageContent>
