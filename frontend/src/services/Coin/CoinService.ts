@@ -7,6 +7,7 @@ import { AddressServiceFactory } from '../Address/AddressServiceFactory';
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { DeleteCoin, SaveCoin } from '../../../wailsjs/go/storage/Store';
 import { coinToStorageCoin } from '../../coin/utils/coin';
+import { TokensStore } from './CoinList';
 
 export class CoinService implements ICoinService {
   private chain: Chain;
@@ -15,6 +16,14 @@ export class CoinService implements ICoinService {
   constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
     this.walletCore = walletCore;
+  }
+
+  hasTokens(): boolean {
+    return (
+      TokensStore.TokenSelectionAssets.filter(asset => {
+        return asset.chain === this.chain && !asset.isNativeToken;
+      }).length > 0
+    );
   }
 
   async saveCoin(coin: Coin, vaultId: string): Promise<void> {
