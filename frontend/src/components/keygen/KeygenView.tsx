@@ -8,6 +8,9 @@ import { SaveVault } from '../../../wailsjs/go/storage/Store';
 import { storage } from '../../../wailsjs/go/models';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
+import { useAssertWalletCore } from '../../main';
+import { DefaultCoinsService } from '../../services/Coin/DefaultCoinsService';
+
 interface KeygenViewProps {
   vault: storage.Vault;
   sessionID: string;
@@ -30,7 +33,7 @@ const KeygenView: React.FC<KeygenViewProps> = ({
   const [contentIndex, setContentIndex] = useState<number>(0);
   const [currentProgress, setCurrentProgress] = useState<number>();
   const [currentStatus, setCurrentStatus] = useState<string>('');
-
+  const walletCore = useAssertWalletCore();
   const invalidateQueries = useInvalidateQueries();
 
   useEffect(() => {
@@ -68,6 +71,7 @@ const KeygenView: React.FC<KeygenViewProps> = ({
       setCurrentProgress(100);
       if (newVault !== undefined) {
         await SaveVault(newVault);
+        new DefaultCoinsService(walletCore).applyDefaultCoins(newVault);
         await invalidateQueries(vaultsQueryKey);
 
         onDone();
@@ -88,6 +92,7 @@ const KeygenView: React.FC<KeygenViewProps> = ({
       setCurrentProgress(100);
       if (newVault !== undefined) {
         await SaveVault(newVault);
+        new DefaultCoinsService(walletCore).applyDefaultCoins(newVault);
         await invalidateQueries(vaultsQueryKey);
         onDone();
       }
