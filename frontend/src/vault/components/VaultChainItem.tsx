@@ -1,12 +1,9 @@
 import { Link } from 'react-router-dom';
 import { ComponentWithValueProps } from '../../lib/ui/props';
-import { useAsserCurrentVaultChainCoins } from '../state/useCurrentVault';
 import { Panel } from '../../lib/ui/panel/Panel';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
-import { storageCoinToCoin } from '../../coin/utils/storageCoin';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
-import { useOwnedCoinsQuery } from '../../coin/query/useOwnedCoinsQuery';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
 import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
@@ -20,9 +17,7 @@ import styled from 'styled-components';
 import { round } from '../../lib/ui/css/round';
 import { horizontalPadding } from '../../lib/ui/css/horizontalPadding';
 import { centerContent } from '../../lib/ui/css/centerContent';
-import { getCoinMetaIconSrc, getCoinMetaKey } from '../../coin/utils/coinMeta';
-import { areEqualCoins } from '../../coin/Coin';
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
+import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 
 const Pill = styled.div`
   height: 24px;
@@ -33,9 +28,7 @@ const Pill = styled.div`
 `;
 
 export const VaultChainItem = ({ value }: ComponentWithValueProps<string>) => {
-  const coins = useAsserCurrentVaultChainCoins(value);
-
-  const ownedCoinsQuery = useOwnedCoinsQuery(coins.map(storageCoinToCoin));
+  const coinsQuery = useVaultChainCoinsQuery(value as Chain);
 
   const vaultAddressQuery = useVaultAddressQuery(value as Chain);
 
@@ -44,13 +37,13 @@ export const VaultChainItem = ({ value }: ComponentWithValueProps<string>) => {
       <Panel>
         <HStack fullWidth alignItems="center" gap={16}>
           <QueryDependant
-            query={ownedCoinsQuery}
+            query={coinsQuery}
             {...getQueryDependantDefaultProps(`${value} balances`)}
-            success={ownedCoins => {
-              const singleCoin = ownedCoins.length === 1 ? ownedCoins[0] : null;
+            success={coins => {
+              const singleCoin = coins.length === 1 ? coins[0] : null;
 
               const totalAmount = sum(
-                ownedCoins.map(
+                coins.map(
                   coin =>
                     (coin.price ?? 0) *
                     fromChainAmount(coin.amount, coin.decimals)
@@ -62,19 +55,7 @@ export const VaultChainItem = ({ value }: ComponentWithValueProps<string>) => {
                     <ChainCoinIcon
                       style={{ fontSize: 32 }}
                       chainSrc={getChainEntityIconSrc(value)}
-                      coinSrc={getCoinMetaIconSrc(
-                        shouldBePresent(
-                          coins.find(coin =>
-                            areEqualCoins(
-                              singleCoin,
-                              getCoinMetaKey({
-                                ...storageCoinToCoin(coin),
-                                chain: value as Chain,
-                              })
-                            )
-                          )
-                        )
-                      )}
+                      coinSrc={singleCoin.icon}
                     />
                   ) : (
                     <ChainEntityIcon
@@ -103,8 +84,8 @@ export const VaultChainItem = ({ value }: ComponentWithValueProps<string>) => {
                               )
                             )}
                           </Text>
-                        ) : ownedCoins.length > 1 ? (
-                          <Pill>{ownedCoins.length} assets</Pill>
+                        ) : coins.length > 1 ? (
+                          <Pill>{coins.length} assets</Pill>
                         ) : null}
                         <Text color="contrast" weight="700" size={16}>
                           ${formatAmount(totalAmount)}

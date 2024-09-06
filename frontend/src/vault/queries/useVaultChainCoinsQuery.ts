@@ -1,77 +1,76 @@
-import { useQuery } from '@tanstack/react-query';
-import { TokensStore } from '../../services/Coin/CoinList';
-import { useCurrentVaultId } from '../state/useCurrentVaultId';
-import { useAssertWalletCore } from '../../main';
 import { Chain } from '../../model/chain';
-import { useAssertCurrentVault } from '../state/useCurrentVault';
-import { CoinAmount, CoinInfo, CoinKey } from '../../coin/Coin';
+import { useAsserCurrentVaultChainCoins } from '../state/useCurrentVault';
+import { areEqualCoins, CoinAmount, CoinInfo, CoinKey } from '../../coin/Coin';
 import { EntityWithPrice } from '../../chain/EntityWithPrice';
 import { CoinMeta } from '../../model/coin-meta';
-import { Fiat } from '../../model/fiat';
-import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
-import { PriceServiceFactory } from '../../services/Price/PriceServiceFactory';
-import { BalanceServiceFactory } from '../../services/Balance/BalanceServiceFactory';
+import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
+import {
+  getStorageCoinKey,
+  storageCoinToCoin,
+} from '../../coin/utils/storageCoin';
+import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
+import { useMemo } from 'react';
+import {
+  getResolvedQuery,
+  pendingQuery,
+  Query,
+} from '../../lib/ui/query/Query';
+import { withoutUndefined } from '../../lib/utils/array/withoutUndefined';
+import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
 
 export type VaultChainCoin = CoinKey &
   CoinAmount &
-  CoinInfo &
+  Omit<CoinInfo, 'name'> &
   Partial<EntityWithPrice>;
 
 export const useVaultChainCoinsQuery = (chain: Chain) => {
-  const vaultId = useCurrentVaultId();
-  const vault = useAssertCurrentVault();
+  const coins = useAsserCurrentVaultChainCoins(chain);
 
-  const walletCore = useAssertWalletCore();
+  const pricesQuery = useCoinPricesQuery(
+    coins.map(storageCoinToCoin).map(CoinMeta.fromCoin)
+  );
 
-  return useQuery({
-    queryKey: ['vaultChainCoins', vaultId, chain],
-    queryFn: async () => {
-      const tokens = TokensStore.TokenSelectionAssets.filter(
-        token => token.chain === chain
-      );
+  const balancesQuery = useBalancesQuery(coins.map(storageCoinToCoin));
 
-      const coinService = CoinServiceFactory.createCoinService(
-        chain,
-        walletCore
-      );
-      const priceService = PriceServiceFactory.createPriceService(
-        chain,
-        walletCore
-      );
-      const balanceService = BalanceServiceFactory.createBalanceService(chain);
+  return useMemo((): Query<VaultChainCoin[]> => {
+    if (pricesQuery.isPending || balancesQuery.isPending) {
+      return pendingQuery;
+    }
 
-      const prices = await priceService.getPrices(tokens);
+    if (pricesQuery.data && balancesQuery.data) {
+      const data = withoutUndefined(
+        coins.map(coin => {
+          const coinKey = getStorageCoinKey(coin);
 
-      return Promise.all(
-        tokens.map(async token => {
-          const coin = await coinService.createCoin(
-            token,
-            vault.public_key_ecdsa || '',
-            vault.public_key_eddsa || '',
-            vault.hex_chain_code || ''
+          const balance = shouldBePresent(balancesQuery.data).find(balance =>
+            areEqualCoins(balance, getStorageCoinKey(coin))
           );
+          const amount = balance?.amount || 0;
 
-          const balance = await balanceService.getBalance(coin);
+          const price =
+            shouldBePresent(pricesQuery.data).find(item =>
+              areEqualCoins(item, coinKey)
+            )?.price ?? 0;
 
-          const price = prices
-            .get(CoinMeta.sortedStringify(token))
-            ?.find(rate => rate.fiat === Fiat.USD)?.value;
-
-          const result: VaultChainCoin = {
-            id: token.ticker,
-            chainId: chain,
-            amount: balance.rawAmount,
-            decimals: token.decimals,
-            name: token.logo,
-            symbol: token.ticker,
-            icon: getCoinMetaIconSrc(token),
+          return {
+            ...coinKey,
+            symbol: coin.ticker,
+            decimals: coin.decimals,
+            icon: getCoinMetaIconSrc(coin),
+            amount,
             price,
           };
-
-          return result;
         })
       );
-    },
-  });
+
+      return getResolvedQuery(data);
+    }
+
+    return {
+      isPending: false,
+      data: undefined,
+      error: [...balancesQuery.errors, ...pricesQuery.errors][0],
+    };
+  }, [balancesQuery, pricesQuery]);
 };

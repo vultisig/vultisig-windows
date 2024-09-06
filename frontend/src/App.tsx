@@ -19,6 +19,7 @@ import { VaultChainPage } from './vault/chain/VaultChainPage';
 import VerifyTransaction from './components/sendCrypto/VerifyTransaction';
 import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPage';
 import { getQueryClient } from './query/queryClient';
+import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVaultChainCoinsPage';
 
 const queryClient = getQueryClient();
 
@@ -49,6 +50,10 @@ const App: React.FC = () => {
                   <Route
                     path="/vault/chains"
                     element={<ManageVaultChainsPage />}
+                  />
+                  <Route
+                    path="/vault/chains/:chain"
+                    element={<ManageVaultChainCoinsPage />}
                   />
                   <Route
                     path="/vault/item/detail/:chain"
