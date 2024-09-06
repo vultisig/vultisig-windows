@@ -2,6 +2,7 @@ import { Chain } from '../../model/chain';
 import { BalanceService } from './BalanceService';
 import { BalanceServiceThorchain } from './BalanceServiceThorchain';
 import { BalanceServiceEvm } from './evm/BalanceServiceEvm';
+import { BalanceServiceUtxo } from './utxo/BalanceServiceUtxo';
 
 export class BalanceServiceFactory {
   static createBalanceService(chain: Chain) {
@@ -26,6 +27,16 @@ export class BalanceServiceFactory {
         return new BalanceServiceEvm(chain);
       case Chain.THORChain:
         return new BalanceServiceThorchain(chain);
+      case Chain.Bitcoin:
+        return new BalanceServiceUtxo(chain);
+      case Chain.Dogecoin:
+        return new BalanceServiceUtxo(chain);
+      case Chain.Litecoin:
+        return new BalanceServiceUtxo(chain);
+      case Chain.BitcoinCash:
+        return new BalanceServiceUtxo(chain);
+      case Chain.Dash:
+        return new BalanceServiceUtxo(chain);
       default:
         return new BalanceService(chain);
     }
