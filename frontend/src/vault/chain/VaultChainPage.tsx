@@ -69,21 +69,9 @@ export const VaultChainPage = () => {
                 </Text>
               </HStack>
               <HStack>
-                <IconButton
-                  kind="secondary"
-                  title="Copy address"
-                  icon={<CopyIcon />}
-                />
-                <IconButton
-                  kind="secondary"
-                  title="Address QR code"
-                  icon={<QrCodeIcon />}
-                />
-                <IconButton
-                  kind="secondary"
-                  title="Block explorer"
-                  icon={<BoxIcon />}
-                />
+                <IconButton title="Copy address" icon={<CopyIcon />} />
+                <IconButton title="Address QR code" icon={<QrCodeIcon />} />
+                <IconButton title="Block explorer" icon={<BoxIcon />} />
               </HStack>
             </HStack>
             <QueryDependant

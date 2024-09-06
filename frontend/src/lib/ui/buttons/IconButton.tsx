@@ -11,7 +11,7 @@ import { match } from '../../utils/match';
 export const iconButtonSizes = ['s', 'm', 'l'] as const;
 export type IconButtonSize = (typeof iconButtonSizes)[number];
 
-export const iconButtonKinds = ['regular', 'secondary'] as const;
+export const iconButtonKinds = ['regular'] as const;
 export type IconButtonKind = (typeof iconButtonKinds)[number];
 
 export const iconButtonSizeRecord: Record<IconButtonSize, number> = {
@@ -38,26 +38,16 @@ const Container = styled(UnstyledButton)<ContainerProps>`
   ${({ size }) => sameDimensions(iconButtonSizeRecord[size])};
 
   color: ${matchColor('kind', {
-    regular: 'text',
-    secondary: 'text',
-    alert: 'alert',
-    alertSecondary: 'alert',
+    regular: 'contrast',
   })};
 
   font-size: ${({ size }) => toSizeUnit(iconButtonIconSizeRecord[size])};
 
   ${borderRadius.s};
 
-  ${({ kind }) =>
-    kind !== 'secondary' &&
-    css`
-      border: 1px solid ${getColor('mist')};
-    `}
-
   background: ${({ kind, theme: { colors } }) =>
     match(kind, {
-      regular: () => colors.foreground,
-      secondary: () => colors.transparent,
+      regular: () => colors.transparent,
     }).toCssValue()};
 
   ${({ isDisabled, kind, theme }) =>
@@ -65,13 +55,11 @@ const Container = styled(UnstyledButton)<ContainerProps>`
     css`
       &:hover {
         background: ${match(kind, {
-          regular: () => theme.colors.foregroundExtra.toCssValue(),
-          secondary: () => theme.colors.mist.toCssValue(),
+          regular: () => theme.colors.mist.toCssValue(),
         })};
 
         color: ${match(kind, {
           regular: () => getColor('contrast'),
-          secondary: () => getColor('contrast'),
         })};
       }
     `}

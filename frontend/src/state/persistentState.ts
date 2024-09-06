@@ -5,6 +5,7 @@ import { TemporaryStorage } from '../lib/ui/state/TemporaryStorage';
 
 export enum PersistentStateKey {
   CurrentVaultId = 'currentVaultId',
+  IsVaultBalanceVisible = 'isVaultBalanceVisible',
   ReactQueryState = 'reactQueryState',
 }
 
