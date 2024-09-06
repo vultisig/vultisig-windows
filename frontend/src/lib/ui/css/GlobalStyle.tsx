@@ -23,6 +23,10 @@ export const GlobalStyle = createGlobalStyle`
     max-width: 100%;
   }
 
+  svg {
+    display: inline;
+  }
+
   input, button, textarea, select {
     font: inherit;
   }

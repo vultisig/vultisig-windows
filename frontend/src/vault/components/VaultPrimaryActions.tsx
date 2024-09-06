@@ -8,7 +8,7 @@ export const VaultPrimaryActions: React.FC = () => {
     <UniformColumnGrid fullWidth gap={12}>
       <SendCoinPromptDeprecated />
       <Button kind="outlined">
-        <Text color="primarAlt">SWAP</Text>
+        <Text color="primaryAlt">SWAP</Text>
       </Button>
     </UniformColumnGrid>
   );

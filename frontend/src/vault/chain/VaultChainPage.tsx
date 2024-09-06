@@ -21,6 +21,7 @@ import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
+import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
@@ -69,21 +70,9 @@ export const VaultChainPage = () => {
                 </Text>
               </HStack>
               <HStack>
-                <IconButton
-                  kind="secondary"
-                  title="Copy address"
-                  icon={<CopyIcon />}
-                />
-                <IconButton
-                  kind="secondary"
-                  title="Address QR code"
-                  icon={<QrCodeIcon />}
-                />
-                <IconButton
-                  kind="secondary"
-                  title="Block explorer"
-                  icon={<BoxIcon />}
-                />
+                <IconButton title="Copy address" icon={<CopyIcon />} />
+                <IconButton title="Address QR code" icon={<QrCodeIcon />} />
+                <IconButton title="Block explorer" icon={<BoxIcon />} />
               </HStack>
             </HStack>
             <QueryDependant
@@ -98,8 +87,16 @@ export const VaultChainPage = () => {
                 );
 
                 return (
-                  <Text size={20} weight="700" color="contrast">
-                    ${formatAmount(total)}
+                  <Text
+                    size={20}
+                    weight="700"
+                    color="contrast"
+                    centerVertically
+                  >
+                    $
+                    <BalanceVisibilityAware>
+                      {formatAmount(total)}
+                    </BalanceVisibilityAware>
                   </Text>
                 );
               }}

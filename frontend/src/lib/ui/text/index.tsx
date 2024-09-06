@@ -5,8 +5,12 @@ import { toSizeUnit } from '../css/toSizeUnit';
 const getTextColorRecord = ({ colors }: DefaultTheme) =>
   ({
     regular: colors.text,
+    supporting: colors.textSupporting,
+    shy: colors.textShy,
+
     primary: colors.primary,
-    primarAlt: colors.primaryAlt,
+    primaryAlt: colors.primaryAlt,
+    reversed: colors.background,
     contrast: colors.contrast,
   }) as const;
 
@@ -21,10 +25,11 @@ export type TextColor = keyof ReturnType<typeof getTextColorRecord>;
 
 export interface TextProps {
   color?: TextColor;
-  weight?: '400' | '500' | '600' | '700' | '800';
+  weight?: React.CSSProperties['fontWeight'];
   size?: number;
   height?: TextHeight;
-  centered?: boolean;
+  centerHorizontally?: boolean;
+  centerVertically?: boolean;
   cropped?: boolean;
   nowrap?: boolean;
   as?: React.ElementType;
@@ -55,17 +60,22 @@ export const Text = styled.p<TextProps>`
     css`
       font-size: ${toSizeUnit(size)};
     `}
-  ${({ centered }) =>
-    centered &&
+  ${({ centerHorizontally }) =>
+    centerHorizontally &&
     css`
       text-align: center;
     `}
-
   ${({ nowrap }) =>
     nowrap &&
     css`
       white-space: nowrap;
     `}
-
   ${({ cropped }) => cropped && cropText}
+
+  ${({ centerVertically }) =>
+    centerVertically &&
+    css`
+      display: inline-flex;
+      align-items: center;
+    `}
 `;

@@ -11,13 +11,14 @@ import { Chain } from '../../model/chain';
 import { Text } from '../../lib/ui/text';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { formatAmount } from '../../lib/utils/formatAmount';
-import { ChainCoinIcon } from '../../chain/ui/ChainCoinIcon';
 import { sum } from '../../lib/utils/array/sum';
 import styled from 'styled-components';
 import { round } from '../../lib/ui/css/round';
 import { horizontalPadding } from '../../lib/ui/css/horizontalPadding';
 import { centerContent } from '../../lib/ui/css/centerContent';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
+import { getColor } from '../../lib/ui/theme/getters';
+import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
 
 const Pill = styled.div`
   height: 24px;
@@ -25,6 +26,7 @@ const Pill = styled.div`
   ${horizontalPadding(12)};
   font-size: 12px;
   ${centerContent};
+  background: ${getColor('mist')};
 `;
 
 export const VaultChainItem = ({ value }: ComponentWithValueProps<string>) => {
@@ -51,18 +53,10 @@ export const VaultChainItem = ({ value }: ComponentWithValueProps<string>) => {
               );
               return (
                 <>
-                  {singleCoin ? (
-                    <ChainCoinIcon
-                      style={{ fontSize: 32 }}
-                      chainSrc={getChainEntityIconSrc(value)}
-                      coinSrc={singleCoin.icon}
-                    />
-                  ) : (
-                    <ChainEntityIcon
-                      value={getChainEntityIconSrc(value)}
-                      style={{ fontSize: 32 }}
-                    />
-                  )}
+                  <ChainEntityIcon
+                    value={getChainEntityIconSrc(value)}
+                    style={{ fontSize: 32 }}
+                  />
 
                   <VStack fullWidth alignItems="start" gap={12}>
                     <HStack
@@ -76,19 +70,38 @@ export const VaultChainItem = ({ value }: ComponentWithValueProps<string>) => {
                       </Text>
                       <HStack alignItems="center" gap={12}>
                         {singleCoin ? (
-                          <Text color="contrast" weight="400" size={12}>
-                            {formatAmount(
-                              fromChainAmount(
-                                singleCoin.amount,
-                                singleCoin.decimals
-                              )
-                            )}
+                          <Text
+                            color="contrast"
+                            weight="400"
+                            size={12}
+                            centerVertically
+                          >
+                            <BalanceVisibilityAware>
+                              {formatAmount(
+                                fromChainAmount(
+                                  singleCoin.amount,
+                                  singleCoin.decimals
+                                )
+                              )}
+                            </BalanceVisibilityAware>
                           </Text>
                         ) : coins.length > 1 ? (
-                          <Pill>{coins.length} assets</Pill>
+                          <Pill>
+                            <BalanceVisibilityAware>
+                              {coins.length} assets
+                            </BalanceVisibilityAware>
+                          </Pill>
                         ) : null}
-                        <Text color="contrast" weight="700" size={16}>
-                          ${formatAmount(totalAmount)}
+                        <Text
+                          centerVertically
+                          color="contrast"
+                          weight="700"
+                          size={16}
+                        >
+                          $
+                          <BalanceVisibilityAware>
+                            {formatAmount(totalAmount)}
+                          </BalanceVisibilityAware>
                         </Text>
                       </HStack>
                     </HStack>

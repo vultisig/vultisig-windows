@@ -33,12 +33,7 @@ export const UploadedQr = ({ value, onRemove }: UploadQrProps) => {
           </IconContainer>
           <Text color="regular">{value.name}</Text>
         </HStack>
-        <IconButton
-          kind="secondary"
-          icon={<CloseIcon />}
-          title="Remove"
-          onClick={onRemove}
-        />
+        <IconButton icon={<CloseIcon />} title="Remove" onClick={onRemove} />
       </HStack>
     </VStack>
   );

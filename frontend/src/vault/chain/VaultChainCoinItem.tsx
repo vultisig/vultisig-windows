@@ -4,6 +4,7 @@ import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { ComponentWithValueProps } from '../../lib/ui/props';
 import { Text } from '../../lib/ui/text';
 import { formatAmount } from '../../lib/utils/formatAmount';
+import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
 import { VaultChainCoin } from '../queries/useVaultChainCoinsQuery';
 
 export const VaultChainCoinItem = ({
@@ -21,12 +22,17 @@ export const VaultChainCoinItem = ({
           <Text color="contrast" size={20} weight="500">
             {symbol}
           </Text>
-          <Text color="contrast" size={18} weight="700">
-            ${formatAmount(balance * (price || 0))}
+          <Text color="contrast" size={18} weight="700" centerVertically>
+            $
+            <BalanceVisibilityAware>
+              {formatAmount(balance * (price || 0))}
+            </BalanceVisibilityAware>
           </Text>
         </HStack>
-        <Text color="contrast" size={18} weight="500">
-          {formatAmount(balance)}
+        <Text color="contrast" size={18} weight="500" centerVertically>
+          <BalanceVisibilityAware>
+            {formatAmount(balance)}
+          </BalanceVisibilityAware>
         </Text>
       </VStack>
     </HStack>
