@@ -4,8 +4,9 @@ import { CoinMeta } from '../../../model/coin-meta';
 import { SpecificUtxo } from '../../../model/gas-info';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
+import { RpcService } from '../RpcService';
 
-export class RpcServiceUtxo implements IRpcService {
+export class RpcServiceUtxo extends RpcService implements IRpcService {
   async calculateFee(coin: Coin): Promise<number> {
     const url = Endpoint.blockchairStats(coin.chain.toLowerCase());
     const request = await fetch(url);
@@ -35,12 +36,24 @@ export class RpcServiceUtxo implements IRpcService {
     return gasInfo;
   }
 
-  sendTransaction(encodedTransaction: string): Promise<string> {
-    throw new Error('Method not implemented.');
+  async sendTransaction(encodedTransaction: string): Promise<string> {
+    return await this.broadcastTransaction(encodedTransaction);
   }
 
-  broadcastTransaction(hex: string): Promise<string> {
-    throw new Error('Method not implemented.');
+  async broadcastTransaction(hex: string): Promise<string> {
+    const url = Endpoint.blockchairBroadcast(this.chain.toLowerCase());
+
+    const request = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: hex }),
+    });
+
+    const response = await request.json();
+
+    return response.data.transaction_hash;
   }
 
   // No need to implement the following methods for UTXO
