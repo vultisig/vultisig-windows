@@ -14,10 +14,10 @@ import { VStack } from '../../lib/ui/layout/Stack';
 import { toSizeUnit } from '../../lib/ui/css/toSizeUnit';
 import { pageConfig } from '../../ui/page/config';
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
-import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
 import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 import { useAssertCurrentVault } from '../../vault/state/useCurrentVault';
 import { VaultOverview } from '../../vault/components/VaultOverview';
+import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance';
 
 type VaultPageView = 'balances' | 'vaults';
 
@@ -48,7 +48,7 @@ export const VaultPage = () => {
         secondaryControls={
           <PageHeaderIconButtons>
             <PageHeaderIconButton icon={<QrCodeIcon />} />
-            <PageHeaderIconButton icon={<RefreshIcon />} />
+            <RefreshVaultBalance />
           </PageHeaderIconButtons>
         }
         title={

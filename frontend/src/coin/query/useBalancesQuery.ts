@@ -9,6 +9,11 @@ import { ChainAccount } from '../../chain/ChainAccount';
 
 type BalanceQueryResult = CoinKey & CoinAmount & ChainAccount;
 
+export const getBalanceQueryKey = ({
+  address,
+  ...key
+}: CoinKey & ChainAccount) => ['coinBalance', key, address];
+
 export const useBalancesQuery = (coins: Coin[]) => {
   const queries = useQueries({
     queries: coins.map(coin => {
@@ -19,7 +24,10 @@ export const useBalancesQuery = (coins: Coin[]) => {
       });
 
       return {
-        queryKey: ['balance', key, coin.address],
+        queryKey: getBalanceQueryKey({
+          ...key,
+          address: coin.address,
+        }),
         queryFn: async (): Promise<BalanceQueryResult> => {
           const balanceService =
             BalanceServiceFactory.createBalanceService(chain);

@@ -12,6 +12,11 @@ import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEag
 
 type PriceQueryResult = CoinKey & EntityWithPrice;
 
+export const getCoinPricesQueryKeys = (coins: CoinKey[]) => [
+  'coinPrices',
+  coins,
+];
+
 export const useCoinPricesQuery = (coins: CoinMeta[]) => {
   const walletCore = useAssertWalletCore();
 
@@ -20,7 +25,7 @@ export const useCoinPricesQuery = (coins: CoinMeta[]) => {
   const queries = useQueries({
     queries: toEntries(groups).map(({ key, value }) => {
       return {
-        queryKey: ['coinPrices', value.map(getCoinMetaKey)],
+        queryKey: getCoinPricesQueryKeys(value.map(getCoinMetaKey)),
         queryFn: async (): Promise<PriceQueryResult[]> => {
           const priceService = PriceServiceFactory.createPriceService(
             key,
