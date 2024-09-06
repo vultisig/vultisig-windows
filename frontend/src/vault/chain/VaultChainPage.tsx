@@ -21,6 +21,7 @@ import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
+import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
@@ -86,8 +87,16 @@ export const VaultChainPage = () => {
                 );
 
                 return (
-                  <Text size={20} weight="700" color="contrast">
-                    ${formatAmount(total)}
+                  <Text
+                    size={20}
+                    weight="700"
+                    color="contrast"
+                    centerVertically
+                  >
+                    $
+                    <BalanceVisibilityAware>
+                      {formatAmount(total)}
+                    </BalanceVisibilityAware>
                   </Text>
                 );
               }}

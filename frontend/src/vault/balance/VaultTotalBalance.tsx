@@ -4,6 +4,7 @@ import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQuery
 import { Text } from '../../lib/ui/text';
 import { formatAmount } from '../../lib/utils/formatAmount';
 import { useVaultTotalBalanceQuery } from '../queries/useVaultTotalBalanceQuery';
+import { BalanceVisibilityAware } from './visibility/BalanceVisibilityAware';
 import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVisibility';
 
 export const VaultTotalBalance = () => {
@@ -15,8 +16,11 @@ export const VaultTotalBalance = () => {
         query={query}
         {...getQueryDependantDefaultProps('balance')}
         success={value => (
-          <Text color="contrast" weight="700" size={26}>
-            ${formatAmount(value)}
+          <Text color="contrast" weight="700" size={26} centerVertically>
+            $
+            <BalanceVisibilityAware size="l">
+              {formatAmount(value)}
+            </BalanceVisibilityAware>
           </Text>
         )}
       />
