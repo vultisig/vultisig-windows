@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ElementType, ReactNode } from 'react';
 
 export type ComponentWithChildrenProps = {
   children: ReactNode;
@@ -24,4 +24,8 @@ export type InputProps<T> = {
 
 export type RemovableComponentProps = {
   onRemove: () => void;
+};
+
+export type AsElementComponent<T extends ElementType = ElementType> = {
+  as?: T;
 };

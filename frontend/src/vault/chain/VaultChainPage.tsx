@@ -11,8 +11,10 @@ import { Panel } from '../../lib/ui/panel/Panel';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
 import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { Text } from '../../lib/ui/text';
+import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { sum } from '../../lib/utils/array/sum';
 import { formatAmount } from '../../lib/utils/formatAmount';
+import { TokensStore } from '../../services/Coin/CoinList';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
@@ -21,6 +23,7 @@ import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
+import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
 
@@ -30,6 +33,12 @@ export const VaultChainPage = () => {
   const vaultAddressQuery = useVaultAddressQuery(chainId);
 
   const vaultCoinsQuery = useVaultChainCoinsQuery(chainId);
+
+  const hasMultipleCoinsSupport = !isEmpty(
+    TokensStore.TokenSelectionAssets.filter(
+      token => token.chain === chainId && !token.isNativeToken
+    )
+  );
 
   return (
     <VStack fill>
@@ -42,7 +51,7 @@ export const VaultChainPage = () => {
         }
         title={<PageHeaderTitle>{chainId}</PageHeaderTitle>}
       />
-      <PageContent>
+      <PageContent gap={16}>
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
@@ -119,6 +128,9 @@ export const VaultChainPage = () => {
             }}
           />
         </Panel>
+        {hasMultipleCoinsSupport && (
+          <ManageVaultChainCoinsPrompt value={chainId} />
+        )}
       </PageContent>
     </VStack>
   );

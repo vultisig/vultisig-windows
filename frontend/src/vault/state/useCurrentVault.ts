@@ -24,23 +24,35 @@ export const useAssertCurrentVault = () => {
   return shouldBePresent(useCurrentVault());
 };
 
-export const useAssertCurrentVaultCoins = () => {
+export const useAssertCurrentVaultChainIds = () => {
   const vault = useAssertCurrentVault();
 
-  return vault.coins || [];
+  const coins = vault.coins || [];
+
+  return useMemo(
+    () =>
+      withoutDuplicates(
+        coins.filter(coin => coin.is_native_token).map(coin => coin.chain)
+      ),
+    [coins]
+  );
+};
+
+export const useAssertCurrentVaultCoins = () => {
+  const chains = useAssertCurrentVaultChainIds();
+
+  const vault = useAssertCurrentVault();
+
+  const allCoins = vault.coins || [];
+
+  return useMemo(
+    () => allCoins.filter(coin => chains.includes(coin.chain)),
+    [allCoins, chains]
+  );
 };
 
 export const useAsserCurrentVaultChainCoins = (chainId: string) => {
   const coins = useAssertCurrentVaultCoins();
 
   return useMemo(() => coins.filter(coin => coin.chain === chainId), [coins]);
-};
-
-export const useAssertCurrentVaultChainIds = () => {
-  const coins = useAssertCurrentVaultCoins();
-
-  return useMemo(
-    () => withoutDuplicates(coins.map(coin => coin.chain)),
-    [coins]
-  );
 };
