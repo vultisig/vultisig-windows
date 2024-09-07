@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../../model/chain';
 import { IAddressService } from './IAddressService';
@@ -19,6 +17,7 @@ export class AddressService implements IAddressService {
   }
 
   resolveDomainAddress(address: string): Promise<string> {
+    console.log('resolve domain address', address);
     throw new Error(
       'Method not implemented, this is only used by Thorchain, EVMs, and Solana.'
     );
