@@ -1,4 +1,5 @@
-import { ENDPOINTS } from '../../utils/config';
+import { Endpoint } from '../Endpoint';
+
 // Interval ref
 let intervalId: any = null;
 
@@ -9,7 +10,7 @@ export function postSession(
 ) {
   return fetch(
     `${
-      isRelay ? ENDPOINTS.VULTISIG_RELAY : ENDPOINTS.LOCAL_MEDIATOR_URL
+      isRelay ? Endpoint.VULTISIG_RELAY : Endpoint.LOCAL_MEDIATOR_URL
     }/${sessionID}`,
     {
       method: 'POST',
@@ -24,7 +25,7 @@ export function postSession(
 export function getSession(isRelay: boolean, sessionID: string) {
   return fetch(
     `${
-      isRelay ? ENDPOINTS.VULTISIG_RELAY : ENDPOINTS.LOCAL_MEDIATOR_URL
+      isRelay ? Endpoint.VULTISIG_RELAY : Endpoint.LOCAL_MEDIATOR_URL
     }/${sessionID}`
   );
 }
@@ -36,7 +37,7 @@ export function startSession(
 ) {
   return fetch(
     `${
-      isRelay ? ENDPOINTS.VULTISIG_RELAY : ENDPOINTS.LOCAL_MEDIATOR_URL
+      isRelay ? Endpoint.VULTISIG_RELAY : Endpoint.LOCAL_MEDIATOR_URL
     }/start/${sessionID}`,
     {
       method: 'POST',
