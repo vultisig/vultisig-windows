@@ -5,13 +5,13 @@ import { storage } from '../../../wailsjs/go/models';
 import KeysignPeerDiscovery from '../../components/keysign/KeysignPeerDiscovery';
 import NavBar from '../../components/navbar/NavBar';
 import KeysignView from '../../components/keysign/KeysignView';
-import { ENDPOINTS } from '../../utils/config';
 import { KeysignPayloadUtils } from '../../extensions/KeysignPayload';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { startSession } from '../../services/Keygen/Keygen';
 import { useWalletCore } from '../../main';
 import KeysignError from '../../components/keysign/KeysignError';
 import KeysignDone from '../../components/keysign/KeysignDone';
+import { Endpoint } from '../../services/Endpoint';
 
 const KeysignFlowView: React.FC = () => {
   const { t } = useTranslation();
@@ -42,7 +42,7 @@ const KeysignFlowView: React.FC = () => {
     hexEncryptionKey: string
   ) => {
     setServerURL(
-      isRelay ? ENDPOINTS.VULTISIG_RELAY : ENDPOINTS.LOCAL_MEDIATOR_URL
+      isRelay ? Endpoint.VULTISIG_RELAY : Endpoint.LOCAL_MEDIATOR_URL
     );
     setSessionID(sessionID);
     devices.push(currentVault.current.local_party_id!);

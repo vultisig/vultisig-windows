@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { WalletCore } from '@trustwallet/wallet-core';
 import { IAddressService } from '../IAddressService';
 import { AddressService } from '../AddressService';

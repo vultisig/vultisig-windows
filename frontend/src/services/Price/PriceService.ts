@@ -1,4 +1,3 @@
-import { WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../../model/chain';
 import { Rate } from '../../model/price-rate';
 import { IPriceService } from './IPriceService';
@@ -9,11 +8,9 @@ import { ChainRates, CurrencyRates } from '../../model/chain-rates';
 
 export class PriceService implements IPriceService {
   chain: Chain;
-  walletCore: WalletCore;
 
-  constructor(chain: Chain, walletCore: WalletCore) {
+  constructor(chain: Chain) {
     this.chain = chain;
-    this.walletCore = walletCore;
   }
 
   async getNativePrices(coins: CoinMeta[]): Promise<Map<string, Rate[]>> {

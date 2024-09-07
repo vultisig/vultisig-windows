@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../../../model/chain';
 import { IRpcService } from '../../Rpc/IRpcService';

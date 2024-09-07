@@ -12,9 +12,9 @@ import KeygenVerify from '../../components/keygen/KeygenVerify';
 import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
 import { KeygenType } from '../../model/TssType';
 import { generateRandomNumber } from '../../utils/util';
-import { ENDPOINTS } from '../../utils/config';
 import { storage } from '../../../wailsjs/go/models';
 import { startSession } from '../../services/Keygen/Keygen';
+import { Endpoint } from '../../services/Endpoint';
 
 const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -63,7 +63,7 @@ const SetupVaultView: React.FC = () => {
   ) => {
     setIsRelay(isRelay);
     setServerURL(
-      isRelay ? ENDPOINTS.VULTISIG_RELAY : ENDPOINTS.LOCAL_MEDIATOR_URL
+      isRelay ? Endpoint.VULTISIG_RELAY : Endpoint.LOCAL_MEDIATOR_URL
     );
     setSessionID(sessionID);
 

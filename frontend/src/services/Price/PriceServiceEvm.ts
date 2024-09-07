@@ -1,4 +1,3 @@
-import { WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../../model/chain';
 import { IPriceService } from './IPriceService';
 import { PriceService } from './PriceService';
@@ -9,12 +8,10 @@ import { Endpoint } from '../Endpoint';
 
 export class PriceServiceEvm extends PriceService implements IPriceService {
   chain: Chain;
-  walletCore: WalletCore;
 
-  constructor(chain: Chain, walletCore: WalletCore) {
-    super(chain, walletCore);
+  constructor(chain: Chain) {
+    super(chain);
     this.chain = chain;
-    this.walletCore = walletCore;
   }
 
   async getPrices(coins: CoinMeta[]): Promise<Map<string, Rate[]>> {

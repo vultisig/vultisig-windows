@@ -1,6 +1,8 @@
 import { Chain } from '../model/chain';
 
 export class Endpoint {
+  static VULTISIG_RELAY: string = 'https://api.vultisig.com/router';
+  static LOCAL_MEDIATOR_URL: string = 'http://127.0.0.1:18080';
   static vultisigApiProxy: string = 'https://api.vultisig.com';
   static supportDocumentLink: string =
     'https://docs.vultisig.com/user-actions/creating-a-vault';

@@ -38,10 +38,7 @@ export class ServiceFactory {
         walletCore
       );
       const balanceService = BalanceServiceFactory.createBalanceService(chain);
-      const priceService = PriceServiceFactory.createPriceService(
-        chain,
-        walletCore
-      );
+      const priceService = PriceServiceFactory.createPriceService(chain);
       const feeService = FeeServiceFactory.createFeeService(chain, walletCore);
 
       return new Service(

@@ -3,7 +3,6 @@ import { CoinMeta } from '../../model/coin-meta';
 import { getCoinMetaKey } from '../utils/coinMeta';
 import { toEntries } from '../../lib/utils/record/toEntries';
 import { PriceServiceFactory } from '../../services/Price/PriceServiceFactory';
-import { useAssertWalletCore } from '../../main';
 import { Fiat } from '../../model/fiat';
 import { CoinKey } from '../Coin';
 import { groupItems } from '../../lib/utils/array/groupItems';
@@ -18,8 +17,6 @@ export const getCoinPricesQueryKeys = (coins: CoinKey[]) => [
 ];
 
 export const useCoinPricesQuery = (coins: CoinMeta[]) => {
-  const walletCore = useAssertWalletCore();
-
   const groups = groupItems(coins, item => item.chain);
 
   const queries = useQueries({
@@ -27,10 +24,7 @@ export const useCoinPricesQuery = (coins: CoinMeta[]) => {
       return {
         queryKey: getCoinPricesQueryKeys(value.map(getCoinMetaKey)),
         queryFn: async (): Promise<PriceQueryResult[]> => {
-          const priceService = PriceServiceFactory.createPriceService(
-            key,
-            walletCore
-          );
+          const priceService = PriceServiceFactory.createPriceService(key);
           const prices = await priceService.getPrices(value);
 
           const result: PriceQueryResult[] = [];
