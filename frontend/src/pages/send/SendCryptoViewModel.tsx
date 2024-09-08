@@ -227,6 +227,8 @@ export function useSendCryptoViewModel(
 
     try {
       const gasInfo: SpecificGasInfo = await service.feeService.getFee(tx.coin);
+
+      console.log('Gas info: ', gasInfo);
       tx.specificGasInfo = gasInfo;
       setGasInfo(gasInfo);
       setGas(tx.specificGasInfo.gasPrice);

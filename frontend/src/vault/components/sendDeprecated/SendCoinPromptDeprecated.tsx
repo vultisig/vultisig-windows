@@ -16,7 +16,7 @@ export const SendCoinPromptDeprecated = () => {
     return (
       Array.from(coins.values())
         .flat()
-        .find(coin => coin.chain === Chain.THORChain && coin.isNativeToken) ||
+        .find(coin => coin.chain === Chain.Dogecoin && coin.isNativeToken) ||
       null
     );
   }, [coins]);
@@ -24,7 +24,7 @@ export const SendCoinPromptDeprecated = () => {
   return (
     <Button
       onClick={() => {
-        navigate(`/vault/item/send/${Chain.THORChain}`, {
+        navigate(`/vault/item/send/${Chain.Dogecoin}`, {
           state: {
             coin: coin,
             balances: balances,
