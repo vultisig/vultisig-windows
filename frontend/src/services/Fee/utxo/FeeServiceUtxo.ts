@@ -12,10 +12,9 @@ export class FeeServiceUtxo extends FeeService implements IFeeService {
       let gasInfo = (await rpcService.getSpecificTransactionInfo(
         coin
       )) as SpecificUtxo;
-      gasInfo.gasPrice = gasInfo.gasPrice;
       return gasInfo;
     } catch (ex) {
-      console.error('Failed to get EVM balance, error: ', ex);
+      console.error('Failed to get UTXO transaction info, error: ', ex);
       return {} as SpecificUtxo;
     }
   }
