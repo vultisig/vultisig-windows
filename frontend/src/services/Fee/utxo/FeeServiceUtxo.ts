@@ -10,10 +10,9 @@ export class FeeServiceUtxo extends FeeService implements IFeeService {
     const rpcService = RpcServiceFactory.createRpcService(this.chain);
     try {
       let gasInfo = (await rpcService.getGasInfo(coin)) as SpecificUtxo;
-      gasInfo.gasPrice = gasInfo.gasPrice;
       return gasInfo;
     } catch (ex) {
-      console.error('Failed to get EVM balance, error: ', ex);
+      console.error('Failed to get UTXO transaction info, error: ', ex);
       return {} as SpecificUtxo;
     }
   }
