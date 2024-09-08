@@ -1,11 +1,19 @@
 /* eslint-disable */
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { SpecificUtxo } from '../../../model/gas-info';
+import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { FeeService } from '../FeeService';
 import { IFeeService } from '../IFeeService';
 
 export class FeeServiceUtxo extends FeeService implements IFeeService {
   async getFee(coin: Coin): Promise<SpecificUtxo> {
-    return {} as SpecificUtxo;
+    const rpcService = RpcServiceFactory.createRpcService(this.chain);
+    try {
+      let gasInfo = (await rpcService.getGasInfo(coin)) as SpecificUtxo;
+      return gasInfo;
+    } catch (ex) {
+      console.error('Failed to get UTXO transaction info, error: ', ex);
+      return {} as SpecificUtxo;
+    }
   }
 }
