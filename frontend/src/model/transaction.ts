@@ -1,5 +1,5 @@
 import { Coin } from '../gen/vultisig/keysign/v1/coin_pb';
-import { SpecificGasInfo } from './gas-info';
+import { SpecificTransactionInfo } from './specific-transaction-info';
 
 export enum TransactionType {
   SEND = 'send',
@@ -15,7 +15,7 @@ export interface ITransaction {
   memo: string;
   coin: Coin;
   transactionType: TransactionType;
-  specificGasInfo?: SpecificGasInfo;
+  specificTransactionInfo?: SpecificTransactionInfo;
 }
 
 export interface ISendTransaction extends ITransaction {
@@ -40,7 +40,7 @@ export function getDefaultSendTransaction(): ISendTransaction {
     sendMaxAmount: false,
     coin: new Coin(),
     transactionType: TransactionType.SEND,
-    specificGasInfo: undefined,
+    specificTransactionInfo: undefined,
   };
 }
 
@@ -55,6 +55,6 @@ export function getDefaultSwapTransaction(): ISwapTransaction {
     swapCoin: new Coin(),
     slippage: 0,
     transactionType: TransactionType.SWAP,
-    specificGasInfo: undefined,
+    specificTransactionInfo: undefined,
   };
 }

@@ -13,7 +13,7 @@ import { IAddressService } from '../Address/IAddressService';
 import { AddressServiceFactory } from '../Address/AddressServiceFactory';
 import { IFeeService } from '../Fee/IFeeService';
 import { FeeServiceFactory } from '../Fee/FeeServiceFactory';
-import { SpecificGasInfo } from '../../model/gas-info';
+import { SpecificTransactionInfo } from '../../model/specific-transaction-info';
 
 export class SendService implements ISendService {
   chain: Chain;
@@ -83,7 +83,7 @@ export class SendService implements ISendService {
     return 0;
   }
 
-  async loadGasInfoForSending(coin: Coin): Promise<SpecificGasInfo> {
+  async loadGasInfoForSending(coin: Coin): Promise<SpecificTransactionInfo> {
     if (!this.addressService) {
       throw new Error('Service is not initialized');
     }

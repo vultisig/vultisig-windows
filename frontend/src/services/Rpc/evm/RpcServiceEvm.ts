@@ -4,7 +4,7 @@ import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../../model/coin-meta';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
-import { SpecificEvm } from '../../../model/gas-info';
+import { SpecificEvm } from '../../../model/specific-transaction-info';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   private provider: ethers.JsonRpcProvider;
@@ -146,7 +146,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async getGasInfo(coin: Coin): Promise<SpecificEvm> {
+  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificEvm> {
     try {
       const gasPrice = await this.provider.send('eth_gasPrice', []);
       const [nonce, priorityFee] = await Promise.all([
@@ -161,7 +161,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         nonce: nonce,
       };
     } catch (error) {
-      console.error('getGasInfo::', error);
+      console.error('getSpecificTransactionInfo::', error);
       throw error;
     }
   }

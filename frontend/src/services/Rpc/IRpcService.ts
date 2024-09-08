@@ -1,6 +1,6 @@
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../model/coin-meta';
-import { SpecificGasInfo } from '../../model/gas-info';
+import { SpecificTransactionInfo } from '../../model/specific-transaction-info';
 
 export interface IRpcService {
   // Common methods
@@ -8,7 +8,7 @@ export interface IRpcService {
   getBalance(coin: Coin): Promise<string>;
   broadcastTransaction(hex: string): Promise<string>;
   resolveENS?(ensName: string): Promise<string>;
-  getGasInfo(coin: Coin): Promise<SpecificGasInfo>;
+  getSpecificTransactionInfo(coin: Coin): Promise<SpecificTransactionInfo>;
   calculateFee(coin?: Coin): Promise<number>;
 
   // Speficic methods

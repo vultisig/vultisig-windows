@@ -1,7 +1,10 @@
 /* eslint-disable */
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../../model/coin-meta';
-import { SpecificUtxo, SpecificUtxoInfo } from '../../../model/gas-info';
+import {
+  SpecificUtxo,
+  SpecificUtxoInfo,
+} from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
@@ -38,7 +41,7 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
     });
   }
 
-  async getGasInfo(coin: Coin): Promise<SpecificUtxo> {
+  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificUtxo> {
     const byteFeePrice = await this.calculateFee(coin);
     const gasInfo: SpecificUtxo = {
       gasPrice: byteFeePrice / 10 ** coin.decimals, // To display in the UI
