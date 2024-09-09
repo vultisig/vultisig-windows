@@ -6,13 +6,16 @@ import { ToastItem } from './ToastItem';
 type Toast = {
   createdAt: number;
   message: string;
+  duration: number;
 };
+
+type AddToastParams = Pick<Toast, 'message'> & Partial<Pick<Toast, 'duration'>>;
 
 type ToastContextState = {
-  addToast: (toast: Omit<Toast, 'createdAt'>) => void;
+  addToast: (params: AddToastParams) => void;
 };
 
-const toastDisplayDuration = 3000;
+const toastDefaultDuration = 3000;
 
 const ToastContext = createContext<ToastContextState | undefined>(undefined);
 
@@ -26,7 +29,7 @@ export const ToastProvider = ({ children }: ComponentWithChildrenProps) => {
       () => {
         setToast(null);
       },
-      toast.createdAt + toastDisplayDuration - Date.now()
+      toast.createdAt + toast.duration - Date.now()
     );
 
     return () => {
@@ -34,12 +37,16 @@ export const ToastProvider = ({ children }: ComponentWithChildrenProps) => {
     };
   }, [toast]);
 
-  const addToast: ToastContextState['addToast'] = useCallback(({ message }) => {
-    setToast({
-      createdAt: Date.now(),
-      message,
-    });
-  }, []);
+  const addToast: ToastContextState['addToast'] = useCallback(
+    ({ message, duration = toastDefaultDuration }) => {
+      setToast({
+        createdAt: Date.now(),
+        message,
+        duration,
+      });
+    },
+    []
+  );
 
   return (
     <ToastContext.Provider value={{ addToast }}>
