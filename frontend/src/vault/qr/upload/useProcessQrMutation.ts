@@ -1,10 +1,13 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import jsQR from 'jsqr';
 import { getRawQueryParams } from '../../../lib/utils/query/getRawQueryParams';
 import { decompressQrPayload } from './utils/decompressQrPayload';
 import { match } from '../../../lib/utils/match';
+import { KeygenMessage } from '../../../gen/vultisig/keygen/v1/keygen_message_pb';
+import { useNavigate } from 'react-router-dom';
+import { ReshareMessage } from '../../../gen/vultisig/keygen/v1/reshare_message_pb';
 
-type QrTtsType = 'Keygen' | 'Reshare';
+type QrTssType = 'Keygen' | 'Reshare';
 
 type QrType = 'NewVault' | 'Keysign';
 
@@ -13,15 +16,15 @@ type QrSharedData = {
   vault: string;
 };
 
-type QrQueryParams =
-  | (QrSharedData & {
-      type: QrType;
-    })
-  | (QrSharedData & {
-      ttsType: QrTtsType;
-    });
+type QrQueryParams = QrSharedData & {
+  type: QrType;
+} & {
+  tssType: QrTssType;
+};
 
 export const useProcessQrMutation = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: async (file: File) => {
       const imageBitmap = await createImageBitmap(file);
@@ -47,31 +50,35 @@ export const useProcessQrMutation = () => {
       }
 
       const url = code.data;
-
+      console.log('url:', url);
       const queryParams = getRawQueryParams<QrQueryParams>(url);
       const { jsonData } = queryParams;
-
       const payload = await decompressQrPayload(jsonData);
-      console.log(payload);
 
       if ('type' in queryParams) {
         return match(queryParams.type, {
           NewVault: async () => {
-            console.log('todo: handle new vault');
+            match(queryParams.tssType, {
+              Keygen: async () => {
+                const keygenMsg = KeygenMessage.fromBinary(payload);
+                console.log('keygenMsg:', keygenMsg);
+                queryClient.setQueryData(['keygenMessage'], keygenMsg);
+                navigate('/join-keygen/' + queryParams.tssType);
+              },
+              Reshare: async () => {
+                const reshareMsg = ReshareMessage.fromBinary(payload);
+                console.log('reshareMsg:', reshareMsg);
+                queryClient.setQueryData(['reshareMessage'], reshareMsg);
+                navigate('/join-keygen/' + queryParams.tssType);
+              },
+            });
           },
           Keysign: async () => {
             console.log('todo: handle key sign');
           },
         });
       } else {
-        return match(queryParams.ttsType, {
-          Keygen: () => {
-            console.log('todo: handle keygen');
-          },
-          Reshare: () => {
-            console.log('todo: handle reshare');
-          },
-        });
+        return;
       }
     },
   });

@@ -20,6 +20,7 @@ import VerifyTransaction from './components/sendCrypto/VerifyTransaction';
 import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPage';
 import { getQueryClient } from './query/queryClient';
 import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVaultChainCoinsPage';
+import JoinKeygenView from './pages/keygen/JoinKeygenView';
 
 const queryClient = getQueryClient();
 
@@ -45,6 +46,10 @@ const App: React.FC = () => {
                   <Route path="/vault/setup" element={<SetupVaultView />} />
                   <Route path="/vault/import" element={<ImportVaultView />} />
                   <Route path="/vault/qr/upload" element={<UploadQrPage />} />
+                  <Route
+                    path="/join-keygen/:keygenType"
+                    element={<JoinKeygenView />}
+                  />
                   <Route path="/vault/keysign" element={<KeysignFlowView />} />
                   <Route path="/vault/list" element={<VaultPage />} />
                   <Route

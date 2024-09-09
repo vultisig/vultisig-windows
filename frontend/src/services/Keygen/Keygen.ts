@@ -21,7 +21,19 @@ export function postSession(
     }
   );
 }
-
+export function joinSession(
+  serverURL: string,
+  sessionID: string,
+  localPartyID: string
+) {
+  return fetch(`${serverURL}/${sessionID}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify([localPartyID]),
+  });
+}
 export function getSession(isRelay: boolean, sessionID: string) {
   return fetch(
     `${
