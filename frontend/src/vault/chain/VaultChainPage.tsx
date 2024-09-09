@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
@@ -132,7 +133,12 @@ export const VaultChainPage = () => {
               return (
                 <>
                   {coins.map(coin => (
-                    <VaultChainCoinItem key={coin.id} value={coin} />
+                    <Link
+                      key={coin.id}
+                      to={`/vault/item/detail/${chainId}/${coin.id}`}
+                    >
+                      <VaultChainCoinItem value={coin} />
+                    </Link>
                   ))}
                 </>
               );

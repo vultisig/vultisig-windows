@@ -6,7 +6,7 @@ import { getCoinPricesQueryKeys } from '../../coin/query/useCoinPricesQuery';
 import { useAssertCurrentVaultCoins } from '../state/useCurrentVault';
 import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import { Spinner } from '../../lib/ui/loaders/Spinner';
-import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery';
+import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
 
 export const RefreshVaultBalance = () => {
   const invalidateQueries = useInvalidateQueries();
