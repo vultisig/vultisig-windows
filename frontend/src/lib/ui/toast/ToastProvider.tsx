@@ -1,0 +1,52 @@
+import { createContext, useCallback, useEffect, useState } from 'react';
+import { ComponentWithChildrenProps } from '../props';
+import { createContextHook } from '../state/createContextHook';
+import { ToastItem } from './ToastItem';
+
+type Toast = {
+  createdAt: number;
+  message: string;
+};
+
+type ToastContextState = {
+  addToast: (toast: Omit<Toast, 'createdAt'>) => void;
+};
+
+const toastDisplayDuration = 3000;
+
+const ToastContext = createContext<ToastContextState | undefined>(undefined);
+
+export const ToastProvider = ({ children }: ComponentWithChildrenProps) => {
+  const [toast, setToast] = useState<Toast | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+
+    const timeout = setTimeout(
+      () => {
+        setToast(null);
+      },
+      toast.createdAt + toastDisplayDuration - Date.now()
+    );
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [toast]);
+
+  const addToast: ToastContextState['addToast'] = useCallback(({ message }) => {
+    setToast({
+      createdAt: Date.now(),
+      message,
+    });
+  }, []);
+
+  return (
+    <ToastContext.Provider value={{ addToast }}>
+      {children}
+      {toast && <ToastItem>{toast.message}</ToastItem>}
+    </ToastContext.Provider>
+  );
+};
+
+export const useToast = createContextHook(ToastContext, 'ToastContext');
