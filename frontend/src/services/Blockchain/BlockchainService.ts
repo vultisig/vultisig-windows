@@ -49,18 +49,6 @@ export class BlockchainService implements IBlockchainService {
     return payload;
   }
 
-  // TODO: remove and create a IBlockchainService interface for Thor that only thor uses
-  isTHORChainSpecific(obj: any): boolean {
-    throw new Error('Method not implemented.');
-  }
-
-  getSwapPreSignedInputData(
-    keysignPayload: KeysignPayload,
-    signingInput: any
-  ): Uint8Array {
-    throw new Error('Method not implemented.');
-  }
-
   getPreSignedInputData(keysignPayload: KeysignPayload): Promise<Uint8Array> {
     throw new Error('Method not implemented.');
   }
