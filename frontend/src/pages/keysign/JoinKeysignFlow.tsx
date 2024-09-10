@@ -81,16 +81,6 @@ const JoinKeysignFlow: React.FC = () => {
     processJoinKeysign();
   }, [publicKeyECDSA, queryClient]);
 
-  const prevScreen = () => {
-    setCurrentScreen(prev => {
-      if (prev > 5) {
-        return 4;
-      } else {
-        return prev > 0 ? prev - 1 : prev;
-      }
-    });
-  };
-
   const joinKeysign = async (partyID: string) => {
     console.log('joining keysign:', partyID);
     await joinSession(serverURL.current, sessionID.current, partyID).then(
@@ -160,11 +150,7 @@ const JoinKeysignFlow: React.FC = () => {
   return (
     <>
       {screens[currentScreen].title && (
-        <NavBar
-          title={screens[currentScreen].title}
-          questionLink={undefined}
-          handleBack={currentScreen !== 0 ? prevScreen : undefined}
-        />
+        <NavBar title={screens[currentScreen].title} questionLink={undefined} />
       )}
       {screens[currentScreen].content}
     </>
