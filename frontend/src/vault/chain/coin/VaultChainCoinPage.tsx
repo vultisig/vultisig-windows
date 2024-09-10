@@ -71,6 +71,7 @@ export const VaultChainCoinPage = () => {
                     icon: getCoinMetaIconSrc(coin),
                     symbol: coin.ticker,
                     price,
+                    ...coinKey,
                   }}
                 />
               );

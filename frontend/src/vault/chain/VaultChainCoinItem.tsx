@@ -1,7 +1,9 @@
 import { EntityWithPrice } from '../../chain/EntityWithPrice';
-import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
+import { ChainCoinIcon } from '../../chain/ui/ChainCoinIcon';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
-import { CoinAmount, CoinInfo } from '../../coin/Coin';
+import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { isNativeCoin } from '../../chain/utils/isNativeCoin';
+import { CoinAmount, CoinInfo, CoinKey } from '../../coin/Coin';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { ComponentWithValueProps } from '../../lib/ui/props';
 import { Text } from '../../lib/ui/text';
@@ -11,15 +13,23 @@ import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityA
 export const VaultChainCoinItem = ({
   value,
 }: ComponentWithValueProps<
-  CoinInfo & CoinAmount & Partial<EntityWithPrice>
+  CoinInfo & CoinAmount & Partial<EntityWithPrice> & CoinKey
 >) => {
-  const { icon, symbol, amount, decimals, price } = value;
+  const { icon, symbol, amount, decimals, price, id, chainId } = value;
 
   const balance = fromChainAmount(amount, decimals);
 
   return (
     <HStack fullWidth alignItems="center" gap={12}>
-      <ChainEntityIcon value={icon} style={{ fontSize: 32 }} />
+      <ChainCoinIcon
+        coinSrc={icon}
+        chainSrc={
+          isNativeCoin({ id, chainId })
+            ? getChainEntityIconSrc(chainId)
+            : undefined
+        }
+        style={{ fontSize: 32 }}
+      />
       <VStack fullWidth gap={8}>
         <HStack fullWidth justifyContent="space-between" alignItems="center">
           <Text color="contrast" size={20} weight="500">
