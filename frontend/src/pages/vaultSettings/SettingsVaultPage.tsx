@@ -2,7 +2,7 @@ import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
-import { settingsItems } from './config';
+import { settingsItems } from './constants';
 import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -25,7 +25,9 @@ const SettingsVaultPage = () => {
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         hasBorder
-        title={<PageHeaderTitle>Settings</PageHeaderTitle>}
+        title={
+          <PageHeaderTitle>{t('vault_settings_page_title')}</PageHeaderTitle>
+        }
       />
       <PageSlice data-testid="SettingsVaultPage-Container" fill>
         <VStack fill>
