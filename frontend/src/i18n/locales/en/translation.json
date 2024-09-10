@@ -103,7 +103,19 @@
   "keysign_error": "Keysign Error",
   "discovering_mediator": "Discovering mediator service, please wait...",
   "joining_keygen": "Joining Keygen",
+  "keysign_done": "Done",
   "joining_keysign": "Joining Keysign",
   "wrong_vault_try_again": "Wrong Vault or Pair Device.",
-  "keysign_done": "Done"
+
+  "vault_settings_settings": "Vault Settings",
+  "vault_settings_language": "Language",
+  "vault_settings_currency": "Currency",
+  "vault_settings_address_book": "Address Book",
+  "vault_settings_default_chains": "Default Chains",
+  "vault_settings_faq": "FAQ",
+  "vault_settings_section_other": "Other",
+  "vault_settings_share_app": "Share The App",
+  "vault_settings_section_legal": "Legal",
+  "vault_settings_privacy_policy": "Privacy Policy",
+  "vault_settings_terms_of_service": "Terms of Service"
 }
