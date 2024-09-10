@@ -23,12 +23,14 @@ const JoinKeygenView: React.FC = () => {
   const navigate = useNavigate();
   const [currentScreen, setCurrentScreen] = useState<number>(0);
   const [keygenError, setKeygenError] = useState<string>('');
-  const { keygenType } = useParams<{ keygenType: string }>();
+  const { keygenType, sessionID } = useParams<{
+    keygenType: string;
+    sessionID: string;
+  }>();
   const vault = useRef<storage.Vault>(new storage.Vault());
   const hexEncryptionKey = useRef<string>('');
   const serverURL = useRef<string>('');
   const serviceName = useRef<string>('');
-  const sessionID = useRef<string>('');
   const vaultAction =
     keygenType === 'Keygen' ? KeygenType.Keygen : KeygenType.Reshare;
 
@@ -48,7 +50,6 @@ const JoinKeygenView: React.FC = () => {
           }
           hexEncryptionKey.current = keygenMessage.encryptionKeyHex;
           serviceName.current = keygenMessage.serviceName;
-          sessionID.current = keygenMessage.sessionId;
           vault.current.name = keygenMessage.vaultName;
           vault.current.hex_chain_code = keygenMessage.hexChainCode;
           vault.current.local_party_id = 'windows-' + generateRandomNumber();
@@ -69,7 +70,6 @@ const JoinKeygenView: React.FC = () => {
           }
           hexEncryptionKey.current = reshareMessage.encryptionKeyHex;
           serviceName.current = reshareMessage.serviceName;
-          sessionID.current = reshareMessage.sessionId;
           try {
             const reshareVault = await GetVault(reshareMessage.publicKeyEcdsa);
             vault.current = reshareVault;
@@ -104,11 +104,9 @@ const JoinKeygenView: React.FC = () => {
     });
   };
   const joinKeygen = async (localPartyID: string) => {
-    await joinSession(serverURL.current, sessionID.current, localPartyID).then(
-      () => {
-        setCurrentScreen(2);
-      }
-    );
+    await joinSession(serverURL.current, sessionID!, localPartyID).then(() => {
+      setCurrentScreen(2);
+    });
   };
 
   const screens = [
@@ -133,7 +131,7 @@ const JoinKeygenView: React.FC = () => {
       content: (
         <KeygenView
           vault={vault.current}
-          sessionID={sessionID.current}
+          sessionID={sessionID!}
           hexEncryptionKey={hexEncryptionKey.current}
           keygenType={vaultAction}
           serverURL={serverURL.current}

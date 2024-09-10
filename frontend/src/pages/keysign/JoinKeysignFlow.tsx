@@ -25,10 +25,12 @@ const JoinKeysignFlow: React.FC = () => {
   const [localPartyID, setLocalPartyID] = useState<string>('');
   const serverURL = useRef<string>('');
   const serviceName = useRef<string>('');
-  const sessionID = useRef<string>('');
   const hexEncryptionKey = useRef<string>('');
   const currentVault = useRef<storage.Vault>(undefined as any);
-  const { publicKeyECDSA } = useParams<{ publicKeyECDSA: string }>();
+  const { publicKeyECDSA, sessionID } = useParams<{
+    publicKeyECDSA: string;
+    sessionID: string;
+  }>();
   const [keysignErr, setKeysignErr] = useState<string>('');
   const walletCore = useWalletCore();
   const [messagesToSign, setMessagesToSign] = useState<string[]>([]);
@@ -36,20 +38,20 @@ const JoinKeysignFlow: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setCurrentScreen(0);
-  }, []);
-  useEffect(() => {
     const processJoinKeysign = async () => {
       if (publicKeyECDSA === undefined) {
         throw new Error('publicKeyECDSA is undefined');
       }
+      if (sessionID === undefined) {
+        throw new Error('sessionID is undefined');
+      }
       const keysignMessage = queryClient.getQueryData<KeysignMessage>([
         'keysignMessage',
+        sessionID,
       ]);
       if (keysignMessage === undefined) {
         throw new Error('keysignMessage is undefined');
       }
-      sessionID.current = keysignMessage.sessionId;
       serviceName.current = keysignMessage.serviceName;
       hexEncryptionKey.current = keysignMessage.encryptionKeyHex;
 
@@ -60,7 +62,7 @@ const JoinKeysignFlow: React.FC = () => {
         currentVault.current = vault;
       } catch (err) {
         console.log(err);
-        setKeysignErr(t('wrongVaultTryAgain'));
+        setKeysignErr(t('wrong_vault_try_again'));
       }
       setKeysignPayload(keysignMessage.keysignPayload);
       console.log(keysignMessage);
@@ -83,11 +85,9 @@ const JoinKeysignFlow: React.FC = () => {
 
   const joinKeysign = async (partyID: string) => {
     console.log('joining keysign:', partyID);
-    await joinSession(serverURL.current, sessionID.current, partyID).then(
-      () => {
-        setCurrentScreen(2);
-      }
-    );
+    await joinSession(serverURL.current, sessionID!, partyID).then(() => {
+      setCurrentScreen(2);
+    });
   };
 
   const onKeysignDone = () => {
@@ -120,7 +120,7 @@ const JoinKeysignFlow: React.FC = () => {
       content: (
         <KeysignView
           vault={currentVault.current}
-          sessionID={sessionID.current}
+          sessionID={sessionID!}
           keysignCommittee={[]}
           hexEncryptionKey={hexEncryptionKey.current}
           messagesToSign={messagesToSign}

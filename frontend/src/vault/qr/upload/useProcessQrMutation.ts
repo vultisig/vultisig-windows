@@ -65,14 +65,30 @@ export const useProcessQrMutation = () => {
               Keygen: async () => {
                 const keygenMsg = KeygenMessage.fromBinary(payload);
                 console.log('keygenMsg:', keygenMsg);
-                queryClient.setQueryData(['keygenMessage'], keygenMsg);
-                navigate('/join-keygen/' + queryParams.tssType);
+                queryClient.setQueryData(
+                  ['keygenMessage', keygenMsg.sessionId],
+                  keygenMsg
+                );
+                navigate(
+                  '/join-keygen/' +
+                    queryParams.tssType +
+                    '/' +
+                    keygenMsg.sessionId
+                );
               },
               Reshare: async () => {
                 const reshareMsg = ReshareMessage.fromBinary(payload);
                 console.log('reshareMsg:', reshareMsg);
-                queryClient.setQueryData(['reshareMessage'], reshareMsg);
-                navigate('/join-keygen/' + queryParams.tssType);
+                queryClient.setQueryData(
+                  ['reshareMessage', reshareMsg.sessionId],
+                  reshareMsg
+                );
+                navigate(
+                  '/join-keygen/' +
+                    queryParams.tssType +
+                    '/' +
+                    reshareMsg.sessionId
+                );
               },
             });
           },
@@ -81,8 +97,11 @@ export const useProcessQrMutation = () => {
             console.log('vault public key ecdsa: ', vault);
             const keySignMsg = KeysignMessage.fromBinary(payload);
             console.log('keySignMsg:', keySignMsg);
-            queryClient.setQueryData(['keysignMessage'], keySignMsg);
-            navigate('/join-keysign/' + vault);
+            queryClient.setQueryData(
+              ['keysignMessage', keySignMsg.sessionId],
+              keySignMsg
+            );
+            navigate('/join-keysign/' + vault + '/' + keySignMsg.sessionId);
           },
         });
       } else {
