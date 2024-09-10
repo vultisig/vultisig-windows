@@ -25,8 +25,8 @@ export const VaultChainCoinItem = ({
         coinSrc={icon}
         chainSrc={
           isNativeCoin({ id, chainId })
-            ? getChainEntityIconSrc(chainId)
-            : undefined
+            ? undefined
+            : getChainEntityIconSrc(chainId)
         }
         style={{ fontSize: 32 }}
       />

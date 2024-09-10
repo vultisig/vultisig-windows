@@ -30,6 +30,7 @@ import { useCurrentVaultChainId } from './useCurrentVaultChainId';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
 import { VaultAddressLink } from './VaultAddressLink';
+import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
 
 export const VaultChainPage = () => {
   const chainId = useCurrentVaultChainId();
@@ -134,7 +135,7 @@ export const VaultChainPage = () => {
             success={coins => {
               return (
                 <>
-                  {coins.map(coin => (
+                  {sortCoinsByBalance(coins).map(coin => (
                     <Link
                       key={coin.id}
                       to={`/vault/item/detail/${chainId}/${coin.id}`}
