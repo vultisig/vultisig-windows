@@ -44,6 +44,7 @@ const JoinKeygenView: React.FC = () => {
         case KeygenType.Keygen: {
           const keygenMessage = queryClient.getQueryData<KeygenMessage>([
             'keygenMessage',
+            sessionID,
           ]);
           if (keygenMessage === undefined) {
             throw new Error('keygenMessage is undefined');
@@ -64,6 +65,7 @@ const JoinKeygenView: React.FC = () => {
         case KeygenType.Reshare: {
           const reshareMessage = queryClient.getQueryData<ReshareMessage>([
             'reshareMessage',
+            sessionID,
           ]);
           if (reshareMessage === undefined) {
             throw new Error('reshareMessage is undefined');
