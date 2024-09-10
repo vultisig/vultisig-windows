@@ -40,7 +40,9 @@ export class BlockchainService implements IBlockchainService {
     const payload = new KeysignPayload();
     payload.coin = obj.coin;
     payload.toAddress = obj.toAddress;
-    payload.toAmount = (obj.amount * 10 ** obj.coin.decimals).toString();
+    payload.toAmount = BigInt(
+      Math.round(obj.amount * 10 ** obj.coin.decimals)
+    ).toString();
     payload.memo = obj.memo;
 
     payload.vaultLocalPartyId = localPartyId;

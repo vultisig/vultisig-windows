@@ -62,6 +62,8 @@ export class BlockchainServiceEvm
         throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
     }
 
+    console.log('payload:', payload);
+
     return payload;
   }
 
