@@ -1,8 +1,9 @@
+import { Link } from 'react-router-dom';
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
+import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
-import { BoxIcon } from '../../lib/ui/icons/BoxIcon';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
 import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
@@ -27,6 +28,9 @@ import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
+import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
+import { VaultAddressLink } from './VaultAddressLink';
+import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
 
 export const VaultChainPage = () => {
   const chainId = useCurrentVaultChainId();
@@ -41,6 +45,8 @@ export const VaultChainPage = () => {
     )
   );
 
+  const copyAddress = useCopyAddress();
+
   return (
     <VStack fill>
       <PageHeader
@@ -53,6 +59,7 @@ export const VaultChainPage = () => {
         title={<PageHeaderTitle>{chainId}</PageHeaderTitle>}
       />
       <PageContent gap={16}>
+        <VaultPrimaryActions />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
@@ -70,9 +77,20 @@ export const VaultChainPage = () => {
                 </Text>
               </HStack>
               <HStack>
-                <IconButton title="Copy address" icon={<CopyIcon />} />
+                <QueryDependant
+                  query={vaultAddressQuery}
+                  success={address => (
+                    <IconButton
+                      onClick={() => copyAddress(address)}
+                      title="Copy address"
+                      icon={<CopyIcon />}
+                    />
+                  )}
+                  error={() => null}
+                  pending={() => null}
+                />
                 <IconButton title="Address QR code" icon={<QrCodeIcon />} />
-                <IconButton title="Block explorer" icon={<BoxIcon />} />
+                <VaultAddressLink />
               </HStack>
             </HStack>
             <QueryDependant
@@ -117,8 +135,13 @@ export const VaultChainPage = () => {
             success={coins => {
               return (
                 <>
-                  {coins.map(coin => (
-                    <VaultChainCoinItem key={coin.id} value={coin} />
+                  {sortCoinsByBalance(coins).map(coin => (
+                    <Link
+                      key={coin.id}
+                      to={`/vault/item/detail/${chainId}/${coin.id}`}
+                    >
+                      <VaultChainCoinItem value={coin} />
+                    </Link>
                   ))}
                 </>
               );

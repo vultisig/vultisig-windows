@@ -114,7 +114,6 @@ const KeysignFlowView: React.FC = () => {
       content: (
         <KeysignDone
           onNext={() => {
-            //TODO: navigate to current vault
             navigate('/vault/list');
           }}
         />
