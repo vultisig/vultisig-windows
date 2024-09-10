@@ -23,6 +23,7 @@ import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVault
 import JoinKeygenView from './pages/keygen/JoinKeygenView';
 import { ToastProvider } from './lib/ui/toast/ToastProvider';
 import { VaultChainCoinPage } from './vault/chain/coin/VaultChainCoinPage';
+import JoinKeysignFlow from './pages/keysign/JoinKeysignFlow';
 
 const queryClient = getQueryClient();
 
@@ -50,8 +51,12 @@ const App: React.FC = () => {
                     <Route path="/vault/import" element={<ImportVaultView />} />
                     <Route path="/vault/qr/upload" element={<UploadQrPage />} />
                     <Route
-                      path="/join-keygen/:keygenType"
+                      path="/join-keygen/:keygenType/:sessionID"
                       element={<JoinKeygenView />}
+                    />
+                    <Route
+                      path="/join-keysign/:publicKeyECDSA/:sessionID"
+                      element={<JoinKeysignFlow />}
                     />
                     <Route
                       path="/vault/keysign"
