@@ -22,6 +22,7 @@ import { getQueryClient } from './query/queryClient';
 import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVaultChainCoinsPage';
 import JoinKeygenView from './pages/keygen/JoinKeygenView';
 import { ToastProvider } from './lib/ui/toast/ToastProvider';
+import { VaultChainCoinPage } from './vault/chain/coin/VaultChainCoinPage';
 
 const queryClient = getQueryClient();
 
@@ -68,6 +69,10 @@ const App: React.FC = () => {
                     <Route
                       path="/vault/item/detail/:chain"
                       element={<VaultChainPage />}
+                    />
+                    <Route
+                      path="/vault/item/detail/:chain/:coin"
+                      element={<VaultChainCoinPage />}
                     />
                     <Route
                       path="/vault/item/send/:chain"

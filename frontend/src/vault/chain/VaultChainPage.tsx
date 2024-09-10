@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
@@ -28,6 +29,7 @@ import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
+import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
 
 export const VaultChainPage = () => {
   const chainId = useCurrentVaultChainId();
@@ -56,6 +58,7 @@ export const VaultChainPage = () => {
         title={<PageHeaderTitle>{chainId}</PageHeaderTitle>}
       />
       <PageContent gap={16}>
+        <VaultPrimaryActions />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
@@ -132,7 +135,12 @@ export const VaultChainPage = () => {
               return (
                 <>
                   {coins.map(coin => (
-                    <VaultChainCoinItem key={coin.id} value={coin} />
+                    <Link
+                      key={coin.id}
+                      to={`/vault/item/detail/${chainId}/${coin.id}`}
+                    >
+                      <VaultChainCoinItem value={coin} />
+                    </Link>
                   ))}
                 </>
               );

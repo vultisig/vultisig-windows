@@ -1,15 +1,18 @@
+import { EntityWithPrice } from '../../chain/EntityWithPrice';
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
+import { CoinAmount, CoinInfo } from '../../coin/Coin';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { ComponentWithValueProps } from '../../lib/ui/props';
 import { Text } from '../../lib/ui/text';
 import { formatAmount } from '../../lib/utils/formatAmount';
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
-import { VaultChainCoin } from '../queries/useVaultChainCoinsQuery';
 
 export const VaultChainCoinItem = ({
   value,
-}: ComponentWithValueProps<VaultChainCoin>) => {
+}: ComponentWithValueProps<
+  CoinInfo & CoinAmount & Partial<EntityWithPrice>
+>) => {
   const { icon, symbol, amount, decimals, price } = value;
 
   const balance = fromChainAmount(amount, decimals);
