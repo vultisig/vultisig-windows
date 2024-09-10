@@ -13,11 +13,12 @@ import { IAddressService } from '../Address/IAddressService';
 import { CoinServiceFactory } from '../Coin/CoinServiceFactory';
 import { IBlockchainService } from './IBlockchainService';
 import { SignedTransactionResult } from './signed-transaction-result';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 export class BlockchainService implements IBlockchainService {
   chain: Chain;
   walletCore: WalletCore;
-  coinType: any;
+  coinType: CoinType;
   addressService: IAddressService;
   constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;

@@ -14,7 +14,9 @@ import { BlockchainService } from '../BlockchainService';
 import SignatureProvider from '../signature-provider';
 import { TW } from '@trustwallet/wallet-core';
 import { SpecificEvm } from '../../../model/gas-info';
-import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import { Chain } from '../../../model/chain';
+import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 
 export class BlockchainServiceEvm
   extends BlockchainService
@@ -50,7 +52,6 @@ export class BlockchainServiceEvm
         };
         break;
 
-      // We will have to check how the swap transaction is structured for UTXO chains
       case TransactionType.SWAP:
         const swapTx = obj as ISwapTransaction;
         payload.blockchainSpecific = {
@@ -71,20 +72,23 @@ export class BlockchainServiceEvm
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
-    if (keysignPayload.blockchainSpecific instanceof EthereumSpecific) {
+    const blockchainSpecific = keysignPayload.blockchainSpecific as
+      | { case: 'ethereumSpecific'; value: EthereumSpecific }
+      | undefined;
+
+    if (!blockchainSpecific || blockchainSpecific.case !== 'ethereumSpecific') {
       throw new Error('Invalid blockchain specific');
     }
 
-    if (keysignPayload.coin === undefined) {
+    const evmSpecific = blockchainSpecific.value;
+
+    if (!keysignPayload.coin) {
       throw new Error('Invalid coin');
     }
 
-    const evmSpecific = keysignPayload.blockchainSpecific as unknown as {
-      case: 'ethereumSpecific';
-      value: EthereumSpecific;
-    };
+    const { gasLimit, maxFeePerGasWei, nonce, priorityFee } = evmSpecific;
 
-    const { gasLimit, maxFeePerGasWei, nonce, priorityFee } = evmSpecific.value;
+    console.log({ gasLimit, maxFeePerGasWei, nonce, priorityFee });
 
     const input = TW.Ethereum.Proto.SigningInput.create({
       toAddress: keysignPayload.toAddress,
@@ -92,8 +96,8 @@ export class BlockchainServiceEvm
         this.walletCore.CoinTypeExt.chainId(this.coinType),
         'hex'
       ),
-      nonce: Buffer.from(nonce.toString(), 'hex'),
-      gasLimit: Buffer.from(gasLimit, 'hex'),
+      nonce: Buffer.from(nonce.toString(), 'hex'), // Directly using as hex string or number
+      gasLimit: Buffer.from(gasLimit, 'hex'), // Same here
       maxFeePerGas: Buffer.from(maxFeePerGasWei, 'hex'),
       maxInclusionFeePerGas: Buffer.from(priorityFee, 'hex'),
       txMode: TW.Ethereum.Proto.TransactionMode.Enveloped,
@@ -101,15 +105,12 @@ export class BlockchainServiceEvm
       transaction: TW.Ethereum.Proto.Transaction.create({
         transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
           amount: Buffer.from(keysignPayload.toAmount, 'hex'),
-          data: Buffer.from(keysignPayload.memo ?? '', 'utf8'),
+          data: Buffer.from(keysignPayload.memo ?? '', 'utf8'), // Memo as a string, UTF-8 encoded
         }),
       }),
     });
 
-    const encoded = TW.Ethereum.Proto.SigningInput.encode(input).finish();
-
-    console.log('encoded:', encoded);
-    return encoded;
+    return TW.Ethereum.Proto.SigningInput.encode(input).finish();
   }
 
   public async getPreSignedImageHash(
@@ -117,7 +118,7 @@ export class BlockchainServiceEvm
   ): Promise<string[]> {
     const input = await this.getPreSignedInputData(keysignPayload);
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType,
+      this.coinType as CoinType,
       input
     );
 
@@ -127,6 +128,7 @@ export class BlockchainServiceEvm
       console.log('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
+
     const imageHashes = [
       this.walletCore.HexCoding.encode(
         preSigningOutput.dataHash
@@ -149,50 +151,62 @@ export class BlockchainServiceEvm
       inputData = await this.getPreSignedInputData(data);
     }
 
-    const publicKey: PublicKey = await this.addressService.getPublicKey(
-      vaultHexPublicKey,
-      '',
-      vaultHexChainCode
+    const addressService = AddressServiceFactory.createAddressService(
+      Chain.THORChain,
+      this.walletCore
     );
+    const thorPublicKey = await addressService.getDerivedPubKey(
+      vaultHexPublicKey,
+      vaultHexChainCode,
+      this.walletCore.CoinTypeExt.derivationPath(this.coinType)
+    );
+    const publicKeyData = Buffer.from(thorPublicKey, 'hex');
+    const publicKey = this.walletCore.PublicKey.createWithData(
+      publicKeyData,
+      this.walletCore.PublicKeyType.secp256k1
+    );
+
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
       this.coinType,
       inputData
     );
 
+    const publicKeys = this.walletCore.DataVector.create();
     const preSigningOutput: TW.TxCompiler.Proto.PreSigningOutput =
       TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
 
+    if (preSigningOutput.errorMessage !== '') {
+      throw new Error(preSigningOutput.errorMessage);
+    }
+
     const allSignatures = this.walletCore.DataVector.create();
-    const publicKeys = this.walletCore.DataVector.create();
     const signatureProvider = new SignatureProvider(
       this.walletCore,
       signatures
     );
-
-    const signature = signatureProvider.getSignatureWithRecoveryId(preHashes);
-    if (signature === undefined) {
-      throw new Error('fail to verify signature');
-    }
+    const signature = signatureProvider.getSignatureWithRecoveryId(
+      preSigningOutput.dataHash
+    );
 
     if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
-      throw new Error('fail to verify signature');
+      throw new Error('Failed to verify signature');
     }
 
     allSignatures.add(signature);
+    publicKeys.add(publicKeyData);
 
-    const compileWithSignatures =
-      this.walletCore.TransactionCompiler.compileWithSignatures(
-        this.coinType,
-        inputData,
-        allSignatures,
-        publicKeys
-      );
-
-    const output = TW.Ethereum.Proto.SigningOutput.decode(
-      compileWithSignatures
+    const compiled = this.walletCore.TransactionCompiler.compileWithSignatures(
+      this.coinType,
+      inputData,
+      allSignatures,
+      publicKeys
     );
 
-    console.log('output error:', output.errorMessage);
+    const output = TW.Ethereum.Proto.SigningOutput.decode(compiled);
+
+    if (output.errorMessage !== '') {
+      throw new Error(output.errorMessage);
+    }
 
     const result = new SignedTransactionResult(
       this.walletCore.HexCoding.encode(output.encoded).stripHexPrefix(),
