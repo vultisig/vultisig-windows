@@ -296,62 +296,6 @@ export class Endpoint {
     }
   }
 
-  static getExplorerByAddressURL(
-    chainTicker: string,
-    address: string
-  ): string | null {
-    switch (chainTicker) {
-      case 'BTC':
-        return `https://blockchair.com/bitcoin/address/${address}`;
-      case 'BCH':
-        return `https://blockchair.com/bitcoin-cash/address/${address}`;
-      case 'LTC':
-        return `https://blockchair.com/litecoin/address/${address}`;
-      case 'DOGE':
-        return `https://blockchair.com/dogecoin/address/${address}`;
-      case 'DASH':
-        return `https://blockchair.com/dash/address/${address}`;
-      case 'RUNE':
-        return `https://runescan.io/address/${address}`;
-      case 'SOL':
-        return `https://explorer.solana.com/address/${address}`;
-      case 'ETH':
-        return `https://etherscan.io/address/${address}`;
-      case 'UATOM':
-        return `https://www.mintscan.io/cosmos/address/${address}`;
-      case 'ADYDX':
-        return `https://www.mintscan.io/dydx/address/${address}`;
-      case 'UKUJI':
-        return `https://finder.kujira.network/kaiyo-1/address/${address}`;
-      case 'AVAX':
-        return `https://snowtrace.io/address/${address}`;
-      case 'BNB':
-        return `https://bscscan.com/address/${address}`;
-      case 'CACAO':
-        return `https://www.mayascan.org/address/${address}`;
-      case 'ARB':
-        return `https://arbiscan.io/address/${address}`;
-      case 'BASE':
-        return `https://basescan.org/address/${address}`;
-      case 'OP':
-        return `https://optimistic.etherscan.io/address/${address}`;
-      case 'MATIC':
-        return `https://polygonscan.com/address/${address}`;
-      case 'BLAST':
-        return `https://blastscan.io/address/${address}`;
-      case 'CRO':
-        return `https://cronoscan.com/address/${address}`;
-      case 'SUI':
-        return `https://suiscan.xyz/mainnet/address/${address}`;
-      case 'DOT':
-        return `https://polkadot.subscan.io/account/${address}`;
-      case 'ZK':
-        return `https://explorer.zksync.io/address/${address}`;
-      default:
-        return null;
-    }
-  }
-
   static getExplorerByAddressURLByGroup(
     chain: Chain | null,
     address: string
