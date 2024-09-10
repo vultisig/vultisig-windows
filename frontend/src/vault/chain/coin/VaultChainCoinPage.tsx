@@ -23,6 +23,7 @@ import { getCoinMetaIconSrc } from '../../../coin/utils/coinMeta';
 import { useCoinPricesQuery } from '../../../coin/query/useCoinPricesQuery';
 import { CoinMeta } from '../../../model/coin-meta';
 import { PageContent } from '../../../ui/page/PageContent';
+import { VaultPrimaryActions } from '../../components/VaultPrimaryActions';
 
 export const VaultChainCoinPage = () => {
   const coinKey = useCurrentVaultCoinKey();
@@ -52,7 +53,8 @@ export const VaultChainCoinPage = () => {
         }
         title={<PageHeaderTitle>{coin.ticker}</PageHeaderTitle>}
       />
-      <PageContent>
+      <PageContent gap={16}>
+        <VaultPrimaryActions />
         <Panel>
           <QueryDependant
             query={balanceQuery}

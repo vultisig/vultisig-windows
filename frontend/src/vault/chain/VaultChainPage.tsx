@@ -29,6 +29,7 @@ import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
+import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
 
 export const VaultChainPage = () => {
   const chainId = useCurrentVaultChainId();
@@ -57,6 +58,7 @@ export const VaultChainPage = () => {
         title={<PageHeaderTitle>{chainId}</PageHeaderTitle>}
       />
       <PageContent gap={16}>
+        <VaultPrimaryActions />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
