@@ -4,7 +4,6 @@ import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
-import { BoxIcon } from '../../lib/ui/icons/BoxIcon';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
 import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
@@ -30,6 +29,7 @@ import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoins
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
+import { VaultAddressLink } from './VaultAddressLink';
 
 export const VaultChainPage = () => {
   const chainId = useCurrentVaultChainId();
@@ -89,7 +89,7 @@ export const VaultChainPage = () => {
                   pending={() => null}
                 />
                 <IconButton title="Address QR code" icon={<QrCodeIcon />} />
-                <IconButton title="Block explorer" icon={<BoxIcon />} />
+                <VaultAddressLink />
               </HStack>
             </HStack>
             <QueryDependant
