@@ -101,5 +101,7 @@
   "send": "Send",
   "keysign": "Keysign",
   "keysign_error": "Keysign Error",
+  "discovering_mediator": "Discovering mediator service, please wait...",
+  "joining_keygen": "Joining Keygen",
   "keysign_done": "Done"
 }

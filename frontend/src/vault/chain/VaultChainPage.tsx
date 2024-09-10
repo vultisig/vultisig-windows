@@ -1,4 +1,5 @@
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
+import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
@@ -41,6 +42,8 @@ export const VaultChainPage = () => {
     )
   );
 
+  const copyAddress = useCopyAddress();
+
   return (
     <VStack fill>
       <PageHeader
@@ -70,7 +73,18 @@ export const VaultChainPage = () => {
                 </Text>
               </HStack>
               <HStack>
-                <IconButton title="Copy address" icon={<CopyIcon />} />
+                <QueryDependant
+                  query={vaultAddressQuery}
+                  success={address => (
+                    <IconButton
+                      onClick={() => copyAddress(address)}
+                      title="Copy address"
+                      icon={<CopyIcon />}
+                    />
+                  )}
+                  error={() => null}
+                  pending={() => null}
+                />
                 <IconButton title="Address QR code" icon={<QrCodeIcon />} />
                 <IconButton title="Block explorer" icon={<BoxIcon />} />
               </HStack>
