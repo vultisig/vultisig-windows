@@ -110,7 +110,9 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
       const priorityFee = priorityFeeMapValue[feeMode || FeeMode.Normal];
       const normalizedBaseFee = this.normalizeFee(Number(baseFee));
-      const maxFeePerGasWei = normalizedBaseFee + priorityFee;
+      const maxFeePerGasWei = Number(
+        BigInt(Math.round(normalizedBaseFee + priorityFee))
+      );
 
       return {
         fee: maxFeePerGasWei * gasLimit,

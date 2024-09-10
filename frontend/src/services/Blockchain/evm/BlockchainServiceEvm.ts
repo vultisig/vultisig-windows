@@ -14,6 +14,7 @@ import { BlockchainService } from '../BlockchainService';
 import SignatureProvider from '../signature-provider';
 import { TW } from '@trustwallet/wallet-core';
 import { SpecificEvm } from '../../../model/gas-info';
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 export class BlockchainServiceEvm
   extends BlockchainService
@@ -90,7 +91,7 @@ export class BlockchainServiceEvm
       chainId: Buffer.from(
         this.walletCore.CoinTypeExt.chainId(this.coinType),
         'hex'
-      ), // TODO: get chain id from coin
+      ),
       nonce: Buffer.from(nonce.toString(), 'hex'),
       gasLimit: Buffer.from(gasLimit, 'hex'),
       maxFeePerGas: Buffer.from(maxFeePerGasWei, 'hex'),
@@ -106,6 +107,8 @@ export class BlockchainServiceEvm
     });
 
     const encoded = TW.Ethereum.Proto.SigningInput.encode(input).finish();
+
+    console.log('encoded:', encoded);
     return encoded;
   }
 
@@ -124,11 +127,13 @@ export class BlockchainServiceEvm
       console.log('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
-    return [
+    const imageHashes = [
       this.walletCore.HexCoding.encode(
         preSigningOutput.dataHash
       ).stripHexPrefix(),
     ];
+    console.log('imageHashes:', imageHashes);
+    return imageHashes;
   }
 
   public async getSignedTransaction(
@@ -143,46 +148,38 @@ export class BlockchainServiceEvm
     } else {
       inputData = await this.getPreSignedInputData(data);
     }
-    const utxoPublicKey = await this.addressService.getDerivedPubKey(
+
+    const publicKey: PublicKey = await this.addressService.getPublicKey(
       vaultHexPublicKey,
-      vaultHexChainCode,
-      this.walletCore.CoinTypeExt.derivationPath(this.coinType)
-    );
-    const publicKeyData = Buffer.from(utxoPublicKey, 'hex');
-    const publicKey = this.walletCore.PublicKey.createWithData(
-      publicKeyData,
-      this.walletCore.PublicKeyType.secp256k1
+      '',
+      vaultHexChainCode
     );
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
       this.coinType,
       inputData
     );
-    const preSignOutputs = TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
+
+    const preSigningOutput: TW.TxCompiler.Proto.PreSigningOutput =
+      TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
+
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
     const signatureProvider = new SignatureProvider(
       this.walletCore,
       signatures
     );
-    for (const hash of preSignOutputs.hashPublicKeys) {
-      if (
-        hash === undefined ||
-        hash.dataHash === undefined ||
-        hash.dataHash === null
-      ) {
-        continue;
-      }
-      const preImageHash = hash.dataHash;
-      const signature = signatureProvider.getDerSignature(preImageHash);
-      if (signature === undefined) {
-        continue;
-      }
-      if (!publicKey.verifyAsDER(signature, preImageHash)) {
-        throw new Error('fail to verify signature');
-      }
-      allSignatures.add(signature);
-      publicKeys.add(publicKeyData);
+
+    const signature = signatureProvider.getSignatureWithRecoveryId(preHashes);
+    if (signature === undefined) {
+      throw new Error('fail to verify signature');
     }
+
+    if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
+      throw new Error('fail to verify signature');
+    }
+
+    allSignatures.add(signature);
+
     const compileWithSignatures =
       this.walletCore.TransactionCompiler.compileWithSignatures(
         this.coinType,
@@ -190,10 +187,16 @@ export class BlockchainServiceEvm
         allSignatures,
         publicKeys
       );
-    const output = TW.Bitcoin.Proto.SigningOutput.decode(compileWithSignatures);
+
+    const output = TW.Ethereum.Proto.SigningOutput.decode(
+      compileWithSignatures
+    );
+
+    console.log('output error:', output.errorMessage);
+
     const result = new SignedTransactionResult(
       this.walletCore.HexCoding.encode(output.encoded).stripHexPrefix(),
-      output.transactionId
+      this.walletCore.HexCoding.encode(output.encoded)
     );
     return result;
   }
