@@ -6,10 +6,11 @@ import { match } from '../../../lib/utils/match';
 import { KeygenMessage } from '../../../gen/vultisig/keygen/v1/keygen_message_pb';
 import { useNavigate } from 'react-router-dom';
 import { ReshareMessage } from '../../../gen/vultisig/keygen/v1/reshare_message_pb';
+import { KeysignMessage } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 
 type QrTssType = 'Keygen' | 'Reshare';
 
-type QrType = 'NewVault' | 'Keysign';
+type QrType = 'NewVault' | 'SignTransaction';
 
 type QrSharedData = {
   jsonData: string;
@@ -20,6 +21,8 @@ type QrQueryParams = QrSharedData & {
   type: QrType;
 } & {
   tssType: QrTssType;
+} & {
+  vault: string;
 };
 
 export const useProcessQrMutation = () => {
@@ -73,8 +76,13 @@ export const useProcessQrMutation = () => {
               },
             });
           },
-          Keysign: async () => {
-            console.log('todo: handle key sign');
+          SignTransaction: async () => {
+            const vault = queryParams.vault;
+            console.log('vault public key ecdsa: ', vault);
+            const keySignMsg = KeysignMessage.fromBinary(payload);
+            console.log('keySignMsg:', keySignMsg);
+            queryClient.setQueryData(['keysignMessage'], keySignMsg);
+            navigate('/join-keysign/' + vault);
           },
         });
       } else {

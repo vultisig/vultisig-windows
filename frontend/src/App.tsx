@@ -22,6 +22,7 @@ import { getQueryClient } from './query/queryClient';
 import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVaultChainCoinsPage';
 import JoinKeygenView from './pages/keygen/JoinKeygenView';
 import { ToastProvider } from './lib/ui/toast/ToastProvider';
+import JoinKeysignFlow from './pages/keysign/JoinKeysignFlow';
 
 const queryClient = getQueryClient();
 
@@ -51,6 +52,10 @@ const App: React.FC = () => {
                     <Route
                       path="/join-keygen/:keygenType"
                       element={<JoinKeygenView />}
+                    />
+                    <Route
+                      path="/join-keysign/:publicKeyECDSA"
+                      element={<JoinKeysignFlow />}
                     />
                     <Route
                       path="/vault/keysign"
