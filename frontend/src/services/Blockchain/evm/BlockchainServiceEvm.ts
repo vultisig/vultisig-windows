@@ -116,22 +116,17 @@ export class BlockchainServiceEvm
       input
     );
 
-    const preSignOutputs =
-      TW.Ethereum.Proto.MessageSigningOutput.decode(preHashes);
-    if (preSignOutputs.errorMessage !== '') {
-      throw new Error(preSignOutputs.errorMessage);
+    const preSigningOutput =
+      TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
+    if (preSigningOutput.errorMessage !== '') {
+      console.log('preSigningOutput error:', preSigningOutput.errorMessage);
+      throw new Error(preSigningOutput.errorMessage);
     }
-    const result: string[] = [];
-    for (const hash of preSignOutputs.signature) {
-      if (hash === undefined) {
-        continue;
-      }
-      result.push(
-        hash
-        //this.walletCore.HexCoding.encode(hash.).stripHexPrefix()
-      );
-    }
-    return result;
+    return [
+      this.walletCore.HexCoding.encode(
+        preSigningOutput.dataHash
+      ).stripHexPrefix(),
+    ];
   }
 
   public async getSignedTransaction(
