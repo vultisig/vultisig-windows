@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { ethers, TransactionRequest } from 'ethers';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../../model/coin-meta';
@@ -16,7 +15,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     this.rpcUrl = rpcUrl;
   }
 
-  async calculateFee(coin: Coin): Promise<number> {
+  async calculateFee(_coin: Coin): Promise<number> {
     return 0;
   }
 
@@ -60,7 +59,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async fetchTokens(nativeToken: Coin): Promise<CoinMeta[]> {
+  async fetchTokens(_nativeToken: Coin): Promise<CoinMeta[]> {
     try {
       // Assuming there's some interaction with an external service like OneInch to get token balances
       // The implementation here will depend on how you fetch tokens for a given wallet address.
@@ -263,6 +262,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return balance.toString();
     } catch (error) {
       // Enhanced error logging
+      console.error('fetchERC20TokenBalance::', error);
       console.error('fetchERC20TokenBalance:: Error occurred');
       console.error('Contract Address:', contractAddress);
       console.error('Wallet Address:', walletAddress);
@@ -322,7 +322,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
+  async getTokens(_nativeToken: Coin): Promise<CoinMeta[]> {
     try {
       // Fetching tokens logic based on specific API or service used
       return [];
