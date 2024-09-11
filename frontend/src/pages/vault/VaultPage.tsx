@@ -6,7 +6,6 @@ import { match } from '../../lib/utils/match';
 import styled from 'styled-components';
 import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt';
 import { PageHeader } from '../../ui/page/PageHeader';
-import { getColor } from '../../lib/ui/theme/getters';
 import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
 import { MenuIcon } from '../../lib/ui/icons/MenuIcon';
 import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle';
@@ -18,6 +17,7 @@ import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 import { useAssertCurrentVault } from '../../vault/state/useCurrentVault';
 import { VaultOverview } from '../../vault/components/VaultOverview';
 import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance';
+import { useNavigate } from 'react-router-dom';
 
 type VaultPageView = 'balances' | 'vaults';
 
@@ -30,21 +30,22 @@ const PositionQrPrompt = styled.div`
   z-index: 1;
 `;
 
-const Header = styled(PageHeader)`
-  border-bottom: 1px solid ${getColor('mistExtra')};
-`;
-
 export const VaultPage = () => {
-  const selectedVault = useAssertCurrentVault();
-
   const [view, setView] = useState<VaultPageView>('balances');
-
+  const navigate = useNavigate();
+  const selectedVault = useAssertCurrentVault();
   const { t } = useTranslation();
 
   return (
-    <VStack fill>
-      <Header
-        primaryControls={<PageHeaderIconButton icon={<MenuIcon />} />}
+    <VStack fill data-testid="VaultPage-Container">
+      <PageHeader
+        hasBorder
+        primaryControls={
+          <PageHeaderIconButton
+            onClick={() => navigate('/vault/settings')}
+            icon={<MenuIcon />}
+          />
+        }
         secondaryControls={
           <PageHeaderIconButtons>
             <PageHeaderIconButton icon={<QrCodeIcon />} />
