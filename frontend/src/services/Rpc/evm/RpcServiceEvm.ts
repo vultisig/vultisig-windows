@@ -163,7 +163,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       // If history is empty, fetch a single max priority fee and use it for all modes
       if (history.length === 0) {
         const value = await this.provider.send('eth_maxPriorityFeePerGas', []);
-        console.log('value', value);
         return priorityFeesMap(value, value, value);
       }
 
