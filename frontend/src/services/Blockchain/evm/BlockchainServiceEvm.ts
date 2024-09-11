@@ -135,6 +135,7 @@ export class BlockchainServiceEvm
       'hex'
     );
 
+    // Send native tokens
     let toAddress = keysignPayload.toAddress;
     let evmTransaction = TW.Ethereum.Proto.Transaction.create({
       transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
@@ -143,6 +144,7 @@ export class BlockchainServiceEvm
       }),
     });
 
+    // Send ERC20 tokens, it will replace the transaction object
     if (!keysignPayload.coin.isNativeToken) {
       toAddress = keysignPayload.coin.contractAddress;
       evmTransaction = TW.Ethereum.Proto.Transaction.create({
