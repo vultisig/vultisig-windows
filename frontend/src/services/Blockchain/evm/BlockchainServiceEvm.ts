@@ -135,21 +135,36 @@ export class BlockchainServiceEvm
       'hex'
     );
 
+    // Send native tokens
+    let toAddress = keysignPayload.toAddress;
+    let evmTransaction = TW.Ethereum.Proto.Transaction.create({
+      transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
+        amount: amountHex,
+        data: Buffer.from(keysignPayload.memo ?? '', 'utf8'),
+      }),
+    });
+
+    // Send ERC20 tokens, it will replace the transaction object
+    if (!keysignPayload.coin.isNativeToken) {
+      toAddress = keysignPayload.coin.contractAddress;
+      evmTransaction = TW.Ethereum.Proto.Transaction.create({
+        erc20Transfer: TW.Ethereum.Proto.Transaction.ERC20Transfer.create({
+          amount: amountHex,
+          to: keysignPayload.toAddress,
+        }),
+      });
+    }
+
     // Create the signing input with the constants
     const input = TW.Ethereum.Proto.SigningInput.create({
-      toAddress: keysignPayload.toAddress,
+      toAddress: toAddress,
       chainId: chainIdHex,
       nonce: nonceHex,
       gasLimit: gasLimitHex,
       maxFeePerGas: maxFeePerGasHex,
       maxInclusionFeePerGas: maxInclusionFeePerGasHex,
       txMode: TW.Ethereum.Proto.TransactionMode.Enveloped,
-      transaction: TW.Ethereum.Proto.Transaction.create({
-        transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
-          amount: amountHex,
-          data: Buffer.from(keysignPayload.memo ?? '', 'utf8'),
-        }),
-      }),
+      transaction: evmTransaction,
     });
 
     return TW.Ethereum.Proto.SigningInput.encode(input).finish();
