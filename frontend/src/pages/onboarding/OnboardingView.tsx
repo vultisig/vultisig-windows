@@ -1,56 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { VStack } from '../../lib/ui/layout/Stack';
+import { PageContent } from '../../ui/page/PageContent';
+import { useHasFinishedOnboarding } from '../../onboarding/hooks/useHasFinishedOnboarding';
 
 const OnboardingView: React.FC = () => {
-  const navigate = useNavigate();
-  const hasMounted = useRef(false);
   const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState(0);
 
-  const nextScreen = () => {
-    setCurrentScreen(prev => (prev < screens.length - 1 ? prev + 1 : prev));
-  };
+  const [, hasFinishedOnboarding] = useHasFinishedOnboarding();
 
-  const skipScreen = () => {
-    setCurrentScreen(screens.length - 1);
+  const completeOnboarding = () => {
+    hasFinishedOnboarding(true);
   };
-
-  useEffect(() => {
-    if (!hasMounted.current) {
-      hasMounted.current = true;
-      const visitedBefore = sessionStorage.getItem('homePageVisited');
-      if (!visitedBefore) {
-        setTimeout(() => {
-          sessionStorage.setItem('homePageVisited', 'true');
-          const flag = localStorage.getItem('isFirstTime');
-          if (!flag) {
-            setCurrentScreen(1);
-            localStorage.setItem('isFirstTime', 'no');
-          } else {
-            skipScreen();
-          }
-        }, 1000);
-      } else {
-        skipScreen();
-      }
-    }
-  }, []);
 
   const screens = [
-    {
-      content: (
-        <div className="text-center mt-[20vh]">
-          <img
-            src="assets/images/logoRadiation.svg"
-            className="mx-auto mb-4 h-[220px]"
-            alt="Logo"
-          />
-          <h1 className="text-3xl font-bold mb-8">{t('vultisig')}</h1>
-          <p className="text-xl">{t('secure_crypto_vault')}</p>
-        </div>
-      ),
-    },
     {
       content: (
         <div className="text-center mt-[10vh]">
@@ -64,7 +28,7 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding1.svg"
             alt="Onboarding1"
           />
-          <h2 className="text-xl w-[500px]">
+          <h2 className="text-xl text-white w-[500px]">
             {t('onboarding_view1_description')}
           </h2>
           <img
@@ -88,7 +52,7 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding2.svg"
             alt="Onboarding2"
           />
-          <h2 className="text-xl w-[500px]">
+          <h2 className="text-xl text-white w-[500px]">
             {t('onboarding_view2_description')}
           </h2>
           <img
@@ -112,7 +76,7 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding3.svg"
             alt="Onboarding3"
           />
-          <h2 className="text-xl w-[500px]">
+          <h2 className="text-xl text-white w-[500px]">
             {t('onboarding_view3_description')}
           </h2>
           <img
@@ -136,7 +100,7 @@ const OnboardingView: React.FC = () => {
             src="assets/images/Onboarding4.svg"
             alt="Onboarding4"
           />
-          <h2 className="text-xl w-[500px]">
+          <h2 className="text-xl text-white w-[500px]">
             {t('onboarding_view4_description')}
           </h2>
           <img
@@ -147,61 +111,36 @@ const OnboardingView: React.FC = () => {
         </div>
       ),
     },
-    {
-      content: (
-        <div className="text-center mt-[20vh]">
-          <img
-            src="assets/images/logoRadiation.svg"
-            className="mx-auto mb-4 h-[220px]"
-            alt="Logo"
-          />
-          <h1 className="text-3xl font-bold mb-8">{t('vultisig')}</h1>
-          <p className="text-xl">{t('secure_crypto_vault')}</p>
-          <div className="flex justify-center mt-24">
-            <button
-              className="bg-secondary text-btn-primary mr-20 rounded-full w-[250px] font-bold"
-              onClick={() => {
-                navigate('/vault/setup');
-              }}
-            >
-              {t('create_new_vault')}
-            </button>
-            <button
-              className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[250px] font-bold"
-              onClick={() => {
-                navigate('/vault/import');
-              }}
-            >
-              {t('import_existing_vault')}
-            </button>
-          </div>
-        </div>
-      ),
-    },
   ];
 
+  const isLastScreen = currentScreen === screens.length - 1;
+
   return (
-    <>
-      <div className="text-white flex items-center justify-center">
+    <PageContent>
+      <VStack alignItems="center" justifyContent="center" fill>
         {screens[currentScreen].content}
+      </VStack>
+      <div className="flex justify-center mt-10">
+        <button
+          className="bg-secondary text-btn-primary mr-20 rounded-full w-[180px] font-bold"
+          onClick={() => {
+            if (isLastScreen) {
+              completeOnboarding();
+            } else {
+              setCurrentScreen(prev => prev + 1);
+            }
+          }}
+        >
+          {t('next')}
+        </button>
+        <button
+          className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[180px] font-bold"
+          onClick={completeOnboarding}
+        >
+          {t('skip')}
+        </button>
       </div>
-      {currentScreen > 0 && currentScreen < screens.length - 1 && (
-        <div className="flex justify-center mt-10">
-          <button
-            className="bg-secondary text-btn-primary mr-20 rounded-full w-[180px] font-bold"
-            onClick={nextScreen}
-          >
-            {t('next')}
-          </button>
-          <button
-            className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[180px] font-bold"
-            onClick={skipScreen}
-          >
-            {t('skip')}
-          </button>
-        </div>
-      )}
-    </>
+    </PageContent>
   );
 };
 
