@@ -230,15 +230,15 @@ export class BlockchainServiceEvm
     }
 
     const addressService = AddressServiceFactory.createAddressService(
-      Chain.THORChain,
+      this.chain,
       this.walletCore
     );
-    const thorPublicKey = await addressService.getDerivedPubKey(
+    const evmPublicKey = await addressService.getDerivedPubKey(
       vaultHexPublicKey,
       vaultHexChainCode,
       this.walletCore.CoinTypeExt.derivationPath(this.coinType)
     );
-    const publicKeyData = Buffer.from(thorPublicKey, 'hex');
+    const publicKeyData = Buffer.from(evmPublicKey, 'hex');
     const publicKey = this.walletCore.PublicKey.createWithData(
       publicKeyData,
       this.walletCore.PublicKeyType.secp256k1
