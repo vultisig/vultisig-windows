@@ -14,7 +14,10 @@ import { BlockchainService } from '../BlockchainService';
 import SignatureProvider from '../signature-provider';
 import { TW } from '@trustwallet/wallet-core';
 import { SpecificEvm } from '../../../model/gas-info';
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import {
+  CoinType,
+  HexCoding,
+} from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { Chain } from '../../../model/chain';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 
@@ -88,27 +91,99 @@ export class BlockchainServiceEvm
 
     const { gasLimit, maxFeePerGasWei, nonce, priorityFee } = evmSpecific;
 
-    console.log({ gasLimit, maxFeePerGasWei, nonce, priorityFee });
+    // Helper function to convert string representation of bigint to hex and strip the '0x' prefix
+    const stringToHex = (value: string): string => {
+      const bigintValue = BigInt(value);
+      let hexString = bigintValue.toString(16);
+      if (hexString.length % 2 !== 0) {
+        hexString = '0' + hexString;
+      }
+      return hexString;
+    };
 
+    const stripHexPrefix = (hex: string): string => {
+      return hex.startsWith('0x') ? hex.slice(2) : hex;
+    };
+
+    const chainId: bigint = BigInt(1);
+
+    // Chain ID: converted to hexadecimal, stripped of '0x', and padded
+    const chainIdHex = Buffer.from(
+      stripHexPrefix(chainId.toString(16).padStart(2, '0')),
+      'hex'
+    );
+    console.log('Chain ID (Hex):', chainIdHex.toString('hex'));
+
+    // Nonce: converted to hexadecimal, stripped of '0x', and padded
+    const nonceHex = Buffer.from(
+      stripHexPrefix(stringToHex(nonce.toString()).padStart(2, '0')),
+      'hex'
+    );
+    console.log('Nonce (Hex):', nonceHex.toString('hex'));
+
+    // Gas limit: converted to hexadecimal, stripped of '0x'
+    const gasLimitHex = Buffer.from(
+      stripHexPrefix(stringToHex(gasLimit)),
+      'hex'
+    );
+    console.log('Gas Limit (Hex):', gasLimitHex.toString('hex'));
+
+    // Max fee per gas: converted to hexadecimal, stripped of '0x'
+    const maxFeePerGasHex = Buffer.from(
+      stripHexPrefix(stringToHex(maxFeePerGasWei)),
+      'hex'
+    );
+    console.log('Max Fee Per Gas (Hex):', maxFeePerGasHex.toString('hex'));
+
+    // Max inclusion fee per gas (priority fee): converted to hexadecimal, stripped of '0x'
+    const maxInclusionFeePerGasHex = Buffer.from(
+      stripHexPrefix(stringToHex(priorityFee)),
+      'hex'
+    );
+    console.log(
+      'Max Inclusion Fee Per Gas (Hex):',
+      maxInclusionFeePerGasHex.toString('hex')
+    );
+
+    // Amount: converted to hexadecimal, stripped of '0x'
+    const amountHex = Buffer.from(
+      stripHexPrefix(stringToHex(keysignPayload.toAmount)),
+      'hex'
+    );
+    console.log('Amount (Hex):', amountHex.toString('hex'));
+
+    // Create the signing input with the constants
     const input = TW.Ethereum.Proto.SigningInput.create({
       toAddress: keysignPayload.toAddress,
-      chainId: Buffer.from(
-        this.walletCore.CoinTypeExt.chainId(this.coinType),
-        'hex'
-      ),
-      nonce: Buffer.from(nonce.toString(), 'hex'), // Directly using as hex string or number
-      gasLimit: Buffer.from(gasLimit, 'hex'), // Same here
-      maxFeePerGas: Buffer.from(maxFeePerGasWei, 'hex'),
-      maxInclusionFeePerGas: Buffer.from(priorityFee, 'hex'),
+      chainId: chainIdHex,
+      nonce: nonceHex,
+      gasLimit: gasLimitHex,
+      maxFeePerGas: maxFeePerGasHex,
+      maxInclusionFeePerGas: maxInclusionFeePerGasHex,
       txMode: TW.Ethereum.Proto.TransactionMode.Enveloped,
-
       transaction: TW.Ethereum.Proto.Transaction.create({
         transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
-          amount: Buffer.from(keysignPayload.toAmount, 'hex'),
-          data: Buffer.from(keysignPayload.memo ?? '', 'utf8'), // Memo as a string, UTF-8 encoded
+          amount: amountHex,
+          data: Buffer.from(keysignPayload.memo ?? '', 'utf8'),
         }),
       }),
     });
+
+    // const input = TW.Ethereum.Proto.SigningInput.create({
+    //   toAddress: "0x4Bf231Bf4Cb92e8d249a3D8db813F075Ba1c5Dfe",
+    //   chainId: Buffer.from("01", "hex"),
+    //   nonce: Buffer.from("09", "hex"),
+    //   gasPrice: Buffer.from("04a817c800", "hex"),
+    //   gasLimit: Buffer.from("5208", "hex"),
+    //   transaction: TW.Ethereum.Proto.Transaction.create({
+    //     transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
+    //       amount: Buffer.from("0de0b6b3a7640000", "hex"),
+    //     }),
+    //   }),
+    // });
+
+    console.log('input VALID:', TW.Ethereum.Proto.SigningInput.verify(input));
+    console.log('input JSON:', input.toJSON());
 
     return TW.Ethereum.Proto.SigningInput.encode(input).finish();
   }
@@ -128,6 +203,9 @@ export class BlockchainServiceEvm
       console.log('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
+
+    console.log('preSigningOutput:', preSigningOutput);
+    console.log('preSigningOutput.dataHash:', preSigningOutput.dataHash);
 
     const imageHashes = [
       this.walletCore.HexCoding.encode(
