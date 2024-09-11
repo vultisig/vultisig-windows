@@ -14,12 +14,7 @@ import { BlockchainService } from '../BlockchainService';
 import SignatureProvider from '../signature-provider';
 import { TW } from '@trustwallet/wallet-core';
 import { SpecificEvm } from '../../../model/gas-info';
-import {
-  CoinType,
-  EthereumChainID,
-  HexCoding,
-} from '@trustwallet/wallet-core/dist/src/wallet-core';
-import { Chain } from '../../../model/chain';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 
 export class BlockchainServiceEvm
@@ -68,8 +63,6 @@ export class BlockchainServiceEvm
         throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
     }
 
-    console.log('payload:', payload);
-
     return payload;
   }
 
@@ -110,46 +103,34 @@ export class BlockchainServiceEvm
       this.walletCore.CoinTypeExt.chainId(this.coinType)
     );
 
-    console.log('CHAIN', this.chain);
-    console.log('COINTYPE', this.coinType);
-    console.log('CHAINID', this.walletCore.CoinTypeExt.chainId(this.coinType));
-
     // Chain ID: converted to hexadecimal, stripped of '0x', and padded
     const chainIdHex = Buffer.from(
       stripHexPrefix(chainId.toString(16).padStart(2, '0')),
       'hex'
     );
-    console.log('Chain ID (Hex):', chainIdHex.toString('hex'));
 
     // Nonce: converted to hexadecimal, stripped of '0x', and padded
     const nonceHex = Buffer.from(
       stripHexPrefix(stringToHex(nonce.toString()).padStart(2, '0')),
       'hex'
     );
-    console.log('Nonce (Hex):', nonceHex.toString('hex'));
 
     // Gas limit: converted to hexadecimal, stripped of '0x'
     const gasLimitHex = Buffer.from(
       stripHexPrefix(stringToHex(gasLimit)),
       'hex'
     );
-    console.log('Gas Limit (Hex):', gasLimitHex.toString('hex'));
 
     // Max fee per gas: converted to hexadecimal, stripped of '0x'
     const maxFeePerGasHex = Buffer.from(
       stripHexPrefix(stringToHex(maxFeePerGasWei)),
       'hex'
     );
-    console.log('Max Fee Per Gas (Hex):', maxFeePerGasHex.toString('hex'));
 
     // Max inclusion fee per gas (priority fee): converted to hexadecimal, stripped of '0x'
     const maxInclusionFeePerGasHex = Buffer.from(
       stripHexPrefix(stringToHex(priorityFee)),
       'hex'
-    );
-    console.log(
-      'Max Inclusion Fee Per Gas (Hex):',
-      maxInclusionFeePerGasHex.toString('hex')
     );
 
     // Amount: converted to hexadecimal, stripped of '0x'
@@ -157,7 +138,6 @@ export class BlockchainServiceEvm
       stripHexPrefix(stringToHex(keysignPayload.toAmount)),
       'hex'
     );
-    console.log('Amount (Hex):', amountHex.toString('hex'));
 
     // Create the signing input with the constants
     const input = TW.Ethereum.Proto.SigningInput.create({
@@ -176,22 +156,6 @@ export class BlockchainServiceEvm
       }),
     });
 
-    // const input = TW.Ethereum.Proto.SigningInput.create({
-    //   toAddress: "0x4Bf231Bf4Cb92e8d249a3D8db813F075Ba1c5Dfe",
-    //   chainId: Buffer.from("01", "hex"),
-    //   nonce: Buffer.from("09", "hex"),
-    //   gasPrice: Buffer.from("04a817c800", "hex"),
-    //   gasLimit: Buffer.from("5208", "hex"),
-    //   transaction: TW.Ethereum.Proto.Transaction.create({
-    //     transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
-    //       amount: Buffer.from("0de0b6b3a7640000", "hex"),
-    //     }),
-    //   }),
-    // });
-
-    console.log('input VALID:', TW.Ethereum.Proto.SigningInput.verify(input));
-    console.log('input JSON:', input.toJSON());
-
     return TW.Ethereum.Proto.SigningInput.encode(input).finish();
   }
 
@@ -207,19 +171,15 @@ export class BlockchainServiceEvm
     const preSigningOutput =
       TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
     if (preSigningOutput.errorMessage !== '') {
-      console.log('preSigningOutput error:', preSigningOutput.errorMessage);
+      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
-
-    console.log('preSigningOutput:', preSigningOutput);
-    console.log('preSigningOutput.dataHash:', preSigningOutput.dataHash);
 
     const imageHashes = [
       this.walletCore.HexCoding.encode(
         preSigningOutput.dataHash
       ).stripHexPrefix(),
     ];
-    console.log('imageHashes:', imageHashes);
     return imageHashes;
   }
 
