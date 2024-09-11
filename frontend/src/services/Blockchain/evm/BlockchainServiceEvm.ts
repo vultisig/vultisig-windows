@@ -143,7 +143,7 @@ export class BlockchainServiceEvm
       }),
     });
 
-    if (keysignPayload.coin.isNativeToken) {
+    if (!keysignPayload.coin.isNativeToken) {
       toAddress = keysignPayload.coin.contractAddress;
       evmTransaction = TW.Ethereum.Proto.Transaction.create({
         erc20Transfer: TW.Ethereum.Proto.Transaction.ERC20Transfer.create({
