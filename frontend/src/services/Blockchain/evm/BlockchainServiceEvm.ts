@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { tss } from '../../../../wailsjs/go/models';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { IBlockchainService } from '../IBlockchainService';
@@ -36,8 +35,6 @@ export class BlockchainServiceEvm
       obj.specificGasInfo as SpecificEvm;
     switch (obj.transactionType) {
       case TransactionType.SEND:
-        const sendTx = obj as ISendTransaction;
-
         specific_pb.gasLimit = transactionInfoSpecific.gasLimit.toString();
         specific_pb.maxFeePerGasWei =
           transactionInfoSpecific.maxFeePerGasWei.toString();
@@ -52,7 +49,6 @@ export class BlockchainServiceEvm
         break;
 
       case TransactionType.SWAP:
-        const swapTx = obj as ISwapTransaction;
         payload.blockchainSpecific = {
           case: 'ethereumSpecific',
           value: specific_pb,
