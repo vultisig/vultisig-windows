@@ -16,6 +16,7 @@ import { TW } from '@trustwallet/wallet-core';
 import { SpecificEvm } from '../../../model/gas-info';
 import {
   CoinType,
+  EthereumChainID,
   HexCoding,
 } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { Chain } from '../../../model/chain';
@@ -105,7 +106,13 @@ export class BlockchainServiceEvm
       return hex.startsWith('0x') ? hex.slice(2) : hex;
     };
 
-    const chainId: bigint = BigInt(1);
+    const chainId: bigint = BigInt(
+      this.walletCore.CoinTypeExt.chainId(this.coinType)
+    );
+
+    console.log('CHAIN', this.chain);
+    console.log('COINTYPE', this.coinType);
+    console.log('CHAINID', this.walletCore.CoinTypeExt.chainId(this.coinType));
 
     // Chain ID: converted to hexadecimal, stripped of '0x', and padded
     const chainIdHex = Buffer.from(
