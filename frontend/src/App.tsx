@@ -14,7 +14,6 @@ import KeysignFlowView from './pages/keysign/KeysignFlow';
 import { GlobalStyle } from './lib/ui/css/GlobalStyle';
 import { VaultsDependant } from './vault/components/VaultsDependant';
 import { VaultPage } from './pages/vault/VaultPage';
-import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { VaultChainPage } from './vault/chain/VaultChainPage';
 import VerifyTransaction from './components/sendCrypto/VerifyTransaction';
 import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPage';
@@ -25,6 +24,10 @@ import { ToastProvider } from './lib/ui/toast/ToastProvider';
 import { VaultChainCoinPage } from './vault/chain/coin/VaultChainCoinPage';
 import JoinKeysignFlow from './pages/keysign/JoinKeysignFlow';
 import SettingsVaultView from './pages/vaultSettings/SettingsVaultPage';
+import { AddVaultPage } from './vault/add/AddVaultPage';
+import { addVaultPath, importVaultPath, setupVaultPath } from './navigation';
+import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
+import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 
 const queryClient = getQueryClient();
 
@@ -44,16 +47,22 @@ const App: React.FC = () => {
                       index
                       element={
                         <EmptyVaultsOnly>
-                          <OnboardingView />
+                          <IncompleteOnboardingOnly>
+                            <OnboardingView />
+                          </IncompleteOnboardingOnly>
                         </EmptyVaultsOnly>
                       }
                     />
-                    <Route path="/vault/setup" element={<SetupVaultView />} />
                     <Route
                       path="/vault/settings"
                       element={<SettingsVaultView />}
                     />
-                    <Route path="/vault/import" element={<ImportVaultView />} />
+                    <Route path={addVaultPath} element={<AddVaultPage />} />
+                    <Route path={setupVaultPath} element={<SetupVaultView />} />
+                    <Route
+                      path={importVaultPath}
+                      element={<ImportVaultView />}
+                    />
                     <Route path="/vault/qr/upload" element={<UploadQrPage />} />
                     <Route
                       path="/join-keygen/:keygenType/:sessionID"

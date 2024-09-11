@@ -14,6 +14,7 @@ import { PlusIcon } from '../../lib/ui/icons/PlusIcon';
 import { useVaults } from '../../vault/queries/useVaultsQuery';
 import { useCurrentVaultId } from '../../vault/state/useCurrentVaultId';
 import { getStorageVaultId } from '../../vault/utils/storageVault';
+import { addVaultPath } from '../../navigation';
 
 interface VaultListProps {
   onFinish: () => void;
@@ -52,7 +53,7 @@ export const VaultList: React.FC<VaultListProps> = ({ onFinish }) => {
       <PageSlice>
         <Button
           onClick={() => {
-            navigate('/vault/setup');
+            navigate(addVaultPath);
           }}
           kind="primary"
         >

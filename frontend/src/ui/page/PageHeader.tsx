@@ -21,7 +21,7 @@ const Content = styled(TakeWholeSpace)`
 `;
 
 type PageHeaderProps = Omit<ComponentProps<typeof Container>, 'title'> & {
-  title: ReactNode;
+  title?: ReactNode;
   primaryControls?: ReactNode;
   secondaryControls?: ReactNode;
   hasBorder?: boolean;
