@@ -1,5 +1,6 @@
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../model/coin-meta';
+import { FeeMode } from '../../model/evm-fee-mode';
 import { SpecificGasInfo } from '../../model/gas-info';
 
 export interface IRpcService {
@@ -8,7 +9,7 @@ export interface IRpcService {
   getBalance(coin: Coin): Promise<string>;
   broadcastTransaction(hex: string): Promise<string>;
   resolveENS?(ensName: string): Promise<string>;
-  getGasInfo(coin: Coin): Promise<SpecificGasInfo>;
+  getGasInfo(coin: Coin, feeMode?: FeeMode): Promise<SpecificGasInfo>;
   calculateFee(coin?: Coin): Promise<number>;
 
   // Speficic methods

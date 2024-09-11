@@ -1,10 +1,10 @@
-/* eslint-disable */
 import { ethers, TransactionRequest } from 'ethers';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../../model/coin-meta';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
 import { SpecificEvm } from '../../../model/gas-info';
+import { FeeMap, FeeMode } from '../../../model/evm-fee-mode';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   private provider: ethers.JsonRpcProvider;
@@ -15,17 +15,8 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     this.rpcUrl = rpcUrl;
   }
 
-  // TODO: Implement the following methods
-  async calculateFee(coin: Coin): Promise<number> {
-    let gasLimit = 21000;
-    if (coin.isNativeToken) {
-      gasLimit = 120000;
-    }
-
-    const baseFee = 1;
-    const priorityFee = 1;
-
-    return gasLimit * (baseFee + priorityFee);
+  async calculateFee(_coin: Coin): Promise<number> {
+    return 0;
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
@@ -68,7 +59,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async fetchTokens(nativeToken: Coin): Promise<CoinMeta[]> {
+  async fetchTokens(_nativeToken: Coin): Promise<CoinMeta[]> {
     try {
       // Assuming there's some interaction with an external service like OneInch to get token balances
       // The implementation here will depend on how you fetch tokens for a given wallet address.
@@ -76,54 +67,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return [];
     } catch (error) {
       console.error('fetchTokens::', error);
-      throw error;
-    }
-  }
-
-  async fetchRecentBlockhash(): Promise<string> {
-    try {
-      const block = await this.provider.getBlock('latest');
-      return block?.hash || '';
-    } catch (error) {
-      console.error('fetchRecentBlockhash::', error);
-      throw error;
-    }
-  }
-
-  async fetchTokenAssociatedAccountByOwner(
-    walletAddress: string,
-    mintAddress: string
-  ): Promise<string> {
-    // This method typically applies to Solana, but if used in an EVM context:
-    try {
-      // Implementation specifics may vary; this example is generic.
-      return walletAddress; // Dummy return for example purposes
-    } catch (error) {
-      console.error('fetchTokenAssociatedAccountByOwner::', error);
-      throw error;
-    }
-  }
-
-  async fetchTokenAccountsByOwner(walletAddress: string): Promise<[]> {
-    // This method typically applies to Solana, but if used in an EVM context:
-    try {
-      // Implementation specifics may vary; returning an empty array for example purposes.
-      return [];
-    } catch (error) {
-      console.error('fetchTokenAccountsByOwner::', error);
-      throw error;
-    }
-  }
-
-  async fetchHighPriorityFee(account: string): Promise<number> {
-    try {
-      const priorityFee = await this.provider.send(
-        'eth_maxPriorityFeePerGas',
-        []
-      );
-      return Number(priorityFee);
-    } catch (error) {
-      console.error('fetchHighPriorityFee::', error);
       throw error;
     }
   }
@@ -146,22 +89,120 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async getGasInfo(coin: Coin): Promise<SpecificEvm> {
+  normalizeFee(value: number): number {
+    return value + value / 2; // x1.5 fee
+  }
+
+  async getGasInfo(coin: Coin, feeMode?: FeeMode): Promise<SpecificEvm> {
     try {
-      const gasPrice = await this.provider.send('eth_gasPrice', []);
-      const [nonce, priorityFee] = await Promise.all([
+      const [gasPrice, nonce] = await Promise.all([
+        this.provider.send('eth_gasPrice', []),
         this.provider.getTransactionCount(coin.address),
-        this.provider.send('eth_maxPriorityFeePerGas', []),
       ]);
 
+      let gasLimit = 23000;
+      if (!coin.isNativeToken) {
+        gasLimit = 120000;
+      }
+
+      const baseFee = await this.getBaseFee();
+      const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
+      const priorityFee = priorityFeeMapValue[feeMode || FeeMode.Normal];
+      const normalizedBaseFee = this.normalizeFee(Number(baseFee));
+      const maxFeePerGasWei = Number(
+        BigInt(Math.round(normalizedBaseFee + priorityFee))
+      );
+
       return {
-        fee: await this.calculateFee(coin),
+        fee: maxFeePerGasWei * gasLimit,
         gasPrice: Number(gasPrice),
-        priorityFee: Number(priorityFee),
-        nonce: nonce,
-      };
+        nonce,
+        priorityFee,
+        priorityFeeWei: priorityFee,
+        gasLimit,
+        maxFeePerGasWei: maxFeePerGasWei,
+      } as SpecificEvm;
     } catch (error) {
       console.error('getGasInfo::', error);
+      throw error;
+    }
+  }
+
+  async getBaseFee(): Promise<string> {
+    try {
+      const txResponse = await this.provider.getBlock('latest');
+
+      if (txResponse && txResponse.baseFeePerGas) {
+        return txResponse.baseFeePerGas.toString();
+      } else {
+        return '';
+      }
+    } catch (error) {
+      console.error('sendTransaction::', error);
+      throw error;
+    }
+  }
+
+  async fetchMaxPriorityFeesPerGas(): Promise<FeeMap> {
+    try {
+      // Fetch fee history (assume getGasHistory is defined)
+      const history = await this.getGasHistory();
+
+      // Helper function to map fees to FeeMode
+      const priorityFeesMap = (
+        low: number,
+        normal: number,
+        fast: number
+      ): FeeMap => ({
+        [FeeMode.SafeLow]: low,
+        [FeeMode.Normal]: normal,
+        [FeeMode.Fast]: fast,
+      });
+
+      // If history is empty, fetch a single max priority fee and use it for all modes
+      if (history.length === 0) {
+        const value = await this.provider.send('eth_maxPriorityFeePerGas', []);
+        return priorityFeesMap(value, value, value);
+      }
+
+      // Calculate low, normal, and fast fees
+      const low = history[0];
+      const normal = history[Math.floor(history.length / 2)];
+      const fast = history[history.length - 1];
+
+      // Return mapped fees
+      return priorityFeesMap(low, normal, fast);
+    } catch (error) {
+      console.error('fetchMaxPriorityFeesPerGas::', error);
+      throw error;
+    }
+  }
+
+  async getGasHistory(): Promise<number[]> {
+    try {
+      // Send the RPC request for fee history
+      const gasHistory = await this.provider.send('eth_feeHistory', [
+        10,
+        'latest',
+        [5],
+      ]);
+
+      // Ensure the response has a valid structure
+      if (!gasHistory || !gasHistory.reward) {
+        throw new Error('Invalid response from eth_feeHistory');
+      }
+
+      // Extract and process the reward array
+      const rewards: string[][] = gasHistory.reward;
+      const rewardValues = rewards
+        .map(reward => reward[0]) // Take the first element from each array
+        .filter(Boolean) // Filter out any undefined or null values
+        .map(reward => parseInt(reward.replace(/^0x/, ''), 16)) // Convert hex to decimal
+        .sort((a, b) => a - b); // Sort the values in ascending order
+
+      return rewardValues;
+    } catch (error) {
+      console.error('getGasHistory::', error);
       throw error;
     }
   }
@@ -221,6 +262,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return balance.toString();
     } catch (error) {
       // Enhanced error logging
+      console.error('fetchERC20TokenBalance::', error);
       console.error('fetchERC20TokenBalance:: Error occurred');
       console.error('Contract Address:', contractAddress);
       console.error('Wallet Address:', walletAddress);
@@ -280,7 +322,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
+  async getTokens(_nativeToken: Coin): Promise<CoinMeta[]> {
     try {
       // Fetching tokens logic based on specific API or service used
       return [];

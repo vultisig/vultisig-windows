@@ -13,11 +13,12 @@ import { IAddressService } from '../Address/IAddressService';
 import { CoinServiceFactory } from '../Coin/CoinServiceFactory';
 import { IBlockchainService } from './IBlockchainService';
 import { SignedTransactionResult } from './signed-transaction-result';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 export class BlockchainService implements IBlockchainService {
   chain: Chain;
   walletCore: WalletCore;
-  coinType: any;
+  coinType: CoinType;
   addressService: IAddressService;
   constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
@@ -40,25 +41,15 @@ export class BlockchainService implements IBlockchainService {
     const payload = new KeysignPayload();
     payload.coin = obj.coin;
     payload.toAddress = obj.toAddress;
-    payload.toAmount = (obj.amount * 10 ** obj.coin.decimals).toString();
+    payload.toAmount = BigInt(
+      Math.round(obj.amount * 10 ** obj.coin.decimals)
+    ).toString();
     payload.memo = obj.memo;
 
     payload.vaultLocalPartyId = localPartyId;
     payload.vaultPublicKeyEcdsa = publicKeyEcdsa;
 
     return payload;
-  }
-
-  // TODO: remove and create a IBlockchainService interface for Thor that only thor uses
-  isTHORChainSpecific(obj: any): boolean {
-    throw new Error('Method not implemented.');
-  }
-
-  getSwapPreSignedInputData(
-    keysignPayload: KeysignPayload,
-    signingInput: any
-  ): Uint8Array {
-    throw new Error('Method not implemented.');
   }
 
   getPreSignedInputData(keysignPayload: KeysignPayload): Promise<Uint8Array> {

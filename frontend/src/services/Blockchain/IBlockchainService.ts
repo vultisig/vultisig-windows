@@ -8,13 +8,6 @@ import {
 } from '../../model/transaction';
 
 export interface IBlockchainService {
-  isTHORChainSpecific(obj: any): boolean;
-
-  getSwapPreSignedInputData(
-    keysignPayload: KeysignPayload,
-    signingInput: any // Each chain has its own signing input
-  ): Uint8Array;
-
   getPreSignedInputData(keysignPayload: KeysignPayload): Promise<Uint8Array>;
 
   getPreSignedImageHash(keysignPayload: KeysignPayload): Promise<string[]>;
@@ -31,4 +24,15 @@ export interface IBlockchainService {
     localPartyId: string,
     publicKeyEcdsa: string
   ): KeysignPayload;
+}
+
+export interface IBlockchainServiceThorchain {
+  isTHORChainSpecific(obj: any): boolean;
+}
+
+export interface ISwapBlockchainService {
+  getSwapPreSignedInputData(
+    keysignPayload: KeysignPayload,
+    signingInput: any
+  ): Uint8Array;
 }
