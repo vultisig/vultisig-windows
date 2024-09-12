@@ -35,7 +35,7 @@ const DetailsVaultPage = () => {
   }
 
   return (
-    <Container fill gap={16}>
+    <Container flexGrow gap={16}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         hasBorder
