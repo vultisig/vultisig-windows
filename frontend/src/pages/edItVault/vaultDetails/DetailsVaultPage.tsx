@@ -17,8 +17,14 @@ const DetailsVaultPage = () => {
     return <></>;
   }
 
-  const { name, public_key_eddsa, public_key_ecdsa, keyshares, signers } =
-    currentVault;
+  const {
+    name,
+    public_key_eddsa,
+    public_key_ecdsa,
+    keyshares,
+    signers,
+    local_party_id,
+  } = currentVault;
 
   const m = keyshares.length;
 
@@ -53,13 +59,13 @@ const DetailsVaultPage = () => {
         <ListItemPanel>
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_ECDSA')}</Text>
-            <Text size={13}>{public_key_eddsa}</Text>
+            <Text size={13}>{public_key_ecdsa}</Text>
           </VStack>
         </ListItemPanel>
         <ListItemPanel>
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_EDDSA')}</Text>
-            <Text size={13}>{public_key_ecdsa}</Text>
+            <Text size={13}>{public_key_eddsa}</Text>
           </VStack>
         </ListItemPanel>
         <AutoCenteredText weight={600} color="contrast">
@@ -68,7 +74,9 @@ const DetailsVaultPage = () => {
         {signers.map((signer, index) => (
           <ListItemPanel key={index}>
             <VStack fullWidth alignItems="start" justifyContent="space-between">
-              <Text weight={900}>{signer}</Text>
+              <Text weight={900}>
+                {signer} {signer === local_party_id && '(This device)'}
+              </Text>
             </VStack>
           </ListItemPanel>
         ))}
