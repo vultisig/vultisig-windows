@@ -19,5 +19,6 @@ export const darkTheme: DefaultTheme = {
     mist: new HSLA(0, 0, 100, 0.06),
     mistExtra: new HSLA(0, 0, 100, 0.13),
     transparent: new HSLA(0, 0, 0, 0),
+    danger: new HSLA(0, 82, 57, 1),
   },
 };
