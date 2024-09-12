@@ -11,6 +11,7 @@ import {
   IconButton,
   ActionsWrapper,
   InfoPill,
+  GradientText,
 } from './VaultBackupPage.styles';
 import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
 import { z } from 'zod';
@@ -133,7 +134,9 @@ const VaultBackupPage = () => {
               {t('vault_backup_page_submit_button_text')}
             </Button>
             <Button kind="outlined" type="button">
-              {t('vault_backup_page_skip_button_text')}
+              <GradientText>
+                {t('vault_backup_page_skip_button_text')}
+              </GradientText>
             </Button>
           </ActionsWrapper>
         </VStack>

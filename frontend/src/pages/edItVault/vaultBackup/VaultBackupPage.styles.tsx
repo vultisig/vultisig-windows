@@ -4,6 +4,7 @@ import { borderRadius } from '../../../lib/ui/css/borderRadius';
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Button } from '../../../lib/ui/buttons/Button';
+import { Text } from '../../../lib/ui/text';
 
 export const InputFieldWrapper = styled.div`
   position: relative;
@@ -42,4 +43,12 @@ export const InfoPill = styled(Button)`
   justify-content: flex-start;
   gap: 4px;
   height: 40px;
+`;
+
+export const GradientText = styled(Text)`
+  background: linear-gradient(90deg, #33e6bf, #0439c7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 `;
