@@ -7,7 +7,7 @@ import { IRpcService } from '../IRpcService';
 
 export class RpcServiceThorchain implements IRpcService {
   async calculateFee(_coin?: Coin): Promise<number> {
-    let urlString = Endpoint.fetchThorchainNetworkInfoNineRealms;
+    const urlString = Endpoint.fetchThorchainNetworkInfoNineRealms;
     const response = await fetch(urlString);
     const data = await response.json();
 
@@ -21,7 +21,7 @@ export class RpcServiceThorchain implements IRpcService {
   }
 
   async getBalance(coin: Coin): Promise<string> {
-    let url = Endpoint.fetchAccountBalanceThorchainNineRealms(coin.address);
+    const url = Endpoint.fetchAccountBalanceThorchainNineRealms(coin.address);
     const response = await fetch(url, {
       headers: {
         'X-Client-ID': 'vultisig',
@@ -54,7 +54,7 @@ export class RpcServiceThorchain implements IRpcService {
   }
 
   async resolveENS?(ensName: string): Promise<string> {
-    let url = Endpoint.resolveTNS(ensName);
+    const url = Endpoint.resolveTNS(ensName);
     const response = await fetch(url);
     const data = await response.json();
     const entry = data.entries.find(
@@ -102,7 +102,7 @@ export class RpcServiceThorchain implements IRpcService {
       return chainID;
     }
 
-    let urlString = Endpoint.thorchainNetworkInfo;
+    const urlString = Endpoint.thorchainNetworkInfo;
     const response = await fetch(urlString);
     const data = await response.json();
     const network = data.result.node_info.network;
