@@ -1,6 +1,7 @@
 import styled, { DefaultTheme, css } from 'styled-components';
 import { cropText } from '../css/cropText';
 import { toSizeUnit } from '../css/toSizeUnit';
+import { match } from '../../utils/match';
 
 const getTextColorRecord = ({ colors }: DefaultTheme) =>
   ({
@@ -12,6 +13,7 @@ const getTextColorRecord = ({ colors }: DefaultTheme) =>
     primaryAlt: colors.primaryAlt,
     reversed: colors.background,
     contrast: colors.contrast,
+    danger: colors.danger,
   }) as const;
 
 type TextHeight = 'small' | 'regular' | 'large';
@@ -20,6 +22,8 @@ const lineHeight: Record<TextHeight, number> = {
   regular: 1.2,
   large: 1.5,
 };
+
+export type TextFontFamily = 'regular' | 'mono';
 
 export type TextColor = keyof ReturnType<typeof getTextColorRecord>;
 
@@ -32,6 +36,7 @@ export interface TextProps {
   centerVertically?: boolean;
   cropped?: boolean;
   nowrap?: boolean;
+  family?: TextFontFamily;
   as?: React.ElementType;
 }
 
@@ -78,4 +83,10 @@ export const Text = styled.p<TextProps>`
       display: inline-flex;
       align-items: center;
     `}
+
+  font-family: ${({ family = 'regular' }) =>
+    match(family, {
+      mono: () => 'Menlo, monospace',
+      regular: () => 'inherit',
+    })};
 `;

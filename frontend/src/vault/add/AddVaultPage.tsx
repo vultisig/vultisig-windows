@@ -12,7 +12,7 @@ export const AddVaultPage = () => {
   const { t } = useTranslation();
 
   return (
-    <VStack fill>
+    <VStack flexGrow>
       <PageHeader primaryControls={<PageHeaderBackButton />} />
       <PageContent gap={16}>
         <ProductLogoBlock />

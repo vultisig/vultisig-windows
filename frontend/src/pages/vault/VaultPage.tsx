@@ -37,7 +37,7 @@ export const VaultPage = () => {
   const { t } = useTranslation();
 
   return (
-    <VStack fill data-testid="VaultPage-Container">
+    <VStack flexGrow data-testid="VaultPage-Container">
       <PageHeader
         hasBorder
         primaryControls={
@@ -65,7 +65,7 @@ export const VaultPage = () => {
         }
       />
 
-      <VStack fill>
+      <VStack flexGrow>
         <Match
           value={view}
           balances={() => (

@@ -1,5 +1,4 @@
 import { Chain } from '../../model/chain';
-import { useAsserCurrentVaultChainCoins } from '../state/useCurrentVault';
 import { areEqualCoins, CoinAmount, CoinInfo, CoinKey } from '../../coin/Coin';
 import { EntityWithPrice } from '../../chain/EntityWithPrice';
 import { CoinMeta } from '../../model/coin-meta';
@@ -18,6 +17,7 @@ import {
 import { withoutUndefined } from '../../lib/utils/array/withoutUndefined';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
+import { useAssertCurrentVaultChainCoins } from '../state/useCurrentVault';
 
 export type VaultChainCoin = CoinKey &
   CoinAmount &
@@ -25,7 +25,7 @@ export type VaultChainCoin = CoinKey &
   Partial<EntityWithPrice>;
 
 export const useVaultChainCoinsQuery = (chain: Chain) => {
-  const coins = useAsserCurrentVaultChainCoins(chain);
+  const coins = useAssertCurrentVaultChainCoins(chain);
 
   const pricesQuery = useCoinPricesQuery(
     coins.map(storageCoinToCoin).map(CoinMeta.fromCoin)

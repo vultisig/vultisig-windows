@@ -14,10 +14,10 @@ export const UploadQrPage = () => {
   const { mutate, isPending, error } = useProcessQrMutation();
 
   return (
-    <VStack fill>
+    <VStack flexGrow>
       <UploadQrPageHeader />
-      <PageContent fill justifyContent="space-between" fullWidth gap={20}>
-        <VStack fullWidth alignItems="center" fill gap={20}>
+      <PageContent flexGrow justifyContent="space-between" fullWidth gap={20}>
+        <VStack fullWidth alignItems="center" flexGrow gap={20}>
           <Text color="contrast" size={16} weight="700">
             Upload QR-Code to join Keysign
           </Text>

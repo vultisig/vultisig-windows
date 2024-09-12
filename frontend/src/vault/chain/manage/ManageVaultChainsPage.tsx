@@ -9,7 +9,7 @@ import { ManageVaultChain } from './ManageVaultChain';
 
 export const ManageVaultChainsPage = () => {
   return (
-    <VStack fill>
+    <VStack flexGrow>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>Choose chains</PageHeaderTitle>}

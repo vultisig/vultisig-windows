@@ -43,7 +43,7 @@ export const VaultChainCoinPage = () => {
   const pricesQuery = useCoinPricesQuery([CoinMeta.fromCoin(coin)]);
 
   return (
-    <VStack fill>
+    <VStack flexGrow>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={

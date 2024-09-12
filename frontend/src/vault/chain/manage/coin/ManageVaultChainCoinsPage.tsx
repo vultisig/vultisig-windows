@@ -16,7 +16,7 @@ export const ManageVaultChainCoinsPage = () => {
   );
 
   return (
-    <VStack fill>
+    <VStack flexGrow>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>Choose coins</PageHeaderTitle>}

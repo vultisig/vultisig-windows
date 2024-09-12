@@ -1,6 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
 import VerifyTransaction from './components/sendCrypto/VerifyTransaction';
-import { addVaultPath, importVaultPath, setupVaultPath } from './navigation';
+import {
+  addressPath,
+  addVaultPath,
+  importVaultPath,
+  setupVaultPath,
+} from './navigation';
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
 import ImportVaultView from './pages/importVault/ImportVaultView';
 import JoinKeygenView from './pages/keygen/JoinKeygenView';
@@ -18,6 +23,10 @@ import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPag
 import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
+import EditVaultPage from './pages/edItVault/EditVaultPage';
+import VaultDetailsPage from './pages/edItVault/vaultDetails/VaultDetailsPage';
+import { AddressPage } from './chain/components/address/AddressPage';
+import VaultBackupPage from './pages/edItVault/vaultBackup/VaultBackupPage';
 
 export const router = createBrowserRouter([
   {
@@ -90,4 +99,17 @@ export const router = createBrowserRouter([
     path: '/vault/item/send/verify',
     element: <VerifyTransaction />,
   },
+  {
+    path: '/vault/settings/vault-settings',
+    element: <EditVaultPage />,
+  },
+  {
+    path: '/vault/settings/vault-settings/details',
+    element: <VaultDetailsPage />,
+  },
+  {
+    path: '/vault/settings/vault-settings/backup-vault',
+    element: <VaultBackupPage />,
+  },
+  { path: addressPath, element: <AddressPage /> },
 ]);
