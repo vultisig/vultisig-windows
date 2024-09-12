@@ -9,6 +9,8 @@ import {
   InputField,
   InputFieldWrapper,
   IconButton,
+  ActionsWrapper,
+  InfoPill,
 } from './VaultBackupPage.styles';
 import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
 import { z } from 'zod';
@@ -16,6 +18,7 @@ import { FieldValues, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { useState } from 'react';
+import InfoGradientIcon from '../../../lib/ui/icons/InfoGradientIcon';
 
 const passwordSchema = z
   .object({
@@ -38,7 +41,7 @@ const VaultBackupPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm({
     resolver: zodResolver(passwordSchema),
     mode: 'onBlur',
@@ -58,59 +61,81 @@ const VaultBackupPage = () => {
           <PageHeaderTitle>{t('vault_backup_page_title')}</PageHeaderTitle>
         }
       />
-      <PageSlice gap={16}>
+      <PageSlice gap={16} flexGrow={true}>
         <Text size={16} color="contrast" weight="600">
           {t('vault_backup_page_password_protection')}
         </Text>
-        <VStack gap={12} as="form" onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <InputFieldWrapper>
-              <InputField
-                type={isPasswordVisible ? 'text' : 'password'}
-                placeholder={t('vault_backup_page_password_input_placeholder')}
-                {...register('password')}
-              />
+        <VStack
+          flexGrow={true}
+          justifyContent="space-between"
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <VStack gap={12}>
+            <div>
+              <InputFieldWrapper>
+                <InputField
+                  type={isPasswordVisible ? 'text' : 'password'}
+                  placeholder={t(
+                    'vault_backup_page_password_input_placeholder'
+                  )}
+                  {...register('password')}
+                />
 
-              <IconButton
-                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-              >
-                <EyeIcon />
-              </IconButton>
-            </InputFieldWrapper>
-            {errors.password?.message && (
-              <Text size={12} color="danger">
-                {typeof errors.password.message === 'string' &&
-                  t(errors.password.message)}
-              </Text>
-            )}
-          </div>
-          <div>
-            <InputFieldWrapper>
-              <InputField
-                type={isVerifiedPasswordVisible ? 'text' : 'password'}
-                placeholder={t(
-                  'vault_backup_page_verified_password_input_placeholder'
-                )}
-                {...register('verifiedPassword')}
-              />
+                <IconButton
+                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                >
+                  <EyeIcon />
+                </IconButton>
+              </InputFieldWrapper>
+              {errors.password?.message && (
+                <Text size={12} color="danger">
+                  {typeof errors.password.message === 'string' &&
+                    t(errors.password.message)}
+                </Text>
+              )}
+            </div>
+            <div>
+              <InputFieldWrapper>
+                <InputField
+                  type={isVerifiedPasswordVisible ? 'text' : 'password'}
+                  placeholder={t(
+                    'vault_backup_page_verified_password_input_placeholder'
+                  )}
+                  {...register('verifiedPassword')}
+                />
 
-              <IconButton
-                onClick={() =>
-                  setIsVerifiedPasswordVisible(!isVerifiedPasswordVisible)
-                }
-              >
-                <EyeIcon />
-              </IconButton>
-            </InputFieldWrapper>
-            {errors.verifiedPassword && (
-              <Text size={12} color="danger">
-                {' '}
-                {typeof errors.verifiedPassword.message === 'string' &&
-                  t(errors.verifiedPassword.message)}
+                <IconButton
+                  onClick={() =>
+                    setIsVerifiedPasswordVisible(!isVerifiedPasswordVisible)
+                  }
+                >
+                  <EyeIcon />
+                </IconButton>
+              </InputFieldWrapper>
+              {errors.verifiedPassword && (
+                <Text size={12} color="danger">
+                  {' '}
+                  {typeof errors.verifiedPassword.message === 'string' &&
+                    t(errors.verifiedPassword.message)}
+                </Text>
+              )}
+            </div>
+          </VStack>
+          <ActionsWrapper gap={16}>
+            <InfoPill kind="outlined">
+              <InfoGradientIcon />{' '}
+              <Text color="contrast" size={13}>
+                {t('vault_backup_page_password_info')}
               </Text>
-            )}
-          </div>
-          <Button type="submit">{t('submit_button_text')}</Button>
+            </InfoPill>
+            <Button isDisabled={!isValid || !isDirty} type="submit">
+              {t('vault_backup_page_submit_button_text')}
+            </Button>
+            <Button kind="outlined" type="button">
+              {t('vault_backup_page_skip_button_text')}
+            </Button>
+          </ActionsWrapper>
         </VStack>
       </PageSlice>
     </VStack>
