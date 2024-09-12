@@ -3,13 +3,13 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
-import { Container, ListItemPanel } from './DetailsVaultPage.styles';
+import { Container, ListItemPanel } from './VaultDetailsPage.styles';
 import { Text } from '../../../lib/ui/text';
 import { useCurrentVault } from '../../../vault/state/useCurrentVault';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { AutoCenteredText } from '../EditVaultPage.styles';
 
-const DetailsVaultPage = () => {
+const VaultDetailsPage = () => {
   const { t } = useTranslation();
   const currentVault = useCurrentVault();
 
@@ -28,14 +28,12 @@ const DetailsVaultPage = () => {
 
   const m = keyshares.length;
 
-  // Determine n based on your logic.
-  // If there are more than 3 keyshares, display "N of M Vault".
   let vaultTypeText;
 
   if (m > 3) {
     vaultTypeText = `N of ${m} Vault`;
   } else {
-    // For cases where it's 2 of 2 or 2 of 3
+    // For cases where it's 2 of 2 or 2 of 3 vaults
     const n = 2;
     vaultTypeText = `${n} of ${m} Vault`;
   }
@@ -44,7 +42,6 @@ const DetailsVaultPage = () => {
     <Container flexGrow gap={16}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        hasBorder
         title={
           <PageHeaderTitle>{t('vault_details_page_title')}</PageHeaderTitle>
         }
@@ -85,4 +82,4 @@ const DetailsVaultPage = () => {
   );
 };
 
-export default DetailsVaultPage;
+export default VaultDetailsPage;
