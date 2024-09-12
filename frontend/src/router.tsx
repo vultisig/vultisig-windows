@@ -18,6 +18,8 @@ import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPag
 import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
+import EditVaultPage from './pages/edItVault/EditVaultPage';
+import DetailsVaultPage from './pages/edItVault/vaultDetails/DetailsVaultPage';
 
 export const router = createBrowserRouter([
   {
@@ -89,5 +91,13 @@ export const router = createBrowserRouter([
   {
     path: '/vault/item/send/verify',
     element: <VerifyTransaction />,
+  },
+  {
+    path: '/vault/settings/vault-settings',
+    element: <EditVaultPage />,
+  },
+  {
+    path: '/vault/settings/vault-settings/details',
+    element: <DetailsVaultPage />,
   },
 ]);
