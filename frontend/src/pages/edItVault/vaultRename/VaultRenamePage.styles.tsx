@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { borderRadius } from '../../../lib/ui/css/borderRadius';
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
-import { VStack } from '../../../lib/ui/layout/Stack';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { Text } from '../../../lib/ui/text';
 
@@ -15,6 +14,9 @@ export const InputFieldWrapper = styled.div`
 
 export const InputField = styled.input`
   background-color: transparent;
+  font-size: 16px;
+  font-weight: 500;
+  color: ${getColor('contrast')};
   display: block;
   width: 100%;
 
@@ -35,10 +37,6 @@ export const IconButton = styled(UnstyledButton)`
   transform: translateY(-50%);
 `;
 
-export const ActionsWrapper = styled(VStack)`
-  margin-bottom: 32px;
-`;
-
 export const InfoPill = styled(Button)`
   pointer-events: none;
   justify-content: flex-start;
@@ -52,4 +50,8 @@ export const GradientText = styled(Text)`
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-fill-color: transparent;
+`;
+
+export const ButtonWithBottomSpace = styled(Button)`
+  margin-bottom: 32px;
 `;

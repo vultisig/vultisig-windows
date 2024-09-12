@@ -27,6 +27,7 @@ import EditVaultPage from './pages/edItVault/EditVaultPage';
 import VaultDetailsPage from './pages/edItVault/vaultDetails/VaultDetailsPage';
 import { AddressPage } from './chain/components/address/AddressPage';
 import VaultBackupPage from './pages/edItVault/vaultBackup/VaultBackupPage';
+import VaultRenamePage from './pages/edItVault/vaultRename/VaultRenamePage';
 
 export const router = createBrowserRouter([
   {
@@ -110,6 +111,10 @@ export const router = createBrowserRouter([
   {
     path: '/vault/settings/vault-settings/backup-vault',
     element: <VaultBackupPage />,
+  },
+  {
+    path: '/vault/settings/vault-settings/rename-vault',
+    element: <VaultRenamePage />,
   },
   { path: addressPath, element: <AddressPage /> },
 ]);
