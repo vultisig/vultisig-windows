@@ -3,13 +3,13 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
-import { Container, ListItemPanel } from './DetailsVaultPage.styles';
+import { Container, ListItemPanel } from './VaultDetailsPage.styles';
 import { Text } from '../../../lib/ui/text';
 import { useCurrentVault } from '../../../vault/state/useCurrentVault';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { AutoCenteredText } from '../EditVaultPage.styles';
 
-const DetailsVaultPage = () => {
+const VaultDetailsPage = () => {
   const { t } = useTranslation();
   const currentVault = useCurrentVault();
 
@@ -17,19 +17,23 @@ const DetailsVaultPage = () => {
     return <></>;
   }
 
-  const { name, public_key_eddsa, public_key_ecdsa, keyshares, signers } =
-    currentVault;
+  const {
+    name,
+    public_key_eddsa,
+    public_key_ecdsa,
+    keyshares,
+    signers,
+    local_party_id,
+  } = currentVault;
 
   const m = keyshares.length;
 
-  // Determine n based on your logic.
-  // If there are more than 3 keyshares, display "N of M Vault".
   let vaultTypeText;
 
   if (m > 3) {
     vaultTypeText = `N of ${m} Vault`;
   } else {
-    // For cases where it's 2 of 2 or 2 of 3
+    // For cases where it's 2 of 2 or 2 of 3 vaults
     const n = 2;
     vaultTypeText = `${n} of ${m} Vault`;
   }
@@ -38,7 +42,6 @@ const DetailsVaultPage = () => {
     <Container flexGrow gap={16}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        hasBorder
         title={
           <PageHeaderTitle>{t('vault_details_page_title')}</PageHeaderTitle>
         }
@@ -53,13 +56,13 @@ const DetailsVaultPage = () => {
         <ListItemPanel>
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_ECDSA')}</Text>
-            <Text size={13}>{public_key_eddsa}</Text>
+            <Text size={13}>{public_key_ecdsa}</Text>
           </VStack>
         </ListItemPanel>
         <ListItemPanel>
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_EDDSA')}</Text>
-            <Text size={13}>{public_key_ecdsa}</Text>
+            <Text size={13}>{public_key_eddsa}</Text>
           </VStack>
         </ListItemPanel>
         <AutoCenteredText weight={600} color="contrast">
@@ -68,7 +71,9 @@ const DetailsVaultPage = () => {
         {signers.map((signer, index) => (
           <ListItemPanel key={index}>
             <VStack fullWidth alignItems="start" justifyContent="space-between">
-              <Text weight={900}>{signer}</Text>
+              <Text weight={900}>
+                {signer} {signer === local_party_id && '(This device)'}
+              </Text>
             </VStack>
           </ListItemPanel>
         ))}
@@ -77,4 +82,4 @@ const DetailsVaultPage = () => {
   );
 };
 
-export default DetailsVaultPage;
+export default VaultDetailsPage;

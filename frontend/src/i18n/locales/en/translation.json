@@ -107,6 +107,7 @@
   "joining_keysign": "Joining Keysign",
   "wrong_vault_try_again": "Wrong Vault or Pair Device.",
   "vault_details_page_title": "Details",
+  "vault_backup_page_title": "Backup",
   "vault_details_page_vault_name": "Vault Name",
   "vault_details_page_vault_ECDSA": "ECDSA",
   "vault_details_page_vault_EDDSA": "EdDSA",
@@ -134,5 +135,13 @@
   "vault_setting_edit_vault_delete_title": "Delete",
   "vault_setting_edit_vault_delete_subtitle": "Delete your vault permanently",
   "address": "Address",
-  "download_qr_code": "Download QR Code"
+  "download_qr_code": "Download QR Code",
+  "vault_backup_page_password_protection": "Optional password protection of your Vault",
+  "vault_backup_page_password_error": "Set a strong password and save it.",
+  "vault_backup_page_password_input_placeholder": "Enter password",
+  "vault_backup_page_verified_password_input_placeholder": "Verify password",
+  "vault_backup_page_verified_password_error": "Passwords must match",
+  "vault_backup_page_submit_button_text": "Save",
+  "vault_backup_page_skip_button_text": "Skip",
+  "vault_backup_page_password_info": "Never store Vault Shares from different devices in the same location"
 }
