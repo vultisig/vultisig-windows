@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
@@ -140,21 +139,6 @@ export class RpcServiceThorchain implements IRpcService {
     throw new Error('Method not implemented.');
   }
   fetchTokens?(_nativeToken: Coin): Promise<CoinMeta[]> {
-    throw new Error('Method not implemented.');
-  }
-  fetchRecentBlockhash?(): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
-  fetchTokenAssociatedAccountByOwner?(
-    _walletAddress: string,
-    _mintAddress: string
-  ): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
-  fetchTokenAccountsByOwner?(_walletAddress: string): Promise<[]> {
-    throw new Error('Method not implemented.');
-  }
-  fetchHighPriorityFee?(_account: string): Promise<number> {
     throw new Error('Method not implemented.');
   }
 }

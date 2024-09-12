@@ -1,5 +1,4 @@
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
-import { CoinMeta } from '../../model/coin-meta';
 import { FeeMode } from '../../model/evm-fee-mode';
 import { SpecificGasInfo } from '../../model/gas-info';
 
@@ -11,41 +10,4 @@ export interface IRpcService {
   resolveENS?(ensName: string): Promise<string>;
   getGasInfo(coin: Coin, feeMode?: FeeMode): Promise<SpecificGasInfo>;
   calculateFee(coin?: Coin): Promise<number>;
-
-  // Speficic methods
-  // TODO: remove and create a IRpcService interface for EVM and Solana
-  // But maybe I will simply remove it because it might not be used at all
-  // Once I implment Solana and EVM I will remove them
-  estimateGas?(
-    senderAddress: string,
-    recipientAddress: string,
-    value: bigint,
-    memo?: string
-  ): Promise<bigint>;
-
-  fetchTokenBalance?(
-    contractAddress: string,
-    walletAddress: string
-  ): Promise<bigint>;
-
-  fetchAllowance?(
-    contractAddress: string,
-    owner: string,
-    spender: string
-  ): Promise<bigint>;
-
-  getTokenInfo?(
-    contractAddress: string
-  ): Promise<{ name: string; symbol: string; decimals: number }>;
-
-  fetchTokens?(nativeToken: Coin): Promise<CoinMeta[]>;
-
-  // Solana-specific methods
-  fetchRecentBlockhash?(): Promise<string>;
-  fetchTokenAssociatedAccountByOwner?(
-    walletAddress: string,
-    mintAddress: string
-  ): Promise<string>;
-  fetchTokenAccountsByOwner?(walletAddress: string): Promise<any[]>;
-  fetchHighPriorityFee?(account: string): Promise<number>;
 }

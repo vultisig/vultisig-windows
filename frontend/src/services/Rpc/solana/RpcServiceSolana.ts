@@ -47,7 +47,7 @@ export class RpcServiceSolana implements IRpcService {
     return this.sendTransaction(hex);
   }
 
-  async fetchRecentBlockhash(): Promise<string> {
+  private async fetchRecentBlockhash(): Promise<string> {
     const requestBody = {
       jsonrpc: '2.0',
       id: 1,

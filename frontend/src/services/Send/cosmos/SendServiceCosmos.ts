@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { ISendService } from '../ISendService';
 import { SendService } from '../SendService';
 
