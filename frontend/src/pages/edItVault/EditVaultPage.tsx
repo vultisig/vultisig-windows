@@ -21,14 +21,14 @@ const EditVaultPage = () => {
   const navigate = useNavigate();
 
   return (
-    <Container fill gap={16}>
+    <Container flexGrow gap={16}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         hasBorder
         title={<PageHeaderTitle>{t('vault_edit_page_title')}</PageHeaderTitle>}
       />
       <PageSlice>
-        <VStack fill gap={12}>
+        <VStack flexGrow gap={12}>
           {editVaultSettingsItems.map(
             ({ path, titleKey, subtitleKey, icon: Icon, textColor }, index) => (
               <UnstyledButton key={index} onClick={() => navigate(path)}>
