@@ -46,6 +46,6 @@ export interface IRpcService {
     walletAddress: string,
     mintAddress: string
   ): Promise<string>;
-  fetchTokenAccountsByOwner?(walletAddress: string): Promise<[]>;
+  fetchTokenAccountsByOwner?(walletAddress: string): Promise<any[]>;
   fetchHighPriorityFee?(account: string): Promise<number>;
 }
