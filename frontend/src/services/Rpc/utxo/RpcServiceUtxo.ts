@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../../model/coin-meta';
 import { SpecificUtxo, SpecificUtxoInfo } from '../../../model/gas-info';
@@ -16,19 +15,19 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
   }
 
   async getBalance(coin: Coin): Promise<string> {
-    let coinName = coin.chain.toLowerCase();
-    let url = Endpoint.blockchairDashboard(coin.address, coinName);
-    let request = await fetch(url);
-    let response = await request.json();
-    let balance = response.data[coin.address].address.balance;
+    const coinName = coin.chain.toLowerCase();
+    const url = Endpoint.blockchairDashboard(coin.address, coinName);
+    const request = await fetch(url);
+    const response = await request.json();
+    const balance = response.data[coin.address].address.balance;
     return balance;
   }
 
   private async getUtxos(coin: Coin): Promise<SpecificUtxoInfo[]> {
-    let coinName = coin.chain.toLowerCase();
-    let url = Endpoint.blockchairDashboard(coin.address, coinName);
-    let request = await fetch(url);
-    let response = await request.json();
+    const coinName = coin.chain.toLowerCase();
+    const url = Endpoint.blockchairDashboard(coin.address, coinName);
+    const request = await fetch(url);
+    const response = await request.json();
     return response.data[coin.address].utxo.map((utxo: any) => {
       return {
         hash: utxo.transaction_hash,
@@ -72,36 +71,36 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
   }
 
   // No need to implement the following methods for UTXO
-  resolveENS?(ensName: string): Promise<string> {
+  resolveENS?(_ensName: string): Promise<string> {
     throw new Error('Method not implemented, UTXO does not have ENS.');
   }
   estimateGas?(
-    senderAddress: string,
-    recipientAddress: string,
-    value: bigint,
-    memo?: string
+    _senderAddress: string,
+    _recipientAddress: string,
+    _value: bigint,
+    _memo?: string
   ): Promise<bigint> {
     throw new Error('Method not implemented.');
   }
   fetchTokenBalance?(
-    contractAddress: string,
-    walletAddress: string
+    _contractAddress: string,
+    _walletAddress: string
   ): Promise<bigint> {
     throw new Error('Method not implemented.');
   }
   fetchAllowance?(
-    contractAddress: string,
-    owner: string,
-    spender: string
+    _contractAddress: string,
+    _owner: string,
+    _spender: string
   ): Promise<bigint> {
     throw new Error('Method not implemented.');
   }
   getTokenInfo?(
-    contractAddress: string
+    _contractAddress: string
   ): Promise<{ name: string; symbol: string; decimals: number }> {
     throw new Error('Method not implemented.');
   }
-  fetchTokens?(nativeToken: Coin): Promise<CoinMeta[]> {
+  fetchTokens?(_nativeToken: Coin): Promise<CoinMeta[]> {
     throw new Error('Method not implemented.');
   }
 }
