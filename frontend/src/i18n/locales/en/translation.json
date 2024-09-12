@@ -132,5 +132,7 @@
   "vault_setting_edit_vault_reshare_title": "Reshare",
   "vault_setting_edit_vault_reshare_subtitle": "Reshare vault with new committee",
   "vault_setting_edit_vault_delete_title": "Delete",
-  "vault_setting_edit_vault_delete_subtitle": "Delete your vault permanently"
+  "vault_setting_edit_vault_delete_subtitle": "Delete your vault permanently",
+  "address": "Address",
+  "download_qr_code": "Download QR Code"
 }

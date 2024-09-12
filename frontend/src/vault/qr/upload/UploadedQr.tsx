@@ -22,7 +22,7 @@ const IconContainer = styled(IconWrapper)`
 
 export const UploadedQr = ({ value, onRemove }: UploadQrProps) => {
   return (
-    <VStack fullWidth fill gap={20}>
+    <VStack fullWidth flexGrow gap={20}>
       <QrImageDropZoneContainer>
         <ContainImage src={URL.createObjectURL(value)} alt="Uploaded QR Code" />
       </QrImageDropZoneContainer>
