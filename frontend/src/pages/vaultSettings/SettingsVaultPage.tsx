@@ -21,7 +21,7 @@ const SettingsVaultPage = () => {
   const { t } = useTranslation();
 
   return (
-    <Container fill gap={16}>
+    <Container flexGrow gap={16}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         hasBorder
@@ -29,8 +29,8 @@ const SettingsVaultPage = () => {
           <PageHeaderTitle>{t('vault_settings_page_title')}</PageHeaderTitle>
         }
       />
-      <PageSlice data-testid="SettingsVaultPage-Container" fill>
-        <VStack fill>
+      <PageSlice data-testid="SettingsVaultPage-Container" flexGrow>
+        <VStack flexGrow>
           <ScrollableFlexboxFiller>
             {settingsItems.map(({ sectionTitleKey, items }, index) => (
               <StyledVStack key={index} gap={12}>

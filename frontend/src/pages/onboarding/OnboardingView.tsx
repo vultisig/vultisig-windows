@@ -117,7 +117,7 @@ const OnboardingView: React.FC = () => {
 
   return (
     <PageContent>
-      <VStack alignItems="center" justifyContent="center" fill>
+      <VStack alignItems="center" justifyContent="center" flexGrow>
         {screens[currentScreen].content}
       </VStack>
       <div className="flex justify-center mt-10">

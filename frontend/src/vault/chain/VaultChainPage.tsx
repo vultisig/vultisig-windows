@@ -5,7 +5,6 @@ import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
-import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { Panel } from '../../lib/ui/panel/Panel';
@@ -31,6 +30,7 @@ import { VaultChainCoinItem } from './VaultChainCoinItem';
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
 import { VaultAddressLink } from './VaultAddressLink';
 import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
+import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt';
 
 export const VaultChainPage = () => {
   const chainId = useCurrentVaultChainId();
@@ -48,7 +48,7 @@ export const VaultChainPage = () => {
   const copyAddress = useCopyAddress();
 
   return (
-    <VStack fill>
+    <VStack flexGrow>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
@@ -76,22 +76,22 @@ export const VaultChainPage = () => {
                   {chainId}
                 </Text>
               </HStack>
-              <HStack>
-                <QueryDependant
-                  query={vaultAddressQuery}
-                  success={address => (
+              <QueryDependant
+                query={vaultAddressQuery}
+                success={address => (
+                  <HStack>
                     <IconButton
                       onClick={() => copyAddress(address)}
                       title="Copy address"
                       icon={<CopyIcon />}
                     />
-                  )}
-                  error={() => null}
-                  pending={() => null}
-                />
-                <IconButton title="Address QR code" icon={<QrCodeIcon />} />
-                <VaultAddressLink />
-              </HStack>
+                    <AddressPageShyPrompt value={address} />
+                    <VaultAddressLink value={address} />
+                  </HStack>
+                )}
+                error={() => null}
+                pending={() => null}
+              />
             </HStack>
             <QueryDependant
               query={vaultCoinsQuery}
