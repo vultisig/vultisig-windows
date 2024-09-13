@@ -97,22 +97,8 @@ export class BlockchainServiceSolana
                 }),
             });
 
-            // Logging each field
-            console.log('Transfer Transaction:');
-            console.log('  Recipient:', input.transferTransaction?.recipient);
-            console.log('  Value:', input.transferTransaction?.value.toString());
-            console.log('  Memo:', input.transferTransaction?.memo);
-
-            console.log('Recent Blockhash:', input.recentBlockhash);
-            console.log('Sender:', input.sender);
-
-            console.log('Priority Fee:');
-            console.log('  Price:', input.priorityFeePrice?.price.toString());
-
             // Encode the input
             const encodedInput = TW.Solana.Proto.SigningInput.encode(input).finish();
-
-            console.log('encodedInput:', this.walletCore.HexCoding.encode(encodedInput));
 
             return encodedInput;
 
@@ -124,7 +110,7 @@ export class BlockchainServiceSolana
                     tokenMintAddress: keysignPayload.coin.contractAddress,
                     senderTokenAddress: fromTokenAssociatedAddress,
                     recipientTokenAddress: toTokenAssociatedAddress,
-                    amount: BigInt(keysignPayload.toAmount),
+                    amount: Long.fromString(keysignPayload.toAmount),
                     decimals: keysignPayload.coin.decimals,
                 });
 
@@ -133,7 +119,7 @@ export class BlockchainServiceSolana
                     recentBlockhash: recentBlockHash,
                     sender: keysignPayload.coin.address,
                     priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-                        price: BigInt(priorityFee),
+                        price: Long.fromString(priorityFee),
                     }),
                 });
 
@@ -153,7 +139,7 @@ export class BlockchainServiceSolana
                     tokenMintAddress: keysignPayload.coin.contractAddress,
                     recipientTokenAddress: generatedAssociatedAddress,
                     senderTokenAddress: fromTokenAssociatedAddress,
-                    amount: BigInt(keysignPayload.toAmount),
+                    amount: Long.fromString(keysignPayload.toAmount),
                     decimals: keysignPayload.coin.decimals,
                 });
 
@@ -162,7 +148,7 @@ export class BlockchainServiceSolana
                     recentBlockhash: recentBlockHash,
                     sender: keysignPayload.coin.address,
                     priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-                        price: BigInt(priorityFee),
+                        price: Long.fromString(priorityFee),
                     }),
                 });
 
@@ -189,22 +175,16 @@ export class BlockchainServiceSolana
         // Decode the result into a Solana-specific PreSigningOutput
         const preSigningOutput = TW.Solana.Proto.PreSigningOutput.decode(preHashes);
 
-        console.log(preSigningOutput.errorMessage);
-
         // Check for any error messages
         if (preSigningOutput.errorMessage !== '') {
             console.error('preSigningOutput error:', preSigningOutput.errorMessage);
             throw new Error(preSigningOutput.errorMessage);
         }
 
-        console.log('preSigningOutput:', preSigningOutput);
-
         // Convert the result data to hex, and ensure consistency with Swift output
         const imageHashes = [
             this.walletCore.HexCoding.encode(preSigningOutput.data).stripHexPrefix(),
         ];
-
-        console.log('imageHashes:', imageHashes[0].toString());
 
         return imageHashes;
     }
@@ -233,21 +213,12 @@ export class BlockchainServiceSolana
             this.walletCore.CoinTypeExt.derivationPath(this.coinType)
         );
 
-        console.log('solanaPublicKey:', solanaPublicKey);
-
-
         const publicKeyData = Buffer.from(solanaPublicKey, 'hex');
-
-        console.log('publicKeyData:', publicKeyData);
 
         const publicKey = this.walletCore.PublicKey.createWithData(
             publicKeyData,
             this.walletCore.PublicKeyType.ed25519
         );
-
-        console.log('publicKey:', publicKey);
-
-        console.log('publicKey:', publicKey.data);
 
         const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
             this.coinType,
@@ -266,6 +237,7 @@ export class BlockchainServiceSolana
             this.walletCore,
             signatures
         );
+
         const signature = signatureProvider.getSignatureWithRecoveryId(
             preSigningOutput.data
         );
