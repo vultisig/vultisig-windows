@@ -8,7 +8,6 @@ const getTextColorRecord = ({ colors }: DefaultTheme) =>
     regular: colors.text,
     supporting: colors.textSupporting,
     shy: colors.textShy,
-
     primary: colors.primary,
     primaryAlt: colors.primaryAlt,
     reversed: colors.background,
