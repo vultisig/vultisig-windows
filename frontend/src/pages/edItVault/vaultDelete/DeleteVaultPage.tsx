@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -10,11 +10,14 @@ import DangerSignRedIcon from '../../../lib/ui/icons/DangerSignRedIcon';
 import {
   ActionsWrapper,
   Check,
+  Container,
   DeleteButton,
   ListItemPanel,
 } from './DeleteVaultPage.styles';
 import { useCurrentVault } from '../../../vault/state/useCurrentVault';
 import { getVaultTypeText } from '../../../utils/util';
+import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery';
+import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation';
 
 const DeleteVaultPage = () => {
   const [deleteTerms, setDeleteTerms] = useState({
@@ -25,6 +28,8 @@ const DeleteVaultPage = () => {
 
   const { t } = useTranslation();
   const currentVault = useCurrentVault();
+  const { data: vaultBalance } = useVaultTotalBalanceQuery();
+  const { mutate: deleteVault, isPending, error } = useDeleteVaultMutation();
 
   if (!currentVault) {
     return <></>;
@@ -42,7 +47,7 @@ const DeleteVaultPage = () => {
   const vaultTypeText = getVaultTypeText(m, t);
 
   return (
-    <VStack flexGrow gap={16}>
+    <Container flexGrow gap={16}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={
@@ -72,8 +77,7 @@ const DeleteVaultPage = () => {
               </HStack>
               <HStack gap={8}>
                 <Text weight={600}>{t('vault_delete_page_vault_value')}:</Text>
-                {/* TODO: @tony to ask how to derive this value */}
-                <Text size={14}>{}</Text>
+                <Text size={14}>{vaultBalance}</Text>
               </HStack>
               <HStack gap={8}>
                 <Text weight={600}>{t('vault_delete_page_vault_type')}:</Text>
@@ -139,6 +143,8 @@ const DeleteVaultPage = () => {
               </HStack>
             </ActionsWrapper>
             <DeleteButton
+              isLoading={isPending}
+              onClick={() => deleteVault(public_key_ecdsa)}
               color="danger"
               isDisabled={
                 !deleteTerms.firstTermAccepted ||
@@ -148,10 +154,15 @@ const DeleteVaultPage = () => {
             >
               {t('vault_delete_button_text')}
             </DeleteButton>
+            {error && (
+              <Text size={12} color="danger">
+                {error?.message}
+              </Text>
+            )}
           </VStack>
         </VStack>
       </PageSlice>
-    </VStack>
+    </Container>
   );
 };
 

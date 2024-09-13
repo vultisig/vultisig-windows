@@ -132,5 +132,12 @@ export const router = createBrowserRouter([
     path: '/vault/settings/vault-settings/delete-vault',
     element: <DeleteVaultPage />,
   },
+<<<<<<< Updated upstream
+=======
+  {
+    path: '/vault/settings/language-settings',
+    element: <LanguageSettingsPage />,
+  },
+>>>>>>> Stashed changes
   { path: addressPath, element: <AddressPage /> },
 ]);
