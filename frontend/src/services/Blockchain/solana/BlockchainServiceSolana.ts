@@ -16,6 +16,7 @@ import { tss } from '../../../../wailsjs/go/models';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import SignatureProvider from '../signature-provider';
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import Long from 'long';
 
 export class BlockchainServiceSolana
     extends BlockchainService
@@ -86,17 +87,34 @@ export class BlockchainServiceSolana
             const input = TW.Solana.Proto.SigningInput.create({
                 transferTransaction: TW.Solana.Proto.Transfer.create({
                     recipient: keysignPayload.toAddress,
-                    value: BigInt(keysignPayload.toAmount),
-                    memo: keysignPayload.memo ?? '', // Memo could be optional
+                    value: Long.fromString(keysignPayload.toAmount),
+                    memo: keysignPayload?.memo,
                 }),
                 recentBlockhash: recentBlockHash,
                 sender: keysignPayload.coin.address,
                 priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-                    price: BigInt(priorityFee),
+                    price: Long.fromString(priorityFee),
                 }),
             });
 
-            return TW.Solana.Proto.SigningInput.encode(input).finish();
+            // Logging each field
+            console.log('Transfer Transaction:');
+            console.log('  Recipient:', input.transferTransaction?.recipient);
+            console.log('  Value:', input.transferTransaction?.value.toString());
+            console.log('  Memo:', input.transferTransaction?.memo);
+
+            console.log('Recent Blockhash:', input.recentBlockhash);
+            console.log('Sender:', input.sender);
+
+            console.log('Priority Fee:');
+            console.log('  Price:', input.priorityFeePrice?.price.toString());
+
+            // Encode the input
+            const encodedInput = TW.Solana.Proto.SigningInput.encode(input).finish();
+
+            console.log('encodedInput:', this.walletCore.HexCoding.encode(encodedInput));
+
+            return encodedInput;
 
         } else {
             // Token transfer
