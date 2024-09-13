@@ -19,11 +19,16 @@ import (
 )
 
 // Keysign signs a message using TSS
-func (t *TssService) Keysign(vault storage.Vault,
+func (t *TssService) Keysign(
+	vault storage.Vault,
 	messages []string,
 	localPartyID string,
 	derivePath string,
-	sessionID, hexEncryptionKey, serverURL, tssType string) ([]*mtss.KeysignResponse, error) {
+	sessionID, 
+	hexEncryptionKey, 
+	serverURL, 
+	tssType string,
+	) ([]*mtss.KeysignResponse, error) {
 
 	t.Logger.WithFields(logrus.Fields{
 		"sessionID":        sessionID,

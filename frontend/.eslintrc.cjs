@@ -23,6 +23,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
     'react/prop-types': 'off',
     'react-hooks/rules-of-hooks': 'error',

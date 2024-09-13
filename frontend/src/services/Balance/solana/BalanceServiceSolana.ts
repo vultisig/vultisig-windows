@@ -4,7 +4,7 @@ import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { IBalanceService } from '../IBalanceService';
 
-export class BalanceServiceEvm implements IBalanceService {
+export class BalanceServiceSolana implements IBalanceService {
   private chain: Chain;
 
   constructor(chain: Chain) {

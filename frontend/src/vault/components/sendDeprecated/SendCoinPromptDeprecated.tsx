@@ -18,9 +18,9 @@ export const SendCoinPromptDeprecated = () => {
         .flat()
         .find(
           coin =>
-            coin.chain === Chain.Ethereum &&
-            coin.ticker == 'UNI' &&
-            !coin.isNativeToken
+            coin.chain === Chain.Solana &&
+            coin.ticker == 'SOL' &&
+            coin.isNativeToken
         ) || null
     );
   }, [coins]);
@@ -28,7 +28,7 @@ export const SendCoinPromptDeprecated = () => {
   return (
     <Button
       onClick={() => {
-        navigate(`/vault/item/send/${Chain.Ethereum}`, {
+        navigate(`/vault/item/send/${Chain.Solana}`, {
           state: {
             coin: coin,
             balances: balances,
