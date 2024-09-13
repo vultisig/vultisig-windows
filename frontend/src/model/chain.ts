@@ -48,9 +48,10 @@ export class ChainUtils {
 
   static getTssKeysignType(chain: Chain): TssKeysignType {
     switch (chain) {
-      case "Solana":
+      case Chain.Solana:
         return TssKeysignType.EdDSA;
-      case "Polkadot":
+      case Chain.Polkadot:
+        return TssKeysignType.EdDSA;
       default:
         return TssKeysignType.ECDSA;
     }
