@@ -4,6 +4,7 @@ import { BlockchainServiceThorchain } from './thorchain/BlockchainServiceThorcha
 import { IBlockchainService } from './IBlockchainService';
 import { BlockchainServiceUtxo } from './utxo/BlockchainServiceUtxo';
 import { BlockchainServiceEvm } from './evm/BlockchainServiceEvm';
+import { BlockchainServiceSolana } from './solana/BlockchainServiceSolana';
 
 export class BlockchainServiceFactory {
   static createService(
@@ -41,6 +42,8 @@ export class BlockchainServiceFactory {
         return new BlockchainServiceEvm(chain, walletCore);
       case Chain.ZkSync:
         return new BlockchainServiceEvm(chain, walletCore);
+      case Chain.Solana:
+        return new BlockchainServiceSolana(chain, walletCore);
       default:
         throw new Error('Chain not supported');
     }

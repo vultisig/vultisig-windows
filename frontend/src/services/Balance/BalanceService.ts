@@ -21,11 +21,6 @@ export class BalanceService implements IBalanceService {
       expiryDate: new Date(Date.now() + 60000 * 60), // 60 minute expiry
     };
 
-    if (fetchedBalance.rawAmount === 0) {
-      // If the balance is 0, return the fetched balance
-      return fetchedBalance;
-    }
-
     return fetchedBalance;
   }
 }

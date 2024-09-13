@@ -1,8 +1,8 @@
-import { Chain } from '../../model/chain';
-import { Balance } from '../../model/balance';
-import { RpcServiceFactory } from '../Rpc/RpcServiceFactory';
-import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
-import { IBalanceService } from './IBalanceService';
+import { Chain } from '../../../model/chain';
+import { Balance } from '../../../model/balance';
+import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
+import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { IBalanceService } from '../IBalanceService';
 
 export class BalanceServiceThorchain implements IBalanceService {
   private chain: Chain;
@@ -24,11 +24,6 @@ export class BalanceServiceThorchain implements IBalanceService {
       decimalAmount: parseInt(balance),
       expiryDate: new Date(Date.now() + 60000 * 60), // 60 minute expiry
     };
-
-    if (fetchedBalance.rawAmount === 0) {
-      // If the balance is 0, return the fetched balance
-      return fetchedBalance;
-    }
 
     return fetchedBalance;
   }

@@ -5,7 +5,7 @@ import { SpecificSolana } from '../../../model/gas-info';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 
-const rpcURL = Endpoint.solanaServiceRpc;
+const rpcURL = Endpoint.solanaServiceRpc2;
 const rpcURL2 = Endpoint.solanaServiceRpc2;
 const tokenInfoServiceURL = Endpoint.solanaTokenInfoServiceRpc;
 
@@ -215,6 +215,8 @@ export class RpcServiceSolana implements IRpcService {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
+
+    console.log('response', response);
 
     if (!response.ok) {
       throw new Error(`Error with request: ${response.statusText}`);
