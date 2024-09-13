@@ -29,7 +29,8 @@ const VaultRenamePage = () => {
   });
 
   const onSubmit = (data: FieldValues) => {
-    // TODO: @antonio to implement logic after @enrique implements the BE
+    // TODO: @tony to implement when @enrique is done with BE
+    console.log('## data', data);
   };
 
   const { t } = useTranslation();
