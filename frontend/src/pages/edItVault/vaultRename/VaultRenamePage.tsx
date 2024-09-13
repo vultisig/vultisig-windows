@@ -6,10 +6,7 @@ import { PageSlice } from '../../../ui/page/PageSlice';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { FieldValues, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 import { Text } from '../../../lib/ui/text';
 import {
   ButtonWithBottomSpace,
