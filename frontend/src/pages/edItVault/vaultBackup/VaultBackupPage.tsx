@@ -20,6 +20,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { useState } from 'react';
 import InfoGradientIcon from '../../../lib/ui/icons/InfoGradientIcon';
+import { useNavigate } from 'react-router-dom';
 
 const passwordSchema = z
   .object({
@@ -51,7 +52,7 @@ const VaultBackupPage = () => {
   const onSubmit = (data: FieldValues) => {
     console.log('## data', data);
   };
-
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   return (
@@ -133,7 +134,7 @@ const VaultBackupPage = () => {
             <Button isDisabled={!isValid || !isDirty} type="submit">
               {t('vault_backup_page_submit_button_text')}
             </Button>
-            <Button kind="outlined" type="button">
+            <Button kind="outlined" type="button" onClick={() => navigate(-1)}>
               <GradientText>
                 {t('vault_backup_page_skip_button_text')}
               </GradientText>
