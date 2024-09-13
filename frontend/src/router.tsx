@@ -136,6 +136,6 @@ export const router = createBrowserRouter([
   {
     path: '/vault/settings/language-settings',
     element: <LanguageSettingsPage />,
-  }
+  },
   { path: addressPath, element: <AddressPage /> },
 ]);
