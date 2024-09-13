@@ -45,6 +45,7 @@ export const AddressPage = () => {
             <Content ref={setElement}>
               {size && (
                 <AddressQrCode
+                  style={{ position: 'absolute' }}
                   value={address}
                   size={Math.min(size.width, size.height)}
                 />

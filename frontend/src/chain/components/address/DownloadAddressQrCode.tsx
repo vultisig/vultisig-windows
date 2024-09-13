@@ -13,7 +13,7 @@ export const DownloadAddressQrCode = ({
       renderTrigger={({ onClick }) => (
         <PageHeaderIconButton icon={<FileUpIcon />} onClick={onClick} />
       )}
-      value={<PrintableAddressQrCode />}
+      value={<PrintableAddressQrCode value={value} />}
     />
   );
 };
