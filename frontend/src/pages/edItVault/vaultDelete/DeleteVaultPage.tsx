@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -18,6 +18,7 @@ import { useCurrentVault } from '../../../vault/state/useCurrentVault';
 import { getVaultTypeText } from '../../../utils/util';
 import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery';
 import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation';
+import { useNavigate } from 'react-router-dom';
 
 const DeleteVaultPage = () => {
   const [deleteTerms, setDeleteTerms] = useState({
@@ -26,10 +27,22 @@ const DeleteVaultPage = () => {
     thirdTermAccepted: false,
   });
 
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const currentVault = useCurrentVault();
   const { data: vaultBalance } = useVaultTotalBalanceQuery();
-  const { mutate: deleteVault, isPending, error } = useDeleteVaultMutation();
+  const {
+    mutate: deleteVault,
+    isPending,
+    error,
+    isSuccess,
+  } = useDeleteVaultMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate('/vault/list');
+    }
+  }, [isSuccess]);
 
   if (!currentVault) {
     return <></>;
