@@ -15,7 +15,7 @@ import {
 import { z } from 'zod';
 
 const renameSchema = z.object({
-  vaultName: z.string().min(1, 'vault_rename_page_name_error').max(50),
+  vaultName: z.string().min(2, 'vault_rename_page_name_error').max(50),
 });
 
 const VaultRenamePage = () => {
