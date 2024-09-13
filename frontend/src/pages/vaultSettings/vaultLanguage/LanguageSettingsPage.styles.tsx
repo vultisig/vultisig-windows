@@ -1,10 +1,27 @@
 import styled from 'styled-components';
-import { Panel } from '../../../lib/ui/panel/Panel';
 import { getColor } from '../../../lib/ui/theme/getters';
 
-export const ListItemPanel = styled(Panel)`
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
+import { borderRadius } from '../../../lib/ui/css/borderRadius';
+
+export const LanguageBox = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
   font-weight: 400;
   font-size: 16px;
   color: ${getColor('contrast')};
+`;
+
+export const LanguageButton = styled(UnstyledButton)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 16px;
+  ${borderRadius.m};
   background-color: ${getColor('foreground')};
+  width: 100%;
 `;
