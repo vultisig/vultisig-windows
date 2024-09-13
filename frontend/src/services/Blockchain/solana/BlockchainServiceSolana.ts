@@ -15,6 +15,7 @@ import { SignedTransactionResult } from '../signed-transaction-result';
 import { tss } from '../../../../wailsjs/go/models';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import SignatureProvider from '../signature-provider';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 export class BlockchainServiceSolana
     extends BlockchainService
@@ -163,7 +164,7 @@ export class BlockchainServiceSolana
 
         // Compile pre-image hashes using TransactionCompiler
         const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-            this.coinType as any, // Ensure this.coinType is correct for Solana
+            this.coinType as CoinType,
             input
         );
 
@@ -213,11 +214,22 @@ export class BlockchainServiceSolana
             vaultHexChainCode,
             this.walletCore.CoinTypeExt.derivationPath(this.coinType)
         );
+
+        console.log('solanaPublicKey:', solanaPublicKey);
+
+
         const publicKeyData = Buffer.from(solanaPublicKey, 'hex');
+
+        console.log('publicKeyData:', publicKeyData);
+
         const publicKey = this.walletCore.PublicKey.createWithData(
             publicKeyData,
             this.walletCore.PublicKeyType.ed25519
         );
+
+        console.log('publicKey:', publicKey);
+
+        console.log('publicKey:', publicKey.data);
 
         const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
             this.coinType,
