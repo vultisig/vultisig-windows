@@ -1,22 +1,32 @@
-import { createContext, FC, PropsWithChildren, useState } from 'react';
+import { createContext, FC, PropsWithChildren, useContext } from 'react';
+import {
+  PersistentStateKey,
+  usePersistentState,
+} from '../../state/persistentState';
+import { LanguageValue, LANGUAGES } from './constants';
 
 type LanguageContextType = {
   language: string;
-  changeAppLanguage: (newLanguage: string) => void;
+  changeInAppLanguage: (newLanguage: LanguageValue) => void;
 };
 
 const LanguageContext = createContext<LanguageContextType>(null!);
 
 export const LanguageProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = usePersistentState(
+    PersistentStateKey.Language,
+    LANGUAGES.English
+  );
 
-  const changeAppLanguage = (newLanguage: string) => {
+  const changeInAppLanguage = (newLanguage: LanguageValue) => {
     setLanguage(newLanguage);
   };
 
   return (
-    <LanguageContext.Provider value={{ language, changeAppLanguage }}>
+    <LanguageContext.Provider value={{ language, changeInAppLanguage }}>
       {children}
     </LanguageContext.Provider>
   );
 };
+
+export const useInAppLanguage = () => useContext(LanguageContext);
