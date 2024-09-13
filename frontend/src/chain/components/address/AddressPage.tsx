@@ -11,6 +11,7 @@ import { Text } from '../../../lib/ui/text';
 import { ElementSizeAware } from '../../../lib/ui/base/ElementSizeAware';
 import { AddressQrCode } from './AddressQrCode';
 import styled from 'styled-components';
+import { DownloadAddressQrCode } from './DownloadAddressQrCode';
 
 const Content = styled.div`
   position: relative;
@@ -33,6 +34,7 @@ export const AddressPage = () => {
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{t('address')}</PageHeaderTitle>}
+        secondaryControls={<DownloadAddressQrCode value={address} />}
       />
       <PageContent alignItems="center" gap={40}>
         <Text weight="600" size={14} family="mono" color="contrast">
@@ -43,6 +45,7 @@ export const AddressPage = () => {
             <Content ref={setElement}>
               {size && (
                 <AddressQrCode
+                  style={{ position: 'absolute' }}
                   value={address}
                   size={Math.min(size.width, size.height)}
                 />

@@ -4,12 +4,12 @@ import { borderRadius } from '../../../lib/ui/css/borderRadius';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { toSizeUnit } from '../../../lib/ui/css/toSizeUnit';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ComponentProps } from 'react';
 
 const codeOffset = 24;
 const codePadding = 16;
 
 const Wrapper = styled.div`
-  position: absolute;
   ${borderRadius.l};
   background: ${getColor('foreground')};
   padding: ${toSizeUnit(codeOffset)};
@@ -23,7 +23,7 @@ const Container = styled.div`
 
 type AddressQrCodeProps = ComponentWithValueProps<string> & {
   size: number;
-};
+} & ComponentProps<typeof Wrapper>;
 
 export const AddressQrCode = ({ size, value }: AddressQrCodeProps) => {
   return (
