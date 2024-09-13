@@ -30,6 +30,8 @@ import { AddressPage } from './chain/components/address/AddressPage';
 import VaultBackupPage from './pages/edItVault/vaultBackup/VaultBackupPage';
 import VaultRenamePage from './pages/edItVault/vaultRename/VaultRenamePage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
+import ReshareVaultPage from './pages/edItVault/vaultReshare/ReshareVaultPage';
+import DeleteVaultPage from './pages/edItVault/vaultDelete/DeleteVaultPage';
 
 export const router = createBrowserRouter([
   {
@@ -121,6 +123,14 @@ export const router = createBrowserRouter([
   {
     path: '/vault/settings/vault-settings/rename-vault',
     element: <VaultRenamePage />,
+  },
+  {
+    path: '/vault/settings/vault-settings/reshare-vault',
+    element: <ReshareVaultPage />,
+  },
+  {
+    path: '/vault/settings/vault-settings/delete-vault',
+    element: <DeleteVaultPage />,
   },
   { path: addressPath, element: <AddressPage /> },
 ]);

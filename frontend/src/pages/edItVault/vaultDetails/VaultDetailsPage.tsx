@@ -8,6 +8,7 @@ import { Text } from '../../../lib/ui/text';
 import { useCurrentVault } from '../../../vault/state/useCurrentVault';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { AutoCenteredText } from '../EditVaultPage.styles';
+import { getVaultTypeText } from '../../../utils/util';
 
 const VaultDetailsPage = () => {
   const { t } = useTranslation();
@@ -28,15 +29,7 @@ const VaultDetailsPage = () => {
 
   const m = keyshares.length;
 
-  let vaultTypeText;
-
-  if (m > 3) {
-    vaultTypeText = `N of ${m} Vault`;
-  } else {
-    // For cases where it's 2 of 2 or 2 of 3 vaults
-    const n = 2;
-    vaultTypeText = `${n} of ${m} Vault`;
-  }
+  const vaultTypeText = getVaultTypeText(m, t);
 
   return (
     <Container flexGrow gap={16}>
