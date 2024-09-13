@@ -15,5 +15,6 @@ export type ThemeColors = {
   mist: HSLA;
   mistExtra: HSLA;
   transparent: HSLA;
+  white: HSLA;
   danger: HSLA;
 };

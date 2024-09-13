@@ -18,6 +18,8 @@ import { useAssertCurrentVault } from '../../vault/state/useCurrentVault';
 import { VaultOverview } from '../../vault/components/VaultOverview';
 import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { shareVaultPath } from '../../navigation';
 
 type VaultPageView = 'balances' | 'vaults';
 
@@ -48,7 +50,9 @@ export const VaultPage = () => {
         }
         secondaryControls={
           <PageHeaderIconButtons>
-            <PageHeaderIconButton icon={<QrCodeIcon />} />
+            <Link to={shareVaultPath}>
+              <PageHeaderIconButton as="div" icon={<QrCodeIcon />} />
+            </Link>
             <RefreshVaultBalance />
           </PageHeaderIconButtons>
         }

@@ -29,3 +29,7 @@ export type RemovableComponentProps = {
 export type AsElementComponent<T extends ElementType = ElementType> = {
   as?: T;
 };
+
+export type TitledComponentProps = {
+  title: ReactNode;
+};
