@@ -147,5 +147,7 @@
   "vault_rename_page_name_error": "Vault name must be between 1 and 50 characters",
   "vault_rename_page_header_title": "Edit your vault name",
   "vault_rename_page_name_title": "Vault Name",
-  "vault_rename_page_submit_button_text": "Save"
+  "vault_rename_page_submit_button_text": "Save",
+  "share_vault_qr": "Share Vault QR",
+  "save": "Save"
 }

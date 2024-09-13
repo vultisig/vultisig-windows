@@ -5,6 +5,7 @@ import {
   addVaultPath,
   importVaultPath,
   setupVaultPath,
+  shareVaultPath,
 } from './navigation';
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
 import ImportVaultView from './pages/importVault/ImportVaultView';
@@ -28,6 +29,7 @@ import VaultDetailsPage from './pages/edItVault/vaultDetails/VaultDetailsPage';
 import { AddressPage } from './chain/components/address/AddressPage';
 import VaultBackupPage from './pages/edItVault/vaultBackup/VaultBackupPage';
 import VaultRenamePage from './pages/edItVault/vaultRename/VaultRenamePage';
+import { ShareVaultPage } from './vault/share/ShareVaultPage';
 
 export const router = createBrowserRouter([
   {
@@ -79,6 +81,10 @@ export const router = createBrowserRouter([
   {
     path: '/vault/chains',
     element: <ManageVaultChainsPage />,
+  },
+  {
+    path: shareVaultPath,
+    element: <ShareVaultPage />,
   },
   {
     path: '/vault/chains/:chain',

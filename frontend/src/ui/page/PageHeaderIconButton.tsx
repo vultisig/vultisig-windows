@@ -18,10 +18,16 @@ const offset = pageConfig.header.iconButton.offset;
 
 export const PageHeaderIconButton = ({
   icon,
+  as,
   ...rest
 }: PageHeaderIconButtonProps) => {
   return (
-    <Container verticalOffset={offset} horizontalOffset={offset} {...rest}>
+    <Container
+      forwardedAs={as}
+      verticalOffset={offset}
+      horizontalOffset={offset}
+      {...rest}
+    >
       <IconWrapper>{icon}</IconWrapper>
     </Container>
   );
