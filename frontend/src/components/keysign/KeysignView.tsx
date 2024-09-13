@@ -80,7 +80,7 @@ const KeysignView: React.FC<KeysignViewProps> = ({
           sessionID,
           hexEncryptionKey,
           serverURL,
-          tssType.toString()
+          tssType.toString().toLowerCase(),
         );
         console.log('sigs:', sigs);
         onDone();
