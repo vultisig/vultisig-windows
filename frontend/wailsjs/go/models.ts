@@ -1,20 +1,3 @@
-export namespace frontend {
-	
-	export class FileFilter {
-	
-	
-	    static createFrom(source: any = {}) {
-	        return new FileFilter(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	
-	    }
-	}
-
-}
-
 export namespace storage {
 	
 	export class AddressBookItem {

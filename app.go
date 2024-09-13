@@ -1,11 +1,11 @@
 package main
 
 import (
-    "context"
-    "encoding/base64"
-    "io/ioutil"
+	"context"
+	"encoding/base64"
+	"io/ioutil"
 
-    "github.com/wailsapp/wails/v2/pkg/runtime"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 type App struct {
@@ -20,11 +20,10 @@ func (a *App) startup(ctx context.Context) {
     a.ctx = ctx
 }
 
-func (a *App) SaveFile(suggestedFilename string, base64Data string, filters []runtime.FileFilter) (string, error) {
+func (a *App) SaveFile(suggestedFilename string, base64Data string) (string, error) {
     filename, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
         Title:           "Save File",
         DefaultFilename: suggestedFilename,
-        Filters:         filters,
     })
     if err != nil {
         return "", err

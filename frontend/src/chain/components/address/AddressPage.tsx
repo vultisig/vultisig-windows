@@ -56,21 +56,9 @@ export const AddressPage = () => {
     // Suggested filename
     const suggestedFilename = 'data.json';
 
-    // File filters (optional)
-    const filters = [
-      {
-        DisplayName: 'JSON files (*.json)',
-        Pattern: '*.json',
-      },
-      {
-        DisplayName: 'All files (*.*)',
-        Pattern: '*.*',
-      },
-    ];
-
     try {
       // Call the SaveFile method from Go backend
-      const filename = await SaveFile(suggestedFilename, base64Data, filters);
+      const filename = await SaveFile(suggestedFilename, base64Data);
       if (filename) {
         alert(`File saved successfully at ${filename}`);
       } else {
