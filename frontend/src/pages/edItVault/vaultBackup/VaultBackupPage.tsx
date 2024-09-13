@@ -52,6 +52,7 @@ const VaultBackupPage = () => {
   const onSubmit = (data: FieldValues) => {
     console.log('## data', data);
   };
+
   const navigate = useNavigate();
   const { t } = useTranslation();
 

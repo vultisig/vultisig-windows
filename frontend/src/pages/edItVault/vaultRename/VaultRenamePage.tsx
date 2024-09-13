@@ -6,7 +6,6 @@ import { PageSlice } from '../../../ui/page/PageSlice';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { FieldValues, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
 import { Text } from '../../../lib/ui/text';
 import {
   ButtonWithBottomSpace,
@@ -30,8 +29,7 @@ const VaultRenamePage = () => {
   });
 
   const onSubmit = (data: FieldValues) => {
-    // TODO: @antonio to implement logic after UI is done
-    console.log('## data', data);
+    // TODO: @antonio to implement logic after @enrique implements the BE
   };
 
   const { t } = useTranslation();

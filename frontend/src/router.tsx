@@ -32,6 +32,7 @@ import VaultRenamePage from './pages/edItVault/vaultRename/VaultRenamePage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
 import ReshareVaultPage from './pages/edItVault/vaultReshare/ReshareVaultPage';
 import DeleteVaultPage from './pages/edItVault/vaultDelete/DeleteVaultPage';
+import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
 
 export const router = createBrowserRouter([
   {
@@ -132,5 +133,9 @@ export const router = createBrowserRouter([
     path: '/vault/settings/vault-settings/delete-vault',
     element: <DeleteVaultPage />,
   },
+  {
+    path: '/vault/settings/language-settings',
+    element: <LanguageSettingsPage />,
+  }
   { path: addressPath, element: <AddressPage /> },
 ]);
