@@ -1,7 +1,7 @@
 import {
   LanguageValue,
   LANGUAGES,
-} from '../../../providers/language/constants';
+} from '../../../lib/hooks/useInAppLanguage/constants';
 
 type LanguageOption = {
   value: LanguageValue;
