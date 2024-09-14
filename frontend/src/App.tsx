@@ -14,7 +14,6 @@ import { getQueryClient } from './query/queryClient';
 import { ToastProvider } from './lib/ui/toast/ToastProvider';
 
 import { router } from './router';
-import { LanguageProvider } from './providers/language/LanguageProvider';
 
 const queryClient = getQueryClient();
 
@@ -27,9 +26,7 @@ const App: React.FC = () => {
           <VaultsDependant>
             <InitializedWalletOnly>
               <ToastProvider>
-                <LanguageProvider>
-                  <RouterProvider router={router} />
-                </LanguageProvider>
+                <RouterProvider router={router} />
               </ToastProvider>
             </InitializedWalletOnly>
           </VaultsDependant>
