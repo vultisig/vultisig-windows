@@ -7,8 +7,8 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
 import { languageOptions } from './constants';
 import { LanguageBox, LanguageButton } from './LanguageSettingsPage.styles';
-import { useInAppLanguage } from '../../../providers/language/LanguageProvider';
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
+import { useInAppLanguage } from '../../../lib/hooks/useInAppLanguage';
 
 const LanguageSettingsPage = () => {
   const { t } = useTranslation();
