@@ -27,6 +27,8 @@ const VaultDetailsPage = () => {
     local_party_id,
   } = currentVault;
 
+  // The value of the vault?
+
   const m = keyshares.length;
 
   const vaultTypeText = getVaultTypeText(m, t);

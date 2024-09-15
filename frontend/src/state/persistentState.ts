@@ -8,6 +8,7 @@ export enum PersistentStateKey {
   IsVaultBalanceVisible = 'isVaultBalanceVisible',
   ReactQueryState = 'reactQueryState',
   HasFinishedOnboarding = 'HasFinishedOnboarding',
+  Language = 'language',
 }
 
 const persistentStorage =
