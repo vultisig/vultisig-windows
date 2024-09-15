@@ -257,16 +257,22 @@ export class BlockchainServiceSolana
             this.walletCore.PublicKeyType.ed25519
         );
 
-        const output = TW.Ethereum.Proto.SigningOutput.decode(compiled);
+        const output = TW.Solana.Proto.SigningOutput.decode(compiled);
 
         if (output.errorMessage !== '') {
             throw new Error(output.errorMessage);
         }
 
         const result = new SignedTransactionResult(
-            this.walletCore.HexCoding.encode(output.encoded).stripHexPrefix(),
-            this.walletCore.HexCoding.encode(output.encoded)
+            output.encoded,
+            this.getHashFromRawTransaction(output.encoded)
         );
         return result;
     }
+
+    getHashFromRawTransaction(tx: string): string {
+        const sig = Buffer.from(tx.slice(0, 64), 'utf8');
+        return sig.toString('base64');
+    }
+
 }

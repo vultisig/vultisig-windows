@@ -253,21 +253,12 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
       // Check if the balance is an empty response
       if (!balance || balance.toString() === '0x') {
-        console.warn(
-          'fetchERC20TokenBalance:: Empty or invalid balance response'
-        );
         return '0';
       }
 
       return balance.toString();
     } catch (error) {
-      // Enhanced error logging
-      console.error('fetchERC20TokenBalance::', error);
-      console.error('fetchERC20TokenBalance:: Error occurred');
-      console.error('Contract Address:', contractAddress);
-      console.error('Wallet Address:', walletAddress);
-      console.error('Network:', await this.provider.getNetwork());
-      console.error('Provider URL:', this.rpcUrl);
+      console.error('fetchERC20TokenBalance::', walletAddress, contractAddress, error);
 
       return '0';
     }

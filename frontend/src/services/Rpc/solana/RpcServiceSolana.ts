@@ -3,13 +3,15 @@ import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { SpecificSolana } from '../../../model/gas-info';
 import { Endpoint } from '../../Endpoint';
+import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
 
 const rpcURL = Endpoint.solanaServiceRpc2;
 const rpcURL2 = Endpoint.solanaServiceRpc2;
 const tokenInfoServiceURL = Endpoint.solanaTokenInfoServiceRpc;
 
-export class RpcServiceSolana implements IRpcService {
+export class RpcServiceSolana implements IRpcService, ITokenService {
+
   async sendTransaction(encodedTransaction: string): Promise<string> {
     const requestBody = {
       jsonrpc: '2.0',
@@ -63,13 +65,19 @@ export class RpcServiceSolana implements IRpcService {
     contractAddress: string,
     walletAddress: string
   ): Promise<bigint> {
-    const accounts: any[] = await this.fetchTokenAccountsByOwner(walletAddress);
-    const tokenAccount = accounts.find(
-      account => account.account.data.parsed.info.mint === contractAddress
-    );
-    const tokenAmount =
-      tokenAccount?.account?.data?.parsed?.info?.tokenAmount?.amount;
-    return BigInt(tokenAmount ?? 0);
+
+    try {
+      const accounts: any[] = await this.fetchTokenAccountsByOwner(walletAddress);
+      const tokenAccount = accounts.find(
+        account => account.account.data.parsed.info.mint === contractAddress
+      );
+      const tokenAmount =
+        tokenAccount?.account?.data?.parsed?.info?.tokenAmount?.amount;
+      return BigInt(tokenAmount ?? 0);
+    } catch (error) {
+      console.error(`Error fetching token balance: ${(error as any).message}`);
+      return BigInt(0);
+    }
   }
 
   async fetchTokenAssociatedAccountByOwner(
@@ -108,7 +116,7 @@ export class RpcServiceSolana implements IRpcService {
     return response.result?.value || [];
   }
 
-  async fetchTokens(nativeToken: Coin): Promise<CoinMeta[]> {
+  async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
     // Fetch token accounts associated with the native token's address
     const accounts = await this.fetchTokenAccountsByOwner(nativeToken.address);
 
@@ -132,7 +140,7 @@ export class RpcServiceSolana implements IRpcService {
     }));
   }
 
-  async fetchSolanaTokenInfoList(
+  private async fetchSolanaTokenInfoList(
     contractAddresses: string[]
   ): Promise<Record<string, any>> {
     const requestBody = { tokens: contractAddresses };
@@ -140,7 +148,7 @@ export class RpcServiceSolana implements IRpcService {
     return response;
   }
 
-  async fetchHighPriorityFee(account: string): Promise<number> {
+  private async fetchHighPriorityFee(account: string): Promise<number> {
     const requestBody = {
       jsonrpc: '2.0',
       id: 1,
@@ -208,15 +216,12 @@ export class RpcServiceSolana implements IRpcService {
     return highPriorityFee;
   }
 
-  // Helper method to handle POST requests using fetch
   private async postRequest(url: string, body: any): Promise<any> {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
-
-    console.log('response', response);
 
     if (!response.ok) {
       throw new Error(`Error with request: ${response.statusText}`);
