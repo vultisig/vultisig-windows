@@ -1,8 +1,8 @@
 import { Chain } from '../../model/chain';
 import { BalanceService } from './BalanceService';
-import { BalanceServiceThorchain } from './thorchain/BalanceServiceThorchain';
 import { BalanceServiceEvm } from './evm/BalanceServiceEvm';
 import { BalanceServiceSolana } from './solana/BalanceServiceSolana';
+import { BalanceServiceThorchain } from './thorchain/BalanceServiceThorchain';
 import { BalanceServiceUtxo } from './utxo/BalanceServiceUtxo';
 
 export class BalanceServiceFactory {

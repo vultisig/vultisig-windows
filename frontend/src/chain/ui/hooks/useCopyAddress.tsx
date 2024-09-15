@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+
 import { useToast } from '../../../lib/ui/toast/ToastProvider';
 
 export const useCopyAddress = () => {

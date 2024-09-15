@@ -1,10 +1,11 @@
 import { ethers, TransactionRequest } from 'ethers';
+
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../../model/coin-meta';
+import { FeeMap, FeeMode } from '../../../model/evm-fee-mode';
+import { SpecificEvm } from '../../../model/gas-info';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
-import { SpecificEvm } from '../../../model/gas-info';
-import { FeeMap, FeeMode } from '../../../model/evm-fee-mode';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   private provider: ethers.JsonRpcProvider;

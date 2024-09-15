@@ -1,13 +1,14 @@
 import { ElementType } from 'react';
-import SettingsIcon from '../../lib/ui/icons/SettingsIcon';
-import GlobeIcon from '../../lib/ui/icons/GlobeIcon';
-import CurrencyCircleIcon from '../../lib/ui/icons/CurrencyCircleIcon';
+
 import AddressBookIcon from '../../lib/ui/icons/AddressBookIcon';
-import FaqIcon from '../../lib/ui/icons/FaqIcon';
+import CurrencyCircleIcon from '../../lib/ui/icons/CurrencyCircleIcon';
 import DefaultChainsIcon from '../../lib/ui/icons/DefaultChainsIcon';
+import FaqIcon from '../../lib/ui/icons/FaqIcon';
+import GlobeIcon from '../../lib/ui/icons/GlobeIcon';
+import NoteIcon from '../../lib/ui/icons/NoteIcon';
+import SettingsIcon from '../../lib/ui/icons/SettingsIcon';
 import ShareIcon from '../../lib/ui/icons/ShareIcon';
 import ShieldCheckIcon from '../../lib/ui/icons/ShieldCheckIcon';
-import NoteIcon from '../../lib/ui/icons/NoteIcon';
 
 type SettingItem = {
   id: string;

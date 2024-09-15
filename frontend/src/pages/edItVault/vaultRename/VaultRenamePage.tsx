@@ -1,18 +1,19 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
+
+import { VStack } from '../../../lib/ui/layout/Stack';
+import { Text } from '../../../lib/ui/text';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { FieldValues, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Text } from '../../../lib/ui/text';
 import {
   ButtonWithBottomSpace,
   InputField,
   InputFieldWrapper,
 } from './VaultRenamePage.styles';
-import { z } from 'zod';
 
 const renameSchema = z.object({
   vaultName: z.string().min(2, 'vault_rename_page_name_error').max(50),

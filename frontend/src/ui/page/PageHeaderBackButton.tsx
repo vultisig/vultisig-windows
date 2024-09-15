@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { PageHeaderIconButton } from './PageHeaderIconButton';
+
 import { ChevronLeftIcon } from '../../lib/ui/icons/ChevronLeftIcon';
+import { PageHeaderIconButton } from './PageHeaderIconButton';
 
 export const PageHeaderBackButton = () => {
   const navigate = useNavigate();

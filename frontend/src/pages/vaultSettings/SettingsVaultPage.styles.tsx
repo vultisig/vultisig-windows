@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+
+import { VStack } from '../../lib/ui/layout/Stack';
 import { Panel } from '../../lib/ui/panel/Panel';
 import { getColor } from '../../lib/ui/theme/getters';
-import { VStack } from '../../lib/ui/layout/Stack';
 import { pageConfig } from '../../ui/page/config';
 
 export const ListItemPanel = styled(Panel)`

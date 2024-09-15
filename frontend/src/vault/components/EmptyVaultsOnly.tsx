@@ -1,8 +1,9 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { ComponentWithChildrenProps } from '../../lib/ui/props';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { useVaults } from '../queries/useVaultsQuery';
-import { useEffect } from 'react';
 
 export const EmptyVaultsOnly = ({ children }: ComponentWithChildrenProps) => {
   const navigate = useNavigate();

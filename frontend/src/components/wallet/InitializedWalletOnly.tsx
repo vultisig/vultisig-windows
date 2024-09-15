@@ -1,4 +1,4 @@
-import { useWalletCore } from '../../main';
+import { useWalletCore } from '../../providers/WalletCoreProvider';
 
 export const InitializedWalletOnly: React.FC<React.PropsWithChildren> = ({
   children,

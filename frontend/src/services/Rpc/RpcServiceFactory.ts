@@ -1,4 +1,5 @@
 import { Chain } from '../../model/chain';
+import { RpcServiceDydx } from './dydx/RpcServiceDydx';
 import {
   RpcServiceArbitrum,
   RpcServiceAvalanche,
@@ -18,7 +19,6 @@ import { RpcServiceSolana } from './solana/RpcServiceSolana';
 import { RpcServiceSui } from './sui/RpcServiceSui';
 import { RpcServiceThorchain } from './thorchain/RpcServiceThorchain';
 import { RpcServiceUtxo } from './utxo/RpcServiceUtxo';
-import { RpcServiceDydx } from './dydx/RpcServiceDydx';
 
 export class RpcServiceFactory {
   static createRpcService(chain: Chain) {

@@ -1,23 +1,24 @@
-import { ComponentWithValueProps } from '../../lib/ui/props';
-import { Panel } from '../../lib/ui/panel/Panel';
-import { HStack, VStack } from '../../lib/ui/layout/Stack';
+import styled from 'styled-components';
+
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
+import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { centerContent } from '../../lib/ui/css/centerContent';
+import { horizontalPadding } from '../../lib/ui/css/horizontalPadding';
+import { round } from '../../lib/ui/css/round';
+import { HStack, VStack } from '../../lib/ui/layout/Stack';
+import { Panel } from '../../lib/ui/panel/Panel';
+import { ComponentWithValueProps } from '../../lib/ui/props';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
 import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
-import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
-import { Chain } from '../../model/chain';
 import { Text } from '../../lib/ui/text';
-import { fromChainAmount } from '../../chain/utils/fromChainAmount';
-import { formatAmount } from '../../lib/utils/formatAmount';
-import { sum } from '../../lib/utils/array/sum';
-import styled from 'styled-components';
-import { round } from '../../lib/ui/css/round';
-import { horizontalPadding } from '../../lib/ui/css/horizontalPadding';
-import { centerContent } from '../../lib/ui/css/centerContent';
-import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { getColor } from '../../lib/ui/theme/getters';
+import { sum } from '../../lib/utils/array/sum';
+import { formatAmount } from '../../lib/utils/formatAmount';
+import { Chain } from '../../model/chain';
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
+import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
+import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress';
 
 const Pill = styled.div`

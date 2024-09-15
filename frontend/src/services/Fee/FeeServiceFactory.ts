@@ -1,13 +1,14 @@
+import { WalletCore } from '@trustwallet/wallet-core';
+
 import { Chain } from '../../model/chain';
-import { FeeServiceEvm } from './evm/FeeServiceEvm';
 import { FeeServiceCosmos } from './cosmos/FeeServiceCosmos';
+import { FeeServiceEvm } from './evm/FeeServiceEvm';
+import { IFeeService } from './IFeeService';
 import { FeeServicePolkadot } from './polkadot/FeeServicePolkadot';
 import { FeeServiceSolana } from './solana/FeeServiceSolana';
 import { FeeServiceSui } from './sui/FeeServiceSui';
 import { FeeServiceThorchain } from './thorchain/FeeServiceThorchain';
 import { FeeServiceUtxo } from './utxo/FeeServiceUtxo';
-import { WalletCore } from '@trustwallet/wallet-core';
-import { IFeeService } from './IFeeService';
 
 export class FeeServiceFactory {
   static createFeeService(chain: Chain, walletCore: WalletCore): IFeeService {

@@ -1,5 +1,6 @@
 import { WalletCore } from '@trustwallet/wallet-core';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import { storage } from '../../../../wailsjs/go/models';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';

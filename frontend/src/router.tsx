@@ -1,4 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
+
+import { AddressPage } from './chain/components/address/AddressPage';
 import VerifyTransaction from './components/sendCrypto/VerifyTransaction';
 import {
   addressPath,
@@ -8,6 +10,12 @@ import {
   shareVaultPath,
 } from './navigation';
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
+import EditVaultPage from './pages/edItVault/EditVaultPage';
+import VaultBackupPage from './pages/edItVault/vaultBackup/VaultBackupPage';
+import DeleteVaultPage from './pages/edItVault/vaultDelete/DeleteVaultPage';
+import VaultDetailsPage from './pages/edItVault/vaultDetails/VaultDetailsPage';
+import VaultRenamePage from './pages/edItVault/vaultRename/VaultRenamePage';
+import ReshareVaultPage from './pages/edItVault/vaultReshare/ReshareVaultPage';
 import ImportVaultView from './pages/importVault/ImportVaultView';
 import JoinKeygenView from './pages/keygen/JoinKeygenView';
 import JoinKeysignFlow from './pages/keysign/JoinKeysignFlow';
@@ -17,6 +25,7 @@ import SendCryptoView from './pages/send/SendCryptoView';
 import SetupVaultView from './pages/setupVault/SetupVaultView';
 import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
+import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
 import { AddVaultPage } from './vault/add/AddVaultPage';
 import { VaultChainCoinPage } from './vault/chain/coin/VaultChainCoinPage';
 import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVaultChainCoinsPage';
@@ -24,15 +33,7 @@ import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPag
 import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
-import EditVaultPage from './pages/edItVault/EditVaultPage';
-import VaultDetailsPage from './pages/edItVault/vaultDetails/VaultDetailsPage';
-import { AddressPage } from './chain/components/address/AddressPage';
-import VaultBackupPage from './pages/edItVault/vaultBackup/VaultBackupPage';
-import VaultRenamePage from './pages/edItVault/vaultRename/VaultRenamePage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
-import ReshareVaultPage from './pages/edItVault/vaultReshare/ReshareVaultPage';
-import DeleteVaultPage from './pages/edItVault/vaultDelete/DeleteVaultPage';
-import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
 
 export const router = createBrowserRouter([
   {

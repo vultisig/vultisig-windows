@@ -1,20 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import NavBar from '../../components/navbar/NavBar';
-import KeygenError from '../../components/keygen/KeygenError';
-import KeygenNameVault from '../../components/keygen/KeygenNameVault';
+
+import { storage } from '../../../wailsjs/go/models';
 import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
-import KeygenView from '../../components/keygen/KeygenView';
 import KeygenDone from '../../components/keygen/KeygenDone';
+import KeygenError from '../../components/keygen/KeygenError';
 import KeygenInitial from '../../components/keygen/KeygenInitial';
+import KeygenNameVault from '../../components/keygen/KeygenNameVault';
+import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
 import KeygenTypeSelector from '../../components/keygen/KeygenTypeSelector';
 import KeygenVerify from '../../components/keygen/KeygenVerify';
-import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
+import KeygenView from '../../components/keygen/KeygenView';
+import NavBar from '../../components/navbar/NavBar';
 import { KeygenType } from '../../model/TssType';
-import { generateRandomNumber } from '../../utils/util';
-import { storage } from '../../../wailsjs/go/models';
-import { startSession } from '../../services/Keygen/Keygen';
 import { Endpoint } from '../../services/Endpoint';
+import { startSession } from '../../services/Keygen/Keygen';
+import { generateRandomNumber } from '../../utils/util';
 
 const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();

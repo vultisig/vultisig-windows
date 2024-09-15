@@ -1,4 +1,6 @@
+import { ReactNode } from 'react';
 import styled from 'styled-components';
+
 import { areEqualCoins } from '../../../coin/Coin';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
@@ -8,12 +10,11 @@ import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Panel } from '../../../lib/ui/panel/Panel';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { Text } from '../../../lib/ui/text';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation';
 import { useSaveCoinMutation } from '../../mutations/useSaveCoinMutation';
 import { useAssertCurrentVaultCoins } from '../../state/useCurrentVault';
-import { Text } from '../../../lib/ui/text';
-import { ReactNode } from 'react';
 
 const Container = styled(Panel)`
   ${interactive};

@@ -1,16 +1,17 @@
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { vStack, VStack } from '../../../lib/ui/layout/Stack';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
+import styled from 'styled-components';
+
+import { ElementSizeAware } from '../../../lib/ui/base/ElementSizeAware';
+import { VStack, vStack } from '../../../lib/ui/layout/Stack';
+import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { AddressPathParams } from '../../../navigation';
-import { useTranslation } from 'react-i18next';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageContent } from '../../../ui/page/PageContent';
-import { Text } from '../../../lib/ui/text';
-import { ElementSizeAware } from '../../../lib/ui/base/ElementSizeAware';
+import { PageHeader } from '../../../ui/page/PageHeader';
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { AddressQrCode } from './AddressQrCode';
-import styled from 'styled-components';
 import { DownloadAddressQrCode } from './DownloadAddressQrCode';
 
 const Content = styled.div`

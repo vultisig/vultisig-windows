@@ -1,8 +1,8 @@
-import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton';
 import { FileUpIcon } from '../../../lib/ui/icons/FileUpIcon';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
-import { PrintableAddressQrCode } from './PrintableAddressQrCode';
 import { SaveAsImage } from '../../../ui/file/SaveAsImage';
+import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton';
+import { PrintableAddressQrCode } from './PrintableAddressQrCode';
 
 export const DownloadAddressQrCode = ({
   value,

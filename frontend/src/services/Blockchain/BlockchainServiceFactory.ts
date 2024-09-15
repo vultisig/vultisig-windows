@@ -1,10 +1,11 @@
 import { WalletCore } from '@trustwallet/wallet-core';
+
 import { Chain } from '../../model/chain';
-import { BlockchainServiceThorchain } from './thorchain/BlockchainServiceThorchain';
-import { IBlockchainService } from './IBlockchainService';
-import { BlockchainServiceUtxo } from './utxo/BlockchainServiceUtxo';
 import { BlockchainServiceEvm } from './evm/BlockchainServiceEvm';
+import { IBlockchainService } from './IBlockchainService';
 import { BlockchainServiceSolana } from './solana/BlockchainServiceSolana';
+import { BlockchainServiceThorchain } from './thorchain/BlockchainServiceThorchain';
+import { BlockchainServiceUtxo } from './utxo/BlockchainServiceUtxo';
 
 export class BlockchainServiceFactory {
   static createService(

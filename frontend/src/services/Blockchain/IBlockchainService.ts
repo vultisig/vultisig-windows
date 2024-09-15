@@ -1,11 +1,11 @@
-import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { SignedTransactionResult } from './signed-transaction-result';
 import { tss } from '../../../wailsjs/go/models';
+import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import {
-  ITransaction,
   ISendTransaction,
   ISwapTransaction,
+  ITransaction,
 } from '../../model/transaction';
+import { SignedTransactionResult } from './signed-transaction-result';
 
 export interface IBlockchainService {
   getPreSignedInputData(keysignPayload: KeysignPayload): Promise<Uint8Array>;

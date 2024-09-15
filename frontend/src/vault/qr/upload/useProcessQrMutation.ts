@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import jsQR from 'jsqr';
-import { getRawQueryParams } from '../../../lib/utils/query/getRawQueryParams';
-import { decompressQrPayload } from './utils/decompressQrPayload';
-import { match } from '../../../lib/utils/match';
-import { KeygenMessage } from '../../../gen/vultisig/keygen/v1/keygen_message_pb';
 import { useNavigate } from 'react-router-dom';
+
+import { KeygenMessage } from '../../../gen/vultisig/keygen/v1/keygen_message_pb';
 import { ReshareMessage } from '../../../gen/vultisig/keygen/v1/reshare_message_pb';
 import { KeysignMessage } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { match } from '../../../lib/utils/match';
+import { getRawQueryParams } from '../../../lib/utils/query/getRawQueryParams';
+import { decompressQrPayload } from './utils/decompressQrPayload';
 
 type QrTssType = 'Keygen' | 'Reshare';
 

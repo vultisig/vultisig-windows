@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { TokensStore } from '../../services/Coin/CoinList';
-import { useCurrentVaultId } from '../state/useCurrentVaultId';
-import { useAssertWalletCore } from '../../main';
-import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
+
 import { Chain } from '../../model/chain';
+import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
+import { TokensStore } from '../../services/Coin/CoinList';
+import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 import { useAssertCurrentVault } from '../state/useCurrentVault';
+import { useCurrentVaultId } from '../state/useCurrentVaultId';
 
 export const useVaultAddressQuery = (chain: Chain) => {
   const vaultId = useCurrentVaultId();

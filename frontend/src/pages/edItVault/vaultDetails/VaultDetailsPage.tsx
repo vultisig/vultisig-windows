@@ -1,14 +1,15 @@
 import { useTranslation } from 'react-i18next';
+
+import { VStack } from '../../../lib/ui/layout/Stack';
+import { Text } from '../../../lib/ui/text';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
-import { Container, ListItemPanel } from './VaultDetailsPage.styles';
-import { Text } from '../../../lib/ui/text';
-import { useCurrentVault } from '../../../vault/state/useCurrentVault';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { AutoCenteredText } from '../EditVaultPage.styles';
 import { getVaultTypeText } from '../../../utils/util';
+import { useCurrentVault } from '../../../vault/state/useCurrentVault';
+import { AutoCenteredText } from '../EditVaultPage.styles';
+import { Container, ListItemPanel } from './VaultDetailsPage.styles';
 
 const VaultDetailsPage = () => {
   const { t } = useTranslation();

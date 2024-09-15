@@ -10,7 +10,7 @@ import {
   ITransaction,
 } from '../../model/transaction';
 import { BlockchainServiceFactory } from '../../services/Blockchain/BlockchainServiceFactory';
-import { useAssertWalletCore } from '../../main';
+import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { ChainUtils } from '../../model/chain';
 
 interface VerifyTransactionViewProps {

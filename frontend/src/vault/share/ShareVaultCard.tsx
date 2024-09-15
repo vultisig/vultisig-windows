@@ -1,16 +1,17 @@
-import styled, { useTheme } from 'styled-components';
-import { borderRadius } from '../../lib/ui/css/borderRadius';
-import { Text } from '../../lib/ui/text';
-import { useAssertCurrentVault } from '../state/useCurrentVault';
-import { vStack, VStack } from '../../lib/ui/layout/Stack';
-import { getColor } from '../../lib/ui/theme/getters';
-import { VaultKey } from './VaultKey';
-import { toSizeUnit } from '../../lib/ui/css/toSizeUnit';
 import QRCode from 'react-qr-code';
-import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyEport';
+import styled, { useTheme } from 'styled-components';
+
+import { borderRadius } from '../../lib/ui/css/borderRadius';
 import { centerContent } from '../../lib/ui/css/centerContent';
 import { sameDimensions } from '../../lib/ui/css/sameDimensions';
+import { toSizeUnit } from '../../lib/ui/css/toSizeUnit';
+import { VStack, vStack } from '../../lib/ui/layout/Stack';
+import { Text } from '../../lib/ui/text';
+import { getColor } from '../../lib/ui/theme/getters';
 import { ProductSimpleLogo } from '../../ui/logo/ProductSimpleLogo';
+import { useAssertCurrentVault } from '../state/useCurrentVault';
+import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyEport';
+import { VaultKey } from './VaultKey';
 
 const cardWidth = 320;
 const qrCodeSize = cardWidth - 80;

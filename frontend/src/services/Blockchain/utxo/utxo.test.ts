@@ -1,12 +1,13 @@
+import { protoInt64 } from '@bufbuild/protobuf';
+import { initWasm } from '@trustwallet/wallet-core';
 import { assert, describe, it, vi } from 'vitest';
+
+import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { protoInt64 } from '@bufbuild/protobuf';
-import { BlockchainServiceFactory } from '../BlockchainServiceFactory';
-import { Chain } from '../../../model/chain';
-import { initWasm } from '@trustwallet/wallet-core';
 import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
+import { Chain } from '../../../model/chain';
+import { BlockchainServiceFactory } from '../BlockchainServiceFactory';
 //import { Vault } from '../../../gen/vultisig/vault/v1/vault_pb';
 
 // Mock the AddressServiceFactory and the AddressService

@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
+
 import { VStack } from '../../lib/ui/layout/Stack';
-import { ProductEnhancedLogo } from '../../ui/logo/ProductEnhancedLogo';
 import { Text } from '../../lib/ui/text';
+import { ProductEnhancedLogo } from '../../ui/logo/ProductEnhancedLogo';
 
 export const ProductLogoBlock = () => {
   const { t } = useTranslation();

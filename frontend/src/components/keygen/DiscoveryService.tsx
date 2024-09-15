@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { DiscoveryService } from '../../../wailsjs/go/mediator/Server';
 
 interface DiscoveryServiceProps {

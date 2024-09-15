@@ -1,12 +1,13 @@
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { UploadQrPageHeader } from './UploadQrPageHeader';
-import { Text } from '../../../lib/ui/text';
-import { QrImageDropZone } from './QrImageDropZone';
 import { useState } from 'react';
-import { UploadedQr } from './UploadedQr';
+
 import { Button } from '../../../lib/ui/buttons/Button';
-import { useProcessQrMutation } from './useProcessQrMutation';
+import { VStack } from '../../../lib/ui/layout/Stack';
+import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
+import { QrImageDropZone } from './QrImageDropZone';
+import { UploadedQr } from './UploadedQr';
+import { UploadQrPageHeader } from './UploadQrPageHeader';
+import { useProcessQrMutation } from './useProcessQrMutation';
 
 export const UploadQrPage = () => {
   const [file, setFile] = useState<File | null>(null);

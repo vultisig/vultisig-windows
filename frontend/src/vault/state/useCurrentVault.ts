@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
-import { useVaults } from '../queries/useVaultsQuery';
-import { useCurrentVaultId } from './useCurrentVaultId';
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
+
 import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
-import { getStorageVaultId } from '../utils/storageVault';
+import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { Chain } from '../../model/chain';
+import { useVaults } from '../queries/useVaultsQuery';
+import { getStorageVaultId } from '../utils/storageVault';
+import { useCurrentVaultId } from './useCurrentVaultId';
 
 export const useCurrentVault = () => {
   const vaults = useVaults();

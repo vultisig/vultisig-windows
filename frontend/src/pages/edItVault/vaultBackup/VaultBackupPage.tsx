@@ -1,26 +1,27 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+
+import { Button } from '../../../lib/ui/buttons/Button';
+import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
+import InfoGradientIcon from '../../../lib/ui/icons/InfoGradientIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageSlice } from '../../../ui/page/PageSlice';
 import { Text } from '../../../lib/ui/text';
+import { PageHeader } from '../../../ui/page/PageHeader';
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { PageSlice } from '../../../ui/page/PageSlice';
 import {
+  ActionsWrapper,
+  GradientText,
+  IconButton,
+  InfoPill,
   InputField,
   InputFieldWrapper,
-  IconButton,
-  ActionsWrapper,
-  InfoPill,
-  GradientText,
 } from './VaultBackupPage.styles';
-import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
-import { z } from 'zod';
-import { FieldValues, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '../../../lib/ui/buttons/Button';
-import { useState } from 'react';
-import InfoGradientIcon from '../../../lib/ui/icons/InfoGradientIcon';
-import { useNavigate } from 'react-router-dom';
 
 const passwordSchema = z
   .object({

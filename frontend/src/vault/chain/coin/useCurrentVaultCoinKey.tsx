@@ -1,4 +1,5 @@
 import { useParams } from 'react-router-dom';
+
 import { CoinKey } from '../../../coin/Coin';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { useCurrentVaultChainId } from '../useCurrentVaultChainId';

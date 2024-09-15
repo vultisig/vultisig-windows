@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 
 type Input = {

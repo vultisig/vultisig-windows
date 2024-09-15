@@ -1,10 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
-import { useAssertCurrentVault } from '../state/useCurrentVault';
-import { CoinMeta } from '../../model/coin-meta';
-import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
-import { useAssertWalletCore } from '../../main';
+
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
+import { CoinMeta } from '../../model/coin-meta';
+import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
+import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
+import { useAssertCurrentVault } from '../state/useCurrentVault';
 import { getStorageVaultId } from '../utils/storageVault';
 
 export const useSaveCoinMutation = () => {

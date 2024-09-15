@@ -1,23 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
-import JoinKeysign from '../../components/keysign/JoinKeysign';
-import NavBar from '../../components/navbar/NavBar';
-import { useTranslation } from 'react-i18next';
-import { joinSession } from '../../services/Keygen/Keygen';
-import { useNavigate, useParams } from 'react-router-dom';
-import { storage } from '../../../wailsjs/go/models';
 import { useQueryClient } from '@tanstack/react-query';
+import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { storage } from '../../../wailsjs/go/models';
 import { GetVault } from '../../../wailsjs/go/storage/Store';
+import DiscoveryServiceScreen from '../../components/keygen/DiscoveryService';
+import JoinKeysign from '../../components/keysign/JoinKeysign';
+import KeysignDone from '../../components/keysign/KeysignDone';
+import KeysignError from '../../components/keysign/KeysignError';
+import KeysignView from '../../components/keysign/KeysignView';
+import NavBar from '../../components/navbar/NavBar';
+import { KeysignPayloadUtils } from '../../extensions/KeysignPayload';
 import {
   KeysignMessage,
   KeysignPayload,
 } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
-import DiscoveryServiceScreen from '../../components/keygen/DiscoveryService';
-import KeysignError from '../../components/keysign/KeysignError';
-import KeysignView from '../../components/keysign/KeysignView';
-import { KeysignPayloadUtils } from '../../extensions/KeysignPayload';
-import { useWalletCore } from '../../main';
+import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { Endpoint } from '../../services/Endpoint';
-import KeysignDone from '../../components/keysign/KeysignDone';
+import { joinSession } from '../../services/Keygen/Keygen';
+
 const JoinKeysignFlow: React.FC = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();

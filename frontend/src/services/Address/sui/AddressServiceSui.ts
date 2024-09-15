@@ -1,7 +1,8 @@
 import { WalletCore } from '@trustwallet/wallet-core';
-import { IAddressService } from '../IAddressService';
-import { AddressService } from '../AddressService';
+
 import { Chain } from '../../../model/chain';
+import { AddressService } from '../AddressService';
+import { IAddressService } from '../IAddressService';
 
 export class AddressServiceSui
   extends AddressService

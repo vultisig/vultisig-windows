@@ -1,13 +1,14 @@
 import { WalletCore } from '@trustwallet/wallet-core';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+
+import { DeleteCoin, SaveCoin } from '../../../wailsjs/go/storage/Store';
+import { coinToStorageCoin } from '../../coin/utils/coin';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
-import { ICoinService } from './ICoinService';
 import { AddressServiceFactory } from '../Address/AddressServiceFactory';
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
-import { DeleteCoin, SaveCoin } from '../../../wailsjs/go/storage/Store';
-import { coinToStorageCoin } from '../../coin/utils/coin';
 import { TokensStore } from './CoinList';
+import { ICoinService } from './ICoinService';
 
 export class CoinService implements ICoinService {
   private chain: Chain;

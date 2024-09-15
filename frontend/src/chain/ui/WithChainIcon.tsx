@@ -1,3 +1,4 @@
+import { ComponentProps } from 'react';
 import styled from 'styled-components';
 
 import { centerContent } from '../../lib/ui/css/centerContent';
@@ -5,7 +6,6 @@ import { round } from '../../lib/ui/css/round';
 import { sameDimensions } from '../../lib/ui/css/sameDimensions';
 import { getColor } from '../../lib/ui/theme/getters';
 import { ChainEntityIcon } from './ChainEntityIcon';
-import { ComponentProps } from 'react';
 
 const Wrapper = styled.div`
   ${sameDimensions('1em')};

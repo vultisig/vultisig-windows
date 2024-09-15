@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { CoinKey } from '../Coin';
-import { Endpoint } from '../../services/Endpoint';
+
 import { queryUrl } from '../../lib/utils/query/queryUrl';
+import { Endpoint } from '../../services/Endpoint';
+import { CoinKey } from '../Coin';
 
 type Price = {
   usd: number;

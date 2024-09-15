@@ -1,10 +1,11 @@
-import styled, { css } from 'styled-components';
 import React from 'react';
+import styled, { css } from 'styled-components';
+
 import { centerContent } from '../../css/centerContent';
 import { interactive } from '../../css/interactive';
 import { CheckIcon } from '../../icons/CheckIcon';
 import { IconWrapper } from '../../icons/IconWrapper';
-import { UIComponentProps, ComponentWithChildrenProps } from '../../props';
+import { ComponentWithChildrenProps, UIComponentProps } from '../../props';
 import { getColor } from '../../theme/getters';
 
 type CheckStatusProps = UIComponentProps & {

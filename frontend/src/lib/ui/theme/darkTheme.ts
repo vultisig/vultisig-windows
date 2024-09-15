@@ -1,4 +1,5 @@
 import { DefaultTheme } from 'styled-components';
+
 import { HSLA } from '../colors/HSLA';
 import { sharedColors } from './shared';
 

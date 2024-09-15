@@ -1,14 +1,15 @@
 import { WalletCore } from '@trustwallet/wallet-core';
+
 import { Chain } from '../model/chain';
 import { AddressServiceFactory } from './Address/AddressServiceFactory';
-import { CoinServiceFactory } from './Coin/CoinServiceFactory';
-import { IService } from './IService';
-import { RpcServiceFactory } from './Rpc/RpcServiceFactory';
-import { Service } from './Service';
 import { BalanceServiceFactory } from './Balance/BalanceServiceFactory';
-import { PriceServiceFactory } from './Price/PriceServiceFactory';
+import { CoinServiceFactory } from './Coin/CoinServiceFactory';
 import { FeeServiceFactory } from './Fee/FeeServiceFactory';
+import { IService } from './IService';
+import { PriceServiceFactory } from './Price/PriceServiceFactory';
+import { RpcServiceFactory } from './Rpc/RpcServiceFactory';
 import { SendServiceFactory } from './Send/SendServiceFactory';
+import { Service } from './Service';
 
 export class ServiceFactory {
   static getService(chain: Chain, walletCore: WalletCore): IService {

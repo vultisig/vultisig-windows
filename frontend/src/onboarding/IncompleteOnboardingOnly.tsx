@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { ComponentWithChildrenProps } from '../lib/ui/props';
-import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding';
-import { addVaultPath } from '../navigation';
 import { useNavigate } from 'react-router-dom';
+
+import { ComponentWithChildrenProps } from '../lib/ui/props';
+import { addVaultPath } from '../navigation';
+import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding';
 
 export const IncompleteOnboardingOnly = ({
   children,

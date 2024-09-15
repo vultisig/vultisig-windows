@@ -1,14 +1,14 @@
-import { Chain } from '../../model/chain';
-import { areEqualCoins, CoinAmount, CoinInfo, CoinKey } from '../../coin/Coin';
+import { useMemo } from 'react';
+
 import { EntityWithPrice } from '../../chain/EntityWithPrice';
-import { CoinMeta } from '../../model/coin-meta';
+import { areEqualCoins, CoinAmount, CoinInfo, CoinKey } from '../../coin/Coin';
+import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
+import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
 import {
   getStorageCoinKey,
   storageCoinToCoin,
 } from '../../coin/utils/storageCoin';
-import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
-import { useMemo } from 'react';
 import {
   getResolvedQuery,
   pendingQuery,
@@ -16,7 +16,8 @@ import {
 } from '../../lib/ui/query/Query';
 import { withoutUndefined } from '../../lib/utils/array/withoutUndefined';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
-import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
+import { Chain } from '../../model/chain';
+import { CoinMeta } from '../../model/coin-meta';
 import { useAssertCurrentVaultChainCoins } from '../state/useCurrentVault';
 
 export type VaultChainCoin = CoinKey &

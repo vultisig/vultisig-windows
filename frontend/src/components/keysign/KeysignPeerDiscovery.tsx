@@ -1,17 +1,18 @@
+import crypto from 'crypto';
+import Lottie from 'lottie-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { storage } from '../../../wailsjs/go/models';
-import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
-import crypto from 'crypto';
-import { generateRandomNumber } from '../../utils/util';
 import { v4 as uuidv4 } from 'uuid';
-import KeysignQRCode from './KeysignQrCode';
-import { createKeysignMessage } from '../../utils/QRGen';
-import Lottie from 'lottie-react';
-import SelectDevice from '../selectDevice/SelectDevice';
+
 import loadingAnimation from '../../../public/assets/images/loadingAnimation.json';
 import { AdvertiseMediator } from '../../../wailsjs/go/mediator/Server';
+import { storage } from '../../../wailsjs/go/models';
+import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { checkForDevices, postSession } from '../../services/Keygen/Keygen';
+import { createKeysignMessage } from '../../utils/QRGen';
+import { generateRandomNumber } from '../../utils/util';
+import SelectDevice from '../selectDevice/SelectDevice';
+import KeysignQRCode from './KeysignQrCode';
 
 interface KeysignPeerDiscoveryProps {
   vault: storage.Vault;

@@ -1,4 +1,5 @@
 import { WalletCore } from '@trustwallet/wallet-core';
+
 import { tss } from '../../../wailsjs/go/models';
 
 class SignatureProvider {

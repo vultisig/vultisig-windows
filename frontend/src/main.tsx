@@ -1,47 +1,19 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { createRoot } from 'react-dom/client';
 import './App.css';
-import App from './App';
-import { Buffer } from 'buffer';
-import { initWasm, WalletCore } from '@trustwallet/wallet-core';
 import './extensions/string';
-import { shouldBePresent } from './lib/utils/assert/shouldBePresent';
+
+import { Buffer } from 'buffer';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+
+import App from './App';
 
 // Make sure Buffer is available globally
 window.Buffer = Buffer;
 
-const WalletCoreContext = createContext<WalletCore | null>(null);
-
-export const WalletCoreProvider = ({ children }: { children: any }) => {
-  const [wasmModule, setWasmModule] = useState<WalletCore | null>(null);
-
-  useEffect(() => {
-    const loadWasm = async () => {
-      const walletCore = await initWasm();
-      setWasmModule(walletCore);
-    };
-    loadWasm();
-  }, []);
-
-  return (
-    <WalletCoreContext.Provider value={wasmModule}>
-      {children}
-    </WalletCoreContext.Provider>
-  );
-};
-
-export const useWalletCore = () => useContext(WalletCoreContext);
-
-export const useAssertWalletCore = () => shouldBePresent(useWalletCore());
-
-const container = document.getElementById('root');
-
-const root = createRoot(container!);
+const root = createRoot(document.getElementById('root')!);
 
 root.render(
-  //<React.StrictMode>
-  <WalletCoreProvider>
+  <StrictMode>
     <App />
-  </WalletCoreProvider>
-  //</React.StrictMode>
+  </StrictMode>
 );

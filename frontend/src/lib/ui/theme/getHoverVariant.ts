@@ -1,6 +1,7 @@
 import { DefaultTheme } from 'styled-components';
-import { ThemeColors } from './ThemeColors';
+
 import { match } from '../../utils/match';
+import { ThemeColors } from './ThemeColors';
 
 interface ThemeGetterParams {
   theme: DefaultTheme;
