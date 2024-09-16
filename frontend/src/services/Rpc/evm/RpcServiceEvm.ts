@@ -9,6 +9,9 @@ import { Endpoint } from '../../Endpoint';
 import { RpcServiceEvmOneInch } from './OneInch';
 import { ChainUtils } from '../../../model/chain';
 
+import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
+
+
 export class RpcServiceEvm implements IRpcService, ITokenService {
   private provider: ethers.JsonRpcProvider;
   private rpcUrl: string;
@@ -38,7 +41,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     try {
       const address = await this.provider.resolveName(ensName);
       if (!address)
-        throw new Error(`ENS name ${ensName} could not be resolved.`);
+        throw new Error('ENS  ' + ensName + ' namecould not be resolved.');
       return address;
     } catch (error) {
       console.error('resolveENS::', error);
@@ -58,18 +61,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return BigInt(balance);
     } catch (error) {
       console.error('fetchTokenBalance::', error);
-      throw error;
-    }
-  }
-
-  async fetchTokens(_nativeToken: Coin): Promise<CoinMeta[]> {
-    try {
-      // Assuming there's some interaction with an external service like OneInch to get token balances
-      // The implementation here will depend on how you fetch tokens for a given wallet address.
-      // For simplicity, returning an empty array here.
-      return [];
-    } catch (error) {
-      console.error('fetchTokens::', error);
       throw error;
     }
   }
@@ -316,8 +307,15 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
+  sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
     try {
+
+      console.log('Fetching tokens for:', nativeToken);
+
       const chain = ChainUtils.stringToChain(nativeToken.chain);
 
       if (!chain) {
@@ -326,8 +324,12 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
       const oneInchChainId = RpcServiceEvmOneInch.getOneInchChainId(chain);
       const oneInchEndpoint = Endpoint.fetch1InchsTokensBalance(oneInchChainId.toString(), nativeToken.address);
-      const response = await fetch(oneInchEndpoint);
-      const balanceData = await response.json();
+
+      const balanceData = await await Fetch(oneInchEndpoint);
+
+      console.log('Balance Data:', balanceData);
+
+      await this.sleep(1000); // Sleep for 2 seconds
 
       // Filter tokens with non-zero balance
       const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
@@ -338,15 +340,14 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         return [];
       }
 
+      console.log('Non-zero balance tokens:', nonZeroBalanceTokenAddresses);
+
       // Fetch token information for the non-zero balance tokens
       const tokenInfoEndpoint = Endpoint.fetch1InchsTokensInfo(oneInchChainId.toString(), nonZeroBalanceTokenAddresses);
-      const tokenInfoResponse = await fetch(tokenInfoEndpoint);
 
-      if (!tokenInfoResponse.ok) {
-        throw new Error("Failed to fetch token information");
-      }
+      const tokenInfoData = await await Fetch(tokenInfoEndpoint);
 
-      const tokenInfoData = await tokenInfoResponse.json();
+      console.log('Token Info Data:', tokenInfoData);
 
       // Map the fetched token information to CoinMeta[] format
       return nonZeroBalanceTokenAddresses
@@ -368,7 +369,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
     } catch (error) {
       console.error('getTokens::', error);
-      throw error;
+      return [];
     }
   }
 

@@ -15,6 +15,7 @@ import (
 	"github.com/vultisig/vultisig-win/mediator"
 	"github.com/vultisig/vultisig-win/storage"
 	"github.com/vultisig/vultisig-win/tss"
+	"github.com/vultisig/vultisig-win/utils"
 )
 
 //go:embed all:frontend/dist
@@ -28,6 +29,7 @@ func main() {
 	app := NewApp()
 	tssIns := tss.NewTssService()
 	store, err := storage.NewStore()
+	goHttp, err := utils.NewGoHttp()
 	if err != nil {
 		panic(err)
 	}
@@ -69,6 +71,7 @@ func main() {
 			tssIns,
 			store,
 			mediator,
+			goHttp,
 		},
 		EnumBind: []interface{}{},
 		LogLevel: logger.ERROR,
