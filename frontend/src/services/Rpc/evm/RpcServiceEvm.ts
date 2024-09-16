@@ -5,6 +5,12 @@ import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
 import { SpecificEvm } from '../../../model/gas-info';
 import { FeeMap, FeeMode } from '../../../model/evm-fee-mode';
+import { Endpoint } from '../../Endpoint';
+import { RpcServiceEvmOneInch } from './OneInch';
+import { ChainUtils } from '../../../model/chain';
+
+import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
+
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   private provider: ethers.JsonRpcProvider;
@@ -35,7 +41,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     try {
       const address = await this.provider.resolveName(ensName);
       if (!address)
-        throw new Error(`ENS name ${ensName} could not be resolved.`);
+        throw new Error('ENS  ' + ensName + ' namecould not be resolved.');
       return address;
     } catch (error) {
       console.error('resolveENS::', error);
@@ -55,18 +61,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return BigInt(balance);
     } catch (error) {
       console.error('fetchTokenBalance::', error);
-      throw error;
-    }
-  }
-
-  async fetchTokens(_nativeToken: Coin): Promise<CoinMeta[]> {
-    try {
-      // Assuming there's some interaction with an external service like OneInch to get token balances
-      // The implementation here will depend on how you fetch tokens for a given wallet address.
-      // For simplicity, returning an empty array here.
-      return [];
-    } catch (error) {
-      console.error('fetchTokens::', error);
       throw error;
     }
   }
@@ -313,15 +307,66 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async getTokens(_nativeToken: Coin): Promise<CoinMeta[]> {
+  sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
     try {
-      // Fetching tokens logic based on specific API or service used
-      return [];
+
+      console.log('Fetching tokens for:', nativeToken);
+
+      const chain = ChainUtils.stringToChain(nativeToken.chain);
+
+      if (!chain) {
+        throw new Error('Invalid chain');
+      }
+
+      const oneInchChainId = RpcServiceEvmOneInch.getOneInchChainId(chain);
+      const oneInchEndpoint = Endpoint.fetch1InchsTokensBalance(oneInchChainId.toString(), nativeToken.address);
+
+      const balanceData = await Fetch(oneInchEndpoint);
+
+      await this.sleep(1000); // We have some rate limits on 1 inch, so I will wait a bit
+
+      // Filter tokens with non-zero balance
+      const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
+        .filter(([_, balance]) => BigInt(balance as string) > 0n)  // Ensure the balance is non-zero
+        .map(([tokenAddress]) => tokenAddress);
+
+      if (nonZeroBalanceTokenAddresses.length === 0) {
+        return [];
+      }
+
+      // Fetch token information for the non-zero balance tokens
+      const tokenInfoEndpoint = Endpoint.fetch1InchsTokensInfo(oneInchChainId.toString(), nonZeroBalanceTokenAddresses);
+
+      const tokenInfoData = await Fetch(tokenInfoEndpoint);
+
+      // Map the fetched token information to CoinMeta[] format
+      return nonZeroBalanceTokenAddresses
+        .map(tokenAddress => {
+          const tokenInfo = tokenInfoData[tokenAddress];
+          if (!tokenInfo) return null;
+
+          return {
+            chain: chain,
+            contractAddress: tokenInfo.address,
+            decimals: tokenInfo.decimals,
+            isNativeToken: false,
+            logo: tokenInfo.logoURI,
+            priceProviderId: '',
+            ticker: tokenInfo.symbol,
+          } as CoinMeta;
+        })
+        .filter((token): token is CoinMeta => token !== null);  // Type guard to filter out null values
+
     } catch (error) {
       console.error('getTokens::', error);
-      throw error;
+      return [];
     }
   }
+
 
   async getGasInfoZk(
     fromAddress: string,
