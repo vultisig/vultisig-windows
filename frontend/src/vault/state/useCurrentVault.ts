@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { groupItems } from '../../lib/utils/array/groupItems';
 import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { Chain } from '../../model/chain';
@@ -54,6 +55,14 @@ export const useAssertCurrentVaultCoins = () => {
     () => allCoins.filter(coin => chains.includes(coin.chain)),
     [allCoins, chains]
   );
+};
+
+export const useAssertCurrentVaultCoinsByChain = () => {
+  const coins = useAssertCurrentVaultCoins();
+
+  return useMemo(() => {
+    return groupItems(coins, coin => coin.chain as Chain);
+  }, [coins]);
 };
 
 export const useAssertCurrentVaultAddreses = () => {

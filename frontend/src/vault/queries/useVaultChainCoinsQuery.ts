@@ -22,7 +22,7 @@ import { useAssertCurrentVaultChainCoins } from '../state/useCurrentVault';
 
 export type VaultChainCoin = CoinKey &
   CoinAmount &
-  Omit<CoinInfo, 'name'> &
+  CoinInfo &
   Partial<EntityWithPrice>;
 
 export const useVaultChainCoinsQuery = (chain: Chain) => {
@@ -45,7 +45,7 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
           const coinKey = getStorageCoinKey(coin);
 
           const balance = shouldBePresent(balancesQuery.data).find(balance =>
-            areEqualCoins(balance, getStorageCoinKey(coin))
+            areEqualCoins(balance, coinKey)
           );
           const amount = balance?.amount || 0;
 

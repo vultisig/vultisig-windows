@@ -3,12 +3,12 @@ import { VStack } from '../../lib/ui/layout/Stack';
 import { PageContent } from '../../ui/page/PageContent';
 import { VaultTotalBalance } from '../balance/VaultTotalBalance';
 import { ManageVaultChainsPrompt } from '../chain/manage/ManageVaultChainsPrompt';
-import { useAssertCurrentVaultChainIds } from '../state/useCurrentVault';
+import { useVaultChainsBalancesQuery } from '../queries/useVaultChainsBalancesQuery';
 import { VaultChainItem } from './VaultChainItem';
 import { VaultPrimaryActions } from './VaultPrimaryActions';
 
 export const VaultOverview = () => {
-  const chains = useAssertCurrentVaultChainIds();
+  const query = useVaultChainsBalancesQuery();
 
   return (
     <ScrollableFlexboxFiller>
@@ -19,8 +19,8 @@ export const VaultOverview = () => {
             <VaultPrimaryActions />
           </VStack>
           <VStack gap={16}>
-            {chains.map(chainId => (
-              <VaultChainItem key={chainId} value={chainId} />
+            {(query.data ?? []).map(value => (
+              <VaultChainItem key={value.chainId} value={value} />
             ))}
             <ManageVaultChainsPrompt />
           </VStack>

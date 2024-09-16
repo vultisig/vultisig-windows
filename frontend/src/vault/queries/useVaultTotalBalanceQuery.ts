@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
-import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { areEqualCoins } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
+import { getCoinValue } from '../../coin/utils/getCoinValue';
 import {
   getStorageCoinKey,
   storageCoinToCoin,
@@ -47,7 +47,11 @@ export const useVaultTotalBalanceQuery = () => {
             return 0;
           }
 
-          return price.price * fromChainAmount(balance.amount, coin.decimals);
+          return getCoinValue({
+            amount: balance.amount,
+            decimals: coin.decimals,
+            price: price.price,
+          });
         })
       );
 
