@@ -5,6 +5,9 @@ import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
 import { SpecificEvm } from '../../../model/gas-info';
 import { FeeMap, FeeMode } from '../../../model/evm-fee-mode';
+import { Endpoint } from '../../Endpoint';
+import { RpcServiceEvmOneInch } from './OneInch';
+import { ChainUtils } from '../../../model/chain';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   private provider: ethers.JsonRpcProvider;
@@ -313,15 +316,62 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async getTokens(_nativeToken: Coin): Promise<CoinMeta[]> {
+  async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
     try {
-      // Fetching tokens logic based on specific API or service used
-      return [];
+      const chain = ChainUtils.stringToChain(nativeToken.chain);
+
+      if (!chain) {
+        throw new Error('Invalid chain');
+      }
+
+      const oneInchChainId = RpcServiceEvmOneInch.getOneInchChainId(chain);
+      const oneInchEndpoint = Endpoint.fetch1InchsTokensBalance(oneInchChainId.toString(), nativeToken.address);
+      const response = await fetch(oneInchEndpoint);
+      const balanceData = await response.json();
+
+      // Filter tokens with non-zero balance
+      const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
+        .filter(([_, balance]) => BigInt(balance as string) > 0n)  // Ensure the balance is non-zero
+        .map(([tokenAddress]) => tokenAddress);
+
+      if (nonZeroBalanceTokenAddresses.length === 0) {
+        return [];
+      }
+
+      // Fetch token information for the non-zero balance tokens
+      const tokenInfoEndpoint = Endpoint.fetch1InchsTokensInfo(oneInchChainId.toString(), nonZeroBalanceTokenAddresses);
+      const tokenInfoResponse = await fetch(tokenInfoEndpoint);
+
+      if (!tokenInfoResponse.ok) {
+        throw new Error("Failed to fetch token information");
+      }
+
+      const tokenInfoData = await tokenInfoResponse.json();
+
+      // Map the fetched token information to CoinMeta[] format
+      return nonZeroBalanceTokenAddresses
+        .map(tokenAddress => {
+          const tokenInfo = tokenInfoData[tokenAddress];
+          if (!tokenInfo) return null;
+
+          return {
+            chain: chain,
+            contractAddress: tokenInfo.address,
+            decimals: tokenInfo.decimals,
+            isNativeToken: false,
+            logo: tokenInfo.logoURI,
+            priceProviderId: '',
+            ticker: tokenInfo.symbol,
+          } as CoinMeta;
+        })
+        .filter((token): token is CoinMeta => token !== null);  // Type guard to filter out null values
+
     } catch (error) {
       console.error('getTokens::', error);
       throw error;
     }
   }
+
 
   async getGasInfoZk(
     fromAddress: string,
