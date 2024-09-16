@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
-import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
@@ -31,6 +30,7 @@ import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
 import { VaultAddressLink } from './VaultAddressLink';
 import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
 import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt';
+import { getCoinValue } from '../../coin/utils/getCoinValue';
 
 export const VaultChainPage = () => {
   const chainId = useCurrentVaultChainId();
@@ -98,9 +98,12 @@ export const VaultChainPage = () => {
               {...getQueryDependantDefaultProps('vault address')}
               success={coins => {
                 const total = sum(
-                  coins.map(
-                    ({ amount, decimals, price = 0 }) =>
-                      fromChainAmount(amount, decimals) * price
+                  coins.map(({ amount, decimals, price = 0 }) =>
+                    getCoinValue({
+                      amount,
+                      decimals,
+                      price,
+                    })
                   )
                 );
 
