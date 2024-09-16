@@ -86,8 +86,10 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     return value + value / 2; // x1.5 fee
   }
 
-  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificEvm> {
+  async getSpecificTransactionInfo(coin: Coin, feeMode?: FeeMode): Promise<SpecificEvm> {
     try {
+      const paramFeeMode: FeeMode = feeMode ?? FeeMode.Normal;
+
       const [gasPrice, nonce] = await Promise.all([
         this.provider.send('eth_gasPrice', []),
         this.provider.getTransactionCount(coin.address),
@@ -100,8 +102,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
       const baseFee = await this.getBaseFee();
       const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
-      const feeMode: FeeMode = FeeMode.Normal; // Ensure feeMode is defined and typed
-      const priorityFee = priorityFeeMapValue[feeMode];
+      const priorityFee = priorityFeeMapValue[paramFeeMode];
       const normalizedBaseFee = this.normalizeFee(Number(baseFee));
       const maxFeePerGasWei = Number(
         BigInt(Math.round(normalizedBaseFee + priorityFee))
