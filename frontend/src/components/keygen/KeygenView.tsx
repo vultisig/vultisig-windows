@@ -2,15 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { storage } from '../../../wailsjs/go/models';
-import { SaveVault } from '../../../wailsjs/go/storage/Store';
-import { Reshare, StartKeygen } from '../../../wailsjs/go/tss/TssService';
 import { EventsOn } from '../../../wailsjs/runtime/runtime';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { KeygenType } from '../../model/TssType';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { DefaultCoinsService } from '../../services/Coin/DefaultCoinsService';
 import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
 import RingProgress from '../ringProgress/RingProgress';
+import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 
 interface KeygenViewProps {
   vault: storage.Vault;
@@ -37,6 +35,8 @@ const KeygenView: React.FC<KeygenViewProps> = ({
   const walletCore = useAssertWalletCore();
   const invalidateQueries = useInvalidateQueries();
 
+  const vaultService = VaultServiceFactory.getService(walletCore);
+
   useEffect(() => {
     EventsOn('PrepareVault', data => {
       console.log('PrepareVault', data);
@@ -58,42 +58,32 @@ const KeygenView: React.FC<KeygenViewProps> = ({
     console.log('start keygen.....');
     // when isRelay = false , need to discover the local mediator
     async function kickoffKeygen() {
-      const newVault = await StartKeygen(
-        vault.name,
-        vault.local_party_id,
-        sessionID,
-        vault.hex_chain_code,
-        hexEncryptionKey,
-        serverURL
-      ).catch(err => {
-        console.log(err);
-        onError(err);
-      });
+      const newVault =
+        await vaultService
+          .StartKeygen(vault, sessionID, hexEncryptionKey, serverURL)
+          .catch(err => {
+            console.log(err);
+            onError(err);
+          });
+
       setCurrentProgress(100);
       if (newVault !== undefined) {
-        await SaveVault(newVault);
-        new DefaultCoinsService(walletCore).applyDefaultCoins(newVault);
         await invalidateQueries(vaultsQueryKey);
-
         onDone();
       }
     }
 
     async function kickoffReshare() {
-      // let's convert the vault to
-      const newVault = await Reshare(
-        vault,
-        sessionID,
-        hexEncryptionKey,
-        serverURL
-      ).catch(err => {
-        console.log(err);
-        onError(err);
-      });
+      const newVault =
+        await vaultService
+          .Reshare(vault, sessionID, hexEncryptionKey, serverURL)
+          .catch(err => {
+            console.log(err);
+            onError(err);
+          });
+
       setCurrentProgress(100);
       if (newVault !== undefined) {
-        await SaveVault(newVault);
-        new DefaultCoinsService(walletCore).applyDefaultCoins(newVault);
         await invalidateQueries(vaultsQueryKey);
         onDone();
       }
