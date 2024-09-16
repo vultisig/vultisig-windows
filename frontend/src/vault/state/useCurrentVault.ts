@@ -5,6 +5,7 @@ import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
 import { getStorageVaultId } from '../utils/storageVault';
 import { Chain } from '../../model/chain';
+import { groupItems } from '../../lib/utils/array/groupItems';
 
 export const useCurrentVault = () => {
   const vaults = useVaults();
@@ -53,6 +54,14 @@ export const useAssertCurrentVaultCoins = () => {
     () => allCoins.filter(coin => chains.includes(coin.chain)),
     [allCoins, chains]
   );
+};
+
+export const useAssertCurrentVaultCoinsByChain = () => {
+  const coins = useAssertCurrentVaultCoins();
+
+  return useMemo(() => {
+    return groupItems(coins, coin => coin.chain as Chain);
+  }, [coins]);
 };
 
 export const useAssertCurrentVaultAddreses = () => {

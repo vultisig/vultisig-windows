@@ -15,7 +15,7 @@ import {
 import { sum } from '../../lib/utils/array/sum';
 import { areEqualCoins } from '../../coin/Coin';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
-import { fromChainAmount } from '../../chain/utils/fromChainAmount';
+import { getCoinValue } from '../../coin/utils/getCoinValue';
 
 export const useVaultTotalBalanceQuery = () => {
   const coins = useAssertCurrentVaultCoins();
@@ -46,7 +46,11 @@ export const useVaultTotalBalanceQuery = () => {
             return 0;
           }
 
-          return price.price * fromChainAmount(balance.amount, coin.decimals);
+          return getCoinValue({
+            amount: balance.amount,
+            decimals: coin.decimals,
+            price: price.price,
+          });
         })
       );
 

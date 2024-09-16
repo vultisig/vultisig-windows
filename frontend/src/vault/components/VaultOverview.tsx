@@ -5,10 +5,10 @@ import { VaultPrimaryActions } from './VaultPrimaryActions';
 import { VaultTotalBalance } from '../balance/VaultTotalBalance';
 import { ManageVaultChainsPrompt } from '../chain/manage/ManageVaultChainsPrompt';
 import { VaultChainItem } from './VaultChainItem';
-import { useAssertCurrentVaultChainIds } from '../state/useCurrentVault';
+import { useVaultChainsBalancesQuery } from '../queries/useVaultChainsBalancesQuery';
 
 export const VaultOverview = () => {
-  const chains = useAssertCurrentVaultChainIds();
+  const query = useVaultChainsBalancesQuery();
 
   return (
     <ScrollableFlexboxFiller>
@@ -19,8 +19,8 @@ export const VaultOverview = () => {
             <VaultPrimaryActions />
           </VStack>
           <VStack gap={16}>
-            {chains.map(chainId => (
-              <VaultChainItem key={chainId} value={chainId} />
+            {(query.data ?? []).map(value => (
+              <VaultChainItem key={value.chainId} value={value} />
             ))}
             <ManageVaultChainsPrompt />
           </VStack>
