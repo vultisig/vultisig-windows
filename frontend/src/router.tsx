@@ -20,12 +20,10 @@ import ImportVaultView from './pages/importVault/ImportVaultView';
 import JoinKeygenView from './pages/keygen/JoinKeygenView';
 import JoinKeysignFlow from './pages/keysign/JoinKeysignFlow';
 import KeysignFlowView from './pages/keysign/KeysignFlow';
-import OnboardingView from './pages/onboarding/OnboardingView';
 import SendCryptoView from './pages/send/SendCryptoView';
 import SetupVaultView from './pages/setupVault/SetupVaultView';
 import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
-import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
 import { AddVaultPage } from './vault/add/AddVaultPage';
 import { VaultChainCoinPage } from './vault/chain/coin/VaultChainCoinPage';
 import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVaultChainCoinsPage';
@@ -34,6 +32,8 @@ import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
+import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
+import { OnboardingPage } from './onboarding/components/OnboardingPage';
 
 export const router = createBrowserRouter([
   {
@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
     element: (
       <EmptyVaultsOnly>
         <IncompleteOnboardingOnly>
-          <OnboardingView />
+          <OnboardingPage />
         </IncompleteOnboardingOnly>
       </EmptyVaultsOnly>
     ),
