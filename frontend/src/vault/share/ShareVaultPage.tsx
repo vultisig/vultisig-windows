@@ -6,9 +6,12 @@ import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { Button } from '../../lib/ui/buttons/Button';
 import { ShareVaultCard } from './ShareVaultCard';
+import { SaveAsImage } from '../../ui/file/SaveAsImage';
+import { useAssertCurrentVault } from '../state/useCurrentVault';
 
 export const ShareVaultPage = () => {
   const { t } = useTranslation();
+  const { name } = useAssertCurrentVault();
 
   return (
     <VStack flexGrow>
@@ -21,7 +24,13 @@ export const ShareVaultPage = () => {
           <ShareVaultCard />
         </VStack>
         <VStack fullWidth>
-          <Button>{t('save')}</Button>
+          <SaveAsImage
+            fileName={name}
+            renderTrigger={({ onClick }) => (
+              <Button onClick={onClick}>{t('save')}</Button>
+            )}
+            value={<ShareVaultCard />}
+          />
         </VStack>
       </PageContent>
     </VStack>
