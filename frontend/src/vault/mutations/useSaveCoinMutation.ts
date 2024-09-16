@@ -6,7 +6,6 @@ import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
 import { useAssertCurrentVault } from '../state/useCurrentVault';
-import { getStorageVaultId } from '../utils/storageVault';
 
 export const useSaveCoinMutation = () => {
   const vault = useAssertCurrentVault();
@@ -20,21 +19,25 @@ export const useSaveCoinMutation = () => {
       console.log('save coin error: ', error);
     },
     mutationFn: async (coinMeta: CoinMeta) => {
-      const coinService = CoinServiceFactory.createCoinService(
-        coinMeta.chain,
-        walletCore
-      );
+      try {
+        const coinService = CoinServiceFactory.createCoinService(
+          coinMeta.chain,
+          walletCore
+        );
 
-      const coin = await coinService.createCoin(
-        coinMeta,
-        vault.public_key_ecdsa || '',
-        vault.public_key_eddsa || '',
-        vault.hex_chain_code || ''
-      );
+        const coin = await coinService.createCoin(
+          coinMeta,
+          vault.public_key_ecdsa || '',
+          vault.public_key_eddsa || '',
+          vault.hex_chain_code || ''
+        );
 
-      await coinService.saveCoin(coin, getStorageVaultId(vault));
+        await coinService.saveCoin(coin, vault);
 
-      await invalidate(vaultsQueryKey);
+        await invalidate(vaultsQueryKey);
+      } catch (error) {
+        console.log('save coin error: ', error);
+      }
     },
   });
 };

@@ -31,7 +31,7 @@ export class DefaultCoinsService {
           vault.hex_chain_code || ''
         )
         .then(coin => {
-          coinService.saveCoin(coin, vault.public_key_ecdsa || '');
+          coinService.saveCoin(coin, vault);
         });
     });
   }
