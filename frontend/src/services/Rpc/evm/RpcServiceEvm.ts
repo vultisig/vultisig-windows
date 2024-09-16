@@ -325,7 +325,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       const oneInchChainId = RpcServiceEvmOneInch.getOneInchChainId(chain);
       const oneInchEndpoint = Endpoint.fetch1InchsTokensBalance(oneInchChainId.toString(), nativeToken.address);
 
-      const balanceData = await await Fetch(oneInchEndpoint);
+      const balanceData = await Fetch(oneInchEndpoint);
 
       await this.sleep(1000); // We have some rate limits on 1 inch, so I will wait a bit
 
@@ -341,7 +341,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       // Fetch token information for the non-zero balance tokens
       const tokenInfoEndpoint = Endpoint.fetch1InchsTokensInfo(oneInchChainId.toString(), nonZeroBalanceTokenAddresses);
 
-      const tokenInfoData = await await Fetch(tokenInfoEndpoint);
+      const tokenInfoData = await Fetch(tokenInfoEndpoint);
 
       // Map the fetched token information to CoinMeta[] format
       return nonZeroBalanceTokenAddresses
