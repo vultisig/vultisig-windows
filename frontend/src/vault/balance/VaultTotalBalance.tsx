@@ -1,3 +1,4 @@
+import { useInAppCurrency } from '../../lib/hooks/useInAppCurrency';
 import { HStack } from '../../lib/ui/layout/Stack';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
 import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
@@ -9,6 +10,7 @@ import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVis
 
 export const VaultTotalBalance = () => {
   const query = useVaultTotalBalanceQuery();
+  const { currencySymbol } = useInAppCurrency();
 
   return (
     <HStack alignItems="center" gap={4}>
@@ -17,10 +19,10 @@ export const VaultTotalBalance = () => {
         {...getQueryDependantDefaultProps('balance')}
         success={value => (
           <Text color="contrast" weight="700" size={26} centerVertically>
-            $
             <BalanceVisibilityAware size="l">
               {formatAmount(value)}
-            </BalanceVisibilityAware>
+            </BalanceVisibilityAware>{' '}
+            {currencySymbol}
           </Text>
         )}
       />

@@ -176,5 +176,16 @@
   "share_vault_qr": "Share Vault QR",
   "save": "Save",
   "settings_vault_page_footer": "VULTISIG APP V",
-  "clear": "Clear"
+  "clear": "Clear",
+  "vault_currency_settings_page_header_title": "Currency",
+  "vault_settings_currency_settings_title_usd": "USD",
+  "vault_settings_currency_settings_title_aud": "AUD",
+  "vault_settings_currency_settings_title_eur": "EUR",
+  "vault_settings_currency_settings_title_gbp": "GBP",
+  "vault_settings_currency_settings_title_chf": "CHF",
+  "vault_settings_currency_settings_title_jpy": "JPY",
+  "vault_settings_currency_settings_title_cny": "CNY",
+  "vault_settings_currency_settings_title_cad": "CAD",
+  "vault_settings_currency_settings_title_sgd": "SGD",
+  "vault_settings_currency_settings_title_sek": "SEK"
 }
