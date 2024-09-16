@@ -8,10 +8,11 @@ import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { DeleteCoin, SaveCoin } from '../../../wailsjs/go/storage/Store';
 import { coinToStorageCoin } from '../../coin/utils/coin';
 import { TokensStore } from './CoinList';
+import { storage } from '../../../wailsjs/go/models';
 
 export class CoinService implements ICoinService {
-  private chain: Chain;
-  private walletCore: WalletCore;
+  chain: Chain;
+  walletCore: WalletCore;
 
   constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
@@ -26,9 +27,9 @@ export class CoinService implements ICoinService {
     );
   }
 
-  async saveCoin(coin: Coin, vaultId: string): Promise<void> {
+  async saveCoin(coin: Coin, vault: storage.Vault): Promise<void> {
     const storageCoin = coinToStorageCoin(coin);
-    await SaveCoin(vaultId, storageCoin);
+    await SaveCoin(vault.public_key_ecdsa, storageCoin);
   }
 
   async deleteCoin(coinId: string, vaultId: string): Promise<void> {
@@ -41,34 +42,41 @@ export class CoinService implements ICoinService {
     publicKeyEdDSA: string, // TODO this is not correct
     hexChainCode: string
   ): Promise<Coin> {
-    const addressService = AddressServiceFactory.createAddressService(
-      this.chain,
-      this.walletCore
-    );
 
-    const publicKey = await addressService.getPublicKey(
-      publicKeyECDSA,
-      publicKeyEdDSA,
-      hexChainCode
-    );
+    try {
+      const addressService = AddressServiceFactory.createAddressService(
+        this.chain,
+        this.walletCore
+      );
 
-    const address = await addressService.deriveAddressFromPublicKey(
-      publicKeyECDSA,
-      publicKeyEdDSA,
-      hexChainCode
-    );
-    const hexPublicKey = this.walletCore.HexCoding.encode(publicKey.data());
-    return new Coin({
-      chain: this.chain.toString(),
-      ticker: asset.ticker,
-      address: address,
-      contractAddress: asset.contractAddress,
-      decimals: asset.decimals,
-      priceProviderId: asset.priceProviderId,
-      isNativeToken: asset.isNativeToken,
-      hexPublicKey: hexPublicKey.stripHexPrefix(),
-      logo: asset.logo,
-    });
+      const publicKey = await addressService.getPublicKey(
+        publicKeyECDSA,
+        publicKeyEdDSA,
+        hexChainCode
+      );
+
+      const address = await addressService.deriveAddressFromPublicKey(
+        publicKeyECDSA,
+        publicKeyEdDSA,
+        hexChainCode
+      );
+      const hexPublicKey = this.walletCore.HexCoding.encode(publicKey.data());
+      return new Coin({
+        chain: this.chain.toString(),
+        ticker: asset.ticker,
+        address: address,
+        contractAddress: asset.contractAddress,
+        decimals: asset.decimals,
+        priceProviderId: asset.priceProviderId,
+        isNativeToken: asset.isNativeToken,
+        hexPublicKey: hexPublicKey.stripHexPrefix(),
+        logo: asset.logo,
+      });
+    }
+    catch (error) {
+      console.log('create coin error: ', error);
+      throw error;
+    }
   }
 
   getCoinType(): CoinType {

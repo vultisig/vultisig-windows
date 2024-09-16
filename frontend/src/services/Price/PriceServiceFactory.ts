@@ -2,12 +2,13 @@ import { Chain } from '../../model/chain';
 import { PriceService } from './PriceService';
 import { IPriceService } from './IPriceService';
 import { PriceServiceEvm } from './PriceServiceEvm';
+import { PriceServiceSolana } from './PriceServiceSolana';
 
 export class PriceServiceFactory {
   static createPriceService(chain: Chain): IPriceService {
     switch (chain) {
       case Chain.Solana:
-        return new PriceService(chain);
+        return new PriceServiceSolana(chain);
       case Chain.Polkadot:
         return new PriceService(chain);
       case Chain.Ethereum:

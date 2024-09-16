@@ -19,8 +19,7 @@ export const SendCoinPromptDeprecated = () => {
         .find(
           coin =>
             coin.chain === Chain.Solana &&
-            coin.ticker == 'SOL' &&
-            coin.isNativeToken
+            coin.ticker == 'JUP'
         ) || null
     );
   }, [coins]);

@@ -37,7 +37,6 @@ export class PriceServiceEvm extends PriceService implements IPriceService {
     const contractAddresses = coins.map(coin => coin.contractAddress);
 
     if (contractAddresses.length === 0) {
-      console.error('No contractAddresses to fetch prices for', coins);
       return new Map();
     }
 
