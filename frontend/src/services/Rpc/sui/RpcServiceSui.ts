@@ -52,19 +52,4 @@ export class RpcServiceSui implements IRpcService {
   fetchTokens?(nativeToken: Coin): Promise<CoinMeta[]> {
     throw new Error('Method not implemented.');
   }
-  fetchRecentBlockhash?(): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
-  fetchTokenAssociatedAccountByOwner?(
-    walletAddress: string,
-    mintAddress: string
-  ): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
-  fetchTokenAccountsByOwner?(walletAddress: string): Promise<[]> {
-    throw new Error('Method not implemented.');
-  }
-  fetchHighPriorityFee?(account: string): Promise<number> {
-    throw new Error('Method not implemented.');
-  }
 }

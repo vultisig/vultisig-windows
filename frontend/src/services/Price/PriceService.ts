@@ -1,10 +1,10 @@
 import { Chain } from '../../model/chain';
-import { Rate } from '../../model/price-rate';
-import { IPriceService } from './IPriceService';
+import { ChainRates, CurrencyRates } from '../../model/chain-rates';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
+import { Rate } from '../../model/price-rate';
 import { Endpoint } from '../Endpoint';
-import { ChainRates, CurrencyRates } from '../../model/chain-rates';
+import { IPriceService } from './IPriceService';
 
 export class PriceService implements IPriceService {
   chain: Chain;

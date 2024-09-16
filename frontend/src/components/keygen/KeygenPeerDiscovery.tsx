@@ -1,19 +1,20 @@
+import crypto from 'crypto';
+import Lottie from 'lottie-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import KeygenQRCode from '../qrCode/KeygenQRCode';
-import Lottie from 'lottie-react';
-import loadingAnimation from '../../../public/assets/images/loadingAnimation.json';
-import SelectDevice from '../selectDevice/SelectDevice';
-import { createKeygenMsg } from '../../utils/QRGen';
 import { v4 as uuidv4 } from 'uuid';
-import { generateRandomNumber } from '../../utils/util';
+
+import loadingAnimation from '../../../public/assets/images/loadingAnimation.json';
 import { AdvertiseMediator } from '../../../wailsjs/go/mediator/Server';
 import {
   checkForDevices,
   clearCheckingInterval,
   postSession,
 } from '../../services/Keygen/Keygen';
-import crypto from 'crypto';
+import { createKeygenMsg } from '../../utils/QRGen';
+import { generateRandomNumber } from '../../utils/util';
+import KeygenQRCode from '../qrCode/KeygenQRCode';
+import SelectDevice from '../selectDevice/SelectDevice';
 
 function getHexEncodedRandomBytes(length: number): string {
   const bytes = crypto.randomBytes(length);

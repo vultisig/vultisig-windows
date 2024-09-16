@@ -1,7 +1,8 @@
 import { WalletCore } from '@trustwallet/wallet-core/dist/src/wallet-core';
-import { CoinServiceFactory } from './CoinServiceFactory';
+
 import { storage } from '../../../wailsjs/go/models';
 import { TokensStore } from './CoinList';
+import { CoinServiceFactory } from './CoinServiceFactory';
 
 export class DefaultCoinsService {
   private defaultTokens = [
@@ -30,7 +31,7 @@ export class DefaultCoinsService {
           vault.hex_chain_code || ''
         )
         .then(coin => {
-          coinService.saveCoin(coin, vault.public_key_ecdsa || '');
+          coinService.saveCoin(coin, vault);
         });
     });
   }

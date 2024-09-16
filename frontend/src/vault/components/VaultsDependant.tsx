@@ -1,8 +1,8 @@
 import { Center } from '../../lib/ui/layout/Center';
-import { Spinner } from '../../lib/ui/loaders/Spinner';
 import { ComponentWithChildrenProps } from '../../lib/ui/props';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
 import { Text } from '../../lib/ui/text';
+import { ProductLogoBlock } from '../../ui/logo/ProductLogoBlock';
 import { useVaultsQuery } from '../queries/useVaultsQuery';
 
 export const VaultsDependant = ({ children }: ComponentWithChildrenProps) => {
@@ -22,11 +22,7 @@ export const VaultsDependant = ({ children }: ComponentWithChildrenProps) => {
           </Center>
         );
       }}
-      pending={() => (
-        <Center>
-          <Spinner />
-        </Center>
-      )}
+      pending={() => <ProductLogoBlock />}
     />
   );
 };

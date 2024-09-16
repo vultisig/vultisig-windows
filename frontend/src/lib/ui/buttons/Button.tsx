@@ -1,21 +1,21 @@
 import React, { forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 
-import { UnstyledButton } from './UnstyledButton';
+import { match } from '../../utils/match';
 import { centerContent } from '../css/centerContent';
 import { horizontalPadding } from '../css/horizontalPadding';
+import { round } from '../css/round';
 import { CenterAbsolutely } from '../layout/CenterAbsolutely';
 import { Spinner } from '../loaders/Spinner';
-import { getColor } from '../theme/getters';
-import { match } from '../../utils/match';
 import { getHoverVariant } from '../theme/getHoverVariant';
-import { round } from '../css/round';
+import { getColor } from '../theme/getters';
+import { UnstyledButton } from './UnstyledButton';
 
 export const buttonSizes = ['xs', 's', 'm', 'l', 'xl'] as const;
 
 type ButtonSize = (typeof buttonSizes)[number];
 
-export const buttonKinds = ['primary', 'outlined'] as const;
+export const buttonKinds = ['primary', 'outlined', 'ghost'] as const;
 
 export type ButtonKind = (typeof buttonKinds)[number];
 
@@ -79,6 +79,11 @@ const Container = styled(UnstyledButton)<ContainerProps>`
         background: ${getColor('foregroundExtra')};
         border: 1px solid ${getColor('primary')};
       `,
+      ghost: () => css`
+        font-weight: 500;
+        color: ${getColor('primary')};
+        background: transparent;
+      `,
     })}
   
   ${({ isDisabled, isLoading, kind }) =>
@@ -91,6 +96,9 @@ const Container = styled(UnstyledButton)<ContainerProps>`
             background: ${getHoverVariant('primary')};
           `,
           outlined: () => css``,
+          ghost: () => css`
+            background: ${getColor('mist')};
+          `,
         })}
       }
     `};

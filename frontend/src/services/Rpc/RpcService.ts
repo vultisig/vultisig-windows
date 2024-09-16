@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Chain } from '../../model/chain';
 
 export class RpcService {

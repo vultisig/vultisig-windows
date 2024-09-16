@@ -1,9 +1,12 @@
 import { useMemo } from 'react';
-import { useVaults } from '../queries/useVaultsQuery';
-import { useCurrentVaultId } from './useCurrentVaultId';
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
+
+import { groupItems } from '../../lib/utils/array/groupItems';
 import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
+import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
+import { Chain } from '../../model/chain';
+import { useVaults } from '../queries/useVaultsQuery';
 import { getStorageVaultId } from '../utils/storageVault';
+import { useCurrentVaultId } from './useCurrentVaultId';
 
 export const useCurrentVault = () => {
   const vaults = useVaults();
@@ -24,16 +27,19 @@ export const useAssertCurrentVault = () => {
   return shouldBePresent(useCurrentVault());
 };
 
-export const useAssertCurrentVaultChainIds = () => {
+export const useAssertCurrentVaultNativeCoins = () => {
   const vault = useAssertCurrentVault();
 
   const coins = vault.coins || [];
 
+  return useMemo(() => coins.filter(coin => coin.is_native_token), [coins]);
+};
+
+export const useAssertCurrentVaultChainIds = () => {
+  const coins = useAssertCurrentVaultNativeCoins();
+
   return useMemo(
-    () =>
-      withoutDuplicates(
-        coins.filter(coin => coin.is_native_token).map(coin => coin.chain)
-      ),
+    () => withoutDuplicates(coins.map(coin => coin.chain)),
     [coins]
   );
 };
@@ -51,7 +57,25 @@ export const useAssertCurrentVaultCoins = () => {
   );
 };
 
-export const useAsserCurrentVaultChainCoins = (chainId: string) => {
+export const useAssertCurrentVaultCoinsByChain = () => {
+  const coins = useAssertCurrentVaultCoins();
+
+  return useMemo(() => {
+    return groupItems(coins, coin => coin.chain as Chain);
+  }, [coins]);
+};
+
+export const useAssertCurrentVaultAddreses = () => {
+  const coins = useAssertCurrentVaultNativeCoins();
+
+  return useMemo(() => {
+    return Object.fromEntries(
+      coins.map(coin => [coin.chain, coin.address])
+    ) as Record<Chain, string>;
+  }, [coins]);
+};
+
+export const useAssertCurrentVaultChainCoins = (chainId: string) => {
   const coins = useAssertCurrentVaultCoins();
 
   return useMemo(() => coins.filter(coin => coin.chain === chainId), [coins]);

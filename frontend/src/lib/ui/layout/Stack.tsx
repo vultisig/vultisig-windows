@@ -1,17 +1,23 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+
 import { toSizeUnit } from '../css/toSizeUnit';
 
-interface FixedDirectionStackProps {
+type FixedDirectionStackProps = {
   gap?: React.CSSProperties['gap'];
   alignItems?: React.CSSProperties['alignItems'];
   justifyContent?: React.CSSProperties['justifyContent'];
   wrap?: React.CSSProperties['flexWrap'];
   fullWidth?: boolean;
   fullHeight?: boolean;
-  fill?: boolean;
+  fullSize?: boolean;
+  flexGrow?: boolean;
   children?: React.ReactNode;
-}
+};
+
+export type StackProps = FixedDirectionStackProps & {
+  direction: React.CSSProperties['flexDirection'];
+};
 
 const formatFlexAlignment = (
   value:
@@ -25,60 +31,68 @@ const formatFlexAlignment = (
   return value;
 };
 
-const stack = css<FixedDirectionStackProps>`
+export const stack = ({
+  gap,
+  alignItems,
+  justifyContent,
+  wrap,
+  fullWidth,
+  fullHeight,
+  fullSize,
+  direction,
+  flexGrow,
+}: StackProps) => css`
   display: flex;
-  ${({ gap }) =>
-    gap &&
-    css`
-      gap: ${toSizeUnit(gap)};
-    `}
-  ${({ alignItems }) =>
-    alignItems &&
-    css`
-      align-items: ${formatFlexAlignment(alignItems)};
-    `}
-  ${({ justifyContent }) =>
-    justifyContent &&
-    css`
-      justify-content: ${formatFlexAlignment(justifyContent)};
-    `}
-  ${({ wrap }) =>
-    wrap &&
-    css`
-      flex-wrap: ${wrap};
-    `}
-  ${({ fullWidth }) =>
-    fullWidth &&
-    css`
-      width: 100%;
-    `}
-  ${({ fullHeight }) =>
-    fullHeight &&
-    css`
-      height: 100%;
-    `}
-    ${({ fill }) =>
-    fill &&
-    css`
-      flex: 1;
-    `}
+  flex-direction: ${direction};
+  ${gap &&
+  css`
+    gap: ${toSizeUnit(gap)};
+  `}
+  ${alignItems &&
+  css`
+    align-items: ${formatFlexAlignment(alignItems)};
+  `}
+  ${justifyContent &&
+  css`
+    justify-content: ${formatFlexAlignment(justifyContent)};
+  `}
+  ${wrap &&
+  css`
+    flex-wrap: ${wrap};
+  `}
+  ${fullWidth &&
+  css`
+    width: 100%;
+  `}
+  ${fullHeight &&
+  css`
+    height: 100%;
+  `}
+  ${fullSize &&
+  css`
+    width: 100%;
+    height: 100%;
+  `}
+    ${flexGrow &&
+  css`
+    flex: 1;
+  `}
 `;
 
+export const vStack = (props: FixedDirectionStackProps = {}) =>
+  stack({ ...props, direction: 'column' });
+
+export const hStack = (props: FixedDirectionStackProps = {}) =>
+  stack({ ...props, direction: 'row' });
+
 export const VStack = styled.div<FixedDirectionStackProps>`
-  ${stack}
-  flex-direction: column;
+  ${vStack}
 `;
 
 export const HStack = styled.div<FixedDirectionStackProps>`
-  ${stack}
-  flex-direction: row;
+  ${hStack}
 `;
-
-export interface StackProps extends FixedDirectionStackProps {
-  direction: React.CSSProperties['flexDirection'];
-}
 
 export const Stack = styled.div<StackProps>`
   ${stack}
-  flex-direction: ${({ direction }) => direction};
 `;

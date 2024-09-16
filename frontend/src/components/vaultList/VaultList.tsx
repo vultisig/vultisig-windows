@@ -1,16 +1,18 @@
 import React from 'react';
-import { storage } from '../../../wailsjs/go/models';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
+import { storage } from '../../../wailsjs/go/models';
+import { Button } from '../../lib/ui/buttons/Button';
+import { verticalPadding } from '../../lib/ui/css/verticalPadding';
+import { PlusIcon } from '../../lib/ui/icons/PlusIcon';
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
-import { PageSlice } from '../../ui/page/PageSlice';
-import styled from 'styled-components';
-import { verticalPadding } from '../../lib/ui/css/verticalPadding';
+import { addVaultPath } from '../../navigation';
 import { pageConfig } from '../../ui/page/config';
+import { PageSlice } from '../../ui/page/PageSlice';
 import { VaultListOption } from '../../vault/list/VaultListOption';
-import { Button } from '../../lib/ui/buttons/Button';
-import { PlusIcon } from '../../lib/ui/icons/PlusIcon';
 import { useVaults } from '../../vault/queries/useVaultsQuery';
 import { useCurrentVaultId } from '../../vault/state/useCurrentVaultId';
 import { getStorageVaultId } from '../../vault/utils/storageVault';
@@ -52,7 +54,7 @@ export const VaultList: React.FC<VaultListProps> = ({ onFinish }) => {
       <PageSlice>
         <Button
           onClick={() => {
-            navigate('/vault/setup');
+            navigate(addVaultPath);
           }}
           kind="primary"
         >

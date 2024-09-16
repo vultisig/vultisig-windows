@@ -1,13 +1,14 @@
 import { useQueries } from '@tanstack/react-query';
-import { CoinMeta } from '../../model/coin-meta';
-import { getCoinMetaKey } from '../utils/coinMeta';
-import { toEntries } from '../../lib/utils/record/toEntries';
-import { PriceServiceFactory } from '../../services/Price/PriceServiceFactory';
-import { Fiat } from '../../model/fiat';
-import { CoinKey } from '../Coin';
-import { groupItems } from '../../lib/utils/array/groupItems';
+
 import { EntityWithPrice } from '../../chain/EntityWithPrice';
 import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEagerQuery';
+import { groupItems } from '../../lib/utils/array/groupItems';
+import { toEntries } from '../../lib/utils/record/toEntries';
+import { CoinMeta } from '../../model/coin-meta';
+import { Fiat } from '../../model/fiat';
+import { PriceServiceFactory } from '../../services/Price/PriceServiceFactory';
+import { CoinKey } from '../Coin';
+import { getCoinMetaKey } from '../utils/coinMeta';
 
 type PriceQueryResult = CoinKey & EntityWithPrice;
 

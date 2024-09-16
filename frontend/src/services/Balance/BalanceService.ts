@@ -1,6 +1,6 @@
-import { Chain } from '../../model/chain';
-import { Balance } from '../../model/balance';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Balance } from '../../model/balance';
+import { Chain } from '../../model/chain';
 import { IBalanceService } from './IBalanceService';
 
 export class BalanceService implements IBalanceService {
@@ -20,11 +20,6 @@ export class BalanceService implements IBalanceService {
       decimalAmount: 0,
       expiryDate: new Date(Date.now() + 60000 * 60), // 60 minute expiry
     };
-
-    if (fetchedBalance.rawAmount === 0) {
-      // If the balance is 0, return the fetched balance
-      return fetchedBalance;
-    }
 
     return fetchedBalance;
   }

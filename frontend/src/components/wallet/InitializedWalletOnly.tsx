@@ -1,4 +1,5 @@
-import { useWalletCore } from '../../main';
+import { useWalletCore } from '../../providers/WalletCoreProvider';
+import { ProductLogoBlock } from '../../ui/logo/ProductLogoBlock';
 
 export const InitializedWalletOnly: React.FC<React.PropsWithChildren> = ({
   children,
@@ -6,7 +7,7 @@ export const InitializedWalletOnly: React.FC<React.PropsWithChildren> = ({
   const walletCore = useWalletCore();
 
   if (!walletCore) {
-    return <div>Loading WalletCore...</div>;
+    return <ProductLogoBlock />;
   }
 
   return <>{children}</>;

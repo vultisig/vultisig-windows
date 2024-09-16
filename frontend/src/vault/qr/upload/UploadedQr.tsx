@@ -1,17 +1,18 @@
+import styled from 'styled-components';
+
+import { IconButton } from '../../../lib/ui/buttons/IconButton';
+import { CloseIcon } from '../../../lib/ui/icons/CloseIcon';
+import { FileIcon } from '../../../lib/ui/icons/FileIcon';
+import { IconWrapper } from '../../../lib/ui/icons/IconWrapper';
+import { ContainImage } from '../../../lib/ui/images/ContainImage';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import {
   ComponentWithValueProps,
   RemovableComponentProps,
 } from '../../../lib/ui/props';
-import { QrImageDropZoneContainer } from './QrImageDropZoneContainer';
-import { ContainImage } from '../../../lib/ui/images/ContainImage';
-import { IconWrapper } from '../../../lib/ui/icons/IconWrapper';
-import styled from 'styled-components';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { FileIcon } from '../../../lib/ui/icons/FileIcon';
 import { Text } from '../../../lib/ui/text';
-import { IconButton } from '../../../lib/ui/buttons/IconButton';
-import { CloseIcon } from '../../../lib/ui/icons/CloseIcon';
+import { getColor } from '../../../lib/ui/theme/getters';
+import { QrImageDropZoneContainer } from './QrImageDropZoneContainer';
 
 type UploadQrProps = ComponentWithValueProps<File> & RemovableComponentProps;
 
@@ -22,7 +23,7 @@ const IconContainer = styled(IconWrapper)`
 
 export const UploadedQr = ({ value, onRemove }: UploadQrProps) => {
   return (
-    <VStack fullWidth fill gap={20}>
+    <VStack fullWidth flexGrow gap={20}>
       <QrImageDropZoneContainer>
         <ContainImage src={URL.createObjectURL(value)} alt="Uploaded QR Code" />
       </QrImageDropZoneContainer>

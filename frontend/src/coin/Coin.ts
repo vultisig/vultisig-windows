@@ -11,7 +11,6 @@ export type CoinAmount = {
 };
 
 export type CoinInfo = {
-  name: string;
   symbol: string;
   icon?: string;
 };

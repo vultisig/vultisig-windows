@@ -1,7 +1,8 @@
 import styled from 'styled-components';
-import { ComponentWithChildrenProps, InputProps } from '../../lib/ui/props';
-import { CollapsableStateIndicator } from '../../lib/ui/layout/CollapsableStateIndicator';
+
 import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
+import { CollapsableStateIndicator } from '../../lib/ui/layout/CollapsableStateIndicator';
+import { ComponentWithChildrenProps, InputProps } from '../../lib/ui/props';
 import { PageHeaderTitle } from './PageHeaderTitle';
 
 type PageHeaderToggleTitleProps = ComponentWithChildrenProps &

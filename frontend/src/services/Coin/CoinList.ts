@@ -93,6 +93,16 @@ export class TokensStore {
       isNativeToken: true,
     }),
 
+    solanaJup: (): CoinMeta => ({
+      chain: Chain.Solana,
+      ticker: 'JUP',
+      logo: 'https://static.jup.ag/jup/icon.png',
+      decimals: 6,
+      priceProviderId: 'jupiter-exchange-solana',
+      contractAddress: 'JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN',
+      isNativeToken: false,
+    }),
+
     ethereum: (): CoinMeta => ({
       chain: Chain.Ethereum,
       ticker: 'ETH',
@@ -1277,6 +1287,7 @@ export class TokensStore {
     TokensStore.Token.mayaChainMaya(),
 
     TokensStore.Token.solana(),
+    TokensStore.Token.solanaJup(),
 
     TokensStore.Token.gaiaChainAtom(),
     TokensStore.Token.kujira(),

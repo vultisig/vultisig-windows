@@ -1,9 +1,10 @@
 import { WalletCore } from '@trustwallet/wallet-core';
-import { Chain } from '../../model/chain';
-import { IAddressService } from './IAddressService';
-import { CoinServiceFactory } from '../Coin/CoinServiceFactory';
+
 import { GetDerivedPubKey } from '../../../wailsjs/go/tss/TssService';
+import { Chain } from '../../model/chain';
+import { CoinServiceFactory } from '../Coin/CoinServiceFactory';
 import { ICoinService } from '../Coin/ICoinService';
+import { IAddressService } from './IAddressService';
 
 export class AddressService implements IAddressService {
   private coinService: ICoinService;

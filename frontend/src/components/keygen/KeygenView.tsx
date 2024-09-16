@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import RingProgress from '../ringProgress/RingProgress';
-import { KeygenType } from '../../model/TssType';
+
+import { storage } from '../../../wailsjs/go/models';
+import { SaveVault } from '../../../wailsjs/go/storage/Store';
 import { Reshare, StartKeygen } from '../../../wailsjs/go/tss/TssService';
 import { EventsOn } from '../../../wailsjs/runtime/runtime';
-import { SaveVault } from '../../../wailsjs/go/storage/Store';
-import { storage } from '../../../wailsjs/go/models';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
-import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
-import { useAssertWalletCore } from '../../main';
+import { KeygenType } from '../../model/TssType';
+import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { DefaultCoinsService } from '../../services/Coin/DefaultCoinsService';
+import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
+import RingProgress from '../ringProgress/RingProgress';
 
 interface KeygenViewProps {
   vault: storage.Vault;

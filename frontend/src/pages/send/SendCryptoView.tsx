@@ -8,8 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
 import SendCryptoForm from '../../components/sendCrypto/SendCryptoForm';
-import VerifyTransaction from '../../components/sendCrypto/VerifyTransaction';
-import { useWalletCore } from '../../main';
+import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { Rate } from '../../model/price-rate';
 import { getDefaultSendTransaction } from '../../model/transaction';
 

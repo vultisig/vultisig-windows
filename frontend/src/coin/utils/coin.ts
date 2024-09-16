@@ -1,12 +1,28 @@
 import { storage } from '../../../wailsjs/go/models';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../model/chain';
-import { coinKeyToString } from '../Coin';
+import { AccountCoinKey, accountCoinKeyToString } from '../AccountCoin';
 import { getCoinMetaKey } from './coinMeta';
 
 type CoinToStorageCoinInput = Coin & {
   address: string;
 };
+
+export const getCoinKey = ({
+  ticker,
+  contractAddress,
+  isNativeToken,
+  chain,
+  address,
+}: Coin): AccountCoinKey => ({
+  ...getCoinMetaKey({
+    ticker,
+    contractAddress,
+    isNativeToken,
+    chain: chain as Chain,
+  }),
+  address,
+});
 
 export const coinToStorageCoin = (
   input: CoinToStorageCoinInput
@@ -22,13 +38,10 @@ export const coinToStorageCoin = (
     decimals,
   } = input;
 
-  const coinKey = getCoinMetaKey({
-    ...input,
-    chain: chain as Chain,
-  });
+  const coinKey = getCoinKey(input);
 
   return {
-    id: coinKeyToString(coinKey),
+    id: accountCoinKeyToString(coinKey),
     chain,
     address,
     hex_public_key: input.hexPublicKey,

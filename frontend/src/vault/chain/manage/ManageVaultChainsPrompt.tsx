@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+
 import { ListAddButton } from '../../../lib/ui/list/ListAddButton';
 
 export const ManageVaultChainsPrompt = () => {

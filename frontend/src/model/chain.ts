@@ -24,8 +24,8 @@ export enum Chain {
   ZkSync = 'ZkSync',
 }
 export enum TssKeysignType {
-  ECDSA,
-  EdDSA,
+  ECDSA = 'ECDSA',
+  EdDSA = 'EdDSA',
 }
 export enum TssAction {
   KEYGEN = 'KEYGEN',
@@ -45,9 +45,12 @@ export class ChainUtils {
     }
     return undefined;
   }
+
   static getTssKeysignType(chain: Chain): TssKeysignType {
     switch (chain) {
-      case (Chain.Solana, Chain.Polkadot):
+      case Chain.Solana:
+        return TssKeysignType.EdDSA;
+      case Chain.Polkadot:
         return TssKeysignType.EdDSA;
       default:
         return TssKeysignType.ECDSA;

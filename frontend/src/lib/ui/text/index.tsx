@@ -1,4 +1,6 @@
-import styled, { DefaultTheme, css } from 'styled-components';
+import styled, { css, DefaultTheme } from 'styled-components';
+
+import { match } from '../../utils/match';
 import { cropText } from '../css/cropText';
 import { toSizeUnit } from '../css/toSizeUnit';
 
@@ -7,11 +9,11 @@ const getTextColorRecord = ({ colors }: DefaultTheme) =>
     regular: colors.text,
     supporting: colors.textSupporting,
     shy: colors.textShy,
-
     primary: colors.primary,
     primaryAlt: colors.primaryAlt,
     reversed: colors.background,
     contrast: colors.contrast,
+    danger: colors.danger,
   }) as const;
 
 type TextHeight = 'small' | 'regular' | 'large';
@@ -20,6 +22,8 @@ const lineHeight: Record<TextHeight, number> = {
   regular: 1.2,
   large: 1.5,
 };
+
+export type TextFontFamily = 'regular' | 'mono';
 
 export type TextColor = keyof ReturnType<typeof getTextColorRecord>;
 
@@ -32,50 +36,64 @@ export interface TextProps {
   centerVertically?: boolean;
   cropped?: boolean;
   nowrap?: boolean;
+  family?: TextFontFamily;
   as?: React.ElementType;
 }
 
-export const Text = styled.p<TextProps>`
+export const text = ({
+  color,
+  weight,
+  size,
+  height,
+  centerHorizontally,
+  centerVertically,
+  cropped,
+  nowrap,
+  family = 'regular',
+}: TextProps) => css`
   margin: 0;
   padding: 0;
   overflow-wrap: break-word;
 
-  ${({ color, theme }) =>
+  ${({ theme }) =>
     color &&
     css`
       color: ${getTextColorRecord(theme)[color].toCssValue()};
     `}
-  ${({ weight }) =>
-    weight &&
-    css`
-      font-weight: ${weight};
-    `}
-  ${({ height }) =>
-    height &&
-    css`
-      line-height: ${lineHeight[height]};
-    `}
-  ${({ size }) =>
-    size &&
-    css`
-      font-size: ${toSizeUnit(size)};
-    `}
-  ${({ centerHorizontally }) =>
-    centerHorizontally &&
-    css`
-      text-align: center;
-    `}
-  ${({ nowrap }) =>
-    nowrap &&
-    css`
-      white-space: nowrap;
-    `}
-  ${({ cropped }) => cropped && cropText}
+  ${weight &&
+  css`
+    font-weight: ${weight};
+  `}
+  ${height &&
+  css`
+    line-height: ${lineHeight[height]};
+  `}
+  ${size &&
+  css`
+    font-size: ${toSizeUnit(size)};
+  `}
+  ${centerHorizontally &&
+  css`
+    text-align: center;
+  `}
+  ${nowrap &&
+  css`
+    white-space: nowrap;
+  `}
+  ${cropped && cropText}
 
-  ${({ centerVertically }) =>
-    centerVertically &&
-    css`
-      display: inline-flex;
-      align-items: center;
-    `}
+  ${centerVertically &&
+  css`
+    display: inline-flex;
+    align-items: center;
+  `}
+
+  font-family: ${match(family, {
+    mono: () => 'Menlo, monospace',
+    regular: () => 'inherit',
+  })};
+`;
+
+export const Text = styled.p<TextProps>`
+  ${text};
 `;

@@ -1,12 +1,13 @@
-import { describe, it, beforeAll, expect, vi } from 'vitest';
+import { protoInt64 } from '@bufbuild/protobuf';
+import { initWasm, WalletCore } from '@trustwallet/wallet-core';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+
+import { tss } from '../../../../wailsjs/go/models';
+import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { protoInt64 } from '@bufbuild/protobuf';
-import { tss } from '../../../../wailsjs/go/models';
-import { BlockchainServiceFactory } from '../BlockchainServiceFactory';
 import { Chain } from '../../../model/chain';
-import { initWasm, WalletCore } from '@trustwallet/wallet-core';
+import { BlockchainServiceFactory } from '../BlockchainServiceFactory';
 
 // Mock the AddressServiceFactory and the AddressService
 vi.mock('../../Address/AddressServiceFactory', () => {

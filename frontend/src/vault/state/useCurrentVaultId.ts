@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
+
+import { useStateCorrector } from '../../lib/ui/state/useStateCorrector';
+import { isEmpty } from '../../lib/utils/array/isEmpty';
 import {
   PersistentStateKey,
   usePersistentState,
 } from '../../state/persistentState';
 import { useVaults } from '../queries/useVaultsQuery';
-import { isEmpty } from '../../lib/utils/array/isEmpty';
-import { useStateCorrector } from '../../lib/ui/state/useStateCorrector';
 import { getStorageVaultId } from '../utils/storageVault';
 
 export const useCurrentVaultId = () => {

@@ -17,6 +17,10 @@ export interface SpecificEvm extends BasicSpecificTransactionInfo {
   gasPrice: number;
   priorityFee: number;
   nonce: number;
+
+  maxFeePerGasWei: number;
+  priorityFeeWei: number;
+  gasLimit: number;
 }
 
 export interface SpecificThorchain extends BasicSpecificTransactionInfo {

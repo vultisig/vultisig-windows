@@ -1,11 +1,16 @@
 import { useMutation } from '@tanstack/react-query';
-import { useAssertCurrentVault } from '../state/useCurrentVault';
+
+import { accountCoinKeyToString } from '../../coin/AccountCoin';
+import { CoinKey } from '../../coin/Coin';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
-import { vaultsQueryKey } from '../queries/useVaultsQuery';
-import { useAssertWalletCore } from '../../main';
-import { CoinKey, coinKeyToString } from '../../coin/Coin';
-import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 import { Chain } from '../../model/chain';
+import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
+import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
+import { vaultsQueryKey } from '../queries/useVaultsQuery';
+import {
+  useAssertCurrentVault,
+  useAssertCurrentVaultAddreses,
+} from '../state/useCurrentVault';
 import { getStorageVaultId } from '../utils/storageVault';
 
 export const useDeleteCoinMutation = () => {
@@ -15,6 +20,8 @@ export const useDeleteCoinMutation = () => {
 
   const walletCore = useAssertWalletCore();
 
+  const addresses = useAssertCurrentVaultAddreses();
+
   return useMutation({
     mutationFn: async (key: CoinKey) => {
       const coinService = CoinServiceFactory.createCoinService(
@@ -22,8 +29,13 @@ export const useDeleteCoinMutation = () => {
         walletCore
       );
 
+      const address = addresses[key.chainId as Chain];
+
       await coinService.deleteCoin(
-        coinKeyToString(key),
+        accountCoinKeyToString({
+          ...key,
+          address,
+        }),
         getStorageVaultId(vault)
       );
 

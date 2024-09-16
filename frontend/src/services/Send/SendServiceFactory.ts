@@ -1,12 +1,13 @@
 import { WalletCore } from '@trustwallet/wallet-core';
+
 import { Chain } from '../../model/chain';
 import { SendServiceCosmos } from './cosmos/SendServiceCosmos';
 import { SendServiceEvm } from './evm/SendServiceEvm';
+import { ISendService } from './ISendService';
 import { SendService } from './SendService';
 import { SendServiceSolana } from './solana/SendServiceSolana';
 import { SendServiceThorchain } from './thorchain/SendServiceThorchain';
 import { SendServiceUtxo } from './utxo/SendServiceUtxo';
-import { ISendService } from './ISendService';
 
 export class SendServiceFactory {
   static createSendService(chain: Chain, walletCore: WalletCore): ISendService {

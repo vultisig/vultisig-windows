@@ -1,10 +1,13 @@
+import { Link } from 'react-router-dom';
+
+import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt';
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
-import { fromChainAmount } from '../../chain/utils/fromChainAmount';
+import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { getCoinValue } from '../../coin/utils/getCoinValue';
+import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
-import { BoxIcon } from '../../lib/ui/icons/BoxIcon';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
-import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { Panel } from '../../lib/ui/panel/Panel';
@@ -22,10 +25,12 @@ import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
+import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
+import { VaultAddressLink } from './VaultAddressLink';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
 
 export const VaultChainPage = () => {
@@ -41,8 +46,10 @@ export const VaultChainPage = () => {
     )
   );
 
+  const copyAddress = useCopyAddress();
+
   return (
-    <VStack fill>
+    <VStack flexGrow>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
@@ -53,6 +60,7 @@ export const VaultChainPage = () => {
         title={<PageHeaderTitle>{chainId}</PageHeaderTitle>}
       />
       <PageContent gap={16}>
+        <VaultPrimaryActions />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack
@@ -69,20 +77,34 @@ export const VaultChainPage = () => {
                   {chainId}
                 </Text>
               </HStack>
-              <HStack>
-                <IconButton title="Copy address" icon={<CopyIcon />} />
-                <IconButton title="Address QR code" icon={<QrCodeIcon />} />
-                <IconButton title="Block explorer" icon={<BoxIcon />} />
-              </HStack>
+              <QueryDependant
+                query={vaultAddressQuery}
+                success={address => (
+                  <HStack>
+                    <IconButton
+                      onClick={() => copyAddress(address)}
+                      title="Copy address"
+                      icon={<CopyIcon />}
+                    />
+                    <AddressPageShyPrompt value={address} />
+                    <VaultAddressLink value={address} />
+                  </HStack>
+                )}
+                error={() => null}
+                pending={() => null}
+              />
             </HStack>
             <QueryDependant
               query={vaultCoinsQuery}
               {...getQueryDependantDefaultProps('vault address')}
               success={coins => {
                 const total = sum(
-                  coins.map(
-                    ({ amount, decimals, price = 0 }) =>
-                      fromChainAmount(amount, decimals) * price
+                  coins.map(({ amount, decimals, price = 0 }) =>
+                    getCoinValue({
+                      amount,
+                      decimals,
+                      price,
+                    })
                   )
                 );
 
@@ -117,8 +139,13 @@ export const VaultChainPage = () => {
             success={coins => {
               return (
                 <>
-                  {coins.map(coin => (
-                    <VaultChainCoinItem key={coin.id} value={coin} />
+                  {sortCoinsByBalance(coins).map(coin => (
+                    <Link
+                      key={coin.id}
+                      to={`/vault/item/detail/${chainId}/${coin.id}`}
+                    >
+                      <VaultChainCoinItem value={coin} />
+                    </Link>
                   ))}
                 </>
               );

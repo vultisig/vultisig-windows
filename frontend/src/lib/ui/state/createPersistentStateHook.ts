@@ -1,4 +1,3 @@
-import { OnValueChangeListener } from './PersistentStorage';
 import {
   Dispatch,
   SetStateAction,
@@ -6,8 +5,10 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { PersistentStorage } from './PersistentStorage';
+
 import { shouldBeDefined } from '../../utils/assert/shouldBeDefined';
+import { OnValueChangeListener } from './PersistentStorage';
+import { PersistentStorage } from './PersistentStorage';
 
 export function createPersistentStateHook<T extends string>(
   storage: PersistentStorage<T>

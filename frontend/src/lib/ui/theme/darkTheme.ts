@@ -1,9 +1,12 @@
 import { DefaultTheme } from 'styled-components';
+
 import { HSLA } from '../colors/HSLA';
+import { sharedColors } from './shared';
 
 export const darkTheme: DefaultTheme = {
   name: 'dark',
   colors: {
+    ...sharedColors,
     text: new HSLA(0, 0, 100, 0.81),
     textSupporting: new HSLA(0, 0, 61),
     textShy: new HSLA(0, 0, 100, 0.28),
@@ -18,6 +21,6 @@ export const darkTheme: DefaultTheme = {
     contrast: new HSLA(0, 0, 100),
     mist: new HSLA(0, 0, 100, 0.06),
     mistExtra: new HSLA(0, 0, 100, 0.13),
-    transparent: new HSLA(0, 0, 0, 0),
+    danger: new HSLA(0, 82, 57, 1),
   },
 };

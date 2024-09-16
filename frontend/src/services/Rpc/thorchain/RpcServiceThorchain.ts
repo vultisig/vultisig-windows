@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
@@ -8,7 +7,7 @@ import { IRpcService } from '../IRpcService';
 
 export class RpcServiceThorchain implements IRpcService {
   async calculateFee(_coin?: Coin): Promise<number> {
-    let urlString = Endpoint.fetchThorchainNetworkInfoNineRealms;
+    const urlString = Endpoint.fetchThorchainNetworkInfoNineRealms;
     const response = await fetch(urlString);
     const data = await response.json();
 
@@ -22,7 +21,7 @@ export class RpcServiceThorchain implements IRpcService {
   }
 
   async getBalance(coin: Coin): Promise<string> {
-    let url = Endpoint.fetchAccountBalanceThorchainNineRealms(coin.address);
+    const url = Endpoint.fetchAccountBalanceThorchainNineRealms(coin.address);
     const response = await fetch(url, {
       headers: {
         'X-Client-ID': 'vultisig',
@@ -55,7 +54,7 @@ export class RpcServiceThorchain implements IRpcService {
   }
 
   async resolveENS?(ensName: string): Promise<string> {
-    let url = Endpoint.resolveTNS(ensName);
+    const url = Endpoint.resolveTNS(ensName);
     const response = await fetch(url);
     const data = await response.json();
     const entry = data.entries.find(
@@ -103,7 +102,7 @@ export class RpcServiceThorchain implements IRpcService {
       return chainID;
     }
 
-    let urlString = Endpoint.thorchainNetworkInfo;
+    const urlString = Endpoint.thorchainNetworkInfo;
     const response = await fetch(urlString);
     const data = await response.json();
     const network = data.result.node_info.network;
@@ -140,21 +139,6 @@ export class RpcServiceThorchain implements IRpcService {
     throw new Error('Method not implemented.');
   }
   fetchTokens?(_nativeToken: Coin): Promise<CoinMeta[]> {
-    throw new Error('Method not implemented.');
-  }
-  fetchRecentBlockhash?(): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
-  fetchTokenAssociatedAccountByOwner?(
-    _walletAddress: string,
-    _mintAddress: string
-  ): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
-  fetchTokenAccountsByOwner?(_walletAddress: string): Promise<[]> {
-    throw new Error('Method not implemented.');
-  }
-  fetchHighPriorityFee?(_account: string): Promise<number> {
     throw new Error('Method not implemented.');
   }
 }
