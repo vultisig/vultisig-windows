@@ -10,7 +10,7 @@ import {
   TransactionType,
 } from '../../../model/transaction';
 import { BlockchainService } from '../BlockchainService';
-import { SpecificSolana } from '../../../model/gas-info';
+import { SpecificSolana } from '../../../model/specific-transaction-info';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import { tss } from '../../../../wailsjs/go/models';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
@@ -34,7 +34,7 @@ export class BlockchainServiceSolana
     );
     const specific_pb = new SolanaSpecific();
     const transactionInfoSpecific: SpecificSolana =
-      obj.specificGasInfo as SpecificSolana;
+      obj.specificTransactionInfo as SpecificSolana;
 
     switch (obj.transactionType) {
       case TransactionType.SEND:

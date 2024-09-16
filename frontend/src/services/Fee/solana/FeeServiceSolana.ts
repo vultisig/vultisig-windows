@@ -8,7 +8,7 @@ export class FeeServiceSolana extends FeeService implements IFeeService {
   async getFee(coin: Coin): Promise<SpecificSolana> {
     const rpcService = RpcServiceFactory.createRpcService(this.chain);
     try {
-      const gasInfo = (await rpcService.getGasInfo(coin)) as SpecificSolana;
+      const gasInfo = (await rpcService.getSpecificTransactionInfo(coin)) as SpecificSolana;
       gasInfo.gasPrice = 1000000 / Math.pow(10, 9);
       return gasInfo;
     } catch (ex) {

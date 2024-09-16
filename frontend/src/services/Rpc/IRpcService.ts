@@ -8,6 +8,6 @@ export interface IRpcService {
   getBalance(coin: Coin): Promise<string>;
   broadcastTransaction(hex: string): Promise<string>;
   resolveENS?(ensName: string): Promise<string>;
-  getGasInfo(coin: Coin, feeMode?: FeeMode): Promise<SpecificGasInfo>;
+  getSpecificTransactionInfo(coin: Coin, feeMode?: FeeMode): Promise<SpecificTransactionInfo>;
   calculateFee(coin?: Coin): Promise<number>;
 }

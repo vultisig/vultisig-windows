@@ -5,7 +5,7 @@ import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { ChainUtils } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { FeeMap, FeeMode } from '../../../model/evm-fee-mode';
-import { SpecificEvm } from '../../../model/gas-info';
+import { SpecificEvm } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
@@ -82,7 +82,11 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async getGasInfo(coin: Coin): Promise<SpecificEvm> {
+  normalizeFee(value: number): number {
+    return value + value / 2; // x1.5 fee
+  }
+
+  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificEvm> {
     try {
       const [gasPrice, nonce] = await Promise.all([
         this.provider.send('eth_gasPrice', []),
@@ -96,7 +100,8 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
       const baseFee = await this.getBaseFee();
       const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
-      const priorityFee = priorityFeeMapValue[feeMode || FeeMode.Normal];
+      const feeMode: FeeMode = FeeMode.Normal; // Ensure feeMode is defined and typed
+      const priorityFee = priorityFeeMapValue[feeMode];
       const normalizedBaseFee = this.normalizeFee(Number(baseFee));
       const maxFeePerGasWei = Number(
         BigInt(Math.round(normalizedBaseFee + priorityFee))
