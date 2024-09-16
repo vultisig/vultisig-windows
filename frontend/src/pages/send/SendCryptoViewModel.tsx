@@ -7,7 +7,7 @@ import { Balance } from '../../model/balance';
 import { Rate } from '../../model/price-rate';
 import { ChainUtils } from '../../model/chain';
 import { ServiceFactory } from '../../services/ServiceFactory';
-import { SpecificGasInfo } from '../../model/gas-info';
+import { SpecificTransactionInfo } from '../../model/specific-transaction-info';
 import { useNavigate, useNavigation } from 'react-router-dom';
 
 interface SendCryptoViewModel {
@@ -22,9 +22,9 @@ interface SendCryptoViewModel {
   isCoinPickerActive: boolean;
   showMemoField: boolean;
   step: 'Send Crypto' | 'Verify Transaction';
-  gasInfo: SpecificGasInfo | null;
+  specificTransactionInfo: SpecificTransactionInfo | null;
   gas: number;
-  isGasInfoLoaded: boolean;
+  isSpecificTransactionInfoLoaded: boolean;
 
   initializeService(walletCore: any, chain: string): void;
   validateForm(): Promise<boolean>;
@@ -44,9 +44,11 @@ interface SendCryptoViewModel {
   setStep(step: 'Send Crypto' | 'Verify Transaction'): void;
   setShowAlert(showAlert: boolean): void;
   loadGasInfoForSending(tx: ISendTransaction): Promise<void>;
-  setGasInfo(gasInfo: SpecificGasInfo | null): void;
+  setSpecificTransactionInfo(
+    specificTransactionInfo: SpecificTransactionInfo | null
+  ): void;
   setGas(gas: number): void;
-  setIsGasInfoLoaded(isLoaded: boolean): void;
+  setIsSpecificTransactionInfoLoaded(isLoaded: boolean): void;
 }
 
 export function useSendCryptoViewModel(
@@ -63,9 +65,11 @@ export function useSendCryptoViewModel(
   const [isLoading, setLoading] = useState(false);
   const [isCoinPickerActive, setCoinPickerActive] = useState(false);
   const [showMemoField, setShowMemoField] = useState(false);
-  const [gasInfo, setGasInfo] = useState<SpecificGasInfo | null>(null);
+  const [specificTransactionInfo, setSpecificTransactionInfo] =
+    useState<SpecificTransactionInfo | null>(null);
   const [gas, setGas] = useState<number>(0);
-  const [isGasInfoLoaded, setIsGasInfoLoaded] = useState(false);
+  const [isSpecificTransactionInfoLoaded, setIsSpecificTransactionInfoLoaded] =
+    useState(false);
 
   const [step, setStep] = useState<'Send Crypto' | 'Verify Transaction'>(
     'Send Crypto'
@@ -177,7 +181,7 @@ export function useSendCryptoViewModel(
       tx.amount = Number(amount);
       tx.amountInFiat = Number(amountInFiat);
       tx.toAddress = toAddress;
-      tx.specificGasInfo = gasInfo!;
+      tx.specificTransactionInfo = specificTransactionInfo!;
 
       navigate('/vault/item/send/verify', {
         state: {
@@ -226,10 +230,12 @@ export function useSendCryptoViewModel(
     }
 
     try {
-      const gasInfo: SpecificGasInfo = await service.feeService.getFee(tx.coin);
-      tx.specificGasInfo = gasInfo;
-      setGasInfo(gasInfo);
-      setGas(tx.specificGasInfo.gasPrice);
+      const specificTransactionInfo: SpecificTransactionInfo = await service.feeService.getFee(
+        tx.coin
+      );
+      tx.specificTransactionInfo = specificTransactionInfo;
+      setSpecificTransactionInfo(specificTransactionInfo);
+      setGas(tx.specificTransactionInfo.gasPrice);
     } catch (ex) {
       console.error('Failed to get gas info for sending, error: ', ex);
     }
@@ -246,9 +252,9 @@ export function useSendCryptoViewModel(
     isLoading,
     isCoinPickerActive,
     showMemoField,
-    gasInfo,
+    specificTransactionInfo,
     gas,
-    isGasInfoLoaded,
+    isSpecificTransactionInfoLoaded,
     step,
     initializeService,
     validateForm,
@@ -268,8 +274,8 @@ export function useSendCryptoViewModel(
     setService,
     setStep,
     loadGasInfoForSending,
-    setGasInfo,
+    setSpecificTransactionInfo,
     setGas,
-    setIsGasInfoLoaded,
+    setIsSpecificTransactionInfoLoaded,
   };
 }

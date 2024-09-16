@@ -5,7 +5,7 @@ import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { ChainUtils } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { FeeMap, FeeMode } from '../../../model/evm-fee-mode';
-import { SpecificEvm } from '../../../model/gas-info';
+import { SpecificEvm } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
@@ -86,8 +86,10 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     return value + value / 2; // x1.5 fee
   }
 
-  async getGasInfo(coin: Coin, feeMode?: FeeMode): Promise<SpecificEvm> {
+  async getSpecificTransactionInfo(coin: Coin, feeMode?: FeeMode): Promise<SpecificEvm> {
     try {
+      const paramFeeMode: FeeMode = feeMode ?? FeeMode.Normal;
+
       const [gasPrice, nonce] = await Promise.all([
         this.provider.send('eth_gasPrice', []),
         this.provider.getTransactionCount(coin.address),
@@ -100,7 +102,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
       const baseFee = await this.getBaseFee();
       const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
-      const priorityFee = priorityFeeMapValue[feeMode || FeeMode.Normal];
+      const priorityFee = priorityFeeMapValue[paramFeeMode];
       const normalizedBaseFee = this.normalizeFee(Number(baseFee));
       const maxFeePerGasWei = Number(
         BigInt(Math.round(normalizedBaseFee + priorityFee))
@@ -116,7 +118,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         maxFeePerGasWei: maxFeePerGasWei,
       } as SpecificEvm;
     } catch (error) {
-      console.error('getGasInfo::', error);
+      console.error('getSpecificTransactionInfo::', error);
       throw error;
     }
   }

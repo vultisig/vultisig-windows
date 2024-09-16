@@ -4,7 +4,7 @@ import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { tss } from '../../../../wailsjs/go/models';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { SpecificEvm } from '../../../model/gas-info';
+import { SpecificEvm } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
@@ -33,7 +33,7 @@ export class BlockchainServiceEvm
     );
     const specific_pb = new EthereumSpecific();
     const transactionInfoSpecific: SpecificEvm =
-      obj.specificGasInfo as SpecificEvm;
+      obj.specificTransactionInfo as SpecificEvm;
     switch (obj.transactionType) {
       case TransactionType.SEND:
         specific_pb.gasLimit = transactionInfoSpecific.gasLimit.toString();

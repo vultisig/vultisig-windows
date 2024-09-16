@@ -38,17 +38,17 @@ const SendCryptoView: React.FC = () => {
   useEffect(() => {
     if (
       sendCryptoViewModel.service &&
-      !sendCryptoViewModel.isGasInfoLoaded &&
+      !sendCryptoViewModel.isSpecificTransactionInfoLoaded &&
       tx.coin &&
       sendCryptoViewModel.gas === 0
     ) {
       sendCryptoViewModel.loadGasInfoForSending(tx).then(() => {
-        sendCryptoViewModel.setIsGasInfoLoaded(true);
+        sendCryptoViewModel.setIsSpecificTransactionInfoLoaded(true);
       });
     }
   }, [
     sendCryptoViewModel.service,
-    sendCryptoViewModel.isGasInfoLoaded,
+    sendCryptoViewModel.isSpecificTransactionInfoLoaded,
     tx.coin,
   ]);
 

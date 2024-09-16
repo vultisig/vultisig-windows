@@ -1,5 +1,5 @@
-export type SpecificGasInfo =
-  | BasicGasInfo
+export type SpecificTransactionInfo =
+  | BasicSpecificTransactionInfo
   | SpecificEvm
   | SpecificCosmos
   | SpecificPolkadot
@@ -8,12 +8,12 @@ export type SpecificGasInfo =
   | SpecificThorchain
   | SpecificUtxo;
 
-export interface BasicGasInfo {
+export interface BasicSpecificTransactionInfo {
   gasPrice: number;
   fee: number;
 }
 
-export interface SpecificEvm extends BasicGasInfo {
+export interface SpecificEvm extends BasicSpecificTransactionInfo {
   gasPrice: number;
   priorityFee: number;
   nonce: number;
@@ -23,13 +23,13 @@ export interface SpecificEvm extends BasicGasInfo {
   gasLimit: number;
 }
 
-export interface SpecificThorchain extends BasicGasInfo {
+export interface SpecificThorchain extends BasicSpecificTransactionInfo {
   accountNumber: number;
   sequence: number;
   isDeposit: boolean;
 }
 
-export interface SpecificUtxo extends BasicGasInfo {
+export interface SpecificUtxo extends BasicSpecificTransactionInfo {
   byteFee: number;
   sendMaxAmount: boolean;
   utxos: SpecificUtxoInfo[];
@@ -41,26 +41,26 @@ export interface SpecificUtxoInfo {
   index: number;
 }
 
-export interface SpecificCosmos extends BasicGasInfo {
+export interface SpecificCosmos extends BasicSpecificTransactionInfo {
   accountNumber: number;
   sequence: number;
   gas: number;
   transactionType: number;
 }
 
-export interface SpecificSolana extends BasicGasInfo {
+export interface SpecificSolana extends BasicSpecificTransactionInfo {
   recentBlockHash: string;
   priorityFee: number;
   fromAddressPubKey: string | undefined;
   toAddressPubKey: string | undefined;
 }
 
-export interface SpecificSui extends BasicGasInfo {
+export interface SpecificSui extends BasicSpecificTransactionInfo {
   referenceGasPrice: number;
   coins: Map<string, string>[];
 }
 
-export interface SpecificPolkadot extends BasicGasInfo {
+export interface SpecificPolkadot extends BasicSpecificTransactionInfo {
   recentBlockHash: string;
   nonce: number;
   currentBlockNumber: number;

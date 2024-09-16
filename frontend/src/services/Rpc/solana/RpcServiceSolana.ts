@@ -1,7 +1,7 @@
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { SpecificSolana } from '../../../model/gas-info';
+import { SpecificSolana } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
@@ -160,7 +160,7 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     return Math.max(...fees.filter((fee: number) => fee > 0), 0);
   }
 
-  async getGasInfo(coin: Coin): Promise<SpecificSolana> {
+  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificSolana> {
     try {
       // Fetch the recent block hash and priority fee concurrently
       const [recentBlockHash, highPriorityFee] = await Promise.all([

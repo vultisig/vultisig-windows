@@ -13,7 +13,7 @@ import SignatureProvider from '../signature-provider';
 import { createHash } from 'crypto';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import { BlockchainService } from '../BlockchainService';
-import { SpecificThorchain } from '../../../model/gas-info';
+import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
@@ -38,7 +38,7 @@ export class BlockchainServiceThorchain
     );
     const specific = new THORChainSpecific();
     const gasInfoSpecific: SpecificThorchain =
-      obj.specificGasInfo as SpecificThorchain;
+      obj.specificTransactionInfo as SpecificThorchain;
     specific.accountNumber = BigInt(gasInfoSpecific.accountNumber);
     specific.fee = BigInt(gasInfoSpecific.fee);
     specific.sequence = BigInt(gasInfoSpecific.sequence);

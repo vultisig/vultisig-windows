@@ -1,7 +1,7 @@
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { SpecificThorchain } from '../../../model/gas-info';
+import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 
@@ -68,7 +68,7 @@ export class RpcServiceThorchain implements IRpcService {
     return entry.address;
   }
 
-  async getGasInfo(coin: Coin): Promise<SpecificThorchain> {
+  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificThorchain> {
     const account = await this.fetchAccountNumber(coin.address);
 
     const fee = await this.calculateFee(coin);

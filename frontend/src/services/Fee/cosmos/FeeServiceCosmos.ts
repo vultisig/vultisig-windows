@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { SpecificCosmos } from '../../../model/gas-info';
+import { SpecificCosmos } from '../../../model/specific-transaction-info';
 import { FeeService } from '../FeeService';
 import { IFeeService } from '../IFeeService';
 
