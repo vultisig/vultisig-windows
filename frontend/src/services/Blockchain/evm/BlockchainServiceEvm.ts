@@ -1,20 +1,21 @@
+import { TW } from '@trustwallet/wallet-core';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+
 import { tss } from '../../../../wailsjs/go/models';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { IBlockchainService } from '../IBlockchainService';
-import { SignedTransactionResult } from '../signed-transaction-result';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { SpecificEvm } from '../../../model/gas-info';
 import {
   ISendTransaction,
   ISwapTransaction,
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import { BlockchainService } from '../BlockchainService';
-import SignatureProvider from '../signature-provider';
-import { TW } from '@trustwallet/wallet-core';
-import { SpecificEvm } from '../../../model/gas-info';
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { BlockchainService } from '../BlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
+import SignatureProvider from '../signature-provider';
+import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceEvm
   extends BlockchainService

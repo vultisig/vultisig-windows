@@ -1,22 +1,24 @@
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KeygenType } from '../../model/TssType';
-import { useQueryClient } from '@tanstack/react-query';
-import { KeygenMessage } from '../../gen/vultisig/keygen/v1/keygen_message_pb';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Endpoint } from '../../services/Endpoint';
-import KeygenError from '../../components/keygen/KeygenError';
-import NavBar from '../../components/navbar/NavBar';
+
 import { storage } from '../../../wailsjs/go/models';
-import { generateRandomNumber } from '../../utils/util';
-import DiscoveryServiceScreen from '../../components/keygen/DiscoveryService';
-import KeygenView from '../../components/keygen/KeygenView';
-import JoinKeygen from '../../components/keygen/JoinKeygen';
 import { GetVault } from '../../../wailsjs/go/storage/Store';
-import { ReshareMessage } from '../../gen/vultisig/keygen/v1/reshare_message_pb';
-import { joinSession } from '../../services/Keygen/Keygen';
-import KeygenDone from '../../components/keygen/KeygenDone';
+import DiscoveryServiceScreen from '../../components/keygen/DiscoveryService';
+import JoinKeygen from '../../components/keygen/JoinKeygen';
 import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
+import KeygenDone from '../../components/keygen/KeygenDone';
+import KeygenError from '../../components/keygen/KeygenError';
+import KeygenView from '../../components/keygen/KeygenView';
+import NavBar from '../../components/navbar/NavBar';
+import { KeygenMessage } from '../../gen/vultisig/keygen/v1/keygen_message_pb';
+import { ReshareMessage } from '../../gen/vultisig/keygen/v1/reshare_message_pb';
+import { KeygenType } from '../../model/TssType';
+import { Endpoint } from '../../services/Endpoint';
+import { joinSession } from '../../services/Keygen/Keygen';
+import { generateRandomNumber } from '../../utils/util';
+
 const JoinKeygenView: React.FC = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { getColor } from '../../../lib/ui/theme/getters';
 
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
 import { borderRadius } from '../../../lib/ui/css/borderRadius';
+import { getColor } from '../../../lib/ui/theme/getters';
 
 export const LanguageBox = styled.div`
   flex: 1;

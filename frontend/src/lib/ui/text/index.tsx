@@ -1,7 +1,8 @@
-import styled, { DefaultTheme, css } from 'styled-components';
+import styled, { css, DefaultTheme } from 'styled-components';
+
+import { match } from '../../utils/match';
 import { cropText } from '../css/cropText';
 import { toSizeUnit } from '../css/toSizeUnit';
-import { match } from '../../utils/match';
 
 const getTextColorRecord = ({ colors }: DefaultTheme) =>
   ({

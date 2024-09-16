@@ -1,16 +1,15 @@
 import { ethers, TransactionRequest } from 'ethers';
-import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { CoinMeta } from '../../../model/coin-meta';
-import { ITokenService } from '../../Tokens/ITokenService';
-import { IRpcService } from '../IRpcService';
-import { SpecificEvm } from '../../../model/gas-info';
-import { FeeMap, FeeMode } from '../../../model/evm-fee-mode';
-import { Endpoint } from '../../Endpoint';
-import { RpcServiceEvmOneInch } from './OneInch';
-import { ChainUtils } from '../../../model/chain';
 
 import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
-
+import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { ChainUtils } from '../../../model/chain';
+import { CoinMeta } from '../../../model/coin-meta';
+import { FeeMap, FeeMode } from '../../../model/evm-fee-mode';
+import { SpecificEvm } from '../../../model/gas-info';
+import { Endpoint } from '../../Endpoint';
+import { ITokenService } from '../../Tokens/ITokenService';
+import { IRpcService } from '../IRpcService';
+import { RpcServiceEvmOneInch } from './OneInch';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   private provider: ethers.JsonRpcProvider;
@@ -252,7 +251,12 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
       return balance.toString();
     } catch (error) {
-      console.error('fetchERC20TokenBalance::', walletAddress, contractAddress, error);
+      console.error(
+        'fetchERC20TokenBalance::',
+        walletAddress,
+        contractAddress,
+        error
+      );
 
       return '0';
     }
@@ -308,12 +312,11 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
   }
 
   sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
     try {
-
       console.log('Fetching tokens for:', nativeToken);
 
       const chain = ChainUtils.stringToChain(nativeToken.chain);
@@ -323,7 +326,10 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       }
 
       const oneInchChainId = RpcServiceEvmOneInch.getOneInchChainId(chain);
-      const oneInchEndpoint = Endpoint.fetch1InchsTokensBalance(oneInchChainId.toString(), nativeToken.address);
+      const oneInchEndpoint = Endpoint.fetch1InchsTokensBalance(
+        oneInchChainId.toString(),
+        nativeToken.address
+      );
 
       const balanceData = await Fetch(oneInchEndpoint);
 
@@ -331,7 +337,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
       // Filter tokens with non-zero balance
       const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
-        .filter(([_, balance]) => BigInt(balance as string) > 0n)  // Ensure the balance is non-zero
+        .filter(([_, balance]) => BigInt(balance as string) > 0n) // Ensure the balance is non-zero
         .map(([tokenAddress]) => tokenAddress);
 
       if (nonZeroBalanceTokenAddresses.length === 0) {
@@ -339,7 +345,10 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       }
 
       // Fetch token information for the non-zero balance tokens
-      const tokenInfoEndpoint = Endpoint.fetch1InchsTokensInfo(oneInchChainId.toString(), nonZeroBalanceTokenAddresses);
+      const tokenInfoEndpoint = Endpoint.fetch1InchsTokensInfo(
+        oneInchChainId.toString(),
+        nonZeroBalanceTokenAddresses
+      );
 
       const tokenInfoData = await Fetch(tokenInfoEndpoint);
 
@@ -359,14 +368,12 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
             ticker: tokenInfo.symbol,
           } as CoinMeta;
         })
-        .filter((token): token is CoinMeta => token !== null);  // Type guard to filter out null values
-
+        .filter((token): token is CoinMeta => token !== null); // Type guard to filter out null values
     } catch (error) {
       console.error('getTokens::', error);
       return [];
     }
   }
-
 
   async getGasInfoZk(
     fromAddress: string,

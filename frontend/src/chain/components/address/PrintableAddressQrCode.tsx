@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { ComponentWithValueProps } from '../../../lib/ui/props';
-import { verticalPadding } from '../../../lib/ui/css/verticalPadding';
-import { Text } from '../../../lib/ui/text';
-import { ProductLogo } from '../../../ui/logo/ProductLogo';
+
 import { ElementSizeAware } from '../../../lib/ui/base/ElementSizeAware';
+import { verticalPadding } from '../../../lib/ui/css/verticalPadding';
+import { VStack } from '../../../lib/ui/layout/Stack';
+import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { Text } from '../../../lib/ui/text';
+import { getColor } from '../../../lib/ui/theme/getters';
+import { ProductLogo } from '../../../ui/logo/ProductLogo';
 import { AddressQrCode } from './AddressQrCode';
 
 const Container = styled(VStack)`

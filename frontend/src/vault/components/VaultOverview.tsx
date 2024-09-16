@@ -1,11 +1,11 @@
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller';
 import { VStack } from '../../lib/ui/layout/Stack';
 import { PageContent } from '../../ui/page/PageContent';
-import { VaultPrimaryActions } from './VaultPrimaryActions';
 import { VaultTotalBalance } from '../balance/VaultTotalBalance';
 import { ManageVaultChainsPrompt } from '../chain/manage/ManageVaultChainsPrompt';
-import { VaultChainItem } from './VaultChainItem';
 import { useVaultChainsBalancesQuery } from '../queries/useVaultChainsBalancesQuery';
+import { VaultChainItem } from './VaultChainItem';
+import { VaultPrimaryActions } from './VaultPrimaryActions';
 
 export const VaultOverview = () => {
   const query = useVaultChainsBalancesQuery();

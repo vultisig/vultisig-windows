@@ -1,10 +1,10 @@
-import { defineConfig, normalizePath } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
+import { defineConfig, normalizePath } from 'vite';
+import circleDependency from 'vite-plugin-circular-dependency'; // Import the plugin
 import stdLibBrowser from 'vite-plugin-node-stdlib-browser';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import path from 'path';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -27,6 +27,17 @@ export default defineConfig({
           dest: '7z-wasm',
         },
       ],
+    }),
+    circleDependency({
+      // Exclude node_modules from the check to focus on your code
+      exclude: /node_modules/,
+      // Do not fail the build on error, so we can see all circular dependencies
+      circleImportThrowErr: false,
+      // This function is called when a circular dependency is detected
+      formatOutModulePath(path) {
+        const str = 'Circular dependency detected:';
+        return str + path;
+      },
     }),
   ],
   build: {

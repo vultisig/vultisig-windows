@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import { ClickableComponentProps } from '../../lib/ui/props';
-import { Panel } from '../../lib/ui/panel/Panel';
+
 import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
-import { HStack } from '../../lib/ui/layout/Stack';
-import { getColor } from '../../lib/ui/theme/getters';
-import { Text } from '../../lib/ui/text';
 import { ChevronRightIcon } from '../../lib/ui/icons/ChevronRightIcon';
+import { HStack } from '../../lib/ui/layout/Stack';
+import { Panel } from '../../lib/ui/panel/Panel';
+import { ClickableComponentProps } from '../../lib/ui/props';
+import { Text } from '../../lib/ui/text';
+import { getColor } from '../../lib/ui/theme/getters';
 
 type VaultListOptionProps = ClickableComponentProps & {
   name: string;

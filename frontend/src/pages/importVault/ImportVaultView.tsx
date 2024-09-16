@@ -1,16 +1,17 @@
 import React, { useRef, useState } from 'react';
-import ImportVaultDialog from '../../components/dialog/ImportVaultDialog';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { decryptVault, isBase64Encoded } from '../../utils/util';
+import { useNavigate } from 'react-router-dom';
+
+import { SaveVault } from '../../../wailsjs/go/storage/Store';
+import ImportVaultDialog from '../../components/dialog/ImportVaultDialog';
+import NavBar from '../../components/navbar/NavBar';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
-import { SaveVault } from '../../../wailsjs/go/storage/Store';
-import NavBar from '../../components/navbar/NavBar';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
-import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
+import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { DefaultCoinsService } from '../../services/Coin/DefaultCoinsService';
-import { useAssertWalletCore } from '../../main';
+import { decryptVault, isBase64Encoded } from '../../utils/util';
+import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
 
 const ImportVaultView: React.FC = () => {
   const { t } = useTranslation();

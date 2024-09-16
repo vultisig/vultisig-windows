@@ -1,8 +1,9 @@
-import { IconButton } from '../../../lib/ui/buttons/IconButton';
-import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { Link } from 'react-router-dom';
-import { makeAddressPath } from '../../../navigation';
+
+import { IconButton } from '../../../lib/ui/buttons/IconButton';
 import { QrCodeIcon } from '../../../lib/ui/icons/QrCodeIcon';
+import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { makeAddressPath } from '../../../navigation';
 
 export const AddressPageShyPrompt = ({
   value,

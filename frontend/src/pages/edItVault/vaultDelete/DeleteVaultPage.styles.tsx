@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { Panel } from '../../../lib/ui/panel/Panel';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus';
-import { sameDimensions } from '../../../lib/ui/css/sameDimensions';
+
 import { Button } from '../../../lib/ui/buttons/Button';
+import { sameDimensions } from '../../../lib/ui/css/sameDimensions';
+import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus';
+import { VStack } from '../../../lib/ui/layout/Stack';
+import { Panel } from '../../../lib/ui/panel/Panel';
+import { getColor } from '../../../lib/ui/theme/getters';
 
 export const Container = styled(VStack)`
   margin-bottom: 32px;

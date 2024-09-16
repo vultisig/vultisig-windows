@@ -1,8 +1,8 @@
 import { ReactNode, useState } from 'react';
-
-import { useElementSize } from '../hooks/useElementSize';
 import { useIsomorphicLayoutEffect } from 'react-use';
+
 import { Dimensions } from '../../utils/entities/Dimensions';
+import { useElementSize } from '../hooks/useElementSize';
 
 interface ElementSizeAwareRenderParams {
   size: Dimensions | null;

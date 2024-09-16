@@ -11,7 +11,6 @@ const rpcURL2 = Endpoint.solanaServiceRpc2;
 const tokenInfoServiceURL = Endpoint.solanaTokenInfoServiceRpc;
 
 export class RpcServiceSolana implements IRpcService, ITokenService {
-
   async sendTransaction(encodedTransaction: string): Promise<string> {
     const requestBody = {
       jsonrpc: '2.0',
@@ -65,9 +64,9 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     contractAddress: string,
     walletAddress: string
   ): Promise<bigint> {
-
     try {
-      const accounts: any[] = await this.fetchTokenAccountsByOwner(walletAddress);
+      const accounts: any[] =
+        await this.fetchTokenAccountsByOwner(walletAddress);
       const tokenAccount = accounts.find(
         account => account.account.data.parsed.info.mint === contractAddress
       );

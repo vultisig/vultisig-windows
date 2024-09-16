@@ -1,6 +1,6 @@
-import { Chain } from '../../model/chain';
-import { Balance } from '../../model/balance';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Balance } from '../../model/balance';
+import { Chain } from '../../model/chain';
 import { IBalanceService } from './IBalanceService';
 
 export class BalanceService implements IBalanceService {

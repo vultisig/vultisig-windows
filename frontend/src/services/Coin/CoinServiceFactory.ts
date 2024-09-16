@@ -1,9 +1,10 @@
 import { WalletCore } from '@trustwallet/wallet-core';
+
 import { Chain } from '../../model/chain';
 import { CoinService } from './CoinService';
-import { ICoinService } from './ICoinService';
-import { CoinServiceSolana } from './CoinServiceSolana';
 import { CoinServiceEvm } from './CoinServiceEvm';
+import { CoinServiceSolana } from './CoinServiceSolana';
+import { ICoinService } from './ICoinService';
 
 export class CoinServiceFactory {
   static createCoinService(chain: Chain, walletCore: WalletCore): ICoinService {

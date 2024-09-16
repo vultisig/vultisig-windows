@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
+
+import { ChainAccount } from '../../chain/ChainAccount';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
-import { getCoinMetaKey } from '../utils/coinMeta';
 import { Chain } from '../../model/chain';
 import { BalanceServiceFactory } from '../../services/Balance/BalanceServiceFactory';
 import { CoinAmount, CoinKey } from '../Coin';
-import { ChainAccount } from '../../chain/ChainAccount';
+import { getCoinMetaKey } from '../utils/coinMeta';
 
 export type BalanceQueryResult = CoinKey & CoinAmount & ChainAccount;
 

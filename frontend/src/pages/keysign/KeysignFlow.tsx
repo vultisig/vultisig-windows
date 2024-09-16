@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { storage } from '../../../wailsjs/go/models';
-import KeysignPeerDiscovery from '../../components/keysign/KeysignPeerDiscovery';
-import NavBar from '../../components/navbar/NavBar';
-import KeysignView from '../../components/keysign/KeysignView';
-import { KeysignPayloadUtils } from '../../extensions/KeysignPayload';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { startSession } from '../../services/Keygen/Keygen';
-import { useWalletCore } from '../../main';
-import KeysignError from '../../components/keysign/KeysignError';
+
+import { storage } from '../../../wailsjs/go/models';
 import KeysignDone from '../../components/keysign/KeysignDone';
+import KeysignError from '../../components/keysign/KeysignError';
+import KeysignPeerDiscovery from '../../components/keysign/KeysignPeerDiscovery';
+import KeysignView from '../../components/keysign/KeysignView';
+import NavBar from '../../components/navbar/NavBar';
+import { KeysignPayloadUtils } from '../../extensions/KeysignPayload';
+import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { Endpoint } from '../../services/Endpoint';
+import { startSession } from '../../services/Keygen/Keygen';
 
 const KeysignFlowView: React.FC = () => {
   const { t } = useTranslation();

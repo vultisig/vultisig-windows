@@ -1,14 +1,15 @@
 import { WalletCore } from '@trustwallet/wallet-core';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+
+import { storage } from '../../../wailsjs/go/models';
+import { DeleteCoin, SaveCoin } from '../../../wailsjs/go/storage/Store';
+import { coinToStorageCoin } from '../../coin/utils/coin';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
-import { ICoinService } from './ICoinService';
 import { AddressServiceFactory } from '../Address/AddressServiceFactory';
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
-import { DeleteCoin, SaveCoin } from '../../../wailsjs/go/storage/Store';
-import { coinToStorageCoin } from '../../coin/utils/coin';
 import { TokensStore } from './CoinList';
-import { storage } from '../../../wailsjs/go/models';
+import { ICoinService } from './ICoinService';
 
 export class CoinService implements ICoinService {
   chain: Chain;
@@ -42,7 +43,6 @@ export class CoinService implements ICoinService {
     publicKeyEdDSA: string, // TODO this is not correct
     hexChainCode: string
   ): Promise<Coin> {
-
     try {
       const addressService = AddressServiceFactory.createAddressService(
         this.chain,
@@ -72,8 +72,7 @@ export class CoinService implements ICoinService {
         hexPublicKey: hexPublicKey.stripHexPrefix(),
         logo: asset.logo,
       });
-    }
-    catch (error) {
+    } catch (error) {
       console.log('create coin error: ', error);
       throw error;
     }

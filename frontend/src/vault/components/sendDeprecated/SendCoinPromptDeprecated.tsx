@@ -1,9 +1,10 @@
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../../../lib/ui/buttons/Button';
-import { useAssertWalletCore } from '../../../main';
-import { useVaultListViewModelDeprecated } from './useVaultListViewModelDeprecated';
-import { Chain } from '../../../model/chain';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { Button } from '../../../lib/ui/buttons/Button';
+import { Chain } from '../../../model/chain';
+import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
+import { useVaultListViewModelDeprecated } from './useVaultListViewModelDeprecated';
 
 export const SendCoinPromptDeprecated = () => {
   const walletCore = useAssertWalletCore();
@@ -16,11 +17,8 @@ export const SendCoinPromptDeprecated = () => {
     return (
       Array.from(coins.values())
         .flat()
-        .find(
-          coin =>
-            coin.chain === Chain.Solana &&
-            coin.ticker == 'JUP'
-        ) || null
+        .find(coin => coin.chain === Chain.Solana && coin.ticker == 'JUP') ||
+      null
     );
   }, [coins]);
 

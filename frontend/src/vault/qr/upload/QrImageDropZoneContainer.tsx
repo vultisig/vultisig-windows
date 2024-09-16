@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+
+import { borderRadius } from '../../../lib/ui/css/borderRadius';
 import { centerContent } from '../../../lib/ui/css/centerContent';
 import { getColor } from '../../../lib/ui/theme/getters';
-import { borderRadius } from '../../../lib/ui/css/borderRadius';
 
 export const QrImageDropZoneContainer = styled.div`
   flex: 1;

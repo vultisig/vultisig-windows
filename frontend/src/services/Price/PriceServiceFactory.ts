@@ -1,6 +1,6 @@
 import { Chain } from '../../model/chain';
-import { PriceService } from './PriceService';
 import { IPriceService } from './IPriceService';
+import { PriceService } from './PriceService';
 import { PriceServiceEvm } from './PriceServiceEvm';
 import { PriceServiceSolana } from './PriceServiceSolana';
 

@@ -1,8 +1,8 @@
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Endpoint } from '../../Endpoint';
-import { RpcServiceEvm } from './RpcServiceEvm';
 import { ITokenService } from '../../Tokens/ITokenService';
+import { RpcServiceEvm } from './RpcServiceEvm';
 
 export class RpcServiceEthereum extends RpcServiceEvm implements ITokenService {
   constructor() {

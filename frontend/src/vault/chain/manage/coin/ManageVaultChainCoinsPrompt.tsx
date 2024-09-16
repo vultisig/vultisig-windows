@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
+
+import { ListAddButton } from '../../../../lib/ui/list/ListAddButton';
 import { ComponentWithValueProps } from '../../../../lib/ui/props';
 import { Chain } from '../../../../model/chain';
-import { ListAddButton } from '../../../../lib/ui/list/ListAddButton';
 
 export const ManageVaultChainCoinsPrompt = ({
   value,

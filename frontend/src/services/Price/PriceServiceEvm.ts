@@ -1,10 +1,10 @@
 import { Chain } from '../../model/chain';
-import { IPriceService } from './IPriceService';
-import { PriceService } from './PriceService';
-import { Rate } from '../../model/price-rate';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
+import { Rate } from '../../model/price-rate';
 import { Endpoint } from '../Endpoint';
+import { IPriceService } from './IPriceService';
+import { PriceService } from './PriceService';
 
 export class PriceServiceEvm extends PriceService implements IPriceService {
   chain: Chain;

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { VStack } from '../../lib/ui/layout/Stack';
-import { PageContent } from '../../ui/page/PageContent';
 import { useHasFinishedOnboarding } from '../../onboarding/hooks/useHasFinishedOnboarding';
+import { PageContent } from '../../ui/page/PageContent';
 
 const OnboardingView: React.FC = () => {
   const { t } = useTranslation();

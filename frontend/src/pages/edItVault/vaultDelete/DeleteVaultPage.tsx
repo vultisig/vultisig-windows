@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react';
-import { HStack, VStack } from '../../../lib/ui/layout/Stack';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageSlice } from '../../../ui/page/PageSlice';
 import { useTranslation } from 'react-i18next';
-import { Text } from '../../../lib/ui/text';
+import { useNavigate } from 'react-router-dom';
+
 import DangerSignRedIcon from '../../../lib/ui/icons/DangerSignRedIcon';
+import { HStack, VStack } from '../../../lib/ui/layout/Stack';
+import { Text } from '../../../lib/ui/text';
+import { PageHeader } from '../../../ui/page/PageHeader';
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { PageSlice } from '../../../ui/page/PageSlice';
+import { getVaultTypeText } from '../../../utils/util';
+import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation';
+import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery';
+import { useCurrentVault } from '../../../vault/state/useCurrentVault';
 import {
   ActionsWrapper,
   Check,
@@ -14,11 +20,6 @@ import {
   DeleteButton,
   ListItemPanel,
 } from './DeleteVaultPage.styles';
-import { useCurrentVault } from '../../../vault/state/useCurrentVault';
-import { getVaultTypeText } from '../../../utils/util';
-import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery';
-import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation';
-import { useNavigate } from 'react-router-dom';
 
 const DeleteVaultPage = () => {
   const [deleteTerms, setDeleteTerms] = useState({

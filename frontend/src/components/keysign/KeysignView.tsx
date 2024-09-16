@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { storage } from '../../../wailsjs/go/models';
+import { Keysign } from '../../../wailsjs/go/tss/TssService';
 import { EventsOn } from '../../../wailsjs/runtime/runtime';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { useTranslation } from 'react-i18next';
-import { Keysign } from '../../../wailsjs/go/tss/TssService';
-import { useWalletCore } from '../../main';
-import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
-import { storage } from '../../../wailsjs/go/models';
 import { ChainUtils } from '../../model/chain';
+import { useWalletCore } from '../../providers/WalletCoreProvider';
+import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 
 interface KeysignViewProps {
   vault: storage.Vault;
@@ -80,7 +81,7 @@ const KeysignView: React.FC<KeysignViewProps> = ({
           sessionID,
           hexEncryptionKey,
           serverURL,
-          tssType.toString().toLowerCase(),
+          tssType.toString().toLowerCase()
         );
         console.log('sigs:', sigs);
         onDone();

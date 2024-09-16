@@ -1,8 +1,8 @@
 import { Chain } from '../../model/chain';
+import { CoinMeta } from '../../model/coin-meta';
+import { Rate } from '../../model/price-rate';
 import { IPriceService } from './IPriceService';
 import { PriceService } from './PriceService';
-import { Rate } from '../../model/price-rate';
-import { CoinMeta } from '../../model/coin-meta';
 
 export class PriceServiceSolana extends PriceService implements IPriceService {
   chain: Chain;
@@ -13,17 +13,14 @@ export class PriceServiceSolana extends PriceService implements IPriceService {
   }
 
   async getPrices(coins: CoinMeta[]): Promise<Map<string, Rate[]>> {
-    const coinsAndTokens = coins.filter(
-      coin => coin.priceProviderId
-    );
+    const coinsAndTokens = coins.filter(coin => coin.priceProviderId);
 
     const [nativePrices] = await Promise.all([
-      this.getNativePrices(coinsAndTokens)
+      this.getNativePrices(coinsAndTokens),
     ]);
 
     const prices = new Map([...nativePrices]);
 
     return prices;
   }
-
 }

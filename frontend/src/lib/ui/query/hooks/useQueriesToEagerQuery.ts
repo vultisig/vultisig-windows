@@ -1,7 +1,8 @@
 import { UseQueryResult } from '@tanstack/react-query';
+
+import { isEmpty } from '../../../utils/array/isEmpty';
 import { withoutUndefined } from '../../../utils/array/withoutUndefined';
 import { EagerQuery } from '../Query';
-import { isEmpty } from '../../../utils/array/isEmpty';
 
 type ToEagerQueryInput<T, R, E = unknown> = {
   queries: UseQueryResult<T, E>[];

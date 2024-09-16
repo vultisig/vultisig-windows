@@ -1,20 +1,21 @@
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
+import { ChevronRightIcon } from '../../lib/ui/icons/ChevronRightIcon';
+import { HStack, VStack } from '../../lib/ui/layout/Stack';
+import { Text } from '../../lib/ui/text';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
+import { PageSlice } from '../../ui/page/PageSlice';
+import { editVaultSettingsItems } from './constants';
 import {
   Container,
   IconWrapper,
   ListItemPanel,
   TextWrapper,
 } from './EditVaultPage.styles';
-import { HStack, VStack } from '../../lib/ui/layout/Stack';
-import { Text } from '../../lib/ui/text';
-import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
-import { useNavigate } from 'react-router-dom';
-import { ChevronRightIcon } from '../../lib/ui/icons/ChevronRightIcon';
-import { editVaultSettingsItems } from './constants';
-import { PageSlice } from '../../ui/page/PageSlice';
 
 const EditVaultPage = () => {
   const { t } = useTranslation();

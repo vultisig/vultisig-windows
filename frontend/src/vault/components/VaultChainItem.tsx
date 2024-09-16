@@ -1,22 +1,23 @@
-import { ComponentWithValueProps } from '../../lib/ui/props';
-import { Panel } from '../../lib/ui/panel/Panel';
-import { HStack, VStack } from '../../lib/ui/layout/Stack';
-import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
-import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
-import { Text } from '../../lib/ui/text';
-import { fromChainAmount } from '../../chain/utils/fromChainAmount';
-import { formatAmount } from '../../lib/utils/formatAmount';
-import { sum } from '../../lib/utils/array/sum';
 import styled from 'styled-components';
-import { round } from '../../lib/ui/css/round';
-import { horizontalPadding } from '../../lib/ui/css/horizontalPadding';
+
+import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
+import { fromChainAmount } from '../../chain/utils/fromChainAmount';
+import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { getCoinValue } from '../../coin/utils/getCoinValue';
 import { centerContent } from '../../lib/ui/css/centerContent';
+import { horizontalPadding } from '../../lib/ui/css/horizontalPadding';
+import { round } from '../../lib/ui/css/round';
+import { HStack, VStack } from '../../lib/ui/layout/Stack';
+import { Panel } from '../../lib/ui/panel/Panel';
+import { ComponentWithValueProps } from '../../lib/ui/props';
+import { Text } from '../../lib/ui/text';
 import { getColor } from '../../lib/ui/theme/getters';
+import { sum } from '../../lib/utils/array/sum';
+import { formatAmount } from '../../lib/utils/formatAmount';
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
-import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress';
 import { VaultChainBalance } from '../queries/useVaultChainsBalancesQuery';
 import { useAssertCurrentVaultAddreses } from '../state/useCurrentVault';
-import { getCoinValue } from '../../coin/utils/getCoinValue';
+import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress';
 
 const Pill = styled.div`
   height: 24px;

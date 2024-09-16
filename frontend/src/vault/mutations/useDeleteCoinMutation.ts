@@ -1,16 +1,17 @@
 import { useMutation } from '@tanstack/react-query';
+
+import { accountCoinKeyToString } from '../../coin/AccountCoin';
+import { CoinKey } from '../../coin/Coin';
+import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
+import { Chain } from '../../model/chain';
+import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
+import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
+import { vaultsQueryKey } from '../queries/useVaultsQuery';
 import {
   useAssertCurrentVault,
   useAssertCurrentVaultAddreses,
 } from '../state/useCurrentVault';
-import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
-import { vaultsQueryKey } from '../queries/useVaultsQuery';
-import { useAssertWalletCore } from '../../main';
-import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
-import { Chain } from '../../model/chain';
 import { getStorageVaultId } from '../utils/storageVault';
-import { accountCoinKeyToString } from '../../coin/AccountCoin';
-import { CoinKey } from '../../coin/Coin';
 
 export const useDeleteCoinMutation = () => {
   const vault = useAssertCurrentVault();

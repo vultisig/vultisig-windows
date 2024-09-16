@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
-import { getColor } from '../theme/getters';
 import { borderRadius } from '../css/borderRadius';
 import { toSizeUnit } from '../css/toSizeUnit';
+import { getColor } from '../theme/getters';
 
 type PanelProps = {
   withSections?: boolean;

@@ -1,12 +1,13 @@
+import { useMutation } from '@tanstack/react-query';
+import { toPng } from 'html-to-image';
 import { useState } from 'react';
 import { ReactNode } from 'react';
+
+import { SaveFile } from '../../../wailsjs/go/main/App';
 import {
   ClickableComponentProps,
   ComponentWithValueProps,
 } from '../../lib/ui/props';
-import { toPng } from 'html-to-image';
-import { useMutation } from '@tanstack/react-query';
-import { SaveFile } from '../../../wailsjs/go/main/App';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 
 type SaveAsImageProps = ComponentWithValueProps<ReactNode> & {

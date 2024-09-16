@@ -1,25 +1,26 @@
+import { useMemo } from 'react';
+
+import { areEqualCoins } from '../../coin/Coin';
+import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
+import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
+import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
+import { getCoinValue } from '../../coin/utils/getCoinValue';
+import {
+  getStorageCoinKey,
+  storageCoinToCoin,
+} from '../../coin/utils/storageCoin';
+import { EagerQuery } from '../../lib/ui/query/Query';
+import { order } from '../../lib/utils/array/order';
+import { sum } from '../../lib/utils/array/sum';
+import { recordMap } from '../../lib/utils/record/recordMap';
+import { toEntries } from '../../lib/utils/record/toEntries';
 import { Chain } from '../../model/chain';
+import { CoinMeta } from '../../model/coin-meta';
 import {
   useAssertCurrentVaultCoins,
   useAssertCurrentVaultCoinsByChain,
 } from '../state/useCurrentVault';
 import { VaultChainCoin } from './useVaultChainCoinsQuery';
-import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
-import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
-import {
-  getStorageCoinKey,
-  storageCoinToCoin,
-} from '../../coin/utils/storageCoin';
-import { CoinMeta } from '../../model/coin-meta';
-import { EagerQuery } from '../../lib/ui/query/Query';
-import { useMemo } from 'react';
-import { recordMap } from '../../lib/utils/record/recordMap';
-import { areEqualCoins } from '../../coin/Coin';
-import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
-import { order } from '../../lib/utils/array/order';
-import { toEntries } from '../../lib/utils/record/toEntries';
-import { sum } from '../../lib/utils/array/sum';
-import { getCoinValue } from '../../coin/utils/getCoinValue';
 
 export type VaultChainBalance = {
   chainId: Chain;

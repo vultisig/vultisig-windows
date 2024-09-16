@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { borderRadius } from '../../../lib/ui/css/borderRadius';
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
-import { VStack } from '../../../lib/ui/layout/Stack';
+
 import { Button } from '../../../lib/ui/buttons/Button';
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
+import { borderRadius } from '../../../lib/ui/css/borderRadius';
+import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
+import { getColor } from '../../../lib/ui/theme/getters';
 
 export const InputFieldWrapper = styled.div`
   position: relative;

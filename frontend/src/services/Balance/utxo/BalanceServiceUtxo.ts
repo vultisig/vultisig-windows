@@ -1,7 +1,7 @@
-import { Chain } from '../../../model/chain';
-import { Balance } from '../../../model/balance';
-import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { Balance } from '../../../model/balance';
+import { Chain } from '../../../model/chain';
+import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { IBalanceService } from '../IBalanceService';
 
 export class BalanceServiceUtxo implements IBalanceService {
@@ -24,7 +24,7 @@ export class BalanceServiceUtxo implements IBalanceService {
       decimalAmount: parseInt(balance) / Math.pow(10, coin.decimals),
       expiryDate: new Date(Date.now() + 60000 * 60), // 60 minute expiry
     };
-    
+
     return fetchedBalance;
   }
 }

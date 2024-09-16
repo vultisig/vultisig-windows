@@ -1,13 +1,13 @@
 import {
+  createContext,
   Dispatch,
   SetStateAction,
-  createContext,
   useContext,
   useState,
 } from 'react';
 
-import { ComponentWithChildrenProps } from '../props';
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
+import { ComponentWithChildrenProps } from '../props';
 
 export function getStateProviderSetup<T>(name: string) {
   type ContextState = { value: T; setValue: Dispatch<SetStateAction<T>> };

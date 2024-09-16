@@ -1,12 +1,13 @@
 import { useDropzone } from 'react-dropzone';
-import { QrImageDropZoneContainer } from './QrImageDropZoneContainer';
 import styled from 'styled-components';
+
 import { interactive } from '../../../lib/ui/css/interactive';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { getColor } from '../../../lib/ui/theme/getters';
 import { ComputerUploadIcon } from '../../../lib/ui/icons/ComputerUploadIcon';
-import { Text } from '../../../lib/ui/text';
 import { IconWrapper } from '../../../lib/ui/icons/IconWrapper';
+import { VStack } from '../../../lib/ui/layout/Stack';
+import { Text } from '../../../lib/ui/text';
+import { getColor } from '../../../lib/ui/theme/getters';
+import { QrImageDropZoneContainer } from './QrImageDropZoneContainer';
 
 type QrImageDropZoneProps = {
   onFinish: (data: File) => void;

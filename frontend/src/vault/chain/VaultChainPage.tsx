@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
+
+import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt';
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { getCoinValue } from '../../coin/utils/getCoinValue';
+import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
 import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
@@ -21,16 +25,13 @@ import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
 import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
+import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
-import { VaultChainCoinItem } from './VaultChainCoinItem';
-import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
 import { VaultAddressLink } from './VaultAddressLink';
-import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
-import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt';
-import { getCoinValue } from '../../coin/utils/getCoinValue';
+import { VaultChainCoinItem } from './VaultChainCoinItem';
 
 export const VaultChainPage = () => {
   const chainId = useCurrentVaultChainId();

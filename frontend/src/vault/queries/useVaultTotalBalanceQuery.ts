@@ -1,21 +1,22 @@
-import { useAssertCurrentVaultCoins } from '../state/useCurrentVault';
+import { useMemo } from 'react';
+
+import { areEqualCoins } from '../../coin/Coin';
+import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
+import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
+import { getCoinValue } from '../../coin/utils/getCoinValue';
 import {
   getStorageCoinKey,
   storageCoinToCoin,
 } from '../../coin/utils/storageCoin';
-import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
-import { CoinMeta } from '../../model/coin-meta';
-import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
-import { useMemo } from 'react';
 import {
   getResolvedQuery,
   pendingQuery,
   Query,
 } from '../../lib/ui/query/Query';
 import { sum } from '../../lib/utils/array/sum';
-import { areEqualCoins } from '../../coin/Coin';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
-import { getCoinValue } from '../../coin/utils/getCoinValue';
+import { CoinMeta } from '../../model/coin-meta';
+import { useAssertCurrentVaultCoins } from '../state/useCurrentVault';
 
 export const useVaultTotalBalanceQuery = () => {
   const coins = useAssertCurrentVaultCoins();

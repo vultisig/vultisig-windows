@@ -8,7 +8,13 @@ module.exports = {
     'prettier',
     'plugin:prettier/recommended',
   ],
-  plugins: ['react', '@typescript-eslint', 'jsx-a11y', 'react-hooks'],
+  plugins: [
+    'react',
+    '@typescript-eslint',
+    'jsx-a11y',
+    'react-hooks',
+    'simple-import-sort',
+  ],
   settings: {
     react: {
       version: 'detect',
@@ -23,9 +29,11 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
     'react/prop-types': 'off',
     'react-hooks/rules-of-hooks': 'error',
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
   },
 };

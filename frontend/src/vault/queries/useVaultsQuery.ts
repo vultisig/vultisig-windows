@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+
 import { GetVaults } from '../../../wailsjs/go/storage/Store';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 

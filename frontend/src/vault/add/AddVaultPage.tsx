@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+
 import { Button } from '../../lib/ui/buttons/Button';
 import { VStack } from '../../lib/ui/layout/Stack';
+import { importVaultPath, setupVaultPath } from '../../navigation';
+import { ProductLogoBlock } from '../../ui/logo/ProductLogoBlock';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
-import { Link } from 'react-router-dom';
-import { importVaultPath, setupVaultPath } from '../../navigation';
-import { ProductLogoBlock } from '../../ui/logo/ProductLogoBlock';
 
 export const AddVaultPage = () => {
   const { t } = useTranslation();

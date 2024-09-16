@@ -1,9 +1,10 @@
 import styled, { keyframes } from 'styled-components';
-import { ComponentWithChildrenProps } from '../props';
-import { round } from '../css/round';
-import { horizontalPadding } from '../css/horizontalPadding';
-import { getColor } from '../theme/getters';
+
 import { centerContent } from '../css/centerContent';
+import { horizontalPadding } from '../css/horizontalPadding';
+import { round } from '../css/round';
+import { ComponentWithChildrenProps } from '../props';
+import { getColor } from '../theme/getters';
 
 const appearFromBottom = keyframes`
   from {

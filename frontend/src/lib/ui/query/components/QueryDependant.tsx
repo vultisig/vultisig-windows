@@ -1,5 +1,6 @@
-import { Query } from '../Query';
 import { ReactNode } from 'react';
+
+import { Query } from '../Query';
 
 export type QueryDependantProps<T, E = unknown> = {
   query: Query<T, E>;

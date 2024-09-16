@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 const JoinKeysign: React.FC = () => {
   const { t } = useTranslation();
   return (

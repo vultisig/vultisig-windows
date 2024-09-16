@@ -1,7 +1,7 @@
+import { ChainEntityIcon } from '../../../../chain/ui/ChainEntityIcon';
 import { getCoinMetaIconSrc } from '../../../../coin/utils/coinMeta';
 import { ComponentWithValueProps } from '../../../../lib/ui/props';
 import { CoinMeta } from '../../../../model/coin-meta';
-import { ChainEntityIcon } from '../../../../chain/ui/ChainEntityIcon';
 import { ManageVaultCoin } from '../ManageVaultCoin';
 
 export const ManageVaultChainCoin = ({

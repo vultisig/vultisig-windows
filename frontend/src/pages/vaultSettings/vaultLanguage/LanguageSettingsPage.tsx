@@ -1,4 +1,7 @@
 import { useTranslation } from 'react-i18next';
+
+import { useInAppLanguage } from '../../../lib/hooks/useInAppLanguage';
+import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -7,8 +10,6 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
 import { languageOptions } from './constants';
 import { LanguageBox, LanguageButton } from './LanguageSettingsPage.styles';
-import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
-import { useInAppLanguage } from '../../../lib/hooks/useInAppLanguage';
 
 const LanguageSettingsPage = () => {
   const { t } = useTranslation();

@@ -1,5 +1,6 @@
-import { KeygenMessage } from '../gen/vultisig/keygen/v1/keygen_message_pb';
 import SevenZip from '7z-wasm';
+
+import { KeygenMessage } from '../gen/vultisig/keygen/v1/keygen_message_pb';
 import {
   KeysignMessage,
   KeysignPayload,

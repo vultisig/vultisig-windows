@@ -1,25 +1,26 @@
 import { useState } from 'react';
-import { VaultList } from '../../components/vaultList/VaultList';
-import { Match } from '../../lib/ui/base/Match';
 import { useTranslation } from 'react-i18next';
-import { match } from '../../lib/utils/match';
-import styled from 'styled-components';
-import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt';
-import { PageHeader } from '../../ui/page/PageHeader';
-import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
-import { MenuIcon } from '../../lib/ui/icons/MenuIcon';
-import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle';
-import { VStack } from '../../lib/ui/layout/Stack';
-import { toSizeUnit } from '../../lib/ui/css/toSizeUnit';
-import { pageConfig } from '../../ui/page/config';
-import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
-import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
-import { useAssertCurrentVault } from '../../vault/state/useCurrentVault';
-import { VaultOverview } from '../../vault/components/VaultOverview';
-import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+import { VaultList } from '../../components/vaultList/VaultList';
+import { Match } from '../../lib/ui/base/Match';
+import { toSizeUnit } from '../../lib/ui/css/toSizeUnit';
+import { MenuIcon } from '../../lib/ui/icons/MenuIcon';
+import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
+import { VStack } from '../../lib/ui/layout/Stack';
+import { match } from '../../lib/utils/match';
 import { shareVaultPath } from '../../navigation';
+import { pageConfig } from '../../ui/page/config';
+import { PageHeader } from '../../ui/page/PageHeader';
+import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
+import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
+import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle';
+import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance';
+import { VaultOverview } from '../../vault/components/VaultOverview';
+import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt';
+import { useAssertCurrentVault } from '../../vault/state/useCurrentVault';
 
 type VaultPageView = 'balances' | 'vaults';
 

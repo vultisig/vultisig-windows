@@ -1,10 +1,9 @@
+import { BrowserOpenURL } from '../../../wailsjs/runtime';
+import { getBlockExplorerUrl } from '../../chain/utils/getBlockExplorerUrl';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { BoxIcon } from '../../lib/ui/icons/BoxIcon';
-
-import { useCurrentVaultChainId } from './useCurrentVaultChainId';
-import { getBlockExplorerUrl } from '../../chain/utils/getBlockExplorerUrl';
-import { BrowserOpenURL } from '../../../wailsjs/runtime';
 import { ComponentWithValueProps } from '../../lib/ui/props';
+import { useCurrentVaultChainId } from './useCurrentVaultChainId';
 
 export const VaultAddressLink = ({
   value,

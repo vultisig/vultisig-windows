@@ -1,4 +1,5 @@
 import { createHash } from 'crypto';
+
 import { storage } from '../../../../wailsjs/go/models';
 
 type VaultPublicKeyExport = {

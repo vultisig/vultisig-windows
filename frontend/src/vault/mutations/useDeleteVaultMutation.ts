@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
+
 import { DeleteVault } from '../../../wailsjs/go/storage/Store';
+import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
 
 export const useDeleteVaultMutation = () => {
