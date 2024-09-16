@@ -9,10 +9,10 @@ export class FeeServiceUtxo extends FeeService implements IFeeService {
   async getFee(coin: Coin): Promise<SpecificUtxo> {
     const rpcService = RpcServiceFactory.createRpcService(this.chain);
     try {
-      let gasInfo = (await rpcService.getSpecificTransactionInfo(
+      let specificTransactionInfo = (await rpcService.getSpecificTransactionInfo(
         coin
       )) as SpecificUtxo;
-      return gasInfo;
+      return specificTransactionInfo;
     } catch (ex) {
       console.error('Failed to get UTXO transaction info, error: ', ex);
       return {} as SpecificUtxo;

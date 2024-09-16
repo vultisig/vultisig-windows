@@ -42,7 +42,7 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
 
   async getSpecificTransactionInfo(coin: Coin): Promise<SpecificUtxo> {
     const byteFeePrice = await this.calculateFee(coin);
-    const gasInfo: SpecificUtxo = {
+    const specificTransactionInfo: SpecificUtxo = {
       gasPrice: byteFeePrice / 10 ** coin.decimals, // To display in the UI
       fee: 0,
       byteFee: byteFeePrice,
@@ -50,7 +50,7 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
       utxos: await this.getUtxos(coin),
     };
 
-    return gasInfo;
+    return specificTransactionInfo;
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {

@@ -10,11 +10,11 @@ export class FeeServiceThorchain extends FeeService implements IFeeService {
   async getFee(coin: Coin): Promise<SpecificThorchain> {
     const rpcService = RpcServiceFactory.createRpcService(this.chain);
     try {
-      let gasInfo = (await rpcService.getSpecificTransactionInfo(
+      let specificTransactionInfo = (await rpcService.getSpecificTransactionInfo(
         coin
       )) as SpecificThorchain;
-      gasInfo.gasPrice = gasInfo.gasPrice / 1e8;
-      return gasInfo;
+      specificTransactionInfo.gasPrice = specificTransactionInfo.gasPrice / 1e8;
+      return specificTransactionInfo;
     } catch (ex) {
       console.error('Failed to get EVM balance, error: ', ex);
       return {} as SpecificThorchain;

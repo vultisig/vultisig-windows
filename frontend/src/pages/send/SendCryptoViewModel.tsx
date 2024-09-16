@@ -230,11 +230,11 @@ export function useSendCryptoViewModel(
     }
 
     try {
-      const gasInfo: SpecificTransactionInfo = await service.feeService.getFee(
+      const specificTransactionInfo: SpecificTransactionInfo = await service.feeService.getFee(
         tx.coin
       );
-      tx.specificTransactionInfo = gasInfo;
-      setSpecificTransactionInfo(gasInfo);
+      tx.specificTransactionInfo = specificTransactionInfo;
+      setSpecificTransactionInfo(specificTransactionInfo);
       setGas(tx.specificTransactionInfo.gasPrice);
     } catch (ex) {
       console.error('Failed to get gas info for sending, error: ', ex);
