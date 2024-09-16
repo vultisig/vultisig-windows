@@ -327,9 +327,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
       const balanceData = await await Fetch(oneInchEndpoint);
 
-      console.log('Balance Data:', balanceData);
-
-      await this.sleep(1000); // Sleep for 2 seconds
+      await this.sleep(1000); // We have some rate limits on 1 inch, so I will wait a bit
 
       // Filter tokens with non-zero balance
       const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
@@ -340,14 +338,10 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         return [];
       }
 
-      console.log('Non-zero balance tokens:', nonZeroBalanceTokenAddresses);
-
       // Fetch token information for the non-zero balance tokens
       const tokenInfoEndpoint = Endpoint.fetch1InchsTokensInfo(oneInchChainId.toString(), nonZeroBalanceTokenAddresses);
 
       const tokenInfoData = await await Fetch(tokenInfoEndpoint);
-
-      console.log('Token Info Data:', tokenInfoData);
 
       // Map the fetched token information to CoinMeta[] format
       return nonZeroBalanceTokenAddresses
