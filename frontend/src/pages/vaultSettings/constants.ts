@@ -10,6 +10,11 @@ import SettingsIcon from '../../lib/ui/icons/SettingsIcon';
 import ShareIcon from '../../lib/ui/icons/ShareIcon';
 import ShieldCheckIcon from '../../lib/ui/icons/ShieldCheckIcon';
 
+export const VULTISIG_GITHUB_LINK =
+  'https://github.com/vultisig/vultisig-windows';
+export const VULTISIG_TWITTER_LINK = 'https://x.com/vultisig';
+export const VULTISIG_DISCORD_LINK = 'https://discord.gg/ngvW8tRRfB';
+
 type SettingItem = {
   id: string;
   titleKey: string;

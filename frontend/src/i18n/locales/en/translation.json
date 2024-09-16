@@ -174,5 +174,6 @@
   "vault_delete_page_term_3": "I have made a vault backup",
   "vault_delete_button_text": "Delete",
   "share_vault_qr": "Share Vault QR",
-  "save": "Save"
+  "save": "Save",
+  "settings_vault_page_footer": "VULTISIG APP V"
 }
