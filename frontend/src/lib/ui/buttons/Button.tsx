@@ -15,7 +15,7 @@ export const buttonSizes = ['xs', 's', 'm', 'l', 'xl'] as const;
 
 type ButtonSize = (typeof buttonSizes)[number];
 
-export const buttonKinds = ['primary', 'outlined'] as const;
+export const buttonKinds = ['primary', 'outlined', 'ghost'] as const;
 
 export type ButtonKind = (typeof buttonKinds)[number];
 
@@ -79,6 +79,11 @@ const Container = styled(UnstyledButton)<ContainerProps>`
         background: ${getColor('foregroundExtra')};
         border: 1px solid ${getColor('primary')};
       `,
+      ghost: () => css`
+        font-weight: 500;
+        color: ${getColor('primary')};
+        background: transparent;
+      `,
     })}
   
   ${({ isDisabled, isLoading, kind }) =>
@@ -91,6 +96,9 @@ const Container = styled(UnstyledButton)<ContainerProps>`
             background: ${getHoverVariant('primary')};
           `,
           outlined: () => css``,
+          ghost: () => css`
+            background: ${getColor('mist')};
+          `,
         })}
       }
     `};

@@ -33,3 +33,7 @@ export type AsElementComponent<T extends ElementType = ElementType> = {
 export type TitledComponentProps = {
   title: ReactNode;
 };
+
+export type ComponentWithActiveState = {
+  isActive?: boolean;
+};
