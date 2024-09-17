@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { areEqualCoins } from '../../../../coin/Coin';
+import { areEqualCoins, coinKeyToString } from '../../../../coin/Coin';
 import { useWhitelistedCoinsQuery } from '../../../../coin/query/useWhitelistedCoinsQuery';
 import {
   getCoinMetaKey,
@@ -30,28 +30,27 @@ export const VaultChainCoinOptions = () => {
 
   const [searchQuery] = useCurrentSearch();
 
-  const items = useMemo(() => {
-    if (!searchQuery) {
-      return initialItems;
-    }
-
+  const allUniqueItems = useMemo(() => {
     return withoutDuplicates(
       [...initialItems, ...(query.data ?? [])],
       (one, another) =>
         areEqualCoins(getCoinMetaKey(one), getCoinMetaKey(another))
     );
-  }, [searchQuery, initialItems, query]);
+  }, [initialItems, query.data]);
 
   const options = useSearchFilter({
     searchQuery,
-    items,
+    items: searchQuery ? allUniqueItems : initialItems,
     getSearchStrings: getCoinMetaSearchStrings,
   });
 
   return (
     <>
       {options.map(option => (
-        <ManageVaultChainCoin key={option.ticker} value={option} />
+        <ManageVaultChainCoin
+          key={coinKeyToString(getCoinMetaKey(option))}
+          value={option}
+        />
       ))}
       {searchQuery && query.isPending && (
         <VStack fullWidth alignItems="center">
