@@ -20,3 +20,11 @@ export const getCoinMetaKey = ({
 export const getCoinMetaIconSrc = (
   coinMeta: Pick<CoinMeta, 'ticker'>
 ): string => getChainEntityIconSrc(coinMeta.ticker);
+
+export const getCoinMetaSearchStrings = ({
+  ticker,
+  contractAddress,
+}: Pick<CoinMeta, 'ticker' | 'contractAddress'>): string[] => [
+  ticker,
+  contractAddress,
+];
