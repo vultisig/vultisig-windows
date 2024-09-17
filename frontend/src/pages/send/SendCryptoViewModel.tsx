@@ -8,8 +8,8 @@ import { Rate } from '../../model/price-rate';
 import { ChainUtils } from '../../model/chain';
 import { ServiceFactory } from '../../services/ServiceFactory';
 import { SpecificTransactionInfo } from '../../model/specific-transaction-info';
-import { useNavigate, useNavigation } from 'react-router-dom';
-import { makeAppPath } from '../../navigation';
+import { useNavigate } from 'react-router-dom';
+import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 
 interface SendCryptoViewModel {
   tx: ISendTransaction;
@@ -77,6 +77,7 @@ export function useSendCryptoViewModel(
   );
 
   const navigate = useNavigate();
+  const { globalCurrency } = useGlobalCurrency();
 
   const initializeService = async (walletCore: any, chain: string) => {
     if (!walletCore) {
@@ -157,8 +158,12 @@ export function useSendCryptoViewModel(
 
   const convertToFiat = async (amount: number): Promise<void> => {
     const fiatAmount =
-      (await service?.sendService.convertToFiat(tx.coin, priceRates, amount)) ??
-      0;
+      (await service?.sendService.convertToFiat(
+        tx.coin,
+        priceRates,
+        amount,
+        globalCurrency
+      )) ?? 0;
     setAmountInFiat(fiatAmount.toString());
     updateTransactionAmounts();
   };
@@ -168,7 +173,8 @@ export function useSendCryptoViewModel(
       (await service?.sendService.convertFromFiat(
         tx.coin,
         priceRates,
-        amountInFiat
+        amountInFiat,
+        globalCurrency
       )) ?? 0;
 
     setAmount(tokenAmount.toString());

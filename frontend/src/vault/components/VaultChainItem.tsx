@@ -4,12 +4,12 @@ import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
+import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 import { centerContent } from '../../lib/ui/css/centerContent';
 import { horizontalPadding } from '../../lib/ui/css/horizontalPadding';
 import { round } from '../../lib/ui/css/round';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { Panel } from '../../lib/ui/panel/Panel';
-import { ComponentWithValueProps } from '../../lib/ui/props';
 import { Text } from '../../lib/ui/text';
 import { getColor } from '../../lib/ui/theme/getters';
 import { sum } from '../../lib/utils/array/sum';
@@ -28,10 +28,13 @@ const Pill = styled.div`
   background: ${getColor('mist')};
 `;
 
-export const VaultChainItem = ({
-  value,
-}: ComponentWithValueProps<VaultChainBalance>) => {
-  const { chainId, coins } = value;
+type VaultChainItemProps = {
+  vault: VaultChainBalance;
+};
+
+export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
+  const { chainId, coins } = vault;
+  const { globalCurrencySymbol } = useGlobalCurrency();
 
   const addresses = useAssertCurrentVaultAddreses();
   const address = addresses[chainId];
@@ -88,7 +91,7 @@ export const VaultChainItem = ({
                 </Pill>
               ) : null}
               <Text centerVertically color="contrast" weight="700" size={16}>
-                $
+                {globalCurrencySymbol}
                 <BalanceVisibilityAware>
                   {formatAmount(totalAmount)}
                 </BalanceVisibilityAware>

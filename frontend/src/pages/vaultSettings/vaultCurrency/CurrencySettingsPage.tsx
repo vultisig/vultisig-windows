@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { useInAppCurrency } from '../../../lib/hooks/useInAppCurrency';
+import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
 import { ScrollableFlexboxFiller } from '../../../lib/ui/layout/ScrollableFlexboxFiller';
 import { VStack } from '../../../lib/ui/layout/Stack';
@@ -17,7 +17,7 @@ import {
 
 const CurrencySettingsPage = () => {
   const { t } = useTranslation();
-  const { currency, changeInAppCurrency } = useInAppCurrency();
+  const { globalCurrency, changeGlobalCurrency } = useGlobalCurrency();
 
   return (
     <ScrollableFlexboxFiller>
@@ -34,14 +34,14 @@ const CurrencySettingsPage = () => {
           {currencyOptions.map(({ title, value }, index) => (
             <CurrencyButton
               key={index}
-              onClick={() => changeInAppCurrency(value)}
+              onClick={() => changeGlobalCurrency(value)}
             >
               <CurrencyBox>
                 <Text size={16} color="contrast" weight="600">
                   {t(title)}
                 </Text>
               </CurrencyBox>
-              {value === currency && <CheckIcon />}
+              {value === globalCurrency && <CheckIcon />}
             </CurrencyButton>
           ))}
         </StyledPageSlice>

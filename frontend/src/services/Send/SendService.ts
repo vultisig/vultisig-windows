@@ -46,7 +46,8 @@ export class SendService implements ISendService {
   async convertToFiat(
     coin: Coin,
     priceRates: Map<string, Rate[]>,
-    amount: number
+    amount: number,
+    globalCurrency: Fiat
   ): Promise<number> {
     const toCoinMeta = CoinMeta.fromCoin(coin);
     const toSortedCoin = CoinMeta.sortedStringify(toCoinMeta);
@@ -54,7 +55,7 @@ export class SendService implements ISendService {
 
     // TODO: Get the rate for the selected fiat on settings
     const rate = rates.find(rate => {
-      return rate.fiat === Fiat.USD;
+      return rate.fiat === globalCurrency;
     });
     if (rate) {
       const fiatAmount = amount * rate.value;
@@ -66,15 +67,15 @@ export class SendService implements ISendService {
   async convertFromFiat(
     coin: Coin,
     priceRates: Map<string, Rate[]>,
-    amountInFiat: number
+    amountInFiat: number,
+    globalCurrency: Fiat
   ): Promise<number> {
     const toCoinMeta = CoinMeta.fromCoin(coin);
     const toSortedCoin = CoinMeta.sortedStringify(toCoinMeta);
     const rates: Rate[] = priceRates.get(toSortedCoin) ?? [];
 
-    // TODO: Get the rate for the selected fiat on settings
     const rate = rates.find(rate => {
-      return rate.fiat === Fiat.USD;
+      return rate.fiat === globalCurrency;
     });
     if (rate) {
       const tokenAmount = amountInFiat / rate.value;
