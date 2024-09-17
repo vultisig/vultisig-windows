@@ -21,6 +21,7 @@ export const ManageVaultChainCoinsPage = () => {
           <PageSlice>
             <CoinSearch />
           </PageSlice>
+          <div />
         </VStack>
         <ScrollableFlexboxFiller>
           <PageContent>

@@ -1,27 +1,21 @@
-import { useMemo } from 'react';
-
+import { useWhitelistedCoinsQuery } from '../../../../coin/query/useWhitelistedCoinsQuery';
 import { getCoinMetaSearchStrings } from '../../../../coin/utils/coinMeta';
+import { VStack } from '../../../../lib/ui/layout/Stack';
 import { useCurrentSearch } from '../../../../lib/ui/search/CurrentSearchProvider';
 import { useSearchFilter } from '../../../../lib/ui/search/hooks/useSearchFilter';
-import { TokensStore } from '../../../../services/Coin/CoinList';
+import { Text } from '../../../../lib/ui/text';
 import { useCurrentVaultChainId } from '../../useCurrentVaultChainId';
 import { ManageVaultChainCoin } from './ManageVaultChainCoin';
 
 export const VaultChainCoinOptions = () => {
   const chainId = useCurrentVaultChainId();
 
-  const items = useMemo(
-    () =>
-      TokensStore.TokenSelectionAssets.filter(
-        token => token.chain === chainId && !token.isNativeToken
-      ),
-    [chainId]
-  );
+  const query = useWhitelistedCoinsQuery(chainId);
 
   const [searchQuery] = useCurrentSearch();
   const options = useSearchFilter({
     searchQuery,
-    items,
+    items: query.data ?? [],
     getSearchStrings: getCoinMetaSearchStrings,
   });
 
@@ -30,6 +24,11 @@ export const VaultChainCoinOptions = () => {
       {options.map(option => (
         <ManageVaultChainCoin key={option.ticker} value={option} />
       ))}
+      {query.isPending && (
+        <VStack fullWidth alignItems="center">
+          <Text>Loading ...</Text>
+        </VStack>
+      )}
     </>
   );
 };

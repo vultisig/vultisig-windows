@@ -17,14 +17,16 @@ export const getCoinMetaKey = ({
   };
 };
 
+// TODO: CoinMeta should have an "icon" field instead of "logo", which should always be a URL.
 export const getCoinMetaIconSrc = (
-  coinMeta: Pick<CoinMeta, 'ticker'>
-): string => getChainEntityIconSrc(coinMeta.ticker);
+  coinMeta: Pick<CoinMeta, 'ticker' | 'logo'>
+): string => {
+  if (coinMeta.logo.startsWith('https://')) {
+    return coinMeta.logo;
+  }
+  return getChainEntityIconSrc(coinMeta.ticker);
+};
 
 export const getCoinMetaSearchStrings = ({
   ticker,
-  contractAddress,
-}: Pick<CoinMeta, 'ticker' | 'contractAddress'>): string[] => [
-  ticker,
-  contractAddress,
-];
+}: Pick<CoinMeta, 'ticker'>): string[] => [ticker];
