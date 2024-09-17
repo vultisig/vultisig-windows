@@ -1,6 +1,8 @@
 import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
+import { EvmChain, evmChainIds } from '../../../chain/evm/EvmChain';
+import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { ChainUtils } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
@@ -9,7 +11,6 @@ import { SpecificEvm } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
-import { RpcServiceEvmOneInch } from './OneInch';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   private provider: ethers.JsonRpcProvider;
@@ -86,7 +87,10 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     return value + value / 2; // x1.5 fee
   }
 
-  async getSpecificTransactionInfo(coin: Coin, feeMode?: FeeMode): Promise<SpecificEvm> {
+  async getSpecificTransactionInfo(
+    coin: Coin,
+    feeMode?: FeeMode
+  ): Promise<SpecificEvm> {
     try {
       const paramFeeMode: FeeMode = feeMode ?? FeeMode.Normal;
 
@@ -327,7 +331,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         throw new Error('Invalid chain');
       }
 
-      const oneInchChainId = RpcServiceEvmOneInch.getOneInchChainId(chain);
+      const oneInchChainId = evmChainIds[chain as EvmChain];
       const oneInchEndpoint = Endpoint.fetch1InchsTokensBalance(
         oneInchChainId.toString(),
         nativeToken.address
@@ -360,15 +364,10 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
           const tokenInfo = tokenInfoData[tokenAddress];
           if (!tokenInfo) return null;
 
-          return {
+          return oneInchTokenToCoinMeta({
+            token: tokenInfo,
             chain: chain,
-            contractAddress: tokenInfo.address,
-            decimals: tokenInfo.decimals,
-            isNativeToken: false,
-            logo: tokenInfo.logoURI,
-            priceProviderId: '',
-            ticker: tokenInfo.symbol,
-          } as CoinMeta;
+          });
         })
         .filter((token): token is CoinMeta => token !== null); // Type guard to filter out null values
     } catch (error) {

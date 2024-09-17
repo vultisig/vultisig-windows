@@ -1,16 +1,9 @@
-export enum Chain {
+import { EvmChain } from '../chain/evm/EvmChain';
+
+enum OtherChain {
   THORChain = 'THORChain',
   MayaChain = 'MayaChain',
-  Arbitrum = 'Arbitrum',
-  Avalanche = 'Avalanche',
-  Base = 'Base',
-  CronosChain = 'CronosChain',
   Sui = 'Sui',
-  BSC = 'BSC',
-  Blast = 'Blast',
-  Ethereum = 'Ethereum',
-  Optimism = 'Optimism',
-  Polygon = 'Polygon',
   Bitcoin = 'Bitcoin',
   BitcoinCash = 'Bitcoin-Cash',
   Litecoin = 'Litecoin',
@@ -21,8 +14,15 @@ export enum Chain {
   Kujira = 'Kujira',
   Dydx = 'Dydx',
   Polkadot = 'Polkadot',
-  ZkSync = 'ZkSync',
 }
+
+export const Chain = {
+  ...EvmChain,
+  ...OtherChain,
+};
+
+export type Chain = EvmChain | OtherChain;
+
 export enum TssKeysignType {
   ECDSA = 'ECDSA',
   EdDSA = 'EdDSA',
