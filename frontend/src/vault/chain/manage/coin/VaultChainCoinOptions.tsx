@@ -6,27 +6,45 @@ import {
   getCoinMetaKey,
   getCoinMetaSearchStrings,
 } from '../../../../coin/utils/coinMeta';
+import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
 import { VStack } from '../../../../lib/ui/layout/Stack';
 import { useCurrentSearch } from '../../../../lib/ui/search/CurrentSearchProvider';
 import { useSearchFilter } from '../../../../lib/ui/search/hooks/useSearchFilter';
 import { Text } from '../../../../lib/ui/text';
 import { withoutDuplicates } from '../../../../lib/utils/array/withoutDuplicates';
+import { CoinMeta } from '../../../../model/coin-meta';
 import { TokensStore } from '../../../../services/Coin/CoinList';
+import { useAssertCurrentVaultChainCoins } from '../../../state/useCurrentVault';
 import { useCurrentVaultChainId } from '../../useCurrentVaultChainId';
 import { ManageVaultChainCoin } from './ManageVaultChainCoin';
 
 export const VaultChainCoinOptions = () => {
   const chainId = useCurrentVaultChainId();
 
+  const vaultCoins = useAssertCurrentVaultChainCoins(chainId);
+
   const query = useWhitelistedCoinsQuery(chainId);
 
-  const initialItems = useMemo(
+  const vaultItems = useMemo(
+    () => vaultCoins.map(storageCoinToCoin).map(CoinMeta.fromCoin),
+    [vaultCoins]
+  );
+
+  const suggestedItems = useMemo(
     () =>
       TokensStore.TokenSelectionAssets.filter(
         token => token.chain === chainId && !token.isNativeToken
       ),
     [chainId]
   );
+
+  const initialItems = useMemo(() => {
+    return withoutDuplicates(
+      [...vaultItems, ...suggestedItems],
+      (one, another) =>
+        areEqualCoins(getCoinMetaKey(one), getCoinMetaKey(another))
+    );
+  }, [suggestedItems, vaultItems]);
 
   const [searchQuery] = useCurrentSearch();
 
@@ -44,9 +62,13 @@ export const VaultChainCoinOptions = () => {
     getSearchStrings: getCoinMetaSearchStrings,
   });
 
+  const sortedOptions = useMemo(() => {
+    return options.sort((a, b) => a.ticker.localeCompare(b.ticker));
+  }, [options]);
+
   return (
     <>
-      {options.map(option => (
+      {sortedOptions.map(option => (
         <ManageVaultChainCoin
           key={coinKeyToString(getCoinMetaKey(option))}
           value={option}
