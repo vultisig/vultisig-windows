@@ -6,6 +6,7 @@ import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
 import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
+import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
 import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
@@ -35,6 +36,7 @@ import { VaultAddressLink } from './VaultAddressLink';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
 
 export const VaultChainPage = () => {
+  const { globalCurrencySymbol } = useGlobalCurrency();
   const chainId = useCurrentVaultChainId();
 
   const vaultAddressQuery = useVaultAddressQuery(chainId);
@@ -116,7 +118,7 @@ export const VaultChainPage = () => {
                     color="contrast"
                     centerVertically
                   >
-                    $
+                    {globalCurrencySymbol}
                     <BalanceVisibilityAware>
                       {formatAmount(total)}
                     </BalanceVisibilityAware>
