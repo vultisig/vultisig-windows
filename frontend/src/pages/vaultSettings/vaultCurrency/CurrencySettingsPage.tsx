@@ -8,9 +8,12 @@ import { Text } from '../../../lib/ui/text';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { PageSlice } from '../../../ui/page/PageSlice';
 import { currencyOptions } from './constants';
-import { CurrencyBox, CurrencyButton } from './CurrencySettingsPage.styles';
+import {
+  CurrencyBox,
+  CurrencyButton,
+  StyledPageSlice,
+} from './CurrencySettingsPage.styles';
 
 const CurrencySettingsPage = () => {
   const { t } = useTranslation();
@@ -27,7 +30,7 @@ const CurrencySettingsPage = () => {
             </PageHeaderTitle>
           }
         />
-        <PageSlice gap={16} flexGrow={true}>
+        <StyledPageSlice gap={16} flexGrow={true}>
           {currencyOptions.map(({ title, value }, index) => (
             <CurrencyButton
               key={index}
@@ -41,7 +44,7 @@ const CurrencySettingsPage = () => {
               {value === currency && <CheckIcon />}
             </CurrencyButton>
           ))}
-        </PageSlice>
+        </StyledPageSlice>
       </VStack>
     </ScrollableFlexboxFiller>
   );
