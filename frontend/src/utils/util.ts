@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { TFunction } from 'i18next';
 
 export const isBase64Encoded = (str: string): boolean => {
@@ -8,34 +7,6 @@ export const isBase64Encoded = (str: string): boolean => {
 
   // Check if the string matches the base64 pattern
   return base64Regex.test(str);
-};
-
-export const decryptVault = (passwd: string, vault: Buffer): Buffer => {
-  // Hash the password to create a key
-  const key = crypto.createHash('sha256').update(passwd).digest();
-
-  // Create a new AES cipher using the key
-  const decipher = crypto.createDecipheriv(
-    'aes-256-gcm',
-    key,
-    vault.slice(0, 12)
-  );
-
-  // Extract the nonce from the vault
-  // const nonce = vault.slice(0, 12);
-  const ciphertext = vault.slice(12, -16); // Exclude the nonce and the auth tag
-  const authTag = vault.slice(-16); // Last 16 bytes is the auth tag
-
-  // Set the authentication tag
-  decipher.setAuthTag(authTag);
-
-  // Decrypt the vault
-  const decrypted = Buffer.concat([
-    decipher.update(ciphertext),
-    decipher.final(),
-  ]);
-
-  return decrypted;
 };
 
 export function generateRandomNumber(): number {
