@@ -2,16 +2,14 @@ import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { SaveVault } from '../../../wailsjs/go/storage/Store';
 import ImportVaultDialog from '../../components/dialog/ImportVaultDialog';
 import NavBar from '../../components/navbar/NavBar';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
-import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { DefaultCoinsService } from '../../services/Coin/DefaultCoinsService';
-import { decryptVault, isBase64Encoded } from '../../utils/util';
+import { isBase64Encoded } from '../../utils/util';
 import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
+import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 
 const ImportVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -27,6 +25,8 @@ const ImportVaultView: React.FC = () => {
   const walletcore = useAssertWalletCore();
 
   const invalidateQueries = useInvalidateQueries();
+
+  const vaultService = VaultServiceFactory.getService(walletcore);
 
   const handleUpload = () => {
     const fileInput = document.getElementById('file_upload');
@@ -87,7 +87,7 @@ const ImportVaultView: React.FC = () => {
   const handleOk = (passwd: string) => {
     if (decryptedContent) {
       try {
-        const decrptedVault = decryptVault(passwd, decryptedContent);
+        const decrptedVault = vaultService.decryptVault(passwd, decryptedContent);
         setDecryptedContent(decrptedVault);
         setContinue(true);
       } catch {
@@ -102,27 +102,7 @@ const ImportVaultView: React.FC = () => {
 
   const handleContinue = async () => {
     if (decryptedContent) {
-      const vault = Vault.fromBinary(decryptedContent);
-      const storageVault = {
-        name: vault.name,
-        public_key_ecdsa: vault.publicKeyEcdsa,
-        public_key_eddsa: vault.publicKeyEddsa,
-        signers: vault.signers,
-        created_at: vault.createdAt,
-        hex_chain_code: vault.hexChainCode,
-        keyshares: vault.keyShares.map(share => ({
-          public_key: share.publicKey,
-          keyshare: share.keyshare,
-        })),
-        local_party_id: vault.localPartyId,
-        reshare_prefix: vault.resharePrefix,
-        order: 0,
-        is_backed_up: true,
-        coins: [],
-        convertValues: () => {},
-      };
-      await SaveVault(storageVault);
-      new DefaultCoinsService(walletcore).applyDefaultCoins(storageVault);
+      await vaultService.importVault(decryptedContent);
       await invalidateQueries(vaultsQueryKey);
       navigate('/vault/list');
     }

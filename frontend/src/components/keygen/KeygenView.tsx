@@ -60,7 +60,7 @@ const KeygenView: React.FC<KeygenViewProps> = ({
     async function kickoffKeygen() {
       const newVault =
         await vaultService
-          .StartKeygen(vault, sessionID, hexEncryptionKey, serverURL)
+          .startKeygen(vault, sessionID, hexEncryptionKey, serverURL)
           .catch(err => {
             console.log(err);
             onError(err);
@@ -76,7 +76,7 @@ const KeygenView: React.FC<KeygenViewProps> = ({
     async function kickoffReshare() {
       const newVault =
         await vaultService
-          .Reshare(vault, sessionID, hexEncryptionKey, serverURL)
+          .reshare(vault, sessionID, hexEncryptionKey, serverURL)
           .catch(err => {
             console.log(err);
             onError(err);
