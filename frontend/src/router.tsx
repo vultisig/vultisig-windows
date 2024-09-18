@@ -6,9 +6,11 @@ import {
   addressPath,
   addVaultPath,
   importVaultPath,
+  keysignPath,
   setupVaultPath,
   shareVaultPath,
 } from './navigation';
+import { OnboardingPage } from './onboarding/components/OnboardingPage';
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
 import EditVaultPage from './pages/edItVault/EditVaultPage';
 import VaultBackupPage from './pages/edItVault/vaultBackup/VaultBackupPage';
@@ -24,6 +26,7 @@ import SendCryptoView from './pages/send/SendCryptoView';
 import SetupVaultView from './pages/setupVault/SetupVaultView';
 import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
+import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
 import { AddVaultPage } from './vault/add/AddVaultPage';
 import { VaultChainCoinPage } from './vault/chain/coin/VaultChainCoinPage';
 import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVaultChainCoinsPage';
@@ -32,8 +35,6 @@ import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
-import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
-import { OnboardingPage } from './onboarding/components/OnboardingPage';
 
 export const router = createBrowserRouter([
   {
@@ -71,11 +72,11 @@ export const router = createBrowserRouter([
     element: <JoinKeygenView />,
   },
   {
-    path: '/join-keysign/:publicKeyECDSA/:sessionID',
+    path: keysignPath,
     element: <JoinKeysignFlow />,
   },
   {
-    path: '/vault/keysign',
+    path: keysignPath,
     element: <KeysignFlowView />,
   },
   {

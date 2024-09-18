@@ -7,6 +7,7 @@ import { ReshareMessage } from '../../../gen/vultisig/keygen/v1/reshare_message_
 import { KeysignMessage } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { match } from '../../../lib/utils/match';
 import { getRawQueryParams } from '../../../lib/utils/query/getRawQueryParams';
+import { makeJoinKeysignPath } from '../../../navigation';
 import { decompressQrPayload } from './utils/decompressQrPayload';
 
 type QrTssType = 'Keygen' | 'Reshare';
@@ -102,7 +103,12 @@ export const useProcessQrMutation = () => {
               ['keysignMessage', keySignMsg.sessionId],
               keySignMsg
             );
-            navigate('/join-keysign/' + vault + '/' + keySignMsg.sessionId);
+            navigate(
+              makeJoinKeysignPath({
+                publicKeyECDSA: vault,
+                sessionID: keySignMsg.sessionId,
+              })
+            );
           },
         });
       } else {

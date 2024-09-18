@@ -5,6 +5,7 @@ export const addVaultPath = '/vault/add';
 export const setupVaultPath = '/vault/setup';
 export const importVaultPath = '/vault/import';
 export const shareVaultPath = '/vault/share';
+export const keysignPath = '/vault/keysign';
 
 export const addressPath = '/address/:address';
 export type AddressPathParams = { address: string };
@@ -12,6 +13,19 @@ export type AddressPathParams = { address: string };
 export const makeAddressPath = (variables: AddressPathParams) =>
   injectVariables({
     template: addressPath,
+    variables,
+    variablePattern: colonVariablePattern,
+  });
+
+export const joinKeysignPath = '/join-keysign/:publicKeyECDSA/:sessionID';
+export type JoinKeysignPathParams = {
+  publicKeyECDSA: string;
+  sessionID: string;
+};
+
+export const makeJoinKeysignPath = (variables: JoinKeysignPathParams) =>
+  injectVariables({
+    template: joinKeysignPath,
     variables,
     variablePattern: colonVariablePattern,
   });
