@@ -10,6 +10,7 @@ import KeysignView from '../../components/keysign/KeysignView';
 import NavBar from '../../components/navbar/NavBar';
 import { KeysignPayloadUtils } from '../../extensions/KeysignPayload';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { makeAppPath } from '../../navigation';
 import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { Endpoint } from '../../services/Endpoint';
 import { startSession } from '../../services/Keygen/Keygen';
@@ -115,7 +116,7 @@ const KeysignFlowView: React.FC = () => {
       content: (
         <KeysignDone
           onNext={() => {
-            navigate('/vault/list');
+            navigate(makeAppPath('vaultList'));
           }}
         />
       ),

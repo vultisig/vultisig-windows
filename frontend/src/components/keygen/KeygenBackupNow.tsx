@@ -2,6 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { makeAppPath } from '../../navigation';
+
 const KeygenBackupNow: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ const KeygenBackupNow: React.FC = () => {
         <button
           className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[250px] font-bold"
           onClick={() => {
-            navigate('/vault/list'); // update later: go to vault view
+            navigate(makeAppPath('vaultList')); // update later: go to vault view
           }}
         >
           {t('skip')}

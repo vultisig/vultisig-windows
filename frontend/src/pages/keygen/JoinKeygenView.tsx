@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { storage } from '../../../wailsjs/go/models';
 import { GetVault } from '../../../wailsjs/go/storage/Store';
@@ -15,6 +15,8 @@ import NavBar from '../../components/navbar/NavBar';
 import { KeygenMessage } from '../../gen/vultisig/keygen/v1/keygen_message_pb';
 import { ReshareMessage } from '../../gen/vultisig/keygen/v1/reshare_message_pb';
 import { KeygenType } from '../../model/TssType';
+import { makeAppPath } from '../../navigation';
+import { useAppPathParams } from '../../navigation/hooks/useRouteParams';
 import { Endpoint } from '../../services/Endpoint';
 import { joinSession } from '../../services/Keygen/Keygen';
 import { generateRandomNumber } from '../../utils/util';
@@ -25,10 +27,7 @@ const JoinKeygenView: React.FC = () => {
   const navigate = useNavigate();
   const [currentScreen, setCurrentScreen] = useState<number>(0);
   const [keygenError, setKeygenError] = useState<string>('');
-  const { keygenType, sessionID } = useParams<{
-    keygenType: string;
-    sessionID: string;
-  }>();
+  const { keygenType, sessionID } = useAppPathParams<'joinKeygen'>();
   const vault = useRef<storage.Vault>(new storage.Vault());
   const hexEncryptionKey = useRef<string>('');
   const serverURL = useRef<string>('');
@@ -165,7 +164,7 @@ const JoinKeygenView: React.FC = () => {
         <KeygenError
           keygenError={keygenError}
           onTryAgain={() => {
-            navigate('/vault/list');
+            navigate(makeAppPath('vaultList'));
           }}
         />
       ),

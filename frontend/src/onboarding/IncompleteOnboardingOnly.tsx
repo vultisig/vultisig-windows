@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ComponentWithChildrenProps } from '../lib/ui/props';
-import { addVaultPath } from '../navigation';
+import { makeAppPath } from '../navigation';
 import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding';
 
 export const IncompleteOnboardingOnly = ({
@@ -14,7 +14,7 @@ export const IncompleteOnboardingOnly = ({
 
   useEffect(() => {
     if (hasCompletedOnboarding) {
-      navigate(addVaultPath);
+      navigate(makeAppPath('addVault'));
     }
   }, [hasCompletedOnboarding, navigate]);
 

@@ -1,10 +1,9 @@
-import { useParams } from 'react-router-dom';
-
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { Chain } from '../../model/chain';
+import { useAppPathParams } from '../../navigation/hooks/useRouteParams';
 
 export const useCurrentVaultChainId = () => {
-  const { chain } = useParams<{ chain: string }>();
+  const { chain } = useAppPathParams<'manageVaultChainCoins'>();
 
   return shouldBePresent(chain) as Chain;
 };

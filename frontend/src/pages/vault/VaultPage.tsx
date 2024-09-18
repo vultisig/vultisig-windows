@@ -11,7 +11,7 @@ import { MenuIcon } from '../../lib/ui/icons/MenuIcon';
 import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 import { VStack } from '../../lib/ui/layout/Stack';
 import { match } from '../../lib/utils/match';
-import { shareVaultPath } from '../../navigation';
+import { makeAppPath } from '../../navigation';
 import { pageConfig } from '../../ui/page/config';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
@@ -45,13 +45,13 @@ export const VaultPage = () => {
         hasBorder
         primaryControls={
           <PageHeaderIconButton
-            onClick={() => navigate('/vault/settings')}
+            onClick={() => navigate(makeAppPath('vaultSettings'))}
             icon={<MenuIcon />}
           />
         }
         secondaryControls={
           <PageHeaderIconButtons>
-            <Link to={shareVaultPath}>
+            <Link to={makeAppPath('shareVault')}>
               <PageHeaderIconButton as="div" icon={<QrCodeIcon />} />
             </Link>
             <RefreshVaultBalance />

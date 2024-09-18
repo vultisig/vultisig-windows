@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../../lib/ui/buttons/Button';
 import { Chain } from '../../../model/chain';
+import { makeAppPath } from '../../../navigation';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { useVaultListViewModelDeprecated } from './useVaultListViewModelDeprecated';
 
@@ -25,7 +26,7 @@ export const SendCoinPromptDeprecated = () => {
   return (
     <Button
       onClick={() => {
-        navigate(`/vault/item/send/${Chain.Solana}`, {
+        navigate(makeAppPath('vaultItemSend', { chain: Chain.Solana }), {
           state: {
             coin: coin,
             balances: balances,

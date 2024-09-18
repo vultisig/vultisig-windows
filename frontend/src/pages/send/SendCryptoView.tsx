@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useEffect } from 'react';
 import { useSendCryptoViewModel } from './SendCryptoViewModel';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,10 +11,11 @@ import SendCryptoForm from '../../components/sendCrypto/SendCryptoForm';
 import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { Rate } from '../../model/price-rate';
 import { getDefaultSendTransaction } from '../../model/transaction';
+import { useAppPathParams } from '../../navigation/hooks/useRouteParams';
 
 const SendCryptoView: React.FC = () => {
   const walletCore = useWalletCore();
-  const { chain } = useParams<{ chain: string }>();
+  const { chain } = useAppPathParams<'vaultItemSend'>();
   const location = useLocation();
 
   const selectedChain = chain || 'THORChain';

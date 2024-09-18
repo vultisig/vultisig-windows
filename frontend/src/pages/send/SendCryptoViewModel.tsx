@@ -9,6 +9,7 @@ import { ChainUtils } from '../../model/chain';
 import { ServiceFactory } from '../../services/ServiceFactory';
 import { SpecificTransactionInfo } from '../../model/specific-transaction-info';
 import { useNavigate, useNavigation } from 'react-router-dom';
+import { makeAppPath } from '../../navigation';
 
 interface SendCryptoViewModel {
   tx: ISendTransaction;
@@ -183,7 +184,7 @@ export function useSendCryptoViewModel(
       tx.toAddress = toAddress;
       tx.specificTransactionInfo = specificTransactionInfo!;
 
-      navigate('/vault/item/send/verify', {
+      navigate(makeAppPath('verifyTransaction'), {
         state: {
           tx: tx,
         },
@@ -230,9 +231,8 @@ export function useSendCryptoViewModel(
     }
 
     try {
-      const specificTransactionInfo: SpecificTransactionInfo = await service.feeService.getFee(
-        tx.coin
-      );
+      const specificTransactionInfo: SpecificTransactionInfo =
+        await service.feeService.getFee(tx.coin);
       tx.specificTransactionInfo = specificTransactionInfo;
       setSpecificTransactionInfo(specificTransactionInfo);
       setGas(tx.specificTransactionInfo.gasPrice);

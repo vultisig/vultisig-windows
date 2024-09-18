@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
+import { makeAppPath } from '../../navigation';
 
 type Input = {
   chainId: string;
@@ -39,7 +40,7 @@ export const useHandleVaultChainItemPress = ({ chainId, address }: Input) => {
     },
     onPointerUp: () => {
       if (!copiedAt) {
-        navigate(`/vault/item/detail/${chainId}`);
+        navigate(makeAppPath('vaultChainDetail', { chain: chainId }));
       }
 
       setPressedAt(null);

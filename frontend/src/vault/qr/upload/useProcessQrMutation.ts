@@ -7,6 +7,7 @@ import { ReshareMessage } from '../../../gen/vultisig/keygen/v1/reshare_message_
 import { KeysignMessage } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { match } from '../../../lib/utils/match';
 import { getRawQueryParams } from '../../../lib/utils/query/getRawQueryParams';
+import { makeAppPath } from '../../../navigation';
 import { decompressQrPayload } from './utils/decompressQrPayload';
 
 type QrTssType = 'Keygen' | 'Reshare';
@@ -65,44 +66,46 @@ export const useProcessQrMutation = () => {
             match(queryParams.tssType, {
               Keygen: async () => {
                 const keygenMsg = KeygenMessage.fromBinary(payload);
-                console.log('keygenMsg:', keygenMsg);
                 queryClient.setQueryData(
                   ['keygenMessage', keygenMsg.sessionId],
                   keygenMsg
                 );
+
                 navigate(
-                  '/join-keygen/' +
-                    queryParams.tssType +
-                    '/' +
-                    keygenMsg.sessionId
+                  makeAppPath('joinKeygen', {
+                    keygenType: queryParams.tssType,
+                    sessionID: keygenMsg.sessionId,
+                  })
                 );
               },
               Reshare: async () => {
                 const reshareMsg = ReshareMessage.fromBinary(payload);
-                console.log('reshareMsg:', reshareMsg);
                 queryClient.setQueryData(
                   ['reshareMessage', reshareMsg.sessionId],
                   reshareMsg
                 );
                 navigate(
-                  '/join-keygen/' +
-                    queryParams.tssType +
-                    '/' +
-                    reshareMsg.sessionId
+                  makeAppPath('joinKeygen', {
+                    keygenType: queryParams.tssType,
+                    sessionID: reshareMsg.sessionId,
+                  })
                 );
               },
             });
           },
           SignTransaction: async () => {
             const vault = queryParams.vault;
-            console.log('vault public key ecdsa: ', vault);
             const keySignMsg = KeysignMessage.fromBinary(payload);
-            console.log('keySignMsg:', keySignMsg);
             queryClient.setQueryData(
               ['keysignMessage', keySignMsg.sessionId],
               keySignMsg
             );
-            navigate('/join-keysign/' + vault + '/' + keySignMsg.sessionId);
+            navigate(
+              makeAppPath('joinKeysign', {
+                publicKeyECDSA: vault,
+                sessionID: keySignMsg.sessionId,
+              })
+            );
           },
         });
       } else {
