@@ -34,6 +34,7 @@ export const appPaths = {
   shareApp: '/vault/settings/share-app',
   privacyPolicy: '/vault/settings/privacy-policy',
   termsOfService: '/vault/settings/terms-of-service',
+  vaultFAQ: '/vault/settings/faq',
 } as const;
 
 type AppPaths = typeof appPaths;

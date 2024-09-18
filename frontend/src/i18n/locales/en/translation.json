@@ -187,5 +187,17 @@
   "vault_settings_currency_settings_title_cny": "CNY",
   "vault_settings_currency_settings_title_cad": "CAD",
   "vault_settings_currency_settings_title_sgd": "SGD",
-  "vault_settings_currency_settings_title_sek": "SEK"
+  "vault_settings_currency_settings_title_sek": "SEK",
+  "faq_setup_crypto_vault_title": "How do I set up my crypto vault?",
+  "faq_setup_crypto_vault_content": "Get 2 or more of your devices together and connected to your local WiFi, Hotspot or internet. Then simply pair them via QR code and create a new vault. You can then send funds in.",
+  "faq_supported_cryptocurrencies_title": "What cryptocurrencies are supported by Vultisig?",
+  "faq_supported_cryptocurrencies_content": "All assets supported by Trust Wallet Core are supported in Vultisig.",
+  "faq_secure_crypto_vault_title": "How does the crypto vault app secure my cryptocurrencies?",
+  "faq_secure_crypto_vault_content": "Vultisig is audited, open-source and uses a very well-proven TSS library.",
+  "faq_vultisig_make_money_title": "How does Vultisig make money?",
+  "faq_vultisig_make_money_content": "Vultisig only charges a flat fee on swap and bridging. There are no other hidden fees.",
+  "faq_recover_assets_title": "Can I recover my assets if I lose a device?",
+  "faq_recover_assets_content": "You can back-up your vault by exporting the vault shares.",
+  "faq_need_to_register_title": "Do I need to register?",
+  "faq_need_to_register_content": "No, there are no registration requirements."
 }
