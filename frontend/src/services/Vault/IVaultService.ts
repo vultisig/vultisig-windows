@@ -25,4 +25,6 @@ export interface IVaultService {
   createBackup(vault: Vault | storage.Vault, password: string): Promise<string>;
 
   storageToProtoVault(storageVault: storage.Vault): Vault;
+
+  updateVaultName(vaultId: string, newName: string): Promise<void>;
 }
