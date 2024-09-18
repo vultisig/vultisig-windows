@@ -10,6 +10,7 @@ import { ServiceFactory } from '../../services/ServiceFactory';
 import { SpecificTransactionInfo } from '../../model/specific-transaction-info';
 import { useNavigate } from 'react-router-dom';
 import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
+import { makeAppPath } from '../../navigation';
 
 interface SendCryptoViewModel {
   tx: ISendTransaction;
