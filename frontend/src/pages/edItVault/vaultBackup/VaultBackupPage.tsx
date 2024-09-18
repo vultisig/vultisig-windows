@@ -5,15 +5,19 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
+import { SaveFile } from '../../../../wailsjs/go/main/App';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
 import InfoGradientIcon from '../../../lib/ui/icons/InfoGradientIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
+import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
+import { VaultServiceFactory } from '../../../services/Vault/VaultServiceFactory';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
+import { useCurrentVault } from '../../../vault/state/useCurrentVault';
 import {
   ActionsWrapper,
   GradientText,
@@ -37,9 +41,12 @@ const passwordSchema = z
   });
 
 const VaultBackupPage = () => {
+  const vault = useCurrentVault();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isVerifiedPasswordVisible, setIsVerifiedPasswordVisible] =
     useState(false);
+  const walletCore = useAssertWalletCore();
+  const vaultService = VaultServiceFactory.getService(walletCore);
 
   const {
     register,
@@ -51,7 +58,12 @@ const VaultBackupPage = () => {
   });
 
   const onSubmit = (data: FieldValues) => {
-    console.log('## data', data);
+    const password = data?.password;
+    if (!vault || !password) return;
+
+    vaultService
+      .createBackup(vault as any, password)
+      .then(base64Data => SaveFile('vault-backup.bak', base64Data));
   };
 
   const navigate = useNavigate();
