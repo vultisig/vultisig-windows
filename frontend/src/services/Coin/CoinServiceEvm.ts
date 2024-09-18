@@ -7,10 +7,25 @@ import { CoinService } from './CoinService';
 import { ICoinService } from './ICoinService';
 
 export class CoinServiceEvm extends CoinService implements ICoinService {
+  async saveTokens(coin: Coin, vault: storage.Vault): Promise<void> {
+    return this.saveCoins(coin, vault, true);
+  }
+
   async saveCoin(coin: Coin, vault: storage.Vault): Promise<void> {
+    return this.saveCoins(coin, vault, false);
+  }
+
+  async saveCoins(
+    coin: Coin,
+    vault: storage.Vault,
+    isToken: boolean
+  ): Promise<void> {
     try {
       const convertedTokens: Coin[] = [];
-      convertedTokens.push(coin);
+
+      if (!isToken) {
+        convertedTokens.push(coin);
+      }
 
       if (coin.isNativeToken) {
         const factory = RpcServiceFactory.createRpcService(
