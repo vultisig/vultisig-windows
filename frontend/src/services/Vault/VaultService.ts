@@ -1,4 +1,4 @@
-import { WalletCore } from '@trustwallet/wallet-core';
+import { WalletCore } from '@trustwallet/wallet-core'; //
 import crypto from 'crypto';
 
 import { storage } from '../../../wailsjs/go/models';
