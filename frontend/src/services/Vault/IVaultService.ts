@@ -22,5 +22,7 @@ export interface IVaultService {
 
   decryptVault(passwd: string, vault: Buffer): Buffer;
 
-  createBackup(vault: Vault, password: string): Promise<string>;
+  createBackup(vault: Vault | storage.Vault, password: string): Promise<string>;
+
+  storageToProtoVault(storageVault: storage.Vault): Vault;
 }
