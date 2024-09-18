@@ -6,6 +6,7 @@ import {
   addressPath,
   addVaultPath,
   importVaultPath,
+  joinKeysignPath,
   keysignPath,
   setupVaultPath,
   shareVaultPath,
@@ -72,7 +73,7 @@ export const router = createBrowserRouter([
     element: <JoinKeygenView />,
   },
   {
-    path: keysignPath,
+    path: joinKeysignPath,
     element: <JoinKeysignFlow />,
   },
   {
