@@ -1,9 +1,10 @@
-import { GLOBAL_CURRENCY_DEFAULT } from '../../../constants';
 import { Fiat } from '../../../model/fiat';
 import {
   PersistentStateKey,
   usePersistentState,
 } from '../../../state/persistentState';
+
+const GLOBAL_CURRENCY_DEFAULT = Fiat.USD;
 
 export const useGlobalCurrency = () => {
   const [globalCurrency, setGlobalCurrency] = usePersistentState(
