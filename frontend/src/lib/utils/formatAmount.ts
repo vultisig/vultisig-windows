@@ -1,3 +1,5 @@
+import { Fiat } from '../../model/fiat';
+
 const million = 1000000;
 const billion = 1000000000;
 
@@ -14,20 +16,27 @@ const getFractionDigits = (amount: number): number => {
   return 2;
 };
 
-export const formatAmount = (amount: number): string => {
+export const formatAmount = (
+  amount: number,
+  currency: Fiat,
+  locale: string = 'en-us'
+): string => {
   if (amount > billion) {
-    return `${formatAmount(amount / billion)}B`;
+    return `${formatAmount(amount / billion, currency, locale)}B`;
   }
   if (amount > million) {
-    return `${formatAmount(amount / million)}M`;
+    return `${formatAmount(amount / million, currency, locale)}M`;
   }
 
   const fractionDigits = getFractionDigits(amount);
 
-  const formatter = new Intl.NumberFormat('en-us', {
+  const formatter = new Intl.NumberFormat(locale, {
+    style: 'decimal',
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   });
 
-  return formatter.format(amount);
+  const formattedAmount = formatter.format(amount);
+
+  return `${formattedAmount} ${currency}`;
 };

@@ -19,6 +19,7 @@ import SendCryptoView from './pages/send/SendCryptoView';
 import SetupVaultView from './pages/setupVault/SetupVaultView';
 import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
+import CurrencySettingsPage from './pages/vaultSettings/vaultCurrency/CurrencySettingsPage';
 import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
 import { AddVaultPage } from './vault/add/AddVaultPage';
 import { VaultChainCoinPage } from './vault/chain/coin/VaultChainCoinPage';
@@ -135,5 +136,9 @@ export const router = createBrowserRouter([
   {
     path: appPaths.address,
     element: <AddressPage />,
+  },
+  {
+    path: appPaths.currencySettings,
+    element: <CurrencySettingsPage />,
   },
 ]);

@@ -8,7 +8,7 @@ import { VaultChainItem } from './VaultChainItem';
 import { VaultPrimaryActions } from './VaultPrimaryActions';
 
 export const VaultOverview = () => {
-  const query = useVaultChainsBalancesQuery();
+  const { data: vaults = [] } = useVaultChainsBalancesQuery();
 
   return (
     <ScrollableFlexboxFiller>
@@ -19,8 +19,8 @@ export const VaultOverview = () => {
             <VaultPrimaryActions />
           </VStack>
           <VStack gap={16}>
-            {(query.data ?? []).map(value => (
-              <VaultChainItem key={value.chainId} value={value} />
+            {vaults.map(vault => (
+              <VaultChainItem key={vault.chainId} vault={vault} />
             ))}
             <ManageVaultChainsPrompt />
           </VStack>

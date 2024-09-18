@@ -4,6 +4,7 @@ import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
 import { CoinAmount, CoinInfo, CoinKey } from '../../coin/Coin';
+import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { ComponentWithValueProps } from '../../lib/ui/props';
 import { Text } from '../../lib/ui/text';
@@ -16,7 +17,7 @@ export const VaultChainCoinItem = ({
   CoinInfo & CoinAmount & Partial<EntityWithPrice> & CoinKey
 >) => {
   const { icon, symbol, amount, decimals, price, id, chainId } = value;
-
+  const { globalCurrency } = useGlobalCurrency();
   const balance = fromChainAmount(amount, decimals);
 
   return (
@@ -36,15 +37,14 @@ export const VaultChainCoinItem = ({
             {symbol}
           </Text>
           <Text color="contrast" size={18} weight="700" centerVertically>
-            $
             <BalanceVisibilityAware>
-              {formatAmount(balance * (price || 0))}
+              {formatAmount(balance * (price || 0), globalCurrency)}
             </BalanceVisibilityAware>
           </Text>
         </HStack>
         <Text color="contrast" size={18} weight="500" centerVertically>
           <BalanceVisibilityAware>
-            {formatAmount(balance)}
+            {formatAmount(balance, globalCurrency)}
           </BalanceVisibilityAware>
         </Text>
       </VStack>

@@ -9,6 +9,7 @@ export enum PersistentStateKey {
   ReactQueryState = 'reactQueryState',
   HasFinishedOnboarding = 'HasFinishedOnboarding',
   Language = 'language',
+  Currency = 'currency',
 }
 
 const persistentStorage =
