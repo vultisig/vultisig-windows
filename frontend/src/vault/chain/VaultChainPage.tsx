@@ -36,7 +36,7 @@ import { VaultAddressLink } from './VaultAddressLink';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
 
 export const VaultChainPage = () => {
-  const { globalCurrencySymbol } = useGlobalCurrency();
+  const { globalCurrency } = useGlobalCurrency();
   const chainId = useCurrentVaultChainId();
 
   const vaultAddressQuery = useVaultAddressQuery(chainId);
@@ -118,9 +118,8 @@ export const VaultChainPage = () => {
                     color="contrast"
                     centerVertically
                   >
-                    {globalCurrencySymbol}
                     <BalanceVisibilityAware>
-                      {formatAmount(total)}
+                      {formatAmount(total, globalCurrency)}
                     </BalanceVisibilityAware>
                   </Text>
                 );

@@ -34,7 +34,7 @@ type VaultChainItemProps = {
 
 export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
   const { chainId, coins } = vault;
-  const { globalCurrencySymbol } = useGlobalCurrency();
+  const { globalCurrency } = useGlobalCurrency();
 
   const addresses = useAssertCurrentVaultAddreses();
   const address = addresses[chainId];
@@ -79,7 +79,8 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
                 <Text color="contrast" weight="400" size={12} centerVertically>
                   <BalanceVisibilityAware>
                     {formatAmount(
-                      fromChainAmount(singleCoin.amount, singleCoin.decimals)
+                      fromChainAmount(singleCoin.amount, singleCoin.decimals),
+                      globalCurrency
                     )}
                   </BalanceVisibilityAware>
                 </Text>
@@ -91,9 +92,8 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
                 </Pill>
               ) : null}
               <Text centerVertically color="contrast" weight="700" size={16}>
-                {globalCurrencySymbol}
                 <BalanceVisibilityAware>
-                  {formatAmount(totalAmount)}
+                  {formatAmount(totalAmount, globalCurrency)}
                 </BalanceVisibilityAware>
               </Text>
             </HStack>

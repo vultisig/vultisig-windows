@@ -1,8 +1,5 @@
+import { GLOBAL_CURRENCY_DEFAULT } from '../../../constants';
 import { Fiat } from '../../../model/fiat';
-import {
-  currencies,
-  currencyToSymbolMap,
-} from '../../../pages/vaultSettings/vaultCurrency/constants';
 import {
   PersistentStateKey,
   usePersistentState,
@@ -11,12 +8,11 @@ import {
 export const useGlobalCurrency = () => {
   const [globalCurrency, setGlobalCurrency] = usePersistentState(
     PersistentStateKey.Currency,
-    currencies[0]
+    GLOBAL_CURRENCY_DEFAULT
   );
 
   return {
     globalCurrency,
-    changeGlobalCurrency: (newCurrency: Fiat) => setGlobalCurrency(newCurrency),
-    globalCurrencySymbol: currencyToSymbolMap[globalCurrency].symbol,
+    updateGlobalCurrency: (newCurrency: Fiat) => setGlobalCurrency(newCurrency),
   };
 };

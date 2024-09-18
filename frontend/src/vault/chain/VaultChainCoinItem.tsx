@@ -17,7 +17,7 @@ export const VaultChainCoinItem = ({
   CoinInfo & CoinAmount & Partial<EntityWithPrice> & CoinKey
 >) => {
   const { icon, symbol, amount, decimals, price, id, chainId } = value;
-  const { globalCurrencySymbol } = useGlobalCurrency();
+  const { globalCurrency } = useGlobalCurrency();
   const balance = fromChainAmount(amount, decimals);
 
   return (
@@ -37,15 +37,14 @@ export const VaultChainCoinItem = ({
             {symbol}
           </Text>
           <Text color="contrast" size={18} weight="700" centerVertically>
-            {globalCurrencySymbol}
             <BalanceVisibilityAware>
-              {formatAmount(balance * (price || 0))}
+              {formatAmount(balance * (price || 0), globalCurrency)}
             </BalanceVisibilityAware>
           </Text>
         </HStack>
         <Text color="contrast" size={18} weight="500" centerVertically>
           <BalanceVisibilityAware>
-            {formatAmount(balance)}
+            {formatAmount(balance, globalCurrency)}
           </BalanceVisibilityAware>
         </Text>
       </VStack>

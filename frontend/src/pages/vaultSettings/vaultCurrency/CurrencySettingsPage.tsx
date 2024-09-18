@@ -17,7 +17,7 @@ import {
 
 const CurrencySettingsPage = () => {
   const { t } = useTranslation();
-  const { globalCurrency, changeGlobalCurrency } = useGlobalCurrency();
+  const { globalCurrency, updateGlobalCurrency } = useGlobalCurrency();
 
   return (
     <ScrollableFlexboxFiller>
@@ -34,7 +34,7 @@ const CurrencySettingsPage = () => {
           {currencyOptions.map(({ title, value }, index) => (
             <CurrencyButton
               key={index}
-              onClick={() => changeGlobalCurrency(value)}
+              onClick={() => updateGlobalCurrency(value)}
             >
               <CurrencyBox>
                 <Text size={16} color="contrast" weight="600">

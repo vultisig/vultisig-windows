@@ -10,7 +10,7 @@ import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVis
 
 export const VaultTotalBalance = () => {
   const query = useVaultTotalBalanceQuery();
-  const { globalCurrencySymbol } = useGlobalCurrency();
+  const { globalCurrency } = useGlobalCurrency();
 
   return (
     <HStack alignItems="center" gap={4}>
@@ -20,9 +20,8 @@ export const VaultTotalBalance = () => {
         success={value => (
           <Text color="contrast" weight="700" size={26} centerVertically>
             <BalanceVisibilityAware size="l">
-              {formatAmount(value)}
+              {formatAmount(value, globalCurrency)}
             </BalanceVisibilityAware>{' '}
-            {globalCurrencySymbol}
           </Text>
         )}
       />

@@ -58,13 +58,3 @@ export const currencyOptions: CurrencyOption[] = [
     symbol: 'SEK',
   },
 ];
-
-export const currencies = currencyOptions.map(option => option.value);
-
-export const currencyToSymbolMap = currencyOptions.reduce(
-  (acc, option) => {
-    acc[option.value] = { symbol: option.symbol };
-    return acc;
-  },
-  {} as Record<string, { symbol: string }>
-);
