@@ -26,5 +26,5 @@ export interface IVaultService {
 
   storageToProtoVault(storageVault: storage.Vault): Vault;
 
-  updateVaultName(vaultId: string, newName: string): Promise<void>;
+  renameVault(vault: Vault | storage.Vault, newName: string): Promise<void>;
 }

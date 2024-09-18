@@ -17,7 +17,21 @@ export class VaultService implements IVaultService {
   }
 
   // public key ECDSA is the unique identifier for a vault - Vault Id
-  async updateVaultName(vaultId: string, newName: string): Promise<void> {
+  async renameVault(
+    vault: Vault | storage.Vault,
+    newName: string
+  ): Promise<void> {
+    let vaultId = '';
+    if (vault instanceof Vault) {
+      vaultId = vault.publicKeyEcdsa;
+    } else {
+      vaultId = vault.public_key_ecdsa;
+    }
+
+    if (vaultId === '') {
+      throw new Error('Vault ID is empty');
+    }
+
     await UpdateVaultName(vaultId, newName);
   }
 
