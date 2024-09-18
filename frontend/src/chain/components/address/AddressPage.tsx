@@ -1,12 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ElementSizeAware } from '../../../lib/ui/base/ElementSizeAware';
 import { VStack, vStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
-import { AddressPathParams } from '../../../navigation';
+import { useAppPathParams } from '../../../navigation/hooks/useRouteParams';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -25,7 +24,7 @@ const Content = styled.div`
 `;
 
 export const AddressPage = () => {
-  const params = useParams<AddressPathParams>();
+  const params = useAppPathParams<'address'>();
   const address = shouldBePresent(params.address);
 
   const { t } = useTranslation();

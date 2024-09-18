@@ -17,6 +17,7 @@ import { Text } from '../../lib/ui/text';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { sum } from '../../lib/utils/array/sum';
 import { formatAmount } from '../../lib/utils/formatAmount';
+import { makeAppPath } from '../../navigation';
 import { TokensStore } from '../../services/Coin/CoinList';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
@@ -142,7 +143,10 @@ export const VaultChainPage = () => {
                   {sortCoinsByBalance(coins).map(coin => (
                     <Link
                       key={coin.id}
-                      to={`/vault/item/detail/${chainId}/${coin.id}`}
+                      to={makeAppPath('vaultChainCoinDetail', {
+                        chain: chainId,
+                        coin: coin.id,
+                      })}
                     >
                       <VaultChainCoinItem value={coin} />
                     </Link>

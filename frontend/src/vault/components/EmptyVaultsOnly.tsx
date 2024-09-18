@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { ComponentWithChildrenProps } from '../../lib/ui/props';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
+import { makeAppPath } from '../../navigation';
 import { useVaults } from '../queries/useVaultsQuery';
 
 export const EmptyVaultsOnly = ({ children }: ComponentWithChildrenProps) => {
@@ -14,7 +15,7 @@ export const EmptyVaultsOnly = ({ children }: ComponentWithChildrenProps) => {
 
   useEffect(() => {
     if (hasVaults) {
-      navigate('/vault/list');
+      navigate(makeAppPath('vaultList'));
     }
   }, [hasVaults, navigate]);
 

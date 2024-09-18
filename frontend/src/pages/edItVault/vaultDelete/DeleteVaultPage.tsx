@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import DangerSignRedIcon from '../../../lib/ui/icons/DangerSignRedIcon';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
+import { makeAppPath } from '../../../navigation';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -41,7 +42,7 @@ const DeleteVaultPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate('/vault/list');
+      navigate(makeAppPath('vaultList'));
     }
   }, [isSuccess]);
 

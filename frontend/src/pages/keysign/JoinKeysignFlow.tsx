@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { storage } from '../../../wailsjs/go/models';
 import { GetVault } from '../../../wailsjs/go/storage/Store';
@@ -16,6 +16,8 @@ import {
   KeysignMessage,
   KeysignPayload,
 } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { makeAppPath } from '../../navigation';
+import { useAppPathParams } from '../../navigation/hooks/useRouteParams';
 import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { Endpoint } from '../../services/Endpoint';
 import { joinSession } from '../../services/Keygen/Keygen';
@@ -29,10 +31,7 @@ const JoinKeysignFlow: React.FC = () => {
   const serviceName = useRef<string>('');
   const hexEncryptionKey = useRef<string>('');
   const currentVault = useRef<storage.Vault>(undefined as any);
-  const { publicKeyECDSA, sessionID } = useParams<{
-    publicKeyECDSA: string;
-    sessionID: string;
-  }>();
+  const { publicKeyECDSA, sessionID } = useAppPathParams<'joinKeysign'>();
   const [keysignErr, setKeysignErr] = useState<string>('');
   const walletCore = useWalletCore();
   const [messagesToSign, setMessagesToSign] = useState<string[]>([]);
@@ -41,12 +40,6 @@ const JoinKeysignFlow: React.FC = () => {
 
   useEffect(() => {
     const processJoinKeysign = async () => {
-      if (publicKeyECDSA === undefined) {
-        throw new Error('publicKeyECDSA is undefined');
-      }
-      if (sessionID === undefined) {
-        throw new Error('sessionID is undefined');
-      }
       const keysignMessage = queryClient.getQueryData<KeysignMessage>([
         'keysignMessage',
         sessionID,
@@ -142,7 +135,7 @@ const JoinKeysignFlow: React.FC = () => {
       content: (
         <KeysignDone
           onNext={() => {
-            navigate('/vault/list');
+            navigate(makeAppPath('vaultList'));
           }}
         />
       ),

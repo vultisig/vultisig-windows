@@ -6,10 +6,11 @@ import ImportVaultDialog from '../../components/dialog/ImportVaultDialog';
 import NavBar from '../../components/navbar/NavBar';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
+import { makeAppPath } from '../../navigation';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
+import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 import { isBase64Encoded } from '../../utils/util';
 import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
-import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 
 const ImportVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -87,7 +88,10 @@ const ImportVaultView: React.FC = () => {
   const handleOk = (passwd: string) => {
     if (decryptedContent) {
       try {
-        const decrptedVault = vaultService.decryptVault(passwd, decryptedContent);
+        const decrptedVault = vaultService.decryptVault(
+          passwd,
+          decryptedContent
+        );
         setDecryptedContent(decrptedVault);
         setContinue(true);
       } catch {
@@ -104,7 +108,7 @@ const ImportVaultView: React.FC = () => {
     if (decryptedContent) {
       await vaultService.importVault(decryptedContent);
       await invalidateQueries(vaultsQueryKey);
-      navigate('/vault/list');
+      navigate(makeAppPath('vaultList'));
     }
   };
 

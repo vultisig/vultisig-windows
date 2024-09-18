@@ -2,15 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { AddressPage } from './chain/components/address/AddressPage';
 import VerifyTransaction from './components/sendCrypto/VerifyTransaction';
-import {
-  addressPath,
-  addVaultPath,
-  importVaultPath,
-  joinKeysignPath,
-  keysignPath,
-  setupVaultPath,
-  shareVaultPath,
-} from './navigation';
+import { appPaths } from './navigation';
 import { OnboardingPage } from './onboarding/components/OnboardingPage';
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
 import EditVaultPage from './pages/edItVault/EditVaultPage';
@@ -39,7 +31,7 @@ import { ShareVaultPage } from './vault/share/ShareVaultPage';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: appPaths.root,
     element: (
       <EmptyVaultsOnly>
         <IncompleteOnboardingOnly>
@@ -49,96 +41,99 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/vault/settings',
+    path: appPaths.vaultSettings,
     element: <SettingsVaultPage />,
   },
   {
-    path: addVaultPath,
+    path: appPaths.addVault,
     element: <AddVaultPage />,
   },
   {
-    path: setupVaultPath,
+    path: appPaths.setupVault,
     element: <SetupVaultView />,
   },
   {
-    path: importVaultPath,
+    path: appPaths.importVault,
     element: <ImportVaultView />,
   },
   {
-    path: '/vault/qr/upload',
+    path: appPaths.uploadQr,
     element: <UploadQrPage />,
   },
   {
-    path: '/join-keygen/:keygenType/:sessionID',
+    path: appPaths.joinKeygen,
     element: <JoinKeygenView />,
   },
   {
-    path: joinKeysignPath,
+    path: appPaths.joinKeysign,
     element: <JoinKeysignFlow />,
   },
   {
-    path: keysignPath,
+    path: appPaths.keysign,
     element: <KeysignFlowView />,
   },
   {
-    path: '/vault/list',
+    path: appPaths.vaultList,
     element: <VaultPage />,
   },
   {
-    path: '/vault/chains',
+    path: appPaths.manageVaultChains,
     element: <ManageVaultChainsPage />,
   },
   {
-    path: shareVaultPath,
+    path: appPaths.shareVault,
     element: <ShareVaultPage />,
   },
   {
-    path: '/vault/chains/:chain',
+    path: appPaths.manageVaultChainCoins,
     element: <ManageVaultChainCoinsPage />,
   },
   {
-    path: '/vault/item/detail/:chain',
+    path: appPaths.vaultChainDetail,
     element: <VaultChainPage />,
   },
   {
-    path: '/vault/item/detail/:chain/:coin',
+    path: appPaths.vaultChainCoinDetail,
     element: <VaultChainCoinPage />,
   },
   {
-    path: '/vault/item/send/:chain',
+    path: appPaths.vaultItemSend,
     element: <SendCryptoView />,
   },
   {
-    path: '/vault/item/send/verify',
+    path: appPaths.verifyTransaction,
     element: <VerifyTransaction />,
   },
   {
-    path: '/vault/settings/vault-settings',
+    path: appPaths.editVault,
     element: <EditVaultPage />,
   },
   {
-    path: '/vault/settings/vault-settings/details',
+    path: appPaths.vaultDetails,
     element: <VaultDetailsPage />,
   },
   {
-    path: '/vault/settings/vault-settings/backup-vault',
+    path: appPaths.vaultBackup,
     element: <VaultBackupPage />,
   },
   {
-    path: '/vault/settings/vault-settings/rename-vault',
+    path: appPaths.vaultRename,
     element: <VaultRenamePage />,
   },
   {
-    path: '/vault/settings/vault-settings/reshare-vault',
+    path: appPaths.vaultReshare,
     element: <ReshareVaultPage />,
   },
   {
-    path: '/vault/settings/vault-settings/delete-vault',
+    path: appPaths.vaultDelete,
     element: <DeleteVaultPage />,
   },
   {
-    path: '/vault/settings/language-settings',
+    path: appPaths.languageSettings,
     element: <LanguageSettingsPage />,
   },
-  { path: addressPath, element: <AddressPage /> },
+  {
+    path: appPaths.address,
+    element: <AddressPage />,
+  },
 ]);

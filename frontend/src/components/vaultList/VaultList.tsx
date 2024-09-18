@@ -9,7 +9,7 @@ import { verticalPadding } from '../../lib/ui/css/verticalPadding';
 import { PlusIcon } from '../../lib/ui/icons/PlusIcon';
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
-import { addVaultPath } from '../../navigation';
+import { makeAppPath } from '../../navigation';
 import { pageConfig } from '../../ui/page/config';
 import { PageSlice } from '../../ui/page/PageSlice';
 import { VaultListOption } from '../../vault/list/VaultListOption';
@@ -54,7 +54,7 @@ export const VaultList: React.FC<VaultListProps> = ({ onFinish }) => {
       <PageSlice>
         <Button
           onClick={() => {
-            navigate(addVaultPath);
+            navigate(makeAppPath('addVault'));
           }}
           kind="primary"
         >

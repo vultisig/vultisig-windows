@@ -12,7 +12,7 @@ import {
 import { BlockchainServiceFactory } from '../../services/Blockchain/BlockchainServiceFactory';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { ChainUtils } from '../../model/chain';
-import { keysignPath } from '../../navigation';
+import { makeAppPath } from '../../navigation';
 
 interface VerifyTransactionViewProps {
   tx: ITransaction | ISendTransaction | ISwapTransaction;
@@ -156,7 +156,7 @@ const VerifyTransaction = () => {
             currentVault.public_key_ecdsa
           );
 
-          navigate(keysignPath, {
+          navigate(makeAppPath('keysign'), {
             state: {
               vault: currentVault,
               keysignPayload: payload,
