@@ -138,7 +138,7 @@ export const router = createBrowserRouter([
     element: <AddressPage />,
   },
   {
-    path: '/vault/settings/currency-settings',
+    path: appPaths.currencySettings,
     element: <CurrencySettingsPage />,
   },
 ]);
