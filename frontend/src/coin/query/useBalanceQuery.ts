@@ -3,7 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import { ChainAccount } from '../../chain/ChainAccount';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../model/chain';
+import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { BalanceServiceFactory } from '../../services/Balance/BalanceServiceFactory';
+import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
+import { useCurrentVault } from '../../vault/state/useCurrentVault';
 import { CoinAmount, CoinKey } from '../Coin';
 import { getCoinMetaKey } from '../utils/coinMeta';
 
@@ -21,6 +24,16 @@ export const useBalanceQuery = (coin: Coin) => {
     chain,
   });
 
+  const walletCore = useWalletCore();
+  if (!walletCore) {
+    throw new Error('WalletCore not found');
+  }
+
+  const vault = useCurrentVault();
+  if (!vault) {
+    throw new Error('Vault not found');
+  }
+
   return useQuery({
     queryKey: getBalanceQueryKey({
       ...key,
@@ -28,6 +41,11 @@ export const useBalanceQuery = (coin: Coin) => {
     }),
     queryFn: async (): Promise<BalanceQueryResult> => {
       const balanceService = BalanceServiceFactory.createBalanceService(chain);
+      const coinService = CoinServiceFactory.createCoinService(
+        chain,
+        walletCore
+      );
+      await coinService.saveTokens(coin, vault);
 
       const { rawAmount } = await balanceService.getBalance(coin);
 

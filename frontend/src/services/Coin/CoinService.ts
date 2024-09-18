@@ -20,6 +20,11 @@ export class CoinService implements ICoinService {
     this.walletCore = walletCore;
   }
 
+  async saveTokens(_coin: Coin, _vault: storage.Vault): Promise<void> {
+    // No need to implement this method
+    // only evm and solana chains need to implement this method
+  }
+
   hasTokens(): boolean {
     return (
       TokensStore.TokenSelectionAssets.filter(asset => {

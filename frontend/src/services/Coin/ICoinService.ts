@@ -16,6 +16,8 @@ export interface ICoinService {
 
   saveCoin(coin: Coin, vault: storage.Vault): Promise<void>;
 
+  saveTokens(coin: Coin, vault: storage.Vault): Promise<void>;
+
   deleteCoin(coinId: string, vaultId: string): Promise<void>;
 
   hasTokens(): boolean;
