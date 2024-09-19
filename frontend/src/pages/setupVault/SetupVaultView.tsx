@@ -12,10 +12,10 @@ import KeygenTypeSelector from '../../components/keygen/KeygenTypeSelector';
 import KeygenVerify from '../../components/keygen/KeygenVerify';
 import KeygenView from '../../components/keygen/KeygenView';
 import NavBar from '../../components/navbar/NavBar';
-import { KeygenType } from '../../model/TssType';
 import { Endpoint } from '../../services/Endpoint';
 import { startSession } from '../../services/Keygen/Keygen';
 import { generateRandomNumber } from '../../utils/util';
+import { KeygenType } from '../../vault/keygen/KeygenType';
 
 const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();

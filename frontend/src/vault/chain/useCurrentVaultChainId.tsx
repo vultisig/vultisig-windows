@@ -1,9 +1,8 @@
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { Chain } from '../../model/chain';
-import { useAppPathParams } from '../../navigation/hooks/useRouteParams';
+import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 
 export const useCurrentVaultChainId = () => {
-  const { chain } = useAppPathParams<'manageVaultChainCoins'>();
+  const { chain } = useAppPathParams<'vaultChainDetail'>();
 
-  return shouldBePresent(chain) as Chain;
+  return chain as Chain;
 };

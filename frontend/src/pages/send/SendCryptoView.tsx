@@ -11,7 +11,7 @@ import SendCryptoForm from '../../components/sendCrypto/SendCryptoForm';
 import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { Rate } from '../../model/price-rate';
 import { getDefaultSendTransaction } from '../../model/transaction';
-import { useAppPathParams } from '../../navigation/hooks/useRouteParams';
+import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 
 const SendCryptoView: React.FC = () => {
   const walletCore = useWalletCore();

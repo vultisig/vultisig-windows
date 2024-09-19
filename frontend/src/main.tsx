@@ -2,7 +2,6 @@ import './App.css';
 import './extensions/string';
 
 import { Buffer } from 'buffer';
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import App from './App';
@@ -12,8 +11,4 @@ window.Buffer = Buffer;
 
 const root = createRoot(document.getElementById('root')!);
 
-root.render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+root.render(<App />);

@@ -1,10 +1,9 @@
-import { useQueryClient } from '@tanstack/react-query';
-import React, { useEffect, useRef, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { storage } from '../../../wailsjs/go/models';
-import { GetVault } from '../../../wailsjs/go/storage/Store';
 import DiscoveryServiceScreen from '../../components/keygen/DiscoveryService';
 import JoinKeygen from '../../components/keygen/JoinKeygen';
 import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
@@ -12,90 +11,88 @@ import KeygenDone from '../../components/keygen/KeygenDone';
 import KeygenError from '../../components/keygen/KeygenError';
 import KeygenView from '../../components/keygen/KeygenView';
 import NavBar from '../../components/navbar/NavBar';
-import { KeygenMessage } from '../../gen/vultisig/keygen/v1/keygen_message_pb';
-import { ReshareMessage } from '../../gen/vultisig/keygen/v1/reshare_message_pb';
-import { KeygenType } from '../../model/TssType';
 import { makeAppPath } from '../../navigation';
-import { useAppPathParams } from '../../navigation/hooks/useRouteParams';
+import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 import { Endpoint } from '../../services/Endpoint';
 import { joinSession } from '../../services/Keygen/Keygen';
 import { generateRandomNumber } from '../../utils/util';
+import { keygenMsgRecord } from '../../vault/keygen/KeygenType';
+import { useVaults } from '../../vault/queries/useVaultsQuery';
 
 const JoinKeygenView: React.FC = () => {
-  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [currentScreen, setCurrentScreen] = useState<number>(0);
   const [keygenError, setKeygenError] = useState<string>('');
-  const { keygenType, sessionID } = useAppPathParams<'joinKeygen'>();
-  const vault = useRef<storage.Vault>(new storage.Vault());
-  const hexEncryptionKey = useRef<string>('');
-  const serverURL = useRef<string>('');
-  const serviceName = useRef<string>('');
-  const vaultAction =
-    keygenType === 'Keygen' ? KeygenType.Keygen : KeygenType.Reshare;
 
-  useEffect(() => {
-    setCurrentScreen(0);
+  const { keygenType, keygenMsg: rawKeygenMsg } =
+    useAppPathParams<'joinKeygen'>();
+
+  const keygenMsg = useMemo(() => {
+    const { fromJsonString } = keygenMsgRecord[keygenType];
+
+    return fromJsonString(rawKeygenMsg);
+  }, [keygenType, rawKeygenMsg]);
+
+  const vaults = useVaults();
+
+  const {
+    sessionId,
+    useVultisigRelay,
+    vaultName,
+    hexChainCode,
+    serviceName,
+    encryptionKeyHex,
+  } = keygenMsg;
+
+  const localPartyId = useMemo(() => {
+    return 'windows-' + generateRandomNumber();
   }, []);
 
-  useEffect(() => {
-    const processJoinKeygen = async () => {
-      switch (vaultAction) {
-        case KeygenType.Keygen: {
-          const keygenMessage = queryClient.getQueryData<KeygenMessage>([
-            'keygenMessage',
-            sessionID,
-          ]);
-          if (keygenMessage === undefined) {
-            throw new Error('keygenMessage is undefined');
-          }
-          hexEncryptionKey.current = keygenMessage.encryptionKeyHex;
-          serviceName.current = keygenMessage.serviceName;
-          vault.current.name = keygenMessage.vaultName;
-          vault.current.hex_chain_code = keygenMessage.hexChainCode;
-          vault.current.local_party_id = 'windows-' + generateRandomNumber();
-          if (keygenMessage.useVultisigRelay) {
-            serverURL.current = Endpoint.VULTISIG_RELAY;
-            joinKeygen(vault.current.local_party_id);
-          } else {
-            setCurrentScreen(1);
-          }
-          break;
-        }
-        case KeygenType.Reshare: {
-          const reshareMessage = queryClient.getQueryData<ReshareMessage>([
-            'reshareMessage',
-            sessionID,
-          ]);
-          if (reshareMessage === undefined) {
-            throw new Error('reshareMessage is undefined');
-          }
-          hexEncryptionKey.current = reshareMessage.encryptionKeyHex;
-          serviceName.current = reshareMessage.serviceName;
-          try {
-            const reshareVault = await GetVault(reshareMessage.publicKeyEcdsa);
-            vault.current = reshareVault;
-          } catch (err) {
-            console.error(err);
-            vault.current.name = reshareMessage.vaultName;
-            vault.current.hex_chain_code = reshareMessage.hexChainCode;
-            vault.current.local_party_id = 'windows-' + generateRandomNumber();
-            vault.current.reshare_prefix = reshareMessage.oldResharePrefix;
-            vault.current.signers = reshareMessage.oldParties;
-          }
-          if (reshareMessage.useVultisigRelay) {
-            serverURL.current = Endpoint.VULTISIG_RELAY;
-            joinKeygen(vault.current.local_party_id);
-          } else {
-            setCurrentScreen(1);
-          }
-          break;
-        }
+  const vault = useMemo(() => {
+    if ('publicKeyEcdsa' in keygenMsg) {
+      const existingVault = vaults.find(
+        vault => vault.public_key_ecdsa === keygenMsg.publicKeyEcdsa
+      );
+      if (existingVault) {
+        return existingVault;
       }
-    };
-    processJoinKeygen();
-  }, [queryClient, vaultAction]);
+    }
+
+    const vault = new storage.Vault();
+    vault.name = vaultName;
+    vault.hex_chain_code = hexChainCode;
+    vault.local_party_id = localPartyId;
+
+    if ('oldResharePrefix' in keygenMsg) {
+      vault.reshare_prefix = keygenMsg.oldResharePrefix;
+    }
+
+    if ('oldParties' in keygenMsg) {
+      vault.signers = keygenMsg.oldParties;
+    }
+
+    return vault;
+  }, [hexChainCode, keygenMsg, localPartyId, vaultName, vaults]);
+
+  const serverUrl = useVultisigRelay ? Endpoint.VULTISIG_RELAY : '';
+
+  const { mutate: joinKeygen } = useMutation({
+    mutationFn: () => {
+      return joinSession(serverUrl, sessionId, localPartyId);
+    },
+    onSuccess: () => {
+      setCurrentScreen(2);
+    },
+  });
+
+  useEffect(() => {
+    if (useVultisigRelay) {
+      joinKeygen();
+    } else {
+      setCurrentScreen(1);
+    }
+  }, [joinKeygen, useVultisigRelay]);
 
   const prevScreen = () => {
     setCurrentScreen(prev => {
@@ -104,11 +101,6 @@ const JoinKeygenView: React.FC = () => {
       } else {
         return prev > 0 ? prev - 1 : prev;
       }
-    });
-  };
-  const joinKeygen = async (localPartyID: string) => {
-    await joinSession(serverURL.current, sessionID!, localPartyID).then(() => {
-      setCurrentScreen(2);
     });
   };
 
@@ -122,10 +114,10 @@ const JoinKeygenView: React.FC = () => {
       content: (
         <DiscoveryServiceScreen
           onContinue={() => {
-            joinKeygen(vault.current.local_party_id);
+            joinKeygen();
           }}
-          localPartyID={vault.current.local_party_id}
-          serviceName={serviceName.current}
+          localPartyID={localPartyId}
+          serviceName={serviceName}
         />
       ),
     },
@@ -133,11 +125,11 @@ const JoinKeygenView: React.FC = () => {
       title: `${t('keygen')}`,
       content: (
         <KeygenView
-          vault={vault.current}
-          sessionID={sessionID!}
-          hexEncryptionKey={hexEncryptionKey.current}
-          keygenType={vaultAction}
-          serverURL={serverURL.current}
+          vault={vault}
+          sessionID={sessionId}
+          hexEncryptionKey={encryptionKeyHex}
+          keygenType={keygenType}
+          serverURL={serverUrl}
           onDone={() => {
             setCurrentScreen(3);
           }}
