@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { BrowserOpenURL } from '../../../wailsjs/runtime/runtime';
 import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
 import { ChevronRightIcon } from '../../lib/ui/icons/ChevronRightIcon';
 import DiscordIcon from '../../lib/ui/icons/DiscordIcon';
@@ -16,6 +17,8 @@ import {
   settingsItems,
   VULTISIG_DISCORD_LINK,
   VULTISIG_GITHUB_LINK,
+  VULTISIG_PRIVACY_POLICY_LINK,
+  VULTISIG_TERMS_OF_SERVICE_LINK,
   VULTISIG_TWITTER_LINK,
 } from './constants';
 import {
@@ -50,7 +53,18 @@ const SettingsVaultPage = () => {
                   </Text>
                 )}
                 {items.map(({ id, titleKey, icon: Icon, path }) => (
-                  <UnstyledButton key={id} onClick={() => navigate(path)}>
+                  <UnstyledButton
+                    key={id}
+                    onClick={() => {
+                      if (id === 'privacy-policy') {
+                        BrowserOpenURL(VULTISIG_PRIVACY_POLICY_LINK);
+                      } else if (id === 'terms-of-service') {
+                        BrowserOpenURL(VULTISIG_TERMS_OF_SERVICE_LINK);
+                      } else {
+                        navigate(path);
+                      }
+                    }}
+                  >
                     <ListItemPanel>
                       <HStack
                         fullWidth
@@ -71,15 +85,21 @@ const SettingsVaultPage = () => {
           </VStack>
           <Footer>
             <HStack gap={24}>
-              <a href={VULTISIG_GITHUB_LINK} target="_blank" rel="noreferrer">
+              <UnstyledButton
+                onClick={() => BrowserOpenURL(VULTISIG_GITHUB_LINK)}
+              >
                 <GithubIcon />
-              </a>
-              <a href={VULTISIG_TWITTER_LINK} target="_blank" rel="noreferrer">
+              </UnstyledButton>
+              <UnstyledButton
+                onClick={() => BrowserOpenURL(VULTISIG_TWITTER_LINK)}
+              >
                 <TwitterIcon />
-              </a>
-              <a href={VULTISIG_DISCORD_LINK} target="_blank" rel="noreferrer">
+              </UnstyledButton>
+              <UnstyledButton
+                onClick={() => BrowserOpenURL(VULTISIG_DISCORD_LINK)}
+              >
                 <DiscordIcon />
-              </a>
+              </UnstyledButton>
             </HStack>
             <VStack alignItems="center">
               <Text size={14} color="primary" weight="600">
