@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ import {
   KeysignPayload,
 } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { makeAppPath } from '../../navigation';
-import { useAppPathParams } from '../../navigation/hooks/useRouteParams';
+import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { Endpoint } from '../../services/Endpoint';
 import { joinSession } from '../../services/Keygen/Keygen';
@@ -37,6 +37,16 @@ const JoinKeysignFlow: React.FC = () => {
   const [messagesToSign, setMessagesToSign] = useState<string[]>([]);
   const [keysignPayload, setKeysignPayload] = useState<KeysignPayload>();
   const navigate = useNavigate();
+
+  const joinKeysign = useCallback(
+    async (partyID: string) => {
+      console.log('joining keysign:', partyID);
+      await joinSession(serverURL.current, sessionID!, partyID).then(() => {
+        setCurrentScreen(2);
+      });
+    },
+    [sessionID]
+  );
 
   useEffect(() => {
     const processJoinKeysign = async () => {
@@ -76,14 +86,7 @@ const JoinKeysignFlow: React.FC = () => {
       });
     };
     processJoinKeysign();
-  }, [publicKeyECDSA, queryClient]);
-
-  const joinKeysign = async (partyID: string) => {
-    console.log('joining keysign:', partyID);
-    await joinSession(serverURL.current, sessionID!, partyID).then(() => {
-      setCurrentScreen(2);
-    });
-  };
+  }, [joinKeysign, publicKeyECDSA, queryClient, sessionID, t, walletCore]);
 
   const onKeysignDone = () => {
     setCurrentScreen(4);

@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { storage } from '../../../wailsjs/go/models';
 import { EventsOn } from '../../../wailsjs/runtime/runtime';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
-import { KeygenType } from '../../model/TssType';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
+import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
+import { KeygenType } from '../../vault/keygen/KeygenType';
 import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
 import RingProgress from '../ringProgress/RingProgress';
-import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 
 interface KeygenViewProps {
   vault: storage.Vault;
   sessionID: string;
   hexEncryptionKey: string;
-  keygenType: KeygenType; // is keygen / Reshare
+  keygenType: KeygenType;
   serverURL: string;
   onDone: () => void;
   onError: (err: string) => void;
@@ -53,18 +53,17 @@ const KeygenView: React.FC<KeygenViewProps> = ({
       setCurrentProgress(70);
       setCurrentStatus(t('generating_eddsa_key'));
     });
-  }, []);
+  }, [t]);
   useEffect(() => {
     console.log('start keygen.....');
     // when isRelay = false , need to discover the local mediator
     async function kickoffKeygen() {
-      const newVault =
-        await vaultService
-          .startKeygen(vault, sessionID, hexEncryptionKey, serverURL)
-          .catch(err => {
-            console.log(err);
-            onError(err);
-          });
+      const newVault = await vaultService
+        .startKeygen(vault, sessionID, hexEncryptionKey, serverURL)
+        .catch(err => {
+          console.log(err);
+          onError(err);
+        });
 
       setCurrentProgress(100);
       if (newVault !== undefined) {
@@ -74,13 +73,12 @@ const KeygenView: React.FC<KeygenViewProps> = ({
     }
 
     async function kickoffReshare() {
-      const newVault =
-        await vaultService
-          .reshare(vault, sessionID, hexEncryptionKey, serverURL)
-          .catch(err => {
-            console.log(err);
-            onError(err);
-          });
+      const newVault = await vaultService
+        .reshare(vault, sessionID, hexEncryptionKey, serverURL)
+        .catch(err => {
+          console.log(err);
+          onError(err);
+        });
 
       setCurrentProgress(100);
       if (newVault !== undefined) {
@@ -95,19 +93,17 @@ const KeygenView: React.FC<KeygenViewProps> = ({
     } else if (keygenType === KeygenType.Reshare) {
       kickoffReshare();
     }
-  }, []);
-
-  const runSliders = () => {
-    if (contentIndex < contents.length - 1) {
-      setContentIndex(contentIndex + 1);
-    } else {
-      setContentIndex(0);
-    }
-  };
-
-  useEffect(() => {
-    setTimeout(runSliders, 3000);
-  }, [contentIndex]);
+  }, [
+    hexEncryptionKey,
+    invalidateQueries,
+    keygenType,
+    onDone,
+    onError,
+    serverURL,
+    sessionID,
+    vault,
+    vaultService,
+  ]);
 
   const contents = [
     {
@@ -202,6 +198,18 @@ const KeygenView: React.FC<KeygenViewProps> = ({
       slider: '/assets/images/keygenSlider7.svg',
     },
   ];
+
+  const runSliders = useCallback(() => {
+    if (contentIndex < contents.length - 1) {
+      setContentIndex(contentIndex + 1);
+    } else {
+      setContentIndex(0);
+    }
+  }, [contentIndex, contents.length]);
+
+  useEffect(() => {
+    setTimeout(runSliders, 3000);
+  }, [runSliders]);
 
   return (
     <div className="flex flex-col items-center justify-center pt-20 text-white text-sm">

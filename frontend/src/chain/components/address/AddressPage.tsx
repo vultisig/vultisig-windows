@@ -5,7 +5,7 @@ import { ElementSizeAware } from '../../../lib/ui/base/ElementSizeAware';
 import { VStack, vStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
-import { useAppPathParams } from '../../../navigation/hooks/useRouteParams';
+import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';

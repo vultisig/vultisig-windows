@@ -2,15 +2,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import jsQR from 'jsqr';
 import { useNavigate } from 'react-router-dom';
 
-import { KeygenMessage } from '../../../gen/vultisig/keygen/v1/keygen_message_pb';
-import { ReshareMessage } from '../../../gen/vultisig/keygen/v1/reshare_message_pb';
 import { KeysignMessage } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { match } from '../../../lib/utils/match';
 import { getRawQueryParams } from '../../../lib/utils/query/getRawQueryParams';
 import { makeAppPath } from '../../../navigation';
+import { keygenMsgRecord, KeygenType } from '../../keygen/KeygenType';
 import { decompressQrPayload } from './utils/decompressQrPayload';
-
-type QrTssType = 'Keygen' | 'Reshare';
 
 type QrType = 'NewVault' | 'SignTransaction';
 
@@ -22,7 +19,7 @@ type QrSharedData = {
 type QrQueryParams = QrSharedData & {
   type: QrType;
 } & {
-  tssType: QrTssType;
+  tssType: KeygenType;
 } & {
   vault: string;
 };
@@ -55,42 +52,22 @@ export const useProcessQrMutation = () => {
       }
 
       const url = code.data;
-      console.log('url:', url);
       const queryParams = getRawQueryParams<QrQueryParams>(url);
       const { jsonData } = queryParams;
       const payload = await decompressQrPayload(jsonData);
 
       if ('type' in queryParams) {
-        return match(queryParams.type, {
+        const path = await match(queryParams.type, {
           NewVault: async () => {
-            match(queryParams.tssType, {
-              Keygen: async () => {
-                const keygenMsg = KeygenMessage.fromBinary(payload);
-                queryClient.setQueryData(
-                  ['keygenMessage', keygenMsg.sessionId],
-                  keygenMsg
-                );
+            const keygenType = queryParams.tssType;
 
-                navigate(
-                  makeAppPath('joinKeygen', {
-                    keygenType: queryParams.tssType,
-                    sessionID: keygenMsg.sessionId,
-                  })
-                );
-              },
-              Reshare: async () => {
-                const reshareMsg = ReshareMessage.fromBinary(payload);
-                queryClient.setQueryData(
-                  ['reshareMessage', reshareMsg.sessionId],
-                  reshareMsg
-                );
-                navigate(
-                  makeAppPath('joinKeygen', {
-                    keygenType: queryParams.tssType,
-                    sessionID: reshareMsg.sessionId,
-                  })
-                );
-              },
+            const { fromBinary } = keygenMsgRecord[keygenType];
+
+            const keygenMsg = JSON.stringify(fromBinary(payload).toJson());
+
+            return makeAppPath('joinKeygen', {
+              keygenType,
+              keygenMsg,
             });
           },
           SignTransaction: async () => {
@@ -100,16 +77,14 @@ export const useProcessQrMutation = () => {
               ['keysignMessage', keySignMsg.sessionId],
               keySignMsg
             );
-            navigate(
-              makeAppPath('joinKeysign', {
-                publicKeyECDSA: vault,
-                sessionID: keySignMsg.sessionId,
-              })
-            );
+            return makeAppPath('joinKeysign', {
+              publicKeyECDSA: vault,
+              sessionID: keySignMsg.sessionId,
+            });
           },
         });
-      } else {
-        return;
+
+        navigate(path);
       }
     },
   });

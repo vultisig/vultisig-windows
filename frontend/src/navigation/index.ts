@@ -1,5 +1,5 @@
-import { colonVariablePattern } from '../lib/utils/template/colonTemplate';
-import { injectVariables } from '../lib/utils/template/injectVariables';
+import { addQueryParams } from '../lib/utils/query/addQueryParams';
+import { KeygenType } from '../vault/keygen/KeygenType';
 
 export const appPaths = {
   addVault: '/vault/add',
@@ -7,18 +7,18 @@ export const appPaths = {
   importVault: '/vault/import',
   shareVault: '/vault/share',
   keysign: '/vault/keysign',
-  address: '/address/:address',
-  joinKeysign: '/join-keysign/:publicKeyECDSA/:sessionID',
+  address: '/address',
+  joinKeysign: '/join-keysign',
   root: '/',
   vaultSettings: '/vault/settings',
   uploadQr: '/vault/qr/upload',
-  joinKeygen: '/join-keygen/:keygenType/:sessionID',
+  joinKeygen: '/join-keygen',
   vaultList: '/vault/list',
   manageVaultChains: '/vault/chains',
-  manageVaultChainCoins: '/vault/chains/:chain',
-  vaultChainDetail: '/vault/item/detail/:chain',
-  vaultChainCoinDetail: '/vault/item/detail/:chain/:coin',
-  vaultItemSend: '/vault/item/send/:chain',
+  manageVaultChainCoins: '/vault/chains/coins',
+  vaultChainDetail: '/vault/item/detail',
+  vaultChainCoinDetail: '/vault/item/detail/coin',
+  vaultItemSend: '/vault/item/send',
   verifyTransaction: '/vault/item/send/verify',
   editVault: '/vault/settings/vault-settings',
   vaultDetails: '/vault/settings/vault-settings/details',
@@ -43,7 +43,7 @@ export type AppPath = keyof AppPaths;
 export type AppPathParams = {
   address: { address: string };
   joinKeysign: { publicKeyECDSA: string; sessionID: string };
-  joinKeygen: { keygenType: string; sessionID: string };
+  joinKeygen: { keygenType: KeygenType; keygenMsg: string };
   manageVaultChainCoins: { chain: string };
   vaultChainDetail: { chain: string };
   vaultChainCoinDetail: { chain: string; coin: string };
@@ -60,14 +60,10 @@ export function makeAppPath<P extends Exclude<AppPath, keyof AppPathParams>>(
   path: P
 ): string;
 export function makeAppPath(path: AppPath, variables?: any): string {
-  const template = appPaths[path];
+  const basePath = appPaths[path];
   if (variables) {
-    return injectVariables({
-      template,
-      variables,
-      variablePattern: colonVariablePattern,
-    });
+    return addQueryParams(basePath, variables);
   } else {
-    return template;
+    return basePath;
   }
 }
