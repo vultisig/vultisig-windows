@@ -5,18 +5,16 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
-import { SaveFile } from '../../../../wailsjs/go/main/App';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
 import InfoGradientIcon from '../../../lib/ui/icons/InfoGradientIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
-import { VaultServiceFactory } from '../../../services/Vault/VaultServiceFactory';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
+import { useBackupVaultMutation } from '../../../vault/mutations/useBackupVaultMutation';
 import { useCurrentVault } from '../../../vault/state/useCurrentVault';
 import {
   ActionsWrapper,
@@ -45,8 +43,8 @@ const VaultBackupPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isVerifiedPasswordVisible, setIsVerifiedPasswordVisible] =
     useState(false);
-  const walletCore = useAssertWalletCore();
-  const vaultService = VaultServiceFactory.getService(walletCore);
+
+  const { mutate: backupVault, isPending, error } = useBackupVaultMutation();
 
   const {
     register,
@@ -61,9 +59,7 @@ const VaultBackupPage = () => {
     const password = data?.password;
     if (!vault || !password) return;
 
-    vaultService
-      .createBackup(vault as any, password)
-      .then(base64Data => SaveFile('vault-backup.bak', base64Data));
+    backupVault({ vault, password });
   };
 
   const navigate = useNavigate();
@@ -146,13 +142,22 @@ const VaultBackupPage = () => {
               </Text>
             </InfoPill>
             <Button isDisabled={!isValid || !isDirty} type="submit">
-              {t('vault_backup_page_submit_button_text')}
+              {t(
+                isPending
+                  ? 'vault_backup_page_submit_loading_button_text'
+                  : 'vault_backup_page_submit_button_text'
+              )}
             </Button>
             <Button kind="outlined" type="button" onClick={() => navigate(-1)}>
               <GradientText>
                 {t('vault_backup_page_skip_button_text')}
               </GradientText>
             </Button>
+            {error && (
+              <Text size={12} color="danger">
+                {error?.message}
+              </Text>
+            )}
           </ActionsWrapper>
         </VStack>
       </PageSlice>
