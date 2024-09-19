@@ -75,15 +75,11 @@ const JoinKeygenView: React.FC = () => {
     return vault;
   }, [hexChainCode, keygenMsg, localPartyId, vaultName, vaults]);
 
-  useEffect(() => {
-    setCurrentScreen(0);
-  }, []);
-
   const serverUrl = useVultisigRelay ? Endpoint.VULTISIG_RELAY : '';
 
   const { mutate: joinKeygen } = useMutation({
     mutationFn: () => {
-      return joinSession(serverUrl, sessionId!, localPartyId);
+      return joinSession(serverUrl, sessionId, localPartyId);
     },
     onSuccess: () => {
       setCurrentScreen(2);
