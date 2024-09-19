@@ -3,7 +3,7 @@ import { WalletCore } from '@trustwallet/wallet-core'; ///
 import crypto from 'crypto';
 
 import { storage } from '../../../wailsjs/go/models';
-import { SaveVault } from '../../../wailsjs/go/storage/Store';
+import { SaveVault, UpdateVaultName } from '../../../wailsjs/go/storage/Store';
 import { Reshare, StartKeygen } from '../../../wailsjs/go/tss/TssService';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { Vault, Vault_KeyShare } from '../../gen/vultisig/vault/v1/vault_pb';
@@ -14,6 +14,25 @@ export class VaultService implements IVaultService {
   private walletCore: WalletCore;
   constructor(walletCore: WalletCore) {
     this.walletCore = walletCore;
+  }
+
+  // public key ECDSA is the unique identifier for a vault - Vault Id
+  async renameVault(
+    vault: Vault | storage.Vault,
+    newName: string
+  ): Promise<void> {
+    let vaultId = '';
+    if (vault instanceof Vault) {
+      vaultId = vault.publicKeyEcdsa;
+    } else {
+      vaultId = vault.public_key_ecdsa;
+    }
+
+    if (vaultId === '') {
+      throw new Error('Vault ID is empty');
+    }
+
+    await UpdateVaultName(vaultId, newName);
   }
 
   async startKeygen(
