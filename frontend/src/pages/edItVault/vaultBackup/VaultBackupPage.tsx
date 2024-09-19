@@ -14,6 +14,8 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
+import { useBackupVaultMutation } from '../../../vault/mutations/useBackupVaultMutation';
+import { useCurrentVault } from '../../../vault/state/useCurrentVault';
 import {
   ActionsWrapper,
   GradientText,
@@ -37,9 +39,12 @@ const passwordSchema = z
   });
 
 const VaultBackupPage = () => {
+  const vault = useCurrentVault();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isVerifiedPasswordVisible, setIsVerifiedPasswordVisible] =
     useState(false);
+
+  const { mutate: backupVault, isPending, error } = useBackupVaultMutation();
 
   const {
     register,
@@ -51,7 +56,10 @@ const VaultBackupPage = () => {
   });
 
   const onSubmit = (data: FieldValues) => {
-    console.log('## data', data);
+    const password = data?.password;
+    if (!vault || !password) return;
+
+    backupVault({ vault, password });
   };
 
   const navigate = useNavigate();
@@ -134,13 +142,22 @@ const VaultBackupPage = () => {
               </Text>
             </InfoPill>
             <Button isDisabled={!isValid || !isDirty} type="submit">
-              {t('vault_backup_page_submit_button_text')}
+              {t(
+                isPending
+                  ? 'vault_backup_page_submit_loading_button_text'
+                  : 'vault_backup_page_submit_button_text'
+              )}
             </Button>
             <Button kind="outlined" type="button" onClick={() => navigate(-1)}>
               <GradientText>
                 {t('vault_backup_page_skip_button_text')}
               </GradientText>
             </Button>
+            {error && (
+              <Text size={12} color="danger">
+                {error?.message}
+              </Text>
+            )}
           </ActionsWrapper>
         </VStack>
       </PageSlice>
