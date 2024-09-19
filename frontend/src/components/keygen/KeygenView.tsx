@@ -1,9 +1,11 @@
+import { useMutation } from '@tanstack/react-query';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { storage } from '../../../wailsjs/go/models';
 import { EventsOn } from '../../../wailsjs/runtime/runtime';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
+import { match } from '../../lib/utils/match';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 import { KeygenType } from '../../vault/keygen/KeygenType';
@@ -35,8 +37,6 @@ const KeygenView: React.FC<KeygenViewProps> = ({
   const walletCore = useAssertWalletCore();
   const invalidateQueries = useInvalidateQueries();
 
-  const vaultService = VaultServiceFactory.getService(walletCore);
-
   useEffect(() => {
     EventsOn('PrepareVault', data => {
       console.log('PrepareVault', data);
@@ -54,56 +54,42 @@ const KeygenView: React.FC<KeygenViewProps> = ({
       setCurrentStatus(t('generating_eddsa_key'));
     });
   }, [t]);
-  useEffect(() => {
-    console.log('start keygen.....');
-    // when isRelay = false , need to discover the local mediator
-    async function kickoffKeygen() {
-      const newVault = await vaultService
-        .startKeygen(vault, sessionID, hexEncryptionKey, serverURL)
-        .catch(err => {
-          console.log(err);
-          onError(err);
-        });
 
-      setCurrentProgress(100);
-      if (newVault !== undefined) {
-        await invalidateQueries(vaultsQueryKey);
-        onDone();
+  const { mutate: startKeygen } = useMutation({
+    mutationFn: async () => {
+      const vaultService = VaultServiceFactory.getService(walletCore);
+      const newVault = await match(keygenType, {
+        [KeygenType.Keygen]: async () => {
+          return vaultService.startKeygen(
+            vault,
+            sessionID,
+            hexEncryptionKey,
+            serverURL
+          );
+        },
+        [KeygenType.Reshare]: async () => {
+          return vaultService.reshare(
+            vault,
+            sessionID,
+            hexEncryptionKey,
+            serverURL
+          );
+        },
+      });
+
+      if (!newVault) {
+        throw new Error('Failed to start keygen');
       }
-    }
 
-    async function kickoffReshare() {
-      const newVault = await vaultService
-        .reshare(vault, sessionID, hexEncryptionKey, serverURL)
-        .catch(err => {
-          console.log(err);
-          onError(err);
-        });
-
-      setCurrentProgress(100);
-      if (newVault !== undefined) {
-        await invalidateQueries(vaultsQueryKey);
-        onDone();
-      }
-    }
-
-    if (keygenType === KeygenType.Keygen) {
-      console.log('sessionID', sessionID);
-      kickoffKeygen();
-    } else if (keygenType === KeygenType.Reshare) {
-      kickoffReshare();
-    }
-  }, [
-    hexEncryptionKey,
-    invalidateQueries,
-    keygenType,
-    onDone,
+      await invalidateQueries(vaultsQueryKey);
+    },
     onError,
-    serverURL,
-    sessionID,
-    vault,
-    vaultService,
-  ]);
+    onSuccess: onDone,
+  });
+
+  useEffect(() => {
+    startKeygen();
+  }, [startKeygen]);
 
   const contents = [
     {
