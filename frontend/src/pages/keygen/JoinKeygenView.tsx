@@ -11,7 +11,7 @@ import NavBar from '../../components/navbar/NavBar';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { makeAppPath } from '../../navigation';
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
-import { keygenMsgRecord } from '../../vault/keygen/KeygenType';
+import { useCurrentJoinKeygenMsg } from '../../vault/keygen/state/currentJoinKeygenMsg';
 import { useCurrentServerUrl } from '../../vault/keygen/state/currentServerUrl';
 import { generateLocalPartyId } from '../../vault/keygen/utils/generateLocalPartyId';
 import { useVaults } from '../../vault/queries/useVaultsQuery';
@@ -21,14 +21,9 @@ const JoinKeygenView: React.FC = () => {
   const navigate = useNavigate();
   const [keygenError, setKeygenError] = useState<string>('');
 
-  const { keygenType, keygenMsg: rawKeygenMsg } =
-    useAppPathParams<'joinKeygen'>();
+  const { keygenType } = useAppPathParams<'joinKeygen'>();
 
-  const keygenMsg = useMemo(() => {
-    const { fromJsonString } = keygenMsgRecord[keygenType];
-
-    return fromJsonString(rawKeygenMsg);
-  }, [keygenType, rawKeygenMsg]);
+  const keygenMsg = useCurrentJoinKeygenMsg();
 
   const vaults = useVaults();
 

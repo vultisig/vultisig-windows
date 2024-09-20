@@ -4,29 +4,21 @@ import { useTranslation } from 'react-i18next';
 
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 import JoinKeygenView from '../../../pages/keygen/JoinKeygenView';
 import { joinSession } from '../../../services/Keygen/Keygen';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { keygenMsgRecord } from '../KeygenType';
+import { useCurrentJoinKeygenMsg } from '../state/currentJoinKeygenMsg';
 import { useCurrentServerUrl } from '../state/currentServerUrl';
 import { generateLocalPartyId } from '../utils/generateLocalPartyId';
 
 export const JoinKeygenSession = () => {
-  const { keygenType, keygenMsg: rawKeygenMsg } =
-    useAppPathParams<'joinKeygen'>();
-
   const { t } = useTranslation();
 
   const localPartyId = useMemo(generateLocalPartyId, []);
 
-  const keygenMsg = useMemo(() => {
-    const { fromJsonString } = keygenMsgRecord[keygenType];
-
-    return fromJsonString(rawKeygenMsg);
-  }, [keygenType, rawKeygenMsg]);
+  const keygenMsg = useCurrentJoinKeygenMsg();
 
   const { sessionId } = keygenMsg;
   const serverUrl = useCurrentServerUrl();
