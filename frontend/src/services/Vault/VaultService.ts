@@ -2,6 +2,7 @@ import { Timestamp } from '@bufbuild/protobuf';
 import { WalletCore } from '@trustwallet/wallet-core'; ///
 import crypto from 'crypto';
 
+import { SaveFileBkp } from '../../../wailsjs/go/main/App';
 import { storage } from '../../../wailsjs/go/models';
 import { SaveVault, UpdateVaultName } from '../../../wailsjs/go/storage/Store';
 import { Reshare, StartKeygen } from '../../../wailsjs/go/tss/TssService';
@@ -151,6 +152,14 @@ export class VaultService implements IVaultService {
     return decrypted;
   }
 
+  async createAndSaveBackup(
+    vault: Vault | storage.Vault,
+    password: string
+  ): Promise<void> {
+    const base64Data = await this.createBackup(vault, password);
+    SaveFileBkp(this.getExportName(vault), base64Data);
+  }
+
   async createBackup(
     vault: Vault | storage.Vault,
     password: string
@@ -224,5 +233,34 @@ export class VaultService implements IVaultService {
     });
 
     return protoVault;
+  }
+
+  getExportName(vault: Vault | storage.Vault): string {
+    const currentDate = new Date();
+    const formattedDate = this.formatDate(currentDate);
+
+    const totalSigners = vault.signers.length;
+    const threshold = this.getThreshold(totalSigners);
+    const lastFourOfPubKey = this.getLastFourCharacters(
+      vault instanceof Vault ? vault.publicKeyEcdsa : vault.public_key_ecdsa
+    );
+    const localPartyId =
+      vault instanceof Vault ? vault.localPartyId : vault.local_party_id;
+
+    return `vultisig-${vault.name}-${formattedDate}-${threshold + 1}of${totalSigners}-${lastFourOfPubKey}-${localPartyId}.bak`;
+  }
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // months are 0-based
+    return `${year}-${month}`;
+  }
+
+  private getThreshold(totalSigners: number): number {
+    return Math.ceil((totalSigners * 2) / 3) - 1;
+  }
+
+  private getLastFourCharacters(pubKey: string): string {
+    return pubKey.slice(-4);
   }
 }
