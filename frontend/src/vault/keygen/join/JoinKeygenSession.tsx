@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { VStack } from '../../../lib/ui/layout/Stack';
@@ -10,13 +9,13 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { useCurrentJoinKeygenMsg } from '../state/currentJoinKeygenMsg';
+import { useCurrentLocalPartyId } from '../state/currentLocalPartyId';
 import { useCurrentServerUrl } from '../state/currentServerUrl';
-import { generateLocalPartyId } from '../utils/generateLocalPartyId';
 
 export const JoinKeygenSession = () => {
   const { t } = useTranslation();
 
-  const localPartyId = useMemo(generateLocalPartyId, []);
+  const localPartyId = useCurrentLocalPartyId();
 
   const keygenMsg = useCurrentJoinKeygenMsg();
 
@@ -40,7 +39,7 @@ export const JoinKeygenSession = () => {
         secondaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{t('keygen')}</PageHeaderTitle>}
       />
-      <VStack flexGrow alignItems="center">
+      <VStack flexGrow justifyContent="center" alignItems="center">
         {sessionQuery.isPending ? (
           <Text>{t('joining_keygen')}</Text>
         ) : (

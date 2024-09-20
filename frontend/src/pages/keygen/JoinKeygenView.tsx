@@ -12,8 +12,8 @@ import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { makeAppPath } from '../../navigation';
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 import { useCurrentJoinKeygenMsg } from '../../vault/keygen/state/currentJoinKeygenMsg';
+import { useCurrentLocalPartyId } from '../../vault/keygen/state/currentLocalPartyId';
 import { useCurrentServerUrl } from '../../vault/keygen/state/currentServerUrl';
-import { generateLocalPartyId } from '../../vault/keygen/utils/generateLocalPartyId';
 import { useVaults } from '../../vault/queries/useVaultsQuery';
 
 const JoinKeygenView: React.FC = () => {
@@ -29,7 +29,7 @@ const JoinKeygenView: React.FC = () => {
 
   const { sessionId, vaultName, hexChainCode, encryptionKeyHex } = keygenMsg;
 
-  const localPartyId = useMemo(generateLocalPartyId, []);
+  const localPartyId = useCurrentLocalPartyId();
 
   const vault = useMemo(() => {
     if ('publicKeyEcdsa' in keygenMsg) {
@@ -85,6 +85,7 @@ const JoinKeygenView: React.FC = () => {
             setCurrentScreen(1);
           }}
           onError={(err: string) => {
+            console.log('keygen error! ', err);
             setKeygenError(err);
             setCurrentScreen(2);
           }}
