@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { DiscoveryService } from '../../../../wailsjs/go/mediator/Server';
 import { VStack } from '../../../lib/ui/layout/Stack';
+import { Spinner } from '../../../lib/ui/loaders/Spinner';
+import { Panel } from '../../../lib/ui/panel/Panel';
 import { Text } from '../../../lib/ui/text';
 import { Endpoint } from '../../../services/Endpoint';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -24,7 +26,7 @@ export const JoinKeygenPage = () => {
 
   const { sessionId, useVultisigRelay, serviceName } = keygenMsg;
 
-  const serverUrlQuery = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ['serverUrl', sessionId],
     queryFn: () => {
       if (useVultisigRelay) {
@@ -38,30 +40,33 @@ export const JoinKeygenPage = () => {
   return (
     <CurrentLocalPartyIdProvider value={localPartyId}>
       <VStack flexGrow>
-        {serverUrlQuery.data ? (
-          <CurrentServerUrlProvider value={serverUrlQuery.data}>
+        {data ? (
+          <CurrentServerUrlProvider value={data}>
             <JoinKeygenSession />
           </CurrentServerUrlProvider>
         ) : (
           <>
             <PageHeader
-              secondaryControls={<PageHeaderBackButton />}
+              primaryControls={<PageHeaderBackButton />}
               title={<PageHeaderTitle>{t('setup')}</PageHeaderTitle>}
             />
             <VStack flexGrow justifyContent="center" alignItems="center">
-              {/* TODO: refactor pending state styles */}
-              {serverUrlQuery.isPending ? (
-                <div className="text-center text-white">
-                  <p className="text-2xl font-bold">
-                    {t('discovering_mediator')}
-                  </p>
-                  <p className="text-2xl font-bold">{localPartyId}</p>
-                  <img
-                    src="/assets/icons/wifi.svg"
-                    alt="wifi"
-                    className="mx-auto mt-[30vh] mb-6"
-                  />
-                </div>
+              {isPending ? (
+                <Panel>
+                  <VStack alignItems="center" gap={8}>
+                    <Text size={24}>
+                      <Spinner />
+                    </Text>
+                    <VStack alignItems="center" gap={20}>
+                      <Text size={14} weight="700">
+                        {t('this_device')} {localPartyId}
+                      </Text>
+                      <Text size={14} weight="700">
+                        {t('discovering_mediator')}
+                      </Text>
+                    </VStack>
+                  </VStack>
+                </Panel>
               ) : (
                 <Text>{t('failed_to_discover_mediator')}</Text>
               )}

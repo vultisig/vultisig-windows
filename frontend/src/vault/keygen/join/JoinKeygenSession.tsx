@@ -36,7 +36,7 @@ export const JoinKeygenSession = () => {
   return (
     <>
       <PageHeader
-        secondaryControls={<PageHeaderBackButton />}
+        primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{t('keygen')}</PageHeaderTitle>}
       />
       <VStack flexGrow justifyContent="center" alignItems="center">
