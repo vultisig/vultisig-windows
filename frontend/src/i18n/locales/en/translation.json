@@ -104,6 +104,7 @@
   "discovering_mediator": "Discovering mediator service, please wait...",
   "failed_to_discover_mediator": "Failed to discover mediator service",
   "joining_keygen": "Joining Keygen",
+  "failed_to_join_keygen": "Failed to join Keygen",
   "keysign_done": "Done",
   "joining_keysign": "Joining Keysign",
   "wrong_vault_try_again": "Wrong Vault or Pair Device.",

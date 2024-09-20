@@ -6,7 +6,6 @@ import { DiscoveryService } from '../../../../wailsjs/go/mediator/Server';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
-import JoinKeygenView from '../../../pages/keygen/JoinKeygenView';
 import { Endpoint } from '../../../services/Endpoint';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -14,6 +13,7 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { keygenMsgRecord } from '../KeygenType';
 import { CurrentServerUrlProvider } from '../state/currentServerUrl';
 import { generateLocalPartyId } from '../utils/generateLocalPartyId';
+import { JoinKeygenSession } from './JoinKeygenSession';
 
 export const JoinKeygenPage = () => {
   const { keygenType, keygenMsg: rawKeygenMsg } =
@@ -46,7 +46,7 @@ export const JoinKeygenPage = () => {
     <VStack flexGrow>
       {serverUrlQuery.data ? (
         <CurrentServerUrlProvider value={serverUrlQuery.data}>
-          <JoinKeygenView />
+          <JoinKeygenSession />
         </CurrentServerUrlProvider>
       ) : (
         <>
