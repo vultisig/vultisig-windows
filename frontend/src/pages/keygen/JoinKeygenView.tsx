@@ -11,18 +11,18 @@ import KeygenDone from '../../components/keygen/KeygenDone';
 import KeygenError from '../../components/keygen/KeygenError';
 import KeygenView from '../../components/keygen/KeygenView';
 import NavBar from '../../components/navbar/NavBar';
+import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { makeAppPath } from '../../navigation';
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 import { Endpoint } from '../../services/Endpoint';
 import { joinSession } from '../../services/Keygen/Keygen';
-import { generateRandomNumber } from '../../utils/util';
 import { keygenMsgRecord } from '../../vault/keygen/KeygenType';
+import { generateLocalPartyId } from '../../vault/keygen/utils/generateLocalPartyId';
 import { useVaults } from '../../vault/queries/useVaultsQuery';
 
 const JoinKeygenView: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [currentScreen, setCurrentScreen] = useState<number>(0);
   const [keygenError, setKeygenError] = useState<string>('');
 
   const { keygenType, keygenMsg: rawKeygenMsg } =
@@ -45,9 +45,7 @@ const JoinKeygenView: React.FC = () => {
     encryptionKeyHex,
   } = keygenMsg;
 
-  const localPartyId = useMemo(() => {
-    return 'windows-' + generateRandomNumber();
-  }, []);
+  const localPartyId = useMemo(generateLocalPartyId, []);
 
   const vault = useMemo(() => {
     if ('publicKeyEcdsa' in keygenMsg) {
@@ -75,10 +73,14 @@ const JoinKeygenView: React.FC = () => {
     return vault;
   }, [hexChainCode, keygenMsg, localPartyId, vaultName, vaults]);
 
-  const serverUrl = useVultisigRelay ? Endpoint.VULTISIG_RELAY : '';
+  const [serverUrl, setServerUrl] = useState(
+    useVultisigRelay ? Endpoint.VULTISIG_RELAY : null
+  );
+
+  const [currentScreen, setCurrentScreen] = useState<number>(serverUrl ? 0 : 1);
 
   const { mutate: joinKeygen } = useMutation({
-    mutationFn: () => {
+    mutationFn: (serverUrl: string) => {
       return joinSession(serverUrl, sessionId, localPartyId);
     },
     onSuccess: () => {
@@ -87,12 +89,10 @@ const JoinKeygenView: React.FC = () => {
   });
 
   useEffect(() => {
-    if (useVultisigRelay) {
-      joinKeygen();
-    } else {
-      setCurrentScreen(1);
+    if (serverUrl) {
+      joinKeygen(serverUrl);
     }
-  }, [joinKeygen, useVultisigRelay]);
+  }, [joinKeygen, serverUrl]);
 
   const prevScreen = () => {
     setCurrentScreen(prev => {
@@ -113,8 +113,8 @@ const JoinKeygenView: React.FC = () => {
       title: t('setup'),
       content: (
         <DiscoveryServiceScreen
-          onContinue={() => {
-            joinKeygen();
+          onContinue={serverUrl => {
+            setServerUrl(serverUrl);
           }}
           localPartyID={localPartyId}
           serviceName={serviceName}
@@ -129,7 +129,7 @@ const JoinKeygenView: React.FC = () => {
           sessionID={sessionId}
           hexEncryptionKey={encryptionKeyHex}
           keygenType={keygenType}
-          serverURL={serverUrl}
+          serverURL={shouldBePresent(serverUrl)}
           onDone={() => {
             setCurrentScreen(3);
           }}
