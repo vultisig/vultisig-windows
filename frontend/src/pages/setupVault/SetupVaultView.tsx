@@ -14,8 +14,8 @@ import KeygenView from '../../components/keygen/KeygenView';
 import NavBar from '../../components/navbar/NavBar';
 import { Endpoint } from '../../services/Endpoint';
 import { startSession } from '../../services/Keygen/Keygen';
-import { generateRandomNumber } from '../../utils/util';
 import { KeygenType } from '../../vault/keygen/KeygenType';
+import { generateLocalPartyId } from '../../vault/keygen/utils/generateLocalPartyId';
 
 const SetupVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -40,7 +40,7 @@ const SetupVaultView: React.FC = () => {
       vault.current.local_party_id === ''
     ) {
       // new vault
-      vault.current.local_party_id = 'windows-' + generateRandomNumber();
+      vault.current.local_party_id = generateLocalPartyId();
     }
     setLocalPartyId(vault.current.local_party_id);
   }, []);

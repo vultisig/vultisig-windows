@@ -1,53 +1,35 @@
-import { useMutation } from '@tanstack/react-query';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { storage } from '../../../wailsjs/go/models';
-import DiscoveryServiceScreen from '../../components/keygen/DiscoveryService';
-import JoinKeygen from '../../components/keygen/JoinKeygen';
 import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
 import KeygenDone from '../../components/keygen/KeygenDone';
 import KeygenError from '../../components/keygen/KeygenError';
 import KeygenView from '../../components/keygen/KeygenView';
 import NavBar from '../../components/navbar/NavBar';
+import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { makeAppPath } from '../../navigation';
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
-import { Endpoint } from '../../services/Endpoint';
-import { joinSession } from '../../services/Keygen/Keygen';
-import { generateRandomNumber } from '../../utils/util';
-import { keygenMsgRecord } from '../../vault/keygen/KeygenType';
+import { useCurrentJoinKeygenMsg } from '../../vault/keygen/state/currentJoinKeygenMsg';
+import { useCurrentLocalPartyId } from '../../vault/keygen/state/currentLocalPartyId';
+import { useCurrentServerUrl } from '../../vault/keygen/state/currentServerUrl';
 import { useVaults } from '../../vault/queries/useVaultsQuery';
 
 const JoinKeygenView: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [currentScreen, setCurrentScreen] = useState<number>(0);
   const [keygenError, setKeygenError] = useState<string>('');
 
-  const { keygenType, keygenMsg: rawKeygenMsg } =
-    useAppPathParams<'joinKeygen'>();
+  const { keygenType } = useAppPathParams<'joinKeygen'>();
 
-  const keygenMsg = useMemo(() => {
-    const { fromJsonString } = keygenMsgRecord[keygenType];
-
-    return fromJsonString(rawKeygenMsg);
-  }, [keygenType, rawKeygenMsg]);
+  const keygenMsg = useCurrentJoinKeygenMsg();
 
   const vaults = useVaults();
 
-  const {
-    sessionId,
-    useVultisigRelay,
-    vaultName,
-    hexChainCode,
-    serviceName,
-    encryptionKeyHex,
-  } = keygenMsg;
+  const { sessionId, vaultName, hexChainCode, encryptionKeyHex } = keygenMsg;
 
-  const localPartyId = useMemo(() => {
-    return 'windows-' + generateRandomNumber();
-  }, []);
+  const localPartyId = useCurrentLocalPartyId();
 
   const vault = useMemo(() => {
     if ('publicKeyEcdsa' in keygenMsg) {
@@ -75,52 +57,21 @@ const JoinKeygenView: React.FC = () => {
     return vault;
   }, [hexChainCode, keygenMsg, localPartyId, vaultName, vaults]);
 
-  const serverUrl = useVultisigRelay ? Endpoint.VULTISIG_RELAY : '';
+  const serverUrl = useCurrentServerUrl();
 
-  const { mutate: joinKeygen } = useMutation({
-    mutationFn: () => {
-      return joinSession(serverUrl, sessionId, localPartyId);
-    },
-    onSuccess: () => {
-      setCurrentScreen(2);
-    },
-  });
-
-  useEffect(() => {
-    if (useVultisigRelay) {
-      joinKeygen();
-    } else {
-      setCurrentScreen(1);
-    }
-  }, [joinKeygen, useVultisigRelay]);
+  const [currentScreen, setCurrentScreen] = useState<number>(0);
 
   const prevScreen = () => {
     setCurrentScreen(prev => {
-      if (prev > 5) {
-        return 4;
+      if (prev > 3) {
+        return 2;
       } else {
-        return prev > 0 ? prev - 1 : prev;
+        return prev > 2 ? prev - 1 : prev;
       }
     });
   };
 
   const screens = [
-    {
-      title: t('keygen'),
-      content: <JoinKeygen />,
-    },
-    {
-      title: t('setup'),
-      content: (
-        <DiscoveryServiceScreen
-          onContinue={() => {
-            joinKeygen();
-          }}
-          localPartyID={localPartyId}
-          serviceName={serviceName}
-        />
-      ),
-    },
     {
       title: `${t('keygen')}`,
       content: (
@@ -129,13 +80,14 @@ const JoinKeygenView: React.FC = () => {
           sessionID={sessionId}
           hexEncryptionKey={encryptionKeyHex}
           keygenType={keygenType}
-          serverURL={serverUrl}
+          serverURL={shouldBePresent(serverUrl)}
           onDone={() => {
-            setCurrentScreen(3);
+            setCurrentScreen(1);
           }}
           onError={(err: string) => {
+            console.log('keygen error! ', err);
             setKeygenError(err);
-            setCurrentScreen(4);
+            setCurrentScreen(2);
           }}
         />
       ),
@@ -145,7 +97,7 @@ const JoinKeygenView: React.FC = () => {
       content: (
         <KeygenDone
           onNext={() => {
-            setCurrentScreen(5);
+            setCurrentScreen(3);
           }}
         />
       ),
@@ -162,7 +114,6 @@ const JoinKeygenView: React.FC = () => {
       ),
     },
     {
-      // 5
       title: '',
       content: <KeygenBackupNow />,
     },
