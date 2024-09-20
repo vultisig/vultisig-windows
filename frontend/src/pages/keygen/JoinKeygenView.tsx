@@ -1,11 +1,8 @@
-import { useMutation } from '@tanstack/react-query';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { storage } from '../../../wailsjs/go/models';
-import DiscoveryServiceScreen from '../../components/keygen/DiscoveryService';
-import JoinKeygen from '../../components/keygen/JoinKeygen';
 import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
 import KeygenDone from '../../components/keygen/KeygenDone';
 import KeygenError from '../../components/keygen/KeygenError';
@@ -14,9 +11,8 @@ import NavBar from '../../components/navbar/NavBar';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { makeAppPath } from '../../navigation';
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
-import { Endpoint } from '../../services/Endpoint';
-import { joinSession } from '../../services/Keygen/Keygen';
 import { keygenMsgRecord } from '../../vault/keygen/KeygenType';
+import { useCurrentServerUrl } from '../../vault/keygen/state/currentServerUrl';
 import { generateLocalPartyId } from '../../vault/keygen/utils/generateLocalPartyId';
 import { useVaults } from '../../vault/queries/useVaultsQuery';
 
@@ -36,14 +32,7 @@ const JoinKeygenView: React.FC = () => {
 
   const vaults = useVaults();
 
-  const {
-    sessionId,
-    useVultisigRelay,
-    vaultName,
-    hexChainCode,
-    serviceName,
-    encryptionKeyHex,
-  } = keygenMsg;
+  const { sessionId, vaultName, hexChainCode, encryptionKeyHex } = keygenMsg;
 
   const localPartyId = useMemo(generateLocalPartyId, []);
 
@@ -73,54 +62,21 @@ const JoinKeygenView: React.FC = () => {
     return vault;
   }, [hexChainCode, keygenMsg, localPartyId, vaultName, vaults]);
 
-  const [serverUrl, setServerUrl] = useState(
-    useVultisigRelay ? Endpoint.VULTISIG_RELAY : null
-  );
+  const serverUrl = useCurrentServerUrl();
 
-  const [currentScreen, setCurrentScreen] = useState<number>(serverUrl ? 0 : 1);
-
-  const { mutate: joinKeygen } = useMutation({
-    mutationFn: (serverUrl: string) => {
-      return joinSession(serverUrl, sessionId, localPartyId);
-    },
-    onSuccess: () => {
-      setCurrentScreen(2);
-    },
-  });
-
-  useEffect(() => {
-    if (serverUrl) {
-      joinKeygen(serverUrl);
-    }
-  }, [joinKeygen, serverUrl]);
+  const [currentScreen, setCurrentScreen] = useState<number>(0);
 
   const prevScreen = () => {
     setCurrentScreen(prev => {
-      if (prev > 5) {
-        return 4;
+      if (prev > 3) {
+        return 2;
       } else {
-        return prev > 0 ? prev - 1 : prev;
+        return prev > 2 ? prev - 1 : prev;
       }
     });
   };
 
   const screens = [
-    {
-      title: t('keygen'),
-      content: <JoinKeygen />,
-    },
-    {
-      title: t('setup'),
-      content: (
-        <DiscoveryServiceScreen
-          onContinue={serverUrl => {
-            setServerUrl(serverUrl);
-          }}
-          localPartyID={localPartyId}
-          serviceName={serviceName}
-        />
-      ),
-    },
     {
       title: `${t('keygen')}`,
       content: (
@@ -131,11 +87,11 @@ const JoinKeygenView: React.FC = () => {
           keygenType={keygenType}
           serverURL={shouldBePresent(serverUrl)}
           onDone={() => {
-            setCurrentScreen(3);
+            setCurrentScreen(1);
           }}
           onError={(err: string) => {
             setKeygenError(err);
-            setCurrentScreen(4);
+            setCurrentScreen(2);
           }}
         />
       ),
@@ -145,7 +101,7 @@ const JoinKeygenView: React.FC = () => {
       content: (
         <KeygenDone
           onNext={() => {
-            setCurrentScreen(5);
+            setCurrentScreen(3);
           }}
         />
       ),
@@ -162,7 +118,6 @@ const JoinKeygenView: React.FC = () => {
       ),
     },
     {
-      // 5
       title: '',
       content: <KeygenBackupNow />,
     },

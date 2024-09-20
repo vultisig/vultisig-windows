@@ -102,6 +102,7 @@
   "keysign": "Keysign",
   "keysign_error": "Keysign Error",
   "discovering_mediator": "Discovering mediator service, please wait...",
+  "failed_to_discover_mediator": "Failed to discover mediator service",
   "joining_keygen": "Joining Keygen",
   "keysign_done": "Done",
   "joining_keysign": "Joining Keysign",
