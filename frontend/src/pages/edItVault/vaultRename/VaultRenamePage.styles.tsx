@@ -22,8 +22,8 @@ export const InputField = styled.input`
   width: 100%;
 
   &::placeholder {
-    font-size: 13px;
-    color: ${getColor('textShy')};
+    font-size: 18px;
+    color: ${getColor('contrast')};
   }
 
   &:focus {

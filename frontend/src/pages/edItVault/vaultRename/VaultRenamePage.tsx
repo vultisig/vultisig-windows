@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { VStack } from '../../../lib/ui/layout/Stack';
@@ -9,6 +11,8 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
+import { useRenameVaultMutation } from '../../../vault/mutations/useRenameVaultMutation';
+import { useAssertCurrentVault } from '../../../vault/state/useCurrentVault';
 import {
   ButtonWithBottomSpace,
   InputField,
@@ -20,6 +24,9 @@ const renameSchema = z.object({
 });
 
 const VaultRenamePage = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const vault = useAssertCurrentVault();
   const {
     register,
     handleSubmit,
@@ -29,12 +36,25 @@ const VaultRenamePage = () => {
     mode: 'onBlur',
   });
 
+  const {
+    mutate: renameVault,
+    isPending,
+    error,
+    isSuccess,
+  } = useRenameVaultMutation();
+
   const onSubmit = (data: FieldValues) => {
-    // TODO: @tony to implement when @enrique is done with BE
-    console.log('## data', data);
+    renameVault({
+      vault,
+      newName: data.vaultName,
+    });
   };
 
-  const { t } = useTranslation();
+  useEffect(() => {
+    if (isSuccess) {
+      navigate(-1);
+    }
+  }, [isSuccess, navigate]);
 
   return (
     <VStack flexGrow gap={16}>
@@ -61,7 +81,7 @@ const VaultRenamePage = () => {
               <InputFieldWrapper>
                 <InputField
                   type="text"
-                  placeholder="Type here..."
+                  placeholder={vault?.name}
                   {...register('vaultName')}
                 />
               </InputFieldWrapper>
@@ -74,11 +94,17 @@ const VaultRenamePage = () => {
             </div>
           </VStack>
           <ButtonWithBottomSpace
+            isLoading={isPending}
             isDisabled={!isValid || !isDirty}
             type="submit"
           >
             {t('vault_rename_page_submit_button_text')}
           </ButtonWithBottomSpace>
+          {error && (
+            <Text size={12} color="danger">
+              {error?.message}
+            </Text>
+          )}
         </VStack>
       </PageSlice>
     </VStack>
