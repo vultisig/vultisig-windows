@@ -52,10 +52,9 @@ export class PriceService implements IPriceService {
     const rates = new Map<string, Rate[]>();
 
     coins.forEach(coinMeta => {
-      const fiatMap =
-        coinMeta.isNativeToken && coinMeta.priceProviderId
-          ? response[coinMeta.priceProviderId]
-          : response[coinMeta.contractAddress];
+      const fiatMap = coinMeta.priceProviderId
+        ? response[coinMeta.priceProviderId]
+        : response[coinMeta.contractAddress];
 
       if (fiatMap) {
         const rateList: Rate[] = [];
