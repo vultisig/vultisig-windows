@@ -344,7 +344,11 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       // Filter tokens with non-zero balance
       const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
         .filter(([_, balance]) => BigInt(balance as string) > 0n) // Ensure the balance is non-zero
-        .map(([tokenAddress]) => tokenAddress);
+        .map(([tokenAddress]) => tokenAddress)
+        .filter(
+          tokenAddress =>
+            tokenAddress !== '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        );
 
       if (nonZeroBalanceTokenAddresses.length === 0) {
         return [];
