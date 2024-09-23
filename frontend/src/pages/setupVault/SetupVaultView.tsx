@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { storage } from '../../../wailsjs/go/models';
 import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
 import KeygenDone from '../../components/keygen/KeygenDone';
-import KeygenError from '../../components/keygen/KeygenError';
 import KeygenInitial from '../../components/keygen/KeygenInitial';
 import KeygenNameVault from '../../components/keygen/KeygenNameVault';
 import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
@@ -15,6 +14,7 @@ import NavBar from '../../components/navbar/NavBar';
 import { Endpoint } from '../../services/Endpoint';
 import { startSession } from '../../services/Keygen/Keygen';
 import { KeygenType } from '../../vault/keygen/KeygenType';
+import { KeygenFailedState } from '../../vault/keygen/shared/KeygenFailedState';
 import { generateLocalPartyId } from '../../vault/keygen/utils/generateLocalPartyId';
 
 const SetupVaultView: React.FC = () => {
@@ -173,8 +173,8 @@ const SetupVaultView: React.FC = () => {
     {
       title: t('keygen'),
       content: (
-        <KeygenError
-          keygenError={keygenError}
+        <KeygenFailedState
+          message={keygenError}
           onTryAgain={() => setCurrentScreen(4)}
         />
       ),

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import JoinKeygenView from '../../../pages/keygen/JoinKeygenView';
 import { joinSession } from '../../../services/Keygen/Keygen';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -11,6 +10,7 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { useCurrentJoinKeygenMsg } from '../state/currentJoinKeygenMsg';
 import { useCurrentLocalPartyId } from '../state/currentLocalPartyId';
 import { useCurrentServerUrl } from '../state/currentServerUrl';
+import { JoinKeygenProcess } from './JoinKeygenProcess';
 
 export const JoinKeygenSession = () => {
   const { t } = useTranslation();
@@ -30,7 +30,7 @@ export const JoinKeygenSession = () => {
   });
 
   if (sessionQuery.data) {
-    return <JoinKeygenView />;
+    return <JoinKeygenProcess />;
   }
 
   return (

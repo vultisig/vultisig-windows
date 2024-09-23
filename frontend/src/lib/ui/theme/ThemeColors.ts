@@ -8,6 +8,8 @@ export type ThemeColors = {
   primary: HSLA;
   primaryAlt: HSLA;
 
+  idle: HSLA;
+
   background: HSLA;
   foreground: HSLA;
   foregroundExtra: HSLA;
