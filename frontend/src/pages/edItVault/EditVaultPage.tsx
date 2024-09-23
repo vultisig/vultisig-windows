@@ -9,8 +9,10 @@ import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../ui/page/PageSlice';
+import { useCurrentVault } from '../../vault/state/useCurrentVault';
 import { editVaultSettingsItems } from './constants';
 import {
+  AutoCenteredTitle,
   Container,
   IconWrapper,
   ListItemPanel,
@@ -20,15 +22,25 @@ import {
 const EditVaultPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const currentVault = useCurrentVault();
+
+  if (!currentVault) {
+    return <></>;
+  }
+
+  const { local_party_id } = currentVault;
 
   return (
     <Container flexGrow gap={16}>
       <PageHeader
+        data-testid="EditVaultPage-PageHeader"
         primaryControls={<PageHeaderBackButton />}
-        hasBorder
         title={<PageHeaderTitle>{t('vault_edit_page_title')}</PageHeaderTitle>}
       />
       <PageSlice>
+        <AutoCenteredTitle size={18} color="contrast" weight={500}>
+          {local_party_id}
+        </AutoCenteredTitle>
         <VStack flexGrow gap={12}>
           {editVaultSettingsItems.map(
             ({ path, titleKey, subtitleKey, icon: Icon, textColor }, index) => (

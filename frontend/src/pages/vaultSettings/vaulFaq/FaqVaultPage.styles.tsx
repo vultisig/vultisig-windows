@@ -14,11 +14,10 @@ export const FaqBox = styled.div`
 export const FaqButton = styled(UnstyledButton)`
   display: flex;
   flex-direction: column;
-
+  align-items: stretch;
   padding: 16px;
   ${borderRadius.m};
   background-color: ${getColor('foreground')};
-  width: 100%;
 
   & > * {
     text-align: start;
