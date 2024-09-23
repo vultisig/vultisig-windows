@@ -72,7 +72,7 @@ const VaultBackupPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setTimeout(() => navigate(-1), 5000);
+      navigate(-1);
     }
   }, [isSuccess, navigate]);
 
