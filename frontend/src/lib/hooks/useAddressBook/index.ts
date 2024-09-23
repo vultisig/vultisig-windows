@@ -2,11 +2,12 @@ import {
   PersistentStateKey,
   usePersistentState,
 } from '../../../state/persistentState';
+import { useStateCorrector } from '../../ui/state/useStateCorrector';
 
 export const useAddressBook = () => {
-  const [addresses, setAddresses] = usePersistentState<string[]>(
-    PersistentStateKey.AddressBook,
-    []
+  const [addresses, setAddresses] = useStateCorrector(
+    usePersistentState<string[]>(PersistentStateKey.AddressBook, []),
+    addresses => addresses.filter(Boolean)
   );
 
   return {
