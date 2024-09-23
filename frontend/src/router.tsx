@@ -19,6 +19,7 @@ import SetupVaultView from './pages/setupVault/SetupVaultView';
 import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import FaqVaultPage from './pages/vaultSettings/vaulFaq/FaqVaultPage';
+import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBookSettings/AddressBookSettingsPage';
 import CurrencySettingsPage from './pages/vaultSettings/vaultCurrency/CurrencySettingsPage';
 import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
 import { AddVaultPage } from './vault/add/AddVaultPage';
@@ -145,5 +146,9 @@ export const router = createBrowserRouter([
   {
     path: appPaths.vaultFAQ,
     element: <FaqVaultPage />,
+  },
+  {
+    path: appPaths.addressBook,
+    element: <AddressBookSettingsPage />,
   },
 ]);

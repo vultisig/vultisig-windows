@@ -20,9 +20,7 @@ const LanguageSettingsPage = () => {
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={
-          <PageHeaderTitle>
-            {t('vault_rename_page_header_title')}
-          </PageHeaderTitle>
+          <PageHeaderTitle>{t('vault_settings_language')}</PageHeaderTitle>
         }
       />
       <PageSlice gap={16} flexGrow={true}>

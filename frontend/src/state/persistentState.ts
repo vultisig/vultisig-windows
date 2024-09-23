@@ -10,6 +10,7 @@ export enum PersistentStateKey {
   HasFinishedOnboarding = 'HasFinishedOnboarding',
   Language = 'language',
   Currency = 'currency',
+  AddressBook = 'addressBook',
 }
 
 const persistentStorage =
