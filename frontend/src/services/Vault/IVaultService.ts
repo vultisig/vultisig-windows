@@ -7,14 +7,14 @@ export interface IVaultService {
     sessionID: any,
     hexEncryptionKey: any,
     serverURL: any
-  ): Promise<storage.Vault | undefined>;
+  ): Promise<storage.Vault>;
 
   startKeygen(
     vault: any,
     sessionID: any,
     hexEncryptionKey: any,
     serverURL: any
-  ): Promise<storage.Vault | undefined>;
+  ): Promise<storage.Vault>;
 
   importVault(buffer: Buffer): Promise<void>;
 

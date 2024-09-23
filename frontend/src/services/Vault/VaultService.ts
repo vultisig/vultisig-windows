@@ -41,7 +41,7 @@ export class VaultService implements IVaultService {
     sessionID: any,
     hexEncryptionKey: any,
     serverURL: any
-  ): Promise<storage.Vault | undefined> {
+  ): Promise<storage.Vault> {
     const newVault = await StartKeygen(
       vault.name,
       vault.local_party_id,
@@ -49,15 +49,13 @@ export class VaultService implements IVaultService {
       vault.hex_chain_code,
       hexEncryptionKey,
       serverURL
-    ).catch(err => {
-      console.log(err);
-    });
+    );
 
-    if (newVault !== undefined) {
-      await SaveVault(newVault);
-      new DefaultCoinsService(this.walletCore).applyDefaultCoins(newVault);
-      return newVault;
-    }
+    await SaveVault(newVault);
+
+    new DefaultCoinsService(this.walletCore).applyDefaultCoins(newVault);
+
+    return newVault;
   }
 
   async reshare(
@@ -65,21 +63,19 @@ export class VaultService implements IVaultService {
     sessionID: any,
     hexEncryptionKey: any,
     serverURL: any
-  ): Promise<storage.Vault | undefined> {
+  ): Promise<storage.Vault> {
     const newVault = await Reshare(
       vault,
       sessionID,
       hexEncryptionKey,
       serverURL
-    ).catch(err => {
-      console.log(err);
-    });
+    );
 
-    if (newVault !== undefined) {
-      await SaveVault(newVault);
-      new DefaultCoinsService(this.walletCore).applyDefaultCoins(newVault);
-      return newVault;
-    }
+    await SaveVault(newVault);
+
+    new DefaultCoinsService(this.walletCore).applyDefaultCoins(newVault);
+
+    return newVault;
   }
 
   async importVault(buffer: Buffer) {
