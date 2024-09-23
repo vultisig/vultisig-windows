@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Panel } from '../../../lib/ui/panel/Panel';
+import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { pageConfig } from '../../../ui/page/config';
 
@@ -14,4 +15,9 @@ export const ListItemPanel = styled(Panel)`
 
 export const Container = styled(VStack)`
   margin-bottom: ${pageConfig.verticalPadding}px;
+`;
+
+export const AutoCenteredText = styled(Text)`
+  margin-block: 12px;
+  align-self: center;
 `;

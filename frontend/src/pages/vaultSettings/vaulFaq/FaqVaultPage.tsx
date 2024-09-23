@@ -17,6 +17,11 @@ import {
   Row,
 } from './FaqVaultPage.styles';
 
+const faqContentTransition = {
+  duration: 0.3,
+  ease: 'easeInOut',
+};
+
 type RowsOpenState = {
   [key: number]: boolean;
 };
@@ -60,8 +65,7 @@ const FaqVaultPage = () => {
                 </Text>
                 <motion.div
                   animate={{ rotate: isCurrentRowExpanded ? 180 : 0 }}
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  transition={faqContentTransition}
                 >
                   <CaretDownIcon />
                 </motion.div>
@@ -70,11 +74,10 @@ const FaqVaultPage = () => {
                 initial="collapsed"
                 animate={isCurrentRowExpanded ? 'expanded' : 'collapsed'}
                 variants={{
-                  collapsed: { height: 0, opacity: 0 },
-                  expanded: { height: 'auto', opacity: 1 },
+                  collapsed: { height: 0, opacity: 0, marginTop: 0 },
+                  expanded: { height: 'initial', opacity: 1, marginTop: 12 },
                 }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
-                style={{ overflow: 'hidden', width: '100%' }}
+                transition={faqContentTransition}
               >
                 <FaqContent>
                   <HorizontalLine />

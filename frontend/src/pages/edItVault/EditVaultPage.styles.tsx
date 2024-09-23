@@ -30,7 +30,7 @@ export const IconWrapper = styled.div`
   height: 30px;
 `;
 
-export const AutoCenteredText = styled(Text)`
-  margin-block: 12px;
+export const AutoCenteredTitle = styled(Text)`
   align-self: center;
+  margin-bottom: 12px;
 `;

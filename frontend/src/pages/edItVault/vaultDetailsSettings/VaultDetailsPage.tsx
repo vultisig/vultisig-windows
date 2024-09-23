@@ -8,8 +8,11 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
 import { getVaultTypeText } from '../../../utils/util';
 import { useCurrentVault } from '../../../vault/state/useCurrentVault';
-import { AutoCenteredText } from '../EditVaultPage.styles';
-import { Container, ListItemPanel } from './VaultDetailsPage.styles';
+import {
+  AutoCenteredText,
+  Container,
+  ListItemPanel,
+} from './VaultDetailsPage.styles';
 
 const VaultDetailsPage = () => {
   const { t } = useTranslation();
