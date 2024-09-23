@@ -14,8 +14,6 @@ export const FaqBox = styled.div`
 export const FaqButton = styled(UnstyledButton)`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
 
   padding: 16px;
   ${borderRadius.m};
