@@ -44,7 +44,7 @@ const DeleteVaultPage = () => {
     if (isSuccess) {
       navigate(makeAppPath('vaultList'));
     }
-  }, [isSuccess]);
+  }, [isSuccess, navigate]);
 
   if (!currentVault) {
     return <></>;

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -39,12 +39,18 @@ const passwordSchema = z
   });
 
 const VaultBackupPage = () => {
-  const vault = useCurrentVault();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isVerifiedPasswordVisible, setIsVerifiedPasswordVisible] =
     useState(false);
 
-  const { mutate: backupVault, isPending, error } = useBackupVaultMutation();
+  const vault = useCurrentVault();
+  const navigate = useNavigate();
+  const {
+    mutate: backupVault,
+    isPending,
+    error,
+    isSuccess,
+  } = useBackupVaultMutation();
 
   const {
     register,
@@ -57,13 +63,18 @@ const VaultBackupPage = () => {
 
   const onSubmit = (data: FieldValues) => {
     const password = data?.password;
-    if (!vault || !password) return;
+    if (!vault) return;
 
     backupVault({ vault, password });
   };
 
-  const navigate = useNavigate();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate(-1);
+    }
+  }, [isSuccess, navigate]);
 
   return (
     <VStack flexGrow gap={16}>
@@ -148,7 +159,17 @@ const VaultBackupPage = () => {
                   : 'vault_backup_page_submit_button_text'
               )}
             </Button>
-            <Button kind="outlined" type="button" onClick={() => navigate(-1)}>
+            <Button
+              kind="outlined"
+              type="button"
+              onClick={() =>
+                vault &&
+                backupVault({
+                  vault,
+                  password: '',
+                })
+              }
+            >
               <GradientText>
                 {t('vault_backup_page_skip_button_text')}
               </GradientText>
