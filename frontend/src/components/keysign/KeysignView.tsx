@@ -1,13 +1,15 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { storage } from '../../../wailsjs/go/models';
+import { storage, tss } from '../../../wailsjs/go/models';
 import { Keysign } from '../../../wailsjs/go/tss/TssService';
 import { EventsOn } from '../../../wailsjs/runtime/runtime';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { ChainUtils } from '../../model/chain';
 import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
+import { BlockchainServiceFactory } from '../../services/Blockchain/BlockchainServiceFactory';
 
 interface KeysignViewProps {
   vault: storage.Vault;
@@ -71,6 +73,10 @@ const KeysignView: React.FC<KeysignViewProps> = ({
         chain,
         walletCore!
       );
+      const blockchainService = BlockchainServiceFactory.createService(
+        chain,
+        walletCore!
+      );
       const tssType = ChainUtils.getTssKeysignType(chain);
       try {
         const sigs = await Keysign(
@@ -84,6 +90,26 @@ const KeysignView: React.FC<KeysignViewProps> = ({
           tssType.toString().toLowerCase()
         );
         console.log('sigs:', sigs);
+
+        const signatures: { [key: string]: tss.KeysignResponse } = {};
+
+        console.log('messagesToSign:', messagesToSign);
+
+        messagesToSign.forEach((msg, idx) => {
+          signatures[msg] = sigs[idx];
+        });
+
+        console.log('signatures:', signatures);
+
+        const signedTx = await blockchainService.getSignedTransaction(
+          vault.public_key_ecdsa,
+          vault.hex_chain_code,
+          keysignPayload,
+          signatures
+        );
+
+        console.log('signedTx:', signedTx);
+
         onDone();
       } catch (e) {
         console.error(e);
