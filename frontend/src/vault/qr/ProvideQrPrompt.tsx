@@ -7,6 +7,7 @@ import { round } from '../../lib/ui/css/round';
 import { sameDimensions } from '../../lib/ui/css/sameDimensions';
 import { CameraIcon } from '../../lib/ui/icons/CameraIcon';
 import { getColor } from '../../lib/ui/theme/getters';
+import { makeAppPath } from '../../navigation';
 
 const Container = styled(UnstyledButton)`
   ${round};
@@ -19,8 +20,8 @@ const Container = styled(UnstyledButton)`
 
 export const ProvideQrPrompt = () => {
   return (
-    <Link to="/vault/qr/upload">
-      <Container>
+    <Link to={makeAppPath('uploadQr', {})}>
+      <Container as="div">
         <CameraIcon />
       </Container>
     </Link>

@@ -18,7 +18,7 @@ export const AddVaultPage = () => {
       <PageContent gap={16}>
         <ProductLogoBlock />
         <VStack gap={16}>
-          <Link to={makeAppPath('setupVault')}>
+          <Link to={makeAppPath('setupVaultOptions')}>
             <Button as="div">{t('create_new_vault')}</Button>
           </Link>
           <Link to={makeAppPath('importVault')}>

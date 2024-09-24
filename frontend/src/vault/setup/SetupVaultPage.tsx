@@ -41,7 +41,7 @@ export const SetupVaultPage = () => {
             artSrc="/assets/icons/pair.svg"
             title={t('pairing_device')}
             actionName={t('scan_qr')}
-            targetDestination={makeAppPath('importVault')}
+            targetDestination={makeAppPath('uploadQr', { title: t('pair') })}
           />
         </HStackSeparatedBy>
       </PageContent>
