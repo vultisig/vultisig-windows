@@ -2,23 +2,24 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Button } from '../../lib/ui/buttons/Button';
-import { ContainImage } from '../../lib/ui/images/ContainImage';
-import { SafeImage } from '../../lib/ui/images/SafeImage';
-import { VStack, vStack } from '../../lib/ui/layout/Stack';
-import { Panel } from '../../lib/ui/panel/Panel';
-import { TitledComponentProps } from '../../lib/ui/props';
-import { Text } from '../../lib/ui/text';
+import { Button } from '../../../lib/ui/buttons/Button';
+import { toSizeUnit } from '../../../lib/ui/css/toSizeUnit';
+import { ContainImage } from '../../../lib/ui/images/ContainImage';
+import { SafeImage } from '../../../lib/ui/images/SafeImage';
+import { VStack, vStack } from '../../../lib/ui/layout/Stack';
+import { Panel } from '../../../lib/ui/panel/Panel';
+import { TitledComponentProps } from '../../../lib/ui/props';
+import { Text } from '../../../lib/ui/text';
+import { setupOptionsConfig } from './config';
 
-type SetupVaultOptionProps = TitledComponentProps & {
+export type SetupVaultOptionProps = TitledComponentProps & {
   artSrc: string;
   targetDestination: string;
   actionName: string;
 };
 
 const Container = styled(Panel)`
-  max-width: 320px;
-  width: 100%;
+  width: ${toSizeUnit(setupOptionsConfig.optionWidth)};
   padding-top: 80px;
 
   ${vStack({
@@ -28,7 +29,7 @@ const Container = styled(Panel)`
 `;
 
 const ArtContainer = styled.div`
-  height: 80px;
+  width: 68px;
 `;
 
 export const SetupVaultOption = ({
@@ -44,7 +45,7 @@ export const SetupVaultOption = ({
       <ArtContainer>
         <SafeImage src={artSrc} render={props => <ContainImage {...props} />} />
       </ArtContainer>
-      <VStack gap={8} alignItems="center">
+      <VStack alignItems="center">
         <Text color="contrast" size={14} family="mono">
           {t('this_device_is_the')}
         </Text>
@@ -52,7 +53,7 @@ export const SetupVaultOption = ({
           {title}
         </Text>
       </VStack>
-      <Link to={targetDestination}>
+      <Link style={{ alignSelf: 'stretch' }} to={targetDestination}>
         <Button as="div">{actionName}</Button>
       </Link>
     </Container>
