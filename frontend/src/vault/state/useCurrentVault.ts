@@ -30,9 +30,10 @@ export const useAssertCurrentVault = () => {
 export const useAssertCurrentVaultNativeCoins = () => {
   const vault = useAssertCurrentVault();
 
-  const coins = vault.coins || [];
-
-  return useMemo(() => coins.filter(coin => coin.is_native_token), [coins]);
+  return useMemo(
+    () => (vault.coins || []).filter(coin => coin.is_native_token),
+    [vault.coins]
+  );
 };
 
 export const useAssertCurrentVaultChainIds = () => {
@@ -49,11 +50,9 @@ export const useAssertCurrentVaultCoins = () => {
 
   const vault = useAssertCurrentVault();
 
-  const allCoins = vault.coins || [];
-
   return useMemo(
-    () => allCoins.filter(coin => chains.includes(coin.chain)),
-    [allCoins, chains]
+    () => (vault.coins || []).filter(coin => chains.includes(coin.chain)),
+    [chains, vault.coins]
   );
 };
 
@@ -78,5 +77,8 @@ export const useAssertCurrentVaultAddreses = () => {
 export const useAssertCurrentVaultChainCoins = (chainId: string) => {
   const coins = useAssertCurrentVaultCoins();
 
-  return useMemo(() => coins.filter(coin => coin.chain === chainId), [coins]);
+  return useMemo(
+    () => coins.filter(coin => coin.chain === chainId),
+    [chainId, coins]
+  );
 };

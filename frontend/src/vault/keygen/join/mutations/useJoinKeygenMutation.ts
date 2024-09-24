@@ -6,6 +6,8 @@ import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
 import { VaultServiceFactory } from '../../../../services/Vault/VaultServiceFactory';
 import { vaultsQueryKey } from '../../../queries/useVaultsQuery';
+import { useCurrentVaultId } from '../../../state/useCurrentVaultId';
+import { getStorageVaultId } from '../../../utils/storageVault';
 import { useKeygenTargetVault } from '../../hooks/useKeygenTargetVault';
 import { KeygenType } from '../../KeygenType';
 import { useCurrentJoinKeygenMsg } from '../../state/currentJoinKeygenMsg';
@@ -25,6 +27,8 @@ export const useJoinKeygenMutation = () => {
   const vault = useKeygenTargetVault();
 
   const invalidateQueries = useInvalidateQueries();
+
+  const [, setCurrentVaultId] = useCurrentVaultId();
 
   return useMutation({
     mutationFn: async () => {
@@ -50,6 +54,8 @@ export const useJoinKeygenMutation = () => {
       });
 
       await invalidateQueries(vaultsQueryKey);
+
+      setCurrentVaultId(getStorageVaultId(newVault));
 
       return newVault;
     },

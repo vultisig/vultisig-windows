@@ -1,5 +1,5 @@
 import BackupIcon from '../../lib/ui/icons/BackupIcon';
-import InfoIcon from '../../lib/ui/icons/InfoIcon';
+import { InfoIcon } from '../../lib/ui/icons/InfoIcon';
 import ReshareIcon from '../../lib/ui/icons/ReshareIcon';
 import SquareAndPencilIcon from '../../lib/ui/icons/SquareAndPencilIcon';
 import TrashRedIcon from '../../lib/ui/icons/TrashRedIcon';
