@@ -1,13 +1,16 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { storage } from '../../../wailsjs/go/models';
+import { storage, tss } from '../../../wailsjs/go/models';
 import { Keysign } from '../../../wailsjs/go/tss/TssService';
 import { EventsOn } from '../../../wailsjs/runtime/runtime';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { ChainUtils } from '../../model/chain';
 import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
+import { BlockchainServiceFactory } from '../../services/Blockchain/BlockchainServiceFactory';
+import { RpcServiceFactory } from '../../services/Rpc/RpcServiceFactory';
 
 interface KeysignViewProps {
   vault: storage.Vault;
@@ -58,7 +61,7 @@ const KeysignView: React.FC<KeysignViewProps> = ({
         onError('Coin is not defined');
         return;
       }
-      if (walletCore === undefined) {
+      if (walletCore === undefined || walletCore === null) {
         onError('WalletCore is not defined');
         return;
       }
@@ -69,8 +72,13 @@ const KeysignView: React.FC<KeysignViewProps> = ({
       }
       const coinService = CoinServiceFactory.createCoinService(
         chain,
-        walletCore!
+        walletCore
       );
+      const blockchainService = BlockchainServiceFactory.createService(
+        chain,
+        walletCore
+      );
+      const rpcService = RpcServiceFactory.createRpcService(chain);
       const tssType = ChainUtils.getTssKeysignType(chain);
       try {
         const sigs = await Keysign(
@@ -83,7 +91,39 @@ const KeysignView: React.FC<KeysignViewProps> = ({
           serverURL,
           tssType.toString().toLowerCase()
         );
-        console.log('sigs:', sigs);
+
+        const signatures: { [key: string]: tss.KeysignResponse } = {};
+        messagesToSign.forEach((msg, idx) => {
+          signatures[msg] = sigs[idx];
+        });
+
+        const signedTx = await blockchainService.getSignedTransaction(
+          vault.public_key_ecdsa,
+          vault.hex_chain_code,
+          keysignPayload,
+          signatures
+        );
+
+        if (!signedTx) {
+          onError("Couldn't sign transaction");
+          return;
+        }
+
+        let txBroadcastedHash = await rpcService.broadcastTransaction(
+          signedTx.rawTransaction
+        );
+        console.log('txBroadcastedHash:', txBroadcastedHash);
+        console.log('txHash:', signedTx.transactionHash);
+
+        if (txBroadcastedHash !== signedTx.transactionHash) {
+          if (txBroadcastedHash === 'Transaction already broadcasted.') {
+            txBroadcastedHash = signedTx.transactionHash;
+          } else {
+            onError('Transaction hash mismatch');
+            return;
+          }
+        }
+
         onDone();
       } catch (e) {
         console.error(e);

@@ -15,7 +15,8 @@ class SignatureProvider {
   }
 
   getDerSignature(preHash: Uint8Array): Uint8Array {
-    const preHashHex = this.walletCore.HexCoding.encode(preHash);
+    const preHashHex =
+      this.walletCore.HexCoding.encode(preHash).stripHexPrefix();
     if (this.signatures[preHashHex]) {
       const sigResult = this.signatures[preHashHex];
       return this.walletCore.HexCoding.decode(sigResult.der_signature);
@@ -24,7 +25,11 @@ class SignatureProvider {
   }
 
   getSignatureWithRecoveryId(preHash: Uint8Array): Uint8Array {
-    const preHashHex = this.walletCore.HexCoding.encode(preHash);
+    const preHashHex =
+      this.walletCore.HexCoding.encode(preHash).stripHexPrefix();
+    console.log('preHashHex:', preHashHex);
+    console.log('this.signatures[preHashHex]:', this.signatures[preHashHex]);
+
     if (this.signatures[preHashHex]) {
       const sigResult = this.signatures[preHashHex];
       const rData = this.walletCore.HexCoding.decode(sigResult.r);
@@ -46,7 +51,8 @@ class SignatureProvider {
 
   // keep in mind EdDSA signature from TSS is in little endian format , need to convert it to bigendian
   getSignature(preHash: Uint8Array): Uint8Array {
-    const preHashHex = this.walletCore.HexCoding.encode(preHash);
+    const preHashHex =
+      this.walletCore.HexCoding.encode(preHash).stripHexPrefix();
     if (this.signatures[preHashHex]) {
       const sigResult = this.signatures[preHashHex];
       const rData = this.walletCore.HexCoding.decode(sigResult.r).reverse();
