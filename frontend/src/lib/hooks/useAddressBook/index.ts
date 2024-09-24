@@ -3,18 +3,44 @@ import {
   usePersistentState,
 } from '../../../state/persistentState';
 import { useStateCorrector } from '../../ui/state/useStateCorrector';
+import { isValidAddress } from './utils/isValidAddress';
+
+export type AddressBookEntry = {
+  address: string;
+  coinSymbol: string;
+  title: string;
+};
 
 export const useAddressBook = () => {
   const [addresses, setAddresses] = useStateCorrector(
-    usePersistentState<string[]>(PersistentStateKey.AddressBook, []),
-    addresses => addresses.filter(Boolean)
+    usePersistentState<AddressBookEntry[]>(PersistentStateKey.AddressBook, []),
+    addressBookEntries =>
+      addressBookEntries.filter(addressBookEntry =>
+        isValidAddress(addressBookEntry.address, addressBookEntry.coinSymbol)
+      )
   );
+
+  const addAddress = (addressBookEntry: AddressBookEntry) => {
+    const { address, coinSymbol } = addressBookEntry;
+    const doesAddressExist = addresses.some(
+      addressBookEntry => addressBookEntry.address === address
+    );
+
+    if (doesAddressExist || !isValidAddress(address, coinSymbol)) {
+      return;
+    }
+
+    setAddresses([...addresses, addressBookEntry]);
+  };
 
   return {
     addresses,
-    addAddress: (newAddress: string) =>
-      setAddresses([...addresses, newAddress]),
+    addAddress,
     removeAddress: (address: string) =>
-      setAddresses(addresses.filter(a => a !== address)),
+      setAddresses(
+        addresses.filter(
+          addressBookEntry => addressBookEntry.address !== address
+        )
+      ),
   };
 };
