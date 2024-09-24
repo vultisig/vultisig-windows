@@ -3,7 +3,8 @@ import { KeygenType } from '../vault/keygen/KeygenType';
 
 export const appPaths = {
   addVault: '/vault/add',
-  setupVault: '/vault/setup',
+  setupVaultOptions: '/vault/setup/option',
+  setupVaultInitiatingDevice: '/vault/setup/initiating-device',
   importVault: '/vault/import',
   shareVault: '/vault/share',
   keysign: '/vault/keysign',
@@ -44,6 +45,7 @@ export type AppPathParams = {
   address: { address: string };
   joinKeysign: { publicKeyECDSA: string; sessionID: string };
   joinKeygen: { keygenType: KeygenType; keygenMsg: string };
+  uploadQr: { title?: string };
   manageVaultChainCoins: { chain: string };
   vaultChainDetail: { chain: string };
   vaultChainCoinDetail: { chain: string; coin: string };
