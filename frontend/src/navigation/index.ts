@@ -3,7 +3,8 @@ import { KeygenType } from '../vault/keygen/KeygenType';
 
 export const appPaths = {
   addVault: '/vault/add',
-  setupVault: '/vault/setup',
+  setupVaultOptions: '/vault/setup/option',
+  setupVaultInitiatingDevice: '/vault/setup/initiating-device',
   importVault: '/vault/import',
   shareVault: '/vault/share',
   keysign: '/vault/keysign',
