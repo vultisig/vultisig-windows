@@ -60,7 +60,7 @@ const KeysignView: React.FC<KeysignViewProps> = ({
         onError('Coin is not defined');
         return;
       }
-      if (walletCore === undefined) {
+      if (walletCore === undefined || walletCore === null) {
         onError('WalletCore is not defined');
         return;
       }
@@ -71,11 +71,11 @@ const KeysignView: React.FC<KeysignViewProps> = ({
       }
       const coinService = CoinServiceFactory.createCoinService(
         chain,
-        walletCore!
+        walletCore
       );
       const blockchainService = BlockchainServiceFactory.createService(
         chain,
-        walletCore!
+        walletCore
       );
       const tssType = ChainUtils.getTssKeysignType(chain);
       try {
@@ -92,8 +92,6 @@ const KeysignView: React.FC<KeysignViewProps> = ({
         console.log('sigs:', sigs);
 
         const signatures: { [key: string]: tss.KeysignResponse } = {};
-
-        console.log('messagesToSign:', messagesToSign);
 
         messagesToSign.forEach((msg, idx) => {
           signatures[msg] = sigs[idx];

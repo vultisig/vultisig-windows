@@ -1,5 +1,6 @@
 import { TW } from '@trustwallet/wallet-core';
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import { keccak256 } from 'js-sha3';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
@@ -216,11 +217,13 @@ export class BlockchainServiceEvm
         this.chain,
         this.walletCore
       );
+
       const evmPublicKey = await addressService.getDerivedPubKey(
         vaultHexPublicKey,
         vaultHexChainCode,
         this.walletCore.CoinTypeExt.derivationPath(this.coinType)
       );
+
       const publicKeyData = Buffer.from(evmPublicKey, 'hex');
       const publicKey = this.walletCore.PublicKey.createWithData(
         publicKeyData,
@@ -245,13 +248,10 @@ export class BlockchainServiceEvm
         this.walletCore,
         signatures
       );
+
       const signature = signatureProvider.getSignatureWithRecoveryId(
         preSigningOutput.dataHash
       );
-
-      console.log('signature:', signature);
-      console.log('publicKey:', publicKeyData);
-      console.log('preHash:', preSigningOutput.dataHash);
 
       if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
         console.log('Failed to verify signature');
@@ -259,8 +259,6 @@ export class BlockchainServiceEvm
       }
 
       allSignatures.add(signature);
-      publicKeys.add(publicKeyData);
-
       const compiled =
         this.walletCore.TransactionCompiler.compileWithSignatures(
           this.coinType,
@@ -269,8 +267,6 @@ export class BlockchainServiceEvm
           publicKeys
         );
 
-      console.log('compiled:', compiled);
-
       const output = TW.Ethereum.Proto.SigningOutput.decode(compiled);
       if (output.errorMessage !== '') {
         console.error('output error:', output.errorMessage);
@@ -278,8 +274,8 @@ export class BlockchainServiceEvm
       }
 
       const result = new SignedTransactionResult(
-        this.walletCore.HexCoding.encode(output.encoded).stripHexPrefix(),
-        this.walletCore.HexCoding.encode(output.encoded)
+        this.walletCore.HexCoding.encode(output.encoded),
+        '0x' + keccak256(output.encoded)
       );
       return result;
     } catch (e) {
