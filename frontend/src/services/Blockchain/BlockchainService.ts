@@ -51,11 +51,6 @@ export class BlockchainService implements IBlockchainService {
         this.walletCore
       );
 
-      const blockchainService = BlockchainServiceFactory.createService(
-        this.chain,
-        this.walletCore
-      );
-
       const rpcService = RpcServiceFactory.createRpcService(this.chain);
 
       const tssType = ChainUtils.getTssKeysignType(this.chain);
@@ -76,7 +71,7 @@ export class BlockchainService implements IBlockchainService {
         signatures[msg] = keysignGoLang[idx];
       });
 
-      const signedTx = await blockchainService.getSignedTransaction(
+      const signedTx = await this.getSignedTransaction(
         vault.public_key_ecdsa,
         vault.hex_chain_code,
         keysignPayload,
