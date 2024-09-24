@@ -26,13 +26,30 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
+    const knownErrors = {
+      messages: [
+        'already known',
+        'Transaction is temporarily banned',
+        'nonce too low',
+        'nonce too high',
+        'transaction already exists',
+      ],
+    };
+
     try {
-      const txResponse = await this.provider.send('eth_sendRawTransaction', [
-        encodedTransaction,
-      ]);
+      const txResponse =
+        await this.provider.broadcastTransaction(encodedTransaction);
       return txResponse.hash;
-    } catch (error) {
+    } catch (error: any) {
       console.error('sendTransaction::', error);
+
+      // Check if the error code or message matches any known error
+      if (knownErrors.messages.some(msg => error?.message?.includes(msg))) {
+        // Handle the case where the transaction was already broadcasted
+        return 'Transaction already broadcasted.';
+      }
+
+      // Re-throw the error if it's not one of the expected ones
       throw error;
     }
   }

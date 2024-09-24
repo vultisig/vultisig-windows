@@ -91,15 +91,11 @@ const KeysignView: React.FC<KeysignViewProps> = ({
           serverURL,
           tssType.toString().toLowerCase()
         );
-        console.log('sigs:', sigs);
 
         const signatures: { [key: string]: tss.KeysignResponse } = {};
-
         messagesToSign.forEach((msg, idx) => {
           signatures[msg] = sigs[idx];
         });
-
-        console.log('signatures:', signatures);
 
         const signedTx = await blockchainService.getSignedTransaction(
           vault.public_key_ecdsa,
@@ -108,22 +104,24 @@ const KeysignView: React.FC<KeysignViewProps> = ({
           signatures
         );
 
-        console.log('signedTx:', signedTx);
-
         if (!signedTx) {
           onError("Couldn't sign transaction");
           return;
         }
 
-        const txHash = await rpcService.sendTransaction(
+        let txBroadcastedHash = await rpcService.broadcastTransaction(
           signedTx.rawTransaction
         );
-        console.log('txHash:', txHash);
+        console.log('txBroadcastedHash:', txBroadcastedHash);
         console.log('txHash:', signedTx.transactionHash);
 
-        if (txHash !== signedTx.transactionHash) {
-          onError('Transaction hash mismatch');
-          return;
+        if (txBroadcastedHash !== signedTx.transactionHash) {
+          if (txBroadcastedHash === 'Transaction already broadcasted.') {
+            txBroadcastedHash = signedTx.transactionHash;
+          } else {
+            onError('Transaction hash mismatch');
+            return;
+          }
         }
 
         onDone();
