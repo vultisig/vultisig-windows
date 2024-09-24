@@ -10,6 +10,7 @@ import { ChainUtils } from '../../model/chain';
 import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 import { BlockchainServiceFactory } from '../../services/Blockchain/BlockchainServiceFactory';
+import { RpcServiceFactory } from '../../services/Rpc/RpcServiceFactory';
 
 interface KeysignViewProps {
   vault: storage.Vault;
@@ -77,6 +78,7 @@ const KeysignView: React.FC<KeysignViewProps> = ({
         chain,
         walletCore
       );
+      const rpcService = RpcServiceFactory.createRpcService(chain);
       const tssType = ChainUtils.getTssKeysignType(chain);
       try {
         const sigs = await Keysign(
@@ -107,6 +109,22 @@ const KeysignView: React.FC<KeysignViewProps> = ({
         );
 
         console.log('signedTx:', signedTx);
+
+        if (!signedTx) {
+          onError("Couldn't sign transaction");
+          return;
+        }
+
+        const txHash = await rpcService.sendTransaction(
+          signedTx.rawTransaction
+        );
+        console.log('txHash:', txHash);
+        console.log('txHash:', signedTx.transactionHash);
+
+        if (txHash !== signedTx.transactionHash) {
+          onError('Transaction hash mismatch');
+          return;
+        }
 
         onDone();
       } catch (e) {
