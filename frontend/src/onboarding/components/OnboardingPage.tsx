@@ -1,15 +1,16 @@
 import { ReactNode, useState } from 'react';
-import styled from 'styled-components';
-import { Text, text } from '../../lib/ui/text';
 import { useTranslation } from 'react-i18next';
-import { PageContent } from '../../ui/page/PageContent';
-import { HStack, vStack, VStack } from '../../lib/ui/layout/Stack';
-import { ProductLogo } from '../../ui/logo/ProductLogo';
-import { SafeImage } from '../../lib/ui/images/SafeImage';
-import { ContainImage } from '../../lib/ui/images/ContainImage';
+import styled from 'styled-components';
+
 import { Button } from '../../lib/ui/buttons/Button';
-import { useHasFinishedOnboarding } from '../hooks/useHasFinishedOnboarding';
 import { MultistepProgressIndicator } from '../../lib/ui/flow/MultistepProgressIndicator';
+import { ContainImage } from '../../lib/ui/images/ContainImage';
+import { SafeImage } from '../../lib/ui/images/SafeImage';
+import { HStack, VStack, vStack } from '../../lib/ui/layout/Stack';
+import { Text, text } from '../../lib/ui/text';
+import { ProductLogo } from '../../ui/logo/ProductLogo';
+import { PageContent } from '../../ui/page/PageContent';
+import { useHasFinishedOnboarding } from '../hooks/useHasFinishedOnboarding';
 
 type OnboardingStep = {
   artUrl: string;

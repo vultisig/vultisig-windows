@@ -4,13 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { DiscoveryService } from '../../../../wailsjs/go/mediator/Server';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { Panel } from '../../../lib/ui/panel/Panel';
 import { Text } from '../../../lib/ui/text';
 import { Endpoint } from '../../../services/Endpoint';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
+import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { KeygenPageHeader } from '../shared/KeygenPageHeader';
+import { PendingKeygenMessage } from '../shared/PendingKeygenMessage';
 import { useCurrentJoinKeygenMsg } from '../state/currentJoinKeygenMsg';
 import { CurrentLocalPartyIdProvider } from '../state/currentLocalPartyId';
 import { CurrentServerUrlProvider } from '../state/currentServerUrl';
@@ -46,31 +45,18 @@ export const JoinKeygenPage = () => {
           </CurrentServerUrlProvider>
         ) : (
           <>
-            <PageHeader
-              primaryControls={<PageHeaderBackButton />}
+            <KeygenPageHeader
               title={<PageHeaderTitle>{t('setup')}</PageHeaderTitle>}
             />
-            <VStack flexGrow justifyContent="center" alignItems="center">
+            <PageContent justifyContent="center" alignItems="center">
               {isPending ? (
-                <Panel>
-                  <VStack alignItems="center" gap={8}>
-                    <Text size={24}>
-                      <Spinner />
-                    </Text>
-                    <VStack alignItems="center" gap={20}>
-                      <Text size={14} weight="700">
-                        {t('this_device')} {localPartyId}
-                      </Text>
-                      <Text size={14} weight="700">
-                        {t('discovering_mediator')}
-                      </Text>
-                    </VStack>
-                  </VStack>
-                </Panel>
+                <PendingKeygenMessage>
+                  {t('discovering_mediator')}
+                </PendingKeygenMessage>
               ) : (
                 <Text>{t('failed_to_discover_mediator')}</Text>
               )}
-            </VStack>
+            </PageContent>
           </>
         )}
       </VStack>

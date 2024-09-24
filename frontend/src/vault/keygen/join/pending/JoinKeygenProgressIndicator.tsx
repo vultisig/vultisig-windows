@@ -6,10 +6,9 @@ import RingProgress from '../../../../components/ringProgress/RingProgress';
 import { VStack } from '../../../../lib/ui/layout/Stack';
 import { Text } from '../../../../lib/ui/text';
 
-type KeygenStage = 'init' | 'prepareVault' | 'ecdsa' | 'eddsa';
+type KeygenStage = 'prepareVault' | 'ecdsa' | 'eddsa';
 
 const keygenCompletion: Record<KeygenStage, number> = {
-  init: 0,
   prepareVault: 25,
   ecdsa: 50,
   eddsa: 70,
@@ -18,17 +17,15 @@ const keygenCompletion: Record<KeygenStage, number> = {
 export const JoinKeygenProgressIndicator = () => {
   const { t } = useTranslation();
 
-  const [stage, setStage] = useState<KeygenStage>('init');
+  const [stage, setStage] = useState<KeygenStage>('prepareVault');
 
   const keygenStageText: Record<KeygenStage, string | null> = {
-    init: null,
     prepareVault: t('prepareVault'),
     ecdsa: t('generating_ecdsa_key'),
     eddsa: t('generating_eddsa_key'),
   };
 
   useEffect(() => {
-    EventsOn('PrepareVault', () => setStage('prepareVault'));
     EventsOn('ECDSA', () => setStage('ecdsa'));
     EventsOn('EdDSA', () => setStage('eddsa'));
   }, []);

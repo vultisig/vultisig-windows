@@ -1,134 +1,40 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { EventsOn } from '../../../../../wailsjs/runtime/runtime';
+import { VStack } from '../../../../lib/ui/layout/Stack';
+import { PageContent } from '../../../../ui/page/PageContent';
+import { KeygenNetworkReminder } from '../../shared/KeygenNetworkReminder';
+import { PendingKeygenMessage } from '../../shared/PendingKeygenMessage';
+import { JoinKeygenEducation } from './JoinKeygenEducation';
 import { JoinKeygenProgressIndicator } from './JoinKeygenProgressIndicator';
 
 export const JoinKeygenPendingState = () => {
   const { t } = useTranslation();
-  const [contentIndex, setContentIndex] = useState<number>(0);
-  const [currentStatus] = useState<string>('');
 
-  const contents = [
-    {
-      title: t('join_keygen_slider1_title'),
-      note: (
-        <>
-          {t('join_keygen_slider1_note1')}{' '}
-          <span className="text-secondary">
-            {t('join_keygen_slider1_note2')}
-          </span>
-          . {t('join_keygen_slider1_note3')}
-        </>
-      ),
-      slider: '/assets/images/keygenSlider1.svg',
-    },
-    {
-      title: t('join_keygen_slider2_title'),
-      note: (
-        <>
-          <span className="text-secondary">
-            {t('join_keygen_slider2_note1')}
-          </span>
-          ! {t('join_keygen_slider2_note2')}
-        </>
-      ),
-      slider: '/assets/images/keygenSlider2.svg',
-    },
-    {
-      title: t('join_keygen_slider3_title'),
-      note: (
-        <>
-          {t('join_keygen_slider3_note1')}{' '}
-          <span className="text-secondary">
-            {t('join_keygen_slider3_note2')}
-          </span>
-          . {t('join_keygen_slider3_note3')}
-        </>
-      ),
-      slider: '/assets/images/keygenSlider3.svg',
-    },
-    {
-      title: t('join_keygen_slider4_title'),
-      note: (
-        <>
-          {t('join_keygen_slider4_note1')}{' '}
-          <span className="text-secondary">
-            {t('join_keygen_slider4_note2')}
-          </span>{' '}
-          {t('join_keygen_slider4_note3')}
-        </>
-      ),
-      slider: '/assets/images/keygenSlider4.svg',
-    },
-    {
-      title: t('join_keygen_slider5_title'),
-      note: (
-        <>
-          {t('join_keygen_slider5_note1')}{' '}
-          <span className="text-secondary">
-            {t('join_keygen_slider5_note2')}
-          </span>{' '}
-          {t('join_keygen_slider5_note3')}
-        </>
-      ),
-      slider: '/assets/images/keygenSlider5.svg',
-    },
-    {
-      title: t('join_keygen_slider6_title'),
-      note: (
-        <>
-          {t('join_keygen_slider6_note1')}{' '}
-          <span className="text-secondary">
-            {t('join_keygen_slider6_note2')}
-          </span>
-          .
-        </>
-      ),
-      slider: '/assets/images/keygenSlider6.svg',
-    },
-    {
-      title: t('join_keygen_slider7_title'),
-      note: (
-        <>
-          {t('join_keygen_slider7_note1')}{' '}
-          <span className="text-secondary">
-            {t('join_keygen_slider7_note2')}
-          </span>
-          {', '}
-          {t('join_keygen_slider7_note3')}
-        </>
-      ),
-      slider: '/assets/images/keygenSlider7.svg',
-    },
-  ];
-
-  const runSliders = useCallback(() => {
-    if (contentIndex < contents.length - 1) {
-      setContentIndex(contentIndex + 1);
-    } else {
-      setContentIndex(0);
-    }
-  }, [contentIndex, contents.length]);
+  const [hasKeygenStarted, setHasKeygenStarted] = useState<boolean>(false);
 
   useEffect(() => {
-    setTimeout(runSliders, 3000);
-  }, [runSliders]);
+    EventsOn('PrepareVault', () => setHasKeygenStarted(true));
+  }, []);
+
+  if (hasKeygenStarted) {
+    return (
+      <PageContent>
+        <VStack flexGrow alignItems="center" justifyContent="center" gap={48}>
+          <JoinKeygenProgressIndicator />
+          <JoinKeygenEducation />
+        </VStack>
+        <KeygenNetworkReminder />
+      </PageContent>
+    );
+  }
 
   return (
-    <div className="flex flex-col items-center justify-center pt-20 text-white text-sm">
-      <JoinKeygenProgressIndicator />
-      <p className="mt-5">{currentStatus}</p>
-      <p className="mt-10 font-bold text-xl">{contents[contentIndex].title}</p>
-      <p className="mt-5 w-80 h-28 text-center">
-        {contents[contentIndex].note}
-      </p>
-      <img src={contents[contentIndex].slider} alt="slider" className="mb-32" />
-      <img
-        src="/assets/icons/wifi.svg"
-        alt="wifi"
-        className="mx-auto mb-4 w-8"
-      />
-      <p>{t('devices_on_same_wifi')}</p>
-    </div>
+    <PageContent alignItems="center" justifyContent="center">
+      <PendingKeygenMessage>
+        {t('waiting_for_keygen_start')}
+      </PendingKeygenMessage>
+    </PageContent>
   );
 };
