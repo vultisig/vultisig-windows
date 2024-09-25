@@ -18,7 +18,7 @@ export const useJoinKeygenMutation = () => {
 
   const keygenMsg = useCurrentJoinKeygenMsg();
 
-  const { keygenType } = useAppPathParams<'joinKeygen'>();
+  const [{ keygenType }] = useAppPathParams<'joinKeygen'>();
 
   const serverUrl = useCurrentServerUrl();
 

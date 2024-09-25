@@ -31,7 +31,7 @@ const JoinKeysignFlow: React.FC = () => {
   const serviceName = useRef<string>('');
   const hexEncryptionKey = useRef<string>('');
   const currentVault = useRef<storage.Vault>(undefined as any);
-  const { publicKeyECDSA, sessionID } = useAppPathParams<'joinKeysign'>();
+  const [{ publicKeyECDSA, sessionID }] = useAppPathParams<'joinKeysign'>();
   const [keysignErr, setKeysignErr] = useState<string>('');
   const walletCore = useWalletCore();
   const [messagesToSign, setMessagesToSign] = useState<string[]>([]);
