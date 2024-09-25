@@ -1,11 +1,11 @@
-import { AddressBookEntry } from '../../../../../lib/hooks/useAddressBook';
+import { AddressBookItem } from '../../../../../lib/types/address-book';
 
 const AddressesListView = ({
-  addresses,
+  addressBookItems,
 }: {
-  addresses: AddressBookEntry[];
+  addressBookItems: AddressBookItem[];
 }) => {
-  return <div>{addresses[0].address}</div>;
+  return <div>{addressBookItems[0].address}</div>;
 };
 
 export default AddressesListView;

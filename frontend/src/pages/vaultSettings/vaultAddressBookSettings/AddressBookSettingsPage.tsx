@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAddressBook } from '../../../lib/hooks/useAddressBook';
 import { VStack } from '../../../lib/ui/layout/Stack';
+import { Text } from '../../../lib/ui/text';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
-import { useAssertCurrentVaultCoins } from '../../../vault/state/useCurrentVault';
+import { useAddressBookItemsQuery } from '../../../vault/queries/useAddressBookItemsQuery';
 import AddAddressView from './components/addAddressForm/AddAddressForm';
 import AddressesListView from './components/addressesListView/AddressesListView';
 import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesView';
@@ -15,27 +15,24 @@ import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesVi
 const AddressBookSettingsPage = () => {
   const [isAddAddressViewOpen, setIsAddAddressViewOpen] = useState(false);
   const { t } = useTranslation();
-  const { addresses, addAddress } = useAddressBook();
-  const coins = useAssertCurrentVaultCoins();
+  const { data: addressBookItems, isFetching } = useAddressBookItemsQuery();
 
   let pageContent = null;
 
-  if (isAddAddressViewOpen) {
+  if (isFetching) {
+    return <Text>Loading...</Text>;
+  } else if (isAddAddressViewOpen) {
     pageContent = (
-      <AddAddressView
-        onClose={() => setIsAddAddressViewOpen(false)}
-        onAddAddress={addAddress}
-        availableCoins={coins}
-      />
+      <AddAddressView onClose={() => setIsAddAddressViewOpen(false)} />
     );
-  } else if (addresses.length === 0) {
+  } else if (addressBookItems.length === 0) {
     pageContent = (
       <EmptyAddressesView
         onOpenAddAddressView={() => setIsAddAddressViewOpen(true)}
       />
     );
-  } else if (addresses.length > 0) {
-    pageContent = <AddressesListView addresses={addresses} />;
+  } else if (addressBookItems.length > 0) {
+    pageContent = <AddressesListView addressBookItems={addressBookItems} />;
   }
 
   return (

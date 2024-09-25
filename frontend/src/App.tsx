@@ -13,7 +13,7 @@ import { getQueryClient } from './query/queryClient';
 import { router } from './router';
 import { VaultsDependant } from './vault/components/VaultsDependant';
 
-const queryClient = getQueryClient();
+export const queryClient = getQueryClient();
 
 const App = () => {
   return (
