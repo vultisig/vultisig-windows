@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { StepTransition } from '../../lib/ui/base/StepTransition';
@@ -6,14 +7,18 @@ import { SetupVaultView } from '../../pages/setupVault/SetupVaultView';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
+import { useGenerateVaultName } from './hooks/useGenerateVaultName';
 import { SetupVaultNameStep } from './SetupVaultNameStep';
 import { VaultNameProvider } from './state/vaultName';
 
 export const SetupVaultPage = () => {
   const { t } = useTranslation();
 
+  const generateVaultName = useGenerateVaultName();
+  const initialVaultName = useMemo(generateVaultName, [generateVaultName]);
+
   return (
-    <VaultNameProvider initialValue={t('main_vault')}>
+    <VaultNameProvider initialValue={initialVaultName}>
       <VStack flexGrow>
         <StepTransition
           from={({ onForward }) => (
