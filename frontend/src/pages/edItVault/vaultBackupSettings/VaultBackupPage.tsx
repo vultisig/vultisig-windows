@@ -10,6 +10,7 @@ import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
 import InfoGradientIcon from '../../../lib/ui/icons/InfoGradientIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
+import { makeAppPath } from '../../../navigation';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -72,7 +73,7 @@ const VaultBackupPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate(-1);
+      navigate(makeAppPath('vaultList'));
     }
   }, [isSuccess, navigate]);
 
