@@ -1,25 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { storage } from '../../../wailsjs/go/models';
 import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
 import KeygenDone from '../../components/keygen/KeygenDone';
-import KeygenNameVault from '../../components/keygen/KeygenNameVault';
 import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
 import KeygenVerify from '../../components/keygen/KeygenVerify';
 import KeygenView from '../../components/keygen/KeygenView';
 import NavBar from '../../components/navbar/NavBar';
+import { ComponentWithBackActionProps } from '../../lib/ui/props';
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 import { Endpoint } from '../../services/Endpoint';
 import { startSession } from '../../services/Keygen/Keygen';
 import { KeygenType } from '../../vault/keygen/KeygenType';
 import { KeygenFailedState } from '../../vault/keygen/shared/KeygenFailedState';
 import { generateLocalPartyId } from '../../vault/keygen/utils/generateLocalPartyId';
+import { useVaultName } from '../../vault/setup/state/vaultName';
 
-const SetupVaultView: React.FC = () => {
+export const SetupVaultView = ({ onBack }: ComponentWithBackActionProps) => {
   const { t } = useTranslation();
   const [currentScreen, setCurrentScreen] = useState<number>(0);
-  const [vaultName, setVaultName] = useState<string>(t('main_vault'));
   const [sessionID, setSessionID] = useState<string>();
   const [devices, setDevices] = useState<string[]>([]);
   const [localPartyId, setLocalPartyId] = useState<string>('');
@@ -30,6 +30,7 @@ const SetupVaultView: React.FC = () => {
   const [serverURL, setServerURL] = useState<string>('http://localhost:18080');
   const vault = useRef<storage.Vault>(new storage.Vault());
   const keygenType = useRef<KeygenType>(KeygenType.Keygen);
+  const [vaultName] = useVaultName();
 
   useEffect(() => {
     setKeygenError('');
@@ -46,10 +47,10 @@ const SetupVaultView: React.FC = () => {
 
   const prevScreen = () => {
     setCurrentScreen(prev => {
-      if (prev > 3) {
-        return 2;
+      if (prev > 2) {
+        return 1;
       } else {
-        return prev > 0 ? prev - 1 : prev;
+        return prev - 1;
       }
     });
   };
@@ -74,36 +75,23 @@ const SetupVaultView: React.FC = () => {
     vault.current.name = vaultName;
     vault.current.signers = devices;
     vault.current.hex_chain_code = hexChainCode;
-    setCurrentScreen(2);
+    setCurrentScreen(1);
   };
 
   const keygenStart = async () => {
     await startSession(isRelay, sessionID!, devices).then(() => {
-      setCurrentScreen(3);
+      setCurrentScreen(2);
     });
   };
 
   // screens
-  // 0 - vault name setup
-  // 1 - keygen peer discovery screens
-  // 2 - keygen verify
-  // 3 - keygen view
-  // 4 - keygen done
-  // 5 - keygen error
-  // 6 - backup view
+  // 0 - keygen peer discovery screens
+  // 1 - keygen verify
+  // 2 - keygen view
+  // 3 - keygen done
+  // 4 - keygen error
+  // 5 - backup view
   const screens = [
-    {
-      title: t('name_your_vault'),
-      content: (
-        <KeygenNameVault
-          onContinue={vaultName => {
-            setVaultName(vaultName);
-
-            setCurrentScreen(1);
-          }}
-        />
-      ),
-    },
     {
       title: `${t('keygen_for')} ${thresholdType} ${t('vault')}`,
       content: (
@@ -135,11 +123,11 @@ const SetupVaultView: React.FC = () => {
           keygenType={keygenType.current}
           serverURL={serverURL}
           onDone={() => {
-            setCurrentScreen(4);
+            setCurrentScreen(3);
           }}
           onError={(err: string) => {
             setKeygenError(err);
-            setCurrentScreen(5);
+            setCurrentScreen(4);
           }}
         />
       ),
@@ -149,7 +137,7 @@ const SetupVaultView: React.FC = () => {
       content: (
         <KeygenDone
           onNext={() => {
-            setCurrentScreen(6);
+            setCurrentScreen(5);
           }}
         />
       ),
@@ -159,7 +147,7 @@ const SetupVaultView: React.FC = () => {
       content: (
         <KeygenFailedState
           message={keygenError}
-          onTryAgain={() => setCurrentScreen(2)}
+          onTryAgain={() => setCurrentScreen(1)}
         />
       ),
     },
@@ -179,12 +167,10 @@ const SetupVaultView: React.FC = () => {
               ? 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
               : undefined
           }
-          handleBack={currentScreen !== 0 ? prevScreen : undefined}
+          handleBack={currentScreen == 0 ? onBack : prevScreen}
         />
       )}
       {screens[currentScreen].content}
     </>
   );
 };
-
-export default SetupVaultView;

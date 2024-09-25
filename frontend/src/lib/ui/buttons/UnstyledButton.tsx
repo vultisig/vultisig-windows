@@ -14,3 +14,7 @@ export const UnstyledButton = styled.button`
   font-family: inherit;
   line-height: inherit;
 `;
+
+UnstyledButton.defaultProps = {
+  type: 'button',
+};

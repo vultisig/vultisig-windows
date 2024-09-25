@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 
 import { match } from '../../utils/match';
+import { MergeRefs } from '../base/MergeRefs';
 import { centerContent } from '../css/centerContent';
 import { horizontalPadding } from '../css/horizontalPadding';
 import { round } from '../css/round';
@@ -9,6 +10,7 @@ import { CenterAbsolutely } from '../layout/CenterAbsolutely';
 import { Spinner } from '../loaders/Spinner';
 import { getHoverVariant } from '../theme/getHoverVariant';
 import { getColor } from '../theme/getters';
+import { Tooltip } from '../tooltips/Tooltip';
 import { UnstyledButton } from './UnstyledButton';
 
 export const buttonSizes = ['xs', 's', 'm', 'l', 'xl'] as const;
@@ -162,6 +164,26 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       onClick: isDisabled || isLoading ? undefined : onClick,
       ...rest,
     };
+
+    if (typeof isDisabled === 'string') {
+      return (
+        <Tooltip
+          content={isDisabled}
+          renderOpener={({ ref: tooltipRef, ...rest }) => {
+            return (
+              <MergeRefs
+                refs={[ref, tooltipRef]}
+                render={ref => (
+                  <Container ref={ref} {...rest} {...containerProps}>
+                    {content}
+                  </Container>
+                )}
+              />
+            );
+          }}
+        />
+      );
+    }
 
     return (
       <Container ref={ref} {...containerProps}>
