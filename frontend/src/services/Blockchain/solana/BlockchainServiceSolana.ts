@@ -24,8 +24,6 @@ import { Keysign } from '../../../../wailsjs/go/tss/TssService';
 import { ChainUtils } from '../../../model/chain';
 import { CoinServiceFactory } from '../../Coin/CoinServiceFactory';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
-import { Transaction } from '@solana/web3.js';
-import bs58 from 'bs58';
 
 export class BlockchainServiceSolana
   extends BlockchainService
@@ -343,34 +341,11 @@ export class BlockchainServiceSolana
 
     const result = new SignedTransactionResult(
       output.encoded,
-      this.getHashFromRawTransaction(output.encoded)
+      output.encoded // TODO: Change this to the actual transaction hash
     );
 
     console.log('Signed transaction:', result);
 
     return result;
-  }
-
-  getHashFromRawTransaction(tx: string): string {
-    return this.getHashFromRawTransaction(tx);
-  }
-
-  getTransactionHashFromRawTx(rawTx: string): string {
-    // Decode the base64 string to bytes
-    const rawTxBytes = Buffer.from(rawTx, 'base64');
-
-    // Parse the transaction using Solana's web3.js Transaction class
-    const transaction = Transaction.from(rawTxBytes);
-
-    // Get the transaction's signature
-    const transactionHash = transaction.signature
-      ? bs58.encode(transaction.signature)
-      : undefined;
-
-    if (!transactionHash) {
-      throw new Error('Transaction signature not found');
-    }
-
-    return transactionHash;
   }
 }
