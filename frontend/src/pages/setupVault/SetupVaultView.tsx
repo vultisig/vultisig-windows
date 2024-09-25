@@ -6,10 +6,10 @@ import KeygenBackupNow from '../../components/keygen/KeygenBackupNow';
 import KeygenDone from '../../components/keygen/KeygenDone';
 import KeygenNameVault from '../../components/keygen/KeygenNameVault';
 import KeygenPeerDiscovery from '../../components/keygen/KeygenPeerDiscovery';
-import KeygenTypeSelector from '../../components/keygen/KeygenTypeSelector';
 import KeygenVerify from '../../components/keygen/KeygenVerify';
 import KeygenView from '../../components/keygen/KeygenView';
 import NavBar from '../../components/navbar/NavBar';
+import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 import { Endpoint } from '../../services/Endpoint';
 import { startSession } from '../../services/Keygen/Keygen';
 import { KeygenType } from '../../vault/keygen/KeygenType';
@@ -24,7 +24,7 @@ const SetupVaultView: React.FC = () => {
   const [devices, setDevices] = useState<string[]>([]);
   const [localPartyId, setLocalPartyId] = useState<string>('');
   const [keygenError, setKeygenError] = useState<string>('');
-  const [vaultType, setVaultType] = useState<string>('2/2');
+  const [{ thresholdType }] = useAppPathParams<'setupVaultInitiatingDevice'>();
   const [isRelay, setIsRelay] = useState(true);
   const [hexEncryptionKey, setHexEncryptionKey] = useState<string>('');
   const [serverURL, setServerURL] = useState<string>('http://localhost:18080');
@@ -46,8 +46,8 @@ const SetupVaultView: React.FC = () => {
 
   const prevScreen = () => {
     setCurrentScreen(prev => {
-      if (prev > 4) {
-        return 3;
+      if (prev > 3) {
+        return 2;
       } else {
         return prev > 0 ? prev - 1 : prev;
       }
@@ -74,34 +74,24 @@ const SetupVaultView: React.FC = () => {
     vault.current.name = vaultName;
     vault.current.signers = devices;
     vault.current.hex_chain_code = hexChainCode;
-    setCurrentScreen(3);
+    setCurrentScreen(2);
   };
 
   const keygenStart = async () => {
     await startSession(isRelay, sessionID!, devices).then(() => {
-      setCurrentScreen(4);
+      setCurrentScreen(3);
     });
   };
 
   // screens
-  // 0 - vault setup view
-  // 1 - vault name setup
-  // 2 - keygen peer discovery screens
-  // 3 - keygen verify
-  // 4 - keygen view
-  // 5 - keygen done
-  // 6 - keygen error
-  // 7 - backup view
+  // 0 - vault name setup
+  // 1 - keygen peer discovery screens
+  // 2 - keygen verify
+  // 3 - keygen view
+  // 4 - keygen done
+  // 5 - keygen error
+  // 6 - backup view
   const screens = [
-    {
-      title: t('setup'),
-      content: (
-        <KeygenTypeSelector
-          setVaultType={setVaultType}
-          onContinue={() => setCurrentScreen(1)}
-        />
-      ),
-    },
     {
       title: t('name_your_vault'),
       content: (
@@ -109,17 +99,17 @@ const SetupVaultView: React.FC = () => {
           onContinue={vaultName => {
             setVaultName(vaultName);
 
-            setCurrentScreen(2);
+            setCurrentScreen(1);
           }}
         />
       ),
     },
     {
-      title: `${t('keygen_for')} ${vaultType} ${t('vault')}`,
+      title: `${t('keygen_for')} ${thresholdType} ${t('vault')}`,
       content: (
         <KeygenPeerDiscovery
           vaultName={vaultName}
-          vaultType={vaultType}
+          vaultType={thresholdType}
           localPartyID={localPartyId}
           onContinue={onKeygenPeerDiscoveryContinue}
         />
@@ -145,11 +135,11 @@ const SetupVaultView: React.FC = () => {
           keygenType={keygenType.current}
           serverURL={serverURL}
           onDone={() => {
-            setCurrentScreen(5);
+            setCurrentScreen(4);
           }}
           onError={(err: string) => {
             setKeygenError(err);
-            setCurrentScreen(6);
+            setCurrentScreen(5);
           }}
         />
       ),
@@ -159,7 +149,7 @@ const SetupVaultView: React.FC = () => {
       content: (
         <KeygenDone
           onNext={() => {
-            setCurrentScreen(7);
+            setCurrentScreen(6);
           }}
         />
       ),
@@ -169,7 +159,7 @@ const SetupVaultView: React.FC = () => {
       content: (
         <KeygenFailedState
           message={keygenError}
-          onTryAgain={() => setCurrentScreen(3)}
+          onTryAgain={() => setCurrentScreen(2)}
         />
       ),
     },

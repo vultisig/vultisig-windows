@@ -12,7 +12,7 @@ export const UploadQrPageHeader = () => {
 
   const { t } = useTranslation();
 
-  const { title = t('keysign') } = useAppPathParams<'uploadQr'>();
+  const [{ title = t('keysign') }] = useAppPathParams<'uploadQr'>();
 
   return (
     <PageHeader

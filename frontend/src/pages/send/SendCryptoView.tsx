@@ -15,7 +15,7 @@ import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 
 const SendCryptoView: React.FC = () => {
   const walletCore = useWalletCore();
-  const { chain } = useAppPathParams<'vaultItemSend'>();
+  const [{ chain }] = useAppPathParams<'vaultItemSend'>();
   const location = useLocation();
 
   const selectedChain = chain || 'THORChain';

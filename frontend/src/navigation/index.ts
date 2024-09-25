@@ -1,10 +1,13 @@
 import { addQueryParams } from '../lib/utils/query/addQueryParams';
+import { Chain } from '../model/chain';
+import { KeygenThresholdType } from '../vault/keygen/KeygenThresholdType';
 import { KeygenType } from '../vault/keygen/KeygenType';
 
 export const appPaths = {
   addVault: '/vault/add',
   setupVaultOptions: '/vault/setup/option',
   setupVaultInitiatingDevice: '/vault/setup/initiating-device',
+  setupVaultKeygenThreshold: '/vault/setup/keygen-options',
   importVault: '/vault/import',
   shareVault: '/vault/share',
   keysign: '/vault/keysign',
@@ -46,10 +49,12 @@ export type AppPathParams = {
   joinKeysign: { publicKeyECDSA: string; sessionID: string };
   joinKeygen: { keygenType: KeygenType; keygenMsg: string };
   uploadQr: { title?: string };
-  manageVaultChainCoins: { chain: string };
-  vaultChainDetail: { chain: string };
-  vaultChainCoinDetail: { chain: string; coin: string };
-  vaultItemSend: { chain: string };
+  manageVaultChainCoins: { chain: Chain };
+  vaultChainDetail: { chain: Chain };
+  vaultChainCoinDetail: { chain: Chain; coin: string };
+  vaultItemSend: { chain: Chain };
+  setupVaultKeygenThreshold: { thresholdType: KeygenThresholdType };
+  setupVaultInitiatingDevice: { thresholdType: KeygenThresholdType };
 };
 
 export type AppPathsWithParams = keyof AppPathParams;

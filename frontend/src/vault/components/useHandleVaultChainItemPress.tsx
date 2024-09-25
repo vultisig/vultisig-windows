@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
+import { Chain } from '../../model/chain';
 import { makeAppPath } from '../../navigation';
 
 type Input = {
@@ -32,7 +33,7 @@ export const useHandleVaultChainItemPress = ({ chainId, address }: Input) => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [pressedAt, copiedAt, address]);
+  }, [address, copiedAt, copyAddress, pressedAt]);
 
   return {
     onPointerDown: () => {
@@ -40,7 +41,7 @@ export const useHandleVaultChainItemPress = ({ chainId, address }: Input) => {
     },
     onPointerUp: () => {
       if (!copiedAt) {
-        navigate(makeAppPath('vaultChainDetail', { chain: chainId }));
+        navigate(makeAppPath('vaultChainDetail', { chain: chainId as Chain }));
       }
 
       setPressedAt(null);

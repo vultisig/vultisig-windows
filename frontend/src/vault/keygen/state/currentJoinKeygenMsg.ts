@@ -4,7 +4,7 @@ import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 import { keygenMsgRecord } from '../KeygenType';
 
 export const useCurrentJoinKeygenMsg = () => {
-  const { keygenType, keygenMsg: rawKeygenMsg } =
+  const [{ keygenType, keygenMsg: rawKeygenMsg }] =
     useAppPathParams<'joinKeygen'>();
 
   return useMemo(() => {
