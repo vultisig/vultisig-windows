@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import { useBoolean } from '../hooks/useBoolean';
 import {
   ComponentWithBackActionProps,
@@ -7,12 +5,23 @@ import {
 } from '../props';
 
 type StepTransitionProps = {
-  from: (props: ComponentWithForwardActionProps) => ReactNode;
-  to: (props: ComponentWithBackActionProps) => ReactNode;
+  from: React.ComponentType<ComponentWithForwardActionProps>;
+  to: React.ComponentType<ComponentWithBackActionProps>;
 };
 
-export const StepTransition = ({ from, to }: StepTransitionProps) => {
+export const StepTransition = ({
+  from: FromComponent,
+  to: ToComponent,
+}: StepTransitionProps) => {
   const [value, { set: onForward, unset: onBack }] = useBoolean(false);
 
-  return <>{value ? from({ onForward }) : to({ onBack })}</>;
+  return (
+    <>
+      {value ? (
+        <ToComponent onBack={onBack} />
+      ) : (
+        <FromComponent onForward={onForward} />
+      )}
+    </>
+  );
 };

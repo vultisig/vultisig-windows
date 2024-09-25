@@ -1,6 +1,16 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '../../lib/ui/buttons/Button';
+import { getFormProps } from '../../lib/ui/form/utils/getFormProps';
+import { TextInput } from '../../lib/ui/inputs/TextInput';
+import { VStack } from '../../lib/ui/layout/Stack';
 import { ComponentWithForwardActionProps } from '../../lib/ui/props';
+import { PageContent } from '../../ui/page/PageContent';
+import { PageHeader } from '../../ui/page/PageHeader';
+import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
+import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
+import { useVaultNames } from '../hooks/useVaultNames';
 import { useVaultName } from './state/vaultName';
 
 export const SetupVaultNameStep = ({
@@ -9,33 +19,44 @@ export const SetupVaultNameStep = ({
   const { t } = useTranslation();
   const [value, setValue] = useVaultName();
 
+  const names = useVaultNames();
+
+  const isDisabled = useMemo(() => {
+    if (!value) {
+      return t('vault_name_required');
+    }
+
+    if (names.includes(value)) {
+      return t('vault_name_already_exists');
+    }
+  }, [names, t, value]);
+
   return (
-    <div className="text-white flex flex-col items-center justify-center mt-60">
-      <div>
-        <label htmlFor="input" className="block text-md mb-2">
-          {t('vault_name')}
-        </label>
-        <input
-          id="input"
-          type="text"
-          value={value}
-          onChange={e => {
-            setValue(e.target.value);
-          }}
-          className="font-bold bg-white/[.10] rounded-lg w-80 py-2 px-3"
-        />
-      </div>
-      <button
-        className={`text-lg rounded-full w-80 font-bold py-2 mt-16 ${
-          value
-            ? 'text-btn-primary bg-secondary'
-            : 'text-btn-secondary bg-white/[.10]'
-        }`}
-        disabled={value === ''}
-        onClick={onForward}
+    <>
+      <PageHeader
+        title={<PageHeaderTitle>{t('name_your_vault')}</PageHeaderTitle>}
+        primaryControls={<PageHeaderBackButton />}
+      />
+      <PageContent
+        as="form"
+        {...getFormProps({
+          isDisabled,
+          onSubmit: onForward,
+        })}
       >
-        {t('continue')}
-      </button>
-    </div>
+        <VStack flexGrow>
+          <TextInput
+            label={t('vault_name')}
+            placeholder={t('enter_vault_name')}
+            value={value}
+            onValueChange={setValue}
+            autoFocus
+          />
+        </VStack>
+        <Button type="submit" isDisabled={isDisabled}>
+          {t('continue')}
+        </Button>
+      </PageContent>
+    </>
   );
 };

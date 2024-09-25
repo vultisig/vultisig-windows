@@ -45,3 +45,7 @@ export type ComponentWithBackActionProps = {
 export type ComponentWithForwardActionProps = {
   onForward: () => void;
 };
+
+export type LabeledComponentProps = {
+  label: ReactNode;
+};

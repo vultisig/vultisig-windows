@@ -1,18 +1,13 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { withoutDuplicates } from '../../../lib/utils/array/withoutDuplicates';
-import { withoutUndefined } from '../../../lib/utils/array/withoutUndefined';
-import { useVaults } from '../../queries/useVaultsQuery';
+import { withoutUndefined } from '../../lib/utils/array/withoutUndefined';
+import { useVaultNames } from './useVaultNames';
 
 export const useGenerateVaultName = () => {
-  const vaults = useVaults();
   const { t } = useTranslation();
 
-  const vaultNames = useMemo(
-    () => withoutDuplicates(vaults.map(v => v.name)),
-    [vaults]
-  );
+  const vaultNames = useVaultNames();
 
   return useCallback(() => {
     const vaultNamePattern = new RegExp(`^${t('vault')} #(\\d+)$`);
