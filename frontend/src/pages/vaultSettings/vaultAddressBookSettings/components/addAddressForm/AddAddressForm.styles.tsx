@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import { StylesConfig } from 'react-select';
+import { MenuProps, StylesConfig } from 'react-select';
 import styled from 'styled-components';
 
 import { Input } from '../../../../../lib/ui/inputs/text-input/Input';
@@ -30,14 +30,28 @@ export const FormField = styled(Panel)`
   gap: 12px;
 `;
 
+export const FormFieldLabel = styled.label`
+  font-weight: 500;
+  color: ${getColor('contrast')};
+  display: inline-block;
+  margin-bottom: 6px;
+`;
+
 export const FormInput = styled(Input)`
   color: ${getColor('contrast')};
   background-color: ${getColor('foreground')};
+
+  &::placeholder {
+    font-size: 13px;
+    color: ${getColor('textShy')};
+  }
 `;
 
 export type CoinOption = {
   value: string;
   label: string;
+  logo: string;
+  isLastOption: boolean;
 };
 
 export const customSelectStyles: StylesConfig<CoinOption, false> = {
@@ -60,10 +74,10 @@ export const customSelectStyles: StylesConfig<CoinOption, false> = {
     marginTop: '5px',
     boxShadow: 'none',
   }),
-  option: base => ({
+  option: (base, { data }) => ({
     ...base,
     backgroundColor: 'none',
-    borderBottom: '2px solid #ffffff47',
+    borderBottom: data.isLastOption ? 'none' : '2px solid #ffffff47',
     color: 'white',
     padding: '10px',
     cursor: 'pointer',
@@ -92,14 +106,15 @@ export const customSelectStyles: StylesConfig<CoinOption, false> = {
   }),
 };
 
-export const customSelectMenu = ({ children, ...props }: any) => {
+export const customSelectMenu = (props: MenuProps<CoinOption, false>) => {
+  const { children, innerProps } = props;
   return (
     <motion.div
+      {...(innerProps as any)}
       initial={{ opacity: 0, height: 0 }}
       animate={{ opacity: 1, height: 'auto' }}
       exit={{ opacity: 0, height: 0 }}
-      transition={{ duration: 0.3 }}
-      {...props}
+      transition={{ duration: 0.5 }}
     >
       {children}
     </motion.div>

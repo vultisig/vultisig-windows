@@ -17,6 +17,7 @@ import {
   customSelectStyles,
   Form,
   FormField,
+  FormFieldLabel,
   FormInput,
 } from './AddAddressForm.styles';
 import { AddressFormValues, addressSchema } from './schemas/addAddressSchema';
@@ -28,6 +29,14 @@ type AddAddressFormProps = {
 const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   const coins = useAssertCurrentVaultCoins();
   const { t } = useTranslation();
+
+  const coinOptions = coins.map((coin, index) => ({
+    value: coin.id,
+    label: coin.ticker,
+    logo: coin.logo,
+    isLastOption: index === coins.length - 1,
+  }));
+
   const {
     register,
     handleSubmit,
@@ -36,6 +45,11 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   } = useForm<AddressFormValues>({
     resolver: zodResolver(addressSchema),
     mode: 'onBlur',
+    defaultValues: {
+      coinId: coinOptions[0].value,
+      title: '',
+      address: '',
+    },
   });
 
   const {
@@ -69,11 +83,6 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     }
   }, [isSuccess, onClose]);
 
-  const coinOptions = coins.map(coin => ({
-    value: coin.id,
-    label: coin.ticker,
-  }));
-
   return (
     <Container>
       <Form onSubmit={handleSubmit(handleAddAddress)}>
@@ -83,39 +92,58 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
             control={control}
             render={({ field }) => (
               <Select<CoinOption>
-                {...field}
-                value={coinOptions.find(option => option.value === field.value)}
+                value={
+                  coinOptions.find(option => option.value === field.value) ||
+                  null
+                }
                 defaultValue={coinOptions[0]}
+                onChange={selectedOption => {
+                  field.onChange(selectedOption?.value);
+                }}
+                onBlur={field.onBlur}
                 options={coinOptions}
                 components={{ Menu: customSelectMenu }}
                 styles={customSelectStyles}
                 placeholder="Select cryptocurrency"
-                onChange={selectedOption =>
-                  field.onChange(selectedOption?.value)
-                }
               />
             )}
           />
         </FormField>
 
-        <FormField>
-          <label htmlFor="title">{t('address_title')}</label>
-          <FormInput
-            id="title"
-            {...register('title')}
-            placeholder={t('enter_title')}
-          />
-          {errors.title && <p>{errors.title.message}</p>}
-        </FormField>
-        <FormField>
-          <label htmlFor="address">{t('address')}</label>
-          <FormInput
-            id="address"
-            {...register('address')}
-            placeholder={t('enter_address')}
-          />
-          {errors.address && <p>{errors.address.message}</p>}
-        </FormField>
+        <div>
+          <FormFieldLabel htmlFor="title">
+            {t('vault_settings_address_book_address_title_field')}
+          </FormFieldLabel>
+          <FormField>
+            <FormInput
+              id="title"
+              {...register('title')}
+              placeholder={t('vault_settings_address_book_address_placeholder')}
+            />
+          </FormField>
+          {errors.title && (
+            <Text color="danger" size={12}>
+              {errors.title.message}
+            </Text>
+          )}
+        </div>
+        <div>
+          <FormFieldLabel htmlFor="address">
+            {t('vault_settings_address_book_address_address_field')}
+          </FormFieldLabel>
+          <FormField>
+            <FormInput
+              id="address"
+              {...register('address')}
+              placeholder={t('vault_settings_address_book_address_placeholder')}
+            />
+          </FormField>
+          {errors.address && (
+            <Text color="danger" size={12}>
+              {errors.address.message}
+            </Text>
+          )}
+        </div>
       </Form>
       <Button
         isLoading={isLoading || isValidating || isAddAddressBookAddressPending}
