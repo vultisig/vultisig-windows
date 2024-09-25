@@ -12,16 +12,90 @@ import {
 import { BlockchainService } from '../BlockchainService';
 import { SpecificSolana } from '../../../model/specific-transaction-info';
 import { SignedTransactionResult } from '../signed-transaction-result';
-import { tss } from '../../../../wailsjs/go/models';
+import { storage, tss } from '../../../../wailsjs/go/models';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import SignatureProvider from '../signature-provider';
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import {
+  CoinType,
+  PublicKey,
+} from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
+import { Keysign } from '../../../../wailsjs/go/tss/TssService';
+import { ChainUtils } from '../../../model/chain';
+import { CoinServiceFactory } from '../../Coin/CoinServiceFactory';
+import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 
 export class BlockchainServiceSolana
   extends BlockchainService
   implements IBlockchainService
 {
+  async signAndBroadcastTransaction(
+    vault: storage.Vault,
+    messages: string[],
+    sessionID: string,
+    hexEncryptionKey: string,
+    serverURL: string,
+    keysignPayload: KeysignPayload
+  ): Promise<string> {
+    try {
+      const coinService = CoinServiceFactory.createCoinService(
+        this.chain,
+        this.walletCore
+      );
+
+      const rpcService = RpcServiceFactory.createRpcService(this.chain);
+
+      const tssType = ChainUtils.getTssKeysignType(this.chain);
+
+      const keysignGoLang = await Keysign(
+        vault,
+        messages,
+        vault.local_party_id,
+        this.walletCore.CoinTypeExt.derivationPath(coinService.getCoinType()),
+        sessionID,
+        hexEncryptionKey,
+        serverURL,
+        tssType.toString().toLowerCase()
+      );
+
+      const signatures: { [key: string]: tss.KeysignResponse } = {};
+      messages.forEach((msg, idx) => {
+        signatures[msg] = keysignGoLang[idx];
+      });
+
+      const signedTx = await this.getSignedTransaction(
+        vault.public_key_eddsa,
+        vault.hex_chain_code,
+        keysignPayload,
+        signatures
+      );
+
+      if (!signedTx) {
+        console.error("Couldn't sign transaction");
+        return "Couldn't sign transaction";
+      }
+
+      let txBroadcastedHash = await rpcService.broadcastTransaction(
+        signedTx.rawTransaction
+      );
+
+      console.log('txBroadcastedHash:', txBroadcastedHash);
+      console.log('txHash:', signedTx.transactionHash);
+
+      if (txBroadcastedHash !== signedTx.transactionHash) {
+        if (txBroadcastedHash === 'Transaction already broadcasted.') {
+          txBroadcastedHash = signedTx.transactionHash;
+        } else {
+          return 'Transaction hash mismatch';
+        }
+      }
+      return txBroadcastedHash;
+    } catch (e: any) {
+      console.error(e);
+      return e.message;
+    }
+  }
+
   createKeysignPayload(
     obj: ITransaction | ISendTransaction | ISwapTransaction,
     localPartyId: string,
@@ -221,40 +295,30 @@ export class BlockchainServiceSolana
       this.walletCore
     );
 
-    const solanaPublicKey = await addressService.getDerivedPubKey(
+    const publicKey: PublicKey = await addressService.getPublicKey(
+      '',
       vaultHexPublicKey,
-      vaultHexChainCode,
-      this.walletCore.CoinTypeExt.derivationPath(this.coinType)
+      vaultHexChainCode
     );
-
-    const publicKeyData = Buffer.from(solanaPublicKey, 'hex');
-
-    const publicKey = this.walletCore.PublicKey.createWithData(
-      publicKeyData,
-      this.walletCore.PublicKeyType.ed25519
-    );
+    const publicKeyData = publicKey.data();
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
       this.coinType,
       inputData
     );
 
-    const publicKeys = this.walletCore.DataVector.create();
     const preSigningOutput = TW.Solana.Proto.PreSigningOutput.decode(preHashes);
-
     if (preSigningOutput.errorMessage !== '') {
       throw new Error(preSigningOutput.errorMessage);
     }
 
     const allSignatures = this.walletCore.DataVector.create();
+    const publicKeys = this.walletCore.DataVector.create();
     const signatureProvider = new SignatureProvider(
       this.walletCore,
       signatures
     );
-
-    const signature = signatureProvider.getSignatureWithRecoveryId(
-      preSigningOutput.data
-    );
+    const signature = signatureProvider.getSignature(preSigningOutput.data);
 
     if (!publicKey.verify(signature, preSigningOutput.data)) {
       throw new Error('Failed to verify signature');
@@ -263,30 +327,25 @@ export class BlockchainServiceSolana
     allSignatures.add(signature);
     publicKeys.add(publicKeyData);
 
-    const compiled =
-      this.walletCore.TransactionCompiler.compileWithSignaturesAndPubKeyType(
-        this.coinType,
-        inputData,
-        allSignatures,
-        publicKeys,
-        this.walletCore.PublicKeyType.ed25519
-      );
+    const compiled = this.walletCore.TransactionCompiler.compileWithSignatures(
+      this.coinType,
+      inputData,
+      allSignatures,
+      publicKeys
+    );
 
     const output = TW.Solana.Proto.SigningOutput.decode(compiled);
-
     if (output.errorMessage !== '') {
       throw new Error(output.errorMessage);
     }
 
     const result = new SignedTransactionResult(
       output.encoded,
-      this.getHashFromRawTransaction(output.encoded)
+      output.encoded // TODO: Change this to the actual transaction hash
     );
-    return result;
-  }
 
-  getHashFromRawTransaction(tx: string): string {
-    const sig = Buffer.from(tx.slice(0, 64), 'utf8');
-    return sig.toString('base64');
+    console.log('Signed transaction:', result);
+
+    return result;
   }
 }
