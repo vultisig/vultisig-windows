@@ -16,7 +16,6 @@ import { SignedTransactionResult } from './signed-transaction-result';
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { Keysign } from '../../../wailsjs/go/tss/TssService';
 import { RpcServiceFactory } from '../Rpc/RpcServiceFactory';
-import { BlockchainServiceFactory } from './BlockchainServiceFactory';
 
 export class BlockchainService implements IBlockchainService {
   chain: Chain;
@@ -123,19 +122,19 @@ export class BlockchainService implements IBlockchainService {
     return payload;
   }
 
-  getPreSignedInputData(keysignPayload: KeysignPayload): Promise<Uint8Array> {
+  getPreSignedInputData(_keysignPayload: KeysignPayload): Promise<Uint8Array> {
     throw new Error('Method not implemented.');
   }
 
-  getPreSignedImageHash(keysignPayload: KeysignPayload): Promise<string[]> {
+  getPreSignedImageHash(_keysignPayload: KeysignPayload): Promise<string[]> {
     throw new Error('Method not implemented.');
   }
 
   getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
-    data: KeysignPayload | Uint8Array,
-    signatures: { [key: string]: tss.KeysignResponse }
+    _vaultHexPublicKey: string,
+    _vaultHexChainCode: string,
+    _data: KeysignPayload | Uint8Array,
+    _signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     throw new Error('Method not implemented.');
   }

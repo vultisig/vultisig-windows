@@ -12,15 +12,31 @@ const tokenInfoServiceURL = Endpoint.solanaTokenInfoServiceRpc;
 
 export class RpcServiceSolana implements IRpcService, ITokenService {
   async sendTransaction(encodedTransaction: string): Promise<string> {
-    const requestBody = {
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'sendTransaction',
-      params: [encodedTransaction],
-    };
+    try {
+      const requestBody = {
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'sendTransaction',
+        params: [encodedTransaction],
+      };
 
-    const response = await this.postRequest(rpcURL, requestBody);
-    return response.result as string;
+      const post = await fetch(rpcURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      });
+
+      const response = await post.json();
+
+      if (response.error) {
+        console.error(`Error sending transaction: ${response.error.message}`);
+      }
+
+      return response.result as string;
+    } catch (error) {
+      console.error(`Error sending transaction: ${(error as any).message}`);
+      return '';
+    }
   }
 
   async getBalance(coin: Coin): Promise<string> {
@@ -223,7 +239,7 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     });
 
     if (!response.ok) {
-      throw new Error(`Error with request: ${response.statusText}`);
+      console.error(`Error with request: ${response.statusText}`);
     }
 
     return await response.json();
