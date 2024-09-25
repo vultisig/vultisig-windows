@@ -5,7 +5,7 @@ const AddressesListView = ({
 }: {
   addressBookItems: AddressBookItem[];
 }) => {
-  return <div>{addressBookItems[0].address}</div>;
+  return <div>{addressBookItems.length}</div>;
 };
 
 export default AddressesListView;
