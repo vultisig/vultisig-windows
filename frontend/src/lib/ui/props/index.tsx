@@ -37,3 +37,11 @@ export type TitledComponentProps = {
 export type ComponentWithActiveState = {
   isActive?: boolean;
 };
+
+export type ComponentWithBackActionProps = {
+  onBack: () => void;
+};
+
+export type ComponentWithForwardActionProps = {
+  onForward: () => void;
+};

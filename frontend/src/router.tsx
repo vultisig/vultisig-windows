@@ -15,7 +15,6 @@ import ImportVaultView from './pages/importVault/ImportVaultView';
 import JoinKeysignFlow from './pages/keysign/JoinKeysignFlow';
 import KeysignFlowView from './pages/keysign/KeysignFlow';
 import SendCryptoView from './pages/send/SendCryptoView';
-import SetupVaultView from './pages/setupVault/SetupVaultView';
 import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import FaqVaultPage from './pages/vaultSettings/vaulFaq/FaqVaultPage';
@@ -32,6 +31,7 @@ import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
 import { SetupVaultKeygenThresholdPage } from './vault/setup/keygenThreshold/SetupVaultKeygenThresholdPage';
 import { SetupVaultOptionsPage } from './vault/setup/options/SetupVaultOptionsPage';
+import { SetupVaultPage } from './vault/setup/SetupVaultPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
 
 export const router = createBrowserRouter([
@@ -63,7 +63,7 @@ export const router = createBrowserRouter([
   },
   {
     path: appPaths.setupVaultInitiatingDevice,
-    element: <SetupVaultView />,
+    element: <SetupVaultPage />,
   },
   {
     path: appPaths.importVault,
