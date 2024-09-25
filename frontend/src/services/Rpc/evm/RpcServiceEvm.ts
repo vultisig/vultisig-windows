@@ -21,8 +21,13 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     this.rpcUrl = rpcUrl;
   }
 
-  async calculateFee(_coin: Coin): Promise<number> {
-    return 0;
+  async calculateFee(coin: Coin): Promise<number> {
+    let gasLimit = 23000;
+    if (!coin.isNativeToken) {
+      gasLimit = 120000;
+    }
+
+    return gasLimit;
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
@@ -116,10 +121,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         this.provider.getTransactionCount(coin.address),
       ]);
 
-      let gasLimit = 23000;
-      if (!coin.isNativeToken) {
-        gasLimit = 120000;
-      }
+      const gasLimit = await this.calculateFee(coin);
 
       const baseFee = await this.getBaseFee();
       const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
