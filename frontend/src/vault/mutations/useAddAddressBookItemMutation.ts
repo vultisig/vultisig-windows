@@ -1,13 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { SaveAddressBookItem } from '../../../wailsjs/go/storage/Store';
-import { AddressBookItem } from '../../lib/types/address-book';
+import { AddAddressBookItem } from '../../lib/types/address-book';
 import { Chain } from '../../model/chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { AddressServiceFactory } from '../../services/Address/AddressServiceFactory';
 import { addressBookItemsQueryKey } from '../queries/useAddressBookItemsQuery';
 
-export const useAddAddressBookItemMutation = () => {
+export const useAddAddressBookItemMutation = ({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+} = {}) => {
   const queryClient = useQueryClient();
   const walletCore = useAssertWalletCore();
 
@@ -16,7 +20,7 @@ export const useAddAddressBookItemMutation = () => {
       addressBookItem,
       chain,
     }: {
-      addressBookItem: AddressBookItem;
+      addressBookItem: AddAddressBookItem;
       chain: Chain;
     }) => {
       const addressService = AddressServiceFactory.createAddressService(
@@ -32,12 +36,17 @@ export const useAddAddressBookItemMutation = () => {
         throw new Error('Invalid address for the selected chain!');
       }
 
+      console.log('## addressBookItem', addressBookItem);
+
       return await SaveAddressBookItem(addressBookItem);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [addressBookItemsQueryKey],
+        refetchType: 'all',
       });
+
+      onSuccess?.();
     },
   });
 };

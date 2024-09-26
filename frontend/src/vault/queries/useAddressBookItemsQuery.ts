@@ -1,33 +1,36 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { GetAddressBookItems } from '../../../wailsjs/go/storage/Store';
+import { GetAllAddressBookItems } from '../../../wailsjs/go/storage/Store';
 import { AddressBookItem } from '../../lib/types/address-book';
-import { useCurrentVault } from '../state/useCurrentVault';
+
+const transformAddressBookItemsResponse = (
+  // TODO: @antonio replace with "storage.AddressBookItem" type when existing
+  addressBookItems: any
+): AddressBookItem[] =>
+  addressBookItems.map((addressBookItem: any) => ({
+    id: addressBookItem.ID,
+    title: addressBookItem.Title,
+    address: addressBookItem.Address,
+    chain: addressBookItem.Chain,
+    order: addressBookItem.Order,
+  }));
 
 export const addressBookItemsQueryKey = ['addressBookItems'];
 
-export const useAddressBookItemsQuery = (vaultPublicKeyEcdsa?: string) => {
-  const currentVault = useCurrentVault();
-
+export const useAddressBookItemsQuery = () => {
   return useQuery({
     queryKey: [addressBookItemsQueryKey],
     queryFn: async () => {
-      const public_key_ecdsa =
-        vaultPublicKeyEcdsa || currentVault?.public_key_ecdsa;
+      const addressBookItems =
+        (await GetAllAddressBookItems()) as AddressBookItem[];
 
-      if (!public_key_ecdsa) {
-        return [];
-      }
-
-      const addressBookItems = (await GetAddressBookItems(
-        public_key_ecdsa
-      )) as AddressBookItem[];
+      console.log('## addressBookItems', addressBookItems);
 
       if (!addressBookItems) {
         return [];
       }
 
-      return addressBookItems;
+      return transformAddressBookItemsResponse(addressBookItems);
     },
     initialData: [],
   });

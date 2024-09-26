@@ -350,6 +350,28 @@ func (s *Store) SaveAddressBookItem(item AddressBookItem) (string, error) {
 	return item.ID.String(), nil
 }
 
+// Get all address book items
+func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
+    query := `SELECT id, title, address, chain, "order" FROM address_book`
+    rows, err := s.db.Query(query)
+    if err != nil {
+        return nil, fmt.Errorf("could not query address book, err: %w", err)
+    }
+    defer s.closeRows(rows)
+
+    var addressBookItems []AddressBookItem
+    for rows.Next() {
+        var addressBookItem AddressBookItem
+        if err := rows.Scan(&addressBookItem.ID, &addressBookItem.Title, &addressBookItem.Address, &addressBookItem.Chain, &addressBookItem.Order); err != nil {
+            return nil, fmt.Errorf("could not scan address book item, err: %w", err)
+        }
+        addressBookItems = append(addressBookItems, addressBookItem)
+    }
+
+    return addressBookItems, nil
+
+}
+
 func (s *Store) GetAddressBookItems(chain string) ([]AddressBookItem, error) {
 	query := `SELECT id, title, address, chain, "order" FROM address_book WHERE chain = ?`
 	rows, err := s.db.Query(query, chain)
