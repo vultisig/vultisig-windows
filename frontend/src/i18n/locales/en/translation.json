@@ -209,5 +209,10 @@
   "or": "or",
   "enter_vault_name": "Enter Vault Name",
   "vault_name_required": "Vault name is required",
-  "vault_name_already_exists": "Vault name must be unique"
+  "vault_name_already_exists": "Vault name must be unique",
+  "vault_settings_address_book_save_addresses_button": "Save Address",
+  "vault_settings_address_book_add_addresses_title": "Add Address",
+  "vault_settings_address_book_address_title_field": "Title",
+  "vault_settings_address_book_address_address_field": "Address",
+  "vault_settings_address_book_address_placeholder": "Type Here"
 }
