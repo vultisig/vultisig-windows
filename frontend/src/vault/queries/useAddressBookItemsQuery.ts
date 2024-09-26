@@ -24,6 +24,8 @@ export const useAddressBookItemsQuery = () => {
       const addressBookItems =
         (await GetAllAddressBookItems()) as AddressBookItem[];
 
+      console.log('## addressBookItems', addressBookItems);
+
       if (!addressBookItems) {
         return [];
       }

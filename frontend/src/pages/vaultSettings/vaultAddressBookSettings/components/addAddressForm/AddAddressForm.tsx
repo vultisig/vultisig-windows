@@ -30,16 +30,14 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   const coins = useAssertCurrentVaultCoins();
   const { t } = useTranslation();
 
-  const coinOptions = useMemo(
-    () =>
-      coins.map((coin, index) => ({
-        value: coin.id,
-        label: coin.ticker,
-        logo: coin.logo,
-        isLastOption: index === coins.length - 1,
-      })),
-    [coins]
-  );
+  const coinOptions = useMemo(() => {
+    return coins.map((coin, index) => ({
+      value: coin.id,
+      label: coin.ticker,
+      logo: coin.logo,
+      isLastOption: index === coins.length - 1,
+    }));
+  }, [coins]);
 
   const {
     register,

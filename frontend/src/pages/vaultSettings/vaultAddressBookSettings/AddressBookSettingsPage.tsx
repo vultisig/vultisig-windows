@@ -18,22 +18,35 @@ const AddressBookSettingsPage = () => {
   const { data: addressBookItems, isFetching: isFetchingAddressBookItems } =
     useAddressBookItemsQuery();
 
-  let pageContent = null;
+  const handleOpenAddAddressView = () => {
+    setIsAddAddressViewOpen(true);
+  };
 
-  if (isFetchingAddressBookItems) {
-    return <Text>Loading...</Text>;
-  } else if (isAddAddressViewOpen) {
-    pageContent = (
-      <AddAddressView onClose={() => setIsAddAddressViewOpen(false)} />
-    );
-  } else if (addressBookItems.length === 0) {
-    pageContent = (
-      <EmptyAddressesView
-        onOpenAddAddressView={() => setIsAddAddressViewOpen(true)}
-      />
-    );
-  } else if (addressBookItems.length > 0) {
-    pageContent = <AddressesListView addressBookItems={addressBookItems} />;
+  let pageContent;
+  switch (true) {
+    case isFetchingAddressBookItems:
+      pageContent = <Text>Loading...</Text>;
+      break;
+    case isAddAddressViewOpen:
+      pageContent = (
+        <AddAddressView onClose={() => setIsAddAddressViewOpen(false)} />
+      );
+      break;
+    case addressBookItems.length === 0:
+      pageContent = (
+        <EmptyAddressesView onOpenAddAddressView={handleOpenAddAddressView} />
+      );
+      break;
+    case addressBookItems.length > 0:
+      pageContent = (
+        <AddressesListView
+          addressBookItems={addressBookItems}
+          onOpenAddAddressView={handleOpenAddAddressView}
+        />
+      );
+      break;
+    default:
+      pageContent = null;
   }
 
   return (

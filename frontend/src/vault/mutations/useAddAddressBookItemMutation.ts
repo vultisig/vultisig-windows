@@ -36,6 +36,8 @@ export const useAddAddressBookItemMutation = ({
         throw new Error('Invalid address for the selected chain!');
       }
 
+      console.log('## addressBookItem', addressBookItem);
+
       return await SaveAddressBookItem(addressBookItem);
     },
     onSuccess: () => {
