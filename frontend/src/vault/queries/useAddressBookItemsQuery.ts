@@ -5,14 +5,15 @@ import { AddressBookItem } from '../../lib/types/address-book';
 
 const transformAddressBookItemsResponse = (
   // TODO: @antonio replace with "storage.AddressBookItem" type when existing
-  addressBookItem: any
-) => ({
-  id: addressBookItem.ID,
-  title: addressBookItem.Title,
-  address: addressBookItem.Address,
-  chain: addressBookItem.Chain,
-  order: addressBookItem.Order,
-});
+  addressBookItems: any
+): AddressBookItem[] =>
+  addressBookItems.map((addressBookItem: any) => ({
+    id: addressBookItem.ID,
+    title: addressBookItem.Title,
+    address: addressBookItem.Address,
+    chain: addressBookItem.Chain,
+    order: addressBookItem.Order,
+  }));
 
 export const addressBookItemsQueryKey = ['addressBookItems'];
 
