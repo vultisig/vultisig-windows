@@ -15,11 +15,12 @@ import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesVi
 const AddressBookSettingsPage = () => {
   const [isAddAddressViewOpen, setIsAddAddressViewOpen] = useState(false);
   const { t } = useTranslation();
-  const { data: addressBookItems, isFetching } = useAddressBookItemsQuery();
+  const { data: addressBookItems, isFetching: isFetchingAddressBookItems } =
+    useAddressBookItemsQuery();
 
   let pageContent = null;
 
-  if (isFetching) {
+  if (isFetchingAddressBookItems) {
     return <Text>Loading...</Text>;
   } else if (isAddAddressViewOpen) {
     pageContent = (

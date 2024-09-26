@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import Select from 'react-select';
@@ -30,12 +30,16 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   const coins = useAssertCurrentVaultCoins();
   const { t } = useTranslation();
 
-  const coinOptions = coins.map((coin, index) => ({
-    value: coin.id,
-    label: coin.ticker,
-    logo: coin.logo,
-    isLastOption: index === coins.length - 1,
-  }));
+  const coinOptions = useMemo(
+    () =>
+      coins.map((coin, index) => ({
+        value: coin.id,
+        label: coin.ticker,
+        logo: coin.logo,
+        isLastOption: index === coins.length - 1,
+      })),
+    [coins]
+  );
 
   const {
     register,
@@ -56,8 +60,9 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     mutate: addAddressBookItem,
     isPending: isAddAddressBookAddressPending,
     error: addAddressBookAddressError,
-    isSuccess,
-  } = useAddAddressBookItemMutation();
+  } = useAddAddressBookItemMutation({
+    onSuccess: onClose,
+  });
 
   const handleAddAddress = (data: AddressFormValues) => {
     const { address, coinId, title } = data;
@@ -76,12 +81,6 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
       chain: coin.chain as Chain,
     });
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      onClose();
-    }
-  }, [isSuccess, onClose]);
 
   return (
     <Container>
@@ -147,7 +146,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
       </Form>
       <Button
         isLoading={isLoading || isValidating || isAddAddressBookAddressPending}
-        disabled={!isValid || !isDirty}
+        isDisabled={!isValid || !isDirty}
         onClick={handleSubmit(handleAddAddress)}
       >
         {t('vault_settings_address_book_save_addresses_button')}

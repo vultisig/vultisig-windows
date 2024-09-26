@@ -18,6 +18,10 @@ export function GetAddressBookItems(arg1) {
   return window['go']['storage']['Store']['GetAddressBookItems'](arg1);
 }
 
+export function GetAllAddressBookItems() {
+  return window['go']['storage']['Store']['GetAllAddressBookItems']();
+}
+
 export function GetCoins(arg1) {
   return window['go']['storage']['Store']['GetCoins'](arg1);
 }

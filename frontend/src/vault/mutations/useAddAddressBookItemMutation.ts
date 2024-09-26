@@ -7,7 +7,11 @@ import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { AddressServiceFactory } from '../../services/Address/AddressServiceFactory';
 import { addressBookItemsQueryKey } from '../queries/useAddressBookItemsQuery';
 
-export const useAddAddressBookItemMutation = () => {
+export const useAddAddressBookItemMutation = ({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+} = {}) => {
   const queryClient = useQueryClient();
   const walletCore = useAssertWalletCore();
 
@@ -37,7 +41,10 @@ export const useAddAddressBookItemMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [addressBookItemsQueryKey],
+        refetchType: 'all',
       });
+
+      onSuccess?.();
     },
   });
 };
