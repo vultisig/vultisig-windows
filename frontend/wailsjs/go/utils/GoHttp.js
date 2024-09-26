@@ -5,3 +5,7 @@
 export function Fetch(arg1) {
   return window['go']['utils']['GoHttp']['Fetch'](arg1);
 }
+
+export function Post(arg1, arg2) {
+  return window['go']['utils']['GoHttp']['Post'](arg1, arg2);
+}

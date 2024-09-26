@@ -1,6 +1,6 @@
 import { ethers, TransactionRequest } from 'ethers';
 
-import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
+import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { EvmChain, evmChainIds } from '../../../chain/evm/EvmChain';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
@@ -31,31 +31,32 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
-    const knownErrors = {
-      messages: [
-        'already known',
-        'Transaction is temporarily banned',
-        'nonce too low',
-        'nonce too high',
-        'transaction already exists',
-      ],
-    };
-
     try {
-      const txResponse =
-        await this.provider.broadcastTransaction(encodedTransaction);
-      return txResponse.hash;
-    } catch (error: any) {
-      console.error('sendTransaction::', error);
+      console.log('Sending transaction:', encodedTransaction);
 
-      // Check if the error code or message matches any known error
-      if (knownErrors.messages.some(msg => error?.message?.includes(msg))) {
-        // Handle the case where the transaction was already broadcasted
-        return 'Transaction already broadcasted.';
+      const payload = {
+        jsonrpc: '2.0',
+        method: 'eth_sendRawTransaction',
+        params: [encodedTransaction],
+        id: 1,
+      };
+
+      console.log('Payload:', payload);
+
+      // Call the Go Post method (Wails handles the WASM call)
+      const response = await Post(this.rpcUrl, payload);
+
+      console.log('Response from Go:', response);
+
+      if (response && response.result) {
+        return response.result;
+      } else {
+        console.error('Transaction failed:', response.error || 'Unknown error');
+        return '';
       }
-
-      // Re-throw the error if it's not one of the expected ones
-      throw error;
+    } catch (error) {
+      console.error('Error sending transaction:', error);
+      return '';
     }
   }
 
@@ -67,7 +68,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return address;
     } catch (error) {
       console.error('resolveENS::', error);
-      throw error;
+      return '';
     }
   }
 
@@ -83,7 +84,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return BigInt(balance);
     } catch (error) {
       console.error('fetchTokenBalance::', error);
-      throw error;
+      return BigInt(0);
     }
   }
 
@@ -142,7 +143,15 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       } as SpecificEvm;
     } catch (error) {
       console.error('getSpecificTransactionInfo::', error);
-      throw error;
+      return {
+        fee: 0,
+        gasPrice: 0,
+        nonce: 0,
+        priorityFee: 0,
+        priorityFeeWei: 0,
+        gasLimit: 0,
+        maxFeePerGasWei: 0,
+      } as SpecificEvm;
     }
   }
 
@@ -157,7 +166,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       }
     } catch (error) {
       console.error('sendTransaction::', error);
-      throw error;
+      return '';
     }
   }
 
@@ -192,7 +201,11 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return priorityFeesMap(low, normal, fast);
     } catch (error) {
       console.error('fetchMaxPriorityFeesPerGas::', error);
-      throw error;
+      return {
+        [FeeMode.SafeLow]: 0,
+        [FeeMode.Normal]: 0,
+        [FeeMode.Fast]: 0,
+      };
     }
   }
 
@@ -221,17 +234,12 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return rewardValues;
     } catch (error) {
       console.error('getGasHistory::', error);
-      throw error;
+      return [];
     }
   }
 
   async broadcastTransaction(encodedTransaction: string): Promise<string> {
-    try {
-      return this.sendTransaction(encodedTransaction);
-    } catch (error) {
-      console.error('broadcastTransaction::', error);
-      throw error;
-    }
+    return this.sendTransaction(encodedTransaction);
   }
 
   async estimateGas(
@@ -252,7 +260,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return BigInt(gasEstimate.toString());
     } catch (error) {
       console.error('estimateGas::', error);
-      throw error;
+      return BigInt(0);
     }
   }
 
@@ -305,7 +313,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return BigInt(allowance.toString());
     } catch (error) {
       console.error('fetchAllowance::', error);
-      throw error;
+      return BigInt(0);
     }
   }
 
