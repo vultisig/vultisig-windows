@@ -50,7 +50,7 @@ export class CoinServiceSolana extends CoinService implements ICoinService {
         await super.saveCoin(token, vault);
       }
     } catch (error) {
-      console.log('save coin error: ', error);
+      console.error('save coin error: ', error);
     }
   }
 }

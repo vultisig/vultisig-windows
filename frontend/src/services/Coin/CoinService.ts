@@ -78,7 +78,7 @@ export class CoinService implements ICoinService {
         logo: asset.logo,
       });
     } catch (error) {
-      console.log('create coin error: ', error);
+      console.error('create coin error: ', error);
       throw error;
     }
   }

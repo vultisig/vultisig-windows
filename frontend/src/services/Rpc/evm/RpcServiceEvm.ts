@@ -370,8 +370,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
   async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
     try {
-      console.log('Fetching tokens for:', nativeToken);
-
       const chain = ChainUtils.stringToChain(nativeToken.chain);
 
       if (!chain) {

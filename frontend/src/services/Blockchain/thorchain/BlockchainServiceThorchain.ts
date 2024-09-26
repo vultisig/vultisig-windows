@@ -196,7 +196,7 @@ export class BlockchainServiceThorchain
     );
     const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
     if (preSigningOutput.errorMessage !== '') {
-      console.log('preSigningOutput error:', preSigningOutput.errorMessage);
+      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
     return [
@@ -270,7 +270,7 @@ export class BlockchainServiceThorchain
       );
       return result;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       throw e;
     }
   }
