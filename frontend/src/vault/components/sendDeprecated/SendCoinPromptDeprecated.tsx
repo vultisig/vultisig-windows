@@ -18,15 +18,16 @@ export const SendCoinPromptDeprecated = () => {
     return (
       Array.from(coins.values())
         .flat()
-        .find(coin => coin.chain === Chain.Arbitrum && coin.ticker == 'ARB') ||
-      null
+        .find(
+          coin => coin.chain === Chain.Avalanche && coin.ticker == 'AVAX'
+        ) || null
     );
   }, [coins]);
 
   return (
     <Button
       onClick={() => {
-        navigate(makeAppPath('vaultItemSend', { chain: Chain.Arbitrum }), {
+        navigate(makeAppPath('vaultItemSend', { chain: Chain.Avalanche }), {
           state: {
             coin: coin,
             balances: balances,

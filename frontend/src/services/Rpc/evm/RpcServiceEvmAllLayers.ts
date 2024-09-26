@@ -145,7 +145,7 @@ export class RpcServiceAvalanche
   implements ITokenService
 {
   constructor() {
-    super(Endpoint.arbitrumOneServiceRpcService);
+    super(Endpoint.avalancheServiceRpcService);
   }
 
   async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
