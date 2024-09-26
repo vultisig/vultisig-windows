@@ -31,9 +31,15 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
-    try {
-      console.log('Sending transaction:', encodedTransaction);
+    const knownErrors = [
+      'already known',
+      'Transaction is temporarily banned',
+      'nonce too low',
+      'nonce too high',
+      'transaction already exists',
+    ];
 
+    try {
       const payload = {
         jsonrpc: '2.0',
         method: 'eth_sendRawTransaction',
@@ -41,22 +47,36 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         id: 1,
       };
 
-      console.log('Payload:', payload);
-
-      // Call the Go Post method (Wails handles the WASM call)
+      // We are having a lot of cors issues, so we are using the Go server to send the transaction
       const response = await Post(this.rpcUrl, payload);
-
-      console.log('Response from Go:', response);
 
       if (response && response.result) {
         return response.result;
       } else {
-        console.error('Transaction failed:', response.error || 'Unknown error');
-        return '';
+        // Handle JSON-RPC error case
+        const errorMessage =
+          response.error?.message || 'Unknown error occurred';
+        const isKnownError = knownErrors.some(msg =>
+          errorMessage.includes(msg)
+        );
+
+        if (isKnownError) {
+          return 'Transaction already broadcasted.';
+        }
+
+        return errorMessage;
       }
-    } catch (error) {
-      console.error('Error sending transaction:', error);
-      return '';
+    } catch (error: any) {
+      console.error('sendTransaction::', error);
+      const isKnownError = knownErrors.some(msg =>
+        error?.message?.includes(msg)
+      );
+
+      if (isKnownError) {
+        return 'Transaction already broadcasted.';
+      }
+
+      return error.message || 'Unknown error occurred';
     }
   }
 
