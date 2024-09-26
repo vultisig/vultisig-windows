@@ -194,8 +194,6 @@ export class BlockchainServiceEvm
       ).stripHexPrefix(),
     ];
 
-    console.log('imageHashes:', imageHashes);
-
     return imageHashes;
   }
 
@@ -254,7 +252,7 @@ export class BlockchainServiceEvm
       );
 
       if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
-        console.log('Failed to verify signature');
+        console.error('Failed to verify signature');
         throw new Error('Failed to verify signature');
       }
 

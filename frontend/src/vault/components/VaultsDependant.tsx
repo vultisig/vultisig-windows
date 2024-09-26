@@ -13,7 +13,7 @@ export const VaultsDependant = ({ children }: ComponentWithChildrenProps) => {
       query={query}
       success={() => children}
       error={err => {
-        console.log('vautls query: ', err);
+        console.error('vautls query: ', err);
         return (
           <Center>
             <Text size={16} weight="500" color="contrast">

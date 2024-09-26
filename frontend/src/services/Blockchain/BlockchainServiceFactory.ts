@@ -41,6 +41,8 @@ export class BlockchainServiceFactory {
         return new BlockchainServiceEvm(chain, walletCore);
       case Chain.Optimism:
         return new BlockchainServiceEvm(chain, walletCore);
+      case Chain.Polygon:
+        return new BlockchainServiceEvm(chain, walletCore);
       case Chain.ZkSync:
         return new BlockchainServiceEvm(chain, walletCore);
       case Chain.Solana:

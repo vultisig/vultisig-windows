@@ -243,8 +243,6 @@ export class BlockchainServiceUtxo
             this.walletCore.BitcoinScript.buildPayToPublicKeyHash(keyHash);
 
           const encoded = this.walletCore.HexCoding.encode(keyHash);
-          console.log('keyHash', keyHash);
-          console.log('encoded', encoded);
 
           input.scripts[encoded.stripHexPrefix()] = redeemScriptPubKey.data();
           break;

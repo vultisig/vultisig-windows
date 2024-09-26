@@ -1,6 +1,6 @@
 import { ethers, TransactionRequest } from 'ethers';
 
-import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
+import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { EvmChain, evmChainIds } from '../../../chain/evm/EvmChain';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
@@ -21,36 +21,62 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     this.rpcUrl = rpcUrl;
   }
 
-  async calculateFee(_coin: Coin): Promise<number> {
-    return 0;
+  async calculateFee(coin: Coin): Promise<number> {
+    let gasLimit = 23000;
+    if (!coin.isNativeToken) {
+      gasLimit = 120000;
+    }
+
+    return gasLimit;
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
-    const knownErrors = {
-      messages: [
-        'already known',
-        'Transaction is temporarily banned',
-        'nonce too low',
-        'nonce too high',
-        'transaction already exists',
-      ],
-    };
+    const knownErrors = [
+      'already known',
+      'Transaction is temporarily banned',
+      'nonce too low',
+      'nonce too high',
+      'transaction already exists',
+    ];
 
     try {
-      const txResponse =
-        await this.provider.broadcastTransaction(encodedTransaction);
-      return txResponse.hash;
+      const payload = {
+        jsonrpc: '2.0',
+        method: 'eth_sendRawTransaction',
+        params: [encodedTransaction],
+        id: 1,
+      };
+
+      // We are having a lot of cors issues, so we are using the Go server to send the transaction
+      const response = await Post(this.rpcUrl, payload);
+
+      if (response && response.result) {
+        return response.result;
+      } else {
+        // Handle JSON-RPC error case
+        const errorMessage =
+          response.error?.message || 'Unknown error occurred';
+        const isKnownError = knownErrors.some(msg =>
+          errorMessage.includes(msg)
+        );
+
+        if (isKnownError) {
+          return 'Transaction already broadcasted.';
+        }
+
+        return errorMessage;
+      }
     } catch (error: any) {
       console.error('sendTransaction::', error);
+      const isKnownError = knownErrors.some(msg =>
+        error?.message?.includes(msg)
+      );
 
-      // Check if the error code or message matches any known error
-      if (knownErrors.messages.some(msg => error?.message?.includes(msg))) {
-        // Handle the case where the transaction was already broadcasted
+      if (isKnownError) {
         return 'Transaction already broadcasted.';
       }
 
-      // Re-throw the error if it's not one of the expected ones
-      throw error;
+      return error.message || 'Unknown error occurred';
     }
   }
 
@@ -62,7 +88,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return address;
     } catch (error) {
       console.error('resolveENS::', error);
-      throw error;
+      return '';
     }
   }
 
@@ -78,7 +104,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return BigInt(balance);
     } catch (error) {
       console.error('fetchTokenBalance::', error);
-      throw error;
+      return BigInt(0);
     }
   }
 
@@ -116,10 +142,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         this.provider.getTransactionCount(coin.address),
       ]);
 
-      let gasLimit = 23000;
-      if (!coin.isNativeToken) {
-        gasLimit = 120000;
-      }
+      const gasLimit = await this.calculateFee(coin);
 
       const baseFee = await this.getBaseFee();
       const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
@@ -140,7 +163,15 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       } as SpecificEvm;
     } catch (error) {
       console.error('getSpecificTransactionInfo::', error);
-      throw error;
+      return {
+        fee: 0,
+        gasPrice: 0,
+        nonce: 0,
+        priorityFee: 0,
+        priorityFeeWei: 0,
+        gasLimit: 0,
+        maxFeePerGasWei: 0,
+      } as SpecificEvm;
     }
   }
 
@@ -155,7 +186,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       }
     } catch (error) {
       console.error('sendTransaction::', error);
-      throw error;
+      return '';
     }
   }
 
@@ -190,7 +221,11 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return priorityFeesMap(low, normal, fast);
     } catch (error) {
       console.error('fetchMaxPriorityFeesPerGas::', error);
-      throw error;
+      return {
+        [FeeMode.SafeLow]: 0,
+        [FeeMode.Normal]: 0,
+        [FeeMode.Fast]: 0,
+      };
     }
   }
 
@@ -219,17 +254,12 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return rewardValues;
     } catch (error) {
       console.error('getGasHistory::', error);
-      throw error;
+      return [];
     }
   }
 
   async broadcastTransaction(encodedTransaction: string): Promise<string> {
-    try {
-      return this.sendTransaction(encodedTransaction);
-    } catch (error) {
-      console.error('broadcastTransaction::', error);
-      throw error;
-    }
+    return this.sendTransaction(encodedTransaction);
   }
 
   async estimateGas(
@@ -250,7 +280,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return BigInt(gasEstimate.toString());
     } catch (error) {
       console.error('estimateGas::', error);
-      throw error;
+      return BigInt(0);
     }
   }
 
@@ -303,7 +333,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return BigInt(allowance.toString());
     } catch (error) {
       console.error('fetchAllowance::', error);
-      throw error;
+      return BigInt(0);
     }
   }
 
@@ -340,8 +370,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
   async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
     try {
-      console.log('Fetching tokens for:', nativeToken);
-
       const chain = ChainUtils.stringToChain(nativeToken.chain);
 
       if (!chain) {

@@ -16,7 +16,7 @@ export const useSaveCoinMutation = () => {
 
   return useMutation({
     onError: error => {
-      console.log('save coin error: ', error);
+      console.error('save coin error: ', error);
     },
     mutationFn: async (coinMeta: CoinMeta) => {
       try {
@@ -36,7 +36,7 @@ export const useSaveCoinMutation = () => {
 
         await invalidate(vaultsQueryKey);
       } catch (error) {
-        console.log('save coin error: ', error);
+        console.error('save coin error: ', error);
       }
     },
   });

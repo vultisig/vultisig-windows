@@ -14,6 +14,8 @@ export class BalanceServiceFactory {
         return new BalanceServiceEvm(chain);
       case Chain.Polygon:
         return new BalanceServiceEvm(chain);
+      case Chain.Avalanche:
+        return new BalanceServiceEvm(chain);
       case Chain.Arbitrum:
         return new BalanceServiceEvm(chain);
       case Chain.Blast:

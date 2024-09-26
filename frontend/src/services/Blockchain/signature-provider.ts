@@ -27,8 +27,6 @@ class SignatureProvider {
   getSignatureWithRecoveryId(preHash: Uint8Array): Uint8Array {
     const preHashHex =
       this.walletCore.HexCoding.encode(preHash).stripHexPrefix();
-    console.log('preHashHex:', preHashHex);
-    console.log('this.signatures[preHashHex]:', this.signatures[preHashHex]);
 
     if (this.signatures[preHashHex]) {
       const sigResult = this.signatures[preHashHex];
