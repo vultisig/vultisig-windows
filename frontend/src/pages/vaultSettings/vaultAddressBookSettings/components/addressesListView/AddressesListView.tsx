@@ -2,43 +2,42 @@ import { useTranslation } from 'react-i18next';
 
 import { AddressBookItem } from '../../../../../lib/types/address-book';
 import { Button } from '../../../../../lib/ui/buttons/Button';
-import {
-  AddressBookListItem,
-  ColumnOneBothRowsItem,
-  ColumnThreeRowOneItem,
-  ColumnTwoRowOneItem,
-  ColumnTwoRowTwoItem,
-  Container,
-} from './AddressesListView.styles';
+import AddressBookListItem from './AddressBookListItem/AddressBookListItem';
+import { Container, Main } from './AddressesListView.styles';
 
 type AddressesListViewProps = {
   addressBookItems: AddressBookItem[];
   onOpenAddAddressView: () => void;
+  isEditModeOn: boolean;
 };
 
 const AddressesListView = ({
   addressBookItems,
   onOpenAddAddressView,
+  isEditModeOn,
 }: AddressesListViewProps) => {
   const { t } = useTranslation();
 
+  const handleDeleteAddress = (id: string) => {
+    // TODO: @antonio to implement when BE is ready
+    console.log('## id', id);
+  };
+
   return (
     <Container>
-      <div>
+      <Main>
         {addressBookItems.map(({ address, id, title, chain }) => (
-          <AddressBookListItem key={id}>
-            {/* TODO: @antonio to implement icon when chain is available from BE */}
-            <ColumnOneBothRowsItem color="primary">
-              {title}
-            </ColumnOneBothRowsItem>
-            <ColumnTwoRowOneItem color="contrast">{title}</ColumnTwoRowOneItem>
-            <ColumnTwoRowTwoItem color="contrast">
-              {address}
-            </ColumnTwoRowTwoItem>
-            <ColumnThreeRowOneItem color="shy">{chain}</ColumnThreeRowOneItem>
-          </AddressBookListItem>
+          <AddressBookListItem
+            key={id}
+            id={id}
+            title={title}
+            address={address}
+            chain={chain}
+            isEditModeOn={isEditModeOn}
+            handleDeleteAddress={handleDeleteAddress}
+          />
         ))}
-      </div>
+      </Main>
       <Button onClick={onOpenAddAddressView}>
         {t('vault_settings_address_book_add_addresses_button')}
       </Button>

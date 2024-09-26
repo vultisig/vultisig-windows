@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
+import SquareAndPencilIcon from '../../../lib/ui/icons/SquareAndPencilIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -14,13 +16,16 @@ import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesVi
 
 const AddressBookSettingsPage = () => {
   const [isAddAddressViewOpen, setIsAddAddressViewOpen] = useState(false);
+  const [isEditModeOn, setIsEditModeOn] = useState(false);
   const { t } = useTranslation();
   const { data: addressBookItems, isFetching: isFetchingAddressBookItems } =
     useAddressBookItemsQuery();
-
   const handleOpenAddAddressView = () => {
     setIsAddAddressViewOpen(true);
   };
+  const handleEditToggle = () => setIsEditModeOn(!isEditModeOn);
+  const isAddressBookEmpty = addressBookItems.length === 0 || !addressBookItems;
+  let isAddressBookListShown = false;
 
   let pageContent;
   switch (true) {
@@ -32,18 +37,20 @@ const AddressBookSettingsPage = () => {
         <AddAddressView onClose={() => setIsAddAddressViewOpen(false)} />
       );
       break;
-    case addressBookItems.length === 0:
+    case isAddressBookEmpty:
       pageContent = (
         <EmptyAddressesView onOpenAddAddressView={handleOpenAddAddressView} />
       );
       break;
-    case addressBookItems.length > 0:
+    case !isAddressBookEmpty:
       pageContent = (
         <AddressesListView
           addressBookItems={addressBookItems}
           onOpenAddAddressView={handleOpenAddAddressView}
+          isEditModeOn={isEditModeOn}
         />
       );
+      isAddressBookListShown = true;
       break;
     default:
       pageContent = null;
@@ -52,7 +59,15 @@ const AddressBookSettingsPage = () => {
   return (
     <VStack flexGrow gap={16}>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={
+          <PageHeaderBackButton
+            onClick={
+              isAddAddressViewOpen
+                ? () => setIsAddAddressViewOpen(false)
+                : undefined
+            }
+          />
+        }
         title={
           <PageHeaderTitle>
             {t(
@@ -61,6 +76,20 @@ const AddressBookSettingsPage = () => {
                 : 'vault_settings_address_book'
             )}
           </PageHeaderTitle>
+        }
+        secondaryControls={
+          isAddressBookListShown &&
+          (isEditModeOn ? (
+            <UnstyledButton onClick={handleEditToggle}>
+              <SquareAndPencilIcon />
+            </UnstyledButton>
+          ) : (
+            <UnstyledButton onClick={handleEditToggle}>
+              <Text color="contrast" size={16} weight={700}>
+                {t('done')}
+              </Text>
+            </UnstyledButton>
+          ))
         }
       />
       <PageSlice gap={16} flexGrow={true}>
