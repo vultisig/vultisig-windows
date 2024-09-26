@@ -54,7 +54,7 @@ const AddressBookItem = ({
           transition={{ duration: 0.3 }}
         >
           <UnstyledButton>
-            <MenuIcon size={35} />
+            <MenuIcon size={30} />
           </UnstyledButton>
         </ModifyButtonWrapper>
       )}
@@ -71,7 +71,7 @@ const AddressBookItem = ({
           transition={{ duration: 0.3 }}
         >
           <UnstyledButton onClick={() => handleDeleteAddress(id)}>
-            <BinIcon size={35} />
+            <BinIcon size={30} />
           </UnstyledButton>
         </ModifyButtonWrapper>
       )}

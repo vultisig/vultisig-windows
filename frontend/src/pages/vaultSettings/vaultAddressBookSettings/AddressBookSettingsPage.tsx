@@ -81,13 +81,13 @@ const AddressBookSettingsPage = () => {
           isAddressBookListShown &&
           (isEditModeOn ? (
             <UnstyledButton onClick={handleEditToggle}>
-              <SquareAndPencilIcon />
-            </UnstyledButton>
-          ) : (
-            <UnstyledButton onClick={handleEditToggle}>
               <Text color="contrast" size={16} weight={700}>
                 {t('done')}
               </Text>
+            </UnstyledButton>
+          ) : (
+            <UnstyledButton onClick={handleEditToggle}>
+              <SquareAndPencilIcon />
             </UnstyledButton>
           ))
         }
