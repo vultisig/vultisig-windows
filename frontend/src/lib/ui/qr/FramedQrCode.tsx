@@ -22,11 +22,11 @@ const Container = styled.div`
   padding: ${toSizeUnit(codePadding)};
 `;
 
-type AddressQrCodeProps = ComponentWithValueProps<string> & {
+type FramedQrCode = ComponentWithValueProps<string> & {
   size: number;
 } & ComponentProps<typeof Wrapper>;
 
-export const AddressQrCode = ({ size, value }: AddressQrCodeProps) => {
+export const FramedQrCode = ({ size, value }: FramedQrCode) => {
   return (
     <Wrapper>
       <Container>

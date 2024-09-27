@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import Lottie from 'lottie-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -10,7 +10,11 @@ import { storage } from '../../../wailsjs/go/models';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { checkForDevices, postSession } from '../../services/Keygen/Keygen';
 import { createKeysignMessage } from '../../utils/QRGen';
-import { generateRandomNumber } from '../../utils/util';
+import {
+  KeygenServerType,
+  keygenServerUrl,
+} from '../../vault/keygen/KeygenServerType';
+import { generateServiceName } from '../../vault/keygen/utils/generateServiceName';
 import SelectDevice from '../selectDevice/SelectDevice';
 import KeysignQRCode from './KeysignQrCode';
 
@@ -18,7 +22,7 @@ interface KeysignPeerDiscoveryProps {
   vault: storage.Vault;
   keysignPayload: KeysignPayload;
   onContinue: (
-    isRelay: boolean,
+    serverType: KeygenServerType,
     sessionID: string,
     devices: string[],
     hexEncryptionKey: string
@@ -47,7 +51,7 @@ const KeysignPeerDiscovery: React.FC<KeysignPeerDiscoveryProps> = ({
     setDevices([]);
     setSelectedDevices([]);
     setSessionID(uuidv4());
-    setServiceName(`Vultisig-Windows-${generateRandomNumber()}`);
+    setServiceName(generateServiceName());
   }, []);
   useEffect(() => {
     async function createQR() {
@@ -63,18 +67,30 @@ const KeysignPeerDiscovery: React.FC<KeysignPeerDiscoveryProps> = ({
     }
     console.log('setup qr code');
     createQR();
-  }, [isRelay, sessionID, serviceName, hexEncryptionKey]);
+  }, [isRelay, keysignPayload, serviceName, sessionID]);
+
+  const discoverService = useCallback(
+    async (name: string) => {
+      if (!isRelay) await AdvertiseMediator(name);
+      await postSession(
+        keygenServerUrl[isRelay ? 'relay' : 'local'],
+        sessionID!,
+        serviceName!
+      );
+      checkForDevices(
+        keygenServerUrl[isRelay ? 'relay' : 'local'],
+        sessionID!,
+        setDevices
+      );
+    },
+    [isRelay, serviceName, sessionID]
+  );
+
   useEffect(() => {
     if (sessionID && serviceName) {
       discoverService(serviceName).catch(console.error);
     }
-  }, [isRelay, sessionID, serviceName]);
-
-  const discoverService = async (name: string) => {
-    if (!isRelay) await AdvertiseMediator(name);
-    await postSession(isRelay, sessionID!, serviceName!);
-    checkForDevices(isRelay, sessionID!, setDevices);
-  };
+  }, [discoverService, serviceName, sessionID]);
 
   const handleDisabled = () => {
     if (vault.signers == undefined || vault.signers.length == 0) return true;
@@ -148,7 +164,7 @@ const KeysignPeerDiscovery: React.FC<KeysignPeerDiscoveryProps> = ({
           disabled={handleDisabled()}
           onClick={() => {
             onContinue(
-              isRelay,
+              isRelay ? 'relay' : 'local',
               sessionID!,
               selectedDevices,
               hexEncryptionKey.current

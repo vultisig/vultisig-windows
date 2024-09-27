@@ -3,13 +3,13 @@ import styled from 'styled-components';
 
 import { ElementSizeAware } from '../../../lib/ui/base/ElementSizeAware';
 import { VStack, vStack } from '../../../lib/ui/layout/Stack';
+import { FramedQrCode } from '../../../lib/ui/qr/FramedQrCode';
 import { Text } from '../../../lib/ui/text';
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { AddressQrCode } from './AddressQrCode';
 import { DownloadAddressQrCode } from './DownloadAddressQrCode';
 
 const Content = styled.div`
@@ -42,7 +42,7 @@ export const AddressPage = () => {
           render={({ setElement, size }) => (
             <Content ref={setElement}>
               {size && (
-                <AddressQrCode
+                <FramedQrCode
                   style={{ position: 'absolute' }}
                   value={address}
                   size={Math.min(size.width, size.height)}

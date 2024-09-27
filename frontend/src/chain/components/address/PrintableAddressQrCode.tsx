@@ -4,10 +4,10 @@ import { ElementSizeAware } from '../../../lib/ui/base/ElementSizeAware';
 import { verticalPadding } from '../../../lib/ui/css/verticalPadding';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { FramedQrCode } from '../../../lib/ui/qr/FramedQrCode';
 import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { ProductLogo } from '../../../ui/logo/ProductLogo';
-import { AddressQrCode } from './AddressQrCode';
 
 const Container = styled(VStack)`
   align-items: center;
@@ -35,7 +35,7 @@ export const PrintableAddressQrCode = ({
       <ElementSizeAware
         render={({ setElement, size }) => (
           <VStack fullWidth ref={setElement}>
-            {size && <AddressQrCode value={value} size={size.width} />}
+            {size && <FramedQrCode value={value} size={size.width} />}
           </VStack>
         )}
       />

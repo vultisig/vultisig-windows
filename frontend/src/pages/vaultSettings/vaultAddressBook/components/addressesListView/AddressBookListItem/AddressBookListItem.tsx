@@ -21,6 +21,7 @@ type AddressBookListItem = {
   chain: string;
   isEditModeOn: boolean;
   handleDeleteAddress: (id: string) => void;
+  onClick: () => void;
 };
 
 const AddressBookItem = ({
@@ -30,6 +31,7 @@ const AddressBookItem = ({
   chain,
   isEditModeOn,
   handleDeleteAddress,
+  onClick,
 }: AddressBookListItem) => {
   const itemRef = useRef<HTMLDivElement>(null);
 
@@ -45,20 +47,32 @@ const AddressBookItem = ({
     }
   }, [isEditModeOn]);
 
+  const handleOnListItemClick = () => {
+    if (!isEditModeOn) {
+      onClick();
+    }
+  };
+
   return (
     <ItemWrapper ref={itemRef} style={{ display: 'flex' }}>
       {isEditModeOn && (
         <ModifyButtonWrapper
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.5 }}
         >
           <UnstyledButton>
             <MenuIcon size={30} />
           </UnstyledButton>
         </ModifyButtonWrapper>
       )}
-      <ListItem>
+      <ListItem
+        initial={{ scaleX: 1 }}
+        animate={{ scaleX: isEditModeOn ? 0.98 : 1 }}
+        transition={{ duration: 0.8, ease: 'easeInOut' }}
+        isEditModeOn={isEditModeOn}
+        onClick={handleOnListItemClick}
+      >
         <ColumnOneBothRowsItem color="primary">{title}</ColumnOneBothRowsItem>
         <ColumnTwoRowOneItem color="contrast">{title}</ColumnTwoRowOneItem>
         <ColumnTwoRowTwoItem color="contrast">{address}</ColumnTwoRowTwoItem>
@@ -68,7 +82,7 @@ const AddressBookItem = ({
         <ModifyButtonWrapper
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.5 }}
         >
           <UnstyledButton onClick={() => handleDeleteAddress(id)}>
             <BinIcon size={30} />

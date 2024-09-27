@@ -20,7 +20,7 @@ export const useJoinKeygenMutation = () => {
 
   const [{ keygenType }] = useAppPathParams<'joinKeygen'>();
 
-  const serverUrl = useCurrentServerUrl();
+  const [serverUrl] = useCurrentServerUrl();
 
   const { sessionId, encryptionKeyHex } = keygenMsg;
 

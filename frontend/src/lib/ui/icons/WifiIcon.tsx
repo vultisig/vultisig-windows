@@ -1,10 +1,13 @@
-export const WifiIcon = () => (
+import { SVGProps } from 'react';
+
+export const WifiIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     width="1em"
     height="1em"
     viewBox="0 0 30 30"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    {...props}
   >
     <path
       fillRule="evenodd"
