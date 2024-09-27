@@ -12,7 +12,7 @@ import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { getQueryDependantDefaultProps } from '../../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { PageContent } from '../../../ui/page/PageContent';
-import { useCurrentServerType } from '../../keygen/state/currentServerType';
+import { KeygenNetworkReminder } from '../../keygen/shared/KeygenNetworkReminder';
 import { useCurrentPeers } from '../state/currentPeers';
 import { useIsPeerDiscoveryStepDisabled } from './hooks/useIsPeerDiscoveryStepDisabled';
 import { ManageServerType } from './ManageServerType';
@@ -34,7 +34,6 @@ export const SetupVaultPeerDiscovery = ({
 }: ComponentWithForwardActionProps) => {
   const { t } = useTranslation();
   const [peers, setPeers] = useCurrentPeers();
-  const [serverType] = useCurrentServerType();
 
   const isDisabled = useIsPeerDiscoveryStepDisabled();
 
@@ -78,25 +77,7 @@ export const SetupVaultPeerDiscovery = ({
             {...getQueryDependantDefaultProps('devices')}
           />
 
-          {serverType === 'relay' ? (
-            <div>
-              <img
-                src="/assets/icons/cellular.svg"
-                alt="cellular"
-                className="mx-auto my-2"
-              />
-              {t('devices_on_same_internet')}
-            </div>
-          ) : (
-            <div>
-              <img
-                src="/assets/icons/wifi.svg"
-                alt="wifi"
-                className="mx-auto my-2"
-              />
-              {t('devices_on_same_wifi')}
-            </div>
-          )}
+          <KeygenNetworkReminder />
         </VStack>
       </Content>
       <Button type="submit" isDisabled={isDisabled}>

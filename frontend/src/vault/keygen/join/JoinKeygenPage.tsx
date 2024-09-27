@@ -12,6 +12,7 @@ import { KeygenPageHeader } from '../shared/KeygenPageHeader';
 import { PendingKeygenMessage } from '../shared/PendingKeygenMessage';
 import { useCurrentJoinKeygenMsg } from '../state/currentJoinKeygenMsg';
 import { CurrentLocalPartyIdProvider } from '../state/currentLocalPartyId';
+import { CurrentServerTypeProvider } from '../state/currentServerType';
 import { CurrentServerUrlProvider } from '../state/currentServerUrl';
 import { generateLocalPartyId } from '../utils/generateLocalPartyId';
 import { JoinKeygenSession } from './JoinKeygenSession';
@@ -41,7 +42,11 @@ export const JoinKeygenPage = () => {
       <VStack flexGrow>
         {data ? (
           <CurrentServerUrlProvider value={data}>
-            <JoinKeygenSession />
+            <CurrentServerTypeProvider
+              initialValue={useVultisigRelay ? 'relay' : 'local'}
+            >
+              <JoinKeygenSession />
+            </CurrentServerTypeProvider>
           </CurrentServerUrlProvider>
         ) : (
           <>

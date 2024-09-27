@@ -32,6 +32,8 @@
   "vault_type_1_description": "You need 1 more device to pair",
   "vault_type_2_description": "You need 2 more devices to pair",
   "vault_type_3_description": "You can pair as many devices you want",
+  "keygen_reminder_relay": "Connect all devices to the Internet with the Vultisig App open.",
+  "keygen_reminder_local": "Connect all devices to the same Network with Vultisig App open",
   "devices_on_same_wifi": "Keep devices on the same Network with VULTISIG open",
   "start": "Start",
   "vault_name": "Vault Name",
