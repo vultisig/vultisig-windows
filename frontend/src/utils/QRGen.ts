@@ -31,7 +31,9 @@ export async function createKeygenMsg(
   sevenZip.FS.writeFile('data.bin', bufferData);
   sevenZip.callMain(['a', archiveName, 'data.bin']);
   const compressedData = sevenZip.FS.readFile(archiveName);
-  return Buffer.from(compressedData).toString('base64');
+  const payload = Buffer.from(compressedData).toString('base64');
+
+  return `vultisig://vultisig.com?type=NewVault&tssType=Keygen&jsonData=${payload}`;
 }
 export async function createKeysignMessage(
   isRelay: boolean,

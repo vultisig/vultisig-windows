@@ -1,25 +1,18 @@
-import { Endpoint } from '../Endpoint';
-
 // Interval ref
 let intervalId: any = null;
 
 export function postSession(
-  isRelay: boolean,
+  serverUrl: string,
   sessionID: string,
   localPartyID: string
 ) {
-  return fetch(
-    `${
-      isRelay ? Endpoint.VULTISIG_RELAY : Endpoint.LOCAL_MEDIATOR_URL
-    }/${sessionID}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify([localPartyID]),
-    }
-  );
+  return fetch(`${serverUrl}/${sessionID}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify([localPartyID]),
+  });
 }
 export function joinSession(
   serverURL: string,
@@ -34,42 +27,33 @@ export function joinSession(
     body: JSON.stringify([localPartyID]),
   });
 }
-export function getSession(isRelay: boolean, sessionID: string) {
-  return fetch(
-    `${
-      isRelay ? Endpoint.VULTISIG_RELAY : Endpoint.LOCAL_MEDIATOR_URL
-    }/${sessionID}`
-  );
+export function getSession(serverUrl: string, sessionID: string) {
+  return fetch(`${serverUrl}/${sessionID}`);
 }
 
 export function startSession(
-  isRelay: boolean,
+  serverURL: string,
   sessionID: string,
   devices: string[]
 ) {
-  return fetch(
-    `${
-      isRelay ? Endpoint.VULTISIG_RELAY : Endpoint.LOCAL_MEDIATOR_URL
-    }/start/${sessionID}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(devices),
-    }
-  );
+  return fetch(`${serverURL}/start/${sessionID}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(devices),
+  });
 }
 
 export function checkForDevices(
-  isRelay: boolean,
+  serverUrl: string,
   sessionID: string,
   setDevices: (devices: string[]) => void
 ) {
   clearCheckingInterval();
   intervalId = setInterval(async () => {
     try {
-      const response = await getSession(isRelay, sessionID);
+      const response = await getSession(serverUrl, sessionID);
       try {
         const data = (await response.json()) as string[];
         const uniqueDevices: any = Array.from(new Set(data));

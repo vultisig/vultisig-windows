@@ -214,5 +214,10 @@
   "vault_settings_address_book_add_addresses_title": "Add Address",
   "vault_settings_address_book_address_title_field": "Title",
   "vault_settings_address_book_address_address_field": "Address",
-  "vault_settings_address_book_address_placeholder": "Type Here"
+  "vault_settings_address_book_address_placeholder": "Type Here",
+  "session_init": "Initializing session...",
+  "session_init_failed": "Failed to initialize session",
+  "select_at_least_one_device": "Select at least one device",
+  "select_n_devices": "Select {{count}} device",
+  "select_n_devices_plural": "Select {{count}} devices"
 }

@@ -19,7 +19,7 @@ export const JoinKeygenSession = () => {
   const keygenMsg = useCurrentJoinKeygenMsg();
 
   const { sessionId } = keygenMsg;
-  const serverUrl = useCurrentServerUrl();
+  const [serverUrl] = useCurrentServerUrl();
 
   const sessionQuery = useQuery({
     queryKey: ['keygenSession', sessionId],
