@@ -12,8 +12,11 @@ import { KeysignPayloadUtils } from '../../extensions/KeysignPayload';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { makeAppPath } from '../../navigation';
 import { useWalletCore } from '../../providers/WalletCoreProvider';
-import { Endpoint } from '../../services/Endpoint';
 import { startSession } from '../../services/Keygen/Keygen';
+import {
+  KeygenServerType,
+  keygenServerUrl,
+} from '../../vault/keygen/KeygenServerType';
 
 const KeysignFlowView: React.FC = () => {
   const { t } = useTranslation();
@@ -35,17 +38,17 @@ const KeysignFlowView: React.FC = () => {
   useEffect(() => {
     currentVault.current = vault;
     setCurrentScreen(0);
-  }, []);
+  }, [vault]);
 
   const onKeysignPeerDiscoveryContinue = (
-    isRelay: boolean,
+    keygenServerType: KeygenServerType,
     sessionID: string,
     devices: string[],
     hexEncryptionKey: string
   ) => {
-    setServerURL(
-      isRelay ? Endpoint.VULTISIG_RELAY : Endpoint.LOCAL_MEDIATOR_URL
-    );
+    const serverUrl = keygenServerUrl[keygenServerType];
+
+    setServerURL(serverUrl);
     setSessionID(sessionID);
     devices.push(currentVault.current.local_party_id!);
     setDevices(devices);
@@ -56,7 +59,7 @@ const KeysignFlowView: React.FC = () => {
       }
     );
     console.log('keysign payload:', keysignPayload);
-    startSession(isRelay, sessionID, devices).then(() => {
+    startSession(serverURL, sessionID, devices).then(() => {
       setCurrentScreen(1);
     });
   };
