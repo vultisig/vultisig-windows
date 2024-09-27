@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { usePoll } from '../../../../lib/ui/query/hooks/usePoll';
-import { fixedDataQueryOptions } from '../../../../lib/ui/query/utils/options';
+import { pollingQueryOptions } from '../../../../lib/ui/query/utils/options';
 import { without } from '../../../../lib/utils/array/without';
 import { withoutDuplicates } from '../../../../lib/utils/array/withoutDuplicates';
 import { queryUrl } from '../../../../lib/utils/query/queryUrl';
@@ -15,7 +14,7 @@ export const usePeerOptionsQuery = () => {
   const [serverType] = useCurrentServerType();
   const localPartyId = useCurrentLocalPartyId();
 
-  const query = useQuery({
+  return useQuery({
     queryKey: ['peerOptions', sessionId, serverType],
     queryFn: async () => {
       const response = await queryUrl<string[]>(
@@ -24,13 +23,6 @@ export const usePeerOptionsQuery = () => {
 
       return without(withoutDuplicates(response), localPartyId);
     },
-    ...fixedDataQueryOptions,
+    ...pollingQueryOptions(5000),
   });
-
-  usePoll(query, {
-    delay: 5000,
-    shouldStop: () => false,
-  });
-
-  return query;
 };

@@ -7,6 +7,8 @@ export type UseQueryGenericOptions = Partial<
     | 'refetchOnWindowFocus'
     | 'refetchOnReconnect'
     | 'staleTime'
+    | 'refetchInterval'
+    | 'refetchIntervalInBackground'
   >
 >;
 
@@ -20,3 +22,10 @@ export const fixedDataQueryOptions: UseQueryGenericOptions = {
   ...noRefetchQueryOptions,
   staleTime: Infinity,
 };
+
+export const pollingQueryOptions = (
+  interval: number
+): UseQueryGenericOptions => ({
+  refetchInterval: interval,
+  refetchIntervalInBackground: true,
+});
