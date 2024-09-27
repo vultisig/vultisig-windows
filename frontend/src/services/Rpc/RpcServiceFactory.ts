@@ -10,8 +10,8 @@ import {
   RpcServiceEthereum,
   RpcServiceOptimism,
   RpcServicePolygon,
-  RpcServiceZksync,
 } from './evm/RpcServiceEvmAllLayers';
+import { RpcServiceZksync } from './evm/RpcServiceZkSyncEvm';
 import { RpcServiceGaia } from './gaia/RpcServiceGaia';
 import { RpcServiceKujira } from './kurija/RpcServiceKurija';
 import { RpcServicePolkadot } from './polkadot/RpcServicePolkadot';

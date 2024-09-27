@@ -13,8 +13,8 @@ import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
-  private provider: ethers.JsonRpcProvider;
-  private rpcUrl: string;
+  provider: ethers.JsonRpcProvider;
+  rpcUrl: string;
 
   constructor(rpcUrl: string) {
     this.provider = new ethers.JsonRpcProvider(rpcUrl);
@@ -423,67 +423,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       console.error('getTokens::', error);
       return [];
     }
-  }
-
-  async getGasInfoZk(
-    fromAddress: string,
-    toAddress: string,
-    memo: string = '0xffffffff'
-  ): Promise<{
-    gasLimit: bigint;
-    gasPerPubdataLimit: bigint;
-    maxFeePerGas: bigint;
-    maxPriorityFeePerGas: bigint;
-    nonce: number;
-  }> {
-    const memoDataHex = ethers.hexlify(ethers.toUtf8Bytes(memo));
-    const data = '0x' + memoDataHex;
-
-    const noncePromise = this.provider.getTransactionCount(fromAddress);
-    const feeEstimatePromise = this.zksEstimateFee(
-      fromAddress,
-      toAddress,
-      data
-    );
-
-    const [nonce, feeEstimateValue] = await Promise.all([
-      noncePromise,
-      feeEstimatePromise,
-    ]);
-
-    return {
-      gasLimit: feeEstimateValue.gasLimit,
-      gasPerPubdataLimit: feeEstimateValue.gasPerPubdataLimit,
-      maxFeePerGas: feeEstimateValue.maxFeePerGas,
-      maxPriorityFeePerGas: feeEstimateValue.maxPriorityFeePerGas,
-      nonce: nonce,
-    };
-  }
-
-  private async zksEstimateFee(
-    fromAddress: string,
-    toAddress: string,
-    data: string
-  ): Promise<{
-    gasLimit: bigint;
-    gasPerPubdataLimit: bigint;
-    maxFeePerGas: bigint;
-    maxPriorityFeePerGas: bigint;
-  }> {
-    const result = await this.provider.send('zks_estimateFee', [
-      {
-        from: fromAddress,
-        to: toAddress,
-        data: data,
-      },
-    ]);
-
-    return {
-      gasLimit: BigInt(result.gas_limit),
-      gasPerPubdataLimit: BigInt(result.gas_per_pubdata_limit),
-      maxFeePerGas: BigInt(result.max_fee_per_gas),
-      maxPriorityFeePerGas: BigInt(result.max_priority_fee_per_gas),
-    };
   }
 
   async estimateGasForERC20Transfer(

@@ -96,21 +96,6 @@ export class RpcServiceCronos extends RpcServiceEvm implements ITokenService {
   }
 }
 
-export class RpcServiceZksync extends RpcServiceEvm implements ITokenService {
-  constructor() {
-    super(Endpoint.zksyncServiceRpcService);
-  }
-
-  async calculateFee(_coin: Coin): Promise<number> {
-    const gasLimit = 200000;
-    return gasLimit;
-  }
-
-  async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
-    return await super.getTokens(nativeToken);
-  }
-}
-
 export class RpcServiceBlast extends RpcServiceEvm implements ITokenService {
   constructor() {
     super(Endpoint.blastServiceRpcService);
