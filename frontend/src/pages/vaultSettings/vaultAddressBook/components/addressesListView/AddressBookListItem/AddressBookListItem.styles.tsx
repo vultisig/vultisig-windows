@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-import { Panel } from '../../../../../../lib/ui/panel/Panel';
 import { Text } from '../../../../../../lib/ui/text';
 import { getColor } from '../../../../../../lib/ui/theme/getters';
 
@@ -13,12 +12,17 @@ export const Container = styled.div`
   margin-bottom: 32px;
 `;
 
-export const ListItem = styled(Panel)`
+export const ListItem = styled(motion.button)<{
+  isEditModeOn: boolean;
+}>`
+  border-radius: 12px;
+  padding: 16px;
   width: 100%;
   font-weight: 400;
   font-size: 16px;
   color: ${getColor('contrast')};
   background-color: ${getColor('foreground')};
+  transform-origin: center;
 
   display: grid;
   grid-template-columns: fit-content(200px) 1fr fit-content(200px);
@@ -38,11 +42,13 @@ export const ColumnOneBothRowsItem = styled(ItemText)`
 export const ColumnTwoRowOneItem = styled(ItemText)`
   grid-column: 2;
   grid-row: 1;
+  text-align: start;
 `;
 
 export const ColumnTwoRowTwoItem = styled(ItemText)`
   grid-column: 2;
   grid-row: 2;
+  text-align: start;
 `;
 
 export const ColumnThreeRowOneItem = styled(ItemText)`
