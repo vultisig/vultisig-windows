@@ -135,6 +135,15 @@ export class RpcServiceBsc extends RpcServiceEvm implements ITokenService {
     super(Endpoint.bscServiceRpcService);
   }
 
+  async calculateFee(coin: Coin): Promise<number> {
+    let gasLimit = 40000;
+    if (!coin.isNativeToken) {
+      gasLimit = 120000;
+    }
+
+    return gasLimit;
+  }
+
   async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
     return await super.getTokens(nativeToken);
   }
