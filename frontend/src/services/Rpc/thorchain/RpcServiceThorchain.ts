@@ -50,7 +50,7 @@ export class RpcServiceThorchain implements IRpcService {
     });
 
     const data = await response.json();
-    return data.txResponse?.txhash;
+    return data.tx_response?.txhash;
   }
 
   async resolveENS?(ensName: string): Promise<string> {
