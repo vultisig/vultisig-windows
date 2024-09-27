@@ -4,12 +4,14 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import Select from 'react-select';
 
+import { AddressBookItem } from '../../../../../lib/types/address-book';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { Text } from '../../../../../lib/ui/text';
 import { extractError } from '../../../../../lib/utils/error/extractError';
 import { Chain } from '../../../../../model/chain';
 import { useAddAddressBookItemMutation } from '../../../../../vault/mutations/useAddAddressBookItemMutation';
 import { useAssertCurrentVaultCoins } from '../../../../../vault/state/useCurrentVault';
+import { AddressFormValues, addressSchema } from '../../schemas/addressSchema';
 import {
   CoinOption,
   Container,
@@ -19,14 +21,17 @@ import {
   FormField,
   FormFieldLabel,
   FormInput,
-} from './AddAddressForm.styles';
-import { AddressFormValues, addressSchema } from './schemas/addAddressSchema';
+} from './ModifyAddressForm.styles';
 
-type AddAddressFormProps = {
+type ModifyAddressFormProps = {
   onClose: () => void;
+  defaultValues: AddressBookItem;
 };
 
-const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
+const ModifyAddressForm = ({
+  onClose,
+  defaultValues,
+}: ModifyAddressFormProps) => {
   const coins = useAssertCurrentVaultCoins();
   const { t } = useTranslation();
 
@@ -39,6 +44,13 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     }));
   }, [coins]);
 
+  // TODO: @antonio to implement when BE returns "coin" as part of each account
+  // const coinIdForDefaultValues =
+  //   useMemo(
+  //     () => coins.find(coin => coin.id === defaultValues.coin.id)?.id,
+  //     [coins, defaultValues.coin.id]
+  //   ) || '';
+
   const {
     register,
     handleSubmit,
@@ -48,9 +60,8 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     resolver: zodResolver(addressSchema),
     mode: 'onBlur',
     defaultValues: {
-      coinId: coinOptions[0].value,
-      title: '',
-      address: '',
+      ...defaultValues,
+      coinId: '1',
     },
   });
 
@@ -62,7 +73,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     onSuccess: onClose,
   });
 
-  const handleAddAddress = (data: AddressFormValues) => {
+  const handleModifyAddress = (data: AddressFormValues) => {
     const { address, coinId, title } = data;
     const coin = coins.find(coin => coin.id === coinId);
 
@@ -82,7 +93,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
 
   return (
     <Container>
-      <Form onSubmit={handleSubmit(handleAddAddress)}>
+      <Form onSubmit={handleSubmit(handleModifyAddress)}>
         <FormField>
           <Controller
             name="coinId"
@@ -145,7 +156,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
       <Button
         isLoading={isLoading || isValidating || isAddAddressBookAddressPending}
         isDisabled={!isValid || !isDirty}
-        onClick={handleSubmit(handleAddAddress)}
+        onClick={handleSubmit(handleModifyAddress)}
       >
         {t('vault_settings_address_book_save_addresses_button')}
       </Button>
@@ -158,4 +169,4 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   );
 };
 
-export default AddAddressForm;
+export default ModifyAddressForm;
