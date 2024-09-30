@@ -212,6 +212,7 @@
   "vault_name_already_exists": "Vault name must be unique",
   "vault_settings_address_book_save_addresses_button": "Save Address",
   "vault_settings_address_book_add_addresses_title": "Add Address",
+  "vault_settings_address_book_edit_addresses_title": "Edit Address",
   "vault_settings_address_book_address_title_field": "Title",
   "vault_settings_address_book_address_address_field": "Address",
   "vault_settings_address_book_address_placeholder": "Type Here",
