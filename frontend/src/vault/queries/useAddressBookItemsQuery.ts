@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { storage } from '../../../wailsjs/go/models';
 import { AddressBookItem } from '../../lib/types/address-book';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 
 const transformAddressBookItemsResponse = (
-  // TODO: @antonio replace with "storage.AddressBookItem" type when existing
-  addressBookItems: any
+  addressBookItems: storage.AddressBookItem[]
 ): AddressBookItem[] =>
   addressBookItems.map((addressBookItem: any) => ({
     id: addressBookItem.ID,
@@ -25,8 +25,7 @@ export const useAddressBookItemsQuery = () => {
   return useQuery({
     queryKey: [addressBookItemsQueryKey],
     queryFn: async () => {
-      const addressBookItems =
-        (await vaultService.getAllAddressBookItems()) as AddressBookItem[];
+      const addressBookItems = await vaultService.getAllAddressBookItems();
 
       if (!addressBookItems) {
         return [];
