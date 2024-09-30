@@ -14,7 +14,7 @@ import { useCurrentJoinKeygenMsg } from '../state/currentJoinKeygenMsg';
 import { CurrentLocalPartyIdProvider } from '../state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../state/currentServerType';
 import { CurrentServerUrlProvider } from '../state/currentServerUrl';
-import { generateLocalPartyId } from '../utils/generateLocalPartyId';
+import { generateLocalPartyId } from '../utils/localPartyId';
 import { JoinKeygenSession } from './JoinKeygenSession';
 
 export const JoinKeygenPage = () => {

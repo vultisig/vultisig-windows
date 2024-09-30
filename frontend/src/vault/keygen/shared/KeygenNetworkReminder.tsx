@@ -16,7 +16,7 @@ export const KeygenNetworkReminder = () => {
         <KeygenServerTypeIcon value={serverType} />
       </Text>
       <Text
-        style={{ maxWidth: 280 }}
+        style={{ maxWidth: 320 }}
         centerHorizontally
         size={14}
         weight="400"
