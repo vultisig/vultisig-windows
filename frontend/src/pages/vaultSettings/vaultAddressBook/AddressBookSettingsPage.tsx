@@ -13,11 +13,12 @@ const AddressBookSettingsPage = () => {
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const { data: addressBookItems, isFetching: isFetchingAddressBookItems } =
     useAddressBookItemsQuery();
+
   const handleOpenAddAddressView = () => {
     setIsAddAddressViewOpen(true);
   };
   const handleEditToggle = () => setIsEditModeOn(!isEditModeOn);
-  const isAddressBookEmpty = addressBookItems.length === 0 || !addressBookItems;
+  const isAddressBookEmpty = addressBookItems.length === 0;
 
   const componentMap = {
     loading: <Text>Loading...</Text>,
@@ -30,7 +31,6 @@ const AddressBookSettingsPage = () => {
     list: (
       <AddressesListView
         onEditModeToggle={handleEditToggle}
-        addressBookItems={addressBookItems}
         onOpenAddAddressView={handleOpenAddAddressView}
         isEditModeOn={isEditModeOn}
       />

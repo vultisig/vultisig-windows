@@ -4,10 +4,21 @@ import crypto from 'crypto';
 
 import { SaveFileBkp } from '../../../wailsjs/go/main/App';
 import { storage } from '../../../wailsjs/go/models';
-import { SaveVault, UpdateVaultName } from '../../../wailsjs/go/storage/Store';
+import {
+  DeleteAddressBookItem,
+  GetAllAddressBookItems,
+  SaveAddressBookItem,
+  SaveVault,
+  UpdateAddressBookItem,
+  UpdateVaultName,
+} from '../../../wailsjs/go/storage/Store';
 import { Reshare, StartKeygen } from '../../../wailsjs/go/tss/TssService';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { Vault, Vault_KeyShare } from '../../gen/vultisig/vault/v1/vault_pb';
+import {
+  AddAddressBookItem,
+  AddressBookItem,
+} from '../../lib/types/address-book';
 import { DefaultCoinsService } from '../Coin/DefaultCoinsService';
 import { IVaultService } from './IVaultService';
 
@@ -15,6 +26,22 @@ export class VaultService implements IVaultService {
   private walletCore: WalletCore;
   constructor(walletCore: WalletCore) {
     this.walletCore = walletCore;
+  }
+
+  async deleteAddressBookItem(id: string): Promise<void> {
+    await DeleteAddressBookItem(id);
+  }
+
+  async updateAddressBookItem(item: AddressBookItem): Promise<void> {
+    await UpdateAddressBookItem(item);
+  }
+
+  async saveAddressBookItem(item: AddAddressBookItem): Promise<void> {
+    await SaveAddressBookItem(item);
+  }
+
+  async getAllAddressBookItems(): Promise<storage.AddressBookItem[]> {
+    return await GetAllAddressBookItems();
   }
 
   // public key ECDSA is the unique identifier for a vault - Vault Id
