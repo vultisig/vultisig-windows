@@ -21,6 +21,7 @@ import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
 import { useCurrentServerType } from '../../keygen/state/currentServerType';
 import { generateServiceName } from '../../keygen/utils/generateServiceName';
 import { useCurrentSessionId } from '../state/currentSessionId';
+import { DownloadKeygenQrCode } from './DownloadKeygenQrCode';
 import { SetupVaultPeerDiscovery } from './SetupVaultPeerDiscovery';
 
 export const SetupVaultPeerDiscoveryStep = ({
@@ -56,6 +57,7 @@ export const SetupVaultPeerDiscoveryStep = ({
           </PageHeaderTitle>
         }
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
+        secondaryControls={<DownloadKeygenQrCode />}
       />
       <QueryDependant
         query={setupSessionStatus}

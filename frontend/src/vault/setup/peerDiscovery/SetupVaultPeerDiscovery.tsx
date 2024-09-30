@@ -1,22 +1,16 @@
-import Lottie from 'lottie-react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import loadingAnimation from '../../../../public/assets/images/loadingAnimation.json';
-import SelectDevice from '../../../components/selectDevice/SelectDevice';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { uniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
-import { getQueryDependantDefaultProps } from '../../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { PageContent } from '../../../ui/page/PageContent';
-import { useCurrentServerType } from '../../keygen/state/currentServerType';
-import { useCurrentPeers } from '../state/currentPeers';
+import { KeygenNetworkReminder } from '../../keygen/shared/KeygenNetworkReminder';
 import { useIsPeerDiscoveryStepDisabled } from './hooks/useIsPeerDiscoveryStepDisabled';
 import { ManageServerType } from './ManageServerType';
-import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery';
+import { PeersManager } from './peers/PeersManager';
 import { SetupVaultPeerDiscoveryQrCode } from './SetupVaultPeerDiscoveryQrCode';
 
 const Content = styled.div`
@@ -33,12 +27,8 @@ export const SetupVaultPeerDiscovery = ({
   onForward,
 }: ComponentWithForwardActionProps) => {
   const { t } = useTranslation();
-  const [peers, setPeers] = useCurrentPeers();
-  const [serverType] = useCurrentServerType();
 
   const isDisabled = useIsPeerDiscoveryStepDisabled();
-
-  const peerOptionsQuery = usePeerOptionsQuery();
 
   return (
     <PageContent
@@ -51,52 +41,11 @@ export const SetupVaultPeerDiscovery = ({
     >
       <Content>
         <SetupVaultPeerDiscoveryQrCode />
-        <VStack gap={40} flexGrow alignItems="center" justifyContent="center">
+        <VStack gap={40} flexGrow alignItems="center">
           <ManageServerType />
-          <QueryDependant
-            query={peerOptionsQuery}
-            success={options => (
-              <>
-                {options.length == 0 ? (
-                  <>
-                    <h3 className="mt-5 font-semibold">
-                      {t('looking_for_devices')}
-                    </h3>
-                    <div className="w-28 h-auto mx-auto my-5">
-                      <Lottie animationData={loadingAnimation} loop={true} />
-                    </div>
-                  </>
-                ) : (
-                  <SelectDevice
-                    devices={options}
-                    selectedDevices={peers}
-                    setSelectedDevices={setPeers}
-                  />
-                )}
-              </>
-            )}
-            {...getQueryDependantDefaultProps('devices')}
-          />
+          <PeersManager />
 
-          {serverType === 'relay' ? (
-            <div>
-              <img
-                src="/assets/icons/cellular.svg"
-                alt="cellular"
-                className="mx-auto my-2"
-              />
-              {t('devices_on_same_internet')}
-            </div>
-          ) : (
-            <div>
-              <img
-                src="/assets/icons/wifi.svg"
-                alt="wifi"
-                className="mx-auto my-2"
-              />
-              {t('devices_on_same_wifi')}
-            </div>
-          )}
+          <KeygenNetworkReminder />
         </VStack>
       </Content>
       <Button type="submit" isDisabled={isDisabled}>
