@@ -1,27 +1,27 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AddressBookItem } from '../../../../../lib/types/address-book';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { UnstyledButton } from '../../../../../lib/ui/buttons/UnstyledButton';
 import SquareAndPencilIcon from '../../../../../lib/ui/icons/SquareAndPencilIcon';
 import { Text } from '../../../../../lib/ui/text';
+import { extractError } from '../../../../../lib/utils/error/extractError';
 import { PageHeader } from '../../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
+import { useDeleteAddressBookItemMutation } from '../../../../../vault/mutations/useDeleteAddressBookItemMutation';
+import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';
 import ModifyAddressForm from '../modifyAddressForm/ModifyAddAddressForm';
 import AddressBookListItem from './AddressBookListItem/AddressBookListItem';
-import { Container, Main } from './AddressesListView.styles';
+import { ButtonWrapper, Container, Main } from './AddressesListView.styles';
 
 type AddressesListViewProps = {
-  addressBookItems: AddressBookItem[];
   onOpenAddAddressView: () => void;
   isEditModeOn: boolean;
   onEditModeToggle: () => void;
 };
 
 const AddressesListView = ({
-  addressBookItems,
   onOpenAddAddressView,
   isEditModeOn,
   onEditModeToggle,
@@ -29,19 +29,33 @@ const AddressesListView = ({
   const [modifyAddressItemId, setModifyAddressItemId] = useState<string | null>(
     null
   );
+  const isModifyViewOpen = modifyAddressItemId !== null;
   const { t } = useTranslation();
+  const {
+    data: addressBookItems,
+    isFetching: isFetchingAddressBookItems,
+    error: addressBookItemsError,
+  } = useAddressBookItemsQuery();
 
-  const handleDeleteAddress = (id: string) => {
-    // TODO: @antonio to implement when BE is ready
-    console.log('## id', id);
-  };
+  const {
+    mutate: deleteAddressBookItem,
+    isPending: isDeleteAddressBookItemLoading,
+    error: deleteAddressBookItemError,
+  } = useDeleteAddressBookItemMutation();
 
+  const isLoading =
+    isFetchingAddressBookItems || isDeleteAddressBookItemLoading;
+  const error = addressBookItemsError || deleteAddressBookItemError;
   const defaultValues = useMemo(
     () => addressBookItems.find(item => item.id === modifyAddressItemId),
     [addressBookItems, modifyAddressItemId]
   );
 
-  if (modifyAddressItemId !== null && defaultValues) {
+  const handleDeleteAddress = (id: string) => {
+    void deleteAddressBookItem(id);
+  };
+
+  if (isModifyViewOpen && defaultValues) {
     return (
       <>
         <PageHeader
@@ -100,9 +114,16 @@ const AddressesListView = ({
             />
           ))}
         </Main>
-        <Button onClick={onOpenAddAddressView}>
-          {t('vault_settings_address_book_add_addresses_button')}
-        </Button>
+        <ButtonWrapper>
+          <Button isLoading={isLoading} onClick={onOpenAddAddressView}>
+            {t('vault_settings_address_book_add_addresses_button')}
+          </Button>
+          {error && (
+            <Text color="danger" size={12}>
+              {extractError(error)}
+            </Text>
+          )}
+        </ButtonWrapper>
       </Container>
     </>
   );

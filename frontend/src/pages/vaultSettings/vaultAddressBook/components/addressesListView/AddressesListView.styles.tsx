@@ -13,3 +13,8 @@ export const Main = styled.div`
   flex-direction: column;
   gap: 8px;
 `;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;

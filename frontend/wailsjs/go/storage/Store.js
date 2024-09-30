@@ -6,6 +6,10 @@ export function Close() {
   return window['go']['storage']['Store']['Close']();
 }
 
+export function DeleteAddressBookItem(arg1) {
+  return window['go']['storage']['Store']['DeleteAddressBookItem'](arg1);
+}
+
 export function DeleteCoin(arg1, arg2) {
   return window['go']['storage']['Store']['DeleteCoin'](arg1, arg2);
 }
@@ -56,6 +60,10 @@ export function SaveSettings(arg1) {
 
 export function SaveVault(arg1) {
   return window['go']['storage']['Store']['SaveVault'](arg1);
+}
+
+export function UpdateAddressBookItem(arg1) {
+  return window['go']['storage']['Store']['UpdateAddressBookItem'](arg1);
 }
 
 export function UpdateVaultName(arg1, arg2) {

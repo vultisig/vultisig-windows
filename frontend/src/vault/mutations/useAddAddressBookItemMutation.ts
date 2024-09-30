@@ -1,11 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { SaveAddressBookItem } from '../../../wailsjs/go/storage/Store';
 import { AddAddressBookItem } from '../../lib/types/address-book';
 import { Chain } from '../../model/chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { AddressServiceFactory } from '../../services/Address/AddressServiceFactory';
-import { addressBookItemsQueryKey } from '../queries/useAddressBookItemsQuery';
+import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
+import {
+  addressBookItemsQueryKey,
+  useAddressBookItemsQuery,
+} from '../queries/useAddressBookItemsQuery';
 
 export const useAddAddressBookItemMutation = ({
   onSuccess,
@@ -14,6 +17,8 @@ export const useAddAddressBookItemMutation = ({
 } = {}) => {
   const queryClient = useQueryClient();
   const walletCore = useAssertWalletCore();
+  const vaultService = VaultServiceFactory.getService(walletCore);
+  const { data: addressBookItems } = useAddressBookItemsQuery();
 
   return useMutation({
     mutationFn: async ({
@@ -36,9 +41,15 @@ export const useAddAddressBookItemMutation = ({
         throw new Error('Invalid address for the selected chain!');
       }
 
-      console.log('## addressBookItem', addressBookItem);
+      const isAddressAlreadyAdded = addressBookItems.some(
+        item => item.address === addressBookItem.address
+      );
 
-      return await SaveAddressBookItem(addressBookItem);
+      if (isAddressAlreadyAdded) {
+        throw new Error('Address already added!');
+      }
+
+      return await vaultService.saveAddressBookItem(addressBookItem);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
