@@ -14,6 +14,7 @@ export const Container = styled.div`
 
 export const ListItem = styled(motion.button)<{
   isEditModeOn: boolean;
+  isCurrentlyBeingDragged: boolean;
 }>`
   border-radius: 12px;
   padding: 16px;
@@ -23,6 +24,12 @@ export const ListItem = styled(motion.button)<{
   color: ${getColor('contrast')};
   background-color: ${getColor('foreground')};
   transform-origin: center;
+  border: ${({ isCurrentlyBeingDragged, theme }) =>
+    isCurrentlyBeingDragged
+      ? `2px solid ${theme.colors.foregroundExtra.toCssValue()}`
+      : 'none'};
+  border-radius: ${({ isCurrentlyBeingDragged }) =>
+    isCurrentlyBeingDragged && '8px'};
 
   display: grid;
   grid-template-columns: fit-content(200px) 1fr fit-content(200px);

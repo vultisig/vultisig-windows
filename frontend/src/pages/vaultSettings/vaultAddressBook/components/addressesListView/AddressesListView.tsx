@@ -1,6 +1,12 @@
-import { useMemo, useState } from 'react';
+import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import { reorder } from '@atlaskit/pragmatic-drag-and-drop/reorder';
+import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
+import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types';
+import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { AddressBookItem } from '../../../../../lib/types/address-book';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { UnstyledButton } from '../../../../../lib/ui/buttons/UnstyledButton';
 import SquareAndPencilIcon from '../../../../../lib/ui/icons/SquareAndPencilIcon';
@@ -14,6 +20,8 @@ import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddres
 import ModifyAddressForm from '../modifyAddressForm/ModifyAddAddressForm';
 import AddressBookListItem from './AddressBookListItem/AddressBookListItem';
 import { ButtonWrapper, Container, Main } from './AddressesListView.styles';
+import { ListContext } from './list-context/useListContext';
+import { getItemRegistry } from './utils/getItemRegistry';
 
 type AddressesListViewProps = {
   onOpenAddAddressView: () => void;
@@ -37,6 +45,15 @@ const AddressesListView = ({
     error: addressBookItemsError,
   } = useAddressBookItemsQuery();
 
+  const [items, setItems] = useState<AddressBookItem[]>([]);
+  const [registry] = useState(getItemRegistry);
+
+  useEffect(() => {
+    if (addressBookItems) {
+      setItems(addressBookItems);
+    }
+  }, [addressBookItems]);
+
   const {
     mutate: deleteAddressBookItem,
     isPending: isDeleteAddressBookItemLoading,
@@ -47,13 +64,91 @@ const AddressesListView = ({
     isFetchingAddressBookItems || isDeleteAddressBookItemLoading;
   const error = addressBookItemsError || deleteAddressBookItemError;
   const defaultValues = useMemo(
-    () => addressBookItems.find(item => item.id === modifyAddressItemId),
-    [addressBookItems, modifyAddressItemId]
+    () => items.find(item => item.id === modifyAddressItemId),
+    [items, modifyAddressItemId]
+  );
+
+  const getItemIndex = useCallback(
+    (id: string) => items.findIndex(item => item.id === id),
+    [items]
+  );
+
+  const reorderItem = useCallback(
+    ({
+      startIndex,
+      indexOfTarget,
+      closestEdgeOfTarget,
+    }: {
+      startIndex: number;
+      indexOfTarget: number;
+      closestEdgeOfTarget: Edge | null;
+    }) => {
+      const finishIndex = getReorderDestinationIndex({
+        startIndex,
+        closestEdgeOfTarget,
+        indexOfTarget,
+        axis: 'vertical',
+      });
+
+      if (finishIndex === startIndex) {
+        return;
+      }
+
+      setItems(prevItems =>
+        reorder({
+          list: prevItems,
+          startIndex,
+          finishIndex,
+        })
+      );
+    },
+    []
+  );
+
+  const contextValue = useMemo(
+    () => ({
+      registerItem: registry.register,
+      reorderItem,
+      getItemIndex,
+    }),
+    [registry.register, reorderItem, getItemIndex]
   );
 
   const handleDeleteAddress = (id: string) => {
     void deleteAddressBookItem(id);
   };
+
+  useEffect(() => {
+    return monitorForElements({
+      onDrop({ location, source }) {
+        const target = location.current.dropTargets[0];
+        if (!target) {
+          return;
+        }
+
+        const sourceData = source.data as { id: string; index: number };
+        const targetData = target.data as { id: string; index: number };
+
+        const sourceIndex = sourceData.index;
+        const targetIndex = targetData.index;
+
+        if (
+          typeof sourceIndex !== 'number' ||
+          typeof targetIndex !== 'number'
+        ) {
+          return;
+        }
+
+        const closestEdgeOfTarget = extractClosestEdge(targetData);
+
+        reorderItem({
+          startIndex: sourceIndex,
+          indexOfTarget: targetIndex,
+          closestEdgeOfTarget,
+        });
+      },
+    });
+  }, [reorderItem]);
 
   if (isModifyViewOpen && defaultValues) {
     return (
@@ -100,20 +195,22 @@ const AddressesListView = ({
         }
       />
       <Container>
-        <Main>
-          {addressBookItems.map(({ address, id, title, chain }) => (
-            <AddressBookListItem
-              key={id}
-              id={id}
-              title={title}
-              address={address}
-              chain={chain}
-              isEditModeOn={isEditModeOn}
-              onClick={() => setModifyAddressItemId(id)}
-              handleDeleteAddress={handleDeleteAddress}
-            />
-          ))}
-        </Main>
+        <ListContext.Provider value={contextValue}>
+          <Main>
+            {items.map(({ address, id, title, chain }) => (
+              <AddressBookListItem
+                key={id}
+                id={id}
+                title={title}
+                address={address}
+                chain={chain}
+                isEditModeOn={isEditModeOn}
+                onClick={() => setModifyAddressItemId(id)}
+                handleDeleteAddress={handleDeleteAddress}
+              />
+            ))}
+          </Main>
+        </ListContext.Provider>
         <ButtonWrapper>
           <Button isLoading={isLoading} onClick={onOpenAddAddressView}>
             {t('vault_settings_address_book_add_addresses_button')}
