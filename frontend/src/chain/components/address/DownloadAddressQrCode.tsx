@@ -2,7 +2,7 @@ import { FileUpIcon } from '../../../lib/ui/icons/FileUpIcon';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { SaveAsImage } from '../../../ui/file/SaveAsImage';
 import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton';
-import { PrintableAddressQrCode } from './PrintableAddressQrCode';
+import { PrintableQrCode } from '../../../ui/qr/PrintableQrCode';
 
 export const DownloadAddressQrCode = ({
   value,
@@ -13,7 +13,7 @@ export const DownloadAddressQrCode = ({
       renderTrigger={({ onClick }) => (
         <PageHeaderIconButton icon={<FileUpIcon />} onClick={onClick} />
       )}
-      value={<PrintableAddressQrCode value={value} />}
+      value={<PrintableQrCode title={value} value={value} />}
     />
   );
 };
