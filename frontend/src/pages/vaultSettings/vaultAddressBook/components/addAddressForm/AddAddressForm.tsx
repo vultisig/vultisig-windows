@@ -7,11 +7,11 @@ import Select from 'react-select';
 import { Text } from '../../../../../lib/ui/text';
 import { extractError } from '../../../../../lib/utils/error/extractError';
 import { Chain } from '../../../../../model/chain';
-import { PageHeader } from '../../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { useAddAddressBookItemMutation } from '../../../../../vault/mutations/useAddAddressBookItemMutation';
 import { useAssertCurrentVaultCoins } from '../../../../../vault/state/useCurrentVault';
+import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles';
 import { AddressFormValues, addressSchema } from '../../schemas/addressSchema';
 import {
   AddButton,
@@ -85,7 +85,8 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
 
   return (
     <>
-      <PageHeader
+      <AddressBookPageHeader
+        data-testid="AddAddressForm-AddressBookPageHeader"
         primaryControls={<PageHeaderBackButton onClick={onClose} />}
         title={
           <PageHeaderTitle>
@@ -93,6 +94,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
           </PageHeaderTitle>
         }
       />
+
       <Container>
         <Form onSubmit={handleSubmit(handleAddAddress)}>
           <FormField>

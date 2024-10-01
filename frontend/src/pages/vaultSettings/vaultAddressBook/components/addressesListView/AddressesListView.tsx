@@ -12,11 +12,11 @@ import { UnstyledButton } from '../../../../../lib/ui/buttons/UnstyledButton';
 import SquareAndPencilIcon from '../../../../../lib/ui/icons/SquareAndPencilIcon';
 import { Text } from '../../../../../lib/ui/text';
 import { extractError } from '../../../../../lib/utils/error/extractError';
-import { PageHeader } from '../../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { useDeleteAddressBookItemMutation } from '../../../../../vault/mutations/useDeleteAddressBookItemMutation';
 import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';
+import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles';
 import ModifyAddressForm from '../modifyAddressForm/ModifyAddAddressForm';
 import AddressBookListItem from './AddressBookListItem/AddressBookListItem';
 import { ButtonWrapper, Container, Main } from './AddressesListView.styles';
@@ -153,7 +153,8 @@ const AddressesListView = ({
   if (isModifyViewOpen && defaultValues) {
     return (
       <>
-        <PageHeader
+        <AddressBookPageHeader
+          data-testid="ModifyAddressesListView-AddressBookPageHeader"
           primaryControls={
             <PageHeaderBackButton
               onClick={() => setModifyAddressItemId(null)}
@@ -175,7 +176,8 @@ const AddressesListView = ({
 
   return (
     <>
-      <PageHeader
+      <AddressBookPageHeader
+        data-testid="AddressesListView-AddressBookPageHeader"
         primaryControls={<PageHeaderBackButton />}
         title={
           <PageHeaderTitle>{t('vault_settings_address_book')}</PageHeaderTitle>

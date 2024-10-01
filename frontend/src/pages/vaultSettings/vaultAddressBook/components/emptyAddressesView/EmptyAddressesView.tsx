@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../../../../lib/ui/buttons/Button';
-import { PageHeader } from '../../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
+import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles';
 import {
   CenteredBox,
   Container,
@@ -22,7 +22,8 @@ const EmptyAddressesView = ({
 
   return (
     <>
-      <PageHeader
+      <AddressBookPageHeader
+        data-testid="EmptyAddressesView-AddressBookPageHeader"
         primaryControls={<PageHeaderBackButton />}
         title={
           <PageHeaderTitle>{t('vault_settings_address_book')}</PageHeaderTitle>
