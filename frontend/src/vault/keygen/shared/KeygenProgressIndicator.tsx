@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EventsOn } from '../../../../../wailsjs/runtime/runtime';
-import RingProgress from '../../../../components/ringProgress/RingProgress';
-import { VStack } from '../../../../lib/ui/layout/Stack';
-import { Text } from '../../../../lib/ui/text';
+import { EventsOn } from '../../../../wailsjs/runtime/runtime';
+import RingProgress from '../../../components/ringProgress/RingProgress';
+import { VStack } from '../../../lib/ui/layout/Stack';
+import { Text } from '../../../lib/ui/text';
 
 type KeygenStage = 'prepareVault' | 'ecdsa' | 'eddsa';
 
@@ -14,7 +14,7 @@ const keygenCompletion: Record<KeygenStage, number> = {
   eddsa: 70,
 };
 
-export const JoinKeygenProgressIndicator = () => {
+export const KeygenProgressIndicator = () => {
   const { t } = useTranslation();
 
   const [stage, setStage] = useState<KeygenStage>('prepareVault');

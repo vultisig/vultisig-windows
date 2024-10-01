@@ -9,7 +9,6 @@ import {
 } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { Text } from '../../../lib/ui/text';
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 import { postSession } from '../../../services/Keygen/Keygen';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -20,6 +19,7 @@ import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
 import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
 import { useCurrentServerType } from '../../keygen/state/currentServerType';
 import { generateServiceName } from '../../keygen/utils/generateServiceName';
+import { useCurrentKeygenThreshold } from '../state/currentKeygenThreshold';
 import { useCurrentSessionId } from '../state/currentSessionId';
 import { DownloadKeygenQrCode } from './DownloadKeygenQrCode';
 import { SetupVaultPeerDiscovery } from './SetupVaultPeerDiscovery';
@@ -30,7 +30,7 @@ export const SetupVaultPeerDiscoveryStep = ({
 }: ComponentWithForwardActionProps & ComponentWithBackActionProps) => {
   const { t } = useTranslation();
   const sessionId = useCurrentSessionId();
-  const [{ thresholdType }] = useAppPathParams<'setupVaultInitiatingDevice'>();
+  const [thresholdType] = useCurrentKeygenThreshold();
   const serviceName = useMemo(generateServiceName, []);
   const [serverType] = useCurrentServerType();
 

@@ -223,5 +223,10 @@
   "session_init_failed": "Failed to initialize session",
   "select_at_least_one_device": "Select at least one device",
   "select_n_devices": "Select {{count}} device",
-  "select_n_devices_plural": "Select {{count}} devices"
+  "select_n_devices_plural": "Select {{count}} devices",
+  "starting_keygen": "Starting Keygen",
+  "failed_to_start_keygen": "Failed to start Keygen",
+  "devices_list_title": "With those Vault Shares",
+  "part": "Part",
+  "min_signers_disclaimer": "You can only send transactions with {{count}} devices present."
 }

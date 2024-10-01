@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EventsOn } from '../../../../../wailsjs/runtime/runtime';
-import { VStack } from '../../../../lib/ui/layout/Stack';
-import { PageContent } from '../../../../ui/page/PageContent';
-import { KeygenNetworkReminder } from '../../shared/KeygenNetworkReminder';
-import { PendingKeygenMessage } from '../../shared/PendingKeygenMessage';
-import { JoinKeygenEducation } from './JoinKeygenEducation';
-import { JoinKeygenProgressIndicator } from './JoinKeygenProgressIndicator';
+import { EventsOn } from '../../../../wailsjs/runtime/runtime';
+import { VStack } from '../../../lib/ui/layout/Stack';
+import { PageContent } from '../../../ui/page/PageContent';
+import { KeygenEducation } from './KeygenEducation';
+import { KeygenNetworkReminder } from './KeygenNetworkReminder';
+import { KeygenProgressIndicator } from './KeygenProgressIndicator';
+import { PendingKeygenMessage } from './PendingKeygenMessage';
 
-export const JoinKeygenPendingState = () => {
+export const KeygenPendingState = () => {
   const { t } = useTranslation();
 
   const [hasKeygenStarted, setHasKeygenStarted] = useState<boolean>(false);
@@ -22,8 +22,8 @@ export const JoinKeygenPendingState = () => {
     return (
       <PageContent>
         <VStack flexGrow alignItems="center" justifyContent="center" gap={48}>
-          <JoinKeygenProgressIndicator />
-          <JoinKeygenEducation />
+          <KeygenProgressIndicator />
+          <KeygenEducation />
         </VStack>
         <KeygenNetworkReminder />
       </PageContent>

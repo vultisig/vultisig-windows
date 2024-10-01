@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams';
+import { useCurrentKeygenThreshold } from '../../state/currentKeygenThreshold';
 import { useCurrentPeers } from '../../state/currentPeers';
 
 export const useIsPeerDiscoveryStepDisabled = () => {
   const { t } = useTranslation();
   const [peers] = useCurrentPeers();
-  const [{ thresholdType }] = useAppPathParams<'setupVaultInitiatingDevice'>();
+  const [thresholdType] = useCurrentKeygenThreshold();
 
   return useMemo(() => {
     const requiredNumber = Number(thresholdType.split('/')[0]);

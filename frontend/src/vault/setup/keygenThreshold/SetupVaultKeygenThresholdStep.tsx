@@ -1,15 +1,14 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Button } from '../../../lib/ui/buttons/Button';
 import { UniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';
+import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { ContainImage } from '../../../lib/ui/images/ContainImage';
 import { SafeImage } from '../../../lib/ui/images/SafeImage';
 import { VStack, vStack } from '../../../lib/ui/layout/Stack';
+import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
-import { makeAppPath } from '../../../navigation';
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -18,6 +17,8 @@ import {
   KeygenThresholdType,
   keygenThresholdTypes,
 } from '../../keygen/KeygenThresholdType';
+import { KeygenEducationPrompt } from '../../keygen/shared/KeygenEducationPrompt';
+import { useCurrentKeygenThreshold } from '../state/currentKeygenThreshold';
 
 const artRecord: Record<KeygenThresholdType, string> = {
   '2/2': '/assets/images/vaultSetup1.svg',
@@ -33,11 +34,12 @@ const ArtContainer = styled.div`
   overflow: hidden;
 `;
 
-export const SetupVaultKeygenThresholdPage = () => {
+export const SetupVaultKeygenThresholdStep = ({
+  onForward,
+}: ComponentWithForwardActionProps) => {
   const { t } = useTranslation();
 
-  const [{ thresholdType }, setParams] =
-    useAppPathParams<'setupVaultKeygenThreshold'>();
+  const [value, setValue] = useCurrentKeygenThreshold();
 
   const descriptionRecord: Record<KeygenThresholdType, string> = {
     '2/2': t('vault_type_1_description'),
@@ -45,16 +47,23 @@ export const SetupVaultKeygenThresholdPage = () => {
     'm/n': t('vault_type_3_description'),
   };
 
-  const art = artRecord[thresholdType];
-  const description = descriptionRecord[thresholdType];
+  const art = artRecord[value];
+  const description = descriptionRecord[value];
 
   return (
     <VStack flexGrow>
       <PageHeader
         title={<PageHeaderTitle>{t('setup')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton />}
+        secondaryControls={<KeygenEducationPrompt />}
       />
-      <PageContent gap={40}>
+      <PageContent
+        gap={40}
+        as="form"
+        {...getFormProps({
+          onSubmit: onForward,
+        })}
+      >
         <VStack gap={20}>
           <VStack alignItems="center">
             <Text family="mono" color="contrast">
@@ -68,13 +77,11 @@ export const SetupVaultKeygenThresholdPage = () => {
                 .map(v => v.toUpperCase())
                 .join(` ${t('of')} `);
 
-              const isSelected = thresholdType === option;
+              const isSelected = value === option;
 
               return (
                 <Button
-                  onClick={() =>
-                    setParams(params => ({ ...params, thresholdType: option }))
-                  }
+                  onClick={() => setValue(option)}
                   kind={isSelected ? 'primary' : 'outlined'}
                   key={option}
                 >
@@ -95,9 +102,7 @@ export const SetupVaultKeygenThresholdPage = () => {
             />
           </ArtContainer>
         </VStack>
-        <Link to={makeAppPath('setupVaultInitiatingDevice', { thresholdType })}>
-          <Button as="div">{t('continue')}</Button>
-        </Link>
+        <Button type="submit">{t('continue')}</Button>
       </PageContent>
     </VStack>
   );
