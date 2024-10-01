@@ -9,7 +9,6 @@ import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { defaultKeygenThresholdType } from '../../keygen/KeygenThresholdType';
 import { setupOptionsConfig } from './config';
 import { SetupVaultOption, SetupVaultOptionProps } from './SetupVaultOption';
 
@@ -21,9 +20,7 @@ export const SetupVaultOptionsPage = () => {
       artSrc: '/assets/icons/initiate.svg',
       title: t('initiating_device'),
       actionName: t('create_qr'),
-      targetDestination: makeAppPath('setupVaultKeygenThreshold', {
-        thresholdType: defaultKeygenThresholdType,
-      }),
+      targetDestination: makeAppPath('setupVaultInitiatingDevice'),
     },
     {
       artSrc: '/assets/icons/pair.svg',

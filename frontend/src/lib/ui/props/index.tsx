@@ -49,3 +49,7 @@ export type ComponentWithForwardActionProps = {
 export type LabeledComponentProps = {
   label: ReactNode;
 };
+
+export type ComponentWithIndexProps = {
+  index: number;
+};
