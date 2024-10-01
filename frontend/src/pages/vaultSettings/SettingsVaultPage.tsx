@@ -103,10 +103,11 @@ const SettingsVaultPage = () => {
             </HStack>
             <VStack alignItems="center">
               <Text size={14} color="primary" weight="600">
-                {t('settings_vault_page_footer')}1.0
+                {t('settings_vault_page_footer')}
+                {__APP_VERSION__}
               </Text>
               <Text size={14} color="primary" weight="600">
-                (BUILD 50)
+                (BUILD {__APP_BUILD__})
               </Text>
             </VStack>
           </Footer>
