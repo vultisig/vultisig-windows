@@ -9,10 +9,11 @@ import { Button } from '../../../../../lib/ui/buttons/Button';
 import { Text } from '../../../../../lib/ui/text';
 import { extractError } from '../../../../../lib/utils/error/extractError';
 import { Chain } from '../../../../../model/chain';
-import { useAddAddressBookItemMutation } from '../../../../../vault/mutations/useAddAddressBookItemMutation';
+import { useUpdateAddressBookItemMutation } from '../../../../../vault/mutations/useUpdateAddressBookItemMutation';
 import { useAssertCurrentVaultCoins } from '../../../../../vault/state/useCurrentVault';
 import { AddressFormValues, addressSchema } from '../../schemas/addressSchema';
 import {
+  ButtonWrapper,
   CoinOption,
   Container,
   customSelectMenu,
@@ -66,10 +67,10 @@ const ModifyAddressForm = ({
   });
 
   const {
-    mutate: addAddressBookItem,
+    mutate: updateAddressBookItem,
     isPending: isAddAddressBookAddressPending,
     error: addAddressBookAddressError,
-  } = useAddAddressBookItemMutation({
+  } = useUpdateAddressBookItemMutation({
     onSuccess: onClose,
   });
 
@@ -81,10 +82,10 @@ const ModifyAddressForm = ({
       return;
     }
 
-    addAddressBookItem({
+    updateAddressBookItem({
       addressBookItem: {
+        ...defaultValues,
         address,
-        coin: coin,
         title,
       },
       chain: coin.chain as Chain,
@@ -153,18 +154,22 @@ const ModifyAddressForm = ({
           )}
         </div>
       </Form>
-      <Button
-        isLoading={isLoading || isValidating || isAddAddressBookAddressPending}
-        isDisabled={!isValid || !isDirty}
-        onClick={handleSubmit(handleModifyAddress)}
-      >
-        {t('vault_settings_address_book_save_addresses_button')}
-      </Button>
-      {addAddressBookAddressError && (
-        <Text color="danger" size={12}>
-          {extractError(addAddressBookAddressError)}
-        </Text>
-      )}
+      <ButtonWrapper>
+        <Button
+          isLoading={
+            isLoading || isValidating || isAddAddressBookAddressPending
+          }
+          isDisabled={!isValid || !isDirty}
+          onClick={handleSubmit(handleModifyAddress)}
+        >
+          {t('vault_settings_address_book_save_addresses_button')}
+        </Button>
+        {addAddressBookAddressError && (
+          <Text color="danger" size={12}>
+            {extractError(addAddressBookAddressError)}
+          </Text>
+        )}
+      </ButtonWrapper>
     </Container>
   );
 };
