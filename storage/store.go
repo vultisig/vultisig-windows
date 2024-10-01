@@ -350,6 +350,26 @@ func (s *Store) SaveAddressBookItem(item AddressBookItem) (string, error) {
 	return item.ID.String(), nil
 }
 
+// Delete address book item by id
+func (s *Store) DeleteAddressBookItem(id string) error {
+	query := `DELETE FROM address_book WHERE id = ?`
+	_, err := s.db.Exec(query, id)
+	if err != nil {
+		return fmt.Errorf("could not delete address book item, err: %w", err)
+	}
+	return nil
+}
+
+// Update address book item by id
+func (s *Store) UpdateAddressBookItem(item AddressBookItem) error {
+	query := `UPDATE address_book SET title = ?, address = ?, chain = ?, "order" = ? WHERE id = ?`
+	_, err := s.db.Exec(query, item.Title, item.Address, item.Chain, item.Order, item.ID)
+	if err != nil {
+		return fmt.Errorf("could not update address book item, err: %w", err)
+	}
+	return nil
+}
+
 // Get all address book items
 func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
     query := `SELECT id, title, address, chain, "order" FROM address_book`

@@ -5,17 +5,22 @@ import { Button } from '../../lib/ui/buttons/Button';
 import { getFormProps } from '../../lib/ui/form/utils/getFormProps';
 import { TextInput } from '../../lib/ui/inputs/TextInput';
 import { VStack } from '../../lib/ui/layout/Stack';
-import { ComponentWithForwardActionProps } from '../../lib/ui/props';
+import {
+  ComponentWithBackActionProps,
+  ComponentWithForwardActionProps,
+} from '../../lib/ui/props';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { useVaultNames } from '../hooks/useVaultNames';
+import { KeygenEducationPrompt } from '../keygen/shared/KeygenEducationPrompt';
 import { useVaultName } from './state/vaultName';
 
 export const SetupVaultNameStep = ({
   onForward,
-}: ComponentWithForwardActionProps) => {
+  onBack,
+}: ComponentWithForwardActionProps & ComponentWithBackActionProps) => {
   const { t } = useTranslation();
   const [value, setValue] = useVaultName();
 
@@ -35,7 +40,8 @@ export const SetupVaultNameStep = ({
     <>
       <PageHeader
         title={<PageHeaderTitle>{t('name_your_vault')}</PageHeaderTitle>}
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={<PageHeaderBackButton onClick={onBack} />}
+        secondaryControls={<KeygenEducationPrompt />}
       />
       <PageContent
         as="form"

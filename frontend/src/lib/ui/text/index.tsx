@@ -51,8 +51,6 @@ export const text = ({
   nowrap,
   family = 'regular',
 }: TextProps) => css`
-  margin: 0;
-  padding: 0;
   overflow-wrap: break-word;
 
   ${({ theme }) =>

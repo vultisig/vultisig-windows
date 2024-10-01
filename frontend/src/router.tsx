@@ -17,9 +17,9 @@ import KeysignFlowView from './pages/keysign/KeysignFlow';
 import SendCryptoView from './pages/send/SendCryptoView';
 import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
-import FaqVaultPage from './pages/vaultSettings/vaulFaq/FaqVaultPage';
-import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBookSettings/AddressBookSettingsPage';
+import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage';
 import CurrencySettingsPage from './pages/vaultSettings/vaultCurrency/CurrencySettingsPage';
+import FaqVaultPage from './pages/vaultSettings/vaultFaq/FaqVaultPage';
 import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
 import { AddVaultPage } from './vault/add/AddVaultPage';
 import { VaultChainCoinPage } from './vault/chain/coin/VaultChainCoinPage';
@@ -29,7 +29,6 @@ import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
-import { SetupVaultKeygenThresholdPage } from './vault/setup/keygenThreshold/SetupVaultKeygenThresholdPage';
 import { SetupVaultOptionsPage } from './vault/setup/options/SetupVaultOptionsPage';
 import { SetupVaultPage } from './vault/setup/SetupVaultPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
@@ -56,10 +55,6 @@ export const router = createBrowserRouter([
   {
     path: appPaths.setupVaultOptions,
     element: <SetupVaultOptionsPage />,
-  },
-  {
-    path: appPaths.setupVaultKeygenThreshold,
-    element: <SetupVaultKeygenThresholdPage />,
   },
   {
     path: appPaths.setupVaultInitiatingDevice,

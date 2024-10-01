@@ -5,7 +5,13 @@ import circleDependency from 'vite-plugin-circular-dependency'; // Import the pl
 import stdLibBrowser from 'vite-plugin-node-stdlib-browser';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
+import * as buildInfo from './build.json';
+
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify(buildInfo.version),
+    __APP_BUILD__: JSON.stringify(buildInfo.build),
+  },
   plugins: [
     react(),
     stdLibBrowser(),

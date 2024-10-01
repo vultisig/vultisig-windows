@@ -8,9 +8,9 @@ import { makeAppPath } from '../../../navigation';
 import { KeygenBackup } from '../shared/KeygenBackup';
 import { KeygenFailedState } from '../shared/KeygenFailedState';
 import { KeygenPageHeader } from '../shared/KeygenPageHeader';
+import { KeygenPendingState } from '../shared/KeygenPendingState';
 import { KeygenSuccessState } from '../shared/KeygenSuccessState';
 import { useJoinKeygenMutation } from './mutations/useJoinKeygenMutation';
-import { JoinKeygenPendingState } from './pending/JoinKeygenPendingState';
 
 export const JoinKeygenProcess = () => {
   const { mutate: joinKeygen, ...joinKeygenState } = useJoinKeygenMutation();
@@ -50,7 +50,7 @@ export const JoinKeygenProcess = () => {
       pending={() => (
         <>
           <KeygenPageHeader />
-          <JoinKeygenPendingState />
+          <KeygenPendingState />
         </>
       )}
     />
