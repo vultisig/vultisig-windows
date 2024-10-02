@@ -1,10 +1,8 @@
-/* eslint-disable */
-import { ISendService } from '../ISendService';
-import { ISendTransaction } from '../../../model/transaction';
-import { SendService } from '../SendService';
-import { Balance } from '../../../model/balance';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { Rate } from '../../../model/price-rate';
+import { Balance } from '../../../model/balance';
+import { ISendTransaction } from '../../../model/transaction';
+import { ISendService } from '../ISendService';
+import { SendService } from '../SendService';
 
 export class SendServiceEvm extends SendService implements ISendService {
   calculateMaxValue(
@@ -13,7 +11,7 @@ export class SendServiceEvm extends SendService implements ISendService {
     balances: Map<Coin, Balance>,
     fee: number
   ): number {
-    let amountInDecimal = super.calculateMaxValue(
+    const amountInDecimal = super.calculateMaxValue(
       tx,
       percentage,
       balances,
