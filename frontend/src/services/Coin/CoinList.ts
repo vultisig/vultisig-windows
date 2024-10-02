@@ -1264,7 +1264,7 @@ export class TokensStore {
     }),
 
     zksyncETH: (): CoinMeta => ({
-      chain: Chain.ZkSync,
+      chain: Chain.Zksync,
       ticker: 'ETH',
       logo: 'zksync',
       decimals: 18,

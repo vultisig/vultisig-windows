@@ -345,7 +345,7 @@ export class Endpoint {
         return `https://suiscan.xyz/mainnet/address/${address}`;
       case Chain.Polkadot:
         return `https://polkadot.subscan.io/account/${address}`;
-      case Chain.ZkSync:
+      case Chain.Zksync:
         return `https://explorer.zksync.io/address/${address}`;
       default:
         return null;

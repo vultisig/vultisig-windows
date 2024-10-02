@@ -45,7 +45,7 @@ export const getBlockExplorerUrl = ({
         [Chain.CronosChain]: () => `https://cronoscan.com/address/${value}`,
         [Chain.Sui]: () => `https://suiscan.xyz/mainnet/address/${value}`,
         [Chain.Polkadot]: () => `https://polkadot.subscan.io/account/${value}`,
-        [Chain.ZkSync]: () => `https://explorer.zksync.io/address/${value}`,
+        [Chain.Zksync]: () => `https://explorer.zksync.io/address/${value}`,
       }),
   });
 };

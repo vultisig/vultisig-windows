@@ -101,7 +101,7 @@ export class ChainUtils {
         return 'DYDX';
       case Chain.Polkadot:
         return 'DOT';
-      case Chain.ZkSync:
+      case Chain.Zksync:
         return 'ZK';
       case Chain.Sui:
         return 'SUI';

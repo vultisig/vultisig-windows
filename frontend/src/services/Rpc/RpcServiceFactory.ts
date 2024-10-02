@@ -43,7 +43,7 @@ export class RpcServiceFactory {
         return new RpcServiceCronos();
       case Chain.BSC:
         return new RpcServiceBsc();
-      case Chain.ZkSync:
+      case Chain.Zksync:
         return new RpcServiceZksync();
       case Chain.THORChain:
         return new RpcServiceThorchain();

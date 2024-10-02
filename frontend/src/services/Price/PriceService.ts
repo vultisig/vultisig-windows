@@ -95,7 +95,7 @@ export class PriceService implements IPriceService {
         return 'optimistic-ethereum';
       case Chain.BSC:
         return 'binance-smart-chain';
-      case Chain.ZkSync:
+      case Chain.Zksync:
         return 'zksync';
       case Chain.THORChain:
       case Chain.Solana:

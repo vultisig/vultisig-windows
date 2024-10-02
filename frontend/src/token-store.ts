@@ -452,7 +452,7 @@ class Token {
   };
 
   static zksyncETH: CoinMeta = {
-    chain: Chain.ZkSync,
+    chain: Chain.Zksync,
     ticker: 'ETH',
     logo: 'zsync_era',
     decimals: 18,

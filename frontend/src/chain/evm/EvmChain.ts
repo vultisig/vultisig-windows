@@ -8,7 +8,7 @@ export enum EvmChain {
   Ethereum = 'Ethereum',
   Optimism = 'Optimism',
   Polygon = 'Polygon',
-  ZkSync = 'ZkSync',
+  Zksync = 'Zksync',
 }
 
 export const evmChainIds: Record<EvmChain, number> = {
@@ -21,5 +21,5 @@ export const evmChainIds: Record<EvmChain, number> = {
   [EvmChain.Ethereum]: 1,
   [EvmChain.Optimism]: 10,
   [EvmChain.Polygon]: 137,
-  [EvmChain.ZkSync]: 324,
+  [EvmChain.Zksync]: 324,
 };

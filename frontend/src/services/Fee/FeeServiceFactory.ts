@@ -33,7 +33,7 @@ export class FeeServiceFactory {
         return new FeeServiceEvm(chain, walletCore);
       case Chain.BSC:
         return new FeeServiceEvm(chain, walletCore);
-      case Chain.ZkSync:
+      case Chain.Zksync:
         return new FeeServiceEvm(chain, walletCore);
       case Chain.THORChain:
         return new FeeServiceThorchain(chain, walletCore);
