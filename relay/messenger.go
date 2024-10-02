@@ -2,18 +2,15 @@ package relay
 
 import (
 	"bytes"
-	"crypto/aes"
-	"crypto/cipher"
 	"crypto/md5"
-	"crypto/rand"
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 
 	"github.com/sirupsen/logrus"
+	"github.com/vultisig/vultisig-win/utils"
 )
 
 type MessengerImp struct {
@@ -46,8 +43,11 @@ func (m *MessengerImp) Send(from, to, body string) error {
 	if body == "" {
 		return fmt.Errorf("body is empty")
 	}
-
-	encryptedBody, err := encrypt(body, m.HexEncryptionKey)
+	encryptionKeyByte, err := hex.DecodeString(m.HexEncryptionKey)
+	if err != nil {
+		return fmt.Errorf("failed to decode hex encryption key: %w", err)
+	}
+	encryptedBody, err := utils.Encrypt(encryptionKeyByte, []byte(body))
 	if err != nil {
 		return fmt.Errorf("failed to encrypt body: %w", err)
 	}
@@ -105,33 +105,4 @@ func (m *MessengerImp) Send(from, to, body string) error {
 	}).Info("Message sent")
 
 	return nil
-}
-
-func encrypt(plainText, hexKey string) (string, error) {
-	key, err := hex.DecodeString(hexKey)
-	if err != nil {
-		return "", err
-	}
-	plainByte := []byte(plainText)
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return "", err
-	}
-	plainByte = pad(plainByte, aes.BlockSize)
-	iv := make([]byte, aes.BlockSize)
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		return "", err
-	}
-	mode := cipher.NewCBCEncrypter(block, iv)
-	ciphertext := make([]byte, len(plainByte))
-	mode.CryptBlocks(ciphertext, plainByte)
-	ciphertext = append(iv, ciphertext...)
-	return string(ciphertext), nil
-}
-
-// pad applies PKCS7 padding to the plaintext
-func pad(data []byte, blockSize int) []byte {
-	padding := blockSize - len(data)%blockSize
-	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
-	return append(data, padtext...)
 }

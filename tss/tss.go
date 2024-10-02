@@ -21,6 +21,7 @@ import (
 
 	"github.com/vultisig/vultisig-win/relay"
 	"github.com/vultisig/vultisig-win/storage"
+	"github.com/vultisig/vultisig-win/utils"
 )
 
 const VULTISIG_ROUTER_URL = "https://api.vultisig.com/router"
@@ -186,6 +187,11 @@ func (t *TssService) downloadMessages(server,
 	wg *sync.WaitGroup) {
 	var messageCache sync.Map
 	defer wg.Done()
+	encryptionKeyBytes, err := hex.DecodeString(hexEncryptionKey)
+	if err != nil {
+		t.Logger.Errorf("Failed to decode hex encryption key: %s", err)
+		return
+	}
 	for {
 		select {
 		case <-endCh: // we are done
@@ -263,7 +269,7 @@ func (t *TssService) downloadMessages(server,
 					continue
 				}
 
-				decryptedBody, err := decrypt(string(decodedBody), hexEncryptionKey)
+				decryptedBody, err := utils.DecryptGCMFallbackToCBC(encryptionKeyBytes, decodedBody)
 				if err != nil {
 					t.Logger.WithFields(logrus.Fields{
 						"session":      session,
@@ -274,7 +280,7 @@ func (t *TssService) downloadMessages(server,
 					continue
 				}
 				t.Logger.Infof("Got message from: %s to: %s key: %s", message.From, message.To, message.Hash)
-				if err := tssServerImp.ApplyData(decryptedBody); err != nil {
+				if err := tssServerImp.ApplyData(string(decryptedBody)); err != nil {
 					t.Logger.WithFields(logrus.Fields{
 						"session":      session,
 						"localPartyID": localPartyID,
