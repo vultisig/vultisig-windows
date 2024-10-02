@@ -1,18 +1,23 @@
-import {
-  PersistentStateKey,
-  usePersistentState,
-} from '../../../state/persistentState';
-import { LANGUAGES, LanguageValue } from './constants';
+import { useUpdateVaultSettingsMutation } from '../../../vault/mutations/useUpdateVaultSettings';
+import { useVaultSettingsQuery } from '../../../vault/queries/useVaultSettingsQuery';
 
 export const useInAppLanguage = () => {
-  const [language, setLanguage] = usePersistentState(
-    PersistentStateKey.Language,
-    LANGUAGES.English
-  );
+  const { data } = useVaultSettingsQuery();
+
+  const {
+    mutate: updateSettings,
+    isPending: isUpdating,
+    error,
+  } = useUpdateVaultSettingsMutation();
+
+  const updateInAppLanguage = (newLanguage: string) => {
+    updateSettings({ ...data, language: newLanguage });
+  };
 
   return {
-    language,
-    changeInAppLanguage: (newLanguage: LanguageValue) =>
-      setLanguage(newLanguage),
+    language: data?.language,
+    updateInAppLanguage,
+    isUpdating,
+    error,
   };
 };
