@@ -27,7 +27,7 @@ export class PriceServiceFactory {
         return new PriceServiceEvm(chain);
       case Chain.BSC:
         return new PriceServiceEvm(chain);
-      case Chain.ZkSync:
+      case Chain.Zksync:
         return new PriceServiceEvm(chain);
       case Chain.Avalanche:
         return new PriceServiceEvm(chain);

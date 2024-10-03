@@ -1,19 +1,19 @@
-/* eslint-disable */
+import { WalletCore } from '@trustwallet/wallet-core';
+
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Balance } from '../../model/balance';
-import { ISendTransaction } from '../../model/transaction';
-import { Rate } from '../../model/price-rate';
+import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
-import { IService } from '../../services/IService';
-import { ISendService } from './ISendService';
-import { Chain } from '../../model/chain';
-import { WalletCore } from '@trustwallet/wallet-core';
-import { IAddressService } from '../Address/IAddressService';
-import { AddressServiceFactory } from '../Address/AddressServiceFactory';
-import { IFeeService } from '../Fee/IFeeService';
-import { FeeServiceFactory } from '../Fee/FeeServiceFactory';
+import { Rate } from '../../model/price-rate';
 import { SpecificTransactionInfo } from '../../model/specific-transaction-info';
+import { ISendTransaction } from '../../model/transaction';
+import { IService } from '../../services/IService';
+import { AddressServiceFactory } from '../Address/AddressServiceFactory';
+import { IAddressService } from '../Address/IAddressService';
+import { FeeServiceFactory } from '../Fee/FeeServiceFactory';
+import { IFeeService } from '../Fee/IFeeService';
+import { ISendService } from './ISendService';
 
 export class SendService implements ISendService {
   chain: Chain;
@@ -35,7 +35,7 @@ export class SendService implements ISendService {
     tx: ISendTransaction,
     percentage: number,
     balances: Map<Coin, Balance>,
-    fee: number
+    _fee: number
   ): number {
     const balance = balances.get(tx.coin)?.rawAmount ?? 0;
     const amount = balance * (percentage / 100);
@@ -96,6 +96,7 @@ export class SendService implements ISendService {
         throw new Error('Fee service is not initialized');
       }
     } catch (error) {
+      console.error('Failed to load gas info', error);
       throw new Error('Failed to load gas info');
     }
   }
@@ -141,9 +142,9 @@ export class SendService implements ISendService {
   }
 
   setPercentageAmount(amount: number, percentage: number): number {
-    let max = amount;
-    let multiplier = percentage / 100;
-    let amountDecimal = max * multiplier;
+    const max = amount;
+    const multiplier = percentage / 100;
+    const amountDecimal = max * multiplier;
     return amountDecimal;
   }
 }

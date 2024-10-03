@@ -28,7 +28,7 @@ export class AddressServiceFactory {
       Chain.Blast,
       Chain.CronosChain,
       Chain.BSC,
-      Chain.ZkSync,
+      Chain.Zksync,
       Chain.Base,
       Chain.Avalanche):
         return new AddressServiceEvm(chain, walletCore);

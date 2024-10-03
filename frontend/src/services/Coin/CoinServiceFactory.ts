@@ -29,7 +29,7 @@ export class CoinServiceFactory {
         return new CoinServiceEvm(chain, walletCore);
       case Chain.BSC:
         return new CoinServiceEvm(chain, walletCore);
-      case Chain.ZkSync:
+      case Chain.Zksync:
         return new CoinServiceEvm(chain, walletCore);
       case Chain.Polkadot:
         return new CoinService(chain, walletCore);

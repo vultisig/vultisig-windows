@@ -34,7 +34,7 @@ export class SendServiceFactory {
         return new SendServiceEvm(chain, walletCore);
       case Chain.Polygon:
         return new SendServiceEvm(chain, walletCore);
-      case Chain.ZkSync:
+      case Chain.Zksync:
         return new SendServiceEvm(chain, walletCore);
       case Chain.Bitcoin:
         return new SendServiceUtxo(chain, walletCore);

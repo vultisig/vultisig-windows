@@ -10,8 +10,8 @@ import {
   RpcServiceEthereum,
   RpcServiceOptimism,
   RpcServicePolygon,
-  RpcServiceZksync,
 } from './evm/RpcServiceEvmAllLayers';
+import { RpcServiceZksync } from './evm/RpcServiceZkSyncEvm';
 import { RpcServiceGaia } from './gaia/RpcServiceGaia';
 import { RpcServiceKujira } from './kurija/RpcServiceKurija';
 import { RpcServicePolkadot } from './polkadot/RpcServicePolkadot';
@@ -43,7 +43,7 @@ export class RpcServiceFactory {
         return new RpcServiceCronos();
       case Chain.BSC:
         return new RpcServiceBsc();
-      case Chain.ZkSync:
+      case Chain.Zksync:
         return new RpcServiceZksync();
       case Chain.THORChain:
         return new RpcServiceThorchain();

@@ -42,7 +42,13 @@ export function startSession(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(devices),
-  });
+  })
+    .then(response => {
+      console.log(response);
+    })
+    .catch(err => {
+      console.error(err);
+    });
 }
 
 export function checkForDevices(
