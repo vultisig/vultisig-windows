@@ -13,7 +13,7 @@ import { LanguageBox, LanguageButton } from './LanguageSettingsPage.styles';
 
 const LanguageSettingsPage = () => {
   const { t } = useTranslation();
-  const { language, changeInAppLanguage } = useInAppLanguage();
+  const { language, updateInAppLanguage } = useInAppLanguage();
 
   return (
     <VStack flexGrow gap={16}>
@@ -27,7 +27,7 @@ const LanguageSettingsPage = () => {
         {languageOptions.map(({ title, subtitle, value }, index) => (
           <LanguageButton
             key={index}
-            onClick={() => changeInAppLanguage(value)}
+            onClick={() => updateInAppLanguage(value)}
           >
             <LanguageBox>
               <Text size={16} color="contrast" weight="600">

@@ -1,8 +1,7 @@
-import { Fiat } from '../../../model/fiat';
 import { useUpdateVaultSettingsMutation } from '../../../vault/mutations/useUpdateVaultSettings';
 import { useVaultSettingsQuery } from '../../../vault/queries/useVaultSettingsQuery';
 
-export const useGlobalCurrency = () => {
+export const useDefaultChains = () => {
   const { data } = useVaultSettingsQuery();
 
   const {
@@ -11,13 +10,13 @@ export const useGlobalCurrency = () => {
     error,
   } = useUpdateVaultSettingsMutation();
 
-  const updateGlobalCurrency = (newCurrency: Fiat) => {
-    updateSettings({ ...data, currency: newCurrency });
+  const updateDefaultChains = (newDefaultChains: string[]) => {
+    updateSettings({ ...data, defaultChains: newDefaultChains });
   };
 
   return {
-    globalCurrency: data.currency as Fiat,
-    updateGlobalCurrency,
+    defaultChains: data?.defaultChains || [],
+    updateDefaultChains,
     isUpdating,
     error,
   };

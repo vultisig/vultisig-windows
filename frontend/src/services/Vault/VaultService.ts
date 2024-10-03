@@ -7,7 +7,9 @@ import { storage } from '../../../wailsjs/go/models';
 import {
   DeleteAddressBookItem,
   GetAllAddressBookItems,
+  GetSettings,
   SaveAddressBookItem,
+  SaveSettings,
   SaveVault,
   UpdateAddressBookItem,
   UpdateVaultName,
@@ -23,6 +25,14 @@ export class VaultService implements IVaultService {
   private walletCore: WalletCore;
   constructor(walletCore: WalletCore) {
     this.walletCore = walletCore;
+  }
+
+  async getVaultSettings(): Promise<storage.Settings[]> {
+    return await GetSettings();
+  }
+
+  async updateVaultSettings(settings: storage.Settings): Promise<void> {
+    await SaveSettings(settings);
   }
 
   async deleteAddressBookItem(id: string): Promise<void> {

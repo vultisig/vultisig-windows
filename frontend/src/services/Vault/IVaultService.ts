@@ -41,4 +41,8 @@ export interface IVaultService {
   saveAddressBookItem(item: Omit<AddressBookItem, 'id'>): Promise<void>;
 
   getAllAddressBookItems(): Promise<storage.AddressBookItem[]>;
+
+  getVaultSettings(): Promise<storage.Settings[]>;
+
+  updateVaultSettings(settings: storage.Settings): Promise<void>;
 }
