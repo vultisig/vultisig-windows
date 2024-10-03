@@ -36,10 +36,6 @@ export function startSession(
   sessionID: string,
   devices: string[]
 ) {
-  console.log('serverURL:', serverURL);
-  console.log('sessionID:', sessionID);
-  console.log('devices:', devices);
-
   return fetch(`${serverURL}/start/${sessionID}`, {
     method: 'POST',
     headers: {

@@ -49,15 +49,6 @@ export async function createKeysignMessage(
     useVultisigRelay: isRelay,
     keysignPayload: keysignPayload,
   });
-
-  console.log({
-    sessionId: sessionID,
-    serviceName: serviceName,
-    encryptionKeyHex: hexEncryptedKey,
-    useVultisigRelay: isRelay,
-    keysignPayload: keysignPayload,
-  });
-
   const serializedData = keysignMessage.toBinary();
   const bufferData = Buffer.from(serializedData);
   const sevenZip = await SevenZip({
