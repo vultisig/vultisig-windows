@@ -44,6 +44,7 @@ export const ItemText = styled(Text)`
 export const ColumnOneBothRowsItem = styled(ItemText)`
   grid-column: 1;
   grid-row: 1 / span 2;
+  align-self: center;
 `;
 
 export const ColumnTwoRowOneItem = styled(ItemText)`

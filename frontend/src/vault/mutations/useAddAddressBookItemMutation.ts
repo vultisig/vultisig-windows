@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { AddAddressBookItem } from '../../lib/types/address-book';
-import { Chain } from '../../model/chain';
+import { AddressBookItem } from '../../lib/types/address-book';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { AddressServiceFactory } from '../../services/Address/AddressServiceFactory';
 import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
@@ -21,15 +20,9 @@ export const useAddAddressBookItemMutation = ({
   const { data: addressBookItems } = useAddressBookItemsQuery();
 
   return useMutation({
-    mutationFn: async ({
-      addressBookItem,
-      chain,
-    }: {
-      addressBookItem: AddAddressBookItem;
-      chain: Chain;
-    }) => {
+    mutationFn: async (addressBookItem: Omit<AddressBookItem, 'id'>) => {
       const addressService = AddressServiceFactory.createAddressService(
-        chain,
+        addressBookItem.chain,
         walletCore
       );
 
@@ -38,7 +31,7 @@ export const useAddAddressBookItemMutation = ({
       );
 
       if (!isValidAddress) {
-        throw new Error('Invalid address for the selected chain!');
+        throw new Error('vault_settings_address_book_invalid_address_error');
       }
 
       const isAddressAlreadyAdded = addressBookItems.some(
@@ -46,7 +39,7 @@ export const useAddAddressBookItemMutation = ({
       );
 
       if (isAddressAlreadyAdded) {
-        throw new Error('Address already added!');
+        throw new Error('vault_settings_address_book_repeated_address_error');
       }
 
       return await vaultService.saveAddressBookItem(addressBookItem);

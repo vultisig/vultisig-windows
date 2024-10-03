@@ -17,7 +17,7 @@ import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { useDeleteAddressBookItemMutation } from '../../../../../vault/mutations/useDeleteAddressBookItemMutation';
 import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';
 import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles';
-import ModifyAddressForm from '../modifyAddressForm/ModifyAddAddressForm';
+import ModifyAddressForm from '../modifyAddressForm/ModifyAddressForm';
 import AddressBookListItem from './AddressBookListItem/AddressBookListItem';
 import { ButtonWrapper, Container, Main } from './AddressesListView.styles';
 import { ListContext } from './list-context/useListContext';
@@ -63,7 +63,7 @@ const AddressesListView = ({
   const isLoading =
     isFetchingAddressBookItems || isDeleteAddressBookItemLoading;
   const error = addressBookItemsError || deleteAddressBookItemError;
-  const defaultValues = useMemo(
+  const itemToModify = useMemo(
     () => items.find(item => item.id === modifyAddressItemId),
     [items, modifyAddressItemId]
   );
@@ -150,7 +150,7 @@ const AddressesListView = ({
     });
   }, [reorderItem]);
 
-  if (isModifyViewOpen && defaultValues) {
+  if (isModifyViewOpen && itemToModify) {
     return (
       <>
         <AddressBookPageHeader
@@ -167,7 +167,7 @@ const AddressesListView = ({
           }
         />
         <ModifyAddressForm
-          defaultValues={defaultValues}
+          addressBookItem={itemToModify}
           onClose={() => setModifyAddressItemId(null)}
         />
       </>
@@ -199,18 +199,20 @@ const AddressesListView = ({
       <Container>
         <ListContext.Provider value={contextValue}>
           <Main>
-            {items.map(({ address, id, title, chain }) => (
-              <AddressBookListItem
-                key={id}
-                id={id}
-                title={title}
-                address={address}
-                chain={chain}
-                isEditModeOn={isEditModeOn}
-                onClick={() => setModifyAddressItemId(id)}
-                handleDeleteAddress={handleDeleteAddress}
-              />
-            ))}
+            {items.map(({ address, id, title, chain }) => {
+              return (
+                <AddressBookListItem
+                  key={id}
+                  id={id}
+                  title={title}
+                  address={address}
+                  chain={chain}
+                  isEditModeOn={isEditModeOn}
+                  onClick={() => setModifyAddressItemId(id)}
+                  handleDeleteAddress={handleDeleteAddress}
+                />
+              );
+            })}
           </Main>
         </ListContext.Provider>
         <ButtonWrapper>

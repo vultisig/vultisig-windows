@@ -1,15 +1,9 @@
-import { Coin } from '../coin';
-
-export type AddAddressBookItem = {
-  address: string;
-  coin: Coin;
-  title: string;
-};
+import { Chain } from '../../../model/chain';
 
 export type AddressBookItem = {
   id: string;
   address: string;
-  chain: string;
+  chain: Chain;
   title: string;
   order: number;
 };

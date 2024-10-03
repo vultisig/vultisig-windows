@@ -1,8 +1,15 @@
 import { motion } from 'framer-motion';
 import React from 'react';
-import { MenuProps, StylesConfig } from 'react-select';
+import {
+  components,
+  MenuProps,
+  OptionProps,
+  SingleValueProps,
+  StylesConfig,
+} from 'react-select';
 import styled from 'styled-components';
 
+import { getChainEntityIconSrc } from '../../../../../chain/utils/getChainEntityIconSrc';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { Input } from '../../../../../lib/ui/inputs/text-input/Input';
 import { Panel } from '../../../../../lib/ui/panel/Panel';
@@ -52,14 +59,14 @@ export const FormInput = styled(Input)`
   }
 `;
 
-export type CoinOption = {
+export type ChainOption = {
   value: string;
   label: string;
   logo: string;
   isLastOption: boolean;
 };
 
-export const customSelectStyles: StylesConfig<CoinOption, false> = {
+export const customSelectStyles: StylesConfig<ChainOption, false> = {
   control: base => ({
     ...base,
     backgroundColor: 'transparent',
@@ -111,7 +118,7 @@ export const customSelectStyles: StylesConfig<CoinOption, false> = {
   }),
 };
 
-export const customSelectMenu = (props: MenuProps<CoinOption, false>) => {
+export const customSelectMenu = (props: MenuProps<ChainOption, false>) => {
   const { children, innerProps } = props;
   return (
     <motion.div
@@ -123,6 +130,40 @@ export const customSelectMenu = (props: MenuProps<CoinOption, false>) => {
     >
       {children}
     </motion.div>
+  );
+};
+
+export const customSelectOption = (props: OptionProps<ChainOption, false>) => {
+  const iconSrc = getChainEntityIconSrc(props.data.value);
+  return (
+    <components.Option {...props}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <img
+          src={iconSrc}
+          alt=""
+          style={{ width: 24, height: 24, marginRight: 8 }}
+        />
+        {props.data.label}
+      </div>
+    </components.Option>
+  );
+};
+
+export const customSingleValue = (
+  props: SingleValueProps<ChainOption, false>
+) => {
+  const iconSrc = getChainEntityIconSrc(props.data.value);
+  return (
+    <components.SingleValue {...props}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <img
+          src={iconSrc}
+          alt=""
+          style={{ width: 24, height: 24, marginRight: 8 }}
+        />
+        {props.data.label}
+      </div>
+    </components.SingleValue>
   );
 };
 
