@@ -10,8 +10,12 @@ import { Text } from '../../../../../lib/ui/text';
 import { extractError } from '../../../../../lib/utils/error/extractError';
 import { Chain } from '../../../../../model/chain';
 import { useUpdateAddressBookItemMutation } from '../../../../../vault/mutations/useUpdateAddressBookItemMutation';
-import { useAssertCurrentVaultCoins } from '../../../../../vault/state/useCurrentVault';
+import { getCoinOptions } from '../../helpers/getCoinOptions';
 import { AddressFormValues, addressSchema } from '../../schemas/addressSchema';
+import {
+  customSelectOption,
+  customSingleValue,
+} from '../addAddressForm/AddAddressForm.styles';
 import {
   ButtonWrapper,
   CoinOption,
@@ -26,31 +30,15 @@ import {
 
 type ModifyAddressFormProps = {
   onClose: () => void;
-  defaultValues: AddressBookItem;
+  addressBookItem: AddressBookItem;
 };
 
 const ModifyAddressForm = ({
   onClose,
-  defaultValues,
+  addressBookItem,
 }: ModifyAddressFormProps) => {
-  const coins = useAssertCurrentVaultCoins();
   const { t } = useTranslation();
-
-  const coinOptions = useMemo(() => {
-    return coins.map((coin, index) => ({
-      value: coin.id,
-      label: coin.ticker,
-      logo: coin.logo,
-      isLastOption: index === coins.length - 1,
-    }));
-  }, [coins]);
-
-  // TODO: @antonio to implement when BE returns "coin" as part of each account
-  // const coinIdForDefaultValues =
-  //   useMemo(
-  //     () => coins.find(coin => coin.id === defaultValues.coin.id)?.id,
-  //     [coins, defaultValues.coin.id]
-  //   ) || '';
+  const chainOptions = useMemo(() => getCoinOptions(), []);
 
   const {
     register,
@@ -61,8 +49,9 @@ const ModifyAddressForm = ({
     resolver: zodResolver(addressSchema),
     mode: 'onBlur',
     defaultValues: {
-      ...defaultValues,
-      coinId: '1',
+      title: addressBookItem.title,
+      address: addressBookItem.address,
+      chain: addressBookItem.chain,
     },
   });
 
@@ -75,20 +64,15 @@ const ModifyAddressForm = ({
   });
 
   const handleModifyAddress = (data: AddressFormValues) => {
-    const { address, coinId, title } = data;
-    const coin = coins.find(coin => coin.id === coinId);
-
-    if (!coin) {
-      return;
-    }
-
+    const { address, chain, title } = data;
     updateAddressBookItem({
       addressBookItem: {
-        ...defaultValues,
+        ...addressBookItem,
         address,
         title,
+        chain: chain as Chain,
       },
-      chain: coin.chain as Chain,
+      chain: chain as Chain,
     });
   };
 
@@ -97,21 +81,25 @@ const ModifyAddressForm = ({
       <Form onSubmit={handleSubmit(handleModifyAddress)}>
         <FormField>
           <Controller
-            name="coinId"
+            name="chain"
             control={control}
             render={({ field }) => (
               <Select<CoinOption>
                 value={
-                  coinOptions.find(option => option.value === field.value) ||
+                  chainOptions.find(option => option.value === field.value) ||
                   null
                 }
-                defaultValue={coinOptions[0]}
+                defaultValue={chainOptions[0]}
                 onChange={selectedOption => {
                   field.onChange(selectedOption?.value);
                 }}
                 onBlur={field.onBlur}
-                options={coinOptions}
-                components={{ Menu: customSelectMenu }}
+                options={chainOptions}
+                components={{
+                  Menu: customSelectMenu,
+                  Option: customSelectOption,
+                  SingleValue: customSingleValue,
+                }}
                 styles={customSelectStyles}
                 placeholder="Select cryptocurrency"
               />
@@ -132,7 +120,7 @@ const ModifyAddressForm = ({
           </FormField>
           {errors.title && (
             <Text color="danger" size={12}>
-              {errors.title.message}
+              {t(errors.title.message || '')}
             </Text>
           )}
         </div>
@@ -149,7 +137,7 @@ const ModifyAddressForm = ({
           </FormField>
           {errors.address && (
             <Text color="danger" size={12}>
-              {errors.address.message}
+              {t(errors.address.message || '')}
             </Text>
           )}
         </div>
@@ -166,7 +154,7 @@ const ModifyAddressForm = ({
         </Button>
         {addAddressBookAddressError && (
           <Text color="danger" size={12}>
-            {extractError(addAddressBookAddressError)}
+            {t(extractError(addAddressBookAddressError))}
           </Text>
         )}
       </ButtonWrapper>

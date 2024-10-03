@@ -9,7 +9,9 @@ import {
   extractClosestEdge,
 } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { getChainEntityIconSrc } from '../../../../../../chain/utils/getChainEntityIconSrc';
 import { UnstyledButton } from '../../../../../../lib/ui/buttons/UnstyledButton';
 import { BinIcon } from '../../../../../../lib/ui/icons/BinIcon';
 import { MenuIcon } from '../../../../../../lib/ui/icons/MenuIcon';
@@ -46,6 +48,7 @@ const AddressBookItem = ({
   const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
   const { registerItem, getItemIndex } = useListContext();
   const itemRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isEditModeOn) {
@@ -104,6 +107,8 @@ const AddressBookItem = ({
     }
   };
 
+  const iconSrc = getChainEntityIconSrc(chain);
+
   return (
     <ItemWrapper ref={itemRef}>
       {isEditModeOn && (
@@ -125,10 +130,12 @@ const AddressBookItem = ({
         isEditModeOn={isEditModeOn}
         onClick={handleOnListItemClick}
       >
-        <ColumnOneBothRowsItem color="primary">{title}</ColumnOneBothRowsItem>
+        <ColumnOneBothRowsItem color="primary">
+          <img src={iconSrc} alt="" style={{ width: 32, height: 32 }} />
+        </ColumnOneBothRowsItem>
         <ColumnTwoRowOneItem color="contrast">{title}</ColumnTwoRowOneItem>
         <ColumnTwoRowTwoItem color="contrast">{address}</ColumnTwoRowTwoItem>
-        <ColumnThreeRowOneItem color="shy">{chain}</ColumnThreeRowOneItem>
+        <ColumnThreeRowOneItem color="shy">{`${chain} ${t('address_book_list_item_network')}`}</ColumnThreeRowOneItem>
       </ListItem>
       {isEditModeOn && (
         <ModifyButtonWrapper

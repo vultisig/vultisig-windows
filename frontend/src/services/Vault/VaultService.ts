@@ -15,10 +15,7 @@ import {
 import { Reshare, StartKeygen } from '../../../wailsjs/go/tss/TssService';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { Vault, Vault_KeyShare } from '../../gen/vultisig/vault/v1/vault_pb';
-import {
-  AddAddressBookItem,
-  AddressBookItem,
-} from '../../lib/types/address-book';
+import { AddressBookItem } from '../../lib/types/address-book';
 import { DefaultCoinsService } from '../Coin/DefaultCoinsService';
 import { IVaultService } from './IVaultService';
 
@@ -36,7 +33,7 @@ export class VaultService implements IVaultService {
     await UpdateAddressBookItem(item as any);
   }
 
-  async saveAddressBookItem(item: AddAddressBookItem): Promise<void> {
+  async saveAddressBookItem(item: Omit<AddressBookItem, 'id'>): Promise<void> {
     await SaveAddressBookItem(item as any);
   }
 

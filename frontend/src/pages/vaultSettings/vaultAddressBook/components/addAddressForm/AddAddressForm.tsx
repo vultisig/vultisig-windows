@@ -10,15 +10,18 @@ import { Chain } from '../../../../../model/chain';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { useAddAddressBookItemMutation } from '../../../../../vault/mutations/useAddAddressBookItemMutation';
-import { useAssertCurrentVaultCoins } from '../../../../../vault/state/useCurrentVault';
+import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';
 import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles';
+import { getCoinOptions } from '../../helpers/getCoinOptions';
 import { AddressFormValues, addressSchema } from '../../schemas/addressSchema';
 import {
   AddButton,
-  CoinOption,
+  ChainOption,
   Container,
   customSelectMenu,
+  customSelectOption,
   customSelectStyles,
+  customSingleValue,
   Form,
   FormField,
   FormFieldLabel,
@@ -30,17 +33,9 @@ type AddAddressFormProps = {
 };
 
 const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
-  const coins = useAssertCurrentVaultCoins();
+  const { data: addressBookItems } = useAddressBookItemsQuery();
   const { t } = useTranslation();
-
-  const coinOptions = useMemo(() => {
-    return coins.map((coin, index) => ({
-      value: coin.id,
-      label: coin.ticker,
-      logo: coin.logo,
-      isLastOption: index === coins.length - 1,
-    }));
-  }, [coins]);
+  const chainOptions = useMemo(() => getCoinOptions(), []);
 
   const {
     register,
@@ -51,7 +46,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     resolver: zodResolver(addressSchema),
     mode: 'onBlur',
     defaultValues: {
-      coinId: coinOptions[0].value,
+      chain: chainOptions[0].value,
       title: '',
       address: '',
     },
@@ -66,20 +61,13 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   });
 
   const handleAddAddress = (data: AddressFormValues) => {
-    const { address, coinId, title } = data;
-    const coin = coins.find(coin => coin.id === coinId);
-
-    if (!coin) {
-      return;
-    }
+    const { address, chain, title } = data;
 
     addAddressBookItem({
-      addressBookItem: {
-        address,
-        coin: coin,
-        title,
-      },
-      chain: coin.chain as Chain,
+      order: addressBookItems.length,
+      title,
+      address,
+      chain: chain as Chain,
     });
   };
 
@@ -99,23 +87,26 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
         <Form onSubmit={handleSubmit(handleAddAddress)}>
           <FormField>
             <Controller
-              name="coinId"
+              name="chain"
               control={control}
               render={({ field }) => (
-                <Select<CoinOption>
+                <Select<ChainOption>
                   value={
-                    coinOptions.find(option => option.value === field.value) ||
+                    chainOptions.find(option => option.value === field.value) ||
                     null
                   }
-                  defaultValue={coinOptions[0]}
+                  defaultValue={chainOptions[0]}
                   onChange={selectedOption => {
                     field.onChange(selectedOption?.value);
                   }}
                   onBlur={field.onBlur}
-                  options={coinOptions}
-                  components={{ Menu: customSelectMenu }}
+                  options={chainOptions}
+                  components={{
+                    Menu: customSelectMenu,
+                    Option: customSelectOption,
+                    SingleValue: customSingleValue,
+                  }}
                   styles={customSelectStyles}
-                  placeholder="Select cryptocurrency"
                 />
               )}
             />
@@ -136,7 +127,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
             </FormField>
             {errors.title && (
               <Text color="danger" size={12}>
-                {errors.title.message}
+                {t(errors.title.message || '')}
               </Text>
             )}
           </div>
@@ -155,7 +146,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
             </FormField>
             {errors.address && (
               <Text color="danger" size={12}>
-                {errors.address.message}
+                {t(errors.address.message || '')}
               </Text>
             )}
           </div>
@@ -172,7 +163,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
           </AddButton>
           {addAddressBookAddressError && (
             <Text color="danger" size={14}>
-              {extractError(addAddressBookAddressError)}
+              {t(extractError(addAddressBookAddressError))}
             </Text>
           )}
         </div>

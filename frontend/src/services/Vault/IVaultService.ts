@@ -1,9 +1,6 @@
 import { storage } from '../../../wailsjs/go/models';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
-import {
-  AddAddressBookItem,
-  AddressBookItem,
-} from '../../lib/types/address-book';
+import { AddressBookItem } from '../../lib/types/address-book';
 
 export interface IVaultService {
   reshare(
@@ -41,7 +38,7 @@ export interface IVaultService {
 
   updateAddressBookItem(item: AddressBookItem): Promise<void>;
 
-  saveAddressBookItem(item: AddAddressBookItem): Promise<void>;
+  saveAddressBookItem(item: Omit<AddressBookItem, 'id'>): Promise<void>;
 
   getAllAddressBookItems(): Promise<storage.AddressBookItem[]>;
 }
