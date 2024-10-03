@@ -33,11 +33,11 @@ export class VaultService implements IVaultService {
   }
 
   async updateAddressBookItem(item: AddressBookItem): Promise<void> {
-    await UpdateAddressBookItem(item);
+    await UpdateAddressBookItem(item as any);
   }
 
   async saveAddressBookItem(item: AddAddressBookItem): Promise<void> {
-    await SaveAddressBookItem(item);
+    await SaveAddressBookItem(item as any);
   }
 
   async getAllAddressBookItems(): Promise<storage.AddressBookItem[]> {
