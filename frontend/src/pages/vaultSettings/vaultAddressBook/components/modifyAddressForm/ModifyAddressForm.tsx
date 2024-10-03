@@ -10,7 +10,7 @@ import { Text } from '../../../../../lib/ui/text';
 import { extractError } from '../../../../../lib/utils/error/extractError';
 import { Chain } from '../../../../../model/chain';
 import { useUpdateAddressBookItemMutation } from '../../../../../vault/mutations/useUpdateAddressBookItemMutation';
-import { getChainOptions } from '../../helpers/getChainOptions';
+import { getCoinOptions } from '../../helpers/getCoinOptions';
 import { AddressFormValues, addressSchema } from '../../schemas/addressSchema';
 import {
   customSelectOption,
@@ -38,7 +38,7 @@ const ModifyAddressForm = ({
   addressBookItem,
 }: ModifyAddressFormProps) => {
   const { t } = useTranslation();
-  const chainOptions = useMemo(() => getChainOptions(), []);
+  const chainOptions = useMemo(() => getCoinOptions(), []);
 
   const {
     register,
@@ -106,6 +106,7 @@ const ModifyAddressForm = ({
             )}
           />
         </FormField>
+
         <div>
           <FormFieldLabel htmlFor="title">
             {t('vault_settings_address_book_address_title_field')}

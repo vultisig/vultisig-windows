@@ -12,7 +12,7 @@ import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { useAddAddressBookItemMutation } from '../../../../../vault/mutations/useAddAddressBookItemMutation';
 import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';
 import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles';
-import { getChainOptions } from '../../helpers/getChainOptions';
+import { getCoinOptions } from '../../helpers/getCoinOptions';
 import { AddressFormValues, addressSchema } from '../../schemas/addressSchema';
 import {
   AddButton,
@@ -35,7 +35,7 @@ type AddAddressFormProps = {
 const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   const { data: addressBookItems } = useAddressBookItemsQuery();
   const { t } = useTranslation();
-  const chainOptions = useMemo(() => getChainOptions(), []);
+  const chainOptions = useMemo(() => getCoinOptions(), []);
 
   const {
     register,
