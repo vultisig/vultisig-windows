@@ -34,7 +34,7 @@ export const useUpdateAddressBookItemMutation = ({
       );
 
       if (!isValidAddress) {
-        throw new Error('Invalid address for the selected chain!');
+        throw new Error('vault_settings_address_book_invalid_address_error');
       }
 
       return await vaultService.updateAddressBookItem(addressBookItem);

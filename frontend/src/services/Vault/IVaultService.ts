@@ -38,7 +38,7 @@ export interface IVaultService {
 
   updateAddressBookItem(item: AddressBookItem): Promise<void>;
 
-  saveAddressBookItem(item: AddressBookItem): Promise<void>;
+  saveAddressBookItem(item: Omit<AddressBookItem, 'id'>): Promise<void>;
 
   getAllAddressBookItems(): Promise<storage.AddressBookItem[]>;
 }

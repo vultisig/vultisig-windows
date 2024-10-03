@@ -14,7 +14,6 @@ export const useDeleteAddressBookItemMutation = () => {
       await vaultService.deleteAddressBookItem(id);
     },
     onSuccess: () => {
-      console.log('## on success?');
       queryClient.invalidateQueries({
         queryKey: [addressBookItemsQueryKey],
         refetchType: 'all',
