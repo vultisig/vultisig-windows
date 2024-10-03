@@ -5,6 +5,7 @@ import { keccak256 } from 'js-sha3';
 import { tss } from '../../../../wailsjs/go/models';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { Chain } from '../../../model/chain';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -102,10 +103,16 @@ export class BlockchainServiceEvm
     );
 
     // Chain ID: converted to hexadecimal, stripped of '0x', and padded
-    const chainIdHex = Buffer.from(
-      stripHexPrefix(chainId.toString(16).padStart(4, '0')), // Ensure proper padding
+    let chainIdHex = Buffer.from(
+      stripHexPrefix(chainId.toString(16).padStart(2, '0')),
       'hex'
     );
+    if (this.chain === Chain.Zksync) {
+      chainIdHex = Buffer.from(
+        stripHexPrefix(chainId.toString(16).padStart(4, '0')), // Ensure proper padding
+        'hex'
+      );
+    }
 
     // Nonce: converted to hexadecimal, stripped of '0x', and padded
     const nonceHex = Buffer.from(
