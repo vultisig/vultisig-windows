@@ -46,9 +46,14 @@ const KeysignFlowView: React.FC = () => {
     devices: string[],
     hexEncryptionKey: string
   ) => {
+    console.log('keygen server type:', keygenServerType);
+
     const serverUrl = keygenServerUrl[keygenServerType];
 
+    console.log('server url:', serverUrl);
+
     setServerURL(serverUrl);
+
     setSessionID(sessionID);
     devices.push(currentVault.current.local_party_id!);
     setDevices(devices);
@@ -59,7 +64,7 @@ const KeysignFlowView: React.FC = () => {
       }
     );
     console.log('keysign payload:', keysignPayload);
-    startSession(serverURL, sessionID, devices).then(() => {
+    startSession(serverUrl, sessionID, devices).then(() => {
       setCurrentScreen(1);
     });
   };

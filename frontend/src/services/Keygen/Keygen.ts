@@ -36,13 +36,23 @@ export function startSession(
   sessionID: string,
   devices: string[]
 ) {
+  console.log('serverURL:', serverURL);
+  console.log('sessionID:', sessionID);
+  console.log('devices:', devices);
+
   return fetch(`${serverURL}/start/${sessionID}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(devices),
-  });
+  })
+    .then(response => {
+      console.log(response);
+    })
+    .catch(err => {
+      console.error(err);
+    });
 }
 
 export function checkForDevices(
