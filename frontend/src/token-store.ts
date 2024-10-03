@@ -462,7 +462,7 @@ class Token {
   };
 }
 
-export const TokenSelectionAssets: Token[] = [
+export const TokenSelectionAssets: CoinMeta[] = [
   Token.bitcoin,
   Token.bitcoinCash,
   Token.litecoin,

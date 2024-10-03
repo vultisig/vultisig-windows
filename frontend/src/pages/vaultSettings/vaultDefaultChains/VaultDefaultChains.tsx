@@ -1,44 +1,61 @@
-// import { useDefaultChains } from '../../../lib/hooks/useDefaultChains';
-// import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
-import { VStack } from '../../../lib/ui/layout/Stack';
-// import { Text } from '../../../lib/ui/text';
-// import { PageHeader } from '../../../ui/page/PageHeader';
-// import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-// import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-// import { PageSlice } from '../../../ui/page/PageSlice';
-// import { useVaultChainsBalancesQuery } from '../../../vault/queries/useVaultChainsBalancesQuery';
-// import { useCurrentVault } from '../../../vault/state/useCurrentVault';
-// import { ChainBox, ChainButton } from './VaultDefaultChains.styles';
+import { useTranslation } from 'react-i18next';
 
-// const CHAINS = ['ethereum', 'avalanche', 'base', 'cronos-chain'];
+import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
+import { useDefaultChains } from '../../../lib/hooks/useDefaultChains';
+import { VStack } from '../../../lib/ui/layout/Stack';
+import { TokenSelectionAssets as tokens } from '../../../token-store';
+import { PageHeader } from '../../../ui/page/PageHeader';
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { PageSlice } from '../../../ui/page/PageSlice';
+import {
+  ChainButton,
+  ColumnOneBothRowsItem,
+  ColumnThreeRowOneItem,
+  ColumnTwoRowOneItem,
+  ColumnTwoRowTwoItem,
+} from './VaultDefaultChains.styles';
 
 const VaultDefaultChains = () => {
-  // TODO: currently missing an endpoint for getting all chains, when yu get it implement the list, select the default chains and if a chain is select/unselected, update the defautl chains in settings.
-  // const { defaultChains } = useDefaultChains();
+  const { t } = useTranslation();
+  const { defaultChains } = useDefaultChains();
 
   return (
     <VStack flexGrow gap={16}>
-      {/* <PageHeader
+      <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={
           <PageHeaderTitle>{t('vault_settings_language')}</PageHeaderTitle>
         }
       />
       <PageSlice gap={16} flexGrow={true}>
-        {languageOptions.map(({ title, subtitle, value }, index) => (
-          <ChainButton key={index} onClick={() => updateInAppLanguage(value)}>
-            <ChainBox>
-              <Text size={16} color="contrast" weight="600">
-                {t(title)}
-              </Text>
-              <Text size={12} color="contrast" weight="500">
-                {t(subtitle)}
-              </Text>
-            </ChainBox>
-            {value === language && <CheckIcon />}
-          </ChainButton>
-        ))}
-      </PageSlice> */}
+        {tokens.map(({ ticker, chain }, index) => {
+          const imgSrc = getChainEntityIconSrc(chain as string);
+
+          return (
+            <ChainButton key={index} onClick={() => {}}>
+              <ColumnOneBothRowsItem
+                src={imgSrc}
+                alt={ticker}
+                width={24}
+                height={24}
+              />
+              <ColumnTwoRowOneItem size={16} color="contrast" weight="600">
+                {ticker}
+              </ColumnTwoRowOneItem>
+              <ColumnTwoRowTwoItem size={12} color="contrast" weight="500">
+                {chain}
+              </ColumnTwoRowTwoItem>
+              <ColumnThreeRowOneItem
+                type="checkbox"
+                checked={defaultChains.some(
+                  currentChain => currentChain === (chain as string)
+                )}
+              />
+            </ChainButton>
+          );
+        })}
+      </PageSlice>
     </VStack>
   );
 };
