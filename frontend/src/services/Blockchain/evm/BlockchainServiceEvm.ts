@@ -103,7 +103,7 @@ export class BlockchainServiceEvm
 
     // Chain ID: converted to hexadecimal, stripped of '0x', and padded
     const chainIdHex = Buffer.from(
-      stripHexPrefix(chainId.toString(16).padStart(2, '0')),
+      stripHexPrefix(chainId.toString(16).padStart(4, '0')), // Ensure proper padding
       'hex'
     );
 
