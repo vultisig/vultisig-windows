@@ -10,9 +10,16 @@ require (
 	github.com/hashicorp/mdns v1.0.5
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/rs/zerolog v1.32.0
+	github.com/stretchr/testify v1.8.4
 	github.com/vultisig/mobile-tss-lib v0.0.0-20240720084109-0abbb4fb701b
 	github.com/vultisig/vultisig-relay v0.0.0-20240821122755-7048cea80d2c
 	github.com/wailsapp/wails/v2 v2.9.1
+)
+
+require (
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (

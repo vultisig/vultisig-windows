@@ -11,6 +11,9 @@ import (
 )
 
 func Encrypt(password []byte, input []byte) ([]byte, error) {
+	if len(password) == 0 {
+		return nil, errors.New("password cannot be empty")
+	}
 	// Hash the password to create a key
 	hash := sha256.Sum256(password)
 	key := hash[:]
