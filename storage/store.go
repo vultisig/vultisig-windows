@@ -271,7 +271,7 @@ func (s *Store) GetCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 // Settings is for all vaults, so no need to pass public key ecdsa
 func (s *Store) SaveSettings(setting Settings) (*Settings, error) {
 
-	query := `INSERT OR REPLACE INTO setttings (
+	query := `INSERT OR REPLACE INTO settings (
 				language,
 				currency,
 				default_chains

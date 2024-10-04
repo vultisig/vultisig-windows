@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
@@ -18,8 +19,25 @@ import {
 
 const VaultDefaultChains = () => {
   const { t } = useTranslation();
-  const { defaultChains } = useDefaultChains();
+  const { defaultChains: initialDefaultChains, updateDefaultChains } =
+    useDefaultChains();
+
+  const [defaultChains, setDefaultChains] = useState(initialDefaultChains);
   const nativeTokens = getNativeTokens();
+
+  const handleChainToggle = (chain: string) => {
+    const formattedDefaultChains = defaultChains.map(c => c.trim());
+    let newDefaultChains;
+
+    if (formattedDefaultChains.includes(chain)) {
+      newDefaultChains = defaultChains.filter(c => c.trim() !== chain.trim());
+    } else {
+      newDefaultChains = [...defaultChains, chain];
+    }
+
+    setDefaultChains(newDefaultChains);
+    updateDefaultChains(newDefaultChains);
+  };
 
   return (
     <VStack flexGrow gap={16}>
@@ -34,7 +52,10 @@ const VaultDefaultChains = () => {
           const imgSrc = getChainEntityIconSrc(chain as string);
 
           return (
-            <ChainButton key={index} onClick={() => {}}>
+            <ChainButton
+              key={index}
+              onClick={() => handleChainToggle(chain.toLowerCase())}
+            >
               <ColumnOneBothRowsItem
                 src={imgSrc}
                 alt={ticker}
@@ -48,9 +69,10 @@ const VaultDefaultChains = () => {
                 {chain}
               </ColumnTwoRowTwoItem>
               <ColumnThreeRowOneItem
+                onChange={() => {}}
                 type="checkbox"
                 checked={defaultChains.some(
-                  currentChain => currentChain === (chain as string)
+                  coin => coin.trim() === chain.trim().toLowerCase()
                 )}
               />
             </ChainButton>
