@@ -45,8 +45,6 @@ export class RpcServiceZksync extends RpcServiceEvm implements ITokenService {
         'ffffffff'
       );
 
-      console.log('getSpecificTransactionInfo::', zkInfo);
-
       const specificEvm: SpecificEvm = {
         fee: zkInfo.maxFeePerGas * zkInfo.gasLimit,
         gasPrice: Number(gasPrice),
@@ -56,8 +54,6 @@ export class RpcServiceZksync extends RpcServiceEvm implements ITokenService {
         gasLimit: zkInfo.gasLimit,
         maxFeePerGasWei: zkInfo.maxFeePerGas,
       } as SpecificEvm;
-
-      console.log('getSpecificTransactionInfo::', specificEvm);
 
       return specificEvm;
     } catch (error) {
@@ -81,9 +77,6 @@ export class RpcServiceZksync extends RpcServiceEvm implements ITokenService {
   ): Promise<SpecificZkEvm> {
     const memoDataHex = ethers.hexlify(ethers.toUtf8Bytes(memo));
     const data = memoDataHex;
-
-    console.log('getGasInfoZk', fromAddress, toAddress, data);
-
     const noncePromise = this.provider.getTransactionCount(fromAddress);
     const feeEstimatePromise = this.zksEstimateFee(
       fromAddress,

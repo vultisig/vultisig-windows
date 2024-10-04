@@ -3,6 +3,7 @@ import { WalletCore } from '@trustwallet/wallet-core';
 import { Chain } from '../../model/chain';
 import { BlockchainServiceEvm } from './evm/BlockchainServiceEvm';
 import { IBlockchainService } from './IBlockchainService';
+import { BlockchainServiceMaya } from './maya/BlockchainServiceMaya';
 import { BlockchainServiceSolana } from './solana/BlockchainServiceSolana';
 import { BlockchainServiceThorchain } from './thorchain/BlockchainServiceThorchain';
 import { BlockchainServiceUtxo } from './utxo/BlockchainServiceUtxo';
@@ -15,6 +16,8 @@ export class BlockchainServiceFactory {
     switch (chain) {
       case Chain.THORChain:
         return new BlockchainServiceThorchain(chain, walletCore);
+      case Chain.MayaChain:
+        return new BlockchainServiceMaya(chain, walletCore);
       case Chain.Bitcoin:
         return new BlockchainServiceUtxo(chain, walletCore);
       case Chain.BitcoinCash:

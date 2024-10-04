@@ -4,6 +4,7 @@ import { Chain } from '../../model/chain';
 import { FeeServiceCosmos } from './cosmos/FeeServiceCosmos';
 import { FeeServiceEvm } from './evm/FeeServiceEvm';
 import { IFeeService } from './IFeeService';
+import { FeeServiceMaya } from './maya/FeeServiceMaya';
 import { FeeServicePolkadot } from './polkadot/FeeServicePolkadot';
 import { FeeServiceSolana } from './solana/FeeServiceSolana';
 import { FeeServiceSui } from './sui/FeeServiceSui';
@@ -38,7 +39,7 @@ export class FeeServiceFactory {
       case Chain.THORChain:
         return new FeeServiceThorchain(chain, walletCore);
       case Chain.MayaChain:
-        return new FeeServiceThorchain(chain, walletCore);
+        return new FeeServiceMaya(chain, walletCore);
       case Chain.Bitcoin:
         return new FeeServiceUtxo(chain, walletCore);
       case Chain.BitcoinCash:

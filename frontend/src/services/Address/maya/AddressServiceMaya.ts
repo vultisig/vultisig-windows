@@ -12,6 +12,11 @@ export class AddressServiceMaya
     super(chain, walletCore);
   }
 
+  async validateAddress(address: string): Promise<boolean> {
+    const coinType = await this.coinType;
+    return this.walletCore.AnyAddress.isValidBech32(address, coinType, 'maya');
+  }
+
   async deriveAddressFromPublicKey(
     publicKeyECDSA: string,
     publicKeyEdDSA: string,

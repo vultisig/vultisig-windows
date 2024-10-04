@@ -5,7 +5,7 @@ import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { IBalanceService } from '../IBalanceService';
 
 export class BalanceServiceThorchain implements IBalanceService {
-  private chain: Chain;
+  chain: Chain;
 
   constructor(chain: Chain) {
     this.chain = chain;
@@ -21,7 +21,7 @@ export class BalanceServiceThorchain implements IBalanceService {
       contractAddress: coin.contractAddress,
       chain: this.chain,
       rawAmount: parseInt(balance),
-      decimalAmount: parseInt(balance),
+      decimalAmount: parseInt(balance) / Math.pow(10, coin.decimals),
       expiryDate: new Date(Date.now() + 60000 * 60), // 60 minute expiry
     };
 
