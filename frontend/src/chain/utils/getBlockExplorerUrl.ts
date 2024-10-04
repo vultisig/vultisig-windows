@@ -77,7 +77,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Sui]: () => `https://suiscan.xyz/mainnet/tx/${value}`,
         [Chain.Polkadot]: () =>
           `https://polkadot.subscan.io/extrinsic/${value}`,
-        [Chain.ZkSync]: () => `https://explorer.zksync.io/tx/${value}`,
+        [Chain.Zksync]: () => `https://explorer.zksync.io/tx/${value}`,
       }),
   });
 };
