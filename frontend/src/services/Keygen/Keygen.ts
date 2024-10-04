@@ -14,19 +14,7 @@ export function postSession(
     body: JSON.stringify([localPartyID]),
   });
 }
-export function joinSession(
-  serverURL: string,
-  sessionID: string,
-  localPartyID: string
-) {
-  return fetch(`${serverURL}/${sessionID}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify([localPartyID]),
-  });
-}
+
 export function getSession(serverUrl: string, sessionID: string) {
   return fetch(`${serverUrl}/${sessionID}`);
 }

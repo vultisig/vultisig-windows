@@ -76,7 +76,7 @@ export type IconButtonProps = Omit<
   icon: React.ReactNode;
   size?: IconButtonSize;
   kind?: IconButtonKind;
-  title: string;
+  title?: string;
   as?: React.ElementType;
   isDisabled?: boolean | string;
 };

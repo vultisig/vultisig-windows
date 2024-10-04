@@ -44,66 +44,60 @@ export class BlockchainService implements IBlockchainService {
     serverURL: string,
     keysignPayload: KeysignPayload
   ): Promise<string> {
-    try {
-      const coinService = CoinServiceFactory.createCoinService(
-        this.chain,
-        this.walletCore
-      );
+    const coinService = CoinServiceFactory.createCoinService(
+      this.chain,
+      this.walletCore
+    );
 
-      const rpcService = RpcServiceFactory.createRpcService(this.chain);
+    const rpcService = RpcServiceFactory.createRpcService(this.chain);
 
-      const tssType = ChainUtils.getTssKeysignType(this.chain);
+    const tssType = ChainUtils.getTssKeysignType(this.chain);
 
-      const keysignGoLang = await Keysign(
-        vault,
-        messages,
-        vault.local_party_id,
-        this.walletCore.CoinTypeExt.derivationPath(coinService.getCoinType()),
-        sessionID,
-        hexEncryptionKey,
-        serverURL,
-        tssType.toString().toLowerCase()
-      );
+    const keysignGoLang = await Keysign(
+      vault,
+      messages,
+      vault.local_party_id,
+      this.walletCore.CoinTypeExt.derivationPath(coinService.getCoinType()),
+      sessionID,
+      hexEncryptionKey,
+      serverURL,
+      tssType.toString().toLowerCase()
+    );
 
-      const signatures: { [key: string]: tss.KeysignResponse } = {};
-      messages.forEach((msg, idx) => {
-        signatures[msg] = keysignGoLang[idx];
-      });
+    const signatures: { [key: string]: tss.KeysignResponse } = {};
+    messages.forEach((msg, idx) => {
+      signatures[msg] = keysignGoLang[idx];
+    });
 
-      const signedTx = await this.getSignedTransaction(
-        vault.public_key_ecdsa,
-        vault.hex_chain_code,
-        keysignPayload,
-        signatures
-      );
+    const signedTx = await this.getSignedTransaction(
+      vault.public_key_ecdsa,
+      vault.hex_chain_code,
+      keysignPayload,
+      signatures
+    );
 
-      if (!signedTx) {
-        console.error("Couldn't sign transaction");
-        return "Couldn't sign transaction";
-      }
-
-      let txBroadcastedHash = await rpcService.broadcastTransaction(
-        signedTx.rawTransaction
-      );
-
-      console.log('txBroadcastedHash:', txBroadcastedHash);
-      console.log('txHash:', signedTx.transactionHash);
-
-      if (
-        txBroadcastedHash.toLowerCase() !==
-        signedTx.transactionHash.toLowerCase()
-      ) {
-        if (txBroadcastedHash === 'Transaction already broadcasted.') {
-          txBroadcastedHash = signedTx.transactionHash;
-        } else {
-          return 'Transaction hash mismatch';
-        }
-      }
-      return txBroadcastedHash;
-    } catch (e: any) {
-      console.error(e);
-      return e.message;
+    if (!signedTx) {
+      console.error("Couldn't sign transaction");
+      return "Couldn't sign transaction";
     }
+
+    let txBroadcastedHash = await rpcService.broadcastTransaction(
+      signedTx.rawTransaction
+    );
+
+    console.log('txBroadcastedHash:', txBroadcastedHash);
+    console.log('txHash:', signedTx.transactionHash);
+
+    if (
+      txBroadcastedHash.toLowerCase() !== signedTx.transactionHash.toLowerCase()
+    ) {
+      if (txBroadcastedHash === 'Transaction already broadcasted.') {
+        txBroadcastedHash = signedTx.transactionHash;
+      } else {
+        return 'Transaction hash mismatch';
+      }
+    }
+    return txBroadcastedHash;
   }
 
   createKeysignPayload(

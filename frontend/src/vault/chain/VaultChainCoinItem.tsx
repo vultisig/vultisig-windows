@@ -44,7 +44,7 @@ export const VaultChainCoinItem = ({
         </HStack>
         <Text color="contrast" size={18} weight="500" centerVertically>
           <BalanceVisibilityAware>
-            {formatAmount(balance, globalCurrency)}
+            {formatAmount(balance)}
           </BalanceVisibilityAware>
         </Text>
       </VStack>
