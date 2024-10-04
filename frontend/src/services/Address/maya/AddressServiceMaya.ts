@@ -12,7 +12,6 @@ export class AddressServiceMaya
     super(chain, walletCore);
   }
 
-  // this should work for all chains
   async validateAddress(address: string): Promise<boolean> {
     const coinType = await this.coinType;
     return this.walletCore.AnyAddress.isValidBech32(address, coinType, 'maya');

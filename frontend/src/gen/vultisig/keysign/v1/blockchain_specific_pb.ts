@@ -589,57 +589,91 @@ export class PolkadotSpecific extends Message<PolkadotSpecific> {
 }
 
 /**
- * @generated from message vultisig.keysign.v1.CoinKeyValuePair
+ * @generated from message vultisig.keysign.v1.SuiCoin
  */
-export class CoinKeyValuePair extends Message<CoinKeyValuePair> {
+export class SuiCoin extends Message<SuiCoin> {
   /**
-   * @generated from field: string key = 1;
+   * @generated from field: string coin_type = 1;
    */
-  key = '';
+  coinType = '';
 
   /**
-   * @generated from field: string value = 2;
+   * @generated from field: string coin_object_id = 2;
    */
-  value = '';
+  coinObjectId = '';
 
-  constructor(data?: PartialMessage<CoinKeyValuePair>) {
+  /**
+   * @generated from field: string version = 3;
+   */
+  version = '';
+
+  /**
+   * @generated from field: string digest = 4;
+   */
+  digest = '';
+
+  /**
+   * @generated from field: string balance = 5;
+   */
+  balance = '';
+
+  /**
+   * @generated from field: string previous_transaction = 6;
+   */
+  previousTransaction = '';
+
+  constructor(data?: PartialMessage<SuiCoin>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime: typeof proto3 = proto3;
-  static readonly typeName = 'vultisig.keysign.v1.CoinKeyValuePair';
+  static readonly typeName = 'vultisig.keysign.v1.SuiCoin';
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: 'key', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: 'value', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 1, name: 'coin_type', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 2,
+      name: 'coin_object_id',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 3, name: 'version', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: 'digest', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: 'balance', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 6,
+      name: 'previous_transaction',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
   ]);
 
   static fromBinary(
     bytes: Uint8Array,
     options?: Partial<BinaryReadOptions>
-  ): CoinKeyValuePair {
-    return new CoinKeyValuePair().fromBinary(bytes, options);
+  ): SuiCoin {
+    return new SuiCoin().fromBinary(bytes, options);
   }
 
   static fromJson(
     jsonValue: JsonValue,
     options?: Partial<JsonReadOptions>
-  ): CoinKeyValuePair {
-    return new CoinKeyValuePair().fromJson(jsonValue, options);
+  ): SuiCoin {
+    return new SuiCoin().fromJson(jsonValue, options);
   }
 
   static fromJsonString(
     jsonString: string,
     options?: Partial<JsonReadOptions>
-  ): CoinKeyValuePair {
-    return new CoinKeyValuePair().fromJsonString(jsonString, options);
+  ): SuiCoin {
+    return new SuiCoin().fromJsonString(jsonString, options);
   }
 
   static equals(
-    a: CoinKeyValuePair | PlainMessage<CoinKeyValuePair> | undefined,
-    b: CoinKeyValuePair | PlainMessage<CoinKeyValuePair> | undefined
+    a: SuiCoin | PlainMessage<SuiCoin> | undefined,
+    b: SuiCoin | PlainMessage<SuiCoin> | undefined
   ): boolean {
-    return proto3.util.equals(CoinKeyValuePair, a, b);
+    return proto3.util.equals(SuiCoin, a, b);
   }
 }
 
@@ -653,9 +687,9 @@ export class SuiSpecific extends Message<SuiSpecific> {
   referenceGasPrice = '';
 
   /**
-   * @generated from field: repeated vultisig.keysign.v1.CoinKeyValuePair coin_key_value_pairs = 2;
+   * @generated from field: repeated vultisig.keysign.v1.SuiCoin coins = 2;
    */
-  coinKeyValuePairs: CoinKeyValuePair[] = [];
+  coins: SuiCoin[] = [];
 
   constructor(data?: PartialMessage<SuiSpecific>) {
     super();
@@ -671,13 +705,7 @@ export class SuiSpecific extends Message<SuiSpecific> {
       kind: 'scalar',
       T: 9 /* ScalarType.STRING */,
     },
-    {
-      no: 2,
-      name: 'coin_key_value_pairs',
-      kind: 'message',
-      T: CoinKeyValuePair,
-      repeated: true,
-    },
+    { no: 2, name: 'coins', kind: 'message', T: SuiCoin, repeated: true },
   ]);
 
   static fromBinary(

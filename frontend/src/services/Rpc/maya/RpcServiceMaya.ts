@@ -14,8 +14,6 @@ export class RpcServiceMaya implements IRpcService {
   }
 
   async getBalance(coin: Coin): Promise<string> {
-    console.log('RPC service MAYA getBalance');
-
     const url = Endpoint.fetchAccountBalanceMayachain(coin.address);
 
     const response = await fetch(url);

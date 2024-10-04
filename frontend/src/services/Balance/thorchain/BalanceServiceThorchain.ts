@@ -9,9 +9,6 @@ export class BalanceServiceThorchain implements IBalanceService {
 
   constructor(chain: Chain) {
     this.chain = chain;
-
-    console.log('BalanceServiceThorchain constructor');
-    console.log('chain:', chain);
   }
 
   async getBalance(coin: Coin): Promise<Balance> {

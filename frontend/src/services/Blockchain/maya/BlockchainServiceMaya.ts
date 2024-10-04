@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { TW } from '@trustwallet/wallet-core';
 import { tss } from '../../../../wailsjs/go/models';
-import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { MAYAChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../../../model/chain';
 import { IBlockchainService } from '../IBlockchainService';
@@ -35,11 +35,10 @@ export class BlockchainServiceMaya
       localPartyId,
       publicKeyEcdsa
     );
-    const specific = new THORChainSpecific();
+    const specific = new MAYAChainSpecific();
     const gasInfoSpecific: SpecificThorchain =
       obj.specificTransactionInfo as SpecificThorchain;
     specific.accountNumber = BigInt(gasInfoSpecific.accountNumber);
-    specific.fee = BigInt(gasInfoSpecific.fee);
     specific.sequence = BigInt(gasInfoSpecific.sequence);
 
     switch (obj.transactionType) {
@@ -57,39 +56,13 @@ export class BlockchainServiceMaya
     }
 
     payload.blockchainSpecific = {
-      case: 'thorchainSpecific',
+      case: 'mayaSpecific',
       value: specific,
     };
 
     return payload;
   }
 
-  isTHORChainSpecific(obj: any): boolean {
-    return obj instanceof THORChainSpecific;
-  }
-  getSwapPreSignedInputData(
-    keysignPayload: KeysignPayload,
-    signingInput: any
-  ): Uint8Array {
-    const pubKeyData = Buffer.from(
-      keysignPayload.coin?.hexPublicKey || '',
-      'hex'
-    );
-    if (!pubKeyData) {
-      throw new Error('invalid hex public key');
-    }
-    const thorchainSpecific = keysignPayload.blockchainSpecific
-      .value as unknown as THORChainSpecific;
-    const input = signingInput;
-    input.publicKey = pubKeyData;
-    input.accountNumber = Number(thorchainSpecific.accountNumber);
-    input.sequence = Number(thorchainSpecific.sequence);
-    input.mode = BroadcastMode.SYNC;
-    input.fee = TW.Cosmos.Proto.Fee.create({
-      gas: 2000000000,
-    });
-    return TW.Cosmos.Proto.SigningInput.encode(input).finish();
-  }
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
@@ -98,26 +71,33 @@ export class BlockchainServiceMaya
     if (keysignPayload.coin?.chain !== Chain.MayaChain.toString()) {
       throw new Error('Invalid chain');
     }
+
     const fromAddr = walletCore.AnyAddress.createBech32(
       keysignPayload.coin.address,
       walletCore.CoinType.thorchain,
       'maya'
     );
+
+    if (keysignPayload.coin.address !== fromAddr.description()) {
+      throw new Error(`${keysignPayload.coin.address} is invalid`);
+    }
+
     if (!fromAddr) {
       throw new Error(`${keysignPayload.coin.address} is invalid`);
     }
+
     const thorchainSpecific = keysignPayload.blockchainSpecific
-      .value as unknown as THORChainSpecific;
+      .value as unknown as MAYAChainSpecific;
+
     const pubKeyData = Buffer.from(keysignPayload.coin.hexPublicKey, 'hex');
     if (!pubKeyData) {
       throw new Error('invalid hex public key');
     }
+
     let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({});
     let message: TW.Cosmos.Proto.Message[];
 
     if (thorchainSpecific.isDeposit) {
-      console.log('MAYA deposit');
-
       thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
         asset: TW.Cosmos.Proto.THORChainAsset.create({
           chain: 'MAYA',
@@ -144,13 +124,16 @@ export class BlockchainServiceMaya
         }),
       ];
     } else {
-      console.log('MAYA send');
-
       const toAddress = walletCore.AnyAddress.createBech32(
         keysignPayload.toAddress,
         coinType,
         'maya'
       );
+
+      if (toAddress.description() !== keysignPayload.toAddress) {
+        throw new Error('To address is different from the bech32 address');
+      }
+
       if (!toAddress) {
         throw new Error('invalid to address');
       }
@@ -172,7 +155,7 @@ export class BlockchainServiceMaya
     }
 
     const input = TW.Cosmos.Proto.SigningInput.create({
-      publicKey: pubKeyData,
+      publicKey: new Uint8Array(pubKeyData),
       signingMode: SigningMode.Protobuf,
       chainId: 'mayachain-mainnet-v1',
       accountNumber: Number(thorchainSpecific.accountNumber),
@@ -184,8 +167,10 @@ export class BlockchainServiceMaya
         gas: 2000000000,
       }),
     });
+
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();
   }
+
   async getPreSignedImageHash(
     keysignPayload: KeysignPayload
   ): Promise<string[]> {
@@ -218,21 +203,20 @@ export class BlockchainServiceMaya
     } else {
       inputData = await this.getPreSignedInputData(data);
     }
+
     const coinType = walletCore.CoinType.thorchain;
+
     const addressService = AddressServiceFactory.createAddressService(
       Chain.MayaChain,
       walletCore
     );
-    const thorPublicKey = await addressService.getDerivedPubKey(
+    const publicKey = await addressService.getPublicKey(
       vaultHexPublicKey,
-      vaultHexChainCode,
-      walletCore.CoinTypeExt.derivationPath(coinType)
+      '',
+      vaultHexChainCode
     );
-    const publicKeyData = Buffer.from(thorPublicKey, 'hex');
-    const publicKey = walletCore.PublicKey.createWithData(
-      publicKeyData,
-      walletCore.PublicKeyType.secp256k1
-    );
+    const publicKeyData = publicKey.data();
+
     try {
       const hashes = walletCore.TransactionCompiler.preImageHashes(
         coinType,
