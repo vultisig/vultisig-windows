@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
 import { useDefaultChains } from '../../../lib/hooks/useDefaultChains';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { TokenSelectionAssets as tokens } from '../../../token-store';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
+import { getNativeTokens } from '../../../utils/getNativeTokens';
 import {
   ChainButton,
   ColumnOneBothRowsItem,
@@ -19,6 +19,7 @@ import {
 const VaultDefaultChains = () => {
   const { t } = useTranslation();
   const { defaultChains } = useDefaultChains();
+  const nativeTokens = getNativeTokens();
 
   return (
     <VStack flexGrow gap={16}>
@@ -29,7 +30,7 @@ const VaultDefaultChains = () => {
         }
       />
       <PageSlice gap={16} flexGrow={true}>
-        {tokens.map(({ ticker, chain }, index) => {
+        {nativeTokens.map(({ ticker, chain }, index) => {
           const imgSrc = getChainEntityIconSrc(chain as string);
 
           return (
