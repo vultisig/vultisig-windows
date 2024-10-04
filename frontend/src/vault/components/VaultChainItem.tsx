@@ -79,8 +79,7 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
                 <Text color="contrast" weight="400" size={12} centerVertically>
                   <BalanceVisibilityAware>
                     {formatAmount(
-                      fromChainAmount(singleCoin.amount, singleCoin.decimals),
-                      globalCurrency
+                      fromChainAmount(singleCoin.amount, singleCoin.decimals)
                     )}
                   </BalanceVisibilityAware>
                 </Text>
@@ -93,7 +92,7 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
               ) : null}
               <Text centerVertically color="contrast" weight="700" size={16}>
                 <BalanceVisibilityAware>
-                  {formatAmount(totalAmount, globalCurrency)}
+                  {formatAmount(totalAmount)} {globalCurrency}
                 </BalanceVisibilityAware>
               </Text>
             </HStack>

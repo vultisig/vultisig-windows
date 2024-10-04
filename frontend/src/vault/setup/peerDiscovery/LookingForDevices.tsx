@@ -1,9 +1,8 @@
-import Lottie from 'lottie-react';
 import { useTranslation } from 'react-i18next';
 
-import loadingAnimation from '../../../../public/assets/images/loadingAnimation.json';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
+import { FancyLoader } from '../../../ui/pending/FancyLoader';
 
 export const LookingForDevices = () => {
   const { t } = useTranslation();
@@ -13,11 +12,7 @@ export const LookingForDevices = () => {
       <Text weight="600" color="contrast">
         {t('looking_for_devices')}
       </Text>
-      <Lottie
-        style={{ width: 120 }}
-        animationData={loadingAnimation}
-        loop={true}
-      />
+      <FancyLoader />
     </VStack>
   );
 };

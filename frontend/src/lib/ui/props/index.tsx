@@ -53,3 +53,7 @@ export type LabeledComponentProps = {
 export type ComponentWithIndexProps = {
   index: number;
 };
+
+export type ComponentWithActionProps = {
+  action: ReactNode;
+};

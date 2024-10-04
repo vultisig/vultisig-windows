@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import jsQR from 'jsqr';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,8 +25,8 @@ type QrQueryParams = QrSharedData & {
 };
 
 export const useProcessQrMutation = () => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
+
   return useMutation({
     mutationFn: async (file: File) => {
       const imageBitmap = await createImageBitmap(file);
@@ -71,15 +71,15 @@ export const useProcessQrMutation = () => {
             });
           },
           SignTransaction: async () => {
-            const vault = queryParams.vault;
-            const keySignMsg = KeysignMessage.fromBinary(payload);
-            queryClient.setQueryData(
-              ['keysignMessage', keySignMsg.sessionId],
-              keySignMsg
+            const vaultId = queryParams.vault;
+
+            const keysignMsg = JSON.stringify(
+              KeysignMessage.fromBinary(payload).toJson()
             );
+
             return makeAppPath('joinKeysign', {
-              publicKeyECDSA: vault,
-              sessionID: keySignMsg.sessionId,
+              keysignMsg,
+              vaultId,
             });
           },
         });
