@@ -1,13 +1,14 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
 import { useDefaultChains } from '../../../lib/hooks/useDefaultChains';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { TokenSelectionAssets as tokens } from '../../../token-store';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
+import { getCoinOptions } from '../vaultAddressBook/helpers/getCoinOptions';
 import {
   ChainButton,
   ColumnOneBothRowsItem,
@@ -19,6 +20,7 @@ import {
 const VaultDefaultChains = () => {
   const { t } = useTranslation();
   const { defaultChains } = useDefaultChains();
+  const tokens = useMemo(() => getCoinOptions(), []);
 
   return (
     <VStack flexGrow gap={16}>
