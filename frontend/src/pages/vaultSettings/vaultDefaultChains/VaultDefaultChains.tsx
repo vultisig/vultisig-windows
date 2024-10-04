@@ -26,9 +26,10 @@ const VaultDefaultChains = () => {
   const nativeTokens = getNativeTokens();
 
   const handleChainToggle = (chain: string) => {
+    const formattedDefaultChains = defaultChains.map(c => c.trim());
     let newDefaultChains;
 
-    if (defaultChains.includes(chain)) {
+    if (formattedDefaultChains.includes(chain)) {
       newDefaultChains = defaultChains.filter(c => c.trim() !== chain.trim());
     } else {
       newDefaultChains = [...defaultChains, chain];
