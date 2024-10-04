@@ -14,6 +14,7 @@ import {
 import { RpcServiceZksync } from './evm/RpcServiceZkSyncEvm';
 import { RpcServiceGaia } from './gaia/RpcServiceGaia';
 import { RpcServiceKujira } from './kurija/RpcServiceKurija';
+import { RpcServiceMaya } from './maya/RpcServiceMaya';
 import { RpcServicePolkadot } from './polkadot/RpcServicePolkadot';
 import { RpcServiceSolana } from './solana/RpcServiceSolana';
 import { RpcServiceSui } from './sui/RpcServiceSui';
@@ -48,7 +49,7 @@ export class RpcServiceFactory {
       case Chain.THORChain:
         return new RpcServiceThorchain();
       case Chain.MayaChain:
-        return new RpcServiceThorchain();
+        return new RpcServiceMaya();
       case Chain.Bitcoin:
         return new RpcServiceUtxo(chain);
       case Chain.BitcoinCash:

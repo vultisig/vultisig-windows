@@ -18,15 +18,16 @@ export const SendCoinPromptDeprecated = () => {
     return (
       Array.from(coins.values())
         .flat()
-        .find(coin => coin.chain === Chain.Zksync && coin.ticker == 'ETH') ||
-      null
+        .find(
+          coin => coin.chain === Chain.MayaChain && coin.ticker == 'CACAO'
+        ) || null
     );
   }, [coins]);
 
   return (
     <Button
       onClick={() => {
-        navigate(makeAppPath('vaultItemSend', { chain: Chain.Zksync }), {
+        navigate(makeAppPath('vaultItemSend', { chain: Chain.MayaChain }), {
           state: {
             coin: coin,
             balances: balances,

@@ -7,8 +7,8 @@ import { ICoinService } from '../Coin/ICoinService';
 import { IAddressService } from './IAddressService';
 
 export class AddressService implements IAddressService {
-  private coinService: ICoinService;
-  private coinType: any;
+  protected coinService: ICoinService;
+  protected coinType: any;
   protected walletCore: WalletCore;
 
   constructor(chain: Chain, walletCore: WalletCore) {
