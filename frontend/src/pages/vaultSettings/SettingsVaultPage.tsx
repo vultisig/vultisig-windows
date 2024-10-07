@@ -13,6 +13,7 @@ import { Text } from '../../lib/ui/text';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
+import { useVaultSettingsQuery } from '../../vault/queries/useVaultSettingsQuery';
 import {
   settingsItems,
   VULTISIG_DISCORD_LINK,
@@ -32,6 +33,8 @@ import {
 const SettingsVaultPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { data: vaultSettings } = useVaultSettingsQuery();
+  const { language, currency } = vaultSettings;
 
   return (
     <Container flexGrow gap={16}>
@@ -75,7 +78,16 @@ const SettingsVaultPage = () => {
                           <Icon />
                           <Text>{t(titleKey)}</Text>
                         </HStack>
-                        <ChevronRightIcon />
+                        {id === 'language' || id === 'currency' ? (
+                          <HStack gap={8} alignItems="center">
+                            <Text size={14} color="contrast">
+                              {id === 'language' ? language : currency}
+                            </Text>
+                            <ChevronRightIcon />
+                          </HStack>
+                        ) : (
+                          <ChevronRightIcon />
+                        )}
                       </HStack>
                     </ListItemPanel>
                   </UnstyledButton>

@@ -34,6 +34,6 @@ export const useAddressBookItemsQuery = () => {
       return transformAddressBookItemsResponse(addressBookItems);
     },
     initialData: [],
-    staleTime: Infinity,
+    staleTime: 1000,
   });
 };

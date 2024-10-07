@@ -25,7 +25,7 @@ export const useVaultSettingsQuery = () => {
 
       return { currency, language, defaultChains };
     },
-    staleTime: Infinity,
+    staleTime: 1000,
     initialData: DEFAULT_SETTINGS,
   });
 };
