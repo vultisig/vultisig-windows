@@ -17,6 +17,10 @@ export const textInputFrame = css`
   ${textInputBorderRadius};
 `;
 
+export const textInputBackground = css`
+  background: ${getColor('foreground')};
+`;
+
 export const textInput = css`
   ${textInputFrame};
   font-size: 14px;

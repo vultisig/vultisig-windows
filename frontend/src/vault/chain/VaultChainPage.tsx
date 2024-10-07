@@ -31,7 +31,7 @@ import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityA
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
-import { useAsserCurrentVaultNativeCoin } from '../state/useCurrentVault';
+import { useAssertCurrentVaultNativeCoin } from '../state/useCurrentVault';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
 import { VaultAddressLink } from './VaultAddressLink';
@@ -53,7 +53,7 @@ export const VaultChainPage = () => {
 
   const copyAddress = useCopyAddress();
 
-  const nativeCoin = useAsserCurrentVaultNativeCoin(chainId);
+  const nativeCoin = useAssertCurrentVaultNativeCoin(chainId);
 
   return (
     <VStack flexGrow>

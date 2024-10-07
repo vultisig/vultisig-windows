@@ -14,6 +14,7 @@ export type ThemeColors = {
   foreground: HSLA;
   foregroundExtra: HSLA;
   foregroundSuper: HSLA;
+  overlay: HSLA;
 
   contrast: HSLA;
   mist: HSLA;

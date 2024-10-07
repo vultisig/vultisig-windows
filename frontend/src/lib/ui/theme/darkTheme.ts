@@ -3,6 +3,9 @@ import { DefaultTheme } from 'styled-components';
 import { HSLA } from '../colors/HSLA';
 import { sharedColors } from './shared';
 
+const backgroundHue = 217;
+const backgroundSaturation = 91;
+
 export const darkTheme: DefaultTheme = {
   name: 'dark',
   colors: {
@@ -16,10 +19,12 @@ export const darkTheme: DefaultTheme = {
 
     idle: new HSLA(34, 93, 54),
 
-    background: new HSLA(217, 91, 9),
+    background: new HSLA(backgroundHue, backgroundSaturation, 9),
     foreground: new HSLA(216, 81, 13),
     foregroundExtra: new HSLA(216, 63, 18),
     foregroundSuper: new HSLA(215, 62, 28),
+
+    overlay: new HSLA(backgroundHue, backgroundSaturation, 1, 0.8),
 
     contrast: new HSLA(0, 0, 100),
     mist: new HSLA(0, 0, 100, 0.06),
