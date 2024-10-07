@@ -10,8 +10,8 @@ export const darkTheme: DefaultTheme = {
   name: 'dark',
   colors: {
     ...sharedColors,
-    text: new HSLA(0, 0, 100, 0.81),
-    textSupporting: new HSLA(0, 0, 61),
+    text: new HSLA(219, 45, 91),
+    textSupporting: new HSLA(216, 41, 85),
     textShy: new HSLA(0, 0, 100, 0.28),
 
     primary: new HSLA(167, 78, 55),

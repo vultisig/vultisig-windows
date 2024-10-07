@@ -253,5 +253,7 @@
   "waiting_for_keysign_start": "Waiting for the signing process to begin...",
   "transaction": "Transaction",
   "transaction_hash_copied": "Transaction hash copied",
-  "asset": "Asset"
+  "asset": "Asset",
+  "balance": "Balance",
+  "failed_to_load": "Failed to load"
 }

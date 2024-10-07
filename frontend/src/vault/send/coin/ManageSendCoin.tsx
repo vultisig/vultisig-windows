@@ -2,9 +2,12 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon';
+import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
 import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
+import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { getCoinMetaIconSrc } from '../../../coin/utils/coinMeta';
+import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Opener } from '../../../lib/ui/base/Opener';
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
 import {
@@ -16,9 +19,12 @@ import { IconWrapper } from '../../../lib/ui/icons/IconWrapper';
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel';
 import { HStack, hStack } from '../../../lib/ui/layout/Stack';
+import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { Modal } from '../../../lib/ui/modal';
+import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
+import { formatAmount } from '../../../lib/utils/formatAmount';
 import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
 import { useCurrentSendCoin } from '../state/sendCoin';
 
@@ -44,6 +50,8 @@ export const ManageSendCoin = () => {
   const { id, chainId } = coinKey;
 
   const { t } = useTranslation();
+
+  const balanceQuery = useBalanceQuery(new Coin(coin));
 
   return (
     <InputContainer>
@@ -76,6 +84,24 @@ export const ManageSendCoin = () => {
           </Modal>
         )}
       />
+      <Text
+        centerVertically
+        weight="400"
+        size={14}
+        family="mono"
+        color="supporting"
+        style={{ gap: 8 }}
+      >
+        <span>{t('balance')}:</span>
+        <QueryDependant
+          success={({ amount, decimals }) => (
+            <span>{formatAmount(fromChainAmount(amount, decimals))}</span>
+          )}
+          query={balanceQuery}
+          pending={() => <Spinner />}
+          error={() => t('failed_to_load')}
+        />
+      </Text>
     </InputContainer>
   );
 };
