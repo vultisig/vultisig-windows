@@ -1,5 +1,6 @@
 import { Chain } from '../../model/chain';
 import { BalanceService } from './BalanceService';
+import { BalanceServiceCosmos } from './cosmos/BalanceServiceCosmos';
 import { BalanceServiceEvm } from './evm/BalanceServiceEvm';
 import { BalanceServiceMaya } from './maya/BalanceServiceMaya';
 import { BalanceServiceSolana } from './solana/BalanceServiceSolana';
@@ -45,6 +46,12 @@ export class BalanceServiceFactory {
         return new BalanceServiceUtxo(chain);
       case Chain.Solana:
         return new BalanceServiceSolana(chain);
+      case Chain.Kujira:
+        return new BalanceServiceCosmos(chain);
+      case Chain.Dydx:
+        return new BalanceServiceCosmos(chain);
+      case Chain.Gaia:
+        return new BalanceServiceCosmos(chain);
       default:
         return new BalanceService(chain);
     }

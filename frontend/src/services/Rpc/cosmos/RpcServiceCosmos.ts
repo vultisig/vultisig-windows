@@ -1,36 +1,32 @@
 /* eslint-disable */
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { SpecificCosmos } from '../../../model/specific-transaction-info';
-import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceCosmos implements IRpcService {
-  // Methods to be overridden
-  protected balanceURL(address: string): string | null {
-    throw new Error('Must override in subclass');
-  }
-
-  protected accountNumberURL(address: string): string | null {
-    throw new Error('Must override in subclass');
-  }
-
-  protected transactionURL(): string | null {
-    throw new Error('Must override in subclass');
-  }
-
   calculateFee(coin: Coin): Promise<number> {
     throw new Error('Method not implemented.');
   }
+
   sendTransaction(encodedTransaction: string): Promise<string> {
-    throw new Error('Method not implemented.');
-  }
-  getBalance(coin: Coin): Promise<string> {
-    throw new Error('Method not implemented.');
+    return this.broadcastTransaction(encodedTransaction);
   }
 
-  resolveENS?(ensName: string): Promise<string> {
-    throw new Error('Method not implemented.');
+  async getBalance(coin: Coin): Promise<string> {
+    const balances = await this.fetchBalances(coin.address);
+    const balance = balances.find(balance => {
+      if (balance.denom.toLowerCase() === this.denom()) {
+        return balance.amount;
+      }
+    });
+
+    if (balance) {
+      return balance.amount;
+    } else {
+      return '0';
+    }
   }
+
   getSpecificTransactionInfo(coin: Coin): Promise<SpecificCosmos> {
     throw new Error('Method not implemented.');
   }
@@ -46,6 +42,7 @@ export class RpcServiceCosmos implements IRpcService {
       throw new HelperError(`HTTP error! status: ${response.status}`);
     }
     const data: CosmosBalanceResponse = await response.json();
+
     return data.balances;
   }
 
@@ -100,60 +97,34 @@ export class RpcServiceCosmos implements IRpcService {
       }
     }
   }
-}
 
-export class RpcServiceCosmosGaia extends RpcServiceCosmos {
-  protected balanceURL(address: string): string {
-    return Endpoint.fetchCosmosAccountBalance(address);
+  protected denom(): string {
+    throw new Error('Must override in subclass');
   }
 
-  protected accountNumberURL(address: string): string {
-    return Endpoint.fetchCosmosAccountNumber(address);
+  protected balanceURL(address: string): string | null {
+    throw new Error('Must override in subclass');
   }
 
-  protected transactionURL(): string {
-    return Endpoint.broadcastCosmosTransaction;
-  }
-}
-
-export class RpcServiceCosmosKurija extends RpcServiceCosmos {
-  protected balanceURL(address: string): string {
-    return Endpoint.fetchKujiraAccountBalance(address);
+  protected accountNumberURL(address: string): string | null {
+    throw new Error('Must override in subclass');
   }
 
-  protected accountNumberURL(address: string): string {
-    return Endpoint.fetchKujiraAccountNumber(address);
+  protected transactionURL(): string | null {
+    throw new Error('Must override in subclass');
   }
 
-  protected transactionURL(): string {
-    return Endpoint.broadcastKujiraTransaction;
-  }
-}
-
-export class RpcServiceCosmosDydx extends RpcServiceCosmos {
-  protected balanceURL(address: string): string {
-    return Endpoint.fetchDydxAccountBalance(address);
-  }
-
-  protected accountNumberURL(address: string): string {
-    return Endpoint.fetchDydxAccountNumber(address);
-  }
-
-  protected transactionURL(): string {
-    return Endpoint.broadcastDydxTransaction;
+  resolveENS?(ensName: string): Promise<string> {
+    throw new Error('Method not implemented.');
   }
 }
 
 interface CosmosBalance {
-  // Define the structure of CosmosBalance
-  // You may need to adjust this based on your actual data structure
   amount: string;
   denom: string;
 }
 
 interface CosmosAccountValue {
-  // Define the structure of CosmosAccountValue
-  // You may need to adjust this based on your actual data structure
   accountNumber: string;
   sequence: string;
 }
