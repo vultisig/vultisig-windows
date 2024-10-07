@@ -262,7 +262,9 @@ export class BlockchainServiceThorchain
       const parsedData = JSON.parse(serializedData);
       const txBytes = parsedData.tx_bytes;
       const decodedTxBytes = Buffer.from(txBytes, 'base64');
-      const hash = createHash('sha256').update(decodedTxBytes).digest('hex');
+      const hash = createHash('sha256')
+        .update(decodedTxBytes as any)
+        .digest('hex');
       const result = new SignedTransactionResult(
         serializedData,
         hash,
