@@ -20,7 +20,7 @@ const Container = styled.div`
   color: ${getColor('contrast')};
 
   ${vStack({
-    alignItems: 'center',
+    justifyContent: 'center',
   })}
 
   ${text({

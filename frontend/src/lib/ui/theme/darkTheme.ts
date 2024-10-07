@@ -12,7 +12,7 @@ export const darkTheme: DefaultTheme = {
     ...sharedColors,
     text: new HSLA(219, 45, 91),
     textSupporting: new HSLA(216, 41, 85),
-    textShy: new HSLA(0, 0, 100, 0.28),
+    textShy: new HSLA(205, 15, 55),
 
     primary: new HSLA(167, 78, 55),
     primaryAlt: new HSLA(224, 98, 64),

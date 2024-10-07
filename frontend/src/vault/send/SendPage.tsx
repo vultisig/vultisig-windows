@@ -1,12 +1,11 @@
 import { useTranslation } from 'react-i18next';
 
-import { VStack } from '../../lib/ui/layout/Stack';
-import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
-import { ManageSendCoin } from './coin/ManageSendCoin';
-import { Sender } from './sender/Sender';
+import { SendForm } from './SendForm';
+import { SendAmountProvider } from './state/amount';
+import { SendReceiverProvider } from './state/receiver';
 
 export const SendPage = () => {
   const { t } = useTranslation();
@@ -17,12 +16,11 @@ export const SendPage = () => {
         primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
       />
-      <PageContent>
-        <VStack gap={16}>
-          <ManageSendCoin />
-          <Sender />
-        </VStack>
-      </PageContent>
+      <SendAmountProvider initialValue={null}>
+        <SendReceiverProvider initialValue="">
+          <SendForm />
+        </SendReceiverProvider>
+      </SendAmountProvider>
     </>
   );
 };

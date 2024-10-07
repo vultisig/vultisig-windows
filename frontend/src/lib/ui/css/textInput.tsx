@@ -31,7 +31,7 @@ export const textInput = css`
 
   &::placeholder {
     ${text({
-      color: 'supporting',
+      color: 'shy',
       size: 12,
       weight: '400',
       family: 'mono',
@@ -39,7 +39,7 @@ export const textInput = css`
   }
 
   outline: 1px solid transparent;
-  border: 1px solid ${getColor('mist')};
+  border: 1px solid transparent;
 
   &:hover {
     outline-color: ${getColor('mist')};
