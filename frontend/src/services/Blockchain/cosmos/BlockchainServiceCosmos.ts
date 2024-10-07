@@ -172,8 +172,6 @@ export class BlockchainServiceCosmos
       inputData = await this.getPreSignedInputData(data);
     }
 
-    const coinType = walletCore.CoinType.dydx;
-
     const addressService = AddressServiceFactory.createAddressService(
       this.chain,
       walletCore
@@ -187,7 +185,7 @@ export class BlockchainServiceCosmos
 
     try {
       const hashes = walletCore.TransactionCompiler.preImageHashes(
-        coinType,
+        this.coinType,
         inputData
       );
       const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
@@ -204,7 +202,7 @@ export class BlockchainServiceCosmos
       publicKeys.add(publicKeyData);
       const compileWithSignatures =
         walletCore.TransactionCompiler.compileWithSignatures(
-          coinType,
+          this.coinType,
           inputData,
           allSignatures,
           publicKeys
