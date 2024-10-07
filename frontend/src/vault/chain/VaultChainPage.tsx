@@ -6,6 +6,7 @@ import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
 import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
+import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
@@ -30,6 +31,7 @@ import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityA
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
+import { useAsserCurrentVaultNativeCoin } from '../state/useCurrentVault';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
 import { useCurrentVaultChainId } from './useCurrentVaultChainId';
 import { VaultAddressLink } from './VaultAddressLink';
@@ -51,6 +53,8 @@ export const VaultChainPage = () => {
 
   const copyAddress = useCopyAddress();
 
+  const nativeCoin = useAsserCurrentVaultNativeCoin(chainId);
+
   return (
     <VStack flexGrow>
       <PageHeader
@@ -63,7 +67,7 @@ export const VaultChainPage = () => {
         title={<PageHeaderTitle>{chainId}</PageHeaderTitle>}
       />
       <PageContent gap={16}>
-        <VaultPrimaryActions />
+        <VaultPrimaryActions value={getStorageCoinKey(nativeCoin)} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack

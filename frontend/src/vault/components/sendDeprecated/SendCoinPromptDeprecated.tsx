@@ -37,7 +37,7 @@ export const SendCoinPromptDeprecated = () => {
       }}
       kind="outlined"
     >
-      SEND
+      SEND DEPRECATED
     </Button>
   );
 };

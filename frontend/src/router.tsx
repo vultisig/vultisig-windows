@@ -30,6 +30,7 @@ import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
+import { SendPage } from './vault/send/SendPage';
 import { SetupVaultOptionsPage } from './vault/setup/options/SetupVaultOptionsPage';
 import { SetupVaultPage } from './vault/setup/SetupVaultPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
@@ -160,5 +161,9 @@ export const router = createBrowserRouter([
   {
     path: appPaths.defaultChains,
     element: <VaultDefaultChains />,
+  },
+  {
+    path: appPaths.send,
+    element: <SendPage />,
   },
 ]);

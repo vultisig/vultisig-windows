@@ -20,3 +20,8 @@ export const areEqualCoins = (one: CoinKey, another: CoinKey): boolean =>
 
 export const coinKeyToString = (coin: CoinKey): string =>
   `${coin.chainId}:${coin.id}`;
+
+export const coinKeyFromString = (coin: string): CoinKey => {
+  const [chainId, id] = coin.split(':');
+  return { chainId, id };
+};

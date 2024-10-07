@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { areEqualCoins } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { useCoinPricesQuery } from '../../../coin/query/useCoinPricesQuery';
+import { getCoinKey } from '../../../coin/utils/coin';
 import { getCoinMetaIconSrc } from '../../../coin/utils/coinMeta';
 import {
   getStorageCoinKey,
@@ -55,14 +56,14 @@ export const VaultChainCoinPage = () => {
         title={<PageHeaderTitle>{coin.ticker}</PageHeaderTitle>}
       />
       <PageContent gap={16}>
-        <VaultPrimaryActions />
+        <VaultPrimaryActions value={getCoinKey(coin)} />
         <Panel>
           <QueryDependant
             query={balanceQuery}
             {...getQueryDependantDefaultProps('balance')}
             success={({ amount, decimals }) => {
               const price = pricesQuery.data
-                ? pricesQuery.data[0].price
+                ? pricesQuery.data[0]?.price
                 : undefined;
               return (
                 <VaultChainCoinItem

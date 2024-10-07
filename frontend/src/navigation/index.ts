@@ -1,4 +1,5 @@
 import { addQueryParams } from '../lib/utils/query/addQueryParams';
+import { withoutUndefinedFields } from '../lib/utils/record/withoutUndefinedFields';
 import { Chain } from '../model/chain';
 import { KeygenType } from '../vault/keygen/KeygenType';
 
@@ -20,6 +21,7 @@ export const appPaths = {
   manageVaultChainCoins: '/vault/chains/coins',
   vaultChainDetail: '/vault/item/detail',
   vaultChainCoinDetail: '/vault/item/detail/coin',
+  send: '/vault/send',
   vaultItemSend: '/vault/item/send',
   verifyTransaction: '/vault/item/send/verify',
   editVault: '/vault/settings/vault-settings',
@@ -51,6 +53,7 @@ export type AppPathParams = {
   vaultChainDetail: { chain: Chain };
   vaultChainCoinDetail: { chain: Chain; coin: string };
   vaultItemSend: { chain: Chain };
+  send: { coin?: string };
 };
 
 export type AppPathsWithParams = keyof AppPathParams;
@@ -65,7 +68,7 @@ export function makeAppPath<P extends Exclude<AppPath, keyof AppPathParams>>(
 export function makeAppPath(path: AppPath, variables?: any): string {
   const basePath = appPaths[path];
   if (variables) {
-    return addQueryParams(basePath, variables);
+    return addQueryParams(basePath, withoutUndefinedFields(variables));
   } else {
     return basePath;
   }

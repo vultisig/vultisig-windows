@@ -82,3 +82,9 @@ export const useAssertCurrentVaultChainCoins = (chainId: string) => {
     [chainId, coins]
   );
 };
+
+export const useAsserCurrentVaultNativeCoin = (chainId: string) => {
+  const nativeCoins = useAssertCurrentVaultNativeCoins();
+
+  return shouldBePresent(nativeCoins.find(coin => coin.chain === chainId));
+};
