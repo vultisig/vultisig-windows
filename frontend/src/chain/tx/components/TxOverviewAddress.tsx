@@ -1,9 +1,9 @@
-import { VStack } from '../../../../lib/ui/layout/Stack';
+import { VStack } from '../../../lib/ui/layout/Stack';
 import {
   ComponentWithValueProps,
   TitledComponentProps,
-} from '../../../../lib/ui/props';
-import { Text } from '../../../../lib/ui/text';
+} from '../../../lib/ui/props';
+import { Text } from '../../../lib/ui/text';
 
 export const TxOverviewAddress: React.FC<
   ComponentWithValueProps<string> & TitledComponentProps

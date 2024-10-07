@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import { Button } from '../../../lib/ui/buttons/Button';
-import { SeparatedByLine } from '../../../lib/ui/layout/SeparatedByLine';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { Panel } from '../../../lib/ui/panel/Panel';
 import { makeAppPath } from '../../../navigation';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -22,12 +21,10 @@ export const JoinKeysignSummaryStep = () => {
       <PageContent>
         <VStack flexGrow>
           <WithProgressIndicator value={1}>
-            <Panel>
-              <SeparatedByLine gap={12}>
-                <JoinKeysignTxOverview />
-                <JoinKeysignTxPrimaryInfo />
-              </SeparatedByLine>
-            </Panel>
+            <TxOverviewPanel>
+              <JoinKeysignTxOverview />
+              <JoinKeysignTxPrimaryInfo />
+            </TxOverviewPanel>
           </WithProgressIndicator>
         </VStack>
         <Link to={makeAppPath('vaultList')}>

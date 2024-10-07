@@ -1,11 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
-import { SeparatedByLine } from '../../../../lib/ui/layout/SeparatedByLine';
-import { Panel } from '../../../../lib/ui/panel/Panel';
+import { TxOverviewAddress } from '../../../../chain/tx/components/TxOverviewAddress';
+import { TxOverviewPanel } from '../../../../chain/tx/components/TxOverviewPanel';
 import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
 import { JoinKeysignTxPrimaryInfo } from '../JoinKeysignTxPrimaryInfo';
 import { useCurrentJoinKeysignPayload } from '../state/currentJoinKeysignMsg';
-import { TxOverviewAddress } from './TxOverviewAddress';
 
 export const KeysignTxOverview = () => {
   const { coin: potentialCoin } = useCurrentJoinKeysignPayload();
@@ -17,11 +16,9 @@ export const KeysignTxOverview = () => {
   const { t } = useTranslation();
 
   return (
-    <Panel>
-      <SeparatedByLine gap={12}>
-        <TxOverviewAddress title={t('from')} value={address} />
-        <JoinKeysignTxPrimaryInfo />
-      </SeparatedByLine>
-    </Panel>
+    <TxOverviewPanel>
+      <TxOverviewAddress title={t('from')} value={address} />
+      <JoinKeysignTxPrimaryInfo />
+    </TxOverviewPanel>
   );
 };

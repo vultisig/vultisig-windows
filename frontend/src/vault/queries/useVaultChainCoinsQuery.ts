@@ -73,5 +73,5 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
       data: undefined,
       error: [...balancesQuery.errors, ...pricesQuery.errors][0],
     };
-  }, [balancesQuery, pricesQuery]);
+  }, [balancesQuery, coins, pricesQuery]);
 };

@@ -1,5 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
+import { TxOverviewAddress } from '../../../chain/tx/components/TxOverviewAddress';
+import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
+import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
@@ -9,8 +12,6 @@ import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useCurrentJoinKeysignPayload } from './state/currentJoinKeysignMsg';
-import { TxOverviewAddress } from './verify/TxOverviewAddress';
-import { TxOverviewRow } from './verify/TxOverviewRow';
 
 export const JoinKeysignTxPrimaryInfo = () => {
   const {
@@ -41,12 +42,10 @@ export const JoinKeysignTxPrimaryInfo = () => {
           </Text>
         </TxOverviewRow>
       )}
-      <TxOverviewRow>
-        <Text>{t('amount')}</Text>
-        <Text family="mono">
-          {formatAmount(fromChainAmount(toAmount, decimals))} {ticker}
-        </Text>
-      </TxOverviewRow>
+      <TxOverviewAmount
+        value={fromChainAmount(toAmount, decimals)}
+        symbol={ticker}
+      />
       <QueryDependant
         query={coinPriceQuery}
         success={price =>
