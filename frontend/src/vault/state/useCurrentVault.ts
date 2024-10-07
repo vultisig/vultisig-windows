@@ -76,6 +76,12 @@ export const useAssertCurrentVaultAddreses = () => {
   }, [coins]);
 };
 
+export const useAssertCurrentVaultAddress = (chainId: string) => {
+  const addresses = useAssertCurrentVaultAddreses();
+
+  return shouldBePresent(addresses[chainId as Chain]);
+};
+
 export const useAssertCurrentVaultChainCoins = (chainId: string) => {
   const coins = useAssertCurrentVaultCoins();
 
