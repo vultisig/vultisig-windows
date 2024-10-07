@@ -49,6 +49,8 @@ export class BlockchainServiceCosmos
       value: specific,
     };
 
+    console.log('createKeysignPayload', payload);
+
     return payload;
   }
 
@@ -134,6 +136,8 @@ export class BlockchainServiceCosmos
       }),
     });
 
+    console.log('getPreSignedInputData', input);
+
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();
   }
 
@@ -151,6 +155,11 @@ export class BlockchainServiceCosmos
       console.error('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
+
+    console.log(
+      walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix()
+    );
+
     return [
       walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix(),
     ];

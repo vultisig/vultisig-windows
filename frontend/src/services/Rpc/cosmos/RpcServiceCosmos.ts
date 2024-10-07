@@ -36,9 +36,9 @@ export class RpcServiceCosmos implements IRpcService {
       if (coin.chain == Chain.Dydx) defaultGas = 2500000000000000;
 
       return {
-        accountNumber: Number(account?.accountNumber),
+        accountNumber: Number(account?.account_number),
         sequence: Number(account?.sequence),
-        gas: 0,
+        gas: defaultGas,
         transactionType: 0,
         gasPrice: defaultGas,
         fee: defaultGas,
@@ -150,7 +150,7 @@ interface CosmosBalance {
 }
 
 interface CosmosAccountValue {
-  accountNumber: string;
+  account_number: string;
   sequence: string;
 }
 
