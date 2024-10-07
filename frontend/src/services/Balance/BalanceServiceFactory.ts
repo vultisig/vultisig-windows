@@ -50,7 +50,7 @@ export class BalanceServiceFactory {
         return new BalanceServiceCosmos(chain);
       case Chain.Dydx:
         return new BalanceServiceCosmos(chain);
-      case Chain.Gaia:
+      case Chain.Cosmos:
         return new BalanceServiceCosmos(chain);
       default:
         return new BalanceService(chain);

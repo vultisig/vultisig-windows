@@ -54,6 +54,7 @@ const KeysignFlowView: React.FC = () => {
     setHexEncryptionKey(hexEncryptionKey);
     KeysignPayloadUtils.getPreKeysignImages(walletCore!, keysignPayload).then(
       msgs => {
+        console.log('messagesToSign', msgs);
         setMessagesToSign(msgs);
       }
     );

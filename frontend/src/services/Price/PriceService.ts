@@ -104,7 +104,7 @@ export class PriceService implements IPriceService {
       case Chain.Litecoin:
       case Chain.Dogecoin:
       case Chain.Dash:
-      case Chain.Gaia:
+      case Chain.Cosmos:
       case Chain.Kujira:
       case Chain.MayaChain:
       case Chain.CronosChain:

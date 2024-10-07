@@ -51,7 +51,7 @@ export class BlockchainServiceFactory {
         return new BlockchainServiceEvm(chain, walletCore);
       case Chain.Solana:
         return new BlockchainServiceSolana(chain, walletCore);
-      case Chain.Gaia:
+      case Chain.Cosmos:
         return new BlockchainServiceCosmos(chain, walletCore);
       case Chain.Kujira:
         return new BlockchainServiceCosmos(chain, walletCore);

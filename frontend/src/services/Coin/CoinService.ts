@@ -119,7 +119,7 @@ export class CoinService implements ICoinService {
         return this.walletCore.CoinType.dash;
       case Chain.Solana:
         return this.walletCore.CoinType.solana;
-      case Chain.Gaia:
+      case Chain.Cosmos:
         return this.walletCore.CoinType.cosmos;
       case Chain.Kujira:
         return this.walletCore.CoinType.kujira;

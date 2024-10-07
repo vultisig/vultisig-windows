@@ -24,8 +24,6 @@ export class BlockchainServiceCosmos
   extends BlockchainService
   implements IBlockchainService
 {
-  private static readonly DydxGasLimit: bigint = BigInt('2500000000000000');
-
   createKeysignPayload(
     obj: ITransaction | ISendTransaction,
     localPartyId: string,
@@ -57,10 +55,16 @@ export class BlockchainServiceCosmos
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
+    console.log('INPUT getPreSignedInputData COSMOS');
+
+    console.log('getPreSignedInputData', keysignPayload);
+
     const walletCore = this.walletCore;
 
     const cosmosSpecific = keysignPayload.blockchainSpecific
       .value as unknown as CosmosSpecific;
+
+    console.log('cosmosSpecific', cosmosSpecific);
 
     if (!keysignPayload.coin) {
       throw new Error('keysignPayload.coin is undefined');
@@ -78,6 +82,8 @@ export class BlockchainServiceCosmos
       this.coinType
     );
 
+    console.log('toAddress', toAddress);
+
     if (!toAddress) {
       throw new Error('invalid to address');
     }
@@ -88,7 +94,7 @@ export class BlockchainServiceCosmos
       case Chain.Dydx:
         denom = 'adydx';
         break;
-      case Chain.Gaia:
+      case Chain.Cosmos:
         denom = 'uatom';
         break;
       case Chain.Kujira:
@@ -112,6 +118,8 @@ export class BlockchainServiceCosmos
         }),
       }),
     ];
+
+    console.log(message[0].toJSON(), null, 2);
 
     const input = TW.Cosmos.Proto.SigningInput.create({
       publicKey: new Uint8Array(pubKeyData),
@@ -144,6 +152,8 @@ export class BlockchainServiceCosmos
   async getPreSignedImageHash(
     keysignPayload: KeysignPayload
   ): Promise<string[]> {
+    console.log('INPUT getPreSignedImageHash COSMOS');
+
     const walletCore = this.walletCore;
     const inputData = await this.getPreSignedInputData(keysignPayload);
     const hashes = walletCore.TransactionCompiler.preImageHashes(

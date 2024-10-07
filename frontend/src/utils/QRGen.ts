@@ -49,6 +49,7 @@ export async function createKeysignMessage(
     useVultisigRelay: isRelay,
     keysignPayload: keysignPayload,
   });
+  console.log('keysignMessage', keysignMessage);
   const serializedData = keysignMessage.toBinary();
   const bufferData = Buffer.from(serializedData);
   const sevenZip = await SevenZip({

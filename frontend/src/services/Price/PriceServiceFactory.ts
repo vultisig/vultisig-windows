@@ -47,7 +47,7 @@ export class PriceServiceFactory {
         return new PriceService(chain);
       case Chain.Sui:
         return new PriceService(chain);
-      case Chain.Gaia:
+      case Chain.Cosmos:
         return new PriceService(chain);
       case Chain.Kujira:
         return new PriceService(chain);

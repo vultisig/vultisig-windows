@@ -49,7 +49,7 @@ export class CoinServiceFactory {
         return new CoinService(chain, walletCore);
       case Chain.Sui:
         return new CoinService(chain, walletCore);
-      case Chain.Gaia:
+      case Chain.Cosmos:
         return new CoinService(chain, walletCore);
       case Chain.Kujira:
         return new CoinService(chain, walletCore);

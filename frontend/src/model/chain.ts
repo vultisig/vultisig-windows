@@ -10,7 +10,7 @@ enum OtherChain {
   Dogecoin = 'Dogecoin',
   Dash = 'Dash',
   Solana = 'Solana',
-  Gaia = 'Gaia',
+  Cosmos = 'Cosmos',
   Kujira = 'Kujira',
   Dydx = 'Dydx',
   Polkadot = 'Polkadot',
@@ -93,7 +93,7 @@ export class ChainUtils {
         return 'DASH';
       case Chain.Solana:
         return 'SOL';
-      case Chain.Gaia:
+      case Chain.Cosmos:
         return 'UATOM';
       case Chain.Kujira:
         return 'KUJI';

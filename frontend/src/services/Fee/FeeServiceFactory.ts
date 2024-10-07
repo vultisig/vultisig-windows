@@ -54,7 +54,7 @@ export class FeeServiceFactory {
         return new FeeServiceEvm(chain, walletCore);
       case Chain.Sui:
         return new FeeServiceSui(chain, walletCore);
-      case Chain.Gaia:
+      case Chain.Cosmos:
         return new FeeServiceCosmos(chain, walletCore);
       case Chain.Kujira:
         return new FeeServiceCosmos(chain, walletCore);

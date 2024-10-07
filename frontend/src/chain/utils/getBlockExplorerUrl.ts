@@ -29,7 +29,7 @@ export const getBlockExplorerUrl = ({
         [Chain.THORChain]: () => `https://runescan.io/address/${value}`,
         [Chain.Solana]: () => `https://explorer.solana.com/address/${value}`,
         [Chain.Ethereum]: () => `https://etherscan.io/address/${value}`,
-        [Chain.Gaia]: () => `https://www.mintscan.io/cosmos/address/${value}`,
+        [Chain.Cosmos]: () => `https://www.mintscan.io/cosmos/address/${value}`,
         [Chain.Dydx]: () => `https://www.mintscan.io/dydx/address/${value}`,
         [Chain.Kujira]: () =>
           `https://finder.kujira.network/kaiyo-1/address/${value}`,
@@ -61,7 +61,7 @@ export const getBlockExplorerUrl = ({
         [Chain.THORChain]: () => `https://runescan.io/tx/${value}`,
         [Chain.Solana]: () => `https://explorer.solana.com/tx/${value}`,
         [Chain.Ethereum]: () => `https://etherscan.io/tx/${value}`,
-        [Chain.Gaia]: () => `https://www.mintscan.io/cosmos/tx/${value}`,
+        [Chain.Cosmos]: () => `https://www.mintscan.io/cosmos/tx/${value}`,
         [Chain.Dydx]: () => `https://www.mintscan.io/dydx/tx/${value}`,
         [Chain.Kujira]: () =>
           `https://finder.kujira.network/kaiyo-1/tx/${value}`,

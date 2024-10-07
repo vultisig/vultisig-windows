@@ -307,7 +307,7 @@ export class Endpoint {
         return `https://explorer.solana.com/address/${address}`;
       case Chain.Ethereum:
         return `https://etherscan.io/address/${address}`;
-      case Chain.Gaia:
+      case Chain.Cosmos:
         return `https://www.mintscan.io/cosmos/address/${address}`;
       case Chain.Dydx:
         return `https://www.mintscan.io/dydx/address/${address}`;

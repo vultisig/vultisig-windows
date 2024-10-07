@@ -243,7 +243,7 @@ class Token {
   };
 
   static gaiaChainAtom: CoinMeta = {
-    chain: Chain.Gaia,
+    chain: Chain.Cosmos,
     ticker: 'ATOM',
     logo: 'atom',
     decimals: 6,

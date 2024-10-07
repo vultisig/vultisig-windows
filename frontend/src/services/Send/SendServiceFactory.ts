@@ -50,7 +50,7 @@ export class SendServiceFactory {
         return new SendServiceSolana(chain, walletCore);
       case Chain.Sui:
         return new SendService(chain, walletCore); // TODO: implement Sui
-      case Chain.Gaia:
+      case Chain.Cosmos:
         return new SendServiceCosmos(chain, walletCore);
       case Chain.Kujira:
         return new SendServiceCosmos(chain, walletCore);

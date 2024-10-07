@@ -64,7 +64,7 @@ export class RpcServiceFactory {
         return new RpcServiceAvalanche();
       case Chain.Sui:
         return new RpcServiceSui();
-      case Chain.Gaia:
+      case Chain.Cosmos:
         return new RpcServiceGaia();
       case Chain.Kujira:
         return new RpcServiceKujira();
