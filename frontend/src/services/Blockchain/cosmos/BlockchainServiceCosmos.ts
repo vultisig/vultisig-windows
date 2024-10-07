@@ -56,7 +56,6 @@ export class BlockchainServiceCosmos
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
     const walletCore = this.walletCore;
-    const coinType = walletCore.CoinType.dydx;
 
     const cosmosSpecific = keysignPayload.blockchainSpecific
       .value as unknown as CosmosSpecific;
@@ -74,7 +73,7 @@ export class BlockchainServiceCosmos
 
     const toAddress = walletCore.AnyAddress.createWithString(
       keysignPayload.toAddress,
-      coinType
+      this.coinType
     );
 
     if (!toAddress) {
@@ -115,7 +114,7 @@ export class BlockchainServiceCosmos
     const input = TW.Cosmos.Proto.SigningInput.create({
       publicKey: new Uint8Array(pubKeyData),
       signingMode: SigningMode.Protobuf,
-      chainId: walletCore.CoinTypeExt.chainId(coinType),
+      chainId: walletCore.CoinTypeExt.chainId(this.coinType),
       accountNumber: Number(cosmosSpecific.accountNumber),
       sequence: Number(cosmosSpecific.sequence),
       mode: BroadcastMode.SYNC,
@@ -142,10 +141,9 @@ export class BlockchainServiceCosmos
     keysignPayload: KeysignPayload
   ): Promise<string[]> {
     const walletCore = this.walletCore;
-    const coinType = walletCore.CoinType.dydx;
     const inputData = await this.getPreSignedInputData(keysignPayload);
     const hashes = walletCore.TransactionCompiler.preImageHashes(
-      coinType,
+      this.coinType,
       inputData
     );
     const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
