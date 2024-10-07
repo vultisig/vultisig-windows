@@ -170,7 +170,7 @@ export class BlockchainServiceThorchain
     }
 
     const input = TW.Cosmos.Proto.SigningInput.create({
-      publicKey: pubKeyData,
+      publicKey: new Uint8Array(pubKeyData),
       signingMode: SigningMode.Protobuf,
       chainId: chainID,
       accountNumber: Number(thorchainSpecific.accountNumber),

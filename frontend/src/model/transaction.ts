@@ -5,6 +5,7 @@ export enum TransactionType {
   SEND = 'send',
   SWAP = 'swap',
   DEPOSIT = 'deposit',
+  VOTE = 'vote',
 }
 
 export interface ITransaction {

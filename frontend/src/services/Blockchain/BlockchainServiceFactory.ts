@@ -1,6 +1,7 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 
 import { Chain } from '../../model/chain';
+import { BlockchainServiceCosmos } from './cosmos/BlockchainServiceCosmos';
 import { BlockchainServiceEvm } from './evm/BlockchainServiceEvm';
 import { IBlockchainService } from './IBlockchainService';
 import { BlockchainServiceMaya } from './maya/BlockchainServiceMaya';
@@ -50,6 +51,12 @@ export class BlockchainServiceFactory {
         return new BlockchainServiceEvm(chain, walletCore);
       case Chain.Solana:
         return new BlockchainServiceSolana(chain, walletCore);
+      case Chain.Gaia:
+        return new BlockchainServiceCosmos(chain, walletCore);
+      case Chain.Kujira:
+        return new BlockchainServiceCosmos(chain, walletCore);
+      case Chain.Dydx:
+        return new BlockchainServiceCosmos(chain, walletCore);
       default:
         throw new Error('Chain not supported');
     }
