@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { Chain } from '../../../model/chain';
 import { SpecificCosmos } from '../../../model/specific-transaction-info';
 import { IRpcService } from '../IRpcService';
 
@@ -27,8 +28,32 @@ export class RpcServiceCosmos implements IRpcService {
     }
   }
 
-  getSpecificTransactionInfo(coin: Coin): Promise<SpecificCosmos> {
-    throw new Error('Method not implemented.');
+  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificCosmos> {
+    try {
+      const account = await this.fetchAccountNumber(coin.address);
+
+      let defaultGas = 7500;
+      if (coin.chain == Chain.Dydx) defaultGas = 2500000000000000;
+
+      return {
+        accountNumber: Number(account?.accountNumber),
+        sequence: Number(account?.sequence),
+        gas: 0,
+        transactionType: 0,
+        gasPrice: defaultGas,
+        fee: defaultGas,
+      } as SpecificCosmos;
+    } catch (error) {
+      console.error('getSpecificTransactionInfo::', error);
+      return {
+        accountNumber: 0,
+        sequence: 0,
+        gas: 0,
+        transactionType: 0,
+        gasPrice: 0,
+        fee: 0,
+      } as SpecificCosmos;
+    }
   }
 
   async fetchBalances(address: string): Promise<CosmosBalance[]> {
