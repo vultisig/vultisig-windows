@@ -5,6 +5,7 @@ import { getFormProps } from '../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../lib/ui/layout/Stack';
 import { ComponentWithForwardActionProps } from '../../lib/ui/props';
 import { PageContent } from '../../ui/page/PageContent';
+import { WithProgressIndicator } from '../keysign/shared/WithProgressIndicator';
 import { ManageAmount } from './amount/ManageSendAmount';
 import { ManageSendCoin } from './coin/ManageSendCoin';
 import { ManageReceiver } from './receiver/ManageReceiver';
@@ -21,12 +22,14 @@ export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
         onSubmit: onForward,
       })}
     >
-      <VStack flexGrow gap={16}>
-        <ManageSendCoin />
-        <Sender />
-        <ManageReceiver />
-        <ManageAmount />
-      </VStack>
+      <WithProgressIndicator value={0.2}>
+        <VStack flexGrow gap={16}>
+          <ManageSendCoin />
+          <Sender />
+          <ManageReceiver />
+          <ManageAmount />
+        </VStack>
+      </WithProgressIndicator>
       <Button type="submit">{t('continue')}</Button>
     </PageContent>
   );

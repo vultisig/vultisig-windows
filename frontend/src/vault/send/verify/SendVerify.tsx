@@ -5,7 +5,6 @@ import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount'
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
-import { VStack } from '../../../lib/ui/layout/Stack';
 import {
   ComponentWithBackActionProps,
   ComponentWithForwardActionProps,
@@ -15,6 +14,7 @@ import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
 import {
   useAssertCurrentVaultAddress,
   useAssertCurrentVaultCoin,
@@ -47,7 +47,7 @@ export const SendVerify: React.FC<
           onSubmit: onForward,
         })}
       >
-        <VStack flexGrow gap={16}>
+        <WithProgressIndicator value={0.3}>
           <TxOverviewPanel>
             <TxOverviewAddress title={t('from')} value={address} />
             <TxOverviewAddress title={t('to')} value={receiver} />
@@ -56,7 +56,7 @@ export const SendVerify: React.FC<
               symbol={coin.ticker}
             />
           </TxOverviewPanel>
-        </VStack>
+        </WithProgressIndicator>
         <Button type="submit">{t('continue')}</Button>
       </PageContent>
     </>
