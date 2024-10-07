@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import { Button } from '../../../lib/ui/buttons/Button';
-import { VStack } from '../../../lib/ui/layout/Stack';
 import { makeAppPath } from '../../../navigation';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -19,14 +18,12 @@ export const JoinKeysignSummaryStep = () => {
     <>
       <PageHeader title={<PageHeaderTitle>{t('verify')}</PageHeaderTitle>} />
       <PageContent>
-        <VStack flexGrow>
-          <WithProgressIndicator value={1}>
-            <TxOverviewPanel>
-              <JoinKeysignTxOverview />
-              <JoinKeysignTxPrimaryInfo />
-            </TxOverviewPanel>
-          </WithProgressIndicator>
-        </VStack>
+        <WithProgressIndicator value={1}>
+          <TxOverviewPanel>
+            <JoinKeysignTxOverview />
+            <JoinKeysignTxPrimaryInfo />
+          </TxOverviewPanel>
+        </WithProgressIndicator>
         <Link to={makeAppPath('vaultList')}>
           <Button as="div">{t('continue')}</Button>
         </Link>
