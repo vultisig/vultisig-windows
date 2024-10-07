@@ -53,7 +53,7 @@ export type AppPathParams = {
   vaultChainDetail: { chain: Chain };
   vaultChainCoinDetail: { chain: Chain; coin: string };
   vaultItemSend: { chain: Chain };
-  send: { coin?: string };
+  send: { coin: string };
 };
 
 export type AppPathsWithParams = keyof AppPathParams;

@@ -6,5 +6,5 @@ import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 export const useInitialSendCoin = () => {
   const [{ coin }] = useAppPathParams<'send'>();
 
-  return useMemo(() => (coin ? coinKeyFromString(coin) : null), [coin]);
+  return useMemo(() => coinKeyFromString(coin), [coin]);
 };
