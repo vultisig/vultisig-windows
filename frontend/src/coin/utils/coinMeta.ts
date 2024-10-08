@@ -1,0 +1,32 @@
+import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { CoinMeta } from '../../model/coin-meta';
+import { CoinKey } from '../Coin';
+
+export const getCoinMetaKey = ({
+  ticker,
+  contractAddress,
+  isNativeToken,
+  chain,
+}: Pick<
+  CoinMeta,
+  'ticker' | 'contractAddress' | 'isNativeToken' | 'chain'
+>): CoinKey => {
+  return {
+    chainId: chain,
+    id: isNativeToken ? ticker : contractAddress,
+  };
+};
+
+// TODO: CoinMeta should have an "icon" field instead of "logo", which should always be a URL.
+export const getCoinMetaIconSrc = (
+  coinMeta: Pick<CoinMeta, 'ticker' | 'logo'>
+): string => {
+  if (coinMeta.logo.startsWith('https://')) {
+    return coinMeta.logo;
+  }
+  return getChainEntityIconSrc(coinMeta.ticker);
+};
+
+export const getCoinMetaSearchStrings = ({
+  ticker,
+}: Pick<CoinMeta, 'ticker'>): string[] => [ticker];
