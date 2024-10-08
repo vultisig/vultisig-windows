@@ -59,6 +59,9 @@ func (g *GoHttp) Fetch(endpoint string) (interface{}, error) {
 // Post sends a POST request with a given payload to the specified endpoint
 func (g *GoHttp) Post(endpoint string, payload interface{}) (interface{}, error) {
 
+	println("endpoint: ", endpoint)
+	println("payload: ", payload)
+
 	// Marshal the payload into JSON
 	jsonPayload, err := json.Marshal(payload)
 	if err != nil {

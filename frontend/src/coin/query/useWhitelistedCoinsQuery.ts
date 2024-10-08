@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { Fetch } from '../../../wailsjs/go/utils/GoHttp';
-import { EvmChain, evmChainIds } from '../../chain/evm/EvmChain';
-import { Chain } from '../../model/chain';
+import { Chain, EvmChain, evmChainIds } from '../../model/chain';
 import { Endpoint } from '../../services/Endpoint';
 import {
   OneInchTokensResponse,

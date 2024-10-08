@@ -205,18 +205,33 @@ export class BlockchainServiceCosmos
         this.coinType,
         inputData
       );
+
+      console.log(
+        'getSignedTransaction::hashes',
+        walletCore.HexCoding.encode(hashes).stripHexPrefix()
+      );
+
       const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
+
+      console.log(
+        'getSignedTransaction::preSigningOutput::errorMessage',
+        preSigningOutput.errorMessage
+      );
+
       const allSignatures = walletCore.DataVector.create();
       const publicKeys = walletCore.DataVector.create();
+
       const signatureProvider = new SignatureProvider(walletCore, signatures);
       const signature = signatureProvider.getSignatureWithRecoveryId(
         preSigningOutput.dataHash
       );
+
       if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
         throw new Error('Invalid signature');
       }
       allSignatures.add(signature);
       publicKeys.add(publicKeyData);
+
       const compileWithSignatures =
         walletCore.TransactionCompiler.compileWithSignatures(
           this.coinType,
@@ -227,8 +242,19 @@ export class BlockchainServiceCosmos
       const output = TW.Cosmos.Proto.SigningOutput.decode(
         compileWithSignatures
       );
+
+      console.log('getSignedTransaction::output', output);
+      console.log(
+        'getSignedTransaction::output.errorMessage',
+        output.errorMessage
+      );
+      console.log('getSignedTransaction::output.serialized', output.serialized);
+
       const serializedData = output.serialized;
       const parsedData = JSON.parse(serializedData);
+
+      console.dir(parsedData, { depth: null });
+
       const txBytes = parsedData.tx_bytes;
       const decodedTxBytes = Buffer.from(txBytes, 'base64');
       const hash = createHash('sha256')

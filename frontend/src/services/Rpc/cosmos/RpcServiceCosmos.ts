@@ -1,4 +1,6 @@
 /* eslint-disable */
+import { any } from 'zod';
+import { Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { SpecificCosmos } from '../../../model/specific-transaction-info';
@@ -94,19 +96,23 @@ export class RpcServiceCosmos implements IRpcService {
     }
 
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonString,
-      });
+      let response = null;
 
-      if (!response.ok) {
-        throw new HelperError(`HTTP error! status: ${response.status}`);
+      try {
+        console.log('broadcastTransaction::url', url);
+        console.log('broadcastTransaction::jsonString', jsonString);
+
+        response = await Post(url, jsonString);
+      } catch (error: any) {
+        console.error('broadcastTransaction::error', error);
+        return error.message;
       }
 
-      const data: CosmosTransactionBroadcastResponse = await response.json();
+      console.log('broadcastTransaction::response', response);
+
+      const data: CosmosTransactionBroadcastResponse = response;
+
+      console.log('broadcastTransaction::', data);
 
       if (data.txResponse?.code === 0 || data.txResponse?.code === 19) {
         if (data.txResponse?.txhash) {

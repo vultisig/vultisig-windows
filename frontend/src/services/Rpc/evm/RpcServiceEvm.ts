@@ -1,10 +1,9 @@
 import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
-import { EvmChain, evmChainIds } from '../../../chain/evm/EvmChain';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { ChainUtils } from '../../../model/chain';
+import { ChainUtils, EvmChain, evmChainIds } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { FeeMap, FeeMode } from '../../../model/evm-fee-mode';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
