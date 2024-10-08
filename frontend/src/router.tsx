@@ -11,7 +11,6 @@ import VaultDetailsPage from './pages/edItVault/vaultDetailsSettings/VaultDetail
 import VaultRenamePage from './pages/edItVault/vaultRenameSettings/VaultRenamePage';
 import ReshareVaultPage from './pages/edItVault/vaultReshareSettings/ReshareVaultPage';
 import ImportVaultView from './pages/importVault/ImportVaultView';
-import KeysignFlowView from './pages/keysign/KeysignFlow';
 import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage';
@@ -27,6 +26,7 @@ import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
+import { StartKeysignPage } from './vault/keysign/start/StartKeysignPage';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
 import { SendPage } from './vault/send/SendPage';
 import { SetupVaultOptionsPage } from './vault/setup/options/SetupVaultOptionsPage';
@@ -78,7 +78,7 @@ export const router = createBrowserRouter([
   },
   {
     path: appPaths.keysign,
-    element: <KeysignFlowView />,
+    element: <StartKeysignPage />,
   },
   {
     path: appPaths.vaultList,

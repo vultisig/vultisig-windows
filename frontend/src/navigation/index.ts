@@ -45,6 +45,7 @@ export type AppPath = keyof AppPaths;
 export type AppPathParams = {
   address: { address: string };
   joinKeysign: { vaultId: string; keysignMsg: string };
+  keysign: { keysignPayload: string };
   joinKeygen: { keygenType: KeygenType; keygenMsg: string };
   uploadQr: { title?: string };
   manageVaultChainCoins: { chain: Chain };

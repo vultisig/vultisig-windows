@@ -59,12 +59,11 @@ export const SendConfirm = () => {
       walletCore
     ).createKeysignPayload(tx, vault.local_party_id, vault.public_key_ecdsa);
 
-    navigate(makeAppPath('keysign'), {
-      state: {
-        vault,
-        keysignPayload: payload,
-      },
-    });
+    navigate(
+      makeAppPath('keysign', {
+        keysignPayload: JSON.stringify(payload.toJson()),
+      })
+    );
   };
 
   if (balanceQuery.error || specificTxInfoQuery.error) {
