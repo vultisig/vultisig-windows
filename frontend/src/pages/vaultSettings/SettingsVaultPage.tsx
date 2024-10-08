@@ -19,6 +19,7 @@ import {
   VULTISIG_DISCORD_LINK,
   VULTISIG_GITHUB_LINK,
   VULTISIG_PRIVACY_POLICY_LINK,
+  VULTISIG_SHARE_APP_LINK,
   VULTISIG_TERMS_OF_SERVICE_LINK,
   VULTISIG_TWITTER_LINK,
 } from './constants';
@@ -34,7 +35,7 @@ const SettingsVaultPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { data: vaultSettings } = useVaultSettingsQuery();
-  const { language, currency } = vaultSettings;
+  const { currency, languageUI } = vaultSettings;
 
   return (
     <Container flexGrow gap={16}>
@@ -63,6 +64,8 @@ const SettingsVaultPage = () => {
                         BrowserOpenURL(VULTISIG_PRIVACY_POLICY_LINK);
                       } else if (id === 'terms-of-service') {
                         BrowserOpenURL(VULTISIG_TERMS_OF_SERVICE_LINK);
+                      } else if (id === 'share-app') {
+                        BrowserOpenURL(VULTISIG_SHARE_APP_LINK);
                       } else {
                         navigate(path);
                       }
@@ -81,7 +84,7 @@ const SettingsVaultPage = () => {
                         {id === 'language' || id === 'currency' ? (
                           <HStack gap={8} alignItems="center">
                             <Text size={14} color="contrast">
-                              {id === 'language' ? language : currency}
+                              {id === 'language' ? languageUI : currency}
                             </Text>
                             <ChevronRightIcon />
                           </HStack>
