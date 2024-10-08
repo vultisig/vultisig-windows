@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { makeAppPath } from '../../navigation';
+import { appPaths } from '../../navigation';
 
 const KeygenBackupNow: React.FC = () => {
   const { t } = useTranslation();
@@ -25,16 +25,14 @@ const KeygenBackupNow: React.FC = () => {
       <div className="flex justify-center mt-28">
         <button
           className="bg-secondary text-btn-primary mr-20 rounded-full w-[250px] font-bold"
-          onClick={() => {
-            navigate(''); // update later: go to backup view
-          }}
+          onClick={() => navigate(appPaths.vaultBackup)}
         >
           {t('backup')}
         </button>
         <button
           className="text-secondary border border-secondary border-solid py-2 px-4 rounded-full w-[250px] font-bold"
           onClick={() => {
-            navigate(makeAppPath('vaultBackup'));
+            navigate(''); // update later: go to vault view
           }}
         >
           {t('skip')}
