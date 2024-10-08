@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { Match } from '../../lib/ui/base/Match';
-import { SendForm } from './SendForm';
+import { SendForm } from './form/SendForm';
 import { SendAmountProvider } from './state/amount';
 import { SendReceiverProvider } from './state/receiver';
 import { SendVerify } from './verify/SendVerify';

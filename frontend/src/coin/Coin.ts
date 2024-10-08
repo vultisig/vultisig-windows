@@ -1,7 +1,8 @@
 import { haveEqualFields } from '../lib/utils/record/haveEqualFields';
+import { Chain } from '../model/chain';
 
 export type CoinKey = {
-  chainId: string;
+  chainId: Chain;
   id: string;
 };
 
@@ -23,5 +24,5 @@ export const coinKeyToString = (coin: CoinKey): string =>
 
 export const coinKeyFromString = (coin: string): CoinKey => {
   const [chainId, id] = coin.split(':');
-  return { chainId, id };
+  return { chainId: chainId as Chain, id };
 };
