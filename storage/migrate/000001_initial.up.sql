@@ -49,7 +49,7 @@ VALUES
     (
         'English',
         'USD',
-        'ethereum, bitcoin, binance-smart-chain, solana'
+        'ethereum,bitcoin,binance-smart-chain,solana'
     );
 
 CREATE TABLE
