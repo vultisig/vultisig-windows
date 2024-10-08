@@ -267,33 +267,62 @@ func (s *Store) GetCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 	return coins, nil
 }
 
-
 // Settings is for all vaults, so no need to pass public key ecdsa
 func (s *Store) SaveSettings(setting Settings) (*Settings, error) {
 
-	query := `INSERT OR REPLACE INTO settings (
+	// Set default values if null
+	if setting.Language == "" {
+		setting.Language = "English"
+	}
+
+	if setting.Currency == "" {
+		setting.Currency = "USD"
+	}
+
+	// Delete existing settings
+	deleteQuery := "DELETE FROM settings"
+	_, err := s.db.Exec(deleteQuery)
+	if err != nil {
+		return nil, fmt.Errorf("could not delete settings, err: %w", err)
+	}
+
+	// Insert new settings
+	insertQuery := `INSERT INTO settings (
 				language,
 				currency,
 				default_chains
-				)
-              VALUES (?, ?, ?)`
+			) VALUES (?, ?, ?);`
 
 	if setting.DefaultChains == nil {
 		setting.DefaultChains = []string{}
 	}
 
-	var stringDefaultChain string = ""
+	var stringDefaultChain string
 	if len(setting.DefaultChains) > 0 {
+		for i, chain := range setting.DefaultChains {
+			chain = strings.TrimSpace(chain)
+			setting.DefaultChains[i] = chain
+		}
 		stringDefaultChain = strings.Join(setting.DefaultChains, ",")
 	}
 
-	_, err := s.db.Exec(query, setting.Language, setting.Currency, stringDefaultChain)
-
+	_, err = s.db.Exec(insertQuery, setting.Language, setting.Currency, stringDefaultChain)
 	if err != nil {
-		return nil, fmt.Errorf("could not upsert settings, err: %w", err)
+		return nil, fmt.Errorf("could not insert settings, err: %w", err)
 	}
 
-	return &setting, nil
+	settings, err := s.GetSettings()
+	if err != nil {
+		return nil, fmt.Errorf("could not get settings, err: %w", err)
+	}
+
+	if len(settings) == 0 {
+		return nil, fmt.Errorf("could not get settings")
+	}
+
+	latestSetting := settings[0]
+
+	return &latestSetting, nil
 }
 
 // GetSettings retrieves all settings from the database.

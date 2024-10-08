@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Wails: Debug myproject",
+            "type": "go",
+            "request": "launch",
+            "mode": "exec",
+            "program": "${workspaceFolder}/build/bin/vultisig-win.app/Contents/MacOS/vultisig-win",
+            "env": {},
+            "args": [
+                "-debug"
+            ],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "wails: build debug"
+        }
+    ]
+}
