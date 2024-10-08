@@ -47,24 +47,16 @@ export class BlockchainServiceCosmos
       value: specific,
     };
 
-    console.log('createKeysignPayload', payload);
-
     return payload;
   }
 
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
-    console.log('INPUT getPreSignedInputData COSMOS');
-
-    console.log('getPreSignedInputData', keysignPayload);
-
     const walletCore = this.walletCore;
 
     const cosmosSpecific = keysignPayload.blockchainSpecific
       .value as unknown as CosmosSpecific;
-
-    console.log('cosmosSpecific', cosmosSpecific);
 
     if (!keysignPayload.coin) {
       throw new Error('keysignPayload.coin is undefined');
@@ -82,13 +74,10 @@ export class BlockchainServiceCosmos
       this.coinType
     );
 
-    console.log('toAddress', toAddress);
-
     if (!toAddress) {
       throw new Error('invalid to address');
     }
 
-    // move to override method
     let denom = 'adydx';
     switch (this.chain as Chain) {
       case Chain.Dydx:
@@ -119,8 +108,6 @@ export class BlockchainServiceCosmos
       }),
     ];
 
-    console.log(message[0].toJSON(), null, 2);
-
     const input = TW.Cosmos.Proto.SigningInput.create({
       publicKey: new Uint8Array(pubKeyData),
       signingMode: SigningMode.Protobuf,
@@ -144,16 +131,12 @@ export class BlockchainServiceCosmos
       }),
     });
 
-    console.log('getPreSignedInputData', input);
-
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();
   }
 
   async getPreSignedImageHash(
     keysignPayload: KeysignPayload
   ): Promise<string[]> {
-    console.log('INPUT getPreSignedImageHash COSMOS');
-
     const walletCore = this.walletCore;
     const inputData = await this.getPreSignedInputData(keysignPayload);
     const hashes = walletCore.TransactionCompiler.preImageHashes(
@@ -165,10 +148,6 @@ export class BlockchainServiceCosmos
       console.error('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
-
-    console.log(
-      walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix()
-    );
 
     return [
       walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix(),
@@ -206,18 +185,7 @@ export class BlockchainServiceCosmos
         inputData
       );
 
-      console.log(
-        'getSignedTransaction::hashes',
-        walletCore.HexCoding.encode(hashes).stripHexPrefix()
-      );
-
       const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
-
-      console.log(
-        'getSignedTransaction::preSigningOutput::errorMessage',
-        preSigningOutput.errorMessage
-      );
-
       const allSignatures = walletCore.DataVector.create();
       const publicKeys = walletCore.DataVector.create();
 
@@ -243,18 +211,8 @@ export class BlockchainServiceCosmos
         compileWithSignatures
       );
 
-      console.log('getSignedTransaction::output', output);
-      console.log(
-        'getSignedTransaction::output.errorMessage',
-        output.errorMessage
-      );
-      console.log('getSignedTransaction::output.serialized', output.serialized);
-
       const serializedData = output.serialized;
       const parsedData = JSON.parse(serializedData);
-
-      console.dir(parsedData, { depth: null });
-
       const txBytes = parsedData.tx_bytes;
       const decodedTxBytes = Buffer.from(txBytes, 'base64');
       const hash = createHash('sha256')
