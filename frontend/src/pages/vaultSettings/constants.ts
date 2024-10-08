@@ -20,6 +20,8 @@ export const VULTISIG_PRIVACY_POLICY_LINK = 'https://vultisig.com/privacy';
 export const VULTISIG_TERMS_OF_SERVICE_LINK =
   'https://vultisig.com/termofservice';
 
+export const VULTISIG_SHARE_APP_LINK = 'https://vultisig.com/#store-section';
+
 type SettingItem = {
   id: string;
   titleKey: string;
