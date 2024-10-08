@@ -10,7 +10,6 @@ export const useVaultsQuery = () => {
     queryKey: vaultsQueryKey,
     queryFn: async () => {
       const result = await GetVaults();
-
       if (result === null) {
         return [];
       }

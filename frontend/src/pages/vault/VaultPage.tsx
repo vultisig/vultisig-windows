@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import VaultBackupBanner from '../../components/vaultBackupBanner/VaultBackupBanner';
 import { VaultList } from '../../components/vaultList/VaultList';
 import { Match } from '../../lib/ui/base/Match';
 import { toSizeUnit } from '../../lib/ui/css/toSizeUnit';
@@ -70,12 +71,13 @@ export const VaultPage = () => {
         }
       />
 
-      <VStack flexGrow>
+      <VStack flexGrow data-testid="VaultPage-Content">
+        {!selectedVault.is_backed_up && <VaultBackupBanner />}
         <Match
           value={view}
           balances={() => (
             <>
-              <PositionQrPrompt>
+              <PositionQrPrompt data-testid="VaultPage-Content-PositionQrPrompt">
                 <ProvideQrPrompt />
               </PositionQrPrompt>
               <VaultOverview />

@@ -142,6 +142,10 @@ export class HSLA {
     return this.relativeLuminance(r, g, b);
   }
 
+  withAlpha(newAlpha: number): HSLA {
+    return new HSLA(this.h, this.s, this.l, enforceRange(newAlpha, 0, 1));
+  }
+
   getHighestContrast(...options: HSLA[]): HSLA {
     const bgLuminance = this.getLuminance();
     let maxContrast = 0;

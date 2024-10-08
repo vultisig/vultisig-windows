@@ -1,6 +1,12 @@
-const DangerSignRedIcon = () => {
+const DangerSignRedIcon = ({ width = 66, height = 60 }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={66} height={60} fill="none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      fill="none"
+      viewBox="0 0 66 60"
+    >
       <path
         fill="#EE2B2B"
         d="M28.125 3.49.761 50.883a5.63 5.63 0 0 0 4.876 8.445H60.36a5.631 5.631 0 0 0 4.875-8.445L37.875 3.49a5.63 5.63 0 0 0-9.75 0Z"

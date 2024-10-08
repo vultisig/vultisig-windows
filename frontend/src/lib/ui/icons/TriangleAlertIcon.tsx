@@ -1,7 +1,13 @@
-export const TriangleAlertIcon = () => (
+export const TriangleAlertIcon = ({
+  width = '1em',
+  height = '0.84em',
+}: {
+  width?: number | string;
+  height?: number | string;
+}) => (
   <svg
-    width="1em"
-    height="0.84em"
+    width={width}
+    height={height}
     viewBox="0 0 24 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

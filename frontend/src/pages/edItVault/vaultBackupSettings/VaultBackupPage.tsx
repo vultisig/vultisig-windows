@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { z } from 'zod';
 
 import { Button } from '../../../lib/ui/buttons/Button';
 import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
@@ -18,6 +17,10 @@ import { PageSlice } from '../../../ui/page/PageSlice';
 import { useBackupVaultMutation } from '../../../vault/mutations/useBackupVaultMutation';
 import { useCurrentVault } from '../../../vault/state/useCurrentVault';
 import {
+  VaultBackupSchema,
+  vaultBackupSchema,
+} from './schemas/vaultBackupSchema';
+import {
   ActionsWrapper,
   GradientText,
   IconButton,
@@ -26,19 +29,6 @@ import {
   InputFieldWrapper,
 } from './VaultBackupPage.styles';
 
-const passwordSchema = z
-  .object({
-    password: z.string().min(3, 'vault_backup_page_password_error').max(30),
-    verifiedPassword: z
-      .string()
-      .min(3, 'Set a strong password and save it.')
-      .max(30),
-  })
-  .refine(data => data.password === data.verifiedPassword, {
-    message: 'vault_backup_page_verified_password_error',
-    path: ['verifiedPassword'],
-  });
-
 const VaultBackupPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isVerifiedPasswordVisible, setIsVerifiedPasswordVisible] =
@@ -46,6 +36,8 @@ const VaultBackupPage = () => {
 
   const vault = useCurrentVault();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const {
     mutate: backupVault,
     isPending,
@@ -57,8 +49,8 @@ const VaultBackupPage = () => {
     register,
     handleSubmit,
     formState: { errors, isValid, isDirty },
-  } = useForm({
-    resolver: zodResolver(passwordSchema),
+  } = useForm<VaultBackupSchema>({
+    resolver: zodResolver(vaultBackupSchema),
     mode: 'onBlur',
   });
 
@@ -68,8 +60,6 @@ const VaultBackupPage = () => {
 
     backupVault({ vault, password });
   };
-
-  const { t } = useTranslation();
 
   useEffect(() => {
     if (isSuccess) {
