@@ -26,9 +26,7 @@ export const SendPage = () => {
         <Match
           value={step}
           form={() => <SendForm onForward={toNextStep} />}
-          verify={() => (
-            <SendVerify onForward={toNextStep} onBack={toPrevStep} />
-          )}
+          verify={() => <SendVerify onBack={toPrevStep} />}
         />
       </SendReceiverProvider>
     </SendAmountProvider>

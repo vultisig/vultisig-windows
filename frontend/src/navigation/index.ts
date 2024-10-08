@@ -22,8 +22,6 @@ export const appPaths = {
   vaultChainDetail: '/vault/item/detail',
   vaultChainCoinDetail: '/vault/item/detail/coin',
   send: '/vault/send',
-  vaultItemSend: '/vault/item/send',
-  verifyTransaction: '/vault/item/send/verify',
   editVault: '/vault/settings/vault-settings',
   vaultDetails: '/vault/settings/vault-settings/details',
   vaultBackup: '/vault/settings/vault-settings/backup-vault',
@@ -52,7 +50,6 @@ export type AppPathParams = {
   manageVaultChainCoins: { chain: Chain };
   vaultChainDetail: { chain: Chain };
   vaultChainCoinDetail: { chain: Chain; coin: string };
-  vaultItemSend: { chain: Chain };
   send: { coin: string };
 };
 

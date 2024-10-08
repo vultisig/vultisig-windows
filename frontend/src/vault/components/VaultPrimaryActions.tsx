@@ -7,7 +7,6 @@ import { Text } from '../../lib/ui/text';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { SendPrompt } from '../send/SendPrompt';
 import { useAssertCurrentVaultNativeCoins } from '../state/useCurrentVault';
-import { SendCoinPromptDeprecated } from './sendDeprecated/SendCoinPromptDeprecated';
 
 export const VaultPrimaryActions = ({
   value,
@@ -22,7 +21,6 @@ export const VaultPrimaryActions = ({
 
   return (
     <UniformColumnGrid fullWidth gap={12}>
-      <SendCoinPromptDeprecated />
       <SendPrompt value={sendInitialCoin} />
       <Button kind="outlined">
         <Text color="primaryAlt">SWAP</Text>

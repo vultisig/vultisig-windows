@@ -1,7 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import { AddressPage } from './chain/components/address/AddressPage';
-import VerifyTransaction from './components/sendCrypto/VerifyTransaction';
 import { appPaths } from './navigation';
 import { OnboardingPage } from './onboarding/components/OnboardingPage';
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
@@ -13,7 +12,6 @@ import VaultRenamePage from './pages/edItVault/vaultRenameSettings/VaultRenamePa
 import ReshareVaultPage from './pages/edItVault/vaultReshareSettings/ReshareVaultPage';
 import ImportVaultView from './pages/importVault/ImportVaultView';
 import KeysignFlowView from './pages/keysign/KeysignFlow';
-import SendCryptoView from './pages/send/SendCryptoView';
 import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage';
@@ -105,14 +103,6 @@ export const router = createBrowserRouter([
   {
     path: appPaths.vaultChainCoinDetail,
     element: <VaultChainCoinPage />,
-  },
-  {
-    path: appPaths.vaultItemSend,
-    element: <SendCryptoView />,
-  },
-  {
-    path: appPaths.verifyTransaction,
-    element: <VerifyTransaction />,
   },
   {
     path: appPaths.editVault,
