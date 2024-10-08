@@ -19,6 +19,7 @@ import {
   VULTISIG_DISCORD_LINK,
   VULTISIG_GITHUB_LINK,
   VULTISIG_PRIVACY_POLICY_LINK,
+  VULTISIG_SHARE_APP_LINK,
   VULTISIG_TERMS_OF_SERVICE_LINK,
   VULTISIG_TWITTER_LINK,
 } from './constants';
@@ -63,6 +64,8 @@ const SettingsVaultPage = () => {
                         BrowserOpenURL(VULTISIG_PRIVACY_POLICY_LINK);
                       } else if (id === 'terms-of-service') {
                         BrowserOpenURL(VULTISIG_TERMS_OF_SERVICE_LINK);
+                      } else if (id === 'share-app') {
+                        BrowserOpenURL(VULTISIG_SHARE_APP_LINK);
                       } else {
                         navigate(path);
                       }
