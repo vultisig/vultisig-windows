@@ -96,17 +96,7 @@ export class RpcServiceCosmos implements IRpcService {
     }
 
     try {
-      let response = null;
-
-      try {
-        console.log('broadcastTransaction::url', url);
-        console.log('broadcastTransaction::jsonString', jsonString);
-
-        response = await Post(url, jsonString);
-      } catch (error: any) {
-        console.error('broadcastTransaction::error', error);
-        return error.message;
-      }
+      let response = await Post(url, JSON.parse(jsonString));
 
       console.log('broadcastTransaction::response', response);
 
@@ -114,12 +104,11 @@ export class RpcServiceCosmos implements IRpcService {
 
       console.log('broadcastTransaction::', data);
 
-      if (data.txResponse?.code === 0 || data.txResponse?.code === 19) {
-        if (data.txResponse?.txhash) {
-          return data.txResponse.txhash;
-        }
+      if (data.tx_response?.txhash) {
+        return data.tx_response.txhash;
       }
-      throw new HelperError(JSON.stringify(data));
+
+      return '';
     } catch (error) {
       if (error instanceof Error) {
         throw error;
@@ -169,7 +158,7 @@ interface CosmosAccountsResponse {
 }
 
 interface CosmosTransactionBroadcastResponse {
-  txResponse?: {
+  tx_response?: {
     code?: number;
     txhash?: string;
   };
