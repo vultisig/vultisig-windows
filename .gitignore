@@ -18,7 +18,6 @@ wails.log
 
 # IDE and Editor directories/files
 .idea/
-.vscode/
 *.swp
 *.swo
 
