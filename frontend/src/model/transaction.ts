@@ -11,7 +11,6 @@ export interface ITransaction {
   fromAddress: string;
   toAddress: string;
   amount: number;
-  amountInFiat: number;
   memo: string;
   coin: Coin;
   transactionType: TransactionType;
@@ -35,7 +34,6 @@ export function getDefaultSendTransaction(): ISendTransaction {
     fromAddress: '',
     toAddress: '',
     amount: 0,
-    amountInFiat: 0,
     memo: '',
     sendMaxAmount: false,
     coin: new Coin(),
@@ -49,7 +47,6 @@ export function getDefaultSwapTransaction(): ISwapTransaction {
     fromAddress: '',
     toAddress: '',
     amount: 0,
-    amountInFiat: 0,
     memo: '',
     coin: new Coin(),
     swapCoin: new Coin(),

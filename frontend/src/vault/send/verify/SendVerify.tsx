@@ -54,7 +54,6 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
       fromAddress: address,
       toAddress: receiver,
       amount: shouldBePresent(amount),
-      amountInFiat: 0,
       memo: '',
       coin: new Coin(coin),
       transactionType: TransactionType.SEND,
