@@ -1,33 +1,23 @@
-/* eslint-disable */
 import { TW } from '@trustwallet/wallet-core';
-import { tss } from '../../../../wailsjs/go/models';
-import {
-  PolkadotSpecific,
-  THORChainSpecific,
-} from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+
+import { storage, tss } from '../../../../wailsjs/go/models';
+import { PolkadotSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { Chain } from '../../../model/chain';
+import { Chain, ChainUtils } from '../../../model/chain';
 import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
-import SigningMode = TW.Cosmos.Proto.SigningMode;
-import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import TxCompiler = TW.TxCompiler;
-import SignatureProvider from '../signature-provider';
-import { createHash } from 'crypto';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
-import { BlockchainService } from '../BlockchainService';
-import {
-  SpecificPolkadot,
-  SpecificThorchain,
-} from '../../../model/specific-transaction-info';
+import { Keysign } from '../../../../wailsjs/go/tss/TssService';
+import { SpecificPolkadot } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
   ITransaction,
-  TransactionType,
 } from '../../../model/transaction';
-import { RpcServiceThorchain } from '../../Rpc/thorchain/RpcServiceThorchain';
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import { CoinServiceFactory } from '../../Coin/CoinServiceFactory';
+import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
+import { BlockchainService } from '../BlockchainService';
+import SignatureProvider from '../signature-provider';
 
 export class BlockchainServicePolkadot
   extends BlockchainService
@@ -65,49 +55,44 @@ export class BlockchainServicePolkadot
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
-    try {
-      if (keysignPayload.coin?.chain !== Chain.Polkadot) {
-        throw new Error('Coin is not Polkadot');
-      }
-
-      const {
-        recentBlockHash,
-        nonce,
-        currentBlockNumber,
-        specVersion,
-        transactionVersion,
-        genesisHash,
-      } = keysignPayload.blockchainSpecific
-        .value as unknown as PolkadotSpecific;
-
-      const t = TW.Polkadot.Proto.Balance.Transfer.create({
-        memo: keysignPayload.memo,
-        toAddress: keysignPayload.toAddress,
-        value: new Uint8Array(Buffer.from(keysignPayload.toAmount)),
-      });
-
-      const balance = TW.Polkadot.Proto.Balance.create({
-        transfer: t,
-      });
-
-      const input = TW.Polkadot.Proto.SigningInput.create({
-        genesisHash: new Uint8Array(Buffer.from(genesisHash, 'hex')),
-        blockHash: new Uint8Array(Buffer.from(recentBlockHash, 'hex')),
-        nonce,
-        specVersion,
-        transactionVersion,
-        network: this.coinType.value,
-        era: TW.Polkadot.Proto.Era.create({
-          blockNumber: BigInt(currentBlockNumber),
-          period: 64,
-        }),
-        balanceCall: balance,
-      });
-
-      return TW.Polkadot.Proto.SigningInput.encode(input).finish();
-    } catch (error) {
-      throw error;
+    if (keysignPayload.coin?.chain !== Chain.Polkadot) {
+      throw new Error('Coin is not Polkadot');
     }
+
+    const {
+      recentBlockHash,
+      nonce,
+      currentBlockNumber,
+      specVersion,
+      transactionVersion,
+      genesisHash,
+    } = keysignPayload.blockchainSpecific.value as unknown as PolkadotSpecific;
+
+    const t = TW.Polkadot.Proto.Balance.Transfer.create({
+      memo: keysignPayload.memo,
+      toAddress: keysignPayload.toAddress,
+      value: new Uint8Array(Buffer.from(keysignPayload.toAmount)),
+    });
+
+    const balance = TW.Polkadot.Proto.Balance.create({
+      transfer: t,
+    });
+
+    const input = TW.Polkadot.Proto.SigningInput.create({
+      genesisHash: new Uint8Array(Buffer.from(genesisHash, 'hex')),
+      blockHash: new Uint8Array(Buffer.from(recentBlockHash, 'hex')),
+      nonce,
+      specVersion,
+      transactionVersion,
+      network: this.coinType.value,
+      era: TW.Polkadot.Proto.Era.create({
+        blockNumber: BigInt(currentBlockNumber),
+        period: 64,
+      }),
+      balanceCall: balance,
+    });
+
+    return TW.Polkadot.Proto.SigningInput.encode(input).finish();
   }
 
   async getPreSignedImageHash(
@@ -125,8 +110,156 @@ export class BlockchainServicePolkadot
       console.error('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
+
+    console.log(
+      'preSigningOutput:',
+      walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix()
+    );
+
     return [
       walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix(),
     ];
+  }
+
+  public async getSignedTransaction(
+    vaultHexPublicKey: string,
+    vaultHexChainCode: string,
+    data: KeysignPayload | Uint8Array,
+    signatures: { [key: string]: tss.KeysignResponse }
+  ): Promise<SignedTransactionResult> {
+    let inputData: Uint8Array;
+    if (data instanceof Uint8Array) {
+      inputData = data;
+    } else {
+      inputData = await this.getPreSignedInputData(data);
+    }
+
+    const publicKey = await this.addressService.getPublicKey(
+      '',
+      vaultHexPublicKey,
+      vaultHexChainCode
+    );
+    const publicKeyData = publicKey.data();
+
+    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
+      this.coinType,
+      inputData
+    );
+
+    console.log('preHashes:', preHashes);
+
+    const preSigningOutput =
+      TxCompiler.Proto.PreSigningOutput.decode(preHashes);
+    if (preSigningOutput.errorMessage !== '') {
+      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
+      //throw new Error(preSigningOutput.errorMessage);
+    }
+
+    const allSignatures = this.walletCore.DataVector.create();
+    const publicKeys = this.walletCore.DataVector.create();
+    const signatureProvider = new SignatureProvider(
+      this.walletCore,
+      signatures
+    );
+    const signature = signatureProvider.getSignature(preSigningOutput.data);
+
+    if (!publicKey.verify(signature, preSigningOutput.data)) {
+      console.error('Failed to verify signature');
+      //throw new Error('Failed to verify signature');
+    }
+
+    allSignatures.add(signature);
+    publicKeys.add(publicKeyData);
+
+    const compiled = this.walletCore.TransactionCompiler.compileWithSignatures(
+      this.coinType,
+      inputData,
+      allSignatures,
+      publicKeys
+    );
+
+    const output = TW.Polkadot.Proto.SigningOutput.decode(compiled);
+    if (output.errorMessage !== '') {
+      console.error('output error:', output.errorMessage);
+      //throw new Error(output.errorMessage);
+    }
+
+    const result = new SignedTransactionResult(
+      this.walletCore.HexCoding.encode(output.encoded),
+      this.walletCore.HexCoding.encode(
+        this.walletCore.Hash.blake2b(output.encoded, 32)
+      )
+    );
+
+    console.log('Signed transaction:', result);
+
+    return result;
+  }
+
+  async signAndBroadcastTransaction(
+    vault: storage.Vault,
+    messages: string[],
+    sessionID: string,
+    hexEncryptionKey: string,
+    serverURL: string,
+    keysignPayload: KeysignPayload
+  ): Promise<string> {
+    try {
+      const coinService = CoinServiceFactory.createCoinService(
+        this.chain,
+        this.walletCore
+      );
+
+      const rpcService = RpcServiceFactory.createRpcService(this.chain);
+
+      const tssType = ChainUtils.getTssKeysignType(this.chain);
+
+      const keysignGoLang = await Keysign(
+        vault,
+        messages,
+        vault.local_party_id,
+        this.walletCore.CoinTypeExt.derivationPath(coinService.getCoinType()),
+        sessionID,
+        hexEncryptionKey,
+        serverURL,
+        tssType.toString().toLowerCase()
+      );
+
+      const signatures: { [key: string]: tss.KeysignResponse } = {};
+      messages.forEach((msg, idx) => {
+        signatures[msg] = keysignGoLang[idx];
+      });
+
+      const signedTx = await this.getSignedTransaction(
+        vault.public_key_eddsa,
+        vault.hex_chain_code,
+        keysignPayload,
+        signatures
+      );
+
+      if (!signedTx) {
+        console.error("Couldn't sign transaction");
+        return "Couldn't sign transaction";
+      }
+
+      let txBroadcastedHash = await rpcService.broadcastTransaction(
+        signedTx.rawTransaction
+      );
+
+      console.log('txBroadcastedHash:', txBroadcastedHash);
+      console.log('txHash:', signedTx.transactionHash);
+
+      if (txBroadcastedHash !== signedTx.transactionHash) {
+        if (txBroadcastedHash === 'Transaction already broadcasted.') {
+          txBroadcastedHash = signedTx.transactionHash;
+        } else {
+          return 'Transaction hash mismatch';
+        }
+      }
+      return txBroadcastedHash;
+    } catch (e: any) {
+      console.error(e);
+      return e.message;
+    }
   }
 }
