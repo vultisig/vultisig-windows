@@ -7,7 +7,7 @@ import { IRpcService } from '../IRpcService';
 
 export class RpcServicePolkadot implements IRpcService {
   async calculateFee(coin: Coin): Promise<number> {
-    return 10_000_000_000;
+    return 1e10;
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
@@ -29,15 +29,16 @@ export class RpcServicePolkadot implements IRpcService {
 
   async getSpecificTransactionInfo(coin: Coin): Promise<SpecificPolkadot> {
     try {
+      let fee = await this.calculateFee(coin);
       let recentBlockHash = await this.fetchBlockHash();
-      let nonce = Number(await this.fetchNonce(coin.address));
+      let nonce = await this.fetchNonce(coin.address);
       let currentBlockNumber = Number(await this.fetchBlockHeader());
       let runtime = await this.fetchRuntimeVersion();
       let genesisHash = await this.fetchGenesisBlockHash();
 
-      return {
-        fee: await this.calculateFee(coin),
-        gasPrice: await this.calculateFee(coin),
+      const specificTransactionInfo: SpecificPolkadot = {
+        fee: fee,
+        gasPrice: fee / 10 ** coin.decimals,
         recentBlockHash: recentBlockHash,
         nonce: nonce,
         currentBlockNumber: currentBlockNumber,
@@ -45,6 +46,10 @@ export class RpcServicePolkadot implements IRpcService {
         transactionVersion: runtime.transactionVersion,
         genesisHash: genesisHash,
       } as SpecificPolkadot;
+
+      console.log('specificTransactionInfo', specificTransactionInfo);
+
+      return specificTransactionInfo;
     } catch (error) {
       console.error('getSpecificTransactionInfo::', error);
       return {
@@ -106,7 +111,7 @@ export class RpcServicePolkadot implements IRpcService {
       };
 
       const response = await Post(Endpoint.polkadotServiceRpc, payload);
-      if (response && response.result) {
+      if (response && response.result !== undefined) {
         return response.result;
       } else {
         return response.error || 'Unknown error occurred';
@@ -116,11 +121,9 @@ export class RpcServicePolkadot implements IRpcService {
     }
   }
 
-  private async fetchNonce(address: string): Promise<BigInt> {
-    const result: string = await this.callRPC('system_accountNextIndex', [
-      address,
-    ]);
-    return BigInt(result);
+  private async fetchNonce(address: string): Promise<number> {
+    const result = await this.callRPC('system_accountNextIndex', [address]);
+    return Number(result);
   }
 
   private async fetchBlockHash(): Promise<string> {
@@ -129,26 +132,20 @@ export class RpcServicePolkadot implements IRpcService {
   }
 
   private async fetchGenesisBlockHash(): Promise<string> {
-    const result: string = await this.callRPC('chain_getBlockHash', [0]);
+    const result = await this.callRPC('chain_getBlockHash', [0]);
     return result;
   }
 
   private async fetchRuntimeVersion(): Promise<any> {
     const result: any = await this.callRPC('state_getRuntimeVersion', []);
-
-    console.log(result);
-
     return {
       specVersion: result.specVersion,
       transactionVersion: result.transactionVersion,
     };
   }
 
-  private async fetchBlockHeader(): Promise<bigint> {
+  private async fetchBlockHeader(): Promise<number> {
     const result: any = await this.callRPC('chain_getHeader', []);
-
-    console.log(result);
-
-    return BigInt(`0x${result.number}`);
+    return Number(result.number);
   }
 }
