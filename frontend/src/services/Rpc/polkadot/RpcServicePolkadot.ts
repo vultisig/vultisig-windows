@@ -10,8 +10,8 @@ export class RpcServicePolkadot implements IRpcService {
     return 10_000_000_000;
   }
 
-  sendTransaction(encodedTransaction: string): Promise<string> {
-    return this.broadcastTransaction(encodedTransaction);
+  async sendTransaction(encodedTransaction: string): Promise<string> {
+    return await this.broadcastTransaction(encodedTransaction);
   }
 
   async getBalance(coin: Coin): Promise<string> {
