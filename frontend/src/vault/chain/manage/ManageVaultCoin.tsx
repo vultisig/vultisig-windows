@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { areEqualCoins } from '../../../coin/Coin';
@@ -29,21 +29,32 @@ type ManageVaultCoinProps = ComponentWithValueProps<CoinMeta> & {
 };
 
 export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
+  const [optimisticIsChecked, setOptimisticIsChecked] = useState(false);
   const key = getCoinMetaKey(value);
 
   const coins = useAssertCurrentVaultCoins();
 
-  const { mutate: saveCoin } = useSaveCoinMutation();
-  const { mutate: deleteCoin } = useDeleteCoinMutation();
+  const { mutate: saveCoin, isPending: isSaving } = useSaveCoinMutation();
+  const { mutate: deleteCoin, isPending: isDeleting } = useDeleteCoinMutation();
 
   const isChecked = coins.some(c => areEqualCoins(getStorageCoinKey(c), key));
 
+  // Synchronize in case the mutation was unsuccessful and the optimistic update needs to be reverted
+  useEffect(() => {
+    if (isChecked !== optimisticIsChecked && !isSaving && !isDeleting) {
+      setOptimisticIsChecked(isChecked);
+    }
+  }, [isChecked, isDeleting, isSaving, optimisticIsChecked]);
+
   return (
     <Container
+      data-testid={`ManageVaultChain-Coin-${value.ticker}`}
       onClick={() => {
         if (isChecked) {
+          setOptimisticIsChecked(false);
           deleteCoin(key);
         } else {
+          setOptimisticIsChecked(true);
           saveCoin(value);
         }
       }}
@@ -60,7 +71,7 @@ export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
             </Text>
           </VStack>
         </HStack>
-        <Check value={isChecked} />
+        <Check value={optimisticIsChecked} />
       </HStack>
     </Container>
   );
