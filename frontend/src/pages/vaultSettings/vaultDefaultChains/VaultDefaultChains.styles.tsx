@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
 import { borderRadius } from '../../../lib/ui/css/borderRadius';
+import { sameDimensions } from '../../../lib/ui/css/sameDimensions';
+import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus';
 import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 
@@ -46,7 +48,8 @@ export const ColumnTwoRowTwoItem = styled(Text)`
   text-align: start;
 `;
 
-export const ColumnThreeRowOneItem = styled.input`
+export const Check = styled(CheckStatus)`
+  ${sameDimensions(24)};
   grid-column: 3;
   grid-row: 1 / span 2;
 `;
