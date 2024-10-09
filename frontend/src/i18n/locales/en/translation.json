@@ -263,5 +263,5 @@
   "send_invalid_receiver_address": "Enter a valid receiver address",
   "amount_required": "Amount is required",
   "send_amount_exceeds_balance": "Amount exceeds balance",
-  "send_same_sender_receiver": "Sender and receiver addresses should be different"
+  "same_sender_receiver_error": "Sender and receiver addresses should be different"
 }
