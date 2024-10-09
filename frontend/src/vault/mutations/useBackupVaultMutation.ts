@@ -18,7 +18,11 @@ export const useBackupVaultMutation = () => {
       vault: storage.Vault;
       password: string;
     }) => {
-      return await vaultService.createAndSaveBackup(vault, password);
+      await vaultService.createAndSaveBackup(vault, password);
+      await vaultService.saveVault({
+        ...vault,
+        is_backed_up: true,
+      } as storage.Vault);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
