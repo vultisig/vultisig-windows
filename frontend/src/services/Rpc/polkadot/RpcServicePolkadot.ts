@@ -75,10 +75,10 @@ export class RpcServicePolkadot implements IRpcService {
           body: requestBody,
         });
 
-        const data = await response.json();
+        const result = await response.json();
 
-        if (data.data?.account?.balance) {
-          const balance = BigInt(data.data.account.balance) * BigInt(10 ** 10);
+        if (result.data?.account?.balance) {
+          const balance = BigInt(Number(result.data.account.balance) * 10e10);
           return balance;
         }
       } catch (error) {
