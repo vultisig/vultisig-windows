@@ -14,9 +14,12 @@ import { ManageSendCoin } from '../coin/ManageSendCoin';
 import { SendNetworkFee } from '../fee/SendNetworkFee';
 import { ManageReceiver } from '../receiver/ManageReceiver';
 import { Sender } from '../sender/Sender';
+import { useIsSendFormDisabled } from './hooks/useIsSendFormDisabled';
 
 export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
   const { t } = useTranslation();
+
+  const isDisabled = useIsSendFormDisabled();
 
   return (
     <>
@@ -29,6 +32,7 @@ export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
         gap={40}
         {...getFormProps({
           onSubmit: onForward,
+          isDisabled,
         })}
       >
         <WithProgressIndicator value={0.2}>
@@ -40,7 +44,9 @@ export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
             <SendNetworkFee />
           </VStack>
         </WithProgressIndicator>
-        <Button type="submit">{t('continue')}</Button>
+        <Button isDisabled={isDisabled} type="submit">
+          {t('continue')}
+        </Button>
       </PageContent>
     </>
   );

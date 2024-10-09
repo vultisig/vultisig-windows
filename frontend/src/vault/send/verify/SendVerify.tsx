@@ -12,11 +12,9 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
-import {
-  useAssertCurrentVaultAddress,
-  useAssertCurrentVaultCoin,
-} from '../../state/useCurrentVault';
+import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
 import { SendNetworkFeeValue } from '../fee/SendNetworkFeeValue';
+import { useSender } from '../sender/hooks/useSender';
 import { useSendAmount } from '../state/amount';
 import { useSendReceiver } from '../state/receiver';
 import { useCurrentSendCoin } from '../state/sendCoin';
@@ -28,7 +26,7 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
   const { t } = useTranslation();
 
   const [coinKey] = useCurrentSendCoin();
-  const address = useAssertCurrentVaultAddress(coinKey.chainId);
+  const sender = useSender();
   const coin = useAssertCurrentVaultCoin(coinKey);
   const [receiver] = useSendReceiver();
   const [amount] = useSendAmount();
@@ -42,7 +40,7 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
       <PageContent gap={40}>
         <WithProgressIndicator value={0.3}>
           <TxOverviewPanel>
-            <TxOverviewAddress title={t('from')} value={address} />
+            <TxOverviewAddress title={t('from')} value={sender} />
             <TxOverviewAddress title={t('to')} value={receiver} />
             <TxOverviewAmount
               value={shouldBePresent(amount)}

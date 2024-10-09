@@ -13,10 +13,10 @@ import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
 import {
   useAssertCurrentVault,
-  useAssertCurrentVaultAddress,
   useAssertCurrentVaultCoin,
 } from '../../state/useCurrentVault';
 import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
+import { useSender } from '../sender/hooks/useSender';
 import { useSendAmount } from '../state/amount';
 import { useSendReceiver } from '../state/receiver';
 import { useCurrentSendCoin } from '../state/sendCoin';
@@ -25,7 +25,7 @@ export const SendConfirm = () => {
   const { t } = useTranslation();
 
   const [coinKey] = useCurrentSendCoin();
-  const address = useAssertCurrentVaultAddress(coinKey.chainId);
+  const sender = useSender();
   const coin = useAssertCurrentVaultCoin(coinKey);
   const [receiver] = useSendReceiver();
   const [amount] = useSendAmount();
@@ -44,7 +44,7 @@ export const SendConfirm = () => {
       amount === fromChainAmount(balance.amount, coin.decimals);
 
     const tx: ISendTransaction = {
-      fromAddress: address,
+      fromAddress: sender,
       toAddress: receiver,
       amount: shouldBePresent(amount),
       memo: '',
