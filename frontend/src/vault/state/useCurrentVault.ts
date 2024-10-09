@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import { areEqualCoins, CoinKey } from '../../coin/Coin';
+import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import { groupItems } from '../../lib/utils/array/groupItems';
 import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
@@ -74,11 +76,31 @@ export const useAssertCurrentVaultAddreses = () => {
   }, [coins]);
 };
 
+export const useAssertCurrentVaultAddress = (chainId: string) => {
+  const addresses = useAssertCurrentVaultAddreses();
+
+  return shouldBePresent(addresses[chainId as Chain]);
+};
+
 export const useAssertCurrentVaultChainCoins = (chainId: string) => {
   const coins = useAssertCurrentVaultCoins();
 
   return useMemo(
     () => coins.filter(coin => coin.chain === chainId),
     [chainId, coins]
+  );
+};
+
+export const useAssertCurrentVaultNativeCoin = (chainId: string) => {
+  const nativeCoins = useAssertCurrentVaultNativeCoins();
+
+  return shouldBePresent(nativeCoins.find(coin => coin.chain === chainId));
+};
+
+export const useAssertCurrentVaultCoin = (coinKey: CoinKey) => {
+  const coins = useAssertCurrentVaultCoins();
+
+  return shouldBePresent(
+    coins.find(coin => areEqualCoins(getStorageCoinKey(coin), coinKey))
   );
 };

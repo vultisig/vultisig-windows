@@ -37,5 +37,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'error',
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
 };

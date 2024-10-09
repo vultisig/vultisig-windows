@@ -1,5 +1,6 @@
 import { storage } from '../../../wailsjs/go/models';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Chain } from '../../model/chain';
 import { AccountCoinKey } from '../AccountCoin';
 
 export const getStorageCoinKey = ({
@@ -10,7 +11,7 @@ export const getStorageCoinKey = ({
   address,
 }: storage.Coin): AccountCoinKey => {
   return {
-    chainId: chain,
+    chainId: chain as Chain,
     id: is_native_token ? ticker : contract_address,
     address,
   };

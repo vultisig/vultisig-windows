@@ -40,7 +40,8 @@ export async function createKeysignMessage(
   serviceName: string,
   sessionID: string,
   hexEncryptedKey: string,
-  keysignPayload: KeysignPayload
+  keysignPayload: KeysignPayload,
+  vaultId: string
 ) {
   const keysignMessage = new KeysignMessage({
     sessionId: sessionID,
@@ -59,5 +60,8 @@ export async function createKeysignMessage(
   sevenZip.FS.writeFile('data.bin', bufferData);
   sevenZip.callMain(['a', archiveName, 'data.bin']);
   const compressedData = sevenZip.FS.readFile(archiveName);
-  return Buffer.from(compressedData).toString('base64');
+
+  const payload = Buffer.from(compressedData).toString('base64');
+
+  return `vultisig://vultisig.com?type=SignTransaction&vault=${vaultId}&jsonData=${payload}`;
 }

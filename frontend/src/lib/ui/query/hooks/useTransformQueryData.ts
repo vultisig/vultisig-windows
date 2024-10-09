@@ -7,7 +7,7 @@ type Query<T> = {
 export const useTransformQueryData = <T, V, B>(
   queryResult: B & Query<T>,
   transform: (data: T) => V
-): B & Query<V> => {
+): Omit<B, 'data'> & Query<V> => {
   return useMemo(
     () =>
       ({

@@ -57,3 +57,7 @@ export type ComponentWithIndexProps = {
 export type ComponentWithActionProps = {
   action: ReactNode;
 };
+
+export type ClosableComponentProps = {
+  onClose: () => void;
+};

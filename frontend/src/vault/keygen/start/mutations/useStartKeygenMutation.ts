@@ -8,10 +8,10 @@ import { vaultsQueryKey } from '../../../queries/useVaultsQuery';
 import { useVaultKeygenDevices } from '../../../setup/hooks/useVaultKegenDevices';
 import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
-import { useCurrentSessionId } from '../../../setup/state/currentSessionId';
 import { useVaultName } from '../../../setup/state/vaultName';
 import { useCurrentVaultId } from '../../../state/useCurrentVaultId';
 import { getStorageVaultId } from '../../../utils/storageVault';
+import { useCurrentSessionId } from '../../shared/state/currentSessionId';
 import { useCurrentLocalPartyId } from '../../state/currentLocalPartyId';
 import { useCurrentServerUrl } from '../../state/currentServerUrl';
 

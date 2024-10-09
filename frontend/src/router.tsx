@@ -1,7 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import { AddressPage } from './chain/components/address/AddressPage';
-import VerifyTransaction from './components/sendCrypto/VerifyTransaction';
 import { appPaths } from './navigation';
 import { OnboardingPage } from './onboarding/components/OnboardingPage';
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
@@ -12,8 +11,6 @@ import VaultDetailsPage from './pages/edItVault/vaultDetailsSettings/VaultDetail
 import VaultRenamePage from './pages/edItVault/vaultRenameSettings/VaultRenamePage';
 import ReshareVaultPage from './pages/edItVault/vaultReshareSettings/ReshareVaultPage';
 import ImportVaultView from './pages/importVault/ImportVaultView';
-import KeysignFlowView from './pages/keysign/KeysignFlow';
-import SendCryptoView from './pages/send/SendCryptoView';
 import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage';
@@ -29,7 +26,9 @@ import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
+import { StartKeysignPage } from './vault/keysign/start/StartKeysignPage';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
+import { SendPage } from './vault/send/SendPage';
 import { SetupVaultOptionsPage } from './vault/setup/options/SetupVaultOptionsPage';
 import { SetupVaultPage } from './vault/setup/SetupVaultPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
@@ -79,7 +78,7 @@ export const router = createBrowserRouter([
   },
   {
     path: appPaths.keysign,
-    element: <KeysignFlowView />,
+    element: <StartKeysignPage />,
   },
   {
     path: appPaths.vaultList,
@@ -104,14 +103,6 @@ export const router = createBrowserRouter([
   {
     path: appPaths.vaultChainCoinDetail,
     element: <VaultChainCoinPage />,
-  },
-  {
-    path: appPaths.vaultItemSend,
-    element: <SendCryptoView />,
-  },
-  {
-    path: appPaths.verifyTransaction,
-    element: <VerifyTransaction />,
   },
   {
     path: appPaths.editVault,
@@ -160,5 +151,9 @@ export const router = createBrowserRouter([
   {
     path: appPaths.defaultChains,
     element: <VaultDefaultChains />,
+  },
+  {
+    path: appPaths.send,
+    element: <SendPage />,
   },
 ]);
