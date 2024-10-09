@@ -21,7 +21,7 @@ const VaultBackupBanner = () => {
           Backup your vault now!
         </Text>
         <ChevronIconButton onClick={() => navigate(appPaths.vaultBackup)}>
-          <ChevronRightIcon />
+          <ChevronRightIcon size={24} />
         </ChevronIconButton>
       </Content>
     </Wrapper>

@@ -20,4 +20,6 @@ export const Wrapper = styled.div`
 
 export const ChevronIconButton = styled(UnstyledButton)`
   color: ${({ theme }) => theme.colors.contrast.toCssValue()};
+  display: grid;
+  place-items: center;
 `;
