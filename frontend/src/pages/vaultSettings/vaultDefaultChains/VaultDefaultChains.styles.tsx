@@ -52,4 +52,5 @@ export const Check = styled(CheckStatus)`
   ${sameDimensions(24)};
   grid-column: 3;
   grid-row: 1 / span 2;
+  align-self: center;
 `;
