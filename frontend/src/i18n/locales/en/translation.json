@@ -252,5 +252,10 @@
   "failed_to_join_session": "Failed to join session",
   "waiting_for_keysign_start": "Waiting for the signing process to begin...",
   "transaction": "Transaction",
-  "transaction_hash_copied": "Transaction hash copied"
+  "transaction_hash_copied": "Transaction hash copied",
+  "asset": "Asset",
+  "balance": "Balance",
+  "failed_to_load": "Failed to load",
+  "enter_address": "Enter Address",
+  "enter_amount": "Enter Amount"
 }

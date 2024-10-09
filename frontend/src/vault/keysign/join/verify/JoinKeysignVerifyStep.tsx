@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../../../lib/ui/buttons/Button';
-import { VStack } from '../../../../lib/ui/layout/Stack';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
 import { PageContent } from '../../../../ui/page/PageContent';
 import { PageHeader } from '../../../../ui/page/PageHeader';
@@ -22,11 +21,9 @@ export const JoinKeysignVerifyStep = ({
         title={<PageHeaderTitle>{t('verify')}</PageHeaderTitle>}
       />
       <PageContent>
-        <VStack flexGrow>
-          <WithProgressIndicator value={0.6}>
-            <KeysignTxOverview />
-          </WithProgressIndicator>
-        </VStack>
+        <WithProgressIndicator value={0.6}>
+          <KeysignTxOverview />
+        </WithProgressIndicator>
         <Button onClick={onForward}>{t('join_keysign')}</Button>
       </PageContent>
     </>

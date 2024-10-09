@@ -8,9 +8,9 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
 import { PageContent } from '../../../ui/page/PageContent';
 import { KeygenNetworkReminder } from '../../keygen/shared/KeygenNetworkReminder';
+import { PeersManager } from '../../keygen/shared/PeersManager';
 import { useIsPeerDiscoveryStepDisabled } from './hooks/useIsPeerDiscoveryStepDisabled';
 import { ManageServerType } from './ManageServerType';
-import { PeersManager } from './peers/PeersManager';
 import { SetupVaultPeerDiscoveryQrCode } from './SetupVaultPeerDiscoveryQrCode';
 
 const Content = styled.div`

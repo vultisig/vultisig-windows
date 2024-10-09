@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
-import { useCurrentPeers } from '../state/currentPeers';
+import { useCurrentPeers } from '../../keysign/shared/state/currentPeers';
 
 export const useVaultKeygenDevices = () => {
   const [peers] = useCurrentPeers();
