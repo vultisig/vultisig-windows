@@ -17,26 +17,29 @@ export function useAppPathParams<P extends AppPathsWithParams>() {
         | Partial<AppPathParams[P]>
         | ((prevParams: AppPathParams[P]) => Partial<AppPathParams[P]>)
     ) => {
-      setSearchParams(prevSearchParams => {
-        const prevParams = parseUrlSearchString<AppPathParams[P]>(
-          prevSearchParams.toString()
-        );
+      setSearchParams(
+        prevSearchParams => {
+          const prevParams = parseUrlSearchString<AppPathParams[P]>(
+            prevSearchParams.toString()
+          );
 
-        const updatedParams =
-          typeof newParams === 'function'
-            ? newParams(prevParams)
-            : { ...prevParams, ...newParams };
+          const updatedParams =
+            typeof newParams === 'function'
+              ? newParams(prevParams)
+              : { ...prevParams, ...newParams };
 
-        const result = new URLSearchParams({});
+          const result = new URLSearchParams({});
 
-        toEntries(withoutUndefinedFields(updatedParams)).forEach(
-          ({ key, value }) => {
-            result.set(key, String(value));
-          }
-        );
+          toEntries(withoutUndefinedFields(updatedParams)).forEach(
+            ({ key, value }) => {
+              result.set(key, String(value));
+            }
+          );
 
-        return result;
-      });
+          return result;
+        },
+        { replace: true }
+      );
     },
     [setSearchParams]
   );
