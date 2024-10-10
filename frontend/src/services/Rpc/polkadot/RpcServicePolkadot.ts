@@ -46,7 +46,7 @@ export class RpcServicePolkadot implements IRpcService {
         genesisHash: genesisHash,
       } as SpecificPolkadot;
 
-      console.log('specificTransactionInfo', specificTransactionInfo);
+      // console.log('specificTransactionInfo', specificTransactionInfo);
 
       return specificTransactionInfo;
     } catch (error) {
@@ -86,7 +86,7 @@ export class RpcServicePolkadot implements IRpcService {
           return balance;
         }
       } catch (error) {
-        console.log(
+        console.error(
           `PolkadotService > fetchBalance > ${error}, Attempt: ${attempt} of ${maxRetries}`
         );
         if (attempt < maxRetries) {
