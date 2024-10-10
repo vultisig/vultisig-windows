@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,6 +21,7 @@ import { useSender } from '../sender/hooks/useSender';
 import { useSendAmount } from '../state/amount';
 import { useSendReceiver } from '../state/receiver';
 import { useCurrentSendCoin } from '../state/sendCoin';
+import { useSendTerms } from './state/sendTerms';
 
 export const SendConfirm = () => {
   const { t } = useTranslation();
@@ -66,13 +68,22 @@ export const SendConfirm = () => {
     );
   };
 
+  const [terms] = useSendTerms();
+  const isDisabled = useMemo(() => {
+    if (terms.some(term => !term)) {
+      return t('send_terms_error');
+    }
+  }, [t, terms]);
+
   if (balanceQuery.error || specificTxInfoQuery.error) {
     return <Text>{t('failed_to_load')}</Text>;
   }
 
-  if (balanceQuery.isPending || specificTxInfoQuery.isPending) {
-    return <Button isLoading>{t('continue')}</Button>;
-  }
+  const isPending = balanceQuery.isPending || specificTxInfoQuery.isPending;
 
-  return <Button onClick={onSubmit}>{t('continue')}</Button>;
+  return (
+    <Button isLoading={isPending} isDisabled={isDisabled} onClick={onSubmit}>
+      {t('continue')}
+    </Button>
+  );
 };

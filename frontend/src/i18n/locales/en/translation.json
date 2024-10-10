@@ -263,5 +263,9 @@
   "send_invalid_receiver_address": "Enter a valid receiver address",
   "amount_required": "Amount is required",
   "send_amount_exceeds_balance": "Amount exceeds balance",
-  "same_sender_receiver_error": "Sender and receiver addresses should be different"
+  "same_sender_receiver_error": "Sender and receiver addresses should be different",
+  "send_terms_0": "I’m sending to the right address",
+  "send_terms_1": "The amount is correct",
+  "send_terms_2": "I’m not sending to a scam or hacker",
+  "send_terms_error": "You must agree with the terms"
 }

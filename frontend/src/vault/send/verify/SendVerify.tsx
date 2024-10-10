@@ -4,8 +4,10 @@ import { TxOverviewAddress } from '../../../chain/tx/components/TxOverviewAddres
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
+import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
+import { range } from '../../../lib/utils/array/range';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -19,6 +21,8 @@ import { useSendAmount } from '../state/amount';
 import { useSendReceiver } from '../state/receiver';
 import { useCurrentSendCoin } from '../state/sendCoin';
 import { SendConfirm } from './SendConfirm';
+import { SendTerms } from './SendTerms';
+import { sendTermsCount, SendTermsProvider } from './state/sendTerms';
 
 export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
   onBack,
@@ -52,7 +56,14 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
             </TxOverviewRow>
           </TxOverviewPanel>
         </WithProgressIndicator>
-        <SendConfirm />
+        <SendTermsProvider
+          initialValue={range(sendTermsCount).map(() => false)}
+        >
+          <VStack gap={20}>
+            <SendTerms />
+            <SendConfirm />
+          </VStack>
+        </SendTermsProvider>
       </PageContent>
     </>
   );
