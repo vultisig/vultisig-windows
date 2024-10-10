@@ -20,13 +20,13 @@ import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel';
 import { HStack, hStack } from '../../../lib/ui/layout/Stack';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { Modal } from '../../../lib/ui/modal';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
 import { useCurrentSendCoin } from '../state/sendCoin';
+import { SendCoinExplorer } from './SendCoinExplorer';
 
 const Container = styled(UnstyledButton)`
   ${textInputFrame};
@@ -78,11 +78,7 @@ export const ManageSendCoin = () => {
             </IconWrapper>
           </Container>
         )}
-        renderContent={({ onClose }) => (
-          <Modal title="TODO" onClose={onClose}>
-            coming soon...
-          </Modal>
-        )}
+        renderContent={({ onClose }) => <SendCoinExplorer onClose={onClose} />}
       />
       <Text
         centerVertically
