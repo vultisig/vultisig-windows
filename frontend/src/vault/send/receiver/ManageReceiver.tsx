@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import { ClipboardGetText } from '../../../../wailsjs/runtime/runtime';
 import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement';
 import {
   IconButton,
@@ -45,10 +46,8 @@ export const ManageReceiver = () => {
         <IconButton
           icon={<PasteIcon />}
           onClick={async () => {
-            const newValue = await asyncAttempt(
-              () => navigator.clipboard.readText(),
-              undefined
-            );
+            const newValue = await asyncAttempt(ClipboardGetText, undefined);
+
             if (newValue) {
               setValue(newValue);
             }
