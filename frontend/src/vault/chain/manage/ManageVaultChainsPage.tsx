@@ -16,7 +16,7 @@ export const ManageVaultChainsPage = () => {
       />
       <ScrollableFlexboxFiller>
         <PageContent>
-          <VStack gap={16}>
+          <VStack gap={16} data-testid="ManageVaultChainsPage-ChainsWrapper">
             {Object.values(Chain).map(chain => (
               <ManageVaultChain key={chain} value={chain} />
             ))}

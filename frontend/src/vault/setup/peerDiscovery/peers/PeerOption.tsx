@@ -20,7 +20,7 @@ import {
   getKeygenDeviceType,
   parseLocalPartyId,
 } from '../../../keygen/utils/localPartyId';
-import { useCurrentPeers } from '../../state/currentPeers';
+import { useCurrentPeers } from '../../../keysign/shared/state/currentPeers';
 
 const Container = styled(UnstyledButton)<ComponentWithActiveState>`
   position: relative;

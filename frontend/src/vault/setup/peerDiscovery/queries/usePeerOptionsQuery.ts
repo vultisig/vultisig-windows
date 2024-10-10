@@ -4,9 +4,9 @@ import { pollingQueryOptions } from '../../../../lib/ui/query/utils/options';
 import { without } from '../../../../lib/utils/array/without';
 import { withoutDuplicates } from '../../../../lib/utils/array/withoutDuplicates';
 import { queryUrl } from '../../../../lib/utils/query/queryUrl';
+import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
 import { useCurrentLocalPartyId } from '../../../keygen/state/currentLocalPartyId';
 import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
-import { useCurrentSessionId } from '../../state/currentSessionId';
 
 export const usePeerOptionsQuery = () => {
   const sessionId = useCurrentSessionId();

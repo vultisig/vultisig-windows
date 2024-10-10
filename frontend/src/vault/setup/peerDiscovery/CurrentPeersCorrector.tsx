@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { intersection } from '../../../lib/utils/array/intersection';
-import { useCurrentPeers } from '../state/currentPeers';
+import { useCurrentPeers } from '../../keysign/shared/state/currentPeers';
 import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery';
 
 export const CurrentPeersCorrector = () => {

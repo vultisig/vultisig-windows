@@ -1,4 +1,5 @@
 import { addQueryParams } from '../lib/utils/query/addQueryParams';
+import { withoutUndefinedFields } from '../lib/utils/record/withoutUndefinedFields';
 import { Chain } from '../model/chain';
 import { KeygenType } from '../vault/keygen/KeygenType';
 
@@ -20,8 +21,7 @@ export const appPaths = {
   manageVaultChainCoins: '/vault/chains/coins',
   vaultChainDetail: '/vault/item/detail',
   vaultChainCoinDetail: '/vault/item/detail/coin',
-  vaultItemSend: '/vault/item/send',
-  verifyTransaction: '/vault/item/send/verify',
+  send: '/vault/send',
   editVault: '/vault/settings/vault-settings',
   vaultDetails: '/vault/settings/vault-settings/details',
   vaultBackup: '/vault/settings/vault-settings/backup-vault',
@@ -45,12 +45,13 @@ export type AppPath = keyof AppPaths;
 export type AppPathParams = {
   address: { address: string };
   joinKeysign: { vaultId: string; keysignMsg: string };
+  keysign: { keysignPayload: string };
   joinKeygen: { keygenType: KeygenType; keygenMsg: string };
   uploadQr: { title?: string };
   manageVaultChainCoins: { chain: Chain };
   vaultChainDetail: { chain: Chain };
   vaultChainCoinDetail: { chain: Chain; coin: string };
-  vaultItemSend: { chain: Chain };
+  send: { coin: string };
 };
 
 export type AppPathsWithParams = keyof AppPathParams;
@@ -65,7 +66,7 @@ export function makeAppPath<P extends Exclude<AppPath, keyof AppPathParams>>(
 export function makeAppPath(path: AppPath, variables?: any): string {
   const basePath = appPaths[path];
   if (variables) {
-    return addQueryParams(basePath, variables);
+    return addQueryParams(basePath, withoutUndefinedFields(variables));
   } else {
     return basePath;
   }

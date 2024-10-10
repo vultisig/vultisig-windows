@@ -1,9 +1,13 @@
-export const ChevronRightIcon = () => {
+export const ChevronRightIcon = ({
+  size = '1em',
+}: {
+  size?: number | string;
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"

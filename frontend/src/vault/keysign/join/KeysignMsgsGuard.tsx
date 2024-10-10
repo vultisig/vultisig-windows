@@ -12,18 +12,19 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
 import { KeysignErrorState } from '../shared/KeysignErrorState';
-import { useCurrentJoinKeysignPayload } from './state/currentJoinKeysignMsg';
-import { CurrentKeysignMsgsProvider } from './state/currentKeysignMsgs';
+import { CurrentKeysignMsgsProvider } from '../shared/state/currentKeysignMsgs';
+import { useKeysignPayload } from '../shared/state/keysignPayload';
 
 export const KeysignMsgsGuard = ({ children }: ComponentWithChildrenProps) => {
   const walletCore = useAssertWalletCore();
 
   const { t } = useTranslation();
 
-  const payload = useCurrentJoinKeysignPayload();
+  const payload = useKeysignPayload();
 
   const { mutate: parse, ...mutationStatus } = useMutation({
     mutationFn: async () => {
+      console.log(JSON.stringify(payload.toJson()));
       return KeysignPayloadUtils.getPreKeysignImages(walletCore, payload);
     },
   });

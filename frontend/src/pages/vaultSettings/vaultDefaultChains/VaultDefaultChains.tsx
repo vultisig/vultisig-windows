@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
@@ -11,33 +11,46 @@ import { PageSlice } from '../../../ui/page/PageSlice';
 import { getNativeTokens } from '../../../utils/getNativeTokens';
 import {
   ChainButton,
+  Check,
   ColumnOneBothRowsItem,
-  ColumnThreeRowOneItem,
   ColumnTwoRowOneItem,
   ColumnTwoRowTwoItem,
 } from './VaultDefaultChains.styles';
 
 const VaultDefaultChains = () => {
   const { t } = useTranslation();
-  const { defaultChains: initialDefaultChains, updateDefaultChains } =
-    useDefaultChains();
+  const {
+    defaultChains: databaseDefaultChains,
+    updateDefaultChains: updateDatabaseDefaultChains,
+    isUpdating,
+  } = useDefaultChains();
 
-  const [defaultChains, setDefaultChains] = useState(initialDefaultChains);
+  const [optimisticDefaultChains, setOptimisticDefaultChains] = useState(
+    databaseDefaultChains
+  );
   const nativeTokens = getNativeTokens();
 
   const handleChainToggle = (chain: string) => {
-    const formattedDefaultChains = defaultChains.map(c => c.trim());
     let newDefaultChains;
 
-    if (formattedDefaultChains.includes(chain)) {
-      newDefaultChains = defaultChains.filter(c => c.trim() !== chain.trim());
+    if (optimisticDefaultChains.includes(chain)) {
+      newDefaultChains = optimisticDefaultChains.filter(
+        c => c.trim() !== chain.trim()
+      );
     } else {
-      newDefaultChains = [...defaultChains, chain];
+      newDefaultChains = [...optimisticDefaultChains, chain];
     }
 
-    setDefaultChains(newDefaultChains);
-    updateDefaultChains(newDefaultChains);
+    setOptimisticDefaultChains(newDefaultChains);
+    updateDatabaseDefaultChains(newDefaultChains);
   };
+
+  // Synchronize in case the mutation was unsuccessful and the optimistic update needs to be reverted
+  useEffect(() => {
+    if (optimisticDefaultChains !== databaseDefaultChains && !isUpdating) {
+      setOptimisticDefaultChains(databaseDefaultChains);
+    }
+  }, [databaseDefaultChains, optimisticDefaultChains, isUpdating]);
 
   return (
     <VStack flexGrow gap={16}>
@@ -68,10 +81,8 @@ const VaultDefaultChains = () => {
               <ColumnTwoRowTwoItem size={12} color="contrast" weight="500">
                 {chain}
               </ColumnTwoRowTwoItem>
-              <ColumnThreeRowOneItem
-                onChange={() => {}}
-                type="checkbox"
-                checked={defaultChains.some(
+              <Check
+                value={optimisticDefaultChains.some(
                   coin => coin.trim() === chain.trim().toLowerCase()
                 )}
               />

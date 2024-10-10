@@ -6,21 +6,21 @@ import { Match } from '../../lib/ui/base/Match';
 import { VStack } from '../../lib/ui/layout/Stack';
 import { useGenerateVaultName } from '../hooks/useGenerateVaultName';
 import { defaultKeygenThresholdType } from '../keygen/KeygenThresholdType';
+import { KeygenStartSessionStep } from '../keygen/shared/KeygenStartSessionStep';
+import { CurrentSessionIdProvider } from '../keygen/shared/state/currentSessionId';
 import { CurrentLocalPartyIdProvider } from '../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../keygen/state/currentServerType';
 import { generateServiceName } from '../keygen/utils/generateServiceName';
 import { generateLocalPartyId } from '../keygen/utils/localPartyId';
+import { CurrentPeersProvider } from '../keysign/shared/state/currentPeers';
 import { SetupVaultKeygenThresholdStep } from './keygenThreshold/SetupVaultKeygenThresholdStep';
 import { SetupVaultPeerDiscoveryStep } from './peerDiscovery/SetupVaultPeerDiscoveryStep';
 import { SetupVaultKeygenStep } from './SetupVaultKeygenStep';
 import { SetupVaultNameStep } from './SetupVaultNameStep';
-import { SetupVaultStartSessionStep } from './SetupVaultStartSessionStep';
 import { CurrentHexChainCodeProvider } from './state/currentHexChainCode';
 import { CurrentHexEncryptionKeyProvider } from './state/currentHexEncryptionKey';
 import { CurrentKeygenThresholdProvider } from './state/currentKeygenThreshold';
-import { CurrentPeersProvider } from './state/currentPeers';
 import { CurrentServiceNameProvider } from './state/currentServiceName';
-import { CurrentSessionIdProvider } from './state/currentSessionId';
 import { ServerUrlDerivedFromServerTypeProvider } from './state/serverUrlDerivedFromServerType';
 import { VaultNameProvider } from './state/vaultName';
 import { SetupVaultVerifyStep } from './verify/SetupVaultVerifyStep';
@@ -96,7 +96,7 @@ export const SetupVaultPage = () => {
                               />
                             )}
                             startSession={() => (
-                              <SetupVaultStartSessionStep
+                              <KeygenStartSessionStep
                                 onBack={toPreviousStep}
                                 onForward={toNextStep}
                               />

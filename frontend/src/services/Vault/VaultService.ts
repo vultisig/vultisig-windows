@@ -27,6 +27,10 @@ export class VaultService implements IVaultService {
     this.walletCore = walletCore;
   }
 
+  async saveVault(vault: storage.Vault): Promise<void> {
+    return await SaveVault(vault);
+  }
+
   async getVaultSettings(): Promise<storage.Settings[]> {
     return await GetSettings();
   }

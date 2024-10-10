@@ -19,6 +19,8 @@ export interface IVaultService {
 
   importVault(buffer: Buffer): Promise<void>;
 
+  saveVault(vault: storage.Vault): Promise<void>;
+
   encryptVault(passwd: string, vault: Buffer): Buffer;
 
   decryptVault(passwd: string, vault: Buffer): Buffer;

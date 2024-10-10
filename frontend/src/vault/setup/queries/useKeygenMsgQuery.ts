@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { createKeygenMsg } from '../../../utils/QRGen';
+import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId';
 import { useCurrentServerType } from '../../keygen/state/currentServerType';
 import { useCurrentHexChainCode } from '../state/currentHexChainCode';
 import { useCurrentHexEncryptionKey } from '../state/currentHexEncryptionKey';
 import { useCurrentServiceName } from '../state/currentServiceName';
-import { useCurrentSessionId } from '../state/currentSessionId';
 import { useVaultName } from '../state/vaultName';
 
 export const useKeygenMsgQuery = () => {

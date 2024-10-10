@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AdvertiseMediator } from '../../../../wailsjs/go/mediator/Server';
@@ -16,11 +16,11 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { keygenServerUrl } from '../../keygen/KeygenServerType';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
+import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId';
 import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
 import { useCurrentServerType } from '../../keygen/state/currentServerType';
-import { generateServiceName } from '../../keygen/utils/generateServiceName';
 import { useCurrentKeygenThreshold } from '../state/currentKeygenThreshold';
-import { useCurrentSessionId } from '../state/currentSessionId';
+import { useCurrentServiceName } from '../state/currentServiceName';
 import { DownloadKeygenQrCode } from './DownloadKeygenQrCode';
 import { SetupVaultPeerDiscovery } from './SetupVaultPeerDiscovery';
 
@@ -31,7 +31,7 @@ export const SetupVaultPeerDiscoveryStep = ({
   const { t } = useTranslation();
   const sessionId = useCurrentSessionId();
   const [thresholdType] = useCurrentKeygenThreshold();
-  const serviceName = useMemo(generateServiceName, []);
+  const serviceName = useCurrentServiceName();
   const [serverType] = useCurrentServerType();
 
   const localPartyId = useCurrentLocalPartyId();
