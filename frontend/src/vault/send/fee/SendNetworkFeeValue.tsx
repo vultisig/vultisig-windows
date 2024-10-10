@@ -43,24 +43,21 @@ export const SendNetworkFeeValue = () => {
         pending={() => <Spinner />}
         error={() => <Text>{t('failed_to_load')}</Text>}
         success={({ fee }) => {
+          const feeAmount = fromChainAmount(fee, decimals);
           return (
             <>
-              {formatAmount(fromChainAmount(fee, decimals))} {ticker}{' '}
+              {formatAmount(feeAmount)} {ticker}{' '}
               <QueryDependant
                 query={priceQuery}
                 pending={() => <Spinner />}
                 error={() => null}
                 success={price => {
-                  return (
-                    <>
-                      (~
-                      {
-                        (formatAmount(fromChainAmount(fee, decimals) * price),
-                        globalCurrency)
-                      }
-                      )
-                    </>
+                  const formattedAmount = formatAmount(
+                    feeAmount * price,
+                    globalCurrency
                   );
+
+                  return `(~${formattedAmount})`;
                 }}
               />
             </>
