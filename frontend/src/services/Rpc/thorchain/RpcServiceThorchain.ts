@@ -1,6 +1,5 @@
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
-import { CoinMeta } from '../../../model/coin-meta';
 import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
@@ -110,35 +109,5 @@ export class RpcServiceThorchain implements IRpcService {
     localStorage.setItem('THORChainChainID', network);
 
     return network;
-  }
-
-  estimateGas?(
-    _senderAddress: string,
-    _recipientAddress: string,
-    _value: bigint,
-    _memo?: string
-  ): Promise<bigint> {
-    throw new Error('Method not implemented.');
-  }
-  fetchTokenBalance?(
-    _contractAddress: string,
-    _walletAddress: string
-  ): Promise<bigint> {
-    throw new Error('Method not implemented.');
-  }
-  fetchAllowance?(
-    _contractAddress: string,
-    _owner: string,
-    _spender: string
-  ): Promise<bigint> {
-    throw new Error('Method not implemented.');
-  }
-  getTokenInfo?(
-    _contractAddress: string
-  ): Promise<{ name: string; symbol: string; decimals: number }> {
-    throw new Error('Method not implemented.');
-  }
-  fetchTokens?(_nativeToken: Coin): Promise<CoinMeta[]> {
-    throw new Error('Method not implemented.');
   }
 }

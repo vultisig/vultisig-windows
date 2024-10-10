@@ -1,5 +1,4 @@
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { CoinMeta } from '../../../model/coin-meta';
 import {
   SpecificUtxo,
   SpecificUtxoInfo,
@@ -71,39 +70,5 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
     const response = await request.json();
 
     return response.data.transaction_hash;
-  }
-
-  // No need to implement the following methods for UTXO
-  resolveENS?(_ensName: string): Promise<string> {
-    throw new Error('Method not implemented, UTXO does not have ENS.');
-  }
-  estimateGas?(
-    _senderAddress: string,
-    _recipientAddress: string,
-    _value: bigint,
-    _memo?: string
-  ): Promise<bigint> {
-    throw new Error('Method not implemented.');
-  }
-  fetchTokenBalance?(
-    _contractAddress: string,
-    _walletAddress: string
-  ): Promise<bigint> {
-    throw new Error('Method not implemented.');
-  }
-  fetchAllowance?(
-    _contractAddress: string,
-    _owner: string,
-    _spender: string
-  ): Promise<bigint> {
-    throw new Error('Method not implemented.');
-  }
-  getTokenInfo?(
-    _contractAddress: string
-  ): Promise<{ name: string; symbol: string; decimals: number }> {
-    throw new Error('Method not implemented.');
-  }
-  fetchTokens?(_nativeToken: Coin): Promise<CoinMeta[]> {
-    throw new Error('Method not implemented.');
   }
 }
