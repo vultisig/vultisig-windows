@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { TxOverviewAddress } from '../../../chain/tx/components/TxOverviewAddress';
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
+import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { VStack } from '../../../lib/ui/layout/Stack';
@@ -18,6 +19,7 @@ import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
 import { SendNetworkFeeValue } from '../fee/SendNetworkFeeValue';
 import { useSender } from '../sender/hooks/useSender';
 import { useSendAmount } from '../state/amount';
+import { useSendMemo } from '../state/memo';
 import { useSendReceiver } from '../state/receiver';
 import { useCurrentSendCoin } from '../state/sendCoin';
 import { SendConfirm } from './SendConfirm';
@@ -34,6 +36,7 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
   const coin = useAssertCurrentVaultCoin(coinKey);
   const [receiver] = useSendReceiver();
   const [amount] = useSendAmount();
+  const [memo] = useSendMemo();
 
   return (
     <>
@@ -46,6 +49,8 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
           <TxOverviewPanel>
             <TxOverviewAddress title={t('from')} value={sender} />
             <TxOverviewAddress title={t('to')} value={receiver} />
+            {memo && <TxOverviewMemo value={memo} />}
+
             <TxOverviewAmount
               value={shouldBePresent(amount)}
               symbol={coin.ticker}

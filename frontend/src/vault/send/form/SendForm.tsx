@@ -12,6 +12,7 @@ import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicato
 import { ManageAmount } from '../amount/ManageSendAmount';
 import { ManageSendCoin } from '../coin/ManageSendCoin';
 import { SendNetworkFee } from '../fee/SendNetworkFee';
+import { ManageMemo } from '../memo/ManageMemo';
 import { ManageReceiver } from '../receiver/ManageReceiver';
 import { Sender } from '../sender/Sender';
 import { useIsSendFormDisabled } from './hooks/useIsSendFormDisabled';
@@ -40,6 +41,7 @@ export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
             <ManageSendCoin />
             <Sender />
             <ManageReceiver />
+            <ManageMemo />
             <ManageAmount />
             <SendNetworkFee />
           </VStack>

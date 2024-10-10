@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { TxOverviewAddress } from '../../../chain/tx/components/TxOverviewAddress';
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
+import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
@@ -34,14 +35,7 @@ export const KeysignTxPrimaryInfo = () => {
   return (
     <>
       <TxOverviewAddress title={t('to')} value={toAddress} />
-      {memo && (
-        <TxOverviewRow>
-          <Text>{t('memo')}</Text>
-          <Text weight="500" size={14}>
-            {memo}
-          </Text>
-        </TxOverviewRow>
-      )}
+      {memo && <TxOverviewMemo value={memo} />}
       <TxOverviewAmount
         value={fromChainAmount(toAmount, decimals)}
         symbol={ticker}

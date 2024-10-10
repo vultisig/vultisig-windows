@@ -19,6 +19,7 @@ import {
 import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
 import { useSender } from '../sender/hooks/useSender';
 import { useSendAmount } from '../state/amount';
+import { useSendMemo } from '../state/memo';
 import { useSendReceiver } from '../state/receiver';
 import { useCurrentSendCoin } from '../state/sendCoin';
 import { useSendTerms } from './state/sendTerms';
@@ -31,6 +32,7 @@ export const SendConfirm = () => {
   const coin = useAssertCurrentVaultCoin(coinKey);
   const [receiver] = useSendReceiver();
   const [amount] = useSendAmount();
+  const [memo] = useSendMemo();
   const vault = useAssertCurrentVault();
 
   const navigate = useNavigate();
@@ -49,7 +51,7 @@ export const SendConfirm = () => {
       fromAddress: sender,
       toAddress: receiver,
       amount: shouldBePresent(amount),
-      memo: '',
+      memo,
       coin: storageCoinToCoin(coin),
       transactionType: TransactionType.SEND,
       specificTransactionInfo: shouldBePresent(specificTxInfoQuery.data),
