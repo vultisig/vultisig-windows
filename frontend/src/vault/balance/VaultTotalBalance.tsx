@@ -20,7 +20,7 @@ export const VaultTotalBalance = () => {
         success={value => (
           <Text color="contrast" weight="700" size={26} centerVertically>
             <BalanceVisibilityAware size="l">
-              {formatAmount(value)} {globalCurrency}
+              {formatAmount(value, globalCurrency)}
             </BalanceVisibilityAware>{' '}
           </Text>
         )}

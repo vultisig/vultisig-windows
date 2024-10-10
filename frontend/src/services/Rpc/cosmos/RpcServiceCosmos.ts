@@ -1,5 +1,4 @@
 /* eslint-disable */
-import { any } from 'zod';
 import { Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';

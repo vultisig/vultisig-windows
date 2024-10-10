@@ -47,8 +47,10 @@ export const KeysignTxPrimaryInfo = () => {
             <TxOverviewRow>
               <Text>{t('value')}</Text>
               <Text family="mono">
-                {formatAmount(fromChainAmount(toAmount, decimals) * price)}{' '}
-                {globalCurrency}
+                {formatAmount(
+                  fromChainAmount(toAmount, decimals) * price,
+                  globalCurrency
+                )}
               </Text>
             </TxOverviewRow>
           ) : null

@@ -57,7 +57,9 @@ const VaultDefaultChains = () => {
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={
-          <PageHeaderTitle>{t('vault_settings_language')}</PageHeaderTitle>
+          <PageHeaderTitle>
+            {t('vault_settings_default_chains')}
+          </PageHeaderTitle>
         }
       />
       <PageSlice gap={16} flexGrow={true}>

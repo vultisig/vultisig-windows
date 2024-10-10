@@ -14,12 +14,16 @@ const getFractionDigits = (amount: number): number => {
   return 2;
 };
 
-export const formatAmount = (amount: number, locale = 'en-us'): string => {
+export const formatAmount = (
+  amount: number,
+  currency?: string,
+  locale = 'en-us'
+): string => {
   if (amount > billion) {
-    return `${formatAmount(amount / billion)}B`;
+    return `${formatAmount(amount / billion, currency)}B`;
   }
   if (amount > million) {
-    return `${formatAmount(amount / million)}M`;
+    return `${formatAmount(amount / million, currency)}M`;
   }
 
   const fractionDigits = getFractionDigits(amount);
@@ -29,5 +33,7 @@ export const formatAmount = (amount: number, locale = 'en-us'): string => {
     maximumFractionDigits: fractionDigits,
   });
 
-  return formatter.format(amount);
+  const formattedAmount = formatter.format(amount);
+
+  return currency ? `${formattedAmount} ${currency}` : formattedAmount;
 };

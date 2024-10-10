@@ -5,6 +5,7 @@ import { BlockchainServiceCosmos } from './cosmos/BlockchainServiceCosmos';
 import { BlockchainServiceEvm } from './evm/BlockchainServiceEvm';
 import { IBlockchainService } from './IBlockchainService';
 import { BlockchainServiceMaya } from './maya/BlockchainServiceMaya';
+import { BlockchainServicePolkadot } from './polkadot/BlockchainServicePolkadot';
 import { BlockchainServiceSolana } from './solana/BlockchainServiceSolana';
 import { BlockchainServiceThorchain } from './thorchain/BlockchainServiceThorchain';
 import { BlockchainServiceUtxo } from './utxo/BlockchainServiceUtxo';
@@ -57,6 +58,8 @@ export class BlockchainServiceFactory {
         return new BlockchainServiceCosmos(chain, walletCore);
       case Chain.Dydx:
         return new BlockchainServiceCosmos(chain, walletCore);
+      case Chain.Polkadot:
+        return new BlockchainServicePolkadot(chain, walletCore);
       default:
         throw new Error('Chain not supported');
     }

@@ -23,7 +23,6 @@ export const useVaultSettingsQuery = () => {
     queryKey: [vaultSettingsQueryKey],
     queryFn: async () => {
       const data = await vaultService.getVaultSettings();
-      console.log('## settings', data);
       const currency = data?.[0]?.currency;
       const language = data?.[0]?.language;
       const defaultChains = data?.[0]?.default_chains;
