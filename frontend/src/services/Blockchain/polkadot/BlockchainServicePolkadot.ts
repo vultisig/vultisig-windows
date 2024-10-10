@@ -7,6 +7,8 @@ import { Chain, ChainUtils } from '../../../model/chain';
 import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import TxCompiler = TW.TxCompiler;
+import Long from 'long';
+
 import { Keysign } from '../../../../wailsjs/go/tss/TssService';
 import { SpecificPolkadot } from '../../../model/specific-transaction-info';
 import {
@@ -56,7 +58,16 @@ export class BlockchainServicePolkadot
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
     if (keysignPayload.coin?.chain !== Chain.Polkadot) {
-      throw new Error('Coin is not Polkadot');
+      console.error('Coin is not Polkadot');
+      console.error('keysignPayload.coin?.chain:', keysignPayload.coin?.chain);
+    }
+
+    const polkadotSpecific = keysignPayload.blockchainSpecific
+      .value as PolkadotSpecific;
+    if (!polkadotSpecific) {
+      console.error(
+        'getPreSignedInputData fail to get DOT transaction information from RPC'
+      );
     }
 
     const {
@@ -66,59 +77,102 @@ export class BlockchainServicePolkadot
       specVersion,
       transactionVersion,
       genesisHash,
-    } = keysignPayload.blockchainSpecific.value as unknown as PolkadotSpecific;
+    } = polkadotSpecific;
 
-    const t = TW.Polkadot.Proto.Balance.Transfer.create({
-      memo: keysignPayload.memo,
-      toAddress: keysignPayload.toAddress,
-      value: new Uint8Array(Buffer.from(keysignPayload.toAmount)),
-    });
+    try {
+      // Helper function to convert string representation of bigint to hex and strip the '0x' prefix
+      const stringToHex = (value: string): string => {
+        const bigintValue = BigInt(value);
+        let hexString = bigintValue.toString(16);
+        if (hexString.length % 2 !== 0) {
+          hexString = '0' + hexString;
+        }
+        return hexString;
+      };
 
-    const balance = TW.Polkadot.Proto.Balance.create({
-      transfer: t,
-    });
+      const stripHexPrefix = (hex: string): string => {
+        return hex.startsWith('0x') ? hex.slice(2) : hex;
+      };
 
-    const input = TW.Polkadot.Proto.SigningInput.create({
-      genesisHash: new Uint8Array(Buffer.from(genesisHash, 'hex')),
-      blockHash: new Uint8Array(Buffer.from(recentBlockHash, 'hex')),
-      nonce,
-      specVersion,
-      transactionVersion,
-      network: this.coinType.value,
-      era: TW.Polkadot.Proto.Era.create({
-        blockNumber: BigInt(currentBlockNumber),
-        period: 64,
-      }),
-      balanceCall: balance,
-    });
+      // Amount: converted to hexadecimal, stripped of '0x'
+      const amountHex = Buffer.from(
+        stripHexPrefix(stringToHex(keysignPayload.toAmount)),
+        'hex'
+      );
 
-    return TW.Polkadot.Proto.SigningInput.encode(input).finish();
+      const t = TW.Polkadot.Proto.Balance.Transfer.create({
+        toAddress: keysignPayload.toAddress,
+        value: new Uint8Array(amountHex),
+        memo: keysignPayload.memo || '',
+      });
+
+      const balance = TW.Polkadot.Proto.Balance.create({
+        transfer: t,
+      });
+
+      const nonceLong =
+        nonce == BigInt(0) ? Long.ZERO : Long.fromString(nonce.toString());
+      const currentBlockNumberLong = Long.fromString(currentBlockNumber);
+      const periodLong = Long.fromString('64');
+
+      const era = TW.Polkadot.Proto.Era.create({
+        blockNumber: currentBlockNumberLong,
+        period: periodLong,
+      });
+
+      const ss58Prefix = this.walletCore.CoinTypeExt.ss58Prefix(this.coinType);
+      const input = TW.Polkadot.Proto.SigningInput.create({
+        genesisHash: this.hexToBytes(genesisHash),
+        blockHash: this.hexToBytes(recentBlockHash),
+        nonce: nonceLong,
+        specVersion: specVersion,
+        transactionVersion: transactionVersion,
+        network: ss58Prefix,
+        era: era,
+        balanceCall: balance,
+      });
+
+      return TW.Polkadot.Proto.SigningInput.encode(input).finish();
+    } catch (e) {
+      console.error('Error in getPreSignedInputData:', e);
+      throw e;
+    }
+  }
+
+  // Helper function to convert hex string to Uint8Array
+  hexToBytes(hex: string): Uint8Array {
+    hex = hex.startsWith('0x') ? hex.slice(2) : hex;
+    return new Uint8Array(Buffer.from(hex, 'hex'));
   }
 
   async getPreSignedImageHash(
     keysignPayload: KeysignPayload
   ): Promise<string[]> {
-    const walletCore = this.walletCore;
-    const coinType = walletCore.CoinType.polkadot;
-    const inputData = await this.getPreSignedInputData(keysignPayload);
-    const hashes = walletCore.TransactionCompiler.preImageHashes(
-      coinType,
-      inputData
-    );
-    const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
-    if (preSigningOutput.errorMessage !== '') {
-      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      throw new Error(preSigningOutput.errorMessage);
+    try {
+      const walletCore = this.walletCore;
+      const coinType = walletCore.CoinType.polkadot;
+      const inputData = await this.getPreSignedInputData(keysignPayload);
+      const hashes = walletCore.TransactionCompiler.preImageHashes(
+        coinType,
+        inputData
+      );
+      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
+      if (preSigningOutput.errorMessage !== '') {
+        console.error('preSigningOutput error:', preSigningOutput.errorMessage);
+        throw new Error(preSigningOutput.errorMessage);
+      }
+
+      // console.log(
+      //   walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix()
+      // );
+
+      return [
+        walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix(),
+      ];
+    } catch (error) {
+      console.error('getPreSignedImageHash::', error);
+      return [];
     }
-
-    console.log(
-      'preSigningOutput:',
-      walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix()
-    );
-
-    return [
-      walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix(),
-    ];
   }
 
   public async getSignedTransaction(
@@ -146,13 +200,13 @@ export class BlockchainServicePolkadot
       inputData
     );
 
-    console.log('preHashes:', preHashes);
+    // console.log('preHashes:', preHashes);
 
     const preSigningOutput =
       TxCompiler.Proto.PreSigningOutput.decode(preHashes);
     if (preSigningOutput.errorMessage !== '') {
       console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      //throw new Error(preSigningOutput.errorMessage);
+      throw new Error(preSigningOutput.errorMessage);
     }
 
     const allSignatures = this.walletCore.DataVector.create();
@@ -165,7 +219,7 @@ export class BlockchainServicePolkadot
 
     if (!publicKey.verify(signature, preSigningOutput.data)) {
       console.error('Failed to verify signature');
-      //throw new Error('Failed to verify signature');
+      throw new Error('Failed to verify signature');
     }
 
     allSignatures.add(signature);
@@ -181,7 +235,7 @@ export class BlockchainServicePolkadot
     const output = TW.Polkadot.Proto.SigningOutput.decode(compiled);
     if (output.errorMessage !== '') {
       console.error('output error:', output.errorMessage);
-      //throw new Error(output.errorMessage);
+      throw new Error(output.errorMessage);
     }
 
     const result = new SignedTransactionResult(
@@ -191,7 +245,7 @@ export class BlockchainServicePolkadot
       )
     );
 
-    console.log('Signed transaction:', result);
+    //console.log('Signed transaction:', result);
 
     return result;
   }

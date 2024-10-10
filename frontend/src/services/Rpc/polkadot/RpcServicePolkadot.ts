@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { SpecificPolkadot } from '../../../model/specific-transaction-info';
@@ -6,7 +5,7 @@ import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServicePolkadot implements IRpcService {
-  async calculateFee(coin: Coin): Promise<number> {
+  async calculateFee(_coin: Coin): Promise<number> {
     return 1e10;
   }
 
@@ -20,7 +19,7 @@ export class RpcServicePolkadot implements IRpcService {
   }
 
   async broadcastTransaction(hex: string): Promise<string> {
-    let hexWithPrefix = hex.startsWith('0x') ? hex : '0x(hex)';
+    const hexWithPrefix = hex.startsWith('0x') ? hex : '0x(hex)';
     const result: string = await this.callRPC('author_submitExtrinsic', [
       hexWithPrefix,
     ]);
@@ -29,12 +28,12 @@ export class RpcServicePolkadot implements IRpcService {
 
   async getSpecificTransactionInfo(coin: Coin): Promise<SpecificPolkadot> {
     try {
-      let fee = await this.calculateFee(coin);
-      let recentBlockHash = await this.fetchBlockHash();
-      let nonce = await this.fetchNonce(coin.address);
-      let currentBlockNumber = Number(await this.fetchBlockHeader());
-      let runtime = await this.fetchRuntimeVersion();
-      let genesisHash = await this.fetchGenesisBlockHash();
+      const fee = await this.calculateFee(coin);
+      const recentBlockHash = await this.fetchBlockHash();
+      const nonce = await this.fetchNonce(coin.address);
+      const currentBlockNumber = Number(await this.fetchBlockHeader());
+      const runtime = await this.fetchRuntimeVersion();
+      const genesisHash = await this.fetchGenesisBlockHash();
 
       const specificTransactionInfo: SpecificPolkadot = {
         fee: fee,
@@ -63,7 +62,7 @@ export class RpcServicePolkadot implements IRpcService {
     }
   }
 
-  private async fetchBalance(address: string): Promise<BigInt> {
+  private async fetchBalance(address: string): Promise<bigint> {
     const body = { key: address };
     const maxRetries = 3;
     const retryDelay = 1000;

@@ -12,7 +12,6 @@ export class BalanceServicePolkadot implements IBalanceService {
   }
 
   async getBalance(coin: Coin): Promise<Balance> {
-    // If not cached, fetch the balance from the RPC service
     const rpcService = RpcServiceFactory.createRpcService(this.chain);
     const balance = await rpcService.getBalance(coin);
 
