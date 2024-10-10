@@ -53,8 +53,12 @@ export const SendNetworkFeeValue = () => {
                 success={price => {
                   return (
                     <>
-                      (~{formatAmount(fromChainAmount(fee, decimals) * price)}{' '}
-                      {globalCurrency})
+                      (~
+                      {
+                        (formatAmount(fromChainAmount(fee, decimals) * price),
+                        globalCurrency)
+                      }
+                      )
                     </>
                   );
                 }}
