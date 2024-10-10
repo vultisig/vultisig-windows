@@ -17,7 +17,7 @@ export const CurrentPeersCorrector = () => {
     [...Object.keys(newValue), ...options].forEach(peer => {
       if (!options.includes(peer)) {
         newValue = omit(newValue, peer);
-      } else if (!newValue[peer]) {
+      } else if (!(peer in newValue)) {
         newValue = { ...newValue, [peer]: true };
       }
     });
