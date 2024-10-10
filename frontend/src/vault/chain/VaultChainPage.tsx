@@ -123,7 +123,7 @@ export const VaultChainPage = () => {
                     centerVertically
                   >
                     <BalanceVisibilityAware>
-                      {formatAmount(total)} {globalCurrency}
+                      {formatAmount(total, globalCurrency)}
                     </BalanceVisibilityAware>
                   </Text>
                 );

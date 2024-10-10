@@ -15,9 +15,7 @@ export const TxOverviewAmount = ({
   return (
     <TxOverviewRow>
       <Text>{t('amount')}</Text>
-      <Text family="mono">
-        {formatAmount(value)} {symbol}
-      </Text>
+      <Text family="mono">{formatAmount(value, symbol)}</Text>
     </TxOverviewRow>
   );
 };
