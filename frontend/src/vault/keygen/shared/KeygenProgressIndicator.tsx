@@ -1,37 +1,30 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EventsOn } from '../../../../wailsjs/runtime/runtime';
 import RingProgress from '../../../components/ringProgress/RingProgress';
 import { VStack } from '../../../lib/ui/layout/Stack';
+import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
+import { KeygenStatus } from './MatchKeygenSessionStatus';
 
-type KeygenStage = 'prepareVault' | 'ecdsa' | 'eddsa';
-
-const keygenCompletion: Record<KeygenStage, number> = {
+const keygenCompletion: Record<KeygenStatus, number> = {
   prepareVault: 25,
   ecdsa: 50,
   eddsa: 70,
 };
 
-export const KeygenProgressIndicator = () => {
+export const KeygenProgressIndicator = ({
+  value,
+}: ComponentWithValueProps<KeygenStatus>) => {
   const { t } = useTranslation();
 
-  const [stage, setStage] = useState<KeygenStage>('prepareVault');
-
-  const keygenStageText: Record<KeygenStage, string | null> = {
+  const keygenStageText: Record<KeygenStatus, string | null> = {
     prepareVault: t('prepareVault'),
     ecdsa: t('generating_ecdsa_key'),
     eddsa: t('generating_eddsa_key'),
   };
 
-  useEffect(() => {
-    EventsOn('ECDSA', () => setStage('ecdsa'));
-    EventsOn('EdDSA', () => setStage('eddsa'));
-  }, []);
-
-  const completion = keygenCompletion[stage];
-  const text = keygenStageText[stage];
+  const completion = keygenCompletion[value];
+  const text = keygenStageText[value];
 
   return (
     <VStack gap={12} alignItems="center">

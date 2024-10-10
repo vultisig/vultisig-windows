@@ -20,10 +20,10 @@ export const KeygenPendingState = () => {
           </PendingKeygenMessage>
         </PageContent>
       )}
-      active={() => (
+      active={value => (
         <PageContent>
           <VStack flexGrow alignItems="center" justifyContent="center" gap={48}>
-            <KeygenProgressIndicator />
+            <KeygenProgressIndicator value={value} />
             <KeygenEducation />
           </VStack>
           <KeygenNetworkReminder />

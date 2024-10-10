@@ -8,7 +8,6 @@ import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { KeysignTxOverview } from './KeysignTxOverview';
-import { KeysignTxPrimaryInfo } from './KeysignTxPrimaryInfo';
 import { WithProgressIndicator } from './WithProgressIndicator';
 
 export const KeysignSummaryStep = () => {
@@ -16,16 +15,15 @@ export const KeysignSummaryStep = () => {
 
   return (
     <>
-      <PageHeader title={<PageHeaderTitle>{t('verify')}</PageHeaderTitle>} />
+      <PageHeader title={<PageHeaderTitle>{t('done')}</PageHeaderTitle>} />
       <PageContent>
         <WithProgressIndicator value={1}>
           <TxOverviewPanel>
             <KeysignTxOverview />
-            <KeysignTxPrimaryInfo />
           </TxOverviewPanel>
         </WithProgressIndicator>
         <Link to={makeAppPath('vaultList')}>
-          <Button as="div">{t('continue')}</Button>
+          <Button as="div">{t('complete')}</Button>
         </Link>
       </PageContent>
     </>

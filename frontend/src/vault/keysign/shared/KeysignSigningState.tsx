@@ -1,38 +1,31 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EventsOn } from '../../../../wailsjs/runtime/runtime';
 import { ProgressLine } from '../../../lib/ui/flow/ProgressLine';
 import { VStack } from '../../../lib/ui/layout/Stack';
+import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { FancyLoader } from '../../../ui/pending/FancyLoader';
+import { KeygenStatus } from '../../keygen/shared/MatchKeygenSessionStatus';
 
-type KeysignStage = 'prepareVault' | 'ecdsa' | 'eddsa';
-
-const keysignCompletion: Record<KeysignStage, number> = {
+const keysignCompletion: Record<KeygenStatus, number> = {
   prepareVault: 0.8,
   ecdsa: 0.85,
   eddsa: 0.9,
 };
 
-export const KeysignSigningState = () => {
+export const KeysignSigningState = ({
+  value,
+}: ComponentWithValueProps<KeygenStatus>) => {
   const { t } = useTranslation();
 
-  const [stage, setStage] = useState<KeysignStage>('prepareVault');
-
-  const keygenStageText: Record<KeysignStage, string> = {
+  const keygenStageText: Record<KeygenStatus, string> = {
     prepareVault: t('prepareVault'),
     ecdsa: t('signing_ecdsa_key'),
     eddsa: t('signing_eddsa_key'),
   };
 
-  useEffect(() => {
-    EventsOn('ECDSA', () => setStage('ecdsa'));
-    EventsOn('EdDSA', () => setStage('eddsa'));
-  }, []);
-
-  const completion = keysignCompletion[stage];
-  const text = keygenStageText[stage];
+  const completion = keysignCompletion[value];
+  const text = keygenStageText[value];
 
   return (
     <>

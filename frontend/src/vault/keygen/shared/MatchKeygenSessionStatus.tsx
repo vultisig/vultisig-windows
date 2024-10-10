@@ -2,20 +2,24 @@ import { ReactNode, useEffect, useState } from 'react';
 
 import { EventsOn } from '../../../../wailsjs/runtime/runtime';
 
+export type KeygenStatus = 'prepareVault' | 'ecdsa' | 'eddsa';
+
 type MatchKeygenSessionStatusProps = {
   pending: () => ReactNode;
-  active: () => ReactNode;
+  active: (status: KeygenStatus) => ReactNode;
 };
 
 export const MatchKeygenSessionStatus = ({
   pending,
   active,
 }: MatchKeygenSessionStatusProps) => {
-  const [hasKeygenStarted, setHasKeygenStarted] = useState<boolean>(false);
+  const [status, setStatus] = useState<KeygenStatus | null>(null);
 
   useEffect(() => {
-    EventsOn('PrepareVault', () => setHasKeygenStarted(true));
+    EventsOn('PrepareVault', () => setStatus('prepareVault'));
+    EventsOn('ECDSA', () => setStatus('ecdsa'));
+    EventsOn('EdDSA', () => setStatus('eddsa'));
   }, []);
 
-  return <>{hasKeygenStarted ? active() : pending()}</>;
+  return <>{status === null ? pending() : active(status)}</>;
 };
