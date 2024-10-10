@@ -63,5 +63,5 @@ export const useVaultTotalBalanceQuery = () => {
       data: undefined,
       error: [...balancesQuery.errors, ...pricesQuery.errors][0],
     };
-  }, [balancesQuery, pricesQuery]);
+  }, [balancesQuery, coins, pricesQuery]);
 };

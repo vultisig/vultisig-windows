@@ -10,8 +10,7 @@ import { InputLabel } from '../../../lib/ui/inputs/InputLabel';
 import { vStack } from '../../../lib/ui/layout/Stack';
 import { text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
-import { useAssertCurrentVaultAddress } from '../../state/useCurrentVault';
-import { useCurrentSendCoin } from '../state/sendCoin';
+import { useSender } from './hooks/useSender';
 
 const Container = styled.div`
   ${textInputFrame};
@@ -31,8 +30,7 @@ const Container = styled.div`
 `;
 
 export const Sender = () => {
-  const [{ chainId }] = useCurrentSendCoin();
-  const address = useAssertCurrentVaultAddress(chainId);
+  const address = useSender();
 
   const { t } = useTranslation();
 

@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,22 +14,25 @@ import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
 import {
   useAssertCurrentVault,
-  useAssertCurrentVaultAddress,
   useAssertCurrentVaultCoin,
 } from '../../state/useCurrentVault';
 import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
+import { useSender } from '../sender/hooks/useSender';
 import { useSendAmount } from '../state/amount';
+import { useSendMemo } from '../state/memo';
 import { useSendReceiver } from '../state/receiver';
 import { useCurrentSendCoin } from '../state/sendCoin';
+import { useSendTerms } from './state/sendTerms';
 
 export const SendConfirm = () => {
   const { t } = useTranslation();
 
   const [coinKey] = useCurrentSendCoin();
-  const address = useAssertCurrentVaultAddress(coinKey.chainId);
+  const sender = useSender();
   const coin = useAssertCurrentVaultCoin(coinKey);
   const [receiver] = useSendReceiver();
   const [amount] = useSendAmount();
+  const [memo] = useSendMemo();
   const vault = useAssertCurrentVault();
 
   const navigate = useNavigate();
@@ -44,10 +48,10 @@ export const SendConfirm = () => {
       amount === fromChainAmount(balance.amount, coin.decimals);
 
     const tx: ISendTransaction = {
-      fromAddress: address,
+      fromAddress: sender,
       toAddress: receiver,
       amount: shouldBePresent(amount),
-      memo: '',
+      memo,
       coin: storageCoinToCoin(coin),
       transactionType: TransactionType.SEND,
       specificTransactionInfo: shouldBePresent(specificTxInfoQuery.data),
@@ -66,13 +70,22 @@ export const SendConfirm = () => {
     );
   };
 
+  const [terms] = useSendTerms();
+  const isDisabled = useMemo(() => {
+    if (terms.some(term => !term)) {
+      return t('send_terms_error');
+    }
+  }, [t, terms]);
+
   if (balanceQuery.error || specificTxInfoQuery.error) {
     return <Text>{t('failed_to_load')}</Text>;
   }
 
-  if (balanceQuery.isPending || specificTxInfoQuery.isPending) {
-    return <Button isLoading>{t('continue')}</Button>;
-  }
+  const isPending = balanceQuery.isPending || specificTxInfoQuery.isPending;
 
-  return <Button onClick={onSubmit}>{t('continue')}</Button>;
+  return (
+    <Button isLoading={isPending} isDisabled={isDisabled} onClick={onSubmit}>
+      {t('continue')}
+    </Button>
+  );
 };

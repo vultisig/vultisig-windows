@@ -18,25 +18,28 @@ export const panelBackground = css`
   background: ${getColor('foreground')};
 `;
 
-export const Panel = styled.div<PanelProps>`
+export const panel = ({ withSections }: PanelProps = {}) => css`
   ${borderRadius.m};
 
-  ${({ withSections }) =>
-    withSections
-      ? css`
-          background: ${getColor('mistExtra')};
-          display: flex;
-          flex-direction: column;
-          gap: 1px;
-          overflow: hidden;
+  ${withSections
+    ? css`
+        background: ${getColor('mistExtra')};
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        overflow: hidden;
 
-          > * {
-            ${panelPadding}
-            ${panelBackground};
-          }
-        `
-      : css`
-          ${panelPadding};
+        > * {
+          ${panelPadding}
           ${panelBackground};
-        `}
+        }
+      `
+    : css`
+        ${panelPadding};
+        ${panelBackground};
+      `}
+`;
+
+export const Panel = styled.div<PanelProps>`
+  ${panel};
 `;
