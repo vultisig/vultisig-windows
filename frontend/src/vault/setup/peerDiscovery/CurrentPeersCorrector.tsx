@@ -1,21 +1,29 @@
 import { useEffect } from 'react';
 
-import { intersection } from '../../../lib/utils/array/intersection';
-import { useCurrentPeers } from '../../keysign/shared/state/currentPeers';
+import { omit } from '../../../lib/utils/record/omit';
+import { usePeersSelectionRecord } from '../../keysign/shared/state/selectedPeers';
 import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery';
 
 export const CurrentPeersCorrector = () => {
-  const [value, setValue] = useCurrentPeers();
+  const [value, setValue] = usePeersSelectionRecord();
 
   const peerOptionsQuery = usePeerOptionsQuery();
 
   useEffect(() => {
-    const options = peerOptionsQuery.data;
-    if (!options) return;
+    const options = peerOptionsQuery.data ?? [];
 
-    const filteredPeers = intersection(value, options);
-    if (filteredPeers.length !== value.length) {
-      setValue(filteredPeers);
+    let newValue = value;
+
+    [...Object.keys(newValue), ...options].forEach(peer => {
+      if (!options.includes(peer)) {
+        newValue = omit(newValue, peer);
+      } else if (!(peer in newValue)) {
+        newValue = { ...newValue, [peer]: true };
+      }
+    });
+
+    if (newValue !== value) {
+      setValue(newValue);
     }
   }, [peerOptionsQuery.data, setValue, value]);
 

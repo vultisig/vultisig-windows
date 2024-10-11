@@ -270,5 +270,6 @@
   "send_terms_error": "You must agree with the terms",
   "choose_tokens": "Choose Tokens",
   "optional": "optional",
-  "enter_memo": "Enter Memo"
+  "enter_memo": "Enter Memo",
+  "complete": "Complete"
 }

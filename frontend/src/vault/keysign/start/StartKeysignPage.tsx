@@ -16,8 +16,8 @@ import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/server
 import { useAssertCurrentVault } from '../../state/useCurrentVault';
 import { KeysignMsgsGuard } from '../join/KeysignMsgsGuard';
 import { KeysignSigningStep } from '../shared/KeysignSigningStep';
-import { CurrentPeersProvider } from '../shared/state/currentPeers';
 import { KeysignPayloadProvider } from '../shared/state/keysignPayload';
+import { PeersSelectionRecordProvider } from '../shared/state/selectedPeers';
 import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoveryStep';
 
 const keysignSteps = ['peers', 'session', 'sign'] as const;
@@ -52,7 +52,7 @@ export const StartKeysignPage = () => {
     <KeysignPayloadProvider value={payload}>
       <KeysignMsgsGuard>
         <CurrentServiceNameProvider value={serviceName}>
-          <CurrentPeersProvider initialValue={[]}>
+          <PeersSelectionRecordProvider initialValue={{}}>
             <CurrentSessionIdProvider value={sessionId}>
               <CurrentHexEncryptionKeyProvider value={hexEncryptionKey}>
                 <CurrentServerTypeProvider initialValue="relay">
@@ -78,7 +78,7 @@ export const StartKeysignPage = () => {
                 </CurrentServerTypeProvider>
               </CurrentHexEncryptionKeyProvider>
             </CurrentSessionIdProvider>
-          </CurrentPeersProvider>
+          </PeersSelectionRecordProvider>
         </CurrentServiceNameProvider>
       </KeysignMsgsGuard>
     </KeysignPayloadProvider>

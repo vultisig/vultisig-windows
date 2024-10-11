@@ -13,14 +13,13 @@ import {
 } from '../../../../lib/ui/props';
 import { Text } from '../../../../lib/ui/text';
 import { getColor } from '../../../../lib/ui/theme/getters';
-import { without } from '../../../../lib/utils/array/without';
 import { KeygenDeviceIcon } from '../../../keygen/shared/device/KeygenDeviceIcon';
 import {
   getKeygenDeviceName,
   getKeygenDeviceType,
   parseLocalPartyId,
 } from '../../../keygen/utils/localPartyId';
-import { useCurrentPeers } from '../../../keysign/shared/state/currentPeers';
+import { usePeersSelectionRecord } from '../../../keysign/shared/state/selectedPeers';
 
 const Container = styled(UnstyledButton)<ComponentWithActiveState>`
   position: relative;
@@ -60,18 +59,19 @@ const Indicator = styled.div`
 `;
 
 export const PeerOption = ({ value }: ComponentWithValueProps<string>) => {
-  const [currentPeers, setCurrentPeers] = useCurrentPeers();
+  const [record, setRecord] = usePeersSelectionRecord();
 
-  const isSelected = currentPeers.includes(value);
+  const isSelected = record[value];
 
   const { id, hash } = parseLocalPartyId(value);
 
   return (
     <Container
       onClick={() => {
-        setCurrentPeers(peers =>
-          isSelected ? without(peers, value) : [...peers, value]
-        );
+        setRecord(prev => ({
+          ...prev,
+          [value]: !isSelected,
+        }));
       }}
       isActive={isSelected}
     >

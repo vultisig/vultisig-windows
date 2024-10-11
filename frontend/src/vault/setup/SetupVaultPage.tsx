@@ -12,7 +12,7 @@ import { CurrentLocalPartyIdProvider } from '../keygen/state/currentLocalPartyId
 import { CurrentServerTypeProvider } from '../keygen/state/currentServerType';
 import { generateServiceName } from '../keygen/utils/generateServiceName';
 import { generateLocalPartyId } from '../keygen/utils/localPartyId';
-import { CurrentPeersProvider } from '../keysign/shared/state/currentPeers';
+import { PeersSelectionRecordProvider } from '../keysign/shared/state/selectedPeers';
 import { SetupVaultKeygenThresholdStep } from './keygenThreshold/SetupVaultKeygenThresholdStep';
 import { SetupVaultPeerDiscoveryStep } from './peerDiscovery/SetupVaultPeerDiscoveryStep';
 import { SetupVaultKeygenStep } from './SetupVaultKeygenStep';
@@ -61,7 +61,7 @@ export const SetupVaultPage = () => {
   return (
     <CurrentKeygenThresholdProvider initialValue={defaultKeygenThresholdType}>
       <CurrentServiceNameProvider value={serviceName}>
-        <CurrentPeersProvider initialValue={[]}>
+        <PeersSelectionRecordProvider initialValue={{}}>
           <CurrentSessionIdProvider value={sessionId}>
             <CurrentHexEncryptionKeyProvider value={hexEncryptionKey}>
               <CurrentHexChainCodeProvider value={hexChainCode}>
@@ -115,7 +115,7 @@ export const SetupVaultPage = () => {
               </CurrentHexChainCodeProvider>
             </CurrentHexEncryptionKeyProvider>
           </CurrentSessionIdProvider>
-        </CurrentPeersProvider>
+        </PeersSelectionRecordProvider>
       </CurrentServiceNameProvider>
     </CurrentKeygenThresholdProvider>
   );
