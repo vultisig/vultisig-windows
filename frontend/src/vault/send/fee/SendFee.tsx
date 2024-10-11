@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { SendFeeValue } from './SendFeeValue';
+import { SendSpecificTxInfoProvider } from './SendSpecificTxInfoProvider';
 
 export const SendFee = () => {
   const { t } = useTranslation();
@@ -10,7 +11,9 @@ export const SendFee = () => {
       <span>
         {t('gas')} ({t('auto')})
       </span>
-      <SendFeeValue />
+      <SendSpecificTxInfoProvider>
+        <SendFeeValue />
+      </SendSpecificTxInfoProvider>
     </>
   );
 };
