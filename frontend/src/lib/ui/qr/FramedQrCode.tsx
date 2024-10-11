@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   ${borderRadius.l};
   background: ${getColor('foreground')};
   padding: ${toSizeUnit(codeOffset)};
+  border: 5px dashed ${({ theme }) => theme.colors.primary.toCssValue()};
 `;
 
 const Container = styled.div`
