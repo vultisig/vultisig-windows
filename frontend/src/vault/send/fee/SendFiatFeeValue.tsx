@@ -35,7 +35,7 @@ export const SendFiatFeeValue = () => {
       success={price => {
         const formattedAmount = formatAmount(feeAmount * price, globalCurrency);
 
-        return `~${formattedAmount}`;
+        return formattedAmount;
       }}
     />
   );
