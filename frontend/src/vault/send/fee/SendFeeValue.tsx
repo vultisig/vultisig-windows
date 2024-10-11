@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { StrictText } from '../../../lib/ui/text';
 import { formatAmount } from '../../../lib/utils/formatAmount';
@@ -13,5 +15,9 @@ export const SendFeeValue = () => {
 
   const feeAmount = fromChainAmount(fee, decimals);
 
-  return <StrictText>{formatAmount(feeAmount, ticker)}</StrictText>;
+  const formattedAmount = useMemo(() => {
+    return formatAmount(feeAmount, ticker);
+  }, [feeAmount, ticker]);
+
+  return <StrictText>{formattedAmount}</StrictText>;
 };
