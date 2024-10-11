@@ -10,7 +10,10 @@ import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant'
 import { Text, text } from '../../../lib/ui/text';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { CoinMeta } from '../../../model/coin-meta';
-import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
+import {
+  useAssertCurrentVaultCoin,
+  useAssertCurrentVaultNativeCoin,
+} from '../../state/useCurrentVault';
 import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
 import { useCurrentSendCoin } from '../state/sendCoin';
 
@@ -29,7 +32,7 @@ export const SendNetworkFeeValue = () => {
   const txSpecificInfoQuery = useSpecificSendTxInfoQuery();
   const [coinKey] = useCurrentSendCoin();
   const coin = useAssertCurrentVaultCoin(coinKey);
-  const { decimals, ticker } = coin;
+  const { decimals, ticker } = useAssertCurrentVaultNativeCoin(coinKey.chainId);
   const priceQuery = useCoinPriceQuery(
     CoinMeta.fromCoin(storageCoinToCoin(coin))
   );
