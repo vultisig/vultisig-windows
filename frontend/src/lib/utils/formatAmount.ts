@@ -11,7 +11,7 @@ const getFractionDigits = (amount: number): number => {
     return nonZeroDigitIndex;
   }
 
-  return 2;
+  return 8;
 };
 
 export const formatAmount = (

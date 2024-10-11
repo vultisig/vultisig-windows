@@ -44,6 +44,7 @@ export class RpcServiceSui extends RpcService implements IRpcService {
 
     const specificTransactionInfo: SpecificSui = {
       gasPrice: gasPrice,
+      fee: gasPrice,
       referenceGasPrice: gasPrice,
       coins: allCoins,
     } as SpecificSui;
@@ -58,7 +59,7 @@ export class RpcServiceSui extends RpcService implements IRpcService {
 
   private async getReferenceGasPrice(): Promise<number> {
     const result = await this.callRPC('suix_getReferenceGasPrice', []);
-    return result;
+    return Number(result);
   }
 
   private async getAllCoins(coin: Coin): Promise<SuiCoin[]> {
