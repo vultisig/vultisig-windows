@@ -1,10 +1,10 @@
-import { Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { SpecificPolkadot } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
+import { RpcService } from '../RpcService';
 
-export class RpcServicePolkadot implements IRpcService {
+export class RpcServicePolkadot extends RpcService implements IRpcService {
   async calculateFee(_coin: Coin): Promise<number> {
     return 1e10;
   }
@@ -100,24 +100,8 @@ export class RpcServicePolkadot implements IRpcService {
     return BigInt(0);
   }
 
-  private async callRPC(method: string, params: any[]): Promise<any> {
-    try {
-      const payload = {
-        jsonrpc: '2.0',
-        method: method,
-        params: params,
-        id: 1,
-      };
-
-      const response = await Post(Endpoint.polkadotServiceRpc, payload);
-      if (response && response.result !== undefined) {
-        return response.result;
-      } else {
-        return response.error || 'Unknown error occurred';
-      }
-    } catch (error: any) {
-      return error.message || 'Unknown error occurred';
-    }
+  async callRPC(method: string, params: any[]): Promise<any> {
+    return await super.callRpc(Endpoint.polkadotServiceRpc, method, params);
   }
 
   private async fetchNonce(address: string): Promise<number> {
