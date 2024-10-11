@@ -11,7 +11,9 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
 import { ManageAmount } from '../amount/ManageSendAmount';
 import { ManageSendCoin } from '../coin/ManageSendCoin';
-import { SendNetworkFee } from '../fee/SendNetworkFee';
+import { SendFee } from '../fee/SendFee';
+import { SendFiatFee } from '../fee/SendFiatFee';
+import { StrictFeeRow } from '../fee/StrictFeeRow';
 import { ManageMemo } from '../memo/ManageMemo';
 import { ManageReceiver } from '../receiver/ManageReceiver';
 import { Sender } from '../sender/Sender';
@@ -43,7 +45,14 @@ export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
             <ManageReceiver />
             <ManageMemo />
             <ManageAmount />
-            <SendNetworkFee />
+            <VStack gap={8}>
+              <StrictFeeRow>
+                <SendFee />
+              </StrictFeeRow>
+              <StrictFeeRow>
+                <SendFiatFee />
+              </StrictFeeRow>
+            </VStack>
           </VStack>
         </WithProgressIndicator>
         <Button isDisabled={isDisabled} type="submit">

@@ -271,5 +271,6 @@
   "choose_tokens": "Choose Tokens",
   "optional": "optional",
   "enter_memo": "Enter Memo",
-  "complete": "Complete"
+  "complete": "Complete",
+  "auto": "auto"
 }

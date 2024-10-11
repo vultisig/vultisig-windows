@@ -95,3 +95,16 @@ export const text = ({
 export const Text = styled.p<TextProps>`
   ${text};
 `;
+
+export const strictText = css`
+  ${text({
+    color: 'contrast',
+    size: 14,
+    weight: 400,
+    family: 'mono',
+  })}
+`;
+
+export const StrictText = styled.p`
+  ${strictText}
+`;
