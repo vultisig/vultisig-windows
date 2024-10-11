@@ -7,7 +7,6 @@ import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
-import { Text } from '../../../lib/ui/text';
 import { range } from '../../../lib/utils/array/range';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -16,7 +15,8 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
 import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
-import { SendNetworkFeeValue } from '../fee/SendNetworkFeeValue';
+import { SendFee } from '../fee/SendFee';
+import { SendFiatFee } from '../fee/SendFiatFee';
 import { useSender } from '../sender/hooks/useSender';
 import { useSendAmount } from '../state/amount';
 import { useSendMemo } from '../state/memo';
@@ -56,8 +56,10 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
               symbol={coin.ticker}
             />
             <TxOverviewRow>
-              <Text>{t('network_fee')}</Text>
-              <SendNetworkFeeValue />
+              <SendFee />
+            </TxOverviewRow>
+            <TxOverviewRow>
+              <SendFiatFee />
             </TxOverviewRow>
           </TxOverviewPanel>
         </WithProgressIndicator>
