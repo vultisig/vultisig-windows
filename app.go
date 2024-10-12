@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/base64"
-	"io/ioutil"
 	"os"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -25,6 +24,7 @@ func (a *App) SaveFileBkp(suggestedFilename string, base64Data string) (string, 
 	// Show the save file dialog to the user
 	filename, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
 		Title:           "Save File",
+		Filters:         []runtime.FileFilter{{DisplayName: "All Files(*)", Pattern: "*.bak;*.dat;*.vult"}},
 		DefaultFilename: suggestedFilename,
 	})
 	if err != nil {
@@ -48,6 +48,7 @@ func (a *App) SaveFileBkp(suggestedFilename string, base64Data string) (string, 
 func (a *App) SaveFile(suggestedFilename string, base64Data string) (string, error) {
 	filename, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
 		Title:           "Save File",
+		Filters:         []runtime.FileFilter{{DisplayName: "All Files(*)", Pattern: "*.bak;*.dat;*.vult"}},
 		DefaultFilename: suggestedFilename,
 	})
 	if err != nil {
@@ -66,7 +67,7 @@ func (a *App) SaveFile(suggestedFilename string, base64Data string) (string, err
 	}
 
 	// Write the data to the file
-	err = ioutil.WriteFile(filename, data, 0644)
+	err = os.WriteFile(filename, data, 0644)
 	if err != nil {
 		return "", err
 	}
