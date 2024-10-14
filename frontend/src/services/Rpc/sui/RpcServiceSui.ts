@@ -65,9 +65,19 @@ export class RpcServiceSui extends RpcService implements IRpcService {
   private async getAllCoins(coin: Coin): Promise<SuiCoin[]> {
     const result = await this.callRPC('suix_getAllCoins', [coin.address]);
     const rawCoins = result.data as SuiCoin[];
-    const suiCoins: SuiCoin[] = rawCoins.filter(
-      f => f.coinType == '0x2::sui::SUI'
-    );
+    const suiCoins: SuiCoin[] = rawCoins
+      .filter(f => f.coinType == '0x2::sui::SUI')
+      .map((coin: SuiCoin) => {
+        const suiCoin = new SuiCoin();
+        suiCoin.balance = coin.balance;
+        suiCoin.coinType = coin.coinType;
+        suiCoin.coinObjectId = coin.coinObjectId;
+        suiCoin.digest = coin.digest;
+        suiCoin.version = coin.version;
+        suiCoin.previousTransaction = coin.previousTransaction;
+
+        return suiCoin;
+      });
     return suiCoins;
   }
 
