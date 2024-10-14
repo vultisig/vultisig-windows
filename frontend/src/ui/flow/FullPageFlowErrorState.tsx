@@ -1,31 +1,35 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { FilledAlertIcon } from '../../../lib/ui/icons/FilledAlertIcon';
-import { VStack } from '../../../lib/ui/layout/Stack';
+import { Button } from '../../lib/ui/buttons/Button';
+import { FilledAlertIcon } from '../../lib/ui/icons/FilledAlertIcon';
+import { VStack } from '../../lib/ui/layout/Stack';
 import {
   ComponentWithActionProps,
+  ComponentWithMessageProps,
   TitledComponentProps,
-} from '../../../lib/ui/props';
-import { Text } from '../../../lib/ui/text';
-import { makeAppPath } from '../../../navigation';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+} from '../../lib/ui/props';
+import { Text } from '../../lib/ui/text';
+import { makeAppPath } from '../../navigation';
+import { PageContent } from '../page/PageContent';
+import { PageHeader } from '../page/PageHeader';
+import { PageHeaderBackButton } from '../page/PageHeaderBackButton';
+import { PageHeaderTitle } from '../page/PageHeaderTitle';
 
-export const KeysignErrorState = ({
+export const FullPageFlowErrorState = ({
   title,
   action,
-}: TitledComponentProps & Partial<ComponentWithActionProps>) => {
+  message,
+}: TitledComponentProps &
+  Partial<ComponentWithActionProps> &
+  ComponentWithMessageProps) => {
   const { t } = useTranslation();
 
   return (
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={<PageHeaderTitle>{t('keysign')}</PageHeaderTitle>}
+        title={<PageHeaderTitle>{title ?? t('keysign')}</PageHeaderTitle>}
       />
       <PageContent>
         <VStack flexGrow gap={40} alignItems="center" justifyContent="center">
@@ -38,7 +42,7 @@ export const KeysignErrorState = ({
               color="contrast"
               centerHorizontally
             >
-              {title}
+              {message}
             </Text>
           </VStack>
         </VStack>

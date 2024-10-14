@@ -9,17 +9,18 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
 import { useServerUrlQuery } from '../../keygen/shared/queries/useServerUrlQuery';
-import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
+import { useCurrentServerType } from '../../keygen/state/currentServerType';
 import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl';
-import { useCurrentJoinKeysignMsg } from './state/currentJoinKeysignMsg';
+import { useCurrentServiceName } from '../../setup/state/currentServiceName';
+import { useCurrentSessionId } from '../shared/state/currentSessionId';
 
-export const KeysignServerUrlProvider = ({
+export const KeygenServerUrlProvider = ({
   children,
 }: ComponentWithChildrenProps) => {
-  const { serviceName, useVultisigRelay, sessionId } =
-    useCurrentJoinKeysignMsg();
+  const [sessionId] = useCurrentSessionId();
 
-  const serverType = useVultisigRelay ? 'relay' : 'local';
+  const [serverType] = useCurrentServerType();
+  const [serviceName] = useCurrentServiceName();
 
   const { t } = useTranslation();
 
@@ -34,21 +35,19 @@ export const KeysignServerUrlProvider = ({
       query={query}
       success={value => (
         <CurrentServerUrlProvider value={value}>
-          <CurrentServerTypeProvider initialValue={serverType}>
-            {children}
-          </CurrentServerTypeProvider>
+          {children}
         </CurrentServerUrlProvider>
       )}
       error={() => (
         <FullPageFlowErrorState
-          title={t('join_keysign')}
+          title={t('join_keygen')}
           message={t('failed_to_discover_mediator')}
         />
       )}
       pending={() => (
         <>
           <PageHeader
-            title={<PageHeaderTitle>{t('join_keysign')}</PageHeaderTitle>}
+            title={<PageHeaderTitle>{t('join_keygen')}</PageHeaderTitle>}
             primaryControls={<PageHeaderBackButton />}
           />
           <PageContent justifyContent="center" alignItems="center">

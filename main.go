@@ -29,6 +29,9 @@ func main() {
 	app := NewApp()
 	tssIns := tss.NewTssService()
 	store, err := storage.NewStore()
+	if err != nil {
+		panic(err)
+	}
 	goHttp, err := utils.NewGoHttp()
 	if err != nil {
 		panic(err)

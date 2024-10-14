@@ -6,12 +6,12 @@ import { KeysignPayloadUtils } from '../../../extensions/KeysignPayload';
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
+import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
-import { KeysignErrorState } from '../shared/KeysignErrorState';
 import { CurrentKeysignMsgsProvider } from '../shared/state/currentKeysignMsgs';
 import { useKeysignPayload } from '../shared/state/keysignPayload';
 
@@ -34,7 +34,12 @@ export const KeysignMsgsGuard = ({ children }: ComponentWithChildrenProps) => {
   return (
     <QueryDependant
       query={mutationStatus}
-      error={() => <KeysignErrorState title={t('read_msg_failed')} />}
+      error={() => (
+        <FullPageFlowErrorState
+          title={t('keysign')}
+          message={t('read_msg_failed')}
+        />
+      )}
       pending={() => (
         <>
           <PageHeader
