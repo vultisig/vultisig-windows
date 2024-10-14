@@ -13,7 +13,7 @@ import { PageSlice } from '../../../ui/page/PageSlice';
 import { getVaultTypeText } from '../../../utils/util';
 import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation';
 import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery';
-import { useCurrentVault } from '../../../vault/state/useCurrentVault';
+import { useUnassertedCurrentVault } from '../../../vault/state/useCurrentVault';
 import {
   ActionsWrapper,
   Check,
@@ -31,7 +31,7 @@ const DeleteVaultPage = () => {
 
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const currentVault = useCurrentVault();
+  const currentVault = useUnassertedCurrentVault();
   const { data: vaultBalance } = useVaultTotalBalanceQuery();
   const {
     mutate: deleteVault,
