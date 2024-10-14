@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Match } from '../../../lib/ui/base/Match';
+import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { CurrentSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
@@ -17,14 +17,9 @@ import { useCurrentJoinKeysignMsg } from './state/currentJoinKeysignMsg';
 import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep';
 
 const keysignSteps = ['verify', 'session', 'sign'] as const;
-type KeysignStep = (typeof keysignSteps)[number];
 
 export const JoinKeysignPage = () => {
-  const [step, setStep] = useState<KeysignStep>(keysignSteps[0]);
-
-  const toNextStep = useCallback(() => {
-    setStep(prev => keysignSteps[keysignSteps.indexOf(prev) + 1]);
-  }, []);
+  const { step, setStep, toNextStep } = useStepNavigation(keysignSteps);
 
   const { keysignPayload, sessionId, encryptionKeyHex } =
     useCurrentJoinKeysignMsg();

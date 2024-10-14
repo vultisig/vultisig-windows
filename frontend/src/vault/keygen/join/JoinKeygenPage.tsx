@@ -1,7 +1,8 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Match } from '../../../lib/ui/base/Match';
+import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { CurrentServiceNameProvider } from '../../setup/state/currentServiceName';
 import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep';
 import { CurrentSessionIdProvider } from '../shared/state/currentSessionId';
@@ -13,7 +14,6 @@ import { JoinKeygenProcess } from './JoinKeygenProcess';
 import { KeygenServerUrlProvider } from './KeygenServerUrlProvider';
 
 const keygenSteps = ['session', 'keygen'] as const;
-type KeygenStep = (typeof keygenSteps)[number];
 
 export const JoinKeygenPage = () => {
   const localPartyId = useMemo(generateLocalPartyId, []);
@@ -24,11 +24,7 @@ export const JoinKeygenPage = () => {
 
   const serverType = useVultisigRelay ? 'relay' : 'local';
 
-  const [step, setStep] = useState<KeygenStep>(keygenSteps[0]);
-
-  const toNextStep = useCallback(() => {
-    setStep(prev => keygenSteps[keygenSteps.indexOf(prev) + 1]);
-  }, []);
+  const { step, toNextStep } = useStepNavigation(keygenSteps);
 
   const { t } = useTranslation();
 
