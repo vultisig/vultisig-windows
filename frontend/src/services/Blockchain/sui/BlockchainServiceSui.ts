@@ -1,4 +1,5 @@
 import { TW } from '@trustwallet/wallet-core';
+import Long from 'long';
 
 import { storage, tss } from '../../../../wailsjs/go/models';
 import { Keysign } from '../../../../wailsjs/go/tss/TssService';
@@ -149,35 +150,41 @@ export class BlockchainServiceSui
     const { coins, referenceGasPrice } = suiSpecific;
 
     const inputData = TW.Sui.Proto.SigningInput.create({
-      referenceGasPrice: referenceGasPrice,
+      referenceGasPrice: Long.fromString(referenceGasPrice),
       signer: keysignPayload.coin?.address,
-      gasBudget: 3000000,
+      gasBudget: Long.fromString('3000000'),
 
       paySui: TW.Sui.Proto.PaySui.create({
         inputCoins: coins.map((coin: SuiCoin) => {
           const obj = TW.Sui.Proto.ObjectRef.create({
             objectDigest: coin.digest,
             objectId: coin.coinObjectId,
-            version: coin.version,
+            version: Long.fromString(coin.version),
           });
           return obj;
         }),
         recipients: [keysignPayload.toAddress],
-        amounts: [BigInt(keysignPayload.toAmount)],
+        amounts: [Long.fromString(keysignPayload.toAmount)],
       }),
     });
 
-    return TW.Sui.Proto.SigningInput.encode(inputData).finish();
+    const input = TW.Sui.Proto.SigningInput.encode(inputData).finish();
+
+    console.log(
+      'input SUI:',
+      this.walletCore.HexCoding.encode(input).stripHexPrefix()
+    );
+
+    return input;
   }
 
   async getPreSignedImageHash(
     keysignPayload: KeysignPayload
   ): Promise<string[]> {
     try {
-      const walletCore = this.walletCore;
-      const coinType = walletCore.CoinType.sui;
+      const coinType = this.walletCore.CoinType.sui;
       const inputData = await this.getPreSignedInputData(keysignPayload);
-      const hashes = walletCore.TransactionCompiler.preImageHashes(
+      const hashes = this.walletCore.TransactionCompiler.preImageHashes(
         coinType,
         inputData
       );
@@ -189,8 +196,11 @@ export class BlockchainServiceSui
       }
 
       const blakeHash = this.walletCore.Hash.blake2b(preSigningOutput.data, 32);
+
+      console.log('blakeHash:', blakeHash);
+
       const blakeHashes = [
-        walletCore.HexCoding.encode(blakeHash).stripHexPrefix(),
+        this.walletCore.HexCoding.encode(blakeHash).stripHexPrefix(),
       ];
 
       console.log('blakeHashes:', blakeHashes);
