@@ -1,14 +1,10 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "vultisig-win",
-  "outputfilename": "vultisig-win",
+  "name": "Vultisig",
+  "outputfilename": "vultisig",
   "frontend:install": "npm install",
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
-  "author": {
-    "name": "Johnny Luo",
-    "email": "johnnyluo1980@gmail.com"
-  },
-    "description": "Vultisig for Windows"
+  "description": "Vultisig for Windows"
 }
