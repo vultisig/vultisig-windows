@@ -98,7 +98,7 @@ export const KeysignSigningStep = ({
                     </VStack>
                   </>
                 )}
-                active={() => <KeysignSigningState />}
+                active={value => <KeysignSigningState value={value} />}
               />
             </VStack>
             <KeygenNetworkReminder />

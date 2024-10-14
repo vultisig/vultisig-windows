@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useCurrentPeers } from '../../../keysign/shared/state/currentPeers';
+import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers';
 import { useCurrentKeygenThreshold } from '../../state/currentKeygenThreshold';
 
 export const useIsPeerDiscoveryStepDisabled = () => {
   const { t } = useTranslation();
-  const [peers] = useCurrentPeers();
+  const peers = useSelectedPeers();
   const [thresholdType] = useCurrentKeygenThreshold();
 
   return useMemo(() => {

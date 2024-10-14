@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -29,6 +30,12 @@ export const KeysignPeerDiscovery = ({
   const { t } = useTranslation();
 
   const isDisabled = useIsPeerDiscoveryStepDisabled();
+
+  useEffect(() => {
+    if (!isDisabled) {
+      onForward();
+    }
+  }, [isDisabled, onForward]);
 
   return (
     <PageContent
