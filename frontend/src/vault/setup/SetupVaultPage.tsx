@@ -11,6 +11,7 @@ import { KeygenStartSessionStep } from '../keygen/shared/KeygenStartSessionStep'
 import { CurrentSessionIdProvider } from '../keygen/shared/state/currentSessionId';
 import { CurrentLocalPartyIdProvider } from '../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../keygen/state/currentServerType';
+import { generateHexEncryptionKey } from '../keygen/utils/generateHexEncryptionKey';
 import { generateServiceName } from '../keygen/utils/generateServiceName';
 import { generateLocalPartyId } from '../keygen/utils/localPartyId';
 import { PeersSelectionRecordProvider } from '../keysign/shared/state/selectedPeers';
@@ -42,7 +43,7 @@ export const SetupVaultPage = () => {
   const localPartyId = useMemo(generateLocalPartyId, []);
 
   const hexChainCode = useMemo(() => getHexEncodedRandomBytes(32), []);
-  const hexEncryptionKey = useMemo(() => getHexEncodedRandomBytes(32), []);
+  const hexEncryptionKey = useMemo(generateHexEncryptionKey, []);
 
   const serviceName = useMemo(generateServiceName, []);
 

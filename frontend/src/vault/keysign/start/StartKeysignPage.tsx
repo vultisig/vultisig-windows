@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { getHexEncodedRandomBytes } from '../../../chain/utils/getHexEncodedRandomBytes';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
@@ -10,6 +9,7 @@ import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionSt
 import { CurrentSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
+import { generateHexEncryptionKey } from '../../keygen/utils/generateHexEncryptionKey';
 import { generateServiceName } from '../../keygen/utils/generateServiceName';
 import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey';
 import { CurrentServiceNameProvider } from '../../setup/state/currentServiceName';
@@ -34,7 +34,7 @@ export const StartKeysignPage = () => {
 
   const serviceName = useMemo(generateServiceName, []);
 
-  const hexEncryptionKey = useMemo(() => getHexEncodedRandomBytes(32), []);
+  const hexEncryptionKey = useMemo(generateHexEncryptionKey, []);
 
   const { local_party_id } = useAssertCurrentVault();
 
