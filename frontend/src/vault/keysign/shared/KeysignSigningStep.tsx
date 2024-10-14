@@ -11,6 +11,7 @@ import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { Chain } from '../../../model/chain';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
+import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -22,7 +23,6 @@ import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId'
 import { useCurrentServerUrl } from '../../keygen/state/currentServerUrl';
 import { useCurrentHexEncryptionKey } from '../../setup/state/currentHexEncryptionKey';
 import { useAssertCurrentVault } from '../../state/useCurrentVault';
-import { KeysignErrorState } from './KeysignErrorState';
 import { KeysignSigningState } from './KeysignSigningState';
 import { KeysignSummaryStep } from './KeysignSummaryStep';
 import { useCurrentKeysignMsgs } from './state/currentKeysignMsgs';
@@ -74,7 +74,12 @@ export const KeysignSigningStep = ({
           <KeysignSummaryStep />
         </CurrentTxHashProvider>
       )}
-      error={() => <KeysignErrorState title={t('signing_error')} />}
+      error={() => (
+        <FullPageFlowErrorState
+          title={t('keysign')}
+          message={t('signing_error')}
+        />
+      )}
       pending={() => (
         <>
           <PageHeader

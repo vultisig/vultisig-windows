@@ -29,7 +29,7 @@ export const JoinKeygenProcess = () => {
           delay={3000}
           from={
             <>
-              <KeygenPageHeader title={`${t('join')} ${t('keygen')}`} />
+              <KeygenPageHeader title={t('join_keygen')} />
               <KeygenSuccessState />
             </>
           }

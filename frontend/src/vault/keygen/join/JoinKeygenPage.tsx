@@ -1,23 +1,21 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { KeygenPageHeader } from '../shared/KeygenPageHeader';
-import { PendingKeygenMessage } from '../shared/PendingKeygenMessage';
-import { useServerUrlQuery } from '../shared/queries/useServerUrlQuery';
+import { Match } from '../../../lib/ui/base/Match';
+import { CurrentServiceNameProvider } from '../../setup/state/currentServiceName';
+import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep';
+import { CurrentSessionIdProvider } from '../shared/state/currentSessionId';
 import { useCurrentJoinKeygenMsg } from '../state/currentJoinKeygenMsg';
 import { CurrentLocalPartyIdProvider } from '../state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../state/currentServerType';
-import { CurrentServerUrlProvider } from '../state/currentServerUrl';
 import { generateLocalPartyId } from '../utils/localPartyId';
-import { JoinKeygenSession } from './JoinKeygenSession';
+import { JoinKeygenProcess } from './JoinKeygenProcess';
+import { KeygenServerUrlProvider } from './KeygenServerUrlProvider';
+
+const keygenSteps = ['session', 'keygen'] as const;
+type KeygenStep = (typeof keygenSteps)[number];
 
 export const JoinKeygenPage = () => {
-  const { t } = useTranslation();
-
   const localPartyId = useMemo(generateLocalPartyId, []);
 
   const keygenMsg = useCurrentJoinKeygenMsg();
@@ -26,38 +24,34 @@ export const JoinKeygenPage = () => {
 
   const serverType = useVultisigRelay ? 'relay' : 'local';
 
-  const { data, isPending } = useServerUrlQuery({
-    serverType,
-    serviceName,
-    sessionId,
-  });
+  const [step, setStep] = useState<KeygenStep>(keygenSteps[0]);
+
+  const toNextStep = useCallback(() => {
+    setStep(prev => keygenSteps[keygenSteps.indexOf(prev) + 1]);
+  }, []);
+
+  const { t } = useTranslation();
 
   return (
     <CurrentLocalPartyIdProvider value={localPartyId}>
-      <VStack flexGrow>
-        {data ? (
-          <CurrentServerUrlProvider value={data}>
-            <CurrentServerTypeProvider initialValue={serverType}>
-              <JoinKeygenSession />
-            </CurrentServerTypeProvider>
-          </CurrentServerUrlProvider>
-        ) : (
-          <>
-            <KeygenPageHeader
-              title={<PageHeaderTitle>{t('setup')}</PageHeaderTitle>}
-            />
-            <PageContent justifyContent="center" alignItems="center">
-              {isPending ? (
-                <PendingKeygenMessage>
-                  {t('discovering_mediator')}
-                </PendingKeygenMessage>
-              ) : (
-                <Text>{t('failed_to_discover_mediator')}</Text>
-              )}
-            </PageContent>
-          </>
-        )}
-      </VStack>
+      <CurrentServiceNameProvider value={serviceName}>
+        <CurrentServerTypeProvider initialValue={serverType}>
+          <CurrentSessionIdProvider value={sessionId}>
+            <KeygenServerUrlProvider>
+              <Match
+                value={step}
+                session={() => (
+                  <JoinKeygenSessionStep
+                    title={t('join_keygen')}
+                    onForward={toNextStep}
+                  />
+                )}
+                keygen={() => <JoinKeygenProcess />}
+              />
+            </KeygenServerUrlProvider>
+          </CurrentSessionIdProvider>
+        </CurrentServerTypeProvider>
+      </CurrentServiceNameProvider>
     </CurrentLocalPartyIdProvider>
   );
 };
