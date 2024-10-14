@@ -1,8 +1,13 @@
+import { TW } from '@trustwallet/wallet-core';
+
 import { storage, tss } from '../../../../wailsjs/go/models';
 import { Keysign } from '../../../../wailsjs/go/tss/TssService';
-import { SuiSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import {
+  SuiCoin,
+  SuiSpecific,
+} from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { ChainUtils } from '../../../model/chain';
+import { Chain, ChainUtils } from '../../../model/chain';
 import { SpecificSui } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -123,12 +128,77 @@ export class BlockchainServiceSui
         throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
     }
 
-    try {
-      console.log(payload.toJson());
-    } catch (error) {
-      console.error('Error in createKeysignPayload:', error);
+    return payload;
+  }
+
+  async getPreSignedInputData(
+    keysignPayload: KeysignPayload
+  ): Promise<Uint8Array> {
+    if (keysignPayload.coin?.chain !== Chain.Sui) {
+      console.error('Coin is not Sui');
+      console.error('keysignPayload.coin?.chain:', keysignPayload.coin?.chain);
     }
 
-    return payload;
+    const suiSpecific = keysignPayload.blockchainSpecific.value as SuiSpecific;
+    if (!suiSpecific) {
+      console.error(
+        'getPreSignedInputData fail to get SUI transaction information from RPC'
+      );
+    }
+
+    const { coins, referenceGasPrice } = suiSpecific;
+
+    const inputData = TW.Sui.Proto.SigningInput.create({
+      referenceGasPrice: referenceGasPrice,
+      signer: keysignPayload.coin?.address,
+      gasBudget: 3000000,
+
+      paySui: TW.Sui.Proto.PaySui.create({
+        inputCoins: coins.map((coin: SuiCoin) => {
+          const obj = TW.Sui.Proto.ObjectRef.create({
+            objectDigest: coin.digest,
+            objectId: coin.coinObjectId,
+            version: coin.version,
+          });
+          return obj;
+        }),
+        recipients: [keysignPayload.toAddress],
+        amounts: [BigInt(keysignPayload.toAmount)],
+      }),
+    });
+
+    return TW.Sui.Proto.SigningInput.encode(inputData).finish();
+  }
+
+  async getPreSignedImageHash(
+    keysignPayload: KeysignPayload
+  ): Promise<string[]> {
+    try {
+      const walletCore = this.walletCore;
+      const coinType = walletCore.CoinType.sui;
+      const inputData = await this.getPreSignedInputData(keysignPayload);
+      const hashes = walletCore.TransactionCompiler.preImageHashes(
+        coinType,
+        inputData
+      );
+      const preSigningOutput =
+        TW.TxCompiler.Proto.PreSigningOutput.decode(hashes);
+      if (preSigningOutput.errorMessage !== '') {
+        console.error('preSigningOutput error:', preSigningOutput.errorMessage);
+        throw new Error(preSigningOutput.errorMessage);
+      }
+
+      const blakeHash = this.walletCore.Hash.blake2b(preSigningOutput.data, 32);
+      const blakeHashes = [
+        walletCore.HexCoding.encode(blakeHash).stripHexPrefix(),
+      ];
+
+      console.log('blakeHashes:', blakeHashes);
+
+      return blakeHashes;
+    } catch (error) {
+      console.error('getPreSignedImageHash::', error);
+      return [];
+    }
   }
 }
