@@ -32,28 +32,14 @@ export class RpcServiceSui extends RpcService implements IRpcService {
   }
 
   async getSpecificTransactionInfo(coin: Coin): Promise<SpecificSui> {
-    console.log('getSpecificTransactionInfo::coin', coin);
-
     const gasPrice = await this.calculateFee(coin);
-
-    console.log('getSpecificTransactionInfo::gasPrice', gasPrice);
-
     const allCoins = await this.getAllCoins(coin);
-
-    console.log('getSpecificTransactionInfo::allCoins', allCoins);
-
     const specificTransactionInfo: SpecificSui = {
       gasPrice: gasPrice,
       fee: gasPrice,
       referenceGasPrice: gasPrice,
       coins: allCoins,
     } as SpecificSui;
-
-    console.log(
-      'getSpecificTransactionInfo::specificTransactionInfo',
-      specificTransactionInfo
-    );
-
     return specificTransactionInfo;
   }
 

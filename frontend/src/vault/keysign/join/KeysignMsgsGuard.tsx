@@ -24,7 +24,6 @@ export const KeysignMsgsGuard = ({ children }: ComponentWithChildrenProps) => {
 
   const { mutate: parse, ...mutationStatus } = useMutation({
     mutationFn: async () => {
-      console.log(JSON.stringify(payload.toJson()));
       return KeysignPayloadUtils.getPreKeysignImages(walletCore, payload);
     },
   });

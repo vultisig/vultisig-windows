@@ -36,11 +36,6 @@ export class BlockchainServiceSui
     keysignPayload: KeysignPayload
   ): Promise<string> {
     try {
-      console.log(
-        'BlockchainServiceSui signAndBroadcastTransaction::messages',
-        messages
-      );
-
       const coinService = CoinServiceFactory.createCoinService(
         this.chain,
         this.walletCore
@@ -78,20 +73,13 @@ export class BlockchainServiceSui
         return "Couldn't sign transaction";
       }
 
-      let txBroadcastedHash = await rpcService.broadcastTransaction(
-        signedTx.rawTransaction
+      const txBroadcastedHash = await rpcService.broadcastTransaction(
+        JSON.stringify({
+          unsignedTransaction: signedTx.rawTransaction,
+          signature: signedTx.signature,
+        })
       );
 
-      console.log('txBroadcastedHash:', txBroadcastedHash);
-      console.log('txHash:', signedTx.transactionHash);
-
-      if (txBroadcastedHash !== signedTx.transactionHash) {
-        if (txBroadcastedHash === 'Transaction already broadcasted.') {
-          txBroadcastedHash = signedTx.transactionHash;
-        } else {
-          return 'Transaction hash mismatch';
-        }
-      }
       return txBroadcastedHash;
     } catch (e: any) {
       console.error(e);
@@ -176,12 +164,6 @@ export class BlockchainServiceSui
     });
 
     const input = TW.Sui.Proto.SigningInput.encode(inputData).finish();
-
-    console.log(
-      'input SUI:',
-      this.walletCore.HexCoding.encode(input).stripHexPrefix()
-    );
-
     return input;
   }
 
@@ -203,15 +185,9 @@ export class BlockchainServiceSui
       }
 
       const blakeHash = this.walletCore.Hash.blake2b(preSigningOutput.data, 32);
-
-      console.log('blakeHash:', blakeHash);
-
       const blakeHashes = [
         this.walletCore.HexCoding.encode(blakeHash).stripHexPrefix(),
       ];
-
-      console.log('blakeHashes:', blakeHashes);
-
       return blakeHashes;
     } catch (error) {
       console.error('getPreSignedImageHash::', error);
@@ -243,8 +219,6 @@ export class BlockchainServiceSui
       this.coinType,
       inputData
     );
-
-    console.log('preHashes:', preHashes);
 
     const preSigningOutput =
       TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
@@ -290,8 +264,6 @@ export class BlockchainServiceSui
       '',
       output.signature
     );
-
-    console.log('Signed transaction:', result);
 
     return result;
   }

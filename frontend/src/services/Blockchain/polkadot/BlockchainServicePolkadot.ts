@@ -300,8 +300,8 @@ export class BlockchainServicePolkadot
         signedTx.rawTransaction
       );
 
-      console.log('txBroadcastedHash:', txBroadcastedHash);
-      console.log('txHash:', signedTx.transactionHash);
+      // console.log('txBroadcastedHash:', txBroadcastedHash);
+      // console.log('txHash:', signedTx.transactionHash);
 
       if (txBroadcastedHash !== signedTx.transactionHash) {
         if (txBroadcastedHash === 'Transaction already broadcasted.') {

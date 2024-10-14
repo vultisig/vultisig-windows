@@ -85,8 +85,8 @@ export class BlockchainService implements IBlockchainService {
       signedTx.rawTransaction
     );
 
-    console.log('txBroadcastedHash:', txBroadcastedHash);
-    console.log('txHash:', signedTx.transactionHash);
+    // console.log('txBroadcastedHash:', txBroadcastedHash);
+    // console.log('txHash:', signedTx.transactionHash);
 
     if (
       txBroadcastedHash.toLowerCase() !== signedTx.transactionHash.toLowerCase()
