@@ -10,8 +10,8 @@ export const useIsPeerDiscoveryStepDisabled = () => {
   const [thresholdType] = useCurrentKeygenThreshold();
 
   return useMemo(() => {
-    const requiredNumber = Number(thresholdType.split('/')[0]);
-    if (isNaN(requiredNumber)) {
+    const requiredDevices = Number(thresholdType.split('/')[1]);
+    if (isNaN(requiredDevices)) {
       if (peers.length < 1) {
         return t('select_at_least_one_device');
       }
@@ -19,10 +19,10 @@ export const useIsPeerDiscoveryStepDisabled = () => {
       return false;
     }
 
-    const requiredPeersNumber = requiredNumber - 1;
+    const requiredPeers = requiredDevices - 1;
 
-    if (peers.length !== requiredPeersNumber) {
-      return t('select_n_devices', { count: requiredPeersNumber });
+    if (peers.length !== requiredPeers) {
+      return t('select_n_devices', { count: requiredPeers });
     }
   }, [peers.length, t, thresholdType]);
 };
