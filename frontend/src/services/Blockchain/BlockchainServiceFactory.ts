@@ -7,6 +7,7 @@ import { IBlockchainService } from './IBlockchainService';
 import { BlockchainServiceMaya } from './maya/BlockchainServiceMaya';
 import { BlockchainServicePolkadot } from './polkadot/BlockchainServicePolkadot';
 import { BlockchainServiceSolana } from './solana/BlockchainServiceSolana';
+import { BlockchainServiceSui } from './sui/BlockchainServiceSui';
 import { BlockchainServiceThorchain } from './thorchain/BlockchainServiceThorchain';
 import { BlockchainServiceUtxo } from './utxo/BlockchainServiceUtxo';
 
@@ -52,6 +53,8 @@ export class BlockchainServiceFactory {
         return new BlockchainServiceEvm(chain, walletCore);
       case Chain.Solana:
         return new BlockchainServiceSolana(chain, walletCore);
+      case Chain.Sui:
+        return new BlockchainServiceSui(chain, walletCore);
       case Chain.Cosmos:
         return new BlockchainServiceCosmos(chain, walletCore);
       case Chain.Kujira:
