@@ -272,5 +272,6 @@
   "optional": "optional",
   "enter_memo": "Enter Memo",
   "complete": "Complete",
-  "auto": "auto"
+  "auto": "auto",
+  "join_reshare": "Join Reshare"
 }

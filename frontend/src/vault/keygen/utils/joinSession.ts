@@ -20,4 +20,6 @@ export const joinSession = async ({
   if (!response.ok) {
     throw new Error('Failed to join session');
   }
+
+  return response;
 };

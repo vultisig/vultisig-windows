@@ -61,3 +61,7 @@ export type ComponentWithActionProps = {
 export type ClosableComponentProps = {
   onClose: () => void;
 };
+
+export type ComponentWithMessageProps = {
+  message: ReactNode;
+};
