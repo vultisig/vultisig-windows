@@ -134,7 +134,9 @@ export const VaultChainPage = () => {
               {...getQueryDependantDefaultProps('vault address')}
               success={address => (
                 <Text size={14} weight="500" color="primary">
-                  {address}
+                  <BalanceVisibilityAware size="xxxl">
+                    {address}
+                  </BalanceVisibilityAware>
                 </Text>
               )}
             />
