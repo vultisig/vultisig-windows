@@ -20,6 +20,8 @@ import { CoinServiceFactory } from '../../Coin/CoinServiceFactory';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
+import SignatureProvider from '../signature-provider';
+import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceSui
   extends BlockchainService
@@ -34,6 +36,11 @@ export class BlockchainServiceSui
     keysignPayload: KeysignPayload
   ): Promise<string> {
     try {
+      console.log(
+        'BlockchainServiceSui signAndBroadcastTransaction::messages',
+        messages
+      );
+
       const coinService = CoinServiceFactory.createCoinService(
         this.chain,
         this.walletCore
@@ -210,5 +217,82 @@ export class BlockchainServiceSui
       console.error('getPreSignedImageHash::', error);
       return [];
     }
+  }
+
+  public async getSignedTransaction(
+    vaultHexPublicKey: string,
+    vaultHexChainCode: string,
+    data: KeysignPayload | Uint8Array,
+    signatures: { [key: string]: tss.KeysignResponse }
+  ): Promise<SignedTransactionResult> {
+    let inputData: Uint8Array;
+    if (data instanceof Uint8Array) {
+      inputData = data;
+    } else {
+      inputData = await this.getPreSignedInputData(data);
+    }
+
+    const publicKey = await this.addressService.getPublicKey(
+      '',
+      vaultHexPublicKey,
+      vaultHexChainCode
+    );
+    const publicKeyData = publicKey.data();
+
+    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
+      this.coinType,
+      inputData
+    );
+
+    console.log('preHashes:', preHashes);
+
+    const preSigningOutput =
+      TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
+    if (preSigningOutput.errorMessage !== '') {
+      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
+      throw new Error(preSigningOutput.errorMessage);
+    }
+
+    const allSignatures = this.walletCore.DataVector.create();
+    const publicKeys = this.walletCore.DataVector.create();
+    const signatureProvider = new SignatureProvider(
+      this.walletCore,
+      signatures
+    );
+
+    const blakeHash = this.walletCore.Hash.blake2b(preSigningOutput.data, 32);
+
+    const signature = signatureProvider.getSignature(blakeHash);
+
+    if (!publicKey.verify(signature, blakeHash)) {
+      console.error('Failed to verify signature');
+      throw new Error('Failed to verify signature');
+    }
+
+    allSignatures.add(signature);
+    publicKeys.add(publicKeyData);
+
+    const compiled = this.walletCore.TransactionCompiler.compileWithSignatures(
+      this.coinType,
+      inputData,
+      allSignatures,
+      publicKeys
+    );
+
+    const output = TW.Sui.Proto.SigningOutput.decode(compiled);
+    if (output.errorMessage !== '') {
+      console.error('output error:', output.errorMessage);
+      throw new Error(output.errorMessage);
+    }
+
+    const result = new SignedTransactionResult(
+      output.unsignedTx,
+      '',
+      output.signature
+    );
+
+    console.log('Signed transaction:', result);
+
+    return result;
   }
 }

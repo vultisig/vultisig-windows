@@ -76,6 +76,8 @@ export class ChainUtils {
         return TssKeysignType.EdDSA;
       case Chain.Polkadot:
         return TssKeysignType.EdDSA;
+      case Chain.Sui:
+        return TssKeysignType.EdDSA;
       default:
         return TssKeysignType.ECDSA;
     }
