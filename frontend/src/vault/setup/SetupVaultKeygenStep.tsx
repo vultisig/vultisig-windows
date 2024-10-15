@@ -11,12 +11,12 @@ import { KeygenBackup } from '../keygen/shared/KeygenBackup';
 import { KeygenFailedState } from '../keygen/shared/KeygenFailedState';
 import { KeygenPendingState } from '../keygen/shared/KeygenPendingState';
 import { KeygenSuccessState } from '../keygen/shared/KeygenSuccessState';
-import { useStartKeygenMutation } from '../keygen/start/mutations/useStartKeygenMutation';
+import { useKeygenMutation } from '../keygen/shared/mutations/useKeygenMutation';
 
 export const SetupVaultKeygenStep = ({
   onBack,
 }: ComponentWithBackActionProps) => {
-  const { mutate: start, ...mutationState } = useStartKeygenMutation();
+  const { mutate: start, ...mutationState } = useKeygenMutation();
 
   const { t } = useTranslation();
 

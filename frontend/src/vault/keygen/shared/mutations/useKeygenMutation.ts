@@ -1,53 +1,58 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { storage } from '../../../../../wailsjs/go/models';
 import { useInvalidateQueries } from '../../../../lib/ui/query/hooks/useInvalidateQueries';
+import { match } from '../../../../lib/utils/match';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
 import { VaultServiceFactory } from '../../../../services/Vault/VaultServiceFactory';
 import { vaultsQueryKey } from '../../../queries/useVaultsQuery';
-import { useVaultKeygenDevices } from '../../../setup/hooks/useVaultKegenDevices';
-import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
-import { useVaultName } from '../../../setup/state/vaultName';
 import { useCurrentVaultId } from '../../../state/useCurrentVaultId';
 import { getStorageVaultId } from '../../../utils/storageVault';
-import { useCurrentSessionId } from '../../shared/state/currentSessionId';
-import { useCurrentLocalPartyId } from '../../state/currentLocalPartyId';
+import { KeygenType } from '../../KeygenType';
+import { useCurrentKeygenType } from '../../state/currentKeygenType';
+import { useCurrentKeygenVault } from '../../state/currentKeygenVault';
 import { useCurrentServerUrl } from '../../state/currentServerUrl';
+import { useCurrentSessionId } from '../state/currentSessionId';
 
-export const useStartKeygenMutation = () => {
+export const useKeygenMutation = () => {
   const walletCore = useAssertWalletCore();
 
-  const sessionId = useCurrentSessionId();
-  const encryptionKeyHex = useCurrentHexEncryptionKey();
+  const keygenType = useCurrentKeygenType();
 
   const serverUrl = useCurrentServerUrl();
+
+  const encryptionKeyHex = useCurrentHexEncryptionKey();
+
+  const sessionId = useCurrentSessionId();
+
+  const vault = useCurrentKeygenVault();
 
   const invalidateQueries = useInvalidateQueries();
 
   const [, setCurrentVaultId] = useCurrentVaultId();
 
-  const localPartyId = useCurrentLocalPartyId();
-  const [vaultName] = useVaultName();
-  const devices = useVaultKeygenDevices();
-  const hexChainCode = useCurrentHexChainCode();
-
   return useMutation({
     mutationFn: async () => {
       const vaultService = VaultServiceFactory.getService(walletCore);
 
-      const template = new storage.Vault();
-      template.local_party_id = localPartyId;
-      template.name = vaultName;
-      template.signers = devices;
-      template.hex_chain_code = hexChainCode;
-
-      const newVault = await vaultService.startKeygen(
-        template,
-        sessionId,
-        encryptionKeyHex,
-        serverUrl
-      );
+      const newVault = await match(keygenType, {
+        [KeygenType.Keygen]: async () => {
+          return vaultService.startKeygen(
+            vault,
+            sessionId,
+            encryptionKeyHex,
+            serverUrl
+          );
+        },
+        [KeygenType.Reshare]: async () => {
+          return vaultService.reshare(
+            vault,
+            sessionId,
+            encryptionKeyHex,
+            serverUrl
+          );
+        },
+      });
 
       await invalidateQueries(vaultsQueryKey);
 

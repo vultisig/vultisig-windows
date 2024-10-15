@@ -4,12 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { getHexEncodedRandomBytes } from '../../chain/utils/getHexEncodedRandomBytes';
 import { Match } from '../../lib/ui/base/Match';
 import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation';
-import { VStack } from '../../lib/ui/layout/Stack';
 import { useGenerateVaultName } from '../hooks/useGenerateVaultName';
 import { defaultKeygenThresholdType } from '../keygen/KeygenThresholdType';
+import { KeygenType } from '../keygen/KeygenType';
 import { KeygenStartSessionStep } from '../keygen/shared/KeygenStartSessionStep';
 import { CurrentServiceNameProvider } from '../keygen/shared/state/currentServiceName';
 import { CurrentSessionIdProvider } from '../keygen/shared/state/currentSessionId';
+import { CurrentKeygenTypeProvider } from '../keygen/state/currentKeygenType';
 import { CurrentLocalPartyIdProvider } from '../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../keygen/state/currentServerType';
 import { generateHexEncryptionKey } from '../keygen/utils/generateHexEncryptionKey';
@@ -20,6 +21,7 @@ import { SetupVaultKeygenThresholdStep } from './keygenThreshold/SetupVaultKeyge
 import { SetupVaultPeerDiscoveryStep } from './peers/SetupVaultPeerDiscoveryStep';
 import { SetupVaultKeygenStep } from './SetupVaultKeygenStep';
 import { SetupVaultNameStep } from './SetupVaultNameStep';
+import { StartKeygenVaultProvider } from './StartKeygenVaultProvider';
 import { CurrentHexChainCodeProvider } from './state/currentHexChainCode';
 import { CurrentHexEncryptionKeyProvider } from './state/currentHexEncryptionKey';
 import { CurrentKeygenThresholdProvider } from './state/currentKeygenThreshold';
@@ -63,45 +65,47 @@ export const SetupVaultPage = () => {
                   <ServerUrlDerivedFromServerTypeProvider>
                     <CurrentLocalPartyIdProvider value={localPartyId}>
                       <VaultNameProvider initialValue={initialVaultName}>
-                        <VStack flexGrow>
-                          <Match
-                            value={step}
-                            threshold={() => (
-                              <SetupVaultKeygenThresholdStep
-                                onForward={toNextStep}
-                              />
-                            )}
-                            name={() => (
-                              <SetupVaultNameStep
-                                onBack={toPreviousStep}
-                                onForward={toNextStep}
-                              />
-                            )}
-                            peers={() => (
-                              <SetupVaultPeerDiscoveryStep
-                                onBack={toPreviousStep}
-                                onForward={toNextStep}
-                              />
-                            )}
-                            verify={() => (
-                              <SetupVaultVerifyStep
-                                onBack={toPreviousStep}
-                                onForward={toNextStep}
-                              />
-                            )}
-                            startSession={() => (
-                              <KeygenStartSessionStep
-                                onBack={toPreviousStep}
-                                onForward={toNextStep}
-                              />
-                            )}
-                            keygen={() => (
-                              <SetupVaultKeygenStep
-                                onBack={() => setStep('verify')}
-                              />
-                            )}
-                          />
-                        </VStack>
+                        <StartKeygenVaultProvider>
+                          <CurrentKeygenTypeProvider value={KeygenType.Keygen}>
+                            <Match
+                              value={step}
+                              threshold={() => (
+                                <SetupVaultKeygenThresholdStep
+                                  onForward={toNextStep}
+                                />
+                              )}
+                              name={() => (
+                                <SetupVaultNameStep
+                                  onBack={toPreviousStep}
+                                  onForward={toNextStep}
+                                />
+                              )}
+                              peers={() => (
+                                <SetupVaultPeerDiscoveryStep
+                                  onBack={toPreviousStep}
+                                  onForward={toNextStep}
+                                />
+                              )}
+                              verify={() => (
+                                <SetupVaultVerifyStep
+                                  onBack={toPreviousStep}
+                                  onForward={toNextStep}
+                                />
+                              )}
+                              startSession={() => (
+                                <KeygenStartSessionStep
+                                  onBack={toPreviousStep}
+                                  onForward={toNextStep}
+                                />
+                              )}
+                              keygen={() => (
+                                <SetupVaultKeygenStep
+                                  onBack={() => setStep('verify')}
+                                />
+                              )}
+                            />
+                          </CurrentKeygenTypeProvider>
+                        </StartKeygenVaultProvider>
                       </VaultNameProvider>
                     </CurrentLocalPartyIdProvider>
                   </ServerUrlDerivedFromServerTypeProvider>
