@@ -12,19 +12,15 @@ export const useUpdateVaultSettingsMutation = () => {
 
   return useMutation({
     mutationFn: async (settings: Settings) => {
-      console.log('## updated settings', settings);
       const result = await vaultService.updateVaultSettings({
         currency: settings.currency,
         language: settings.language,
         default_chains: settings.defaultChains,
       });
 
-      console.log('## result', result);
-
       return result;
     },
     onSuccess: () => {
-      console.log('## is success');
       queryClient.invalidateQueries({
         queryKey: [vaultSettingsQueryKey],
       });

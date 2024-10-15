@@ -27,7 +27,7 @@ export class RpcServiceFactory {
       case Chain.Solana:
         return new RpcServiceSolana();
       case Chain.Polkadot:
-        return new RpcServicePolkadot();
+        return new RpcServicePolkadot(chain);
       case Chain.Ethereum:
         return new RpcServiceEthereum();
       case Chain.Optimism:
@@ -63,7 +63,7 @@ export class RpcServiceFactory {
       case Chain.Avalanche:
         return new RpcServiceAvalanche();
       case Chain.Sui:
-        return new RpcServiceSui();
+        return new RpcServiceSui(chain);
       case Chain.Cosmos:
         return new RpcServiceGaia();
       case Chain.Kujira:

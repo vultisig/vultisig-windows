@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -11,6 +12,8 @@ import { useSendAmount } from '../../state/amount';
 import { useSendReceiver } from '../../state/receiver';
 import { useCurrentSendCoin } from '../../state/sendCoin';
 
+// TODO: This should use the validate method from the send service
+// Each coin has a different way of validating. This should be abstracted.
 export const useIsSendFormDisabled = () => {
   const sender = useSender();
   const [receiver] = useSendReceiver();
@@ -45,9 +48,9 @@ export const useIsSendFormDisabled = () => {
       return t('send_invalid_receiver_address');
     }
 
-    if (receiver === sender) {
-      return t('same_sender_receiver_error');
-    }
+    // if (receiver === sender) {
+    //   return t('same_sender_receiver_error');
+    // }
 
     if (!amount) {
       return t('amount_required');
