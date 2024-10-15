@@ -14,10 +14,6 @@ export const Content = styled.div`
   color: ${({ theme }) => theme.colors.danger.toCssValue()};
 `;
 
-export const Wrapper = styled.div`
-  padding-inline: 20px;
-`;
-
 export const ChevronIconButton = styled(UnstyledButton)`
   color: ${({ theme }) => theme.colors.contrast.toCssValue()};
   display: grid;

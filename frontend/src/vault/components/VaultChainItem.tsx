@@ -98,7 +98,9 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
             </HStack>
           </HStack>
           <Text color="primary" weight="400" size={12}>
-            {address}
+            <BalanceVisibilityAware size="xxxl">
+              {address}
+            </BalanceVisibilityAware>
           </Text>
         </VStack>
       </HStack>

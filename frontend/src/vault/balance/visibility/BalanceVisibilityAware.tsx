@@ -5,7 +5,7 @@ import { ComponentWithChildrenProps } from '../../../lib/ui/props';
 import { range } from '../../../lib/utils/array/range';
 import { useIsVaultBalanceVisible } from './useIsVaultBalanceVisible';
 
-type BalanceSize = 'm' | 'l';
+type BalanceSize = 'm' | 'l' | 'xxxl';
 
 type BalanceVisibilityAwareProps = ComponentWithChildrenProps & {
   size?: BalanceSize;
@@ -14,6 +14,7 @@ type BalanceVisibilityAwareProps = ComponentWithChildrenProps & {
 const hiddenContentLength: Record<BalanceSize, number> = {
   m: 4,
   l: 8,
+  xxxl: 34,
 };
 
 const Icon = styled(AsteriskIcon)`
