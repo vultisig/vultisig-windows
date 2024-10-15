@@ -273,5 +273,7 @@
   "enter_memo": "Enter Memo",
   "complete": "Complete",
   "auto": "auto",
-  "join_reshare": "Join Reshare"
+  "join_reshare": "Join Reshare",
+  "reshare": "Reshare",
+  "failed_to_generate_qr_code": "Failed to generate QR code"
 }

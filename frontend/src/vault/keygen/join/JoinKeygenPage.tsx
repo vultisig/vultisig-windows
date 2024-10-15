@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
-import { CurrentServiceNameProvider } from '../../setup/state/currentServiceName';
 import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep';
+import { CurrentServiceNameProvider } from '../shared/state/currentServiceName';
 import { CurrentSessionIdProvider } from '../shared/state/currentSessionId';
 import { useCurrentJoinKeygenMsg } from '../state/currentJoinKeygenMsg';
 import { CurrentLocalPartyIdProvider } from '../state/currentLocalPartyId';

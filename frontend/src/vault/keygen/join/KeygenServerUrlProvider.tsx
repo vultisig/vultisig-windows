@@ -11,7 +11,7 @@ import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
 import { useServerUrlQuery } from '../../keygen/shared/queries/useServerUrlQuery';
 import { useCurrentServerType } from '../../keygen/state/currentServerType';
 import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl';
-import { useCurrentServiceName } from '../../setup/state/currentServiceName';
+import { useCurrentServiceName } from '../shared/state/currentServiceName';
 import { useCurrentSessionId } from '../shared/state/currentSessionId';
 
 export const KeygenServerUrlProvider = ({

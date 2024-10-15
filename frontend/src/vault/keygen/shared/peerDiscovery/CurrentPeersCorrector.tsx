@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import { omit } from '../../../lib/utils/record/omit';
-import { usePeersSelectionRecord } from '../../keysign/shared/state/selectedPeers';
+import { omit } from '../../../../lib/utils/record/omit';
+import { usePeersSelectionRecord } from '../../../keysign/shared/state/selectedPeers';
 import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery';
 
 export const CurrentPeersCorrector = () => {

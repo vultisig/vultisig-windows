@@ -1,25 +1,25 @@
 import styled, { css } from 'styled-components';
 
-import { UnstyledButton } from '../../../../lib/ui/buttons/UnstyledButton';
-import { borderRadius } from '../../../../lib/ui/css/borderRadius';
-import { centerContent } from '../../../../lib/ui/css/centerContent';
-import { round } from '../../../../lib/ui/css/round';
-import { sameDimensions } from '../../../../lib/ui/css/sameDimensions';
-import { CheckIcon } from '../../../../lib/ui/icons/CheckIcon';
-import { VStack, vStack } from '../../../../lib/ui/layout/Stack';
+import { UnstyledButton } from '../../../../../lib/ui/buttons/UnstyledButton';
+import { borderRadius } from '../../../../../lib/ui/css/borderRadius';
+import { centerContent } from '../../../../../lib/ui/css/centerContent';
+import { round } from '../../../../../lib/ui/css/round';
+import { sameDimensions } from '../../../../../lib/ui/css/sameDimensions';
+import { CheckIcon } from '../../../../../lib/ui/icons/CheckIcon';
+import { VStack, vStack } from '../../../../../lib/ui/layout/Stack';
 import {
   ComponentWithActiveState,
   ComponentWithValueProps,
-} from '../../../../lib/ui/props';
-import { Text } from '../../../../lib/ui/text';
-import { getColor } from '../../../../lib/ui/theme/getters';
-import { KeygenDeviceIcon } from '../../../keygen/shared/device/KeygenDeviceIcon';
+} from '../../../../../lib/ui/props';
+import { Text } from '../../../../../lib/ui/text';
+import { getColor } from '../../../../../lib/ui/theme/getters';
+import { usePeersSelectionRecord } from '../../../../keysign/shared/state/selectedPeers';
 import {
   getKeygenDeviceName,
   getKeygenDeviceType,
   parseLocalPartyId,
-} from '../../../keygen/utils/localPartyId';
-import { usePeersSelectionRecord } from '../../../keysign/shared/state/selectedPeers';
+} from '../../../utils/localPartyId';
+import { KeygenDeviceIcon } from '../../device/KeygenDeviceIcon';
 
 const Container = styled(UnstyledButton)<ComponentWithActiveState>`
   position: relative;

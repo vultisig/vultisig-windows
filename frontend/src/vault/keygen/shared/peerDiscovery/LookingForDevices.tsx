@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { FancyLoader } from '../../../ui/pending/FancyLoader';
+import { VStack } from '../../../../lib/ui/layout/Stack';
+import { Text } from '../../../../lib/ui/text';
+import { FancyLoader } from '../../../../ui/pending/FancyLoader';
 
 export const LookingForDevices = () => {
   const { t } = useTranslation();

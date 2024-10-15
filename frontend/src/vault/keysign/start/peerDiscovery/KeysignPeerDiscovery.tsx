@@ -9,8 +9,8 @@ import { VStack } from '../../../../lib/ui/layout/Stack';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
 import { PageContent } from '../../../../ui/page/PageContent';
 import { KeygenNetworkReminder } from '../../../keygen/shared/KeygenNetworkReminder';
+import { ManageServerType } from '../../../keygen/shared/peerDiscovery/ManageServerType';
 import { PeersManager } from '../../../keygen/shared/PeersManager';
-import { ManageServerType } from '../../../setup/peerDiscovery/ManageServerType';
 import { useIsPeerDiscoveryStepDisabled } from './hooks/useIsPeerDiscoveryStepDisabled';
 import { KeysignPeerDiscoveryQrCode } from './KeysignPeerDiscoveryCode';
 

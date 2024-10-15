@@ -1,20 +1,17 @@
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
-import { centerContent } from '../../../lib/ui/css/centerContent';
-import { round } from '../../../lib/ui/css/round';
-import { HStack, hStack } from '../../../lib/ui/layout/Stack';
-import { ComponentWithActiveState } from '../../../lib/ui/props';
-import { text } from '../../../lib/ui/text';
-import { matchColor } from '../../../lib/ui/theme/getters';
-import { IconWrapper } from '../../../pages/edItVault/EditVaultPage.styles';
-import {
-  KeygenServerType,
-  keygenServerTypes,
-} from '../../keygen/KeygenServerType';
-import { KeygenServerTypeIcon } from '../../keygen/shared/KeygenServerTypeIcon';
-import { useCurrentServerType } from '../../keygen/state/currentServerType';
+import { UnstyledButton } from '../../../../lib/ui/buttons/UnstyledButton';
+import { centerContent } from '../../../../lib/ui/css/centerContent';
+import { round } from '../../../../lib/ui/css/round';
+import { HStack, hStack } from '../../../../lib/ui/layout/Stack';
+import { ComponentWithActiveState } from '../../../../lib/ui/props';
+import { text } from '../../../../lib/ui/text';
+import { matchColor } from '../../../../lib/ui/theme/getters';
+import { IconWrapper } from '../../../../pages/edItVault/EditVaultPage.styles';
+import { KeygenServerType, keygenServerTypes } from '../../KeygenServerType';
+import { useCurrentServerType } from '../../state/currentServerType';
+import { KeygenServerTypeIcon } from '../KeygenServerTypeIcon';
 
 const Option = styled(UnstyledButton)<ComponentWithActiveState>`
   ${round};

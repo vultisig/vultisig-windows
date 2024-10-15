@@ -65,3 +65,7 @@ export type ClosableComponentProps = {
 export type ComponentWithMessageProps = {
   message: ReactNode;
 };
+
+export type ComponentWithDisabledState = {
+  isDisabled?: boolean | string;
+};
