@@ -3,17 +3,19 @@ import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import Select from 'react-select';
+import { z } from 'zod';
 
 import { Text } from '../../../../../lib/ui/text';
 import { extractError } from '../../../../../lib/utils/error/extractError';
 import { Chain } from '../../../../../model/chain';
+import { useWalletCore } from '../../../../../providers/WalletCoreProvider';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { useAddAddressBookItemMutation } from '../../../../../vault/mutations/useAddAddressBookItemMutation';
 import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';
 import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles';
 import { getCoinOptions } from '../../helpers/getCoinOptions';
-import { AddressFormValues, addressSchema } from '../../schemas/addressSchema';
+import { getAddressSchema } from '../../schemas/addressSchema';
 import {
   AddButton,
   ChainOption,
@@ -36,6 +38,13 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   const { data: addressBookItems } = useAddressBookItemsQuery();
   const { t } = useTranslation();
   const chainOptions = useMemo(() => getCoinOptions(), []);
+  const walletCore = useWalletCore();
+  const addressSchema = getAddressSchema({
+    walletCore,
+    addressBookItems,
+  });
+
+  type AddressFormValues = z.infer<typeof addressSchema>;
 
   const {
     register,
