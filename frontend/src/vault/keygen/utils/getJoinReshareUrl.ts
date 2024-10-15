@@ -1,5 +1,6 @@
 import { deepLinkBaseUrl } from '../../../constants';
 import { ReshareMessage } from '../../../gen/vultisig/keygen/v1/reshare_message_pb';
+import { addQueryParams } from '../../../lib/utils/query/addQueryParams';
 import { toCompressedString } from '../../../utils/protobuf/toCompressedString';
 import { KeygenServerType } from '../KeygenServerType';
 
@@ -15,7 +16,7 @@ export type GetJoinReshareUrlInput = {
   oldParties: string[];
 };
 
-export const getJoinReshareUrl = ({
+export const getJoinReshareUrl = async ({
   serverType,
   vaultName,
   serviceName,
@@ -38,7 +39,11 @@ export const getJoinReshareUrl = ({
     oldParties,
   });
 
-  const jsonData = toCompressedString(keygenMessage);
+  const jsonData = await toCompressedString(keygenMessage);
 
-  return `${deepLinkBaseUrl}?type=NewVault&tssType=Reshare&jsonData=${jsonData}`;
+  return addQueryParams(deepLinkBaseUrl, {
+    type: 'NewVault',
+    tssType: 'Reshare',
+    jsonData,
+  });
 };

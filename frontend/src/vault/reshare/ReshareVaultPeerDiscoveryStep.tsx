@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ComponentWithForwardActionProps } from '../../lib/ui/props';
 import { KeygenPeerDiscoveryStep } from '../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep';
 import { useSelectedPeers } from '../keysign/shared/state/selectedPeers';
-import { useJoinReshareUrlQuery } from './queries/useJoinKeygenUrlQuery';
+import { useJoinReshareUrlQuery } from './queries/useJoinReshareUrlQuery';
 
 export const ReshareVaultPeerDiscoveryStep = ({
   onForward,

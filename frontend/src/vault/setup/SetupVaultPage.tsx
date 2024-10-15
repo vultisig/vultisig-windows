@@ -8,8 +8,10 @@ import { useGenerateVaultName } from '../hooks/useGenerateVaultName';
 import { defaultKeygenThresholdType } from '../keygen/KeygenThresholdType';
 import { KeygenType } from '../keygen/KeygenType';
 import { KeygenStartSessionStep } from '../keygen/shared/KeygenStartSessionStep';
+import { KeygenStep } from '../keygen/shared/KeygenStep';
 import { CurrentServiceNameProvider } from '../keygen/shared/state/currentServiceName';
 import { CurrentSessionIdProvider } from '../keygen/shared/state/currentSessionId';
+import { KeygenVerifyStep } from '../keygen/shared/verify/KeygenVerifyStep';
 import { CurrentKeygenTypeProvider } from '../keygen/state/currentKeygenType';
 import { CurrentLocalPartyIdProvider } from '../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../keygen/state/currentServerType';
@@ -19,7 +21,6 @@ import { generateLocalPartyId } from '../keygen/utils/localPartyId';
 import { PeersSelectionRecordProvider } from '../keysign/shared/state/selectedPeers';
 import { SetupVaultKeygenThresholdStep } from './keygenThreshold/SetupVaultKeygenThresholdStep';
 import { SetupVaultPeerDiscoveryStep } from './peers/SetupVaultPeerDiscoveryStep';
-import { SetupVaultKeygenStep } from './SetupVaultKeygenStep';
 import { SetupVaultNameStep } from './SetupVaultNameStep';
 import { StartKeygenVaultProvider } from './StartKeygenVaultProvider';
 import { CurrentHexChainCodeProvider } from './state/currentHexChainCode';
@@ -27,7 +28,6 @@ import { CurrentHexEncryptionKeyProvider } from './state/currentHexEncryptionKey
 import { CurrentKeygenThresholdProvider } from './state/currentKeygenThreshold';
 import { ServerUrlDerivedFromServerTypeProvider } from './state/serverUrlDerivedFromServerType';
 import { VaultNameProvider } from './state/vaultName';
-import { SetupVaultVerifyStep } from './verify/SetupVaultVerifyStep';
 
 const setupVaultSteps = [
   'threshold',
@@ -87,7 +87,7 @@ export const SetupVaultPage = () => {
                                 />
                               )}
                               verify={() => (
-                                <SetupVaultVerifyStep
+                                <KeygenVerifyStep
                                   onBack={toPreviousStep}
                                   onForward={toNextStep}
                                 />
@@ -99,9 +99,7 @@ export const SetupVaultPage = () => {
                                 />
                               )}
                               keygen={() => (
-                                <SetupVaultKeygenStep
-                                  onBack={() => setStep('verify')}
-                                />
+                                <KeygenStep onBack={() => setStep('verify')} />
                               )}
                             />
                           </CurrentKeygenTypeProvider>

@@ -1,23 +1,23 @@
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
-import { VStack } from '../../../lib/ui/layout/Stack';
+import { Button } from '../../../../lib/ui/buttons/Button';
+import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps';
+import { VStack } from '../../../../lib/ui/layout/Stack';
 import {
   ComponentWithBackActionProps,
   ComponentWithForwardActionProps,
-} from '../../../lib/ui/props';
-import { InfoBlock } from '../../../lib/ui/status/InfoBlock';
-import { Text } from '../../../lib/ui/text';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { getVaultActionSignersMin } from '../../keygen/utils/getVaultActionSignersMin';
-import { useVaultKeygenDevices } from '../hooks/useVaultKegenDevices';
+} from '../../../../lib/ui/props';
+import { InfoBlock } from '../../../../lib/ui/status/InfoBlock';
+import { Text } from '../../../../lib/ui/text';
+import { PageContent } from '../../../../ui/page/PageContent';
+import { PageHeader } from '../../../../ui/page/PageHeader';
+import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
+import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
+import { useVaultKeygenDevices } from '../../../setup/hooks/useVaultKegenDevices';
+import { getVaultActionSignersMin } from '../../utils/getVaultActionSignersMin';
 import { VaultDeviceItem } from './VaultDeviceItem';
 
-export const SetupVaultVerifyStep = ({
+export const KeygenVerifyStep = ({
   onBack,
   onForward,
 }: ComponentWithForwardActionProps & ComponentWithBackActionProps) => {
@@ -30,7 +30,7 @@ export const SetupVaultVerifyStep = ({
   return (
     <>
       <PageHeader
-        title={<PageHeaderTitle>{t('keygen')}</PageHeaderTitle>}
+        title={<PageHeaderTitle>{t('verify')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
       />
       <PageContent

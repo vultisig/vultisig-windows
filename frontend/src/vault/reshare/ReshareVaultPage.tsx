@@ -5,19 +5,20 @@ import { Match } from '../../lib/ui/base/Match';
 import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation';
 import { KeygenType } from '../keygen/KeygenType';
 import { KeygenStartSessionStep } from '../keygen/shared/KeygenStartSessionStep';
+import { KeygenStep } from '../keygen/shared/KeygenStep';
 import { CurrentServiceNameProvider } from '../keygen/shared/state/currentServiceName';
 import { CurrentSessionIdProvider } from '../keygen/shared/state/currentSessionId';
+import { KeygenVerifyStep } from '../keygen/shared/verify/KeygenVerifyStep';
 import { CurrentKeygenTypeProvider } from '../keygen/state/currentKeygenType';
+import { CurrentKeygenVaultProvider } from '../keygen/state/currentKeygenVault';
 import { CurrentLocalPartyIdProvider } from '../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../keygen/state/currentServerType';
 import { generateHexEncryptionKey } from '../keygen/utils/generateHexEncryptionKey';
 import { generateServiceName } from '../keygen/utils/generateServiceName';
 import { PeersSelectionRecordProvider } from '../keysign/shared/state/selectedPeers';
-import { SetupVaultKeygenStep } from '../setup/SetupVaultKeygenStep';
 import { CurrentHexChainCodeProvider } from '../setup/state/currentHexChainCode';
 import { CurrentHexEncryptionKeyProvider } from '../setup/state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../setup/state/serverUrlDerivedFromServerType';
-import { SetupVaultVerifyStep } from '../setup/verify/SetupVaultVerifyStep';
 import { useAssertCurrentVault } from '../state/useCurrentVault';
 import { ReshareVaultPeerDiscoveryStep } from './ReshareVaultPeerDiscoveryStep';
 
@@ -51,31 +52,31 @@ export const ReshareVaultPage = () => {
                 <ServerUrlDerivedFromServerTypeProvider>
                   <CurrentLocalPartyIdProvider value={local_party_id}>
                     <CurrentKeygenTypeProvider value={KeygenType.Reshare}>
-                      <Match
-                        value={step}
-                        peers={() => (
-                          <ReshareVaultPeerDiscoveryStep
-                            onForward={toNextStep}
-                          />
-                        )}
-                        verify={() => (
-                          <SetupVaultVerifyStep
-                            onBack={toPreviousStep}
-                            onForward={toNextStep}
-                          />
-                        )}
-                        startSession={() => (
-                          <KeygenStartSessionStep
-                            onBack={toPreviousStep}
-                            onForward={toNextStep}
-                          />
-                        )}
-                        keygen={() => (
-                          <SetupVaultKeygenStep
-                            onBack={() => setStep('verify')}
-                          />
-                        )}
-                      />
+                      <CurrentKeygenVaultProvider value={vault}>
+                        <Match
+                          value={step}
+                          peers={() => (
+                            <ReshareVaultPeerDiscoveryStep
+                              onForward={toNextStep}
+                            />
+                          )}
+                          verify={() => (
+                            <KeygenVerifyStep
+                              onBack={toPreviousStep}
+                              onForward={toNextStep}
+                            />
+                          )}
+                          startSession={() => (
+                            <KeygenStartSessionStep
+                              onBack={toPreviousStep}
+                              onForward={toNextStep}
+                            />
+                          )}
+                          keygen={() => (
+                            <KeygenStep onBack={() => setStep('verify')} />
+                          )}
+                        />
+                      </CurrentKeygenVaultProvider>
                     </CurrentKeygenTypeProvider>
                   </CurrentLocalPartyIdProvider>
                 </ServerUrlDerivedFromServerTypeProvider>

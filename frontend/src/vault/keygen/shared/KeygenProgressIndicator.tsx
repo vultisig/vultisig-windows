@@ -4,6 +4,9 @@ import RingProgress from '../../../components/ringProgress/RingProgress';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
+import { match } from '../../../lib/utils/match';
+import { KeygenType } from '../KeygenType';
+import { useCurrentKeygenType } from '../state/currentKeygenType';
 import { KeygenStatus } from './MatchKeygenSessionStatus';
 
 const keygenCompletion: Record<KeygenStatus, number> = {
@@ -17,10 +20,18 @@ export const KeygenProgressIndicator = ({
 }: ComponentWithValueProps<KeygenStatus>) => {
   const { t } = useTranslation();
 
+  const keygenType = useCurrentKeygenType();
+
   const keygenStageText: Record<KeygenStatus, string | null> = {
     prepareVault: t('prepareVault'),
-    ecdsa: t('generating_ecdsa_key'),
-    eddsa: t('generating_eddsa_key'),
+    ecdsa: match(keygenType, {
+      [KeygenType.Keygen]: () => t('generating_ecdsa_key'),
+      [KeygenType.Reshare]: () => t('resharing_ecdsa_key'),
+    }),
+    eddsa: match(keygenType, {
+      [KeygenType.Keygen]: () => t('generating_eddsa_key'),
+      [KeygenType.Reshare]: () => t('resharing_eddsa_key'),
+    }),
   };
 
   const completion = keygenCompletion[value];

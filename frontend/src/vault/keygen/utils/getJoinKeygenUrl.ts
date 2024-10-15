@@ -1,5 +1,6 @@
 import { deepLinkBaseUrl } from '../../../constants';
 import { KeygenMessage } from '../../../gen/vultisig/keygen/v1/keygen_message_pb';
+import { addQueryParams } from '../../../lib/utils/query/addQueryParams';
 import { toCompressedString } from '../../../utils/protobuf/toCompressedString';
 import { KeygenServerType } from '../KeygenServerType';
 
@@ -12,7 +13,7 @@ export type GetJoinKeygenUrlInput = {
   hexChainCode: string;
 };
 
-export const getJoinKeygenUrl = ({
+export const getJoinKeygenUrl = async ({
   serverType,
   vaultName,
   serviceName,
@@ -29,7 +30,11 @@ export const getJoinKeygenUrl = ({
     vaultName: vaultName,
   });
 
-  const jsonData = toCompressedString(keygenMessage);
+  const jsonData = await toCompressedString(keygenMessage);
 
-  return `${deepLinkBaseUrl}?type=NewVault&tssType=Keygen&jsonData=${jsonData}`;
+  return addQueryParams(deepLinkBaseUrl, {
+    type: 'NewVault',
+    tssType: 'Keygen',
+    jsonData,
+  });
 };
