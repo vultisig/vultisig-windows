@@ -1,3 +1,5 @@
+import { SuiCoin } from '../gen/vultisig/keysign/v1/blockchain_specific_pb';
+
 export type SpecificTransactionInfo =
   | BasicSpecificTransactionInfo
   | SpecificEvm
@@ -57,7 +59,7 @@ export interface SpecificSolana extends BasicSpecificTransactionInfo {
 
 export interface SpecificSui extends BasicSpecificTransactionInfo {
   referenceGasPrice: number;
-  coins: Map<string, string>[];
+  coins: SuiCoin[];
 }
 
 export interface SpecificPolkadot extends BasicSpecificTransactionInfo {

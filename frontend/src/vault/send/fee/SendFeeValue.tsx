@@ -12,9 +12,6 @@ import { useSendSpecificTxInfo } from './SendSpecificTxInfoProvider';
 
 export const SendFeeValue = () => {
   const txInfo = useSendSpecificTxInfo();
-
-  console.log(txInfo);
-
   const [coinKey] = useCurrentSendCoin();
   const { chainId } = coinKey;
   const { decimals } = useAssertCurrentVaultNativeCoin(chainId);

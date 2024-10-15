@@ -79,9 +79,6 @@ export class BlockchainServiceSolana
         signedTx.rawTransaction
       );
 
-      console.log('txBroadcastedHash:', txBroadcastedHash);
-      console.log('txHash:', signedTx.transactionHash);
-
       if (txBroadcastedHash !== signedTx.transactionHash) {
         if (txBroadcastedHash === 'Transaction already broadcasted.') {
           txBroadcastedHash = signedTx.transactionHash;
@@ -344,7 +341,7 @@ export class BlockchainServiceSolana
       output.encoded // TODO: Change this to the actual transaction hash
     );
 
-    console.log('Signed transaction:', result);
+    // console.log('Signed transaction:', result);
 
     return result;
   }
