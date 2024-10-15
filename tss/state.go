@@ -25,3 +25,7 @@ func (l *LocalStateAccessorImp) SaveLocalState(pubKey, localState string) error 
 	l.keyshares[pubKey] = localState
 	return nil
 }
+func (l *LocalStateAccessorImp) Reset(keyshares map[string]string) error {
+	l.keyshares = keyshares
+	return nil
+}

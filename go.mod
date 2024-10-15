@@ -1,8 +1,8 @@
 module github.com/vultisig/vultisig-win
 
-go 1.21.7
+go 1.22.2
 
-toolchain go1.22.5
+toolchain go1.23.2
 
 require (
 	github.com/golang-migrate/migrate/v4 v4.17.1
@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/mdns v1.0.5
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/rs/zerolog v1.32.0
-	github.com/vultisig/mobile-tss-lib v0.0.0-20240720084109-0abbb4fb701b
+	github.com/vultisig/mobile-tss-lib v0.0.0-20241007055757-4506b08a18a5
 	github.com/vultisig/vultisig-relay v0.0.0-20240821122755-7048cea80d2c
 	github.com/wailsapp/wails/v2 v2.9.1
 )
@@ -62,13 +62,13 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
-	golang.org/x/crypto v0.23.0 // indirect
+	golang.org/x/crypto v0.26.0 // indirect
 	golang.org/x/exp v0.0.0-20240213143201-ec583247a57a // indirect
-	golang.org/x/net v0.25.0 // indirect
-	golang.org/x/sys v0.20.0 // indirect
-	golang.org/x/text v0.15.0 // indirect
+	golang.org/x/net v0.28.0 // indirect
+	golang.org/x/sys v0.23.0 // indirect
+	golang.org/x/text v0.17.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
-	google.golang.org/protobuf v1.33.0 // indirect
+	google.golang.org/protobuf v1.34.2 // indirect
 )
 
 replace (

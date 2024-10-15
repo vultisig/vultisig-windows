@@ -71,6 +71,8 @@ func (t *TssService) Reshare(vault storage.Vault,
 			"session": sessionID,
 			"attempt": attempt,
 		}).Error(err)
+		// reset it to the previous keyshare , so reshare can retry
+		localStateAccessor.Reset(keyShares)
 	}
 
 	if err != nil {
@@ -178,7 +180,7 @@ func (t *TssService) reshareECDSAKey(tssService *mtss.ServiceImpl,
 		"parties_joined":     partiesJoined,
 		"old_parties":        oldParties,
 		"new_reshare_prefix": "",
-	}).Info("Start ECDSA keygen...")
+	}).Info("Start ECDSA reshare...")
 
 	resp, err := tssService.ReshareECDSA(&mtss.ReshareRequest{
 		PubKey:           publicKey,
@@ -216,7 +218,7 @@ func (t *TssService) reshareEDDSAKey(tssService *mtss.ServiceImpl,
 		"parties_joined":     partiesJoined,
 		"old_parties":        oldParties,
 		"new_reshare_prefix": newResharePrefix,
-	}).Info("Start EdDSA keygen...")
+	}).Info("Start EdDSA reshare...")
 	resp, err := tssService.ResharingEdDSA(&mtss.ReshareRequest{
 		PubKey:           publicKey,
 		LocalPartyID:     localPartyID,
