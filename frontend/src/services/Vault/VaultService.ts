@@ -27,6 +27,11 @@ export class VaultService implements IVaultService {
     this.walletCore = walletCore;
   }
 
+  private async getDefaultChains(): Promise<string[]> {
+    const settings = await GetSettings();
+    return settings[0]?.default_chains || {};
+  }
+
   async saveVault(vault: storage.Vault): Promise<void> {
     return await SaveVault(vault);
   }
@@ -90,8 +95,11 @@ export class VaultService implements IVaultService {
     );
 
     await SaveVault(newVault);
-
-    new DefaultCoinsService(this.walletCore).applyDefaultCoins(newVault);
+    const defaultChains = await this.getDefaultChains();
+    new DefaultCoinsService(this.walletCore).applyDefaultCoins(
+      newVault,
+      defaultChains
+    );
 
     return newVault;
   }
@@ -110,8 +118,11 @@ export class VaultService implements IVaultService {
     );
 
     await SaveVault(newVault);
-
-    new DefaultCoinsService(this.walletCore).applyDefaultCoins(newVault);
+    const defaultChains = await this.getDefaultChains();
+    new DefaultCoinsService(this.walletCore).applyDefaultCoins(
+      newVault,
+      defaultChains
+    );
 
     return newVault;
   }
@@ -137,7 +148,11 @@ export class VaultService implements IVaultService {
       convertValues: () => {},
     };
     await SaveVault(storageVault);
-    new DefaultCoinsService(this.walletCore).applyDefaultCoins(storageVault);
+    const defaultChains = await this.getDefaultChains();
+    new DefaultCoinsService(this.walletCore).applyDefaultCoins(
+      storageVault,
+      defaultChains
+    );
   }
 
   encryptVault(passwd: string, vault: Buffer): Buffer {

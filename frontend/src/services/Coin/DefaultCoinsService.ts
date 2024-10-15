@@ -5,20 +5,24 @@ import { TokensStore } from './CoinList';
 import { CoinServiceFactory } from './CoinServiceFactory';
 
 export class DefaultCoinsService {
-  private defaultTokens = [
-    TokensStore.Token.bitcoin,
-    TokensStore.Token.ethereum,
-    TokensStore.Token.bscChainBnb,
-    TokensStore.Token.solana,
-    TokensStore.Token.thorChain,
-  ];
   private walletCore: WalletCore;
   constructor(walletCore: WalletCore) {
     this.walletCore = walletCore;
   }
 
-  applyDefaultCoins(vault: storage.Vault) {
-    this.defaultTokens.forEach(token => {
+  applyDefaultCoins(vault: storage.Vault, defaultChains: string[]) {
+    const defaultTokens = defaultChains
+      .map(chain => {
+        return Object.entries(TokensStore.Token)
+          .filter(
+            ([_, getToken]) =>
+              getToken().chain.toLowerCase() === chain.toLowerCase()
+          )
+          .map(([_, getToken]) => getToken);
+      })
+      .flat();
+
+    defaultTokens.forEach(token => {
       const coinService = CoinServiceFactory.createCoinService(
         token().chain,
         this.walletCore

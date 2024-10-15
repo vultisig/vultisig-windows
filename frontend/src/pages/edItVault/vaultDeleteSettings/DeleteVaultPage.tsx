@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import DangerSignRedIcon from '../../../lib/ui/icons/DangerSignRedIcon';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { makeAppPath } from '../../../navigation';
+import { appPaths } from '../../../navigation';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -34,17 +34,10 @@ const DeleteVaultPage = () => {
   const currentVault = useUnassertedCurrentVault();
   const { data: vaultBalance } = useVaultTotalBalanceQuery();
   const {
-    mutate: deleteVault,
+    mutateAsync: deleteVault,
     isPending,
     error,
-    isSuccess,
   } = useDeleteVaultMutation();
-
-  useEffect(() => {
-    if (isSuccess) {
-      navigate(makeAppPath('vaultList'));
-    }
-  }, [isSuccess, navigate]);
 
   if (!currentVault) {
     return <></>;
@@ -159,7 +152,11 @@ const DeleteVaultPage = () => {
             </ActionsWrapper>
             <DeleteButton
               isLoading={isPending}
-              onClick={() => deleteVault(public_key_ecdsa)}
+              onClick={() =>
+                deleteVault(public_key_ecdsa).then(() =>
+                  navigate(appPaths.addVault)
+                )
+              }
               color="danger"
               isDisabled={
                 !deleteTerms.firstTermAccepted ||
