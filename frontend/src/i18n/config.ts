@@ -5,6 +5,7 @@ import { initReactI18next } from 'react-i18next';
 
 import enTranslation from './locales/en/translation.json';
 import esTranslation from './locales/es/translation.json';
+import ptTranslation from './locales/pt/translation.json';
 
 // Initialization
 i18n
@@ -18,6 +19,9 @@ i18n
       },
       es: {
         translation: esTranslation,
+      },
+      pt: {
+        translation: ptTranslation,
       },
     },
     fallbackLng: 'en',
