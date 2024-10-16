@@ -5,7 +5,8 @@ import { ComponentWithChildrenProps } from '../../../lib/ui/props';
 import { useVaults } from '../../queries/useVaultsQuery';
 import { useCurrentJoinKeygenMsg } from '../state/currentJoinKeygenMsg';
 import { CurrentKeygenVaultProvider } from '../state/currentKeygenVault';
-import { useCurrentLocalPartyId } from '../state/currentLocalPartyId';
+import { CurrentLocalPartyIdProvider } from '../state/currentLocalPartyId';
+import { generateLocalPartyId } from '../utils/localPartyId';
 
 export const JoinKeygenVaultProvider: React.FC<ComponentWithChildrenProps> = ({
   children,
@@ -16,9 +17,7 @@ export const JoinKeygenVaultProvider: React.FC<ComponentWithChildrenProps> = ({
 
   const { vaultName, hexChainCode } = keygenMsg;
 
-  const localPartyId = useCurrentLocalPartyId();
-
-  const value = useMemo(() => {
+  const existingVault = useMemo(() => {
     if ('publicKeyEcdsa' in keygenMsg) {
       const existingVault = vaults.find(
         vault => vault.public_key_ecdsa === keygenMsg.publicKeyEcdsa
@@ -27,11 +26,17 @@ export const JoinKeygenVaultProvider: React.FC<ComponentWithChildrenProps> = ({
         return existingVault;
       }
     }
+  }, [keygenMsg, vaults]);
+
+  const value = useMemo(() => {
+    if (existingVault) {
+      return existingVault;
+    }
 
     const vault = new storage.Vault();
     vault.name = vaultName;
     vault.hex_chain_code = hexChainCode;
-    vault.local_party_id = localPartyId;
+    vault.local_party_id = generateLocalPartyId();
 
     if ('oldResharePrefix' in keygenMsg) {
       vault.reshare_prefix = keygenMsg.oldResharePrefix;
@@ -42,11 +47,13 @@ export const JoinKeygenVaultProvider: React.FC<ComponentWithChildrenProps> = ({
     }
 
     return vault;
-  }, [hexChainCode, keygenMsg, localPartyId, vaultName, vaults]);
+  }, [existingVault, hexChainCode, keygenMsg, vaultName]);
 
   return (
     <CurrentKeygenVaultProvider value={value}>
-      {children}
+      <CurrentLocalPartyIdProvider value={value.local_party_id}>
+        {children}
+      </CurrentLocalPartyIdProvider>
     </CurrentKeygenVaultProvider>
   );
 };

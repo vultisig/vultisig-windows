@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Transition } from '../../../lib/ui/base/Transition';
+import { TitledComponentProps } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { makeAppPath } from '../../../navigation';
 import { KeygenBackup } from '../shared/KeygenBackup';
@@ -12,10 +12,8 @@ import { KeygenPendingState } from '../shared/KeygenPendingState';
 import { KeygenSuccessState } from '../shared/KeygenSuccessState';
 import { useKeygenMutation } from '../shared/mutations/useKeygenMutation';
 
-export const JoinKeygenProcess = () => {
+export const JoinKeygenProcess = ({ title }: TitledComponentProps) => {
   const { mutate: joinKeygen, ...joinKeygenState } = useKeygenMutation();
-
-  const { t } = useTranslation();
 
   useEffect(joinKeygen, [joinKeygen]);
 
@@ -29,7 +27,7 @@ export const JoinKeygenProcess = () => {
           delay={3000}
           from={
             <>
-              <KeygenPageHeader title={t('join_keygen')} />
+              <KeygenPageHeader title={title} />
               <KeygenSuccessState />
             </>
           }
@@ -38,7 +36,7 @@ export const JoinKeygenProcess = () => {
       )}
       error={error => (
         <>
-          <KeygenPageHeader />
+          <KeygenPageHeader title={title} />
           <KeygenFailedState
             message={error.message}
             onTryAgain={() => {
@@ -49,7 +47,7 @@ export const JoinKeygenProcess = () => {
       )}
       pending={() => (
         <>
-          <KeygenPageHeader />
+          <KeygenPageHeader title={title} />
           <KeygenPendingState />
         </>
       )}
