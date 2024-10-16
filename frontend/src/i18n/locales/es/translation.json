@@ -278,5 +278,9 @@
   "auto": "automático",
   "join_reshare": "Unirse a reparto",
   "reshare": "Recompartir",
-  "failed_to_generate_qr_code": "No se pudo generar código QR"
+  "failed_to_generate_qr_code": "No se pudo generar código QR",
+  "vault_already_exists": "El almacén ya existe",
+  "vault_already_exists_message": "Seleccione un almacén diferente.",
+  "vault_missing_public_key": "El almacén no tiene una clave pública",
+  "vault_missing_public_key_message": "El archivo del almacén está dañado o no tiene una clave pública. Inténtelo de nuevo o seleccione un almacén diferente."
 }
