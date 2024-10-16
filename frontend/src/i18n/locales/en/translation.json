@@ -278,5 +278,9 @@
   "auto": "auto",
   "join_reshare": "Join Reshare",
   "reshare": "Reshare",
-  "failed_to_generate_qr_code": "Failed to generate QR code"
+  "failed_to_generate_qr_code": "Failed to generate QR code",
+  "vault_already_exists": "Vault already exists",
+  "vault_already_exists_message": "Please select a different vault.",
+  "vault_missing_public_key": "Vault missing public key",
+  "vault_missing_public_key_message": "Vault file is corrupted or missing a public key. Please try again or select a different vault."
 }

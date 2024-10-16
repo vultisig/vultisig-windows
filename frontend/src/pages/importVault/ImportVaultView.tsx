@@ -10,7 +10,10 @@ import { makeAppPath } from '../../navigation';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 import { isBase64Encoded } from '../../utils/util';
-import { vaultsQueryKey } from '../../vault/queries/useVaultsQuery';
+import {
+  useVaultsQuery,
+  vaultsQueryKey,
+} from '../../vault/queries/useVaultsQuery';
 
 const ImportVaultView: React.FC = () => {
   const { t } = useTranslation();
@@ -24,6 +27,7 @@ const ImportVaultView: React.FC = () => {
   const [dialogContent, setDialogContent] = useState('');
   const [decryptedContent, setDecryptedContent] = useState<Buffer | null>();
   const walletcore = useAssertWalletCore();
+  const { data: vaults = [] } = useVaultsQuery();
 
   const invalidateQueries = useInvalidateQueries();
 
@@ -52,7 +56,31 @@ const ImportVaultView: React.FC = () => {
           if (data && isBase64Encoded(data.toString())) {
             setFileContent(data.toString());
             const decodedData = Buffer.from(data.toString(), 'base64');
-            const vaultContainer = VaultContainer.fromBinary(decodedData);
+            const vaultContainer = VaultContainer.fromBinary(
+              decodedData as unknown as Uint8Array
+            );
+
+            const decodedVault = Buffer.from(
+              vaultContainer.vault,
+              'base64'
+            ).toString('utf-8');
+            const pubKeyMatch = decodedVault.match(/"pub_key":\s*"([^"]+)"/);
+
+            if (pubKeyMatch && pubKeyMatch[1]) {
+              const publicKey = pubKeyMatch[1];
+              if (vaults.some(vault => vault.public_key_ecdsa === publicKey)) {
+                setDialogTitle(t('vault_already_exists'));
+                setDialogContent(t('vault_already_exists_message'));
+                setDialogOpen(true);
+                return;
+              }
+            } else {
+              setDialogTitle(t('vault_missing_public_key'));
+              setDialogContent(t('vault_missing_public_key_message'));
+              setDialogOpen(true);
+              return;
+            }
+
             if (isBase64Encoded(vaultContainer.vault)) {
               const decodedVault = Buffer.from(
                 vaultContainer.vault.toString(),
