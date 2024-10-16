@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { toPng } from 'html-to-image';
 import { useState } from 'react';
 import { ReactNode } from 'react';
+import styled from 'styled-components';
 
 import { SaveFile } from '../../../wailsjs/go/main/App';
 import {
@@ -14,6 +15,14 @@ type SaveAsImageProps = ComponentWithValueProps<ReactNode> & {
   fileName: string;
   renderTrigger: (props: ClickableComponentProps) => ReactNode;
 };
+
+const Wrapper = styled.div`
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  pointer-events: none;
+  opacity: 0;
+`;
 
 export const SaveAsImage = ({
   value,
@@ -32,9 +41,9 @@ export const SaveAsImage = ({
 
   return (
     <>
-      <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
+      <Wrapper>
         <div ref={setNode}>{value}</div>
-      </div>
+      </Wrapper>
       {node &&
         renderTrigger({
           onClick: () => saveFile(shouldBePresent(node)),

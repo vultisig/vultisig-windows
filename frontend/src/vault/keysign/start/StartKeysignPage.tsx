@@ -1,17 +1,18 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { getHexEncodedRandomBytes } from '../../../chain/utils/getHexEncodedRandomBytes';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Match } from '../../../lib/ui/base/Match';
+import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
+import { CurrentServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { CurrentSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
+import { generateHexEncryptionKey } from '../../keygen/utils/generateHexEncryptionKey';
 import { generateServiceName } from '../../keygen/utils/generateServiceName';
 import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey';
-import { CurrentServiceNameProvider } from '../../setup/state/currentServiceName';
 import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/serverUrlDerivedFromServerType';
 import { useAssertCurrentVault } from '../../state/useCurrentVault';
 import { KeysignMsgsGuard } from '../join/KeysignMsgsGuard';
@@ -21,7 +22,6 @@ import { PeersSelectionRecordProvider } from '../shared/state/selectedPeers';
 import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoveryStep';
 
 const keysignSteps = ['peers', 'session', 'sign'] as const;
-type KeysignStep = (typeof keysignSteps)[number];
 
 export const StartKeysignPage = () => {
   const [{ keysignPayload: rawPayload }] = useAppPathParams<'keysign'>();
@@ -34,19 +34,12 @@ export const StartKeysignPage = () => {
 
   const serviceName = useMemo(generateServiceName, []);
 
-  const hexEncryptionKey = useMemo(() => getHexEncodedRandomBytes(32), []);
+  const hexEncryptionKey = useMemo(generateHexEncryptionKey, []);
 
   const { local_party_id } = useAssertCurrentVault();
 
-  const [step, setStep] = useState<KeysignStep>(keysignSteps[0]);
-
-  const toNextStep = useCallback(() => {
-    setStep(prev => keysignSteps[keysignSteps.indexOf(prev) + 1]);
-  }, []);
-
-  const toPrevStep = useCallback(() => {
-    setStep(prev => keysignSteps[keysignSteps.indexOf(prev) - 1]);
-  }, []);
+  const { step, setStep, toPreviousStep, toNextStep } =
+    useStepNavigation(keysignSteps);
 
   return (
     <KeysignPayloadProvider value={payload}>
@@ -66,7 +59,7 @@ export const StartKeysignPage = () => {
                         session={() => (
                           <KeygenStartSessionStep
                             onForward={toNextStep}
-                            onBack={toPrevStep}
+                            onBack={toPreviousStep}
                           />
                         )}
                         sign={() => (

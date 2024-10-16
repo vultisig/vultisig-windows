@@ -1,4 +1,3 @@
-import { FEATURE_FLAGS } from '../../constants';
 import BackupIcon from '../../lib/ui/icons/BackupIcon';
 import { InfoIcon } from '../../lib/ui/icons/InfoIcon';
 import ReshareIcon from '../../lib/ui/icons/ReshareIcon';
@@ -34,16 +33,12 @@ export const editVaultSettingsItems: SettingItem[] = [
     icon: SquareAndPencilIcon,
     path: makeAppPath('vaultRename'),
   },
-  ...(FEATURE_FLAGS.reshare
-    ? [
-        {
-          titleKey: 'vault_setting_edit_vault_reshare_title',
-          subtitleKey: 'vault_setting_edit_vault_reshare_subtitle',
-          icon: ReshareIcon,
-          path: makeAppPath('vaultReshare'),
-        },
-      ]
-    : []),
+  {
+    titleKey: 'vault_setting_edit_vault_reshare_title',
+    subtitleKey: 'vault_setting_edit_vault_reshare_subtitle',
+    icon: ReshareIcon,
+    path: makeAppPath('reshareVault'),
+  },
   {
     titleKey: 'vault_setting_edit_vault_delete_title',
     subtitleKey: 'vault_setting_edit_vault_delete_subtitle',

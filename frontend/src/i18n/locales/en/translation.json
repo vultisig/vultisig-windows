@@ -58,6 +58,7 @@
   "information_note2": "Make sure no other devices are running Vultisig.",
   "try_again": "Try Again",
   "keygen_failed": "Key Generation Error. Please try again.",
+  "reshare_failed": "Reshare Error. Please try again.",
   "select_your_vault_type": "Select your Vault Type",
   "pair": "Pair",
   "create_qr": "Create QR",
@@ -97,7 +98,9 @@
   "join_keygen_slider7_note2": "from multiple devices",
   "join_keygen_slider7_note3": "enhancing flexibility without compromising security.",
   "generating_ecdsa_key": "Generating ECDSA Key",
+  "resharing_ecdsa_key": "Resharing ECDSA Key",
   "generating_eddsa_key": "Generating EdDSA Key",
+  "resharing_eddsa_key": "Resharing EdDSA Key",
   "signing_ecdsa_key": "Signing using ECDSA Key...",
   "signing_eddsa_key": "Signing using EdDSA Key...",
   "send": "Send",
@@ -273,5 +276,7 @@
   "enter_memo": "Enter Memo",
   "complete": "Complete",
   "auto": "auto",
-  "join_reshare": "Join Reshare"
+  "join_reshare": "Join Reshare",
+  "reshare": "Reshare",
+  "failed_to_generate_qr_code": "Failed to generate QR code"
 }

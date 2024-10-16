@@ -3,26 +3,43 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AdvertiseMediator } from '../../../../../wailsjs/go/mediator/Server';
-import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
+import {
+  ComponentWithBackActionProps,
+  ComponentWithDisabledState,
+  ComponentWithForwardActionProps,
+  TitledComponentProps,
+} from '../../../../lib/ui/props';
 import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
+import { Query } from '../../../../lib/ui/query/Query';
 import { Text } from '../../../../lib/ui/text';
 import { postSession } from '../../../../services/Keygen/Keygen';
 import { PageContent } from '../../../../ui/page/PageContent';
 import { PageHeader } from '../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
-import { keygenServerUrl } from '../../../keygen/KeygenServerType';
-import { PendingKeygenMessage } from '../../../keygen/shared/PendingKeygenMessage';
-import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName';
-import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
-import { useCurrentLocalPartyId } from '../../../keygen/state/currentLocalPartyId';
-import { useCurrentServerType } from '../../../keygen/state/currentServerType';
-import { DownloadKeysignQrCode } from './DownloadKeysignQrCode';
-import { KeysignPeerDiscovery } from './KeysignPeerDiscovery';
+import { keygenServerUrl } from '../../KeygenServerType';
+import { useCurrentLocalPartyId } from '../../state/currentLocalPartyId';
+import { useCurrentServerType } from '../../state/currentServerType';
+import { PendingKeygenMessage } from '../PendingKeygenMessage';
+import { useCurrentServiceName } from '../state/currentServiceName';
+import { useCurrentSessionId } from '../state/currentSessionId';
+import { DownloadKeygenQrCode } from './DownloadKeygenQrCode';
+import { KeygenPeerDiscovery } from './KeygenPeerDiscovery';
 
-export const KeysignPeerDiscoveryStep = ({
+type KeygenPeerDiscoveryStepProps = ComponentWithForwardActionProps &
+  Partial<ComponentWithBackActionProps> &
+  TitledComponentProps &
+  ComponentWithDisabledState & {
+    joinUrlQuery: Query<string>;
+  };
+
+export const KeygenPeerDiscoveryStep = ({
   onForward,
-}: ComponentWithForwardActionProps) => {
+  onBack,
+  title,
+  isDisabled,
+  joinUrlQuery,
+}: KeygenPeerDiscoveryStepProps) => {
   const { t } = useTranslation();
   const sessionId = useCurrentSessionId();
   const serviceName = useCurrentServiceName();
@@ -45,13 +62,26 @@ export const KeysignPeerDiscoveryStep = ({
   return (
     <>
       <PageHeader
-        title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
-        primaryControls={<PageHeaderBackButton />}
-        secondaryControls={<DownloadKeysignQrCode />}
+        title={<PageHeaderTitle>{title}</PageHeaderTitle>}
+        primaryControls={<PageHeaderBackButton onClick={onBack} />}
+        secondaryControls={
+          <QueryDependant
+            query={joinUrlQuery}
+            success={value => <DownloadKeygenQrCode value={value} />}
+            error={() => null}
+            pending={() => null}
+          />
+        }
       />
       <QueryDependant
         query={setupSessionStatus}
-        success={() => <KeysignPeerDiscovery onForward={onForward} />}
+        success={() => (
+          <KeygenPeerDiscovery
+            joinUrlQuery={joinUrlQuery}
+            isDisabled={isDisabled}
+            onForward={onForward}
+          />
+        )}
         pending={() => (
           <PageContent justifyContent="center" alignItems="center">
             <PendingKeygenMessage>{t('session_init')}</PendingKeygenMessage>

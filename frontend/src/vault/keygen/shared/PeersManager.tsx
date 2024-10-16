@@ -4,10 +4,10 @@ import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { getQueryDependantDefaultProps } from '../../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { Text } from '../../../lib/ui/text';
-import { CurrentPeersCorrector } from '../../setup/peerDiscovery/CurrentPeersCorrector';
-import { LookingForDevices } from '../../setup/peerDiscovery/LookingForDevices';
-import { PeerOption } from '../../setup/peerDiscovery/peers/PeerOption';
-import { usePeerOptionsQuery } from '../../setup/peerDiscovery/queries/usePeerOptionsQuery';
+import { CurrentPeersCorrector } from './peerDiscovery/CurrentPeersCorrector';
+import { LookingForDevices } from './peerDiscovery/LookingForDevices';
+import { PeerOption } from './peerDiscovery/peers/PeerOption';
+import { usePeerOptionsQuery } from './peerDiscovery/queries/usePeerOptionsQuery';
 
 export const PeersManager = () => {
   const { t } = useTranslation();

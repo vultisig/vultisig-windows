@@ -5,7 +5,10 @@ import { FilledAlertIcon } from '../../../lib/ui/icons/FilledAlertIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock';
 import { Text } from '../../../lib/ui/text';
+import { match } from '../../../lib/utils/match';
 import { PageContent } from '../../../ui/page/PageContent';
+import { KeygenType } from '../KeygenType';
+import { useCurrentKeygenType } from '../state/currentKeygenType';
 
 type KeygenFailedStatePros = {
   message: string;
@@ -17,6 +20,13 @@ export const KeygenFailedState = ({
   onTryAgain,
 }: KeygenFailedStatePros) => {
   const { t } = useTranslation();
+
+  const keygenType = useCurrentKeygenType();
+
+  const title = match(keygenType, {
+    [KeygenType.Keygen]: () => t('keygen'),
+    [KeygenType.Reshare]: () => t('reshare'),
+  });
 
   return (
     <PageContent>
@@ -30,7 +40,7 @@ export const KeygenFailedState = ({
             color="contrast"
             centerHorizontally
           >
-            {t('keygen_failed')}
+            {title}
           </Text>
           <Text centerHorizontally size={14} color="contrast">
             {message}

@@ -9,7 +9,6 @@ import VaultBackupPage from './pages/edItVault/vaultBackupSettings/VaultBackupPa
 import DeleteVaultPage from './pages/edItVault/vaultDeleteSettings/DeleteVaultPage';
 import VaultDetailsPage from './pages/edItVault/vaultDetailsSettings/VaultDetailsPage';
 import VaultRenamePage from './pages/edItVault/vaultRenameSettings/VaultRenamePage';
-import ReshareVaultPage from './pages/edItVault/vaultReshareSettings/ReshareVaultPage';
 import ImportVaultView from './pages/importVault/ImportVaultView';
 import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
@@ -28,6 +27,7 @@ import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
 import { StartKeysignPage } from './vault/keysign/start/StartKeysignPage';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
+import { ReshareVaultPage } from './vault/reshare/ReshareVaultPage';
 import { SendPage } from './vault/send/SendPage';
 import { SetupVaultOptionsPage } from './vault/setup/options/SetupVaultOptionsPage';
 import { SetupVaultPage } from './vault/setup/SetupVaultPage';
@@ -121,7 +121,7 @@ export const router = createBrowserRouter([
     element: <VaultRenamePage />,
   },
   {
-    path: appPaths.vaultReshare,
+    path: appPaths.reshareVault,
     element: <ReshareVaultPage />,
   },
   {
@@ -155,5 +155,9 @@ export const router = createBrowserRouter([
   {
     path: appPaths.send,
     element: <SendPage />,
+  },
+  {
+    path: appPaths.reshareVault,
+    element: <ReshareVaultPage />,
   },
 ]);
