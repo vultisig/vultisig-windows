@@ -16,7 +16,11 @@ import { KeygenPendingState } from './KeygenPendingState';
 import { KeygenSuccessState } from './KeygenSuccessState';
 import { useKeygenMutation } from './mutations/useKeygenMutation';
 
-export const KeygenStep = ({ onBack }: ComponentWithBackActionProps) => {
+type KeygenStepProps = ComponentWithBackActionProps & {
+  onTryAgain: () => void;
+};
+
+export const KeygenStep = ({ onBack, onTryAgain }: KeygenStepProps) => {
   const { mutate: start, ...mutationState } = useKeygenMutation();
 
   const { t } = useTranslation();
@@ -48,7 +52,7 @@ export const KeygenStep = ({ onBack }: ComponentWithBackActionProps) => {
       error={error => (
         <>
           <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />
-          <KeygenFailedState message={error.message} onTryAgain={onBack} />
+          <KeygenFailedState message={error.message} onTryAgain={onTryAgain} />
         </>
       )}
       pending={() => (

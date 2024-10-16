@@ -58,6 +58,7 @@
   "information_note2": "Make sure no other devices are running Vultisig.",
   "try_again": "Try Again",
   "keygen_failed": "Key Generation Error. Please try again.",
+  "reshare_failed": "Reshare Error. Please try again.",
   "select_your_vault_type": "Select your Vault Type",
   "pair": "Pair",
   "create_qr": "Create QR",

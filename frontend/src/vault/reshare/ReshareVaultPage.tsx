@@ -73,7 +73,10 @@ export const ReshareVaultPage = () => {
                             />
                           )}
                           keygen={() => (
-                            <KeygenStep onBack={() => setStep('verify')} />
+                            <KeygenStep
+                              onTryAgain={() => setStep(reshareVaultSteps[0])}
+                              onBack={() => setStep('verify')}
+                            />
                           )}
                         />
                       </CurrentKeygenVaultProvider>

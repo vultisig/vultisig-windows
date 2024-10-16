@@ -99,7 +99,10 @@ export const SetupVaultPage = () => {
                                 />
                               )}
                               keygen={() => (
-                                <KeygenStep onBack={() => setStep('verify')} />
+                                <KeygenStep
+                                  onTryAgain={() => setStep(setupVaultSteps[0])}
+                                  onBack={() => setStep('verify')}
+                                />
                               )}
                             />
                           </CurrentKeygenTypeProvider>
