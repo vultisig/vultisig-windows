@@ -154,7 +154,7 @@ const DeleteVaultPage = () => {
               isLoading={isPending}
               onClick={() =>
                 deleteVault(public_key_ecdsa).then(() =>
-                  navigate(appPaths.addVault)
+                  navigate(appPaths.vaultList)
                 )
               }
               color="danger"

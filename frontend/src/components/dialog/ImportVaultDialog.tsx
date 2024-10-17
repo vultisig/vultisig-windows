@@ -58,7 +58,7 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
             <div className="flex justify-between">
               <button
                 onClick={handleClose}
-                className="px-4 py-2 bg-gray-500 rounded-lg w-1/2 mr-4"
+                className="px-4 py-2 bg-blue-500 rounded-lg w-1/2 mr-4"
               >
                 {t('cancel')}
               </button>

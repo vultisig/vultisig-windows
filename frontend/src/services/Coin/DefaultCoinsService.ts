@@ -14,10 +14,13 @@ export class DefaultCoinsService {
     const defaultTokens = defaultChains
       .map(chain => {
         return Object.entries(TokensStore.Token)
-          .filter(
-            ([_, getToken]) =>
-              getToken().chain.toLowerCase() === chain.toLowerCase()
-          )
+          .filter(([_, getToken]) => {
+            const token = getToken();
+            return (
+              token.chain.toLowerCase() === chain.toLowerCase() &&
+              token.isNativeToken === true
+            );
+          })
           .map(([_, getToken]) => getToken);
       })
       .flat();
