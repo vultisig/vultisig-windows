@@ -46,6 +46,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Sui]: () => `https://suiscan.xyz/mainnet/address/${value}`,
         [Chain.Polkadot]: () => `https://polkadot.subscan.io/account/${value}`,
         [Chain.Zksync]: () => `https://explorer.zksync.io/address/${value}`,
+        [Chain.Ton]: () => `https://tonscan.io/accounts/${value}`,
       }),
     tx: () =>
       match(chainId, {
@@ -78,6 +79,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Polkadot]: () =>
           `https://polkadot.subscan.io/extrinsic/${value}`,
         [Chain.Zksync]: () => `https://explorer.zksync.io/tx/${value}`,
+        [Chain.Ton]: () => `https://tonscan.io/transactions/${value}`,
       }),
   });
 };

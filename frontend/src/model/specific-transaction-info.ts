@@ -8,7 +8,8 @@ export type SpecificTransactionInfo =
   | SpecificSolana
   | SpecificSui
   | SpecificThorchain
-  | SpecificUtxo;
+  | SpecificUtxo
+  | SpecificTon;
 
 export interface BasicSpecificTransactionInfo {
   gasPrice: number;
@@ -60,6 +61,10 @@ export interface SpecificSolana extends BasicSpecificTransactionInfo {
 export interface SpecificSui extends BasicSpecificTransactionInfo {
   referenceGasPrice: number;
   coins: SuiCoin[];
+}
+
+export interface SpecificTon extends BasicSpecificTransactionInfo {
+  recentBlockHash: string;
 }
 
 export interface SpecificPolkadot extends BasicSpecificTransactionInfo {

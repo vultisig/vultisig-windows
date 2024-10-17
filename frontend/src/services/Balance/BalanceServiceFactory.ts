@@ -7,6 +7,7 @@ import { BalanceServicePolkadot } from './polkadot/BalanceServicePolkadot';
 import { BalanceServiceSolana } from './solana/BalanceServiceSolana';
 import { BalanceServiceSui } from './sui/BalanceServiceSui';
 import { BalanceServiceThorchain } from './thorchain/BalanceServiceThorchain';
+import { BalanceServiceTon } from './ton/BalanceServiceTon';
 import { BalanceServiceUtxo } from './utxo/BalanceServiceUtxo';
 
 export class BalanceServiceFactory {
@@ -58,6 +59,8 @@ export class BalanceServiceFactory {
         return new BalanceServicePolkadot(chain);
       case Chain.Sui:
         return new BalanceServiceSui(chain);
+      case Chain.Ton:
+        return new BalanceServiceTon(chain);
       default:
         return new BalanceService(chain);
     }

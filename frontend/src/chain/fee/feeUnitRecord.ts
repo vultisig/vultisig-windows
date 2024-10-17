@@ -24,4 +24,5 @@ export const feeUnitRecord: Record<Chain, string> = {
   [Chain.Sui]: 'SUI',
   [Chain.Polkadot]: 'DOT',
   [Chain.Dydx]: 'adydx',
+  [Chain.Ton]: 'TON',
 };
