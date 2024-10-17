@@ -53,6 +53,8 @@ export class PriceServiceFactory {
         return new PriceService(chain);
       case Chain.Dydx:
         return new PriceService(chain);
+      case Chain.Ton:
+        return new PriceService(chain);
       default:
         throw new Error(`Chain not supported ${chain}`);
     }

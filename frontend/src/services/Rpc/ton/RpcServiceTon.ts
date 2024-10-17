@@ -29,6 +29,7 @@ export class RpcServiceTon extends RpcService implements IRpcService {
     return {
       fee: 0,
       gasPrice: 0,
+      recentBlockHash: '',
     };
   }
 
