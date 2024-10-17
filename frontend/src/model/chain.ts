@@ -24,29 +24,37 @@ export const evmChainIds: Record<EvmChain, number> = {
   [EvmChain.Zksync]: 324,
 };
 
-enum OtherChain {
-  THORChain = 'THORChain',
-  MayaChain = 'MayaChain',
-  Sui = 'Sui',
+export enum UtxoChain {
   Bitcoin = 'Bitcoin',
   BitcoinCash = 'Bitcoin-Cash',
   Litecoin = 'Litecoin',
   Dogecoin = 'Dogecoin',
   Dash = 'Dash',
-  Solana = 'Solana',
+}
+
+export enum CosmosChain {
+  THORChain = 'THORChain',
   Cosmos = 'Cosmos',
-  Kujira = 'Kujira',
+  MayaChain = 'MayaChain',
   Dydx = 'Dydx',
+  Kujira = 'Kujira',
+}
+
+export enum OtherChain {
+  Sui = 'Sui',
+  Solana = 'Solana',
   Polkadot = 'Polkadot',
   Ton = 'Ton',
 }
 
 export const Chain = {
   ...EvmChain,
+  ...UtxoChain,
+  ...CosmosChain,
   ...OtherChain,
 };
 
-export type Chain = EvmChain | OtherChain;
+export type Chain = EvmChain | UtxoChain | CosmosChain | OtherChain;
 
 export enum TssKeysignType {
   ECDSA = 'ECDSA',
