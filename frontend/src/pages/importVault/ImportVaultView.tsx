@@ -46,7 +46,10 @@ const ImportVaultView: React.FC = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      if (!event.target.files[0].name.endsWith('.bak')) {
+      if (
+        !event.target.files[0].name.endsWith('.bak') &&
+        !event.target.files[0].name.endsWith('.vult')
+      ) {
         setDialogTitle(t('invalid_file_format'));
         setDialogContent(t('invalid_file_format_message'));
         setDialogOpen(true);
