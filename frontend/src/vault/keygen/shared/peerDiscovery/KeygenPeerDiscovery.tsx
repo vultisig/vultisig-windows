@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { Button } from '../../../../lib/ui/buttons/Button';
-import { uniformColumnGrid } from '../../../../lib/ui/css/uniformColumnGrid';
 import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../../../lib/ui/layout/Stack';
 import { TakeWholeSpaceCenterContent } from '../../../../lib/ui/layout/TakeWholeSpaceCenterContent';
@@ -21,13 +20,11 @@ import { KeygenPeerDiscoveryQrCode } from './KeygenPeerDiscoveryQrCode';
 import { ManageServerType } from './ManageServerType';
 
 const Content = styled.div`
-  ${uniformColumnGrid({
-    minChildrenWidth: 320,
-    gap: 40,
-    fullWidth: true,
-  })}
   flex: 1;
+  display: flex;
+  justify-content: center;
   align-items: center;
+  gap: 40px;
 `;
 
 type KeygenPeerDiscoveryProps = ComponentWithForwardActionProps &
@@ -45,7 +42,6 @@ export const KeygenPeerDiscovery = ({
   return (
     <PageContent
       as="form"
-      gap={40}
       {...getFormProps({
         onSubmit: onForward,
         isDisabled,
@@ -67,10 +63,9 @@ export const KeygenPeerDiscovery = ({
           )}
         />
 
-        <VStack gap={40} flexGrow alignItems="center">
+        <VStack gap={40} alignItems="center">
           <ManageServerType />
           <PeersManager />
-
           <KeygenNetworkReminder />
         </VStack>
       </Content>
