@@ -1,4 +1,3 @@
-/* eslint-disable */
 export namespace storage {
   export class AddressBookItem {
     ID: number[];

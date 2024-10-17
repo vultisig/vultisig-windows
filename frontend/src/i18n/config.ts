@@ -3,8 +3,11 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
+import deTranslation from './locales/de/translation.json';
 import enTranslation from './locales/en/translation.json';
 import esTranslation from './locales/es/translation.json';
+import hrTranslation from './locales/hr/translation.json';
+import itTranslation from './locales/it/translation.json';
 import ptTranslation from './locales/pt/translation.json';
 
 // Initialization
@@ -22,6 +25,15 @@ i18n
       },
       pt: {
         translation: ptTranslation,
+      },
+      it: {
+        translation: itTranslation,
+      },
+      de: {
+        translation: deTranslation,
+      },
+      hr: {
+        translation: hrTranslation,
       },
     },
     fallbackLng: 'en',
