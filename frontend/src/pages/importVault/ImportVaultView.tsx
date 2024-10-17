@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import ImportVaultDialog from '../../components/dialog/ImportVaultDialog';
 import NavBar from '../../components/navbar/NavBar';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
+import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { makeAppPath } from '../../navigation';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
@@ -25,7 +26,10 @@ const ImportVaultView: React.FC = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState('');
   const [dialogContent, setDialogContent] = useState('');
-  const [decryptedContent, setDecryptedContent] = useState<Buffer | null>();
+  const [encryptedVaultContent, setEncryptedVaultContent] =
+    useState<Buffer | null>(null);
+  const [decryptedVaultContent, setDecryptedVaultContent] =
+    useState<Buffer | null>(null);
   const walletcore = useAssertWalletCore();
   const { data: vaults = [] } = useVaultsQuery();
 
@@ -60,41 +64,29 @@ const ImportVaultView: React.FC = () => {
               decodedData as unknown as Uint8Array
             );
 
-            const decodedVault = Buffer.from(
-              vaultContainer.vault,
-              'base64'
-            ).toString('utf-8');
-            const pubKeyMatch = decodedVault.match(/"pub_key":\s*"([^"]+)"/);
-
-            if (pubKeyMatch && pubKeyMatch[1]) {
-              const publicKey = pubKeyMatch[1];
-              if (vaults.some(vault => vault.public_key_ecdsa === publicKey)) {
-                setDialogTitle(t('vault_already_exists'));
-                setDialogContent(t('vault_already_exists_message'));
-                setDialogOpen(true);
-                return;
-              }
-            } else {
-              setDialogTitle(t('vault_missing_public_key'));
-              setDialogContent(t('vault_missing_public_key_message'));
-              setDialogOpen(true);
-              return;
-            }
-
             if (isBase64Encoded(vaultContainer.vault)) {
-              const decodedVault = Buffer.from(
+              const encryptedContent = Buffer.from(
                 vaultContainer.vault.toString(),
                 'base64'
               );
-              setDecryptedContent(decodedVault);
+              setEncryptedVaultContent(encryptedContent);
               if (vaultContainer.isEncrypted) {
                 setDialogTitle(t('enter_password'));
                 setDialogContent('');
                 setDialogOpen(true);
               } else {
+                setDecryptedVaultContent(encryptedContent);
                 setContinue(true);
               }
+            } else {
+              setDialogTitle(t('invalid_vault_data'));
+              setDialogContent(t('invalid_vault_data_message'));
+              setDialogOpen(true);
             }
+          } else {
+            setDialogTitle(t('invalid_file_content'));
+            setDialogContent(t('invalid_file_content_message'));
+            setDialogOpen(true);
           }
         };
         reader.readAsText(event.target.files[0]);
@@ -109,18 +101,20 @@ const ImportVaultView: React.FC = () => {
     setSelectedFile(null);
     setFileContent('');
     setContinue(false);
+    setEncryptedVaultContent(null);
+    setDecryptedVaultContent(null);
   };
 
   const handleCloseDialog = () => setDialogOpen(false);
 
   const handleOk = (passwd: string) => {
-    if (decryptedContent) {
+    if (encryptedVaultContent) {
       try {
-        const decrptedVault = vaultService.decryptVault(
+        const decryptedVault = vaultService.decryptVault(
           passwd,
-          decryptedContent
+          encryptedVaultContent
         );
-        setDecryptedContent(decrptedVault);
+        setDecryptedVaultContent(decryptedVault);
         setContinue(true);
       } catch {
         setDialogTitle(t('incorrect_password'));
@@ -133,10 +127,28 @@ const ImportVaultView: React.FC = () => {
   };
 
   const handleContinue = async () => {
-    if (decryptedContent) {
-      await vaultService.importVault(decryptedContent);
-      await invalidateQueries(vaultsQueryKey);
-      navigate(makeAppPath('vaultList'));
+    if (decryptedVaultContent) {
+      try {
+        const vault = Vault.fromBinary(
+          decryptedVaultContent as unknown as Uint8Array
+        );
+
+        if (vaults.some(v => v.public_key_ecdsa === vault.publicKeyEcdsa)) {
+          setDialogTitle(t('vault_already_exists'));
+          setDialogContent(t('vault_already_exists_message'));
+          setDialogOpen(true);
+          return;
+        }
+
+        await vaultService.importVault(decryptedVaultContent);
+        await invalidateQueries(vaultsQueryKey);
+        navigate(makeAppPath('vaultList'));
+      } catch (e: unknown) {
+        setDialogTitle(t('invalid_vault_data'));
+        setDialogContent(t('invalid_vault_data_message'));
+        setDialogOpen(true);
+        console.error(e);
+      }
     }
   };
 
@@ -158,7 +170,7 @@ const ImportVaultView: React.FC = () => {
             onClick={handleUpload}
             role="none"
           >
-            {isContinue && decryptedContent && (
+            {isContinue && decryptedVaultContent && (
               <div
                 className="break-all h-[230px] px-4 py-4 overflow-hidden overflow-ellipsis text-base font-normal"
                 style={{
@@ -167,7 +179,7 @@ const ImportVaultView: React.FC = () => {
                   WebkitLineClamp: 9,
                 }}
               >
-                {decryptedContent.toString('hex')}
+                {decryptedVaultContent.toString('hex')}
               </div>
             )}
             {!isContinue && (
