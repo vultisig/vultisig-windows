@@ -34,6 +34,9 @@ const VaultRenamePage = () => {
   } = useForm({
     resolver: zodResolver(renameSchema),
     mode: 'onBlur',
+    defaultValues: {
+      vaultName: vault.name,
+    },
   });
 
   const {
@@ -79,11 +82,7 @@ const VaultRenamePage = () => {
           <VStack gap={12}>
             <div>
               <InputFieldWrapper>
-                <InputField
-                  type="text"
-                  placeholder={vault?.name}
-                  {...register('vaultName')}
-                />
+                <InputField type="text" {...register('vaultName')} />
               </InputFieldWrapper>
               {errors.vaultName?.message && (
                 <Text size={12} color="danger">
