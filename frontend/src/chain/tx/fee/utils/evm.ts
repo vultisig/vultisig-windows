@@ -1,1 +1,4 @@
-export const gweiDecimals = 9;
+export const gwei = {
+  decimals: 9,
+  symbol: 'Gwei',
+};

@@ -1,11 +1,9 @@
 import { formatAmount } from '../../../../lib/utils/formatAmount';
-import { Chain, EvmChain } from '../../../../model/chain';
+import { Chain } from '../../../../model/chain';
 import { SpecificTransactionInfo } from '../../../../model/specific-transaction-info';
 import { fromChainAmount } from '../../../utils/fromChainAmount';
-import { gweiDecimals } from './evm';
+import { getFeeAmountDecimals, getFeeAmountRecord } from './feeAmount';
 import { getFeeUnit } from './feeUnit';
-import { getChainFeeCoin } from './getChainFeeCoin';
-import { getFeeAmount } from './getFeeAmount';
 
 type FormatFeeInput = {
   chain: Chain;
@@ -13,10 +11,11 @@ type FormatFeeInput = {
 };
 
 export const formatFee = ({ chain, txInfo }: FormatFeeInput) => {
-  const feeAmount = getFeeAmount[chain](txInfo);
+  const getFeeAmount = getFeeAmountRecord[chain];
 
-  const decimals =
-    chain in EvmChain ? gweiDecimals : getChainFeeCoin(chain).decimals;
+  const feeAmount = getFeeAmount(txInfo);
+
+  const decimals = getFeeAmountDecimals(chain);
 
   const amount = fromChainAmount(feeAmount, decimals);
 

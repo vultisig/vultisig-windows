@@ -1,4 +1,4 @@
-import { Chain } from '../../../../model/chain';
+import { Chain, EvmChain } from '../../../../model/chain';
 import {
   BasicSpecificTransactionInfo,
   SpecificEvm,
@@ -7,6 +7,8 @@ import {
   SpecificSui,
   SpecificUtxo,
 } from '../../../../model/specific-transaction-info';
+import { gwei } from './evm';
+import { getChainFeeCoin } from './getChainFeeCoin';
 
 type GetFeeAmount<T> = (txInfo: T) => number;
 
@@ -19,7 +21,7 @@ const getCosmosFeeAmount: GetFeeAmount<BasicSpecificTransactionInfo> = ({
   fee,
 }) => fee;
 
-export const getFeeAmount: Record<Chain, GetFeeAmount<any>> = {
+export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
   [Chain.Arbitrum]: getEvmFeeAmount,
   [Chain.Avalanche]: getEvmFeeAmount,
   [Chain.Base]: getEvmFeeAmount,
@@ -44,3 +46,6 @@ export const getFeeAmount: Record<Chain, GetFeeAmount<any>> = {
   [Chain.Solana]: ({ fee }: SpecificSolana) => fee,
   [Chain.Polkadot]: ({ fee }: SpecificPolkadot) => fee,
 };
+
+export const getFeeAmountDecimals = (chain: Chain): number =>
+  chain in EvmChain ? gwei.decimals : getChainFeeCoin(chain).decimals;
