@@ -26,7 +26,7 @@ export const evmChainIds: Record<EvmChain, number> = {
 
 export enum UtxoChain {
   Bitcoin = 'Bitcoin',
-  BitcoinCash = 'BitcoinCash',
+  BitcoinCash = 'Bitcoin-Cash',
   Litecoin = 'Litecoin',
   Dogecoin = 'Dogecoin',
   Dash = 'Dash',
