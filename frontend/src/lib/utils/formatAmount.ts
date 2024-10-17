@@ -18,7 +18,7 @@ const getFractionDigits = (amount: number): number => {
 
     const isFollowingZero = fractionPartDigits[nonZeroDigitIndex + 1] === '0';
 
-    return nonZeroDigitIndex + (isFollowingZero ? 0 : 1);
+    return nonZeroDigitIndex + (isFollowingZero ? 1 : 2);
   }
 
   return defaultFractionDigits;
