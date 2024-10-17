@@ -2,8 +2,6 @@ import { Chain, EvmChain } from '../../../../model/chain';
 import {
   BasicSpecificTransactionInfo,
   SpecificEvm,
-  SpecificPolkadot,
-  SpecificSolana,
   SpecificSui,
   SpecificUtxo,
 } from '../../../../model/specific-transaction-info';
@@ -20,6 +18,9 @@ const getUtxoFeeAmount: GetFeeAmount<SpecificUtxo> = ({ byteFee }) => byteFee;
 const getCosmosFeeAmount: GetFeeAmount<BasicSpecificTransactionInfo> = ({
   fee,
 }) => fee;
+
+const solanaDefaultFee = 1000000;
+const polkadotDefaultFee = 250000000;
 
 export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
   [Chain.Arbitrum]: getEvmFeeAmount,
@@ -43,8 +44,8 @@ export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
   [Chain.Dydx]: getCosmosFeeAmount,
   [Chain.Kujira]: getCosmosFeeAmount,
   [Chain.Sui]: ({ referenceGasPrice }: SpecificSui) => referenceGasPrice,
-  [Chain.Solana]: ({ fee }: SpecificSolana) => fee,
-  [Chain.Polkadot]: ({ fee }: SpecificPolkadot) => fee,
+  [Chain.Solana]: () => solanaDefaultFee,
+  [Chain.Polkadot]: () => polkadotDefaultFee,
 };
 
 export const getFeeAmountDecimals = (chain: Chain): number =>
