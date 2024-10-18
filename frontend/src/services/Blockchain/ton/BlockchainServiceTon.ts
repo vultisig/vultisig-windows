@@ -172,14 +172,18 @@ export class BlockchainServiceTon
         TW.TheOpenNetwork.Proto.SendMode.IGNORE_ACTION_PHASE_ERRORS,
     });
 
-    // Native token transfer
-    const input = TW.TheOpenNetwork.Proto.SigningInput.create({
+    const inputObject = {
       walletVersion: TW.TheOpenNetwork.Proto.WalletVersion.WALLET_V4_R2,
       expireAt: Number(expireAt.toString()),
-      //sequenceNumber: Number(sequenceNumber.toString()),
+      sequenceNumber: Number(sequenceNumber.toString()),
       messages: [tokenTransferMessage],
       publicKey: new Uint8Array(pubKeyData),
-    });
+    };
+
+    console.log('inputObject:', inputObject);
+
+    // Native token transfer
+    const input = TW.TheOpenNetwork.Proto.SigningInput.create(inputObject);
 
     // Encode the input
     const encodedInput =

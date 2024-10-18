@@ -25,13 +25,16 @@ export class RpcServiceTon extends RpcService implements IRpcService {
     return response.balance;
   }
 
-  async getSpecificTransactionInfo(_coin: Coin): Promise<SpecificTon> {
+  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificTon> {
+    const extendedInfo = await this.getExtendedAddressInformation(coin.address);
+    const sequenceNumber = extendedInfo?.result?.account_state?.seqno || 0;
+
     return {
       fee: 0,
       gasPrice: 0,
       bounceable: false,
       expireAt: Math.floor(Date.now() / 1000) + 600,
-      sequenceNumber: 0,
+      sequenceNumber,
     };
   }
 
@@ -39,6 +42,12 @@ export class RpcServiceTon extends RpcService implements IRpcService {
     address: string
   ): Promise<TonAddressInformation> {
     return await Fetch(Endpoint.fetchTonBalance(address));
+  }
+
+  private async getExtendedAddressInformation(
+    address: string
+  ): Promise<ApiResponse> {
+    return await Fetch(Endpoint.fetchExtendedAddressInformation(address));
   }
 }
 
@@ -50,4 +59,47 @@ export interface TonAddressInformation {
   last_transaction_hash: string;
   last_transaction_lt: string;
   status: string;
+}
+
+interface ApiResponse {
+  ok: boolean;
+  result: Result;
+}
+
+interface Result {
+  '@type': 'fullAccountState';
+  address: Address;
+  balance: string;
+  last_transaction_id: LastTransactionId;
+  block_id: BlockId;
+  sync_utime: number;
+  account_state: AccountState;
+  revision: number;
+  '@extra': string;
+}
+
+interface Address {
+  '@type': 'accountAddress';
+  account_address: string;
+}
+
+interface LastTransactionId {
+  '@type': 'internal.transactionId';
+  lt: string;
+  hash: string;
+}
+
+interface BlockId {
+  '@type': 'ton.blockIdExt';
+  workchain: number;
+  shard: string;
+  seqno: number;
+  root_hash: string;
+  file_hash: string;
+}
+
+interface AccountState {
+  '@type': 'wallet.v4.accountState';
+  wallet_id: string;
+  seqno: number;
 }
