@@ -16,7 +16,7 @@ import {
   vaultsQueryKey,
 } from '../../vault/queries/useVaultsQuery';
 
-const ImportVaultView: React.FC = () => {
+const ImportVaultView = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -45,58 +45,71 @@ const ImportVaultView: React.FC = () => {
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      if (
-        !event.target.files[0].name.endsWith('.bak') &&
-        !event.target.files[0].name.endsWith('.vult')
-      ) {
-        setDialogTitle(t('invalid_file_format'));
-        setDialogContent(t('invalid_file_format_message'));
+    if (!event.target.files) return;
+
+    const file = event.target.files[0];
+
+    if (
+      !file.name.endsWith('.bak') &&
+      !file.name.endsWith('.vult') &&
+      !file.name.endsWith('.dat')
+    ) {
+      setDialogTitle(t('invalid_file_format'));
+      setDialogContent(t('invalid_file_format_message'));
+      setDialogOpen(true);
+      return;
+    }
+
+    setSelectedFile(file);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const data = reader.result?.toString();
+
+      setFileContent('');
+      setContinue(false);
+
+      if (!data || !isBase64Encoded(data)) {
+        setDialogTitle(t('invalid_file_content'));
+        setDialogContent(t('invalid_file_content_message'));
+        setDialogOpen(true);
+        return;
+      }
+
+      setFileContent(data);
+
+      const decodedData = Buffer.from(data, 'base64');
+      const vaultContainer = VaultContainer.fromBinary(
+        decodedData as unknown as Uint8Array
+      );
+
+      if (!isBase64Encoded(vaultContainer.vault)) {
+        setDialogTitle(t('invalid_vault_data'));
+        setDialogContent(t('invalid_vault_data_message'));
+        setDialogOpen(true);
+        return;
+      }
+
+      const encryptedContent = Buffer.from(
+        vaultContainer.vault.toString(),
+        'base64'
+      );
+      setEncryptedVaultContent(encryptedContent);
+
+      if (vaultContainer.isEncrypted) {
+        setDialogTitle(t('enter_password'));
+        setDialogContent('');
         setDialogOpen(true);
       } else {
-        setSelectedFile(event.target.files[0]);
-        const reader = new FileReader();
-        reader.onload = () => {
-          const data = reader.result;
-          setFileContent('');
-          setContinue(false);
-          if (data && isBase64Encoded(data.toString())) {
-            setFileContent(data.toString());
-            const decodedData = Buffer.from(data.toString(), 'base64');
-            const vaultContainer = VaultContainer.fromBinary(
-              decodedData as unknown as Uint8Array
-            );
+        setDecryptedVaultContent(encryptedContent);
+        setContinue(true);
+      }
+    };
 
-            if (isBase64Encoded(vaultContainer.vault)) {
-              const encryptedContent = Buffer.from(
-                vaultContainer.vault.toString(),
-                'base64'
-              );
-              setEncryptedVaultContent(encryptedContent);
-              if (vaultContainer.isEncrypted) {
-                setDialogTitle(t('enter_password'));
-                setDialogContent('');
-                setDialogOpen(true);
-              } else {
-                setDecryptedVaultContent(encryptedContent);
-                setContinue(true);
-              }
-            } else {
-              setDialogTitle(t('invalid_vault_data'));
-              setDialogContent(t('invalid_vault_data_message'));
-              setDialogOpen(true);
-            }
-          } else {
-            setDialogTitle(t('invalid_file_content'));
-            setDialogContent(t('invalid_file_content_message'));
-            setDialogOpen(true);
-          }
-        };
-        reader.readAsText(event.target.files[0]);
-      }
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+    reader.readAsText(file);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
