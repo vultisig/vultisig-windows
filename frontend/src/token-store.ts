@@ -192,6 +192,16 @@ class Token {
     isNativeToken: true,
   };
 
+  static ton: CoinMeta = {
+    chain: Chain.Ton,
+    ticker: 'TON',
+    logo: 'ton',
+    decimals: 9,
+    priceProviderId: 'the-open-network',
+    contractAddress: '',
+    isNativeToken: true,
+  };
+
   static avalanche: CoinMeta = {
     chain: Chain.Avalanche,
     ticker: 'AVAX',
@@ -509,4 +519,5 @@ export const TokenSelectionAssets: CoinMeta[] = [
   Token.suiSUI,
   Token.dotDOT,
   Token.zksyncETH,
+  Token.ton,
 ];
