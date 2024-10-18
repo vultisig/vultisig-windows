@@ -30,7 +30,7 @@ export class RpcServiceTon extends RpcService implements IRpcService {
       fee: 0,
       gasPrice: 0,
       bounceable: false,
-      expireAt: 0,
+      expireAt: Math.floor(Date.now() / 1000) + 600,
       sequenceNumber: 0,
     };
   }

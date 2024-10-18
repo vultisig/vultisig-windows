@@ -176,7 +176,7 @@ export class BlockchainServiceTon
     const input = TW.TheOpenNetwork.Proto.SigningInput.create({
       walletVersion: TW.TheOpenNetwork.Proto.WalletVersion.WALLET_V4_R2,
       expireAt: Number(expireAt.toString()),
-      sequenceNumber: Number(sequenceNumber.toString()),
+      //sequenceNumber: Number(sequenceNumber.toString()),
       messages: [tokenTransferMessage],
       publicKey: new Uint8Array(pubKeyData),
     });
