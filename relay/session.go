@@ -111,20 +111,12 @@ func (s *Client) WaitForSessionStart(ctx context.Context, sessionID string) ([]s
 				return nil, fmt.Errorf("fail to read session body: %w", err)
 			}
 			if err := resp.Body.Close(); err != nil {
-				s.Logger.Errorf("fail to close response body, %w", err)
+				s.Logger.Errorf("fail to close response body, %s", err)
 			}
 			if err := json.Unmarshal(buff, &parties); err != nil {
 				return nil, fmt.Errorf("fail to unmarshal session body: %w", err)
 			}
-			//remove duplicates from parties
-			distinctParties := make(map[string]struct{})
-			for _, party := range parties {
-				distinctParties[party] = struct{}{}
-			}
-			parties = make([]string, 0, len(distinctParties))
-			for party := range distinctParties {
-				parties = append(parties, party)
-			}
+
 			// We need to hold expected parties to start session
 			if len(parties) > 1 {
 				s.Logger.WithFields(logrus.Fields{
