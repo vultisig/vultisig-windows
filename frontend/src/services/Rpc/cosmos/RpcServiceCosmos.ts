@@ -30,31 +30,29 @@ export class RpcServiceCosmos implements IRpcService {
   }
 
   async getSpecificTransactionInfo(coin: Coin): Promise<SpecificCosmos> {
+    let defaultGas = 7500;
+    if (coin.chain == Chain.Dydx) defaultGas = 2500000000000000;
+
+    let result: SpecificCosmos = {
+      gas: defaultGas,
+      transactionType: 0,
+      gasPrice: defaultGas,
+      fee: defaultGas,
+      accountNumber: 0,
+      sequence: 0,
+    };
+
     try {
       const account = await this.fetchAccountNumber(coin.address);
-
-      let defaultGas = 7500;
-      if (coin.chain == Chain.Dydx) defaultGas = 2500000000000000;
-
-      return {
-        accountNumber: Number(account?.account_number),
-        sequence: Number(account?.sequence),
-        gas: defaultGas,
-        transactionType: 0,
-        gasPrice: defaultGas,
-        fee: defaultGas,
-      } as SpecificCosmos;
+      if (account) {
+        result.accountNumber = Number(account.account_number);
+        result.sequence = Number(account.sequence);
+      }
     } catch (error) {
       console.error('getSpecificTransactionInfo::', error);
-      return {
-        accountNumber: 0,
-        sequence: 0,
-        gas: 0,
-        transactionType: 0,
-        gasPrice: 0,
-        fee: 0,
-      } as SpecificCosmos;
     }
+
+    return result;
   }
 
   async fetchBalances(address: string): Promise<CosmosBalance[]> {
