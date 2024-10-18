@@ -44,6 +44,7 @@ export enum OtherChain {
   Sui = 'Sui',
   Solana = 'Solana',
   Polkadot = 'Polkadot',
+  Ton = 'Ton',
 }
 
 export const Chain = {
@@ -85,6 +86,8 @@ export class ChainUtils {
       case Chain.Polkadot:
         return TssKeysignType.EdDSA;
       case Chain.Sui:
+        return TssKeysignType.EdDSA;
+      case Chain.Ton:
         return TssKeysignType.EdDSA;
       default:
         return TssKeysignType.ECDSA;
@@ -139,6 +142,8 @@ export class ChainUtils {
         return 'ZK';
       case Chain.Sui:
         return 'SUI';
+      case Chain.Ton:
+        return 'TON';
     }
   }
 }
