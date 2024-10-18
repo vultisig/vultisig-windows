@@ -15,12 +15,9 @@ const getEvmFeeAmount: GetFeeAmount<SpecificEvm> = ({ maxFeePerGasWei }) =>
 
 const getUtxoFeeAmount: GetFeeAmount<SpecificUtxo> = ({ byteFee }) => byteFee;
 
-const getCosmosFeeAmount: GetFeeAmount<BasicSpecificTransactionInfo> = ({
+const getDefaultFeeAmount: GetFeeAmount<BasicSpecificTransactionInfo> = ({
   fee,
 }) => fee;
-
-const solanaDefaultFee = 1000000;
-const polkadotDefaultFee = 250000000;
 
 export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
   [Chain.Arbitrum]: getEvmFeeAmount,
@@ -38,15 +35,15 @@ export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
   [Chain.Litecoin]: getUtxoFeeAmount,
   [Chain.Dogecoin]: getUtxoFeeAmount,
   [Chain.Dash]: getUtxoFeeAmount,
-  [Chain.THORChain]: getCosmosFeeAmount,
-  [Chain.Cosmos]: getCosmosFeeAmount,
-  [Chain.MayaChain]: getCosmosFeeAmount,
-  [Chain.Dydx]: getCosmosFeeAmount,
-  [Chain.Kujira]: getCosmosFeeAmount,
+  [Chain.THORChain]: getDefaultFeeAmount,
+  [Chain.Cosmos]: getDefaultFeeAmount,
+  [Chain.MayaChain]: getDefaultFeeAmount,
+  [Chain.Dydx]: getDefaultFeeAmount,
+  [Chain.Kujira]: getDefaultFeeAmount,
   [Chain.Sui]: ({ referenceGasPrice }: SpecificSui) => referenceGasPrice,
-  [Chain.Solana]: () => solanaDefaultFee,
-  [Chain.Polkadot]: () => polkadotDefaultFee,
-  [Chain.Ton]: () => 0,
+  [Chain.Solana]: getDefaultFeeAmount,
+  [Chain.Polkadot]: getDefaultFeeAmount,
+  [Chain.Ton]: getDefaultFeeAmount,
 };
 
 export const getFeeAmountDecimals = (chain: Chain): number =>

@@ -5,18 +5,20 @@ import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 
 export const vaultsQueryKey = ['vaults'];
 
+export const vaultsQueryFn = async () => {
+  const result = await GetVaults();
+
+  if (result === null) {
+    return [];
+  }
+
+  return result;
+};
+
 export const useVaultsQuery = () => {
   return useQuery({
     queryKey: vaultsQueryKey,
-    queryFn: async () => {
-      const result = await GetVaults();
-
-      if (result === null) {
-        return [];
-      }
-
-      return result;
-    },
+    queryFn: vaultsQueryFn,
   });
 };
 
