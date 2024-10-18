@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +13,10 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
 import { getVaultTypeText } from '../../../utils/util';
 import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation';
+import {
+  vaultsQueryFn,
+  vaultsQueryKey,
+} from '../../../vault/queries/useVaultsQuery';
 import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery';
 import { useUnassertedCurrentVault } from '../../../vault/state/useCurrentVault';
 import {
@@ -28,7 +33,7 @@ const DeleteVaultPage = () => {
     secondTermAccepted: false,
     thirdTermAccepted: false,
   });
-
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const currentVault = useUnassertedCurrentVault();
@@ -53,6 +58,24 @@ const DeleteVaultPage = () => {
 
   const m = keyshares.length;
   const vaultTypeText = getVaultTypeText(m, t);
+
+  const handleDeleteVaultAndRedirect = async () => {
+    try {
+      await deleteVault(public_key_ecdsa);
+      const vaults = await queryClient.fetchQuery({
+        queryKey: vaultsQueryKey,
+        queryFn: vaultsQueryFn,
+      });
+
+      if (vaults.length > 0) {
+        navigate(appPaths.vaultList);
+      } else {
+        navigate(appPaths.addVault);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <Container flexGrow gap={16}>
@@ -152,11 +175,7 @@ const DeleteVaultPage = () => {
             </ActionsWrapper>
             <DeleteButton
               isLoading={isPending}
-              onClick={() =>
-                deleteVault(public_key_ecdsa).then(() =>
-                  navigate(appPaths.vaultList)
-                )
-              }
+              onClick={handleDeleteVaultAndRedirect}
               color="danger"
               isDisabled={
                 !deleteTerms.firstTermAccepted ||
