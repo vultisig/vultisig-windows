@@ -9,6 +9,7 @@ import { FeeServicePolkadot } from './polkadot/FeeServicePolkadot';
 import { FeeServiceSolana } from './solana/FeeServiceSolana';
 import { FeeServiceSui } from './sui/FeeServiceSui';
 import { FeeServiceThorchain } from './thorchain/FeeServiceThorchain';
+import { FeeServiceTon } from './ton/FeeServiceTon';
 import { FeeServiceUtxo } from './utxo/FeeServiceUtxo';
 
 export class FeeServiceFactory {
@@ -60,6 +61,8 @@ export class FeeServiceFactory {
         return new FeeServiceCosmos(chain, walletCore);
       case Chain.Dydx:
         return new FeeServiceCosmos(chain, walletCore);
+      case Chain.Ton:
+        return new FeeServiceTon(chain, walletCore);
       default:
         throw new Error(`Chain not supported ${chain}`);
     }

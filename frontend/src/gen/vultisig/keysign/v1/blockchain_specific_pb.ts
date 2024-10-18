@@ -736,3 +736,69 @@ export class SuiSpecific extends Message<SuiSpecific> {
     return proto3.util.equals(SuiSpecific, a, b);
   }
 }
+
+/**
+ * @generated from message vultisig.keysign.v1.TonSpecific
+ */
+export class TonSpecific extends Message<TonSpecific> {
+  /**
+   * @generated from field: uint64 sequence_number = 1;
+   */
+  sequenceNumber = protoInt64.zero;
+
+  /**
+   * @generated from field: uint64 expire_at = 2;
+   */
+  expireAt = protoInt64.zero;
+
+  /**
+   * @generated from field: bool bounceable = 3;
+   */
+  bounceable = false;
+
+  constructor(data?: PartialMessage<TonSpecific>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = 'vultisig.keysign.v1.TonSpecific';
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    {
+      no: 1,
+      name: 'sequence_number',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+    { no: 2, name: 'expire_at', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 3, name: 'bounceable', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
+  ]);
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): TonSpecific {
+    return new TonSpecific().fromBinary(bytes, options);
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): TonSpecific {
+    return new TonSpecific().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): TonSpecific {
+    return new TonSpecific().fromJsonString(jsonString, options);
+  }
+
+  static equals(
+    a: TonSpecific | PlainMessage<TonSpecific> | undefined,
+    b: TonSpecific | PlainMessage<TonSpecific> | undefined
+  ): boolean {
+    return proto3.util.equals(TonSpecific, a, b);
+  }
+}

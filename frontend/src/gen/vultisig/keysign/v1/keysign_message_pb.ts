@@ -21,6 +21,7 @@ import {
   SolanaSpecific,
   SuiSpecific,
   THORChainSpecific,
+  TonSpecific,
   UTXOSpecific,
 } from './blockchain_specific_pb.js';
 import { UtxoInfo } from './utxo_info_pb.js';
@@ -195,6 +196,13 @@ export class KeysignPayload extends Message<KeysignPayload> {
         value: SuiSpecific;
         case: 'suicheSpecific';
       }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.TonSpecific ton_specific = 12;
+         */
+        value: TonSpecific;
+        case: 'tonSpecific';
+      }
     | { case: undefined; value?: undefined } = { case: undefined };
 
   /**
@@ -314,6 +322,13 @@ export class KeysignPayload extends Message<KeysignPayload> {
       name: 'suiche_specific',
       kind: 'message',
       T: SuiSpecific,
+      oneof: 'blockchain_specific',
+    },
+    {
+      no: 12,
+      name: 'ton_specific',
+      kind: 'message',
+      T: TonSpecific,
       oneof: 'blockchain_specific',
     },
     { no: 20, name: 'utxo_info', kind: 'message', T: UtxoInfo, repeated: true },

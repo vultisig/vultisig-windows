@@ -93,6 +93,16 @@ export class TokensStore {
       isNativeToken: true,
     }),
 
+    ton: (): CoinMeta => ({
+      chain: Chain.Ton,
+      ticker: 'TON',
+      logo: 'ton',
+      decimals: 9,
+      priceProviderId: 'the-open-network',
+      contractAddress: '',
+      isNativeToken: true,
+    }),
+
     solanaJup: (): CoinMeta => ({
       chain: Chain.Solana,
       ticker: 'JUP',
@@ -1430,5 +1440,6 @@ export class TokensStore {
     // ZSYNC
     TokensStore.Token.zksyncETH(),
     // END EVMS
+    TokensStore.Token.ton(),
   ];
 }

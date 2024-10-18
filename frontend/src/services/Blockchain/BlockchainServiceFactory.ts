@@ -9,6 +9,7 @@ import { BlockchainServicePolkadot } from './polkadot/BlockchainServicePolkadot'
 import { BlockchainServiceSolana } from './solana/BlockchainServiceSolana';
 import { BlockchainServiceSui } from './sui/BlockchainServiceSui';
 import { BlockchainServiceThorchain } from './thorchain/BlockchainServiceThorchain';
+import { BlockchainServiceTon } from './ton/BlockchainServiceTon';
 import { BlockchainServiceUtxo } from './utxo/BlockchainServiceUtxo';
 
 export class BlockchainServiceFactory {
@@ -63,6 +64,8 @@ export class BlockchainServiceFactory {
         return new BlockchainServiceCosmos(chain, walletCore);
       case Chain.Polkadot:
         return new BlockchainServicePolkadot(chain, walletCore);
+      case Chain.Ton:
+        return new BlockchainServiceTon(chain, walletCore);
       default:
         throw new Error('Chain not supported');
     }

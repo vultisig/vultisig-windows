@@ -43,6 +43,7 @@ export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
   [Chain.Sui]: ({ referenceGasPrice }: SpecificSui) => referenceGasPrice,
   [Chain.Solana]: getDefaultFeeAmount,
   [Chain.Polkadot]: getDefaultFeeAmount,
+  [Chain.Ton]: getDefaultFeeAmount,
 };
 
 export const getFeeAmountDecimals = (chain: Chain): number =>
