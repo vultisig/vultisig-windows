@@ -64,7 +64,9 @@ export interface SpecificSui extends BasicSpecificTransactionInfo {
 }
 
 export interface SpecificTon extends BasicSpecificTransactionInfo {
-  recentBlockHash: string;
+  sequenceNumber: number;
+  expireAt: number;
+  bounceable: boolean;
 }
 
 export interface SpecificPolkadot extends BasicSpecificTransactionInfo {
