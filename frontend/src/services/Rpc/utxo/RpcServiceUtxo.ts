@@ -43,7 +43,7 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
     const byteFeePrice = await this.calculateFee(coin);
     const specificTransactionInfo: SpecificUtxo = {
       gasPrice: byteFeePrice / 10 ** coin.decimals, // To display in the UI
-      fee: 0,
+      fee: byteFeePrice,
       byteFee: byteFeePrice,
       sendMaxAmount: false, // By default, we don't send as the max amount
       utxos: await this.getUtxos(coin),

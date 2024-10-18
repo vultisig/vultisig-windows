@@ -1,3 +1,4 @@
+import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { SpecificPolkadot } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
@@ -6,7 +7,7 @@ import { RpcService } from '../RpcService';
 
 export class RpcServicePolkadot extends RpcService implements IRpcService {
   async calculateFee(_coin: Coin): Promise<number> {
-    return 1e10;
+    return 250000000;
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
@@ -27,39 +28,32 @@ export class RpcServicePolkadot extends RpcService implements IRpcService {
   }
 
   async getSpecificTransactionInfo(coin: Coin): Promise<SpecificPolkadot> {
+    const fee = await this.calculateFee(coin);
+    const result: SpecificPolkadot = {
+      recentBlockHash: '',
+      nonce: 0,
+      currentBlockNumber: 0,
+      specVersion: 0,
+      transactionVersion: 0,
+      genesisHash: '',
+      fee,
+      gasPrice: fromChainAmount(fee, coin.decimals),
+    };
+
     try {
-      const fee = await this.calculateFee(coin);
-      const recentBlockHash = await this.fetchBlockHash();
-      const nonce = await this.fetchNonce(coin.address);
-      const currentBlockNumber = Number(await this.fetchBlockHeader());
-      const runtime = await this.fetchRuntimeVersion();
-      const genesisHash = await this.fetchGenesisBlockHash();
-
-      const specificTransactionInfo: SpecificPolkadot = {
-        fee: fee,
-        gasPrice: fee / 10 ** coin.decimals,
-        recentBlockHash: recentBlockHash,
-        nonce: nonce,
-        currentBlockNumber: currentBlockNumber,
-        specVersion: runtime.specVersion,
-        transactionVersion: runtime.transactionVersion,
-        genesisHash: genesisHash,
-      } as SpecificPolkadot;
-
-      // console.log('specificTransactionInfo', specificTransactionInfo);
-
-      return specificTransactionInfo;
+      result.recentBlockHash = await this.fetchBlockHash();
+      result.nonce = await this.fetchNonce(coin.address);
+      result.currentBlockNumber = Number(await this.fetchBlockHeader());
+      const { specVersion, transactionVersion } =
+        await this.fetchRuntimeVersion();
+      result.specVersion = specVersion;
+      result.transactionVersion = transactionVersion;
+      result.genesisHash = await this.fetchGenesisBlockHash();
     } catch (error) {
       console.error('getSpecificTransactionInfo::', error);
-      return {
-        recentBlockHash: '',
-        nonce: 0,
-        currentBlockNumber: 0,
-        specVersion: 0,
-        transactionVersion: 0,
-        genesisHash: '',
-      } as SpecificPolkadot;
     }
+
+    return result;
   }
 
   private async fetchBalance(address: string): Promise<bigint> {

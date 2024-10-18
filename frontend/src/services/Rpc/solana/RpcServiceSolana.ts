@@ -217,7 +217,7 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
         fromAddressPubKey: fromAddressPubKey || undefined,
         toAddressPubKey: toAddressPubKey || undefined,
         gasPrice: 0, // Solana doesn’t use gas prices
-        fee: 0, // Solana fees are handled differently
+        fee: 1000000, // Solana fees are handled differently
       } as SpecificSolana;
     } catch (error) {
       throw new Error(`Error fetching gas info: ${(error as any).message}`);
