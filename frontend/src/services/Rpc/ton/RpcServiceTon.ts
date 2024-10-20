@@ -1,4 +1,4 @@
-import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
+import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { SpecificTon } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
@@ -6,16 +6,19 @@ import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceTon extends RpcService implements IRpcService {
-  async calculateFee(_coin: Coin): Promise<number> {
-    return 0;
+  async calculateFee(coin: Coin): Promise<number> {
+    return 0.01 * 10 ** coin.decimals;
   }
 
-  async sendTransaction(_encodedTransaction: string): Promise<string> {
-    return '';
+  async sendTransaction(encodedTransaction: string): Promise<string> {
+    return await this.broadcastTransaction(encodedTransaction);
   }
 
-  async broadcastTransaction(_obj: string): Promise<string> {
-    return '';
+  async broadcastTransaction(obj: string): Promise<string> {
+    const response = await Post(Endpoint.broadcastTonTransaction(), {
+      boc: obj,
+    });
+    return response.result.hash;
   }
 
   async getBalance(coin: Coin): Promise<string> {
@@ -30,8 +33,8 @@ export class RpcServiceTon extends RpcService implements IRpcService {
     const sequenceNumber = extendedInfo?.result?.account_state?.seqno || 0;
 
     return {
-      fee: 0,
-      gasPrice: 0,
+      fee: await this.calculateFee(coin),
+      gasPrice: await this.calculateFee(coin),
       bounceable: false,
       expireAt: Math.floor(Date.now() / 1000) + 600,
       sequenceNumber,

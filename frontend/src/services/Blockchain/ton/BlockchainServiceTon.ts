@@ -78,13 +78,6 @@ export class BlockchainServiceTon
         signedTx.rawTransaction
       );
 
-      if (txBroadcastedHash !== signedTx.transactionHash) {
-        if (txBroadcastedHash === 'Transaction already broadcasted.') {
-          txBroadcastedHash = signedTx.transactionHash;
-        } else {
-          return 'Transaction hash mismatch';
-        }
-      }
       return txBroadcastedHash;
     } catch (e: any) {
       console.error(e);
