@@ -3,7 +3,7 @@ export const addQueryParams = (
   params: Record<string, string | number | boolean>
 ) => {
   const query = Object.entries(params)
-    .map(pair => pair.map(encodeURIComponent).join('='))
+    .map(pair => pair.join('='))
     .join('&');
 
   return [baseUrl, query].join(baseUrl.includes('?') ? '&' : '?');
