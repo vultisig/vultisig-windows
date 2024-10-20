@@ -140,18 +140,18 @@ export class Endpoint {
   static polkadotServiceBalance: string =
     'https://polkadot.api.subscan.io/api/v2/scan/search';
 
-  static tonServiceRpc: string = 'https://toncenter.com/api/v2/jsonRPC';
+  static tonServiceRpc: string = 'https://api.vultisig.com/ton/v2/jsonRPC';
 
   static fetchTonBalance(address: string): string {
-    return `https://toncenter.com/api/v3/addressInformation?address=${address}&use_v2=false`;
+    return `https://api.vultisig.com/ton/v3/addressInformation?address=${address}&use_v2=false`;
   }
 
   static fetchExtendedAddressInformation(address: string): string {
-    return `https://toncenter.com/api/v2/getExtendedAddressInformation?address=${address}`;
+    return `https://api.vultisig.com/ton/v2/getExtendedAddressInformation?address=${address}`;
   }
 
   static broadcastTonTransaction(): string {
-    return `https://toncenter.com/api/v2/sendBocReturnHash`;
+    return `https://api.vultisig.com/ton/v2/sendBocReturnHash`;
   }
 
   static bitcoinLabelTxHash(value: string): string {
