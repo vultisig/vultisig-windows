@@ -150,6 +150,10 @@ export class Endpoint {
     return `https://toncenter.com/api/v2/getExtendedAddressInformation?address=${address}`;
   }
 
+  static broadcastTonTransaction(): string {
+    return `https://toncenter.com/api/v2/sendBocReturnHash`;
+  }
+
   static bitcoinLabelTxHash(value: string): string {
     return `https://mempool.space/tx/${value}`;
   }
