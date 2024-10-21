@@ -66,7 +66,7 @@ export const VaultChainPage = () => {
         }
         title={<PageHeaderTitle>{chainId}</PageHeaderTitle>}
       />
-      <PageContent gap={16}>
+      <PageContent gap={16} data-testid="VaultChainPage-Content">
         <VaultPrimaryActions value={getStorageCoinKey(nativeCoin)} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
