@@ -48,7 +48,8 @@ const ImportVaultView: React.FC = () => {
     if (event.target.files) {
       if (
         !event.target.files[0].name.endsWith('.bak') &&
-        !event.target.files[0].name.endsWith('.vult')
+        !event.target.files[0].name.endsWith('.vult') &&
+        !event.target.files[0].name.endsWith('.dat')
       ) {
         setDialogTitle(t('invalid_file_format'));
         setDialogContent(t('invalid_file_format_message'));
@@ -58,6 +59,43 @@ const ImportVaultView: React.FC = () => {
         const reader = new FileReader();
         reader.onload = () => {
           const data = reader.result;
+
+          if (event.target.files) {
+            console.log(event.target.files[0]);
+            console.log(event.target.files[0]?.name);
+            console.log(event.target.files[0]?.name?.endsWith('.dat'));
+            // console.log(data);
+            // console.log(data?.toString());
+            // console.log(data && isBase64Encoded(data?.toString()));
+
+            try {
+              // Assuming HEX string, decode it to Uint8Array
+              const decodedData = walletcore.HexCoding.decode(
+                data?.toString() ?? ''
+              );
+
+              // Assuming HEX string, encode it to Uint8Array
+              console.log(decodedData);
+
+              // Convert the ArrayBuffer to a string (assuming the binary data is JSON)
+              const textDecoder = new TextDecoder('utf-8');
+              const jsonString = textDecoder.decode(decodedData);
+
+              console.log(jsonString);
+
+              // Parse the JSON string
+              const jsonObject = JSON.parse(jsonString);
+
+              console.log(jsonObject);
+            } catch (error) {
+              console.error('Error decoding hex data:', error);
+              setDialogTitle(t('invalid_file_content'));
+              setDialogContent(t('invalid_file_content_message'));
+              setDialogOpen(true);
+              return;
+            }
+          }
+
           setFileContent('');
           setContinue(false);
           if (data && isBase64Encoded(data.toString())) {
