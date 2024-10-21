@@ -61,12 +61,12 @@ const ImportVaultView: React.FC = () => {
           const data = reader.result;
 
           if (event.target.files) {
-            console.log(event.target.files[0]);
+            console.log(event.target.files);
             console.log(event.target.files[0]?.name);
             console.log(event.target.files[0]?.name?.endsWith('.dat'));
-            // console.log(data);
-            // console.log(data?.toString());
-            // console.log(data && isBase64Encoded(data?.toString()));
+
+            console.log(data);
+            console.log(data?.toString());
 
             try {
               // Assuming HEX string, decode it to Uint8Array
@@ -86,6 +86,13 @@ const ImportVaultView: React.FC = () => {
               // Parse the JSON string
               const jsonObject = JSON.parse(jsonString);
 
+              // do not try to convert this to VaultContainer there are not the same object
+              // So the convertion must be manual
+              /*
+              Example:
+                This will not work
+                const vault = Vault.fromBinary(decryptedVaultContent as unknown as Uint8Array);
+              */
               console.log(jsonObject);
             } catch (error) {
               console.error('Error decoding hex data:', error);
