@@ -4,5 +4,5 @@ import { FramedQrCode } from '../../../../lib/ui/qr/FramedQrCode';
 export const KeygenPeerDiscoveryQrCode = ({
   value,
 }: ComponentWithValueProps<string>) => {
-  return <FramedQrCode value={value} size={365} />;
+  return <FramedQrCode value={value} />;
 };

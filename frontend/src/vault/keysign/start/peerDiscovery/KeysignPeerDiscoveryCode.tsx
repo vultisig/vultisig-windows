@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-import { ElementSizeAware } from '../../../../lib/ui/base/ElementSizeAware';
 import { centerContent } from '../../../../lib/ui/css/centerContent';
 import { takeWholeSpace } from '../../../../lib/ui/css/takeWholeSpace';
 import { FramedQrCode } from '../../../../lib/ui/qr/FramedQrCode';
@@ -20,16 +19,9 @@ export const KeysignPeerDiscoveryQrCode = () => {
     <QueryDependant
       query={keygenMsgQuery}
       success={data => (
-        <ElementSizeAware
-          render={({ setElement, size }) => (
-            <Container ref={setElement}>
-              <FramedQrCode
-                value={data}
-                size={size ? Math.min(size.width, size.height) : 0}
-              />
-            </Container>
-          )}
-        />
+        <Container>
+          <FramedQrCode value={data} />
+        </Container>
       )}
       {...getQueryDependantDefaultProps('keysign message')}
     />
