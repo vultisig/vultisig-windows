@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-import { ElementSizeAware } from '../../lib/ui/base/ElementSizeAware';
 import { verticalPadding } from '../../lib/ui/css/verticalPadding';
 import { VStack } from '../../lib/ui/layout/Stack';
 import {
@@ -37,13 +36,10 @@ export const PrintableQrCode = ({
 }: ComponentWithValueProps<string> & TitledComponentProps) => {
   return (
     <Container>
-      <ElementSizeAware
-        render={({ setElement, size }) => (
-          <VStack fullWidth ref={setElement}>
-            {size && <FramedQrCode value={value} size={size.width} />}
-          </VStack>
-        )}
-      />
+      <VStack fullWidth>
+        <FramedQrCode value={value} />
+      </VStack>
+
       <Footer>
         <Text color="contrast" size={14} family="mono">
           {title}
