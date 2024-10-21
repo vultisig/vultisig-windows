@@ -24,10 +24,15 @@ const Container = styled.div`
 `;
 
 type FramedQrCode = ComponentWithValueProps<string> & {
-  size: number;
+  size?: number;
 } & ComponentProps<typeof Wrapper>;
 
-export const FramedQrCode = ({ size, value }: FramedQrCode) => {
+const DEFAULT_QR_CODE_SIZE = 365;
+
+export const FramedQrCode = ({
+  size = DEFAULT_QR_CODE_SIZE,
+  value,
+}: FramedQrCode) => {
   return (
     <Wrapper>
       <Container>
