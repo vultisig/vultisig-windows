@@ -6,7 +6,6 @@ import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
-import { getCoinMetaKey } from '../../coin/utils/coinMeta';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
 import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
 import { getStorageCoinKey } from '../../coin/utils/storageCoin';
@@ -24,7 +23,6 @@ import { Text } from '../../lib/ui/text';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { sum } from '../../lib/utils/array/sum';
 import { formatAmount } from '../../lib/utils/formatAmount';
-import { Chain } from '../../model/chain';
 import { makeAppPath } from '../../navigation';
 import { TokensStore } from '../../services/Coin/CoinList';
 import { PageContent } from '../../ui/page/PageContent';
@@ -65,15 +63,7 @@ export const VaultChainPage = () => {
   const { mutate: refresh, isPending } = useMutation({
     mutationFn: () => {
       return invalidateQueries(
-        getBalanceQueryKey({
-          ...getCoinMetaKey({
-            ticker: nativeCoin.ticker,
-            contractAddress: nativeCoin.contract_address,
-            isNativeToken: nativeCoin.is_native_token,
-            chain: nativeCoin.chain as Chain,
-          }),
-          address: nativeCoin.address,
-        })
+        getBalanceQueryKey(getStorageCoinKey(nativeCoin))
       );
     },
   });
