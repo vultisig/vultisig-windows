@@ -81,13 +81,41 @@ const ImportVaultView = () => {
         const utf8String = utf8Decoder.decode(buffer);
 
         try {
-          // Try parsing as JSON
-          JSON.parse(utf8String);
-          // Success parsing JSON
-          setDecryptedVaultContent(new Uint8Array(buffer));
+          // Assuming HEX string, decode it to Uint8Array
+          const decodedData = walletcore.HexCoding.decode(utf8String);
+
+          // Assuming HEX string, encode it to Uint8Array
+          console.log(decodedData);
+
+          // Convert the ArrayBuffer to a string (assuming the binary data is JSON)
+          const textDecoder = new TextDecoder('utf-8');
+          const jsonString = textDecoder.decode(decodedData);
+
+          console.log(jsonString);
+
+          // Parse the JSON string
+          const jsonObject = JSON.parse(jsonString);
+
+          // do not try to convert this to VaultContainer there are not the same object
+          // So the convertion must be manual
+          /*
+          Example:
+            This will not work
+            const vault = Vault.fromBinary(decryptedVaultContent as unknown as Uint8Array);
+          */
+          console.log(jsonObject);
+
+          // now you need to convert to the format you need to insert to storage.Vault...
+          // not sure it will be here or in the next step
+
           setContinue(true);
-        } catch (e) {
-          console.info(e);
+        } catch (error) {
+          console.error('Error decoding hex data:', error);
+          // setDialogTitle(t('invalid_file_content'));
+          // setDialogContent(t('invalid_file_content_message'));
+          // setDialogOpen(true);
+
+          console.info(error);
           // Not JSON, try interpreting as hex string
           const hexString = utf8String.trim().replace(/\s+/g, '');
           if (/^[0-9a-fA-F]+$/.test(hexString)) {
@@ -108,6 +136,8 @@ const ImportVaultView = () => {
             setDialogTitle(t('enter_password'));
             setDialogOpen(true);
           }
+
+          return;
         }
       } else {
         const dataStr = Buffer.from(data as ArrayBuffer).toString('utf8');
@@ -206,6 +236,8 @@ const ImportVaultView = () => {
           if (backupVault.vault) {
             vault = Vault.fromJson(backupVault.vault);
           } else {
+            // this wont work for dat files you must convert manually
+            // the objects are not the same
             vault = Vault.fromJson(backupVault);
           }
         } catch (jsonError) {
