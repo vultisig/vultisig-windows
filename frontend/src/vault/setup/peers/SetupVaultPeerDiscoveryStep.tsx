@@ -7,39 +7,33 @@ import {
 } from '../../../lib/ui/props';
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep';
 import { useSelectedPeers } from '../../keysign/shared/state/selectedPeers';
-import { useCurrentKeygenThreshold } from '../state/currentKeygenThreshold';
+import { SetupVaultType } from '../type/SetupVaultType';
 import { useJoinKeygenUrlQuery } from './queries/useJoinKeygenUrlQuery';
+
+type SetupVaultPeerDiscoveryStepProps = ComponentWithForwardActionProps &
+  ComponentWithBackActionProps & {
+    setupVaultType: SetupVaultType;
+  };
 
 export const SetupVaultPeerDiscoveryStep = ({
   onForward,
   onBack,
-}: ComponentWithForwardActionProps & ComponentWithBackActionProps) => {
+  setupVaultType,
+}: SetupVaultPeerDiscoveryStepProps) => {
   const { t } = useTranslation();
   const peers = useSelectedPeers();
-  const [thresholdType] = useCurrentKeygenThreshold();
 
   const isDisabled = useMemo(() => {
-    const requiredDevices = Number(thresholdType.split('/')[1]);
-    if (isNaN(requiredDevices)) {
-      if (peers.length < 1) {
-        return t('select_at_least_one_device');
-      }
-
-      return false;
+    if (peers.length < 1) {
+      return t('select_at_least_one_device');
     }
-
-    const requiredPeers = requiredDevices - 1;
-
-    if (peers.length !== requiredPeers) {
-      return t('select_n_devices', { count: requiredPeers });
-    }
-  }, [peers.length, t, thresholdType]);
+  }, [peers.length, t]);
 
   const joinUrlQuery = useJoinKeygenUrlQuery();
 
   return (
     <KeygenPeerDiscoveryStep
-      title={`${t('keygen_for')} ${thresholdType} ${t('vault')}`}
+      title={t('keygen_for', { type: t(setupVaultType) })}
       onBack={onBack}
       onForward={onForward}
       isDisabled={isDisabled}

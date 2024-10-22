@@ -36,6 +36,7 @@
   "vault_type_1_description": "You need 1 more device to pair",
   "vault_type_2_description": "You need 2 more devices to pair",
   "vault_type_3_description": "You can pair as many devices you want",
+  "keygen_for_vault": "Keygen for {{type}} Vault",
   "keygen_reminder_relay": "Connect all devices to the Internet with the Vultisig App open.",
   "keygen_reminder_local": "Connect all devices to the same Network with Vultisig App open",
   "devices_on_same_wifi": "Keep devices on the same Network with VULTISIG open",
@@ -287,5 +288,19 @@
   "vault_already_exists": "Vault already exists",
   "vault_already_exists_message": "Please select a different vault.",
   "vault_missing_public_key": "Vault missing public key",
-  "vault_missing_public_key_message": "Vault file is corrupted or missing a public key. Please try again or select a different vault."
+  "vault_missing_public_key_message": "Vault file is corrupted or missing a public key. Please try again or select a different vault.",
+  "fast": "Fast",
+  "secure": "Secure",
+  "fast_vault_setup_prop_0": "Single Device Setup",
+  "fast_vault_setup_prop_1": "Transaction Alerts & Policies",
+  "fast_vault_setup_prop_2": "Vault Backup Emailed",
+  "active_vault_setup_prop_0": "Fast Signing On The Move",
+  "active_vault_setup_prop_1": "Transaction Alerts & Policies",
+  "active_vault_setup_prop_2": "Fully self-custodial",
+  "secure_vault_setup_prop_0": "Only Your Devices",
+  "secure_vault_setup_prop_1": "No Alerts or Policies",
+  "secure_vault_setup_prop_2": "Fully self-custodial",
+  "fast_vault_purpose": "Use as a \"hot wallet\"",
+  "active_vault_purpose": "Use as a \"main wallet\"",
+  "secure_vault_purpose": "Use as a \"cold wallet\""
 }

@@ -17,7 +17,6 @@ import CurrencySettingsPage from './pages/vaultSettings/vaultCurrency/CurrencySe
 import VaultDefaultChains from './pages/vaultSettings/vaultDefaultChains/VaultDefaultChains';
 import FaqVaultPage from './pages/vaultSettings/vaultFaq/FaqVaultPage';
 import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
-import { AddVaultPage } from './vault/add/AddVaultPage';
 import { VaultChainCoinPage } from './vault/chain/coin/VaultChainCoinPage';
 import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVaultChainCoinsPage';
 import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPage';
@@ -29,8 +28,9 @@ import { StartKeysignPage } from './vault/keysign/start/StartKeysignPage';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
 import { ReshareVaultPage } from './vault/reshare/ReshareVaultPage';
 import { SendPage } from './vault/send/SendPage';
-import { SetupVaultOptionsPage } from './vault/setup/options/SetupVaultOptionsPage';
-import { SetupVaultPage } from './vault/setup/SetupVaultPage';
+import { SetupFastVaultPage } from './vault/setup/fast/SetupFastVaultPage';
+import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage';
+import { SetupVaultPage } from './vault/setup/type/SetupVaultPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
 
 export const router = createBrowserRouter([
@@ -49,15 +49,15 @@ export const router = createBrowserRouter([
     element: <SettingsVaultPage />,
   },
   {
-    path: appPaths.addVault,
-    element: <AddVaultPage />,
+    path: appPaths.setupFastVault,
+    element: <SetupFastVaultPage />,
   },
   {
-    path: appPaths.setupVaultOptions,
-    element: <SetupVaultOptionsPage />,
+    path: appPaths.setupSecureVault,
+    element: <SetupSecureVaultPage />,
   },
   {
-    path: appPaths.setupVaultInitiatingDevice,
+    path: appPaths.setupVault,
     element: <SetupVaultPage />,
   },
   {
