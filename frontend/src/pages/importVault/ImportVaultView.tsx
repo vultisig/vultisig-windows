@@ -1,4 +1,4 @@
-import { Buffer } from 'buffer'; // Ensure Buffer is available
+import { Buffer } from 'buffer';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +17,10 @@ import {
   useVaultsQuery,
   vaultsQueryKey,
 } from '../../vault/queries/useVaultsQuery';
+import {
+  BackupVault,
+  mapBackupVaultToVault,
+} from './utils/mapBackupVaultToVault';
 
 const ImportVaultView = () => {
   const { t } = useTranslation();
@@ -77,67 +81,21 @@ const ImportVaultView = () => {
 
       if (fileExt === 'dat') {
         const buffer = data as ArrayBuffer;
-        const utf8Decoder = new TextDecoder('utf-8');
-        const utf8String = utf8Decoder.decode(buffer);
+        const uint8Array = new Uint8Array(buffer);
 
-        try {
-          // Assuming HEX string, decode it to Uint8Array
-          const decodedData = walletcore.HexCoding.decode(utf8String);
+        const isEncrypted = (data: Uint8Array): boolean => {
+          const ENCRYPTION_HEADER = [0x45, 0x4e, 0x43];
+          return ENCRYPTION_HEADER.every((byte, i) => data[i] === byte);
+        };
 
-          // Assuming HEX string, encode it to Uint8Array
-          console.log(decodedData);
-
-          // Convert the ArrayBuffer to a string (assuming the binary data is JSON)
-          const textDecoder = new TextDecoder('utf-8');
-          const jsonString = textDecoder.decode(decodedData);
-
-          console.log(jsonString);
-
-          // Parse the JSON string
-          const jsonObject = JSON.parse(jsonString);
-
-          // do not try to convert this to VaultContainer there are not the same object
-          // So the convertion must be manual
-          /*
-          Example:
-            This will not work
-            const vault = Vault.fromBinary(decryptedVaultContent as unknown as Uint8Array);
-          */
-          console.log(jsonObject);
-
-          // now you need to convert to the format you need to insert to storage.Vault...
-          // not sure it will be here or in the next step
-
+        if (isEncrypted(uint8Array)) {
+          setEncryptedVaultContent(buffer);
+          setDialogTitle(t('enter_password'));
+          setDialogContent('');
+          setDialogOpen(true);
+        } else {
           setContinue(true);
-        } catch (error) {
-          console.error('Error decoding hex data:', error);
-          // setDialogTitle(t('invalid_file_content'));
-          // setDialogContent(t('invalid_file_content_message'));
-          // setDialogOpen(true);
-
-          console.info(error);
-          // Not JSON, try interpreting as hex string
-          const hexString = utf8String.trim().replace(/\s+/g, '');
-          if (/^[0-9a-fA-F]+$/.test(hexString)) {
-            try {
-              const vaultBytes = Uint8Array.from(
-                hexString.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16))
-              );
-              setDecryptedVaultContent(vaultBytes);
-              setContinue(true);
-            } catch (hexError: unknown) {
-              setEncryptedVaultContent(buffer);
-              setDialogTitle(t('enter_password'));
-              setDialogOpen(true);
-              console.error(hexError);
-            }
-          } else {
-            setEncryptedVaultContent(buffer);
-            setDialogTitle(t('enter_password'));
-            setDialogOpen(true);
-          }
-
-          return;
+          setDecryptedVaultContent(uint8Array);
         }
       } else {
         const dataStr = Buffer.from(data as ArrayBuffer).toString('utf8');
@@ -195,95 +153,81 @@ const ImportVaultView = () => {
   const handleCloseDialog = () => setDialogOpen(false);
 
   const handleOk = async (passwd: string) => {
-    if (encryptedVaultContent) {
-      try {
-        let decryptedVault: ArrayBuffer;
+    if (!encryptedVaultContent) return;
 
-        if (fileExtension === 'dat') {
-          decryptedVault = await decryptData(encryptedVaultContent, passwd);
-          setDecryptedVaultContent(new Uint8Array(decryptedVault));
-        } else {
-          const decryptedBuffer = vaultService.decryptVault(
-            passwd,
-            Buffer.from(encryptedVaultContent)
-          );
-          setDecryptedVaultContent(new Uint8Array(decryptedBuffer));
-        }
-
-        setContinue(true);
-        setDialogOpen(false);
-      } catch {
-        setDialogTitle(t('incorrect_password'));
-        setDialogContent(t('backup_decryption_failed'));
-        setTimeout(() => {
-          setDialogOpen(true);
-        }, 0);
+    try {
+      let decryptedVault: ArrayBuffer;
+      if (fileExtension === 'dat') {
+        decryptedVault = await decryptData(encryptedVaultContent, passwd);
+        setDecryptedVaultContent(new Uint8Array(decryptedVault));
+      } else {
+        const decryptedBuffer = vaultService.decryptVault(
+          passwd,
+          Buffer.from(encryptedVaultContent)
+        );
+        setDecryptedVaultContent(new Uint8Array(decryptedBuffer));
       }
+
+      setContinue(true);
+      setDialogOpen(false);
+    } catch (e) {
+      setDialogTitle(t('backup_decryption_failed_title'));
+      setDialogContent(t('backup_decryption_failed'));
+      setTimeout(() => {
+        setDialogOpen(true);
+      }, 0);
+      console.log('Error in handleOk', e);
     }
   };
 
   const handleContinue = async () => {
-    if (decryptedVaultContent) {
-      try {
-        let vault: Vault;
-        const utf8String = new TextDecoder('utf-8').decode(
-          decryptedVaultContent
-        );
+    if (!decryptedVaultContent) return;
 
+    try {
+      let vault: Vault;
+      const utf8String = new TextDecoder('utf-8').decode(decryptedVaultContent);
+
+      if (fileExtension === 'dat') {
         try {
-          const backupVault = JSON.parse(utf8String);
-
-          if (backupVault.vault) {
-            vault = Vault.fromJson(backupVault.vault);
-          } else {
-            // this wont work for dat files you must convert manually
-            // the objects are not the same
-            vault = Vault.fromJson(backupVault);
-          }
-        } catch (jsonError) {
-          console.info(jsonError);
-          const hexString = utf8String.trim().replace(/\s+/g, '');
-          if (/^[0-9a-fA-F]+$/.test(hexString)) {
-            const vaultBytes = Uint8Array.from(
-              hexString.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16))
-            );
-            try {
-              vault = Vault.fromBinary(vaultBytes);
-            } catch (hexParseError: unknown) {
-              throw new Error(extractError(hexParseError));
-            }
-          } else if (isBase64Encoded(utf8String)) {
-            const base64Data = Buffer.from(utf8String, 'base64');
-            try {
-              vault = Vault.fromBinary(new Uint8Array(base64Data));
-            } catch (base64Error: unknown) {
-              throw new Error(extractError(base64Error));
-            }
-          } else {
-            try {
-              vault = Vault.fromBinary(decryptedVaultContent);
-            } catch (binaryParseError) {
-              throw new Error(extractError(binaryParseError));
-            }
-          }
-        }
-
-        if (vaults.some(v => v.public_key_ecdsa === vault.publicKeyEcdsa)) {
-          setDialogTitle(t('vault_already_exists'));
-          setDialogContent(t('vault_already_exists_message'));
+          const cleanedData = utf8String.trim();
+          const backupVault = JSON.parse(cleanedData);
+          vault = mapBackupVaultToVault(backupVault as BackupVault);
+        } catch (e) {
+          setDialogTitle(t('invalid_vault_data'));
+          setDialogContent(t('invalid_vault_data_message'));
           setDialogOpen(true);
+          console.error('Failed to parse decrypted content as JSON:', e);
           return;
         }
-
-        await vaultService.importVault(Buffer.from(decryptedVaultContent));
-        await invalidateQueries(vaultsQueryKey);
-        navigate(makeAppPath('vaultList'));
-      } catch (e: unknown) {
-        setDialogTitle(t('invalid_vault_data'));
-        setDialogContent(t('invalid_vault_data_message'));
-        setDialogOpen(true);
-        console.error(e);
+      } else {
+        vault = Vault.fromBinary(
+          decryptedVaultContent as unknown as Uint8Array
+        );
       }
+
+      if (vaults.some(v => v.public_key_ecdsa === vault.publicKeyEcdsa)) {
+        setDialogTitle(t('vault_already_exists'));
+        setDialogContent(t('vault_already_exists_message'));
+        setDialogOpen(true);
+        return;
+      }
+
+      if (fileExtension === 'dat') {
+        const vaultJsonString = JSON.stringify(vault);
+        const vaultBuffer = Buffer.from(vaultJsonString, 'utf-8');
+        await vaultService.importVault(vaultBuffer);
+      } else {
+        const vaultBuffer = Buffer.from(decryptedVaultContent as Uint8Array);
+        await vaultService.importVault(vaultBuffer);
+      }
+
+      await invalidateQueries(vaultsQueryKey);
+      navigate(makeAppPath('vaultList'));
+    } catch (e: unknown) {
+      setDialogTitle(t('invalid_vault_data'));
+      setDialogContent(t('invalid_vault_data_message'));
+      setDialogOpen(true);
+      console.error('Error in handleContinue function', e);
     }
   };
 
