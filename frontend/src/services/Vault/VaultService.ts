@@ -285,31 +285,16 @@ export class VaultService implements IVaultService {
   }
 
   getExportName(vault: Vault | storage.Vault): string {
-    const currentDate = new Date();
-    const formattedDate = this.formatDate(currentDate);
-
     const totalSigners = vault.signers.length;
     const threshold = this.getThreshold(totalSigners);
-    const lastFourOfPubKey = this.getLastFourCharacters(
-      vault instanceof Vault ? vault.publicKeyEcdsa : vault.public_key_ecdsa
-    );
+
     const localPartyId =
       vault instanceof Vault ? vault.localPartyId : vault.local_party_id;
 
-    return `vultisig-${vault.name}-${formattedDate}-${threshold + 1}of${totalSigners}-${lastFourOfPubKey}-${localPartyId}.bak`;
-  }
-
-  private formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // months are 0-based
-    return `${year}-${month}`;
+    return `${vault.name}-${localPartyId}-${threshold + 1}of${totalSigners}.vult`;
   }
 
   private getThreshold(totalSigners: number): number {
     return Math.ceil((totalSigners * 2) / 3) - 1;
-  }
-
-  private getLastFourCharacters(pubKey: string): string {
-    return pubKey.slice(-4);
   }
 }
