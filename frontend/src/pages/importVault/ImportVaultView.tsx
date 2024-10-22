@@ -161,8 +161,6 @@ const ImportVaultView = () => {
         const decryptedString = new TextDecoder('utf-8').decode(decryptedVault);
         const hexDecodedData = Buffer.from(decryptedString, 'hex');
 
-        console.log('Decrypted String:', decryptedString);
-
         setDecryptedVaultContent(new Uint8Array(hexDecodedData));
       } else {
         const decryptedBuffer = vaultService.decryptVault(
