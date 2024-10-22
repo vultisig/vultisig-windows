@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Buffer } from 'buffer';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -83,19 +84,17 @@ const ImportVaultView = () => {
         const buffer = data as ArrayBuffer;
         const uint8Array = new Uint8Array(buffer);
 
-        const isEncrypted = (data: Uint8Array): boolean => {
-          const ENCRYPTION_HEADER = [0x45, 0x4e, 0x43];
-          return ENCRYPTION_HEADER.every((byte, i) => data[i] === byte);
-        };
-
-        if (isEncrypted(uint8Array)) {
+        try {
+          // Try to decode as UTF-8 string and see if an error is thrown - if not then the vault is not encrypted
+          new TextDecoder('utf-8', { fatal: true }).decode(uint8Array);
+          setDecryptedVaultContent(uint8Array);
+          setContinue(true);
+        } catch (e) {
+          // Decoding failed, assume encrypted
           setEncryptedVaultContent(buffer);
           setDialogTitle(t('enter_password'));
           setDialogContent('');
           setDialogOpen(true);
-        } else {
-          setContinue(true);
-          setDecryptedVaultContent(uint8Array);
         }
       } else {
         const dataStr = Buffer.from(data as ArrayBuffer).toString('utf8');
@@ -159,7 +158,12 @@ const ImportVaultView = () => {
       let decryptedVault: ArrayBuffer;
       if (fileExtension === 'dat') {
         decryptedVault = await decryptData(encryptedVaultContent, passwd);
-        setDecryptedVaultContent(new Uint8Array(decryptedVault));
+        const decryptedString = new TextDecoder('utf-8').decode(decryptedVault);
+        const hexDecodedData = Buffer.from(decryptedString, 'hex');
+
+        console.log('Decrypted String:', decryptedString);
+
+        setDecryptedVaultContent(new Uint8Array(hexDecodedData));
       } else {
         const decryptedBuffer = vaultService.decryptVault(
           passwd,
@@ -190,7 +194,15 @@ const ImportVaultView = () => {
       if (fileExtension === 'dat') {
         try {
           const cleanedData = utf8String.trim();
-          const backupVault = JSON.parse(cleanedData);
+          let backupVault;
+
+          try {
+            backupVault = JSON.parse(cleanedData);
+          } catch (jsonError) {
+            const hexDecoded = Buffer.from(cleanedData, 'hex').toString('utf8');
+            backupVault = JSON.parse(hexDecoded);
+          }
+
           vault = mapBackupVaultToVault(backupVault as BackupVault);
         } catch (e) {
           setDialogTitle(t('invalid_vault_data'));
@@ -213,8 +225,8 @@ const ImportVaultView = () => {
       }
 
       if (fileExtension === 'dat') {
-        const vaultJsonString = JSON.stringify(vault);
-        const vaultBuffer = Buffer.from(vaultJsonString, 'utf-8');
+        const vaultBinary = vault.toBinary();
+        const vaultBuffer = Buffer.from(vaultBinary);
         await vaultService.importVault(vaultBuffer);
       } else {
         const vaultBuffer = Buffer.from(decryptedVaultContent as Uint8Array);
