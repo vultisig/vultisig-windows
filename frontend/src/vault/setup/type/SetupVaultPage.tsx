@@ -55,10 +55,11 @@ export const SetupVaultPage = () => {
   }, [navigate, value]);
 
   return (
-    <PageHeader
-      title={<PageHeaderTitle>{t('setup')}</PageHeaderTitle>}
-      primaryControls={<PageHeaderBackButton />}
-    >
+    <>
+      <PageHeader
+        title={<PageHeaderTitle>{t('setup')}</PageHeaderTitle>}
+        primaryControls={<PageHeaderBackButton />}
+      />
       <PageContent
         gap={40}
         as="form"
@@ -69,7 +70,7 @@ export const SetupVaultPage = () => {
         <VStack gap={20}>
           <UniformColumnGrid fullWidth gap={8}>
             {setupVaultTypes.map(option => {
-              const text = t(value).toUpperCase();
+              const text = t(option).toUpperCase();
 
               const isSelected = value === option;
 
@@ -92,25 +93,27 @@ export const SetupVaultPage = () => {
               render={props => <ContainImage {...props} />}
             />
           </ArtContainer>
-          <VStack gap="8" alignItems="center">
+          <VStack gap={12} alignItems="center">
             {getSetupVaultProperties(value).map(prop => (
               <HStack key={prop} alignItems="center" gap={6}>
                 <Dot />
-                <Text weight="600" color="contrast">
+                <Text size={14} weight="600" color="contrast">
                   {t(prop)}
                 </Text>
               </HStack>
             ))}
           </VStack>
-          <Text weight="600" color="contrast">
+          <Text size={14} weight="600" color="contrast">
             {t(getSetupVaultPurpose(value))}
           </Text>
         </VStack>
-        <VStack>
-          <Button type="submit">{t('continue')}</Button>
+        <VStack gap={20}>
+          <Button type="submit">{t('start').toUpperCase()}</Button>
           {value !== 'fast' && (
             <Button
-              onClick={() => navigate(makeAppPath('uploadQr', {}))}
+              onClick={() =>
+                navigate(makeAppPath('uploadQr', { title: t('join_keygen') }))
+              }
               kind="outlined"
             >
               {t('pair')}
@@ -118,6 +121,6 @@ export const SetupVaultPage = () => {
           )}
         </VStack>
       </PageContent>
-    </PageHeader>
+    </>
   );
 };

@@ -54,6 +54,7 @@ export const VaultList: React.FC<VaultListProps> = ({ onFinish }) => {
       <PageSlice>
         <Button
           onClick={() => {
+            console.log('navigate to: ', makeAppPath('setupVault', {}));
             navigate(makeAppPath('setupVault', {}));
           }}
           kind="primary"

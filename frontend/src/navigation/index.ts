@@ -9,7 +9,7 @@ export const appPaths = {
   shareVault: '/vault/share',
   reshareVault: '/vault/reshare',
   keysign: '/vault/keysign',
-  setupVault: 'vault/setup',
+  setupVault: '/vault/setup',
   setupSecureVault: '/vault/setup/secure',
   setupFastVault: '/vault/setup/fast',
   address: '/address',

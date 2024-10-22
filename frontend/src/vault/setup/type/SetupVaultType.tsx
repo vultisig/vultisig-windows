@@ -6,7 +6,7 @@ export type SetupVaultType = (typeof setupVaultTypes)[number];
 export const defaultSetupVaultType: SetupVaultType = 'fast';
 
 export const getSetupVaultArt = (type: SetupVaultType) =>
-  `images/${type}VaultSetup.svg`;
+  `/assets/images/${type}VaultSetup.svg`;
 
 export const getSetupVaultProperties = (type: SetupVaultType) =>
   range(3).map(index => `${type}_vault_setup_prop_${index}`);
