@@ -45,7 +45,6 @@ export const AddressPage = () => {
                 <FramedQrCode
                   style={{ position: 'absolute' }}
                   value={address}
-                  size={Math.min(size.width, size.height)}
                 />
               )}
             </Content>
