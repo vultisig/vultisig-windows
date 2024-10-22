@@ -18,12 +18,7 @@ export const RefreshVaultBalance = () => {
     mutationFn: () => {
       return invalidateQueries(
         getCoinPricesQueryKeys(coins.map(getStorageCoinKey)),
-        ...coins.map(coin =>
-          getBalanceQueryKey({
-            ...getStorageCoinKey(coin),
-            address: coin.address,
-          })
-        )
+        ...coins.map(coin => getBalanceQueryKey(getStorageCoinKey(coin)))
       );
     },
   });

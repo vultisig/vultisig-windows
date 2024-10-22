@@ -1,9 +1,11 @@
+import { useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 
 import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt';
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
 import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
 import { getStorageCoinKey } from '../../coin/utils/storageCoin';
@@ -12,8 +14,10 @@ import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
 import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
+import { Spinner } from '../../lib/ui/loaders/Spinner';
 import { Panel } from '../../lib/ui/panel/Panel';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
+import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { Text } from '../../lib/ui/text';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
@@ -38,6 +42,7 @@ import { VaultAddressLink } from './VaultAddressLink';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
 
 export const VaultChainPage = () => {
+  const invalidateQueries = useInvalidateQueries();
   const { globalCurrency } = useGlobalCurrency();
   const chainId = useCurrentVaultChainId();
 
@@ -55,13 +60,24 @@ export const VaultChainPage = () => {
 
   const nativeCoin = useAssertCurrentVaultNativeCoin(chainId);
 
+  const { mutate: refresh, isPending } = useMutation({
+    mutationFn: () => {
+      return invalidateQueries(
+        getBalanceQueryKey(getStorageCoinKey(nativeCoin))
+      );
+    },
+  });
+
   return (
     <VStack flexGrow>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
           <PageHeaderIconButtons>
-            <PageHeaderIconButton icon={<RefreshIcon />} />
+            <PageHeaderIconButton
+              onClick={() => refresh()}
+              icon={isPending ? <Spinner /> : <RefreshIcon />}
+            />
           </PageHeaderIconButtons>
         }
         title={<PageHeaderTitle>{chainId}</PageHeaderTitle>}
