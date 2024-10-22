@@ -7,21 +7,16 @@ import {
 } from '../../../lib/ui/props';
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep';
 import { useSelectedPeers } from '../../keysign/shared/state/selectedPeers';
-import { SetupVaultType } from '../type/SetupVaultType';
+import { useVaultType } from '../shared/state/vaultType';
 import { useJoinKeygenUrlQuery } from './queries/useJoinKeygenUrlQuery';
 
-type SetupVaultPeerDiscoveryStepProps = ComponentWithForwardActionProps &
-  ComponentWithBackActionProps & {
-    setupVaultType: SetupVaultType;
-  };
-
-export const SetupVaultPeerDiscoveryStep = ({
-  onForward,
-  onBack,
-  setupVaultType,
-}: SetupVaultPeerDiscoveryStepProps) => {
+export const SetupVaultPeerDiscoveryStep: React.FC<
+  ComponentWithForwardActionProps & ComponentWithBackActionProps
+> = ({ onForward, onBack }) => {
   const { t } = useTranslation();
   const peers = useSelectedPeers();
+
+  const type = useVaultType();
 
   const isDisabled = useMemo(() => {
     if (peers.length < 1) {
@@ -33,7 +28,7 @@ export const SetupVaultPeerDiscoveryStep = ({
 
   return (
     <KeygenPeerDiscoveryStep
-      title={t('keygen_for', { type: t(setupVaultType) })}
+      title={t('keygen_for', { type: t(type) })}
       onBack={onBack}
       onForward={onForward}
       isDisabled={isDisabled}

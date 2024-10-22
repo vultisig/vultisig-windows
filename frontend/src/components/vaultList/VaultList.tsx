@@ -52,17 +52,26 @@ export const VaultList: React.FC<VaultListProps> = ({ onFinish }) => {
         </PageSlice>
       </ScrollableFlexboxFiller>
       <PageSlice>
-        <Button
-          onClick={() => {
-            console.log('navigate to: ', makeAppPath('setupVault', {}));
-            navigate(makeAppPath('setupVault', {}));
-          }}
-          kind="primary"
-        >
-          <HStack alignItems="center" gap={8}>
-            <PlusIcon /> {t('add_new_vault')}
-          </HStack>
-        </Button>
+        <VStack gap={20}>
+          <Button
+            onClick={() => {
+              navigate(makeAppPath('setupVault', {}));
+            }}
+            kind="primary"
+          >
+            <HStack alignItems="center" gap={8}>
+              <PlusIcon /> {t('add_new_vault')}
+            </HStack>
+          </Button>
+          <Button
+            onClick={() => {
+              navigate(makeAppPath('importVault'));
+            }}
+            kind="outlined"
+          >
+            {t('import_existing_vault')}
+          </Button>
+        </VStack>
       </PageSlice>
     </Container>
   );

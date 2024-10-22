@@ -48,10 +48,12 @@ export const SetupVaultPage = () => {
 
   const navigate = useNavigate();
   const onStart = useCallback(() => {
-    match(value, {
-      fast: () => navigate('setupFastVault'),
-      secure: () => navigate('setupSecureVault'),
-    });
+    navigate(
+      match(value, {
+        fast: () => makeAppPath('setupFastVault'),
+        secure: () => makeAppPath('setupSecureVault'),
+      })
+    );
   }, [navigate, value]);
 
   return (
@@ -93,7 +95,7 @@ export const SetupVaultPage = () => {
               render={props => <ContainImage {...props} />}
             />
           </ArtContainer>
-          <VStack gap={12} alignItems="center">
+          <VStack gap={8} alignItems="center">
             {getSetupVaultProperties(value).map(prop => (
               <HStack key={prop} alignItems="center" gap={6}>
                 <Dot />

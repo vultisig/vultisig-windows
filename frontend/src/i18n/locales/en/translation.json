@@ -302,5 +302,16 @@
   "secure_vault_setup_prop_2": "Fully self-custodial",
   "fast_vault_purpose": "Use as a \"hot wallet\"",
   "active_vault_purpose": "Use as a \"main wallet\"",
-  "secure_vault_purpose": "Use as a \"cold wallet\""
+  "secure_vault_purpose": "Use as a \"cold wallet\"",
+  "invalid_email": "Please enter a valid email address",
+  "email": "Email",
+  "verify_email": "Verify Email",
+  "emails_dont_match": "Emails don't match",
+  "email_backup": "Enter your email to receive your backup",
+  "password_required": "Password is required",
+  "passwords_dont_match": "Passwords don't match",
+  "verify_password": "Verify Password",
+  "password_reason": "This password encrypts your FastVault Share",
+  "password": "Password",
+  "password_backup": "Protect your vault and fast sign."
 }
