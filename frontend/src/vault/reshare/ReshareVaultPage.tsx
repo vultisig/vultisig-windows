@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Match } from '../../lib/ui/base/Match';
@@ -42,6 +43,8 @@ export const ReshareVaultPage = () => {
   const { step, setStep, toPreviousStep, toNextStep } =
     useStepNavigation(reshareVaultSteps);
 
+  const { t } = useTranslation();
+
   return (
     <CurrentServiceNameProvider value={serviceName}>
       <PeersSelectionRecordProvider initialValue={{}}>
@@ -74,6 +77,7 @@ export const ReshareVaultPage = () => {
                           )}
                           keygen={() => (
                             <KeygenStep
+                              title={t('reshare')}
                               onTryAgain={() => setStep(reshareVaultSteps[0])}
                               onBack={() => setStep('verify')}
                             />

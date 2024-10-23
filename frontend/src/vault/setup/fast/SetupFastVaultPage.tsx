@@ -1,15 +1,14 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
 import { getHexEncodedRandomBytes } from '../../../chain/utils/getHexEncodedRandomBytes';
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { KeygenType } from '../../keygen/KeygenType';
-import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
 import { KeygenStep } from '../../keygen/shared/KeygenStep';
 import { CurrentServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { CurrentSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
-import { KeygenVerifyStep } from '../../keygen/shared/verify/KeygenVerifyStep';
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType';
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
@@ -28,15 +27,9 @@ import { SetupVaultEmailStep } from './email/SetupVaultEmailStep';
 import { EmailProvider } from './email/state/email';
 import { SetupVaultPasswordStep } from './password/SetupVaultPasswordStep';
 import { PasswordProvider } from './password/state/password';
+import { SetupVaultServerStep } from './SetupVaultServerStep';
 
-const steps = [
-  'name',
-  'email',
-  'password',
-  'verify',
-  'startSession',
-  'keygen',
-] as const;
+const steps = ['name', 'email', 'password', 'server', 'keygen'] as const;
 
 export const SetupFastVaultPage = () => {
   const localPartyId = useMemo(generateLocalPartyId, []);
@@ -50,6 +43,8 @@ export const SetupFastVaultPage = () => {
 
   const { step, setStep, toPreviousStep, toNextStep } =
     useStepNavigation(steps);
+
+  const { t } = useTranslation();
 
   return (
     <VaultTypeProvider value="fast">
@@ -87,22 +82,17 @@ export const SetupFastVaultPage = () => {
                                       onForward={toNextStep}
                                     />
                                   )}
-                                  verify={() => (
-                                    <KeygenVerifyStep
-                                      onBack={toPreviousStep}
-                                      onForward={toNextStep}
-                                    />
-                                  )}
-                                  startSession={() => (
-                                    <KeygenStartSessionStep
+                                  server={() => (
+                                    <SetupVaultServerStep
                                       onBack={toPreviousStep}
                                       onForward={toNextStep}
                                     />
                                   )}
                                   keygen={() => (
                                     <KeygenStep
+                                      title={t('keygenFor', { type: 'fast' })}
                                       onTryAgain={() => setStep(steps[0])}
-                                      onBack={() => setStep('verify')}
+                                      onBack={() => setStep('password')}
                                     />
                                   )}
                                 />

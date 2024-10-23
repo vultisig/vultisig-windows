@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
 import { getHexEncodedRandomBytes } from '../../../chain/utils/getHexEncodedRandomBytes';
@@ -41,6 +42,8 @@ export const SetupSecureVaultPage = () => {
   const { step, setStep, toPreviousStep, toNextStep } =
     useStepNavigation(steps);
 
+  const { t } = useTranslation();
+
   return (
     <VaultTypeProvider value="secure">
       <CurrentServiceNameProvider value={serviceName}>
@@ -82,6 +85,7 @@ export const SetupSecureVaultPage = () => {
                               )}
                               keygen={() => (
                                 <KeygenStep
+                                  title={t('keygenFor', { type: 'secure' })}
                                   onTryAgain={() => setStep(steps[0])}
                                   onBack={() => setStep('verify')}
                                 />
