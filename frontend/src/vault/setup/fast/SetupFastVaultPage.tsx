@@ -28,8 +28,18 @@ import { EmailProvider } from './email/state/email';
 import { SetupVaultPasswordStep } from './password/SetupVaultPasswordStep';
 import { PasswordProvider } from './password/state/password';
 import { SetupVaultServerStep } from './SetupVaultServerStep';
+import { SetupVaultWaitServerStep } from './SetupVaultWaitServerStep';
 
-const steps = ['name', 'email', 'password', 'server', 'keygen'] as const;
+const steps = [
+  'name',
+  'email',
+  'password',
+  'server',
+  'waitServer',
+  'keygen',
+] as const;
+
+const lastEditableStep = 'password';
 
 export const SetupFastVaultPage = () => {
   const localPartyId = useMemo(generateLocalPartyId, []);
@@ -86,7 +96,13 @@ export const SetupFastVaultPage = () => {
                                   )}
                                   server={() => (
                                     <SetupVaultServerStep
-                                      onBack={() => setStep('password')}
+                                      onBack={() => setStep(lastEditableStep)}
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  waitServer={() => (
+                                    <SetupVaultWaitServerStep
+                                      onBack={() => setStep(lastEditableStep)}
                                       onForward={toNextStep}
                                     />
                                   )}
@@ -96,7 +112,7 @@ export const SetupFastVaultPage = () => {
                                         type: t(vaultType),
                                       })}
                                       onTryAgain={() => setStep(steps[0])}
-                                      onBack={() => setStep('password')}
+                                      onBack={() => setStep(lastEditableStep)}
                                     />
                                   )}
                                 />
