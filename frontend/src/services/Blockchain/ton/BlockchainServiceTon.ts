@@ -158,7 +158,7 @@ export class BlockchainServiceTon
     const tokenTransferMessage = TW.TheOpenNetwork.Proto.Transfer.create({
       dest: keysignPayload.toAddress,
       amount: Number(keysignPayload.toAmount),
-      bounceable: bounceable,
+      bounceable: true,
       comment: keysignPayload.memo,
       mode:
         TW.TheOpenNetwork.Proto.SendMode.PAY_FEES_SEPARATELY |
@@ -172,8 +172,6 @@ export class BlockchainServiceTon
       messages: [tokenTransferMessage],
       publicKey: new Uint8Array(pubKeyData),
     };
-
-    console.log('inputObject:', inputObject);
 
     // Native token transfer
     const input = TW.TheOpenNetwork.Proto.SigningInput.create(inputObject);
@@ -274,8 +272,6 @@ export class BlockchainServiceTon
       output.encoded,
       output.encoded // TODO: Change this to the actual transaction hash
     );
-
-    // console.log('Signed transaction:', result);
 
     return result;
   }
