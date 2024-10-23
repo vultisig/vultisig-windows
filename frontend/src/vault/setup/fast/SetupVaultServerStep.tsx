@@ -7,14 +7,12 @@ import {
   ComponentWithForwardActionProps,
 } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
-import { postSession } from '../../../services/Keygen/Keygen';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { KeygenFailedState } from '../../keygen/shared/KeygenFailedState';
 import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId';
 import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
-import { useCurrentServerUrl } from '../../keygen/state/currentServerUrl';
 import { useVaultType } from '../shared/state/vaultType';
 import { useCurrentHexChainCode } from '../state/currentHexChainCode';
 import { useCurrentHexEncryptionKey } from '../state/currentHexEncryptionKey';
@@ -38,13 +36,9 @@ export const SetupVaultServerStep: React.FC<
   const hexEncryptionKey = useCurrentHexEncryptionKey();
   const localPartyId = useCurrentLocalPartyId();
 
-  const serverUrl = useCurrentServerUrl();
-
   const { mutate, ...state } = useMutation({
-    mutationFn: async () => {
-      await postSession(serverUrl, sessionId, localPartyId);
-
-      return setupVaultWithServer({
+    mutationFn: () =>
+      setupVaultWithServer({
         name,
         encryption_password: password,
         session_id: sessionId,
@@ -52,8 +46,7 @@ export const SetupVaultServerStep: React.FC<
         local_party_id: localPartyId,
         email,
         hex_encryption_key: hexEncryptionKey,
-      });
-    },
+      }),
     onSuccess: onForward,
   });
 

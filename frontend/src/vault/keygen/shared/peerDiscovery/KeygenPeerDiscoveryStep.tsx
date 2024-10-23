@@ -17,9 +17,9 @@ import { PageContent } from '../../../../ui/page/PageContent';
 import { PageHeader } from '../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
-import { keygenServerUrl } from '../../KeygenServerType';
 import { useCurrentLocalPartyId } from '../../state/currentLocalPartyId';
 import { useCurrentServerType } from '../../state/currentServerType';
+import { useCurrentServerUrl } from '../../state/currentServerUrl';
 import { PendingKeygenMessage } from '../PendingKeygenMessage';
 import { useCurrentServiceName } from '../state/currentServiceName';
 import { useCurrentSessionId } from '../state/currentSessionId';
@@ -47,13 +47,15 @@ export const KeygenPeerDiscoveryStep = ({
 
   const localPartyId = useCurrentLocalPartyId();
 
+  const serverUrl = useCurrentServerUrl();
+
   const { mutate: setupSession, ...setupSessionStatus } = useMutation({
     mutationFn: async () => {
       if (serverType === 'local') {
         await AdvertiseMediator(serviceName);
       }
 
-      return postSession(keygenServerUrl[serverType], sessionId, localPartyId);
+      return postSession(serverUrl, sessionId, localPartyId);
     },
   });
 
