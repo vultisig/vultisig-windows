@@ -8,6 +8,7 @@ import {
 } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { Text } from '../../../lib/ui/text';
+import { postSession } from '../../../services/Keygen/Keygen';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -16,6 +17,7 @@ import { FancyLoader } from '../../../ui/pending/FancyLoader';
 import { KeygenFailedState } from '../../keygen/shared/KeygenFailedState';
 import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId';
 import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
+import { useCurrentServerUrl } from '../../keygen/state/currentServerUrl';
 import { useVaultType } from '../shared/state/vaultType';
 import { useCurrentHexChainCode } from '../state/currentHexChainCode';
 import { useCurrentHexEncryptionKey } from '../state/currentHexEncryptionKey';
@@ -37,10 +39,13 @@ export const SetupVaultServerStep: React.FC<
   const hexChainCode = useCurrentHexChainCode();
   const hexEncryptionKey = useCurrentHexEncryptionKey();
   const localPartyId = useCurrentLocalPartyId();
+  const serverUrl = useCurrentServerUrl();
 
   const { mutate, ...state } = useMutation({
-    mutationFn: () =>
-      setupVaultWithServer({
+    mutationFn: async () => {
+      await postSession(serverUrl, sessionId, localPartyId);
+
+      return setupVaultWithServer({
         name,
         encryption_password: password,
         session_id: sessionId,
@@ -48,7 +53,8 @@ export const SetupVaultServerStep: React.FC<
         local_party_id: localPartyId,
         email,
         hex_encryption_key: hexEncryptionKey,
-      }),
+      });
+    },
     onSuccess: onForward,
   });
 
@@ -79,7 +85,6 @@ export const SetupVaultServerStep: React.FC<
           <KeygenFailedState message={error.message} onTryAgain={onBack} />
         )}
       />
-      <PageContent></PageContent>
     </>
   );
 };
