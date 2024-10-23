@@ -313,5 +313,6 @@
   "verify_password": "Verify Password",
   "password_reason": "This password encrypts your FastVault Share",
   "password": "Password",
-  "password_backup": "Protect your vault and fast sign."
+  "password_backup": "Protect your vault and fast sign.",
+  "looking_for_server": "Looking for FastVaultServer..."
 }

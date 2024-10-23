@@ -46,8 +46,10 @@ export const SetupFastVaultPage = () => {
 
   const { t } = useTranslation();
 
+  const vaultType = 'fast';
+
   return (
-    <VaultTypeProvider value="fast">
+    <VaultTypeProvider value={vaultType}>
       <EmailProvider initialValue="">
         <PasswordProvider initialValue="">
           <CurrentServiceNameProvider value={serviceName}>
@@ -84,13 +86,15 @@ export const SetupFastVaultPage = () => {
                                   )}
                                   server={() => (
                                     <SetupVaultServerStep
-                                      onBack={toPreviousStep}
+                                      onBack={() => setStep('password')}
                                       onForward={toNextStep}
                                     />
                                   )}
                                   keygen={() => (
                                     <KeygenStep
-                                      title={t('keygenFor', { type: 'fast' })}
+                                      title={t('keygen_for_vault', {
+                                        type: t(vaultType),
+                                      })}
                                       onTryAgain={() => setStep(steps[0])}
                                       onBack={() => setStep('password')}
                                     />

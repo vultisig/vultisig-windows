@@ -44,8 +44,10 @@ export const SetupSecureVaultPage = () => {
 
   const { t } = useTranslation();
 
+  const vaultType = 'secure';
+
   return (
-    <VaultTypeProvider value="secure">
+    <VaultTypeProvider value={vaultType}>
       <CurrentServiceNameProvider value={serviceName}>
         <PeersSelectionRecordProvider initialValue={{}}>
           <CurrentSessionIdProvider value={sessionId}>
@@ -85,7 +87,9 @@ export const SetupSecureVaultPage = () => {
                               )}
                               keygen={() => (
                                 <KeygenStep
-                                  title={t('keygenFor', { type: 'secure' })}
+                                  title={t('keygen_for_vault', {
+                                    type: t(vaultType),
+                                  })}
                                   onTryAgain={() => setStep(steps[0])}
                                   onBack={() => setStep('verify')}
                                 />

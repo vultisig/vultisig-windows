@@ -6,10 +6,14 @@ import {
   ComponentWithBackActionProps,
   ComponentWithForwardActionProps,
 } from '../../../lib/ui/props';
+import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { FancyLoader } from '../../../ui/pending/FancyLoader';
+import { KeygenFailedState } from '../../keygen/shared/KeygenFailedState';
 import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId';
 import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
 import { useVaultType } from '../shared/state/vaultType';
@@ -34,7 +38,7 @@ export const SetupVaultServerStep: React.FC<
   const hexEncryptionKey = useCurrentHexEncryptionKey();
   const localPartyId = useCurrentLocalPartyId();
 
-  const { mutate } = useMutation({
+  const { mutate, ...state } = useMutation({
     mutationFn: () =>
       setupVaultWithServer({
         name,
@@ -54,9 +58,26 @@ export const SetupVaultServerStep: React.FC<
     <>
       <PageHeader
         title={
-          <PageHeaderTitle>{t('keygen_for_vault', { type })}</PageHeaderTitle>
+          <PageHeaderTitle>
+            {t('keygen_for_vault', { type: t(type) })}
+          </PageHeaderTitle>
         }
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
+      />
+      <QueryDependant
+        query={state}
+        pending={() => (
+          <PageContent alignItems="center" justifyContent="center">
+            <FancyLoader />
+            <Text color="contrast" weight="bold" size={16}>
+              {t('looking_for_server')}
+            </Text>
+          </PageContent>
+        )}
+        success={() => null}
+        error={error => (
+          <KeygenFailedState message={error.message} onTryAgain={onBack} />
+        )}
       />
       <PageContent></PageContent>
     </>
