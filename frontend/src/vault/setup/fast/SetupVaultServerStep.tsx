@@ -12,7 +12,7 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { KeygenFailedState } from '../../keygen/shared/KeygenFailedState';
 import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId';
-import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
+import { generateLocalPartyId } from '../../keygen/utils/localPartyId';
 import { useVaultType } from '../shared/state/vaultType';
 import { useCurrentHexChainCode } from '../state/currentHexChainCode';
 import { useCurrentHexEncryptionKey } from '../state/currentHexEncryptionKey';
@@ -34,7 +34,6 @@ export const SetupVaultServerStep: React.FC<
   const sessionId = useCurrentSessionId();
   const hexChainCode = useCurrentHexChainCode();
   const hexEncryptionKey = useCurrentHexEncryptionKey();
-  const localPartyId = useCurrentLocalPartyId();
 
   const { mutate, ...state } = useMutation({
     mutationFn: () =>
@@ -43,7 +42,7 @@ export const SetupVaultServerStep: React.FC<
         encryption_password: password,
         session_id: sessionId,
         hex_chain_code: hexChainCode,
-        local_party_id: localPartyId,
+        local_party_id: generateLocalPartyId('server'),
         email,
         hex_encryption_key: hexEncryptionKey,
       }),

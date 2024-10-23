@@ -11,7 +11,9 @@ type Input = {
 };
 
 export const setupVaultWithServer = async (input: Input) => {
-  const response = await fetch(`${Endpoint.vultisigApiProxy}/vault/create`, {
+  const url = `${Endpoint.vultisigApiProxy}/vault/create`;
+
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
