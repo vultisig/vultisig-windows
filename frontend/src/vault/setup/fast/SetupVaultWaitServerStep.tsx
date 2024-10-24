@@ -7,11 +7,13 @@ import {
 } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { isEmpty } from '../../../lib/utils/array/isEmpty';
+import { recordFromKeys } from '../../../lib/utils/record/recordFromKeys';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { KeygenFailedState } from '../../keygen/shared/KeygenFailedState';
 import { usePeerOptionsQuery } from '../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery';
+import { usePeersSelectionRecord } from '../../keysign/shared/state/selectedPeers';
 import { useVaultType } from '../shared/state/vaultType';
 import { SetupFastVaultServerLoader } from './SetupFastVaultServerLoader';
 
@@ -22,12 +24,15 @@ export const SetupVaultWaitServerStep: React.FC<
 
   const peerOptionsQuery = usePeerOptionsQuery();
 
+  const [, setRecord] = usePeersSelectionRecord();
+
   const { data } = peerOptionsQuery;
   useEffect(() => {
     if (data && !isEmpty(data)) {
+      setRecord(recordFromKeys(data, () => true));
       onForward();
     }
-  }, [onForward, data]);
+  }, [data, onForward, setRecord]);
 
   const type = useVaultType();
 
