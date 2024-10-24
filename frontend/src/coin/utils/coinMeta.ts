@@ -20,6 +20,10 @@ export const getCoinMetaKey = ({
 export const getCoinMetaIconSrc = (
   coinMeta: Pick<CoinMeta, 'logo'>
 ): string => {
+  if (!coinMeta || !coinMeta.logo) {
+    return '';
+  }
+
   if (coinMeta.logo.startsWith('https://')) {
     return coinMeta.logo;
   }
