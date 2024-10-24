@@ -10,6 +10,7 @@
   "next": "Siguiente",
   "skip": "Omitir",
   "enter_password": "Ingrese la contraseña",
+  "choose_coins": "Choose Coins",
   "invalid_file_format": "Formato de archivo inválido",
   "invalid_vault_parse_to_string": "No se pudo analizar la bóveda en cadena",
   "invalid_vault_data": "Datos de bóveda no válidos",

@@ -20,9 +20,7 @@ import { ManageVaultChainCoin } from './ManageVaultChainCoin';
 
 export const VaultChainCoinOptions = () => {
   const chainId = useCurrentVaultChainId();
-
   const vaultCoins = useAssertCurrentVaultChainCoins(chainId);
-
   const query = useWhitelistedCoinsQuery(chainId);
 
   const vaultItems = useMemo(
