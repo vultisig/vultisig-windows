@@ -6,6 +6,10 @@ import { groupItems } from '../../lib/utils/array/groupItems';
 import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { Chain } from '../../model/chain';
+import {
+  keygenDeviceFromDeviceName,
+  parseLocalPartyId,
+} from '../keygen/utils/localPartyId';
 import { useVaults } from '../queries/useVaultsQuery';
 import { getStorageVaultId } from '../utils/storageVault';
 import { useCurrentVaultId } from './useCurrentVaultId';
@@ -117,5 +121,19 @@ export const useAssertCurrentVaultCoin = (coinKey: CoinKey) => {
 
   return shouldBePresent(
     coins.find(coin => areEqualCoins(getStorageCoinKey(coin), coinKey))
+  );
+};
+
+export const useCurrentVaultHasServer = () => {
+  const { signers } = useAssertCurrentVault();
+
+  return useMemo(
+    () =>
+      signers.some(
+        signer =>
+          keygenDeviceFromDeviceName(parseLocalPartyId(signer).deviceName) ===
+          'server'
+      ),
+    [signers]
   );
 };

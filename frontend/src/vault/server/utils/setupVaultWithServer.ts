@@ -1,4 +1,4 @@
-import { Endpoint } from '../../../../services/Endpoint';
+import { fastVaultServerUrl } from '../config';
 
 type Input = {
   name: string;
@@ -11,7 +11,7 @@ type Input = {
 };
 
 export const setupVaultWithServer = async (input: Input) => {
-  const url = `${Endpoint.vultisigApiProxy}/vault/create`;
+  const url = `${fastVaultServerUrl}/create`;
 
   const response = await fetch(url, {
     method: 'POST',

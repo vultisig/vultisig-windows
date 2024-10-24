@@ -9,6 +9,7 @@ export const appPaths = {
   shareVault: '/vault/share',
   reshareVault: '/vault/reshare',
   keysign: '/vault/keysign',
+  fastKeysign: '/vault/keysign/fast',
   setupVault: '/vault/setup',
   setupSecureVault: '/vault/setup/secure',
   setupFastVault: '/vault/setup/fast',
@@ -48,6 +49,7 @@ export type AppPathParams = {
   address: { address: string };
   joinKeysign: { vaultId: string; keysignMsg: string };
   keysign: { keysignPayload: string };
+  fastKeysign: { keysignPayload: string };
   joinKeygen: { keygenType: KeygenType; keygenMsg: string };
   uploadQr: { title?: string };
   manageVaultChainCoins: { chain: Chain };

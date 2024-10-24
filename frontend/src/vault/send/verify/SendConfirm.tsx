@@ -6,6 +6,7 @@ import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { Button } from '../../../lib/ui/buttons/Button';
+import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { ISendTransaction, TransactionType } from '../../../model/transaction';
@@ -15,6 +16,7 @@ import { BlockchainServiceFactory } from '../../../services/Blockchain/Blockchai
 import {
   useAssertCurrentVault,
   useAssertCurrentVaultCoin,
+  useCurrentVaultHasServer,
 } from '../../state/useCurrentVault';
 import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
 import { useSender } from '../sender/hooks/useSender';
@@ -23,6 +25,8 @@ import { useSendMemo } from '../state/memo';
 import { useSendReceiver } from '../state/receiver';
 import { useCurrentSendCoin } from '../state/sendCoin';
 import { useSendTerms } from './state/sendTerms';
+
+type SendType = 'fast' | 'paired';
 
 export const SendConfirm = () => {
   const { t } = useTranslation();
@@ -42,7 +46,7 @@ export const SendConfirm = () => {
   const specificTxInfoQuery = useSpecificSendTxInfoQuery();
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
-  const onSubmit = () => {
+  const startKeysign = (type: SendType) => {
     const balance = shouldBePresent(balanceQuery.data);
     const isMaxAmount =
       amount === fromChainAmount(balance.amount, coin.decimals);
@@ -64,7 +68,7 @@ export const SendConfirm = () => {
     ).createKeysignPayload(tx, vault.local_party_id, vault.public_key_ecdsa);
 
     navigate(
-      makeAppPath('keysign', {
+      makeAppPath(type === 'fast' ? 'fastKeysign' : 'keysign', {
         keysignPayload: JSON.stringify(payload.toJson()),
       })
     );
@@ -77,14 +81,37 @@ export const SendConfirm = () => {
     }
   }, [t, terms]);
 
+  const hasServer = useCurrentVaultHasServer();
+
   if (balanceQuery.error || specificTxInfoQuery.error) {
     return <Text>{t('failed_to_load')}</Text>;
   }
 
   const isPending = balanceQuery.isPending || specificTxInfoQuery.isPending;
 
+  if (isPending) {
+    return <Text>{t('loading')}</Text>;
+  }
+
+  if (hasServer) {
+    return (
+      <VStack gap={20}>
+        <Button onClick={() => startKeysign('fast')} isDisabled={isDisabled}>
+          {t('fast_sign')}
+        </Button>
+        <Button
+          kind="outlined"
+          isDisabled={isDisabled}
+          onClick={() => startKeysign('paired')}
+        >
+          {t('paired_sign')}
+        </Button>
+      </VStack>
+    );
+  }
+
   return (
-    <Button isLoading={isPending} isDisabled={isDisabled} onClick={onSubmit}>
+    <Button isDisabled={isDisabled} onClick={() => startKeysign('paired')}>
       {t('continue')}
     </Button>
   );
