@@ -1,44 +1,29 @@
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { v4 as uuidv4 } from 'uuid';
 
-import { getHexEncodedRandomBytes } from '../../../chain/utils/getHexEncodedRandomBytes';
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { KeygenType } from '../../keygen/KeygenType';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
 import { KeygenStep } from '../../keygen/shared/KeygenStep';
-import { CurrentServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
-import { CurrentSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
+import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
+import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
 import { KeygenVerifyStep } from '../../keygen/shared/verify/KeygenVerifyStep';
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType';
-import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
+import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
-import { generateHexEncryptionKey } from '../../keygen/utils/generateHexEncryptionKey';
-import { generateServiceName } from '../../keygen/utils/generateServiceName';
-import { generateLocalPartyId } from '../../keygen/utils/localPartyId';
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers';
 import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
 import { VaultTypeProvider } from '../shared/state/vaultType';
 import { StartKeygenVaultProvider } from '../StartKeygenVaultProvider';
-import { CurrentHexChainCodeProvider } from '../state/currentHexChainCode';
-import { CurrentHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey';
+import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode';
+import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType';
 import { SetupVaultNameProvider } from '../state/vaultName';
 
 const steps = ['name', 'peers', 'verify', 'startSession', 'keygen'] as const;
 
 export const SetupSecureVaultPage = () => {
-  const localPartyId = useMemo(generateLocalPartyId, []);
-
-  const hexChainCode = useMemo(() => getHexEncodedRandomBytes(32), []);
-  const hexEncryptionKey = useMemo(generateHexEncryptionKey, []);
-
-  const serviceName = useMemo(generateServiceName, []);
-
-  const sessionId = useMemo(uuidv4, []);
-
   const { step, setStep, toPreviousStep, toNextStep } =
     useStepNavigation(steps);
 
@@ -48,14 +33,14 @@ export const SetupSecureVaultPage = () => {
 
   return (
     <VaultTypeProvider value={vaultType}>
-      <CurrentServiceNameProvider value={serviceName}>
+      <GeneratedServiceNameProvider>
         <PeersSelectionRecordProvider initialValue={{}}>
-          <CurrentSessionIdProvider value={sessionId}>
-            <CurrentHexEncryptionKeyProvider value={hexEncryptionKey}>
-              <CurrentHexChainCodeProvider value={hexChainCode}>
+          <GeneratedSessionIdProvider>
+            <GeneratedHexEncryptionKeyProvider>
+              <GeneratedHexChainCodeProvider>
                 <CurrentServerTypeProvider initialValue="relay">
                   <ServerUrlDerivedFromServerTypeProvider>
-                    <CurrentLocalPartyIdProvider value={localPartyId}>
+                    <GeneratedLocalPartyIdProvider>
                       <SetupVaultNameProvider>
                         <StartKeygenVaultProvider>
                           <CurrentKeygenTypeProvider value={KeygenType.Keygen}>
@@ -98,14 +83,14 @@ export const SetupSecureVaultPage = () => {
                           </CurrentKeygenTypeProvider>
                         </StartKeygenVaultProvider>
                       </SetupVaultNameProvider>
-                    </CurrentLocalPartyIdProvider>
+                    </GeneratedLocalPartyIdProvider>
                   </ServerUrlDerivedFromServerTypeProvider>
                 </CurrentServerTypeProvider>
-              </CurrentHexChainCodeProvider>
-            </CurrentHexEncryptionKeyProvider>
-          </CurrentSessionIdProvider>
+              </GeneratedHexChainCodeProvider>
+            </GeneratedHexEncryptionKeyProvider>
+          </GeneratedSessionIdProvider>
         </PeersSelectionRecordProvider>
-      </CurrentServiceNameProvider>
+      </GeneratedServiceNameProvider>
     </VaultTypeProvider>
   );
 };
