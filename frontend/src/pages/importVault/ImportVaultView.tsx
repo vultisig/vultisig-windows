@@ -8,16 +8,14 @@ import ImportVaultDialog from '../../components/dialog/ImportVaultDialog';
 import NavBar from '../../components/navbar/NavBar';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
-import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { extractError } from '../../lib/utils/error/extractError';
 import { makeAppPath } from '../../navigation';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 import { isBase64Encoded } from '../../utils/util';
-import {
-  useVaultsQuery,
-  vaultsQueryKey,
-} from '../../vault/queries/useVaultsQuery';
+import { useVaultsQuery } from '../../vault/queries/useVaultsQuery';
+import { useCurrentVaultId } from '../../vault/state/useCurrentVaultId';
+import { getStorageVaultId } from '../../vault/utils/storageVault';
 import {
   BackupVault,
   mapBackupVaultToVault,
@@ -26,6 +24,7 @@ import {
 const ImportVaultView = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [_, setCurrentVaultId] = useCurrentVaultId();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isContinue, setContinue] = useState(false);
@@ -38,9 +37,7 @@ const ImportVaultView = () => {
     useState<Uint8Array | null>(null);
   const [fileExtension, setFileExtension] = useState<string>('');
   const walletcore = useAssertWalletCore();
-  const { data: vaults = [] } = useVaultsQuery();
-
-  const invalidateQueries = useInvalidateQueries();
+  const { data: vaults = [], refetch } = useVaultsQuery();
 
   const vaultService = VaultServiceFactory.getService(walletcore);
 
@@ -231,7 +228,15 @@ const ImportVaultView = () => {
         await vaultService.importVault(vaultBuffer);
       }
 
-      await invalidateQueries(vaultsQueryKey);
+      const { data: updatedVaults } = await refetch();
+
+      if (updatedVaults) {
+        const lastVaultId = getStorageVaultId(
+          updatedVaults[updatedVaults.length - 1]
+        );
+        setCurrentVaultId(lastVaultId);
+      }
+
       navigate(makeAppPath('vaultList'));
     } catch (e: unknown) {
       setDialogTitle(t('invalid_vault_data'));
@@ -303,7 +308,6 @@ const ImportVaultView = () => {
                   WebkitLineClamp: 9,
                 }}
               >
-                {/* Display decrypted content as hex */}
                 {Buffer.from(decryptedVaultContent).toString('hex')}
               </div>
             )}
