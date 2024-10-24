@@ -6,6 +6,7 @@ import { getHexEncodedRandomBytes } from '../../../chain/utils/getHexEncodedRand
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { KeygenType } from '../../keygen/KeygenType';
+import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
 import { KeygenStep } from '../../keygen/shared/KeygenStep';
 import { CurrentServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { CurrentSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
@@ -36,6 +37,7 @@ const steps = [
   'password',
   'server',
   'waitServer',
+  'startSession',
   'keygen',
 ] as const;
 
@@ -102,6 +104,12 @@ export const SetupFastVaultPage = () => {
                                   )}
                                   waitServer={() => (
                                     <SetupVaultWaitServerStep
+                                      onBack={() => setStep(lastEditableStep)}
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  startSession={() => (
+                                    <KeygenStartSessionStep
                                       onBack={() => setStep(lastEditableStep)}
                                       onForward={toNextStep}
                                     />
