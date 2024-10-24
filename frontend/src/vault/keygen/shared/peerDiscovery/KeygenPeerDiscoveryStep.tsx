@@ -1,8 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
-import { AdvertiseMediator } from '../../../../../wailsjs/go/mediator/Server';
+import { Button } from '../../../../lib/ui/buttons/Button';
+import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps';
+import { VStack } from '../../../../lib/ui/layout/Stack';
+import { TakeWholeSpaceCenterContent } from '../../../../lib/ui/layout/TakeWholeSpaceCenterContent';
+import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import {
   ComponentWithBackActionProps,
   ComponentWithDisabledState,
@@ -11,20 +14,17 @@ import {
 } from '../../../../lib/ui/props';
 import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
 import { Query } from '../../../../lib/ui/query/Query';
-import { Text } from '../../../../lib/ui/text';
-import { postSession } from '../../../../services/Keygen/Keygen';
+import { StrictText } from '../../../../lib/ui/text';
 import { PageContent } from '../../../../ui/page/PageContent';
 import { PageHeader } from '../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
-import { useCurrentLocalPartyId } from '../../state/currentLocalPartyId';
-import { useCurrentServerType } from '../../state/currentServerType';
-import { useCurrentServerUrl } from '../../state/currentServerUrl';
-import { PendingKeygenMessage } from '../PendingKeygenMessage';
-import { useCurrentServiceName } from '../state/currentServiceName';
-import { useCurrentSessionId } from '../state/currentSessionId';
+import { useVaultType } from '../../../setup/shared/state/vaultType';
+import { KeygenNetworkReminder } from '../KeygenNetworkReminder';
+import { PeersManager } from '../PeersManager';
 import { DownloadKeygenQrCode } from './DownloadKeygenQrCode';
-import { KeygenPeerDiscovery } from './KeygenPeerDiscovery';
+import { KeygenPeerDiscoveryQrCode } from './KeygenPeerDiscoveryQrCode';
+import { ManageServerType } from './ManageServerType';
 
 type KeygenPeerDiscoveryStepProps = ComponentWithForwardActionProps &
   Partial<ComponentWithBackActionProps> &
@@ -32,6 +32,14 @@ type KeygenPeerDiscoveryStepProps = ComponentWithForwardActionProps &
   ComponentWithDisabledState & {
     joinUrlQuery: Query<string>;
   };
+
+const Content = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+`;
 
 export const KeygenPeerDiscoveryStep = ({
   onForward,
@@ -41,25 +49,8 @@ export const KeygenPeerDiscoveryStep = ({
   joinUrlQuery,
 }: KeygenPeerDiscoveryStepProps) => {
   const { t } = useTranslation();
-  const sessionId = useCurrentSessionId();
-  const serviceName = useCurrentServiceName();
-  const [serverType] = useCurrentServerType();
 
-  const localPartyId = useCurrentLocalPartyId();
-
-  const serverUrl = useCurrentServerUrl();
-
-  const { mutate: setupSession, ...setupSessionStatus } = useMutation({
-    mutationFn: async () => {
-      if (serverType === 'local') {
-        await AdvertiseMediator(serviceName);
-      }
-
-      return postSession(serverUrl, sessionId, localPartyId);
-    },
-  });
-
-  useEffect(() => setupSession(), [setupSession]);
+  const vaultType = useVaultType();
 
   return (
     <>
@@ -75,26 +66,39 @@ export const KeygenPeerDiscoveryStep = ({
           />
         }
       />
-      <QueryDependant
-        query={setupSessionStatus}
-        success={() => (
-          <KeygenPeerDiscovery
-            joinUrlQuery={joinUrlQuery}
-            isDisabled={isDisabled}
-            onForward={onForward}
+      <PageContent
+        as="form"
+        {...getFormProps({
+          onSubmit: onForward,
+          isDisabled,
+        })}
+      >
+        <Content>
+          <QueryDependant
+            query={joinUrlQuery}
+            success={value => <KeygenPeerDiscoveryQrCode value={value} />}
+            pending={() => (
+              <TakeWholeSpaceCenterContent>
+                <Spinner />
+              </TakeWholeSpaceCenterContent>
+            )}
+            error={() => (
+              <TakeWholeSpaceCenterContent>
+                <StrictText>{t('failed_to_generate_qr_code')}</StrictText>
+              </TakeWholeSpaceCenterContent>
+            )}
           />
-        )}
-        pending={() => (
-          <PageContent justifyContent="center" alignItems="center">
-            <PendingKeygenMessage>{t('session_init')}</PendingKeygenMessage>
-          </PageContent>
-        )}
-        error={() => (
-          <PageContent justifyContent="center" alignItems="center">
-            <Text>{t('session_init_failed')}</Text>
-          </PageContent>
-        )}
-      />
+
+          <VStack gap={40} alignItems="center">
+            {vaultType === 'secure' && <ManageServerType />}
+            <PeersManager />
+            <KeygenNetworkReminder />
+          </VStack>
+        </Content>
+        <Button type="submit" isDisabled={isDisabled}>
+          {t('continue')}
+        </Button>
+      </PageContent>
     </>
   );
 };

@@ -10,6 +10,8 @@ import { useSelectedPeers } from '../../keysign/shared/state/selectedPeers';
 import { useVaultType } from '../shared/state/vaultType';
 import { useJoinKeygenUrlQuery } from './queries/useJoinKeygenUrlQuery';
 
+const requiredPeers = 2;
+
 export const SetupVaultPeerDiscoveryStep: React.FC<
   ComponentWithForwardActionProps & ComponentWithBackActionProps
 > = ({ onForward, onBack }) => {
@@ -19,8 +21,8 @@ export const SetupVaultPeerDiscoveryStep: React.FC<
   const type = useVaultType();
 
   const isDisabled = useMemo(() => {
-    if (peers.length < 1) {
-      return t('select_at_least_one_device');
+    if (peers.length !== requiredPeers) {
+      return t('select_n_devices', { count: requiredPeers });
     }
   }, [peers.length, t]);
 
@@ -28,7 +30,7 @@ export const SetupVaultPeerDiscoveryStep: React.FC<
 
   return (
     <KeygenPeerDiscoveryStep
-      title={t('keygen_for', { type: t(type) })}
+      title={t('keygen_for_vault', { type: t(type) })}
       onBack={onBack}
       onForward={onForward}
       isDisabled={isDisabled}

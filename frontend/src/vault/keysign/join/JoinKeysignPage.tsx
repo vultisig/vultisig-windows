@@ -1,5 +1,3 @@
-import { useTranslation } from 'react-i18next';
-
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
@@ -26,8 +24,6 @@ export const JoinKeysignPage = () => {
 
   const { local_party_id } = useAssertCurrentVault();
 
-  const { t } = useTranslation();
-
   return (
     <KeysignVaultGuard>
       <KeysignPayloadProvider value={shouldBePresent(keysignPayload)}>
@@ -43,7 +39,6 @@ export const JoinKeysignPage = () => {
                     )}
                     session={() => (
                       <JoinKeygenSessionStep
-                        title={t('join_keysign')}
                         onForward={toNextStep}
                         onBack={() => setStep('verify')}
                       />

@@ -6,7 +6,6 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import {
   ComponentWithBackActionProps,
   ComponentWithForwardActionProps,
-  TitledComponentProps,
 } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
@@ -24,10 +23,7 @@ import { useCurrentSessionId } from './state/currentSessionId';
 export const JoinKeygenSessionStep = ({
   onForward,
   onBack,
-  title,
-}: ComponentWithForwardActionProps &
-  Partial<ComponentWithBackActionProps> &
-  TitledComponentProps) => {
+}: ComponentWithForwardActionProps & Partial<ComponentWithBackActionProps>) => {
   const sessionId = useCurrentSessionId();
 
   const serverUrl = useCurrentServerUrl();
@@ -48,6 +44,8 @@ export const JoinKeygenSessionStep = ({
   useEffect(() => start(), [start]);
 
   const { t } = useTranslation();
+
+  const title = t('join_session');
 
   return (
     <QueryDependant

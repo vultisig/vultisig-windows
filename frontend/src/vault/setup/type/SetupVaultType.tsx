@@ -1,6 +1,6 @@
 import { range } from '../../../lib/utils/array/range';
 
-export const setupVaultTypes = ['fast', 'secure'] as const;
+export const setupVaultTypes = ['fast', 'active', 'secure'] as const;
 export type SetupVaultType = (typeof setupVaultTypes)[number];
 
 export const defaultSetupVaultType: SetupVaultType = 'fast';

@@ -1,13 +1,21 @@
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { KeygenType } from '../../keygen/KeygenType';
+import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
+import { KeygenVerifyStep } from '../../keygen/shared/verify/KeygenVerifyStep';
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType';
 import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers';
+import { SetupVaultEmailStep } from '../fast/email/SetupVaultEmailStep';
+import { EmailProvider } from '../fast/email/state/email';
+import { SetupVaultPasswordStep } from '../fast/password/SetupVaultPasswordStep';
+import { PasswordProvider } from '../fast/password/state/password';
+import { SetupVaultServerStep } from '../fast/SetupVaultServerStep';
+import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
 import { SetupVaultKeygenStep } from '../shared/SetupVaultKeygenStep';
 import { VaultTypeProvider } from '../shared/state/vaultType';
@@ -16,31 +24,27 @@ import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode';
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType';
 import { SetupVaultNameProvider } from '../state/vaultName';
-import { SetupVaultEmailStep } from './email/SetupVaultEmailStep';
-import { EmailProvider } from './email/state/email';
-import { SetupVaultPasswordStep } from './password/SetupVaultPasswordStep';
-import { PasswordProvider } from './password/state/password';
-import { SetupVaultServerStep } from './SetupVaultServerStep';
-import { SetupVaultWaitServerStep } from './SetupVaultWaitServerStep';
 
 const steps = [
   'name',
   'email',
   'password',
   'server',
-  'waitServer',
+  'joinSession',
+  'peers',
+  'verify',
   'startSession',
   'keygen',
 ] as const;
 
 const lastEditableStep = 'password';
 
-export const SetupFastVaultPage = () => {
+export const SetupActiveVaultPage = () => {
   const { step, setStep, toPreviousStep, toNextStep } =
     useStepNavigation(steps);
 
   return (
-    <VaultTypeProvider value="fast">
+    <VaultTypeProvider value="active">
       <EmailProvider initialValue="">
         <PasswordProvider initialValue="">
           <GeneratedServiceNameProvider>
@@ -81,8 +85,20 @@ export const SetupFastVaultPage = () => {
                                       onForward={toNextStep}
                                     />
                                   )}
-                                  waitServer={() => (
-                                    <SetupVaultWaitServerStep
+                                  verify={() => (
+                                    <KeygenVerifyStep
+                                      onBack={toPreviousStep}
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  joinSession={() => (
+                                    <JoinKeygenSessionStep
+                                      onBack={() => setStep(lastEditableStep)}
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  peers={() => (
+                                    <SetupVaultPeerDiscoveryStep
                                       onBack={() => setStep(lastEditableStep)}
                                       onForward={toNextStep}
                                     />
