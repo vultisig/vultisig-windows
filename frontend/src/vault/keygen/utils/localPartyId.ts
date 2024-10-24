@@ -36,6 +36,17 @@ export const parseLocalPartyId = (localPartyId: string) => {
   return { deviceName, hash };
 };
 
+export const keygenDeviceFromDeviceName = (
+  deviceName: string
+): KeygenDevice | null => {
+  const lowerCaseDeviceName = deviceName.toLowerCase();
+  if (lowerCaseDeviceName in keygenDeviceType) {
+    return lowerCaseDeviceName as KeygenDevice;
+  }
+
+  return null;
+};
+
 const keygenDeviceName: Record<KeygenDevice, string> = {
   windows: 'Windows',
   mac: 'Mac',
@@ -47,9 +58,9 @@ const keygenDeviceName: Record<KeygenDevice, string> = {
 };
 
 export const formatKeygenDeviceName = (deviceName: string) => {
-  const lowerCaseDeviceName = deviceName.toLowerCase();
-  if (lowerCaseDeviceName in keygenDeviceType) {
-    return keygenDeviceName[lowerCaseDeviceName as KeygenDevice];
+  const keygenDevice = keygenDeviceFromDeviceName(deviceName);
+  if (keygenDevice) {
+    return keygenDeviceName[keygenDevice];
   }
 
   return deviceName;
@@ -69,9 +80,9 @@ const keygenDeviceType: Record<KeygenDevice, DeviceType> = {
 };
 
 export const getKeygenDeviceType = (deviceName: string): DeviceType => {
-  const lowerCaseDeviceName = deviceName.toLowerCase();
-  if (lowerCaseDeviceName in keygenDeviceType) {
-    return keygenDeviceType[lowerCaseDeviceName as KeygenDevice];
+  const keygenDevice = keygenDeviceFromDeviceName(deviceName);
+  if (keygenDevice) {
+    return keygenDeviceType[keygenDevice];
   }
 
   return 'phone';

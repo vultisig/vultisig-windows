@@ -316,5 +316,10 @@
   "password_reason": "This password encrypts your FastVault Share",
   "password": "Password",
   "password_backup": "Protect your vault and fast sign.",
-  "looking_for_server": "Looking for FastVaultServer..."
+  "looking_for_server": "Looking for FastVaultServer...",
+  "loading": "Loading...",
+  "fast_sign": "Fast Sign",
+  "paired_sign": "Paired Sign",
+  "password_to_decrypt": "This Password decrypts your FastVault Share",
+  "fast_vault_password": "FastVault Password"
 }

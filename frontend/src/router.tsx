@@ -24,6 +24,7 @@ import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
+import { StartFastKeysignPage } from './vault/keysign/start/fast/StartFastKeysignPage';
 import { StartKeysignPage } from './vault/keysign/start/StartKeysignPage';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
 import { ReshareVaultPage } from './vault/reshare/ReshareVaultPage';
@@ -84,6 +85,10 @@ export const router = createBrowserRouter([
   {
     path: appPaths.keysign,
     element: <StartKeysignPage />,
+  },
+  {
+    path: appPaths.fastKeysign,
+    element: <StartFastKeysignPage />,
   },
   {
     path: appPaths.vaultList,
