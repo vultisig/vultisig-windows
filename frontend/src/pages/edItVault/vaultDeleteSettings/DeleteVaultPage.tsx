@@ -70,7 +70,7 @@ const DeleteVaultPage = () => {
       if (vaults.length > 0) {
         navigate(appPaths.vaultList);
       } else {
-        navigate(appPaths.addVault);
+        navigate(appPaths.setupVault);
       }
     } catch (err) {
       console.error(err);

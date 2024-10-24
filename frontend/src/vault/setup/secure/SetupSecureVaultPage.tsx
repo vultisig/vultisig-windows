@@ -1,47 +1,35 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { v4 as uuidv4 } from 'uuid';
 
-import { getHexEncodedRandomBytes } from '../../chain/utils/getHexEncodedRandomBytes';
-import { Match } from '../../lib/ui/base/Match';
-import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation';
-import { useGenerateVaultName } from '../hooks/useGenerateVaultName';
-import { defaultKeygenThresholdType } from '../keygen/KeygenThresholdType';
-import { KeygenType } from '../keygen/KeygenType';
-import { KeygenStartSessionStep } from '../keygen/shared/KeygenStartSessionStep';
-import { KeygenStep } from '../keygen/shared/KeygenStep';
-import { CurrentServiceNameProvider } from '../keygen/shared/state/currentServiceName';
-import { CurrentSessionIdProvider } from '../keygen/shared/state/currentSessionId';
-import { KeygenVerifyStep } from '../keygen/shared/verify/KeygenVerifyStep';
-import { CurrentKeygenTypeProvider } from '../keygen/state/currentKeygenType';
-import { CurrentLocalPartyIdProvider } from '../keygen/state/currentLocalPartyId';
-import { CurrentServerTypeProvider } from '../keygen/state/currentServerType';
-import { generateHexEncryptionKey } from '../keygen/utils/generateHexEncryptionKey';
-import { generateServiceName } from '../keygen/utils/generateServiceName';
-import { generateLocalPartyId } from '../keygen/utils/localPartyId';
-import { PeersSelectionRecordProvider } from '../keysign/shared/state/selectedPeers';
-import { SetupVaultKeygenThresholdStep } from './keygenThreshold/SetupVaultKeygenThresholdStep';
-import { SetupVaultPeerDiscoveryStep } from './peers/SetupVaultPeerDiscoveryStep';
-import { SetupVaultNameStep } from './SetupVaultNameStep';
-import { StartKeygenVaultProvider } from './StartKeygenVaultProvider';
-import { CurrentHexChainCodeProvider } from './state/currentHexChainCode';
-import { CurrentHexEncryptionKeyProvider } from './state/currentHexEncryptionKey';
-import { CurrentKeygenThresholdProvider } from './state/currentKeygenThreshold';
-import { ServerUrlDerivedFromServerTypeProvider } from './state/serverUrlDerivedFromServerType';
-import { VaultNameProvider } from './state/vaultName';
+import { getHexEncodedRandomBytes } from '../../../chain/utils/getHexEncodedRandomBytes';
+import { Match } from '../../../lib/ui/base/Match';
+import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
+import { KeygenType } from '../../keygen/KeygenType';
+import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
+import { KeygenStep } from '../../keygen/shared/KeygenStep';
+import { CurrentServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
+import { CurrentSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
+import { KeygenVerifyStep } from '../../keygen/shared/verify/KeygenVerifyStep';
+import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType';
+import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
+import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
+import { generateHexEncryptionKey } from '../../keygen/utils/generateHexEncryptionKey';
+import { generateServiceName } from '../../keygen/utils/generateServiceName';
+import { generateLocalPartyId } from '../../keygen/utils/localPartyId';
+import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers';
+import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep';
+import { SetupVaultNameStep } from '../SetupVaultNameStep';
+import { VaultTypeProvider } from '../shared/state/vaultType';
+import { StartKeygenVaultProvider } from '../StartKeygenVaultProvider';
+import { CurrentHexChainCodeProvider } from '../state/currentHexChainCode';
+import { CurrentHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey';
+import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType';
+import { SetupVaultNameProvider } from '../state/vaultName';
 
-const setupVaultSteps = [
-  'threshold',
-  'name',
-  'peers',
-  'verify',
-  'startSession',
-  'keygen',
-] as const;
+const steps = ['name', 'peers', 'verify', 'startSession', 'keygen'] as const;
 
-export const SetupVaultPage = () => {
-  const generateVaultName = useGenerateVaultName();
-  const initialVaultName = useMemo(generateVaultName, [generateVaultName]);
-
+export const SetupSecureVaultPage = () => {
   const localPartyId = useMemo(generateLocalPartyId, []);
 
   const hexChainCode = useMemo(() => getHexEncodedRandomBytes(32), []);
@@ -52,10 +40,14 @@ export const SetupVaultPage = () => {
   const sessionId = useMemo(uuidv4, []);
 
   const { step, setStep, toPreviousStep, toNextStep } =
-    useStepNavigation(setupVaultSteps);
+    useStepNavigation(steps);
+
+  const { t } = useTranslation();
+
+  const vaultType = 'secure';
 
   return (
-    <CurrentKeygenThresholdProvider initialValue={defaultKeygenThresholdType}>
+    <VaultTypeProvider value={vaultType}>
       <CurrentServiceNameProvider value={serviceName}>
         <PeersSelectionRecordProvider initialValue={{}}>
           <CurrentSessionIdProvider value={sessionId}>
@@ -64,16 +56,11 @@ export const SetupVaultPage = () => {
                 <CurrentServerTypeProvider initialValue="relay">
                   <ServerUrlDerivedFromServerTypeProvider>
                     <CurrentLocalPartyIdProvider value={localPartyId}>
-                      <VaultNameProvider initialValue={initialVaultName}>
+                      <SetupVaultNameProvider>
                         <StartKeygenVaultProvider>
                           <CurrentKeygenTypeProvider value={KeygenType.Keygen}>
                             <Match
                               value={step}
-                              threshold={() => (
-                                <SetupVaultKeygenThresholdStep
-                                  onForward={toNextStep}
-                                />
-                              )}
                               name={() => (
                                 <SetupVaultNameStep
                                   onBack={toPreviousStep}
@@ -100,14 +87,17 @@ export const SetupVaultPage = () => {
                               )}
                               keygen={() => (
                                 <KeygenStep
-                                  onTryAgain={() => setStep(setupVaultSteps[0])}
+                                  title={t('keygen_for_vault', {
+                                    type: t(vaultType),
+                                  })}
+                                  onTryAgain={() => setStep(steps[0])}
                                   onBack={() => setStep('verify')}
                                 />
                               )}
                             />
                           </CurrentKeygenTypeProvider>
                         </StartKeygenVaultProvider>
-                      </VaultNameProvider>
+                      </SetupVaultNameProvider>
                     </CurrentLocalPartyIdProvider>
                   </ServerUrlDerivedFromServerTypeProvider>
                 </CurrentServerTypeProvider>
@@ -116,6 +106,6 @@ export const SetupVaultPage = () => {
           </CurrentSessionIdProvider>
         </PeersSelectionRecordProvider>
       </CurrentServiceNameProvider>
-    </CurrentKeygenThresholdProvider>
+    </VaultTypeProvider>
   );
 };

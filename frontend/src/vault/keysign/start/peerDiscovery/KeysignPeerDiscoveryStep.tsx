@@ -11,12 +11,12 @@ import { PageContent } from '../../../../ui/page/PageContent';
 import { PageHeader } from '../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
-import { keygenServerUrl } from '../../../keygen/KeygenServerType';
 import { PendingKeygenMessage } from '../../../keygen/shared/PendingKeygenMessage';
 import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName';
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
 import { useCurrentLocalPartyId } from '../../../keygen/state/currentLocalPartyId';
 import { useCurrentServerType } from '../../../keygen/state/currentServerType';
+import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
 import { DownloadKeysignQrCode } from './DownloadKeysignQrCode';
 import { KeysignPeerDiscovery } from './KeysignPeerDiscovery';
 
@@ -30,13 +30,15 @@ export const KeysignPeerDiscoveryStep = ({
 
   const localPartyId = useCurrentLocalPartyId();
 
+  const serverUrl = useCurrentServerUrl();
+
   const { mutate: setupSession, ...setupSessionStatus } = useMutation({
     mutationFn: async () => {
       if (serverType === 'local') {
         await AdvertiseMediator(serviceName);
       }
 
-      return postSession(keygenServerUrl[serverType], sessionId, localPartyId);
+      return postSession(serverUrl, sessionId, localPartyId);
     },
   });
 

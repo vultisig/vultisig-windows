@@ -12,7 +12,7 @@ import { getColor } from '../../../../lib/ui/theme/getters';
 import { useVaultKeygenDevices } from '../../../setup/hooks/useVaultKegenDevices';
 import { useCurrentLocalPartyId } from '../../state/currentLocalPartyId';
 import {
-  getKeygenDeviceName,
+  formatKeygenDeviceName,
   parseLocalPartyId,
 } from '../../utils/localPartyId';
 
@@ -41,14 +41,15 @@ export const VaultDeviceItem = ({
 
   const devices = useVaultKeygenDevices();
 
-  const { id } = parseLocalPartyId(value);
+  const { deviceName } = parseLocalPartyId(value);
 
   const { t } = useTranslation();
 
   return (
     <Container>
       {t('part')} {index + 1} {t('of')} {devices.length}:{' '}
-      {getKeygenDeviceName(id)} {isCurrentDevice ? `(${t('this_device')})` : ''}
+      {formatKeygenDeviceName(deviceName)}{' '}
+      {isCurrentDevice ? `(${t('this_device')})` : ''}
     </Container>
   );
 };

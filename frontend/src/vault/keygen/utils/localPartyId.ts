@@ -1,4 +1,5 @@
-import { generateRandomNumber } from '../../../utils/util';
+import { capitalizeFirstLetter } from '../../../lib/utils/capitalizeFirstLetter';
+import { randomIntegerInRange } from '../../../lib/utils/randomInRange';
 
 export const keygenDevices = [
   'windows',
@@ -7,6 +8,7 @@ export const keygenDevices = [
   'iphone',
   'ipad',
   'android',
+  'server',
 ] as const;
 export type KeygenDevice = (typeof keygenDevices)[number];
 
@@ -14,13 +16,24 @@ const localPartyIdSeparator = '-';
 
 export const currentKeygenDevice: KeygenDevice = 'windows';
 
-export const generateLocalPartyId = () =>
-  [currentKeygenDevice, generateRandomNumber()].join(localPartyIdSeparator);
+export const generateLocalPartyId = (
+  device: KeygenDevice = currentKeygenDevice
+) => {
+  const deviceName =
+    device === 'server' ? capitalizeFirstLetter(device) : device;
+
+  const number =
+    device === 'server'
+      ? randomIntegerInRange(1000, 9999)
+      : randomIntegerInRange(100, 999);
+
+  return [deviceName, number].join(localPartyIdSeparator);
+};
 
 export const parseLocalPartyId = (localPartyId: string) => {
-  const [id, hash] = localPartyId.split(localPartyIdSeparator);
+  const [deviceName, hash] = localPartyId.split(localPartyIdSeparator);
 
-  return { id, hash };
+  return { deviceName, hash };
 };
 
 const keygenDeviceName: Record<KeygenDevice, string> = {
@@ -30,17 +43,19 @@ const keygenDeviceName: Record<KeygenDevice, string> = {
   iphone: 'iPhone',
   ipad: 'iPad',
   android: 'Android',
+  server: 'Server',
 };
 
-export const getKeygenDeviceName = (id: string) => {
-  if (id in keygenDeviceName) {
-    return keygenDeviceName[id as KeygenDevice];
+export const formatKeygenDeviceName = (deviceName: string) => {
+  const lowerCaseDeviceName = deviceName.toLowerCase();
+  if (lowerCaseDeviceName in keygenDeviceType) {
+    return keygenDeviceName[lowerCaseDeviceName as KeygenDevice];
   }
 
-  return id;
+  return deviceName;
 };
 
-export const deviceTypes = ['phone', 'tablet', 'desktop'] as const;
+export const deviceTypes = ['phone', 'tablet', 'desktop', 'server'] as const;
 export type DeviceType = (typeof deviceTypes)[number];
 
 const keygenDeviceType: Record<KeygenDevice, DeviceType> = {
@@ -50,11 +65,13 @@ const keygenDeviceType: Record<KeygenDevice, DeviceType> = {
   iphone: 'phone',
   ipad: 'tablet',
   android: 'phone',
+  server: 'server',
 };
 
-export const getKeygenDeviceType = (id: string): DeviceType => {
-  if (id in keygenDeviceType) {
-    return keygenDeviceType[id as KeygenDevice];
+export const getKeygenDeviceType = (deviceName: string): DeviceType => {
+  const lowerCaseDeviceName = deviceName.toLowerCase();
+  if (lowerCaseDeviceName in keygenDeviceType) {
+    return keygenDeviceType[lowerCaseDeviceName as KeygenDevice];
   }
 
   return 'phone';
