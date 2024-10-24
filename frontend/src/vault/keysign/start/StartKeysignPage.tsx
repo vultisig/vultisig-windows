@@ -4,7 +4,9 @@ import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
+import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
+import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager';
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
@@ -18,7 +20,7 @@ import { KeysignPayloadProvider } from '../shared/state/keysignPayload';
 import { PeersSelectionRecordProvider } from '../shared/state/selectedPeers';
 import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoveryStep';
 
-const keysignSteps = ['peers', 'session', 'sign'] as const;
+const keysignSteps = ['joinSession', 'peers', 'session', 'sign'] as const;
 
 export const StartKeysignPage = () => {
   const [{ keysignPayload: rawPayload }] = useAppPathParams<'keysign'>();
@@ -42,8 +44,12 @@ export const StartKeysignPage = () => {
                 <CurrentServerTypeProvider initialValue="relay">
                   <ServerUrlDerivedFromServerTypeProvider>
                     <CurrentLocalPartyIdProvider value={local_party_id}>
+                      <MediatorManager />
                       <Match
                         value={step}
+                        joinSession={() => (
+                          <JoinKeygenSessionStep onForward={toNextStep} />
+                        )}
                         peers={() => (
                           <KeysignPeerDiscoveryStep onForward={toNextStep} />
                         )}

@@ -2,6 +2,7 @@ import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { KeygenType } from '../../keygen/KeygenType';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
+import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager';
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
 import { KeygenVerifyStep } from '../../keygen/shared/verify/KeygenVerifyStep';
@@ -19,7 +20,14 @@ import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryption
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType';
 import { SetupVaultNameProvider } from '../state/vaultName';
 
-const steps = ['name', 'peers', 'verify', 'startSession', 'keygen'] as const;
+const steps = [
+  'name',
+  'joinSession',
+  'peers',
+  'verify',
+  'startSession',
+  'keygen',
+] as const;
 
 export const SetupSecureVaultPage = () => {
   const { step, setStep, toPreviousStep, toNextStep } =
@@ -38,10 +46,17 @@ export const SetupSecureVaultPage = () => {
                       <SetupVaultNameProvider>
                         <StartKeygenVaultProvider>
                           <CurrentKeygenTypeProvider value={KeygenType.Keygen}>
+                            <MediatorManager />
                             <Match
                               value={step}
                               name={() => (
                                 <SetupVaultNameStep
+                                  onBack={toPreviousStep}
+                                  onForward={toNextStep}
+                                />
+                              )}
+                              joinSession={() => (
+                                <KeygenStartSessionStep
                                   onBack={toPreviousStep}
                                   onForward={toNextStep}
                                 />

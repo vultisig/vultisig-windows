@@ -1,48 +1,42 @@
-import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
-import { AdvertiseMediator } from '../../../../../wailsjs/go/mediator/Server';
+import { Button } from '../../../../lib/ui/buttons/Button';
+import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps';
+import { VStack } from '../../../../lib/ui/layout/Stack';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
-import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
-import { Text } from '../../../../lib/ui/text';
 import { PageContent } from '../../../../ui/page/PageContent';
 import { PageHeader } from '../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
-import { PendingKeygenMessage } from '../../../keygen/shared/PendingKeygenMessage';
-import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName';
-import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
-import { useCurrentLocalPartyId } from '../../../keygen/state/currentLocalPartyId';
-import { useCurrentServerType } from '../../../keygen/state/currentServerType';
-import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
-import { joinSession } from '../../../keygen/utils/joinSession';
+import { KeygenNetworkReminder } from '../../../keygen/shared/KeygenNetworkReminder';
+import { ManageServerType } from '../../../keygen/shared/peerDiscovery/ManageServerType';
+import { PeersManager } from '../../../keygen/shared/PeersManager';
 import { DownloadKeysignQrCode } from './DownloadKeysignQrCode';
-import { KeysignPeerDiscovery } from './KeysignPeerDiscovery';
+import { useIsPeerDiscoveryStepDisabled } from './hooks/useIsPeerDiscoveryStepDisabled';
+import { KeysignPeerDiscoveryQrCode } from './KeysignPeerDiscoveryCode';
+
+const Content = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+`;
 
 export const KeysignPeerDiscoveryStep = ({
   onForward,
 }: ComponentWithForwardActionProps) => {
   const { t } = useTranslation();
-  const sessionId = useCurrentSessionId();
-  const serviceName = useCurrentServiceName();
-  const [serverType] = useCurrentServerType();
 
-  const localPartyId = useCurrentLocalPartyId();
+  const isDisabled = useIsPeerDiscoveryStepDisabled();
 
-  const serverUrl = useCurrentServerUrl();
-
-  const { mutate: setupSession, ...setupSessionStatus } = useMutation({
-    mutationFn: async () => {
-      if (serverType === 'local') {
-        await AdvertiseMediator(serviceName);
-      }
-
-      return joinSession({ serverUrl, sessionId, localPartyId });
-    },
-  });
-
-  useEffect(() => setupSession(), [setupSession]);
+  useEffect(() => {
+    if (!isDisabled) {
+      onForward();
+    }
+  }, [isDisabled, onForward]);
 
   return (
     <>
@@ -51,20 +45,27 @@ export const KeysignPeerDiscoveryStep = ({
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={<DownloadKeysignQrCode />}
       />
-      <QueryDependant
-        query={setupSessionStatus}
-        success={() => <KeysignPeerDiscovery onForward={onForward} />}
-        pending={() => (
-          <PageContent justifyContent="center" alignItems="center">
-            <PendingKeygenMessage>{t('session_init')}</PendingKeygenMessage>
-          </PageContent>
-        )}
-        error={() => (
-          <PageContent justifyContent="center" alignItems="center">
-            <Text>{t('session_init_failed')}</Text>
-          </PageContent>
-        )}
-      />
+      <PageContent
+        as="form"
+        gap={40}
+        {...getFormProps({
+          onSubmit: onForward,
+          isDisabled,
+        })}
+      >
+        <Content>
+          <KeysignPeerDiscoveryQrCode />
+          <VStack gap={40} flexGrow alignItems="center">
+            <ManageServerType />
+            <PeersManager />
+
+            <KeygenNetworkReminder />
+          </VStack>
+        </Content>
+        <Button type="submit" isDisabled={isDisabled}>
+          {t('continue')}
+        </Button>
+      </PageContent>
     </>
   );
 };

@@ -1,6 +1,7 @@
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { KeygenType } from '../../keygen/KeygenType';
+import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
@@ -29,6 +30,7 @@ const steps = [
   'email',
   'password',
   'server',
+  'joinSession',
   'peers',
   'verify',
   'startSession',
@@ -89,9 +91,15 @@ export const SetupActiveVaultPage = () => {
                                       onForward={toNextStep}
                                     />
                                   )}
+                                  joinSession={() => (
+                                    <JoinKeygenSessionStep
+                                      onBack={() => setStep(lastEditableStep)}
+                                      onForward={toNextStep}
+                                    />
+                                  )}
                                   peers={() => (
                                     <SetupVaultPeerDiscoveryStep
-                                      onBack={toPreviousStep}
+                                      onBack={() => setStep(lastEditableStep)}
                                       onForward={toNextStep}
                                     />
                                   )}
