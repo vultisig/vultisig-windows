@@ -4,6 +4,7 @@ import { KeygenType } from '../../keygen/KeygenType';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
+import { KeygenVerifyStep } from '../../keygen/shared/verify/KeygenVerifyStep';
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType';
 import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
@@ -13,7 +14,7 @@ import { EmailProvider } from '../fast/email/state/email';
 import { SetupVaultPasswordStep } from '../fast/password/SetupVaultPasswordStep';
 import { PasswordProvider } from '../fast/password/state/password';
 import { SetupVaultServerStep } from '../fast/SetupVaultServerStep';
-import { SetupVaultWaitServerStep } from '../fast/SetupVaultWaitServerStep';
+import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
 import { SetupVaultKeygenStep } from '../shared/SetupVaultKeygenStep';
 import { VaultTypeProvider } from '../shared/state/vaultType';
@@ -28,7 +29,8 @@ const steps = [
   'email',
   'password',
   'server',
-  'waitServer',
+  'peers',
+  'verify',
   'startSession',
   'keygen',
 ] as const;
@@ -81,9 +83,15 @@ export const SetupActiveVaultPage = () => {
                                       onForward={toNextStep}
                                     />
                                   )}
-                                  waitServer={() => (
-                                    <SetupVaultWaitServerStep
-                                      onBack={() => setStep(lastEditableStep)}
+                                  verify={() => (
+                                    <KeygenVerifyStep
+                                      onBack={toPreviousStep}
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  peers={() => (
+                                    <SetupVaultPeerDiscoveryStep
+                                      onBack={toPreviousStep}
                                       onForward={toNextStep}
                                     />
                                   )}

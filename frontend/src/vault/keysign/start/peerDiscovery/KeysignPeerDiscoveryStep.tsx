@@ -6,7 +6,6 @@ import { AdvertiseMediator } from '../../../../../wailsjs/go/mediator/Server';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
 import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
 import { Text } from '../../../../lib/ui/text';
-import { postSession } from '../../../../services/Keygen/Keygen';
 import { PageContent } from '../../../../ui/page/PageContent';
 import { PageHeader } from '../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
@@ -17,6 +16,7 @@ import { useCurrentSessionId } from '../../../keygen/shared/state/currentSession
 import { useCurrentLocalPartyId } from '../../../keygen/state/currentLocalPartyId';
 import { useCurrentServerType } from '../../../keygen/state/currentServerType';
 import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
+import { joinSession } from '../../../keygen/utils/joinSession';
 import { DownloadKeysignQrCode } from './DownloadKeysignQrCode';
 import { KeysignPeerDiscovery } from './KeysignPeerDiscovery';
 
@@ -38,7 +38,7 @@ export const KeysignPeerDiscoveryStep = ({
         await AdvertiseMediator(serviceName);
       }
 
-      return postSession(serverUrl, sessionId, localPartyId);
+      return joinSession({ serverUrl, sessionId, localPartyId });
     },
   });
 
