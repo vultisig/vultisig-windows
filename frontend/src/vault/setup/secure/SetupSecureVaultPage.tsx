@@ -1,10 +1,7 @@
-import { useTranslation } from 'react-i18next';
-
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { KeygenType } from '../../keygen/KeygenType';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
-import { KeygenStep } from '../../keygen/shared/KeygenStep';
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
 import { KeygenVerifyStep } from '../../keygen/shared/verify/KeygenVerifyStep';
@@ -14,6 +11,7 @@ import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType'
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers';
 import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
+import { SetupVaultKeygenStep } from '../shared/SetupVaultKeygenStep';
 import { VaultTypeProvider } from '../shared/state/vaultType';
 import { StartKeygenVaultProvider } from '../StartKeygenVaultProvider';
 import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode';
@@ -27,12 +25,8 @@ export const SetupSecureVaultPage = () => {
   const { step, setStep, toPreviousStep, toNextStep } =
     useStepNavigation(steps);
 
-  const { t } = useTranslation();
-
-  const vaultType = 'secure';
-
   return (
-    <VaultTypeProvider value={vaultType}>
+    <VaultTypeProvider value="secure">
       <GeneratedServiceNameProvider>
         <PeersSelectionRecordProvider initialValue={{}}>
           <GeneratedSessionIdProvider>
@@ -71,10 +65,7 @@ export const SetupSecureVaultPage = () => {
                                 />
                               )}
                               keygen={() => (
-                                <KeygenStep
-                                  title={t('keygen_for_vault', {
-                                    type: t(vaultType),
-                                  })}
+                                <SetupVaultKeygenStep
                                   onTryAgain={() => setStep(steps[0])}
                                   onBack={() => setStep('verify')}
                                 />
