@@ -52,6 +52,7 @@ export const SetupVaultPage = () => {
       match(value, {
         fast: () => makeAppPath('setupFastVault'),
         secure: () => makeAppPath('setupSecureVault'),
+        active: () => makeAppPath('setupActiveVault'),
       })
     );
   }, [navigate, value]);

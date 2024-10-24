@@ -12,6 +12,7 @@ export const appPaths = {
   setupVault: '/vault/setup',
   setupSecureVault: '/vault/setup/secure',
   setupFastVault: '/vault/setup/fast',
+  setupActiveVault: '/vault/setup/active',
   address: '/address',
   joinKeysign: '/join-keysign',
   root: '/',
