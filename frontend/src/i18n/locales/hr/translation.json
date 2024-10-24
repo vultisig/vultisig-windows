@@ -9,6 +9,7 @@
   "import_existing_vault": "Uvezi postojeći trezor",
   "next": "Dalje",
   "skip": "Preskoči",
+  "choose_coins": "Odaberite novčiće",
   "enter_password": "Unesite lozinku",
   "invalid_file_format": "Neispravan format datoteke",
   "invalid_file_format_message": "Provjerite jeste li odabrali ispravnu sigurnosnu kopiju s ekstenzijom .bak.",
