@@ -8,6 +8,8 @@ import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers';
+import { ServerEmailStep } from '../../server/email/ServerEmailStep';
+import { EmailProvider } from '../../server/email/state/email';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
 import { SetupVaultKeygenStep } from '../shared/SetupVaultKeygenStep';
 import { VaultTypeProvider } from '../shared/state/vaultType';
@@ -16,8 +18,6 @@ import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode';
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType';
 import { SetupVaultNameProvider } from '../state/vaultName';
-import { SetupVaultEmailStep } from './email/SetupVaultEmailStep';
-import { EmailProvider } from './email/state/email';
 import { SetupVaultPasswordStep } from './password/SetupVaultPasswordStep';
 import { PasswordProvider } from './password/state/password';
 import { SetupVaultServerStep } from './SetupVaultServerStep';
@@ -64,7 +64,7 @@ export const SetupFastVaultPage = () => {
                                     />
                                   )}
                                   email={() => (
-                                    <SetupVaultEmailStep
+                                    <ServerEmailStep
                                       onBack={toPreviousStep}
                                       onForward={toNextStep}
                                     />

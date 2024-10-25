@@ -317,6 +317,7 @@
   "verify_email": "Verify Email",
   "emails_dont_match": "Emails don't match",
   "email_backup": "Enter your email to receive your backup",
+  "email_disclaimer": "This email is only used to send the backup",
   "password_required": "Password is required",
   "passwords_dont_match": "Passwords don't match",
   "verify_password": "Verify Password",
