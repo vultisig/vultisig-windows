@@ -36,7 +36,7 @@ export const ReshareVaultPage = () => {
             {t('start_reshare')}
           </Button>
           <Button
-            onClick={() => navigate(makeAppPath('reshareVaultSecure'))}
+            onClick={() => navigate(makeAppPath('reshareVaultFast'))}
             kind="outlined"
           >
             {t('start_reshare_with_server')}
