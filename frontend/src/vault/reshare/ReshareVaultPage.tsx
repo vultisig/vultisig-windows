@@ -8,6 +8,7 @@ import { Text } from '../../lib/ui/text';
 import { makeAppPath } from '../../navigation';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
+import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 
 export const ReshareVaultPage = () => {
@@ -17,7 +18,10 @@ export const ReshareVaultPage = () => {
 
   return (
     <>
-      <PageHeader title={<PageHeaderTitle>{t('reshare')}</PageHeaderTitle>} />
+      <PageHeader
+        primaryControls={<PageHeaderBackButton />}
+        title={<PageHeaderTitle>{t('reshare')}</PageHeaderTitle>}
+      />
       <PageContent>
         <VStack gap={8} flexGrow alignItems="center" justifyContent="center">
           <Text size={20} color="contrast" weight="600">

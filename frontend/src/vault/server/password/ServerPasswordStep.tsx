@@ -63,9 +63,9 @@ export const ServerPasswordStep: React.FC<ComponentWithForwardActionProps> = ({
             onValueChange={setPassword}
             label={t('fast_vault_password')}
           />
-          <InfoBlock>{t('password_to_decrypt')}</InfoBlock>
         </VStack>
         <VStack gap={20}>
+          <InfoBlock>{t('password_to_decrypt')}</InfoBlock>
           <Button isLoading={isPending} type="submit">
             {t('continue')}
           </Button>
