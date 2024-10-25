@@ -1,3 +1,5 @@
+import { attempt } from '../attempt';
+
 /**
  * Extracts and returns a human-readable error message from an unknown error object.
  *
@@ -23,5 +25,5 @@ export const extractErrorMsg = (err: unknown): string => {
     return extractErrorMsg(err.message);
   }
 
-  return JSON.stringify(err);
+  return attempt(() => JSON.stringify(err), '');
 };
