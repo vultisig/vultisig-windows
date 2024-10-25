@@ -8,6 +8,8 @@ export const appPaths = {
   importVault: '/vault/import',
   shareVault: '/vault/share',
   reshareVault: '/vault/reshare',
+  reshareVaultSecure: '/vault/reshare/secure',
+  reshareVaultFast: '/vault/reshare/fast',
   keysign: '/vault/keysign',
   fastKeysign: '/vault/keysign/fast',
   setupVault: '/vault/setup',
