@@ -7,7 +7,7 @@ import {
 } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { isEmpty } from '../../../lib/utils/array/isEmpty';
-import { getErrorMessage } from '../../../lib/utils/getErrorMessage';
+import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { recordFromKeys } from '../../../lib/utils/record/recordFromKeys';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -59,7 +59,7 @@ export const WaitForServerToJoinStep: React.FC<
         )}
         error={error => (
           <FullPageFlowErrorState
-            message={getErrorMessage(error)}
+            message={extractErrorMsg(error)}
             title={title}
           />
         )}
