@@ -29,11 +29,13 @@ import {
   useCurrentVaultHasServer,
 } from '../../state/useCurrentVault';
 import { ReshareVaultPeerDiscoveryStep } from '../ReshareVaultPeerDiscoveryStep';
+import { FastReshareServerStep } from './FastReshareServerStep';
 
 const reshareVaultSteps = [
   'email',
   'password',
   'joinSession',
+  'server',
   'peers',
   'verify',
   'startSession',
@@ -82,6 +84,11 @@ export const FastReshareVaultPage = () => {
                                     />
                                   )
                                 }
+                                server={() => (
+                                  <FastReshareServerStep
+                                    onForward={toNextStep}
+                                  />
+                                )}
                                 joinSession={() => (
                                   <JoinKeygenSessionStep
                                     onForward={toNextStep}
