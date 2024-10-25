@@ -46,7 +46,7 @@ export const KeysignMsgsGuard = ({ children }: ComponentWithChildrenProps) => {
             primaryControls={<PageHeaderBackButton />}
           />
           <PageContent justifyContent="center" alignItems="center">
-            <PendingKeygenMessage>{t('read_msg_failed')}</PendingKeygenMessage>
+            <PendingKeygenMessage>{t('read_msg')}</PendingKeygenMessage>
           </PageContent>
         </>
       )}

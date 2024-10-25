@@ -8,7 +8,7 @@ import ImportVaultDialog from '../../components/dialog/ImportVaultDialog';
 import NavBar from '../../components/navbar/NavBar';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
-import { extractError } from '../../lib/utils/error/extractError';
+import { extractErrorMsg } from '../../lib/utils/error/extractErrorMsg';
 import { makeAppPath } from '../../navigation';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
@@ -277,7 +277,7 @@ const ImportVaultView = () => {
 
       return decrypted;
     } catch (error: unknown) {
-      throw new Error(extractError(error));
+      throw new Error(extractErrorMsg(error));
     }
   };
 

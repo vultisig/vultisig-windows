@@ -6,7 +6,7 @@ import Select from 'react-select';
 import { z } from 'zod';
 
 import { Text } from '../../../../../lib/ui/text';
-import { extractError } from '../../../../../lib/utils/error/extractError';
+import { extractErrorMsg } from '../../../../../lib/utils/error/extractErrorMsg';
 import { Chain } from '../../../../../model/chain';
 import { useWalletCore } from '../../../../../providers/WalletCoreProvider';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
@@ -172,7 +172,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
           </AddButton>
           {addAddressBookAddressError && (
             <Text color="danger" size={14}>
-              {t(extractError(addAddressBookAddressError))}
+              {t(extractErrorMsg(addAddressBookAddressError))}
             </Text>
           )}
         </div>

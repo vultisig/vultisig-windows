@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { AddressBookItem } from '../../../../../lib/types/address-book';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { Text } from '../../../../../lib/ui/text';
-import { extractError } from '../../../../../lib/utils/error/extractError';
+import { extractErrorMsg } from '../../../../../lib/utils/error/extractErrorMsg';
 import { Chain } from '../../../../../model/chain';
 import { useWalletCore } from '../../../../../providers/WalletCoreProvider';
 import { useUpdateAddressBookItemMutation } from '../../../../../vault/mutations/useUpdateAddressBookItemMutation';
@@ -164,7 +164,7 @@ const ModifyAddressForm = ({
         </Button>
         {addAddressBookAddressError && (
           <Text color="danger" size={12}>
-            {t(extractError(addAddressBookAddressError))}
+            {t(extractErrorMsg(addAddressBookAddressError))}
           </Text>
         )}
       </ButtonWrapper>

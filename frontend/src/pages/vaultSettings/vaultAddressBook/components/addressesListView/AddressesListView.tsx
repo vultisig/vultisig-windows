@@ -11,7 +11,7 @@ import { Button } from '../../../../../lib/ui/buttons/Button';
 import { UnstyledButton } from '../../../../../lib/ui/buttons/UnstyledButton';
 import SquareAndPencilIcon from '../../../../../lib/ui/icons/SquareAndPencilIcon';
 import { Text } from '../../../../../lib/ui/text';
-import { extractError } from '../../../../../lib/utils/error/extractError';
+import { extractErrorMsg } from '../../../../../lib/utils/error/extractErrorMsg';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { useDeleteAddressBookItemMutation } from '../../../../../vault/mutations/useDeleteAddressBookItemMutation';
@@ -221,7 +221,7 @@ const AddressesListView = ({
           </Button>
           {error && (
             <Text color="danger" size={12}>
-              {extractError(error)}
+              {extractErrorMsg(error)}
             </Text>
           )}
         </ButtonWrapper>
