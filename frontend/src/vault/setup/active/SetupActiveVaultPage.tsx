@@ -12,8 +12,8 @@ import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType'
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers';
 import { ServerEmailStep } from '../../server/email/ServerEmailStep';
 import { EmailProvider } from '../../server/email/state/email';
-import { SetupVaultPasswordStep } from '../fast/password/SetupVaultPasswordStep';
-import { PasswordProvider } from '../fast/password/state/password';
+import { SetServerPasswordStep } from '../../server/password/SetServerPasswordStep';
+import { PasswordProvider } from '../../server/password/state/password';
 import { SetupVaultServerStep } from '../fast/SetupVaultServerStep';
 import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
@@ -74,7 +74,7 @@ export const SetupActiveVaultPage = () => {
                                     />
                                   )}
                                   password={() => (
-                                    <SetupVaultPasswordStep
+                                    <SetServerPasswordStep
                                       onBack={toPreviousStep}
                                       onForward={toNextStep}
                                     />

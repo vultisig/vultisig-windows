@@ -12,7 +12,8 @@ import { GeneratedSessionIdProvider } from '../../../keygen/shared/state/current
 import { CurrentLocalPartyIdProvider } from '../../../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../../../keygen/state/currentServerType';
 import { WaitForServerToJoinStep } from '../../../server/components/WaitForServerToJoinStep';
-import { PasswordProvider } from '../../../setup/fast/password/state/password';
+import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep';
+import { PasswordProvider } from '../../../server/password/state/password';
 import { GeneratedHexEncryptionKeyProvider } from '../../../setup/state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../../../setup/state/serverUrlDerivedFromServerType';
 import { useAssertCurrentVault } from '../../../state/useCurrentVault';
@@ -20,7 +21,6 @@ import { KeysignMsgsGuard } from '../../join/KeysignMsgsGuard';
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep';
 import { KeysignPayloadProvider } from '../../shared/state/keysignPayload';
 import { PeersSelectionRecordProvider } from '../../shared/state/selectedPeers';
-import { FastKeysignPasswordStep } from './FastKeysignPasswordStep';
 import { FastKeysignServerStep } from './FastKeysignServerStep';
 
 const keysignSteps = [
@@ -59,7 +59,7 @@ export const StartFastKeysignPage = () => {
                         <Match
                           value={step}
                           password={() => (
-                            <FastKeysignPasswordStep onForward={toNextStep} />
+                            <ServerPasswordStep onForward={toNextStep} />
                           )}
                           startSession={() => (
                             <KeygenStartSessionStep onForward={toNextStep} />

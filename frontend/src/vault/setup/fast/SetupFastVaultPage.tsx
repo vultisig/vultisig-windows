@@ -10,6 +10,8 @@ import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType'
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers';
 import { ServerEmailStep } from '../../server/email/ServerEmailStep';
 import { EmailProvider } from '../../server/email/state/email';
+import { SetServerPasswordStep } from '../../server/password/SetServerPasswordStep';
+import { PasswordProvider } from '../../server/password/state/password';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
 import { SetupVaultKeygenStep } from '../shared/SetupVaultKeygenStep';
 import { VaultTypeProvider } from '../shared/state/vaultType';
@@ -18,8 +20,6 @@ import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode';
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType';
 import { SetupVaultNameProvider } from '../state/vaultName';
-import { SetupVaultPasswordStep } from './password/SetupVaultPasswordStep';
-import { PasswordProvider } from './password/state/password';
 import { SetupVaultServerStep } from './SetupVaultServerStep';
 import { SetupVaultWaitServerStep } from './SetupVaultWaitServerStep';
 
@@ -70,7 +70,7 @@ export const SetupFastVaultPage = () => {
                                     />
                                   )}
                                   password={() => (
-                                    <SetupVaultPasswordStep
+                                    <SetServerPasswordStep
                                       onBack={toPreviousStep}
                                       onForward={toNextStep}
                                     />
