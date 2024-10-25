@@ -21,7 +21,7 @@ import { useCurrentSessionId } from './state/currentSessionId';
 export const KeygenStartSessionStep = ({
   onBack,
   onForward,
-}: ComponentWithBackActionProps & ComponentWithForwardActionProps) => {
+}: Partial<ComponentWithBackActionProps> & ComponentWithForwardActionProps) => {
   const { t } = useTranslation();
 
   const sessionId = useCurrentSessionId();

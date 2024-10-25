@@ -1,16 +1,17 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { KeysignPayload } from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Match } from '../../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
 import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams';
-import { JoinKeygenSessionStep } from '../../../keygen/shared/JoinKeygenSessionStep';
 import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep';
 import { MediatorManager } from '../../../keygen/shared/peerDiscovery/MediatorManager';
 import { GeneratedServiceNameProvider } from '../../../keygen/shared/state/currentServiceName';
 import { GeneratedSessionIdProvider } from '../../../keygen/shared/state/currentSessionId';
 import { CurrentLocalPartyIdProvider } from '../../../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../../../keygen/state/currentServerType';
+import { WaitForServerToJoinStep } from '../../../server/components/WaitForServerToJoinStep';
 import { PasswordProvider } from '../../../setup/fast/password/state/password';
 import { GeneratedHexEncryptionKeyProvider } from '../../../setup/state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../../../setup/state/serverUrlDerivedFromServerType';
@@ -19,14 +20,14 @@ import { KeysignMsgsGuard } from '../../join/KeysignMsgsGuard';
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep';
 import { KeysignPayloadProvider } from '../../shared/state/keysignPayload';
 import { PeersSelectionRecordProvider } from '../../shared/state/selectedPeers';
-import { KeysignPeerDiscoveryStep } from '../peerDiscovery/KeysignPeerDiscoveryStep';
 import { FastKeysignPasswordStep } from './FastKeysignPasswordStep';
+import { FastKeysignServerStep } from './FastKeysignServerStep';
 
 const keysignSteps = [
   'password',
-  'joinSession',
-  'peers',
-  'session',
+  'server',
+  'waitServer',
+  'startSession',
   'sign',
 ] as const;
 
@@ -39,53 +40,50 @@ export const StartFastKeysignPage = () => {
 
   const { local_party_id } = useAssertCurrentVault();
 
-  const { step, setStep, toPreviousStep, toNextStep } =
-    useStepNavigation(keysignSteps);
+  const { step, toNextStep } = useStepNavigation(keysignSteps);
+
+  const { t } = useTranslation();
 
   return (
     <PasswordProvider initialValue="">
-      <KeysignPayloadProvider value={payload}>
-        <KeysignMsgsGuard>
-          <GeneratedServiceNameProvider>
-            <PeersSelectionRecordProvider initialValue={{}}>
-              <GeneratedSessionIdProvider>
-                <GeneratedHexEncryptionKeyProvider>
-                  <CurrentServerTypeProvider initialValue="relay">
-                    <ServerUrlDerivedFromServerTypeProvider>
-                      <CurrentLocalPartyIdProvider value={local_party_id}>
+      <CurrentLocalPartyIdProvider value={local_party_id}>
+        <KeysignPayloadProvider value={payload}>
+          <KeysignMsgsGuard>
+            <GeneratedServiceNameProvider>
+              <PeersSelectionRecordProvider initialValue={{}}>
+                <GeneratedSessionIdProvider>
+                  <GeneratedHexEncryptionKeyProvider>
+                    <CurrentServerTypeProvider initialValue="relay">
+                      <ServerUrlDerivedFromServerTypeProvider>
                         <MediatorManager />
                         <Match
                           value={step}
                           password={() => (
                             <FastKeysignPasswordStep onForward={toNextStep} />
                           )}
-                          joinSession={() => (
-                            <JoinKeygenSessionStep onForward={toNextStep} />
+                          startSession={() => (
+                            <KeygenStartSessionStep onForward={toNextStep} />
                           )}
-                          peers={() => (
-                            <KeysignPeerDiscoveryStep onForward={toNextStep} />
-                          )}
-                          session={() => (
-                            <KeygenStartSessionStep
+                          waitServer={() => (
+                            <WaitForServerToJoinStep
+                              title={t('fast_sign')}
                               onForward={toNextStep}
-                              onBack={toPreviousStep}
                             />
                           )}
-                          sign={() => (
-                            <KeysignSigningStep
-                              onBack={() => setStep('peers')}
-                            />
+                          server={() => (
+                            <FastKeysignServerStep onForward={toNextStep} />
                           )}
+                          sign={() => <KeysignSigningStep />}
                         />
-                      </CurrentLocalPartyIdProvider>
-                    </ServerUrlDerivedFromServerTypeProvider>
-                  </CurrentServerTypeProvider>
-                </GeneratedHexEncryptionKeyProvider>
-              </GeneratedSessionIdProvider>
-            </PeersSelectionRecordProvider>
-          </GeneratedServiceNameProvider>
-        </KeysignMsgsGuard>
-      </KeysignPayloadProvider>
+                      </ServerUrlDerivedFromServerTypeProvider>
+                    </CurrentServerTypeProvider>
+                  </GeneratedHexEncryptionKeyProvider>
+                </GeneratedSessionIdProvider>
+              </PeersSelectionRecordProvider>
+            </GeneratedServiceNameProvider>
+          </KeysignMsgsGuard>
+        </KeysignPayloadProvider>
+      </CurrentLocalPartyIdProvider>
     </PasswordProvider>
   );
 };

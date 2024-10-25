@@ -3,7 +3,7 @@ import { fastVaultServerUrl } from '../config';
 type Input = {
   public_key: string;
   messages: string[];
-  session_id: string;
+  session: string;
   hex_encryption_key: string;
   derive_path: string;
   is_ecdsa: boolean;
@@ -11,7 +11,7 @@ type Input = {
 };
 
 export const signWithServer = async (input: Input) => {
-  const url = `${fastVaultServerUrl}/create`;
+  const url = `${fastVaultServerUrl}/sign`;
 
   const response = await fetch(url, {
     method: 'POST',

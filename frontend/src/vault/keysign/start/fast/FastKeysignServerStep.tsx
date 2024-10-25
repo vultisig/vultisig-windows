@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
 import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
@@ -9,15 +8,14 @@ import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
 import { Chain, ChainUtils, TssKeysignType } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
 import { CoinServiceFactory } from '../../../../services/Coin/CoinServiceFactory';
+import { FullPageFlowErrorState } from '../../../../ui/flow/FullPageFlowErrorState';
 import { PageHeader } from '../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
-import { KeygenFailedState } from '../../../keygen/shared/KeygenFailedState';
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
+import { WaitForServerLoader } from '../../../server/components/WaitForServerLoader';
 import { signWithServer } from '../../../server/utils/signWithServer';
 import { useVaultPassword } from '../../../setup/fast/password/state/password';
-import { SetupFastVaultServerLoader } from '../../../setup/fast/SetupFastVaultServerLoader';
-import { useVaultType } from '../../../setup/shared/state/vaultType';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { useAssertCurrentVault } from '../../../state/useCurrentVault';
 import { useCurrentKeysignMsgs } from '../../shared/state/currentKeysignMsgs';
@@ -27,7 +25,6 @@ export const FastKeysignServerStep: React.FC<
   ComponentWithForwardActionProps
 > = ({ onForward }) => {
   const { t } = useTranslation();
-  const type = useVaultType();
 
   const { public_key_ecdsa } = useAssertCurrentVault();
 
@@ -56,7 +53,7 @@ export const FastKeysignServerStep: React.FC<
       return signWithServer({
         public_key: public_key_ecdsa,
         messages,
-        session_id: sessionId,
+        session: sessionId,
         hex_encryption_key: hexEncryptionKey,
         derive_path: walletCore.CoinTypeExt.derivationPath(
           coinService.getCoinType()
@@ -70,27 +67,33 @@ export const FastKeysignServerStep: React.FC<
 
   useEffect(mutate, [mutate]);
 
-  const navigate = useNavigate();
+  const title = t('fast_sign');
+
+  const header = (
+    <PageHeader
+      title={<PageHeaderTitle>{title}</PageHeaderTitle>}
+      primaryControls={<PageHeaderBackButton />}
+    />
+  );
 
   return (
     <>
-      <PageHeader
-        title={
-          <PageHeaderTitle>
-            {t('keygen_for_vault', { type: t(type) })}
-          </PageHeaderTitle>
-        }
-        primaryControls={<PageHeaderBackButton />}
-      />
       <QueryDependant
         query={state}
-        pending={() => <SetupFastVaultServerLoader />}
-        success={() => null}
+        pending={() => (
+          <>
+            {header}
+            <WaitForServerLoader />
+          </>
+        )}
+        success={() => (
+          <>
+            {header}
+            <WaitForServerLoader />
+          </>
+        )}
         error={error => (
-          <KeygenFailedState
-            message={error.message}
-            onTryAgain={() => navigate(-1)}
-          />
+          <FullPageFlowErrorState title={title} message={error.message} />
         )}
       />
     </>
