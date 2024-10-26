@@ -13,9 +13,13 @@ const ManageVaultChainsList = () => {
     );
   }, [searchQuery]);
 
-  return filteredChains.map(chain => (
-    <ManageVaultChain key={chain} value={chain} />
-  ));
+  return (
+    <>
+      {filteredChains.map(chain => (
+        <ManageVaultChain key={chain} value={chain} />
+      ))}
+    </>
+  );
 };
 
 export default ManageVaultChainsList;
