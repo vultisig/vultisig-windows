@@ -6,12 +6,20 @@ import { CoinServiceFactory } from './CoinServiceFactory';
 
 export class DefaultCoinsService {
   private walletCore: WalletCore;
+  private defaultTokens = [
+    TokensStore.Token.bitcoin,
+    TokensStore.Token.bscChainBnb,
+    TokensStore.Token.ethereum,
+    TokensStore.Token.solana,
+    TokensStore.Token.thorChain,
+  ];
+
   constructor(walletCore: WalletCore) {
     this.walletCore = walletCore;
   }
 
   applyDefaultCoins(vault: storage.Vault, defaultChains: string[]) {
-    const defaultTokens = defaultChains
+    let defaultTokens = defaultChains
       .map(chain => {
         return Object.entries(TokensStore.Token)
           .filter(([_, getToken]) => {
@@ -23,7 +31,12 @@ export class DefaultCoinsService {
           })
           .map(([_, getToken]) => getToken);
       })
-      .flat();
+      .flat()
+      .sort((a, b) => a().chain.localeCompare(b().chain));
+
+    if (defaultTokens.length === 0) {
+      defaultTokens = this.defaultTokens;
+    }
 
     defaultTokens.forEach(token => {
       const coinService = CoinServiceFactory.createCoinService(

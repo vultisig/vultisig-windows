@@ -15,6 +15,7 @@ import {
   ColumnOneBothRowsItem,
   ColumnTwoRowOneItem,
   ColumnTwoRowTwoItem,
+  HeaderWrapper,
 } from './VaultDefaultChains.styles';
 
 const VaultDefaultChains = () => {
@@ -54,14 +55,16 @@ const VaultDefaultChains = () => {
 
   return (
     <VStack flexGrow gap={16}>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={
-          <PageHeaderTitle>
-            {t('vault_settings_default_chains')}
-          </PageHeaderTitle>
-        }
-      />
+      <HeaderWrapper>
+        <PageHeader
+          primaryControls={<PageHeaderBackButton />}
+          title={
+            <PageHeaderTitle>
+              {t('vault_settings_default_chains')}
+            </PageHeaderTitle>
+          }
+        />
+      </HeaderWrapper>
       <PageSlice gap={16} flexGrow={true}>
         {nativeTokens.map(({ ticker, chain }, index) => {
           const imgSrc = getChainEntityIconSrc(chain as string);
