@@ -19,11 +19,10 @@ export const getVaultTypeText = (
 ) => {
   let vaultTypeText;
 
-  const n = 2; // Assuming n is 2 in this case for simplicity
+  const n = 2;
   if (m > 3) {
     vaultTypeText = t('m_of_n_vault', { n, m });
   } else {
-    // Handle specific cases like 2 of 2, 2 of 3 vaults
     vaultTypeText = t(`2_of_${m}_vault`);
   }
 
