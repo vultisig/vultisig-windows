@@ -14,7 +14,7 @@ import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage';
 import CurrencySettingsPage from './pages/vaultSettings/vaultCurrency/CurrencySettingsPage';
-import VaultDefaultChains from './pages/vaultSettings/vaultDefaultChains/VaultDefaultChains';
+import VaultDefaultChainsPage from './pages/vaultSettings/vaultDefaultChains/VaultDefaultChainsPage';
 import FaqVaultPage from './pages/vaultSettings/vaultFaq/FaqVaultPage';
 import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
 import { VaultChainCoinPage } from './vault/chain/coin/VaultChainCoinPage';
@@ -160,7 +160,7 @@ export const router = createBrowserRouter([
   },
   {
     path: appPaths.defaultChains,
-    element: <VaultDefaultChains />,
+    element: <VaultDefaultChainsPage />,
   },
   {
     path: appPaths.send,
