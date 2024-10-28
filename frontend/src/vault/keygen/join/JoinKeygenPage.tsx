@@ -48,10 +48,7 @@ export const JoinKeygenPage = () => {
                   <Match
                     value={step}
                     session={() => (
-                      <JoinKeygenSessionStep
-                        title={title}
-                        onForward={toNextStep}
-                      />
+                      <JoinKeygenSessionStep onForward={toNextStep} />
                     )}
                     keygen={() => <JoinKeygenProcess title={title} />}
                   />

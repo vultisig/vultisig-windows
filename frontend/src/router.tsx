@@ -14,10 +14,9 @@ import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage';
 import CurrencySettingsPage from './pages/vaultSettings/vaultCurrency/CurrencySettingsPage';
-import VaultDefaultChains from './pages/vaultSettings/vaultDefaultChains/VaultDefaultChains';
+import VaultDefaultChainsPage from './pages/vaultSettings/vaultDefaultChains/VaultDefaultChainsPage';
 import FaqVaultPage from './pages/vaultSettings/vaultFaq/FaqVaultPage';
 import LanguageSettingsPage from './pages/vaultSettings/vaultLanguage/LanguageSettingsPage';
-import { AddVaultPage } from './vault/add/AddVaultPage';
 import { VaultChainCoinPage } from './vault/chain/coin/VaultChainCoinPage';
 import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVaultChainCoinsPage';
 import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPage';
@@ -25,12 +24,15 @@ import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
+import { StartFastKeysignPage } from './vault/keysign/start/fast/StartFastKeysignPage';
 import { StartKeysignPage } from './vault/keysign/start/StartKeysignPage';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
 import { ReshareVaultPage } from './vault/reshare/ReshareVaultPage';
 import { SendPage } from './vault/send/SendPage';
-import { SetupVaultOptionsPage } from './vault/setup/options/SetupVaultOptionsPage';
-import { SetupVaultPage } from './vault/setup/SetupVaultPage';
+import { SetupActiveVaultPage } from './vault/setup/active/SetupActiveVaultPage';
+import { SetupFastVaultPage } from './vault/setup/fast/SetupFastVaultPage';
+import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage';
+import { SetupVaultPage } from './vault/setup/type/SetupVaultPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
 import { SwapPage } from './vault/swap/SwapPage';
 
@@ -50,15 +52,19 @@ export const router = createBrowserRouter([
     element: <SettingsVaultPage />,
   },
   {
-    path: appPaths.addVault,
-    element: <AddVaultPage />,
+    path: appPaths.setupFastVault,
+    element: <SetupFastVaultPage />,
   },
   {
-    path: appPaths.setupVaultOptions,
-    element: <SetupVaultOptionsPage />,
+    path: appPaths.setupActiveVault,
+    element: <SetupActiveVaultPage />,
   },
   {
-    path: appPaths.setupVaultInitiatingDevice,
+    path: appPaths.setupSecureVault,
+    element: <SetupSecureVaultPage />,
+  },
+  {
+    path: appPaths.setupVault,
     element: <SetupVaultPage />,
   },
   {
@@ -80,6 +86,10 @@ export const router = createBrowserRouter([
   {
     path: appPaths.keysign,
     element: <StartKeysignPage />,
+  },
+  {
+    path: appPaths.fastKeysign,
+    element: <StartFastKeysignPage />,
   },
   {
     path: appPaths.vaultList,
@@ -151,7 +161,7 @@ export const router = createBrowserRouter([
   },
   {
     path: appPaths.defaultChains,
-    element: <VaultDefaultChains />,
+    element: <VaultDefaultChainsPage />,
   },
   {
     path: appPaths.send,

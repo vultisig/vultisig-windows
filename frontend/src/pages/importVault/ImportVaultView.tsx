@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Buffer } from 'buffer';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -6,34 +8,36 @@ import ImportVaultDialog from '../../components/dialog/ImportVaultDialog';
 import NavBar from '../../components/navbar/NavBar';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
-import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
+import { extractErrorMsg } from '../../lib/utils/error/extractErrorMsg';
 import { makeAppPath } from '../../navigation';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 import { isBase64Encoded } from '../../utils/util';
+import { useVaultsQuery } from '../../vault/queries/useVaultsQuery';
+import { useCurrentVaultId } from '../../vault/state/useCurrentVaultId';
+import { getStorageVaultId } from '../../vault/utils/storageVault';
 import {
-  useVaultsQuery,
-  vaultsQueryKey,
-} from '../../vault/queries/useVaultsQuery';
+  BackupVault,
+  mapBackupVaultToVault,
+} from './utils/mapBackupVaultToVault';
 
-const ImportVaultView: React.FC = () => {
+const ImportVaultView = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [_, setCurrentVaultId] = useCurrentVaultId();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [fileContent, setFileContent] = useState('');
   const [isContinue, setContinue] = useState(false);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState('');
   const [dialogContent, setDialogContent] = useState('');
   const [encryptedVaultContent, setEncryptedVaultContent] =
-    useState<Buffer | null>(null);
+    useState<ArrayBuffer | null>(null);
   const [decryptedVaultContent, setDecryptedVaultContent] =
-    useState<Buffer | null>(null);
+    useState<Uint8Array | null>(null);
+  const [fileExtension, setFileExtension] = useState<string>('');
   const walletcore = useAssertWalletCore();
-  const { data: vaults = [] } = useVaultsQuery();
-
-  const invalidateQueries = useInvalidateQueries();
+  const { data: vaults = [], refetch } = useVaultsQuery();
 
   const vaultService = VaultServiceFactory.getService(walletcore);
 
@@ -45,64 +49,98 @@ const ImportVaultView: React.FC = () => {
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      if (
-        !event.target.files[0].name.endsWith('.bak') &&
-        !event.target.files[0].name.endsWith('.vult')
-      ) {
-        setDialogTitle(t('invalid_file_format'));
-        setDialogContent(t('invalid_file_format_message'));
-        setDialogOpen(true);
-      } else {
-        setSelectedFile(event.target.files[0]);
-        const reader = new FileReader();
-        reader.onload = () => {
-          const data = reader.result;
-          setFileContent('');
-          setContinue(false);
-          if (data && isBase64Encoded(data.toString())) {
-            setFileContent(data.toString());
-            const decodedData = Buffer.from(data.toString(), 'base64');
-            const vaultContainer = VaultContainer.fromBinary(
-              decodedData as unknown as Uint8Array
-            );
+    if (!event.target.files) return;
 
-            if (isBase64Encoded(vaultContainer.vault)) {
-              const encryptedContent = Buffer.from(
-                vaultContainer.vault.toString(),
-                'base64'
-              );
-              setEncryptedVaultContent(encryptedContent);
-              if (vaultContainer.isEncrypted) {
-                setDialogTitle(t('enter_password'));
-                setDialogContent('');
-                setDialogOpen(true);
-              } else {
-                setDecryptedVaultContent(encryptedContent);
-                setContinue(true);
-              }
-            } else {
-              setDialogTitle(t('invalid_vault_data'));
-              setDialogContent(t('invalid_vault_data_message'));
-              setDialogOpen(true);
-            }
-          } else {
-            setDialogTitle(t('invalid_file_content'));
-            setDialogContent(t('invalid_file_content_message'));
-            setDialogOpen(true);
-          }
-        };
-        reader.readAsText(event.target.files[0]);
+    const file = event.target.files[0];
+    const fileExt = file.name.split('.').pop()?.toLowerCase() || '';
+    setFileExtension(fileExt);
+
+    if (!['bak', 'vult', 'dat'].includes(fileExt)) {
+      setDialogTitle(t('invalid_file_format'));
+      setDialogContent(t('invalid_file_format_message'));
+      setDialogOpen(true);
+      return;
+    }
+
+    setSelectedFile(file);
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const data = reader.result;
+
+      setContinue(false);
+
+      if (!data) {
+        setDialogTitle(t('invalid_file_content'));
+        setDialogContent(t('invalid_file_content_message'));
+        setDialogOpen(true);
+        return;
       }
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+
+      if (fileExt === 'dat') {
+        const buffer = data as ArrayBuffer;
+        const uint8Array = new Uint8Array(buffer);
+
+        try {
+          // Try to decode as UTF-8 string and see if an error is thrown - if not then the vault is not encrypted
+          new TextDecoder('utf-8', { fatal: true }).decode(uint8Array);
+          setDecryptedVaultContent(uint8Array);
+          setContinue(true);
+        } catch (e) {
+          // Decoding failed, assume encrypted
+          setEncryptedVaultContent(buffer);
+          setDialogTitle(t('enter_password'));
+          setDialogContent('');
+          setDialogOpen(true);
+        }
+      } else {
+        const dataStr = Buffer.from(data as ArrayBuffer).toString('utf8');
+
+        if (!isBase64Encoded(dataStr)) {
+          setDialogTitle(t('invalid_file_content'));
+          setDialogContent(t('invalid_file_content_message'));
+          setDialogOpen(true);
+          return;
+        }
+
+        const decodedData = Buffer.from(dataStr, 'base64');
+        const vaultContainer = VaultContainer.fromBinary(
+          decodedData as unknown as Uint8Array
+        );
+
+        if (!isBase64Encoded(vaultContainer.vault)) {
+          setDialogTitle(t('invalid_vault_data'));
+          setDialogContent(t('invalid_vault_data_message'));
+          setDialogOpen(true);
+          return;
+        }
+
+        const encryptedContent = Buffer.from(
+          vaultContainer.vault.toString(),
+          'base64'
+        );
+        setEncryptedVaultContent(encryptedContent.buffer);
+
+        if (vaultContainer.isEncrypted) {
+          setDialogTitle(t('enter_password'));
+          setDialogContent('');
+          setDialogOpen(true);
+        } else {
+          setDecryptedVaultContent(new Uint8Array(encryptedContent));
+          setContinue(true);
+        }
       }
+    };
+
+    reader.readAsArrayBuffer(file);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
   const handleCancel = () => {
     setSelectedFile(null);
-    setFileContent('');
     setContinue(false);
     setEncryptedVaultContent(null);
     setDecryptedVaultContent(null);
@@ -110,48 +148,136 @@ const ImportVaultView: React.FC = () => {
 
   const handleCloseDialog = () => setDialogOpen(false);
 
-  const handleOk = (passwd: string) => {
-    if (encryptedVaultContent) {
-      try {
-        const decryptedVault = vaultService.decryptVault(
+  const handleOk = async (passwd: string) => {
+    if (!encryptedVaultContent) return;
+
+    try {
+      let decryptedVault: ArrayBuffer;
+      if (fileExtension === 'dat') {
+        decryptedVault = await decryptData(encryptedVaultContent, passwd);
+        const decryptedString = new TextDecoder('utf-8').decode(decryptedVault);
+        const hexDecodedData = Buffer.from(decryptedString, 'hex');
+
+        setDecryptedVaultContent(new Uint8Array(hexDecodedData));
+      } else {
+        const decryptedBuffer = vaultService.decryptVault(
           passwd,
-          encryptedVaultContent
+          Buffer.from(encryptedVaultContent)
         );
-        setDecryptedVaultContent(decryptedVault);
-        setContinue(true);
-      } catch {
-        setDialogTitle(t('incorrect_password'));
-        setDialogContent(t('backup_decryption_failed'));
-        setTimeout(() => {
-          setDialogOpen(true);
-        }, 0);
+        setDecryptedVaultContent(new Uint8Array(decryptedBuffer));
       }
+
+      setContinue(true);
+      setDialogOpen(false);
+    } catch (e) {
+      setDialogTitle(t('backup_decryption_failed_title'));
+      setDialogContent(t('backup_decryption_failed'));
+      setTimeout(() => {
+        setDialogOpen(true);
+      }, 0);
+      console.log('Error in handleOk', e);
     }
   };
 
   const handleContinue = async () => {
-    if (decryptedVaultContent) {
-      try {
-        const vault = Vault.fromBinary(
-          decryptedVaultContent as unknown as Uint8Array
-        );
+    if (!decryptedVaultContent) return;
 
-        if (vaults.some(v => v.public_key_ecdsa === vault.publicKeyEcdsa)) {
-          setDialogTitle(t('vault_already_exists'));
-          setDialogContent(t('vault_already_exists_message'));
+    try {
+      let vault: Vault;
+      const utf8String = new TextDecoder('utf-8').decode(decryptedVaultContent);
+
+      if (fileExtension === 'dat') {
+        try {
+          const cleanedData = utf8String.trim();
+          let backupVault;
+
+          try {
+            backupVault = JSON.parse(cleanedData);
+          } catch (jsonError) {
+            const hexDecoded = Buffer.from(cleanedData, 'hex').toString('utf8');
+            backupVault = JSON.parse(hexDecoded);
+          }
+
+          vault = mapBackupVaultToVault(backupVault as BackupVault);
+        } catch (e) {
+          setDialogTitle(t('invalid_vault_data'));
+          setDialogContent(t('invalid_vault_data_message'));
           setDialogOpen(true);
+          console.error('Failed to parse decrypted content as JSON:', e);
           return;
         }
-
-        await vaultService.importVault(decryptedVaultContent);
-        await invalidateQueries(vaultsQueryKey);
-        navigate(makeAppPath('vaultList'));
-      } catch (e: unknown) {
-        setDialogTitle(t('invalid_vault_data'));
-        setDialogContent(t('invalid_vault_data_message'));
-        setDialogOpen(true);
-        console.error(e);
+      } else {
+        vault = Vault.fromBinary(
+          decryptedVaultContent as unknown as Uint8Array
+        );
       }
+
+      if (vaults.some(v => v.public_key_ecdsa === vault.publicKeyEcdsa)) {
+        setDialogTitle(t('vault_already_exists'));
+        setDialogContent(t('vault_already_exists_message'));
+        setDialogOpen(true);
+        return;
+      }
+
+      if (fileExtension === 'dat') {
+        const vaultBinary = vault.toBinary();
+        const vaultBuffer = Buffer.from(vaultBinary);
+        await vaultService.importVault(vaultBuffer);
+      } else {
+        const vaultBuffer = Buffer.from(decryptedVaultContent as Uint8Array);
+        await vaultService.importVault(vaultBuffer);
+      }
+
+      const { data: updatedVaults } = await refetch();
+
+      if (updatedVaults) {
+        const lastVaultId = getStorageVaultId(
+          updatedVaults[updatedVaults.length - 1]
+        );
+        setCurrentVaultId(lastVaultId);
+      }
+
+      navigate(makeAppPath('vaultList'));
+    } catch (e: unknown) {
+      setDialogTitle(t('invalid_vault_data'));
+      setDialogContent(t('invalid_vault_data_message'));
+      setDialogOpen(true);
+      console.error('Error in handleContinue function', e);
+    }
+  };
+
+  const decryptData = async (
+    encryptedData: ArrayBuffer,
+    password: string
+  ): Promise<ArrayBuffer> => {
+    const passwordBytes = new TextEncoder().encode(password);
+    const passwordHash = await crypto.subtle.digest('SHA-256', passwordBytes);
+
+    const key = await crypto.subtle.importKey(
+      'raw',
+      passwordHash,
+      { name: 'AES-GCM' },
+      false,
+      ['decrypt']
+    );
+
+    const encryptedBytes = new Uint8Array(encryptedData);
+    const nonce = encryptedBytes.slice(0, 12);
+    const ciphertextAndTag = encryptedBytes.slice(12);
+
+    try {
+      const decrypted = await crypto.subtle.decrypt(
+        {
+          name: 'AES-GCM',
+          iv: nonce,
+        },
+        key,
+        ciphertextAndTag
+      );
+
+      return decrypted;
+    } catch (error: unknown) {
+      throw new Error(extractErrorMsg(error));
     }
   };
 
@@ -182,7 +308,7 @@ const ImportVaultView: React.FC = () => {
                   WebkitLineClamp: 9,
                 }}
               >
-                {decryptedVaultContent.toString('hex')}
+                {Buffer.from(decryptedVaultContent).toString('hex')}
               </div>
             )}
             {!isContinue && (
@@ -196,7 +322,7 @@ const ImportVaultView: React.FC = () => {
               </>
             )}
           </div>
-          {selectedFile && fileContent && isContinue && (
+          {selectedFile && isContinue && (
             <div className="flex justify-between mt-8">
               <div className="flex">
                 <img

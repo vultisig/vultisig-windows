@@ -2,15 +2,18 @@ import { addQueryParams } from '../lib/utils/query/addQueryParams';
 import { withoutUndefinedFields } from '../lib/utils/record/withoutUndefinedFields';
 import { Chain } from '../model/chain';
 import { KeygenType } from '../vault/keygen/KeygenType';
+import { SetupVaultType } from '../vault/setup/type/SetupVaultType';
 
 export const appPaths = {
-  addVault: '/vault/add',
-  setupVaultOptions: '/vault/setup/option',
-  setupVaultInitiatingDevice: '/vault/setup/initiating-device',
   importVault: '/vault/import',
   shareVault: '/vault/share',
   reshareVault: '/vault/reshare',
   keysign: '/vault/keysign',
+  fastKeysign: '/vault/keysign/fast',
+  setupVault: '/vault/setup',
+  setupSecureVault: '/vault/setup/secure',
+  setupFastVault: '/vault/setup/fast',
+  setupActiveVault: '/vault/setup/active',
   address: '/address',
   joinKeysign: '/join-keysign',
   root: '/',
@@ -47,12 +50,14 @@ export type AppPathParams = {
   address: { address: string };
   joinKeysign: { vaultId: string; keysignMsg: string };
   keysign: { keysignPayload: string };
+  fastKeysign: { keysignPayload: string };
   joinKeygen: { keygenType: KeygenType; keygenMsg: string };
   uploadQr: { title?: string };
   manageVaultChainCoins: { chain: Chain };
   vaultChainDetail: { chain: Chain };
   vaultChainCoinDetail: { chain: Chain; coin: string };
   send: { coin: string };
+  setupVault: { type?: SetupVaultType };
   vaultItemSwap: Record<string, string>;
 };
 

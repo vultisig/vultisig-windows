@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { ChevronRightIcon } from '../../lib/ui/icons/ChevronRightIcon';
@@ -7,14 +8,15 @@ import { appPaths } from '../../navigation';
 import { ChevronIconButton, Content } from './VaultBackupBanner.styles';
 
 const VaultBackupBanner = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
     <div>
       <Content data-testid="VaultBackupBanner-Content">
         <TriangleAlertIcon height={24} width={24} />
-        <Text color="contrast" size={14} weight="500">
-          Backup your vault now!
+        <Text color="regular" size={14} weight="500">
+          {t('vault_backup_banner_title')}
         </Text>
         <ChevronIconButton onClick={() => navigate(appPaths.vaultBackup)}>
           <ChevronRightIcon size={24} />

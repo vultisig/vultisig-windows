@@ -17,8 +17,7 @@ export const getBlockExplorerUrl = ({
   return match(entity, {
     address: () =>
       match(chainId, {
-        [Chain.Bitcoin]: () =>
-          `https://blockchair.com/bitcoin/address/${value}`,
+        [Chain.Bitcoin]: () => `https://mempool.space/address/${value}`,
         [Chain.BitcoinCash]: () =>
           `https://blockchair.com/bitcoin-cash/address/${value}`,
         [Chain.Litecoin]: () =>
@@ -46,12 +45,11 @@ export const getBlockExplorerUrl = ({
         [Chain.Sui]: () => `https://suiscan.xyz/mainnet/address/${value}`,
         [Chain.Polkadot]: () => `https://polkadot.subscan.io/account/${value}`,
         [Chain.Zksync]: () => `https://explorer.zksync.io/address/${value}`,
-        [Chain.Ton]: () => `https://tonscan.org/address/${value}`,
+        [Chain.Ton]: () => `https://tonviewer.com/${value}`,
       }),
     tx: () =>
       match(chainId, {
-        [Chain.Bitcoin]: () =>
-          `https://blockchair.com/bitcoin/transaction/${value}`,
+        [Chain.Bitcoin]: () => `https://mempool.space/tx/${value}`,
         [Chain.BitcoinCash]: () =>
           `https://blockchair.com/bitcoin-cash/transaction/${value}`,
         [Chain.Litecoin]: () =>
@@ -79,7 +77,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Polkadot]: () =>
           `https://polkadot.subscan.io/extrinsic/${value}`,
         [Chain.Zksync]: () => `https://explorer.zksync.io/tx/${value}`,
-        [Chain.Ton]: () => `https://tonscan.org/tx/${value}`,
+        [Chain.Ton]: () => `https://tonviewer.com/transaction/${value}`,
       }),
   });
 };

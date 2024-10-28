@@ -118,6 +118,7 @@
   "wrong_vault_try_again": "Cassaforte o dispositivo di accoppiamento errato.",
   "vault_details_page_title": "Dettagli",
   "vault_backup_page_title": "Backup",
+  "vault_backup_banner_title": "Esegui subito il backup della condivisione vault di questo dispositivo!",
   "vault_details_page_vault_name": "Nome della cassaforte",
   "vault_details_page_vault_ECDSA": "ECDSA",
   "vault_details_page_vault_EDDSA": "EdDSA",
