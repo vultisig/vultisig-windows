@@ -118,6 +118,7 @@
   "wrong_vault_try_again": "Cofre ou dispositivo de pareamento incorreto.",
   "vault_details_page_title": "Detalhes",
   "vault_backup_page_title": "Backup",
+  "vault_backup_banner_title": "Faça já o backup da partilha do cofre deste dispositivo!",
   "vault_details_page_vault_name": "Nome do cofre",
   "vault_details_page_vault_ECDSA": "ECDSA",
   "vault_details_page_vault_EDDSA": "EdDSA",

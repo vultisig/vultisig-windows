@@ -122,6 +122,7 @@
   "wrong_vault_try_again": "Falscher Tresor oder Paarungsgerät.",
   "vault_details_page_title": "Details",
   "vault_backup_page_title": "Backup",
+  "vault_backup_banner_title": "Sichern Sie jetzt Ihre Tresorfreigabe dieses Geräts!",
   "vault_details_page_vault_name": "Tresorname",
   "vault_details_page_vault_ECDSA": "ECDSA",
   "vault_details_page_vault_EDDSA": "EdDSA",

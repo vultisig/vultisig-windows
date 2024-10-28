@@ -122,6 +122,7 @@
   "wrong_vault_try_again": "Bóveda o dispositivo de emparejamiento incorrecto.",
   "vault_details_page_title": "Detalles",
   "vault_backup_page_title": "Respaldo",
+  "vault_backup_banner_title": "¡Realice una copia de seguridad de su parte de bóveda de este dispositivo ahora!",
   "vault_details_page_vault_name": "Nombre de la bóveda",
   "vault_details_page_vault_ECDSA": "ECDSA",
   "vault_details_page_vault_EDDSA": "EdDSA",
