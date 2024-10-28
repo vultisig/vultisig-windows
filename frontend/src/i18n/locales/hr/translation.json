@@ -119,6 +119,8 @@
   "wrong_vault_try_again": "Pogrešan trezor ili uređaj za uparivanje.",
   "vault_details_page_title": "Detalji",
   "vault_backup_page_title": "Sigurnosna kopija",
+  "vault_backup_banner_title": "Sada napravite sigurnosnu kopiju svog udjela trezora na ovom uređaju!",
+  "vault_details_page_vault_part": "Dio trezora",
   "vault_details_page_vault_name": "Naziv trezora",
   "vault_details_page_vault_ECDSA": "ECDSA",
   "vault_details_page_vault_EDDSA": "EdDSA",

@@ -17,8 +17,7 @@ export const getBlockExplorerUrl = ({
   return match(entity, {
     address: () =>
       match(chainId, {
-        [Chain.Bitcoin]: () =>
-          `https://blockchair.com/bitcoin/address/${value}`,
+        [Chain.Bitcoin]: () => `https://mempool.space/address/${value}`,
         [Chain.BitcoinCash]: () =>
           `https://blockchair.com/bitcoin-cash/address/${value}`,
         [Chain.Litecoin]: () =>
@@ -50,8 +49,7 @@ export const getBlockExplorerUrl = ({
       }),
     tx: () =>
       match(chainId, {
-        [Chain.Bitcoin]: () =>
-          `https://blockchair.com/bitcoin/transaction/${value}`,
+        [Chain.Bitcoin]: () => `https://mempool.space/tx/${value}`,
         [Chain.BitcoinCash]: () =>
           `https://blockchair.com/bitcoin-cash/transaction/${value}`,
         [Chain.Litecoin]: () =>
