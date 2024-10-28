@@ -6,7 +6,8 @@
     "prettier": "^3.3.3"
   },
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "translate": "npx tsx frontend/src/i18n/scripts/translate.ts"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [

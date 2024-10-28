@@ -1,24 +1,24 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '../../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps';
-import { PasswordInput } from '../../../../lib/ui/inputs/PasswordInput';
-import { VStack } from '../../../../lib/ui/layout/Stack';
+import { Button } from '../../../lib/ui/buttons/Button';
+import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
+import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput';
+import { VStack } from '../../../lib/ui/layout/Stack';
 import {
   ComponentWithBackActionProps,
   ComponentWithForwardActionProps,
-} from '../../../../lib/ui/props';
-import { InfoBlock } from '../../../../lib/ui/status/InfoBlock';
-import { Text } from '../../../../lib/ui/text';
-import { PageContent } from '../../../../ui/page/PageContent';
-import { PageHeader } from '../../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
-import { KeygenEducationPrompt } from '../../../keygen/shared/KeygenEducationPrompt';
+} from '../../../lib/ui/props';
+import { InfoBlock } from '../../../lib/ui/status/InfoBlock';
+import { Text } from '../../../lib/ui/text';
+import { PageContent } from '../../../ui/page/PageContent';
+import { PageHeader } from '../../../ui/page/PageHeader';
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { KeygenEducationPrompt } from '../../keygen/shared/KeygenEducationPrompt';
 import { useVaultPassword } from './state/password';
 
-export const SetupVaultPasswordStep = ({
+export const SetServerPasswordStep = ({
   onForward,
   onBack,
 }: ComponentWithForwardActionProps & Partial<ComponentWithBackActionProps>) => {

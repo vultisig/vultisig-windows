@@ -10,10 +10,10 @@ import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers';
-import { SetupVaultEmailStep } from '../fast/email/SetupVaultEmailStep';
-import { EmailProvider } from '../fast/email/state/email';
-import { SetupVaultPasswordStep } from '../fast/password/SetupVaultPasswordStep';
-import { PasswordProvider } from '../fast/password/state/password';
+import { ServerEmailStep } from '../../server/email/ServerEmailStep';
+import { EmailProvider } from '../../server/email/state/email';
+import { SetServerPasswordStep } from '../../server/password/SetServerPasswordStep';
+import { PasswordProvider } from '../../server/password/state/password';
 import { SetupVaultServerStep } from '../fast/SetupVaultServerStep';
 import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
@@ -68,13 +68,13 @@ export const SetupActiveVaultPage = () => {
                                     />
                                   )}
                                   email={() => (
-                                    <SetupVaultEmailStep
+                                    <ServerEmailStep
                                       onBack={toPreviousStep}
                                       onForward={toNextStep}
                                     />
                                   )}
                                   password={() => (
-                                    <SetupVaultPasswordStep
+                                    <SetServerPasswordStep
                                       onBack={toPreviousStep}
                                       onForward={toNextStep}
                                     />

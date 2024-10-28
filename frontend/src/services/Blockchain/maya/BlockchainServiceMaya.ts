@@ -20,6 +20,7 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
+import Long from 'long';
 
 export class BlockchainServiceMaya
   extends BlockchainService
@@ -105,7 +106,7 @@ export class BlockchainServiceMaya
           ticker: 'CACAO',
           synth: false,
         }),
-        decimals: keysignPayload.coin.decimals,
+        decimals: new Long(keysignPayload.coin.decimals),
       });
 
       const toAmount = Number(keysignPayload.toAmount || '0');
@@ -158,13 +159,13 @@ export class BlockchainServiceMaya
       publicKey: new Uint8Array(pubKeyData),
       signingMode: SigningMode.Protobuf,
       chainId: 'mayachain-mainnet-v1',
-      accountNumber: Number(thorchainSpecific.accountNumber),
-      sequence: Number(thorchainSpecific.sequence),
+      accountNumber: new Long(Number(thorchainSpecific.accountNumber)),
+      sequence: new Long(Number(thorchainSpecific.sequence)),
       mode: BroadcastMode.SYNC,
       memo: keysignPayload.memo || '',
       messages: message,
       fee: TW.Cosmos.Proto.Fee.create({
-        gas: 2000000000,
+        gas: new Long(2000000000),
       }),
     });
 
