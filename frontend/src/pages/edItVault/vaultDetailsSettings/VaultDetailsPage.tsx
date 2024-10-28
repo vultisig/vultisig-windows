@@ -26,15 +26,12 @@ const VaultDetailsPage = () => {
     name,
     public_key_eddsa,
     public_key_ecdsa,
-    keyshares,
     signers,
     local_party_id,
+    order,
   } = currentVault;
 
-  // The value of the vault?
-
-  const m = keyshares.length;
-
+  const m = signers.length;
   const vaultTypeText = getVaultTypeText(m, t);
 
   return (
@@ -49,19 +46,33 @@ const VaultDetailsPage = () => {
         <ListItemPanel>
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_name')}</Text>
-            <Text size={13}>{name}</Text>
+            <Text color="supporting" size={13}>
+              {name}
+            </Text>
+          </VStack>
+        </ListItemPanel>
+        <ListItemPanel>
+          <VStack fullWidth alignItems="start" justifyContent="space-between">
+            <Text weight={900}>{t('vault_details_page_vault_part')}</Text>
+            <Text color="supporting" size={13}>
+              Part {order + 1} of {signers.length}
+            </Text>
           </VStack>
         </ListItemPanel>
         <ListItemPanel>
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_ECDSA')}</Text>
-            <Text size={13}>{public_key_ecdsa}</Text>
+            <Text color="supporting" size={13}>
+              {public_key_ecdsa}
+            </Text>
           </VStack>
         </ListItemPanel>
         <ListItemPanel>
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_EDDSA')}</Text>
-            <Text size={13}>{public_key_eddsa}</Text>
+            <Text color="supporting" size={13}>
+              {public_key_eddsa}
+            </Text>
           </VStack>
         </ListItemPanel>
         <AutoCenteredText weight={600} color="contrast">
@@ -70,8 +81,9 @@ const VaultDetailsPage = () => {
         {signers.map((signer, index) => (
           <ListItemPanel key={index}>
             <VStack fullWidth alignItems="start" justifyContent="space-between">
-              <Text weight={900}>
-                {signer} {signer === local_party_id && '(This device)'}
+              <Text color="supporting" weight={900} size={13}>
+                Signer {index + 1}: {signer}{' '}
+                {signer === local_party_id && '(This device)'}
               </Text>
             </VStack>
           </ListItemPanel>
