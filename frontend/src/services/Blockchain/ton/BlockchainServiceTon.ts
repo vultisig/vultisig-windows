@@ -23,6 +23,7 @@ import { Keysign } from '../../../../wailsjs/go/tss/TssService';
 import { ChainUtils } from '../../../model/chain';
 import { CoinServiceFactory } from '../../Coin/CoinServiceFactory';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
+import Long from 'long';
 
 export class BlockchainServiceTon
   extends BlockchainService
@@ -157,7 +158,7 @@ export class BlockchainServiceTon
 
     const tokenTransferMessage = TW.TheOpenNetwork.Proto.Transfer.create({
       dest: keysignPayload.toAddress,
-      amount: Number(keysignPayload.toAmount),
+      amount: new Long(Number(keysignPayload.toAmount)),
       bounceable:
         (keysignPayload.memo &&
           ['d', 'w'].includes(keysignPayload.memo.trim())) ||
