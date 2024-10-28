@@ -25,9 +25,8 @@ export interface ISendTransaction extends ITransaction {
 
 // TODO: We will need to add more fields to this interface
 export interface ISwapTransaction extends ITransaction {
-  swapCoin: Coin; // The coin being swapped to
-  slippage: number; // Allowed slippage percentage for the swap
   transactionType: TransactionType.SWAP;
+  sendMaxAmount: boolean;
 }
 
 export function getDefaultSendTransaction(): ISendTransaction {
@@ -49,10 +48,9 @@ export function getDefaultSwapTransaction(): ISwapTransaction {
     toAddress: '',
     amount: 0,
     memo: '',
-    coin: new Coin(),
-    swapCoin: new Coin(),
-    slippage: 0,
     transactionType: TransactionType.SWAP,
     specificTransactionInfo: undefined,
+    sendMaxAmount: false,
+    coin: new Coin(),
   };
 }

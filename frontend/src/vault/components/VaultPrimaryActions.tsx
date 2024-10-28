@@ -1,12 +1,11 @@
 import { CoinKey } from '../../coin/Coin';
 import { getStorageCoinKey } from '../../coin/utils/storageCoin';
-import { Button } from '../../lib/ui/buttons/Button';
 import { UniformColumnGrid } from '../../lib/ui/css/uniformColumnGrid';
 import { ComponentWithValueProps } from '../../lib/ui/props';
-import { Text } from '../../lib/ui/text';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { SendPrompt } from '../send/SendPrompt';
 import { useAssertCurrentVaultNativeCoins } from '../state/useCurrentVault';
+import { SwapPrompt } from './SwapPrompt';
 
 export const VaultPrimaryActions = ({
   value,
@@ -22,9 +21,7 @@ export const VaultPrimaryActions = ({
   return (
     <UniformColumnGrid fullWidth gap={12}>
       <SendPrompt value={sendInitialCoin} />
-      <Button kind="outlined">
-        <Text color="primaryAlt">SWAP</Text>
-      </Button>
+      <SwapPrompt value={sendInitialCoin} />
     </UniformColumnGrid>
   );
 };

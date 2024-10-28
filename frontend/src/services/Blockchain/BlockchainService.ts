@@ -116,6 +116,28 @@ export class BlockchainService implements IBlockchainService {
     return payload;
   }
 
+  // createKeysignSwapPayload(
+  //   obj: ISwapTransaction,
+  //   localPartyId: string,
+  //   publicKeyEcdsa: string
+  // ): KeysignPayload {
+  //   const payload = new KeysignPayload();
+  //   payload.coin = new Coin({
+  //     chain: obj.asset.chain,
+  //     ticker: obj.asset.ticker,
+  //     address: obj.asset.contractAddress,
+  //     contractAddress: obj.asset.contractAddress,
+  //     decimals: obj.asset.decimals,
+  //     isNativeToken: nativeTokenForChain[obj.asset.chain] === obj.asset.ticker,
+  //     logo: obj.asset.icon,
+  //   });
+  //   payload.toAmount = BigInt(
+  //       Math.round(obj.amount * 10 ** obj.asset.decimals)
+  //   ).toString();
+  //   payload.memo = obj.memo;
+  //   payload.isMaya = obj.isMaya
+  // }
+
   getPreSignedInputData(_keysignPayload: KeysignPayload): Promise<Uint8Array> {
     throw new Error('Method not implemented.');
   }

@@ -50,7 +50,7 @@ export class Endpoint {
   //     const isAffiliateParams = isAffiliate
   //         ? `&affiliate=${THORChainSwaps.affiliateFeeAddress}&affiliate_bps=${THORChainSwaps.affiliateFeeRateBp}`
   //         : "";
-  //     return new URL(`${chain.baseUrl}/quote/swap?from_asset=${fromAsset}&to_asset=${toAsset}&amount=${amount}&destination=${address}&streaming_interval=${interval}${isAffiliateParams}`);
+  //     return new URL(`${chain.baseUrl}/quote/swap-old?from_asset=${fromAsset}&to_asset=${toAsset}&amount=${amount}&destination=${address}&streaming_interval=${interval}${isAffiliateParams}`);
   // }
 
   static fetch1InchSwapQuote(

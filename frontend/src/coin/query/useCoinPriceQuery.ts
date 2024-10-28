@@ -11,6 +11,7 @@ import { getCoinPricesQueryKeys } from './useCoinPricesQuery';
 
 export const useCoinPriceQuery = (coin: CoinMeta) => {
   const { globalCurrency } = useGlobalCurrency();
+  console.log(coin);
 
   const query = useQuery({
     queryKey: getCoinPricesQueryKeys([getCoinMetaKey(coin)]),
