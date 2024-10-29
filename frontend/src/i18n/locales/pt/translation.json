@@ -335,5 +335,6 @@
   "fast_sign": "Sinal rápido",
   "paired_sign": "Sinal emparelhado",
   "password_to_decrypt": "Esta senha descriptografa seu FastVault Share",
-  "fast_vault_password": "Senha do FastVault"
+  "fast_vault_password": "Senha do FastVault",
+  "max": "Máx"
 }

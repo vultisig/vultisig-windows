@@ -336,7 +336,6 @@
   "paired_sign": "Signo emparejado",
   "password_to_decrypt": "Esta contraseña descifra su recurso compartido de FastVault",
   "fast_vault_password": "Contraseña de FastVault",
-  "vault_missing_public_key_message": "El archivo de la bóveda está dañado o falta una clave pública. Por favor, inténtelo de nuevo o seleccione una bóveda diferente.",
   "page.swap.quote.amount.error": "No hay cotización disponible para el monto solicitado.",
   "page.swap.info.title": "¿Qué es el intercambio de activos?",
   "page.swap.info.how.it.work": "¿Cómo funciona?",
@@ -368,5 +367,6 @@
   "page.swap.halted.state": "El comercio se detiene para el par seleccionado, no se puede procesar el intercambio",
   "page.swap.not.possible": "¡No es posible cambiar a un contrato inteligente! Ingrese una dirección de destinatario diferente.",
   "page.swap.title": "Intercambio",
-  "slippage": "Deslizamiento"
+  "slippage": "Deslizamiento",
+  "max": "Máximo"
 }

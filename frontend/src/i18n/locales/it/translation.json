@@ -335,5 +335,6 @@
   "fast_sign": "Segnale veloce",
   "paired_sign": "Segno accoppiato",
   "password_to_decrypt": "Questa password decifra la tua condivisione FastVault",
-  "fast_vault_password": "Password di FastVault"
+  "fast_vault_password": "Password di FastVault",
+  "max": "Massimo"
 }
