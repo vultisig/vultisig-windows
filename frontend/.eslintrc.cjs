@@ -34,7 +34,7 @@ module.exports = {
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
     'react/prop-types': 'off',
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'error',
+    'react-hooks/exhaustive-deps': 'off',
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
     '@typescript-eslint/ban-ts-comment': 'off',

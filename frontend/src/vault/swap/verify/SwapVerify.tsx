@@ -60,52 +60,6 @@ export const SwapVerify: React.FC<ComponentWithBackActionProps> = ({
     swapProtocol === SwapProtocolType.MAYA ||
     swapProtocol === SwapProtocolType.MAYA_STREAMING;
 
-  // const nativeFeeToken = new Coin({
-  //   chain: convertChainSymbolToChain(fromTokenSourceChain),
-  //   contractAddress: '',
-  //   decimals: nativeTokenDecimals[fromToken.chain],
-  //   isNativeToken: true,
-  //   logo: fromToken.symbol,
-  //   priceProviderId:
-  //     convertChainSymbolToChain(fromTokenSourceChain).toLowerCase(),
-  //   ticker: nativeTokenForChain[fromTokenSourceChain],
-  // });
-  //
-  // const { data: fromNativeTokenPrice } = useCoinPriceQuery(
-  //   CoinMeta.fromCoin(nativeFeeToken)
-  // );
-
-  // const inboundFeeUsd = useMemo(() => {
-  //   return prepareNumberWithSeparators(
-  //     calculateSendFeeAmount(
-  //       inboundFee as SendFee,
-  //       `${fromNativeTokenPrice ? fromNativeTokenPrice : 1.23}`,
-  //       nativeTokenDecimals[
-  //         getSourceChain(fromToken.chain, fromToken.synth, fromToken.provider)
-  //       ]
-  //     )
-  //   );
-  // }, [inboundFee, fromNativeTokenPrice, fromToken]);
-
-  // const inboundFeeInAsset = useMemo(() => {
-  //   return prepareNumberWithSeparators(
-  //     calculateSendFee(
-  //       inboundFee as SendFee,
-  //       nativeTokenDecimals[
-  //         getSourceChain(fromToken.chain, fromToken.synth, fromToken.provider)
-  //       ]
-  //     )
-  //   );
-  // }, [inboundFee, fromToken]);
-
-  // const totalFeeUsd = useMemo(() => {
-  //   return prepareNumberWithSeparators(
-  //     new BigNumber(inboundFeeUsd)
-  //       .plus(selectedSwapQuote?.fees.totalInUsd || '1')
-  //       .toFixed(2)
-  //   );
-  // }, [inboundFeeUsd, selectedSwapQuote]);
-
   const slippage = +new BigNumber(
     selectedSwapQuote?.fees.slippage_bps || selectedSwapQuote?.slippage_bps || 0
   )
@@ -140,11 +94,6 @@ export const SwapVerify: React.FC<ComponentWithBackActionProps> = ({
                   From
                 </Text>
                 <div className="gap-[6px] mb-[12px] items-center flex">
-                  {/*<div className="flex items-center gap-[6px]">*/}
-                  {/*  <span className="text-[16px] mt-[4px] font-light">*/}
-                  {/*    {prepareNumberWithSeparators(fromAmount, 6)}{' '}*/}
-                  {/*  </span>*/}
-                  {/*</div>*/}
                   <div className="relative">
                     <ChainCoinIcon
                       coinSrc={getCoinMetaIconSrc(coin)}

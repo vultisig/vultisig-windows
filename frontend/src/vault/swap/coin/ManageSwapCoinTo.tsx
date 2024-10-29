@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { storage } from '../../../../wailsjs/go/models';
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon';
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
-import { useThorwalletApi } from '../../../lib/hooks/use-thorwallet-api';
+import Skeleton from '../../../components/skeleton';
+import useSwapPairs from '../../../lib/hooks/useSwapPairs';
 import { Opener } from '../../../lib/ui/base/Opener';
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
 import {
@@ -21,18 +21,8 @@ import { HStack, hStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { Chain } from '../../../model/chain';
-import {
-  convertChainSymbolToChain,
-  convertChainToChainTicker,
-} from '../../../utils/crypto';
-import {
-  useAssertCurrentVaultAddreses,
-  useAssertCurrentVaultCoin,
-} from '../../state/useCurrentVault';
-import { nativeTokenForChain } from '../../utils/helpers';
-import Coin = storage.Coin;
-import Skeleton from '../../../components/skeleton';
-import { TokenSelectionAssets } from '../../../token-store';
+import { convertChainToChainTicker } from '../../../utils/crypto';
+import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
 import { useCoinTo } from '../state/coin-to';
 import { useCurrentSwapCoin } from '../state/swapCoin';
 import { SwapCoinToExplorer } from './SwapCoinToExplorer';
@@ -54,73 +44,28 @@ const Container = styled(UnstyledButton)`
 `;
 
 export const ManageSwapCoinTo = () => {
-  const [pairs, setPairs] = useState<Coin[]>([]);
-  const [pairsLoading, setPairsLoading] = useState(true);
   const [coinKey] = useCurrentSwapCoin();
   const coin = useAssertCurrentVaultCoin(coinKey);
-  const { getSwapPairs } = useThorwalletApi();
-  const addresses = useAssertCurrentVaultAddreses();
   const [coinTo, setCoinTo] = useCoinTo();
-
-  console.log(coin);
-  // console.log(swapPairsData);
 
   const { t } = useTranslation();
 
-  // const balanceQuery = useBalanceQuery(storageCoinToCoin(coinTo));
-
-  const getSwapPains = async () => {
-    setPairsLoading(true);
-    const swapPairs = await getSwapPairs(
-      convertChainToChainTicker(coin.chain as Chain),
-      coin.ticker,
-      storageCoinToCoin(coin).contractAddress
-    );
-    const pairs: Coin[] = [];
-    swapPairs
-      .filter(asset => !asset.isSynth)
-      .forEach(pair => {
-        const coin = TokenSelectionAssets.find(
-          asset =>
-            asset.chain === convertChainSymbolToChain(pair.chain) &&
-            asset.ticker === pair.ticker
-        );
-        if (coin) {
-          pairs.push({
-            chain: coin.chain,
-            address:
-              addresses[
-                convertChainSymbolToChain(coin.chain) as keyof typeof addresses
-              ],
-            contract_address: coin.contractAddress || '',
-            decimals: coin.decimals,
-            hex_public_key: '',
-            id: `${convertChainToChainTicker(coin.chain)}:${nativeTokenForChain[convertChainToChainTicker(coin.chain)] === coin.ticker ? coin.ticker : coin.contractAddress}:${addresses[convertChainSymbolToChain(coin.chain) as keyof typeof addresses]}`,
-            is_native_token:
-              nativeTokenForChain[convertChainToChainTicker(coin.chain)] ===
-              coin.ticker,
-            price_provider_id: coin.priceProviderId,
-            logo: pair.icon,
-            ticker: coin.ticker,
-          });
-        }
-      });
-    setPairs(pairs);
-    setCoinTo(pairs[0]);
-    setPairsLoading(false);
-  };
-
-  console.log(pairs);
+  const { data: pairs, isLoading: pairsLoading } = useSwapPairs(
+    convertChainToChainTicker(coin.chain as Chain),
+    coin.ticker,
+    storageCoinToCoin(coin).contractAddress
+  );
 
   useEffect(() => {
-    getSwapPains();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [coin]);
+    if (pairs?.length) {
+      setCoinTo(pairs[0]);
+    }
+  }, [pairs]);
 
   return (
     <InputContainer>
       <InputLabel>{t('to')}</InputLabel>
-      {pairsLoading ? (
+      {pairsLoading || !pairs ? (
         <Skeleton height="48px" />
       ) : (
         <Opener
@@ -150,24 +95,6 @@ export const ManageSwapCoinTo = () => {
           )}
         />
       )}
-      {/*<Text*/}
-      {/*  centerVertically*/}
-      {/*  weight="400"*/}
-      {/*  size={14}*/}
-      {/*  family="mono"*/}
-      {/*  color="supporting"*/}
-      {/*  style={{ gap: 8 }}*/}
-      {/*>*/}
-      {/*  <span>{t('balance')}:</span>*/}
-      {/*  <QueryDependant*/}
-      {/*    success={({ amount, decimals }) => (*/}
-      {/*      <span>{formatAmount(fromChainAmount(amount, decimals))}</span>*/}
-      {/*    )}*/}
-      {/*    query={balanceQuery}*/}
-      {/*    pending={() => <Spinner />}*/}
-      {/*    error={() => t('failed_to_load')}*/}
-      {/*  />*/}
-      {/*</Text>*/}
     </InputContainer>
   );
 };

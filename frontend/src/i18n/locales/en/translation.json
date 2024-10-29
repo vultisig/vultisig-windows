@@ -322,7 +322,7 @@
   "fast_sign": "Fast Sign",
   "paired_sign": "Paired Sign",
   "password_to_decrypt": "This Password decrypts your FastVault Share",
-  "fast_vault_password": "FastVault Password"
+  "fast_vault_password": "FastVault Password",
   "vault_missing_public_key_message": "Vault file is corrupted or missing a public key. Please try again or select a different vault.",
   "min_signers_disclaimer": "You can only send transactions with {{count}} devices present.",
   "page.swap.quote.amount.error": "No quote available for requested amount and pair.",
@@ -352,5 +352,7 @@
   "page.swap.info.tips.stay.informed.description": "Keep an eye on market trends and rates. Timing can impact the value you receive.",
   "page.swap.info.tips.security": "Security",
   "page.swap.info.tips.security.description": "Always ensure the security of your wallet and private keys.",
-  "page.swap.receiver.optional": "Receiver (optional)"
+  "page.swap.receiver.optional": "Receiver (optional)",
+  "page.swap.halted.state": "Trading is halted for selected pair, can't process swap",
+  "page.swap.not.possible": "Swapping to a smart contract is not possible! Enter a different recipient address."
 }

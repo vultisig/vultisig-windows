@@ -1,10 +1,11 @@
 import BigNumber from 'bignumber.js';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { useThorwalletApi } from '../../../lib/hooks/use-thorwallet-api';
 import { SwapQuoteParams } from '../../../lib/types/swap';
 import { debounce } from '../../../lib/utils/debounce';
 import { Chain } from '../../../model/chain';
+import { getSwapQuotes } from '../../../services/Thorwallet';
 import { convertChainToChainTicker } from '../../../utils/crypto';
 import {
   useAssertCurrentVaultAddreses,
@@ -29,8 +30,8 @@ export default function SwapQuotes() {
   const isDisabled = useIsSendFormDisabled();
   const [coinTo] = useCoinTo();
   const [recipient] = useSendReceiver();
+  const { t } = useTranslation();
   const [swapQuotesLoading, setSwapQuotesLoading] = useState(false);
-  const { getSwapQuotes } = useThorwalletApi();
   const [priceOptimisedQuote, setPriceOptimisedQuote] =
     useState<SwapQuote | null>(null);
   const [timeOptimisedQuote, setTimeOptimisedQuote] =
@@ -64,7 +65,6 @@ export default function SwapQuotes() {
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadSwapQuotes = useCallback(
     debounce(async function (params: SwapQuoteParams) {
       const data = await getSwapQuotes(params);
@@ -83,12 +83,11 @@ export default function SwapQuotes() {
         }
       } else {
         if (data.thorchain.base.error?.includes('halted')) {
-          error = "Trading is halted for selected pair, can't process swap";
+          error = t('page.swap.halted.state');
         } else if (
           data.thorchain.base.error?.includes('Swapping to a smart contract')
         ) {
-          error =
-            'Swapping to a smart contract is not possible! Enter a different recipient address.';
+          error = t('page.swap.not.possible');
         }
         setTimeOptimisedQuote(null);
       }
@@ -105,14 +104,13 @@ export default function SwapQuotes() {
         }
       } else {
         if (data.thorchain.streaming.error?.includes('halted')) {
-          error = "Trading is halted for selected pair, can't process swap";
+          error = t('page.swap.halted.state');
         } else if (
           data.thorchain.streaming.error?.includes(
             'Swapping to a smart contract'
           )
         ) {
-          error =
-            'Swapping to a smart contract is not possible! Enter a different recipient address.';
+          error = t('page.swap.not.possible');
         }
         setPriceOptimisedQuote(null);
       }
@@ -129,10 +127,9 @@ export default function SwapQuotes() {
         setMayaQuote(data.maya.quote);
       } else {
         if (data.maya.error?.includes('halted')) {
-          error = "Trading is halted for selected pair, can't process swap";
+          error = t('page.swap.halted.state');
         } else if (data.maya.error?.includes('Swapping to a smart contract')) {
-          error =
-            'Swapping to a smart contract is not possible! Enter a different recipient address.';
+          error = t('page.swap.not.possible');
         }
         setMayaQuote(null);
       }
@@ -149,12 +146,11 @@ export default function SwapQuotes() {
         setMayaStreamingQuote(data.mayaStreaming.quote);
       } else {
         if (data.mayaStreaming.error?.includes('halted')) {
-          error = "Trading is halted for selected pair, can't process swap";
+          error = t('page.swap.halted.state');
         } else if (
           data.mayaStreaming.error?.includes('Swapping to a smart contract')
         ) {
-          error =
-            'Swapping to a smart contract is not possible! Enter a different recipient address.';
+          error = t('page.swap.not.possible');
         }
         setMayaStreamingQuote(null);
       }
@@ -173,7 +169,6 @@ export default function SwapQuotes() {
       setSwapProtocol(null);
       setMayaQuote(null);
       setMayaStreamingQuote(null);
-      // Todo add other protocols erase
       loadSwapQuotes({
         fromAsset: `${convertChainToChainTicker(coin.chain as Chain)}.${coin.ticker}${coin.contract_address ? `-${coin.contract_address}` : ''}`,
         toAsset: `${convertChainToChainTicker(coinTo?.chain as Chain)}.${coinTo?.ticker}${coinTo?.contract_address ? `-${coinTo.contract_address}` : ''}`,

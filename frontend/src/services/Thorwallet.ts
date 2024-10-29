@@ -1,4 +1,10 @@
-import { SwapQuoteParams } from '../lib/types/swap';
+import { SwapPairsAsset } from '../lib/types/assets';
+import {
+  InboundAddress,
+  SwapQuoteParams,
+  SwapQuoteResponse,
+} from '../lib/types/swap';
+import { queryUrl, thorWalletQueryUrl } from '../lib/utils/query/queryUrl';
 
 export class ThorwalletApi {
   static thorWalletApi: string = 'https://api-v2-dev.thorwallet.org';
@@ -39,3 +45,27 @@ export class ThorwalletApi {
     }`;
   }
 }
+
+export const getMAYAActualInboundAddresses = async () => {
+  const endpoint = ThorwalletApi.getMayaAddresses();
+  return await queryUrl<InboundAddress[]>(endpoint);
+};
+
+export const getTHORActualInboundAddresses = async () => {
+  const endpoint = ThorwalletApi.getThorchainIboundAddresses();
+  return await queryUrl<InboundAddress[]>(endpoint);
+};
+
+export const getSwapQuotes = async (params: SwapQuoteParams) => {
+  const endpoint = ThorwalletApi.getSwapQuotes(params);
+  return await thorWalletQueryUrl<SwapQuoteResponse>(endpoint);
+};
+
+export const getSwapPairs = async (
+  chain: string,
+  ticker: string,
+  contractAddress: string
+) => {
+  const endpoint = ThorwalletApi.getSwapPairs(chain, ticker, contractAddress);
+  return await thorWalletQueryUrl<SwapPairsAsset[]>(endpoint);
+};

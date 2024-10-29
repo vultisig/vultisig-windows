@@ -316,5 +316,7 @@
   "page.swap.info.tips.stay.informed.description": "Esté atento a las tendencias y tarifas del mercado. El tiempo puede afectar el valor que recibe.",
   "page.swap.info.tips.security": "Seguridad",
   "page.swap.info.tips.security.description": "Garantice siempre la seguridad de su billetera y claves privadas.",
-  "page.swap.receiver.optional": "Receptor (opcional)"
+  "page.swap.receiver.optional": "Receptor (opcional)",
+  "page.swap.halted.state": "El comercio se detiene para el par seleccionado, no se puede procesar el intercambio",
+  "page.swap.not.possible": "¡No es posible cambiar a un contrato inteligente! Ingrese una dirección de destinatario diferente."
 }
