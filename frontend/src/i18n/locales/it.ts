@@ -389,4 +389,51 @@ export const it = {
   password_to_decrypt: 'Questa password decifra la tua condivisione FastVault',
   fast_vault_password: 'Password di FastVault',
   max: 'Massimo',
+  'page.swap.quote.amount.error':
+    "Nessun preventivo disponibile per l'importo e la coppia richiesti.",
+  'page.swap.info.title': "Cos'è lo scambio di asset?",
+  'page.swap.info.how.it.work': 'Come funziona?',
+  'page.swap.info.select.assets': 'Seleziona Risorse',
+  'page.swap.info.select.assets.description':
+    'Inizia scegliendo i due asset che desideri scambiare, ad esempio Bitcoin con Ethereum.',
+  'page.swap.info.check.rates': 'Controlla le tariffe',
+  'page.swap.info.check.rates.description':
+    'La nostra piattaforma mostra il tasso di cambio corrente e le commissioni associate. I tassi sono determinati dalle condizioni di mercato e dalla liquidità.',
+  'page.swap.info.confirm.swap': 'Conferma scambio',
+  'page.swap.info.confirm.swap.description':
+    'Una volta confermato lo scambio, la rete decentralizzata di Vultisig elabora la transazione in modo sicuro.',
+  'page.swap.info.receive.assets': 'Ricevi risorse',
+  'page.swap.info.receive.assets.description':
+    "L'asset scambiato viene depositato direttamente nel tuo portafoglio, solitamente entro pochi minuti.",
+  'page.swap.info.swap.benefits.title':
+    "Vantaggi dell'utilizzo di Vultisig per lo scambio",
+  'page.swap.info.swap.benefits.decentralised': 'Decentralizzato',
+  'page.swap.info.swap.benefits.decentralised.description':
+    'Operiamo secondo protocolli completamente decentralizzati, garantendo sicurezza e trasparenza.',
+  'page.swap.info.swap.benefits.speed': 'Velocità',
+  'page.swap.info.swap.benefits.speed.description':
+    "Le transazioni vengono elaborate rapidamente, garantendo un'esperienza di scambio fluida.",
+  'page.swap.info.swap.benefits.accessibility': 'Accessibilità',
+  'page.swap.info.swap.benefits.accessibility.description':
+    "Scambia un'ampia gamma di criptovalute senza bisogno di intermediari tradizionali.",
+  'page.swap.info.swap.benefits.liquidity': 'Liquidità',
+  'page.swap.info.swap.benefits.liquidity.description':
+    'Vultisig garantisce liquidità, facilitando lo scambio di grandi quantità ai tassi di mercato.',
+  'page.swap.info.tips': 'Suggerimenti per i nuovi utenti',
+  'page.swap.info.tips.start': 'Inizia in piccolo',
+  'page.swap.info.tips.start.description':
+    'Se non hai mai fatto trading, potresti iniziare con una piccola transazione per familiarizzare con il processo.',
+  'page.swap.info.tips.stay.informed': 'Rimani informato',
+  'page.swap.info.tips.stay.informed.description':
+    "Tieni d'occhio le tendenze e i tassi di mercato. Il tempismo può avere un impatto sul valore che ricevi.",
+  'page.swap.info.tips.security': 'Sicurezza',
+  'page.swap.info.tips.security.description':
+    'Assicuratevi sempre la sicurezza del vostro portafoglio e delle vostre chiavi private.',
+  'page.swap.receiver.optional': 'Ricevitore (opzionale)',
+  'page.swap.halted.state':
+    'Il trading è stato interrotto per la coppia selezionata, impossibile elaborare lo swap',
+  'page.swap.not.possible':
+    'Non è possibile passare a uno smart contract! Inserisci un indirizzo destinatario diverso.',
+  'page.swap.title': 'Scambio',
+  slippage: 'Slittamento',
 };

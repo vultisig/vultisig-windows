@@ -3,12 +3,9 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
-import { de } from './locales/de';
-import { en } from './locales/en';
-import { es } from './locales/es';
-import { hr } from './locales/hr';
-import { it } from './locales/it';
-import { pt } from './locales/pt';
+import { recordMap } from '../lib/utils/record/recordMap';
+import { primaryLanguage } from './Language';
+import { translations } from './translations';
 
 // Initialization
 i18n
@@ -16,27 +13,8 @@ i18n
   .use(LanguageDetector) // Detects the user's language
   .use(initReactI18next) // Passes i18n instance to react-i18next
   .init({
-    resources: {
-      en: {
-        translation: en,
-      },
-      es: {
-        translation: es,
-      },
-      pt: {
-        translation: pt,
-      },
-      it: {
-        translation: it,
-      },
-      de: {
-        translation: de,
-      },
-      hr: {
-        translation: hr,
-      },
-    },
-    fallbackLng: 'en',
+    resources: recordMap(translations, translation => ({ translation })),
+    fallbackLng: primaryLanguage,
     debug: false,
     interpolation: {
       escapeValue: false,
