@@ -3,10 +3,8 @@ import { useMutation } from '@tanstack/react-query';
 import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
 import { getCoinPricesQueryKeys } from '../../coin/query/useCoinPricesQuery';
 import { getStorageCoinKey } from '../../coin/utils/storageCoin';
-import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
-import { Spinner } from '../../lib/ui/loaders/Spinner';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
-import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
+import { PageHeaderRefresh } from '../../ui/page/PageHeaderRefresh';
 import { useAssertCurrentVaultCoins } from '../state/useCurrentVault';
 
 export const RefreshVaultBalance = () => {
@@ -23,10 +21,5 @@ export const RefreshVaultBalance = () => {
     },
   });
 
-  return (
-    <PageHeaderIconButton
-      onClick={() => refresh()}
-      icon={isPending ? <Spinner /> : <RefreshIcon />}
-    />
-  );
+  return <PageHeaderRefresh onClick={() => refresh()} isPending={isPending} />;
 };

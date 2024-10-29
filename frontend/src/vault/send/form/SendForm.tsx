@@ -16,6 +16,7 @@ import { SendFiatFee } from '../fee/SendFiatFee';
 import { StrictFeeRow } from '../fee/StrictFeeRow';
 import { ManageMemo } from '../memo/ManageMemo';
 import { ManageReceiver } from '../receiver/ManageReceiver';
+import { RefreshSend } from '../RefreshSend';
 import { Sender } from '../sender/Sender';
 import { useIsSendFormDisabled } from './hooks/useIsSendFormDisabled';
 
@@ -28,6 +29,7 @@ export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
+        secondaryControls={<RefreshSend />}
         title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
       />
       <PageContent

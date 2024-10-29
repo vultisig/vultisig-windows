@@ -54,7 +54,7 @@ export class BlockchainServiceUtxo
         };
         break;
 
-      // We will have to check how the swap transaction is structured for UTXO chains
+      // We will have to check how the swap-old transaction is structured for UTXO chains
       case TransactionType.SWAP:
         const swapTx = obj as ISwapTransaction;
         payload.blockchainSpecific = {
