@@ -1,93 +1,60 @@
-import { useMemo } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
-import { Match } from '../../lib/ui/base/Match';
-import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation';
-import { KeygenType } from '../keygen/KeygenType';
-import { KeygenStartSessionStep } from '../keygen/shared/KeygenStartSessionStep';
-import { KeygenStep } from '../keygen/shared/KeygenStep';
-import { CurrentServiceNameProvider } from '../keygen/shared/state/currentServiceName';
-import { CurrentSessionIdProvider } from '../keygen/shared/state/currentSessionId';
-import { KeygenVerifyStep } from '../keygen/shared/verify/KeygenVerifyStep';
-import { CurrentKeygenTypeProvider } from '../keygen/state/currentKeygenType';
-import { CurrentKeygenVaultProvider } from '../keygen/state/currentKeygenVault';
-import { CurrentLocalPartyIdProvider } from '../keygen/state/currentLocalPartyId';
-import { CurrentServerTypeProvider } from '../keygen/state/currentServerType';
-import { generateHexEncryptionKey } from '../keygen/utils/generateHexEncryptionKey';
-import { generateServiceName } from '../keygen/utils/generateServiceName';
-import { PeersSelectionRecordProvider } from '../keysign/shared/state/selectedPeers';
-import { CurrentHexChainCodeProvider } from '../setup/state/currentHexChainCode';
-import { CurrentHexEncryptionKeyProvider } from '../setup/state/currentHexEncryptionKey';
-import { ServerUrlDerivedFromServerTypeProvider } from '../setup/state/serverUrlDerivedFromServerType';
-import { useAssertCurrentVault } from '../state/useCurrentVault';
-import { ReshareVaultPeerDiscoveryStep } from './ReshareVaultPeerDiscoveryStep';
-
-const reshareVaultSteps = [
-  'peers',
-  'verify',
-  'startSession',
-  'keygen',
-] as const;
+import { Button } from '../../lib/ui/buttons/Button';
+import { VStack } from '../../lib/ui/layout/Stack';
+import { InfoBlock } from '../../lib/ui/status/InfoBlock';
+import { Text } from '../../lib/ui/text';
+import { makeAppPath } from '../../navigation';
+import { PageContent } from '../../ui/page/PageContent';
+import { PageHeader } from '../../ui/page/PageHeader';
+import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
+import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 
 export const ReshareVaultPage = () => {
-  const vault = useAssertCurrentVault();
-  const { local_party_id, hex_chain_code } = vault;
+  const { t } = useTranslation();
 
-  const hexEncryptionKey = useMemo(generateHexEncryptionKey, []);
-
-  const serviceName = useMemo(generateServiceName, []);
-
-  const sessionId = useMemo(uuidv4, []);
-
-  const { step, setStep, toPreviousStep, toNextStep } =
-    useStepNavigation(reshareVaultSteps);
+  const navigate = useNavigate();
 
   return (
-    <CurrentServiceNameProvider value={serviceName}>
-      <PeersSelectionRecordProvider initialValue={{}}>
-        <CurrentSessionIdProvider value={sessionId}>
-          <CurrentHexEncryptionKeyProvider value={hexEncryptionKey}>
-            <CurrentHexChainCodeProvider value={hex_chain_code}>
-              <CurrentServerTypeProvider initialValue="relay">
-                <ServerUrlDerivedFromServerTypeProvider>
-                  <CurrentLocalPartyIdProvider value={local_party_id}>
-                    <CurrentKeygenTypeProvider value={KeygenType.Reshare}>
-                      <CurrentKeygenVaultProvider value={vault}>
-                        <Match
-                          value={step}
-                          peers={() => (
-                            <ReshareVaultPeerDiscoveryStep
-                              onForward={toNextStep}
-                            />
-                          )}
-                          verify={() => (
-                            <KeygenVerifyStep
-                              onBack={toPreviousStep}
-                              onForward={toNextStep}
-                            />
-                          )}
-                          startSession={() => (
-                            <KeygenStartSessionStep
-                              onBack={toPreviousStep}
-                              onForward={toNextStep}
-                            />
-                          )}
-                          keygen={() => (
-                            <KeygenStep
-                              onTryAgain={() => setStep(reshareVaultSteps[0])}
-                              onBack={() => setStep('verify')}
-                            />
-                          )}
-                        />
-                      </CurrentKeygenVaultProvider>
-                    </CurrentKeygenTypeProvider>
-                  </CurrentLocalPartyIdProvider>
-                </ServerUrlDerivedFromServerTypeProvider>
-              </CurrentServerTypeProvider>
-            </CurrentHexChainCodeProvider>
-          </CurrentHexEncryptionKeyProvider>
-        </CurrentSessionIdProvider>
-      </PeersSelectionRecordProvider>
-    </CurrentServiceNameProvider>
+    <>
+      <PageHeader
+        primaryControls={<PageHeaderBackButton />}
+        title={<PageHeaderTitle>{t('reshare')}</PageHeaderTitle>}
+      />
+      <PageContent>
+        <VStack gap={8} flexGrow alignItems="center" justifyContent="center">
+          <Text size={20} color="contrast" weight="600">
+            {t('reshare_your_vault')}
+          </Text>
+          <Text size={14} color="supporting">
+            {t('reshare_explanation')}
+          </Text>
+        </VStack>
+        <VStack gap={20}>
+          <InfoBlock>{t('reshare_disclaimer')}</InfoBlock>
+          <Button
+            onClick={() => navigate(makeAppPath('reshareVaultSecure'))}
+            kind="primary"
+          >
+            {t('start_reshare')}
+          </Button>
+          <Button
+            onClick={() => navigate(makeAppPath('reshareVaultFast'))}
+            kind="outlined"
+          >
+            {t('start_reshare_with_server')}
+          </Button>
+          <Button
+            onClick={() =>
+              navigate(makeAppPath('uploadQr', { title: t('join_reshare') }))
+            }
+            kind="outlined"
+          >
+            {t('join_reshare')}
+          </Button>
+        </VStack>
+      </PageContent>
+    </>
   );
 };

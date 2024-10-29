@@ -30,7 +30,7 @@ import { useKeysignPayload } from './state/keysignPayload';
 
 export const KeysignSigningStep = ({
   onBack,
-}: ComponentWithBackActionProps) => {
+}: Partial<ComponentWithBackActionProps>) => {
   const payload = useKeysignPayload();
   const msgs = useCurrentKeysignMsgs();
 

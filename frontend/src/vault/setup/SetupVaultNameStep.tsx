@@ -20,7 +20,7 @@ import { useVaultName } from './state/vaultName';
 export const SetupVaultNameStep = ({
   onForward,
   onBack,
-}: ComponentWithForwardActionProps & ComponentWithBackActionProps) => {
+}: ComponentWithForwardActionProps & Partial<ComponentWithBackActionProps>) => {
   const { t } = useTranslation();
   const [value, setValue] = useVaultName();
 

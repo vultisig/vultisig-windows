@@ -15,7 +15,7 @@ export const Content = styled.div`
 `;
 
 export const ChevronIconButton = styled(UnstyledButton)`
-  color: ${({ theme }) => theme.colors.contrast.toCssValue()};
+  color: ${({ theme }) => theme.colors.text.toCssValue()};
   display: grid;
   place-items: center;
 `;

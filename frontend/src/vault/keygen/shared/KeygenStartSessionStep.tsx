@@ -8,20 +8,20 @@ import {
 } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { Text } from '../../../lib/ui/text';
-import { startSession } from '../../../services/Keygen/Keygen';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { useVaultKeygenDevices } from '../../setup/hooks/useVaultKegenDevices';
 import { useCurrentServerUrl } from '../state/currentServerUrl';
+import { startSession } from '../utils/startSession';
 import { PendingKeygenMessage } from './PendingKeygenMessage';
 import { useCurrentSessionId } from './state/currentSessionId';
 
 export const KeygenStartSessionStep = ({
   onBack,
   onForward,
-}: ComponentWithBackActionProps & ComponentWithForwardActionProps) => {
+}: Partial<ComponentWithBackActionProps> & ComponentWithForwardActionProps) => {
   const { t } = useTranslation();
 
   const sessionId = useCurrentSessionId();
@@ -32,7 +32,7 @@ export const KeygenStartSessionStep = ({
 
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {
-      return startSession(serverUrl, sessionId, devices);
+      return startSession({ serverUrl, sessionId, devices });
     },
     onSuccess: () => onForward(),
   });

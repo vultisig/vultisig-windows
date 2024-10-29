@@ -54,3 +54,9 @@ export const Check = styled(CheckStatus)`
   grid-row: 1 / span 2;
   align-self: center;
 `;
+
+export const HeaderWrapper = styled.div`
+  background-color: ${getColor('background')};
+  position: sticky;
+  top: 0;
+`;

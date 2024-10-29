@@ -15,7 +15,7 @@ import { Text } from '../../../../../lib/ui/text';
 import { getColor } from '../../../../../lib/ui/theme/getters';
 import { usePeersSelectionRecord } from '../../../../keysign/shared/state/selectedPeers';
 import {
-  getKeygenDeviceName,
+  formatKeygenDeviceName,
   getKeygenDeviceType,
   parseLocalPartyId,
 } from '../../../utils/localPartyId';
@@ -63,7 +63,7 @@ export const PeerOption = ({ value }: ComponentWithValueProps<string>) => {
 
   const isSelected = record[value];
 
-  const { id, hash } = parseLocalPartyId(value);
+  const { deviceName, hash } = parseLocalPartyId(value);
 
   return (
     <Container
@@ -82,11 +82,11 @@ export const PeerOption = ({ value }: ComponentWithValueProps<string>) => {
       )}
       <KeygenDeviceIcon
         style={{ fontSize: 50 }}
-        value={getKeygenDeviceType(id)}
+        value={getKeygenDeviceType(deviceName)}
       />
       <VStack alignItems="center">
         <Text weight="700" size={16} color="contrast">
-          {getKeygenDeviceName(id)}
+          {formatKeygenDeviceName(deviceName)}
         </Text>
         <Text weight="600" size={12} color="contrast">
           {hash}

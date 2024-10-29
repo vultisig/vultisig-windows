@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../../lib/ui/buttons/Button';
 import { FilledAlertIcon } from '../../../lib/ui/icons/FilledAlertIcon';
@@ -12,7 +13,7 @@ import { useCurrentKeygenType } from '../state/currentKeygenType';
 
 type KeygenFailedStatePros = {
   message: string;
-  onTryAgain: () => void;
+  onTryAgain?: () => void;
 };
 
 export const KeygenFailedState = ({
@@ -27,6 +28,8 @@ export const KeygenFailedState = ({
     [KeygenType.Keygen]: () => t('keygen'),
     [KeygenType.Reshare]: () => t('reshare'),
   });
+
+  const navigate = useNavigate();
 
   return (
     <PageContent>
@@ -53,7 +56,9 @@ export const KeygenFailedState = ({
           <br />
           {t('information_note2')}
         </WarningBlock>
-        <Button onClick={onTryAgain}>{t('try_again')}</Button>
+        <Button onClick={onTryAgain || (() => navigate(-1))}>
+          {t('try_again')}
+        </Button>
       </VStack>
     </PageContent>
   );
