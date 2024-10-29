@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { ChevronRightIcon } from '../../lib/ui/icons/ChevronRightIcon';
-import { TriangleAlertIcon } from '../../lib/ui/icons/TriangleAlertIcon';
-import { Text } from '../../lib/ui/text';
-import { appPaths } from '../../navigation';
-import { ChevronIconButton, Content } from './VaultBackupBanner.styles';
+import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon';
+import { TriangleAlertIcon } from '../../../lib/ui/icons/TriangleAlertIcon';
+import { Text } from '../../../lib/ui/text';
+import { appPaths } from '../../../navigation';
+import { ChevronIconButton, Content } from './VaultBackupReminderBanner.styles';
 
-const VaultBackupBanner = () => {
+const VaultBackupReminderBanner = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -26,4 +26,4 @@ const VaultBackupBanner = () => {
   );
 };
 
-export default VaultBackupBanner;
+export default VaultBackupReminderBanner;
