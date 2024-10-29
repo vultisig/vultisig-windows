@@ -71,7 +71,6 @@
   "initiating_device": "Initiierendes Gerät",
   "pairing_device": "Paarungsgerät",
   "add_new_vault": "Neuen Tresor hinzufügen",
-  "backupnow_description": "Jedes Gerät hat sein eigenes einzigartiges Fragment. Bitte sichern Sie jetzt alle Ihre Tresorfragmente.",
   "backupnow_note": "Hinweis: Bewahren Sie niemals Tresorfragmente von verschiedenen Geräten am selben Ort auf.",
   "backup": "Backup",
   "prepareVault": "Tresor wird vorbereitet...",
@@ -123,6 +122,10 @@
   "vault_details_page_title": "Details",
   "vault_details_page_vault_part": "Tresorteil",
   "vault_backup_page_title": "Backup",
+  "backupnow_description": "Backups funktionieren in Vultisig anders",
+  "backupnow_note_part1": "Jedes Gerät hat seine",
+  "backupnow_note_part2": "eigene",
+  "backupnow_note_part3": "einzigartige Tresorfreigabe, die",
   "vault_backup_banner_title": "Sichern Sie jetzt Ihre Tresorfreigabe dieses Geräts!",
   "vault_details_page_vault_name": "Tresorname",
   "vault_details_page_vault_ECDSA": "ECDSA",
@@ -335,5 +338,11 @@
   "fast_sign": "Schnelles Zeichen",
   "paired_sign": "Gepaartes Zeichen",
   "password_to_decrypt": "Dieses Passwort entschlüsselt Ihre FastVault-Freigabe",
-  "fast_vault_password": "FastVault-Passwort"
+  "fast_vault_password": "FastVault-Passwort",
+  "vault_backup_keygen_banner_title_part1": "Sichern Sie Ihren Tresor auf",
+  "vault_backup_keygen_banner_title_part2": "jedes",
+  "vault_backup_keygen_banner_title_part3": "Gerät einzeln!",
+  "vault_backup_keygen_skip_modal_title": "Sicherung überspringen",
+  "vault_backup_keygen_skip_modal_back_btn": "Zurück",
+  "vault_backup_keygen_skip_modal_checkbox_label": "Ich verstehe, dass ich durch das Überspringen der Sicherung den Zugriff auf meine Gelder verlieren kann."
 }
