@@ -27,7 +27,9 @@ import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
 import { StartFastKeysignPage } from './vault/keysign/start/fast/StartFastKeysignPage';
 import { StartKeysignPage } from './vault/keysign/start/StartKeysignPage';
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage';
+import { FastReshareVaultPage } from './vault/reshare/fast/FastReshareVaultPage';
 import { ReshareVaultPage } from './vault/reshare/ReshareVaultPage';
+import { SecureReshareVaultPage } from './vault/reshare/secure/SecureReshareVaultPage';
 import { SendPage } from './vault/send/SendPage';
 import { SetupActiveVaultPage } from './vault/setup/active/SetupActiveVaultPage';
 import { SetupFastVaultPage } from './vault/setup/fast/SetupFastVaultPage';
@@ -134,6 +136,14 @@ export const router = createBrowserRouter([
   {
     path: appPaths.reshareVault,
     element: <ReshareVaultPage />,
+  },
+  {
+    path: appPaths.reshareVaultFast,
+    element: <FastReshareVaultPage />,
+  },
+  {
+    path: appPaths.reshareVaultSecure,
+    element: <SecureReshareVaultPage />,
   },
   {
     path: appPaths.vaultDelete,

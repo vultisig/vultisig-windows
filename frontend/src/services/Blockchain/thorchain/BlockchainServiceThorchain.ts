@@ -21,6 +21,7 @@ import {
   TransactionType,
 } from '../../../model/transaction';
 import { RpcServiceThorchain } from '../../Rpc/thorchain/RpcServiceThorchain';
+import Long from 'long';
 
 export class BlockchainServiceThorchain
   extends BlockchainService
@@ -87,7 +88,7 @@ export class BlockchainServiceThorchain
     input.sequence = Number(thorchainSpecific.sequence);
     input.mode = BroadcastMode.SYNC;
     input.fee = TW.Cosmos.Proto.Fee.create({
-      gas: 20000000,
+      gas: new Long(20000000),
     });
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();
   }
@@ -122,7 +123,7 @@ export class BlockchainServiceThorchain
           ticker: 'RUNE',
           synth: false,
         }),
-        decimals: 8,
+        decimals: new Long(8),
       });
       const toAmount = Number(keysignPayload.toAmount || '0');
       if (toAmount > 0) {
@@ -173,13 +174,13 @@ export class BlockchainServiceThorchain
       publicKey: new Uint8Array(pubKeyData),
       signingMode: SigningMode.Protobuf,
       chainId: chainID,
-      accountNumber: Number(thorchainSpecific.accountNumber),
-      sequence: Number(thorchainSpecific.sequence),
+      accountNumber: new Long(Number(thorchainSpecific.accountNumber)),
+      sequence: new Long(Number(thorchainSpecific.sequence)),
       mode: BroadcastMode.SYNC,
       memo: keysignPayload.memo || '',
       messages: message,
       fee: TW.Cosmos.Proto.Fee.create({
-        gas: 20000000,
+        gas: new Long(20000000),
       }),
     });
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();

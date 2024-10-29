@@ -1,24 +1,24 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '../../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps';
-import { TextInput } from '../../../../lib/ui/inputs/TextInput';
-import { VStack } from '../../../../lib/ui/layout/Stack';
+import { Button } from '../../../lib/ui/buttons/Button';
+import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
+import { TextInput } from '../../../lib/ui/inputs/TextInput';
+import { VStack } from '../../../lib/ui/layout/Stack';
 import {
   ComponentWithBackActionProps,
   ComponentWithForwardActionProps,
-} from '../../../../lib/ui/props';
-import { Text } from '../../../../lib/ui/text';
-import { validateEmail } from '../../../../lib/utils/validation/validateEmail';
-import { PageContent } from '../../../../ui/page/PageContent';
-import { PageHeader } from '../../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
-import { KeygenEducationPrompt } from '../../../keygen/shared/KeygenEducationPrompt';
+} from '../../../lib/ui/props';
+import { InfoBlock } from '../../../lib/ui/status/InfoBlock';
+import { Text } from '../../../lib/ui/text';
+import { validateEmail } from '../../../lib/utils/validation/validateEmail';
+import { PageContent } from '../../../ui/page/PageContent';
+import { PageHeader } from '../../../ui/page/PageHeader';
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { useVaultEmail } from './state/email';
 
-export const SetupVaultEmailStep = ({
+export const ServerEmailStep = ({
   onForward,
   onBack,
 }: ComponentWithForwardActionProps & Partial<ComponentWithBackActionProps>) => {
@@ -41,7 +41,6 @@ export const SetupVaultEmailStep = ({
       <PageHeader
         title={<PageHeaderTitle>{t('email')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        secondaryControls={<KeygenEducationPrompt />}
       />
       <PageContent
         as="form"
@@ -66,9 +65,12 @@ export const SetupVaultEmailStep = ({
             onValueChange={setRepeatedValue}
           />
         </VStack>
-        <Button type="submit" isDisabled={isDisabled}>
-          {t('continue')}
-        </Button>
+        <VStack gap={20}>
+          <InfoBlock>{t('email_disclaimer')}</InfoBlock>
+          <Button type="submit" isDisabled={isDisabled}>
+            {t('continue')}
+          </Button>
+        </VStack>
       </PageContent>
     </>
   );

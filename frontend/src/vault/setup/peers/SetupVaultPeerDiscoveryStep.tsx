@@ -10,7 +10,7 @@ import { useSelectedPeers } from '../../keysign/shared/state/selectedPeers';
 import { useVaultType } from '../shared/state/vaultType';
 import { useJoinKeygenUrlQuery } from './queries/useJoinKeygenUrlQuery';
 
-const requiredPeers = 2;
+const requiredPeers = 1;
 
 export const SetupVaultPeerDiscoveryStep: React.FC<
   ComponentWithForwardActionProps & ComponentWithBackActionProps

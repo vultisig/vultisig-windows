@@ -8,6 +8,7 @@ import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import TxCompiler = TW.TxCompiler;
 import { createHash } from 'crypto';
+import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
 import {
@@ -112,8 +113,8 @@ export class BlockchainServiceCosmos
       publicKey: new Uint8Array(pubKeyData),
       signingMode: SigningMode.Protobuf,
       chainId: walletCore.CoinTypeExt.chainId(this.coinType),
-      accountNumber: Number(cosmosSpecific.accountNumber),
-      sequence: Number(cosmosSpecific.sequence),
+      accountNumber: new Long(Number(cosmosSpecific.accountNumber)),
+      sequence: new Long(Number(cosmosSpecific.sequence)),
       mode: BroadcastMode.SYNC,
       memo:
         cosmosSpecific.transactionType !== TransactionType.VOTE
@@ -121,7 +122,7 @@ export class BlockchainServiceCosmos
           : '',
       messages: message,
       fee: TW.Cosmos.Proto.Fee.create({
-        gas: 200000,
+        gas: new Long(200000),
         amounts: [
           TW.Cosmos.Proto.Amount.create({
             amount: cosmosSpecific.gas.toString(),

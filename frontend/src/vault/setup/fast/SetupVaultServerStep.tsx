@@ -14,13 +14,13 @@ import { KeygenFailedState } from '../../keygen/shared/KeygenFailedState';
 import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId';
 import { generateLocalPartyId } from '../../keygen/utils/localPartyId';
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader';
+import { useVaultEmail } from '../../server/email/state/email';
+import { useVaultPassword } from '../../server/password/state/password';
 import { setupVaultWithServer } from '../../server/utils/setupVaultWithServer';
 import { useVaultType } from '../shared/state/vaultType';
 import { useCurrentHexChainCode } from '../state/currentHexChainCode';
 import { useCurrentHexEncryptionKey } from '../state/currentHexEncryptionKey';
 import { useVaultName } from '../state/vaultName';
-import { useVaultEmail } from './email/state/email';
-import { useVaultPassword } from './password/state/password';
 
 export const SetupVaultServerStep: React.FC<
   ComponentWithForwardActionProps & ComponentWithBackActionProps
