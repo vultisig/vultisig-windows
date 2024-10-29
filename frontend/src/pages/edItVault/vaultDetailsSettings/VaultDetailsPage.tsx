@@ -55,7 +55,8 @@ const VaultDetailsPage = () => {
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_part')}</Text>
             <Text color="supporting" size={13}>
-              Part {order + 1} of {signers.length}
+              {t('vault_details_page_part_of_vault')} {order + 1}{' '}
+              {t('vault_details_page_of_word')} {signers.length}
             </Text>
           </VStack>
         </ListItemPanel>
@@ -82,8 +83,9 @@ const VaultDetailsPage = () => {
           <ListItemPanel key={index}>
             <VStack fullWidth alignItems="start" justifyContent="space-between">
               <Text color="supporting" weight={900} size={13}>
-                Signer {index + 1}: {signer}{' '}
-                {signer === local_party_id && '(This device)'}
+                {t('vault_details_page_signer_word')} {index + 1}: {signer}{' '}
+                {signer === local_party_id &&
+                  `(${t('vault_details_page_this_device')})`}
               </Text>
             </VStack>
           </ListItemPanel>
