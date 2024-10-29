@@ -300,7 +300,6 @@
   "vault_already_exists": "Vault already exists",
   "vault_already_exists_message": "Please select a different vault.",
   "vault_missing_public_key": "Vault missing public key",
-  "vault_missing_public_key_message": "Vault file is corrupted or missing a public key. Please try again or select a different vault.",
   "fast": "Fast",
   "secure": "Secure",
   "active": "Active",
@@ -367,5 +366,6 @@
   "page.swap.halted.state": "Trading is halted for selected pair, can't process swap",
   "page.swap.not.possible": "Swapping to a smart contract is not possible! Enter a different recipient address.",
   "page.swap.title": "Swap",
-  "slippage": "Slippage"
+  "slippage": "Slippage",
+  "max": "Max"
 }

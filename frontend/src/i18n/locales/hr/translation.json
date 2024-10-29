@@ -335,5 +335,6 @@
   "fast_sign": "Brzi znak",
   "paired_sign": "Upareni znak",
   "password_to_decrypt": "Ova lozinka dešifrira vaš FastVault Share",
-  "fast_vault_password": "Lozinka za FastVault"
+  "fast_vault_password": "Lozinka za FastVault",
+  "max": "Maks"
 }

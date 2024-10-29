@@ -335,5 +335,6 @@
   "fast_sign": "Schnelles Zeichen",
   "paired_sign": "Gepaartes Zeichen",
   "password_to_decrypt": "Dieses Passwort entschlüsselt Ihre FastVault-Freigabe",
-  "fast_vault_password": "FastVault-Passwort"
+  "fast_vault_password": "FastVault-Passwort",
+  "max": "Max"
 }

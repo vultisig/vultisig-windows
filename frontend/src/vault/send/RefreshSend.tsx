@@ -1,22 +1,27 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
-import { getCoinPricesQueryKeys } from '../../coin/query/useCoinPricesQuery';
-import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { PageHeaderRefresh } from '../../ui/page/PageHeaderRefresh';
-import { useAssertCurrentVaultCoins } from '../state/useCurrentVault';
+import { useAssertCurrentVaultAddress } from '../state/useCurrentVault';
+import { getSpecificSendTxInfoQueryKey } from './queries/useSpecificSendTxInfoQuery';
+import { useCurrentSendCoin } from './state/sendCoin';
 
-export const RefreshVaultBalance = () => {
+export const RefreshSend = () => {
   const invalidateQueries = useInvalidateQueries();
 
-  const coins = useAssertCurrentVaultCoins();
+  const [coinKey] = useCurrentSendCoin();
+  const address = useAssertCurrentVaultAddress(coinKey.chainId);
 
   const { mutate: refresh, isPending } = useMutation({
     mutationFn: () => {
+      const accountCoinKey = {
+        ...coinKey,
+        address,
+      };
       return invalidateQueries(
-        getCoinPricesQueryKeys(coins.map(getStorageCoinKey)),
-        ...coins.map(coin => getBalanceQueryKey(getStorageCoinKey(coin)))
+        getBalanceQueryKey(accountCoinKey),
+        getSpecificSendTxInfoQueryKey(accountCoinKey)
       );
     },
   });
