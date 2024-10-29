@@ -4,7 +4,7 @@ import {
   SwapQuoteParams,
   SwapQuoteResponse,
 } from '../lib/types/swap';
-import { queryUrl, thorWalletQueryUrl } from '../lib/utils/query/queryUrl';
+import { queryUrl, queryUrlWindowsPlatform } from '../lib/utils/query/queryUrl';
 
 export class ThorwalletApi {
   static thorWalletApi: string = 'https://api-v2-dev.thorwallet.org';
@@ -58,7 +58,7 @@ export const getTHORActualInboundAddresses = async () => {
 
 export const getSwapQuotes = async (params: SwapQuoteParams) => {
   const endpoint = ThorwalletApi.getSwapQuotes(params);
-  return await thorWalletQueryUrl<SwapQuoteResponse>(endpoint);
+  return await queryUrlWindowsPlatform<SwapQuoteResponse>(endpoint);
 };
 
 export const getSwapPairs = async (
@@ -67,5 +67,5 @@ export const getSwapPairs = async (
   contractAddress: string
 ) => {
   const endpoint = ThorwalletApi.getSwapPairs(chain, ticker, contractAddress);
-  return await thorWalletQueryUrl<SwapPairsAsset[]>(endpoint);
+  return await queryUrlWindowsPlatform<SwapPairsAsset[]>(endpoint);
 };

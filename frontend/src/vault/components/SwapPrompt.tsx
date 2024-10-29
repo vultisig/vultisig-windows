@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { CoinKey, coinKeyToString } from '../../coin/Coin';
@@ -6,6 +7,7 @@ import { ComponentWithValueProps } from '../../lib/ui/props';
 import { makeAppPath } from '../../navigation';
 
 export const SwapPrompt = ({ value }: ComponentWithValueProps<CoinKey>) => {
+  const { t } = useTranslation();
   return (
     <Link
       to={makeAppPath('vaultItemSwap', {
@@ -13,7 +15,7 @@ export const SwapPrompt = ({ value }: ComponentWithValueProps<CoinKey>) => {
       })}
     >
       <Button as="div" kind="outlined" style={{ textTransform: 'uppercase' }}>
-        SWAP
+        {t('page.swap.title')}
       </Button>
     </Link>
   );

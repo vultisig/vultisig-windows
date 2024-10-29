@@ -9,7 +9,7 @@ export const queryUrl = async <T>(url: string): Promise<T> => {
   return response.json();
 };
 
-export const thorWalletQueryUrl = async <T, R = undefined>(
+export const queryUrlWindowsPlatform = async <T, R = undefined>(
   url: string,
   method?: string,
   body?: R

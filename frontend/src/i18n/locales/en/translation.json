@@ -360,5 +360,7 @@
   "page.swap.info.tips.security.description": "Always ensure the security of your wallet and private keys.",
   "page.swap.receiver.optional": "Receiver (optional)",
   "page.swap.halted.state": "Trading is halted for selected pair, can't process swap",
-  "page.swap.not.possible": "Swapping to a smart contract is not possible! Enter a different recipient address."
+  "page.swap.not.possible": "Swapping to a smart contract is not possible! Enter a different recipient address.",
+  "page.swap.title": "Swap",
+  "slippage": "Slippage"
 }

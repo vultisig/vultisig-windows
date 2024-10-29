@@ -1,4 +1,5 @@
 import { SyntheticEvent, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
@@ -30,6 +31,7 @@ export default function SwapOutputSection({
   quote,
   type,
 }: SwapOutputSectionProps) {
+  const { t } = useTranslation();
   const [coinKey] = useCurrentSendCoin();
   const [coinTo] = useCoinTo();
   const coin = useAssertCurrentVaultCoin(coinKey);
@@ -50,20 +52,20 @@ export default function SwapOutputSection({
     if (percentage >= 10) {
       return (
         <span className="text-[12px] text-alert-red font-light">
-          {percentage}% slippage
+          {percentage}% {t('slippage').toLowerCase()}
         </span>
       );
     }
     if (percentage <= 2) {
       return (
         <span className="text-[12px] text-turquoise-600 font-light">
-          {percentage}% slippage
+          {percentage}% {t('slippage').toLowerCase()}
         </span>
       );
     }
     return (
       <span className="text-[12px] text-warning font-light">
-        {percentage}% slippage
+        {percentage}% {t('slippage').toLowerCase()}
       </span>
     );
   };

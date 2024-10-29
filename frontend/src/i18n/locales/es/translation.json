@@ -361,5 +361,7 @@
   "page.swap.info.tips.security.description": "Garantice siempre la seguridad de su billetera y claves privadas.",
   "page.swap.receiver.optional": "Receptor (opcional)",
   "page.swap.halted.state": "El comercio se detiene para el par seleccionado, no se puede procesar el intercambio",
-  "page.swap.not.possible": "¡No es posible cambiar a un contrato inteligente! Ingrese una dirección de destinatario diferente."
+  "page.swap.not.possible": "¡No es posible cambiar a un contrato inteligente! Ingrese una dirección de destinatario diferente.",
+  "page.swap.title": "Intercambio",
+  "slippage": "Deslizamiento"
 }
