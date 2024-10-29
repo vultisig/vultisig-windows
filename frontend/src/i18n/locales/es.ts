@@ -86,8 +86,6 @@ export const es = {
   initiating_device: 'Dispositivo iniciador',
   pairing_device: 'Dispositivo de emparejamiento',
   add_new_vault: 'Agregar nueva bóveda',
-  backupnow_description:
-    'Cada dispositivo tiene su propio fragmento único. Haga una copia de seguridad de todos sus fragmentos de la bóveda ahora.',
   backupnow_note:
     'Nota: Nunca almacene fragmentos de bóvedas de dispositivos diferentes en la misma ubicación.',
   backup: 'Respaldo',
@@ -442,4 +440,17 @@ export const es = {
   'page.swap.title': 'Intercambio',
   slippage: 'Deslizamiento',
   max: 'Máximo',
+  backupnow_description:
+    'Las copias de seguridad funcionan de forma diferente en Vultisig',
+  backupnow_note_part1: 'Cada dispositivo tiene su',
+  backupnow_note_part2: 'propio',
+  backupnow_note_part3: 'recurso compartido de bóveda único, que es',
+  vault_backup_keygen_banner_title_part1:
+    'Realice una copia de seguridad de su bóveda en',
+  vault_backup_keygen_banner_title_part2: 'cada',
+  vault_backup_keygen_banner_title_part3: 'dispositivo de forma individual',
+  vault_backup_keygen_skip_modal_title: 'Omitir copia de seguridad',
+  vault_backup_keygen_skip_modal_back_btn: 'Atrás',
+  vault_backup_keygen_skip_modal_checkbox_label:
+    'Entiendo que si omito la copia de seguridad, puedo perder el acceso a mis fondos.',
 };

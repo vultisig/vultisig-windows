@@ -21,6 +21,7 @@ export type ModalProps = AsElementComponent &
     placement?: ModalPlacement;
     footer?: ReactNode;
     targetWidth?: number;
+    titleAlign?: 'left' | 'center' | 'right';
   };
 
 const contentVerticalPadding = 8;
@@ -51,6 +52,7 @@ export const Modal = ({
   return (
     <BodyPortal>
       <Backdrop onClose={onClose}>
+        Backdrop
         <Container forwardedAs={as} {...rest}>
           <VStack gap={8}>
             <HStack alignItems="start" justifyContent="space-between" gap={16}>

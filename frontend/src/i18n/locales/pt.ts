@@ -80,8 +80,6 @@ export const pt = {
   initiating_device: 'Dispositivo inicializador',
   pairing_device: 'Dispositivo de pareamento',
   add_new_vault: 'Adicionar novo cofre',
-  backupnow_description:
-    'Cada dispositivo tem seu próprio fragmento exclusivo. Faça backup de todos os seus fragmentos do cofre agora.',
   backupnow_note:
     'Nota: Nunca armazene fragmentos de cofres de dispositivos diferentes no mesmo local.',
   backup: 'Backup',
@@ -436,4 +434,15 @@ export const pt = {
     'Trocar para um contrato inteligente não é possível! Insira um endereço de destinatário diferente.',
   'page.swap.title': 'Trocar',
   slippage: 'Deslizamento',
+  backupnow_description: 'Os backups funcionam de forma diferente no Vultisig',
+  backupnow_note_part1: 'Cada dispositivo tem o seu',
+  backupnow_note_part2: 'próprio',
+  backupnow_note_part3: 'partilha de cofre exclusivo, que é',
+  vault_backup_keygen_banner_title_part1: 'Fazer backup do seu cofre em',
+  vault_backup_keygen_banner_title_part2: 'todos',
+  vault_backup_keygen_banner_title_part3: 'dispositivo individualmente!',
+  vault_backup_keygen_skip_modal_title: 'Ignorar cópia de segurança',
+  vault_backup_keygen_skip_modal_back_btn: 'Voltar',
+  vault_backup_keygen_skip_modal_checkbox_label:
+    'Percebo que, ao saltar o backup, posso perder o acesso aos meus fundos.',
 };

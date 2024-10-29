@@ -80,8 +80,6 @@ export const it = {
   initiating_device: 'Dispositivo iniziale',
   pairing_device: 'Dispositivo di accoppiamento',
   add_new_vault: 'Aggiungi nuova cassaforte',
-  backupnow_description:
-    'Ogni dispositivo ha il proprio frammento unico. Esegui ora il backup di tutti i tuoi frammenti della cassaforte.',
   backupnow_note:
     'Nota: Non conservare mai i frammenti delle cassaforti di dispositivi diversi nella stessa posizione.',
   backup: 'Backup',
@@ -436,4 +434,15 @@ export const it = {
     'Non è possibile passare a uno smart contract! Inserisci un indirizzo destinatario diverso.',
   'page.swap.title': 'Scambio',
   slippage: 'Slittamento',
+  backupnow_description: 'I backup funzionano in modo diverso in Vultisig',
+  backupnow_note_part1: 'Ogni dispositivo ha il suo',
+  backupnow_note_part2: 'proprio',
+  backupnow_note_part3: 'condivisione vault univoca, che è',
+  vault_backup_keygen_banner_title_part1: 'Esegui il backup del tuo vault su',
+  vault_backup_keygen_banner_title_part2: 'ogni',
+  vault_backup_keygen_banner_title_part3: 'singolarmente!',
+  vault_backup_keygen_skip_modal_title: 'Salta backup',
+  vault_backup_keygen_skip_modal_back_btn: 'Indietro',
+  vault_backup_keygen_skip_modal_checkbox_label:
+    "Capisco che saltando il backup potrei perdere l'accesso ai miei fondi.",
 };

@@ -84,8 +84,6 @@ export const en = {
   initiating_device: 'Initiating device',
   pairing_device: 'Pairing device',
   add_new_vault: 'Add New Vault',
-  backupnow_description:
-    'Each device has its own unique share. Please Backup all of your Vault Shares now.',
   backupnow_note:
     'Note: Never store Vault Shares from different devices in the same location.',
   backup: 'Backup',
@@ -424,4 +422,15 @@ export const en = {
   'page.swap.title': 'Swap',
   slippage: 'Slippage',
   max: 'Max',
+  backupnow_description: 'Backups work different in Vultisig',
+  backupnow_note_part1: 'Each device has its',
+  backupnow_note_part2: 'own',
+  backupnow_note_part3: 'unique vault share, which is needed for recovery',
+  vault_backup_keygen_banner_title_part1: 'Backup your vault on',
+  vault_backup_keygen_banner_title_part2: 'every',
+  vault_backup_keygen_banner_title_part3: 'device individually!',
+  vault_backup_keygen_skip_modal_title: 'Skip Backup',
+  vault_backup_keygen_skip_modal_back_btn: 'Back',
+  vault_backup_keygen_skip_modal_checkbox_label:
+    'I understand that by skipping the backup I may lose access to my funds.',
 };

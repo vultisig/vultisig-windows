@@ -78,8 +78,6 @@ export const hr = {
   initiating_device: 'Inicijalni uređaj',
   pairing_device: 'Uređaj za uparivanje',
   add_new_vault: 'Dodaj novi trezor',
-  backupnow_description:
-    'Svaki uređaj ima svoj jedinstveni dio. Molimo sigurnosno kopirajte sve svoje dijelove trezora sada.',
   backupnow_note:
     'Napomena: Nikada ne pohranjujte dijelove trezora s različitih uređaja na isto mjesto.',
   backup: 'Sigurnosna kopija',
@@ -426,4 +424,15 @@ export const hr = {
     'Zamjena za pametni ugovor nije moguća! Unesite drugu adresu primatelja.',
   'page.swap.title': 'Zamjena',
   slippage: 'Proklizavanje',
+  backupnow_description: 'Sigurnosne kopije rade drugačije u Vultisigu',
+  backupnow_note_part1: 'Svaki uređaj ima svoje',
+  backupnow_note_part2: 'vlastito',
+  backupnow_note_part3: 'jedinstveni dio trezora, koji je',
+  vault_backup_keygen_banner_title_part1: 'Sigurnosno kopirajte svoj trezor na',
+  vault_backup_keygen_banner_title_part2: 'svaki',
+  vault_backup_keygen_banner_title_part3: 'uređaj pojedinačno!',
+  vault_backup_keygen_skip_modal_title: 'Preskoči sigurnosnu kopiju',
+  vault_backup_keygen_skip_modal_back_btn: 'Natrag',
+  vault_backup_keygen_skip_modal_checkbox_label:
+    'Razumijem da preskakanjem sigurnosne kopije mogu izgubiti pristup svojim sredstvima.',
 };
