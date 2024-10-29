@@ -65,7 +65,7 @@ export const ManageSwapCoinTo = () => {
   return (
     <InputContainer>
       <InputLabel>{t('to')}</InputLabel>
-      {pairsLoading || !pairs ? (
+      {pairsLoading || !pairs || !coinTo ? (
         <Skeleton height="48px" />
       ) : (
         <Opener
