@@ -36,6 +36,7 @@ import { SetupFastVaultPage } from './vault/setup/fast/SetupFastVaultPage';
 import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage';
 import { SetupVaultPage } from './vault/setup/type/SetupVaultPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
+import { SwapPage } from './vault/swap/SwapPage';
 
 export const router = createBrowserRouter([
   {
@@ -175,6 +176,10 @@ export const router = createBrowserRouter([
   {
     path: appPaths.send,
     element: <SendPage />,
+  },
+  {
+    path: appPaths.vaultItemSwap,
+    element: <SwapPage />,
   },
   {
     path: appPaths.reshareVault,
