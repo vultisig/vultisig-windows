@@ -449,4 +449,13 @@ export const pt = {
   new_vault_setup: 'Nova configuração do Vault',
   new_vault_setup_disclaimer:
     'Sua configuração foi alterada, faça um novo backup.',
+  vault_settings_register_for_airdrop: 'Registe os seus cofres!',
+  vault_register_for_airdrop_title: 'Registar Vault',
+  vault_register_for_airdrop_list_item_1: 'Guarde o seu QR do Vault',
+  vault_register_for_airdrop_list_item_2_part_1: 'Ir para',
+  vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
+  vault_register_for_airdrop_list_item_3: 'Carregue o seu código QR do Vault',
+  vault_register_for_airdrop_list_item_4:
+    'Rastreie os seus VULTIES (pontos de cofre)!',
+  vault_register_for_airdrop_save_vault_QR_button: 'Guardar QR do Vault',
 };

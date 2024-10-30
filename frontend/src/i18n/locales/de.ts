@@ -455,4 +455,13 @@ export const de = {
   new_vault_setup: 'Neues Tresor-Setup',
   new_vault_setup_disclaimer:
     'Ihre Konfiguration hat sich geändert. Erstellen Sie ein neues Backup.',
+  vault_settings_register_for_airdrop: 'Registrieren Sie Ihre Vaults!',
+  vault_register_for_airdrop_title: 'Vault registrieren',
+  vault_register_for_airdrop_list_item_1: 'Speichern Sie Ihren Vault-QR',
+  vault_register_for_airdrop_list_item_2_part_1: 'Gehen Sie zu',
+  vault_register_for_airdrop_list_item_2_part_2: 'Vultisig-Web',
+  vault_register_for_airdrop_list_item_3: 'Laden Sie Ihren Vault-QR-Code hoch',
+  vault_register_for_airdrop_list_item_4:
+    'Verfolgen Sie Ihre VULTIES (Vault-Punkte)!',
+  vault_register_for_airdrop_save_vault_QR_button: 'Vault-QR speichern',
 };

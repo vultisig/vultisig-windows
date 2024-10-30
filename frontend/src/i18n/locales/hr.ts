@@ -439,4 +439,13 @@ export const hr = {
   new_vault_setup: 'Nova postavka trezora',
   new_vault_setup_disclaimer:
     'Vaša se konfiguracija promijenila, napravite novu sigurnosnu kopiju.',
+  vault_settings_register_for_airdrop: 'Registrirajte svoje trezore!',
+  vault_register_for_airdrop_title: 'Registrirajte trezor',
+  vault_register_for_airdrop_list_item_1: 'Spremite svoj Vault QR',
+  vault_register_for_airdrop_list_item_2_part_1: 'Idi na',
+  vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
+  vault_register_for_airdrop_list_item_3: 'Učitajte svoj Vault QR kod',
+  vault_register_for_airdrop_list_item_4:
+    'Pratite svoje VULTIES (Vault bodove)!',
+  vault_register_for_airdrop_save_vault_QR_button: 'Spremi Vault QR',
 };

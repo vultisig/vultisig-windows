@@ -10,6 +10,7 @@ import DeleteVaultPage from './pages/edItVault/vaultDeleteSettings/DeleteVaultPa
 import VaultDetailsPage from './pages/edItVault/vaultDetailsSettings/VaultDetailsPage';
 import VaultRenamePage from './pages/edItVault/vaultRenameSettings/VaultRenamePage';
 import ImportVaultView from './pages/importVault/ImportVaultView';
+import RegisterForAirdropPage from './pages/registerForAirdrop/RegisterForAirdropPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage';
 import CurrencySettingsPage from './pages/vaultSettings/vaultCurrency/CurrencySettingsPage';
@@ -189,5 +190,9 @@ export const router = createBrowserRouter([
   {
     path: appPaths.reshareVault,
     element: <ReshareVaultPage />,
+  },
+  {
+    path: appPaths.registerForAirdrop,
+    element: <RegisterForAirdropPage />,
   },
 ]);
