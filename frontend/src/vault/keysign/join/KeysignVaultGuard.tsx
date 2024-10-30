@@ -28,7 +28,7 @@ export const KeysignVaultGuard = ({ children }: ComponentWithChildrenProps) => {
         title={t('join_keysign')}
         message={t('wrong_vault_try_again')}
         action={
-          <Link to={makeAppPath('vaultList')}>
+          <Link to={makeAppPath('vaults')}>
             <Button as="div">{t('change_vault')}</Button>
           </Link>
         }

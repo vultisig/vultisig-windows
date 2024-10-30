@@ -237,7 +237,7 @@ const ImportVaultView = () => {
         setCurrentVaultId(lastVaultId);
       }
 
-      navigate(makeAppPath('vaultList'));
+      navigate(makeAppPath('vault'));
     } catch (e: unknown) {
       setDialogTitle(t('invalid_vault_data'));
       setDialogContent(t('invalid_vault_data_message'));

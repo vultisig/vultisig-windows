@@ -47,7 +47,7 @@ export const FullPageFlowErrorState = ({
           </VStack>
         </VStack>
         {action ?? (
-          <Link to={makeAppPath('vaultList')}>
+          <Link to={makeAppPath('vault')}>
             <Button as="div">{t('try_again')}</Button>
           </Link>
         )}

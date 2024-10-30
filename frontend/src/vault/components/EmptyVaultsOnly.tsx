@@ -15,7 +15,7 @@ export const EmptyVaultsOnly = ({ children }: ComponentWithChildrenProps) => {
 
   useEffect(() => {
     if (hasVaults) {
-      navigate(makeAppPath('vaultList'));
+      navigate(makeAppPath('vault'));
     }
   }, [hasVaults, navigate]);
 

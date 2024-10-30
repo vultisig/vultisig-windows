@@ -22,7 +22,7 @@ export const KeysignSummaryStep = () => {
             <KeysignTxOverview />
           </TxOverviewPanel>
         </WithProgressIndicator>
-        <Link to={makeAppPath('vaultList')}>
+        <Link to={makeAppPath('vault')}>
           <Button as="div">{t('complete')}</Button>
         </Link>
       </PageContent>
