@@ -2,6 +2,8 @@ package storage
 
 import (
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type KeyShare struct {
@@ -23,4 +25,5 @@ type Vault struct {
 	Order          int        `json:"order"`
 	IsBackedUp     bool       `json:"is_backed_up"`
 	Coins          []Coin     `json:"coins"`
+	FolderID 			 *uuid.UUID `json:"folder_id"`
 }
