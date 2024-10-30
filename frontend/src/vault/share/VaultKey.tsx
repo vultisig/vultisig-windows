@@ -1,4 +1,4 @@
-import { VStack } from '../../lib/ui/layout/Stack';
+import { HStack } from '../../lib/ui/layout/Stack';
 import {
   ComponentWithValueProps,
   TitledComponentProps,
@@ -9,12 +9,12 @@ export const VaultKey = ({
   value,
   title,
 }: ComponentWithValueProps<string> & TitledComponentProps) => (
-  <VStack alignItems="center">
-    <Text weight={600} size={16} centerHorizontally>
-      {title}
+  <HStack alignItems="center" gap={4}>
+    <Text size={16} centerHorizontally>
+      {title}:
     </Text>
-    <Text size={12} style={{ overflowWrap: 'anywhere' }} centerHorizontally>
+    <Text size={16} style={{ overflowWrap: 'anywhere' }} centerHorizontally>
       {value}
     </Text>
-  </VStack>
+  </HStack>
 );
