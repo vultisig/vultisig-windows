@@ -464,4 +464,9 @@ export const de = {
   vault_register_for_airdrop_list_item_4:
     'Verfolgen Sie Ihre VULTIES (Vault-Punkte)!',
   vault_register_for_airdrop_save_vault_QR_button: 'Vault-QR speichern',
+  vault_qr_share: 'Teilen',
+  vault_qr_share_title: 'Vault-QR-Code',
+  vault_qr_share_text: 'Schauen Sie sich diesen Vault-QR-Code an!',
+  vault_qr_share_not_supported:
+    'Teilen wird in diesem Browser nicht unterstützt.',
 };

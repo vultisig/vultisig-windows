@@ -448,4 +448,8 @@ export const hr = {
   vault_register_for_airdrop_list_item_4:
     'Pratite svoje VULTIES (Vault bodove)!',
   vault_register_for_airdrop_save_vault_QR_button: 'Spremi Vault QR',
+  vault_qr_share: 'Dijeli',
+  vault_qr_share_title: 'QR kod trezora',
+  vault_qr_share_text: 'Pogledajte ovaj QR kod trezora!',
+  vault_qr_share_not_supported: 'Dijeljenje nije podržano u ovom pregledniku.',
 };

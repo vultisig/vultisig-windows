@@ -445,4 +445,8 @@ export const en = {
   vault_register_for_airdrop_list_item_3: 'Upload your Vault QR Code',
   vault_register_for_airdrop_list_item_4: 'Track your VULTIES (Vault Points) !',
   vault_register_for_airdrop_save_vault_QR_button: 'Save Vault QR',
+  vault_qr_share: 'Share',
+  vault_qr_share_title: 'Vault QR Code',
+  vault_qr_share_text: 'Check out this vault QR code!',
+  vault_qr_share_not_supported: 'Sharing not supported on this browser.',
 };
