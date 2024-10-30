@@ -32,7 +32,6 @@ export const hr = {
   devices_on_same_internet:
     'Povežite sve uređaje na Internet s otvorenim Vultisigom',
   select_the_pairing_devices: 'Odaberite uređaje za uparivanje',
-  keygen_for: 'Generiranje ključa za',
   '2_of_2_vault': '2 od 2 trezor',
   '2_of_3_vault': '2 od 3 trezor',
   m_of_n_vault: 'M od N trezor',
@@ -367,7 +366,6 @@ export const hr = {
   password_required: 'Lozinka je obavezna',
   passwords_dont_match: 'Lozinke se ne podudaraju',
   verify_password: 'Potvrdi lozinku',
-  password_reason: 'Ova lozinka šifrira vaš FastVault Share',
   password: 'Lozinka',
   password_backup: 'Zaštitite svoj trezor i brzo potpišite.',
   looking_for_server: 'Tražite FastVaultServer...',
@@ -435,4 +433,10 @@ export const hr = {
   vault_backup_keygen_skip_modal_back_btn: 'Natrag',
   vault_backup_keygen_skip_modal_checkbox_label:
     'Razumijem da preskakanjem sigurnosne kopije mogu izgubiti pristup svojim sredstvima.',
+  server_password_reason:
+    'Ova lozinka šifrira vaš Vault Share primljen putem e-pošte',
+  changes_in_setup: 'Promjene u postavkama',
+  new_vault_setup: 'Nova postavka trezora',
+  new_vault_setup_disclaimer:
+    'Vaša se konfiguracija promijenila, napravite novu sigurnosnu kopiju.',
 };

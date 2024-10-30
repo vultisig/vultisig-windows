@@ -4,6 +4,8 @@ import { fileURLToPath } from 'url';
 
 import { createTsFile } from '../../lib/codegen/utils/createTsFile';
 import { without } from '../../lib/utils/array/without';
+import { omit } from '../../lib/utils/record/omit';
+import { Copy } from '../Copy';
 import { languages, primaryLanguage } from '../Language';
 import { translations } from '../translations';
 import { translateTexts } from '../utils/translateTexts';
@@ -17,10 +19,15 @@ const sync = async () => {
 
   await Promise.all(
     without(languages, primaryLanguage).map(async language => {
-      const targetCopy = translations[language];
+      const oldCopy = translations[language];
+
+      const result: Copy = omit(
+        oldCopy,
+        ...without(Object.keys(oldCopy), ...Object.keys(sourceCopy))
+      );
 
       const missingKeys = Object.keys(sourceCopy).filter(
-        key => !(key in targetCopy)
+        key => !(key in result)
       );
 
       const translatedTexts = await translateTexts({
@@ -30,10 +37,9 @@ const sync = async () => {
       });
 
       missingKeys.forEach((key, index) => {
-        targetCopy[key] = translatedTexts[index];
+        result[key] = translatedTexts[index];
       });
-
-      const content = `export const ${language} = ${JSON.stringify(targetCopy)}`;
+      const content = `export const ${language} = ${JSON.stringify(result)}`;
 
       createTsFile({
         directory: path.resolve(currentDirname, copyDirectory),

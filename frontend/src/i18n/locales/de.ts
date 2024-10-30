@@ -37,7 +37,6 @@ export const de = {
   devices_on_same_internet:
     'Verbinden Sie alle Geräte mit dem Internet und öffnen Sie Vultisig',
   select_the_pairing_devices: 'Wählen Sie die Paarungsgeräte aus',
-  keygen_for: 'Schlüsselgenerierung für',
   '2_of_2_vault': '2-von-2-Tresor',
   '2_of_3_vault': '2-von-3-Tresor',
   m_of_n_vault: 'M-von-N-Tresor',
@@ -383,7 +382,6 @@ export const de = {
   password_required: 'Passwort erforderlich ist',
   passwords_dont_match: 'Passwörter stimmen nicht überein',
   verify_password: 'Kennwort bestätigen',
-  password_reason: 'Dieses Passwort verschlüsselt Ihren FastVault Share',
   password: 'Passwort',
   password_backup: 'Schützen Sie Ihren Tresor und Ihr schnelles Zeichen.',
   looking_for_server: 'Suche nach FastVaultServer ...',
@@ -447,4 +445,14 @@ export const de = {
   vault_backup_keygen_skip_modal_back_btn: 'Zurück',
   vault_backup_keygen_skip_modal_checkbox_label:
     'Ich verstehe, dass ich durch das Überspringen der Sicherung den Zugriff auf meine Gelder verlieren kann.',
+  server_password_reason:
+    'Dieses Passwort verschlüsselt Ihren per E-Mail erhaltenen Vault Share',
+  backupnow_note_part1: 'Jedes Gerät hat seine',
+  backupnow_note_part2: 'eigen',
+  backupnow_note_part3:
+    'Einzigartiger Tresor-Share, der für die Wiederherstellung benötigt wird',
+  changes_in_setup: 'Änderungen im Setup',
+  new_vault_setup: 'Neues Tresor-Setup',
+  new_vault_setup_disclaimer:
+    'Ihre Konfiguration hat sich geändert. Erstellen Sie ein neues Backup.',
 };

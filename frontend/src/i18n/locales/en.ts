@@ -361,7 +361,8 @@ export const en = {
   password_required: 'Password is required',
   passwords_dont_match: "Passwords don't match",
   verify_password: 'Verify Password',
-  password_reason: 'This password encrypts your FastVault Share',
+  server_password_reason:
+    'This password encrypts your Vault Share received via email',
   password: 'Password',
   password_backup: 'Protect your vault and fast sign.',
   looking_for_server: 'Looking for FastVaultServer...',
@@ -433,4 +434,7 @@ export const en = {
   vault_backup_keygen_skip_modal_back_btn: 'Back',
   vault_backup_keygen_skip_modal_checkbox_label:
     'I understand that by skipping the backup I may lose access to my funds.',
+  changes_in_setup: 'Changes in Setup',
+  new_vault_setup: 'New Vault Setup',
+  new_vault_setup_disclaimer: 'Your configuration changed, make a new backup.',
 };
