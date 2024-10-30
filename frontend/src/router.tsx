@@ -10,7 +10,6 @@ import DeleteVaultPage from './pages/edItVault/vaultDeleteSettings/DeleteVaultPa
 import VaultDetailsPage from './pages/edItVault/vaultDetailsSettings/VaultDetailsPage';
 import VaultRenamePage from './pages/edItVault/vaultRenameSettings/VaultRenamePage';
 import ImportVaultView from './pages/importVault/ImportVaultView';
-import { VaultPage } from './pages/vault/VaultPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage';
 import CurrencySettingsPage from './pages/vaultSettings/vaultCurrency/CurrencySettingsPage';
@@ -22,6 +21,7 @@ import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVault
 import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPage';
 import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
+import { VaultPage } from './vault/components/VaultPage';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
 import { StartFastKeysignPage } from './vault/keysign/start/fast/StartFastKeysignPage';
@@ -37,6 +37,7 @@ import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPage } from './vault/setup/type/SetupVaultPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
 import { SwapPage } from './vault/swap/SwapPage';
+import { VaultsPage } from './vaults/components/VaultsPage';
 
 export const router = createBrowserRouter([
   {
@@ -94,8 +95,12 @@ export const router = createBrowserRouter([
     element: <StartFastKeysignPage />,
   },
   {
-    path: appPaths.vaultList,
+    path: appPaths.vault,
     element: <VaultPage />,
+  },
+  {
+    path: appPaths.vaults,
+    element: <VaultsPage />,
   },
   {
     path: appPaths.manageVaultChains,

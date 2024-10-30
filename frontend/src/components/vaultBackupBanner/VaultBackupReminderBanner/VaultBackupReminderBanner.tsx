@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon';
 import { TriangleAlertIcon } from '../../../lib/ui/icons/TriangleAlertIcon';
 import { Text } from '../../../lib/ui/text';
-import { appPaths } from '../../../navigation';
+import { makeAppPath } from '../../../navigation';
 import { ChevronIconButton, Content } from './VaultBackupReminderBanner.styles';
 
 const VaultBackupReminderBanner = () => {
@@ -18,7 +18,7 @@ const VaultBackupReminderBanner = () => {
         <Text color="regular" size={14} weight="500">
           {t('vault_backup_banner_title')}
         </Text>
-        <ChevronIconButton onClick={() => navigate(appPaths.vaultBackup)}>
+        <ChevronIconButton onClick={() => navigate(makeAppPath('vaultBackup'))}>
           <ChevronRightIcon size={24} />
         </ChevronIconButton>
       </Content>

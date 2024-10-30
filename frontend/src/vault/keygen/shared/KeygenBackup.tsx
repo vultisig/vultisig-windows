@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import KeygenVaultBackupBanner from '../../../components/vaultBackupBanner/KeygenVaultBackupBanner/KeygenVaultBackupBanner';
@@ -9,7 +9,7 @@ import { ContainImage } from '../../../lib/ui/images/ContainImage';
 import { SafeImage } from '../../../lib/ui/images/SafeImage';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text, text } from '../../../lib/ui/text';
-import { appPaths, makeAppPath } from '../../../navigation';
+import { makeAppPath } from '../../../navigation';
 import { ProductLogo } from '../../../ui/logo/ProductLogo';
 import { PageContent } from '../../../ui/page/PageContent';
 import KeygenSkipVaultBackupAttentionModal from './KeygenSkipVaultBackupAttentionModal';
@@ -17,7 +17,6 @@ import KeygenSkipVaultBackupAttentionModal from './KeygenSkipVaultBackupAttentio
 export const KeygenBackup = () => {
   const { t } = useTranslation();
   const [isSaveBackupModalOpen, setIsSaveBackupModalOpen] = useState(true);
-  const navigate = useNavigate();
 
   return (
     <>
@@ -63,7 +62,7 @@ export const KeygenBackup = () => {
         </VStack>
       </PageContent>
       <KeygenSkipVaultBackupAttentionModal
-        onSkip={() => navigate(appPaths.vaultList)}
+        onSkip={() => makeAppPath('vault')}
         isOpen={isSaveBackupModalOpen}
         onClose={() => setIsSaveBackupModalOpen(false)}
       />

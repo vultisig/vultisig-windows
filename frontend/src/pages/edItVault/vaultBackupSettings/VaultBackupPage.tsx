@@ -63,7 +63,7 @@ const VaultBackupPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate(makeAppPath('vaultList'));
+      navigate(makeAppPath('vault'));
     }
   }, [isSuccess, navigate]);
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -12,21 +11,17 @@ import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { makeAppPath } from '../../navigation';
 import { pageConfig } from '../../ui/page/config';
 import { PageSlice } from '../../ui/page/PageSlice';
-import { VaultListOption } from '../../vault/list/VaultListOption';
 import { useVaults } from '../../vault/queries/useVaultsQuery';
 import { useCurrentVaultId } from '../../vault/state/useCurrentVaultId';
 import { getStorageVaultId } from '../../vault/utils/storageVault';
-
-interface VaultListProps {
-  onFinish: () => void;
-}
+import { VaultListOption } from './VaultListOption';
 
 const Container = styled(VStack)`
   flex: 1;
   ${verticalPadding(pageConfig.verticalPadding)};
 `;
 
-export const VaultList: React.FC<VaultListProps> = ({ onFinish }) => {
+export const VaultList = () => {
   const [, setSelectedVault] = useCurrentVaultId();
   const vaults = useVaults();
 
@@ -35,7 +30,7 @@ export const VaultList: React.FC<VaultListProps> = ({ onFinish }) => {
 
   const handleVaultSelect = (vault: storage.Vault) => {
     setSelectedVault(getStorageVaultId(vault));
-    onFinish();
+    navigate(makeAppPath('vault'));
   };
 
   return (
