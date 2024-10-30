@@ -69,3 +69,7 @@ export type ComponentWithMessageProps = {
 export type ComponentWithDisabledState = {
   isDisabled?: boolean | string;
 };
+
+export type ComponentWithStatusProps<T> = {
+  status: T;
+};

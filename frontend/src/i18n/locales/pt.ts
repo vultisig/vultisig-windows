@@ -32,7 +32,6 @@ export const pt = {
   devices_on_same_internet:
     'Conecte todos os dispositivos à Internet com o Vultisig aberto',
   select_the_pairing_devices: 'Selecione os dispositivos de pareamento',
-  keygen_for: 'Geração de chaves para',
   '2_of_2_vault': 'Cofre 2 de 2',
   '2_of_3_vault': 'Cofre 2 de 3',
   m_of_n_vault: 'Cofre M de N',
@@ -377,7 +376,6 @@ export const pt = {
   password_required: 'Senha é necessária',
   passwords_dont_match: 'As senhas não correspondem',
   verify_password: 'Verificar senha',
-  password_reason: 'Esta senha criptografa seu FastVault Share',
   password: 'Senha',
   password_backup: 'Proteja seu cofre e assine rapidamente.',
   looking_for_server: 'Procurando por FastVaultServer...',
@@ -445,4 +443,10 @@ export const pt = {
   vault_backup_keygen_skip_modal_back_btn: 'Voltar',
   vault_backup_keygen_skip_modal_checkbox_label:
     'Percebo que, ao saltar o backup, posso perder o acesso aos meus fundos.',
+  server_password_reason:
+    'Esta senha criptografa seu Vault Share recebido por e-mail',
+  changes_in_setup: 'Mudanças na configuração',
+  new_vault_setup: 'Nova configuração do Vault',
+  new_vault_setup_disclaimer:
+    'Sua configuração foi alterada, faça um novo backup.',
 };

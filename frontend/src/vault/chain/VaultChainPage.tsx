@@ -5,6 +5,7 @@ import { AddressPageShyPrompt } from '../../chain/components/address/AddressPage
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { isNativeCoin } from '../../chain/utils/isNativeCoin';
 import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
 import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
@@ -21,6 +22,7 @@ import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQuer
 import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { Text } from '../../lib/ui/text';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
+import { splitBy } from '../../lib/utils/array/splitBy';
 import { sum } from '../../lib/utils/array/sum';
 import { formatAmount } from '../../lib/utils/formatAmount';
 import { makeAppPath } from '../../navigation';
@@ -161,9 +163,15 @@ export const VaultChainPage = () => {
             query={vaultCoinsQuery}
             {...getQueryDependantDefaultProps('vault address')}
             success={coins => {
+              const orderedCoins = splitBy(coins, coin =>
+                isNativeCoin(coin) ? 0 : 1
+              )
+                .map(sortCoinsByBalance)
+                .flat();
+
               return (
                 <>
-                  {sortCoinsByBalance(coins).map(coin => (
+                  {orderedCoins.map(coin => (
                     <Link
                       key={coin.id}
                       to={makeAppPath('vaultChainCoinDetail', {

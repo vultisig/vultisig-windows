@@ -37,7 +37,6 @@ export const es = {
   devices_on_same_internet:
     'Conecte todos los dispositivos a Internet con Vultisig abierto',
   select_the_pairing_devices: 'Seleccione los dispositivos de emparejamiento',
-  keygen_for: 'Generación de claves para',
   '2_of_2_vault': 'Bóveda 2 de 2',
   '2_of_3_vault': 'Bóveda 2 de 3',
   m_of_n_vault: 'Bóveda M de N',
@@ -382,7 +381,6 @@ export const es = {
   password_required: 'Se requiere contraseña',
   passwords_dont_match: 'Las contraseñas no coinciden',
   verify_password: 'Verificar contraseña',
-  password_reason: 'Esta contraseña encripta su FastVault Share',
   password: 'Contraseña',
   password_backup: 'Protege tu bóveda y firma rápidamente.',
   looking_for_server: 'Buscando FastVaultServer...',
@@ -453,4 +451,10 @@ export const es = {
   vault_backup_keygen_skip_modal_back_btn: 'Atrás',
   vault_backup_keygen_skip_modal_checkbox_label:
     'Entiendo que si omito la copia de seguridad, puedo perder el acceso a mis fondos.',
+  server_password_reason:
+    'Esta contraseña encripta su Vault Share recibida por correo electrónico',
+  changes_in_setup: 'Cambios en la configuración',
+  new_vault_setup: 'Nueva configuración de bóveda',
+  new_vault_setup_disclaimer:
+    'Su configuración cambió, haga una nueva copia de seguridad.',
 };
