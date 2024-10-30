@@ -1,3 +1,12 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE
+    IF NOT EXISTS vault_folders (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        "order" REAL NOT NULL DEFAULT 0
+    );
+
 CREATE TABLE
     IF NOT EXISTS vaults (
         public_key_ecdsa TEXT PRIMARY KEY NOT NULL,
@@ -9,7 +18,9 @@ CREATE TABLE
         signers TEXT NOT NULL,
         is_backedup INTEGER NOT NULL DEFAULT 0,
         listorder INTEGER NOT NULL DEFAULT 0,
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        folder_id TEXT,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (folder_id) REFERENCES vault_folders(id) ON DELETE SET NULL
     );
 
 CREATE TABLE
@@ -66,6 +77,8 @@ CREATE INDEX IF NOT EXISTS idx_address_book_chain ON address_book (chain);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_address_book_address_chain ON address_book (address, chain);
 
 CREATE INDEX IF NOT EXISTS idx_vaults_public_key_ecdsa ON vaults (public_key_ecdsa);
+
+CREATE INDEX IF NOT EXISTS idx_vaults_folder_id ON vaults (folder_id);
 
 CREATE INDEX IF NOT EXISTS idx_keyshares_public_key_ecdsa ON keyshares (public_key_ecdsa);
 

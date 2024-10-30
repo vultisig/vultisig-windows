@@ -73,8 +73,19 @@ func (s *Store) SaveVault(vault *Vault) error {
 	if err != nil {
 		return fmt.Errorf("could not marshal signers, err: %w", err)
 	}
-	query := `INSERT OR REPLACE INTO vaults (name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, listorder, is_backedup)
-							  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+
+	query := `INSERT OR REPLACE INTO vaults (
+		name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
+		local_party_id, signers, reshare_prefix, listorder, is_backedup, folder_id
+	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+
+	var folderIDStr interface{}
+	if vault.FolderID != nil {
+		folderIDStr = vault.FolderID.String()
+	} else {
+		folderIDStr = nil
+	}
+
 	_, err = s.db.Exec(query,
 		vault.Name,
 		vault.PublicKeyECDSA,
@@ -85,10 +96,12 @@ func (s *Store) SaveVault(vault *Vault) error {
 		string(buf),
 		vault.ResharePrefix,
 		vault.Order,
-		vault.IsBackedUp)
+		vault.IsBackedUp,
+		folderIDStr)
 	if err != nil {
 		return fmt.Errorf("could not upsert vault, err: %w", err)
 	}
+
 	for _, keyShare := range vault.KeyShares {
 		if err := s.saveKeyshare(vault.PublicKeyECDSA, keyShare); err != nil {
 			return fmt.Errorf("could not save keyshare, err: %w", err)
@@ -102,6 +115,7 @@ func (s *Store) SaveVault(vault *Vault) error {
 	return nil
 }
 
+
 // UpdateVaultName updates the vault name
 func (s *Store) UpdateVaultName(publicKeyECDSA, name string) error {
 	query := `UPDATE vaults SET name = ? WHERE public_key_ecdsa = ?`
@@ -111,10 +125,13 @@ func (s *Store) UpdateVaultName(publicKeyECDSA, name string) error {
 
 // GetVault gets a vault
 func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
-	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, listorder, is_backedup FROM vaults WHERE public_key_ecdsa = ?`
+	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
+		local_party_id, signers, reshare_prefix, listorder, is_backedup, folder_id
+		FROM vaults WHERE public_key_ecdsa = ?`
 	row := s.db.QueryRow(query, publicKeyEcdsa)
 	var signers string
 	var vault Vault
+	var folderIDStr sql.NullString
 	err := row.Scan(&vault.Name,
 		&vault.PublicKeyECDSA,
 		&vault.PublicKeyEdDSA,
@@ -124,12 +141,22 @@ func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 		&signers,
 		&vault.ResharePrefix,
 		&vault.Order,
-		&vault.IsBackedUp)
+		&vault.IsBackedUp,
+		&folderIDStr)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, fmt.Errorf("vault not found")
 		}
 		return nil, fmt.Errorf("could not scan vault, err: %w", err)
+	}
+	if folderIDStr.Valid {
+		folderID, err := uuid.Parse(folderIDStr.String)
+		if err != nil {
+			return nil, fmt.Errorf("could not parse folder ID, err: %w", err)
+		}
+		vault.FolderID = &folderID
+	} else {
+		vault.FolderID = nil
 	}
 	if err := json.Unmarshal([]byte(signers), &vault.Signers); err != nil {
 		return nil, fmt.Errorf("could not unmarshal signers, err: %w", err)
@@ -183,7 +210,8 @@ func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
 
 // GetVaults gets all vaults
 func (s *Store) GetVaults() ([]*Vault, error) {
-	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code, local_party_id, signers,reshare_prefix, listorder, is_backedup FROM vaults`
+	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
+		local_party_id, signers, reshare_prefix, listorder, is_backedup, folder_id FROM vaults`
 	rows, err := s.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("could not query vaults, err: %w", err)
@@ -194,6 +222,7 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 	for rows.Next() {
 		var vault Vault
 		var signers string
+		var folderIDStr sql.NullString
 		err := rows.Scan(&vault.Name,
 			&vault.PublicKeyECDSA,
 			&vault.PublicKeyEdDSA,
@@ -203,9 +232,19 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 			&signers,
 			&vault.ResharePrefix,
 			&vault.Order,
-			&vault.IsBackedUp)
+			&vault.IsBackedUp,
+			&folderIDStr)
 		if err != nil {
 			return nil, fmt.Errorf("could not scan vault, err: %w", err)
+		}
+		if folderIDStr.Valid {
+			folderID, err := uuid.Parse(folderIDStr.String)
+			if err != nil {
+				return nil, fmt.Errorf("could not parse folder ID, err: %w", err)
+			}
+			vault.FolderID = &folderID
+		} else {
+			vault.FolderID = nil
 		}
 		if err := json.Unmarshal([]byte(signers), &vault.Signers); err != nil {
 			return nil, fmt.Errorf("could not unmarshal signers, err: %w", err)
@@ -223,9 +262,9 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 
 		vaults = append(vaults, &vault)
 	}
-
 	return vaults, nil
 }
+
 
 // DeleteVault deletes a vault
 func (s *Store) DeleteVault(publicKeyECDSA string) error {
@@ -469,6 +508,80 @@ func (s *Store) SaveCoin(vaultPublicKeyECDSA string, coin Coin) (string, error) 
 		return "", fmt.Errorf("could not upsert coin, err: %w", err)
 	}
 	return coin.ID, nil
+}
+
+func (s *Store) SaveVaultFolder(folder *VaultFolder) (string, error) {
+	if folder.ID == uuid.Nil {
+		folder.ID = uuid.New()
+	}
+	query := `INSERT OR REPLACE INTO vault_folders (id, title, "order") VALUES (?, ?, ?)`
+	_, err := s.db.Exec(query, folder.ID.String(), folder.Title, folder.Order)
+	if err != nil {
+		return "", fmt.Errorf("could not upsert vault folder, err: %w", err)
+	}
+	return folder.ID.String(), nil
+}
+
+func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
+	query := `SELECT id, title, "order" FROM vault_folders WHERE id = ?`
+	row := s.db.QueryRow(query, id)
+	var (
+		folder   VaultFolder
+		folderID string
+		err      error
+	)
+	if err = row.Scan(&folderID, &folder.Title, &folder.Order); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, fmt.Errorf("vault folder not found")
+		}
+		return nil, fmt.Errorf("could not scan vault folder, err: %w", err)
+	}
+	folder.ID, err = uuid.Parse(folderID)
+	if err != nil {
+		return nil, fmt.Errorf("could not parse folder ID, err: %w", err)
+	}
+	return &folder, nil
+}
+
+func (s *Store) GetVaultFolders() ([]*VaultFolder, error) {
+	query := `SELECT id, title, "order" FROM vault_folders ORDER BY "order"`
+	rows, err := s.db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("could not query vault folders, err: %w", err)
+	}
+	defer s.closeRows(rows)
+
+	var folders []*VaultFolder
+	for rows.Next() {
+		var folder VaultFolder
+		var folderID string
+		if err := rows.Scan(&folderID, &folder.Title, &folder.Order); err != nil {
+			return nil, fmt.Errorf("could not scan vault folder, err: %w", err)
+		}
+		folder.ID, err = uuid.Parse(folderID)
+		if err != nil {
+			return nil, fmt.Errorf("could not parse folder ID, err: %w", err)
+		}
+		folders = append(folders, &folder)
+	}
+	return folders, nil
+}
+
+func (s *Store) UpdateVaultFolder(folder *VaultFolder) error {
+	query := `UPDATE vault_folders SET title = ?, "order" = ? WHERE id = ?`
+	_, err := s.db.Exec(query, folder.Title, folder.Order, folder.ID.String())
+	if err != nil {
+		return fmt.Errorf("could not update vault folder, err: %w", err)
+	}
+	return nil
+}
+
+func (s *Store) DeleteVaultFolder(id string) error {
+	_, err := s.db.Exec("DELETE FROM vault_folders WHERE id = ?", id)
+	if err != nil {
+		return fmt.Errorf("could not delete vault folder, err: %w", err)
+	}
+	return nil
 }
 
 // Close the db connection
