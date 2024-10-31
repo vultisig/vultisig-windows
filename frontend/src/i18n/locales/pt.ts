@@ -464,4 +464,14 @@ export const pt = {
   vault_qr_share_not_supported:
     'Compartilhamento não suportado neste navegador.',
   import_vault: 'Cofre de importação',
+  vaultCheckUpdatePage: {
+    errorLoadingLocalVersion: 'Erro ao carregar a versão local: {{error}}',
+    errorFetchingLatestVersion:
+      'Erro ao buscar a versão mais recente: {{error}}',
+    fetchingLatestVersion: 'Buscando a versão mais recente...',
+    applicationUpToDate: 'O aplicativo está atualizado.',
+    newVersionAvailable: 'Uma nova versão ({{latestVersion}}) está disponível!',
+    downloadButton: 'Baixe agora.',
+    currentVersion: '{{localVersion}}',
+  },
 };
