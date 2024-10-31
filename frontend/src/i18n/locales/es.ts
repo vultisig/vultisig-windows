@@ -457,4 +457,14 @@ export const es = {
   new_vault_setup: 'Nueva configuración de bóveda',
   new_vault_setup_disclaimer:
     'Su configuración cambió, haga una nueva copia de seguridad.',
+  vault_settings_register_for_airdrop: '¡Registre sus Vaults!',
+  vault_register_for_airdrop_title: 'Registrar Vault',
+  vault_register_for_airdrop_list_item_1: 'Guarde el código QR de su Vault',
+  vault_register_for_airdrop_list_item_2_part_1: 'Ir a',
+  vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
+  vault_register_for_airdrop_list_item_3: 'Suba el código QR de su Vault',
+  vault_register_for_airdrop_list_item_4:
+    '¡Realice un seguimiento de sus VULTIES (puntos de Vault)!',
+  vault_register_for_airdrop_save_vault_QR_button:
+    'Guarde el código QR de su Vault',
 };

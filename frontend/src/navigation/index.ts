@@ -44,6 +44,7 @@ export const appPaths = {
   termsOfService: '/vault/settings/terms-of-service',
   vaultFAQ: '/vault/settings/faq',
   vaultItemSwap: '/vault/item/swap',
+  registerForAirdrop: '/register-for-airdrop',
 } as const;
 
 type AppPaths = typeof appPaths;

@@ -437,4 +437,12 @@ export const en = {
   changes_in_setup: 'Changes in Setup',
   new_vault_setup: 'New Vault Setup',
   new_vault_setup_disclaimer: 'Your configuration changed, make a new backup.',
+  vault_settings_register_for_airdrop: 'Register your Vaults!',
+  vault_register_for_airdrop_title: 'Register Vault',
+  vault_register_for_airdrop_list_item_1: 'Save your Vault QR',
+  vault_register_for_airdrop_list_item_2_part_1: 'Go to',
+  vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
+  vault_register_for_airdrop_list_item_3: 'Upload your Vault QR Code',
+  vault_register_for_airdrop_list_item_4: 'Track your VULTIES (Vault Points) !',
+  vault_register_for_airdrop_save_vault_QR_button: 'Save Vault QR',
 };

@@ -1,6 +1,6 @@
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 
-export const useCurrentVaultChainId = () => {
+export const useCurrentVaultChain = () => {
   const [{ chain }] = useAppPathParams<'vaultChainDetail'>();
 
   return chain;
