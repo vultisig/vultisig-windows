@@ -449,8 +449,19 @@ export const hr = {
     'Pratite svoje VULTIES (Vault bodove)!',
   vault_register_for_airdrop_save_vault_QR_button: 'Spremi Vault QR',
   vault_qr_share: 'Dijeli',
-  vault_qr_share_title: 'QR kod trezora',
+  vault_qr_share_title: 'QR kod treszora',
   vault_qr_share_text: 'Pogledajte ovaj QR kod trezora!',
   vault_qr_share_not_supported: 'Dijeljenje nije podržano u ovom pregledniku.',
   import_vault: 'Uvoz trezora',
+  vaultCheckUpdatePage: {
+    errorLoadingLocalVersion:
+      'Pogreška pri učitavanju lokalne verzije: {{error}}',
+    errorFetchingLatestVersion:
+      'Pogreška pri dohvaćanju najnovije verzije: {{error}}',
+    fetchingLatestVersion: 'Dohvaćanje najnovije verzije...',
+    applicationUpToDate: 'Aplikacija je ažurirana.',
+    newVersionAvailable: 'Nova verzija ({{latestVersion}}) je dostupna!',
+    downloadButton: 'Preuzmi sada.',
+    currentVersion: '{{localVersion}}',
+  },
 };
