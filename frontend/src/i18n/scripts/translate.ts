@@ -30,8 +30,12 @@ const sync = async () => {
         key => !(key in result)
       );
 
+      const textsToTranslate = missingKeys
+        .map(key => sourceCopy[key])
+        .filter((value): value is string => typeof value === 'string');
+
       const translatedTexts = await translateTexts({
-        texts: missingKeys.map(key => sourceCopy[key]),
+        texts: textsToTranslate,
         from: primaryLanguage,
         to: language,
       });
