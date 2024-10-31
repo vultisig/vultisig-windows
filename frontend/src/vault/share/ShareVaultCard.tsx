@@ -51,8 +51,8 @@ const LogoContainer = styled.div`
 
 export const ShareVaultCard = () => {
   const vault = useAssertCurrentVault();
-
-  const { name, local_party_id } = vault;
+  const { uid } = getVaultPublicKeyExport(vault);
+  const { name } = vault;
 
   const qrCodeValue = JSON.stringify(getVaultPublicKeyExport(vault));
 
@@ -64,7 +64,7 @@ export const ShareVaultCard = () => {
         <Text weight={600} size={22} cropped>
           {name}
         </Text>
-        <VaultKey title="UID" value={local_party_id} />
+        <VaultKey title="UID" value={uid} />
       </VStack>
       <QrCodeWrapper>
         <QRCode
