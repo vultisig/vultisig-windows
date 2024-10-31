@@ -1,9 +1,7 @@
 package storage
 
-import "github.com/google/uuid"
-
 type VaultFolder struct {
-	ID      uuid.UUID
-	Title   string
-	Order   float64
+	ID    string  `json:"id"`
+	Title string  `json:"title"`
+	Order float64 `json:"order"`
 }

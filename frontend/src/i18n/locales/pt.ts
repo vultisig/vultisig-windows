@@ -463,4 +463,5 @@ export const pt = {
   vault_qr_share_text: 'Confira este código QR do vault!',
   vault_qr_share_not_supported:
     'Compartilhamento não suportado neste navegador.',
+  import_vault: 'Cofre de importação',
 };

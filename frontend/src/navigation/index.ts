@@ -23,6 +23,7 @@ export const appPaths = {
   uploadQr: '/vault/qr/upload',
   joinKeygen: '/join-keygen',
   vaults: '/vaults',
+  manageVaults: '/vaults/manage',
   vault: '/vault',
   manageVaultChains: '/vault/chains',
   manageVaultChainCoins: '/vault/chains/coins',
@@ -45,6 +46,7 @@ export const appPaths = {
   vaultFAQ: '/vault/settings/faq',
   vaultItemSwap: '/vault/item/swap',
   registerForAirdrop: '/register-for-airdrop',
+  onboarding: '/onboarding',
 } as const;
 
 type AppPaths = typeof appPaths;

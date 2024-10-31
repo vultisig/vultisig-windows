@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { AddressPage } from './chain/components/address/AddressPage';
 import { appPaths } from './navigation';
+import { CompletedOnboardingOnly } from './onboarding/CompletedOnboardingOnly';
 import { OnboardingPage } from './onboarding/components/OnboardingPage';
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
 import EditVaultPage from './pages/edItVault/EditVaultPage';
@@ -38,17 +39,27 @@ import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPage } from './vault/setup/type/SetupVaultPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
 import { SwapPage } from './vault/swap/SwapPage';
+import { NoVaultsHomePage } from './vaults/components/NoVaultsHomePage';
 import { VaultsPage } from './vaults/components/VaultsPage';
+import { ManageVaultsPage } from './vaults/manage/ManageVaultsPage';
 
 export const router = createBrowserRouter([
   {
     path: appPaths.root,
     element: (
       <EmptyVaultsOnly>
-        <IncompleteOnboardingOnly>
-          <OnboardingPage />
-        </IncompleteOnboardingOnly>
+        <CompletedOnboardingOnly>
+          <NoVaultsHomePage />
+        </CompletedOnboardingOnly>
       </EmptyVaultsOnly>
+    ),
+  },
+  {
+    path: appPaths.onboarding,
+    element: (
+      <IncompleteOnboardingOnly>
+        <OnboardingPage />
+      </IncompleteOnboardingOnly>
     ),
   },
   {
@@ -102,6 +113,10 @@ export const router = createBrowserRouter([
   {
     path: appPaths.vaults,
     element: <VaultsPage />,
+  },
+  {
+    path: appPaths.manageVaults,
+    element: <ManageVaultsPage />,
   },
   {
     path: appPaths.manageVaultChains,
