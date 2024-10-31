@@ -4,6 +4,7 @@ import { ElementType } from 'react';
 import AddressBookIcon from '../../lib/ui/icons/AddressBookIcon';
 import CurrencyCircleIcon from '../../lib/ui/icons/CurrencyCircleIcon';
 import DefaultChainsIcon from '../../lib/ui/icons/DefaultChainsIcon';
+import DownloadIcon from '../../lib/ui/icons/DownloadIcon';
 import FaqIcon from '../../lib/ui/icons/FaqIcon';
 import GlobeIcon from '../../lib/ui/icons/GlobeIcon';
 import NoteIcon from '../../lib/ui/icons/NoteIcon';
@@ -91,6 +92,12 @@ export const settingsItems: SettingSection[] = [
         titleKey: 'vault_settings_share_app',
         icon: ShareIcon,
         path: makeAppPath('shareApp'),
+      },
+      {
+        id: 'check-for-update',
+        titleKey: 'vault_settings_check_for_update',
+        icon: DownloadIcon,
+        path: makeAppPath('checkUpdate'),
       },
     ],
   },
