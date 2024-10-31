@@ -14,6 +14,7 @@ import ImportVaultView from './pages/importVault/ImportVaultView';
 import RegisterForAirdropPage from './pages/registerForAirdrop/RegisterForAirdropPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage';
+import VaultCheckUpdatePage from './pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage';
 import CurrencySettingsPage from './pages/vaultSettings/vaultCurrency/CurrencySettingsPage';
 import VaultDefaultChainsPage from './pages/vaultSettings/vaultDefaultChains/VaultDefaultChainsPage';
 import FaqVaultPage from './pages/vaultSettings/vaultFaq/FaqVaultPage';
@@ -209,5 +210,9 @@ export const router = createBrowserRouter([
   {
     path: appPaths.registerForAirdrop,
     element: <RegisterForAirdropPage />,
+  },
+  {
+    path: appPaths.checkUpdate,
+    element: <VaultCheckUpdatePage />,
   },
 ]);

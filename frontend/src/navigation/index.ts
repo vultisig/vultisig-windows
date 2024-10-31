@@ -37,6 +37,7 @@ export const appPaths = {
   vaultDelete: '/vault/settings/vault-settings/delete-vault',
   languageSettings: '/vault/settings/language-settings',
   currencySettings: '/vault/settings/currency-settings',
+  checkUpdate: '/vault/settings/check-update',
   addressBook: '/vault/settings/address-book',
   defaultChains: '/vault/settings/default-chains',
   faq: '/vault/settings/faq',
