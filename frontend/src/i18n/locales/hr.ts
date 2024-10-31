@@ -452,4 +452,5 @@ export const hr = {
   vault_qr_share_title: 'QR kod trezora',
   vault_qr_share_text: 'Pogledajte ovaj QR kod trezora!',
   vault_qr_share_not_supported: 'Dijeljenje nije podržano u ovom pregledniku.',
+  import_vault: 'Uvoz trezora',
 };

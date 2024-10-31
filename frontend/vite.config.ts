@@ -1,7 +1,8 @@
 import react from '@vitejs/plugin-react';
+import { exec } from 'child_process';
 import path from 'path';
-import { defineConfig, normalizePath } from 'vite';
-import circleDependency from 'vite-plugin-circular-dependency'; // Import the plugin
+import { defineConfig, normalizePath, ViteDevServer } from 'vite';
+import circleDependency from 'vite-plugin-circular-dependency';
 import stdLibBrowser from 'vite-plugin-node-stdlib-browser';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
@@ -45,6 +46,20 @@ export default defineConfig({
         return str + path;
       },
     }),
+    {
+      name: 'watch-wailsjs-and-format',
+      configureServer(server: ViteDevServer) {
+        const wailsjsPath = path.resolve(__dirname, 'wailsjs');
+
+        server.watcher.add(`${wailsjsPath}/**/*.{ts,js}`);
+
+        server.watcher.on('change', (file: string) => {
+          if (file.startsWith(wailsjsPath)) {
+            exec('npm run format:wails');
+          }
+        });
+      },
+    },
   ],
   build: {
     outDir: 'dist',

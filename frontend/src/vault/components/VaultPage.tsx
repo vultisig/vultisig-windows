@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -16,6 +15,7 @@ import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle';
 import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance';
 import { VaultOverview } from '../../vault/components/VaultOverview';
 import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt';
+import { useAssertCurrentVault } from '../state/useCurrentVault';
 
 const PositionQrPrompt = styled.div`
   position: fixed;
@@ -28,7 +28,7 @@ const PositionQrPrompt = styled.div`
 
 export const VaultPage = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { name } = useAssertCurrentVault();
 
   return (
     <VStack flexGrow data-testid="VaultPage-Container">
@@ -50,7 +50,7 @@ export const VaultPage = () => {
               navigate(makeAppPath('vaults'));
             }}
           >
-            {t('vaults')}
+            {name}
           </PageHeaderToggleTitle>
         }
       />

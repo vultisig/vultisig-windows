@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { storage } from '../../../wailsjs/go/models';
 import { Button } from '../../lib/ui/buttons/Button';
+import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
 import { verticalPadding } from '../../lib/ui/css/verticalPadding';
 import { PlusIcon } from '../../lib/ui/icons/PlusIcon';
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller';
@@ -38,11 +39,12 @@ export const VaultList = () => {
       <ScrollableFlexboxFiller>
         <PageSlice gap={16}>
           {vaults.map((vault, index) => (
-            <VaultListOption
+            <UnstyledButton
               key={index}
-              name={vault.name}
               onClick={() => handleVaultSelect(vault)}
-            />
+            >
+              <VaultListOption title={vault.name} />
+            </UnstyledButton>
           ))}
         </PageSlice>
       </ScrollableFlexboxFiller>

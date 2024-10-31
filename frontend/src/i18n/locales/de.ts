@@ -469,4 +469,5 @@ export const de = {
   vault_qr_share_text: 'Schauen Sie sich diesen Vault-QR-Code an!',
   vault_qr_share_not_supported:
     'Teilen wird in diesem Browser nicht unterstützt.',
+  import_vault: 'Tresor importieren',
 };

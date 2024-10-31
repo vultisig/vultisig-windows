@@ -471,4 +471,5 @@ export const es = {
   vault_qr_share_title: 'Código QR de Vault',
   vault_qr_share_text: '¡Mira este código QR de Vault!',
   vault_qr_share_not_supported: 'Este navegador no admite compartir.',
+  import_vault: 'Importar bóveda',
 };
