@@ -473,5 +473,6 @@ export const pt = {
     newVersionAvailable: 'Uma nova versão ({{latestVersion}}) está disponível!',
     downloadButton: 'Baixe agora.',
     currentVersion: '{{localVersion}}',
+    title: 'Verificar atualização',
   },
 };

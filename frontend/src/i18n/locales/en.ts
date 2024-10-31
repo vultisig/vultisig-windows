@@ -459,5 +459,6 @@ export const en = {
     newVersionAvailable: 'A new version ({{latestVersion}}) is available!',
     downloadButton: 'Download it now.',
     currentVersion: '{{localVersion}}',
+    title: 'Check Update',
   },
 };
