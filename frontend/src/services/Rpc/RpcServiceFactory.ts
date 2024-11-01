@@ -15,6 +15,7 @@ import { RpcServiceZksync } from './evm/RpcServiceZkSyncEvm';
 import { RpcServiceGaia } from './gaia/RpcServiceGaia';
 import { RpcServiceKujira } from './kurija/RpcServiceKurija';
 import { RpcServiceMaya } from './maya/RpcServiceMaya';
+import { RpcServiceOsmosis } from './osmosis/RpcServiceOsmosis';
 import { RpcServicePolkadot } from './polkadot/RpcServicePolkadot';
 import { RpcServiceSolana } from './solana/RpcServiceSolana';
 import { RpcServiceSui } from './sui/RpcServiceSui';
@@ -67,6 +68,8 @@ export class RpcServiceFactory {
         return new RpcServiceSui(chain);
       case Chain.Cosmos:
         return new RpcServiceGaia();
+      case Chain.Osmosis:
+        return new RpcServiceOsmosis();
       case Chain.Kujira:
         return new RpcServiceKujira();
       case Chain.Dydx:

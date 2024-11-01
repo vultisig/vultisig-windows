@@ -1253,6 +1253,16 @@ export class TokensStore {
       isNativeToken: true,
     }),
 
+    osmosisOsmo: (): CoinMeta => ({
+      chain: Chain.Osmosis,
+      ticker: 'OSMO',
+      logo: 'osmo',
+      decimals: 6,
+      priceProviderId: 'osmosis',
+      contractAddress: '',
+      isNativeToken: true,
+    }),
+
     kujira: (): CoinMeta => ({
       chain: Chain.Kujira,
       ticker: 'KUJI',
@@ -1300,6 +1310,7 @@ export class TokensStore {
     TokensStore.Token.solanaJup(),
 
     TokensStore.Token.gaiaChainAtom(),
+    TokensStore.Token.osmosisOsmo(),
     TokensStore.Token.kujira(),
     TokensStore.Token.dydx(),
 
