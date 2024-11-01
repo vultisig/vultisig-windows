@@ -2,6 +2,6 @@ package storage
 
 type VaultFolder struct {
 	ID    string  `json:"id"`
-	Title string  `json:"title"`
+	Name string  `json:"name"`
 	Order float64 `json:"order"`
 }

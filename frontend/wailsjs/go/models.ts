@@ -136,7 +136,7 @@ export namespace storage {
   }
   export class VaultFolder {
     id: string;
-    title: string;
+    name: string;
     order: number;
 
     static createFrom(source: any = {}) {
@@ -146,7 +146,7 @@ export namespace storage {
     constructor(source: any = {}) {
       if ('string' === typeof source) source = JSON.parse(source);
       this.id = source['id'];
-      this.title = source['title'];
+      this.name = source['name'];
       this.order = source['order'];
     }
   }

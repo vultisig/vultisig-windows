@@ -487,4 +487,11 @@ export const de = {
       'Eine neue Version ({{latestVersion}}) ist verfügbar! Sie verwenden derzeit die Version v{{localVersion}}.',
     updateButton: 'Aktualisieren',
   },
+  create_folder: 'Ordner erstellen',
+  folder_name: 'Ordnername',
+  enter_folder_name: 'Geben Sie den Ordnernamen ein',
+  folder_name_required: 'Ordnername ist erforderlich',
+  folder_name_already_exists: 'Der Ordnername muss eindeutig sein',
+  create: 'Erstellen',
+  folders: 'Ordner',
 };

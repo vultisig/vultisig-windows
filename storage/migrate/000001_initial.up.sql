@@ -3,7 +3,7 @@ PRAGMA foreign_keys = ON;
 CREATE TABLE
     IF NOT EXISTS vault_folders (
         id TEXT PRIMARY KEY,
-        title TEXT NOT NULL,
+        name TEXT NOT NULL,
         "order" REAL NOT NULL DEFAULT 0
     );
 

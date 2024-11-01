@@ -470,4 +470,11 @@ export const hr = {
       'Dostupna je nova verzija ({{latestVersion}})! Trenutno koristite verziju v{{localVersion}}.',
     updateButton: 'Ažuriraj',
   },
+  create_folder: 'Stvori mapu',
+  folder_name: 'Naziv mape',
+  enter_folder_name: 'Unesite naziv mape',
+  folder_name_required: 'Potreban je naziv mape',
+  folder_name_already_exists: 'Naziv mape mora biti jedinstven',
+  create: 'Stvoriti',
+  folders: 'mape',
 };

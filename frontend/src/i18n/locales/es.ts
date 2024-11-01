@@ -488,4 +488,11 @@ export const es = {
       '¡Una nueva versión ({{latestVersion}}) está disponible! Actualmente estás usando la versión v{{localVersion}}.',
     updateButton: 'Actualizar',
   },
+  create_folder: 'Crear carpeta',
+  folder_name: 'Nombre de la carpeta',
+  enter_folder_name: 'Introduzca el nombre de la carpeta',
+  folder_name_required: 'El nombre de la carpeta es obligatorio',
+  folder_name_already_exists: 'El nombre de la carpeta debe ser único',
+  create: 'Crear',
+  folders: 'Carpetas',
 };

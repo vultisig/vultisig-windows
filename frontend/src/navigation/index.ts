@@ -48,6 +48,7 @@ export const appPaths = {
   vaultItemSwap: '/vault/item/swap',
   registerForAirdrop: '/register-for-airdrop',
   onboarding: '/onboarding',
+  createVaultFolder: '/vault/create-folder',
 } as const;
 
 type AppPaths = typeof appPaths;

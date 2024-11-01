@@ -2,12 +2,15 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Hoverable } from '../../lib/ui/base/Hoverable';
+import { Button } from '../../lib/ui/buttons/Button';
 import { Text } from '../../lib/ui/text';
 import { makeAppPath } from '../../navigation';
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
-import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle';
+import { VaultGroupsContainer } from '../components/VaultGroupsContainer';
+import { VaultsPageHeaderTitle } from '../components/VaultsPageHeaderTitle';
+import { ManageVaultFolders } from '../folders/manage/ManageVaultFolders';
 import { ManageVaults } from './ManageVaults';
 
 export const ManageVaultsPage = () => {
@@ -26,19 +29,19 @@ export const ManageVaultsPage = () => {
             </Text>
           </Hoverable>
         }
-        title={
-          <PageHeaderToggleTitle
-            value={true}
-            onChange={() => {
-              navigate(makeAppPath('vault'));
-            }}
-          >
-            {t('vaults')}
-          </PageHeaderToggleTitle>
-        }
+        title={<VaultsPageHeaderTitle />}
       />
       <PageContent>
-        <ManageVaults />
+        <VaultGroupsContainer>
+          <ManageVaultFolders />
+          <ManageVaults />
+        </VaultGroupsContainer>
+        <Button
+          kind="outlined"
+          onClick={() => navigate(makeAppPath('createVaultFolder'))}
+        >
+          {t('create_folder')}
+        </Button>
       </PageContent>
     </>
   );
