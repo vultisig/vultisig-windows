@@ -483,4 +483,9 @@ export const es = {
     currentVersion: '{{localVersion}}',
     title: 'Comprobar actualización',
   },
+  updatePopup: {
+    updateAvailableMessage:
+      '¡Una nueva versión ({{latestVersion}}) está disponible! Actualmente estás usando la versión v{{localVersion}}.',
+    updateButton: 'Actualizar',
+  },
 };

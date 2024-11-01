@@ -475,4 +475,9 @@ export const pt = {
     currentVersion: '{{localVersion}}',
     title: 'Verificar atualização',
   },
+  updatePopup: {
+    updateAvailableMessage:
+      'Uma nova versão ({{latestVersion}}) está disponível! Você está usando atualmente a versão v{{localVersion}}.',
+    updateButton: 'Atualizar',
+  },
 };

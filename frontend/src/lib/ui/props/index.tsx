@@ -11,6 +11,7 @@ export type UIComponentProps = {
 
 export type ClickableComponentProps = {
   onClick: () => void;
+  className?: string;
 };
 
 export type ComponentWithValueProps<T> = {

@@ -482,4 +482,9 @@ export const de = {
     currentVersion: '{{localVersion}}',
     title: 'Update prüfen',
   },
+  updatePopup: {
+    updateAvailableMessage:
+      'Eine neue Version ({{latestVersion}}) ist verfügbar! Sie verwenden derzeit die Version v{{localVersion}}.',
+    updateButton: 'Aktualisieren',
+  },
 };

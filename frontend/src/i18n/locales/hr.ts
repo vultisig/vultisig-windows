@@ -465,4 +465,9 @@ export const hr = {
     currentVersion: '{{localVersion}}',
     title: 'Provjeri ažuriranje',
   },
+  updatePopup: {
+    updateAvailableMessage:
+      'Dostupna je nova verzija ({{latestVersion}})! Trenutno koristite verziju v{{localVersion}}.',
+    updateButton: 'Ažuriraj',
+  },
 };
