@@ -163,7 +163,6 @@ export const en = {
   vault_settings_faq: 'FAQ',
   vault_settings_section_other: 'Other',
   vault_settings_share_app: 'Share The App',
-  vault_settings_check_for_update: 'Check for Update',
   vault_settings_section_legal: 'Legal',
   vault_settings_privacy_policy: 'Privacy Policy',
   vault_settings_terms_of_service: 'Terms of Service',
