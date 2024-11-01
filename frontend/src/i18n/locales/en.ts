@@ -451,13 +451,4 @@ export const en = {
   vault_qr_share_title: 'Vault QR Code',
   vault_qr_share_text: 'Check out this vault QR code!',
   vault_qr_share_not_supported: 'Sharing not supported on this browser.',
-  vaultCheckUpdatePage: {
-    errorLoadingLocalVersion: 'Error loading local version: {{error}}',
-    errorFetchingLatestVersion: 'Error fetching latest version: {{error}}',
-    fetchingLatestVersion: 'Fetching latest version...',
-    applicationUpToDate: 'Application is up to date.',
-    newVersionAvailable: 'A new version ({{latestVersion}}) is available!',
-    downloadButton: 'Download it now.',
-    currentVersion: '{{localVersion}}',
-  },
 };

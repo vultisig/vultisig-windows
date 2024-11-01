@@ -472,14 +472,4 @@ export const es = {
   vault_qr_share_text: '¡Mira este código QR de Vault!',
   vault_qr_share_not_supported: 'Este navegador no admite compartir.',
   import_vault: 'Importar bóveda',
-  vaultCheckUpdatePage: {
-    errorLoadingLocalVersion: 'Error al cargar la versión local: {{error}}',
-    errorFetchingLatestVersion: 'Error al obtener la última versión: {{error}}',
-    fetchingLatestVersion: 'Obteniendo la última versión...',
-    applicationUpToDate: 'La aplicación está actualizada.',
-    newVersionAvailable:
-      '¡Hay una nueva versión ({{latestVersion}}) disponible!',
-    downloadButton: 'Descárguela ahora.',
-    currentVersion: '{{localVersion}}',
-  },
 };

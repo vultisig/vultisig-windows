@@ -1,3 +1,1 @@
-export interface Copy {
-  [key: string]: string | Copy;
-}
+export type Copy = Record<string, string>;

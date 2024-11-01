@@ -470,15 +470,4 @@ export const de = {
   vault_qr_share_not_supported:
     'Teilen wird in diesem Browser nicht unterstützt.',
   import_vault: 'Tresor importieren',
-  vaultCheckUpdatePage: {
-    errorLoadingLocalVersion:
-      'Fehler beim Laden der lokalen Version: {{error}}',
-    errorFetchingLatestVersion:
-      'Fehler beim Abrufen der neuesten Version: {{error}}',
-    fetchingLatestVersion: 'Neueste Version wird abgerufen...',
-    applicationUpToDate: 'Anwendung ist auf dem neuesten Stand.',
-    newVersionAvailable: 'Eine neue Version ({{latestVersion}}) ist verfügbar!',
-    downloadButton: 'Jetzt herunterladen.',
-    currentVersion: '{{localVersion}}',
-  },
 };
