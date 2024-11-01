@@ -1,3 +1,9 @@
+/*
+
+WARNING: Never change the string of the enum values. It must match with IOS/Android app. They are case sensitive!
+
+*/
+
 export enum EvmChain {
   Arbitrum = 'Arbitrum',
   Avalanche = 'Avalanche',
@@ -35,6 +41,7 @@ export enum UtxoChain {
 export enum CosmosChain {
   THORChain = 'THORChain',
   Cosmos = 'Cosmos',
+  Osmosis = 'Osmosis',
   MayaChain = 'MayaChain',
   Dydx = 'Dydx',
   Kujira = 'Kujira',
@@ -132,6 +139,8 @@ export class ChainUtils {
         return 'SOL';
       case Chain.Cosmos:
         return 'UATOM';
+      case Chain.Osmosis:
+        return 'UOSMO';
       case Chain.Kujira:
         return 'KUJI';
       case Chain.Dydx:

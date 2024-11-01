@@ -1,7 +1,6 @@
 import { TW } from '@trustwallet/wallet-core';
 
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { Chain } from '../../../model/chain';
 import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
@@ -18,6 +17,7 @@ import {
 import { SpecificCosmos } from '../../../model/specific-transaction-info';
 import { ISendTransaction, ITransaction } from '../../../model/transaction';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { BlockchainService } from '../BlockchainService';
 import SignatureProvider from '../signature-provider';
 
@@ -68,8 +68,6 @@ export class BlockchainServiceCosmos
       throw new Error('invalid hex public key');
     }
 
-    // let message: TW.Cosmos.Proto.Message[];
-
     const toAddress = walletCore.AnyAddress.createWithString(
       keysignPayload.toAddress,
       this.coinType
@@ -79,21 +77,13 @@ export class BlockchainServiceCosmos
       throw new Error('invalid to address');
     }
 
-    let denom = 'adydx';
-    switch (this.chain as Chain) {
-      case Chain.Dydx:
-        denom = 'adydx';
-        break;
-      case Chain.Cosmos:
-        denom = 'uatom';
-        break;
-      case Chain.Kujira:
-        denom = 'ukuji';
-        break;
-      default:
-        throw new Error('unsupported chain');
-    }
+    const rpcService = RpcServiceFactory.createRpcService(this.chain) as any;
+    const denom = rpcService.denom();
 
+    if (!denom) {
+      console.error('getPreSignedInputData > denom is not defined');
+      throw new Error('getPreSignedInputData > denom is not defined');
+    }
     const message: TW.Cosmos.Proto.Message[] = [
       TW.Cosmos.Proto.Message.create({
         sendCoinsMessage: TW.Cosmos.Proto.Message.Send.create({

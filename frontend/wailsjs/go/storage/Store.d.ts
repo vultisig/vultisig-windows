@@ -59,4 +59,4 @@ export function UpdateVaultIsBackedUp(
 
 export function UpdateVaultName(arg1: string, arg2: string): Promise<void>;
 
-e;
+export function UpdateVaultOrder(arg1: string, arg2: number): Promise<void>;

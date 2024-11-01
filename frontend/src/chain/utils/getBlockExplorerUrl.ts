@@ -46,6 +46,8 @@ export const getBlockExplorerUrl = ({
         [Chain.Polkadot]: () => `https://polkadot.subscan.io/account/${value}`,
         [Chain.Zksync]: () => `https://explorer.zksync.io/address/${value}`,
         [Chain.Ton]: () => `https://tonviewer.com/${value}`,
+        [Chain.Osmosis]: () =>
+          `https://www.mintscan.io/osmosis/address/${value}`,
       }),
     tx: () =>
       match(chainId, {
@@ -78,6 +80,7 @@ export const getBlockExplorerUrl = ({
           `https://polkadot.subscan.io/extrinsic/${value}`,
         [Chain.Zksync]: () => `https://explorer.zksync.io/tx/${value}`,
         [Chain.Ton]: () => `https://tonviewer.com/transaction/${value}`,
+        [Chain.Osmosis]: () => `https://www.mintscan.io/osmosis/tx/${value}`,
       }),
   });
 };

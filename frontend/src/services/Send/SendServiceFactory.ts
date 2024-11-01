@@ -54,6 +54,8 @@ export class SendServiceFactory {
         return new SendService(chain, walletCore);
       case Chain.Cosmos:
         return new SendServiceCosmos(chain, walletCore);
+      case Chain.Osmosis:
+        return new SendServiceCosmos(chain, walletCore);
       case Chain.Kujira:
         return new SendServiceCosmos(chain, walletCore);
       case Chain.Dydx:
