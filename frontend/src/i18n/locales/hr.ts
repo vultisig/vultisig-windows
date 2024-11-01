@@ -463,6 +463,5 @@ export const hr = {
     newVersionAvailable: 'Nova verzija ({{latestVersion}}) je dostupna!',
     downloadButton: 'Preuzmi sada.',
     currentVersion: '{{localVersion}}',
-    title: 'Provjeri ažuriranje',
   },
 };

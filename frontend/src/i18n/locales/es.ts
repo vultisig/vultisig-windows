@@ -481,6 +481,5 @@ export const es = {
       '¡Hay una nueva versión ({{latestVersion}}) disponible!',
     downloadButton: 'Descárguela ahora.',
     currentVersion: '{{localVersion}}',
-    title: 'Comprobar actualización',
   },
 };

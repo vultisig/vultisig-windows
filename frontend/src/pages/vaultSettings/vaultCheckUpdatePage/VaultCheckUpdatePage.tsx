@@ -6,9 +6,6 @@ import useVersionCheck from '../../../lib/hooks/useVersionCheck';
 import { Text } from '../../../lib/ui/text';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { ProductLogo } from '../../../ui/logo/ProductLogo';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageSlice } from '../../../ui/page/PageSlice';
 import { VULTISIG_GITHUB_RELEASES_LINK } from '../constants';
 import {
   CenteredText,
@@ -64,26 +61,19 @@ const VaultCheckUpdatePage = () => {
   }
 
   return (
-    <PageSlice>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('vaultCheckUpdatePage.title')}
-      />
-
-      <FixedWrapper>
-        <ProductLogo fontSize={200} />
-        <Content>
-          <Text color="contrast" weight={500}>
-            {content}
+    <FixedWrapper>
+      <ProductLogo fontSize={200} />
+      <Content>
+        <Text color="contrast" weight={500}>
+          {content}
+        </Text>
+        {!updateAvailable && (
+          <Text color="contrast" size={14}>
+            {localVersion}
           </Text>
-          {!updateAvailable && (
-            <Text color="contrast" size={14}>
-              {localVersion}
-            </Text>
-          )}
-        </Content>
-      </FixedWrapper>
-    </PageSlice>
+        )}
+      </Content>
+    </FixedWrapper>
   );
 };
 

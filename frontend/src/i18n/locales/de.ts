@@ -480,6 +480,5 @@ export const de = {
     newVersionAvailable: 'Eine neue Version ({{latestVersion}}) ist verfügbar!',
     downloadButton: 'Jetzt herunterladen.',
     currentVersion: '{{localVersion}}',
-    title: 'Update prüfen',
   },
 };

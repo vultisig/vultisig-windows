@@ -475,6 +475,5 @@ export const it = {
       'È disponibile una nuova versione ({{latestVersion}})!',
     downloadButton: 'Scaricala ora.',
     currentVersion: '{{localVersion}}',
-    title: 'Controlla aggiornamento',
   },
 };
