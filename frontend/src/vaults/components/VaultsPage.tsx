@@ -1,21 +1,22 @@
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { EditIcon } from '../../lib/ui/icons/EditIcon';
-import { VStack } from '../../lib/ui/layout/Stack';
 import { makeAppPath } from '../../navigation';
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt';
+import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
-import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle';
-import { VaultList } from './VaultList';
+import { VaultFolders } from '../folders/components/VaultFolders';
+import { ManageVaultCreation } from './ManageVaultCreation';
+import { VaultGroupsContainer } from './VaultGroupsContainer';
+import { Vaults } from './Vaults';
+import { VaultsPageHeaderTitle } from './VaultsPageHeaderTitle';
 
 export const VaultsPage = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
 
   return (
-    <VStack flexGrow data-testid="VaultPage-Container">
+    <>
       <PageHeader
         hasBorder
         primaryControls={<PageHeaderVaultSettingsPrompt />}
@@ -25,18 +26,15 @@ export const VaultsPage = () => {
             onClick={() => navigate(makeAppPath('manageVaults'))}
           />
         }
-        title={
-          <PageHeaderToggleTitle
-            value={true}
-            onChange={() => {
-              navigate(makeAppPath('vault'));
-            }}
-          >
-            {t('vaults')}
-          </PageHeaderToggleTitle>
-        }
+        title={<VaultsPageHeaderTitle />}
       />
-      <VaultList />
-    </VStack>
+      <PageContent>
+        <VaultGroupsContainer>
+          <VaultFolders />
+          <Vaults />
+        </VaultGroupsContainer>
+        <ManageVaultCreation />
+      </PageContent>
+    </>
   );
 };

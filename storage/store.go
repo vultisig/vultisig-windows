@@ -527,8 +527,8 @@ func (s *Store) SaveVaultFolder(folder *VaultFolder) (string, error) {
 	if folder.ID == "" {
 		folder.ID = uuid.New().String()
 	}
-	query := `INSERT OR REPLACE INTO vault_folders (id, title, "order") VALUES (?, ?, ?)`
-	_, err := s.db.Exec(query, folder.ID, folder.Title, folder.Order)
+	query := `INSERT OR REPLACE INTO vault_folders (id, name, "order") VALUES (?, ?, ?)`
+	_, err := s.db.Exec(query, folder.ID, folder.Name, folder.Order)
 	if err != nil {
 		return "", fmt.Errorf("could not upsert vault folder, err: %w", err)
 	}
@@ -536,10 +536,10 @@ func (s *Store) SaveVaultFolder(folder *VaultFolder) (string, error) {
 }
 
 func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
-	query := `SELECT id, title, "order" FROM vault_folders WHERE id = ?`
+	query := `SELECT id, name, "order" FROM vault_folders WHERE id = ?`
 	row := s.db.QueryRow(query, id)
 	var folder VaultFolder
-	if err := row.Scan(&folder.ID, &folder.Title, &folder.Order); err != nil {
+	if err := row.Scan(&folder.ID, &folder.Name, &folder.Order); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, fmt.Errorf("vault folder not found")
 		}
@@ -548,8 +548,17 @@ func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
 	return &folder, nil
 }
 
+func (s *Store) UpdateVaultFolderOrder(id string, order float64) error {
+	query := `UPDATE vault_folders SET "order" = ? WHERE id = ?`
+	_, err := s.db.Exec(query, order, id)
+	if err != nil {
+		return fmt.Errorf("could not update vault folder order, err: %w", err)
+	}
+	return nil
+}
+
 func (s *Store) GetVaultFolders() ([]*VaultFolder, error) {
-	query := `SELECT id, title, "order" FROM vault_folders ORDER BY "order"`
+	query := `SELECT id, name, "order" FROM vault_folders ORDER BY "order"`
 	rows, err := s.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("could not query vault folders, err: %w", err)
@@ -559,7 +568,7 @@ func (s *Store) GetVaultFolders() ([]*VaultFolder, error) {
 	var folders []*VaultFolder
 	for rows.Next() {
 		var folder VaultFolder
-		if err := rows.Scan(&folder.ID, &folder.Title, &folder.Order); err != nil {
+		if err := rows.Scan(&folder.ID, &folder.Name, &folder.Order); err != nil {
 			return nil, fmt.Errorf("could not scan vault folder, err: %w", err)
 		}
 		folders = append(folders, &folder)
@@ -568,8 +577,8 @@ func (s *Store) GetVaultFolders() ([]*VaultFolder, error) {
 }
 
 func (s *Store) UpdateVaultFolder(folder *VaultFolder) error {
-	query := `UPDATE vault_folders SET title = ?, "order" = ? WHERE id = ?`
-	_, err := s.db.Exec(query, folder.Title, folder.Order, folder.ID)
+	query := `UPDATE vault_folders SET name = ?, "order" = ? WHERE id = ?`
+	_, err := s.db.Exec(query, folder.Name, folder.Order, folder.ID)
 	if err != nil {
 		return fmt.Errorf("could not update vault folder, err: %w", err)
 	}

@@ -1,44 +1,18 @@
 import { useEffect, useState } from 'react';
-import styled, { css } from 'styled-components';
 
 import { storage } from '../../../wailsjs/go/models';
-import { DnDItemStatus } from '../../lib/dnd/DnDItemStatus';
 import { DnDList } from '../../lib/dnd/DnDList';
-import { absoluteOutline } from '../../lib/ui/css/absoluteOutline';
-import { borderRadius } from '../../lib/ui/css/borderRadius';
-import { MenuIcon } from '../../lib/ui/icons/MenuIcon';
-import { HStack, VStack } from '../../lib/ui/layout/Stack';
-import { ComponentWithStatusProps } from '../../lib/ui/props';
-import { getColor } from '../../lib/ui/theme/getters';
+import {
+  DnDItemContainer,
+  DnDItemHighlight,
+} from '../../lib/ui/list/item/DnDItemContainer';
 import { sortEntitiesWithOrder } from '../../lib/utils/entities/EntityWithOrder';
-import { match } from '../../lib/utils/match';
 import { getNewOrder } from '../../lib/utils/order/getNewOrder';
 import { useUpdateVaultOrderMutation } from '../../vault/mutations/useUpdateVaultOrderMutation';
 import { useVaults } from '../../vault/queries/useVaultsQuery';
 import { getStorageVaultId } from '../../vault/utils/storageVault';
-import { VaultListOption } from '../components/VaultListOption';
-
-const Highlight = styled.div`
-  position: absolute;
-  ${borderRadius.s};
-  ${absoluteOutline(0, 0)}
-
-  border: 2px solid ${getColor('primary')};
-`;
-
-const ItemContainer = styled.div<ComponentWithStatusProps<DnDItemStatus>>`
-  position: relative;
-  ${({ status }) =>
-    match(status, {
-      idle: () => css``,
-      overlay: () => css`
-        cursor: grabbing;
-      `,
-      placeholder: () => css`
-        opacity: 0.4;
-      `,
-    })}
-`;
+import { VaultListItem } from '../components/VaultListItem';
+import { VaultsContainer } from '../components/VaultsContainer';
 
 export const ManageVaults = () => {
   const vaults = useVaults();
@@ -78,24 +52,21 @@ export const ManageVaults = () => {
           )
         );
       }}
-      renderList={({ props }) => <VStack gap={16} {...props} />}
+      renderList={({ props }) => <VaultsContainer {...props} />}
       renderItem={({ item, draggableProps, dragHandleProps, status }) => {
         return (
-          <ItemContainer
+          <DnDItemContainer
             {...draggableProps}
             {...dragHandleProps}
             status={status}
           >
-            <VaultListOption
-              title={
-                <HStack alignItems="center" gap={12}>
-                  <MenuIcon size={24} />
-                  {item.name}
-                </HStack>
-              }
+            <VaultListItem
+              isDraggable
+              id={getStorageVaultId(item)}
+              name={item.name}
             />
-            {status === 'overlay' && <Highlight />}
-          </ItemContainer>
+            {status === 'overlay' && <DnDItemHighlight />}
+          </DnDItemContainer>
         );
       }}
     />

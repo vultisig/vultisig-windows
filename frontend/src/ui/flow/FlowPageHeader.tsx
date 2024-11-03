@@ -7,7 +7,7 @@ import { PageHeaderBackButton } from '../page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../page/PageHeaderTitle';
 
 export const FlowPageHeader: React.FC<
-  TitledComponentProps & ComponentWithBackActionProps
+  TitledComponentProps & Partial<ComponentWithBackActionProps>
 > = ({ title, onBack }) => (
   <PageHeader
     title={<PageHeaderTitle>{title}</PageHeaderTitle>}

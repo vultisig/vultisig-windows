@@ -466,4 +466,11 @@ export const en = {
       'A new version ({{latestVersion}}) is available! You are currently using v{{localVersion}}.',
     updateButton: 'Update',
   },
+  create_folder: 'Create Folder',
+  folder_name: 'Folder name',
+  enter_folder_name: 'Enter folder name',
+  folder_name_required: 'Folder name is required',
+  folder_name_already_exists: 'Folder name must be unique',
+  create: 'Create',
+  folders: 'Folders',
 };

@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { GetVaults } from '../../../wailsjs/go/storage/Store';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
+import { sortEntitiesWithOrder } from '../../lib/utils/entities/EntityWithOrder';
 
 export const vaultsQueryKey = ['vaults'];
 
@@ -12,7 +13,7 @@ export const vaultsQueryFn = async () => {
     return [];
   }
 
-  return result;
+  return sortEntitiesWithOrder(result);
 };
 
 export const useVaultsQuery = () => {

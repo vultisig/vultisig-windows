@@ -480,4 +480,11 @@ export const pt = {
       'Uma nova versão ({{latestVersion}}) está disponível! Você está usando atualmente a versão v{{localVersion}}.',
     updateButton: 'Atualizar',
   },
+  create_folder: 'Criar pasta',
+  folder_name: 'Nome da pasta',
+  enter_folder_name: 'Digite o nome da pasta',
+  folder_name_required: 'O nome da pasta é obrigatório',
+  folder_name_already_exists: 'O nome da pasta deve ser único',
+  create: 'Criar',
+  folders: 'Pastas',
 };

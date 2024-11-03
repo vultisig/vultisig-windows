@@ -482,4 +482,11 @@ export const it = {
       'È disponibile una nuova versione ({{latestVersion}})! Stai attualmente usando la versione v{{localVersion}}.',
     updateButton: 'Aggiorna',
   },
+  create_folder: 'Crea cartella',
+  folder_name: 'Nome cartella',
+  enter_folder_name: 'Inserisci il nome della cartella',
+  folder_name_required: 'Il nome della cartella è obbligatorio',
+  folder_name_already_exists: 'Il nome della cartella deve essere univoco',
+  create: 'Creare',
+  folders: 'Cartelle',
 };
