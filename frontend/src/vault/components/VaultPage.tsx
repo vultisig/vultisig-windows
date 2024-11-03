@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
+import UpdateAvailablePopup from '../../components/updateAvailablePopup/UpdateAvailablePopup';
 import { toSizeUnit } from '../../lib/ui/css/toSizeUnit';
 import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 import { VStack } from '../../lib/ui/layout/Stack';
@@ -31,34 +32,37 @@ export const VaultPage = () => {
   const { name } = useAssertCurrentVault();
 
   return (
-    <VStack flexGrow data-testid="VaultPage-Container">
-      <PageHeader
-        hasBorder
-        primaryControls={<PageHeaderVaultSettingsPrompt />}
-        secondaryControls={
-          <PageHeaderIconButtons>
-            <Link to={makeAppPath('shareVault')}>
-              <PageHeaderIconButton as="div" icon={<QrCodeIcon />} />
-            </Link>
-            <RefreshVaultBalance />
-          </PageHeaderIconButtons>
-        }
-        title={
-          <PageHeaderToggleTitle
-            value={false}
-            onChange={() => {
-              navigate(makeAppPath('vaults'));
-            }}
-          >
-            {name}
-          </PageHeaderToggleTitle>
-        }
-      />
+    <>
+      <VStack flexGrow data-testid="VaultPage-Container">
+        <PageHeader
+          hasBorder
+          primaryControls={<PageHeaderVaultSettingsPrompt />}
+          secondaryControls={
+            <PageHeaderIconButtons>
+              <Link to={makeAppPath('shareVault')}>
+                <PageHeaderIconButton as="div" icon={<QrCodeIcon />} />
+              </Link>
+              <RefreshVaultBalance />
+            </PageHeaderIconButtons>
+          }
+          title={
+            <PageHeaderToggleTitle
+              value={false}
+              onChange={() => {
+                navigate(makeAppPath('vaults'));
+              }}
+            >
+              {name}
+            </PageHeaderToggleTitle>
+          }
+        />
 
-      <PositionQrPrompt>
-        <ProvideQrPrompt />
-      </PositionQrPrompt>
-      <VaultOverview />
-    </VStack>
+        <PositionQrPrompt>
+          <ProvideQrPrompt />
+        </PositionQrPrompt>
+        <VaultOverview />
+      </VStack>
+      <UpdateAvailablePopup />;
+    </>
   );
 };

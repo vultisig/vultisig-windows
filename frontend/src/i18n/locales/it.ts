@@ -477,4 +477,9 @@ export const it = {
     currentVersion: '{{localVersion}}',
     title: 'Controlla aggiornamento',
   },
+  updatePopup: {
+    updateAvailableMessage:
+      'È disponibile una nuova versione ({{latestVersion}})! Stai attualmente usando la versione v{{localVersion}}.',
+    updateButton: 'Aggiorna',
+  },
 };
