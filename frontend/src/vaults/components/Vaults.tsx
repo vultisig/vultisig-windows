@@ -1,3 +1,4 @@
+import { NonEmptyOnly } from '../../lib/ui/base/NonEmptyOnly';
 import { useFolderlessVaults } from '../../vault/queries/useVaultsQuery';
 import { getStorageVaultId } from '../../vault/utils/storageVault';
 import { VaultListItem } from './VaultListItem';
@@ -7,14 +8,19 @@ export const Vaults = () => {
   const vaults = useFolderlessVaults();
 
   return (
-    <VaultsContainer>
-      {vaults.map((vault, index) => (
-        <VaultListItem
-          key={index}
-          id={getStorageVaultId(vault)}
-          name={vault.name}
-        />
-      ))}
-    </VaultsContainer>
+    <NonEmptyOnly
+      value={vaults}
+      render={items => (
+        <VaultsContainer>
+          {items.map((vault, index) => (
+            <VaultListItem
+              key={index}
+              id={getStorageVaultId(vault)}
+              name={vault.name}
+            />
+          ))}
+        </VaultsContainer>
+      )}
+    />
   );
 };

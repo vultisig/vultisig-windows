@@ -6,6 +6,7 @@ import {
   DnDItemContainer,
   DnDItemHighlight,
 } from '../../lib/ui/list/item/DnDItemContainer';
+import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { sortEntitiesWithOrder } from '../../lib/utils/entities/EntityWithOrder';
 import { getNewOrder } from '../../lib/utils/order/getNewOrder';
 import { useUpdateVaultOrderMutation } from '../../vault/mutations/useUpdateVaultOrderMutation';
@@ -24,6 +25,8 @@ export const ManageVaults = () => {
   }, [vaults]);
 
   const { mutate } = useUpdateVaultOrderMutation();
+
+  if (isEmpty(items)) return null;
 
   return (
     <DnDList

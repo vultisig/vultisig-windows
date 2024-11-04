@@ -596,9 +596,16 @@ func (s *Store) UpdateVaultFolder(folder *VaultFolder) error {
 }
 
 func (s *Store) DeleteVaultFolder(id string) error {
-	_, err := s.db.Exec("DELETE FROM vault_folders WHERE id = ?", id)
+	// Set folder_id to NULL for all vaults that reference the folder being deleted
+	_, err := s.db.Exec("UPDATE vaults SET folder_id = NULL WHERE folder_id = ?", id)
 	if err != nil {
-		return fmt.Errorf("could not delete vault folder, err: %w", err)
+			return fmt.Errorf("could not update vaults to set folder_id to NULL, err: %w", err)
+	}
+
+	// Delete the vault folder
+	_, err = s.db.Exec("DELETE FROM vault_folders WHERE id = ?", id)
+	if err != nil {
+			return fmt.Errorf("could not delete vault folder, err: %w", err)
 	}
 	return nil
 }
