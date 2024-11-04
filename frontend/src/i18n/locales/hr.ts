@@ -479,4 +479,5 @@ export const hr = {
   folders: 'mape',
   vault_settings_check_for_update: 'Provjerite ažuriranje',
   delete_folder: 'Izbriši mapu',
+  deposit: 'Depozit',
 };

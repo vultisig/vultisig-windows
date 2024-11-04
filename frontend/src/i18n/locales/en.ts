@@ -474,4 +474,5 @@ export const en = {
   create: 'Create',
   delete_folder: 'Delete Folder',
   folders: 'Folders',
+  deposit: 'Deposit',
 };
