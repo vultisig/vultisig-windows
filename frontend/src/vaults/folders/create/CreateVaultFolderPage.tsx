@@ -11,8 +11,8 @@ import { getLastItemOrder } from '../../../lib/utils/order/getLastItemOrder';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
 import { PageContent } from '../../../ui/page/PageContent';
 import { useFolderlessVaults } from '../../../vault/queries/useVaultsQuery';
+import { useCreateVaultFolderMutation } from '../../folder/mutations/useCreateVaultFolderMutation';
 import { FolderVaultsInput } from '../components/FolderVaultsInput';
-import { useCreateVaultFolderMutation } from '../mutations/useCreateVaultFolderMutation';
 import { useVaultFolders } from '../queries/useVaultFoldersQuery';
 
 export const CreateVaultFolderPage = () => {

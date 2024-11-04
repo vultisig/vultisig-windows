@@ -7,7 +7,8 @@ import {
   UpdateVaultFolderID,
 } from '../../../../wailsjs/go/storage/Store';
 import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries';
-import { vaultFoldersQueryKey } from '../queries/useVaultFoldersQuery';
+import { vaultsQueryKey } from '../../../vault/queries/useVaultsQuery';
+import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery';
 
 type CreateVaultFolderInput = {
   name: string;
@@ -33,7 +34,7 @@ export const useCreateVaultFolderMutation = () => {
       );
     },
     onSuccess: () => {
-      invalidateQueries(vaultFoldersQueryKey);
+      invalidateQueries(vaultFoldersQueryKey, vaultsQueryKey);
     },
   });
 };

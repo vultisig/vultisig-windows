@@ -35,8 +35,5 @@ export const useVaultFolders = () => {
 export const useVaultFolder = (id: string) => {
   const folders = useVaultFolders();
 
-  return useMemo(
-    () => shouldBePresent(folders.find(folder => folder.id === id)),
-    [folders, id]
-  );
+  return useMemo(() => folders.find(folder => folder.id === id), [folders, id]);
 };

@@ -1,8 +1,7 @@
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
-import { useVaultFolder } from '../../folders/queries/useVaultFoldersQuery';
+import { storage } from '../../../../wailsjs/go/models';
+import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup';
 
-export const useCurrentVaultFolder = () => {
-  const [{ id }] = useAppPathParams<'vaultFolder'>();
-
-  return useVaultFolder(id);
-};
+export const {
+  useValue: useCurrentVaultFolder,
+  provider: VaultFolderProvider,
+} = getValueProviderSetup<storage.VaultFolder>('VaultFolder');

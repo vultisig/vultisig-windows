@@ -8,9 +8,9 @@ import {
 } from '../../../lib/ui/list/item/DnDItemContainer';
 import { sortEntitiesWithOrder } from '../../../lib/utils/entities/EntityWithOrder';
 import { getNewOrder } from '../../../lib/utils/order/getNewOrder';
+import { useUpdateVaultFolderOrderMutation } from '../../folder/mutations/useUpdateVaultFolderOrderMutation';
 import { FolderListItem } from '../components/FolderListItem';
 import { VaultFoldersContainer } from '../components/VaultFoldersContainer';
-import { useUpdateVaultFolderOrderMutation } from '../mutations/useUpdateVaultFolderOrderMutation';
 import { useVaultFolders } from '../queries/useVaultFoldersQuery';
 
 export const ManageVaultFolders = () => {
