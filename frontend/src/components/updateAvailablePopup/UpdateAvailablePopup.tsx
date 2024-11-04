@@ -29,8 +29,6 @@ const UpdateAvailablePopup = () => {
     const isError = localError || remoteError;
     if (!isLoading && !isError && updateAvailable) {
       setIsOpen(true);
-    } else if (isLoading || isError) {
-      setIsOpen(false);
     }
   }, [isLoading, localError, remoteError, updateAvailable]);
 
