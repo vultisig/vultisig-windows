@@ -37,3 +37,12 @@ export const useFolderlessVaults = () => {
 
   return useMemo(() => vaults.filter(({ folder_id }) => !folder_id), [vaults]);
 };
+
+export const useFolderVaults = (folderId: string) => {
+  const vaults = useVaults();
+
+  return useMemo(
+    () => vaults.filter(({ folder_id }) => folder_id === folderId),
+    [vaults, folderId]
+  );
+};
