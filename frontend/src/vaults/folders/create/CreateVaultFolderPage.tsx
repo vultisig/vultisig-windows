@@ -19,6 +19,8 @@ export const CreateVaultFolderPage = () => {
 
   const [name, setName] = useState('');
 
+  const [vaultIds] = useState<string[]>([]);
+
   const folders = useVaultFolders();
   const names = useMemo(() => folders.map(({ name }) => name), [folders]);
 
@@ -47,6 +49,7 @@ export const CreateVaultFolderPage = () => {
               {
                 name,
                 order: getLastItemOrder(folders.map(({ order }) => order)),
+                vaultIds,
               },
               {
                 onSuccess: () => {
