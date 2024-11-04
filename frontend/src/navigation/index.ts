@@ -49,6 +49,8 @@ export const appPaths = {
   registerForAirdrop: '/register-for-airdrop',
   onboarding: '/onboarding',
   createVaultFolder: '/vault/create-folder',
+  vaultFolder: '/vault/folder',
+  manageVaultFolder: '/vault/folder/manage',
 } as const;
 
 type AppPaths = typeof appPaths;
@@ -67,6 +69,8 @@ export type AppPathParams = {
   send: { coin: string };
   setupVault: { type?: SetupVaultType };
   vaultItemSwap: Record<string, string>;
+  vaultFolder: { id: string };
+  manageVaultFolder: { id: string };
 };
 
 export type AppPathsWithParams = keyof AppPathParams;

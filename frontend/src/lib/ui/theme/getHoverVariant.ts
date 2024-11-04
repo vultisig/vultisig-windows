@@ -7,7 +7,7 @@ interface ThemeGetterParams {
   theme: DefaultTheme;
 }
 
-type ColorName = keyof Pick<ThemeColors, 'foreground' | 'primary'>;
+type ColorName = keyof Pick<ThemeColors, 'foreground' | 'primary' | 'idle'>;
 
 export const getHoverVariant =
   (color: ColorName) =>
@@ -15,4 +15,5 @@ export const getHoverVariant =
     match(color, {
       foreground: () => theme.colors.foreground.getVariant({ l: l => l + 4 }),
       primary: () => theme.colors.primary.getVariant({ l: l => l * 0.92 }),
+      idle: () => theme.colors.idle.getVariant({ l: l => l + 4 }),
     }).toCssValue();
