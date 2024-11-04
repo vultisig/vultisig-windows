@@ -25,7 +25,7 @@ const VaultCheckUpdatePage = () => {
     updateAvailable,
     localError,
     remoteError,
-    isRemoteFetching,
+    isLoading,
   } = useVersionCheck();
 
   let content: ReactNode;
@@ -42,7 +42,7 @@ const VaultCheckUpdatePage = () => {
     });
   }
 
-  if (isRemoteFetching) {
+  if (isLoading) {
     content = t('vaultCheckUpdatePage.fetchingLatestVersion');
   }
 
