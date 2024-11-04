@@ -15,5 +15,5 @@ export const getHoverVariant =
     match(color, {
       foreground: () => theme.colors.foreground.getVariant({ l: l => l + 4 }),
       primary: () => theme.colors.primary.getVariant({ l: l => l * 0.92 }),
-      idle: () => theme.colors.foreground.getVariant({ l: l => l + 4 }),
+      idle: () => theme.colors.idle.getVariant({ l: l => l + 4 }),
     }).toCssValue();
