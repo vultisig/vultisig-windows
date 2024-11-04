@@ -132,6 +132,16 @@ func (s *Store) UpdateVaultOrder(publicKeyECDSA string, order float64) error {
 	return nil
 }
 
+// UpdateVaultFolderID updates the folder ID of a vault
+func (s *Store) UpdateVaultFolderID(publicKeyECDSA string, folderID *string) error {
+	query := `UPDATE vaults SET folder_id = ? WHERE public_key_ecdsa = ?`
+	_, err := s.db.Exec(query, folderID, publicKeyECDSA)
+	if err != nil {
+		return fmt.Errorf("could not update vault folder ID, err: %w", err)
+	}
+	return nil
+}
+
 // UpdateVaultIsBackedUp updates the IsBackedUp status of a vault
 func (s *Store) UpdateVaultIsBackedUp(publicKeyECDSA string, isBackedUp bool) error {
 	query := `UPDATE vaults SET is_backedup = ? WHERE public_key_ecdsa = ?`
