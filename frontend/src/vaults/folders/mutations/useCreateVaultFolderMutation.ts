@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { v4 as uuidv4 } from 'uuid';
 
 import { storage } from '../../../../wailsjs/go/models';
 import {
@@ -19,9 +20,11 @@ export const useCreateVaultFolderMutation = () => {
 
   return useMutation({
     mutationFn: async ({ name, order, vaultIds }: CreateVaultFolderInput) => {
-      const folder = new storage.VaultFolder();
-      folder.name = name;
-      folder.order = order;
+      const folder = storage.VaultFolder.createFrom({
+        name,
+        order,
+        id: uuidv4(),
+      });
 
       await SaveVaultFolder(folder);
 

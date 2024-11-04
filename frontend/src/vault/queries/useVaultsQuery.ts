@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
 import { GetVaults } from '../../../wailsjs/go/storage/Store';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
@@ -29,4 +30,10 @@ export const useVaults = () => {
     return [];
   }
   return shouldBePresent(data);
+};
+
+export const useFolderlessVaults = () => {
+  const vaults = useVaults();
+
+  return useMemo(() => vaults.filter(({ folder_id }) => !folder_id), [vaults]);
 };

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { NonEmptyOnly } from '../../../lib/ui/base/NonEmptyOnly';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
@@ -9,6 +10,8 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { getLastItemOrder } from '../../../lib/utils/order/getLastItemOrder';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
 import { PageContent } from '../../../ui/page/PageContent';
+import { useFolderlessVaults } from '../../../vault/queries/useVaultsQuery';
+import { FolderVaultsInput } from '../components/FolderVaultsInput';
 import { useCreateVaultFolderMutation } from '../mutations/useCreateVaultFolderMutation';
 import { useVaultFolders } from '../queries/useVaultFoldersQuery';
 
@@ -19,10 +22,12 @@ export const CreateVaultFolderPage = () => {
 
   const [name, setName] = useState('');
 
-  const [vaultIds] = useState<string[]>([]);
+  const [vaultIds, setVaultIds] = useState<string[]>([]);
 
   const folders = useVaultFolders();
   const names = useMemo(() => folders.map(({ name }) => name), [folders]);
+
+  const vaults = useFolderlessVaults();
 
   const isDisabled = useMemo(() => {
     if (!name) {
@@ -60,12 +65,22 @@ export const CreateVaultFolderPage = () => {
           },
         })}
       >
-        <VStack flexGrow>
+        <VStack flexGrow gap={20}>
           <TextInput
             placeholder={t('enter_folder_name')}
             label={t('folder_name')}
             value={name}
             onValueChange={setName}
+          />
+          <NonEmptyOnly
+            value={vaults}
+            render={options => (
+              <FolderVaultsInput
+                options={options}
+                value={vaultIds}
+                onChange={setVaultIds}
+              />
+            )}
           />
         </VStack>
         <Button isLoading={isPending} type="submit" isDisabled={isDisabled}>

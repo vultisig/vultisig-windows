@@ -74,3 +74,7 @@ export type ComponentWithDisabledState = {
 export type ComponentWithStatusProps<T> = {
   status: T;
 };
+
+export type ComponentWithOptionsProps<T> = {
+  options: readonly T[];
+};

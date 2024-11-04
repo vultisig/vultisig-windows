@@ -9,13 +9,13 @@ import {
 import { sortEntitiesWithOrder } from '../../lib/utils/entities/EntityWithOrder';
 import { getNewOrder } from '../../lib/utils/order/getNewOrder';
 import { useUpdateVaultOrderMutation } from '../../vault/mutations/useUpdateVaultOrderMutation';
-import { useVaults } from '../../vault/queries/useVaultsQuery';
+import { useFolderlessVaults } from '../../vault/queries/useVaultsQuery';
 import { getStorageVaultId } from '../../vault/utils/storageVault';
 import { VaultListItem } from '../components/VaultListItem';
 import { VaultsContainer } from '../components/VaultsContainer';
 
 export const ManageVaults = () => {
-  const vaults = useVaults();
+  const vaults = useFolderlessVaults();
 
   const [items, setItems] = useState(() => sortEntitiesWithOrder(vaults));
 
