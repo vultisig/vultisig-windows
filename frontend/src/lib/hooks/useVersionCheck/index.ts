@@ -9,7 +9,11 @@ import {
 import { isVersionNewer } from './utils';
 
 const useVersionCheck = () => {
-  const { data: localVersionData, error: localError } = useQuery({
+  const {
+    data: localVersionData,
+    error: localError,
+    isFetching: isLocalFetching,
+  } = useQuery({
     queryKey: [LOCAL_VERSION_QUERY_KEY],
     queryFn: async () => {
       const response = await fetch(VULTISIG_LOCAL_BUILD_API);
@@ -43,13 +47,15 @@ const useVersionCheck = () => {
     localVersion,
   });
 
+  const isLoading = isLocalFetching || isRemoteFetching;
+
   return {
     localVersion,
     latestVersion,
     updateAvailable,
     localError,
     remoteError,
-    isRemoteFetching,
+    isLoading,
   };
 };
 
