@@ -48,10 +48,6 @@ export const useIsSendFormDisabled = () => {
       return t('send_invalid_receiver_address');
     }
 
-    // if (receiver === sender) {
-    //   return t('same_sender_receiver_error');
-    // }
-
     if (!amount) {
       return t('amount_required');
     }

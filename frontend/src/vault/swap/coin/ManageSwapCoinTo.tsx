@@ -60,6 +60,7 @@ export const ManageSwapCoinTo = () => {
     if (pairs?.length) {
       setCoinTo(pairs[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairs]);
 
   return (

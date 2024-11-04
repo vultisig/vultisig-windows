@@ -67,7 +67,7 @@ export const SetServerPasswordStep = ({
           />
         </VStack>
         <VStack gap={20}>
-          <InfoBlock>{t('password_reason')}</InfoBlock>
+          <InfoBlock>{t('server_password_reason')}</InfoBlock>
           <Button type="submit" isDisabled={isDisabled}>
             {t('continue')}
           </Button>

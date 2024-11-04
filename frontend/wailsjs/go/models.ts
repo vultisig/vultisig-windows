@@ -93,6 +93,7 @@ export namespace storage {
     order: number;
     is_backed_up: boolean;
     coins: Coin[];
+    folder_id?: string;
 
     static createFrom(source: any = {}) {
       return new Vault(source);
@@ -112,6 +113,7 @@ export namespace storage {
       this.order = source['order'];
       this.is_backed_up = source['is_backed_up'];
       this.coins = this.convertValues(source['coins'], Coin);
+      this.folder_id = source['folder_id'];
     }
 
     convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -130,6 +132,22 @@ export namespace storage {
         return new classs(a);
       }
       return a;
+    }
+  }
+  export class VaultFolder {
+    id: string;
+    name: string;
+    order: number;
+
+    static createFrom(source: any = {}) {
+      return new VaultFolder(source);
+    }
+
+    constructor(source: any = {}) {
+      if ('string' === typeof source) source = JSON.parse(source);
+      this.id = source['id'];
+      this.name = source['name'];
+      this.order = source['order'];
     }
   }
 }

@@ -49,6 +49,8 @@ export class PriceServiceFactory {
         return new PriceService(chain);
       case Chain.Cosmos:
         return new PriceService(chain);
+      case Chain.Osmosis:
+        return new PriceService(chain);
       case Chain.Kujira:
         return new PriceService(chain);
       case Chain.Dydx:

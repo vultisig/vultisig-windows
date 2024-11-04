@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Post } from '../../../../wailsjs/go/utils/GoHttp';
+import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { SpecificCosmos } from '../../../model/specific-transaction-info';
@@ -47,6 +47,8 @@ export class RpcServiceCosmos implements IRpcService {
       if (account) {
         result.accountNumber = Number(account.account_number);
         result.sequence = Number(account.sequence);
+      } else {
+        console.error('getSpecificTransactionInfo::No account data  found');
       }
     } catch (error) {
       console.error('getSpecificTransactionInfo::', error);
@@ -61,13 +63,8 @@ export class RpcServiceCosmos implements IRpcService {
       return [];
     }
 
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new HelperError(`HTTP error! status: ${response.status}`);
-    }
-    const data: CosmosBalanceResponse = await response.json();
-
-    return data.balances;
+    const response: CosmosBalanceResponse = await Fetch(url);
+    return response.balances;
   }
 
   async fetchAccountNumber(
@@ -78,18 +75,27 @@ export class RpcServiceCosmos implements IRpcService {
       return null;
     }
 
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new HelperError(`HTTP error! status: ${response.status}`);
+    const response = await Fetch(url);
+
+    if (!response.account) {
+      console.error('fetchAccountNumber:: No account data found');
+      return null;
     }
-    const data: CosmosAccountsResponse = await response.json();
-    return data.account;
+
+    if (!response.account as unknown as CosmosAccountValue) {
+      console.error('fetchAccountNumber:: No account data found');
+      return null;
+    }
+
+    return response.account as CosmosAccountValue;
   }
 
   async broadcastTransaction(jsonString: string): Promise<string> {
     const url = this.transactionURL();
     if (!url) {
-      throw new HelperError('Failed to get transaction URL');
+      throw new HelperError(
+        'broadcastTransaction: Failed to get transaction URL'
+      );
     }
 
     try {

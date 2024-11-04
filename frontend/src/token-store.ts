@@ -262,6 +262,16 @@ class Token {
     isNativeToken: true,
   };
 
+  static osmosisOsmo: CoinMeta = {
+    chain: Chain.Osmosis,
+    ticker: 'OSMO',
+    logo: 'osmo',
+    decimals: 6,
+    priceProviderId: 'osmosis',
+    contractAddress: '',
+    isNativeToken: true,
+  };
+
   static kujira: CoinMeta = {
     chain: Chain.Kujira,
     ticker: 'KUJI',
@@ -498,6 +508,7 @@ export const TokenSelectionAssets: CoinMeta[] = [
   Token.bscChainUsdt,
   Token.bscChainUsdc,
   Token.gaiaChainAtom,
+  Token.osmosisOsmo,
   Token.kujira,
   Token.dydx,
   Token.baseEth,

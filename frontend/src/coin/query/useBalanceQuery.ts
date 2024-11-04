@@ -7,15 +7,13 @@ import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { BalanceServiceFactory } from '../../services/Balance/BalanceServiceFactory';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 import { useCurrentVault } from '../../vault/state/useCurrentVault';
+import { AccountCoinKey } from '../AccountCoin';
 import { CoinAmount, CoinKey } from '../Coin';
 import { getCoinMetaKey } from '../utils/coinMeta';
 
 export type BalanceQueryResult = CoinKey & CoinAmount & ChainAccount;
 
-export const getBalanceQueryKey = ({
-  address,
-  ...key
-}: CoinKey & ChainAccount) => ['coinBalance', key, address];
+export const getBalanceQueryKey = (key: AccountCoinKey) => ['coinBalance', key];
 
 export const useBalanceQuery = (coin: Coin) => {
   const chain = coin.chain as Chain;

@@ -1,4 +1,4 @@
-const ShareIcon = () => (
+const ShareIcon = ({ strokeColor = '#fff' }: { strokeColor: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={24}
@@ -7,14 +7,14 @@ const ShareIcon = () => (
     viewBox="0 0 20 20"
   >
     <path
-      stroke="#fff"
+      stroke={strokeColor}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}
       d="m13.75 11.875 3.75-3.75-3.75-3.75M15 16.875H3.125a.625.625 0 0 1-.625-.625V6.875"
     />
     <path
-      stroke="#fff"
+      stroke={strokeColor}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}

@@ -58,6 +58,8 @@ export class BlockchainServiceFactory {
         return new BlockchainServiceSui(chain, walletCore);
       case Chain.Cosmos:
         return new BlockchainServiceCosmos(chain, walletCore);
+      case Chain.Osmosis:
+        return new BlockchainServiceCosmos(chain, walletCore);
       case Chain.Kujira:
         return new BlockchainServiceCosmos(chain, walletCore);
       case Chain.Dydx:

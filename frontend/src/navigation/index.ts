@@ -22,7 +22,9 @@ export const appPaths = {
   vaultSettings: '/vault/settings',
   uploadQr: '/vault/qr/upload',
   joinKeygen: '/join-keygen',
-  vaultList: '/vault/list',
+  vaults: '/vaults',
+  manageVaults: '/vaults/manage',
+  vault: '/vault',
   manageVaultChains: '/vault/chains',
   manageVaultChainCoins: '/vault/chains/coins',
   vaultChainDetail: '/vault/item/detail',
@@ -35,6 +37,7 @@ export const appPaths = {
   vaultDelete: '/vault/settings/vault-settings/delete-vault',
   languageSettings: '/vault/settings/language-settings',
   currencySettings: '/vault/settings/currency-settings',
+  checkUpdate: '/vault/settings/check-update',
   addressBook: '/vault/settings/address-book',
   defaultChains: '/vault/settings/default-chains',
   faq: '/vault/settings/faq',
@@ -43,6 +46,11 @@ export const appPaths = {
   termsOfService: '/vault/settings/terms-of-service',
   vaultFAQ: '/vault/settings/faq',
   vaultItemSwap: '/vault/item/swap',
+  registerForAirdrop: '/register-for-airdrop',
+  onboarding: '/onboarding',
+  createVaultFolder: '/vault/create-folder',
+  vaultFolder: '/vault/folder',
+  manageVaultFolder: '/vault/folder/manage',
 } as const;
 
 type AppPaths = typeof appPaths;
@@ -61,6 +69,8 @@ export type AppPathParams = {
   send: { coin: string };
   setupVault: { type?: SetupVaultType };
   vaultItemSwap: Record<string, string>;
+  vaultFolder: { id: string };
+  manageVaultFolder: { id: string };
 };
 
 export type AppPathsWithParams = keyof AppPathParams;

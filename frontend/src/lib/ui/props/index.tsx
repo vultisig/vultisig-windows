@@ -11,6 +11,7 @@ export type UIComponentProps = {
 
 export type ClickableComponentProps = {
   onClick: () => void;
+  className?: string;
 };
 
 export type ComponentWithValueProps<T> = {
@@ -68,4 +69,12 @@ export type ComponentWithMessageProps = {
 
 export type ComponentWithDisabledState = {
   isDisabled?: boolean | string;
+};
+
+export type ComponentWithStatusProps<T> = {
+  status: T;
+};
+
+export type ComponentWithOptionsProps<T> = {
+  options: readonly T[];
 };

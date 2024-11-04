@@ -20,7 +20,8 @@ type Vault struct {
 	KeyShares      []KeyShare `json:"keyshares"`
 	LocalPartyID   string     `json:"local_party_id"`
 	ResharePrefix  string     `json:"reshare_prefix"`
-	Order          int        `json:"order"`
+	Order          float64    `json:"order"`
 	IsBackedUp     bool       `json:"is_backed_up"`
 	Coins          []Coin     `json:"coins"`
+	FolderID			 *string `json:"folder_id,omitempty"`
 }

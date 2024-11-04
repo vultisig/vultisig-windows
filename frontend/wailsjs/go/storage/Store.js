@@ -18,6 +18,10 @@ export function DeleteVault(arg1) {
   return window['go']['storage']['Store']['DeleteVault'](arg1);
 }
 
+export function DeleteVaultFolder(arg1) {
+  return window['go']['storage']['Store']['DeleteVaultFolder'](arg1);
+}
+
 export function GetAddressBookItems(arg1) {
   return window['go']['storage']['Store']['GetAddressBookItems'](arg1);
 }
@@ -36,6 +40,14 @@ export function GetSettings() {
 
 export function GetVault(arg1) {
   return window['go']['storage']['Store']['GetVault'](arg1);
+}
+
+export function GetVaultFolder(arg1) {
+  return window['go']['storage']['Store']['GetVaultFolder'](arg1);
+}
+
+export function GetVaultFolders() {
+  return window['go']['storage']['Store']['GetVaultFolders']();
 }
 
 export function GetVaults() {
@@ -62,10 +74,34 @@ export function SaveVault(arg1) {
   return window['go']['storage']['Store']['SaveVault'](arg1);
 }
 
+export function SaveVaultFolder(arg1) {
+  return window['go']['storage']['Store']['SaveVaultFolder'](arg1);
+}
+
 export function UpdateAddressBookItem(arg1) {
   return window['go']['storage']['Store']['UpdateAddressBookItem'](arg1);
 }
 
+export function UpdateVaultFolder(arg1) {
+  return window['go']['storage']['Store']['UpdateVaultFolder'](arg1);
+}
+
+export function UpdateVaultFolderID(arg1, arg2) {
+  return window['go']['storage']['Store']['UpdateVaultFolderID'](arg1, arg2);
+}
+
+export function UpdateVaultFolderOrder(arg1, arg2) {
+  return window['go']['storage']['Store']['UpdateVaultFolderOrder'](arg1, arg2);
+}
+
+export function UpdateVaultIsBackedUp(arg1, arg2) {
+  return window['go']['storage']['Store']['UpdateVaultIsBackedUp'](arg1, arg2);
+}
+
 export function UpdateVaultName(arg1, arg2) {
   return window['go']['storage']['Store']['UpdateVaultName'](arg1, arg2);
+}
+
+export function UpdateVaultOrder(arg1, arg2) {
+  return window['go']['storage']['Store']['UpdateVaultOrder'](arg1, arg2);
 }

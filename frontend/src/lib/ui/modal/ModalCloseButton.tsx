@@ -20,9 +20,12 @@ const Container = styled(Hoverable)`
   }
 `;
 
-export const ModalCloseButton = ({ onClick }: ClickableComponentProps) => {
+export const ModalCloseButton = ({
+  onClick,
+  className,
+}: ClickableComponentProps) => {
   return (
-    <Container onClick={onClick}>
+    <Container className={className} onClick={onClick}>
       <IconWrapper>
         <CloseIcon />
       </IconWrapper>

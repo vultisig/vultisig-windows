@@ -47,6 +47,7 @@ export const ManageReceiver = () => {
         convertChainSymbolToChain(coinTo?.chain || '') as keyof typeof addresses
       ] || ''
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addresses, coinTo]);
 
   return (

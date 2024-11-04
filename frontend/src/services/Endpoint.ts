@@ -220,6 +220,17 @@ export class Endpoint {
   static broadcastCosmosTransaction: string =
     'https://cosmos-rest.publicnode.com/cosmos/tx/v1beta1/txs';
 
+  static fetchOsmosisAccountBalance(address: string): string {
+    return `https://osmosis-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
+  }
+
+  static fetchOsmosisAccountNumber(address: string): string {
+    return `https://osmosis-rest.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`;
+  }
+
+  static broadcastOsmosisTransaction: string =
+    'https://osmosis-rest.publicnode.com/cosmos/tx/v1beta1/txs';
+
   static fetchDydxAccountBalance(address: string): string {
     return `https://dydx-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
   }

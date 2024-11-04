@@ -57,6 +57,7 @@ export const useIsSendFormDisabled = () => {
     if (amount > maxAmount) {
       return t('send_amount_exceeds_balance');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     addressValidationQuery.data,
     addressValidationQuery.isPending,
