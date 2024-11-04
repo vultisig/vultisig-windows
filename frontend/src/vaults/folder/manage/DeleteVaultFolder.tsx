@@ -12,7 +12,7 @@ export const DeleteVaultFolder = () => {
   const { t } = useTranslation();
 
   return (
-    <Button isLoading={isPending} onClick={() => mutate(id)}>
+    <Button kind="idle" isLoading={isPending} onClick={() => mutate(id)}>
       {t('delete_folder')}
     </Button>
   );
