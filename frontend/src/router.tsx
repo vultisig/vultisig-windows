@@ -42,6 +42,8 @@ import { ShareVaultPage } from './vault/share/ShareVaultPage';
 import { SwapPage } from './vault/swap/SwapPage';
 import { NoVaultsHomePage } from './vaults/components/NoVaultsHomePage';
 import { VaultsPage } from './vaults/components/VaultsPage';
+import { ManageVaultFolderPage } from './vaults/folder/manage/ManageVaultFolderPage';
+import { VaultFolderPage } from './vaults/folder/VaultFolderPage';
 import { CreateVaultFolderPage } from './vaults/folders/create/CreateVaultFolderPage';
 import { ManageVaultsPage } from './vaults/manage/ManageVaultsPage';
 
@@ -219,5 +221,13 @@ export const router = createBrowserRouter([
   {
     path: appPaths.createVaultFolder,
     element: <CreateVaultFolderPage />,
+  },
+  {
+    path: appPaths.vaultFolder,
+    element: <VaultFolderPage />,
+  },
+  {
+    path: appPaths.manageVaultFolder,
+    element: <ManageVaultFolderPage />,
   },
 ]);
