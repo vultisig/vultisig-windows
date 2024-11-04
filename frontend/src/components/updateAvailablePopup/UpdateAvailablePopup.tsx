@@ -15,14 +15,22 @@ import {
 const UpdateAvailablePopup = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { localVersion, latestVersion, updateAvailable } = useVersionCheck();
-  const [isOpen, setIsOpen] = useState(updateAvailable);
+  const {
+    localVersion,
+    latestVersion,
+    updateAvailable,
+    localError,
+    remoteError,
+    isLoading,
+  } = useVersionCheck();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (updateAvailable) {
+    const isError = localError || remoteError;
+    if (!isLoading && !isError && updateAvailable) {
       setIsOpen(true);
     }
-  }, [updateAvailable]);
+  }, [isLoading, localError, remoteError, updateAvailable]);
 
   if (!isOpen) {
     return null;
