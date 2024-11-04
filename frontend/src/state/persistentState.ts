@@ -11,6 +11,7 @@ export enum PersistentStateKey {
   Language = 'language',
   Currency = 'currency',
   AddressBook = 'addressBook',
+  FavouriteTokens = 'favouriteTokens',
 }
 
 const persistentStorage =

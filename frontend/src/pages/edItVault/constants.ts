@@ -40,7 +40,7 @@ export const editVaultSettingsItems: SettingItem[] = [
     path: makeAppPath('reshareVault'),
   },
   {
-    titleKey: 'vault_setting_edit_vault_delete_title',
+    titleKey: 'delete',
     subtitleKey: 'vault_setting_edit_vault_delete_subtitle',
     icon: TrashRedIcon,
     path: makeAppPath('vaultDelete'),

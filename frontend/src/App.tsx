@@ -11,7 +11,7 @@ import { ToastProvider } from './lib/ui/toast/ToastProvider';
 import { WalletCoreProvider } from './providers/WalletCoreProvider';
 import { getQueryClient } from './query/queryClient';
 import { router } from './router';
-import { VaultsDependant } from './vault/components/VaultsDependant';
+import { RemoteStateDependant } from './state/RemoteStateDependant';
 
 const queryClient = getQueryClient();
 
@@ -22,13 +22,13 @@ const App = () => {
         <ThemeProvider theme={darkTheme}>
           <GlobalStyle />
           <div className="w-full min-h-screen bg-primary h-full flex flex-col">
-            <VaultsDependant>
+            <RemoteStateDependant>
               <InitializedWalletOnly>
                 <ToastProvider>
                   <RouterProvider router={router} />
                 </ToastProvider>
               </InitializedWalletOnly>
-            </VaultsDependant>
+            </RemoteStateDependant>
           </div>
         </ThemeProvider>
       </QueryClientProvider>

@@ -5,6 +5,7 @@ import { AddressPageShyPrompt } from '../../chain/components/address/AddressPage
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { isNativeCoin } from '../../chain/utils/isNativeCoin';
 import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
 import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
@@ -21,6 +22,7 @@ import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQuer
 import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { Text } from '../../lib/ui/text';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
+import { splitBy } from '../../lib/utils/array/splitBy';
 import { sum } from '../../lib/utils/array/sum';
 import { formatAmount } from '../../lib/utils/formatAmount';
 import { makeAppPath } from '../../navigation';
@@ -37,28 +39,18 @@ import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { useAssertCurrentVaultNativeCoin } from '../state/useCurrentVault';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
-import { useCurrentVaultChainId } from './useCurrentVaultChainId';
+import { useCurrentVaultChain } from './useCurrentVaultChain';
 import { VaultAddressLink } from './VaultAddressLink';
 import { VaultChainCoinItem } from './VaultChainCoinItem';
 
 export const VaultChainPage = () => {
   const invalidateQueries = useInvalidateQueries();
   const { globalCurrency } = useGlobalCurrency();
-  const chainId = useCurrentVaultChainId();
-
-  const vaultAddressQuery = useVaultAddressQuery(chainId);
-
-  const vaultCoinsQuery = useVaultChainCoinsQuery(chainId);
-
-  const hasMultipleCoinsSupport = !isEmpty(
-    TokensStore.TokenSelectionAssets.filter(
-      token => token.chain === chainId && !token.isNativeToken
-    )
-  );
-
+  const chain = useCurrentVaultChain();
+  const vaultAddressQuery = useVaultAddressQuery(chain);
+  const vaultCoinsQuery = useVaultChainCoinsQuery(chain);
+  const nativeCoin = useAssertCurrentVaultNativeCoin(chain);
   const copyAddress = useCopyAddress();
-
-  const nativeCoin = useAssertCurrentVaultNativeCoin(chainId);
 
   const { mutate: refresh, isPending } = useMutation({
     mutationFn: () => {
@@ -67,6 +59,12 @@ export const VaultChainPage = () => {
       );
     },
   });
+
+  const hasMultipleCoinsSupport = !isEmpty(
+    TokensStore.TokenSelectionAssets.filter(
+      token => token.chain === chain && !token.isNativeToken
+    )
+  );
 
   return (
     <VStack flexGrow>
@@ -80,7 +78,7 @@ export const VaultChainPage = () => {
             />
           </PageHeaderIconButtons>
         }
-        title={<PageHeaderTitle>{chainId}</PageHeaderTitle>}
+        title={<PageHeaderTitle>{chain}</PageHeaderTitle>}
       />
       <PageContent gap={16} data-testid="VaultChainPage-Content">
         <VaultPrimaryActions value={getStorageCoinKey(nativeCoin)} />
@@ -93,11 +91,11 @@ export const VaultChainPage = () => {
             >
               <HStack alignItems="center" gap={12}>
                 <ChainEntityIcon
-                  value={getChainEntityIconSrc(chainId)}
+                  value={getChainEntityIconSrc(chain)}
                   style={{ fontSize: 32 }}
                 />
                 <Text weight="700" color="contrast">
-                  {chainId}
+                  {chain}
                 </Text>
               </HStack>
               <QueryDependant
@@ -161,13 +159,19 @@ export const VaultChainPage = () => {
             query={vaultCoinsQuery}
             {...getQueryDependantDefaultProps('vault address')}
             success={coins => {
+              const orderedCoins = splitBy(coins, coin =>
+                isNativeCoin(coin) ? 0 : 1
+              )
+                .map(sortCoinsByBalance)
+                .flat();
+
               return (
                 <>
-                  {sortCoinsByBalance(coins).map(coin => (
+                  {orderedCoins.map(coin => (
                     <Link
                       key={coin.id}
                       to={makeAppPath('vaultChainCoinDetail', {
-                        chain: chainId,
+                        chain: chain,
                         coin: coin.id,
                       })}
                     >
@@ -180,7 +184,7 @@ export const VaultChainPage = () => {
           />
         </Panel>
         {hasMultipleCoinsSupport && (
-          <ManageVaultChainCoinsPrompt value={chainId} />
+          <ManageVaultChainCoinsPrompt value={chain} />
         )}
       </PageContent>
     </VStack>

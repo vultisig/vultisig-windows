@@ -24,22 +24,27 @@ export const theme = {
       neutral: {
         0: '#FFFFFF',
         100: '#F3F4F5',
-        200: '#EBECED',
-        300: '#BDBDBD',
+        200: '#ABBFC7',
+        300: '#7E9EA8',
         400: '#A7A7A7',
-        500: '#9F9F9F',
-        700: '#737373',
+        500: '#25364A',
+        600: '#233C59',
+        700: '#1C2938',
         900: '#000000',
       },
       blue: {
         200: '#1B3F73',
+        300: '#1C3046',
         400: '#11284A',
+        500: '#18293D',
         600: '#061B3A',
-        800: '#02122B',
+        800: '#19222E',
       },
       persianBlue: {
         200: '#4879FD',
-        400: '#2155DF',
+        300: '#57A4FF',
+        500: '#2A7AF7',
+        600: '#2155DF',
       },
       turquoise: {
         600: '#33E6BF',
@@ -60,6 +65,7 @@ export const theme = {
       },
       background: {
         blue: '#02122B',
+        skeleton: '#2A3C47',
       },
     },
     fontSize: {
@@ -93,6 +99,20 @@ export const theme = {
       menlo: ['Menlo', 'monospace'],
       montserrat: ['Montserrat', 'sans-serif'],
       american: ['AmericanTypewriter', 'serif'],
+    },
+    animation: {
+      wave: 'wave 1.5s linear 0.5s infinite',
+      rotate: 'rotate 1.5s linear 0.5s infinite',
+    },
+    keyframes: {
+      wave: {
+        '0%': { transform: 'translateX(-100%)' },
+        '50%, 100%': { transform: 'translateX(100%)' },
+      },
+      rotate: {
+        '0%': { transform: 'rotate(0)' },
+        '100%': { transform: 'rotate(360deg)' },
+      },
     },
   },
 };

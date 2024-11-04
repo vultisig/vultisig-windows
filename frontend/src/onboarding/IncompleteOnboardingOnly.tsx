@@ -14,7 +14,7 @@ export const IncompleteOnboardingOnly = ({
 
   useEffect(() => {
     if (hasCompletedOnboarding) {
-      navigate(makeAppPath('setupVault', {}));
+      navigate(makeAppPath('root'));
     }
   }, [hasCompletedOnboarding, navigate]);
 

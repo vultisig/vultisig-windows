@@ -57,7 +57,7 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
   );
 
   return (
-    <Panel {...pressHandlers}>
+    <Panel data-testid="VaultChainItem-Panel" {...pressHandlers}>
       <HStack fullWidth alignItems="center" gap={16}>
         <ChainEntityIcon
           value={getChainEntityIconSrc(chainId)}

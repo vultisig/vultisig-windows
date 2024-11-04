@@ -18,6 +18,7 @@ export const darkTheme: DefaultTheme = {
     primaryAlt: new HSLA(224, 98, 64),
 
     idle: new HSLA(34, 93, 54),
+    success: new HSLA(135, 59, 49),
 
     background: new HSLA(backgroundHue, backgroundSaturation, 9),
     foreground: new HSLA(216, 81, 13),

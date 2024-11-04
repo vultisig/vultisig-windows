@@ -46,13 +46,6 @@ export class Endpoint {
     return `https://midgard.ninerealms.com/v2/thorname/lookup/${name}`;
   }
 
-  // static fetchSwapQuoteThorchain(chain: SwapChain, address: string, fromAsset: string, toAsset: string, amount: string, interval: string, isAffiliate: boolean): URL {
-  //     const isAffiliateParams = isAffiliate
-  //         ? `&affiliate=${THORChainSwaps.affiliateFeeAddress}&affiliate_bps=${THORChainSwaps.affiliateFeeRateBp}`
-  //         : "";
-  //     return new URL(`${chain.baseUrl}/quote/swap?from_asset=${fromAsset}&to_asset=${toAsset}&amount=${amount}&destination=${address}&streaming_interval=${interval}${isAffiliateParams}`);
-  // }
-
   static fetch1InchSwapQuote(
     chain: string,
     source: string,
@@ -226,6 +219,17 @@ export class Endpoint {
 
   static broadcastCosmosTransaction: string =
     'https://cosmos-rest.publicnode.com/cosmos/tx/v1beta1/txs';
+
+  static fetchOsmosisAccountBalance(address: string): string {
+    return `https://osmosis-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
+  }
+
+  static fetchOsmosisAccountNumber(address: string): string {
+    return `https://osmosis-rest.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`;
+  }
+
+  static broadcastOsmosisTransaction: string =
+    'https://osmosis-rest.publicnode.com/cosmos/tx/v1beta1/txs';
 
   static fetchDydxAccountBalance(address: string): string {
     return `https://dydx-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;

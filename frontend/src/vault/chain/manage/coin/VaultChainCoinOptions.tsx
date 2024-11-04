@@ -15,11 +15,11 @@ import { withoutDuplicates } from '../../../../lib/utils/array/withoutDuplicates
 import { CoinMeta } from '../../../../model/coin-meta';
 import { TokensStore } from '../../../../services/Coin/CoinList';
 import { useAssertCurrentVaultChainCoins } from '../../../state/useCurrentVault';
-import { useCurrentVaultChainId } from '../../useCurrentVaultChainId';
+import { useCurrentVaultChain } from '../../useCurrentVaultChain';
 import { ManageVaultChainCoin } from './ManageVaultChainCoin';
 
 export const VaultChainCoinOptions = () => {
-  const chainId = useCurrentVaultChainId();
+  const chainId = useCurrentVaultChain();
   const vaultCoins = useAssertCurrentVaultChainCoins(chainId);
   const query = useWhitelistedCoinsQuery(chainId);
 

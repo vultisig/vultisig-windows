@@ -3,24 +3,6 @@ import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { AddressBookItem } from '../../lib/types/address-book';
 
 export interface IVaultService {
-  reshare(
-    vault: any,
-    sessionID: any,
-    hexEncryptionKey: any,
-    serverURL: any
-  ): Promise<storage.Vault>;
-
-  startKeygen(
-    vault: any,
-    sessionID: any,
-    hexEncryptionKey: any,
-    serverURL: any
-  ): Promise<storage.Vault>;
-
-  importVault(buffer: Buffer): Promise<void>;
-
-  saveVault(vault: storage.Vault): Promise<void>;
-
   encryptVault(passwd: string, vault: Buffer): Buffer;
 
   decryptVault(passwd: string, vault: Buffer): Buffer;

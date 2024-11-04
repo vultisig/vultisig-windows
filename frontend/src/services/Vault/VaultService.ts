@@ -10,15 +10,12 @@ import {
   GetSettings,
   SaveAddressBookItem,
   SaveSettings,
-  SaveVault,
   UpdateAddressBookItem,
   UpdateVaultName,
 } from '../../../wailsjs/go/storage/Store';
-import { Reshare, StartKeygen } from '../../../wailsjs/go/tss/TssService';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { Vault, Vault_KeyShare } from '../../gen/vultisig/vault/v1/vault_pb';
 import { AddressBookItem } from '../../lib/types/address-book';
-import { DefaultCoinsService } from '../Coin/DefaultCoinsService';
 import { IVaultService } from './IVaultService';
 
 export class VaultService implements IVaultService {
@@ -30,10 +27,6 @@ export class VaultService implements IVaultService {
   private async getDefaultChains(): Promise<string[]> {
     const settings = await GetSettings();
     return settings[0]?.default_chains || {};
-  }
-
-  async saveVault(vault: storage.Vault): Promise<void> {
-    return await SaveVault(vault);
   }
 
   async getVaultSettings(): Promise<storage.Settings[]> {
@@ -77,82 +70,6 @@ export class VaultService implements IVaultService {
     }
 
     await UpdateVaultName(vaultId, newName);
-  }
-
-  async startKeygen(
-    vault: any,
-    sessionID: any,
-    hexEncryptionKey: any,
-    serverURL: any
-  ): Promise<storage.Vault> {
-    const newVault = await StartKeygen(
-      vault.name,
-      vault.local_party_id,
-      sessionID,
-      vault.hex_chain_code,
-      hexEncryptionKey,
-      serverURL
-    );
-
-    await SaveVault(newVault);
-    const defaultChains = await this.getDefaultChains();
-    new DefaultCoinsService(this.walletCore).applyDefaultCoins(
-      newVault,
-      defaultChains
-    );
-
-    return newVault;
-  }
-
-  async reshare(
-    vault: any,
-    sessionID: any,
-    hexEncryptionKey: any,
-    serverURL: any
-  ): Promise<storage.Vault> {
-    const newVault = await Reshare(
-      vault,
-      sessionID,
-      hexEncryptionKey,
-      serverURL
-    );
-
-    await SaveVault(newVault);
-    const defaultChains = await this.getDefaultChains();
-    new DefaultCoinsService(this.walletCore).applyDefaultCoins(
-      newVault,
-      defaultChains
-    );
-
-    return newVault;
-  }
-
-  async importVault(buffer: Buffer) {
-    const vault = Vault.fromBinary(buffer);
-    const storageVault = {
-      name: vault.name,
-      public_key_ecdsa: vault.publicKeyEcdsa,
-      public_key_eddsa: vault.publicKeyEddsa,
-      signers: vault.signers,
-      created_at: vault.createdAt,
-      hex_chain_code: vault.hexChainCode,
-      keyshares: vault.keyShares.map(share => ({
-        public_key: share.publicKey,
-        keyshare: share.keyshare,
-      })),
-      local_party_id: vault.localPartyId,
-      reshare_prefix: vault.resharePrefix,
-      order: 0,
-      is_backed_up: true,
-      coins: [],
-      convertValues: () => {},
-    };
-    await SaveVault(storageVault);
-    const defaultChains = await this.getDefaultChains();
-    new DefaultCoinsService(this.walletCore).applyDefaultCoins(
-      storageVault,
-      defaultChains
-    );
   }
 
   encryptVault(passwd: string, vault: Buffer): Buffer {
