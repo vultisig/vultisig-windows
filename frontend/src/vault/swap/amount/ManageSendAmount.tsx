@@ -14,6 +14,11 @@ export const ManageAmount = () => {
       placeholder={t('enter_amount')}
       value={value}
       onValueChange={setValue}
+      onKeyDown={e => {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+          e.preventDefault();
+        }
+      }}
     />
   );
 };

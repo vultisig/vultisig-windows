@@ -1,4 +1,4 @@
-import { forwardRef, ReactNode, Ref, useState } from 'react';
+import { forwardRef, ReactNode, Ref, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { borderRadius } from '../css/borderRadius';
@@ -47,8 +47,28 @@ export const AmountTextInput = forwardRef(function AmountInputInner(
   }: AmountTextInputProps,
   ref: Ref<HTMLInputElement> | null
 ) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const valueAsString = value?.toString() ?? '';
   const [inputValue, setInputValue] = useState<string>(valueAsString);
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (document.activeElement === inputRef.current) {
+        e.preventDefault();
+      }
+    };
+
+    const input = inputRef.current;
+    if (input) {
+      input.addEventListener('wheel', handleWheel);
+    }
+
+    return () => {
+      if (input) {
+        input.removeEventListener('wheel', handleWheel);
+      }
+    };
+  }, []);
 
   return (
     <Input
@@ -72,7 +92,7 @@ export const AmountTextInput = forwardRef(function AmountInputInner(
           ? inputValue
           : valueAsString
       }
-      ref={ref}
+      ref={ref || inputRef}
       inputOverlay={unit ? <UnitContainer>{unit}</UnitContainer> : undefined}
       onValueChange={(value: string) => {
         if (shouldBePositive) {
