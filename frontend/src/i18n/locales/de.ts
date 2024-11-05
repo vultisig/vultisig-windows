@@ -497,4 +497,6 @@ export const de = {
   vault_settings_check_for_update: 'Nach Updates suchen',
   delete_folder: 'Ordner löschen',
   deposit: 'Einzahlung',
+  add_vaults_to_folder:
+    'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
 };

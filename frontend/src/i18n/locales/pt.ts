@@ -490,4 +490,5 @@ export const pt = {
   vault_settings_check_for_update: 'Verificar atualizações',
   delete_folder: 'Excluir pasta',
   deposit: 'Depositar',
+  add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
 };

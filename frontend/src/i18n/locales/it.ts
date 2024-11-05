@@ -492,4 +492,5 @@ export const it = {
   vault_settings_check_for_update: 'Controlla gli aggiornamenti',
   delete_folder: 'Elimina cartella',
   deposit: 'Deposito',
+  add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
 };

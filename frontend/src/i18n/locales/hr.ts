@@ -480,4 +480,5 @@ export const hr = {
   vault_settings_check_for_update: 'Provjerite ažuriranje',
   delete_folder: 'Izbriši mapu',
   deposit: 'Depozit',
+  add_vaults_to_folder: 'Odaberite trezore za dodavanje u mapu.',
 };
