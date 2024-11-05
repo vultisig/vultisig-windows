@@ -32,7 +32,7 @@ export const VaultFolderPage = () => {
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
-      <PageContent>
+      <PageContent scrollable>
         <VStack gap={8}>
           {vaults.map((vault, index) => (
             <VaultListItem

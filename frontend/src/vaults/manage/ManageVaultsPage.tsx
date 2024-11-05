@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../../lib/ui/buttons/Button';
 import { makeAppPath } from '../../navigation';
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt';
+import { PageContent } from '../../ui/page/PageContent';
 import { PageFooter } from '../../ui/page/PageFooter';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { FinishEditing } from '../components/FinishEditing';
-import { VaultGroupsContainer } from '../components/VaultGroupsContainer';
 import { VaultsPageHeaderTitle } from '../components/VaultsPageHeaderTitle';
 import { ManageVaultFolders } from '../folders/manage/ManageVaultFolders';
 import { ManageVaults } from './ManageVaults';
@@ -26,10 +26,10 @@ export const ManageVaultsPage = () => {
         }
         title={<VaultsPageHeaderTitle />}
       />
-      <VaultGroupsContainer>
+      <PageContent scrollable gap={20}>
         <ManageVaultFolders />
         <ManageVaults />
-      </VaultGroupsContainer>
+      </PageContent>
       <PageFooter>
         <Button
           kind="outlined"
