@@ -491,4 +491,5 @@ export const pt = {
   delete_folder: 'Excluir pasta',
   deposit: 'Depositar',
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
+  thorchain_message_deposit: 'Depósito de mensagem THORChain',
 };
