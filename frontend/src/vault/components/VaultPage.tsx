@@ -62,7 +62,7 @@ export const VaultPage = () => {
         </PositionQrPrompt>
         <VaultOverview />
       </VStack>
-      <UpdateAvailablePopup />;
+      <UpdateAvailablePopup />
     </>
   );
 };
