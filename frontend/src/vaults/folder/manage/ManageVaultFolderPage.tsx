@@ -10,6 +10,7 @@ import { useFolderVaults } from '../../../vault/queries/useVaultsQuery';
 import { getStorageVaultId } from '../../../vault/utils/storageVault';
 import { FinishEditing } from '../../components/FinishEditing';
 import { VaultListItem } from '../../components/VaultListItem';
+import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder';
 import { useCurrentVaultFolder } from '../state/currentVaultFolder';
 import { DeleteVaultFolder } from './DeleteVaultFolder';
 
@@ -32,14 +33,17 @@ export const ManageVaultFolderPage = () => {
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
       <PageContent>
-        <VStack flexGrow gap={8}>
-          {vaults.map((vault, index) => (
-            <VaultListItem
-              key={index}
-              id={getStorageVaultId(vault)}
-              name={vault.name}
-            />
-          ))}
+        <VStack flexGrow gap={20}>
+          <VStack gap={8}>
+            {vaults.map((vault, index) => (
+              <VaultListItem
+                key={index}
+                id={getStorageVaultId(vault)}
+                name={vault.name}
+              />
+            ))}
+          </VStack>
+          <AddVaultsToFolder />
         </VStack>
         <DeleteVaultFolder />
       </PageContent>

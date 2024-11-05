@@ -1,11 +1,22 @@
 export namespace storage {
   export class AddressBookItem {
+    ID: number[];
+    Title: string;
+    Address: string;
+    Chain: string;
+    Order: number;
+
     static createFrom(source: any = {}) {
       return new AddressBookItem(source);
     }
 
     constructor(source: any = {}) {
       if ('string' === typeof source) source = JSON.parse(source);
+      this.ID = source['ID'];
+      this.Title = source['Title'];
+      this.Address = source['Address'];
+      this.Chain = source['Chain'];
+      this.Order = source['Order'];
     }
   }
   export class Coin {
