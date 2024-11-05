@@ -51,6 +51,7 @@ export const appPaths = {
   createVaultFolder: '/vault/create-folder',
   vaultFolder: '/vault/folder',
   manageVaultFolder: '/vault/folder/manage',
+  vaultItemDeposit: '/vault/item/deposit',
 } as const;
 
 type AppPaths = typeof appPaths;
@@ -69,6 +70,7 @@ export type AppPathParams = {
   send: { coin: string };
   setupVault: { type?: SetupVaultType };
   vaultItemSwap: Record<string, string>;
+  vaultItemDeposit: Record<string, string>;
   vaultFolder: { id: string };
   manageVaultFolder: { id: string };
 };

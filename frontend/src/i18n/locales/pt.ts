@@ -489,4 +489,5 @@ export const pt = {
   folders: 'Pastas',
   vault_settings_check_for_update: 'Verificar atualizações',
   delete_folder: 'Excluir pasta',
+  deposit: 'Depositar',
 };

@@ -66,6 +66,7 @@ export default function SwapQuotes() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const loadSwapQuotes = useCallback(
     debounce(async function (params: SwapQuoteParams) {
       const data = await getSwapQuotes(params);
@@ -165,7 +166,7 @@ export default function SwapQuotes() {
   );
 
   useEffect(() => {
-    if (amount && !isDisabled) {
+    if (amount) {
       setSwapQuotesLoading(true);
       setSwapProtocol(null);
       setMayaQuote(null);

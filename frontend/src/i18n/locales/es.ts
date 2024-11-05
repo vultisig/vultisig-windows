@@ -497,4 +497,5 @@ export const es = {
   folders: 'Carpetas',
   vault_settings_check_for_update: 'Buscar actualizaciones',
   delete_folder: 'Eliminar carpeta',
+  deposit: 'Depositar',
 };
