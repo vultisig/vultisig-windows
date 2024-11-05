@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
+import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { Coin } from '../../../lib/types/coin';
 import { Button } from '../../../lib/ui/buttons/Button';
@@ -30,6 +32,7 @@ export const SwapConfirm = () => {
   const addresses = useAssertCurrentVaultAddreses();
   const [coinKey] = useCurrentSwapCoin();
   const coin = useAssertCurrentVaultCoin(coinKey);
+  const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
   const [fromAmount] = useSwapAmount();
   const [swapProtocol] = useSwapProtocol();
@@ -55,6 +58,11 @@ export const SwapConfirm = () => {
       nativeTokenForChain[asset.chain] !== asset.ticker
     );
   };
+
+  const balance = shouldBePresent(balanceQuery.data);
+
+  const isMaxAmount =
+    fromAmount === fromChainAmount(balance.amount, coin.decimals);
 
   const isAssetToSend = () => {
     const isThorAsset = coin.chain === Chain.THORChain;
@@ -87,7 +95,7 @@ export const SwapConfirm = () => {
         memo: selectedSwapQuote?.memo || '',
         coin: storageCoinToCoin(coin),
         transactionType: TransactionType.SEND,
-        sendMaxAmount: false,
+        sendMaxAmount: isMaxAmount,
         specificTransactionInfo: shouldBePresent(specificTxInfoQuery.data),
       };
       const payload = BlockchainServiceFactory.createService(
