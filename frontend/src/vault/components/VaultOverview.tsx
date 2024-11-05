@@ -20,8 +20,6 @@ export const VaultOverview = () => {
   const { data: vaults = [] } = useVaultChainsBalancesQuery();
   const vault = useCurrentVault();
 
-  console.log('## vaults', vaults);
-
   return (
     <ScrollableFlexboxFiller>
       {!vault?.is_backed_up && (
