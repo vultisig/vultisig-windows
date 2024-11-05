@@ -499,4 +499,5 @@ export const es = {
   delete_folder: 'Eliminar carpeta',
   deposit: 'Depositar',
   add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
+  thorchain_message_deposit: 'Depósito de mensajes de THORChain',
 };
