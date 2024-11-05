@@ -498,4 +498,5 @@ export const es = {
   vault_settings_check_for_update: 'Buscar actualizaciones',
   delete_folder: 'Eliminar carpeta',
   deposit: 'Depositar',
+  add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
 };

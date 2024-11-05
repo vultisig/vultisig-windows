@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { makeAppPath } from '../../../navigation';
 import { PageContent } from '../../../ui/page/PageContent';
+import { PageFooter } from '../../../ui/page/PageFooter';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -10,6 +11,7 @@ import { useFolderVaults } from '../../../vault/queries/useVaultsQuery';
 import { getStorageVaultId } from '../../../vault/utils/storageVault';
 import { FinishEditing } from '../../components/FinishEditing';
 import { VaultListItem } from '../../components/VaultListItem';
+import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder';
 import { useCurrentVaultFolder } from '../state/currentVaultFolder';
 import { DeleteVaultFolder } from './DeleteVaultFolder';
 
@@ -31,8 +33,8 @@ export const ManageVaultFolderPage = () => {
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
-      <PageContent>
-        <VStack flexGrow gap={8}>
+      <PageContent scrollable gap={20}>
+        <VStack gap={8}>
           {vaults.map((vault, index) => (
             <VaultListItem
               key={index}
@@ -41,8 +43,11 @@ export const ManageVaultFolderPage = () => {
             />
           ))}
         </VStack>
-        <DeleteVaultFolder />
+        <AddVaultsToFolder />
       </PageContent>
+      <PageFooter>
+        <DeleteVaultFolder />
+      </PageFooter>
     </>
   );
 };

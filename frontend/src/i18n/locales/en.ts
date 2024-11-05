@@ -474,5 +474,6 @@ export const en = {
   create: 'Create',
   delete_folder: 'Delete Folder',
   folders: 'Folders',
+  add_vaults_to_folder: 'Select Vaults to add to the folder.',
   deposit: 'Deposit',
 };
