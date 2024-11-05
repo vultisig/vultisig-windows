@@ -1,3 +1,5 @@
+import './swap.css';
+
 import { Match } from '../../lib/ui/base/Match';
 import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation';
 import { SwapForm } from './form/SwapForm';

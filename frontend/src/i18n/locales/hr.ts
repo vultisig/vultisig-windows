@@ -477,4 +477,6 @@ export const hr = {
   folder_name_already_exists: 'Naziv mape mora biti jedinstven',
   create: 'Stvoriti',
   folders: 'mape',
+  vault_settings_check_for_update: 'Provjerite ažuriranje',
+  delete_folder: 'Izbriši mapu',
 };

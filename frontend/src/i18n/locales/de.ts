@@ -494,4 +494,6 @@ export const de = {
   folder_name_already_exists: 'Der Ordnername muss eindeutig sein',
   create: 'Erstellen',
   folders: 'Ordner',
+  vault_settings_check_for_update: 'Nach Updates suchen',
+  delete_folder: 'Ordner löschen',
 };

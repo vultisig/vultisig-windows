@@ -495,4 +495,6 @@ export const es = {
   folder_name_already_exists: 'El nombre de la carpeta debe ser único',
   create: 'Crear',
   folders: 'Carpetas',
+  vault_settings_check_for_update: 'Buscar actualizaciones',
+  delete_folder: 'Eliminar carpeta',
 };

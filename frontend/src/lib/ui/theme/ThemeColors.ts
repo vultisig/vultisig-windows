@@ -9,6 +9,7 @@ export type ThemeColors = {
   primaryAlt: HSLA;
 
   idle: HSLA;
+  success: HSLA;
 
   background: HSLA;
   foreground: HSLA;

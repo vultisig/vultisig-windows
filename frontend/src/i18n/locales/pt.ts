@@ -487,4 +487,6 @@ export const pt = {
   folder_name_already_exists: 'O nome da pasta deve ser único',
   create: 'Criar',
   folders: 'Pastas',
+  vault_settings_check_for_update: 'Verificar atualizações',
+  delete_folder: 'Excluir pasta',
 };

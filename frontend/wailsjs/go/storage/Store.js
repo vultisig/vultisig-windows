@@ -86,6 +86,10 @@ export function UpdateVaultFolder(arg1) {
   return window['go']['storage']['Store']['UpdateVaultFolder'](arg1);
 }
 
+export function UpdateVaultFolderID(arg1, arg2) {
+  return window['go']['storage']['Store']['UpdateVaultFolderID'](arg1, arg2);
+}
+
 export function UpdateVaultFolderOrder(arg1, arg2) {
   return window['go']['storage']['Store']['UpdateVaultFolderOrder'](arg1, arg2);
 }

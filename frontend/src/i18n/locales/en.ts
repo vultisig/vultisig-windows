@@ -472,5 +472,6 @@ export const en = {
   folder_name_required: 'Folder name is required',
   folder_name_already_exists: 'Folder name must be unique',
   create: 'Create',
+  delete_folder: 'Delete Folder',
   folders: 'Folders',
 };

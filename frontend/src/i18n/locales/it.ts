@@ -489,4 +489,6 @@ export const it = {
   folder_name_already_exists: 'Il nome della cartella deve essere univoco',
   create: 'Creare',
   folders: 'Cartelle',
+  vault_settings_check_for_update: 'Controlla gli aggiornamenti',
+  delete_folder: 'Elimina cartella',
 };
