@@ -496,4 +496,5 @@ export const de = {
   folders: 'Ordner',
   vault_settings_check_for_update: 'Nach Updates suchen',
   delete_folder: 'Ordner löschen',
+  deposit: 'Einzahlung',
 };

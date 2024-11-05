@@ -491,4 +491,5 @@ export const it = {
   folders: 'Cartelle',
   vault_settings_check_for_update: 'Controlla gli aggiornamenti',
   delete_folder: 'Elimina cartella',
+  deposit: 'Deposito',
 };

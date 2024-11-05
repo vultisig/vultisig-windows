@@ -5,7 +5,10 @@ import { ComponentWithValueProps } from '../../lib/ui/props';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { SendPrompt } from '../send/SendPrompt';
 import { useAssertCurrentVaultNativeCoins } from '../state/useCurrentVault';
+import { DepositPrompt } from './DepositPrompts';
 import { SwapPrompt } from './SwapPrompt';
+
+const depositFeatureEnabledChains = new Set(['THORChain']);
 
 export const VaultPrimaryActions = ({
   value,
@@ -18,10 +21,15 @@ export const VaultPrimaryActions = ({
 
   const sendInitialCoin = value ?? getStorageCoinKey(nativeCoins[0]);
 
+  const isDepositFeatureEnabled = value
+    ? depositFeatureEnabledChains.has(value.chainId)
+    : false;
+
   return (
     <UniformColumnGrid fullWidth gap={12}>
       <SendPrompt value={sendInitialCoin} />
       <SwapPrompt value={sendInitialCoin} />
+      {isDepositFeatureEnabled && <DepositPrompt value={sendInitialCoin} />}
     </UniformColumnGrid>
   );
 };

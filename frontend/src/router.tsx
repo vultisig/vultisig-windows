@@ -25,6 +25,7 @@ import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPag
 import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { VaultPage } from './vault/components/VaultPage';
+import { DepositPage } from './vault/deposit/DepositPage';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
 import { StartFastKeysignPage } from './vault/keysign/start/fast/StartFastKeysignPage';
@@ -238,5 +239,9 @@ export const router = createBrowserRouter([
         <ManageVaultFolderPage />
       </CurrentVaultFolderPageProvider>
     ),
+  },
+  {
+    path: appPaths.vaultItemDeposit,
+    element: <DepositPage />,
   },
 ]);
