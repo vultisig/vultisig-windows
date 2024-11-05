@@ -1,20 +1,7 @@
 import styled from 'styled-components';
 
-import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller';
-import { vStack } from '../../lib/ui/layout/Stack';
-import { ComponentWithChildrenProps } from '../../lib/ui/props';
+import { PageContent } from '../../ui/page/PageContent';
 
-const Content = styled.div`
-  ${vStack({
-    flexGrow: true,
-    gap: 20,
-  })}
+export const VaultGroupsContainer = styled(PageContent)`
+  gap: 20px;
 `;
-
-export const VaultGroupsContainer = ({
-  children,
-}: ComponentWithChildrenProps) => (
-  <ScrollableFlexboxFiller>
-    <Content>{children}</Content>
-  </ScrollableFlexboxFiller>
-);

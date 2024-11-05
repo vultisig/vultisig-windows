@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../../lib/ui/buttons/Button';
 import { makeAppPath } from '../../navigation';
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt';
-import { PageContent } from '../../ui/page/PageContent';
+import { PageFooter } from '../../ui/page/PageFooter';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { FinishEditing } from '../components/FinishEditing';
 import { VaultGroupsContainer } from '../components/VaultGroupsContainer';
@@ -26,18 +26,18 @@ export const ManageVaultsPage = () => {
         }
         title={<VaultsPageHeaderTitle />}
       />
-      <PageContent>
-        <VaultGroupsContainer>
-          <ManageVaultFolders />
-          <ManageVaults />
-        </VaultGroupsContainer>
+      <VaultGroupsContainer>
+        <ManageVaultFolders />
+        <ManageVaults />
+      </VaultGroupsContainer>
+      <PageFooter>
         <Button
           kind="outlined"
           onClick={() => navigate(makeAppPath('createVaultFolder'))}
         >
           {t('create_folder')}
         </Button>
-      </PageContent>
+      </PageFooter>
     </>
   );
 };

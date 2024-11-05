@@ -9,4 +9,9 @@ export const PageContent = styled(VStack)`
   ${horizontalPadding(pageConfig.horizontalPadding)};
   ${verticalPadding(pageConfig.verticalPadding)};
   flex: 1;
+
+  overflow-y: auto;
+  > * {
+    flex-shrink: 0;
+  }
 `;
