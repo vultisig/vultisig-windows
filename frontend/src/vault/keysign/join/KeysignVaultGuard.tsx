@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
 import { makeAppPath } from '../../../navigation';
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
+import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { useVaults } from '../../queries/useVaultsQuery';
@@ -13,7 +13,7 @@ import { getStorageVaultId } from '../../utils/storageVault';
 import { CurrentKeysignVaultProvider } from './state/currentKeysignVault';
 
 export const KeysignVaultGuard = ({ children }: ComponentWithChildrenProps) => {
-  const [{ vaultId }] = useAppPathParams<'joinKeysign'>();
+  const { vaultId } = useAppPathState<'joinKeysign'>();
   const vaults = useVaults();
 
   const { t } = useTranslation();

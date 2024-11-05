@@ -1,3 +1,9 @@
+import { KeygenMessage } from '../gen/vultisig/keygen/v1/keygen_message_pb';
+import { ReshareMessage } from '../gen/vultisig/keygen/v1/reshare_message_pb';
+import {
+  KeysignMessage,
+  KeysignPayload,
+} from '../gen/vultisig/keysign/v1/keysign_message_pb';
 import { addQueryParams } from '../lib/utils/query/addQueryParams';
 import { withoutUndefinedFields } from '../lib/utils/record/withoutUndefinedFields';
 import { Chain } from '../model/chain';
@@ -59,10 +65,6 @@ export type AppPath = keyof AppPaths;
 
 export type AppPathParams = {
   address: { address: string };
-  joinKeysign: { vaultId: string; keysignMsg: string };
-  keysign: { keysignPayload: string };
-  fastKeysign: { keysignPayload: string };
-  joinKeygen: { keygenType: KeygenType; keygenMsg: string };
   uploadQr: { title?: string };
   manageVaultChainCoins: { chain: Chain };
   vaultChainDetail: { chain: Chain };
@@ -75,7 +77,19 @@ export type AppPathParams = {
   manageVaultFolder: { id: string };
 };
 
+export type AppPathState = {
+  keysign: { keysignPayload: KeysignPayload };
+  fastKeysign: { keysignPayload: KeysignPayload };
+  joinKeysign: { vaultId: string; keysignMsg: KeysignMessage };
+  joinKeygen: {
+    keygenType: KeygenType;
+    keygenMsg: KeygenMessage | ReshareMessage;
+  };
+};
+
 export type AppPathsWithParams = keyof AppPathParams;
+
+export type AppPathsWithState = keyof AppPathState;
 
 export function makeAppPath<P extends keyof AppPathParams>(
   path: P,
