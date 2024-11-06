@@ -1,25 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 
-import { VStack } from '../../../lib/ui/layout/Stack';
 import { makeAppPath } from '../../../navigation';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageFooter } from '../../../ui/page/PageFooter';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { useFolderVaults } from '../../../vault/queries/useVaultsQuery';
-import { getStorageVaultId } from '../../../vault/utils/storageVault';
 import { FinishEditing } from '../../components/FinishEditing';
-import { VaultListItem } from '../../components/VaultListItem';
 import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder';
 import { useCurrentVaultFolder } from '../state/currentVaultFolder';
 import { DeleteVaultFolder } from './DeleteVaultFolder';
+import { ManageFolderVaults } from './ManageFolderVaults';
 
 export const ManageVaultFolderPage = () => {
   const navigate = useNavigate();
   const { id, name } = useCurrentVaultFolder();
-
-  const vaults = useFolderVaults(id);
 
   return (
     <>
@@ -34,15 +29,7 @@ export const ManageVaultFolderPage = () => {
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
       <PageContent scrollable gap={20}>
-        <VStack gap={8}>
-          {vaults.map((vault, index) => (
-            <VaultListItem
-              key={index}
-              id={getStorageVaultId(vault)}
-              name={vault.name}
-            />
-          ))}
-        </VStack>
+        <ManageFolderVaults />
         <AddVaultsToFolder />
       </PageContent>
       <PageFooter>

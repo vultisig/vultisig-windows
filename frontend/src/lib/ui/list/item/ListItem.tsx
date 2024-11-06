@@ -4,12 +4,12 @@ import { borderRadius } from '../../css/borderRadius';
 import { horizontalPadding } from '../../css/horizontalPadding';
 import { interactive } from '../../css/interactive';
 import { ChevronRightIcon } from '../../icons/ChevronRightIcon';
-import { MenuIcon } from '../../icons/MenuIcon';
 import { HStack, hStack } from '../../layout/Stack';
 import { ClickableComponentProps, TitledComponentProps } from '../../props';
 import { text } from '../../text';
 import { getHoverVariant } from '../../theme/getHoverVariant';
 import { getColor } from '../../theme/getters';
+import { DnDItemContentPrefix } from './DnDItemContentPrefix';
 
 const Container = styled.div<{ isInteractive: boolean }>`
   font-weight: 400;
@@ -50,7 +50,7 @@ export const ListItem = ({ title, onClick, isDraggable }: ListItemProps) => {
     <Container isInteractive={!!onClick} onClick={onClick}>
       <HStack fullWidth alignItems="center" justifyContent="space-between">
         <HStack alignItems="center" gap={12}>
-          {isDraggable && <MenuIcon size={24} />}
+          {isDraggable && <DnDItemContentPrefix />}
           {title}
         </HStack>
         {onClick && <ChevronRightIcon />}
