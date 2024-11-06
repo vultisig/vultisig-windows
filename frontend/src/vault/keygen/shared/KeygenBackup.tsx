@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import KeygenVaultBackupBanner from '../../../components/vaultBackupBanner/KeygenVaultBackupBanner/KeygenVaultBackupBanner';
+import { Opener } from '../../../lib/ui/base/Opener';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { ContainImage } from '../../../lib/ui/images/ContainImage';
 import { SafeImage } from '../../../lib/ui/images/SafeImage';
@@ -16,7 +16,7 @@ import KeygenSkipVaultBackupAttentionModal from './KeygenSkipVaultBackupAttentio
 
 export const KeygenBackup = () => {
   const { t } = useTranslation();
-  const [isSaveBackupModalOpen, setIsSaveBackupModalOpen] = useState(true);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -52,20 +52,21 @@ export const KeygenBackup = () => {
               {t('backup')}
             </Button>
           </Link>
-          <Button
-            as="div"
-            kind="outlined"
-            onClick={() => setIsSaveBackupModalOpen(true)}
-          >
-            {t('skip')}
-          </Button>
+          <Opener
+            renderOpener={({ onOpen }) => (
+              <Button as="div" kind="outlined" onClick={onOpen}>
+                {t('skip')}
+              </Button>
+            )}
+            renderContent={({ onClose }) => (
+              <KeygenSkipVaultBackupAttentionModal
+                onSkip={() => navigate(makeAppPath('vault'))}
+                onClose={onClose}
+              />
+            )}
+          />
         </VStack>
       </PageContent>
-      <KeygenSkipVaultBackupAttentionModal
-        onSkip={() => makeAppPath('vault')}
-        isOpen={isSaveBackupModalOpen}
-        onClose={() => setIsSaveBackupModalOpen(false)}
-      />
     </>
   );
 };

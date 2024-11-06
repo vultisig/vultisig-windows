@@ -153,13 +153,9 @@ const VaultBackupPage = () => {
             <Button
               kind="outlined"
               type="button"
-              onClick={() =>
-                vault &&
-                backupVault({
-                  vault,
-                  password: '',
-                })
-              }
+              onClick={() => {
+                navigate(makeAppPath('vault'));
+              }}
             >
               <GradientText>
                 {t('vault_backup_page_skip_button_text')}
