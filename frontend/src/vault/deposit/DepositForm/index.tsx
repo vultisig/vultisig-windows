@@ -25,7 +25,7 @@ import { DepositActionItemExplorer } from './DepositActionItemExplorer';
 import { Container, ErrorText, InputFieldWrapper } from './DepositForm.styled';
 
 type DepositFormProps = {
-  onSubmit: (data: FieldValues) => void;
+  onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void;
   coinWithActions: CoinKey;
 };
 
@@ -68,8 +68,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   });
 
   const onFormSubmit = (data: FieldValues) => {
-    console.log('Form submitted with data:', data);
-    onSubmit(data);
+    onSubmit(data, selectedChainAction as ChainAction);
   };
 
   return (
@@ -77,7 +76,7 @@ export const DepositForm: FC<DepositFormProps> = ({
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={<RefreshSend />}
-        title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
+        title={<PageHeaderTitle>{t('deposit')}</PageHeaderTitle>}
       />
       <PageContent as="form" gap={40} onSubmit={handleSubmit(onFormSubmit)}>
         <WithProgressIndicator value={0.2}>
