@@ -5,7 +5,7 @@ import { takeWholeSpace } from '../../../../lib/ui/css/takeWholeSpace';
 import { FramedQrCode } from '../../../../lib/ui/qr/FramedQrCode';
 import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
 import { getQueryDependantDefaultProps } from '../../../../lib/ui/query/utils/getQueryDependantDefaultProps';
-import { useKeysignMsgQuery } from '../../shared/queries/useKeysignMsgQuery';
+import { useJoinKeysignUrlQuery } from '../../shared/queries/useJoinKeysignUrlQuery';
 
 const Container = styled.div`
   ${takeWholeSpace};
@@ -13,7 +13,7 @@ const Container = styled.div`
 `;
 
 export const KeysignPeerDiscoveryQrCode = () => {
-  const keygenMsgQuery = useKeysignMsgQuery();
+  const keygenMsgQuery = useJoinKeysignUrlQuery();
 
   return (
     <QueryDependant

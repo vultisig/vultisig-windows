@@ -6,10 +6,10 @@ import { SaveAsImage } from '../../../../ui/file/SaveAsImage';
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode';
 import { useCurrentLocalPartyId } from '../../../keygen/state/currentLocalPartyId';
-import { useKeysignMsgQuery } from '../../shared/queries/useKeysignMsgQuery';
+import { useJoinKeysignUrlQuery } from '../../shared/queries/useJoinKeysignUrlQuery';
 
 export const DownloadKeysignQrCode = () => {
-  const msgQuery = useKeysignMsgQuery();
+  const joinUrlQuery = useJoinKeysignUrlQuery();
 
   const localPartyId = useCurrentLocalPartyId();
 
@@ -17,7 +17,7 @@ export const DownloadKeysignQrCode = () => {
 
   return (
     <QueryDependant
-      query={msgQuery}
+      query={joinUrlQuery}
       success={data => (
         <SaveAsImage
           fileName={localPartyId}
