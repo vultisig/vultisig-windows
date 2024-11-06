@@ -493,4 +493,5 @@ export const it = {
   delete_folder: 'Elimina cartella',
   deposit: 'Deposito',
   add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
+  thorchain_message_deposit: 'Deposito messaggio THORChain',
 };

@@ -481,4 +481,5 @@ export const hr = {
   delete_folder: 'Izbriši mapu',
   deposit: 'Depozit',
   add_vaults_to_folder: 'Odaberite trezore za dodavanje u mapu.',
+  thorchain_message_deposit: 'THORChain polog poruke',
 };
