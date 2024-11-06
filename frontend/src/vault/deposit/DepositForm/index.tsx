@@ -22,7 +22,7 @@ import {
   requiredFieldsPerChainAction,
 } from './chainOptionsConfig';
 import { DepositActionItemExplorer } from './DepositActionItemExplorer';
-import { Container, InputFieldWrapper } from './DepositForm.styled';
+import { Container, ErrorText, InputFieldWrapper } from './DepositForm.styled';
 
 type DepositFormProps = {
   onSubmit: (data: FieldValues) => void;
@@ -109,11 +109,13 @@ export const DepositForm: FC<DepositFormProps> = ({
             <VStack gap={12}>
               {requiredFieldsForChainAction.map(field => (
                 <InputContainer key={field.name}>
-                  <label>
+                  <Text size={15} weight="400">
                     {t(
                       `chainFunctions.${selectedChainAction}.labels.${field.name}`
-                    )}
-                  </label>
+                    ) +
+                      ' ' +
+                      `${field.required ? `(${t('chainFunctions.required_validation')})` : ''}`}
+                  </Text>
                   <InputFieldWrapper
                     as="input"
                     type={field.type}
@@ -121,14 +123,14 @@ export const DepositForm: FC<DepositFormProps> = ({
                     required={field.required}
                   />
                   {errors[field.name] && (
-                    <Text color="danger" size={13} className="error">
+                    <ErrorText color="danger" size={13} className="error">
                       {t(
                         `chainFunctions.${selectedChainAction}.validations.${field.name}`,
                         {
                           defaultValue: t('chainFunctions.default_validation'),
                         }
                       )}
-                    </Text>
+                    </ErrorText>
                   )}
                 </InputContainer>
               ))}

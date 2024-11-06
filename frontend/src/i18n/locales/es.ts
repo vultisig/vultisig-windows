@@ -501,6 +501,7 @@ export const es = {
   add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
   thorchain_message_deposit: 'Depósito de mensajes de THORChain',
   chainFunctions: {
+    required_validation: 'Obligatorio',
     default_validation: 'Entrada inválida',
     bond: {
       labels: {

@@ -483,6 +483,7 @@ export const hr = {
   add_vaults_to_folder: 'Odaberite trezore za dodavanje u mapu.',
   thorchain_message_deposit: 'THORChain polog poruke',
   chainFunctions: {
+    required_validation: 'Potrebno',
     default_validation: 'Nevažeći unos',
     bond: {
       labels: {

@@ -6,7 +6,7 @@ import {
   textInputFrame,
 } from '../../../lib/ui/css/textInput';
 import { hStack, vStack } from '../../../lib/ui/layout/Stack';
-import { text } from '../../../lib/ui/text';
+import { Text, text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 
 export const Container = styled(UnstyledButton)`
@@ -28,7 +28,7 @@ export const Container = styled(UnstyledButton)`
 export const InputFieldWrapper = styled.div`
   ${textInputFrame};
   ${textInputBackground};
-
+  font-family: monospace;
   color: ${getColor('contrast')};
 
   ${vStack({
@@ -40,4 +40,9 @@ export const InputFieldWrapper = styled.div`
     color: 'contrast',
     family: 'mono',
   })}
+`;
+
+export const ErrorText = styled(Text)`
+  display: inline-block;
+  margin-top: -5px;
 `;

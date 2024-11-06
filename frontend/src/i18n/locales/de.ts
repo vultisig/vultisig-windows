@@ -501,6 +501,7 @@ export const de = {
     'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
   thorchain_message_deposit: 'THORChain-Nachrichteneinzahlung',
   chainFunctions: {
+    required_validation: 'Erforderlich',
     default_validation: 'Ungültige Eingabe',
     bond: {
       labels: {
