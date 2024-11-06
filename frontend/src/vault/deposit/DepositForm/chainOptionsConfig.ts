@@ -44,8 +44,22 @@ export const requiredFieldsPerChainAction = {
         .string()
         .min(1, 'chainFunctions.bond.validations.nodeAddress'),
       provider: z.string().optional(),
-      operatorFee: z.number().optional(),
-      amount: z.number().positive('chainFunctions.bond.validations.amount'),
+      operatorFee: z
+        .string()
+        .transform(val => (val ? Number(val) : undefined))
+        .pipe(z.number().optional()),
+      amount: z
+        .string()
+        .transform(val => Number(val))
+        .pipe(
+          z
+            .number()
+            .positive()
+            .min(1, 'chainFunctions.bond.validations.amount')
+            .refine(val => val > 0, {
+              message: 'Amount must be greater than zero',
+            })
+        ),
     }),
   },
   unbond: {
@@ -73,7 +87,18 @@ export const requiredFieldsPerChainAction = {
       nodeAddress: z
         .string()
         .min(1, 'chainFunctions.unbond.validations.nodeAddress'),
-      amount: z.number().positive('chainFunctions.unbond.validations.amount'),
+      amount: z
+        .string()
+        .transform(val => Number(val))
+        .pipe(
+          z
+            .number()
+            .positive()
+            .min(1, 'chainFunctions.unbond.validations.amount')
+            .refine(val => val > 0, {
+              message: 'Amount must be greater than zero',
+            })
+        ),
       provider: z.string().optional(),
     }),
   },
@@ -89,7 +114,7 @@ export const requiredFieldsPerChainAction = {
     schema: z.object({
       nodeAddress: z
         .string()
-        .nonempty('chainFunctions.leave.validations.nodeAddress'),
+        .min(1, 'chainFunctions.leave.validations.nodeAddress'),
     }),
   },
   custom: {
@@ -108,7 +133,18 @@ export const requiredFieldsPerChainAction = {
       },
     ],
     schema: z.object({
-      amount: z.number().positive('chainFunctions.custom.validations.amount'),
+      amount: z
+        .string()
+        .transform(val => Number(val))
+        .pipe(
+          z
+            .number()
+            .positive()
+            .min(1, 'chainFunctions.custom.validations.amount')
+            .refine(val => val > 0, {
+              message: 'Amount must be greater than zero',
+            })
+        ),
       customMemo: z
         .string()
         .min(1, 'chainFunctions.custom.validations.customMemo'),
@@ -124,7 +160,18 @@ export const requiredFieldsPerChainAction = {
       },
     ],
     schema: z.object({
-      amount: z.number().positive('chainFunctions.addPool.validations.amount'),
+      amount: z
+        .string()
+        .transform(val => Number(val))
+        .pipe(
+          z
+            .number()
+            .positive()
+            .min(1, 'chainFunctions.addPool.validations.amount')
+            .refine(val => val > 0, {
+              message: 'Amount must be greater than zero',
+            })
+        ),
     }),
   },
   withdrawPool: {
@@ -143,12 +190,23 @@ export const requiredFieldsPerChainAction = {
       },
     ],
     schema: z.object({
-      affiliateFee: z.number().optional(),
+      affiliateFee: z
+        .string()
+        .optional()
+        .transform(val => (val ? Number(val) : undefined))
+        .pipe(z.number().optional()),
       percentage: z
-        .number()
-        .min(0)
-        .max(100)
-        .nonnegative('chainFunctions.withdrawPool.validations.percentage'),
+        .string()
+        .transform(val => Number(val))
+        .pipe(
+          z
+            .number()
+            .min(0)
+            .max(100)
+            .refine(val => val >= 0 && val <= 100, {
+              message: 'chainFunctions.withdrawPool.validations.percentage',
+            })
+        ),
     }),
   },
 };
