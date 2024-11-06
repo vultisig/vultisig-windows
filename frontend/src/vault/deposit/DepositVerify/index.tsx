@@ -6,6 +6,7 @@ import {
   TxOverviewColumn,
   TxOverviewRow,
 } from '../../../chain/tx/components/TxOverviewRow';
+import { Button } from '../../../lib/ui/buttons/Button';
 import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -74,6 +75,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
             </TxOverviewRow>
           </TxOverviewPanel>
         </WithProgressIndicator>
+        <Button onClick={() => {}}>{t('sign')}</Button>
       </PageContent>
     </>
   );
