@@ -492,4 +492,66 @@ export const pt = {
   deposit: 'Depositar',
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   thorchain_message_deposit: 'Depósito de mensagem THORChain',
+  chainFunctions: {
+    default_validation: 'Entrada inválida',
+    bond: {
+      labels: {
+        nodeAddress: 'Endereço do Nó',
+        provider: 'Provedor',
+        operatorFee: 'Taxa do Operador',
+        amount: 'Quantidade',
+      },
+      validations: {
+        nodeAddress: 'Endereço do nó é obrigatório',
+        operatorFee: 'Taxa do operador é obrigatória',
+        amount: 'Quantidade deve ser positiva',
+      },
+    },
+    unbond: {
+      labels: {
+        nodeAddress: 'Endereço do Nó',
+        amount: 'Quantidade',
+        provider: 'Provedor',
+      },
+      validations: {
+        nodeAddress: 'Endereço do nó é obrigatório',
+        amount: 'Quantidade deve ser positiva',
+      },
+    },
+    leave: {
+      labels: {
+        nodeAddress: 'Endereço do Nó',
+      },
+      validations: {
+        nodeAddress: 'Endereço do nó é obrigatório',
+      },
+    },
+    custom: {
+      labels: {
+        amount: 'Quantidade',
+        customMemo: 'Memo Personalizado',
+      },
+      validations: {
+        amount: 'Quantidade deve ser positiva',
+        customMemo: 'Memo personalizado é obrigatório',
+      },
+    },
+    addPool: {
+      labels: {
+        amount: 'Quantidade',
+      },
+      validations: {
+        amount: 'Quantidade deve ser positiva',
+      },
+    },
+    withdrawPool: {
+      labels: {
+        affiliateFee: 'Taxa de Afiliado',
+        percentage: 'Porcentagem',
+      },
+      validations: {
+        percentage: 'Porcentagem é obrigatória e deve estar entre 0 e 100',
+      },
+    },
+  },
 };

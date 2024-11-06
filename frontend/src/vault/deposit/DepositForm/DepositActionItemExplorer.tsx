@@ -9,12 +9,14 @@ type DepositActionItemExplorerProps = {
   options: string[];
   onClose: () => void;
   onOptionClick: (option: string) => void;
+  activeOption?: string;
 };
 
 export const DepositActionItemExplorer: FC<DepositActionItemExplorerProps> = ({
   onClose,
   options,
   onOptionClick,
+  activeOption,
 }) => {
   const { t } = useTranslation();
 
@@ -30,9 +32,9 @@ export const DepositActionItemExplorer: FC<DepositActionItemExplorerProps> = ({
           return (
             <DepositActionOption
               key={index}
-              value={option}
+              value={t(option)}
               //   TODO: fix
-              isActive={false}
+              isActive={activeOption === option}
               onClick={() => {
                 onOptionClick(option);
                 onClose();

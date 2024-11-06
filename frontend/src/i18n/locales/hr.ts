@@ -482,4 +482,66 @@ export const hr = {
   deposit: 'Depozit',
   add_vaults_to_folder: 'Odaberite trezore za dodavanje u mapu.',
   thorchain_message_deposit: 'THORChain polog poruke',
+  chainFunctions: {
+    default_validation: 'Nevažeći unos',
+    bond: {
+      labels: {
+        nodeAddress: 'Adresa Čvora',
+        provider: 'Pružatelj',
+        operatorFee: 'Naknada Operatera',
+        amount: 'Iznos',
+      },
+      validations: {
+        nodeAddress: 'Adresa čvora je obavezna',
+        operatorFee: 'Naknada operatera je obavezna',
+        amount: 'Iznos mora biti pozitivan',
+      },
+    },
+    unbond: {
+      labels: {
+        nodeAddress: 'Adresa Čvora',
+        amount: 'Iznos',
+        provider: 'Pružatelj',
+      },
+      validations: {
+        nodeAddress: 'Adresa čvora je obavezna',
+        amount: 'Iznos mora biti pozitivan',
+      },
+    },
+    leave: {
+      labels: {
+        nodeAddress: 'Adresa Čvora',
+      },
+      validations: {
+        nodeAddress: 'Adresa čvora je obavezna',
+      },
+    },
+    custom: {
+      labels: {
+        amount: 'Iznos',
+        customMemo: 'Prilagođena Bilješka',
+      },
+      validations: {
+        amount: 'Iznos mora biti pozitivan',
+        customMemo: 'Prilagođena bilješka je obavezna',
+      },
+    },
+    addPool: {
+      labels: {
+        amount: 'Iznos',
+      },
+      validations: {
+        amount: 'Iznos mora biti pozitivan',
+      },
+    },
+    withdrawPool: {
+      labels: {
+        affiliateFee: 'Naknada za Partnera',
+        percentage: 'Postotak',
+      },
+      validations: {
+        percentage: 'Postotak je obavezan i mora biti između 0 i 100',
+      },
+    },
+  },
 };

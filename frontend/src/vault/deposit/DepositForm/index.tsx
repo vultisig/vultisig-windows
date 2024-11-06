@@ -9,7 +9,6 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -34,6 +33,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   onSubmit,
   coinWithActions,
 }) => {
+  const { t } = useTranslation();
   const { chainId } = coinWithActions;
   const chainActionOptions =
     chainActionOptionsConfig[chainId?.toLowerCase() as ChainWithAction];
@@ -67,10 +67,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     mode: 'onChange',
   });
 
-  const { t } = useTranslation();
-
   const onFormSubmit = (data: FieldValues) => {
-    // Handle form submission
     console.log('Form submitted with data:', data);
     onSubmit(data);
   };
@@ -94,7 +91,7 @@ export const DepositForm: FC<DepositFormProps> = ({
               <Container onClick={onOpen}>
                 <HStack alignItems="center" gap={8}>
                   <Text weight="400" family="mono" size={16}>
-                    {selectedChainAction}
+                    {t(`${selectedChainAction}`)}
                   </Text>
                 </HStack>
               </Container>
@@ -102,6 +99,7 @@ export const DepositForm: FC<DepositFormProps> = ({
             renderContent={({ onClose }) => (
               <DepositActionItemExplorer
                 onClose={onClose}
+                activeOption={selectedChainAction}
                 options={chainActionOptions}
                 onOptionClick={option => setSelectedChainAction(option)}
               />
@@ -111,7 +109,11 @@ export const DepositForm: FC<DepositFormProps> = ({
             <VStack gap={12}>
               {requiredFieldsForChainAction.map(field => (
                 <InputContainer key={field.name}>
-                  <label>{field.label}</label>
+                  <label>
+                    {t(
+                      `chainFunctions.${selectedChainAction}.labels.${field.name}`
+                    )}
+                  </label>
                   <InputFieldWrapper
                     as="input"
                     type={field.type}
@@ -119,9 +121,14 @@ export const DepositForm: FC<DepositFormProps> = ({
                     required={field.required}
                   />
                   {errors[field.name] && (
-                    <span className="error">
-                      {extractErrorMsg(errors[field.name]) || 'Invalid input'}
-                    </span>
+                    <Text color="danger" size={13} className="error">
+                      {t(
+                        `chainFunctions.${selectedChainAction}.validations.${field.name}`,
+                        {
+                          defaultValue: t('chainFunctions.default_validation'),
+                        }
+                      )}
+                    </Text>
                   )}
                 </InputContainer>
               ))}

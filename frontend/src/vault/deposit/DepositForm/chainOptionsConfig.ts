@@ -17,23 +17,35 @@ export const requiredFieldsPerChainAction = {
       {
         name: 'nodeAddress',
         type: 'text',
-        label: 'Node Address',
+        label: 'chainFunctions.bond.labels.nodeAddress',
         required: true,
       },
-      { name: 'provider', type: 'text', label: 'Provider', required: false },
+      {
+        name: 'provider',
+        type: 'text',
+        label: 'chainFunctions.bond.labels.provider',
+        required: false,
+      },
       {
         name: 'operatorFee',
         type: 'number',
-        label: "Operator's Fee",
+        label: 'chainFunctions.bond.labels.operatorFee',
         required: false,
       },
-      { name: 'amount', type: 'number', label: 'Amount', required: true },
+      {
+        name: 'amount',
+        type: 'number',
+        label: 'chainFunctions.bond.labels.amount',
+        required: true,
+      },
     ],
     schema: z.object({
-      nodeAddress: z.string().nonempty('Node Address is required'),
+      nodeAddress: z
+        .string()
+        .min(1, 'chainFunctions.bond.validations.nodeAddress'),
       provider: z.string().optional(),
       operatorFee: z.number().optional(),
-      amount: z.number().positive('Amount must be positive'),
+      amount: z.number().positive('chainFunctions.bond.validations.amount'),
     }),
   },
   unbond: {
@@ -41,15 +53,27 @@ export const requiredFieldsPerChainAction = {
       {
         name: 'nodeAddress',
         type: 'text',
-        label: 'Node Address',
+        label: 'chainFunctions.unbond.labels.nodeAddress',
         required: true,
       },
-      { name: 'amount', type: 'number', label: 'Amount', required: true },
-      { name: 'provider', type: 'text', label: 'Provider', required: false },
+      {
+        name: 'amount',
+        type: 'number',
+        label: 'chainFunctions.unbond.labels.amount',
+        required: true,
+      },
+      {
+        name: 'provider',
+        type: 'text',
+        label: 'chainFunctions.unbond.labels.provider',
+        required: false,
+      },
     ],
     schema: z.object({
-      nodeAddress: z.string().nonempty('Node Address is required'),
-      amount: z.number().positive('Amount must be positive'),
+      nodeAddress: z
+        .string()
+        .min(1, 'chainFunctions.unbond.validations.nodeAddress'),
+      amount: z.number().positive('chainFunctions.unbond.validations.amount'),
       provider: z.string().optional(),
     }),
   },
@@ -58,35 +82,49 @@ export const requiredFieldsPerChainAction = {
       {
         name: 'nodeAddress',
         type: 'text',
-        label: 'Node Address',
+        label: 'chainFunctions.leave.labels.nodeAddress',
         required: true,
       },
     ],
     schema: z.object({
-      nodeAddress: z.string().nonempty('Node Address is required'),
+      nodeAddress: z
+        .string()
+        .nonempty('chainFunctions.leave.validations.nodeAddress'),
     }),
   },
   custom: {
     fields: [
-      { name: 'amount', type: 'number', label: 'Amount', required: true },
+      {
+        name: 'amount',
+        type: 'number',
+        label: 'chainFunctions.custom.labels.amount',
+        required: true,
+      },
       {
         name: 'customMemo',
         type: 'text',
-        label: 'Custom Memo',
+        label: 'chainFunctions.custom.labels.customMemo',
         required: true,
       },
     ],
     schema: z.object({
-      amount: z.number().positive('Amount must be positive'),
-      customMemo: z.string().nonempty('Custom Memo is required'),
+      amount: z.number().positive('chainFunctions.custom.validations.amount'),
+      customMemo: z
+        .string()
+        .min(1, 'chainFunctions.custom.validations.customMemo'),
     }),
   },
   addPool: {
     fields: [
-      { name: 'amount', type: 'number', label: 'Amount', required: true },
+      {
+        name: 'amount',
+        type: 'number',
+        label: 'chainFunctions.addPool.labels.amount',
+        required: true,
+      },
     ],
     schema: z.object({
-      amount: z.number().positive('Amount must be positive'),
+      amount: z.number().positive('chainFunctions.addPool.validations.amount'),
     }),
   },
   withdrawPool: {
@@ -94,13 +132,13 @@ export const requiredFieldsPerChainAction = {
       {
         name: 'affiliateFee',
         type: 'number',
-        label: "Affiliate's Fee",
+        label: 'chainFunctions.withdrawPool.labels.affiliateFee',
         required: false,
       },
       {
         name: 'percentage',
         type: 'number',
-        label: 'Percentage',
+        label: 'chainFunctions.withdrawPool.labels.percentage',
         required: true,
       },
     ],
@@ -110,7 +148,7 @@ export const requiredFieldsPerChainAction = {
         .number()
         .min(0)
         .max(100)
-        .nonnegative('Percentage is required and must be between 0 and 100'),
+        .nonnegative('chainFunctions.withdrawPool.validations.percentage'),
     }),
   },
 };
