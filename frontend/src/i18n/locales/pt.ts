@@ -493,7 +493,7 @@ export const pt = {
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   thorchain_message_deposit: 'Depósito de mensagem THORChain',
   chainFunctions: {
-    required_validation: 'Obrigatório',
+    optional_validation: 'Opcional',
     default_validation: 'Entrada inválida',
     bond: {
       labels: {

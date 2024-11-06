@@ -486,7 +486,7 @@ export const en = {
   vote: 'Vote',
   stake: 'Stake',
   chainFunctions: {
-    required_validation: 'Required',
+    optional_validation: 'Optional',
     default_validation: 'Invalid input',
     bond: {
       labels: {

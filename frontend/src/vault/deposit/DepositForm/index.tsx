@@ -112,9 +112,16 @@ export const DepositForm: FC<DepositFormProps> = ({
                   <Text size={15} weight="400">
                     {t(
                       `chainFunctions.${selectedChainAction}.labels.${field.name}`
-                    ) +
-                      ' ' +
-                      `${field.required ? `(${t('chainFunctions.required_validation')})` : ''}`}
+                    )}{' '}
+                    {!field.required ? (
+                      <Text as="span" size={14}>
+                        ({t('chainFunctions.optional_validation')})
+                      </Text>
+                    ) : (
+                      <Text as="span" color="danger" size={14}>
+                        *
+                      </Text>
+                    )}
                   </Text>
                   <InputFieldWrapper
                     as="input"

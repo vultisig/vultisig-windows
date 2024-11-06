@@ -502,7 +502,7 @@ export const es = {
   thorchain_message_deposit: 'Depósito de mensajes de THORChain',
   chainFunctions: {
     required_validation: 'Obligatorio',
-    default_validation: 'Entrada inválida',
+    option_validation: 'Opcional',
     bond: {
       labels: {
         nodeAddress: 'Dirección del Nodo',

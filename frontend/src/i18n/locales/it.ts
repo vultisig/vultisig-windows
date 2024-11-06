@@ -495,7 +495,7 @@ export const it = {
   add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
   thorchain_message_deposit: 'Deposito messaggio THORChain',
   chainFunctions: {
-    required_validation: 'Obbligatorio',
+    optional_validation: 'Facoltativo',
     default_validation: 'Ingresso non valido',
     bond: {
       labels: {
