@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { hStack } from '../../../lib/ui/layout/Stack';
+import { hStack, vStack } from '../../../lib/ui/layout/Stack';
 import { text } from '../../../lib/ui/text';
 
 export const TxOverviewRow = styled.div`
@@ -9,7 +9,21 @@ export const TxOverviewRow = styled.div`
     alignItems: 'center',
     justifyContent: 'space-between',
     wrap: 'wrap',
-    gap: 20,
+    gap: 6,
+  })}
+
+  ${text({
+    weight: 700,
+    size: 16,
+  })}
+`;
+
+export const TxOverviewColumn = styled.div`
+  ${vStack({
+    fullWidth: true,
+    justifyContent: 'space-between',
+    wrap: 'wrap',
+    gap: 6,
   })}
 
   ${text({

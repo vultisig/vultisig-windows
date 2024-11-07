@@ -500,4 +500,67 @@ export const es = {
   deposit: 'Depositar',
   add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
   thorchain_message_deposit: 'Depósito de mensajes de THORChain',
+  chainFunctions: {
+    required_validation: 'Obligatorio',
+    option_validation: 'Opcional',
+    bond: {
+      labels: {
+        nodeAddress: 'Dirección del Nodo',
+        provider: 'Proveedor',
+        operatorFee: 'Comisión del Operador',
+        amount: 'Cantidad',
+      },
+      validations: {
+        nodeAddress: 'La dirección del nodo es obligatoria',
+        operatorFee: 'La comisión del operador es obligatoria',
+        amount: 'La cantidad debe ser positiva',
+      },
+    },
+    unbond: {
+      labels: {
+        nodeAddress: 'Dirección del Nodo',
+        amount: 'Cantidad',
+        provider: 'Proveedor',
+      },
+      validations: {
+        nodeAddress: 'La dirección del nodo es obligatoria',
+        amount: 'La cantidad debe ser positiva',
+      },
+    },
+    leave: {
+      labels: {
+        nodeAddress: 'Dirección del Nodo',
+      },
+      validations: {
+        nodeAddress: 'La dirección del nodo es obligatoria',
+      },
+    },
+    custom: {
+      labels: {
+        amount: 'Cantidad',
+        customMemo: 'Memo Personalizado',
+      },
+      validations: {
+        amount: 'La cantidad debe ser positiva',
+        customMemo: 'El memo personalizado es obligatorio',
+      },
+    },
+    addPool: {
+      labels: {
+        amount: 'Cantidad',
+      },
+      validations: {
+        amount: 'La cantidad debe ser positiva',
+      },
+    },
+    withdrawPool: {
+      labels: {
+        affiliateFee: 'Comisión de Afiliado',
+        percentage: 'Porcentaje',
+      },
+      validations: {
+        percentage: 'El porcentaje es obligatorio y debe estar entre 0 y 100',
+      },
+    },
+  },
 };

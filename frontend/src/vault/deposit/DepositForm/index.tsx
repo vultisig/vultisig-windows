@@ -9,7 +9,6 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -23,10 +22,10 @@ import {
   requiredFieldsPerChainAction,
 } from './chainOptionsConfig';
 import { DepositActionItemExplorer } from './DepositActionItemExplorer';
-import { Container, InputFieldWrapper } from './DepositForm.styled';
+import { Container, ErrorText, InputFieldWrapper } from './DepositForm.styled';
 
 type DepositFormProps = {
-  onSubmit: (data: FieldValues) => void;
+  onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void;
   coinWithActions: CoinKey;
 };
 
@@ -34,6 +33,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   onSubmit,
   coinWithActions,
 }) => {
+  const { t } = useTranslation();
   const { chainId } = coinWithActions;
   const chainActionOptions =
     chainActionOptionsConfig[chainId?.toLowerCase() as ChainWithAction];
@@ -67,12 +67,8 @@ export const DepositForm: FC<DepositFormProps> = ({
     mode: 'onChange',
   });
 
-  const { t } = useTranslation();
-
   const onFormSubmit = (data: FieldValues) => {
-    // Handle form submission
-    console.log('Form submitted with data:', data);
-    onSubmit(data);
+    onSubmit(data, selectedChainAction as ChainAction);
   };
 
   return (
@@ -80,7 +76,7 @@ export const DepositForm: FC<DepositFormProps> = ({
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={<RefreshSend />}
-        title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
+        title={<PageHeaderTitle>{t('deposit')}</PageHeaderTitle>}
       />
       <PageContent as="form" gap={40} onSubmit={handleSubmit(onFormSubmit)}>
         <WithProgressIndicator value={0.2}>
@@ -94,7 +90,7 @@ export const DepositForm: FC<DepositFormProps> = ({
               <Container onClick={onOpen}>
                 <HStack alignItems="center" gap={8}>
                   <Text weight="400" family="mono" size={16}>
-                    {selectedChainAction}
+                    {t(`${selectedChainAction}`)}
                   </Text>
                 </HStack>
               </Container>
@@ -102,6 +98,7 @@ export const DepositForm: FC<DepositFormProps> = ({
             renderContent={({ onClose }) => (
               <DepositActionItemExplorer
                 onClose={onClose}
+                activeOption={selectedChainAction}
                 options={chainActionOptions}
                 onOptionClick={option => setSelectedChainAction(option)}
               />
@@ -111,7 +108,20 @@ export const DepositForm: FC<DepositFormProps> = ({
             <VStack gap={12}>
               {requiredFieldsForChainAction.map(field => (
                 <InputContainer key={field.name}>
-                  <label>{field.label}</label>
+                  <Text size={15} weight="400">
+                    {t(
+                      `chainFunctions.${selectedChainAction}.labels.${field.name}`
+                    )}{' '}
+                    {!field.required ? (
+                      <Text as="span" size={14}>
+                        ({t('chainFunctions.optional_validation')})
+                      </Text>
+                    ) : (
+                      <Text as="span" color="danger" size={14}>
+                        *
+                      </Text>
+                    )}
+                  </Text>
                   <InputFieldWrapper
                     as="input"
                     type={field.type}
@@ -119,9 +129,14 @@ export const DepositForm: FC<DepositFormProps> = ({
                     required={field.required}
                   />
                   {errors[field.name] && (
-                    <span className="error">
-                      {extractErrorMsg(errors[field.name]) || 'Invalid input'}
-                    </span>
+                    <ErrorText color="danger" size={13} className="error">
+                      {t(
+                        `chainFunctions.${selectedChainAction}.validations.${field.name}`,
+                        {
+                          defaultValue: t('chainFunctions.default_validation'),
+                        }
+                      )}
+                    </ErrorText>
                   )}
                 </InputContainer>
               ))}
