@@ -5,6 +5,7 @@ import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import {
   TxOverviewColumn,
   TxOverviewRow,
+  TxOverviewRowDepositsFlow,
 } from '../../../chain/tx/components/TxOverviewRow';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { Text } from '../../../lib/ui/text';
@@ -50,12 +51,12 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
               if (!depositFormData[field.name]) return null;
 
               return field.type === 'number' || field.type === 'percentage' ? (
-                <TxOverviewRow key={field.name}>
+                <TxOverviewRowDepositsFlow key={field.name}>
                   <Text size={18} weight={700}>
                     {t(field.label)}
                   </Text>
                   <StrictText>{String(depositFormData[field.name])}</StrictText>
-                </TxOverviewRow>
+                </TxOverviewRowDepositsFlow>
               ) : (
                 <TxOverviewColumn key={field.name}>
                   <Text size={18} weight={700}>
