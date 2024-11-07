@@ -1,6 +1,7 @@
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { CurrentSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
@@ -11,7 +12,6 @@ import { KeysignPayloadProvider } from '../shared/state/keysignPayload';
 import { KeysignMsgsGuard } from './KeysignMsgsGuard';
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider';
 import { KeysignVaultGuard } from './KeysignVaultGuard';
-import { useCurrentJoinKeysignMsg } from './state/currentJoinKeysignMsg';
 import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep';
 
 const keysignSteps = ['verify', 'session', 'sign'] as const;
@@ -19,8 +19,9 @@ const keysignSteps = ['verify', 'session', 'sign'] as const;
 export const JoinKeysignPage = () => {
   const { step, setStep, toNextStep } = useStepNavigation(keysignSteps);
 
-  const { keysignPayload, sessionId, encryptionKeyHex } =
-    useCurrentJoinKeysignMsg();
+  const {
+    keysignMsg: { keysignPayload, sessionId, encryptionKeyHex },
+  } = useAppPathState<'joinKeysign'>();
 
   const { local_party_id } = useAssertCurrentVault();
 
