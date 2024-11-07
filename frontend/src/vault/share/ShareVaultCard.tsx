@@ -10,7 +10,7 @@ import { Text } from '../../lib/ui/text';
 import { getColor } from '../../lib/ui/theme/getters';
 import { ProductSimpleLogo } from '../../ui/logo/ProductSimpleLogo';
 import { useAssertCurrentVault } from '../state/useCurrentVault';
-import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyEport';
+import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport';
 import { VaultKey } from './VaultKey';
 
 const cardWidth = 320;
