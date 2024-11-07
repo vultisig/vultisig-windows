@@ -25,7 +25,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Dogecoin]: () =>
           `https://blockchair.com/dogecoin/address/${value}`,
         [Chain.Dash]: () => `https://blockchair.com/dash/address/${value}`,
-        [Chain.THORChain]: () => `https://runescan.io/address/${value}`,
+        [Chain.THORChain]: () => `https://thorchain.net/address/${value}`,
         [Chain.Solana]: () => `https://explorer.solana.com/address/${value}`,
         [Chain.Ethereum]: () => `https://etherscan.io/address/${value}`,
         [Chain.Cosmos]: () => `https://www.mintscan.io/cosmos/address/${value}`,
@@ -59,7 +59,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Dogecoin]: () =>
           `https://blockchair.com/dogecoin/transaction/${value}`,
         [Chain.Dash]: () => `https://blockchair.com/dash/transaction/${value}`,
-        [Chain.THORChain]: () => `https://runescan.io/tx/${value}`,
+        [Chain.THORChain]: () => `https://thorchain.net/tx/${value}`,
         [Chain.Solana]: () => `https://explorer.solana.com/tx/${value}`,
         [Chain.Ethereum]: () => `https://etherscan.io/tx/${value}`,
         [Chain.Cosmos]: () => `https://www.mintscan.io/cosmos/tx/${value}`,
