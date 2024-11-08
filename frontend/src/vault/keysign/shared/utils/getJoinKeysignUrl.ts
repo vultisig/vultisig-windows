@@ -8,7 +8,7 @@ import { toCompressedString } from '../../../../utils/protobuf/toCompressedStrin
 import {
   KeygenServerType,
   keygenServerUrl,
-} from '../../../keygen/KeygenServerType';
+} from '../../../keygen/server/KeygenServerType';
 import { uploadPayloadToServer } from '../../../server/utils/uploadPayloadToServer';
 
 export type GetJoinKeysignUrlInput = {

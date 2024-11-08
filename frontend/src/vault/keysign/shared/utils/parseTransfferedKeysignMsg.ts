@@ -2,7 +2,7 @@ import {
   KeysignMessage,
   KeysignPayload,
 } from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { keygenServerUrl } from '../../../keygen/KeygenServerType';
+import { getKeygenServerUrl } from '../../../keygen/server/utils/getKeygenServerUrl';
 import { decompressQrPayload } from '../../../qr/upload/utils/decompressQrPayload';
 import { getPayloadFromServer } from '../../../server/utils/getPayloadFromServer';
 
@@ -13,7 +13,10 @@ export const parseTransferredKeysignMsg = async (
 
   if (keysignMsg.payloadId) {
     const serverType = keysignMsg.useVultisigRelay ? 'relay' : 'local';
-    const serverUrl = keygenServerUrl[serverType];
+    const serverUrl = await getKeygenServerUrl({
+      serverType,
+      serviceName: keysignMsg.serviceName,
+    });
 
     const rawPayload = await getPayloadFromServer({
       hash: keysignMsg.payloadId,

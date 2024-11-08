@@ -1,4 +1,4 @@
-import { Endpoint } from '../../services/Endpoint';
+import { Endpoint } from '../../../services/Endpoint';
 
 export const keygenServerTypes = ['relay', 'local'] as const;
 
