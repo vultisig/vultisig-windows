@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
@@ -10,7 +9,7 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { ISendTransaction, TransactionType } from '../../../model/transaction';
-import { makeAppPath } from '../../../navigation';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
 import {
@@ -39,7 +38,7 @@ export const SendConfirm = () => {
   const [memo] = useSendMemo();
   const vault = useAssertCurrentVault();
 
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   const walletCore = useAssertWalletCore();
 
@@ -62,16 +61,14 @@ export const SendConfirm = () => {
       sendMaxAmount: isMaxAmount,
     };
 
-    const payload = BlockchainServiceFactory.createService(
+    const keysignPayload = BlockchainServiceFactory.createService(
       coinKey.chainId,
       walletCore
     ).createKeysignPayload(tx, vault.local_party_id, vault.public_key_ecdsa);
 
-    navigate(
-      makeAppPath(type === 'fast' ? 'fastKeysign' : 'keysign', {
-        keysignPayload: JSON.stringify(payload.toJson()),
-      })
-    );
+    navigate(type === 'fast' ? 'fastKeysign' : 'keysign', {
+      state: { keysignPayload },
+    });
   };
 
   const [terms] = useSendTerms();

@@ -10,7 +10,7 @@ import { Text } from '../../lib/ui/text';
 import { getColor } from '../../lib/ui/theme/getters';
 import { ProductSimpleLogo } from '../../ui/logo/ProductSimpleLogo';
 import { useAssertCurrentVault } from '../state/useCurrentVault';
-import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyEport';
+import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport';
 import { VaultKey } from './VaultKey';
 
 const cardWidth = 320;
@@ -18,10 +18,10 @@ const qrCodeSize = cardWidth - 80;
 const logoSize = 46;
 
 const Container = styled.div`
-  background: linear-gradient(180deg, #33e6bf 0%, #0439c7 100%);
+  background: linear-gradient(180deg, #33e6bf 0%, #0439c7 50%);
   max-width: ${toSizeUnit(cardWidth)};
   width: 100%;
-  padding: 40px 20px;
+  padding: 12px 20px;
   ${borderRadius.l};
   color: ${getColor('contrast')};
 
@@ -29,6 +29,10 @@ const Container = styled.div`
     gap: 20,
     alignItems: 'center',
   })}
+
+  displaY: flex;
+  flex-direction: column;
+  gap: 32px;
 `;
 
 const QrCodeWrapper = styled.div`
@@ -47,8 +51,8 @@ const LogoContainer = styled.div`
 
 export const ShareVaultCard = () => {
   const vault = useAssertCurrentVault();
-
-  const { name, public_key_ecdsa, public_key_eddsa } = vault;
+  const { uid } = getVaultPublicKeyExport(vault);
+  const { name } = vault;
 
   const qrCodeValue = JSON.stringify(getVaultPublicKeyExport(vault));
 
@@ -56,6 +60,12 @@ export const ShareVaultCard = () => {
 
   return (
     <Container>
+      <VStack gap={4} alignItems="center">
+        <Text weight={600} size={22} cropped>
+          {name}
+        </Text>
+        <VaultKey title="UID" value={uid} />
+      </VStack>
       <QrCodeWrapper>
         <QRCode
           bgColor="transparent"
@@ -67,13 +77,9 @@ export const ShareVaultCard = () => {
           <ProductSimpleLogo />
         </LogoContainer>
       </QrCodeWrapper>
-      <VStack gap={12} alignItems="center">
-        <Text weight={600} size={20} cropped>
-          {name}
-        </Text>
-        <VaultKey title="ECDSA Key" value={public_key_ecdsa} />
-        <VaultKey title="EdDSA Key" value={public_key_eddsa} />
-      </VStack>
+      <Text weight={500} size={20} cropped>
+        vultisig.com
+      </Text>
     </Container>
   );
 };

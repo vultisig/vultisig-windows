@@ -5,22 +5,22 @@ import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependa
 import { SaveAsImage } from '../../../../ui/file/SaveAsImage';
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode';
-import { useCurrentLocalPartyId } from '../../../keygen/state/currentLocalPartyId';
+import { getVaultPublicKeyExport } from '../../../share/utils/getVaultPublicKeyExport';
+import { useAssertCurrentVault } from '../../../state/useCurrentVault';
 import { useKeysignMsgQuery } from '../../shared/queries/useKeysignMsgQuery';
 
 export const DownloadKeysignQrCode = () => {
   const msgQuery = useKeysignMsgQuery();
-
-  const localPartyId = useCurrentLocalPartyId();
-
   const { t } = useTranslation();
+  const vault = useAssertCurrentVault();
+  const { uid } = getVaultPublicKeyExport(vault);
 
   return (
     <QueryDependant
       query={msgQuery}
       success={data => (
         <SaveAsImage
-          fileName={localPartyId}
+          fileName={`VaultSend-${vault.name}-${uid}-${new Date().toISOString()}`}
           renderTrigger={({ onClick }) => (
             <PageHeaderIconButton icon={<FileUpIcon />} onClick={onClick} />
           )}

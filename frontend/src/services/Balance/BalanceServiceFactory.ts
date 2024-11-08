@@ -55,6 +55,8 @@ export class BalanceServiceFactory {
         return new BalanceServiceCosmos(chain);
       case Chain.Cosmos:
         return new BalanceServiceCosmos(chain);
+      case Chain.Osmosis:
+        return new BalanceServiceCosmos(chain);
       case Chain.Polkadot:
         return new BalanceServicePolkadot(chain);
       case Chain.Sui:

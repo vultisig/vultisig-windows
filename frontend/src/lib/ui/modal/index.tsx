@@ -21,6 +21,7 @@ export type ModalProps = AsElementComponent &
     placement?: ModalPlacement;
     footer?: ReactNode;
     targetWidth?: number;
+    titleAlign?: 'left' | 'center' | 'right';
   };
 
 const contentVerticalPadding = 8;

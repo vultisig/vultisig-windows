@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import { AddressPage } from './chain/components/address/AddressPage';
 import { appPaths } from './navigation';
+import { CompletedOnboardingOnly } from './onboarding/CompletedOnboardingOnly';
 import { OnboardingPage } from './onboarding/components/OnboardingPage';
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
 import EditVaultPage from './pages/edItVault/EditVaultPage';
@@ -10,9 +11,10 @@ import DeleteVaultPage from './pages/edItVault/vaultDeleteSettings/DeleteVaultPa
 import VaultDetailsPage from './pages/edItVault/vaultDetailsSettings/VaultDetailsPage';
 import VaultRenamePage from './pages/edItVault/vaultRenameSettings/VaultRenamePage';
 import ImportVaultView from './pages/importVault/ImportVaultView';
-import { VaultPage } from './pages/vault/VaultPage';
+import RegisterForAirdropPage from './pages/registerForAirdrop/RegisterForAirdropPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage';
+import VaultCheckUpdatePage from './pages/vaultSettings/vaultCheckUpdatePage/VaultCheckUpdatePage';
 import CurrencySettingsPage from './pages/vaultSettings/vaultCurrency/CurrencySettingsPage';
 import VaultDefaultChainsPage from './pages/vaultSettings/vaultDefaultChains/VaultDefaultChainsPage';
 import FaqVaultPage from './pages/vaultSettings/vaultFaq/FaqVaultPage';
@@ -22,6 +24,8 @@ import { ManageVaultChainCoinsPage } from './vault/chain/manage/coin/ManageVault
 import { ManageVaultChainsPage } from './vault/chain/manage/ManageVaultChainsPage';
 import { VaultChainPage } from './vault/chain/VaultChainPage';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
+import { VaultPage } from './vault/components/VaultPage';
+import { DepositPage } from './vault/deposit/DepositPage';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
 import { StartFastKeysignPage } from './vault/keysign/start/fast/StartFastKeysignPage';
@@ -37,16 +41,31 @@ import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPage } from './vault/setup/type/SetupVaultPage';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
 import { SwapPage } from './vault/swap/SwapPage';
+import { NoVaultsHomePage } from './vaults/components/NoVaultsHomePage';
+import { VaultsPage } from './vaults/components/VaultsPage';
+import { CurrentVaultFolderPageProvider } from './vaults/folder/CurrentVaultFolderPageProvider';
+import { ManageVaultFolderPage } from './vaults/folder/manage/ManageVaultFolderPage';
+import { VaultFolderPage } from './vaults/folder/VaultFolderPage';
+import { CreateVaultFolderPage } from './vaults/folders/create/CreateVaultFolderPage';
+import { ManageVaultsPage } from './vaults/manage/ManageVaultsPage';
 
 export const router = createBrowserRouter([
   {
     path: appPaths.root,
     element: (
       <EmptyVaultsOnly>
-        <IncompleteOnboardingOnly>
-          <OnboardingPage />
-        </IncompleteOnboardingOnly>
+        <CompletedOnboardingOnly>
+          <NoVaultsHomePage />
+        </CompletedOnboardingOnly>
       </EmptyVaultsOnly>
+    ),
+  },
+  {
+    path: appPaths.onboarding,
+    element: (
+      <IncompleteOnboardingOnly>
+        <OnboardingPage />
+      </IncompleteOnboardingOnly>
     ),
   },
   {
@@ -94,8 +113,16 @@ export const router = createBrowserRouter([
     element: <StartFastKeysignPage />,
   },
   {
-    path: appPaths.vaultList,
+    path: appPaths.vault,
     element: <VaultPage />,
+  },
+  {
+    path: appPaths.vaults,
+    element: <VaultsPage />,
+  },
+  {
+    path: appPaths.manageVaults,
+    element: <ManageVaultsPage />,
   },
   {
     path: appPaths.manageVaultChains,
@@ -184,5 +211,37 @@ export const router = createBrowserRouter([
   {
     path: appPaths.reshareVault,
     element: <ReshareVaultPage />,
+  },
+  {
+    path: appPaths.registerForAirdrop,
+    element: <RegisterForAirdropPage />,
+  },
+  {
+    path: appPaths.checkUpdate,
+    element: <VaultCheckUpdatePage />,
+  },
+  {
+    path: appPaths.createVaultFolder,
+    element: <CreateVaultFolderPage />,
+  },
+  {
+    path: appPaths.vaultFolder,
+    element: (
+      <CurrentVaultFolderPageProvider>
+        <VaultFolderPage />
+      </CurrentVaultFolderPageProvider>
+    ),
+  },
+  {
+    path: appPaths.manageVaultFolder,
+    element: (
+      <CurrentVaultFolderPageProvider>
+        <ManageVaultFolderPage />
+      </CurrentVaultFolderPageProvider>
+    ),
+  },
+  {
+    path: appPaths.vaultItemDeposit,
+    element: <DepositPage />,
   },
 ]);

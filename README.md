@@ -53,3 +53,15 @@ The view model should only know the chain from which it wants to get the data an
 ```RpcServiceFactory.createService(chain).getBalance(coin);```
 
 So, from the front-end perspective, we should use CHAIN for everything, and if there is a very specific implementation, we implement it using the services.
+
+## FOR Linux user
+
+Vultisig under linux require `libwebkit2gtk-4.0-dev` , usually you can run the following command to install it 
+
+```
+sudo apt update
+sudo apt install libwebkit2gtk-4.0-dev
+```
+If you are using ubuntu 24.4 and it can't find `libwebkit2gtk-4.0-dev` , then here is the workaround
+1. add `deb http://gb.archive.ubuntu.com/ubuntu jammy main` to `/etc/apt/sources.list`  
+2. and run  `sudo apt update` and `sudo apt install libwebkit2gtk-4.0-dev`

@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
+import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
+import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { Coin } from '../../../lib/types/coin';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { Chain } from '../../../model/chain';
 import { ISendTransaction, TransactionType } from '../../../model/transaction';
-import { makeAppPath } from '../../../navigation';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
 import { convertChainToChainTicker } from '../../../utils/crypto';
@@ -30,12 +31,13 @@ export const SwapConfirm = () => {
   const addresses = useAssertCurrentVaultAddreses();
   const [coinKey] = useCurrentSwapCoin();
   const coin = useAssertCurrentVaultCoin(coinKey);
+  const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
   const [fromAmount] = useSwapAmount();
   const [swapProtocol] = useSwapProtocol();
   const [selectedSwapQuote] = useSwapQuote();
 
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   const walletCore = useAssertWalletCore();
 
@@ -55,6 +57,11 @@ export const SwapConfirm = () => {
       nativeTokenForChain[asset.chain] !== asset.ticker
     );
   };
+
+  const balance = shouldBePresent(balanceQuery.data);
+
+  const isMaxAmount =
+    fromAmount === fromChainAmount(balance.amount, coin.decimals);
 
   const isAssetToSend = () => {
     const isThorAsset = coin.chain === Chain.THORChain;
@@ -87,19 +94,17 @@ export const SwapConfirm = () => {
         memo: selectedSwapQuote?.memo || '',
         coin: storageCoinToCoin(coin),
         transactionType: TransactionType.SEND,
-        sendMaxAmount: false,
+        sendMaxAmount: isMaxAmount,
         specificTransactionInfo: shouldBePresent(specificTxInfoQuery.data),
       };
-      const payload = BlockchainServiceFactory.createService(
+      const keysignPayload = BlockchainServiceFactory.createService(
         coin.chain as Chain,
         walletCore
       ).createKeysignPayload(tx, vault.local_party_id, vault.public_key_ecdsa);
 
-      navigate(
-        makeAppPath('keysign', {
-          keysignPayload: JSON.stringify(payload.toJson()),
-        })
-      );
+      navigate('keysign', {
+        state: { keysignPayload },
+      });
     }
   };
 

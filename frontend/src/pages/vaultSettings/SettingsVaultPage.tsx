@@ -71,7 +71,9 @@ const SettingsVaultPage = () => {
                       }
                     }}
                   >
-                    <ListItemPanel>
+                    <ListItemPanel
+                      isSpecialItem={id === 'register-for-airdrop'}
+                    >
                       <HStack
                         fullWidth
                         alignItems="center"

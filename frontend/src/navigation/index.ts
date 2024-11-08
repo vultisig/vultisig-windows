@@ -1,3 +1,9 @@
+import { KeygenMessage } from '../gen/vultisig/keygen/v1/keygen_message_pb';
+import { ReshareMessage } from '../gen/vultisig/keygen/v1/reshare_message_pb';
+import {
+  KeysignMessage,
+  KeysignPayload,
+} from '../gen/vultisig/keysign/v1/keysign_message_pb';
 import { addQueryParams } from '../lib/utils/query/addQueryParams';
 import { withoutUndefinedFields } from '../lib/utils/record/withoutUndefinedFields';
 import { Chain } from '../model/chain';
@@ -22,7 +28,9 @@ export const appPaths = {
   vaultSettings: '/vault/settings',
   uploadQr: '/vault/qr/upload',
   joinKeygen: '/join-keygen',
-  vaultList: '/vault/list',
+  vaults: '/vaults',
+  manageVaults: '/vaults/manage',
+  vault: '/vault',
   manageVaultChains: '/vault/chains',
   manageVaultChainCoins: '/vault/chains/coins',
   vaultChainDetail: '/vault/item/detail',
@@ -35,6 +43,7 @@ export const appPaths = {
   vaultDelete: '/vault/settings/vault-settings/delete-vault',
   languageSettings: '/vault/settings/language-settings',
   currencySettings: '/vault/settings/currency-settings',
+  checkUpdate: '/vault/settings/check-update',
   addressBook: '/vault/settings/address-book',
   defaultChains: '/vault/settings/default-chains',
   faq: '/vault/settings/faq',
@@ -43,6 +52,12 @@ export const appPaths = {
   termsOfService: '/vault/settings/terms-of-service',
   vaultFAQ: '/vault/settings/faq',
   vaultItemSwap: '/vault/item/swap',
+  registerForAirdrop: '/register-for-airdrop',
+  onboarding: '/onboarding',
+  createVaultFolder: '/vault/create-folder',
+  vaultFolder: '/vault/folder',
+  manageVaultFolder: '/vault/folder/manage',
+  vaultItemDeposit: '/vault/item/deposit',
 } as const;
 
 type AppPaths = typeof appPaths;
@@ -50,10 +65,6 @@ export type AppPath = keyof AppPaths;
 
 export type AppPathParams = {
   address: { address: string };
-  joinKeysign: { vaultId: string; keysignMsg: string };
-  keysign: { keysignPayload: string };
-  fastKeysign: { keysignPayload: string };
-  joinKeygen: { keygenType: KeygenType; keygenMsg: string };
   uploadQr: { title?: string };
   manageVaultChainCoins: { chain: Chain };
   vaultChainDetail: { chain: Chain };
@@ -61,9 +72,24 @@ export type AppPathParams = {
   send: { coin: string };
   setupVault: { type?: SetupVaultType };
   vaultItemSwap: Record<string, string>;
+  vaultItemDeposit: Record<string, string>;
+  vaultFolder: { id: string };
+  manageVaultFolder: { id: string };
+};
+
+export type AppPathState = {
+  keysign: { keysignPayload: KeysignPayload };
+  fastKeysign: { keysignPayload: KeysignPayload };
+  joinKeysign: { vaultId: string; keysignMsg: KeysignMessage };
+  joinKeygen: {
+    keygenType: KeygenType;
+    keygenMsg: KeygenMessage | ReshareMessage;
+  };
 };
 
 export type AppPathsWithParams = keyof AppPathParams;
+
+export type AppPathsWithState = keyof AppPathState;
 
 export function makeAppPath<P extends keyof AppPathParams>(
   path: P,

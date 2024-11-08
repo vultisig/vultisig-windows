@@ -1,10 +1,8 @@
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { KeysignPayload } from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Match } from '../../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
-import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams';
+import { useAppPathState } from '../../../../navigation/hooks/useAppPathState';
 import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep';
 import { MediatorManager } from '../../../keygen/shared/peerDiscovery/MediatorManager';
 import { GeneratedServiceNameProvider } from '../../../keygen/shared/state/currentServiceName';
@@ -32,11 +30,7 @@ const keysignSteps = [
 ] as const;
 
 export const StartFastKeysignPage = () => {
-  const [{ keysignPayload: rawPayload }] = useAppPathParams<'keysign'>();
-
-  const payload = useMemo(() => {
-    return KeysignPayload.fromJsonString(rawPayload);
-  }, [rawPayload]);
+  const { keysignPayload } = useAppPathState<'fastKeysign'>();
 
   const { local_party_id } = useAssertCurrentVault();
 
@@ -47,7 +41,7 @@ export const StartFastKeysignPage = () => {
   return (
     <PasswordProvider initialValue="">
       <CurrentLocalPartyIdProvider value={local_party_id}>
-        <KeysignPayloadProvider value={payload}>
+        <KeysignPayloadProvider value={keysignPayload}>
           <KeysignMsgsGuard>
             <GeneratedServiceNameProvider>
               <PeersSelectionRecordProvider initialValue={{}}>

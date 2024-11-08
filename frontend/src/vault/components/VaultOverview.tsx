@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import VaultBackupBanner from '../../components/vaultBackupBanner/VaultBackupBanner';
+import VaultBackupReminderBanner from '../../components/vaultBackupBanner/VaultBackupReminderBanner/VaultBackupReminderBanner';
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller';
 import { VStack } from '../../lib/ui/layout/Stack';
 import { PageContent } from '../../ui/page/PageContent';
@@ -24,7 +24,7 @@ export const VaultOverview = () => {
     <ScrollableFlexboxFiller>
       {!vault?.is_backed_up && (
         <VaultBannerWrapper>
-          <VaultBackupBanner />
+          <VaultBackupReminderBanner />
         </VaultBannerWrapper>
       )}
       <PageContent>

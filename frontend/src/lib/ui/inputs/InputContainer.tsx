@@ -7,6 +7,6 @@ export const inputContainer = css`
   gap: 8px;
 `;
 
-export const InputContainer = styled.label`
+export const InputContainer = styled.div`
   ${inputContainer};
 `;

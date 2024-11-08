@@ -1,9 +1,6 @@
-import { useMemo } from 'react';
-
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
+import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
 import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager';
@@ -23,11 +20,7 @@ import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoverySt
 const keysignSteps = ['joinSession', 'peers', 'session', 'sign'] as const;
 
 export const StartKeysignPage = () => {
-  const [{ keysignPayload: rawPayload }] = useAppPathParams<'keysign'>();
-
-  const payload = useMemo(() => {
-    return KeysignPayload.fromJsonString(rawPayload);
-  }, [rawPayload]);
+  const { keysignPayload } = useAppPathState<'keysign'>();
 
   const { local_party_id } = useAssertCurrentVault();
 
@@ -35,15 +28,15 @@ export const StartKeysignPage = () => {
     useStepNavigation(keysignSteps);
 
   return (
-    <KeysignPayloadProvider value={payload}>
-      <KeysignMsgsGuard>
-        <GeneratedServiceNameProvider>
-          <PeersSelectionRecordProvider initialValue={{}}>
-            <GeneratedSessionIdProvider>
-              <GeneratedHexEncryptionKeyProvider>
-                <CurrentServerTypeProvider initialValue="relay">
-                  <ServerUrlDerivedFromServerTypeProvider>
-                    <CurrentLocalPartyIdProvider value={local_party_id}>
+    <CurrentLocalPartyIdProvider value={local_party_id}>
+      <KeysignPayloadProvider value={keysignPayload}>
+        <KeysignMsgsGuard>
+          <GeneratedServiceNameProvider>
+            <PeersSelectionRecordProvider initialValue={{}}>
+              <GeneratedSessionIdProvider>
+                <GeneratedHexEncryptionKeyProvider>
+                  <CurrentServerTypeProvider initialValue="relay">
+                    <ServerUrlDerivedFromServerTypeProvider>
                       <MediatorManager />
                       <Match
                         value={step}
@@ -63,14 +56,14 @@ export const StartKeysignPage = () => {
                           <KeysignSigningStep onBack={() => setStep('peers')} />
                         )}
                       />
-                    </CurrentLocalPartyIdProvider>
-                  </ServerUrlDerivedFromServerTypeProvider>
-                </CurrentServerTypeProvider>
-              </GeneratedHexEncryptionKeyProvider>
-            </GeneratedSessionIdProvider>
-          </PeersSelectionRecordProvider>
-        </GeneratedServiceNameProvider>
-      </KeysignMsgsGuard>
-    </KeysignPayloadProvider>
+                    </ServerUrlDerivedFromServerTypeProvider>
+                  </CurrentServerTypeProvider>
+                </GeneratedHexEncryptionKeyProvider>
+              </GeneratedSessionIdProvider>
+            </PeersSelectionRecordProvider>
+          </GeneratedServiceNameProvider>
+        </KeysignMsgsGuard>
+      </KeysignPayloadProvider>
+    </CurrentLocalPartyIdProvider>
   );
 };

@@ -18,18 +18,16 @@ export const useIsSendFormDisabled = () => {
   const sender = useSender();
   const [receiver] = useSendReceiver();
   const [amount] = useSendAmount();
-
   const [coinKey] = useCurrentSendCoin();
+
+  const { t } = useTranslation();
+  const coin = useAssertCurrentVaultCoin(coinKey);
+  const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
   const addressValidationQuery = useValidateAddressQuery({
     address: receiver,
     chainId: coinKey.chainId,
   });
-
-  const { t } = useTranslation();
-
-  const coin = useAssertCurrentVaultCoin(coinKey);
-  const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
   return useMemo(() => {
     if (addressValidationQuery.isPending || balanceQuery.isPending) {
@@ -47,10 +45,6 @@ export const useIsSendFormDisabled = () => {
     if (addressError) {
       return t('send_invalid_receiver_address');
     }
-
-    // if (receiver === sender) {
-    //   return t('same_sender_receiver_error');
-    // }
 
     if (!amount) {
       return t('amount_required');

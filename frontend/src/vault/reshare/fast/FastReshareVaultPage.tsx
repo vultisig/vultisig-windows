@@ -9,7 +9,6 @@ import { KeygenStep } from '../../keygen/shared/KeygenStep';
 import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager';
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
-import { KeygenVerifyStep } from '../../keygen/shared/verify/KeygenVerifyStep';
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType';
 import { CurrentKeygenVaultProvider } from '../../keygen/state/currentKeygenVault';
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
@@ -29,6 +28,7 @@ import {
   useCurrentVaultHasServer,
 } from '../../state/useCurrentVault';
 import { ReshareVaultPeerDiscoveryStep } from '../ReshareVaultPeerDiscoveryStep';
+import { ReshareVerifyStep } from '../shared/ReshareVerifyStep';
 import { FastReshareServerStep } from './FastReshareServerStep';
 
 const reshareVaultSteps = [
@@ -100,7 +100,7 @@ export const FastReshareVaultPage = () => {
                                   />
                                 )}
                                 verify={() => (
-                                  <KeygenVerifyStep
+                                  <ReshareVerifyStep
                                     onBack={toPreviousStep}
                                     onForward={toNextStep}
                                   />

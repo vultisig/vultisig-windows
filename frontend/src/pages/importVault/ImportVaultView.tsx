@@ -13,6 +13,7 @@ import { makeAppPath } from '../../navigation';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 import { isBase64Encoded } from '../../utils/util';
+import { useSaveVaultMutation } from '../../vault/mutations/useSaveVaultMutation';
 import { useVaultsQuery } from '../../vault/queries/useVaultsQuery';
 import { useCurrentVaultId } from '../../vault/state/useCurrentVaultId';
 import { getStorageVaultId } from '../../vault/utils/storageVault';
@@ -47,6 +48,8 @@ const ImportVaultView = () => {
       fileInput.click();
     }
   };
+
+  const { mutateAsync: saveVault } = useSaveVaultMutation();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -219,25 +222,38 @@ const ImportVaultView = () => {
         return;
       }
 
-      if (fileExtension === 'dat') {
-        const vaultBinary = vault.toBinary();
-        const vaultBuffer = Buffer.from(vaultBinary);
-        await vaultService.importVault(vaultBuffer);
-      } else {
-        const vaultBuffer = Buffer.from(decryptedVaultContent as Uint8Array);
-        await vaultService.importVault(vaultBuffer);
-      }
+      const getVaultBuffer = () => {
+        if (fileExtension === 'dat') {
+          const vaultBinary = vault.toBinary();
+          return Buffer.from(vaultBinary);
+        }
+        return Buffer.from(decryptedVaultContent as Uint8Array);
+      };
 
-      const { data: updatedVaults } = await refetch();
+      const newVault = Vault.fromBinary(getVaultBuffer());
 
-      if (updatedVaults) {
-        const lastVaultId = getStorageVaultId(
-          updatedVaults[updatedVaults.length - 1]
-        );
-        setCurrentVaultId(lastVaultId);
-      }
+      const storageVault = {
+        name: newVault.name,
+        public_key_ecdsa: newVault.publicKeyEcdsa,
+        public_key_eddsa: newVault.publicKeyEddsa,
+        signers: newVault.signers,
+        created_at: newVault.createdAt,
+        hex_chain_code: newVault.hexChainCode,
+        keyshares: newVault.keyShares.map(share => ({
+          public_key: share.publicKey,
+          keyshare: share.keyshare,
+        })),
+        local_party_id: newVault.localPartyId,
+        reshare_prefix: newVault.resharePrefix,
+        order: 0,
+        is_backed_up: true,
+        coins: [],
+        convertValues: () => {},
+      };
 
-      navigate(makeAppPath('vaultList'));
+      await saveVault(storageVault);
+
+      navigate(makeAppPath('vault'));
     } catch (e: unknown) {
       setDialogTitle(t('invalid_vault_data'));
       setDialogContent(t('invalid_vault_data_message'));

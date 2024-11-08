@@ -40,7 +40,7 @@ export const JoinKeygenProcess = ({ title }: TitledComponentProps) => {
           <KeygenFailedState
             message={error.message}
             onTryAgain={() => {
-              navigate(makeAppPath('vaultList'));
+              navigate(makeAppPath('vault'));
             }}
           />
         </>

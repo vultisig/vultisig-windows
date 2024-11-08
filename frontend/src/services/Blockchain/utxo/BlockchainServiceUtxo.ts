@@ -118,7 +118,7 @@ export class BlockchainServiceUtxo
         this.walletCore.HexCoding.encode(hash.dataHash).stripHexPrefix()
       );
     }
-    return result;
+    return result.sort();
   }
 
   public async getSignedTransaction(
