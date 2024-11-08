@@ -5,10 +5,7 @@ import {
 } from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
 import { toCompressedString } from '../../../../utils/protobuf/toCompressedString';
-import {
-  KeygenServerType,
-  keygenServerUrl,
-} from '../../../keygen/KeygenServerType';
+import { KeygenServerType } from '../../../keygen/KeygenServerType';
 import { uploadPayloadToServer } from '../../../server/utils/uploadPayloadToServer';
 
 export type GetJoinKeysignUrlInput = {
@@ -53,7 +50,6 @@ export const getJoinKeysignUrl = async ({
     const compressedPayload = await toCompressedString(payload);
     const payloadId = await uploadPayloadToServer({
       payload: compressedPayload,
-      serverUrl: keygenServerUrl[serverType],
     });
 
     return getJoinKeysignUrl({

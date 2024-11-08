@@ -1,13 +1,13 @@
+import { keygenServerUrl } from '../../keygen/KeygenServerType';
+
 type UploadPayloadToServerInput = {
-  serverUrl: string;
   hash: string;
 };
 
 export async function getPayloadFromServer({
   hash,
-  serverUrl,
 }: UploadPayloadToServerInput): Promise<string> {
-  const url = `${serverUrl}/payload/${hash}`;
+  const url = `${keygenServerUrl.relay}/payload/${hash}`;
 
   const response = await fetch(url);
 
