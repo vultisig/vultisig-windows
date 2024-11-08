@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import jsQR from 'jsqr';
 
-import { KeysignMessage } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { match } from '../../../lib/utils/match';
 import { getRawQueryParams } from '../../../lib/utils/query/getRawQueryParams';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { keygenMsgRecord, KeygenType } from '../../keygen/KeygenType';
+import { parseTransferredKeysignMsg } from '../../keysign/shared/utils/parseTransfferedKeysignMsg';
 import { decompressQrPayload } from './utils/decompressQrPayload';
 
 type QrType = 'NewVault' | 'SignTransaction';
@@ -74,7 +74,7 @@ export const useProcessQrMutation = () => {
           SignTransaction: async () => {
             const vaultId = queryParams.vault;
 
-            const keysignMsg = KeysignMessage.fromBinary(payload);
+            const keysignMsg = await parseTransferredKeysignMsg(payload);
 
             navigate('joinKeysign', {
               state: {
