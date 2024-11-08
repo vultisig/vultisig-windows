@@ -28,15 +28,15 @@ export const StartKeysignPage = () => {
     useStepNavigation(keysignSteps);
 
   return (
-    <KeysignPayloadProvider value={keysignPayload}>
-      <KeysignMsgsGuard>
-        <GeneratedServiceNameProvider>
-          <PeersSelectionRecordProvider initialValue={{}}>
-            <GeneratedSessionIdProvider>
-              <GeneratedHexEncryptionKeyProvider>
-                <CurrentServerTypeProvider initialValue="relay">
-                  <ServerUrlDerivedFromServerTypeProvider>
-                    <CurrentLocalPartyIdProvider value={local_party_id}>
+    <CurrentLocalPartyIdProvider value={local_party_id}>
+      <KeysignPayloadProvider value={keysignPayload}>
+        <KeysignMsgsGuard>
+          <GeneratedServiceNameProvider>
+            <PeersSelectionRecordProvider initialValue={{}}>
+              <GeneratedSessionIdProvider>
+                <GeneratedHexEncryptionKeyProvider>
+                  <CurrentServerTypeProvider initialValue="relay">
+                    <ServerUrlDerivedFromServerTypeProvider>
                       <MediatorManager />
                       <Match
                         value={step}
@@ -56,14 +56,14 @@ export const StartKeysignPage = () => {
                           <KeysignSigningStep onBack={() => setStep('peers')} />
                         )}
                       />
-                    </CurrentLocalPartyIdProvider>
-                  </ServerUrlDerivedFromServerTypeProvider>
-                </CurrentServerTypeProvider>
-              </GeneratedHexEncryptionKeyProvider>
-            </GeneratedSessionIdProvider>
-          </PeersSelectionRecordProvider>
-        </GeneratedServiceNameProvider>
-      </KeysignMsgsGuard>
-    </KeysignPayloadProvider>
+                    </ServerUrlDerivedFromServerTypeProvider>
+                  </CurrentServerTypeProvider>
+                </GeneratedHexEncryptionKeyProvider>
+              </GeneratedSessionIdProvider>
+            </PeersSelectionRecordProvider>
+          </GeneratedServiceNameProvider>
+        </KeysignMsgsGuard>
+      </KeysignPayloadProvider>
+    </CurrentLocalPartyIdProvider>
   );
 };
