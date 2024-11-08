@@ -26,12 +26,12 @@ export const JoinKeysignPage = () => {
   const { local_party_id } = useAssertCurrentVault();
 
   return (
-    <KeysignVaultGuard>
-      <KeysignPayloadProvider value={shouldBePresent(keysignPayload)}>
-        <KeysignMsgsGuard>
-          <KeysignServerUrlProvider>
-            <CurrentSessionIdProvider value={sessionId}>
-              <CurrentLocalPartyIdProvider value={local_party_id}>
+    <CurrentLocalPartyIdProvider value={local_party_id}>
+      <KeysignVaultGuard>
+        <KeysignPayloadProvider value={shouldBePresent(keysignPayload)}>
+          <KeysignMsgsGuard>
+            <KeysignServerUrlProvider>
+              <CurrentSessionIdProvider value={sessionId}>
                 <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
                   <Match
                     value={step}
@@ -49,11 +49,11 @@ export const JoinKeysignPage = () => {
                     )}
                   />
                 </CurrentHexEncryptionKeyProvider>
-              </CurrentLocalPartyIdProvider>
-            </CurrentSessionIdProvider>
-          </KeysignServerUrlProvider>
-        </KeysignMsgsGuard>
-      </KeysignPayloadProvider>
-    </KeysignVaultGuard>
+              </CurrentSessionIdProvider>
+            </KeysignServerUrlProvider>
+          </KeysignMsgsGuard>
+        </KeysignPayloadProvider>
+      </KeysignVaultGuard>
+    </CurrentLocalPartyIdProvider>
   );
 };

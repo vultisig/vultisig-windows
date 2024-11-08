@@ -5,19 +5,17 @@ import { ComponentWithValueProps } from '../../../../lib/ui/props';
 import { SaveAsImage } from '../../../../ui/file/SaveAsImage';
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode';
-import { getVaultPublicKeyExport } from '../../../share/utils/getVaultPublicKeyExport';
-import { useAssertCurrentVault } from '../../../state/useCurrentVault';
+import { useCurrentKeygenVault } from '../../state/currentKeygenVault';
 
 export const DownloadKeygenQrCode = ({
   value,
 }: ComponentWithValueProps<string>) => {
-  const vault = useAssertCurrentVault();
-  const { uid } = getVaultPublicKeyExport(vault);
+  const { name } = useCurrentKeygenVault();
   const { t } = useTranslation();
 
   return (
     <SaveAsImage
-      fileName={`VaultKeygen-${vault.name}-${uid}-${new Date().toISOString()}`}
+      fileName={`VaultKeygen-${name}-${new Date().toISOString()}`}
       renderTrigger={({ onClick }) => (
         <PageHeaderIconButton icon={<FileUpIcon />} onClick={onClick} />
       )}
