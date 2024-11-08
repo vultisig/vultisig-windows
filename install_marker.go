@@ -15,7 +15,7 @@ type InstallMarkerService struct{}
 
 func (s *InstallMarkerService) GetAppDataDir() string {
 	dir, _ := os.UserConfigDir()
-	return filepath.Join(dir, "VULTISIG") // Adjust "VULTISIG" to your app’s actual name
+	return filepath.Join(dir, "Vultisig")
 }
 
 func (s *InstallMarkerService) IsFreshInstall() bool {
