@@ -6,6 +6,7 @@ import { isEmpty } from '../../../lib/utils/array/isEmpty';
 import {
   chainActionOptionsConfig,
   ChainWithAction,
+  swapAvailableChains,
 } from '../../deposit/DepositForm/chainOptionsConfig';
 import { SendPrompt } from '../../send/SendPrompt';
 import { useAssertCurrentVaultNativeCoins } from '../../state/useCurrentVault';
@@ -27,10 +28,14 @@ export const VaultPrimaryActions = ({
     ? chainActionOptionsConfig[chainId] || []
     : [];
 
+  const isSwapAvailable = swapAvailableChains.some(
+    chain => chain === value?.chainId
+  );
+
   return (
     <UniformColumnGrid fullWidth gap={12}>
       <SendPrompt value={sendInitialCoin} />
-      <SwapPrompt value={sendInitialCoin} />
+      {isSwapAvailable && <SwapPrompt value={sendInitialCoin} />}
       {availableChainActions.length > 0 && (
         <DepositPrompt value={sendInitialCoin} />
       )}

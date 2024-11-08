@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { Chain } from '../../../model/chain';
+
 export type ChainWithAction = keyof typeof chainActionOptionsConfig;
 
 export const chainActionOptionsConfig = {
@@ -8,6 +10,21 @@ export const chainActionOptionsConfig = {
   dydx: ['vote'],
   ton: ['stake', 'unstake'],
 };
+
+export const swapAvailableChains = [
+  Chain.Arbitrum,
+  Chain.Avalanche,
+  Chain.Ethereum,
+  Chain.Bitcoin,
+  Chain.BitcoinCash,
+  Chain.Litecoin,
+  Chain.Dogecoin,
+  Chain.Dash,
+  Chain.THORChain,
+  Chain.Cosmos,
+  Chain.MayaChain,
+  Chain.Kujira,
+];
 
 export type ChainAction = keyof typeof requiredFieldsPerChainAction;
 
