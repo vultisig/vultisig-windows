@@ -45,10 +45,22 @@ func main() {
 			log.Err(err).Msg("relay server exit")
 		}
 	}()
-	// migrate db , ensure db is in correct state
+	// Migrate db, ensure db is in correct state
 	if err := store.Migrate(); err != nil {
 		panic(err)
 	}
+
+	// Create an instance of InstallMarkerService
+	installMarkerService := &InstallMarkerService{}
+
+	// Optionally handle fresh install logic in Go on startup
+	if installMarkerService.IsFreshInstall() {
+		log.Info().Msg("Fresh install detected. Creating install marker.")
+		if err := installMarkerService.CreateInstallMarker(); err != nil {
+			log.Err(err).Msg("Failed to create install marker")
+		}
+	}
+
 	// Create application with options
 	err = wails.Run(&options.App{
 		Title:     "Vultisig",
@@ -75,6 +87,7 @@ func main() {
 			store,
 			mediator,
 			goHttp,
+			installMarkerService, 
 		},
 		EnumBind: []interface{}{},
 		LogLevel: logger.ERROR,
