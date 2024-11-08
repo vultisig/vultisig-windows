@@ -57,7 +57,14 @@ export const KeygenPeerDiscoveryStep = ({
       <PageHeader
         title={<PageHeaderTitle>{title}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        secondaryControls={null}
+        secondaryControls={
+          <QueryDependant
+            query={joinUrlQuery}
+            success={value => <DownloadKeygenQrCode value={value} />}
+            error={() => null}
+            pending={() => null}
+          />
+        }
       />
       <PageContent
         as="form"
