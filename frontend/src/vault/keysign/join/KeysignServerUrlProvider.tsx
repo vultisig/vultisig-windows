@@ -8,8 +8,8 @@ import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { useKeygenServerUrlQuery } from '../../keygen/server/queries/useKeygenServerUrlQuery';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
-import { useServerUrlQuery } from '../../keygen/shared/queries/useServerUrlQuery';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
 import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl';
 
@@ -17,17 +17,16 @@ export const KeysignServerUrlProvider = ({
   children,
 }: ComponentWithChildrenProps) => {
   const {
-    keysignMsg: { serviceName, useVultisigRelay, sessionId },
+    keysignMsg: { serviceName, useVultisigRelay },
   } = useAppPathState<'joinKeysign'>();
 
   const serverType = useVultisigRelay ? 'relay' : 'local';
 
   const { t } = useTranslation();
 
-  const query = useServerUrlQuery({
+  const query = useKeygenServerUrlQuery({
     serverType,
     serviceName,
-    sessionId,
   });
 
   return (
