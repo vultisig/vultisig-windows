@@ -56,8 +56,8 @@ export const KeysignPeerDiscoveryStep = ({
             </VStack>
           </Content>
           <DynamicInfoPanel
-            title="Join Keysign"
-            subtitle="Scan with devices to participate in signing the transaction"
+            title={t('join_keysign')}
+            subtitle={t('scan_with_devices_to_sign')}
           />
         </Wrapper>
         <Button type="submit" isDisabled={isDisabled}>

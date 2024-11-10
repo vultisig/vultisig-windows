@@ -564,4 +564,7 @@ export const de = {
       },
     },
   },
+  scan_with_devices: 'Mit Geräten scannen, um der Tresorgeneration beizutreten',
+  scan_with_devices_to_sign:
+    'Esegui la scansione con i dispositivi per partecipare alla firma della transazione',
 };

@@ -545,4 +545,7 @@ export const hr = {
       },
     },
   },
+  scan_with_devices: 'Skeniraj s uređajima za pridruživanje generaciji trezora',
+  scan_with_devices_to_sign:
+    'Skeniraj s uređajima za sudjelovanje u potpisivanju transakcije',
 };

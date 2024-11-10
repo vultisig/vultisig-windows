@@ -89,8 +89,8 @@ export const KeygenPeerDiscoveryStep = ({
             </VStack>
           </Content>
           <DynamicInfoPanel
-            title="Join Keygen"
-            subtitle="Scan with devices to join the vault generation"
+            title={t('join_keygen')}
+            subtitle={t('scan_with_devices')}
           />
         </Wrapper>
         <Button type="submit" isDisabled={isDisabled}>
