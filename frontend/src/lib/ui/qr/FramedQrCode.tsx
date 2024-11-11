@@ -36,7 +36,7 @@ export const FramedQrCode = ({
   return (
     <Wrapper>
       <Container>
-        <QRCode size={size - (codeOffset + codePadding) * 2} value={value} />
+        <QRCode size={size} value={value} />
       </Container>
     </Wrapper>
   );
