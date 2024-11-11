@@ -48,6 +48,9 @@ export const getBlockExplorerUrl = ({
         [Chain.Ton]: () => `https://tonviewer.com/${value}`,
         [Chain.Osmosis]: () =>
           `https://www.mintscan.io/osmosis/address/${value}`,
+        [Chain.Terra]: () => `https://www.mintscan.io/terra/address/${value}`,
+        [Chain.TerraClassic]: () =>
+          `https://finder.terra.money/classic/address/${value}`,
       }),
     tx: () =>
       match(chainId, {
@@ -81,6 +84,9 @@ export const getBlockExplorerUrl = ({
         [Chain.Zksync]: () => `https://explorer.zksync.io/tx/${value}`,
         [Chain.Ton]: () => `https://tonviewer.com/transaction/${value}`,
         [Chain.Osmosis]: () => `https://www.mintscan.io/osmosis/tx/${value}`,
+        [Chain.Terra]: () => `https://www.mintscan.io/terra/tx/${value}`,
+        [Chain.TerraClassic]: () =>
+          `https://finder.terra.money/classic/tx/${value}`,
       }),
   });
 };

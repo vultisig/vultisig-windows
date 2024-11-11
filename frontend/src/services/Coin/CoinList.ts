@@ -1263,6 +1263,26 @@ export class TokensStore {
       isNativeToken: true,
     }),
 
+    terraLuna: (): CoinMeta => ({
+      chain: Chain.Terra,
+      ticker: 'LUNA',
+      logo: 'luna',
+      decimals: 6,
+      priceProviderId: 'terra-luna-2',
+      contractAddress: '',
+      isNativeToken: true,
+    }),
+
+    terraLunc: (): CoinMeta => ({
+      chain: Chain.TerraClassic,
+      ticker: 'LUNC',
+      logo: 'lunc',
+      decimals: 6,
+      priceProviderId: 'terra-luna',
+      contractAddress: '',
+      isNativeToken: true,
+    }),
+
     kujira: (): CoinMeta => ({
       chain: Chain.Kujira,
       ticker: 'KUJI',
@@ -1311,6 +1331,9 @@ export class TokensStore {
 
     TokensStore.Token.gaiaChainAtom(),
     TokensStore.Token.osmosisOsmo(),
+    TokensStore.Token.terraLuna(),
+    TokensStore.Token.terraLunc(),
+
     TokensStore.Token.kujira(),
     TokensStore.Token.dydx(),
 

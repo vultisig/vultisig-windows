@@ -220,6 +220,32 @@ export class Endpoint {
   static broadcastCosmosTransaction: string =
     'https://cosmos-rest.publicnode.com/cosmos/tx/v1beta1/txs';
 
+  // --------------------------------- Terra ---------------------------------
+
+  static fetchTerraV2AccountBalance(address: string): string {
+    return `https://terra-lcd.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
+  }
+
+  static fetchTerraV2AccountNumber(address: string): string {
+    return `https://terra-lcd.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`;
+  }
+
+  static broadcastTerraV2Transaction: string =
+    'https://terra-lcd.publicnode.com/cosmos/tx/v1beta1/txs';
+
+  static fetchTerraClassicAccountBalance(address: string): string {
+    return `https://terra-classic-lcd.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
+  }
+
+  static fetchTerraClassicAccountNumber(address: string): string {
+    return `https://terra-classic-lcd.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`;
+  }
+
+  static broadcastTerraClassicTransaction: string =
+    'https://terra-classic-lcd.publicnode.com/cosmos/tx/v1beta1/txs';
+
+  // --------------------------------- Terra ---------------------------------
+
   static fetchOsmosisAccountBalance(address: string): string {
     return `https://osmosis-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
   }

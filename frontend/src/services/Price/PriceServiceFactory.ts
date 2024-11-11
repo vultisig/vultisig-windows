@@ -55,6 +55,10 @@ export class PriceServiceFactory {
         return new PriceService(chain);
       case Chain.Dydx:
         return new PriceService(chain);
+      case Chain.Terra:
+        return new PriceService(chain);
+      case Chain.TerraClassic:
+        return new PriceService(chain);
       case Chain.Ton:
         return new PriceService(chain);
       default:

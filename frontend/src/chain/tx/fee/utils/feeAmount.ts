@@ -45,6 +45,8 @@ export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
   [Chain.Polkadot]: getDefaultFeeAmount,
   [Chain.Ton]: getDefaultFeeAmount,
   [Chain.Osmosis]: getDefaultFeeAmount,
+  [Chain.Terra]: getDefaultFeeAmount,
+  [Chain.TerraClassic]: getDefaultFeeAmount,
 };
 
 export const getFeeAmountDecimals = (chain: Chain): number =>

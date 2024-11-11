@@ -60,6 +60,10 @@ export class SendServiceFactory {
         return new SendServiceCosmos(chain, walletCore);
       case Chain.Dydx:
         return new SendServiceCosmos(chain, walletCore);
+      case Chain.Terra:
+        return new SendServiceCosmos(chain, walletCore);
+      case Chain.TerraClassic:
+        return new SendServiceCosmos(chain, walletCore);
       case Chain.Polkadot:
         return new SendService(chain, walletCore); // TODO: implement Polkadot
       default:
