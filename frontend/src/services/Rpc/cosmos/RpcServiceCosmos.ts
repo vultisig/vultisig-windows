@@ -32,7 +32,7 @@ export class RpcServiceCosmos implements IRpcService {
   async getSpecificTransactionInfo(coin: Coin): Promise<SpecificCosmos> {
     let defaultGas = 7500;
     if (coin.chain == Chain.Dydx) defaultGas = 2500000000000000;
-    if (coin.chain == Chain.TerraClassic) defaultGas = 10000000;
+    if (coin.chain == Chain.TerraClassic) defaultGas = 100000000;
 
     let result: SpecificCosmos = {
       gas: defaultGas,
@@ -101,6 +101,9 @@ export class RpcServiceCosmos implements IRpcService {
 
     try {
       let response = await Post(url, JSON.parse(jsonString));
+
+      console.log('broadcastTransaction::response', response);
+
       const data: CosmosTransactionBroadcastResponse = response;
 
       if (data.tx_response?.txhash) {
