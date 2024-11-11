@@ -15,7 +15,7 @@ import { KeysignMsgsGuard } from '../join/KeysignMsgsGuard';
 import { KeysignSigningStep } from '../shared/KeysignSigningStep';
 import { KeysignPayloadProvider } from '../shared/state/keysignPayload';
 import { PeersSelectionRecordProvider } from '../shared/state/selectedPeers';
-import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoveryStep';
+import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoveryStep/KeysignPeerDiscoveryStep';
 
 const keysignSteps = ['joinSession', 'peers', 'session', 'sign'] as const;
 

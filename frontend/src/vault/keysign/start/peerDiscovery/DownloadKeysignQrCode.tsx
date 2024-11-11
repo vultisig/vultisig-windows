@@ -26,7 +26,13 @@ export const DownloadKeysignQrCode = () => {
           renderTrigger={({ onClick }) => (
             <PageHeaderIconButton icon={<FileUpIcon />} onClick={onClick} />
           )}
-          value={<PrintableQrCode value={data} title={t('join_keysign')} />}
+          value={
+            <PrintableQrCode
+              value={data}
+              title={t('join_keysign')}
+              description={t('scan_with_devices_to_sign')}
+            />
+          }
         />
       )}
       pending={() => null}

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ComponentWithForwardActionProps } from '../../lib/ui/props';
-import { KeygenPeerDiscoveryStep } from '../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep';
+import { KeygenPeerDiscoveryStep } from '../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep/KeygenPeerDiscoveryStep';
 import { useSelectedPeers } from '../keysign/shared/state/selectedPeers';
 import { useJoinReshareUrlQuery } from './queries/useJoinReshareUrlQuery';
 
