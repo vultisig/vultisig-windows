@@ -38,7 +38,7 @@ export const PrintableQrCode = ({
 }: PrintableQrCodeProps) => {
   return (
     <Container>
-      <VStack fullWidth>
+      <VStack>
         <FramedQrCode value={value} />
       </VStack>
 

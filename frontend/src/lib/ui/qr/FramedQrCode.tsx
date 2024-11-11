@@ -7,14 +7,17 @@ import { toSizeUnit } from '../../../lib/ui/css/toSizeUnit';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { getColor } from '../../../lib/ui/theme/getters';
 
+const DEFAULT_QR_CODE_SIZE = 365;
 const codeOffset = 24;
 const codePadding = 16;
 
 const Wrapper = styled.div`
+  box-sizing: border-box;
   ${borderRadius.l};
   background: ${getColor('foreground')};
   padding: ${toSizeUnit(codeOffset)};
   border: 5px dashed ${({ theme }) => theme.colors.primary.toCssValue()};
+  width: DEFAULT_QR_CODE_SIZE + 'px';
 `;
 
 const Container = styled.div`
@@ -26,8 +29,6 @@ const Container = styled.div`
 type FramedQrCode = ComponentWithValueProps<string> & {
   size?: number;
 } & ComponentProps<typeof Wrapper>;
-
-const DEFAULT_QR_CODE_SIZE = 365;
 
 export const FramedQrCode = ({
   size = DEFAULT_QR_CODE_SIZE,

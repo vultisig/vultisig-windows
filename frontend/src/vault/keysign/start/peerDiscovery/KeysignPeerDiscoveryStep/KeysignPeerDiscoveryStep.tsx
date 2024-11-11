@@ -47,7 +47,7 @@ export const KeysignPeerDiscoveryStep = ({
       >
         <Content>
           <KeysignPeerDiscoveryQrCode />
-          <VStack gap={40} flexGrow alignItems="center">
+          <VStack gap={40} alignItems="center">
             <ManageServerType />
             <PeersManager />
             <KeygenNetworkReminder />
