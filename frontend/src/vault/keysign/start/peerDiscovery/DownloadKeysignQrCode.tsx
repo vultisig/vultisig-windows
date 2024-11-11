@@ -13,14 +13,16 @@ export const DownloadKeysignQrCode = () => {
   const msgQuery = useKeysignMsgQuery();
   const { t } = useTranslation();
   const vault = useAssertCurrentVault();
+  const { name } = vault;
   const { uid } = getVaultPublicKeyExport(vault);
+  const lastThreeUID = uid.slice(-3);
 
   return (
     <QueryDependant
       query={msgQuery}
       success={data => (
         <SaveAsImage
-          fileName={`VaultSend-${vault.name}-${uid}-${new Date().toISOString()}`}
+          fileName={`VaultKeysign-${name}-${lastThreeUID}`}
           renderTrigger={({ onClick }) => (
             <PageHeaderIconButton icon={<FileUpIcon />} onClick={onClick} />
           )}

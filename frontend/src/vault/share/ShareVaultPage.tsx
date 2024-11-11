@@ -18,6 +18,8 @@ export const ShareVaultPage = () => {
   const { t } = useTranslation();
   const vault = useAssertCurrentVault();
   const { uid } = getVaultPublicKeyExport(vault);
+  const lastThreeUID = uid.slice(-3);
+
   const { name } = vault;
   const qrNodeRef = useRef<HTMLDivElement | null>(null);
 
@@ -65,7 +67,7 @@ export const ShareVaultPage = () => {
           </Button>
 
           <SaveAsImage
-            fileName={`VultisigQR-${vault.name}-${uid}-${new Date().toISOString()}`}
+            fileName={`VultisigQR-${name}-${lastThreeUID}`}
             renderTrigger={({ onClick }) => (
               <Button kind="outlined" onClick={onClick}>
                 {t('save')}
