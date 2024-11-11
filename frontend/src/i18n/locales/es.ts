@@ -436,6 +436,8 @@ export const es = {
   'page.swap.not.possible':
     '¡No es posible cambiar a un contrato inteligente! Ingrese una dirección de destinatario diferente.',
   'page.swap.title': 'Intercambio',
+  swap_invalid_receiver:
+    'Se ha especificado una dirección de destinatario no válida. Probablemente deberías agregar la cadena entrante a tu lista.',
   slippage: 'Deslizamiento',
   max: 'Máximo',
   backupnow_description:

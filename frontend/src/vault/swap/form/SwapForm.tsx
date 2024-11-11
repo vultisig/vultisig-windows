@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../../lib/ui/buttons/Button';
@@ -8,7 +9,9 @@ import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { convertChainSymbolToChain } from '../../../utils/crypto';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
+import { useAssertCurrentVaultAddreses } from '../../state/useCurrentVault';
 import { ManageAmount } from '../amount/ManageSendAmount';
 import { ManageSwapCoin } from '../coin/ManageSwapCoin';
 import { ManageSwapCoinTo } from '../coin/ManageSwapCoinTo';
@@ -16,13 +19,27 @@ import { SendFee } from '../fee/SendFee';
 import { SendFiatFee } from '../fee/SendFiatFee';
 import { StrictFeeRow } from '../fee/StrictFeeRow';
 import SwapQuotes from '../quotes/SwapQuotes';
-import { ManageReceiver } from '../receiver/ManageReceiver';
+import { useCoinTo } from '../state/coin-to';
+import { useSendReceiver } from '../state/receiver';
 import { useIsSendFormDisabled } from './hooks/useIsSendFormDisabled';
 
 export const SwapForm = ({ onForward }: ComponentWithForwardActionProps) => {
   const { t } = useTranslation();
+  const [, setValue] = useSendReceiver();
 
   const isDisabled = useIsSendFormDisabled();
+
+  const addresses = useAssertCurrentVaultAddreses();
+  const [coinTo] = useCoinTo();
+
+  useEffect(() => {
+    setValue(
+      addresses[
+        convertChainSymbolToChain(coinTo?.chain || '') as keyof typeof addresses
+      ] || ''
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addresses, coinTo]);
 
   return (
     <>
@@ -42,7 +59,6 @@ export const SwapForm = ({ onForward }: ComponentWithForwardActionProps) => {
           <VStack gap={16}>
             <ManageSwapCoin />
             <ManageSwapCoinTo />
-            <ManageReceiver />
             <ManageAmount />
             <SwapQuotes />
             <VStack gap={8}>

@@ -423,6 +423,8 @@ export const en = {
   'page.swap.not.possible':
     'Swapping to a smart contract is not possible! Enter a different recipient address.',
   'page.swap.title': 'Swap',
+  swap_invalid_receiver:
+    'Invalid recipient address specified. Probably you should add inbound chain to your list.',
   slippage: 'Slippage',
   max: 'Max',
   backupnow_description: 'Backups work different in Vultisig',

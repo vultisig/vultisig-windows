@@ -35,6 +35,10 @@ export const useIsSendFormDisabled = () => {
       return t('send_pending_validation');
     }
 
+    if (!receiver) {
+      return t('swap_invalid_receiver');
+    }
+
     if (
       addressValidationQuery.data === undefined ||
       balanceQuery.data === undefined
