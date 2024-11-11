@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { DynamicInfoPanel } from '../../../../../components/actionInfoCard/DynamicInfoPanel';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../../../../lib/ui/layout/Stack';
@@ -16,7 +15,7 @@ import { PeersManager } from '../../../../keygen/shared/PeersManager';
 import { DownloadKeysignQrCode } from '../DownloadKeysignQrCode';
 import { useIsPeerDiscoveryStepDisabled } from '../hooks/useIsPeerDiscoveryStepDisabled';
 import { KeysignPeerDiscoveryQrCode } from '../KeysignPeerDiscoveryCode';
-import { Content, Wrapper } from './KeysignPeerDiscoveryStep.styled';
+import { Content } from './KeysignPeerDiscoveryStep.styled';
 
 export const KeysignPeerDiscoveryStep = ({
   onForward,
@@ -46,20 +45,14 @@ export const KeysignPeerDiscoveryStep = ({
           isDisabled,
         })}
       >
-        <Wrapper>
-          <Content>
-            <KeysignPeerDiscoveryQrCode />
-            <VStack gap={40} flexGrow alignItems="center">
-              <ManageServerType />
-              <PeersManager />
-              <KeygenNetworkReminder />
-            </VStack>
-          </Content>
-          <DynamicInfoPanel
-            title={t('join_keysign')}
-            subtitle={t('scan_with_devices_to_sign')}
-          />
-        </Wrapper>
+        <Content>
+          <KeysignPeerDiscoveryQrCode />
+          <VStack gap={40} flexGrow alignItems="center">
+            <ManageServerType />
+            <PeersManager />
+            <KeygenNetworkReminder />
+          </VStack>
+        </Content>
         <Button type="submit" isDisabled={isDisabled}>
           {t('continue')}
         </Button>

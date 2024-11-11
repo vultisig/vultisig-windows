@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 
-import { DynamicInfoPanel } from '../../../../../components/actionInfoCard/DynamicInfoPanel';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../../../../lib/ui/layout/Stack';
@@ -25,7 +24,7 @@ import { PeersManager } from '../../PeersManager';
 import { DownloadKeygenQrCode } from '../DownloadKeygenQrCode';
 import { KeygenPeerDiscoveryQrCode } from '../KeygenPeerDiscoveryQrCode';
 import { ManageServerType } from '../ManageServerType';
-import { Content, Wrapper } from './KegenPeerDiscoveryStep.styled';
+import { Content } from './KegenPeerDiscoveryStep.styled';
 
 type KeygenPeerDiscoveryStepProps = ComponentWithForwardActionProps &
   Partial<ComponentWithBackActionProps> &
@@ -65,34 +64,29 @@ export const KeygenPeerDiscoveryStep = ({
           isDisabled,
         })}
       >
-        <Wrapper>
-          <Content>
-            <QueryDependant
-              query={joinUrlQuery}
-              success={value => <KeygenPeerDiscoveryQrCode value={value} />}
-              pending={() => (
-                <TakeWholeSpaceCenterContent>
-                  <Spinner />
-                </TakeWholeSpaceCenterContent>
-              )}
-              error={() => (
-                <TakeWholeSpaceCenterContent>
-                  <StrictText>{t('failed_to_generate_qr_code')}</StrictText>
-                </TakeWholeSpaceCenterContent>
-              )}
-            />
-
-            <VStack gap={40} alignItems="center">
-              {vaultType === 'secure' && <ManageServerType />}
-              <PeersManager />
-              <KeygenNetworkReminder />
-            </VStack>
-          </Content>
-          <DynamicInfoPanel
-            title={t('join_keygen')}
-            subtitle={t('scan_with_devices')}
+        <Content>
+          <QueryDependant
+            query={joinUrlQuery}
+            success={value => <KeygenPeerDiscoveryQrCode value={value} />}
+            pending={() => (
+              <TakeWholeSpaceCenterContent>
+                <Spinner />
+              </TakeWholeSpaceCenterContent>
+            )}
+            error={() => (
+              <TakeWholeSpaceCenterContent>
+                <StrictText>{t('failed_to_generate_qr_code')}</StrictText>
+              </TakeWholeSpaceCenterContent>
+            )}
           />
-        </Wrapper>
+
+          <VStack gap={40} alignItems="center">
+            {vaultType === 'secure' && <ManageServerType />}
+            <PeersManager />
+            <KeygenNetworkReminder />
+          </VStack>
+        </Content>
+
         <Button type="submit" isDisabled={isDisabled}>
           {t('continue')}
         </Button>
