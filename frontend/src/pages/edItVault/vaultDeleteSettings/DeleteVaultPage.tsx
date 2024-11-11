@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import DangerSignRedIcon from '../../../lib/ui/icons/DangerSignRedIcon';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -44,6 +45,8 @@ const DeleteVaultPage = () => {
 
   const m = keyshares.length;
   const vaultTypeText = getVaultTypeText(m, t);
+
+  const navigate = useAppNavigate();
 
   return (
     <Container flexGrow gap={16}>
@@ -143,7 +146,13 @@ const DeleteVaultPage = () => {
             </ActionsWrapper>
             <DeleteButton
               isLoading={isPending}
-              onClick={() => deleteVault(getStorageVaultId(vault))}
+              onClick={() => {
+                deleteVault(getStorageVaultId(vault), {
+                  onSuccess: () => {
+                    navigate('vault');
+                  },
+                });
+              }}
               color="danger"
               isDisabled={
                 !deleteTerms.firstTermAccepted ||

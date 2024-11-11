@@ -75,43 +75,23 @@ export const router = createBrowserRouter([
   },
   {
     path: appPaths.setupFastVault,
-    element: (
-      <ActiveVaultGuard>
-        <SetupFastVaultPage />
-      </ActiveVaultGuard>
-    ),
+    element: <SetupFastVaultPage />,
   },
   {
     path: appPaths.setupActiveVault,
-    element: (
-      <ActiveVaultGuard>
-        <SetupActiveVaultPage />
-      </ActiveVaultGuard>
-    ),
+    element: <SetupActiveVaultPage />,
   },
   {
     path: appPaths.setupSecureVault,
-    element: (
-      <ActiveVaultGuard>
-        <SetupSecureVaultPage />
-      </ActiveVaultGuard>
-    ),
+    element: <SetupSecureVaultPage />,
   },
   {
     path: appPaths.setupVault,
-    element: (
-      <ActiveVaultGuard>
-        <SetupVaultPage />
-      </ActiveVaultGuard>
-    ),
+    element: <SetupVaultPage />,
   },
   {
     path: appPaths.importVault,
-    element: (
-      <ActiveVaultGuard>
-        <ImportVaultView />
-      </ActiveVaultGuard>
-    ),
+    element: <ImportVaultView />,
   },
   {
     path: appPaths.uploadQr,
