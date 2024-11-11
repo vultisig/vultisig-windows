@@ -19,7 +19,7 @@ export const DownloadKeygenQrCode = ({
 
   return (
     <SaveAsImage
-      fileName={`VayltKeygen-${name}-${lastThreeUID}`}
+      fileName={`VayltKeygenQR-${name}-${lastThreeUID}`}
       renderTrigger={({ onClick }) => (
         <PageHeaderIconButton icon={<FileUpIcon />} onClick={onClick} />
       )}

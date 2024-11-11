@@ -22,7 +22,7 @@ export const DownloadKeysignQrCode = () => {
       query={msgQuery}
       success={data => (
         <SaveAsImage
-          fileName={`VaultKeysign-${name}-${lastThreeUID}`}
+          fileName={`VaultKeysignQR-${name}-${lastThreeUID}`}
           renderTrigger={({ onClick }) => (
             <PageHeaderIconButton icon={<FileUpIcon />} onClick={onClick} />
           )}
