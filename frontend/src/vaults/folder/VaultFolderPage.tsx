@@ -1,8 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-
 import { EditIcon } from '../../lib/ui/icons/EditIcon';
 import { VStack } from '../../lib/ui/layout/Stack';
-import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
@@ -15,7 +13,7 @@ import { VaultListItem } from '../components/VaultListItem';
 import { useCurrentVaultFolder } from './state/currentVaultFolder';
 
 export const VaultFolderPage = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const { id, name } = useCurrentVaultFolder();
 
   const vaults = useFolderVaults(id);
@@ -24,11 +22,13 @@ export const VaultFolderPage = () => {
     <>
       <PageHeader
         hasBorder
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={
+          <PageHeaderBackButton onClick={() => navigate('vaults')} />
+        }
         secondaryControls={
           <PageHeaderIconButton
             icon={<EditIcon />}
-            onClick={() => navigate(makeAppPath('manageVaultFolder', { id }))}
+            onClick={() => navigate('manageVaultFolder', { params: { id } })}
           />
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
