@@ -65,7 +65,7 @@ export class SendServiceFactory {
       case Chain.TerraClassic:
         return new SendServiceCosmos(chain, walletCore);
       case Chain.Polkadot:
-        return new SendService(chain, walletCore); // TODO: implement Polkadot
+        return new SendService(chain, walletCore);
       default:
         throw new Error('Chain not supported');
     }
