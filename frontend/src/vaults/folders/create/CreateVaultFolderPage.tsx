@@ -10,9 +10,10 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { getLastItemOrder } from '../../../lib/utils/order/getLastItemOrder';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
 import { PageContent } from '../../../ui/page/PageContent';
+import { PageFooter } from '../../../ui/page/PageFooter';
 import { useFolderlessVaults } from '../../../vault/queries/useVaultsQuery';
+import { FolderVaultsInput } from '../../folder/addVaults/FolderVaultsInput';
 import { useCreateVaultFolderMutation } from '../../folder/mutations/useCreateVaultFolderMutation';
-import { FolderVaultsInput } from '../components/FolderVaultsInput';
 import { useVaultFolders } from '../queries/useVaultFoldersQuery';
 
 export const CreateVaultFolderPage = () => {
@@ -44,8 +45,9 @@ export const CreateVaultFolderPage = () => {
   return (
     <>
       <FlowPageHeader title={t('create_folder')} />
-      <PageContent
+      <VStack
         as="form"
+        flexGrow
         {...getFormProps({
           isDisabled,
           isPending,
@@ -65,7 +67,7 @@ export const CreateVaultFolderPage = () => {
           },
         })}
       >
-        <VStack flexGrow gap={20}>
+        <PageContent gap={20} scrollable>
           <TextInput
             placeholder={t('enter_folder_name')}
             label={t('folder_name')}
@@ -82,11 +84,14 @@ export const CreateVaultFolderPage = () => {
               />
             )}
           />
-        </VStack>
-        <Button isLoading={isPending} type="submit" isDisabled={isDisabled}>
-          {t('create')}
-        </Button>
-      </PageContent>
+          <div style={{ height: 1000 }} />
+        </PageContent>
+        <PageFooter>
+          <Button isLoading={isPending} type="submit" isDisabled={isDisabled}>
+            {t('create')}
+          </Button>
+        </PageFooter>
+      </VStack>
     </>
   );
 };

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import DangerSignRedIcon from '../../../lib/ui/icons/DangerSignRedIcon';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { makeAppPath } from '../../../navigation';
+import { appPaths, makeAppPath } from '../../../navigation';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -70,7 +70,7 @@ const DeleteVaultPage = () => {
       if (vaults.length > 0) {
         navigate(makeAppPath('vaults'));
       } else {
-        navigate(makeAppPath('setupVault', {}));
+        navigate(appPaths.root);
       }
     } catch (err) {
       console.error(err);

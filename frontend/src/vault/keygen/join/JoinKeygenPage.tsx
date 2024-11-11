@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { match } from '../../../lib/utils/match';
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
+import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey';
 import { KeygenType } from '../KeygenType';
 import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep';
 import { CurrentServiceNameProvider } from '../shared/state/currentServiceName';
 import { CurrentSessionIdProvider } from '../shared/state/currentSessionId';
-import { useCurrentJoinKeygenMsg } from '../state/currentJoinKeygenMsg';
 import { CurrentKeygenTypeProvider } from '../state/currentKeygenType';
 import { CurrentServerTypeProvider } from '../state/currentServerType';
 import { JoinKeygenProcess } from './JoinKeygenProcess';
@@ -19,9 +18,7 @@ import { KeygenServerUrlProvider } from './KeygenServerUrlProvider';
 const keygenSteps = ['session', 'keygen'] as const;
 
 export const JoinKeygenPage = () => {
-  const [{ keygenType }] = useAppPathParams<'joinKeygen'>();
-
-  const keygenMsg = useCurrentJoinKeygenMsg();
+  const { keygenType, keygenMsg } = useAppPathState<'joinKeygen'>();
 
   const { sessionId, useVultisigRelay, serviceName, encryptionKeyHex } =
     keygenMsg;

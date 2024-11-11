@@ -492,4 +492,69 @@ export const it = {
   vault_settings_check_for_update: 'Controlla gli aggiornamenti',
   delete_folder: 'Elimina cartella',
   deposit: 'Deposito',
+  add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
+  thorchain_message_deposit: 'Deposito messaggio THORChain',
+  chainFunctions: {
+    optional_validation: 'Facoltativo',
+    default_validation: 'Ingresso non valido',
+    bond: {
+      labels: {
+        nodeAddress: 'Indirizzo del Nodo',
+        provider: 'Fornitore',
+        operatorFee: "Tariffa dell'Operatore",
+        amount: 'Importo',
+      },
+      validations: {
+        nodeAddress: 'Indirizzo del nodo è obbligatorio',
+        operatorFee: "Tariffa dell'operatore è obbligatoria",
+        amount: "L'importo deve essere positivo",
+      },
+    },
+    unbond: {
+      labels: {
+        nodeAddress: 'Indirizzo del Nodo',
+        amount: 'Importo',
+        provider: 'Fornitore',
+      },
+      validations: {
+        nodeAddress: 'Indirizzo del nodo è obbligatorio',
+        amount: "L'importo deve essere positivo",
+      },
+    },
+    leave: {
+      labels: {
+        nodeAddress: 'Indirizzo del Nodo',
+      },
+      validations: {
+        nodeAddress: 'Indirizzo del nodo è obbligatorio',
+      },
+    },
+    custom: {
+      labels: {
+        amount: 'Importo',
+        customMemo: 'Memo Personalizzato',
+      },
+      validations: {
+        amount: "L'importo deve essere positivo",
+        customMemo: 'Memo personalizzato è obbligatorio',
+      },
+    },
+    addPool: {
+      labels: {
+        amount: 'Importo',
+      },
+      validations: {
+        amount: "L'importo deve essere positivo",
+      },
+    },
+    withdrawPool: {
+      labels: {
+        affiliateFee: "Tariffa dell'Affiliato",
+        percentage: 'Percentuale',
+      },
+      validations: {
+        percentage: 'La percentuale è obbligatoria e deve essere tra 0 e 100',
+      },
+    },
+  },
 };

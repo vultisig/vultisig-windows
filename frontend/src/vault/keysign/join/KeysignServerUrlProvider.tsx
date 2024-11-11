@@ -2,31 +2,31 @@ import { useTranslation } from 'react-i18next';
 
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { useKeygenServerUrlQuery } from '../../keygen/server/queries/useKeygenServerUrlQuery';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
-import { useServerUrlQuery } from '../../keygen/shared/queries/useServerUrlQuery';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
 import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl';
-import { useCurrentJoinKeysignMsg } from './state/currentJoinKeysignMsg';
 
 export const KeysignServerUrlProvider = ({
   children,
 }: ComponentWithChildrenProps) => {
-  const { serviceName, useVultisigRelay, sessionId } =
-    useCurrentJoinKeysignMsg();
+  const {
+    keysignMsg: { serviceName, useVultisigRelay },
+  } = useAppPathState<'joinKeysign'>();
 
   const serverType = useVultisigRelay ? 'relay' : 'local';
 
   const { t } = useTranslation();
 
-  const query = useServerUrlQuery({
+  const query = useKeygenServerUrlQuery({
     serverType,
     serviceName,
-    sessionId,
   });
 
   return (

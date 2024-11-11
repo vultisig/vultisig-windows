@@ -64,6 +64,10 @@ export class BlockchainServiceFactory {
         return new BlockchainServiceCosmos(chain, walletCore);
       case Chain.Dydx:
         return new BlockchainServiceCosmos(chain, walletCore);
+      case Chain.Terra:
+        return new BlockchainServiceCosmos(chain, walletCore);
+      case Chain.TerraClassic:
+        return new BlockchainServiceCosmos(chain, walletCore);
       case Chain.Polkadot:
         return new BlockchainServicePolkadot(chain, walletCore);
       case Chain.Ton:

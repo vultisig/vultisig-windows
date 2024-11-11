@@ -1,12 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import jsQR from 'jsqr';
-import { useNavigate } from 'react-router-dom';
 
-import { KeysignMessage } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { match } from '../../../lib/utils/match';
 import { getRawQueryParams } from '../../../lib/utils/query/getRawQueryParams';
-import { makeAppPath } from '../../../navigation';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { keygenMsgRecord, KeygenType } from '../../keygen/KeygenType';
+import { parseTransferredKeysignMsg } from '../../keysign/shared/utils/parseTransfferedKeysignMsg';
 import { decompressQrPayload } from './utils/decompressQrPayload';
 
 type QrType = 'NewVault' | 'SignTransaction';
@@ -25,7 +24,7 @@ type QrQueryParams = QrSharedData & {
 };
 
 export const useProcessQrMutation = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   return useMutation({
     mutationFn: async (file: File) => {
@@ -57,34 +56,34 @@ export const useProcessQrMutation = () => {
       const payload = await decompressQrPayload(jsonData);
 
       if ('type' in queryParams) {
-        const path = await match(queryParams.type, {
+        await match(queryParams.type, {
           NewVault: async () => {
             const keygenType = queryParams.tssType;
 
             const { fromBinary } = keygenMsgRecord[keygenType];
 
-            const keygenMsg = JSON.stringify(fromBinary(payload).toJson());
+            const keygenMsg = fromBinary(payload);
 
-            return makeAppPath('joinKeygen', {
-              keygenType,
-              keygenMsg,
+            navigate('joinKeygen', {
+              state: {
+                keygenType,
+                keygenMsg,
+              },
             });
           },
           SignTransaction: async () => {
             const vaultId = queryParams.vault;
 
-            const keysignMsg = JSON.stringify(
-              KeysignMessage.fromBinary(payload).toJson()
-            );
+            const keysignMsg = await parseTransferredKeysignMsg(payload);
 
-            return makeAppPath('joinKeysign', {
-              keysignMsg,
-              vaultId,
+            navigate('joinKeysign', {
+              state: {
+                keysignMsg,
+                vaultId,
+              },
             });
           },
         });
-
-        navigate(path);
       }
     },
   });

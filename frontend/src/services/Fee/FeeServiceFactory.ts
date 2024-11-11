@@ -63,6 +63,10 @@ export class FeeServiceFactory {
         return new FeeServiceCosmos(chain, walletCore);
       case Chain.Dydx:
         return new FeeServiceCosmos(chain, walletCore);
+      case Chain.Terra:
+        return new FeeServiceCosmos(chain, walletCore);
+      case Chain.TerraClassic:
+        return new FeeServiceCosmos(chain, walletCore);
       case Chain.Ton:
         return new FeeServiceTon(chain, walletCore);
       default:

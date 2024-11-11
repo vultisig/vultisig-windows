@@ -57,6 +57,10 @@ export class CoinServiceFactory {
         return new CoinService(chain, walletCore);
       case Chain.Dydx:
         return new CoinService(chain, walletCore);
+      case Chain.Terra:
+        return new CoinService(chain, walletCore);
+      case Chain.TerraClassic:
+        return new CoinService(chain, walletCore);
       case Chain.Ton:
         return new CoinService(chain, walletCore);
       default:

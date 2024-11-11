@@ -497,4 +497,71 @@ export const de = {
   vault_settings_check_for_update: 'Nach Updates suchen',
   delete_folder: 'Ordner löschen',
   deposit: 'Einzahlung',
+  add_vaults_to_folder:
+    'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
+  thorchain_message_deposit: 'THORChain-Nachrichteneinzahlung',
+  chainFunctions: {
+    optional_validation: 'Optional',
+    default_validation: 'Ungültige Eingabe',
+    bond: {
+      labels: {
+        nodeAddress: 'Knotenadresse',
+        provider: 'Anbieter',
+        operatorFee: 'Betreibergebühr',
+        amount: 'Betrag',
+      },
+      validations: {
+        nodeAddress: 'Knotenadresse ist erforderlich',
+        operatorFee: 'Betreibergebühr ist erforderlich',
+        amount: 'Betrag muss positiv sein',
+      },
+    },
+    unbond: {
+      labels: {
+        nodeAddress: 'Knotenadresse',
+        amount: 'Betrag',
+        provider: 'Anbieter',
+      },
+      validations: {
+        nodeAddress: 'Knotenadresse ist erforderlich',
+        amount: 'Betrag muss positiv sein',
+      },
+    },
+    leave: {
+      labels: {
+        nodeAddress: 'Knotenadresse',
+      },
+      validations: {
+        nodeAddress: 'Knotenadresse ist erforderlich',
+      },
+    },
+    custom: {
+      labels: {
+        amount: 'Betrag',
+        customMemo: 'Benutzerdefiniertes Memo',
+      },
+      validations: {
+        amount: 'Betrag muss positiv sein',
+        customMemo: 'Benutzerdefiniertes Memo ist erforderlich',
+      },
+    },
+    addPool: {
+      labels: {
+        amount: 'Betrag',
+      },
+      validations: {
+        amount: 'Betrag muss positiv sein',
+      },
+    },
+    withdrawPool: {
+      labels: {
+        affiliateFee: 'Partnergebühr',
+        percentage: 'Prozentsatz',
+      },
+      validations: {
+        percentage:
+          'Prozentsatz ist erforderlich und muss zwischen 0 und 100 liegen',
+      },
+    },
+  },
 };

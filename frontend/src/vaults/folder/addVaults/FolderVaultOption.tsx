@@ -6,7 +6,8 @@ import { interactive } from '../../../lib/ui/css/interactive';
 import { InvisibleHTMLCheckbox } from '../../../lib/ui/inputs/checkbox/InvisibleHTMLCheckbox';
 import { SwitchContainer } from '../../../lib/ui/inputs/switch/SwitchContainer';
 import { SwitchControl } from '../../../lib/ui/inputs/switch/SwitchControl';
-import { hStack } from '../../../lib/ui/layout/Stack';
+import { HStack, hStack } from '../../../lib/ui/layout/Stack';
+import { DnDItemContentPrefix } from '../../../lib/ui/list/item/DnDItemContentPrefix';
 import { InputProps, TitledComponentProps } from '../../../lib/ui/props';
 import { text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
@@ -31,13 +32,24 @@ const Container = styled.label`
   })}
 `;
 
-export const FolderVaultOption: React.FC<
-  TitledComponentProps & InputProps<boolean>
-> = ({ title, value, onChange }) => {
+type FolderVaultOptionProps = TitledComponentProps &
+  InputProps<boolean> & {
+    isDraggable?: boolean;
+  };
+
+export const FolderVaultOption: React.FC<FolderVaultOptionProps> = ({
+  title,
+  value,
+  onChange,
+  isDraggable,
+}) => {
   const size = 'm';
   return (
     <Container>
-      {title}
+      <HStack alignItems="center" gap={12}>
+        {isDraggable && <DnDItemContentPrefix />}
+        {title}
+      </HStack>
       <InvisibleHTMLCheckbox value={value} onChange={onChange} />
       <SwitchContainer size={size} isActive={value}>
         <SwitchControl isActive={value} size={size} />

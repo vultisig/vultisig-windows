@@ -474,5 +474,78 @@ export const en = {
   create: 'Create',
   delete_folder: 'Delete Folder',
   folders: 'Folders',
+  add_vaults_to_folder: 'Select Vaults to add to the folder.',
   deposit: 'Deposit',
+  thorchain_message_deposit: 'THORChain message deposit',
+  bond: 'Bond',
+  unbond: 'Unbond',
+  leave: 'Leave',
+  addPool: 'Add Pool',
+  withdrawPool: 'Withdraw Pool',
+  custom: 'Custom Action',
+  vote: 'Vote',
+  stake: 'Stake',
+  chainFunctions: {
+    optional_validation: 'Optional',
+    default_validation: 'Invalid input',
+    bond: {
+      labels: {
+        nodeAddress: 'Node Address',
+        provider: 'Provider',
+        operatorFee: "Operator's Fee",
+        amount: 'Amount',
+      },
+      validations: {
+        nodeAddress: 'Node Address is required',
+        operatorFee: "Operator's Fee is required",
+        amount: 'Amount must be positive',
+      },
+    },
+    unbond: {
+      labels: {
+        nodeAddress: 'Node Address',
+        amount: 'Amount',
+        provider: 'Provider',
+      },
+      validations: {
+        nodeAddress: 'Node Address is required',
+        amount: 'Amount must be positive',
+      },
+    },
+    leave: {
+      labels: {
+        nodeAddress: 'Node Address',
+      },
+      validations: {
+        nodeAddress: 'Node Address is required',
+      },
+    },
+    custom: {
+      labels: {
+        amount: 'Amount',
+        customMemo: 'Custom Memo',
+      },
+      validations: {
+        amount: 'Amount must be positive',
+        customMemo: 'Custom Memo is required',
+      },
+    },
+    addPool: {
+      labels: {
+        amount: 'Amount',
+      },
+      validations: {
+        amount: 'Amount must be positive',
+      },
+    },
+    withdrawPool: {
+      labels: {
+        affiliateFee: "Affiliate's Fee",
+        percentage: 'Percentage',
+      },
+      validations: {
+        percentage: 'Percentage is required and must be between 0 and 100',
+      },
+    },
+  },
 };

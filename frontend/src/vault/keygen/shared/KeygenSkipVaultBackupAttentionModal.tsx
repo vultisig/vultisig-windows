@@ -28,21 +28,17 @@ const OrangeButton = styled(Button)<{
 `;
 
 const KeygenSkipVaultBackupAttentionModal = ({
-  isOpen,
   onClose,
   onSkip,
 }: {
-  isOpen: boolean;
   onClose: () => void;
   onSkip: () => void;
 }) => {
   const [hasAcceptedRisk, setHasAcceptedRisk] = useState(false);
   const { t } = useTranslation();
-  if (!isOpen) return null;
 
   return (
     <StyledModal
-      text="This is a test"
       title={t('vault_backup_keygen_skip_modal_title')}
       onClose={onClose}
     >

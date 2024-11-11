@@ -13,6 +13,7 @@ type FixedDirectionStackProps = {
   fullSize?: boolean;
   flexGrow?: boolean;
   children?: React.ReactNode;
+  scrollable?: boolean;
 };
 
 export type StackProps = FixedDirectionStackProps & {
@@ -41,6 +42,7 @@ export const stack = ({
   fullSize,
   direction,
   flexGrow,
+  scrollable,
 }: StackProps) => css`
   display: flex;
   flex-direction: ${direction};
@@ -76,6 +78,14 @@ export const stack = ({
     ${flexGrow &&
   css`
     flex: 1;
+  `}
+  ${scrollable &&
+  css`
+    overflow: auto;
+    flex-basis: 0;
+    > * {
+      flex-shrink: 0;
+    }
   `}
 `;
 

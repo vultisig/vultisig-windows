@@ -12,10 +12,13 @@ import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { useAssertCurrentVault } from '../state/useCurrentVault';
 import { ShareVaultCard } from './ShareVaultCard';
+import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport';
 
 export const ShareVaultPage = () => {
   const { t } = useTranslation();
-  const { name } = useAssertCurrentVault();
+  const vault = useAssertCurrentVault();
+  const { uid } = getVaultPublicKeyExport(vault);
+  const { name } = vault;
   const qrNodeRef = useRef<HTMLDivElement | null>(null);
 
   const shareQrImage = async () => {
@@ -62,7 +65,7 @@ export const ShareVaultPage = () => {
           </Button>
 
           <SaveAsImage
-            fileName={name}
+            fileName={`VultisigQR-${vault.name}-${uid}-${new Date().toISOString()}`}
             renderTrigger={({ onClick }) => (
               <Button kind="outlined" onClick={onClick}>
                 {t('save')}

@@ -21,7 +21,7 @@ export const SetupVaultPeerDiscoveryStep: React.FC<
   const type = useVaultType();
 
   const isDisabled = useMemo(() => {
-    if (peers.length !== requiredPeers) {
+    if (peers.length < requiredPeers) {
       return t('select_n_devices', { count: requiredPeers });
     }
   }, [peers.length, t]);

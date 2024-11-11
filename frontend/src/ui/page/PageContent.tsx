@@ -8,5 +8,5 @@ import { pageConfig } from './config';
 export const PageContent = styled(VStack)`
   ${horizontalPadding(pageConfig.horizontalPadding)};
   ${verticalPadding(pageConfig.verticalPadding)};
-  flex: 1;
+  flex-grow: 1;
 `;
