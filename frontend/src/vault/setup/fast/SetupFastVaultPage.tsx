@@ -1,5 +1,6 @@
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { KeygenType } from '../../keygen/KeygenType';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
@@ -36,8 +37,10 @@ const steps = [
 const lastEditableStep = 'password';
 
 export const SetupFastVaultPage = () => {
-  const { step, setStep, toPreviousStep, toNextStep } =
-    useStepNavigation(steps);
+  const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
+    steps,
+    onExit: useNavigateBack(),
+  });
 
   return (
     <VaultTypeProvider value="fast">

@@ -1,5 +1,6 @@
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { KeygenType } from '../../keygen/KeygenType';
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
@@ -40,8 +41,10 @@ const steps = [
 const lastEditableStep = 'password';
 
 export const SetupActiveVaultPage = () => {
-  const { step, setStep, toPreviousStep, toNextStep } =
-    useStepNavigation(steps);
+  const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
+    steps,
+    onExit: useNavigateBack(),
+  });
 
   return (
     <VaultTypeProvider value="active">

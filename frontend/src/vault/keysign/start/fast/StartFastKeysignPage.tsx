@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Match } from '../../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState';
+import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack';
 import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep';
 import { MediatorManager } from '../../../keygen/shared/peerDiscovery/MediatorManager';
 import { GeneratedServiceNameProvider } from '../../../keygen/shared/state/currentServiceName';
@@ -34,7 +35,10 @@ export const StartFastKeysignPage = () => {
 
   const { local_party_id } = useCurrentVault();
 
-  const { step, toNextStep } = useStepNavigation(keysignSteps);
+  const { step, toNextStep } = useStepNavigation({
+    steps: keysignSteps,
+    onExit: useNavigateBack(),
+  });
 
   const { t } = useTranslation();
 

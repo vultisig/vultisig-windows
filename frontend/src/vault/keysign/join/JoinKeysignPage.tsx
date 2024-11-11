@@ -2,6 +2,7 @@ import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { CurrentSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
@@ -17,7 +18,10 @@ import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep';
 const keysignSteps = ['verify', 'session', 'sign'] as const;
 
 export const JoinKeysignPage = () => {
-  const { step, setStep, toNextStep } = useStepNavigation(keysignSteps);
+  const { step, setStep, toNextStep } = useStepNavigation({
+    steps: keysignSteps,
+    onExit: useNavigateBack(),
+  });
 
   const {
     keysignMsg: { keysignPayload, sessionId, encryptionKeyHex },

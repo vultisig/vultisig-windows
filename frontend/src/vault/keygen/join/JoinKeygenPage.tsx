@@ -4,6 +4,7 @@ import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { match } from '../../../lib/utils/match';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey';
 import { KeygenType } from '../KeygenType';
 import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep';
@@ -25,7 +26,10 @@ export const JoinKeygenPage = () => {
 
   const serverType = useVultisigRelay ? 'relay' : 'local';
 
-  const { step, toNextStep } = useStepNavigation(keygenSteps);
+  const { step, toNextStep } = useStepNavigation({
+    steps: keygenSteps,
+    onExit: useNavigateBack(),
+  });
 
   const { t } = useTranslation();
 
