@@ -14,21 +14,6 @@ import { useVaults } from '../queries/useVaultsQuery';
 import { getStorageVaultId } from '../utils/storageVault';
 import { useCurrentVaultId } from './useCurrentVaultId';
 
-export const useUnassertedCurrentVault = () => {
-  const vaults = useVaults();
-  const [currentVaultId] = useCurrentVaultId();
-
-  return useMemo(() => {
-    if (!currentVaultId) return null;
-
-    const vault = vaults.find(
-      vault => getStorageVaultId(vault) === currentVaultId
-    );
-
-    return vault;
-  }, [vaults, currentVaultId]);
-};
-
 export const useCurrentVault = () => {
   const vaults = useVaults();
   const [currentVaultId] = useCurrentVaultId();
