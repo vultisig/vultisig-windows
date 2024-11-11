@@ -220,8 +220,6 @@ export class Endpoint {
   static broadcastCosmosTransaction: string =
     'https://cosmos-rest.publicnode.com/cosmos/tx/v1beta1/txs';
 
-  // --------------------------------- Terra ---------------------------------
-
   static fetchTerraV2AccountBalance(address: string): string {
     return `https://terra-lcd.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
   }
@@ -243,8 +241,6 @@ export class Endpoint {
 
   static broadcastTerraClassicTransaction: string =
     'https://terra-classic-lcd.publicnode.com/cosmos/tx/v1beta1/txs';
-
-  // --------------------------------- Terra ---------------------------------
 
   static fetchOsmosisAccountBalance(address: string): string {
     return `https://osmosis-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
