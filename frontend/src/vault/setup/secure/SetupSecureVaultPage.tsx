@@ -50,10 +50,7 @@ export const SetupSecureVaultPage = () => {
                             <Match
                               value={step}
                               name={() => (
-                                <SetupVaultNameStep
-                                  onBack={toPreviousStep}
-                                  onForward={toNextStep}
-                                />
+                                <SetupVaultNameStep onForward={toNextStep} />
                               )}
                               joinSession={() => (
                                 <KeygenStartSessionStep
