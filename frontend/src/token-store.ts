@@ -282,6 +282,26 @@ class Token {
     isNativeToken: true,
   };
 
+  static terraLuna: CoinMeta = {
+    chain: Chain.Terra,
+    ticker: 'LUNA',
+    logo: 'luna',
+    decimals: 6,
+    priceProviderId: 'terra-luna-2',
+    contractAddress: '',
+    isNativeToken: true,
+  };
+
+  static terraLunc: CoinMeta = {
+    chain: Chain.TerraClassic,
+    ticker: 'LUNC',
+    logo: 'lunc',
+    decimals: 6,
+    priceProviderId: 'terra-luna',
+    contractAddress: '',
+    isNativeToken: true,
+  };
+
   static dydx: CoinMeta = {
     chain: Chain.Dydx,
     ticker: 'DYDX',
@@ -531,4 +551,6 @@ export const TokenSelectionAssets: CoinMeta[] = [
   Token.dotDOT,
   Token.zksyncETH,
   Token.ton,
+  Token.terraLuna,
+  Token.terraLunc,
 ];
