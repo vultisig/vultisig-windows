@@ -67,7 +67,7 @@ export const ShareVaultPage = () => {
           </Button>
 
           <SaveAsImage
-            fileName={`VultisigQR-${name}-${lastThreeUID}`}
+            fileName={`VaultQR-${name}-${lastThreeUID}`}
             renderTrigger={({ onClick }) => (
               <Button kind="outlined" onClick={onClick}>
                 {t('save')}
