@@ -139,11 +139,7 @@ export const router = createBrowserRouter([
   },
   {
     path: appPaths.manageVaults,
-    element: (
-      <ActiveVaultGuard>
-        <ManageVaultsPage />
-      </ActiveVaultGuard>
-    ),
+    element: <ManageVaultsPage />,
   },
   {
     path: appPaths.manageVaultChains,
