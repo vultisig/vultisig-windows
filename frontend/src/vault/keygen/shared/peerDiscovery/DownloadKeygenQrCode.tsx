@@ -23,7 +23,13 @@ export const DownloadKeygenQrCode = ({
       renderTrigger={({ onClick }) => (
         <PageHeaderIconButton icon={<FileUpIcon />} onClick={onClick} />
       )}
-      value={<PrintableQrCode value={value} title={t('join_keygen')} />}
+      value={
+        <PrintableQrCode
+          value={value}
+          title={t('join_keygen')}
+          description={t('scan_with_devices')}
+        />
+      }
     />
   );
 };

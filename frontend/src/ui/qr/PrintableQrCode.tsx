@@ -1,11 +1,6 @@
 import styled from 'styled-components';
 
-import { verticalPadding } from '../../lib/ui/css/verticalPadding';
 import { VStack } from '../../lib/ui/layout/Stack';
-import {
-  ComponentWithValueProps,
-  TitledComponentProps,
-} from '../../lib/ui/props';
 import { FramedQrCode } from '../../lib/ui/qr/FramedQrCode';
 import { Text } from '../../lib/ui/text';
 import { getColor } from '../../lib/ui/theme/getters';
@@ -22,21 +17,28 @@ const Container = styled(VStack)`
 const Footer = styled(VStack)`
   gap: 20px;
   align-items: center;
+  justify-content: space-between;
   font-weight: 600;
-  ${verticalPadding(40)};
 `;
 
 const Logo = styled(ProductLogo)`
   font-size: 80px;
 `;
 
+type PrintableQrCodeProps = {
+  value: string;
+  title?: string;
+  description?: string;
+};
+
 export const PrintableQrCode = ({
   value,
   title,
-}: ComponentWithValueProps<string> & TitledComponentProps) => {
+  description,
+}: PrintableQrCodeProps) => {
   return (
     <Container>
-      <VStack fullWidth>
+      <VStack>
         <FramedQrCode value={value} />
       </VStack>
 
@@ -44,6 +46,11 @@ export const PrintableQrCode = ({
         <Text color="contrast" size={14} family="mono">
           {title}
         </Text>
+        {description && (
+          <Text color="contrast" size={14} family="mono">
+            {description}
+          </Text>
+        )}
         <Logo />
       </Footer>
     </Container>
