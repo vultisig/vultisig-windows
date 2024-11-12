@@ -8,7 +8,7 @@ import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { useVaults } from '../../queries/useVaultsQuery';
-import { useCurrentVaultId } from '../../state/useCurrentVaultId';
+import { useCurrentVaultId } from '../../state/currentVaultId';
 import { getStorageVaultId } from '../../utils/storageVault';
 import { CurrentKeysignVaultProvider } from './state/currentKeysignVault';
 

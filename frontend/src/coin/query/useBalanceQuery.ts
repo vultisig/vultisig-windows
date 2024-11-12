@@ -6,7 +6,7 @@ import { Chain } from '../../model/chain';
 import { useWalletCore } from '../../providers/WalletCoreProvider';
 import { BalanceServiceFactory } from '../../services/Balance/BalanceServiceFactory';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
-import { useCurrentVault } from '../../vault/state/useCurrentVault';
+import { useCurrentVault } from '../../vault/state/currentVault';
 import { AccountCoinKey } from '../AccountCoin';
 import { CoinAmount, CoinKey } from '../Coin';
 import { getCoinMetaKey } from '../utils/coinMeta';

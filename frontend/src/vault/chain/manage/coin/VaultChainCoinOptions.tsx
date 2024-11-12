@@ -14,13 +14,13 @@ import { Text } from '../../../../lib/ui/text';
 import { withoutDuplicates } from '../../../../lib/utils/array/withoutDuplicates';
 import { CoinMeta } from '../../../../model/coin-meta';
 import { TokensStore } from '../../../../services/Coin/CoinList';
-import { useAssertCurrentVaultChainCoins } from '../../../state/useCurrentVault';
+import { useCurrentVaultChainCoins } from '../../../state/currentVault';
 import { useCurrentVaultChain } from '../../useCurrentVaultChain';
 import { ManageVaultChainCoin } from './ManageVaultChainCoin';
 
 export const VaultChainCoinOptions = () => {
   const chainId = useCurrentVaultChain();
-  const vaultCoins = useAssertCurrentVaultChainCoins(chainId);
+  const vaultCoins = useCurrentVaultChainCoins(chainId);
   const query = useWhitelistedCoinsQuery(chainId);
 
   const initialItems = useMemo(() => {

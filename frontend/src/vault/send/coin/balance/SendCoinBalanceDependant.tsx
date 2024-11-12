@@ -10,14 +10,14 @@ import {
   QueryDependant,
   QueryDependantWrapperProps,
 } from '../../../../lib/ui/query/components/QueryDependant';
-import { useAssertCurrentVaultCoin } from '../../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../../state/currentVault';
 import { useCurrentSendCoin } from '../../state/sendCoin';
 
 export const SendCoinBalanceDependant: React.FC<
   QueryDependantWrapperProps<BalanceQueryResult>
 > = props => {
   const [coinKey] = useCurrentSendCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
 
   const query = useBalanceQuery(storageCoinToCoin(coin));
 

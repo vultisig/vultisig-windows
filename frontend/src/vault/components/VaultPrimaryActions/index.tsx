@@ -9,14 +9,14 @@ import {
   swapAvailableChains,
 } from '../../deposit/DepositForm/chainOptionsConfig';
 import { SendPrompt } from '../../send/SendPrompt';
-import { useAssertCurrentVaultNativeCoins } from '../../state/useCurrentVault';
+import { useCurrentVaultNativeCoins } from '../../state/currentVault';
 import { DepositPrompt } from '../DepositPrompts';
 import { SwapPrompt } from '../SwapPrompt';
 
 export const VaultPrimaryActions = ({
   value,
 }: Partial<ComponentWithValueProps<CoinKey>>) => {
-  const nativeCoins = useAssertCurrentVaultNativeCoins();
+  const nativeCoins = useCurrentVaultNativeCoins();
 
   if (isEmpty(nativeCoins)) {
     return null;

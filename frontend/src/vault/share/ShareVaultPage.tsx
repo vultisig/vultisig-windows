@@ -10,13 +10,13 @@ import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
-import { useAssertCurrentVault } from '../state/useCurrentVault';
+import { useCurrentVault } from '../state/currentVault';
 import { ShareVaultCard } from './ShareVaultCard';
 import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport';
 
 export const ShareVaultPage = () => {
   const { t } = useTranslation();
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
   const { uid } = getVaultPublicKeyExport(vault);
   const lastThreeUID = uid.slice(-3);
 

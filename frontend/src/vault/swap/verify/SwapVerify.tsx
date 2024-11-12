@@ -22,9 +22,9 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { formatMidgardNumber } from '../../../utils/midgard';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
 import {
-  useAssertCurrentVaultAddreses,
-  useAssertCurrentVaultCoin,
-} from '../../state/useCurrentVault';
+  useCurrentVaultAddreses,
+  useCurrentVaultCoin,
+} from '../../state/currentVault';
 import { SendFee } from '../fee/SendFee';
 import { SendFiatFee } from '../fee/SendFiatFee';
 import TotalFee from '../fee/TotalFee';
@@ -44,9 +44,9 @@ export const SwapVerify: React.FC<ComponentWithBackActionProps> = ({
   onBack,
 }) => {
   const { t } = useTranslation();
-  const addresses = useAssertCurrentVaultAddreses();
+  const addresses = useCurrentVaultAddreses();
   const [coinKey] = useCurrentSwapCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const { id, chainId } = coinKey;
   const [amount] = useSwapAmount();
   const [swapProtocol] = useSwapProtocol();

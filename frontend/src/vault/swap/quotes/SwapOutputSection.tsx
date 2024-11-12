@@ -11,7 +11,7 @@ import { formatAmount } from '../../../lib/utils/formatAmount';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useCurrentSendCoin } from '../../send/state/sendCoin';
-import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { getOutputAssetAmount } from '../../utils/helpers';
 import { useSendSpecificTxInfo } from '../fee/SendSpecificTxInfoProvider';
 import { useCoinTo } from '../state/coin-to';
@@ -34,7 +34,7 @@ export default function SwapOutputSection({
   const { t } = useTranslation();
   const [coinKey] = useCurrentSendCoin();
   const [coinTo] = useCoinTo();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const priceQuery = useCoinPriceQuery(
     CoinMeta.fromCoin(storageCoinToCoin(coin))
   );

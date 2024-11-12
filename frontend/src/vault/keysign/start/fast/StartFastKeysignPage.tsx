@@ -14,7 +14,7 @@ import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep'
 import { PasswordProvider } from '../../../server/password/state/password';
 import { GeneratedHexEncryptionKeyProvider } from '../../../setup/state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../../../setup/state/serverUrlDerivedFromServerType';
-import { useAssertCurrentVault } from '../../../state/useCurrentVault';
+import { useCurrentVault } from '../../../state/currentVault';
 import { KeysignMsgsGuard } from '../../join/KeysignMsgsGuard';
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep';
 import { KeysignPayloadProvider } from '../../shared/state/keysignPayload';
@@ -32,7 +32,7 @@ const keysignSteps = [
 export const StartFastKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'fastKeysign'>();
 
-  const { local_party_id } = useAssertCurrentVault();
+  const { local_party_id } = useCurrentVault();
 
   const { step, toNextStep } = useStepNavigation(keysignSteps);
 

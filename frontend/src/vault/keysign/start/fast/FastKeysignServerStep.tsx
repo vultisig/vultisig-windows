@@ -17,7 +17,7 @@ import { WaitForServerLoader } from '../../../server/components/WaitForServerLoa
 import { useVaultPassword } from '../../../server/password/state/password';
 import { signWithServer } from '../../../server/utils/signWithServer';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
-import { useAssertCurrentVault } from '../../../state/useCurrentVault';
+import { useCurrentVault } from '../../../state/currentVault';
 import { useCurrentKeysignMsgs } from '../../shared/state/currentKeysignMsgs';
 import { useKeysignPayload } from '../../shared/state/keysignPayload';
 
@@ -26,7 +26,7 @@ export const FastKeysignServerStep: React.FC<
 > = ({ onForward }) => {
   const { t } = useTranslation();
 
-  const { public_key_ecdsa } = useAssertCurrentVault();
+  const { public_key_ecdsa } = useCurrentVault();
 
   const sessionId = useCurrentSessionId();
   const hexEncryptionKey = useCurrentHexEncryptionKey();

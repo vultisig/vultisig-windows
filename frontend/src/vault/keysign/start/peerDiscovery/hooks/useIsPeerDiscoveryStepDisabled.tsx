@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import { getVaultActionSignersMin } from '../../../../keygen/utils/getVaultActionSignersMin';
 import { useVaultKeygenDevices } from '../../../../setup/hooks/useVaultKegenDevices';
-import { useAssertCurrentVault } from '../../../../state/useCurrentVault';
+import { useCurrentVault } from '../../../../state/currentVault';
 
 export const useIsPeerDiscoveryStepDisabled = () => {
   const { t } = useTranslation();
   const devices = useVaultKeygenDevices();
-  const { signers } = useAssertCurrentVault();
+  const { signers } = useCurrentVault();
 
   return useMemo(() => {
     const requiredPeersNumber = getVaultActionSignersMin(signers.length);

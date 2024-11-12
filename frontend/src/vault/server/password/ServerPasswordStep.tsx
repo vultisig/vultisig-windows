@@ -14,7 +14,7 @@ import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { useAssertCurrentVault } from '../../state/useCurrentVault';
+import { useCurrentVault } from '../../state/currentVault';
 import { getStorageVaultId } from '../../utils/storageVault';
 import { getVaultFromServer } from '../utils/getVaultFromServer';
 import { useVaultPassword } from './state/password';
@@ -26,7 +26,7 @@ export const ServerPasswordStep: React.FC<ComponentWithForwardActionProps> = ({
 
   const [password, setPassword] = useVaultPassword();
 
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
 
   const { mutate, error, isPending } = useMutation({
     mutationFn: async () =>

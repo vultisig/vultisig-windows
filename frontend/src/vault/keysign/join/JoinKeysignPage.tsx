@@ -6,7 +6,7 @@ import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep
 import { CurrentSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey';
-import { useAssertCurrentVault } from '../../state/useCurrentVault';
+import { useCurrentVault } from '../../state/currentVault';
 import { KeysignSigningStep } from '../shared/KeysignSigningStep';
 import { KeysignPayloadProvider } from '../shared/state/keysignPayload';
 import { KeysignMsgsGuard } from './KeysignMsgsGuard';
@@ -23,7 +23,7 @@ export const JoinKeysignPage = () => {
     keysignMsg: { keysignPayload, sessionId, encryptionKeyHex },
   } = useAppPathState<'joinKeysign'>();
 
-  const { local_party_id } = useAssertCurrentVault();
+  const { local_party_id } = useCurrentVault();
 
   return (
     <CurrentLocalPartyIdProvider value={local_party_id}>

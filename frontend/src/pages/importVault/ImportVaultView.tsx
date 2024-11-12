@@ -15,7 +15,7 @@ import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 import { isBase64Encoded } from '../../utils/util';
 import { useSaveVaultMutation } from '../../vault/mutations/useSaveVaultMutation';
 import { useVaultsQuery } from '../../vault/queries/useVaultsQuery';
-import { useCurrentVaultId } from '../../vault/state/useCurrentVaultId';
+import { useCurrentVaultId } from '../../vault/state/currentVaultId';
 import { getStorageVaultId } from '../../vault/utils/storageVault';
 import {
   BackupVault,
