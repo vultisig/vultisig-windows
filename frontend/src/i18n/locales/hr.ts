@@ -421,6 +421,8 @@ export const hr = {
   'page.swap.not.possible':
     'Zamjena za pametni ugovor nije moguća! Unesite drugu adresu primatelja.',
   'page.swap.title': 'Zamjena',
+  swap_invalid_receiver:
+    'Érvénytelen címzett megadva. Valószínűleg fel kell vennie a bejövő láncot a listára.',
   slippage: 'Proklizavanje',
   backupnow_description: 'Sigurnosne kopije rade drugačije u Vultisigu',
   backupnow_note_part1: 'Svaki uređaj ima svoje',

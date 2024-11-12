@@ -431,6 +431,8 @@ export const pt = {
   'page.swap.not.possible':
     'Trocar para um contrato inteligente não é possível! Insira um endereço de destinatário diferente.',
   'page.swap.title': 'Trocar',
+  swap_invalid_receiver:
+    'Endereço de destinatário inválido especificado. Provavelmente você deveria adicionar uma cadeia de entrada à sua lista.',
   slippage: 'Deslizamento',
   backupnow_description: 'Os backups funcionam de forma diferente no Vultisig',
   backupnow_note_part1: 'Cada dispositivo tem o seu',
