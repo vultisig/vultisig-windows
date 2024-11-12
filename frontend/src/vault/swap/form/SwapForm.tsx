@@ -38,8 +38,7 @@ export const SwapForm = ({ onForward }: ComponentWithForwardActionProps) => {
         convertChainSymbolToChain(coinTo?.chain || '') as keyof typeof addresses
       ] || ''
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addresses, coinTo]);
+  }, [addresses, coinTo, setValue]);
 
   return (
     <>
