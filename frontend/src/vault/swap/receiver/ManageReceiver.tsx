@@ -17,7 +17,7 @@ import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { text } from '../../../lib/ui/text';
 import { asyncAttempt } from '../../../lib/utils/promise/asyncAttempt';
 import { convertChainSymbolToChain } from '../../../utils/crypto';
-import { useAssertCurrentVaultAddreses } from '../../state/useCurrentVault';
+import { useCurrentVaultAddreses } from '../../state/currentVault';
 import { useCoinTo } from '../state/coin-to';
 import { useSendReceiver } from '../state/receiver';
 
@@ -30,7 +30,7 @@ const Input = styled(TextInput)`
 
 export const ManageReceiver = () => {
   const [value, setValue] = useSendReceiver();
-  const addresses = useAssertCurrentVaultAddreses();
+  const addresses = useCurrentVaultAddreses();
   const [coinTo] = useCoinTo();
 
   const { t } = useTranslation();

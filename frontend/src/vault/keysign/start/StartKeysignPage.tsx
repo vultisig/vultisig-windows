@@ -10,7 +10,7 @@ import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPart
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
 import { GeneratedHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/serverUrlDerivedFromServerType';
-import { useAssertCurrentVault } from '../../state/useCurrentVault';
+import { useCurrentVault } from '../../state/currentVault';
 import { KeysignMsgsGuard } from '../join/KeysignMsgsGuard';
 import { KeysignSigningStep } from '../shared/KeysignSigningStep';
 import { KeysignPayloadProvider } from '../shared/state/keysignPayload';
@@ -22,7 +22,7 @@ const keysignSteps = ['joinSession', 'peers', 'session', 'sign'] as const;
 export const StartKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'keysign'>();
 
-  const { local_party_id } = useAssertCurrentVault();
+  const { local_party_id } = useCurrentVault();
 
   const { step, setStep, toPreviousStep, toNextStep } =
     useStepNavigation(keysignSteps);

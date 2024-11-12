@@ -20,7 +20,7 @@ import { HStack, hStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { formatAmount } from '../../../lib/utils/formatAmount';
-import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useCurrentSendCoin } from '../state/sendCoin';
 import { SendCoinBalanceDependant } from './balance/SendCoinBalanceDependant';
 import { SendCoinExplorer } from './SendCoinExplorer';
@@ -43,7 +43,7 @@ const Container = styled(UnstyledButton)`
 
 export const ManageSendCoin = () => {
   const [coinKey] = useCurrentSendCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const { id, chainId } = coinKey;
 
   const { t } = useTranslation();

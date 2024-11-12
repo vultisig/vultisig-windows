@@ -17,9 +17,9 @@ import { toEntries } from '../../lib/utils/record/toEntries';
 import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
 import {
-  useAssertCurrentVaultCoins,
-  useAssertCurrentVaultCoinsByChain,
-} from '../state/useCurrentVault';
+  useCurrentVaultCoins,
+  useCurrentVaultCoinsByChain,
+} from '../state/currentVault';
 import { VaultChainCoin } from './useVaultChainCoinsQuery';
 
 export type VaultChainBalance = {
@@ -30,8 +30,8 @@ export type VaultChainBalance = {
 export const useVaultChainsBalancesQuery = (): EagerQuery<
   VaultChainBalance[]
 > => {
-  const coins = useAssertCurrentVaultCoins();
-  const groupedCoins = useAssertCurrentVaultCoinsByChain();
+  const coins = useCurrentVaultCoins();
+  const groupedCoins = useCurrentVaultCoinsByChain();
 
   const pricesQuery = useCoinPricesQuery(
     coins.map(storageCoinToCoin).map(CoinMeta.fromCoin)

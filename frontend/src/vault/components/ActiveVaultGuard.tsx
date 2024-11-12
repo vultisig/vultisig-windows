@@ -2,14 +2,22 @@ import { useEffect } from 'react';
 
 import { ComponentWithChildrenProps } from '../../lib/ui/props';
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
-import { useCurrentVault } from '../state/useCurrentVault';
+import { useVaults } from '../queries/useVaultsQuery';
+import { CurrentVaultProvider } from '../state/currentVault';
+import { useCurrentVaultId } from '../state/currentVaultId';
+import { getStorageVaultId } from '../utils/storageVault';
 
 export const ActiveVaultGuard: React.FC<ComponentWithChildrenProps> = ({
   children,
 }) => {
-  const vault = useCurrentVault();
+  const [currentVaultId] = useCurrentVaultId();
+  const vaults = useVaults();
 
   const navigate = useAppNavigate();
+
+  const vault = vaults.find(
+    vault => getStorageVaultId(vault) === currentVaultId
+  );
 
   const isDisabled = !vault;
 
@@ -23,5 +31,5 @@ export const ActiveVaultGuard: React.FC<ComponentWithChildrenProps> = ({
     return null;
   }
 
-  return <>{children}</>;
+  return <CurrentVaultProvider value={vault}>{children}</CurrentVaultProvider>;
 };

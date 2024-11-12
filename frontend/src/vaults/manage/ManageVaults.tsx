@@ -11,6 +11,7 @@ import { sortEntitiesWithOrder } from '../../lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '../../lib/utils/order/getNewOrder';
 import { useUpdateVaultOrderMutation } from '../../vault/mutations/useUpdateVaultOrderMutation';
 import { useFolderlessVaults } from '../../vault/queries/useVaultsQuery';
+import { CurrentVaultProvider } from '../../vault/state/currentVault';
 import { getStorageVaultId } from '../../vault/utils/storageVault';
 import { VaultListItem } from '../components/VaultListItem';
 import { VaultsContainer } from '../components/VaultsContainer';
@@ -62,12 +63,11 @@ export const ManageVaults = () => {
             {...draggableProps}
             {...dragHandleProps}
             status={status}
+            key={getStorageVaultId(item)}
           >
-            <VaultListItem
-              isDraggable
-              id={getStorageVaultId(item)}
-              name={item.name}
-            />
+            <CurrentVaultProvider value={item}>
+              <VaultListItem isDraggable />
+            </CurrentVaultProvider>
             {status === 'overlay' && <DnDItemHighlight />}
           </DnDItemContainer>
         );

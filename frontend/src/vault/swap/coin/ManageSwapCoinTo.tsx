@@ -22,7 +22,7 @@ import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { Chain } from '../../../model/chain';
 import { convertChainToChainTicker } from '../../../utils/crypto';
-import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useCoinTo } from '../state/coin-to';
 import { useCurrentSwapCoin } from '../state/swapCoin';
 import { SwapCoinToExplorer } from './SwapCoinToExplorer';
@@ -45,7 +45,7 @@ const Container = styled(UnstyledButton)`
 
 export const ManageSwapCoinTo = () => {
   const [coinKey] = useCurrentSwapCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const [coinTo, setCoinTo] = useCoinTo();
 
   const { t } = useTranslation();

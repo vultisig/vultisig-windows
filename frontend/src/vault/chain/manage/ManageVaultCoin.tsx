@@ -14,7 +14,7 @@ import { Text } from '../../../lib/ui/text';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation';
 import { useSaveCoinMutation } from '../../mutations/useSaveCoinMutation';
-import { useAssertCurrentVaultCoins } from '../../state/useCurrentVault';
+import { useCurrentVaultCoins } from '../../state/currentVault';
 
 const Container = styled(Panel)`
   ${interactive};
@@ -32,7 +32,7 @@ export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const [optimisticIsChecked, setOptimisticIsChecked] = useState(false);
   const key = getCoinMetaKey(value);
 
-  const coins = useAssertCurrentVaultCoins();
+  const coins = useCurrentVaultCoins();
 
   const { mutate: saveCoin, isPending: isSaving } = useSaveCoinMutation();
   const { mutate: deleteCoin, isPending: isDeleting } = useDeleteCoinMutation();

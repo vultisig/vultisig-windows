@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
 
+import { storage } from '../../../wailsjs/go/models';
 import { areEqualCoins, CoinKey } from '../../coin/Coin';
 import { getStorageCoinKey } from '../../coin/utils/storageCoin';
+import { getValueProviderSetup } from '../../lib/ui/state/getValueProviderSetup';
 import { groupItems } from '../../lib/utils/array/groupItems';
 import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
@@ -10,31 +12,12 @@ import {
   keygenDeviceFromDeviceName,
   parseLocalPartyId,
 } from '../keygen/utils/localPartyId';
-import { useVaults } from '../queries/useVaultsQuery';
-import { getStorageVaultId } from '../utils/storageVault';
-import { useCurrentVaultId } from './useCurrentVaultId';
 
-export const useCurrentVault = () => {
-  const vaults = useVaults();
-  const [currentVaultId] = useCurrentVaultId();
+export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
+  getValueProviderSetup<storage.Vault>('CurrentTxHash');
 
-  return useMemo(() => {
-    if (!currentVaultId) return null;
-
-    const vault = shouldBePresent(
-      vaults.find(vault => getStorageVaultId(vault) === currentVaultId)
-    );
-
-    return vault;
-  }, [vaults, currentVaultId]);
-};
-
-export const useAssertCurrentVault = () => {
-  return shouldBePresent(useCurrentVault());
-};
-
-export const useAssertCurrentVaultNativeCoins = () => {
-  const vault = useAssertCurrentVault();
+export const useCurrentVaultNativeCoins = () => {
+  const vault = useCurrentVault();
 
   return useMemo(
     () => (vault.coins || []).filter(coin => coin.is_native_token),
@@ -42,8 +25,8 @@ export const useAssertCurrentVaultNativeCoins = () => {
   );
 };
 
-export const useAssertCurrentVaultChainIds = () => {
-  const coins = useAssertCurrentVaultNativeCoins();
+export const useCurrentVaultChainIds = () => {
+  const coins = useCurrentVaultNativeCoins();
 
   return useMemo(
     () => withoutDuplicates(coins.map(coin => coin.chain)),
@@ -51,10 +34,10 @@ export const useAssertCurrentVaultChainIds = () => {
   );
 };
 
-export const useAssertCurrentVaultCoins = () => {
-  const chains = useAssertCurrentVaultChainIds();
+export const useCurrentVaultCoins = () => {
+  const chains = useCurrentVaultChainIds();
 
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
 
   return useMemo(
     () => (vault.coins || []).filter(coin => chains.includes(coin.chain)),
@@ -62,16 +45,16 @@ export const useAssertCurrentVaultCoins = () => {
   );
 };
 
-export const useAssertCurrentVaultCoinsByChain = () => {
-  const coins = useAssertCurrentVaultCoins();
+export const useCurrentVaultCoinsByChain = () => {
+  const coins = useCurrentVaultCoins();
 
   return useMemo(() => {
     return groupItems(coins, coin => coin.chain as Chain);
   }, [coins]);
 };
 
-export const useAssertCurrentVaultAddreses = () => {
-  const coins = useAssertCurrentVaultNativeCoins();
+export const useCurrentVaultAddreses = () => {
+  const coins = useCurrentVaultNativeCoins();
 
   return useMemo(() => {
     return Object.fromEntries(
@@ -80,14 +63,14 @@ export const useAssertCurrentVaultAddreses = () => {
   }, [coins]);
 };
 
-export const useAssertCurrentVaultAddress = (chainId: string) => {
-  const addresses = useAssertCurrentVaultAddreses();
+export const useCurrentVaultAddress = (chainId: string) => {
+  const addresses = useCurrentVaultAddreses();
 
   return shouldBePresent(addresses[chainId as Chain]);
 };
 
-export const useAssertCurrentVaultChainCoins = (chainId: string) => {
-  const coins = useAssertCurrentVaultCoins();
+export const useCurrentVaultChainCoins = (chainId: string) => {
+  const coins = useCurrentVaultCoins();
 
   return useMemo(
     () => coins.filter(coin => coin.chain === chainId),
@@ -95,14 +78,14 @@ export const useAssertCurrentVaultChainCoins = (chainId: string) => {
   );
 };
 
-export const useAssertCurrentVaultNativeCoin = (chainId: string) => {
-  const nativeCoins = useAssertCurrentVaultNativeCoins();
+export const useCurrentVaultNativeCoin = (chainId: string) => {
+  const nativeCoins = useCurrentVaultNativeCoins();
 
   return shouldBePresent(nativeCoins.find(coin => coin.chain === chainId));
 };
 
-export const useAssertCurrentVaultCoin = (coinKey: CoinKey) => {
-  const coins = useAssertCurrentVaultCoins();
+export const useCurrentVaultCoin = (coinKey: CoinKey) => {
+  const coins = useCurrentVaultCoins();
 
   return shouldBePresent(
     coins.find(coin => areEqualCoins(getStorageCoinKey(coin), coinKey))
@@ -110,7 +93,7 @@ export const useAssertCurrentVaultCoin = (coinKey: CoinKey) => {
 };
 
 export const useCurrentVaultHasServer = () => {
-  const { signers } = useAssertCurrentVault();
+  const { signers } = useCurrentVault();
 
   return useMemo(
     () =>

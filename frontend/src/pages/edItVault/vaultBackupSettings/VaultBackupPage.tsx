@@ -15,7 +15,7 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
 import { useBackupVaultMutation } from '../../../vault/mutations/useBackupVaultMutation';
-import { useCurrentVault } from '../../../vault/state/useCurrentVault';
+import { useCurrentVault } from '../../../vault/state/currentVault';
 import {
   VaultBackupSchema,
   vaultBackupSchema,

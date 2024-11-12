@@ -7,7 +7,7 @@ import { getLastItemOrder } from '../../lib/utils/order/getLastItemOrder';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { DefaultCoinsService } from '../../services/Coin/DefaultCoinsService';
 import { useVaults, vaultsQueryKey } from '../queries/useVaultsQuery';
-import { useCurrentVaultId } from '../state/useCurrentVaultId';
+import { useCurrentVaultId } from '../state/currentVaultId';
 import { getStorageVaultId } from '../utils/storageVault';
 
 export const useSaveVaultMutation = () => {

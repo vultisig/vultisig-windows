@@ -6,7 +6,7 @@ import {
   convertChainSymbolToChain,
   convertChainToChainTicker,
 } from '../../../utils/crypto';
-import { useAssertCurrentVaultAddreses } from '../../../vault/state/useCurrentVault';
+import { useCurrentVaultAddreses } from '../../../vault/state/currentVault';
 import { nativeTokenForChain } from '../../../vault/utils/helpers';
 import { Coin } from '../../types/coin';
 
@@ -15,7 +15,7 @@ export default function useSwapPairs(
   ticker: string,
   contractAddress: string
 ) {
-  const addresses = useAssertCurrentVaultAddreses();
+  const addresses = useCurrentVaultAddreses();
   return useQuery({
     queryKey: ['swap-pairs', `${chain}.${ticker}`],
     queryFn: async () => {

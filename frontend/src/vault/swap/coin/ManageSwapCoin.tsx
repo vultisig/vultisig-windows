@@ -24,7 +24,7 @@ import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant'
 import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { formatAmount } from '../../../lib/utils/formatAmount';
-import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useCurrentSwapCoin } from '../state/swapCoin';
 import { SwapCoinExplorer } from './SwapCoinExplorer';
 
@@ -46,7 +46,7 @@ const Container = styled(UnstyledButton)`
 
 export const ManageSwapCoin = () => {
   const [coinKey] = useCurrentSwapCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const { id, chainId } = coinKey;
 
   const { t } = useTranslation();

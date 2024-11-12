@@ -5,10 +5,10 @@ import { CoinMeta } from '../../model/coin-meta';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
-import { useAssertCurrentVault } from '../state/useCurrentVault';
+import { useCurrentVault } from '../state/currentVault';
 
 export const useSaveCoinMutation = () => {
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
 
   const walletCore = useAssertWalletCore();
 

@@ -6,7 +6,7 @@ import { useValidateAddressQuery } from '../../../../chain/queries/useValidateAd
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
-import { useAssertCurrentVaultCoin } from '../../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../../state/currentVault';
 import { useSender } from '../../sender/hooks/useSender';
 import { useSendAmount } from '../../state/amount';
 import { useSendReceiver } from '../../state/receiver';
@@ -21,7 +21,7 @@ export const useIsSendFormDisabled = () => {
   const [coinKey] = useCurrentSendCoin();
 
   const { t } = useTranslation();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
   const addressValidationQuery = useValidateAddressQuery({

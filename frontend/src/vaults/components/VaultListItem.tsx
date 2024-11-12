@@ -2,28 +2,25 @@ import { useNavigate } from 'react-router-dom';
 
 import { ListItem } from '../../lib/ui/list/item/ListItem';
 import { makeAppPath } from '../../navigation';
-import { useCurrentVaultId } from '../../vault/state/useCurrentVaultId';
+import { useCurrentVault } from '../../vault/state/currentVault';
+import { useCurrentVaultId } from '../../vault/state/currentVaultId';
+import { getStorageVaultId } from '../../vault/utils/storageVault';
 
 type VaultListItemProps = {
   isDraggable?: boolean;
-  name: string;
-  id: string;
 };
 
-export const VaultListItem = ({
-  name,
-  id,
-  isDraggable,
-}: VaultListItemProps) => {
+export const VaultListItem = ({ isDraggable }: VaultListItemProps) => {
   const navigate = useNavigate();
   const [, setSelectedVault] = useCurrentVaultId();
+  const vault = useCurrentVault();
 
   return (
     <ListItem
       isDraggable={isDraggable}
-      title={name}
+      title={vault.name}
       onClick={() => {
-        setSelectedVault(id);
+        setSelectedVault(getStorageVaultId(vault));
         navigate(makeAppPath('vault'));
       }}
     />

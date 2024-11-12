@@ -18,7 +18,7 @@ import { VaultTypeProvider } from '../../setup/shared/state/vaultType';
 import { CurrentHexChainCodeProvider } from '../../setup/state/currentHexChainCode';
 import { GeneratedHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/serverUrlDerivedFromServerType';
-import { useAssertCurrentVault } from '../../state/useCurrentVault';
+import { useCurrentVault } from '../../state/currentVault';
 import { ReshareVaultPeerDiscoveryStep } from '../ReshareVaultPeerDiscoveryStep';
 import { ReshareVerifyStep } from '../shared/ReshareVerifyStep';
 
@@ -31,7 +31,7 @@ const reshareVaultSteps = [
 ] as const;
 
 export const SecureReshareVaultPage = () => {
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
   const { local_party_id, hex_chain_code } = vault;
 
   const { step, setStep, toPreviousStep, toNextStep } =
