@@ -501,6 +501,7 @@ export const de = {
     'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
   thorchain_message_deposit: 'THORChain-Nachrichteneinzahlung',
   chainFunctions: {
+    memo: 'Memo',
     optional_validation: 'Optional',
     default_validation: 'Ungültige Eingabe',
     bond: {
@@ -511,7 +512,8 @@ export const de = {
         amount: 'Betrag',
       },
       validations: {
-        nodeAddress: 'Knotenadresse ist erforderlich',
+        nodeAddressMinLength: 'Knotenadresse ist erforderlich',
+        nodeAddressInvalid: 'Knotenadresse ist ungültig',
         operatorFee: 'Betreibergebühr ist erforderlich',
         amount: 'Betrag muss positiv sein',
       },
@@ -523,7 +525,8 @@ export const de = {
         provider: 'Anbieter',
       },
       validations: {
-        nodeAddress: 'Knotenadresse ist erforderlich',
+        nodeAddressMinLength: 'Knotenadresse ist erforderlich',
+        nodeAddressInvalid: 'Knotenadresse ist ungültig',
         amount: 'Betrag muss positiv sein',
       },
     },
@@ -532,7 +535,8 @@ export const de = {
         nodeAddress: 'Knotenadresse',
       },
       validations: {
-        nodeAddress: 'Knotenadresse ist erforderlich',
+        nodeAddressMinLength: 'Knotenadresse ist erforderlich',
+        nodeAddressInvalid: 'Knotenadresse ist ungültig',
       },
     },
     custom: {
@@ -567,4 +571,5 @@ export const de = {
   scan_with_devices: 'Mit Geräten scannen, um der Tresorgeneration beizutreten',
   scan_with_devices_to_sign:
     'Esegui la scansione con i dispositivi per partecipare alla firma della transazione',
+  sign: 'Signieren',
 };

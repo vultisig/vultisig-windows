@@ -8,7 +8,6 @@ import { AppPathParams, AppPathsWithParams } from '..';
 
 export function useAppPathParams<P extends AppPathsWithParams>() {
   const [searchParams, setSearchParams] = useSearchParams();
-
   const searchString = searchParams.toString();
 
   const setParams = useCallback(

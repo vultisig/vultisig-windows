@@ -499,6 +499,7 @@ export const it = {
   add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
   thorchain_message_deposit: 'Deposito messaggio THORChain',
   chainFunctions: {
+    memo: 'Memo',
     optional_validation: 'Facoltativo',
     default_validation: 'Ingresso non valido',
     bond: {
@@ -509,7 +510,8 @@ export const it = {
         amount: 'Importo',
       },
       validations: {
-        nodeAddress: 'Indirizzo del nodo è obbligatorio',
+        nodeAddressMinLength: 'Indirizzo nodo obbligatorio',
+        nodeAddressInvalid: 'Indirizzo nodo non valido',
         operatorFee: "Tariffa dell'operatore è obbligatoria",
         amount: "L'importo deve essere positivo",
       },
@@ -521,7 +523,8 @@ export const it = {
         provider: 'Fornitore',
       },
       validations: {
-        nodeAddress: 'Indirizzo del nodo è obbligatorio',
+        nodeAddressMinLength: 'Indirizzo nodo obbligatorio',
+        nodeAddressInvalid: 'Indirizzo nodo non valido',
         amount: "L'importo deve essere positivo",
       },
     },
@@ -530,7 +533,8 @@ export const it = {
         nodeAddress: 'Indirizzo del Nodo',
       },
       validations: {
-        nodeAddress: 'Indirizzo del nodo è obbligatorio',
+        nodeAddressMinLength: 'Indirizzo nodo obbligatorio',
+        nodeAddressInvalid: 'Indirizzo nodo non valido',
       },
     },
     custom: {
@@ -561,4 +565,5 @@ export const it = {
       },
     },
   },
+  sign: 'Firma',
 };
