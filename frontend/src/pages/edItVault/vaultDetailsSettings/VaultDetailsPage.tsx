@@ -22,14 +22,8 @@ const VaultDetailsPage = () => {
     return <></>;
   }
 
-  const {
-    name,
-    public_key_eddsa,
-    public_key_ecdsa,
-    signers,
-    local_party_id,
-    order,
-  } = currentVault;
+  const { name, public_key_eddsa, public_key_ecdsa, signers, local_party_id } =
+    currentVault;
 
   const m = signers.length;
   const vaultTypeText = getVaultTypeText(m, t);
@@ -55,7 +49,8 @@ const VaultDetailsPage = () => {
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_part')}</Text>
             <Text color="supporting" size={13}>
-              {t('vault_details_page_part_of_vault')} {order + 1}{' '}
+              {t('vault_details_page_part_of_vault')}{' '}
+              {signers.indexOf(local_party_id) + 1}{' '}
               {t('vault_details_page_of_word')} {signers.length}
             </Text>
           </VStack>
