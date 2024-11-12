@@ -39,11 +39,11 @@ export const formatAmount = (
   const fractionDigits = getFractionDigits(amount);
 
   const formatter = new Intl.NumberFormat(locale, {
+    style: currency ? 'currency' : 'decimal',
+    currency: currency || undefined,
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   });
 
-  const formattedAmount = formatter.format(amount);
-
-  return currency ? `${formattedAmount} ${currency}` : formattedAmount;
+  return formatter.format(amount);
 };

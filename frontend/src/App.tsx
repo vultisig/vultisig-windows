@@ -8,6 +8,7 @@ import { GlobalStyle } from './lib/ui/css/GlobalStyle';
 import { darkTheme } from './lib/ui/theme/darkTheme';
 import { ThemeProvider } from './lib/ui/theme/ThemeProvider';
 import { ToastProvider } from './lib/ui/toast/ToastProvider';
+import OnboardingResetter from './onboarding/OnboardingRessetterProvider';
 import { WalletCoreProvider } from './providers/WalletCoreProvider';
 import { getQueryClient } from './query/queryClient';
 import { router } from './router';
@@ -24,9 +25,11 @@ const App = () => {
           <div className="w-full min-h-screen bg-primary h-full flex flex-col">
             <RemoteStateDependant>
               <InitializedWalletOnly>
-                <ToastProvider>
-                  <RouterProvider router={router} />
-                </ToastProvider>
+                <OnboardingResetter>
+                  <ToastProvider>
+                    <RouterProvider router={router} />
+                  </ToastProvider>
+                </OnboardingResetter>
               </InitializedWalletOnly>
             </RemoteStateDependant>
           </div>

@@ -14,35 +14,27 @@ import { Text } from '../../../../lib/ui/text';
 import { withoutDuplicates } from '../../../../lib/utils/array/withoutDuplicates';
 import { CoinMeta } from '../../../../model/coin-meta';
 import { TokensStore } from '../../../../services/Coin/CoinList';
-import { useAssertCurrentVaultChainCoins } from '../../../state/useCurrentVault';
+import { useCurrentVaultChainCoins } from '../../../state/currentVault';
 import { useCurrentVaultChain } from '../../useCurrentVaultChain';
 import { ManageVaultChainCoin } from './ManageVaultChainCoin';
 
 export const VaultChainCoinOptions = () => {
   const chainId = useCurrentVaultChain();
-  const vaultCoins = useAssertCurrentVaultChainCoins(chainId);
+  const vaultCoins = useCurrentVaultChainCoins(chainId);
   const query = useWhitelistedCoinsQuery(chainId);
 
-  const vaultItems = useMemo(
-    () => vaultCoins.map(storageCoinToCoin).map(CoinMeta.fromCoin),
-    [vaultCoins]
-  );
-
-  const suggestedItems = useMemo(
-    () =>
-      TokensStore.TokenSelectionAssets.filter(
-        token => token.chain === chainId && !token.isNativeToken
-      ),
-    [chainId]
-  );
-
   const initialItems = useMemo(() => {
+    const vaultItems = vaultCoins.map(storageCoinToCoin).map(CoinMeta.fromCoin);
+    const suggestedItems = TokensStore.TokenSelectionAssets.filter(
+      token => token.chain === chainId
+    );
+
     return withoutDuplicates(
       [...vaultItems, ...suggestedItems],
       (one, another) =>
         areEqualCoins(getCoinMetaKey(one), getCoinMetaKey(another))
-    );
-  }, [suggestedItems, vaultItems]);
+    ).filter(({ isNativeToken }) => !isNativeToken);
+  }, [chainId, vaultCoins]);
 
   const [searchQuery] = useCurrentSearch();
 

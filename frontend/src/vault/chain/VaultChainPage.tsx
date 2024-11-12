@@ -37,7 +37,7 @@ import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityA
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
-import { useAssertCurrentVaultNativeCoin } from '../state/useCurrentVault';
+import { useCurrentVaultNativeCoin } from '../state/currentVault';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
 import { useCurrentVaultChain } from './useCurrentVaultChain';
 import { VaultAddressLink } from './VaultAddressLink';
@@ -49,7 +49,7 @@ export const VaultChainPage = () => {
   const chain = useCurrentVaultChain();
   const vaultAddressQuery = useVaultAddressQuery(chain);
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain);
-  const nativeCoin = useAssertCurrentVaultNativeCoin(chain);
+  const nativeCoin = useCurrentVaultNativeCoin(chain);
   const copyAddress = useCopyAddress();
 
   const { mutate: refresh, isPending } = useMutation({

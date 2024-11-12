@@ -12,6 +12,7 @@ import { sortEntitiesWithOrder } from '../../../lib/utils/entities/EntityWithOrd
 import { getNewOrder } from '../../../lib/utils/order/getNewOrder';
 import { useUpdateVaultOrderMutation } from '../../../vault/mutations/useUpdateVaultOrderMutation';
 import { useFolderVaults } from '../../../vault/queries/useVaultsQuery';
+import { CurrentVaultProvider } from '../../../vault/state/currentVault';
 import { getStorageVaultId } from '../../../vault/utils/storageVault';
 import { FolderVaultOption } from '../addVaults/FolderVaultOption';
 import { useRemoveVaultFromFolderMutation } from '../mutations/useRemoveVaultFromFolderMutation';
@@ -67,21 +68,22 @@ export const ManageFolderVaults = () => {
 
         return (
           <DnDItemContainer
+            key={vaultId}
             {...draggableProps}
             {...dragHandleProps}
             status={status}
           >
-            <FolderVaultOption
-              isDraggable
-              value={true}
-              onChange={() => {
-                remove({
-                  vaultId,
-                });
-              }}
-              key={vaultId}
-              title={item.name}
-            />
+            <CurrentVaultProvider value={item}>
+              <FolderVaultOption
+                isDraggable
+                value={true}
+                onChange={() => {
+                  remove({
+                    vaultId,
+                  });
+                }}
+              />
+            </CurrentVaultProvider>
             {status === 'overlay' && <DnDItemHighlight />}
           </DnDItemContainer>
         );

@@ -23,14 +23,14 @@ import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton';
 import { PageHeaderIconButtons } from '../../../ui/page/PageHeaderIconButtons';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { VaultPrimaryActions } from '../../components/VaultPrimaryActions';
-import { useAssertCurrentVaultCoins } from '../../state/useCurrentVault';
+import { useCurrentVaultCoins } from '../../state/currentVault';
 import { VaultChainCoinItem } from '../VaultChainCoinItem';
 import { useCurrentVaultCoinKey } from './useCurrentVaultCoinKey';
 
 export const VaultChainCoinPage = () => {
   const coinKey = useCurrentVaultCoinKey();
 
-  const coins = useAssertCurrentVaultCoins();
+  const coins = useCurrentVaultCoins();
 
   const coin = useMemo(() => {
     return storageCoinToCoin(

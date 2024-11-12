@@ -16,10 +16,10 @@ import {
 import { sum } from '../../lib/utils/array/sum';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { CoinMeta } from '../../model/coin-meta';
-import { useAssertCurrentVaultCoins } from '../state/useCurrentVault';
+import { useCurrentVaultCoins } from '../state/currentVault';
 
 export const useVaultTotalBalanceQuery = () => {
-  const coins = useAssertCurrentVaultCoins();
+  const coins = useCurrentVaultCoins();
 
   const pricesQuery = useCoinPricesQuery(
     coins.map(storageCoinToCoin).map(CoinMeta.fromCoin)

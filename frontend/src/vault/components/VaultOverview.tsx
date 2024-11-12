@@ -7,7 +7,7 @@ import { PageContent } from '../../ui/page/PageContent';
 import { VaultTotalBalance } from '../balance/VaultTotalBalance';
 import { ManageVaultChainsPrompt } from '../chain/manage/ManageVaultChainsPrompt';
 import { useVaultChainsBalancesQuery } from '../queries/useVaultChainsBalancesQuery';
-import { useCurrentVault } from '../state/useCurrentVault';
+import { useCurrentVault } from '../state/currentVault';
 import { VaultChainItem } from './VaultChainItem';
 import { VaultPrimaryActions } from './VaultPrimaryActions';
 

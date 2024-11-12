@@ -45,6 +45,8 @@ export enum CosmosChain {
   MayaChain = 'MayaChain',
   Dydx = 'Dydx',
   Kujira = 'Kujira',
+  Terra = 'Terra',
+  TerraClassic = 'TerraClassic',
 }
 
 export enum OtherChain {
@@ -153,6 +155,10 @@ export class ChainUtils {
         return 'SUI';
       case Chain.Ton:
         return 'TON';
+      case Chain.Terra:
+        return 'LUNA';
+      case Chain.TerraClassic:
+        return 'LUNC';
     }
   }
 }

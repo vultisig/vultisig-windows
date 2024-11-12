@@ -5,7 +5,7 @@ import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Modal } from '../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../lib/ui/props';
-import { useAssertCurrentVaultCoins } from '../../state/useCurrentVault';
+import { useCurrentVaultCoins } from '../../state/currentVault';
 import { useCurrentSwapCoin } from '../state/swapCoin';
 import { SendCoinOption } from './SendCoinOption';
 
@@ -16,7 +16,7 @@ export const SwapCoinExplorer: React.FC<ClosableComponentProps> = ({
 
   const [value, setValue] = useCurrentSwapCoin();
 
-  const coins = useAssertCurrentVaultCoins();
+  const coins = useCurrentVaultCoins();
 
   return (
     <Modal

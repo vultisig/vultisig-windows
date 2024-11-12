@@ -1,5 +1,5 @@
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
-import { keygenServerUrl } from '../../keygen/KeygenServerType';
+import { keygenServerUrl } from '../../keygen/server/KeygenServerType';
 import { useCurrentServerType } from '../../keygen/state/currentServerType';
 import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl';
 

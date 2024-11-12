@@ -11,6 +11,10 @@ export const it = {
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   create_new_vault: 'Crea nuova cassaforte',
   import_existing_vault: 'Importa cassaforte esistente',
+  scan_with_devices:
+    'Esegui la scansione con i dispositivi per partecipare alla generazione del vault',
+  scan_with_devices_to_sign:
+    'Esegui la scansione con i dispositivi per partecipare alla firma della transazione',
   next: 'Avanti',
   skip: 'Salta',
   enter_password: 'Inserisci la password',

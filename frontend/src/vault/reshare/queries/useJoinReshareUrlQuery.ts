@@ -9,7 +9,7 @@ import {
 } from '../../keygen/utils/getJoinReshareUrl';
 import { useCurrentHexChainCode } from '../../setup/state/currentHexChainCode';
 import { useCurrentHexEncryptionKey } from '../../setup/state/currentHexEncryptionKey';
-import { useAssertCurrentVault } from '../../state/useCurrentVault';
+import { useCurrentVault } from '../../state/currentVault';
 
 export const useJoinReshareUrlQuery = () => {
   const sessionId = useCurrentSessionId();
@@ -17,8 +17,7 @@ export const useJoinReshareUrlQuery = () => {
   const serviceName = useCurrentServiceName();
   const hexEncryptionKey = useCurrentHexEncryptionKey();
   const hexChainCode = useCurrentHexChainCode();
-  const { signers, reshare_prefix, public_key_ecdsa, name } =
-    useAssertCurrentVault();
+  const { signers, reshare_prefix, public_key_ecdsa, name } = useCurrentVault();
 
   const input: GetJoinReshareUrlInput = {
     sessionId,

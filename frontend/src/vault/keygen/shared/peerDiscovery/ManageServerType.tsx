@@ -9,7 +9,10 @@ import { ComponentWithActiveState } from '../../../../lib/ui/props';
 import { text } from '../../../../lib/ui/text';
 import { matchColor } from '../../../../lib/ui/theme/getters';
 import { IconWrapper } from '../../../../pages/edItVault/EditVaultPage.styles';
-import { KeygenServerType, keygenServerTypes } from '../../KeygenServerType';
+import {
+  KeygenServerType,
+  keygenServerTypes,
+} from '../../server/KeygenServerType';
 import { useCurrentServerType } from '../../state/currentServerType';
 import { KeygenServerTypeIcon } from '../KeygenServerTypeIcon';
 

@@ -13,6 +13,10 @@ export const pt = {
   import_existing_vault: 'Importar cofre existente',
   next: 'Próximo',
   skip: 'Pular',
+  scan_with_devices:
+    'Esegui la scansione con i dispositivi per partecipare alla generazione del vault',
+  scan_with_devices_to_sign:
+    'Escanear com dispositivos para participar da assinatura da transação',
   enter_password: 'Digite a senha',
   invalid_file_format: 'Formato de arquivo inválido',
   invalid_file_format_message:

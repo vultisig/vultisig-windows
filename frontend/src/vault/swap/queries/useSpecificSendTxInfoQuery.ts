@@ -3,13 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { ServiceFactory } from '../../../services/ServiceFactory';
-import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useCurrentSwapCoin } from '../state/swapCoin';
 
 export const useSpecificSendTxInfoQuery = () => {
   const walletCore = useAssertWalletCore();
   const [coinKey] = useCurrentSwapCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
 
   return useQuery({
     queryKey: ['specificSendTxInfo', coinKey],

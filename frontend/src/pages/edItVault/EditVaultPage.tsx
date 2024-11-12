@@ -9,7 +9,7 @@ import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../ui/page/PageSlice';
-import { useCurrentVault } from '../../vault/state/useCurrentVault';
+import { useCurrentVault } from '../../vault/state/currentVault';
 import { editVaultSettingsItems } from './constants';
 import {
   AutoCenteredTitle,

@@ -4,14 +4,14 @@ import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { CoinMeta } from '../../../model/coin-meta';
-import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useSwapQuote } from '../state/selected-quote';
 import { useCurrentSwapCoin } from '../state/swapCoin';
 import { useSendSpecificTxInfo } from './SendSpecificTxInfoProvider';
 
 export default function TotalFeeUsd() {
   const [coinKey] = useCurrentSwapCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const [selectedSwapQuote] = useSwapQuote();
   const priceQuery = useCoinPriceQuery(
     CoinMeta.fromCoin(storageCoinToCoin(coin))

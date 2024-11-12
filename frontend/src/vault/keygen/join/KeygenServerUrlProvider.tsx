@@ -8,26 +8,22 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
-import { useServerUrlQuery } from '../../keygen/shared/queries/useServerUrlQuery';
 import { useCurrentServerType } from '../../keygen/state/currentServerType';
 import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl';
+import { useKeygenServerUrlQuery } from '../server/queries/useKeygenServerUrlQuery';
 import { useCurrentServiceName } from '../shared/state/currentServiceName';
-import { useCurrentSessionId } from '../shared/state/currentSessionId';
 
 export const KeygenServerUrlProvider = ({
   children,
 }: ComponentWithChildrenProps) => {
-  const [sessionId] = useCurrentSessionId();
-
   const [serverType] = useCurrentServerType();
   const [serviceName] = useCurrentServiceName();
 
   const { t } = useTranslation();
 
-  const query = useServerUrlQuery({
+  const query = useKeygenServerUrlQuery({
     serverType,
     serviceName,
-    sessionId,
   });
 
   return (

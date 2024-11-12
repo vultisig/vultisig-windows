@@ -14,7 +14,7 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
-import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { SendFee } from '../fee/SendFee';
 import { SendFiatFee } from '../fee/SendFiatFee';
 import { useSender } from '../sender/hooks/useSender';
@@ -33,7 +33,7 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
 
   const [coinKey] = useCurrentSendCoin();
   const sender = useSender();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const [receiver] = useSendReceiver();
   const [amount] = useSendAmount();
   const [memo] = useSendMemo();

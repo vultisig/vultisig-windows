@@ -19,6 +19,10 @@ import { RpcServiceOsmosis } from './osmosis/RpcServiceOsmosis';
 import { RpcServicePolkadot } from './polkadot/RpcServicePolkadot';
 import { RpcServiceSolana } from './solana/RpcServiceSolana';
 import { RpcServiceSui } from './sui/RpcServiceSui';
+import {
+  RpcServiceTerraClassic,
+  RpcServiceTerraV2,
+} from './terra/RpcServiceTerra';
 import { RpcServiceThorchain } from './thorchain/RpcServiceThorchain';
 import { RpcServiceTon } from './ton/RpcServiceTon';
 import { RpcServiceUtxo } from './utxo/RpcServiceUtxo';
@@ -76,6 +80,10 @@ export class RpcServiceFactory {
         return new RpcServiceDydx();
       case Chain.Ton:
         return new RpcServiceTon(chain);
+      case Chain.Terra:
+        return new RpcServiceTerraV2();
+      case Chain.TerraClassic:
+        return new RpcServiceTerraClassic();
       default:
         throw new Error(`Chain not supported ${chain}`);
     }

@@ -135,6 +135,10 @@ export class CoinService implements ICoinService {
         return this.walletCore.CoinType.ton;
       case Chain.Osmosis:
         return this.walletCore.CoinType.osmosis;
+      case Chain.Terra:
+        return this.walletCore.CoinType.terraV2;
+      case Chain.TerraClassic:
+        return this.walletCore.CoinType.terra;
       default:
         throw new Error(`Invalid chain ${this.chain}`);
     }

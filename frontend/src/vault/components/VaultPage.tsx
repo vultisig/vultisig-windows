@@ -16,7 +16,7 @@ import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle';
 import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance';
 import { VaultOverview } from '../../vault/components/VaultOverview';
 import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt';
-import { useAssertCurrentVault } from '../state/useCurrentVault';
+import { useCurrentVault } from '../state/currentVault';
 
 const PositionQrPrompt = styled.div`
   position: fixed;
@@ -29,7 +29,7 @@ const PositionQrPrompt = styled.div`
 
 export const VaultPage = () => {
   const navigate = useNavigate();
-  const { name } = useAssertCurrentVault();
+  const { name } = useCurrentVault();
 
   return (
     <>

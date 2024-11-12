@@ -7,7 +7,7 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
 import { getVaultTypeText } from '../../../utils/util';
-import { useCurrentVault } from '../../../vault/state/useCurrentVault';
+import { useCurrentVault } from '../../../vault/state/currentVault';
 import {
   AutoCenteredText,
   Container,
