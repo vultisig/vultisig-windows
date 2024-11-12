@@ -14,12 +14,12 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
-import { DepositFee } from '../DepositFee';
-import { DepositFiatFee } from '../DepositFiatFee';
 import {
   ChainAction,
   requiredFieldsPerChainAction,
 } from '../DepositForm/chainOptionsConfig';
+import { DepositFee } from '../fee/DepositFee';
+import { DepositFiatFee } from '../fee/DepositFiatFee';
 import { StrictText, StrictTextContrast } from './DepositVerify.styled';
 
 type DepositVerifyProps = {
