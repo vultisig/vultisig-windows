@@ -11,7 +11,7 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { convertChainSymbolToChain } from '../../../utils/crypto';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
-import { useAssertCurrentVaultAddreses } from '../../state/useCurrentVault';
+import { useCurrentVaultAddreses } from '../../state/currentVault';
 import { ManageAmount } from '../amount/ManageSendAmount';
 import { ManageSwapCoin } from '../coin/ManageSwapCoin';
 import { ManageSwapCoinTo } from '../coin/ManageSwapCoinTo';
@@ -29,7 +29,7 @@ export const SwapForm = ({ onForward }: ComponentWithForwardActionProps) => {
 
   const isDisabled = useIsSendFormDisabled();
 
-  const addresses = useAssertCurrentVaultAddreses();
+  const addresses = useCurrentVaultAddreses();
   const [coinTo] = useCoinTo();
 
   useEffect(() => {
