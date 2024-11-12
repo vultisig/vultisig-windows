@@ -1,3 +1,5 @@
+import { assertFetchResponse } from '../../../lib/utils/fetch/assertFetchResponse';
+
 type StartSessionInput = {
   serverUrl: string;
   sessionId: string;
@@ -17,9 +19,7 @@ export const startSession = async ({
     body: JSON.stringify(devices),
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to start session');
-  }
+  await assertFetchResponse(response);
 
   return response;
 };

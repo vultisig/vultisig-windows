@@ -1,3 +1,5 @@
+import { assertFetchResponse } from '../../../lib/utils/fetch/assertFetchResponse';
+
 type UploadPayloadToServerInput = {
   serverUrl: string;
   hash: string;
@@ -11,9 +13,7 @@ export async function getPayloadFromServer({
 
   const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error('Failed to get payload from server');
-  }
+  await assertFetchResponse(response);
 
   return response.text();
 }
