@@ -507,7 +507,8 @@ export const pt = {
         amount: 'Quantidade',
       },
       validations: {
-        nodeAddress: 'Endereço do nó é obrigatório',
+        nodeAddressMinLength: 'Endereço do nó é obrigatório',
+        nodeAddressInvalid: 'Endereço do nó é inválido',
         operatorFee: 'Taxa do operador é obrigatória',
         amount: 'Quantidade deve ser positiva',
       },
@@ -519,7 +520,8 @@ export const pt = {
         provider: 'Provedor',
       },
       validations: {
-        nodeAddress: 'Endereço do nó é obrigatório',
+        nodeAddressMinLength: 'Endereço do nó é obrigatório',
+        nodeAddressInvalid: 'Endereço do nó é inválido',
         amount: 'Quantidade deve ser positiva',
       },
     },
@@ -528,7 +530,8 @@ export const pt = {
         nodeAddress: 'Endereço do Nó',
       },
       validations: {
-        nodeAddress: 'Endereço do nó é obrigatório',
+        nodeAddressMinLength: 'Endereço do nó é obrigatório',
+        nodeAddressInvalid: 'Endereço do nó é inválido',
       },
     },
     custom: {

@@ -493,7 +493,8 @@ export const hr = {
         amount: 'Iznos',
       },
       validations: {
-        nodeAddress: 'Adresa čvora je obavezna',
+        nodeAddressMinLength: 'Potrebna je adresa čvora',
+        nodeAddressInvalid: 'Adresa čvora je nevažeća',
         operatorFee: 'Naknada operatera je obavezna',
         amount: 'Iznos mora biti pozitivan',
       },
@@ -505,7 +506,8 @@ export const hr = {
         provider: 'Pružatelj',
       },
       validations: {
-        nodeAddress: 'Adresa čvora je obavezna',
+        nodeAddressMinLength: 'Potrebna je adresa čvora',
+        nodeAddressInvalid: 'Adresa čvora je nevažeća',
         amount: 'Iznos mora biti pozitivan',
       },
     },
@@ -514,7 +516,8 @@ export const hr = {
         nodeAddress: 'Adresa Čvora',
       },
       validations: {
-        nodeAddress: 'Adresa čvora je obavezna',
+        nodeAddressMinLength: 'Potrebna je adresa čvora',
+        nodeAddressInvalid: 'Adresa čvora je nevažeća',
       },
     },
     custom: {

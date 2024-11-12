@@ -511,8 +511,8 @@ export const es = {
         amount: 'Cantidad',
       },
       validations: {
-        nodeAddress: 'La dirección del nodo es obligatoria',
-        operatorFee: 'La comisión del operador es obligatoria',
+        nodeAddressMinLength: 'La dirección del nodo es obligatoria',
+        nodeAddressInvalid: 'La dirección del nodo no es válida',
         amount: 'La cantidad debe ser positiva',
       },
     },
@@ -523,7 +523,8 @@ export const es = {
         provider: 'Proveedor',
       },
       validations: {
-        nodeAddress: 'La dirección del nodo es obligatoria',
+        nodeAddressMinLength: 'La dirección del nodo es obligatoria',
+        nodeAddressInvalid: 'La dirección del nodo no es válida',
         amount: 'La cantidad debe ser positiva',
       },
     },
@@ -532,7 +533,8 @@ export const es = {
         nodeAddress: 'Dirección del Nodo',
       },
       validations: {
-        nodeAddress: 'La dirección del nodo es obligatoria',
+        nodeAddressMinLength: 'La dirección del nodo es obligatoria',
+        nodeAddressInvalid: 'La dirección del nodo no es válida',
       },
     },
     custom: {

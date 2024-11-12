@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { Chain } from '../../../model/chain';
+import { validateNodeAddress } from '../utils/validateNodeAddress';
 
 export type ChainWithAction = keyof typeof chainActionOptionsConfig;
 
@@ -10,6 +11,8 @@ export const chainActionOptionsConfig = {
   dydx: ['vote'],
   ton: ['stake', 'unstake'],
 };
+
+export type ChainAction = keyof typeof requiredFieldsPerChainAction;
 
 export const swapAvailableChains = [
   Chain.Arbitrum,
@@ -25,8 +28,6 @@ export const swapAvailableChains = [
   Chain.MayaChain,
   Chain.Kujira,
 ];
-
-export type ChainAction = keyof typeof requiredFieldsPerChainAction;
 
 export const requiredFieldsPerChainAction = {
   bond: {
@@ -56,28 +57,38 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: z.object({
-      nodeAddress: z
-        .string()
-        .min(1, 'chainFunctions.bond.validations.nodeAddress'),
-      provider: z.string().optional(),
-      operatorFee: z
-        .string()
-        .transform(val => (val ? Number(val) : undefined))
-        .pipe(z.number().optional()),
-      amount: z
-        .string()
-        .transform(val => Number(val))
-        .pipe(
-          z
-            .number()
-            .positive()
-            .min(1, 'chainFunctions.bond.validations.amount')
-            .refine(val => val > 0, {
-              message: 'Amount must be greater than zero',
-            })
-        ),
-    }),
+    schema: (chainId: Chain, walletCore: any) =>
+      z.object({
+        nodeAddress: z
+          .string()
+          .refine(address => address.length > 0, {
+            message: 'chainFunctions.bond.validations.nodeAddressMinLength',
+          })
+          .refine(
+            async address =>
+              await validateNodeAddress(address, chainId, walletCore),
+            {
+              message: 'chainFunctions.bond.validations.nodeAddressInvalid',
+            }
+          ),
+        provider: z.string().optional(),
+        operatorFee: z
+          .string()
+          .transform(val => (val ? Number(val) : undefined))
+          .pipe(z.number().optional()),
+        amount: z
+          .string()
+          .transform(val => Number(val))
+          .pipe(
+            z
+              .number()
+              .positive()
+              .min(1, 'chainFunctions.bond.validations.amount')
+              .refine(val => val > 0, {
+                message: 'chainFunctions.bond.validations.amount',
+              })
+          ),
+      }),
   },
   unbond: {
     fields: [
@@ -100,24 +111,34 @@ export const requiredFieldsPerChainAction = {
         required: false,
       },
     ],
-    schema: z.object({
-      nodeAddress: z
-        .string()
-        .min(1, 'chainFunctions.unbond.validations.nodeAddress'),
-      amount: z
-        .string()
-        .transform(val => Number(val))
-        .pipe(
-          z
-            .number()
-            .positive()
-            .min(1, 'chainFunctions.unbond.validations.amount')
-            .refine(val => val > 0, {
-              message: 'Amount must be greater than zero',
-            })
-        ),
-      provider: z.string().optional(),
-    }),
+    schema: (chainId: Chain, walletCore: any) =>
+      z.object({
+        nodeAddress: z
+          .string()
+          .refine(address => address.length > 0, {
+            message: 'chainFunctions.bond.validations.nodeAddressMinLength',
+          })
+          .refine(
+            async address =>
+              await validateNodeAddress(address, chainId, walletCore),
+            {
+              message: 'chainFunctions.bond.validations.nodeAddressInvalid',
+            }
+          ),
+        amount: z
+          .string()
+          .transform(val => Number(val))
+          .pipe(
+            z
+              .number()
+              .positive()
+              .min(1, 'chainFunctions.unbond.validations.amount')
+              .refine(val => val > 0, {
+                message: 'chainFunctions.unbond.validations.amount',
+              })
+          ),
+        provider: z.string().optional(),
+      }),
   },
   leave: {
     fields: [
@@ -128,11 +149,21 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: z.object({
-      nodeAddress: z
-        .string()
-        .min(1, 'chainFunctions.leave.validations.nodeAddress'),
-    }),
+    schema: (chainId: Chain, walletCore: any) =>
+      z.object({
+        nodeAddress: z
+          .string()
+          .refine(address => address.length > 0, {
+            message: 'chainFunctions.leave.validations.nodeAddressMinLength',
+          })
+          .refine(
+            async address =>
+              await validateNodeAddress(address, chainId, walletCore),
+            {
+              message: 'chainFunctions.leave.validations.nodeAddressInvalid',
+            }
+          ),
+      }),
   },
   custom: {
     fields: [
@@ -159,7 +190,7 @@ export const requiredFieldsPerChainAction = {
             .positive()
             .min(1, 'chainFunctions.custom.validations.amount')
             .refine(val => val > 0, {
-              message: 'Amount must be greater than zero',
+              message: 'chainFunctions.custom.validations.amount',
             })
         ),
       customMemo: z
@@ -186,7 +217,7 @@ export const requiredFieldsPerChainAction = {
             .positive()
             .min(1, 'chainFunctions.addPool.validations.amount')
             .refine(val => val > 0, {
-              message: 'Amount must be greater than zero',
+              message: 'chainFunctions.addPool.validations.amount',
             })
         ),
     }),

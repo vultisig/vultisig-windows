@@ -511,7 +511,8 @@ export const de = {
         amount: 'Betrag',
       },
       validations: {
-        nodeAddress: 'Knotenadresse ist erforderlich',
+        nodeAddressMinLength: 'Knotenadresse ist erforderlich',
+        nodeAddressInvalid: 'Knotenadresse ist ungültig',
         operatorFee: 'Betreibergebühr ist erforderlich',
         amount: 'Betrag muss positiv sein',
       },
@@ -523,7 +524,8 @@ export const de = {
         provider: 'Anbieter',
       },
       validations: {
-        nodeAddress: 'Knotenadresse ist erforderlich',
+        nodeAddressMinLength: 'Knotenadresse ist erforderlich',
+        nodeAddressInvalid: 'Knotenadresse ist ungültig',
         amount: 'Betrag muss positiv sein',
       },
     },
@@ -532,7 +534,8 @@ export const de = {
         nodeAddress: 'Knotenadresse',
       },
       validations: {
-        nodeAddress: 'Knotenadresse ist erforderlich',
+        nodeAddressMinLength: 'Knotenadresse ist erforderlich',
+        nodeAddressInvalid: 'Knotenadresse ist ungültig',
       },
     },
     custom: {

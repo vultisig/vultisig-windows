@@ -496,7 +496,8 @@ export const en = {
         amount: 'Amount',
       },
       validations: {
-        nodeAddress: 'Node Address is required',
+        nodeAddressMinLength: 'Node Address is required',
+        nodeAddressInvalid: 'Node Address is invalid',
         operatorFee: "Operator's Fee is required",
         amount: 'Amount must be positive',
       },
@@ -508,7 +509,8 @@ export const en = {
         provider: 'Provider',
       },
       validations: {
-        nodeAddress: 'Node Address is required',
+        nodeAddressMinLength: 'Node Address is required',
+        nodeAddressInvalid: 'Node Address is invalid',
         amount: 'Amount must be positive',
       },
     },
@@ -517,7 +519,8 @@ export const en = {
         nodeAddress: 'Node Address',
       },
       validations: {
-        nodeAddress: 'Node Address is required',
+        nodeAddressMinLength: 'Node Address is required',
+        nodeAddressInvalid: 'Node Address is invalid',
       },
     },
     custom: {
