@@ -342,6 +342,7 @@ export const en = {
   fast: 'Fast',
   secure: 'Secure',
   active: 'Active',
+  sign: 'Sign',
   fast_vault_setup_prop_0: 'Single Device Setup',
   fast_vault_setup_prop_1: 'Transaction Alerts & Policies',
   fast_vault_setup_prop_2: 'Vault Backup Emailed',
@@ -486,6 +487,7 @@ export const en = {
   vote: 'Vote',
   stake: 'Stake',
   chainFunctions: {
+    memo: 'Memo',
     optional_validation: 'Optional',
     default_validation: 'Invalid input',
     bond: {
@@ -496,7 +498,8 @@ export const en = {
         amount: 'Amount',
       },
       validations: {
-        nodeAddress: 'Node Address is required',
+        nodeAddressMinLength: 'Node Address is required',
+        nodeAddressInvalid: 'Node Address is invalid',
         operatorFee: "Operator's Fee is required",
         amount: 'Amount must be positive',
       },
@@ -508,7 +511,8 @@ export const en = {
         provider: 'Provider',
       },
       validations: {
-        nodeAddress: 'Node Address is required',
+        nodeAddressMinLength: 'Node Address is required',
+        nodeAddressInvalid: 'Node Address is invalid',
         amount: 'Amount must be positive',
       },
     },
@@ -517,7 +521,8 @@ export const en = {
         nodeAddress: 'Node Address',
       },
       validations: {
-        nodeAddress: 'Node Address is required',
+        nodeAddressMinLength: 'Node Address is required',
+        nodeAddressInvalid: 'Node Address is invalid',
       },
     },
     custom: {

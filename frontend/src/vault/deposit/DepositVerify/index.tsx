@@ -5,20 +5,21 @@ import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import {
   TxOverviewColumn,
   TxOverviewRow,
+  TxOverviewRowDepositsFlow,
 } from '../../../chain/tx/components/TxOverviewRow';
-import { Button } from '../../../lib/ui/buttons/Button';
 import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
-import { DepositFee } from '../DepositFee';
-import { DepositFiatFee } from '../DepositFiatFee';
+import { DepositConfirmButton } from '../DepositConfirmButton';
 import {
   ChainAction,
   requiredFieldsPerChainAction,
 } from '../DepositForm/chainOptionsConfig';
+import { DepositFee } from '../fee/DepositFee';
+import { DepositFiatFee } from '../fee/DepositFiatFee';
 import { StrictText, StrictTextContrast } from './DepositVerify.styled';
 
 type DepositVerifyProps = {
@@ -50,12 +51,12 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
               if (!depositFormData[field.name]) return null;
 
               return field.type === 'number' || field.type === 'percentage' ? (
-                <TxOverviewRow key={field.name}>
+                <TxOverviewRowDepositsFlow key={field.name}>
                   <Text size={18} weight={700}>
                     {t(field.label)}
                   </Text>
                   <StrictText>{String(depositFormData[field.name])}</StrictText>
-                </TxOverviewRow>
+                </TxOverviewRowDepositsFlow>
               ) : (
                 <TxOverviewColumn key={field.name}>
                   <Text size={18} weight={700}>
@@ -67,6 +68,14 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                 </TxOverviewColumn>
               );
             })}
+            <TxOverviewRow key="memo">
+              <Text size={18} weight={700}>
+                {t('chainFunctions.memo')}
+              </Text>
+              <StrictTextContrast>
+                {String(depositFormData['memo'])}
+              </StrictTextContrast>
+            </TxOverviewRow>
             <TxOverviewRow>
               <DepositFee />
             </TxOverviewRow>
@@ -75,7 +84,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
             </TxOverviewRow>
           </TxOverviewPanel>
         </WithProgressIndicator>
-        <Button onClick={() => {}}>{t('sign')}</Button>
+        <DepositConfirmButton depositFormData={depositFormData} />
       </PageContent>
     </>
   );

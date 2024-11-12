@@ -497,6 +497,7 @@ export const pt = {
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   thorchain_message_deposit: 'Depósito de mensagem THORChain',
   chainFunctions: {
+    memo: 'Memo',
     optional_validation: 'Opcional',
     default_validation: 'Entrada inválida',
     bond: {
@@ -507,7 +508,8 @@ export const pt = {
         amount: 'Quantidade',
       },
       validations: {
-        nodeAddress: 'Endereço do nó é obrigatório',
+        nodeAddressMinLength: 'Endereço do nó é obrigatório',
+        nodeAddressInvalid: 'Endereço do nó é inválido',
         operatorFee: 'Taxa do operador é obrigatória',
         amount: 'Quantidade deve ser positiva',
       },
@@ -519,7 +521,8 @@ export const pt = {
         provider: 'Provedor',
       },
       validations: {
-        nodeAddress: 'Endereço do nó é obrigatório',
+        nodeAddressMinLength: 'Endereço do nó é obrigatório',
+        nodeAddressInvalid: 'Endereço do nó é inválido',
         amount: 'Quantidade deve ser positiva',
       },
     },
@@ -528,7 +531,8 @@ export const pt = {
         nodeAddress: 'Endereço do Nó',
       },
       validations: {
-        nodeAddress: 'Endereço do nó é obrigatório',
+        nodeAddressMinLength: 'Endereço do nó é obrigatório',
+        nodeAddressInvalid: 'Endereço do nó é inválido',
       },
     },
     custom: {
@@ -559,4 +563,5 @@ export const pt = {
       },
     },
   },
+  sign: 'Assinar',
 };

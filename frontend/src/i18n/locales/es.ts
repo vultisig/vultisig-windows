@@ -501,6 +501,7 @@ export const es = {
   add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
   thorchain_message_deposit: 'Depósito de mensajes de THORChain',
   chainFunctions: {
+    memo: 'Memo',
     required_validation: 'Obligatorio',
     option_validation: 'Opcional',
     bond: {
@@ -511,8 +512,8 @@ export const es = {
         amount: 'Cantidad',
       },
       validations: {
-        nodeAddress: 'La dirección del nodo es obligatoria',
-        operatorFee: 'La comisión del operador es obligatoria',
+        nodeAddressMinLength: 'La dirección del nodo es obligatoria',
+        nodeAddressInvalid: 'La dirección del nodo no es válida',
         amount: 'La cantidad debe ser positiva',
       },
     },
@@ -523,7 +524,8 @@ export const es = {
         provider: 'Proveedor',
       },
       validations: {
-        nodeAddress: 'La dirección del nodo es obligatoria',
+        nodeAddressMinLength: 'La dirección del nodo es obligatoria',
+        nodeAddressInvalid: 'La dirección del nodo no es válida',
         amount: 'La cantidad debe ser positiva',
       },
     },
@@ -532,7 +534,8 @@ export const es = {
         nodeAddress: 'Dirección del Nodo',
       },
       validations: {
-        nodeAddress: 'La dirección del nodo es obligatoria',
+        nodeAddressMinLength: 'La dirección del nodo es obligatoria',
+        nodeAddressInvalid: 'La dirección del nodo no es válida',
       },
     },
     custom: {
@@ -566,4 +569,5 @@ export const es = {
   scan_with_devices: 'Skeniraj s uređajima za pridruživanje generaciji trezora',
   scan_with_devices_to_sign:
     'Escanear con dispositivos para participar en la firma de la transacción',
+  sign: 'Firmar',
 };

@@ -483,6 +483,7 @@ export const hr = {
   add_vaults_to_folder: 'Odaberite trezore za dodavanje u mapu.',
   thorchain_message_deposit: 'THORChain polog poruke',
   chainFunctions: {
+    memo: 'Memo',
     optional_validation: 'Izborno',
     default_validation: 'Nevažeći unos',
     bond: {
@@ -493,7 +494,8 @@ export const hr = {
         amount: 'Iznos',
       },
       validations: {
-        nodeAddress: 'Adresa čvora je obavezna',
+        nodeAddressMinLength: 'Potrebna je adresa čvora',
+        nodeAddressInvalid: 'Adresa čvora je nevažeća',
         operatorFee: 'Naknada operatera je obavezna',
         amount: 'Iznos mora biti pozitivan',
       },
@@ -505,7 +507,8 @@ export const hr = {
         provider: 'Pružatelj',
       },
       validations: {
-        nodeAddress: 'Adresa čvora je obavezna',
+        nodeAddressMinLength: 'Potrebna je adresa čvora',
+        nodeAddressInvalid: 'Adresa čvora je nevažeća',
         amount: 'Iznos mora biti pozitivan',
       },
     },
@@ -514,7 +517,8 @@ export const hr = {
         nodeAddress: 'Adresa Čvora',
       },
       validations: {
-        nodeAddress: 'Adresa čvora je obavezna',
+        nodeAddressMinLength: 'Potrebna je adresa čvora',
+        nodeAddressInvalid: 'Adresa čvora je nevažeća',
       },
     },
     custom: {
@@ -548,4 +552,5 @@ export const hr = {
   scan_with_devices: 'Skeniraj s uređajima za pridruživanje generaciji trezora',
   scan_with_devices_to_sign:
     'Skeniraj s uređajima za sudjelovanje u potpisivanju transakcije',
+  sign: 'Potpiši',
 };

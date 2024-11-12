@@ -75,6 +75,7 @@ export type AppPathParams = {
   vaultItemDeposit: Record<string, string>;
   vaultFolder: { id: string };
   manageVaultFolder: { id: string };
+  deposit: { coin: string };
 };
 
 export type AppPathState = {
