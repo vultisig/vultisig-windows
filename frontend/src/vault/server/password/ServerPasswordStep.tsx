@@ -9,7 +9,6 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock';
 import { Text } from '../../../lib/ui/text';
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -69,7 +68,7 @@ export const ServerPasswordStep: React.FC<ComponentWithForwardActionProps> = ({
           <Button isLoading={isPending} type="submit">
             {t('continue')}
           </Button>
-          {error && <Text color="danger">{extractErrorMsg(error)}</Text>}
+          {error && <Text color="danger">{t('incorrect_password')}</Text>}
         </VStack>
       </PageContent>
     </>
