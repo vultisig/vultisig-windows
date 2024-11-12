@@ -342,6 +342,7 @@ export const en = {
   fast: 'Fast',
   secure: 'Secure',
   active: 'Active',
+  sign: 'Sign',
   fast_vault_setup_prop_0: 'Single Device Setup',
   fast_vault_setup_prop_1: 'Transaction Alerts & Policies',
   fast_vault_setup_prop_2: 'Vault Backup Emailed',
@@ -486,6 +487,7 @@ export const en = {
   vote: 'Vote',
   stake: 'Stake',
   chainFunctions: {
+    memo: 'Memo',
     optional_validation: 'Optional',
     default_validation: 'Invalid input',
     bond: {

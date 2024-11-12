@@ -8,6 +8,7 @@ import { parseCoinString } from '../swap/utils';
 import { DepositForm } from './DepositForm';
 import { ChainAction } from './DepositForm/chainOptionsConfig';
 import { DepositVerify } from './DepositVerify';
+import { useMemoGenerator } from './hooks/useMemoGenerator';
 
 const depositSteps = ['form', 'verify'] as const;
 
@@ -27,6 +28,11 @@ export const DepositPage = () => {
     toNextStep();
   };
 
+  const depositFormDataWithMemo = useMemoGenerator({
+    depositFormData,
+    selectedChainAction,
+  });
+
   return (
     <Match
       value={step}
@@ -40,7 +46,7 @@ export const DepositPage = () => {
         <DepositVerify
           selectedChainAction={selectedChainAction}
           onBack={toPreviousStep}
-          depositFormData={depositFormData}
+          depositFormData={depositFormDataWithMemo}
         />
       )}
     />

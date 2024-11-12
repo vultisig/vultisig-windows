@@ -499,6 +499,7 @@ export const it = {
   add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
   thorchain_message_deposit: 'Deposito messaggio THORChain',
   chainFunctions: {
+    memo: 'Memo',
     optional_validation: 'Facoltativo',
     default_validation: 'Ingresso non valido',
     bond: {
@@ -564,4 +565,5 @@ export const it = {
       },
     },
   },
+  sign: 'Firma',
 };

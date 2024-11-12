@@ -4,10 +4,8 @@ import { AccountCoinKey } from '../../../coin/AccountCoin';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { ServiceFactory } from '../../../services/ServiceFactory';
-import {
-  useAssertCurrentVaultAddress,
-  useAssertCurrentVaultCoin,
-} from '../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../state/currentVault';
+import { useCurrentVaultAddress } from '../../state/currentVault';
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
 
 export const getSpecificDepositTxInfoQueryKey = (coinKey: AccountCoinKey) => [
@@ -18,8 +16,8 @@ export const getSpecificDepositTxInfoQueryKey = (coinKey: AccountCoinKey) => [
 export const useSpecificDepositTxInfoQuery = () => {
   const walletCore = useAssertWalletCore();
   const [coinKey] = useCurrentDepositCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
-  const address = useAssertCurrentVaultAddress(coinKey.chainId);
+  const coin = useCurrentVaultCoin(coinKey);
+  const address = useCurrentVaultAddress(coinKey.chainId);
 
   return useQuery({
     queryKey: getSpecificDepositTxInfoQueryKey({
@@ -28,7 +26,7 @@ export const useSpecificDepositTxInfoQuery = () => {
     }),
     queryFn: async () => {
       const service = ServiceFactory.getService(coinKey.chainId, walletCore);
-      return service.feeService.getFee(storageCoinToCoin(coin));
+      return await service.feeService.getFee(storageCoinToCoin(coin));
     },
   });
 };

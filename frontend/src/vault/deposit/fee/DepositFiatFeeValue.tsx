@@ -7,13 +7,13 @@ import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { CoinMeta } from '../../../model/coin-meta';
-import { useAssertCurrentVaultCoin } from '../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
 import { useSendSpecificTxInfo } from './DepositSpecificTxInfoProvider';
 
 export const DepositFiatFeeValue = () => {
   const [coinKey] = useCurrentDepositCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const priceQuery = useCoinPriceQuery(
     CoinMeta.fromCoin(storageCoinToCoin(coin))
   );

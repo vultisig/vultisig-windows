@@ -497,6 +497,7 @@ export const pt = {
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   thorchain_message_deposit: 'Depósito de mensagem THORChain',
   chainFunctions: {
+    memo: 'Memo',
     optional_validation: 'Opcional',
     default_validation: 'Entrada inválida',
     bond: {
@@ -562,4 +563,5 @@ export const pt = {
       },
     },
   },
+  sign: 'Assinar',
 };

@@ -501,6 +501,7 @@ export const es = {
   add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
   thorchain_message_deposit: 'Depósito de mensajes de THORChain',
   chainFunctions: {
+    memo: 'Memo',
     required_validation: 'Obligatorio',
     option_validation: 'Opcional',
     bond: {
@@ -568,4 +569,5 @@ export const es = {
   scan_with_devices: 'Skeniraj s uređajima za pridruživanje generaciji trezora',
   scan_with_devices_to_sign:
     'Escanear con dispositivos para participar en la firma de la transacción',
+  sign: 'Firmar',
 };
