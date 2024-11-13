@@ -38,9 +38,22 @@ export const formatAmount = (
 
   const fractionDigits = getFractionDigits(amount);
 
-  const formatter = new Intl.NumberFormat(locale, {
-    style: currency ? 'currency' : 'decimal',
-    currency: currency || undefined,
+  // Validate and set locale safely
+  let validLocale = 'en-US';
+  try {
+    validLocale = new Intl.NumberFormat(locale).resolvedOptions().locale;
+  } catch (error: unknown) {
+    console.warn(
+      `Invalid locale provided: ${locale}. Falling back to 'en-US'. ${error}`
+    );
+  }
+
+  // Validate currency code
+  const isValidCurrency = currency && /^[A-Z]{3}$/.test(currency.toUpperCase());
+
+  const formatter = new Intl.NumberFormat(validLocale, {
+    style: isValidCurrency ? 'currency' : 'decimal',
+    currency: isValidCurrency ? currency : undefined,
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   });
