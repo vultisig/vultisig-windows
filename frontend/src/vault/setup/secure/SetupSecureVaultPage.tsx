@@ -1,5 +1,6 @@
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { KeygenType } from '../../keygen/KeygenType';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
 import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager';
@@ -30,8 +31,10 @@ const steps = [
 ] as const;
 
 export const SetupSecureVaultPage = () => {
-  const { step, setStep, toPreviousStep, toNextStep } =
-    useStepNavigation(steps);
+  const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
+    steps,
+    onExit: useNavigateBack(),
+  });
 
   return (
     <VaultTypeProvider value="secure">
@@ -50,10 +53,7 @@ export const SetupSecureVaultPage = () => {
                             <Match
                               value={step}
                               name={() => (
-                                <SetupVaultNameStep
-                                  onBack={toPreviousStep}
-                                  onForward={toNextStep}
-                                />
+                                <SetupVaultNameStep onForward={toNextStep} />
                               )}
                               joinSession={() => (
                                 <KeygenStartSessionStep

@@ -1,6 +1,7 @@
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
 import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager';
@@ -24,8 +25,10 @@ export const StartKeysignPage = () => {
 
   const { local_party_id } = useCurrentVault();
 
-  const { step, setStep, toPreviousStep, toNextStep } =
-    useStepNavigation(keysignSteps);
+  const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
+    steps: keysignSteps,
+    onExit: useNavigateBack(),
+  });
 
   return (
     <CurrentLocalPartyIdProvider value={local_party_id}>

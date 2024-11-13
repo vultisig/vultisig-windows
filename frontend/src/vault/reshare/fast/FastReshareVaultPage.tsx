@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { KeygenType } from '../../keygen/KeygenType';
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
@@ -46,8 +47,10 @@ export const FastReshareVaultPage = () => {
   const vault = useCurrentVault();
   const { local_party_id, hex_chain_code } = vault;
 
-  const { step, setStep, toPreviousStep, toNextStep } =
-    useStepNavigation(reshareVaultSteps);
+  const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
+    steps: reshareVaultSteps,
+    onExit: useNavigateBack(),
+  });
 
   const { t } = useTranslation();
 

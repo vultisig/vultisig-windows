@@ -1,5 +1,6 @@
 import { Match } from '../../lib/ui/base/Match';
 import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation';
+import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
 import { SendForm } from './form/SendForm';
 import { SendAmountProvider } from './state/amount';
 import { SendMemoProvider } from './state/memo';
@@ -9,7 +10,10 @@ import { SendVerify } from './verify/SendVerify';
 const sendSteps = ['form', 'verify'] as const;
 
 export const SendPage = () => {
-  const { step, toPreviousStep, toNextStep } = useStepNavigation(sendSteps);
+  const { step, toPreviousStep, toNextStep } = useStepNavigation({
+    steps: sendSteps,
+    onExit: useNavigateBack(),
+  });
 
   return (
     <SendAmountProvider initialValue={null}>
