@@ -83,7 +83,7 @@ export const requiredFieldsPerChainAction = {
             z
               .number()
               .positive()
-              .min(1, 'chainFunctions.bond.validations.amount')
+              .min(0.01, 'chainFunctions.bond.validations.amount')
               .refine(val => val > 0, {
                 message: 'chainFunctions.bond.validations.amount',
               })
@@ -132,7 +132,7 @@ export const requiredFieldsPerChainAction = {
             z
               .number()
               .positive()
-              .min(1, 'chainFunctions.unbond.validations.amount')
+              .min(0.01, 'chainFunctions.unbond.validations.amount')
               .refine(val => val > 0, {
                 message: 'chainFunctions.unbond.validations.amount',
               })
@@ -188,7 +188,7 @@ export const requiredFieldsPerChainAction = {
           z
             .number()
             .positive()
-            .min(1, 'chainFunctions.custom.validations.amount')
+            .min(0.01, 'chainFunctions.custom.validations.amount')
             .refine(val => val > 0, {
               message: 'chainFunctions.custom.validations.amount',
             })
@@ -215,7 +215,7 @@ export const requiredFieldsPerChainAction = {
           z
             .number()
             .positive()
-            .min(1, 'chainFunctions.addPool.validations.amount')
+            .min(0.01, 'chainFunctions.addPool.validations.amount')
             .refine(val => val > 0, {
               message: 'chainFunctions.addPool.validations.amount',
             })

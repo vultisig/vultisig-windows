@@ -1,13 +1,15 @@
 import { useTranslation } from 'react-i18next';
 
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
-import { ISendTransaction, TransactionType } from '../../../model/transaction';
+import {
+  IDepositTransaction,
+  TransactionType,
+} from '../../../model/transaction';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
@@ -38,28 +40,20 @@ export const DepositConfirmButton = ({
   const amount = depositFormData['amount'] as number;
   const memo = depositFormData['memo'] as string;
   const vault = useCurrentVault();
-
   const navigate = useAppNavigate();
-
   const walletCore = useAssertWalletCore();
-
   const specificTxInfoQuery = useSpecificDepositTxInfoQuery();
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
   const startKeysign = (type: SendType) => {
-    const balance = shouldBePresent(balanceQuery.data);
-    const isMaxAmount =
-      amount === fromChainAmount(balance.amount, coin.decimals);
-
-    const tx: ISendTransaction = {
+    const tx: IDepositTransaction = {
       fromAddress: sender,
       toAddress: receiver,
       amount: shouldBePresent(amount),
       memo,
       coin: storageCoinToCoin(coin),
-      transactionType: TransactionType.SEND,
+      transactionType: TransactionType.DEPOSIT,
       specificTransactionInfo: shouldBePresent(specificTxInfoQuery.data),
-      sendMaxAmount: isMaxAmount,
     };
 
     const keysignPayload = BlockchainServiceFactory.createService(
