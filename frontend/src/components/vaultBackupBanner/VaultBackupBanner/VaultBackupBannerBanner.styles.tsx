@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
 
-export const Content = styled.div`
+export const ContentWrapperButton = styled(UnstyledButton)`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,7 +14,7 @@ export const Content = styled.div`
   color: ${({ theme }) => theme.colors.danger.toCssValue()};
 `;
 
-export const ChevronIconButton = styled(UnstyledButton)`
+export const ChevronIconWrapper = styled.div`
   color: ${({ theme }) => theme.colors.text.toCssValue()};
   display: grid;
   place-items: center;
