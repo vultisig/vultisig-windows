@@ -435,6 +435,8 @@ export const it = {
   'page.swap.not.possible':
     'Non è possibile passare a uno smart contract! Inserisci un indirizzo destinatario diverso.',
   'page.swap.title': 'Scambio',
+  swap_invalid_receiver:
+    'È stato specificato un indirizzo del destinatario non valido. Probabilmente dovresti aggiungere la catena in entrata alla tua lista.',
   slippage: 'Slittamento',
   backupnow_description: 'I backup funzionano in modo diverso in Vultisig',
   backupnow_note_part1: 'Ogni dispositivo ha il suo',

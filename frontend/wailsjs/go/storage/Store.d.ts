@@ -64,4 +64,6 @@ export function UpdateVaultIsBackedUp(
   arg2: boolean
 ): Promise<void>;
 
-export function UpdateVaultName(arg1: string, arg2: string): Pro;
+export function UpdateVaultName(arg1: string, arg2: string): Promise<void>;
+
+export function UpdateVaultOrder(arg1: string, arg2: number): Promise<void>;
