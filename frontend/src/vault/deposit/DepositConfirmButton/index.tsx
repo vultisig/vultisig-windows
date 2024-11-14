@@ -64,8 +64,6 @@ export const DepositConfirmButton = ({
       specificTransactionInfo: specificTxInfoQuery.data,
     });
 
-    console.log('## payload', tx);
-
     const keysignPayload = BlockchainServiceFactory.createService(
       coinKey.chainId,
       walletCore
