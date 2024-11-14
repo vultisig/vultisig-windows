@@ -23,6 +23,10 @@ export interface ISendTransaction extends ITransaction {
   transactionType: TransactionType.SEND;
 }
 
+export interface IDepositTransaction extends ITransaction {
+  transactionType: TransactionType.DEPOSIT;
+}
+
 // TODO: We will need to add more fields to this interface
 export interface ISwapTransaction extends ITransaction {
   transactionType: TransactionType.SWAP;

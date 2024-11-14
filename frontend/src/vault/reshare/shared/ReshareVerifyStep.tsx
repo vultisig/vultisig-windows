@@ -19,7 +19,7 @@ import { PageContent } from '../../../ui/page/PageContent';
 import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
 import { getVaultActionSignersMin } from '../../keygen/utils/getVaultActionSignersMin';
 import { useVaultKeygenDevices } from '../../setup/hooks/useVaultKegenDevices';
-import { useAssertCurrentVault } from '../../state/useCurrentVault';
+import { useCurrentVault } from '../../state/currentVault';
 import { ReshareDeviceItem } from './ReshareDeviceItem';
 
 const Pill = styled.div`
@@ -42,7 +42,7 @@ export const ReshareVerifyStep: React.FC<
 
   const devices = useVaultKeygenDevices();
   const localPartyId = useCurrentLocalPartyId();
-  const { signers } = useAssertCurrentVault();
+  const { signers } = useCurrentVault();
 
   const thresholdText = `${getVaultActionSignersMin(devices.length)} ${t('of')} ${devices.length}`;
 

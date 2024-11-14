@@ -13,6 +13,10 @@ export const pt = {
   import_existing_vault: 'Importar cofre existente',
   next: 'Próximo',
   skip: 'Pular',
+  scan_with_devices:
+    'Esegui la scansione con i dispositivi per partecipare alla generazione del vault',
+  scan_with_devices_to_sign:
+    'Escanear com dispositivos para participar da assinatura da transação',
   enter_password: 'Digite a senha',
   invalid_file_format: 'Formato de arquivo inválido',
   invalid_file_format_message:
@@ -431,6 +435,8 @@ export const pt = {
   'page.swap.not.possible':
     'Trocar para um contrato inteligente não é possível! Insira um endereço de destinatário diferente.',
   'page.swap.title': 'Trocar',
+  swap_invalid_receiver:
+    'Endereço de destinatário inválido especificado. Provavelmente você deveria adicionar uma cadeia de entrada à sua lista.',
   slippage: 'Deslizamento',
   backupnow_description: 'Os backups funcionam de forma diferente no Vultisig',
   backupnow_note_part1: 'Cada dispositivo tem o seu',
@@ -493,6 +499,7 @@ export const pt = {
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   thorchain_message_deposit: 'Depósito de mensagem THORChain',
   chainFunctions: {
+    memo: 'Memo',
     optional_validation: 'Opcional',
     default_validation: 'Entrada inválida',
     bond: {
@@ -503,7 +510,8 @@ export const pt = {
         amount: 'Quantidade',
       },
       validations: {
-        nodeAddress: 'Endereço do nó é obrigatório',
+        nodeAddressMinLength: 'Endereço do nó é obrigatório',
+        nodeAddressInvalid: 'Endereço do nó é inválido',
         operatorFee: 'Taxa do operador é obrigatória',
         amount: 'Quantidade deve ser positiva',
       },
@@ -515,7 +523,8 @@ export const pt = {
         provider: 'Provedor',
       },
       validations: {
-        nodeAddress: 'Endereço do nó é obrigatório',
+        nodeAddressMinLength: 'Endereço do nó é obrigatório',
+        nodeAddressInvalid: 'Endereço do nó é inválido',
         amount: 'Quantidade deve ser positiva',
       },
     },
@@ -524,7 +533,8 @@ export const pt = {
         nodeAddress: 'Endereço do Nó',
       },
       validations: {
-        nodeAddress: 'Endereço do nó é obrigatório',
+        nodeAddressMinLength: 'Endereço do nó é obrigatório',
+        nodeAddressInvalid: 'Endereço do nó é inválido',
       },
     },
     custom: {
@@ -555,4 +565,5 @@ export const pt = {
       },
     },
   },
+  sign: 'Assinar',
 };

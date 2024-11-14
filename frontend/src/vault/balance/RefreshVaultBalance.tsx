@@ -5,12 +5,12 @@ import { getCoinPricesQueryKeys } from '../../coin/query/useCoinPricesQuery';
 import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { PageHeaderRefresh } from '../../ui/page/PageHeaderRefresh';
-import { useAssertCurrentVaultCoins } from '../state/useCurrentVault';
+import { useCurrentVaultCoins } from '../state/currentVault';
 
 export const RefreshVaultBalance = () => {
   const invalidateQueries = useInvalidateQueries();
 
-  const coins = useAssertCurrentVaultCoins();
+  const coins = useCurrentVaultCoins();
 
   const { mutate: refresh, isPending } = useMutation({
     mutationFn: () => {

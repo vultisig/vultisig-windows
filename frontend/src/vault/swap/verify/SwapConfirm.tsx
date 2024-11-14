@@ -14,10 +14,10 @@ import { BlockchainServiceFactory } from '../../../services/Blockchain/Blockchai
 import { convertChainToChainTicker } from '../../../utils/crypto';
 import { getInboundAddressForChain } from '../../../utils/midgard';
 import {
-  useAssertCurrentVault,
-  useAssertCurrentVaultAddreses,
-  useAssertCurrentVaultCoin,
-} from '../../state/useCurrentVault';
+  useCurrentVault,
+  useCurrentVaultAddreses,
+  useCurrentVaultCoin,
+} from '../../state/currentVault';
 import { nativeTokenForChain } from '../../utils/helpers';
 import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
 import { useSwapAmount } from '../state/amount';
@@ -28,9 +28,9 @@ import { SwapProtocolType } from '../types';
 
 export const SwapConfirm = () => {
   const { t } = useTranslation();
-  const addresses = useAssertCurrentVaultAddreses();
+  const addresses = useCurrentVaultAddreses();
   const [coinKey] = useCurrentSwapCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
   const [fromAmount] = useSwapAmount();
@@ -41,7 +41,7 @@ export const SwapConfirm = () => {
 
   const walletCore = useAssertWalletCore();
 
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
 
   const specificTxInfoQuery = useSpecificSendTxInfoQuery();
 

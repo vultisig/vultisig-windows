@@ -9,12 +9,11 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock';
 import { Text } from '../../../lib/ui/text';
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { useAssertCurrentVault } from '../../state/useCurrentVault';
+import { useCurrentVault } from '../../state/currentVault';
 import { getStorageVaultId } from '../../utils/storageVault';
 import { getVaultFromServer } from '../utils/getVaultFromServer';
 import { useVaultPassword } from './state/password';
@@ -26,7 +25,7 @@ export const ServerPasswordStep: React.FC<ComponentWithForwardActionProps> = ({
 
   const [password, setPassword] = useVaultPassword();
 
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
 
   const { mutate, error, isPending } = useMutation({
     mutationFn: async () =>
@@ -69,7 +68,7 @@ export const ServerPasswordStep: React.FC<ComponentWithForwardActionProps> = ({
           <Button isLoading={isPending} type="submit">
             {t('continue')}
           </Button>
-          {error && <Text color="danger">{extractErrorMsg(error)}</Text>}
+          {error && <Text color="danger">{t('incorrect_password')}</Text>}
         </VStack>
       </PageContent>
     </>

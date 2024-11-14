@@ -2,6 +2,7 @@ import './swap.css';
 
 import { Match } from '../../lib/ui/base/Match';
 import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation';
+import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
 import { SwapForm } from './form/SwapForm';
 import { SwapAmountProvider } from './state/amount';
 import { CoinToProvider } from './state/coin-to';
@@ -13,7 +14,10 @@ import { SwapVerify } from './verify/SwapVerify';
 const sendSteps = ['form', 'verify'] as const;
 
 export const SwapPage = () => {
-  const { step, toPreviousStep, toNextStep } = useStepNavigation(sendSteps);
+  const { step, toPreviousStep, toNextStep } = useStepNavigation({
+    steps: sendSteps,
+    onExit: useNavigateBack(),
+  });
 
   return (
     <SwapProtocolProvider initialValue={null}>

@@ -342,6 +342,7 @@ export const en = {
   fast: 'Fast',
   secure: 'Secure',
   active: 'Active',
+  sign: 'Sign',
   fast_vault_setup_prop_0: 'Single Device Setup',
   fast_vault_setup_prop_1: 'Transaction Alerts & Policies',
   fast_vault_setup_prop_2: 'Vault Backup Emailed',
@@ -423,6 +424,8 @@ export const en = {
   'page.swap.not.possible':
     'Swapping to a smart contract is not possible! Enter a different recipient address.',
   'page.swap.title': 'Swap',
+  swap_invalid_receiver:
+    'Invalid recipient address specified. Probably you should add inbound chain to your list.',
   slippage: 'Slippage',
   max: 'Max',
   backupnow_description: 'Backups work different in Vultisig',
@@ -486,6 +489,7 @@ export const en = {
   vote: 'Vote',
   stake: 'Stake',
   chainFunctions: {
+    memo: 'Memo',
     optional_validation: 'Optional',
     default_validation: 'Invalid input',
     bond: {
@@ -496,7 +500,8 @@ export const en = {
         amount: 'Amount',
       },
       validations: {
-        nodeAddress: 'Node Address is required',
+        nodeAddressMinLength: 'Node Address is required',
+        nodeAddressInvalid: 'Node Address is invalid',
         operatorFee: "Operator's Fee is required",
         amount: 'Amount must be positive',
       },
@@ -508,7 +513,8 @@ export const en = {
         provider: 'Provider',
       },
       validations: {
-        nodeAddress: 'Node Address is required',
+        nodeAddressMinLength: 'Node Address is required',
+        nodeAddressInvalid: 'Node Address is invalid',
         amount: 'Amount must be positive',
       },
     },
@@ -517,7 +523,8 @@ export const en = {
         nodeAddress: 'Node Address',
       },
       validations: {
-        nodeAddress: 'Node Address is required',
+        nodeAddressMinLength: 'Node Address is required',
+        nodeAddressInvalid: 'Node Address is invalid',
       },
     },
     custom: {
@@ -548,4 +555,7 @@ export const en = {
       },
     },
   },
+  scan_with_devices: 'Scan with devices to join the vault generation',
+  scan_with_devices_to_sign:
+    'Scan with devices to participate in signing the transaction',
 };

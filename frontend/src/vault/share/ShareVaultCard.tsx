@@ -9,7 +9,7 @@ import { VStack, vStack } from '../../lib/ui/layout/Stack';
 import { Text } from '../../lib/ui/text';
 import { getColor } from '../../lib/ui/theme/getters';
 import { ProductSimpleLogo } from '../../ui/logo/ProductSimpleLogo';
-import { useAssertCurrentVault } from '../state/useCurrentVault';
+import { useCurrentVault } from '../state/currentVault';
 import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport';
 import { VaultKey } from './VaultKey';
 
@@ -50,7 +50,7 @@ const LogoContainer = styled.div`
 `;
 
 export const ShareVaultCard = () => {
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
   const { uid } = getVaultPublicKeyExport(vault);
   const { name } = vault;
 

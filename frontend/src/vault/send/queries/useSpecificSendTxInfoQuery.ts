@@ -5,9 +5,9 @@ import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { ServiceFactory } from '../../../services/ServiceFactory';
 import {
-  useAssertCurrentVaultAddress,
-  useAssertCurrentVaultCoin,
-} from '../../state/useCurrentVault';
+  useCurrentVaultAddress,
+  useCurrentVaultCoin,
+} from '../../state/currentVault';
 import { useCurrentSendCoin } from '../state/sendCoin';
 
 export const getSpecificSendTxInfoQueryKey = (coinKey: AccountCoinKey) => [
@@ -18,8 +18,8 @@ export const getSpecificSendTxInfoQueryKey = (coinKey: AccountCoinKey) => [
 export const useSpecificSendTxInfoQuery = () => {
   const walletCore = useAssertWalletCore();
   const [coinKey] = useCurrentSendCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
-  const address = useAssertCurrentVaultAddress(coinKey.chainId);
+  const coin = useCurrentVaultCoin(coinKey);
+  const address = useCurrentVaultAddress(coinKey.chainId);
 
   return useQuery({
     queryKey: getSpecificSendTxInfoQueryKey({

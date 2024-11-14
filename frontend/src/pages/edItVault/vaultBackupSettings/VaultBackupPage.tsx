@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
 import { useBackupVaultMutation } from '../../../vault/mutations/useBackupVaultMutation';
-import { useCurrentVault } from '../../../vault/state/useCurrentVault';
+import { useCurrentVault } from '../../../vault/state/currentVault';
 import {
   VaultBackupSchema,
   vaultBackupSchema,
@@ -38,12 +38,7 @@ const VaultBackupPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const {
-    mutate: backupVault,
-    isPending,
-    error,
-    isSuccess,
-  } = useBackupVaultMutation();
+  const { mutate: backupVault, isPending, error } = useBackupVaultMutation();
 
   const {
     register,
@@ -54,18 +49,17 @@ const VaultBackupPage = () => {
     mode: 'onBlur',
   });
 
-  const onSubmit = (data: FieldValues) => {
+  const onSubmit = (data?: FieldValues) => {
     const password = data?.password;
     if (!vault) return;
 
-    backupVault({ vault, password });
+    backupVault(
+      { vault, password },
+      {
+        onSuccess: () => navigate(makeAppPath('vault')),
+      }
+    );
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      navigate(makeAppPath('vault'));
-    }
-  }, [isSuccess, navigate]);
 
   return (
     <VStack flexGrow gap={16}>
@@ -143,7 +137,10 @@ const VaultBackupPage = () => {
                 {t('vault_backup_page_password_info')}
               </Text>
             </InfoPill>
-            <Button isDisabled={!isValid || !isDirty} type="submit">
+            <Button
+              isDisabled={!isValid || !isDirty || isPending}
+              type="submit"
+            >
               {t(
                 isPending
                   ? 'vault_backup_page_submit_loading_button_text'
@@ -151,11 +148,10 @@ const VaultBackupPage = () => {
               )}
             </Button>
             <Button
+              disabled={isPending}
               kind="outlined"
               type="button"
-              onClick={() => {
-                navigate(makeAppPath('vault'));
-              }}
+              onClick={onSubmit}
             >
               <GradientText>
                 {t('vault_backup_page_skip_button_text')}

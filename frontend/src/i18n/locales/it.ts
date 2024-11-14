@@ -11,6 +11,10 @@ export const it = {
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   create_new_vault: 'Crea nuova cassaforte',
   import_existing_vault: 'Importa cassaforte esistente',
+  scan_with_devices:
+    'Esegui la scansione con i dispositivi per partecipare alla generazione del vault',
+  scan_with_devices_to_sign:
+    'Esegui la scansione con i dispositivi per partecipare alla firma della transazione',
   next: 'Avanti',
   skip: 'Salta',
   enter_password: 'Inserisci la password',
@@ -431,6 +435,8 @@ export const it = {
   'page.swap.not.possible':
     'Non è possibile passare a uno smart contract! Inserisci un indirizzo destinatario diverso.',
   'page.swap.title': 'Scambio',
+  swap_invalid_receiver:
+    'È stato specificato un indirizzo del destinatario non valido. Probabilmente dovresti aggiungere la catena in entrata alla tua lista.',
   slippage: 'Slittamento',
   backupnow_description: 'I backup funzionano in modo diverso in Vultisig',
   backupnow_note_part1: 'Ogni dispositivo ha il suo',
@@ -495,6 +501,7 @@ export const it = {
   add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
   thorchain_message_deposit: 'Deposito messaggio THORChain',
   chainFunctions: {
+    memo: 'Memo',
     optional_validation: 'Facoltativo',
     default_validation: 'Ingresso non valido',
     bond: {
@@ -505,7 +512,8 @@ export const it = {
         amount: 'Importo',
       },
       validations: {
-        nodeAddress: 'Indirizzo del nodo è obbligatorio',
+        nodeAddressMinLength: 'Indirizzo nodo obbligatorio',
+        nodeAddressInvalid: 'Indirizzo nodo non valido',
         operatorFee: "Tariffa dell'operatore è obbligatoria",
         amount: "L'importo deve essere positivo",
       },
@@ -517,7 +525,8 @@ export const it = {
         provider: 'Fornitore',
       },
       validations: {
-        nodeAddress: 'Indirizzo del nodo è obbligatorio',
+        nodeAddressMinLength: 'Indirizzo nodo obbligatorio',
+        nodeAddressInvalid: 'Indirizzo nodo non valido',
         amount: "L'importo deve essere positivo",
       },
     },
@@ -526,7 +535,8 @@ export const it = {
         nodeAddress: 'Indirizzo del Nodo',
       },
       validations: {
-        nodeAddress: 'Indirizzo del nodo è obbligatorio',
+        nodeAddressMinLength: 'Indirizzo nodo obbligatorio',
+        nodeAddressInvalid: 'Indirizzo nodo non valido',
       },
     },
     custom: {
@@ -557,4 +567,5 @@ export const it = {
       },
     },
   },
+  sign: 'Firma',
 };

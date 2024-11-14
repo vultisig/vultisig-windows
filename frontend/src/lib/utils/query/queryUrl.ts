@@ -1,10 +1,9 @@
+import { assertFetchResponse } from '../fetch/assertFetchResponse';
+
 export const queryUrl = async <T>(url: string): Promise<T> => {
   const response = await fetch(url);
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error);
-  }
+  await assertFetchResponse(response);
 
   return response.json();
 };
@@ -23,9 +22,8 @@ export const queryUrlWindowsPlatform = async <T, R = undefined>(
     method: method ? method : 'GET',
     body: body ? JSON.stringify(body) : undefined,
   });
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error);
-  }
+
+  await assertFetchResponse(response);
+
   return response.json();
 };

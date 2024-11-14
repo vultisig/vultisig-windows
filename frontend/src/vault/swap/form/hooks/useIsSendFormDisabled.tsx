@@ -6,7 +6,7 @@ import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
 import { Chain } from '../../../../model/chain';
-import { useAssertCurrentVaultCoin } from '../../../state/useCurrentVault';
+import { useCurrentVaultCoin } from '../../../state/currentVault';
 import { useSender } from '../../sender/hooks/useSender';
 import { useSwapAmount } from '../../state/amount';
 import { useCoinTo } from '../../state/coin-to';
@@ -27,12 +27,16 @@ export const useIsSendFormDisabled = () => {
 
   const { t } = useTranslation();
 
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
   return useMemo(() => {
     if (addressValidationQuery.isPending || balanceQuery.isPending) {
       return t('send_pending_validation');
+    }
+
+    if (!receiver) {
+      return t('swap_invalid_receiver');
     }
 
     if (

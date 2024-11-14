@@ -5,7 +5,7 @@ import { useCurrentServiceName } from '../../../keygen/shared/state/currentServi
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
 import { useCurrentServerType } from '../../../keygen/state/currentServerType';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
-import { useAssertCurrentVault } from '../../../state/useCurrentVault';
+import { useCurrentVault } from '../../../state/currentVault';
 import { getStorageVaultId } from '../../../utils/storageVault';
 import { useKeysignPayload } from '../state/keysignPayload';
 
@@ -15,7 +15,7 @@ export const useKeysignMsgQuery = () => {
   const serviceName = useCurrentServiceName();
   const hexEncryptionKey = useCurrentHexEncryptionKey();
   const payload = useKeysignPayload();
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
 
   return useQuery({
     queryKey: [

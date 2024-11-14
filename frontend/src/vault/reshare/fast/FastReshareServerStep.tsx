@@ -16,9 +16,9 @@ import { useVaultPassword } from '../../server/password/state/password';
 import { reshareWithServer } from '../../server/utils/reshareWithServer';
 import { useCurrentHexEncryptionKey } from '../../setup/state/currentHexEncryptionKey';
 import {
-  useAssertCurrentVault,
+  useCurrentVault,
   useCurrentVaultHasServer,
-} from '../../state/useCurrentVault';
+} from '../../state/currentVault';
 
 export const FastReshareServerStep: React.FC<
   ComponentWithForwardActionProps
@@ -33,7 +33,7 @@ export const FastReshareServerStep: React.FC<
   const hasServer = useCurrentVaultHasServer();
 
   const { name, signers, hex_chain_code, public_key_ecdsa, reshare_prefix } =
-    useAssertCurrentVault();
+    useCurrentVault();
 
   const [email] = useVaultEmail();
 

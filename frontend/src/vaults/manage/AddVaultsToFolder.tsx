@@ -1,5 +1,6 @@
 import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { useFolderlessVaults } from '../../vault/queries/useVaultsQuery';
+import { CurrentVaultProvider } from '../../vault/state/currentVault';
 import { getStorageVaultId } from '../../vault/utils/storageVault';
 import { AddVaultsToFolderContainer } from '../folder/addVaults/AddVaultsToFolderContainer';
 import { FolderVaultOption } from '../folder/addVaults/FolderVaultOption';
@@ -21,17 +22,18 @@ export const AddVaultsToFolder = () => {
         const vaultId = getStorageVaultId(vault);
 
         return (
-          <FolderVaultOption
-            value={false}
-            onChange={() => {
-              mutate({
-                vaultId,
-                folderId: id,
-              });
-            }}
-            key={vaultId}
-            title={vault.name}
-          />
+          <CurrentVaultProvider value={vault} key={vaultId}>
+            <FolderVaultOption
+              value={false}
+              onChange={() => {
+                mutate({
+                  vaultId,
+                  folderId: id,
+                });
+              }}
+              key={vaultId}
+            />
+          </CurrentVaultProvider>
         );
       })}
     </AddVaultsToFolderContainer>

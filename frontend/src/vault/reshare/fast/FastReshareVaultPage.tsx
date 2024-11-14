@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { KeygenType } from '../../keygen/KeygenType';
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
@@ -24,9 +25,9 @@ import { CurrentHexChainCodeProvider } from '../../setup/state/currentHexChainCo
 import { GeneratedHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/serverUrlDerivedFromServerType';
 import {
-  useAssertCurrentVault,
+  useCurrentVault,
   useCurrentVaultHasServer,
-} from '../../state/useCurrentVault';
+} from '../../state/currentVault';
 import { ReshareVaultPeerDiscoveryStep } from '../ReshareVaultPeerDiscoveryStep';
 import { ReshareVerifyStep } from '../shared/ReshareVerifyStep';
 import { FastReshareServerStep } from './FastReshareServerStep';
@@ -43,11 +44,13 @@ const reshareVaultSteps = [
 ] as const;
 
 export const FastReshareVaultPage = () => {
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
   const { local_party_id, hex_chain_code } = vault;
 
-  const { step, setStep, toPreviousStep, toNextStep } =
-    useStepNavigation(reshareVaultSteps);
+  const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
+    steps: reshareVaultSteps,
+    onExit: useNavigateBack(),
+  });
 
   const { t } = useTranslation();
 

@@ -9,9 +9,9 @@ import { Chain } from '../../../model/chain';
 import { getSwapQuotes } from '../../../services/Thorwallet';
 import { convertChainToChainTicker } from '../../../utils/crypto';
 import {
-  useAssertCurrentVaultAddreses,
-  useAssertCurrentVaultCoin,
-} from '../../state/useCurrentVault';
+  useCurrentVaultAddreses,
+  useCurrentVaultCoin,
+} from '../../state/currentVault';
 import { SendSpecificTxInfoProvider } from '../fee/SendSpecificTxInfoProvider';
 import { useIsSendFormDisabled } from '../form/hooks/useIsSendFormDisabled';
 import { useSwapAmount } from '../state/amount';
@@ -26,8 +26,8 @@ import SwapOutput from './SwapOutput';
 export default function SwapQuotes() {
   const [amount] = useSwapAmount();
   const [coinKey] = useCurrentSwapCoin();
-  const coin = useAssertCurrentVaultCoin(coinKey);
-  const addresses = useAssertCurrentVaultAddreses();
+  const coin = useCurrentVaultCoin(coinKey);
+  const addresses = useCurrentVaultAddreses();
   const isDisabled = useIsSendFormDisabled();
   const [coinTo] = useCoinTo();
   const [recipient] = useSendReceiver();

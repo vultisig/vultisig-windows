@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Match } from '../../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState';
+import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack';
 import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep';
 import { MediatorManager } from '../../../keygen/shared/peerDiscovery/MediatorManager';
 import { GeneratedServiceNameProvider } from '../../../keygen/shared/state/currentServiceName';
@@ -14,7 +15,7 @@ import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep'
 import { PasswordProvider } from '../../../server/password/state/password';
 import { GeneratedHexEncryptionKeyProvider } from '../../../setup/state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../../../setup/state/serverUrlDerivedFromServerType';
-import { useAssertCurrentVault } from '../../../state/useCurrentVault';
+import { useCurrentVault } from '../../../state/currentVault';
 import { KeysignMsgsGuard } from '../../join/KeysignMsgsGuard';
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep';
 import { KeysignPayloadProvider } from '../../shared/state/keysignPayload';
@@ -32,9 +33,12 @@ const keysignSteps = [
 export const StartFastKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'fastKeysign'>();
 
-  const { local_party_id } = useAssertCurrentVault();
+  const { local_party_id } = useCurrentVault();
 
-  const { step, toNextStep } = useStepNavigation(keysignSteps);
+  const { step, toNextStep } = useStepNavigation({
+    steps: keysignSteps,
+    onExit: useNavigateBack(),
+  });
 
   const { t } = useTranslation();
 

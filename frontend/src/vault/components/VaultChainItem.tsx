@@ -16,7 +16,7 @@ import { sum } from '../../lib/utils/array/sum';
 import { formatAmount } from '../../lib/utils/formatAmount';
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
 import { VaultChainBalance } from '../queries/useVaultChainsBalancesQuery';
-import { useAssertCurrentVaultAddreses } from '../state/useCurrentVault';
+import { useCurrentVaultAddreses } from '../state/currentVault';
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress';
 
 const Pill = styled.div`
@@ -36,7 +36,7 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
   const { chainId, coins } = vault;
   const { globalCurrency } = useGlobalCurrency();
 
-  const addresses = useAssertCurrentVaultAddreses();
+  const addresses = useCurrentVaultAddreses();
   const address = addresses[chainId];
 
   const pressHandlers = useHandleVaultChainItemPress({

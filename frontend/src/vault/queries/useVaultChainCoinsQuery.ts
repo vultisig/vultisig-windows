@@ -18,7 +18,7 @@ import { withoutUndefined } from '../../lib/utils/array/withoutUndefined';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
-import { useAssertCurrentVaultChainCoins } from '../state/useCurrentVault';
+import { useCurrentVaultChainCoins } from '../state/currentVault';
 
 export type VaultChainCoin = CoinKey &
   CoinAmount &
@@ -26,7 +26,7 @@ export type VaultChainCoin = CoinKey &
   Partial<EntityWithPrice>;
 
 export const useVaultChainCoinsQuery = (chain: Chain) => {
-  const coins = useAssertCurrentVaultChainCoins(chain);
+  const coins = useCurrentVaultChainCoins(chain);
 
   const pricesQuery = useCoinPricesQuery(
     coins.map(storageCoinToCoin).map(CoinMeta.fromCoin)

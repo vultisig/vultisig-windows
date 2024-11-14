@@ -4,12 +4,12 @@ import { Chain } from '../../model/chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { TokensStore } from '../../services/Coin/CoinList';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
-import { useAssertCurrentVault } from '../state/useCurrentVault';
-import { useCurrentVaultId } from '../state/useCurrentVaultId';
+import { useCurrentVault } from '../state/currentVault';
+import { useCurrentVaultId } from '../state/currentVaultId';
 
 export const useVaultAddressQuery = (chain: Chain) => {
   const vaultId = useCurrentVaultId();
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
 
   const walletCore = useAssertWalletCore();
 

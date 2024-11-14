@@ -9,6 +9,21 @@ export const TxOverviewRow = styled.div`
     alignItems: 'center',
     justifyContent: 'space-between',
     wrap: 'wrap',
+    gap: 20,
+  })}
+
+  ${text({
+    weight: 700,
+    size: 16,
+  })}
+`;
+
+export const TxOverviewRowDepositsFlow = styled.div`
+  ${hStack({
+    fullWidth: true,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    wrap: 'wrap',
     gap: 6,
   })}
 

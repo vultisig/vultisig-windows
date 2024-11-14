@@ -9,7 +9,7 @@ import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../ui/page/PageSlice';
 import { ShareVaultCard } from '../../vault/share/ShareVaultCard';
-import { useAssertCurrentVault } from '../../vault/state/useCurrentVault';
+import { useCurrentVault } from '../../vault/state/currentVault';
 import { VULTISIG_WEBSITE_LINK } from '../vaultSettings/constants';
 import {
   ListItem,
@@ -23,7 +23,7 @@ import {
 
 const RegisterForAirdropPage = () => {
   const { t } = useTranslation();
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
 
   return (
     <PageSlice flexGrow>

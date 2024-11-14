@@ -9,6 +9,7 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
+import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -16,10 +17,14 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
 import { RefreshSend } from '../../send/RefreshSend';
 import {
+  getChainActionSchema,
+  getRequiredFields,
+  resolveSchema,
+} from '../utils/schema';
+import {
   ChainAction,
   chainActionOptionsConfig,
   ChainWithAction,
-  requiredFieldsPerChainAction,
 } from './chainOptionsConfig';
 import { DepositActionItemExplorer } from './DepositActionItemExplorer';
 import { Container, ErrorText, InputFieldWrapper } from './DepositForm.styled';
@@ -33,28 +38,26 @@ export const DepositForm: FC<DepositFormProps> = ({
   onSubmit,
   coinWithActions,
 }) => {
+  const walletCore = useAssertWalletCore();
   const { t } = useTranslation();
   const { chainId } = coinWithActions;
   const chainActionOptions =
     chainActionOptionsConfig[chainId?.toLowerCase() as ChainWithAction];
 
-  const [selectedChainAction, setSelectedChainAction] = useState<
-    (typeof chainActionOptionsConfig)[ChainWithAction][number] | undefined
-  >(chainActionOptions[0]);
+  const [selectedChainAction, setSelectedChainAction] = useState<ChainAction>(
+    chainActionOptions[0] as ChainAction
+  );
 
-  const requiredFieldsForChainAction =
-    chainId &&
-    selectedChainAction &&
-    selectedChainAction in requiredFieldsPerChainAction
-      ? requiredFieldsPerChainAction[selectedChainAction as ChainAction].fields
-      : [];
-
-  const schemaForChainAction =
-    chainId &&
-    selectedChainAction &&
-    selectedChainAction in requiredFieldsPerChainAction
-      ? requiredFieldsPerChainAction[selectedChainAction as ChainAction].schema
-      : undefined;
+  const requiredFieldsForChainAction = getRequiredFields(
+    chainId,
+    selectedChainAction
+  );
+  const chainActionSchema = getChainActionSchema(chainId, selectedChainAction);
+  const schemaForChainAction = resolveSchema(
+    chainActionSchema,
+    chainId,
+    walletCore
+  );
 
   const {
     register,
@@ -64,7 +67,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     resolver: schemaForChainAction
       ? zodResolver(schemaForChainAction)
       : undefined,
-    mode: 'onChange',
+    mode: 'onBlur',
   });
 
   const onFormSubmit = (data: FieldValues) => {
@@ -100,7 +103,9 @@ export const DepositForm: FC<DepositFormProps> = ({
                 onClose={onClose}
                 activeOption={selectedChainAction}
                 options={chainActionOptions}
-                onOptionClick={option => setSelectedChainAction(option)}
+                onOptionClick={option =>
+                  setSelectedChainAction(option as ChainAction)
+                }
               />
             )}
           />
@@ -112,13 +117,13 @@ export const DepositForm: FC<DepositFormProps> = ({
                     {t(
                       `chainFunctions.${selectedChainAction}.labels.${field.name}`
                     )}{' '}
-                    {!field.required ? (
-                      <Text as="span" size={14}>
-                        ({t('chainFunctions.optional_validation')})
-                      </Text>
-                    ) : (
+                    {field.required ? (
                       <Text as="span" color="danger" size={14}>
                         *
+                      </Text>
+                    ) : (
+                      <Text as="span" size={14}>
+                        ({t('chainFunctions.optional_validation')})
                       </Text>
                     )}
                   </Text>
@@ -130,12 +135,9 @@ export const DepositForm: FC<DepositFormProps> = ({
                   />
                   {errors[field.name] && (
                     <ErrorText color="danger" size={13} className="error">
-                      {t(
-                        `chainFunctions.${selectedChainAction}.validations.${field.name}`,
-                        {
-                          defaultValue: t('chainFunctions.default_validation'),
-                        }
-                      )}
+                      {t(errors[field.name]?.message as string, {
+                        defaultValue: t('chainFunctions.default_validation'),
+                      })}
                     </ErrorText>
                   )}
                 </InputContainer>

@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-import VaultBackupReminderBanner from '../../components/vaultBackupBanner/VaultBackupReminderBanner/VaultBackupReminderBanner';
+import VaultBackupBanner from '../../components/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner';
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller';
 import { VStack } from '../../lib/ui/layout/Stack';
 import { PageContent } from '../../ui/page/PageContent';
 import { VaultTotalBalance } from '../balance/VaultTotalBalance';
 import { ManageVaultChainsPrompt } from '../chain/manage/ManageVaultChainsPrompt';
 import { useVaultChainsBalancesQuery } from '../queries/useVaultChainsBalancesQuery';
-import { useCurrentVault } from '../state/useCurrentVault';
+import { useCurrentVault } from '../state/currentVault';
 import { VaultChainItem } from './VaultChainItem';
 import { VaultPrimaryActions } from './VaultPrimaryActions';
 
@@ -24,7 +24,7 @@ export const VaultOverview = () => {
     <ScrollableFlexboxFiller>
       {!vault?.is_backed_up && (
         <VaultBannerWrapper>
-          <VaultBackupReminderBanner />
+          <VaultBackupBanner />
         </VaultBannerWrapper>
       )}
       <PageContent>

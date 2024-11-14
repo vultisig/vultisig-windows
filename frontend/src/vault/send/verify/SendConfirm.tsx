@@ -13,10 +13,10 @@ import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
 import {
-  useAssertCurrentVault,
-  useAssertCurrentVaultCoin,
+  useCurrentVault,
+  useCurrentVaultCoin,
   useCurrentVaultHasServer,
-} from '../../state/useCurrentVault';
+} from '../../state/currentVault';
 import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
 import { useSender } from '../sender/hooks/useSender';
 import { useSendAmount } from '../state/amount';
@@ -32,11 +32,11 @@ export const SendConfirm = () => {
 
   const [coinKey] = useCurrentSendCoin();
   const sender = useSender();
-  const coin = useAssertCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const [receiver] = useSendReceiver();
   const [amount] = useSendAmount();
   const [memo] = useSendMemo();
-  const vault = useAssertCurrentVault();
+  const vault = useCurrentVault();
 
   const navigate = useAppNavigate();
 

@@ -5,7 +5,7 @@ import {
   ComponentWithBackActionProps,
   ComponentWithForwardActionProps,
 } from '../../../lib/ui/props';
-import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep';
+import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep/KeygenPeerDiscoveryStep';
 import { useSelectedPeers } from '../../keysign/shared/state/selectedPeers';
 import { useVaultType } from '../shared/state/vaultType';
 import { useJoinKeygenUrlQuery } from './queries/useJoinKeygenUrlQuery';
