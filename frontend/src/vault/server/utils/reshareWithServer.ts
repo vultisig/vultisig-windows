@@ -1,3 +1,4 @@
+import { assertFetchResponse } from '../../../lib/utils/fetch/assertFetchResponse';
 import { fastVaultServerUrl } from '../config';
 
 type Input = {
@@ -24,10 +25,7 @@ export const reshareWithServer = async (input: Input) => {
     body: JSON.stringify(input),
   });
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error);
-  }
+  await assertFetchResponse(response);
 
   return response;
 };

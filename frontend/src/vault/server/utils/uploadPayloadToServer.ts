@@ -1,5 +1,7 @@
 import crypto from 'crypto';
 
+import { assertFetchResponse } from '../../../lib/utils/fetch/assertFetchResponse';
+
 type UploadPayloadToServerInput = {
   serverUrl: string;
   payload: string;
@@ -20,9 +22,7 @@ export async function uploadPayloadToServer({
     body: payload,
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to upload payload to server');
-  }
+  await assertFetchResponse(response);
 
   return hash;
 }

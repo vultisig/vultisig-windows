@@ -1,3 +1,5 @@
+import { assertFetchResponse } from '../../../lib/utils/fetch/assertFetchResponse';
+
 type JoinSessionInput = {
   serverUrl: string;
   sessionId: string;
@@ -17,9 +19,7 @@ export const joinSession = async ({
     body: JSON.stringify([localPartyId]),
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to join session');
-  }
+  await assertFetchResponse(response);
 
   return response;
 };

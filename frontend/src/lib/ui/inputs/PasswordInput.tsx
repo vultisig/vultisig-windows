@@ -26,6 +26,8 @@ export const PasswordInput: React.FC<
       render={({ actionSize }) => (
         <Input
           type={shouldHideValue ? 'password' : 'text'}
+          autoComplete="off"
+          spellCheck="false"
           {...rest}
           style={{
             paddingRight: actionSize.width + textInputHorizontalPadding,

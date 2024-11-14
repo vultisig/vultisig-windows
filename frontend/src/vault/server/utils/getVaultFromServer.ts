@@ -1,3 +1,5 @@
+import { base64Encode } from '../../../lib/utils/base64Encode';
+import { assertFetchResponse } from '../../../lib/utils/fetch/assertFetchResponse';
 import { fastVaultServerUrl } from '../config';
 
 type GetVaultFromServerInput = {
@@ -13,14 +15,11 @@ export const getVaultFromServer = async ({
 
   const response = await fetch(url, {
     headers: {
-      'x-password': password,
+      'x-password': base64Encode(password),
     },
   });
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(error);
-  }
+  await assertFetchResponse(response);
 
   return response.json();
 };
