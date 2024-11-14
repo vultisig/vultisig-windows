@@ -5,7 +5,10 @@ import { horizontalPadding } from '../../css/horizontalPadding';
 import { interactive } from '../../css/interactive';
 import { ChevronRightIcon } from '../../icons/ChevronRightIcon';
 import { HStack, hStack } from '../../layout/Stack';
-import { ClickableComponentProps, TitledComponentProps } from '../../props';
+import {
+  ClickableComponentProps,
+  ComponentWithChildrenProps,
+} from '../../props';
 import { text } from '../../text';
 import { getHoverVariant } from '../../theme/getHoverVariant';
 import { getColor } from '../../theme/getters';
@@ -40,20 +43,36 @@ const Container = styled.div<{ isInteractive: boolean }>`
     `}
 `;
 
+const Content = styled.div`
+  ${hStack({
+    flexGrow: true,
+    alignItems: 'center',
+    gap: 12,
+  })}
+  overflow: hidden;
+`;
+
 type ListItemProps = {
   isDraggable?: boolean;
-} & TitledComponentProps &
+} & ComponentWithChildrenProps &
   Partial<ClickableComponentProps>;
 
-export const ListItem = ({ title, onClick, isDraggable }: ListItemProps) => {
+export const ListItem = ({ children, onClick, isDraggable }: ListItemProps) => {
   return (
     <Container isInteractive={!!onClick} onClick={onClick}>
-      <HStack fullWidth alignItems="center" justifyContent="space-between">
-        <HStack alignItems="center" gap={12}>
+      <HStack
+        gap={20}
+        flexGrow
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Content>
           {isDraggable && <DnDItemContentPrefix />}
-          {title}
+          {children}
+        </Content>
+        <HStack style={{ flexShrink: 0 }}>
+          {onClick && <ChevronRightIcon />}
         </HStack>
-        {onClick && <ChevronRightIcon />}
       </HStack>
     </Container>
   );
