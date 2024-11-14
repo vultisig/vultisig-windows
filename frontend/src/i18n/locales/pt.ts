@@ -499,6 +499,7 @@ export const pt = {
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   thorchain_message_deposit: 'Depósito de mensagem THORChain',
   chainFunctions: {
+    amountExceeded: 'O valor excede o saldo disponível',
     memo: 'Memo',
     optional_validation: 'Opcional',
     default_validation: 'Entrada inválida',
@@ -562,6 +563,34 @@ export const pt = {
       },
       validations: {
         percentage: 'Porcentagem é obrigatória e deve estar entre 0 e 100',
+      },
+    },
+    vote: {
+      labels: {
+        proposalId: 'ID da proposta',
+        support: 'Suporte',
+      },
+      validates: {
+        proposalId: 'ID da proposta é obrigatório',
+        support: 'Campo de suporte é obrigatório',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Quantidade',
+        validatorAddress: 'Endereço do validador',
+      },
+      validates: {
+        amount: 'Quantidade deve ser positiva',
+        validatorAddress: 'Endereço do validador é obrigatório',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Endereço do validador',
+      },
+      validates: {
+        validatorAddress: 'Endereço do validador é obrigatório',
       },
     },
   },

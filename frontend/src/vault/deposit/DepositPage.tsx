@@ -7,7 +7,11 @@ import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
 import { parseCoinString } from '../swap/utils';
 import { DepositForm } from './DepositForm';
-import { ChainAction } from './DepositForm/chainOptionsConfig';
+import {
+  ChainAction,
+  chainActionOptionsConfig,
+  ChainWithAction,
+} from './DepositForm/chainOptionsConfig';
 import { DepositVerify } from './DepositVerify';
 import { useMemoGenerator } from './hooks/useMemoGenerator';
 
@@ -15,13 +19,23 @@ const depositSteps = ['form', 'verify'] as const;
 
 export const DepositPage = () => {
   const [depositFormData, setDepositFormData] = useState<FieldValues>({});
-  const [selectedChainAction, setSelectedChainAction] = useState<ChainAction>();
-  const [{ coin }] = useAppPathParams<'vaultItemSwap'>();
-  const parsedCoin = parseCoinString(coin);
+  const [{ coin }] = useAppPathParams<'deposit'>();
+  const { chainId: chain } = parseCoinString(coin);
+  const chainActionOptions =
+    chainActionOptionsConfig[chain?.toLowerCase() as ChainWithAction];
+
+  const [selectedChainAction, setSelectedChainAction] = useState<ChainAction>(
+    chainActionOptions[0] as ChainAction
+  );
+
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps: depositSteps,
     onExit: useNavigateBack(),
   });
+
+  const updateSelectedChainAction = (action: ChainAction) => {
+    setSelectedChainAction(action);
+  };
 
   const handleDepositFormSubmit = (
     data: FieldValues,
@@ -42,8 +56,11 @@ export const DepositPage = () => {
       value={step}
       form={() => (
         <DepositForm
+          selectedChainAction={selectedChainAction}
+          onSelectChainAction={updateSelectedChainAction}
           onSubmit={handleDepositFormSubmit}
-          coinWithActions={parsedCoin}
+          chainActionOptions={chainActionOptions}
+          chain={chain}
         />
       )}
       verify={() => (

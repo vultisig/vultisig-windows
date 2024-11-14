@@ -52,6 +52,8 @@ export const VaultChainPage = () => {
   const nativeCoin = useCurrentVaultNativeCoin(chain);
   const copyAddress = useCopyAddress();
 
+  console.log('## curent chain', chain);
+
   const { mutate: refresh, isPending } = useMutation({
     mutationFn: () => {
       return invalidateQueries(

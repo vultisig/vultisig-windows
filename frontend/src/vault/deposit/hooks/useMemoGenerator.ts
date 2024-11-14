@@ -13,13 +13,23 @@ export const useMemoGenerator = ({
   selectedChainAction,
 }: UseMemoGeneratorProps): FieldValues => {
   const enhancedDepositFormData = useMemo(() => {
-    let memoValue;
-
+    console.log('## selectedChainAction', selectedChainAction);
+    let memoValue = '';
+    const upperCaseSelectedChainAction = selectedChainAction?.toUpperCase();
     if (selectedChainAction === 'custom' && depositFormData['customMemo']) {
       memoValue = depositFormData['customMemo'] as string;
+    } else if (selectedChainAction === 'withdrawPool') {
+      memoValue = 'POOL-:1:vi:50';
+    } else if (selectedChainAction === 'addPool') {
+      memoValue += 'POOL+';
+    } else if (selectedChainAction && depositFormData['nodeAddress']) {
+      memoValue = `${upperCaseSelectedChainAction}:${depositFormData['nodeAddress'] || '+'}`;
+
+      if (selectedChainAction === 'unbond' && depositFormData['amount']) {
+        memoValue += `:${depositFormData['amount']}`;
+      }
     } else {
-      const nodeAddress = depositFormData['nodeAddress'] as string;
-      memoValue = `${selectedChainAction}:${nodeAddress || '+'}`;
+      memoValue = `${upperCaseSelectedChainAction || ''}`;
     }
 
     return { ...depositFormData, memo: memoValue };

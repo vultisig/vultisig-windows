@@ -485,6 +485,7 @@ export const hr = {
   add_vaults_to_folder: 'Odaberite trezore za dodavanje u mapu.',
   thorchain_message_deposit: 'THORChain polog poruke',
   chainFunctions: {
+    amountExceeded: 'Az összeg meghaladja a rendelkezésre álló egyenleget',
     memo: 'Memo',
     optional_validation: 'Izborno',
     default_validation: 'Nevažeći unos',
@@ -548,6 +549,34 @@ export const hr = {
       },
       validations: {
         percentage: 'Postotak je obavezan i mora biti između 0 i 100',
+      },
+    },
+    vote: {
+      labels: {
+        proposalId: 'ID Prijedloga',
+        support: 'Podrška',
+      },
+      validations: {
+        proposalId: 'ID Prijedloga je obavezan',
+        support: 'Polje Podrška je obavezno',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Iznos',
+        validatorAddress: 'Adresa Validatora',
+      },
+      validations: {
+        amount: 'Iznos mora biti pozitivan',
+        validatorAddress: 'Adresa Validatora je obavezna',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Adresa Validatora',
+      },
+      validations: {
+        validatorAddress: 'Adresa Validatora je obavezna',
       },
     },
   },
