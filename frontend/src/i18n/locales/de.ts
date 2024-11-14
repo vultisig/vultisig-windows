@@ -503,6 +503,7 @@ export const de = {
     'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
   thorchain_message_deposit: 'THORChain-Nachrichteneinzahlung',
   chainFunctions: {
+    amountExceeded: 'Der Betrag übersteigt das verfügbare Guthaben',
     memo: 'Memo',
     optional_validation: 'Optional',
     default_validation: 'Ungültige Eingabe',
@@ -567,6 +568,34 @@ export const de = {
       validations: {
         percentage:
           'Prozentsatz ist erforderlich und muss zwischen 0 und 100 liegen',
+      },
+    },
+    vote: {
+      labels: {
+        proposalId: 'Vorschlags-ID',
+        support: 'Support',
+      },
+      validations: {
+        proposalId: 'Vorschlags-ID ist erforderlich',
+        support: 'Support-Feld ist erforderlich',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Betrag',
+        validatorAddress: 'Validator-Adresse',
+      },
+      validations: {
+        amount: 'Betrag muss positiv sein',
+        validatorAddress: 'Validator-Adresse ist erforderlich',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Validator-Adresse',
+      },
+      validations: {
+        validatorAddress: 'Validator-Adresse ist erforderlich',
       },
     },
   },

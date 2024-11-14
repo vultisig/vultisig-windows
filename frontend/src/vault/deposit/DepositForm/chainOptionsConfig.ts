@@ -1,3 +1,4 @@
+import { WalletCore } from '@trustwallet/wallet-core';
 import { z } from 'zod';
 
 import { Chain } from '../../../model/chain';
@@ -13,21 +14,6 @@ export const chainActionOptionsConfig = {
 };
 
 export type ChainAction = keyof typeof requiredFieldsPerChainAction;
-
-export const swapAvailableChains = [
-  Chain.Arbitrum,
-  Chain.Avalanche,
-  Chain.Ethereum,
-  Chain.Bitcoin,
-  Chain.BitcoinCash,
-  Chain.Litecoin,
-  Chain.Dogecoin,
-  Chain.Dash,
-  Chain.THORChain,
-  Chain.Cosmos,
-  Chain.MayaChain,
-  Chain.Kujira,
-];
 
 export const requiredFieldsPerChainAction = {
   bond: {
@@ -57,7 +43,11 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: (chainId: Chain, walletCore: any) =>
+    schema: (
+      chainId: Chain,
+      walletCore: WalletCore,
+      totalAmountAvailable: number
+    ) =>
       z.object({
         nodeAddress: z
           .string()
@@ -84,6 +74,7 @@ export const requiredFieldsPerChainAction = {
               .number()
               .positive()
               .min(0.01, 'chainFunctions.bond.validations.amount')
+              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
               .refine(val => val > 0, {
                 message: 'chainFunctions.bond.validations.amount',
               })
@@ -111,7 +102,11 @@ export const requiredFieldsPerChainAction = {
         required: false,
       },
     ],
-    schema: (chainId: Chain, walletCore: any) =>
+    schema: (
+      chainId: Chain,
+      walletCore: WalletCore,
+      totalAmountAvailable: number
+    ) =>
       z.object({
         nodeAddress: z
           .string()
@@ -132,6 +127,7 @@ export const requiredFieldsPerChainAction = {
             z
               .number()
               .positive()
+              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
               .min(0.01, 'chainFunctions.unbond.validations.amount')
               .refine(val => val > 0, {
                 message: 'chainFunctions.unbond.validations.amount',
@@ -149,7 +145,7 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: (chainId: Chain, walletCore: any) =>
+    schema: (chainId: Chain, walletCore: WalletCore) =>
       z.object({
         nodeAddress: z
           .string()
@@ -180,23 +176,29 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: z.object({
-      amount: z
-        .string()
-        .transform(val => Number(val))
-        .pipe(
-          z
-            .number()
-            .positive()
-            .min(0.01, 'chainFunctions.custom.validations.amount')
-            .refine(val => val > 0, {
-              message: 'chainFunctions.custom.validations.amount',
-            })
-        ),
-      customMemo: z
-        .string()
-        .min(1, 'chainFunctions.custom.validations.customMemo'),
-    }),
+    schema: (
+      chainId: Chain,
+      walletCore: WalletCore,
+      totalAmountAvailable: number
+    ) =>
+      z.object({
+        amount: z
+          .string()
+          .transform(val => Number(val))
+          .pipe(
+            z
+              .number()
+              .positive()
+              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
+              .min(0.01, 'chainFunctions.custom.validations.amount')
+              .refine(val => val > 0, {
+                message: 'chainFunctions.custom.validations.amount',
+              })
+          ),
+        customMemo: z
+          .string()
+          .min(1, 'chainFunctions.custom.validations.customMemo'),
+      }),
   },
   addPool: {
     fields: [
@@ -207,20 +209,22 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: z.object({
-      amount: z
-        .string()
-        .transform(val => Number(val))
-        .pipe(
-          z
-            .number()
-            .positive()
-            .min(0.01, 'chainFunctions.addPool.validations.amount')
-            .refine(val => val > 0, {
-              message: 'chainFunctions.addPool.validations.amount',
-            })
-        ),
-    }),
+    schema: (chainId: Chain, walletCore: any, totalAmountAvailable: number) =>
+      z.object({
+        amount: z
+          .string()
+          .transform(val => Number(val))
+          .pipe(
+            z
+              .number()
+              .positive()
+              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
+              .min(0.01, 'chainFunctions.addPool.validations.amount')
+              .refine(val => val > 0, {
+                message: 'chainFunctions.addPool.validations.amount',
+              })
+          ),
+      }),
   },
   withdrawPool: {
     fields: [
@@ -255,6 +259,73 @@ export const requiredFieldsPerChainAction = {
               message: 'chainFunctions.withdrawPool.validations.percentage',
             })
         ),
+    }),
+  },
+  vote: {
+    fields: [
+      {
+        name: 'proposalId',
+        type: 'text',
+        label: 'chainFunctions.vote.labels.proposalId',
+        required: true,
+      },
+      {
+        name: 'support',
+        type: 'boolean',
+        label: 'chainFunctions.vote.labels.support',
+        required: true,
+      },
+    ],
+    schema: z.object({
+      proposalId: z
+        .string()
+        .min(1, 'chainFunctions.vote.validations.proposalId'),
+      support: z.boolean(),
+    }),
+  },
+  stake: {
+    fields: [
+      {
+        name: 'amount',
+        type: 'number',
+        label: 'chainFunctions.stake.labels.amount',
+        required: true,
+      },
+      {
+        name: 'validatorAddress',
+        type: 'text',
+        label: 'chainFunctions.stake.labels.validatorAddress',
+        required: true,
+      },
+    ],
+    schema: z.object({
+      amount: z
+        .string()
+        .transform(val => Number(val))
+        .pipe(
+          z
+            .number()
+            .positive()
+            .min(0.01, 'chainFunctions.stake.validations.amount')
+        ),
+      validatorAddress: z
+        .string()
+        .min(1, 'chainFunctions.stake.validations.validatorAddress'),
+    }),
+  },
+  unstake: {
+    fields: [
+      {
+        name: 'validatorAddress',
+        type: 'text',
+        label: 'chainFunctions.unstake.labels.validatorAddress',
+        required: true,
+      },
+    ],
+    schema: z.object({
+      validatorAddress: z
+        .string()
+        .min(1, 'chainFunctions.unstake.validations.validatorAddress'),
     }),
   },
 };

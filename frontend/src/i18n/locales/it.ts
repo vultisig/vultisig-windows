@@ -501,6 +501,7 @@ export const it = {
   add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
   thorchain_message_deposit: 'Deposito messaggio THORChain',
   chainFunctions: {
+    amountExceeded: "L'importo supera il saldo disponibile",
     memo: 'Memo',
     optional_validation: 'Facoltativo',
     default_validation: 'Ingresso non valido',
@@ -564,6 +565,34 @@ export const it = {
       },
       validations: {
         percentage: 'La percentuale è obbligatoria e deve essere tra 0 e 100',
+      },
+    },
+    vote: {
+      labels: {
+        proposalId: 'ID proposta',
+        support: 'Supporto',
+      },
+      validations: {
+        proposalId: 'ID proposta obbligatorio',
+        support: 'Il campo Supporto è obbligatorio',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Importo',
+        validatorAddress: 'Indirizzo convalidatore',
+      },
+      validations: {
+        amount: "L'importo deve essere positivo",
+        validatorAddress: 'Indirizzo convalidatore obbligatorio',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Indirizzo convalidatore',
+      },
+      validations: {
+        validatorAddress: 'Indirizzo convalidatore obbligatorio',
       },
     },
   },

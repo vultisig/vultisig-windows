@@ -503,6 +503,7 @@ export const es = {
   add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
   thorchain_message_deposit: 'Depósito de mensajes de THORChain',
   chainFunctions: {
+    amountExceeded: 'El importe excede el saldo disponible',
     memo: 'Memo',
     required_validation: 'Obligatorio',
     option_validation: 'Opcional',
@@ -565,6 +566,34 @@ export const es = {
       },
       validations: {
         percentage: 'El porcentaje es obligatorio y debe estar entre 0 y 100',
+      },
+    },
+    vote: {
+      labels: {
+        proposalId: 'ID de la propuesta',
+        support: 'Soporte',
+      },
+      validations: {
+        proposalId: 'ID de la propuesta es obligatorio',
+        support: 'El campo de soporte es obligatorio',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Monto',
+        validatorAddress: 'Dirección del validador',
+      },
+      validations: {
+        amount: 'El monto debe ser positivo',
+        validatorAddress: 'La dirección del validador es obligatoria',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Dirección del validador',
+      },
+      validations: {
+        validatorAddress: 'La dirección del validador es obligatoria',
       },
     },
   },

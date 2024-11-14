@@ -5,11 +5,6 @@ import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
-import {
-  IDepositTransaction,
-  TransactionType,
-} from '../../../model/transaction';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
@@ -18,43 +13,56 @@ import {
   useCurrentVaultCoin,
   useCurrentVaultHasServer,
 } from '../../state/currentVault';
+import { ChainAction } from '../DepositForm/chainOptionsConfig';
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
 import { useSender } from '../hooks/useSender';
 import { useSpecificDepositTxInfoQuery } from '../queries/useSpecificDepositTxInfoQuery';
+import { transactionConfig } from './config';
+import { createTransaction } from './utils';
 
 type SendType = 'fast' | 'paired';
 
 type DepositConfirmButtonProps = {
   depositFormData: Record<string, unknown>;
+  action: ChainAction;
 };
 
 export const DepositConfirmButton = ({
   depositFormData,
+  action,
 }: DepositConfirmButtonProps) => {
   const { t } = useTranslation();
 
   const [coinKey] = useCurrentDepositCoin();
   const sender = useSender();
   const coin = useCurrentVaultCoin(coinKey);
-  const receiver = depositFormData['nodeAddress'] as string;
-  const amount = depositFormData['amount'] as number;
-  const memo = depositFormData['memo'] as string;
   const vault = useCurrentVault();
   const navigate = useAppNavigate();
   const walletCore = useAssertWalletCore();
   const specificTxInfoQuery = useSpecificDepositTxInfoQuery();
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
+  const config = transactionConfig[action] || {};
+  const receiver = config.requiresNodeAddress
+    ? (depositFormData['nodeAddress'] as string)
+    : '';
+  const amount = config.requiresAmount
+    ? (depositFormData['amount'] as number)
+    : config.defaultAmount || 0;
+  const memo = config.requiresMemo ? (depositFormData['memo'] as string) : '';
+
   const startKeysign = (type: SendType) => {
-    const tx: IDepositTransaction = {
-      fromAddress: sender,
-      toAddress: receiver,
-      amount: shouldBePresent(amount),
+    const tx = createTransaction({
+      selectedChainAction: action,
+      sender,
+      receiver,
+      amount,
       memo,
       coin: storageCoinToCoin(coin),
-      transactionType: TransactionType.DEPOSIT,
-      specificTransactionInfo: shouldBePresent(specificTxInfoQuery.data),
-    };
+      affiliateFee: depositFormData.affiliateFee as number | undefined,
+      percentage: depositFormData.percentage as number | undefined,
+      specificTransactionInfo: specificTxInfoQuery.data,
+    });
 
     const keysignPayload = BlockchainServiceFactory.createService(
       coinKey.chainId,
@@ -67,6 +75,13 @@ export const DepositConfirmButton = ({
   };
 
   const hasServer = useCurrentVaultHasServer();
+
+  if (
+    (config.requiresAmount && !amount) ||
+    (config.requiresNodeAddress && !receiver)
+  ) {
+    return <Text>{t('required_field_missing')}</Text>;
+  }
 
   if (balanceQuery.error || specificTxInfoQuery.error) {
     return <Text>{t('failed_to_load')}</Text>;
