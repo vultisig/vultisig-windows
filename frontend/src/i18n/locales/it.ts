@@ -27,6 +27,10 @@ export const it = {
     'Carica il frammento della tua cassaforte precedentemente creata:',
   select_backup_file: 'Seleziona file di backup',
   continue: 'Continua',
+  email_confirmation_code_label:
+    'Inserisci il codice ricevuto con il tuo backup via email',
+  email_confirmation_code_error: 'Codice non valido',
+  email_confirmation: 'Inserisci codice',
   ok: 'OK',
   cancel: 'Annulla',
   internet: 'Internet',
