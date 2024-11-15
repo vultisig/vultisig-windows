@@ -59,9 +59,12 @@ const VaultDefaultChains = () => {
 
   // Synchronize in case the mutation was unsuccessful and the optimistic update needs to be reverted
   useEffect(() => {
-    if (optimisticDefaultChains !== databaseDefaultChains && !isUpdating) {
-      setOptimisticDefaultChains(databaseDefaultChains);
-    }
+    const timeout = setTimeout(() => {
+      if (optimisticDefaultChains !== databaseDefaultChains && !isUpdating) {
+        setOptimisticDefaultChains(databaseDefaultChains);
+      }
+    }, 200); // Add a slight delay to reduce unnecessary sync
+    return () => clearTimeout(timeout);
   }, [databaseDefaultChains, optimisticDefaultChains, isUpdating]);
 
   return (
