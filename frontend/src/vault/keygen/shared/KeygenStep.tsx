@@ -7,7 +7,6 @@ import {
 } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { KeygenBackup } from './KeygenBackup';
 import { KeygenFailedState } from './KeygenFailedState';
@@ -20,7 +19,7 @@ type KeygenStepProps = ComponentWithBackActionProps &
     onTryAgain: () => void;
   };
 
-export const KeygenStep = ({ onBack, onTryAgain, title }: KeygenStepProps) => {
+export const KeygenStep = ({ onTryAgain, title }: KeygenStepProps) => {
   const { mutate: start, ...mutationState } = useKeygenMutation();
 
   useEffect(start, [start]);
@@ -48,10 +47,7 @@ export const KeygenStep = ({ onBack, onTryAgain, title }: KeygenStepProps) => {
       )}
       pending={() => (
         <>
-          <PageHeader
-            title={<PageHeaderTitle>{title}</PageHeaderTitle>}
-            primaryControls={<PageHeaderBackButton onClick={onBack} />}
-          />
+          <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />
           <KeygenPendingState />
         </>
       )}
