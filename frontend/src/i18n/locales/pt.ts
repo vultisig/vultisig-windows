@@ -380,6 +380,10 @@ export const pt = {
   password_required: 'Senha é necessária',
   passwords_dont_match: 'As senhas não correspondem',
   verify_password: 'Verificar senha',
+  email_confirmation_code_label:
+    'Digite o código recebido com seu backup por e-mail',
+  email_confirmation_code_error: 'Código inválido',
+  email_confirmation: 'Digite o código',
   password: 'Senha',
   password_backup: 'Proteja seu cofre e assine rapidamente.',
   looking_for_server: 'Procurando por FastVaultServer...',

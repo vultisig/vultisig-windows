@@ -360,6 +360,10 @@ export const en = {
   verify_email: 'Verify Email',
   emails_dont_match: "Emails don't match",
   email_backup: 'Enter your email to receive your backup',
+  email_confirmation_code_label:
+    'Enter the code received with your backup via email',
+  email_confirmation_code_error: 'Invalid code',
+  email_confirmation: 'Enter code',
   email_disclaimer: 'This email is only used to send the backup',
   password_required: 'Password is required',
   passwords_dont_match: "Passwords don't match",

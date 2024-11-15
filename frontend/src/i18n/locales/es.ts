@@ -49,6 +49,10 @@ export const es = {
     'Conecte todos los dispositivos a la misma red con la aplicación Vultisig abierta',
   devices_on_same_wifi:
     'Mantenga los dispositivos en la misma red con VULTISIG abierto',
+  email_confirmation_code_label:
+    'Ingrese el código que recibió con su copia de seguridad por correo electrónico',
+  email_confirmation_code_error: 'Código no válido',
+  email_confirmation: 'Ingrese el código',
   start: 'Comenzar',
   vault_name: 'Nombre de la bóveda',
   main_vault: 'Bóveda principal',
