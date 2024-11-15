@@ -5,6 +5,7 @@ import { makeAppPath } from '../../navigation';
 import { useCurrentVault } from '../../vault/state/currentVault';
 import { useCurrentVaultId } from '../../vault/state/currentVaultId';
 import { getStorageVaultId } from '../../vault/utils/storageVault';
+import { VaultDescription } from './VaultDescription';
 
 type VaultListItemProps = {
   isDraggable?: boolean;
@@ -18,11 +19,12 @@ export const VaultListItem = ({ isDraggable }: VaultListItemProps) => {
   return (
     <ListItem
       isDraggable={isDraggable}
-      title={vault.name}
       onClick={() => {
         setSelectedVault(getStorageVaultId(vault));
         navigate(makeAppPath('vault'));
       }}
-    />
+    >
+      <VaultDescription />
+    </ListItem>
   );
 };

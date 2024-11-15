@@ -372,6 +372,7 @@ export const en = {
   loading: 'Loading...',
   fast_sign: 'Fast Sign',
   paired_sign: 'Paired Sign',
+  part_n_of_m: 'Part {{n}} of {{m}}',
   password_to_decrypt: 'This Password decrypts your FastVault Share',
   fast_vault_password: 'FastVault Password',
   vault_missing_public_key_message:

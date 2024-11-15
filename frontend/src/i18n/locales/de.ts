@@ -534,37 +534,25 @@ export const de = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Knotenadresse',
-      },
+      labels: { nodeAddress: 'Knotenadresse' },
       validations: {
         nodeAddressMinLength: 'Knotenadresse ist erforderlich',
         nodeAddressInvalid: 'Knotenadresse ist ungültig',
       },
     },
     custom: {
-      labels: {
-        amount: 'Betrag',
-        customMemo: 'Benutzerdefiniertes Memo',
-      },
+      labels: { amount: 'Betrag', customMemo: 'Benutzerdefiniertes Memo' },
       validations: {
         amount: 'Betrag muss positiv sein',
         customMemo: 'Benutzerdefiniertes Memo ist erforderlich',
       },
     },
     addPool: {
-      labels: {
-        amount: 'Betrag',
-      },
-      validations: {
-        amount: 'Betrag muss positiv sein',
-      },
+      labels: { amount: 'Betrag' },
+      validations: { amount: 'Betrag muss positiv sein' },
     },
     withdrawPool: {
-      labels: {
-        affiliateFee: 'Partnergebühr',
-        percentage: 'Prozentsatz',
-      },
+      labels: { affiliateFee: 'Partnergebühr', percentage: 'Prozentsatz' },
       validations: {
         percentage:
           'Prozentsatz ist erforderlich und muss zwischen 0 und 100 liegen',
@@ -603,4 +591,13 @@ export const de = {
   scan_with_devices_to_sign:
     'Esegui la scansione con i dispositivi per partecipare alla firma della transazione',
   sign: 'Signieren',
+  part_n_of_m: 'Teil {{n}} von {{m}}',
+  bond: 'Bindung',
+  unbond: 'Bindung lösen',
+  leave: 'Verlassen',
+  addPool: 'Pool hinzufügen',
+  withdrawPool: 'Pool abheben',
+  custom: 'Benutzerdefinierte Aktion',
+  vote: 'Abstimmung',
+  stake: 'Einsatz',
 };

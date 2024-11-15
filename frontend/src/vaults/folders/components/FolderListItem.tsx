@@ -22,12 +22,11 @@ export const FolderListItem = ({
     <ListItem
       isDraggable={isDraggable}
       onClick={() => navigate(makeAppPath('vaultFolder', { id }))}
-      title={
-        <HStack alignItems="center" gap={12}>
-          <FolderIcon style={{ fontSize: 24 }} />
-          {name}
-        </HStack>
-      }
-    />
+    >
+      <HStack alignItems="center" gap={12}>
+        <FolderIcon style={{ fontSize: 24 }} />
+        {name}
+      </HStack>
+    </ListItem>
   );
 };

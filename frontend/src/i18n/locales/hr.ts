@@ -516,37 +516,25 @@ export const hr = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Adresa Čvora',
-      },
+      labels: { nodeAddress: 'Adresa Čvora' },
       validations: {
         nodeAddressMinLength: 'Potrebna je adresa čvora',
         nodeAddressInvalid: 'Adresa čvora je nevažeća',
       },
     },
     custom: {
-      labels: {
-        amount: 'Iznos',
-        customMemo: 'Prilagođena Bilješka',
-      },
+      labels: { amount: 'Iznos', customMemo: 'Prilagođena Bilješka' },
       validations: {
         amount: 'Iznos mora biti pozitivan',
         customMemo: 'Prilagođena bilješka je obavezna',
       },
     },
     addPool: {
-      labels: {
-        amount: 'Iznos',
-      },
-      validations: {
-        amount: 'Iznos mora biti pozitivan',
-      },
+      labels: { amount: 'Iznos' },
+      validations: { amount: 'Iznos mora biti pozitivan' },
     },
     withdrawPool: {
-      labels: {
-        affiliateFee: 'Naknada za Partnera',
-        percentage: 'Postotak',
-      },
+      labels: { affiliateFee: 'Naknada za Partnera', percentage: 'Postotak' },
       validations: {
         percentage: 'Postotak je obavezan i mora biti između 0 i 100',
       },
@@ -584,4 +572,13 @@ export const hr = {
   scan_with_devices_to_sign:
     'Skeniraj s uređajima za sudjelovanje u potpisivanju transakcije',
   sign: 'Potpiši',
+  part_n_of_m: 'Dio {{n}} od {{m}}',
+  bond: 'Veza',
+  unbond: 'Odvezati se',
+  leave: 'Otiđi',
+  addPool: 'Dodaj bazen',
+  withdrawPool: 'Skup povlačenja',
+  custom: 'Prilagođena radnja',
+  vote: 'Glasanje',
+  stake: 'Ulog',
 };

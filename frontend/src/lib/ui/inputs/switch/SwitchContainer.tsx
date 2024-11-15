@@ -21,5 +21,7 @@ export const SwitchContainer = styled.div<{
 
   position: relative;
 
+  flex-shrink: 0;
+
   ${round};
 `;

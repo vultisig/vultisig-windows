@@ -533,31 +533,22 @@ export const es = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Dirección del Nodo',
-      },
+      labels: { nodeAddress: 'Dirección del Nodo' },
       validations: {
         nodeAddressMinLength: 'La dirección del nodo es obligatoria',
         nodeAddressInvalid: 'La dirección del nodo no es válida',
       },
     },
     custom: {
-      labels: {
-        amount: 'Cantidad',
-        customMemo: 'Memo Personalizado',
-      },
+      labels: { amount: 'Cantidad', customMemo: 'Memo Personalizado' },
       validations: {
         amount: 'La cantidad debe ser positiva',
         customMemo: 'El memo personalizado es obligatorio',
       },
     },
     addPool: {
-      labels: {
-        amount: 'Cantidad',
-      },
-      validations: {
-        amount: 'La cantidad debe ser positiva',
-      },
+      labels: { amount: 'Cantidad' },
+      validations: { amount: 'La cantidad debe ser positiva' },
     },
     withdrawPool: {
       labels: {
@@ -601,4 +592,13 @@ export const es = {
   scan_with_devices_to_sign:
     'Escanear con dispositivos para participar en la firma de la transacción',
   sign: 'Firmar',
+  part_n_of_m: 'Parte {{n}} de {{m}}',
+  bond: 'Vínculo',
+  unbond: 'Desatar',
+  leave: 'Dejar',
+  addPool: 'Agregar piscina',
+  withdrawPool: 'Fondo de retiro',
+  custom: 'Acción personalizada',
+  vote: 'Votar',
+  stake: 'Apostar',
 };
