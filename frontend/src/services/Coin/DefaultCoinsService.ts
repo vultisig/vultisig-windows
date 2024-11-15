@@ -18,41 +18,37 @@ export class DefaultCoinsService {
     this.walletCore = walletCore;
   }
 
-  applyDefaultCoins(vault: storage.Vault, defaultChains: string[]) {
-    let defaultTokens = defaultChains
-      .map(chain => {
-        return Object.entries(TokensStore.Token)
-          .filter(([_, getToken]) => {
-            const token = getToken();
-            return (
-              token.chain.toLowerCase() === chain.toLowerCase() &&
-              token.isNativeToken === true
-            );
-          })
-          .map(([_, getToken]) => getToken);
-      })
-      .flat()
-      .sort((a, b) => a().chain.localeCompare(b().chain));
+  async applyDefaultCoins(vault: storage.Vault, defaultChains: string[]) {
+    const normalizedChains = new Set(
+      defaultChains.map(chain => chain.toLowerCase())
+    );
+
+    let defaultTokens = Object.values(TokensStore.Token)
+      .map(getToken => getToken())
+      .filter(
+        token =>
+          normalizedChains.has(token.chain.toLowerCase()) && token.isNativeToken
+      )
+      .sort((a, b) => a.chain.localeCompare(b.chain));
 
     if (defaultTokens.length === 0) {
-      defaultTokens = this.defaultTokens;
+      defaultTokens = this.defaultTokens.map(getToken => getToken());
     }
 
-    defaultTokens.forEach(token => {
-      const coinService = CoinServiceFactory.createCoinService(
-        token().chain,
-        this.walletCore
-      );
-      coinService
-        .createCoin(
-          token(),
+    await Promise.all(
+      defaultTokens.map(async token => {
+        const coinService = CoinServiceFactory.createCoinService(
+          token.chain,
+          this.walletCore
+        );
+        const coin = await coinService.createCoin(
+          token,
           vault.public_key_ecdsa || '',
           vault.public_key_eddsa || '',
           vault.hex_chain_code || ''
-        )
-        .then(coin => {
-          coinService.saveCoin(coin, vault);
-        });
-    });
+        );
+        await coinService.saveCoin(coin, vault);
+      })
+    );
   }
 }

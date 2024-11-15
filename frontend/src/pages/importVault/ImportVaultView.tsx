@@ -25,7 +25,6 @@ import {
 const ImportVaultView = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [_, setCurrentVaultId] = useCurrentVaultId();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isContinue, setContinue] = useState(false);
@@ -49,7 +48,7 @@ const ImportVaultView = () => {
     }
   };
 
-  const { mutateAsync: saveVault } = useSaveVaultMutation();
+  const { mutateAsync: saveVault, isPending } = useSaveVaultMutation();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -363,10 +362,10 @@ const ImportVaultView = () => {
                 ? 'text-btn-primary bg-secondary'
                 : 'text-btn-secondary bg-white/[.10]'
             }`}
-            disabled={!isContinue}
+            disabled={!isContinue || isPending}
             onClick={handleContinue}
           >
-            {t('continue')}
+            {isPending ? t('loading') : t('continue')}
           </button>
         </div>
       </div>
