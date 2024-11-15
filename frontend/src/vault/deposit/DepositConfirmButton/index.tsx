@@ -49,7 +49,7 @@ export const DepositConfirmButton = ({
   const amount = config.requiresAmount
     ? (depositFormData['amount'] as number)
     : config.defaultAmount || 0;
-  const memo = config.requiresMemo ? (depositFormData['memo'] as string) : '';
+  const memo = (depositFormData['memo'] as string) ?? '';
 
   const startKeysign = (type: SendType) => {
     const tx = createTransaction({
