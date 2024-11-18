@@ -11,11 +11,11 @@ import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButto
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { KeygenNetworkReminder } from '../../../../keygen/shared/KeygenNetworkReminder';
 import { ManageServerType } from '../../../../keygen/shared/peerDiscovery/ManageServerType';
-import { PeersManager } from '../../../../keygen/shared/PeersManager';
 import { DownloadKeysignQrCode } from '../DownloadKeysignQrCode';
 import { useIsPeerDiscoveryStepDisabled } from '../hooks/useIsPeerDiscoveryStepDisabled';
 import { KeysignPeerDiscoveryQrCode } from '../KeysignPeerDiscoveryCode';
 import { Content } from './KeysignPeerDiscoveryStep.styled';
+import { KeysignPeersManager } from './KeysignPeersManager';
 
 export const KeysignPeerDiscoveryStep = ({
   onForward,
@@ -49,7 +49,7 @@ export const KeysignPeerDiscoveryStep = ({
           <KeysignPeerDiscoveryQrCode />
           <VStack gap={40} alignItems="center">
             <ManageServerType />
-            <PeersManager />
+            <KeysignPeersManager />
             <KeygenNetworkReminder />
           </VStack>
         </Content>

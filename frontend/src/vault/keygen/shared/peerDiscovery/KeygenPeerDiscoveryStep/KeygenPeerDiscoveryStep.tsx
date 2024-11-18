@@ -20,9 +20,9 @@ import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButto
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { useVaultType } from '../../../../setup/shared/state/vaultType';
 import { KeygenNetworkReminder } from '../../KeygenNetworkReminder';
-import { PeersManager } from '../../PeersManager';
 import { DownloadKeygenQrCode } from '../DownloadKeygenQrCode';
 import { KeygenPeerDiscoveryQrCode } from '../KeygenPeerDiscoveryQrCode';
+import { KeygenPeersManager } from '../KeygenPeersManager';
 import { ManageServerType } from '../ManageServerType';
 import { Content } from './KegenPeerDiscoveryStep.styled';
 
@@ -82,7 +82,7 @@ export const KeygenPeerDiscoveryStep = ({
 
           <VStack gap={40} alignItems="center">
             {vaultType === 'secure' && <ManageServerType />}
-            <PeersManager />
+            <KeygenPeersManager />
             <KeygenNetworkReminder />
           </VStack>
         </Content>
