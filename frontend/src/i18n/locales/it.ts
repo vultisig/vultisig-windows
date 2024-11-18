@@ -56,6 +56,8 @@ export const it = {
   vault_name: 'Nome della cassaforte',
   main_vault: 'Cassaforte principale',
   with_these_devices: 'Con questi dispositivi',
+  missing_public_key_ecdsa: 'Manca la chiave pubblica ECDSA',
+  missing_verification_code: 'Manca il codice di verifica',
   this_device: 'Questo dispositivo',
   pair_device: 'Accoppia dispositivo',
   backup_device: 'Dispositivo di backup',

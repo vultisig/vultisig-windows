@@ -31,6 +31,8 @@ export const de = {
   backup_decryption_failed: 'Entschlüsselung der Sicherung fehlgeschlagen',
   upload_previous_vault: 'Laden Sie Ihr zuvor erstelltes Tresorfragment hoch:',
   select_backup_file: 'Sicherungsdatei auswählen',
+  missing_public_key_ecdsa: 'Fehlender öffentlicher Schlüssel ECDSA',
+  missing_verification_code: 'Fehlender Verifizierungscode',
   continue: 'Fortfahren',
   ok: 'OK',
   cancel: 'Abbrechen',

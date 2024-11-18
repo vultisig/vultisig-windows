@@ -1,34 +1,46 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { storage } from '../../../../wailsjs/go/models';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
+import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { appPaths } from '../../../navigation';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { useUserEmailVerificationCodeQuery } from '../../queries/useUserEmailVerificationCodeQuery';
 
-export const KeygenEmailCodeConfirmation = () => {
-  // TODO: fetch the verification code from the server and verify it with user input
-  const VERIFICATION_CODE = '';
+type KeygenEmailCodeConfirmationProps = {
+  vault: storage.Vault | null;
+};
+
+export const KeygenEmailCodeConfirmation = ({
+  vault,
+}: KeygenEmailCodeConfirmationProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [confirmationValue, setConfirmationValue] = useState('');
-  const [error, setError] = useState('');
+  const {
+    data,
+    isFetching,
+    error,
+    refetch: verifyEmailVerificationCode,
+  } = useUserEmailVerificationCodeQuery({
+    publicKeyECDSA: vault?.public_key_ecdsa || '',
+    code: confirmationValue,
+  });
 
-  const handleSubmit = () => {
-    // TODO: use the actual verification
-    if (confirmationValue === VERIFICATION_CODE) {
+  useEffect(() => {
+    if (data) {
       navigate(appPaths.keygenBackup);
-    } else {
-      setError(t('email_confirmation_code_error'));
     }
-  };
+  }, [data, navigate]);
 
   return (
     <>
@@ -40,7 +52,7 @@ export const KeygenEmailCodeConfirmation = () => {
         as="form"
         {...getFormProps({
           isDisabled: !confirmationValue,
-          onSubmit: handleSubmit,
+          onSubmit: verifyEmailVerificationCode,
         })}
       >
         <VStack flexGrow gap={12}>
@@ -56,11 +68,13 @@ export const KeygenEmailCodeConfirmation = () => {
         </VStack>
         <VStack gap={20}>
           <Button type="submit" isDisabled={!confirmationValue}>
-            {t('continue')}
+            {isFetching ? t('loading') : t('continue')}
           </Button>
-          <Text color="danger" size={12}>
-            {error}
-          </Text>
+          {error && (
+            <Text color="danger" size={12}>
+              {extractErrorMsg(error)}
+            </Text>
+          )}
         </VStack>
       </PageContent>
     </>
