@@ -17,10 +17,10 @@ CREATE TABLE coins_new (
 
 INSERT INTO coins_new
 SELECT *
-FROM Coins
+FROM coins
 WHERE public_key_ecdsa IN (SELECT public_key_ecdsa FROM vaults);
 
-DROP TABLE Coins;
+DROP TABLE coins;
 
 ALTER TABLE coins_new RENAME TO coins;
 
