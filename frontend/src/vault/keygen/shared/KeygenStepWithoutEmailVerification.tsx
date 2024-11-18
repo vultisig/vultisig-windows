@@ -8,7 +8,7 @@ import {
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { KeygenEmailCodeConfirmation } from './KeygenEmailCodeConfirmation';
+import { KeygenBackup } from './KeygenBackup';
 import { KeygenFailedState } from './KeygenFailedState';
 import { KeygenPendingState } from './KeygenPendingState';
 import { KeygenSuccessState } from './KeygenSuccessState';
@@ -19,8 +19,12 @@ type KeygenStepProps = ComponentWithBackActionProps &
     onTryAgain: () => void;
   };
 
-export const KeygenStep = ({ onTryAgain, title }: KeygenStepProps) => {
+export const KeygenStepWithoutEmailVerification = ({
+  onTryAgain,
+  title,
+}: KeygenStepProps) => {
   const { mutate: start, ...mutationState } = useKeygenMutation();
+
   useEffect(start, [start]);
 
   return (
@@ -35,7 +39,7 @@ export const KeygenStep = ({ onTryAgain, title }: KeygenStepProps) => {
               <KeygenSuccessState />
             </>
           }
-          to={<KeygenEmailCodeConfirmation />}
+          to={<KeygenBackup />}
         />
       )}
       error={error => (

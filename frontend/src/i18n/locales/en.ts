@@ -10,6 +10,8 @@ export const en = {
   onboarding_view4_description:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
   create_new_vault: 'Create a New Vault',
+  missing_public_key_ecdsa: 'Missing Public Key ECDSA',
+  missing_verification_code: 'Missing Verification Code',
   import_existing_vault: 'Import an Existing Vault',
   import_vault: 'Import Vault',
   next: 'Next',

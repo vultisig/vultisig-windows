@@ -11,6 +11,8 @@ export const pt = {
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   create_new_vault: 'Criar novo cofre',
   import_existing_vault: 'Importar cofre existente',
+  missing_public_key_ecdsa: 'Chave pública ECDSA ausente',
+  missing_verification_code: 'Código de verificação ausente',
   next: 'Próximo',
   skip: 'Pular',
   scan_with_devices:

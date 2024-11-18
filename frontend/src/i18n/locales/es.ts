@@ -33,6 +33,8 @@ export const es = {
   internet: 'Internet',
   local: 'Local',
   looking_for_devices: 'Buscando dispositivos...',
+  missing_public_key_ecdsa: 'Falta la clave pública ECDSA',
+  missing_verification_code: 'Falta el código de verificación',
   more_devices: 'más dispositivos...',
   devices_on_same_internet:
     'Conecte todos los dispositivos a Internet con Vultisig abierto',

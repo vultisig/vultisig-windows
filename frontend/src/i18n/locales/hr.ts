@@ -59,6 +59,8 @@ export const hr = {
   backup_disclaimer:
     'Trebali biste sigurnosno kopirati sve dijelove trezora na odvojene lokacije.',
   of: 'od',
+  missing_public_key_ecdsa: 'Nedostaje javni ključ ECDSA',
+  missing_verification_code: 'Nedostaje kontrolni kod',
   vault: 'Trezor',
   vaults: 'Trezori',
   setup: 'Postavljanje',
