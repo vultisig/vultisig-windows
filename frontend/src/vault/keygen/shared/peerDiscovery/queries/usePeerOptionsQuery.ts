@@ -20,6 +20,6 @@ export const usePeerOptionsQuery = () => {
 
       return without(withoutDuplicates(response), localPartyId);
     },
-    ...pollingQueryOptions(5000),
+    ...pollingQueryOptions(2000),
   });
 };
