@@ -503,6 +503,7 @@ export const de = {
     'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
   thorchain_message_deposit: 'THORChain-Nachrichteneinzahlung',
   chainFunctions: {
+    amountExceeded: 'Der Betrag übersteigt das verfügbare Guthaben',
     memo: 'Memo',
     optional_validation: 'Optional',
     default_validation: 'Ungültige Eingabe',
@@ -533,40 +534,56 @@ export const de = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Knotenadresse',
-      },
+      labels: { nodeAddress: 'Knotenadresse' },
       validations: {
         nodeAddressMinLength: 'Knotenadresse ist erforderlich',
         nodeAddressInvalid: 'Knotenadresse ist ungültig',
       },
     },
     custom: {
-      labels: {
-        amount: 'Betrag',
-        customMemo: 'Benutzerdefiniertes Memo',
-      },
+      labels: { amount: 'Betrag', customMemo: 'Benutzerdefiniertes Memo' },
       validations: {
         amount: 'Betrag muss positiv sein',
         customMemo: 'Benutzerdefiniertes Memo ist erforderlich',
       },
     },
     addPool: {
-      labels: {
-        amount: 'Betrag',
-      },
-      validations: {
-        amount: 'Betrag muss positiv sein',
-      },
+      labels: { amount: 'Betrag' },
+      validations: { amount: 'Betrag muss positiv sein' },
     },
     withdrawPool: {
-      labels: {
-        affiliateFee: 'Partnergebühr',
-        percentage: 'Prozentsatz',
-      },
+      labels: { affiliateFee: 'Partnergebühr', percentage: 'Prozentsatz' },
       validations: {
         percentage:
           'Prozentsatz ist erforderlich und muss zwischen 0 und 100 liegen',
+      },
+    },
+    vote: {
+      labels: {
+        proposalId: 'Vorschlags-ID',
+        support: 'Support',
+      },
+      validations: {
+        proposalId: 'Vorschlags-ID ist erforderlich',
+        support: 'Support-Feld ist erforderlich',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Betrag',
+        validatorAddress: 'Validator-Adresse',
+      },
+      validations: {
+        amount: 'Betrag muss positiv sein',
+        validatorAddress: 'Validator-Adresse ist erforderlich',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Validator-Adresse',
+      },
+      validations: {
+        validatorAddress: 'Validator-Adresse ist erforderlich',
       },
     },
   },
@@ -574,4 +591,13 @@ export const de = {
   scan_with_devices_to_sign:
     'Esegui la scansione con i dispositivi per partecipare alla firma della transazione',
   sign: 'Signieren',
+  part_n_of_m: 'Teil {{n}} von {{m}}',
+  bond: 'Bindung',
+  unbond: 'Bindung lösen',
+  leave: 'Verlassen',
+  addPool: 'Pool hinzufügen',
+  withdrawPool: 'Pool abheben',
+  custom: 'Benutzerdefinierte Aktion',
+  vote: 'Abstimmung',
+  stake: 'Einsatz',
 };

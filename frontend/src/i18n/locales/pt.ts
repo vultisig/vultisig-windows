@@ -499,6 +499,7 @@ export const pt = {
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   thorchain_message_deposit: 'Depósito de mensagem THORChain',
   chainFunctions: {
+    amountExceeded: 'O valor excede o saldo disponível',
     memo: 'Memo',
     optional_validation: 'Opcional',
     default_validation: 'Entrada inválida',
@@ -529,41 +530,66 @@ export const pt = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Endereço do Nó',
-      },
+      labels: { nodeAddress: 'Endereço do Nó' },
       validations: {
         nodeAddressMinLength: 'Endereço do nó é obrigatório',
         nodeAddressInvalid: 'Endereço do nó é inválido',
       },
     },
     custom: {
-      labels: {
-        amount: 'Quantidade',
-        customMemo: 'Memo Personalizado',
-      },
+      labels: { amount: 'Quantidade', customMemo: 'Memo Personalizado' },
       validations: {
         amount: 'Quantidade deve ser positiva',
         customMemo: 'Memo personalizado é obrigatório',
       },
     },
     addPool: {
-      labels: {
-        amount: 'Quantidade',
-      },
-      validations: {
-        amount: 'Quantidade deve ser positiva',
-      },
+      labels: { amount: 'Quantidade' },
+      validations: { amount: 'Quantidade deve ser positiva' },
     },
     withdrawPool: {
-      labels: {
-        affiliateFee: 'Taxa de Afiliado',
-        percentage: 'Porcentagem',
-      },
+      labels: { affiliateFee: 'Taxa de Afiliado', percentage: 'Porcentagem' },
       validations: {
         percentage: 'Porcentagem é obrigatória e deve estar entre 0 e 100',
       },
     },
+    vote: {
+      labels: {
+        proposalId: 'ID da proposta',
+        support: 'Suporte',
+      },
+      validates: {
+        proposalId: 'ID da proposta é obrigatório',
+        support: 'Campo de suporte é obrigatório',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Quantidade',
+        validatorAddress: 'Endereço do validador',
+      },
+      validates: {
+        amount: 'Quantidade deve ser positiva',
+        validatorAddress: 'Endereço do validador é obrigatório',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Endereço do validador',
+      },
+      validates: {
+        validatorAddress: 'Endereço do validador é obrigatório',
+      },
+    },
   },
   sign: 'Assinar',
+  part_n_of_m: 'Parte {{n}} de {{m}}',
+  bond: 'Ligação',
+  unbond: 'Desvincular',
+  leave: 'Deixar',
+  addPool: 'Adicionar Pool',
+  withdrawPool: 'Retirar Pool',
+  custom: 'Ação personalizada',
+  vote: 'Voto',
+  stake: 'Estaca',
 };

@@ -6,12 +6,12 @@ import { isEmpty } from '../../../lib/utils/array/isEmpty';
 import {
   chainActionOptionsConfig,
   ChainWithAction,
-  swapAvailableChains,
 } from '../../deposit/DepositForm/chainOptionsConfig';
 import { SendPrompt } from '../../send/SendPrompt';
 import { useCurrentVaultNativeCoins } from '../../state/currentVault';
 import { DepositPrompt } from '../DepositPrompts';
 import { SwapPrompt } from '../SwapPrompt';
+import { swapAvailableChains } from './config';
 
 export const VaultPrimaryActions = ({
   value,

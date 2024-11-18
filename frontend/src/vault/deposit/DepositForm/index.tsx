@@ -1,14 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { CoinKey } from '../../../coin/Coin';
 import { Opener } from '../../../lib/ui/base/Opener';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
+import { Chain } from '../../../model/chain';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -16,47 +16,45 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
 import { RefreshSend } from '../../send/RefreshSend';
+import { useGetTotalAmountAvailableForChain } from '../hooks/useGetAmountTotalBalance';
 import {
   getChainActionSchema,
   getRequiredFields,
   resolveSchema,
 } from '../utils/schema';
-import {
-  ChainAction,
-  chainActionOptionsConfig,
-  ChainWithAction,
-} from './chainOptionsConfig';
+import { ChainAction } from './chainOptionsConfig';
 import { DepositActionItemExplorer } from './DepositActionItemExplorer';
 import { Container, ErrorText, InputFieldWrapper } from './DepositForm.styled';
 
 type DepositFormProps = {
   onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void;
-  coinWithActions: CoinKey;
+  selectedChainAction: ChainAction;
+  onSelectChainAction: (action: ChainAction) => void;
+  chainActionOptions: string[];
+  chain: Chain;
 };
 
 export const DepositForm: FC<DepositFormProps> = ({
   onSubmit,
-  coinWithActions,
+  selectedChainAction,
+  onSelectChainAction,
+  chainActionOptions,
+  chain,
 }) => {
   const walletCore = useAssertWalletCore();
   const { t } = useTranslation();
-  const { chainId } = coinWithActions;
-  const chainActionOptions =
-    chainActionOptionsConfig[chainId?.toLowerCase() as ChainWithAction];
-
-  const [selectedChainAction, setSelectedChainAction] = useState<ChainAction>(
-    chainActionOptions[0] as ChainAction
-  );
+  const totalAmountAvailable = useGetTotalAmountAvailableForChain(chain);
 
   const requiredFieldsForChainAction = getRequiredFields(
-    chainId,
+    chain,
     selectedChainAction
   );
-  const chainActionSchema = getChainActionSchema(chainId, selectedChainAction);
+  const chainActionSchema = getChainActionSchema(chain, selectedChainAction);
   const schemaForChainAction = resolveSchema(
     chainActionSchema,
-    chainId,
-    walletCore
+    chain,
+    walletCore,
+    totalAmountAvailable
   );
 
   const {
@@ -104,7 +102,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                 activeOption={selectedChainAction}
                 options={chainActionOptions}
                 onOptionClick={option =>
-                  setSelectedChainAction(option as ChainAction)
+                  onSelectChainAction(option as ChainAction)
                 }
               />
             )}
@@ -130,6 +128,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                   <InputFieldWrapper
                     as="input"
                     type={field.type}
+                    step="0.01"
                     {...register(field.name)}
                     required={field.required}
                   />

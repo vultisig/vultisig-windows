@@ -503,6 +503,7 @@ export const es = {
   add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
   thorchain_message_deposit: 'Depósito de mensajes de THORChain',
   chainFunctions: {
+    amountExceeded: 'El importe excede el saldo disponible',
     memo: 'Memo',
     required_validation: 'Obligatorio',
     option_validation: 'Opcional',
@@ -532,31 +533,22 @@ export const es = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Dirección del Nodo',
-      },
+      labels: { nodeAddress: 'Dirección del Nodo' },
       validations: {
         nodeAddressMinLength: 'La dirección del nodo es obligatoria',
         nodeAddressInvalid: 'La dirección del nodo no es válida',
       },
     },
     custom: {
-      labels: {
-        amount: 'Cantidad',
-        customMemo: 'Memo Personalizado',
-      },
+      labels: { amount: 'Cantidad', customMemo: 'Memo Personalizado' },
       validations: {
         amount: 'La cantidad debe ser positiva',
         customMemo: 'El memo personalizado es obligatorio',
       },
     },
     addPool: {
-      labels: {
-        amount: 'Cantidad',
-      },
-      validations: {
-        amount: 'La cantidad debe ser positiva',
-      },
+      labels: { amount: 'Cantidad' },
+      validations: { amount: 'La cantidad debe ser positiva' },
     },
     withdrawPool: {
       labels: {
@@ -567,9 +559,46 @@ export const es = {
         percentage: 'El porcentaje es obligatorio y debe estar entre 0 y 100',
       },
     },
+    vote: {
+      labels: {
+        proposalId: 'ID de la propuesta',
+        support: 'Soporte',
+      },
+      validations: {
+        proposalId: 'ID de la propuesta es obligatorio',
+        support: 'El campo de soporte es obligatorio',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Monto',
+        validatorAddress: 'Dirección del validador',
+      },
+      validations: {
+        amount: 'El monto debe ser positivo',
+        validatorAddress: 'La dirección del validador es obligatoria',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Dirección del validador',
+      },
+      validations: {
+        validatorAddress: 'La dirección del validador es obligatoria',
+      },
+    },
   },
   scan_with_devices: 'Skeniraj s uređajima za pridruživanje generaciji trezora',
   scan_with_devices_to_sign:
     'Escanear con dispositivos para participar en la firma de la transacción',
   sign: 'Firmar',
+  part_n_of_m: 'Parte {{n}} de {{m}}',
+  bond: 'Vínculo',
+  unbond: 'Desatar',
+  leave: 'Dejar',
+  addPool: 'Agregar piscina',
+  withdrawPool: 'Fondo de retiro',
+  custom: 'Acción personalizada',
+  vote: 'Votar',
+  stake: 'Apostar',
 };

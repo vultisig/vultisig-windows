@@ -485,6 +485,7 @@ export const hr = {
   add_vaults_to_folder: 'Odaberite trezore za dodavanje u mapu.',
   thorchain_message_deposit: 'THORChain polog poruke',
   chainFunctions: {
+    amountExceeded: 'Az összeg meghaladja a rendelkezésre álló egyenleget',
     memo: 'Memo',
     optional_validation: 'Izborno',
     default_validation: 'Nevažeći unos',
@@ -515,39 +516,55 @@ export const hr = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Adresa Čvora',
-      },
+      labels: { nodeAddress: 'Adresa Čvora' },
       validations: {
         nodeAddressMinLength: 'Potrebna je adresa čvora',
         nodeAddressInvalid: 'Adresa čvora je nevažeća',
       },
     },
     custom: {
-      labels: {
-        amount: 'Iznos',
-        customMemo: 'Prilagođena Bilješka',
-      },
+      labels: { amount: 'Iznos', customMemo: 'Prilagođena Bilješka' },
       validations: {
         amount: 'Iznos mora biti pozitivan',
         customMemo: 'Prilagođena bilješka je obavezna',
       },
     },
     addPool: {
+      labels: { amount: 'Iznos' },
+      validations: { amount: 'Iznos mora biti pozitivan' },
+    },
+    withdrawPool: {
+      labels: { affiliateFee: 'Naknada za Partnera', percentage: 'Postotak' },
+      validations: {
+        percentage: 'Postotak je obavezan i mora biti između 0 i 100',
+      },
+    },
+    vote: {
+      labels: {
+        proposalId: 'ID Prijedloga',
+        support: 'Podrška',
+      },
+      validations: {
+        proposalId: 'ID Prijedloga je obavezan',
+        support: 'Polje Podrška je obavezno',
+      },
+    },
+    stake: {
       labels: {
         amount: 'Iznos',
+        validatorAddress: 'Adresa Validatora',
       },
       validations: {
         amount: 'Iznos mora biti pozitivan',
+        validatorAddress: 'Adresa Validatora je obavezna',
       },
     },
-    withdrawPool: {
+    unstake: {
       labels: {
-        affiliateFee: 'Naknada za Partnera',
-        percentage: 'Postotak',
+        validatorAddress: 'Adresa Validatora',
       },
       validations: {
-        percentage: 'Postotak je obavezan i mora biti između 0 i 100',
+        validatorAddress: 'Adresa Validatora je obavezna',
       },
     },
   },
@@ -555,4 +572,13 @@ export const hr = {
   scan_with_devices_to_sign:
     'Skeniraj s uređajima za sudjelovanje u potpisivanju transakcije',
   sign: 'Potpiši',
+  part_n_of_m: 'Dio {{n}} od {{m}}',
+  bond: 'Veza',
+  unbond: 'Odvezati se',
+  leave: 'Otiđi',
+  addPool: 'Dodaj bazen',
+  withdrawPool: 'Skup povlačenja',
+  custom: 'Prilagođena radnja',
+  vote: 'Glasanje',
+  stake: 'Ulog',
 };

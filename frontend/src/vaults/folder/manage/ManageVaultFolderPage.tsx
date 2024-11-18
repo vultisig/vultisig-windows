@@ -1,6 +1,4 @@
-import { useNavigate } from 'react-router-dom';
-
-import { makeAppPath } from '../../../navigation';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageFooter } from '../../../ui/page/PageFooter';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -13,17 +11,19 @@ import { DeleteVaultFolder } from './DeleteVaultFolder';
 import { ManageFolderVaults } from './ManageFolderVaults';
 
 export const ManageVaultFolderPage = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const { id, name } = useCurrentVaultFolder();
 
   return (
     <>
       <PageHeader
         hasBorder
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={
+          <PageHeaderBackButton onClick={() => navigate('vaults')} />
+        }
         secondaryControls={
           <FinishEditing
-            onClick={() => navigate(makeAppPath('vaultFolder', { id }))}
+            onClick={() => navigate('vaultFolder', { params: { id } })}
           />
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}

@@ -372,6 +372,7 @@ export const en = {
   loading: 'Loading...',
   fast_sign: 'Fast Sign',
   paired_sign: 'Paired Sign',
+  part_n_of_m: 'Part {{n}} of {{m}}',
   password_to_decrypt: 'This Password decrypts your FastVault Share',
   fast_vault_password: 'FastVault Password',
   vault_missing_public_key_message:
@@ -489,6 +490,8 @@ export const en = {
   vote: 'Vote',
   stake: 'Stake',
   chainFunctions: {
+    amountExceeded: 'Amount exceeds available balance',
+    requiredFieldMissing: 'Required field missing',
     memo: 'Memo',
     optional_validation: 'Optional',
     default_validation: 'Invalid input',
@@ -552,6 +555,34 @@ export const en = {
       },
       validations: {
         percentage: 'Percentage is required and must be between 0 and 100',
+      },
+    },
+    vote: {
+      labels: {
+        proposalId: 'Proposal ID',
+        support: 'Support',
+      },
+      validations: {
+        proposalId: 'Proposal ID is required',
+        support: 'Support field is required',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Amount',
+        validatorAddress: 'Validator Address',
+      },
+      validations: {
+        amount: 'Amount must be positive',
+        validatorAddress: 'Validator Address is required',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Validator Address',
+      },
+      validations: {
+        validatorAddress: 'Validator Address is required',
       },
     },
   },

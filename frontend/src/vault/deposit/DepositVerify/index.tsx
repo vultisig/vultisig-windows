@@ -20,11 +20,12 @@ import {
 } from '../DepositForm/chainOptionsConfig';
 import { DepositFee } from '../fee/DepositFee';
 import { DepositFiatFee } from '../fee/DepositFiatFee';
+import { useSender } from '../hooks/useSender';
 import { StrictText, StrictTextContrast } from './DepositVerify.styled';
 
 type DepositVerifyProps = {
   depositFormData: Record<string, unknown>;
-  selectedChainAction?: ChainAction;
+  selectedChainAction: ChainAction;
   onBack: () => void;
 };
 
@@ -33,6 +34,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   depositFormData,
   selectedChainAction,
 }) => {
+  const sender = useSender();
   const { t } = useTranslation();
   const actionFields = selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.fields
@@ -47,6 +49,12 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
       <PageContent gap={40}>
         <WithProgressIndicator value={0.3}>
           <TxOverviewPanel>
+            <TxOverviewColumn key="from">
+              <Text size={18} weight={700}>
+                {t('from')}
+              </Text>
+              <StrictTextContrast>{sender}</StrictTextContrast>
+            </TxOverviewColumn>
             {actionFields.map(field => {
               if (!depositFormData[field.name]) return null;
 
@@ -84,7 +92,10 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
             </TxOverviewRow>
           </TxOverviewPanel>
         </WithProgressIndicator>
-        <DepositConfirmButton depositFormData={depositFormData} />
+        <DepositConfirmButton
+          action={selectedChainAction}
+          depositFormData={depositFormData}
+        />
       </PageContent>
     </>
   );

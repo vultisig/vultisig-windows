@@ -501,6 +501,7 @@ export const it = {
   add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
   thorchain_message_deposit: 'Deposito messaggio THORChain',
   chainFunctions: {
+    amountExceeded: "L'importo supera il saldo disponibile",
     memo: 'Memo',
     optional_validation: 'Facoltativo',
     default_validation: 'Ingresso non valido',
@@ -531,31 +532,22 @@ export const it = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Indirizzo del Nodo',
-      },
+      labels: { nodeAddress: 'Indirizzo del Nodo' },
       validations: {
         nodeAddressMinLength: 'Indirizzo nodo obbligatorio',
         nodeAddressInvalid: 'Indirizzo nodo non valido',
       },
     },
     custom: {
-      labels: {
-        amount: 'Importo',
-        customMemo: 'Memo Personalizzato',
-      },
+      labels: { amount: 'Importo', customMemo: 'Memo Personalizzato' },
       validations: {
         amount: "L'importo deve essere positivo",
         customMemo: 'Memo personalizzato è obbligatorio',
       },
     },
     addPool: {
-      labels: {
-        amount: 'Importo',
-      },
-      validations: {
-        amount: "L'importo deve essere positivo",
-      },
+      labels: { amount: 'Importo' },
+      validations: { amount: "L'importo deve essere positivo" },
     },
     withdrawPool: {
       labels: {
@@ -566,6 +558,43 @@ export const it = {
         percentage: 'La percentuale è obbligatoria e deve essere tra 0 e 100',
       },
     },
+    vote: {
+      labels: {
+        proposalId: 'ID proposta',
+        support: 'Supporto',
+      },
+      validations: {
+        proposalId: 'ID proposta obbligatorio',
+        support: 'Il campo Supporto è obbligatorio',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Importo',
+        validatorAddress: 'Indirizzo convalidatore',
+      },
+      validations: {
+        amount: "L'importo deve essere positivo",
+        validatorAddress: 'Indirizzo convalidatore obbligatorio',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Indirizzo convalidatore',
+      },
+      validations: {
+        validatorAddress: 'Indirizzo convalidatore obbligatorio',
+      },
+    },
   },
   sign: 'Firma',
+  part_n_of_m: 'Parte {{n}} di {{m}}',
+  bond: 'Legame',
+  unbond: 'Slegare',
+  leave: 'Partire',
+  addPool: 'Aggiungi piscina',
+  withdrawPool: 'Prelevare il pool',
+  custom: 'Azione personalizzata',
+  vote: 'Votare',
+  stake: 'Palo',
 };
