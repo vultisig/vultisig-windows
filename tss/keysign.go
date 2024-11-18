@@ -24,11 +24,11 @@ func (t *TssService) Keysign(
 	messages []string,
 	localPartyID string,
 	derivePath string,
-	sessionID, 
-	hexEncryptionKey, 
-	serverURL, 
+	sessionID,
+	hexEncryptionKey,
+	serverURL,
 	tssType string,
-	) ([]*mtss.KeysignResponse, error) {
+) ([]*mtss.KeysignResponse, error) {
 
 	t.Logger.WithFields(logrus.Fields{
 		"sessionID":        sessionID,
@@ -50,12 +50,17 @@ func (t *TssService) Keysign(
 	if !slices.Contains(partiesJoined, localPartyID) {
 		return nil, fmt.Errorf("local party not in parties joined")
 	}
-
+	for _, item := range partiesJoined {
+		if !slices.Contains(vault.Signers, item) {
+			return nil, fmt.Errorf("device %s in not in current vault's signers list", item)
+		}
+	}
 	runtime.EventsEmit(t.ctx, "PrepareVault")
 	vaultShares := make(map[string]string)
 	for _, item := range vault.KeyShares {
 		vaultShares[item.PublicKey] = item.KeyShare
 	}
+
 	localStateAccessor, err := NewLocalStateAccessorImp(vaultShares)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create localStateAccessor: %w", err)
