@@ -14,7 +14,7 @@ import {
 } from '../keygen/utils/localPartyId';
 
 export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
-  getValueProviderSetup<storage.Vault>('CurrentTxHash');
+  getValueProviderSetup<storage.Vault>('CurrentVault');
 
 export const useCurrentVaultNativeCoins = () => {
   const vault = useCurrentVault();
