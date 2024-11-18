@@ -25,6 +25,7 @@ import { useSwapQuote } from '../state/selected-quote';
 import { useSwapProtocol } from '../state/swap-protocol-type';
 import { useCurrentSwapCoin } from '../state/swapCoin';
 import { SwapProtocolType } from '../types';
+import { useIsSwapConfirmDisabled } from './hooks/useIsSwapConfirmDisabled';
 
 export const SwapConfirm = () => {
   const { t } = useTranslation();
@@ -32,6 +33,7 @@ export const SwapConfirm = () => {
   const [coinKey] = useCurrentSwapCoin();
   const coin = useCurrentVaultCoin(coinKey);
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
+  const isSwapConfirmDisabled = useIsSwapConfirmDisabled();
 
   const [fromAmount] = useSwapAmount();
   const [swapProtocol] = useSwapProtocol();
@@ -114,7 +116,7 @@ export const SwapConfirm = () => {
       isDisabled={
         !isAssetToSend()
           ? 'This type of transaction is not supported yet.'
-          : false
+          : isSwapConfirmDisabled
       }
     >
       {t('continue')}

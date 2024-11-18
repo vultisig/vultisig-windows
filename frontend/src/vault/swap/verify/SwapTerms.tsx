@@ -8,22 +8,22 @@ import { range } from '../../../lib/utils/array/range';
 import { updateAtIndex } from '../../../lib/utils/array/updateAtIndex';
 import {
   getSendTermCopyKey,
-  sendTermsCount,
-  useSendTerms,
-} from './state/sendTerms';
+  swapTermsCount,
+  useSwapTerms,
+} from './state/swapTerms';
 
 const Item = styled(Checkbox)`
   ${verticalPadding(10)}
 `;
 
-export const SendTerms = () => {
+export const SwapTerms = () => {
   const { t } = useTranslation();
 
-  const [value, setValue] = useSendTerms();
+  const [value, setValue] = useSwapTerms();
 
   return (
     <VStack>
-      {range(sendTermsCount).map(index => {
+      {range(swapTermsCount).map(index => {
         const text = t(getSendTermCopyKey(index));
 
         return (
