@@ -425,6 +425,9 @@ export const en = {
   'page.swap.not.possible':
     'Swapping to a smart contract is not possible! Enter a different recipient address.',
   'page.swap.title': 'Swap',
+  swap_terms_0: 'The swap amount is correct',
+  swap_terms_1: 'I agree with the amount I will receive after the swap',
+  swap_agree_terms: 'You must agree with terms before proceeding',
   swap_invalid_receiver:
     'Invalid recipient address specified. Probably you should add inbound chain to your list.',
   slippage: 'Slippage',

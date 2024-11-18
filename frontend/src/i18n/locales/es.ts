@@ -436,6 +436,10 @@ export const es = {
   'page.swap.not.possible':
     '¡No es posible cambiar a un contrato inteligente! Ingrese una dirección de destinatario diferente.',
   'page.swap.title': 'Intercambio',
+  swap_terms_0: 'El monto del swap es correcto',
+  swap_terms_1:
+    'Estoy de acuerdo con la cantidad que recibiré después del intercambio',
+  swap_agree_terms: 'Debes aceptar los términos antes de continuar.',
   swap_invalid_receiver:
     'Se ha especificado una dirección de destinatario no válida. Probablemente deberías agregar la cadena entrante a tu lista.',
   slippage: 'Deslizamiento',

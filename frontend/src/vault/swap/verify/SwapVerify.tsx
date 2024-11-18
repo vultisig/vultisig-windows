@@ -36,9 +36,9 @@ import { useSwapProtocol } from '../state/swap-protocol-type';
 import { useCurrentSwapCoin } from '../state/swapCoin';
 import { SwapProtocolType } from '../types';
 import { convertSeconds } from '../utils';
-import { SendTerms } from './SendTerms';
-import { sendTermsCount, SendTermsProvider } from './state/sendTerms';
+import { swapTermsCount, SwapTermsProvider } from './state/swapTerms';
 import { SwapConfirm } from './SwapConfirm';
+import { SwapTerms } from './SwapTerms';
 
 export const SwapVerify: React.FC<ComponentWithBackActionProps> = ({
   onBack,
@@ -209,14 +209,14 @@ export const SwapVerify: React.FC<ComponentWithBackActionProps> = ({
               </VStack>
             </HStack>
           </TxOverviewPanel>
-          <SendTermsProvider
-            initialValue={range(sendTermsCount).map(() => false)}
+          <SwapTermsProvider
+            initialValue={range(swapTermsCount).map(() => false)}
           >
             <VStack gap={20}>
-              <SendTerms />
+              <SwapTerms />
               <SwapConfirm />
             </VStack>
-          </SendTermsProvider>
+          </SwapTermsProvider>
         </WithProgressIndicator>
       </PageContent>
     </>

@@ -437,6 +437,11 @@ export const de = {
   'page.swap.not.possible':
     'Ein Wechsel zu einem Smart Contract ist nicht möglich! Geben Sie eine andere Empfängeradresse ein.',
   'page.swap.title': 'Tauschen',
+  swap_terms_0: 'Der Tauschbetrag ist korrekt',
+  swap_terms_1:
+    'Ich bin mit dem Betrag einverstanden, den ich nach dem Tausch erhalte',
+  swap_agree_terms:
+    'Sie müssen den Bedingungen zustimmen, bevor Sie fortfahren',
   swap_invalid_receiver:
     'Ungültige Empfängeradresse angegeben. Wahrscheinlich sollten Sie Ihrer Liste eine eingehende Kette hinzufügen.',
   slippage: 'Schlupf',

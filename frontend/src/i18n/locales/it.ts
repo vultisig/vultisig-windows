@@ -435,6 +435,9 @@ export const it = {
   'page.swap.not.possible':
     'Non è possibile passare a uno smart contract! Inserisci un indirizzo destinatario diverso.',
   'page.swap.title': 'Scambio',
+  swap_terms_0: "L'importo dello swap è corretto",
+  swap_terms_1: "Sono d'accordo con l'importo che riceverò dopo lo scambio",
+  swap_agree_terms: 'È necessario accettare i termini prima di procedere',
   swap_invalid_receiver:
     'È stato specificato un indirizzo del destinatario non valido. Probabilmente dovresti aggiungere la catena in entrata alla tua lista.',
   slippage: 'Slittamento',
