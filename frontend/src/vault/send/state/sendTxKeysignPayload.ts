@@ -10,6 +10,7 @@ import { BlockchainServiceFactory } from '../../../services/Blockchain/Blockchai
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault';
 import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
 import { useSender } from '../sender/hooks/useSender';
+import { capSendAmountToMax } from '../utils/capSendAmountToMax';
 import { useSendAmount } from './amount';
 import { useSendMemo } from './memo';
 import { useSendReceiver } from './receiver';
@@ -34,10 +35,16 @@ export const useSendTxKeysignPayload = () => {
     const isMaxAmount =
       amount === fromChainAmount(balance.amount, coin.decimals);
 
+    const specificTransactionInfo = shouldBePresent(specificTxInfoQuery.data);
+
     const tx: ISendTransaction = {
       fromAddress: sender,
       toAddress: receiver,
-      amount: shouldBePresent(amount),
+      amount: capSendAmountToMax({
+        amount: shouldBePresent(amount),
+        coin: storageCoinToCoin(coin),
+        fee: specificTransactionInfo.fee,
+      }),
       memo,
       coin: storageCoinToCoin(coin),
       transactionType: TransactionType.SEND,
