@@ -1,4 +1,7 @@
 import { Coin } from '../gen/vultisig/keysign/v1/coin_pb';
+import { Erc20ApprovePayload } from '../gen/vultisig/keysign/v1/erc20_approve_payload_pb';
+import { SwapPayloadType } from '../gen/vultisig/keysign/v1/keysign_message_pb';
+import { THORChainSwapPayload } from '../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
 import { SpecificTransactionInfo } from './specific-transaction-info';
 
 export enum TransactionType {
@@ -31,6 +34,11 @@ export interface IDepositTransaction extends ITransaction {
 export interface ISwapTransaction extends ITransaction {
   transactionType: TransactionType.SWAP;
   sendMaxAmount: boolean;
+  swapPayload: {
+    value: THORChainSwapPayload;
+    case: SwapPayloadType;
+  };
+  erc20ApprovePayload?: Erc20ApprovePayload;
 }
 
 export function getDefaultSendTransaction(): ISendTransaction {
@@ -46,15 +54,18 @@ export function getDefaultSendTransaction(): ISendTransaction {
   };
 }
 
-export function getDefaultSwapTransaction(): ISwapTransaction {
-  return {
-    fromAddress: '',
-    toAddress: '',
-    amount: 0,
-    memo: '',
-    transactionType: TransactionType.SWAP,
-    specificTransactionInfo: undefined,
-    sendMaxAmount: false,
-    coin: new Coin(),
-  };
-}
+// export function getDefaultSwapTransaction(): ISwapTransaction {
+//   return {
+//     fromAddress: '',
+//     toAddress: '',
+//     amount: 0,
+//     memo: '',
+//     transactionType: TransactionType.SWAP,
+//     specificTransactionInfo: undefined,
+//     sendMaxAmount: false,
+//     coin: new Coin(),
+//     swapPayload: {
+//       fromAddress: ''
+//     }
+//   };
+// }

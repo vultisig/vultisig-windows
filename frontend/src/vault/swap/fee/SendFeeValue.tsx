@@ -7,6 +7,9 @@ export const SendFeeValue = () => {
   const txInfo = useSendSpecificTxInfo();
   const [coinKey] = useCurrentSwapCoin();
   const { chainId } = coinKey;
+  console.log(coinKey);
+  console.log(chainId);
+  console.log(txInfo);
 
   return <StrictText>{formatFee({ chain: chainId, txInfo })}</StrictText>;
 };

@@ -375,6 +375,8 @@ export const hr = {
   password_to_decrypt: 'Ova lozinka dešifrira vaš FastVault Share',
   fast_vault_password: 'Lozinka za FastVault',
   max: 'Maks',
+  insufficient_funds_to_pay_fee:
+    'Nincs elegendő egyenleg a tranzakciós díj fedezésére.',
   'page.swap.quote.amount.error':
     'Nema dostupne ponude za traženi iznos i par.',
   'page.swap.info.title': 'Što je zamjena imovine?',

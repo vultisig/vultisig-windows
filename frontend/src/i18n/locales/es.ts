@@ -390,6 +390,8 @@ export const es = {
   password_to_decrypt:
     'Esta contraseña descifra su recurso compartido de FastVault',
   fast_vault_password: 'Contraseña de FastVault',
+  insufficient_funds_to_pay_fee:
+    'Saldo insuficiente para cubrir la tarifa de transacción.',
   'page.swap.quote.amount.error':
     'No hay cotización disponible para el monto solicitado.',
   'page.swap.info.title': '¿Qué es el intercambio de activos?',

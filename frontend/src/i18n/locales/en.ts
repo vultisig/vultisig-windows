@@ -378,6 +378,8 @@ export const en = {
     'Vault file is corrupted or missing a public key. Please try again or select a different vault.',
   min_signers_disclaimer:
     'You can only send transactions with {{count}} devices present.',
+  insufficient_funds_to_pay_fee:
+    'Insufficient balance to cover transaction fee.',
   'page.swap.quote.amount.error':
     'No quote available for requested amount and pair.',
   'page.swap.info.title': 'What is asset swapping?',

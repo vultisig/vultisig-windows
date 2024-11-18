@@ -29,6 +29,12 @@ import { THORChainSwapPayload } from './thorchain_swap_payload_pb.js';
 import { OneInchSwapPayload } from './1inch_swap_payload_pb.js';
 import { Erc20ApprovePayload } from './erc20_approve_payload_pb.js';
 
+export enum SwapPayloadType {
+  MAYA = 'mayachainSwapPayload',
+  THORCHAIN = 'thorchainSwapPayload',
+  ONE_INCH = 'oneinchSwapPayload',
+}
+
 /**
  * @generated from message vultisig.keysign.v1.KeysignMessage
  */
@@ -230,21 +236,21 @@ export class KeysignPayload extends Message<KeysignPayload> {
          * @generated from field: vultisig.keysign.v1.THORChainSwapPayload thorchain_swap_payload = 22;
          */
         value: THORChainSwapPayload;
-        case: 'thorchainSwapPayload';
+        case: SwapPayloadType.THORCHAIN;
       }
     | {
         /**
          * @generated from field: vultisig.keysign.v1.THORChainSwapPayload mayachain_swap_payload = 23;
          */
         value: THORChainSwapPayload;
-        case: 'mayachainSwapPayload';
+        case: SwapPayloadType.MAYA;
       }
     | {
         /**
          * @generated from field: vultisig.keysign.v1.OneInchSwapPayload oneinch_swap_payload = 24;
          */
         value: OneInchSwapPayload;
-        case: 'oneinchSwapPayload';
+        case: SwapPayloadType.ONE_INCH;
       }
     | { case: undefined; value?: undefined } = { case: undefined };
 

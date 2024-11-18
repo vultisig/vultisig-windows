@@ -1,23 +1,9 @@
 import { SwapPairsAsset } from '../lib/types/assets';
-import {
-  InboundAddress,
-  SwapQuoteParams,
-  SwapQuoteResponse,
-} from '../lib/types/swap';
-import { queryUrl, queryUrlWindowsPlatform } from '../lib/utils/query/queryUrl';
+import { SwapQuoteParams, SwapQuoteResponse } from '../lib/types/swap';
+import { queryUrlWindowsPlatform } from '../lib/utils/query/queryUrl';
 
 export class ThorwalletApi {
   static thorWalletApi: string = 'https://api-v2-dev.thorwallet.org';
-  static mayaNodeUrl: string = 'https://mayanode.mayachain.info';
-  static thorNodeUrl: string = 'https://thorchain-thornode-lb-1.thorwallet.org';
-
-  static getMayaAddresses(): string {
-    return `${this.mayaNodeUrl}/mayachain/inbound_addresses`;
-  }
-
-  static getThorchainIboundAddresses(): string {
-    return `${this.thorNodeUrl}/thorchain/inbound_addresses`;
-  }
 
   static getSwapQuotes({
     fromAsset,
@@ -45,16 +31,6 @@ export class ThorwalletApi {
     }`;
   }
 }
-
-export const getMAYAActualInboundAddresses = async () => {
-  const endpoint = ThorwalletApi.getMayaAddresses();
-  return await queryUrl<InboundAddress[]>(endpoint);
-};
-
-export const getTHORActualInboundAddresses = async () => {
-  const endpoint = ThorwalletApi.getThorchainIboundAddresses();
-  return await queryUrl<InboundAddress[]>(endpoint);
-};
 
 export const getSwapQuotes = async (params: SwapQuoteParams) => {
   const endpoint = ThorwalletApi.getSwapQuotes(params);

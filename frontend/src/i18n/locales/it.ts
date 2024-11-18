@@ -389,6 +389,8 @@ export const it = {
   password_to_decrypt: 'Questa password decifra la tua condivisione FastVault',
   fast_vault_password: 'Password di FastVault',
   max: 'Massimo',
+  insufficient_funds_to_pay_fee:
+    'Saldo insufficiente per coprire la commissione di transazione.',
   'page.swap.quote.amount.error':
     "Nessun preventivo disponibile per l'importo e la coppia richiesti.",
   'page.swap.info.title': "Cos'è lo scambio di asset?",
