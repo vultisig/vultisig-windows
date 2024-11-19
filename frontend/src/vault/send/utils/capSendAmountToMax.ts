@@ -1,15 +1,15 @@
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
-import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { minBigInt } from '../../../lib/utils/math/minBigInt';
 import { EvmChain } from '../../../model/chain';
 
 type Input = {
   coin: Coin;
-  amount: number;
-  fee: number;
+  amount: bigint;
+  fee: bigint;
+  balance: bigint;
 };
 
-export const capSendAmountToMax = ({ coin, amount, fee }: Input) => {
+export const capSendAmountToMax = ({ coin, amount, fee, balance }: Input) => {
   if (!coin.isNativeToken) {
     return amount;
   }
@@ -19,7 +19,5 @@ export const capSendAmountToMax = ({ coin, amount, fee }: Input) => {
     return amount;
   }
 
-  const chainAmount = toChainAmount(amount, coin.decimals);
-
-  return fromChainAmount(Number(chainAmount) - fee, coin.decimals);
+  return minBigInt(amount, balance - fee);
 };

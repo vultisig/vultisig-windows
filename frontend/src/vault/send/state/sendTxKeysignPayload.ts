@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
+import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
@@ -32,21 +33,22 @@ export const useSendTxKeysignPayload = () => {
 
   return useMemo(() => {
     const balance = shouldBePresent(balanceQuery.data);
-    const isMaxAmount =
-      amount === fromChainAmount(balance.amount, coin.decimals);
+    const chainAmount = toChainAmount(shouldBePresent(amount), coin.decimals);
+    const isMaxAmount = chainAmount === balance.amount;
 
     const specificTransactionInfo = shouldBePresent(specificTxInfoQuery.data);
 
-    const cappedAmount = capSendAmountToMax({
-      amount: shouldBePresent(amount),
+    const cappedChainAmount = capSendAmountToMax({
+      amount: chainAmount,
       coin: storageCoinToCoin(coin),
-      fee: specificTransactionInfo.fee,
+      fee: BigInt(Math.round(specificTransactionInfo.fee)),
+      balance: balance.amount,
     });
 
     const tx: ISendTransaction = {
       fromAddress: sender,
       toAddress: receiver,
-      amount: cappedAmount,
+      amount: fromChainAmount(cappedChainAmount, coin.decimals),
       memo,
       coin: storageCoinToCoin(coin),
       transactionType: TransactionType.SEND,

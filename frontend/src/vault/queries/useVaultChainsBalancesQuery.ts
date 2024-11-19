@@ -49,7 +49,7 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
         const balance = (balancesQuery.data ?? []).find(balance =>
           areEqualCoins(balance, coinKey)
         );
-        const amount = balance?.amount || 0;
+        const amount = balance?.amount || BigInt(0);
 
         const price =
           (pricesQuery.data ?? []).find(item => areEqualCoins(item, coinKey))
