@@ -11,6 +11,32 @@ import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
 
+const nativeTokenGasLimit: Record<EvmChain, number> = {
+  [EvmChain.Arbitrum]: 50000,
+  [EvmChain.Avalanche]: 23000,
+  [EvmChain.Base]: 30000,
+  [EvmChain.CronosChain]: 23000,
+  [EvmChain.BSC]: 23000,
+  [EvmChain.Blast]: 23000,
+  [EvmChain.Ethereum]: 23000,
+  [EvmChain.Optimism]: 50000,
+  [EvmChain.Polygon]: 23000,
+  [EvmChain.Zksync]: 50000,
+};
+
+const otherTokenGasLimit: Record<EvmChain, number> = {
+  [EvmChain.Arbitrum]: 150000,
+  [EvmChain.Avalanche]: 120000,
+  [EvmChain.Base]: 150000,
+  [EvmChain.CronosChain]: 120000,
+  [EvmChain.BSC]: 120000,
+  [EvmChain.Blast]: 120000,
+  [EvmChain.Ethereum]: 120000,
+  [EvmChain.Optimism]: 150000,
+  [EvmChain.Polygon]: 120000,
+  [EvmChain.Zksync]: 150000,
+};
+
 export class RpcServiceEvm implements IRpcService, ITokenService {
   provider: ethers.JsonRpcProvider;
   rpcUrl: string;
@@ -20,13 +46,12 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     this.rpcUrl = rpcUrl;
   }
 
-  async calculateFee(coin: Coin): Promise<number> {
-    let gasLimit = 23000;
-    if (!coin.isNativeToken) {
-      gasLimit = 120000;
+  async calculateFee({ chain, isNativeToken }: Coin): Promise<number> {
+    if (isNativeToken) {
+      return nativeTokenGasLimit[chain as EvmChain];
     }
 
-    return gasLimit;
+    return otherTokenGasLimit[chain as EvmChain];
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
