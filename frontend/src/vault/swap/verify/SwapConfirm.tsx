@@ -29,6 +29,7 @@ import {
 import { nativeTokenForChain } from '../../utils/helpers';
 import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
 import { useSwapAmount } from '../state/amount';
+import { useCoinTo } from '../state/coin-to';
 import { useSwapQuote } from '../state/selected-quote';
 import { useSwapProtocol } from '../state/swap-protocol-type';
 import { useCurrentSwapCoin } from '../state/swapCoin';
@@ -42,6 +43,7 @@ export const SwapConfirm = () => {
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
   const [fromAmount] = useSwapAmount();
+  const [coinTo] = useCoinTo();
   const [swapProtocol] = useSwapProtocol();
   const [selectedSwapQuote] = useSwapQuote();
   const [allowance, setAllowance] = useState(0n);
@@ -105,7 +107,6 @@ export const SwapConfirm = () => {
       sender,
       selectedSwapQuote?.router as string
     );
-    console.log(allowance);
     setAllowance(allowance);
     return;
   }, [coin.chain, coin.contract_address, selectedSwapQuote?.router, sender]);
@@ -116,7 +117,7 @@ export const SwapConfirm = () => {
     }
   }, [coin, fetchAllowance, isEvmErc20Asset]);
 
-  const buildERC20KeysignPayload = (
+  const buildSwapKeysignPayload = (
     tx: Omit<ISendTransaction, 'transactionType' | 'toAddress'>
   ) => {
     const toAddress = selectedSwapQuote?.router;
@@ -132,12 +133,24 @@ export const SwapConfirm = () => {
           routerAddress: selectedSwapQuote?.router,
           fromAmount: fromAmount ? fromAmount.toString() : '0',
           expirationTime: selectedSwapQuote?.expiry,
+          streamingInterval:
+            selectedSwapQuote?.streaming_swap_seconds?.toString() || '',
+          streamingQuantity:
+            selectedSwapQuote?.max_streaming_quantity.toString(),
+          toAmountDecimal: coinTo?.decimals.toString(),
+          toAmountLimit: selectedSwapQuote?.expected_amount_out,
+          vaultAddress: sender,
         }),
       },
-      erc20ApprovePayload: new Erc20ApprovePayload({
-        amount: fromAmount ? toChainAmount(fromAmount, coin.decimals) : '0',
-        spender: selectedSwapQuote?.router,
-      }),
+      erc20ApprovePayload:
+        fromAmount && +formatUnits(allowance, coin.decimals) < +fromAmount
+          ? new Erc20ApprovePayload({
+              amount: fromAmount
+                ? toChainAmount(fromAmount, coin.decimals)
+                : '0',
+              spender: selectedSwapQuote?.router,
+            })
+          : undefined,
     };
   };
 
@@ -150,30 +163,6 @@ export const SwapConfirm = () => {
       sendMaxAmount: isMaxAmount,
       specificTransactionInfo: shouldBePresent(specificTxInfoQuery.data),
     };
-    if (isEvmErc20Asset(coin) && fromAmount) {
-      console.log(+formatUnits(allowance, coin.decimals));
-      console.log(+fromAmount);
-      if (+formatUnits(allowance, coin.decimals) < +fromAmount) {
-        console.log('we are here');
-        const tx = buildERC20KeysignPayload({
-          ...commonTx,
-        });
-        const keysignPayload = BlockchainServiceFactory.createService(
-          coin.chain as Chain,
-          walletCore
-        ).createKeysignPayload(
-          tx,
-          vault.local_party_id,
-          vault.public_key_ecdsa
-        );
-        console.log(keysignPayload);
-
-        navigate('keysign', {
-          state: { keysignPayload },
-        });
-        return;
-      }
-    }
     if (isAssetToSend()) {
       const inboundAddress = await getInboundAddressForChain(
         convertChainToChainTicker(coin.chain as Chain),
@@ -192,8 +181,31 @@ export const SwapConfirm = () => {
       navigate('keysign', {
         state: { keysignPayload },
       });
+      return;
     }
+    const tx = buildSwapKeysignPayload({
+      ...commonTx,
+    });
+    const keysignPayload = BlockchainServiceFactory.createService(
+      coin.chain as Chain,
+      walletCore
+    ).createKeysignPayload(tx, vault.local_party_id, vault.public_key_ecdsa);
+
+    navigate('keysign', {
+      state: { keysignPayload },
+    });
   };
 
-  return <Button onClick={onSubmit}>{t('continue')}</Button>;
+  return (
+    <Button
+      onClick={onSubmit}
+      isDisabled={
+        isEvmErc20Asset(coin)
+          ? 'This type of transaction is not supported yet.'
+          : isSwapConfirmDisabled
+      }
+    >
+      {t('continue')}
+    </Button>
+  );
 };
