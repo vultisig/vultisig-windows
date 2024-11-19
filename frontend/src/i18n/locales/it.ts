@@ -16,6 +16,8 @@ export const it = {
   scan_with_devices_to_sign:
     'Esegui la scansione con i dispositivi per partecipare alla firma della transazione',
   next: 'Avanti',
+  failed_to_confirm_email_code:
+    'Impossibile confermare il codice di verifica e-mail',
   skip: 'Salta',
   enter_password: 'Inserisci la password',
   invalid_file_format: 'Formato del file non valido',

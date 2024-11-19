@@ -26,6 +26,7 @@ export const KeygenStepWithEmailVerification = ({
 }: KeygenStepProps) => {
   const [newVault, setNewVault] = useState<storage.Vault | null>(null);
   const { mutateAsync: createVault, ...mutationState } = useKeygenMutation();
+
   useEffect(() => {
     (async () => {
       setNewVault(await createVault());

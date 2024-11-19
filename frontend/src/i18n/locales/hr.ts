@@ -16,6 +16,7 @@ export const hr = {
   create_new_vault: 'Kreiraj novi trezor',
   import_existing_vault: 'Uvezi postojeći trezor',
   next: 'Dalje',
+  failed_to_confirm_email_code: 'Nije uspjela potvrda koda za potvrdu e-pošte',
   skip: 'Preskoči',
   choose_coins: 'Odaberite novčiće',
   enter_password: 'Unesite lozinku',

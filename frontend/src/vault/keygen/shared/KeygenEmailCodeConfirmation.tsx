@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
+import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries';
 import { Text } from '../../../lib/ui/text';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { appPaths } from '../../../navigation';
@@ -14,7 +15,10 @@ import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { useUserEmailVerificationCodeQuery } from '../../queries/useUserEmailVerificationCodeQuery';
+import {
+  userEmailVerificationCodeQueryKey,
+  useUserEmailVerificationCodeMutation,
+} from '../../mutations/useUserEmailVerificationCodeMutation';
 
 type KeygenEmailCodeConfirmationProps = {
   vault: storage.Vault | null;
@@ -27,20 +31,23 @@ export const KeygenEmailCodeConfirmation = ({
   const navigate = useNavigate();
   const [confirmationValue, setConfirmationValue] = useState('');
   const {
-    data,
-    isFetching,
+    mutateAsync: verifyEmailCode,
+    isPending,
     error,
-    refetch: verifyEmailVerificationCode,
-  } = useUserEmailVerificationCodeQuery({
-    publicKeyECDSA: vault?.public_key_ecdsa || '',
-    code: confirmationValue,
-  });
+  } = useUserEmailVerificationCodeMutation();
+  const invalidateQueries = useInvalidateQueries();
 
-  useEffect(() => {
-    if (data) {
+  const handleVerifyEmailCode = async () => {
+    const result = await verifyEmailCode({
+      code: confirmationValue,
+      publicKeyECDSA: vault?.public_key_ecdsa || '',
+    });
+
+    if (result && result.success) {
       navigate(appPaths.keygenBackup);
+      invalidateQueries(userEmailVerificationCodeQueryKey);
     }
-  }, [data, navigate]);
+  };
 
   return (
     <>
@@ -52,7 +59,7 @@ export const KeygenEmailCodeConfirmation = ({
         as="form"
         {...getFormProps({
           isDisabled: !confirmationValue,
-          onSubmit: verifyEmailVerificationCode,
+          onSubmit: handleVerifyEmailCode,
         })}
       >
         <VStack flexGrow gap={12}>
@@ -68,11 +75,11 @@ export const KeygenEmailCodeConfirmation = ({
         </VStack>
         <VStack gap={20}>
           <Button type="submit" isDisabled={!confirmationValue}>
-            {isFetching ? t('loading') : t('continue')}
+            {isPending ? t('loading') : t('continue')}
           </Button>
           {error && (
             <Text color="danger" size={12}>
-              {extractErrorMsg(error)}
+              {t(extractErrorMsg(error))}
             </Text>
           )}
         </VStack>

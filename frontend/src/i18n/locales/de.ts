@@ -16,6 +16,8 @@ export const de = {
   email_confirmation_code_error: 'Ungültiger Code',
   email_confirmation: 'Code eingeben',
   next: 'Weiter',
+  failed_to_confirm_email_code:
+    'E-Mail-Bestätigungscode konnte nicht bestätigt werden',
   skip: 'Überspringen',
   choose_coins: 'Münzen auswählen',
   enter_password: 'Passwort eingeben',
