@@ -20,7 +20,7 @@ export class RpcServiceBase extends RpcServiceEvm implements ITokenService {
   }
 
   async calculateFee(coin: Coin): Promise<number> {
-    let gasLimit = 40000;
+    let gasLimit = 50000;
     if (!coin.isNativeToken) {
       gasLimit = 120000;
     }
