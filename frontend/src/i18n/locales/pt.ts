@@ -359,7 +359,7 @@ export const pt = {
   reshare_disclaimer:
     'Para todas as ações de Reshare, o limite de dispositivos é sempre necessário.',
   start_reshare: 'Iniciar Reshare',
-  start_reshare_with_server: 'Inicie o Reshare com o Vultisigner',
+  start_reshare_with_server: 'Iniciar nova partilha com o Vultiserver',
   fast: 'Rápido',
   secure: 'Seguro',
   active: 'Ativo',

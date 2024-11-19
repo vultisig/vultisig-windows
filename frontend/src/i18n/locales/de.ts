@@ -365,7 +365,7 @@ export const de = {
   reshare_disclaimer:
     'Für alle Reshare-Aktionen ist immer der Geräteschwellenwert erforderlich.',
   start_reshare: 'Neu teilen starten',
-  start_reshare_with_server: 'Reshare mit Vultisigner starten',
+  start_reshare_with_server: 'Neue Freigabe mit Vultiserver starten',
   fast: 'Schnell',
   secure: 'Sicher',
   active: 'Aktiv',
