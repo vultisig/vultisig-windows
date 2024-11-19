@@ -7,7 +7,7 @@ import {
   VULTISIG_LOCAL_BUILD_API,
   VULTISIG_RELEASES_API,
 } from './constants';
-import { isVersionNewer } from './utils';
+import { isValidVersion, isVersionNewer } from './utils';
 
 const useVersionCheck = () => {
   const {
@@ -19,9 +19,13 @@ const useVersionCheck = () => {
     queryFn: async () => {
       const response = await fetch(VULTISIG_LOCAL_BUILD_API);
       if (!response.ok) {
-        throw new Error('Error loading local build file');
+        throw new Error('Failed to fetch local build version.');
       }
-      return await response.json();
+      const data = await response.json();
+      if (!isValidVersion(data?.version)) {
+        throw new Error(`Invalid local version format: ${data?.version}`);
+      }
+      return { version: data.version };
     },
   });
 
@@ -34,23 +38,29 @@ const useVersionCheck = () => {
     queryFn: async () => {
       const response = await fetch(VULTISIG_RELEASES_API);
       if (!response.ok) {
-        throw new Error('Error fetching the latest release');
+        throw new Error('Failed to fetch latest version data.');
       }
+
       const data = await response.json();
-      return data.tag_name.slice(1);
+      const tagName = data?.tag_name || '';
+      const version = tagName.startsWith('v') ? tagName.slice(1) : tagName;
+
+      if (!isValidVersion(version)) {
+        throw new Error(`Invalid latest version format: ${version}`);
+      }
+      return { version };
     },
   });
 
-  const localVersion = localVersionData?.version || '';
-  const latestVersion = latestVersionData || '';
-  const updateAvailable = attempt(
-    () =>
-      isVersionNewer({
-        remoteVersion: latestVersion,
-        localVersion,
-      }),
-    false
-  );
+  const localVersion = localVersionData?.version;
+  const latestVersion = latestVersionData?.version;
+
+  const updateAvailable = attempt(() => {
+    return isVersionNewer({
+      remoteVersion: latestVersion,
+      localVersion,
+    });
+  }, false);
 
   const isLoading = isLocalFetching || isRemoteFetching;
 
