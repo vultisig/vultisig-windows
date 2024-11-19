@@ -37,14 +37,16 @@ export const useSendTxKeysignPayload = () => {
 
     const specificTransactionInfo = shouldBePresent(specificTxInfoQuery.data);
 
+    const cappedAmount = capSendAmountToMax({
+      amount: shouldBePresent(amount),
+      coin: storageCoinToCoin(coin),
+      fee: specificTransactionInfo.fee,
+    });
+
     const tx: ISendTransaction = {
       fromAddress: sender,
       toAddress: receiver,
-      amount: capSendAmountToMax({
-        amount: shouldBePresent(amount),
-        coin: storageCoinToCoin(coin),
-        fee: specificTransactionInfo.fee,
-      }),
+      amount: cappedAmount,
       memo,
       coin: storageCoinToCoin(coin),
       transactionType: TransactionType.SEND,
