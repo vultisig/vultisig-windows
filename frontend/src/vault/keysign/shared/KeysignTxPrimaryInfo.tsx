@@ -37,7 +37,7 @@ export const KeysignTxPrimaryInfo = () => {
       <TxOverviewAddress title={t('to')} value={toAddress} />
       {memo && <TxOverviewMemo value={memo} />}
       <TxOverviewAmount
-        value={fromChainAmount(toAmount, decimals)}
+        value={fromChainAmount(BigInt(toAmount), decimals)}
         symbol={ticker}
       />
       <QueryDependant
@@ -48,7 +48,7 @@ export const KeysignTxPrimaryInfo = () => {
               <Text>{t('value')}</Text>
               <Text family="mono">
                 {formatAmount(
-                  fromChainAmount(toAmount, decimals) * price,
+                  fromChainAmount(BigInt(toAmount), decimals) * price,
                   globalCurrency
                 )}
               </Text>

@@ -7,7 +7,7 @@ export type CoinKey = {
 };
 
 export type CoinAmount = {
-  amount: string | number;
+  amount: bigint;
   decimals: number;
 };
 

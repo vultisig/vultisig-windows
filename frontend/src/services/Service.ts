@@ -5,14 +5,12 @@ import { IFeeService } from './Fee/IFeeService';
 import { IService } from './IService';
 import { IPriceService } from './Price/IPriceService';
 import { IRpcService } from './Rpc/IRpcService';
-import { ISendService } from './Send/ISendService';
 
 export class Service implements IService {
   rpcService: IRpcService;
   addressService: IAddressService;
   coinService: ICoinService;
   keygenService: any;
-  sendService: ISendService;
   balanceService: IBalanceService;
   priceService: IPriceService;
   feeService: IFeeService;
@@ -22,7 +20,6 @@ export class Service implements IService {
     addressService: IAddressService,
     coinService: ICoinService,
     keygenService: any,
-    sendService: ISendService,
     balanceService: IBalanceService,
     priceService: IPriceService,
     feeService: IFeeService
@@ -31,7 +28,6 @@ export class Service implements IService {
     this.addressService = addressService;
     this.coinService = coinService;
     this.keygenService = keygenService;
-    this.sendService = sendService;
     this.balanceService = balanceService;
     this.priceService = priceService;
     this.feeService = feeService;
