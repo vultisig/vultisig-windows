@@ -348,7 +348,7 @@ export const hr = {
   reshare_disclaimer:
     'Za sve radnje ponovnog dijeljenja uvijek je potreban prag uređaja.',
   start_reshare: 'Počnite ponovno dijeliti',
-  start_reshare_with_server: 'Počnite ponovno dijeliti s Vultisignerom',
+  start_reshare_with_server: 'Počni ponovno dijeliti s Vultiserverom',
   fast: 'Brzo',
   secure: 'Siguran',
   active: 'Aktivan',
