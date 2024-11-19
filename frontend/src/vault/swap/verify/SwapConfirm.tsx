@@ -64,6 +64,10 @@ export const SwapConfirm = () => {
     swapProtocol === SwapProtocolType.MAYA_STREAMING ||
     swapProtocol === SwapProtocolType.MAYA;
 
+  const isThorchain =
+    swapProtocol === SwapProtocolType.THORPriceOptimised ||
+    swapProtocol === SwapProtocolType.THORTimeOptimised;
+
   const isEvmErc20Asset = useCallback(
     (asset: Coin): boolean => {
       return (
@@ -148,13 +152,17 @@ export const SwapConfirm = () => {
         fromAmount && +formatUnits(allowance, coin.decimals) < +fromAmount
           ? new Erc20ApprovePayload({
               amount: fromAmount
-                ? toChainAmount(fromAmount, coin.decimals)
+                ? toChainAmount(fromAmount, coin.decimals).toString()
                 : '0',
               spender: selectedSwapQuote?.router,
             })
           : undefined,
     };
   };
+
+  const isDepositTransaction =
+    (coin.chain === Chain.MayaChain && isMaya) ||
+    (coin.chain === Chain.THORChain && isThorchain);
 
   const onSubmit = async () => {
     const commonTx = {
@@ -165,6 +173,26 @@ export const SwapConfirm = () => {
       sendMaxAmount: isMaxAmount,
       specificTransactionInfo: shouldBePresent(specificTxInfoQuery.data),
     };
+    if (isDepositTransaction) {
+      const tx = {
+        fromAddress: sender,
+        toAddress: '',
+        amount: shouldBePresent(fromAmount),
+        memo: selectedSwapQuote?.memo as string,
+        coin: storageCoinToCoin(coin),
+        transactionType: TransactionType.DEPOSIT,
+        specificTransactionInfo: specificTxInfoQuery.data,
+      };
+      const keysignPayload = BlockchainServiceFactory.createService(
+        coinKey.chainId,
+        walletCore
+      ).createKeysignPayload(tx, vault.local_party_id, vault.public_key_ecdsa);
+
+      navigate('keysign', {
+        state: { keysignPayload },
+      });
+      return;
+    }
     if (isAssetToSend()) {
       const inboundAddress = await getInboundAddressForChain(
         convertChainToChainTicker(coin.chain as Chain),

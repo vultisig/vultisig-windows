@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useValidateAddressQuery } from '../../../../chain/queries/useValidateAddressQuery';
-import { formatFee } from '../../../../chain/tx/fee/utils/formatFee';
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
@@ -36,9 +35,6 @@ export const useIsSendFormDisabled = () => {
   const nativeCoin = useCurrentVaultNativeCoin(coin.chain);
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
   const nativeBalanceQuery = useBalanceQuery(storageCoinToCoin(nativeCoin));
-  console.log(nativeBalanceQuery);
-  console.log(txInfo);
-  console.log(formatFee({ chain: Chain.Avalanche, txInfo }));
 
   return useMemo(() => {
     if (addressValidationQuery.isPending || balanceQuery.isPending) {
@@ -51,7 +47,9 @@ export const useIsSendFormDisabled = () => {
 
     if (nativeBalanceQuery.data) {
       if (
-        new BigNumber(txInfo.fee).isGreaterThan(nativeBalanceQuery.data.amount)
+        new BigNumber(txInfo.fee).isGreaterThan(
+          nativeBalanceQuery.data.amount.toString()
+        )
       ) {
         return t('insufficient_funds_to_pay_fee');
       }
