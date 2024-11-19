@@ -110,17 +110,6 @@ export class BlockchainService implements IBlockchainService {
       vaultLocalPartyId: localPartyId,
       vaultPublicKeyEcdsa: publicKeyEcdsa,
     });
-    // payload.coin = obj.coin;
-    // payload.toAddress = obj.toAddress;
-    // payload.toAmount = BigInt(
-    //   Math.round(obj.amount * 10 ** obj.coin.decimals)
-    // ).toString();
-    // payload.memo = obj.memo;
-    //
-    // payload.vaultLocalPartyId = localPartyId;
-    // payload.vaultPublicKeyEcdsa = publicKeyEcdsa;
-    // payload.erc20ApprovePayload = obj.erc20ApprovePayload;
-    // payload.swapPayload = obj.swapPayload;
 
     return payload;
   }

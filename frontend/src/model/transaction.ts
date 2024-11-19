@@ -85,19 +85,3 @@ export function getDefaultSendTransaction(): ISendTransaction {
     specificTransactionInfo: undefined,
   };
 }
-
-// export function getDefaultSwapTransaction(): ISwapTransaction {
-//   return {
-//     fromAddress: '',
-//     toAddress: '',
-//     amount: 0,
-//     memo: '',
-//     transactionType: TransactionType.SWAP,
-//     specificTransactionInfo: undefined,
-//     sendMaxAmount: false,
-//     coin: new Coin(),
-//     swapPayload: {
-//       fromAddress: ''
-//     }
-//   };
-// }
