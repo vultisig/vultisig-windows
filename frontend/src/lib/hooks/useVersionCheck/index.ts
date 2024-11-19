@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { attempt } from '../../utils/attempt';
 import {
   LATEST_VERSION_QUERY_KEY,
   LOCAL_VERSION_QUERY_KEY,
@@ -42,10 +43,14 @@ const useVersionCheck = () => {
 
   const localVersion = localVersionData?.version || '';
   const latestVersion = latestVersionData || '';
-  const updateAvailable = isVersionNewer({
-    remoteVersion: latestVersion,
-    localVersion,
-  });
+  const updateAvailable = attempt(
+    () =>
+      isVersionNewer({
+        remoteVersion: latestVersion,
+        localVersion,
+      }),
+    false
+  );
 
   const isLoading = isLocalFetching || isRemoteFetching;
 
