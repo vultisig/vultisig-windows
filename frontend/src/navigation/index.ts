@@ -28,6 +28,7 @@ export const appPaths = {
   vaultSettings: '/vault/settings',
   uploadQr: '/vault/qr/upload',
   joinKeygen: '/join-keygen',
+  keygenBackup: '/keygen/backup',
   vaults: '/vaults',
   manageVaults: '/vaults/manage',
   vault: '/vault',

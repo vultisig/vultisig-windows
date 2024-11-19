@@ -13,3 +13,8 @@ export const isVersionNewer = ({
   if (rMajor === lMajor && rMinor === lMinor && rPatch > lPatch) return true;
   return false;
 };
+
+export const isValidVersion = (version: string | undefined): boolean => {
+  if (!version) return false;
+  return /^\d+\.\d+\.\d+$/.test(version);
+};

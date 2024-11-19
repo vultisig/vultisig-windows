@@ -16,6 +16,8 @@ export const it = {
   scan_with_devices_to_sign:
     'Esegui la scansione con i dispositivi per partecipare alla firma della transazione',
   next: 'Avanti',
+  failed_to_confirm_email_code:
+    'Impossibile confermare il codice di verifica e-mail',
   skip: 'Salta',
   enter_password: 'Inserisci la password',
   invalid_file_format: 'Formato del file non valido',
@@ -27,6 +29,10 @@ export const it = {
     'Carica il frammento della tua cassaforte precedentemente creata:',
   select_backup_file: 'Seleziona file di backup',
   continue: 'Continua',
+  email_confirmation_code_label:
+    'Inserisci il codice ricevuto con il tuo backup via email',
+  email_confirmation_code_error: 'Codice non valido',
+  email_confirmation: 'Inserisci codice',
   ok: 'OK',
   cancel: 'Annulla',
   internet: 'Internet',
@@ -52,6 +58,8 @@ export const it = {
   vault_name: 'Nome della cassaforte',
   main_vault: 'Cassaforte principale',
   with_these_devices: 'Con questi dispositivi',
+  missing_public_key_ecdsa: 'Manca la chiave pubblica ECDSA',
+  missing_verification_code: 'Manca il codice di verifica',
   this_device: 'Questo dispositivo',
   pair_device: 'Accoppia dispositivo',
   backup_device: 'Dispositivo di backup',
@@ -355,7 +363,7 @@ export const it = {
   reshare_disclaimer:
     'Per tutte le azioni di condivisione è sempre richiesta la soglia dei dispositivi.',
   start_reshare: 'Inizia la condivisione',
-  start_reshare_with_server: 'Inizia la condivisione con Vultisigner',
+  start_reshare_with_server: 'Avvia la condivisione con Vultiserver',
   fast: 'Veloce',
   secure: 'Sicuro',
   active: 'Attivo',
@@ -437,6 +445,9 @@ export const it = {
   'page.swap.not.possible':
     'Non è possibile passare a uno smart contract! Inserisci un indirizzo destinatario diverso.',
   'page.swap.title': 'Scambio',
+  swap_terms_0: "L'importo dello swap è corretto",
+  swap_terms_1: "Sono d'accordo con l'importo che riceverò dopo lo scambio",
+  swap_agree_terms: 'È necessario accettare i termini prima di procedere',
   swap_invalid_receiver:
     'È stato specificato un indirizzo del destinatario non valido. Probabilmente dovresti aggiungere la catena in entrata alla tua lista.',
   slippage: 'Slittamento',
@@ -503,6 +514,7 @@ export const it = {
   add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
   thorchain_message_deposit: 'Deposito messaggio THORChain',
   chainFunctions: {
+    amountExceeded: "L'importo supera il saldo disponibile",
     memo: 'Memo',
     optional_validation: 'Facoltativo',
     default_validation: 'Ingresso non valido',
@@ -533,31 +545,22 @@ export const it = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Indirizzo del Nodo',
-      },
+      labels: { nodeAddress: 'Indirizzo del Nodo' },
       validations: {
         nodeAddressMinLength: 'Indirizzo nodo obbligatorio',
         nodeAddressInvalid: 'Indirizzo nodo non valido',
       },
     },
     custom: {
-      labels: {
-        amount: 'Importo',
-        customMemo: 'Memo Personalizzato',
-      },
+      labels: { amount: 'Importo', customMemo: 'Memo Personalizzato' },
       validations: {
         amount: "L'importo deve essere positivo",
         customMemo: 'Memo personalizzato è obbligatorio',
       },
     },
     addPool: {
-      labels: {
-        amount: 'Importo',
-      },
-      validations: {
-        amount: "L'importo deve essere positivo",
-      },
+      labels: { amount: 'Importo' },
+      validations: { amount: "L'importo deve essere positivo" },
     },
     withdrawPool: {
       labels: {
@@ -568,6 +571,43 @@ export const it = {
         percentage: 'La percentuale è obbligatoria e deve essere tra 0 e 100',
       },
     },
+    vote: {
+      labels: {
+        proposalId: 'ID proposta',
+        support: 'Supporto',
+      },
+      validations: {
+        proposalId: 'ID proposta obbligatorio',
+        support: 'Il campo Supporto è obbligatorio',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Importo',
+        validatorAddress: 'Indirizzo convalidatore',
+      },
+      validations: {
+        amount: "L'importo deve essere positivo",
+        validatorAddress: 'Indirizzo convalidatore obbligatorio',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Indirizzo convalidatore',
+      },
+      validations: {
+        validatorAddress: 'Indirizzo convalidatore obbligatorio',
+      },
+    },
   },
   sign: 'Firma',
+  part_n_of_m: 'Parte {{n}} di {{m}}',
+  bond: 'Legame',
+  unbond: 'Slegare',
+  leave: 'Partire',
+  addPool: 'Aggiungi piscina',
+  withdrawPool: 'Prelevare il pool',
+  custom: 'Azione personalizzata',
+  vote: 'Votare',
+  stake: 'Palo',
 };

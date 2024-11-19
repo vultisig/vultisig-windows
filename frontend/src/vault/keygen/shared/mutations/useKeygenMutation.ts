@@ -40,7 +40,6 @@ export const useKeygenMutation = () => {
       });
 
       await saveVault(newVault);
-
       return newVault;
     },
   });

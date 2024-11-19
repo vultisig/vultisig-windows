@@ -11,7 +11,13 @@ export const de = {
     'Vultisig ist eine Wallet ohne Seed-Phrases. Stattdessen verwendet es einfach zu verwaltende Fragmente. Jedes Gerät hat sein eigenes einzigartiges Fragment, das separat gesichert werden muss.',
   create_new_vault: 'Neuen Tresor erstellen',
   import_existing_vault: 'Bestehenden Tresor importieren',
+  email_confirmation_code_label:
+    'Geben Sie den Code ein, den Sie mit Ihrem Backup per E-Mail erhalten haben',
+  email_confirmation_code_error: 'Ungültiger Code',
+  email_confirmation: 'Code eingeben',
   next: 'Weiter',
+  failed_to_confirm_email_code:
+    'E-Mail-Bestätigungscode konnte nicht bestätigt werden',
   skip: 'Überspringen',
   choose_coins: 'Münzen auswählen',
   enter_password: 'Passwort eingeben',
@@ -27,6 +33,8 @@ export const de = {
   backup_decryption_failed: 'Entschlüsselung der Sicherung fehlgeschlagen',
   upload_previous_vault: 'Laden Sie Ihr zuvor erstelltes Tresorfragment hoch:',
   select_backup_file: 'Sicherungsdatei auswählen',
+  missing_public_key_ecdsa: 'Fehlender öffentlicher Schlüssel ECDSA',
+  missing_verification_code: 'Fehlender Verifizierungscode',
   continue: 'Fortfahren',
   ok: 'OK',
   cancel: 'Abbrechen',
@@ -357,7 +365,7 @@ export const de = {
   reshare_disclaimer:
     'Für alle Reshare-Aktionen ist immer der Geräteschwellenwert erforderlich.',
   start_reshare: 'Neu teilen starten',
-  start_reshare_with_server: 'Reshare mit Vultisigner starten',
+  start_reshare_with_server: 'Neue Freigabe mit Vultiserver starten',
   fast: 'Schnell',
   secure: 'Sicher',
   active: 'Aktiv',
@@ -439,6 +447,11 @@ export const de = {
   'page.swap.not.possible':
     'Ein Wechsel zu einem Smart Contract ist nicht möglich! Geben Sie eine andere Empfängeradresse ein.',
   'page.swap.title': 'Tauschen',
+  swap_terms_0: 'Der Tauschbetrag ist korrekt',
+  swap_terms_1:
+    'Ich bin mit dem Betrag einverstanden, den ich nach dem Tausch erhalte',
+  swap_agree_terms:
+    'Sie müssen den Bedingungen zustimmen, bevor Sie fortfahren',
   swap_invalid_receiver:
     'Ungültige Empfängeradresse angegeben. Wahrscheinlich sollten Sie Ihrer Liste eine eingehende Kette hinzufügen.',
   slippage: 'Schlupf',
@@ -505,6 +518,7 @@ export const de = {
     'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
   thorchain_message_deposit: 'THORChain-Nachrichteneinzahlung',
   chainFunctions: {
+    amountExceeded: 'Der Betrag übersteigt das verfügbare Guthaben',
     memo: 'Memo',
     optional_validation: 'Optional',
     default_validation: 'Ungültige Eingabe',
@@ -535,40 +549,56 @@ export const de = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Knotenadresse',
-      },
+      labels: { nodeAddress: 'Knotenadresse' },
       validations: {
         nodeAddressMinLength: 'Knotenadresse ist erforderlich',
         nodeAddressInvalid: 'Knotenadresse ist ungültig',
       },
     },
     custom: {
-      labels: {
-        amount: 'Betrag',
-        customMemo: 'Benutzerdefiniertes Memo',
-      },
+      labels: { amount: 'Betrag', customMemo: 'Benutzerdefiniertes Memo' },
       validations: {
         amount: 'Betrag muss positiv sein',
         customMemo: 'Benutzerdefiniertes Memo ist erforderlich',
       },
     },
     addPool: {
-      labels: {
-        amount: 'Betrag',
-      },
-      validations: {
-        amount: 'Betrag muss positiv sein',
-      },
+      labels: { amount: 'Betrag' },
+      validations: { amount: 'Betrag muss positiv sein' },
     },
     withdrawPool: {
-      labels: {
-        affiliateFee: 'Partnergebühr',
-        percentage: 'Prozentsatz',
-      },
+      labels: { affiliateFee: 'Partnergebühr', percentage: 'Prozentsatz' },
       validations: {
         percentage:
           'Prozentsatz ist erforderlich und muss zwischen 0 und 100 liegen',
+      },
+    },
+    vote: {
+      labels: {
+        proposalId: 'Vorschlags-ID',
+        support: 'Support',
+      },
+      validations: {
+        proposalId: 'Vorschlags-ID ist erforderlich',
+        support: 'Support-Feld ist erforderlich',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Betrag',
+        validatorAddress: 'Validator-Adresse',
+      },
+      validations: {
+        amount: 'Betrag muss positiv sein',
+        validatorAddress: 'Validator-Adresse ist erforderlich',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Validator-Adresse',
+      },
+      validations: {
+        validatorAddress: 'Validator-Adresse ist erforderlich',
       },
     },
   },
@@ -576,4 +606,13 @@ export const de = {
   scan_with_devices_to_sign:
     'Esegui la scansione con i dispositivi per partecipare alla firma della transazione',
   sign: 'Signieren',
+  part_n_of_m: 'Teil {{n}} von {{m}}',
+  bond: 'Bindung',
+  unbond: 'Bindung lösen',
+  leave: 'Verlassen',
+  addPool: 'Pool hinzufügen',
+  withdrawPool: 'Pool abheben',
+  custom: 'Benutzerdefinierte Aktion',
+  vote: 'Abstimmung',
+  stake: 'Einsatz',
 };

@@ -26,9 +26,41 @@ export interface ISendTransaction extends ITransaction {
   transactionType: TransactionType.SEND;
 }
 
-export interface IDepositTransaction extends ITransaction {
+export interface IDepositTransactionBase {
+  fromAddress: string;
+  toAddress?: string;
+  memo: string;
+  coin: Coin;
+  specificTransactionInfo?: SpecificTransactionInfo;
   transactionType: TransactionType.DEPOSIT;
+  amount?: number;
 }
+
+export interface IDepositTransactionBond extends IDepositTransactionBase {
+  toAddress: string;
+  amount: number;
+}
+
+export interface IDepositTransactionLeave extends IDepositTransactionBase {
+  toAddress: string;
+  amount?: number;
+}
+
+export interface IDepositTransactionAddPool extends IDepositTransactionBase {
+  amount: number;
+}
+
+export interface IDepositTransactionWithdrawPool
+  extends IDepositTransactionBase {
+  percentage: number;
+  affiliateFee?: number;
+}
+
+export type IDepositTransactionVariant =
+  | IDepositTransactionBond
+  | IDepositTransactionLeave
+  | IDepositTransactionAddPool
+  | IDepositTransactionWithdrawPool;
 
 // TODO: We will need to add more fields to this interface
 export interface ISwapTransaction extends ITransaction {

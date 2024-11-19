@@ -8,7 +8,6 @@ import { FeeServiceFactory } from './Fee/FeeServiceFactory';
 import { IService } from './IService';
 import { PriceServiceFactory } from './Price/PriceServiceFactory';
 import { RpcServiceFactory } from './Rpc/RpcServiceFactory';
-import { SendServiceFactory } from './Send/SendServiceFactory';
 import { Service } from './Service';
 
 export class ServiceFactory {
@@ -34,10 +33,7 @@ export class ServiceFactory {
         walletCore
       );
       const keygenService = null; // I need to understand how it works and is used
-      const sendService = SendServiceFactory.createSendService(
-        chain,
-        walletCore
-      );
+
       const balanceService = BalanceServiceFactory.createBalanceService(chain);
       const priceService = PriceServiceFactory.createPriceService(chain);
       const feeService = FeeServiceFactory.createFeeService(chain, walletCore);
@@ -47,7 +43,6 @@ export class ServiceFactory {
         addressService,
         coinService,
         keygenService,
-        sendService,
         balanceService,
         priceService,
         feeService

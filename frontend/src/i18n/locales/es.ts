@@ -14,6 +14,8 @@ export const es = {
   next: 'Siguiente',
   skip: 'Omitir',
   enter_password: 'Ingrese la contraseña',
+  failed_to_confirm_email_code:
+    'No se pudo confirmar el código de verificación de correo electrónico',
   choose_coins: 'Elige Monedas',
   invalid_file_format: 'Formato de archivo inválido',
   invalid_vault_parse_to_string: 'No se pudo analizar la bóveda en cadena',
@@ -33,6 +35,8 @@ export const es = {
   internet: 'Internet',
   local: 'Local',
   looking_for_devices: 'Buscando dispositivos...',
+  missing_public_key_ecdsa: 'Falta la clave pública ECDSA',
+  missing_verification_code: 'Falta el código de verificación',
   more_devices: 'más dispositivos...',
   devices_on_same_internet:
     'Conecte todos los dispositivos a Internet con Vultisig abierto',
@@ -49,6 +53,10 @@ export const es = {
     'Conecte todos los dispositivos a la misma red con la aplicación Vultisig abierta',
   devices_on_same_wifi:
     'Mantenga los dispositivos en la misma red con VULTISIG abierto',
+  email_confirmation_code_label:
+    'Ingrese el código que recibió con su copia de seguridad por correo electrónico',
+  email_confirmation_code_error: 'Código no válido',
+  email_confirmation: 'Ingrese el código',
   start: 'Comenzar',
   vault_name: 'Nombre de la bóveda',
   main_vault: 'Bóveda principal',
@@ -353,7 +361,7 @@ export const es = {
   reshare_disclaimer:
     'Para todas las acciones de Reshare siempre se requiere el umbral de dispositivos.',
   start_reshare: 'Empezar a compartir',
-  start_reshare_with_server: 'Comience a compartir con Vultisigner',
+  start_reshare_with_server: 'Iniciar reshare con Vultiserver',
   fast: 'Rápido',
   secure: 'Seguro',
   active: 'Activo',
@@ -438,6 +446,10 @@ export const es = {
   'page.swap.not.possible':
     '¡No es posible cambiar a un contrato inteligente! Ingrese una dirección de destinatario diferente.',
   'page.swap.title': 'Intercambio',
+  swap_terms_0: 'El monto del swap es correcto',
+  swap_terms_1:
+    'Estoy de acuerdo con la cantidad que recibiré después del intercambio',
+  swap_agree_terms: 'Debes aceptar los términos antes de continuar.',
   swap_invalid_receiver:
     'Se ha especificado una dirección de destinatario no válida. Probablemente deberías agregar la cadena entrante a tu lista.',
   slippage: 'Deslizamiento',
@@ -505,6 +517,7 @@ export const es = {
   add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
   thorchain_message_deposit: 'Depósito de mensajes de THORChain',
   chainFunctions: {
+    amountExceeded: 'El importe excede el saldo disponible',
     memo: 'Memo',
     required_validation: 'Obligatorio',
     option_validation: 'Opcional',
@@ -534,31 +547,22 @@ export const es = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Dirección del Nodo',
-      },
+      labels: { nodeAddress: 'Dirección del Nodo' },
       validations: {
         nodeAddressMinLength: 'La dirección del nodo es obligatoria',
         nodeAddressInvalid: 'La dirección del nodo no es válida',
       },
     },
     custom: {
-      labels: {
-        amount: 'Cantidad',
-        customMemo: 'Memo Personalizado',
-      },
+      labels: { amount: 'Cantidad', customMemo: 'Memo Personalizado' },
       validations: {
         amount: 'La cantidad debe ser positiva',
         customMemo: 'El memo personalizado es obligatorio',
       },
     },
     addPool: {
-      labels: {
-        amount: 'Cantidad',
-      },
-      validations: {
-        amount: 'La cantidad debe ser positiva',
-      },
+      labels: { amount: 'Cantidad' },
+      validations: { amount: 'La cantidad debe ser positiva' },
     },
     withdrawPool: {
       labels: {
@@ -569,9 +573,46 @@ export const es = {
         percentage: 'El porcentaje es obligatorio y debe estar entre 0 y 100',
       },
     },
+    vote: {
+      labels: {
+        proposalId: 'ID de la propuesta',
+        support: 'Soporte',
+      },
+      validations: {
+        proposalId: 'ID de la propuesta es obligatorio',
+        support: 'El campo de soporte es obligatorio',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Monto',
+        validatorAddress: 'Dirección del validador',
+      },
+      validations: {
+        amount: 'El monto debe ser positivo',
+        validatorAddress: 'La dirección del validador es obligatoria',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Dirección del validador',
+      },
+      validations: {
+        validatorAddress: 'La dirección del validador es obligatoria',
+      },
+    },
   },
   scan_with_devices: 'Skeniraj s uređajima za pridruživanje generaciji trezora',
   scan_with_devices_to_sign:
     'Escanear con dispositivos para participar en la firma de la transacción',
   sign: 'Firmar',
+  part_n_of_m: 'Parte {{n}} de {{m}}',
+  bond: 'Vínculo',
+  unbond: 'Desatar',
+  leave: 'Dejar',
+  addPool: 'Agregar piscina',
+  withdrawPool: 'Fondo de retiro',
+  custom: 'Acción personalizada',
+  vote: 'Votar',
+  stake: 'Apostar',
 };

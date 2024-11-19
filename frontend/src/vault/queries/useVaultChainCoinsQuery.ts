@@ -31,7 +31,6 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
   const pricesQuery = useCoinPricesQuery(
     coins.map(storageCoinToCoin).map(CoinMeta.fromCoin)
   );
-
   const balancesQuery = useBalancesQuery(coins.map(storageCoinToCoin));
 
   return useMemo((): Query<VaultChainCoin[]> => {
@@ -47,7 +46,7 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
           const balance = shouldBePresent(balancesQuery.data).find(balance =>
             areEqualCoins(balance, coinKey)
           );
-          const amount = balance?.amount || 0;
+          const amount = balance?.amount || BigInt(0);
 
           const price =
             shouldBePresent(pricesQuery.data).find(item =>

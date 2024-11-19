@@ -1,18 +1,20 @@
 import { useTranslation } from 'react-i18next';
 
-import { HStack, VStack } from '../../../lib/ui/layout/Stack';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
-import { getQueryDependantDefaultProps } from '../../../lib/ui/query/utils/getQueryDependantDefaultProps';
-import { Text } from '../../../lib/ui/text';
-import { CurrentPeersCorrector } from './peerDiscovery/CurrentPeersCorrector';
-import { LookingForDevices } from './peerDiscovery/LookingForDevices';
-import { PeerOption } from './peerDiscovery/peers/PeerOption';
-import { usePeerOptionsQuery } from './peerDiscovery/queries/usePeerOptionsQuery';
+import { HStack, VStack } from '../../../../lib/ui/layout/Stack';
+import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
+import { Query } from '../../../../lib/ui/query/Query';
+import { getQueryDependantDefaultProps } from '../../../../lib/ui/query/utils/getQueryDependantDefaultProps';
+import { Text } from '../../../../lib/ui/text';
+import { CurrentPeersCorrector } from './CurrentPeersCorrector';
+import { LookingForDevices } from './LookingForDevices';
+import { PeerOption } from './peers/PeerOption';
 
-export const PeersManager = () => {
+type PeersManageProps = {
+  peerOptionsQuery: Query<string[]>;
+};
+
+export const PeersManager = ({ peerOptionsQuery }: PeersManageProps) => {
   const { t } = useTranslation();
-
-  const peerOptionsQuery = usePeerOptionsQuery();
 
   return (
     <VStack

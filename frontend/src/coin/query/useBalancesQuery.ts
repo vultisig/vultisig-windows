@@ -28,7 +28,7 @@ export const useBalancesQuery = (coins: Coin[]) => {
           const { rawAmount } = await balanceService.getBalance(coin);
 
           return {
-            amount: rawAmount,
+            amount: BigInt(Math.round(rawAmount)),
             decimals: coin.decimals,
 
             ...key,

@@ -10,6 +10,9 @@ export const en = {
   onboarding_view4_description:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
   create_new_vault: 'Create a New Vault',
+  missing_public_key_ecdsa: 'Missing Public Key ECDSA',
+  missing_verification_code: 'Missing Verification Code',
+  failed_to_confirm_email_code: 'Failed to confirm email verification code',
   import_existing_vault: 'Import an Existing Vault',
   import_vault: 'Import Vault',
   next: 'Next',
@@ -334,7 +337,7 @@ export const en = {
   reshare_disclaimer:
     'For all Reshare actions the threshold of devices is always required.',
   start_reshare: 'Start Reshare',
-  start_reshare_with_server: 'Start Reshare with Vultisigner',
+  start_reshare_with_server: 'Start Reshare with Vultiserver',
   failed_to_generate_qr_code: 'Failed to generate QR code',
   vault_already_exists: 'Vault already exists',
   vault_already_exists_message: 'Please select a different vault.',
@@ -360,6 +363,10 @@ export const en = {
   verify_email: 'Verify Email',
   emails_dont_match: "Emails don't match",
   email_backup: 'Enter your email to receive your backup',
+  email_confirmation_code_label:
+    'Enter the code received with your backup via email',
+  email_confirmation_code_error: 'Invalid code',
+  email_confirmation: 'Enter code',
   email_disclaimer: 'This email is only used to send the backup',
   password_required: 'Password is required',
   passwords_dont_match: "Passwords don't match",
@@ -372,6 +379,7 @@ export const en = {
   loading: 'Loading...',
   fast_sign: 'Fast Sign',
   paired_sign: 'Paired Sign',
+  part_n_of_m: 'Part {{n}} of {{m}}',
   password_to_decrypt: 'This Password decrypts your FastVault Share',
   fast_vault_password: 'FastVault Password',
   vault_missing_public_key_message:
@@ -426,6 +434,9 @@ export const en = {
   'page.swap.not.possible':
     'Swapping to a smart contract is not possible! Enter a different recipient address.',
   'page.swap.title': 'Swap',
+  swap_terms_0: 'The swap amount is correct',
+  swap_terms_1: 'I agree with the amount I will receive after the swap',
+  swap_agree_terms: 'You must agree with terms before proceeding',
   swap_invalid_receiver:
     'Invalid recipient address specified. Probably you should add inbound chain to your list.',
   slippage: 'Slippage',
@@ -491,6 +502,8 @@ export const en = {
   vote: 'Vote',
   stake: 'Stake',
   chainFunctions: {
+    amountExceeded: 'Amount exceeds available balance',
+    requiredFieldMissing: 'Required field missing',
     memo: 'Memo',
     optional_validation: 'Optional',
     default_validation: 'Invalid input',
@@ -554,6 +567,34 @@ export const en = {
       },
       validations: {
         percentage: 'Percentage is required and must be between 0 and 100',
+      },
+    },
+    vote: {
+      labels: {
+        proposalId: 'Proposal ID',
+        support: 'Support',
+      },
+      validations: {
+        proposalId: 'Proposal ID is required',
+        support: 'Support field is required',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Amount',
+        validatorAddress: 'Validator Address',
+      },
+      validations: {
+        amount: 'Amount must be positive',
+        validatorAddress: 'Validator Address is required',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Validator Address',
+      },
+      validations: {
+        validatorAddress: 'Validator Address is required',
       },
     },
   },

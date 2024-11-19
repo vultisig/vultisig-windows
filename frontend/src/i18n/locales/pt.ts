@@ -11,7 +11,11 @@ export const pt = {
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   create_new_vault: 'Criar novo cofre',
   import_existing_vault: 'Importar cofre existente',
+  missing_public_key_ecdsa: 'Chave pública ECDSA ausente',
+  missing_verification_code: 'Código de verificação ausente',
   next: 'Próximo',
+  failed_to_confirm_email_code:
+    'Falha ao confirmar o código de verificação de e-mail',
   skip: 'Pular',
   scan_with_devices:
     'Esegui la scansione con i dispositivi per partecipare alla generazione del vault',
@@ -355,7 +359,7 @@ export const pt = {
   reshare_disclaimer:
     'Para todas as ações de Reshare, o limite de dispositivos é sempre necessário.',
   start_reshare: 'Iniciar Reshare',
-  start_reshare_with_server: 'Inicie o Reshare com o Vultisigner',
+  start_reshare_with_server: 'Iniciar nova partilha com o Vultiserver',
   fast: 'Rápido',
   secure: 'Seguro',
   active: 'Ativo',
@@ -380,6 +384,10 @@ export const pt = {
   password_required: 'Senha é necessária',
   passwords_dont_match: 'As senhas não correspondem',
   verify_password: 'Verificar senha',
+  email_confirmation_code_label:
+    'Digite o código recebido com seu backup por e-mail',
+  email_confirmation_code_error: 'Código inválido',
+  email_confirmation: 'Digite o código',
   password: 'Senha',
   password_backup: 'Proteja seu cofre e assine rapidamente.',
   looking_for_server: 'Procurando por FastVaultServer...',
@@ -437,6 +445,9 @@ export const pt = {
   'page.swap.not.possible':
     'Trocar para um contrato inteligente não é possível! Insira um endereço de destinatário diferente.',
   'page.swap.title': 'Trocar',
+  swap_terms_0: 'O valor do swap está correto',
+  swap_terms_1: 'Concordo com o valor que receberei após a troca',
+  swap_agree_terms: 'Você deve concordar com os termos antes de prosseguir',
   swap_invalid_receiver:
     'Endereço de destinatário inválido especificado. Provavelmente você deveria adicionar uma cadeia de entrada à sua lista.',
   slippage: 'Deslizamento',
@@ -501,6 +512,7 @@ export const pt = {
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   thorchain_message_deposit: 'Depósito de mensagem THORChain',
   chainFunctions: {
+    amountExceeded: 'O valor excede o saldo disponível',
     memo: 'Memo',
     optional_validation: 'Opcional',
     default_validation: 'Entrada inválida',
@@ -531,41 +543,66 @@ export const pt = {
       },
     },
     leave: {
-      labels: {
-        nodeAddress: 'Endereço do Nó',
-      },
+      labels: { nodeAddress: 'Endereço do Nó' },
       validations: {
         nodeAddressMinLength: 'Endereço do nó é obrigatório',
         nodeAddressInvalid: 'Endereço do nó é inválido',
       },
     },
     custom: {
-      labels: {
-        amount: 'Quantidade',
-        customMemo: 'Memo Personalizado',
-      },
+      labels: { amount: 'Quantidade', customMemo: 'Memo Personalizado' },
       validations: {
         amount: 'Quantidade deve ser positiva',
         customMemo: 'Memo personalizado é obrigatório',
       },
     },
     addPool: {
-      labels: {
-        amount: 'Quantidade',
-      },
-      validations: {
-        amount: 'Quantidade deve ser positiva',
-      },
+      labels: { amount: 'Quantidade' },
+      validations: { amount: 'Quantidade deve ser positiva' },
     },
     withdrawPool: {
-      labels: {
-        affiliateFee: 'Taxa de Afiliado',
-        percentage: 'Porcentagem',
-      },
+      labels: { affiliateFee: 'Taxa de Afiliado', percentage: 'Porcentagem' },
       validations: {
         percentage: 'Porcentagem é obrigatória e deve estar entre 0 e 100',
       },
     },
+    vote: {
+      labels: {
+        proposalId: 'ID da proposta',
+        support: 'Suporte',
+      },
+      validates: {
+        proposalId: 'ID da proposta é obrigatório',
+        support: 'Campo de suporte é obrigatório',
+      },
+    },
+    stake: {
+      labels: {
+        amount: 'Quantidade',
+        validatorAddress: 'Endereço do validador',
+      },
+      validates: {
+        amount: 'Quantidade deve ser positiva',
+        validatorAddress: 'Endereço do validador é obrigatório',
+      },
+    },
+    unstake: {
+      labels: {
+        validatorAddress: 'Endereço do validador',
+      },
+      validates: {
+        validatorAddress: 'Endereço do validador é obrigatório',
+      },
+    },
   },
   sign: 'Assinar',
+  part_n_of_m: 'Parte {{n}} de {{m}}',
+  bond: 'Ligação',
+  unbond: 'Desvincular',
+  leave: 'Deixar',
+  addPool: 'Adicionar Pool',
+  withdrawPool: 'Retirar Pool',
+  custom: 'Ação personalizada',
+  vote: 'Voto',
+  stake: 'Estaca',
 };

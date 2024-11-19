@@ -40,11 +40,8 @@ export default function SwapQuotes() {
   const [mayaQuote, setMayaQuote] = useState<SwapQuote | null>(null);
   const [mayaStreamingQuote, setMayaStreamingQuote] =
     useState<SwapQuote | null>(null);
-  const [swapProtocol, setSwapProtocol] = useSwapProtocol();
-  const [quote, setSelectedQuote] = useSwapQuote();
-
-  console.log(swapProtocol);
-  console.log(quote);
+  const [, setSwapProtocol] = useSwapProtocol();
+  const [, setSelectedQuote] = useSwapQuote();
 
   const handleChangeSwapProtocol = (type: SwapProtocolType) => {
     setSwapProtocol(type);
