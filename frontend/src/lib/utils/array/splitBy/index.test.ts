@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { splitBy } from './splitBy';
+import { splitBy } from '.';
 
 describe('splitBy', () => {
   it('should split items into two groups based on the organize function', () => {
