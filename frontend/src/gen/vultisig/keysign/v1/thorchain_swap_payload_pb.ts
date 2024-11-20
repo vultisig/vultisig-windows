@@ -71,7 +71,7 @@ export class THORChainSwapPayload extends Message<THORChainSwapPayload> {
   /**
    * @generated from field: uint64 expiration_time = 11;
    */
-  expirationTime = protoInt64.zero;
+  expirationTime = 0;
 
   /**
    * @generated from field: bool is_affiliate = 12;

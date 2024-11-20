@@ -3,6 +3,7 @@ import './swap.css';
 import { Match } from '../../lib/ui/base/Match';
 import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation';
 import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
+import { SendSpecificTxInfoProvider } from './fee/SendSpecificTxInfoProvider';
 import { SwapForm } from './form/SwapForm';
 import { SwapAmountProvider } from './state/amount';
 import { CoinToProvider } from './state/coin-to';
@@ -25,11 +26,13 @@ export const SwapPage = () => {
         <SwapAmountProvider initialValue={null}>
           <SendReceiverProvider initialValue="">
             <CoinToProvider initialValue={null}>
-              <Match
-                value={step}
-                form={() => <SwapForm onForward={toNextStep} />}
-                verify={() => <SwapVerify onBack={toPreviousStep} />}
-              />
+              <SendSpecificTxInfoProvider>
+                <Match
+                  value={step}
+                  form={() => <SwapForm onForward={toNextStep} />}
+                  verify={() => <SwapVerify onBack={toPreviousStep} />}
+                />
+              </SendSpecificTxInfoProvider>
             </CoinToProvider>
           </SendReceiverProvider>
         </SwapAmountProvider>

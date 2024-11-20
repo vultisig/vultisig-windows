@@ -397,6 +397,8 @@ export const pt = {
   password_to_decrypt: 'Esta senha descriptografa seu FastVault Share',
   fast_vault_password: 'Senha do FastVault',
   max: 'Máx',
+  insufficient_funds_to_pay_fee:
+    'Saldo insuficiente para cobrir a taxa de transação.',
   'page.swap.quote.amount.error':
     'Nenhuma cotação disponível para o valor e par solicitados.',
   'page.swap.info.title': 'O que é troca de ativos?',

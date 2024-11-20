@@ -399,6 +399,8 @@ export const de = {
   password_to_decrypt: 'Dieses Passwort entschlüsselt Ihre FastVault-Freigabe',
   fast_vault_password: 'FastVault-Passwort',
   max: 'Max',
+  insufficient_funds_to_pay_fee:
+    'Das Guthaben reicht nicht aus, um die Transaktionsgebühr zu decken.',
   'page.swap.quote.amount.error':
     'Für die gewünschte Menge und das gewünschte Paar ist kein Angebot verfügbar.',
   'page.swap.info.title': 'Was ist Asset-Swapping?',
