@@ -8,7 +8,7 @@ import DownloadIcon from '../../lib/ui/icons/DownloadIcon';
 import FaqIcon from '../../lib/ui/icons/FaqIcon';
 import GlobeIcon from '../../lib/ui/icons/GlobeIcon';
 import NoteIcon from '../../lib/ui/icons/NoteIcon';
-import SettingsIcon from '../../lib/ui/icons/SettingsIcon';
+import { SettingsIcon } from '../../lib/ui/icons/SettingsIcon';
 import ShareIcon from '../../lib/ui/icons/ShareIcon';
 import ShieldCheckIcon from '../../lib/ui/icons/ShieldCheckIcon';
 import VultisigLogoIcon from '../../lib/ui/icons/VultisigLogoIcon';
@@ -46,7 +46,7 @@ export const settingsItems: SettingSection[] = [
       {
         id: 'vault-settings',
         titleKey: 'vault_settings_settings',
-        icon: SettingsIcon,
+        icon: () => <SettingsIcon style={{ fontSize: 24 }} />,
         path: makeAppPath('editVault'),
       },
       {
