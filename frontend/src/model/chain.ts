@@ -4,18 +4,28 @@ WARNING: Never change the string of the enum values. It must match with IOS/Andr
 
 */
 
-export enum EvmChain {
+export enum EvmRollupChain {
   Arbitrum = 'Arbitrum',
-  Avalanche = 'Avalanche',
   Base = 'Base',
+  Optimism = 'Optimism',
+  Zksync = 'Zksync',
+}
+
+enum OtherEvmChain {
+  Avalanche = 'Avalanche',
   CronosChain = 'CronosChain',
   BSC = 'BSC',
   Blast = 'Blast',
   Ethereum = 'Ethereum',
-  Optimism = 'Optimism',
   Polygon = 'Polygon',
-  Zksync = 'Zksync',
 }
+
+export const EvmChain = {
+  ...EvmRollupChain,
+  ...OtherEvmChain,
+};
+
+export type EvmChain = EvmRollupChain | OtherEvmChain;
 
 export const evmChainIds: Record<EvmChain, number> = {
   [EvmChain.Arbitrum]: 42161,
