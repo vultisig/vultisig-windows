@@ -1,5 +1,5 @@
+import { FeePriority } from '../../chain/fee/FeePriority';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
-import { FeeMode } from '../../model/evm-fee-mode';
 import { SpecificTransactionInfo } from '../../model/specific-transaction-info';
 
 export interface IRpcService {
@@ -10,7 +10,7 @@ export interface IRpcService {
   resolveENS?(ensName: string): Promise<string>;
   getSpecificTransactionInfo(
     coin: Coin,
-    feeMode?: FeeMode
+    feePriority?: FeePriority
   ): Promise<SpecificTransactionInfo>;
   calculateFee(coin?: Coin): Promise<number>;
 }
