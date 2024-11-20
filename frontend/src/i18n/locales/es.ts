@@ -16,7 +16,7 @@ export const es = {
   enter_password: 'Ingrese la contraseña',
   failed_to_confirm_email_code:
     'No se pudo confirmar el código de verificación de correo electrónico',
-  choose_coins: 'Elige Monedas',
+  choose_coins: 'Elegir monedas',
   invalid_file_format: 'Formato de archivo inválido',
   invalid_vault_parse_to_string: 'No se pudo analizar la bóveda en cadena',
   invalid_vault_data: 'Datos de bóveda no válidos',
