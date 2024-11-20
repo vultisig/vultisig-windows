@@ -22,7 +22,7 @@ import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQuer
 import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { Text } from '../../lib/ui/text';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
-import { splitBy } from '../../lib/utils/array/splitBy/splitBy';
+import { splitBy } from '../../lib/utils/array/splitBy';
 import { sum } from '../../lib/utils/array/sum';
 import { formatAmount } from '../../lib/utils/formatAmount';
 import { makeAppPath } from '../../navigation';
