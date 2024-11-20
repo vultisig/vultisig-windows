@@ -163,7 +163,7 @@ export default function SwapOutputSection({
         <div className="flex-1">{logo}</div>
         <div className="flex items-center rounded-[12px] px-[12px] py-[8px] border-[1px] border-neutral-500 bg-blue-800 gap-[8px]">
           <span className="text-neutral-300 font-medium">
-            Fees $
+            Fees{' '}
             {formatAmount(
               feeAmount * (priceQuery.data || 0) + +quote.fees.totalInUsd,
               globalCurrency
