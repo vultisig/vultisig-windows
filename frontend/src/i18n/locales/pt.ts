@@ -344,7 +344,7 @@ export const pt = {
   vault_missing_public_key_message:
     'O arquivo do cofre está corrompido ou falta uma chave pública. Por favor, tente novamente ou selecione um cofre diferente.',
   backup_decryption_failed_title: 'Falha ao descriptografar o backup',
-  choose_coins: 'Escolha moedas',
+  choose_coins: 'Escolher moedas',
   choose_chains: 'Escolha correntes',
   invalid_vault_parse_to_string:
     'Não foi possível analisar o vault para string',
