@@ -349,7 +349,7 @@ export const it = {
   vault_missing_public_key_message:
     'Il file della cassaforte è corrotto o manca una chiave pubblica. Per favore, riprova o seleziona una cassaforte diversa.',
   backup_decryption_failed_title: 'Impossibile decifrare il backup',
-  choose_coins: 'Scegli le monete',
+  choose_coins: 'Scegli monete',
   choose_chains: 'Scegli le catene',
   invalid_vault_parse_to_string: 'Impossibile analizzare il vault in stringa',
   invalid_vault_data: 'Dati del vault non validi',
