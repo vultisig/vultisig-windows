@@ -13,6 +13,7 @@ import { ManageAmount } from '../amount/ManageSendAmount';
 import { ManageSendCoin } from '../coin/ManageSendCoin';
 import { SendFee } from '../fee/SendFee';
 import { SendFiatFee } from '../fee/SendFiatFee';
+import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings';
 import { StrictFeeRow } from '../fee/StrictFeeRow';
 import { ManageMemo } from '../memo/ManageMemo';
 import { ManageReceiver } from '../receiver/ManageReceiver';
@@ -29,7 +30,12 @@ export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        secondaryControls={<RefreshSend />}
+        secondaryControls={
+          <>
+            <ManageFeeSettings />
+            <RefreshSend />
+          </>
+        }
         title={<PageHeaderTitle>{t('send')}</PageHeaderTitle>}
       />
       <PageContent
