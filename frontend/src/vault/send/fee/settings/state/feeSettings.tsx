@@ -1,15 +1,15 @@
 import { useCallback, useMemo } from 'react';
 
+import { FeePriority } from '../../../../../chain/fee/FeePriority';
 import { isNativeCoin } from '../../../../../chain/utils/isNativeCoin';
 import { ComponentWithChildrenProps } from '../../../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../../../lib/ui/state/getStateProviderSetup';
 import { omit } from '../../../../../lib/utils/record/omit';
 import { Chain } from '../../../../../model/chain';
-import { FeeMode } from '../../../../../model/evm-fee-mode';
 import { useCurrentSendCoin } from '../../../state/sendCoin';
 
-type FeeSettings = {
-  mode: FeeMode;
+export type FeeSettings = {
+  priority: FeePriority;
   gasLimit: number;
 };
 

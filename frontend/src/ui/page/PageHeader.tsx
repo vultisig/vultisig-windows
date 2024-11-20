@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { centerContent } from '../../lib/ui/css/centerContent';
 import { horizontalPadding } from '../../lib/ui/css/horizontalPadding';
 import { TakeWholeSpace } from '../../lib/ui/css/takeWholeSpace';
+import { hStack } from '../../lib/ui/layout/Stack';
 import { getColor } from '../../lib/ui/theme/getters';
 import { pageConfig } from './config';
 
@@ -30,6 +31,10 @@ type PageHeaderProps = Omit<ComponentProps<typeof Container>, 'title'> & {
 
 const ControlsContainer = styled.div`
   position: absolute;
+  ${hStack({
+    alignItems: 'center',
+    gap: 16,
+  })}
 `;
 
 export const PageHeader = ({
