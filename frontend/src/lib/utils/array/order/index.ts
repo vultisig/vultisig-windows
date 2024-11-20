@@ -1,4 +1,4 @@
-import { Order } from '../order/Order';
+import { Order } from '../../order/Order';
 
 export const order = <T>(
   array: T[],
