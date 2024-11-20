@@ -3,7 +3,7 @@ import { SwapQuoteParams, SwapQuoteResponse } from '../lib/types/swap';
 import { queryUrlWindowsPlatform } from '../lib/utils/query/queryUrl';
 
 export class ThorwalletApi {
-  static thorWalletApi: string = 'https://api-v2-dev.thorwallet.org';
+  static thorWalletApi: string = 'https://api-v2-prod.thorwallet.org';
 
   static getSwapQuotes({
     fromAsset,

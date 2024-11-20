@@ -52,3 +52,9 @@ export interface InboundAddress {
   pub_key: string;
   router: string;
 }
+
+export enum SwapPayloadType {
+  MAYA = 'mayachainSwapPayload',
+  THORCHAIN = 'thorchainSwapPayload',
+  ONE_INCH = 'oneinchSwapPayload',
+}
