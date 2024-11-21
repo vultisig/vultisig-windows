@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { feePriorities, FeePriority } from '../../../../chain/fee/FeePriority';
+import {
+  defaultFeePriority,
+  feePriorities,
+  FeePriority,
+} from '../../../../chain/fee/FeePriority';
 import { Button } from '../../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps';
 import { AmountTextInput } from '../../../../lib/ui/inputs/AmountTextInput';
@@ -11,7 +15,8 @@ import { RadioInput } from '../../../../lib/ui/inputs/RadioInput';
 import { VStack } from '../../../../lib/ui/layout/Stack';
 import { Modal } from '../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../lib/ui/props';
-import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
+import { SpecificEvm } from '../../../../model/specific-transaction-info';
+import { useSendSpecificTxInfo } from '../SendSpecificTxInfoProvider';
 import { BaseFee } from './baseFee/BaseFee';
 import { useFeeSettings } from './state/feeSettings';
 
@@ -27,8 +32,14 @@ export const ManageFeeSettingsOverlay: React.FC<ClosableComponentProps> = ({
 
   const [persistentValue, setPersistentValue] = useFeeSettings();
 
+  const { gasLimit: defaultGasLimit } = useSendSpecificTxInfo() as SpecificEvm;
+
   const [value, setValue] = useState<FeeSettingsFormShape>(
-    shouldBePresent(persistentValue)
+    () =>
+      persistentValue ?? {
+        priority: defaultFeePriority,
+        gasLimit: defaultGasLimit,
+      }
   );
 
   return (

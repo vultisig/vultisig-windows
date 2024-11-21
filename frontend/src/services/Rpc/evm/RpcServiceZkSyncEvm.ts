@@ -1,6 +1,5 @@
 import { ethers } from 'ethers';
 
-import { FeePriority } from '../../../chain/fee/FeePriority';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { EvmChain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
@@ -25,10 +24,7 @@ export class RpcServiceZksync extends RpcServiceEvm implements ITokenService {
     return await super.getTokens(nativeToken);
   }
 
-  async getSpecificTransactionInfo(
-    coin: Coin,
-    _feePriority?: FeePriority
-  ): Promise<SpecificEvm> {
+  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificEvm> {
     try {
       const [gasPrice] = await Promise.all([
         this.provider.send('eth_gasPrice', []),

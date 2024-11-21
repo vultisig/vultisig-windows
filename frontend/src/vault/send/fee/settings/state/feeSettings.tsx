@@ -1,23 +1,14 @@
 import { useCallback, useMemo } from 'react';
 
-import { getEvmGasLimit } from '../../../../../chain/evm/utils/getEvmGasLimit';
-import {
-  defaultFeePriority,
-  FeePriority,
-} from '../../../../../chain/fee/FeePriority';
+import { EvmFeeSettings } from '../../../../../chain/evm/fee/EvmFeeSettings';
 import { isNativeCoin } from '../../../../../chain/utils/isNativeCoin';
 import { ComponentWithChildrenProps } from '../../../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../../../lib/ui/state/getStateProviderSetup';
 import { omit } from '../../../../../lib/utils/record/omit';
-import { Chain, EvmChain } from '../../../../../model/chain';
+import { Chain } from '../../../../../model/chain';
 import { useCurrentSendCoin } from '../../../state/sendCoin';
 
-export type FeeSettings = {
-  priority: FeePriority;
-  gasLimit: number;
-};
-
-type FeeSettingsRecord = Record<string, FeeSettings>;
+type FeeSettingsRecord = Record<string, EvmFeeSettings>;
 
 type FeeSettingsKey = {
   chainId: Chain;
@@ -52,21 +43,11 @@ export const useFeeSettings = () => {
       return record[stringKey];
     }
 
-    if (coin.chainId in EvmChain) {
-      return {
-        priority: defaultFeePriority,
-        gasLimit: getEvmGasLimit({
-          chainId: coin.chainId as EvmChain,
-          isNativeToken: isNativeCoin(coin),
-        }),
-      };
-    }
-
     return null;
   }, [coin, record]);
 
   const setValue = useCallback(
-    (value: FeeSettings | null) => {
+    (value: EvmFeeSettings | null) => {
       const stringKey = feeSettingsKeyToString({
         chainId: coin.chainId,
         isNativeToken: isNativeCoin(coin),

@@ -2,8 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 
 import { AccountCoinKey } from '../../../coin/AccountCoin';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
-import { EvmChain } from '../../../model/chain';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { ServiceFactory } from '../../../services/ServiceFactory';
 import {
@@ -32,10 +30,10 @@ export const useSpecificSendTxInfoQuery = () => {
     }),
     queryFn: async () => {
       const service = ServiceFactory.getService(coinKey.chainId, walletCore);
-      if (coin.chain in EvmChain) {
+      if (settings) {
         return service.rpcService.getSpecificTransactionInfo(
           storageCoinToCoin(coin),
-          shouldBePresent(settings).priority
+          settings.priority
         );
       }
       return service.rpcService.getSpecificTransactionInfo(
