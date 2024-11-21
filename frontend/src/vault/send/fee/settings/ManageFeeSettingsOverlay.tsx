@@ -18,6 +18,7 @@ import { ClosableComponentProps } from '../../../../lib/ui/props';
 import { SpecificEvm } from '../../../../model/specific-transaction-info';
 import { useSendSpecificTxInfo } from '../SendSpecificTxInfoProvider';
 import { BaseFee } from './baseFee/BaseFee';
+import { FeeContainer } from './FeeContainer';
 import { useFeeSettings } from './state/feeSettings';
 
 type FeeSettingsFormShape = {
@@ -75,6 +76,12 @@ export const ManageFeeSettingsOverlay: React.FC<ClosableComponentProps> = ({
           value={value.gasLimit}
           onValueChange={gasLimit => setValue({ ...value, gasLimit })}
         />
+        <InputContainer>
+          <InputLabel>
+            {t('total_fee')} ({t('gwei')})
+          </InputLabel>
+          <FeeContainer>TO DO</FeeContainer>
+        </InputContainer>
       </VStack>
     </Modal>
   );
