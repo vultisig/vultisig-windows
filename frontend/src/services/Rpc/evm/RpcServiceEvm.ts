@@ -1,6 +1,11 @@
 import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
+import {
+  evmNativeTokenGasLimit,
+  evmTokenGasLimit,
+} from '../../../chain/evm/evmGasLimit';
+import { evmRpcUrl } from '../../../chain/evm/evmRpcUrl';
 import { FeePriority } from '../../../chain/fee/FeePriority';
 import { gwei } from '../../../chain/tx/fee/utils/evm';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
@@ -18,18 +23,17 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
   provider: ethers.JsonRpcProvider;
   rpcUrl: string;
 
-  constructor(rpcUrl: string) {
-    this.provider = new ethers.JsonRpcProvider(rpcUrl);
-    this.rpcUrl = rpcUrl;
+  constructor(chain: EvmChain) {
+    this.rpcUrl = evmRpcUrl[chain];
+    this.provider = new ethers.JsonRpcProvider(this.rpcUrl);
   }
 
   async calculateFee(coin: Coin): Promise<number> {
-    let gasLimit = 23000;
-    if (!coin.isNativeToken) {
-      gasLimit = 120000;
-    }
+    const record = coin.isNativeToken
+      ? evmNativeTokenGasLimit
+      : evmTokenGasLimit;
 
-    return gasLimit;
+    return record[coin.chain as EvmChain];
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
