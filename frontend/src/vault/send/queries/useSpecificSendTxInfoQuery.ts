@@ -33,7 +33,7 @@ export const useSpecificSendTxInfoQuery = () => {
       if (settings) {
         return service.rpcService.getSpecificTransactionInfo(
           storageCoinToCoin(coin),
-          settings.priority
+          settings
         );
       }
       return service.rpcService.getSpecificTransactionInfo(
