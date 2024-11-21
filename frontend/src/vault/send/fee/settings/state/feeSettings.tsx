@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
+import { getEvmGasLimit } from '../../../../../chain/evm/utils/getEvmGasLimit';
 import {
   defaultFeePriority,
   FeePriority,
@@ -54,7 +55,10 @@ export const useFeeSettings = () => {
     if (coin.chainId in EvmChain) {
       return {
         priority: defaultFeePriority,
-        gasLimit: 0,
+        gasLimit: getEvmGasLimit({
+          chainId: coin.chainId as EvmChain,
+          isNativeToken: isNativeCoin(coin),
+        }),
       };
     }
 

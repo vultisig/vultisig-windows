@@ -9,6 +9,7 @@ import { InputLabel } from '../../../../lib/ui/inputs/InputLabel';
 import { RadioInput } from '../../../../lib/ui/inputs/RadioInput';
 import { Modal } from '../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../lib/ui/props';
+import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
 import { FeeSettings, useFeeSettings } from './state/feeSettings';
 
 export const ManageFeeSettingsOverlay: React.FC<ClosableComponentProps> = ({
@@ -18,10 +19,9 @@ export const ManageFeeSettingsOverlay: React.FC<ClosableComponentProps> = ({
 
   const [persistentValue, setPersistentValue] = useFeeSettings();
 
-  const [value, setValue] = useState<FeeSettings>({
-    priority: persistentValue?.priority ?? 'normal',
-    gasLimit: 2300,
-  });
+  const [value, setValue] = useState<FeeSettings>(
+    shouldBePresent(persistentValue)
+  );
 
   return (
     <Modal
