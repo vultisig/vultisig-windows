@@ -12,6 +12,7 @@ import { VStack } from '../../../../lib/ui/layout/Stack';
 import { Modal } from '../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../lib/ui/props';
 import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
+import { BaseFee } from './baseFee/BaseFee';
 import { useFeeSettings } from './state/feeSettings';
 
 type FeeSettingsFormShape = {
@@ -47,7 +48,7 @@ export const ManageFeeSettingsOverlay: React.FC<ClosableComponentProps> = ({
       title={t('advanced')}
       footer={<Button type="submit">{t('save')}</Button>}
     >
-      <VStack gap={8}>
+      <VStack gap={12}>
         <InputContainer>
           <InputLabel>{t('priority')}</InputLabel>
           <RadioInput
@@ -57,6 +58,7 @@ export const ManageFeeSettingsOverlay: React.FC<ClosableComponentProps> = ({
             renderOption={t}
           />
         </InputContainer>
+        <BaseFee />
         <AmountTextInput
           label={<InputLabel>{t('gas_limit')}</InputLabel>}
           value={value.gasLimit}

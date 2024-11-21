@@ -2,6 +2,7 @@ import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { evmRpcUrl } from '../../../chain/evm/evmRpcUrl';
+import { getEvmBaseFee } from '../../../chain/evm/utils/getEvmBaseFee';
 import { getEvmGasLimit } from '../../../chain/evm/utils/getEvmGasLimit';
 import { FeePriority } from '../../../chain/fee/FeePriority';
 import { gwei } from '../../../chain/tx/fee/utils/evm';
@@ -140,7 +141,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         isNativeToken: coin.isNativeToken,
       });
 
-      const baseFee = await this.getBaseFee();
+      const baseFee = await getEvmBaseFee(this.chain);
       const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
       const priorityFee = priorityFeeMapValue[feePriority];
       const normalizedBaseFee = this.normalizeFee(Number(baseFee));
@@ -168,21 +169,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         gasLimit: 0,
         maxFeePerGasWei: 0,
       } as SpecificEvm;
-    }
-  }
-
-  async getBaseFee(): Promise<string> {
-    try {
-      const txResponse = await this.provider.getBlock('latest');
-
-      if (txResponse && txResponse.baseFeePerGas) {
-        return txResponse.baseFeePerGas.toString();
-      } else {
-        return '';
-      }
-    } catch (error) {
-      console.error('sendTransaction::', error);
-      return '';
     }
   }
 
