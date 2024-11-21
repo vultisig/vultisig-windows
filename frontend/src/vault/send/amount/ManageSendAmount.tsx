@@ -43,7 +43,6 @@ const MaxButton = styled(UnstyledButton)`
 
 export const ManageAmount = () => {
   const [value, setValue] = useSendAmount();
-
   const { t } = useTranslation();
 
   return (
