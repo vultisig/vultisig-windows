@@ -18,7 +18,6 @@ import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
 import { RpcServiceEvm } from '../../../services/Rpc/evm/RpcServiceEvm';
-import { getRPCServiceEndpoint } from '../../../services/Rpc/evm/utils';
 import { convertChainToChainTicker } from '../../../utils/crypto';
 import { getInboundAddressForChain } from '../../../utils/midgard';
 import {
@@ -105,9 +104,7 @@ export const SwapConfirm = () => {
   };
 
   const fetchAllowance = useCallback(async () => {
-    const service = new RpcServiceEvm(
-      getRPCServiceEndpoint(coin.chain as EvmChain)
-    );
+    const service = new RpcServiceEvm(coin.chain as EvmChain);
     const allowance = await service.fetchAllowance(
       coin.contract_address,
       sender,

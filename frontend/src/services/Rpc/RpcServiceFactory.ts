@@ -1,18 +1,10 @@
-import { Chain } from '../../model/chain';
+import { match } from '../../lib/utils/match';
+import { Chain, EvmChain } from '../../model/chain';
 import { RpcServiceDydx } from './dydx/RpcServiceDydx';
-import {
-  RpcServiceArbitrum,
-  RpcServiceAvalanche,
-  RpcServiceBase,
-  RpcServiceBlast,
-  RpcServiceBsc,
-  RpcServiceCronos,
-  RpcServiceEthereum,
-  RpcServiceOptimism,
-  RpcServicePolygon,
-} from './evm/RpcServiceEvmAllLayers';
+import { RpcServiceEvm } from './evm/RpcServiceEvm';
 import { RpcServiceZksync } from './evm/RpcServiceZkSyncEvm';
 import { RpcServiceGaia } from './gaia/RpcServiceGaia';
+import { IRpcService } from './IRpcService';
 import { RpcServiceKujira } from './kurija/RpcServiceKurija';
 import { RpcServiceMaya } from './maya/RpcServiceMaya';
 import { RpcServiceOsmosis } from './osmosis/RpcServiceOsmosis';
@@ -29,63 +21,34 @@ import { RpcServiceUtxo } from './utxo/RpcServiceUtxo';
 
 export class RpcServiceFactory {
   static createRpcService(chain: Chain) {
-    switch (chain) {
-      case Chain.Solana:
-        return new RpcServiceSolana();
-      case Chain.Polkadot:
-        return new RpcServicePolkadot(chain);
-      case Chain.Ethereum:
-        return new RpcServiceEthereum();
-      case Chain.Optimism:
-        return new RpcServiceOptimism();
-      case Chain.Polygon:
-        return new RpcServicePolygon();
-      case Chain.Arbitrum:
-        return new RpcServiceArbitrum();
-      case Chain.Blast:
-        return new RpcServiceBlast();
-      case Chain.Base:
-        return new RpcServiceBase();
-      case Chain.CronosChain:
-        return new RpcServiceCronos();
-      case Chain.BSC:
-        return new RpcServiceBsc();
-      case Chain.Zksync:
-        return new RpcServiceZksync();
-      case Chain.THORChain:
-        return new RpcServiceThorchain();
-      case Chain.MayaChain:
-        return new RpcServiceMaya();
-      case Chain.Bitcoin:
-        return new RpcServiceUtxo(chain);
-      case Chain.BitcoinCash:
-        return new RpcServiceUtxo(chain);
-      case Chain.Litecoin:
-        return new RpcServiceUtxo(chain);
-      case Chain.Dash:
-        return new RpcServiceUtxo(chain);
-      case Chain.Dogecoin:
-        return new RpcServiceUtxo(chain);
-      case Chain.Avalanche:
-        return new RpcServiceAvalanche();
-      case Chain.Sui:
-        return new RpcServiceSui(chain);
-      case Chain.Cosmos:
-        return new RpcServiceGaia();
-      case Chain.Osmosis:
-        return new RpcServiceOsmosis();
-      case Chain.Kujira:
-        return new RpcServiceKujira();
-      case Chain.Dydx:
-        return new RpcServiceDydx();
-      case Chain.Ton:
-        return new RpcServiceTon(chain);
-      case Chain.Terra:
-        return new RpcServiceTerraV2();
-      case Chain.TerraClassic:
-        return new RpcServiceTerraClassic();
-      default:
-        throw new Error(`Chain not supported ${chain}`);
-    }
+    return match<Chain, IRpcService>(chain, {
+      [Chain.Solana]: () => new RpcServiceSolana(),
+      [Chain.Polkadot]: () => new RpcServicePolkadot(chain),
+      [Chain.Ethereum]: () => new RpcServiceEvm(chain as EvmChain),
+      [Chain.Optimism]: () => new RpcServiceEvm(chain as EvmChain),
+      [Chain.Polygon]: () => new RpcServiceEvm(chain as EvmChain),
+      [Chain.Arbitrum]: () => new RpcServiceEvm(chain as EvmChain),
+      [Chain.Blast]: () => new RpcServiceEvm(chain as EvmChain),
+      [Chain.Base]: () => new RpcServiceEvm(chain as EvmChain),
+      [Chain.CronosChain]: () => new RpcServiceEvm(chain as EvmChain),
+      [Chain.BSC]: () => new RpcServiceEvm(chain as EvmChain),
+      [Chain.Zksync]: () => new RpcServiceZksync(),
+      [Chain.THORChain]: () => new RpcServiceThorchain(),
+      [Chain.MayaChain]: () => new RpcServiceMaya(),
+      [Chain.Bitcoin]: () => new RpcServiceUtxo(chain),
+      [Chain.BitcoinCash]: () => new RpcServiceUtxo(chain),
+      [Chain.Litecoin]: () => new RpcServiceUtxo(chain),
+      [Chain.Dash]: () => new RpcServiceUtxo(chain),
+      [Chain.Dogecoin]: () => new RpcServiceUtxo(chain),
+      [Chain.Avalanche]: () => new RpcServiceEvm(chain as EvmChain),
+      [Chain.Sui]: () => new RpcServiceSui(chain),
+      [Chain.Cosmos]: () => new RpcServiceGaia(),
+      [Chain.Osmosis]: () => new RpcServiceOsmosis(),
+      [Chain.Kujira]: () => new RpcServiceKujira(),
+      [Chain.Dydx]: () => new RpcServiceDydx(),
+      [Chain.Ton]: () => new RpcServiceTon(chain),
+      [Chain.Terra]: () => new RpcServiceTerraV2(),
+      [Chain.TerraClassic]: () => new RpcServiceTerraClassic(),
+    });
   }
 }

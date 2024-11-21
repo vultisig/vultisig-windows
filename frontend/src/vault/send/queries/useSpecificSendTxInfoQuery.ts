@@ -2,12 +2,15 @@ import { useQuery } from '@tanstack/react-query';
 
 import { AccountCoinKey } from '../../../coin/AccountCoin';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
+import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { EvmChain } from '../../../model/chain';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { ServiceFactory } from '../../../services/ServiceFactory';
 import {
   useCurrentVaultAddress,
   useCurrentVaultCoin,
 } from '../../state/currentVault';
+import { useFeeSettings } from '../fee/settings/state/feeSettings';
 import { useCurrentSendCoin } from '../state/sendCoin';
 
 export const getSpecificSendTxInfoQueryKey = (coinKey: AccountCoinKey) => [
@@ -20,6 +23,7 @@ export const useSpecificSendTxInfoQuery = () => {
   const [coinKey] = useCurrentSendCoin();
   const coin = useCurrentVaultCoin(coinKey);
   const address = useCurrentVaultAddress(coinKey.chainId);
+  const [settings] = useFeeSettings();
 
   return useQuery({
     queryKey: getSpecificSendTxInfoQueryKey({
@@ -28,7 +32,15 @@ export const useSpecificSendTxInfoQuery = () => {
     }),
     queryFn: async () => {
       const service = ServiceFactory.getService(coinKey.chainId, walletCore);
-      return service.feeService.getFee(storageCoinToCoin(coin));
+      if (coin.chain in EvmChain) {
+        return service.rpcService.getSpecificTransactionInfo(
+          storageCoinToCoin(coin),
+          shouldBePresent(settings).priority
+        );
+      }
+      return service.rpcService.getSpecificTransactionInfo(
+        storageCoinToCoin(coin)
+      );
     },
   });
 };

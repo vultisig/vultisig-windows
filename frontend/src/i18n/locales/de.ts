@@ -574,32 +574,22 @@ export const de = {
       },
     },
     vote: {
-      labels: {
-        proposalId: 'Vorschlags-ID',
-        support: 'Support',
-      },
+      labels: { proposalId: 'Vorschlags-ID', support: 'Support' },
       validations: {
         proposalId: 'Vorschlags-ID ist erforderlich',
         support: 'Support-Feld ist erforderlich',
       },
     },
     stake: {
-      labels: {
-        amount: 'Betrag',
-        validatorAddress: 'Validator-Adresse',
-      },
+      labels: { amount: 'Betrag', validatorAddress: 'Validator-Adresse' },
       validations: {
         amount: 'Betrag muss positiv sein',
         validatorAddress: 'Validator-Adresse ist erforderlich',
       },
     },
     unstake: {
-      labels: {
-        validatorAddress: 'Validator-Adresse',
-      },
-      validations: {
-        validatorAddress: 'Validator-Adresse ist erforderlich',
-      },
+      labels: { validatorAddress: 'Validator-Adresse' },
+      validations: { validatorAddress: 'Validator-Adresse ist erforderlich' },
     },
   },
   scan_with_devices: 'Mit Geräten scannen, um der Tresorgeneration beizutreten',
@@ -615,4 +605,8 @@ export const de = {
   custom: 'Benutzerdefinierte Aktion',
   vote: 'Abstimmung',
   stake: 'Einsatz',
+  advanced: 'Fortschrittlich',
+  low: 'Niedrig',
+  normal: 'Normal',
+  priority: 'Priorität',
 };

@@ -1,11 +1,16 @@
 import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
+import { evmRpcUrl } from '../../../chain/evm/evmRpcUrl';
+import { getEvmGasLimit } from '../../../chain/evm/utils/getEvmGasLimit';
+import { FeePriority } from '../../../chain/fee/FeePriority';
+import { gwei } from '../../../chain/tx/fee/utils/evm';
+import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { ChainUtils, EvmChain, evmChainIds } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { FeeMap, FeeMode } from '../../../model/evm-fee-mode';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
@@ -13,20 +18,11 @@ import { IRpcService } from '../IRpcService';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   provider: ethers.JsonRpcProvider;
-  rpcUrl: string;
+  chain: EvmChain;
 
-  constructor(rpcUrl: string) {
-    this.provider = new ethers.JsonRpcProvider(rpcUrl);
-    this.rpcUrl = rpcUrl;
-  }
-
-  async calculateFee(coin: Coin): Promise<number> {
-    let gasLimit = 23000;
-    if (!coin.isNativeToken) {
-      gasLimit = 120000;
-    }
-
-    return gasLimit;
+  constructor(chain: EvmChain) {
+    this.chain = chain;
+    this.provider = new ethers.JsonRpcProvider(evmRpcUrl[chain]);
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
@@ -47,7 +43,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       };
 
       // We are having a lot of cors issues, so we are using the Go server to send the transaction
-      const response = await Post(this.rpcUrl, payload);
+      const response = await Post(evmRpcUrl[this.chain], payload);
 
       if (response && response.result) {
         return response.result;
@@ -120,7 +116,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         );
       }
     } catch (error) {
-      console.error(this.rpcUrl, 'getBalance::', error);
+      console.error(evmRpcUrl[this.chain], 'getBalance::', error);
       return '0';
     }
   }
@@ -131,21 +127,22 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
   async getSpecificTransactionInfo(
     coin: Coin,
-    feeMode?: FeeMode
+    feePriority: FeePriority = 'normal'
   ): Promise<SpecificEvm> {
     try {
-      const paramFeeMode: FeeMode = feeMode ?? FeeMode.Normal;
-
       const [gasPrice, nonce] = await Promise.all([
         this.provider.send('eth_gasPrice', []),
         this.provider.getTransactionCount(coin.address),
       ]);
 
-      const gasLimit = await this.calculateFee(coin);
+      const gasLimit = getEvmGasLimit({
+        chainId: this.chain,
+        isNativeToken: coin.isNativeToken,
+      });
 
       const baseFee = await this.getBaseFee();
       const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
-      const priorityFee = priorityFeeMapValue[paramFeeMode];
+      const priorityFee = priorityFeeMapValue[feePriority];
       const normalizedBaseFee = this.normalizeFee(Number(baseFee));
       const maxFeePerGasWei = Number(
         BigInt(Math.round(normalizedBaseFee + priorityFee))
@@ -153,7 +150,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
       return {
         fee: maxFeePerGasWei * gasLimit,
-        gasPrice: Number(gasPrice),
+        gasPrice: fromChainAmount(Number(gasPrice), gwei.decimals),
         nonce,
         priorityFee,
         priorityFeeWei: priorityFee,
@@ -189,26 +186,18 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async fetchMaxPriorityFeesPerGas(): Promise<FeeMap> {
+  async fetchMaxPriorityFeesPerGas(): Promise<Record<FeePriority, number>> {
     try {
-      // Fetch fee history (assume getGasHistory is defined)
       const history = await this.getGasHistory();
-
-      // Helper function to map fees to FeeMode
-      const priorityFeesMap = (
-        low: number,
-        normal: number,
-        fast: number
-      ): FeeMap => ({
-        [FeeMode.SafeLow]: low,
-        [FeeMode.Normal]: normal,
-        [FeeMode.Fast]: fast,
-      });
 
       // If history is empty, fetch a single max priority fee and use it for all modes
       if (history.length === 0) {
         const value = await this.provider.send('eth_maxPriorityFeePerGas', []);
-        return priorityFeesMap(value, value, value);
+        return {
+          fast: value,
+          low: value,
+          normal: value,
+        };
       }
 
       // Calculate low, normal, and fast fees
@@ -217,14 +206,15 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       const fast = history[history.length - 1];
 
       // Return mapped fees
-      return priorityFeesMap(low, normal, fast);
-    } catch (error) {
-      console.error('fetchMaxPriorityFeesPerGas::', error);
       return {
-        [FeeMode.SafeLow]: 0,
-        [FeeMode.Normal]: 0,
-        [FeeMode.Fast]: 0,
+        low,
+        normal,
+        fast,
       };
+    } catch (error) {
+      throw new Error(
+        `Failed to fetch max priority fees per gas ${extractErrorMsg(error)}`
+      );
     }
   }
 

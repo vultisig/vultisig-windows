@@ -574,29 +574,21 @@ export const es = {
       },
     },
     vote: {
-      labels: {
-        proposalId: 'ID de la propuesta',
-        support: 'Soporte',
-      },
+      labels: { proposalId: 'ID de la propuesta', support: 'Soporte' },
       validations: {
         proposalId: 'ID de la propuesta es obligatorio',
         support: 'El campo de soporte es obligatorio',
       },
     },
     stake: {
-      labels: {
-        amount: 'Monto',
-        validatorAddress: 'Dirección del validador',
-      },
+      labels: { amount: 'Monto', validatorAddress: 'Dirección del validador' },
       validations: {
         amount: 'El monto debe ser positivo',
         validatorAddress: 'La dirección del validador es obligatoria',
       },
     },
     unstake: {
-      labels: {
-        validatorAddress: 'Dirección del validador',
-      },
+      labels: { validatorAddress: 'Dirección del validador' },
       validations: {
         validatorAddress: 'La dirección del validador es obligatoria',
       },
@@ -615,4 +607,8 @@ export const es = {
   custom: 'Acción personalizada',
   vote: 'Votar',
   stake: 'Apostar',
+  advanced: 'Avanzado',
+  low: 'Bajo',
+  normal: 'Normal',
+  priority: 'Prioridad',
 };

@@ -26,7 +26,9 @@ export const useSpecificDepositTxInfoQuery = () => {
     }),
     queryFn: async () => {
       const service = ServiceFactory.getService(coinKey.chainId, walletCore);
-      return await service.feeService.getFee(storageCoinToCoin(coin));
+      return await service.rpcService.getSpecificTransactionInfo(
+        storageCoinToCoin(coin)
+      );
     },
   });
 };

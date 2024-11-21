@@ -567,10 +567,7 @@ export const pt = {
       },
     },
     vote: {
-      labels: {
-        proposalId: 'ID da proposta',
-        support: 'Suporte',
-      },
+      labels: { proposalId: 'ID da proposta', support: 'Suporte' },
       validates: {
         proposalId: 'ID da proposta é obrigatório',
         support: 'Campo de suporte é obrigatório',
@@ -587,12 +584,8 @@ export const pt = {
       },
     },
     unstake: {
-      labels: {
-        validatorAddress: 'Endereço do validador',
-      },
-      validates: {
-        validatorAddress: 'Endereço do validador é obrigatório',
-      },
+      labels: { validatorAddress: 'Endereço do validador' },
+      validates: { validatorAddress: 'Endereço do validador é obrigatório' },
     },
   },
   sign: 'Assinar',
@@ -605,4 +598,8 @@ export const pt = {
   custom: 'Ação personalizada',
   vote: 'Voto',
   stake: 'Estaca',
+  advanced: 'Avançado',
+  low: 'Baixo',
+  normal: 'Normal',
+  priority: 'Prioridade',
 };
