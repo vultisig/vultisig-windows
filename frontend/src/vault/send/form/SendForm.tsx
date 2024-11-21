@@ -9,6 +9,7 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
+import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay';
 import { ManageAmount } from '../amount/ManageSendAmount';
 import { ManageSendCoin } from '../coin/ManageSendCoin';
 import { SendFee } from '../fee/SendFee';
@@ -53,6 +54,7 @@ export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
             <ManageReceiver />
             <ManageMemo />
             <ManageAmount />
+            <AmountInGlobalCurrencyDisplay />
             <VStack gap={8}>
               <StrictFeeRow>
                 <SendFee />
