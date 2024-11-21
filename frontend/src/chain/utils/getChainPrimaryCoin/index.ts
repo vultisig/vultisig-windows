@@ -1,7 +1,7 @@
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
-import { Chain } from '../../model/chain';
-import { CoinMeta } from '../../model/coin-meta';
-import { TokensStore } from '../../services/Coin/CoinList';
+import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { Chain } from '../../../model/chain';
+import { CoinMeta } from '../../../model/coin-meta';
+import { TokensStore } from '../../../services/Coin/CoinList';
 
 export const getChainPrimaryCoin = (chain: Chain): CoinMeta => {
   const tokens = TokensStore.TokenSelectionAssets.filter(

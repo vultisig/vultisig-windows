@@ -1,5 +1,5 @@
-import { EvmChain } from '../../../model/chain';
-import { evmNativeTokenGasLimit, evmTokenGasLimit } from '../evmGasLimit';
+import { EvmChain } from '../../../../model/chain';
+import { evmNativeTokenGasLimit, evmTokenGasLimit } from '../../evmGasLimit';
 
 type GetEvmGasLimitInput = {
   chainId: EvmChain;
