@@ -4,7 +4,6 @@ import { Chain } from '../model/chain';
 import { AddressServiceFactory } from './Address/AddressServiceFactory';
 import { BalanceServiceFactory } from './Balance/BalanceServiceFactory';
 import { CoinServiceFactory } from './Coin/CoinServiceFactory';
-import { FeeServiceFactory } from './Fee/FeeServiceFactory';
 import { IService } from './IService';
 import { PriceServiceFactory } from './Price/PriceServiceFactory';
 import { RpcServiceFactory } from './Rpc/RpcServiceFactory';
@@ -36,7 +35,6 @@ export class ServiceFactory {
 
       const balanceService = BalanceServiceFactory.createBalanceService(chain);
       const priceService = PriceServiceFactory.createPriceService(chain);
-      const feeService = FeeServiceFactory.createFeeService(chain, walletCore);
 
       return new Service(
         rpcService,
@@ -44,8 +42,7 @@ export class ServiceFactory {
         coinService,
         keygenService,
         balanceService,
-        priceService,
-        feeService
+        priceService
       );
     } catch (e) {
       console.error(chain, walletCore, e);

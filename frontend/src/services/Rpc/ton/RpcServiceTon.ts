@@ -34,7 +34,7 @@ export class RpcServiceTon extends RpcService implements IRpcService {
 
     return {
       fee: await this.calculateFee(coin),
-      gasPrice: await this.calculateFee(coin),
+      gasPrice: 1000000 / Math.pow(10, coin.decimals),
       bounceable: false,
       expireAt: Math.floor(Date.now() / 1000) + 600,
       sequenceNumber,

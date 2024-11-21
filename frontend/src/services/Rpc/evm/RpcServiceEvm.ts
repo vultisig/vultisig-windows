@@ -2,6 +2,8 @@ import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { FeePriority } from '../../../chain/fee/FeePriority';
+import { gwei } from '../../../chain/tx/fee/utils/evm';
+import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
@@ -152,7 +154,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
       return {
         fee: maxFeePerGasWei * gasLimit,
-        gasPrice: Number(gasPrice),
+        gasPrice: fromChainAmount(Number(gasPrice), gwei.decimals),
         nonce,
         priorityFee,
         priorityFeeWei: priorityFee,

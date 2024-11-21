@@ -28,7 +28,9 @@ export const useSpecificSendTxInfoQuery = () => {
     }),
     queryFn: async () => {
       const service = ServiceFactory.getService(coinKey.chainId, walletCore);
-      return service.feeService.getFee(storageCoinToCoin(coin));
+      return service.rpcService.getSpecificTransactionInfo(
+        storageCoinToCoin(coin)
+      );
     },
   });
 };

@@ -1,3 +1,5 @@
+import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
+import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { SpecificThorchain } from '../../../model/specific-transaction-info';
@@ -65,7 +67,7 @@ export class RpcServiceMaya implements IRpcService {
 
     const specificThorchain: SpecificThorchain = {
       fee, // sometimes the fee is calculated like EVMs, so we need to add it here
-      gasPrice: fee, //The gas price is the price per byte of the transaction
+      gasPrice: fromChainAmount(fee, getChainFeeCoin(Chain.MayaChain).decimals),
       accountNumber: Number(account?.account_number),
       sequence: Number(account?.sequence ?? 0),
       isDeposit: false,
