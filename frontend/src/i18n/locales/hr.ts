@@ -552,32 +552,22 @@ export const hr = {
       },
     },
     vote: {
-      labels: {
-        proposalId: 'ID Prijedloga',
-        support: 'Podrška',
-      },
+      labels: { proposalId: 'ID Prijedloga', support: 'Podrška' },
       validations: {
         proposalId: 'ID Prijedloga je obavezan',
         support: 'Polje Podrška je obavezno',
       },
     },
     stake: {
-      labels: {
-        amount: 'Iznos',
-        validatorAddress: 'Adresa Validatora',
-      },
+      labels: { amount: 'Iznos', validatorAddress: 'Adresa Validatora' },
       validations: {
         amount: 'Iznos mora biti pozitivan',
         validatorAddress: 'Adresa Validatora je obavezna',
       },
     },
     unstake: {
-      labels: {
-        validatorAddress: 'Adresa Validatora',
-      },
-      validations: {
-        validatorAddress: 'Adresa Validatora je obavezna',
-      },
+      labels: { validatorAddress: 'Adresa Validatora' },
+      validations: { validatorAddress: 'Adresa Validatora je obavezna' },
     },
   },
   scan_with_devices: 'Skeniraj s uređajima za pridruživanje generaciji trezora',
@@ -593,4 +583,8 @@ export const hr = {
   custom: 'Prilagođena radnja',
   vote: 'Glasanje',
   stake: 'Ulog',
+  advanced: 'Napredno',
+  low: 'Niska',
+  normal: 'Normalan',
+  priority: 'Prioritet',
 };

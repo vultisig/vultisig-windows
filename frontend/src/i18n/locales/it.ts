@@ -572,10 +572,7 @@ export const it = {
       },
     },
     vote: {
-      labels: {
-        proposalId: 'ID proposta',
-        support: 'Supporto',
-      },
+      labels: { proposalId: 'ID proposta', support: 'Supporto' },
       validations: {
         proposalId: 'ID proposta obbligatorio',
         support: 'Il campo Supporto è obbligatorio',
@@ -592,12 +589,8 @@ export const it = {
       },
     },
     unstake: {
-      labels: {
-        validatorAddress: 'Indirizzo convalidatore',
-      },
-      validations: {
-        validatorAddress: 'Indirizzo convalidatore obbligatorio',
-      },
+      labels: { validatorAddress: 'Indirizzo convalidatore' },
+      validations: { validatorAddress: 'Indirizzo convalidatore obbligatorio' },
     },
   },
   sign: 'Firma',
@@ -610,4 +603,8 @@ export const it = {
   custom: 'Azione personalizzata',
   vote: 'Votare',
   stake: 'Palo',
+  advanced: 'Avanzato',
+  low: 'Basso',
+  normal: 'Normale',
+  priority: 'Priorità',
 };
