@@ -300,6 +300,7 @@ export const en = {
   amount: 'Amount',
   value: 'Value',
   gas: 'Gas',
+  gas_limit: 'Gas limit',
   network_fee: 'Network fee',
   advanced: 'Advanced',
   low: 'Low',
