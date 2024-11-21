@@ -28,7 +28,6 @@ export const useCoinPricesQuery = (coins: CoinMeta[]) => {
         queryFn: async (): Promise<PriceQueryResult[]> => {
           const priceService = PriceServiceFactory.createPriceService(key);
           const prices = await priceService.getPrices(value);
-
           const result: PriceQueryResult[] = [];
 
           value.forEach(coin => {
