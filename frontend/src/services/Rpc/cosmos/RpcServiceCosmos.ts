@@ -6,10 +6,6 @@ import { SpecificCosmos } from '../../../model/specific-transaction-info';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceCosmos implements IRpcService {
-  calculateFee(coin: Coin): Promise<number> {
-    throw new Error('Method not implemented.');
-  }
-
   sendTransaction(encodedTransaction: string): Promise<string> {
     return this.broadcastTransaction(encodedTransaction);
   }

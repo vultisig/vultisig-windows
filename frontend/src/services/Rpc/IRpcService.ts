@@ -12,5 +12,4 @@ export interface IRpcService {
     coin: Coin,
     feePriority?: FeePriority
   ): Promise<SpecificTransactionInfo>;
-  calculateFee(coin?: Coin): Promise<number>;
 }

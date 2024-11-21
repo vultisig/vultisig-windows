@@ -1,11 +1,14 @@
 import { useCallback, useMemo } from 'react';
 
-import { FeePriority } from '../../../../../chain/fee/FeePriority';
+import {
+  defaultFeePriority,
+  FeePriority,
+} from '../../../../../chain/fee/FeePriority';
 import { isNativeCoin } from '../../../../../chain/utils/isNativeCoin';
 import { ComponentWithChildrenProps } from '../../../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../../../lib/ui/state/getStateProviderSetup';
 import { omit } from '../../../../../lib/utils/record/omit';
-import { Chain } from '../../../../../model/chain';
+import { Chain, EvmChain } from '../../../../../model/chain';
 import { useCurrentSendCoin } from '../../../state/sendCoin';
 
 export type FeeSettings = {
@@ -46,6 +49,13 @@ export const useFeeSettings = () => {
 
     if (stringKey in record) {
       return record[stringKey];
+    }
+
+    if (coin.chainId in EvmChain) {
+      return {
+        priority: defaultFeePriority,
+        gasLimit: 0,
+      };
     }
 
     return null;

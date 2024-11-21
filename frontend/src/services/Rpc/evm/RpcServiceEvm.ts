@@ -1,11 +1,8 @@
 import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
-import {
-  evmNativeTokenGasLimit,
-  evmTokenGasLimit,
-} from '../../../chain/evm/evmGasLimit';
 import { evmRpcUrl } from '../../../chain/evm/evmRpcUrl';
+import { getEvmGasLimit } from '../../../chain/evm/utils/getEvmGasLimit';
 import { FeePriority } from '../../../chain/fee/FeePriority';
 import { gwei } from '../../../chain/tx/fee/utils/evm';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
@@ -21,19 +18,11 @@ import { IRpcService } from '../IRpcService';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   provider: ethers.JsonRpcProvider;
-  rpcUrl: string;
+  chain: EvmChain;
 
   constructor(chain: EvmChain) {
-    this.rpcUrl = evmRpcUrl[chain];
-    this.provider = new ethers.JsonRpcProvider(this.rpcUrl);
-  }
-
-  async calculateFee(coin: Coin): Promise<number> {
-    const record = coin.isNativeToken
-      ? evmNativeTokenGasLimit
-      : evmTokenGasLimit;
-
-    return record[coin.chain as EvmChain];
+    this.chain = chain;
+    this.provider = new ethers.JsonRpcProvider(evmRpcUrl[chain]);
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
@@ -54,7 +43,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       };
 
       // We are having a lot of cors issues, so we are using the Go server to send the transaction
-      const response = await Post(this.rpcUrl, payload);
+      const response = await Post(evmRpcUrl[this.chain], payload);
 
       if (response && response.result) {
         return response.result;
@@ -127,7 +116,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         );
       }
     } catch (error) {
-      console.error(this.rpcUrl, 'getBalance::', error);
+      console.error(evmRpcUrl[this.chain], 'getBalance::', error);
       return '0';
     }
   }
@@ -146,7 +135,10 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         this.provider.getTransactionCount(coin.address),
       ]);
 
-      const gasLimit = await this.calculateFee(coin);
+      const gasLimit = getEvmGasLimit({
+        chainId: this.chain,
+        isNativeToken: coin.isNativeToken,
+      });
 
       const baseFee = await this.getBaseFee();
       const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
