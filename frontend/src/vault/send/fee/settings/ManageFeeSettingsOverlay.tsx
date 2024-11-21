@@ -36,7 +36,11 @@ export const ManageFeeSettingsOverlay: React.FC<ClosableComponentProps> = ({
       onClose={onClose}
       title={t('advanced')}
       footer={
-        <CancelSubmitFooter submitText={t('save')} cancelText={t('cancel')} />
+        <CancelSubmitFooter
+          onCancel={onClose}
+          submitText={t('save')}
+          cancelText={t('cancel')}
+        />
       }
     >
       <InputContainer>
