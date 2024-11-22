@@ -29,9 +29,9 @@ import {
   SpecificSendTxInfoProvider,
   useSendSpecificTxInfo,
 } from '../../SendSpecificTxInfoProvider';
-import { BaseFee } from '../baseFee/BaseFee';
 import { FeeContainer } from '../FeeContainer';
 import { useFeeSettings } from '../state/feeSettings';
+import { BaseFee } from './baseFee/BaseFee';
 
 type FeeSettingsFormShape = {
   priority: FeePriority;

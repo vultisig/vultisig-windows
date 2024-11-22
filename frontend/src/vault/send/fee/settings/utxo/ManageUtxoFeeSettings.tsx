@@ -1,14 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EvmFeeSettings } from '../../../../../chain/evm/fee/EvmFeeSettings';
 import {
   defaultFeePriority,
   feePriorities,
   FeePriority,
 } from '../../../../../chain/fee/FeePriority';
-import { useSpecificTxInfoQuery } from '../../../../../coin/query/useSpecificTxInfoQuery';
-import { storageCoinToCoin } from '../../../../../coin/utils/storageCoin';
+import { adjustByteFee } from '../../../../../chain/utxo/fee/adjustByteFee';
+import { UtxoFeeSettings } from '../../../../../chain/utxo/fee/UtxoFeeSettings';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps';
 import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput';
@@ -16,26 +15,15 @@ import { InputContainer } from '../../../../../lib/ui/inputs/InputContainer';
 import { InputLabel } from '../../../../../lib/ui/inputs/InputLabel';
 import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput';
 import { VStack } from '../../../../../lib/ui/layout/Stack';
-import { Spinner } from '../../../../../lib/ui/loaders/Spinner';
 import { Modal } from '../../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../../lib/ui/props';
-import { QueryDependant } from '../../../../../lib/ui/query/components/QueryDependant';
-import { SpecificEvm } from '../../../../../model/specific-transaction-info';
-import { useCurrentVaultCoin } from '../../../../state/currentVault';
-import { useCurrentSendCoin } from '../../../state/sendCoin';
-import { SendFeeValue } from '../../SendFeeValue';
-import { SendFiatFeeValue } from '../../SendFiatFeeValue';
-import {
-  SpecificSendTxInfoProvider,
-  useSendSpecificTxInfo,
-} from '../../SendSpecificTxInfoProvider';
-import { BaseFee } from '../baseFee/BaseFee';
-import { FeeContainer } from '../FeeContainer';
+import { shouldBePresent } from '../../../../../lib/utils/assert/shouldBePresent';
+import { SpecificUtxo } from '../../../../../model/specific-transaction-info';
+import { useSendSpecificTxInfo } from '../../SendSpecificTxInfoProvider';
 import { useFeeSettings } from '../state/feeSettings';
 
-type FeeSettingsFormShape = {
-  priority: FeePriority;
-  gasLimit: number | null;
+type FormShape = {
+  priority: FeePriority | number | null;
 };
 
 export const ManageUtxoFeeSettings: React.FC<ClosableComponentProps> = ({
@@ -44,84 +32,65 @@ export const ManageUtxoFeeSettings: React.FC<ClosableComponentProps> = ({
   const { t } = useTranslation();
 
   const [persistentValue, setPersistentValue] =
-    useFeeSettings<EvmFeeSettings>();
+    useFeeSettings<UtxoFeeSettings>();
 
-  const { gasLimit: defaultGasLimit } = useSendSpecificTxInfo() as SpecificEvm;
+  const { byteFee } = useSendSpecificTxInfo() as SpecificUtxo;
 
-  const [value, setValue] = useState<FeeSettingsFormShape>(
+  const [value, setValue] = useState<FormShape>(
     () =>
       persistentValue ?? {
         priority: defaultFeePriority,
-        gasLimit: defaultGasLimit,
       }
   );
 
-  const [coinKey] = useCurrentSendCoin();
-  const coin = useCurrentVaultCoin(coinKey);
-
-  const guardedValue: EvmFeeSettings = useMemo(
-    () => ({
-      ...value,
-      gasLimit: value.gasLimit ?? 0,
-    }),
-    [value]
-  );
-
-  const txInfoQuery = useSpecificTxInfoQuery({
-    coin: storageCoinToCoin(coin),
-    feeSettings: guardedValue,
-  });
+  const isDisabled = useMemo(() => {
+    if (!value.priority) {
+      return t('network_rate_required');
+    }
+  }, [t, value.priority]);
 
   return (
     <Modal
       as="form"
       {...getFormProps({
         onSubmit: () => {
-          setPersistentValue(guardedValue);
+          setPersistentValue({
+            priority: shouldBePresent(value.priority),
+          });
           onClose();
         },
         onClose,
+        isDisabled,
       })}
       onClose={onClose}
       title={t('advanced')}
-      footer={<Button type="submit">{t('save')}</Button>}
+      footer={
+        <Button isDisabled={isDisabled} type="submit">
+          {t('save')}
+        </Button>
+      }
     >
       <VStack gap={12}>
         <InputContainer>
           <InputLabel>{t('priority')}</InputLabel>
           <RadioInput
             options={feePriorities}
-            value={value.priority}
+            value={typeof value.priority === 'number' ? null : value.priority}
             onChange={priority => setValue({ ...value, priority })}
             renderOption={t}
           />
         </InputContainer>
-        <BaseFee />
         <AmountTextInput
-          label={<InputLabel>{t('gas_limit')}</InputLabel>}
-          value={value.gasLimit}
-          onValueChange={gasLimit => setValue({ ...value, gasLimit })}
+          label={<InputLabel>{t('network_rate')} (sats/vbyte)</InputLabel>}
+          value={
+            value.priority
+              ? adjustByteFee(byteFee, { priority: value.priority })
+              : null
+          }
+          onValueChange={priority => setValue({ ...value, priority })}
+          shouldBeInteger
+          shouldBePositive
         />
-        <InputContainer>
-          <InputLabel>
-            {t('total_fee')} ({t('gwei')})
-          </InputLabel>
-          <FeeContainer>
-            <QueryDependant
-              query={txInfoQuery}
-              success={value => (
-                <SpecificSendTxInfoProvider value={value}>
-                  <span>
-                    <SendFeeValue />
-                  </span>
-                  <SendFiatFeeValue />
-                </SpecificSendTxInfoProvider>
-              )}
-              error={() => t('failed_to_load')}
-              pending={() => <Spinner />}
-            />
-          </FeeContainer>
-        </InputContainer>
       </VStack>
     </Modal>
   );
