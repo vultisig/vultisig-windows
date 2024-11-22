@@ -2,8 +2,13 @@ import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { evmRpcUrl } from '../../../chain/evm/evmRpcUrl';
+import { EvmFeeSettings } from '../../../chain/evm/fee/EvmFeeSettings';
+import { getEvmBaseFee } from '../../../chain/evm/utils/getEvmBaseFee';
 import { getEvmGasLimit } from '../../../chain/evm/utils/getEvmGasLimit';
-import { FeePriority } from '../../../chain/fee/FeePriority';
+import {
+  defaultFeePriority,
+  FeePriority,
+} from '../../../chain/fee/FeePriority';
 import { gwei } from '../../../chain/tx/fee/utils/evm';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
@@ -127,7 +132,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
   async getSpecificTransactionInfo(
     coin: Coin,
-    feePriority: FeePriority = 'normal'
+    feeSettings?: EvmFeeSettings
   ): Promise<SpecificEvm> {
     try {
       const [gasPrice, nonce] = await Promise.all([
@@ -135,13 +140,16 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         this.provider.getTransactionCount(coin.address),
       ]);
 
-      const gasLimit = getEvmGasLimit({
-        chainId: this.chain,
-        isNativeToken: coin.isNativeToken,
-      });
+      const gasLimit =
+        feeSettings?.gasLimit ??
+        getEvmGasLimit({
+          chainId: this.chain,
+          isNativeToken: coin.isNativeToken,
+        });
 
-      const baseFee = await this.getBaseFee();
+      const baseFee = await getEvmBaseFee(this.chain);
       const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
+      const feePriority = feeSettings?.priority ?? defaultFeePriority;
       const priorityFee = priorityFeeMapValue[feePriority];
       const normalizedBaseFee = this.normalizeFee(Number(baseFee));
       const maxFeePerGasWei = Number(
@@ -168,21 +176,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         gasLimit: 0,
         maxFeePerGasWei: 0,
       } as SpecificEvm;
-    }
-  }
-
-  async getBaseFee(): Promise<string> {
-    try {
-      const txResponse = await this.provider.getBlock('latest');
-
-      if (txResponse && txResponse.baseFeePerGas) {
-        return txResponse.baseFeePerGas.toString();
-      } else {
-        return '';
-      }
-    } catch (error) {
-      console.error('sendTransaction::', error);
-      return '';
     }
   }
 

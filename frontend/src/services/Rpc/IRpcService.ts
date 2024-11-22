@@ -1,4 +1,3 @@
-import { FeePriority } from '../../chain/fee/FeePriority';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { SpecificTransactionInfo } from '../../model/specific-transaction-info';
 
@@ -10,6 +9,6 @@ export interface IRpcService {
   resolveENS?(ensName: string): Promise<string>;
   getSpecificTransactionInfo(
     coin: Coin,
-    feePriority?: FeePriority
+    feeSettings?: any
   ): Promise<SpecificTransactionInfo>;
 }

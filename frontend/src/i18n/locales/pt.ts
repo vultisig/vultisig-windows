@@ -602,4 +602,8 @@ export const pt = {
   low: 'Baixo',
   normal: 'Normal',
   priority: 'Prioridade',
+  gas_limit: 'Limite de gás',
+  current_base_fee: 'Taxa base atual',
+  gwei: 'Gwei',
+  total_fee: 'Taxa total',
 };

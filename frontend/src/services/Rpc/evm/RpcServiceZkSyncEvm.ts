@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 
-import { FeePriority } from '../../../chain/fee/FeePriority';
+import { EvmFeeSettings } from '../../../chain/evm/fee/EvmFeeSettings';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { EvmChain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
@@ -27,7 +27,7 @@ export class RpcServiceZksync extends RpcServiceEvm implements ITokenService {
 
   async getSpecificTransactionInfo(
     coin: Coin,
-    _feePriority?: FeePriority
+    feeSettings?: EvmFeeSettings
   ): Promise<SpecificEvm> {
     try {
       const [gasPrice] = await Promise.all([
@@ -40,13 +40,15 @@ export class RpcServiceZksync extends RpcServiceEvm implements ITokenService {
         'ffffffff'
       );
 
+      const gasLimit = feeSettings?.gasLimit ?? zkInfo.gasLimit;
+
       const specificEvm: SpecificEvm = {
-        fee: zkInfo.maxFeePerGas * zkInfo.gasLimit,
+        fee: zkInfo.maxFeePerGas * gasLimit,
         gasPrice: Number(gasPrice),
         nonce: zkInfo.nonce,
         priorityFee: zkInfo.maxPriorityFeePerGas,
         priorityFeeWei: zkInfo.maxPriorityFeePerGas,
-        gasLimit: zkInfo.gasLimit,
+        gasLimit,
         maxFeePerGasWei: zkInfo.maxFeePerGas,
       } as SpecificEvm;
 

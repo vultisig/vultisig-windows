@@ -609,4 +609,8 @@ export const de = {
   low: 'Niedrig',
   normal: 'Normal',
   priority: 'Priorität',
+  gas_limit: 'Gasgrenze',
+  current_base_fee: 'Aktuelle Grundgebühr',
+  gwei: 'Gwei',
+  total_fee: 'Gesamtgebühr',
 };
