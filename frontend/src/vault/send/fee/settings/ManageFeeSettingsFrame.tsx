@@ -1,14 +1,10 @@
 import { t } from 'i18next';
 
 import { Opener } from '../../../../lib/ui/base/Opener';
-import { Button } from '../../../../lib/ui/buttons/Button';
-import { BodyPortal } from '../../../../lib/ui/dom/BodyPortal';
 import { SettingsIcon } from '../../../../lib/ui/icons/SettingsIcon';
-import { VStack } from '../../../../lib/ui/layout/Stack';
-import { Spinner } from '../../../../lib/ui/loaders/Spinner';
-import { Backdrop } from '../../../../lib/ui/modal/Backdrop';
-import { ModalContainer } from '../../../../lib/ui/modal/ModalContainer';
 import { ClosableComponentProps } from '../../../../lib/ui/props';
+import { FailedQueryOverlay } from '../../../../lib/ui/query/components/overlay/FailedQueryOverlay';
+import { PendingQueryOverlay } from '../../../../lib/ui/query/components/overlay/PendingQueryOverlay';
 import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
 import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled';
@@ -38,28 +34,17 @@ export const ManageFeeSettingsFrame = ({
             </SpecificSendTxInfoProvider>
           )}
           pending={() => (
-            <BodyPortal>
-              <Backdrop onClose={onClose}>
-                <ModalContainer>
-                  <VStack alignItems="center" gap={8}>
-                    <Spinner />
-                    <StrictText>{t('loading')}</StrictText>
-                  </VStack>
-                </ModalContainer>
-              </Backdrop>
-            </BodyPortal>
+            <PendingQueryOverlay
+              onClose={onClose}
+              title={<StrictText>{t('loading')}</StrictText>}
+            />
           )}
           error={() => (
-            <BodyPortal>
-              <Backdrop onClose={onClose}>
-                <ModalContainer>
-                  <VStack alignItems="center" gap={8}>
-                    <StrictText>{t('failed_to_load')}</StrictText>
-                    <Button onClick={onClose}>{t('close')}</Button>
-                  </VStack>
-                </ModalContainer>
-              </Backdrop>
-            </BodyPortal>
+            <FailedQueryOverlay
+              title={<StrictText>{t('failed_to_load')}</StrictText>}
+              onClose={onClose}
+              closeText={t('close')}
+            />
           )}
         />
       )}
