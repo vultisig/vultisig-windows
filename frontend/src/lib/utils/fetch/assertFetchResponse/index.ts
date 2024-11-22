@@ -1,5 +1,5 @@
-import { extractErrorMsg } from '../error/extractErrorMsg';
-import { asyncFallbackChain } from '../promise/asyncFallbackChain';
+import { extractErrorMsg } from '../../error/extractErrorMsg';
+import { asyncFallbackChain } from '../../promise/asyncFallbackChain';
 
 export const assertFetchResponse = async (response: Response) => {
   if (!response.ok) {
