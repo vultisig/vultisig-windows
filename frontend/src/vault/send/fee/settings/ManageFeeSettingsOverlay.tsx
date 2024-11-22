@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { EvmFeeSettings } from '../../../../chain/evm/fee/EvmFeeSettings';
 import {
   defaultFeePriority,
   feePriorities,
   FeePriority,
 } from '../../../../chain/fee/FeePriority';
+import { useSpecificTxInfoQuery } from '../../../../coin/query/useSpecificTxInfoQuery';
+import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
 import { Button } from '../../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps';
 import { AmountTextInput } from '../../../../lib/ui/inputs/AmountTextInput';
@@ -13,10 +16,19 @@ import { InputContainer } from '../../../../lib/ui/inputs/InputContainer';
 import { InputLabel } from '../../../../lib/ui/inputs/InputLabel';
 import { RadioInput } from '../../../../lib/ui/inputs/RadioInput';
 import { VStack } from '../../../../lib/ui/layout/Stack';
+import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { Modal } from '../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../lib/ui/props';
+import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
 import { SpecificEvm } from '../../../../model/specific-transaction-info';
-import { useSendSpecificTxInfo } from '../SendSpecificTxInfoProvider';
+import { useCurrentVaultCoin } from '../../../state/currentVault';
+import { useCurrentSendCoin } from '../../state/sendCoin';
+import { SendFeeValue } from '../SendFeeValue';
+import { SendFiatFeeValue } from '../SendFiatFeeValue';
+import {
+  SpecificSendTxInfoProvider,
+  useSendSpecificTxInfo,
+} from '../SendSpecificTxInfoProvider';
 import { BaseFee } from './baseFee/BaseFee';
 import { FeeContainer } from './FeeContainer';
 import { useFeeSettings } from './state/feeSettings';
@@ -43,15 +55,28 @@ export const ManageFeeSettingsOverlay: React.FC<ClosableComponentProps> = ({
       }
   );
 
+  const [coinKey] = useCurrentSendCoin();
+  const coin = useCurrentVaultCoin(coinKey);
+
+  const guardedValue: EvmFeeSettings = useMemo(
+    () => ({
+      ...value,
+      gasLimit: value.gasLimit ?? 0,
+    }),
+    [value]
+  );
+
+  const txInfoQuery = useSpecificTxInfoQuery({
+    coin: storageCoinToCoin(coin),
+    feeSettings: guardedValue,
+  });
+
   return (
     <Modal
       as="form"
       {...getFormProps({
         onSubmit: () => {
-          setPersistentValue({
-            ...value,
-            gasLimit: value.gasLimit ?? 0,
-          });
+          setPersistentValue(guardedValue);
           onClose();
         },
         onClose,
@@ -80,7 +105,21 @@ export const ManageFeeSettingsOverlay: React.FC<ClosableComponentProps> = ({
           <InputLabel>
             {t('total_fee')} ({t('gwei')})
           </InputLabel>
-          <FeeContainer>TO DO</FeeContainer>
+          <FeeContainer>
+            <QueryDependant
+              query={txInfoQuery}
+              success={value => (
+                <SpecificSendTxInfoProvider value={value}>
+                  <span>
+                    <SendFeeValue />
+                  </span>
+                  <SendFiatFeeValue />
+                </SpecificSendTxInfoProvider>
+              )}
+              error={() => t('failed_to_load')}
+              pending={() => <Spinner />}
+            />
+          </FeeContainer>
         </InputContainer>
       </VStack>
     </Modal>
