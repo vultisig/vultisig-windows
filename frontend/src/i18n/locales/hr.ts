@@ -587,4 +587,8 @@ export const hr = {
   low: 'Niska',
   normal: 'Normalan',
   priority: 'Prioritet',
+  gas_limit: 'Ograničenje plina',
+  current_base_fee: 'Trenutna osnovna naknada',
+  gwei: 'Gwei',
+  total_fee: 'Ukupna naknada',
 };

@@ -607,4 +607,8 @@ export const it = {
   low: 'Basso',
   normal: 'Normale',
   priority: 'Priorità',
+  gas_limit: 'Limite del gas',
+  current_base_fee: 'Tariffa base attuale',
+  gwei: 'Ciao',
+  total_fee: 'Tariffa totale',
 };

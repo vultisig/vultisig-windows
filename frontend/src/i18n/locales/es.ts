@@ -611,4 +611,8 @@ export const es = {
   low: 'Bajo',
   normal: 'Normal',
   priority: 'Prioridad',
+  gas_limit: 'Límite de gas',
+  current_base_fee: 'Tarifa base actual',
+  gwei: 'Gwei',
+  total_fee: 'Tarifa total',
 };
