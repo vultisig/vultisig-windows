@@ -17,7 +17,7 @@ const VaultBannerWrapper = styled.div`
 `;
 
 export const VaultOverview = () => {
-  const { data: vaults = [] } = useVaultChainsBalancesQuery();
+  const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery();
   const vault = useCurrentVault();
 
   return (
@@ -34,8 +34,11 @@ export const VaultOverview = () => {
             <VaultPrimaryActions />
           </VStack>
           <VStack gap={16}>
-            {vaults.map(vault => (
-              <VaultChainItem key={vault.chainId} vault={vault} />
+            {vaultChainBalances.map(vaultChainBalance => (
+              <VaultChainItem
+                key={vaultChainBalance.chainId}
+                vault={vaultChainBalance}
+              />
             ))}
             <ManageVaultChainsPrompt />
           </VStack>
