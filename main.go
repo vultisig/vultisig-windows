@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"embed"
+	"os"
 
 	"github.com/rs/zerolog/log"
 	"github.com/wailsapp/wails/v2"
@@ -25,8 +26,12 @@ var assets embed.FS
 var icon []byte
 
 func main() {
+	argsWithoutProg := os.Args[1:]
+	if len(argsWithoutProg) > 0 {
+
+	}
 	// Create an instance of the app structure
-	app := NewApp()
+	app := NewApp(argsWithoutProg)
 	tssIns := tss.NewTssService()
 	store, err := storage.NewStore()
 	if err != nil {
@@ -87,7 +92,7 @@ func main() {
 			store,
 			mediator,
 			goHttp,
-			installMarkerService, 
+			installMarkerService,
 		},
 		EnumBind: []interface{}{},
 		LogLevel: logger.ERROR,

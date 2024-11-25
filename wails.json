@@ -6,5 +6,13 @@
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
-  "description": "Vultisig for Windows"
+  "description": "Vultisig for Windows",
+  "info": {
+    "protocols": [
+      {
+        "scheme": "vultisig",
+        "description": "Vultisig application"
+      }
+    ]
+  }
 }
