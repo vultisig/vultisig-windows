@@ -305,6 +305,8 @@ export const en = {
   gwei: 'Gwei',
   total_fee: 'Total Fee',
   network_fee: 'Network fee',
+  network_rate: 'Network rate',
+  network_rate_required: 'Network rate is required',
   advanced: 'Advanced',
   low: 'Low',
   normal: 'Normal',

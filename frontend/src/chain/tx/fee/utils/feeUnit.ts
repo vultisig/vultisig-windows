@@ -1,9 +1,7 @@
 import { Chain, EvmChain, UtxoChain } from '../../../../model/chain';
+import { getUtxoFeeUnit } from '../../../utxo/fee/getUtxoFeeUnit';
 import { gwei } from './evm';
 import { getChainFeeCoin } from './getChainFeeCoin';
-
-export const getUtxoFeeUnit = (chain: UtxoChain): string =>
-  `${getChainFeeCoin(chain).ticker}/vbyte`;
 
 export const getFeeUnit = (chain: Chain): string => {
   if (chain in EvmChain) {

@@ -1,14 +1,14 @@
 import { Button } from '../buttons/Button';
 import { UniformColumnGrid } from '../css/uniformColumnGrid';
-import { InputProps, UIComponentProps } from '../props';
+import { UIComponentProps } from '../props';
 
-interface RadioInputProps<T extends string>
-  extends InputProps<T>,
-    UIComponentProps {
+type RadioInputProps<T extends string> = UIComponentProps & {
+  value: T | null;
+  onChange: (value: T) => void;
   options: readonly T[];
   renderOption: (option: T) => React.ReactNode;
   minOptionHeight?: number;
-}
+};
 
 export const RadioInput = <T extends string>({
   value,

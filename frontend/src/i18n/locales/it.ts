@@ -611,4 +611,6 @@ export const it = {
   current_base_fee: 'Tariffa base attuale',
   gwei: 'Ciao',
   total_fee: 'Tariffa totale',
+  network_rate: 'Tasso di rete',
+  network_rate_required: 'È richiesta la velocità di rete',
 };

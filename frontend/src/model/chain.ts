@@ -74,6 +74,54 @@ export enum TssAction {
   RESHARE = 'RESHARE',
 }
 
+export const chainKinds = [
+  'evm',
+  'utxo',
+  'cosmos',
+  'solana',
+  'polkadot',
+  'ton',
+  'sui',
+] as const;
+
+export type ChainKind = (typeof chainKinds)[number];
+
+export const chainKindRecord: Record<Chain, ChainKind> = {
+  [EvmChain.Arbitrum]: 'evm',
+  [EvmChain.Avalanche]: 'evm',
+  [EvmChain.Base]: 'evm',
+  [EvmChain.CronosChain]: 'evm',
+  [EvmChain.BSC]: 'evm',
+  [EvmChain.Blast]: 'evm',
+  [EvmChain.Ethereum]: 'evm',
+  [EvmChain.Optimism]: 'evm',
+  [EvmChain.Polygon]: 'evm',
+  [EvmChain.Zksync]: 'evm',
+
+  [UtxoChain.Bitcoin]: 'utxo',
+  [UtxoChain.BitcoinCash]: 'utxo',
+  [UtxoChain.Litecoin]: 'utxo',
+  [UtxoChain.Dogecoin]: 'utxo',
+  [UtxoChain.Dash]: 'utxo',
+
+  [CosmosChain.THORChain]: 'cosmos',
+  [CosmosChain.Cosmos]: 'cosmos',
+  [CosmosChain.Osmosis]: 'cosmos',
+  [CosmosChain.MayaChain]: 'cosmos',
+  [CosmosChain.Dydx]: 'cosmos',
+  [CosmosChain.Kujira]: 'cosmos',
+  [CosmosChain.Terra]: 'cosmos',
+  [CosmosChain.TerraClassic]: 'cosmos',
+
+  [OtherChain.Sui]: 'sui',
+
+  [OtherChain.Solana]: 'solana',
+
+  [OtherChain.Polkadot]: 'polkadot',
+
+  [OtherChain.Ton]: 'ton',
+};
+
 export class ChainUtils {
   static stringToChain(chain: string): Chain | undefined {
     if (Object.values(Chain).includes(chain as Chain)) {
