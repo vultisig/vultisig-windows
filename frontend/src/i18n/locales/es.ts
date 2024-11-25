@@ -615,4 +615,6 @@ export const es = {
   current_base_fee: 'Tarifa base actual',
   gwei: 'Gwei',
   total_fee: 'Tarifa total',
+  network_rate: 'Tasa de red',
+  network_rate_required: 'Se requiere velocidad de red',
 };

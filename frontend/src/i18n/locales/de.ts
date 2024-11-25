@@ -613,4 +613,6 @@ export const de = {
   current_base_fee: 'Aktuelle Grundgebühr',
   gwei: 'Gwei',
   total_fee: 'Gesamtgebühr',
+  network_rate: 'Netzwerkrate',
+  network_rate_required: 'Netzwerkrate ist erforderlich',
 };

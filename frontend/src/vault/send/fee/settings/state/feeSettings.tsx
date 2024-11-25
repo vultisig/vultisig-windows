@@ -2,13 +2,16 @@ import { useCallback, useMemo } from 'react';
 
 import { EvmFeeSettings } from '../../../../../chain/evm/fee/EvmFeeSettings';
 import { isNativeCoin } from '../../../../../chain/utils/isNativeCoin';
+import { UtxoFeeSettings } from '../../../../../chain/utxo/fee/UtxoFeeSettings';
 import { ComponentWithChildrenProps } from '../../../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../../../lib/ui/state/getStateProviderSetup';
 import { omit } from '../../../../../lib/utils/record/omit';
 import { Chain } from '../../../../../model/chain';
 import { useCurrentSendCoin } from '../../../state/sendCoin';
 
-type FeeSettingsRecord = Record<string, EvmFeeSettings>;
+type FeeSettings = EvmFeeSettings | UtxoFeeSettings;
+
+type FeeSettingsRecord = Record<string, FeeSettings>;
 
 type FeeSettingsKey = {
   chainId: Chain;
@@ -29,7 +32,7 @@ export const FeeSettingsProvider = ({
   </FeeSettingsRecordProvider>
 );
 
-export const useFeeSettings = () => {
+export const useFeeSettings = <T extends FeeSettings>() => {
   const [coin] = useCurrentSendCoin();
   const [record, setRecord] = useFeeSettingsRecord();
 
@@ -40,14 +43,14 @@ export const useFeeSettings = () => {
     });
 
     if (stringKey in record) {
-      return record[stringKey];
+      return record[stringKey] as T;
     }
 
     return null;
   }, [coin, record]);
 
   const setValue = useCallback(
-    (value: EvmFeeSettings | null) => {
+    (value: T | null) => {
       const stringKey = feeSettingsKeyToString({
         chainId: coin.chainId,
         isNativeToken: isNativeCoin(coin),
