@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { areEqualCoins } from '../../../coin/Coin';
@@ -26,7 +27,8 @@ const Input = styled(TextInput)`
 `;
 
 export const AmountInGlobalCurrencyDisplay = () => {
-  const [value] = useSendAmount();
+  const { t } = useTranslation();
+  const [sendAmount] = useSendAmount();
   const [coinKey] = useCurrentSendCoin();
   const coins = useCurrentVaultCoins();
   const { globalCurrency } = useGlobalCurrency();
@@ -38,9 +40,22 @@ export const AmountInGlobalCurrencyDisplay = () => {
     );
   }, [coins, coinKey]);
 
-  const pricesQuery = useCoinPricesQuery([CoinMeta.fromCoin(coin)]);
-  const price = pricesQuery.data ? pricesQuery.data[0]?.price : undefined;
-  const fiatValue = price && value ? value * price : undefined;
+  const {
+    data: prices,
+    isPending,
+    errors,
+  } = useCoinPricesQuery([CoinMeta.fromCoin(coin)]);
+
+  const normalizedPrices = Array.isArray(prices)
+    ? prices.map(p => ({
+        ...p,
+        price: p.price || (p as any)[globalCurrency],
+      }))
+    : [];
+
+  const price = normalizedPrices[0]?.price;
+  const calculatedSendAmountInFiat =
+    price && sendAmount ? sendAmount * price : undefined;
 
   return (
     <Input
@@ -55,11 +70,14 @@ export const AmountInGlobalCurrencyDisplay = () => {
         </HStack>
       }
       value={
-        fiatValue !== undefined
-          ? fiatValue.toFixed(2) + ' ' + globalCurrency
-          : ''
+        (sendAmount && !calculatedSendAmountInFiat) || errors.length > 0
+          ? t('failed_to_load')
+          : calculatedSendAmountInFiat !== undefined
+            ? calculatedSendAmountInFiat.toFixed(2) + ' ' + globalCurrency
+            : ''
       }
       disabled
+      placeholder={isPending ? t('loading') : ''}
     />
   );
 };
