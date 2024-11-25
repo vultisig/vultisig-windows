@@ -606,4 +606,6 @@ export const pt = {
   current_base_fee: 'Taxa base atual',
   gwei: 'Gwei',
   total_fee: 'Taxa total',
+  network_rate: 'Taxa de rede',
+  network_rate_required: 'A taxa de rede é necessária',
 };
