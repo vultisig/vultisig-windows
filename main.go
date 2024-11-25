@@ -27,9 +27,6 @@ var icon []byte
 
 func main() {
 	argsWithoutProg := os.Args[1:]
-	if len(argsWithoutProg) > 0 {
-
-	}
 	// Create an instance of the app structure
 	app := NewApp(argsWithoutProg)
 	tssIns := tss.NewTssService()
