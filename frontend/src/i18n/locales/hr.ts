@@ -591,4 +591,6 @@ export const hr = {
   current_base_fee: 'Trenutna osnovna naknada',
   gwei: 'Gwei',
   total_fee: 'Ukupna naknada',
+  network_rate: 'Mrežna stopa',
+  network_rate_required: 'Potrebna je mrežna stopa',
 };
