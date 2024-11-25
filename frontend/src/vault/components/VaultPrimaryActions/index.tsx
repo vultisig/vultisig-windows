@@ -23,7 +23,10 @@ export const VaultPrimaryActions = ({
   }
 
   const sendInitialCoin = value ?? getStorageCoinKey(nativeCoins[0]);
-  const chainId = value?.chainId?.toLowerCase() as ChainWithAction | undefined;
+  const chainId = sendInitialCoin?.chainId?.toLowerCase() as
+    | ChainWithAction
+    | undefined;
+
   const availableChainActions = chainId
     ? chainActionOptionsConfig[chainId] || []
     : [];
