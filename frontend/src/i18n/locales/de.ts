@@ -615,4 +615,5 @@ export const de = {
   total_fee: 'Gesamtgebühr',
   network_rate: 'Netzwerkrate',
   network_rate_required: 'Netzwerkrate ist erforderlich',
+  saving_vault: 'Tresor wird gespeichert …',
 };

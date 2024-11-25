@@ -608,6 +608,7 @@ export const en = {
       },
     },
   },
+  saving_vault: 'Saving Vault...',
   scan_with_devices: 'Scan with devices to join the vault generation',
   scan_with_devices_to_sign:
     'Scan with devices to participate in signing the transaction',

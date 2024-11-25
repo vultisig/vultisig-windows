@@ -613,4 +613,5 @@ export const it = {
   total_fee: 'Tariffa totale',
   network_rate: 'Tasso di rete',
   network_rate_required: 'È richiesta la velocità di rete',
+  saving_vault: 'Salvataggio Vault...',
 };

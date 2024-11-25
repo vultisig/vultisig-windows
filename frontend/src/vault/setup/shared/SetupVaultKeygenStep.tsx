@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
-import { KeygenStepWithEmailVerification } from '../../keygen/shared/KeygenStepWithEmailVerification';
-import { KeygenStepWithoutEmailVerification } from '../../keygen/shared/KeygenStepWithoutEmailVerification';
+import { KeygenStep } from '../../keygen/shared/KeygenStep';
 import { useVaultType } from './state/vaultType';
 
 type SetupVaultKeygenStepProps = ComponentWithBackActionProps & {
@@ -13,23 +12,9 @@ export const SetupVaultKeygenStep = (props: SetupVaultKeygenStepProps) => {
   const { t } = useTranslation();
   const vaultType = useVaultType();
 
-  if (vaultType === 'secure') {
-    return (
-      <KeygenStepWithoutEmailVerification
-        title={t('keygen_for_vault', {
-          type: t(vaultType),
-        })}
-        {...props}
-      />
-    );
-  }
+  const title = t('keygen_for_vault', {
+    type: t(vaultType),
+  });
 
-  return (
-    <KeygenStepWithEmailVerification
-      title={t('keygen_for_vault', {
-        type: t(vaultType),
-      })}
-      {...props}
-    />
-  );
+  return <KeygenStep {...props} title={title} />;
 };

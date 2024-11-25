@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Transition } from '../../../lib/ui/base/Transition';
+import { StepTransition } from '../../../lib/ui/base/StepTransition';
 import {
   ComponentWithBackActionProps,
   TitledComponentProps,
@@ -8,10 +8,12 @@ import {
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { KeygenBackup } from './KeygenBackup';
+import { VerifyEmailStep } from '../../fast/components/VerifyEmailStep';
+import { haveServerSigner } from '../../fast/utils/haveServerSigner';
+import { getStorageVaultId } from '../../utils/storageVault';
 import { KeygenFailedState } from './KeygenFailedState';
 import { KeygenPendingState } from './KeygenPendingState';
-import { KeygenSuccessState } from './KeygenSuccessState';
+import { KeygenSuccessStep } from './KeygenSuccessStep';
 import { useKeygenMutation } from './mutations/useKeygenMutation';
 
 type KeygenStepProps = ComponentWithBackActionProps &
@@ -19,10 +21,7 @@ type KeygenStepProps = ComponentWithBackActionProps &
     onTryAgain: () => void;
   };
 
-export const KeygenStepWithoutEmailVerification = ({
-  onTryAgain,
-  title,
-}: KeygenStepProps) => {
+export const KeygenStep = ({ onTryAgain, title }: KeygenStepProps) => {
   const { mutate: start, ...mutationState } = useKeygenMutation();
 
   useEffect(start, [start]);
@@ -30,18 +29,23 @@ export const KeygenStepWithoutEmailVerification = ({
   return (
     <QueryDependant
       query={mutationState}
-      success={() => (
-        <Transition
-          delay={3000}
-          from={
-            <>
-              <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />
-              <KeygenSuccessState />
-            </>
-          }
-          to={<KeygenBackup />}
-        />
-      )}
+      success={vault => {
+        if (haveServerSigner(vault.signers)) {
+          return (
+            <StepTransition
+              from={({ onForward }) => (
+                <VerifyEmailStep
+                  onForward={onForward}
+                  vaultId={getStorageVaultId(vault)}
+                />
+              )}
+              to={() => <KeygenSuccessStep value={vault} title={title} />}
+            />
+          );
+        }
+
+        return <KeygenSuccessStep value={vault} title={title} />;
+      }}
       error={error => (
         <>
           <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />

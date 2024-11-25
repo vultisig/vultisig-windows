@@ -12,10 +12,10 @@ import { FullPageFlowErrorState } from '../../../../ui/flow/FullPageFlowErrorSta
 import { PageHeader } from '../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
+import { signWithServer } from '../../../fast/api/signWithServer';
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
 import { WaitForServerLoader } from '../../../server/components/WaitForServerLoader';
 import { useVaultPassword } from '../../../server/password/state/password';
-import { signWithServer } from '../../../server/utils/signWithServer';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { useCurrentVault } from '../../../state/currentVault';
 import { useCurrentKeysignMsgs } from '../../shared/state/currentKeysignMsgs';
