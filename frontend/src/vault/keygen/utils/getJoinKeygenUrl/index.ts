@@ -1,8 +1,8 @@
-import { deepLinkBaseUrl } from '../../../constants';
-import { KeygenMessage } from '../../../gen/vultisig/keygen/v1/keygen_message_pb';
-import { addQueryParams } from '../../../lib/utils/query/addQueryParams';
-import { toCompressedString } from '../../../utils/protobuf/toCompressedString';
-import { KeygenServerType } from '../server/KeygenServerType';
+import { deepLinkBaseUrl } from '../../../../constants';
+import { KeygenMessage } from '../../../../gen/vultisig/keygen/v1/keygen_message_pb';
+import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
+import { toCompressedString } from '../../../../utils/protobuf/toCompressedString';
+import { KeygenServerType } from '../../server/KeygenServerType';
 
 export type GetJoinKeygenUrlInput = {
   serverType: KeygenServerType;
