@@ -40,8 +40,6 @@ export const KeysignSigningStep = ({
   const serverUrl = useCurrentServerUrl();
   const { t } = useTranslation();
 
-  console.log('## payload', payload);
-
   const { mutate: startKeysign, ...mutationStatus } = useMutation({
     mutationFn: async () => {
       const { chain } = shouldBePresent(payload.coin);
