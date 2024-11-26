@@ -22,8 +22,8 @@ export const VaultPrimaryActions = ({
     return null;
   }
 
-  const sendInitialCoin = value ?? getStorageCoinKey(nativeCoins[0]);
-  const chainId = sendInitialCoin?.chainId?.toLowerCase() as
+  const coinDerived = value ?? getStorageCoinKey(nativeCoins[0]);
+  const chainId = coinDerived?.chainId?.toLowerCase() as
     | ChainWithAction
     | undefined;
 
@@ -32,15 +32,15 @@ export const VaultPrimaryActions = ({
     : [];
 
   const isSwapAvailable = swapAvailableChains.some(
-    chain => chain === value?.chainId
+    chain => chain === coinDerived?.chainId
   );
 
   return (
     <UniformColumnGrid fullWidth gap={12}>
-      <SendPrompt value={sendInitialCoin} />
-      {isSwapAvailable && <SwapPrompt value={sendInitialCoin} />}
+      <SendPrompt value={coinDerived} />
+      {isSwapAvailable && <SwapPrompt value={coinDerived} />}
       {availableChainActions.length > 0 && (
-        <DepositPrompt value={sendInitialCoin} />
+        <DepositPrompt value={coinDerived} />
       )}
     </UniformColumnGrid>
   );
