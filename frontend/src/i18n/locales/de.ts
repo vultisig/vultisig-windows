@@ -616,4 +616,7 @@ export const de = {
   network_rate: 'Netzwerkrate',
   network_rate_required: 'Netzwerkrate ist erforderlich',
   saving_vault: 'Tresor wird gespeichert …',
+  deeplink: 'Deeplink',
+  processing_url: 'URL wird verarbeitet...',
+  failed_to_process_url: 'Die URL konnte nicht verarbeitet werden.',
 };

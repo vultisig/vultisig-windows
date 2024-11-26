@@ -594,4 +594,7 @@ export const hr = {
   network_rate: 'Mrežna stopa',
   network_rate_required: 'Potrebna je mrežna stopa',
   saving_vault: 'Spremanje trezora...',
+  deeplink: 'Dubinska veza',
+  processing_url: 'Obrada URL-a...',
+  failed_to_process_url: 'Obrada URL-a nije uspjela',
 };

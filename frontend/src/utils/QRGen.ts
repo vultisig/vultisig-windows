@@ -1,6 +1,6 @@
 import SevenZip from '7z-wasm';
 
-import { deepLinkBaseUrl } from '../constants';
+import { deepLinkBaseUrl } from '../deeplink/config';
 import {
   KeysignMessage,
   KeysignPayload,

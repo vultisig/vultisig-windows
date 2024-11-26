@@ -618,4 +618,7 @@ export const es = {
   network_rate: 'Tasa de red',
   network_rate_required: 'Se requiere velocidad de red',
   saving_vault: 'Salvando la bóveda...',
+  deeplink: 'Enlace profundo',
+  processing_url: 'Procesando URL...',
+  failed_to_process_url: 'No se pudo procesar la URL',
 };

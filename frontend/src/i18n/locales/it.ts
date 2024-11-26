@@ -614,4 +614,7 @@ export const it = {
   network_rate: 'Tasso di rete',
   network_rate_required: 'È richiesta la velocità di rete',
   saving_vault: 'Salvataggio Vault...',
+  deeplink: 'Collegamento profondo',
+  processing_url: 'Elaborazione URL...',
+  failed_to_process_url: "Impossibile elaborare l'URL",
 };

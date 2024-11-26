@@ -1,27 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import jsQR from 'jsqr';
 
-import { match } from '../../../lib/utils/match';
-import { getRawQueryParams } from '../../../lib/utils/query/getRawQueryParams';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
-import { keygenMsgRecord, KeygenType } from '../../keygen/KeygenType';
-import { parseTransferredKeysignMsg } from '../../keysign/shared/utils/parseTransfferedKeysignMsg';
-import { decompressQrPayload } from './utils/decompressQrPayload';
-
-type QrType = 'NewVault' | 'SignTransaction';
-
-type QrSharedData = {
-  jsonData: string;
-  vault: string;
-};
-
-type QrQueryParams = QrSharedData & {
-  type: QrType;
-} & {
-  tssType: KeygenType;
-} & {
-  vault: string;
-};
 
 export const useProcessQrMutation = () => {
   const navigate = useAppNavigate();
@@ -30,7 +10,6 @@ export const useProcessQrMutation = () => {
     mutationFn: async (file: File) => {
       const imageBitmap = await createImageBitmap(file);
 
-      // Create a canvas to draw the image
       const canvas = document.createElement('canvas');
       canvas.width = imageBitmap.width;
       canvas.height = imageBitmap.height;
@@ -51,40 +30,7 @@ export const useProcessQrMutation = () => {
       }
 
       const url = code.data;
-      const queryParams = getRawQueryParams<QrQueryParams>(url);
-      const { jsonData } = queryParams;
-      const payload = await decompressQrPayload(jsonData);
-
-      if ('type' in queryParams) {
-        await match(queryParams.type, {
-          NewVault: async () => {
-            const keygenType = queryParams.tssType;
-
-            const { fromBinary } = keygenMsgRecord[keygenType];
-
-            const keygenMsg = fromBinary(payload);
-
-            navigate('joinKeygen', {
-              state: {
-                keygenType,
-                keygenMsg,
-              },
-            });
-          },
-          SignTransaction: async () => {
-            const vaultId = queryParams.vault;
-
-            const keysignMsg = await parseTransferredKeysignMsg(payload);
-
-            navigate('joinKeysign', {
-              state: {
-                keysignMsg,
-                vaultId,
-              },
-            });
-          },
-        });
-      }
+      navigate('deeplink', { state: { url } });
     },
   });
 };

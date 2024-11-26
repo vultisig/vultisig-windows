@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import { AddressPage } from './chain/components/address/AddressPage';
+import { DeeplinkPage } from './deeplink/components/DeeplinkPage';
 import { appPaths } from './navigation';
 import { CompletedOnboardingOnly } from './onboarding/CompletedOnboardingOnly';
 import { OnboardingPage } from './onboarding/components/OnboardingPage';
@@ -343,6 +344,14 @@ export const router = createBrowserRouter([
     element: (
       <ActiveVaultGuard>
         <DepositPage />
+      </ActiveVaultGuard>
+    ),
+  },
+  {
+    path: appPaths.deeplink,
+    element: (
+      <ActiveVaultGuard>
+        <DeeplinkPage />
       </ActiveVaultGuard>
     ),
   },

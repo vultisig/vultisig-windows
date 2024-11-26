@@ -609,4 +609,7 @@ export const pt = {
   network_rate: 'Taxa de rede',
   network_rate_required: 'A taxa de rede é necessária',
   saving_vault: 'Cofre de Salvamento...',
+  deeplink: 'Link profundo',
+  processing_url: 'Processando URL...',
+  failed_to_process_url: 'Falha ao processar URL',
 };

@@ -59,6 +59,7 @@ export const appPaths = {
   vaultFolder: '/vault/folder',
   manageVaultFolder: '/vault/folder/manage',
   vaultItemDeposit: '/vault/item/deposit',
+  deeplink: '/deeplink',
 } as const;
 
 type AppPaths = typeof appPaths;
@@ -89,6 +90,9 @@ export type AppPathState = {
   joinKeygen: {
     keygenType: KeygenType;
     keygenMsg: KeygenMessage | ReshareMessage;
+  };
+  deeplink: {
+    url: string;
   };
 };
 
