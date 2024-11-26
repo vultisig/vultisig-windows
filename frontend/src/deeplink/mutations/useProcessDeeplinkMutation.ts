@@ -45,6 +45,7 @@ export const useProcessDeeplinkMutation = () => {
                 keygenType,
                 keygenMsg,
               },
+              replace: true,
             });
           },
           SignTransaction: async () => {
@@ -57,6 +58,7 @@ export const useProcessDeeplinkMutation = () => {
                 keysignMsg,
                 vaultId,
               },
+              replace: true,
             });
           },
         });
