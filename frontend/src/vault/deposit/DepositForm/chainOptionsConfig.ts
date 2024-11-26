@@ -4,9 +4,9 @@ import { z } from 'zod';
 import { Chain } from '../../../model/chain';
 import { validateNodeAddress } from '../utils/validateNodeAddress';
 
-export type ChainWithAction = keyof typeof chainActionOptionsConfig;
+export type ChainWithAction = keyof typeof chainDepositOptionsConfig;
 
-export const chainActionOptionsConfig = {
+export const chainDepositOptionsConfig = {
   thorchain: ['bond', 'unbond', 'leave', 'addPool', 'withdrawPool', 'custom'],
   mayachain: ['bond', 'unbond', 'leave', 'custom'],
   dydx: ['vote'],

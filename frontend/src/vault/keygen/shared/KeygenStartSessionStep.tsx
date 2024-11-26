@@ -45,7 +45,11 @@ export const KeygenStartSessionStep = ({
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         title={<PageHeaderTitle>{t('keygen')}</PageHeaderTitle>}
       />
-      <PageContent justifyContent="center" alignItems="center">
+      <PageContent
+        justifyContent="center"
+        alignItems="center"
+        data-testid="KeygenStartStep-PageContent"
+      >
         <QueryDependant
           query={status}
           pending={() => (

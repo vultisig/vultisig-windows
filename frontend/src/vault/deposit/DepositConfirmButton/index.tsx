@@ -32,7 +32,6 @@ export const DepositConfirmButton = ({
   action,
 }: DepositConfirmButtonProps) => {
   const { t } = useTranslation();
-
   const [coinKey] = useCurrentDepositCoin();
   const sender = useSender();
   const coin = useCurrentVaultCoin(coinKey);
@@ -46,9 +45,11 @@ export const DepositConfirmButton = ({
   const receiver = config.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
     : '';
+
   const amount = config.requiresAmount
     ? (depositFormData['amount'] as number)
     : config.defaultAmount || 0;
+
   const memo = (depositFormData['memo'] as string) ?? '';
 
   const startKeysign = (type: SendType) => {
@@ -70,7 +71,7 @@ export const DepositConfirmButton = ({
     ).createKeysignPayload(tx, vault.local_party_id, vault.public_key_ecdsa);
 
     navigate(type === 'fast' ? 'fastKeysign' : 'keysign', {
-      state: { keysignPayload },
+      state: { keysignPayload, keysignAction: 'deposit' },
     });
   };
 

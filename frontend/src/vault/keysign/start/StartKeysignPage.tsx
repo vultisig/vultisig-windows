@@ -21,7 +21,7 @@ import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoverySt
 const keysignSteps = ['joinSession', 'peers', 'session', 'sign'] as const;
 
 export const StartKeysignPage = () => {
-  const { keysignPayload } = useAppPathState<'keysign'>();
+  const { keysignPayload, keysignAction } = useAppPathState<'keysign'>();
 
   const { local_party_id } = useCurrentVault();
 
@@ -47,7 +47,10 @@ export const StartKeysignPage = () => {
                           <JoinKeygenSessionStep onForward={toNextStep} />
                         )}
                         peers={() => (
-                          <KeysignPeerDiscoveryStep onForward={toNextStep} />
+                          <KeysignPeerDiscoveryStep
+                            actionType={keysignAction}
+                            onForward={toNextStep}
+                          />
                         )}
                         session={() => (
                           <KeygenStartSessionStep

@@ -36,6 +36,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
 }) => {
   const sender = useSender();
   const { t } = useTranslation();
+
   const actionFields = selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.fields
     : [];

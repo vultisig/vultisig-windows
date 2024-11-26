@@ -80,7 +80,10 @@ export type AppPathParams = {
 };
 
 export type AppPathState = {
-  keysign: { keysignPayload: KeysignPayload };
+  keysign: {
+    keysignPayload: KeysignPayload;
+    keysignAction?: 'send' | 'deposit';
+  };
   fastKeysign: { keysignPayload: KeysignPayload };
   joinKeysign: { vaultId: string; keysignMsg: KeysignMessage };
   joinKeygen: {

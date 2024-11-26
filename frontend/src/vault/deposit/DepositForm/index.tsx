@@ -15,7 +15,6 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
-import { RefreshSend } from '../../send/RefreshSend';
 import { useGetTotalAmountAvailableForChain } from '../hooks/useGetAmountTotalBalance';
 import {
   getChainActionSchema,
@@ -49,6 +48,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     chain,
     selectedChainAction
   );
+
   const chainActionSchema = getChainActionSchema(chain, selectedChainAction);
   const schemaForChainAction = resolveSchema(
     chainActionSchema,
@@ -68,7 +68,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     mode: 'onBlur',
   });
 
-  const onFormSubmit = (data: FieldValues) => {
+  const handleFormSubmit = (data: FieldValues) => {
     onSubmit(data, selectedChainAction as ChainAction);
   };
 
@@ -76,10 +76,9 @@ export const DepositForm: FC<DepositFormProps> = ({
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        secondaryControls={<RefreshSend />}
         title={<PageHeaderTitle>{t('deposit')}</PageHeaderTitle>}
       />
-      <PageContent as="form" gap={40} onSubmit={handleSubmit(onFormSubmit)}>
+      <PageContent as="form" gap={40} onSubmit={handleSubmit(handleFormSubmit)}>
         <WithProgressIndicator value={0.2}>
           <InputContainer>
             <InputFieldWrapper>
