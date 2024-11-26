@@ -13,7 +13,6 @@ export const useMemoGenerator = ({
   selectedChainAction,
 }: UseMemoGeneratorProps): FieldValues => {
   const enhancedDepositFormData = useMemo(() => {
-    console.log('## selectedChainAction', selectedChainAction);
     let memoValue = '';
     const upperCaseSelectedChainAction = selectedChainAction?.toUpperCase();
     if (selectedChainAction === 'custom' && depositFormData['customMemo']) {
