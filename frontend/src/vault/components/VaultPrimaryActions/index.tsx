@@ -4,7 +4,7 @@ import { UniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { isEmpty } from '../../../lib/utils/array/isEmpty';
 import {
-  chainActionOptionsConfig,
+  chainDepositOptionsConfig,
   ChainWithAction,
 } from '../../deposit/DepositForm/chainOptionsConfig';
 import { SendPrompt } from '../../send/SendPrompt';
@@ -28,7 +28,7 @@ export const VaultPrimaryActions = ({
     | undefined;
 
   const availableChainActions = chainId
-    ? chainActionOptionsConfig[chainId] || []
+    ? chainDepositOptionsConfig[chainId] || []
     : [];
 
   const isSwapAvailable = swapAvailableChains.some(
