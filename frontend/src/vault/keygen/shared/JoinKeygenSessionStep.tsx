@@ -63,7 +63,7 @@ export const JoinKeygenSessionStep = ({
             primaryControls={<PageHeaderBackButton onClick={onBack} />}
             title={<PageHeaderTitle>{title}</PageHeaderTitle>}
           />
-          <PageContent>
+          <PageContent data-testid="JoinKeygenStep-PageContent">
             <VStack flexGrow>
               <VStack flexGrow alignItems="center" justifyContent="center">
                 <PendingKeygenMessage>
