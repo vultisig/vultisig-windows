@@ -33,15 +33,14 @@ export const KeysignSigningStep = ({
 }: Partial<ComponentWithBackActionProps>) => {
   const payload = useKeysignPayload();
   const msgs = useCurrentKeysignMsgs();
-
   const walletCore = useAssertWalletCore();
-
   const vault = useCurrentVault();
-
   const sessionId = useCurrentSessionId();
   const encryptionKeyHex = useCurrentHexEncryptionKey();
-
   const serverUrl = useCurrentServerUrl();
+  const { t } = useTranslation();
+
+  console.log('## payload', payload);
 
   const { mutate: startKeysign, ...mutationStatus } = useMutation({
     mutationFn: async () => {
@@ -64,8 +63,6 @@ export const KeysignSigningStep = ({
 
   useEffect(() => startKeysign(), [startKeysign]);
 
-  const { t } = useTranslation();
-
   return (
     <QueryDependant
       query={mutationStatus}
@@ -86,7 +83,7 @@ export const KeysignSigningStep = ({
             primaryControls={<PageHeaderBackButton onClick={onBack} />}
             title={<PageHeaderTitle>{t('keysign')}</PageHeaderTitle>}
           />
-          <PageContent>
+          <PageContent data-testid="KeysignVerifyStep-PageContent">
             <VStack flexGrow>
               <MatchKeygenSessionStatus
                 pending={() => (
