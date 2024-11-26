@@ -13,9 +13,9 @@ import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { getVaultFromServer } from '../../fast/api/getVaultFromServer';
 import { useCurrentVault } from '../../state/currentVault';
 import { getStorageVaultId } from '../../utils/storageVault';
-import { getVaultFromServer } from '../utils/getVaultFromServer';
 import { useVaultPassword } from './state/password';
 
 export const ServerPasswordStep: React.FC<ComponentWithForwardActionProps> = ({

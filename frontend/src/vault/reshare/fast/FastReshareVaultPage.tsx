@@ -6,7 +6,7 @@ import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { KeygenType } from '../../keygen/KeygenType';
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep';
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
-import { KeygenStepWithoutEmailVerification } from '../../keygen/shared/KeygenStepWithoutEmailVerification';
+import { KeygenStep } from '../../keygen/shared/KeygenStep';
 import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager';
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
@@ -114,7 +114,7 @@ export const FastReshareVaultPage = () => {
                                   />
                                 )}
                                 keygen={() => (
-                                  <KeygenStepWithoutEmailVerification
+                                  <KeygenStep
                                     title={t('reshare')}
                                     onTryAgain={() =>
                                       setStep(reshareVaultSteps[0])

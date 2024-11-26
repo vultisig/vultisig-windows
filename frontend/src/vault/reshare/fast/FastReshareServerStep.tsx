@@ -8,12 +8,12 @@ import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { reshareWithServer } from '../../fast/api/reshareWithServer';
 import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId';
 import { generateLocalPartyId } from '../../keygen/utils/localPartyId';
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader';
 import { useVaultEmail } from '../../server/email/state/email';
 import { useVaultPassword } from '../../server/password/state/password';
-import { reshareWithServer } from '../../server/utils/reshareWithServer';
 import { useCurrentHexEncryptionKey } from '../../setup/state/currentHexEncryptionKey';
 import {
   useCurrentVault,

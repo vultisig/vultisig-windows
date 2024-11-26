@@ -8,10 +8,7 @@ import { groupItems } from '../../lib/utils/array/groupItems';
 import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 import { Chain } from '../../model/chain';
-import {
-  keygenDeviceFromDeviceName,
-  parseLocalPartyId,
-} from '../keygen/utils/localPartyId';
+import { haveServerSigner } from '../fast/utils/haveServerSigner';
 
 export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
   getValueProviderSetup<storage.Vault>('CurrentVault');
@@ -95,13 +92,5 @@ export const useCurrentVaultCoin = (coinKey: CoinKey) => {
 export const useCurrentVaultHasServer = () => {
   const { signers } = useCurrentVault();
 
-  return useMemo(
-    () =>
-      signers.some(
-        signer =>
-          keygenDeviceFromDeviceName(parseLocalPartyId(signer).deviceName) ===
-          'server'
-      ),
-    [signers]
-  );
+  return useMemo(() => haveServerSigner(signers), [signers]);
 };

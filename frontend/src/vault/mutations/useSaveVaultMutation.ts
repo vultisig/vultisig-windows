@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 
 import { storage } from '../../../wailsjs/go/models';
 import { GetSettings, SaveVault } from '../../../wailsjs/go/storage/Store';
@@ -11,7 +11,9 @@ import { useVaults, vaultsQueryKey } from '../queries/useVaultsQuery';
 import { useCurrentVaultId } from '../state/currentVaultId';
 import { getStorageVaultId } from '../utils/storageVault';
 
-export const useSaveVaultMutation = () => {
+export const useSaveVaultMutation = (
+  options?: UseMutationOptions<any, any, storage.Vault, unknown>
+) => {
   const invalidateQueries = useInvalidateQueries();
   const walletCore = useAssertWalletCore();
   const vaults = useVaults();
@@ -36,5 +38,6 @@ export const useSaveVaultMutation = () => {
       );
       await invalidateQueries(vaultSettingsQueryKey);
     },
+    ...options,
   });
 };

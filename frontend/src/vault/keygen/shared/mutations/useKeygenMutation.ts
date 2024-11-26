@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 
 import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService';
 import { match } from '../../../../lib/utils/match';
-import { useSaveVaultMutation } from '../../../mutations/useSaveVaultMutation';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { KeygenType } from '../../KeygenType';
 import { useCurrentKeygenType } from '../../state/currentKeygenType';
@@ -21,11 +20,9 @@ export const useKeygenMutation = () => {
 
   const vault = useCurrentKeygenVault();
 
-  const { mutateAsync: saveVault } = useSaveVaultMutation();
-
   return useMutation({
-    mutationFn: async () => {
-      const newVault = await match(keygenType, {
+    mutationFn: async () =>
+      match(keygenType, {
         [KeygenType.Keygen]: () =>
           StartKeygen(
             vault.name,
@@ -37,10 +34,6 @@ export const useKeygenMutation = () => {
           ),
         [KeygenType.Reshare]: () =>
           Reshare(vault, sessionId, encryptionKeyHex, serverUrl),
-      });
-
-      await saveVault(newVault);
-      return newVault;
-    },
+      }),
   });
 };

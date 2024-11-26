@@ -617,4 +617,5 @@ export const es = {
   total_fee: 'Tarifa total',
   network_rate: 'Tasa de red',
   network_rate_required: 'Se requiere velocidad de red',
+  saving_vault: 'Salvando la bóveda...',
 };

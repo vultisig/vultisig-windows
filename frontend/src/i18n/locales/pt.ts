@@ -608,4 +608,5 @@ export const pt = {
   total_fee: 'Taxa total',
   network_rate: 'Taxa de rede',
   network_rate_required: 'A taxa de rede é necessária',
+  saving_vault: 'Cofre de Salvamento...',
 };

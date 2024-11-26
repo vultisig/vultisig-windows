@@ -593,4 +593,5 @@ export const hr = {
   total_fee: 'Ukupna naknada',
   network_rate: 'Mrežna stopa',
   network_rate_required: 'Potrebna je mrežna stopa',
+  saving_vault: 'Spremanje trezora...',
 };
