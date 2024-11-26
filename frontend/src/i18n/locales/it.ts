@@ -459,7 +459,7 @@ export const it = {
   vault_backup_keygen_banner_title_part2: 'ogni',
   vault_backup_keygen_banner_title_part3: 'singolarmente!',
   vault_backup_keygen_skip_modal_title: 'Salta backup',
-  vault_backup_keygen_skip_modal_back_btn: 'Indietro',
+  back: 'Indietro',
   vault_backup_keygen_skip_modal_checkbox_label:
     "Capisco che saltando il backup potrei perdere l'accesso ai miei fondi.",
   server_password_reason:

@@ -4,7 +4,6 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from 'react-router-dom';
 
 import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly';
-import { DeeplinkObserver } from './deeplink/components/DeeplinkObserver';
 import { GlobalStyle } from './lib/ui/css/GlobalStyle';
 import { darkTheme } from './lib/ui/theme/darkTheme';
 import { ThemeProvider } from './lib/ui/theme/ThemeProvider';
@@ -26,7 +25,6 @@ const App = () => {
           <div className="w-full min-h-screen bg-primary h-full flex flex-col">
             <RemoteStateDependant>
               <InitializedWalletOnly>
-                <DeeplinkObserver />
                 <OnboardingResetter>
                   <ToastProvider>
                     <RouterProvider router={router} />

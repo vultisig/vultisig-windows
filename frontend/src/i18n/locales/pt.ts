@@ -459,7 +459,7 @@ export const pt = {
   vault_backup_keygen_banner_title_part2: 'todos',
   vault_backup_keygen_banner_title_part3: 'dispositivo individualmente!',
   vault_backup_keygen_skip_modal_title: 'Ignorar cópia de segurança',
-  vault_backup_keygen_skip_modal_back_btn: 'Voltar',
+  back: 'Voltar',
   vault_backup_keygen_skip_modal_checkbox_label:
     'Percebo que, ao saltar o backup, posso perder o acesso aos meus fundos.',
   server_password_reason:

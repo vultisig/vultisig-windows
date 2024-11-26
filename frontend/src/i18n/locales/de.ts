@@ -459,7 +459,7 @@ export const de = {
   vault_backup_keygen_banner_title_part2: 'jedes',
   vault_backup_keygen_banner_title_part3: 'Gerät einzeln!',
   vault_backup_keygen_skip_modal_title: 'Sicherung überspringen',
-  vault_backup_keygen_skip_modal_back_btn: 'Zurück',
+  back: 'Zurück',
   vault_backup_keygen_skip_modal_checkbox_label:
     'Ich verstehe, dass ich durch das Überspringen der Sicherung den Zugriff auf meine Gelder verlieren kann.',
   server_password_reason:

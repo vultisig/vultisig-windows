@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '../../lib/ui/buttons/Button';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
 import { useAppPathState } from '../../navigation/hooks/useAppPathState';
+import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
 import { FlowErrorPageContent } from '../../ui/flow/FlowErrorPageContent';
 import { FlowPageHeader } from '../../ui/flow/FlowPageHeader';
 import { FlowPendingPageContent } from '../../ui/flow/FlowPendingPageContent';
@@ -18,6 +20,8 @@ export const DeeplinkPage = () => {
 
   useEffect(() => mutate(url), [url, mutate]);
 
+  const goBack = useNavigateBack();
+
   return (
     <>
       <FlowPageHeader title={t('deeplink')} />
@@ -27,7 +31,10 @@ export const DeeplinkPage = () => {
           success={() => null}
           pending={() => <FlowPendingPageContent title={t('processing_url')} />}
           error={() => (
-            <FlowErrorPageContent message={t('failed_to_process_url')} />
+            <FlowErrorPageContent
+              action={<Button onClick={goBack}>{t('back')}</Button>}
+              message={t('failed_to_process_url')}
+            />
           )}
         />
       </PageContent>
