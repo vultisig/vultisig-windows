@@ -9,7 +9,7 @@ import { parseCoinString } from '../swap/utils';
 import { DepositForm } from './DepositForm';
 import {
   ChainAction,
-  chainActionOptionsConfig,
+  chainDepositOptionsConfig,
   ChainWithAction,
 } from './DepositForm/chainOptionsConfig';
 import { DepositVerify } from './DepositVerify';
@@ -22,7 +22,7 @@ export const DepositPage = () => {
   const [{ coin }] = useAppPathParams<'deposit'>();
   const { chainId: chain } = parseCoinString(coin);
   const chainActionOptions =
-    chainActionOptionsConfig[chain?.toLowerCase() as ChainWithAction];
+    chainDepositOptionsConfig[chain?.toLowerCase() as ChainWithAction];
 
   const [selectedChainAction, setSelectedChainAction] = useState<ChainAction>(
     chainActionOptions[0] as ChainAction
