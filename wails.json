@@ -11,8 +11,9 @@
     "fileAssociations": [
       {
         "ext": "vult",
+        "name": "Vultisig Backup",
         "description": "Vultisig backup file",
-        "icon": "appicon"
+        "iconName": "appicon"
       }
     ],
     "protocols": [
