@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { deepLinkBaseUrl } from '../../../../constants';
+import { deepLinkBaseUrl } from '../../../../deeplink/config';
 import { KeygenMessage } from '../../../../gen/vultisig/keygen/v1/keygen_message_pb';
 import * as queryUtils from '../../../../lib/utils/query/addQueryParams';
 import * as protobufUtils from '../../../../utils/protobuf/toCompressedString';

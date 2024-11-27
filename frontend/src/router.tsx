@@ -1,6 +1,8 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Outlet } from 'react-router-dom';
 
 import { AddressPage } from './chain/components/address/AddressPage';
+import { DeeplinkObserver } from './deeplink/components/DeeplinkObserver';
+import { DeeplinkPage } from './deeplink/components/DeeplinkPage';
 import { appPaths } from './navigation';
 import { CompletedOnboardingOnly } from './onboarding/CompletedOnboardingOnly';
 import { OnboardingPage } from './onboarding/components/OnboardingPage';
@@ -51,299 +53,319 @@ import { VaultFolderPage } from './vaults/folder/VaultFolderPage';
 import { CreateVaultFolderPage } from './vaults/folders/create/CreateVaultFolderPage';
 import { ManageVaultsPage } from './vaults/manage/ManageVaultsPage';
 
+const Root = () => (
+  <>
+    <DeeplinkObserver />
+    <Outlet />
+  </>
+);
+
 export const router = createBrowserRouter([
   {
-    path: appPaths.root,
-    element: (
-      <EmptyVaultsOnly>
-        <CompletedOnboardingOnly>
-          <NoVaultsHomePage />
-        </CompletedOnboardingOnly>
-      </EmptyVaultsOnly>
-    ),
-  },
-  {
-    path: appPaths.onboarding,
-    element: (
-      <IncompleteOnboardingOnly>
-        <OnboardingPage />
-      </IncompleteOnboardingOnly>
-    ),
-  },
-  {
-    path: appPaths.vaultSettings,
-    element: <SettingsVaultPage />,
-  },
-  {
-    path: appPaths.setupFastVault,
-    element: <SetupFastVaultPage />,
-  },
-  {
-    path: appPaths.setupActiveVault,
-    element: <SetupActiveVaultPage />,
-  },
-  {
-    path: appPaths.setupSecureVault,
-    element: <SetupSecureVaultPage />,
-  },
-  {
-    path: appPaths.setupVault,
-    element: <SetupVaultPage />,
-  },
-  {
-    path: appPaths.importVault,
-    element: <ImportVaultView />,
-  },
-  {
-    path: appPaths.uploadQr,
-    element: <UploadQrPage />,
-  },
-  {
-    path: appPaths.joinKeygen,
-    element: <JoinKeygenPage />,
-  },
-  {
-    path: appPaths.keygenBackup,
-    element: <KeygenBackup />,
-  },
-  {
-    path: appPaths.joinKeysign,
-    element: (
-      <ActiveVaultGuard>
-        <JoinKeysignPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.keysign,
-    element: (
-      <ActiveVaultGuard>
-        <StartKeysignPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.fastKeysign,
-    element: (
-      <ActiveVaultGuard>
-        <StartFastKeysignPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.vault,
-    element: (
-      <ActiveVaultGuard>
-        <VaultPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.vaults,
-    element: <VaultsPage />,
-  },
-  {
-    path: appPaths.manageVaults,
-    element: <ManageVaultsPage />,
-  },
-  {
-    path: appPaths.manageVaultChains,
-    element: (
-      <ActiveVaultGuard>
-        <ManageVaultChainsPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.shareVault,
-    element: (
-      <ActiveVaultGuard>
-        <ShareVaultPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.manageVaultChainCoins,
-    element: (
-      <ActiveVaultGuard>
-        <ManageVaultChainCoinsPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.vaultChainDetail,
-    element: (
-      <ActiveVaultGuard>
-        <VaultChainPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.vaultChainCoinDetail,
-    element: (
-      <ActiveVaultGuard>
-        <VaultChainCoinPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.editVault,
-    element: (
-      <ActiveVaultGuard>
-        <EditVaultPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.vaultDetails,
-    element: (
-      <ActiveVaultGuard>
-        <VaultDetailsPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.vaultBackup,
-    element: (
-      <ActiveVaultGuard>
-        <VaultBackupPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.vaultRename,
-    element: (
-      <ActiveVaultGuard>
-        <VaultRenamePage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.reshareVault,
-    element: (
-      <ActiveVaultGuard>
-        <ReshareVaultPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.reshareVaultFast,
-    element: (
-      <ActiveVaultGuard>
-        <FastReshareVaultPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.reshareVaultSecure,
-    element: (
-      <ActiveVaultGuard>
-        <SecureReshareVaultPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.vaultDelete,
-    element: (
-      <ActiveVaultGuard>
-        <DeleteVaultPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.languageSettings,
-    element: <LanguageSettingsPage />,
-  },
-  {
-    path: appPaths.address,
-    element: <AddressPage />,
-  },
-  {
-    path: appPaths.currencySettings,
-    element: <CurrencySettingsPage />,
-  },
-  {
-    path: appPaths.vaultFAQ,
-    element: <FaqVaultPage />,
-  },
-  {
-    path: appPaths.addressBook,
-    element: <AddressBookSettingsPage />,
-  },
-  {
-    path: appPaths.defaultChains,
-    element: <VaultDefaultChainsPage />,
-  },
-  {
-    path: appPaths.send,
-    element: (
-      <ActiveVaultGuard>
-        <SendPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.vaultItemSwap,
-    element: (
-      <ActiveVaultGuard>
-        <SwapPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.reshareVault,
-    element: (
-      <ActiveVaultGuard>
-        <ReshareVaultPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.registerForAirdrop,
-    element: (
-      <ActiveVaultGuard>
-        <RegisterForAirdropPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.checkUpdate,
-    element: <VaultCheckUpdatePage />,
-  },
-  {
-    path: appPaths.createVaultFolder,
-    element: (
-      <ActiveVaultGuard>
-        <CreateVaultFolderPage />
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.vaultFolder,
-    element: (
-      <ActiveVaultGuard>
-        <CurrentVaultFolderPageProvider>
-          <VaultFolderPage />
-        </CurrentVaultFolderPageProvider>
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.manageVaultFolder,
-    element: (
-      <ActiveVaultGuard>
-        <CurrentVaultFolderPageProvider>
-          <ManageVaultFolderPage />
-        </CurrentVaultFolderPageProvider>
-      </ActiveVaultGuard>
-    ),
-  },
-  {
-    path: appPaths.vaultItemDeposit,
-    element: (
-      <ActiveVaultGuard>
-        <DepositPage />
-      </ActiveVaultGuard>
-    ),
+    element: <Root />,
+    children: [
+      {
+        path: appPaths.root,
+        element: (
+          <EmptyVaultsOnly>
+            <CompletedOnboardingOnly>
+              <NoVaultsHomePage />
+            </CompletedOnboardingOnly>
+          </EmptyVaultsOnly>
+        ),
+      },
+      {
+        path: appPaths.onboarding,
+        element: (
+          <IncompleteOnboardingOnly>
+            <OnboardingPage />
+          </IncompleteOnboardingOnly>
+        ),
+      },
+      {
+        path: appPaths.vaultSettings,
+        element: <SettingsVaultPage />,
+      },
+      {
+        path: appPaths.setupFastVault,
+        element: <SetupFastVaultPage />,
+      },
+      {
+        path: appPaths.setupActiveVault,
+        element: <SetupActiveVaultPage />,
+      },
+      {
+        path: appPaths.setupSecureVault,
+        element: <SetupSecureVaultPage />,
+      },
+      {
+        path: appPaths.setupVault,
+        element: <SetupVaultPage />,
+      },
+      {
+        path: appPaths.importVault,
+        element: <ImportVaultView />,
+      },
+      {
+        path: appPaths.uploadQr,
+        element: <UploadQrPage />,
+      },
+      {
+        path: appPaths.joinKeygen,
+        element: <JoinKeygenPage />,
+      },
+      {
+        path: appPaths.keygenBackup,
+        element: <KeygenBackup />,
+      },
+      {
+        path: appPaths.joinKeysign,
+        element: (
+          <ActiveVaultGuard>
+            <JoinKeysignPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.keysign,
+        element: (
+          <ActiveVaultGuard>
+            <StartKeysignPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.fastKeysign,
+        element: (
+          <ActiveVaultGuard>
+            <StartFastKeysignPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.vault,
+        element: (
+          <ActiveVaultGuard>
+            <VaultPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.vaults,
+        element: <VaultsPage />,
+      },
+      {
+        path: appPaths.manageVaults,
+        element: <ManageVaultsPage />,
+      },
+      {
+        path: appPaths.manageVaultChains,
+        element: (
+          <ActiveVaultGuard>
+            <ManageVaultChainsPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.shareVault,
+        element: (
+          <ActiveVaultGuard>
+            <ShareVaultPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.manageVaultChainCoins,
+        element: (
+          <ActiveVaultGuard>
+            <ManageVaultChainCoinsPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.vaultChainDetail,
+        element: (
+          <ActiveVaultGuard>
+            <VaultChainPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.vaultChainCoinDetail,
+        element: (
+          <ActiveVaultGuard>
+            <VaultChainCoinPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.editVault,
+        element: (
+          <ActiveVaultGuard>
+            <EditVaultPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.vaultDetails,
+        element: (
+          <ActiveVaultGuard>
+            <VaultDetailsPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.vaultBackup,
+        element: (
+          <ActiveVaultGuard>
+            <VaultBackupPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.vaultRename,
+        element: (
+          <ActiveVaultGuard>
+            <VaultRenamePage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.reshareVault,
+        element: (
+          <ActiveVaultGuard>
+            <ReshareVaultPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.reshareVaultFast,
+        element: (
+          <ActiveVaultGuard>
+            <FastReshareVaultPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.reshareVaultSecure,
+        element: (
+          <ActiveVaultGuard>
+            <SecureReshareVaultPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.vaultDelete,
+        element: (
+          <ActiveVaultGuard>
+            <DeleteVaultPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.languageSettings,
+        element: <LanguageSettingsPage />,
+      },
+      {
+        path: appPaths.address,
+        element: <AddressPage />,
+      },
+      {
+        path: appPaths.currencySettings,
+        element: <CurrencySettingsPage />,
+      },
+      {
+        path: appPaths.vaultFAQ,
+        element: <FaqVaultPage />,
+      },
+      {
+        path: appPaths.addressBook,
+        element: <AddressBookSettingsPage />,
+      },
+      {
+        path: appPaths.defaultChains,
+        element: <VaultDefaultChainsPage />,
+      },
+      {
+        path: appPaths.send,
+        element: (
+          <ActiveVaultGuard>
+            <SendPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.vaultItemSwap,
+        element: (
+          <ActiveVaultGuard>
+            <SwapPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.reshareVault,
+        element: (
+          <ActiveVaultGuard>
+            <ReshareVaultPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.registerForAirdrop,
+        element: (
+          <ActiveVaultGuard>
+            <RegisterForAirdropPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.checkUpdate,
+        element: <VaultCheckUpdatePage />,
+      },
+      {
+        path: appPaths.createVaultFolder,
+        element: (
+          <ActiveVaultGuard>
+            <CreateVaultFolderPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.vaultFolder,
+        element: (
+          <ActiveVaultGuard>
+            <CurrentVaultFolderPageProvider>
+              <VaultFolderPage />
+            </CurrentVaultFolderPageProvider>
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.manageVaultFolder,
+        element: (
+          <ActiveVaultGuard>
+            <CurrentVaultFolderPageProvider>
+              <ManageVaultFolderPage />
+            </CurrentVaultFolderPageProvider>
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.vaultItemDeposit,
+        element: (
+          <ActiveVaultGuard>
+            <DepositPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.deeplink,
+        element: (
+          <ActiveVaultGuard>
+            <DeeplinkPage />
+          </ActiveVaultGuard>
+        ),
+      },
+    ],
   },
 ]);
