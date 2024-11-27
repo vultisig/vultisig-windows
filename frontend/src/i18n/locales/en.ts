@@ -514,6 +514,9 @@ export const en = {
   add_vaults_to_folder: 'Select Vaults to add to the folder.',
   deposit: 'Deposit',
   chain_message_deposit: '{{chain}} message deposit',
+  thorchain_message_deposit: 'THORChain message deposit',
+  bond_with_lp: 'Bond',
+  unbond_with_lp: 'Unbond',
   bond: 'Bond',
   unbond: 'Unbond',
   leave: 'Leave',
@@ -540,6 +543,33 @@ export const en = {
         nodeAddressInvalid: 'Node Address is invalid',
         operatorFee: "Operator's Fee is required",
         amount: 'Amount must be positive',
+        lpUnits: 'LP Units must be positive',
+      },
+    },
+    bond_with_lp: {
+      labels: {
+        nodeAddress: 'Node Address',
+        amount: 'Amount',
+        lpUnits: 'LP Units',
+      },
+      validations: {
+        nodeAddressMinLength: 'Node Address is required',
+        nodeAddressInvalid: 'Node Address is invalid',
+        amount: 'Amount must be positive',
+        lpUnits: 'LP Units must be positive',
+      },
+    },
+    unbond_with_lp: {
+      labels: {
+        nodeAddress: 'Node Address',
+        amount: 'Amount',
+        lpUnits: 'LP Units',
+      },
+      validations: {
+        nodeAddressMinLength: 'Node Address is required',
+        nodeAddressInvalid: 'Node Address is invalid',
+        amount: 'Amount must be positive',
+        lpUnits: 'LP Units must be positive',
       },
     },
     unbond: {
