@@ -21,6 +21,10 @@ export const useMemoGenerator = ({
       memoValue = 'POOL-:1:vi:50';
     } else if (selectedChainAction === 'addPool') {
       memoValue += 'POOL+';
+    } else if (selectedChainAction === 'bond_with_lp') {
+      memoValue += 'BOND';
+    } else if (selectedChainAction === 'unbond_with_lp') {
+      memoValue += 'UNBOND';
     } else if (selectedChainAction && depositFormData['nodeAddress']) {
       memoValue = `${upperCaseSelectedChainAction}:${depositFormData['nodeAddress'] || '+'}`;
 
