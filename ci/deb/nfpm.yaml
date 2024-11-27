@@ -18,7 +18,6 @@ description: |
 vendor: "Vultisig"
 homepage: "https://vultisig.com"
 license: "MIT"
-changelog: "changelog.yaml"
 contents:
   - src: ../../build/bin/vultisig
     dst: /usr/local/bin/vultisig
