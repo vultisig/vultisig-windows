@@ -617,4 +617,7 @@ export const it = {
   deeplink: 'Collegamento profondo',
   processing_url: 'Elaborazione URL...',
   failed_to_process_url: "Impossibile elaborare l'URL",
+  importing_vault: 'Importazione Vault...',
+  failed_to_import_vault: 'Impossibile importare il vault',
+  failed_to_save_vault: 'Impossibile salvare il vault',
 };

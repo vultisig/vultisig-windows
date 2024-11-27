@@ -612,4 +612,7 @@ export const pt = {
   deeplink: 'Link profundo',
   processing_url: 'Processando URL...',
   failed_to_process_url: 'Falha ao processar URL',
+  importing_vault: 'Importando o Vault...',
+  failed_to_import_vault: 'Falha ao importar o cofre',
+  failed_to_save_vault: 'Falha ao salvar o cofre',
 };

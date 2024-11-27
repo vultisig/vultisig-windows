@@ -6,6 +6,10 @@ export function GetOSArgs() {
   return window['go']['main']['App']['GetOSArgs']();
 }
 
+export function ReadTextFile(arg1) {
+  return window['go']['main']['App']['ReadTextFile'](arg1);
+}
+
 export function SaveFile(arg1, arg2) {
   return window['go']['main']['App']['SaveFile'](arg1, arg2);
 }

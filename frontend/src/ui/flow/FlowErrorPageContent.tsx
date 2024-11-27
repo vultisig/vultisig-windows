@@ -7,15 +7,19 @@ import { VStack } from '../../lib/ui/layout/Stack';
 import {
   ComponentWithActionProps,
   ComponentWithMessageProps,
+  TitledComponentProps,
 } from '../../lib/ui/props';
-import { Text } from '../../lib/ui/text';
+import { StrictText, Text } from '../../lib/ui/text';
 import { makeAppPath } from '../../navigation';
 import { PageContent } from '../page/PageContent';
 
 export const FlowErrorPageContent = ({
   action,
   message,
-}: Partial<ComponentWithActionProps> & ComponentWithMessageProps) => {
+  title,
+}: Partial<ComponentWithActionProps> &
+  Partial<ComponentWithMessageProps> &
+  TitledComponentProps) => {
   const { t } = useTranslation();
 
   return (
@@ -30,8 +34,9 @@ export const FlowErrorPageContent = ({
             color="contrast"
             centerHorizontally
           >
-            {message}
+            {title}
           </Text>
+          {message && <StrictText>{message}</StrictText>}
         </VStack>
       </VStack>
       {action ?? (

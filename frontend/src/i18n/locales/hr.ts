@@ -597,4 +597,7 @@ export const hr = {
   deeplink: 'Dubinska veza',
   processing_url: 'Obrada URL-a...',
   failed_to_process_url: 'Obrada URL-a nije uspjela',
+  importing_vault: 'Uvoz trezora...',
+  failed_to_import_vault: 'Uvoz trezora nije uspio',
+  failed_to_save_vault: 'Spremanje sefa nije uspjelo',
 };

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Buffer } from 'buffer';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,8 +14,7 @@ import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 import { isBase64Encoded } from '../../utils/util';
 import { useSaveVaultMutation } from '../../vault/mutations/useSaveVaultMutation';
 import { useVaultsQuery } from '../../vault/queries/useVaultsQuery';
-import { useCurrentVaultId } from '../../vault/state/currentVaultId';
-import { getStorageVaultId } from '../../vault/utils/storageVault';
+import { toStorageVault } from '../../vault/utils/storageVault';
 import {
   BackupVault,
   mapBackupVaultToVault,
@@ -37,7 +35,7 @@ const ImportVaultView = () => {
     useState<Uint8Array | null>(null);
   const [fileExtension, setFileExtension] = useState<string>('');
   const walletcore = useAssertWalletCore();
-  const { data: vaults = [], refetch } = useVaultsQuery();
+  const { data: vaults = [] } = useVaultsQuery();
 
   const vaultService = VaultServiceFactory.getService(walletcore);
 
@@ -88,7 +86,7 @@ const ImportVaultView = () => {
           new TextDecoder('utf-8', { fatal: true }).decode(uint8Array);
           setDecryptedVaultContent(uint8Array);
           setContinue(true);
-        } catch (e) {
+        } catch {
           // Decoding failed, assume encrypted
           setEncryptedVaultContent(buffer);
           setDialogTitle(t('enter_password'));
@@ -195,7 +193,7 @@ const ImportVaultView = () => {
 
           try {
             backupVault = JSON.parse(cleanedData);
-          } catch (jsonError) {
+          } catch {
             const hexDecoded = Buffer.from(cleanedData, 'hex').toString('utf8');
             backupVault = JSON.parse(hexDecoded);
           }
@@ -231,26 +229,7 @@ const ImportVaultView = () => {
 
       const newVault = Vault.fromBinary(getVaultBuffer());
 
-      const storageVault = {
-        name: newVault.name,
-        public_key_ecdsa: newVault.publicKeyEcdsa,
-        public_key_eddsa: newVault.publicKeyEddsa,
-        signers: newVault.signers,
-        created_at: newVault.createdAt,
-        hex_chain_code: newVault.hexChainCode,
-        keyshares: newVault.keyShares.map(share => ({
-          public_key: share.publicKey,
-          keyshare: share.keyshare,
-        })),
-        local_party_id: newVault.localPartyId,
-        reshare_prefix: newVault.resharePrefix,
-        order: 0,
-        is_backed_up: true,
-        coins: [],
-        convertValues: () => {},
-      };
-
-      await saveVault(storageVault);
+      await saveVault(toStorageVault(newVault));
 
       navigate(makeAppPath('vault'));
     } catch (e: unknown) {
