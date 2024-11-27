@@ -464,7 +464,7 @@ export const es = {
   vault_backup_keygen_banner_title_part2: 'cada',
   vault_backup_keygen_banner_title_part3: 'dispositivo de forma individual',
   vault_backup_keygen_skip_modal_title: 'Omitir copia de seguridad',
-  vault_backup_keygen_skip_modal_back_btn: 'Atrás',
+  back: 'Atrás',
   vault_backup_keygen_skip_modal_checkbox_label:
     'Entiendo que si omito la copia de seguridad, puedo perder el acceso a mis fondos.',
   server_password_reason:
@@ -618,4 +618,7 @@ export const es = {
   network_rate: 'Tasa de red',
   network_rate_required: 'Se requiere velocidad de red',
   saving_vault: 'Salvando la bóveda...',
+  deeplink: 'Enlace profundo',
+  processing_url: 'Procesando URL...',
+  failed_to_process_url: 'No se pudo procesar la URL',
 };

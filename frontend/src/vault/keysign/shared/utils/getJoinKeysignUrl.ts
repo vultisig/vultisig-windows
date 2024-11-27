@@ -1,4 +1,4 @@
-import { deepLinkBaseUrl } from '../../../../constants';
+import { deepLinkBaseUrl } from '../../../../deeplink/config';
 import {
   KeysignMessage,
   KeysignPayload,

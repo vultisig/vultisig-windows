@@ -84,6 +84,9 @@ export const en = {
   pair: 'Pair',
   create_qr: 'Create QR',
   scan_qr: 'Scan QR / Pair device',
+  deeplink: 'Deeplink',
+  processing_url: 'Processing URL...',
+  failed_to_process_url: 'Failed to process URL',
   this_device_is_the: 'This device is the',
   initiating_device: 'Initiating device',
   pairing_device: 'Pairing device',
@@ -459,7 +462,7 @@ export const en = {
   vault_backup_keygen_banner_title_part2: 'every',
   vault_backup_keygen_banner_title_part3: 'device individually!',
   vault_backup_keygen_skip_modal_title: 'Skip Backup',
-  vault_backup_keygen_skip_modal_back_btn: 'Back',
+  back: 'Back',
   vault_backup_keygen_skip_modal_checkbox_label:
     'I understand that by skipping the backup I may lose access to my funds.',
   changes_in_setup: 'Changes in Setup',

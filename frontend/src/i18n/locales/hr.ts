@@ -444,7 +444,7 @@ export const hr = {
   vault_backup_keygen_banner_title_part2: 'svaki',
   vault_backup_keygen_banner_title_part3: 'uređaj pojedinačno!',
   vault_backup_keygen_skip_modal_title: 'Preskoči sigurnosnu kopiju',
-  vault_backup_keygen_skip_modal_back_btn: 'Natrag',
+  back: 'Natrag',
   vault_backup_keygen_skip_modal_checkbox_label:
     'Razumijem da preskakanjem sigurnosne kopije mogu izgubiti pristup svojim sredstvima.',
   server_password_reason:
@@ -594,4 +594,7 @@ export const hr = {
   network_rate: 'Mrežna stopa',
   network_rate_required: 'Potrebna je mrežna stopa',
   saving_vault: 'Spremanje trezora...',
+  deeplink: 'Dubinska veza',
+  processing_url: 'Obrada URL-a...',
+  failed_to_process_url: 'Obrada URL-a nije uspjela',
 };
