@@ -496,6 +496,9 @@ export const hr = {
   deposit: 'Depozit',
   add_vaults_to_folder: 'Odaberite trezore za dodavanje u mapu.',
   chain_message_deposit: '{{chain}} polog poruke',
+  thorchain_message_deposit: 'THORChain polog poruke',
+  bond_with_lp: 'Veza',
+  unbond_with_lp: 'Odvoji',
   chainFunctions: {
     amountExceeded: 'Az összeg meghaladja a rendelkezésre álló egyenleget',
     memo: 'Memo',
@@ -525,6 +528,32 @@ export const hr = {
         nodeAddressMinLength: 'Potrebna je adresa čvora',
         nodeAddressInvalid: 'Adresa čvora je nevažeća',
         amount: 'Iznos mora biti pozitivan',
+      },
+    },
+    bond_with_lp: {
+      labels: {
+        nodeAddress: 'Adresa čvora',
+        amount: 'Iznos',
+        lpUnits: 'LP jedinice',
+      },
+      validations: {
+        nodeAddressMinLength: 'Adresa čvora je obavezna',
+        nodeAddressInvalid: 'Adresa čvora je nevažeća',
+        amount: 'Iznos mora biti pozitivan',
+        lpUnits: 'LP jedinice moraju biti pozitivne',
+      },
+    },
+    unbond_with_lp: {
+      labels: {
+        nodeAddress: 'Adresa čvora',
+        amount: 'Iznos',
+        lpUnits: 'LP jedinice',
+      },
+      validations: {
+        nodeAddressMinLength: 'Adresa čvora je obavezna',
+        nodeAddressInvalid: 'Adresa čvora je nevažeća',
+        amount: 'Iznos mora biti pozitivan',
+        lpUnits: 'LP jedinice moraju biti pozitivne',
       },
     },
     leave: {

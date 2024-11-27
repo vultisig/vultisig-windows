@@ -513,6 +513,9 @@ export const it = {
   deposit: 'Deposito',
   add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
   chain_message_deposit: 'Deposito messaggio {{chain}}',
+  thorchain_message_deposit: 'Deposito messaggio THORChain',
+  bond_with_lp: 'Legame',
+  unbond_with_lp: 'Slega',
   chainFunctions: {
     amountExceeded: "L'importo supera il saldo disponibile",
     memo: 'Memo',
@@ -542,6 +545,32 @@ export const it = {
         nodeAddressMinLength: 'Indirizzo nodo obbligatorio',
         nodeAddressInvalid: 'Indirizzo nodo non valido',
         amount: "L'importo deve essere positivo",
+      },
+    },
+    bond_with_lp: {
+      labels: {
+        nodeAddress: 'Indirizzo del Nodo',
+        amount: 'Importo',
+        lpUnits: 'Unità LP',
+      },
+      validations: {
+        nodeAddressMinLength: "L'indirizzo del nodo è obbligatorio",
+        nodeAddressInvalid: "L'indirizzo del nodo è non valido",
+        amount: "L'importo deve essere positivo",
+        lpUnits: 'Le unità LP devono essere positive',
+      },
+    },
+    unbond_with_lp: {
+      labels: {
+        nodeAddress: 'Indirizzo del Nodo',
+        amount: 'Importo',
+        lpUnits: 'Unità LP',
+      },
+      validations: {
+        nodeAddressMinLength: "L'indirizzo del nodo è obbligatorio",
+        nodeAddressInvalid: "L'indirizzo del nodo è non valido",
+        amount: "L'importo deve essere positivo",
+        lpUnits: 'Le unità LP devono essere positive',
       },
     },
     leave: {

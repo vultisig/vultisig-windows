@@ -511,6 +511,9 @@ export const pt = {
   deposit: 'Depositar',
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   chain_message_deposit: 'Depósito de mensagem {{chain}}',
+  thorchain_message_deposit: 'Depósito de mensagem THORChain',
+  bond_with_lp: 'Vínculo',
+  unbond_with_lp: 'Desvincular',
   chainFunctions: {
     amountExceeded: 'O valor excede o saldo disponível',
     memo: 'Memo',
@@ -540,6 +543,32 @@ export const pt = {
         nodeAddressMinLength: 'Endereço do nó é obrigatório',
         nodeAddressInvalid: 'Endereço do nó é inválido',
         amount: 'Quantidade deve ser positiva',
+      },
+    },
+    bond_with_lp: {
+      labels: {
+        nodeAddress: 'Endereço do Nó',
+        amount: 'Quantidade',
+        lpUnits: 'Unidades LP',
+      },
+      validations: {
+        nodeAddressMinLength: 'O endereço do nó é obrigatório',
+        nodeAddressInvalid: 'O endereço do nó é inválido',
+        amount: 'A quantidade deve ser positiva',
+        lpUnits: 'As unidades LP devem ser positivas',
+      },
+    },
+    unbond_with_lp: {
+      labels: {
+        nodeAddress: 'Endereço do Nó',
+        amount: 'Quantidade',
+        lpUnits: 'Unidades LP',
+      },
+      validations: {
+        nodeAddressMinLength: 'O endereço do nó é obrigatório',
+        nodeAddressInvalid: 'O endereço do nó é inválido',
+        amount: 'A quantidade deve ser positiva',
+        lpUnits: 'As unidades LP devem ser positivas',
       },
     },
     leave: {
