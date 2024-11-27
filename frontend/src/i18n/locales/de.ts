@@ -516,7 +516,7 @@ export const de = {
   deposit: 'Einzahlung',
   add_vaults_to_folder:
     'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
-  thorchain_message_deposit: 'THORChain-Nachrichteneinzahlung',
+  chain_message_deposit: '{{chain}}-Nachrichteneinzahlung',
   chainFunctions: {
     amountExceeded: 'Der Betrag übersteigt das verfügbare Guthaben',
     memo: 'Memo',
