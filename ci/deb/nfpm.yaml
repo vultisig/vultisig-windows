@@ -1,0 +1,28 @@
+name: "vultisig"
+arch: "amd64"
+platform: "linux"
+version: "1.0.6"
+section: "default"
+priority: "extra"
+maintainer: "Vultisig team <dev@vultisig.com>"
+description: |
+  Vultisig linux application
+vendor: "Vultisig"
+homepage: "https://vultisig.com"
+license: "MIT"
+contents:
+  - src: ../../build/bin/vultisig
+    dst: /usr/local/bin/vultisig
+  - src: /usr/local/bin/vultisig
+    dst: /sbin/vultisig
+    type: symlink
+  - src: ./vultisig.desktop
+    dst: /usr/share/applications/vultisig.desktop
+  - src: ./vultisig.svg
+    dst: /usr/share/icons/hicolor/scalable/apps/vultisig.svg
+  - src: ./vultisig.svg
+    dst: /usr/share/icons/Yaru/scalable/apps/vultisig.svg
+overrides:
+  deb:
+    scripts:
+      postinstall: ./postinstall.sh
