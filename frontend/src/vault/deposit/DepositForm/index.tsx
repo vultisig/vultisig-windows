@@ -18,7 +18,7 @@ import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicato
 import { useGetTotalAmountAvailableForChain } from '../hooks/useGetAmountTotalBalance';
 import {
   getChainActionSchema,
-  getRequiredFields,
+  getFieldsForChainAction,
   resolveSchema,
 } from '../utils/schema';
 import { ChainAction } from './chainOptionsConfig';
@@ -43,12 +43,12 @@ export const DepositForm: FC<DepositFormProps> = ({
   const walletCore = useAssertWalletCore();
   const { t } = useTranslation();
   const totalAmountAvailable = useGetTotalAmountAvailableForChain(chain);
-  const requiredFieldsForChainAction = getRequiredFields(
+  const chainActionSchema = getChainActionSchema(chain, selectedChainAction);
+  const fieldsForChainAction = getFieldsForChainAction(
     chain,
     selectedChainAction
   );
 
-  const chainActionSchema = getChainActionSchema(chain, selectedChainAction);
   const schemaForChainAction = resolveSchema(
     chainActionSchema,
     chain,
@@ -107,9 +107,9 @@ export const DepositForm: FC<DepositFormProps> = ({
               />
             )}
           />
-          {selectedChainAction && requiredFieldsForChainAction.length > 0 && (
+          {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
-              {requiredFieldsForChainAction.map(field => (
+              {fieldsForChainAction.map(field => (
                 <InputContainer key={field.name}>
                   <Text size={15} weight="400">
                     {t(
