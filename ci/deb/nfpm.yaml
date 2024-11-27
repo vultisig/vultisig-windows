@@ -1,11 +1,3 @@
-# This is an example nfpm configuration file.
-# Make sure to check the documentation at https://nfpm.goreleaser.com
-#
-# The lines below are called `modelines`. See `:help modeline`
-# Feel free to remove those if you don't want/need to use them.
-# yaml-language-server: $schema=https://nfpm.goreleaser.com/static/schema.json
-# vim: set ts=2 sw=2 tw=0 fo=cnqoj
-
 name: "vultisig"
 arch: "amd64"
 platform: "linux"
