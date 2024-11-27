@@ -6,7 +6,7 @@ section: "default"
 priority: "extra"
 maintainer: "Vultisig team <dev@vultisig.com>"
 description: |
-  Vultisig linix application
+  Vultisig linux application
 vendor: "Vultisig"
 homepage: "https://vultisig.com"
 license: "MIT"
