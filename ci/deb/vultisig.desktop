@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Vultisig
+Comment=Vultisig Linux Application
+Exec=/usr/local/bin/vultisig
+Icon=/usr/share/icons/hicolor/256x256/apps/vultisig.png
+Terminal=false
+Type=Application
+Categories=Utility;

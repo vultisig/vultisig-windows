@@ -20,17 +20,18 @@ homepage: "https://vultisig.com"
 license: "MIT"
 changelog: "changelog.yaml"
 contents:
-  - src: ./vultisig
+  - src: ../../build/bin/vultisig
     dst: /usr/local/bin/vultisig
   - src: /usr/local/bin/vultisig
     dst: /sbin/vultisig
     type: symlink
+  - src: ./vultisig.desktop
+    dst: /usr/share/applications/vultisig.desktop
+  - src: ./vultisig.svg
+    dst: /usr/share/icons/hicolor/scalable/apps/vultisig.svg
+  - src: ./vultisig.svg
+    dst: /usr/share/icons/Yaru/scalable/apps/vultisig.svg
 overrides:
-  rpm:
-    scripts:
-      preinstall: ./scripts/preinstall.sh
-      postremove: ./scripts/postremove.sh
   deb:
     scripts:
-      postinstall: ./scripts/postinstall.sh
-      preremove: ./scripts/preremove.sh
+      postinstall: ./postinstall.sh
