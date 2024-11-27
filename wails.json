@@ -8,6 +8,14 @@
   "frontend:dev:serverUrl": "auto",
   "description": "Vultisig for Windows",
   "info": {
+    "fileAssociations": [
+      {
+        "ext": "vult",
+        "name": "Vultisig Backup",
+        "description": "Vultisig backup file",
+        "iconName": "appicon"
+      }
+    ],
     "protocols": [
       {
         "scheme": "vultisig",

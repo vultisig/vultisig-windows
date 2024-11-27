@@ -1,5 +1,6 @@
 import SevenZip from '7z-wasm';
 
+import { deepLinkBaseUrl } from '../deeplink/config';
 import {
   KeysignMessage,
   KeysignPayload,
@@ -32,5 +33,5 @@ export async function createKeysignMessage(
 
   const payload = Buffer.from(compressedData).toString('base64');
 
-  return `vultisig://vultisig.com?type=SignTransaction&vault=${vaultId}&jsonData=${payload}`;
+  return `${deepLinkBaseUrl}?type=SignTransaction&vault=${vaultId}&jsonData=${payload}`;
 }

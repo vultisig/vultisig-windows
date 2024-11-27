@@ -56,7 +56,7 @@ const KeygenSkipVaultBackupAttentionModal = ({
           {t('vault_backup_keygen_skip_modal_title')}
         </OrangeButton>
         <Button as="div" kind="outlined" onClick={onClose}>
-          {t('vault_backup_keygen_skip_modal_back_btn')}
+          {t('back')}
         </Button>
       </VStack>
     </StyledModal>

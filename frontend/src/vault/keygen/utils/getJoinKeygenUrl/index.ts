@@ -1,4 +1,4 @@
-import { deepLinkBaseUrl } from '../../../../constants';
+import { deepLinkBaseUrl } from '../../../../deeplink/config';
 import { KeygenMessage } from '../../../../gen/vultisig/keygen/v1/keygen_message_pb';
 import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
 import { toCompressedString } from '../../../../utils/protobuf/toCompressedString';

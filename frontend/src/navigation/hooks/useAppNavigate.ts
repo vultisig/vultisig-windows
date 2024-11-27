@@ -10,6 +10,8 @@ import {
   makeAppPath,
 } from '..';
 
+type CommonOptions = { replace?: boolean };
+
 type PathsWithParamsAndState = Extract<AppPathsWithParams, AppPathsWithState>;
 type PathsWithOnlyParams = Exclude<AppPathsWithParams, PathsWithParamsAndState>;
 type PathsWithOnlyState = Exclude<AppPathsWithState, PathsWithParamsAndState>;
@@ -21,29 +23,32 @@ type PathsWithNoParamsOrState = Exclude<
 type AppNavigate = {
   <P extends PathsWithParamsAndState>(
     path: P,
-    options: { params: AppPathParams[P]; state: AppPathState[P] }
+    options: CommonOptions & {
+      params: AppPathParams[P];
+      state: AppPathState[P];
+    }
   ): void;
   <P extends PathsWithOnlyParams>(
     path: P,
-    options: { params: AppPathParams[P] }
+    options: CommonOptions & { params: AppPathParams[P] }
   ): void;
   <P extends PathsWithOnlyState>(
     path: P,
-    options: { state: AppPathState[P] }
+    options: CommonOptions & { state: AppPathState[P] }
   ): void;
-  (path: PathsWithNoParamsOrState): void;
+  (path: PathsWithNoParamsOrState, options?: CommonOptions): void;
 };
 
 export function useAppNavigate(): AppNavigate {
   const navigate = useNavigate();
 
   const appNavigate = useCallback(
-    (path: AppPath, options?: any) => {
-      const to = options?.params
-        ? makeAppPath(path as any, options.params)
+    (path: AppPath, { params, ...options }: any = {}) => {
+      const to = params
+        ? makeAppPath(path as any, params)
         : makeAppPath(path as any);
 
-      navigate(to, options?.state ? { state: options.state } : undefined);
+      navigate(to, options);
     },
     [navigate]
   );
