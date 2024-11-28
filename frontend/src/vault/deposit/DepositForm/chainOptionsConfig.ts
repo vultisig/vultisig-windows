@@ -8,7 +8,7 @@ export type ChainWithAction = keyof typeof chainDepositOptionsConfig;
 
 export const chainDepositOptionsConfig = {
   thorchain: ['bond', 'unbond', 'leave', 'addPool', 'withdrawPool', 'custom'],
-  mayachain: ['bond', 'unbond', 'leave', 'custom'],
+  mayachain: ['bond', 'unbond', 'leave', 'addPool', 'withdrawPool', 'custom'],
   dydx: ['vote'],
   ton: ['stake', 'unstake'],
 };

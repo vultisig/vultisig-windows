@@ -43,7 +43,6 @@ export const DepositForm: FC<DepositFormProps> = ({
   const walletCore = useAssertWalletCore();
   const { t } = useTranslation();
   const totalAmountAvailable = useGetTotalAmountAvailableForChain(chain);
-
   const requiredFieldsForChainAction = getRequiredFields(
     chain,
     selectedChainAction
@@ -82,7 +81,9 @@ export const DepositForm: FC<DepositFormProps> = ({
         <WithProgressIndicator value={0.2}>
           <InputContainer>
             <InputFieldWrapper>
-              {t('thorchain_message_deposit')}
+              {t('chain_message_deposit', {
+                chain,
+              })}
             </InputFieldWrapper>
           </InputContainer>
           <Opener

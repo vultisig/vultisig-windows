@@ -508,7 +508,7 @@ export const en = {
   folders: 'Folders',
   add_vaults_to_folder: 'Select Vaults to add to the folder.',
   deposit: 'Deposit',
-  thorchain_message_deposit: 'THORChain message deposit',
+  chain_message_deposit: '{{chain}} message deposit',
   bond: 'Bond',
   unbond: 'Unbond',
   leave: 'Leave',
