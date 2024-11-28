@@ -23,7 +23,6 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Kujira]: 'https://finder.kujira.network/kaiyo-1',
   [Chain.Avalanche]: 'https://snowtrace.io',
   [Chain.BSC]: 'https://bscscan.com',
-  // [Chain.MayaChain]: 'https://www.xscanner.org',
   [Chain.MayaChain]: 'https://www.mayascan.org',
   [Chain.Arbitrum]: 'https://arbiscan.io',
   [Chain.Base]: 'https://basescan.org',
