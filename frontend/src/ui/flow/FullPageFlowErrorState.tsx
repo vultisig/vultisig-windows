@@ -21,7 +21,7 @@ export const FullPageFlowErrorState = ({
         primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{title}</PageHeaderTitle>}
       />
-      <FlowErrorPageContent action={action} message={message} />
+      <FlowErrorPageContent action={action} title={message} />
     </>
   );
 };

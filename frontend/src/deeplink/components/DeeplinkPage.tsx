@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../lib/ui/buttons/Button';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
+import { extractErrorMsg } from '../../lib/utils/error/extractErrorMsg';
 import { useAppPathState } from '../../navigation/hooks/useAppPathState';
 import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
 import { FlowErrorPageContent } from '../../ui/flow/FlowErrorPageContent';
 import { FlowPageHeader } from '../../ui/flow/FlowPageHeader';
 import { FlowPendingPageContent } from '../../ui/flow/FlowPendingPageContent';
-import { PageContent } from '../../ui/page/PageContent';
 import { useProcessDeeplinkMutation } from '../mutations/useProcessDeeplinkMutation';
 
 export const DeeplinkPage = () => {
@@ -25,19 +25,18 @@ export const DeeplinkPage = () => {
   return (
     <>
       <FlowPageHeader title={t('deeplink')} />
-      <PageContent flexGrow alignItems="center" justifyContent="center">
-        <QueryDependant
-          query={mutationState}
-          success={() => null}
-          pending={() => <FlowPendingPageContent title={t('processing_url')} />}
-          error={() => (
-            <FlowErrorPageContent
-              action={<Button onClick={goBack}>{t('back')}</Button>}
-              message={t('failed_to_process_url')}
-            />
-          )}
-        />
-      </PageContent>
+      <QueryDependant
+        query={mutationState}
+        success={() => null}
+        pending={() => <FlowPendingPageContent title={t('processing_url')} />}
+        error={error => (
+          <FlowErrorPageContent
+            action={<Button onClick={goBack}>{t('back')}</Button>}
+            title={t('failed_to_process_url')}
+            message={extractErrorMsg(error)}
+          />
+        )}
+      />
     </>
   );
 };

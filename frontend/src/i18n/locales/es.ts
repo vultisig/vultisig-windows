@@ -621,4 +621,7 @@ export const es = {
   deeplink: 'Enlace profundo',
   processing_url: 'Procesando URL...',
   failed_to_process_url: 'No se pudo procesar la URL',
+  importing_vault: 'Importando Bóveda...',
+  failed_to_import_vault: 'Error al importar el almacén',
+  failed_to_save_vault: 'No se pudo guardar la bóveda',
 };

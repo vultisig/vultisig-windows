@@ -1,8 +1,8 @@
 import { createBrowserRouter, Outlet } from 'react-router-dom';
 
 import { AddressPage } from './chain/components/address/AddressPage';
-import { DeeplinkObserver } from './deeplink/components/DeeplinkObserver';
 import { DeeplinkPage } from './deeplink/components/DeeplinkPage';
+import { LauncherObserver } from './launcher/components/LauncherObserver';
 import { appPaths } from './navigation';
 import { CompletedOnboardingOnly } from './onboarding/CompletedOnboardingOnly';
 import { OnboardingPage } from './onboarding/components/OnboardingPage';
@@ -29,6 +29,7 @@ import { ActiveVaultGuard } from './vault/components/ActiveVaultGuard';
 import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { VaultPage } from './vault/components/VaultPage';
 import { DepositPage } from './vault/deposit/DepositPage';
+import { ImportVaultFromFilePage } from './vault/import/components/ImportVaultFromFilePage';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { KeygenBackup } from './vault/keygen/shared/KeygenBackup';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
@@ -55,7 +56,7 @@ import { ManageVaultsPage } from './vaults/manage/ManageVaultsPage';
 
 const Root = () => (
   <>
-    <DeeplinkObserver />
+    <LauncherObserver />
     <Outlet />
   </>
 );
@@ -105,6 +106,10 @@ export const router = createBrowserRouter([
       {
         path: appPaths.importVault,
         element: <ImportVaultView />,
+      },
+      {
+        path: appPaths.importVaultFromFile,
+        element: <ImportVaultFromFilePage />,
       },
       {
         path: appPaths.uploadQr,

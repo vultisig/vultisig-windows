@@ -47,9 +47,21 @@ func (a *App) SaveFileBkp(suggestedFilename string, base64Data string) (string, 
 
 	return filename, nil
 }
+
 func (a *App) GetOSArgs() []string {
 	return a.args
 }
+
+func (a *App) ReadTextFile(filename string) (string, error) {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+
+	return string(data), nil
+}
+
+
 func (a *App) SaveFile(suggestedFilename string, base64Data string) (string, error) {
 	filename, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
 		Title: "Save File",

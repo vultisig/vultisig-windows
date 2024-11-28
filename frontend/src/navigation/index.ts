@@ -12,6 +12,7 @@ import { SetupVaultType } from '../vault/setup/type/SetupVaultType';
 
 export const appPaths = {
   importVault: '/vault/import',
+  importVaultFromFile: '/vault/import/file',
   shareVault: '/vault/share',
   reshareVault: '/vault/reshare',
   reshareVaultSecure: '/vault/reshare/secure',
@@ -93,6 +94,9 @@ export type AppPathState = {
   };
   deeplink: {
     url: string;
+  };
+  importVaultFromFile: {
+    filePath: string;
   };
 };
 

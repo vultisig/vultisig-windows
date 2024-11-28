@@ -9,11 +9,10 @@ import {
 } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
+import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
-import { PageContent } from '../../../ui/page/PageContent';
+import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent';
 import { useSaveVaultMutation } from '../../mutations/useSaveVaultMutation';
-import { KeygenFailedState } from './KeygenFailedState';
-import { PendingKeygenMessage } from './PendingKeygenMessage';
 
 export const SaveVaultStep: React.FC<
   ComponentWithValueProps<storage.Vault> &
@@ -32,18 +31,17 @@ export const SaveVaultStep: React.FC<
 
   return (
     <>
+      <FlowPageHeader title={title} />
       <QueryDependant
         query={mutationState}
-        pending={() => (
-          <>
-            <FlowPageHeader title={title} />
-            <PageContent flexGrow alignItems="center" justifyContent="center">
-              <PendingKeygenMessage>{t('saving_vault')}</PendingKeygenMessage>
-            </PageContent>
-          </>
-        )}
+        pending={() => <FlowPendingPageContent title={t('saving_vault')} />}
         success={() => null}
-        error={error => <KeygenFailedState message={extractErrorMsg(error)} />}
+        error={error => (
+          <FlowErrorPageContent
+            title={t('failed_to_save_vault')}
+            message={extractErrorMsg(error)}
+          />
+        )}
       />
     </>
   );

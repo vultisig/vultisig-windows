@@ -2,10 +2,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 import { GetOSArgs } from '../../../wailsjs/go/main/App';
+import { deepLinkBaseUrl } from '../../deeplink/config';
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
-import { deepLinkBaseUrl } from '../config';
 
-export const DeeplinkObserver = () => {
+export const LauncherObserver = () => {
   const navigate = useAppNavigate();
 
   const { mutate } = useMutation({
@@ -13,9 +13,12 @@ export const DeeplinkObserver = () => {
       const args = await GetOSArgs();
 
       const url = args.find(arg => arg.startsWith(deepLinkBaseUrl));
+      const filePath = args.find(arg => arg.endsWith('.vult'));
 
       if (url) {
         navigate('deeplink', { state: { url } });
+      } else if (filePath) {
+        navigate('importVaultFromFile', { state: { filePath } });
       }
     },
   });
