@@ -78,3 +78,7 @@ export type ComponentWithStatusProps<T> = {
 export type ComponentWithOptionsProps<T> = {
   options: readonly T[];
 };
+
+export type ValueFinishProps<T> = {
+  onFinish: (value: T) => void;
+};
