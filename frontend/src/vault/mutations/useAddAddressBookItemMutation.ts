@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AddressBookItem } from '../../lib/types/address-book';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { AddressServiceFactory } from '../../services/Address/AddressServiceFactory';
-import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
+import { VaultService } from '../../services/Vault/VaultService';
 import {
   addressBookItemsQueryKey,
   useAddressBookItemsQuery,
@@ -16,7 +16,7 @@ export const useAddAddressBookItemMutation = ({
 } = {}) => {
   const queryClient = useQueryClient();
   const walletCore = useAssertWalletCore();
-  const vaultService = VaultServiceFactory.getService(walletCore);
+  const vaultService = new VaultService();
   const { data: addressBookItems } = useAddressBookItemsQuery();
 
   return useMutation({

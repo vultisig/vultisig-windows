@@ -1,13 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Settings } from '../../lib/types/settings';
-import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
+import { VaultService } from '../../services/Vault/VaultService';
 import { vaultSettingsQueryKey } from '../queries/useVaultSettingsQuery';
 
 export const useUpdateVaultSettingsMutation = () => {
-  const walletCore = useAssertWalletCore();
-  const vaultService = VaultServiceFactory.getService(walletCore);
+  const vaultService = new VaultService();
   const queryClient = useQueryClient();
 
   return useMutation({

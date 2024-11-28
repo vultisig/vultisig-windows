@@ -600,4 +600,5 @@ export const hr = {
   importing_vault: 'Uvoz trezora...',
   failed_to_import_vault: 'Uvoz trezora nije uspio',
   failed_to_save_vault: 'Spremanje sefa nije uspjelo',
+  vault_password: 'Lozinka trezora',
 };

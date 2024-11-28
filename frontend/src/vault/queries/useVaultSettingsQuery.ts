@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
+import { VaultService } from '../../services/Vault/VaultService';
 import { mapLanguageToLanguageNameUI } from '../mappers/mapLanguageToLanguageUI';
 
 export const vaultSettingsQueryKey = ['vaultSettings'];
@@ -15,8 +14,7 @@ const DEFAULT_SETTINGS = {
 };
 
 export const useVaultSettingsQuery = () => {
-  const walletCore = useAssertWalletCore();
-  const vaultService = VaultServiceFactory.getService(walletCore);
+  const vaultService = new VaultService();
   const { t } = useTranslation();
 
   return useQuery({

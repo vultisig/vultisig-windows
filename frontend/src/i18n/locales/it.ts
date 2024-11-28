@@ -620,4 +620,5 @@ export const it = {
   importing_vault: 'Importazione Vault...',
   failed_to_import_vault: 'Impossibile importare il vault',
   failed_to_save_vault: 'Impossibile salvare il vault',
+  vault_password: 'Password del caveau',
 };

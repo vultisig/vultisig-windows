@@ -6,7 +6,7 @@ import { PageContent } from '../page/PageContent';
 
 export const FlowPendingPageContent = ({ title }: TitledComponentProps) => (
   <PageContent flexGrow alignItems="center" justifyContent="center">
-    <VStack gap={8}>
+    <VStack alignItems="center" gap={8}>
       <StrictText>{title}</StrictText>
       <Spinner />
     </VStack>

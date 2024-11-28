@@ -4,7 +4,7 @@ import { AddressBookItem } from '../../lib/types/address-book';
 import { Chain } from '../../model/chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { AddressServiceFactory } from '../../services/Address/AddressServiceFactory';
-import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
+import { VaultService } from '../../services/Vault/VaultService';
 import { addressBookItemsQueryKey } from '../queries/useAddressBookItemsQuery';
 
 export const useUpdateAddressBookItemMutation = ({
@@ -14,7 +14,7 @@ export const useUpdateAddressBookItemMutation = ({
 } = {}) => {
   const queryClient = useQueryClient();
   const walletCore = useAssertWalletCore();
-  const vaultService = VaultServiceFactory.getService(walletCore);
+  const vaultService = new VaultService();
 
   return useMutation({
     mutationFn: async ({

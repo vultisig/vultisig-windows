@@ -1,13 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
+import { VaultService } from '../../services/Vault/VaultService';
 import { addressBookItemsQueryKey } from '../queries/useAddressBookItemsQuery';
 
 export const useDeleteAddressBookItemMutation = () => {
   const queryClient = useQueryClient();
-  const walletCore = useAssertWalletCore();
-  const vaultService = VaultServiceFactory.getService(walletCore);
+  const vaultService = new VaultService();
 
   return useMutation({
     mutationFn: async (id: string) => {

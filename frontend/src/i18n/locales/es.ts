@@ -624,4 +624,5 @@ export const es = {
   importing_vault: 'Importando Bóveda...',
   failed_to_import_vault: 'Error al importar el almacén',
   failed_to_save_vault: 'No se pudo guardar la bóveda',
+  vault_password: 'Contraseña de la bóveda',
 };

@@ -17,6 +17,7 @@ export const en = {
   import_vault: 'Import Vault',
   importing_vault: 'Importing Vault...',
   failed_to_import_vault: 'Failed to import vault',
+  vault_password: 'Vault Password',
   failed_to_save_vault: 'Failed to save vault',
   next: 'Next',
   skip: 'Skip',

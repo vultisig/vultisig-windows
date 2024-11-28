@@ -2,14 +2,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { storage } from '../../../wailsjs/go/models';
 import { UpdateVaultIsBackedUp } from '../../../wailsjs/go/storage/Store';
-import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
+import { VaultService } from '../../services/Vault/VaultService';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
 import { getStorageVaultId } from '../utils/storageVault';
 
 export const useBackupVaultMutation = () => {
-  const walletCore = useAssertWalletCore();
-  const vaultService = VaultServiceFactory.getService(walletCore);
+  const vaultService = new VaultService();
   const queryClient = useQueryClient();
 
   return useMutation({

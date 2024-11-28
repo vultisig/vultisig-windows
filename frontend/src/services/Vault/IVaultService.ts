@@ -5,8 +5,6 @@ import { AddressBookItem } from '../../lib/types/address-book';
 export interface IVaultService {
   encryptVault(passwd: string, vault: Buffer): Buffer;
 
-  decryptVault(passwd: string, vault: Buffer): Buffer;
-
   createBackup(vault: Vault | storage.Vault, password: string): Promise<string>;
 
   createAndSaveBackup(

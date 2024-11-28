@@ -9,9 +9,8 @@ import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { extractErrorMsg } from '../../lib/utils/error/extractErrorMsg';
 import { makeAppPath } from '../../navigation';
-import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
 import { isBase64Encoded } from '../../utils/util';
+import { decryptVault } from '../../vault/encryption/decryptVault';
 import { useSaveVaultMutation } from '../../vault/mutations/useSaveVaultMutation';
 import { useVaultsQuery } from '../../vault/queries/useVaultsQuery';
 import { toStorageVault } from '../../vault/utils/storageVault';
@@ -34,10 +33,7 @@ const ImportVaultView = () => {
   const [decryptedVaultContent, setDecryptedVaultContent] =
     useState<Uint8Array | null>(null);
   const [fileExtension, setFileExtension] = useState<string>('');
-  const walletcore = useAssertWalletCore();
   const { data: vaults = [] } = useVaultsQuery();
-
-  const vaultService = VaultServiceFactory.getService(walletcore);
 
   const handleUpload = () => {
     const fileInput = document.getElementById('file_upload');
@@ -148,22 +144,22 @@ const ImportVaultView = () => {
 
   const handleCloseDialog = () => setDialogOpen(false);
 
-  const handleOk = async (passwd: string) => {
+  const handleOk = async (password: string) => {
     if (!encryptedVaultContent) return;
 
     try {
       let decryptedVault: ArrayBuffer;
       if (fileExtension === 'dat') {
-        decryptedVault = await decryptData(encryptedVaultContent, passwd);
+        decryptedVault = await decryptData(encryptedVaultContent, password);
         const decryptedString = new TextDecoder('utf-8').decode(decryptedVault);
         const hexDecodedData = Buffer.from(decryptedString, 'hex');
 
         setDecryptedVaultContent(new Uint8Array(hexDecodedData));
       } else {
-        const decryptedBuffer = vaultService.decryptVault(
-          passwd,
-          Buffer.from(encryptedVaultContent)
-        );
+        const decryptedBuffer = decryptVault({
+          password,
+          vault: Buffer.from(encryptedVaultContent),
+        });
         setDecryptedVaultContent(new Uint8Array(decryptedBuffer));
       }
 
