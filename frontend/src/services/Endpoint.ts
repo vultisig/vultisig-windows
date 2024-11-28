@@ -1,5 +1,3 @@
-import { Chain } from '../model/chain';
-
 export class Endpoint {
   static VULTISIG_RELAY: string = 'https://api.vultisig.com/router';
   static LOCAL_MEDIATOR_URL: string = 'http://127.0.0.1:18080';
@@ -147,10 +145,6 @@ export class Endpoint {
     return `https://api.vultisig.com/ton/v2/sendBocReturnHash`;
   }
 
-  static bitcoinLabelTxHash(value: string): string {
-    return `https://mempool.space/tx/${value}`;
-  }
-
   static litecoinLabelTxHash(value: string): string {
     return `https://litecoinspace.org/tx/${value}`;
   }
@@ -169,10 +163,6 @@ export class Endpoint {
     return new URL(
       `${this.vultisigApiProxy}/blockchair/${coinName}/dashboards/address/${address}?state=latest`
     );
-  }
-
-  static ethereumLabelTxHash(value: string): string {
-    return `https://etherscan.io/tx/${value}`;
   }
 
   static fetchCryptoPrices(ids: string, currencies: string): URL {
@@ -197,16 +187,8 @@ export class Endpoint {
     return `${this.vultisigApiProxy}/coingeicko/api/v3/onchain/networks/${network}/tokens/multi/${joinedAddresses}`;
   }
 
-  static fetchBitcoinTransactions(userAddress: string): string {
-    return `https://mempool.space/api/address/${userAddress}/txs`;
-  }
-
   static fetchLitecoinTransactions(userAddress: string): string {
     return `https://litecoinspace.org/api/address/${userAddress}/txs`;
-  }
-
-  static bscLabelTxHash(value: string): string {
-    return `https://bscscan.com/tx/${value}`;
   }
 
   static fetchCosmosAccountBalance(address: string): string {
@@ -277,118 +259,5 @@ export class Endpoint {
 
   static getSwapProgressURL(txid: string): string {
     return `https://runescan.io/tx/${txid.stripHexPrefix()}`;
-  }
-
-  static getMayaSwapTracker(txid: string): string {
-    return `https://www.mayascan.org/tx/${txid.stripHexPrefix()}`;
-  }
-
-  static getExplorerURL(chainTicker: string, txid: string): string {
-    switch (chainTicker) {
-      case 'BTC':
-        return `https://blockchair.com/bitcoin/transaction/${txid}`;
-      case 'BCH':
-        return `https://blockchair.com/bitcoin-cash/transaction/${txid}`;
-      case 'LTC':
-        return `https://blockchair.com/litecoin/transaction/${txid}`;
-      case 'DOGE':
-        return `https://blockchair.com/dogecoin/transaction/${txid}`;
-      case 'DASH':
-        return `https://blockchair.com/dash/transaction/${txid}`;
-      case 'RUNE':
-        return `https://runescan.io/tx/${txid.stripHexPrefix()}`;
-      case 'SOL':
-        return `https://explorer.solana.com/tx/${txid}`;
-      case 'ETH':
-        return `https://etherscan.io/tx/${txid}`;
-      case 'UATOM':
-        return `https://www.mintscan.io/cosmos/tx/${txid}`;
-      case 'ADYDX':
-        return `https://www.mintscan.io/dydx/tx/${txid}`;
-      case 'UKUJI':
-        return `https://finder.kujira.network/kaiyo-1/tx/${txid}`;
-      case 'AVAX':
-        return `https://snowtrace.io/tx/${txid}`;
-      case 'BNB':
-        return `https://bscscan.com/tx/${txid}`;
-      case 'CACAO':
-        return `https://www.mayascan.org/tx/${txid}`;
-      case 'ARB':
-        return `https://arbiscan.io/tx/${txid}`;
-      case 'BASE':
-        return `https://basescan.org/tx/${txid}`;
-      case 'OP':
-        return `https://optimistic.etherscan.io/tx/${txid}`;
-      case 'MATIC':
-        return `https://polygonscan.com/tx/${txid}`;
-      case 'BLAST':
-        return `https://blastscan.io/tx/${txid}`;
-      case 'CRO':
-        return `https://cronoscan.com/tx/${txid}`;
-      case 'SUI':
-        return `https://suiscan.xyz/mainnet/tx/${txid}`;
-      case 'DOT':
-        return `https://polkadot.subscan.io/extrinsic/${txid}`;
-      case 'ZK':
-        return `https://explorer.zksync.io/tx/${txid}`;
-      default:
-        return '';
-    }
-  }
-
-  static getExplorerByAddressURLByGroup(
-    chain: Chain | null,
-    address: string
-  ): string | null {
-    switch (chain) {
-      case Chain.THORChain:
-        return `https://runescan.io/address/${address}`;
-      case Chain.Solana:
-        return `https://explorer.solana.com/address/${address}`;
-      case Chain.Ethereum:
-        return `https://etherscan.io/address/${address}`;
-      case Chain.Cosmos:
-        return `https://www.mintscan.io/cosmos/address/${address}`;
-      case Chain.Dydx:
-        return `https://www.mintscan.io/dydx/address/${address}`;
-      case Chain.Kujira:
-        return `https://finder.kujira.network/kaiyo-1/address/${address}`;
-      case Chain.Avalanche:
-        return `https://snowtrace.io/address/${address}`;
-      case Chain.BSC:
-        return `https://bscscan.com/address/${address}`;
-      case Chain.Bitcoin:
-        return `https://www.blockchain.com/btc/address/${address}`;
-      case Chain.BitcoinCash:
-        return `https://explorer.bitcoin.com/bch/address/${address}`;
-      case Chain.Litecoin:
-        return `https://blockchair.com/litecoin/address/${address}`;
-      case Chain.Dogecoin:
-        return `https://blockchair.com/dogecoin/address/${address}`;
-      case Chain.Dash:
-        return `https://blockchair.com/dash/address/${address}`;
-      case Chain.MayaChain:
-        return `https://www.mayascan.org/address/${address}`;
-      case Chain.Arbitrum:
-        return `https://arbiscan.io/address/${address}`;
-      case Chain.Base:
-        return `https://basescan.org/address/${address}`;
-      case Chain.Optimism:
-        return `https://optimistic.etherscan.io/address/${address}`;
-      case Chain.Polygon:
-        return `https://polygonscan.com/address/${address}`;
-      case Chain.Blast:
-        return `https://blastscan.io/address/${address}`;
-      case Chain.CronosChain:
-        return `https://cronoscan.com/address/${address}`;
-      case Chain.Sui:
-        return `https://suiscan.xyz/mainnet/address/${address}`;
-      case Chain.Polkadot:
-        return `https://polkadot.subscan.io/account/${address}`;
-      case Chain.Zksync:
-        return `https://explorer.zksync.io/address/${address}`;
-      default:
-        return null;
-    }
   }
 }
