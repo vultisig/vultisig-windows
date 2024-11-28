@@ -224,7 +224,7 @@ export const it = {
   vault_delete_page_header_details: 'Dettagli',
   vault_delete_page_vault_name: 'Nome della cassaforte',
   vault_delete_page_vault_value: 'Valore della cassaforte',
-  vault_delete_page_vault_type: 'Tipo di cassaforte',
+  vault_delete_page_vault_part: 'Parte del Vault',
   vault_delete_page_device_id: 'ID del dispositivo',
   vault_delete_page_ecdsa_key: 'Chiave ECDSA',
   vault_delete_page_eddsa_key: 'Chiave EdDSA',

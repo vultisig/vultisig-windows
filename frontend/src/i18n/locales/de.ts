@@ -225,7 +225,7 @@ export const de = {
   vault_delete_page_header_details: 'Details',
   vault_delete_page_vault_name: 'Tresorname',
   vault_delete_page_vault_value: 'Tresorwert',
-  vault_delete_page_vault_type: 'Tresortyp',
+  vvault_delete_page_vault_part: 'Tresorteil',
   vault_delete_page_device_id: 'Geräte-ID',
   vault_delete_page_ecdsa_key: 'ECDSA-Schlüssel',
   vault_delete_page_eddsa_key: 'EdDSA-Schlüssel',

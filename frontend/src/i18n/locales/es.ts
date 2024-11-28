@@ -226,7 +226,7 @@ export const es = {
   vault_delete_page_header_details: 'Detalles',
   vault_delete_page_vault_name: 'Nombre de la bóveda',
   vault_delete_page_vault_value: 'Valor de la bóveda',
-  vault_delete_page_vault_type: 'Tipo de bóveda',
+  vault_delete_page_vault_part: 'Parte de la Bóveda',
   vault_delete_page_device_id: 'ID del dispositivo',
   vault_delete_page_ecdsa_key: 'Clave ECDSA',
   vault_delete_page_eddsa_key: 'Clave EdDSA',
