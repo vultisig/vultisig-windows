@@ -219,7 +219,7 @@ export const pt = {
   vault_delete_page_header_details: 'Detalhes',
   vault_delete_page_vault_name: 'Nome do cofre',
   vault_delete_page_vault_value: 'Valor do cofre',
-  vault_delete_page_vault_type: 'Tipo de cofre',
+  vault_delete_page_vault_part: 'Parte do Cofre',
   vault_delete_page_device_id: 'ID do dispositivo',
   vault_delete_page_ecdsa_key: 'Chave ECDSA',
   vault_delete_page_eddsa_key: 'Chave EdDSA',

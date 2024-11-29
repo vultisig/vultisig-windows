@@ -22,8 +22,20 @@ import {
   ListItemPanel,
 } from './DeleteVaultPage.styles';
 
+type DeleteTerms = {
+  firstTermAccepted: boolean;
+  secondTermAccepted: boolean;
+  thirdTermAccepted: boolean;
+};
+
+const deleteTermsConfig: { key: keyof DeleteTerms; labelKey: string }[] = [
+  { key: 'firstTermAccepted', labelKey: 'vault_delete_page_term_1' },
+  { key: 'secondTermAccepted', labelKey: 'vault_delete_page_term_2' },
+  { key: 'thirdTermAccepted', labelKey: 'vault_delete_page_term_3' },
+];
+
 const DeleteVaultPage = () => {
-  const [deleteTerms, setDeleteTerms] = useState({
+  const [deleteTerms, setDeleteTerms] = useState<DeleteTerms>({
     firstTermAccepted: false,
     secondTermAccepted: false,
     thirdTermAccepted: false,
@@ -32,8 +44,8 @@ const DeleteVaultPage = () => {
   const { t } = useTranslation();
   const { data: vaultBalance } = useVaultTotalBalanceQuery();
   const { mutate: deleteVault, isPending, error } = useDeleteVaultMutation();
-
   const vault = useCurrentVault();
+  const navigate = useAppNavigate();
 
   const {
     name,
@@ -43,10 +55,26 @@ const DeleteVaultPage = () => {
     local_party_id,
   } = vault;
 
-  const m = keyshares.length;
-  const vaultTypeText = getVaultTypeText(m, t);
+  const vaultDetails = [
+    { label: t('vault_delete_page_vault_name'), value: name },
+    { label: t('vault_delete_page_vault_value'), value: vaultBalance },
+    {
+      label: t('vault_delete_page_vault_part'),
+      value: getVaultTypeText(keyshares.length, t),
+    },
+    { label: t('vault_delete_page_device_id'), value: local_party_id },
+    { label: t('vault_delete_page_ecdsa_key'), value: public_key_ecdsa },
+    { label: t('vault_delete_page_eddsa_key'), value: public_key_eddsa },
+  ];
 
-  const navigate = useAppNavigate();
+  const toggleDeleteTerm = (key: keyof DeleteTerms) => {
+    setDeleteTerms(prev => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  const isDeleteDisabled = !Object.values(deleteTerms).every(Boolean);
 
   return (
     <Container flexGrow gap={16}>
@@ -58,107 +86,63 @@ const DeleteVaultPage = () => {
           </PageHeaderTitle>
         }
       />
-      <PageSlice gap={32} flexGrow={true}>
+      <PageSlice gap={32} flexGrow>
         <VStack gap={16} justifyContent="center" alignItems="center">
           <DangerSignRedIcon />
           <Text size={16} color="contrast" weight="700">
             {t('vault_delete_page_header_subtitle')}
           </Text>
         </VStack>
-        <VStack flexGrow={true} justifyContent="space-between">
+
+        <VStack flexGrow justifyContent="space-between">
           <ListItemPanel>
             <VStack gap={10}>
-              <HStack gap={8}>
-                <Text size={22} weight={600}>
-                  {t('vault_delete_page_header_details')}:
-                </Text>
-              </HStack>
-              <HStack gap={8}>
-                <Text weight={600}>{t('vault_delete_page_vault_name')}:</Text>
-                <Text size={14}>{name}</Text>
-              </HStack>
-              <HStack gap={8}>
-                <Text weight={600}>{t('vault_delete_page_vault_value')}:</Text>
-                <Text size={14}>{vaultBalance}</Text>
-              </HStack>
-              <HStack gap={8}>
-                <Text weight={600}>{t('vault_delete_page_vault_type')}:</Text>
-                <Text size={14}>{vaultTypeText}</Text>
-              </HStack>
-              <HStack gap={8}>
-                <Text weight={600}>{t('vault_delete_page_device_id')}:</Text>
-                <Text size={14}>{local_party_id}</Text>
-              </HStack>
-              <HStack gap={8}>
-                <Text weight={600}>{t('vault_delete_page_ecdsa_key')}:</Text>
-                <Text size={14}>{public_key_ecdsa}</Text>
-              </HStack>
-              <HStack gap={8}>
-                <Text weight={600}>{t('vault_delete_page_eddsa_key')}:</Text>
-                <Text size={14}>{public_key_eddsa}</Text>
-              </HStack>
+              <Text size={22} weight={600}>
+                {t('vault_delete_page_header_details')}:
+              </Text>
+              {vaultDetails.map(({ label, value }, index) => (
+                <HStack key={index} gap={8}>
+                  <Text weight={600}>{label}:</Text>
+                  <Text
+                    size={14}
+                    color={
+                      index === vaultDetails.length - 1 ||
+                      index === vaultDetails.length - 2
+                        ? 'shy'
+                        : undefined
+                    }
+                  >
+                    {value}
+                  </Text>
+                </HStack>
+              ))}
             </VStack>
           </ListItemPanel>
+
           <VStack>
             <ActionsWrapper gap={16}>
-              <HStack
-                onClick={() =>
-                  setDeleteTerms({
-                    ...deleteTerms,
-                    firstTermAccepted: !deleteTerms.firstTermAccepted,
-                  })
-                }
-                as="button"
-                alignItems="center"
-                gap={8}
-              >
-                <Check value={deleteTerms.firstTermAccepted} />
-                <Text color="contrast">{t('vault_delete_page_term_1')}</Text>
-              </HStack>
-              <HStack
-                onClick={() =>
-                  setDeleteTerms({
-                    ...deleteTerms,
-                    secondTermAccepted: !deleteTerms.secondTermAccepted,
-                  })
-                }
-                as="button"
-                alignItems="center"
-                gap={8}
-              >
-                <Check value={deleteTerms.secondTermAccepted} />
-                <Text color="contrast">{t('vault_delete_page_term_2')}</Text>
-              </HStack>
-              <HStack
-                onClick={() =>
-                  setDeleteTerms({
-                    ...deleteTerms,
-                    thirdTermAccepted: !deleteTerms.thirdTermAccepted,
-                  })
-                }
-                as="button"
-                alignItems="center"
-                gap={8}
-              >
-                <Check value={deleteTerms.thirdTermAccepted} />
-                <Text color="contrast">{t('vault_delete_page_term_3')}</Text>
-              </HStack>
+              {deleteTermsConfig.map(({ key, labelKey }) => (
+                <HStack
+                  key={key}
+                  onClick={() => toggleDeleteTerm(key)}
+                  as="button"
+                  alignItems="center"
+                  gap={8}
+                >
+                  <Check value={deleteTerms[key]} />
+                  <Text color="contrast">{t(labelKey)}</Text>
+                </HStack>
+              ))}
             </ActionsWrapper>
             <DeleteButton
               isLoading={isPending}
               onClick={() => {
                 deleteVault(getStorageVaultId(vault), {
-                  onSuccess: () => {
-                    navigate('vault');
-                  },
+                  onSuccess: () => navigate('vault'),
                 });
               }}
               color="danger"
-              isDisabled={
-                !deleteTerms.firstTermAccepted ||
-                !deleteTerms.secondTermAccepted ||
-                !deleteTerms.thirdTermAccepted
-              }
+              isDisabled={isDeleteDisabled}
             >
               {t('vault_delete_button_text')}
             </DeleteButton>

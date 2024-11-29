@@ -1,4 +1,4 @@
-import { byteFeeMultiplier, UtxoFeeSettings } from './UtxoFeeSettings';
+import { byteFeeMultiplier, UtxoFeeSettings } from '../UtxoFeeSettings';
 
 export const adjustByteFee = (
   byteFee: number,

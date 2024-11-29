@@ -222,7 +222,7 @@ export const en = {
   vault_delete_page_header_details: 'Details',
   vault_delete_page_vault_name: 'Vault Name',
   vault_delete_page_vault_value: 'Vault Value',
-  vault_delete_page_vault_type: 'Vault Type',
+  vault_delete_page_vault_part: 'Vault Part',
   vault_delete_page_device_id: 'Device ID',
   vault_delete_page_ecdsa_key: 'ECDSA Key',
   vault_delete_page_eddsa_key: 'EdDSA Key',

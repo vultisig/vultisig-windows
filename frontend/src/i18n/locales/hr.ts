@@ -212,7 +212,7 @@ export const hr = {
   vault_delete_page_header_details: 'Detalji',
   vault_delete_page_vault_name: 'Naziv trezora',
   vault_delete_page_vault_value: 'Vrijednost trezora',
-  vault_delete_page_vault_type: 'Tip trezora',
+  vault_delete_page_vault_part: 'Dio Skladišta',
   vault_delete_page_device_id: 'ID uređaja',
   vault_delete_page_ecdsa_key: 'ECDSA ključ',
   vault_delete_page_eddsa_key: 'EdDSA ključ',
