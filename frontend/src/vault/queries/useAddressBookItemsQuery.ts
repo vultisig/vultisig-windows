@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { storage } from '../../../wailsjs/go/models';
 import { AddressBookItem } from '../../lib/types/address-book';
-import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { VaultServiceFactory } from '../../services/Vault/VaultServiceFactory';
+import { VaultService } from '../../services/Vault/VaultService';
 
 const transformAddressBookItemsResponse = (
   addressBookItems: storage.AddressBookItem[]
@@ -19,8 +18,7 @@ const transformAddressBookItemsResponse = (
 export const addressBookItemsQueryKey = ['addressBookItems'];
 
 export const useAddressBookItemsQuery = () => {
-  const walletCore = useAssertWalletCore();
-  const vaultService = VaultServiceFactory.getService(walletCore);
+  const vaultService = new VaultService();
 
   return useQuery({
     queryKey: [addressBookItemsQueryKey],

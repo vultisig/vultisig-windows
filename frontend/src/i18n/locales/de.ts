@@ -622,4 +622,5 @@ export const de = {
   importing_vault: 'Vault wird importiert...',
   failed_to_import_vault: 'Tresor konnte nicht importiert werden',
   failed_to_save_vault: 'Tresor konnte nicht gespeichert werden',
+  vault_password: 'Tresorkennwort',
 };

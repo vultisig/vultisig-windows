@@ -1,5 +1,4 @@
 import { Timestamp } from '@bufbuild/protobuf';
-import { WalletCore } from '@trustwallet/wallet-core'; ///
 import crypto from 'crypto';
 
 import { SaveFileBkp } from '../../../wailsjs/go/main/App';
@@ -19,16 +18,6 @@ import { AddressBookItem } from '../../lib/types/address-book';
 import { IVaultService } from './IVaultService';
 
 export class VaultService implements IVaultService {
-  private walletCore: WalletCore;
-  constructor(walletCore: WalletCore) {
-    this.walletCore = walletCore;
-  }
-
-  private async getDefaultChains(): Promise<string[]> {
-    const settings = await GetSettings();
-    return settings[0]?.default_chains || {};
-  }
-
   async getVaultSettings(): Promise<storage.Settings[]> {
     return await GetSettings();
   }
@@ -90,32 +79,6 @@ export class VaultService implements IVaultService {
 
     // Combine nonce, ciphertext, and authTag into a single buffer
     return Buffer.concat([nonce, ciphertext, authTag]);
-  }
-
-  decryptVault(passwd: string, vault: Buffer): Buffer {
-    // Hash the password to create a key
-    const key = crypto.createHash('sha256').update(passwd).digest();
-
-    // Create a new AES cipher using the key
-    const decipher = crypto.createDecipheriv(
-      'aes-256-gcm',
-      key,
-      vault.slice(0, 12) // Nonce is the first 12 bytes
-    );
-
-    const ciphertext = vault.slice(12, -16); // Exclude the nonce and the auth tag
-    const authTag = vault.slice(-16); // Last 16 bytes is the auth tag
-
-    // Set the authentication tag
-    decipher.setAuthTag(authTag);
-
-    // Decrypt the vault
-    const decrypted = Buffer.concat([
-      decipher.update(ciphertext),
-      decipher.final(),
-    ]);
-
-    return decrypted;
   }
 
   async createAndSaveBackup(

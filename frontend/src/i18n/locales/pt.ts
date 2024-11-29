@@ -615,4 +615,5 @@ export const pt = {
   importing_vault: 'Importando o Vault...',
   failed_to_import_vault: 'Falha ao importar o cofre',
   failed_to_save_vault: 'Falha ao salvar o cofre',
+  vault_password: 'Senha do cofre',
 };

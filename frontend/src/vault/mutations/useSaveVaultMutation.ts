@@ -6,7 +6,6 @@ import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQuer
 import { getLastItemOrder } from '../../lib/utils/order/getLastItemOrder';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { DefaultCoinsService } from '../../services/Coin/DefaultCoinsService';
-import { vaultSettingsQueryKey } from '../queries/useVaultSettingsQuery';
 import { useVaults, vaultsQueryKey } from '../queries/useVaultsQuery';
 import { useCurrentVaultId } from '../state/currentVaultId';
 import { getStorageVaultId } from '../utils/storageVault';
@@ -22,21 +21,24 @@ export const useSaveVaultMutation = (
   return useMutation({
     mutationFn: async (vault: storage.Vault) => {
       const order = getLastItemOrder(vaults.map(vault => vault.order));
-      const newVault = {
+      const newVault: storage.Vault = {
         ...vault,
         order,
-      } as storage.Vault;
+        convertValues: () => {},
+      };
 
       await SaveVault(newVault);
-      await invalidateQueries(vaultsQueryKey);
-      setCurrentVaultId(getStorageVaultId(newVault));
+
       const settings = await GetSettings();
       const defaultChains = settings[0]?.default_chains || [];
       await new DefaultCoinsService(walletCore).applyDefaultCoins(
         newVault,
         defaultChains
       );
-      await invalidateQueries(vaultSettingsQueryKey);
+
+      await invalidateQueries(vaultsQueryKey);
+
+      setCurrentVaultId(getStorageVaultId(newVault));
     },
     ...options,
   });
