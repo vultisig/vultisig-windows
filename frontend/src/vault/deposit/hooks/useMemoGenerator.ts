@@ -22,9 +22,9 @@ export const useMemoGenerator = ({
     } else if (selectedChainAction === 'addPool') {
       memoValue += 'POOL+';
     } else if (selectedChainAction === 'bond_with_lp') {
-      memoValue += 'BOND';
+      memoValue += `BOND:${depositFormData['nodeAddress']}:${depositFormData['lpUnits']}`;
     } else if (selectedChainAction === 'unbond_with_lp') {
-      memoValue += 'UNBOND';
+      memoValue += `UNBOND:${depositFormData['nodeAddress']}:${depositFormData['lpUnits']}`;
     } else if (selectedChainAction && depositFormData['nodeAddress']) {
       memoValue = `${upperCaseSelectedChainAction}:${depositFormData['nodeAddress'] || '+'}`;
 

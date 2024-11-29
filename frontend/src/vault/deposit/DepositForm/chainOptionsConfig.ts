@@ -86,19 +86,19 @@ export const requiredFieldsPerChainAction = {
       {
         name: 'nodeAddress',
         type: 'text',
-        label: 'chainFunctions.bond.labels.nodeAddress',
+        label: 'chainFunctions.bond_with_lp.labels.nodeAddress',
         required: true,
       },
       {
         name: 'lpUnits',
         type: 'number',
-        label: 'chainFunctions.bond.labels.lpUnits',
+        label: 'chainFunctions.bond_with_lp.labels.lpUnits',
         required: true,
       },
       {
         name: 'amount',
         type: 'number',
-        label: 'chainFunctions.bond.labels.amount',
+        label: 'chainFunctions.bond_with_lp.labels.amount',
         required: false,
       },
     ],
@@ -210,21 +210,21 @@ export const requiredFieldsPerChainAction = {
   unbond_with_lp: {
     fields: [
       {
-        name: 'lpUnits',
-        type: 'number',
-        label: 'chainFunctions.unbond.labels.lpUnits',
+        name: 'nodeAddress',
+        type: 'text',
+        label: 'chainFunctions.unbond_with_lp.labels.nodeAddress',
         required: true,
       },
       {
-        name: 'nodeAddress',
-        type: 'text',
-        label: 'chainFunctions.unbond.labels.nodeAddress',
+        name: 'lpUnits',
+        type: 'number',
+        label: 'chainFunctions.unbond_with_lp.labels.lpUnits',
         required: true,
       },
       {
         name: 'amount',
         type: 'number',
-        label: 'chainFunctions.unbond.labels.amount',
+        label: 'chainFunctions.unbond_with_lp.labels.amount',
         required: false,
       },
     ],
