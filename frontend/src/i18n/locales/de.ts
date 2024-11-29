@@ -225,7 +225,6 @@ export const de = {
   vault_delete_page_header_details: 'Details',
   vault_delete_page_vault_name: 'Tresorname',
   vault_delete_page_vault_value: 'Tresorwert',
-  vvault_delete_page_vault_part: 'Tresorteil',
   vault_delete_page_device_id: 'Geräte-ID',
   vault_delete_page_ecdsa_key: 'ECDSA-Schlüssel',
   vault_delete_page_eddsa_key: 'EdDSA-Schlüssel',
@@ -623,4 +622,11 @@ export const de = {
   failed_to_import_vault: 'Tresor konnte nicht importiert werden',
   failed_to_save_vault: 'Tresor konnte nicht gespeichert werden',
   vault_password: 'Tresorkennwort',
+  upload_qr_code_to_join_keysign:
+    'Laden Sie den QR-Code hoch, um Keysign beizutreten',
+  upload_qr_code_image: 'QR-Code-Bild hochladen',
+  getting_video_permission: 'Videoberechtigung einholen...',
+  failed_to_get_video_permission:
+    'Videoberechtigung konnte nicht eingeholt werden',
+  vault_delete_page_vault_part: 'Tresorteil',
 };

@@ -601,4 +601,10 @@ export const hr = {
   failed_to_import_vault: 'Uvoz trezora nije uspio',
   failed_to_save_vault: 'Spremanje sefa nije uspjelo',
   vault_password: 'Lozinka trezora',
+  upload_qr_code_to_join_keysign:
+    'Učitajte QR kod da biste se pridružili Keysignu',
+  upload_qr_code_image: 'Prenesite sliku QR koda',
+  getting_video_permission: 'Dobivanje dozvole za video...',
+  failed_to_get_video_permission:
+    'Nije uspjelo dobivanje dozvole za videozapis',
 };

@@ -616,4 +616,8 @@ export const pt = {
   failed_to_import_vault: 'Falha ao importar o cofre',
   failed_to_save_vault: 'Falha ao salvar o cofre',
   vault_password: 'Senha do cofre',
+  upload_qr_code_to_join_keysign: 'Carregue o código QR para aderir ao Keysign',
+  upload_qr_code_image: 'Carregar imagem do código QR',
+  getting_video_permission: 'Obtendo permissão para vídeo...',
+  failed_to_get_video_permission: 'Falha ao obter permissão de vídeo',
 };
