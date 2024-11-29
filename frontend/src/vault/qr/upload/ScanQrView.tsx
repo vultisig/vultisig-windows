@@ -6,9 +6,12 @@ import styled from 'styled-components';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { takeWholeSpaceAbsolutely } from '../../../lib/ui/css/takeWholeSpaceAbsolutely';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { attempt } from '../../../lib/utils/attempt';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';
 import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent';
 import { PageContent } from '../../../ui/page/PageContent';
+import { readQrCode } from './utils/readQrCode';
 
 const Container = styled(PageContent)`
   position: relative;
@@ -44,6 +47,43 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
   }, [video, stream]);
 
   useEffect(getStream, [getStream]);
+
+  const navigate = useAppNavigate();
+
+  useEffect(() => {
+    if (!video) return;
+
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    if (!context) return;
+
+    let animationFrameId: number;
+
+    const scan = () => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      const url = attempt(
+        () =>
+          readQrCode({
+            canvasContext: context,
+            image: video,
+          }),
+        undefined
+      );
+
+      if (url) {
+        navigate('deeplink', { state: { url } });
+      } else {
+        animationFrameId = requestAnimationFrame(scan);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(scan);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [navigate, video]);
 
   return (
     <Container>

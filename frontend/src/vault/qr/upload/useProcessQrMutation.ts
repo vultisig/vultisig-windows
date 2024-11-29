@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import jsQR from 'jsqr';
 
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
+import { readQrCode } from './utils/readQrCode';
 
 export const useProcessQrMutation = () => {
   const navigate = useAppNavigate();
@@ -19,17 +19,11 @@ export const useProcessQrMutation = () => {
         throw new Error('Could not get canvas context');
       }
 
-      context.drawImage(imageBitmap, 0, 0);
+      const url = readQrCode({
+        canvasContext: context,
+        image: imageBitmap,
+      });
 
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
-      const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-      if (!code) {
-        throw new Error('Failed to read QR code');
-      }
-
-      const url = code.data;
       navigate('deeplink', { state: { url } });
     },
   });
