@@ -32,7 +32,13 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
 
   const { mutate: getStream, ...streamMutationState } = useMutation({
-    mutationFn: () => navigator.mediaDevices.getUserMedia({ video: true }),
+    mutationFn: () =>
+      navigator.mediaDevices.getUserMedia({
+        video: {
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+        },
+      }),
   });
 
   const { data: stream } = streamMutationState;
