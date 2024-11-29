@@ -90,6 +90,7 @@ export const en = {
   scan_qr: 'Scan QR / Pair device',
   deeplink: 'Deeplink',
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
+  upload_qr_code_image: 'Upload QR Code Image',
   processing_url: 'Processing URL...',
   failed_to_process_url: 'Failed to process URL',
   this_device_is_the: 'This device is the',
