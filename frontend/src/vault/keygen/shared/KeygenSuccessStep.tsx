@@ -28,7 +28,7 @@ export const KeygenSuccessStep = ({
             <KeygenSuccessState />
           </>
         }
-        to={<KeygenBackup />}
+        to={<KeygenBackup vault={value} />}
       />
     )}
   />
