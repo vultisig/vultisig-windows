@@ -54,7 +54,7 @@ export const KeygenBackup = ({ vault }: { vault: storage.Vault }) => {
             {t('backup')}
           </Button>
         </Link>
-        {isFastVault && (
+        {!isFastVault && (
           <Opener
             renderOpener={({ onOpen }) => (
               <Button as="div" kind="outlined" onClick={onOpen}>
