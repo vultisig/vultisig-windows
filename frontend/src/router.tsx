@@ -31,7 +31,6 @@ import { VaultPage } from './vault/components/VaultPage';
 import { DepositPage } from './vault/deposit/DepositPage';
 import { ImportVaultFromFilePage } from './vault/import/components/ImportVaultFromFilePage';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
-import { KeygenBackup } from './vault/keygen/shared/KeygenBackup';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
 import { StartFastKeysignPage } from './vault/keysign/start/fast/StartFastKeysignPage';
 import { StartKeysignPage } from './vault/keysign/start/StartKeysignPage';
@@ -118,10 +117,6 @@ export const router = createBrowserRouter([
       {
         path: appPaths.joinKeygen,
         element: <JoinKeygenPage />,
-      },
-      {
-        path: appPaths.keygenBackup,
-        element: <KeygenBackup />,
       },
       {
         path: appPaths.joinKeysign,
