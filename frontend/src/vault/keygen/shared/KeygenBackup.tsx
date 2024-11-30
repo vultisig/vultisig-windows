@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { storage } from '../../../../wailsjs/go/models';
 import KeygenVaultBackupBanner from '../../../components/vaultBackupBanner/KeygenVaultBackupBanner/KeygenVaultBackupBanner';
 import { Opener } from '../../../lib/ui/base/Opener';
 import { Button } from '../../../lib/ui/buttons/Button';
@@ -13,18 +14,12 @@ import { makeAppPath } from '../../../navigation';
 import { ProductLogo } from '../../../ui/logo/ProductLogo';
 import KeygenSkipVaultBackupAttentionModal from './KeygenSkipVaultBackupAttentionModal';
 
-const Wrapper = styled.div`
-  flex: 1;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 40px;
-`;
-
-export const KeygenBackup = () => {
+export const KeygenBackup = ({ vault }: { vault: storage.Vault }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const isFastVault = vault.signers.some(signer =>
+    signer.startsWith('Server-')
+  );
 
   return (
     <Wrapper>
@@ -59,23 +54,34 @@ export const KeygenBackup = () => {
             {t('backup')}
           </Button>
         </Link>
-        <Opener
-          renderOpener={({ onOpen }) => (
-            <Button as="div" kind="outlined" onClick={onOpen}>
-              {t('skip')}
-            </Button>
-          )}
-          renderContent={({ onClose }) => (
-            <KeygenSkipVaultBackupAttentionModal
-              onSkip={() => navigate(makeAppPath('vault'))}
-              onClose={onClose}
-            />
-          )}
-        />
+        {isFastVault && (
+          <Opener
+            renderOpener={({ onOpen }) => (
+              <Button as="div" kind="outlined" onClick={onOpen}>
+                {t('skip')}
+              </Button>
+            )}
+            renderContent={({ onClose }) => (
+              <KeygenSkipVaultBackupAttentionModal
+                onSkip={() => navigate(makeAppPath('vault'))}
+                onClose={onClose}
+              />
+            )}
+          />
+        )}
       </VStack>
     </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+`;
 
 const ArtContainer = styled.div`
   height: 260px;
