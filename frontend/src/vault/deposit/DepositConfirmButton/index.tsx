@@ -20,7 +20,7 @@ import { useSpecificDepositTxInfoQuery } from '../queries/useSpecificDepositTxIn
 import { transactionConfig } from './config';
 import { createTransaction } from './utils';
 
-type SendType = 'fast' | 'paired';
+type DepositType = 'fast' | 'paired';
 
 type DepositConfirmButtonProps = {
   depositFormData: Record<string, unknown>;
@@ -52,7 +52,7 @@ export const DepositConfirmButton = ({
 
   const memo = (depositFormData['memo'] as string) ?? '';
 
-  const startKeysign = (type: SendType) => {
+  const startKeysign = (type: DepositType) => {
     const tx = createTransaction({
       selectedChainAction: action,
       sender,

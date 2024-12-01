@@ -14,7 +14,6 @@ export const chainDepositOptionsConfig = {
 };
 
 export type ChainAction = keyof typeof requiredFieldsPerChainAction;
-
 export const requiredFieldsPerChainAction = {
   bond: {
     fields: [

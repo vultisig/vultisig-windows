@@ -1,42 +1,58 @@
 import { useMemo } from 'react';
 import { FieldValues } from 'react-hook-form';
 
+import { Coin } from '../../../lib/types/coin';
 import { ChainAction } from '../DepositForm/chainOptionsConfig';
 
 type UseMemoGeneratorProps = {
   depositFormData: FieldValues;
   selectedChainAction?: ChainAction;
+  coinName: Coin['ticker'];
+  fee?: number;
 };
 
 export const useMemoGenerator = ({
-  depositFormData,
+  depositFormData = {},
   selectedChainAction,
+  coinName,
+  fee,
 }: UseMemoGeneratorProps): FieldValues => {
   const enhancedDepositFormData = useMemo(() => {
-    let memoValue = '';
-    const upperCaseSelectedChainAction = selectedChainAction?.toUpperCase();
-    if (selectedChainAction === 'custom' && depositFormData['customMemo']) {
-      memoValue = depositFormData['customMemo'] as string;
-    } else if (selectedChainAction === 'withdrawPool') {
-      memoValue = 'POOL-:1:vi:50';
-    } else if (selectedChainAction === 'addPool') {
-      memoValue += 'POOL+';
-    } else if (selectedChainAction === 'bond_with_lp') {
-      memoValue += `BOND:${depositFormData['nodeAddress']}:${depositFormData['lpUnits']}`;
-    } else if (selectedChainAction === 'unbond_with_lp') {
-      memoValue += `UNBOND:${depositFormData['nodeAddress']}:${depositFormData['lpUnits']}`;
-    } else if (selectedChainAction && depositFormData['nodeAddress']) {
-      memoValue = `${upperCaseSelectedChainAction}:${depositFormData['nodeAddress'] || '+'}`;
+    const upperCaseChainAction = selectedChainAction?.toUpperCase() || '';
+    const nodeAddress = depositFormData['nodeAddress'] as string | null;
+    const amount = depositFormData['amount'] as number | null;
+    const lpUnits = depositFormData['lpUnits'] as number | null;
+    const customMemo = depositFormData['customMemo'] as string;
+    const percentage = depositFormData['percentage'] as number | null;
+    const affiliateFee = depositFormData['affiliateFee'] as number | null;
+    const provider = depositFormData['provider'] as string | null;
 
-      if (selectedChainAction === 'unbond' && depositFormData['amount']) {
-        memoValue += `:${depositFormData['amount']}`;
+    const generateMemo = (): string => {
+      if (selectedChainAction === 'custom' && customMemo) {
+        return customMemo;
       }
-    } else {
-      memoValue = `${upperCaseSelectedChainAction || ''}`;
-    }
 
+      switch (selectedChainAction) {
+        case 'withdrawPool':
+          return `POOL-:${percentage}:${affiliateFee}:${fee}`;
+        case 'addPool':
+          return 'POOL+';
+        case 'bond_with_lp':
+          return `BOND:${coinName}:${lpUnits}:${nodeAddress}`;
+        case 'unbond_with_lp':
+          return `UNBOND:${coinName}:${lpUnits}:${nodeAddress}`;
+        case 'unbond':
+          return `${upperCaseChainAction}:${nodeAddress}:${amount}:${provider ? provider : ''}`;
+        default:
+          return nodeAddress
+            ? `${upperCaseChainAction}:${nodeAddress || '+'}`
+            : upperCaseChainAction;
+      }
+    };
+
+    const memoValue = generateMemo();
     return { ...depositFormData, memo: memoValue };
-  }, [depositFormData, selectedChainAction]);
+  }, [selectedChainAction, depositFormData, fee, coinName]);
 
   return enhancedDepositFormData;
 };
