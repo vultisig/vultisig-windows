@@ -512,7 +512,7 @@ export const en = {
   delete_folder: 'Delete Folder',
   folders: 'Folders',
   add_vaults_to_folder: 'Select Vaults to add to the folder.',
-  deposit: 'Deposit',
+  deposit: 'Function',
   chain_message_deposit: '{{chain}} message deposit',
   thorchain_message_deposit: 'THORChain message deposit',
   bond_with_lp: 'Bond Maya',
