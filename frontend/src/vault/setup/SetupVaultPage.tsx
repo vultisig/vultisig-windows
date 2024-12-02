@@ -3,29 +3,29 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { round } from '../../../lib/ui/css/round';
-import { sameDimensions } from '../../../lib/ui/css/sameDimensions';
-import { UniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
-import { ContainImage } from '../../../lib/ui/images/ContainImage';
-import { SafeImage } from '../../../lib/ui/images/SafeImage';
-import { HStack, VStack, vStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { match } from '../../../lib/utils/match';
-import { makeAppPath } from '../../../navigation';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { Button } from '../../lib/ui/buttons/Button';
+import { round } from '../../lib/ui/css/round';
+import { sameDimensions } from '../../lib/ui/css/sameDimensions';
+import { UniformColumnGrid } from '../../lib/ui/css/uniformColumnGrid';
+import { getFormProps } from '../../lib/ui/form/utils/getFormProps';
+import { ContainImage } from '../../lib/ui/images/ContainImage';
+import { SafeImage } from '../../lib/ui/images/SafeImage';
+import { HStack, VStack, vStack } from '../../lib/ui/layout/Stack';
+import { Text } from '../../lib/ui/text';
+import { getColor } from '../../lib/ui/theme/getters';
+import { match } from '../../lib/utils/match';
+import { makeAppPath } from '../../navigation';
+import { PageContent } from '../../ui/page/PageContent';
+import { PageHeader } from '../../ui/page/PageHeader';
+import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
+import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import {
   getSetupVaultArt,
   getSetupVaultProperties,
   getSetupVaultPurpose,
   setupVaultTypes,
-} from './SetupVaultType';
-import { useSetupVaultType } from './state/setupVaultType';
+} from './type/SetupVaultType';
+import { useSetupVaultType } from './type/state/setupVaultType';
 
 const ArtContainer = styled.div`
   ${vStack({
@@ -43,7 +43,6 @@ const Dot = styled.div`
 
 export const SetupVaultPage = () => {
   const { t } = useTranslation();
-
   const [value, setValue] = useSetupVaultType();
 
   const navigate = useNavigate();

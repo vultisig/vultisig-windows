@@ -78,6 +78,11 @@ export const it = {
   done: 'Fatto',
   information_note1:
     'Mantieni i dispositivi sulla stessa rete Wi-Fi, cassaforte corretta e accoppia i dispositivi.',
+  secureVault: 'Secure Vault',
+  secure_vault_setup_prop_0:
+    '2of3, 3of4, 4of6 configurazioni dispositivo disponibili',
+  secure_vault_setup_prop_1: 'Un backup per dispositivo',
+  secure_vault_setup_prop_2: 'Ridondante, sicuro',
   information_note2:
     'Assicurati che nessun altro dispositivo stia eseguendo Vultisig.',
   try_again: 'Riprova',
@@ -373,9 +378,6 @@ export const it = {
   active_vault_setup_prop_0: 'Firma veloce in movimento',
   active_vault_setup_prop_1: 'Avvisi e politiche sulle transazioni',
   active_vault_setup_prop_2: 'Completamente auto-affidabile',
-  secure_vault_setup_prop_0: 'Solo i tuoi dispositivi',
-  secure_vault_setup_prop_1: 'Nessun avviso o politica',
-  secure_vault_setup_prop_2: 'Completamente auto-affidabile',
   fast_vault_purpose: 'Utilizzare come "portafoglio caldo"',
   active_vault_purpose: 'Utilizzare come "portafoglio principale"',
   secure_vault_purpose: 'Utilizzare come "portafoglio freddo"',
