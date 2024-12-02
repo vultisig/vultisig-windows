@@ -60,6 +60,11 @@ export const hr = {
   backup_disclaimer:
     'Trebali biste sigurnosno kopirati sve dijelove trezora na odvojene lokacije.',
   of: 'od',
+  secureVault: 'Sigurni trezor',
+  secure_vault_setup_prop_0:
+    'Dostupne su postavke uređaja 2 od 3, 3 od 4, 4 od 6',
+  secure_vault_setup_prop_1: 'Jedna sigurnosna kopija po uređaju',
+  secure_vault_setup_prop_2: 'Suvišan, siguran',
   missing_public_key_ecdsa: 'Nedostaje javni ključ ECDSA',
   missing_verification_code: 'Nedostaje kontrolni kod',
   vault: 'Trezor',
@@ -358,9 +363,6 @@ export const hr = {
   active_vault_setup_prop_0: 'Brzo potpisivanje u pokretu',
   active_vault_setup_prop_1: 'Obavijesti o transakcijama i pravila',
   active_vault_setup_prop_2: 'Potpuno samostalno skrbništvo',
-  secure_vault_setup_prop_0: 'Samo Vaši uređaji',
-  secure_vault_setup_prop_1: 'Nema upozorenja ili pravila',
-  secure_vault_setup_prop_2: 'Potpuno samostalno skrbništvo',
   fast_vault_purpose: 'Koristite kao "vrući novčanik"',
   active_vault_purpose: 'Koristite kao "glavni novčanik"',
   secure_vault_purpose: 'Koristite kao "hladni novčanik"',
