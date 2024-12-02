@@ -1,47 +1,42 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { PageContent } from '../../../ui/page/PageContent';
-import { QrImageDropZone } from './QrImageDropZone';
-import { UploadedQr } from './UploadedQr';
-import { UploadQrPageHeader } from './UploadQrPageHeader';
-import { useProcessQrMutation } from './useProcessQrMutation';
+import { Match } from '../../../lib/ui/base/Match';
+import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
+import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
+import { ScanQrView } from './ScanQrView';
+import { UploadQrView } from './UploadQrView';
+
+const uploadQrViews = ['scan', 'upload'] as const;
+type UploadQrView = (typeof uploadQrViews)[number];
 
 export const UploadQrPage = () => {
-  const [file, setFile] = useState<File | null>(null);
+  const { t } = useTranslation();
 
-  const { mutate, isPending, error } = useProcessQrMutation();
+  const [{ title = t('keysign') }] = useAppPathParams<'uploadQr'>();
+
+  const goBack = useNavigateBack();
+
+  const [view, setView] = useState<UploadQrView>('scan');
+
+  const viewIndex = uploadQrViews.indexOf(view);
 
   return (
-    <VStack flexGrow>
-      <UploadQrPageHeader />
-      <PageContent flexGrow justifyContent="space-between" fullWidth gap={20}>
-        <VStack fullWidth alignItems="center" flexGrow gap={20}>
-          <Text color="contrast" size={16} weight="700">
-            Upload QR-Code to join Keysign
-          </Text>
-          {file ? (
-            <UploadedQr value={file} onRemove={() => setFile(null)} />
-          ) : (
-            <QrImageDropZone onFinish={setFile} />
-          )}
-          {error && <Text color="regular">Failed to process QR</Text>}
-        </VStack>
-
-        <Button
-          isLoading={isPending}
-          onClick={() => {
-            if (file) {
-              mutate(file);
-            }
-          }}
-          isDisabled={!file}
-        >
-          Continue
-        </Button>
-      </PageContent>
-    </VStack>
+    <>
+      <FlowPageHeader
+        onBack={
+          viewIndex === 0 ? goBack : () => setView(uploadQrViews[viewIndex - 1])
+        }
+        title={title}
+      />
+      <Match
+        value={view}
+        scan={() => (
+          <ScanQrView onUploadQrViewRequest={() => setView('upload')} />
+        )}
+        upload={() => <UploadQrView />}
+      />
+    </>
   );
 };
