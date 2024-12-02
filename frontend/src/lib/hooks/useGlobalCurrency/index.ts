@@ -1,6 +1,7 @@
 import { Fiat } from '../../../model/fiat';
 import { useUpdateVaultSettingsMutation } from '../../../vault/mutations/useUpdateVaultSettings';
 import { useVaultSettingsQuery } from '../../../vault/queries/useVaultSettingsQuery';
+import { matchCurrencySymbol } from './utils/matchCurrencySymbol';
 
 export const useGlobalCurrency = () => {
   const { data } = useVaultSettingsQuery();
@@ -15,7 +16,10 @@ export const useGlobalCurrency = () => {
     updateSettings({ ...data, currency: newCurrency });
   };
 
+  const currencySymbol = matchCurrencySymbol(data.currency);
+
   return {
+    currencySymbol,
     globalCurrency: data.currency as Fiat,
     updateGlobalCurrency,
     isUpdating,
