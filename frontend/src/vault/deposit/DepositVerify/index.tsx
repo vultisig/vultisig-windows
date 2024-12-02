@@ -36,7 +36,6 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
 }) => {
   const sender = useSender();
   const { t } = useTranslation();
-
   const actionFields = selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.fields
     : [];
@@ -58,7 +57,6 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
             </TxOverviewColumn>
             {actionFields.map(field => {
               if (!depositFormData[field.name]) return null;
-
               return field.type === 'number' || field.type === 'percentage' ? (
                 <TxOverviewRowDepositsFlow key={field.name}>
                   <Text size={18} weight={700}>

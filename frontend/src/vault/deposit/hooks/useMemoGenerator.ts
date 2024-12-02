@@ -1,38 +1,33 @@
 import { useMemo } from 'react';
 import { FieldValues } from 'react-hook-form';
 
+import { MayaChainPool } from '../../../lib/types/deposit';
 import { ChainAction } from '../DepositForm/chainOptionsConfig';
+import { generateMemo } from '../utils/memoGenerator';
 
 type UseMemoGeneratorProps = {
   depositFormData: FieldValues;
   selectedChainAction?: ChainAction;
+  bondableAsset: MayaChainPool['asset'];
+  fee?: number;
 };
 
 export const useMemoGenerator = ({
-  depositFormData,
+  depositFormData = {},
   selectedChainAction,
+  bondableAsset,
+  fee,
 }: UseMemoGeneratorProps): FieldValues => {
-  const enhancedDepositFormData = useMemo(() => {
-    let memoValue = '';
-    const upperCaseSelectedChainAction = selectedChainAction?.toUpperCase();
-    if (selectedChainAction === 'custom' && depositFormData['customMemo']) {
-      memoValue = depositFormData['customMemo'] as string;
-    } else if (selectedChainAction === 'withdrawPool') {
-      memoValue = 'POOL-:1:vi:50';
-    } else if (selectedChainAction === 'addPool') {
-      memoValue += 'POOL+';
-    } else if (selectedChainAction && depositFormData['nodeAddress']) {
-      memoValue = `${upperCaseSelectedChainAction}:${depositFormData['nodeAddress'] || '+'}`;
+  const memoValue = useMemo(
+    () =>
+      generateMemo({
+        selectedChainAction,
+        depositFormData,
+        bondableAsset,
+        fee,
+      }),
+    [selectedChainAction, depositFormData, fee, bondableAsset]
+  );
 
-      if (selectedChainAction === 'unbond' && depositFormData['amount']) {
-        memoValue += `:${depositFormData['amount']}`;
-      }
-    } else {
-      memoValue = `${upperCaseSelectedChainAction || ''}`;
-    }
-
-    return { ...depositFormData, memo: memoValue };
-  }, [depositFormData, selectedChainAction]);
-
-  return enhancedDepositFormData;
+  return { ...depositFormData, memo: memoValue };
 };

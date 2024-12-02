@@ -516,6 +516,9 @@ export const es = {
   deposit: 'Depositar',
   add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
   chain_message_deposit: 'Depósito de mensajes de {{chain}}',
+  thorchain_message_deposit: 'Depósito de mensajes de THORChain',
+  bond_with_lp: 'Enlazar',
+  unbond_with_lp: 'Desvincular',
   chainFunctions: {
     amountExceeded: 'El importe excede el saldo disponible',
     memo: 'Memo',
@@ -544,6 +547,34 @@ export const es = {
         nodeAddressMinLength: 'La dirección del nodo es obligatoria',
         nodeAddressInvalid: 'La dirección del nodo no es válida',
         amount: 'La cantidad debe ser positiva',
+      },
+    },
+    bond_with_lp: {
+      labels: {
+        nodeAddress: 'Dirección del Nodo',
+        amount: 'Cantidad',
+        lpUnits: 'Unidades LP',
+        bondableAsset: 'Activo',
+      },
+      validations: {
+        nodeAddressMinLength: 'La dirección del nodo es obligatoria',
+        nodeAddressInvalid: 'La dirección del nodo no es válida',
+        amount: 'La cantidad debe ser positiva',
+        lpUnits: 'Las unidades LP deben ser positivas',
+      },
+    },
+    unbond_with_lp: {
+      labels: {
+        nodeAddress: 'Dirección del Nodo',
+        amount: 'Cantidad',
+        lpUnits: 'Unidades LP',
+        bondableAsset: 'Activo',
+      },
+      validations: {
+        nodeAddressMinLength: 'La dirección del nodo es obligatoria',
+        nodeAddressInvalid: 'La dirección del nodo no es válida',
+        amount: 'La cantidad debe ser positiva',
+        lpUnits: 'Las unidades LP deben ser positivas',
       },
     },
     leave: {

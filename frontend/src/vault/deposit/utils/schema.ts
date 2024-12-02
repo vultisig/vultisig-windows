@@ -17,7 +17,7 @@ export const isSchemaFunction = (
   return typeof schema === 'function';
 };
 
-export const getRequiredFields = (
+export const getFieldsForChainAction = (
   chainId: Chain,
   selectedChainAction: ChainAction | undefined
 ) =>

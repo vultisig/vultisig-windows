@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
@@ -13,9 +14,9 @@ export const {
   provider: SpecificSendTxInfoProvider,
 } = getValueProviderSetup<SpecificTransactionInfo>('SendSpecificTxInfo');
 
-export const SendSpecificTxInfoProvider: React.FC<
-  ComponentWithChildrenProps
-> = ({ children }) => {
+export const DepositSpecificTxInfoProvider: FC<ComponentWithChildrenProps> = ({
+  children,
+}) => {
   const txSpecificInfoQuery = useSpecificDepositTxInfoQuery();
   const { t } = useTranslation();
 

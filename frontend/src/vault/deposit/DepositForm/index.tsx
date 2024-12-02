@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Opener } from '../../../lib/ui/base/Opener';
 import { Button } from '../../../lib/ui/buttons/Button';
+import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon';
+import { IconWrapper } from '../../../lib/ui/icons/IconWrapper';
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
@@ -16,15 +18,23 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
 import { useGetTotalAmountAvailableForChain } from '../hooks/useGetAmountTotalBalance';
+import { useGetMayaChainBondableAssetsQuery } from '../hooks/useGetMayaChainBondableAssetsQuery';
 import {
   getChainActionSchema,
-  getRequiredFields,
+  getFieldsForChainAction,
   resolveSchema,
 } from '../utils/schema';
 import { ChainAction } from './chainOptionsConfig';
 import { DepositActionItemExplorer } from './DepositActionItemExplorer';
-import { Container, ErrorText, InputFieldWrapper } from './DepositForm.styled';
+import {
+  AssetRequiredLabel,
+  Container,
+  ErrorText,
+  InputFieldWrapper,
+} from './DepositForm.styled';
+import { MayaChainAssetExplorer } from './MayaChainAssetExplorer';
 
+type FormData = Record<string, any>;
 type DepositFormProps = {
   onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void;
   selectedChainAction: ChainAction;
@@ -40,15 +50,16 @@ export const DepositForm: FC<DepositFormProps> = ({
   chainActionOptions,
   chain,
 }) => {
+  const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery();
   const walletCore = useAssertWalletCore();
   const { t } = useTranslation();
   const totalAmountAvailable = useGetTotalAmountAvailableForChain(chain);
-  const requiredFieldsForChainAction = getRequiredFields(
+  const chainActionSchema = getChainActionSchema(chain, selectedChainAction);
+  const fieldsForChainAction = getFieldsForChainAction(
     chain,
     selectedChainAction
   );
 
-  const chainActionSchema = getChainActionSchema(chain, selectedChainAction);
   const schemaForChainAction = resolveSchema(
     chainActionSchema,
     chain,
@@ -59,8 +70,11 @@ export const DepositForm: FC<DepositFormProps> = ({
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
+    getValues,
     formState: { errors, isValid },
-  } = useForm({
+  } = useForm<FormData>({
     resolver: schemaForChainAction
       ? zodResolver(schemaForChainAction)
       : undefined,
@@ -71,6 +85,8 @@ export const DepositForm: FC<DepositFormProps> = ({
     onSubmit(data, selectedChainAction as ChainAction);
   };
 
+  const selectedBondableAsset = getValues('bondableAsset');
+  console.log('## selected bonadable asset', selectedBondableAsset);
   return (
     <>
       <PageHeader
@@ -94,6 +110,9 @@ export const DepositForm: FC<DepositFormProps> = ({
                     {t(`${selectedChainAction}`)}
                   </Text>
                 </HStack>
+                <IconWrapper style={{ fontSize: 20 }}>
+                  <ChevronRightIcon />
+                </IconWrapper>
               </Container>
             )}
             renderContent={({ onClose }) => (
@@ -107,9 +126,46 @@ export const DepositForm: FC<DepositFormProps> = ({
               />
             )}
           />
-          {selectedChainAction && requiredFieldsForChainAction.length > 0 && (
+          {(selectedChainAction === 'bond_with_lp' ||
+            selectedChainAction === 'unbond_with_lp') &&
+            bondableAssets.length > 0 && (
+              <Opener
+                renderOpener={({ onOpen }) => (
+                  <Container onClick={onOpen}>
+                    <HStack alignItems="center" gap={4}>
+                      <Text weight="400" family="mono" size={16}>
+                        {selectedBondableAsset ||
+                          t('chainFunctions.bond_with_lp.labels.bondableAsset')}
+                      </Text>
+                      {!selectedBondableAsset && (
+                        <AssetRequiredLabel as="span" color="danger" size={14}>
+                          *
+                        </AssetRequiredLabel>
+                      )}
+                    </HStack>
+                    <IconWrapper style={{ fontSize: 20 }}>
+                      <ChevronRightIcon />
+                    </IconWrapper>
+                  </Container>
+                )}
+                renderContent={({ onClose }) => (
+                  <MayaChainAssetExplorer
+                    onClose={onClose}
+                    activeOption={watch('bondableAsset')}
+                    onOptionClick={selectedAsset => {
+                      setValue('bondableAsset', selectedAsset, {
+                        shouldValidate: true,
+                      });
+                      onClose();
+                    }}
+                    options={bondableAssets}
+                  />
+                )}
+              />
+            )}
+          {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
-              {requiredFieldsForChainAction.map(field => (
+              {fieldsForChainAction.map(field => (
                 <InputContainer key={field.name}>
                   <Text size={15} weight="400">
                     {t(

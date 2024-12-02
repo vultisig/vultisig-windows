@@ -8,13 +8,19 @@ export type ChainWithAction = keyof typeof chainDepositOptionsConfig;
 
 export const chainDepositOptionsConfig = {
   thorchain: ['bond', 'unbond', 'leave', 'addPool', 'withdrawPool', 'custom'],
-  mayachain: ['bond', 'unbond', 'leave', 'addPool', 'withdrawPool', 'custom'],
+  mayachain: [
+    'bond',
+    'unbond',
+    'bond_with_lp',
+    'unbond_with_lp',
+    'leave',
+    'custom',
+  ],
   dydx: ['vote'],
   ton: ['stake', 'unstake'],
 };
 
 export type ChainAction = keyof typeof requiredFieldsPerChainAction;
-
 export const requiredFieldsPerChainAction = {
   bond: {
     fields: [
@@ -81,6 +87,80 @@ export const requiredFieldsPerChainAction = {
           ),
       }),
   },
+  bond_with_lp: {
+    fields: [
+      {
+        name: 'nodeAddress',
+        type: 'text',
+        label: 'chainFunctions.bond_with_lp.labels.nodeAddress',
+        required: true,
+      },
+      {
+        name: 'lpUnits',
+        type: 'number',
+        label: 'chainFunctions.bond_with_lp.labels.lpUnits',
+        required: true,
+      },
+      {
+        name: 'amount',
+        type: 'number',
+        label: 'chainFunctions.bond_with_lp.labels.amount',
+        required: false,
+      },
+    ],
+    schema: (
+      chainId: Chain,
+      walletCore: WalletCore,
+      totalAmountAvailable: number
+    ) =>
+      z.object({
+        nodeAddress: z
+          .string()
+          .refine(address => address.length > 0, {
+            message: 'chainFunctions.bond.validations.nodeAddressMinLength',
+          })
+          .refine(
+            async address =>
+              await validateNodeAddress(address, chainId, walletCore),
+            {
+              message: 'chainFunctions.bond.validations.nodeAddressInvalid',
+            }
+          ),
+        bondableAsset: z
+          .string()
+          .min(1, 'chainFunctions.unbond_with_lp.validations.bondableAsset'),
+        lpUnits: z
+          .string()
+          .optional()
+          .transform(val => Number(val))
+          .pipe(
+            z
+              .number()
+              .positive()
+              .min(0.01, 'chainFunctions.bond.validations.lpUnits')
+              // TODO: need to find out how to find the max amount of LP tokens
+              // .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
+              .refine(val => val > 0, {
+                message: 'chainFunctions.bond.validations.lpUnits',
+              })
+          ),
+        amount: z
+          .string()
+          .optional()
+          .transform(val => {
+            if (val === undefined || val === '') return undefined;
+            return Number(val);
+          })
+          .pipe(
+            z
+              .number()
+              .positive()
+              .min(0.01, 'chainFunctions.bond.validations.amount')
+              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
+              .optional()
+          ),
+      }),
+  },
   unbond: {
     fields: [
       {
@@ -134,6 +214,80 @@ export const requiredFieldsPerChainAction = {
               })
           ),
         provider: z.string().optional(),
+      }),
+  },
+  unbond_with_lp: {
+    fields: [
+      {
+        name: 'nodeAddress',
+        type: 'text',
+        label: 'chainFunctions.unbond_with_lp.labels.nodeAddress',
+        required: true,
+      },
+      {
+        name: 'lpUnits',
+        type: 'number',
+        label: 'chainFunctions.unbond_with_lp.labels.lpUnits',
+        required: true,
+      },
+      {
+        name: 'amount',
+        type: 'number',
+        label: 'chainFunctions.unbond_with_lp.labels.amount',
+        required: false,
+      },
+    ],
+    schema: (
+      chainId: Chain,
+      walletCore: WalletCore,
+      totalAmountAvailable: number
+    ) =>
+      z.object({
+        nodeAddress: z
+          .string()
+          .refine(address => address.length > 0, {
+            message: 'chainFunctions.bond.validations.nodeAddressMinLength',
+          })
+          .refine(
+            async address =>
+              await validateNodeAddress(address, chainId, walletCore),
+            {
+              message: 'chainFunctions.bond.validations.nodeAddressInvalid',
+            }
+          ),
+        lpUnits: z
+          .string()
+          .optional()
+          .transform(val => Number(val))
+          .pipe(
+            z
+              .number()
+              .positive()
+              .min(0.01, 'chainFunctions.bond.validations.lpUnits')
+              // TODO: need to find out how to find the max amount of LP tokens
+              // .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
+              .refine(val => val > 0, {
+                message: 'chainFunctions.bond.validations.lpUnits',
+              })
+          ),
+        bondableAsset: z
+          .string()
+          .min(1, 'chainFunctions.bond_with_lp.validations.bondableAsset'),
+        amount: z
+          .string()
+          .optional()
+          .transform(val => {
+            if (val === undefined || val === '') return undefined;
+            return Number(val);
+          })
+          .pipe(
+            z
+              .number()
+              .positive()
+              .min(0.01, 'chainFunctions.bond.validations.amount')
+              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
+              .optional()
+          ),
       }),
   },
   leave: {

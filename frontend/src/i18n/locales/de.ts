@@ -516,6 +516,9 @@ export const de = {
   add_vaults_to_folder:
     'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
   chain_message_deposit: '{{chain}}-Nachrichteneinzahlung',
+  thorchain_message_deposit: 'THORChain-Nachrichteneinzahlung',
+  bond_with_lp: 'Bindung',
+  unbond_with_lp: 'Bindung lösen',
   chainFunctions: {
     amountExceeded: 'Der Betrag übersteigt das verfügbare Guthaben',
     memo: 'Memo',
@@ -545,6 +548,34 @@ export const de = {
         nodeAddressMinLength: 'Knotenadresse ist erforderlich',
         nodeAddressInvalid: 'Knotenadresse ist ungültig',
         amount: 'Betrag muss positiv sein',
+      },
+    },
+    bond_with_lp: {
+      labels: {
+        nodeAddress: 'Knotenadresse',
+        amount: 'Betrag',
+        lpUnits: 'LP-Einheiten',
+        bondableAsset: 'Vermögenswert',
+      },
+      validations: {
+        nodeAddressMinLength: 'Knotenadresse ist erforderlich',
+        nodeAddressInvalid: 'Knotenadresse ist ungültig',
+        amount: 'Betrag muss positiv sein',
+        lpUnits: 'LP-Einheiten müssen positiv sein',
+      },
+    },
+    unbond_with_lp: {
+      labels: {
+        nodeAddress: 'Knotenadresse',
+        amount: 'Betrag',
+        lpUnits: 'LP-Einheiten',
+        bondableAsset: 'Vermögenswert',
+      },
+      validations: {
+        nodeAddressMinLength: 'Knotenadresse ist erforderlich',
+        nodeAddressInvalid: 'Knotenadresse ist ungültig',
+        amount: 'Betrag muss positiv sein',
+        lpUnits: 'LP-Einheiten müssen positiv sein',
       },
     },
     leave: {
