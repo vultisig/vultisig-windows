@@ -42,7 +42,7 @@ import { SendPage } from './vault/send/SendPage';
 import { SetupActiveVaultPage } from './vault/setup/active/SetupActiveVaultPage';
 import { SetupFastVaultPage } from './vault/setup/fast/SetupFastVaultPage';
 import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage';
-import { SetupVaultPage } from './vault/setup/type/SetupVaultPage';
+import { SetupVaultPageController } from './vault/setup/SetupVaultPageController';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
 import { SwapPage } from './vault/swap/SwapPage';
 import { NoVaultsHomePage } from './vaults/components/NoVaultsHomePage';
@@ -100,7 +100,7 @@ export const router = createBrowserRouter([
       },
       {
         path: appPaths.setupVault,
-        element: <SetupVaultPage />,
+        element: <SetupVaultPageController />,
       },
       {
         path: appPaths.importVault,
