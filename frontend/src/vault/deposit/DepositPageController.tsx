@@ -22,15 +22,18 @@ import { useMemoGenerator } from './hooks/useMemoGenerator';
 const depositSteps = ['form', 'verify'] as const;
 
 export const DepositPageController = () => {
-  const [depositFormData, setDepositFormData] = useState<FieldValues>({});
   const [{ coin: coinName }] = useAppPathParams<'deposit'>();
   const { chainId: chain } = parseCoinString(coinName);
   const chainActionOptions =
     chainDepositOptionsConfig[chain?.toLowerCase() as ChainWithAction];
 
-  const [selectedChainAction, setSelectedChainAction] = useState<ChainAction>(
-    chainActionOptions[0] as ChainAction
-  );
+  const [state, setState] = useState<{
+    depositFormData: FieldValues;
+    selectedChainAction: ChainAction;
+  }>({
+    depositFormData: {},
+    selectedChainAction: chainActionOptions[0] as ChainAction,
+  });
 
   const txInfo = useSendSpecificTxInfo();
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
@@ -38,23 +41,18 @@ export const DepositPageController = () => {
     onExit: useNavigateBack(),
   });
 
-  const updateSelectedChainAction = (action: ChainAction) => {
-    setSelectedChainAction(action);
-  };
-
-  const handleDepositFormSubmit = (
-    data: FieldValues,
-    selectedChainAction: ChainAction
-  ) => {
-    setDepositFormData(data);
-    setSelectedChainAction(selectedChainAction);
+  const handleDepositFormSubmit = (data: FieldValues) => {
+    setState(prevState => ({
+      ...prevState,
+      depositFormData: data,
+    }));
     toNextStep();
   };
 
   const depositFormDataWithMemo = useMemoGenerator({
-    depositFormData,
-    selectedChainAction,
-    coinName,
+    depositFormData: state.depositFormData,
+    selectedChainAction: state.selectedChainAction,
+    bondableAsset: state.depositFormData?.bondableAsset,
     fee: txInfo?.fee,
   });
 
@@ -64,8 +62,13 @@ export const DepositPageController = () => {
         value={step}
         form={() => (
           <DepositForm
-            selectedChainAction={selectedChainAction}
-            onSelectChainAction={updateSelectedChainAction}
+            selectedChainAction={state.selectedChainAction}
+            onSelectChainAction={action =>
+              setState(prevState => ({
+                ...prevState,
+                selectedChainAction: action,
+              }))
+            }
             onSubmit={handleDepositFormSubmit}
             chainActionOptions={chainActionOptions}
             chain={chain}
@@ -73,7 +76,7 @@ export const DepositPageController = () => {
         )}
         verify={() => (
           <DepositVerify
-            selectedChainAction={selectedChainAction}
+            selectedChainAction={state.selectedChainAction}
             onBack={toPreviousStep}
             depositFormData={depositFormDataWithMemo}
           />

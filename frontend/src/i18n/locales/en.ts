@@ -515,8 +515,8 @@ export const en = {
   deposit: 'Deposit',
   chain_message_deposit: '{{chain}} message deposit',
   thorchain_message_deposit: 'THORChain message deposit',
-  bond_with_lp: 'Bond',
-  unbond_with_lp: 'Unbond',
+  bond_with_lp: 'Bond Maya',
+  unbond_with_lp: 'Unbond Maya',
   bond: 'Bond',
   unbond: 'Unbond',
   leave: 'Leave',
@@ -537,6 +537,7 @@ export const en = {
         provider: 'Provider',
         operatorFee: "Operator's Fee",
         amount: 'Amount',
+        asset: 'Asset',
       },
       validations: {
         nodeAddressMinLength: 'Node Address is required',
@@ -557,6 +558,7 @@ export const en = {
         nodeAddressInvalid: 'Node Address is invalid',
         amount: 'Amount must be positive',
         lpUnits: 'LP Units must be positive',
+        bondableAsset: 'Bondable Asset is required',
       },
     },
     unbond_with_lp: {
@@ -570,6 +572,7 @@ export const en = {
         nodeAddressInvalid: 'Node Address is invalid',
         amount: 'Amount must be positive',
         lpUnits: 'LP Units must be positive',
+        bondableAsset: 'Bondable Asset is required',
       },
     },
     unbond: {

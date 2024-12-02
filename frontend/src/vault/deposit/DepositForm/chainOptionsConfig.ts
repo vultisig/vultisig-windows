@@ -8,7 +8,14 @@ export type ChainWithAction = keyof typeof chainDepositOptionsConfig;
 
 export const chainDepositOptionsConfig = {
   thorchain: ['bond', 'unbond', 'leave', 'addPool', 'withdrawPool', 'custom'],
-  mayachain: ['bond_with_lp', 'unbond_with_lp', 'leave', 'custom'],
+  mayachain: [
+    'bond',
+    'unbond',
+    'bond_with_lp',
+    'unbond_with_lp',
+    'leave',
+    'custom',
+  ],
   dydx: ['vote'],
   ton: ['stake', 'unstake'],
 };
@@ -119,6 +126,9 @@ export const requiredFieldsPerChainAction = {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
             }
           ),
+        bondableAsset: z
+          .string()
+          .min(1, 'chainFunctions.unbond_with_lp.validations.bondableAsset'),
         lpUnits: z
           .string()
           .optional()
@@ -260,6 +270,9 @@ export const requiredFieldsPerChainAction = {
                 message: 'chainFunctions.bond.validations.lpUnits',
               })
           ),
+        bondableAsset: z
+          .string()
+          .min(1, 'chainFunctions.bond_with_lp.validations.bondableAsset'),
         amount: z
           .string()
           .optional()
