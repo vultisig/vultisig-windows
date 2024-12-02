@@ -550,6 +550,7 @@ export const pt = {
         nodeAddress: 'Endereço do Nó',
         amount: 'Quantidade',
         lpUnits: 'Unidades LP',
+        bondableAsset: 'Ativo',
       },
       validations: {
         nodeAddressMinLength: 'O endereço do nó é obrigatório',
@@ -563,6 +564,7 @@ export const pt = {
         nodeAddress: 'Endereço do Nó',
         amount: 'Quantidade',
         lpUnits: 'Unidades LP',
+        bondableAsset: 'Ativo',
       },
       validations: {
         nodeAddressMinLength: 'O endereço do nó é obrigatório',

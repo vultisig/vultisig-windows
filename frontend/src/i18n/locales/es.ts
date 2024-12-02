@@ -554,6 +554,7 @@ export const es = {
         nodeAddress: 'Dirección del Nodo',
         amount: 'Cantidad',
         lpUnits: 'Unidades LP',
+        bondableAsset: 'Activo',
       },
       validations: {
         nodeAddressMinLength: 'La dirección del nodo es obligatoria',
@@ -567,6 +568,7 @@ export const es = {
         nodeAddress: 'Dirección del Nodo',
         amount: 'Cantidad',
         lpUnits: 'Unidades LP',
+        bondableAsset: 'Activo',
       },
       validations: {
         nodeAddressMinLength: 'La dirección del nodo es obligatoria',

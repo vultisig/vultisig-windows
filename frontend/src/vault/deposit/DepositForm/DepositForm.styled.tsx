@@ -46,3 +46,7 @@ export const ErrorText = styled(Text)`
   display: inline-block;
   margin-top: -5px;
 `;
+
+export const AssetRequiredLabel = styled(Text)`
+  align-self: flex-start;
+`;

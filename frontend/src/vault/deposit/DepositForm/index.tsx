@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -26,7 +26,12 @@ import {
 } from '../utils/schema';
 import { ChainAction } from './chainOptionsConfig';
 import { DepositActionItemExplorer } from './DepositActionItemExplorer';
-import { Container, ErrorText, InputFieldWrapper } from './DepositForm.styled';
+import {
+  AssetRequiredLabel,
+  Container,
+  ErrorText,
+  InputFieldWrapper,
+} from './DepositForm.styled';
 import { MayaChainAssetExplorer } from './MayaChainAssetExplorer';
 
 type FormData = Record<string, any>;
@@ -81,13 +86,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   };
 
   const selectedBondableAsset = getValues('bondableAsset');
-
-  useEffect(() => {
-    if (bondableAssets.length > 0) {
-      setValue('bondableAsset', bondableAssets[0].asset);
-    }
-  }, [bondableAssets, setValue]);
-
+  console.log('## selected bonadable asset', selectedBondableAsset);
   return (
     <>
       <PageHeader
@@ -133,12 +132,16 @@ export const DepositForm: FC<DepositFormProps> = ({
               <Opener
                 renderOpener={({ onOpen }) => (
                   <Container onClick={onOpen}>
-                    <HStack alignItems="center" gap={8}>
+                    <HStack alignItems="center" gap={4}>
                       <Text weight="400" family="mono" size={16}>
                         {selectedBondableAsset ||
-                          (bondableAssets.length > 0 &&
-                            bondableAssets[0].asset)}
+                          t('chainFunctions.bond_with_lp.labels.bondableAsset')}
                       </Text>
+                      {!selectedBondableAsset && (
+                        <AssetRequiredLabel as="span" color="danger" size={14}>
+                          *
+                        </AssetRequiredLabel>
+                      )}
                     </HStack>
                     <IconWrapper style={{ fontSize: 20 }}>
                       <ChevronRightIcon />

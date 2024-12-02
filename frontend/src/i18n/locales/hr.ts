@@ -535,6 +535,7 @@ export const hr = {
         nodeAddress: 'Adresa čvora',
         amount: 'Iznos',
         lpUnits: 'LP jedinice',
+        bondableAsset: 'Imovina',
       },
       validations: {
         nodeAddressMinLength: 'Adresa čvora je obavezna',
@@ -548,6 +549,7 @@ export const hr = {
         nodeAddress: 'Adresa čvora',
         amount: 'Iznos',
         lpUnits: 'LP jedinice',
+        bondableAsset: 'Imovina',
       },
       validations: {
         nodeAddressMinLength: 'Adresa čvora je obavezna',

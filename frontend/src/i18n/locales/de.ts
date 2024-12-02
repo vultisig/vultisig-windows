@@ -555,6 +555,7 @@ export const de = {
         nodeAddress: 'Knotenadresse',
         amount: 'Betrag',
         lpUnits: 'LP-Einheiten',
+        bondableAsset: 'Vermögenswert',
       },
       validations: {
         nodeAddressMinLength: 'Knotenadresse ist erforderlich',
@@ -568,6 +569,7 @@ export const de = {
         nodeAddress: 'Knotenadresse',
         amount: 'Betrag',
         lpUnits: 'LP-Einheiten',
+        bondableAsset: 'Vermögenswert',
       },
       validations: {
         nodeAddressMinLength: 'Knotenadresse ist erforderlich',

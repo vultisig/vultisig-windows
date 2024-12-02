@@ -552,13 +552,13 @@ export const en = {
         nodeAddress: 'Node Address',
         amount: 'Amount',
         lpUnits: 'LP Units',
+        bondableAsset: 'Asset',
       },
       validations: {
         nodeAddressMinLength: 'Node Address is required',
         nodeAddressInvalid: 'Node Address is invalid',
         amount: 'Amount must be positive',
         lpUnits: 'LP Units must be positive',
-        bondableAsset: 'Bondable Asset is required',
       },
     },
     unbond_with_lp: {
@@ -566,13 +566,13 @@ export const en = {
         nodeAddress: 'Node Address',
         amount: 'Amount',
         lpUnits: 'LP Units',
+        bondableAsset: 'Asset',
       },
       validations: {
         nodeAddressMinLength: 'Node Address is required',
         nodeAddressInvalid: 'Node Address is invalid',
         amount: 'Amount must be positive',
         lpUnits: 'LP Units must be positive',
-        bondableAsset: 'Bondable Asset is required',
       },
     },
     unbond: {
