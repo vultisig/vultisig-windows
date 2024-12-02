@@ -372,11 +372,13 @@ export const es = {
   active_vault_setup_prop_0: 'Firma rápida en movimiento',
   active_vault_setup_prop_1: 'Alertas y políticas de transacciones',
   active_vault_setup_prop_2: 'Totalmente autocustodial',
-  secure_vault_setup_prop_0: 'Sólo tus dispositivos',
-  secure_vault_setup_prop_1: 'Sin alertas ni políticas',
-  secure_vault_setup_prop_2: 'Totalmente autocustodial',
+  secure_vault_setup_prop_0:
+    '2 de 3, 3 de 4, 4 de 6 configuraciones de dispositivos disponibles',
+  secure_vault_setup_prop_1: 'Una copia de seguridad por dispositivo',
+  secure_vault_setup_prop_2: 'Redundante, seguro',
   fast_vault_purpose: 'Úselo como una "billetera caliente"',
   active_vault_purpose: 'Úselo como "billetera principal"',
+  secureVault: 'Secure Vault',
   secure_vault_purpose: 'Úselo como una "billetera fría"',
   invalid_email:
     'Por favor, introduce una dirección de correo electrónico válida',
