@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import DangerSignRedIcon from '../../../lib/ui/icons/DangerSignRedIcon';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
@@ -9,7 +10,6 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
-import { getVaultTypeText } from '../../../utils/util';
 import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation';
 import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery';
 import { useCurrentVault } from '../../../vault/state/currentVault';
@@ -46,21 +46,19 @@ const DeleteVaultPage = () => {
   const { mutate: deleteVault, isPending, error } = useDeleteVaultMutation();
   const vault = useCurrentVault();
   const navigate = useAppNavigate();
-
-  const {
-    name,
-    public_key_eddsa,
-    public_key_ecdsa,
-    keyshares,
-    local_party_id,
-  } = vault;
+  const { currencySymbol } = useGlobalCurrency();
+  const { signers, name, public_key_eddsa, public_key_ecdsa, local_party_id } =
+    vault;
 
   const vaultDetails = [
     { label: t('vault_delete_page_vault_name'), value: name },
-    { label: t('vault_delete_page_vault_value'), value: vaultBalance },
+    {
+      label: t('vault_delete_page_vault_value'),
+      value: vaultBalance + ' ' + currencySymbol,
+    },
     {
       label: t('vault_delete_page_vault_part'),
-      value: getVaultTypeText(keyshares.length, t),
+      value: `${t('vault_details_page_part_of_vault')} ${signers.indexOf(local_party_id) + 1} ${t('vault_details_page_of_word')} ${signers.length}`,
     },
     { label: t('vault_delete_page_device_id'), value: local_party_id },
     { label: t('vault_delete_page_ecdsa_key'), value: public_key_ecdsa },
