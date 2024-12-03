@@ -8,6 +8,7 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
 import { getVaultTypeText } from '../../../utils/util';
 import { useCurrentVault } from '../../../vault/state/currentVault';
+import { getVaultParticipantInfo } from '../../../vault/utils/helpers';
 import {
   AutoCenteredText,
   Container,
@@ -24,9 +25,12 @@ const VaultDetailsPage = () => {
 
   const { name, public_key_eddsa, public_key_ecdsa, signers, local_party_id } =
     currentVault;
+  const { localPartyIndex, totalSigners } = getVaultParticipantInfo({
+    signers,
+    local_party_id,
+  });
 
-  const m = signers.length;
-  const vaultTypeText = getVaultTypeText(m, t);
+  const vaultTypeText = getVaultTypeText(signers.length, t);
 
   return (
     <Container flexGrow gap={16}>
@@ -49,9 +53,8 @@ const VaultDetailsPage = () => {
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_part')}</Text>
             <Text color="supporting" size={13}>
-              {t('vault_details_page_part_of_vault')}{' '}
-              {signers.indexOf(local_party_id) + 1}{' '}
-              {t('vault_details_page_of_word')} {signers.length}
+              {t('vault_details_page_part_of_vault')} {localPartyIndex}{' '}
+              {t('vault_details_page_of_word')} {totalSigners}
             </Text>
           </VStack>
         </ListItemPanel>
