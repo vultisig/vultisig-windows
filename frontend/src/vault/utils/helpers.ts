@@ -21,3 +21,12 @@ export const nativeTokenForChain: { [key: string]: string } = {
 export const getOutputAssetAmount = (amount: string, isMaya?: boolean) => {
   return formatMidgardNumber(amount, isMaya).toString();
 };
+
+export const getVaultParticipantInfo = (vault: {
+  signers: string[];
+  local_party_id: string;
+}) => {
+  const totalSigners = vault.signers.length;
+  const localPartyIndex = vault.signers.indexOf(vault.local_party_id) + 1;
+  return { localPartyIndex, totalSigners };
+};
