@@ -8,7 +8,7 @@ import { makeAppPath } from '../../../navigation';
 import {
   ChevronIconWrapper,
   ContentWrapperButton,
-} from './VaultBackupBannerBanner.styles';
+} from './VaultBackupBanner.styles';
 
 const VaultBackupBanner = () => {
   const { t } = useTranslation();
