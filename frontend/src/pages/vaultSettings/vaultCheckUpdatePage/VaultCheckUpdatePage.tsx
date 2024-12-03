@@ -23,34 +23,24 @@ const VaultCheckUpdatePage = () => {
     localVersion,
     latestVersion,
     updateAvailable,
-    localError,
+    isLocalVersionValid,
     remoteError,
     isLoading,
   } = useVersionCheck();
 
   let content: ReactNode;
 
-  if (localError) {
-    content = t('vaultCheckUpdatePage.errorLoadingLocalVersion', {
-      error: extractErrorMsg(localError),
-    });
-  }
-
-  if (remoteError) {
+  if (!isLocalVersionValid) {
+    content = t('vaultCheckUpdatePage.errorLoadingLocalVersion');
+  } else if (remoteError) {
     content = t('vaultCheckUpdatePage.errorFetchingLatestVersion', {
       error: extractErrorMsg(remoteError),
     });
-  }
-
-  if (isLoading) {
+  } else if (isLoading) {
     content = t('vaultCheckUpdatePage.fetchingLatestVersion');
-  }
-
-  if (!updateAvailable) {
+  } else if (!updateAvailable) {
     content = t('vaultCheckUpdatePage.applicationUpToDate');
-  }
-
-  if (updateAvailable) {
+  } else if (updateAvailable) {
     content = (
       <CenteredText>
         {t('vaultCheckUpdatePage.newVersionAvailable', { latestVersion })}

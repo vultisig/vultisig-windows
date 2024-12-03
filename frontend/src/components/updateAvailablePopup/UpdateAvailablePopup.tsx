@@ -19,18 +19,18 @@ const UpdateAvailablePopup = () => {
     localVersion,
     latestVersion,
     updateAvailable,
-    localError,
+    isLocalVersionValid,
     remoteError,
     isLoading,
   } = useVersionCheck();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const isError = localError || remoteError;
+    const isError = !isLocalVersionValid || remoteError;
     if (!isLoading && !isError && updateAvailable) {
       setIsOpen(true);
     }
-  }, [isLoading, localError, remoteError, updateAvailable]);
+  }, [isLoading, isLocalVersionValid, remoteError, updateAvailable]);
 
   if (!isOpen) {
     return null;
