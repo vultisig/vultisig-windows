@@ -12,7 +12,6 @@ import { CoinAmount, CoinKey } from '../Coin';
 import { getCoinMetaKey } from '../utils/coinMeta';
 
 export type BalanceQueryResult = CoinKey & CoinAmount & ChainAccount;
-
 export const getBalanceQueryKey = (key: AccountCoinKey) => ['coinBalance', key];
 
 export const useBalanceQuery = (coin: Coin) => {
