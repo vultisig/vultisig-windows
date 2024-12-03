@@ -166,15 +166,10 @@ export class VaultService implements IVaultService {
 
   getExportName(vault: Vault | storage.Vault): string {
     const totalSigners = vault.signers.length;
-    const threshold = this.getThreshold(totalSigners);
-
     const localPartyId =
       vault instanceof Vault ? vault.localPartyId : vault.local_party_id;
 
-    return `${vault.name}-${localPartyId}-${threshold + 1}of${totalSigners}.vult`;
-  }
-
-  private getThreshold(totalSigners: number): number {
-    return Math.ceil((totalSigners * 2) / 3) - 1;
+    const localPartyIndex = vault.signers.indexOf(localPartyId) + 1;
+    return `${vault.name}-${localPartyId}-part${localPartyIndex}of${totalSigners}.vult`;
   }
 }
