@@ -1,33 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 
+import buildInfo from '../../../../build.json';
 import { attempt } from '../../utils/attempt';
-import {
-  LATEST_VERSION_QUERY_KEY,
-  LOCAL_VERSION_QUERY_KEY,
-  VULTISIG_LOCAL_BUILD_API,
-  VULTISIG_RELEASES_API,
-} from './constants';
+import { LATEST_VERSION_QUERY_KEY, VULTISIG_RELEASES_API } from './constants';
 import { isValidVersion, isVersionNewer } from './utils';
 
 const useVersionCheck = () => {
-  const {
-    data: localVersionData,
-    error: localError,
-    isFetching: isLocalFetching,
-  } = useQuery({
-    queryKey: [LOCAL_VERSION_QUERY_KEY],
-    queryFn: async () => {
-      const response = await fetch(VULTISIG_LOCAL_BUILD_API);
-      if (!response.ok) {
-        throw new Error('Failed to fetch local build version.');
-      }
-      const data = await response.json();
-      if (!isValidVersion(data?.version)) {
-        throw new Error(`Invalid local version format: ${data?.version}`);
-      }
-      return { version: data.version };
-    },
-  });
+  const localVersion = buildInfo?.version;
 
   const {
     data: latestVersionData,
@@ -52,7 +31,6 @@ const useVersionCheck = () => {
     },
   });
 
-  const localVersion = localVersionData?.version;
   const latestVersion = latestVersionData?.version;
 
   const updateAvailable = attempt(() => {
@@ -62,15 +40,13 @@ const useVersionCheck = () => {
     });
   }, false);
 
-  const isLoading = isLocalFetching || isRemoteFetching;
-
   return {
     localVersion,
     latestVersion,
     updateAvailable,
-    localError,
     remoteError,
-    isLoading,
+    isLocalVersionValid: isValidVersion(localVersion),
+    isLoading: isRemoteFetching,
   };
 };
 
