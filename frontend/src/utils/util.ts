@@ -14,16 +14,16 @@ export function generateRandomNumber(): number {
 }
 
 export const getVaultTypeText = (
-  m: number,
+  signersLength: number,
   t: TFunction<'translation', undefined>
 ) => {
   let vaultTypeText;
 
   const n = 2;
-  if (m > 3) {
-    vaultTypeText = t('m_of_n_vault', { n, m });
+  if (signersLength > 3) {
+    vaultTypeText = t('m_of_n_vault', { n, signersLength });
   } else {
-    vaultTypeText = t(`2_of_${m}_vault`);
+    vaultTypeText = t(`2_of_${signersLength}_vault`);
   }
 
   return vaultTypeText;
