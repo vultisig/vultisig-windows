@@ -8,6 +8,7 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
 import InfoGradientIcon from '../../../lib/ui/icons/InfoGradientIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
+import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries';
 import { Text } from '../../../lib/ui/text';
 import { makeAppPath } from '../../../navigation';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -15,6 +16,7 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
 import { useBackupVaultMutation } from '../../../vault/mutations/useBackupVaultMutation';
+import { vaultsQueryKey } from '../../../vault/queries/useVaultsQuery';
 import { useCurrentVault } from '../../../vault/state/currentVault';
 import {
   VaultBackupSchema,
@@ -37,8 +39,13 @@ const VaultBackupPage = () => {
   const vault = useCurrentVault();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const invalidateQueries = useInvalidateQueries();
 
-  const { mutate: backupVault, isPending, error } = useBackupVaultMutation();
+  const {
+    mutateAsync: backupVault,
+    isPending,
+    error,
+  } = useBackupVaultMutation();
 
   const {
     register,
@@ -49,16 +56,18 @@ const VaultBackupPage = () => {
     mode: 'onBlur',
   });
 
-  const onSubmit = (data?: FieldValues) => {
+  const onSubmit = async (data?: FieldValues) => {
     const password = data?.password;
     if (!vault) return;
 
-    backupVault(
+    await backupVault(
       { vault, password },
       {
         onSuccess: () => navigate(makeAppPath('vault')),
       }
     );
+
+    invalidateQueries(vaultsQueryKey);
   };
 
   return (
