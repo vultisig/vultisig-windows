@@ -1,4 +1,4 @@
-import { TokenSelectionAssets } from '../token-store';
+import { TokensStore } from '../services/Coin/CoinList';
 
 export const getNativeTokens = () =>
-  TokenSelectionAssets.filter(token => token.isNativeToken);
+  TokensStore.TokenSelectionAssets.filter(token => token.isNativeToken);

@@ -1,4 +1,4 @@
-import { TokenSelectionAssets } from '../../../../token-store';
+import { TokensStore } from '../../../../services/Coin/CoinList';
 import { getNativeTokens } from '../../../../utils/getNativeTokens';
 
 export const getCoinOptions = () => {
@@ -7,6 +7,6 @@ export const getCoinOptions = () => {
     value: chain,
     label: ticker,
     logo: logo,
-    isLastOption: index === TokenSelectionAssets.length - 1,
+    isLastOption: index === TokensStore.TokenSelectionAssets.length - 1,
   }));
 };

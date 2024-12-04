@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { TokensStore } from '../../../services/Coin/CoinList';
 import { getSwapPairs } from '../../../services/Thorwallet';
-import { TokenSelectionAssets } from '../../../token-store';
 import {
   convertChainSymbolToChain,
   convertChainToChainTicker,
@@ -24,7 +24,7 @@ export default function useSwapPairs(
       swapPairs
         .filter(asset => !asset.isSynth)
         .forEach(pair => {
-          const coin = TokenSelectionAssets.find(
+          const coin = TokensStore.TokenSelectionAssets.find(
             asset =>
               asset.chain === convertChainSymbolToChain(pair.chain) &&
               asset.ticker === pair.ticker
