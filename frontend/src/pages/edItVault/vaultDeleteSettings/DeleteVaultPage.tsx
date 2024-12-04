@@ -13,7 +13,7 @@ import { PageSlice } from '../../../ui/page/PageSlice';
 import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation';
 import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery';
 import { useCurrentVault } from '../../../vault/state/currentVault';
-import { getVaultParticipantInfo } from '../../../vault/utils/helpers';
+import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers';
 import { getStorageVaultId } from '../../../vault/utils/storageVault';
 import {
   ActionsWrapper,
@@ -51,10 +51,11 @@ const DeleteVaultPage = () => {
   const { signers, name, public_key_eddsa, public_key_ecdsa, local_party_id } =
     vault;
 
-  const { localPartyIndex, totalSigners } = getVaultParticipantInfo({
-    signers,
-    local_party_id,
-  });
+  const { localPartyIndex, totalSigners } =
+    getVaultParticipantInfoFormattedForUI({
+      signers,
+      local_party_id,
+    });
 
   const vaultDetails = [
     { label: t('vault_delete_page_vault_name'), value: name },
