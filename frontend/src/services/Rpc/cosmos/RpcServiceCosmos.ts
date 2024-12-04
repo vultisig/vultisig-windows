@@ -13,8 +13,16 @@ export class RpcServiceCosmos implements IRpcService {
   async getBalance(coin: Coin): Promise<string> {
     const balances = await this.fetchBalances(coin.address);
     const balance = balances.find(balance => {
-      if (balance.denom.toLowerCase() === this.denom()) {
-        return balance.amount;
+      if (coin.isNativeToken) {
+        if (balance.denom.toLowerCase() === this.denom()) {
+          return balance.amount;
+        }
+      } else {
+        if (
+          balance.denom.toLowerCase() === coin.contractAddress.toLowerCase()
+        ) {
+          return balance.amount;
+        }
       }
     });
 

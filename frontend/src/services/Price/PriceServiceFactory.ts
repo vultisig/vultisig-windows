@@ -1,6 +1,7 @@
 import { Chain } from '../../model/chain';
 import { IPriceService } from './IPriceService';
 import { PriceService } from './PriceService';
+import { PriceServiceCosmos } from './PriceServiceCosmos';
 import { PriceServiceEvm } from './PriceServiceEvm';
 import { PriceServiceSolana } from './PriceServiceSolana';
 
@@ -48,17 +49,17 @@ export class PriceServiceFactory {
       case Chain.Sui:
         return new PriceService(chain);
       case Chain.Cosmos:
-        return new PriceService(chain);
+        return new PriceServiceCosmos(chain);
       case Chain.Osmosis:
-        return new PriceService(chain);
+        return new PriceServiceCosmos(chain);
       case Chain.Kujira:
-        return new PriceService(chain);
+        return new PriceServiceCosmos(chain);
       case Chain.Dydx:
-        return new PriceService(chain);
+        return new PriceServiceCosmos(chain);
       case Chain.Terra:
-        return new PriceService(chain);
+        return new PriceServiceCosmos(chain);
       case Chain.TerraClassic:
-        return new PriceService(chain);
+        return new PriceServiceCosmos(chain);
       case Chain.Ton:
         return new PriceService(chain);
       default:

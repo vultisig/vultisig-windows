@@ -92,7 +92,9 @@ export class BlockchainServiceCosmos
           amounts: [
             TW.Cosmos.Proto.Amount.create({
               amount: keysignPayload.toAmount,
-              denom: denom,
+              denom: keysignPayload.coin.isNativeToken
+                ? denom
+                : keysignPayload.coin.contractAddress,
             }),
           ],
         }),
