@@ -3,15 +3,11 @@ import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { UniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { isEmpty } from '../../../lib/utils/array/isEmpty';
-import {
-  chainDepositOptionsConfig,
-  ChainWithAction,
-} from '../../deposit/DepositForm/chainOptionsConfig';
 import { SendPrompt } from '../../send/SendPrompt';
 import { useCurrentVaultNativeCoins } from '../../state/currentVault';
+import { SwapPrompt } from '../../swap/components/SwapPrompt';
+import { swapEnabledChains } from '../../swap/swapEnabledChains';
 import { DepositPrompt } from '../DepositPrompts';
-import { SwapPrompt } from '../SwapPrompt';
-import { swapAvailableChains } from './config';
 
 export const VaultPrimaryActions = ({
   value,
@@ -22,26 +18,15 @@ export const VaultPrimaryActions = ({
     return null;
   }
 
-  const coinDerived = value ?? getStorageCoinKey(nativeCoins[0]);
-  const chainId = coinDerived?.chainId?.toLowerCase() as
-    | ChainWithAction
-    | undefined;
+  const coinKey = value ?? getStorageCoinKey(nativeCoins[0]);
 
-  const availableChainActions = chainId
-    ? chainDepositOptionsConfig[chainId] || []
-    : [];
-
-  const isSwapAvailable = swapAvailableChains.some(
-    chain => chain === coinDerived?.chainId
-  );
+  const isSwapAvailable = swapEnabledChains.includes(coinKey.chainId);
 
   return (
     <UniformColumnGrid fullWidth gap={12}>
-      <SendPrompt value={coinDerived} />
-      {isSwapAvailable && <SwapPrompt value={coinDerived} />}
-      {availableChainActions.length > 0 && (
-        <DepositPrompt value={coinDerived} />
-      )}
+      <SendPrompt value={coinKey} />
+      {isSwapAvailable && <SwapPrompt value={coinKey} />}
+      <DepositPrompt value={coinKey} />
     </UniformColumnGrid>
   );
 };

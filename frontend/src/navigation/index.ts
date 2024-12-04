@@ -52,13 +52,13 @@ export const appPaths = {
   privacyPolicy: '/vault/settings/privacy-policy',
   termsOfService: '/vault/settings/terms-of-service',
   vaultFAQ: '/vault/settings/faq',
-  vaultItemSwap: '/vault/item/swap',
+  swap: '/vault/item/swap',
   registerForAirdrop: '/register-for-airdrop',
   onboarding: '/onboarding',
   createVaultFolder: '/vault/create-folder',
   vaultFolder: '/vault/folder',
   manageVaultFolder: '/vault/folder/manage',
-  vaultItemDeposit: '/vault/item/deposit',
+  deposit: '/vault/item/deposit',
   deeplink: '/deeplink',
 } as const;
 
@@ -73,11 +73,10 @@ export type AppPathParams = {
   vaultChainCoinDetail: { chain: Chain; coin: string };
   send: { coin: string };
   setupVault: { type?: SetupVaultType };
-  vaultItemSwap: Record<string, string>;
-  vaultItemDeposit: Record<string, string>;
+  swap: { coin: string };
+  deposit: { coin: string };
   vaultFolder: { id: string };
   manageVaultFolder: { id: string };
-  deposit: { coin: string };
 };
 
 export type AppPathState = {

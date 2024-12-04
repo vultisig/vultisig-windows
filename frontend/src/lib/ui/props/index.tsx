@@ -82,3 +82,7 @@ export type ComponentWithOptionsProps<T> = {
 export type ValueFinishProps<T> = {
   onFinish: (value: T) => void;
 };
+
+export type OptionalValueFinishProps<T> = {
+  onFinish: (value?: T) => void;
+};

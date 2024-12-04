@@ -408,6 +408,7 @@ export const en = {
     'Vault file is corrupted or missing a public key. Please try again or select a different vault.',
   min_signers_disclaimer:
     'You can only send transactions with {{count}} devices present.',
+  insufficient_balance: 'Insufficient balance',
   insufficient_funds_to_pay_fee:
     'Insufficient balance to cover transaction fee.',
   'page.swap.quote.amount.error':
@@ -455,7 +456,7 @@ export const en = {
     "Trading is halted for selected pair, can't process swap",
   'page.swap.not.possible':
     'Swapping to a smart contract is not possible! Enter a different recipient address.',
-  'page.swap.title': 'Swap',
+  swap: 'Swap',
   swap_terms_0: 'The swap amount is correct',
   swap_terms_1: 'I agree with the amount I will receive after the swap',
   swap_agree_terms: 'You must agree with terms before proceeding',

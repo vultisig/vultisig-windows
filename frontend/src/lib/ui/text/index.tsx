@@ -33,7 +33,11 @@ export interface TextProps {
   size?: number;
   height?: TextHeight;
   centerHorizontally?: boolean;
-  centerVertically?: boolean;
+  centerVertically?:
+    | boolean
+    | {
+        gap: number;
+      };
   cropped?: boolean;
   nowrap?: boolean;
   family?: TextFontFamily;
@@ -84,6 +88,11 @@ export const text = ({
   css`
     display: inline-flex;
     align-items: center;
+
+    ${typeof centerVertically === 'object' &&
+    css`
+      gap: ${toSizeUnit(centerVertically.gap)};
+    `}
   `}
 
   font-family: ${match(family, {

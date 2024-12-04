@@ -1,0 +1,50 @@
+import styled from 'styled-components';
+
+import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount';
+import { CoinKey } from '../../../../coin/Coin';
+import { useCoinPriceQuery } from '../../../../coin/query/useCoinPriceQuery';
+import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
+import { centerContent } from '../../../../lib/ui/css/centerContent';
+import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit';
+import { Spinner } from '../../../../lib/ui/loaders/Spinner';
+import { ComponentWithValueProps } from '../../../../lib/ui/props';
+import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
+import { text } from '../../../../lib/ui/text';
+import { EntityWithAmount } from '../../../../lib/utils/entities/EntityWithAmount';
+import { CoinMeta } from '../../../../model/coin-meta';
+import { useCurrentVaultCoin } from '../../../state/currentVault';
+import { amountConfig } from './config';
+
+const Container = styled.div`
+  position: absolute;
+  pointer-events: none;
+  right: ${toSizeUnit(amountConfig.horizontalPadding)};
+  height: 100%;
+  ${centerContent};
+  ${text({
+    color: 'supporting',
+    weight: 700,
+    size: 16,
+  })};
+`;
+
+export const FiatAmount = ({
+  value,
+}: ComponentWithValueProps<CoinKey & EntityWithAmount>) => {
+  const coin = useCurrentVaultCoin(value);
+
+  const query = useCoinPriceQuery(CoinMeta.fromCoin(storageCoinToCoin(coin)));
+
+  const formatFiatAmount = useFormatFiatAmount();
+
+  return (
+    <Container>
+      <QueryDependant
+        query={query}
+        error={() => null}
+        pending={() => <Spinner />}
+        success={price => formatFiatAmount(value.amount * price)}
+      />
+    </Container>
+  );
+};
