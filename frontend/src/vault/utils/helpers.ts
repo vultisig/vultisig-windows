@@ -22,7 +22,7 @@ export const getOutputAssetAmount = (amount: string, isMaya?: boolean) => {
   return formatMidgardNumber(amount, isMaya).toString();
 };
 
-export const getVaultParticipantInfo = (vault: {
+export const getVaultParticipantInfoFormattedForUI = (vault: {
   signers: string[];
   local_party_id: string;
 }) => {

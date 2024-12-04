@@ -8,7 +8,7 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
 import { getVaultTypeText } from '../../../utils/util';
 import { useCurrentVault } from '../../../vault/state/currentVault';
-import { getVaultParticipantInfo } from '../../../vault/utils/helpers';
+import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers';
 import {
   AutoCenteredText,
   Container,
@@ -25,10 +25,11 @@ const VaultDetailsPage = () => {
 
   const { name, public_key_eddsa, public_key_ecdsa, signers, local_party_id } =
     currentVault;
-  const { localPartyIndex, totalSigners } = getVaultParticipantInfo({
-    signers,
-    local_party_id,
-  });
+  const { localPartyIndex, totalSigners } =
+    getVaultParticipantInfoFormattedForUI({
+      signers,
+      local_party_id,
+    });
 
   const vaultTypeText = getVaultTypeText(signers.length, t);
 

@@ -41,11 +41,7 @@ const VaultBackupPage = () => {
   const { t } = useTranslation();
   const invalidateQueries = useInvalidateQueries();
 
-  const {
-    mutateAsync: backupVault,
-    isPending,
-    error,
-  } = useBackupVaultMutation();
+  const { mutate: backupVault, isPending, error } = useBackupVaultMutation();
 
   const {
     register,
@@ -60,14 +56,15 @@ const VaultBackupPage = () => {
     const password = data?.password;
     if (!vault) return;
 
-    await backupVault(
+    backupVault(
       { vault, password },
       {
-        onSuccess: () => navigate(makeAppPath('vault')),
+        onSuccess: () => {
+          invalidateQueries(vaultsQueryKey);
+          navigate(makeAppPath('vault'));
+        },
       }
     );
-
-    invalidateQueries(vaultsQueryKey);
   };
 
   return (
