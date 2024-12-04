@@ -262,6 +262,17 @@ class Token {
     isNativeToken: true,
   };
 
+  static gaiaChainUSDC: CoinMeta = {
+    chain: Chain.Cosmos,
+    ticker: 'USDC',
+    logo: 'usdc',
+    decimals: 6,
+    priceProviderId: 'usd-coin',
+    contractAddress:
+      'ibc/F663521BF1836B00F5F177680F74BFB9A8B5654A694D0D2BC249E03CF2509013',
+    isNativeToken: false,
+  };
+
   static osmosisOsmo: CoinMeta = {
     chain: Chain.Osmosis,
     ticker: 'OSMO',
@@ -538,6 +549,7 @@ export const TokenSelectionAssets: CoinMeta[] = [
   Token.bscChainUsdt,
   Token.bscChainUsdc,
   Token.gaiaChainAtom,
+  Token.gaiaChainUSDC,
   Token.osmosisOsmo,
   Token.osmosisIonOsmo,
   Token.kujira,

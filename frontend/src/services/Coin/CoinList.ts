@@ -1253,6 +1253,17 @@ export class TokensStore {
       isNativeToken: true,
     }),
 
+    gaiaChainUsdc: (): CoinMeta => ({
+      chain: Chain.Cosmos,
+      ticker: 'USDC',
+      logo: 'usdc',
+      decimals: 6,
+      priceProviderId: 'usd-coin',
+      contractAddress:
+        'ibc/F663521BF1836B00F5F177680F74BFB9A8B5654A694D0D2BC249E03CF2509013',
+      isNativeToken: false,
+    }),
+
     osmosisOsmo: (): CoinMeta => ({
       chain: Chain.Osmosis,
       ticker: 'OSMO',
@@ -1340,6 +1351,8 @@ export class TokensStore {
     TokensStore.Token.solanaJup(),
 
     TokensStore.Token.gaiaChainAtom(),
+    TokensStore.Token.gaiaChainUsdc(),
+
     TokensStore.Token.osmosisOsmo(),
     TokensStore.Token.osmosisIonOsmo(),
     TokensStore.Token.terraLuna(),
