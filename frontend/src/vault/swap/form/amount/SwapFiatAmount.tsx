@@ -28,7 +28,7 @@ const Container = styled.div`
   })};
 `;
 
-export const FiatAmount = ({
+export const SwapFiatAmount = ({
   value,
 }: ComponentWithValueProps<CoinKey & EntityWithAmount>) => {
   const coin = useCurrentVaultCoin(value);

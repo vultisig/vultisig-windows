@@ -1,5 +1,6 @@
 import { CoinKey } from '../../../../coin/Coin';
 import { EntityWithTicker } from '../../../../lib/utils/entities/EntityWithTicker';
+import { mirrorRecord } from '../../../../lib/utils/record/mirrorRecord';
 import { isNativeCoin } from '../../../utils/isNativeCoin';
 import {
   thorchainSwapChains,
@@ -24,4 +25,13 @@ export const toThorchainSwapAsset = ({
   }
 
   return `${key}-${id}`;
+};
+
+export const fromThorchainSwapAsset = (asset: string): CoinKey => {
+  const [swapChain, ticker] = asset.split('.');
+  const id = asset.split('-')[1] ?? ticker;
+
+  const chainId = mirrorRecord(thorchainSwapChains)[swapChain];
+
+  return { chainId, id };
 };

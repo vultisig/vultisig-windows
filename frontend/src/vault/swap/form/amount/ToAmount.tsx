@@ -8,12 +8,12 @@ import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
 import { text } from '../../../../lib/ui/text';
 import { formatAmount } from '../../../../lib/utils/formatAmount';
+import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery';
 import { useToCoin } from '../../state/toCoin';
-import { useSwapOutputAmountQuery } from '../queries/useSwapOutputAmountQuery';
 import { AmountContainer } from './AmountContainer';
 import { AmountLabel } from './AmountLabel';
 import { amountConfig } from './config';
-import { FiatAmount } from './FiatAmount';
+import { SwapFiatAmount } from './SwapFiatAmount';
 
 const Value = styled.div`
   ${takeWholeSpace};
@@ -42,7 +42,9 @@ export const ToAmount = () => {
         query={query}
         pending={() => null}
         error={() => null}
-        success={value => <FiatAmount value={{ amount: value, ...toCoin }} />}
+        success={value => (
+          <SwapFiatAmount value={{ amount: value, ...toCoin }} />
+        )}
       />
       <Value>
         <QueryDependant

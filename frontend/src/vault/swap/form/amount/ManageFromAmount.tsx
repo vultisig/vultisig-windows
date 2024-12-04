@@ -15,7 +15,7 @@ import { useFromCoin } from '../../state/fromCoin';
 import { AmountContainer } from './AmountContainer';
 import { AmountLabel } from './AmountLabel';
 import { amountConfig } from './config';
-import { FiatAmount } from './FiatAmount';
+import { SwapFiatAmount } from './SwapFiatAmount';
 
 const Input = styled.input`
   ${takeWholeSpace};
@@ -55,7 +55,9 @@ export const ManageFromAmount = () => {
   return (
     <AmountContainer>
       <AmountLabel>{t('from')}</AmountLabel>
-      {value !== null && <FiatAmount value={{ amount: value, ...fromCoin }} />}
+      {value !== null && (
+        <SwapFiatAmount value={{ amount: value, ...fromCoin }} />
+      )}
       <Input
         type="number"
         placeholder={t('enter_amount')}

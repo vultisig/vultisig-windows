@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../../lib/ui/layout/Stack';
+import { StrictInfoRow } from '../../../lib/ui/layout/StrictInfoRow';
 import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -15,7 +16,6 @@ import { ManageSendCoin } from '../coin/ManageSendCoin';
 import { SendFee } from '../fee/SendFee';
 import { SendFiatFee } from '../fee/SendFiatFee';
 import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings';
-import { StrictFeeRow } from '../fee/StrictFeeRow';
 import { ManageMemo } from '../memo/ManageMemo';
 import { ManageReceiver } from '../receiver/ManageReceiver';
 import { RefreshSend } from '../RefreshSend';
@@ -55,12 +55,12 @@ export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
             <ManageAmount />
             <AmountInGlobalCurrencyDisplay />
             <VStack gap={8}>
-              <StrictFeeRow>
+              <StrictInfoRow>
                 <SendFee />
-              </StrictFeeRow>
-              <StrictFeeRow>
+              </StrictInfoRow>
+              <StrictInfoRow>
                 <SendFiatFee />
-              </StrictFeeRow>
+              </StrictInfoRow>
             </VStack>
           </VStack>
         </WithProgressIndicator>

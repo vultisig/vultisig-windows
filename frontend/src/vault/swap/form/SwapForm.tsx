@@ -12,6 +12,7 @@ import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicato
 import { RefreshSwap } from '../components/RefreshSwap';
 import { SwapAmount } from './amount/SwapAmount';
 import { useIsSwapFormDisabled } from './hooks/useIsSwapFormDisabled';
+import { SwapInfo } from './info/SwapInfo';
 import { ManageFromCoin } from './ManageFromCoin';
 import { ManageToCoin } from './ManageToCoin';
 
@@ -40,7 +41,9 @@ export const SwapForm: React.FC<ComponentWithForwardActionProps> = ({
             <ManageFromCoin />
             <SwapAmount />
             <ManageToCoin />
-            <VStack gap={8}>fees</VStack>
+            <VStack gap={8}>
+              <SwapInfo />
+            </VStack>
           </VStack>
         </WithProgressIndicator>
         <Button isDisabled={isDisabled} type="submit">
