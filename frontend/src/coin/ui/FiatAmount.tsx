@@ -5,7 +5,6 @@ import { Spinner } from '../../lib/ui/loaders/Spinner';
 import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
 import { EntityWithAmount } from '../../lib/utils/entities/EntityWithAmount';
 import { CoinMeta } from '../../model/coin-meta';
-import { Fiat } from '../../model/fiat';
 import { useCurrentVaultCoin } from '../../vault/state/currentVault';
 import { CoinKey } from '../Coin';
 import { useCoinPriceQuery } from '../query/useCoinPriceQuery';
@@ -18,10 +17,7 @@ type FiatAmountProps = EntityWithAmount & {
 export const FiatAmount = ({ coin: coinKey, amount }: FiatAmountProps) => {
   const coin = useCurrentVaultCoin(coinKey);
 
-  const query = useCoinPriceQuery(
-    CoinMeta.fromCoin(storageCoinToCoin(coin)),
-    Fiat.USD
-  );
+  const query = useCoinPriceQuery(CoinMeta.fromCoin(storageCoinToCoin(coin)));
 
   const { t } = useTranslation();
 
