@@ -13,6 +13,7 @@ import { PageSlice } from '../../../ui/page/PageSlice';
 import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation';
 import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery';
 import { useCurrentVault } from '../../../vault/state/currentVault';
+import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers';
 import { getStorageVaultId } from '../../../vault/utils/storageVault';
 import {
   ActionsWrapper,
@@ -50,6 +51,12 @@ const DeleteVaultPage = () => {
   const { signers, name, public_key_eddsa, public_key_ecdsa, local_party_id } =
     vault;
 
+  const { localPartyIndex, totalSigners } =
+    getVaultParticipantInfoFormattedForUI({
+      signers,
+      local_party_id,
+    });
+
   const vaultDetails = [
     { label: t('vault_delete_page_vault_name'), value: name },
     {
@@ -58,7 +65,7 @@ const DeleteVaultPage = () => {
     },
     {
       label: t('vault_delete_page_vault_part'),
-      value: `${t('vault_details_page_part_of_vault')} ${signers.indexOf(local_party_id) + 1} ${t('vault_details_page_of_word')} ${signers.length}`,
+      value: `${t('vault_details_page_part_of_vault')} ${localPartyIndex} ${t('vault_details_page_of_word')} ${totalSigners}`,
     },
     { label: t('vault_delete_page_device_id'), value: local_party_id },
     { label: t('vault_delete_page_ecdsa_key'), value: public_key_ecdsa },
