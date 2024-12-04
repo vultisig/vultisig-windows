@@ -1263,6 +1263,16 @@ export class TokensStore {
       isNativeToken: true,
     }),
 
+    osmosisIonOsmo: (): CoinMeta => ({
+      chain: Chain.Osmosis,
+      ticker: 'ION',
+      logo: 'ion',
+      decimals: 6,
+      priceProviderId: 'ion',
+      contractAddress: 'uion',
+      isNativeToken: false,
+    }),
+
     terraLuna: (): CoinMeta => ({
       chain: Chain.Terra,
       ticker: 'LUNA',
@@ -1331,6 +1341,7 @@ export class TokensStore {
 
     TokensStore.Token.gaiaChainAtom(),
     TokensStore.Token.osmosisOsmo(),
+    TokensStore.Token.osmosisIonOsmo(),
     TokensStore.Token.terraLuna(),
     TokensStore.Token.terraLunc(),
 
