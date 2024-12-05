@@ -30,7 +30,6 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
   onBack,
 }) => {
   const { t } = useTranslation();
-
   const [coinKey] = useCurrentSendCoin();
   const sender = useSender();
   const coin = useCurrentVaultCoin(coinKey);
