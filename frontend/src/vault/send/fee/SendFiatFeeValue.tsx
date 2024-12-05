@@ -24,7 +24,8 @@ export const SendFiatFeeValue = () => {
 
   const { decimals } = getChainFeeCoin(coinKey.chainId);
 
-  const feeAmount = fromChainAmount(BigInt(Math.round(fee)), decimals);
+  const feeAmount =
+    fee !== undefined ? fromChainAmount(BigInt(Math.round(fee)), decimals) : 0;
 
   return (
     <QueryDependant
