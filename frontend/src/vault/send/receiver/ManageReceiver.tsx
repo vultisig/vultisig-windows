@@ -11,6 +11,8 @@ import {
   textInputHeight,
   textInputHorizontalPadding,
 } from '../../../lib/ui/css/textInput';
+import AddressBookIcon from '../../../lib/ui/icons/AddressBookIcon';
+import { CameraIcon } from '../../../lib/ui/icons/CameraIcon';
 import { PasteIcon } from '../../../lib/ui/icons/PasteIcon';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { text } from '../../../lib/ui/text';
@@ -26,7 +28,6 @@ const Input = styled(TextInput)`
 
 export const ManageReceiver = () => {
   const [value, setValue] = useSendReceiver();
-
   const { t } = useTranslation();
 
   return (
@@ -43,16 +44,32 @@ export const ManageReceiver = () => {
         />
       )}
       action={
-        <IconButton
-          icon={<PasteIcon />}
-          onClick={async () => {
-            const newValue = await asyncAttempt(ClipboardGetText, undefined);
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {' '}
+          {/* Action container */}
+          <IconButton
+            icon={<PasteIcon />}
+            onClick={async () => {
+              const newValue = await asyncAttempt(ClipboardGetText, undefined);
 
-            if (newValue) {
-              setValue(newValue);
-            }
-          }}
-        />
+              if (newValue) {
+                setValue(newValue);
+              }
+            }}
+          />
+          <IconButton
+            icon={<CameraIcon size={20} />}
+            onClick={() => {
+              console.log('Second action triggered');
+            }}
+          />
+          <IconButton
+            icon={<AddressBookIcon />}
+            onClick={() => {
+              console.log('First action triggered');
+            }}
+          />
+        </div>
       }
       actionPlacerStyles={{
         right: textInputHorizontalPadding,
