@@ -35,8 +35,18 @@ export class RpcServiceCosmos implements IRpcService {
 
   async getSpecificTransactionInfo(coin: Coin): Promise<SpecificCosmos> {
     let defaultGas = 7500;
-    if (coin.chain == Chain.Dydx) defaultGas = 2500000000000000;
-    if (coin.chain == Chain.TerraClassic) defaultGas = 100000000;
+
+    switch (coin.chain) {
+      case Chain.Dydx:
+        defaultGas = 2500000000000000;
+        break;
+      case Chain.TerraClassic:
+        defaultGas = 100000000;
+        break;
+      case Chain.Noble:
+        defaultGas = 20000;
+        break;
+    }
 
     let result: SpecificCosmos = {
       gas: defaultGas,
@@ -53,7 +63,7 @@ export class RpcServiceCosmos implements IRpcService {
         result.accountNumber = Number(account.account_number);
         result.sequence = Number(account.sequence);
       } else {
-        console.error('getSpecificTransactionInfo::No account data  found');
+        console.error('getSpecificTransactionInfo::No account data found');
       }
     } catch (error) {
       console.error('getSpecificTransactionInfo::', error);
@@ -105,7 +115,16 @@ export class RpcServiceCosmos implements IRpcService {
 
     try {
       let response = await Post(url, JSON.parse(jsonString));
+
       const data: CosmosTransactionBroadcastResponse = response;
+
+      if (
+        data.tx_response?.raw_log &&
+        data.tx_response?.raw_log !== '' &&
+        data.tx_response?.raw_log !== '[]'
+      ) {
+        return data.tx_response.raw_log;
+      }
 
       if (data.tx_response?.txhash) {
         return data.tx_response.txhash;
@@ -164,6 +183,7 @@ interface CosmosTransactionBroadcastResponse {
   tx_response?: {
     code?: number;
     txhash?: string;
+    raw_log?: string;
   };
 }
 
