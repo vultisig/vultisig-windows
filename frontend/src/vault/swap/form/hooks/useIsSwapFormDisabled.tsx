@@ -6,6 +6,7 @@ import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
 import { extractErrorMsg } from '../../../../lib/utils/error/extractErrorMsg';
 import { useCurrentVaultCoin } from '../../../state/currentVault';
+import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery';
 import { useFromAmount } from '../../state/fromAmount';
 import { useFromCoin } from '../../state/fromCoin';
 
@@ -17,6 +18,8 @@ export const useIsSwapFormDisabled = () => {
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
   const { t } = useTranslation();
+
+  const swapQuoteQuery = useSwapQuoteQuery();
 
   return useMemo(() => {
     if (!amount) {
@@ -37,11 +40,22 @@ export const useIsSwapFormDisabled = () => {
     if (amount > maxAmount) {
       return t('insufficient_balance');
     }
+
+    if (swapQuoteQuery.isPending) {
+      return t('loading');
+    }
+
+    if (!swapQuoteQuery.data) {
+      return extractErrorMsg(swapQuoteQuery.error);
+    }
   }, [
     amount,
     balanceQuery.data,
     balanceQuery.error,
     balanceQuery.isPending,
+    swapQuoteQuery.data,
+    swapQuoteQuery.error,
+    swapQuoteQuery.isPending,
     t,
   ]);
 };
