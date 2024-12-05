@@ -1317,7 +1317,7 @@ export class TokensStore {
     kujiraAstro: (): CoinMeta => ({
       chain: Chain.Kujira,
       ticker: 'ASTRO',
-      logo: 'terra-astroport',
+      logo: 'terra-astroport.png',
       decimals: 6,
       priceProviderId: 'astroport-fi',
       contractAddress:
@@ -1350,7 +1350,7 @@ export class TokensStore {
     kujiraMnta: (): CoinMeta => ({
       chain: Chain.Kujira,
       ticker: 'MNTA',
-      logo: 'mnta',
+      logo: 'mnta.png',
       decimals: 6,
       priceProviderId: 'mantadao',
       contractAddress:
@@ -1361,7 +1361,7 @@ export class TokensStore {
     kujiraNSTK: (): CoinMeta => ({
       chain: Chain.Kujira,
       ticker: 'NSTK',
-      logo: 'nstk',
+      logo: 'nstk.png',
       decimals: 6,
       priceProviderId: 'unstake-fi',
       contractAddress:
@@ -1372,7 +1372,7 @@ export class TokensStore {
     kujiraWINK: (): CoinMeta => ({
       chain: Chain.Kujira,
       ticker: 'WINK',
-      logo: 'wink',
+      logo: 'wink.png',
       decimals: 6,
       priceProviderId: 'winkhub',
       contractAddress:
@@ -1383,7 +1383,7 @@ export class TokensStore {
     kujiraUSK: (): CoinMeta => ({
       chain: Chain.Kujira,
       ticker: 'USK',
-      logo: 'usk',
+      logo: 'usk.png',
       decimals: 6,
       priceProviderId: 'usk',
       contractAddress:
