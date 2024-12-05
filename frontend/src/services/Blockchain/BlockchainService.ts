@@ -86,14 +86,13 @@ export class BlockchainService implements IBlockchainService {
     );
 
     if (
-      txBroadcastedHash.toLowerCase() !== signedTx.transactionHash.toLowerCase()
+      txBroadcastedHash.toLowerCase() !==
+        signedTx.transactionHash.toLowerCase() &&
+      txBroadcastedHash === 'Transaction already broadcasted.'
     ) {
-      if (txBroadcastedHash === 'Transaction already broadcasted.') {
-        txBroadcastedHash = signedTx.transactionHash;
-      } else {
-        return 'Transaction hash mismatch';
-      }
+      txBroadcastedHash = signedTx.transactionHash;
     }
+
     return txBroadcastedHash;
   }
 

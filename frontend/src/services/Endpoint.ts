@@ -213,6 +213,20 @@ export class Endpoint {
   static broadcastTerraV2Transaction: string =
     'https://terra-lcd.publicnode.com/cosmos/tx/v1beta1/txs';
 
+  static fetchTerraClassicWasmTokenBalance(
+    contractAddress: string,
+    base64Payload: string
+  ): string {
+    return `https://terra-classic-lcd.publicnode.com/cosmwasm/wasm/v1/contract/${contractAddress}/smart/${base64Payload}`;
+  }
+
+  static fetchTerraV2WasmTokenBalance(
+    contractAddress: string,
+    base64Payload: string
+  ): string {
+    return `https://terra-lcd.publicnode.com/cosmwasm/wasm/v1/contract/${contractAddress}/smart/${base64Payload}`;
+  }
+
   static fetchTerraClassicAccountBalance(address: string): string {
     return `https://terra-classic-lcd.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
   }

@@ -1304,6 +1304,59 @@ export class TokensStore {
       isNativeToken: true,
     }),
 
+    terraTPT: (): CoinMeta => ({
+      chain: Chain.Terra,
+      ticker: 'TPT',
+      logo: 'terra-poker-token.png',
+      decimals: 6,
+      priceProviderId: 'tpt',
+      contractAddress:
+        'terra13j2k5rfkg0qhk58vz63cze0uze4hwswlrfnm0fa4rnyggjyfrcnqcrs5z2',
+      isNativeToken: false,
+    }),
+
+    terraAstroIBC: (): CoinMeta => ({
+      chain: Chain.Terra,
+      ticker: 'ASTRO-IBC',
+      logo: 'terra-astroport.png',
+      decimals: 6,
+      priceProviderId: 'astroport-fi',
+      contractAddress:
+        'ibc/8D8A7F7253615E5F76CB6252A1E1BD921D5EDB7BBAAF8913FB1C77FF125D9995',
+      isNativeToken: false,
+    }),
+
+    terraAstro: (): CoinMeta => ({
+      chain: Chain.Terra,
+      ticker: 'ASTRO',
+      logo: 'terra-astroport.png',
+      decimals: 6,
+      priceProviderId: 'astroport-fi',
+      contractAddress:
+        'terra1nsuqsk6kh58ulczatwev87ttq2z6r3pusulg9r24mfj2fvtzd4uq3exn26',
+      isNativeToken: false,
+    }),
+
+    terraClassicUSD: (): CoinMeta => ({
+      chain: Chain.TerraClassic,
+      ticker: 'USTC',
+      logo: 'ustc.png',
+      decimals: 6,
+      priceProviderId: 'terrausd',
+      contractAddress: 'uusd',
+      isNativeToken: false,
+    }),
+
+    terraClassicAstro: (): CoinMeta => ({
+      chain: Chain.TerraClassic,
+      ticker: 'ASTROC',
+      logo: 'terra-astroport.png',
+      decimals: 6,
+      priceProviderId: 'astroport',
+      contractAddress: 'terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3',
+      isNativeToken: false,
+    }),
+
     kujira: (): CoinMeta => ({
       chain: Chain.Kujira,
       ticker: 'KUJI',
@@ -1413,28 +1466,44 @@ export class TokensStore {
   };
 
   static TokenSelectionAssets: CoinMeta[] = [
+    // UTXOs
     TokensStore.Token.bitcoin(),
     TokensStore.Token.bitcoinCash(),
     TokensStore.Token.litecoin(),
     TokensStore.Token.dogecoin(),
     TokensStore.Token.dash(),
 
+    TokensStore.Token.dydx(),
+    TokensStore.Token.suiSUI(),
+    TokensStore.Token.dotDOT(),
+
     TokensStore.Token.thorChain(),
 
     TokensStore.Token.mayaChainCacao(),
     TokensStore.Token.mayaChainMaya(),
 
+    // Solana
     TokensStore.Token.solana(),
     TokensStore.Token.solanaJup(),
 
+    // COSMOS
     TokensStore.Token.gaiaChainAtom(),
     TokensStore.Token.gaiaChainUsdc(),
 
+    // OSMOSIS
     TokensStore.Token.osmosisOsmo(),
     TokensStore.Token.osmosisIonOsmo(),
+
+    // TERRA
     TokensStore.Token.terraLuna(),
     TokensStore.Token.terraLunc(),
+    TokensStore.Token.terraTPT(),
+    TokensStore.Token.terraAstroIBC(),
+    TokensStore.Token.terraAstro(),
+    TokensStore.Token.terraClassicUSD(),
+    TokensStore.Token.terraClassicAstro(),
 
+    // KUJIRA
     TokensStore.Token.kujira(),
     TokensStore.Token.kujiraAstro(),
     TokensStore.Token.kujiraLunc(),
@@ -1443,11 +1512,6 @@ export class TokensStore {
     TokensStore.Token.kujiraNSTK(),
     TokensStore.Token.kujiraWINK(),
     TokensStore.Token.kujiraUSK(),
-    TokensStore.Token.dydx(),
-
-    TokensStore.Token.suiSUI(),
-
-    TokensStore.Token.dotDOT(),
 
     // START EVMS
     // ETHEREUM
