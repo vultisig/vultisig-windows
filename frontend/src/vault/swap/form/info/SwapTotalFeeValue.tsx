@@ -1,21 +1,72 @@
-import { ThorchainSwapQuote } from '../../../../chain/thor/swap/api/ThorchainSwapQuote';
-import { thorchainSwapConfig } from '../../../../chain/thor/swap/config';
-import { fromThorchainSwapAsset } from '../../../../chain/thor/swap/utils/swapAsset';
-import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
-import { FiatAmount } from '../../../../coin/ui/FiatAmount';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
-type SwapTotalFeeValueProps = {
-  swapQuote: ThorchainSwapQuote;
-};
+import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount';
+import { areEqualCoins, CoinKey } from '../../../../coin/Coin';
+import { useCoinPricesQuery } from '../../../../coin/query/useCoinPricesQuery';
+import {
+  getStorageCoinKey,
+  storageCoinToCoin,
+} from '../../../../coin/utils/storageCoin';
+import { Spinner } from '../../../../lib/ui/loaders/Spinner';
+import { ComponentWithValueProps } from '../../../../lib/ui/props';
+import { MatchEagerQuery } from '../../../../lib/ui/query/components/MatchEagerQuery';
+import { sum } from '../../../../lib/utils/array/sum';
+import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
+import { EntityWithAmount } from '../../../../lib/utils/entities/EntityWithAmount';
+import { CoinMeta } from '../../../../model/coin-meta';
+import { useCurrentVaultCoins } from '../../../state/currentVault';
 
-export const SwapTotalFeeValue = ({ swapQuote }: SwapTotalFeeValueProps) => {
+type SwapFee = CoinKey & EntityWithAmount;
+
+export const SwapTotalFeeValue = ({
+  value,
+}: ComponentWithValueProps<SwapFee[]>) => {
+  const vaultCoins = useCurrentVaultCoins();
+  const coins = useMemo(
+    () =>
+      value.map(key =>
+        CoinMeta.fromCoin(
+          storageCoinToCoin(
+            shouldBePresent(
+              vaultCoins.find(coin =>
+                areEqualCoins(getStorageCoinKey(coin), key)
+              )
+            )
+          )
+        )
+      ),
+    [value, vaultCoins]
+  );
+
+  const { t } = useTranslation();
+
+  const pricesQuery = useCoinPricesQuery(coins);
+
+  const formatAmount = useFormatFiatAmount();
+
   return (
-    <FiatAmount
-      coin={fromThorchainSwapAsset(swapQuote.fees.asset)}
-      amount={fromChainAmount(
-        swapQuote.fees.total,
-        thorchainSwapConfig.decimals
-      )}
+    <MatchEagerQuery
+      value={pricesQuery}
+      pending={() => <Spinner />}
+      error={() => null}
+      success={prices => {
+        if (prices.length !== value.length) {
+          return t('failed_to_load');
+        }
+
+        const total = sum(
+          value.map(({ amount, ...coinKey }) => {
+            const { price } = shouldBePresent(
+              prices.find(price => areEqualCoins(price, coinKey))
+            );
+
+            return price * amount;
+          })
+        );
+
+        return formatAmount(total);
+      }}
     />
   );
 };
