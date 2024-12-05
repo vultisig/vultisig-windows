@@ -37,6 +37,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Osmosis]: 'https://www.mintscan.io/osmosis',
   [Chain.Terra]: 'https://www.mintscan.io/terra',
   [Chain.TerraClassic]: 'https://finder.terra.money/classic',
+  [Chain.Noble]: 'https://www.mintscan.io/noble',
 };
 
 export const getBlockExplorerUrl = ({
@@ -75,6 +76,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Osmosis]: () => `${baseUrl}/address/${value}`,
         [Chain.Terra]: () => `${baseUrl}/address/${value}`,
         [Chain.TerraClassic]: () => `${baseUrl}/classic/address/${value}`,
+        [Chain.Noble]: () => `${baseUrl}/address/${value}`,
       }),
     tx: () =>
       match(chainId, {
@@ -105,6 +107,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Osmosis]: () => `${baseUrl}/tx/${value}`,
         [Chain.Terra]: () => `${baseUrl}/tx/${value}`,
         [Chain.TerraClassic]: () => `${baseUrl}/tx/${value}`,
+        [Chain.Noble]: () => `${baseUrl}/tx/${value}`,
       }),
   });
 };

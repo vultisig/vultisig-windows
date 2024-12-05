@@ -47,6 +47,7 @@ export enum CosmosChain {
   Kujira = 'Kujira',
   Terra = 'Terra',
   TerraClassic = 'TerraClassic',
+  Noble = 'Noble',
 }
 
 export enum OtherChain {
@@ -112,6 +113,7 @@ export const chainKindRecord: Record<Chain, ChainKind> = {
   [CosmosChain.Kujira]: 'cosmos',
   [CosmosChain.Terra]: 'cosmos',
   [CosmosChain.TerraClassic]: 'cosmos',
+  [CosmosChain.Noble]: 'cosmos',
 
   [OtherChain.Sui]: 'sui',
 
@@ -207,6 +209,8 @@ export class ChainUtils {
         return 'LUNA';
       case Chain.TerraClassic:
         return 'LUNC';
+      case Chain.Noble:
+        return 'UUSDC';
     }
   }
 }

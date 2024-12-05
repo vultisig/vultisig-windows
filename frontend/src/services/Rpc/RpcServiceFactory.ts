@@ -7,6 +7,7 @@ import { RpcServiceGaia } from './gaia/RpcServiceGaia';
 import { IRpcService } from './IRpcService';
 import { RpcServiceKujira } from './kurija/RpcServiceKurija';
 import { RpcServiceMaya } from './maya/RpcServiceMaya';
+import { RpcServiceNoble } from './noble/RpcServiceNoble';
 import { RpcServiceOsmosis } from './osmosis/RpcServiceOsmosis';
 import { RpcServicePolkadot } from './polkadot/RpcServicePolkadot';
 import { RpcServiceSolana } from './solana/RpcServiceSolana';
@@ -49,6 +50,7 @@ export class RpcServiceFactory {
       [Chain.Ton]: () => new RpcServiceTon(chain),
       [Chain.Terra]: () => new RpcServiceTerraV2(),
       [Chain.TerraClassic]: () => new RpcServiceTerraClassic(),
+      [Chain.Noble]: () => new RpcServiceNoble(),
     });
   }
 }

@@ -1304,6 +1304,16 @@ export class TokensStore {
       isNativeToken: true,
     }),
 
+    nobleUUSDC: (): CoinMeta => ({
+      chain: Chain.Noble,
+      ticker: 'USDC',
+      logo: 'usdc',
+      decimals: 6,
+      priceProviderId: 'usd-coin',
+      contractAddress: '',
+      isNativeToken: true,
+    }),
+
     kujira: (): CoinMeta => ({
       chain: Chain.Kujira,
       ticker: 'KUJI',
@@ -1443,10 +1453,11 @@ export class TokensStore {
     TokensStore.Token.kujiraNSTK(),
     TokensStore.Token.kujiraWINK(),
     TokensStore.Token.kujiraUSK(),
+
+    TokensStore.Token.nobleUUSDC(),
+
     TokensStore.Token.dydx(),
-
     TokensStore.Token.suiSUI(),
-
     TokensStore.Token.dotDOT(),
 
     // START EVMS

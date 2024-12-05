@@ -235,6 +235,17 @@ export class Endpoint {
   static broadcastOsmosisTransaction: string =
     'https://osmosis-rest.publicnode.com/cosmos/tx/v1beta1/txs';
 
+  static broadcastNobleTransaction: string =
+    'https://noble-api.polkachu.com/cosmos/tx/v1beta1/txs';
+
+  static fetchNobleAccountNumber(address: string): string {
+    return `https://noble-api.polkachu.com/cosmos/auth/v1beta1/accounts/${address}`;
+  }
+
+  static fetchNobleAccountBalance(address: string): string {
+    return `https://noble-api.polkachu.com/cosmos/bank/v1beta1/balances/${address}`;
+  }
+
   static fetchDydxAccountBalance(address: string): string {
     return `https://dydx-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
   }

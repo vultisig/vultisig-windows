@@ -60,6 +60,8 @@ export class PriceServiceFactory {
         return new PriceServiceCosmos(chain);
       case Chain.TerraClassic:
         return new PriceServiceCosmos(chain);
+      case Chain.Noble:
+        return new PriceServiceCosmos(chain);
       case Chain.Ton:
         return new PriceService(chain);
       default:

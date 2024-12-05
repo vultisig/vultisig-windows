@@ -63,6 +63,8 @@ export class CoinServiceFactory {
         return new CoinService(chain, walletCore);
       case Chain.Ton:
         return new CoinService(chain, walletCore);
+      case Chain.Noble:
+        return new CoinService(chain, walletCore);
       default:
         throw new Error(`Chain not supported ${chain}`);
     }
