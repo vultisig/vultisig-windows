@@ -54,7 +54,6 @@ export const ManageReceiver = () => {
           withDefaultStructure={false}
         >
           <FixedScanQRView
-            onUploadQrViewRequest={() => setViewState('default')}
             onScanSuccess={address => {
               setValue(address);
               setViewState('default');

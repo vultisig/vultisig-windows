@@ -24,15 +24,15 @@ const Video = styled.video`
 `;
 
 type ScanQrViewProps = {
-  onUploadQrViewRequest: () => void;
+  onUploadQrViewRequest?: () => void;
   onScanSuccess: (value: string) => void;
-  containerClassName?: string;
+  className?: string;
 };
 
 export const ScanQrView = ({
   onUploadQrViewRequest,
   onScanSuccess,
-  containerClassName,
+  className,
 }: ScanQrViewProps) => {
   // Keep success callback in ref to avoid adding it to useEffect deps on line 107
   const onScanSuccessRef = useRef(onScanSuccess);
@@ -103,7 +103,7 @@ export const ScanQrView = ({
   }, [navigate, video]);
 
   return (
-    <Container className={containerClassName}>
+    <Container className={className}>
       <QueryDependant
         query={streamMutationState}
         success={() => <Video ref={setVideo} muted />}
@@ -126,10 +126,11 @@ export const ScanQrView = ({
           />
         )}
       />
-
-      <Button onClick={onUploadQrViewRequest}>
-        {t('upload_qr_code_image')}
-      </Button>
+      {onUploadQrViewRequest && (
+        <Button onClick={onUploadQrViewRequest}>
+          {t('upload_qr_code_image')}
+        </Button>
+      )}
     </Container>
   );
 };
