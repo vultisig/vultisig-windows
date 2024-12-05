@@ -21,7 +21,12 @@ export class RpcServiceTerraV2 extends RpcServiceCosmos {
   }
 
   async getBalance(coin: Coin): Promise<string> {
-    if (coin.isNativeToken) {
+    if (
+      coin.isNativeToken ||
+      (!coin.isNativeToken && coin.contractAddress.includes('ibc/')) ||
+      (!coin.isNativeToken && coin.contractAddress.includes('factory/')) ||
+      (!coin.isNativeToken && !coin.contractAddress.includes('terra'))
+    ) {
       return await this.getTokenBalance(coin);
     } else {
       return await this.fetchWasmTokenBalances(coin);
@@ -110,7 +115,12 @@ export class RpcServiceTerraClassic extends RpcServiceCosmos {
   }
 
   async getBalance(coin: Coin): Promise<string> {
-    if (coin.isNativeToken) {
+    if (
+      coin.isNativeToken ||
+      (!coin.isNativeToken && coin.contractAddress.includes('ibc/')) ||
+      (!coin.isNativeToken && coin.contractAddress.includes('factory/')) ||
+      (!coin.isNativeToken && !coin.contractAddress.includes('terra'))
+    ) {
       return await this.getTokenBalance(coin);
     } else {
       return await this.fetchWasmTokenBalances(coin);
