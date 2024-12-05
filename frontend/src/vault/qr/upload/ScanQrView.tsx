@@ -26,13 +26,13 @@ const Video = styled.video`
 type ScanQrViewProps = {
   onUploadQrViewRequest: () => void;
   onScanSuccess: (value: string) => void;
-  className?: string;
+  containerClassName?: string;
 };
 
 export const ScanQrView = ({
   onUploadQrViewRequest,
   onScanSuccess,
-  className,
+  containerClassName,
 }: ScanQrViewProps) => {
   const onScanSuccessRef = useRef(onScanSuccess);
   const { t } = useTranslation();
@@ -102,7 +102,7 @@ export const ScanQrView = ({
   }, [navigate, video]);
 
   return (
-    <Container className={className}>
+    <Container className={containerClassName}>
       <QueryDependant
         query={streamMutationState}
         success={() => <Video ref={setVideo} muted />}
