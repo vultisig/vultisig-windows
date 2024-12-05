@@ -44,7 +44,7 @@ export class RpcServiceCosmos implements IRpcService {
         defaultGas = 100000000;
         break;
       case Chain.Noble:
-        defaultGas = 20000;
+        defaultGas = 30000;
         break;
     }
 
