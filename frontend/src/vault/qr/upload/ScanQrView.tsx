@@ -57,10 +57,6 @@ export const ScanQrView = ({
   const { data: stream, reset: resetStreamState } = streamMutationState;
 
   useEffect(() => {
-    onScanSuccessRef.current = onScanSuccess;
-  }, [onScanSuccess]);
-
-  useEffect(() => {
     if (!stream || !video) return;
 
     video.srcObject = stream;
