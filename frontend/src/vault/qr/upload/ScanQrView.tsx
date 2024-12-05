@@ -34,7 +34,12 @@ export const ScanQrView = ({
   onScanSuccess,
   containerClassName,
 }: ScanQrViewProps) => {
+  // Keep success callback in ref to avoid adding it to useEffect deps on line 107
   const onScanSuccessRef = useRef(onScanSuccess);
+  if (onScanSuccessRef.current !== onScanSuccess) {
+    onScanSuccessRef.current = onScanSuccess;
+  }
+
   const { t } = useTranslation();
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
   const navigate = useAppNavigate();
