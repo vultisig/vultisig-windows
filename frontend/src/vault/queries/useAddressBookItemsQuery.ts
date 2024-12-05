@@ -16,6 +16,7 @@ const transformAddressBookItemsResponse = (
   }));
 
 export const addressBookItemsQueryKey = ['addressBookItems'];
+const STALE_TIME_IN_MS = 100000;
 
 export const useAddressBookItemsQuery = () => {
   const vaultService = new VaultService();
@@ -32,6 +33,6 @@ export const useAddressBookItemsQuery = () => {
       return transformAddressBookItemsResponse(addressBookItems);
     },
     initialData: [],
-    staleTime: 1000,
+    staleTime: STALE_TIME_IN_MS,
   });
 };

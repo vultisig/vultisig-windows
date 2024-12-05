@@ -22,6 +22,7 @@ export type ModalProps = AsElementComponent &
     footer?: ReactNode;
     targetWidth?: number;
     titleAlign?: 'left' | 'center' | 'right';
+    withDefaultStructure?: boolean;
   };
 
 const contentVerticalPadding = 8;
@@ -47,22 +48,31 @@ export const Modal = ({
   footer,
   subTitle,
   as,
+  withDefaultStructure = true,
   ...rest
 }: ModalProps) => {
   return (
     <BodyPortal>
       <Backdrop onClose={onClose}>
-        <Container forwardedAs={as} {...rest}>
-          <VStack gap={8}>
-            <HStack alignItems="start" justifyContent="space-between" gap={16}>
-              <ModalTitleText>{title}</ModalTitleText>
-              {onClose && <ModalCloseButton onClick={onClose} />}
-            </HStack>
-            {subTitle && <ModalSubTitleText>{subTitle}</ModalSubTitleText>}
-          </VStack>
-          <ModalContent>{children}</ModalContent>
-          {footer && <VStack>{footer}</VStack>}
-        </Container>
+        {withDefaultStructure ? (
+          <Container forwardedAs={as} {...rest}>
+            <VStack gap={8}>
+              <HStack
+                alignItems="start"
+                justifyContent="space-between"
+                gap={16}
+              >
+                <ModalTitleText>{title}</ModalTitleText>
+                {onClose && <ModalCloseButton onClick={onClose} />}
+              </HStack>
+              {subTitle && <ModalSubTitleText>{subTitle}</ModalSubTitleText>}
+            </VStack>
+            <ModalContent>{children}</ModalContent>
+            {footer && <VStack>{footer}</VStack>}
+          </Container>
+        ) : (
+          children
+        )}
       </Backdrop>
     </BodyPortal>
   );
