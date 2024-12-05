@@ -1314,6 +1314,83 @@ export class TokensStore {
       isNativeToken: true,
     }),
 
+    kujiraAstro: (): CoinMeta => ({
+      chain: Chain.Kujira,
+      ticker: 'ASTRO',
+      logo: 'terra-astroport.png',
+      decimals: 6,
+      priceProviderId: 'astroport-fi',
+      contractAddress:
+        'ibc/640E1C3E28FD45F611971DF891AE3DC90C825DF759DF8FAA8F33F7F72B35AD56',
+      isNativeToken: false,
+    }),
+
+    kujiraLunc: (): CoinMeta => ({
+      chain: Chain.Kujira,
+      ticker: 'LUNC',
+      logo: 'lunc',
+      decimals: 6,
+      priceProviderId: 'terra-luna',
+      contractAddress:
+        'ibc/119334C55720942481F458C9C462F5C0CD1F1E7EEAC4679D674AA67221916AEA',
+      isNativeToken: false,
+    }),
+
+    kujiraUsdc: (): CoinMeta => ({
+      chain: Chain.Kujira,
+      ticker: 'USDC',
+      logo: 'usdc',
+      decimals: 6,
+      priceProviderId: 'usd-coin',
+      contractAddress:
+        'ibc/FE98AAD68F02F03565E9FA39A5E627946699B2B07115889ED812D8BA639576A9',
+      isNativeToken: false,
+    }),
+
+    kujiraMnta: (): CoinMeta => ({
+      chain: Chain.Kujira,
+      ticker: 'MNTA',
+      logo: 'mnta.png',
+      decimals: 6,
+      priceProviderId: 'mantadao',
+      contractAddress:
+        'factory/kujira1643jxg8wasy5cfcn7xm8rd742yeazcksqlg4d7/umnta',
+      isNativeToken: false,
+    }),
+
+    kujiraNSTK: (): CoinMeta => ({
+      chain: Chain.Kujira,
+      ticker: 'NSTK',
+      logo: 'nstk.png',
+      decimals: 6,
+      priceProviderId: 'unstake-fi',
+      contractAddress:
+        'factory/kujira1aaudpfr9y23lt9d45hrmskphpdfaq9ajxd3ukh/unstk',
+      isNativeToken: false,
+    }),
+
+    kujiraWINK: (): CoinMeta => ({
+      chain: Chain.Kujira,
+      ticker: 'WINK',
+      logo: 'wink.png',
+      decimals: 6,
+      priceProviderId: 'winkhub',
+      contractAddress:
+        'factory/kujira12cjjeytrqcj25uv349thltcygnp9k0kukpct0e/uwink',
+      isNativeToken: false,
+    }),
+
+    kujiraUSK: (): CoinMeta => ({
+      chain: Chain.Kujira,
+      ticker: 'USK',
+      logo: 'usk.png',
+      decimals: 6,
+      priceProviderId: 'usk',
+      contractAddress:
+        'factory/kujira1qk00h5atutpsv900x202pxx42npjr9thg58dnqpa72f2p7m2luase444a7/uusk',
+      isNativeToken: false,
+    }),
+
     dydx: (): CoinMeta => ({
       chain: Chain.Dydx,
       ticker: 'DYDX',
@@ -1359,6 +1436,13 @@ export class TokensStore {
     TokensStore.Token.terraLunc(),
 
     TokensStore.Token.kujira(),
+    TokensStore.Token.kujiraAstro(),
+    TokensStore.Token.kujiraLunc(),
+    TokensStore.Token.kujiraUsdc(),
+    TokensStore.Token.kujiraMnta(),
+    TokensStore.Token.kujiraNSTK(),
+    TokensStore.Token.kujiraWINK(),
+    TokensStore.Token.kujiraUSK(),
     TokensStore.Token.dydx(),
 
     TokensStore.Token.suiSUI(),
