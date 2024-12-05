@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -25,9 +25,16 @@ const Video = styled.video`
 
 type ScanQrViewProps = {
   onUploadQrViewRequest: () => void;
+  onScanSuccess: (value: string) => void;
+  className?: string;
 };
 
-export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
+export const ScanQrView = ({
+  onUploadQrViewRequest,
+  onScanSuccess,
+  className,
+}: ScanQrViewProps) => {
+  const onScanSuccessRef = useRef(onScanSuccess);
   const { t } = useTranslation();
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
   const navigate = useAppNavigate();
@@ -43,6 +50,10 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
   });
 
   const { data: stream, reset: resetStreamState } = streamMutationState;
+
+  useEffect(() => {
+    onScanSuccessRef.current = onScanSuccess;
+  }, [onScanSuccess]);
 
   useEffect(() => {
     if (!stream || !video) return;
@@ -69,7 +80,7 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
 
-      const url = attempt(
+      const scanData = attempt(
         () =>
           readQrCode({
             canvasContext: context,
@@ -78,8 +89,8 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
         undefined
       );
 
-      if (url) {
-        navigate('deeplink', { state: { url } });
+      if (scanData) {
+        onScanSuccessRef.current(scanData);
       } else {
         animationFrameId = requestAnimationFrame(scan);
       }
@@ -91,7 +102,7 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
   }, [navigate, video]);
 
   return (
-    <Container>
+    <Container className={className}>
       <QueryDependant
         query={streamMutationState}
         success={() => <Video ref={setVideo} muted />}
