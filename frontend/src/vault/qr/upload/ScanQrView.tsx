@@ -30,6 +30,7 @@ type ScanQrViewProps = {
 export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
   const { t } = useTranslation();
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  const navigate = useAppNavigate();
 
   const { mutate: getStream, ...streamMutationState } = useMutation({
     mutationFn: () =>
@@ -41,7 +42,7 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
       }),
   });
 
-  const { data: stream } = streamMutationState;
+  const { data: stream, reset: resetStreamState } = streamMutationState;
 
   useEffect(() => {
     if (!stream || !video) return;
@@ -53,8 +54,6 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
   }, [video, stream]);
 
   useEffect(getStream, [getStream]);
-
-  const navigate = useAppNavigate();
 
   useEffect(() => {
     if (!video) return;
@@ -100,7 +99,19 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
           <FlowPendingPageContent title={t('getting_video_permission')} />
         )}
         error={() => (
-          <FlowErrorPageContent title={t('failed_to_get_video_permission')} />
+          <FlowErrorPageContent
+            title={t('failed_to_get_video_permission')}
+            action={
+              <Button
+                onClick={() => {
+                  resetStreamState();
+                  getStream();
+                }}
+              >
+                {t('try_again')}
+              </Button>
+            }
+          />
         )}
       />
 
