@@ -13,7 +13,6 @@ import {
 } from '../../../model/transaction';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
-import { useSpecificSendTxInfoQuery } from '../../send/queries/useSpecificSendTxInfoQuery';
 import {
   useCurrentVault,
   useCurrentVaultAddress,
@@ -23,6 +22,7 @@ import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
 import { useSwapQuoteQuery } from './useSwapQuoteQuery';
+import { useSwapSpecificTxInfoQuery } from './useSwapSpecificTxInfoQuery';
 
 export const useSwapKeysignPayloadQuery = () => {
   const [fromCoinKey] = useFromCoin();
@@ -45,7 +45,7 @@ export const useSwapKeysignPayloadQuery = () => {
 
   const fromCoinBalanceQuery = useBalanceQuery(fromCoin);
 
-  const specificTxInfoQuery = useSpecificSendTxInfoQuery();
+  const specificTxInfoQuery = useSwapSpecificTxInfoQuery();
 
   return useQuery({
     queryKey: ['swapKeysignPayload'],
