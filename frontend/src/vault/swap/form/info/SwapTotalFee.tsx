@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { thorchainSwapConfig } from '../../../../chain/thor/swap/config';
-import { fromThorchainSwapAsset } from '../../../../chain/thor/swap/utils/swapAsset';
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { getChainPrimaryCoin } from '../../../../chain/utils/getChainPrimaryCoin';
 import { getCoinMetaKey } from '../../../../coin/utils/coinMeta';
@@ -11,6 +10,7 @@ import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependa
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery';
 import { useSwapSpecificTxInfoQuery } from '../../queries/useSwapSpecificTxInfoQuery';
 import { useFromCoin } from '../../state/fromCoin';
+import { useToCoin } from '../../state/toCoin';
 import { SwapTotalFeeFiatValue } from './SwapTotalFeeFiatValue';
 
 export const SwapTotalFee = () => {
@@ -19,6 +19,7 @@ export const SwapTotalFee = () => {
   const txInfo = useSwapSpecificTxInfoQuery();
 
   const [fromCoinKey] = useFromCoin();
+  const [toCoinKey] = useToCoin();
 
   const fromGasCoin = useMemo(
     () => getChainPrimaryCoin(fromCoinKey.chainId),
@@ -34,33 +35,36 @@ export const SwapTotalFee = () => {
         query={query}
         error={() => null}
         pending={() => <Spinner />}
-        success={swapQuote => (
-          <QueryDependant
-            query={txInfo}
-            error={() => null}
-            pending={() => <Spinner />}
-            success={({ fee }) => (
-              <SwapTotalFeeFiatValue
-                value={[
-                  {
-                    ...fromThorchainSwapAsset(swapQuote.fees.asset),
-                    amount: fromChainAmount(
-                      swapQuote.fees.total,
-                      thorchainSwapConfig.decimals
-                    ),
-                  },
-                  {
-                    ...getCoinMetaKey(fromGasCoin),
-                    amount: fromChainAmount(
-                      BigInt(Math.round(fee)),
-                      fromGasCoin.decimals
-                    ),
-                  },
-                ]}
-              />
-            )}
-          />
-        )}
+        success={swapQuote => {
+          console.log(swapQuote);
+          return (
+            <QueryDependant
+              query={txInfo}
+              error={() => null}
+              pending={() => <Spinner />}
+              success={({ fee }) => (
+                <SwapTotalFeeFiatValue
+                  value={[
+                    {
+                      ...toCoinKey,
+                      amount: fromChainAmount(
+                        swapQuote.fees.total,
+                        thorchainSwapConfig.decimals
+                      ),
+                    },
+                    {
+                      ...getCoinMetaKey(fromGasCoin),
+                      amount: fromChainAmount(
+                        BigInt(Math.round(fee)),
+                        fromGasCoin.decimals
+                      ),
+                    },
+                  ]}
+                />
+              )}
+            />
+          );
+        }}
       />
     </>
   );
