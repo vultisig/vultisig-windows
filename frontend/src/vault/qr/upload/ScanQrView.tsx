@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -24,12 +24,25 @@ const Video = styled.video`
 `;
 
 type ScanQrViewProps = {
-  onUploadQrViewRequest: () => void;
+  onUploadQrViewRequest?: () => void;
+  onScanSuccess: (value: string) => void;
+  className?: string;
 };
 
-export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
+export const ScanQrView = ({
+  onUploadQrViewRequest,
+  onScanSuccess,
+  className,
+}: ScanQrViewProps) => {
+  // Keep success callback in ref to avoid adding it to useEffect deps on line 107
+  const onScanSuccessRef = useRef(onScanSuccess);
+  if (onScanSuccessRef.current !== onScanSuccess) {
+    onScanSuccessRef.current = onScanSuccess;
+  }
+
   const { t } = useTranslation();
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  const navigate = useAppNavigate();
 
   const { mutate: getStream, ...streamMutationState } = useMutation({
     mutationFn: () =>
@@ -41,7 +54,7 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
       }),
   });
 
-  const { data: stream } = streamMutationState;
+  const { data: stream, reset: resetStreamState } = streamMutationState;
 
   useEffect(() => {
     if (!stream || !video) return;
@@ -53,8 +66,6 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
   }, [video, stream]);
 
   useEffect(getStream, [getStream]);
-
-  const navigate = useAppNavigate();
 
   useEffect(() => {
     if (!video) return;
@@ -70,7 +81,7 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
 
-      const url = attempt(
+      const scanData = attempt(
         () =>
           readQrCode({
             canvasContext: context,
@@ -79,8 +90,8 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
         undefined
       );
 
-      if (url) {
-        navigate('deeplink', { state: { url } });
+      if (scanData) {
+        onScanSuccessRef.current(scanData);
       } else {
         animationFrameId = requestAnimationFrame(scan);
       }
@@ -92,7 +103,7 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
   }, [navigate, video]);
 
   return (
-    <Container>
+    <Container className={className}>
       <QueryDependant
         query={streamMutationState}
         success={() => <Video ref={setVideo} muted />}
@@ -100,13 +111,26 @@ export const ScanQrView = ({ onUploadQrViewRequest }: ScanQrViewProps) => {
           <FlowPendingPageContent title={t('getting_video_permission')} />
         )}
         error={() => (
-          <FlowErrorPageContent title={t('failed_to_get_video_permission')} />
+          <FlowErrorPageContent
+            title={t('failed_to_get_video_permission')}
+            action={
+              <Button
+                onClick={() => {
+                  resetStreamState();
+                  getStream();
+                }}
+              >
+                {t('try_again')}
+              </Button>
+            }
+          />
         )}
       />
-
-      <Button onClick={onUploadQrViewRequest}>
-        {t('upload_qr_code_image')}
-      </Button>
+      {onUploadQrViewRequest && (
+        <Button onClick={onUploadQrViewRequest}>
+          {t('upload_qr_code_image')}
+        </Button>
+      )}
     </Container>
   );
 };
