@@ -2,6 +2,7 @@ import { WalletCore } from '@trustwallet/wallet-core';
 
 import { Chain } from '../../model/chain';
 import { BlockchainServiceCosmos } from './cosmos/BlockchainServiceCosmos';
+import { BlockchainServiceTerra } from './cosmos/BlockchainServiceTerra';
 import { BlockchainServiceEvm } from './evm/BlockchainServiceEvm';
 import { IBlockchainService } from './IBlockchainService';
 import { BlockchainServiceMaya } from './maya/BlockchainServiceMaya';
@@ -65,9 +66,9 @@ export class BlockchainServiceFactory {
       case Chain.Dydx:
         return new BlockchainServiceCosmos(chain, walletCore);
       case Chain.Terra:
-        return new BlockchainServiceCosmos(chain, walletCore);
+        return new BlockchainServiceTerra(chain, walletCore);
       case Chain.TerraClassic:
-        return new BlockchainServiceCosmos(chain, walletCore);
+        return new BlockchainServiceTerra(chain, walletCore);
       case Chain.Polkadot:
         return new BlockchainServicePolkadot(chain, walletCore);
       case Chain.Ton:
