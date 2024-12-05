@@ -105,7 +105,12 @@ export class RpcServiceCosmos implements IRpcService {
 
     try {
       let response = await Post(url, JSON.parse(jsonString));
+
       const data: CosmosTransactionBroadcastResponse = response;
+
+      if (data.tx_response?.raw_log && data.tx_response?.raw_log !== '') {
+        return data.tx_response.raw_log;
+      }
 
       if (data.tx_response?.txhash) {
         return data.tx_response.txhash;
@@ -164,6 +169,7 @@ interface CosmosTransactionBroadcastResponse {
   tx_response?: {
     code?: number;
     txhash?: string;
+    raw_log?: string;
   };
 }
 
