@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
-import { TxOverviewAddress } from '../../../chain/tx/components/TxOverviewAddress';
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
 import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
+import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
@@ -34,7 +34,7 @@ export const KeysignTxPrimaryInfo = () => {
 
   return (
     <>
-      <TxOverviewAddress title={t('to')} value={toAddress} />
+      <TxOverviewPrimaryRow title={t('to')}>{toAddress}</TxOverviewPrimaryRow>
       {memo && <TxOverviewMemo value={memo} />}
       <TxOverviewAmount
         value={fromChainAmount(BigInt(toAmount), decimals)}

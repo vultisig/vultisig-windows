@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
-import { TxOverviewAddress } from '../../../chain/tx/components/TxOverviewAddress';
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
 import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
+import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
@@ -46,8 +46,12 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
       <PageContent gap={40}>
         <WithProgressIndicator value={0.3}>
           <TxOverviewPanel>
-            <TxOverviewAddress title={t('from')} value={sender} />
-            <TxOverviewAddress title={t('to')} value={receiver} />
+            <TxOverviewPrimaryRow title={t('from')}>
+              {sender}
+            </TxOverviewPrimaryRow>
+            <TxOverviewPrimaryRow title={t('to')}>
+              {receiver}
+            </TxOverviewPrimaryRow>
             {memo && <TxOverviewMemo value={memo} />}
 
             <TxOverviewAmount

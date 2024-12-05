@@ -345,7 +345,7 @@ export const en = {
   send_terms_0: 'I’m sending to the right address',
   send_terms_1: 'The amount is correct',
   send_terms_2: 'I’m not sending to a scam or hacker',
-  send_terms_error: 'You must agree with the terms',
+  terms_required: 'You must agree with the terms',
   choose_tokens: 'Choose Tokens',
   optional: 'optional',
   enter_memo: 'Enter Memo',

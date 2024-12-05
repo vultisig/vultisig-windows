@@ -19,7 +19,7 @@ import { useCurrentVaultCoins } from '../../../state/currentVault';
 
 type SwapFee = CoinKey & EntityWithAmount;
 
-export const SwapTotalFeeValue = ({
+export const SwapTotalFeeFiatValue = ({
   value,
 }: ComponentWithValueProps<SwapFee[]>) => {
   const vaultCoins = useCurrentVaultCoins();
