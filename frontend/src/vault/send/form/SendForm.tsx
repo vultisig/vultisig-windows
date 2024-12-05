@@ -24,7 +24,6 @@ import { useIsSendFormDisabled } from './hooks/useIsSendFormDisabled';
 
 export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
   const { t } = useTranslation();
-
   const isDisabled = useIsSendFormDisabled();
 
   return (
