@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Match } from '../../../lib/ui/base/Match';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { PageSlice } from '../../../ui/page/PageSlice';
@@ -17,37 +18,37 @@ const AddressBookSettingsPage = () => {
   const handleOpenAddAddressView = () => {
     setIsAddAddressViewOpen(true);
   };
-  const handleEditToggle = () => setIsEditModeOn(!isEditModeOn);
-  const isAddressBookEmpty = addressBookItems.length === 0;
-
-  const componentMap = {
-    loading: <Text>Loading...</Text>,
-    addAddress: (
-      <AddAddressView onClose={() => setIsAddAddressViewOpen(false)} />
-    ),
-    empty: (
-      <EmptyAddressesView onOpenAddAddressView={handleOpenAddAddressView} />
-    ),
-    list: (
-      <AddressesListView
-        onEditModeToggle={handleEditToggle}
-        onOpenAddAddressView={handleOpenAddAddressView}
-        isEditModeOn={isEditModeOn}
-      />
-    ),
-  };
-
-  const getPageContent = () => {
-    if (isFetchingAddressBookItems) return componentMap.loading;
-    if (isAddAddressViewOpen) return componentMap.addAddress;
-    if (isAddressBookEmpty) return componentMap.empty;
-    return componentMap.list;
-  };
 
   return (
     <VStack flexGrow gap={16}>
       <PageSlice gap={16} flexGrow={true}>
-        {getPageContent()}
+        <Match
+          value={
+            isFetchingAddressBookItems
+              ? 'loading'
+              : isAddAddressViewOpen
+                ? 'addAddress'
+                : addressBookItems.length === 0
+                  ? 'empty'
+                  : 'list'
+          }
+          loading={() => <Text>Loading...</Text>}
+          addAddress={() => (
+            <AddAddressView onClose={() => setIsAddAddressViewOpen(false)} />
+          )}
+          empty={() => (
+            <EmptyAddressesView
+              onOpenAddAddressView={handleOpenAddAddressView}
+            />
+          )}
+          list={() => (
+            <AddressesListView
+              onEditModeToggle={() => setIsEditModeOn(!isEditModeOn)}
+              onOpenAddAddressView={handleOpenAddAddressView}
+              isEditModeOn={isEditModeOn}
+            />
+          )}
+        />
       </PageSlice>
     </VStack>
   );
