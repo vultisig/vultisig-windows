@@ -73,6 +73,8 @@ export class BlockchainServiceFactory {
         return new BlockchainServicePolkadot(chain, walletCore);
       case Chain.Ton:
         return new BlockchainServiceTon(chain, walletCore);
+      case Chain.Noble:
+        return new BlockchainServiceCosmos(chain, walletCore);
       default:
         throw new Error('Chain not supported');
     }

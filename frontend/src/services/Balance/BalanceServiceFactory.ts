@@ -67,6 +67,8 @@ export class BalanceServiceFactory {
         return new BalanceServiceSui(chain);
       case Chain.Ton:
         return new BalanceServiceTon(chain);
+      case Chain.Noble:
+        return new BalanceServiceCosmos(chain);
       default:
         return new BalanceService(chain);
     }

@@ -1304,6 +1304,16 @@ export class TokensStore {
       isNativeToken: true,
     }),
 
+    nobleUUSDC: (): CoinMeta => ({
+      chain: Chain.Noble,
+      ticker: 'USDC',
+      logo: 'usdc',
+      decimals: 6,
+      priceProviderId: 'usd-coin',
+      contractAddress: '',
+      isNativeToken: true,
+    }),
+
     terraTPT: (): CoinMeta => ({
       chain: Chain.Terra,
       ticker: 'TPT',
@@ -1493,6 +1503,9 @@ export class TokensStore {
     // OSMOSIS
     TokensStore.Token.osmosisOsmo(),
     TokensStore.Token.osmosisIonOsmo(),
+
+    // NOBLE
+    TokensStore.Token.nobleUUSDC(),
 
     // TERRA
     TokensStore.Token.terraLuna(),

@@ -139,6 +139,8 @@ export class CoinService implements ICoinService {
         return this.walletCore.CoinType.terraV2;
       case Chain.TerraClassic:
         return this.walletCore.CoinType.terra;
+      case Chain.Noble:
+        return this.walletCore.CoinType.noble;
       default:
         throw new Error(`Invalid chain ${this.chain}`);
     }
