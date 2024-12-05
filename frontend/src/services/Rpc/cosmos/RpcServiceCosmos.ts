@@ -108,7 +108,11 @@ export class RpcServiceCosmos implements IRpcService {
 
       const data: CosmosTransactionBroadcastResponse = response;
 
-      if (data.tx_response?.raw_log && data.tx_response?.raw_log !== '') {
+      if (
+        data.tx_response?.raw_log &&
+        data.tx_response?.raw_log !== '' &&
+        data.tx_response?.raw_log !== '[]'
+      ) {
         return data.tx_response.raw_log;
       }
 
