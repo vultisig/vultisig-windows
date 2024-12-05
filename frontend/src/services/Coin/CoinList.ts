@@ -1504,6 +1504,9 @@ export class TokensStore {
     TokensStore.Token.osmosisOsmo(),
     TokensStore.Token.osmosisIonOsmo(),
 
+    // NOBLE
+    TokensStore.Token.nobleUUSDC(),
+
     // TERRA
     TokensStore.Token.terraLuna(),
     TokensStore.Token.terraLunc(),
