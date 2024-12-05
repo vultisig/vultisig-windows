@@ -4,20 +4,17 @@ import { Match } from '../../../lib/ui/base/Match';
 import { Text } from '../../../lib/ui/text';
 import { PageSlice } from '../../../ui/page/PageSlice';
 import { useAddressBookItemsQuery } from '../../queries/useAddressBookItemsQuery';
+import { Wrapper } from './AddressSelector.styles';
 import AddAddressView from './components/addAddressForm/AddAddressForm';
 import AddressesListView from './components/addressesListView/AddressesListView';
 import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesView';
-import { Wrapper } from './SendAddressBookManager.styles';
 
-type SendAddressBookManagerProps = {
+type AddressSelectorProps = {
   onAddressClick: (address: string) => void;
   onClose: () => void;
 };
 
-const SendAddressBookManager = ({
-  onAddressClick,
-  onClose,
-}: SendAddressBookManagerProps) => {
+const AddressSelector = ({ onAddressClick, onClose }: AddressSelectorProps) => {
   const [isAddAddressViewOpen, setIsAddAddressViewOpen] = useState(false);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
   const { data: addressBookItems, isFetching: isFetchingAddressBookItems } =
@@ -64,4 +61,4 @@ const SendAddressBookManager = ({
   );
 };
 
-export default SendAddressBookManager;
+export default AddressSelector;

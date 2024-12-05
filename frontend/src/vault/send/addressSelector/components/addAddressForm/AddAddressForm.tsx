@@ -13,9 +13,9 @@ import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButto
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { useAddAddressBookItemMutation } from '../../../../mutations/useAddAddressBookItemMutation';
 import { useAddressBookItemsQuery } from '../../../../queries/useAddressBookItemsQuery';
+import { AddressBookPageHeader } from '../../AddressSelector.styles';
 import { getCoinOptions } from '../../helpers/getCoinOptions';
 import { getAddressSchema } from '../../schemas/addressSchema';
-import { AddressBookPageHeader } from '../../SendAddressBookManager.styles';
 import {
   AddButton,
   ChainOption,

@@ -16,7 +16,7 @@ import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButto
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { useDeleteAddressBookItemMutation } from '../../../../mutations/useDeleteAddressBookItemMutation';
 import { useAddressBookItemsQuery } from '../../../../queries/useAddressBookItemsQuery';
-import { AddressBookPageHeader } from '../../SendAddressBookManager.styles';
+import { AddressBookPageHeader } from '../../AddressSelector.styles';
 import ModifyAddressForm from '../modifyAddressForm/ModifyAddressForm';
 import AddressBookListItem from './AddressBookListItem/AddressBookListItem';
 import { ButtonWrapper, Container, Main } from './AddressesListView.styles';

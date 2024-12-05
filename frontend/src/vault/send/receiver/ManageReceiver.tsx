@@ -20,7 +20,7 @@ import { HStack } from '../../../lib/ui/layout/Stack';
 import { Modal } from '../../../lib/ui/modal';
 import { text } from '../../../lib/ui/text';
 import { asyncAttempt } from '../../../lib/utils/promise/asyncAttempt';
-import SendAddressBookManager from '../sendAddressBookPicker/SendAddressBookManager';
+import AddressSelector from '../addressSelector/AddressSelector';
 import { useSendReceiver } from '../state/receiver';
 
 const Input = styled(TextInput)`
@@ -38,7 +38,7 @@ export const ManageReceiver = () => {
   if (isAddressBookOpen) {
     return (
       <Modal title="" withDefaultStructure={false}>
-        <SendAddressBookManager
+        <AddressSelector
           onAddressClick={address => {
             setValue(address);
             setIsAddressBookOpen(false);

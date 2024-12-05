@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
-import { AddressBookPageHeader } from '../../SendAddressBookManager.styles';
+import { AddressBookPageHeader } from '../../AddressSelector.styles';
 import {
   CenteredBox,
   Container,
