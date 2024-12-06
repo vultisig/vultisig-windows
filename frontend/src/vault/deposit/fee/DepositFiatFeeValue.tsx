@@ -22,7 +22,7 @@ export const DepositFiatFeeValue = () => {
 
   const { fee } = useSendSpecificTxInfo();
 
-  const { decimals } = getChainFeeCoin(coinKey.chainId);
+  const { decimals } = getChainFeeCoin(coinKey.chain);
 
   const feeAmount = fromChainAmount(fee, decimals);
 

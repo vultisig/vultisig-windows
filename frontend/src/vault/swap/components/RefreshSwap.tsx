@@ -10,7 +10,7 @@ export const RefreshSwap = () => {
   const invalidateQueries = useInvalidateQueries();
 
   const [coinKey] = useFromCoin();
-  const address = useCurrentVaultAddress(coinKey.chainId);
+  const address = useCurrentVaultAddress(coinKey.chain);
 
   const { mutate: refresh, isPending } = useMutation({
     mutationFn: () => {

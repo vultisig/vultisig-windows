@@ -6,7 +6,7 @@ import { useSendSpecificTxInfo } from './DepositSpecificTxInfoProvider';
 export const DepositFeeValue = () => {
   const txInfo = useSendSpecificTxInfo();
   const [coinKey] = useCurrentDepositCoin();
-  const { chainId } = coinKey;
+  const { chain } = coinKey;
 
-  return <StrictText>{formatFee({ chain: chainId, txInfo })}</StrictText>;
+  return <StrictText>{formatFee({ chain: chain, txInfo })}</StrictText>;
 };

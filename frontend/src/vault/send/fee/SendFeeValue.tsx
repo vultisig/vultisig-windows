@@ -5,7 +5,7 @@ import { useSendSpecificTxInfo } from './SendSpecificTxInfoProvider';
 export const SendFeeValue = () => {
   const txInfo = useSendSpecificTxInfo();
   const [coinKey] = useCurrentSendCoin();
-  const { chainId } = coinKey;
+  const { chain } = coinKey;
 
-  return <>{formatFee({ chain: chainId, txInfo })}</>;
+  return <>{formatFee({ chain: chain, txInfo })}</>;
 };

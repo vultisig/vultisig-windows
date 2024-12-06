@@ -12,7 +12,7 @@ export const getCoinMetaKey = ({
   'ticker' | 'contractAddress' | 'isNativeToken' | 'chain'
 >): CoinKey => {
   return {
-    chainId: chain,
+    chain: chain,
     id: isNativeToken ? ticker : contractAddress,
   };
 };

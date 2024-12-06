@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
 
 import { EntityWithPrice } from '../../chain/EntityWithPrice';
-import { areEqualCoins, CoinAmount, CoinInfo, CoinKey } from '../../coin/Coin';
+import { areEqualCoins, CoinAmount, CoinKey } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
-import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
 import {
   getStorageCoinKey,
   storageCoinToCoin,
@@ -16,13 +15,16 @@ import {
 } from '../../lib/ui/query/Query';
 import { withoutUndefined } from '../../lib/utils/array/withoutUndefined';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
+import { EntityWithLogo } from '../../lib/utils/entities/EntityWithLogo';
+import { EntityWithTicker } from '../../lib/utils/entities/EntityWithTicker';
 import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
 import { useCurrentVaultChainCoins } from '../state/currentVault';
 
 export type VaultChainCoin = CoinKey &
   CoinAmount &
-  CoinInfo &
+  EntityWithLogo &
+  EntityWithTicker &
   Partial<EntityWithPrice>;
 
 export const useVaultChainCoinsQuery = (chain: Chain) => {
@@ -55,9 +57,9 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
 
           return {
             ...coinKey,
-            symbol: coin.ticker,
+            ticker: coin.ticker,
             decimals: coin.decimals,
-            icon: getCoinMetaIconSrc(coin),
+            logo: coin.logo,
             amount,
             price,
           };

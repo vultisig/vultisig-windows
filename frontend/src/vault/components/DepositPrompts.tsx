@@ -14,10 +14,10 @@ import {
 export const DepositPrompt = ({ value }: ComponentWithValueProps<CoinKey>) => {
   const { t } = useTranslation();
 
-  const chainId = value.chainId?.toLowerCase() as ChainWithAction | undefined;
+  const chain = value.chain?.toLowerCase() as ChainWithAction | undefined;
 
-  const availableChainActions = chainId
-    ? chainDepositOptionsConfig[chainId] || []
+  const availableChainActions = chain
+    ? chainDepositOptionsConfig[chain] || []
     : [];
 
   if (isEmpty(availableChainActions)) {

@@ -71,20 +71,20 @@ describe('groupItems', () => {
 });
 
 describe('groupChainEntities', () => {
-  it('should group chain entities by chainId', () => {
+  it('should group chain entities by chain', () => {
     const chainEntities: ChainEntity[] = [
-      { chainId: 'Ethereum' as Chain },
-      { chainId: 'BSC' as Chain },
-      { chainId: 'Ethereum' as Chain },
-      { chainId: 'Solana' as Chain },
+      { chain: 'Ethereum' as Chain },
+      { chain: 'BSC' as Chain },
+      { chain: 'Ethereum' as Chain },
+      { chain: 'Solana' as Chain },
     ];
 
     const grouped = groupChainEntities(chainEntities);
 
     expect(grouped).toEqual({
-      Ethereum: [{ chainId: 'Ethereum' }, { chainId: 'Ethereum' }],
-      BSC: [{ chainId: 'BSC' }],
-      Solana: [{ chainId: 'Solana' }],
+      Ethereum: [{ chain: 'Ethereum' }, { chain: 'Ethereum' }],
+      BSC: [{ chain: 'BSC' }],
+      Solana: [{ chain: 'Solana' }],
     });
   });
 
@@ -95,16 +95,16 @@ describe('groupChainEntities', () => {
     expect(grouped).toEqual({});
   });
 
-  it('should handle chain entities with the same chainId', () => {
+  it('should handle chain entities with the same chain', () => {
     const chainEntities: ChainEntity[] = [
-      { chainId: 'Ethereum' as Chain },
-      { chainId: 'Ethereum' as Chain },
+      { chain: 'Ethereum' as Chain },
+      { chain: 'Ethereum' as Chain },
     ];
 
     const grouped = groupChainEntities(chainEntities);
 
     expect(grouped).toEqual({
-      Ethereum: [{ chainId: 'Ethereum' }, { chainId: 'Ethereum' }],
+      Ethereum: [{ chain: 'Ethereum' }, { chain: 'Ethereum' }],
     });
   });
 });

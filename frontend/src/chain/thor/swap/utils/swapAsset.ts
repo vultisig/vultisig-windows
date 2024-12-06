@@ -8,19 +8,19 @@ import {
 } from '../thorchainSwapChains';
 
 export const toThorchainSwapAsset = ({
-  chainId,
+  chain,
   id,
   ticker,
 }: CoinKey & EntityWithTicker): string => {
-  const swapChainId = thorchainSwapChains[chainId as ThorchainSwapEnabledChain];
+  const swapChainId = thorchainSwapChains[chain as ThorchainSwapEnabledChain];
 
   if (!swapChainId) {
-    throw new Error(`No swap chain id found for ${chainId}`);
+    throw new Error(`No swap chain id found for ${chain}`);
   }
 
   const key = `${swapChainId}.${ticker}`;
 
-  if (isNativeCoin({ chainId, id })) {
+  if (isNativeCoin({ chain, id })) {
     return key;
   }
 
@@ -36,7 +36,7 @@ export const fromThorchainSwapAsset = (asset: string): CoinKey => {
   const [swapChain, ticker] = asset.split('.');
   const id = asset.split('-')[1] ?? ticker;
 
-  const chainId = mirrorRecord(thorchainSwapChains)[swapChain];
+  const chain = mirrorRecord(thorchainSwapChains)[swapChain];
 
-  return { chainId, id };
+  return { chain, id };
 };

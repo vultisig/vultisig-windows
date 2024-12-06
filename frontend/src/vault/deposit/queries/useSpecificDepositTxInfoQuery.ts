@@ -17,7 +17,7 @@ export const useSpecificDepositTxInfoQuery = () => {
   const walletCore = useAssertWalletCore();
   const [coinKey] = useCurrentDepositCoin();
   const coin = useCurrentVaultCoin(coinKey);
-  const address = useCurrentVaultAddress(coinKey.chainId);
+  const address = useCurrentVaultAddress(coinKey.chain);
 
   return useQuery({
     queryKey: getSpecificDepositTxInfoQueryKey({
@@ -25,7 +25,7 @@ export const useSpecificDepositTxInfoQuery = () => {
       address,
     }),
     queryFn: async () => {
-      const service = ServiceFactory.getService(coinKey.chainId, walletCore);
+      const service = ServiceFactory.getService(coinKey.chain, walletCore);
       return await service.rpcService.getSpecificTransactionInfo(
         storageCoinToCoin(coin)
       );

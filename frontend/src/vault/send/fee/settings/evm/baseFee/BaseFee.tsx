@@ -15,9 +15,9 @@ import { FeeContainer } from '../../FeeContainer';
 export const BaseFee = () => {
   const { t } = useTranslation();
 
-  const [{ chainId }] = useCurrentSendCoin();
+  const [{ chain }] = useCurrentSendCoin();
 
-  const query = useEvmBaseFeeQuery(chainId as EvmChain);
+  const query = useEvmBaseFeeQuery(chain as EvmChain);
 
   return (
     <InputContainer>

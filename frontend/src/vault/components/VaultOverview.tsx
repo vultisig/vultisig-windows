@@ -36,7 +36,7 @@ export const VaultOverview = () => {
           <VStack gap={16}>
             {vaultChainBalances.map(vaultChainBalance => (
               <VaultChainItem
-                key={vaultChainBalance.chainId}
+                key={vaultChainBalance.chain}
                 vault={vaultChainBalance}
               />
             ))}

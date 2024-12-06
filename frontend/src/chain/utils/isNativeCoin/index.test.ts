@@ -32,14 +32,14 @@ vi.mock('../../../services/Coin/CoinList', () => ({
 vi.mock('../../../coin/Coin', () => ({
   areEqualCoins: vi.fn(
     (one: CoinKey, another: CoinKey) =>
-      one.chainId === another.chainId && one.id === another.id
+      one.chain === another.chain && one.id === another.id
   ),
 }));
 
 vi.mock('../../../coin/utils/coinMeta', () => ({
   getCoinMetaKey: vi.fn(
     ({ ticker, contractAddress, isNativeToken, chain }) => ({
-      chainId: chain,
+      chain: chain,
       id: isNativeToken ? ticker : contractAddress,
     })
   ),
@@ -47,22 +47,22 @@ vi.mock('../../../coin/utils/coinMeta', () => ({
 
 describe('isNativeCoin', () => {
   it('should return true for a native Ethereum coin (ETH)', () => {
-    const key: CoinKey = { chainId: EvmChain.Ethereum, id: 'ETH' };
+    const key: CoinKey = { chain: EvmChain.Ethereum, id: 'ETH' };
     expect(isNativeCoin(key)).toBe(true);
   });
 
   it('should return true for a native Binance Smart Chain coin (BNB)', () => {
-    const key: CoinKey = { chainId: EvmChain.BSC, id: 'BNB' };
+    const key: CoinKey = { chain: EvmChain.BSC, id: 'BNB' };
     expect(isNativeCoin(key)).toBe(true);
   });
 
   it('should return false for a non-native Ethereum token (USDT)', () => {
-    const key: CoinKey = { chainId: EvmChain.Ethereum, id: '0x1234' };
+    const key: CoinKey = { chain: EvmChain.Ethereum, id: '0x1234' };
     expect(isNativeCoin(key)).toBe(false);
   });
 
   it('should return false for an unsupported coin key', () => {
-    const key: CoinKey = { chainId: EvmChain.Ethereum, id: 'Unsupported' };
+    const key: CoinKey = { chain: EvmChain.Ethereum, id: 'Unsupported' };
     expect(isNativeCoin(key)).toBe(false);
   });
 });

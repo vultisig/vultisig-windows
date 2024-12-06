@@ -98,18 +98,18 @@ export class BlockchainServiceEvm
       return hex.startsWith('0x') ? hex.slice(2) : hex;
     };
 
-    const chainId: bigint = BigInt(
+    const chain: bigint = BigInt(
       this.walletCore.CoinTypeExt.chainId(this.coinType)
     );
 
     // Chain ID: converted to hexadecimal, stripped of '0x', and padded
-    let chainIdHex = Buffer.from(
-      stripHexPrefix(chainId.toString(16).padStart(2, '0')),
+    let chainHex = Buffer.from(
+      stripHexPrefix(chain.toString(16).padStart(2, '0')),
       'hex'
     );
     if (this.chain === Chain.Zksync) {
-      chainIdHex = Buffer.from(
-        stripHexPrefix(chainId.toString(16).padStart(4, '0')), // Ensure proper padding
+      chainHex = Buffer.from(
+        stripHexPrefix(chain.toString(16).padStart(4, '0')), // Ensure proper padding
         'hex'
       );
     }
@@ -167,7 +167,7 @@ export class BlockchainServiceEvm
     // Create the signing input with the constants
     const input = TW.Ethereum.Proto.SigningInput.create({
       toAddress: toAddress,
-      chainId: chainIdHex,
+      chainId: chainHex,
       nonce: nonceHex,
       gasLimit: gasLimitHex,
       maxFeePerGas: maxFeePerGasHex,

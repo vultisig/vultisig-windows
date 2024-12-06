@@ -60,25 +60,25 @@ export const useCurrentVaultAddreses = () => {
   }, [coins]);
 };
 
-export const useCurrentVaultAddress = (chainId: string) => {
+export const useCurrentVaultAddress = (chain: string) => {
   const addresses = useCurrentVaultAddreses();
 
-  return shouldBePresent(addresses[chainId as Chain]);
+  return shouldBePresent(addresses[chain as Chain]);
 };
 
-export const useCurrentVaultChainCoins = (chainId: string) => {
+export const useCurrentVaultChainCoins = (chain: string) => {
   const coins = useCurrentVaultCoins();
 
   return useMemo(
-    () => coins.filter(coin => coin.chain === chainId),
-    [chainId, coins]
+    () => coins.filter(coin => coin.chain === chain),
+    [chain, coins]
   );
 };
 
-export const useCurrentVaultNativeCoin = (chainId: string) => {
+export const useCurrentVaultNativeCoin = (chain: string) => {
   const nativeCoins = useCurrentVaultNativeCoins();
 
-  return shouldBePresent(nativeCoins.find(coin => coin.chain === chainId));
+  return shouldBePresent(nativeCoins.find(coin => coin.chain === chain));
 };
 
 export const useCurrentVaultCoin = (coinKey: CoinKey) => {

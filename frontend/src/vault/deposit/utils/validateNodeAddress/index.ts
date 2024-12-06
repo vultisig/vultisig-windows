@@ -5,11 +5,11 @@ import { AddressServiceFactory } from '../../../../services/Address/AddressServi
 
 export async function validateNodeAddress(
   nodeAddress: string,
-  chainId: Chain,
+  chain: Chain,
   walletCore: WalletCore
 ): Promise<boolean> {
   const addressService = AddressServiceFactory.createAddressService(
-    chainId,
+    chain,
     walletCore
   );
   const isValid = await addressService.validateAddress(nodeAddress);

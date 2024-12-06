@@ -21,7 +21,7 @@ export const useIsSendFormDisabled = () => {
 
   const addressValidationQuery = useValidateAddressQuery({
     address: receiver,
-    chainId: coinKey.chainId,
+    chain: coinKey.chain,
   });
 
   return useMemo(() => {

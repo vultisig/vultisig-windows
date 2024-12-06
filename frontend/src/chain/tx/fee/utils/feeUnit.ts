@@ -5,7 +5,7 @@ import { getChainFeeCoin } from './getChainFeeCoin';
 
 export const getFeeUnit = (chain: Chain): string => {
   if (chain in EvmChain) {
-    return gwei.symbol;
+    return gwei.name;
   }
 
   if (chain in UtxoChain) {

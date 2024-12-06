@@ -11,7 +11,7 @@ export const getStorageCoinKey = ({
   address,
 }: storage.Coin): AccountCoinKey => {
   return {
-    chainId: chain as Chain,
+    chain: chain as Chain,
     id: is_native_token ? ticker : contract_address,
     address,
   };

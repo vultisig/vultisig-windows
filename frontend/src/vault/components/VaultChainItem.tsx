@@ -33,14 +33,14 @@ type VaultChainItemProps = {
 };
 
 export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
-  const { chainId, coins } = vault;
+  const { chain, coins } = vault;
   const { globalCurrency } = useGlobalCurrency();
 
   const addresses = useCurrentVaultAddreses();
-  const address = addresses[chainId];
+  const address = addresses[chain];
 
   const pressHandlers = useHandleVaultChainItemPress({
-    chainId,
+    chain,
     address,
   });
 
@@ -60,7 +60,7 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
     <Panel data-testid="VaultChainItem-Panel" {...pressHandlers}>
       <HStack fullWidth alignItems="center" gap={16}>
         <ChainEntityIcon
-          value={getChainEntityIconSrc(chainId)}
+          value={getChainEntityIconSrc(chain)}
           style={{ fontSize: 32 }}
         />
 
@@ -72,7 +72,7 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
             gap={20}
           >
             <Text color="contrast" weight="700" size={16}>
-              {chainId}
+              {chain}
             </Text>
             <HStack alignItems="center" gap={12}>
               {singleCoin ? (
