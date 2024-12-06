@@ -48,9 +48,27 @@ export const formatAmount = (
     );
   }
 
+  if (currency) {
+    try {
+      const formatter = new Intl.NumberFormat(validLocale, {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits,
+      });
+
+      return formatter.format(amount);
+    } catch {
+      const formatter = new Intl.NumberFormat(validLocale, {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits,
+      });
+
+      return `${formatter.format(amount)} ${currency}`;
+    }
+  }
+
   const formatter = new Intl.NumberFormat(validLocale, {
-    style: currency ? 'currency' : 'decimal',
-    currency: currency,
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   });
