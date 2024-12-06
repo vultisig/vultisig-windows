@@ -16,13 +16,18 @@ import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
 import { EntityWithAmount } from '../../../../lib/utils/entities/EntityWithAmount';
 import { CoinMeta } from '../../../../model/coin-meta';
 import { useCurrentVaultCoins } from '../../../state/currentVault';
+import { useSwapFees } from '../../state/swapFees';
 
 type SwapFee = CoinKey & EntityWithAmount;
 
 export const SwapTotalFeeFiatValue = ({
   value,
 }: ComponentWithValueProps<SwapFee[]>) => {
+  const [, setSwapFees] = useSwapFees();
   const vaultCoins = useCurrentVaultCoins();
+  const { t } = useTranslation();
+  const formatAmount = useFormatFiatAmount();
+
   const coins = useMemo(
     () =>
       value.map(key =>
@@ -39,11 +44,7 @@ export const SwapTotalFeeFiatValue = ({
     [value, vaultCoins]
   );
 
-  const { t } = useTranslation();
-
   const pricesQuery = useCoinPricesQuery(coins);
-
-  const formatAmount = useFormatFiatAmount();
 
   return (
     <MatchEagerQuery
@@ -55,7 +56,7 @@ export const SwapTotalFeeFiatValue = ({
           return t('failed_to_load');
         }
 
-        const total = sum(
+        const fees = sum(
           value.map(({ amount, ...coinKey }) => {
             const { price } = shouldBePresent(
               prices.find(price => areEqualCoins(price, coinKey))
@@ -65,7 +66,9 @@ export const SwapTotalFeeFiatValue = ({
           })
         );
 
-        return formatAmount(total);
+        const feesFormatted = formatAmount(fees);
+        setSwapFees({ totalFeesFormatted: feesFormatted });
+        return fees;
       }}
     />
   );
