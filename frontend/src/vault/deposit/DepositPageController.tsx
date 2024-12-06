@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { FieldValues } from 'react-hook-form';
 
+import { coinKeyFromString } from '../../coin/Coin';
 import { Match } from '../../lib/ui/base/Match';
 import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation';
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
-import { parseCoinString } from '../swap/utils';
 import { DepositForm } from './DepositForm';
 import {
   ChainAction,
@@ -23,7 +23,7 @@ const depositSteps = ['form', 'verify'] as const;
 
 export const DepositPageController = () => {
   const [{ coin: coinName }] = useAppPathParams<'deposit'>();
-  const { chainId: chain } = parseCoinString(coinName);
+  const { chainId: chain } = coinKeyFromString(coinName);
   const chainActionOptions =
     chainDepositOptionsConfig[chain?.toLowerCase() as ChainWithAction];
 

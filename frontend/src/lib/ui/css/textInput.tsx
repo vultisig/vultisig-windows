@@ -21,6 +21,21 @@ export const textInputBackground = css`
   background: ${getColor('foreground')};
 `;
 
+export const interactiveTextInput = css`
+  outline: 1px solid transparent;
+  border: 1px solid transparent;
+
+  &:hover {
+    outline-color: ${getColor('mist')};
+  }
+
+  &:focus,
+  &:active {
+    border-color: ${getColor('mistExtra')};
+    border-color: ${getColor('mistExtra')};
+  }
+`;
+
 export const textInput = css`
   ${textInputFrame};
   font-size: 14px;
@@ -38,16 +53,5 @@ export const textInput = css`
     })}
   }
 
-  outline: 1px solid transparent;
-  border: 1px solid transparent;
-
-  &:hover {
-    outline-color: ${getColor('mist')};
-  }
-
-  &:focus,
-  &:active {
-    border-color: ${getColor('mistExtra')};
-    border-color: ${getColor('mistExtra')};
-  }
+  ${interactiveTextInput};
 `;

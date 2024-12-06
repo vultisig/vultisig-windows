@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -7,15 +6,11 @@ import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
 import { useCurrentVaultCoin } from '../../../state/currentVault';
-import { useSender } from '../../sender/hooks/useSender';
 import { useSendAmount } from '../../state/amount';
 import { useSendReceiver } from '../../state/receiver';
 import { useCurrentSendCoin } from '../../state/sendCoin';
 
-// TODO: This should use the validate method from the send service
-// Each coin has a different way of validating. This should be abstracted.
 export const useIsSendFormDisabled = () => {
-  const sender = useSender();
   const [receiver] = useSendReceiver();
   const [amount] = useSendAmount();
   const [coinKey] = useCurrentSendCoin();
@@ -62,8 +57,6 @@ export const useIsSendFormDisabled = () => {
     amount,
     balanceQuery.data,
     balanceQuery.isPending,
-    receiver,
-    sender,
     t,
   ]);
 };

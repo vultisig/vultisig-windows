@@ -44,7 +44,7 @@ import { SetupFastVaultPage } from './vault/setup/fast/SetupFastVaultPage';
 import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage';
 import { SetupVaultPageController } from './vault/setup/SetupVaultPageController';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
-import { SwapPage } from './vault/swap/SwapPage';
+import { SwapPage } from './vault/swap/components/SwapPage';
 import { NoVaultsHomePage } from './vaults/components/NoVaultsHomePage';
 import { VaultsPage } from './vaults/components/VaultsPage';
 import { CurrentVaultFolderPageProvider } from './vaults/folder/CurrentVaultFolderPageProvider';
@@ -295,7 +295,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: appPaths.vaultItemSwap,
+        path: appPaths.swap,
         element: (
           <ActiveVaultGuard>
             <SwapPage />
@@ -351,7 +351,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: appPaths.vaultItemDeposit,
+        path: appPaths.deposit,
         element: (
           <ActiveVaultGuard>
             <DepositPage />

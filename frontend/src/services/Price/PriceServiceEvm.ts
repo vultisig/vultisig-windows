@@ -1,3 +1,7 @@
+import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
+import { queryUrl } from '../../lib/utils/query/queryUrl';
+import { toEntries } from '../../lib/utils/record/toEntries';
+import { areLowerCaseEqual } from '../../lib/utils/string/areLowerCaseEqual';
 import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';
@@ -15,7 +19,6 @@ export class PriceServiceEvm extends PriceService implements IPriceService {
   }
 
   async getPrices(coins: CoinMeta[]): Promise<Map<string, Rate[]>> {
-    // Fetch the prices if not cached
     const nativeCoins = coins.filter(
       coin => coin.isNativeToken && coin.priceProviderId
     );
@@ -48,14 +51,26 @@ export class PriceServiceEvm extends PriceService implements IPriceService {
         .join(',')
     );
 
-    const response = await fetch(endpoint);
+    const response =
+      await queryUrl<Record<string, Record<string, number>>>(endpoint);
 
-    if (!response.ok) {
-      console.error(`Failed to fetch prices from ${endpoint}`);
-    }
+    const rates = new Map<string, Rate[]>();
 
-    const json = await response.json();
+    toEntries(response).forEach(({ key: contractAddress, value: prices }) => {
+      const coin = shouldBePresent(
+        coins.find(coin =>
+          areLowerCaseEqual(coin.contractAddress, contractAddress)
+        )
+      );
 
-    return this.mapRates(json, coins);
+      const rateList: Rate[] = toEntries(prices).map(({ key, value }) => ({
+        fiat: key.toUpperCase() as Fiat,
+        value,
+      }));
+
+      rates.set(CoinMeta.sortedStringify(coin), rateList);
+    });
+
+    return rates;
   }
 }

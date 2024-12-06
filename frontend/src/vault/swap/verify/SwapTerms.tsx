@@ -7,7 +7,7 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { range } from '../../../lib/utils/array/range';
 import { updateAtIndex } from '../../../lib/utils/array/updateAtIndex';
 import {
-  getSendTermCopyKey,
+  getSwapTermCopyKey,
   swapTermsCount,
   useSwapTerms,
 } from './state/swapTerms';
@@ -24,7 +24,7 @@ export const SwapTerms = () => {
   return (
     <VStack>
       {range(swapTermsCount).map(index => {
-        const text = t(getSendTermCopyKey(index));
+        const text = t(getSwapTermCopyKey(index));
 
         return (
           <Item

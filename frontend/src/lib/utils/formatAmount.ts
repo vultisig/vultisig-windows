@@ -48,12 +48,27 @@ export const formatAmount = (
     );
   }
 
-  // Validate currency code
-  const isValidCurrency = currency && /^[A-Z]{3}$/.test(currency.toUpperCase());
+  if (currency) {
+    try {
+      const formatter = new Intl.NumberFormat(validLocale, {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits,
+      });
+
+      return formatter.format(amount);
+    } catch {
+      const formatter = new Intl.NumberFormat(validLocale, {
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits,
+      });
+
+      return `${formatter.format(amount)} ${currency}`;
+    }
+  }
 
   const formatter = new Intl.NumberFormat(validLocale, {
-    style: isValidCurrency ? 'currency' : 'decimal',
-    currency: isValidCurrency ? currency : undefined,
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   });
