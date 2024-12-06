@@ -8,13 +8,13 @@ import { useCurrentVaultChain } from './useCurrentVaultChain';
 export const VaultAddressLink = ({
   value,
 }: ComponentWithValueProps<string>) => {
-  const chainId = useCurrentVaultChain();
+  const chain = useCurrentVaultChain();
 
   return (
     <IconButton
       onClick={() => {
         const url = getBlockExplorerUrl({
-          chainId,
+          chain,
           entity: 'address',
           value,
         });

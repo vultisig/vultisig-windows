@@ -5,7 +5,7 @@ export const useCurrentVaultCoinKey = (): CoinKey => {
   const [{ chain, coin }] = useAppPathParams<'vaultChainCoinDetail'>();
 
   return {
-    chainId: chain,
+    chain: chain,
     id: coin,
   };
 };

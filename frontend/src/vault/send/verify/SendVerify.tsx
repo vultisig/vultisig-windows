@@ -56,7 +56,7 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
 
             <TxOverviewAmount
               value={shouldBePresent(amount)}
-              symbol={coin.ticker}
+              ticker={coin.ticker}
             />
             <TxOverviewRow>
               <SendFee />

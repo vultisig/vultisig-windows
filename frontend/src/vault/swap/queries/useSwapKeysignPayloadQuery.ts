@@ -35,12 +35,12 @@ export const useSwapKeysignPayloadQuery = () => {
   const [fromCoinKey] = useFromCoin();
   const fromStorageCoin = useCurrentVaultCoin(fromCoinKey);
   const fromCoin = storageCoinToCoin(fromStorageCoin);
-  const fromAddress = useCurrentVaultAddress(fromCoinKey.chainId);
+  const fromAddress = useCurrentVaultAddress(fromCoinKey.chain);
 
   const [toCoinKey] = useToCoin();
   const toStorageCoin = useCurrentVaultCoin(toCoinKey);
   const toCoin = storageCoinToCoin(toStorageCoin);
-  const [receiver] = useCurrentVaultAddress(toCoinKey.chainId);
+  const [receiver] = useCurrentVaultAddress(toCoinKey.chain);
 
   const [fromAmount] = useFromAmount();
 
@@ -63,7 +63,7 @@ export const useSwapKeysignPayloadQuery = () => {
         swapQuote.router ?? swapQuote.inbound_address ?? receiver;
 
       const service = BlockchainServiceFactory.createService(
-        fromCoinKey.chainId,
+        fromCoinKey.chain,
         walletCore
       );
 
@@ -101,7 +101,7 @@ export const useSwapKeysignPayloadQuery = () => {
           };
         }
 
-        if (fromCoinKey.chainId in EvmChain && !isNativeCoin(fromCoinKey)) {
+        if (fromCoinKey.chain in EvmChain && !isNativeCoin(fromCoinKey)) {
           return {
             fromAddress,
             amount: shouldBePresent(fromAmount),

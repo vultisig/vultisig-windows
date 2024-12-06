@@ -143,7 +143,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       const gasLimit =
         feeSettings?.gasLimit ??
         getEvmGasLimit({
-          chainId: this.chain,
+          chain: this.chain,
           isNativeToken: coin.isNativeToken,
         });
 

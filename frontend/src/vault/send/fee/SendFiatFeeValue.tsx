@@ -22,7 +22,7 @@ export const SendFiatFeeValue = () => {
 
   const { fee } = useSendSpecificTxInfo();
 
-  const { decimals } = getChainFeeCoin(coinKey.chainId);
+  const { decimals } = getChainFeeCoin(coinKey.chain);
 
   const feeAmount =
     fee !== undefined ? fromChainAmount(BigInt(Math.round(fee)), decimals) : 0;

@@ -12,7 +12,7 @@ export const RefreshSend = () => {
   const invalidateQueries = useInvalidateQueries();
 
   const [coinKey] = useCurrentSendCoin();
-  const address = useCurrentVaultAddress(coinKey.chainId);
+  const address = useCurrentVaultAddress(coinKey.chain);
 
   const feeSettings = useFeeSettings();
 

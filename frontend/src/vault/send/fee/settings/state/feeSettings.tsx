@@ -14,12 +14,12 @@ type FeeSettings = EvmFeeSettings | UtxoFeeSettings;
 type FeeSettingsRecord = Record<string, FeeSettings>;
 
 type FeeSettingsKey = {
-  chainId: Chain;
+  chain: Chain;
   isNativeToken: boolean;
 };
 
 const feeSettingsKeyToString = (key: FeeSettingsKey): string =>
-  `${key.chainId}:${key.isNativeToken}`;
+  `${key.chain}:${key.isNativeToken}`;
 
 const { useState: useFeeSettingsRecord, provider: FeeSettingsRecordProvider } =
   getStateProviderSetup<FeeSettingsRecord>('FeeSettings');
@@ -38,7 +38,7 @@ export const useFeeSettings = <T extends FeeSettings>() => {
 
   const value = useMemo(() => {
     const stringKey = feeSettingsKeyToString({
-      chainId: coin.chainId,
+      chain: coin.chain,
       isNativeToken: isNativeCoin(coin),
     });
 
@@ -52,7 +52,7 @@ export const useFeeSettings = <T extends FeeSettings>() => {
   const setValue = useCallback(
     (value: T | null) => {
       const stringKey = feeSettingsKeyToString({
-        chainId: coin.chainId,
+        chain: coin.chain,
         isNativeToken: isNativeCoin(coin),
       });
 

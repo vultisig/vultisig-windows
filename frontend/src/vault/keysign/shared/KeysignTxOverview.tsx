@@ -33,7 +33,7 @@ export const KeysignTxOverview = () => {
         <IconButton
           onClick={() => {
             const url = getBlockExplorerUrl({
-              chainId: chain as Chain,
+              chain: chain as Chain,
               entity: 'tx',
               value: txHash,
             });

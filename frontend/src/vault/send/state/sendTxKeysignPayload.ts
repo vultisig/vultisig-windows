@@ -57,7 +57,7 @@ export const useSendTxKeysignPayload = () => {
     };
 
     const keysignPayload = BlockchainServiceFactory.createService(
-      coinKey.chainId,
+      coinKey.chain,
       walletCore
     ).createKeysignPayload(tx, vault.local_party_id, vault.public_key_ecdsa);
 
@@ -66,7 +66,7 @@ export const useSendTxKeysignPayload = () => {
     amount,
     balanceQuery.data,
     coin,
-    coinKey.chainId,
+    coinKey.chain,
     memo,
     receiver,
     sender,

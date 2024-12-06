@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { areEqualCoins } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
-import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
 import {
   getStorageCoinKey,
@@ -23,7 +22,7 @@ import {
 import { VaultChainCoin } from './useVaultChainCoinsQuery';
 
 export type VaultChainBalance = {
-  chainId: Chain;
+  chain: Chain;
   coins: VaultChainCoin[];
 };
 
@@ -57,9 +56,9 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
 
         return {
           ...coinKey,
-          symbol: coin.ticker,
+          ticker: coin.ticker,
           decimals: coin.decimals,
-          icon: getCoinMetaIconSrc(coin),
+          logo: coin.logo,
           amount,
           price,
         };
@@ -68,7 +67,7 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
 
     const data = order(
       toEntries(balancesByChain).map(({ key, value }) => ({
-        chainId: key,
+        chain: key,
         coins: value,
       })),
       ({ coins }) => sum(coins.map(getCoinValue)),

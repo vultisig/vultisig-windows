@@ -6,11 +6,11 @@ import { Chain } from '../../model/chain';
 import { makeAppPath } from '../../navigation';
 
 type Input = {
-  chainId: string;
+  chain: string;
   address?: string;
 };
 
-export const useHandleVaultChainItemPress = ({ chainId, address }: Input) => {
+export const useHandleVaultChainItemPress = ({ chain, address }: Input) => {
   const [pressedAt, setPressedAt] = useState<number | null>(null);
   const [copiedAt, setCopiedAt] = useState<number | null>(null);
   const copyAddress = useCopyAddress();
@@ -41,7 +41,7 @@ export const useHandleVaultChainItemPress = ({ chainId, address }: Input) => {
     },
     onPointerUp: () => {
       if (!copiedAt) {
-        navigate(makeAppPath('vaultChainDetail', { chain: chainId as Chain }));
+        navigate(makeAppPath('vaultChainDetail', { chain: chain as Chain }));
       }
 
       setPressedAt(null);

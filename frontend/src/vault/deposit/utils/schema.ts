@@ -10,7 +10,7 @@ import {
 export const isSchemaFunction = (
   schema: unknown
 ): schema is (
-  chainId: Chain,
+  chain: Chain,
   walletCore: any,
   totalAmountAvailable: number
 ) => ZodObject<any> => {
@@ -18,30 +18,30 @@ export const isSchemaFunction = (
 };
 
 export const getFieldsForChainAction = (
-  chainId: Chain,
+  chain: Chain,
   selectedChainAction: ChainAction | undefined
 ) =>
-  chainId && selectedChainAction
+  chain && selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.fields || []
     : [];
 
 export const getChainActionSchema = (
-  chainId: Chain,
+  chain: Chain,
   selectedChainAction: ChainAction | undefined
 ) =>
-  chainId && selectedChainAction
+  chain && selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.schema
     : undefined;
 
 // @antonio: using any because Zod can't be configured
 export const resolveSchema = (
   schema: any,
-  chainId: Chain,
+  chain: Chain,
   walletCore: WalletCore,
   totalAmountAvailable: number
 ) =>
   schema
     ? isSchemaFunction(schema)
-      ? schema(chainId, walletCore, totalAmountAvailable)
+      ? schema(chain, walletCore, totalAmountAvailable)
       : schema
     : undefined;

@@ -25,11 +25,11 @@ export const useDeleteCoinMutation = () => {
   return useMutation({
     mutationFn: async (key: CoinKey) => {
       const coinService = CoinServiceFactory.createCoinService(
-        key.chainId as Chain,
+        key.chain as Chain,
         walletCore
       );
 
-      const address = addresses[key.chainId as Chain];
+      const address = addresses[key.chain as Chain];
 
       await coinService.deleteCoin(
         accountCoinKeyToString({

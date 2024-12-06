@@ -2,14 +2,14 @@ import { EvmChain } from '../../../../model/chain';
 import { evmNativeTokenGasLimit, evmTokenGasLimit } from '../../evmGasLimit';
 
 type GetEvmGasLimitInput = {
-  chainId: EvmChain;
+  chain: EvmChain;
   isNativeToken: boolean;
 };
 
 export const getEvmGasLimit = ({
-  chainId,
+  chain,
   isNativeToken,
 }: GetEvmGasLimitInput) => {
   const record = isNativeToken ? evmNativeTokenGasLimit : evmTokenGasLimit;
-  return record[chainId];
+  return record[chain];
 };

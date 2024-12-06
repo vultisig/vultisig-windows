@@ -10,7 +10,7 @@ describe('getBlockExplorerUrl', () => {
   it('should throw an error for unsupported chains', () => {
     expect(() =>
       getBlockExplorerUrl({
-        chainId: 'UnsupportedChain' as Chain,
+        chain: 'UnsupportedChain' as Chain,
         entity: 'address',
         value: address,
       })
@@ -20,7 +20,7 @@ describe('getBlockExplorerUrl', () => {
   it('should throw an error for unsupported entities', () => {
     expect(() =>
       getBlockExplorerUrl({
-        chainId: Chain.Ethereum,
+        chain: Chain.Ethereum,
         entity: 'unsupported-entity' as 'address' | 'tx',
         value: address,
       })
@@ -29,7 +29,7 @@ describe('getBlockExplorerUrl', () => {
 
   it('should generate the correct address URL for Ethereum', () => {
     const url = getBlockExplorerUrl({
-      chainId: Chain.Ethereum,
+      chain: Chain.Ethereum,
       entity: 'address',
       value: address,
     });
@@ -38,7 +38,7 @@ describe('getBlockExplorerUrl', () => {
 
   it('should generate the correct transaction URL for Ethereum', () => {
     const url = getBlockExplorerUrl({
-      chainId: Chain.Ethereum,
+      chain: Chain.Ethereum,
       entity: 'tx',
       value: tx,
     });
@@ -47,7 +47,7 @@ describe('getBlockExplorerUrl', () => {
 
   it('should generate the correct address URL for Bitcoin', () => {
     const url = getBlockExplorerUrl({
-      chainId: Chain.Bitcoin,
+      chain: Chain.Bitcoin,
       entity: 'address',
       value: address,
     });
@@ -56,7 +56,7 @@ describe('getBlockExplorerUrl', () => {
 
   it('should generate the correct transaction URL for Bitcoin', () => {
     const url = getBlockExplorerUrl({
-      chainId: Chain.Bitcoin,
+      chain: Chain.Bitcoin,
       entity: 'tx',
       value: tx,
     });
@@ -65,7 +65,7 @@ describe('getBlockExplorerUrl', () => {
 
   it('should generate the correct address URL for Solana', () => {
     const url = getBlockExplorerUrl({
-      chainId: Chain.Solana,
+      chain: Chain.Solana,
       entity: 'address',
       value: address,
     });
@@ -74,7 +74,7 @@ describe('getBlockExplorerUrl', () => {
 
   it('should generate the correct transaction URL for Solana', () => {
     const url = getBlockExplorerUrl({
-      chainId: Chain.Solana,
+      chain: Chain.Solana,
       entity: 'tx',
       value: tx,
     });

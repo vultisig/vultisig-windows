@@ -4,7 +4,7 @@ import { Chain } from '../../../model/chain';
 type ChainEntity = 'address' | 'tx';
 
 type GetBlockExplorerUrlInput = {
-  chainId: Chain;
+  chain: Chain;
   entity: ChainEntity;
   value: string;
 };
@@ -41,14 +41,14 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
 };
 
 export const getBlockExplorerUrl = ({
-  chainId,
+  chain,
   entity,
   value,
 }: GetBlockExplorerUrlInput): string => {
-  const baseUrl = blockExplorerBaseUrl[chainId];
+  const baseUrl = blockExplorerBaseUrl[chain];
   return match(entity, {
     address: () =>
-      match(chainId, {
+      match(chain, {
         [Chain.Bitcoin]: () => `${baseUrl}/address/${value}`,
         [Chain.BitcoinCash]: () => `${baseUrl}/address/${value}`,
         [Chain.Litecoin]: () => `${baseUrl}/address/${value}`,
@@ -79,7 +79,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Noble]: () => `${baseUrl}/address/${value}`,
       }),
     tx: () =>
-      match(chainId, {
+      match(chain, {
         [Chain.Bitcoin]: () => `${baseUrl}/tx/${value}`,
         [Chain.BitcoinCash]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Litecoin]: () => `${baseUrl}/transaction/${value}`,

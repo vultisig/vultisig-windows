@@ -38,7 +38,7 @@ export const KeysignTxPrimaryInfo = () => {
       {memo && <TxOverviewMemo value={memo} />}
       <TxOverviewAmount
         value={fromChainAmount(BigInt(toAmount), decimals)}
-        symbol={ticker}
+        ticker={ticker}
       />
       <QueryDependant
         query={coinPriceQuery}

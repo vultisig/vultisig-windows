@@ -20,7 +20,7 @@ export const VaultPrimaryActions = ({
 
   const coinKey = value ?? getStorageCoinKey(nativeCoins[0]);
 
-  const isSwapAvailable = swapEnabledChains.includes(coinKey.chainId);
+  const isSwapAvailable = swapEnabledChains.includes(coinKey.chain);
 
   return (
     <UniformColumnGrid fullWidth gap={12}>

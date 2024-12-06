@@ -50,7 +50,7 @@ export const requiredFieldsPerChainAction = {
       },
     ],
     schema: (
-      chainId: Chain,
+      chain: Chain,
       walletCore: WalletCore,
       totalAmountAvailable: number
     ) =>
@@ -62,7 +62,7 @@ export const requiredFieldsPerChainAction = {
           })
           .refine(
             async address =>
-              await validateNodeAddress(address, chainId, walletCore),
+              await validateNodeAddress(address, chain, walletCore),
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
             }
@@ -109,7 +109,7 @@ export const requiredFieldsPerChainAction = {
       },
     ],
     schema: (
-      chainId: Chain,
+      chain: Chain,
       walletCore: WalletCore,
       totalAmountAvailable: number
     ) =>
@@ -121,7 +121,7 @@ export const requiredFieldsPerChainAction = {
           })
           .refine(
             async address =>
-              await validateNodeAddress(address, chainId, walletCore),
+              await validateNodeAddress(address, chain, walletCore),
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
             }
@@ -183,7 +183,7 @@ export const requiredFieldsPerChainAction = {
       },
     ],
     schema: (
-      chainId: Chain,
+      chain: Chain,
       walletCore: WalletCore,
       totalAmountAvailable: number
     ) =>
@@ -195,7 +195,7 @@ export const requiredFieldsPerChainAction = {
           })
           .refine(
             async address =>
-              await validateNodeAddress(address, chainId, walletCore),
+              await validateNodeAddress(address, chain, walletCore),
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
             }
@@ -238,7 +238,7 @@ export const requiredFieldsPerChainAction = {
       },
     ],
     schema: (
-      chainId: Chain,
+      chain: Chain,
       walletCore: WalletCore,
       totalAmountAvailable: number
     ) =>
@@ -250,7 +250,7 @@ export const requiredFieldsPerChainAction = {
           })
           .refine(
             async address =>
-              await validateNodeAddress(address, chainId, walletCore),
+              await validateNodeAddress(address, chain, walletCore),
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
             }
@@ -299,7 +299,7 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: (chainId: Chain, walletCore: WalletCore) =>
+    schema: (chain: Chain, walletCore: WalletCore) =>
       z.object({
         nodeAddress: z
           .string()
@@ -308,7 +308,7 @@ export const requiredFieldsPerChainAction = {
           })
           .refine(
             async address =>
-              await validateNodeAddress(address, chainId, walletCore),
+              await validateNodeAddress(address, chain, walletCore),
             {
               message: 'chainFunctions.leave.validations.nodeAddressInvalid',
             }
@@ -331,7 +331,7 @@ export const requiredFieldsPerChainAction = {
       },
     ],
     schema: (
-      chainId: Chain,
+      chain: Chain,
       walletCore: WalletCore,
       totalAmountAvailable: number
     ) =>
@@ -363,7 +363,7 @@ export const requiredFieldsPerChainAction = {
         required: true,
       },
     ],
-    schema: (chainId: Chain, walletCore: any, totalAmountAvailable: number) =>
+    schema: (chain: Chain, walletCore: any, totalAmountAvailable: number) =>
       z.object({
         amount: z
           .string()

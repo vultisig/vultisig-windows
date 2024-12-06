@@ -4,7 +4,6 @@ import { areEqualCoins } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { useCoinPricesQuery } from '../../../coin/query/useCoinPricesQuery';
 import { getCoinKey } from '../../../coin/utils/coin';
-import { getCoinMetaIconSrc } from '../../../coin/utils/coinMeta';
 import {
   getStorageCoinKey,
   storageCoinToCoin,
@@ -70,8 +69,8 @@ export const VaultChainCoinPage = () => {
                   value={{
                     amount,
                     decimals,
-                    icon: getCoinMetaIconSrc(coin),
-                    symbol: coin.ticker,
+                    logo: coin.logo,
+                    ticker: coin.ticker,
                     price,
                     ...coinKey,
                   }}

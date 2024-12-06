@@ -4,14 +4,14 @@ import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { AddressServiceFactory } from '../../services/Address/AddressServiceFactory';
 import { ChainAccount } from '../ChainAccount';
 
-export const useValidateAddressQuery = ({ chainId, address }: ChainAccount) => {
+export const useValidateAddressQuery = ({ chain, address }: ChainAccount) => {
   const walletCore = useAssertWalletCore();
 
   return useQuery({
-    queryKey: ['validateAddress', chainId, address],
+    queryKey: ['validateAddress', chain, address],
     queryFn: async () => {
       const addressService = AddressServiceFactory.createAddressService(
-        chainId,
+        chain,
         walletCore
       );
 

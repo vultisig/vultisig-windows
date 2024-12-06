@@ -3,9 +3,9 @@ import { useQuery } from '@tanstack/react-query';
 import { EvmChain } from '../../../model/chain';
 import { getEvmBaseFee } from '../utils/getEvmBaseFee';
 
-export const useEvmBaseFeeQuery = (chainId: EvmChain) => {
+export const useEvmBaseFeeQuery = (chain: EvmChain) => {
   return useQuery({
-    queryKey: ['evmBaseFee', chainId],
-    queryFn: () => getEvmBaseFee(chainId),
+    queryKey: ['evmBaseFee', chain],
+    queryFn: () => getEvmBaseFee(chain),
   });
 };

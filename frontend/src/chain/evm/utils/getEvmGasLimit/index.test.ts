@@ -33,7 +33,7 @@ vi.mock('../evmGasLimit', () => ({
 describe('getEvmGasLimit', () => {
   it('should return the native token gas limit for Ethereum', () => {
     const gasLimit = getEvmGasLimit({
-      chainId: EvmChain.Ethereum,
+      chain: EvmChain.Ethereum,
       isNativeToken: true,
     });
     expect(gasLimit).toBe(23000);
@@ -41,7 +41,7 @@ describe('getEvmGasLimit', () => {
 
   it('should return the token gas limit for Ethereum', () => {
     const gasLimit = getEvmGasLimit({
-      chainId: EvmChain.Ethereum,
+      chain: EvmChain.Ethereum,
       isNativeToken: false,
     });
     expect(gasLimit).toBe(120000);
@@ -49,7 +49,7 @@ describe('getEvmGasLimit', () => {
 
   it('should return the native token gas limit for Base', () => {
     const gasLimit = getEvmGasLimit({
-      chainId: EvmChain.Base,
+      chain: EvmChain.Base,
       isNativeToken: true,
     });
     expect(gasLimit).toBe(40000);
@@ -57,7 +57,7 @@ describe('getEvmGasLimit', () => {
 
   it('should return the token gas limit for Base', () => {
     const gasLimit = getEvmGasLimit({
-      chainId: EvmChain.Base,
+      chain: EvmChain.Base,
       isNativeToken: false,
     });
     expect(gasLimit).toBe(120000);
@@ -65,7 +65,7 @@ describe('getEvmGasLimit', () => {
 
   it('should return the native token gas limit for Arbitrum', () => {
     const gasLimit = getEvmGasLimit({
-      chainId: EvmChain.Arbitrum,
+      chain: EvmChain.Arbitrum,
       isNativeToken: true,
     });
     expect(gasLimit).toBe(120000);
@@ -73,7 +73,7 @@ describe('getEvmGasLimit', () => {
 
   it('should return the token gas limit for Arbitrum', () => {
     const gasLimit = getEvmGasLimit({
-      chainId: EvmChain.Arbitrum,
+      chain: EvmChain.Arbitrum,
       isNativeToken: false,
     });
     expect(gasLimit).toBe(120000);
@@ -81,7 +81,7 @@ describe('getEvmGasLimit', () => {
 
   it('should return the native token gas limit for Zksync', () => {
     const gasLimit = getEvmGasLimit({
-      chainId: EvmChain.Zksync,
+      chain: EvmChain.Zksync,
       isNativeToken: true,
     });
     expect(gasLimit).toBe(200000);
@@ -89,7 +89,7 @@ describe('getEvmGasLimit', () => {
 
   it('should return the token gas limit for Zksync', () => {
     const gasLimit = getEvmGasLimit({
-      chainId: EvmChain.Zksync,
+      chain: EvmChain.Zksync,
       isNativeToken: false,
     });
     expect(gasLimit).toBe(200000);
@@ -97,7 +97,7 @@ describe('getEvmGasLimit', () => {
 
   it('should return undefined if the chain ID does not exist in the record', () => {
     const gasLimit = getEvmGasLimit({
-      chainId: 'UNKNOWN_CHAIN' as EvmChain,
+      chain: 'UNKNOWN_CHAIN' as EvmChain,
       isNativeToken: true,
     });
     expect(gasLimit).toBeUndefined();

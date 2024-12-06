@@ -22,8 +22,8 @@ export const SwapTotalFee = () => {
   const [toCoinKey] = useToCoin();
 
   const fromGasCoin = useMemo(
-    () => getChainPrimaryCoin(fromCoinKey.chainId),
-    [fromCoinKey.chainId]
+    () => getChainPrimaryCoin(fromCoinKey.chain),
+    [fromCoinKey.chain]
   );
 
   const { t } = useTranslation();

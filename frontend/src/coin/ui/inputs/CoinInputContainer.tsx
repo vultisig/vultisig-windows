@@ -59,9 +59,7 @@ export const CoinInputContainer = ({
         <ChainCoinIcon
           coinSrc={getCoinMetaIconSrc(value)}
           chainSrc={
-            isNativeCoin(value)
-              ? undefined
-              : getChainEntityIconSrc(value.chainId)
+            isNativeCoin(value) ? undefined : getChainEntityIconSrc(value.chain)
           }
           style={{ fontSize: 32 }}
         />

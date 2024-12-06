@@ -23,7 +23,7 @@ const depositSteps = ['form', 'verify'] as const;
 
 export const DepositPageController = () => {
   const [{ coin: coinName }] = useAppPathParams<'deposit'>();
-  const { chainId: chain } = coinKeyFromString(coinName);
+  const { chain: chain } = coinKeyFromString(coinName);
   const chainActionOptions =
     chainDepositOptionsConfig[chain?.toLowerCase() as ChainWithAction];
 

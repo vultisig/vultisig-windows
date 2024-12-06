@@ -19,14 +19,14 @@ import { useCurrentVaultChain } from '../../useCurrentVaultChain';
 import { ManageVaultChainCoin } from './ManageVaultChainCoin';
 
 export const VaultChainCoinOptions = () => {
-  const chainId = useCurrentVaultChain();
-  const vaultCoins = useCurrentVaultChainCoins(chainId);
-  const query = useWhitelistedCoinsQuery(chainId);
+  const chain = useCurrentVaultChain();
+  const vaultCoins = useCurrentVaultChainCoins(chain);
+  const query = useWhitelistedCoinsQuery(chain);
 
   const initialItems = useMemo(() => {
     const vaultItems = vaultCoins.map(storageCoinToCoin).map(CoinMeta.fromCoin);
     const suggestedItems = TokensStore.TokenSelectionAssets.filter(
-      token => token.chain === chainId
+      token => token.chain === chain
     );
 
     return withoutDuplicates(
@@ -34,7 +34,7 @@ export const VaultChainCoinOptions = () => {
       (one, another) =>
         areEqualCoins(getCoinMetaKey(one), getCoinMetaKey(another))
     ).filter(({ isNativeToken }) => !isNativeToken);
-  }, [chainId, vaultCoins]);
+  }, [chain, vaultCoins]);
 
   const [searchQuery] = useCurrentSearch();
 

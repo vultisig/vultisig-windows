@@ -66,7 +66,7 @@ export const DepositConfirmButton = ({
     });
 
     const keysignPayload = BlockchainServiceFactory.createService(
-      coinKey.chainId,
+      coinKey.chain,
       walletCore
     ).createKeysignPayload(tx, vault.local_party_id, vault.public_key_ecdsa);
 
