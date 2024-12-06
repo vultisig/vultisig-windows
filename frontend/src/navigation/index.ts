@@ -4,6 +4,7 @@ import {
   KeysignMessage,
   KeysignPayload,
 } from '../gen/vultisig/keysign/v1/keysign_message_pb';
+import { KeysignActionFees } from '../lib/types/keysign';
 import { addQueryParams } from '../lib/utils/query/addQueryParams';
 import { withoutUndefinedFields } from '../lib/utils/record/withoutUndefinedFields';
 import { Chain } from '../model/chain';
@@ -82,9 +83,10 @@ export type AppPathParams = {
 export type AppPathState = {
   keysign: {
     keysignPayload: KeysignPayload;
+    fees?: KeysignActionFees;
     keysignAction?: 'send' | 'deposit';
   };
-  fastKeysign: { keysignPayload: KeysignPayload };
+  fastKeysign: { keysignPayload: KeysignPayload; fees?: KeysignActionFees };
   joinKeysign: { vaultId: string; keysignMsg: KeysignMessage };
   joinKeygen: {
     keygenType: KeygenType;
