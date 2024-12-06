@@ -41,7 +41,6 @@ type AppNavigate = {
 
 export function useAppNavigate(): AppNavigate {
   const navigate = useNavigate();
-
   const appNavigate = useCallback(
     (path: AppPath, { params, ...options }: any = {}) => {
       const to = params
