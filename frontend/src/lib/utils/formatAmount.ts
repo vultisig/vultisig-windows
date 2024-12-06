@@ -48,12 +48,9 @@ export const formatAmount = (
     );
   }
 
-  // Validate currency code
-  const isValidCurrency = currency && /^[A-Z]{3}$/.test(currency.toUpperCase());
-
   const formatter = new Intl.NumberFormat(validLocale, {
-    style: isValidCurrency ? 'currency' : 'decimal',
-    currency: isValidCurrency ? currency : undefined,
+    style: currency ? 'currency' : 'decimal',
+    currency: currency,
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   });

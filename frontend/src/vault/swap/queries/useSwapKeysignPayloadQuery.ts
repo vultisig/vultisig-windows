@@ -2,11 +2,18 @@ import { useQuery } from '@tanstack/react-query';
 
 import { thorchainSwapConfig } from '../../../chain/thor/swap/config';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
+import { getChainPrimaryCoin } from '../../../chain/utils/getChainPrimaryCoin';
+import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
+import { areEqualCoins } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
+import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { THORChainSwapPayload } from '../../../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { Chain, EvmChain } from '../../../model/chain';
 import {
+  IDepositTransactionVariant,
+  ISendTransaction,
   ISwapTransaction,
   SwapPayloadType,
   TransactionType,
@@ -70,31 +77,72 @@ export const useSwapKeysignPayloadQuery = () => {
 
       const specificTransactionInfo = shouldBePresent(specificTxInfoQuery.data);
 
-      const tx: ISwapTransaction = {
-        fromAddress,
-        toAddress,
-        amount,
-        memo: swapQuote.memo,
-        coin: fromCoin,
-        sendMaxAmount,
-        specificTransactionInfo,
-        transactionType: TransactionType.SWAP,
-        swapPayload: {
-          case: SwapPayloadType.THORCHAIN,
-          value: new THORChainSwapPayload({
+      const thorchainPrimaryCoin = getCoinMetaKey(
+        getChainPrimaryCoin(Chain.THORChain)
+      );
+
+      const { memo } = swapQuote;
+
+      type Tx =
+        | ISendTransaction
+        | ISwapTransaction
+        | IDepositTransactionVariant;
+
+      const getTx = async (): Promise<Tx> => {
+        if (areEqualCoins(fromCoinKey, thorchainPrimaryCoin)) {
+          return {
             fromAddress,
-            fromCoin,
-            routerAddress: swapQuote.router,
-            fromAmount: amount.toString(),
-            expirationTime: swapQuote.expiry,
-            streamingInterval: thorchainSwapConfig.streamingInterval.toString(),
-            streamingQuantity: '0',
-            toAmountDecimal: toCoin.decimals.toString(),
-            toAmountLimit: swapQuote.expected_amount_out,
-            vaultAddress: fromAddress,
-          }),
-        },
+            toAddress: '',
+            amount: shouldBePresent(fromAmount),
+            memo,
+            coin: fromCoin,
+            transactionType: TransactionType.DEPOSIT,
+            specificTransactionInfo,
+          };
+        }
+
+        if (fromCoinKey.chainId in EvmChain && !isNativeCoin(fromCoinKey)) {
+          return {
+            fromAddress,
+            amount: shouldBePresent(fromAmount),
+            memo,
+            coin: fromCoin,
+            sendMaxAmount,
+            specificTransactionInfo,
+            transactionType: TransactionType.SEND,
+            toAddress,
+          };
+        }
+
+        return {
+          fromAddress,
+          toAddress,
+          amount,
+          memo,
+          coin: fromCoin,
+          sendMaxAmount,
+          specificTransactionInfo,
+          transactionType: TransactionType.SWAP,
+          swapPayload: {
+            case: SwapPayloadType.THORCHAIN,
+            value: new THORChainSwapPayload({
+              fromAddress,
+              fromCoin,
+              routerAddress: swapQuote.router,
+              fromAmount: amount.toString(),
+              expirationTime: swapQuote.expiry,
+              streamingInterval:
+                thorchainSwapConfig.streamingInterval.toString(),
+              streamingQuantity: '0',
+              toAmountDecimal: toCoin.decimals.toString(),
+              toAmountLimit: swapQuote.expected_amount_out,
+              vaultAddress: fromAddress,
+            }),
+          },
+        };
       };
+
+      const tx = await getTx();
 
       return service.createKeysignPayload(
         tx,
