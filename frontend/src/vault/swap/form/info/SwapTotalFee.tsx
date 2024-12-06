@@ -36,7 +36,6 @@ export const SwapTotalFee = () => {
         error={() => null}
         pending={() => <Spinner />}
         success={swapQuote => {
-          console.log(swapQuote);
           return (
             <QueryDependant
               query={txInfo}

@@ -65,7 +65,6 @@ export class PriceService implements IPriceService {
             rateList.push({
               fiat,
               value: fiatMap[lowerCaseFiat as keyof CurrencyRates],
-              expiryDate: new Date(Date.now() + 60000 * 60),
             });
           }
         }
