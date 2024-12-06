@@ -45,20 +45,6 @@ export default defineConfig({
         return str + path;
       },
     }),
-    // {
-    //   name: 'watch-wailsjs-and-format',
-    //   configureServer(server: ViteDevServer) {
-    //     const wailsjsPath = path.resolve(__dirname, 'wailsjs');
-
-    //     server.watcher.add(`${wailsjsPath}/**/*.{ts,js}`);
-
-    //     server.watcher.on('change', (file: string) => {
-    //       if (file.startsWith(wailsjsPath)) {
-    //         exec('npm run format:wails');
-    //       }
-    //     });
-    //   },
-    // },
   ],
   build: {
     outDir: 'dist',

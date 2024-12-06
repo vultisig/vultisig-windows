@@ -18,7 +18,11 @@ const affiliateParams = {
   affiliate_bps: 50,
 };
 
-export const getThorchainSwapQuote = ({
+type ThorchainSwapQuoteErrorResponse = {
+  error: string;
+};
+
+export const getThorchainSwapQuote = async ({
   destination,
   fromAsset,
   toAsset,
@@ -36,5 +40,13 @@ export const getThorchainSwapQuote = ({
 
   const url = addQueryParams(swapBaseUrl, params);
 
-  return queryUrl<ThorchainSwapQuote>(url);
+  const result = await queryUrl<
+    ThorchainSwapQuote | ThorchainSwapQuoteErrorResponse
+  >(url);
+
+  if ('error' in result) {
+    throw new Error(result.error);
+  }
+
+  return result;
 };
