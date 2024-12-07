@@ -11,16 +11,42 @@ import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { Chain } from '../../../model/chain';
+import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { useKeysignPayload } from './state/keysignPayload';
 
+const Section = ({
+  label,
+  value,
+  isMono,
+}: {
+  label: string;
+  value?: string;
+  isMono?: boolean;
+}) =>
+  value ? (
+    <VStack gap={16}>
+      <HStack alignItems="center" gap={4}>
+        <Text weight="600" size={20} color="contrast">
+          {label}
+        </Text>
+      </HStack>
+      <Text
+        family={isMono ? 'mono' : 'regular'}
+        color="primary"
+        size={14}
+        weight="400"
+      >
+        {value}
+      </Text>
+    </VStack>
+  ) : null;
+
 export const KeysignTxOverview = () => {
-  const txHash = useCurrentTxHash();
-
   const { t } = useTranslation();
-
+  const { coin, toAddress, memo, toAmount } = useKeysignPayload();
+  const { fees } = useAppPathState<'keysign'>();
+  const txHash = useCurrentTxHash();
   const copyTxHash = useCopyTxHash();
-
-  const { coin } = useKeysignPayload();
   const { chain } = shouldBePresent(coin);
 
   return (
@@ -45,6 +71,15 @@ export const KeysignTxOverview = () => {
       <Text family="mono" color="primary" size={14} weight="400">
         {txHash}
       </Text>
+      <Section label={t('to')} value={toAddress} isMono />
+      <Section label={t('memo')} value={memo} isMono />
+      <Section label={t('value')} value={toAmount} isMono />
+      <Section
+        label={t('network_fee')}
+        value={fees?.networkFeesFormatted}
+        isMono
+      />
+      <Section label={t('total_fee')} value={fees?.totalFeesFormatted} isMono />
     </VStack>
   );
 };

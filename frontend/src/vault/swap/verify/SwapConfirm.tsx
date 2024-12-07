@@ -6,11 +6,12 @@ import { StrictText } from '../../../lib/ui/text';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt';
 import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery';
+import { useSwapFees } from '../state/swapFees';
 import { useSwapTerms } from './state/swapTerms';
 
 export const SwapConfirm = () => {
   const { t } = useTranslation();
-
+  const [fees] = useSwapFees();
   const keysignPayloadQuery = useSwapKeysignPayloadQuery();
 
   const [terms] = useSwapTerms();
@@ -26,7 +27,11 @@ export const SwapConfirm = () => {
       pending={() => <StrictText>{t('loading')}</StrictText>}
       error={error => <StrictText>{extractErrorMsg(error)}</StrictText>}
       success={keysignPayload => (
-        <StartKeysignPrompt value={keysignPayload} isDisabled={isDisabled} />
+        <StartKeysignPrompt
+          value={keysignPayload}
+          fees={fees}
+          isDisabled={isDisabled}
+        />
       )}
     />
   );
