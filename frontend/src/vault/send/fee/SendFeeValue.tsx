@@ -19,5 +19,5 @@ export const SendFeeValue = () => {
     });
   }, [fees, setFees]);
 
-  return fees;
+  return <>{fees}</>;
 };
