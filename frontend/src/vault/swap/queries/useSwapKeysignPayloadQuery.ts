@@ -127,7 +127,7 @@ export const useSwapKeysignPayloadQuery = () => {
           sendMaxAmount,
           specificTransactionInfo,
           transactionType: TransactionType.SEND,
-          toAddress,
+          toAddress: shouldBePresent(swapQuote.inbound_address),
         };
       };
 
