@@ -67,13 +67,14 @@ export enum SwapPayloadType {
   ONE_INCH = 'oneinchSwapPayload',
 }
 
-// TODO: We will need to add more fields to this interface
+export type SwapPayload = {
+  value: THORChainSwapPayload;
+  case: SwapPayloadType;
+};
+
 export interface ISwapTransaction extends ITransaction {
   transactionType: TransactionType.SWAP;
   sendMaxAmount: boolean;
-  swapPayload: {
-    value: THORChainSwapPayload;
-    case: SwapPayloadType;
-  };
+  swapPayload: SwapPayload;
   erc20ApprovePayload?: Erc20ApprovePayload;
 }
