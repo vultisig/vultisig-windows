@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { thorchainSwapConfig } from '../../../chain/thor/swap/config';
+import { getErc20SwapTx } from '../../../chain/evm/swap/getErc20SwapTx';
+import { thorchainSwapQuoteToSwapPayload } from '../../../chain/thor/swap/utils/thorchainSwapQuoteToSwapPayload';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getChainPrimaryCoin } from '../../../chain/utils/getChainPrimaryCoin';
 import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
@@ -8,14 +9,12 @@ import { areEqualCoins } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
-import { THORChainSwapPayload } from '../../../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { Chain, EvmChain } from '../../../model/chain';
 import {
   IDepositTransactionVariant,
   ISendTransaction,
   ISwapTransaction,
-  SwapPayloadType,
   TransactionType,
 } from '../../../model/transaction';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
@@ -102,43 +101,33 @@ export const useSwapKeysignPayloadQuery = () => {
         }
 
         if (fromCoinKey.chain in EvmChain && !isNativeCoin(fromCoinKey)) {
-          return {
+          return getErc20SwapTx({
             fromAddress,
-            amount: shouldBePresent(fromAmount),
-            memo,
+            toAddress,
+            amount,
             coin: fromCoin,
             sendMaxAmount,
             specificTransactionInfo,
-            transactionType: TransactionType.SEND,
-            toAddress,
-          };
+            swapPayload: thorchainSwapQuoteToSwapPayload({
+              quote: swapQuote,
+              fromAddress,
+              fromCoin,
+              toCoin,
+              amount,
+            }),
+            memo,
+          });
         }
 
         return {
           fromAddress,
-          toAddress,
-          amount,
+          amount: shouldBePresent(fromAmount),
           memo,
           coin: fromCoin,
           sendMaxAmount,
           specificTransactionInfo,
-          transactionType: TransactionType.SWAP,
-          swapPayload: {
-            case: SwapPayloadType.THORCHAIN,
-            value: new THORChainSwapPayload({
-              fromAddress,
-              fromCoin,
-              routerAddress: swapQuote.router,
-              fromAmount: amount.toString(),
-              expirationTime: swapQuote.expiry,
-              streamingInterval:
-                thorchainSwapConfig.streamingInterval.toString(),
-              streamingQuantity: '0',
-              toAmountDecimal: toCoin.decimals.toString(),
-              toAmountLimit: swapQuote.expected_amount_out,
-              vaultAddress: fromAddress,
-            }),
-          },
+          transactionType: TransactionType.SEND,
+          toAddress: shouldBePresent(swapQuote.inbound_address),
         };
       };
 

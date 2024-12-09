@@ -28,7 +28,7 @@ export const useKeysignMsgQuery = () => {
     ],
     queryFn: () =>
       createKeysignMessage(
-        serverType === 'relay',
+        serverType,
         serviceName,
         sessionId,
         hexEncryptionKey,
