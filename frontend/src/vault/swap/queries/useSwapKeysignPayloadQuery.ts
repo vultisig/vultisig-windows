@@ -112,8 +112,8 @@ export const useSwapKeysignPayloadQuery = () => {
               quote: swapQuote,
               fromAddress,
               fromCoin,
+              toCoin,
               amount,
-              toCoinDecimals: toCoin.decimals,
             }),
             memo,
           });

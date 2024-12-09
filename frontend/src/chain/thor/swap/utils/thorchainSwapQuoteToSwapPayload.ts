@@ -9,7 +9,7 @@ type Input = {
   fromAddress: string;
   fromCoin: Coin;
   amount: number;
-  toCoinDecimals: number;
+  toCoin: Coin;
 };
 
 export const thorchainSwapQuoteToSwapPayload = ({
@@ -17,21 +17,26 @@ export const thorchainSwapQuoteToSwapPayload = ({
   fromAddress,
   fromCoin,
   amount,
-  toCoinDecimals,
+  toCoin,
 }: Input): SwapPayload => {
+  const isAffiliate =
+    !!quote.fees.affiliate && Number(quote.fees.affiliate) > 0;
+
   return {
     case: SwapPayloadType.THORCHAIN,
     value: new THORChainSwapPayload({
       fromAddress,
       fromCoin,
+      toCoin,
+      vaultAddress: quote.inbound_address ?? fromCoin.address,
       routerAddress: quote.router,
       fromAmount: amount.toString(),
+      toAmountDecimal: toCoin.decimals.toString(),
       expirationTime: quote.expiry,
       streamingInterval: thorchainSwapConfig.streamingInterval.toString(),
       streamingQuantity: '0',
-      toAmountDecimal: toCoinDecimals.toString(),
-      toAmountLimit: quote.expected_amount_out,
-      vaultAddress: fromAddress,
+      toAmountLimit: '0',
+      isAffiliate,
     }),
   };
 };
