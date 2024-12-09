@@ -66,7 +66,8 @@ export const StartKeysignPrompt = ({
         navigate('keysign', {
           state: {
             keysignPayload,
-          },
+            fees,
+          } as AppPathState['keysign'],
         });
       }}
     >

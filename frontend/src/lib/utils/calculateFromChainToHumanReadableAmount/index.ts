@@ -8,10 +8,4 @@ type Params = {
 export const calculateFromChainToHumanReadableAmount = ({
   amount,
   decimals,
-}: Params) => {
-  if (!amount || !decimals) {
-    return null;
-  }
-
-  return fromChainAmount(BigInt(amount), decimals);
-};
+}: Params) => fromChainAmount(BigInt(amount), decimals);
