@@ -74,11 +74,13 @@ export const KeysignTxOverview = () => {
       <Section label={t('to')} value={toAddress} isMono />
       <Section label={t('memo')} value={memo} isMono />
       <Section label={t('value')} value={toAmount} isMono />
-      <Section
-        label={t('network_fee')}
-        value={fees?.networkFeesFormatted}
-        isMono
-      />
+      {fees?.type === 'send' && (
+        <Section
+          label={t('network_fee')}
+          value={fees.networkFeesFormatted}
+          isMono
+        />
+      )}
       <Section label={t('total_fee')} value={fees?.totalFeesFormatted} isMono />
     </VStack>
   );

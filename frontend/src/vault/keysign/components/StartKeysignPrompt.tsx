@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { KeysignActionFees } from '../../../lib/types/keysign';
+import { KeysignActionFeeValue } from '../../../lib/types/keysign';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import {
@@ -13,7 +13,9 @@ import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useCurrentVaultHasServer } from '../../state/currentVault';
 
 type StartKeysignPrompt = ComponentWithValueProps<KeysignPayload> &
-  ComponentWithDisabledState & { fees: KeysignActionFees | null };
+  ComponentWithDisabledState & {
+    fees: KeysignActionFeeValue | null;
+  };
 export const StartKeysignPrompt = ({
   value: keysignPayload,
   fees,
@@ -47,7 +49,7 @@ export const StartKeysignPrompt = ({
               state: {
                 keysignPayload,
                 fees,
-              } as AppPathState['fastKeysign'],
+              } as AppPathState['keysign'],
             });
           }}
         >

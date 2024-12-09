@@ -23,8 +23,8 @@ import { QueryDependant } from '../../../../../lib/ui/query/components/QueryDepe
 import { SpecificEvm } from '../../../../../model/specific-transaction-info';
 import { useCurrentVaultCoin } from '../../../../state/currentVault';
 import { useCurrentSendCoin } from '../../../state/sendCoin';
-import { SendFeeValue } from '../../SendFeeValue';
 import { SendFiatFeeValue } from '../../SendFiatFeeValue';
+import { SendGasFeeValue } from '../../SendGasFeeValue';
 import {
   SpecificSendTxInfoProvider,
   useSendSpecificTxInfo,
@@ -112,7 +112,7 @@ export const ManageEvmFeeSettings: React.FC<ClosableComponentProps> = ({
               success={value => (
                 <SpecificSendTxInfoProvider value={value}>
                   <span>
-                    <SendFeeValue />
+                    <SendGasFeeValue />
                   </span>
                   <SendFiatFeeValue />
                 </SpecificSendTxInfoProvider>

@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
 import { StrictText } from '../../../lib/ui/text';
-import { SendFeeValue } from './SendFeeValue';
+import { SendGasFeeValue } from './SendGasFeeValue';
 import { SendSpecificTxInfoProvider } from './SendSpecificTxInfoProvider';
 
-export const SendFee = () => {
+export const SendGasFeeWrapper = () => {
   const { t } = useTranslation();
 
   return (
@@ -14,7 +14,7 @@ export const SendFee = () => {
       </span>
       <SendSpecificTxInfoProvider>
         <StrictText>
-          <SendFeeValue />
+          <SendGasFeeValue />
         </StrictText>
       </SendSpecificTxInfoProvider>
     </>
