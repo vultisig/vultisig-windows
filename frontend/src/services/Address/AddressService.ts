@@ -1,6 +1,7 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 
 import { GetDerivedPubKey } from '../../../wailsjs/go/tss/TssService';
+import { getCoinType } from '../../chain/walletCore/getCoinType';
 import { Chain } from '../../model/chain';
 import { CoinServiceFactory } from '../Coin/CoinServiceFactory';
 import { ICoinService } from '../Coin/ICoinService';
@@ -14,7 +15,10 @@ export class AddressService implements IAddressService {
   constructor(chain: Chain, walletCore: WalletCore) {
     this.walletCore = walletCore;
     this.coinService = CoinServiceFactory.createCoinService(chain, walletCore);
-    this.coinType = this.coinService.getCoinType();
+    this.coinType = getCoinType({
+      walletCore,
+      chain,
+    });
   }
 
   resolveDomainAddress(address: string): Promise<string> {

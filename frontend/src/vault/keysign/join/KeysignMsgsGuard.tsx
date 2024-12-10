@@ -1,11 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { KeysignPayloadUtils } from '../../../extensions/KeysignPayload';
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
-import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -13,26 +9,16 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
 import { CurrentKeysignMsgsProvider } from '../shared/state/currentKeysignMsgs';
-import { useKeysignPayload } from '../shared/state/keysignPayload';
+import { useKeysignMsgsQuery } from './queries/useKeysignMsgsQuery';
 
 export const KeysignMsgsGuard = ({ children }: ComponentWithChildrenProps) => {
-  const walletCore = useAssertWalletCore();
-
   const { t } = useTranslation();
 
-  const payload = useKeysignPayload();
-
-  const { mutate: parse, ...mutationStatus } = useMutation({
-    mutationFn: async () => {
-      return KeysignPayloadUtils.getPreKeysignImages(walletCore, payload);
-    },
-  });
-
-  useEffect(() => parse(), [parse]);
+  const query = useKeysignMsgsQuery();
 
   return (
     <QueryDependant
-      query={mutationStatus}
+      query={query}
       error={() => (
         <FullPageFlowErrorState
           title={t('keysign')}

@@ -1,3 +1,5 @@
+import { addMinutes } from 'date-fns';
+
 import { Coin } from '../../../../gen/vultisig/keysign/v1/coin_pb';
 import { THORChainSwapPayload } from '../../../../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
 import { SwapPayload, SwapPayloadType } from '../../../../model/transaction';
@@ -32,7 +34,7 @@ export const thorchainSwapQuoteToSwapPayload = ({
       routerAddress: quote.router,
       fromAmount: amount.toString(),
       toAmountDecimal: toCoin.decimals.toString(),
-      expirationTime: quote.expiry,
+      expirationTime: addMinutes(Date.now(), 15).getTime(),
       streamingInterval: thorchainSwapConfig.streamingInterval.toString(),
       streamingQuantity: '0',
       toAmountLimit: '0',

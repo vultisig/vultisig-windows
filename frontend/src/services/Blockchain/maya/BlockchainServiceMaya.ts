@@ -21,6 +21,7 @@ import {
   TransactionType,
 } from '../../../model/transaction';
 import Long from 'long';
+import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 
 export class BlockchainServiceMaya
   extends BlockchainService
@@ -188,7 +189,7 @@ export class BlockchainServiceMaya
       throw new Error(preSigningOutput.errorMessage);
     }
     return [
-      walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix(),
+      stripHexPrefix(walletCore.HexCoding.encode(preSigningOutput.dataHash)),
     ];
   }
   async getSignedTransaction(
