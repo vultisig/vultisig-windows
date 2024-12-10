@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '../../../lib/ui/buttons/Button';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
@@ -11,7 +12,6 @@ import { PageFooter } from '../../../ui/page/PageFooter';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { FinishEditing } from '../../components/FinishEditing';
 import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder';
 import { useUpdateVaultFolderNameMutation } from '../mutations/useUpdateVaultFoderNameMutation';
 import { useCurrentVaultFolder } from '../state/currentVaultFolder';
@@ -33,18 +33,7 @@ export const ManageVaultFolderPage = () => {
         primaryControls={
           <PageHeaderBackButton onClick={() => navigate('vaults')} />
         }
-        secondaryControls={
-          isPending ? (
-            <Spinner />
-          ) : (
-            <FinishEditing
-              onClick={async () => {
-                await mutateAsync({ id, name });
-                navigate('vaultFolder', { params: { id } });
-              }}
-            />
-          )
-        }
+        secondaryControls={<DeleteVaultFolder />}
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
       <PageContent data-testid="manage-vault-folder-page" scrollable gap={20}>
@@ -58,7 +47,17 @@ export const ManageVaultFolderPage = () => {
         <AddVaultsToFolder />
       </PageContent>
       <PageFooter>
-        <DeleteVaultFolder />
+        <Button
+          type="button"
+          onClick={async () => {
+            await mutateAsync({ id, name });
+            navigate('vaultFolder', { params: { id } });
+          }}
+        >
+          <Text color="reversed" size={14} weight="600">
+            {isPending ? <Spinner /> : t('done')}
+          </Text>
+        </Button>
       </PageFooter>
     </>
   );
