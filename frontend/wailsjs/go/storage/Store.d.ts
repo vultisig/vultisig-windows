@@ -54,6 +54,11 @@ export function UpdateVaultFolder(arg1: storage.VaultFolder): Promise<void>;
 
 export function UpdateVaultFolderID(arg1: string, arg2: any): Promise<void>;
 
+export function UpdateVaultFolderName(
+  arg1: string,
+  arg2: string
+): Promise<void>;
+
 export function UpdateVaultFolderOrder(
   arg1: string,
   arg2: number
