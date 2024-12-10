@@ -15,8 +15,8 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
 import { useCurrentVaultCoin } from '../../state/currentVault';
-import { SendFee } from '../fee/SendFee';
-import { SendFiatFee } from '../fee/SendFiatFee';
+import { SendFiatFee } from '../fee/SendFiatFeeWrapper';
+import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper';
 import { useSender } from '../sender/hooks/useSender';
 import { useSendAmount } from '../state/amount';
 import { useSendMemo } from '../state/memo';
@@ -59,7 +59,7 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
               ticker={coin.ticker}
             />
             <TxOverviewRow>
-              <SendFee />
+              <SendGasFeeWrapper />
             </TxOverviewRow>
             <TxOverviewRow>
               <SendFiatFee />

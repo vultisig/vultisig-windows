@@ -13,8 +13,8 @@ import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicato
 import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay';
 import { ManageAmount } from '../amount/ManageSendAmount';
 import { ManageSendCoin } from '../coin/ManageSendCoin';
-import { SendFee } from '../fee/SendFee';
-import { SendFiatFee } from '../fee/SendFiatFee';
+import { SendFiatFee } from '../fee/SendFiatFeeWrapper';
+import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper';
 import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings';
 import { ManageMemo } from '../memo/ManageMemo';
 import { ManageReceiver } from '../receiver/ManageReceiver';
@@ -56,7 +56,7 @@ export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
             <AmountInGlobalCurrencyDisplay />
             <VStack gap={8}>
               <StrictInfoRow>
-                <SendFee />
+                <SendGasFeeWrapper />
               </StrictInfoRow>
               <StrictInfoRow>
                 <SendFiatFee />
