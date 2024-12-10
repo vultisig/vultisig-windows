@@ -1,42 +1,49 @@
+import { useEffect } from 'react';
+
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { calculateFromChainToHumanReadableAmount } from '../../../lib/utils/calculateFromChainToHumanReadableAmount';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useCurrentSendCoin } from '../state/sendCoin';
+import { useSendFees } from '../state/sendFees';
 import { useSendSpecificTxInfo } from './SendSpecificTxInfoProvider';
 
 export const SendFiatFeeValue = () => {
   const [coinKey] = useCurrentSendCoin();
+  const [, setFees] = useSendFees();
+  const { globalCurrency } = useGlobalCurrency();
+  const { fee } = useSendSpecificTxInfo();
   const coin = useCurrentVaultCoin(coinKey);
-  const priceQuery = useCoinPriceQuery(
+
+  const { isPending, data: price } = useCoinPriceQuery(
     CoinMeta.fromCoin(storageCoinToCoin(coin))
   );
 
-  const { globalCurrency } = useGlobalCurrency();
-
-  const { fee } = useSendSpecificTxInfo();
-
   const { decimals } = getChainFeeCoin(coinKey.chain);
+  const humanReadableFeeValue = calculateFromChainToHumanReadableAmount({
+    amount: fee,
+    decimals,
+  });
 
-  const feeAmount =
-    fee !== undefined ? fromChainAmount(BigInt(Math.round(fee)), decimals) : 0;
+  let formattedAmount: string | null = null;
 
-  return (
-    <QueryDependant
-      query={priceQuery}
-      pending={() => <Spinner />}
-      error={() => null}
-      success={price => {
-        const formattedAmount = formatAmount(feeAmount * price, globalCurrency);
+  useEffect(() => {
+    if (!formattedAmount) return;
 
-        return formattedAmount;
-      }}
-    />
-  );
+    setFees({
+      type: 'send',
+      networkFeesFormatted: formattedAmount,
+    });
+  }, [formattedAmount, setFees]);
+
+  if (isPending) return <Spinner />;
+  if (!price || !humanReadableFeeValue) return null;
+
+  formattedAmount = formatAmount(humanReadableFeeValue * price, globalCurrency);
+  return <>{formattedAmount}</>;
 };
