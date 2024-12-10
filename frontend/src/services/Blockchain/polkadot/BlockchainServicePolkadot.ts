@@ -10,6 +10,7 @@ import TxCompiler = TW.TxCompiler;
 import Long from 'long';
 
 import { Keysign } from '../../../../wailsjs/go/tss/TssService';
+import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { SpecificPolkadot } from '../../../model/specific-transaction-info';
 import {
@@ -81,19 +82,9 @@ export class BlockchainServicePolkadot
     } = polkadotSpecific;
 
     try {
-      // Helper function to convert string representation of bigint to hex and strip the '0x' prefix
-      const stringToHex = (value: string): string => {
-        const bigintValue = BigInt(value);
-        let hexString = bigintValue.toString(16);
-        if (hexString.length % 2 !== 0) {
-          hexString = '0' + hexString;
-        }
-        return hexString;
-      };
-
       // Amount: converted to hexadecimal, stripped of '0x'
       const amountHex = Buffer.from(
-        stripHexPrefix(stringToHex(keysignPayload.toAmount)),
+        stripHexPrefix(bigIntToHex(BigInt(keysignPayload.toAmount))),
         'hex'
       );
 

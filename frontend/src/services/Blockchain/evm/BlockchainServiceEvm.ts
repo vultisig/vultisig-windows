@@ -3,6 +3,7 @@ import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { keccak256 } from 'js-sha3';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -85,16 +86,6 @@ export class BlockchainServiceEvm
 
     const { gasLimit, maxFeePerGasWei, nonce, priorityFee } = evmSpecific;
 
-    // Helper function to convert string representation of bigint to hex and strip the '0x' prefix
-    const stringToHex = (value: string): string => {
-      const bigintValue = BigInt(value);
-      let hexString = bigintValue.toString(16);
-      if (hexString.length % 2 !== 0) {
-        hexString = '0' + hexString;
-      }
-      return hexString;
-    };
-
     const chain: bigint = BigInt(
       this.walletCore.CoinTypeExt.chainId(this.coinType)
     );
@@ -113,31 +104,31 @@ export class BlockchainServiceEvm
 
     // Nonce: converted to hexadecimal, stripped of '0x', and padded
     const nonceHex = Buffer.from(
-      stripHexPrefix(stringToHex(nonce.toString()).padStart(2, '0')),
+      stripHexPrefix(bigIntToHex(nonce).padStart(2, '0')),
       'hex'
     );
 
     // Gas limit: converted to hexadecimal, stripped of '0x'
     const gasLimitHex = Buffer.from(
-      stripHexPrefix(stringToHex(gasLimit)),
+      stripHexPrefix(bigIntToHex(BigInt(gasLimit))),
       'hex'
     );
 
     // Max fee per gas: converted to hexadecimal, stripped of '0x'
     const maxFeePerGasHex = Buffer.from(
-      stripHexPrefix(stringToHex(maxFeePerGasWei)),
+      stripHexPrefix(bigIntToHex(BigInt(maxFeePerGasWei))),
       'hex'
     );
 
     // Max inclusion fee per gas (priority fee): converted to hexadecimal, stripped of '0x'
     const maxInclusionFeePerGasHex = Buffer.from(
-      stripHexPrefix(stringToHex(priorityFee)),
+      stripHexPrefix(bigIntToHex(BigInt(priorityFee))),
       'hex'
     );
 
     // Amount: converted to hexadecimal, stripped of '0x'
     const amountHex = Buffer.from(
-      stripHexPrefix(stringToHex(keysignPayload.toAmount)),
+      stripHexPrefix(bigIntToHex(BigInt(keysignPayload.toAmount))),
       'hex'
     );
 
