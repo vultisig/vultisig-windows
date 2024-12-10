@@ -4,6 +4,7 @@ import Long from 'long';
 import { storage, tss } from '../../../../wailsjs/go/models';
 import { Keysign } from '../../../../wailsjs/go/tss/TssService';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
+import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import {
   SuiCoin,
   SuiSpecific,
@@ -17,7 +18,6 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import { CoinServiceFactory } from '../../Coin/CoinServiceFactory';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
@@ -37,20 +37,20 @@ export class BlockchainServiceSui
     keysignPayload: KeysignPayload
   ): Promise<string> {
     try {
-      const coinService = CoinServiceFactory.createCoinService(
-        this.chain,
-        this.walletCore
-      );
-
       const rpcService = RpcServiceFactory.createRpcService(this.chain);
 
       const tssType = ChainUtils.getTssKeysignType(this.chain);
+
+      const coinType = getCoinType({
+        walletCore: this.walletCore,
+        chain: this.chain,
+      });
 
       const keysignGoLang = await Keysign(
         vault,
         messages,
         vault.local_party_id,
-        this.walletCore.CoinTypeExt.derivationPath(coinService.getCoinType()),
+        this.walletCore.CoinTypeExt.derivationPath(coinType),
         sessionID,
         hexEncryptionKey,
         serverURL,

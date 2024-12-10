@@ -25,6 +25,7 @@ import { CoinServiceFactory } from '../../Coin/CoinServiceFactory';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import Long from 'long';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
+import { getCoinType } from '../../../chain/walletCore/getCoinType';
 
 export class BlockchainServiceTon
   extends BlockchainService
@@ -48,11 +49,16 @@ export class BlockchainServiceTon
 
       const tssType = ChainUtils.getTssKeysignType(this.chain);
 
+      const coinType = getCoinType({
+        walletCore: this.walletCore,
+        chain: this.chain,
+      });
+
       const keysignGoLang = await Keysign(
         vault,
         messages,
         vault.local_party_id,
-        this.walletCore.CoinTypeExt.derivationPath(coinService.getCoinType()),
+        this.walletCore.CoinTypeExt.derivationPath(coinType),
         sessionID,
         hexEncryptionKey,
         serverURL,

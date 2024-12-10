@@ -10,12 +10,12 @@ import {
 } from '../../model/transaction';
 import { AddressServiceFactory } from '../Address/AddressServiceFactory';
 import { IAddressService } from '../Address/IAddressService';
-import { CoinServiceFactory } from '../Coin/CoinServiceFactory';
 import { IBlockchainService } from './IBlockchainService';
 import { SignedTransactionResult } from './signed-transaction-result';
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { Keysign } from '../../../wailsjs/go/tss/TssService';
 import { RpcServiceFactory } from '../Rpc/RpcServiceFactory';
+import { getCoinType } from '../../chain/walletCore/getCoinType';
 
 export class BlockchainService implements IBlockchainService {
   chain: Chain;
@@ -26,10 +26,7 @@ export class BlockchainService implements IBlockchainService {
   constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
     this.walletCore = walletCore;
-    this.coinType = CoinServiceFactory.createCoinService(
-      this.chain,
-      walletCore
-    ).getCoinType();
+    this.coinType = getCoinType({ walletCore, chain });
     this.addressService = AddressServiceFactory.createAddressService(
       this.chain,
       walletCore
@@ -44,11 +41,6 @@ export class BlockchainService implements IBlockchainService {
     serverURL: string,
     keysignPayload: KeysignPayload
   ): Promise<string> {
-    const coinService = CoinServiceFactory.createCoinService(
-      this.chain,
-      this.walletCore
-    );
-
     const rpcService = RpcServiceFactory.createRpcService(this.chain);
 
     const tssType = ChainUtils.getTssKeysignType(this.chain);
@@ -57,7 +49,7 @@ export class BlockchainService implements IBlockchainService {
       vault,
       messages,
       vault.local_party_id,
-      this.walletCore.CoinTypeExt.derivationPath(coinService.getCoinType()),
+      this.walletCore.CoinTypeExt.derivationPath(this.coinType),
       sessionID,
       hexEncryptionKey,
       serverURL,

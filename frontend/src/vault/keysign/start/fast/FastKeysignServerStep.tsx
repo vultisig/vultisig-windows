@@ -2,12 +2,12 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
 import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
 import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
 import { Chain, ChainUtils, TssKeysignType } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
-import { CoinServiceFactory } from '../../../../services/Coin/CoinServiceFactory';
 import { FullPageFlowErrorState } from '../../../../ui/flow/FullPageFlowErrorState';
 import { PageHeader } from '../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
@@ -45,18 +45,13 @@ export const FastKeysignServerStep: React.FC<
     mutationFn: () => {
       const chain = coin.chain as Chain;
 
-      const coinService = CoinServiceFactory.createCoinService(
-        chain,
-        walletCore
-      );
-
       return signWithServer({
         public_key: public_key_ecdsa,
         messages,
         session: sessionId,
         hex_encryption_key: hexEncryptionKey,
         derive_path: walletCore.CoinTypeExt.derivationPath(
-          coinService.getCoinType()
+          getCoinType({ walletCore, chain })
         ),
         is_ecdsa: ChainUtils.getTssKeysignType(chain) === TssKeysignType.ECDSA,
         vault_password: password,
