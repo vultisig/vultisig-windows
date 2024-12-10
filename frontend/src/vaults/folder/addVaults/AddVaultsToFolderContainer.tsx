@@ -1,12 +1,13 @@
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 
-export const AddVaultsToFolderContainer: React.FC<
-  ComponentWithChildrenProps
-> = ({ children }) => {
+export const AddVaultsToFolderContainer: FC<ComponentWithChildrenProps> = ({
+  children,
+}) => {
   const { t } = useTranslation();
 
   return (
