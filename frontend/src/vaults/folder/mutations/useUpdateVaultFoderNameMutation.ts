@@ -4,11 +4,6 @@ import { UpdateVaultFolderName } from '../../../../wailsjs/go/storage/Store';
 import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries';
 import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery';
 
-export type Input = {
-  id: string;
-  order: number;
-};
-
 export const useUpdateVaultFolderNameMutation = () => {
   const invalidate = useInvalidateQueries();
 
