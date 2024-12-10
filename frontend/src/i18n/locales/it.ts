@@ -16,6 +16,7 @@ export const it = {
   scan_with_devices_to_sign:
     'Esegui la scansione con i dispositivi per partecipare alla firma della transazione',
   next: 'Avanti',
+  current_vaults: 'Caveau Correnti',
   failed_to_confirm_email_code:
     'Impossibile confermare il codice di verifica e-mail',
   skip: 'Salta',

@@ -32,6 +32,7 @@ export const hr = {
   cancel: 'Otkaži',
   internet: 'Internet',
   local: 'Lokalno',
+  current_vaults: 'Trenutni Trezori',
   looking_for_devices: 'Traženje uređaja...',
   more_devices: 'više uređaja...',
   devices_on_same_internet:
