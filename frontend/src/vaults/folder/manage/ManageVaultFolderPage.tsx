@@ -1,3 +1,10 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { TextInput } from '../../../lib/ui/inputs/TextInput';
+import { VStack } from '../../../lib/ui/layout/Stack';
+import { Spinner } from '../../../lib/ui/loaders/Spinner';
+import { Text } from '../../../lib/ui/text';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageFooter } from '../../../ui/page/PageFooter';
@@ -6,13 +13,18 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { FinishEditing } from '../../components/FinishEditing';
 import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder';
+import { useUpdateVaultFolderNameMutation } from '../mutations/useUpdateVaultFoderNameMutation';
 import { useCurrentVaultFolder } from '../state/currentVaultFolder';
 import { DeleteVaultFolder } from './DeleteVaultFolder';
 import { ManageFolderVaults } from './ManageFolderVaults';
 
 export const ManageVaultFolderPage = () => {
   const navigate = useAppNavigate();
-  const { id, name } = useCurrentVaultFolder();
+  const { id, name: initialName } = useCurrentVaultFolder();
+  const [name, setName] = useState(initialName);
+  const { t } = useTranslation();
+
+  const { mutateAsync, isPending } = useUpdateVaultFolderNameMutation();
 
   return (
     <>
@@ -22,13 +34,26 @@ export const ManageVaultFolderPage = () => {
           <PageHeaderBackButton onClick={() => navigate('vaults')} />
         }
         secondaryControls={
-          <FinishEditing
-            onClick={() => navigate('vaultFolder', { params: { id } })}
-          />
+          isPending ? (
+            <Spinner />
+          ) : (
+            <FinishEditing
+              onClick={async () => {
+                await mutateAsync({ id, name });
+                navigate('vaultFolder', { params: { id } });
+              }}
+            />
+          )
         }
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
-      <PageContent scrollable gap={20}>
+      <PageContent data-testid="manage-vault-folder-page" scrollable gap={20}>
+        <VStack gap={8}>
+          <Text weight="500" color="supporting" size={14}>
+            {t('folder_name')}
+          </Text>
+          <TextInput value={name} onValueChange={setName} />
+        </VStack>
         <ManageFolderVaults />
         <AddVaultsToFolder />
       </PageContent>
