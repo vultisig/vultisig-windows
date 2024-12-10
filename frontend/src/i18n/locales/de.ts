@@ -16,6 +16,7 @@ export const de = {
   email_confirmation_code_error: 'Ungültiger Code',
   email_confirmation: 'Code eingeben',
   next: 'Weiter',
+  current_vaults: 'Aktuelle Tresore',
   failed_to_confirm_email_code:
     'E-Mail-Bestätigungscode konnte nicht bestätigt werden',
   skip: 'Überspringen',
