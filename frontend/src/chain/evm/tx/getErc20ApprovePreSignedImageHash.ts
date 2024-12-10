@@ -7,6 +7,7 @@ import { Chain } from '../../../model/chain';
 import { bigIntToHex } from '../../utils/bigIntToHex';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';
 import { getCoinType } from '../../walletCore/getCoinType';
+import { getSigningInputEnvelopedTxFields } from './getSigningInputEnvelopedTxFields';
 
 type Input = {
   keysignPayload: KeysignPayload;
@@ -33,25 +34,10 @@ export const getErc20ApprovePreSignedImageHash = ({
   const { maxFeePerGasWei, priorityFee, nonce, gasLimit } =
     blockchainSpecific.value as EthereumSpecific;
 
-  console.log({
-    maxFeePerGasWei,
-    priorityFee,
-    nonce,
-    gasLimit,
-  });
-
   const coinType = getCoinType({
     walletCore,
     chain: coin.chain as Chain,
   });
-
-  const chain: bigint = BigInt(walletCore.CoinTypeExt.chainId(coinType));
-
-  const padStart = coin.chain === Chain.Zksync ? 4 : 2;
-  const chainHex = Buffer.from(
-    stripHexPrefix(chain.toString(16).padStart(padStart, '0')),
-    'hex'
-  );
 
   const input = TW.Ethereum.Proto.SigningInput.create({
     transaction: {
@@ -61,7 +47,14 @@ export const getErc20ApprovePreSignedImageHash = ({
       },
     },
     toAddress: shouldBePresent(keysignPayload.coin).contractAddress,
-    chainId: chainHex,
+    ...getSigningInputEnvelopedTxFields({
+      chain: coin.chain as Chain,
+      walletCore,
+      maxFeePerGasWei,
+      priorityFee,
+      nonce,
+      gasLimit,
+    }),
   });
 
   const encodedInput = TW.Ethereum.Proto.SigningInput.encode(input).finish();
@@ -76,18 +69,3 @@ export const getErc20ApprovePreSignedImageHash = ({
 
   return stripHexPrefix(walletCore.HexCoding.encode(preSigningOutput.dataHash));
 };
-
-// var input = signingInput
-// input.chainID = Data(hexString: Int64(intChainID).hexString())!
-// input.nonce = Data(hexString: (nonce + incrementNonceValue).hexString())!
-
-// if let gas, let gasPrice {
-//     input.gasLimit = gas.serialize()
-//     input.gasPrice = gasPrice.serialize()
-//     input.txMode = .legacy
-// } else {
-//     input.gasLimit = gasLimit.magnitude.serialize()
-//     input.maxFeePerGas = maxFeePerGasWei.magnitude.serialize()
-//     input.maxInclusionFeePerGas = priorityFeeWei.magnitude.serialize()
-//     input.txMode = .enveloped
-// }

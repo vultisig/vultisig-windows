@@ -3,11 +3,11 @@ import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { keccak256 } from 'js-sha3';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getSigningInputEnvelopedTxFields } from '../../../chain/evm/tx/getSigningInputEnvelopedTxFields';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { Chain } from '../../../model/chain';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -86,46 +86,6 @@ export class BlockchainServiceEvm
 
     const { gasLimit, maxFeePerGasWei, nonce, priorityFee } = evmSpecific;
 
-    const chain: bigint = BigInt(
-      this.walletCore.CoinTypeExt.chainId(this.coinType)
-    );
-
-    // Chain ID: converted to hexadecimal, stripped of '0x', and padded
-    let chainHex = Buffer.from(
-      stripHexPrefix(chain.toString(16).padStart(2, '0')),
-      'hex'
-    );
-    if (this.chain === Chain.Zksync) {
-      chainHex = Buffer.from(
-        stripHexPrefix(chain.toString(16).padStart(4, '0')), // Ensure proper padding
-        'hex'
-      );
-    }
-
-    // Nonce: converted to hexadecimal, stripped of '0x', and padded
-    const nonceHex = Buffer.from(
-      stripHexPrefix(bigIntToHex(nonce).padStart(2, '0')),
-      'hex'
-    );
-
-    // Gas limit: converted to hexadecimal, stripped of '0x'
-    const gasLimitHex = Buffer.from(
-      stripHexPrefix(bigIntToHex(BigInt(gasLimit))),
-      'hex'
-    );
-
-    // Max fee per gas: converted to hexadecimal, stripped of '0x'
-    const maxFeePerGasHex = Buffer.from(
-      stripHexPrefix(bigIntToHex(BigInt(maxFeePerGasWei))),
-      'hex'
-    );
-
-    // Max inclusion fee per gas (priority fee): converted to hexadecimal, stripped of '0x'
-    const maxInclusionFeePerGasHex = Buffer.from(
-      stripHexPrefix(bigIntToHex(BigInt(priorityFee))),
-      'hex'
-    );
-
     // Amount: converted to hexadecimal, stripped of '0x'
     const amountHex = Buffer.from(
       stripHexPrefix(bigIntToHex(BigInt(keysignPayload.toAmount))),
@@ -155,13 +115,15 @@ export class BlockchainServiceEvm
     // Create the signing input with the constants
     const input = TW.Ethereum.Proto.SigningInput.create({
       toAddress: toAddress,
-      chainId: chainHex,
-      nonce: nonceHex,
-      gasLimit: gasLimitHex,
-      maxFeePerGas: maxFeePerGasHex,
-      maxInclusionFeePerGas: maxInclusionFeePerGasHex,
-      txMode: TW.Ethereum.Proto.TransactionMode.Enveloped,
       transaction: evmTransaction,
+      ...getSigningInputEnvelopedTxFields({
+        chain: this.chain,
+        walletCore: this.walletCore,
+        maxFeePerGasWei: maxFeePerGasWei,
+        priorityFee: priorityFee,
+        nonce: nonce,
+        gasLimit: gasLimit,
+      }),
     });
 
     return TW.Ethereum.Proto.SigningInput.encode(input).finish();
