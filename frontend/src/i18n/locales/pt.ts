@@ -516,6 +516,7 @@ export const pt = {
   thorchain_message_deposit: 'Depósito de mensagem THORChain',
   bond_with_lp: 'Vínculo',
   unbond_with_lp: 'Desvincular',
+  current_vaults: 'Cofres Atuais',
   chainFunctions: {
     amountExceeded: 'O valor excede o saldo disponível',
     memo: 'Memo',

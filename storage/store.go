@@ -545,6 +545,15 @@ func (s *Store) SaveVaultFolder(folder *VaultFolder) (string, error) {
 	return folder.ID, nil
 }
 
+func (s *Store) UpdateVaultFolderName(id string, name string) error {
+    query := `UPDATE vault_folders SET name = ? WHERE id = ?`
+    _, err := s.db.Exec(query, name, id)
+    if err != nil {
+        return fmt.Errorf("could not update vault folder name, err: %w", err)
+    }
+    return nil
+}
+
 func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
 	query := `SELECT id, name, "order" FROM vault_folders WHERE id = ?`
 	row := s.db.QueryRow(query, id)

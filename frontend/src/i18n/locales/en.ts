@@ -49,6 +49,7 @@ export const en = {
   invalid_vault_data: 'Invalid vault data',
   invalid_vault_data_message:
     "Data extracted from the vault backup couldn't be parsed.",
+  current_vaults: 'Current Vaults',
   vault_type_1_description: 'You need 1 more device to pair',
   vault_type_2_description: 'You need 2 more devices to pair',
   vault_type_3_description: 'You can pair as many devices you want',

@@ -1,19 +1,20 @@
-import { useTranslation } from 'react-i18next';
-
-import { Button } from '../../../lib/ui/buttons/Button';
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
+import TrashIcon from '../../../lib/ui/icons/TrashIcon';
+import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { useDeleteVaultFolderMutation } from '../mutations/useDeleteVaultFolderMutation';
 import { useCurrentVaultFolder } from '../state/currentVaultFolder';
 
 export const DeleteVaultFolder = () => {
   const { id } = useCurrentVaultFolder();
-
   const { mutate, isPending } = useDeleteVaultFolderMutation();
 
-  const { t } = useTranslation();
-
   return (
-    <Button kind="idle" isLoading={isPending} onClick={() => mutate(id)}>
-      {t('delete_folder')}
-    </Button>
+    <UnstyledButton onClick={() => mutate(id)}>
+      {isPending ? (
+        <Spinner />
+      ) : (
+        <TrashIcon width={20} height={20} stroke="#FFA500" />
+      )}
+    </UnstyledButton>
   );
 };

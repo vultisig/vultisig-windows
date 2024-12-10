@@ -1,13 +1,13 @@
-const TrashRedIcon = () => (
+const TrashIcon = ({ stroke = '#EE2B2B', width = 24, height = 24 }) => (
   <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={24}
-    height={24}
+    xmlns="http://www.w3.height/2000/svg"
+    width={width}
+    height={height}
     fill="none"
     viewBox="0 0 24 24"
   >
     <path
-      stroke="#EE2B2B"
+      stroke={stroke}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}
@@ -15,4 +15,4 @@ const TrashRedIcon = () => (
     />
   </svg>
 );
-export default TrashRedIcon;
+export default TrashIcon;

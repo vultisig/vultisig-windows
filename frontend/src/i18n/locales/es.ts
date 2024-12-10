@@ -520,6 +520,7 @@ export const es = {
   chain_message_deposit: 'Depósito de mensajes de {{chain}}',
   thorchain_message_deposit: 'Depósito de mensajes de THORChain',
   bond_with_lp: 'Enlazar',
+  current_vaults: 'Bóvedas Actuales',
   unbond_with_lp: 'Desvincular',
   chainFunctions: {
     amountExceeded: 'El importe excede el saldo disponible',

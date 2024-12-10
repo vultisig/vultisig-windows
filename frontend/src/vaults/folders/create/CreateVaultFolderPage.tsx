@@ -18,14 +18,11 @@ import { useVaultFolders } from '../queries/useVaultFoldersQuery';
 
 export const CreateVaultFolderPage = () => {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
-
   const [name, setName] = useState('');
-
   const [vaultIds, setVaultIds] = useState<string[]>([]);
-
   const folders = useVaultFolders();
+
   const names = useMemo(() => folders.map(({ name }) => name), [folders]);
 
   const vaults = useFolderlessVaults();
@@ -44,7 +41,10 @@ export const CreateVaultFolderPage = () => {
 
   return (
     <>
-      <FlowPageHeader title={t('create_folder')} />
+      <FlowPageHeader
+        title={t('create_folder')}
+        data-testid="create-vault-folder-page"
+      />
       <VStack
         as="form"
         flexGrow

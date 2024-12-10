@@ -2,7 +2,7 @@ import BackupIcon from '../../lib/ui/icons/BackupIcon';
 import { InfoIcon } from '../../lib/ui/icons/InfoIcon';
 import ReshareIcon from '../../lib/ui/icons/ReshareIcon';
 import SquareAndPencilIcon from '../../lib/ui/icons/SquareAndPencilIcon';
-import TrashRedIcon from '../../lib/ui/icons/TrashRedIcon';
+import TrashIcon from '../../lib/ui/icons/TrashIcon';
 import { TextColor } from '../../lib/ui/text';
 import { makeAppPath } from '../../navigation';
 
@@ -42,7 +42,7 @@ export const editVaultSettingsItems: SettingItem[] = [
   {
     titleKey: 'vault_setting_edit_vault_delete_title',
     subtitleKey: 'vault_setting_edit_vault_delete_subtitle',
-    icon: TrashRedIcon,
+    icon: TrashIcon,
     path: makeAppPath('vaultDelete'),
     textColor: 'danger',
   },
