@@ -10,6 +10,7 @@ import TxCompiler = TW.TxCompiler;
 import Long from 'long';
 
 import { Keysign } from '../../../../wailsjs/go/tss/TssService';
+import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { SpecificPolkadot } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -90,10 +91,6 @@ export class BlockchainServicePolkadot
         return hexString;
       };
 
-      const stripHexPrefix = (hex: string): string => {
-        return hex.startsWith('0x') ? hex.slice(2) : hex;
-      };
-
       // Amount: converted to hexadecimal, stripped of '0x'
       const amountHex = Buffer.from(
         stripHexPrefix(stringToHex(keysignPayload.toAmount)),
@@ -167,7 +164,7 @@ export class BlockchainServicePolkadot
       // );
 
       return [
-        walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix(),
+        stripHexPrefix(walletCore.HexCoding.encode(preSigningOutput.dataHash)),
       ];
     } catch (error) {
       console.error('getPreSignedImageHash::', error);

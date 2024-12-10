@@ -1,6 +1,7 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 
 import { tss } from '../../../wailsjs/go/models';
+import { stripHexPrefix } from '../../chain/utils/stripHexPrefix';
 
 class SignatureProvider {
   private walletCore: WalletCore;
@@ -15,8 +16,9 @@ class SignatureProvider {
   }
 
   getDerSignature(preHash: Uint8Array): Uint8Array {
-    const preHashHex =
-      this.walletCore.HexCoding.encode(preHash).stripHexPrefix();
+    const preHashHex = stripHexPrefix(
+      this.walletCore.HexCoding.encode(preHash)
+    );
     if (this.signatures[preHashHex]) {
       const sigResult = this.signatures[preHashHex];
       return this.walletCore.HexCoding.decode(sigResult.der_signature);
@@ -25,8 +27,9 @@ class SignatureProvider {
   }
 
   getSignatureWithRecoveryId(preHash: Uint8Array): Uint8Array {
-    const preHashHex =
-      this.walletCore.HexCoding.encode(preHash).stripHexPrefix();
+    const preHashHex = stripHexPrefix(
+      this.walletCore.HexCoding.encode(preHash)
+    );
 
     if (this.signatures[preHashHex]) {
       const sigResult = this.signatures[preHashHex];
@@ -49,8 +52,9 @@ class SignatureProvider {
 
   // keep in mind EdDSA signature from TSS is in little endian format , need to convert it to bigendian
   getSignature(preHash: Uint8Array): Uint8Array {
-    const preHashHex =
-      this.walletCore.HexCoding.encode(preHash).stripHexPrefix();
+    const preHashHex = stripHexPrefix(
+      this.walletCore.HexCoding.encode(preHash)
+    );
     if (this.signatures[preHashHex]) {
       const sigResult = this.signatures[preHashHex];
       const rData = this.walletCore.HexCoding.decode(sigResult.r).reverse();

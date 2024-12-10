@@ -3,6 +3,7 @@ import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { keccak256 } from 'js-sha3';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../../../model/chain';
@@ -92,10 +93,6 @@ export class BlockchainServiceEvm
         hexString = '0' + hexString;
       }
       return hexString;
-    };
-
-    const stripHexPrefix = (hex: string): string => {
-      return hex.startsWith('0x') ? hex.slice(2) : hex;
     };
 
     const chain: bigint = BigInt(
@@ -196,9 +193,9 @@ export class BlockchainServiceEvm
     }
 
     const imageHashes = [
-      this.walletCore.HexCoding.encode(
-        preSigningOutput.dataHash
-      ).stripHexPrefix(),
+      stripHexPrefix(
+        this.walletCore.HexCoding.encode(preSigningOutput.dataHash)
+      ),
     ];
 
     return imageHashes;

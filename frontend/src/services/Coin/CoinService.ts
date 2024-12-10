@@ -3,6 +3,7 @@ import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 import { storage } from '../../../wailsjs/go/models';
 import { DeleteCoin, SaveCoin } from '../../../wailsjs/go/storage/Store';
+import { stripHexPrefix } from '../../chain/utils/stripHexPrefix';
 import { coinToStorageCoin } from '../../coin/utils/coin';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../model/chain';
@@ -74,7 +75,7 @@ export class CoinService implements ICoinService {
         decimals: asset.decimals,
         priceProviderId: asset.priceProviderId,
         isNativeToken: asset.isNativeToken,
-        hexPublicKey: hexPublicKey.stripHexPrefix(),
+        hexPublicKey: stripHexPrefix(hexPublicKey),
         logo: asset.logo,
       });
     } catch (error) {

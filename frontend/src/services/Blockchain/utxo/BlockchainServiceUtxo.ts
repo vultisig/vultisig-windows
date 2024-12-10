@@ -16,6 +16,7 @@ import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 import { SpecificUtxo } from '../../../model/specific-transaction-info';
 import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
+import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 
 export class BlockchainServiceUtxo
   extends BlockchainService
@@ -115,7 +116,7 @@ export class BlockchainServiceUtxo
         continue;
       }
       result.push(
-        this.walletCore.HexCoding.encode(hash.dataHash).stripHexPrefix()
+        stripHexPrefix(this.walletCore.HexCoding.encode(hash.dataHash))
       );
     }
     return result.sort();
@@ -182,7 +183,7 @@ export class BlockchainServiceUtxo
       );
     const output = TW.Bitcoin.Proto.SigningOutput.decode(compileWithSignatures);
     const result = new SignedTransactionResult(
-      this.walletCore.HexCoding.encode(output.encoded).stripHexPrefix(),
+      stripHexPrefix(this.walletCore.HexCoding.encode(output.encoded)),
       output.transactionId
     );
     return result;
@@ -231,7 +232,7 @@ export class BlockchainServiceUtxo
               segWitPubKeyHash
             );
           input.scripts[
-            this.walletCore.HexCoding.encode(segWitPubKeyHash).stripHexPrefix()
+            stripHexPrefix(this.walletCore.HexCoding.encode(segWitPubKeyHash))
           ] = redeemScript.data();
           break;
         }
@@ -244,7 +245,7 @@ export class BlockchainServiceUtxo
 
           const encoded = this.walletCore.HexCoding.encode(keyHash);
 
-          input.scripts[encoded.stripHexPrefix()] = redeemScriptPubKey.data();
+          input.scripts[stripHexPrefix(encoded)] = redeemScriptPubKey.data();
           break;
         }
         default:

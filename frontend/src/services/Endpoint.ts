@@ -281,8 +281,4 @@ export class Endpoint {
 
   static broadcastKujiraTransaction: string =
     'https://kujira-rest.publicnode.com/cosmos/tx/v1beta1/txs';
-
-  static getSwapProgressURL(txid: string): string {
-    return `https://runescan.io/tx/${txid.stripHexPrefix()}`;
-  }
 }

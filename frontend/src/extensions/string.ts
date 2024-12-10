@@ -3,7 +3,6 @@ import { keccak256 } from 'js-sha3';
 declare global {
   interface String {
     asUrl(): URL;
-    stripHexPrefix(): string;
     isNameService(): boolean;
     namehash(): string;
   }
@@ -11,10 +10,6 @@ declare global {
 
 String.prototype.asUrl = function (): URL {
   return new URL(this.toString());
-};
-
-String.prototype.stripHexPrefix = function (): string {
-  return this.replace(/^0x/, '');
 };
 
 String.prototype.isNameService = function (): boolean {

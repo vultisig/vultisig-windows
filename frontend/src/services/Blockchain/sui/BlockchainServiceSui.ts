@@ -3,6 +3,7 @@ import Long from 'long';
 
 import { storage, tss } from '../../../../wailsjs/go/models';
 import { Keysign } from '../../../../wailsjs/go/tss/TssService';
+import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import {
   SuiCoin,
   SuiSpecific,
@@ -186,7 +187,7 @@ export class BlockchainServiceSui
 
       const blakeHash = this.walletCore.Hash.blake2b(preSigningOutput.data, 32);
       const blakeHashes = [
-        this.walletCore.HexCoding.encode(blakeHash).stripHexPrefix(),
+        stripHexPrefix(this.walletCore.HexCoding.encode(blakeHash)),
       ];
       return blakeHashes;
     } catch (error) {

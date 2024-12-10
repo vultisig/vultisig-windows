@@ -24,6 +24,7 @@ import { Keysign } from '../../../../wailsjs/go/tss/TssService';
 import { ChainUtils } from '../../../model/chain';
 import { CoinServiceFactory } from '../../Coin/CoinServiceFactory';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
+import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 
 export class BlockchainServiceSolana
   extends BlockchainService
@@ -268,7 +269,7 @@ export class BlockchainServiceSolana
 
     // Convert the result data to hex, and ensure consistency with Swift output
     const imageHashes = [
-      this.walletCore.HexCoding.encode(preSigningOutput.data).stripHexPrefix(),
+      stripHexPrefix(this.walletCore.HexCoding.encode(preSigningOutput.data)),
     ];
 
     return imageHashes;
