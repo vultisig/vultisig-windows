@@ -15,9 +15,7 @@ const transformAddressBookItemsResponse = (
     order: addressBookItem.Order,
   }));
 
-export const addressBookItemsQueryKey = ['addressBookItems'];
-const STALE_TIME_IN_MS = 100000;
-
+export const addressBookItemsQueryKey = 'addressBookItems';
 export const useAddressBookItemsQuery = () => {
   const vaultService = new VaultService();
 
@@ -25,7 +23,6 @@ export const useAddressBookItemsQuery = () => {
     queryKey: [addressBookItemsQueryKey],
     queryFn: async () => {
       const addressBookItems = await vaultService.getAllAddressBookItems();
-
       if (!addressBookItems) {
         return [];
       }
@@ -33,6 +30,6 @@ export const useAddressBookItemsQuery = () => {
       return transformAddressBookItemsResponse(addressBookItems);
     },
     initialData: [],
-    staleTime: STALE_TIME_IN_MS,
+    staleTime: Number.MAX_SAFE_INTEGER,
   });
 };
