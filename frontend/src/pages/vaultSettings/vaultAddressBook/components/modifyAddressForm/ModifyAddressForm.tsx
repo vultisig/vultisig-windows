@@ -14,7 +14,7 @@ import { useWalletCore } from '../../../../../providers/WalletCoreProvider';
 import { useUpdateAddressBookItemMutation } from '../../../../../vault/mutations/useUpdateAddressBookItemMutation';
 import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';
 import { getCoinOptions } from '../../helpers/getCoinOptions';
-import { getAddressSchema } from '../../schemas/addressSchema';
+import { getModifyAddressSchema } from '../../schemas/addressSchema';
 import {
   customSelectOption,
   customSingleValue,
@@ -44,7 +44,7 @@ const ModifyAddressForm = ({
   const chainOptions = useMemo(() => getCoinOptions(), []);
   const { data: addressBookItems } = useAddressBookItemsQuery();
   const walletCore = useWalletCore();
-  const addressSchema = getAddressSchema({
+  const addressSchema = getModifyAddressSchema({
     walletCore,
     addressBookItems,
   });
