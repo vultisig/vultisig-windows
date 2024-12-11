@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Match } from '../../../lib/ui/base/Match';
 import { VStack } from '../../../lib/ui/layout/Stack';
@@ -12,12 +12,19 @@ import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesVi
 const AddressBookSettingsPage = () => {
   const [isAddAddressViewOpen, setIsAddAddressViewOpen] = useState(false);
   const [isEditModeOn, setIsEditModeOn] = useState(false);
-  const { data: addressBookItems, isFetching: isFetchingAddressBookItems } =
-    useAddressBookItemsQuery();
+  const {
+    data: addressBookItems,
+    isFetching: isFetchingAddressBookItems,
+    refetch,
+  } = useAddressBookItemsQuery();
 
   const handleOpenAddAddressView = () => {
     setIsAddAddressViewOpen(true);
   };
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <VStack flexGrow gap={16}>
