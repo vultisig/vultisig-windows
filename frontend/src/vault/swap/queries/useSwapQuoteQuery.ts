@@ -4,8 +4,10 @@ import { getThorchainSwapQuote } from '../../../chain/thor/swap/api/getThorchain
 import { toThorchainSwapAsset } from '../../../chain/thor/swap/asset/toThorchainSwapAsset';
 import { thorchainSwapConfig } from '../../../chain/thor/swap/config';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
+import { CoinKey } from '../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
+import { withoutNullOrUndefined } from '../../../lib/utils/array/withoutNullOrUndefined';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Fiat } from '../../../model/fiat';
@@ -16,6 +18,19 @@ import {
 import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
+
+type GetSwapQuoteQueryKey = {
+  fromCoinKey: CoinKey;
+  toCoinKey: CoinKey;
+  fromAmount: number | null;
+};
+
+export const getSwapQuoteQueryKey = ({
+  fromCoinKey,
+  toCoinKey,
+  fromAmount,
+}: GetSwapQuoteQueryKey) =>
+  withoutNullOrUndefined(['swapQuote', fromCoinKey, toCoinKey, fromAmount]);
 
 export const useSwapQuoteQuery = () => {
   const [fromCoinKey] = useFromCoin();
@@ -33,13 +48,11 @@ export const useSwapQuoteQuery = () => {
   );
 
   return useQuery({
-    queryKey: [
-      'swapOutputAmount',
+    queryKey: getSwapQuoteQueryKey({
       fromCoinKey,
       toCoinKey,
       fromAmount,
-      destination,
-    ],
+    }),
     queryFn: async () => {
       const fromAsset = toThorchainSwapAsset({
         ...fromCoinKey,
@@ -53,7 +66,7 @@ export const useSwapQuoteQuery = () => {
       const amount = toChainAmount(
         shouldBePresent(fromAmount),
         thorchainSwapConfig.decimals
-      ).toString();
+      );
 
       const usdAmount =
         shouldBePresent(fromAmount) * shouldBePresent(fromCoinUsdPrice.data);
@@ -70,5 +83,6 @@ export const useSwapQuoteQuery = () => {
       });
     },
     enabled: !!fromAmount && !!fromCoinUsdPrice.data,
+    retry: false,
   });
 };

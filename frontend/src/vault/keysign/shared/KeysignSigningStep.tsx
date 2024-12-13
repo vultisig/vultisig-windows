@@ -8,6 +8,7 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { Chain } from '../../../model/chain';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
@@ -69,10 +70,11 @@ export const KeysignSigningStep = ({
           <KeysignSummaryStep />
         </CurrentTxHashProvider>
       )}
-      error={() => (
+      error={error => (
         <FullPageFlowErrorState
           title={t('keysign')}
           message={t('signing_error')}
+          errorMessage={extractErrorMsg(error)}
         />
       )}
       pending={() => (
