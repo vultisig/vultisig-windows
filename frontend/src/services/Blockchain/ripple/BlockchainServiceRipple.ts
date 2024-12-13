@@ -35,8 +35,10 @@ export class BlockchainServiceRipple
       publicKeyEcdsa
     );
     const rippleSpecific = new RippleSpecific();
+
     const transactionInfoSpecific: SpecificRipple =
       obj.specificTransactionInfo as SpecificRipple;
+
     switch (obj.transactionType) {
       case TransactionType.SEND:
         rippleSpecific.gas = BigInt(transactionInfoSpecific?.fee || 0);
@@ -82,28 +84,46 @@ export class BlockchainServiceRipple
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
+    if (keysignPayload.blockchainSpecific instanceof RippleSpecific) {
+      throw new Error('Invalid blockchain specific');
+    }
+
     const walletCore = this.walletCore;
 
     if (keysignPayload.coin?.chain !== Chain.Ripple) {
       console.error('Coin is not Ripple');
       console.error('keysignPayload.coin?.chain:', keysignPayload.coin?.chain);
+      throw new Error('Coin is not Ripple');
     }
 
-    const transactionInfoSpecific: SpecificRipple =
-      keysignPayload.blockchainSpecific as unknown as SpecificRipple;
+    const transactionInfoSpecific =
+      keysignPayload.blockchainSpecific as unknown as {
+        case: 'rippleSpecific';
+        value: RippleSpecific;
+      };
+
+    const { gas, sequence } = transactionInfoSpecific.value;
 
     if (!transactionInfoSpecific) {
       console.error(
         'getPreSignedInputData fail to get Ripple transaction information from RPC'
       );
+      throw new Error(
+        'getPreSignedInputData fail to get Ripple transaction information from RPC'
+      );
     }
 
     if (!keysignPayload.coin) {
+      console.error('keysignPayload.coin is undefined');
       throw new Error('keysignPayload.coin is undefined');
     }
 
-    const pubKeyData = Buffer.from(keysignPayload.coin.hexPublicKey, 'hex');
+    const pubKeyData = Buffer.from(
+      keysignPayload?.coin?.hexPublicKey || '',
+      'hex'
+    );
     if (!pubKeyData) {
+      console.error('invalid hex public key');
       throw new Error('invalid hex public key');
     }
 
@@ -113,17 +133,16 @@ export class BlockchainServiceRipple
     );
 
     if (!toAddress) {
+      console.error('invalid to address');
       throw new Error('invalid to address');
     }
 
-    const { fee, sequence } = transactionInfoSpecific;
-
     try {
       const input = TW.Ripple.Proto.SigningInput.create({
-        account: keysignPayload.coin.address,
-        fee: Long.fromString(fee.toString()),
-        sequence: sequence,
-        publicKey: pubKeyData,
+        account: keysignPayload?.coin?.address,
+        fee: Long.fromString(gas.toString()),
+        sequence: Number(sequence),
+        publicKey: new Uint8Array(pubKeyData),
         opPayment: TW.Ripple.Proto.OperationPayment.create({
           destination: keysignPayload.toAddress,
           amount: Long.fromString(keysignPayload.toAmount),
@@ -133,25 +152,10 @@ export class BlockchainServiceRipple
         }),
       });
 
-      console.log({
-        account: keysignPayload.coin.address,
-        fee: Long.fromString(fee.toString()),
-        sequence: sequence,
-        publicKey: pubKeyData,
-      });
-
-      console.log({
-        destination: keysignPayload.toAddress,
-        amount: Long.fromString(keysignPayload.toAmount),
-        destinationTag: keysignPayload.memo
-          ? Long.fromString(keysignPayload.memo)
-          : undefined,
-      });
-
       return TW.Ripple.Proto.SigningInput.encode(input).finish();
-    } catch (e) {
+    } catch (e: any) {
       console.error('Error in getPreSignedInputData:', e);
-      throw e;
+      throw new Error(e.message);
     }
   }
 
@@ -229,6 +233,7 @@ export class BlockchainServiceRipple
       );
 
       if (!publicKey.verifyAsDER(signature, preSigningOutput.dataHash)) {
+        console.error('fail to verify signature');
         throw new Error('fail to verify signature');
       }
 
