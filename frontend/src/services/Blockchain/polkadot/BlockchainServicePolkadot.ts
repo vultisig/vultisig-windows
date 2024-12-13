@@ -13,6 +13,7 @@ import { Keysign } from '../../../../wailsjs/go/tss/TssService';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { SpecificPolkadot } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -150,12 +151,11 @@ export class BlockchainServicePolkadot
         throw new Error(preSigningOutput.errorMessage);
       }
 
-      // console.log(
-      //   walletCore.HexCoding.encode(preSigningOutput.dataHash).stripHexPrefix()
-      // );
-
       return [
-        stripHexPrefix(walletCore.HexCoding.encode(preSigningOutput.dataHash)),
+        hexEncode({
+          value: preSigningOutput.dataHash,
+          walletCore,
+        }),
       ];
     } catch (error) {
       console.error('getPreSignedImageHash::', error);

@@ -340,7 +340,6 @@ export const it = {
   send_terms_0: "Sto inviando all'indirizzo corretto",
   send_terms_1: "L'importo è corretto",
   send_terms_2: 'Non sto inviando a una truffa o a un hacker',
-  send_terms_error: 'Devi accettare i termini',
   choose_tokens: 'Scegli token',
   optional: 'opzionale',
   enter_memo: 'Inserisci memo',
@@ -447,7 +446,6 @@ export const it = {
     'Il trading è stato interrotto per la coppia selezionata, impossibile elaborare lo swap',
   'page.swap.not.possible':
     'Non è possibile passare a uno smart contract! Inserisci un indirizzo destinatario diverso.',
-  'page.swap.title': 'Scambio',
   swap_terms_0: "L'importo dello swap è corretto",
   swap_terms_1: "Sono d'accordo con l'importo che riceverò dopo lo scambio",
   swap_agree_terms: 'È necessario accettare i termini prima di procedere',
@@ -659,4 +657,10 @@ export const it = {
   upload_qr_code_image: "Carica l'immagine del codice QR",
   getting_video_permission: "Ottenimento dell'autorizzazione video...",
   failed_to_get_video_permission: "Impossibile ottenere l'autorizzazione video",
+  terms_required: 'Devi accettare i termini',
+  insufficient_balance: 'Equilibrio insufficiente',
+  swap: 'Scambio',
+  allowance: 'Indennità',
+  provider: 'Fornitore',
+  estimated_fees: 'Tariffe stimate',
 };

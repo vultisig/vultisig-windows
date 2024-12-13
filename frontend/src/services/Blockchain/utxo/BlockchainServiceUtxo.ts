@@ -16,7 +16,8 @@ import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 import { SpecificUtxo } from '../../../model/specific-transaction-info';
 import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
-import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
+import { toUtxoPreSignedImageHashes } from '../../../chain/utxo/tx/toUtxoPreSignedImageHashes';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 
 export class BlockchainServiceUtxo
   extends BlockchainService
@@ -98,28 +99,14 @@ export class BlockchainServiceUtxo
     keysignPayload: KeysignPayload
   ): Promise<string[]> {
     const input = await this.getPreSignedInputData(keysignPayload);
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
+    const preImageHashes = this.walletCore.TransactionCompiler.preImageHashes(
       this.coinType,
       input
     );
-    const preSignOutputs = TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
-    if (preSignOutputs.errorMessage !== '') {
-      throw new Error(preSignOutputs.errorMessage);
-    }
-    const result: string[] = [];
-    for (const hash of preSignOutputs.hashPublicKeys) {
-      if (
-        hash === undefined ||
-        hash.dataHash === undefined ||
-        hash.dataHash === null
-      ) {
-        continue;
-      }
-      result.push(
-        stripHexPrefix(this.walletCore.HexCoding.encode(hash.dataHash))
-      );
-    }
-    return result.sort();
+
+    return toUtxoPreSignedImageHashes({ preImageHashes }).map(value =>
+      hexEncode({ value, walletCore: this.walletCore })
+    );
   }
 
   public async getSignedTransaction(
@@ -183,7 +170,10 @@ export class BlockchainServiceUtxo
       );
     const output = TW.Bitcoin.Proto.SigningOutput.decode(compileWithSignatures);
     const result = new SignedTransactionResult(
-      stripHexPrefix(this.walletCore.HexCoding.encode(output.encoded)),
+      hexEncode({
+        value: output.encoded,
+        walletCore: this.walletCore,
+      }),
       output.transactionId
     );
     return result;
@@ -232,7 +222,10 @@ export class BlockchainServiceUtxo
               segWitPubKeyHash
             );
           input.scripts[
-            stripHexPrefix(this.walletCore.HexCoding.encode(segWitPubKeyHash))
+            hexEncode({
+              value: segWitPubKeyHash,
+              walletCore: this.walletCore,
+            })
           ] = redeemScript.data();
           break;
         }
@@ -243,9 +236,12 @@ export class BlockchainServiceUtxo
           const redeemScriptPubKey =
             this.walletCore.BitcoinScript.buildPayToPublicKeyHash(keyHash);
 
-          const encoded = this.walletCore.HexCoding.encode(keyHash);
-
-          input.scripts[stripHexPrefix(encoded)] = redeemScriptPubKey.data();
+          input.scripts[
+            hexEncode({
+              value: keyHash,
+              walletCore: this.walletCore,
+            })
+          ] = redeemScriptPubKey.data();
           break;
         }
         default:

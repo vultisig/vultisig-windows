@@ -340,7 +340,6 @@ export const de = {
   send_terms_0: 'Ich sende an die richtige Adresse',
   send_terms_1: 'Der Betrag ist korrekt',
   send_terms_2: 'Ich sende nicht an einen Betrug oder Hacker',
-  send_terms_error: 'Sie müssen den Bedingungen zustimmen',
   choose_tokens: 'Tokens auswählen',
   optional: 'optional',
   enter_memo: 'Memo eingeben',
@@ -448,7 +447,6 @@ export const de = {
     'Der Handel für das ausgewählte Paar ist angehalten, der Tausch kann nicht durchgeführt werden',
   'page.swap.not.possible':
     'Ein Wechsel zu einem Smart Contract ist nicht möglich! Geben Sie eine andere Empfängeradresse ein.',
-  'page.swap.title': 'Tauschen',
   swap_terms_0: 'Der Tauschbetrag ist korrekt',
   swap_terms_1:
     'Ich bin mit dem Betrag einverstanden, den ich nach dem Tausch erhalte',
@@ -663,4 +661,10 @@ export const de = {
   failed_to_get_video_permission:
     'Videoberechtigung konnte nicht eingeholt werden',
   vault_delete_page_vault_part: 'Tresorteil',
+  terms_required: 'Sie müssen den Bedingungen zustimmen',
+  insufficient_balance: 'Unzureichendes Gleichgewicht',
+  swap: 'Tauschen',
+  allowance: 'Zuschuss',
+  provider: 'Anbieter',
+  estimated_fees: 'Geschätzte Gebühren',
 };

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { getThorchainSwapQuote } from '../../../chain/thor/swap/api/getThorchainSwapQuote';
+import { toThorchainSwapAsset } from '../../../chain/thor/swap/asset/toThorchainSwapAsset';
 import { thorchainSwapConfig } from '../../../chain/thor/swap/config';
-import { toThorchainSwapAsset } from '../../../chain/thor/swap/utils/swapAsset';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';

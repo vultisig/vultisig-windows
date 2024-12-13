@@ -134,49 +134,36 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     coin: Coin,
     feeSettings?: EvmFeeSettings
   ): Promise<SpecificEvm> {
-    try {
-      const [gasPrice, nonce] = await Promise.all([
-        this.provider.send('eth_gasPrice', []),
-        this.provider.getTransactionCount(coin.address),
-      ]);
+    const [gasPrice, nonce] = await Promise.all([
+      this.provider.send('eth_gasPrice', []),
+      this.provider.getTransactionCount(coin.address),
+    ]);
 
-      const gasLimit =
-        feeSettings?.gasLimit ??
-        getEvmGasLimit({
-          chain: this.chain,
-          isNativeToken: coin.isNativeToken,
-        });
+    const gasLimit =
+      feeSettings?.gasLimit ??
+      getEvmGasLimit({
+        chain: this.chain,
+        isNativeToken: coin.isNativeToken,
+      });
 
-      const baseFee = await getEvmBaseFee(this.chain);
-      const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
-      const feePriority = feeSettings?.priority ?? defaultFeePriority;
-      const priorityFee = priorityFeeMapValue[feePriority];
-      const normalizedBaseFee = this.normalizeFee(Number(baseFee));
-      const maxFeePerGasWei = Number(
-        BigInt(Math.round(normalizedBaseFee + priorityFee))
-      );
+    const baseFee = await getEvmBaseFee(this.chain);
+    const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
+    const feePriority = feeSettings?.priority ?? defaultFeePriority;
+    const priorityFee = priorityFeeMapValue[feePriority];
+    const normalizedBaseFee = this.normalizeFee(Number(baseFee));
+    const maxFeePerGasWei = Number(
+      BigInt(Math.round(normalizedBaseFee + priorityFee))
+    );
 
-      return {
-        fee: maxFeePerGasWei * gasLimit,
-        gasPrice: fromChainAmount(Number(gasPrice), gwei.decimals),
-        nonce,
-        priorityFee,
-        priorityFeeWei: priorityFee,
-        gasLimit,
-        maxFeePerGasWei: maxFeePerGasWei,
-      } as SpecificEvm;
-    } catch (error) {
-      console.error('getSpecificTransactionInfo::', error);
-      return {
-        fee: 0,
-        gasPrice: 0,
-        nonce: 0,
-        priorityFee: 0,
-        priorityFeeWei: 0,
-        gasLimit: 0,
-        maxFeePerGasWei: 0,
-      } as SpecificEvm;
-    }
+    return {
+      fee: maxFeePerGasWei * gasLimit,
+      gasPrice: fromChainAmount(Number(gasPrice), gwei.decimals),
+      nonce,
+      priorityFee,
+      priorityFeeWei: priorityFee,
+      gasLimit,
+      maxFeePerGasWei: maxFeePerGasWei,
+    } as SpecificEvm;
   }
 
   async fetchMaxPriorityFeesPerGas(): Promise<Record<FeePriority, number>> {
