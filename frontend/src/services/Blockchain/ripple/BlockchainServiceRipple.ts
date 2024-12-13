@@ -1,9 +1,7 @@
 /* eslint-disable */
-import { tss } from '../../../../wailsjs/go/models';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { IBlockchainService } from '../IBlockchainService';
-import { SignedTransactionResult } from '../signed-transaction-result';
-import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import {
   ISendTransaction,
   ISwapTransaction,
@@ -11,12 +9,12 @@ import {
   TransactionType,
 } from '../../../model/transaction';
 import { BlockchainService } from '../BlockchainService';
-import SignatureProvider from '../signature-provider';
 import { TW } from '@trustwallet/wallet-core';
-import Long from 'long';
-import { SpecificUtxo } from '../../../model/specific-transaction-info';
-import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
+import { SpecificRipple } from '../../../model/specific-transaction-info';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
+import TxCompiler = TW.TxCompiler;
+import { Chain } from '../../../model/chain';
+import Long from 'long';
 
 export class BlockchainServiceRipple
   extends BlockchainService
@@ -32,26 +30,19 @@ export class BlockchainServiceRipple
       localPartyId,
       publicKeyEcdsa
     );
-    const utxoSpecific = new UTXOSpecific();
-    const transactionInfoSpecific: SpecificUtxo =
-      obj.specificTransactionInfo as SpecificUtxo;
+    const rippleSpecific = new RippleSpecific();
+    const transactionInfoSpecific: SpecificRipple =
+      obj.specificTransactionInfo as SpecificRipple;
     switch (obj.transactionType) {
       case TransactionType.SEND:
-        const sendTx = obj as ISendTransaction;
-        utxoSpecific.sendMaxAmount = sendTx.sendMaxAmount;
-        utxoSpecific.byteFee = transactionInfoSpecific.byteFee.toString() ?? '';
-
-        payload.utxoInfo = transactionInfoSpecific.utxos.map(utxo => {
-          return new UtxoInfo({
-            hash: utxo.hash,
-            amount: utxo.amount,
-            index: utxo.index,
-          });
-        });
+        rippleSpecific.gas = BigInt(transactionInfoSpecific?.gasPrice || 0);
+        rippleSpecific.sequence = BigInt(
+          transactionInfoSpecific?.sequence || 0
+        );
 
         payload.blockchainSpecific = {
-          case: 'utxoSpecific',
-          value: utxoSpecific,
+          case: 'rippleSpecific',
+          value: rippleSpecific,
         };
         break;
 
@@ -59,8 +50,8 @@ export class BlockchainServiceRipple
       case TransactionType.SWAP:
         const swapTx = obj as ISwapTransaction;
         payload.blockchainSpecific = {
-          case: 'utxoSpecific',
-          value: utxoSpecific,
+          case: 'rippleSpecific',
+          value: rippleSpecific,
         };
         break;
 
@@ -87,189 +78,87 @@ export class BlockchainServiceRipple
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
-    const input = this.getBitcoinSigningInput(keysignPayload);
-    const inputData = TW.Bitcoin.Proto.SigningInput.encode(input).finish();
-    const plan = this.walletCore.AnySigner.plan(inputData, this.coinType);
-    input.plan = TW.Bitcoin.Proto.TransactionPlan.decode(plan);
-    return TW.Bitcoin.Proto.SigningInput.encode(input).finish();
+    const walletCore = this.walletCore;
+
+    if (keysignPayload.coin?.chain !== Chain.Ripple) {
+      console.error('Coin is not Ripple');
+      console.error('keysignPayload.coin?.chain:', keysignPayload.coin?.chain);
+    }
+
+    const transactionInfoSpecific: SpecificRipple =
+      keysignPayload.blockchainSpecific as unknown as SpecificRipple;
+
+    if (!transactionInfoSpecific) {
+      console.error(
+        'getPreSignedInputData fail to get Ripple transaction information from RPC'
+      );
+    }
+
+    if (!keysignPayload.coin) {
+      throw new Error('keysignPayload.coin is undefined');
+    }
+
+    const pubKeyData = Buffer.from(keysignPayload.coin.hexPublicKey, 'hex');
+    if (!pubKeyData) {
+      throw new Error('invalid hex public key');
+    }
+
+    const toAddress = walletCore.AnyAddress.createWithString(
+      keysignPayload.toAddress,
+      this.coinType
+    );
+
+    if (!toAddress) {
+      throw new Error('invalid to address');
+    }
+
+    const { fee, sequence } = transactionInfoSpecific;
+
+    try {
+      const input = TW.Ripple.Proto.SigningInput.create({
+        account: keysignPayload.coin.address,
+        fee: Long.fromString(fee.toString()),
+        sequence: sequence,
+        publicKey: pubKeyData,
+        opPayment: TW.Ripple.Proto.OperationPayment.create({
+          destination: keysignPayload.toAddress,
+          amount: Long.fromString(keysignPayload.toAmount),
+          destinationTag: keysignPayload.memo
+            ? Long.fromString(keysignPayload.memo)
+            : undefined,
+        }),
+      });
+
+      return TW.Ripple.Proto.SigningInput.encode(input).finish();
+    } catch (e) {
+      console.error('Error in getPreSignedInputData:', e);
+      throw e;
+    }
   }
 
-  public async getPreSignedImageHash(
+  async getPreSignedImageHash(
     keysignPayload: KeysignPayload
   ): Promise<string[]> {
-    const input = await this.getPreSignedInputData(keysignPayload);
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType,
-      input
-    );
-    const preSignOutputs = TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
-    if (preSignOutputs.errorMessage !== '') {
-      throw new Error(preSignOutputs.errorMessage);
-    }
-    const result: string[] = [];
-    for (const hash of preSignOutputs.hashPublicKeys) {
-      if (
-        hash === undefined ||
-        hash.dataHash === undefined ||
-        hash.dataHash === null
-      ) {
-        continue;
-      }
-      result.push(
-        stripHexPrefix(this.walletCore.HexCoding.encode(hash.dataHash))
+    try {
+      const walletCore = this.walletCore;
+      const coinType = walletCore.CoinType.xrp;
+      const inputData = await this.getPreSignedInputData(keysignPayload);
+      const hashes = walletCore.TransactionCompiler.preImageHashes(
+        coinType,
+        inputData
       );
-    }
-    return result.sort();
-  }
-
-  public async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
-    data: KeysignPayload | Uint8Array,
-    signatures: { [key: string]: tss.KeysignResponse }
-  ): Promise<SignedTransactionResult> {
-    let inputData: Uint8Array;
-    if (data instanceof Uint8Array) {
-      inputData = data;
-    } else {
-      inputData = await this.getPreSignedInputData(data);
-    }
-    const utxoPublicKey = await this.addressService.getDerivedPubKey(
-      vaultHexPublicKey,
-      vaultHexChainCode,
-      this.walletCore.CoinTypeExt.derivationPath(this.coinType)
-    );
-    const publicKeyData = Buffer.from(utxoPublicKey, 'hex');
-    const publicKey = this.walletCore.PublicKey.createWithData(
-      publicKeyData,
-      this.walletCore.PublicKeyType.secp256k1
-    );
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType,
-      inputData
-    );
-    const preSignOutputs = TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
-    const allSignatures = this.walletCore.DataVector.create();
-    const publicKeys = this.walletCore.DataVector.create();
-    const signatureProvider = new SignatureProvider(
-      this.walletCore,
-      signatures
-    );
-    for (const hash of preSignOutputs.hashPublicKeys) {
-      if (
-        hash === undefined ||
-        hash.dataHash === undefined ||
-        hash.dataHash === null
-      ) {
-        continue;
+      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
+      if (preSigningOutput.errorMessage !== '') {
+        console.error('preSigningOutput error:', preSigningOutput.errorMessage);
+        throw new Error(preSigningOutput.errorMessage);
       }
-      const preImageHash = hash.dataHash;
-      const signature = signatureProvider.getDerSignature(preImageHash);
-      if (signature === undefined) {
-        continue;
-      }
-      if (!publicKey.verifyAsDER(signature, preImageHash)) {
-        throw new Error('fail to verify signature');
-      }
-      allSignatures.add(signature);
-      publicKeys.add(publicKeyData);
-    }
-    const compileWithSignatures =
-      this.walletCore.TransactionCompiler.compileWithSignatures(
-        this.coinType,
-        inputData,
-        allSignatures,
-        publicKeys
-      );
-    const output = TW.Bitcoin.Proto.SigningOutput.decode(compileWithSignatures);
-    const result = new SignedTransactionResult(
-      stripHexPrefix(this.walletCore.HexCoding.encode(output.encoded)),
-      output.transactionId
-    );
-    return result;
-  }
 
-  // private methods
-  getBitcoinSigningInput(
-    keysignPayload: KeysignPayload
-  ): TW.Bitcoin.Proto.SigningInput {
-    if (keysignPayload.blockchainSpecific instanceof UTXOSpecific) {
-      throw new Error('Invalid blockchain specific');
+      return [
+        stripHexPrefix(walletCore.HexCoding.encode(preSigningOutput.dataHash)),
+      ];
+    } catch (error) {
+      console.error('getPreSignedImageHash::', error);
+      return [];
     }
-    if (keysignPayload.coin === undefined) {
-      throw new Error('Invalid coin');
-    }
-    const utxoSpecific = keysignPayload.blockchainSpecific as unknown as {
-      case: 'utxoSpecific';
-      value: UTXOSpecific;
-    };
-    const { byteFee, sendMaxAmount } = utxoSpecific.value;
-    const input = TW.Bitcoin.Proto.SigningInput.create({
-      hashType: this.walletCore.BitcoinScript.hashTypeForCoin(this.coinType),
-      amount: Long.fromString(keysignPayload.toAmount),
-      useMaxAmount: sendMaxAmount,
-      toAddress: keysignPayload.toAddress,
-      changeAddress: keysignPayload.coin?.address,
-      byteFee: Long.fromString(byteFee),
-      coinType: this.coinType.value,
-    });
-    const encoder = new TextEncoder();
-    const memo = keysignPayload.memo || '';
-    if (memo != '') {
-      input.outputOpReturn = encoder.encode(keysignPayload.memo);
-    }
-    for (const utxo of keysignPayload.utxoInfo) {
-      const lockScript = this.walletCore.BitcoinScript.lockScriptForAddress(
-        keysignPayload.coin.address,
-        this.coinType
-      );
-      switch (this.coinType) {
-        case this.walletCore.CoinType.bitcoin:
-        case this.walletCore.CoinType.litecoin: {
-          const segWitPubKeyHash = lockScript.matchPayToWitnessPublicKeyHash();
-          const redeemScript =
-            this.walletCore.BitcoinScript.buildPayToWitnessPubkeyHash(
-              segWitPubKeyHash
-            );
-          input.scripts[
-            stripHexPrefix(this.walletCore.HexCoding.encode(segWitPubKeyHash))
-          ] = redeemScript.data();
-          break;
-        }
-        case this.walletCore.CoinType.bitcoinCash:
-        case this.walletCore.CoinType.dash:
-        case this.walletCore.CoinType.dogecoin: {
-          const keyHash = lockScript.matchPayToPubkeyHash();
-          const redeemScriptPubKey =
-            this.walletCore.BitcoinScript.buildPayToPublicKeyHash(keyHash);
-
-          const encoded = this.walletCore.HexCoding.encode(keyHash);
-
-          input.scripts[stripHexPrefix(encoded)] = redeemScriptPubKey.data();
-          break;
-        }
-        default:
-          throw new Error('Unsupported coin type');
-      }
-      const unspendTransaction = TW.Bitcoin.Proto.UnspentTransaction.create({
-        amount: Long.fromString(utxo.amount.toString()),
-        outPoint: TW.Bitcoin.Proto.OutPoint.create({
-          hash: this.walletCore.HexCoding.decode(utxo.hash).reverse(),
-          index: utxo.index,
-          sequence: 0xffffffff,
-        }),
-        script: lockScript.data(),
-      });
-      input.utxo.push(unspendTransaction);
-    }
-    return input;
-  }
-
-  async getBitcoinTransactionPlan(
-    keysignPayload: KeysignPayload
-  ): Promise<TW.Bitcoin.Proto.TransactionPlan> {
-    const input = await this.getPreSignedInputData(keysignPayload);
-    const plan = this.walletCore.AnySigner.plan(input, this.coinType);
-    return TW.Bitcoin.Proto.TransactionPlan.decode(plan);
   }
 }

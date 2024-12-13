@@ -12,6 +12,7 @@ import type {
   PlainMessage,
 } from '@bufbuild/protobuf';
 import { Message, proto3 } from '@bufbuild/protobuf';
+import { LibType } from './lib_type_message_pb.js';
 
 /**
  * @generated from message vultisig.keygen.v1.KeygenMessage
@@ -47,6 +48,13 @@ export class KeygenMessage extends Message<KeygenMessage> {
    */
   vaultName = '';
 
+  /**
+   * Default to GG20
+   *
+   * @generated from field: vultisig.keygen.v1.LibType lib_type = 7;
+   */
+  libType = LibType.GG20;
+
   constructor(data?: PartialMessage<KeygenMessage>) {
     super();
     proto3.util.initPartial(data, this);
@@ -81,6 +89,7 @@ export class KeygenMessage extends Message<KeygenMessage> {
       T: 8 /* ScalarType.BOOL */,
     },
     { no: 6, name: 'vault_name', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: 'lib_type', kind: 'enum', T: proto3.getEnumType(LibType) },
   ]);
 
   static fromBinary(

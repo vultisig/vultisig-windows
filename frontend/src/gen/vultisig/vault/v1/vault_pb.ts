@@ -12,6 +12,7 @@ import type {
   PlainMessage,
 } from '@bufbuild/protobuf';
 import { Message, proto3, Timestamp } from '@bufbuild/protobuf';
+import { LibType } from '../../keygen/v1/lib_type_message_pb.js';
 
 /**
  * @generated from message vultisig.vault.v1.Vault
@@ -61,6 +62,11 @@ export class Vault extends Message<Vault> {
    * @generated from field: string reshare_prefix = 9;
    */
   resharePrefix = '';
+
+  /**
+   * @generated from field: vultisig.keygen.v1.LibType lib_type = 10;
+   */
+  libType = LibType.GG20;
 
   constructor(data?: PartialMessage<Vault>) {
     super();
@@ -116,6 +122,7 @@ export class Vault extends Message<Vault> {
       kind: 'scalar',
       T: 9 /* ScalarType.STRING */,
     },
+    { no: 10, name: 'lib_type', kind: 'enum', T: proto3.getEnumType(LibType) },
   ]);
 
   static fromBinary(
