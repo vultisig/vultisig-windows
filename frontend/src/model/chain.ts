@@ -55,6 +55,7 @@ export enum OtherChain {
   Solana = 'Solana',
   Polkadot = 'Polkadot',
   Ton = 'Ton',
+  Ripple = 'Ripple',
 }
 
 export const Chain = {
@@ -83,6 +84,7 @@ export const chainKinds = [
   'polkadot',
   'ton',
   'sui',
+  'ripple',
 ] as const;
 
 export type ChainKind = (typeof chainKinds)[number];
@@ -122,6 +124,8 @@ export const chainKindRecord: Record<Chain, ChainKind> = {
   [OtherChain.Polkadot]: 'polkadot',
 
   [OtherChain.Ton]: 'ton',
+
+  [OtherChain.Ripple]: 'ripple',
 };
 
 export class ChainUtils {
@@ -211,6 +215,8 @@ export class ChainUtils {
         return 'LUNC';
       case Chain.Noble:
         return 'UUSDC';
+      case Chain.Ripple:
+        return 'XRP';
     }
   }
 }

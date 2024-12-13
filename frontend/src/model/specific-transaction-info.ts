@@ -9,7 +9,8 @@ export type SpecificTransactionInfo =
   | SpecificSui
   | SpecificThorchain
   | SpecificUtxo
-  | SpecificTon;
+  | SpecificTon
+  | SpecificRipple;
 
 export interface BasicSpecificTransactionInfo {
   gasPrice: number;
@@ -76,4 +77,8 @@ export interface SpecificPolkadot extends BasicSpecificTransactionInfo {
   specVersion: number;
   transactionVersion: number;
   genesisHash: string;
+}
+
+export interface SpecificRipple extends BasicSpecificTransactionInfo {
+  sequence: number;
 }

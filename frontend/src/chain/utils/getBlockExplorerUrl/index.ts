@@ -38,6 +38,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Terra]: 'https://www.mintscan.io/terra',
   [Chain.TerraClassic]: 'https://finder.terra.money/classic',
   [Chain.Noble]: 'https://www.mintscan.io/noble',
+  [Chain.Ripple]: 'https://xrpscan.com',
 };
 
 export const getBlockExplorerUrl = ({
@@ -77,6 +78,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Terra]: () => `${baseUrl}/address/${value}`,
         [Chain.TerraClassic]: () => `${baseUrl}/classic/address/${value}`,
         [Chain.Noble]: () => `${baseUrl}/address/${value}`,
+        [Chain.Ripple]: () => `${baseUrl}/account/${value}`,
       }),
     tx: () =>
       match(chain, {
@@ -108,6 +110,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Terra]: () => `${baseUrl}/tx/${value}`,
         [Chain.TerraClassic]: () => `${baseUrl}/tx/${value}`,
         [Chain.Noble]: () => `${baseUrl}/tx/${value}`,
+        [Chain.Ripple]: () => `${baseUrl}/transaction/${value}`,
       }),
   });
 };

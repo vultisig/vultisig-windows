@@ -64,6 +64,8 @@ export class PriceServiceFactory {
         return new PriceServiceCosmos(chain);
       case Chain.Ton:
         return new PriceService(chain);
+      case Chain.Ripple:
+        return new PriceService(chain);
       default:
         throw new Error(`Chain not supported ${chain}`);
     }

@@ -4,6 +4,7 @@ import { BalanceServiceCosmos } from './cosmos/BalanceServiceCosmos';
 import { BalanceServiceEvm } from './evm/BalanceServiceEvm';
 import { BalanceServiceMaya } from './maya/BalanceServiceMaya';
 import { BalanceServicePolkadot } from './polkadot/BalanceServicePolkadot';
+import { BalanceServiceRipple } from './ripple/BalanceServiceRipple';
 import { BalanceServiceSolana } from './solana/BalanceServiceSolana';
 import { BalanceServiceSui } from './sui/BalanceServiceSui';
 import { BalanceServiceThorchain } from './thorchain/BalanceServiceThorchain';
@@ -69,6 +70,8 @@ export class BalanceServiceFactory {
         return new BalanceServiceTon(chain);
       case Chain.Noble:
         return new BalanceServiceCosmos(chain);
+      case Chain.Ripple:
+        return new BalanceServiceRipple(chain);
       default:
         return new BalanceService(chain);
     }

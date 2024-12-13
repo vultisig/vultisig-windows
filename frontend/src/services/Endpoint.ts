@@ -133,6 +133,8 @@ export class Endpoint {
 
   static tonServiceRpc: string = 'https://api.vultisig.com/ton/v2/jsonRPC';
 
+  static rippleServiceRpc = 'https://xrplcluster.com';
+
   static fetchTonBalance(address: string): string {
     return `https://api.vultisig.com/ton/v3/addressInformation?address=${address}&use_v2=false`;
   }

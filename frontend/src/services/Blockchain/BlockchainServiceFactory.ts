@@ -7,6 +7,7 @@ import { BlockchainServiceEvm } from './evm/BlockchainServiceEvm';
 import { IBlockchainService } from './IBlockchainService';
 import { BlockchainServiceMaya } from './maya/BlockchainServiceMaya';
 import { BlockchainServicePolkadot } from './polkadot/BlockchainServicePolkadot';
+import { BlockchainServiceRipple } from './ripple/BlockchainServiceRipple';
 import { BlockchainServiceSolana } from './solana/BlockchainServiceSolana';
 import { BlockchainServiceSui } from './sui/BlockchainServiceSui';
 import { BlockchainServiceThorchain } from './thorchain/BlockchainServiceThorchain';
@@ -75,6 +76,8 @@ export class BlockchainServiceFactory {
         return new BlockchainServiceTon(chain, walletCore);
       case Chain.Noble:
         return new BlockchainServiceCosmos(chain, walletCore);
+      case Chain.Ripple:
+        return new BlockchainServiceRipple(chain, walletCore);
       default:
         throw new Error('Chain not supported');
     }
