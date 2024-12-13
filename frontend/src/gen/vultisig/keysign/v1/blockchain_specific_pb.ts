@@ -342,6 +342,11 @@ export class CosmosSpecific extends Message<CosmosSpecific> {
    */
   transactionType = TransactionType.UNSPECIFIED;
 
+  /**
+   * @generated from field: optional vultisig.keysign.v1.CosmosIbcDenomTrace ibc_denom_traces = 5;
+   */
+  ibcDenomTraces?: CosmosIbcDenomTrace;
+
   constructor(data?: PartialMessage<CosmosSpecific>) {
     super();
     proto3.util.initPartial(data, this);
@@ -363,6 +368,13 @@ export class CosmosSpecific extends Message<CosmosSpecific> {
       name: 'transaction_type',
       kind: 'enum',
       T: proto3.getEnumType(TransactionType),
+    },
+    {
+      no: 5,
+      name: 'ibc_denom_traces',
+      kind: 'message',
+      T: CosmosIbcDenomTrace,
+      opt: true,
     },
   ]);
 
@@ -392,6 +404,72 @@ export class CosmosSpecific extends Message<CosmosSpecific> {
     b: CosmosSpecific | PlainMessage<CosmosSpecific> | undefined
   ): boolean {
     return proto3.util.equals(CosmosSpecific, a, b);
+  }
+}
+
+/**
+ * @generated from message vultisig.keysign.v1.CosmosIbcDenomTrace
+ */
+export class CosmosIbcDenomTrace extends Message<CosmosIbcDenomTrace> {
+  /**
+   * @generated from field: string path = 1;
+   */
+  path = '';
+
+  /**
+   * @generated from field: string base_denom = 2;
+   */
+  baseDenom = '';
+
+  /**
+   * @generated from field: string latest_block = 3;
+   */
+  latestBlock = '';
+
+  constructor(data?: PartialMessage<CosmosIbcDenomTrace>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = 'vultisig.keysign.v1.CosmosIbcDenomTrace';
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'path', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'base_denom', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 3,
+      name: 'latest_block',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+  ]);
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): CosmosIbcDenomTrace {
+    return new CosmosIbcDenomTrace().fromBinary(bytes, options);
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): CosmosIbcDenomTrace {
+    return new CosmosIbcDenomTrace().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): CosmosIbcDenomTrace {
+    return new CosmosIbcDenomTrace().fromJsonString(jsonString, options);
+  }
+
+  static equals(
+    a: CosmosIbcDenomTrace | PlainMessage<CosmosIbcDenomTrace> | undefined,
+    b: CosmosIbcDenomTrace | PlainMessage<CosmosIbcDenomTrace> | undefined
+  ): boolean {
+    return proto3.util.equals(CosmosIbcDenomTrace, a, b);
   }
 }
 
@@ -800,5 +878,60 @@ export class TonSpecific extends Message<TonSpecific> {
     b: TonSpecific | PlainMessage<TonSpecific> | undefined
   ): boolean {
     return proto3.util.equals(TonSpecific, a, b);
+  }
+}
+
+/**
+ * @generated from message vultisig.keysign.v1.RippleSpecific
+ */
+export class RippleSpecific extends Message<RippleSpecific> {
+  /**
+   * @generated from field: uint64 sequence = 1;
+   */
+  sequence = protoInt64.zero;
+
+  /**
+   * @generated from field: uint64 gas = 2;
+   */
+  gas = protoInt64.zero;
+
+  constructor(data?: PartialMessage<RippleSpecific>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = 'vultisig.keysign.v1.RippleSpecific';
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'sequence', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: 'gas', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+  ]);
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): RippleSpecific {
+    return new RippleSpecific().fromBinary(bytes, options);
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): RippleSpecific {
+    return new RippleSpecific().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): RippleSpecific {
+    return new RippleSpecific().fromJsonString(jsonString, options);
+  }
+
+  static equals(
+    a: RippleSpecific | PlainMessage<RippleSpecific> | undefined,
+    b: RippleSpecific | PlainMessage<RippleSpecific> | undefined
+  ): boolean {
+    return proto3.util.equals(RippleSpecific, a, b);
   }
 }

@@ -12,12 +12,14 @@ import type {
   PlainMessage,
 } from '@bufbuild/protobuf';
 import { Message, proto3 } from '@bufbuild/protobuf';
+import { CustomMessagePayload } from './custom_message_payload_pb.js';
 import { Coin } from './coin_pb.js';
 import {
   CosmosSpecific,
   EthereumSpecific,
   MAYAChainSpecific,
   PolkadotSpecific,
+  RippleSpecific,
   SolanaSpecific,
   SuiSpecific,
   THORChainSpecific,
@@ -63,6 +65,11 @@ export class KeysignMessage extends Message<KeysignMessage> {
    */
   payloadId = '';
 
+  /**
+   * @generated from field: optional vultisig.keysign.v1.CustomMessagePayload custom_message_payload = 8;
+   */
+  customMessagePayload?: CustomMessagePayload;
+
   constructor(data?: PartialMessage<KeysignMessage>) {
     super();
     proto3.util.initPartial(data, this);
@@ -92,6 +99,13 @@ export class KeysignMessage extends Message<KeysignMessage> {
       T: 8 /* ScalarType.BOOL */,
     },
     { no: 7, name: 'payload_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 8,
+      name: 'custom_message_payload',
+      kind: 'message',
+      T: CustomMessagePayload,
+      opt: true,
+    },
   ]);
 
   static fromBinary(
@@ -208,6 +222,13 @@ export class KeysignPayload extends Message<KeysignPayload> {
          */
         value: TonSpecific;
         case: 'tonSpecific';
+      }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.RippleSpecific ripple_specific = 13;
+         */
+        value: RippleSpecific;
+        case: 'rippleSpecific';
       }
     | { case: undefined; value?: undefined } = { case: undefined };
 
@@ -335,6 +356,13 @@ export class KeysignPayload extends Message<KeysignPayload> {
       name: 'ton_specific',
       kind: 'message',
       T: TonSpecific,
+      oneof: 'blockchain_specific',
+    },
+    {
+      no: 13,
+      name: 'ripple_specific',
+      kind: 'message',
+      T: RippleSpecific,
       oneof: 'blockchain_specific',
     },
     { no: 20, name: 'utxo_info', kind: 'message', T: UtxoInfo, repeated: true },

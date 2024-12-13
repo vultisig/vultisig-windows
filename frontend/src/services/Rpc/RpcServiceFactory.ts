@@ -10,6 +10,7 @@ import { RpcServiceMaya } from './maya/RpcServiceMaya';
 import { RpcServiceNoble } from './noble/RpcServiceNoble';
 import { RpcServiceOsmosis } from './osmosis/RpcServiceOsmosis';
 import { RpcServicePolkadot } from './polkadot/RpcServicePolkadot';
+import { RpcServiceRipple } from './ripple/RpcServiceRipple';
 import { RpcServiceSolana } from './solana/RpcServiceSolana';
 import { RpcServiceSui } from './sui/RpcServiceSui';
 import {
@@ -51,6 +52,7 @@ export class RpcServiceFactory {
       [Chain.Terra]: () => new RpcServiceTerraV2(),
       [Chain.TerraClassic]: () => new RpcServiceTerraClassic(),
       [Chain.Noble]: () => new RpcServiceNoble(),
+      [Chain.Ripple]: () => new RpcServiceRipple(chain),
     });
   }
 }

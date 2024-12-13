@@ -53,6 +53,16 @@ export class TokensStore {
       isNativeToken: true,
     }),
 
+    ripple: (): CoinMeta => ({
+      chain: Chain.Ripple,
+      ticker: 'XRP',
+      logo: 'xrp',
+      decimals: 6,
+      priceProviderId: 'ripple',
+      contractAddress: '',
+      isNativeToken: true,
+    }),
+
     thorChain: (): CoinMeta => ({
       chain: Chain.THORChain,
       ticker: 'RUNE',
@@ -1482,6 +1492,7 @@ export class TokensStore {
     TokensStore.Token.litecoin(),
     TokensStore.Token.dogecoin(),
     TokensStore.Token.dash(),
+    TokensStore.Token.ripple(),
 
     TokensStore.Token.dydx(),
     TokensStore.Token.suiSUI(),

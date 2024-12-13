@@ -24,6 +24,7 @@ export function QueryDependant<T, E = unknown>({
   }
 
   if (query.error) {
+    console.error('QueryDependant query.error:', query.error);
     return <>{error(query.error)}</>;
   }
 
