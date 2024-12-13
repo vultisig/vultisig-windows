@@ -15,7 +15,6 @@ import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { calculateFromChainToHumanReadableAmount } from '../../../lib/utils/calculateFromChainToHumanReadableAmount';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { Chain } from '../../../model/chain';
-import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { useKeysignPayload } from './state/keysignPayload';
 
 const Section = ({
@@ -48,7 +47,6 @@ const Section = ({
 export const KeysignTxOverview = () => {
   const { t } = useTranslation();
   const { coin, toAddress, memo, toAmount } = useKeysignPayload();
-  const { fees } = useAppPathState<'keysign'>();
   const txHash = useCurrentTxHash();
   const copyTxHash = useCopyTxHash();
   const { chain } = shouldBePresent(coin);
@@ -86,17 +84,10 @@ export const KeysignTxOverview = () => {
       <Text family="mono" color="primary" size={14} weight="400">
         {txHash}
       </Text>
+
       <Section label={t('to')} value={toAddress} isMono />
       <Section label={t('memo')} value={memo} isMono />
       <Section label={t('value')} value={String(amount)} isMono />
-      {fees?.type === 'send' && (
-        <Section
-          label={t('network_fee')}
-          value={fees.networkFeesFormatted}
-          isMono
-        />
-      )}
-      <Section label={t('total_fee')} value={fees?.totalFeesFormatted} isMono />
     </VStack>
   );
 };

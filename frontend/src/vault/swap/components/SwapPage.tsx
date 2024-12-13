@@ -3,7 +3,6 @@ import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { SwapForm } from '../form/SwapForm';
 import { FromAmountProvider } from '../state/fromAmount';
-import { SwapFeesProvider } from '../state/swapFees';
 import { ToCoinProvider } from '../state/toCoin';
 import { SwapVerify } from '../verify/SwapVerify';
 
@@ -16,16 +15,14 @@ export const SwapPage = () => {
   });
 
   return (
-    <SwapFeesProvider initialValue={null}>
-      <FromAmountProvider initialValue={null}>
-        <ToCoinProvider>
-          <Match
-            value={step}
-            form={() => <SwapForm onForward={toNextStep} />}
-            verify={() => <SwapVerify onBack={toPreviousStep} />}
-          />
-        </ToCoinProvider>
-      </FromAmountProvider>
-    </SwapFeesProvider>
+    <FromAmountProvider initialValue={null}>
+      <ToCoinProvider>
+        <Match
+          value={step}
+          form={() => <SwapForm onForward={toNextStep} />}
+          verify={() => <SwapVerify onBack={toPreviousStep} />}
+        />
+      </ToCoinProvider>
+    </FromAmountProvider>
   );
 };

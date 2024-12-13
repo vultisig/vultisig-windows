@@ -1,26 +1,22 @@
 import { useTranslation } from 'react-i18next';
 
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { KeysignActionFeeValue } from '../../../lib/types/keysign';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import {
   ComponentWithDisabledState,
   ComponentWithValueProps,
 } from '../../../lib/ui/props';
-import { AppPathState } from '../../../navigation';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useCurrentVaultHasServer } from '../../state/currentVault';
 
-type StartKeysignPrompt = ComponentWithValueProps<KeysignPayload> &
-  ComponentWithDisabledState & {
-    fees: KeysignActionFeeValue | null;
-  };
+type StartKeysignPromptProps = ComponentWithValueProps<KeysignPayload> &
+  ComponentWithDisabledState;
+
 export const StartKeysignPrompt = ({
   value: keysignPayload,
-  fees,
   isDisabled,
-}: StartKeysignPrompt) => {
+}: StartKeysignPromptProps) => {
   const { t } = useTranslation();
   const navigate = useAppNavigate();
   const hasServer = useCurrentVaultHasServer();
@@ -33,8 +29,7 @@ export const StartKeysignPrompt = ({
             navigate('fastKeysign', {
               state: {
                 keysignPayload,
-                fees,
-              } as AppPathState['fastKeysign'],
+              },
             });
           }}
           isDisabled={isDisabled}
@@ -48,8 +43,7 @@ export const StartKeysignPrompt = ({
             navigate('keysign', {
               state: {
                 keysignPayload,
-                fees,
-              } as AppPathState['keysign'],
+              },
             });
           }}
         >
@@ -66,8 +60,7 @@ export const StartKeysignPrompt = ({
         navigate('keysign', {
           state: {
             keysignPayload,
-            fees,
-          } as AppPathState['keysign'],
+          },
         });
       }}
     >
