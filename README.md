@@ -22,29 +22,39 @@ If you need to make an update to the proto file, make sure you raise a PR in htt
 
 To generate the proto files for typescript, run the following command in the frontend directory
 ```bash
-cd frontend
-npm buf generate commondata/proto
+cd frontend && npx buf generate commondata/proto
 ```
+
+## Update protobuf files for type script
+To git pull for a submodule, you have a few options:
+
+1. Pull for the specific submodule:
+```bash
+git submodule update --remote frontend/commondata
+```
+
+2. Pull for all submodules:
+```bash
+git submodule update --remote
+```
+
+3. If you want to pull and also initialize/update nested submodules:
+```bash
+git submodule update --init --recursive
+```
+
+4. If you want to pull the main repository and all its submodules in one command:
+```bash
+git pull --recurse-submodules
+```
+
+Each of these commands will fetch and update the submodule to its latest commit on the remote branch.
+
+Tip: Make sure you're in the root directory of your main repository when running these commands.
 
 # DEVELOPMENT GUIDE
 
-We are developing using VIEW, VIEW MODELS, FACTORIES, SEVICES, and Interfaces;
-
-Correct:
-```
-VIEW -> VIEW MODELS -> FACTORIES -> SEVICES
-```
-
-Incorrect:
-```
-VIEW -> FACTORIES -> SEVICES (The view must call a view model, then follow the correct flow)
-VIEW -> SEVICES (The view must call a view model, then follow the correct flow)
-VIEW MODELS -> SEVICES (The view must call a factory passing the chain)
-```
-
 We have multiple chains, and we must avoid IF and else, so we use interfaces to implement the functionality per chain;
-
-Once we create a new pageView, this page must have a pageViewModel; only the view model must have access to the Services.
 
 The services must be initialized using the FACTORIES, and inside the Factory class, the SWITCHES cases must be exhaustive so we can cover all chains.
 

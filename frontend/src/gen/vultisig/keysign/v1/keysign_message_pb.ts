@@ -58,11 +58,6 @@ export class KeysignMessage extends Message<KeysignMessage> {
    */
   useVultisigRelay = false;
 
-  /**
-   * @generated from field: string payload_id = 7;
-   */
-  payloadId = '';
-
   constructor(data?: PartialMessage<KeysignMessage>) {
     super();
     proto3.util.initPartial(data, this);
@@ -91,7 +86,6 @@ export class KeysignMessage extends Message<KeysignMessage> {
       kind: 'scalar',
       T: 8 /* ScalarType.BOOL */,
     },
-    { no: 7, name: 'payload_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(
