@@ -114,6 +114,6 @@ export const strictText = css`
   })}
 `;
 
-export const StrictText = styled.p`
+export const StrictText = styled(Text)`
   ${strictText}
 `;

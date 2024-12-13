@@ -25,3 +25,5 @@ export const evmTokenGasLimit: Record<EvmChain, number> = {
   [EvmChain.Avalanche]: 120000,
   [EvmChain.Zksync]: 200000,
 };
+
+export const defaultEvmSwapGasLimit = 600000;

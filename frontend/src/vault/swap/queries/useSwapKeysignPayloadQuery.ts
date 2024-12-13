@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { getErc20SwapTx } from '../../../chain/evm/swap/getErc20SwapTx';
-import { thorchainSwapQuoteToSwapPayload } from '../../../chain/thor/swap/utils/thorchainSwapQuoteToSwapPayload';
+import { getErc20ThorchainSwapKeysignPayload } from '../../../chain/thor/swap/utils/getErc20ThorchainSwapKeysignPayload';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getChainPrimaryCoin } from '../../../chain/utils/getChainPrimaryCoin';
 import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
@@ -11,12 +10,8 @@ import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { Chain, EvmChain } from '../../../model/chain';
-import {
-  IDepositTransactionVariant,
-  ISendTransaction,
-  ISwapTransaction,
-  TransactionType,
-} from '../../../model/transaction';
+import { SpecificEvm } from '../../../model/specific-transaction-info';
+import { TransactionType } from '../../../model/transaction';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
 import {
@@ -24,6 +19,7 @@ import {
   useCurrentVaultAddress,
   useCurrentVaultCoin,
 } from '../../state/currentVault';
+import { getStorageVaultId } from '../../utils/storageVault';
 import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
@@ -39,7 +35,6 @@ export const useSwapKeysignPayloadQuery = () => {
   const [toCoinKey] = useToCoin();
   const toStorageCoin = useCurrentVaultCoin(toCoinKey);
   const toCoin = storageCoinToCoin(toStorageCoin);
-  const [receiver] = useCurrentVaultAddress(toCoinKey.chain);
 
   const [fromAmount] = useFromAmount();
 
@@ -57,9 +52,6 @@ export const useSwapKeysignPayloadQuery = () => {
     queryKey: ['swapKeysignPayload'],
     queryFn: async () => {
       const swapQuote = shouldBePresent(swapQuoteQuery.data);
-
-      const toAddress =
-        swapQuote.router ?? swapQuote.inbound_address ?? receiver;
 
       const service = BlockchainServiceFactory.createService(
         fromCoinKey.chain,
@@ -82,14 +74,21 @@ export const useSwapKeysignPayloadQuery = () => {
 
       const { memo } = swapQuote;
 
-      type Tx =
-        | ISendTransaction
-        | ISwapTransaction
-        | IDepositTransactionVariant;
+      if (fromCoinKey.chain in EvmChain && !isNativeCoin(fromCoinKey)) {
+        return getErc20ThorchainSwapKeysignPayload({
+          quote: swapQuote,
+          fromAddress,
+          fromCoin,
+          amount,
+          toCoin,
+          specificTransactionInfo: specificTransactionInfo as SpecificEvm,
+          vaultId: getStorageVaultId(vault),
+          vaultLocalPartyId: vault.local_party_id,
+        });
+      }
 
-      const getTx = async (): Promise<Tx> => {
-        if (areEqualCoins(fromCoinKey, thorchainPrimaryCoin)) {
-          return {
+      const tx = areEqualCoins(fromCoinKey, thorchainPrimaryCoin)
+        ? {
             fromAddress,
             toAddress: '',
             amount: shouldBePresent(fromAmount),
@@ -97,41 +96,17 @@ export const useSwapKeysignPayloadQuery = () => {
             coin: fromCoin,
             transactionType: TransactionType.DEPOSIT,
             specificTransactionInfo,
-          };
-        }
-
-        if (fromCoinKey.chain in EvmChain && !isNativeCoin(fromCoinKey)) {
-          return getErc20SwapTx({
+          }
+        : {
             fromAddress,
-            toAddress,
-            amount,
+            amount: shouldBePresent(fromAmount),
+            memo,
             coin: fromCoin,
             sendMaxAmount,
             specificTransactionInfo,
-            swapPayload: thorchainSwapQuoteToSwapPayload({
-              quote: swapQuote,
-              fromAddress,
-              fromCoin,
-              toCoin,
-              amount,
-            }),
-            memo,
-          });
-        }
-
-        return {
-          fromAddress,
-          amount: shouldBePresent(fromAmount),
-          memo,
-          coin: fromCoin,
-          sendMaxAmount,
-          specificTransactionInfo,
-          transactionType: TransactionType.SEND,
-          toAddress: shouldBePresent(swapQuote.inbound_address),
-        };
-      };
-
-      const tx = await getTx();
+            transactionType: TransactionType.SEND,
+            toAddress: shouldBePresent(swapQuote.inbound_address),
+          };
 
       return service.createKeysignPayload(
         tx,

@@ -1,5 +1,7 @@
+import { formatAmount } from '../../../../lib/utils/formatAmount';
 import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
 import { queryUrl } from '../../../../lib/utils/query/queryUrl';
+import { fromChainAmount } from '../../../utils/fromChainAmount';
 import { thorchainSwapConfig } from '../config';
 import { ThorchainSwapQuote } from './ThorchainSwapQuote';
 
@@ -7,16 +9,11 @@ type Input = {
   destination: string;
   fromAsset: string;
   toAsset: string;
-  amount: string;
+  amount: bigint;
   isAffiliate: boolean;
 };
 
 const swapBaseUrl = `${thorchainSwapConfig.apiUrl}/quote/swap`;
-
-const affiliateParams = {
-  affiliate: 'vi',
-  affiliate_bps: 50,
-};
 
 type ThorchainSwapQuoteErrorResponse = {
   error: string;
@@ -32,10 +29,15 @@ export const getThorchainSwapQuote = async ({
   const params = {
     from_asset: fromAsset,
     to_asset: toAsset,
-    amount,
+    amount: amount.toString(),
     destination,
     streaming_interval: thorchainSwapConfig.streamingInterval,
-    ...(isAffiliate ? affiliateParams : {}),
+    ...(isAffiliate
+      ? {
+          affiliate: thorchainSwapConfig.affiliateFeeAddress,
+          affiliate_bps: thorchainSwapConfig.affiliateFeeRateBps,
+        }
+      : {}),
   };
 
   const url = addQueryParams(swapBaseUrl, params);
@@ -46,6 +48,19 @@ export const getThorchainSwapQuote = async ({
 
   if ('error' in result) {
     throw new Error(result.error);
+  }
+
+  if (BigInt(result.recommended_min_amount_in) > amount) {
+    const minAmount = fromChainAmount(
+      result.recommended_min_amount_in,
+      thorchainSwapConfig.decimals
+    );
+
+    const formattedMinAmount = formatAmount(minAmount);
+
+    const msg = `Swap amount too small. Recommended amount ${formattedMinAmount}`;
+
+    throw new Error(msg);
   }
 
   return result;

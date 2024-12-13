@@ -10,7 +10,7 @@ import { createHash } from 'crypto';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
-import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import {
   CosmosSpecific,
   TransactionType,
@@ -144,7 +144,10 @@ export class BlockchainServiceCosmos
     }
 
     return [
-      stripHexPrefix(walletCore.HexCoding.encode(preSigningOutput.dataHash)),
+      hexEncode({
+        value: preSigningOutput.dataHash,
+        walletCore: walletCore,
+      }),
     ];
   }
 

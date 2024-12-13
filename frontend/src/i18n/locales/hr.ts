@@ -326,7 +326,6 @@ export const hr = {
   send_terms_0: 'Šaljem na ispravnu adresu',
   send_terms_1: 'Iznos je točan',
   send_terms_2: 'Ne šaljem prevarantu ili hakeru',
-  send_terms_error: 'Morate se složiti s uvjetima',
   choose_tokens: 'Odaberite tokene',
   optional: 'opcionalno',
   enter_memo: 'Unesite memo',
@@ -432,7 +431,6 @@ export const hr = {
     'Trgovanje je zaustavljeno za odabrani par, ne može se obraditi zamjena',
   'page.swap.not.possible':
     'Zamjena za pametni ugovor nije moguća! Unesite drugu adresu primatelja.',
-  'page.swap.title': 'Zamjena',
   swap_terms_0: 'A swap összeg helyes',
   swap_terms_1: 'Egyetértek azzal az összeggel, amit a csere után kapok',
   swap_agree_terms: 'A folytatás előtt el kell fogadnia a feltételeket',
@@ -641,4 +639,10 @@ export const hr = {
   getting_video_permission: 'Dobivanje dozvole za video...',
   failed_to_get_video_permission:
     'Nije uspjelo dobivanje dozvole za videozapis',
+  terms_required: 'Morate se složiti s uvjetima',
+  insufficient_balance: 'Nedovoljna ravnoteža',
+  swap: 'Zamjena',
+  allowance: 'dodatak',
+  provider: 'Davatelj',
+  estimated_fees: 'Procijenjene naknade',
 };

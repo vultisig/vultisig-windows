@@ -26,6 +26,7 @@ import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import Long from 'long';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 
 export class BlockchainServiceTon
   extends BlockchainService
@@ -211,7 +212,10 @@ export class BlockchainServiceTon
     }
 
     const imageHashes = [
-      stripHexPrefix(this.walletCore.HexCoding.encode(preSigningOutput.data)),
+      hexEncode({
+        value: preSigningOutput.data,
+        walletCore: this.walletCore,
+      }),
     ];
 
     return imageHashes;
