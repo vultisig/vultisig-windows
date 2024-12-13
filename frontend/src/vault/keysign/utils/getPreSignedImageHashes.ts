@@ -37,7 +37,7 @@ export const getPreSignedImageHashes = async ({
     return [approveImageHash, ...restOfImageHashes];
   }
 
-  if ('swapPayload' in keysignPayload) {
+  if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
     return getThorchainSwapPreSignedImageHashes({
       keysignPayload,
       walletCore,
