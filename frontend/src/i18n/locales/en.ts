@@ -458,6 +458,7 @@ export const en = {
   'page.swap.not.possible':
     'Swapping to a smart contract is not possible! Enter a different recipient address.',
   swap: 'Swap',
+  allowance: 'Allowance',
   provider: 'Provider',
   estimated_fees: 'Estimated Fees',
   swap_terms_0: 'The swap amount is correct',

@@ -13,11 +13,6 @@ type Input = {
 
 const swapBaseUrl = `${thorchainSwapConfig.apiUrl}/quote/swap`;
 
-const affiliateParams = {
-  affiliate: 'vi',
-  affiliate_bps: 50,
-};
-
 type ThorchainSwapQuoteErrorResponse = {
   error: string;
 };
@@ -35,7 +30,12 @@ export const getThorchainSwapQuote = async ({
     amount,
     destination,
     streaming_interval: thorchainSwapConfig.streamingInterval,
-    ...(isAffiliate ? affiliateParams : {}),
+    ...(isAffiliate
+      ? {
+          affiliate: thorchainSwapConfig.affiliateFeeAddress,
+          affiliate_bps: thorchainSwapConfig.affiliateFeeRateBps,
+        }
+      : {}),
   };
 
   const url = addQueryParams(swapBaseUrl, params);

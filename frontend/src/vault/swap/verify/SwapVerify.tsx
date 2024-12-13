@@ -21,6 +21,7 @@ import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
 import { swapTermsCount, SwapTermsProvider } from './state/swapTerms';
+import { SwapAllowance } from './SwapAllowance';
 import { SwapConfirm } from './SwapConfirm';
 import { SwapTerms } from './SwapTerms';
 
@@ -59,6 +60,8 @@ export const SwapVerify: React.FC<ComponentWithBackActionProps> = ({
                 success={amount => formatAmount(amount, toCoin.ticker)}
               />
             </TxOverviewPrimaryRow>
+
+            <SwapAllowance />
 
             <TxOverviewRow>
               <SwapTotalFee />

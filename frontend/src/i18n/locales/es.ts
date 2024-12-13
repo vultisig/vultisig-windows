@@ -337,7 +337,6 @@ export const es = {
   send_terms_0: 'Estoy enviando a la dirección correcta',
   send_terms_1: 'El monto es correcto',
   send_terms_2: 'No estoy enviando a una estafa o hacker',
-  send_terms_error: 'Debe aceptar los términos',
   choose_tokens: 'Elegir tokens',
   optional: 'opcional',
   enter_memo: 'Ingrese memo',
@@ -447,7 +446,6 @@ export const es = {
     'El comercio se detiene para el par seleccionado, no se puede procesar el intercambio',
   'page.swap.not.possible':
     '¡No es posible cambiar a un contrato inteligente! Ingrese una dirección de destinatario diferente.',
-  'page.swap.title': 'Intercambio',
   swap_terms_0: 'El monto del swap es correcto',
   swap_terms_1:
     'Estoy de acuerdo con la cantidad que recibiré después del intercambio',
@@ -663,4 +661,10 @@ export const es = {
   upload_qr_code_image: 'Subir imagen de código QR',
   getting_video_permission: 'Obteniendo permiso para grabar vídeo...',
   failed_to_get_video_permission: 'No se pudo obtener el permiso para el video',
+  terms_required: 'Debes aceptar los términos',
+  insufficient_balance: 'Saldo insuficiente',
+  swap: 'Intercambio',
+  allowance: 'Prestación',
+  provider: 'Proveedor',
+  estimated_fees: 'Tarifas estimadas',
 };

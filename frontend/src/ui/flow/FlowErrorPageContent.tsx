@@ -36,7 +36,7 @@ export const FlowErrorPageContent = ({
           >
             {title}
           </Text>
-          {message && <StrictText>{message}</StrictText>}
+          {message && <StrictText centerHorizontally>{message}</StrictText>}
         </VStack>
       </VStack>
       {action ?? (

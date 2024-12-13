@@ -4,8 +4,10 @@ import { keccak256 } from 'js-sha3';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { getSigningInputEnvelopedTxFields } from '../../../chain/evm/tx/getSigningInputEnvelopedTxFields';
+import { toEthereumSpecific } from '../../../chain/evm/tx/toEthereumSpecific';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
@@ -13,7 +15,6 @@ import {
   ISendTransaction,
   ISwapTransaction,
   ITransaction,
-  TransactionType,
 } from '../../../model/transaction';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import { BlockchainService } from '../BlockchainService';
@@ -30,39 +31,19 @@ export class BlockchainServiceEvm
     localPartyId: string,
     publicKeyEcdsa: string
   ): KeysignPayload {
+    const transactionInfoSpecific: SpecificEvm =
+      obj.specificTransactionInfo as SpecificEvm;
+
     const payload: KeysignPayload = super.createKeysignPayload(
       obj,
       localPartyId,
       publicKeyEcdsa
     );
-    const specific_pb = new EthereumSpecific();
-    const transactionInfoSpecific: SpecificEvm =
-      obj.specificTransactionInfo as SpecificEvm;
-    switch (obj.transactionType) {
-      case TransactionType.SEND:
-        specific_pb.gasLimit = transactionInfoSpecific.gasLimit.toString();
-        specific_pb.maxFeePerGasWei =
-          transactionInfoSpecific.maxFeePerGasWei.toString();
-        specific_pb.nonce = BigInt(transactionInfoSpecific.nonce);
-        specific_pb.priorityFee =
-          transactionInfoSpecific.priorityFee.toString();
 
-        payload.blockchainSpecific = {
-          case: 'ethereumSpecific',
-          value: specific_pb,
-        };
-        break;
-
-      case TransactionType.SWAP:
-        payload.blockchainSpecific = {
-          case: 'ethereumSpecific',
-          value: specific_pb,
-        };
-        break;
-
-      default:
-        throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
-    }
+    payload.blockchainSpecific = {
+      case: 'ethereumSpecific',
+      value: toEthereumSpecific(transactionInfoSpecific),
+    };
 
     return payload;
   }
@@ -146,9 +127,10 @@ export class BlockchainServiceEvm
     }
 
     const imageHashes = [
-      stripHexPrefix(
-        this.walletCore.HexCoding.encode(preSigningOutput.dataHash)
-      ),
+      hexEncode({
+        value: preSigningOutput.dataHash,
+        walletCore: this.walletCore,
+      }),
     ];
 
     return imageHashes;

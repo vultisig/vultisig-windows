@@ -22,7 +22,7 @@ import {
 } from '../../../model/transaction';
 import { RpcServiceThorchain } from '../../Rpc/thorchain/RpcServiceThorchain';
 import Long from 'long';
-import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 
 export class BlockchainServiceThorchain
   extends BlockchainService
@@ -202,7 +202,10 @@ export class BlockchainServiceThorchain
       throw new Error(preSigningOutput.errorMessage);
     }
     return [
-      stripHexPrefix(walletCore.HexCoding.encode(preSigningOutput.dataHash)),
+      hexEncode({
+        value: preSigningOutput.dataHash,
+        walletCore: walletCore,
+      }),
     ];
   }
   async getSignedTransaction(

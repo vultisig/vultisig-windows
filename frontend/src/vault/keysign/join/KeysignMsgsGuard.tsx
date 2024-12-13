@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
 import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -19,10 +20,11 @@ export const KeysignMsgsGuard = ({ children }: ComponentWithChildrenProps) => {
   return (
     <QueryDependant
       query={query}
-      error={() => (
+      error={error => (
         <FullPageFlowErrorState
           title={t('keysign')}
           message={t('read_msg_failed')}
+          errorMessage={extractErrorMsg(error)}
         />
       )}
       pending={() => (

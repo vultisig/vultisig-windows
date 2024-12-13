@@ -23,8 +23,8 @@ import Long from 'long';
 import { Keysign } from '../../../../wailsjs/go/tss/TssService';
 import { ChainUtils } from '../../../model/chain';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
-import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 
 export class BlockchainServiceSolana
   extends BlockchainService
@@ -269,7 +269,10 @@ export class BlockchainServiceSolana
 
     // Convert the result data to hex, and ensure consistency with Swift output
     const imageHashes = [
-      stripHexPrefix(this.walletCore.HexCoding.encode(preSigningOutput.data)),
+      hexEncode({
+        value: preSigningOutput.data,
+        walletCore: this.walletCore,
+      }),
     ];
 
     return imageHashes;
