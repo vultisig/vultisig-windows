@@ -37,8 +37,6 @@ export const useKeysignMsgsQuery = () => {
         walletCore!
       );
 
-      console.log('useKeysignMsgsQuery service:', service);
-
       return service.getPreSignedImageHash(payload);
     },
     meta: {
