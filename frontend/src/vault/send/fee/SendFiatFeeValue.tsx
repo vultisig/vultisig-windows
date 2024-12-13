@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
+import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { calculateFromChainToHumanReadableAmount } from '../../../lib/utils/calculateFromChainToHumanReadableAmount';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useCurrentVaultCoin } from '../../state/currentVault';
@@ -25,10 +25,7 @@ export const SendFiatFeeValue = () => {
   );
 
   const { decimals } = getChainFeeCoin(coinKey.chain);
-  const humanReadableFeeValue = calculateFromChainToHumanReadableAmount({
-    amount: fee,
-    decimals,
-  });
+  const humanReadableFeeValue = fromChainAmount(fee, decimals);
 
   let formattedAmount: string | null = null;
 

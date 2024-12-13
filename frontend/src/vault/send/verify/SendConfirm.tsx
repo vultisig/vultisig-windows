@@ -8,13 +8,11 @@ import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt'
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
 import { useCurrentSendCoin } from '../state/sendCoin';
-import { useSendFees } from '../state/sendFees';
 import { useSendTxKeysignPayload } from '../state/sendTxKeysignPayload';
 import { useSendTerms } from './state/sendTerms';
 
 export const SendConfirm = () => {
   const { t } = useTranslation();
-  const [fees] = useSendFees();
   const [coinKey] = useCurrentSendCoin();
   const coin = useCurrentVaultCoin(coinKey);
   const specificTxInfoQuery = useSpecificSendTxInfoQuery();
@@ -38,11 +36,5 @@ export const SendConfirm = () => {
     return <Text>{t('loading')}</Text>;
   }
 
-  return (
-    <StartKeysignPrompt
-      value={keysignPayload}
-      fees={fees}
-      isDisabled={isDisabled}
-    />
-  );
+  return <StartKeysignPrompt value={keysignPayload} isDisabled={isDisabled} />;
 };
