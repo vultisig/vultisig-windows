@@ -34,7 +34,7 @@ export const thorchainSwapQuoteToSwapPayload = ({
       routerAddress: quote.router,
       fromAmount: amount.toString(),
       toAmountDecimal: toCoin.decimals.toString(),
-      expirationTime: addMinutes(Date.now(), 15).getTime(),
+      expirationTime: BigInt(addMinutes(Date.now(), 15).getTime()),
       streamingInterval: thorchainSwapConfig.streamingInterval.toString(),
       streamingQuantity: '0',
       toAmountLimit: '0',
