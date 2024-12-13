@@ -143,17 +143,19 @@ func (t *TssService) keysignWithRetry(
 			"error":   err,
 		}).Error("Failed to keysign")
 		// double check whether other party already get signature
-		sigResp, err := client.CheckKeysignComplete(sessionID, messageID)
-		if err == nil && sigResp != nil {
+		sigResp, checkErr := client.CheckKeysignComplete(sessionID, messageID)
+		if checkErr == nil && sigResp != nil {
+			t.Logger.Info("Other party already get signature")
 			resp = sigResp
 			break
 		}
 	}
 	close(endCh)
 	wg.Wait()
-	if err != nil {
-		return nil, fmt.Errorf("failed to keysign: %w", err)
+	if resp != nil {
+		return resp, nil
 	}
-	return resp, nil
+
+	return nil, fmt.Errorf("failed to keysign: %w", err)
 
 }
