@@ -48,7 +48,7 @@ export const getThorchainSwapPreSignedImageHashes = async ({
     routerAddress: swapPayload.routerAddress,
     fromAmount: swapPayload.fromAmount,
     toAmountLimit: swapPayload.toAmountLimit,
-    expirationTime: new Long(swapPayload.expirationTime),
+    expirationTime: new Long(Number(swapPayload.expirationTime)),
     streamParams: {
       interval: swapPayload.streamingInterval,
       quantity: swapPayload.streamingQuantity,

@@ -40,8 +40,10 @@ export const thorchainSwapQuoteToSwapPayload = ({
         quote.expected_amount_out,
         toCoin.decimals
       ).toFixed(toCoin.decimals),
-      expirationTime: Math.round(
-        convertDuration(addMinutes(Date.now(), 15).getTime(), 'ms', 's')
+      expirationTime: BigInt(
+        Math.round(
+          convertDuration(addMinutes(Date.now(), 15).getTime(), 'ms', 's')
+        )
       ),
       streamingInterval: thorchainSwapConfig.streamingInterval.toString(),
       streamingQuantity: '0',
