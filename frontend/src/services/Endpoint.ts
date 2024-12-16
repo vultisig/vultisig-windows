@@ -100,8 +100,7 @@ export class Endpoint {
 
   static baseServiceRpcService: string = 'https://base-rpc.publicnode.com';
 
-  static arbitrumOneServiceRpcService: string =
-    'https://arbitrum-one-rpc.publicnode.com';
+  static arbitrumOneServiceRpcService: string = 'https://api.vultisig.com/arb/';
 
   static polygonServiceRpcService: string =
     'https://polygon-bor-rpc.publicnode.com';
@@ -116,11 +115,9 @@ export class Endpoint {
 
   static zksyncServiceRpcService: string = 'https://mainnet.era.zksync.io';
 
-  static ethServiceRpcService: string = 'https://ethereum-rpc.publicnode.com';
+  static ethServiceRpcService: string = 'https://api.vultisig.com/eth/';
 
-  static solanaServiceRpc: string = 'https://api.mainnet-beta.solana.com';
-
-  static solanaServiceRpc2: string = 'https://solana-rpc.publicnode.com';
+  static solanaServiceRpc: string = 'https://api.vultisig.com/solana/';
 
   static solanaTokenInfoServiceRpc: string = 'https://api.solana.fm/v1/tokens';
 

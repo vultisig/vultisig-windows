@@ -6,8 +6,8 @@ import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
 
-const rpcURL = Endpoint.solanaServiceRpc2;
-const rpcURL2 = Endpoint.solanaServiceRpc2;
+const rpcURL = Endpoint.solanaServiceRpc;
+const rpcURL2 = Endpoint.solanaServiceRpc;
 const tokenInfoServiceURL = Endpoint.solanaTokenInfoServiceRpc;
 
 export class RpcServiceSolana implements IRpcService, ITokenService {
