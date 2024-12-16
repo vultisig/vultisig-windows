@@ -1,4 +1,4 @@
-import { getErc20ThorchainSwapKeysignPayload } from '../../../chain/thor/swap/utils/getErc20ThorchainSwapKeysignPayload';
+import { getErc20ThorchainSwapKeysignPayload } from '../../../chain/swap/thor/utils/getErc20ThorchainSwapKeysignPayload';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getChainPrimaryCoin } from '../../../chain/utils/getChainPrimaryCoin';
 import { isNativeCoin } from '../../../chain/utils/isNativeCoin';

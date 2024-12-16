@@ -1,6 +1,6 @@
-import { getThorchainSwapQuote } from '../../../chain/thor/swap/api/getThorchainSwapQuote';
-import { toThorchainSwapAsset } from '../../../chain/thor/swap/asset/toThorchainSwapAsset';
-import { thorchainSwapConfig } from '../../../chain/thor/swap/config';
+import { getThorchainSwapQuote } from '../../../chain/swap/thor/api/getThorchainSwapQuote';
+import { toThorchainSwapAsset } from '../../../chain/swap/thor/asset/toThorchainSwapAsset';
+import { thorchainSwapConfig } from '../../../chain/swap/thor/config';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { CoinKey } from '../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';

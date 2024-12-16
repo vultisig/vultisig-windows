@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { thorchainSwapConfig } from '../../../chain/thor/swap/config';
+import { thorchainSwapConfig } from '../../../chain/swap/thor/config';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useTransformQueryData } from '../../../lib/ui/query/hooks/useTransformQueryData';
 import { useSwapQuoteQuery } from './useSwapQuoteQuery';

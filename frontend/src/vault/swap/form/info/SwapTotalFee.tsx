@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { thorchainSwapConfig } from '../../../../chain/thor/swap/config';
+import { thorchainSwapConfig } from '../../../../chain/swap/thor/config';
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { getChainPrimaryCoin } from '../../../../chain/utils/getChainPrimaryCoin';
 import { getCoinMetaKey } from '../../../../coin/utils/coinMeta';
