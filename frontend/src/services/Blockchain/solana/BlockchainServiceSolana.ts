@@ -83,8 +83,6 @@ export class BlockchainServiceSolana
       if (txBroadcastedHash !== signedTx.transactionHash) {
         if (txBroadcastedHash === 'Transaction already broadcasted.') {
           txBroadcastedHash = signedTx.transactionHash;
-        } else {
-          return 'Transaction hash mismatch';
         }
       }
       return txBroadcastedHash;
