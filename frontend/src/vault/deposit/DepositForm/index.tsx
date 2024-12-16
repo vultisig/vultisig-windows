@@ -86,7 +86,6 @@ export const DepositForm: FC<DepositFormProps> = ({
   };
 
   const selectedBondableAsset = getValues('bondableAsset');
-  console.log('## selected bonadable asset', selectedBondableAsset);
   return (
     <>
       <PageHeader
