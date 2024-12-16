@@ -1,18 +1,18 @@
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { getCoinKey } from '../../../../coin/utils/coin';
-import { EthereumSpecific } from '../../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { KeysignPayload } from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { THORChainSwapPayload } from '../../../../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
-import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
-import { match } from '../../../../lib/utils/match';
-import { Chain } from '../../../../model/chain';
-import { evmSigningInputToPreSignedImageHash } from '../../../evm/tx/evmSigningInputToPreSignedImageHash';
-import { getSigningInputEnvelopedTxFields } from '../../../evm/tx/getSigningInputEnvelopedTxFields';
+import { getCoinKey } from '../../../../../coin/utils/coin';
+import { EthereumSpecific } from '../../../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { KeysignPayload } from '../../../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { THORChainSwapPayload } from '../../../../../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
+import { shouldBePresent } from '../../../../../lib/utils/assert/shouldBePresent';
+import { match } from '../../../../../lib/utils/match';
+import { Chain } from '../../../../../model/chain';
+import { evmSigningInputToPreSignedImageHash } from '../../../../evm/tx/evmSigningInputToPreSignedImageHash';
+import { getSigningInputEnvelopedTxFields } from '../../../../evm/tx/getSigningInputEnvelopedTxFields';
+import { nativeSwapAffiliateConfig } from '../../nativeSwapAffiliateConfig';
 import { toThorchainSwapAssetProto } from '../asset/toThorchainSwapAssetProto';
-import { thorchainSwapConfig } from '../config';
-import { ThorchainSwapEnabledChain } from '../thorchainSwapChains';
+import { ThorchainSwapEnabledChain } from '../thorchainSwapProtoChains';
 
 type Input = {
   keysignPayload: KeysignPayload;
@@ -55,8 +55,8 @@ export const getThorchainSwapPreSignedImageHashes = async ({
     },
     ...(swapPayload.isAffiliate
       ? {
-          affiliateFeeAddress: thorchainSwapConfig.affiliateFeeAddress,
-          affiliateFeeRateBps: thorchainSwapConfig.affiliateFeeRateBps,
+          affiliateFeeAddress: nativeSwapAffiliateConfig.affiliateFeeAddress,
+          affiliateFeeRateBps: nativeSwapAffiliateConfig.affiliateFeeRateBps,
         }
       : {}),
   });

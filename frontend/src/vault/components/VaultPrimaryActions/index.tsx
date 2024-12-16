@@ -1,7 +1,7 @@
 import {
   SwapEnabledChain,
   swapEnabledChains,
-} from '../../../chain/swap/swapChains';
+} from '../../../chain/swap/swapEnabledChains';
 import { CoinKey } from '../../../coin/Coin';
 import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { UniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';

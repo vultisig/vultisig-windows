@@ -2,10 +2,17 @@ import { formatAmount } from '../../../../lib/utils/formatAmount';
 import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
 import { queryUrl } from '../../../../lib/utils/query/queryUrl';
 import { fromChainAmount } from '../../../utils/fromChainAmount';
-import { thorchainSwapConfig } from '../config';
-import { ThorchainSwapQuote } from './ThorchainSwapQuote';
+import { getChainPrimaryCoin } from '../../../utils/getChainPrimaryCoin';
+import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig';
+import {
+  nativeSwapApiBaseUrl,
+  NativeSwapChain,
+  nativeSwapStreamingInterval,
+} from '../NativeSwapChain';
+import { NativeSwapQuote } from './NativeSwapQuote';
 
 type Input = {
+  swapChain: NativeSwapChain;
   destination: string;
   fromAsset: string;
   toAsset: string;
@@ -13,47 +20,49 @@ type Input = {
   isAffiliate: boolean;
 };
 
-const swapBaseUrl = `${thorchainSwapConfig.apiUrl}/quote/swap`;
-
-type ThorchainSwapQuoteErrorResponse = {
+type NativeSwapQuoteErrorResponse = {
   error: string;
 };
 
-export const getThorchainSwapQuote = async ({
+export const getNativeSwapQuote = async ({
+  swapChain,
   destination,
   fromAsset,
   toAsset,
   amount,
   isAffiliate,
 }: Input) => {
+  const swapBaseUrl = `${nativeSwapApiBaseUrl[swapChain]}/quote/swap`;
   const params = {
     from_asset: fromAsset,
     to_asset: toAsset,
     amount: amount.toString(),
     destination,
-    streaming_interval: thorchainSwapConfig.streamingInterval,
+    streaming_interval: nativeSwapStreamingInterval[swapChain],
     ...(isAffiliate
       ? {
-          affiliate: thorchainSwapConfig.affiliateFeeAddress,
-          affiliate_bps: thorchainSwapConfig.affiliateFeeRateBps,
+          affiliate: nativeSwapAffiliateConfig.affiliateFeeAddress,
+          affiliate_bps: nativeSwapAffiliateConfig.affiliateFeeRateBps,
         }
       : {}),
   };
 
   const url = addQueryParams(swapBaseUrl, params);
 
-  const result = await queryUrl<
-    ThorchainSwapQuote | ThorchainSwapQuoteErrorResponse
-  >(url);
+  const result = await queryUrl<NativeSwapQuote | NativeSwapQuoteErrorResponse>(
+    url
+  );
 
   if ('error' in result) {
     throw new Error(result.error);
   }
 
   if (BigInt(result.recommended_min_amount_in) > amount) {
+    const { decimals } = getChainPrimaryCoin(swapChain);
+
     const minAmount = fromChainAmount(
       result.recommended_min_amount_in,
-      thorchainSwapConfig.decimals
+      decimals
     );
 
     const formattedMinAmount = formatAmount(minAmount);

@@ -1,16 +1,17 @@
 import { addMinutes } from 'date-fns';
 
-import { Coin } from '../../../../gen/vultisig/keysign/v1/coin_pb';
-import { THORChainSwapPayload } from '../../../../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
-import { convertDuration } from '../../../../lib/utils/time/convertDuration';
-import { SwapPayload, SwapPayloadType } from '../../../../model/transaction';
-import { fromChainAmount } from '../../../utils/fromChainAmount';
-import { toChainAmount } from '../../../utils/toChainAmount';
-import { ThorchainSwapQuote } from '../api/ThorchainSwapQuote';
-import { thorchainSwapConfig } from '../config';
+import { Coin } from '../../../../../gen/vultisig/keysign/v1/coin_pb';
+import { THORChainSwapPayload } from '../../../../../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
+import { convertDuration } from '../../../../../lib/utils/time/convertDuration';
+import { Chain } from '../../../../../model/chain';
+import { SwapPayload, SwapPayloadType } from '../../../../../model/transaction';
+import { fromChainAmount } from '../../../../utils/fromChainAmount';
+import { toChainAmount } from '../../../../utils/toChainAmount';
+import { NativeSwapQuote } from '../../api/NativeSwapQuote';
+import { nativeSwapStreamingInterval } from '../../NativeSwapChain';
 
 type Input = {
-  quote: ThorchainSwapQuote;
+  quote: NativeSwapQuote;
   fromAddress: string;
   fromCoin: Coin;
   amount: number;
@@ -26,6 +27,8 @@ export const thorchainSwapQuoteToSwapPayload = ({
 }: Input): SwapPayload => {
   const isAffiliate =
     !!quote.fees.affiliate && Number(quote.fees.affiliate) > 0;
+
+  const streamingInterval = nativeSwapStreamingInterval[Chain.THORChain];
 
   return {
     case: SwapPayloadType.THORCHAIN,
@@ -45,7 +48,7 @@ export const thorchainSwapQuoteToSwapPayload = ({
           convertDuration(addMinutes(Date.now(), 15).getTime(), 'ms', 's')
         )
       ),
-      streamingInterval: thorchainSwapConfig.streamingInterval.toString(),
+      streamingInterval: streamingInterval.toString(),
       streamingQuantity: '0',
       toAmountLimit: '0',
       isAffiliate,

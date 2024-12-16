@@ -1,12 +1,15 @@
-import { getThorchainSwapQuote } from '../../../chain/swap/thor/api/getThorchainSwapQuote';
-import { toThorchainSwapAsset } from '../../../chain/swap/thor/asset/toThorchainSwapAsset';
-import { thorchainSwapConfig } from '../../../chain/swap/thor/config';
+import { getNativeSwapQuote } from '../../../chain/swap/native/api/getNativeSwapQuote';
+import { nativeSwapAffiliateConfig } from '../../../chain/swap/native/nativeSwapAffiliateConfig';
+import { NativeSwapChain } from '../../../chain/swap/native/NativeSwapChain';
+import { toThorchainSwapAsset } from '../../../chain/swap/native/thor/asset/toThorchainSwapAsset';
+import { getChainPrimaryCoin } from '../../../chain/utils/getChainPrimaryCoin';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { CoinKey } from '../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { withoutNullOrUndefined } from '../../../lib/utils/array/withoutNullOrUndefined';
+import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Fiat } from '../../../model/fiat';
 import {
@@ -45,6 +48,8 @@ export const useSwapQuoteQuery = () => {
     Fiat.USD
   );
 
+  const swapChain: NativeSwapChain = Chain.THORChain;
+
   return useStateDependentQuery({
     state: {
       fromAmount: fromAmount ?? undefined,
@@ -66,14 +71,17 @@ export const useSwapQuoteQuery = () => {
           ticker: toCoin.ticker,
         });
 
-        const amount = toChainAmount(fromAmount, thorchainSwapConfig.decimals);
+        const { decimals } = getChainPrimaryCoin(swapChain);
+
+        const amount = toChainAmount(fromAmount, decimals);
 
         const usdAmount = fromAmount * fromCoinUsdPrice;
 
         const isAffiliate =
-          usdAmount >= thorchainSwapConfig.minUsdAffiliateAmount;
+          usdAmount >= nativeSwapAffiliateConfig.minUsdAffiliateAmount;
 
-        return getThorchainSwapQuote({
+        return getNativeSwapQuote({
+          swapChain,
           fromAsset,
           toAsset,
           destination,

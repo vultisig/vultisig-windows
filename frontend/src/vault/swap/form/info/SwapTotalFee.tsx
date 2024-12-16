@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { thorchainSwapConfig } from '../../../../chain/swap/thor/config';
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { getChainPrimaryCoin } from '../../../../chain/utils/getChainPrimaryCoin';
 import { getCoinMetaKey } from '../../../../coin/utils/coinMeta';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
+import { Chain } from '../../../../model/chain';
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery';
 import { useSwapSpecificTxInfoQuery } from '../../queries/useSwapSpecificTxInfoQuery';
 import { useFromCoin } from '../../state/fromCoin';
@@ -41,26 +41,26 @@ export const SwapTotalFee = () => {
               value={txInfo}
               error={() => null}
               pending={() => <Spinner />}
-              success={({ fee }) => (
-                <SwapTotalFeeFiatValue
-                  value={[
-                    {
-                      ...toCoinKey,
-                      amount: fromChainAmount(
-                        swapQuote.fees.total,
-                        thorchainSwapConfig.decimals
-                      ),
-                    },
-                    {
-                      ...getCoinMetaKey(fromGasCoin),
-                      amount: fromChainAmount(
-                        BigInt(Math.round(fee)),
-                        fromGasCoin.decimals
-                      ),
-                    },
-                  ]}
-                />
-              )}
+              success={({ fee }) => {
+                const { decimals } = getChainPrimaryCoin(Chain.THORChain);
+                return (
+                  <SwapTotalFeeFiatValue
+                    value={[
+                      {
+                        ...toCoinKey,
+                        amount: fromChainAmount(swapQuote.fees.total, decimals),
+                      },
+                      {
+                        ...getCoinMetaKey(fromGasCoin),
+                        amount: fromChainAmount(
+                          BigInt(Math.round(fee)),
+                          fromGasCoin.decimals
+                        ),
+                      },
+                    ]}
+                  />
+                );
+              }}
             />
           );
         }}
