@@ -5,7 +5,7 @@ import {
   ComponentWithBackActionProps,
   TitledComponentProps,
 } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { VerifyEmailStep } from '../../fast/components/VerifyEmailStep';
@@ -27,8 +27,8 @@ export const KeygenStep = ({ onTryAgain, title }: KeygenStepProps) => {
   useEffect(start, [start]);
 
   return (
-    <QueryDependant
-      query={mutationState}
+    <MatchQuery
+      value={mutationState}
       success={vault => {
         if (haveServerSigner(vault.signers)) {
           return (

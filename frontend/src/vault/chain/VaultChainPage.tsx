@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt';
@@ -17,9 +18,8 @@ import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { Spinner } from '../../lib/ui/loaders/Spinner';
 import { Panel } from '../../lib/ui/panel/Panel';
-import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../lib/ui/query/components/MatchQuery';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
-import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { Text } from '../../lib/ui/text';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { splitBy } from '../../lib/utils/array/splitBy';
@@ -66,6 +66,8 @@ export const VaultChainPage = () => {
     )
   );
 
+  const { t } = useTranslation();
+
   return (
     <VStack flexGrow>
       <PageHeader
@@ -98,8 +100,8 @@ export const VaultChainPage = () => {
                   {chain}
                 </Text>
               </HStack>
-              <QueryDependant
-                query={vaultAddressQuery}
+              <MatchQuery
+                value={vaultAddressQuery}
                 success={address => (
                   <HStack>
                     <IconButton
@@ -115,9 +117,10 @@ export const VaultChainPage = () => {
                 pending={() => null}
               />
             </HStack>
-            <QueryDependant
-              query={vaultCoinsQuery}
-              {...getQueryDependantDefaultProps('vault address')}
+            <MatchQuery
+              value={vaultCoinsQuery}
+              error={() => t('failed_to_load')}
+              pending={() => t('loading')}
               success={coins => {
                 const total = sum(
                   coins.map(({ amount, decimals, price = 0 }) =>
@@ -143,9 +146,10 @@ export const VaultChainPage = () => {
                 );
               }}
             />
-            <QueryDependant
-              query={vaultAddressQuery}
-              {...getQueryDependantDefaultProps('vault address')}
+            <MatchQuery
+              value={vaultAddressQuery}
+              error={() => t('failed_to_load')}
+              pending={() => t('loading')}
               success={address => (
                 <Text size={14} weight="500" color="primary">
                   <BalanceVisibilityAware size="xxxl">
@@ -155,9 +159,10 @@ export const VaultChainPage = () => {
               )}
             />
           </VStack>
-          <QueryDependant
-            query={vaultCoinsQuery}
-            {...getQueryDependantDefaultProps('vault address')}
+          <MatchQuery
+            value={vaultCoinsQuery}
+            error={() => t('failed_to_load')}
+            pending={() => t('loading')}
             success={coins => {
               const orderedCoins = splitBy(coins, coin =>
                 isNativeCoin(coin) ? 0 : 1

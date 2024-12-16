@@ -3,9 +3,9 @@ import { t } from 'i18next';
 import { Opener } from '../../../../lib/ui/base/Opener';
 import { SettingsIcon } from '../../../../lib/ui/icons/SettingsIcon';
 import { ClosableComponentProps } from '../../../../lib/ui/props';
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { FailedQueryOverlay } from '../../../../lib/ui/query/components/overlay/FailedQueryOverlay';
 import { PendingQueryOverlay } from '../../../../lib/ui/query/components/overlay/PendingQueryOverlay';
-import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
 import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled';
 import { useSpecificSendTxInfoQuery } from '../../queries/useSpecificSendTxInfoQuery';
@@ -26,8 +26,8 @@ export const ManageFeeSettingsFrame = ({
         <PageHeaderIconButton onClick={onOpen} icon={<SettingsIcon />} />
       )}
       renderContent={({ onClose }) => (
-        <QueryDependant
-          query={txSpecificInfoQuery}
+        <MatchQuery
+          value={txSpecificInfoQuery}
           success={value => (
             <SpecificSendTxInfoProvider value={value}>
               {render({ onClose })}

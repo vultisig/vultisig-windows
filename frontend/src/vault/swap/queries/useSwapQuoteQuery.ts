@@ -1,5 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-
 import { getThorchainSwapQuote } from '../../../chain/thor/swap/api/getThorchainSwapQuote';
 import { toThorchainSwapAsset } from '../../../chain/thor/swap/asset/toThorchainSwapAsset';
 import { thorchainSwapConfig } from '../../../chain/thor/swap/config';
@@ -7,8 +5,8 @@ import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { CoinKey } from '../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
+import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { withoutNullOrUndefined } from '../../../lib/utils/array/withoutNullOrUndefined';
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Fiat } from '../../../model/fiat';
 import {
@@ -22,7 +20,7 @@ import { useToCoin } from '../state/toCoin';
 type GetSwapQuoteQueryKey = {
   fromCoinKey: CoinKey;
   toCoinKey: CoinKey;
-  fromAmount: number | null;
+  fromAmount: number;
 };
 
 export const getSwapQuoteQueryKey = ({
@@ -47,42 +45,43 @@ export const useSwapQuoteQuery = () => {
     Fiat.USD
   );
 
-  return useQuery({
-    queryKey: getSwapQuoteQueryKey({
-      fromCoinKey,
-      toCoinKey,
-      fromAmount,
-    }),
-    queryFn: async () => {
-      const fromAsset = toThorchainSwapAsset({
-        ...fromCoinKey,
-        ticker: fromCoin.ticker,
-      });
-      const toAsset = toThorchainSwapAsset({
-        ...toCoinKey,
-        ticker: toCoin.ticker,
-      });
-
-      const amount = toChainAmount(
-        shouldBePresent(fromAmount),
-        thorchainSwapConfig.decimals
-      );
-
-      const usdAmount =
-        shouldBePresent(fromAmount) * shouldBePresent(fromCoinUsdPrice.data);
-
-      const isAffiliate =
-        usdAmount >= thorchainSwapConfig.minUsdAffiliateAmount;
-
-      return getThorchainSwapQuote({
-        fromAsset,
-        toAsset,
-        destination,
-        amount,
-        isAffiliate,
-      });
+  return useStateDependentQuery({
+    state: {
+      fromAmount: fromAmount ?? undefined,
+      fromCoinUsdPrice: fromCoinUsdPrice.data,
     },
-    enabled: !!fromAmount && !!fromCoinUsdPrice.data,
-    retry: false,
+    getQuery: ({ fromAmount, fromCoinUsdPrice }) => ({
+      queryKey: getSwapQuoteQueryKey({
+        fromCoinKey,
+        toCoinKey,
+        fromAmount,
+      }),
+      queryFn: async () => {
+        const fromAsset = toThorchainSwapAsset({
+          ...fromCoinKey,
+          ticker: fromCoin.ticker,
+        });
+        const toAsset = toThorchainSwapAsset({
+          ...toCoinKey,
+          ticker: toCoin.ticker,
+        });
+
+        const amount = toChainAmount(fromAmount, thorchainSwapConfig.decimals);
+
+        const usdAmount = fromAmount * fromCoinUsdPrice;
+
+        const isAffiliate =
+          usdAmount >= thorchainSwapConfig.minUsdAffiliateAmount;
+
+        return getThorchainSwapQuote({
+          fromAsset,
+          toAsset,
+          destination,
+          amount,
+          isAffiliate,
+        });
+      },
+      retry: false,
+    }),
   });
 };

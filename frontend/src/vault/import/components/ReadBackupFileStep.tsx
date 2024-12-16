@@ -6,7 +6,7 @@ import { ReadTextFile } from '../../../../wailsjs/go/main/App';
 import { VaultContainer } from '../../../gen/vultisig/vault/v1/vault_container_pb';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { ValueFinishProps } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { fromBase64 } from '../../../lib/utils/fromBase64';
 import { pipe } from '../../../lib/utils/pipe';
@@ -36,8 +36,8 @@ export const ReadBackupFileStep = ({
   return (
     <>
       <FlowPageHeader title={t('import_vault')} />
-      <QueryDependant
-        query={mutationState}
+      <MatchQuery
+        value={mutationState}
         success={() => null}
         pending={() => <FlowPendingPageContent title={t('importing_vault')} />}
         error={error => (

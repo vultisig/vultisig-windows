@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { TitledComponentProps } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { makeAppPath } from '../../../navigation';
 import { KeygenFailedState } from '../shared/KeygenFailedState';
 import { KeygenPageHeader } from '../shared/KeygenPageHeader';
@@ -18,8 +18,8 @@ export const JoinKeygenProcess = ({ title }: TitledComponentProps) => {
   const navigate = useNavigate();
 
   return (
-    <QueryDependant
-      query={joinKeygenState}
+    <MatchQuery
+      value={joinKeygenState}
       success={vault => <KeygenSuccessStep value={vault} title={title} />}
       error={error => (
         <>

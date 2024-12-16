@@ -19,7 +19,7 @@ import { VStack } from '../../../../../lib/ui/layout/Stack';
 import { Spinner } from '../../../../../lib/ui/loaders/Spinner';
 import { Modal } from '../../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../../lib/ui/props';
-import { QueryDependant } from '../../../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery';
 import { SpecificEvm } from '../../../../../model/specific-transaction-info';
 import { useCurrentVaultCoin } from '../../../../state/currentVault';
 import { useCurrentSendCoin } from '../../../state/sendCoin';
@@ -107,8 +107,8 @@ export const ManageEvmFeeSettings: React.FC<ClosableComponentProps> = ({
             {t('total_fee')} ({t('gwei')})
           </InputLabel>
           <FeeContainer>
-            <QueryDependant
-              query={txInfoQuery}
+            <MatchQuery
+              value={txInfoQuery}
               success={value => (
                 <SpecificSendTxInfoProvider value={value}>
                   <span>

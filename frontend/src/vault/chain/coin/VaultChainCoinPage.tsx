@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { areEqualCoins } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
@@ -11,8 +12,7 @@ import {
 import { RefreshIcon } from '../../../lib/ui/icons/RefreshIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Panel } from '../../../lib/ui/panel/Panel';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
-import { getQueryDependantDefaultProps } from '../../../lib/ui/query/utils/getQueryDependantDefaultProps';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { CoinMeta } from '../../../model/coin-meta';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -43,6 +43,8 @@ export const VaultChainCoinPage = () => {
 
   const pricesQuery = useCoinPricesQuery([CoinMeta.fromCoin(coin)]);
 
+  const { t } = useTranslation();
+
   return (
     <VStack flexGrow data-testid="ManageVaultChainCoinPage-Coin">
       <PageHeader
@@ -57,9 +59,10 @@ export const VaultChainCoinPage = () => {
       <PageContent gap={16}>
         <VaultPrimaryActions value={getCoinKey(coin)} />
         <Panel>
-          <QueryDependant
-            query={balanceQuery}
-            {...getQueryDependantDefaultProps('balance')}
+          <MatchQuery
+            value={balanceQuery}
+            error={() => t('failed_to_load')}
+            pending={() => t('loading')}
             success={({ amount, decimals }) => {
               const price = pricesQuery.data
                 ? pricesQuery.data[0]?.price

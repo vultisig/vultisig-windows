@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -27,8 +27,8 @@ export const KeygenServerUrlProvider = ({
   });
 
   return (
-    <QueryDependant
-      query={query}
+    <MatchQuery
+      value={query}
       success={value => (
         <CurrentServerUrlProvider value={value}>
           {children}

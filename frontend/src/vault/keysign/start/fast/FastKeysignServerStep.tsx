@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
-import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
 import { Chain, ChainUtils, TssKeysignType } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
@@ -73,8 +73,8 @@ export const FastKeysignServerStep: React.FC<
 
   return (
     <>
-      <QueryDependant
-        query={state}
+      <MatchQuery
+        value={state}
         pending={() => (
           <>
             {header}

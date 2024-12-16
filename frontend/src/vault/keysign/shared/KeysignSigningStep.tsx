@@ -6,7 +6,7 @@ import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash';
 import { ProgressLine } from '../../../lib/ui/flow/ProgressLine';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { Chain } from '../../../model/chain';
@@ -63,8 +63,8 @@ export const KeysignSigningStep = ({
   useEffect(() => startKeysign(), [startKeysign]);
 
   return (
-    <QueryDependant
-      query={mutationStatus}
+    <MatchQuery
+      value={mutationStatus}
       success={txHash => (
         <CurrentTxHashProvider value={txHash}>
           <KeysignSummaryStep />

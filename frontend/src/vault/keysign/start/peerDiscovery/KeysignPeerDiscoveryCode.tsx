@@ -1,9 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { centerContent } from '../../../../lib/ui/css/centerContent';
 import { FramedQrCode } from '../../../../lib/ui/qr/FramedQrCode';
-import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
-import { getQueryDependantDefaultProps } from '../../../../lib/ui/query/utils/getQueryDependantDefaultProps';
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { useKeysignMsgQuery } from '../../shared/queries/useKeysignMsgQuery';
 
 const Container = styled.div`
@@ -13,15 +13,18 @@ const Container = styled.div`
 export const KeysignPeerDiscoveryQrCode = () => {
   const keygenMsgQuery = useKeysignMsgQuery();
 
+  const { t } = useTranslation();
+
   return (
-    <QueryDependant
-      query={keygenMsgQuery}
+    <MatchQuery
+      value={keygenMsgQuery}
       success={data => (
         <Container>
           <FramedQrCode value={data} />
         </Container>
       )}
-      {...getQueryDependantDefaultProps('keysign message')}
+      error={() => t('failed_to_load')}
+      pending={() => t('loading')}
     />
   );
 };

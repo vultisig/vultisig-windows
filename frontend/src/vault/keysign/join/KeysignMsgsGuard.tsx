@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -18,8 +18,8 @@ export const KeysignMsgsGuard = ({ children }: ComponentWithChildrenProps) => {
   const query = useKeysignMsgsQuery();
 
   return (
-    <QueryDependant
-      query={query}
+    <MatchQuery
+      value={query}
       error={error => (
         <FullPageFlowErrorState
           title={t('keysign')}

@@ -6,7 +6,7 @@ import {
   ComponentWithBackActionProps,
   ComponentWithForwardActionProps,
 } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -61,8 +61,8 @@ export const SetupVaultServerStep: React.FC<
         }
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
       />
-      <QueryDependant
-        query={state}
+      <MatchQuery
+        value={state}
         pending={() => <WaitForServerLoader />}
         success={() => null}
         error={error => (

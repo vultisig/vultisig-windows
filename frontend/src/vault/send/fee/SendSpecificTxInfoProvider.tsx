@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup';
 import { StrictText } from '../../../lib/ui/text';
 import { SpecificTransactionInfo } from '../../../model/specific-transaction-info';
@@ -20,8 +20,8 @@ export const SendSpecificTxInfoProvider: React.FC<
   const { t } = useTranslation();
 
   return (
-    <QueryDependant
-      query={txSpecificInfoQuery}
+    <MatchQuery
+      value={txSpecificInfoQuery}
       pending={() => <Spinner />}
       error={() => <StrictText>{t('failed_to_load')}</StrictText>}
       success={value => (

@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { QueryKey, useMutation } from '@tanstack/react-query';
 
 import { getBalanceQueryKey } from '../../../coin/query/useBalanceQuery';
 import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries';
@@ -20,18 +20,24 @@ export const RefreshSwap = () => {
 
   const { mutate: refresh, isPending } = useMutation({
     mutationFn: () => {
-      const accountCoinKey = {
-        ...fromCoinKey,
-        address,
-      };
-      return invalidateQueries(
-        getBalanceQueryKey(accountCoinKey),
-        getSwapQuoteQueryKey({
-          fromCoinKey,
-          toCoinKey,
-          fromAmount,
-        })
-      );
+      const queryKeys: QueryKey[] = [
+        getBalanceQueryKey({
+          ...fromCoinKey,
+          address,
+        }),
+      ];
+
+      if (fromAmount) {
+        queryKeys.push(
+          getSwapQuoteQueryKey({
+            fromCoinKey,
+            toCoinKey,
+            fromAmount,
+          })
+        );
+      }
+
+      return invalidateQueries(queryKeys);
     },
   });
 

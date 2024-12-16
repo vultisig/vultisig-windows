@@ -5,7 +5,7 @@ import {
   ComponentWithForwardActionProps,
   TitledComponentProps,
 } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { isEmpty } from '../../../lib/utils/array/isEmpty';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { recordFromKeys } from '../../../lib/utils/record/recordFromKeys';
@@ -43,8 +43,8 @@ export const WaitForServerToJoinStep: React.FC<
 
   return (
     <>
-      <QueryDependant
-        query={peerOptionsQuery}
+      <MatchQuery
+        value={peerOptionsQuery}
         pending={() => (
           <>
             {header}

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../lib/ui/buttons/Button';
-import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../lib/ui/query/components/MatchQuery';
 import { extractErrorMsg } from '../../lib/utils/error/extractErrorMsg';
 import { useAppPathState } from '../../navigation/hooks/useAppPathState';
 import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
@@ -25,8 +25,8 @@ export const DeeplinkPage = () => {
   return (
     <>
       <FlowPageHeader title={t('deeplink')} />
-      <QueryDependant
-        query={mutationState}
+      <MatchQuery
+        value={mutationState}
         success={() => null}
         pending={() => <FlowPendingPageContent title={t('processing_url')} />}
         error={error => (

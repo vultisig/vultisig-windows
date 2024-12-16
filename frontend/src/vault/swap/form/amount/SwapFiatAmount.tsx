@@ -8,7 +8,7 @@ import { centerContent } from '../../../../lib/ui/css/centerContent';
 import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { ComponentWithValueProps } from '../../../../lib/ui/props';
-import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { text } from '../../../../lib/ui/text';
 import { EntityWithAmount } from '../../../../lib/utils/entities/EntityWithAmount';
 import { CoinMeta } from '../../../../model/coin-meta';
@@ -39,8 +39,8 @@ export const SwapFiatAmount = ({
 
   return (
     <Container>
-      <QueryDependant
-        query={query}
+      <MatchQuery
+        value={query}
         error={() => null}
         pending={() => <Spinner />}
         success={price => formatFiatAmount(value.amount * price)}

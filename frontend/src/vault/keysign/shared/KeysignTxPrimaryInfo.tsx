@@ -7,7 +7,7 @@ import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { formatAmount } from '../../../lib/utils/formatAmount';
@@ -40,8 +40,8 @@ export const KeysignTxPrimaryInfo = () => {
         value={fromChainAmount(BigInt(toAmount), decimals)}
         ticker={ticker}
       />
-      <QueryDependant
-        query={coinPriceQuery}
+      <MatchQuery
+        value={coinPriceQuery}
         success={price =>
           price ? (
             <TxOverviewRow>

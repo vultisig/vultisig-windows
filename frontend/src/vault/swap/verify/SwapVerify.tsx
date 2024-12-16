@@ -5,7 +5,7 @@ import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPri
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { range } from '../../../lib/utils/array/range';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { formatAmount } from '../../../lib/utils/formatAmount';
@@ -53,8 +53,8 @@ export const SwapVerify: React.FC<ComponentWithBackActionProps> = ({
               {formatAmount(shouldBePresent(fromAmount), fromCoin.ticker)}
             </TxOverviewPrimaryRow>
             <TxOverviewPrimaryRow title={t('to')}>
-              <QueryDependant
-                query={outAmountQuery}
+              <MatchQuery
+                value={outAmountQuery}
                 error={() => t('failed_to_load')}
                 pending={() => t('loading')}
                 success={amount => formatAmount(amount, toCoin.ticker)}

@@ -1,7 +1,8 @@
+import { useTranslation } from 'react-i18next';
+
 import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 import { HStack } from '../../lib/ui/layout/Stack';
-import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
-import { getQueryDependantDefaultProps } from '../../lib/ui/query/utils/getQueryDependantDefaultProps';
+import { MatchQuery } from '../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../lib/ui/text';
 import { formatAmount } from '../../lib/utils/formatAmount';
 import { useVaultTotalBalanceQuery } from '../queries/useVaultTotalBalanceQuery';
@@ -12,11 +13,14 @@ export const VaultTotalBalance = () => {
   const query = useVaultTotalBalanceQuery();
   const { globalCurrency } = useGlobalCurrency();
 
+  const { t } = useTranslation();
+
   return (
     <HStack alignItems="center" gap={4}>
-      <QueryDependant
-        query={query}
-        {...getQueryDependantDefaultProps('balance')}
+      <MatchQuery
+        value={query}
+        error={() => t('failed_to_load')}
+        pending={() => t('loading')}
         success={value => (
           <Text color="contrast" weight="700" size={26} centerVertically>
             <BalanceVisibilityAware size="l">

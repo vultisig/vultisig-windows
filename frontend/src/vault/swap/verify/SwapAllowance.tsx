@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery';
@@ -13,8 +13,8 @@ export const SwapAllowance = () => {
   const { t } = useTranslation();
 
   return (
-    <QueryDependant
-      query={query}
+    <MatchQuery
+      value={query}
       error={() => null}
       pending={() => null}
       success={({ erc20ApprovePayload, coin }) => {

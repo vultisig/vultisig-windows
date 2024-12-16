@@ -7,7 +7,7 @@ import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { text } from '../../../lib/ui/text';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { useCurrentVaultCoin } from '../../state/currentVault';
@@ -36,8 +36,8 @@ export const SwapCoinBalance = ({
     <Container>
       <span>{t('balance')}:</span>
       <span>
-        <QueryDependant
-          query={query}
+        <MatchQuery
+          value={query}
           pending={() => <Spinner />}
           error={() => t('failed_to_load')}
           success={({ amount, decimals }) => (
