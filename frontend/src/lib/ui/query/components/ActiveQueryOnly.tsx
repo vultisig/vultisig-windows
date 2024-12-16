@@ -5,8 +5,7 @@ import {
 import { Query } from '../Query';
 
 export const ActiveQueryOnly: React.FC<
-  ComponentWithChildrenProps &
-    ComponentWithValueProps<Query<any> & { isLoading: boolean }>
+  ComponentWithChildrenProps & ComponentWithValueProps<Query<any>>
 > = ({ children, value }) => {
   const isActive =
     value.data !== undefined ||

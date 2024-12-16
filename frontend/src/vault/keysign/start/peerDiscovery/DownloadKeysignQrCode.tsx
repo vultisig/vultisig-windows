@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { FileUpIcon } from '../../../../lib/ui/icons/FileUpIcon';
-import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { SaveAsImage } from '../../../../ui/file/SaveAsImage';
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode';
@@ -18,8 +18,8 @@ export const DownloadKeysignQrCode = () => {
   const lastThreeUID = uid.slice(-3);
 
   return (
-    <QueryDependant
-      query={msgQuery}
+    <MatchQuery
+      value={msgQuery}
       success={data => (
         <SaveAsImage
           fileName={`VaultKeysignQR-${name}-${lastThreeUID}`}

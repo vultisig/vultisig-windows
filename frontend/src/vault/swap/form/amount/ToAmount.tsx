@@ -5,7 +5,7 @@ import { horizontalPadding } from '../../../../lib/ui/css/horizontalPadding';
 import { takeWholeSpace } from '../../../../lib/ui/css/takeWholeSpace';
 import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
-import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { text } from '../../../../lib/ui/text';
 import { formatAmount } from '../../../../lib/utils/formatAmount';
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery';
@@ -38,8 +38,8 @@ export const ToAmount = () => {
   return (
     <AmountContainer>
       <AmountLabel>{t('to')}</AmountLabel>
-      <QueryDependant
-        query={query}
+      <MatchQuery
+        value={query}
         pending={() => null}
         error={() => null}
         success={value => (
@@ -47,10 +47,11 @@ export const ToAmount = () => {
         )}
       />
       <Value>
-        <QueryDependant
-          query={query}
-          pending={() => (query.isLoading ? <Spinner /> : formatAmount(0))}
+        <MatchQuery
+          value={query}
+          pending={() => <Spinner />}
           error={() => formatAmount(0)}
+          inactive={() => formatAmount(0)}
           success={value => formatAmount(value)}
         />
       </Value>

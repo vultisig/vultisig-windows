@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { Button } from '../../../lib/ui/buttons/Button';
 import { takeWholeSpaceAbsolutely } from '../../../lib/ui/css/takeWholeSpaceAbsolutely';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { attempt } from '../../../lib/utils/attempt';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';
@@ -104,8 +104,8 @@ export const ScanQrView = ({
 
   return (
     <Container className={className}>
-      <QueryDependant
-        query={streamMutationState}
+      <MatchQuery
+        value={streamMutationState}
         success={() => <Video ref={setVideo} muted />}
         pending={() => (
           <FlowPendingPageContent title={t('getting_video_permission')} />

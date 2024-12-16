@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useFormatFiatAmount } from '../../chain/ui/hooks/useFormatFiatAmount';
 import { Spinner } from '../../lib/ui/loaders/Spinner';
-import { QueryDependant } from '../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../lib/ui/query/components/MatchQuery';
 import { EntityWithAmount } from '../../lib/utils/entities/EntityWithAmount';
 import { CoinMeta } from '../../model/coin-meta';
 import { useCurrentVaultCoin } from '../../vault/state/currentVault';
@@ -24,8 +24,8 @@ export const FiatAmount = ({ coin: coinKey, amount }: FiatAmountProps) => {
   const formatAmount = useFormatFiatAmount();
 
   return (
-    <QueryDependant
-      query={query}
+    <MatchQuery
+      value={query}
       success={value => formatAmount(value * amount)}
       error={() => t('failed_to_load')}
       pending={() => <Spinner />}

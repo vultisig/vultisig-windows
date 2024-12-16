@@ -7,7 +7,7 @@ import {
   ComponentWithValueProps,
   TitledComponentProps,
 } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
@@ -32,8 +32,8 @@ export const SaveVaultStep: React.FC<
   return (
     <>
       <FlowPageHeader title={title} />
-      <QueryDependant
-        query={mutationState}
+      <MatchQuery
+        value={mutationState}
         pending={() => <FlowPendingPageContent title={t('saving_vault')} />}
         success={() => null}
         error={error => (

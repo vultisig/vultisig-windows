@@ -11,7 +11,7 @@ import {
   ComponentWithForwardActionProps,
   TitledComponentProps,
 } from '../../../../../lib/ui/props';
-import { QueryDependant } from '../../../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery';
 import { Query } from '../../../../../lib/ui/query/Query';
 import { StrictText } from '../../../../../lib/ui/text';
 import { PageContent } from '../../../../../ui/page/PageContent';
@@ -49,8 +49,8 @@ export const KeygenPeerDiscoveryStep = ({
         title={<PageHeaderTitle>{title}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         secondaryControls={
-          <QueryDependant
-            query={joinUrlQuery}
+          <MatchQuery
+            value={joinUrlQuery}
             success={value => <DownloadKeygenQrCode value={value} />}
             error={() => null}
             pending={() => null}
@@ -65,8 +65,8 @@ export const KeygenPeerDiscoveryStep = ({
         })}
       >
         <Content>
-          <QueryDependant
-            query={joinUrlQuery}
+          <MatchQuery
+            value={joinUrlQuery}
             success={value => <KeygenPeerDiscoveryQrCode value={value} />}
             pending={() => (
               <TakeWholeSpaceCenterContent>

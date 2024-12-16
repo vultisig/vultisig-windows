@@ -6,7 +6,7 @@ import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { getChainPrimaryCoin } from '../../../../chain/utils/getChainPrimaryCoin';
 import { getCoinMetaKey } from '../../../../coin/utils/coinMeta';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
-import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery';
 import { useSwapSpecificTxInfoQuery } from '../../queries/useSwapSpecificTxInfoQuery';
 import { useFromCoin } from '../../state/fromCoin';
@@ -31,14 +31,14 @@ export const SwapTotalFee = () => {
   return (
     <>
       <span>{t('estimated_fees')}</span>
-      <QueryDependant
-        query={query}
+      <MatchQuery
+        value={query}
         error={() => null}
         pending={() => <Spinner />}
         success={swapQuote => {
           return (
-            <QueryDependant
-              query={txInfo}
+            <MatchQuery
+              value={txInfo}
               error={() => null}
               pending={() => <Spinner />}
               success={({ fee }) => (

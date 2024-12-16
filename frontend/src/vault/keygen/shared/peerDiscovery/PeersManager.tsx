@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { HStack, VStack } from '../../../../lib/ui/layout/Stack';
-import { QueryDependant } from '../../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { Query } from '../../../../lib/ui/query/Query';
-import { getQueryDependantDefaultProps } from '../../../../lib/ui/query/utils/getQueryDependantDefaultProps';
 import { Text } from '../../../../lib/ui/text';
 import { CurrentPeersCorrector } from './CurrentPeersCorrector';
 import { LookingForDevices } from './LookingForDevices';
@@ -22,8 +21,10 @@ export const PeersManager = ({ peerOptionsQuery }: PeersManageProps) => {
       justifyContent="center"
       style={{ minHeight: 160 }}
     >
-      <QueryDependant
-        query={peerOptionsQuery}
+      <MatchQuery
+        value={peerOptionsQuery}
+        error={() => t('failed_to_load')}
+        pending={() => t('loading')}
         success={options => (
           <>
             <CurrentPeersCorrector />
@@ -43,7 +44,6 @@ export const PeersManager = ({ peerOptionsQuery }: PeersManageProps) => {
             )}
           </>
         )}
-        {...getQueryDependantDefaultProps('devices')}
       />
     </VStack>
   );

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { StrictText } from '../../../lib/ui/text';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt';
@@ -20,8 +20,8 @@ export const SwapConfirm = () => {
   }, [t, terms]);
 
   return (
-    <QueryDependant
-      query={keysignPayloadQuery}
+    <MatchQuery
+      value={keysignPayloadQuery}
       pending={() => <StrictText>{t('loading')}</StrictText>}
       error={error => <StrictText>{extractErrorMsg(error)}</StrictText>}
       success={keysignPayload => (

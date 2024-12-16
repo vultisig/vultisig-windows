@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Center } from '../lib/ui/layout/Center';
 import { ComponentWithChildrenProps } from '../lib/ui/props';
-import { QueryDependant } from '../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../lib/ui/query/components/MatchQuery';
 import { mergeQueries } from '../lib/ui/query/utils/mergeQueries';
 import { StrictText } from '../lib/ui/text';
 import { ProductLogoBlock } from '../ui/logo/ProductLogoBlock';
@@ -24,8 +24,8 @@ export const RemoteStateDependant = ({
   const { t } = useTranslation();
 
   return (
-    <QueryDependant
-      query={query}
+    <MatchQuery
+      value={query}
       success={() => children}
       error={() => (
         <Center>

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -68,8 +68,8 @@ export const FastReshareServerStep: React.FC<
 
   return (
     <>
-      <QueryDependant
-        query={state}
+      <MatchQuery
+        value={state}
         pending={() => (
           <>
             {header}

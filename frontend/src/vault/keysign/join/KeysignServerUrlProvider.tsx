@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -30,8 +30,8 @@ export const KeysignServerUrlProvider = ({
   });
 
   return (
-    <QueryDependant
-      query={query}
+    <MatchQuery
+      value={query}
       success={value => (
         <CurrentServerUrlProvider value={value}>
           <CurrentServerTypeProvider initialValue={serverType}>

@@ -4,7 +4,7 @@ import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { QueryDependant } from '../../../lib/ui/query/components/QueryDependant';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useCurrentVaultCoin } from '../../state/currentVault';
@@ -27,8 +27,8 @@ export const DepositFiatFeeValue = () => {
   const feeAmount = fromChainAmount(fee, decimals);
 
   return (
-    <QueryDependant
-      query={priceQuery}
+    <MatchQuery
+      value={priceQuery}
       pending={() => <Spinner />}
       error={() => null}
       success={price => {
