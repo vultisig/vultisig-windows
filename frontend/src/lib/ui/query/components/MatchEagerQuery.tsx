@@ -27,8 +27,12 @@ export function MatchEagerQuery<T, E = unknown>({
     return <>{error(errors)}</>;
   }
 
+  if (isLoading === false) {
+    return <>{inactive()}</>;
+  }
+
   if (isPending) {
-    return <>{(isLoading === false ? inactive : pending)()}</>;
+    return <>{pending()}</>;
   }
 
   return null;
