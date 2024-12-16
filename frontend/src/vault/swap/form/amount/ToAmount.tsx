@@ -49,8 +49,9 @@ export const ToAmount = () => {
       <Value>
         <MatchQuery
           value={query}
-          pending={() => (query.isLoading ? <Spinner /> : formatAmount(0))}
+          pending={() => <Spinner />}
           error={() => formatAmount(0)}
+          inactive={() => formatAmount(0)}
           success={value => formatAmount(value)}
         />
       </Value>
