@@ -3,40 +3,101 @@ import { FieldValues } from 'react-hook-form';
 import { MayaChainPool } from '../../../../lib/types/deposit';
 import { ChainAction } from '../../DepositForm/chainOptionsConfig';
 
-export const generateMemo = (params: {
+interface MemoParams {
   selectedChainAction?: ChainAction;
   depositFormData: FieldValues;
   bondableAsset: MayaChainPool['asset'];
   fee?: number | bigint;
-}): string => {
-  const { selectedChainAction, depositFormData, bondableAsset, fee } = params;
-  const upperCaseChainAction = selectedChainAction?.toUpperCase() || '';
-  const nodeAddress = depositFormData['nodeAddress'] as string | null;
-  const amount = depositFormData['amount'] as number | null;
-  const lpUnits = depositFormData['lpUnits'] as number | null;
-  const customMemo = depositFormData['customMemo'] as string;
-  const percentage = depositFormData['percentage'] as number | null;
-  const affiliateFee = depositFormData['affiliateFee'] as number | null;
-  const provider = depositFormData['provider'] as string | null;
+}
 
+export const generateMemo = ({
+  selectedChainAction,
+  depositFormData,
+  bondableAsset,
+  fee,
+}: MemoParams): string => {
+  const {
+    nodeAddress,
+    amount,
+    lpUnits,
+    customMemo,
+    percentage,
+    affiliateFee,
+    provider,
+    operatorFee,
+  } = extractFormValues(depositFormData);
+
+  // If "custom" is selected and a custom memo exists, return it directly.
   if (selectedChainAction === 'custom' && customMemo) {
     return customMemo;
   }
 
+  const action = selectedChainAction?.toUpperCase() || '';
+
   switch (selectedChainAction) {
     case 'withdrawPool':
+      // Format: "POOL-:percentage:affiliateFee:fee"
       return `POOL-:${percentage}:${affiliateFee}:${fee}`;
+
     case 'addPool':
+      // Simple static memo
       return 'POOL+';
+
     case 'bond_with_lp':
+      // If provider is given:
+      //    with operatorFee: "BOND:nodeAddress:provider:operatorFee"
+      //    without operatorFee: "BOND:nodeAddress:provider"
+      // If no provider: "BOND:bondableAsset:lpUnits:nodeAddress"
+      if (provider) {
+        return operatorFee
+          ? `BOND:${nodeAddress}:${provider}:${operatorFee}`
+          : `BOND:${nodeAddress}:${provider}`;
+      }
       return `BOND:${bondableAsset}:${lpUnits}:${nodeAddress}`;
+
+    case 'bond':
+      // Similar logic as above, but differs when no provider:
+      // If provider:
+      //    with operatorFee: "BOND:nodeAddress:provider:operatorFee"
+      //    without operatorFee: "BOND:nodeAddress:provider"
+      // If no provider:
+      //    with operatorFee: "BOND:nodeAddress:amount:operatorFee"
+      //    without operatorFee: "BOND:nodeAddress:amount"
+      if (provider) {
+        return operatorFee
+          ? `BOND:${nodeAddress}:${provider}:${operatorFee}`
+          : `BOND:${nodeAddress}:${provider}`;
+      }
+      return operatorFee
+        ? `BOND:${nodeAddress}:${amount}:${operatorFee}`
+        : `BOND:${nodeAddress}:${amount}`;
+
     case 'unbond_with_lp':
+      // "UNBOND:bondableAsset:lpUnits:nodeAddress"
       return `UNBOND:${bondableAsset}:${lpUnits}:${nodeAddress}`;
+
     case 'unbond':
-      return `${upperCaseChainAction}:${nodeAddress}:${amount}:${provider || ''}`;
+      // If provider: "UNBOND:nodeAddress:amount:provider"
+      // Else: "UNBOND:nodeAddress:amount"
+      return provider
+        ? `${action}:${nodeAddress}:${amount}:${provider}`
+        : `${action}:${nodeAddress}:${amount}`;
+
     default:
-      return nodeAddress
-        ? `${upperCaseChainAction}:${nodeAddress}`
-        : upperCaseChainAction;
+      // Default: If nodeAddress present: "ACTION:nodeAddress", else "ACTION"
+      return nodeAddress ? `${action}:${nodeAddress}` : action;
   }
 };
+
+function extractFormValues(formData: FieldValues) {
+  return {
+    nodeAddress: formData.nodeAddress as string | null,
+    amount: formData.amount as number | null,
+    lpUnits: formData.lpUnits as number | null,
+    customMemo: formData.customMemo as string | undefined,
+    percentage: formData.percentage as number | null,
+    affiliateFee: formData.affiliateFee as number | null,
+    provider: formData.provider as string | null,
+    operatorFee: formData.operatorFee as string | null,
+  };
+}
