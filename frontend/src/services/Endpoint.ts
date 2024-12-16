@@ -96,24 +96,22 @@ export class Endpoint {
   static avalancheServiceRpcService: string =
     'https://avalanche-c-chain-rpc.publicnode.com';
 
-  static bscServiceRpcService: string = 'https://bsc-rpc.publicnode.com';
+  static bscServiceRpcService: string = 'https://api.vultisig.com/bsc/';
 
-  static baseServiceRpcService: string = 'https://base-rpc.publicnode.com';
+  static baseServiceRpcService: string = 'https://api.vultisig.com/base/';
 
   static arbitrumOneServiceRpcService: string = 'https://api.vultisig.com/arb/';
 
-  static polygonServiceRpcService: string =
-    'https://polygon-bor-rpc.publicnode.com';
+  static polygonServiceRpcService: string = 'https://api.vultisig.com/polygon/';
 
-  static optimismServiceRpcService: string =
-    'https://optimism-rpc.publicnode.com';
+  static optimismServiceRpcService: string = 'https://api.vultisig.com/opt/';
 
   static cronosServiceRpcService: string =
     'https://cronos-evm-rpc.publicnode.com';
 
-  static blastServiceRpcService: string = 'https://rpc.ankr.com/blast';
+  static blastServiceRpcService: string = 'https://api.vultisig.com/blast/';
 
-  static zksyncServiceRpcService: string = 'https://mainnet.era.zksync.io';
+  static zksyncServiceRpcService: string = 'https://api.vultisig.com/zksync/';
 
   static ethServiceRpcService: string = 'https://api.vultisig.com/eth/';
 
