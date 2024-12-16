@@ -27,8 +27,12 @@ export function MatchQuery<T, E = unknown>({
     return <>{error(value.error)}</>;
   }
 
+  if (value.isLoading === false) {
+    return <>{inactive()}</>;
+  }
+
   if (value.isPending) {
-    return <>{(value.isLoading === false ? inactive : pending)()}</>;
+    return <>{pending()}</>;
   }
 
   return null;

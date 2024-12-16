@@ -63,7 +63,7 @@ export const SetupSecureVaultPage = () => {
                               )}
                               peers={() => (
                                 <SetupVaultPeerDiscoveryStep
-                                  onBack={toPreviousStep}
+                                  onBack={() => setStep(steps[0])}
                                   onForward={toNextStep}
                                 />
                               )}
