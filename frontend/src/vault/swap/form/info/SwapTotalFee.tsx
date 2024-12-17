@@ -6,7 +6,6 @@ import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { getCoinMetaKey } from '../../../../coin/utils/coinMeta';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
-import { Chain } from '../../../../model/chain';
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery';
 import { useSwapSpecificTxInfoQuery } from '../../queries/useSwapSpecificTxInfoQuery';
 import { useFromCoin } from '../../state/fromCoin';
@@ -42,7 +41,8 @@ export const SwapTotalFee = () => {
               error={() => null}
               pending={() => <Spinner />}
               success={({ fee }) => {
-                const { decimals } = getChainFeeCoin(Chain.THORChain);
+                const { decimals } = getChainFeeCoin(swapQuote.swapChain);
+
                 return (
                   <SwapTotalFeeFiatValue
                     value={[
