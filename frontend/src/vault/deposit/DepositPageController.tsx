@@ -53,7 +53,7 @@ export const DepositPageController = () => {
     depositFormData: state.depositFormData,
     selectedChainAction: state.selectedChainAction,
     bondableAsset: state.depositFormData?.bondableAsset,
-    fee: txInfo?.fee,
+    fee: txInfo.fee,
   });
 
   return (
