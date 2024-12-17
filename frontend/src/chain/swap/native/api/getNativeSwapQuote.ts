@@ -1,8 +1,8 @@
 import { formatAmount } from '../../../../lib/utils/formatAmount';
 import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
 import { queryUrl } from '../../../../lib/utils/query/queryUrl';
+import { getChainFeeCoin } from '../../../tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../utils/fromChainAmount';
-import { getChainPrimaryCoin } from '../../../utils/getChainPrimaryCoin';
 import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig';
 import {
   nativeSwapApiBaseUrl,
@@ -58,7 +58,7 @@ export const getNativeSwapQuote = async ({
   }
 
   if (BigInt(result.recommended_min_amount_in) > amount) {
-    const { decimals } = getChainPrimaryCoin(swapChain);
+    const { decimals } = getChainFeeCoin(swapChain);
 
     const minAmount = fromChainAmount(
       result.recommended_min_amount_in,

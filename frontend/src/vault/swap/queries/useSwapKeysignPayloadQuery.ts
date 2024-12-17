@@ -1,6 +1,6 @@
 import { getErc20ThorchainSwapKeysignPayload } from '../../../chain/swap/native/thor/utils/getErc20ThorchainSwapKeysignPayload';
+import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
-import { getChainPrimaryCoin } from '../../../chain/utils/getChainPrimaryCoin';
 import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
 import { areEqualCoins } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
@@ -72,7 +72,7 @@ export const useSwapKeysignPayloadQuery = () => {
           fromChainAmount(fromCoinBalance.amount, fromCoin.decimals);
 
         const thorchainPrimaryCoin = getCoinMetaKey(
-          getChainPrimaryCoin(Chain.THORChain)
+          getChainFeeCoin(Chain.THORChain)
         );
 
         const { memo } = swapQuote;

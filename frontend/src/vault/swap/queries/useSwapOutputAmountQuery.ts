@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 
+import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
-import { getChainPrimaryCoin } from '../../../chain/utils/getChainPrimaryCoin';
 import { useTransformQueryData } from '../../../lib/ui/query/hooks/useTransformQueryData';
 import { Chain } from '../../../model/chain';
 import { useSwapQuoteQuery } from './useSwapQuoteQuery';
 
 export const useSwapOutputAmountQuery = () => {
-  const { decimals } = getChainPrimaryCoin(Chain.THORChain);
+  const { decimals } = getChainFeeCoin(Chain.THORChain);
 
   return useTransformQueryData(
     useSwapQuoteQuery(),

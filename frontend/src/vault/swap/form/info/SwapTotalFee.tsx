@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { getChainFeeCoin } from '../../../../chain/tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
-import { getChainPrimaryCoin } from '../../../../chain/utils/getChainPrimaryCoin';
 import { getCoinMetaKey } from '../../../../coin/utils/coinMeta';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
@@ -22,7 +22,7 @@ export const SwapTotalFee = () => {
   const [toCoinKey] = useToCoin();
 
   const fromGasCoin = useMemo(
-    () => getChainPrimaryCoin(fromCoinKey.chain),
+    () => getChainFeeCoin(fromCoinKey.chain),
     [fromCoinKey.chain]
   );
 
@@ -42,7 +42,7 @@ export const SwapTotalFee = () => {
               error={() => null}
               pending={() => <Spinner />}
               success={({ fee }) => {
-                const { decimals } = getChainPrimaryCoin(Chain.THORChain);
+                const { decimals } = getChainFeeCoin(Chain.THORChain);
                 return (
                   <SwapTotalFeeFiatValue
                     value={[

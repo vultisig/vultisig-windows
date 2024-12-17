@@ -2,7 +2,7 @@ import { getNativeSwapQuote } from '../../../chain/swap/native/api/getNativeSwap
 import { toNativeSwapAsset } from '../../../chain/swap/native/asset/toNativeSwapAsset';
 import { nativeSwapAffiliateConfig } from '../../../chain/swap/native/nativeSwapAffiliateConfig';
 import { NativeSwapChain } from '../../../chain/swap/native/NativeSwapChain';
-import { getChainPrimaryCoin } from '../../../chain/utils/getChainPrimaryCoin';
+import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { CoinKey } from '../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
@@ -71,7 +71,7 @@ export const useSwapQuoteQuery = () => {
           ticker: toCoin.ticker,
         });
 
-        const { decimals } = getChainPrimaryCoin(swapChain);
+        const { decimals } = getChainFeeCoin(swapChain);
 
         const amount = toChainAmount(fromAmount, decimals);
 
