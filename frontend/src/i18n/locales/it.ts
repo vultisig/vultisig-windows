@@ -635,6 +635,7 @@ export const it = {
   custom: 'Azione personalizzata',
   vote: 'Votare',
   stake: 'Palo',
+  unstake: 'Ritirare',
   advanced: 'Avanzato',
   low: 'Basso',
   normal: 'Normale',
