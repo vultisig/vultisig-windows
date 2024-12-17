@@ -636,6 +636,7 @@ export const de = {
   custom: 'Benutzerdefinierte Aktion',
   vote: 'Abstimmung',
   stake: 'Einsatz',
+  unstake: 'Abstecken',
   advanced: 'Fortschrittlich',
   low: 'Niedrig',
   normal: 'Normal',

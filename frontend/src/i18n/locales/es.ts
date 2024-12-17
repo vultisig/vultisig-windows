@@ -639,6 +639,7 @@ export const es = {
   custom: 'Acción personalizada',
   vote: 'Votar',
   stake: 'Apostar',
+  unstake: 'Desbloquear',
   advanced: 'Avanzado',
   low: 'Bajo',
   normal: 'Normal',

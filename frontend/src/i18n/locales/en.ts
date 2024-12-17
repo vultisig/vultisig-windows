@@ -531,6 +531,7 @@ export const en = {
   custom: 'Custom Action',
   vote: 'Vote',
   stake: 'Stake',
+  unstake: 'Unstake',
   chainFunctions: {
     amountExceeded: 'Amount exceeds available balance',
     requiredFieldMissing: 'Required field missing',
