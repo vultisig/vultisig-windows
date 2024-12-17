@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
 import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
 import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
+import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
@@ -11,10 +13,10 @@ import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { formatAmount } from '../../../lib/utils/formatAmount';
+import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { KeysignTxOverviewRow } from './KeysignTxOverviewRow';
+import { SpecificTransactionInfo } from '../../../model/specific-transaction-info';
 import { useKeysignPayload } from './state/keysignPayload';
-import { extractAndFormatFees } from './utils/extractAndFormatFees';
 
 export const KeysignTxPrimaryInfo = () => {
   const {
@@ -35,11 +37,13 @@ export const KeysignTxPrimaryInfo = () => {
 
   const { globalCurrency } = useGlobalCurrency();
 
-  const fees = extractAndFormatFees({
-    blockchainSpecific,
-    currency: globalCurrency,
-    decimals: decimals,
-  });
+  const networkFeesFormatted = useMemo(() => {
+    if (!blockchainSpecific.value) return null;
+    formatFee({
+      chain: coin.chain as Chain,
+      txInfo: blockchainSpecific.value as unknown as SpecificTransactionInfo,
+    });
+  }, [blockchainSpecific.value, coin.chain]);
 
   return (
     <>
@@ -67,17 +71,10 @@ export const KeysignTxPrimaryInfo = () => {
         error={() => null}
         pending={() => null}
       />
-      {fees.networkFeesFormatted && (
-        <KeysignTxOverviewRow
-          label={t('network_fee')}
-          value={fees.networkFeesFormatted}
-        />
-      )}
-      {fees.totalFeesFormatted && (
-        <KeysignTxOverviewRow
-          label={t('total_fee')}
-          value={fees.totalFeesFormatted}
-        />
+      {networkFeesFormatted && (
+        <TxOverviewPrimaryRow title={t('network_fee')}>
+          {networkFeesFormatted}
+        </TxOverviewPrimaryRow>
       )}
     </>
   );
