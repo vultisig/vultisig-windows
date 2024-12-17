@@ -9,7 +9,7 @@ type UseMemoGeneratorProps = {
   depositFormData: FieldValues;
   selectedChainAction?: ChainAction;
   bondableAsset: MayaChainPool['asset'];
-  fee?: number;
+  fee?: number | bigint;
 };
 
 export const useMemoGenerator = ({
