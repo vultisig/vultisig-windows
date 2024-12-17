@@ -26,7 +26,7 @@ import { GeneratedHexEncryptionKeyProvider } from '../../setup/state/currentHexE
 import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/serverUrlDerivedFromServerType';
 import {
   useCurrentVault,
-  useCurrentVaultHasServer,
+  useVaultServerStatus,
 } from '../../state/currentVault';
 import { ReshareVaultPeerDiscoveryStep } from '../ReshareVaultPeerDiscoveryStep';
 import { ReshareVerifyStep } from '../shared/ReshareVerifyStep';
@@ -53,7 +53,7 @@ export const FastReshareVaultPage = () => {
 
   const { t } = useTranslation();
 
-  const hasServer = useCurrentVaultHasServer();
+  const { hasServer, isBackup } = useVaultServerStatus();
 
   return (
     <EmailProvider initialValue="">
@@ -76,7 +76,7 @@ export const FastReshareVaultPage = () => {
                                   <ServerEmailStep onForward={toNextStep} />
                                 )}
                                 password={() =>
-                                  hasServer ? (
+                                  hasServer && !isBackup ? (
                                     <ServerPasswordStep
                                       onForward={toNextStep}
                                     />
