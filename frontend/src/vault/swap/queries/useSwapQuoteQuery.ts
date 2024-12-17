@@ -46,7 +46,7 @@ export const useSwapQuoteQuery = () => {
 
   return useStateDependentQuery({
     state: {
-      fromAmount: fromAmount ?? undefined,
+      fromAmount: fromAmount || undefined,
       fromCoinUsdPrice: fromCoinUsdPrice.data,
     },
     getQuery: ({ fromAmount, fromCoinUsdPrice }) => ({
