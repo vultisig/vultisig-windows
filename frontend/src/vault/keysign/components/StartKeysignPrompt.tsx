@@ -8,7 +8,7 @@ import {
   ComponentWithValueProps,
 } from '../../../lib/ui/props';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
-import { useCurrentVaultHasServer } from '../../state/currentVault';
+import { useVaultServerStatus } from '../../state/currentVault';
 
 type StartKeysignPromptProps = ComponentWithValueProps<KeysignPayload> &
   ComponentWithDisabledState;
@@ -19,9 +19,9 @@ export const StartKeysignPrompt = ({
 }: StartKeysignPromptProps) => {
   const { t } = useTranslation();
   const navigate = useAppNavigate();
-  const hasServer = useCurrentVaultHasServer();
+  const { hasServer, isBackup } = useVaultServerStatus();
 
-  if (hasServer) {
+  if (hasServer && !isBackup) {
     return (
       <VStack gap={20}>
         <Button
