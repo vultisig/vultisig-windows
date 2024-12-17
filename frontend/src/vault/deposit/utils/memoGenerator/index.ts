@@ -7,7 +7,7 @@ export const generateMemo = (params: {
   selectedChainAction?: ChainAction;
   depositFormData: FieldValues;
   bondableAsset: MayaChainPool['asset'];
-  fee?: number;
+  fee?: number | bigint;
 }): string => {
   const { selectedChainAction, depositFormData, bondableAsset, fee } = params;
   const upperCaseChainAction = selectedChainAction?.toUpperCase() || '';
