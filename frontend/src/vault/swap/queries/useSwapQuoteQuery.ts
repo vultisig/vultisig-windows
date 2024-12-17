@@ -1,15 +1,12 @@
-import { getNativeSwapQuote } from '../../../chain/swap/native/api/getNativeSwapQuote';
+import { findNativeSwapQuote } from '../../../chain/swap/native/api/findNativeSwapQuote';
 import { toNativeSwapAsset } from '../../../chain/swap/native/asset/toNativeSwapAsset';
 import { nativeSwapAffiliateConfig } from '../../../chain/swap/native/nativeSwapAffiliateConfig';
-import { NativeSwapChain } from '../../../chain/swap/native/NativeSwapChain';
-import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
-import { toChainAmount } from '../../../chain/utils/toChainAmount';
+import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { CoinKey } from '../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { withoutNullOrUndefined } from '../../../lib/utils/array/withoutNullOrUndefined';
-import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Fiat } from '../../../model/fiat';
 import {
@@ -48,8 +45,6 @@ export const useSwapQuoteQuery = () => {
     Fiat.USD
   );
 
-  const swapChain: NativeSwapChain = Chain.THORChain;
-
   return useStateDependentQuery({
     state: {
       fromAmount: fromAmount ?? undefined,
@@ -71,22 +66,18 @@ export const useSwapQuoteQuery = () => {
           ticker: toCoin.ticker,
         });
 
-        const { decimals } = getChainFeeCoin(swapChain);
-
-        const amount = toChainAmount(fromAmount, decimals);
-
         const usdAmount = fromAmount * fromCoinUsdPrice;
 
         const isAffiliate =
           usdAmount >= nativeSwapAffiliateConfig.minUsdAffiliateAmount;
 
-        return getNativeSwapQuote({
-          swapChain,
+        return findNativeSwapQuote({
           fromAsset,
           toAsset,
           destination,
-          amount,
+          amount: fromAmount,
           isAffiliate,
+          fromChain: fromCoin.chain as NativeSwapEnabledChain,
         });
       },
       retry: false,

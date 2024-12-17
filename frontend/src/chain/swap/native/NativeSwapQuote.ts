@@ -1,4 +1,7 @@
+import { NativeSwapChain } from './NativeSwapChain';
+
 export type NativeSwapQuote = {
+  swapChain: NativeSwapChain;
   dust_threshold?: string;
   expected_amount_out: string;
   expiry: number;

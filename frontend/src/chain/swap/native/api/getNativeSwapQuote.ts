@@ -3,26 +3,29 @@ import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
 import { queryUrl } from '../../../../lib/utils/query/queryUrl';
 import { getChainFeeCoin } from '../../../tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../utils/fromChainAmount';
+import { toChainAmount } from '../../../utils/toChainAmount';
 import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig';
 import {
   nativeSwapApiBaseUrl,
   NativeSwapChain,
   nativeSwapStreamingInterval,
 } from '../NativeSwapChain';
-import { NativeSwapQuote } from './NativeSwapQuote';
+import { NativeSwapQuote } from '../NativeSwapQuote';
 
-type Input = {
+export type GetNativeSwapQuoteInput = {
   swapChain: NativeSwapChain;
   destination: string;
   fromAsset: string;
   toAsset: string;
-  amount: bigint;
+  amount: number;
   isAffiliate: boolean;
 };
 
 type NativeSwapQuoteErrorResponse = {
   error: string;
 };
+
+type NativeSwapQuoteResponse = Omit<NativeSwapQuote, 'swapChain'>;
 
 export const getNativeSwapQuote = async ({
   swapChain,
@@ -31,12 +34,15 @@ export const getNativeSwapQuote = async ({
   toAsset,
   amount,
   isAffiliate,
-}: Input) => {
+}: GetNativeSwapQuoteInput): Promise<NativeSwapQuote> => {
+  const { decimals } = getChainFeeCoin(swapChain);
+  const chainAmount = toChainAmount(amount, decimals);
+
   const swapBaseUrl = `${nativeSwapApiBaseUrl[swapChain]}/quote/swap`;
   const params = {
     from_asset: fromAsset,
     to_asset: toAsset,
-    amount: amount.toString(),
+    amount: chainAmount.toString(),
     destination,
     streaming_interval: nativeSwapStreamingInterval[swapChain],
     ...(isAffiliate
@@ -49,17 +55,15 @@ export const getNativeSwapQuote = async ({
 
   const url = addQueryParams(swapBaseUrl, params);
 
-  const result = await queryUrl<NativeSwapQuote | NativeSwapQuoteErrorResponse>(
-    url
-  );
+  const result = await queryUrl<
+    NativeSwapQuoteResponse | NativeSwapQuoteErrorResponse
+  >(url);
 
   if ('error' in result) {
     throw new Error(result.error);
   }
 
-  if (BigInt(result.recommended_min_amount_in) > amount) {
-    const { decimals } = getChainFeeCoin(swapChain);
-
+  if (BigInt(result.recommended_min_amount_in) > chainAmount) {
     const minAmount = fromChainAmount(
       result.recommended_min_amount_in,
       decimals
@@ -72,5 +76,8 @@ export const getNativeSwapQuote = async ({
     throw new Error(msg);
   }
 
-  return result;
+  return {
+    ...result,
+    swapChain,
+  };
 };

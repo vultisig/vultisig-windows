@@ -8,7 +8,7 @@ import { RpcServiceEvm } from '../../../../../services/Rpc/evm/RpcServiceEvm';
 import { defaultEvmSwapGasLimit } from '../../../../evm/evmGasLimit';
 import { toEthereumSpecific } from '../../../../evm/tx/toEthereumSpecific';
 import { toChainAmount } from '../../../../utils/toChainAmount';
-import { NativeSwapQuote } from '../../api/NativeSwapQuote';
+import { NativeSwapQuote } from '../../NativeSwapQuote';
 import { thorchainSwapQuoteToSwapPayload } from './thorchainSwapQuoteToSwapPayload';
 
 type Input = {

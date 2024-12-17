@@ -7,8 +7,8 @@ import { Chain } from '../../../../../model/chain';
 import { SwapPayload, SwapPayloadType } from '../../../../../model/transaction';
 import { fromChainAmount } from '../../../../utils/fromChainAmount';
 import { toChainAmount } from '../../../../utils/toChainAmount';
-import { NativeSwapQuote } from '../../api/NativeSwapQuote';
 import { nativeSwapStreamingInterval } from '../../NativeSwapChain';
+import { NativeSwapQuote } from '../../NativeSwapQuote';
 
 type Input = {
   quote: NativeSwapQuote;
