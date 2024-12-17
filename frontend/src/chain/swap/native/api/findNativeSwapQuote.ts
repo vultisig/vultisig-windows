@@ -1,7 +1,7 @@
 import { asyncFallbackChain } from '../../../../lib/utils/promise/asyncFallbackChain';
+import { extractChainFromNativeSwapAsset } from '../asset/extractChainFromNativeSwapAsset';
 import {
   nativeSwapChains,
-  NativeSwapEnabledChain,
   nativeSwapEnabledChainsRecord,
 } from '../NativeSwapChain';
 import {
@@ -9,20 +9,21 @@ import {
   GetNativeSwapQuoteInput,
 } from './getNativeSwapQuote';
 
-type FindNativeSwapQuoteInput = Omit<GetNativeSwapQuoteInput, 'swapChain'> & {
-  fromChain: NativeSwapEnabledChain;
-};
+type FindNativeSwapQuoteInput = Omit<GetNativeSwapQuoteInput, 'swapChain'>;
 
-export const findNativeSwapQuote = async ({
-  fromChain,
-  ...rest
-}: FindNativeSwapQuoteInput) => {
+export const findNativeSwapQuote = async (input: FindNativeSwapQuoteInput) => {
+  const involvedChains = [input.fromAsset, input.toAsset].map(
+    extractChainFromNativeSwapAsset
+  );
+
   const matchingSwapChains = nativeSwapChains.filter(swapChain =>
-    nativeSwapEnabledChainsRecord[swapChain].includes(fromChain as any)
+    involvedChains.every(chain =>
+      nativeSwapEnabledChainsRecord[swapChain].includes(chain as any)
+    )
   );
 
   const fetchers = matchingSwapChains.map(
-    swapChain => () => getNativeSwapQuote({ swapChain, ...rest })
+    swapChain => () => getNativeSwapQuote({ swapChain, ...input })
   );
 
   return asyncFallbackChain(...fetchers);

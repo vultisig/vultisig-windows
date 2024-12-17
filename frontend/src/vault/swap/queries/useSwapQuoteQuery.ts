@@ -1,7 +1,6 @@
 import { findNativeSwapQuote } from '../../../chain/swap/native/api/findNativeSwapQuote';
 import { toNativeSwapAsset } from '../../../chain/swap/native/asset/toNativeSwapAsset';
 import { nativeSwapAffiliateConfig } from '../../../chain/swap/native/nativeSwapAffiliateConfig';
-import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { CoinKey } from '../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
@@ -77,7 +76,6 @@ export const useSwapQuoteQuery = () => {
           destination,
           amount: fromAmount,
           isAffiliate,
-          fromChain: fromCoin.chain as NativeSwapEnabledChain,
         });
       },
       retry: false,
