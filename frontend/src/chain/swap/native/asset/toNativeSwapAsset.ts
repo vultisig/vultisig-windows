@@ -1,17 +1,14 @@
 import { CoinKey } from '../../../../coin/Coin';
 import { EntityWithTicker } from '../../../../lib/utils/entities/EntityWithTicker';
 import { isNativeCoin } from '../../../utils/isNativeCoin';
-import {
-  thorchainSwapChains,
-  ThorchainSwapEnabledChain,
-} from '../thorchainSwapChains';
+import { NativeSwapChain, nativeSwapChainIds } from '../NativeSwapChain';
 
-export const toThorchainSwapAsset = ({
+export const toNativeSwapAsset = ({
   chain,
   id,
   ticker,
 }: CoinKey & EntityWithTicker): string => {
-  const swapChainId = thorchainSwapChains[chain as ThorchainSwapEnabledChain];
+  const swapChainId = nativeSwapChainIds[chain as NativeSwapChain];
 
   if (!swapChainId) {
     throw new Error(`No swap chain id found for ${chain}`);

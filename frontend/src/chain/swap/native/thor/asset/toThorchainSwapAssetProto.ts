@@ -1,14 +1,14 @@
 import { TW } from '@trustwallet/wallet-core';
 
-import { CoinKey } from '../../../../coin/Coin';
-import { EntityWithTicker } from '../../../../lib/utils/entities/EntityWithTicker';
-import { match } from '../../../../lib/utils/match';
-import { TransferDirection } from '../../../../lib/utils/TransferDirection';
-import { isNativeCoin } from '../../../utils/isNativeCoin';
+import { CoinKey } from '../../../../../coin/Coin';
+import { EntityWithTicker } from '../../../../../lib/utils/entities/EntityWithTicker';
+import { match } from '../../../../../lib/utils/match';
+import { TransferDirection } from '../../../../../lib/utils/TransferDirection';
+import { isNativeCoin } from '../../../../utils/isNativeCoin';
 import {
   ThorchainSwapEnabledChain,
   thorchainSwapProtoChains,
-} from '../thorchainSwapChains';
+} from '../thorchainSwapProtoChains';
 
 type Input = CoinKey &
   EntityWithTicker & {

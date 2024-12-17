@@ -1,6 +1,6 @@
-import { getErc20ThorchainSwapKeysignPayload } from '../../../chain/thor/swap/utils/getErc20ThorchainSwapKeysignPayload';
+import { getErc20ThorchainSwapKeysignPayload } from '../../../chain/swap/native/thor/utils/getErc20ThorchainSwapKeysignPayload';
+import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
-import { getChainPrimaryCoin } from '../../../chain/utils/getChainPrimaryCoin';
 import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
 import { areEqualCoins } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
@@ -71,10 +71,6 @@ export const useSwapKeysignPayloadQuery = () => {
           fromAmount ===
           fromChainAmount(fromCoinBalance.amount, fromCoin.decimals);
 
-        const thorchainPrimaryCoin = getCoinMetaKey(
-          getChainPrimaryCoin(Chain.THORChain)
-        );
-
         const { memo } = swapQuote;
 
         if (fromCoinKey.chain in EvmChain && !isNativeCoin(fromCoinKey)) {
@@ -90,7 +86,11 @@ export const useSwapKeysignPayloadQuery = () => {
           });
         }
 
-        const tx = areEqualCoins(fromCoinKey, thorchainPrimaryCoin)
+        const thorchainFeeCoin = getCoinMetaKey(
+          getChainFeeCoin(Chain.THORChain)
+        );
+
+        const tx = areEqualCoins(fromCoinKey, thorchainFeeCoin)
           ? {
               fromAddress,
               toAddress: '',

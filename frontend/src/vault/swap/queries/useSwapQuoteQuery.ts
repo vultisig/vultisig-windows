@@ -1,7 +1,6 @@
-import { getThorchainSwapQuote } from '../../../chain/thor/swap/api/getThorchainSwapQuote';
-import { toThorchainSwapAsset } from '../../../chain/thor/swap/asset/toThorchainSwapAsset';
-import { thorchainSwapConfig } from '../../../chain/thor/swap/config';
-import { toChainAmount } from '../../../chain/utils/toChainAmount';
+import { findNativeSwapQuote } from '../../../chain/swap/native/api/findNativeSwapQuote';
+import { toNativeSwapAsset } from '../../../chain/swap/native/asset/toNativeSwapAsset';
+import { nativeSwapAffiliateConfig } from '../../../chain/swap/native/nativeSwapAffiliateConfig';
 import { CoinKey } from '../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
@@ -47,7 +46,7 @@ export const useSwapQuoteQuery = () => {
 
   return useStateDependentQuery({
     state: {
-      fromAmount: fromAmount ?? undefined,
+      fromAmount: fromAmount || undefined,
       fromCoinUsdPrice: fromCoinUsdPrice.data,
     },
     getQuery: ({ fromAmount, fromCoinUsdPrice }) => ({
@@ -57,27 +56,25 @@ export const useSwapQuoteQuery = () => {
         fromAmount,
       }),
       queryFn: async () => {
-        const fromAsset = toThorchainSwapAsset({
+        const fromAsset = toNativeSwapAsset({
           ...fromCoinKey,
           ticker: fromCoin.ticker,
         });
-        const toAsset = toThorchainSwapAsset({
+        const toAsset = toNativeSwapAsset({
           ...toCoinKey,
           ticker: toCoin.ticker,
         });
 
-        const amount = toChainAmount(fromAmount, thorchainSwapConfig.decimals);
-
         const usdAmount = fromAmount * fromCoinUsdPrice;
 
         const isAffiliate =
-          usdAmount >= thorchainSwapConfig.minUsdAffiliateAmount;
+          usdAmount >= nativeSwapAffiliateConfig.minUsdAffiliateAmount;
 
-        return getThorchainSwapQuote({
+        return findNativeSwapQuote({
           fromAsset,
           toAsset,
           destination,
-          amount,
+          amount: fromAmount,
           isAffiliate,
         });
       },

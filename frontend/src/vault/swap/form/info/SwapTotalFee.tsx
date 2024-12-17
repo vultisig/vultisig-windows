@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { thorchainSwapConfig } from '../../../../chain/thor/swap/config';
+import { NativeSwapEnabledChain } from '../../../../chain/swap/native/NativeSwapChain';
+import { getNativeSwapDecimals } from '../../../../chain/swap/native/utils/getNativeSwapDecimals';
+import { getChainFeeCoin } from '../../../../chain/tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
-import { getChainPrimaryCoin } from '../../../../chain/utils/getChainPrimaryCoin';
 import { getCoinMetaKey } from '../../../../coin/utils/coinMeta';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
@@ -22,7 +23,7 @@ export const SwapTotalFee = () => {
   const [toCoinKey] = useToCoin();
 
   const fromGasCoin = useMemo(
-    () => getChainPrimaryCoin(fromCoinKey.chain),
+    () => getChainFeeCoin(fromCoinKey.chain),
     [fromCoinKey.chain]
   );
 
@@ -41,26 +42,29 @@ export const SwapTotalFee = () => {
               value={txInfo}
               error={() => null}
               pending={() => <Spinner />}
-              success={({ fee }) => (
-                <SwapTotalFeeFiatValue
-                  value={[
-                    {
-                      ...toCoinKey,
-                      amount: fromChainAmount(
-                        swapQuote.fees.total,
-                        thorchainSwapConfig.decimals
-                      ),
-                    },
-                    {
-                      ...getCoinMetaKey(fromGasCoin),
-                      amount: fromChainAmount(
-                        BigInt(Math.round(fee)),
-                        fromGasCoin.decimals
-                      ),
-                    },
-                  ]}
-                />
-              )}
+              success={({ fee }) => {
+                const decimals = getNativeSwapDecimals(
+                  fromCoinKey.chain as NativeSwapEnabledChain
+                );
+
+                return (
+                  <SwapTotalFeeFiatValue
+                    value={[
+                      {
+                        ...toCoinKey,
+                        amount: fromChainAmount(swapQuote.fees.total, decimals),
+                      },
+                      {
+                        ...getCoinMetaKey(fromGasCoin),
+                        amount: fromChainAmount(
+                          BigInt(Math.round(fee)),
+                          fromGasCoin.decimals
+                        ),
+                      },
+                    ]}
+                  />
+                );
+              }}
             />
           );
         }}

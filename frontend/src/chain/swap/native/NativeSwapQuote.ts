@@ -1,8 +1,11 @@
-export type ThorchainSwapQuote = {
+import { NativeSwapChain } from './NativeSwapChain';
+
+export type NativeSwapQuote = {
+  swapChain: NativeSwapChain;
   dust_threshold?: string;
   expected_amount_out: string;
   expiry: number;
-  fees: ThorchainSwapFees;
+  fees: NativeSwapFees;
   inbound_address?: string;
   inbound_confirmation_blocks?: number;
   inbound_confirmation_seconds?: number;
@@ -17,7 +20,7 @@ export type ThorchainSwapQuote = {
   router?: string;
 };
 
-export type ThorchainSwapFees = {
+export type NativeSwapFees = {
   affiliate: string;
   asset: string;
   outbound: string;
