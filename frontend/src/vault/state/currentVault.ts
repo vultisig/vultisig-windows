@@ -89,8 +89,18 @@ export const useCurrentVaultCoin = (coinKey: CoinKey) => {
   );
 };
 
-export const useCurrentVaultHasServer = () => {
-  const { signers } = useCurrentVault();
+export const useVaultServerStatus = () => {
+  const { signers, local_party_id } = useCurrentVault();
 
-  return useMemo(() => haveServerSigner(signers), [signers]);
+  return useMemo(() => {
+    const hasServerSigner = haveServerSigner(signers);
+    const isBackupServerShare = local_party_id
+      ?.toLowerCase()
+      .startsWith('server-');
+
+    return {
+      hasServer: hasServerSigner && !isBackupServerShare,
+      isBackup: isBackupServerShare,
+    };
+  }, [signers, local_party_id]);
 };
