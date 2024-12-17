@@ -21,12 +21,7 @@ export const DepositActionItemExplorer: FC<DepositActionItemExplorerProps> = ({
   const { t } = useTranslation();
 
   return (
-    <Modal
-      width={480}
-      placement="top"
-      title={t('choose_tokens')}
-      onClose={onClose}
-    >
+    <Modal width={480} placement="top" title="" onClose={onClose}>
       <VStack gap={20}>
         {options.map((option, index) => {
           return (
