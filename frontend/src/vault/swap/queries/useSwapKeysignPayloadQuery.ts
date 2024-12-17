@@ -71,10 +71,6 @@ export const useSwapKeysignPayloadQuery = () => {
           fromAmount ===
           fromChainAmount(fromCoinBalance.amount, fromCoin.decimals);
 
-        const thorchainPrimaryCoin = getCoinMetaKey(
-          getChainFeeCoin(Chain.THORChain)
-        );
-
         const { memo } = swapQuote;
 
         if (fromCoinKey.chain in EvmChain && !isNativeCoin(fromCoinKey)) {
@@ -90,7 +86,11 @@ export const useSwapKeysignPayloadQuery = () => {
           });
         }
 
-        const tx = areEqualCoins(fromCoinKey, thorchainPrimaryCoin)
+        const thorchainFeeCoin = getCoinMetaKey(
+          getChainFeeCoin(Chain.THORChain)
+        );
+
+        const tx = areEqualCoins(fromCoinKey, thorchainFeeCoin)
           ? {
               fromAddress,
               toAddress: '',

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -9,6 +9,7 @@ import {
   textInputBorderRadius,
 } from '../../../../lib/ui/css/textInput';
 import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit';
+import { InputDebounce } from '../../../../lib/ui/inputs/InputDebounce';
 import { text } from '../../../../lib/ui/text';
 import { useFromAmount } from '../../state/fromAmount';
 import { useFromCoin } from '../../state/fromCoin';
@@ -52,42 +53,51 @@ export const ManageFromAmount = () => {
 
   const { t } = useTranslation();
 
+  const handleInputValueChange = useCallback(
+    (value: string) => {
+      value = value.replace(/-/g, '');
+
+      if (value === '') {
+        setInputValue('');
+        setValue?.(null);
+        return;
+      }
+
+      const valueAsNumber = parseFloat(value);
+      if (isNaN(valueAsNumber)) {
+        return;
+      }
+
+      setInputValue(
+        valueAsNumber.toString() !== value ? value : valueAsNumber.toString()
+      );
+      setValue?.(valueAsNumber);
+    },
+    [setValue]
+  );
+
   return (
     <AmountContainer>
       <AmountLabel>{t('from')}</AmountLabel>
       {value !== null && (
         <SwapFiatAmount value={{ amount: value, ...fromCoin }} />
       )}
-      <Input
-        type="number"
-        placeholder={t('enter_amount')}
-        onWheel={event => event.currentTarget.blur()}
+      <InputDebounce
         value={
           Number(valueAsString) === Number(inputValue)
             ? inputValue
             : valueAsString
         }
-        onChange={({ currentTarget: { value } }) => {
-          value = value.replace(/-/g, '');
-
-          if (value === '') {
-            setInputValue('');
-            setValue?.(null);
-            return;
-          }
-
-          const valueAsNumber = parseFloat(value);
-          if (isNaN(valueAsNumber)) {
-            return;
-          }
-
-          setInputValue(
-            valueAsNumber.toString() !== value
-              ? value
-              : valueAsNumber.toString()
-          );
-          setValue?.(valueAsNumber);
-        }}
+        onChange={handleInputValueChange}
+        render={({ value, onChange }) => (
+          <Input
+            type="number"
+            placeholder={t('enter_amount')}
+            onWheel={event => event.currentTarget.blur()}
+            value={value}
+            onChange={({ currentTarget: { value } }) => onChange(value)}
+          />
+        )}
       />
     </AmountContainer>
   );
