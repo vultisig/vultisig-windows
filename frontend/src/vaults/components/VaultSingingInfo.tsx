@@ -9,7 +9,7 @@ import { Text, text } from '../../lib/ui/text';
 import { getColor } from '../../lib/ui/theme/getters';
 import {
   useCurrentVault,
-  useCurrentVaultHasServer,
+  useVaultServerStatus,
 } from '../../vault/state/currentVault';
 
 const Tag = styled.div`
@@ -27,7 +27,7 @@ const Tag = styled.div`
 `;
 
 export const VaultSigningInfo = () => {
-  const hasServer = useCurrentVaultHasServer();
+  const { hasServer, isBackup } = useVaultServerStatus();
   const { signers, local_party_id } = useCurrentVault();
 
   const { t } = useTranslation();
@@ -41,7 +41,7 @@ export const VaultSigningInfo = () => {
           {t('part_n_of_m', { n: index + 1, m: signers.length })}
         </Text>
       )}
-      {hasServer && <Tag>{t('fast_sign')}</Tag>}
+      {hasServer && !isBackup && <Tag>{t('fast_sign')}</Tag>}
     </HStack>
   );
 };
