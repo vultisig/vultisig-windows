@@ -11,7 +11,7 @@ import { BlockchainServiceFactory } from '../../../services/Blockchain/Blockchai
 import {
   useCurrentVault,
   useCurrentVaultCoin,
-  useCurrentVaultHasServer,
+  useVaultServerStatus,
 } from '../../state/currentVault';
 import { ChainAction } from '../DepositForm/chainOptionsConfig';
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
@@ -75,7 +75,7 @@ export const DepositConfirmButton = ({
     });
   };
 
-  const hasServer = useCurrentVaultHasServer();
+  const { hasServer, isBackup } = useVaultServerStatus();
 
   if (
     (config.requiresAmount && !amount) ||
@@ -94,7 +94,7 @@ export const DepositConfirmButton = ({
     return <Text>{t('loading')}</Text>;
   }
 
-  if (hasServer) {
+  if (hasServer && !isBackup) {
     return (
       <VStack gap={20}>
         <Button onClick={() => startKeysign('fast')}>{t('fast_sign')}</Button>
