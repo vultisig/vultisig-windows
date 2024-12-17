@@ -1,7 +1,7 @@
 import { getNativeSwapQuote } from '../../../chain/swap/native/api/getNativeSwapQuote';
+import { toNativeSwapAsset } from '../../../chain/swap/native/asset/toNativeSwapAsset';
 import { nativeSwapAffiliateConfig } from '../../../chain/swap/native/nativeSwapAffiliateConfig';
 import { NativeSwapChain } from '../../../chain/swap/native/NativeSwapChain';
-import { toThorchainSwapAsset } from '../../../chain/swap/native/thor/asset/toThorchainSwapAsset';
 import { getChainPrimaryCoin } from '../../../chain/utils/getChainPrimaryCoin';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { CoinKey } from '../../../coin/Coin';
@@ -62,11 +62,11 @@ export const useSwapQuoteQuery = () => {
         fromAmount,
       }),
       queryFn: async () => {
-        const fromAsset = toThorchainSwapAsset({
+        const fromAsset = toNativeSwapAsset({
           ...fromCoinKey,
           ticker: fromCoin.ticker,
         });
-        const toAsset = toThorchainSwapAsset({
+        const toAsset = toNativeSwapAsset({
           ...toCoinKey,
           ticker: toCoin.ticker,
         });

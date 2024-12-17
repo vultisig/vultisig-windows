@@ -1,9 +1,9 @@
-import { CoinKey } from '../../../../../coin/Coin';
-import { EntityWithTicker } from '../../../../../lib/utils/entities/EntityWithTicker';
-import { isNativeCoin } from '../../../../utils/isNativeCoin';
-import { NativeSwapChain, nativeSwapChainIds } from '../../NativeSwapChain';
+import { CoinKey } from '../../../../coin/Coin';
+import { EntityWithTicker } from '../../../../lib/utils/entities/EntityWithTicker';
+import { isNativeCoin } from '../../../utils/isNativeCoin';
+import { NativeSwapChain, nativeSwapChainIds } from '../NativeSwapChain';
 
-export const toThorchainSwapAsset = ({
+export const toNativeSwapAsset = ({
   chain,
   id,
   ticker,
