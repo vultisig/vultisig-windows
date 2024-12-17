@@ -1,25 +1,32 @@
-import { Chain, EvmChain } from '../../../../model/chain';
 import {
-  BasicSpecificTransactionInfo,
-  SpecificEvm,
-  SpecificSui,
-  SpecificUtxo,
-} from '../../../../model/specific-transaction-info';
+  EthereumSpecific,
+  SuiSpecific,
+  THORChainSpecific,
+  UTXOSpecific,
+} from '../../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { Chain, EvmChain } from '../../../../model/chain';
 import { gwei } from './evm';
 import { getChainFeeCoin } from './getChainFeeCoin';
 
 type GetFeeAmount<T> = (txInfo: T) => number;
 
-const getEvmFeeAmount: GetFeeAmount<SpecificEvm> = ({ maxFeePerGasWei }) =>
-  maxFeePerGasWei;
+const getEvmFeeAmount: GetFeeAmount<EthereumSpecific> = ({
+  maxFeePerGasWei,
+}): number => Number(maxFeePerGasWei);
 
-const getUtxoFeeAmount: GetFeeAmount<SpecificUtxo> = ({ byteFee }) => byteFee;
+const getUtxoFeeAmount: GetFeeAmount<UTXOSpecific> = ({ byteFee }): number =>
+  Number(byteFee);
 
-const getDefaultFeeAmount: GetFeeAmount<BasicSpecificTransactionInfo> = ({
+const getDefaultFeeAmount: GetFeeAmount<THORChainSpecific> = ({
   fee,
-}) => fee;
+}): number => Number(fee);
+
+const getSuiFeeAmount: GetFeeAmount<SuiSpecific> = ({
+  referenceGasPrice,
+}): number => Number(referenceGasPrice);
 
 export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
+  // EVM Chains
   [Chain.Arbitrum]: getEvmFeeAmount,
   [Chain.Avalanche]: getEvmFeeAmount,
   [Chain.Base]: getEvmFeeAmount,
@@ -30,17 +37,20 @@ export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
   [Chain.Optimism]: getEvmFeeAmount,
   [Chain.Polygon]: getEvmFeeAmount,
   [Chain.Zksync]: getEvmFeeAmount,
+
+  // UTXO Chains
   [Chain.Bitcoin]: getUtxoFeeAmount,
   [Chain.BitcoinCash]: getUtxoFeeAmount,
   [Chain.Litecoin]: getUtxoFeeAmount,
   [Chain.Dogecoin]: getUtxoFeeAmount,
   [Chain.Dash]: getUtxoFeeAmount,
+
+  // Default Chains
   [Chain.THORChain]: getDefaultFeeAmount,
   [Chain.Cosmos]: getDefaultFeeAmount,
   [Chain.MayaChain]: getDefaultFeeAmount,
   [Chain.Dydx]: getDefaultFeeAmount,
   [Chain.Kujira]: getDefaultFeeAmount,
-  [Chain.Sui]: ({ referenceGasPrice }: SpecificSui) => referenceGasPrice,
   [Chain.Solana]: getDefaultFeeAmount,
   [Chain.Polkadot]: getDefaultFeeAmount,
   [Chain.Ton]: getDefaultFeeAmount,
@@ -49,6 +59,9 @@ export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
   [Chain.TerraClassic]: getDefaultFeeAmount,
   [Chain.Noble]: getDefaultFeeAmount,
   [Chain.Ripple]: getDefaultFeeAmount,
+
+  // SUI Chain
+  [Chain.Sui]: getSuiFeeAmount,
 };
 
 export const getFeeAmountDecimals = (chain: Chain): number =>
