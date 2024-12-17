@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime';
 import { useCurrentTxHash } from '../../../chain/state/currentTxHash';
+import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
+import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getBlockExplorerUrl } from '../../../chain/utils/getBlockExplorerUrl';
@@ -18,9 +20,8 @@ import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { KeysignTxOverviewRow } from './KeysignTxOverviewRow';
+import { SpecificTransactionInfo } from '../../../model/specific-transaction-info';
 import { useKeysignPayload } from './state/keysignPayload';
-import { extractAndFormatFees } from './utils/extractAndFormatFees';
 
 export const KeysignTxOverview = () => {
   const txHash = useCurrentTxHash();
@@ -43,17 +44,20 @@ export const KeysignTxOverview = () => {
   const coinPriceQuery = useCoinPriceQuery(CoinMeta.fromCoin(coin));
 
   const formattedToAmount = useMemo(() => {
-    if (!toAmount || !coin) return null;
-    return fromChainAmount(BigInt(toAmount), decimals || 18);
-  }, [toAmount, coin, decimals]);
+    if (!toAmount) return null;
 
-  const fees = extractAndFormatFees({
-    blockchainSpecific,
-    currency: globalCurrency,
-    decimals: decimals,
-  });
+    return fromChainAmount(BigInt(toAmount), decimals);
+  }, [toAmount, decimals]);
 
   const { chain } = shouldBePresent(coin);
+
+  const networkFeesFormatted = useMemo(() => {
+    if (!blockchainSpecific.value) return null;
+    return formatFee({
+      chain: chain as Chain,
+      txInfo: blockchainSpecific.value as unknown as SpecificTransactionInfo,
+    });
+  }, [blockchainSpecific.value, chain]);
 
   return (
     <VStack gap={16}>
@@ -77,21 +81,21 @@ export const KeysignTxOverview = () => {
       <Text family="mono" color="primary" size={14} weight="400">
         {txHash}
       </Text>
-      <KeysignTxOverviewRow label={t('to')} value={toAddress} />
-      {memo && <KeysignTxOverviewRow label={t('memo')} value={memo} />}
+      {toAddress && (
+        <TxOverviewPrimaryRow title={t('to')}>{toAddress}</TxOverviewPrimaryRow>
+      )}
+      {memo && (
+        <TxOverviewPrimaryRow title={t('memo')}>{memo}</TxOverviewPrimaryRow>
+      )}
       {formattedToAmount && (
         <>
           <MatchQuery
             value={coinPriceQuery}
             success={price =>
               price ? (
-                <KeysignTxOverviewRow
-                  label={t('value')}
-                  value={formatAmount(
-                    formattedToAmount * price,
-                    globalCurrency
-                  )}
-                />
+                <TxOverviewPrimaryRow title={t('value')}>
+                  {formatAmount(formattedToAmount * price, globalCurrency)}
+                </TxOverviewPrimaryRow>
               ) : null
             }
             error={() => null}
@@ -99,18 +103,10 @@ export const KeysignTxOverview = () => {
           />
         </>
       )}
-
-      {fees.networkFeesFormatted && (
-        <KeysignTxOverviewRow
-          label={t('network_fee')}
-          value={fees.networkFeesFormatted}
-        />
-      )}
-      {fees.totalFeesFormatted && (
-        <KeysignTxOverviewRow
-          label={t('total_fee')}
-          value={fees.totalFeesFormatted}
-        />
+      {networkFeesFormatted && (
+        <TxOverviewPrimaryRow title={t('network_fee')}>
+          {networkFeesFormatted}
+        </TxOverviewPrimaryRow>
       )}
     </VStack>
   );
