@@ -630,6 +630,7 @@ export const pt = {
   custom: 'Ação personalizada',
   vote: 'Voto',
   stake: 'Estaca',
+  unstake: 'Desfazer stake',
   advanced: 'Avançado',
   low: 'Baixo',
   normal: 'Normal',

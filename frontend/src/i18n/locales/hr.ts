@@ -615,6 +615,7 @@ export const hr = {
   custom: 'Prilagođena radnja',
   vote: 'Glasanje',
   stake: 'Ulog',
+  unstake: 'Kivonás',
   advanced: 'Napredno',
   low: 'Niska',
   normal: 'Normalan',
