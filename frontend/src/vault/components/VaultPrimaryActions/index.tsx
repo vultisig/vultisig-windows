@@ -1,12 +1,10 @@
-import {
-  SwapEnabledChain,
-  swapEnabledChains,
-} from '../../../chain/swap/swapEnabledChains';
+import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains';
 import { CoinKey } from '../../../coin/Coin';
 import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { UniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { isEmpty } from '../../../lib/utils/array/isEmpty';
+import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { SendPrompt } from '../../send/SendPrompt';
 import { useCurrentVaultNativeCoins } from '../../state/currentVault';
 import { SwapPrompt } from '../../swap/components/SwapPrompt';
@@ -23,14 +21,12 @@ export const VaultPrimaryActions = ({
 
   const coinKey = value ?? getStorageCoinKey(nativeCoins[0]);
 
-  const isSwapAvailable = swapEnabledChains.includes(
-    coinKey.chain as SwapEnabledChain
-  );
-
   return (
     <UniformColumnGrid fullWidth gap={12}>
       <SendPrompt value={coinKey} />
-      {isSwapAvailable && <SwapPrompt value={coinKey} />}
+      {isOneOf(coinKey.chain, swapEnabledChains) && (
+        <SwapPrompt value={coinKey} />
+      )}
       <DepositPrompt value={coinKey} />
     </UniformColumnGrid>
   );

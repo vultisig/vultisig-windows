@@ -1,14 +1,12 @@
 import { useMemo } from 'react';
 
-import {
-  SwapEnabledChain,
-  swapEnabledChains,
-} from '../../../chain/swap/swapEnabledChains';
+import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains';
 import { CoinKey } from '../../../coin/Coin';
 import { CoinInputContainer } from '../../../coin/ui/inputs/CoinInputContainer';
 import { SelectCoinOverlay } from '../../../coin/ui/inputs/SelectCoinOverlay';
 import { Opener } from '../../../lib/ui/base/Opener';
 import { InputProps } from '../../../lib/ui/props';
+import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { pick } from '../../../lib/utils/record/pick';
 import {
   useCurrentVaultCoin,
@@ -25,10 +23,7 @@ export const SwapCoinInput: React.FC<InputProps<CoinKey>> = ({
   const coins = useCurrentVaultCoins();
 
   const options = useMemo(
-    () =>
-      coins.filter(coin =>
-        swapEnabledChains.includes(coin.chain as SwapEnabledChain)
-      ),
+    () => coins.filter(coin => isOneOf(coin.chain, swapEnabledChains)),
     [coins]
   );
 

@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { NativeSwapEnabledChain } from '../../../../chain/swap/native/NativeSwapChain';
+import { getNativeSwapDecimals } from '../../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { getChainFeeCoin } from '../../../../chain/tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { getCoinMetaKey } from '../../../../coin/utils/coinMeta';
@@ -41,7 +43,9 @@ export const SwapTotalFee = () => {
               error={() => null}
               pending={() => <Spinner />}
               success={({ fee }) => {
-                const { decimals } = getChainFeeCoin(swapQuote.swapChain);
+                const decimals = getNativeSwapDecimals(
+                  fromCoinKey.chain as NativeSwapEnabledChain
+                );
 
                 return (
                   <SwapTotalFeeFiatValue

@@ -1,3 +1,4 @@
+import { isOneOf } from '../../../../lib/utils/array/isOneOf';
 import { asyncFallbackChain } from '../../../../lib/utils/promise/asyncFallbackChain';
 import { extractChainFromNativeSwapAsset } from '../asset/extractChainFromNativeSwapAsset';
 import {
@@ -18,7 +19,7 @@ export const findNativeSwapQuote = async (input: FindNativeSwapQuoteInput) => {
 
   const matchingSwapChains = nativeSwapChains.filter(swapChain =>
     involvedChains.every(chain =>
-      nativeSwapEnabledChainsRecord[swapChain].includes(chain as any)
+      isOneOf(chain, nativeSwapEnabledChainsRecord[swapChain])
     )
   );
 

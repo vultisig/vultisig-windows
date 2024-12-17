@@ -1,9 +1,9 @@
 import { formatAmount } from '../../../../lib/utils/formatAmount';
 import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
 import { queryUrl } from '../../../../lib/utils/query/queryUrl';
-import { getChainFeeCoin } from '../../../tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../utils/fromChainAmount';
 import { toChainAmount } from '../../../utils/toChainAmount';
+import { extractChainFromNativeSwapAsset } from '../asset/extractChainFromNativeSwapAsset';
 import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig';
 import {
   nativeSwapApiBaseUrl,
@@ -11,6 +11,7 @@ import {
   nativeSwapStreamingInterval,
 } from '../NativeSwapChain';
 import { NativeSwapQuote } from '../NativeSwapQuote';
+import { getNativeSwapDecimals } from '../utils/getNativeSwapDecimals';
 
 export type GetNativeSwapQuoteInput = {
   swapChain: NativeSwapChain;
@@ -35,7 +36,9 @@ export const getNativeSwapQuote = async ({
   amount,
   isAffiliate,
 }: GetNativeSwapQuoteInput): Promise<NativeSwapQuote> => {
-  const { decimals } = getChainFeeCoin(swapChain);
+  const decimals = getNativeSwapDecimals(
+    extractChainFromNativeSwapAsset(fromAsset)
+  );
   const chainAmount = toChainAmount(amount, decimals);
 
   const swapBaseUrl = `${nativeSwapApiBaseUrl[swapChain]}/quote/swap`;
