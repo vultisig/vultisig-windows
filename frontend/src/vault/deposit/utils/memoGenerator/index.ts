@@ -56,32 +56,23 @@ export const generateMemo = ({
       return `BOND:${bondableAsset}:${lpUnits}:${nodeAddress}`;
 
     case 'bond':
-      // Similar logic as above, but differs when no provider:
-      // If provider:
-      //    with operatorFee: "BOND:nodeAddress:provider:operatorFee"
-      //    without operatorFee: "BOND:nodeAddress:provider"
-      // If no provider:
-      //    with operatorFee: "BOND:nodeAddress:amount:operatorFee"
-      //    without operatorFee: "BOND:nodeAddress:amount"
+      // If provider exists, return with operatorFee if present
       if (provider) {
         return operatorFee
           ? `BOND:${nodeAddress}:${provider}:${operatorFee}`
           : `BOND:${nodeAddress}:${provider}`;
       }
+      // If no provider, include only operatorFee (no 'amount' field)
       return operatorFee
-        ? `BOND:${nodeAddress}:${amount}:${operatorFee}`
-        : `BOND:${nodeAddress}:${amount}`;
-
+        ? `BOND:${nodeAddress}:${operatorFee}`
+        : `BOND:${nodeAddress}`;
     case 'unbond_with_lp':
       // "UNBOND:bondableAsset:lpUnits:nodeAddress"
       return `UNBOND:${bondableAsset}:${lpUnits}:${nodeAddress}`;
-
     case 'unbond':
-      // If provider: "UNBOND:nodeAddress:amount:provider"
-      // Else: "UNBOND:nodeAddress:amount"
       return provider
-        ? `${action}:${nodeAddress}:${amount}:${provider}`
-        : `${action}:${nodeAddress}:${amount}`;
+        ? `UNBOND:${nodeAddress}:${amount}:${provider}`
+        : `UNBOND:${nodeAddress}:${amount}`;
 
     default:
       // Default: If nodeAddress present: "ACTION:nodeAddress", else "ACTION"
