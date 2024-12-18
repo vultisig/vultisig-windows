@@ -176,7 +176,10 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     return Math.max(...fees.filter((fee: number) => fee > 0), 0);
   }
 
-  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificSolana> {
+  async getSpecificTransactionInfo(
+    coin: Coin,
+    receiver: string
+  ): Promise<SpecificSolana> {
     try {
       // Fetch the recent block hash and priority fee concurrently
       const [recentBlockHash, highPriorityFee] = await Promise.all([
@@ -189,7 +192,7 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
       }
 
       let fromAddressPubKey = coin.address;
-      let toAddressPubKey = coin.contractAddress;
+      let toAddressPubKey = receiver;
 
       // If the coin is not a native token and both from and to addresses are available
       if (fromAddressPubKey && toAddressPubKey && !coin.isNativeToken) {
