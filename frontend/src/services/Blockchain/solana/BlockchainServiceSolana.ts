@@ -25,6 +25,7 @@ import { ChainUtils } from '../../../model/chain';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
+import { RpcServiceSolana } from '../../Rpc/solana/RpcServiceSolana';
 
 export class BlockchainServiceSolana
   extends BlockchainService
@@ -155,12 +156,12 @@ export class BlockchainServiceSolana
 
     const {
       priorityFee,
-      recentBlockHash,
       fromTokenAssociatedAddress,
       toTokenAssociatedAddress,
     } = specific;
 
     const priorityFeePrice = Number(priorityFee) * 2;
+    const newRecentBlockHash = await RpcServiceSolana.fetchRecentBlockhash();
 
     if (keysignPayload.coin.isNativeToken) {
       // Native token transfer
@@ -170,10 +171,13 @@ export class BlockchainServiceSolana
           value: Long.fromString(keysignPayload.toAmount),
           memo: keysignPayload?.memo,
         }),
-        recentBlockhash: recentBlockHash,
+        recentBlockhash: newRecentBlockHash,
         sender: keysignPayload.coin.address,
         priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
           price: Long.fromString(priorityFeePrice.toString()),
+        }),
+        priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
+          limit: Number(20000),
         }),
       });
 
@@ -195,10 +199,13 @@ export class BlockchainServiceSolana
 
         const input = TW.Solana.Proto.SigningInput.create({
           tokenTransferTransaction: tokenTransferMessage,
-          recentBlockhash: recentBlockHash,
+          recentBlockhash: newRecentBlockHash,
           sender: keysignPayload.coin.address,
           priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-            price: Long.fromString(priorityFee),
+            price: Long.fromString(priorityFeePrice.toString()),
+          }),
+          priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
+            limit: Number(20000),
           }),
         });
 
@@ -230,10 +237,13 @@ export class BlockchainServiceSolana
 
         const input = TW.Solana.Proto.SigningInput.create({
           createAndTransferTokenTransaction: createAndTransferTokenMessage,
-          recentBlockhash: recentBlockHash,
+          recentBlockhash: newRecentBlockHash,
           sender: keysignPayload.coin.address,
           priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-            price: Long.fromString(priorityFee),
+            price: Long.fromString(priorityFeePrice.toString()),
+          }),
+          priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
+            limit: Number(20000),
           }),
         });
 

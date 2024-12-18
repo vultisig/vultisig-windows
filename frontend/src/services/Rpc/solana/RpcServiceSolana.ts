@@ -244,7 +244,19 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     return this.sendTransaction(hex);
   }
 
-  private async fetchRecentBlockhash(): Promise<string> {
+  async fetchRecentBlockhash(): Promise<string> {
+    const requestBody = {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'getLatestBlockhash',
+      params: [{ commitment: 'confirmed' }], //Official Solana recommendation: Use confirmed commitment when fetching recent blockhash. This will provide a better (extended with aprox. 13s) time window as compared to finalized commitment, thus reducing the risk of transaction expiration (see below).
+    };
+
+    const response = await this.postRequest(rpcURL, requestBody);
+    return response.result?.value?.blockhash as string;
+  }
+
+  static async fetchRecentBlockhash(): Promise<string> {
     const requestBody = {
       jsonrpc: '2.0',
       id: 1,
@@ -415,6 +427,20 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
   }
 
   private async postRequest(url: string, body: any): Promise<any> {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      console.error(`Error with request: ${response.statusText}`);
+    }
+
+    return await response.json();
+  }
+
+  static async postRequest(url: string, body: any): Promise<any> {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
