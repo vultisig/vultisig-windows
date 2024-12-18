@@ -32,6 +32,7 @@ export const pt = {
   select_backup_file: 'Selecionar arquivo de backup',
   continue: 'Continuar',
   ok: 'OK',
+  save_changes: 'Salvar alterações',
   cancel: 'Cancelar',
   internet: 'Internet',
   local: 'Local',

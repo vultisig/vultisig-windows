@@ -69,6 +69,7 @@ export const es = {
   backup_disclaimer:
     'Debe hacer una copia de seguridad de todos los fragmentos de la bóveda en ubicaciones separadas.',
   of: 'de',
+  save_changes: 'Guardar cambios',
   vault: 'Bóveda',
   vaults: 'Bóvedas',
   setup: 'Configurar',

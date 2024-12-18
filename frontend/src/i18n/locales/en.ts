@@ -310,6 +310,7 @@ export const en = {
   from: 'From',
   memo: 'Memo',
   amount: 'Amount',
+  save_changes: 'Save Changes',
   value: 'Value',
   gas: 'Gas',
   gas_limit: 'Gas limit',

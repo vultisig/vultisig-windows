@@ -357,6 +357,7 @@ export const hr = {
   fast: 'Brzo',
   secure: 'Siguran',
   active: 'Aktivan',
+  save_changes: 'Mentések mentése',
   fast_vault_setup_prop_0: 'Postavljanje jednog uređaja',
   fast_vault_setup_prop_1: 'Obavijesti o transakcijama i pravila',
   fast_vault_setup_prop_2: 'Sigurnosna kopija trezora poslana e-poštom',
