@@ -32,7 +32,6 @@ export const useSpecificTxInfoQuery = ({
   const walletCore = useAssertWalletCore();
 
   const [receiver] = useSendReceiver();
-  console.log(receiver);
 
   return useQuery({
     queryKey: getSpecificTxInfoQueryKey({
