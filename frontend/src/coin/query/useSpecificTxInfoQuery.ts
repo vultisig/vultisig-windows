@@ -5,6 +5,7 @@ import { withoutUndefined } from '../../lib/utils/array/withoutUndefined';
 import { Chain } from '../../model/chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { ServiceFactory } from '../../services/ServiceFactory';
+import { useSendReceiver } from '../../vault/send/state/receiver';
 import { AccountCoinKey } from '../AccountCoin';
 import { getCoinKey } from '../utils/coin';
 
@@ -30,6 +31,9 @@ export const useSpecificTxInfoQuery = ({
 }: SpecificTxInfoQueryParams) => {
   const walletCore = useAssertWalletCore();
 
+  const [receiver] = useSendReceiver();
+  console.log(receiver);
+
   return useQuery({
     queryKey: getSpecificTxInfoQueryKey({
       coin: getCoinKey(coin),
@@ -40,7 +44,11 @@ export const useSpecificTxInfoQuery = ({
         coin.chain as Chain,
         walletCore
       );
-      return service.rpcService.getSpecificTransactionInfo(coin, feeSettings);
+      return service.rpcService.getSpecificTransactionInfo(
+        coin,
+        receiver,
+        feeSettings
+      );
     },
   });
 };

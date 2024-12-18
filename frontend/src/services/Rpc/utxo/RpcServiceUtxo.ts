@@ -43,6 +43,7 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
 
   async getSpecificTransactionInfo(
     coin: Coin,
+    _receiver: string,
     feeSettings?: UtxoFeeSettings
   ): Promise<SpecificUtxo> {
     let byteFee = await this.calculateFee(coin);

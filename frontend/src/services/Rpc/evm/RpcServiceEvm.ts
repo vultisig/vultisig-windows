@@ -132,6 +132,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
   async getSpecificTransactionInfo(
     coin: Coin,
+    _receiver: string,
     feeSettings?: EvmFeeSettings
   ): Promise<SpecificEvm> {
     const [gasPrice, nonce] = await Promise.all([

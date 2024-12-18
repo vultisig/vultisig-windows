@@ -27,6 +27,7 @@ export class RpcServiceZksync extends RpcServiceEvm implements ITokenService {
 
   async getSpecificTransactionInfo(
     coin: Coin,
+    _receiver: string,
     feeSettings?: EvmFeeSettings
   ): Promise<SpecificEvm> {
     try {
