@@ -16,7 +16,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Dogecoin]: 'https://blockchair.com/dogecoin',
   [Chain.Dash]: 'https://blockchair.com/dash',
   [Chain.THORChain]: 'https://thorchain.net',
-  [Chain.Solana]: 'https://explorer.solana.com',
+  [Chain.Solana]: 'https://solscan.io',
   [Chain.Ethereum]: 'https://etherscan.io',
   [Chain.Cosmos]: 'https://www.mintscan.io/cosmos',
   [Chain.Dydx]: 'https://www.mintscan.io/dydx',
