@@ -19,33 +19,38 @@ export function useTransformQueriesData<
       recordMap(queriesRecord, ({ data }) => data)
     );
 
+    const queries = Object.values(queriesRecord);
+
+    const error =
+      Object.values(queriesRecord).find(({ error }) => error)?.error ?? null;
+    const isPending = queries.some(({ isPending }) => isPending);
+    const isLoading = queries.some(({ isLoading }) => isLoading);
+
     if (getRecordSize(dataRecord) === getRecordSize(queriesRecord)) {
       try {
         return {
           data: transform(
             dataRecord as { [K in keyof T]: NonUndefined<T[K]['data']> }
           ),
-          isPending: false,
-          isLoading: false,
-          error: null,
+          isPending,
+          isLoading,
+          error,
         };
       } catch (error) {
         return {
           data: undefined,
-          isPending: false,
-          isLoading: false,
+          isPending,
+          isLoading,
           error: error as E,
         };
       }
     }
 
-    const queries = Object.values(queriesRecord);
-
     return {
       data: undefined,
-      error: queries.find(({ error }) => error)?.error ?? null,
-      isPending: queries.some(({ isPending }) => isPending),
-      isLoading: queries.some(({ isLoading }) => isLoading),
+      error,
+      isPending,
+      isLoading,
     };
   }, [queriesRecord, transform]);
 }
