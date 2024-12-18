@@ -1,17 +1,14 @@
-import { findNativeSwapQuote } from '../../../chain/swap/native/api/findNativeSwapQuote';
-import { toNativeSwapAsset } from '../../../chain/swap/native/asset/toNativeSwapAsset';
-import { nativeSwapAffiliateConfig } from '../../../chain/swap/native/nativeSwapAffiliateConfig';
+import { swapConfig } from '../../../chain/swap/config';
+import { findSwapQuote } from '../../../chain/swap/quote/findSwapQuote';
 import { CoinKey } from '../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { withoutNullOrUndefined } from '../../../lib/utils/array/withoutNullOrUndefined';
+import { pick } from '../../../lib/utils/record/pick';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Fiat } from '../../../model/fiat';
-import {
-  useCurrentVaultAddress,
-  useCurrentVaultCoin,
-} from '../../state/currentVault';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
@@ -37,8 +34,6 @@ export const useSwapQuoteQuery = () => {
   const fromCoin = useCurrentVaultCoin(fromCoinKey);
   const toCoin = useCurrentVaultCoin(toCoinKey);
 
-  const destination = useCurrentVaultAddress(toCoin.chain);
-
   const fromCoinUsdPrice = useCoinPriceQuery(
     CoinMeta.fromCoin(storageCoinToCoin(fromCoin)),
     Fiat.USD
@@ -56,24 +51,19 @@ export const useSwapQuoteQuery = () => {
         fromAmount,
       }),
       queryFn: async () => {
-        const fromAsset = toNativeSwapAsset({
-          ...fromCoinKey,
-          ticker: fromCoin.ticker,
-        });
-        const toAsset = toNativeSwapAsset({
-          ...toCoinKey,
-          ticker: toCoin.ticker,
-        });
-
         const usdAmount = fromAmount * fromCoinUsdPrice;
 
-        const isAffiliate =
-          usdAmount >= nativeSwapAffiliateConfig.minUsdAffiliateAmount;
+        const isAffiliate = usdAmount >= swapConfig.minUsdAffiliateAmount;
 
-        return findNativeSwapQuote({
-          fromAsset,
-          toAsset,
-          destination,
+        return findSwapQuote({
+          from: {
+            ...fromCoinKey,
+            ...pick(fromCoin, ['ticker', 'decimals', 'address']),
+          },
+          to: {
+            ...toCoinKey,
+            ...pick(toCoin, ['ticker', 'decimals', 'address']),
+          },
           amount: fromAmount,
           isAffiliate,
         });

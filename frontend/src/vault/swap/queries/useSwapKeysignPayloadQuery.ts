@@ -8,7 +8,7 @@ import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
-import { Chain, EvmChain } from '../../../model/chain';
+import { EvmChain } from '../../../model/chain';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
 import { TransactionType } from '../../../model/transaction';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
@@ -71,11 +71,17 @@ export const useSwapKeysignPayloadQuery = () => {
           fromAmount ===
           fromChainAmount(fromCoinBalance.amount, fromCoin.decimals);
 
-        const { memo } = swapQuote;
+        if ('oneInch' in swapQuote) {
+          throw new Error('OneInch swap is not supported yet');
+        }
+
+        const { native: quote } = swapQuote;
+
+        const { memo, swapChain } = quote;
 
         if (fromCoinKey.chain in EvmChain && !isNativeCoin(fromCoinKey)) {
           return getErc20ThorchainSwapKeysignPayload({
-            quote: swapQuote,
+            quote,
             fromAddress,
             fromCoin,
             amount: fromAmount,
@@ -86,11 +92,9 @@ export const useSwapKeysignPayloadQuery = () => {
           });
         }
 
-        const thorchainFeeCoin = getCoinMetaKey(
-          getChainFeeCoin(Chain.THORChain)
-        );
+        const nativeFeeCoin = getCoinMetaKey(getChainFeeCoin(swapChain));
 
-        const tx = areEqualCoins(fromCoinKey, thorchainFeeCoin)
+        const tx = areEqualCoins(fromCoinKey, nativeFeeCoin)
           ? {
               fromAddress,
               toAddress: '',
@@ -108,7 +112,7 @@ export const useSwapKeysignPayloadQuery = () => {
               sendMaxAmount,
               specificTransactionInfo,
               transactionType: TransactionType.SEND,
-              toAddress: shouldBePresent(swapQuote.inbound_address),
+              toAddress: shouldBePresent(quote.inbound_address),
             };
 
         return service.createKeysignPayload(
