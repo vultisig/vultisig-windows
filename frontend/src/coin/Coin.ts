@@ -6,9 +6,12 @@ export type CoinKey = {
   id: string;
 };
 
-export type CoinAmount = {
-  amount: bigint;
+export type EntityWithDecimals = {
   decimals: number;
+};
+
+export type CoinAmount = EntityWithDecimals & {
+  amount: bigint;
 };
 
 export const areEqualCoins = (one: CoinKey, another: CoinKey): boolean =>
