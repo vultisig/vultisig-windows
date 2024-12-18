@@ -84,6 +84,7 @@ export const it = {
     '2of3, 3of4, 4of6 configurazioni dispositivo disponibili',
   secure_vault_setup_prop_1: 'Un backup per dispositivo',
   secure_vault_setup_prop_2: 'Ridondante, sicuro',
+  save_changes: 'Salva modifiche',
   information_note2:
     'Assicurati che nessun altro dispositivo stia eseguendo Vultisig.',
   try_again: 'Riprova',

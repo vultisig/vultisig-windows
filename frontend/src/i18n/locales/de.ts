@@ -78,6 +78,7 @@ export const de = {
   keygen: 'Schlüsselgenerierung',
   name_your_vault: 'Nennen Sie Ihren Tresor',
   join: 'Beitreten',
+  save_changes: 'Änderungen speichern',
   done: 'Fertig',
   information_note1:
     'Halten Sie die Geräte im selben WLAN-Netzwerk, richtigen Tresor und paaren Sie die Geräte.',
