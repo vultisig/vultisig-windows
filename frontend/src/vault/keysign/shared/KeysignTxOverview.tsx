@@ -53,6 +53,7 @@ export const KeysignTxOverview = () => {
 
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) return null;
+
     return formatFee({
       chain: chain as Chain,
       txInfo: blockchainSpecific.value as unknown as SpecificTransactionInfo,
