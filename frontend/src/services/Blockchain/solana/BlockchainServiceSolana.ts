@@ -156,12 +156,15 @@ export class BlockchainServiceSolana
 
     const {
       priorityFee,
+      recentBlockHash,
       fromTokenAssociatedAddress,
       toTokenAssociatedAddress,
     } = specific;
 
     const priorityFeePrice = Number(priorityFee) * 2;
-    const newRecentBlockHash = await RpcServiceSolana.fetchRecentBlockhash();
+    //const newRecentBlockHash = await RpcServiceSolana.fetchRecentBlockhash();
+
+    const newRecentBlockHash = recentBlockHash;
 
     if (keysignPayload.coin.isNativeToken) {
       // Native token transfer
@@ -320,6 +323,7 @@ export class BlockchainServiceSolana
 
     const preSigningOutput = TW.Solana.Proto.PreSigningOutput.decode(preHashes);
     if (preSigningOutput.errorMessage !== '') {
+      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
 
@@ -347,6 +351,7 @@ export class BlockchainServiceSolana
 
     const output = TW.Solana.Proto.SigningOutput.decode(compiled);
     if (output.errorMessage !== '') {
+      console.error('SigningOutput error:', output.errorMessage);
       throw new Error(output.errorMessage);
     }
 

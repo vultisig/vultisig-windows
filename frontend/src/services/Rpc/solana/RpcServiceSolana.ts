@@ -31,7 +31,7 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
         params: [
           encodedTransaction,
           {
-            preflightCommitment: 'confirmed',
+            preflightCommitment: 'finalized',
           },
         ],
       };
@@ -249,7 +249,7 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
       jsonrpc: '2.0',
       id: 1,
       method: 'getLatestBlockhash',
-      params: [{ commitment: 'confirmed' }], //Official Solana recommendation: Use confirmed commitment when fetching recent blockhash. This will provide a better (extended with aprox. 13s) time window as compared to finalized commitment, thus reducing the risk of transaction expiration (see below).
+      params: [{ commitment: 'finalized' }], //Official Solana recommendation: Use confirmed commitment when fetching recent blockhash. This will provide a better (extended with aprox. 13s) time window as compared to finalized commitment, thus reducing the risk of transaction expiration (see below).
     };
 
     const response = await this.postRequest(rpcURL, requestBody);
@@ -261,7 +261,7 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
       jsonrpc: '2.0',
       id: 1,
       method: 'getLatestBlockhash',
-      params: [{ commitment: 'confirmed' }], //Official Solana recommendation: Use confirmed commitment when fetching recent blockhash. This will provide a better (extended with aprox. 13s) time window as compared to finalized commitment, thus reducing the risk of transaction expiration (see below).
+      params: [{ commitment: 'finalized' }], //Official Solana recommendation: Use confirmed commitment when fetching recent blockhash. This will provide a better (extended with aprox. 13s) time window as compared to finalized commitment, thus reducing the risk of transaction expiration (see below).
     };
 
     const response = await this.postRequest(rpcURL, requestBody);
