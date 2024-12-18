@@ -55,7 +55,7 @@ export const ManageVaultFolderPage = () => {
           }}
         >
           <Text color="reversed" size={14} weight="600">
-            {isPending ? <Spinner /> : t('done')}
+            {isPending ? <Spinner /> : t('save_changes')}
           </Text>
         </Button>
       </PageFooter>
