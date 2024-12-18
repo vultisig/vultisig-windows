@@ -160,6 +160,8 @@ export class BlockchainServiceSolana
       toTokenAssociatedAddress,
     } = specific;
 
+    const priorityFeePrice = Number(priorityFee) * 2;
+
     if (keysignPayload.coin.isNativeToken) {
       // Native token transfer
       const input = TW.Solana.Proto.SigningInput.create({
@@ -171,7 +173,7 @@ export class BlockchainServiceSolana
         recentBlockhash: recentBlockHash,
         sender: keysignPayload.coin.address,
         priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-          price: Long.fromString(priorityFee),
+          price: Long.fromString(priorityFeePrice.toString()),
         }),
       });
 
