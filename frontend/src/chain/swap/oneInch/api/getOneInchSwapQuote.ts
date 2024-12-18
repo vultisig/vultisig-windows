@@ -1,5 +1,5 @@
+import { Fetch } from '../../../../../wailsjs/go/utils/GoHttp';
 import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
-import { queryUrl } from '../../../../lib/utils/query/queryUrl';
 import { pick } from '../../../../lib/utils/record/pick';
 import { EvmChain, evmChainIds } from '../../../../model/chain';
 import { Endpoint } from '../../../../services/Endpoint';
@@ -16,7 +16,8 @@ type Input = {
   isAffiliate: boolean;
 };
 
-const baseUrl = `${Endpoint.vultisigApiProxy}/1inch/swap/v6.0/`;
+const getBaseUrl = (chainId: number) =>
+  `${Endpoint.vultisigApiProxy}/1inch/swap/v6.0/${chainId}/swap`;
 
 const nativeCoinAddress = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
@@ -26,7 +27,7 @@ export const getOneInchSwapQuote = async ({
   toCoinId,
   amount,
   isAffiliate,
-}: Input) => {
+}: Input): Promise<OneInchSwapQuote> => {
   const chainId = evmChainIds[account.chain as EvmChain];
 
   const params = {
@@ -44,11 +45,7 @@ export const getOneInchSwapQuote = async ({
     ...(isAffiliate ? pick(oneInchAffiliateConfig, ['referrer', 'fee']) : {}),
   };
 
-  const url = addQueryParams(`${baseUrl}quote/${chainId}/swap`, params);
+  const url = addQueryParams(getBaseUrl(chainId), params);
 
-  const result = await queryUrl<OneInchSwapQuote>(url);
-
-  console.log('oneInchQuote: ', result);
-
-  return result;
+  return Fetch(url);
 };

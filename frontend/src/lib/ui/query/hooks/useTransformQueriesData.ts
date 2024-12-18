@@ -20,14 +20,23 @@ export function useTransformQueriesData<
     );
 
     if (getRecordSize(dataRecord) === getRecordSize(queriesRecord)) {
-      return {
-        data: transform(
-          dataRecord as { [K in keyof T]: NonUndefined<T[K]['data']> }
-        ),
-        isPending: false,
-        isLoading: false,
-        error: null,
-      };
+      try {
+        return {
+          data: transform(
+            dataRecord as { [K in keyof T]: NonUndefined<T[K]['data']> }
+          ),
+          isPending: false,
+          isLoading: false,
+          error: null,
+        };
+      } catch (error) {
+        return {
+          data: undefined,
+          isPending: false,
+          isLoading: false,
+          error: error as E,
+        };
+      }
     }
 
     const queries = Object.values(queriesRecord);
