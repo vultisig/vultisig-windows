@@ -25,6 +25,11 @@ const getSuiFeeAmount: GetFeeAmount<SuiSpecific> = ({
   referenceGasPrice,
 }): number => Number(referenceGasPrice);
 
+const getSolanaDefaultFeeAmount: GetFeeAmount<any> = ({
+  priorityFee,
+  fee,
+}): number => (fee ? Number(fee) : priorityFee && Number(priorityFee));
+
 export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
   // EVM Chains
   [Chain.Arbitrum]: getEvmFeeAmount,
@@ -51,7 +56,7 @@ export const getFeeAmountRecord: Record<Chain, GetFeeAmount<any>> = {
   [Chain.MayaChain]: getDefaultFeeAmount,
   [Chain.Dydx]: getDefaultFeeAmount,
   [Chain.Kujira]: getDefaultFeeAmount,
-  [Chain.Solana]: getDefaultFeeAmount,
+  [Chain.Solana]: getSolanaDefaultFeeAmount,
   [Chain.Polkadot]: getDefaultFeeAmount,
   [Chain.Ton]: getDefaultFeeAmount,
   [Chain.Osmosis]: getDefaultFeeAmount,
