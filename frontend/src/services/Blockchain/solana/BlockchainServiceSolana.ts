@@ -162,7 +162,7 @@ export class BlockchainServiceSolana
 
     const priorityFeePrice = 1_000_000; // Turbo fee in lamports, around 5 cents
     const priorityFeeLimit = Number(100_000); // Turbo fee in lamports, around 5 cents
-    const newRecentBlockHash = recentBlockHash;
+    const newRecentBlockHash = recentBlockHash; // DKLS should fix it. Using the same, since fetching the latest block hash won't match with IOS and Android
 
     if (keysignPayload.coin.isNativeToken) {
       // Native token transfer
