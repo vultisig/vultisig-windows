@@ -5,11 +5,14 @@ import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativ
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useTransformQueryData } from '../../../lib/ui/query/hooks/useTransformQueryData';
 import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useToCoin } from '../state/toCoin';
 import { useSwapQuoteQuery } from './useSwapQuoteQuery';
 
 export const useSwapOutputAmountQuery = () => {
   const [toCoinKey] = useToCoin();
+
+  const toCoin = useCurrentVaultCoin(toCoinKey);
 
   return useTransformQueryData(
     useSwapQuoteQuery(),
@@ -21,12 +24,11 @@ export const useSwapOutputAmountQuery = () => {
               expected_amount_out,
               getNativeSwapDecimals(toCoinKey.chain as NativeSwapEnabledChain)
             ),
-          oneInch: () => {
-            throw new Error('OneInch swap is not supported yet');
-          },
+          oneInch: ({ dstAmount }) =>
+            fromChainAmount(dstAmount, toCoin.decimals),
         });
       },
-      [toCoinKey.chain]
+      [toCoin.decimals, toCoinKey.chain]
     )
   );
 };
