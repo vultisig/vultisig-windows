@@ -161,7 +161,9 @@ export class BlockchainServiceSolana
       toTokenAssociatedAddress,
     } = specific;
 
-    const priorityFeePrice = Number(priorityFee) * 2;
+    const priorityFeePrice = 1123141; // Turbo fee
+
+    console.log('priorityFeePrice:', priorityFeePrice);
     //const newRecentBlockHash = await RpcServiceSolana.fetchRecentBlockhash();
 
     const newRecentBlockHash = recentBlockHash;
@@ -180,7 +182,7 @@ export class BlockchainServiceSolana
           price: Long.fromString(priorityFeePrice.toString()),
         }),
         priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
-          limit: Number(20000),
+          limit: Number(200000),
         }),
       });
 
@@ -208,7 +210,7 @@ export class BlockchainServiceSolana
             price: Long.fromString(priorityFeePrice.toString()),
           }),
           priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
-            limit: Number(20000),
+            limit: Number(200000),
           }),
         });
 
@@ -246,7 +248,7 @@ export class BlockchainServiceSolana
             price: Long.fromString(priorityFeePrice.toString()),
           }),
           priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
-            limit: Number(20000),
+            limit: Number(200000),
           }),
         });
 
