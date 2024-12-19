@@ -1,4 +1,4 @@
-import { defaultEvmTransferGasLimit } from '../../../chain/evm/evmGasLimit';
+import { defaultEvmSwapGasLimit } from '../../../chain/evm/evmGasLimit';
 import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
@@ -52,7 +52,7 @@ export const useSwapFeesQuery = () => {
             {
               ...getCoinMetaKey(fromFeeCoin),
               amount: fromChainAmount(
-                BigInt(gasPrice) * BigInt(defaultEvmTransferGasLimit),
+                BigInt(gasPrice || 0) * BigInt(defaultEvmSwapGasLimit),
                 fromFeeCoin.decimals
               ),
             },
