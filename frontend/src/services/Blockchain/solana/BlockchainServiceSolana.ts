@@ -25,6 +25,7 @@ import { ChainUtils } from '../../../model/chain';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
+import { RpcServiceSolana } from '../../Rpc/solana/RpcServiceSolana';
 
 export class BlockchainServiceSolana
   extends BlockchainService
@@ -154,11 +155,14 @@ export class BlockchainServiceSolana
     }
 
     const {
-      priorityFee,
       recentBlockHash,
       fromTokenAssociatedAddress,
       toTokenAssociatedAddress,
     } = specific;
+
+    const priorityFeePrice = 1_000_000; // Turbo fee in lamports, around 5 cents
+    const priorityFeeLimit = Number(100_000); // Turbo fee in lamports, around 5 cents
+    const newRecentBlockHash = recentBlockHash; // DKLS should fix it. Using the same, since fetching the latest block hash won't match with IOS and Android
 
     if (keysignPayload.coin.isNativeToken) {
       // Native token transfer
@@ -168,10 +172,13 @@ export class BlockchainServiceSolana
           value: Long.fromString(keysignPayload.toAmount),
           memo: keysignPayload?.memo,
         }),
-        recentBlockhash: recentBlockHash,
+        recentBlockhash: newRecentBlockHash,
         sender: keysignPayload.coin.address,
         priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-          price: Long.fromString(priorityFee),
+          price: Long.fromString(priorityFeePrice.toString()),
+        }),
+        priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
+          limit: priorityFeeLimit,
         }),
       });
 
@@ -193,10 +200,13 @@ export class BlockchainServiceSolana
 
         const input = TW.Solana.Proto.SigningInput.create({
           tokenTransferTransaction: tokenTransferMessage,
-          recentBlockhash: recentBlockHash,
+          recentBlockhash: newRecentBlockHash,
           sender: keysignPayload.coin.address,
           priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-            price: Long.fromString(priorityFee),
+            price: Long.fromString(priorityFeePrice.toString()),
+          }),
+          priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
+            limit: priorityFeeLimit,
           }),
         });
 
@@ -228,10 +238,13 @@ export class BlockchainServiceSolana
 
         const input = TW.Solana.Proto.SigningInput.create({
           createAndTransferTokenTransaction: createAndTransferTokenMessage,
-          recentBlockhash: recentBlockHash,
+          recentBlockhash: newRecentBlockHash,
           sender: keysignPayload.coin.address,
           priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-            price: Long.fromString(priorityFee),
+            price: Long.fromString(priorityFeePrice.toString()),
+          }),
+          priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
+            limit: priorityFeeLimit,
           }),
         });
 
@@ -308,6 +321,7 @@ export class BlockchainServiceSolana
 
     const preSigningOutput = TW.Solana.Proto.PreSigningOutput.decode(preHashes);
     if (preSigningOutput.errorMessage !== '') {
+      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
       throw new Error(preSigningOutput.errorMessage);
     }
 
@@ -335,6 +349,7 @@ export class BlockchainServiceSolana
 
     const output = TW.Solana.Proto.SigningOutput.decode(compiled);
     if (output.errorMessage !== '') {
+      console.error('SigningOutput error:', output.errorMessage);
       throw new Error(output.errorMessage);
     }
 

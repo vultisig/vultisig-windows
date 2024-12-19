@@ -13,11 +13,28 @@ const tokenInfoServiceURL = Endpoint.solanaTokenInfoServiceRpc;
 export class RpcServiceSolana implements IRpcService, ITokenService {
   async sendTransaction(encodedTransaction: string): Promise<string> {
     try {
+      // Simulate transaction before sending
+      const isSimulationSuccessful =
+        await this.simulateTransaction(encodedTransaction);
+      if (!isSimulationSuccessful.success) {
+        console.error(isSimulationSuccessful.error);
+        return (
+          isSimulationSuccessful.error || 'Error to simulate the transaction'
+        );
+      }
+
+      // Send transaction
       const requestBody = {
         jsonrpc: '2.0',
         id: 1,
         method: 'sendTransaction',
-        params: [encodedTransaction],
+        params: [
+          encodedTransaction,
+          {
+            preflightCommitment: 'confirmed',
+            skipPreflight: true,
+          },
+        ],
       };
 
       const post = await fetch(rpcURL, {
@@ -30,12 +47,169 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
 
       if (response.error) {
         console.error(`Error sending transaction: ${response.error.message}`);
+        return response.error.message;
       }
 
-      return response.result as string;
+      const transactionHash = response.result as string;
+
+      // Confirm transaction
+      const isConfirmed = await this.confirmTransaction(transactionHash);
+      if (!isConfirmed.success) {
+        console.error(
+          isConfirmed.error ||
+            'Transaction confirmation failed or transaction was rejected.'
+        );
+        return (
+          isConfirmed.error ||
+          'Transaction confirmation failed or transaction was rejected.'
+        );
+      }
+
+      return transactionHash;
     } catch (error) {
       console.error(`Error sending transaction: ${(error as any).message}`);
       return '';
+    }
+  }
+
+  async simulateTransaction(
+    encodedTransaction: string
+  ): Promise<{ success: boolean; error?: string }> {
+    const requestBody = {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'simulateTransaction',
+      params: [encodedTransaction],
+    };
+
+    try {
+      const post = await fetch(rpcURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      });
+
+      const response = await post.json();
+
+      if (response.error) {
+        const errorMessage = `Simulation error: ${response.error.message}`;
+        console.error(errorMessage);
+        return { success: false, error: errorMessage };
+      }
+
+      if (response.result.err) {
+        const errorMessage = `Transaction simulation failed: ${JSON.stringify(response.result.err)}`;
+        console.error(errorMessage);
+        return { success: false, error: errorMessage };
+      }
+
+      return { success: true };
+    } catch (error) {
+      const errorMessage = `Error simulating transaction: ${(error as any).message}`;
+      console.error(errorMessage);
+      return { success: false, error: errorMessage };
+    }
+  }
+
+  async confirmTransaction(
+    transactionHash: string,
+    timeout = 30000,
+    interval = 2000
+  ): Promise<{ success: boolean; error?: string; logs?: string[] }> {
+    const requestBody = {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'getSignatureStatuses',
+      params: [[transactionHash], { searchTransactionHistory: true }],
+    };
+
+    const startTime = Date.now();
+
+    while (Date.now() - startTime < timeout) {
+      try {
+        const post = await fetch(rpcURL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody),
+        });
+
+        const response = await post.json();
+
+        if (response.error) {
+          const errorMessage = `Error fetching transaction status: ${response.error.message}`;
+          console.error(errorMessage);
+          return { success: false, error: errorMessage };
+        }
+
+        const status = response.result.value[0];
+
+        const transactionDetails =
+          await this.getTransactionDetails(transactionHash);
+
+        if (status) {
+          if (status.err) {
+            // Fetch detailed logs if the transaction failed
+            const errorMessage = `Transaction failed with error: ${JSON.stringify(status.err)}`;
+            console.error(errorMessage);
+
+            return {
+              success: false,
+              error: errorMessage,
+              logs: transactionDetails.logs,
+            };
+          }
+
+          return { success: true };
+        }
+
+        console.log('Waiting for transaction confirmation...');
+      } catch (error) {
+        const errorMessage = `Error confirming transaction: ${(error as any).message}`;
+        console.error(errorMessage);
+        return { success: false, error: errorMessage };
+      }
+
+      await new Promise(resolve => setTimeout(resolve, interval));
+    }
+
+    const errorMessage = `Transaction confirmation timed out for hash: ${transactionHash}`;
+    console.error(errorMessage);
+    return { success: false, error: errorMessage };
+  }
+
+  async getTransactionDetails(
+    transactionHash: string
+  ): Promise<{ logs?: string[]; error?: string }> {
+    const requestBody = {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'getTransaction',
+      params: [transactionHash, { encoding: 'json' }],
+    };
+
+    try {
+      const post = await fetch(rpcURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      });
+
+      const response = await post.json();
+
+      if (response.error) {
+        const errorMessage = `Error fetching transaction details: ${response.error.message}`;
+        console.error(errorMessage);
+        return { error: errorMessage };
+      }
+
+      const transactionDetails = response.result;
+      return {
+        logs: transactionDetails?.meta?.logMessages || [],
+      };
+    } catch (error) {
+      const errorMessage = `Error fetching transaction details: ${(error as any).message}`;
+      console.error(errorMessage);
+      return { error: errorMessage };
     }
   }
 
@@ -64,15 +238,16 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     return this.sendTransaction(hex);
   }
 
-  private async fetchRecentBlockhash(): Promise<string> {
+  async fetchRecentBlockhash(): Promise<string> {
     const requestBody = {
       jsonrpc: '2.0',
       id: 1,
       method: 'getLatestBlockhash',
-      params: [{ commitment: 'finalized' }],
+      params: [{ commitment: 'confirmed' }], //Official Solana recommendation: Use confirmed commitment when fetching recent blockhash. This will provide a better (extended with aprox. 13s) time window as compared to finalized commitment, thus reducing the risk of transaction expiration (see below).
     };
 
     const response = await this.postRequest(rpcURL, requestBody);
+
     return response.result?.value?.blockhash as string;
   }
 
@@ -176,7 +351,10 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     return Math.max(...fees.filter((fee: number) => fee > 0), 0);
   }
 
-  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificSolana> {
+  async getSpecificTransactionInfo(
+    coin: Coin,
+    receiver: string
+  ): Promise<SpecificSolana> {
     try {
       // Fetch the recent block hash and priority fee concurrently
       const [recentBlockHash, highPriorityFee] = await Promise.all([
@@ -189,7 +367,7 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
       }
 
       let fromAddressPubKey = coin.address;
-      let toAddressPubKey = coin.contractAddress;
+      let toAddressPubKey = receiver;
 
       // If the coin is not a native token and both from and to addresses are available
       if (fromAddressPubKey && toAddressPubKey && !coin.isNativeToken) {

@@ -9,6 +9,7 @@ export interface IRpcService {
   resolveENS?(ensName: string): Promise<string>;
   getSpecificTransactionInfo(
     coin: Coin,
+    receiver: string,
     feeSettings?: any
   ): Promise<SpecificTransactionInfo>;
 }
