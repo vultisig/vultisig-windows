@@ -115,7 +115,7 @@ export class BlockchainServiceCosmos
           : '',
       messages: message,
       fee: TW.Cosmos.Proto.Fee.create({
-        gas: new Long(300000),
+        gas: new Long(200000),
         amounts: [
           TW.Cosmos.Proto.Amount.create({
             amount: cosmosSpecific.gas.toString(),
