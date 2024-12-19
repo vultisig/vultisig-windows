@@ -5,37 +5,39 @@ import { withoutUndefined } from '../../lib/utils/array/withoutUndefined';
 import { Chain } from '../../model/chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { ServiceFactory } from '../../services/ServiceFactory';
-import { useSendReceiver } from '../../vault/send/state/receiver';
 import { AccountCoinKey } from '../AccountCoin';
 import { getCoinKey } from '../utils/coin';
 
 type SpecificTxInfoQueryParams = {
   coin: Coin;
+  receiver: string;
   feeSettings?: any;
 };
 
 type SpecificTxInfoQueryKeyParams = {
   coin: AccountCoinKey;
   feeSettings?: any;
+  receiver: string;
 };
 
 export const getSpecificTxInfoQueryKey = ({
   coin,
   feeSettings,
+  receiver,
 }: SpecificTxInfoQueryKeyParams) =>
-  withoutUndefined(['specificSendTxInfo', coin, feeSettings]);
+  withoutUndefined(['specificSendTxInfo', coin, receiver, feeSettings]);
 
 export const useSpecificTxInfoQuery = ({
   coin,
   feeSettings,
+  receiver,
 }: SpecificTxInfoQueryParams) => {
   const walletCore = useAssertWalletCore();
-
-  const [receiver] = useSendReceiver();
 
   return useQuery({
     queryKey: getSpecificTxInfoQueryKey({
       coin: getCoinKey(coin),
+      receiver,
       feeSettings,
     }),
     queryFn: async () => {

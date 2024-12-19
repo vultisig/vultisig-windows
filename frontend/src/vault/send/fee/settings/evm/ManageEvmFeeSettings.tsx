@@ -7,8 +7,6 @@ import {
   feePriorities,
   FeePriority,
 } from '../../../../../chain/fee/FeePriority';
-import { useSpecificTxInfoQuery } from '../../../../../coin/query/useSpecificTxInfoQuery';
-import { storageCoinToCoin } from '../../../../../coin/utils/storageCoin';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps';
 import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput';
@@ -21,8 +19,7 @@ import { Modal } from '../../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../../lib/ui/props';
 import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery';
 import { SpecificEvm } from '../../../../../model/specific-transaction-info';
-import { useCurrentVaultCoin } from '../../../../state/currentVault';
-import { useCurrentSendCoin } from '../../../state/sendCoin';
+import { useSpecificSendTxInfoQuery } from '../../../queries/useSpecificSendTxInfoQuery';
 import { SendFiatFeeValue } from '../../SendFiatFeeValue';
 import { SendGasFeeValue } from '../../SendGasFeeValue';
 import {
@@ -56,9 +53,6 @@ export const ManageEvmFeeSettings: React.FC<ClosableComponentProps> = ({
       }
   );
 
-  const [coinKey] = useCurrentSendCoin();
-  const coin = useCurrentVaultCoin(coinKey);
-
   const guardedValue: EvmFeeSettings = useMemo(
     () => ({
       ...value,
@@ -67,10 +61,7 @@ export const ManageEvmFeeSettings: React.FC<ClosableComponentProps> = ({
     [value]
   );
 
-  const txInfoQuery = useSpecificTxInfoQuery({
-    coin: storageCoinToCoin(coin),
-    feeSettings: guardedValue,
-  });
+  const txInfoQuery = useSpecificSendTxInfoQuery();
 
   return (
     <Modal
