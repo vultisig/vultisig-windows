@@ -1,3 +1,4 @@
+import { getCoinKey } from '../../../../coin/utils/coin';
 import {
   OneInchQuote,
   OneInchSwapPayload,
@@ -7,8 +8,10 @@ import { Coin } from '../../../../gen/vultisig/keysign/v1/coin_pb';
 import { KeysignPayload } from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { SpecificEvm } from '../../../../model/specific-transaction-info';
 import { defaultEvmSwapGasLimit } from '../../../evm/evmGasLimit';
+import { processErc20KeysignPayload } from '../../../evm/tx/processErc20KeysignPayload';
 import { toEthereumSpecific } from '../../../evm/tx/toEthereumSpecific';
 import { fromChainAmount } from '../../../utils/fromChainAmount';
+import { isNativeCoin } from '../../../utils/isNativeCoin';
 import { OneInchSwapQuote } from '../OneInchSwapQuote';
 
 type Input = {
@@ -21,7 +24,7 @@ type Input = {
   specificTransactionInfo: SpecificEvm;
 };
 
-export const getOneInchSwapKeysignPayload = ({
+export const getOneInchSwapKeysignPayload = async ({
   vaultLocalPartyId,
   vaultId,
   amount,
@@ -29,7 +32,7 @@ export const getOneInchSwapKeysignPayload = ({
   fromCoin,
   toCoin,
   specificTransactionInfo,
-}: Input): KeysignPayload => {
+}: Input): Promise<KeysignPayload> => {
   const swapPayload = new OneInchSwapPayload({
     fromCoin,
     toCoin,
@@ -64,6 +67,16 @@ export const getOneInchSwapKeysignPayload = ({
     vaultPublicKeyEcdsa: vaultId,
     vaultLocalPartyId,
   });
+
+  if (!isNativeCoin(getCoinKey(fromCoin))) {
+    return processErc20KeysignPayload({
+      value: result,
+      coin: getCoinKey(fromCoin),
+      sender: fromCoin.address,
+      receiver: quote.tx.to,
+      amount,
+    });
+  }
 
   return result;
 };
