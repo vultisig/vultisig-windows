@@ -1,3 +1,4 @@
+import { defaultEvmTransferGasLimit } from '../../../chain/evm/evmGasLimit';
 import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
@@ -24,9 +25,10 @@ export const useSwapFeesQuery = () => {
       txInfo: txInfoQuery,
     },
     ({ swapQuote, txInfo }) => {
+      const fromFeeCoin = getChainFeeCoin(fromCoinKey.chain);
+
       return matchRecordUnion(swapQuote, {
         native: ({ fees }) => {
-          const fromFeeCoin = getChainFeeCoin(fromCoinKey.chain);
           const decimals = getNativeSwapDecimals(
             fromCoinKey.chain as NativeSwapEnabledChain
           );
@@ -45,8 +47,16 @@ export const useSwapFeesQuery = () => {
             },
           ];
         },
-        oneInch: () => {
-          throw new Error('OneInch swap is not supported yet');
+        oneInch: ({ tx: { gasPrice } }) => {
+          return [
+            {
+              ...getCoinMetaKey(fromFeeCoin),
+              amount: fromChainAmount(
+                BigInt(gasPrice) * BigInt(defaultEvmTransferGasLimit),
+                fromFeeCoin.decimals
+              ),
+            },
+          ];
         },
       });
     }

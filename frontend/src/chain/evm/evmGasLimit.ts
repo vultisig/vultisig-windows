@@ -27,3 +27,4 @@ export const evmTokenGasLimit: Record<EvmChain, number> = {
 };
 
 export const defaultEvmSwapGasLimit = 600000;
+export const defaultEvmTransferGasLimit = 23000;

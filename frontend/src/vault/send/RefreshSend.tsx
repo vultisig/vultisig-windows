@@ -6,6 +6,7 @@ import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQuer
 import { PageHeaderRefresh } from '../../ui/page/PageHeaderRefresh';
 import { useCurrentVaultAddress } from '../state/currentVault';
 import { useFeeSettings } from './fee/settings/state/feeSettings';
+import { useSendReceiver } from './state/receiver';
 import { useCurrentSendCoin } from './state/sendCoin';
 
 export const RefreshSend = () => {
@@ -13,6 +14,7 @@ export const RefreshSend = () => {
 
   const [coinKey] = useCurrentSendCoin();
   const address = useCurrentVaultAddress(coinKey.chain);
+  const [receiver] = useSendReceiver();
 
   const feeSettings = useFeeSettings();
 
@@ -26,6 +28,7 @@ export const RefreshSend = () => {
         getBalanceQueryKey(accountCoinKey),
         getSpecificTxInfoQueryKey({
           coin: accountCoinKey,
+          receiver,
           feeSettings,
         })
       );

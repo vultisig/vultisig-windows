@@ -9,5 +9,7 @@ export const useSwapSpecificTxInfoQuery = () => {
 
   return useSpecificTxInfoQuery({
     coin: storageCoinToCoin(coin),
+    // receiver is only required for Solana which swaps do not support
+    receiver: '',
   });
 };
