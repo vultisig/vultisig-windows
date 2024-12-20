@@ -3,6 +3,7 @@ import { WalletCore } from '@trustwallet/wallet-core';
 import { getErc20ApprovePreSignedImageHash } from '../../../chain/evm/tx/getErc20ApprovePreSignedImageHash';
 import { incrementKeysignPayloadNonce } from '../../../chain/evm/tx/incrementKeysignPayloadNonce';
 import { getThorchainSwapPreSignedImageHashes } from '../../../chain/swap/native/thor/tx/getThorchainSwapPreSignedImageHashes';
+import { getOneInchSwapPreSignedImageHashes } from '../../../chain/swap/oneInch/tx/getOneInchSwapPreSignedImageHashes';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
@@ -52,9 +53,11 @@ export const getPreSignedImageHashes = async ({
         mayachainSwapPayload: () => {
           throw new Error('Mayachain swap not supported');
         },
-        oneinchSwapPayload: () => {
-          throw new Error('1inch swap not supported');
-        },
+        oneinchSwapPayload: () =>
+          getOneInchSwapPreSignedImageHashes({
+            keysignPayload,
+            walletCore,
+          }),
       }
     );
   }
