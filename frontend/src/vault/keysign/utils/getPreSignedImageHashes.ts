@@ -5,6 +5,7 @@ import { incrementKeysignPayloadNonce } from '../../../chain/evm/tx/incrementKey
 import { getThorchainSwapPreSignedImageHashes } from '../../../chain/swap/native/thor/tx/getThorchainSwapPreSignedImageHashes';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
 import { Chain } from '../../../model/chain';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
 
@@ -38,10 +39,24 @@ export const getPreSignedImageHashes = async ({
   }
 
   if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
-    return getThorchainSwapPreSignedImageHashes({
-      keysignPayload,
-      walletCore,
-    });
+    return matchDiscriminatedUnion(
+      keysignPayload.swapPayload,
+      'case',
+      'value',
+      {
+        thorchainSwapPayload: () =>
+          getThorchainSwapPreSignedImageHashes({
+            keysignPayload,
+            walletCore,
+          }),
+        mayachainSwapPayload: () => {
+          throw new Error('Mayachain swap not supported');
+        },
+        oneinchSwapPayload: () => {
+          throw new Error('1inch swap not supported');
+        },
+      }
+    );
   }
 
   const service = BlockchainServiceFactory.createService(chain, walletCore);
