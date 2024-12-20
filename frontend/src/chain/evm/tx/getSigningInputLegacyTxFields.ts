@@ -43,7 +43,7 @@ export const getSigningInputLegacyTxFields = ({
       stripHexPrefix(bigIntToHex(nonce).padStart(2, '0')),
       'hex'
     ),
-    txMode: TW.Ethereum.Proto.TransactionMode.Enveloped,
+    txMode: TW.Ethereum.Proto.TransactionMode.Legacy,
     gasLimit: Buffer.from(stripHexPrefix(bigIntToHex(BigInt(gasLimit))), 'hex'),
     gasPrice: Buffer.from(stripHexPrefix(bigIntToHex(gasPrice)), 'hex'),
   };
