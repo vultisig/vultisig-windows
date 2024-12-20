@@ -1,13 +1,16 @@
 import { getErc20ThorchainSwapKeysignPayload } from '../../../chain/swap/native/thor/utils/getErc20ThorchainSwapKeysignPayload';
+import { getOneInchSwapKeysignPayload } from '../../../chain/swap/oneInch/utils/getOneInchSwapKeysignPayload';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
+import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { areEqualCoins } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
 import { EvmChain } from '../../../model/chain';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
 import { TransactionType } from '../../../model/transaction';
@@ -71,55 +74,64 @@ export const useSwapKeysignPayloadQuery = () => {
           fromAmount ===
           fromChainAmount(fromCoinBalance.amount, fromCoin.decimals);
 
-        if ('oneInch' in swapQuote) {
-          throw new Error('OneInch swap is not supported yet');
-        }
+        return matchRecordUnion(swapQuote, {
+          oneInch: quote => {
+            return getOneInchSwapKeysignPayload({
+              quote,
+              fromCoin,
+              toCoin,
+              amount: toChainAmount(fromAmount, fromCoin.decimals),
+              specificTransactionInfo: specificTransactionInfo as SpecificEvm,
+              vaultId: getStorageVaultId(vault),
+              vaultLocalPartyId: vault.local_party_id,
+            });
+          },
+          native: quote => {
+            const { memo, swapChain } = quote;
 
-        const { native: quote } = swapQuote;
-
-        const { memo, swapChain } = quote;
-
-        if (fromCoinKey.chain in EvmChain && !isNativeCoin(fromCoinKey)) {
-          return getErc20ThorchainSwapKeysignPayload({
-            quote,
-            fromAddress,
-            fromCoin,
-            amount: fromAmount,
-            toCoin,
-            specificTransactionInfo: specificTransactionInfo as SpecificEvm,
-            vaultId: getStorageVaultId(vault),
-            vaultLocalPartyId: vault.local_party_id,
-          });
-        }
-
-        const nativeFeeCoin = getCoinMetaKey(getChainFeeCoin(swapChain));
-
-        const tx = areEqualCoins(fromCoinKey, nativeFeeCoin)
-          ? {
-              fromAddress,
-              toAddress: '',
-              amount: fromAmount,
-              memo,
-              coin: fromCoin,
-              transactionType: TransactionType.DEPOSIT,
-              specificTransactionInfo,
+            if (fromCoinKey.chain in EvmChain && !isNativeCoin(fromCoinKey)) {
+              return getErc20ThorchainSwapKeysignPayload({
+                quote,
+                fromAddress,
+                fromCoin,
+                amount: fromAmount,
+                toCoin,
+                specificTransactionInfo: specificTransactionInfo as SpecificEvm,
+                vaultId: getStorageVaultId(vault),
+                vaultLocalPartyId: vault.local_party_id,
+              });
             }
-          : {
-              fromAddress,
-              amount: fromAmount,
-              memo,
-              coin: fromCoin,
-              sendMaxAmount,
-              specificTransactionInfo,
-              transactionType: TransactionType.SEND,
-              toAddress: shouldBePresent(quote.inbound_address),
-            };
 
-        return service.createKeysignPayload(
-          tx,
-          vault.local_party_id,
-          vault.public_key_ecdsa
-        );
+            const nativeFeeCoin = getCoinMetaKey(getChainFeeCoin(swapChain));
+
+            const tx = areEqualCoins(fromCoinKey, nativeFeeCoin)
+              ? {
+                  fromAddress,
+                  toAddress: '',
+                  amount: fromAmount,
+                  memo,
+                  coin: fromCoin,
+                  transactionType: TransactionType.DEPOSIT,
+                  specificTransactionInfo,
+                }
+              : {
+                  fromAddress,
+                  amount: fromAmount,
+                  memo,
+                  coin: fromCoin,
+                  sendMaxAmount,
+                  specificTransactionInfo,
+                  transactionType: TransactionType.SEND,
+                  toAddress: shouldBePresent(quote.inbound_address),
+                };
+
+            return service.createKeysignPayload(
+              tx,
+              vault.local_party_id,
+              vault.public_key_ecdsa
+            );
+          },
+        });
       },
     }),
   });
