@@ -4,6 +4,7 @@ import { pick } from '../../../../lib/utils/record/pick';
 import { EvmChain, evmChainIds } from '../../../../model/chain';
 import { Endpoint } from '../../../../services/Endpoint';
 import { ChainAccount } from '../../../ChainAccount';
+import { defaultEvmSwapGasLimit } from '../../../evm/evmGasLimit';
 import { isNativeCoin } from '../../../utils/isNativeCoin';
 import { oneInchAffiliateConfig } from '../oneInchAffiliateConfig';
 import { OneInchSwapQuote } from '../OneInchSwapQuote';
@@ -47,5 +48,17 @@ export const getOneInchSwapQuote = async ({
 
   const url = addQueryParams(getBaseUrl(chainId), params);
 
-  return Fetch(url);
+  const result: OneInchSwapQuote = await Fetch(url);
+
+  if (!result.tx.gas) {
+    return {
+      ...result,
+      tx: {
+        ...result.tx,
+        gas: defaultEvmSwapGasLimit,
+      },
+    };
+  }
+
+  return result;
 };
