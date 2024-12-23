@@ -38,11 +38,15 @@ export const getPreSigningHashes = ({
       ).sort();
     }
 
-    const { errorMessage, dataHash } =
+    const { errorMessage, dataHash, data } =
       TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
 
     if (errorMessage) {
       throw new Error(errorMessage);
+    }
+
+    if (chain === Chain.Sui) {
+      return [walletCore.Hash.blake2b(data, 32)];
     }
 
     return [dataHash];
