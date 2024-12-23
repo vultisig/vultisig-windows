@@ -4,9 +4,9 @@ import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_sp
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { Chain } from '../../../model/chain';
+import { getPreSigningHashes } from '../../tx/utils/getPreSigningHashes';
 import { bigIntToHex } from '../../utils/bigIntToHex';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';
-import { evmSigningInputToPreSignedImageHash } from './evmSigningInputToPreSignedImageHash';
 import { getSigningInputEnvelopedTxFields } from './getSigningInputEnvelopedTxFields';
 
 type Input = {
@@ -14,10 +14,10 @@ type Input = {
   walletCore: WalletCore;
 };
 
-export const getErc20ApprovePreSignedImageHash = ({
+export const getErc20ApprovePreSignedImageHashes = ({
   keysignPayload,
   walletCore,
-}: Input): string => {
+}: Input): string[] => {
   const { amount, spender } = shouldBePresent(
     keysignPayload.erc20ApprovePayload
   );
@@ -53,9 +53,12 @@ export const getErc20ApprovePreSignedImageHash = ({
     }),
   });
 
-  return evmSigningInputToPreSignedImageHash({
-    signingInput,
+  const txInputData =
+    TW.Ethereum.Proto.SigningInput.encode(signingInput).finish();
+
+  return getPreSigningHashes({
     walletCore,
+    txInputData,
     chain,
   });
 };

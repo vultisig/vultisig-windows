@@ -13,7 +13,6 @@ import { Keysign } from '../../../../wailsjs/go/tss/TssService';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
-import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { SpecificPolkadot } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -132,35 +131,6 @@ export class BlockchainServicePolkadot
   hexToBytes(hex: string): Uint8Array {
     hex = hex.startsWith('0x') ? hex.slice(2) : hex;
     return new Uint8Array(Buffer.from(hex, 'hex'));
-  }
-
-  async getPreSignedImageHash(
-    keysignPayload: KeysignPayload
-  ): Promise<string[]> {
-    try {
-      const walletCore = this.walletCore;
-      const coinType = walletCore.CoinType.polkadot;
-      const inputData = await this.getPreSignedInputData(keysignPayload);
-      const hashes = walletCore.TransactionCompiler.preImageHashes(
-        coinType,
-        inputData
-      );
-      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
-      if (preSigningOutput.errorMessage !== '') {
-        console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-        throw new Error(preSigningOutput.errorMessage);
-      }
-
-      return [
-        hexEncode({
-          value: preSigningOutput.dataHash,
-          walletCore,
-        }),
-      ];
-    } catch (error) {
-      console.error('getPreSignedImageHash::', error);
-      return [];
-    }
   }
 
   public async getSignedTransaction(

@@ -109,10 +109,6 @@ export class BlockchainService implements IBlockchainService {
     throw new Error('Method not implemented.');
   }
 
-  getPreSignedImageHash(_keysignPayload: KeysignPayload): Promise<string[]> {
-    throw new Error('Method not implemented.');
-  }
-
   getSignedTransaction(
     _vaultHexPublicKey: string,
     _vaultHexChainCode: string,

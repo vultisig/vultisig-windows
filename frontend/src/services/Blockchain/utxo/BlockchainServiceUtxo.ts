@@ -16,8 +16,8 @@ import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 import { SpecificUtxo } from '../../../model/specific-transaction-info';
 import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
-import { toUtxoPreSignedImageHashes } from '../../../chain/utxo/tx/toUtxoPreSignedImageHashes';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 
 export class BlockchainServiceUtxo
   extends BlockchainService
@@ -93,20 +93,6 @@ export class BlockchainServiceUtxo
     const plan = this.walletCore.AnySigner.plan(inputData, this.coinType);
     input.plan = TW.Bitcoin.Proto.TransactionPlan.decode(plan);
     return TW.Bitcoin.Proto.SigningInput.encode(input).finish();
-  }
-
-  public async getPreSignedImageHash(
-    keysignPayload: KeysignPayload
-  ): Promise<string[]> {
-    const input = await this.getPreSignedInputData(keysignPayload);
-    const preImageHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType,
-      input
-    );
-
-    return toUtxoPreSignedImageHashes({ preImageHashes }).map(value =>
-      hexEncode({ value, walletCore: this.walletCore })
-    );
   }
 
   public async getSignedTransaction(

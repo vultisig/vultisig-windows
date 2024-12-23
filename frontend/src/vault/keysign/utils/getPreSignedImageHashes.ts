@@ -1,9 +1,10 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 
-import { getErc20ApprovePreSignedImageHash } from '../../../chain/evm/tx/getErc20ApprovePreSignedImageHash';
+import { getErc20ApprovePreSignedImageHashes } from '../../../chain/evm/tx/getErc20ApprovePreSignedImageHashes';
 import { incrementKeysignPayloadNonce } from '../../../chain/evm/tx/incrementKeysignPayloadNonce';
 import { getThorchainSwapPreSignedImageHashes } from '../../../chain/swap/native/thor/tx/getThorchainSwapPreSignedImageHashes';
 import { getOneInchSwapPreSignedImageHashes } from '../../../chain/swap/oneInch/tx/getOneInchSwapPreSignedImageHashes';
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
@@ -24,7 +25,7 @@ export const getPreSignedImageHashes = async ({
 
   const { erc20ApprovePayload, ...restOfKeysignPayload } = keysignPayload;
   if (erc20ApprovePayload) {
-    const approveImageHash = getErc20ApprovePreSignedImageHash({
+    const approveImageHashes = getErc20ApprovePreSignedImageHashes({
       keysignPayload,
       walletCore,
     });
@@ -36,7 +37,7 @@ export const getPreSignedImageHashes = async ({
       walletCore,
     });
 
-    return [approveImageHash, ...restOfImageHashes];
+    return [...approveImageHashes, ...restOfImageHashes];
   }
 
   if ('swapPayload' in keysignPayload && keysignPayload.swapPayload.value) {
@@ -64,5 +65,11 @@ export const getPreSignedImageHashes = async ({
 
   const service = BlockchainServiceFactory.createService(chain, walletCore);
 
-  return service.getPreSignedImageHash(keysignPayload);
+  const txInputData = await service.getPreSignedInputData(keysignPayload);
+
+  return getPreSigningHashes({
+    txInputData,
+    walletCore,
+    chain,
+  });
 };
