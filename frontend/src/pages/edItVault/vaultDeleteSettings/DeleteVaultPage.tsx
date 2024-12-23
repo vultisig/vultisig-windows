@@ -61,7 +61,7 @@ const DeleteVaultPage = () => {
     { label: t('vault_delete_page_vault_name'), value: name },
     {
       label: t('vault_delete_page_vault_value'),
-      value: vaultBalance + ' ' + currencySymbol,
+      value: vaultBalance + ' ' + currencySymbol?.symbol,
     },
     {
       label: t('vault_delete_page_vault_part'),
