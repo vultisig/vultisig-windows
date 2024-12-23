@@ -15,17 +15,12 @@ import { SignedTransactionResult } from '../signed-transaction-result';
 import { storage, tss } from '../../../../wailsjs/go/models';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import SignatureProvider from '../signature-provider';
-import {
-  CoinType,
-  PublicKey,
-} from '@trustwallet/wallet-core/dist/src/wallet-core';
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 import { Keysign } from '../../../../wailsjs/go/tss/TssService';
 import { ChainUtils } from '../../../model/chain';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
-import { hexEncode } from '../../../chain/walletCore/hexEncode';
-import { RpcServiceSolana } from '../../Rpc/solana/RpcServiceSolana';
 
 export class BlockchainServiceSolana
   extends BlockchainService
@@ -255,38 +250,6 @@ export class BlockchainServiceSolana
         );
       }
     }
-  }
-
-  public async getPreSignedImageHash(
-    keysignPayload: KeysignPayload
-  ): Promise<string[]> {
-    // Get the pre-signed input data
-    const input = await this.getPreSignedInputData(keysignPayload);
-
-    // Compile pre-image hashes using TransactionCompiler
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType as CoinType,
-      input
-    );
-
-    // Decode the result into a Solana-specific PreSigningOutput
-    const preSigningOutput = TW.Solana.Proto.PreSigningOutput.decode(preHashes);
-
-    // Check for any error messages
-    if (preSigningOutput.errorMessage !== '') {
-      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      throw new Error(preSigningOutput.errorMessage);
-    }
-
-    // Convert the result data to hex, and ensure consistency with Swift output
-    const imageHashes = [
-      hexEncode({
-        value: preSigningOutput.data,
-        walletCore: this.walletCore,
-      }),
-    ];
-
-    return imageHashes;
   }
 
   public async getSignedTransaction(

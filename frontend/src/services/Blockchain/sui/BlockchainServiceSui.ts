@@ -4,7 +4,6 @@ import Long from 'long';
 import { storage, tss } from '../../../../wailsjs/go/models';
 import { Keysign } from '../../../../wailsjs/go/tss/TssService';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
-import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import {
   SuiCoin,
   SuiSpecific,
@@ -166,37 +165,6 @@ export class BlockchainServiceSui
 
     const input = TW.Sui.Proto.SigningInput.encode(inputData).finish();
     return input;
-  }
-
-  async getPreSignedImageHash(
-    keysignPayload: KeysignPayload
-  ): Promise<string[]> {
-    try {
-      const coinType = this.walletCore.CoinType.sui;
-      const inputData = await this.getPreSignedInputData(keysignPayload);
-      const hashes = this.walletCore.TransactionCompiler.preImageHashes(
-        coinType,
-        inputData
-      );
-      const preSigningOutput =
-        TW.TxCompiler.Proto.PreSigningOutput.decode(hashes);
-      if (preSigningOutput.errorMessage !== '') {
-        console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-        throw new Error(preSigningOutput.errorMessage);
-      }
-
-      const blakeHash = this.walletCore.Hash.blake2b(preSigningOutput.data, 32);
-      const blakeHashes = [
-        hexEncode({
-          value: blakeHash,
-          walletCore: this.walletCore,
-        }),
-      ];
-      return blakeHashes;
-    } catch (error) {
-      console.error('getPreSignedImageHash::', error);
-      return [];
-    }
   }
 
   public async getSignedTransaction(

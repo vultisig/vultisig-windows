@@ -1,5 +1,4 @@
 import { TW } from '@trustwallet/wallet-core';
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { keccak256 } from 'js-sha3';
 
 import { tss } from '../../../../wailsjs/go/models';
@@ -7,7 +6,6 @@ import { getSigningInputEnvelopedTxFields } from '../../../chain/evm/tx/getSigni
 import { toEthereumSpecific } from '../../../chain/evm/tx/toEthereumSpecific';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
-import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
@@ -108,32 +106,6 @@ export class BlockchainServiceEvm
     });
 
     return TW.Ethereum.Proto.SigningInput.encode(input).finish();
-  }
-
-  public async getPreSignedImageHash(
-    keysignPayload: KeysignPayload
-  ): Promise<string[]> {
-    const input = await this.getPreSignedInputData(keysignPayload);
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType as CoinType,
-      input
-    );
-
-    const preSigningOutput =
-      TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
-    if (preSigningOutput.errorMessage !== '') {
-      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      throw new Error(preSigningOutput.errorMessage);
-    }
-
-    const imageHashes = [
-      hexEncode({
-        value: preSigningOutput.dataHash,
-        walletCore: this.walletCore,
-      }),
-    ];
-
-    return imageHashes;
   }
 
   public async getSignedTransaction(

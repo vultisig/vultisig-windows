@@ -10,7 +10,6 @@ import { createHash } from 'crypto';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
-import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import {
   CosmosSpecific,
   TransactionType,
@@ -126,29 +125,6 @@ export class BlockchainServiceCosmos
     });
 
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();
-  }
-
-  async getPreSignedImageHash(
-    keysignPayload: KeysignPayload
-  ): Promise<string[]> {
-    const walletCore = this.walletCore;
-    const inputData = await this.getPreSignedInputData(keysignPayload);
-    const hashes = walletCore.TransactionCompiler.preImageHashes(
-      this.coinType,
-      inputData
-    );
-    const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
-    if (preSigningOutput.errorMessage !== '') {
-      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      throw new Error(preSigningOutput.errorMessage);
-    }
-
-    return [
-      hexEncode({
-        value: preSigningOutput.dataHash,
-        walletCore: walletCore,
-      }),
-    ];
   }
 
   async getSignedTransaction(

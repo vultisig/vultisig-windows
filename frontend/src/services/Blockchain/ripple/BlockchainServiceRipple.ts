@@ -159,33 +159,6 @@ export class BlockchainServiceRipple
     }
   }
 
-  async getPreSignedImageHash(
-    keysignPayload: KeysignPayload
-  ): Promise<string[]> {
-    try {
-      const walletCore = this.walletCore;
-      const coinType = walletCore.CoinType.xrp;
-      const inputData = await this.getPreSignedInputData(keysignPayload);
-      const hashes = walletCore.TransactionCompiler.preImageHashes(
-        coinType,
-        inputData
-      );
-
-      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
-      if (preSigningOutput.errorMessage !== '') {
-        console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-        throw new Error(preSigningOutput.errorMessage);
-      }
-
-      return [
-        stripHexPrefix(walletCore.HexCoding.encode(preSigningOutput.dataHash)),
-      ];
-    } catch (error) {
-      console.error('getPreSignedImageHash::', error);
-      return [];
-    }
-  }
-
   async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,

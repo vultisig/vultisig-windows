@@ -15,18 +15,13 @@ import { SignedTransactionResult } from '../signed-transaction-result';
 import { storage, tss } from '../../../../wailsjs/go/models';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import SignatureProvider from '../signature-provider';
-import {
-  CoinType,
-  PublicKey,
-} from '@trustwallet/wallet-core/dist/src/wallet-core';
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { Keysign } from '../../../../wailsjs/go/tss/TssService';
 import { ChainUtils } from '../../../model/chain';
 import { CoinServiceFactory } from '../../Coin/CoinServiceFactory';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import Long from 'long';
-import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
-import { hexEncode } from '../../../chain/walletCore/hexEncode';
 
 export class BlockchainServiceTon
   extends BlockchainService
@@ -193,32 +188,6 @@ export class BlockchainServiceTon
       TW.TheOpenNetwork.Proto.SigningInput.encode(input).finish();
 
     return encodedInput;
-  }
-
-  public async getPreSignedImageHash(
-    keysignPayload: KeysignPayload
-  ): Promise<string[]> {
-    const input = await this.getPreSignedInputData(keysignPayload);
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType as CoinType,
-      input
-    );
-
-    const preSigningOutput =
-      TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
-    if (preSigningOutput.errorMessage !== '') {
-      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      throw new Error(preSigningOutput.errorMessage);
-    }
-
-    const imageHashes = [
-      hexEncode({
-        value: preSigningOutput.data,
-        walletCore: this.walletCore,
-      }),
-    ];
-
-    return imageHashes;
   }
 
   public async getSignedTransaction(

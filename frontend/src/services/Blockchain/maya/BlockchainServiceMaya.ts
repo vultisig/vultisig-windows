@@ -21,8 +21,6 @@ import {
   TransactionType,
 } from '../../../model/transaction';
 import Long from 'long';
-import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
-import { hexEncode } from '../../../chain/walletCore/hexEncode';
 
 export class BlockchainServiceMaya
   extends BlockchainService
@@ -174,28 +172,6 @@ export class BlockchainServiceMaya
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();
   }
 
-  async getPreSignedImageHash(
-    keysignPayload: KeysignPayload
-  ): Promise<string[]> {
-    const walletCore = this.walletCore;
-    const coinType = walletCore.CoinType.thorchain;
-    const inputData = await this.getPreSignedInputData(keysignPayload);
-    const hashes = walletCore.TransactionCompiler.preImageHashes(
-      coinType,
-      inputData
-    );
-    const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
-    if (preSigningOutput.errorMessage !== '') {
-      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      throw new Error(preSigningOutput.errorMessage);
-    }
-    return [
-      hexEncode({
-        value: preSigningOutput.dataHash,
-        walletCore,
-      }),
-    ];
-  }
   async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,

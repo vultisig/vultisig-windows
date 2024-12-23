@@ -8,8 +8,8 @@ import { THORChainSwapPayload } from '../../../../../gen/vultisig/keysign/v1/tho
 import { shouldBePresent } from '../../../../../lib/utils/assert/shouldBePresent';
 import { match } from '../../../../../lib/utils/match';
 import { Chain } from '../../../../../model/chain';
-import { evmSigningInputToPreSignedImageHash } from '../../../../evm/tx/evmSigningInputToPreSignedImageHash';
 import { getSigningInputEnvelopedTxFields } from '../../../../evm/tx/getSigningInputEnvelopedTxFields';
+import { getPreSigningHashes } from '../../../../tx/utils/getPreSigningHashes';
 import { nativeSwapAffiliateConfig } from '../../nativeSwapAffiliateConfig';
 import { toThorchainSwapAssetProto } from '../asset/toThorchainSwapAssetProto';
 import { ThorchainSwapEnabledChain } from '../thorchainSwapProtoChains';
@@ -90,13 +90,14 @@ export const getThorchainSwapPreSignedImageHashes = async ({
       }),
     });
 
-    return [
-      evmSigningInputToPreSignedImageHash({
-        signingInput,
-        walletCore,
-        chain: fromChain,
-      }),
-    ];
+    const txInputData =
+      TW.Ethereum.Proto.SigningInput.encode(signingInput).finish();
+
+    return getPreSigningHashes({
+      walletCore,
+      txInputData,
+      chain: fromChain,
+    });
   };
 
   // Since currently only EVM chains use SwapPayload

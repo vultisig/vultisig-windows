@@ -4,8 +4,8 @@ import { OneInchSwapPayload } from '../../../../gen/vultisig/keysign/v1/1inch_sw
 import { EthereumSpecific } from '../../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
-import { evmSigningInputToPreSignedImageHash } from '../../../evm/tx/evmSigningInputToPreSignedImageHash';
 import { getSigningInputLegacyTxFields } from '../../../evm/tx/getSigningInputLegacyTxFields';
+import { getPreSigningHashes } from '../../../tx/utils/getPreSigningHashes';
 import { bigIntToHex } from '../../../utils/bigIntToHex';
 import { stripHexPrefix } from '../../../utils/stripHexPrefix';
 import { OneInchSwapEnabledChain } from '../OneInchSwapEnabledChains';
@@ -53,11 +53,12 @@ export const getOneInchSwapPreSignedImageHashes = async ({
     }),
   });
 
-  return [
-    evmSigningInputToPreSignedImageHash({
-      signingInput,
-      walletCore,
-      chain: fromChain,
-    }),
-  ];
+  const txInputData =
+    TW.Ethereum.Proto.SigningInput.encode(signingInput).finish();
+
+  return getPreSigningHashes({
+    walletCore,
+    txInputData,
+    chain: fromChain,
+  });
 };
