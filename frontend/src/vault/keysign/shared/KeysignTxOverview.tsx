@@ -18,6 +18,7 @@ import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { formatAmount } from '../../../lib/utils/formatAmount';
+import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { SpecificTransactionInfo } from '../../../model/specific-transaction-info';
@@ -36,6 +37,7 @@ export const KeysignTxOverview = () => {
     memo,
     toAmount,
     blockchainSpecific,
+    swapPayload,
   } = useKeysignPayload();
 
   const coin = shouldBePresent(potentialCoin);
@@ -60,6 +62,18 @@ export const KeysignTxOverview = () => {
     });
   }, [blockchainSpecific.value, chain]);
 
+  const blockExplorerChain: Chain = useMemo(() => {
+    if (swapPayload && swapPayload.value) {
+      return matchDiscriminatedUnion(swapPayload, 'case', 'value', {
+        thorchainSwapPayload: () => Chain.THORChain,
+        mayachainSwapPayload: () => Chain.MayaChain,
+        oneinchSwapPayload: () => chain as Chain,
+      });
+    }
+
+    return chain as Chain;
+  }, [chain, swapPayload]);
+
   return (
     <VStack gap={16}>
       <HStack alignItems="center" gap={4}>
@@ -70,7 +84,7 @@ export const KeysignTxOverview = () => {
         <IconButton
           onClick={() => {
             const url = getBlockExplorerUrl({
-              chain: chain as Chain,
+              chain: blockExplorerChain,
               entity: 'tx',
               value: txHash,
             });
