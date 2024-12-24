@@ -57,5 +57,5 @@ export const getPreSigningHashes = ({
         walletCore,
       })
     )
-    .toSorted();
+    .sort();
 };
