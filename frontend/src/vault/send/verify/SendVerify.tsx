@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
@@ -5,10 +6,16 @@ import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
+import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount';
+import { areEqualCoins } from '../../../coin/Coin';
+import { useCoinPricesQuery } from '../../../coin/query/useCoinPricesQuery';
+import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
+import { Text } from '../../../lib/ui/text';
 import { range } from '../../../lib/utils/array/range';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { CoinMeta } from '../../../model/coin-meta';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -26,9 +33,7 @@ import { SendConfirm } from './SendConfirm';
 import { SendTerms } from './SendTerms';
 import { sendTermsCount, SendTermsProvider } from './state/sendTerms';
 
-export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
-  onBack,
-}) => {
+export const SendVerify: FC<ComponentWithBackActionProps> = ({ onBack }) => {
   const { t } = useTranslation();
   const [coinKey] = useCurrentSendCoin();
   const sender = useSender();
@@ -36,6 +41,14 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
   const [receiver] = useSendReceiver();
   const [amount] = useSendAmount();
   const [memo] = useSendMemo();
+  const formatFiat = useFormatFiatAmount();
+  const { data: coinPrices = [] } = useCoinPricesQuery([
+    CoinMeta.fromCoin(storageCoinToCoin(coin)),
+  ]);
+  const price =
+    shouldBePresent(coinPrices).find(item => areEqualCoins(item, coinKey))
+      ?.price ?? 0;
+  const fiatValue = amount ? amount * price : null;
 
   return (
     <>
@@ -58,6 +71,14 @@ export const SendVerify: React.FC<ComponentWithBackActionProps> = ({
               value={shouldBePresent(amount)}
               ticker={coin.ticker}
             />
+
+            {fiatValue !== null && (
+              <TxOverviewRow>
+                <Text>{t('value')}</Text>
+                <Text family="mono">{formatFiat(fiatValue)}</Text>
+              </TxOverviewRow>
+            )}
+
             <TxOverviewRow>
               <SendGasFeeWrapper />
             </TxOverviewRow>
