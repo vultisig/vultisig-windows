@@ -32,7 +32,7 @@ export class BlockchainServiceSolana
     sessionID: string,
     hexEncryptionKey: string,
     serverURL: string,
-    keysignPayload: KeysignPayload
+    txInputData: Uint8Array
   ): Promise<string> {
     try {
       const rpcService = RpcServiceFactory.createRpcService(this.chain);
@@ -63,7 +63,7 @@ export class BlockchainServiceSolana
       const signedTx = await this.getSignedTransaction(
         vault.public_key_eddsa,
         vault.hex_chain_code,
-        keysignPayload,
+        txInputData,
         signatures
       );
 
@@ -255,11 +255,9 @@ export class BlockchainServiceSolana
   public async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload,
+    txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const inputData = await this.getPreSignedInputData(data);
-
     const addressService = AddressServiceFactory.createAddressService(
       this.chain,
       this.walletCore
@@ -274,7 +272,7 @@ export class BlockchainServiceSolana
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
       this.coinType,
-      inputData
+      txInputData
     );
 
     const preSigningOutput = TW.Solana.Proto.PreSigningOutput.decode(preHashes);
@@ -300,7 +298,7 @@ export class BlockchainServiceSolana
 
     const compiled = this.walletCore.TransactionCompiler.compileWithSignatures(
       this.coinType,
-      inputData,
+      txInputData,
       allSignatures,
       publicKeys
     );

@@ -1,9 +1,12 @@
-/* eslint-disable */
+import { TW } from '@trustwallet/wallet-core';
+import Long from 'long';
+
 import { tss } from '../../../../wailsjs/go/models';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { IBlockchainService } from '../IBlockchainService';
-import { SignedTransactionResult } from '../signed-transaction-result';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
+import { SpecificUtxo } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
@@ -11,13 +14,9 @@ import {
   TransactionType,
 } from '../../../model/transaction';
 import { BlockchainService } from '../BlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
-import { TW } from '@trustwallet/wallet-core';
-import Long from 'long';
-import { SpecificUtxo } from '../../../model/specific-transaction-info';
-import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
-import { hexEncode } from '../../../chain/walletCore/hexEncode';
-import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceUtxo
   extends BlockchainService
@@ -38,8 +37,7 @@ export class BlockchainServiceUtxo
       obj.specificTransactionInfo as SpecificUtxo;
     switch (obj.transactionType) {
       case TransactionType.SEND:
-        const sendTx = obj as ISendTransaction;
-        utxoSpecific.sendMaxAmount = sendTx.sendMaxAmount;
+        utxoSpecific.sendMaxAmount = (obj as ISendTransaction).sendMaxAmount;
         utxoSpecific.byteFee = transactionInfoSpecific.byteFee.toString() ?? '';
 
         payload.utxoInfo = transactionInfoSpecific.utxos.map(utxo => {
@@ -58,7 +56,6 @@ export class BlockchainServiceUtxo
 
       // We will have to check how the swap-old transaction is structured for UTXO chains
       case TransactionType.SWAP:
-        const swapTx = obj as ISwapTransaction;
         payload.blockchainSpecific = {
           case: 'utxoSpecific',
           value: utxoSpecific,
@@ -98,10 +95,9 @@ export class BlockchainServiceUtxo
   public async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload,
+    txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    let inputData = await this.getPreSignedInputData(data);
     const utxoPublicKey = await this.addressService.getDerivedPubKey(
       vaultHexPublicKey,
       vaultHexChainCode,
@@ -114,7 +110,7 @@ export class BlockchainServiceUtxo
     );
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
       this.coinType,
-      inputData
+      txInputData
     );
     const preSignOutputs = TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
     const allSignatures = this.walletCore.DataVector.create();
@@ -145,7 +141,7 @@ export class BlockchainServiceUtxo
     const compileWithSignatures =
       this.walletCore.TransactionCompiler.compileWithSignatures(
         this.coinType,
-        inputData,
+        txInputData,
         allSignatures,
         publicKeys
       );

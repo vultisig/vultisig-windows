@@ -33,7 +33,7 @@ export class BlockchainServiceSui
     sessionID: string,
     hexEncryptionKey: string,
     serverURL: string,
-    keysignPayload: KeysignPayload
+    txInputData: Uint8Array
   ): Promise<string> {
     try {
       const rpcService = RpcServiceFactory.createRpcService(this.chain);
@@ -64,7 +64,7 @@ export class BlockchainServiceSui
       const signedTx = await this.getSignedTransaction(
         vault.public_key_eddsa,
         vault.hex_chain_code,
-        keysignPayload,
+        txInputData,
         signatures
       );
 
@@ -170,11 +170,9 @@ export class BlockchainServiceSui
   public async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload,
+    txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const inputData = await this.getPreSignedInputData(data);
-
     const publicKey = await this.addressService.getPublicKey(
       '',
       vaultHexPublicKey,
@@ -184,7 +182,7 @@ export class BlockchainServiceSui
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
       this.coinType,
-      inputData
+      txInputData
     );
 
     const preSigningOutput =
@@ -215,7 +213,7 @@ export class BlockchainServiceSui
 
     const compiled = this.walletCore.TransactionCompiler.compileWithSignatures(
       this.coinType,
-      inputData,
+      txInputData,
       allSignatures,
       publicKeys
     );

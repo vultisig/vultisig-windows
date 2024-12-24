@@ -136,11 +136,9 @@ export class BlockchainServicePolkadot
   public async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload,
+    txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const inputData = await this.getPreSignedInputData(data);
-
     const publicKey = await this.addressService.getPublicKey(
       '',
       vaultHexPublicKey,
@@ -150,7 +148,7 @@ export class BlockchainServicePolkadot
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
       this.coinType,
-      inputData
+      txInputData
     );
 
     // console.log('preHashes:', preHashes);
@@ -180,7 +178,7 @@ export class BlockchainServicePolkadot
 
     const compiled = this.walletCore.TransactionCompiler.compileWithSignatures(
       this.coinType,
-      inputData,
+      txInputData,
       allSignatures,
       publicKeys
     );
@@ -209,7 +207,7 @@ export class BlockchainServicePolkadot
     sessionID: string,
     hexEncryptionKey: string,
     serverURL: string,
-    keysignPayload: KeysignPayload
+    txInputData: Uint8Array
   ): Promise<string> {
     try {
       const rpcService = RpcServiceFactory.createRpcService(this.chain);
@@ -240,7 +238,7 @@ export class BlockchainServicePolkadot
       const signedTx = await this.getSignedTransaction(
         vault.public_key_eddsa,
         vault.hex_chain_code,
-        keysignPayload,
+        txInputData,
         signatures
       );
 

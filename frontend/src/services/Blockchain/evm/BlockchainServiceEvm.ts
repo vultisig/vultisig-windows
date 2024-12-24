@@ -111,10 +111,9 @@ export class BlockchainServiceEvm
   public async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload,
+    txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const inputData = await this.getPreSignedInputData(data);
     const addressService = AddressServiceFactory.createAddressService(
       this.chain,
       this.walletCore
@@ -134,7 +133,7 @@ export class BlockchainServiceEvm
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
       this.coinType,
-      inputData
+      txInputData
     );
 
     const publicKeys = this.walletCore.DataVector.create();
@@ -163,7 +162,7 @@ export class BlockchainServiceEvm
     allSignatures.add(signature);
     const compiled = this.walletCore.TransactionCompiler.compileWithSignatures(
       this.coinType,
-      inputData,
+      txInputData,
       allSignatures,
       publicKeys
     );

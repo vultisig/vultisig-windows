@@ -190,11 +190,10 @@ export class BlockchainServiceThorchain
   async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload,
+    txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
-    const inputData = await this.getPreSignedInputData(data);
     const coinType = walletCore.CoinType.thorchain;
     const addressService = AddressServiceFactory.createAddressService(
       Chain.THORChain,
@@ -213,7 +212,7 @@ export class BlockchainServiceThorchain
     try {
       const hashes = walletCore.TransactionCompiler.preImageHashes(
         coinType,
-        inputData
+        txInputData
       );
       const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
       const allSignatures = walletCore.DataVector.create();
@@ -230,7 +229,7 @@ export class BlockchainServiceThorchain
       const compileWithSignatures =
         walletCore.TransactionCompiler.compileWithSignatures(
           coinType,
-          inputData,
+          txInputData,
           allSignatures,
           publicKeys
         );

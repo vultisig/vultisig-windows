@@ -39,7 +39,7 @@ export class BlockchainService implements IBlockchainService {
     sessionID: string,
     hexEncryptionKey: string,
     serverURL: string,
-    keysignPayload: KeysignPayload
+    txInputData: Uint8Array
   ): Promise<string> {
     const rpcService = RpcServiceFactory.createRpcService(this.chain);
 
@@ -64,7 +64,7 @@ export class BlockchainService implements IBlockchainService {
     const signedTx = await this.getSignedTransaction(
       vault.public_key_ecdsa,
       vault.hex_chain_code,
-      keysignPayload,
+      txInputData,
       signatures
     );
 
@@ -112,7 +112,7 @@ export class BlockchainService implements IBlockchainService {
   getSignedTransaction(
     _vaultHexPublicKey: string,
     _vaultHexChainCode: string,
-    _data: KeysignPayload,
+    _txInputData: Uint8Array,
     _signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     throw new Error('Method not implemented.');
