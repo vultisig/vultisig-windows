@@ -50,12 +50,10 @@ export const getPreSigningHashes = ({
     return [dataHash];
   };
 
-  return getHashes()
-    .map(value =>
-      hexEncode({
-        value,
-        walletCore,
-      })
-    )
-    .sort();
+  return getHashes().map(value =>
+    hexEncode({
+      value,
+      walletCore,
+    })
+  );
 };
