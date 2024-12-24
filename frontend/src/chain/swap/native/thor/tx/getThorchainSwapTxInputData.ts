@@ -9,7 +9,6 @@ import { shouldBePresent } from '../../../../../lib/utils/assert/shouldBePresent
 import { match } from '../../../../../lib/utils/match';
 import { Chain } from '../../../../../model/chain';
 import { getSigningInputEnvelopedTxFields } from '../../../../evm/tx/getSigningInputEnvelopedTxFields';
-import { getPreSigningHashes } from '../../../../tx/utils/getPreSigningHashes';
 import { nativeSwapAffiliateConfig } from '../../nativeSwapAffiliateConfig';
 import { toThorchainSwapAssetProto } from '../asset/toThorchainSwapAssetProto';
 import { ThorchainSwapEnabledChain } from '../thorchainSwapProtoChains';
@@ -19,10 +18,10 @@ type Input = {
   walletCore: WalletCore;
 };
 
-export const getThorchainSwapPreSignedImageHashes = async ({
+export const getThorchainSwapTxInputData = async ({
   keysignPayload,
   walletCore,
-}: Input): Promise<string[]> => {
+}: Input): Promise<Uint8Array> => {
   const swapPayload = shouldBePresent(keysignPayload.swapPayload)
     .value as THORChainSwapPayload;
 
@@ -72,7 +71,7 @@ export const getThorchainSwapPreSignedImageHashes = async ({
     throw new Error(swapOutput.error.message);
   }
 
-  const getEvmHashes = () => {
+  const getEvmTxInputData = () => {
     const { blockchainSpecific } = keysignPayload;
 
     const { maxFeePerGasWei, priorityFee, nonce, gasLimit } =
@@ -90,39 +89,32 @@ export const getThorchainSwapPreSignedImageHashes = async ({
       }),
     });
 
-    const txInputData =
-      TW.Ethereum.Proto.SigningInput.encode(signingInput).finish();
-
-    return getPreSigningHashes({
-      walletCore,
-      txInputData,
-      chain: fromChain,
-    });
+    return TW.Ethereum.Proto.SigningInput.encode(signingInput).finish();
   };
 
   // Since currently only EVM chains use SwapPayload
   // we've implemented only EVM tx input data for now
-  const getUtxoHashes = () => {
+  const getUtxoTxInputData = () => {
     throw new Error('Not implemented');
   };
 
-  const getThorHashes = () => {
+  const getThorTxInputData = () => {
     throw new Error('Not implemented');
   };
 
-  const getCosmosHashes = () => {
+  const getCosmosTxInputData = () => {
     throw new Error('Not implemented');
   };
 
   return match(fromChain as ThorchainSwapEnabledChain, {
-    [Chain.THORChain]: getThorHashes,
-    [Chain.Cosmos]: getCosmosHashes,
-    [Chain.BitcoinCash]: getUtxoHashes,
-    [Chain.Bitcoin]: getUtxoHashes,
-    [Chain.Dogecoin]: getUtxoHashes,
-    [Chain.Litecoin]: getUtxoHashes,
-    [Chain.BSC]: getEvmHashes,
-    [Chain.Ethereum]: getEvmHashes,
-    [Chain.Avalanche]: getEvmHashes,
+    [Chain.THORChain]: getThorTxInputData,
+    [Chain.Cosmos]: getCosmosTxInputData,
+    [Chain.BitcoinCash]: getUtxoTxInputData,
+    [Chain.Bitcoin]: getUtxoTxInputData,
+    [Chain.Dogecoin]: getUtxoTxInputData,
+    [Chain.Litecoin]: getUtxoTxInputData,
+    [Chain.BSC]: getEvmTxInputData,
+    [Chain.Ethereum]: getEvmTxInputData,
+    [Chain.Avalanche]: getEvmTxInputData,
   });
 };

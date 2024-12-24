@@ -1,5 +1,5 @@
-/* eslint-disable */
 import { TW } from '@trustwallet/wallet-core';
+
 import { tss } from '../../../../wailsjs/go/models';
 import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -9,10 +9,9 @@ import { SignedTransactionResult } from '../signed-transaction-result';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import TxCompiler = TW.TxCompiler;
-import SignatureProvider from '../signature-provider';
 import { createHash } from 'crypto';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
-import { BlockchainService } from '../BlockchainService';
+import Long from 'long';
+
 import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -20,8 +19,10 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
+import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import { RpcServiceThorchain } from '../../Rpc/thorchain/RpcServiceThorchain';
-import Long from 'long';
+import { BlockchainService } from '../BlockchainService';
+import SignatureProvider from '../signature-provider';
 
 export class BlockchainServiceThorchain
   extends BlockchainService
@@ -164,7 +165,7 @@ export class BlockchainServiceThorchain
       ];
     }
 
-    var chainID = walletCore.CoinTypeExt.chainId(coinType);
+    let chainID = walletCore.CoinTypeExt.chainId(coinType);
     const thorChainId = await RpcServiceThorchain.getTHORChainChainID();
     if (thorChainId && chainID != thorChainId) {
       chainID = thorChainId;
@@ -189,16 +190,10 @@ export class BlockchainServiceThorchain
   async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload | Uint8Array,
+    txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
-    let inputData: Uint8Array;
-    if (data instanceof Uint8Array) {
-      inputData = data;
-    } else {
-      inputData = await this.getPreSignedInputData(data);
-    }
     const coinType = walletCore.CoinType.thorchain;
     const addressService = AddressServiceFactory.createAddressService(
       Chain.THORChain,
@@ -217,7 +212,7 @@ export class BlockchainServiceThorchain
     try {
       const hashes = walletCore.TransactionCompiler.preImageHashes(
         coinType,
-        inputData
+        txInputData
       );
       const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
       const allSignatures = walletCore.DataVector.create();
@@ -234,7 +229,7 @@ export class BlockchainServiceThorchain
       const compileWithSignatures =
         walletCore.TransactionCompiler.compileWithSignatures(
           coinType,
-          inputData,
+          txInputData,
           allSignatures,
           publicKeys
         );

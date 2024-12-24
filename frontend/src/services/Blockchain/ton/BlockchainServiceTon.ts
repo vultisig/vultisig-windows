@@ -1,27 +1,26 @@
-/* eslint-disable */
 import { TW } from '@trustwallet/wallet-core';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { IBlockchainService } from '../IBlockchainService';
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import Long from 'long';
+
+import { storage, tss } from '../../../../wailsjs/go/models';
+import { Keysign } from '../../../../wailsjs/go/tss/TssService';
+import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import { TonSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { ChainUtils } from '../../../model/chain';
+import { SpecificTon } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import { BlockchainService } from '../BlockchainService';
-import { SpecificTon } from '../../../model/specific-transaction-info';
-import { SignedTransactionResult } from '../signed-transaction-result';
-import { storage, tss } from '../../../../wailsjs/go/models';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
-import SignatureProvider from '../signature-provider';
-import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
-import { Keysign } from '../../../../wailsjs/go/tss/TssService';
-import { ChainUtils } from '../../../model/chain';
-import { CoinServiceFactory } from '../../Coin/CoinServiceFactory';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
-import Long from 'long';
-import { getCoinType } from '../../../chain/walletCore/getCoinType';
+import { BlockchainService } from '../BlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
+import SignatureProvider from '../signature-provider';
+import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceTon
   extends BlockchainService
@@ -33,60 +32,50 @@ export class BlockchainServiceTon
     sessionID: string,
     hexEncryptionKey: string,
     serverURL: string,
-    keysignPayload: KeysignPayload
+    txInputData: Uint8Array
   ): Promise<string> {
-    try {
-      const coinService = CoinServiceFactory.createCoinService(
-        this.chain,
-        this.walletCore
-      );
+    const rpcService = RpcServiceFactory.createRpcService(this.chain);
 
-      const rpcService = RpcServiceFactory.createRpcService(this.chain);
+    const tssType = ChainUtils.getTssKeysignType(this.chain);
 
-      const tssType = ChainUtils.getTssKeysignType(this.chain);
+    const coinType = getCoinType({
+      walletCore: this.walletCore,
+      chain: this.chain,
+    });
 
-      const coinType = getCoinType({
-        walletCore: this.walletCore,
-        chain: this.chain,
-      });
+    const keysignGoLang = await Keysign(
+      vault,
+      messages,
+      vault.local_party_id,
+      this.walletCore.CoinTypeExt.derivationPath(coinType),
+      sessionID,
+      hexEncryptionKey,
+      serverURL,
+      tssType.toString().toLowerCase()
+    );
 
-      const keysignGoLang = await Keysign(
-        vault,
-        messages,
-        vault.local_party_id,
-        this.walletCore.CoinTypeExt.derivationPath(coinType),
-        sessionID,
-        hexEncryptionKey,
-        serverURL,
-        tssType.toString().toLowerCase()
-      );
+    const signatures: { [key: string]: tss.KeysignResponse } = {};
+    messages.forEach((msg, idx) => {
+      signatures[msg] = keysignGoLang[idx];
+    });
 
-      const signatures: { [key: string]: tss.KeysignResponse } = {};
-      messages.forEach((msg, idx) => {
-        signatures[msg] = keysignGoLang[idx];
-      });
+    const signedTx = await this.getSignedTransaction(
+      vault.public_key_eddsa,
+      vault.hex_chain_code,
+      txInputData,
+      signatures
+    );
 
-      const signedTx = await this.getSignedTransaction(
-        vault.public_key_eddsa,
-        vault.hex_chain_code,
-        keysignPayload,
-        signatures
-      );
-
-      if (!signedTx) {
-        console.error("Couldn't sign transaction");
-        return "Couldn't sign transaction";
-      }
-
-      let txBroadcastedHash = await rpcService.broadcastTransaction(
-        signedTx.rawTransaction
-      );
-
-      return txBroadcastedHash;
-    } catch (e: any) {
-      console.error(e);
-      return e.message;
+    if (!signedTx) {
+      console.error("Couldn't sign transaction");
+      return "Couldn't sign transaction";
     }
+
+    const txBroadcastedHash = await rpcService.broadcastTransaction(
+      signedTx.rawTransaction
+    );
+
+    return txBroadcastedHash;
   }
 
   createKeysignPayload(
@@ -148,11 +137,7 @@ export class BlockchainServiceTon
       throw new Error('Invalid coin');
     }
 
-    const {
-      bounceable, // used for bounceable messages
-      expireAt,
-      sequenceNumber,
-    } = specific;
+    const { expireAt, sequenceNumber } = specific;
 
     const pubKeyData = Buffer.from(keysignPayload.coin.hexPublicKey, 'hex');
     if (!pubKeyData) {
@@ -193,16 +178,9 @@ export class BlockchainServiceTon
   public async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload | Uint8Array,
+    txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    let inputData: Uint8Array;
-    if (data instanceof Uint8Array) {
-      inputData = data;
-    } else {
-      inputData = await this.getPreSignedInputData(data);
-    }
-
     const addressService = AddressServiceFactory.createAddressService(
       this.chain,
       this.walletCore
@@ -217,7 +195,7 @@ export class BlockchainServiceTon
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
       this.coinType,
-      inputData
+      txInputData
     );
 
     const preSigningOutput =
@@ -242,7 +220,7 @@ export class BlockchainServiceTon
 
     const compiled = this.walletCore.TransactionCompiler.compileWithSignatures(
       this.coinType,
-      inputData,
+      txInputData,
       allSignatures,
       publicKeys
     );

@@ -130,16 +130,10 @@ export class BlockchainServiceCosmos
   async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload | Uint8Array,
+    txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
-    let inputData: Uint8Array;
-    if (data instanceof Uint8Array) {
-      inputData = data;
-    } else {
-      inputData = await this.getPreSignedInputData(data);
-    }
 
     const addressService = AddressServiceFactory.createAddressService(
       this.chain,
@@ -155,7 +149,7 @@ export class BlockchainServiceCosmos
     try {
       const hashes = walletCore.TransactionCompiler.preImageHashes(
         this.coinType,
-        inputData
+        txInputData
       );
 
       const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
@@ -176,7 +170,7 @@ export class BlockchainServiceCosmos
       const compileWithSignatures =
         walletCore.TransactionCompiler.compileWithSignatures(
           this.coinType,
-          inputData,
+          txInputData,
           allSignatures,
           publicKeys
         );
