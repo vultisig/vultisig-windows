@@ -51,12 +51,12 @@ export const VaultChainPage = () => {
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain);
   const nativeCoin = useCurrentVaultNativeCoin(chain);
   const copyAddress = useCopyAddress();
+  const storageCoinKey = getStorageCoinKey(nativeCoin);
+  const invalidateQueryKey = getBalanceQueryKey(storageCoinKey);
 
   const { mutate: refresh, isPending } = useMutation({
     mutationFn: () => {
-      return invalidateQueries(
-        getBalanceQueryKey(getStorageCoinKey(nativeCoin))
-      );
+      return invalidateQueries(invalidateQueryKey);
     },
   });
 
