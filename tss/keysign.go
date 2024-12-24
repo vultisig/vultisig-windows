@@ -29,13 +29,15 @@ func (t *TssService) Keysign(
 	serverURL,
 	tssType string,
 ) ([]*mtss.KeysignResponse, error) {
-
+	//sort the messages before signing
+	slices.Sort(messages)
 	t.Logger.WithFields(logrus.Fields{
 		"sessionID":        sessionID,
 		"hexEncryptionKey": hexEncryptionKey,
 		"messages":         messages,
 		"localPartyID":     localPartyID,
 	}).Info("KeysignECDSA")
+
 	client := relay.NewClient(serverURL)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
@@ -101,6 +103,7 @@ func (t *TssService) keysignWithRetry(
 	tssType string,
 	derivePath string,
 	sessionID, hexEncryptionKey, serverURL string) (*mtss.KeysignResponse, error) {
+	t.Logger.Infof("signing message: %s", message)
 	messageID := hex.EncodeToString(md5.New().Sum([]byte(message)))
 	msgBuf, err := hex.DecodeString(message)
 	if err != nil {
