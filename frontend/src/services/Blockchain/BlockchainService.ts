@@ -112,7 +112,7 @@ export class BlockchainService implements IBlockchainService {
   getSignedTransaction(
     _vaultHexPublicKey: string,
     _vaultHexChainCode: string,
-    _data: KeysignPayload | Uint8Array,
+    _data: KeysignPayload,
     _signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     throw new Error('Method not implemented.');

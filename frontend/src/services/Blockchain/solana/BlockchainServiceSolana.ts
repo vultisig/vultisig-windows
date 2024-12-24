@@ -1,26 +1,26 @@
-/* eslint-disable */
 import { TW } from '@trustwallet/wallet-core';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { IBlockchainService } from '../IBlockchainService';
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import Long from 'long';
+
+import { storage, tss } from '../../../../wailsjs/go/models';
+import { Keysign } from '../../../../wailsjs/go/tss/TssService';
+import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import { SolanaSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { ChainUtils } from '../../../model/chain';
+import { SpecificSolana } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import { BlockchainService } from '../BlockchainService';
-import { SpecificSolana } from '../../../model/specific-transaction-info';
-import { SignedTransactionResult } from '../signed-transaction-result';
-import { storage, tss } from '../../../../wailsjs/go/models';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
-import SignatureProvider from '../signature-provider';
-import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
-import Long from 'long';
-import { Keysign } from '../../../../wailsjs/go/tss/TssService';
-import { ChainUtils } from '../../../model/chain';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
-import { getCoinType } from '../../../chain/walletCore/getCoinType';
+import { BlockchainService } from '../BlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
+import SignatureProvider from '../signature-provider';
+import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceSolana
   extends BlockchainService
@@ -255,15 +255,10 @@ export class BlockchainServiceSolana
   public async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload | Uint8Array,
+    data: KeysignPayload,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    let inputData: Uint8Array;
-    if (data instanceof Uint8Array) {
-      inputData = data;
-    } else {
-      inputData = await this.getPreSignedInputData(data);
-    }
+    const inputData = await this.getPreSignedInputData(data);
 
     const addressService = AddressServiceFactory.createAddressService(
       this.chain,

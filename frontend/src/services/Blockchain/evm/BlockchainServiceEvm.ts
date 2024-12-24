@@ -111,17 +111,11 @@ export class BlockchainServiceEvm
   public async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload | Uint8Array,
+    data: KeysignPayload,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     try {
-      let inputData: Uint8Array;
-      if (data instanceof Uint8Array) {
-        inputData = data;
-      } else {
-        inputData = await this.getPreSignedInputData(data);
-      }
-
+      const inputData = await this.getPreSignedInputData(data);
       const addressService = AddressServiceFactory.createAddressService(
         this.chain,
         this.walletCore

@@ -14,7 +14,7 @@ export interface IBlockchainService {
   getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload | Uint8Array,
+    data: KeysignPayload,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult>;
 
