@@ -33,9 +33,7 @@ export const getPreSigningHashes = ({
         throw new Error(errorMessage);
       }
 
-      return withoutNullOrUndefined(
-        hashPublicKeys.map(hash => hash?.dataHash)
-      ).sort();
+      return withoutNullOrUndefined(hashPublicKeys.map(hash => hash?.dataHash));
     }
 
     const { errorMessage, dataHash, data } =
@@ -52,10 +50,12 @@ export const getPreSigningHashes = ({
     return [dataHash];
   };
 
-  return getHashes().map(value =>
-    hexEncode({
-      value,
-      walletCore,
-    })
-  );
+  return getHashes()
+    .map(value =>
+      hexEncode({
+        value,
+        walletCore,
+      })
+    )
+    .sort();
 };

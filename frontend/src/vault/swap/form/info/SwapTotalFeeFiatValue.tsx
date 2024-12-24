@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount';
@@ -11,6 +11,7 @@ import {
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { ComponentWithValueProps } from '../../../../lib/ui/props';
 import { MatchEagerQuery } from '../../../../lib/ui/query/components/MatchEagerQuery';
+import { useTransformQueryData } from '../../../../lib/ui/query/hooks/useTransformQueryData';
 import { sum } from '../../../../lib/utils/array/sum';
 import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
 import { EntityWithAmount } from '../../../../lib/utils/entities/EntityWithAmount';
@@ -41,16 +42,12 @@ export const SwapTotalFeeFiatValue = ({
 
   const { t } = useTranslation();
 
-  const pricesQuery = useCoinPricesQuery(coins);
-
   const formatAmount = useFormatFiatAmount();
 
-  return (
-    <MatchEagerQuery
-      value={pricesQuery}
-      pending={() => <Spinner />}
-      error={() => null}
-      success={prices => {
+  const pricesQuery = useTransformQueryData(
+    useCoinPricesQuery(coins),
+    useCallback(
+      prices => {
         if (prices.length !== value.length) {
           return t('failed_to_load');
         }
@@ -66,7 +63,17 @@ export const SwapTotalFeeFiatValue = ({
         );
 
         return formatAmount(total);
-      }}
+      },
+      [formatAmount, t, value]
+    )
+  );
+
+  return (
+    <MatchEagerQuery
+      value={pricesQuery}
+      pending={() => <Spinner />}
+      error={() => null}
+      success={value => value}
     />
   );
 };
