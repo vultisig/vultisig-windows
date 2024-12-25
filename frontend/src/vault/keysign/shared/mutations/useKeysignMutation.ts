@@ -41,6 +41,8 @@ export const useKeysignMutation = () => {
         })
       );
 
+      const msgs = groupedMsgs.flat();
+
       const blockchainService = BlockchainServiceFactory.createService(
         chain as Chain,
         walletCore
@@ -50,11 +52,9 @@ export const useKeysignMutation = () => {
 
       const coinType = getCoinType({ walletCore, chain });
 
-      const msgs = groupedMsgs.flat();
-
       const signatures = await Keysign(
         vault,
-        groupedMsgs.flat(),
+        msgs,
         vault.local_party_id,
         walletCore.CoinTypeExt.derivationPath(coinType),
         sessionId,
