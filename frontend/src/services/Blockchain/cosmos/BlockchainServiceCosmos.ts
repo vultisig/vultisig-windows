@@ -11,6 +11,8 @@ import Long from 'long';
 import { tss } from '../../../../wailsjs/go/models';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
+import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import {
   CosmosSpecific,
   TransactionType,
@@ -20,7 +22,6 @@ import { ISendTransaction, ITransaction } from '../../../model/transaction';
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { BlockchainService } from '../BlockchainService';
-import SignatureProvider from '../signature-provider';
 
 export class BlockchainServiceCosmos
   extends BlockchainService
@@ -156,8 +157,10 @@ export class BlockchainServiceCosmos
     const allSignatures = walletCore.DataVector.create();
     const publicKeys = walletCore.DataVector.create();
 
-    const signatureProvider = new SignatureProvider(walletCore, signatures);
-    const signature = signatureProvider.getSignatureWithRecoveryId(dataHash);
+    const signature = generateSignatureWithRecoveryId({
+      walletCore,
+      signature: signatures[hexEncode({ value: dataHash, walletCore })],
+    });
 
     assertSignature({
       publicKey,

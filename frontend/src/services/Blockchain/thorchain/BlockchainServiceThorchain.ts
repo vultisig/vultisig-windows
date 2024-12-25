@@ -13,6 +13,8 @@ import Long from 'long';
 
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
+import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -23,7 +25,6 @@ import {
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import { RpcServiceThorchain } from '../../Rpc/thorchain/RpcServiceThorchain';
 import { BlockchainService } from '../BlockchainService';
-import SignatureProvider from '../signature-provider';
 
 export class BlockchainServiceThorchain
   extends BlockchainService
@@ -218,8 +219,14 @@ export class BlockchainServiceThorchain
       });
       const allSignatures = walletCore.DataVector.create();
       const publicKeys = walletCore.DataVector.create();
-      const signatureProvider = new SignatureProvider(walletCore, signatures);
-      const signature = signatureProvider.getSignatureWithRecoveryId(dataHash);
+
+      const signature = generateSignatureWithRecoveryId({
+        walletCore: this.walletCore,
+        signature:
+          signatures[
+            hexEncode({ value: dataHash, walletCore: this.walletCore })
+          ],
+      });
 
       assertSignature({
         publicKey,

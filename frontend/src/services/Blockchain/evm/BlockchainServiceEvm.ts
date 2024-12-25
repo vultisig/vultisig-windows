@@ -7,7 +7,9 @@ import { toEthereumSpecific } from '../../../chain/evm/tx/toEthereumSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
+import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
@@ -19,7 +21,6 @@ import {
 import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
-import SignatureProvider from '../signature-provider';
 import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceEvm
@@ -136,10 +137,6 @@ export class BlockchainServiceEvm
     const publicKeys = this.walletCore.DataVector.create();
 
     const allSignatures = this.walletCore.DataVector.create();
-    const signatureProvider = new SignatureProvider(
-      this.walletCore,
-      signatures
-    );
 
     const [dataHash] = getPreSigningHashes({
       walletCore: this.walletCore,
@@ -147,7 +144,11 @@ export class BlockchainServiceEvm
       txInputData,
     });
 
-    const signature = signatureProvider.getSignatureWithRecoveryId(dataHash);
+    const signature = generateSignatureWithRecoveryId({
+      walletCore: this.walletCore,
+      signature:
+        signatures[hexEncode({ value: dataHash, walletCore: this.walletCore })],
+    });
 
     assertSignature({
       publicKey,
