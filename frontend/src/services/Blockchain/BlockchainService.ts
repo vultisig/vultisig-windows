@@ -1,21 +1,22 @@
-/* eslint-disable */
 import { WalletCore } from '@trustwallet/wallet-core';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+
 import { storage, tss } from '../../../wailsjs/go/models';
+import { Keysign } from '../../../wailsjs/go/tss/TssService';
+import { getCoinType } from '../../chain/walletCore/getCoinType';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { Chain, ChainUtils } from '../../model/chain';
+import { Chain } from '../../model/chain';
 import {
   ISendTransaction,
   ISwapTransaction,
   ITransaction,
 } from '../../model/transaction';
+import { getTssKeysignType } from '../../vault/keysign/utils/getTssKeysignType';
 import { AddressServiceFactory } from '../Address/AddressServiceFactory';
 import { IAddressService } from '../Address/IAddressService';
+import { RpcServiceFactory } from '../Rpc/RpcServiceFactory';
 import { IBlockchainService } from './IBlockchainService';
 import { SignedTransactionResult } from './signed-transaction-result';
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
-import { Keysign } from '../../../wailsjs/go/tss/TssService';
-import { RpcServiceFactory } from '../Rpc/RpcServiceFactory';
-import { getCoinType } from '../../chain/walletCore/getCoinType';
 
 export class BlockchainService implements IBlockchainService {
   chain: Chain;
@@ -43,7 +44,7 @@ export class BlockchainService implements IBlockchainService {
   ): Promise<string> {
     const rpcService = RpcServiceFactory.createRpcService(this.chain);
 
-    const tssType = ChainUtils.getTssKeysignType(this.chain);
+    const tssType = getTssKeysignType(this.chain);
 
     const keysignGoLang = await Keysign(
       vault,

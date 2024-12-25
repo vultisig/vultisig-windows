@@ -24,6 +24,7 @@ import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId'
 import { useCurrentServerUrl } from '../../keygen/state/currentServerUrl';
 import { useCurrentHexEncryptionKey } from '../../setup/state/currentHexEncryptionKey';
 import { useCurrentVault } from '../../state/currentVault';
+import { getTxInputData } from '../utils/getTxInputData';
 import { KeysignSigningState } from './KeysignSigningState';
 import { KeysignSummaryStep } from './KeysignSummaryStep';
 import { useCurrentKeysignMsgs } from './state/currentKeysignMsgs';
@@ -44,13 +45,16 @@ export const KeysignSigningStep = ({
   const { mutate: startKeysign, ...mutationStatus } = useMutation({
     mutationFn: async () => {
       const { chain } = shouldBePresent(payload.coin);
+
+      const [txInputData] = await getTxInputData({
+        keysignPayload: payload,
+        walletCore,
+      });
+
       const blockchainService = BlockchainServiceFactory.createService(
         chain as Chain,
         walletCore
       );
-
-      const txInputData =
-        await blockchainService.getPreSignedInputData(payload);
 
       return blockchainService.signAndBroadcastTransaction(
         vault,

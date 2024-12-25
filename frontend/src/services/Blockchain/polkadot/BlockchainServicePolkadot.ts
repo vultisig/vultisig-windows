@@ -3,7 +3,7 @@ import { TW } from '@trustwallet/wallet-core';
 import { storage, tss } from '../../../../wailsjs/go/models';
 import { PolkadotSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { Chain, ChainUtils } from '../../../model/chain';
+import { Chain } from '../../../model/chain';
 import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import TxCompiler = TW.TxCompiler;
@@ -19,6 +19,7 @@ import {
   ISwapTransaction,
   ITransaction,
 } from '../../../model/transaction';
+import { getTssKeysignType } from '../../../vault/keysign/utils/getTssKeysignType';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { BlockchainService } from '../BlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -212,7 +213,7 @@ export class BlockchainServicePolkadot
     try {
       const rpcService = RpcServiceFactory.createRpcService(this.chain);
 
-      const tssType = ChainUtils.getTssKeysignType(this.chain);
+      const tssType = getTssKeysignType(this.chain);
 
       const coinType = getCoinType({
         walletCore: this.walletCore,

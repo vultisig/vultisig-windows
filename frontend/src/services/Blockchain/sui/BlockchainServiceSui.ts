@@ -9,7 +9,7 @@ import {
   SuiSpecific,
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { Chain, ChainUtils } from '../../../model/chain';
+import { Chain } from '../../../model/chain';
 import { SpecificSui } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -17,6 +17,7 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
+import { getTssKeysignType } from '../../../vault/keysign/utils/getTssKeysignType';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
@@ -38,7 +39,7 @@ export class BlockchainServiceSui
     try {
       const rpcService = RpcServiceFactory.createRpcService(this.chain);
 
-      const tssType = ChainUtils.getTssKeysignType(this.chain);
+      const tssType = getTssKeysignType(this.chain);
 
       const coinType = getCoinType({
         walletCore: this.walletCore,

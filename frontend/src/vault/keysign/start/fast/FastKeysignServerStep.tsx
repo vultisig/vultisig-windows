@@ -6,7 +6,7 @@ import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
-import { Chain, ChainUtils, TssKeysignType } from '../../../../model/chain';
+import { Chain, TssKeysignType } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
 import { FullPageFlowErrorState } from '../../../../ui/flow/FullPageFlowErrorState';
 import { PageHeader } from '../../../../ui/page/PageHeader';
@@ -20,6 +20,7 @@ import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncry
 import { useCurrentVault } from '../../../state/currentVault';
 import { useCurrentKeysignMsgs } from '../../shared/state/currentKeysignMsgs';
 import { useKeysignPayload } from '../../shared/state/keysignPayload';
+import { getTssKeysignType } from '../../utils/getTssKeysignType';
 
 export const FastKeysignServerStep: React.FC<
   ComponentWithForwardActionProps
@@ -53,7 +54,7 @@ export const FastKeysignServerStep: React.FC<
         derive_path: walletCore.CoinTypeExt.derivationPath(
           getCoinType({ walletCore, chain })
         ),
-        is_ecdsa: ChainUtils.getTssKeysignType(chain) === TssKeysignType.ECDSA,
+        is_ecdsa: getTssKeysignType(chain) === TssKeysignType.ECDSA,
         vault_password: password,
       });
     },
