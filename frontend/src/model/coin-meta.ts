@@ -1,6 +1,6 @@
-/* eslint-disable */
 import { Coin } from '../gen/vultisig/keysign/v1/coin_pb';
-import { Chain, ChainUtils } from './chain';
+import { isOneOf } from '../lib/utils/array/isOneOf';
+import { Chain } from './chain';
 
 export type CoinMeta = {
   chain: Chain;
@@ -18,7 +18,7 @@ export namespace CoinMeta {
       throw new Error('Coin is undefined');
     }
 
-    const chain = ChainUtils.stringToChain(coin.chain);
+    const chain = isOneOf(coin.chain, Object.values(Chain));
     if (!chain) {
       throw new Error('Chain is undefined');
     }

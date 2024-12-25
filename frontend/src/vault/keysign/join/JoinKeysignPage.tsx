@@ -10,8 +10,8 @@ import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEnc
 import { useCurrentVault } from '../../state/currentVault';
 import { KeysignSigningStep } from '../shared/KeysignSigningStep';
 import { KeysignPayloadProvider } from '../shared/state/keysignPayload';
-import { KeysignMsgsGuard } from './KeysignMsgsGuard';
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider';
+import { KeysignTxInputDataGuard } from './KeysignTxInputDataGuard';
 import { KeysignVaultGuard } from './KeysignVaultGuard';
 import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep';
 
@@ -33,7 +33,7 @@ export const JoinKeysignPage = () => {
     <CurrentLocalPartyIdProvider value={local_party_id}>
       <KeysignVaultGuard>
         <KeysignPayloadProvider value={shouldBePresent(keysignPayload)}>
-          <KeysignMsgsGuard>
+          <KeysignTxInputDataGuard>
             <KeysignServerUrlProvider>
               <CurrentSessionIdProvider value={sessionId}>
                 <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
@@ -55,7 +55,7 @@ export const JoinKeysignPage = () => {
                 </CurrentHexEncryptionKeyProvider>
               </CurrentSessionIdProvider>
             </KeysignServerUrlProvider>
-          </KeysignMsgsGuard>
+          </KeysignTxInputDataGuard>
         </KeysignPayloadProvider>
       </KeysignVaultGuard>
     </CurrentLocalPartyIdProvider>

@@ -4,8 +4,6 @@ WARNING: Never change the string of the enum values. It must match with IOS/Andr
 
 */
 
-import { isOneOf } from '../lib/utils/array/isOneOf';
-
 export enum EvmChain {
   Arbitrum = 'Arbitrum',
   Avalanche = 'Avalanche',
@@ -130,26 +128,9 @@ export const chainKindRecord: Record<Chain, ChainKind> = {
   [OtherChain.Ripple]: 'ripple',
 };
 
-export class ChainUtils {
-  static stringToChain(chain: string): Chain | undefined {
-    return isOneOf(chain, Object.values(Chain));
-  }
-  static stringToTssAction(action: string): TssAction | undefined {
-    return isOneOf(action, Object.values(TssAction));
-  }
-
-  static getTssKeysignType(chain: Chain): TssKeysignType {
-    switch (chain) {
-      case Chain.Solana:
-        return TssKeysignType.EdDSA;
-      case Chain.Polkadot:
-        return TssKeysignType.EdDSA;
-      case Chain.Sui:
-        return TssKeysignType.EdDSA;
-      case Chain.Ton:
-        return TssKeysignType.EdDSA;
-      default:
-        return TssKeysignType.ECDSA;
-    }
-  }
-}
+export const edDsaChains = [
+  Chain.Solana,
+  Chain.Polkadot,
+  Chain.Sui,
+  Chain.Ton,
+] as const;

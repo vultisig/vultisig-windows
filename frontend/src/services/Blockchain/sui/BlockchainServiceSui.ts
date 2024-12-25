@@ -1,15 +1,13 @@
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { storage, tss } from '../../../../wailsjs/go/models';
-import { Keysign } from '../../../../wailsjs/go/tss/TssService';
-import { getCoinType } from '../../../chain/walletCore/getCoinType';
+import { tss } from '../../../../wailsjs/go/models';
 import {
   SuiCoin,
   SuiSpecific,
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { Chain, ChainUtils } from '../../../model/chain';
+import { Chain } from '../../../model/chain';
 import { SpecificSui } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -17,7 +15,6 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -27,66 +24,6 @@ export class BlockchainServiceSui
   extends BlockchainService
   implements IBlockchainService
 {
-  async signAndBroadcastTransaction(
-    vault: storage.Vault,
-    messages: string[],
-    sessionID: string,
-    hexEncryptionKey: string,
-    serverURL: string,
-    txInputData: Uint8Array
-  ): Promise<string> {
-    try {
-      const rpcService = RpcServiceFactory.createRpcService(this.chain);
-
-      const tssType = ChainUtils.getTssKeysignType(this.chain);
-
-      const coinType = getCoinType({
-        walletCore: this.walletCore,
-        chain: this.chain,
-      });
-
-      const keysignGoLang = await Keysign(
-        vault,
-        messages,
-        vault.local_party_id,
-        this.walletCore.CoinTypeExt.derivationPath(coinType),
-        sessionID,
-        hexEncryptionKey,
-        serverURL,
-        tssType.toString().toLowerCase()
-      );
-
-      const signatures: { [key: string]: tss.KeysignResponse } = {};
-      messages.forEach((msg, idx) => {
-        signatures[msg] = keysignGoLang[idx];
-      });
-
-      const signedTx = await this.getSignedTransaction(
-        vault.public_key_eddsa,
-        vault.hex_chain_code,
-        txInputData,
-        signatures
-      );
-
-      if (!signedTx) {
-        console.error("Couldn't sign transaction");
-        return "Couldn't sign transaction";
-      }
-
-      const txBroadcastedHash = await rpcService.broadcastTransaction(
-        JSON.stringify({
-          unsignedTransaction: signedTx.rawTransaction,
-          signature: signedTx.signature,
-        })
-      );
-
-      return txBroadcastedHash;
-    } catch (e: any) {
-      console.error(e);
-      return e.message;
-    }
-  }
-
   createKeysignPayload(
     obj: ITransaction | ISendTransaction | ISwapTransaction,
     localPartyId: string,

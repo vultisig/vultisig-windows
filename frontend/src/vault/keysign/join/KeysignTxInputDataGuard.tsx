@@ -9,13 +9,15 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
-import { CurrentKeysignMsgsProvider } from '../shared/state/currentKeysignMsgs';
-import { useKeysignMsgsQuery } from './queries/useKeysignMsgsQuery';
+import { KeysignTxInputDataProvider } from '../shared/state/keysignTxInputData';
+import { useKeysignTxInputDataQuery } from './queries/useKeysignTxInputDataQuery';
 
-export const KeysignMsgsGuard = ({ children }: ComponentWithChildrenProps) => {
+export const KeysignTxInputDataGuard = ({
+  children,
+}: ComponentWithChildrenProps) => {
   const { t } = useTranslation();
 
-  const query = useKeysignMsgsQuery();
+  const query = useKeysignTxInputDataQuery();
 
   return (
     <MatchQuery
@@ -39,9 +41,9 @@ export const KeysignMsgsGuard = ({ children }: ComponentWithChildrenProps) => {
         </>
       )}
       success={value => (
-        <CurrentKeysignMsgsProvider value={value}>
+        <KeysignTxInputDataProvider value={value}>
           {children}
-        </CurrentKeysignMsgsProvider>
+        </KeysignTxInputDataProvider>
       )}
     />
   );

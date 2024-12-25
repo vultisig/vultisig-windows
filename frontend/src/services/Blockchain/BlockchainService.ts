@@ -1,8 +1,10 @@
-/* eslint-disable */
 import { WalletCore } from '@trustwallet/wallet-core';
-import { storage, tss } from '../../../wailsjs/go/models';
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+
+import { tss } from '../../../wailsjs/go/models';
+import { getCoinType } from '../../chain/walletCore/getCoinType';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { Chain, ChainUtils } from '../../model/chain';
+import { Chain } from '../../model/chain';
 import {
   ISendTransaction,
   ISwapTransaction,
@@ -12,10 +14,6 @@ import { AddressServiceFactory } from '../Address/AddressServiceFactory';
 import { IAddressService } from '../Address/IAddressService';
 import { IBlockchainService } from './IBlockchainService';
 import { SignedTransactionResult } from './signed-transaction-result';
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core';
-import { Keysign } from '../../../wailsjs/go/tss/TssService';
-import { RpcServiceFactory } from '../Rpc/RpcServiceFactory';
-import { getCoinType } from '../../chain/walletCore/getCoinType';
 
 export class BlockchainService implements IBlockchainService {
   chain: Chain;
@@ -31,61 +29,6 @@ export class BlockchainService implements IBlockchainService {
       this.chain,
       walletCore
     );
-  }
-
-  async signAndBroadcastTransaction(
-    vault: storage.Vault,
-    messages: string[],
-    sessionID: string,
-    hexEncryptionKey: string,
-    serverURL: string,
-    txInputData: Uint8Array
-  ): Promise<string> {
-    const rpcService = RpcServiceFactory.createRpcService(this.chain);
-
-    const tssType = ChainUtils.getTssKeysignType(this.chain);
-
-    const keysignGoLang = await Keysign(
-      vault,
-      messages,
-      vault.local_party_id,
-      this.walletCore.CoinTypeExt.derivationPath(this.coinType),
-      sessionID,
-      hexEncryptionKey,
-      serverURL,
-      tssType.toString().toLowerCase()
-    );
-
-    const signatures: { [key: string]: tss.KeysignResponse } = {};
-    messages.forEach((msg, idx) => {
-      signatures[msg] = keysignGoLang[idx];
-    });
-
-    const signedTx = await this.getSignedTransaction(
-      vault.public_key_ecdsa,
-      vault.hex_chain_code,
-      txInputData,
-      signatures
-    );
-
-    if (!signedTx) {
-      console.error("Couldn't sign transaction");
-      return "Couldn't sign transaction";
-    }
-
-    let txBroadcastedHash = await rpcService.broadcastTransaction(
-      signedTx.rawTransaction
-    );
-
-    if (
-      txBroadcastedHash.toLowerCase() !==
-        signedTx.transactionHash.toLowerCase() &&
-      txBroadcastedHash === 'Transaction already broadcasted.'
-    ) {
-      txBroadcastedHash = signedTx.transactionHash;
-    }
-
-    return txBroadcastedHash;
   }
 
   createKeysignPayload(

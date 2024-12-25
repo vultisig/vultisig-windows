@@ -1,4 +1,4 @@
-import { storage, tss } from '../../../wailsjs/go/models';
+import { tss } from '../../../wailsjs/go/models';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import {
   IDepositTransactionVariant,
@@ -27,15 +27,6 @@ export interface IBlockchainService {
     localPartyId: string,
     publicKeyEcdsa: string
   ): KeysignPayload;
-
-  signAndBroadcastTransaction(
-    vault: storage.Vault,
-    messages: string[],
-    sessionID: string,
-    hexEncryptionKey: string,
-    serverURL: string,
-    txInputData: Uint8Array
-  ): Promise<string>;
 }
 
 export interface IBlockchainServiceThorchain {

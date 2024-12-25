@@ -13,8 +13,9 @@ import { gwei } from '../../../chain/tx/fee/utils/evm';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
-import { ChainUtils, EvmChain, evmChainIds } from '../../../model/chain';
+import { Chain, EvmChain, evmChainIds } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
@@ -340,7 +341,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
   async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
     try {
-      const chain = ChainUtils.stringToChain(nativeToken.chain);
+      const chain = isOneOf(nativeToken.chain, Object.values(Chain));
 
       if (!chain) {
         throw new Error('Invalid chain');
