@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
@@ -18,8 +19,8 @@ import { WaitForServerLoader } from '../../../server/components/WaitForServerLoa
 import { useVaultPassword } from '../../../server/password/state/password';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { useCurrentVault } from '../../../state/currentVault';
-import { useCurrentKeysignMsgs } from '../../shared/state/currentKeysignMsgs';
 import { useKeysignPayload } from '../../shared/state/keysignPayload';
+import { useKeysignTxInputData } from '../../shared/state/keysignTxInputData';
 import { getTssKeysignType } from '../../utils/getTssKeysignType';
 
 export const FastKeysignServerStep: React.FC<
@@ -40,11 +41,19 @@ export const FastKeysignServerStep: React.FC<
 
   const [password] = useVaultPassword();
 
-  const messages = useCurrentKeysignMsgs();
+  const inputs = useKeysignTxInputData();
 
   const { mutate, ...state } = useMutation({
     mutationFn: () => {
       const chain = coin.chain as Chain;
+
+      const messages = inputs.flatMap(txInputData =>
+        getPreSigningHashes({
+          txInputData,
+          walletCore,
+          chain,
+        })
+      );
 
       return signWithServer({
         public_key: public_key_ecdsa,

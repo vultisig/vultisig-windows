@@ -16,7 +16,7 @@ import { PasswordProvider } from '../../../server/password/state/password';
 import { GeneratedHexEncryptionKeyProvider } from '../../../setup/state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../../../setup/state/serverUrlDerivedFromServerType';
 import { useCurrentVault } from '../../../state/currentVault';
-import { KeysignMsgsGuard } from '../../join/KeysignMsgsGuard';
+import { KeysignTxInputDataGuard } from '../../join/KeysignTxInputDataGuard';
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep';
 import { KeysignPayloadProvider } from '../../shared/state/keysignPayload';
 import { PeersSelectionRecordProvider } from '../../shared/state/selectedPeers';
@@ -46,7 +46,7 @@ export const StartFastKeysignPage = () => {
     <PasswordProvider initialValue="">
       <CurrentLocalPartyIdProvider value={local_party_id}>
         <KeysignPayloadProvider value={keysignPayload}>
-          <KeysignMsgsGuard>
+          <KeysignTxInputDataGuard>
             <GeneratedServiceNameProvider>
               <PeersSelectionRecordProvider initialValue={{}}>
                 <GeneratedSessionIdProvider>
@@ -79,7 +79,7 @@ export const StartFastKeysignPage = () => {
                 </GeneratedSessionIdProvider>
               </PeersSelectionRecordProvider>
             </GeneratedServiceNameProvider>
-          </KeysignMsgsGuard>
+          </KeysignTxInputDataGuard>
         </KeysignPayloadProvider>
       </CurrentLocalPartyIdProvider>
     </PasswordProvider>
