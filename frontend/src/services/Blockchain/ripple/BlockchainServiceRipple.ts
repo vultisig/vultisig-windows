@@ -1,8 +1,12 @@
 import { TW } from '@trustwallet/wallet-core';
+import Long from 'long';
 
+import { tss } from '../../../../wailsjs/go/models';
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { Chain } from '../../../model/chain';
 import { SpecificRipple } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -10,14 +14,9 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
+import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
-import TxCompiler = TW.TxCompiler;
-import Long from 'long';
-
-import { tss } from '../../../../wailsjs/go/models';
-import { Chain } from '../../../model/chain';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import SignatureProvider from '../signature-provider';
 import { SignedTransactionResult } from '../signed-transaction-result';
 
@@ -178,27 +177,19 @@ export class BlockchainServiceRipple
     const publicKeyData = publicKey.data();
 
     try {
-      const hashes = walletCore.TransactionCompiler.preImageHashes(
-        this.coinType,
-        txInputData
-      );
-
-      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
-
-      if (preSigningOutput.errorMessage !== '') {
-        console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-        throw new Error(preSigningOutput.errorMessage);
-      }
-
       const allSignatures = walletCore.DataVector.create();
       const publicKeys = walletCore.DataVector.create();
 
-      const signatureProvider = new SignatureProvider(walletCore, signatures);
-      const signature = signatureProvider.getDerSignature(
-        preSigningOutput.dataHash
-      );
+      const [dataHash] = getPreSigningHashes({
+        walletCore,
+        txInputData,
+        chain: this.chain,
+      });
 
-      if (!publicKey.verifyAsDER(signature, preSigningOutput.dataHash)) {
+      const signatureProvider = new SignatureProvider(walletCore, signatures);
+      const signature = signatureProvider.getDerSignature(dataHash);
+
+      if (!publicKey.verifyAsDER(signature, dataHash)) {
         console.error('fail to verify signature');
         throw new Error('fail to verify signature');
       }
@@ -214,20 +205,16 @@ export class BlockchainServiceRipple
           publicKeys
         );
 
-      const output = TW.Ripple.Proto.SigningOutput.decode(
+      const { encoded, errorMessage } = TW.Ripple.Proto.SigningOutput.decode(
         compileWithSignatures
       );
 
-      if (output.errorMessage !== '') {
-        console.error(
-          'TW.Ripple.Proto.SigningOutput.decode error:',
-          preSigningOutput.errorMessage
-        );
-        throw new Error(preSigningOutput.errorMessage);
+      if (errorMessage) {
+        throw new Error(errorMessage);
       }
 
       const result = new SignedTransactionResult(
-        stripHexPrefix(this.walletCore.HexCoding.encode(output.encoded)),
+        stripHexPrefix(this.walletCore.HexCoding.encode(encoded)),
         '',
         undefined
       );

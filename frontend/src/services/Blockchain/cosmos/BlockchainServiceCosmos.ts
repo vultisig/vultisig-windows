@@ -5,11 +5,11 @@ import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
-import TxCompiler = TW.TxCompiler;
 import { createHash } from 'crypto';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import {
   CosmosSpecific,
   TransactionType,
@@ -147,21 +147,19 @@ export class BlockchainServiceCosmos
     const publicKeyData = publicKey.data();
 
     try {
-      const hashes = walletCore.TransactionCompiler.preImageHashes(
-        this.coinType,
-        txInputData
-      );
+      const [dataHash] = getPreSigningHashes({
+        walletCore,
+        txInputData,
+        chain: this.chain,
+      });
 
-      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
       const allSignatures = walletCore.DataVector.create();
       const publicKeys = walletCore.DataVector.create();
 
       const signatureProvider = new SignatureProvider(walletCore, signatures);
-      const signature = signatureProvider.getSignatureWithRecoveryId(
-        preSigningOutput.dataHash
-      );
+      const signature = signatureProvider.getSignatureWithRecoveryId(dataHash);
 
-      if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
+      if (!publicKey.verify(signature, dataHash)) {
         throw new Error('Invalid signature');
       }
       allSignatures.add(signature);

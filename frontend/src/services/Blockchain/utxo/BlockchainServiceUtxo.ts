@@ -2,6 +2,7 @@ import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -108,36 +109,29 @@ export class BlockchainServiceUtxo
       publicKeyData,
       this.walletCore.PublicKeyType.secp256k1
     );
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType,
-      txInputData
-    );
-    const preSignOutputs = TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
     const signatureProvider = new SignatureProvider(
       this.walletCore,
       signatures
     );
-    for (const hash of preSignOutputs.hashPublicKeys) {
-      if (
-        hash === undefined ||
-        hash.dataHash === undefined ||
-        hash.dataHash === null
-      ) {
-        continue;
-      }
-      const preImageHash = hash.dataHash;
-      const signature = signatureProvider.getDerSignature(preImageHash);
+    const hashes = getPreSigningHashes({
+      walletCore: this.walletCore,
+      txInputData,
+      chain: this.chain,
+    });
+    hashes.forEach(hash => {
+      const signature = signatureProvider.getDerSignature(hash);
       if (signature === undefined) {
-        continue;
+        return;
       }
-      if (!publicKey.verifyAsDER(signature, preImageHash)) {
+      if (!publicKey.verifyAsDER(signature, hash)) {
         throw new Error('fail to verify signature');
       }
       allSignatures.add(signature);
       publicKeys.add(publicKeyData);
-    }
+    });
+
     const compileWithSignatures =
       this.walletCore.TransactionCompiler.compileWithSignatures(
         this.coinType,

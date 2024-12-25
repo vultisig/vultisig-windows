@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
+import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
@@ -52,7 +53,12 @@ export const FastKeysignServerStep: React.FC<
           txInputData,
           walletCore,
           chain,
-        })
+        }).map(value =>
+          hexEncode({
+            value,
+            walletCore,
+          })
+        )
       );
 
       return signWithServer({

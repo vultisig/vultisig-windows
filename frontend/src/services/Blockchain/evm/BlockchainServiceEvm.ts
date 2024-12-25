@@ -4,6 +4,7 @@ import { keccak256 } from 'js-sha3';
 import { tss } from '../../../../wailsjs/go/models';
 import { getSigningInputEnvelopedTxFields } from '../../../chain/evm/tx/getSigningInputEnvelopedTxFields';
 import { toEthereumSpecific } from '../../../chain/evm/tx/toEthereumSpecific';
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
@@ -131,18 +132,7 @@ export class BlockchainServiceEvm
       this.walletCore.PublicKeyType.secp256k1
     );
 
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType,
-      txInputData
-    );
-
     const publicKeys = this.walletCore.DataVector.create();
-    const preSigningOutput: TW.TxCompiler.Proto.PreSigningOutput =
-      TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
-
-    if (preSigningOutput.errorMessage !== '') {
-      throw new Error(preSigningOutput.errorMessage);
-    }
 
     const allSignatures = this.walletCore.DataVector.create();
     const signatureProvider = new SignatureProvider(
@@ -150,11 +140,15 @@ export class BlockchainServiceEvm
       signatures
     );
 
-    const signature = signatureProvider.getSignatureWithRecoveryId(
-      preSigningOutput.dataHash
-    );
+    const [dataHash] = getPreSigningHashes({
+      walletCore: this.walletCore,
+      chain: this.chain,
+      txInputData,
+    });
 
-    if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
+    const signature = signatureProvider.getSignatureWithRecoveryId(dataHash);
+
+    if (!publicKey.verify(signature, dataHash)) {
       console.error('Failed to verify signature');
       throw new Error('Failed to verify signature');
     }

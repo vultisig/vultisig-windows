@@ -8,10 +8,10 @@ import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
-import TxCompiler = TW.TxCompiler;
 import { createHash } from 'crypto';
 import Long from 'long';
 
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -210,18 +210,16 @@ export class BlockchainServiceThorchain
       walletCore.PublicKeyType.secp256k1
     );
     try {
-      const hashes = walletCore.TransactionCompiler.preImageHashes(
-        coinType,
-        txInputData
-      );
-      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
+      const [dataHash] = getPreSigningHashes({
+        walletCore: walletCore,
+        txInputData,
+        chain: Chain.THORChain,
+      });
       const allSignatures = walletCore.DataVector.create();
       const publicKeys = walletCore.DataVector.create();
       const signatureProvider = new SignatureProvider(walletCore, signatures);
-      const signature = signatureProvider.getSignatureWithRecoveryId(
-        preSigningOutput.dataHash
-      );
-      if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
+      const signature = signatureProvider.getSignatureWithRecoveryId(dataHash);
+      if (!publicKey.verify(signature, dataHash)) {
         throw new Error('Invalid signature');
       }
       allSignatures.add(signature);

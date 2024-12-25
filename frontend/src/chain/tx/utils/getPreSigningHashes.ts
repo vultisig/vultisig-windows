@@ -3,7 +3,6 @@ import { TW, WalletCore } from '@trustwallet/wallet-core';
 import { withoutNullOrUndefined } from '../../../lib/utils/array/withoutNullOrUndefined';
 import { Chain, UtxoChain } from '../../../model/chain';
 import { getCoinType } from '../../walletCore/getCoinType';
-import { hexEncode } from '../../walletCore/hexEncode';
 
 type Input = {
   walletCore: WalletCore;
@@ -50,10 +49,5 @@ export const getPreSigningHashes = ({
     return [dataHash];
   };
 
-  return getHashes().map(value =>
-    hexEncode({
-      value,
-      walletCore,
-    })
-  );
+  return getHashes();
 };

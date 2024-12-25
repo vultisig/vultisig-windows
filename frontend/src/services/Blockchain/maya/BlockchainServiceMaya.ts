@@ -1,5 +1,5 @@
-/* eslint-disable */
 import { TW } from '@trustwallet/wallet-core';
+
 import { tss } from '../../../../wailsjs/go/models';
 import { MAYAChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -8,11 +8,10 @@ import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
-import TxCompiler = TW.TxCompiler;
-import SignatureProvider from '../signature-provider';
 import { createHash } from 'crypto';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
-import { BlockchainService } from '../BlockchainService';
+import Long from 'long';
+
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -20,7 +19,9 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import Long from 'long';
+import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { BlockchainService } from '../BlockchainService';
+import SignatureProvider from '../signature-provider';
 
 export class BlockchainServiceMaya
   extends BlockchainService
@@ -194,18 +195,16 @@ export class BlockchainServiceMaya
     const publicKeyData = publicKey.data();
 
     try {
-      const hashes = walletCore.TransactionCompiler.preImageHashes(
-        coinType,
-        txInputData
-      );
-      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
       const allSignatures = walletCore.DataVector.create();
       const publicKeys = walletCore.DataVector.create();
       const signatureProvider = new SignatureProvider(walletCore, signatures);
-      const signature = signatureProvider.getSignatureWithRecoveryId(
-        preSigningOutput.dataHash
-      );
-      if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
+      const [dataHash] = getPreSigningHashes({
+        walletCore,
+        chain: Chain.MayaChain,
+        txInputData,
+      });
+      const signature = signatureProvider.getSignatureWithRecoveryId(dataHash);
+      if (!publicKey.verify(signature, dataHash)) {
         throw new Error('Invalid signature');
       }
       allSignatures.add(signature);

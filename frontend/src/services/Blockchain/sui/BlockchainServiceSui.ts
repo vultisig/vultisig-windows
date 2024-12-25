@@ -2,6 +2,7 @@ import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import {
   SuiCoin,
   SuiSpecific,
@@ -117,18 +118,6 @@ export class BlockchainServiceSui
     );
     const publicKeyData = publicKey.data();
 
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType,
-      txInputData
-    );
-
-    const preSigningOutput =
-      TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
-    if (preSigningOutput.errorMessage !== '') {
-      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      throw new Error(preSigningOutput.errorMessage);
-    }
-
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
     const signatureProvider = new SignatureProvider(
@@ -136,11 +125,15 @@ export class BlockchainServiceSui
       signatures
     );
 
-    const blakeHash = this.walletCore.Hash.blake2b(preSigningOutput.data, 32);
+    const [dataHash] = getPreSigningHashes({
+      walletCore: this.walletCore,
+      txInputData,
+      chain: this.chain,
+    });
 
-    const signature = signatureProvider.getSignature(blakeHash);
+    const signature = signatureProvider.getSignature(dataHash);
 
-    if (!publicKey.verify(signature, blakeHash)) {
+    if (!publicKey.verify(signature, dataHash)) {
       console.error('Failed to verify signature');
       throw new Error('Failed to verify signature');
     }

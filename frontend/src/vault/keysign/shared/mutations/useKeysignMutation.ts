@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Keysign } from '../../../../../wailsjs/go/tss/TssService';
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
+import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { arraysToRecord } from '../../../../lib/utils/array/arraysToRecord';
 import { getLastItem } from '../../../../lib/utils/array/getLastItem';
 import { chainPromises } from '../../../../lib/utils/promise/chainPromises';
@@ -38,7 +39,12 @@ export const useKeysignMutation = () => {
           txInputData,
           walletCore,
           chain,
-        })
+        }).map(value =>
+          hexEncode({
+            value,
+            walletCore,
+          })
+        )
       );
 
       const msgs = groupedMsgs.flat();
