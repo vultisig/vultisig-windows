@@ -175,16 +175,10 @@ export class BlockchainServiceMaya
   async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload | Uint8Array,
+    txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
-    let inputData: Uint8Array;
-    if (data instanceof Uint8Array) {
-      inputData = data;
-    } else {
-      inputData = await this.getPreSignedInputData(data);
-    }
 
     const coinType = walletCore.CoinType.thorchain;
 
@@ -202,7 +196,7 @@ export class BlockchainServiceMaya
     try {
       const hashes = walletCore.TransactionCompiler.preImageHashes(
         coinType,
-        inputData
+        txInputData
       );
       const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
       const allSignatures = walletCore.DataVector.create();
@@ -219,7 +213,7 @@ export class BlockchainServiceMaya
       const compileWithSignatures =
         walletCore.TransactionCompiler.compileWithSignatures(
           coinType,
-          inputData,
+          txInputData,
           allSignatures,
           publicKeys
         );

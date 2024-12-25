@@ -1,7 +1,9 @@
-/* eslint-disable */
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { IBlockchainService } from '../IBlockchainService';
+import { TW } from '@trustwallet/wallet-core';
+
+import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { SpecificRipple } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
@@ -9,16 +11,15 @@ import {
   TransactionType,
 } from '../../../model/transaction';
 import { BlockchainService } from '../BlockchainService';
-import { TW } from '@trustwallet/wallet-core';
-import { SpecificRipple } from '../../../model/specific-transaction-info';
-import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
+import { IBlockchainService } from '../IBlockchainService';
 import TxCompiler = TW.TxCompiler;
-import { Chain } from '../../../model/chain';
 import Long from 'long';
-import { SignedTransactionResult } from '../signed-transaction-result';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+
 import { tss } from '../../../../wailsjs/go/models';
+import { Chain } from '../../../model/chain';
+import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
 import SignatureProvider from '../signature-provider';
+import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceRipple
   extends BlockchainService
@@ -54,7 +55,6 @@ export class BlockchainServiceRipple
 
       // We will have to check how the swap-old transaction is structured for UTXO chains
       case TransactionType.SWAP:
-        const swapTx = obj as ISwapTransaction;
         payload.blockchainSpecific = {
           case: 'rippleSpecific',
           value: rippleSpecific,
@@ -162,17 +162,10 @@ export class BlockchainServiceRipple
   async getSignedTransaction(
     vaultHexPublicKey: string,
     vaultHexChainCode: string,
-    data: KeysignPayload | Uint8Array,
+    txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
-    let inputData: Uint8Array;
-    if (data instanceof Uint8Array) {
-      inputData = data;
-    } else {
-      inputData = await this.getPreSignedInputData(data);
-    }
-
     const addressService = AddressServiceFactory.createAddressService(
       this.chain,
       walletCore
@@ -187,7 +180,7 @@ export class BlockchainServiceRipple
     try {
       const hashes = walletCore.TransactionCompiler.preImageHashes(
         this.coinType,
-        inputData
+        txInputData
       );
 
       const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
@@ -216,7 +209,7 @@ export class BlockchainServiceRipple
       const compileWithSignatures =
         walletCore.TransactionCompiler.compileWithSignatures(
           this.coinType,
-          inputData,
+          txInputData,
           allSignatures,
           publicKeys
         );

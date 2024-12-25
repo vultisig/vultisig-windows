@@ -49,13 +49,16 @@ export const KeysignSigningStep = ({
         walletCore
       );
 
+      const txInputData =
+        await blockchainService.getPreSignedInputData(payload);
+
       return blockchainService.signAndBroadcastTransaction(
         vault,
         msgs,
         sessionId,
         encryptionKeyHex,
         serverUrl,
-        payload
+        txInputData
       );
     },
   });
