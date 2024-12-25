@@ -38,7 +38,7 @@ export class AddressService implements IAddressService {
     publicKeyECDSA: string,
     publicKeyEdDSA: string,
     hexChainCode: string
-  ): Promise<any> {
+  ) {
     const walletCore = this.walletCore;
     const coinType = await this.coinType;
 

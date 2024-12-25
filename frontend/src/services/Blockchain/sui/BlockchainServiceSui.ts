@@ -3,6 +3,7 @@ import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import {
   SuiCoin,
   SuiSpecific,
@@ -133,10 +134,11 @@ export class BlockchainServiceSui
 
     const signature = signatureProvider.getSignature(dataHash);
 
-    if (!publicKey.verify(signature, dataHash)) {
-      console.error('Failed to verify signature');
-      throw new Error('Failed to verify signature');
-    }
+    assertSignature({
+      publicKey,
+      signature,
+      message: dataHash,
+    });
 
     allSignatures.add(signature);
     publicKeys.add(publicKeyData);

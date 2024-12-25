@@ -12,14 +12,10 @@ export class AddressServiceSui
     super(chain, walletCore);
   }
 
-  async getPublicKey(
-    _publicKeyECDSA: string,
-    publicKeyEdDSA: string
-  ): Promise<any> {
-    const walletCore = this.walletCore;
-    return walletCore.PublicKey.createWithData(
+  async getPublicKey(_publicKeyECDSA: string, publicKeyEdDSA: string) {
+    return this.walletCore.PublicKey.createWithData(
       Buffer.from(publicKeyEdDSA, 'hex'),
-      walletCore.PublicKeyType.ed25519
+      this.walletCore.PublicKeyType.ed25519
     );
   }
 }

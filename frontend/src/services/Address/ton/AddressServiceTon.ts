@@ -1,4 +1,5 @@
 import { WalletCore } from '@trustwallet/wallet-core';
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 import { Chain } from '../../../model/chain';
 import { AddressService } from '../AddressService';
@@ -15,11 +16,10 @@ export class AddressServiceTon
   async getPublicKey(
     _publicKeyECDSA: string,
     publicKeyEdDSA: string
-  ): Promise<any> {
-    const walletCore = this.walletCore;
-    return walletCore.PublicKey.createWithData(
+  ): Promise<PublicKey> {
+    return this.walletCore.PublicKey.createWithData(
       Buffer.from(publicKeyEdDSA, 'hex'),
-      walletCore.PublicKeyType.ed25519
+      this.walletCore.PublicKeyType.ed25519
     );
   }
 }

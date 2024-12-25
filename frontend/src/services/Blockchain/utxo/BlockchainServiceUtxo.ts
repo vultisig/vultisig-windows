@@ -3,6 +3,7 @@ import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -125,9 +126,14 @@ export class BlockchainServiceUtxo
       if (signature === undefined) {
         return;
       }
-      if (!publicKey.verifyAsDER(signature, hash)) {
-        throw new Error('fail to verify signature');
-      }
+
+      assertSignature({
+        publicKey,
+        message: hash,
+        signature,
+        signatureFormat: 'der',
+      });
+
       allSignatures.add(signature);
       publicKeys.add(publicKeyData);
     });

@@ -3,6 +3,7 @@ import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -189,10 +190,12 @@ export class BlockchainServiceRipple
       const signatureProvider = new SignatureProvider(walletCore, signatures);
       const signature = signatureProvider.getDerSignature(dataHash);
 
-      if (!publicKey.verifyAsDER(signature, dataHash)) {
-        console.error('fail to verify signature');
-        throw new Error('fail to verify signature');
-      }
+      assertSignature({
+        publicKey,
+        message: dataHash,
+        signature,
+        signatureFormat: 'der',
+      });
 
       allSignatures.add(signature);
       publicKeys.add(publicKeyData);

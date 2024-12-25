@@ -12,6 +12,7 @@ import { createHash } from 'crypto';
 import Long from 'long';
 
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -219,9 +220,13 @@ export class BlockchainServiceThorchain
       const publicKeys = walletCore.DataVector.create();
       const signatureProvider = new SignatureProvider(walletCore, signatures);
       const signature = signatureProvider.getSignatureWithRecoveryId(dataHash);
-      if (!publicKey.verify(signature, dataHash)) {
-        throw new Error('Invalid signature');
-      }
+
+      assertSignature({
+        publicKey,
+        signature,
+        message: dataHash,
+      });
+
       allSignatures.add(signature);
       publicKeys.add(publicKeyData);
       const compileWithSignatures =

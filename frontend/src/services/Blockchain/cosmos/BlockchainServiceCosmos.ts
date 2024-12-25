@@ -10,6 +10,7 @@ import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import {
   CosmosSpecific,
   TransactionType,
@@ -146,52 +147,44 @@ export class BlockchainServiceCosmos
     );
     const publicKeyData = publicKey.data();
 
-    try {
-      const [dataHash] = getPreSigningHashes({
-        walletCore,
+    const [dataHash] = getPreSigningHashes({
+      walletCore,
+      txInputData,
+      chain: this.chain,
+    });
+
+    const allSignatures = walletCore.DataVector.create();
+    const publicKeys = walletCore.DataVector.create();
+
+    const signatureProvider = new SignatureProvider(walletCore, signatures);
+    const signature = signatureProvider.getSignatureWithRecoveryId(dataHash);
+
+    assertSignature({
+      publicKey,
+      message: dataHash,
+      signature,
+    });
+
+    allSignatures.add(signature);
+    publicKeys.add(publicKeyData);
+
+    const compileWithSignatures =
+      walletCore.TransactionCompiler.compileWithSignatures(
+        this.coinType,
         txInputData,
-        chain: this.chain,
-      });
-
-      const allSignatures = walletCore.DataVector.create();
-      const publicKeys = walletCore.DataVector.create();
-
-      const signatureProvider = new SignatureProvider(walletCore, signatures);
-      const signature = signatureProvider.getSignatureWithRecoveryId(dataHash);
-
-      if (!publicKey.verify(signature, dataHash)) {
-        throw new Error('Invalid signature');
-      }
-      allSignatures.add(signature);
-      publicKeys.add(publicKeyData);
-
-      const compileWithSignatures =
-        walletCore.TransactionCompiler.compileWithSignatures(
-          this.coinType,
-          txInputData,
-          allSignatures,
-          publicKeys
-        );
-      const output = TW.Cosmos.Proto.SigningOutput.decode(
-        compileWithSignatures
+        allSignatures,
+        publicKeys
       );
+    const output = TW.Cosmos.Proto.SigningOutput.decode(compileWithSignatures);
 
-      const serializedData = output.serialized;
-      const parsedData = JSON.parse(serializedData);
-      const txBytes = parsedData.tx_bytes;
-      const decodedTxBytes = Buffer.from(txBytes, 'base64');
-      const hash = createHash('sha256')
-        .update(decodedTxBytes as any)
-        .digest('hex');
-      const result = new SignedTransactionResult(
-        serializedData,
-        hash,
-        undefined
-      );
-      return result;
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
+    const serializedData = output.serialized;
+    const parsedData = JSON.parse(serializedData);
+    const txBytes = parsedData.tx_bytes;
+    const decodedTxBytes = Buffer.from(txBytes, 'base64');
+    const hash = createHash('sha256')
+      .update(decodedTxBytes as any)
+      .digest('hex');
+    const result = new SignedTransactionResult(serializedData, hash, undefined);
+    return result;
   }
 }

@@ -9,6 +9,7 @@ import { SignedTransactionResult } from '../signed-transaction-result';
 import TxCompiler = TW.TxCompiler;
 import Long from 'long';
 
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { SpecificPolkadot } from '../../../model/specific-transaction-info';
@@ -165,10 +166,11 @@ export class BlockchainServicePolkadot
     );
     const signature = signatureProvider.getSignature(preSigningOutput.data);
 
-    if (!publicKey.verify(signature, preSigningOutput.data)) {
-      console.error('Failed to verify signature');
-      throw new Error('Failed to verify signature');
-    }
+    assertSignature({
+      publicKey,
+      message: preSigningOutput.data,
+      signature,
+    });
 
     allSignatures.add(signature);
     publicKeys.add(publicKeyData);

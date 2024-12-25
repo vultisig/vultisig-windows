@@ -3,6 +3,7 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import { TonSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { SpecificTon } from '../../../model/specific-transaction-info';
@@ -155,9 +156,12 @@ export class BlockchainServiceTon
       signatures
     );
     const signature = signatureProvider.getSignature(preSigningOutput.data);
-    if (!publicKey.verify(signature, preSigningOutput.data)) {
-      throw new Error('Failed to verify signature');
-    }
+
+    assertSignature({
+      publicKey,
+      message: preSigningOutput.data,
+      signature,
+    });
 
     allSignatures.add(signature);
     publicKeys.add(publicKeyData);

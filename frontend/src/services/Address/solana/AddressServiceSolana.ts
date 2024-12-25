@@ -12,10 +12,7 @@ export class AddressServiceSolana
     super(chain, walletCore);
   }
 
-  async getPublicKey(
-    _publicKeyECDSA: string,
-    publicKeyEdDSA: string
-  ): Promise<any> {
+  async getPublicKey(_publicKeyECDSA: string, publicKeyEdDSA: string) {
     return this.walletCore.PublicKey.createWithData(
       Buffer.from(publicKeyEdDSA, 'hex'),
       this.walletCore.PublicKeyType.ed25519
