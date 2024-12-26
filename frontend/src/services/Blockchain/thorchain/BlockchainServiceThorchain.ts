@@ -14,6 +14,7 @@ import Long from 'long';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
+import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import {
@@ -100,13 +101,17 @@ export class BlockchainServiceThorchain
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
     const walletCore = this.walletCore;
-    const coinType = walletCore.CoinType.thorchain;
+    const coinType = getCoinType({
+      walletCore,
+      chain: this.chain,
+    });
     if (keysignPayload.coin?.chain !== Chain.THORChain.toString()) {
       throw new Error('Invalid chain');
     }
+
     const fromAddr = walletCore.AnyAddress.createWithString(
       keysignPayload.coin.address,
-      walletCore.CoinType.thorchain
+      coinType
     );
     if (!fromAddr) {
       throw new Error(`${keysignPayload.coin.address} is invalid`);
@@ -196,7 +201,10 @@ export class BlockchainServiceThorchain
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
-    const coinType = walletCore.CoinType.thorchain;
+    const coinType = getCoinType({
+      walletCore,
+      chain: this.chain,
+    });
 
     const publicKey = await toWalletCorePublicKey({
       walletCore,

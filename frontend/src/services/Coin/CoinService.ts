@@ -64,7 +64,7 @@ export class CoinService implements ICoinService {
         if (this.chain === Chain.MayaChain) {
           this.walletCore.AnyAddress.createBech32WithPublicKey(
             publicKey,
-            this.walletCore.CoinType.thorchain,
+            coinType,
             'maya'
           );
         }
