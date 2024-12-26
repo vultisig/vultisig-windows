@@ -1,6 +1,7 @@
-import { WalletCore } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import { WalletCore } from '@trustwallet/wallet-core';
 
 import { storage } from '../../../wailsjs/go/models';
+import { getVaultPublicKey } from '../../vault/publicKey/getVaultPublicKey';
 import { TokensStore } from './CoinList';
 import { CoinServiceFactory } from './CoinServiceFactory';
 
@@ -43,9 +44,10 @@ export class DefaultCoinsService {
         );
         const coin = await coinService.createCoin(
           token,
-          vault.public_key_ecdsa || '',
-          vault.public_key_eddsa || '',
-          vault.hex_chain_code || ''
+          getVaultPublicKey({
+            chain: token.chain,
+            vault,
+          })
         );
         await coinService.saveCoin(coin, vault);
       })

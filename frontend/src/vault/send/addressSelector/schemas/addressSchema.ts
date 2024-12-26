@@ -1,15 +1,15 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 import { z } from 'zod';
 
+import { isValidAddress } from '../../../../chain/utils/isValidAddress';
 import { AddressBookItem } from '../../../../lib/types/address-book';
 import { Chain } from '../../../../model/chain';
-import { AddressServiceFactory } from '../../../../services/Address/AddressServiceFactory';
 
 export const getAddressSchema = ({
   walletCore,
   addressBookItems,
 }: {
-  walletCore: WalletCore | null;
+  walletCore: WalletCore;
   addressBookItems: AddressBookItem[];
 }) =>
   z
@@ -26,14 +26,13 @@ export const getAddressSchema = ({
     .superRefine(async (data, ctx) => {
       const { address, chain } = data;
 
-      const addressService = AddressServiceFactory.createAddressService(
-        chain as Chain,
-        walletCore
-      );
+      const isValid = isValidAddress({
+        chain: chain as Chain,
+        address,
+        walletCore,
+      });
 
-      const isValidAddress = await addressService.validateAddress(address);
-
-      if (!isValidAddress) {
+      if (!isValid) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['address'],

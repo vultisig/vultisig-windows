@@ -3,8 +3,10 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import { TonSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { SpecificTon } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -12,7 +14,8 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -120,21 +123,15 @@ export class BlockchainServiceTon
   }
 
   public async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const addressService = AddressServiceFactory.createAddressService(
-      this.chain,
-      this.walletCore
-    );
-
-    const publicKey: PublicKey = await addressService.getPublicKey(
-      '',
-      vaultHexPublicKey,
-      vaultHexChainCode
-    );
+    const publicKey: PublicKey = await toWalletCorePublicKey({
+      walletCore: this.walletCore,
+      value: vaultPublicKey,
+      chain: this.chain,
+    });
     const publicKeyData = publicKey.data();
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
@@ -142,11 +139,10 @@ export class BlockchainServiceTon
       txInputData
     );
 
-    const preSigningOutput =
+    const { data, errorMessage } =
       TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
-    if (preSigningOutput.errorMessage !== '') {
-      throw new Error(preSigningOutput.errorMessage);
-    }
+
+    assertErrorMessage(errorMessage);
 
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
@@ -154,10 +150,13 @@ export class BlockchainServiceTon
       this.walletCore,
       signatures
     );
-    const signature = signatureProvider.getSignature(preSigningOutput.data);
-    if (!publicKey.verify(signature, preSigningOutput.data)) {
-      throw new Error('Failed to verify signature');
-    }
+    const signature = signatureProvider.getSignature(data);
+
+    assertSignature({
+      publicKey,
+      message: data,
+      signature,
+    });
 
     allSignatures.add(signature);
     publicKeys.add(publicKeyData);
@@ -170,9 +169,8 @@ export class BlockchainServiceTon
     );
 
     const output = TW.TheOpenNetwork.Proto.SigningOutput.decode(compiled);
-    if (output.errorMessage !== '') {
-      throw new Error(output.errorMessage);
-    }
+
+    assertErrorMessage(output.errorMessage);
 
     const result = new SignedTransactionResult(
       output.encoded,

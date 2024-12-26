@@ -1,9 +1,9 @@
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 
 import { withoutNullOrUndefined } from '../../../lib/utils/array/withoutNullOrUndefined';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain, UtxoChain } from '../../../model/chain';
 import { getCoinType } from '../../walletCore/getCoinType';
-import { hexEncode } from '../../walletCore/hexEncode';
 
 type Input = {
   walletCore: WalletCore;
@@ -29,9 +29,7 @@ export const getPreSigningHashes = ({
       const { errorMessage, hashPublicKeys } =
         TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
 
-      if (errorMessage) {
-        throw new Error(errorMessage);
-      }
+      assertErrorMessage(errorMessage);
 
       return withoutNullOrUndefined(hashPublicKeys.map(hash => hash?.dataHash));
     }
@@ -39,9 +37,7 @@ export const getPreSigningHashes = ({
     const { errorMessage, dataHash, data } =
       TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
 
-    if (errorMessage) {
-      throw new Error(errorMessage);
-    }
+    assertErrorMessage(errorMessage);
 
     if (chain === Chain.Sui) {
       return [walletCore.Hash.blake2b(data, 32)];
@@ -50,10 +46,5 @@ export const getPreSigningHashes = ({
     return [dataHash];
   };
 
-  return getHashes().map(value =>
-    hexEncode({
-      value,
-      walletCore,
-    })
-  );
+  return getHashes();
 };

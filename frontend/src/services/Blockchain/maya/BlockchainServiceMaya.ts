@@ -1,5 +1,5 @@
-/* eslint-disable */
 import { TW } from '@trustwallet/wallet-core';
+
 import { tss } from '../../../../wailsjs/go/models';
 import { MAYAChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -8,11 +8,14 @@ import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
-import TxCompiler = TW.TxCompiler;
-import SignatureProvider from '../signature-provider';
 import { createHash } from 'crypto';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
-import { BlockchainService } from '../BlockchainService';
+import Long from 'long';
+
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { assertSignature } from '../../../chain/utils/assertSignature';
+import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
+import { getCoinType } from '../../../chain/walletCore/getCoinType';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -20,7 +23,9 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import Long from 'long';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
+import { BlockchainService } from '../BlockchainService';
 
 export class BlockchainServiceMaya
   extends BlockchainService
@@ -68,14 +73,17 @@ export class BlockchainServiceMaya
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
     const walletCore = this.walletCore;
-    const coinType = walletCore.CoinType.thorchain;
+    const coinType = getCoinType({
+      walletCore,
+      chain: this.chain,
+    });
     if (keysignPayload.coin?.chain !== Chain.MayaChain.toString()) {
       throw new Error('Invalid chain');
     }
 
     const fromAddr = walletCore.AnyAddress.createBech32(
       keysignPayload.coin.address,
-      walletCore.CoinType.thorchain,
+      coinType,
       'maya'
     );
 
@@ -173,69 +181,62 @@ export class BlockchainServiceMaya
   }
 
   async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
 
-    const coinType = walletCore.CoinType.thorchain;
+    const coinType = getCoinType({
+      walletCore,
+      chain: this.chain,
+    });
 
-    const addressService = AddressServiceFactory.createAddressService(
-      Chain.MayaChain,
-      walletCore
-    );
-    const publicKey = await addressService.getPublicKey(
-      vaultHexPublicKey,
-      '',
-      vaultHexChainCode
-    );
+    const publicKey = await toWalletCorePublicKey({
+      walletCore,
+      value: vaultPublicKey,
+      chain: Chain.MayaChain,
+    });
     const publicKeyData = publicKey.data();
 
-    try {
-      const hashes = walletCore.TransactionCompiler.preImageHashes(
+    const allSignatures = walletCore.DataVector.create();
+    const publicKeys = walletCore.DataVector.create();
+    const [dataHash] = getPreSigningHashes({
+      walletCore,
+      chain: Chain.MayaChain,
+      txInputData,
+    });
+
+    const signature = generateSignatureWithRecoveryId({
+      walletCore: this.walletCore,
+      signature:
+        signatures[hexEncode({ value: dataHash, walletCore: this.walletCore })],
+    });
+
+    assertSignature({
+      publicKey,
+      message: dataHash,
+      signature,
+    });
+
+    allSignatures.add(signature);
+    publicKeys.add(publicKeyData);
+    const compileWithSignatures =
+      walletCore.TransactionCompiler.compileWithSignatures(
         coinType,
-        txInputData
+        txInputData,
+        allSignatures,
+        publicKeys
       );
-      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
-      const allSignatures = walletCore.DataVector.create();
-      const publicKeys = walletCore.DataVector.create();
-      const signatureProvider = new SignatureProvider(walletCore, signatures);
-      const signature = signatureProvider.getSignatureWithRecoveryId(
-        preSigningOutput.dataHash
-      );
-      if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
-        throw new Error('Invalid signature');
-      }
-      allSignatures.add(signature);
-      publicKeys.add(publicKeyData);
-      const compileWithSignatures =
-        walletCore.TransactionCompiler.compileWithSignatures(
-          coinType,
-          txInputData,
-          allSignatures,
-          publicKeys
-        );
-      const output = TW.Cosmos.Proto.SigningOutput.decode(
-        compileWithSignatures
-      );
-      const serializedData = output.serialized;
-      const parsedData = JSON.parse(serializedData);
-      const txBytes = parsedData.tx_bytes;
-      const decodedTxBytes = Buffer.from(txBytes, 'base64');
-      const hash = createHash('sha256')
-        .update(decodedTxBytes as any)
-        .digest('hex');
-      const result = new SignedTransactionResult(
-        serializedData,
-        hash,
-        undefined
-      );
-      return result;
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
+    const output = TW.Cosmos.Proto.SigningOutput.decode(compileWithSignatures);
+    const serializedData = output.serialized;
+    const parsedData = JSON.parse(serializedData);
+    const txBytes = parsedData.tx_bytes;
+    const decodedTxBytes = Buffer.from(txBytes, 'base64');
+    const hash = createHash('sha256')
+      .update(decodedTxBytes as any)
+      .digest('hex');
+    const result = new SignedTransactionResult(serializedData, hash, undefined);
+    return result;
   }
 }

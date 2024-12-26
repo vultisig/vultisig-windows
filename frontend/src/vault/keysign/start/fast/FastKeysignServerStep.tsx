@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next';
 
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
+import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
-import { Chain, TssKeysignType } from '../../../../model/chain';
+import { Chain } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
 import { FullPageFlowErrorState } from '../../../../ui/flow/FullPageFlowErrorState';
 import { PageHeader } from '../../../../ui/page/PageHeader';
@@ -52,7 +53,12 @@ export const FastKeysignServerStep: React.FC<
           txInputData,
           walletCore,
           chain,
-        })
+        }).map(value =>
+          hexEncode({
+            value,
+            walletCore,
+          })
+        )
       );
 
       return signWithServer({
@@ -63,7 +69,7 @@ export const FastKeysignServerStep: React.FC<
         derive_path: walletCore.CoinTypeExt.derivationPath(
           getCoinType({ walletCore, chain })
         ),
-        is_ecdsa: getTssKeysignType(chain) === TssKeysignType.ECDSA,
+        is_ecdsa: getTssKeysignType(chain) === 'ecdsa',
         vault_password: password,
       });
     },

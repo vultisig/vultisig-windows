@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Keysign } from '../../../../../wailsjs/go/tss/TssService';
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
+import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { arraysToRecord } from '../../../../lib/utils/array/arraysToRecord';
 import { getLastItem } from '../../../../lib/utils/array/getLastItem';
 import { chainPromises } from '../../../../lib/utils/promise/chainPromises';
@@ -13,6 +14,7 @@ import { BlockchainServiceFactory } from '../../../../services/Blockchain/Blockc
 import { RpcServiceFactory } from '../../../../services/Rpc/RpcServiceFactory';
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
 import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
+import { getVaultPublicKey } from '../../../publicKey/getVaultPublicKey';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { useCurrentVault } from '../../../state/currentVault';
 import { getKeysignChain } from '../../utils/getKeysignChain';
@@ -38,7 +40,12 @@ export const useKeysignMutation = () => {
           txInputData,
           walletCore,
           chain,
-        })
+        }).map(value =>
+          hexEncode({
+            value,
+            walletCore,
+          })
+        )
       );
 
       const msgs = groupedMsgs.flat();
@@ -71,8 +78,10 @@ export const useKeysignMutation = () => {
 
           const { rawTransaction, signature } =
             await blockchainService.getSignedTransaction(
-              vault.public_key_ecdsa,
-              vault.hex_chain_code,
+              getVaultPublicKey({
+                vault,
+                chain,
+              }),
               txInputData,
               pick(signaturesRecord, msgs)
             );

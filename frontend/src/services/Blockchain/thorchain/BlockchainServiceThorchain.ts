@@ -8,10 +8,14 @@ import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
-import TxCompiler = TW.TxCompiler;
 import { createHash } from 'crypto';
 import Long from 'long';
 
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { assertSignature } from '../../../chain/utils/assertSignature';
+import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
+import { getCoinType } from '../../../chain/walletCore/getCoinType';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -19,10 +23,10 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { RpcServiceThorchain } from '../../Rpc/thorchain/RpcServiceThorchain';
 import { BlockchainService } from '../BlockchainService';
-import SignatureProvider from '../signature-provider';
 
 export class BlockchainServiceThorchain
   extends BlockchainService
@@ -97,13 +101,17 @@ export class BlockchainServiceThorchain
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
     const walletCore = this.walletCore;
-    const coinType = walletCore.CoinType.thorchain;
+    const coinType = getCoinType({
+      walletCore,
+      chain: this.chain,
+    });
     if (keysignPayload.coin?.chain !== Chain.THORChain.toString()) {
       throw new Error('Invalid chain');
     }
+
     const fromAddr = walletCore.AnyAddress.createWithString(
       keysignPayload.coin.address,
-      walletCore.CoinType.thorchain
+      coinType
     );
     if (!fromAddr) {
       throw new Error(`${keysignPayload.coin.address} is invalid`);
@@ -188,44 +196,47 @@ export class BlockchainServiceThorchain
   }
 
   async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
-    const coinType = walletCore.CoinType.thorchain;
-    const addressService = AddressServiceFactory.createAddressService(
-      Chain.THORChain,
-      walletCore
-    );
-    const thorPublicKey = await addressService.getDerivedPubKey(
-      vaultHexPublicKey,
-      vaultHexChainCode,
-      walletCore.CoinTypeExt.derivationPath(coinType)
-    );
-    const publicKeyData = Buffer.from(thorPublicKey, 'hex');
-    const publicKey = walletCore.PublicKey.createWithData(
-      publicKeyData,
-      walletCore.PublicKeyType.secp256k1
-    );
+    const coinType = getCoinType({
+      walletCore,
+      chain: this.chain,
+    });
+
+    const publicKey = await toWalletCorePublicKey({
+      walletCore,
+      chain: Chain.THORChain,
+      value: vaultPublicKey,
+    });
+
     try {
-      const hashes = walletCore.TransactionCompiler.preImageHashes(
-        coinType,
-        txInputData
-      );
-      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
+      const [dataHash] = getPreSigningHashes({
+        walletCore: walletCore,
+        txInputData,
+        chain: Chain.THORChain,
+      });
       const allSignatures = walletCore.DataVector.create();
       const publicKeys = walletCore.DataVector.create();
-      const signatureProvider = new SignatureProvider(walletCore, signatures);
-      const signature = signatureProvider.getSignatureWithRecoveryId(
-        preSigningOutput.dataHash
-      );
-      if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
-        throw new Error('Invalid signature');
-      }
+
+      const signature = generateSignatureWithRecoveryId({
+        walletCore: this.walletCore,
+        signature:
+          signatures[
+            hexEncode({ value: dataHash, walletCore: this.walletCore })
+          ],
+      });
+
+      assertSignature({
+        publicKey,
+        signature,
+        message: dataHash,
+      });
+
       allSignatures.add(signature);
-      publicKeys.add(publicKeyData);
+      publicKeys.add(publicKey.data());
       const compileWithSignatures =
         walletCore.TransactionCompiler.compileWithSignatures(
           coinType,

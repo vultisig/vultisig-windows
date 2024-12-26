@@ -4,20 +4,25 @@ import { keccak256 } from 'js-sha3';
 import { tss } from '../../../../wailsjs/go/models';
 import { getSigningInputEnvelopedTxFields } from '../../../chain/evm/tx/getSigningInputEnvelopedTxFields';
 import { toEthereumSpecific } from '../../../chain/evm/tx/toEthereumSpecific';
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
+import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
   ITransaction,
 } from '../../../model/transaction';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
-import SignatureProvider from '../signature-provider';
 import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceEvm
@@ -109,57 +114,38 @@ export class BlockchainServiceEvm
   }
 
   public async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const addressService = AddressServiceFactory.createAddressService(
-      this.chain,
-      this.walletCore
-    );
-
-    const evmPublicKey = await addressService.getDerivedPubKey(
-      vaultHexPublicKey,
-      vaultHexChainCode,
-      this.walletCore.CoinTypeExt.derivationPath(this.coinType)
-    );
-
-    const publicKeyData = Buffer.from(evmPublicKey, 'hex');
-    const publicKey = this.walletCore.PublicKey.createWithData(
-      publicKeyData,
-      this.walletCore.PublicKeyType.secp256k1
-    );
-
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType,
-      txInputData
-    );
+    const publicKey = await toWalletCorePublicKey({
+      walletCore: this.walletCore,
+      chain: this.chain,
+      value: vaultPublicKey,
+    });
 
     const publicKeys = this.walletCore.DataVector.create();
-    const preSigningOutput: TW.TxCompiler.Proto.PreSigningOutput =
-      TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
 
-    if (preSigningOutput.errorMessage !== '') {
-      throw new Error(preSigningOutput.errorMessage);
-    }
+    const [dataHash] = getPreSigningHashes({
+      walletCore: this.walletCore,
+      chain: this.chain,
+      txInputData,
+    });
 
-    const allSignatures = this.walletCore.DataVector.create();
-    const signatureProvider = new SignatureProvider(
-      this.walletCore,
-      signatures
-    );
+    const signature = generateSignatureWithRecoveryId({
+      walletCore: this.walletCore,
+      signature:
+        signatures[hexEncode({ value: dataHash, walletCore: this.walletCore })],
+    });
 
-    const signature = signatureProvider.getSignatureWithRecoveryId(
-      preSigningOutput.dataHash
-    );
+    assertSignature({
+      publicKey,
+      signature,
+      message: dataHash,
+    });
 
-    if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
-      console.error('Failed to verify signature');
-      throw new Error('Failed to verify signature');
-    }
+    const allSignatures = this.walletCore.DataVector.createWithData(signature);
 
-    allSignatures.add(signature);
     const compiled = this.walletCore.TransactionCompiler.compileWithSignatures(
       this.coinType,
       txInputData,
@@ -167,15 +153,14 @@ export class BlockchainServiceEvm
       publicKeys
     );
 
-    const output = TW.Ethereum.Proto.SigningOutput.decode(compiled);
-    if (output.errorMessage !== '') {
-      console.error('output error:', output.errorMessage);
-      throw new Error(output.errorMessage);
-    }
+    const { errorMessage, encoded } =
+      TW.Ethereum.Proto.SigningOutput.decode(compiled);
+
+    assertErrorMessage(errorMessage);
 
     const result = new SignedTransactionResult(
-      this.walletCore.HexCoding.encode(output.encoded),
-      '0x' + keccak256(output.encoded)
+      this.walletCore.HexCoding.encode(encoded),
+      '0x' + keccak256(encoded)
     );
     return result;
   }

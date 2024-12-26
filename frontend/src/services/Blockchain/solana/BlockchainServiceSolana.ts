@@ -1,10 +1,11 @@
 import { TW } from '@trustwallet/wallet-core';
-import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import { SolanaSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { SpecificSolana } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -12,7 +13,8 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -187,21 +189,15 @@ export class BlockchainServiceSolana
   }
 
   public async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const addressService = AddressServiceFactory.createAddressService(
-      this.chain,
-      this.walletCore
-    );
-
-    const publicKey: PublicKey = await addressService.getPublicKey(
-      '',
-      vaultHexPublicKey,
-      vaultHexChainCode
-    );
+    const publicKey = await toWalletCorePublicKey({
+      walletCore: this.walletCore,
+      value: vaultPublicKey,
+      chain: this.chain,
+    });
     const publicKeyData = publicKey.data();
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
@@ -209,11 +205,10 @@ export class BlockchainServiceSolana
       txInputData
     );
 
-    const preSigningOutput = TW.Solana.Proto.PreSigningOutput.decode(preHashes);
-    if (preSigningOutput.errorMessage !== '') {
-      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      throw new Error(preSigningOutput.errorMessage);
-    }
+    const { errorMessage, data } =
+      TW.Solana.Proto.PreSigningOutput.decode(preHashes);
+
+    assertErrorMessage(errorMessage);
 
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
@@ -221,11 +216,13 @@ export class BlockchainServiceSolana
       this.walletCore,
       signatures
     );
-    const signature = signatureProvider.getSignature(preSigningOutput.data);
+    const signature = signatureProvider.getSignature(data);
 
-    if (!publicKey.verify(signature, preSigningOutput.data)) {
-      throw new Error('Failed to verify signature');
-    }
+    assertSignature({
+      publicKey,
+      message: data,
+      signature,
+    });
 
     allSignatures.add(signature);
     publicKeys.add(publicKeyData);
@@ -237,18 +234,15 @@ export class BlockchainServiceSolana
       publicKeys
     );
 
-    const output = TW.Solana.Proto.SigningOutput.decode(compiled);
-    if (output.errorMessage !== '') {
-      console.error('SigningOutput error:', output.errorMessage);
-      throw new Error(output.errorMessage);
-    }
+    const { encoded, errorMessage: solanaErrorMessage } =
+      TW.Solana.Proto.SigningOutput.decode(compiled);
+
+    assertErrorMessage(solanaErrorMessage);
 
     const result = new SignedTransactionResult(
-      output.encoded,
-      output.encoded // TODO: Change this to the actual transaction hash
+      encoded,
+      encoded // TODO: Change this to the actual transaction hash
     );
-
-    // console.log('Signed transaction:', result);
 
     return result;
   }

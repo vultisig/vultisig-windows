@@ -67,10 +67,6 @@ export const Chain = {
 
 export type Chain = EvmChain | UtxoChain | CosmosChain | OtherChain;
 
-export enum TssKeysignType {
-  ECDSA = 'ECDSA',
-  EdDSA = 'EdDSA',
-}
 export enum TssAction {
   KEYGEN = 'KEYGEN',
   RESHARE = 'RESHARE',
@@ -127,10 +123,3 @@ export const chainKindRecord: Record<Chain, ChainKind> = {
 
   [OtherChain.Ripple]: 'ripple',
 };
-
-export const edDsaChains = [
-  Chain.Solana,
-  Chain.Polkadot,
-  Chain.Sui,
-  Chain.Ton,
-] as const;

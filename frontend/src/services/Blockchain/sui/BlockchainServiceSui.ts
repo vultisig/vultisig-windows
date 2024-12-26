@@ -2,11 +2,14 @@ import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import {
   SuiCoin,
   SuiSpecific,
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain } from '../../../model/chain';
 import { SpecificSui } from '../../../model/specific-transaction-info';
 import {
@@ -15,6 +18,8 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -105,29 +110,16 @@ export class BlockchainServiceSui
   }
 
   public async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const publicKey = await this.addressService.getPublicKey(
-      '',
-      vaultHexPublicKey,
-      vaultHexChainCode
-    );
+    const publicKey = await toWalletCorePublicKey({
+      walletCore: this.walletCore,
+      value: vaultPublicKey,
+      chain: this.chain,
+    });
     const publicKeyData = publicKey.data();
-
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType,
-      txInputData
-    );
-
-    const preSigningOutput =
-      TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
-    if (preSigningOutput.errorMessage !== '') {
-      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      throw new Error(preSigningOutput.errorMessage);
-    }
 
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
@@ -136,14 +128,19 @@ export class BlockchainServiceSui
       signatures
     );
 
-    const blakeHash = this.walletCore.Hash.blake2b(preSigningOutput.data, 32);
+    const [dataHash] = getPreSigningHashes({
+      walletCore: this.walletCore,
+      txInputData,
+      chain: this.chain,
+    });
 
-    const signature = signatureProvider.getSignature(blakeHash);
+    const signature = signatureProvider.getSignature(dataHash);
 
-    if (!publicKey.verify(signature, blakeHash)) {
-      console.error('Failed to verify signature');
-      throw new Error('Failed to verify signature');
-    }
+    assertSignature({
+      publicKey,
+      signature,
+      message: dataHash,
+    });
 
     allSignatures.add(signature);
     publicKeys.add(publicKeyData);
@@ -156,10 +153,8 @@ export class BlockchainServiceSui
     );
 
     const output = TW.Sui.Proto.SigningOutput.decode(compiled);
-    if (output.errorMessage !== '') {
-      console.error('output error:', output.errorMessage);
-      throw new Error(output.errorMessage);
-    }
+
+    assertErrorMessage(output.errorMessage);
 
     const result = new SignedTransactionResult(
       output.unsignedTx,

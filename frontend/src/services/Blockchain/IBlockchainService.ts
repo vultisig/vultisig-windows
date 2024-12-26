@@ -6,14 +6,14 @@ import {
   ISwapTransaction,
   ITransaction,
 } from '../../model/transaction';
+import { VaultPublicKey } from '../../vault/publicKey/VaultPublicKey';
 import { SignedTransactionResult } from './signed-transaction-result';
 
 export interface IBlockchainService {
   getPreSignedInputData(keysignPayload: KeysignPayload): Promise<Uint8Array>;
 
   getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult>;

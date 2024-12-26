@@ -5,21 +5,24 @@ import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
-import TxCompiler = TW.TxCompiler;
 import { createHash } from 'crypto';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { assertSignature } from '../../../chain/utils/assertSignature';
+import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
+import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import {
   CosmosSpecific,
   TransactionType,
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { SpecificCosmos } from '../../../model/specific-transaction-info';
 import { ISendTransaction, ITransaction } from '../../../model/transaction';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { BlockchainService } from '../BlockchainService';
-import SignatureProvider from '../signature-provider';
 
 export class BlockchainServiceCosmos
   extends BlockchainService
@@ -128,72 +131,59 @@ export class BlockchainServiceCosmos
   }
 
   async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
 
-    const addressService = AddressServiceFactory.createAddressService(
-      this.chain,
-      walletCore
-    );
-    const publicKey = await addressService.getPublicKey(
-      vaultHexPublicKey,
-      '',
-      vaultHexChainCode
-    );
+    const publicKey = await toWalletCorePublicKey({
+      chain: this.chain,
+      walletCore: this.walletCore,
+      value: vaultPublicKey,
+    });
     const publicKeyData = publicKey.data();
 
-    try {
-      const hashes = walletCore.TransactionCompiler.preImageHashes(
+    const [dataHash] = getPreSigningHashes({
+      walletCore,
+      txInputData,
+      chain: this.chain,
+    });
+
+    const allSignatures = walletCore.DataVector.create();
+    const publicKeys = walletCore.DataVector.create();
+
+    const signature = generateSignatureWithRecoveryId({
+      walletCore,
+      signature: signatures[hexEncode({ value: dataHash, walletCore })],
+    });
+
+    assertSignature({
+      publicKey,
+      message: dataHash,
+      signature,
+    });
+
+    allSignatures.add(signature);
+    publicKeys.add(publicKeyData);
+
+    const compileWithSignatures =
+      walletCore.TransactionCompiler.compileWithSignatures(
         this.coinType,
-        txInputData
+        txInputData,
+        allSignatures,
+        publicKeys
       );
+    const output = TW.Cosmos.Proto.SigningOutput.decode(compileWithSignatures);
 
-      const preSigningOutput = TxCompiler.Proto.PreSigningOutput.decode(hashes);
-      const allSignatures = walletCore.DataVector.create();
-      const publicKeys = walletCore.DataVector.create();
-
-      const signatureProvider = new SignatureProvider(walletCore, signatures);
-      const signature = signatureProvider.getSignatureWithRecoveryId(
-        preSigningOutput.dataHash
-      );
-
-      if (!publicKey.verify(signature, preSigningOutput.dataHash)) {
-        throw new Error('Invalid signature');
-      }
-      allSignatures.add(signature);
-      publicKeys.add(publicKeyData);
-
-      const compileWithSignatures =
-        walletCore.TransactionCompiler.compileWithSignatures(
-          this.coinType,
-          txInputData,
-          allSignatures,
-          publicKeys
-        );
-      const output = TW.Cosmos.Proto.SigningOutput.decode(
-        compileWithSignatures
-      );
-
-      const serializedData = output.serialized;
-      const parsedData = JSON.parse(serializedData);
-      const txBytes = parsedData.tx_bytes;
-      const decodedTxBytes = Buffer.from(txBytes, 'base64');
-      const hash = createHash('sha256')
-        .update(decodedTxBytes as any)
-        .digest('hex');
-      const result = new SignedTransactionResult(
-        serializedData,
-        hash,
-        undefined
-      );
-      return result;
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
+    const serializedData = output.serialized;
+    const parsedData = JSON.parse(serializedData);
+    const txBytes = parsedData.tx_bytes;
+    const decodedTxBytes = Buffer.from(txBytes, 'base64');
+    const hash = createHash('sha256')
+      .update(decodedTxBytes as any)
+      .digest('hex');
+    const result = new SignedTransactionResult(serializedData, hash, undefined);
+    return result;
   }
 }

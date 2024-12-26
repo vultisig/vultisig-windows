@@ -2,6 +2,8 @@ import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
+import { assertSignature } from '../../../chain/utils/assertSignature';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -13,6 +15,8 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -93,51 +97,43 @@ export class BlockchainServiceUtxo
   }
 
   public async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const utxoPublicKey = await this.addressService.getDerivedPubKey(
-      vaultHexPublicKey,
-      vaultHexChainCode,
-      this.walletCore.CoinTypeExt.derivationPath(this.coinType)
-    );
-    const publicKeyData = Buffer.from(utxoPublicKey, 'hex');
-    const publicKey = this.walletCore.PublicKey.createWithData(
-      publicKeyData,
-      this.walletCore.PublicKeyType.secp256k1
-    );
-    const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-      this.coinType,
-      txInputData
-    );
-    const preSignOutputs = TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
+    const publicKey = await toWalletCorePublicKey({
+      walletCore: this.walletCore,
+      chain: this.chain,
+      value: vaultPublicKey,
+    });
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
     const signatureProvider = new SignatureProvider(
       this.walletCore,
       signatures
     );
-    for (const hash of preSignOutputs.hashPublicKeys) {
-      if (
-        hash === undefined ||
-        hash.dataHash === undefined ||
-        hash.dataHash === null
-      ) {
-        continue;
-      }
-      const preImageHash = hash.dataHash;
-      const signature = signatureProvider.getDerSignature(preImageHash);
+    const hashes = getPreSigningHashes({
+      walletCore: this.walletCore,
+      txInputData,
+      chain: this.chain,
+    });
+    hashes.forEach(hash => {
+      const signature = signatureProvider.getDerSignature(hash);
       if (signature === undefined) {
-        continue;
+        return;
       }
-      if (!publicKey.verifyAsDER(signature, preImageHash)) {
-        throw new Error('fail to verify signature');
-      }
+
+      assertSignature({
+        publicKey,
+        message: hash,
+        signature,
+        signatureFormat: 'der',
+      });
+
       allSignatures.add(signature);
-      publicKeys.add(publicKeyData);
-    }
+      publicKeys.add(publicKey.data());
+    });
+
     const compileWithSignatures =
       this.walletCore.TransactionCompiler.compileWithSignatures(
         this.coinType,

@@ -3,11 +3,13 @@ import { WalletCore } from '@trustwallet/wallet-core';
 import { storage } from '../../../wailsjs/go/models';
 import { DeleteCoin, SaveCoin } from '../../../wailsjs/go/storage/Store';
 import { stripHexPrefix } from '../../chain/utils/stripHexPrefix';
+import { getCoinType } from '../../chain/walletCore/getCoinType';
 import { coinToStorageCoin } from '../../coin/utils/coin';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
-import { AddressServiceFactory } from '../Address/AddressServiceFactory';
+import { toWalletCorePublicKey } from '../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../vault/publicKey/VaultPublicKey';
 import { TokensStore } from './CoinList';
 import { ICoinService } from './ICoinService';
 
@@ -44,27 +46,37 @@ export class CoinService implements ICoinService {
 
   async createCoin(
     asset: CoinMeta,
-    publicKeyECDSA: string,
-    publicKeyEdDSA: string, // TODO this is not correct
-    hexChainCode: string
+    vaultPublicKey: VaultPublicKey
   ): Promise<Coin> {
     try {
-      const addressService = AddressServiceFactory.createAddressService(
-        this.chain,
-        this.walletCore
-      );
+      const publicKey = await toWalletCorePublicKey({
+        chain: this.chain,
+        value: vaultPublicKey,
+        walletCore: this.walletCore,
+      });
 
-      const publicKey = await addressService.getPublicKey(
-        publicKeyECDSA,
-        publicKeyEdDSA,
-        hexChainCode
-      );
+      const coinType = getCoinType({
+        chain: this.chain,
+        walletCore: this.walletCore,
+      });
 
-      const address = await addressService.deriveAddressFromPublicKey(
-        publicKeyECDSA,
-        publicKeyEdDSA,
-        hexChainCode
-      );
+      const getAddress = () => {
+        if (this.chain === Chain.MayaChain) {
+          this.walletCore.AnyAddress.createBech32WithPublicKey(
+            publicKey,
+            coinType,
+            'maya'
+          );
+        }
+
+        return this.walletCore.CoinTypeExt.deriveAddressFromPublicKey(
+          coinType,
+          publicKey
+        );
+      };
+
+      const address = getAddress();
+
       const hexPublicKey = this.walletCore.HexCoding.encode(publicKey.data());
       return new Coin({
         chain: this.chain.toString(),

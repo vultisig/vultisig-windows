@@ -1,5 +1,7 @@
 import { storage } from '../../../wailsjs/go/models';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Chain } from '../../model/chain';
+import { getVaultPublicKey } from '../../vault/publicKey/getVaultPublicKey';
 import { IRpcService } from '../Rpc/IRpcService';
 import { RpcServiceFactory } from '../Rpc/RpcServiceFactory';
 import { ITokenService } from '../Tokens/ITokenService';
@@ -38,9 +40,7 @@ export class CoinServiceEvm extends CoinService implements ICoinService {
             convertedTokens.push(
               await super.createCoin(
                 token,
-                vault.public_key_ecdsa,
-                vault.public_key_eddsa,
-                vault.hex_chain_code
+                getVaultPublicKey({ vault, chain: coin.chain as Chain })
               )
             )
           )
