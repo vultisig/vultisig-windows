@@ -1,15 +1,15 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 import { z } from 'zod';
 
+import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { AddressBookItem } from '../../../../lib/types/address-book';
 import { Chain } from '../../../../model/chain';
-import { AddressServiceFactory } from '../../../../services/Address/AddressServiceFactory';
 
 export const getAddressSchema = ({
   walletCore,
   addressBookItems,
 }: {
-  walletCore: WalletCore | null;
+  walletCore: WalletCore;
   addressBookItems: AddressBookItem[];
 }) =>
   z
@@ -26,12 +26,12 @@ export const getAddressSchema = ({
     .superRefine(async (data, ctx) => {
       const { address, chain } = data;
 
-      const addressService = AddressServiceFactory.createAddressService(
-        chain as Chain,
-        walletCore
-      );
+      const coinType = getCoinType({
+        walletCore,
+        chain: chain as Chain,
+      });
 
-      const isValidAddress = await addressService.validateAddress(address);
+      const isValidAddress = walletCore.AnyAddress.isValid(address, coinType);
 
       if (!isValidAddress) {
         ctx.addIssue({

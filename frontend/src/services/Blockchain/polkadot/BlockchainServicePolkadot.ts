@@ -19,6 +19,8 @@ import {
   ISwapTransaction,
   ITransaction,
 } from '../../../model/transaction';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import SignatureProvider from '../signature-provider';
 
@@ -133,16 +135,15 @@ export class BlockchainServicePolkadot
   }
 
   public async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const publicKey = await this.addressService.getPublicKey(
-      '',
-      vaultHexPublicKey,
-      vaultHexChainCode
-    );
+    const publicKey = await toWalletCorePublicKey({
+      walletCore: this.walletCore,
+      value: vaultPublicKey,
+      chain: Chain.Polkadot,
+    });
     const publicKeyData = publicKey.data();
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(

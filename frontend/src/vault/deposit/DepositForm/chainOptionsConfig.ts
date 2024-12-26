@@ -1,8 +1,8 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 import { z } from 'zod';
 
+import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import { Chain } from '../../../model/chain';
-import { validateNodeAddress } from '../utils/validateNodeAddress';
 
 export type ChainWithAction = keyof typeof chainDepositOptionsConfig;
 
@@ -61,8 +61,14 @@ export const requiredFieldsPerChainAction = {
             message: 'chainFunctions.bond.validations.nodeAddressMinLength',
           })
           .refine(
-            async address =>
-              await validateNodeAddress(address, chain, walletCore),
+            async address => {
+              const coinType = getCoinType({
+                walletCore,
+                chain: chain as Chain,
+              });
+
+              return walletCore.AnyAddress.isValid(address, coinType);
+            },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
             }
@@ -120,8 +126,14 @@ export const requiredFieldsPerChainAction = {
             message: 'chainFunctions.bond.validations.nodeAddressMinLength',
           })
           .refine(
-            async address =>
-              await validateNodeAddress(address, chain, walletCore),
+            async address => {
+              const coinType = getCoinType({
+                walletCore,
+                chain: chain as Chain,
+              });
+
+              return walletCore.AnyAddress.isValid(address, coinType);
+            },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
             }
@@ -194,8 +206,14 @@ export const requiredFieldsPerChainAction = {
             message: 'chainFunctions.bond.validations.nodeAddressMinLength',
           })
           .refine(
-            async address =>
-              await validateNodeAddress(address, chain, walletCore),
+            async address => {
+              const coinType = getCoinType({
+                walletCore,
+                chain: chain as Chain,
+              });
+
+              return walletCore.AnyAddress.isValid(address, coinType);
+            },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
             }
@@ -249,8 +267,14 @@ export const requiredFieldsPerChainAction = {
             message: 'chainFunctions.bond.validations.nodeAddressMinLength',
           })
           .refine(
-            async address =>
-              await validateNodeAddress(address, chain, walletCore),
+            async address => {
+              const coinType = getCoinType({
+                walletCore,
+                chain: chain as Chain,
+              });
+
+              return walletCore.AnyAddress.isValid(address, coinType);
+            },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
             }
@@ -307,8 +331,14 @@ export const requiredFieldsPerChainAction = {
             message: 'chainFunctions.leave.validations.nodeAddressMinLength',
           })
           .refine(
-            async address =>
-              await validateNodeAddress(address, chain, walletCore),
+            async address => {
+              const coinType = getCoinType({
+                walletCore,
+                chain: chain as Chain,
+              });
+
+              return walletCore.AnyAddress.isValid(address, coinType);
+            },
             {
               message: 'chainFunctions.leave.validations.nodeAddressInvalid',
             }

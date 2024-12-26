@@ -19,7 +19,8 @@ import {
   ISwapTransaction,
   ITransaction,
 } from '../../../model/transaction';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
@@ -113,27 +114,15 @@ export class BlockchainServiceEvm
   }
 
   public async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const addressService = AddressServiceFactory.createAddressService(
-      this.chain,
-      this.walletCore
-    );
-
-    const evmPublicKey = await addressService.getDerivedPubKey(
-      vaultHexPublicKey,
-      vaultHexChainCode,
-      this.walletCore.CoinTypeExt.derivationPath(this.coinType)
-    );
-
-    const publicKeyData = Buffer.from(evmPublicKey, 'hex');
-    const publicKey = this.walletCore.PublicKey.createWithData(
-      publicKeyData,
-      this.walletCore.PublicKeyType.secp256k1
-    );
+    const publicKey = await toWalletCorePublicKey({
+      walletCore: this.walletCore,
+      chain: this.chain,
+      value: vaultPublicKey,
+    });
 
     const publicKeys = this.walletCore.DataVector.create();
 

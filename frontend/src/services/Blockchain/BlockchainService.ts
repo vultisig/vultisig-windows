@@ -10,8 +10,7 @@ import {
   ISwapTransaction,
   ITransaction,
 } from '../../model/transaction';
-import { AddressServiceFactory } from '../Address/AddressServiceFactory';
-import { IAddressService } from '../Address/IAddressService';
+import { VaultPublicKey } from '../../vault/publicKey/VaultPublicKey';
 import { IBlockchainService } from './IBlockchainService';
 import { SignedTransactionResult } from './signed-transaction-result';
 
@@ -19,16 +18,11 @@ export class BlockchainService implements IBlockchainService {
   chain: Chain;
   walletCore: WalletCore;
   coinType: CoinType;
-  addressService: IAddressService;
 
   constructor(chain: Chain, walletCore: WalletCore) {
     this.chain = chain;
     this.walletCore = walletCore;
     this.coinType = getCoinType({ walletCore, chain });
-    this.addressService = AddressServiceFactory.createAddressService(
-      this.chain,
-      walletCore
-    );
   }
 
   createKeysignPayload(
@@ -53,8 +47,7 @@ export class BlockchainService implements IBlockchainService {
   }
 
   getSignedTransaction(
-    _vaultHexPublicKey: string,
-    _vaultHexChainCode: string,
+    _vaultPublicKey: VaultPublicKey,
     _txInputData: Uint8Array,
     _signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {

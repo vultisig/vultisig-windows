@@ -4,6 +4,7 @@ import { Chain } from '../../model/chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { TokensStore } from '../../services/Coin/CoinList';
 import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
+import { getVaultPublicKey } from '../publicKey/getVaultPublicKey';
 import { useCurrentVault } from '../state/currentVault';
 import { useCurrentVaultId } from '../state/currentVaultId';
 
@@ -31,9 +32,10 @@ export const useVaultAddressQuery = (chain: Chain) => {
 
       const coin = await coinService.createCoin(
         nativeTokens,
-        vault.public_key_ecdsa || '',
-        vault.public_key_eddsa || '',
-        vault.hex_chain_code || ''
+        getVaultPublicKey({
+          vault,
+          chain: nativeTokens.chain,
+        })
       );
 
       return coin.address;

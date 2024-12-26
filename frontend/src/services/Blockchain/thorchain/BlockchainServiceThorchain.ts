@@ -22,7 +22,8 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { RpcServiceThorchain } from '../../Rpc/thorchain/RpcServiceThorchain';
 import { BlockchainService } from '../BlockchainService';
 
@@ -190,27 +191,19 @@ export class BlockchainServiceThorchain
   }
 
   async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
     const coinType = walletCore.CoinType.thorchain;
-    const addressService = AddressServiceFactory.createAddressService(
-      Chain.THORChain,
-      walletCore
-    );
-    const thorPublicKey = await addressService.getDerivedPubKey(
-      vaultHexPublicKey,
-      vaultHexChainCode,
-      walletCore.CoinTypeExt.derivationPath(coinType)
-    );
-    const publicKeyData = Buffer.from(thorPublicKey, 'hex');
-    const publicKey = walletCore.PublicKey.createWithData(
-      publicKeyData,
-      walletCore.PublicKeyType.secp256k1
-    );
+
+    const publicKey = await toWalletCorePublicKey({
+      walletCore,
+      chain: Chain.THORChain,
+      value: vaultPublicKey,
+    });
+
     try {
       const [dataHash] = getPreSigningHashes({
         walletCore: walletCore,
@@ -235,7 +228,7 @@ export class BlockchainServiceThorchain
       });
 
       allSignatures.add(signature);
-      publicKeys.add(publicKeyData);
+      publicKeys.add(publicKey.data());
       const compileWithSignatures =
         walletCore.TransactionCompiler.compileWithSignatures(
           coinType,

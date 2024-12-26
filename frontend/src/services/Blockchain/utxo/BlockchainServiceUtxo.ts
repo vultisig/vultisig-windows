@@ -15,6 +15,8 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -95,21 +97,15 @@ export class BlockchainServiceUtxo
   }
 
   public async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const utxoPublicKey = await this.addressService.getDerivedPubKey(
-      vaultHexPublicKey,
-      vaultHexChainCode,
-      this.walletCore.CoinTypeExt.derivationPath(this.coinType)
-    );
-    const publicKeyData = Buffer.from(utxoPublicKey, 'hex');
-    const publicKey = this.walletCore.PublicKey.createWithData(
-      publicKeyData,
-      this.walletCore.PublicKeyType.secp256k1
-    );
+    const publicKey = await toWalletCorePublicKey({
+      walletCore: this.walletCore,
+      chain: this.chain,
+      value: vaultPublicKey,
+    });
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
     const signatureProvider = new SignatureProvider(
@@ -135,7 +131,7 @@ export class BlockchainServiceUtxo
       });
 
       allSignatures.add(signature);
-      publicKeys.add(publicKeyData);
+      publicKeys.add(publicKey.data());
     });
 
     const compileWithSignatures =

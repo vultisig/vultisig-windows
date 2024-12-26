@@ -4,6 +4,8 @@ WARNING: Never change the string of the enum values. It must match with IOS/Andr
 
 */
 
+import { PublicKeyType } from '@trustwallet/wallet-core/dist/src/wallet-core';
+
 export enum EvmChain {
   Arbitrum = 'Arbitrum',
   Avalanche = 'Avalanche',
@@ -71,6 +73,12 @@ export enum TssKeysignType {
   ECDSA = 'ECDSA',
   EdDSA = 'EdDSA',
 }
+
+export const walletCorePublicKeyType: Record<TssKeysignType, PublicKeyType> = {
+  [TssKeysignType.ECDSA]: PublicKeyType.secp256k1,
+  [TssKeysignType.EdDSA]: PublicKeyType.ed25519,
+};
+
 export enum TssAction {
   KEYGEN = 'KEYGEN',
   RESHARE = 'RESHARE',

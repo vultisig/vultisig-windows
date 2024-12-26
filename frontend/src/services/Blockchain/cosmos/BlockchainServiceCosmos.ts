@@ -19,7 +19,8 @@ import {
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { SpecificCosmos } from '../../../model/specific-transaction-info';
 import { ISendTransaction, ITransaction } from '../../../model/transaction';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { BlockchainService } from '../BlockchainService';
 
@@ -130,22 +131,17 @@ export class BlockchainServiceCosmos
   }
 
   async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
 
-    const addressService = AddressServiceFactory.createAddressService(
-      this.chain,
-      walletCore
-    );
-    const publicKey = await addressService.getPublicKey(
-      vaultHexPublicKey,
-      '',
-      vaultHexChainCode
-    );
+    const publicKey = await toWalletCorePublicKey({
+      chain: this.chain,
+      walletCore: this.walletCore,
+      value: vaultPublicKey,
+    });
     const publicKeyData = publicKey.data();
 
     const [dataHash] = getPreSigningHashes({

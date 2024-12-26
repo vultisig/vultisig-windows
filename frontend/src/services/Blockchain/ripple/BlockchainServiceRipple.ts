@@ -16,7 +16,8 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -161,21 +162,17 @@ export class BlockchainServiceRipple
   }
 
   async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
-    const addressService = AddressServiceFactory.createAddressService(
-      this.chain,
-      walletCore
-    );
-    const publicKey = await addressService.getPublicKey(
-      vaultHexPublicKey,
-      '',
-      vaultHexChainCode
-    );
+
+    const publicKey = await toWalletCorePublicKey({
+      walletCore,
+      chain: this.chain,
+      value: vaultPublicKey,
+    });
     const publicKeyData = publicKey.data();
 
     const allSignatures = walletCore.DataVector.create();

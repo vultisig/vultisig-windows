@@ -10,7 +10,7 @@ import { Button } from '../../../../../lib/ui/buttons/Button';
 import { Text } from '../../../../../lib/ui/text';
 import { extractErrorMsg } from '../../../../../lib/utils/error/extractErrorMsg';
 import { Chain } from '../../../../../model/chain';
-import { useWalletCore } from '../../../../../providers/WalletCoreProvider';
+import { useAssertWalletCore } from '../../../../../providers/WalletCoreProvider';
 import { useUpdateAddressBookItemMutation } from '../../../../../vault/mutations/useUpdateAddressBookItemMutation';
 import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';
 import { getCoinOptions } from '../../helpers/getCoinOptions';
@@ -43,7 +43,7 @@ const ModifyAddressForm = ({
   const { t } = useTranslation();
   const chainOptions = useMemo(() => getCoinOptions(), []);
   const { data: addressBookItems } = useAddressBookItemsQuery();
-  const walletCore = useWalletCore();
+  const walletCore = useAssertWalletCore();
   const addressSchema = getModifyAddressSchema({
     walletCore,
     addressBookItems,

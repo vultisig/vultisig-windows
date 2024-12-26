@@ -22,7 +22,8 @@ import {
   ITransaction,
   TransactionType,
 } from '../../../model/transaction';
-import { AddressServiceFactory } from '../../Address/AddressServiceFactory';
+import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
+import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 
 export class BlockchainServiceMaya
@@ -176,8 +177,7 @@ export class BlockchainServiceMaya
   }
 
   async getSignedTransaction(
-    vaultHexPublicKey: string,
-    vaultHexChainCode: string,
+    vaultPublicKey: VaultPublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
@@ -185,15 +185,11 @@ export class BlockchainServiceMaya
 
     const coinType = walletCore.CoinType.thorchain;
 
-    const addressService = AddressServiceFactory.createAddressService(
-      Chain.MayaChain,
-      walletCore
-    );
-    const publicKey = await addressService.getPublicKey(
-      vaultHexPublicKey,
-      '',
-      vaultHexChainCode
-    );
+    const publicKey = await toWalletCorePublicKey({
+      walletCore,
+      value: vaultPublicKey,
+      chain: Chain.MayaChain,
+    });
     const publicKeyData = publicKey.data();
 
     const allSignatures = walletCore.DataVector.create();

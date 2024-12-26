@@ -14,6 +14,7 @@ import { BlockchainServiceFactory } from '../../../../services/Blockchain/Blockc
 import { RpcServiceFactory } from '../../../../services/Rpc/RpcServiceFactory';
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
 import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
+import { getVaultPublicKey } from '../../../publicKey/getVaultPublicKey';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { useCurrentVault } from '../../../state/currentVault';
 import { getKeysignChain } from '../../utils/getKeysignChain';
@@ -77,8 +78,10 @@ export const useKeysignMutation = () => {
 
           const { rawTransaction, signature } =
             await blockchainService.getSignedTransaction(
-              vault.public_key_ecdsa,
-              vault.hex_chain_code,
+              getVaultPublicKey({
+                vault,
+                chain,
+              }),
               txInputData,
               pick(signaturesRecord, msgs)
             );

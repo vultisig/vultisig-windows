@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { Text } from '../../../../../lib/ui/text';
 import { extractErrorMsg } from '../../../../../lib/utils/error/extractErrorMsg';
 import { Chain } from '../../../../../model/chain';
-import { useWalletCore } from '../../../../../providers/WalletCoreProvider';
+import { useAssertWalletCore } from '../../../../../providers/WalletCoreProvider';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
 import { useAddAddressBookItemMutation } from '../../../../../vault/mutations/useAddAddressBookItemMutation';
@@ -38,7 +38,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
   const { data: addressBookItems } = useAddressBookItemsQuery();
   const { t } = useTranslation();
   const chainOptions = useMemo(() => getCoinOptions(), []);
-  const walletCore = useWalletCore();
+  const walletCore = useAssertWalletCore();
   const addressSchema = getAddressSchema({
     walletCore,
     addressBookItems,
