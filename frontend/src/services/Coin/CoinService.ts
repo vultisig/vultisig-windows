@@ -60,10 +60,22 @@ export class CoinService implements ICoinService {
         walletCore: this.walletCore,
       });
 
-      const address = this.walletCore.CoinTypeExt.deriveAddressFromPublicKey(
-        coinType,
-        publicKey
-      );
+      const getAddress = () => {
+        if (this.chain === Chain.MayaChain) {
+          this.walletCore.AnyAddress.createBech32WithPublicKey(
+            publicKey,
+            this.walletCore.CoinType.thorchain,
+            'maya'
+          );
+        }
+
+        return this.walletCore.CoinTypeExt.deriveAddressFromPublicKey(
+          coinType,
+          publicKey
+        );
+      };
+
+      const address = getAddress();
 
       const hexPublicKey = this.walletCore.HexCoding.encode(publicKey.data());
       return new Coin({

@@ -15,5 +15,9 @@ export const isValidAddress = ({ chain, address, walletCore }: Input) => {
     chain,
   });
 
+  if (chain === Chain.MayaChain) {
+    return walletCore.AnyAddress.isValidBech32(address, coinType, 'maya');
+  }
+
   return walletCore.AnyAddress.isValid(address, coinType);
 };
