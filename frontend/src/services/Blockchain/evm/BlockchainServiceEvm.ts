@@ -12,6 +12,7 @@ import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { SpecificEvm } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -136,8 +137,6 @@ export class BlockchainServiceEvm
 
     const publicKeys = this.walletCore.DataVector.create();
 
-    const allSignatures = this.walletCore.DataVector.create();
-
     const [dataHash] = getPreSigningHashes({
       walletCore: this.walletCore,
       chain: this.chain,
@@ -156,7 +155,8 @@ export class BlockchainServiceEvm
       message: dataHash,
     });
 
-    allSignatures.add(signature);
+    const allSignatures = this.walletCore.DataVector.createWithData(signature);
+
     const compiled = this.walletCore.TransactionCompiler.compileWithSignatures(
       this.coinType,
       txInputData,
@@ -164,15 +164,14 @@ export class BlockchainServiceEvm
       publicKeys
     );
 
-    const output = TW.Ethereum.Proto.SigningOutput.decode(compiled);
-    if (output.errorMessage !== '') {
-      console.error('output error:', output.errorMessage);
-      throw new Error(output.errorMessage);
-    }
+    const { errorMessage, encoded } =
+      TW.Ethereum.Proto.SigningOutput.decode(compiled);
+
+    assertErrorMessage(errorMessage);
 
     const result = new SignedTransactionResult(
-      this.walletCore.HexCoding.encode(output.encoded),
-      '0x' + keccak256(output.encoded)
+      this.walletCore.HexCoding.encode(encoded),
+      '0x' + keccak256(encoded)
     );
     return result;
   }

@@ -7,6 +7,7 @@ import { assertSignature } from '../../../chain/utils/assertSignature';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain } from '../../../model/chain';
 import { SpecificRipple } from '../../../model/specific-transaction-info';
 import {
@@ -177,54 +178,47 @@ export class BlockchainServiceRipple
     );
     const publicKeyData = publicKey.data();
 
-    try {
-      const allSignatures = walletCore.DataVector.create();
-      const publicKeys = walletCore.DataVector.create();
+    const allSignatures = walletCore.DataVector.create();
+    const publicKeys = walletCore.DataVector.create();
 
-      const [dataHash] = getPreSigningHashes({
-        walletCore,
+    const [dataHash] = getPreSigningHashes({
+      walletCore,
+      txInputData,
+      chain: this.chain,
+    });
+
+    const signatureProvider = new SignatureProvider(walletCore, signatures);
+    const signature = signatureProvider.getDerSignature(dataHash);
+
+    assertSignature({
+      publicKey,
+      message: dataHash,
+      signature,
+      signatureFormat: 'der',
+    });
+
+    allSignatures.add(signature);
+    publicKeys.add(publicKeyData);
+
+    const compileWithSignatures =
+      walletCore.TransactionCompiler.compileWithSignatures(
+        this.coinType,
         txInputData,
-        chain: this.chain,
-      });
-
-      const signatureProvider = new SignatureProvider(walletCore, signatures);
-      const signature = signatureProvider.getDerSignature(dataHash);
-
-      assertSignature({
-        publicKey,
-        message: dataHash,
-        signature,
-        signatureFormat: 'der',
-      });
-
-      allSignatures.add(signature);
-      publicKeys.add(publicKeyData);
-
-      const compileWithSignatures =
-        walletCore.TransactionCompiler.compileWithSignatures(
-          this.coinType,
-          txInputData,
-          allSignatures,
-          publicKeys
-        );
-
-      const { encoded, errorMessage } = TW.Ripple.Proto.SigningOutput.decode(
-        compileWithSignatures
+        allSignatures,
+        publicKeys
       );
 
-      if (errorMessage) {
-        throw new Error(errorMessage);
-      }
+    const { encoded, errorMessage } = TW.Ripple.Proto.SigningOutput.decode(
+      compileWithSignatures
+    );
 
-      const result = new SignedTransactionResult(
-        stripHexPrefix(this.walletCore.HexCoding.encode(encoded)),
-        '',
-        undefined
-      );
-      return result;
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
+    assertErrorMessage(errorMessage);
+
+    const result = new SignedTransactionResult(
+      stripHexPrefix(this.walletCore.HexCoding.encode(encoded)),
+      '',
+      undefined
+    );
+    return result;
   }
 }

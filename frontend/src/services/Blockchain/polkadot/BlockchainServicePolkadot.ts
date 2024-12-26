@@ -12,6 +12,7 @@ import Long from 'long';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { SpecificPolkadot } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -149,14 +150,10 @@ export class BlockchainServicePolkadot
       txInputData
     );
 
-    // console.log('preHashes:', preHashes);
-
-    const preSigningOutput =
+    const { data, errorMessage } =
       TxCompiler.Proto.PreSigningOutput.decode(preHashes);
-    if (preSigningOutput.errorMessage !== '') {
-      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      throw new Error(preSigningOutput.errorMessage);
-    }
+
+    assertErrorMessage(errorMessage);
 
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
@@ -164,11 +161,11 @@ export class BlockchainServicePolkadot
       this.walletCore,
       signatures
     );
-    const signature = signatureProvider.getSignature(preSigningOutput.data);
+    const signature = signatureProvider.getSignature(data);
 
     assertSignature({
       publicKey,
-      message: preSigningOutput.data,
+      message: data,
       signature,
     });
 
@@ -182,20 +179,17 @@ export class BlockchainServicePolkadot
       publicKeys
     );
 
-    const output = TW.Polkadot.Proto.SigningOutput.decode(compiled);
-    if (output.errorMessage !== '') {
-      console.error('output error:', output.errorMessage);
-      throw new Error(output.errorMessage);
-    }
+    const { errorMessage: polkadotErrorMessage, encoded } =
+      TW.Polkadot.Proto.SigningOutput.decode(compiled);
+
+    assertErrorMessage(polkadotErrorMessage);
 
     const result = new SignedTransactionResult(
-      this.walletCore.HexCoding.encode(output.encoded),
+      this.walletCore.HexCoding.encode(encoded),
       this.walletCore.HexCoding.encode(
-        this.walletCore.Hash.blake2b(output.encoded, 32)
+        this.walletCore.Hash.blake2b(encoded, 32)
       )
     );
-
-    //console.log('Signed transaction:', result);
 
     return result;
   }

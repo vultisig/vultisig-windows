@@ -6,6 +6,7 @@ import { tss } from '../../../../wailsjs/go/models';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { TonSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { SpecificTon } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -143,11 +144,10 @@ export class BlockchainServiceTon
       txInputData
     );
 
-    const preSigningOutput =
+    const { data, errorMessage } =
       TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
-    if (preSigningOutput.errorMessage !== '') {
-      throw new Error(preSigningOutput.errorMessage);
-    }
+
+    assertErrorMessage(errorMessage);
 
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
@@ -155,11 +155,11 @@ export class BlockchainServiceTon
       this.walletCore,
       signatures
     );
-    const signature = signatureProvider.getSignature(preSigningOutput.data);
+    const signature = signatureProvider.getSignature(data);
 
     assertSignature({
       publicKey,
-      message: preSigningOutput.data,
+      message: data,
       signature,
     });
 
@@ -174,9 +174,8 @@ export class BlockchainServiceTon
     );
 
     const output = TW.TheOpenNetwork.Proto.SigningOutput.decode(compiled);
-    if (output.errorMessage !== '') {
-      throw new Error(output.errorMessage);
-    }
+
+    assertErrorMessage(output.errorMessage);
 
     const result = new SignedTransactionResult(
       output.encoded,

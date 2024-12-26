@@ -6,6 +6,7 @@ import { tss } from '../../../../wailsjs/go/models';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { SolanaSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { SpecificSolana } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
@@ -210,11 +211,10 @@ export class BlockchainServiceSolana
       txInputData
     );
 
-    const preSigningOutput = TW.Solana.Proto.PreSigningOutput.decode(preHashes);
-    if (preSigningOutput.errorMessage !== '') {
-      console.error('preSigningOutput error:', preSigningOutput.errorMessage);
-      throw new Error(preSigningOutput.errorMessage);
-    }
+    const { errorMessage, data } =
+      TW.Solana.Proto.PreSigningOutput.decode(preHashes);
+
+    assertErrorMessage(errorMessage);
 
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
@@ -222,11 +222,11 @@ export class BlockchainServiceSolana
       this.walletCore,
       signatures
     );
-    const signature = signatureProvider.getSignature(preSigningOutput.data);
+    const signature = signatureProvider.getSignature(data);
 
     assertSignature({
       publicKey,
-      message: preSigningOutput.data,
+      message: data,
       signature,
     });
 
@@ -240,18 +240,15 @@ export class BlockchainServiceSolana
       publicKeys
     );
 
-    const output = TW.Solana.Proto.SigningOutput.decode(compiled);
-    if (output.errorMessage !== '') {
-      console.error('SigningOutput error:', output.errorMessage);
-      throw new Error(output.errorMessage);
-    }
+    const { encoded, errorMessage: solanaErrorMessage } =
+      TW.Solana.Proto.SigningOutput.decode(compiled);
+
+    assertErrorMessage(solanaErrorMessage);
 
     const result = new SignedTransactionResult(
-      output.encoded,
-      output.encoded // TODO: Change this to the actual transaction hash
+      encoded,
+      encoded // TODO: Change this to the actual transaction hash
     );
-
-    // console.log('Signed transaction:', result);
 
     return result;
   }

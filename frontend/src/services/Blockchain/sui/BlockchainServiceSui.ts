@@ -9,6 +9,7 @@ import {
   SuiSpecific,
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain } from '../../../model/chain';
 import { SpecificSui } from '../../../model/specific-transaction-info';
 import {
@@ -151,10 +152,8 @@ export class BlockchainServiceSui
     );
 
     const output = TW.Sui.Proto.SigningOutput.decode(compiled);
-    if (output.errorMessage !== '') {
-      console.error('output error:', output.errorMessage);
-      throw new Error(output.errorMessage);
-    }
+
+    assertErrorMessage(output.errorMessage);
 
     const result = new SignedTransactionResult(
       output.unsignedTx,
