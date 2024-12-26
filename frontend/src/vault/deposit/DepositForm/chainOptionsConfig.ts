@@ -1,7 +1,7 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 import { z } from 'zod';
 
-import { getCoinType } from '../../../chain/walletCore/getCoinType';
+import { isValidAddress } from '../../../chain/utils/isValidAddress';
 import { Chain } from '../../../model/chain';
 
 export type ChainWithAction = keyof typeof chainDepositOptionsConfig;
@@ -62,12 +62,11 @@ export const requiredFieldsPerChainAction = {
           })
           .refine(
             async address => {
-              const coinType = getCoinType({
-                walletCore,
+              return isValidAddress({
                 chain: chain as Chain,
+                address,
+                walletCore,
               });
-
-              return walletCore.AnyAddress.isValid(address, coinType);
             },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
@@ -127,12 +126,11 @@ export const requiredFieldsPerChainAction = {
           })
           .refine(
             async address => {
-              const coinType = getCoinType({
-                walletCore,
+              return isValidAddress({
                 chain: chain as Chain,
+                address,
+                walletCore,
               });
-
-              return walletCore.AnyAddress.isValid(address, coinType);
             },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
@@ -207,12 +205,11 @@ export const requiredFieldsPerChainAction = {
           })
           .refine(
             async address => {
-              const coinType = getCoinType({
-                walletCore,
+              return isValidAddress({
                 chain: chain as Chain,
+                address,
+                walletCore,
               });
-
-              return walletCore.AnyAddress.isValid(address, coinType);
             },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
@@ -268,12 +265,11 @@ export const requiredFieldsPerChainAction = {
           })
           .refine(
             async address => {
-              const coinType = getCoinType({
-                walletCore,
+              return isValidAddress({
                 chain: chain as Chain,
+                address,
+                walletCore,
               });
-
-              return walletCore.AnyAddress.isValid(address, coinType);
             },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
@@ -332,12 +328,11 @@ export const requiredFieldsPerChainAction = {
           })
           .refine(
             async address => {
-              const coinType = getCoinType({
-                walletCore,
+              return isValidAddress({
                 chain: chain as Chain,
+                address,
+                walletCore,
               });
-
-              return walletCore.AnyAddress.isValid(address, coinType);
             },
             {
               message: 'chainFunctions.leave.validations.nodeAddressInvalid',

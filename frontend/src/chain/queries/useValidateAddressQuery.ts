@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { ChainAccount } from '../ChainAccount';
-import { getCoinType } from '../walletCore/getCoinType';
+import { isValidAddress } from '../utils/isValidAddress';
 
 export const useValidateAddressQuery = ({ chain, address }: ChainAccount) => {
   const walletCore = useAssertWalletCore();
@@ -10,12 +10,11 @@ export const useValidateAddressQuery = ({ chain, address }: ChainAccount) => {
   return useQuery({
     queryKey: ['validateAddress', chain, address],
     queryFn: async () => {
-      const coinType = getCoinType({
-        walletCore,
+      const isValid = isValidAddress({
         chain,
+        address,
+        walletCore,
       });
-
-      const isValid = walletCore.AnyAddress.isValid(address, coinType);
 
       return isValid ? null : 'Invalid address';
     },

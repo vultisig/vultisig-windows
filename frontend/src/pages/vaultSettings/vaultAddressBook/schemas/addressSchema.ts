@@ -1,7 +1,7 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 import { z } from 'zod';
 
-import { getCoinType } from '../../../../chain/walletCore/getCoinType';
+import { isValidAddress } from '../../../../chain/utils/isValidAddress';
 import { AddressBookItem } from '../../../../lib/types/address-book';
 import { Chain } from '../../../../model/chain';
 
@@ -26,14 +26,13 @@ export const getAddressSchema = ({
     .superRefine(async (data, ctx) => {
       const { address, chain } = data;
 
-      const coinType = getCoinType({
-        walletCore,
+      const isValid = isValidAddress({
         chain: chain as Chain,
+        address,
+        walletCore,
       });
 
-      const isValidAddress = walletCore.AnyAddress.isValid(address, coinType);
-
-      if (!isValidAddress) {
+      if (!isValid) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['address'],
@@ -74,14 +73,13 @@ export const getModifyAddressSchema = ({
     .superRefine(async (data, ctx) => {
       const { address, chain } = data;
 
-      const coinType = getCoinType({
-        walletCore,
+      const isValid = isValidAddress({
         chain: chain as Chain,
+        address,
+        walletCore,
       });
 
-      const isValidAddress = walletCore.AnyAddress.isValid(address, coinType);
-
-      if (!isValidAddress) {
+      if (!isValid) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['address'],

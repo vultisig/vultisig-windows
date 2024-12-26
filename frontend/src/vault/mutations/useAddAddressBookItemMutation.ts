@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { getCoinType } from '../../chain/walletCore/getCoinType';
+import { isValidAddress } from '../../chain/utils/isValidAddress';
 import { AddressBookItem } from '../../lib/types/address-book';
+import { Chain } from '../../model/chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { VaultService } from '../../services/Vault/VaultService';
 import {
@@ -23,14 +24,13 @@ export const useAddAddressBookItemMutation = ({
     mutationFn: async (addressBookItem: Omit<AddressBookItem, 'id'>) => {
       const { address, chain } = addressBookItem;
 
-      const coinType = getCoinType({
+      const isValid = isValidAddress({
+        chain: chain as Chain,
+        address,
         walletCore,
-        chain,
       });
 
-      const isValidAddress = walletCore.AnyAddress.isValid(address, coinType);
-
-      if (!isValidAddress) {
+      if (!isValid) {
         throw new Error('vault_settings_address_book_invalid_address_error');
       }
 
