@@ -1,4 +1,4 @@
-import { WalletCore } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import { WalletCore } from '@trustwallet/wallet-core';
 
 import { storage } from '../../../wailsjs/go/models';
 import { getVaultPublicKey } from '../../vault/publicKey/getVaultPublicKey';

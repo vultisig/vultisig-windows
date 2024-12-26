@@ -16,8 +16,8 @@ export const getVaultPublicKey = ({ chain, vault }: Input): VaultPublicKey => {
   const type = getTssKeysignType(chain);
 
   const value = match(type, {
-    ECDSA: () => vault.public_key_ecdsa,
-    EdDSA: () => vault.public_key_eddsa,
+    ecdsa: () => vault.public_key_ecdsa,
+    eddsa: () => vault.public_key_eddsa,
   });
 
   return {

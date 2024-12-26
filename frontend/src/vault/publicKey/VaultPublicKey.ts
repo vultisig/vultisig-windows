@@ -1,4 +1,4 @@
-import { TssKeysignType } from '../../model/chain';
+import { TssKeysignType } from '../../chain/keysign/TssKeysignType';
 
 export type VaultPublicKey = {
   value: string;

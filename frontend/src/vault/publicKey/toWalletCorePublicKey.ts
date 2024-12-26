@@ -1,12 +1,9 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 
 import { GetDerivedPubKey } from '../../../wailsjs/go/tss/TssService';
+import { walletCorePublicKeyType } from '../../chain/keysign/TssKeysignType';
 import { getCoinType } from '../../chain/walletCore/getCoinType';
-import {
-  Chain,
-  TssKeysignType,
-  walletCorePublicKeyType,
-} from '../../model/chain';
+import { Chain } from '../../model/chain';
 import { VaultPublicKey } from './VaultPublicKey';
 
 type Input = {
@@ -25,7 +22,7 @@ export const toWalletCorePublicKey = async ({
     chain,
   });
 
-  const isEdDSA = value.type === TssKeysignType.EdDSA;
+  const isEdDSA = value.type === 'eddsa';
 
   const derivedPublicKey = await GetDerivedPubKey(
     value.value,
