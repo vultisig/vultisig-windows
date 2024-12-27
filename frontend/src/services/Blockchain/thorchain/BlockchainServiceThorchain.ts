@@ -71,32 +71,6 @@ export class BlockchainServiceThorchain
     return payload;
   }
 
-  isTHORChainSpecific(obj: any): boolean {
-    return obj instanceof THORChainSpecific;
-  }
-  getSwapPreSignedInputData(
-    keysignPayload: KeysignPayload,
-    signingInput: any
-  ): Uint8Array {
-    const pubKeyData = Buffer.from(
-      keysignPayload.coin?.hexPublicKey || '',
-      'hex'
-    );
-    if (!pubKeyData) {
-      throw new Error('invalid hex public key');
-    }
-    const thorchainSpecific = keysignPayload.blockchainSpecific
-      .value as unknown as THORChainSpecific;
-    const input = signingInput;
-    input.publicKey = pubKeyData;
-    input.accountNumber = Number(thorchainSpecific.accountNumber);
-    input.sequence = Number(thorchainSpecific.sequence);
-    input.mode = BroadcastMode.SYNC;
-    input.fee = TW.Cosmos.Proto.Fee.create({
-      gas: new Long(20000000),
-    });
-    return TW.Cosmos.Proto.SigningInput.encode(input).finish();
-  }
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {

@@ -28,14 +28,3 @@ export interface IBlockchainService {
     publicKeyEcdsa: string
   ): KeysignPayload;
 }
-
-export interface IBlockchainServiceThorchain {
-  isTHORChainSpecific(obj: any): boolean;
-}
-
-export interface ISwapBlockchainService {
-  getSwapPreSignedInputData(
-    keysignPayload: KeysignPayload,
-    signingInput: any
-  ): Uint8Array;
-}
