@@ -28,10 +28,3 @@ export interface IBlockchainService {
     publicKeyEcdsa: string
   ): KeysignPayload;
 }
-
-export interface ISwapBlockchainService {
-  getSwapPreSignedInputData(
-    keysignPayload: KeysignPayload,
-    signingInput: any
-  ): Uint8Array;
-}

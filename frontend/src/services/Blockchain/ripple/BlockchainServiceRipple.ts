@@ -70,14 +70,6 @@ export class BlockchainServiceRipple
     return payload;
   }
 
-  getSwapPreSignedInputData(
-    keysignPayload: KeysignPayload,
-    signingInput: any
-  ): Uint8Array {
-    console.error('Method not implemented.', keysignPayload, signingInput);
-    throw new Error('Method not implemented.');
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {

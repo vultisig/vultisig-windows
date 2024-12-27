@@ -78,84 +78,9 @@ export class BlockchainServiceUtxo
     return payload;
   }
 
-  getSwapPreSignedInputData(
-    keysignPayload: KeysignPayload,
-    signingInput: any
-  ): Uint8Array {
-    console.error('Method not implemented.', keysignPayload, signingInput);
-    throw new Error('Method not implemented.');
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
-    const input = this.getBitcoinSigningInput(keysignPayload);
-    const inputData = TW.Bitcoin.Proto.SigningInput.encode(input).finish();
-    const plan = this.walletCore.AnySigner.plan(inputData, this.coinType);
-    input.plan = TW.Bitcoin.Proto.TransactionPlan.decode(plan);
-    return TW.Bitcoin.Proto.SigningInput.encode(input).finish();
-  }
-
-  public async getSignedTransaction(
-    vaultPublicKey: VaultPublicKey,
-    txInputData: Uint8Array,
-    signatures: { [key: string]: tss.KeysignResponse }
-  ): Promise<SignedTransactionResult> {
-    const publicKey = await toWalletCorePublicKey({
-      walletCore: this.walletCore,
-      chain: this.chain,
-      value: vaultPublicKey,
-    });
-    const allSignatures = this.walletCore.DataVector.create();
-    const publicKeys = this.walletCore.DataVector.create();
-    const signatureProvider = new SignatureProvider(
-      this.walletCore,
-      signatures
-    );
-    const hashes = getPreSigningHashes({
-      walletCore: this.walletCore,
-      txInputData,
-      chain: this.chain,
-    });
-    hashes.forEach(hash => {
-      const signature = signatureProvider.getDerSignature(hash);
-      if (signature === undefined) {
-        return;
-      }
-
-      assertSignature({
-        publicKey,
-        message: hash,
-        signature,
-        signatureFormat: 'der',
-      });
-
-      allSignatures.add(signature);
-      publicKeys.add(publicKey.data());
-    });
-
-    const compileWithSignatures =
-      this.walletCore.TransactionCompiler.compileWithSignatures(
-        this.coinType,
-        txInputData,
-        allSignatures,
-        publicKeys
-      );
-    const output = TW.Bitcoin.Proto.SigningOutput.decode(compileWithSignatures);
-    const result = new SignedTransactionResult(
-      hexEncode({
-        value: output.encoded,
-        walletCore: this.walletCore,
-      }),
-      output.transactionId
-    );
-    return result;
-  }
-
-  // private methods
-  getBitcoinSigningInput(
-    keysignPayload: KeysignPayload
-  ): TW.Bitcoin.Proto.SigningInput {
     const { byteFee, sendMaxAmount } = assertField(
       keysignPayload.blockchainSpecific,
       'value'
@@ -222,14 +147,68 @@ export class BlockchainServiceUtxo
       input.outputOpReturn = encoder.encode(keysignPayload.memo);
     }
 
-    return input;
+    const inputData = TW.Bitcoin.Proto.SigningInput.encode(input).finish();
+
+    const plan = this.walletCore.AnySigner.plan(inputData, this.coinType);
+
+    input.plan = TW.Bitcoin.Proto.TransactionPlan.decode(plan);
+
+    return TW.Bitcoin.Proto.SigningInput.encode(input).finish();
   }
 
-  async getBitcoinTransactionPlan(
-    keysignPayload: KeysignPayload
-  ): Promise<TW.Bitcoin.Proto.TransactionPlan> {
-    const input = await this.getPreSignedInputData(keysignPayload);
-    const plan = this.walletCore.AnySigner.plan(input, this.coinType);
-    return TW.Bitcoin.Proto.TransactionPlan.decode(plan);
+  public async getSignedTransaction(
+    vaultPublicKey: VaultPublicKey,
+    txInputData: Uint8Array,
+    signatures: { [key: string]: tss.KeysignResponse }
+  ): Promise<SignedTransactionResult> {
+    const publicKey = await toWalletCorePublicKey({
+      walletCore: this.walletCore,
+      chain: this.chain,
+      value: vaultPublicKey,
+    });
+    const allSignatures = this.walletCore.DataVector.create();
+    const publicKeys = this.walletCore.DataVector.create();
+    const signatureProvider = new SignatureProvider(
+      this.walletCore,
+      signatures
+    );
+    const hashes = getPreSigningHashes({
+      walletCore: this.walletCore,
+      txInputData,
+      chain: this.chain,
+    });
+    hashes.forEach(hash => {
+      const signature = signatureProvider.getDerSignature(hash);
+      if (signature === undefined) {
+        return;
+      }
+
+      assertSignature({
+        publicKey,
+        message: hash,
+        signature,
+        signatureFormat: 'der',
+      });
+
+      allSignatures.add(signature);
+      publicKeys.add(publicKey.data());
+    });
+
+    const compileWithSignatures =
+      this.walletCore.TransactionCompiler.compileWithSignatures(
+        this.coinType,
+        txInputData,
+        allSignatures,
+        publicKeys
+      );
+    const output = TW.Bitcoin.Proto.SigningOutput.decode(compileWithSignatures);
+    const result = new SignedTransactionResult(
+      hexEncode({
+        value: output.encoded,
+        walletCore: this.walletCore,
+      }),
+      output.transactionId
+    );
+    return result;
   }
 }
