@@ -124,8 +124,6 @@ export class BlockchainServiceEvm
       value: vaultPublicKey,
     });
 
-    const publicKeys = this.walletCore.DataVector.create();
-
     const [dataHash] = getPreSigningHashes({
       walletCore: this.walletCore,
       chain: this.chain,
@@ -150,7 +148,7 @@ export class BlockchainServiceEvm
       this.coinType,
       txInputData,
       allSignatures,
-      publicKeys
+      this.walletCore.DataVector.create()
     );
 
     const { errorMessage, encoded } =

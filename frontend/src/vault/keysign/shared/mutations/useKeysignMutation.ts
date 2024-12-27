@@ -48,7 +48,7 @@ export const useKeysignMutation = () => {
         )
       );
 
-      const msgs = groupedMsgs.flat();
+      const msgs = groupedMsgs.flat().sort();
 
       const blockchainService = BlockchainServiceFactory.createService(
         chain as Chain,
