@@ -18,8 +18,6 @@ export const getTxInputData = async ({
   keysignPayload,
   walletCore,
 }: Input): Promise<Uint8Array[]> => {
-  console.log('keysign payload');
-  console.log(JSON.stringify(keysignPayload));
   const chain = getKeysignChain(keysignPayload);
 
   const { erc20ApprovePayload, ...restOfKeysignPayload } = keysignPayload;
