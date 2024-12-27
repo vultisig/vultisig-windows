@@ -100,12 +100,12 @@ export class BlockchainServiceUtxo
       pkh: () => lockScript.matchPayToPubkeyHash(),
     });
 
-    const skriptKey = hexEncode({
+    const scriptKey = hexEncode({
       value: pubKeyHash,
       walletCore: this.walletCore,
     });
 
-    const skript = match(scriptType, {
+    const script = match(scriptType, {
       wpkh: () =>
         this.walletCore.BitcoinScript.buildPayToWitnessPubkeyHash(
           pubKeyHash
@@ -126,7 +126,7 @@ export class BlockchainServiceUtxo
       coinType: this.coinType.value,
 
       scripts: {
-        [skriptKey]: skript,
+        [scriptKey]: script,
       },
 
       utxo: keysignPayload.utxoInfo.map(({ hash, amount, index }) =>
