@@ -70,11 +70,6 @@ export class BlockchainServiceRipple
     return payload;
   }
 
-  isTHORChainSpecific(obj: any): boolean {
-    console.error('Method not implemented.', obj);
-    throw new Error('Method not implemented.');
-  }
-
   getSwapPreSignedInputData(
     keysignPayload: KeysignPayload,
     signingInput: any

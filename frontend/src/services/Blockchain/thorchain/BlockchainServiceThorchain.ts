@@ -71,9 +71,6 @@ export class BlockchainServiceThorchain
     return payload;
   }
 
-  isTHORChainSpecific(obj: any): boolean {
-    return obj instanceof THORChainSpecific;
-  }
   getSwapPreSignedInputData(
     keysignPayload: KeysignPayload,
     signingInput: any

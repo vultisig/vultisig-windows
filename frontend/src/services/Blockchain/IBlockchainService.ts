@@ -29,10 +29,6 @@ export interface IBlockchainService {
   ): KeysignPayload;
 }
 
-export interface IBlockchainServiceThorchain {
-  isTHORChainSpecific(obj: any): boolean;
-}
-
 export interface ISwapBlockchainService {
   getSwapPreSignedInputData(
     keysignPayload: KeysignPayload,
