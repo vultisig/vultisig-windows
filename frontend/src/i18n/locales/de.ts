@@ -403,51 +403,6 @@ export const de = {
   max: 'Max',
   insufficient_funds_to_pay_fee:
     'Das Guthaben reicht nicht aus, um die Transaktionsgebühr zu decken.',
-  'page.swap.quote.amount.error':
-    'Für die gewünschte Menge und das gewünschte Paar ist kein Angebot verfügbar.',
-  'page.swap.info.title': 'Was ist Asset-Swapping?',
-  'page.swap.info.how.it.work': 'Wie funktioniert es?',
-  'page.swap.info.select.assets': 'Assets auswählen',
-  'page.swap.info.select.assets.description':
-    'Wählen Sie zunächst die beiden Vermögenswerte aus, die Sie tauschen möchten, z. B. Bitcoin gegen Ethereum.',
-  'page.swap.info.check.rates': 'Preise prüfen',
-  'page.swap.info.check.rates.description':
-    'Auf unserer Plattform werden der aktuelle Wechselkurs und alle damit verbundenen Gebühren angezeigt. Die Kurse werden durch Marktbedingungen und Liquidität bestimmt.',
-  'page.swap.info.confirm.swap': 'Tausch bestätigen',
-  'page.swap.info.confirm.swap.description':
-    'Sobald Sie den Tausch bestätigt haben, verarbeitet das dezentrale Netzwerk von Vultisig die Transaktion sicher.',
-  'page.swap.info.receive.assets': 'Vermögenswerte empfangen',
-  'page.swap.info.receive.assets.description':
-    'Der getauschte Vermögenswert wird in der Regel innerhalb weniger Minuten direkt in Ihr Portemonnaie eingezahlt.',
-  'page.swap.info.swap.benefits.title':
-    'Vorteile der Verwendung von Vultisig zum Tauschen',
-  'page.swap.info.swap.benefits.decentralised': 'Dezentral',
-  'page.swap.info.swap.benefits.decentralised.description':
-    'Wir arbeiten mit vollständig dezentralisierten Protokollen, um Sicherheit und Transparenz zu gewährleisten.',
-  'page.swap.info.swap.benefits.speed': 'Geschwindigkeit',
-  'page.swap.info.swap.benefits.speed.description':
-    'Transaktionen werden schnell verarbeitet und ermöglichen ein nahtloses Austauscherlebnis.',
-  'page.swap.info.swap.benefits.accessibility': 'Zugänglichkeit',
-  'page.swap.info.swap.benefits.accessibility.description':
-    'Tauschen Sie eine große Auswahl an Kryptowährungen ohne die Notwendigkeit traditioneller Vermittler.',
-  'page.swap.info.swap.benefits.liquidity': 'Liquidität',
-  'page.swap.info.swap.benefits.liquidity.description':
-    'Vultisig sorgt für Liquidität und erleichtert den Tausch großer Beträge zu Marktkursen.',
-  'page.swap.info.tips': 'Tipps für neue Benutzer',
-  'page.swap.info.tips.start': 'Fangen Sie klein an',
-  'page.swap.info.tips.start.description':
-    'Wenn Sie neu beim Tauschen sind, sollten Sie mit einer kleinen Transaktion beginnen, um sich mit dem Vorgang vertraut zu machen.',
-  'page.swap.info.tips.stay.informed': 'Bleiben Sie informiert',
-  'page.swap.info.tips.stay.informed.description':
-    'Behalten Sie Markttrends und -preise im Auge. Der Zeitpunkt kann sich auf den Wert auswirken, den Sie erhalten.',
-  'page.swap.info.tips.security': 'Sicherheit',
-  'page.swap.info.tips.security.description':
-    'Achten Sie stets auf die Sicherheit Ihres Wallets und Ihrer privaten Schlüssel.',
-  'page.swap.receiver.optional': 'Empfänger (optional)',
-  'page.swap.halted.state':
-    'Der Handel für das ausgewählte Paar ist angehalten, der Tausch kann nicht durchgeführt werden',
-  'page.swap.not.possible':
-    'Ein Wechsel zu einem Smart Contract ist nicht möglich! Geben Sie eine andere Empfängeradresse ein.',
   swap_terms_0: 'Der Tauschbetrag ist korrekt',
   swap_terms_1:
     'Ich bin mit dem Betrag einverstanden, den ich nach dem Tausch erhalte',
@@ -669,4 +624,5 @@ export const de = {
   allowance: 'Zuschuss',
   provider: 'Anbieter',
   estimated_fees: 'Geschätzte Gebühren',
+  swap_tracking_link: 'Tracking-Link austauschen',
 };

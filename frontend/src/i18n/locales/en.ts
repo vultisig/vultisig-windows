@@ -413,52 +413,8 @@ export const en = {
   insufficient_balance: 'Insufficient balance',
   insufficient_funds_to_pay_fee:
     'Insufficient balance to cover transaction fee.',
-  'page.swap.quote.amount.error':
-    'No quote available for requested amount and pair.',
-  'page.swap.info.title': 'What is asset swapping?',
-  'page.swap.info.how.it.work': 'How Does It Work?',
-  'page.swap.info.select.assets': 'Select Assets',
-  'page.swap.info.select.assets.description':
-    'Begin by choosing the two assets you wish to swap, such as Bitcoin for Ethereum.',
-  'page.swap.info.check.rates': 'Check Rates',
-  'page.swap.info.check.rates.description':
-    'Our platform shows the current exchange rate and any associated fees. Rates are determined by market conditions and liquidity.',
-  'page.swap.info.confirm.swap': 'Confirm Swap',
-  'page.swap.info.confirm.swap.description':
-    "Once you confirm the swap, Vultisig's decentralized network securely processes the transaction.",
-  'page.swap.info.receive.assets': 'Receive Assets',
-  'page.swap.info.receive.assets.description':
-    'The swapped asset is deposited directly into your wallet, typically within minutes.',
-  'page.swap.info.swap.benefits.title':
-    'Benefits of using Vultisig for swapping',
-  'page.swap.info.swap.benefits.decentralised': 'Decentralised',
-  'page.swap.info.swap.benefits.decentralised.description':
-    'We operate on fully decentralised protocols, ensuring security and transparency.',
-  'page.swap.info.swap.benefits.speed': 'Speed',
-  'page.swap.info.swap.benefits.speed.description':
-    'Transactions are processed quickly, providing a seamless swapping experience.',
-  'page.swap.info.swap.benefits.accessibility': 'Accessibility',
-  'page.swap.info.swap.benefits.accessibility.description':
-    'Swap a wide range of cryptocurrencies without the need for traditional intermediaries.',
-  'page.swap.info.swap.benefits.liquidity': 'Liquidity',
-  'page.swap.info.swap.benefits.liquidity.description':
-    'Vultisig ensures liquidity, making it easier to swap large amounts at market rates.',
-  'page.swap.info.tips': 'Tips for New Users',
-  'page.swap.info.tips.start': 'Start Small',
-  'page.swap.info.tips.start.description':
-    'If you’re new to swapping, consider starting with a small transaction to familiarise yourself with the process.',
-  'page.swap.info.tips.stay.informed': 'Stay Informed',
-  'page.swap.info.tips.stay.informed.description':
-    'Keep an eye on market trends and rates. Timing can impact the value you receive.',
-  'page.swap.info.tips.security': 'Security',
-  'page.swap.info.tips.security.description':
-    'Always ensure the security of your wallet and private keys.',
-  'page.swap.receiver.optional': 'Receiver (optional)',
-  'page.swap.halted.state':
-    "Trading is halted for selected pair, can't process swap",
-  'page.swap.not.possible':
-    'Swapping to a smart contract is not possible! Enter a different recipient address.',
   swap: 'Swap',
+  swap_tracking_link: 'Swap tracking link',
   allowance: 'Allowance',
   provider: 'Provider',
   estimated_fees: 'Estimated Fees',
