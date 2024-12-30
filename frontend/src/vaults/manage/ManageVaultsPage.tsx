@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../lib/ui/buttons/Button';
-import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageFooter } from '../../ui/page/PageFooter';
@@ -13,7 +12,7 @@ import { ManageVaultFolders } from '../folders/manage/ManageVaultFolders';
 import { ManageVaults } from './ManageVaults';
 
 export const ManageVaultsPage = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const { t } = useTranslation();
 
   return (
@@ -21,9 +20,7 @@ export const ManageVaultsPage = () => {
       <PageHeader
         hasBorder
         primaryControls={<PageHeaderVaultSettingsPrompt />}
-        secondaryControls={
-          <FinishEditing onClick={() => navigate(makeAppPath('vaults'))} />
-        }
+        secondaryControls={<FinishEditing onClick={() => navigate('vaults')} />}
         title={<VaultsPageHeaderTitle />}
       />
       <PageContent scrollable gap={20}>
@@ -31,10 +28,7 @@ export const ManageVaultsPage = () => {
         <ManageVaults />
       </PageContent>
       <PageFooter>
-        <Button
-          kind="outlined"
-          onClick={() => navigate(makeAppPath('createVaultFolder'))}
-        >
+        <Button kind="outlined" onClick={() => navigate('createVaultFolder')}>
           {t('create_folder')}
         </Button>
       </PageFooter>

@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Button } from '../../lib/ui/buttons/Button';
@@ -14,7 +13,7 @@ import { HStack, VStack, vStack } from '../../lib/ui/layout/Stack';
 import { Text } from '../../lib/ui/text';
 import { getColor } from '../../lib/ui/theme/getters';
 import { match } from '../../lib/utils/match';
-import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
@@ -45,13 +44,13 @@ export const SetupVaultPage = () => {
   const { t } = useTranslation();
   const [value, setValue] = useSetupVaultType();
 
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const onStart = useCallback(() => {
     navigate(
       match(value, {
-        fast: () => makeAppPath('setupFastVault'),
-        secure: () => makeAppPath('setupSecureVault'),
-        active: () => makeAppPath('setupActiveVault'),
+        fast: () => 'setupFastVault',
+        secure: () => 'setupSecureVault',
+        active: () => 'setupActiveVault',
       })
     );
   }, [navigate, value]);
@@ -114,7 +113,7 @@ export const SetupVaultPage = () => {
           {value !== 'fast' && (
             <Button
               onClick={() =>
-                navigate(makeAppPath('uploadQr', { title: t('join_keygen') }))
+                navigate('uploadQr', { params: { title: t('join_keygen') } })
               }
               kind="outlined"
             >

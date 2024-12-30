@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import useVersionCheck from '../../lib/hooks/useVersionCheck';
 import { Text } from '../../lib/ui/text';
-import { appPaths } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { ProductLogo } from '../../ui/logo/ProductLogo';
 import {
   FixedWrapper,
@@ -14,7 +13,7 @@ import {
 
 const UpdateAvailablePopup = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const {
     localVersion,
     latestVersion,
@@ -46,7 +45,7 @@ const UpdateAvailablePopup = () => {
           localVersion,
         })}
       </Text>
-      <StyledButton onClickCapture={() => navigate(appPaths.checkUpdate)}>
+      <StyledButton onClickCapture={() => navigate('checkUpdate')}>
         {t('updatePopup.updateButton')}
       </StyledButton>
     </FixedWrapper>

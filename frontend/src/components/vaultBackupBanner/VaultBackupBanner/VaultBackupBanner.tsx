@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon';
 import { TriangleAlertIcon } from '../../../lib/ui/icons/TriangleAlertIcon';
 import { Text } from '../../../lib/ui/text';
-import { makeAppPath } from '../../../navigation';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import {
   ChevronIconWrapper,
   ContentWrapperButton,
@@ -12,11 +11,11 @@ import {
 
 const VaultBackupBanner = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   return (
     <ContentWrapperButton
-      onClick={() => navigate(makeAppPath('vaultBackup'))}
+      onClick={() => navigate('vaultBackup')}
       data-testid="VaultBackupBanner-Content"
     >
       <TriangleAlertIcon height={24} width={24} />

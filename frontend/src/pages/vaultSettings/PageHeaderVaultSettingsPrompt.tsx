@@ -1,15 +1,13 @@
-import { useNavigate } from 'react-router-dom';
-
 import { MenuIcon } from '../../lib/ui/icons/MenuIcon';
-import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
 
 export const PageHeaderVaultSettingsPrompt = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   return (
     <PageHeaderIconButton
-      onClick={() => navigate(makeAppPath('vaultSettings'))}
+      onClick={() => navigate('vaultSettings')}
       icon={<MenuIcon />}
     />
   );

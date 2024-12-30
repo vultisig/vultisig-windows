@@ -1,11 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../lib/ui/buttons/Button';
 import { VStack } from '../../lib/ui/layout/Stack';
 import { InfoBlock } from '../../lib/ui/status/InfoBlock';
 import { Text } from '../../lib/ui/text';
-import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
@@ -14,7 +13,7 @@ import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 export const ReshareVaultPage = () => {
   const { t } = useTranslation();
 
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   return (
     <>
@@ -33,21 +32,15 @@ export const ReshareVaultPage = () => {
         </VStack>
         <VStack gap={20}>
           <InfoBlock>{t('reshare_disclaimer')}</InfoBlock>
-          <Button
-            onClick={() => navigate(makeAppPath('reshareVaultSecure'))}
-            kind="primary"
-          >
+          <Button onClick={() => navigate('reshareVaultSecure')} kind="primary">
             {t('start_reshare')}
           </Button>
-          <Button
-            onClick={() => navigate(makeAppPath('reshareVaultFast'))}
-            kind="outlined"
-          >
+          <Button onClick={() => navigate('reshareVaultFast')} kind="outlined">
             {t('start_reshare_with_server')}
           </Button>
           <Button
             onClick={() =>
-              navigate(makeAppPath('uploadQr', { title: t('join_reshare') }))
+              navigate('uploadQr', { params: { title: t('join_reshare') } })
             }
             kind="outlined"
           >

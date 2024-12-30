@@ -4,13 +4,13 @@ import ReshareIcon from '../../lib/ui/icons/ReshareIcon';
 import SquareAndPencilIcon from '../../lib/ui/icons/SquareAndPencilIcon';
 import TrashIcon from '../../lib/ui/icons/TrashIcon';
 import { TextColor } from '../../lib/ui/text';
-import { makeAppPath } from '../../navigation';
+import { AppPathsWithNoParamsOrState } from '../../navigation';
 
 type SettingItem = {
   titleKey: string;
   subtitleKey: string;
   icon: React.ElementType;
-  path: string;
+  path: AppPathsWithNoParamsOrState;
   textColor?: TextColor;
 };
 
@@ -19,31 +19,31 @@ export const editVaultSettingsItems: SettingItem[] = [
     titleKey: 'vault_settings_edit_vault_details_title',
     subtitleKey: 'vault_setting_edit_vault_details_subtitle',
     icon: InfoIcon,
-    path: makeAppPath('vaultDetails'),
+    path: 'vaultDetails',
   },
   {
     titleKey: 'vault_setting_edit_vault_backup_title',
     subtitleKey: 'vault_setting_edit_vault_backup_subtitle',
     icon: BackupIcon,
-    path: makeAppPath('vaultBackup'),
+    path: 'vaultBackup',
   },
   {
     titleKey: 'vault_setting_edit_vault_rename_title',
     subtitleKey: 'vault_setting_edit_vault_rename_subtitle',
     icon: SquareAndPencilIcon,
-    path: makeAppPath('vaultRename'),
+    path: 'vaultRename',
   },
   {
     titleKey: 'vault_setting_edit_vault_reshare_title',
     subtitleKey: 'vault_setting_edit_vault_reshare_subtitle',
     icon: ReshareIcon,
-    path: makeAppPath('reshareVault'),
+    path: 'reshareVault',
   },
   {
     titleKey: 'vault_setting_edit_vault_delete_title',
     subtitleKey: 'vault_setting_edit_vault_delete_subtitle',
     icon: TrashIcon,
-    path: makeAppPath('vaultDelete'),
+    path: 'vaultDelete',
     textColor: 'danger',
   },
 ];

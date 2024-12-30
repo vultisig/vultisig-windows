@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -44,6 +44,14 @@ export const ManageReceiver = () => {
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default');
   const { t } = useTranslation();
 
+  const onScanSuccess = useCallback(
+    (address: string) => {
+      setValue(address);
+      setViewState('default');
+    },
+    [setValue]
+  );
+
   return (
     <Match
       value={viewState}
@@ -53,12 +61,7 @@ export const ManageReceiver = () => {
           onClose={() => setViewState('default')}
           withDefaultStructure={false}
         >
-          <FixedScanQRView
-            onScanSuccess={address => {
-              setValue(address);
-              setViewState('default');
-            }}
-          />
+          <FixedScanQRView onScanSuccess={onScanSuccess} />
         </Modal>
       )}
       addressBook={() => (

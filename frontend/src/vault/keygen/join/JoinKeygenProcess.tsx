@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { TitledComponentProps } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { makeAppPath } from '../../../navigation';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { KeygenFailedState } from '../shared/KeygenFailedState';
 import { KeygenPageHeader } from '../shared/KeygenPageHeader';
 import { KeygenPendingState } from '../shared/KeygenPendingState';
@@ -15,7 +14,7 @@ export const JoinKeygenProcess = ({ title }: TitledComponentProps) => {
 
   useEffect(joinKeygen, [joinKeygen]);
 
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   return (
     <MatchQuery
@@ -27,7 +26,7 @@ export const JoinKeygenProcess = ({ title }: TitledComponentProps) => {
           <KeygenFailedState
             message={error.message}
             onTryAgain={() => {
-              navigate(makeAppPath('vault'));
+              navigate('vault');
             }}
           />
         </>

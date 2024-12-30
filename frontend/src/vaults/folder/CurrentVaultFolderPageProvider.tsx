@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { ComponentWithChildrenProps } from '../../lib/ui/props';
-import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 import { useVaultFolder } from '../folders/queries/useVaultFoldersQuery';
 import { VaultFolderProvider } from './state/currentVaultFolder';
@@ -14,11 +13,11 @@ export const CurrentVaultFolderPageProvider = ({
 
   const value = useVaultFolder(id);
 
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   useEffect(() => {
     if (!value) {
-      navigate(makeAppPath('vaults'));
+      navigate('vaults');
     }
   }, [navigate, value]);
 

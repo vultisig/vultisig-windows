@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../../lib/ui/buttons/Button';
 import { FilledAlertIcon } from '../../../lib/ui/icons/FilledAlertIcon';
@@ -7,6 +6,7 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock';
 import { Text } from '../../../lib/ui/text';
 import { match } from '../../../lib/utils/match';
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { PageContent } from '../../../ui/page/PageContent';
 import { KeygenType } from '../KeygenType';
 import { useCurrentKeygenType } from '../state/currentKeygenType';
@@ -29,7 +29,7 @@ export const KeygenFailedState = ({
     [KeygenType.Reshare]: () => t('reshare'),
   });
 
-  const navigate = useNavigate();
+  const goBack = useNavigateBack();
 
   return (
     <PageContent>
@@ -56,9 +56,7 @@ export const KeygenFailedState = ({
           <br />
           {t('information_note2')}
         </WarningBlock>
-        <Button onClick={onTryAgain || (() => navigate(-1))}>
-          {t('try_again')}
-        </Button>
+        <Button onClick={onTryAgain || goBack}>{t('try_again')}</Button>
       </VStack>
     </PageContent>
   );

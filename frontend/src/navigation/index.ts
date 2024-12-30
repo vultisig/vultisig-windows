@@ -104,6 +104,23 @@ export type AppPathsWithParams = keyof AppPathParams;
 
 export type AppPathsWithState = keyof AppPathState;
 
+export type AppPathsWithParamsAndState = Extract<
+  AppPathsWithParams,
+  AppPathsWithState
+>;
+export type AppPathsWithOnlyParams = Exclude<
+  AppPathsWithParams,
+  AppPathsWithParamsAndState
+>;
+export type AppPathsWithOnlyState = Exclude<
+  AppPathsWithState,
+  AppPathsWithParamsAndState
+>;
+export type AppPathsWithNoParamsOrState = Exclude<
+  AppPath,
+  AppPathsWithParams | AppPathsWithState
+>;
+
 export function makeAppPath<P extends keyof AppPathParams>(
   path: P,
   variables: AppPathParams[P]

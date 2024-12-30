@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { storage } from '../../../../wailsjs/go/models';
@@ -11,12 +11,13 @@ import { SafeImage } from '../../../lib/ui/images/SafeImage';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text, text } from '../../../lib/ui/text';
 import { makeAppPath } from '../../../navigation';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { ProductLogo } from '../../../ui/logo/ProductLogo';
 import KeygenSkipVaultBackupAttentionModal from './KeygenSkipVaultBackupAttentionModal';
 
 export const KeygenBackup = ({ vault }: { vault: storage.Vault }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const isFastVault = vault.signers.some(signer =>
     signer.startsWith('Server-')
   );
@@ -63,7 +64,7 @@ export const KeygenBackup = ({ vault }: { vault: storage.Vault }) => {
             )}
             renderContent={({ onClose }) => (
               <KeygenSkipVaultBackupAttentionModal
-                onSkip={() => navigate(makeAppPath('vault'))}
+                onSkip={() => navigate('vault')}
                 onClose={onClose}
               />
             )}
