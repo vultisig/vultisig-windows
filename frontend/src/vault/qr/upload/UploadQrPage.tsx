@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { Match } from '../../../lib/ui/base/Match';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
@@ -14,7 +14,7 @@ type UploadQrView = (typeof uploadQrViews)[number];
 
 export const UploadQrPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const [{ title = t('keysign') }] = useAppPathParams<'uploadQr'>();
 
   const goBack = useNavigateBack();
@@ -22,6 +22,13 @@ export const UploadQrPage = () => {
   const [view, setView] = useState<UploadQrView>('scan');
 
   const viewIndex = uploadQrViews.indexOf(view);
+
+  const onScanSuccess = useCallback(
+    (url: string) => {
+      navigate('deeplink', { state: { url } });
+    },
+    [navigate]
+  );
 
   return (
     <>
@@ -36,7 +43,7 @@ export const UploadQrPage = () => {
         scan={() => (
           <ScanQrView
             onUploadQrViewRequest={() => setView('upload')}
-            onScanSuccess={url => navigate('deeplink', { state: { url } })}
+            onScanSuccess={onScanSuccess}
           />
         )}
         upload={() => <UploadQrView />}

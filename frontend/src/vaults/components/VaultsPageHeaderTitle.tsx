@@ -1,18 +1,17 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle';
 
 export const VaultsPageHeaderTitle = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const { t } = useTranslation();
 
   return (
     <PageHeaderToggleTitle
       value={true}
       onChange={() => {
-        navigate(makeAppPath('vault'));
+        navigate('vault');
       }}
     >
       {t('vaults')}

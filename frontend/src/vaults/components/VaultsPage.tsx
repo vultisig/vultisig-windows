@@ -1,7 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-
 import { EditIcon } from '../../lib/ui/icons/EditIcon';
-import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageFooter } from '../../ui/page/PageFooter';
@@ -13,7 +11,7 @@ import { Vaults } from './Vaults';
 import { VaultsPageHeaderTitle } from './VaultsPageHeaderTitle';
 
 export const VaultsPage = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   return (
     <>
@@ -23,7 +21,7 @@ export const VaultsPage = () => {
         secondaryControls={
           <PageHeaderIconButton
             icon={<EditIcon />}
-            onClick={() => navigate(makeAppPath('manageVaults'))}
+            onClick={() => navigate('manageVaults')}
           />
         }
         title={<VaultsPageHeaderTitle />}

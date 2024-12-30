@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Button } from '../../lib/ui/buttons/Button';
@@ -9,7 +8,7 @@ import { ContainImage } from '../../lib/ui/images/ContainImage';
 import { SafeImage } from '../../lib/ui/images/SafeImage';
 import { HStack, VStack, vStack } from '../../lib/ui/layout/Stack';
 import { Text } from '../../lib/ui/text';
-import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
@@ -28,10 +27,10 @@ const ArtContainer = styled.div`
 `;
 
 export const SecureSetupVaultPage = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const { t } = useTranslation();
   const onStart = useCallback(() => {
-    navigate(makeAppPath('setupSecureVault'));
+    navigate('setupSecureVault');
   }, [navigate]);
 
   return (
@@ -85,7 +84,7 @@ export const SecureSetupVaultPage = () => {
           <Button type="submit">{t('start').toUpperCase()}</Button>
           <Button
             onClick={() =>
-              navigate(makeAppPath('uploadQr', { title: t('join_keygen') }))
+              navigate('uploadQr', { params: { title: t('join_keygen') } })
             }
             kind="outlined"
           >

@@ -1,20 +1,19 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../lib/ui/buttons/Button';
 import { PlusIcon } from '../../lib/ui/icons/PlusIcon';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
-import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 
 export const ManageVaultCreation = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const { t } = useTranslation();
 
   return (
     <VStack gap={20}>
       <Button
         onClick={() => {
-          navigate(makeAppPath('setupVault', {}));
+          navigate('setupVault', { params: {} });
         }}
         kind="primary"
       >
@@ -24,7 +23,7 @@ export const ManageVaultCreation = () => {
       </Button>
       <Button
         onClick={() => {
-          navigate(makeAppPath('importVault'));
+          navigate('importVault');
         }}
         kind="outlined"
       >

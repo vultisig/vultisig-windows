@@ -1,9 +1,7 @@
-import { useNavigate } from 'react-router-dom';
-
 import { FolderIcon } from '../../../lib/ui/icons/FolderIcon';
 import { HStack } from '../../../lib/ui/layout/Stack';
 import { ListItem } from '../../../lib/ui/list/item/ListItem';
-import { makeAppPath } from '../../../navigation';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 
 type FolderListItemProps = {
   isDraggable?: boolean;
@@ -16,12 +14,12 @@ export const FolderListItem = ({
   isDraggable,
   id,
 }: FolderListItemProps) => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   return (
     <ListItem
       isDraggable={isDraggable}
-      onClick={() => navigate(makeAppPath('vaultFolder', { id }))}
+      onClick={() => navigate('vaultFolder', { params: { id } })}
     >
       <HStack alignItems="center" gap={12}>
         <FolderIcon style={{ fontSize: 24 }} />

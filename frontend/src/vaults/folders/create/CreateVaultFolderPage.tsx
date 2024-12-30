@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { NonEmptyOnly } from '../../../lib/ui/base/NonEmptyOnly';
 import { Button } from '../../../lib/ui/buttons/Button';
@@ -8,6 +7,7 @@ import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { getLastItemOrder } from '../../../lib/utils/order/getLastItemOrder';
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageFooter } from '../../../ui/page/PageFooter';
@@ -18,7 +18,7 @@ import { useVaultFolders } from '../queries/useVaultFoldersQuery';
 
 export const CreateVaultFolderPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const goBack = useNavigateBack();
   const [name, setName] = useState('');
   const [vaultIds, setVaultIds] = useState<string[]>([]);
   const folders = useVaultFolders();
@@ -59,9 +59,7 @@ export const CreateVaultFolderPage = () => {
                 vaultIds,
               },
               {
-                onSuccess: () => {
-                  navigate(-1);
-                },
+                onSuccess: goBack,
               }
             );
           },

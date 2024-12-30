@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
 import { ChevronRightIcon } from '../../lib/ui/icons/ChevronRightIcon';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { Text } from '../../lib/ui/text';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
@@ -21,7 +21,7 @@ import {
 
 const EditVaultPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const currentVault = useCurrentVault();
 
   if (!currentVault) {

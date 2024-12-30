@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -7,7 +7,6 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { takeWholeSpaceAbsolutely } from '../../../lib/ui/css/takeWholeSpaceAbsolutely';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { attempt } from '../../../lib/utils/attempt';
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';
 import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -34,22 +33,27 @@ export const ScanQrView = ({
   onScanSuccess,
   className,
 }: ScanQrViewProps) => {
-  // Keep success callback in ref to avoid adding it to useEffect deps on line 107
-  const onScanSuccessRef = useRef(onScanSuccess);
-  if (onScanSuccessRef.current !== onScanSuccess) {
-    onScanSuccessRef.current = onScanSuccess;
-  }
-
   const { t } = useTranslation();
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
-  const navigate = useAppNavigate();
 
   const { mutate: getStream, ...streamMutationState } = useMutation({
     mutationFn: () =>
       navigator.mediaDevices.getUserMedia({
         video: {
-          width: { ideal: 1920 },
-          height: { ideal: 1080 },
+          width: {
+            min: 640,
+            ideal: 1920,
+            max: 3840,
+          },
+          height: {
+            min: 480,
+            ideal: 1080,
+            max: 2160,
+          },
+          frameRate: {
+            ideal: 30,
+            max: 60,
+          },
         },
       }),
   });
@@ -91,7 +95,7 @@ export const ScanQrView = ({
       );
 
       if (scanData) {
-        onScanSuccessRef.current(scanData);
+        onScanSuccess(scanData);
       } else {
         animationFrameId = requestAnimationFrame(scan);
       }
@@ -100,7 +104,7 @@ export const ScanQrView = ({
     animationFrameId = requestAnimationFrame(scan);
 
     return () => cancelAnimationFrame(animationFrameId);
-  }, [navigate, video]);
+  }, [onScanSuccess, video]);
 
   return (
     <Container className={className}>

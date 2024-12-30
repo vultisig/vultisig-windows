@@ -1,14 +1,13 @@
 import { Buffer } from 'buffer';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import ImportVaultDialog from '../../components/dialog/ImportVaultDialog';
 import NavBar from '../../components/navbar/NavBar';
 import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
 import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 import { extractErrorMsg } from '../../lib/utils/error/extractErrorMsg';
-import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { isBase64Encoded } from '../../utils/util';
 import { decryptVault } from '../../vault/encryption/decryptVault';
 import { useSaveVaultMutation } from '../../vault/mutations/useSaveVaultMutation';
@@ -21,7 +20,7 @@ import {
 
 const ImportVaultView = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isContinue, setContinue] = useState(false);
@@ -227,7 +226,7 @@ const ImportVaultView = () => {
 
       await saveVault(toStorageVault(newVault));
 
-      navigate(makeAppPath('vault'));
+      navigate('vault');
     } catch (e: unknown) {
       setDialogTitle(t('invalid_vault_data'));
       setDialogContent(t('invalid_vault_data_message'));

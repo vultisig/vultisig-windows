@@ -12,7 +12,7 @@ import { SettingsIcon } from '../../lib/ui/icons/SettingsIcon';
 import ShareIcon from '../../lib/ui/icons/ShareIcon';
 import ShieldCheckIcon from '../../lib/ui/icons/ShieldCheckIcon';
 import VultisigLogoIcon from '../../lib/ui/icons/VultisigLogoIcon';
-import { makeAppPath } from '../../navigation';
+import { AppPathsWithNoParamsOrState } from '../../navigation';
 
 export const VULTISIG_WEBSITE_LINK = 'https://vultisig.com';
 export const VULTISIG_GITHUB_LINK =
@@ -32,7 +32,7 @@ type SettingItem = {
   id: string;
   titleKey: string;
   icon: ElementType;
-  path: string;
+  path: AppPathsWithNoParamsOrState;
 };
 
 type SettingSection = {
@@ -47,37 +47,37 @@ export const settingsItems: SettingSection[] = [
         id: 'vault-settings',
         titleKey: 'vault_settings_settings',
         icon: () => <SettingsIcon style={{ fontSize: 24 }} />,
-        path: makeAppPath('editVault'),
+        path: 'editVault',
       },
       {
         id: 'language',
         titleKey: 'vault_settings_language',
         icon: GlobeIcon,
-        path: makeAppPath('languageSettings'),
+        path: 'languageSettings',
       },
       {
         id: 'currency',
         titleKey: 'vault_settings_currency',
         icon: CurrencyCircleIcon,
-        path: makeAppPath('currencySettings'),
+        path: 'currencySettings',
       },
       {
         id: 'address-book',
         titleKey: 'vault_settings_address_book',
         icon: AddressBookIcon,
-        path: makeAppPath('addressBook'),
+        path: 'addressBook',
       },
       {
         id: 'default-chains',
         titleKey: 'vault_settings_default_chains',
         icon: DefaultChainsIcon,
-        path: makeAppPath('defaultChains'),
+        path: 'defaultChains',
       },
       {
         id: 'faq',
         titleKey: 'vault_settings_faq',
         icon: FaqIcon,
-        path: makeAppPath('faq'),
+        path: 'faq',
       },
     ],
   },
@@ -88,19 +88,19 @@ export const settingsItems: SettingSection[] = [
         id: 'register-for-airdrop',
         titleKey: 'vault_settings_register_for_airdrop',
         icon: VultisigLogoIcon,
-        path: makeAppPath('registerForAirdrop'),
+        path: 'registerForAirdrop',
       },
       {
         id: 'share-app',
         titleKey: 'vault_settings_share_app',
         icon: ShareIcon,
-        path: makeAppPath('shareApp'),
+        path: 'shareApp',
       },
       {
         id: 'check-for-update',
         titleKey: 'vault_settings_check_for_update',
         icon: DownloadIcon,
-        path: makeAppPath('checkUpdate'),
+        path: 'checkUpdate',
       },
     ],
   },
@@ -111,13 +111,13 @@ export const settingsItems: SettingSection[] = [
         id: 'privacy-policy',
         titleKey: 'vault_settings_privacy_policy',
         icon: ShieldCheckIcon,
-        path: makeAppPath('privacyPolicy'),
+        path: 'privacyPolicy',
       },
       {
         id: 'terms-of-service',
         titleKey: 'vault_settings_terms_of_service',
         icon: NoteIcon,
-        path: makeAppPath('termsOfService'),
+        path: 'termsOfService',
       },
     ],
   },

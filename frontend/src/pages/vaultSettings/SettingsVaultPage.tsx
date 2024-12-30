@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { BrowserOpenURL } from '../../../wailsjs/runtime/runtime';
 import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
@@ -10,6 +9,7 @@ import TwitterIcon from '../../lib/ui/icons/TwitterIcon';
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { Text } from '../../lib/ui/text';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
@@ -32,7 +32,7 @@ import {
 } from './SettingsVaultPage.styles';
 
 const SettingsVaultPage = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const { t } = useTranslation();
   const { data: vaultSettings } = useVaultSettingsQuery();
   const { currency, languageUI } = vaultSettings;

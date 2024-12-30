@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { ComponentWithChildrenProps } from '../lib/ui/props';
-import { makeAppPath } from '../navigation';
+import { useAppNavigate } from '../navigation/hooks/useAppNavigate';
 import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding';
 
 export const IncompleteOnboardingOnly = ({
@@ -10,11 +9,11 @@ export const IncompleteOnboardingOnly = ({
 }: ComponentWithChildrenProps) => {
   const [hasCompletedOnboarding] = useHasFinishedOnboarding();
 
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   useEffect(() => {
     if (hasCompletedOnboarding) {
-      navigate(makeAppPath('root'));
+      navigate('root');
     }
   }, [hasCompletedOnboarding, navigate]);
 

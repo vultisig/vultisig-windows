@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { Button } from '../../../lib/ui/buttons/Button';
 import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
@@ -10,7 +9,7 @@ import InfoGradientIcon from '../../../lib/ui/icons/InfoGradientIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries';
 import { Text } from '../../../lib/ui/text';
-import { makeAppPath } from '../../../navigation';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -37,7 +36,7 @@ const VaultBackupPage = () => {
     useState(false);
 
   const vault = useCurrentVault();
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const { t } = useTranslation();
   const invalidateQueries = useInvalidateQueries();
 
@@ -61,7 +60,7 @@ const VaultBackupPage = () => {
       {
         onSuccess: () => {
           invalidateQueries(vaultsQueryKey);
-          navigate(makeAppPath('vault'));
+          navigate('vault');
         },
       }
     );

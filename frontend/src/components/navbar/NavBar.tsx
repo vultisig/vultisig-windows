@@ -1,7 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { BrowserOpenURL } from '../../../wailsjs/runtime';
+import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
 
 interface NavBarProps {
   title: string;
@@ -10,7 +10,7 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = ({ title, questionLink, handleBack }) => {
-  const navigate = useNavigate();
+  const goBack = useNavigateBack();
 
   const openHelp = () => {
     if (questionLink) {
@@ -26,7 +26,7 @@ const NavBar: React.FC<NavBarProps> = ({ title, questionLink, handleBack }) => {
           if (handleBack) {
             handleBack();
           } else {
-            navigate(-1);
+            goBack();
           }
         }}
       >

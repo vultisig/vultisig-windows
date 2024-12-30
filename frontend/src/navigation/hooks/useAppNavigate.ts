@@ -5,38 +5,32 @@ import {
   AppPath,
   AppPathParams,
   AppPathState,
-  AppPathsWithParams,
-  AppPathsWithState,
+  AppPathsWithNoParamsOrState,
+  AppPathsWithOnlyParams,
+  AppPathsWithOnlyState,
+  AppPathsWithParamsAndState,
   makeAppPath,
 } from '..';
 
 type CommonOptions = { replace?: boolean };
 
-type PathsWithParamsAndState = Extract<AppPathsWithParams, AppPathsWithState>;
-type PathsWithOnlyParams = Exclude<AppPathsWithParams, PathsWithParamsAndState>;
-type PathsWithOnlyState = Exclude<AppPathsWithState, PathsWithParamsAndState>;
-type PathsWithNoParamsOrState = Exclude<
-  AppPath,
-  AppPathsWithParams | AppPathsWithState
->;
-
 type AppNavigate = {
-  <P extends PathsWithParamsAndState>(
+  <P extends AppPathsWithParamsAndState>(
     path: P,
     options: CommonOptions & {
       params: AppPathParams[P];
       state: AppPathState[P];
     }
   ): void;
-  <P extends PathsWithOnlyParams>(
+  <P extends AppPathsWithOnlyParams>(
     path: P,
     options: CommonOptions & { params: AppPathParams[P] }
   ): void;
-  <P extends PathsWithOnlyState>(
+  <P extends AppPathsWithOnlyState>(
     path: P,
     options: CommonOptions & { state: AppPathState[P] }
   ): void;
-  (path: PathsWithNoParamsOrState, options?: CommonOptions): void;
+  (path: AppPathsWithNoParamsOrState, options?: CommonOptions): void;
 };
 
 export function useAppNavigate(): AppNavigate {

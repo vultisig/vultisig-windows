@@ -1,5 +1,4 @@
 import Rive from '@rive-app/react-canvas';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,6 +8,7 @@ import { toSizeUnit } from '../../lib/ui/css/toSizeUnit';
 import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 import { VStack } from '../../lib/ui/layout/Stack';
 import { makeAppPath } from '../../navigation';
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt';
 import { pageConfig } from '../../ui/page/config';
 import { PageHeader } from '../../ui/page/PageHeader';
@@ -30,7 +30,7 @@ const PositionQrPrompt = styled.div`
 `;
 
 export const VaultPage = () => {
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const { name } = useCurrentVault();
 
   return (
@@ -51,7 +51,7 @@ export const VaultPage = () => {
             <PageHeaderToggleTitle
               value={false}
               onChange={() => {
-                navigate(makeAppPath('vaults'));
+                navigate('vaults');
               }}
             >
               {name}
