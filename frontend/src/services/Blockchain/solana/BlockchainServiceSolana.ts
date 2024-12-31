@@ -6,13 +6,6 @@ import { assertSignature } from '../../../chain/utils/assertSignature';
 import { SolanaSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { SpecificSolana } from '../../../model/specific-transaction-info';
-import {
-  ISendTransaction,
-  ISwapTransaction,
-  ITransaction,
-  TransactionType,
-} from '../../../model/transaction';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
@@ -24,50 +17,6 @@ export class BlockchainServiceSolana
   extends BlockchainService
   implements IBlockchainService
 {
-  createKeysignPayload(
-    obj: ITransaction | ISendTransaction | ISwapTransaction,
-    localPartyId: string,
-    publicKeyEcdsa: string
-  ): KeysignPayload {
-    const payload: KeysignPayload = super.createKeysignPayload(
-      obj,
-      localPartyId,
-      publicKeyEcdsa
-    );
-    const specific_pb = new SolanaSpecific();
-    const transactionInfoSpecific: SpecificSolana =
-      obj.specificTransactionInfo as SpecificSolana;
-
-    switch (obj.transactionType) {
-      case TransactionType.SEND:
-        specific_pb.fromTokenAssociatedAddress =
-          transactionInfoSpecific.fromAddressPubKey;
-        specific_pb.toTokenAssociatedAddress =
-          transactionInfoSpecific.toAddressPubKey;
-        specific_pb.priorityFee =
-          transactionInfoSpecific.priorityFee.toString();
-        specific_pb.recentBlockHash = transactionInfoSpecific.recentBlockHash;
-
-        payload.blockchainSpecific = {
-          case: 'solanaSpecific',
-          value: specific_pb,
-        };
-        break;
-
-      case TransactionType.SWAP:
-        payload.blockchainSpecific = {
-          case: 'solanaSpecific',
-          value: specific_pb,
-        };
-        break;
-
-      default:
-        throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
-    }
-
-    return payload;
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {

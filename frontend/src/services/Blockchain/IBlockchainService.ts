@@ -1,11 +1,5 @@
 import { tss } from '../../../wailsjs/go/models';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
-import {
-  IDepositTransactionVariant,
-  ISendTransaction,
-  ISwapTransaction,
-  ITransaction,
-} from '../../model/transaction';
 import { VaultPublicKey } from '../../vault/publicKey/VaultPublicKey';
 import { SignedTransactionResult } from './signed-transaction-result';
 
@@ -17,14 +11,4 @@ export interface IBlockchainService {
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult>;
-
-  createKeysignPayload(
-    obj:
-      | ITransaction
-      | ISendTransaction
-      | ISwapTransaction
-      | IDepositTransactionVariant,
-    localPartyId: string,
-    publicKeyEcdsa: string
-  ): KeysignPayload;
 }

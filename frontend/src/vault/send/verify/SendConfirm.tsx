@@ -6,7 +6,7 @@ import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { Text } from '../../../lib/ui/text';
 import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt';
 import { useCurrentVaultCoin } from '../../state/currentVault';
-import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
+import { useSpecificSendTxInfoQuery } from '../queries/useSendChainSpecificQuery';
 import { useCurrentSendCoin } from '../state/sendCoin';
 import { useSendTxKeysignPayload } from '../state/sendTxKeysignPayload';
 import { useSendTerms } from './state/sendTerms';

@@ -4,10 +4,10 @@ import {
   OneInchSwapPayload,
   OneInchTransaction,
 } from '../../../../gen/vultisig/keysign/v1/1inch_swap_payload_pb';
-import { EthereumSpecific } from '../../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../../gen/vultisig/keysign/v1/coin_pb';
 import { KeysignPayload } from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { processErc20KeysignPayload } from '../../../evm/tx/processErc20KeysignPayload';
+import { KeysignChainSpecific } from '../../../keysign/KeysignChainSpecific';
 import { fromChainAmount } from '../../../utils/fromChainAmount';
 import { isNativeCoin } from '../../../utils/isNativeCoin';
 import { OneInchSwapQuote } from '../OneInchSwapQuote';
@@ -19,7 +19,7 @@ type Input = {
   quote: OneInchSwapQuote;
   fromCoin: Coin;
   toCoin: Coin;
-  ethereumSpecific: EthereumSpecific;
+  chainSpecific: KeysignChainSpecific;
 };
 
 export const getOneInchSwapKeysignPayload = async ({
@@ -29,7 +29,7 @@ export const getOneInchSwapKeysignPayload = async ({
   quote,
   fromCoin,
   toCoin,
-  ethereumSpecific,
+  chainSpecific,
 }: Input): Promise<KeysignPayload> => {
   const swapPayload = new OneInchSwapPayload({
     fromCoin,
@@ -55,10 +55,7 @@ export const getOneInchSwapKeysignPayload = async ({
       case: 'oneinchSwapPayload',
       value: swapPayload,
     },
-    blockchainSpecific: {
-      case: 'ethereumSpecific',
-      value: ethereumSpecific,
-    },
+    blockchainSpecific: chainSpecific,
     vaultPublicKeyEcdsa: vaultId,
     vaultLocalPartyId,
   });

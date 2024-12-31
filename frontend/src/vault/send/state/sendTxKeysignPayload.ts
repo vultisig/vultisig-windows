@@ -9,7 +9,7 @@ import { ISendTransaction, TransactionType } from '../../../model/transaction';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault';
-import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
+import { useSpecificSendTxInfoQuery } from '../queries/useSendChainSpecificQuery';
 import { useSender } from '../sender/hooks/useSender';
 import { capSendAmountToMax } from '../utils/capSendAmountToMax';
 import { useSendAmount } from './amount';

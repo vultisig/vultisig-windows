@@ -1,21 +1,17 @@
-import { getKeysignChainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getErc20ThorchainSwapKeysignPayload } from '../../../chain/swap/native/thor/utils/getErc20ThorchainSwapKeysignPayload';
 import { getOneInchSwapKeysignPayload } from '../../../chain/swap/oneInch/utils/getOneInchSwapKeysignPayload';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { areEqualCoins } from '../../../coin/Coin';
-import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
-import { EvmChain } from '../../../model/chain';
-import { TransactionType } from '../../../model/transaction';
-import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
-import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
+import { Chain, EvmChain, UtxoChain } from '../../../model/chain';
+import { RpcServiceUtxo } from '../../../services/Rpc/utxo/RpcServiceUtxo';
 import {
   useCurrentVault,
   useCurrentVaultAddress,
@@ -42,44 +38,27 @@ export const useSwapKeysignPayloadQuery = () => {
 
   const swapQuoteQuery = useSwapQuoteQuery();
 
-  const walletCore = useAssertWalletCore();
-
   const vault = useCurrentVault();
-
-  const fromCoinBalanceQuery = useBalanceQuery(fromCoin);
 
   const chainSpecificQuery = useSwapChainSpecificQuery();
 
   return useStateDependentQuery({
     state: {
       swapQuote: swapQuoteQuery.data,
-      fromCoinBalance: fromCoinBalanceQuery.data,
       chainSpecific: chainSpecificQuery.data,
       fromAmount: fromAmount ?? undefined,
     },
-    getQuery: ({ swapQuote, fromCoinBalance, chainSpecific, fromAmount }) => ({
+    getQuery: ({ swapQuote, chainSpecific, fromAmount }) => ({
       queryKey: ['swapKeysignPayload'],
       queryFn: async () => {
-        const service = BlockchainServiceFactory.createService(
-          fromCoinKey.chain,
-          walletCore
-        );
-
-        const sendMaxAmount =
-          fromAmount ===
-          fromChainAmount(fromCoinBalance.amount, fromCoin.decimals);
-
-        return matchRecordUnion(swapQuote, {
+        const result = await matchRecordUnion(swapQuote, {
           oneInch: quote => {
             return getOneInchSwapKeysignPayload({
               quote,
               fromCoin,
               toCoin,
               amount: toChainAmount(fromAmount, fromCoin.decimals),
-              ethereumSpecific: getKeysignChainSpecificValue(
-                chainSpecific,
-                'ethereumSpecific'
-              ),
+              chainSpecific,
               vaultId: getStorageVaultId(vault),
               vaultLocalPartyId: vault.local_party_id,
             });
@@ -94,10 +73,7 @@ export const useSwapKeysignPayloadQuery = () => {
                 fromCoin,
                 amount: fromAmount,
                 toCoin,
-                ethereumSpecific: getKeysignChainSpecificValue(
-                  chainSpecific,
-                  'ethereumSpecific'
-                ),
+                chainSpecific,
                 vaultId: getStorageVaultId(vault),
                 vaultLocalPartyId: vault.local_party_id,
               });
@@ -105,34 +81,28 @@ export const useSwapKeysignPayloadQuery = () => {
 
             const nativeFeeCoin = getCoinMetaKey(getChainFeeCoin(swapChain));
 
-            const tx = areEqualCoins(fromCoinKey, nativeFeeCoin)
-              ? {
-                  fromAddress,
-                  toAddress: '',
-                  amount: fromAmount,
-                  memo,
-                  coin: fromCoin,
-                  transactionType: TransactionType.DEPOSIT,
-                  chainSpecific,
-                }
-              : {
-                  fromAddress,
-                  amount: fromAmount,
-                  memo,
-                  coin: fromCoin,
-                  sendMaxAmount,
-                  chainSpecific,
-                  transactionType: TransactionType.SEND,
-                  toAddress: shouldBePresent(quote.inbound_address),
-                };
+            const isDeposit = areEqualCoins(fromCoinKey, nativeFeeCoin);
 
-            return service.createKeysignPayload(
-              tx,
-              vault.local_party_id,
-              vault.public_key_ecdsa
-            );
+            return new KeysignPayload({
+              coin: fromCoin,
+              toAddress: isDeposit
+                ? ''
+                : shouldBePresent(quote.inbound_address),
+              toAmount: toChainAmount(fromAmount, fromCoin.decimals).toString(),
+              blockchainSpecific: chainSpecific,
+              memo,
+              vaultLocalPartyId: vault.local_party_id,
+              vaultPublicKeyEcdsa: vault.public_key_ecdsa,
+            });
           },
         });
+
+        if (fromCoin.chain in UtxoChain) {
+          const service = new RpcServiceUtxo(fromCoin.chain as Chain);
+          result.utxoInfo = await service.getUtxos(fromCoin);
+        }
+
+        return result;
       },
     }),
   });

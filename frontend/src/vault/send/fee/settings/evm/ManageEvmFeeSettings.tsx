@@ -19,7 +19,7 @@ import { Modal } from '../../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../../lib/ui/props';
 import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery';
 import { SpecificEvm } from '../../../../../model/specific-transaction-info';
-import { useSpecificSendTxInfoQuery } from '../../../queries/useSpecificSendTxInfoQuery';
+import { useSpecificSendTxInfoQuery } from '../../../queries/useSendChainSpecificQuery';
 import { SendFiatFeeValue } from '../../SendFiatFeeValue';
 import { SendGasFeeValue } from '../../SendGasFeeValue';
 import {

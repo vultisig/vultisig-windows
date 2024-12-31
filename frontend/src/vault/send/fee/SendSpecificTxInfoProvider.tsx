@@ -6,7 +6,7 @@ import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup';
 import { StrictText } from '../../../lib/ui/text';
 import { SpecificTransactionInfo } from '../../../model/specific-transaction-info';
-import { useSpecificSendTxInfoQuery } from '../queries/useSpecificSendTxInfoQuery';
+import { useSpecificSendTxInfoQuery } from '../queries/useSendChainSpecificQuery';
 
 export const {
   useValue: useSendSpecificTxInfo,

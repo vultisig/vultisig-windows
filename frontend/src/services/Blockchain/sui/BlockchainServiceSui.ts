@@ -11,13 +11,6 @@ import {
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain } from '../../../model/chain';
-import { SpecificSui } from '../../../model/specific-transaction-info';
-import {
-  ISendTransaction,
-  ISwapTransaction,
-  ITransaction,
-  TransactionType,
-} from '../../../model/transaction';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
@@ -29,46 +22,6 @@ export class BlockchainServiceSui
   extends BlockchainService
   implements IBlockchainService
 {
-  createKeysignPayload(
-    obj: ITransaction | ISendTransaction | ISwapTransaction,
-    localPartyId: string,
-    publicKeyEcdsa: string
-  ): KeysignPayload {
-    const payload: KeysignPayload = super.createKeysignPayload(
-      obj,
-      localPartyId,
-      publicKeyEcdsa
-    );
-    const specific_pb = new SuiSpecific();
-    const transactionInfoSpecific: SpecificSui =
-      obj.specificTransactionInfo as SpecificSui;
-
-    switch (obj.transactionType) {
-      case TransactionType.SEND:
-        specific_pb.coins = transactionInfoSpecific.coins || [];
-        specific_pb.referenceGasPrice =
-          transactionInfoSpecific.referenceGasPrice.toString();
-
-        payload.blockchainSpecific = {
-          case: 'suicheSpecific',
-          value: specific_pb,
-        };
-        break;
-
-      case TransactionType.SWAP:
-        payload.blockchainSpecific = {
-          case: 'suicheSpecific',
-          value: specific_pb,
-        };
-        break;
-
-      default:
-        throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
-    }
-
-    return payload;
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {

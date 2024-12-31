@@ -8,18 +8,10 @@ import { utxoChainScriptType } from '../../../chain/utxo/UtxoScriptType';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { match } from '../../../lib/utils/match';
 import { assertField } from '../../../lib/utils/record/assertField';
 import { UtxoChain } from '../../../model/chain';
-import { SpecificUtxo } from '../../../model/specific-transaction-info';
-import {
-  ISendTransaction,
-  ISwapTransaction,
-  ITransaction,
-  TransactionType,
-} from '../../../model/transaction';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
@@ -31,53 +23,6 @@ export class BlockchainServiceUtxo
   extends BlockchainService
   implements IBlockchainService
 {
-  createKeysignPayload(
-    obj: ITransaction | ISendTransaction | ISwapTransaction,
-    localPartyId: string,
-    publicKeyEcdsa: string
-  ): KeysignPayload {
-    const payload: KeysignPayload = super.createKeysignPayload(
-      obj,
-      localPartyId,
-      publicKeyEcdsa
-    );
-    const utxoSpecific = new UTXOSpecific();
-    const transactionInfoSpecific: SpecificUtxo =
-      obj.specificTransactionInfo as SpecificUtxo;
-    switch (obj.transactionType) {
-      case TransactionType.SEND:
-        utxoSpecific.sendMaxAmount = (obj as ISendTransaction).sendMaxAmount;
-        utxoSpecific.byteFee = transactionInfoSpecific.byteFee.toString() ?? '';
-
-        payload.utxoInfo = transactionInfoSpecific.utxos.map(utxo => {
-          return new UtxoInfo({
-            hash: utxo.hash,
-            amount: utxo.amount,
-            index: utxo.index,
-          });
-        });
-
-        payload.blockchainSpecific = {
-          case: 'utxoSpecific',
-          value: utxoSpecific,
-        };
-        break;
-
-      // We will have to check how the swap-old transaction is structured for UTXO chains
-      case TransactionType.SWAP:
-        payload.blockchainSpecific = {
-          case: 'utxoSpecific',
-          value: utxoSpecific,
-        };
-        break;
-
-      default:
-        throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
-    }
-
-    return payload;
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {

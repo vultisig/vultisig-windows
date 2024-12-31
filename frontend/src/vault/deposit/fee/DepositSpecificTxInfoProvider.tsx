@@ -7,7 +7,7 @@ import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup';
 import { StrictText } from '../../../lib/ui/text';
 import { SpecificTransactionInfo } from '../../../model/specific-transaction-info';
-import { useSpecificDepositTxInfoQuery } from '../queries/useSpecificDepositTxInfoQuery';
+import { useSpecificDepositTxInfoQuery } from '../queries/useDepositChainSpecificQuery';
 
 export const {
   useValue: useSendSpecificTxInfo,

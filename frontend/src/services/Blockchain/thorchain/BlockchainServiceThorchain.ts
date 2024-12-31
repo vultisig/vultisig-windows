@@ -16,13 +16,6 @@ import { assertSignature } from '../../../chain/utils/assertSignature';
 import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
-import { SpecificThorchain } from '../../../model/specific-transaction-info';
-import {
-  ISendTransaction,
-  ISwapTransaction,
-  ITransaction,
-  TransactionType,
-} from '../../../model/transaction';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { RpcServiceThorchain } from '../../Rpc/thorchain/RpcServiceThorchain';
@@ -32,45 +25,6 @@ export class BlockchainServiceThorchain
   extends BlockchainService
   implements IBlockchainService
 {
-  createKeysignPayload(
-    obj: ITransaction | ISendTransaction | ISwapTransaction,
-    localPartyId: string,
-    publicKeyEcdsa: string
-  ): KeysignPayload {
-    const payload: KeysignPayload = super.createKeysignPayload(
-      obj,
-      localPartyId,
-      publicKeyEcdsa
-    );
-    const specific = new THORChainSpecific();
-    const gasInfoSpecific: SpecificThorchain =
-      obj.specificTransactionInfo as SpecificThorchain;
-    specific.accountNumber = BigInt(gasInfoSpecific.accountNumber);
-    specific.fee = BigInt(gasInfoSpecific.fee);
-    specific.sequence = BigInt(gasInfoSpecific.sequence);
-
-    switch (obj.transactionType) {
-      case TransactionType.SEND:
-        specific.isDeposit = false;
-
-        break;
-      case TransactionType.DEPOSIT:
-        specific.isDeposit = true;
-
-        break;
-
-      default:
-        throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
-    }
-
-    payload.blockchainSpecific = {
-      case: 'thorchainSpecific',
-      value: specific,
-    };
-
-    return payload;
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {

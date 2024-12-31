@@ -8,7 +8,7 @@ import { FailedQueryOverlay } from '../../../../lib/ui/query/components/overlay/
 import { PendingQueryOverlay } from '../../../../lib/ui/query/components/overlay/PendingQueryOverlay';
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
 import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled';
-import { useSpecificSendTxInfoQuery } from '../../queries/useSpecificSendTxInfoQuery';
+import { useSpecificSendTxInfoQuery } from '../../queries/useSendChainSpecificQuery';
 import { SpecificSendTxInfoProvider } from '../SendSpecificTxInfoProvider';
 
 type ManageFeeSettingsFrameProps = {
