@@ -1,8 +1,11 @@
-/* eslint-disable */
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
+import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
+import {
+  CosmosSpecific,
+  TransactionType,
+} from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
-import { SpecificCosmos } from '../../../model/specific-transaction-info';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceCosmos implements IRpcService {
@@ -33,7 +36,7 @@ export class RpcServiceCosmos implements IRpcService {
     }
   }
 
-  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificCosmos> {
+  async getSpecificTransactionInfo(coin: Coin) {
     let defaultGas = 7500;
 
     switch (coin.chain) {
@@ -48,26 +51,17 @@ export class RpcServiceCosmos implements IRpcService {
         break;
     }
 
-    let result: SpecificCosmos = {
-      gas: defaultGas,
-      transactionType: 0,
-      gasPrice: defaultGas,
-      fee: defaultGas,
-      accountNumber: 0,
-      sequence: 0,
-    };
+    const account = await this.fetchAccountNumber(coin.address);
 
-    try {
-      const account = await this.fetchAccountNumber(coin.address);
-      if (account) {
-        result.accountNumber = Number(account.account_number);
-        result.sequence = Number(account.sequence);
-      } else {
-        console.error('getSpecificTransactionInfo::No account data found');
-      }
-    } catch (error) {
-      console.error('getSpecificTransactionInfo::', error);
-    }
+    const result: KeysignChainSpecific = {
+      case: 'cosmosSpecific',
+      value: new CosmosSpecific({
+        accountNumber: BigInt(account.account_number),
+        sequence: BigInt(account.sequence),
+        gas: BigInt(defaultGas),
+        transactionType: TransactionType.UNSPECIFIED,
+      }),
+    };
 
     return result;
   }
@@ -82,25 +76,10 @@ export class RpcServiceCosmos implements IRpcService {
     return response.balances;
   }
 
-  async fetchAccountNumber(
-    address: string
-  ): Promise<CosmosAccountValue | null> {
+  async fetchAccountNumber(address: string): Promise<CosmosAccountValue> {
     const url = this.accountNumberURL(address);
-    if (!url) {
-      return null;
-    }
 
     const response = await Fetch(url);
-
-    if (!response.account) {
-      console.error('fetchAccountNumber:: No account data found');
-      return null;
-    }
-
-    if (!response.account as unknown as CosmosAccountValue) {
-      console.error('fetchAccountNumber:: No account data found');
-      return null;
-    }
 
     return response.account as CosmosAccountValue;
   }
@@ -114,7 +93,7 @@ export class RpcServiceCosmos implements IRpcService {
     }
 
     try {
-      let response = await Post(url, JSON.parse(jsonString));
+      const response = await Post(url, JSON.parse(jsonString));
 
       const data: CosmosTransactionBroadcastResponse = response;
 
@@ -145,19 +124,15 @@ export class RpcServiceCosmos implements IRpcService {
   }
 
   protected balanceURL(address: string): string | null {
-    throw new Error('Must override in subclass');
+    throw new Error(`Must override in subclass, address: ${address}`);
   }
 
-  protected accountNumberURL(address: string): string | null {
-    throw new Error('Must override in subclass');
+  protected accountNumberURL(address: string): string {
+    throw new Error(`Must override in subclass, address: ${address}`);
   }
 
   protected transactionURL(): string | null {
     throw new Error('Must override in subclass');
-  }
-
-  resolveENS?(ensName: string): Promise<string> {
-    throw new Error('Method not implemented.');
   }
 }
 
@@ -173,10 +148,6 @@ interface CosmosAccountValue {
 
 interface CosmosBalanceResponse {
   balances: CosmosBalance[];
-}
-
-interface CosmosAccountsResponse {
-  account: CosmosAccountValue;
 }
 
 interface CosmosTransactionBroadcastResponse {
