@@ -1,4 +1,4 @@
-import { useSpecificTxInfoQuery } from '../../../coin/query/useSpecificTxInfoQuery';
+import { useSpecificTxInfoQuery } from '../../../coin/query/useChainSpecificQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useFeeSettings } from '../fee/settings/state/feeSettings';

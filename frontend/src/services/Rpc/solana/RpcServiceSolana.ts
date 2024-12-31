@@ -1,7 +1,6 @@
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { SpecificSolana } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';

@@ -11,12 +11,13 @@ import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import { createHash } from 'crypto';
 import Long from 'long';
 
+import { getKeysignChainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
+import { mayaConfig } from '../../../chain/maya/config';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
-import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
@@ -42,9 +43,11 @@ export class BlockchainServiceMaya
       publicKeyEcdsa
     );
     const specific = new MAYAChainSpecific();
-    const gasInfoSpecific: SpecificThorchain =
-      obj.specificTransactionInfo as SpecificThorchain;
-    specific.accountNumber = BigInt(gasInfoSpecific.accountNumber);
+    const gasInfoSpecific = getKeysignChainSpecificValue(
+      obj.chainSpecific,
+      'mayaSpecific'
+    );
+
     specific.sequence = BigInt(gasInfoSpecific.sequence);
 
     switch (obj.transactionType) {
@@ -173,7 +176,7 @@ export class BlockchainServiceMaya
       memo: keysignPayload.memo || '',
       messages: message,
       fee: TW.Cosmos.Proto.Fee.create({
-        gas: new Long(2000000000),
+        gas: new Long(mayaConfig.fee),
       }),
     });
 

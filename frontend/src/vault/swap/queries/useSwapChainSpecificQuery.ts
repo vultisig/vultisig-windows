@@ -1,13 +1,13 @@
-import { useSpecificTxInfoQuery } from '../../../coin/query/useSpecificTxInfoQuery';
+import { useChainSpecificQuery } from '../../../coin/query/useChainSpecificQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromCoin } from '../state/fromCoin';
 
-export const useSwapSpecificTxInfoQuery = () => {
+export const useSwapChainSpecificQuery = () => {
   const [fromCoin] = useFromCoin();
   const coin = useCurrentVaultCoin(fromCoin);
 
-  return useSpecificTxInfoQuery({
+  return useChainSpecificQuery({
     coin: storageCoinToCoin(coin),
     // receiver is only required for Solana which swaps do not support
     receiver: '',

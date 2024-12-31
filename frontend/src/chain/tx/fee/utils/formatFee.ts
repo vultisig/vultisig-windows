@@ -1,19 +1,18 @@
 import { formatAmount } from '../../../../lib/utils/formatAmount';
 import { Chain } from '../../../../model/chain';
-import { SpecificTransactionInfo } from '../../../../model/specific-transaction-info';
+import { KeysignChainSpecific } from '../../../keysign/KeysignChainSpecific';
 import { fromChainAmount } from '../../../utils/fromChainAmount';
-import { getFeeAmountDecimals, getFeeAmountRecord } from './feeAmount';
 import { getFeeUnit } from './feeUnit';
+import { getFeeAmount } from './getFeeAmount';
+import { getFeeAmountDecimals } from './getFeeAmountDecimals';
 
 type FormatFeeInput = {
   chain: Chain;
-  txInfo: SpecificTransactionInfo;
+  chainSpecific: KeysignChainSpecific;
 };
 
-export const formatFee = ({ chain, txInfo }: FormatFeeInput) => {
-  const getFeeAmount = getFeeAmountRecord[chain];
-
-  const feeAmount = getFeeAmount(txInfo);
+export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
+  const feeAmount = getFeeAmount(chainSpecific);
 
   const decimals = getFeeAmountDecimals(chain);
 

@@ -2,6 +2,7 @@ import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getKeysignChainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
@@ -9,7 +10,6 @@ import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_spec
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain } from '../../../model/chain';
-import { SpecificRipple } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
@@ -39,8 +39,10 @@ export class BlockchainServiceRipple
     );
     const rippleSpecific = new RippleSpecific();
 
-    const transactionInfoSpecific: SpecificRipple =
-      obj.specificTransactionInfo as SpecificRipple;
+    const transactionInfoSpecific = getKeysignChainSpecificValue(
+      obj.chainSpecific,
+      'rippleSpecific'
+    );
 
     switch (obj.transactionType) {
       case TransactionType.SEND:

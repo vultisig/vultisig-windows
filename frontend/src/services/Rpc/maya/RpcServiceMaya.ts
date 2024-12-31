@@ -1,3 +1,4 @@
+import { mayaConfig } from '../../../chain/maya/config';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
@@ -8,7 +9,7 @@ import { IRpcService } from '../IRpcService';
 
 export class RpcServiceMaya implements IRpcService {
   async calculateFee(_coin?: Coin): Promise<number> {
-    return 2000000000;
+    return mayaConfig.fee;
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {

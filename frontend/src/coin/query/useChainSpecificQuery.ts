@@ -8,34 +8,34 @@ import { ServiceFactory } from '../../services/ServiceFactory';
 import { AccountCoinKey } from '../AccountCoin';
 import { getCoinKey } from '../utils/coin';
 
-type SpecificTxInfoQueryParams = {
+type ChainSpecificQueryParams = {
   coin: Coin;
   receiver: string;
   feeSettings?: any;
 };
 
-type SpecificTxInfoQueryKeyParams = {
+type ChainSpecificQueryKeyParams = {
   coin: AccountCoinKey;
   feeSettings?: any;
   receiver: string;
 };
 
-export const getSpecificTxInfoQueryKey = ({
+export const getChainSpecificQueryKey = ({
   coin,
   feeSettings,
   receiver,
-}: SpecificTxInfoQueryKeyParams) =>
-  withoutUndefined(['specificSendTxInfo', coin, receiver, feeSettings]);
+}: ChainSpecificQueryKeyParams) =>
+  withoutUndefined(['chainSpecific', coin, receiver, feeSettings]);
 
-export const useSpecificTxInfoQuery = ({
+export const useChainSpecificQuery = ({
   coin,
   feeSettings,
   receiver,
-}: SpecificTxInfoQueryParams) => {
+}: ChainSpecificQueryParams) => {
   const walletCore = useAssertWalletCore();
 
   return useQuery({
-    queryKey: getSpecificTxInfoQueryKey({
+    queryKey: getChainSpecificQueryKey({
       coin: getCoinKey(coin),
       receiver,
       feeSettings,

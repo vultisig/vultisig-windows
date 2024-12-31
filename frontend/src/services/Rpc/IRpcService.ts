@@ -1,5 +1,5 @@
+import { KeysignChainSpecific } from '../../chain/keysign/KeysignChainSpecific';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
-import { SpecificTransactionInfo } from '../../model/specific-transaction-info';
 
 export interface IRpcService {
   // Common methods
@@ -11,5 +11,5 @@ export interface IRpcService {
     coin: Coin,
     receiver: string,
     feeSettings?: any
-  ): Promise<SpecificTransactionInfo>;
+  ): Promise<KeysignChainSpecific>;
 }

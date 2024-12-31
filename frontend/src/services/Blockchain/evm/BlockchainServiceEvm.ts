@@ -3,7 +3,7 @@ import { keccak256 } from 'js-sha3';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { getSigningInputEnvelopedTxFields } from '../../../chain/evm/tx/getSigningInputEnvelopedTxFields';
-import { toEthereumSpecific } from '../../../chain/evm/tx/toEthereumSpecific';
+import { getKeysignChainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
@@ -13,7 +13,6 @@ import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { SpecificEvm } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
@@ -34,8 +33,10 @@ export class BlockchainServiceEvm
     localPartyId: string,
     publicKeyEcdsa: string
   ): KeysignPayload {
-    const transactionInfoSpecific: SpecificEvm =
-      obj.specificTransactionInfo as SpecificEvm;
+    const ethereumSpecific = getKeysignChainSpecificValue(
+      obj.chainSpecific,
+      'ethereumSpecific'
+    );
 
     const payload: KeysignPayload = super.createKeysignPayload(
       obj,
@@ -45,7 +46,7 @@ export class BlockchainServiceEvm
 
     payload.blockchainSpecific = {
       case: 'ethereumSpecific',
-      value: toEthereumSpecific(transactionInfoSpecific),
+      value: ethereumSpecific,
     };
 
     return payload;

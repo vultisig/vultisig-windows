@@ -9,11 +9,11 @@ import { SignedTransactionResult } from '../signed-transaction-result';
 import TxCompiler = TW.TxCompiler;
 import Long from 'long';
 
+import { getKeysignChainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { SpecificPolkadot } from '../../../model/specific-transaction-info';
 import {
   ISendTransaction,
   ISwapTransaction,
@@ -39,8 +39,10 @@ export class BlockchainServicePolkadot
       publicKeyEcdsa
     );
     const specific = new PolkadotSpecific();
-    const gasInfoSpecific: SpecificPolkadot =
-      obj.specificTransactionInfo as SpecificPolkadot;
+    const gasInfoSpecific = getKeysignChainSpecificValue(
+      obj.chainSpecific,
+      'polkadotSpecific'
+    );
 
     specific.currentBlockNumber = gasInfoSpecific.currentBlockNumber.toString();
     specific.genesisHash = gasInfoSpecific.genesisHash;

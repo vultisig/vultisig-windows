@@ -1,3 +1,4 @@
+import { polkadotConfig } from '../../../chain/polkadot/config';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { SpecificPolkadot } from '../../../model/specific-transaction-info';
@@ -7,7 +8,7 @@ import { RpcService } from '../RpcService';
 
 export class RpcServicePolkadot extends RpcService implements IRpcService {
   async calculateFee(_coin: Coin): Promise<number> {
-    return 250000000;
+    return polkadotConfig.fee;
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {

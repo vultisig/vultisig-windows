@@ -9,6 +9,7 @@ import { createHash } from 'crypto';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getKeysignChainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
@@ -17,7 +18,6 @@ import {
   CosmosSpecific,
   TransactionType,
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { SpecificCosmos } from '../../../model/specific-transaction-info';
 import { ISendTransaction, ITransaction } from '../../../model/transaction';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
@@ -39,8 +39,10 @@ export class BlockchainServiceCosmos
       publicKeyEcdsa
     );
     const specific = new CosmosSpecific();
-    const gasInfoSpecific: SpecificCosmos =
-      obj.specificTransactionInfo as SpecificCosmos;
+    const gasInfoSpecific = getKeysignChainSpecificValue(
+      obj.chainSpecific,
+      'cosmosSpecific'
+    );
     specific.accountNumber = BigInt(gasInfoSpecific.accountNumber);
     specific.sequence = BigInt(gasInfoSpecific.sequence);
     specific.gas = BigInt(gasInfoSpecific.gas);

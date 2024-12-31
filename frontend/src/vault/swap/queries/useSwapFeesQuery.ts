@@ -7,8 +7,8 @@ import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransfor
 import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
+import { useSwapSpecificTxInfoQuery } from './useSwapChainSpecificQuery';
 import { useSwapQuoteQuery } from './useSwapQuoteQuery';
-import { useSwapSpecificTxInfoQuery } from './useSwapSpecificTxInfoQuery';
 
 export const useSwapFeesQuery = () => {
   const swapQuoteQuery = useSwapQuoteQuery();

@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { rippleConfig } from '../../../chain/ripple/config';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { SpecificRipple } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
@@ -52,8 +53,8 @@ export class RpcServiceRipple extends RpcService implements IRpcService {
     let sequence = accountInfo?.account_data?.Sequence ?? 0;
 
     const specificTransactionInfo: SpecificRipple = {
-      gasPrice: 180000,
-      fee: 180000,
+      gasPrice: rippleConfig.fee,
+      fee: rippleConfig.fee,
       sequence: sequence,
     } as SpecificRipple;
 

@@ -1,13 +1,13 @@
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
+import { tonConfig } from '../../../chain/ton/config';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { SpecificTon } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceTon extends RpcService implements IRpcService {
-  async calculateFee(coin: Coin): Promise<number> {
-    return 0.01 * 10 ** coin.decimals;
+  async calculateFee(): Promise<number> {
+    return Number(tonConfig.fee);
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {

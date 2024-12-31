@@ -1,3 +1,4 @@
+import { getKeysignChainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getErc20ThorchainSwapKeysignPayload } from '../../../chain/swap/native/thor/utils/getErc20ThorchainSwapKeysignPayload';
 import { getOneInchSwapKeysignPayload } from '../../../chain/swap/oneInch/utils/getOneInchSwapKeysignPayload';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
@@ -12,7 +13,6 @@ import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDepe
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
 import { EvmChain } from '../../../model/chain';
-import { SpecificEvm } from '../../../model/specific-transaction-info';
 import { TransactionType } from '../../../model/transaction';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
@@ -25,8 +25,8 @@ import { getStorageVaultId } from '../../utils/storageVault';
 import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
+import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery';
 import { useSwapQuoteQuery } from './useSwapQuoteQuery';
-import { useSwapSpecificTxInfoQuery } from './useSwapSpecificTxInfoQuery';
 
 export const useSwapKeysignPayloadQuery = () => {
   const [fromCoinKey] = useFromCoin();
@@ -48,21 +48,16 @@ export const useSwapKeysignPayloadQuery = () => {
 
   const fromCoinBalanceQuery = useBalanceQuery(fromCoin);
 
-  const specificTxInfoQuery = useSwapSpecificTxInfoQuery();
+  const chainSpecificQuery = useSwapChainSpecificQuery();
 
   return useStateDependentQuery({
     state: {
       swapQuote: swapQuoteQuery.data,
       fromCoinBalance: fromCoinBalanceQuery.data,
-      specificTransactionInfo: specificTxInfoQuery.data,
+      chainSpecific: chainSpecificQuery.data,
       fromAmount: fromAmount ?? undefined,
     },
-    getQuery: ({
-      swapQuote,
-      fromCoinBalance,
-      specificTransactionInfo,
-      fromAmount,
-    }) => ({
+    getQuery: ({ swapQuote, fromCoinBalance, chainSpecific, fromAmount }) => ({
       queryKey: ['swapKeysignPayload'],
       queryFn: async () => {
         const service = BlockchainServiceFactory.createService(
@@ -81,7 +76,10 @@ export const useSwapKeysignPayloadQuery = () => {
               fromCoin,
               toCoin,
               amount: toChainAmount(fromAmount, fromCoin.decimals),
-              specificTransactionInfo: specificTransactionInfo as SpecificEvm,
+              ethereumSpecific: getKeysignChainSpecificValue(
+                chainSpecific,
+                'ethereumSpecific'
+              ),
               vaultId: getStorageVaultId(vault),
               vaultLocalPartyId: vault.local_party_id,
             });
@@ -96,7 +94,10 @@ export const useSwapKeysignPayloadQuery = () => {
                 fromCoin,
                 amount: fromAmount,
                 toCoin,
-                specificTransactionInfo: specificTransactionInfo as SpecificEvm,
+                ethereumSpecific: getKeysignChainSpecificValue(
+                  chainSpecific,
+                  'ethereumSpecific'
+                ),
                 vaultId: getStorageVaultId(vault),
                 vaultLocalPartyId: vault.local_party_id,
               });
@@ -112,7 +113,7 @@ export const useSwapKeysignPayloadQuery = () => {
                   memo,
                   coin: fromCoin,
                   transactionType: TransactionType.DEPOSIT,
-                  specificTransactionInfo,
+                  chainSpecific,
                 }
               : {
                   fromAddress,
@@ -120,7 +121,7 @@ export const useSwapKeysignPayloadQuery = () => {
                   memo,
                   coin: fromCoin,
                   sendMaxAmount,
-                  specificTransactionInfo,
+                  chainSpecific,
                   transactionType: TransactionType.SEND,
                   toAddress: shouldBePresent(quote.inbound_address),
                 };

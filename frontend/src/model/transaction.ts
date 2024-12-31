@@ -1,7 +1,7 @@
+import { KeysignChainSpecific } from '../chain/keysign/KeysignChainSpecific';
 import { Coin } from '../gen/vultisig/keysign/v1/coin_pb';
 import { Erc20ApprovePayload } from '../gen/vultisig/keysign/v1/erc20_approve_payload_pb';
 import { THORChainSwapPayload } from '../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
-import { SpecificTransactionInfo } from './specific-transaction-info';
 
 export enum TransactionType {
   SEND = 'send',
@@ -17,7 +17,7 @@ export interface ITransaction {
   memo: string;
   coin: Coin;
   transactionType: TransactionType;
-  specificTransactionInfo?: SpecificTransactionInfo;
+  chainSpecific: KeysignChainSpecific;
 }
 
 export interface ISendTransaction extends ITransaction {
@@ -30,7 +30,7 @@ export interface IDepositTransactionBase {
   toAddress?: string;
   memo: string;
   coin: Coin;
-  specificTransactionInfo?: SpecificTransactionInfo;
+  chainSpecific: KeysignChainSpecific;
   transactionType: TransactionType.DEPOSIT;
   amount?: number;
 }
