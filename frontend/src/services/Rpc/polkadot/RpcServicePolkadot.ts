@@ -1,7 +1,7 @@
+import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
 import { polkadotConfig } from '../../../chain/polkadot/config';
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
+import { PolkadotSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { SpecificPolkadot } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
@@ -28,31 +28,26 @@ export class RpcServicePolkadot extends RpcService implements IRpcService {
     return result;
   }
 
-  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificPolkadot> {
-    const fee = await this.calculateFee(coin);
-    const result: SpecificPolkadot = {
-      recentBlockHash: '',
-      nonce: 0,
-      currentBlockNumber: 0,
-      specVersion: 0,
-      transactionVersion: 0,
-      genesisHash: '',
-      fee,
-      gasPrice: fromChainAmount(fee, coin.decimals),
-    };
+  async getSpecificTransactionInfo(coin: Coin) {
+    const recentBlockHash = await this.fetchBlockHash();
+    const nonce = await this.fetchNonce(coin.address);
+    const currentBlockNumber = Number(await this.fetchBlockHeader());
+    const genesisHash = await this.fetchGenesisBlockHash();
 
-    try {
-      result.recentBlockHash = await this.fetchBlockHash();
-      result.nonce = await this.fetchNonce(coin.address);
-      result.currentBlockNumber = Number(await this.fetchBlockHeader());
-      const { specVersion, transactionVersion } =
-        await this.fetchRuntimeVersion();
-      result.specVersion = specVersion;
-      result.transactionVersion = transactionVersion;
-      result.genesisHash = await this.fetchGenesisBlockHash();
-    } catch (error) {
-      console.error('getSpecificTransactionInfo::', error);
-    }
+    const { specVersion, transactionVersion } =
+      await this.fetchRuntimeVersion();
+
+    const result: KeysignChainSpecific = {
+      case: 'polkadotSpecific',
+      value: new PolkadotSpecific({
+        recentBlockHash,
+        nonce: BigInt(nonce),
+        currentBlockNumber: currentBlockNumber.toString(),
+        specVersion,
+        transactionVersion,
+        genesisHash,
+      }),
+    };
 
     return result;
   }

@@ -9,15 +9,14 @@ import {
   defaultFeePriority,
   FeePriority,
 } from '../../../chain/fee/FeePriority';
-import { gwei } from '../../../chain/tx/fee/utils/evm';
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
+import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
+import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { Chain, EvmChain, evmChainIds } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { SpecificEvm } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
@@ -135,11 +134,8 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     coin: Coin,
     _receiver: string,
     feeSettings?: EvmFeeSettings
-  ): Promise<SpecificEvm> {
-    const [gasPrice, nonce] = await Promise.all([
-      this.provider.send('eth_gasPrice', []),
-      this.provider.getTransactionCount(coin.address),
-    ]);
+  ) {
+    const nonce = await this.provider.getTransactionCount(coin.address);
 
     const gasLimit =
       feeSettings?.gasLimit ??
@@ -157,15 +153,17 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       BigInt(Math.round(normalizedBaseFee + priorityFee))
     );
 
-    return {
-      fee: maxFeePerGasWei * gasLimit,
-      gasPrice: fromChainAmount(Number(gasPrice), gwei.decimals),
-      nonce,
-      priorityFee,
-      priorityFeeWei: priorityFee,
-      gasLimit,
-      maxFeePerGasWei: maxFeePerGasWei,
-    } as SpecificEvm;
+    const result: KeysignChainSpecific = {
+      case: 'ethereumSpecific',
+      value: new EthereumSpecific({
+        maxFeePerGasWei: maxFeePerGasWei.toString(),
+        priorityFee: priorityFee.toString(),
+        nonce: BigInt(nonce),
+        gasLimit: gasLimit.toString(),
+      }),
+    };
+
+    return result;
   }
 
   async fetchMaxPriorityFeesPerGas(): Promise<Record<FeePriority, number>> {
