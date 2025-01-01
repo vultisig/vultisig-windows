@@ -10,7 +10,6 @@ export type GetChainSpecificInput<T = any> = {
 };
 
 export interface IRpcService {
-  // Common methods
   sendTransaction(encodedTransaction: string): Promise<string>;
   getBalance(coin: Coin): Promise<string>;
   broadcastTransaction(hex: string): Promise<string>;

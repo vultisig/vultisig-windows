@@ -6,12 +6,10 @@ import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { GetChainSpecificInput } from '../../services/Rpc/IRpcService';
 import { ServiceFactory } from '../../services/ServiceFactory';
 
-export const getChainSpecificQueryKey = ({
-  coin,
-  feeSettings,
-  receiver,
-}: GetChainSpecificInput) =>
-  withoutUndefined(['chainSpecific', coin, receiver, feeSettings]);
+export const chainSpecificQueryKeyPrefix = 'chainSpecific';
+
+export const getChainSpecificQueryKey = (input: GetChainSpecificInput) =>
+  withoutUndefined([chainSpecificQueryKeyPrefix, ...Object.values(input)]);
 
 export const useChainSpecificQuery = (input: GetChainSpecificInput) => {
   const walletCore = useAssertWalletCore();

@@ -68,7 +68,7 @@ export class RpcServiceThorchain implements IRpcService {
     return entry.address;
   }
 
-  async getChainSpecific({ coin }: GetChainSpecificInput) {
+  async getChainSpecific({ coin, isDeposit = false }: GetChainSpecificInput) {
     const account = await this.fetchAccountNumber(coin.address);
 
     const fee = await this.calculateFee(coin);
@@ -79,6 +79,7 @@ export class RpcServiceThorchain implements IRpcService {
         accountNumber: BigInt(account?.account_number),
         sequence: BigInt(account?.sequence ?? 0),
         fee: BigInt(fee),
+        isDeposit,
       }),
     };
 
