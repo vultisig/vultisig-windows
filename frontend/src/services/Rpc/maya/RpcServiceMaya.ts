@@ -7,10 +7,6 @@ import { Endpoint } from '../../Endpoint';
 import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 
 export class RpcServiceMaya implements IRpcService {
-  async calculateFee(_coin?: Coin): Promise<number> {
-    return mayaConfig.fee;
-  }
-
   async sendTransaction(encodedTransaction: string): Promise<string> {
     return await this.broadcastTransaction(encodedTransaction);
   }
@@ -63,14 +59,12 @@ export class RpcServiceMaya implements IRpcService {
   async getChainSpecific({ coin, isDeposit = false }: GetChainSpecificInput) {
     const account = await this.fetchAccountNumber(coin.address);
 
-    const fee = await this.calculateFee(coin);
-
     const result: KeysignChainSpecific = {
       case: 'thorchainSpecific',
       value: new THORChainSpecific({
         accountNumber: BigInt(account?.account_number),
         sequence: BigInt(account?.sequence ?? 0),
-        fee: BigInt(fee),
+        fee: mayaConfig.fee,
         isDeposit,
       }),
     };

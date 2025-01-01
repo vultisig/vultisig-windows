@@ -1,3 +1,3 @@
 export const polkadotConfig = {
-  fee: 250000000,
+  fee: BigInt(250000000),
 };

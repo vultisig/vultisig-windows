@@ -1,5 +1,4 @@
 import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
-import { polkadotConfig } from '../../../chain/polkadot/config';
 import { PolkadotSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
@@ -7,10 +6,6 @@ import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServicePolkadot extends RpcService implements IRpcService {
-  async calculateFee(_coin: Coin): Promise<number> {
-    return polkadotConfig.fee;
-  }
-
   async sendTransaction(encodedTransaction: string): Promise<string> {
     return await this.broadcastTransaction(encodedTransaction);
   }

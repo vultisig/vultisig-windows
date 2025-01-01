@@ -1,3 +1,3 @@
 export const mayaConfig = {
-  fee: 2000000000,
+  fee: BigInt(2000000000),
 };

@@ -43,7 +43,7 @@ export const useSwapFeesQuery = () => {
             {
               ...getCoinMetaKey(fromFeeCoin),
               amount: fromChainAmount(
-                BigInt(Math.round(feeAmount)),
+                feeAmount,
                 getChainFeeCoin(fromCoinKey.chain).decimals
               ),
             },

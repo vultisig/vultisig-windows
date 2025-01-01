@@ -129,7 +129,7 @@ export class BlockchainServiceMaya
       memo: keysignPayload.memo || '',
       messages: message,
       fee: TW.Cosmos.Proto.Fee.create({
-        gas: new Long(mayaConfig.fee),
+        gas: new Long(Number(mayaConfig.fee)),
       }),
     });
 

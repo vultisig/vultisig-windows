@@ -1,3 +1,3 @@
 export const rippleConfig = {
-  fee: 180000,
+  fee: BigInt(180000),
 };

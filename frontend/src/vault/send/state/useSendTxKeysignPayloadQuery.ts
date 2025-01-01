@@ -45,7 +45,7 @@ export const useSendTxKeysignPayloadQuery = () => {
         const cappedChainAmount = capSendAmountToMax({
           amount: chainAmount,
           coin: storageCoinToCoin(coin),
-          fee: BigInt(Math.round(feeAmount)),
+          fee: feeAmount,
           balance: balance.amount,
         });
 

@@ -1,6 +1,5 @@
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
-import { tonConfig } from '../../../chain/ton/config';
 import { TonSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
@@ -8,10 +7,6 @@ import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceTon extends RpcService implements IRpcService {
-  async calculateFee(): Promise<number> {
-    return Number(tonConfig.fee);
-  }
-
   async sendTransaction(encodedTransaction: string): Promise<string> {
     return await this.broadcastTransaction(encodedTransaction);
   }
