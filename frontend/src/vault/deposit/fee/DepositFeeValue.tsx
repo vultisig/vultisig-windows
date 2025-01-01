@@ -1,7 +1,7 @@
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { StrictText } from '../../../lib/ui/text';
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
-import { useDepositChainSpecific } from './DepositSpecificTxInfoProvider';
+import { useDepositChainSpecific } from './DepositChainSpecificProvider';
 
 export const DepositFeeValue = () => {
   const chainSpecific = useDepositChainSpecific();

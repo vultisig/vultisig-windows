@@ -7,6 +7,7 @@ import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { EvmChain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { ITokenService } from '../../Tokens/ITokenService';
+import { GetChainSpecificInput } from '../IRpcService';
 import { RpcServiceEvm } from './RpcServiceEvm';
 
 interface SpecificZkEvm {
@@ -26,11 +27,10 @@ export class RpcServiceZksync extends RpcServiceEvm implements ITokenService {
     return await super.getTokens(nativeToken);
   }
 
-  async getSpecificTransactionInfo(
-    coin: Coin,
-    _receiver: string,
-    feeSettings?: EvmFeeSettings
-  ) {
+  async getChainSpecific({
+    coin,
+    feeSettings,
+  }: GetChainSpecificInput<EvmFeeSettings>) {
     const zkInfo: SpecificZkEvm = await this.getGasInfoZk(
       coin.address,
       '0000000000000000000000000000000000000000',

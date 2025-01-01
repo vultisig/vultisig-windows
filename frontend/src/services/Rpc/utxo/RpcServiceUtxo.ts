@@ -5,7 +5,7 @@ import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specif
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
 import { Endpoint } from '../../Endpoint';
-import { IRpcService } from '../IRpcService';
+import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceUtxo extends RpcService implements IRpcService {
@@ -41,11 +41,11 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
     );
   }
 
-  async getSpecificTransactionInfo(
-    coin: Coin,
-    _receiver: string,
-    feeSettings?: UtxoFeeSettings
-  ) {
+  async getChainSpecific({
+    coin,
+    feeSettings,
+    sendMaxAmount = false,
+  }: GetChainSpecificInput<UtxoFeeSettings>) {
     let byteFee = await this.calculateFee(coin);
     if (feeSettings) {
       byteFee = adjustByteFee(byteFee, feeSettings);
@@ -55,7 +55,7 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
       case: 'utxoSpecific',
       value: new UTXOSpecific({
         byteFee: byteFee.toString(),
-        sendMaxAmount: false,
+        sendMaxAmount,
       }),
     };
 

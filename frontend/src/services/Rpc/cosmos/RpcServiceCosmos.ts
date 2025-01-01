@@ -6,7 +6,7 @@ import {
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
-import { IRpcService } from '../IRpcService';
+import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 
 export class RpcServiceCosmos implements IRpcService {
   sendTransaction(encodedTransaction: string): Promise<string> {
@@ -36,7 +36,7 @@ export class RpcServiceCosmos implements IRpcService {
     }
   }
 
-  async getSpecificTransactionInfo(coin: Coin) {
+  async getChainSpecific({ coin }: GetChainSpecificInput) {
     let defaultGas = 7500;
 
     switch (coin.chain) {

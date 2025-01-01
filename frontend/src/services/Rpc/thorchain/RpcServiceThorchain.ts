@@ -3,7 +3,7 @@ import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_s
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { Endpoint } from '../../Endpoint';
-import { IRpcService } from '../IRpcService';
+import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 
 export class RpcServiceThorchain implements IRpcService {
   async calculateFee(_coin?: Coin): Promise<number> {
@@ -68,7 +68,7 @@ export class RpcServiceThorchain implements IRpcService {
     return entry.address;
   }
 
-  async getSpecificTransactionInfo(coin: Coin) {
+  async getChainSpecific({ coin }: GetChainSpecificInput) {
     const account = await this.fetchAccountNumber(coin.address);
 
     const fee = await this.calculateFee(coin);

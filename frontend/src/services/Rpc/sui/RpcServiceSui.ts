@@ -5,7 +5,7 @@ import {
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
-import { IRpcService } from '../IRpcService';
+import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceSui extends RpcService implements IRpcService {
@@ -33,7 +33,7 @@ export class RpcServiceSui extends RpcService implements IRpcService {
     return result.totalBalance;
   }
 
-  async getSpecificTransactionInfo(coin: Coin) {
+  async getChainSpecific({ coin }: GetChainSpecificInput) {
     const gasPrice = await this.calculateFee(coin);
     const allCoins = await this.getAllCoins(coin);
 

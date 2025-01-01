@@ -10,7 +10,7 @@ import { formatAmount } from '../../../lib/utils/formatAmount';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
-import { useDepositChainSpecific } from './DepositSpecificTxInfoProvider';
+import { useDepositChainSpecific } from './DepositChainSpecificProvider';
 
 export const DepositFiatFeeValue = () => {
   const [coinKey] = useCurrentDepositCoin();

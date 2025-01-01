@@ -3,7 +3,7 @@ import { polkadotConfig } from '../../../chain/polkadot/config';
 import { PolkadotSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
-import { IRpcService } from '../IRpcService';
+import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServicePolkadot extends RpcService implements IRpcService {
@@ -28,7 +28,7 @@ export class RpcServicePolkadot extends RpcService implements IRpcService {
     return result;
   }
 
-  async getSpecificTransactionInfo(coin: Coin) {
+  async getChainSpecific({ coin }: GetChainSpecificInput) {
     const recentBlockHash = await this.fetchBlockHash();
     const nonce = await this.fetchNonce(coin.address);
     const currentBlockNumber = Number(await this.fetchBlockHeader());

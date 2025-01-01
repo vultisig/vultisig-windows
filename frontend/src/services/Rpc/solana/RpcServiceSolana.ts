@@ -5,7 +5,7 @@ import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
-import { IRpcService } from '../IRpcService';
+import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 
 const rpcURL = Endpoint.solanaServiceRpc;
 const rpcURL2 = Endpoint.solanaServiceRpc;
@@ -352,7 +352,7 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     return Math.max(...fees.filter((fee: number) => fee > 0), 0);
   }
 
-  async getSpecificTransactionInfo(coin: Coin, receiver: string) {
+  async getChainSpecific({ coin, receiver }: GetChainSpecificInput) {
     // Fetch the recent block hash and priority fee concurrently
     const [recentBlockHash, highPriorityFee] = await Promise.all([
       this.fetchRecentBlockhash(),

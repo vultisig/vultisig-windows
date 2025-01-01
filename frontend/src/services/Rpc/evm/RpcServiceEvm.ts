@@ -19,7 +19,7 @@ import { Chain, EvmChain, evmChainIds } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
-import { IRpcService } from '../IRpcService';
+import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   provider: ethers.JsonRpcProvider;
@@ -130,11 +130,10 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     return value + value / 2; // x1.5 fee
   }
 
-  async getSpecificTransactionInfo(
-    coin: Coin,
-    _receiver: string,
-    feeSettings?: EvmFeeSettings
-  ) {
+  async getChainSpecific({
+    coin,
+    feeSettings,
+  }: GetChainSpecificInput<EvmFeeSettings>) {
     const nonce = await this.provider.getTransactionCount(coin.address);
 
     const gasLimit =

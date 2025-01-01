@@ -4,7 +4,7 @@ import { tonConfig } from '../../../chain/ton/config';
 import { TonSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
-import { IRpcService } from '../IRpcService';
+import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceTon extends RpcService implements IRpcService {
@@ -30,7 +30,7 @@ export class RpcServiceTon extends RpcService implements IRpcService {
     return response.balance;
   }
 
-  async getSpecificTransactionInfo(coin: Coin) {
+  async getChainSpecific({ coin }: GetChainSpecificInput) {
     const extendedInfo = await this.getExtendedAddressInformation(coin.address);
     const sequenceNumber = BigInt(
       extendedInfo?.result?.account_state?.seqno || 0

@@ -14,7 +14,7 @@ import { DepositVerify } from './DepositVerify';
 import {
   DepositChainSpecificProvider,
   useDepositChainSpecific,
-} from './fee/DepositSpecificTxInfoProvider';
+} from './fee/DepositChainSpecificProvider';
 import { useMemoGenerator } from './hooks/useMemoGenerator';
 
 const depositSteps = ['form', 'verify'] as const;
