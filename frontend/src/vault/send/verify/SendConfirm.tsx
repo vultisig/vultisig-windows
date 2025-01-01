@@ -8,7 +8,7 @@ import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt'
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery';
 import { useCurrentSendCoin } from '../state/sendCoin';
-import { useSendTxKeysignPayload } from '../state/sendTxKeysignPayload';
+import { useSendTxKeysignPayload } from '../state/useSendTxKeysignPayloadQuery';
 import { useSendTerms } from './state/sendTerms';
 
 export const SendConfirm = () => {

@@ -1,13 +1,14 @@
 import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
+import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
 import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
-import { useSwapSpecificTxInfoQuery } from './useSwapChainSpecificQuery';
+import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery';
 import { useSwapQuoteQuery } from './useSwapQuoteQuery';
 
 export const useSwapFeesQuery = () => {
@@ -16,14 +17,14 @@ export const useSwapFeesQuery = () => {
   const [fromCoinKey] = useFromCoin();
   const [toCoinKey] = useToCoin();
 
-  const txInfoQuery = useSwapSpecificTxInfoQuery();
+  const chainSpecificQuery = useSwapChainSpecificQuery();
 
   return useTransformQueriesData(
     {
       swapQuote: swapQuoteQuery,
-      txInfo: txInfoQuery,
+      chainSpecific: chainSpecificQuery,
     },
-    ({ swapQuote, txInfo }) => {
+    ({ swapQuote, chainSpecific }) => {
       const fromFeeCoin = getChainFeeCoin(fromCoinKey.chain);
 
       return matchRecordUnion(swapQuote, {
@@ -31,6 +32,8 @@ export const useSwapFeesQuery = () => {
           const decimals = getNativeSwapDecimals(
             fromCoinKey.chain as NativeSwapEnabledChain
           );
+
+          const feeAmount = getFeeAmount(chainSpecific);
 
           return [
             {
@@ -40,8 +43,8 @@ export const useSwapFeesQuery = () => {
             {
               ...getCoinMetaKey(fromFeeCoin),
               amount: fromChainAmount(
-                BigInt(Math.round(txInfo.fee)),
-                fromFeeCoin.decimals
+                BigInt(Math.round(feeAmount)),
+                getChainFeeCoin(fromCoinKey.chain).decimals
               ),
             },
           ];
