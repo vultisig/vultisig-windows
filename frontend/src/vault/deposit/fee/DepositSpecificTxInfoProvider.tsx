@@ -1,34 +1,33 @@
-import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { ComponentWithChildrenProps } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup';
 import { StrictText } from '../../../lib/ui/text';
-import { SpecificTransactionInfo } from '../../../model/specific-transaction-info';
-import { useSpecificDepositTxInfoQuery } from '../queries/useDepositChainSpecificQuery';
+import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery';
 
 export const {
-  useValue: useSendSpecificTxInfo,
-  provider: SpecificSendTxInfoProvider,
-} = getValueProviderSetup<SpecificTransactionInfo>('SendSpecificTxInfo');
+  useValue: useDepositChainSpecific,
+  provider: DepositChainSpecificValueProvider,
+} = getValueProviderSetup<KeysignChainSpecific>('DepositChainSpecific');
 
-export const DepositSpecificTxInfoProvider: FC<ComponentWithChildrenProps> = ({
-  children,
-}) => {
-  const txSpecificInfoQuery = useSpecificDepositTxInfoQuery();
+export const DepositChainSpecificProvider: React.FC<
+  ComponentWithChildrenProps
+> = ({ children }) => {
+  const chainSpecificQuery = useDepositChainSpecificQuery();
   const { t } = useTranslation();
 
   return (
     <MatchQuery
-      value={txSpecificInfoQuery}
+      value={chainSpecificQuery}
       pending={() => <Spinner />}
       error={() => <StrictText>{t('failed_to_load')}</StrictText>}
       success={value => (
-        <SpecificSendTxInfoProvider value={value}>
+        <DepositChainSpecificValueProvider value={value}>
           {children}
-        </SpecificSendTxInfoProvider>
+        </DepositChainSpecificValueProvider>
       )}
     />
   );

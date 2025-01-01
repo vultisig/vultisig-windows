@@ -3,6 +3,7 @@ import {
   KeysignChainSpecific,
 } from '../../../chain/keysign/KeysignChainSpecific';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
+import { CoinKey } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { useChainSpecificQuery } from '../../../coin/query/useChainSpecificQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
@@ -15,6 +16,22 @@ import { useFeeSettings } from '../fee/settings/state/feeSettings';
 import { useSendAmount } from '../state/amount';
 import { useSendReceiver } from '../state/receiver';
 import { useCurrentSendCoin } from '../state/sendCoin';
+
+type GetSendChainSpecificQueryKeyInput = {
+  coinKey: CoinKey;
+  amount: number | null;
+  receiver: string;
+};
+export const getSendChainSpecificQueryKey = ({
+  coinKey,
+  amount,
+  receiver,
+}: GetSendChainSpecificQueryKeyInput) => [
+  'sendChainSpecific',
+  amount,
+  coinKey,
+  receiver,
+];
 
 export const useSendChainSpecificQuery = () => {
   const [coinKey] = useCurrentSendCoin();
@@ -40,7 +57,11 @@ export const useSendChainSpecificQuery = () => {
       amount: amount ?? undefined,
     },
     getQuery: ({ fromCoinBalance, chainSpecific, amount }) => ({
-      queryKey: ['swapChainSpecific'],
+      queryKey: getSendChainSpecificQueryKey({
+        coinKey: coinKey,
+        amount,
+        receiver,
+      }),
       queryFn: async (): Promise<KeysignChainSpecific> => {
         if (isOneOf(coin.chain, Object.values(UtxoChain))) {
           const sendMaxAmount =

@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { StrictText } from '../../../lib/ui/text';
+import { SendChainSpecificProvider } from './SendChainSpecificProvider';
 import { SendGasFeeValue } from './SendGasFeeValue';
-import { SendSpecificTxInfoProvider } from './SendSpecificTxInfoProvider';
 
 export const SendGasFeeWrapper = () => {
   const { t } = useTranslation();
@@ -12,11 +12,11 @@ export const SendGasFeeWrapper = () => {
       <span>
         {t('gas')} ({t('auto')})
       </span>
-      <SendSpecificTxInfoProvider>
+      <SendChainSpecificProvider>
         <StrictText>
           <SendGasFeeValue />
         </StrictText>
-      </SendSpecificTxInfoProvider>
+      </SendChainSpecificProvider>
     </>
   );
 };

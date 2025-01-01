@@ -13,11 +13,9 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
+import { ChainAction } from '../ChainAction';
 import { DepositConfirmButton } from '../DepositConfirmButton';
-import {
-  ChainAction,
-  requiredFieldsPerChainAction,
-} from '../DepositForm/chainOptionsConfig';
+import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig';
 import { DepositFee } from '../fee/DepositFee';
 import { DepositFiatFee } from '../fee/DepositFiatFee';
 import { useSender } from '../hooks/useSender';

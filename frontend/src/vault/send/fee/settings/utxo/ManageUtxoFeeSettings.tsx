@@ -6,6 +6,7 @@ import {
   feePriorities,
   FeePriority,
 } from '../../../../../chain/fee/FeePriority';
+import { getKeysignChainSpecificValue } from '../../../../../chain/keysign/KeysignChainSpecific';
 import { adjustByteFee } from '../../../../../chain/utxo/fee/adjustByteFee';
 import { UtxoFeeSettings } from '../../../../../chain/utxo/fee/UtxoFeeSettings';
 import { Button } from '../../../../../lib/ui/buttons/Button';
@@ -18,8 +19,7 @@ import { VStack } from '../../../../../lib/ui/layout/Stack';
 import { Modal } from '../../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../../lib/ui/props';
 import { shouldBePresent } from '../../../../../lib/utils/assert/shouldBePresent';
-import { SpecificUtxo } from '../../../../../model/specific-transaction-info';
-import { useSendSpecificTxInfo } from '../../SendSpecificTxInfoProvider';
+import { useSendChainSpecific } from '../../SendChainSpecificProvider';
 import { useFeeSettings } from '../state/feeSettings';
 
 type FormShape = {
@@ -34,7 +34,12 @@ export const ManageUtxoFeeSettings: React.FC<ClosableComponentProps> = ({
   const [persistentValue, setPersistentValue] =
     useFeeSettings<UtxoFeeSettings>();
 
-  const { byteFee } = useSendSpecificTxInfo() as SpecificUtxo;
+  const chainSpecific = useSendChainSpecific();
+
+  const { byteFee } = getKeysignChainSpecificValue(
+    chainSpecific,
+    'utxoSpecific'
+  );
 
   const [value, setValue] = useState<FormShape>(
     () =>
@@ -84,7 +89,7 @@ export const ManageUtxoFeeSettings: React.FC<ClosableComponentProps> = ({
           label={<InputLabel>{t('network_rate')} (sats/vbyte)</InputLabel>}
           value={
             value.priority
-              ? adjustByteFee(byteFee, { priority: value.priority })
+              ? adjustByteFee(Number(byteFee), { priority: value.priority })
               : null
           }
           onValueChange={priority => setValue({ ...value, priority })}

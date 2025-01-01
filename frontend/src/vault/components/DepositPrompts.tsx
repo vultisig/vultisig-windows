@@ -4,23 +4,16 @@ import { Link } from 'react-router-dom';
 import { CoinKey, coinKeyToString } from '../../coin/Coin';
 import { Button } from '../../lib/ui/buttons/Button';
 import { ComponentWithValueProps } from '../../lib/ui/props';
-import { isEmpty } from '../../lib/utils/array/isEmpty';
+import { isOneOf } from '../../lib/utils/array/isOneOf';
 import { makeAppPath } from '../../navigation';
-import {
-  chainDepositOptionsConfig,
-  ChainWithAction,
-} from '../deposit/DepositForm/chainOptionsConfig';
+import { depositEnabledChains } from '../deposit/DepositEnabledChain';
 
 export const DepositPrompt = ({ value }: ComponentWithValueProps<CoinKey>) => {
   const { t } = useTranslation();
 
-  const chain = value.chain?.toLowerCase() as ChainWithAction | undefined;
+  const chain = isOneOf(value.chain, depositEnabledChains);
 
-  const availableChainActions = chain
-    ? chainDepositOptionsConfig[chain] || []
-    : [];
-
-  if (isEmpty(availableChainActions)) {
+  if (!chain) {
     return null;
   }
 

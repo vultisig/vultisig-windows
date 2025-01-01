@@ -1,12 +1,12 @@
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { useCurrentSendCoin } from '../state/sendCoin';
-import { useSendSpecificTxInfo } from './SendSpecificTxInfoProvider';
+import { useSendChainSpecific } from './SendChainSpecificProvider';
 
 export const SendGasFeeValue = () => {
-  const txInfo = useSendSpecificTxInfo();
+  const chainSpecific = useSendChainSpecific();
   const [coinKey] = useCurrentSendCoin();
   const { chain } = coinKey;
-  const fees = formatFee({ chain: chain, txInfo });
+  const fees = formatFee({ chain: chain, chainSpecific });
 
   return <>{fees}</>;
 };
