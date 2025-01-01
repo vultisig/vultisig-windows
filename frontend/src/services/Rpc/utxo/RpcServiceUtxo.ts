@@ -1,5 +1,7 @@
+import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
 import { adjustByteFee } from '../../../chain/utxo/fee/adjustByteFee';
 import { UtxoFeeSettings } from '../../../chain/utxo/fee/UtxoFeeSettings';
+import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
 import { Endpoint } from '../../Endpoint';
@@ -43,21 +45,21 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
     coin: Coin,
     _receiver: string,
     feeSettings?: UtxoFeeSettings
-  ): Promise<SpecificUtxo> {
+  ) {
     let byteFee = await this.calculateFee(coin);
     if (feeSettings) {
       byteFee = adjustByteFee(byteFee, feeSettings);
     }
 
-    const specificTransactionInfo: SpecificUtxo = {
-      gasPrice: byteFee / 10 ** coin.decimals, // To display in the UI
-      fee: byteFee,
-      byteFee,
-      sendMaxAmount: false, // By default, we don't send as the max amount
-      utxos: await this.getUtxos(coin),
+    const result: KeysignChainSpecific = {
+      case: 'utxoSpecific',
+      value: new UTXOSpecific({
+        byteFee: byteFee.toString(),
+        sendMaxAmount: false,
+      }),
     };
 
-    return specificTransactionInfo;
+    return result;
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
