@@ -1,8 +1,7 @@
-import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
+import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
+import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
-import { SpecificThorchain } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 
@@ -69,20 +68,21 @@ export class RpcServiceThorchain implements IRpcService {
     return entry.address;
   }
 
-  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificThorchain> {
+  async getSpecificTransactionInfo(coin: Coin) {
     const account = await this.fetchAccountNumber(coin.address);
 
     const fee = await this.calculateFee(coin);
 
-    const specificThorchain: SpecificThorchain = {
-      fee, // sometimes the fee is calculated like EVMs, so we need to add it here
-      gasPrice: fromChainAmount(fee, getChainFeeCoin(Chain.THORChain).decimals), //The gas price is the price per byte of the transaction
-      accountNumber: Number(account?.account_number),
-      sequence: Number(account?.sequence ?? 0),
-      isDeposit: false,
-    } as SpecificThorchain;
+    const result: KeysignChainSpecific = {
+      case: 'thorchainSpecific',
+      value: new THORChainSpecific({
+        accountNumber: BigInt(account?.account_number),
+        sequence: BigInt(account?.sequence ?? 0),
+        fee: BigInt(fee),
+      }),
+    };
 
-    return specificThorchain;
+    return result;
   }
 
   async fetchAccountNumber(address: string) {
