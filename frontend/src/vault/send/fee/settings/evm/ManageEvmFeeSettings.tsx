@@ -7,7 +7,6 @@ import {
   feePriorities,
   FeePriority,
 } from '../../../../../chain/fee/FeePriority';
-import { getKeysignChainSpecificValue } from '../../../../../chain/keysign/KeysignChainSpecific';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps';
 import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput';
@@ -19,6 +18,7 @@ import { Spinner } from '../../../../../lib/ui/loaders/Spinner';
 import { Modal } from '../../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../../lib/ui/props';
 import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery';
+import { getDiscriminatedUnionValue } from '../../../../../lib/utils/getDiscriminatedUnionValue';
 import { useSendChainSpecificQuery } from '../../../queries/useSendChainSpecificQuery';
 import {
   SendChainSpecificValueProvider,
@@ -44,8 +44,10 @@ export const ManageEvmFeeSettings: React.FC<ClosableComponentProps> = ({
     useFeeSettings<EvmFeeSettings>();
 
   const sendChainSpecific = useSendChainSpecific();
-  const { gasLimit: defaultGasLimit } = getKeysignChainSpecificValue(
+  const { gasLimit: defaultGasLimit } = getDiscriminatedUnionValue(
     sendChainSpecific,
+    'case',
+    'value',
     'ethereumSpecific'
   );
 

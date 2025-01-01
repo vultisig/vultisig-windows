@@ -6,7 +6,6 @@ import {
   feePriorities,
   FeePriority,
 } from '../../../../../chain/fee/FeePriority';
-import { getKeysignChainSpecificValue } from '../../../../../chain/keysign/KeysignChainSpecific';
 import { adjustByteFee } from '../../../../../chain/utxo/fee/adjustByteFee';
 import { UtxoFeeSettings } from '../../../../../chain/utxo/fee/UtxoFeeSettings';
 import { Button } from '../../../../../lib/ui/buttons/Button';
@@ -19,6 +18,7 @@ import { VStack } from '../../../../../lib/ui/layout/Stack';
 import { Modal } from '../../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../../lib/ui/props';
 import { shouldBePresent } from '../../../../../lib/utils/assert/shouldBePresent';
+import { getDiscriminatedUnionValue } from '../../../../../lib/utils/getDiscriminatedUnionValue';
 import { useSendChainSpecific } from '../../SendChainSpecificProvider';
 import { useFeeSettings } from '../state/feeSettings';
 
@@ -36,8 +36,10 @@ export const ManageUtxoFeeSettings: React.FC<ClosableComponentProps> = ({
 
   const chainSpecific = useSendChainSpecific();
 
-  const { byteFee } = getKeysignChainSpecificValue(
+  const { byteFee } = getDiscriminatedUnionValue(
     chainSpecific,
+    'case',
+    'value',
     'utxoSpecific'
   );
 
