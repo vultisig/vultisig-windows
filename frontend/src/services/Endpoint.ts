@@ -156,12 +156,6 @@ export class Endpoint {
     );
   }
 
-  static blockchairDashboard(address: string, coinName: string): URL {
-    return new URL(
-      `${this.vultisigApiProxy}/blockchair/${coinName}/dashboards/address/${address}?state=latest`
-    );
-  }
-
   static fetchCryptoPrices(ids: string, currencies: string): URL {
     return new URL(
       `${this.vultisigApiProxy}/coingeicko/api/v3/simple/price?ids=${ids}&vs_currencies=${currencies}`

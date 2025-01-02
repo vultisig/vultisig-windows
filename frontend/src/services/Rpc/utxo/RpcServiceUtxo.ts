@@ -1,4 +1,6 @@
 import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
+import { assertChainField } from '../../../chain/utils/assertChainField';
+import { getUtxoAddressInfo } from '../../../chain/utxo/blockchair/getUtxoAddressInfo';
 import { adjustByteFee } from '../../../chain/utxo/fee/adjustByteFee';
 import { UtxoFeeSettings } from '../../../chain/utxo/fee/UtxoFeeSettings';
 import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
@@ -17,12 +19,8 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
   }
 
   async getBalance(coin: Coin): Promise<string> {
-    const coinName = coin.chain.toLowerCase();
-    const url = Endpoint.blockchairDashboard(coin.address, coinName);
-    const request = await fetch(url);
-    const response = await request.json();
-    const balance = response.data[coin.address].address.balance;
-    return balance;
+    const { data } = await getUtxoAddressInfo(assertChainField(coin));
+    return data[coin.address].address.balance.toString();
   }
 
   async getChainSpecific({
