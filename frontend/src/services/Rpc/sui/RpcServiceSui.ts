@@ -1,9 +1,11 @@
-/* eslint-disable */
-import { SuiCoin } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
+import {
+  SuiCoin,
+  SuiSpecific,
+} from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { SpecificSui } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
-import { IRpcService } from '../IRpcService';
+import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceSui extends RpcService implements IRpcService {
@@ -31,16 +33,19 @@ export class RpcServiceSui extends RpcService implements IRpcService {
     return result.totalBalance;
   }
 
-  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificSui> {
+  async getChainSpecific({ coin }: GetChainSpecificInput) {
     const gasPrice = await this.calculateFee(coin);
     const allCoins = await this.getAllCoins(coin);
-    const specificTransactionInfo: SpecificSui = {
-      gasPrice: gasPrice,
-      fee: gasPrice,
-      referenceGasPrice: gasPrice,
-      coins: allCoins,
-    } as SpecificSui;
-    return specificTransactionInfo;
+
+    const result: KeysignChainSpecific = {
+      case: 'suicheSpecific',
+      value: new SuiSpecific({
+        referenceGasPrice: gasPrice.toString(),
+        coins: allCoins,
+      }),
+    };
+
+    return result;
   }
 
   private async getReferenceGasPrice(): Promise<number> {

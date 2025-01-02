@@ -1,4 +1,5 @@
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
+import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
@@ -9,7 +10,7 @@ import { formatAmount } from '../../../lib/utils/formatAmount';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
-import { useSendSpecificTxInfo } from './DepositSpecificTxInfoProvider';
+import { useDepositChainSpecific } from './DepositChainSpecificProvider';
 
 export const DepositFiatFeeValue = () => {
   const [coinKey] = useCurrentDepositCoin();
@@ -20,9 +21,11 @@ export const DepositFiatFeeValue = () => {
 
   const { globalCurrency } = useGlobalCurrency();
 
-  const { fee } = useSendSpecificTxInfo();
+  const chainSpecific = useDepositChainSpecific();
 
   const { decimals } = getChainFeeCoin(coinKey.chain);
+
+  const fee = getFeeAmount(chainSpecific);
 
   const feeAmount = fromChainAmount(fee, decimals);
 

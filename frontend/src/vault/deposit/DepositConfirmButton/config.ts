@@ -1,4 +1,4 @@
-import { ChainAction } from '../DepositForm/chainOptionsConfig';
+import { ChainAction } from '../ChainAction';
 
 type TransactionConfig = {
   requiresAmount?: boolean;

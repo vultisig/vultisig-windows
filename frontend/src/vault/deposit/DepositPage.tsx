@@ -1,8 +1,8 @@
 import { DepositPageController } from './DepositPageController';
-import { DepositSpecificTxInfoProvider } from './fee/DepositSpecificTxInfoProvider';
+import { DepositChainSpecificProvider } from './fee/DepositChainSpecificProvider';
 
 export const DepositPage = () => (
-  <DepositSpecificTxInfoProvider>
+  <DepositChainSpecificProvider>
     <DepositPageController />
-  </DepositSpecificTxInfoProvider>
+  </DepositChainSpecificProvider>
 );

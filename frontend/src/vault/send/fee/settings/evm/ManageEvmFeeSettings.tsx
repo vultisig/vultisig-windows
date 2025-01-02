@@ -18,14 +18,14 @@ import { Spinner } from '../../../../../lib/ui/loaders/Spinner';
 import { Modal } from '../../../../../lib/ui/modal';
 import { ClosableComponentProps } from '../../../../../lib/ui/props';
 import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery';
-import { SpecificEvm } from '../../../../../model/specific-transaction-info';
-import { useSpecificSendTxInfoQuery } from '../../../queries/useSpecificSendTxInfoQuery';
+import { getDiscriminatedUnionValue } from '../../../../../lib/utils/getDiscriminatedUnionValue';
+import { useSendChainSpecificQuery } from '../../../queries/useSendChainSpecificQuery';
+import {
+  SendChainSpecificValueProvider,
+  useSendChainSpecific,
+} from '../../SendChainSpecificProvider';
 import { SendFiatFeeValue } from '../../SendFiatFeeValue';
 import { SendGasFeeValue } from '../../SendGasFeeValue';
-import {
-  SpecificSendTxInfoProvider,
-  useSendSpecificTxInfo,
-} from '../../SendSpecificTxInfoProvider';
 import { FeeContainer } from '../FeeContainer';
 import { useFeeSettings } from '../state/feeSettings';
 import { BaseFee } from './baseFee/BaseFee';
@@ -43,13 +43,19 @@ export const ManageEvmFeeSettings: React.FC<ClosableComponentProps> = ({
   const [persistentValue, setPersistentValue] =
     useFeeSettings<EvmFeeSettings>();
 
-  const { gasLimit: defaultGasLimit } = useSendSpecificTxInfo() as SpecificEvm;
+  const sendChainSpecific = useSendChainSpecific();
+  const { gasLimit: defaultGasLimit } = getDiscriminatedUnionValue(
+    sendChainSpecific,
+    'case',
+    'value',
+    'ethereumSpecific'
+  );
 
   const [value, setValue] = useState<FeeSettingsFormShape>(
     () =>
       persistentValue ?? {
         priority: defaultFeePriority,
-        gasLimit: defaultGasLimit,
+        gasLimit: Number(defaultGasLimit),
       }
   );
 
@@ -61,7 +67,7 @@ export const ManageEvmFeeSettings: React.FC<ClosableComponentProps> = ({
     [value]
   );
 
-  const txInfoQuery = useSpecificSendTxInfoQuery();
+  const chainSpecificQuery = useSendChainSpecificQuery();
 
   return (
     <Modal
@@ -99,14 +105,14 @@ export const ManageEvmFeeSettings: React.FC<ClosableComponentProps> = ({
           </InputLabel>
           <FeeContainer>
             <MatchQuery
-              value={txInfoQuery}
+              value={chainSpecificQuery}
               success={value => (
-                <SpecificSendTxInfoProvider value={value}>
+                <SendChainSpecificValueProvider value={value}>
                   <span>
                     <SendGasFeeValue />
                   </span>
                   <SendFiatFeeValue />
-                </SpecificSendTxInfoProvider>
+                </SendChainSpecificValueProvider>
               )}
               error={() => t('failed_to_load')}
               pending={() => <Spinner />}

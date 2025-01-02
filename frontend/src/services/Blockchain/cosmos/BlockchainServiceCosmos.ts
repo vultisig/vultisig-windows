@@ -17,8 +17,6 @@ import {
   CosmosSpecific,
   TransactionType,
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { SpecificCosmos } from '../../../model/specific-transaction-info';
-import { ISendTransaction, ITransaction } from '../../../model/transaction';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
@@ -28,32 +26,6 @@ export class BlockchainServiceCosmos
   extends BlockchainService
   implements IBlockchainService
 {
-  createKeysignPayload(
-    obj: ITransaction | ISendTransaction,
-    localPartyId: string,
-    publicKeyEcdsa: string
-  ): KeysignPayload {
-    const payload: KeysignPayload = super.createKeysignPayload(
-      obj,
-      localPartyId,
-      publicKeyEcdsa
-    );
-    const specific = new CosmosSpecific();
-    const gasInfoSpecific: SpecificCosmos =
-      obj.specificTransactionInfo as SpecificCosmos;
-    specific.accountNumber = BigInt(gasInfoSpecific.accountNumber);
-    specific.sequence = BigInt(gasInfoSpecific.sequence);
-    specific.gas = BigInt(gasInfoSpecific.gas);
-    specific.transactionType = gasInfoSpecific.transactionType;
-
-    payload.blockchainSpecific = {
-      case: 'cosmosSpecific',
-      value: specific,
-    };
-
-    return payload;
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {

@@ -7,13 +7,6 @@ import { assertSignature } from '../../../chain/utils/assertSignature';
 import { TonSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { SpecificTon } from '../../../model/specific-transaction-info';
-import {
-  ISendTransaction,
-  ISwapTransaction,
-  ITransaction,
-  TransactionType,
-} from '../../../model/transaction';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
@@ -25,48 +18,6 @@ export class BlockchainServiceTon
   extends BlockchainService
   implements IBlockchainService
 {
-  createKeysignPayload(
-    obj: ITransaction | ISendTransaction | ISwapTransaction,
-    localPartyId: string,
-    publicKeyEcdsa: string
-  ): KeysignPayload {
-    const payload: KeysignPayload = super.createKeysignPayload(
-      obj,
-      localPartyId,
-      publicKeyEcdsa
-    );
-    const specific_pb = new TonSpecific();
-    const transactionInfoSpecific: SpecificTon =
-      obj.specificTransactionInfo as SpecificTon;
-
-    switch (obj.transactionType) {
-      case TransactionType.SEND:
-        specific_pb.bounceable = transactionInfoSpecific.bounceable;
-        specific_pb.expireAt = BigInt(transactionInfoSpecific.expireAt);
-        specific_pb.sequenceNumber = BigInt(
-          transactionInfoSpecific.sequenceNumber
-        );
-
-        payload.blockchainSpecific = {
-          case: 'tonSpecific',
-          value: specific_pb,
-        };
-        break;
-
-      case TransactionType.SWAP:
-        payload.blockchainSpecific = {
-          case: 'tonSpecific',
-          value: specific_pb,
-        };
-        break;
-
-      default:
-        throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
-    }
-
-    return payload;
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {

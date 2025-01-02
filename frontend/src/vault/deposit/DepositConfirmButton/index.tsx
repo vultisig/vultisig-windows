@@ -1,24 +1,24 @@
 import { useTranslation } from 'react-i18next';
 
+import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
+import { isOneOf } from '../../../lib/utils/array/isOneOf';
+import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
-import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
-import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
 import {
   useCurrentVault,
   useCurrentVaultCoin,
   useVaultServerStatus,
 } from '../../state/currentVault';
-import { ChainAction } from '../DepositForm/chainOptionsConfig';
+import { ChainAction } from '../ChainAction';
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
-import { useSender } from '../hooks/useSender';
-import { useSpecificDepositTxInfoQuery } from '../queries/useSpecificDepositTxInfoQuery';
+import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery';
 import { transactionConfig } from './config';
-import { createTransaction } from './utils';
 
 type DepositType = 'fast' | 'paired';
 
@@ -33,13 +33,12 @@ export const DepositConfirmButton = ({
 }: DepositConfirmButtonProps) => {
   const { t } = useTranslation();
   const [coinKey] = useCurrentDepositCoin();
-  const sender = useSender();
   const coin = useCurrentVaultCoin(coinKey);
-  const vault = useCurrentVault();
   const navigate = useAppNavigate();
-  const walletCore = useAssertWalletCore();
-  const specificTxInfoQuery = useSpecificDepositTxInfoQuery();
+  const chainSpecificQuery = useDepositChainSpecificQuery();
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
+
+  const vault = useCurrentVault();
 
   const config = transactionConfig[action] || {};
   const receiver = config.requiresNodeAddress
@@ -53,22 +52,25 @@ export const DepositConfirmButton = ({
   const memo = (depositFormData['memo'] as string) ?? '';
 
   const startKeysign = (type: DepositType) => {
-    const tx = createTransaction({
-      selectedChainAction: action,
-      sender,
-      receiver,
-      amount,
-      memo,
+    // TODO: handle affiliate fee and percentage
+    const keysignPayload = new KeysignPayload({
       coin: storageCoinToCoin(coin),
-      affiliateFee: depositFormData.affiliateFee as number | undefined,
-      percentage: depositFormData.percentage as number | undefined,
-      specificTransactionInfo: specificTxInfoQuery.data,
+      memo,
+      blockchainSpecific: shouldBePresent(chainSpecificQuery.data),
+      vaultLocalPartyId: vault.local_party_id,
+      vaultPublicKeyEcdsa: vault.public_key_ecdsa,
     });
 
-    const keysignPayload = BlockchainServiceFactory.createService(
-      coinKey.chain,
-      walletCore
-    ).createKeysignPayload(tx, vault.local_party_id, vault.public_key_ecdsa);
+    if (isOneOf(action, ['unstake', 'leave', 'unbound', 'stake', 'bond'])) {
+      keysignPayload.toAddress = shouldBePresent(receiver);
+    }
+
+    if (!isOneOf(action, ['vote', 'withdrawPool'])) {
+      keysignPayload.toAmount = toChainAmount(
+        shouldBePresent(amount),
+        coin.decimals
+      ).toString();
+    }
 
     navigate(type === 'fast' ? 'fastKeysign' : 'keysign', {
       state: { keysignPayload, keysignAction: 'deposit' },
@@ -84,11 +86,11 @@ export const DepositConfirmButton = ({
     return <Text>{t('required_field_missing')}</Text>;
   }
 
-  if (balanceQuery.error || specificTxInfoQuery.error) {
+  if (balanceQuery.error || chainSpecificQuery.error) {
     return <Text>{t('failed_to_load')}</Text>;
   }
 
-  const isPending = balanceQuery.isPending || specificTxInfoQuery.isPending;
+  const isPending = balanceQuery.isPending || chainSpecificQuery.isPending;
 
   if (isPending) {
     return <Text>{t('loading')}</Text>;

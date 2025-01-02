@@ -9,13 +9,6 @@ import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_spec
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain } from '../../../model/chain';
-import { SpecificRipple } from '../../../model/specific-transaction-info';
-import {
-  ISendTransaction,
-  ISwapTransaction,
-  ITransaction,
-  TransactionType,
-} from '../../../model/transaction';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
@@ -27,49 +20,6 @@ export class BlockchainServiceRipple
   extends BlockchainService
   implements IBlockchainService
 {
-  createKeysignPayload(
-    obj: ITransaction | ISendTransaction | ISwapTransaction,
-    localPartyId: string,
-    publicKeyEcdsa: string
-  ): KeysignPayload {
-    const payload: KeysignPayload = super.createKeysignPayload(
-      obj,
-      localPartyId,
-      publicKeyEcdsa
-    );
-    const rippleSpecific = new RippleSpecific();
-
-    const transactionInfoSpecific: SpecificRipple =
-      obj.specificTransactionInfo as SpecificRipple;
-
-    switch (obj.transactionType) {
-      case TransactionType.SEND:
-        rippleSpecific.gas = BigInt(transactionInfoSpecific?.fee || 0);
-        rippleSpecific.sequence = BigInt(
-          transactionInfoSpecific?.sequence || 0
-        );
-
-        payload.blockchainSpecific = {
-          case: 'rippleSpecific',
-          value: rippleSpecific,
-        };
-        break;
-
-      // We will have to check how the swap-old transaction is structured for UTXO chains
-      case TransactionType.SWAP:
-        payload.blockchainSpecific = {
-          case: 'rippleSpecific',
-          value: rippleSpecific,
-        };
-        break;
-
-      default:
-        throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
-    }
-
-    return payload;
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {

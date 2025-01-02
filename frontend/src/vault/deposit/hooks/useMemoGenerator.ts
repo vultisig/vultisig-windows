@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { FieldValues } from 'react-hook-form';
 
 import { MayaChainPool } from '../../../lib/types/deposit';
-import { ChainAction } from '../DepositForm/chainOptionsConfig';
+import { ChainAction } from '../ChainAction';
 import { generateMemo } from '../utils/memoGenerator';
 
 type UseMemoGeneratorProps = {

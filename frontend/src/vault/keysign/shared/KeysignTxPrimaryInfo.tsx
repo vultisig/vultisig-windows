@@ -15,7 +15,6 @@ import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { SpecificTransactionInfo } from '../../../model/specific-transaction-info';
 import { useKeysignPayload } from './state/keysignPayload';
 
 export const KeysignTxPrimaryInfo = () => {
@@ -41,9 +40,9 @@ export const KeysignTxPrimaryInfo = () => {
     if (!blockchainSpecific.value) return null;
     formatFee({
       chain: coin.chain as Chain,
-      txInfo: blockchainSpecific.value as unknown as SpecificTransactionInfo,
+      chainSpecific: blockchainSpecific,
     });
-  }, [blockchainSpecific.value, coin.chain]);
+  }, [blockchainSpecific, coin.chain]);
 
   return (
     <>

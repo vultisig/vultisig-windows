@@ -1,11 +1,13 @@
 import { ethers } from 'ethers';
 
 import { EvmFeeSettings } from '../../../chain/evm/fee/EvmFeeSettings';
+import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
+import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { EvmChain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { SpecificEvm } from '../../../model/specific-transaction-info';
 import { ITokenService } from '../../Tokens/ITokenService';
+import { GetChainSpecificInput } from '../IRpcService';
 import { RpcServiceEvm } from './RpcServiceEvm';
 
 interface SpecificZkEvm {
@@ -25,47 +27,29 @@ export class RpcServiceZksync extends RpcServiceEvm implements ITokenService {
     return await super.getTokens(nativeToken);
   }
 
-  async getSpecificTransactionInfo(
-    coin: Coin,
-    _receiver: string,
-    feeSettings?: EvmFeeSettings
-  ): Promise<SpecificEvm> {
-    try {
-      const [gasPrice] = await Promise.all([
-        this.provider.send('eth_gasPrice', []),
-      ]);
+  async getChainSpecific({
+    coin,
+    feeSettings,
+  }: GetChainSpecificInput<EvmFeeSettings>) {
+    const zkInfo: SpecificZkEvm = await this.getGasInfoZk(
+      coin.address,
+      '0000000000000000000000000000000000000000',
+      'ffffffff'
+    );
 
-      const zkInfo: SpecificZkEvm = await this.getGasInfoZk(
-        coin.address,
-        '0000000000000000000000000000000000000000',
-        'ffffffff'
-      );
+    const gasLimit = feeSettings?.gasLimit ?? zkInfo.gasLimit;
 
-      const gasLimit = feeSettings?.gasLimit ?? zkInfo.gasLimit;
+    const result: KeysignChainSpecific = {
+      case: 'ethereumSpecific',
+      value: new EthereumSpecific({
+        maxFeePerGasWei: zkInfo.maxFeePerGas.toString(),
+        priorityFee: zkInfo.maxPriorityFeePerGas.toString(),
+        nonce: BigInt(zkInfo.nonce),
+        gasLimit: gasLimit.toString(),
+      }),
+    };
 
-      const specificEvm: SpecificEvm = {
-        fee: zkInfo.maxFeePerGas * gasLimit,
-        gasPrice: Number(gasPrice),
-        nonce: zkInfo.nonce,
-        priorityFee: zkInfo.maxPriorityFeePerGas,
-        priorityFeeWei: zkInfo.maxPriorityFeePerGas,
-        gasLimit,
-        maxFeePerGasWei: zkInfo.maxFeePerGas,
-      } as SpecificEvm;
-
-      return specificEvm;
-    } catch (error) {
-      console.error('getSpecificTransactionInfo::', error);
-      return {
-        fee: 0,
-        gasPrice: 0,
-        nonce: 0,
-        priorityFee: 0,
-        priorityFeeWei: 0,
-        gasLimit: 0,
-        maxFeePerGasWei: 0,
-      } as SpecificEvm;
-    }
+    return result;
   }
 
   async getGasInfoZk(

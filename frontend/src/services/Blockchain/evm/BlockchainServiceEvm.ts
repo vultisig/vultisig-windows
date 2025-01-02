@@ -3,7 +3,6 @@ import { keccak256 } from 'js-sha3';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { getSigningInputEnvelopedTxFields } from '../../../chain/evm/tx/getSigningInputEnvelopedTxFields';
-import { toEthereumSpecific } from '../../../chain/evm/tx/toEthereumSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
@@ -13,12 +12,6 @@ import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { SpecificEvm } from '../../../model/specific-transaction-info';
-import {
-  ISendTransaction,
-  ISwapTransaction,
-  ITransaction,
-} from '../../../model/transaction';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
@@ -29,28 +22,6 @@ export class BlockchainServiceEvm
   extends BlockchainService
   implements IBlockchainService
 {
-  createKeysignPayload(
-    obj: ITransaction | ISendTransaction | ISwapTransaction,
-    localPartyId: string,
-    publicKeyEcdsa: string
-  ): KeysignPayload {
-    const transactionInfoSpecific: SpecificEvm =
-      obj.specificTransactionInfo as SpecificEvm;
-
-    const payload: KeysignPayload = super.createKeysignPayload(
-      obj,
-      localPartyId,
-      publicKeyEcdsa
-    );
-
-    payload.blockchainSpecific = {
-      case: 'ethereumSpecific',
-      value: toEthereumSpecific(transactionInfoSpecific),
-    };
-
-    return payload;
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {

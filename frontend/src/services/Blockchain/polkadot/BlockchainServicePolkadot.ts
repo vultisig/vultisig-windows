@@ -13,12 +13,6 @@ import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { SpecificPolkadot } from '../../../model/specific-transaction-info';
-import {
-  ISendTransaction,
-  ISwapTransaction,
-  ITransaction,
-} from '../../../model/transaction';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
@@ -28,35 +22,6 @@ export class BlockchainServicePolkadot
   extends BlockchainService
   implements IBlockchainService
 {
-  createKeysignPayload(
-    obj: ITransaction | ISendTransaction | ISwapTransaction,
-    localPartyId: string,
-    publicKeyEcdsa: string
-  ): KeysignPayload {
-    const payload: KeysignPayload = super.createKeysignPayload(
-      obj,
-      localPartyId,
-      publicKeyEcdsa
-    );
-    const specific = new PolkadotSpecific();
-    const gasInfoSpecific: SpecificPolkadot =
-      obj.specificTransactionInfo as SpecificPolkadot;
-
-    specific.currentBlockNumber = gasInfoSpecific.currentBlockNumber.toString();
-    specific.genesisHash = gasInfoSpecific.genesisHash;
-    specific.nonce = BigInt(gasInfoSpecific.nonce);
-    specific.recentBlockHash = gasInfoSpecific.recentBlockHash;
-    specific.specVersion = gasInfoSpecific.specVersion;
-    specific.transactionVersion = gasInfoSpecific.transactionVersion;
-
-    payload.blockchainSpecific = {
-      case: 'polkadotSpecific',
-      value: specific,
-    };
-
-    return payload;
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {

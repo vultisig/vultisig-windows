@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
+import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
@@ -11,13 +12,14 @@ import { CoinMeta } from '../../../model/coin-meta';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useCurrentSendCoin } from '../state/sendCoin';
 import { useSendFees } from '../state/sendFees';
-import { useSendSpecificTxInfo } from './SendSpecificTxInfoProvider';
+import { useSendChainSpecific } from './SendChainSpecificProvider';
 
 export const SendFiatFeeValue = () => {
   const [coinKey] = useCurrentSendCoin();
   const [, setFees] = useSendFees();
   const { globalCurrency } = useGlobalCurrency();
-  const { fee } = useSendSpecificTxInfo();
+  const chainSpecific = useSendChainSpecific();
+  const fee = getFeeAmount(chainSpecific);
   const coin = useCurrentVaultCoin(coinKey);
 
   const { isPending, data: price } = useCoinPriceQuery(

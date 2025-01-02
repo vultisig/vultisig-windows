@@ -1,22 +1,20 @@
 import { useState } from 'react';
 import { FieldValues } from 'react-hook-form';
 
+import { getFeeAmount } from '../../chain/tx/fee/utils/getFeeAmount';
 import { coinKeyFromString } from '../../coin/Coin';
 import { Match } from '../../lib/ui/base/Match';
 import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation';
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
+import { ChainAction, chainActionsRecord } from './ChainAction';
+import { DepositEnabledChain } from './DepositEnabledChain';
 import { DepositForm } from './DepositForm';
-import {
-  ChainAction,
-  chainDepositOptionsConfig,
-  ChainWithAction,
-} from './DepositForm/chainOptionsConfig';
 import { DepositVerify } from './DepositVerify';
 import {
-  DepositSpecificTxInfoProvider,
-  useSendSpecificTxInfo,
-} from './fee/DepositSpecificTxInfoProvider';
+  DepositChainSpecificProvider,
+  useDepositChainSpecific,
+} from './fee/DepositChainSpecificProvider';
 import { useMemoGenerator } from './hooks/useMemoGenerator';
 
 const depositSteps = ['form', 'verify'] as const;
@@ -24,8 +22,7 @@ const depositSteps = ['form', 'verify'] as const;
 export const DepositPageController = () => {
   const [{ coin: coinName }] = useAppPathParams<'deposit'>();
   const { chain: chain } = coinKeyFromString(coinName);
-  const chainActionOptions =
-    chainDepositOptionsConfig[chain?.toLowerCase() as ChainWithAction];
+  const chainActionOptions = chainActionsRecord[chain as DepositEnabledChain];
 
   const [state, setState] = useState<{
     depositFormData: FieldValues;
@@ -35,7 +32,6 @@ export const DepositPageController = () => {
     selectedChainAction: chainActionOptions[0] as ChainAction,
   });
 
-  const txInfo = useSendSpecificTxInfo();
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps: depositSteps,
     onExit: useNavigateBack(),
@@ -49,15 +45,17 @@ export const DepositPageController = () => {
     toNextStep();
   };
 
+  const chainSpecific = useDepositChainSpecific();
+
   const depositFormDataWithMemo = useMemoGenerator({
     depositFormData: state.depositFormData,
     selectedChainAction: state.selectedChainAction,
     bondableAsset: state.depositFormData?.bondableAsset,
-    fee: txInfo.fee,
+    fee: getFeeAmount(chainSpecific),
   });
 
   return (
-    <DepositSpecificTxInfoProvider>
+    <DepositChainSpecificProvider>
       <Match
         value={step}
         form={() => (
@@ -82,6 +80,6 @@ export const DepositPageController = () => {
           />
         )}
       />
-    </DepositSpecificTxInfoProvider>
+    </DepositChainSpecificProvider>
   );
 };

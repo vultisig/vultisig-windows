@@ -1,15 +1,12 @@
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
+import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
+import { TonSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { SpecificTon } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
-import { IRpcService } from '../IRpcService';
+import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceTon extends RpcService implements IRpcService {
-  async calculateFee(coin: Coin): Promise<number> {
-    return 0.01 * 10 ** coin.decimals;
-  }
-
   async sendTransaction(encodedTransaction: string): Promise<string> {
     return await this.broadcastTransaction(encodedTransaction);
   }
@@ -28,17 +25,22 @@ export class RpcServiceTon extends RpcService implements IRpcService {
     return response.balance;
   }
 
-  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificTon> {
+  async getChainSpecific({ coin }: GetChainSpecificInput) {
     const extendedInfo = await this.getExtendedAddressInformation(coin.address);
-    const sequenceNumber = extendedInfo?.result?.account_state?.seqno || 0;
+    const sequenceNumber = BigInt(
+      extendedInfo?.result?.account_state?.seqno || 0
+    );
 
-    return {
-      fee: await this.calculateFee(coin),
-      gasPrice: 1000000 / Math.pow(10, coin.decimals),
-      bounceable: false,
-      expireAt: Math.floor(Date.now() / 1000) + 600,
-      sequenceNumber,
+    const result: KeysignChainSpecific = {
+      case: 'tonSpecific',
+      value: new TonSpecific({
+        sequenceNumber,
+        expireAt: BigInt(Math.floor(Date.now() / 1000) + 600),
+        bounceable: false,
+      }),
     };
+
+    return result;
   }
 
   private async getAddressInformation(

@@ -17,6 +17,7 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
+import { ChainAction } from '../ChainAction';
 import { useGetTotalAmountAvailableForChain } from '../hooks/useGetAmountTotalBalance';
 import { useGetMayaChainBondableAssetsQuery } from '../hooks/useGetMayaChainBondableAssetsQuery';
 import {
@@ -24,7 +25,6 @@ import {
   getFieldsForChainAction,
   resolveSchema,
 } from '../utils/schema';
-import { ChainAction } from './chainOptionsConfig';
 import { DepositActionItemExplorer } from './DepositActionItemExplorer';
 import {
   AssetRequiredLabel,

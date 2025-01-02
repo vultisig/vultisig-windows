@@ -11,18 +11,12 @@ import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import { createHash } from 'crypto';
 import Long from 'long';
 
+import { mayaConfig } from '../../../chain/maya/config';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
-import { SpecificThorchain } from '../../../model/specific-transaction-info';
-import {
-  ISendTransaction,
-  ISwapTransaction,
-  ITransaction,
-  TransactionType,
-} from '../../../model/transaction';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
@@ -31,44 +25,6 @@ export class BlockchainServiceMaya
   extends BlockchainService
   implements IBlockchainService
 {
-  createKeysignPayload(
-    obj: ITransaction | ISendTransaction | ISwapTransaction,
-    localPartyId: string,
-    publicKeyEcdsa: string
-  ): KeysignPayload {
-    const payload: KeysignPayload = super.createKeysignPayload(
-      obj,
-      localPartyId,
-      publicKeyEcdsa
-    );
-    const specific = new MAYAChainSpecific();
-    const gasInfoSpecific: SpecificThorchain =
-      obj.specificTransactionInfo as SpecificThorchain;
-    specific.accountNumber = BigInt(gasInfoSpecific.accountNumber);
-    specific.sequence = BigInt(gasInfoSpecific.sequence);
-
-    switch (obj.transactionType) {
-      case TransactionType.SEND:
-        specific.isDeposit = false;
-
-        break;
-      case TransactionType.DEPOSIT:
-        specific.isDeposit = true;
-
-        break;
-
-      default:
-        throw new Error(`Unsupported transaction type: ${obj.transactionType}`);
-    }
-
-    payload.blockchainSpecific = {
-      case: 'mayaSpecific',
-      value: specific,
-    };
-
-    return payload;
-  }
-
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
@@ -173,7 +129,7 @@ export class BlockchainServiceMaya
       memo: keysignPayload.memo || '',
       messages: message,
       fee: TW.Cosmos.Proto.Fee.create({
-        gas: new Long(2000000000),
+        gas: new Long(Number(mayaConfig.fee)),
       }),
     });
 

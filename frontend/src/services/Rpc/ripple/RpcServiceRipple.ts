@@ -1,18 +1,21 @@
-/* eslint-disable */
+import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
+import { rippleConfig } from '../../../chain/ripple/config';
+import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { SpecificRipple } from '../../../model/specific-transaction-info';
 import { Endpoint } from '../../Endpoint';
-import { IRpcService } from '../IRpcService';
+import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceRipple extends RpcService implements IRpcService {
   sendTransaction(encodedTransaction: string): Promise<string> {
-    throw new Error('Method not implemented.');
+    throw new Error(
+      `Method not implemented, encodedTransaction: ${encodedTransaction}`
+    );
   }
 
   async getBalance(coin: Coin): Promise<string> {
-    let accountInfo = await this.fetchAccountsInfo(coin.address);
-    let balance = accountInfo?.account_data?.Balance;
+    const accountInfo = await this.fetchAccountsInfo(coin.address);
+    const balance = accountInfo?.account_data?.Balance;
     return balance ?? '0';
   }
 
@@ -47,20 +50,22 @@ export class RpcServiceRipple extends RpcService implements IRpcService {
     return '';
   }
 
-  async getSpecificTransactionInfo(coin: Coin): Promise<SpecificRipple> {
-    let accountInfo = await this.fetchAccountsInfo(coin.address);
-    let sequence = accountInfo?.account_data?.Sequence ?? 0;
+  async getChainSpecific({ coin }: GetChainSpecificInput) {
+    const accountInfo = await this.fetchAccountsInfo(coin.address);
+    const sequence = accountInfo?.account_data?.Sequence ?? 0;
 
-    const specificTransactionInfo: SpecificRipple = {
-      gasPrice: 180000,
-      fee: 180000,
-      sequence: sequence,
-    } as SpecificRipple;
+    const result: KeysignChainSpecific = {
+      case: 'rippleSpecific',
+      value: new RippleSpecific({
+        sequence,
+        gas: BigInt(rippleConfig.fee),
+      }),
+    };
 
-    return specificTransactionInfo;
+    return result;
   }
 
-  private async fetchAccountsInfo(walletAddress: String): Promise<any> {
+  private async fetchAccountsInfo(walletAddress: string): Promise<any> {
     try {
       return await super.callRpc(Endpoint.rippleServiceRpc, 'account_info', [
         {
@@ -75,6 +80,6 @@ export class RpcServiceRipple extends RpcService implements IRpcService {
   }
 
   resolveENS?(ensName: string): Promise<string> {
-    throw new Error('Method not implemented.');
+    throw new Error(`Method not implemented, ensName: ${ensName}`);
   }
 }

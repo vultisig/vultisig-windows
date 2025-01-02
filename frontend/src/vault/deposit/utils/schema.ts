@@ -2,10 +2,8 @@ import { WalletCore } from '@trustwallet/wallet-core';
 import { ZodObject } from 'zod';
 
 import { Chain } from '../../../model/chain';
-import {
-  ChainAction,
-  requiredFieldsPerChainAction,
-} from '../DepositForm/chainOptionsConfig';
+import { ChainAction } from '../ChainAction';
+import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig';
 
 export const isSchemaFunction = (
   schema: unknown

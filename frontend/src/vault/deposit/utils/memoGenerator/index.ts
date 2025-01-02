@@ -1,7 +1,7 @@
 import { FieldValues } from 'react-hook-form';
 
 import { MayaChainPool } from '../../../../lib/types/deposit';
-import { ChainAction } from '../../DepositForm/chainOptionsConfig';
+import { ChainAction } from '../../ChainAction';
 
 interface MemoParams {
   selectedChainAction?: ChainAction;

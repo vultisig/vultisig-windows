@@ -23,7 +23,6 @@ import { formatAmount } from '../../../lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { SpecificTransactionInfo } from '../../../model/specific-transaction-info';
 import { useKeysignPayload } from './state/keysignPayload';
 import { SwapTrackingLink } from './SwapTrackingLink';
 
@@ -61,9 +60,9 @@ export const KeysignTxOverview = () => {
 
     return formatFee({
       chain: chain as Chain,
-      txInfo: blockchainSpecific.value as unknown as SpecificTransactionInfo,
+      chainSpecific: blockchainSpecific,
     });
-  }, [blockchainSpecific.value, chain]);
+  }, [blockchainSpecific, chain]);
 
   const blockExplorerChain: Chain = useMemo(() => {
     if (swapPayload && swapPayload.value) {

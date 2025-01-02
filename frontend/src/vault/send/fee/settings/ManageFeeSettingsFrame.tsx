@@ -8,8 +8,8 @@ import { FailedQueryOverlay } from '../../../../lib/ui/query/components/overlay/
 import { PendingQueryOverlay } from '../../../../lib/ui/query/components/overlay/PendingQueryOverlay';
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
 import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled';
-import { useSpecificSendTxInfoQuery } from '../../queries/useSpecificSendTxInfoQuery';
-import { SpecificSendTxInfoProvider } from '../SendSpecificTxInfoProvider';
+import { useSendChainSpecificQuery } from '../../queries/useSendChainSpecificQuery';
+import { SendChainSpecificValueProvider } from '../SendChainSpecificProvider';
 
 type ManageFeeSettingsFrameProps = {
   render: (props: ClosableComponentProps) => React.ReactNode;
@@ -18,7 +18,7 @@ type ManageFeeSettingsFrameProps = {
 export const ManageFeeSettingsFrame = ({
   render,
 }: ManageFeeSettingsFrameProps) => {
-  const txSpecificInfoQuery = useSpecificSendTxInfoQuery();
+  const chainSpecificQuery = useSendChainSpecificQuery();
 
   return (
     <Opener
@@ -27,11 +27,11 @@ export const ManageFeeSettingsFrame = ({
       )}
       renderContent={({ onClose }) => (
         <MatchQuery
-          value={txSpecificInfoQuery}
+          value={chainSpecificQuery}
           success={value => (
-            <SpecificSendTxInfoProvider value={value}>
+            <SendChainSpecificValueProvider value={value}>
               {render({ onClose })}
-            </SpecificSendTxInfoProvider>
+            </SendChainSpecificValueProvider>
           )}
           pending={() => (
             <PendingQueryOverlay
