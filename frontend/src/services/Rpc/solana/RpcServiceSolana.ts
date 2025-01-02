@@ -306,35 +306,113 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
   }
 
   async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
-    // Fetch token accounts associated with the native token's address
-    const accounts = await this.fetchTokenAccountsByOwner(nativeToken.address);
+    if (!nativeToken?.address) {
+      throw new Error('Invalid native token: Address is required');
+    }
 
-    // Extract token mint addresses from the accounts
+    const accounts = await this.fetchTokenAccountsByOwner(nativeToken.address);
+    if (!accounts.length) {
+      return [];
+    }
+
     const tokenAddresses = accounts.map(
       account => account.account.data.parsed.info.mint
     );
-
-    // Fetch token information for the given token addresses
     const tokenInfos = await this.fetchSolanaTokenInfoList(tokenAddresses);
 
-    // Map the token information to CoinMeta objects
-    return Object.entries(tokenInfos).map(([address, tokenInfo]: any) => ({
-      chain: Chain.Solana, // Assuming Solana chain here, adjust if dynamic
-      ticker: tokenInfo.tokenMetadata.onChainInfo.symbol,
-      logo: tokenInfo.tokenList.image,
-      decimals: tokenInfo.decimals,
-      contractAddress: address,
-      isNativeToken: false, // Non-native tokens in this case
-      priceProviderId: tokenInfo.tokenList.extensions.coingeckoId ?? '',
-    }));
+    return Object.entries(tokenInfos)
+      .filter(([_, info]) => this.isValidToken(info))
+      .map(([address, info]) => this.mapToCoinMeta(address, info));
   }
 
   private async fetchSolanaTokenInfoList(
     contractAddresses: string[]
   ): Promise<Record<string, any>> {
-    const requestBody = { tokens: contractAddresses };
-    const response = await this.postRequest(tokenInfoServiceURL, requestBody);
-    return response;
+    const results: Record<string, any> = {};
+    const missingTokens: string[] = [];
+
+    try {
+      const solanaFmResults = await this.postRequest(tokenInfoServiceURL, {
+        tokens: contractAddresses,
+      });
+      Object.assign(results, solanaFmResults);
+
+      missingTokens.push(...contractAddresses.filter(addr => !results[addr]));
+
+      if (missingTokens.length) {
+        console.warn(
+          `Missing tokens from Solana.fm: ${missingTokens.join(', ')}`
+        );
+
+        const fallbackResults = await this.fetchFromJupiterBatch(missingTokens);
+
+        fallbackResults.forEach(({ address, data }) => {
+          if (data) results[address] = data;
+        });
+      }
+    } catch (error) {
+      console.error(`Error fetching token info: ${error}`);
+    }
+
+    return results;
+  }
+
+  private async fetchFromJupiterBatch(
+    contractAddresses: string[]
+  ): Promise<{ address: string; data: any }[]> {
+    const fetchPromises = contractAddresses.map(address =>
+      this.fetchFromJupiter(address)
+        .then(data => ({ address, data }))
+        .catch(error => {
+          console.error(
+            `Error fetching token ${address} from Jupiter API: ${error.message}`
+          );
+          return { address, data: null };
+        })
+    );
+
+    return Promise.all(fetchPromises);
+  }
+
+  private async fetchFromJupiter(contractAddress: string): Promise<any> {
+    const url = Endpoint.solanaTokenInfoJupiterServiceRpc(contractAddress);
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    return await response.json();
+  }
+
+  private isValidToken(tokenInfo: any): boolean {
+    if (
+      !tokenInfo?.symbol ||
+      !tokenInfo?.decimals ||
+      !tokenInfo?.extensions?.coingeckoId
+    ) {
+      console.warn(
+        `Skipping token with incomplete metadata: ${JSON.stringify(tokenInfo)}`
+      );
+      return false;
+    }
+    return true;
+  }
+
+  private mapToCoinMeta(address: string, tokenInfo: any): CoinMeta {
+    return {
+      chain: Chain.Solana,
+      ticker: tokenInfo.symbol,
+      logo: tokenInfo.image || '',
+      decimals: tokenInfo.decimals || 0,
+      contractAddress: address,
+      isNativeToken: false,
+      priceProviderId: tokenInfo.extensions?.coingeckoId || '',
+    };
   }
 
   async fetchHighPriorityFee(account: string): Promise<number> {
