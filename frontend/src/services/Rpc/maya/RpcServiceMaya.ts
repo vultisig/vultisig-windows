@@ -1,6 +1,5 @@
 import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
-import { mayaConfig } from '../../../chain/maya/config';
-import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { MAYAChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { Endpoint } from '../../Endpoint';
@@ -60,11 +59,10 @@ export class RpcServiceMaya implements IRpcService {
     const account = await this.fetchAccountNumber(coin.address);
 
     const result: KeysignChainSpecific = {
-      case: 'thorchainSpecific',
-      value: new THORChainSpecific({
+      case: 'mayaSpecific',
+      value: new MAYAChainSpecific({
         accountNumber: BigInt(account?.account_number),
         sequence: BigInt(account?.sequence ?? 0),
-        fee: mayaConfig.fee,
         isDeposit,
       }),
     };
