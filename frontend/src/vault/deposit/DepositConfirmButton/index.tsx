@@ -11,6 +11,7 @@ import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import {
+  useCurrentVault,
   useCurrentVaultCoin,
   useVaultServerStatus,
 } from '../../state/currentVault';
@@ -37,6 +38,8 @@ export const DepositConfirmButton = ({
   const chainSpecificQuery = useDepositChainSpecificQuery();
   const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
+  const vault = useCurrentVault();
+
   const config = transactionConfig[action] || {};
   const receiver = config.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
@@ -54,6 +57,8 @@ export const DepositConfirmButton = ({
       coin: storageCoinToCoin(coin),
       memo,
       blockchainSpecific: shouldBePresent(chainSpecificQuery.data),
+      vaultLocalPartyId: vault.local_party_id,
+      vaultPublicKeyEcdsa: vault.public_key_ecdsa,
     });
 
     if (isOneOf(action, ['unstake', 'leave', 'unbound', 'stake', 'bond'])) {
