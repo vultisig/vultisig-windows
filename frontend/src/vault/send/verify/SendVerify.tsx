@@ -7,8 +7,7 @@ import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount';
-import { areEqualCoins } from '../../../coin/Coin';
-import { useCoinPricesQuery } from '../../../coin/query/useCoinPricesQuery';
+import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
@@ -42,13 +41,11 @@ export const SendVerify: FC<ComponentWithBackActionProps> = ({ onBack }) => {
   const [amount] = useSendAmount();
   const [memo] = useSendMemo();
   const formatFiat = useFormatFiatAmount();
-  const { data: coinPrices = [] } = useCoinPricesQuery([
-    CoinMeta.fromCoin(storageCoinToCoin(coin)),
-  ]);
-  const price =
-    shouldBePresent(coinPrices).find(item => areEqualCoins(item, coinKey))
-      ?.price ?? 0;
-  const fiatValue = amount ? amount * price : null;
+  const { data: coinPrice } = useCoinPriceQuery(
+    CoinMeta.fromCoin(storageCoinToCoin(coin))
+  );
+
+  const fiatValue = amount && coinPrice ? amount * coinPrice : null;
 
   return (
     <>
