@@ -1,12 +1,14 @@
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
+import { assertChainField } from '../../../chain/utils/assertChainField';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
+import { getUtxos } from '../../../chain/utxo/tx/getUtxos';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { useTransform } from '../../../lib/ui/hooks/useTransform';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
-import { Chain, UtxoChain } from '../../../model/chain';
-import { RpcServiceUtxo } from '../../../services/Rpc/utxo/RpcServiceUtxo';
+import { UtxoChain } from '../../../model/chain';
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault';
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery';
 import { capSendAmountToMax } from '../utils/capSendAmountToMax';
@@ -17,7 +19,7 @@ import { useCurrentSendCoin } from './sendCoin';
 
 export const useSendTxKeysignPayloadQuery = () => {
   const [coinKey] = useCurrentSendCoin();
-  const coin = useCurrentVaultCoin(coinKey);
+  const coin = useTransform(useCurrentVaultCoin(coinKey), storageCoinToCoin);
   const [receiver] = useSendReceiver();
   const [amount] = useSendAmount();
   const [memo] = useSendMemo();
@@ -25,7 +27,7 @@ export const useSendTxKeysignPayloadQuery = () => {
   const vault = useCurrentVault();
 
   const chainSpecificQuery = useSendChainSpecificQuery();
-  const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
+  const balanceQuery = useBalanceQuery(coin);
 
   return useStateDependentQuery({
     state: {
@@ -44,13 +46,13 @@ export const useSendTxKeysignPayloadQuery = () => {
 
         const cappedChainAmount = capSendAmountToMax({
           amount: chainAmount,
-          coin: storageCoinToCoin(coin),
+          coin,
           fee: feeAmount,
           balance: balance.amount,
         });
 
         const result = new KeysignPayload({
-          coin: storageCoinToCoin(coin),
+          coin,
           toAddress: receiver,
           toAmount: cappedChainAmount.toString(),
           blockchainSpecific: chainSpecific,
@@ -60,8 +62,7 @@ export const useSendTxKeysignPayloadQuery = () => {
         });
 
         if (coin.chain in UtxoChain) {
-          const service = new RpcServiceUtxo(coin.chain as Chain);
-          result.utxoInfo = await service.getUtxos(storageCoinToCoin(coin));
+          result.utxoInfo = await getUtxos(assertChainField(coin));
         }
 
         return result;

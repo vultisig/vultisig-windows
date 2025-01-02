@@ -1,17 +1,19 @@
 import { getErc20ThorchainSwapKeysignPayload } from '../../../chain/swap/native/thor/utils/getErc20ThorchainSwapKeysignPayload';
 import { getOneInchSwapKeysignPayload } from '../../../chain/swap/oneInch/utils/getOneInchSwapKeysignPayload';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
+import { assertChainField } from '../../../chain/utils/assertChainField';
 import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
+import { getUtxos } from '../../../chain/utxo/tx/getUtxos';
 import { areEqualCoins } from '../../../coin/Coin';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { useTransform } from '../../../lib/ui/hooks/useTransform';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
-import { Chain, EvmChain, UtxoChain } from '../../../model/chain';
-import { RpcServiceUtxo } from '../../../services/Rpc/utxo/RpcServiceUtxo';
+import { EvmChain, UtxoChain } from '../../../model/chain';
 import {
   useCurrentVault,
   useCurrentVaultAddress,
@@ -26,8 +28,10 @@ import { useSwapQuoteQuery } from './useSwapQuoteQuery';
 
 export const useSwapKeysignPayloadQuery = () => {
   const [fromCoinKey] = useFromCoin();
-  const fromStorageCoin = useCurrentVaultCoin(fromCoinKey);
-  const fromCoin = storageCoinToCoin(fromStorageCoin);
+  const fromCoin = useTransform(
+    useCurrentVaultCoin(fromCoinKey),
+    storageCoinToCoin
+  );
   const fromAddress = useCurrentVaultAddress(fromCoinKey.chain);
 
   const [toCoinKey] = useToCoin();
@@ -98,8 +102,7 @@ export const useSwapKeysignPayloadQuery = () => {
         });
 
         if (fromCoin.chain in UtxoChain) {
-          const service = new RpcServiceUtxo(fromCoin.chain as Chain);
-          result.utxoInfo = await service.getUtxos(fromCoin);
+          result.utxoInfo = await getUtxos(assertChainField(fromCoin));
         }
 
         return result;

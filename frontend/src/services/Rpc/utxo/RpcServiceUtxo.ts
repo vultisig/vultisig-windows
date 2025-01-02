@@ -3,7 +3,6 @@ import { adjustByteFee } from '../../../chain/utxo/fee/adjustByteFee';
 import { UtxoFeeSettings } from '../../../chain/utxo/fee/UtxoFeeSettings';
 import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
 import { Endpoint } from '../../Endpoint';
 import { GetChainSpecificInput, IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
@@ -24,21 +23,6 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
     const response = await request.json();
     const balance = response.data[coin.address].address.balance;
     return balance;
-  }
-
-  async getUtxos(coin: Coin): Promise<UtxoInfo[]> {
-    const coinName = coin.chain.toLowerCase();
-    const url = Endpoint.blockchairDashboard(coin.address, coinName);
-    const request = await fetch(url);
-    const response = await request.json();
-    return response.data[coin.address].utxo.map(
-      (utxo: any) =>
-        new UtxoInfo({
-          hash: utxo.transaction_hash,
-          amount: BigInt(utxo.value),
-          index: Number(utxo.index),
-        })
-    );
   }
 
   async getChainSpecific({
