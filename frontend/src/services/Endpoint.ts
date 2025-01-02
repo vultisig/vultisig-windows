@@ -101,6 +101,9 @@ export class Endpoint {
 
   static solanaTokenInfoServiceRpc: string = 'https://api.solana.fm/v1/tokens';
 
+  static solanaTokenInfoJupiterServiceRpc = (contractAddress: string) =>
+    `https://tokens.jup.ag/token/${contractAddress}`;
+
   static suiServiceRpc: string = 'https://sui-rpc.publicnode.com';
 
   static polkadotServiceRpc: string = 'https://polkadot-rpc.publicnode.com';
