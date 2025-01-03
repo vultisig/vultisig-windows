@@ -20,12 +20,10 @@ const getBetaAuthAccountInfo = async ({
   const baseUrl = cosmosRpcUrl[chain];
   const url = `${baseUrl}/cosmos/auth/v1beta1/accounts/${address}`;
   const response = (await Fetch(url)) as {
-    result: {
-      value: AccountInfoValueResponse;
-    };
+    account: AccountInfoValueResponse;
   };
 
-  return response.result.value;
+  return response.account;
 };
 
 const getAuthAccountInfo = async ({
@@ -35,10 +33,12 @@ const getAuthAccountInfo = async ({
   const baseUrl = cosmosRpcUrl[chain];
   const url = `${baseUrl}/auth/accounts/${address}`;
   const response = (await Fetch(url)) as {
-    account: AccountInfoValueResponse;
+    result: {
+      value: AccountInfoValueResponse;
+    };
   };
 
-  return response.account;
+  return response.result.value;
 };
 
 const accountInfoHandler: Record<

@@ -5,11 +5,12 @@ import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import Long from 'long';
 
+import { cosmosFeeCoinDenom } from '../../../chain/cosmos/cosmosFeeCoinDenom';
 import {
   CosmosSpecific,
   TransactionType,
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
+import { CosmosChain } from '../../../model/chain';
 import { BlockchainServiceCosmos } from './BlockchainServiceCosmos';
 
 export class BlockchainServiceTerra extends BlockchainServiceCosmos {
@@ -60,13 +61,8 @@ export class BlockchainServiceTerra extends BlockchainServiceCosmos {
       throw new Error('invalid to address');
     }
 
-    const rpcService = RpcServiceFactory.createRpcService(this.chain) as any;
-    const denom = rpcService.denom();
+    const denom = cosmosFeeCoinDenom[this.chain as CosmosChain];
 
-    if (!denom) {
-      console.error('getPreSignedInputData > denom is not defined');
-      throw new Error('getPreSignedInputData > denom is not defined');
-    }
     const message: TW.Cosmos.Proto.Message[] = [
       TW.Cosmos.Proto.Message.create({
         wasmExecuteContractGeneric:
@@ -130,13 +126,8 @@ export class BlockchainServiceTerra extends BlockchainServiceCosmos {
       throw new Error('invalid to address');
     }
 
-    const rpcService = RpcServiceFactory.createRpcService(this.chain) as any;
-    const denom = rpcService.denom();
+    const denom = cosmosFeeCoinDenom[this.chain as CosmosChain];
 
-    if (!denom) {
-      console.error('getPreSignedInputData > denom is not defined');
-      throw new Error('getPreSignedInputData > denom is not defined');
-    }
     const message: TW.Cosmos.Proto.Message[] = [
       TW.Cosmos.Proto.Message.create({
         sendCoinsMessage: TW.Cosmos.Proto.Message.Send.create({
