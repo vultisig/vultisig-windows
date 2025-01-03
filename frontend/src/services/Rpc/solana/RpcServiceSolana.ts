@@ -1,11 +1,9 @@
-import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
-import { SolanaSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
-import { GetChainSpecificInput, IRpcService } from '../IRpcService';
+import { IRpcService } from '../IRpcService';
 
 const rpcURL = Endpoint.solanaServiceRpc;
 const rpcURL2 = Endpoint.solanaServiceRpc;
@@ -339,7 +337,7 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     return response;
   }
 
-  private async fetchHighPriorityFee(account: string): Promise<number> {
+  async fetchHighPriorityFee(account: string): Promise<number> {
     const requestBody = {
       jsonrpc: '2.0',
       id: 1,
@@ -350,54 +348,6 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     const response = await this.postRequest(rpcURL, requestBody);
     const fees = response.result.map((feeObj: any) => feeObj.prioritizationFee);
     return Math.max(...fees.filter((fee: number) => fee > 0), 0);
-  }
-
-  async getChainSpecific({ coin, receiver }: GetChainSpecificInput) {
-    // Fetch the recent block hash and priority fee concurrently
-    const [recentBlockHash, highPriorityFee] = await Promise.all([
-      this.fetchRecentBlockhash(),
-      this.fetchHighPriorityFee(coin.address),
-    ]);
-
-    if (!recentBlockHash) {
-      throw new Error('Failed to get recent block hash');
-    }
-
-    let fromAddressPubKey = coin.address;
-    let toAddressPubKey = receiver;
-
-    // If the coin is not a native token and both from and to addresses are available
-    if (fromAddressPubKey && toAddressPubKey && !coin.isNativeToken) {
-      // Fetch associated token accounts for both the from and to addresses
-      const [associatedTokenAddressFrom, associatedTokenAddressTo] =
-        await Promise.all([
-          this.fetchTokenAssociatedAccountByOwner(
-            fromAddressPubKey,
-            coin.contractAddress
-          ),
-          this.fetchTokenAssociatedAccountByOwner(
-            toAddressPubKey,
-            coin.contractAddress
-          ),
-        ]);
-
-      fromAddressPubKey = associatedTokenAddressFrom;
-      toAddressPubKey = associatedTokenAddressTo;
-    }
-
-    const value = new SolanaSpecific({
-      recentBlockHash,
-      priorityFee: highPriorityFee.toString(),
-      fromTokenAssociatedAddress: fromAddressPubKey,
-      toTokenAssociatedAddress: toAddressPubKey,
-    });
-
-    const result: KeysignChainSpecific = {
-      case: 'solanaSpecific',
-      value,
-    };
-
-    return result;
   }
 
   async calculateFee(coin?: Coin): Promise<number> {

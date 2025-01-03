@@ -1,9 +1,6 @@
-import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
-import { rippleConfig } from '../../../chain/ripple/config';
-import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
-import { GetChainSpecificInput, IRpcService } from '../IRpcService';
+import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceRipple extends RpcService implements IRpcService {
@@ -50,22 +47,7 @@ export class RpcServiceRipple extends RpcService implements IRpcService {
     return '';
   }
 
-  async getChainSpecific({ coin }: GetChainSpecificInput) {
-    const accountInfo = await this.fetchAccountsInfo(coin.address);
-    const sequence = accountInfo?.account_data?.Sequence ?? 0;
-
-    const result: KeysignChainSpecific = {
-      case: 'rippleSpecific',
-      value: new RippleSpecific({
-        sequence,
-        gas: BigInt(rippleConfig.fee),
-      }),
-    };
-
-    return result;
-  }
-
-  private async fetchAccountsInfo(walletAddress: string): Promise<any> {
+  async fetchAccountsInfo(walletAddress: string): Promise<any> {
     try {
       return await super.callRpc(Endpoint.rippleServiceRpc, 'account_info', [
         {

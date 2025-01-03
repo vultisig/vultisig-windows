@@ -9,6 +9,7 @@ import { createHash } from 'crypto';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { cosmosFeeCoinDenom } from '../../../chain/cosmos/cosmosFeeCoinDenom';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
@@ -17,9 +18,9 @@ import {
   CosmosSpecific,
   TransactionType,
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { CosmosChain } from '../../../model/chain';
 import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
 import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
-import { RpcServiceFactory } from '../../Rpc/RpcServiceFactory';
 import { BlockchainService } from '../BlockchainService';
 
 export class BlockchainServiceCosmos
@@ -52,13 +53,8 @@ export class BlockchainServiceCosmos
       throw new Error('invalid to address');
     }
 
-    const rpcService = RpcServiceFactory.createRpcService(this.chain) as any;
-    const denom = rpcService.denom();
+    const denom = cosmosFeeCoinDenom[this.chain as CosmosChain];
 
-    if (!denom) {
-      console.error('getPreSignedInputData > denom is not defined');
-      throw new Error('getPreSignedInputData > denom is not defined');
-    }
     const message: TW.Cosmos.Proto.Message[] = [
       TW.Cosmos.Proto.Message.create({
         sendCoinsMessage: TW.Cosmos.Proto.Message.Send.create({

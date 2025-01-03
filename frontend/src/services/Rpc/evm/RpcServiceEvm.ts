@@ -2,16 +2,8 @@ import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { evmRpcUrl } from '../../../chain/evm/evmRpcUrl';
-import { EvmFeeSettings } from '../../../chain/evm/fee/EvmFeeSettings';
-import { getEvmBaseFee } from '../../../chain/evm/utils/getEvmBaseFee';
-import { getEvmGasLimit } from '../../../chain/evm/utils/getEvmGasLimit';
-import {
-  defaultFeePriority,
-  FeePriority,
-} from '../../../chain/fee/FeePriority';
-import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
+import { FeePriority } from '../../../chain/fee/FeePriority';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
-import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
@@ -19,7 +11,7 @@ import { Chain, EvmChain, evmChainIds } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
-import { GetChainSpecificInput, IRpcService } from '../IRpcService';
+import { IRpcService } from '../IRpcService';
 
 export class RpcServiceEvm implements IRpcService, ITokenService {
   provider: ethers.JsonRpcProvider;
@@ -124,45 +116,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       console.error(evmRpcUrl[this.chain], 'getBalance::', error);
       return '0';
     }
-  }
-
-  normalizeFee(value: number): number {
-    return value + value / 2; // x1.5 fee
-  }
-
-  async getChainSpecific({
-    coin,
-    feeSettings,
-  }: GetChainSpecificInput<EvmFeeSettings>) {
-    const nonce = await this.provider.getTransactionCount(coin.address);
-
-    const gasLimit =
-      feeSettings?.gasLimit ??
-      getEvmGasLimit({
-        chain: this.chain,
-        isNativeToken: coin.isNativeToken,
-      });
-
-    const baseFee = await getEvmBaseFee(this.chain);
-    const priorityFeeMapValue = await this.fetchMaxPriorityFeesPerGas();
-    const feePriority = feeSettings?.priority ?? defaultFeePriority;
-    const priorityFee = priorityFeeMapValue[feePriority];
-    const normalizedBaseFee = this.normalizeFee(Number(baseFee));
-    const maxFeePerGasWei = Number(
-      BigInt(Math.round(normalizedBaseFee + priorityFee))
-    );
-
-    const result: KeysignChainSpecific = {
-      case: 'ethereumSpecific',
-      value: new EthereumSpecific({
-        maxFeePerGasWei: maxFeePerGasWei.toString(),
-        priorityFee: priorityFee.toString(),
-        nonce: BigInt(nonce),
-        gasLimit: gasLimit.toString(),
-      }),
-    };
-
-    return result;
   }
 
   async fetchMaxPriorityFeesPerGas(): Promise<Record<FeePriority, number>> {

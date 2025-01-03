@@ -1,11 +1,7 @@
-import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
-import {
-  SuiCoin,
-  SuiSpecific,
-} from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { SuiCoin } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
-import { GetChainSpecificInput, IRpcService } from '../IRpcService';
+import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceSui extends RpcService implements IRpcService {
@@ -33,27 +29,12 @@ export class RpcServiceSui extends RpcService implements IRpcService {
     return result.totalBalance;
   }
 
-  async getChainSpecific({ coin }: GetChainSpecificInput) {
-    const gasPrice = await this.calculateFee(coin);
-    const allCoins = await this.getAllCoins(coin);
-
-    const result: KeysignChainSpecific = {
-      case: 'suicheSpecific',
-      value: new SuiSpecific({
-        referenceGasPrice: gasPrice.toString(),
-        coins: allCoins,
-      }),
-    };
-
-    return result;
-  }
-
   private async getReferenceGasPrice(): Promise<number> {
     const result = await this.callRPC('suix_getReferenceGasPrice', []);
     return Number(result);
   }
 
-  private async getAllCoins(coin: Coin): Promise<SuiCoin[]> {
+  async getAllCoins(coin: Coin): Promise<SuiCoin[]> {
     const result = await this.callRPC('suix_getAllCoins', [coin.address]);
     const rawCoins = result.data as SuiCoin[];
     const suiCoins: SuiCoin[] = rawCoins

@@ -1,8 +1,6 @@
-import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
-import { PolkadotSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
-import { GetChainSpecificInput, IRpcService } from '../IRpcService';
+import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServicePolkadot extends RpcService implements IRpcService {
@@ -20,30 +18,6 @@ export class RpcServicePolkadot extends RpcService implements IRpcService {
     const result: string = await this.callRPC('author_submitExtrinsic', [
       hexWithPrefix,
     ]);
-    return result;
-  }
-
-  async getChainSpecific({ coin }: GetChainSpecificInput) {
-    const recentBlockHash = await this.fetchBlockHash();
-    const nonce = await this.fetchNonce(coin.address);
-    const currentBlockNumber = Number(await this.fetchBlockHeader());
-    const genesisHash = await this.fetchGenesisBlockHash();
-
-    const { specVersion, transactionVersion } =
-      await this.fetchRuntimeVersion();
-
-    const result: KeysignChainSpecific = {
-      case: 'polkadotSpecific',
-      value: new PolkadotSpecific({
-        recentBlockHash,
-        nonce: BigInt(nonce),
-        currentBlockNumber: currentBlockNumber.toString(),
-        specVersion,
-        transactionVersion,
-        genesisHash,
-      }),
-    };
-
     return result;
   }
 
@@ -91,22 +65,22 @@ export class RpcServicePolkadot extends RpcService implements IRpcService {
     return await super.callRpc(Endpoint.polkadotServiceRpc, method, params);
   }
 
-  private async fetchNonce(address: string): Promise<number> {
+  async fetchNonce(address: string): Promise<number> {
     const result = await this.callRPC('system_accountNextIndex', [address]);
     return Number(result);
   }
 
-  private async fetchBlockHash(): Promise<string> {
+  async fetchBlockHash(): Promise<string> {
     const result: string = await this.callRPC('chain_getBlockHash', []);
     return result;
   }
 
-  private async fetchGenesisBlockHash(): Promise<string> {
+  async fetchGenesisBlockHash(): Promise<string> {
     const result = await this.callRPC('chain_getBlockHash', [0]);
     return result;
   }
 
-  private async fetchRuntimeVersion(): Promise<any> {
+  async fetchRuntimeVersion(): Promise<any> {
     const result: any = await this.callRPC('state_getRuntimeVersion', []);
     return {
       specVersion: result.specVersion,
@@ -114,7 +88,7 @@ export class RpcServicePolkadot extends RpcService implements IRpcService {
     };
   }
 
-  private async fetchBlockHeader(): Promise<number> {
+  async fetchBlockHeader(): Promise<number> {
     const result: any = await this.callRPC('chain_getHeader', []);
     return Number(result.number);
   }

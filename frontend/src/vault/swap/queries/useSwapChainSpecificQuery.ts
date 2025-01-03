@@ -1,3 +1,5 @@
+import { getChainSpecific } from '../../../chain/keysign/chainSpecific/getChainSpecific';
+import { GetChainSpecificInput } from '../../../chain/keysign/chainSpecific/GetChainSpecificInput';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { areEqualCoins } from '../../../coin/Coin';
@@ -6,10 +8,6 @@ import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQu
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
-import { Chain } from '../../../model/chain';
-import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
-import { GetChainSpecificInput } from '../../../services/Rpc/IRpcService';
-import { ServiceFactory } from '../../../services/ServiceFactory';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
@@ -25,8 +23,6 @@ export const useSwapChainSpecificQuery = () => {
   const [fromAmount] = useFromAmount();
 
   const swapQuoteQuery = useSwapQuoteQuery();
-
-  const walletCore = useAssertWalletCore();
 
   return useStateDependentQuery({
     state: {
@@ -51,13 +47,7 @@ export const useSwapChainSpecificQuery = () => {
 
       return {
         queryKey: getChainSpecificQueryKey(input),
-        queryFn: async () => {
-          const service = ServiceFactory.getService(
-            input.coin.chain as Chain,
-            walletCore
-          );
-          return service.rpcService.getChainSpecific(input);
-        },
+        queryFn: () => getChainSpecific(input),
       };
     },
   });

@@ -1,5 +1,6 @@
 import { withoutDuplicates } from '../../../lib/utils/array/withoutDuplicates';
 import { Chain } from '../../../model/chain';
+import { cosmosRpcUrl } from '../../cosmos/cosmosRpcUrl';
 
 export const nativeSwapChains = [Chain.THORChain, Chain.MayaChain] as const;
 export type NativeSwapChain = (typeof nativeSwapChains)[number];
@@ -10,8 +11,8 @@ export const nativeSwapStreamingInterval: Record<NativeSwapChain, number> = {
 };
 
 export const nativeSwapApiBaseUrl: Record<NativeSwapChain, string> = {
-  [Chain.THORChain]: 'https://thornode.ninerealms.com/thorchain',
-  [Chain.MayaChain]: 'https://mayanode.mayachain.info/mayachain',
+  [Chain.THORChain]: `${cosmosRpcUrl[Chain.THORChain]}/thorchain`,
+  [Chain.MayaChain]: `${cosmosRpcUrl[Chain.MayaChain]}/mayachain`,
 };
 
 export const nativeSwapEnabledChainsRecord = {
