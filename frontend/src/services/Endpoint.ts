@@ -18,19 +18,11 @@ export class Endpoint {
     return `${this.vultisigApiProxy}/blowfish/solana/v0/mainnet/scan/transactions?language=en`;
   }
 
-  static fetchAccountNumberThorchainNineRealms(address: string): string {
-    return `https://thornode.ninerealms.com/auth/accounts/${address}`;
-  }
-
   static fetchThorchainNetworkInfoNineRealms: string =
     'https://thornode.ninerealms.com/thorchain/network';
   static thorchainNetworkInfo: URL = new URL(
     'https://rpc.ninerealms.com/status'
   );
-
-  static fetchAccountNumberMayachain(address: string): string {
-    return `https://mayanode.mayachain.info/auth/accounts/${address}`;
-  }
 
   static fetchAccountBalanceThorchainNineRealms(address: string): string {
     return `https://thornode.ninerealms.com/cosmos/bank/v1beta1/balances/${address}`;
@@ -146,10 +138,6 @@ export class Endpoint {
     return `https://litecoinspace.org/tx/${value}`;
   }
 
-  static blockchairStats(chainName: string): URL {
-    return new URL(`${this.vultisigApiProxy}/blockchair/${chainName}/stats`);
-  }
-
   static blockchairBroadcast(chainName: string): URL {
     return new URL(
       `${this.vultisigApiProxy}/blockchair/${chainName}/push/transaction`
@@ -184,10 +172,6 @@ export class Endpoint {
 
   static fetchCosmosAccountBalance(address: string): string {
     return `https://cosmos-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
-  }
-
-  static fetchCosmosAccountNumber(address: string): string {
-    return `https://cosmos-rest.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`;
   }
 
   static broadcastCosmosTransaction: string =
@@ -255,19 +239,11 @@ export class Endpoint {
     return `https://dydx-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
   }
 
-  static fetchDydxAccountNumber(address: string): string {
-    return `https://dydx-rest.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`;
-  }
-
   static broadcastDydxTransaction: string =
     'https://dydx-rest.publicnode.com/cosmos/tx/v1beta1/txs';
 
   static fetchKujiraAccountBalance(address: string): string {
     return `https://kujira-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
-  }
-
-  static fetchKujiraAccountNumber(address: string): string {
-    return `https://kujira-rest.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`;
   }
 
   static broadcastKujiraTransaction: string =

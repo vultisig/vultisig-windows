@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Endpoint } from '../../Endpoint';
 import { RpcServiceCosmos } from '../cosmos/RpcServiceCosmos';
 
@@ -9,10 +8,6 @@ export class RpcServiceDydx extends RpcServiceCosmos {
 
   protected balanceURL(address: string): string {
     return Endpoint.fetchDydxAccountBalance(address);
-  }
-
-  protected accountNumberURL(address: string): string {
-    return Endpoint.fetchDydxAccountNumber(address);
   }
 
   protected transactionURL(): string {

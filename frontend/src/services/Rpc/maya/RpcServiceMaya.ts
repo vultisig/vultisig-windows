@@ -1,9 +1,7 @@
-import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
-import { MAYAChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { Endpoint } from '../../Endpoint';
-import { GetChainSpecificInput, IRpcService } from '../IRpcService';
+import { IRpcService } from '../IRpcService';
 
 export class RpcServiceMaya implements IRpcService {
   async sendTransaction(encodedTransaction: string): Promise<string> {
@@ -53,28 +51,5 @@ export class RpcServiceMaya implements IRpcService {
       throw new Error('TNS entry not found');
     }
     return entry.address;
-  }
-
-  async getChainSpecific({ coin, isDeposit = false }: GetChainSpecificInput) {
-    const account = await this.fetchAccountNumber(coin.address);
-
-    const result: KeysignChainSpecific = {
-      case: 'mayaSpecific',
-      value: new MAYAChainSpecific({
-        accountNumber: BigInt(account?.account_number),
-        sequence: BigInt(account?.sequence ?? 0),
-        isDeposit,
-      }),
-    };
-
-    return result;
-  }
-
-  async fetchAccountNumber(address: string) {
-    const url = Endpoint.fetchAccountNumberMayachain(address);
-    const response = await fetch(url);
-
-    const data = await response.json();
-    return data.result.value;
   }
 }

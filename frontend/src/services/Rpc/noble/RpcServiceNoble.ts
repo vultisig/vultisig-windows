@@ -11,10 +11,6 @@ export class RpcServiceNoble extends RpcServiceCosmos {
     return Endpoint.fetchNobleAccountBalance(address);
   }
 
-  protected accountNumberURL(address: string): string {
-    return Endpoint.fetchNobleAccountNumber(address);
-  }
-
   protected transactionURL(): string {
     return Endpoint.broadcastNobleTransaction;
   }

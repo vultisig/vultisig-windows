@@ -1,5 +1,5 @@
 import { Chain } from '../model/chain';
 
-export type ChainEntity = {
-  chain: Chain;
+export type ChainEntity<T extends Chain = Chain> = {
+  chain: T;
 };

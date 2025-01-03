@@ -11,10 +11,6 @@ export class RpcServiceOsmosis extends RpcServiceCosmos {
     return Endpoint.fetchOsmosisAccountBalance(address);
   }
 
-  protected accountNumberURL(address: string): string {
-    return Endpoint.fetchOsmosisAccountNumber(address);
-  }
-
   protected transactionURL(): string {
     return Endpoint.broadcastOsmosisTransaction;
   }

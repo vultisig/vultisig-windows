@@ -11,10 +11,6 @@ export class RpcServiceGaia extends RpcServiceCosmos {
     return Endpoint.fetchCosmosAccountBalance(address);
   }
 
-  protected accountNumberURL(address: string): string {
-    return Endpoint.fetchCosmosAccountNumber(address);
-  }
-
   protected transactionURL(): string {
     return Endpoint.broadcastCosmosTransaction;
   }

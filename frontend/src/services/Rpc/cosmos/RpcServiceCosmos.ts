@@ -1,12 +1,6 @@
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
-import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
-import {
-  CosmosSpecific,
-  TransactionType,
-} from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { Chain } from '../../../model/chain';
-import { GetChainSpecificInput, IRpcService } from '../IRpcService';
+import { IRpcService } from '../IRpcService';
 
 export class RpcServiceCosmos implements IRpcService {
   sendTransaction(encodedTransaction: string): Promise<string> {
@@ -36,36 +30,6 @@ export class RpcServiceCosmos implements IRpcService {
     }
   }
 
-  async getChainSpecific({ coin }: GetChainSpecificInput) {
-    let defaultGas = 7500;
-
-    switch (coin.chain) {
-      case Chain.Dydx:
-        defaultGas = 2500000000000000;
-        break;
-      case Chain.TerraClassic:
-        defaultGas = 100000000;
-        break;
-      case Chain.Noble:
-        defaultGas = 30000;
-        break;
-    }
-
-    const account = await this.fetchAccountNumber(coin.address);
-
-    const result: KeysignChainSpecific = {
-      case: 'cosmosSpecific',
-      value: new CosmosSpecific({
-        accountNumber: BigInt(account.account_number),
-        sequence: BigInt(account.sequence),
-        gas: BigInt(defaultGas),
-        transactionType: TransactionType.UNSPECIFIED,
-      }),
-    };
-
-    return result;
-  }
-
   async fetchBalances(address: string): Promise<CosmosBalance[]> {
     const url = this.balanceURL(address);
     if (!url) {
@@ -74,14 +38,6 @@ export class RpcServiceCosmos implements IRpcService {
 
     const response: CosmosBalanceResponse = await Fetch(url);
     return response.balances;
-  }
-
-  async fetchAccountNumber(address: string): Promise<CosmosAccountValue> {
-    const url = this.accountNumberURL(address);
-
-    const response = await Fetch(url);
-
-    return response.account as CosmosAccountValue;
   }
 
   async broadcastTransaction(jsonString: string): Promise<string> {
@@ -127,10 +83,6 @@ export class RpcServiceCosmos implements IRpcService {
     throw new Error(`Must override in subclass, address: ${address}`);
   }
 
-  protected accountNumberURL(address: string): string {
-    throw new Error(`Must override in subclass, address: ${address}`);
-  }
-
   protected transactionURL(): string | null {
     throw new Error('Must override in subclass');
   }
@@ -139,11 +91,6 @@ export class RpcServiceCosmos implements IRpcService {
 interface CosmosBalance {
   amount: string;
   denom: string;
-}
-
-interface CosmosAccountValue {
-  account_number: string;
-  sequence: string;
 }
 
 interface CosmosBalanceResponse {
