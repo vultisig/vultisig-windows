@@ -1,5 +1,9 @@
+import {
+  getCosmosBalanceUrl,
+  getCosmosTxBroadcastUrl,
+} from '../../../chain/cosmos/cosmosRpcUrl';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { Chain } from '../../../model/chain';
+import { Chain, CosmosChain } from '../../../model/chain';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 
@@ -9,7 +13,10 @@ export class RpcServiceMaya implements IRpcService {
   }
 
   async getBalance(coin: Coin): Promise<string> {
-    const url = Endpoint.fetchAccountBalanceMayachain(coin.address);
+    const url = getCosmosBalanceUrl({
+      chain: coin.chain as CosmosChain,
+      address: coin.address,
+    });
 
     const response = await fetch(url);
 
@@ -23,7 +30,7 @@ export class RpcServiceMaya implements IRpcService {
   }
 
   async broadcastTransaction(hex: string): Promise<string> {
-    const url = Endpoint.broadcastTransactionMayachain;
+    const url = getCosmosTxBroadcastUrl(Chain.MayaChain);
 
     // fetch to post the transaction
     const response = await fetch(url, {

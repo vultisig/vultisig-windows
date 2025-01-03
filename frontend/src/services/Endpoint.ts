@@ -1,3 +1,6 @@
+import { cosmosRpcUrl } from '../chain/cosmos/cosmosRpcUrl';
+import { Chain } from '../model/chain';
+
 export class Endpoint {
   static VULTISIG_RELAY: string = 'https://api.vultisig.com/router';
   static LOCAL_MEDIATOR_URL: string = 'http://127.0.0.1:18080';
@@ -5,10 +8,6 @@ export class Endpoint {
   static supportDocumentLink: string =
     'https://docs.vultisig.com/user-actions/creating-a-vault';
   static vultisigRelay: string = 'https://api.vultisig.com/router';
-  static broadcastTransactionThorchainNineRealms: string =
-    'https://thornode.ninerealms.com/cosmos/tx/v1beta1/txs';
-  static broadcastTransactionMayachain: string =
-    'https://mayanode.mayachain.info/cosmos/tx/v1beta1/txs';
 
   static fetchBlowfishTransactions(chain: string, network: string): string {
     return `${this.vultisigApiProxy}/blowfish/${chain}/v0/${network}/scan/transactions?language=en&method=eth_sendTransaction`;
@@ -18,19 +17,10 @@ export class Endpoint {
     return `${this.vultisigApiProxy}/blowfish/solana/v0/mainnet/scan/transactions?language=en`;
   }
 
-  static fetchThorchainNetworkInfoNineRealms: string =
-    'https://thornode.ninerealms.com/thorchain/network';
+  static fetchThorchainNetworkInfoNineRealms: string = `${cosmosRpcUrl[Chain.THORChain]}/thorchain/network`;
   static thorchainNetworkInfo: URL = new URL(
     'https://rpc.ninerealms.com/status'
   );
-
-  static fetchAccountBalanceThorchainNineRealms(address: string): string {
-    return `https://thornode.ninerealms.com/cosmos/bank/v1beta1/balances/${address}`;
-  }
-
-  static fetchAccountBalanceMayachain(address: string): string {
-    return `https://mayanode.mayachain.info/cosmos/bank/v1beta1/balances/${address}`;
-  }
 
   static resolveTNS(name: string) {
     return `https://midgard.ninerealms.com/v2/thorname/lookup/${name}`;
@@ -170,24 +160,6 @@ export class Endpoint {
     return `https://litecoinspace.org/api/address/${userAddress}/txs`;
   }
 
-  static fetchCosmosAccountBalance(address: string): string {
-    return `https://cosmos-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
-  }
-
-  static broadcastCosmosTransaction: string =
-    'https://cosmos-rest.publicnode.com/cosmos/tx/v1beta1/txs';
-
-  static fetchTerraV2AccountBalance(address: string): string {
-    return `https://terra-lcd.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
-  }
-
-  static fetchTerraV2AccountNumber(address: string): string {
-    return `https://terra-lcd.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`;
-  }
-
-  static broadcastTerraV2Transaction: string =
-    'https://terra-lcd.publicnode.com/cosmos/tx/v1beta1/txs';
-
   static fetchTerraClassicWasmTokenBalance(
     contractAddress: string,
     base64Payload: string
@@ -201,51 +173,4 @@ export class Endpoint {
   ): string {
     return `https://terra-lcd.publicnode.com/cosmwasm/wasm/v1/contract/${contractAddress}/smart/${base64Payload}`;
   }
-
-  static fetchTerraClassicAccountBalance(address: string): string {
-    return `https://terra-classic-lcd.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
-  }
-
-  static fetchTerraClassicAccountNumber(address: string): string {
-    return `https://terra-classic-lcd.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`;
-  }
-
-  static broadcastTerraClassicTransaction: string =
-    'https://terra-classic-lcd.publicnode.com/cosmos/tx/v1beta1/txs';
-
-  static fetchOsmosisAccountBalance(address: string): string {
-    return `https://osmosis-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
-  }
-
-  static fetchOsmosisAccountNumber(address: string): string {
-    return `https://osmosis-rest.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`;
-  }
-
-  static broadcastOsmosisTransaction: string =
-    'https://osmosis-rest.publicnode.com/cosmos/tx/v1beta1/txs';
-
-  static broadcastNobleTransaction: string =
-    'https://noble-api.polkachu.com/cosmos/tx/v1beta1/txs';
-
-  static fetchNobleAccountNumber(address: string): string {
-    return `https://noble-api.polkachu.com/cosmos/auth/v1beta1/accounts/${address}`;
-  }
-
-  static fetchNobleAccountBalance(address: string): string {
-    return `https://noble-api.polkachu.com/cosmos/bank/v1beta1/balances/${address}`;
-  }
-
-  static fetchDydxAccountBalance(address: string): string {
-    return `https://dydx-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
-  }
-
-  static broadcastDydxTransaction: string =
-    'https://dydx-rest.publicnode.com/cosmos/tx/v1beta1/txs';
-
-  static fetchKujiraAccountBalance(address: string): string {
-    return `https://kujira-rest.publicnode.com/cosmos/bank/v1beta1/balances/${address}`;
-  }
-
-  static broadcastKujiraTransaction: string =
-    'https://kujira-rest.publicnode.com/cosmos/tx/v1beta1/txs';
 }

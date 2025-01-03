@@ -1,14 +1,10 @@
 import { match } from '../../lib/utils/match';
 import { Chain, EvmChain } from '../../model/chain';
-import { RpcServiceDydx } from './dydx/RpcServiceDydx';
+import { RpcServiceCosmos } from './cosmos/RpcServiceCosmos';
 import { RpcServiceEvm } from './evm/RpcServiceEvm';
 import { RpcServiceZksync } from './evm/RpcServiceZkSyncEvm';
-import { RpcServiceGaia } from './gaia/RpcServiceGaia';
 import { IRpcService } from './IRpcService';
-import { RpcServiceKujira } from './kurija/RpcServiceKurija';
 import { RpcServiceMaya } from './maya/RpcServiceMaya';
-import { RpcServiceNoble } from './noble/RpcServiceNoble';
-import { RpcServiceOsmosis } from './osmosis/RpcServiceOsmosis';
 import { RpcServicePolkadot } from './polkadot/RpcServicePolkadot';
 import { RpcServiceRipple } from './ripple/RpcServiceRipple';
 import { RpcServiceSolana } from './solana/RpcServiceSolana';
@@ -44,14 +40,15 @@ export class RpcServiceFactory {
       [Chain.Dogecoin]: () => new RpcServiceUtxo(chain),
       [Chain.Avalanche]: () => new RpcServiceEvm(chain as EvmChain),
       [Chain.Sui]: () => new RpcServiceSui(chain),
-      [Chain.Cosmos]: () => new RpcServiceGaia(),
-      [Chain.Osmosis]: () => new RpcServiceOsmosis(),
-      [Chain.Kujira]: () => new RpcServiceKujira(),
-      [Chain.Dydx]: () => new RpcServiceDydx(),
+      [Chain.Cosmos]: () => new RpcServiceCosmos(Chain.Cosmos),
+      [Chain.Osmosis]: () => new RpcServiceCosmos(Chain.Osmosis),
+      [Chain.Kujira]: () => new RpcServiceCosmos(Chain.Kujira),
+      [Chain.Dydx]: () => new RpcServiceCosmos(Chain.Dydx),
       [Chain.Ton]: () => new RpcServiceTon(chain),
-      [Chain.Terra]: () => new RpcServiceTerraV2(),
-      [Chain.TerraClassic]: () => new RpcServiceTerraClassic(),
-      [Chain.Noble]: () => new RpcServiceNoble(),
+      [Chain.Terra]: () => new RpcServiceTerraV2(Chain.Terra),
+      [Chain.TerraClassic]: () =>
+        new RpcServiceTerraClassic(Chain.TerraClassic),
+      [Chain.Noble]: () => new RpcServiceCosmos(Chain.Noble),
       [Chain.Ripple]: () => new RpcServiceRipple(chain),
     });
   }

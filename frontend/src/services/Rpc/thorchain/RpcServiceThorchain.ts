@@ -1,3 +1,7 @@
+import {
+  getCosmosBalanceUrl,
+  getCosmosTxBroadcastUrl,
+} from '../../../chain/cosmos/cosmosRpcUrl';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { Endpoint } from '../../Endpoint';
@@ -9,7 +13,10 @@ export class RpcServiceThorchain implements IRpcService {
   }
 
   async getBalance(coin: Coin): Promise<string> {
-    const url = Endpoint.fetchAccountBalanceThorchainNineRealms(coin.address);
+    const url = getCosmosBalanceUrl({
+      chain: Chain.THORChain,
+      address: coin.address,
+    });
     const response = await fetch(url, {
       headers: {
         'X-Client-ID': 'vultisig',
@@ -26,7 +33,7 @@ export class RpcServiceThorchain implements IRpcService {
   }
 
   async broadcastTransaction(hex: string): Promise<string> {
-    const url = Endpoint.broadcastTransactionThorchainNineRealms;
+    const url = getCosmosTxBroadcastUrl(Chain.THORChain);
 
     // fetch to post the transaction
     const response = await fetch(url, {

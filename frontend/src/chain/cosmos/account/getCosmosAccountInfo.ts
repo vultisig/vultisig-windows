@@ -1,7 +1,7 @@
 import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
-import { match } from '../../../lib/utils/match';
 import { Chain, CosmosChain } from '../../../model/chain';
 import { ChainAccount } from '../../ChainAccount';
+import { cosmosRpcUrl } from '../cosmosRpcUrl';
 
 type AccountInfoValueResponse = {
   account_number: string;
@@ -13,47 +13,57 @@ type AccountInfo = {
   sequence: number;
 };
 
-type AccountInfoResponse =
-  | {
-      result: {
-        value: AccountInfoValueResponse;
-      };
-    }
-  | {
-      account: AccountInfoValueResponse;
-    };
-
-export const getCosmosAccountInfo = async ({
+const getBetaAuthAccountInfo = async ({
   address,
   chain,
-}: ChainAccount<CosmosChain>): Promise<AccountInfo> => {
-  const url = match(chain, {
-    [Chain.Cosmos]: () =>
-      `https://cosmos-rest.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`,
-    [Chain.Osmosis]: () =>
-      `https://osmosis-rest.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`,
-    [Chain.MayaChain]: () =>
-      `https://thornode.ninerealms.com/auth/accounts/${address}`,
-    [Chain.Dydx]: () =>
-      `https://dydx-rest.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`,
-    [Chain.Kujira]: () =>
-      `https://kujira-rest.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`,
-    [Chain.Terra]: () =>
-      `https://terra-lcd.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`,
-    [Chain.TerraClassic]: () =>
-      `https://terra-classic-lcd.publicnode.com/cosmos/auth/v1beta1/accounts/${address}`,
-    [Chain.Noble]: () =>
-      `https://noble-api.polkachu.com/cosmos/auth/v1beta1/accounts/${address}`,
-    [Chain.THORChain]: () =>
-      `https://thornode.ninerealms.com/auth/accounts/${address}`,
-  });
+}: ChainAccount<CosmosChain>) => {
+  const baseUrl = cosmosRpcUrl[chain];
+  const url = `${baseUrl}/cosmos/auth/v1beta1/accounts/${address}`;
+  const response = (await Fetch(url)) as {
+    result: {
+      value: AccountInfoValueResponse;
+    };
+  };
 
-  const response = await Fetch(url);
+  return response.result.value;
+};
 
-  const data = (await response.json()) as AccountInfoResponse;
+const getAuthAccountInfo = async ({
+  address,
+  chain,
+}: ChainAccount<CosmosChain>) => {
+  const baseUrl = cosmosRpcUrl[chain];
+  const url = `${baseUrl}/auth/accounts/${address}`;
+  const response = (await Fetch(url)) as {
+    account: AccountInfoValueResponse;
+  };
 
+  return response.account;
+};
+
+const accountInfoHandler: Record<
+  CosmosChain,
+  ({
+    address,
+    chain,
+  }: ChainAccount<CosmosChain>) => Promise<AccountInfoValueResponse>
+> = {
+  [Chain.Cosmos]: getBetaAuthAccountInfo,
+  [Chain.Osmosis]: getBetaAuthAccountInfo,
+  [Chain.Dydx]: getBetaAuthAccountInfo,
+  [Chain.Kujira]: getBetaAuthAccountInfo,
+  [Chain.Terra]: getBetaAuthAccountInfo,
+  [Chain.TerraClassic]: getBetaAuthAccountInfo,
+  [Chain.Noble]: getBetaAuthAccountInfo,
+  [Chain.THORChain]: getAuthAccountInfo,
+  [Chain.MayaChain]: getAuthAccountInfo,
+};
+
+export const getCosmosAccountInfo = async (
+  account: ChainAccount<CosmosChain>
+): Promise<AccountInfo> => {
   const { account_number, sequence } =
-    'account' in data ? data.account : data.result.value;
+    await accountInfoHandler[account.chain](account);
 
   return {
     accountNumber: Number(account_number),

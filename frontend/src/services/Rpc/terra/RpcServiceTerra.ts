@@ -1,21 +1,9 @@
-/* eslint-disable */
+import { cosmosFeeCoinDenom } from '../../../chain/cosmos/cosmosFeeCoinDenom';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
 import { RpcServiceCosmos } from '../cosmos/RpcServiceCosmos';
 
 export class RpcServiceTerraV2 extends RpcServiceCosmos {
-  protected denom(): string {
-    return 'uluna';
-  }
-
-  protected balanceURL(address: string): string {
-    return Endpoint.fetchTerraV2AccountBalance(address);
-  }
-
-  protected transactionURL(): string {
-    return Endpoint.broadcastTerraV2Transaction;
-  }
-
   async getBalance(coin: Coin): Promise<string> {
     if (
       coin.isNativeToken ||
@@ -31,9 +19,11 @@ export class RpcServiceTerraV2 extends RpcServiceCosmos {
 
   async getTokenBalance(coin: Coin): Promise<string> {
     const balances = await this.fetchBalances(coin.address);
+    const denom = cosmosFeeCoinDenom[this.chain];
+
     const balance = balances.find(balance => {
       if (coin.isNativeToken) {
-        if (balance.denom.toLowerCase() === this.denom()) {
+        if (balance.denom.toLowerCase() === denom) {
           return balance.amount;
         }
       } else {
@@ -66,7 +56,7 @@ export class RpcServiceTerraV2 extends RpcServiceCosmos {
         coin.contractAddress,
         base64Payload
       );
-    } catch (e) {
+    } catch {
       return '0';
     }
 
@@ -77,7 +67,7 @@ export class RpcServiceTerraV2 extends RpcServiceCosmos {
     let response;
     try {
       response = await fetch(url);
-    } catch (e) {
+    } catch {
       return '0';
     }
 
@@ -94,18 +84,6 @@ export class RpcServiceTerraV2 extends RpcServiceCosmos {
 }
 
 export class RpcServiceTerraClassic extends RpcServiceCosmos {
-  protected denom(): string {
-    return 'uluna';
-  }
-
-  protected balanceURL(address: string): string {
-    return Endpoint.fetchTerraClassicAccountBalance(address);
-  }
-
-  protected transactionURL(): string {
-    return Endpoint.broadcastTerraClassicTransaction;
-  }
-
   async getBalance(coin: Coin): Promise<string> {
     if (
       coin.isNativeToken ||
@@ -121,9 +99,11 @@ export class RpcServiceTerraClassic extends RpcServiceCosmos {
 
   async getTokenBalance(coin: Coin): Promise<string> {
     const balances = await this.fetchBalances(coin.address);
+    const denom = cosmosFeeCoinDenom[this.chain];
+
     const balance = balances.find(balance => {
       if (coin.isNativeToken) {
-        if (balance.denom.toLowerCase() === this.denom()) {
+        if (balance.denom.toLowerCase() === denom) {
           return balance.amount;
         }
       } else {
@@ -156,7 +136,7 @@ export class RpcServiceTerraClassic extends RpcServiceCosmos {
         coin.contractAddress,
         base64Payload
       );
-    } catch (e) {
+    } catch {
       return '0';
     }
 
@@ -167,7 +147,7 @@ export class RpcServiceTerraClassic extends RpcServiceCosmos {
     let response;
     try {
       response = await fetch(url);
-    } catch (e) {
+    } catch {
       return '0';
     }
 
