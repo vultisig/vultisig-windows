@@ -1,5 +1,5 @@
 import { cosmosRpcUrl } from '../chain/cosmos/cosmosRpcUrl';
-import { Chain } from '../model/chain';
+import { Chain, CosmosChain } from '../model/chain';
 
 export class Endpoint {
   static VULTISIG_RELAY: string = 'https://api.vultisig.com/router';
@@ -164,13 +164,13 @@ export class Endpoint {
     contractAddress: string,
     base64Payload: string
   ): string {
-    return `https://terra-classic-lcd.publicnode.com/cosmwasm/wasm/v1/contract/${contractAddress}/smart/${base64Payload}`;
+    return `${cosmosRpcUrl[CosmosChain.TerraClassic]}/cosmwasm/wasm/v1/contract/${contractAddress}/smart/${base64Payload}`;
   }
 
   static fetchTerraV2WasmTokenBalance(
     contractAddress: string,
     base64Payload: string
   ): string {
-    return `https://terra-lcd.publicnode.com/cosmwasm/wasm/v1/contract/${contractAddress}/smart/${base64Payload}`;
+    return `${cosmosRpcUrl[CosmosChain.Terra]}/cosmwasm/wasm/v1/contract/${contractAddress}/smart/${base64Payload}`;
   }
 }
