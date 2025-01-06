@@ -6,6 +6,7 @@ import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
 import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
+import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
@@ -40,7 +41,7 @@ export const KeysignTxPrimaryInfo = () => {
     if (!blockchainSpecific.value) return null;
     formatFee({
       chain: coin.chain as Chain,
-      chainSpecific: blockchainSpecific,
+      amount: getFeeAmount(blockchainSpecific),
     });
   }, [blockchainSpecific, coin.chain]);
 

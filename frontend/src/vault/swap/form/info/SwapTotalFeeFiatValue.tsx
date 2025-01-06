@@ -2,7 +2,8 @@ import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount';
-import { areEqualCoins, CoinKey } from '../../../../coin/Coin';
+import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
+import { areEqualCoins } from '../../../../coin/Coin';
 import { useCoinPricesQuery } from '../../../../coin/query/useCoinPricesQuery';
 import {
   getStorageCoinKey,
@@ -14,11 +15,9 @@ import { MatchEagerQuery } from '../../../../lib/ui/query/components/MatchEagerQ
 import { useTransformQueryData } from '../../../../lib/ui/query/hooks/useTransformQueryData';
 import { sum } from '../../../../lib/utils/array/sum';
 import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
-import { EntityWithAmount } from '../../../../lib/utils/entities/EntityWithAmount';
 import { CoinMeta } from '../../../../model/coin-meta';
 import { useCurrentVaultCoins } from '../../../state/currentVault';
-
-type SwapFee = CoinKey & EntityWithAmount;
+import { SwapFee } from '../../types/SwapFee';
 
 export const SwapTotalFeeFiatValue = ({
   value,
@@ -53,12 +52,12 @@ export const SwapTotalFeeFiatValue = ({
         }
 
         const total = sum(
-          value.map(({ amount, ...coinKey }) => {
+          value.map(({ amount, decimals, ...coinKey }) => {
             const { price } = shouldBePresent(
               prices.find(price => areEqualCoins(price, coinKey))
             );
 
-            return price * amount;
+            return price * fromChainAmount(amount, decimals);
           })
         );
 

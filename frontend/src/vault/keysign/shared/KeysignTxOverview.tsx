@@ -6,6 +6,7 @@ import { useCurrentTxHash } from '../../../chain/state/currentTxHash';
 import { nativeSwapChains } from '../../../chain/swap/native/NativeSwapChain';
 import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
+import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getBlockExplorerUrl } from '../../../chain/utils/getBlockExplorerUrl';
@@ -60,7 +61,7 @@ export const KeysignTxOverview = () => {
 
     return formatFee({
       chain: chain as Chain,
-      chainSpecific: blockchainSpecific,
+      amount: getFeeAmount(blockchainSpecific),
     });
   }, [blockchainSpecific, chain]);
 

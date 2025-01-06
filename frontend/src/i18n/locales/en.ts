@@ -417,7 +417,6 @@ export const en = {
   swap_tracking_link: 'Swap tracking link',
   allowance: 'Allowance',
   provider: 'Provider',
-  estimated_fees: 'Estimated Fees',
   swap_terms_0: 'The swap amount is correct',
   swap_terms_1: 'I agree with the amount I will receive after the swap',
   swap_agree_terms: 'You must agree with terms before proceeding',

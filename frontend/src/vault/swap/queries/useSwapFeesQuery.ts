@@ -2,12 +2,12 @@ import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapCha
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
 import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
+import { SwapFees } from '../types/SwapFee';
 import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery';
 import { useSwapQuoteQuery } from './useSwapQuoteQuery';
 
@@ -24,7 +24,7 @@ export const useSwapFeesQuery = () => {
       swapQuote: swapQuoteQuery,
       chainSpecific: chainSpecificQuery,
     },
-    ({ swapQuote, chainSpecific }) => {
+    ({ swapQuote, chainSpecific }): SwapFees => {
       const fromFeeCoin = getChainFeeCoin(fromCoinKey.chain);
 
       return matchRecordUnion(swapQuote, {
@@ -35,30 +35,27 @@ export const useSwapFeesQuery = () => {
 
           const feeAmount = getFeeAmount(chainSpecific);
 
-          return [
-            {
-              ...toCoinKey,
-              amount: fromChainAmount(fees.total, decimals),
-            },
-            {
+          return {
+            network: {
               ...getCoinMetaKey(fromFeeCoin),
-              amount: fromChainAmount(
-                feeAmount,
-                getChainFeeCoin(fromCoinKey.chain).decimals
-              ),
+              amount: feeAmount,
+              decimals: getChainFeeCoin(fromCoinKey.chain).decimals,
             },
-          ];
+            swap: {
+              ...toCoinKey,
+              amount: fees.total,
+              decimals,
+            },
+          };
         },
         oneInch: ({ tx: { gasPrice, gas } }) => {
-          return [
-            {
+          return {
+            network: {
               ...getCoinMetaKey(fromFeeCoin),
-              amount: fromChainAmount(
-                BigInt(gasPrice) * BigInt(gas),
-                fromFeeCoin.decimals
-              ),
+              amount: BigInt(gasPrice) * BigInt(gas),
+              decimals: fromFeeCoin.decimals,
             },
-          ];
+          };
         },
       });
     }
