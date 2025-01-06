@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { ScrollableFlexboxFiller } from '../../../../lib/ui/layout/ScrollableFlexboxFiller';
 import { VStack } from '../../../../lib/ui/layout/Stack';
 import { CurrentSearchProvider } from '../../../../lib/ui/search/CurrentSearchProvider';
@@ -10,13 +12,15 @@ import { CoinSearch } from './search/CoinSearch';
 import { VaultChainCoinOptions } from './VaultChainCoinOptions';
 
 export const ManageVaultChainCoinsPage = () => {
+  const { t } = useTranslation();
+
   return (
     <CurrentSearchProvider initialValue="">
       <VStack flexGrow>
         <VStack gap={20}>
           <PageHeader
             primaryControls={<PageHeaderBackButton />}
-            title={<PageHeaderTitle>Choose coins</PageHeaderTitle>}
+            title={<PageHeaderTitle>{t('choose_coins')}</PageHeaderTitle>}
           />
           <PageSlice>
             <CoinSearch />
