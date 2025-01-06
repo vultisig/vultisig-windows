@@ -18,9 +18,19 @@ export const SwapFees: React.FC<SwapFeesProps> = ({ RowComponent }) => {
 
   return (
     <>
+      <RowComponent>
+        <span>{t('swap_fee')}</span>
+        <MatchQuery
+          value={query}
+          pending={() => <Spinner />}
+          error={() => <span>{t('failed_to_load')}</span>}
+          success={({ swap }) => {
+            return <SwapFeeFiatValue value={[swap]} />;
+          }}
+        />
+      </RowComponent>
       <MatchQuery
         value={query}
-        pending={() => <Spinner />}
         success={({ network }) => {
           if (!network) return null;
 
@@ -35,17 +45,6 @@ export const SwapFees: React.FC<SwapFeesProps> = ({ RowComponent }) => {
           );
         }}
       />
-      <RowComponent>
-        <span>{t('swap_fee')}</span>
-        <MatchQuery
-          value={query}
-          pending={() => <Spinner />}
-          error={() => <span>{t('failed_to_load')}</span>}
-          success={({ swap }) => {
-            return <SwapFeeFiatValue value={[swap]} />;
-          }}
-        />
-      </RowComponent>
       <RowComponent>
         <span>{t('total_fee')}</span>
         <MatchQuery
