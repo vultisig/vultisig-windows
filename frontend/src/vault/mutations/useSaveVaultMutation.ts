@@ -1,11 +1,12 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 
 import { storage } from '../../../wailsjs/go/models';
-import { GetSettings, SaveVault } from '../../../wailsjs/go/storage/Store';
+import { SaveVault } from '../../../wailsjs/go/storage/Store';
+import { useDefaultChains } from '../../chain/state/defaultChains';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { getLastItemOrder } from '../../lib/utils/order/getLastItemOrder';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { DefaultCoinsService } from '../../services/Coin/DefaultCoinsService';
+import { createVaultDefaultCoins } from '../coins/createVaultDefaultCoins';
 import { useVaults, vaultsQueryKey } from '../queries/useVaultsQuery';
 import { useCurrentVaultId } from '../state/currentVaultId';
 import { getStorageVaultId } from '../utils/storageVault';
@@ -18,6 +19,8 @@ export const useSaveVaultMutation = (
   const vaults = useVaults();
   const [, setCurrentVaultId] = useCurrentVaultId();
 
+  const [defaultChains] = useDefaultChains();
+
   return useMutation({
     mutationFn: async (vault: storage.Vault) => {
       const order = getLastItemOrder(vaults.map(vault => vault.order));
@@ -29,12 +32,11 @@ export const useSaveVaultMutation = (
 
       await SaveVault(newVault);
 
-      const settings = await GetSettings();
-      const defaultChains = settings[0]?.default_chains || [];
-      await new DefaultCoinsService(walletCore).applyDefaultCoins(
-        newVault,
-        defaultChains
-      );
+      await createVaultDefaultCoins({
+        vault: newVault,
+        defaultChains,
+        walletCore,
+      });
 
       await invalidateQueries(vaultsQueryKey);
 

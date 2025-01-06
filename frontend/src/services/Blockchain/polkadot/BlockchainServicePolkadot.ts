@@ -7,14 +7,13 @@ import { Chain } from '../../../model/chain';
 import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import TxCompiler = TW.TxCompiler;
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
-import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import SignatureProvider from '../signature-provider';
 
@@ -100,15 +99,10 @@ export class BlockchainServicePolkadot
   }
 
   public async getSignedTransaction(
-    vaultPublicKey: VaultPublicKey,
+    publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const publicKey = await toWalletCorePublicKey({
-      walletCore: this.walletCore,
-      value: vaultPublicKey,
-      chain: Chain.Polkadot,
-    });
     const publicKeyData = publicKey.data();
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(

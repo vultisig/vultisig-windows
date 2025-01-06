@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
@@ -351,24 +350,11 @@ func (s *Store) SaveSettings(setting Settings) (*Settings, error) {
 	// Insert new settings
 	insertQuery := `INSERT INTO settings (
 				language,
-				currency,
-				default_chains
-			) VALUES (?, ?, ?);`
+				currency
+			) VALUES (?, ?);`
 
-	if setting.DefaultChains == nil {
-		setting.DefaultChains = []string{}
-	}
 
-	var stringDefaultChain string
-	if len(setting.DefaultChains) > 0 {
-		for i, chain := range setting.DefaultChains {
-			chain = strings.TrimSpace(chain)
-			setting.DefaultChains[i] = chain
-		}
-		stringDefaultChain = strings.Join(setting.DefaultChains, ",")
-	}
-
-	_, err = s.db.Exec(insertQuery, setting.Language, setting.Currency, stringDefaultChain)
+	_, err = s.db.Exec(insertQuery, setting.Language, setting.Currency)
 	if err != nil {
 		return nil, fmt.Errorf("could not insert settings, err: %w", err)
 	}
@@ -390,7 +376,7 @@ func (s *Store) SaveSettings(setting Settings) (*Settings, error) {
 // GetSettings retrieves all settings from the database.
 func (s *Store) GetSettings() ([]Settings, error) {
 	var settings []Settings
-	query := `SELECT language, currency, default_chains FROM settings`
+	query := `SELECT language, currency FROM settings`
 	rows, err := s.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("could not query the settings, err: %w", err)
@@ -401,27 +387,20 @@ func (s *Store) GetSettings() ([]Settings, error) {
 		var (
 			language      string
 			currency      string
-			defaultChains string
 		)
 
 		if err := rows.Scan(
 			&language,
 			&currency,
-			&defaultChains,
 		); err != nil {
 			return nil, fmt.Errorf("could not scan settings, err: %w", err)
 		}
 
-		// Split the defaultChains string into an array
-		chainArray := []string{}
-		if defaultChains != "" {
-			chainArray = strings.Split(defaultChains, ",")
-		}
+
 
 		setting := Settings{
 			Language:      language,
 			Currency:      currency,
-			DefaultChains: chainArray,
 		}
 
 		settings = append(settings, setting)
@@ -531,6 +510,72 @@ func (s *Store) SaveCoin(vaultPublicKeyECDSA string, coin Coin) (string, error) 
 		return "", fmt.Errorf("could not upsert coin, err: %w", err)
 	}
 	return coin.ID, nil
+}
+
+// SaveCoins saves multiple coins for a vault in a single transaction
+func (s *Store) SaveCoins(vaultPublicKeyECDSA string, coins []Coin) ([]string, error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return nil, fmt.Errorf("could not begin transaction: %w", err)
+	}
+	defer func() {
+		if err != nil {
+			if rbErr := tx.Rollback(); rbErr != nil {
+				s.log.Error().Err(rbErr).Msg("could not rollback transaction")
+			}
+		}
+	}()
+
+	query := `INSERT OR REPLACE INTO coins (
+		id, 
+		chain, 
+		address,
+		hex_public_key, 
+		ticker, 
+		contract_address, 
+		is_native_token, 
+		logo, 
+		price_provider_id,
+		decimals,
+		public_key_ecdsa
+	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+
+	stmt, err := tx.Prepare(query)
+	if err != nil {
+		return nil, fmt.Errorf("could not prepare statement: %w", err)
+	}
+	defer stmt.Close()
+
+	coinIDs := make([]string, len(coins))
+	for i, coin := range coins {
+		if coin.ID == "" {
+			coin.ID = uuid.New().String()
+		}
+		coinIDs[i] = coin.ID
+
+		_, err = stmt.Exec(
+			coin.ID,
+			coin.Chain,
+			coin.Address,
+			coin.HexPublicKey,
+			coin.Ticker,
+			coin.ContractAddress,
+			coin.IsNativeToken,
+			coin.Logo,
+			coin.PriceProviderID,
+			coin.Decimals,
+			vaultPublicKeyECDSA,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("could not insert coin %s: %w", coin.ID, err)
+		}
+	}
+
+	if err = tx.Commit(); err != nil {
+		return nil, fmt.Errorf("could not commit transaction: %w", err)
+	}
+
+	return coinIDs, nil
 }
 
 func (s *Store) SaveVaultFolder(folder *VaultFolder) (string, error) {

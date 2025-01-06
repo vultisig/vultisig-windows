@@ -66,7 +66,6 @@ export namespace storage {
   export class Settings {
     language: string;
     currency: string;
-    default_chains: string[];
 
     static createFrom(source: any = {}) {
       return new Settings(source);
@@ -76,7 +75,6 @@ export namespace storage {
       if ('string' === typeof source) source = JSON.parse(source);
       this.language = source['language'];
       this.currency = source['currency'];
-      this.default_chains = source['default_chains'];
     }
   }
   export class Vault {
