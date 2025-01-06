@@ -619,6 +619,6 @@ export const it = {
   swap: 'Scambio',
   allowance: 'Indennità',
   provider: 'Fornitore',
-  estimated_fees: 'Tariffe stimate',
   swap_tracking_link: 'Link di monitoraggio dello scambio',
+  swap_fee: 'Commissione di cambio',
 };

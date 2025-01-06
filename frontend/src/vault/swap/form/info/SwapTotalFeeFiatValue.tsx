@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount';
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
@@ -19,7 +18,7 @@ import { CoinMeta } from '../../../../model/coin-meta';
 import { useCurrentVaultCoins } from '../../../state/currentVault';
 import { SwapFee } from '../../types/SwapFee';
 
-export const SwapTotalFeeFiatValue = ({
+export const SwapFeeFiatValue = ({
   value,
 }: ComponentWithValueProps<SwapFee[]>) => {
   const vaultCoins = useCurrentVaultCoins();
@@ -39,8 +38,6 @@ export const SwapTotalFeeFiatValue = ({
     [value, vaultCoins]
   );
 
-  const { t } = useTranslation();
-
   const formatAmount = useFormatFiatAmount();
 
   const pricesQuery = useTransformQueryData(
@@ -48,7 +45,7 @@ export const SwapTotalFeeFiatValue = ({
     useCallback(
       prices => {
         if (prices.length !== value.length) {
-          return t('failed_to_load');
+          throw new Error('Failed to load prices');
         }
 
         const total = sum(
@@ -63,7 +60,7 @@ export const SwapTotalFeeFiatValue = ({
 
         return formatAmount(total);
       },
-      [formatAmount, t, value]
+      [formatAmount, value]
     )
   );
 
@@ -71,7 +68,6 @@ export const SwapTotalFeeFiatValue = ({
     <MatchEagerQuery
       value={pricesQuery}
       pending={() => <Spinner />}
-      error={() => null}
       success={value => value}
     />
   );

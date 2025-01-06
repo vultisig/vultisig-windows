@@ -8,7 +8,8 @@ import { tonConfig } from '../../../ton/config';
 export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
   matchDiscriminatedUnion(chainSpecific, 'case', 'value', {
     utxoSpecific: ({ byteFee }) => BigInt(byteFee),
-    ethereumSpecific: ({ maxFeePerGasWei }) => BigInt(maxFeePerGasWei),
+    ethereumSpecific: ({ maxFeePerGasWei, gasLimit }) =>
+      BigInt(maxFeePerGasWei) * BigInt(gasLimit),
     suicheSpecific: ({ referenceGasPrice }) => BigInt(referenceGasPrice),
     solanaSpecific: ({ priorityFee }) => BigInt(priorityFee),
     thorchainSpecific: ({ fee }) => BigInt(fee),

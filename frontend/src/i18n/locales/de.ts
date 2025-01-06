@@ -623,6 +623,6 @@ export const de = {
   swap: 'Tauschen',
   allowance: 'Zuschuss',
   provider: 'Anbieter',
-  estimated_fees: 'Geschätzte Gebühren',
   swap_tracking_link: 'Tracking-Link austauschen',
+  swap_fee: 'Swap-Gebühr',
 };

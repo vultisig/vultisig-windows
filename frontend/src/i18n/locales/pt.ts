@@ -614,6 +614,6 @@ export const pt = {
   swap: 'Trocar',
   allowance: 'Mesada',
   provider: 'Provedor',
-  estimated_fees: 'Taxas estimadas',
   swap_tracking_link: 'Link de rastreamento de troca',
+  swap_fee: 'Taxa de swap',
 };

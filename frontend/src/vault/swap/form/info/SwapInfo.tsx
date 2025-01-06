@@ -3,9 +3,8 @@ import { ActiveQueryOnly } from '../../../../lib/ui/query/components/ActiveQuery
 import { WarningBlock } from '../../../../lib/ui/status/WarningBlock';
 import { extractErrorMsg } from '../../../../lib/utils/error/extractErrorMsg';
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery';
-import { SwapNetworkFee } from './SwapNetworkFee';
+import { SwapFees } from './SwapFees';
 import { SwapProvider } from './SwapProvider';
-import { SwapTotalFee } from './SwapTotalFee';
 
 export const SwapInfo = () => {
   const query = useSwapQuoteQuery();
@@ -17,12 +16,7 @@ export const SwapInfo = () => {
   return (
     <ActiveQueryOnly value={query}>
       <SwapProvider />
-      <StrictInfoRow>
-        <SwapNetworkFee />
-      </StrictInfoRow>
-      <StrictInfoRow>
-        <SwapTotalFee />
-      </StrictInfoRow>
+      <SwapFees RowComponent={StrictInfoRow} />
     </ActiveQueryOnly>
   );
 };

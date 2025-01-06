@@ -15,8 +15,7 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
 import { useCurrentVaultCoin } from '../../state/currentVault';
-import { SwapNetworkFee } from '../form/info/SwapNetworkFee';
-import { SwapTotalFee } from '../form/info/SwapTotalFee';
+import { SwapFees } from '../form/info/SwapFees';
 import { useSwapOutputAmountQuery } from '../queries/useSwapOutputAmountQuery';
 import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
@@ -63,12 +62,7 @@ export const SwapVerify: React.FC<ComponentWithBackActionProps> = ({
             </TxOverviewPrimaryRow>
 
             <SwapAllowance />
-            <TxOverviewRow>
-              <SwapNetworkFee />
-            </TxOverviewRow>
-            <TxOverviewRow>
-              <SwapTotalFee />
-            </TxOverviewRow>
+            <SwapFees RowComponent={TxOverviewRow} />
           </TxOverviewPanel>
         </WithProgressIndicator>
         <SwapTermsProvider
