@@ -623,6 +623,6 @@ export const es = {
   swap: 'Intercambio',
   allowance: 'Prestación',
   provider: 'Proveedor',
-  estimated_fees: 'Tarifas estimadas',
   swap_tracking_link: 'Enlace de seguimiento de intercambio',
+  swap_fee: 'Tarifa de intercambio',
 };

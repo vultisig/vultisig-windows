@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount';
-import { areEqualCoins, CoinKey } from '../../../../coin/Coin';
+import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
+import { areEqualCoins } from '../../../../coin/Coin';
 import { useCoinPricesQuery } from '../../../../coin/query/useCoinPricesQuery';
 import {
   getStorageCoinKey,
@@ -14,13 +14,11 @@ import { MatchEagerQuery } from '../../../../lib/ui/query/components/MatchEagerQ
 import { useTransformQueryData } from '../../../../lib/ui/query/hooks/useTransformQueryData';
 import { sum } from '../../../../lib/utils/array/sum';
 import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
-import { EntityWithAmount } from '../../../../lib/utils/entities/EntityWithAmount';
 import { CoinMeta } from '../../../../model/coin-meta';
 import { useCurrentVaultCoins } from '../../../state/currentVault';
+import { SwapFee } from '../../types/SwapFee';
 
-type SwapFee = CoinKey & EntityWithAmount;
-
-export const SwapTotalFeeFiatValue = ({
+export const SwapFeeFiatValue = ({
   value,
 }: ComponentWithValueProps<SwapFee[]>) => {
   const vaultCoins = useCurrentVaultCoins();
@@ -40,8 +38,6 @@ export const SwapTotalFeeFiatValue = ({
     [value, vaultCoins]
   );
 
-  const { t } = useTranslation();
-
   const formatAmount = useFormatFiatAmount();
 
   const pricesQuery = useTransformQueryData(
@@ -49,22 +45,22 @@ export const SwapTotalFeeFiatValue = ({
     useCallback(
       prices => {
         if (prices.length !== value.length) {
-          return t('failed_to_load');
+          throw new Error('Failed to load prices');
         }
 
         const total = sum(
-          value.map(({ amount, ...coinKey }) => {
+          value.map(({ amount, decimals, ...coinKey }) => {
             const { price } = shouldBePresent(
               prices.find(price => areEqualCoins(price, coinKey))
             );
 
-            return price * amount;
+            return price * fromChainAmount(amount, decimals);
           })
         );
 
         return formatAmount(total);
       },
-      [formatAmount, t, value]
+      [formatAmount, value]
     )
   );
 
@@ -72,7 +68,6 @@ export const SwapTotalFeeFiatValue = ({
     <MatchEagerQuery
       value={pricesQuery}
       pending={() => <Spinner />}
-      error={() => null}
       success={value => value}
     />
   );

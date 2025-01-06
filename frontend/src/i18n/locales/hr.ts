@@ -601,6 +601,6 @@ export const hr = {
   swap: 'Zamjena',
   allowance: 'dodatak',
   provider: 'Davatelj',
-  estimated_fees: 'Procijenjene naknade',
   swap_tracking_link: 'Swap link za praćenje',
+  swap_fee: 'Naknada za zamjenu',
 };
