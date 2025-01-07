@@ -32,13 +32,13 @@ export const useAutoDiscoverTokensForNativeToken = ({
         throw new Error('Coin is undefined');
       }
 
-      const result = await factory.getTokens(coin);
+      const tokens = await factory.getTokens(coin);
 
-      if (!result.length) {
+      if (!tokens.length) {
         return [];
       }
 
-      return result;
+      return tokens;
     },
   });
 };
