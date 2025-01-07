@@ -7,10 +7,14 @@ import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
+import { useAutoDiscoverAndSaveTokens } from '../../coin/query/useAutoDiscoverAndSaveTokens';
 import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
 import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
-import { getStorageCoinKey } from '../../coin/utils/storageCoin';
+import {
+  getStorageCoinKey,
+  storageCoinToCoin,
+} from '../../coin/utils/storageCoin';
 import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
@@ -53,11 +57,17 @@ export const VaultChainPage = () => {
   const copyAddress = useCopyAddress();
   const storageCoinKey = getStorageCoinKey(nativeCoin);
   const invalidateQueryKey = getBalanceQueryKey(storageCoinKey);
+  const { t } = useTranslation();
 
-  const { mutate: refresh, isPending } = useMutation({
+  const { mutate: refreshBalance, isPending } = useMutation({
     mutationFn: () => {
       return invalidateQueries(invalidateQueryKey);
     },
+  });
+
+  const { refetch: retriggerAutoDiscover } = useAutoDiscoverAndSaveTokens({
+    chain,
+    coin: storageCoinToCoin(nativeCoin),
   });
 
   const hasMultipleCoinsSupport = !isEmpty(
@@ -66,8 +76,6 @@ export const VaultChainPage = () => {
     )
   );
 
-  const { t } = useTranslation();
-
   return (
     <VStack flexGrow>
       <PageHeader
@@ -75,7 +83,10 @@ export const VaultChainPage = () => {
         secondaryControls={
           <PageHeaderIconButtons>
             <PageHeaderIconButton
-              onClick={() => refresh()}
+              onClick={() => {
+                refreshBalance();
+                retriggerAutoDiscover();
+              }}
               icon={isPending ? <Spinner /> : <RefreshIcon />}
             />
           </PageHeaderIconButtons>
