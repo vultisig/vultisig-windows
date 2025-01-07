@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
 import { areEqualCoins, coinKeyToString } from '../../../../coin/Coin';
+import { useAutoDiscoverTokensForNativeToken } from '../../../../coin/query/useAutoDiscoverTokensForNativeToken';
 import { useWhitelistedCoinsQuery } from '../../../../coin/query/useWhitelistedCoinsQuery';
 import {
   getCoinMetaKey,
@@ -8,11 +9,11 @@ import {
 } from '../../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
 import { VStack } from '../../../../lib/ui/layout/Stack';
+import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { useCurrentSearch } from '../../../../lib/ui/search/CurrentSearchProvider';
 import { useSearchFilter } from '../../../../lib/ui/search/hooks/useSearchFilter';
 import { Text } from '../../../../lib/ui/text';
 import { withoutDuplicates } from '../../../../lib/utils/array/withoutDuplicates';
-import { CoinMeta } from '../../../../model/coin-meta';
 import { TokensStore } from '../../../../services/Coin/CoinList';
 import { useCurrentVaultChainCoins } from '../../../state/currentVault';
 import { useCurrentVaultChain } from '../../useCurrentVaultChain';
@@ -21,20 +22,32 @@ import { ManageVaultChainCoin } from './ManageVaultChainCoin';
 export const VaultChainCoinOptions = () => {
   const chain = useCurrentVaultChain();
   const vaultCoins = useCurrentVaultChainCoins(chain);
+  const nativeToken = vaultCoins.find(
+    coin => coin.chain === chain && coin.is_native_token
+  )!;
+
+  const {
+    data: autoDiscoveredTokens = [],
+    isLoading: isLoadingAutoDiscover,
+    error: errorAutoDiscover,
+  } = useAutoDiscoverTokensForNativeToken({
+    chain,
+    coin: storageCoinToCoin(nativeToken),
+  });
+
   const query = useWhitelistedCoinsQuery(chain);
 
   const initialItems = useMemo(() => {
-    const vaultItems = vaultCoins.map(storageCoinToCoin).map(CoinMeta.fromCoin);
     const suggestedItems = TokensStore.TokenSelectionAssets.filter(
       token => token.chain === chain
     );
 
     return withoutDuplicates(
-      [...vaultItems, ...suggestedItems],
+      [...autoDiscoveredTokens, ...suggestedItems],
       (one, another) =>
         areEqualCoins(getCoinMetaKey(one), getCoinMetaKey(another))
     ).filter(({ isNativeToken }) => !isNativeToken);
-  }, [chain, vaultCoins]);
+  }, [chain, autoDiscoveredTokens]);
 
   const [searchQuery] = useCurrentSearch();
 
@@ -59,10 +72,16 @@ export const VaultChainCoinOptions = () => {
   return (
     <>
       {sortedOptions.map(option => (
-        <ManageVaultChainCoin
-          key={coinKeyToString(getCoinMetaKey(option))}
-          value={option}
-        />
+        <>
+          <ManageVaultChainCoin
+            key={coinKeyToString(getCoinMetaKey(option))}
+            value={option}
+          />
+          {isLoadingAutoDiscover && <Spinner />}
+          {errorAutoDiscover && (
+            <Text color="danger">{errorAutoDiscover?.message}</Text>
+          )}
+        </>
       ))}
       {searchQuery && query.isPending && (
         <VStack fullWidth alignItems="center">
