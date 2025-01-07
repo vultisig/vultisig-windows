@@ -321,10 +321,10 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     const tokenInfos = await this.fetchSolanaTokenInfoList(tokenAddresses);
 
     return Object.entries(tokenInfos)
-      .filter(([_, info]) =>
+      .filter(([_, info = {}]) =>
         this.isValidToken({
-          coingeckoId: info.tokenList.extensions.coingeckoId,
-          symbol: info.tokenList.symbol,
+          coingeckoId: info.tokenList?.extensions?.coingeckoId,
+          symbol: info.tokenList?.symbol,
           decimals: info.decimals,
         })
       )
