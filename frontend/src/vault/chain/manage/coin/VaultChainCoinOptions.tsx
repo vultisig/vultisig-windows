@@ -72,21 +72,19 @@ export const VaultChainCoinOptions = () => {
   return (
     <>
       {sortedOptions.map(option => (
-        <>
-          <ManageVaultChainCoin
-            key={coinKeyToString(getCoinMetaKey(option))}
-            value={option}
-          />
-          {isLoadingAutoDiscover && <Spinner />}
-          {errorAutoDiscover && (
-            <Text color="danger">{errorAutoDiscover?.message}</Text>
-          )}
-        </>
+        <ManageVaultChainCoin
+          key={coinKeyToString(getCoinMetaKey(option))}
+          value={option}
+        />
       ))}
       {searchQuery && query.isPending && (
         <VStack fullWidth alignItems="center">
           <Text>Searching ...</Text>
         </VStack>
+      )}
+      {isLoadingAutoDiscover && <Spinner />}
+      {errorAutoDiscover && (
+        <Text color="danger">{errorAutoDiscover?.message}</Text>
       )}
     </>
   );
