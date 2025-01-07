@@ -2,7 +2,6 @@ import { getChainSpecific } from '../../../chain/keysign/chainSpecific/getChainS
 import { GetChainSpecificInput } from '../../../chain/keysign/chainSpecific/GetChainSpecificInput';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { areEqualCoins } from '../../../coin/Coin';
-import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
@@ -17,15 +16,12 @@ export const useSwapChainSpecificQuery = () => {
   const fromStorageCoin = useCurrentVaultCoin(fromCoinKey);
   const fromCoin = storageCoinToCoin(fromStorageCoin);
 
-  const fromCoinBalanceQuery = useBalanceQuery(fromCoin);
-
   const [fromAmount] = useFromAmount();
 
   const swapQuoteQuery = useSwapQuoteQuery();
 
   return useStateDependentQuery({
     state: {
-      fromCoinBalance: fromCoinBalanceQuery.data,
       swapQuote: swapQuoteQuery.data,
       fromAmount: fromAmount ?? undefined,
     },
