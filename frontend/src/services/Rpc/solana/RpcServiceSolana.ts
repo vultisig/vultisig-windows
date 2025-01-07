@@ -321,7 +321,13 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     const tokenInfos = await this.fetchSolanaTokenInfoList(tokenAddresses);
 
     return Object.entries(tokenInfos)
-      .filter(([_, info]) => this.isValidToken(info))
+      .filter(([_, info]) =>
+        this.isValidToken({
+          coingeckoId: info.tokenList.extensions.coingeckoId,
+          symbol: info.tokenList.symbol,
+          decimals: info.decimals,
+        })
+      )
       .map(([address, info]) => this.mapToCoinMeta(address, info));
   }
 
@@ -335,6 +341,7 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
       const solanaFmResults = await this.postRequest(tokenInfoServiceURL, {
         tokens: contractAddresses,
       });
+
       Object.assign(results, solanaFmResults);
 
       missingTokens.push(...contractAddresses.filter(addr => !results[addr]));
@@ -389,12 +396,12 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     return await response.json();
   }
 
-  private isValidToken(tokenInfo: any): boolean {
-    if (
-      !tokenInfo?.symbol ||
-      !tokenInfo?.decimals ||
-      !tokenInfo?.extensions?.coingeckoId
-    ) {
+  private isValidToken(tokenInfo: {
+    coingeckoId?: string;
+    symbol?: string;
+    decimals?: number;
+  }): boolean {
+    if (!tokenInfo?.symbol || !tokenInfo?.decimals || !tokenInfo?.coingeckoId) {
       console.warn(
         `Skipping token with incomplete metadata: ${JSON.stringify(tokenInfo)}`
       );
@@ -406,12 +413,12 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
   private mapToCoinMeta(address: string, tokenInfo: any): CoinMeta {
     return {
       chain: Chain.Solana,
-      ticker: tokenInfo.symbol,
-      logo: tokenInfo.image || '',
+      ticker: (tokenInfo.tokenList?.symbol || '').toUpperCase(),
+      logo: tokenInfo.tokenList?.image || '',
       decimals: tokenInfo.decimals || 0,
       contractAddress: address,
       isNativeToken: false,
-      priceProviderId: tokenInfo.extensions?.coingeckoId || '',
+      priceProviderId: tokenInfo.tokenList?.extensions?.coingeckoId || '',
     };
   }
 
