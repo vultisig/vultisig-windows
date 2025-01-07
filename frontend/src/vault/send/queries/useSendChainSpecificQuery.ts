@@ -1,7 +1,5 @@
 import { getChainSpecific } from '../../../chain/keysign/chainSpecific/getChainSpecific';
 import { GetChainSpecificInput } from '../../../chain/keysign/chainSpecific/GetChainSpecificInput';
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
-import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
@@ -18,22 +16,18 @@ export const useSendChainSpecificQuery = () => {
 
   const [receiver] = useSendReceiver();
 
-  const fromCoinBalanceQuery = useBalanceQuery(storageCoinToCoin(coin));
-
   const [amount] = useSendAmount();
 
   return useStateDependentQuery({
     state: {
-      fromCoinBalance: fromCoinBalanceQuery.data,
       amount: amount ?? undefined,
     },
-    getQuery: ({ fromCoinBalance, amount }) => {
+    getQuery: ({ amount }) => {
       const input: GetChainSpecificInput = {
         coin: storageCoinToCoin(coin),
         receiver,
         feeSettings,
-        sendMaxAmount:
-          amount === fromChainAmount(fromCoinBalance.amount, coin.decimals),
+        amount,
       };
 
       return {

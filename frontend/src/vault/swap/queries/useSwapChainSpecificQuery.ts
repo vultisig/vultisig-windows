@@ -1,7 +1,6 @@
 import { getChainSpecific } from '../../../chain/keysign/chainSpecific/getChainSpecific';
 import { GetChainSpecificInput } from '../../../chain/keysign/chainSpecific/GetChainSpecificInput';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { areEqualCoins } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery';
@@ -30,12 +29,10 @@ export const useSwapChainSpecificQuery = () => {
       swapQuote: swapQuoteQuery.data,
       fromAmount: fromAmount ?? undefined,
     },
-    getQuery: ({ fromCoinBalance, swapQuote }) => {
+    getQuery: ({ swapQuote, fromAmount }) => {
       const input: GetChainSpecificInput = {
         coin: fromCoin,
-        sendMaxAmount:
-          fromAmount ===
-          fromChainAmount(fromCoinBalance.amount, fromCoin.decimals),
+        amount: fromAmount,
       };
 
       if ('native' in swapQuote) {

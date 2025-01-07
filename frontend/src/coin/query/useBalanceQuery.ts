@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { ChainAccount } from '../../chain/ChainAccount';
 import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../model/chain';
-import { BalanceServiceFactory } from '../../services/Balance/BalanceServiceFactory';
 import { AccountCoinKey } from '../AccountCoin';
+import { getCoinBalance } from '../balance/getCoinBalance';
 import { CoinAmount, CoinKey } from '../Coin';
 import { getCoinMetaKey } from '../utils/coinMeta';
 
@@ -24,16 +24,11 @@ export const useBalanceQuery = (coin: Coin) => {
       address: coin.address,
     }),
     queryFn: async (): Promise<BalanceQueryResult> => {
-      const balanceService = BalanceServiceFactory.createBalanceService(chain);
-
-      const { rawAmount } = await balanceService.getBalance(coin);
+      const balance = await getCoinBalance(coin);
 
       return {
-        amount: BigInt(Math.round(rawAmount)),
-        decimals: coin.decimals,
-
+        ...balance,
         ...key,
-
         address: coin.address,
       };
     },
