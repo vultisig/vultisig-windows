@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
+import { createCoin } from '../../coin/utils/createCoin';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { CoinMeta } from '../../model/coin-meta';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
@@ -25,13 +26,17 @@ export const useSaveCoinMutation = () => {
         walletCore
       );
 
-      const coin = await coinService.createCoin(
+      const publicKey = await getVaultPublicKey({
+        vault,
+        chain: coinMeta.chain,
+        walletCore,
+      });
+
+      const coin = createCoin({
         coinMeta,
-        getVaultPublicKey({
-          vault,
-          chain: coinMeta.chain,
-        })
-      );
+        publicKey,
+        walletCore,
+      });
 
       await coinService.saveCoin(coin, vault);
 

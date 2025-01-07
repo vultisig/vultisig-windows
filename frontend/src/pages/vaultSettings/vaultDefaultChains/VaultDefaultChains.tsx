@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useDefaultChains } from '../../../chain/state/defaultChains';
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
-import { useDefaultChains } from '../../../lib/hooks/useDefaultChains';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { useCurrentSearch } from '../../../lib/ui/search/CurrentSearchProvider';
+import { without } from '../../../lib/utils/array/without';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -23,15 +24,9 @@ import {
 const VaultDefaultChains = () => {
   const { t } = useTranslation();
   const [searchQuery] = useCurrentSearch();
-  const {
-    defaultChains: databaseDefaultChains,
-    updateDefaultChains: updateDatabaseDefaultChains,
-    isUpdating,
-  } = useDefaultChains();
 
-  const [optimisticDefaultChains, setOptimisticDefaultChains] = useState(
-    databaseDefaultChains
-  );
+  const [value, setValue] = useDefaultChains();
+
   const nativeTokens = getNativeTokens();
   const filteredNativeTokens = useMemo(() => {
     if (!searchQuery) {
@@ -41,31 +36,6 @@ const VaultDefaultChains = () => {
       token.ticker.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [nativeTokens, searchQuery]);
-
-  const handleChainToggle = (chain: string) => {
-    let newDefaultChains;
-
-    if (optimisticDefaultChains.includes(chain)) {
-      newDefaultChains = optimisticDefaultChains.filter(
-        c => c.trim() !== chain.trim()
-      );
-    } else {
-      newDefaultChains = [...optimisticDefaultChains, chain];
-    }
-
-    setOptimisticDefaultChains(newDefaultChains);
-    updateDatabaseDefaultChains(newDefaultChains);
-  };
-
-  // Synchronize in case the mutation was unsuccessful and the optimistic update needs to be reverted
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (optimisticDefaultChains !== databaseDefaultChains && !isUpdating) {
-        setOptimisticDefaultChains(databaseDefaultChains);
-      }
-    }, 200); // Add a slight delay to reduce unnecessary sync
-    return () => clearTimeout(timeout);
-  }, [databaseDefaultChains, optimisticDefaultChains, isUpdating]);
 
   return (
     <VStack flexGrow gap={16}>
@@ -84,10 +54,16 @@ const VaultDefaultChains = () => {
         {filteredNativeTokens.map(({ ticker, chain }, index) => {
           const imgSrc = getChainEntityIconSrc(chain as string);
 
+          const isSelected = value.includes(chain);
+
           return (
             <ChainButton
               key={index}
-              onClick={() => handleChainToggle(chain.toLowerCase())}
+              onClick={() =>
+                setValue(prev =>
+                  prev.includes(chain) ? without(prev, chain) : [...prev, chain]
+                )
+              }
             >
               <ColumnOneBothRowsItem
                 src={imgSrc}
@@ -101,11 +77,7 @@ const VaultDefaultChains = () => {
               <ColumnTwoRowTwoItem size={12} color="contrast" weight="500">
                 {chain}
               </ColumnTwoRowTwoItem>
-              <Check
-                value={optimisticDefaultChains.some(
-                  coin => coin.trim() === chain.trim().toLowerCase()
-                )}
-              />
+              <Check value={isSelected} />
             </ChainButton>
           );
         })}

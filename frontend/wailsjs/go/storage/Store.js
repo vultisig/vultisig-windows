@@ -66,6 +66,10 @@ export function SaveCoin(arg1, arg2) {
   return window['go']['storage']['Store']['SaveCoin'](arg1, arg2);
 }
 
+export function SaveCoins(arg1, arg2) {
+  return window['go']['storage']['Store']['SaveCoins'](arg1, arg2);
+}
+
 export function SaveSettings(arg1) {
   return window['go']['storage']['Store']['SaveSettings'](arg1);
 }

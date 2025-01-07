@@ -9,7 +9,6 @@ export const vaultSettingsQueryKey = ['vaultSettings'];
 const DEFAULT_SETTINGS = {
   currency: 'USD',
   language: 'en',
-  defaultChains: [],
   languageUI: 'English',
 };
 
@@ -23,12 +22,10 @@ export const useVaultSettingsQuery = () => {
       const data = await vaultService.getVaultSettings();
       const currency = data?.[0]?.currency;
       const language = data?.[0]?.language;
-      const defaultChains = data?.[0]?.default_chains;
 
       return {
         currency,
         language,
-        defaultChains,
         languageUI: t(mapLanguageToLanguageNameUI(language) || ''),
       };
     },

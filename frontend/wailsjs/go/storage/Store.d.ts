@@ -40,6 +40,11 @@ export function SaveAddressBookItem(
 
 export function SaveCoin(arg1: string, arg2: storage.Coin): Promise<string>;
 
+export function SaveCoins(
+  arg1: string,
+  arg2: Array<storage.Coin>
+): Promise<Array<string>>;
+
 export function SaveSettings(arg1: storage.Settings): Promise<storage.Settings>;
 
 export function SaveVault(arg1: storage.Vault): Promise<void>;

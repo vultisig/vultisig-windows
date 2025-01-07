@@ -13,7 +13,6 @@ export const useUpdateVaultSettingsMutation = () => {
       const result = await vaultService.updateVaultSettings({
         currency: settings.currency,
         language: settings.language,
-        default_chains: settings.defaultChains,
       });
 
       return result;

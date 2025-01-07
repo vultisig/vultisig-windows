@@ -5,6 +5,7 @@ import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { createHash } from 'crypto';
 import Long from 'long';
 
@@ -19,8 +20,6 @@ import {
   TransactionType,
 } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { CosmosChain } from '../../../model/chain';
-import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
-import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 
 export class BlockchainServiceCosmos
@@ -99,17 +98,12 @@ export class BlockchainServiceCosmos
   }
 
   async getSignedTransaction(
-    vaultPublicKey: VaultPublicKey,
+    publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
 
-    const publicKey = await toWalletCorePublicKey({
-      chain: this.chain,
-      walletCore: this.walletCore,
-      value: vaultPublicKey,
-    });
     const publicKeyData = publicKey.data();
 
     const [dataHash] = getPreSigningHashes({

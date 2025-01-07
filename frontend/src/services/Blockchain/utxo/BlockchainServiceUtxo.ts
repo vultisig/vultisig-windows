@@ -1,4 +1,5 @@
 import { TW } from '@trustwallet/wallet-core';
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
@@ -12,8 +13,6 @@ import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { match } from '../../../lib/utils/match';
 import { assertField } from '../../../lib/utils/record/assertField';
 import { UtxoChain } from '../../../model/chain';
-import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
-import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -102,15 +101,10 @@ export class BlockchainServiceUtxo
   }
 
   public async getSignedTransaction(
-    vaultPublicKey: VaultPublicKey,
+    publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
-    const publicKey = await toWalletCorePublicKey({
-      walletCore: this.walletCore,
-      chain: this.chain,
-      value: vaultPublicKey,
-    });
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
     const signatureProvider = new SignatureProvider(

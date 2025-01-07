@@ -8,6 +8,7 @@ import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { createHash } from 'crypto';
 import Long from 'long';
 
@@ -17,8 +18,6 @@ import { assertSignature } from '../../../chain/utils/assertSignature';
 import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
-import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
-import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 
 export class BlockchainServiceMaya
@@ -137,7 +136,7 @@ export class BlockchainServiceMaya
   }
 
   async getSignedTransaction(
-    vaultPublicKey: VaultPublicKey,
+    publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
@@ -148,11 +147,6 @@ export class BlockchainServiceMaya
       chain: this.chain,
     });
 
-    const publicKey = await toWalletCorePublicKey({
-      walletCore,
-      value: vaultPublicKey,
-      chain: Chain.MayaChain,
-    });
     const publicKeyData = publicKey.data();
 
     const allSignatures = walletCore.DataVector.create();

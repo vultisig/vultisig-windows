@@ -72,16 +72,19 @@ export const useKeysignMutation = () => {
 
       const signaturesRecord = arraysToRecord(msgs, signatures);
 
+      const publicKey = await getVaultPublicKey({
+        vault,
+        chain,
+        walletCore,
+      });
+
       const hashes = await chainPromises(
         inputs.map(async (txInputData, index) => {
           const msgs = groupedMsgs[index];
 
           const { rawTransaction, signature } =
             await blockchainService.getSignedTransaction(
-              getVaultPublicKey({
-                vault,
-                chain,
-              }),
+              publicKey,
               txInputData,
               pick(signaturesRecord, msgs)
             );

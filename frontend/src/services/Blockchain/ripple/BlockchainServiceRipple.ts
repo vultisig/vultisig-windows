@@ -1,4 +1,5 @@
 import { TW } from '@trustwallet/wallet-core';
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
@@ -9,8 +10,6 @@ import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_spec
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain } from '../../../model/chain';
-import { toWalletCorePublicKey } from '../../../vault/publicKey/toWalletCorePublicKey';
-import { VaultPublicKey } from '../../../vault/publicKey/VaultPublicKey';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -99,17 +98,12 @@ export class BlockchainServiceRipple
   }
 
   async getSignedTransaction(
-    vaultPublicKey: VaultPublicKey,
+    publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
   ): Promise<SignedTransactionResult> {
     const walletCore = this.walletCore;
 
-    const publicKey = await toWalletCorePublicKey({
-      walletCore,
-      chain: this.chain,
-      value: vaultPublicKey,
-    });
     const publicKeyData = publicKey.data();
 
     const allSignatures = walletCore.DataVector.create();
