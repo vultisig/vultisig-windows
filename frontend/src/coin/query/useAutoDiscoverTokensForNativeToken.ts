@@ -19,7 +19,11 @@ export const useAutoDiscoverTokensForNativeToken = ({
   return useQuery({
     queryKey: ['autoDiscoverTokens', coin.address],
     queryFn: async () => {
-      console.log('## running');
+      // Some chains don't support auto-discovering tokens
+      if (!factory.getTokens) {
+        return [];
+      }
+
       if (!coin.isNativeToken) {
         throw new Error('Coin is not native token');
       }
