@@ -35,7 +35,7 @@ export const useSendTxKeysignPayloadQuery = () => {
         const result = new KeysignPayload({
           coin,
           toAddress: receiver,
-          toAmount: cappedAmount.toString(),
+          toAmount: cappedAmount.amount.toString(),
           blockchainSpecific: chainSpecific,
           memo,
           vaultLocalPartyId: vault.local_party_id,
