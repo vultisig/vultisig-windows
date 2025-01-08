@@ -5,5 +5,5 @@ export type GetChainSpecificInput<T = any> = {
   receiver?: string;
   feeSettings?: T;
   isDeposit?: boolean;
-  sendMaxAmount?: boolean;
+  amount?: number;
 };

@@ -1,6 +1,8 @@
+import { getCoinBalance } from '../../../coin/balance/getCoinBalance';
 import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { UtxoChain } from '../../../model/chain';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
+import { toChainAmount } from '../../utils/toChainAmount';
 import { getUtxoStats } from '../../utxo/blockchair/getUtxoStats';
 import { adjustByteFee } from '../../utxo/fee/adjustByteFee';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
@@ -8,10 +10,10 @@ import { GetChainSpecificInput } from './GetChainSpecificInput';
 export const getUtxoSpecific = async ({
   coin,
   feeSettings,
-  sendMaxAmount,
+  amount,
 }: Pick<
   GetChainSpecificInput<EvmFeeSettings>,
-  'coin' | 'feeSettings' | 'sendMaxAmount'
+  'coin' | 'feeSettings' | 'amount'
 >): Promise<UTXOSpecific> => {
   const chain = coin.chain as UtxoChain;
 
@@ -22,8 +24,16 @@ export const getUtxoSpecific = async ({
     byteFee = adjustByteFee(byteFee, feeSettings);
   }
 
-  return new UTXOSpecific({
+  const result = new UTXOSpecific({
     byteFee: byteFee.toString(),
-    sendMaxAmount,
   });
+
+  if (amount) {
+    const balance = await getCoinBalance(coin);
+
+    result.sendMaxAmount =
+      toChainAmount(amount, coin.decimals) === balance.amount;
+  }
+
+  return result;
 };

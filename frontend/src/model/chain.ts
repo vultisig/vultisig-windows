@@ -123,3 +123,5 @@ export const chainKindRecord: Record<Chain, ChainKind> = {
 
   [OtherChain.Ripple]: 'ripple',
 };
+
+export const maxSendAmountEnabledChains = Object.values(UtxoChain);
