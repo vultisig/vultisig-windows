@@ -9,6 +9,7 @@ import { assertSignature } from '../../../chain/utils/assertSignature';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
+import { assertField } from '../../../lib/utils/record/assertField';
 import { Chain } from '../../../model/chain';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
@@ -35,15 +36,9 @@ export class BlockchainServiceRipple
       'rippleSpecific'
     );
 
-    if (!keysignPayload.coin) {
-      console.error('keysignPayload.coin is undefined');
-      throw new Error('keysignPayload.coin is undefined');
-    }
+    const coin = assertField(keysignPayload, 'coin');
 
-    const pubKeyData = Buffer.from(
-      keysignPayload?.coin?.hexPublicKey || '',
-      'hex'
-    );
+    const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex');
     if (!pubKeyData) {
       console.error('invalid hex public key');
       throw new Error('invalid hex public key');
@@ -61,7 +56,7 @@ export class BlockchainServiceRipple
 
     try {
       const input = TW.Ripple.Proto.SigningInput.create({
-        account: keysignPayload?.coin?.address,
+        account: coin.address,
         fee: Long.fromString(gas.toString()),
         sequence: Number(sequence),
         publicKey: new Uint8Array(pubKeyData),

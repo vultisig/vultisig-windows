@@ -7,6 +7,7 @@ import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainS
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
+import { assertField } from '../../../lib/utils/record/assertField';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -24,9 +25,7 @@ export class BlockchainServiceSolana
       'solanaSpecific'
     );
 
-    if (!keysignPayload.coin) {
-      throw new Error('Invalid coin');
-    }
+    const coin = assertField(keysignPayload, 'coin');
 
     const {
       recentBlockHash,
@@ -38,7 +37,7 @@ export class BlockchainServiceSolana
     const priorityFeeLimit = Number(100_000); // Turbo fee in lamports, around 5 cents
     const newRecentBlockHash = recentBlockHash; // DKLS should fix it. Using the same, since fetching the latest block hash won't match with IOS and Android
 
-    if (keysignPayload.coin.isNativeToken) {
+    if (coin.isNativeToken) {
       // Native token transfer
       const input = TW.Solana.Proto.SigningInput.create({
         transferTransaction: TW.Solana.Proto.Transfer.create({
@@ -47,7 +46,7 @@ export class BlockchainServiceSolana
           memo: keysignPayload?.memo,
         }),
         recentBlockhash: newRecentBlockHash,
-        sender: keysignPayload.coin.address,
+        sender: coin.address,
         priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
           price: Long.fromString(priorityFeePrice.toString()),
         }),
@@ -65,17 +64,17 @@ export class BlockchainServiceSolana
       if (fromTokenAssociatedAddress && toTokenAssociatedAddress) {
         // Both addresses are available for token transfer
         const tokenTransferMessage = TW.Solana.Proto.TokenTransfer.create({
-          tokenMintAddress: keysignPayload.coin.contractAddress,
+          tokenMintAddress: coin.contractAddress,
           senderTokenAddress: fromTokenAssociatedAddress,
           recipientTokenAddress: toTokenAssociatedAddress,
           amount: Long.fromString(keysignPayload.toAmount),
-          decimals: keysignPayload.coin.decimals,
+          decimals: coin.decimals,
         });
 
         const input = TW.Solana.Proto.SigningInput.create({
           tokenTransferTransaction: tokenTransferMessage,
           recentBlockhash: newRecentBlockHash,
-          sender: keysignPayload.coin.address,
+          sender: coin.address,
           priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
             price: Long.fromString(priorityFeePrice.toString()),
           }),
@@ -91,7 +90,7 @@ export class BlockchainServiceSolana
           keysignPayload.toAddress
         );
         const generatedAssociatedAddress = receiverAddress.defaultTokenAddress(
-          keysignPayload.coin.contractAddress
+          coin.contractAddress
         );
 
         if (!generatedAssociatedAddress) {
@@ -103,17 +102,17 @@ export class BlockchainServiceSolana
         const createAndTransferTokenMessage =
           TW.Solana.Proto.CreateAndTransferToken.create({
             recipientMainAddress: keysignPayload.toAddress,
-            tokenMintAddress: keysignPayload.coin.contractAddress,
+            tokenMintAddress: coin.contractAddress,
             recipientTokenAddress: generatedAssociatedAddress,
             senderTokenAddress: fromTokenAssociatedAddress,
             amount: Long.fromString(keysignPayload.toAmount),
-            decimals: keysignPayload.coin.decimals,
+            decimals: coin.decimals,
           });
 
         const input = TW.Solana.Proto.SigningInput.create({
           createAndTransferTokenTransaction: createAndTransferTokenMessage,
           recentBlockhash: newRecentBlockHash,
-          sender: keysignPayload.coin.address,
+          sender: coin.address,
           priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
             price: Long.fromString(priorityFeePrice.toString()),
           }),

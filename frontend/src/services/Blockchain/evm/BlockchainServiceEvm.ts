@@ -13,6 +13,7 @@ import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
+import { assertField } from '../../../lib/utils/record/assertField';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import { SignedTransactionResult } from '../signed-transaction-result';
@@ -29,9 +30,7 @@ export class BlockchainServiceEvm
       'ethereumSpecific'
     );
 
-    if (!keysignPayload.coin) {
-      throw new Error('Invalid coin');
-    }
+    const coin = assertField(keysignPayload, 'coin');
 
     const { gasLimit, maxFeePerGasWei, nonce, priorityFee } = evmSpecific;
 
@@ -51,8 +50,8 @@ export class BlockchainServiceEvm
     });
 
     // Send ERC20 tokens, it will replace the transaction object
-    if (!keysignPayload.coin.isNativeToken) {
-      toAddress = keysignPayload.coin.contractAddress;
+    if (!coin.isNativeToken) {
+      toAddress = coin.contractAddress;
       evmTransaction = TW.Ethereum.Proto.Transaction.create({
         erc20Transfer: TW.Ethereum.Proto.Transaction.ERC20Transfer.create({
           amount: amountHex,
