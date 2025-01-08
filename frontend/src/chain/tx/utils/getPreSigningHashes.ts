@@ -38,11 +38,11 @@ export const getPreSigningHashes = ({
 
   assertErrorMessage(errorMessage);
 
-  if (chain === Chain.Sui) {
-    return [walletCore.Hash.blake2b(data, 32)];
-  }
+  if (dataHash.length === 0) {
+    if (chain === Chain.Sui) {
+      return [walletCore.Hash.blake2b(data, 32)];
+    }
 
-  if (chain === Chain.Ton) {
     return [data];
   }
 
