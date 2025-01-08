@@ -9,20 +9,33 @@ import { getCoinValue } from './getCoinValue';
 export const sortCoinsByBalance = <
   T extends CoinAmount & Partial<EntityWithPrice>,
 >(
-  items: T[]
+  items: T[],
+  minFiatValue: number = 0.0001
 ): T[] => {
   const [itemsWithBalance, itemsWithoutBalance] = splitBy(
     items,
     ({ amount }) => (amount ? 0 : 1)
   );
+
   const [itemsWithPrice, itemsWithoutPrice] = splitBy(
     itemsWithBalance,
     ({ price }) => (price ? 0 : 1)
   );
 
+  const filteredItemsWithPrice = itemsWithPrice.filter(
+    ({ price, amount, decimals }) => {
+      const fiatValue = getCoinValue({
+        price: shouldBePresent(price),
+        amount,
+        decimals,
+      });
+      return fiatValue >= minFiatValue;
+    }
+  );
+
   return [
     ...order(
-      itemsWithPrice,
+      filteredItemsWithPrice,
       ({ price, amount, decimals }) =>
         getCoinValue({
           price: shouldBePresent(price),
