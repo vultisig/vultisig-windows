@@ -7,6 +7,7 @@ import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainS
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
+import { assertField } from '../../../lib/utils/record/assertField';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
@@ -24,16 +25,11 @@ export class BlockchainServiceTon
       'tonSpecific'
     );
 
-    if (!keysignPayload.coin) {
-      throw new Error('Invalid coin');
-    }
+    const coin = assertField(keysignPayload, 'coin');
 
     const { expireAt, sequenceNumber } = specific;
 
-    const pubKeyData = Buffer.from(keysignPayload.coin.hexPublicKey, 'hex');
-    if (!pubKeyData) {
-      throw new Error('invalid hex public key');
-    }
+    const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex');
 
     const tokenTransferMessage = TW.TheOpenNetwork.Proto.Transfer.create({
       dest: keysignPayload.toAddress,
