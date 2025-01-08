@@ -3,15 +3,14 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { utxoChainScriptType } from '../../../chain/utxo/UtxoScriptType';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
-import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { match } from '../../../lib/utils/match';
-import { assertField } from '../../../lib/utils/record/assertField';
 import { UtxoChain } from '../../../model/chain';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
@@ -25,10 +24,10 @@ export class BlockchainServiceUtxo
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
-    const { byteFee, sendMaxAmount } = assertField(
+    const { byteFee, sendMaxAmount } = getBlockchainSpecificValue(
       keysignPayload.blockchainSpecific,
-      'value'
-    ) as UTXOSpecific;
+      'utxoSpecific'
+    );
 
     const coin = shouldBePresent(keysignPayload.coin);
 

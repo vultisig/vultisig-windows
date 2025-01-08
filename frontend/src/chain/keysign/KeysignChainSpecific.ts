@@ -1,4 +1,5 @@
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { getDiscriminatedUnionValue } from '../../lib/utils/getDiscriminatedUnionValue';
 import { Chain } from '../../model/chain';
 
 export type KeysignChainSpecific = Exclude<
@@ -56,3 +57,19 @@ export type ChainsBySpecific<T extends KeysignChainSpecificKey> = {
     ? K
     : never;
 }[keyof typeof chainSpecificRecord];
+
+export const getBlockchainSpecificValue = <T extends KeysignChainSpecificKey>(
+  blockchainSpecific: KeysignPayload['blockchainSpecific'],
+  expectedCase: T
+): Extract<KeysignChainSpecific, { case: T }>['value'] => {
+  if (!blockchainSpecific.case) {
+    throw new Error('Invalid blockchain specific');
+  }
+
+  return getDiscriminatedUnionValue(
+    blockchainSpecific,
+    'case',
+    'value',
+    expectedCase
+  ) as any;
+};

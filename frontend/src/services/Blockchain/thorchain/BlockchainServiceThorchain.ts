@@ -1,7 +1,6 @@
 import { TW } from '@trustwallet/wallet-core';
 
 import { tss } from '../../../../wailsjs/go/models';
-import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../../../model/chain';
 import { IBlockchainService } from '../IBlockchainService';
@@ -12,6 +11,7 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { createHash } from 'crypto';
 import Long from 'long';
 
+import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
@@ -43,8 +43,11 @@ export class BlockchainServiceThorchain
     if (!fromAddr) {
       throw new Error(`${keysignPayload.coin.address} is invalid`);
     }
-    const thorchainSpecific = keysignPayload.blockchainSpecific
-      .value as unknown as THORChainSpecific;
+    const thorchainSpecific = getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'thorchainSpecific'
+    );
+
     const pubKeyData = Buffer.from(keysignPayload.coin.hexPublicKey, 'hex');
     if (!pubKeyData) {
       throw new Error('invalid hex public key');

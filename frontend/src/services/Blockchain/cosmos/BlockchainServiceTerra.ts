@@ -6,10 +6,8 @@ import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import Long from 'long';
 
 import { cosmosFeeCoinDenom } from '../../../chain/cosmos/cosmosFeeCoinDenom';
-import {
-  CosmosSpecific,
-  TransactionType,
-} from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
+import { TransactionType } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { CosmosChain } from '../../../model/chain';
 import { BlockchainServiceCosmos } from './BlockchainServiceCosmos';
 
@@ -40,8 +38,10 @@ export class BlockchainServiceTerra extends BlockchainServiceCosmos {
   ): Promise<Uint8Array> {
     const walletCore = this.walletCore;
 
-    const cosmosSpecific = keysignPayload.blockchainSpecific
-      .value as unknown as CosmosSpecific;
+    const cosmosSpecific = getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'cosmosSpecific'
+    );
 
     if (!keysignPayload.coin) {
       throw new Error('keysignPayload.coin is undefined');
@@ -105,8 +105,10 @@ export class BlockchainServiceTerra extends BlockchainServiceCosmos {
   ): Promise<Uint8Array> {
     const walletCore = this.walletCore;
 
-    const cosmosSpecific = keysignPayload.blockchainSpecific
-      .value as unknown as CosmosSpecific;
+    const cosmosSpecific = getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'cosmosSpecific'
+    );
 
     if (!keysignPayload.coin) {
       throw new Error('keysignPayload.coin is undefined');

@@ -3,8 +3,8 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { assertSignature } from '../../../chain/utils/assertSignature';
-import { SolanaSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { BlockchainService } from '../BlockchainService';
@@ -19,15 +19,10 @@ export class BlockchainServiceSolana
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
-    const blockchainSpecific = keysignPayload.blockchainSpecific as
-      | { case: 'solanaSpecific'; value: SolanaSpecific }
-      | undefined;
-
-    if (!blockchainSpecific || blockchainSpecific.case !== 'solanaSpecific') {
-      throw new Error('Invalid blockchain specific');
-    }
-
-    const specific = blockchainSpecific.value;
+    const specific = getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'solanaSpecific'
+    );
 
     if (!keysignPayload.coin) {
       throw new Error('Invalid coin');

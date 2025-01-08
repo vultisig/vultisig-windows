@@ -4,13 +4,13 @@ import { keccak256 } from 'js-sha3';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { getSigningInputEnvelopedTxFields } from '../../../chain/evm/tx/getSigningInputEnvelopedTxFields';
+import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { generateSignatureWithRecoveryId } from '../../../chain/utils/generateSignatureWithRecoveryId';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
-import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { BlockchainService } from '../BlockchainService';
@@ -24,15 +24,10 @@ export class BlockchainServiceEvm
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
-    const blockchainSpecific = keysignPayload.blockchainSpecific as
-      | { case: 'ethereumSpecific'; value: EthereumSpecific }
-      | undefined;
-
-    if (!blockchainSpecific || blockchainSpecific.case !== 'ethereumSpecific') {
-      throw new Error('Invalid blockchain specific');
-    }
-
-    const evmSpecific = blockchainSpecific.value;
+    const evmSpecific = getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'ethereumSpecific'
+    );
 
     if (!keysignPayload.coin) {
       throw new Error('Invalid coin');
