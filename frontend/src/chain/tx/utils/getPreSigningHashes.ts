@@ -42,5 +42,9 @@ export const getPreSigningHashes = ({
     return [walletCore.Hash.blake2b(data, 32)];
   }
 
+  if (chain === Chain.Ton) {
+    return [data];
+  }
+
   return [dataHash];
 };

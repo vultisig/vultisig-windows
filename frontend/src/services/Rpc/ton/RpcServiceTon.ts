@@ -13,7 +13,8 @@ export class RpcServiceTon extends RpcService implements IRpcService {
     const response = await Post(Endpoint.broadcastTonTransaction(), {
       boc: obj,
     });
-    return response.result.hash;
+
+    return Buffer.from(response.result.hash, 'base64').toString('hex');
   }
 
   async getBalance(coin: Coin): Promise<string> {
