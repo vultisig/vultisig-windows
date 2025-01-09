@@ -4,10 +4,10 @@ import { Keysign } from '../../../../../wailsjs/go/tss/TssService';
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
-import { arraysToRecord } from '../../../../lib/utils/array/arraysToRecord';
 import { getLastItem } from '../../../../lib/utils/array/getLastItem';
 import { chainPromises } from '../../../../lib/utils/promise/chainPromises';
 import { pick } from '../../../../lib/utils/record/pick';
+import { recordFromItems } from '../../../../lib/utils/record/recordFromItems';
 import { Chain } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../../services/Blockchain/BlockchainServiceFactory';
@@ -70,7 +70,9 @@ export const useKeysignMutation = () => {
         tssType.toString().toLowerCase()
       );
 
-      const signaturesRecord = arraysToRecord(msgs, signatures);
+      const signaturesRecord = recordFromItems(signatures, ({ msg }) =>
+        Buffer.from(msg, 'base64').toString('hex')
+      );
 
       const publicKey = await getVaultPublicKey({
         vault,
