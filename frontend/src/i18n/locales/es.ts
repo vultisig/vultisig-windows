@@ -13,6 +13,7 @@ export const es = {
   import_existing_vault: 'Importar bóveda existente',
   next: 'Siguiente',
   skip: 'Omitir',
+  required_field_missing: 'Campo requerido faltante',
   enter_password: 'Ingrese la contraseña',
   failed_to_confirm_email_code:
     'No se pudo confirmar el código de verificación de correo electrónico',
