@@ -7,6 +7,7 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { takeWholeSpaceAbsolutely } from '../../../lib/ui/css/takeWholeSpaceAbsolutely';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { attempt } from '../../../lib/utils/attempt';
+import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';
 import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -114,9 +115,10 @@ export const ScanQrView = ({
         pending={() => (
           <FlowPendingPageContent title={t('getting_video_permission')} />
         )}
-        error={() => (
+        error={error => (
           <FlowErrorPageContent
             title={t('failed_to_get_video_permission')}
+            message={extractErrorMsg(error)}
             action={
               <Button
                 onClick={() => {
