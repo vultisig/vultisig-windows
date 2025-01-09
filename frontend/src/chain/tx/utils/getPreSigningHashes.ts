@@ -24,27 +24,27 @@ export const getPreSigningHashes = ({
     txInputData
   );
 
-  const getHashes = () => {
-    if (chain in UtxoChain) {
-      const { errorMessage, hashPublicKeys } =
-        TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
-
-      assertErrorMessage(errorMessage);
-
-      return withoutNullOrUndefined(hashPublicKeys.map(hash => hash?.dataHash));
-    }
-
-    const { errorMessage, dataHash, data } =
-      TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
+  if (chain in UtxoChain) {
+    const { errorMessage, hashPublicKeys } =
+      TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
 
     assertErrorMessage(errorMessage);
 
+    return withoutNullOrUndefined(hashPublicKeys.map(hash => hash?.dataHash));
+  }
+
+  const { errorMessage, dataHash, data } =
+    TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
+
+  assertErrorMessage(errorMessage);
+
+  if (dataHash.length === 0) {
     if (chain === Chain.Sui) {
       return [walletCore.Hash.blake2b(data, 32)];
     }
 
-    return [dataHash];
-  };
+    return [data];
+  }
 
-  return getHashes();
+  return [dataHash];
 };

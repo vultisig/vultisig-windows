@@ -1,7 +1,6 @@
 import { TW } from '@trustwallet/wallet-core';
 
 import { tss } from '../../../../wailsjs/go/models';
-import { PolkadotSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../../../model/chain';
 import { IBlockchainService } from '../IBlockchainService';
@@ -10,6 +9,7 @@ import TxCompiler = TW.TxCompiler;
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
+import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
@@ -29,13 +29,10 @@ export class BlockchainServicePolkadot
       console.error('keysignPayload.coin?.chain:', keysignPayload.coin?.chain);
     }
 
-    const polkadotSpecific = keysignPayload.blockchainSpecific
-      .value as PolkadotSpecific;
-    if (!polkadotSpecific) {
-      console.error(
-        'getPreSignedInputData fail to get DOT transaction information from RPC'
-      );
-    }
+    const polkadotSpecific = getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'polkadotSpecific'
+    );
 
     const {
       recentBlockHash,

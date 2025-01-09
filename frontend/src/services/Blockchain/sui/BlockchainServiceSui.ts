@@ -3,12 +3,10 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
-import {
-  SuiCoin,
-  SuiSpecific,
-} from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { SuiCoin } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain } from '../../../model/chain';
@@ -29,14 +27,10 @@ export class BlockchainServiceSui
       console.error('keysignPayload.coin?.chain:', keysignPayload.coin?.chain);
     }
 
-    const suiSpecific = keysignPayload.blockchainSpecific.value as SuiSpecific;
-    if (!suiSpecific) {
-      console.error(
-        'getPreSignedInputData fail to get SUI transaction information from RPC'
-      );
-    }
-
-    const { coins, referenceGasPrice } = suiSpecific;
+    const { coins, referenceGasPrice } = getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'suicheSpecific'
+    );
 
     const inputData = TW.Sui.Proto.SigningInput.create({
       referenceGasPrice: Long.fromString(referenceGasPrice),

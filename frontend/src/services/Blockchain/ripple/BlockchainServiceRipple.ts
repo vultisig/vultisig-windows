@@ -3,12 +3,13 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
-import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
+import { assertField } from '../../../lib/utils/record/assertField';
 import { Chain } from '../../../model/chain';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
@@ -22,10 +23,6 @@ export class BlockchainServiceRipple
   async getPreSignedInputData(
     keysignPayload: KeysignPayload
   ): Promise<Uint8Array> {
-    if (keysignPayload.blockchainSpecific instanceof RippleSpecific) {
-      throw new Error('Invalid blockchain specific');
-    }
-
     const walletCore = this.walletCore;
 
     if (keysignPayload.coin?.chain !== Chain.Ripple) {
@@ -34,32 +31,14 @@ export class BlockchainServiceRipple
       throw new Error('Coin is not Ripple');
     }
 
-    const transactionInfoSpecific =
-      keysignPayload.blockchainSpecific as unknown as {
-        case: 'rippleSpecific';
-        value: RippleSpecific;
-      };
-
-    const { gas, sequence } = transactionInfoSpecific.value;
-
-    if (!transactionInfoSpecific) {
-      console.error(
-        'getPreSignedInputData fail to get Ripple transaction information from RPC'
-      );
-      throw new Error(
-        'getPreSignedInputData fail to get Ripple transaction information from RPC'
-      );
-    }
-
-    if (!keysignPayload.coin) {
-      console.error('keysignPayload.coin is undefined');
-      throw new Error('keysignPayload.coin is undefined');
-    }
-
-    const pubKeyData = Buffer.from(
-      keysignPayload?.coin?.hexPublicKey || '',
-      'hex'
+    const { gas, sequence } = getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'rippleSpecific'
     );
+
+    const coin = assertField(keysignPayload, 'coin');
+
+    const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex');
     if (!pubKeyData) {
       console.error('invalid hex public key');
       throw new Error('invalid hex public key');
@@ -77,7 +56,7 @@ export class BlockchainServiceRipple
 
     try {
       const input = TW.Ripple.Proto.SigningInput.create({
-        account: keysignPayload?.coin?.address,
+        account: coin.address,
         fee: Long.fromString(gas.toString()),
         sequence: Number(sequence),
         publicKey: new Uint8Array(pubKeyData),

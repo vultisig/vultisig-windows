@@ -1,7 +1,6 @@
 import { TW } from '@trustwallet/wallet-core';
 
 import { tss } from '../../../../wailsjs/go/models';
-import { MAYAChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../../../model/chain';
 import { IBlockchainService } from '../IBlockchainService';
@@ -12,6 +11,7 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { createHash } from 'crypto';
 import Long from 'long';
 
+import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { mayaConfig } from '../../../chain/maya/config';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
@@ -50,8 +50,10 @@ export class BlockchainServiceMaya
       throw new Error(`${keysignPayload.coin.address} is invalid`);
     }
 
-    const thorchainSpecific = keysignPayload.blockchainSpecific
-      .value as unknown as MAYAChainSpecific;
+    const mayaSpecific = getBlockchainSpecificValue(
+      keysignPayload.blockchainSpecific,
+      'mayaSpecific'
+    );
 
     const pubKeyData = Buffer.from(keysignPayload.coin.hexPublicKey, 'hex');
     if (!pubKeyData) {
@@ -61,7 +63,7 @@ export class BlockchainServiceMaya
     let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({});
     let message: TW.Cosmos.Proto.Message[];
 
-    if (thorchainSpecific.isDeposit) {
+    if (mayaSpecific.isDeposit) {
       thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
         asset: TW.Cosmos.Proto.THORChainAsset.create({
           chain: 'MAYA',
@@ -122,8 +124,8 @@ export class BlockchainServiceMaya
       publicKey: new Uint8Array(pubKeyData),
       signingMode: SigningMode.Protobuf,
       chainId: 'mayachain-mainnet-v1',
-      accountNumber: new Long(Number(thorchainSpecific.accountNumber)),
-      sequence: new Long(Number(thorchainSpecific.sequence)),
+      accountNumber: new Long(Number(mayaSpecific.accountNumber)),
+      sequence: new Long(Number(mayaSpecific.sequence)),
       mode: BroadcastMode.SYNC,
       memo: keysignPayload.memo || '',
       messages: message,
