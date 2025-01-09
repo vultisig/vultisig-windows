@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
+import { coinKeyFromString } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -9,7 +10,9 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { Chain } from '../../../model/chain';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
+import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 import {
   useCurrentVault,
   useCurrentVaultCoin,
@@ -31,6 +34,9 @@ export const DepositConfirmButton = ({
   depositFormData,
   action,
 }: DepositConfirmButtonProps) => {
+  const [{ coin: coinName }] = useAppPathParams<'deposit'>();
+  const { chain: chain } = coinKeyFromString(coinName);
+  const isTonFunction = chain === Chain.Ton;
   const { t } = useTranslation();
   const [coinKey] = useCurrentDepositCoin();
   const coin = useCurrentVaultCoin(coinKey);
@@ -61,7 +67,10 @@ export const DepositConfirmButton = ({
       vaultPublicKeyEcdsa: vault.public_key_ecdsa,
     });
 
-    if (isOneOf(action, ['unstake', 'leave', 'unbound', 'stake', 'bond'])) {
+    if (
+      isOneOf(action, ['unstake', 'leave', 'unbound', 'stake', 'bond']) &&
+      !isTonFunction
+    ) {
       keysignPayload.toAddress = shouldBePresent(receiver);
     }
 
@@ -81,13 +90,13 @@ export const DepositConfirmButton = ({
 
   if (
     (config.requiresAmount && !amount) ||
-    (config.requiresNodeAddress && !receiver)
+    (config.requiresNodeAddress && !receiver && !isTonFunction)
   ) {
-    return <Text>{t('required_field_missing')}</Text>;
+    return <Text color="danger">{t('required_field_missing')}</Text>;
   }
 
   if (balanceQuery.error || chainSpecificQuery.error) {
-    return <Text>{t('failed_to_load')}</Text>;
+    return <Text color="danger">{t('failed_to_load')}</Text>;
   }
 
   const isPending = balanceQuery.isPending || chainSpecificQuery.isPending;
