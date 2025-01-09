@@ -14,6 +14,7 @@ export const hr = {
   email_confirmation_code_error: 'Érvénytelen kód',
   email_confirmation: 'Adja meg a kódot',
   create_new_vault: 'Kreiraj novi trezor',
+  required_field_missing: 'Hiányzó kötelező mező',
   import_existing_vault: 'Uvezi postojeći trezor',
   next: 'Dalje',
   failed_to_confirm_email_code: 'Nije uspjela potvrda koda za potvrdu e-pošte',
