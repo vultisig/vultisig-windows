@@ -36,6 +36,7 @@ export const en = {
   internet: 'Internet',
   choose_coins: 'Choose coins',
   choose_chains: 'Choose chains',
+  required_field_missing: 'Required field missing',
   local: 'Local',
   looking_for_devices: 'Looking for devices... ',
   more_devices: 'more devices ...',
