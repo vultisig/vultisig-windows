@@ -51,6 +51,8 @@ export const DepositConfirmButton = ({
     ? (depositFormData['nodeAddress'] as string)
     : '';
 
+  const validatorAddress = depositFormData['validatorAddress'] as string;
+
   const amount = config.requiresAmount
     ? (depositFormData['amount'] as number)
     : config.defaultAmount || 0;
@@ -67,11 +69,10 @@ export const DepositConfirmButton = ({
       vaultPublicKeyEcdsa: vault.public_key_ecdsa,
     });
 
-    if (
-      isOneOf(action, ['unstake', 'leave', 'unbound', 'stake', 'bond']) &&
-      !isTonFunction
-    ) {
-      keysignPayload.toAddress = shouldBePresent(receiver);
+    if (isOneOf(action, ['unstake', 'leave', 'unbound', 'stake', 'bond'])) {
+      keysignPayload.toAddress = shouldBePresent(
+        isTonFunction ? validatorAddress : receiver
+      );
     }
 
     if (!isOneOf(action, ['vote', 'withdrawPool'])) {
