@@ -4,3 +4,12 @@ export type KeysignSwapPayload = Exclude<
   KeysignPayload['swapPayload'],
   { case: undefined; value?: undefined }
 >;
+
+export const toKeysignSwapPayload = (
+  swapPayload: KeysignPayload['swapPayload']
+): KeysignSwapPayload => {
+  if (swapPayload.case === undefined) {
+    throw new Error('Swap payload case is undefined');
+  }
+  return swapPayload;
+};

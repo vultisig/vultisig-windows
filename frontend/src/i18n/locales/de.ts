@@ -626,4 +626,11 @@ export const de = {
   provider: 'Anbieter',
   swap_tracking_link: 'Tracking-Link austauschen',
   swap_fee: 'Swap-Gebühr',
+  and: 'Und',
+  approve: 'Genehmigen',
+  action: 'Aktion',
+  from_asset: 'Von Anlagegut',
+  to_asset: 'Zum Vermögenswert',
+  allowance_spender: 'Taschengeld-Ausgeber',
+  allowance_amount: 'Freibetrag',
 };

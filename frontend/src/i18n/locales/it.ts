@@ -622,4 +622,11 @@ export const it = {
   provider: 'Fornitore',
   swap_tracking_link: 'Link di monitoraggio dello scambio',
   swap_fee: 'Commissione di cambio',
+  and: 'E',
+  approve: 'Approvare',
+  action: 'Azione',
+  from_asset: 'Da Risorsa',
+  to_asset: 'Per Risorse',
+  allowance_spender: 'Spendere indennità',
+  allowance_amount: "Importo dell'indennità",
 };

@@ -80,6 +80,8 @@ export const en = {
   name_your_vault: 'Name your Vault',
   join: 'Join',
   done: 'Done',
+  and: 'and',
+  approve: 'Approve',
   information_note1:
     'Keep devices on the same WiFi Network, correct vault and pair devices.',
   information_note2: 'Make sure no other devices are running Vultisig.',
@@ -372,6 +374,7 @@ export const en = {
   secureVault: 'Secure Vault',
   active: 'Active',
   sign: 'Sign',
+  action: 'Action',
   fast_vault_setup_prop_0: 'Single Device Setup',
   fast_vault_setup_prop_1: 'Transaction Alerts & Policies',
   fast_vault_setup_prop_2: 'Vault Backup Emailed',
@@ -621,4 +624,8 @@ export const en = {
   scan_with_devices: 'Scan with devices to join the vault generation',
   scan_with_devices_to_sign:
     'Scan with devices to participate in signing the transaction',
+  from_asset: 'From Asset',
+  to_asset: 'To Asset',
+  allowance_spender: 'Allowance spender',
+  allowance_amount: 'Allowance amount',
 };
