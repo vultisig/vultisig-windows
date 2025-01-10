@@ -604,4 +604,11 @@ export const hr = {
   provider: 'Davatelj',
   swap_tracking_link: 'Swap link za praćenje',
   swap_fee: 'Naknada za zamjenu',
+  and: 'i',
+  approve: 'Odobriti',
+  action: 'Akcijski',
+  from_asset: 'Od imovine',
+  to_asset: 'Za sredstvo',
+  allowance_spender: 'Potrošač džeparca',
+  allowance_amount: 'Iznos dodatka',
 };

@@ -617,4 +617,11 @@ export const pt = {
   provider: 'Provedor',
   swap_tracking_link: 'Link de rastreamento de troca',
   swap_fee: 'Taxa de swap',
+  and: 'e',
+  approve: 'Aprovar',
+  action: 'Ação',
+  from_asset: 'Do Ativo',
+  to_asset: 'Para Ativo',
+  allowance_spender: 'Gastador de mesada',
+  allowance_amount: 'Valor do subsídio',
 };

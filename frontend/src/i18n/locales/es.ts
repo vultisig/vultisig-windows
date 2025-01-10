@@ -626,4 +626,11 @@ export const es = {
   provider: 'Proveedor',
   swap_tracking_link: 'Enlace de seguimiento de intercambio',
   swap_fee: 'Tarifa de intercambio',
+  and: 'y',
+  approve: 'Aprobar',
+  action: 'Acción',
+  from_asset: 'Desde Activo',
+  to_asset: 'Al activo',
+  allowance_spender: 'Gastador de mesadas',
+  allowance_amount: 'Monto de la asignación',
 };
