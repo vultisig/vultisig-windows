@@ -493,6 +493,9 @@ export const en = {
   vote: 'Vote',
   stake: 'Stake',
   unstake: 'Unstake',
+  method: 'Method',
+  message: 'Message',
+  signature: 'Signature',
   chainFunctions: {
     amountExceeded: 'Amount exceeds available balance',
     requiredFieldMissing: 'Required field missing',
@@ -620,6 +623,8 @@ export const en = {
       },
     },
   },
+  signing_method: 'Signing Method',
+  message_to_sign: 'Message to sign',
   saving_vault: 'Saving Vault...',
   scan_with_devices: 'Scan with devices to join the vault generation',
   scan_with_devices_to_sign:
