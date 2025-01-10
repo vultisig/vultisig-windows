@@ -19,12 +19,11 @@ import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncry
 import { useCurrentVault } from '../../../state/currentVault';
 import { getKeysignChain } from '../../utils/getKeysignChain';
 import { getTssKeysignType } from '../../utils/getTssKeysignType';
+import { getTxInputData } from '../../utils/getTxInputData';
 import { useKeysignPayload } from '../state/keysignPayload';
-import { useKeysignTxInputData } from '../state/keysignTxInputData';
 
 export const useKeysignMutation = () => {
   const payload = useKeysignPayload();
-  const inputs = useKeysignTxInputData();
   const walletCore = useAssertWalletCore();
   const vault = useCurrentVault();
   const sessionId = useCurrentSessionId();
@@ -34,6 +33,11 @@ export const useKeysignMutation = () => {
   return useMutation({
     mutationFn: async () => {
       const chain = getKeysignChain(payload);
+
+      const inputs = await getTxInputData({
+        keysignPayload: payload,
+        walletCore,
+      });
 
       const groupedMsgs = inputs.map(txInputData =>
         getPreSigningHashes({

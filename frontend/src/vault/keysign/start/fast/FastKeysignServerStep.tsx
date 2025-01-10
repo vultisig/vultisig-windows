@@ -21,8 +21,8 @@ import { useVaultPassword } from '../../../server/password/state/password';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { useCurrentVault } from '../../../state/currentVault';
 import { useKeysignPayload } from '../../shared/state/keysignPayload';
-import { useKeysignTxInputData } from '../../shared/state/keysignTxInputData';
 import { getTssKeysignType } from '../../utils/getTssKeysignType';
+import { getTxInputData } from '../../utils/getTxInputData';
 
 export const FastKeysignServerStep: React.FC<
   ComponentWithForwardActionProps
@@ -42,11 +42,14 @@ export const FastKeysignServerStep: React.FC<
 
   const [password] = useVaultPassword();
 
-  const inputs = useKeysignTxInputData();
-
   const { mutate, ...state } = useMutation({
-    mutationFn: () => {
+    mutationFn: async () => {
       const chain = coin.chain as Chain;
+
+      const inputs = await getTxInputData({
+        keysignPayload: payload,
+        walletCore,
+      });
 
       const messages = inputs.flatMap(txInputData =>
         getPreSigningHashes({

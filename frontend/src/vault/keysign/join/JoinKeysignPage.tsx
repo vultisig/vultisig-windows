@@ -11,7 +11,6 @@ import { useCurrentVault } from '../../state/currentVault';
 import { KeysignSigningStep } from '../shared/KeysignSigningStep';
 import { KeysignPayloadProvider } from '../shared/state/keysignPayload';
 import { KeysignServerUrlProvider } from './KeysignServerUrlProvider';
-import { KeysignTxInputDataGuard } from './KeysignTxInputDataGuard';
 import { KeysignVaultGuard } from './KeysignVaultGuard';
 import { JoinKeysignVerifyStep } from './verify/JoinKeysignVerifyStep';
 
@@ -33,29 +32,27 @@ export const JoinKeysignPage = () => {
     <CurrentLocalPartyIdProvider value={local_party_id}>
       <KeysignVaultGuard>
         <KeysignPayloadProvider value={shouldBePresent(keysignPayload)}>
-          <KeysignTxInputDataGuard>
-            <KeysignServerUrlProvider>
-              <CurrentSessionIdProvider value={sessionId}>
-                <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
-                  <Match
-                    value={step}
-                    verify={() => (
-                      <JoinKeysignVerifyStep onForward={toNextStep} />
-                    )}
-                    session={() => (
-                      <JoinKeygenSessionStep
-                        onForward={toNextStep}
-                        onBack={() => setStep('verify')}
-                      />
-                    )}
-                    sign={() => (
-                      <KeysignSigningStep onBack={() => setStep('verify')} />
-                    )}
-                  />
-                </CurrentHexEncryptionKeyProvider>
-              </CurrentSessionIdProvider>
-            </KeysignServerUrlProvider>
-          </KeysignTxInputDataGuard>
+          <KeysignServerUrlProvider>
+            <CurrentSessionIdProvider value={sessionId}>
+              <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
+                <Match
+                  value={step}
+                  verify={() => (
+                    <JoinKeysignVerifyStep onForward={toNextStep} />
+                  )}
+                  session={() => (
+                    <JoinKeygenSessionStep
+                      onForward={toNextStep}
+                      onBack={() => setStep('verify')}
+                    />
+                  )}
+                  sign={() => (
+                    <KeysignSigningStep onBack={() => setStep('verify')} />
+                  )}
+                />
+              </CurrentHexEncryptionKeyProvider>
+            </CurrentSessionIdProvider>
+          </KeysignServerUrlProvider>
         </KeysignPayloadProvider>
       </KeysignVaultGuard>
     </CurrentLocalPartyIdProvider>

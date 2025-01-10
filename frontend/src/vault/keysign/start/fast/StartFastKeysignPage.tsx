@@ -16,7 +16,6 @@ import { PasswordProvider } from '../../../server/password/state/password';
 import { GeneratedHexEncryptionKeyProvider } from '../../../setup/state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../../../setup/state/serverUrlDerivedFromServerType';
 import { useCurrentVault } from '../../../state/currentVault';
-import { KeysignTxInputDataGuard } from '../../join/KeysignTxInputDataGuard';
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep';
 import { KeysignPayloadProvider } from '../../shared/state/keysignPayload';
 import { PeersSelectionRecordProvider } from '../../shared/state/selectedPeers';
@@ -46,40 +45,38 @@ export const StartFastKeysignPage = () => {
     <PasswordProvider initialValue="">
       <CurrentLocalPartyIdProvider value={local_party_id}>
         <KeysignPayloadProvider value={keysignPayload}>
-          <KeysignTxInputDataGuard>
-            <GeneratedServiceNameProvider>
-              <PeersSelectionRecordProvider initialValue={{}}>
-                <GeneratedSessionIdProvider>
-                  <GeneratedHexEncryptionKeyProvider>
-                    <CurrentServerTypeProvider initialValue="relay">
-                      <ServerUrlDerivedFromServerTypeProvider>
-                        <MediatorManager />
-                        <Match
-                          value={step}
-                          password={() => (
-                            <ServerPasswordStep onForward={toNextStep} />
-                          )}
-                          startSession={() => (
-                            <KeygenStartSessionStep onForward={toNextStep} />
-                          )}
-                          waitServer={() => (
-                            <WaitForServerToJoinStep
-                              title={t('fast_sign')}
-                              onForward={toNextStep}
-                            />
-                          )}
-                          server={() => (
-                            <FastKeysignServerStep onForward={toNextStep} />
-                          )}
-                          sign={() => <KeysignSigningStep />}
-                        />
-                      </ServerUrlDerivedFromServerTypeProvider>
-                    </CurrentServerTypeProvider>
-                  </GeneratedHexEncryptionKeyProvider>
-                </GeneratedSessionIdProvider>
-              </PeersSelectionRecordProvider>
-            </GeneratedServiceNameProvider>
-          </KeysignTxInputDataGuard>
+          <GeneratedServiceNameProvider>
+            <PeersSelectionRecordProvider initialValue={{}}>
+              <GeneratedSessionIdProvider>
+                <GeneratedHexEncryptionKeyProvider>
+                  <CurrentServerTypeProvider initialValue="relay">
+                    <ServerUrlDerivedFromServerTypeProvider>
+                      <MediatorManager />
+                      <Match
+                        value={step}
+                        password={() => (
+                          <ServerPasswordStep onForward={toNextStep} />
+                        )}
+                        startSession={() => (
+                          <KeygenStartSessionStep onForward={toNextStep} />
+                        )}
+                        waitServer={() => (
+                          <WaitForServerToJoinStep
+                            title={t('fast_sign')}
+                            onForward={toNextStep}
+                          />
+                        )}
+                        server={() => (
+                          <FastKeysignServerStep onForward={toNextStep} />
+                        )}
+                        sign={() => <KeysignSigningStep />}
+                      />
+                    </ServerUrlDerivedFromServerTypeProvider>
+                  </CurrentServerTypeProvider>
+                </GeneratedHexEncryptionKeyProvider>
+              </GeneratedSessionIdProvider>
+            </PeersSelectionRecordProvider>
+          </GeneratedServiceNameProvider>
         </KeysignPayloadProvider>
       </CurrentLocalPartyIdProvider>
     </PasswordProvider>
