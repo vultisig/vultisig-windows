@@ -35,6 +35,10 @@ export const generateMemo = ({
   const action = selectedChainAction?.toUpperCase() || '';
 
   switch (selectedChainAction) {
+    case 'stake':
+      return 'd';
+    case 'unstake':
+      return 'w';
     case 'withdrawPool':
       // Format: "POOL-:percentage:affiliateFee:fee"
       return `POOL-:${percentage}:${affiliateFee}:${fee}`;
