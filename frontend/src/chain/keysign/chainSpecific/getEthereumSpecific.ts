@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Chain, EvmChain } from '../../../model/chain';
 import { RpcServiceEvm } from '../../../services/Rpc/evm/RpcServiceEvm';
-import { evmRpcUrl } from '../../evm/evmRpcUrl';
+import { getEvmChainRpcUrl } from '../../evm/chainInfo';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
 import { getEvmBaseFee } from '../../evm/utils/getEvmBaseFee';
 import { getEvmGasLimit } from '../../evm/utils/getEvmGasLimit';
@@ -21,7 +21,7 @@ export const getEthereumSpecific = async ({
 >): Promise<EthereumSpecific> => {
   const chain = coin.chain as EvmChain;
 
-  const provider = new ethers.JsonRpcProvider(evmRpcUrl[chain]);
+  const provider = new ethers.JsonRpcProvider(getEvmChainRpcUrl(chain));
 
   const nonce = BigInt(await provider.getTransactionCount(coin.address));
 

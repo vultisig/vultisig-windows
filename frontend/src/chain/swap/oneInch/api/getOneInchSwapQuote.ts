@@ -1,9 +1,10 @@
 import { Fetch } from '../../../../../wailsjs/go/utils/GoHttp';
 import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
 import { pick } from '../../../../lib/utils/record/pick';
-import { EvmChain, evmChainIds } from '../../../../model/chain';
+import { EvmChain } from '../../../../model/chain';
 import { Endpoint } from '../../../../services/Endpoint';
 import { ChainAccount } from '../../../ChainAccount';
+import { getEvmChainId } from '../../../evm/chainInfo';
 import { defaultEvmSwapGasLimit } from '../../../evm/evmGasLimit';
 import { isNativeCoin } from '../../../utils/isNativeCoin';
 import { oneInchAffiliateConfig } from '../oneInchAffiliateConfig';
@@ -29,7 +30,7 @@ export const getOneInchSwapQuote = async ({
   amount,
   isAffiliate,
 }: Input): Promise<OneInchSwapQuote> => {
-  const chainId = evmChainIds[account.chain as EvmChain];
+  const chainId = getEvmChainId(account.chain as EvmChain);
 
   const params = {
     src: isNativeCoin({ id: fromCoinId, chain: account.chain })
