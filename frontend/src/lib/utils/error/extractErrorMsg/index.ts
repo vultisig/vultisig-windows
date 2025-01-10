@@ -1,4 +1,5 @@
 import { attempt } from '../../attempt';
+import { getUserFriendlyErrorMessageIfExistent } from '../getUserFriendlyErrorMessageIfExistent';
 
 /**
  * Extracts and returns a human-readable error message from an unknown error object.
@@ -8,17 +9,7 @@ import { attempt } from '../../attempt';
  */
 export const extractErrorMsg = (err: unknown): string => {
   if (typeof err === 'string') {
-    if (
-      err.toLowerCase().indexOf('user rejected action') !== -1 ||
-      err.toLowerCase().indexOf('user rejected') !== -1
-    ) {
-      return 'Action rejected by User';
-    }
-    if (err === 'SignatureExpired') {
-      return 'Signature expired! Please adjust the time in your device.';
-    }
-
-    return err;
+    return getUserFriendlyErrorMessageIfExistent(err);
   }
 
   if (typeof err === 'number' || typeof err === 'boolean') {
