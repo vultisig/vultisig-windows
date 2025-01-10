@@ -1,13 +1,13 @@
 import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
-import { evmRpcUrl } from '../../../chain/evm/evmRpcUrl';
+import { getEvmChainId, getEvmChainRpcUrl } from '../../../chain/evm/chainInfo';
 import { FeePriority } from '../../../chain/fee/FeePriority';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
-import { Chain, EvmChain, evmChainIds } from '../../../model/chain';
+import { Chain, EvmChain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Endpoint } from '../../Endpoint';
 import { ITokenService } from '../../Tokens/ITokenService';
@@ -19,7 +19,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
   constructor(chain: EvmChain) {
     this.chain = chain;
-    this.provider = new ethers.JsonRpcProvider(evmRpcUrl[chain]);
+    this.provider = new ethers.JsonRpcProvider(getEvmChainRpcUrl(chain));
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
@@ -40,7 +40,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       };
 
       // We are having a lot of cors issues, so we are using the Go server to send the transaction
-      const response = await Post(evmRpcUrl[this.chain], payload);
+      const response = await Post(getEvmChainRpcUrl(this.chain), payload);
 
       if (response && response.result) {
         return response.result;
@@ -113,7 +113,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         );
       }
     } catch (error) {
-      console.error(evmRpcUrl[this.chain], 'getBalance::', error);
+      console.error(getEvmChainRpcUrl(this.chain), 'getBalance::', error);
       return '0';
     }
   }
@@ -297,7 +297,7 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
         throw new Error('Invalid chain');
       }
 
-      const oneInchChainId = evmChainIds[chain as EvmChain];
+      const oneInchChainId = getEvmChainId(chain as EvmChain);
       const oneInchEndpoint = Endpoint.fetch1InchsTokensBalance(
         oneInchChainId.toString(),
         nativeToken.address

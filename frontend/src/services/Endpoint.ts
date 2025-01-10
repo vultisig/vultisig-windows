@@ -75,25 +75,12 @@ export class Endpoint {
     return `https://api.coinpaprika.com/v1/tickers?quotes=${quotes}`;
   }
 
-  static avalancheServiceRpcService: string =
-    'https://avalanche-c-chain-rpc.publicnode.com';
-
-  static bscServiceRpcService: string = 'https://api.vultisig.com/bsc/';
-
   static baseServiceRpcService: string = 'https://api.vultisig.com/base/';
-
-  static arbitrumOneServiceRpcService: string = 'https://api.vultisig.com/arb/';
-
-  static polygonServiceRpcService: string = 'https://api.vultisig.com/polygon/';
-
-  static optimismServiceRpcService: string = 'https://api.vultisig.com/opt/';
 
   static cronosServiceRpcService: string =
     'https://cronos-evm-rpc.publicnode.com';
 
   static blastServiceRpcService: string = 'https://api.vultisig.com/blast/';
-
-  static zksyncServiceRpcService: string = 'https://api.vultisig.com/zksync/';
 
   static ethServiceRpcService: string = 'https://api.vultisig.com/eth/';
 
