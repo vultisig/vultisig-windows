@@ -13,20 +13,17 @@ import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { formatAmount } from '../../../lib/utils/formatAmount';
+import { assertField } from '../../../lib/utils/record/assertField';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useKeysignPayload } from './state/keysignPayload';
 
 export const KeysignTxPrimaryInfo = () => {
-  const {
-    coin: potentialCoin,
-    toAddress,
-    memo,
-    toAmount,
-    blockchainSpecific,
-  } = useKeysignPayload();
+  const payload = useKeysignPayload();
 
-  const coin = shouldBePresent(potentialCoin);
+  const { toAddress, memo, toAmount, blockchainSpecific } = payload;
+
+  const coin = assertField(payload, 'coin');
 
   const { decimals, ticker } = shouldBePresent(coin);
 
@@ -46,6 +43,10 @@ export const KeysignTxPrimaryInfo = () => {
 
   return (
     <>
+      <TxOverviewPrimaryRow title={t('from')}>
+        {coin.address}
+      </TxOverviewPrimaryRow>
+
       <TxOverviewPrimaryRow title={t('to')}>{toAddress}</TxOverviewPrimaryRow>
       {memo && <TxOverviewMemo value={memo} />}
       <TxOverviewAmount
