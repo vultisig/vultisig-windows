@@ -71,7 +71,7 @@ export const useKeysignMutation = () => {
         sessionId,
         encryptionKeyHex,
         serverUrl,
-        tssType.toString().toLowerCase()
+        tssType
       );
 
       const signaturesRecord = recordFromItems(signatures, ({ msg }) =>
