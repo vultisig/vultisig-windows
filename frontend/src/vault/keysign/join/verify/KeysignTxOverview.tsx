@@ -1,15 +1,12 @@
-import { getKeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload';
 import { MatchRecordUnion } from '../../../../lib/ui/base/MatchRecordUnion';
-import { useAppPathState } from '../../../../navigation/hooks/useAppPathState';
 import { KeysignSwapTxInfo } from '../../../swap/keysign/KeysignSwapTxInfo';
 import { KeysignTxPrimaryInfo } from '../../shared/KeysignTxPrimaryInfo';
 import { KeysignPayloadProvider } from '../../shared/state/keysignPayload';
+import { useJoinKeysignMessagePayload } from '../state/joinKeysignMessagePayload';
 import { KeysignCustomMessageInfo } from './KeysignCustomMessageInfo';
 
 export const KeysignTxOverview = () => {
-  const { keysignMsg } = useAppPathState<'joinKeysign'>();
-
-  const keysignMessagePayload = getKeysignMessagePayload(keysignMsg);
+  const keysignMessagePayload = useJoinKeysignMessagePayload();
 
   return (
     <MatchRecordUnion

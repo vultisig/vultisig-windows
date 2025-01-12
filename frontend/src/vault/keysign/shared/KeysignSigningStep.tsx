@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash';
+import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion';
 import { ProgressLine } from '../../../lib/ui/flow/ProgressLine';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
@@ -15,9 +16,11 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { KeygenNetworkReminder } from '../../keygen/shared/KeygenNetworkReminder';
 import { MatchKeygenSessionStatus } from '../../keygen/shared/MatchKeygenSessionStatus';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
+import { useJoinKeysignMessagePayload } from '../join/state/joinKeysignMessagePayload';
 import { KeysignSigningState } from './KeysignSigningState';
 import { KeysignSummaryStep } from './KeysignSummaryStep';
 import { useKeysignMutation } from './mutations/useKeysignMutation';
+import { KeysignPayloadProvider } from './state/keysignPayload';
 
 export const KeysignSigningStep = ({
   onBack,
@@ -28,13 +31,25 @@ export const KeysignSigningStep = ({
 
   useEffect(() => startKeysign(), [startKeysign]);
 
+  const keysignMessagePayload = useJoinKeysignMessagePayload();
+
   return (
     <MatchQuery
       value={mutationStatus}
-      success={txHash => (
-        <CurrentTxHashProvider value={txHash}>
-          <KeysignSummaryStep />
-        </CurrentTxHashProvider>
+      success={value => (
+        <MatchRecordUnion
+          value={keysignMessagePayload}
+          handlers={{
+            keysign: payload => (
+              <KeysignPayloadProvider value={payload}>
+                <CurrentTxHashProvider value={value}>
+                  <KeysignSummaryStep />
+                </CurrentTxHashProvider>
+              </KeysignPayloadProvider>
+            ),
+            custom: () => <p>todo: {value}</p>,
+          }}
+        />
       )}
       error={error => (
         <FullPageFlowErrorState
