@@ -1,13 +1,18 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash';
+import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
+import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
 import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion';
+import { Button } from '../../../lib/ui/buttons/Button';
 import { ProgressLine } from '../../../lib/ui/flow/ProgressLine';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
+import { makeAppPath } from '../../../navigation';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -17,10 +22,12 @@ import { KeygenNetworkReminder } from '../../keygen/shared/KeygenNetworkReminder
 import { MatchKeygenSessionStatus } from '../../keygen/shared/MatchKeygenSessionStatus';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
 import { useJoinKeysignMessagePayload } from '../join/state/joinKeysignMessagePayload';
+import { KeysignCustomMessageInfo } from '../join/verify/KeysignCustomMessageInfo';
 import { KeysignSigningState } from './KeysignSigningState';
-import { KeysignSummaryStep } from './KeysignSummaryStep';
+import { KeysignTxOverview } from './KeysignTxOverview';
 import { useKeysignMutation } from './mutations/useKeysignMutation';
 import { KeysignPayloadProvider } from './state/keysignPayload';
+import { WithProgressIndicator } from './WithProgressIndicator';
 
 export const KeysignSigningStep = ({
   onBack,
@@ -37,19 +44,38 @@ export const KeysignSigningStep = ({
     <MatchQuery
       value={mutationStatus}
       success={value => (
-        <MatchRecordUnion
-          value={keysignMessagePayload}
-          handlers={{
-            keysign: payload => (
-              <KeysignPayloadProvider value={payload}>
-                <CurrentTxHashProvider value={value}>
-                  <KeysignSummaryStep />
-                </CurrentTxHashProvider>
-              </KeysignPayloadProvider>
-            ),
-            custom: () => <p>todo: {value}</p>,
-          }}
-        />
+        <>
+          <PageHeader title={<PageHeaderTitle>{t('done')}</PageHeaderTitle>} />
+          <PageContent>
+            <WithProgressIndicator value={1}>
+              <TxOverviewPanel>
+                <MatchRecordUnion
+                  value={keysignMessagePayload}
+                  handlers={{
+                    keysign: payload => (
+                      <KeysignPayloadProvider value={payload}>
+                        <CurrentTxHashProvider value={value}>
+                          <KeysignTxOverview />
+                        </CurrentTxHashProvider>
+                      </KeysignPayloadProvider>
+                    ),
+                    custom: payload => (
+                      <>
+                        <KeysignCustomMessageInfo value={payload} />
+                        <TxOverviewPrimaryRow title={t('signature')}>
+                          {value}
+                        </TxOverviewPrimaryRow>
+                      </>
+                    ),
+                  }}
+                />
+              </TxOverviewPanel>
+            </WithProgressIndicator>
+            <Link to={makeAppPath('vault')}>
+              <Button as="div">{t('complete')}</Button>
+            </Link>
+          </PageContent>
+        </>
       )}
       error={error => (
         <FullPageFlowErrorState
