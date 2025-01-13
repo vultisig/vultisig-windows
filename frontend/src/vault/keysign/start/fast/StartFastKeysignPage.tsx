@@ -69,7 +69,11 @@ export const StartFastKeysignPage = () => {
                         server={() => (
                           <FastKeysignServerStep onForward={toNextStep} />
                         )}
-                        sign={() => <KeysignSigningStep />}
+                        sign={() => (
+                          <KeysignSigningStep
+                            payload={{ keysign: keysignPayload }}
+                          />
+                        )}
                       />
                     </ServerUrlDerivedFromServerTypeProvider>
                   </CurrentServerTypeProvider>

@@ -1,3 +1,4 @@
+import { getKeysignMessagePayload } from '../../../chain/keysign/KeysignMessagePayload';
 import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
@@ -20,9 +21,9 @@ export const JoinKeysignPage = () => {
     onExit: useNavigateBack(),
   });
 
-  const {
-    keysignMsg: { sessionId, encryptionKeyHex },
-  } = useAppPathState<'joinKeysign'>();
+  const { keysignMsg } = useAppPathState<'joinKeysign'>();
+
+  const { sessionId, encryptionKeyHex } = keysignMsg;
 
   const { local_party_id } = useCurrentVault();
 
@@ -42,7 +43,10 @@ export const JoinKeysignPage = () => {
                   />
                 )}
                 sign={() => (
-                  <KeysignSigningStep onBack={() => setStep('verify')} />
+                  <KeysignSigningStep
+                    payload={getKeysignMessagePayload(keysignMsg)}
+                    onBack={() => setStep('verify')}
+                  />
                 )}
               />
             </CurrentHexEncryptionKeyProvider>

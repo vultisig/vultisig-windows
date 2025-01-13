@@ -57,7 +57,10 @@ export const StartKeysignPage = () => {
                         />
                       )}
                       sign={() => (
-                        <KeysignSigningStep onBack={() => setStep('peers')} />
+                        <KeysignSigningStep
+                          payload={{ keysign: keysignPayload }}
+                          onBack={() => setStep('peers')}
+                        />
                       )}
                     />
                   </ServerUrlDerivedFromServerTypeProvider>

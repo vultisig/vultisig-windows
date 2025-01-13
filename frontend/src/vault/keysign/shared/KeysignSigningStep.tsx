@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { KeysignMessagePayload } from '../../../chain/keysign/KeysignMessagePayload';
 import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash';
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
@@ -29,12 +30,18 @@ import { useKeysignMutation } from './mutations/useKeysignMutation';
 import { KeysignPayloadProvider } from './state/keysignPayload';
 import { WithProgressIndicator } from './WithProgressIndicator';
 
+type KeysignSigningStepProps = {
+  payload: KeysignMessagePayload;
+} & Partial<ComponentWithBackActionProps>;
+
 export const KeysignSigningStep = ({
   onBack,
-}: Partial<ComponentWithBackActionProps>) => {
+  payload,
+}: KeysignSigningStepProps) => {
   const { t } = useTranslation();
 
-  const { mutate: startKeysign, ...mutationStatus } = useKeysignMutation();
+  const { mutate: startKeysign, ...mutationStatus } =
+    useKeysignMutation(payload);
 
   useEffect(() => startKeysign(), [startKeysign]);
 
