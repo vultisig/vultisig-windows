@@ -1,5 +1,6 @@
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 
+import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { withoutNullOrUndefined } from '../../../lib/utils/array/withoutNullOrUndefined';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain, UtxoChain } from '../../../model/chain';
@@ -24,7 +25,7 @@ export const getPreSigningHashes = ({
     txInputData
   );
 
-  if (chain in UtxoChain) {
+  if (isOneOf(chain, Object.values(UtxoChain))) {
     const { errorMessage, hashPublicKeys } =
       TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
 

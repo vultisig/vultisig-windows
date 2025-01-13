@@ -11,6 +11,7 @@ import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { useTransform } from '../../../lib/ui/hooks/useTransform';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
+import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
 import { EvmChain, UtxoChain } from '../../../model/chain';
@@ -70,7 +71,10 @@ export const useSwapKeysignPayloadQuery = () => {
           native: quote => {
             const { memo, swapChain } = quote;
 
-            if (fromCoinKey.chain in EvmChain && !isNativeCoin(fromCoinKey)) {
+            if (
+              isOneOf(fromCoinKey.chain, Object.values(EvmChain)) &&
+              !isNativeCoin(fromCoinKey)
+            ) {
               return getErc20ThorchainSwapKeysignPayload({
                 quote,
                 fromAddress,
@@ -101,9 +105,11 @@ export const useSwapKeysignPayloadQuery = () => {
           },
         });
 
-        if (fromCoin.chain in UtxoChain) {
+        if (isOneOf(fromCoin.chain, Object.values(UtxoChain))) {
           result.utxoInfo = await getUtxos(assertChainField(fromCoin));
         }
+
+        console.log('result: ', result);
 
         return result;
       },
