@@ -53,6 +53,7 @@ export const appPaths = {
   termsOfService: '/vault/settings/terms-of-service',
   vaultFAQ: '/vault/settings/faq',
   swap: '/vault/item/swap',
+  signCustomMessage: '/vault/sign-custom-message',
   registerForAirdrop: '/register-for-airdrop',
   onboarding: '/onboarding',
   createVaultFolder: '/vault/create-folder',
