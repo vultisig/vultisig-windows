@@ -6,6 +6,8 @@ import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQu
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
+import { isOneOf } from '../../../lib/utils/array/isOneOf';
+import { UtxoChain } from '../../../model/chain';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
@@ -36,6 +38,12 @@ export const useSwapChainSpecificQuery = () => {
         const nativeFeeCoin = getCoinMetaKey(getChainFeeCoin(swapChain));
 
         input.isDeposit = areEqualCoins(fromCoinKey, nativeFeeCoin);
+      }
+
+      if (isOneOf(fromCoin.chain, Object.values(UtxoChain))) {
+        input.feeSettings = {
+          priority: 'fast',
+        };
       }
 
       return {
