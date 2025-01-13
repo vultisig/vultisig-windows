@@ -629,4 +629,9 @@ export const it = {
   to_asset: 'Per Risorse',
   allowance_spender: 'Spendere indennità',
   allowance_amount: "Importo dell'indennità",
+  method: 'Metodo',
+  message: 'Messaggio',
+  signature: 'Firma',
+  signing_method: 'Metodo di firma',
+  message_to_sign: 'Messaggio da firmare',
 };
