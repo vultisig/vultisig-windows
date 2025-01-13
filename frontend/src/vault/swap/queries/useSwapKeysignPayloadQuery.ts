@@ -109,8 +109,6 @@ export const useSwapKeysignPayloadQuery = () => {
           result.utxoInfo = await getUtxos(assertChainField(fromCoin));
         }
 
-        console.log('result: ', result);
-
         return result;
       },
     }),

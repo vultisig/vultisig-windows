@@ -3,9 +3,7 @@ import { ChainAccount } from '../../ChainAccount';
 import { getUtxoAddressInfo } from '../blockchair/getUtxoAddressInfo';
 
 export const getUtxos = async (account: ChainAccount) => {
-  console.log('getUtxos: ', account);
   const { data } = await getUtxoAddressInfo(account);
-  console.log('getUtxos data: ', data);
 
   return data[account.address].utxo.map(
     utxo =>
