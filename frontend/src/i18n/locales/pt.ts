@@ -212,7 +212,7 @@ export const pt = {
   vault_backup_page_verified_password_error: 'As senhas devem ser iguais',
   vault_backup_page_submit_button_text: 'Salvar',
   vault_backup_page_submit_loading_button_text: 'Salvando...',
-  vault_backup_page_skip_button_text: 'Pular',
+  vault_backup_page_skip_button_text: 'Saltar senha',
   vault_backup_page_password_info:
     'Nunca armazene os fragmentos do seu cofre de dispositivos diferentes no mesmo local',
   vault_rename_page_name_error:

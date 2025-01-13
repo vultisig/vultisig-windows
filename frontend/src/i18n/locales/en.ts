@@ -217,7 +217,7 @@ export const en = {
   vault_backup_page_verified_password_error: 'Passwords must match',
   vault_backup_page_submit_button_text: 'Save',
   vault_backup_page_submit_loading_button_text: 'Saving...',
-  vault_backup_page_skip_button_text: 'Skip',
+  vault_backup_page_skip_button_text: 'Skip Password',
   vault_backup_page_password_info:
     'Never store Vault Shares from different devices in the same location',
   vault_rename_page_name_error:

@@ -218,7 +218,7 @@ export const it = {
   vault_backup_page_verified_password_error: 'Le password devono coincidere',
   vault_backup_page_submit_button_text: 'Salva',
   vault_backup_page_submit_loading_button_text: 'Salvataggio...',
-  vault_backup_page_skip_button_text: 'Salta',
+  vault_backup_page_skip_button_text: 'Salta la password',
   vault_backup_page_password_info:
     'Non conservare mai i frammenti della tua cassaforte di dispositivi diversi nella stessa posizione',
   vault_rename_page_name_error:

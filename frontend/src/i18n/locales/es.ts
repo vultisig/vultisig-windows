@@ -214,7 +214,7 @@ export const es = {
   vault_backup_page_verified_password_error: 'Las contraseñas deben coincidir',
   vault_backup_page_submit_button_text: 'Guardar',
   vault_backup_page_submit_loading_button_text: 'Guardando...',
-  vault_backup_page_skip_button_text: 'Omitir',
+  vault_backup_page_skip_button_text: 'Omitir contraseña',
   vault_backup_page_password_info:
     'Nunca almacene los fragmentos de su bóveda de dispositivos diferentes en la misma ubicación',
   vault_rename_page_name_error:

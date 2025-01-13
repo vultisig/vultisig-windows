@@ -215,7 +215,7 @@ export const de = {
   vault_backup_page_verified_password_error: 'Passwörter müssen übereinstimmen',
   vault_backup_page_submit_button_text: 'Speichern',
   vault_backup_page_submit_loading_button_text: 'Speichern...',
-  vault_backup_page_skip_button_text: 'Überspringen',
+  vault_backup_page_skip_button_text: 'Passwort überspringen',
   vault_backup_page_password_info:
     'Bewahren Sie niemals Tresorfragmente von verschiedenen Geräten am selben Ort auf',
   vault_rename_page_name_error:

@@ -207,7 +207,7 @@ export const hr = {
   vault_backup_page_verified_password_error: 'Lozinke se moraju podudarati',
   vault_backup_page_submit_button_text: 'Spremi',
   vault_backup_page_submit_loading_button_text: 'Spremanje...',
-  vault_backup_page_skip_button_text: 'Preskoči',
+  vault_backup_page_skip_button_text: 'Jelszó kihagyása',
   vault_backup_page_password_info:
     'Nikada ne pohranjujte dijelove trezora s različitih uređaja na isto mjesto',
   vault_rename_page_name_error: 'Naziv trezora mora biti između 1 i 50 znakova',
