@@ -1,7 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
+import { keccak256 } from 'js-sha3';
 
 import { Keysign } from '../../../../../wailsjs/go/tss/TssService';
+import { TssKeysignType } from '../../../../chain/keysign/TssKeysignType';
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
+import { generateSignatureWithRecoveryId } from '../../../../chain/utils/generateSignatureWithRecoveryId';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { getLastItem } from '../../../../lib/utils/array/getLastItem';
@@ -118,23 +121,32 @@ export const useKeysignMutation = () => {
 
           return getLastItem(hashes);
         },
-        custom: async ({ message, method }) => {
+        custom: async ({ message }) => {
+          const tssType: TssKeysignType = 'ecdsa';
+
+          const chain = Chain.Ethereum;
+
+          const derivePath = walletCore.CoinTypeExt.derivationPath(
+            getCoinType({ walletCore, chain })
+          );
+
           const [signature] = await Keysign(
             vault,
-            // TODO: which argument here?
-            [message],
+            [keccak256(message)],
             vault.local_party_id,
-            // TODO: which argument here?
-            method,
+            derivePath,
             sessionId,
             encryptionKeyHex,
             serverUrl,
-            // TODO: which argument here?
-            'ecdsa'
+            tssType
           );
 
-          // TODO: what should it return?
-          return signature.msg;
+          const result = generateSignatureWithRecoveryId({
+            walletCore,
+            signature,
+          });
+
+          return Buffer.from(result).toString('hex');
         },
       });
     },
