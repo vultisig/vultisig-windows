@@ -640,4 +640,7 @@ export const it = {
   sign_message: 'Messaggio del segno',
   method_required: 'È richiesto il metodo di firma',
   message_required: 'Il messaggio è obbligatorio',
+  something_went_wrong: 'Qualcosa è andato storto',
+  report_error: 'Segnala errore',
+  go_to_home_page: 'Vai alla Home Page',
 };

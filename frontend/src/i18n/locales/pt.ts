@@ -635,4 +635,7 @@ export const pt = {
   sign_message: 'Assinar mensagem',
   method_required: 'O método de assinatura é obrigatório',
   message_required: 'Mensagem é necessária',
+  something_went_wrong: 'Algo deu errado',
+  report_error: 'Relatar erro',
+  go_to_home_page: 'Ir para a página inicial',
 };

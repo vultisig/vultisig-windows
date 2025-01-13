@@ -644,4 +644,7 @@ export const es = {
   sign_message: 'Firmar mensaje',
   method_required: 'Se requiere método de firma',
   message_required: 'El mensaje es obligatorio',
+  something_went_wrong: 'Algo salió mal',
+  report_error: 'Informar error',
+  go_to_home_page: 'Ir a la página de inicio',
 };
