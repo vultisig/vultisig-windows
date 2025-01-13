@@ -2,8 +2,8 @@ import React from 'react';
 
 import { ComponentWithChildrenProps } from '../../lib/ui/props';
 
-type ErrorState = {
-  error: Error | null;
+export type ErrorState = {
+  error: Error;
   info: React.ErrorInfo | null;
 };
 
