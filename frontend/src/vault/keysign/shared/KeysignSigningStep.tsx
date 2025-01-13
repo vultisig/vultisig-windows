@@ -22,7 +22,6 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { KeygenNetworkReminder } from '../../keygen/shared/KeygenNetworkReminder';
 import { MatchKeygenSessionStatus } from '../../keygen/shared/MatchKeygenSessionStatus';
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
-import { useJoinKeysignMessagePayload } from '../join/state/joinKeysignMessagePayload';
 import { KeysignCustomMessageInfo } from '../join/verify/KeysignCustomMessageInfo';
 import { KeysignSigningState } from './KeysignSigningState';
 import { KeysignTxOverview } from './KeysignTxOverview';
@@ -45,8 +44,6 @@ export const KeysignSigningStep = ({
 
   useEffect(() => startKeysign(), [startKeysign]);
 
-  const keysignMessagePayload = useJoinKeysignMessagePayload();
-
   return (
     <MatchQuery
       value={mutationStatus}
@@ -57,7 +54,7 @@ export const KeysignSigningStep = ({
             <WithProgressIndicator value={1}>
               <TxOverviewPanel>
                 <MatchRecordUnion
-                  value={keysignMessagePayload}
+                  value={payload}
                   handlers={{
                     keysign: payload => (
                       <KeysignPayloadProvider value={payload}>
