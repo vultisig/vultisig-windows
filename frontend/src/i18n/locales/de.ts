@@ -633,4 +633,9 @@ export const de = {
   to_asset: 'Zum Vermögenswert',
   allowance_spender: 'Taschengeld-Ausgeber',
   allowance_amount: 'Freibetrag',
+  method: 'Verfahren',
+  message: 'Nachricht',
+  signature: 'Unterschrift',
+  signing_method: 'Signiermethode',
+  message_to_sign: 'Zu unterzeichnende Nachricht',
 };

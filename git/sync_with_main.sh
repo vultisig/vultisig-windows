@@ -1,0 +1,1 @@
+git fetch origin && git rebase origin/main && git push --force-with-lease || echo 'Rebase failed. Please resolve conflicts and continue the rebase.'

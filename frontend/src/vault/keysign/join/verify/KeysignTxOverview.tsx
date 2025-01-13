@@ -1,14 +1,28 @@
-import { TxOverviewPanel } from '../../../../chain/tx/components/TxOverviewPanel';
+import { MatchRecordUnion } from '../../../../lib/ui/base/MatchRecordUnion';
 import { KeysignSwapTxInfo } from '../../../swap/keysign/KeysignSwapTxInfo';
 import { KeysignTxPrimaryInfo } from '../../shared/KeysignTxPrimaryInfo';
-import { useKeysignPayload } from '../../shared/state/keysignPayload';
+import { KeysignPayloadProvider } from '../../shared/state/keysignPayload';
+import { useJoinKeysignMessagePayload } from '../state/joinKeysignMessagePayload';
+import { KeysignCustomMessageInfo } from './KeysignCustomMessageInfo';
 
 export const KeysignTxOverview = () => {
-  const { swapPayload } = useKeysignPayload();
+  const keysignMessagePayload = useJoinKeysignMessagePayload();
 
   return (
-    <TxOverviewPanel>
-      {swapPayload.value ? <KeysignSwapTxInfo /> : <KeysignTxPrimaryInfo />}
-    </TxOverviewPanel>
+    <MatchRecordUnion
+      value={keysignMessagePayload}
+      handlers={{
+        keysign: keysignPayload => (
+          <KeysignPayloadProvider value={keysignPayload}>
+            {keysignPayload.swapPayload.value ? (
+              <KeysignSwapTxInfo />
+            ) : (
+              <KeysignTxPrimaryInfo />
+            )}
+          </KeysignPayloadProvider>
+        ),
+        custom: value => <KeysignCustomMessageInfo value={value} />,
+      }}
+    />
   );
 };

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import { TxOverviewPanel } from '../../../../chain/tx/components/TxOverviewPanel';
 import { Button } from '../../../../lib/ui/buttons/Button';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
 import { PageContent } from '../../../../ui/page/PageContent';
@@ -22,7 +23,9 @@ export const JoinKeysignVerifyStep = ({
       />
       <PageContent>
         <WithProgressIndicator value={0.6}>
-          <KeysignTxOverview />
+          <TxOverviewPanel>
+            <KeysignTxOverview />
+          </TxOverviewPanel>
         </WithProgressIndicator>
         <Button onClick={onForward}>{t('join_keysign')}</Button>
       </PageContent>

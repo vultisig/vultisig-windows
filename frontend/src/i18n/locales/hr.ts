@@ -611,4 +611,9 @@ export const hr = {
   to_asset: 'Za sredstvo',
   allowance_spender: 'Potrošač džeparca',
   allowance_amount: 'Iznos dodatka',
+  method: 'metoda',
+  message: 'Poruka',
+  signature: 'Potpis',
+  signing_method: 'Način potpisivanja',
+  message_to_sign: 'Poruka za potpisivanje',
 };

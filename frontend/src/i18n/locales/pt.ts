@@ -624,4 +624,9 @@ export const pt = {
   to_asset: 'Para Ativo',
   allowance_spender: 'Gastador de mesada',
   allowance_amount: 'Valor do subsídio',
+  method: 'Método',
+  message: 'Mensagem',
+  signature: 'Assinatura',
+  signing_method: 'Método de assinatura',
+  message_to_sign: 'Mensagem para assinar',
 };

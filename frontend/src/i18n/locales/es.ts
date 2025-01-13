@@ -633,4 +633,9 @@ export const es = {
   to_asset: 'Al activo',
   allowance_spender: 'Gastador de mesadas',
   allowance_amount: 'Monto de la asignación',
+  method: 'Método',
+  message: 'Mensaje',
+  signature: 'Firma',
+  signing_method: 'Método de firma',
+  message_to_sign: 'Mensaje para firmar',
 };
