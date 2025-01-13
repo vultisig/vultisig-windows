@@ -86,7 +86,10 @@ export class VaultService implements IVaultService {
     password: string
   ): Promise<void> {
     const base64Data = await this.createBackup(vault, password);
-    SaveFileBkp(this.getExportName(vault), base64Data);
+    const wasSaved = await SaveFileBkp(this.getExportName(vault), base64Data);
+    if (!wasSaved) {
+      throw new Error('Backup was not saved.');
+    }
   }
 
   async createBackup(
