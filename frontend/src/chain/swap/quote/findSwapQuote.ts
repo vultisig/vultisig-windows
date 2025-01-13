@@ -1,4 +1,5 @@
 import { EntityWithDecimals } from '../../../coin/Coin';
+import { isEmpty } from '../../../lib/utils/array/isEmpty';
 import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { EntityWithId } from '../../../lib/utils/entities/EntityWithId';
 import { EntityWithTicker } from '../../../lib/utils/entities/EntityWithTicker';
@@ -74,6 +75,10 @@ export const findSwapQuote = ({
 
       return { oneInch };
     });
+  }
+
+  if (isEmpty(fetchers)) {
+    throw new Error(`No swap routes found.`);
   }
 
   return asyncFallbackChain(...fetchers);

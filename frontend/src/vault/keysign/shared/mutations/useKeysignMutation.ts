@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { keccak256 } from 'js-sha3';
 
 import { Keysign } from '../../../../../wailsjs/go/tss/TssService';
+import { KeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload';
 import { TssKeysignType } from '../../../../chain/keysign/TssKeysignType';
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { generateSignatureWithRecoveryId } from '../../../../chain/utils/generateSignatureWithRecoveryId';
@@ -21,19 +22,16 @@ import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
 import { getVaultPublicKey } from '../../../publicKey/getVaultPublicKey';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { useCurrentVault } from '../../../state/currentVault';
-import { useJoinKeysignMessagePayload } from '../../join/state/joinKeysignMessagePayload';
 import { getKeysignChain } from '../../utils/getKeysignChain';
 import { getTssKeysignType } from '../../utils/getTssKeysignType';
 import { getTxInputData } from '../../utils/getTxInputData';
 
-export const useKeysignMutation = () => {
+export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore();
   const vault = useCurrentVault();
   const sessionId = useCurrentSessionId();
   const encryptionKeyHex = useCurrentHexEncryptionKey();
   const serverUrl = useCurrentServerUrl();
-
-  const payload = useJoinKeysignMessagePayload();
 
   return useMutation({
     mutationFn: async () => {
