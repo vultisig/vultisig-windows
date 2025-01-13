@@ -376,6 +376,7 @@ export const en = {
   active: 'Active',
   sign: 'Sign',
   sign_custom_message: 'Sign custom message',
+  sign_message: 'Sign message',
   action: 'Action',
   fast_vault_setup_prop_0: 'Single Device Setup',
   fast_vault_setup_prop_1: 'Transaction Alerts & Policies',
