@@ -23,11 +23,11 @@ export const deriveAddress = ({
   });
 
   if (chain === Chain.MayaChain) {
-    walletCore.AnyAddress.createBech32WithPublicKey(
+    return walletCore.AnyAddress.createBech32WithPublicKey(
       publicKey,
       coinType,
       'maya'
-    );
+    ).description();
   }
 
   return walletCore.CoinTypeExt.deriveAddressFromPublicKey(coinType, publicKey);
