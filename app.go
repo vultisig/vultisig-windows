@@ -23,29 +23,27 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) SaveFileBkp(suggestedFilename string, base64Data string) (string, error) {
-	// Show the save file dialog to the user
-	filename, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
-		Title:           "Save File",
-		Filters:         []runtime.FileFilter{{DisplayName: "All Files(*)", Pattern: "*.bak;*.dat;*.vult"}},
-		DefaultFilename: suggestedFilename,
-	})
-	if err != nil {
-		return "", err
-	}
+func (a *App) SaveFileBkp(suggestedFilename string, base64Data string) (bool, error) {
+    filename, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
+        Title:           "Save File",
+        Filters:         []runtime.FileFilter{{DisplayName: "All Files(*)", Pattern: "*.bak;*.dat;*.vult"}},
+        DefaultFilename: suggestedFilename,
+    })
+    if err != nil {
+        return false, err
+    }
 
-	if filename == "" {
-		// User canceled the dialog
-		return "", nil
-	}
+    if filename == "" {
+        // User canceled the dialog
+        return false, nil
+    }
 
-	// Write the base64 string directly to the file without decoding it
-	err = os.WriteFile(filename, []byte(base64Data), 0644)
-	if err != nil {
-		return "", err
-	}
+    err = os.WriteFile(filename, []byte(base64Data), 0644)
+    if err != nil {
+        return false, err
+    }
 
-	return filename, nil
+    return true, nil
 }
 
 func (a *App) GetOSArgs() []string {
