@@ -4,7 +4,6 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from 'react-router-dom';
 
 import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly';
-import { ErrorBoundary } from './errors/components/ErrorBoundary';
 import { GlobalStyle } from './lib/ui/css/GlobalStyle';
 import { VStack } from './lib/ui/layout/Stack';
 import { darkTheme } from './lib/ui/theme/darkTheme';
@@ -24,19 +23,17 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={darkTheme}>
           <GlobalStyle />
-          <ErrorBoundary>
-            <VStack fullSize>
-              <RemoteStateDependant>
-                <InitializedWalletOnly>
-                  <OnboardingResetter>
-                    <ToastProvider>
-                      <RouterProvider router={router} />
-                    </ToastProvider>
-                  </OnboardingResetter>
-                </InitializedWalletOnly>
-              </RemoteStateDependant>
-            </VStack>
-          </ErrorBoundary>
+          <VStack fullSize>
+            <RemoteStateDependant>
+              <InitializedWalletOnly>
+                <OnboardingResetter>
+                  <ToastProvider>
+                    <RouterProvider router={router} />
+                  </ToastProvider>
+                </OnboardingResetter>
+              </InitializedWalletOnly>
+            </RemoteStateDependant>
+          </VStack>
         </ThemeProvider>
       </QueryClientProvider>
     </WalletCoreProvider>
