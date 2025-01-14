@@ -25,7 +25,7 @@ import {
   getFieldsForChainAction,
   resolveSchema,
 } from '../utils/schema';
-import { DISABLED_FIELDS } from './chainOptionsConfig';
+import { DISABLED_FIELDS_NAMES } from './chainOptionsConfig';
 import { DepositActionItemExplorer } from './DepositActionItemExplorer';
 import {
   AssetRequiredLabel,
@@ -166,7 +166,7 @@ export const DepositForm: FC<DepositFormProps> = ({
           {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
               {fieldsForChainAction
-                .filter(field => !DISABLED_FIELDS.includes(field.name))
+                .filter(field => !DISABLED_FIELDS_NAMES.includes(field.name))
                 .map(field => (
                   <InputContainer key={field.name}>
                     <Text size={15} weight="400">
