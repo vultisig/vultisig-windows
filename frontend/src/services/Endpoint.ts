@@ -118,12 +118,6 @@ export class Endpoint {
     return `https://litecoinspace.org/tx/${value}`;
   }
 
-  static blockchairBroadcast(chainName: string): URL {
-    return new URL(
-      `${this.vultisigApiProxy}/blockchair/${chainName}/push/transaction`
-    );
-  }
-
   static fetchCryptoPrices(ids: string, currencies: string): URL {
     return new URL(
       `${this.vultisigApiProxy}/coingeicko/api/v3/simple/price?ids=${ids}&vs_currencies=${currencies}`

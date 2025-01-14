@@ -1,7 +1,8 @@
 import { assertChainField } from '../../../chain/utils/assertChainField';
+import { broadcastUtxoTransaction } from '../../../chain/utxo/blockchair/broadcastUtxoTransaction';
 import { getUtxoAddressInfo } from '../../../chain/utxo/blockchair/getUtxoAddressInfo';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { Endpoint } from '../../Endpoint';
+import { UtxoChain } from '../../../model/chain';
 import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
@@ -12,22 +13,13 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
-    return await this.broadcastTransaction(encodedTransaction);
+    return this.broadcastTransaction(encodedTransaction);
   }
 
-  async broadcastTransaction(hex: string): Promise<string> {
-    const url = Endpoint.blockchairBroadcast(this.chain.toLowerCase());
-
-    const request = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ data: hex }),
+  async broadcastTransaction(tx: string): Promise<string> {
+    return broadcastUtxoTransaction({
+      chain: this.chain as UtxoChain,
+      tx,
     });
-
-    const response = await request.json();
-
-    return response.data.transaction_hash;
   }
 }
