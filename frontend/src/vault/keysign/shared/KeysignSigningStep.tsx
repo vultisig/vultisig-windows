@@ -26,7 +26,6 @@ import { KeysignCustomMessageInfo } from '../join/verify/KeysignCustomMessageInf
 import { KeysignSigningState } from './KeysignSigningState';
 import { KeysignTxOverview } from './KeysignTxOverview';
 import { useKeysignMutation } from './mutations/useKeysignMutation';
-import { KeysignPayloadProvider } from './state/keysignPayload';
 import { WithProgressIndicator } from './WithProgressIndicator';
 
 type KeysignSigningStepProps = {
@@ -57,11 +56,9 @@ export const KeysignSigningStep = ({
                   value={payload}
                   handlers={{
                     keysign: payload => (
-                      <KeysignPayloadProvider value={payload}>
-                        <CurrentTxHashProvider value={value}>
-                          <KeysignTxOverview />
-                        </CurrentTxHashProvider>
-                      </KeysignPayloadProvider>
+                      <CurrentTxHashProvider value={value}>
+                        <KeysignTxOverview value={payload} />
+                      </CurrentTxHashProvider>
                     ),
                     custom: payload => (
                       <>

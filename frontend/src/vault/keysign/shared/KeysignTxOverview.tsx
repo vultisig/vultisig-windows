@@ -10,11 +10,13 @@ import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getBlockExplorerUrl } from '../../../chain/utils/getBlockExplorerUrl';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { IconButton } from '../../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../../lib/ui/icons/CopyIcon';
 import { LinkIcon } from '../../../lib/ui/icons/LinkIcon';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
+import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
 import { isOneOf } from '../../../lib/utils/array/isOneOf';
@@ -23,10 +25,11 @@ import { formatAmount } from '../../../lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { useKeysignPayload } from './state/keysignPayload';
 import { SwapTrackingLink } from './SwapTrackingLink';
 
-export const KeysignTxOverview = () => {
+export const KeysignTxOverview = ({
+  value,
+}: ComponentWithValueProps<KeysignPayload>) => {
   const txHash = useCurrentTxHash();
 
   const { t } = useTranslation();
@@ -40,7 +43,7 @@ export const KeysignTxOverview = () => {
     toAmount,
     blockchainSpecific,
     swapPayload,
-  } = useKeysignPayload();
+  } = value;
 
   const coin = shouldBePresent(potentialCoin);
 

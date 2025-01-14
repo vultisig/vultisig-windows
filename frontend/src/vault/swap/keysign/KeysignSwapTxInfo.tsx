@@ -7,17 +7,20 @@ import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { withoutUndefined } from '../../../lib/utils/array/withoutUndefined';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { getDiscriminatedUnionValue } from '../../../lib/utils/getDiscriminatedUnionValue';
+import { getRecordUnionValue } from '../../../lib/utils/getRecordUnionValue';
 import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
 import { assertField } from '../../../lib/utils/record/assertField';
 import { Chain } from '../../../model/chain';
-import { useKeysignPayload } from '../../keysign/shared/state/keysignPayload';
+import { useKeysignMessagePayload } from '../../keysign/shared/state/keysignMessagePayload';
 
 export const KeysignSwapTxInfo = () => {
-  const payload = useKeysignPayload();
+  const payload = useKeysignMessagePayload();
 
-  const { erc20ApprovePayload, toAmount: fromAmount } = payload;
+  const keysignPayload = getRecordUnionValue(payload, 'keysign');
 
-  const fromCoin = assertField(payload, 'coin');
+  const { erc20ApprovePayload, toAmount: fromAmount } = keysignPayload;
+
+  const fromCoin = assertField(keysignPayload, 'coin');
 
   const { t } = useTranslation();
 
@@ -26,7 +29,7 @@ export const KeysignSwapTxInfo = () => {
     t('swap'),
   ]).join(` ${t('and')} `);
 
-  const swapPayload = toKeysignSwapPayload(payload.swapPayload);
+  const swapPayload = toKeysignSwapPayload(keysignPayload.swapPayload);
 
   const swapPayloadValue = getDiscriminatedUnionValue(
     swapPayload,

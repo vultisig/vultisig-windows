@@ -3,7 +3,6 @@ import { keccak256 } from 'js-sha3';
 
 import { Keysign } from '../../../../../wailsjs/go/tss/TssService';
 import { KeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload';
-import { TssKeysignType } from '../../../../chain/keysign/TssKeysignType';
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { generateSignatureWithRecoveryId } from '../../../../chain/utils/generateSignatureWithRecoveryId';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
@@ -22,6 +21,7 @@ import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
 import { getVaultPublicKey } from '../../../publicKey/getVaultPublicKey';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { useCurrentVault } from '../../../state/currentVault';
+import { customMessageConfig } from '../../customMessage/config';
 import { getKeysignChain } from '../../utils/getKeysignChain';
 import { getTssKeysignType } from '../../utils/getTssKeysignType';
 import { getTxInputData } from '../../utils/getTxInputData';
@@ -120,12 +120,8 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
           return getLastItem(hashes);
         },
         custom: async ({ message }) => {
-          const tssType: TssKeysignType = 'ecdsa';
-
-          const chain = Chain.Ethereum;
-
           const derivePath = walletCore.CoinTypeExt.derivationPath(
-            getCoinType({ walletCore, chain })
+            getCoinType({ walletCore, chain: customMessageConfig.chain })
           );
 
           const [signature] = await Keysign(
@@ -136,7 +132,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             sessionId,
             encryptionKeyHex,
             serverUrl,
-            tssType
+            customMessageConfig.tssType
           );
 
           const result = generateSignatureWithRecoveryId({
