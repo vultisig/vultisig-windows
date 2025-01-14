@@ -312,6 +312,7 @@ export const pt = {
   from: 'De',
   memo: 'Memo',
   amount: 'Valor',
+  unbondAmount: 'Quantia de Desvinculação',
   value: 'Valor',
   gas: 'Gás',
   network_fee: 'Taxa de rede',

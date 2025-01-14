@@ -303,6 +303,7 @@ export const hr = {
   from: 'Od',
   memo: 'Memo',
   amount: 'Iznos',
+  unbondAmount: 'Kibontási Összeg',
   value: 'Vrijednost',
   gas: 'Plin',
   network_fee: 'Naknada za mrežu',
