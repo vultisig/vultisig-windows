@@ -73,11 +73,13 @@ export const generateMemo = ({
     case 'unbond_with_lp':
       // "UNBOND:bondableAsset:lpUnits:nodeAddress"
       return `UNBOND:${bondableAsset}:${lpUnits}:${nodeAddress}`;
-    case 'unbond':
+    case 'unbond': {
+      // Convert amount to units by multiplying by 1e8
+      const amountInUnits = amount ? Math.round(amount * 1e8) : 0;
       return provider
-        ? `UNBOND:${nodeAddress}:${amount}:${provider}`
-        : `UNBOND:${nodeAddress}:${amount}`;
-
+        ? `UNBOND:${nodeAddress}:${amountInUnits}:${provider}`
+        : `UNBOND:${nodeAddress}:${amountInUnits}`;
+    }
     default:
       // Default: If nodeAddress present: "ACTION:nodeAddress", else "ACTION"
       return nodeAddress ? `${action}:${nodeAddress}` : action;
