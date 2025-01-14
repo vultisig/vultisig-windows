@@ -18,6 +18,7 @@ import { DepositConfirmButton } from '../DepositConfirmButton';
 import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig';
 import { DepositFee } from '../fee/DepositFee';
 import { DepositFiatFee } from '../fee/DepositFiatFee';
+import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
 import { useSender } from '../hooks/useSender';
 import { StrictText, StrictTextContrast } from './DepositVerify.styled';
 import { getFormattedFormData } from './utils';
@@ -33,9 +34,11 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   depositFormData,
   selectedChainAction,
 }) => {
+  const [coin] = useCurrentDepositCoin();
   const formattedDepositFormData = getFormattedFormData(
     depositFormData,
-    selectedChainAction
+    selectedChainAction,
+    coin
   );
   const sender = useSender();
   const { t } = useTranslation();
