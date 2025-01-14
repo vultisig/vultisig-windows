@@ -20,6 +20,7 @@ import { DepositFee } from '../fee/DepositFee';
 import { DepositFiatFee } from '../fee/DepositFiatFee';
 import { useSender } from '../hooks/useSender';
 import { StrictText, StrictTextContrast } from './DepositVerify.styled';
+import { getFormattedFormData } from './utils';
 
 type DepositVerifyProps = {
   depositFormData: Record<string, unknown>;
@@ -32,6 +33,10 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   depositFormData,
   selectedChainAction,
 }) => {
+  const formattedDepositFormData = getFormattedFormData(
+    depositFormData,
+    selectedChainAction
+  );
   const sender = useSender();
   const { t } = useTranslation();
   const actionFields = selectedChainAction
@@ -54,13 +59,15 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
               <StrictTextContrast>{sender}</StrictTextContrast>
             </TxOverviewColumn>
             {actionFields.map(field => {
-              if (!depositFormData[field.name]) return null;
+              if (!formattedDepositFormData[field.name]) return null;
               return field.type === 'number' || field.type === 'percentage' ? (
                 <TxOverviewRowDepositsFlow key={field.name}>
                   <Text size={18} weight={700}>
                     {t(field.label)}
                   </Text>
-                  <StrictText>{String(depositFormData[field.name])}</StrictText>
+                  <StrictText>
+                    {String(formattedDepositFormData[field.name])}
+                  </StrictText>
                 </TxOverviewRowDepositsFlow>
               ) : (
                 <TxOverviewColumn key={field.name}>
@@ -68,7 +75,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                     {t(field.label)}
                   </Text>
                   <StrictTextContrast>
-                    {String(depositFormData[field.name])}
+                    {String(formattedDepositFormData[field.name])}
                   </StrictTextContrast>
                 </TxOverviewColumn>
               );
@@ -78,7 +85,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                 {t('chainFunctions.memo')}
               </Text>
               <StrictTextContrast>
-                {String(depositFormData['memo'])}
+                {String(formattedDepositFormData['memo'])}
               </StrictTextContrast>
             </TxOverviewRow>
             <TxOverviewRow>
