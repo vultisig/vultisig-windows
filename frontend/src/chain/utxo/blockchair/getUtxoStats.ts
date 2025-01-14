@@ -1,5 +1,6 @@
 import { queryUrl } from '../../../lib/utils/query/queryUrl';
-import { Endpoint } from '../../../services/Endpoint';
+import { UtxoChain } from '../../../model/chain';
+import { getBlockchairBaseUrl } from './getBlockchairBaseUrl';
 
 type BlockchairStatsResponse = {
   data: {
@@ -7,9 +8,8 @@ type BlockchairStatsResponse = {
   };
 };
 
-export const getUtxoStats = (chainName: string) => {
-  const chain = chainName.toLowerCase();
-  const url = `${Endpoint.vultisigApiProxy}/blockchair/${chain}/stats`;
+export const getUtxoStats = (chain: UtxoChain) => {
+  const url = `${getBlockchairBaseUrl(chain)}/stats`;
 
   return queryUrl<BlockchairStatsResponse>(url);
 };

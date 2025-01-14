@@ -1,6 +1,6 @@
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { UtxoChain } from '../../../model/chain';
-import { Endpoint } from '../../../services/Endpoint';
+import { getBlockchairBaseUrl } from './getBlockchairBaseUrl';
 
 type BlockchairBroadcastResponse =
   | {
@@ -24,9 +24,7 @@ export const broadcastUtxoTransaction = async ({
   chain,
   tx,
 }: BroadcastUtxoTransactionInput) => {
-  const coinName = chain.toLowerCase();
-
-  const url = `${Endpoint.vultisigApiProxy}/blockchair/${coinName}/push/transaction`;
+  const url = `${getBlockchairBaseUrl(chain)}/push/transaction`;
 
   const response: BlockchairBroadcastResponse = await fetch(url, {
     method: 'POST',
