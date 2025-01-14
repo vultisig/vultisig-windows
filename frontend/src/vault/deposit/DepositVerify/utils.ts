@@ -16,7 +16,7 @@ export const getFormattedFormData = (
 
     // For THORChain leave we need to hardcode the amount to 0.00000001 RUNE for the transaction
     if (chainAction === 'leave') {
-      const runeDecimals = getChainFeeCoin(Chain.THORChain)?.decimals || 8;
+      const runeDecimals = getChainFeeCoin(Chain.THORChain)?.decimals;
       formData['amount'] = AMOUNT_FOR_THORCHAIN_UNBOND.toFixed(runeDecimals);
     }
 
