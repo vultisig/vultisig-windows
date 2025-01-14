@@ -494,6 +494,7 @@ export const pt = {
     },
     unbond: {
       labels: {
+        unbondAmount: 'Quantidade de Desvinculação',
         nodeAddress: 'Endereço do Nó',
         amount: 'Quantidade',
         provider: 'Provedor',
