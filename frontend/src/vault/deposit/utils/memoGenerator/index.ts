@@ -1,6 +1,8 @@
 import { FieldValues } from 'react-hook-form';
 
+import { getChainFeeCoin } from '../../../../chain/tx/fee/utils/getChainFeeCoin';
 import { MayaChainPool } from '../../../../lib/types/deposit';
+import { Chain } from '../../../../model/chain';
 import { ChainAction } from '../../ChainAction';
 
 interface MemoParams {
@@ -74,8 +76,10 @@ export const generateMemo = ({
       // "UNBOND:bondableAsset:lpUnits:nodeAddress"
       return `UNBOND:${bondableAsset}:${lpUnits}:${nodeAddress}`;
     case 'unbond': {
-      // Convert amount to units by multiplying by 1e8
-      const amountInUnits = amount ? Math.round(amount * 1e8) : 0;
+      const runeDecimals = getChainFeeCoin(Chain.THORChain)?.decimals || 8;
+      const amountInUnits = amount
+        ? Math.round(amount * Math.pow(10, runeDecimals))
+        : 0;
       return provider
         ? `UNBOND:${nodeAddress}:${amountInUnits}:${provider}`
         : `UNBOND:${nodeAddress}:${amountInUnits}`;
