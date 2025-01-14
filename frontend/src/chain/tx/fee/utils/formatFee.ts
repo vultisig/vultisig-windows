@@ -1,3 +1,4 @@
+import { isOneOf } from '../../../../lib/utils/array/isOneOf';
 import { formatAmount } from '../../../../lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '../../../../lib/utils/matchDiscriminatedUnion';
 import { Chain, EvmChain } from '../../../../model/chain';
@@ -35,8 +36,9 @@ export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
     }
   );
 
-  const decimals =
-    chain in EvmChain ? gwei.decimals : getChainFeeCoin(chain).decimals;
+  const decimals = isOneOf(chain, Object.values(EvmChain))
+    ? gwei.decimals
+    : getChainFeeCoin(chain).decimals;
 
   const amount = fromChainAmount(feeAmount, decimals);
 
