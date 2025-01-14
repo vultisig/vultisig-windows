@@ -1,9 +1,7 @@
+import { KeysignMessagePayload } from '../chain/keysign/KeysignMessagePayload';
 import { KeygenMessage } from '../gen/vultisig/keygen/v1/keygen_message_pb';
 import { ReshareMessage } from '../gen/vultisig/keygen/v1/reshare_message_pb';
-import {
-  KeysignMessage,
-  KeysignPayload,
-} from '../gen/vultisig/keysign/v1/keysign_message_pb';
+import { KeysignMessage } from '../gen/vultisig/keysign/v1/keysign_message_pb';
 import { addQueryParams } from '../lib/utils/query/addQueryParams';
 import { withoutUndefinedFields } from '../lib/utils/record/withoutUndefinedFields';
 import { Chain } from '../model/chain';
@@ -82,11 +80,11 @@ export type AppPathParams = {
 
 export type AppPathState = {
   keysign: {
-    keysignPayload: KeysignPayload;
+    keysignPayload: KeysignMessagePayload;
     keysignAction?: 'send' | 'deposit';
   };
   fastKeysign: {
-    keysignPayload: KeysignPayload;
+    keysignPayload: KeysignMessagePayload;
   };
   joinKeysign: { vaultId: string; keysignMsg: KeysignMessage };
   joinKeygen: {

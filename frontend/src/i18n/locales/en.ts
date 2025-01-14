@@ -629,6 +629,8 @@ export const en = {
   },
   signing_method: 'Signing Method',
   message_to_sign: 'Message to sign',
+  method_required: 'Signing method is required',
+  message_required: 'Message is required',
   saving_vault: 'Saving Vault...',
   scan_with_devices: 'Scan with devices to join the vault generation',
   scan_with_devices_to_sign:
