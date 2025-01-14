@@ -479,6 +479,7 @@ export const hr = {
     },
     unbond: {
       labels: {
+        unbondAmount: 'Kibontási Összeg',
         nodeAddress: 'Adresa Čvora',
         amount: 'Iznos',
         provider: 'Pružatelj',

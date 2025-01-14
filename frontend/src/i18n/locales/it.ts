@@ -496,6 +496,7 @@ export const it = {
     },
     unbond: {
       labels: {
+        unbondAmount: 'Importo di Svincolo',
         nodeAddress: 'Indirizzo del Nodo',
         amount: 'Importo',
         provider: 'Fornitore',
