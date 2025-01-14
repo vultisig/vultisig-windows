@@ -315,6 +315,7 @@ export const es = {
   from: 'De',
   memo: 'Memo',
   amount: 'Monto',
+  unbondAmount: 'Cantidad de Desvinculación',
   value: 'Valor',
   gas: 'Gas',
   network_fee: 'Tarifa de red',

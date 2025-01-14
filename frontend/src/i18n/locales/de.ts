@@ -318,6 +318,7 @@ export const de = {
   from: 'Von',
   memo: 'Memo',
   amount: 'Betrag',
+  unbondAmount: 'Entkoppelungsbetrag',
   value: 'Wert',
   gas: 'Gas',
   network_fee: 'Netzwerkgebühr',
