@@ -631,4 +631,8 @@ export const pt = {
   signature: 'Assinatura',
   signing_method: 'Método de assinatura',
   message_to_sign: 'Mensagem para assinar',
+  sign_custom_message: 'Assinar mensagem personalizada',
+  sign_message: 'Assinar mensagem',
+  method_required: 'O método de assinatura é obrigatório',
+  message_required: 'Mensagem é necessária',
 };

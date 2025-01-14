@@ -640,4 +640,8 @@ export const de = {
   signature: 'Unterschrift',
   signing_method: 'Signiermethode',
   message_to_sign: 'Zu unterzeichnende Nachricht',
+  sign_custom_message: 'Benutzerdefinierte Nachricht signieren',
+  sign_message: 'Nachricht signieren',
+  method_required: 'Signaturmethode ist erforderlich',
+  message_required: 'Nachricht ist erforderlich',
 };
