@@ -1,4 +1,4 @@
 export const nativeSwapAffiliateConfig = {
-  affiliateFeeAddress: 'vi',
+  affiliateFeeAddress: 'v0',
   affiliateFeeRateBps: 50,
 };
