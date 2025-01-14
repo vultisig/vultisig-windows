@@ -26,14 +26,7 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
     'withdrawPool',
     'custom',
   ],
-  [Chain.MayaChain]: [
-    'bond',
-    'unbond',
-    'bond_with_lp',
-    'unbond_with_lp',
-    'leave',
-    'custom',
-  ],
+  [Chain.MayaChain]: ['bond_with_lp', 'unbond_with_lp', 'leave', 'custom'],
   [Chain.Dydx]: ['vote'],
   [Chain.Ton]: ['stake', 'unstake'],
 };
