@@ -499,6 +499,7 @@ export const de = {
     },
     unbond: {
       labels: {
+        unbondAmount: 'Entkoppelungsbetrag',
         nodeAddress: 'Knotenadresse',
         amount: 'Betrag',
         provider: 'Anbieter',
