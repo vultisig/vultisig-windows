@@ -318,6 +318,7 @@ export const it = {
   from: 'Da',
   memo: 'Memo',
   amount: 'Importo',
+  unbondAmount: 'Importo di Svincolo',
   value: 'Valore',
   gas: 'Gas',
   network_fee: 'Commissione di rete',
