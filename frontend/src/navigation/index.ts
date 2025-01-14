@@ -81,7 +81,6 @@ export type AppPathParams = {
 export type AppPathState = {
   keysign: {
     keysignPayload: KeysignMessagePayload;
-    keysignAction?: 'send' | 'deposit';
   };
   fastKeysign: {
     keysignPayload: KeysignMessagePayload;
