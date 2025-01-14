@@ -10,15 +10,15 @@ require (
 	github.com/hashicorp/mdns v1.0.5
 	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/rs/zerolog v1.33.0
-	github.com/vultisig/mobile-tss-lib v0.0.0-20241007055757-4506b08a18a5
+	github.com/vultisig/mobile-tss-lib v0.0.0-20250113110513-b211041c087b
 	github.com/vultisig/vultisig-relay v0.0.0-20241101003153-adf172658a9a
 	github.com/wailsapp/wails/v2 v2.9.2
 )
 
 require (
 	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/sync v0.9.0 // indirect
-	golang.org/x/tools v0.27.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/tools v0.29.0 // indirect
 )
 
 require (
@@ -68,10 +68,10 @@ require (
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/crypto v0.29.0 // indirect
-	golang.org/x/net v0.31.0 // indirect
-	golang.org/x/sys v0.27.0 // indirect
-	golang.org/x/text v0.20.0 // indirect
+	golang.org/x/crypto v0.32.0 // indirect
+	golang.org/x/net v0.34.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
 	google.golang.org/protobuf v1.35.2 // indirect
 )
