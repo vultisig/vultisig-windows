@@ -17,7 +17,6 @@ import { GeneratedHexEncryptionKeyProvider } from '../../../setup/state/currentH
 import { ServerUrlDerivedFromServerTypeProvider } from '../../../setup/state/serverUrlDerivedFromServerType';
 import { useCurrentVault } from '../../../state/currentVault';
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep';
-import { KeysignPayloadProvider } from '../../shared/state/keysignPayload';
 import { PeersSelectionRecordProvider } from '../../shared/state/selectedPeers';
 import { FastKeysignServerStep } from './FastKeysignServerStep';
 
@@ -44,44 +43,40 @@ export const StartFastKeysignPage = () => {
   return (
     <PasswordProvider initialValue="">
       <CurrentLocalPartyIdProvider value={local_party_id}>
-        <KeysignPayloadProvider value={keysignPayload}>
-          <GeneratedServiceNameProvider>
-            <PeersSelectionRecordProvider initialValue={{}}>
-              <GeneratedSessionIdProvider>
-                <GeneratedHexEncryptionKeyProvider>
-                  <CurrentServerTypeProvider initialValue="relay">
-                    <ServerUrlDerivedFromServerTypeProvider>
-                      <MediatorManager />
-                      <Match
-                        value={step}
-                        password={() => (
-                          <ServerPasswordStep onForward={toNextStep} />
-                        )}
-                        startSession={() => (
-                          <KeygenStartSessionStep onForward={toNextStep} />
-                        )}
-                        waitServer={() => (
-                          <WaitForServerToJoinStep
-                            title={t('fast_sign')}
-                            onForward={toNextStep}
-                          />
-                        )}
-                        server={() => (
-                          <FastKeysignServerStep onForward={toNextStep} />
-                        )}
-                        sign={() => (
-                          <KeysignSigningStep
-                            payload={{ keysign: keysignPayload }}
-                          />
-                        )}
-                      />
-                    </ServerUrlDerivedFromServerTypeProvider>
-                  </CurrentServerTypeProvider>
-                </GeneratedHexEncryptionKeyProvider>
-              </GeneratedSessionIdProvider>
-            </PeersSelectionRecordProvider>
-          </GeneratedServiceNameProvider>
-        </KeysignPayloadProvider>
+        <GeneratedServiceNameProvider>
+          <PeersSelectionRecordProvider initialValue={{}}>
+            <GeneratedSessionIdProvider>
+              <GeneratedHexEncryptionKeyProvider>
+                <CurrentServerTypeProvider initialValue="relay">
+                  <ServerUrlDerivedFromServerTypeProvider>
+                    <MediatorManager />
+                    <Match
+                      value={step}
+                      password={() => (
+                        <ServerPasswordStep onForward={toNextStep} />
+                      )}
+                      startSession={() => (
+                        <KeygenStartSessionStep onForward={toNextStep} />
+                      )}
+                      waitServer={() => (
+                        <WaitForServerToJoinStep
+                          title={t('fast_sign')}
+                          onForward={toNextStep}
+                        />
+                      )}
+                      server={() => (
+                        <FastKeysignServerStep onForward={toNextStep} />
+                      )}
+                      sign={() => (
+                        <KeysignSigningStep payload={keysignPayload} />
+                      )}
+                    />
+                  </ServerUrlDerivedFromServerTypeProvider>
+                </CurrentServerTypeProvider>
+              </GeneratedHexEncryptionKeyProvider>
+            </GeneratedSessionIdProvider>
+          </PeersSelectionRecordProvider>
+        </GeneratedServiceNameProvider>
       </CurrentLocalPartyIdProvider>
     </PasswordProvider>
   );

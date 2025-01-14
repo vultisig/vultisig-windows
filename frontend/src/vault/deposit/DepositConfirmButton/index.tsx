@@ -83,7 +83,10 @@ export const DepositConfirmButton = ({
     }
 
     navigate(type === 'fast' ? 'fastKeysign' : 'keysign', {
-      state: { keysignPayload, keysignAction: 'deposit' },
+      state: {
+        keysignPayload: { keysign: keysignPayload },
+        keysignAction: 'deposit',
+      },
     });
   };
 

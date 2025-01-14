@@ -13,7 +13,6 @@ import { GeneratedHexEncryptionKeyProvider } from '../../setup/state/currentHexE
 import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/serverUrlDerivedFromServerType';
 import { useCurrentVault } from '../../state/currentVault';
 import { KeysignSigningStep } from '../shared/KeysignSigningStep';
-import { KeysignPayloadProvider } from '../shared/state/keysignPayload';
 import { PeersSelectionRecordProvider } from '../shared/state/selectedPeers';
 import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoveryStep/KeysignPeerDiscoveryStep';
 
@@ -31,45 +30,43 @@ export const StartKeysignPage = () => {
 
   return (
     <CurrentLocalPartyIdProvider value={local_party_id}>
-      <KeysignPayloadProvider value={keysignPayload}>
-        <GeneratedServiceNameProvider>
-          <PeersSelectionRecordProvider initialValue={{}}>
-            <GeneratedSessionIdProvider>
-              <GeneratedHexEncryptionKeyProvider>
-                <CurrentServerTypeProvider initialValue="relay">
-                  <ServerUrlDerivedFromServerTypeProvider>
-                    <MediatorManager />
-                    <Match
-                      value={step}
-                      joinSession={() => (
-                        <JoinKeygenSessionStep onForward={toNextStep} />
-                      )}
-                      peers={() => (
-                        <KeysignPeerDiscoveryStep
-                          actionType={keysignAction}
-                          onForward={toNextStep}
-                        />
-                      )}
-                      session={() => (
-                        <KeygenStartSessionStep
-                          onForward={toNextStep}
-                          onBack={toPreviousStep}
-                        />
-                      )}
-                      sign={() => (
-                        <KeysignSigningStep
-                          payload={{ keysign: keysignPayload }}
-                          onBack={() => setStep('peers')}
-                        />
-                      )}
-                    />
-                  </ServerUrlDerivedFromServerTypeProvider>
-                </CurrentServerTypeProvider>
-              </GeneratedHexEncryptionKeyProvider>
-            </GeneratedSessionIdProvider>
-          </PeersSelectionRecordProvider>
-        </GeneratedServiceNameProvider>
-      </KeysignPayloadProvider>
+      <GeneratedServiceNameProvider>
+        <PeersSelectionRecordProvider initialValue={{}}>
+          <GeneratedSessionIdProvider>
+            <GeneratedHexEncryptionKeyProvider>
+              <CurrentServerTypeProvider initialValue="relay">
+                <ServerUrlDerivedFromServerTypeProvider>
+                  <MediatorManager />
+                  <Match
+                    value={step}
+                    joinSession={() => (
+                      <JoinKeygenSessionStep onForward={toNextStep} />
+                    )}
+                    peers={() => (
+                      <KeysignPeerDiscoveryStep
+                        actionType={keysignAction}
+                        onForward={toNextStep}
+                      />
+                    )}
+                    session={() => (
+                      <KeygenStartSessionStep
+                        onForward={toNextStep}
+                        onBack={toPreviousStep}
+                      />
+                    )}
+                    sign={() => (
+                      <KeysignSigningStep
+                        payload={keysignPayload}
+                        onBack={() => setStep('peers')}
+                      />
+                    )}
+                  />
+                </ServerUrlDerivedFromServerTypeProvider>
+              </CurrentServerTypeProvider>
+            </GeneratedHexEncryptionKeyProvider>
+          </GeneratedSessionIdProvider>
+        </PeersSelectionRecordProvider>
+      </GeneratedServiceNameProvider>
     </CurrentLocalPartyIdProvider>
   );
 };
