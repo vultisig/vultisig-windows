@@ -313,6 +313,7 @@ export const en = {
   from: 'From',
   memo: 'Memo',
   amount: 'Amount',
+  unbondAmount: 'Unbond Amount',
   save_changes: 'Save Changes',
   value: 'Value',
   gas: 'Gas',
