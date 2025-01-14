@@ -67,6 +67,6 @@ export const getCosmosAccountInfo = async (
 
   return {
     accountNumber: Number(account_number),
-    sequence: Number(sequence),
+    sequence: Number(sequence ?? 0),
   };
 };
