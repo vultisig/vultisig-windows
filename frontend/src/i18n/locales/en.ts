@@ -552,6 +552,7 @@ export const en = {
         nodeAddress: 'Node Address',
         amount: 'Amount',
         provider: 'Provider',
+        unbondAmount: 'Unbond Amount',
       },
       validations: {
         nodeAddressMinLength: 'Node Address is required',

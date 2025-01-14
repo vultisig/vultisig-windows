@@ -501,6 +501,7 @@ export const es = {
         nodeAddress: 'Dirección del Nodo',
         amount: 'Cantidad',
         provider: 'Proveedor',
+        unbondAmount: 'Cantidad de Desvinculación',
       },
       validations: {
         nodeAddressMinLength: 'La dirección del nodo es obligatoria',
