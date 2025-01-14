@@ -180,7 +180,6 @@ export const requiredFieldsPerChainAction = {
         name: 'unbondAmount',
         type: 'number',
         label: 'chainFunctions.unbond.labels.unbondAmount',
-        disabled: true,
       },
     ],
     schema: (
