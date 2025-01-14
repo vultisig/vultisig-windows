@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { isValidAddress } from '../../../chain/utils/isValidAddress';
 import { Chain } from '../../../model/chain';
 
-export const DISABLED_FIELDS = ['unbondAmount'];
+export const DISABLED_FIELDS_NAMES = ['unbondAmount'];
 
 export const requiredFieldsPerChainAction = {
   bond: {
