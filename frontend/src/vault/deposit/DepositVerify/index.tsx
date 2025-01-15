@@ -40,6 +40,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
     selectedChainAction,
     coin
   );
+
   const sender = useSender();
   const { t } = useTranslation();
   const actionFields = selectedChainAction
@@ -63,13 +64,15 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
             </TxOverviewColumn>
             {actionFields.map(field => {
               if (!formattedDepositFormData[field.name]) return null;
+
               return field.type === 'number' || field.type === 'percentage' ? (
                 <TxOverviewRowDepositsFlow key={field.name}>
                   <Text size={18} weight={700}>
                     {t(field.label)}
                   </Text>
                   <StrictText>
-                    {String(formattedDepositFormData[field.name])}
+                    {String(formattedDepositFormData[field.name])}{' '}
+                    {field.name === 'amount' && coin.id}
                   </StrictText>
                 </TxOverviewRowDepositsFlow>
               ) : (
@@ -101,7 +104,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
         </WithProgressIndicator>
         <DepositConfirmButton
           action={selectedChainAction}
-          depositFormData={depositFormData}
+          depositFormData={formattedDepositFormData}
         />
       </PageContent>
     </>
