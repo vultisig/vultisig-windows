@@ -5,7 +5,6 @@ import { THORChainSwapPayload } from '../../../../../gen/vultisig/keysign/v1/tho
 import { convertDuration } from '../../../../../lib/utils/time/convertDuration';
 import { KeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload';
 import { fromChainAmount } from '../../../../utils/fromChainAmount';
-import { toChainAmount } from '../../../../utils/toChainAmount';
 import { nativeSwapStreamingInterval } from '../../NativeSwapChain';
 import { NativeSwapQuote } from '../../NativeSwapQuote';
 
@@ -13,7 +12,7 @@ type Input = {
   quote: NativeSwapQuote;
   fromAddress: string;
   fromCoin: Coin;
-  amount: number;
+  amount: bigint;
   toCoin: Coin;
 };
 
@@ -37,7 +36,7 @@ export const thorchainSwapQuoteToSwapPayload = ({
       toCoin,
       vaultAddress: quote.inbound_address ?? fromCoin.address,
       routerAddress: quote.router,
-      fromAmount: toChainAmount(amount, fromCoin.decimals).toString(),
+      fromAmount: amount.toString(),
       toAmountDecimal: fromChainAmount(
         quote.expected_amount_out,
         toCoin.decimals

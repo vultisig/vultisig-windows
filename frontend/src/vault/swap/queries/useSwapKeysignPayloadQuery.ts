@@ -1,26 +1,11 @@
-import { getErc20ThorchainSwapKeysignPayload } from '../../../chain/swap/native/thor/utils/getErc20ThorchainSwapKeysignPayload';
-import { getOneInchSwapKeysignPayload } from '../../../chain/swap/oneInch/utils/getOneInchSwapKeysignPayload';
-import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
-import { assertChainField } from '../../../chain/utils/assertChainField';
-import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
+import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload';
+import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
-import { getUtxos } from '../../../chain/utxo/tx/getUtxos';
-import { areEqualCoins } from '../../../coin/Coin';
-import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { useTransform } from '../../../lib/ui/hooks/useTransform';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
-import { isOneOf } from '../../../lib/utils/array/isOneOf';
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
-import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
-import { EvmChain, UtxoChain } from '../../../model/chain';
-import {
-  useCurrentVault,
-  useCurrentVaultAddress,
-  useCurrentVaultCoin,
-} from '../../state/currentVault';
-import { getStorageVaultId } from '../../utils/storageVault';
+import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
@@ -33,7 +18,6 @@ export const useSwapKeysignPayloadQuery = () => {
     useCurrentVaultCoin(fromCoinKey),
     storageCoinToCoin
   );
-  const fromAddress = useCurrentVaultAddress(fromCoinKey.chain);
 
   const [toCoinKey] = useToCoin();
   const toStorageCoin = useCurrentVaultCoin(toCoinKey);
@@ -56,60 +40,24 @@ export const useSwapKeysignPayloadQuery = () => {
     getQuery: ({ swapQuote, chainSpecific, fromAmount }) => ({
       queryKey: ['swapKeysignPayload'],
       queryFn: async () => {
-        const result = await matchRecordUnion(swapQuote, {
-          oneInch: quote => {
-            return getOneInchSwapKeysignPayload({
-              quote,
-              fromCoin,
-              toCoin,
-              amount: toChainAmount(fromAmount, fromCoin.decimals),
-              chainSpecific,
-              vaultId: getStorageVaultId(vault),
-              vaultLocalPartyId: vault.local_party_id,
-            });
-          },
-          native: quote => {
-            const { memo, swapChain } = quote;
-
-            if (
-              isOneOf(fromCoinKey.chain, Object.values(EvmChain)) &&
-              !isNativeCoin(fromCoinKey)
-            ) {
-              return getErc20ThorchainSwapKeysignPayload({
-                quote,
-                fromAddress,
-                fromCoin,
-                amount: fromAmount,
-                toCoin,
-                chainSpecific,
-                vaultId: getStorageVaultId(vault),
-                vaultLocalPartyId: vault.local_party_id,
-              });
-            }
-
-            const nativeFeeCoin = getCoinMetaKey(getChainFeeCoin(swapChain));
-
-            const isDeposit = areEqualCoins(fromCoinKey, nativeFeeCoin);
-
-            return new KeysignPayload({
-              coin: fromCoin,
-              toAddress: isDeposit
-                ? ''
-                : shouldBePresent(quote.inbound_address),
-              toAmount: toChainAmount(fromAmount, fromCoin.decimals).toString(),
-              blockchainSpecific: chainSpecific,
-              memo,
-              vaultLocalPartyId: vault.local_party_id,
-              vaultPublicKeyEcdsa: vault.public_key_ecdsa,
-            });
-          },
+        const amount = toChainAmount(fromAmount, fromCoin.decimals);
+        const swapSpecificFields = await getSwapKeysignPayloadFields({
+          amount,
+          quote: swapQuote,
+          fromCoin,
+          toCoin,
         });
 
-        if (isOneOf(fromCoin.chain, Object.values(UtxoChain))) {
-          result.utxoInfo = await getUtxos(assertChainField(fromCoin));
-        }
+        const result = new KeysignPayload({
+          coin: fromCoin,
+          toAmount: amount.toString(),
+          blockchainSpecific: chainSpecific,
+          vaultLocalPartyId: vault.local_party_id,
+          vaultPublicKeyEcdsa: vault.public_key_ecdsa,
+          ...swapSpecificFields,
+        });
 
-        return result;
+        return processKeysignPayload(result);
       },
     }),
   });

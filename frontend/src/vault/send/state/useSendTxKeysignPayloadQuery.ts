@@ -1,11 +1,8 @@
-import { assertChainField } from '../../../chain/utils/assertChainField';
-import { getUtxos } from '../../../chain/utxo/tx/getUtxos';
+import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { useTransform } from '../../../lib/ui/hooks/useTransform';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
-import { isOneOf } from '../../../lib/utils/array/isOneOf';
-import { UtxoChain } from '../../../model/chain';
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault';
 import { useSendCappedAmountQuery } from '../queries/useSendCappedAmountQuery';
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery';
@@ -43,11 +40,7 @@ export const useSendTxKeysignPayloadQuery = () => {
           vaultPublicKeyEcdsa: vault.public_key_ecdsa,
         });
 
-        if (isOneOf(coin.chain, Object.values(UtxoChain))) {
-          result.utxoInfo = await getUtxos(assertChainField(coin));
-        }
-
-        return result;
+        return processKeysignPayload(result);
       },
     }),
   });
