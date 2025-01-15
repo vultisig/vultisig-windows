@@ -4,10 +4,6 @@ import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServicePolkadot extends RpcService implements IRpcService {
-  async sendTransaction(encodedTransaction: string): Promise<string> {
-    return await this.broadcastTransaction(encodedTransaction);
-  }
-
   async getBalance(coin: Coin): Promise<string> {
     const balance = await this.fetchBalance(coin.address);
     return balance.toString();

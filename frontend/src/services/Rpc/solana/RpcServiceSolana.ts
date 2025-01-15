@@ -10,7 +10,7 @@ const rpcURL2 = Endpoint.solanaServiceRpc;
 const tokenInfoServiceURL = Endpoint.solanaTokenInfoServiceRpc;
 
 export class RpcServiceSolana implements IRpcService, ITokenService {
-  async sendTransaction(encodedTransaction: string): Promise<string> {
+  async broadcastTransaction(encodedTransaction: string): Promise<string> {
     try {
       // Simulate transaction before sending
       const isSimulationSuccessful =
@@ -230,11 +230,6 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
       );
       return tokenBalance?.toString() || '0';
     }
-  }
-
-  async broadcastTransaction(hex: string): Promise<string> {
-    // Solana does not broadcast via hex in the same way EVM chains do. Instead, you broadcast an encoded transaction.
-    return this.sendTransaction(hex);
   }
 
   async fetchRecentBlockhash(): Promise<string> {

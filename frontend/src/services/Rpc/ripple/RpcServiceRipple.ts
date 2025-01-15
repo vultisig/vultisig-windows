@@ -4,12 +4,6 @@ import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceRipple extends RpcService implements IRpcService {
-  sendTransaction(encodedTransaction: string): Promise<string> {
-    throw new Error(
-      `Method not implemented, encodedTransaction: ${encodedTransaction}`
-    );
-  }
-
   async getBalance(coin: Coin): Promise<string> {
     const accountInfo = await this.fetchAccountsInfo(coin.address);
     const balance = accountInfo?.account_data?.Balance;
@@ -59,9 +53,5 @@ export class RpcServiceRipple extends RpcService implements IRpcService {
     } catch {
       console.error('Error in fetchTokenAccountsByOwner:');
     }
-  }
-
-  resolveENS?(ensName: string): Promise<string> {
-    throw new Error(`Method not implemented, ensName: ${ensName}`);
   }
 }

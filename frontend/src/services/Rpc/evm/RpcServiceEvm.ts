@@ -27,27 +27,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     this.provider = new ethers.JsonRpcProvider(getEvmChainRpcUrl(chain));
   }
 
-  async sendTransaction(encodedTransaction: string): Promise<string> {
-    const publicClient = getEvmPublicClient(this.chain as EvmChain);
-    const hash = await publicClient.sendRawTransaction({
-      serializedTransaction: encodedTransaction as `0x${string}`,
-    });
-
-    return hash;
-  }
-
-  async resolveENS(ensName: string): Promise<string> {
-    try {
-      const address = await this.provider.resolveName(ensName);
-      if (!address)
-        throw new Error('ENS  ' + ensName + ' namecould not be resolved.');
-      return address;
-    } catch (error) {
-      console.error('resolveENS::', error);
-      return '';
-    }
-  }
-
   async getBalance(coin: Coin): Promise<string> {
     const balance = coin.isNativeToken
       ? await this.provider.getBalance(coin.address)
@@ -122,7 +101,12 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
   }
 
   async broadcastTransaction(encodedTransaction: string): Promise<string> {
-    return this.sendTransaction(encodedTransaction);
+    const publicClient = getEvmPublicClient(this.chain as EvmChain);
+    const hash = await publicClient.sendRawTransaction({
+      serializedTransaction: encodedTransaction as `0x${string}`,
+    });
+
+    return hash;
   }
 
   async estimateGas(

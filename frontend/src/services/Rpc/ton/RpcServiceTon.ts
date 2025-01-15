@@ -5,10 +5,6 @@ import { IRpcService } from '../IRpcService';
 import { RpcService } from '../RpcService';
 
 export class RpcServiceTon extends RpcService implements IRpcService {
-  async sendTransaction(encodedTransaction: string): Promise<string> {
-    return await this.broadcastTransaction(encodedTransaction);
-  }
-
   async broadcastTransaction(obj: string): Promise<string> {
     const response = await Post(Endpoint.broadcastTonTransaction(), {
       boc: obj,
