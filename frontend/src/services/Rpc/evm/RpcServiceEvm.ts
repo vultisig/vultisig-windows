@@ -1,7 +1,11 @@
 import { ethers, TransactionRequest } from 'ethers';
 
-import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
-import { getEvmChainId, getEvmChainRpcUrl } from '../../../chain/evm/chainInfo';
+import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
+import {
+  getEvmChainId,
+  getEvmChainRpcUrl,
+  getEvmPublicClient,
+} from '../../../chain/evm/chainInfo';
 import { getErc20Balance } from '../../../chain/evm/erc20/getErc20Balance';
 import { FeePriority } from '../../../chain/fee/FeePriority';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
@@ -24,53 +28,12 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
   }
 
   async sendTransaction(encodedTransaction: string): Promise<string> {
-    const knownErrors = [
-      'already known',
-      'Transaction is temporarily banned',
-      'nonce too low',
-      'nonce too high',
-      'transaction already exists',
-    ];
+    const publicClient = getEvmPublicClient(this.chain as EvmChain);
+    const hash = await publicClient.sendRawTransaction({
+      serializedTransaction: encodedTransaction as `0x${string}`,
+    });
 
-    try {
-      const payload = {
-        jsonrpc: '2.0',
-        method: 'eth_sendRawTransaction',
-        params: [encodedTransaction],
-        id: 1,
-      };
-
-      // We are having a lot of cors issues, so we are using the Go server to send the transaction
-      const response = await Post(getEvmChainRpcUrl(this.chain), payload);
-
-      if (response && response.result) {
-        return response.result;
-      } else {
-        // Handle JSON-RPC error case
-        const errorMessage =
-          response.error?.message || 'Unknown error occurred';
-        const isKnownError = knownErrors.some(msg =>
-          errorMessage.includes(msg)
-        );
-
-        if (isKnownError) {
-          return 'Transaction already broadcasted.';
-        }
-
-        return errorMessage;
-      }
-    } catch (error: any) {
-      console.error('sendTransaction::', error);
-      const isKnownError = knownErrors.some(msg =>
-        error?.message?.includes(msg)
-      );
-
-      if (isKnownError) {
-        return 'Transaction already broadcasted.';
-      }
-
-      return error.message || 'Unknown error occurred';
-    }
+    return hash;
   }
 
   async resolveENS(ensName: string): Promise<string> {
