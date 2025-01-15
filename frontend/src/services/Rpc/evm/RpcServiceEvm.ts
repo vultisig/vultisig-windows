@@ -2,6 +2,7 @@ import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { getEvmChainId, getEvmChainRpcUrl } from '../../../chain/evm/chainInfo';
+import { getErc20Balance } from '../../../chain/evm/erc20/getErc20Balance';
 import { FeePriority } from '../../../chain/fee/FeePriority';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
@@ -84,38 +85,16 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     }
   }
 
-  async fetchTokenBalance(
-    contractAddress: string,
-    walletAddress: string
-  ): Promise<bigint> {
-    try {
-      const balance = await this.fetchERC20TokenBalance(
-        contractAddress,
-        walletAddress
-      );
-      return BigInt(balance);
-    } catch (error) {
-      console.error('fetchTokenBalance::', error);
-      return BigInt(0);
-    }
-  }
-
   async getBalance(coin: Coin): Promise<string> {
-    try {
-      if (coin.isNativeToken) {
-        const balance = await this.provider.getBalance(coin.address);
-        const strBalance = balance.toString();
-        return strBalance;
-      } else {
-        return await this.fetchERC20TokenBalance(
-          coin.contractAddress,
-          coin.address
-        );
-      }
-    } catch (error) {
-      console.error(getEvmChainRpcUrl(this.chain), 'getBalance::', error);
-      return '0';
-    }
+    const balance = coin.isNativeToken
+      ? await this.provider.getBalance(coin.address)
+      : await getErc20Balance({
+          chain: this.chain,
+          address: coin.contractAddress as `0x${string}`,
+          accountAddress: coin.address as `0x${string}`,
+        });
+
+    return balance.toString();
   }
 
   async fetchMaxPriorityFeesPerGas(): Promise<Record<FeePriority, number>> {
@@ -201,59 +180,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
       return BigInt(gasEstimate.toString());
     } catch (error) {
       console.error('estimateGas::', error);
-      return BigInt(0);
-    }
-  }
-
-  async fetchERC20TokenBalance(
-    contractAddress: string,
-    walletAddress: string
-  ): Promise<string> {
-    try {
-      const erc20Contract = new ethers.Contract(
-        contractAddress,
-        ['function balanceOf(address) view returns (uint256)'],
-        this.provider
-      );
-
-      const balance = await erc20Contract.balanceOf(walletAddress);
-
-      // Check if the balance is an empty response
-      if (!balance || balance.toString() === '0x') {
-        return '0';
-      }
-
-      return balance.toString();
-    } catch (error) {
-      console.error(
-        'fetchERC20TokenBalance::',
-        walletAddress,
-        contractAddress,
-        error
-      );
-
-      return '0';
-    }
-  }
-
-  async fetchAllowance(
-    contractAddress: string,
-    owner: string,
-    spender: string
-  ): Promise<bigint> {
-    try {
-      const erc20Contract = new ethers.Contract(
-        contractAddress,
-        [
-          'function allowance(address owner, address spender) view returns (uint256)',
-        ],
-        this.provider
-      );
-
-      const allowance = await erc20Contract.allowance(owner, spender);
-      return BigInt(allowance.toString());
-    } catch (error) {
-      console.error('fetchAllowance::', error);
       return BigInt(0);
     }
   }

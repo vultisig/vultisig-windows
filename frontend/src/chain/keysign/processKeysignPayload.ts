@@ -3,7 +3,7 @@ import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb
 import { isOneOf } from '../../lib/utils/array/isOneOf';
 import { assertField } from '../../lib/utils/record/assertField';
 import { EvmChain, UtxoChain } from '../../model/chain';
-import { RpcServiceEvm } from '../../services/Rpc/evm/RpcServiceEvm';
+import { getErc20Allowance } from '../evm/erc20/getErc20Allowance';
 import { assertChainField } from '../utils/assertChainField';
 import { getUtxos } from '../utxo/tx/getUtxos';
 
@@ -16,13 +16,14 @@ export const processKeysignPayload = async (
   const { chain } = coin;
 
   if ('swapPayload' in payload && payload.swapPayload.value) {
-    if (isOneOf(chain, Object.values(EvmChain)) && !coin.isNativeToken) {
-      const service = new RpcServiceEvm(coin.chain as EvmChain);
-      const allowance = await service.fetchAllowance(
-        coin.contractAddress,
-        coin.address,
-        payload.toAddress
-      );
+    const evmChain = isOneOf(chain, Object.values(EvmChain));
+    if (evmChain && !coin.isNativeToken) {
+      const allowance = await getErc20Allowance({
+        chain: evmChain,
+        spenderAddress: payload.toAddress as `0x${string}`,
+        ownerAddress: coin.address as `0x${string}`,
+        address: coin.contractAddress as `0x${string}`,
+      });
 
       const hasEnoughAllowance = BigInt(allowance) >= BigInt(payload.toAmount);
 
