@@ -19,5 +19,5 @@ export const transactionConfig: Record<ChainAction, TransactionConfig> = {
   unstake: { requiresAmount: true, requiresNodeAddress: true },
   vote: { requiresAmount: false, requiresNodeAddress: false },
   bond_with_lp: { requiresAmount: false, requiresNodeAddress: true },
-  unbond_with_lp: { requiresAmount: false, requiresNodeAddress: true },
+  unbond_with_lp: { requiresAmount: true, requiresNodeAddress: true },
 };
