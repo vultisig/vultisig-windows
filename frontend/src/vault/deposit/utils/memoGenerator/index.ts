@@ -34,7 +34,7 @@ export const generateMemo = ({
     return customMemo;
   }
 
-  const action = selectedChainAction?.toUpperCase() || '';
+  const action = selectedChainAction || '';
 
   switch (selectedChainAction) {
     case 'stake':
