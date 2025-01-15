@@ -13,6 +13,7 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { ChainAction } from '../ChainAction';
 import { DepositConfirmButton } from '../DepositConfirmButton';
 import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig';
@@ -34,7 +35,8 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   depositFormData,
   selectedChainAction,
 }) => {
-  const [coin] = useCurrentDepositCoin();
+  const [coinKey] = useCurrentDepositCoin();
+  const coin = useCurrentVaultCoin(coinKey);
   const formattedDepositFormData = getFormattedFormData(
     depositFormData,
     selectedChainAction,
@@ -72,7 +74,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                   </Text>
                   <StrictText>
                     {String(formattedDepositFormData[field.name])}{' '}
-                    {field.name === 'amount' && coin.id}
+                    {field.name === 'amount' && coin.ticker}
                   </StrictText>
                 </TxOverviewRowDepositsFlow>
               ) : (
