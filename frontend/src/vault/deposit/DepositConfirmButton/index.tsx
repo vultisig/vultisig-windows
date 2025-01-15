@@ -47,6 +47,7 @@ export const DepositConfirmButton = ({
   const vault = useCurrentVault();
 
   const config = transactionConfig[action] || {};
+
   const receiver = config.requiresNodeAddress
     ? (depositFormData['nodeAddress'] as string)
     : '';
@@ -54,7 +55,7 @@ export const DepositConfirmButton = ({
   const validatorAddress = depositFormData['validatorAddress'] as string;
 
   const amount = config.requiresAmount
-    ? (depositFormData['amount'] as number)
+    ? Number(depositFormData['amount'])
     : config.defaultAmount || 0;
 
   const memo = (depositFormData['memo'] as string) ?? '';
