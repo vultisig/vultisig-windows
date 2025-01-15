@@ -88,6 +88,16 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                 </TxOverviewColumn>
               );
             })}
+            {selectedChainAction === 'leave' && (
+              <TxOverviewRowDepositsFlow>
+                <Text size={18} weight={700}>
+                  {t('amount')}
+                </Text>
+                <StrictText>
+                  {String(formattedDepositFormData.amount)} {coin.ticker}
+                </StrictText>
+              </TxOverviewRowDepositsFlow>
+            )}
             <TxOverviewRow key="memo">
               <Text size={18} weight={700}>
                 {t('chainFunctions.memo')}
