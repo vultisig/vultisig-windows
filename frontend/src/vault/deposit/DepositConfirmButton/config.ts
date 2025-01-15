@@ -11,7 +11,7 @@ type TransactionConfig = {
 export const transactionConfig: Record<ChainAction, TransactionConfig> = {
   bond: { requiresAmount: true, requiresNodeAddress: true },
   unbond: { requiresAmount: true, requiresNodeAddress: true },
-  leave: { requiresNodeAddress: true, defaultAmount: 1e-8 },
+  leave: { requiresNodeAddress: true, requiresAmount: true },
   custom: { requiresAmount: true },
   addPool: { requiresAmount: true },
   withdrawPool: {},
