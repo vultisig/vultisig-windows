@@ -15,7 +15,7 @@ export const generateSignatureWithRecoveryId = ({
 }: Input) => {
   const { r, s, recovery_id } = recordMap(
     pick(signature, ['r', 's', 'recovery_id']),
-    walletCore.HexCoding.decode
+    value => walletCore.HexCoding.decode(value)
   );
 
   return new Uint8Array([...r, ...s, ...recovery_id]);
