@@ -2,42 +2,42 @@ import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { CoinKey } from '../../../coin/Coin';
 import { Chain } from '../../../model/chain';
 import { ChainAction } from '../ChainAction';
-import { THORCHAIN_AND_MAYACHAIN_DEPOSIT_AMOUNT } from './constants';
+
+function getDustDepositAmountString(decimals: number) {
+  return (1 / Math.pow(10, decimals)).toFixed(decimals);
+}
 
 export const getFormattedFormData = (
   formData: Record<string, unknown>,
   chainAction: ChainAction,
   coin: CoinKey
 ) => {
-  const formattedFormData: Record<string, unknown> = {};
+  const formattedFormData = { ...formData };
+  const decimals = getChainFeeCoin(
+    coin.id === 'RUNE' ? Chain.THORChain : Chain.MayaChain
+  )?.decimals;
+  const dustAmount = getDustDepositAmountString(decimals);
 
-  Object.keys(formData).forEach(key => {
-    const value = formData[key];
+  // For THORChain / MayaChain LEAVE we need to hardcode the amount for the transaction
+  if (chainAction === 'leave' && (coin.id === 'RUNE' || coin.id === 'CACAO')) {
+    formattedFormData.amount = dustAmount;
+  }
 
-    if (!value) return;
+  // For THORChain unbond and MayaChain unbond_with_lp we need to hardcode the amount on the UI
+  if (
+    ('amount' in formData && chainAction === 'unbond' && coin.id === 'RUNE') ||
+    ('amount' in formData &&
+      chainAction === 'unbond_with_lp' &&
+      coin.id === 'CACAO')
+  ) {
+    formattedFormData.unbondAmount = formData.amount;
+    formattedFormData.amount = dustAmount;
+  }
 
-    const decimals = getChainFeeCoin(
-      coin.id === 'RUNE' ? Chain.THORChain : Chain.MayaChain
-    )?.decimals;
-
-    // For THORChain leave we need to hardcode the amount to 0.00000001 for the transaction
-    if (chainAction === 'leave') {
-      formData['amount'] =
-        THORCHAIN_AND_MAYACHAIN_DEPOSIT_AMOUNT.toFixed(decimals);
-    }
-
-    // For THORChain unbond we need to hardcode the amount to 0.00000001 on the UI
-    if (
-      key === 'amount' &&
-      (chainAction === 'unbond' || chainAction === 'unbond_with_lp')
-    ) {
-      formattedFormData['unbondAmount'] = formData[key];
-      formattedFormData[key] =
-        `${THORCHAIN_AND_MAYACHAIN_DEPOSIT_AMOUNT.toFixed(decimals)} ${coin.id}`;
-    } else {
-      formattedFormData[key] = value;
-    }
-  });
+  // If 'amount' doesn't exist in the current formData as it's not mandatory for MayaChain unbond_with_lp Form, we need to hardcode the amount to 0.00000001 for the transaction
+  if (chainAction === 'unbond_with_lp' && coin.id === 'CACAO') {
+    formattedFormData.amount = dustAmount;
+  }
 
   return formattedFormData;
 };
