@@ -1,6 +1,7 @@
 import BackupIcon from '../../lib/ui/icons/BackupIcon';
 import { InfoIcon } from '../../lib/ui/icons/InfoIcon';
 import ReshareIcon from '../../lib/ui/icons/ReshareIcon';
+import { SignatureIcon } from '../../lib/ui/icons/SignatureIcon';
 import SquareAndPencilIcon from '../../lib/ui/icons/SquareAndPencilIcon';
 import TrashIcon from '../../lib/ui/icons/TrashIcon';
 import { TextColor } from '../../lib/ui/text';
@@ -38,6 +39,12 @@ export const editVaultSettingsItems: SettingItem[] = [
     subtitleKey: 'vault_setting_edit_vault_reshare_subtitle',
     icon: ReshareIcon,
     path: 'reshareVault',
+  },
+  {
+    titleKey: 'sign',
+    subtitleKey: 'sign_custom_message',
+    icon: SignatureIcon,
+    path: 'signCustomMessage',
   },
   {
     titleKey: 'vault_setting_edit_vault_delete_title',

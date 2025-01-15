@@ -28,6 +28,7 @@ export const TextWrapper = styled.div`
 export const IconWrapper = styled.div`
   align-self: center;
   height: 30px;
+  font-size: 24px;
 `;
 
 export const AutoCenteredTitle = styled(Text)`

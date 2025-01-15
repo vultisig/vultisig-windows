@@ -640,4 +640,8 @@ export const es = {
   signature: 'Firma',
   signing_method: 'Método de firma',
   message_to_sign: 'Mensaje para firmar',
+  sign_custom_message: 'Firmar mensaje personalizado',
+  sign_message: 'Firmar mensaje',
+  method_required: 'Se requiere método de firma',
+  message_required: 'El mensaje es obligatorio',
 };

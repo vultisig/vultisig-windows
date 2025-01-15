@@ -13,14 +13,14 @@ import { GeneratedHexEncryptionKeyProvider } from '../../setup/state/currentHexE
 import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/serverUrlDerivedFromServerType';
 import { useCurrentVault } from '../../state/currentVault';
 import { KeysignSigningStep } from '../shared/KeysignSigningStep';
-import { KeysignPayloadProvider } from '../shared/state/keysignPayload';
+import { KeysignMessagePayloadProvider } from '../shared/state/keysignMessagePayload';
 import { PeersSelectionRecordProvider } from '../shared/state/selectedPeers';
 import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoveryStep/KeysignPeerDiscoveryStep';
 
 const keysignSteps = ['joinSession', 'peers', 'session', 'sign'] as const;
 
 export const StartKeysignPage = () => {
-  const { keysignPayload, keysignAction } = useAppPathState<'keysign'>();
+  const { keysignPayload } = useAppPathState<'keysign'>();
 
   const { local_party_id } = useCurrentVault();
 
@@ -30,8 +30,8 @@ export const StartKeysignPage = () => {
   });
 
   return (
-    <CurrentLocalPartyIdProvider value={local_party_id}>
-      <KeysignPayloadProvider value={keysignPayload}>
+    <KeysignMessagePayloadProvider value={keysignPayload}>
+      <CurrentLocalPartyIdProvider value={local_party_id}>
         <GeneratedServiceNameProvider>
           <PeersSelectionRecordProvider initialValue={{}}>
             <GeneratedSessionIdProvider>
@@ -45,10 +45,7 @@ export const StartKeysignPage = () => {
                         <JoinKeygenSessionStep onForward={toNextStep} />
                       )}
                       peers={() => (
-                        <KeysignPeerDiscoveryStep
-                          actionType={keysignAction}
-                          onForward={toNextStep}
-                        />
+                        <KeysignPeerDiscoveryStep onForward={toNextStep} />
                       )}
                       session={() => (
                         <KeygenStartSessionStep
@@ -58,7 +55,7 @@ export const StartKeysignPage = () => {
                       )}
                       sign={() => (
                         <KeysignSigningStep
-                          payload={{ keysign: keysignPayload }}
+                          payload={keysignPayload}
                           onBack={() => setStep('peers')}
                         />
                       )}
@@ -69,7 +66,7 @@ export const StartKeysignPage = () => {
             </GeneratedSessionIdProvider>
           </PeersSelectionRecordProvider>
         </GeneratedServiceNameProvider>
-      </KeysignPayloadProvider>
-    </CurrentLocalPartyIdProvider>
+      </CurrentLocalPartyIdProvider>
+    </KeysignMessagePayloadProvider>
   );
 };

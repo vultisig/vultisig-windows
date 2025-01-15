@@ -8,7 +8,9 @@ import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
+import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
@@ -16,14 +18,13 @@ import { formatAmount } from '../../../lib/utils/formatAmount';
 import { assertField } from '../../../lib/utils/record/assertField';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { useKeysignPayload } from './state/keysignPayload';
 
-export const KeysignTxPrimaryInfo = () => {
-  const payload = useKeysignPayload();
+export const KeysignTxPrimaryInfo = ({
+  value,
+}: ComponentWithValueProps<KeysignPayload>) => {
+  const { toAddress, memo, toAmount, blockchainSpecific } = value;
 
-  const { toAddress, memo, toAmount, blockchainSpecific } = payload;
-
-  const coin = assertField(payload, 'coin');
+  const coin = assertField(value, 'coin');
 
   const { decimals, ticker } = shouldBePresent(coin);
 

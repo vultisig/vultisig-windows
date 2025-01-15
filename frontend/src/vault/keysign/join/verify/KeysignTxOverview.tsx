@@ -1,26 +1,22 @@
 import { MatchRecordUnion } from '../../../../lib/ui/base/MatchRecordUnion';
 import { KeysignSwapTxInfo } from '../../../swap/keysign/KeysignSwapTxInfo';
 import { KeysignTxPrimaryInfo } from '../../shared/KeysignTxPrimaryInfo';
-import { KeysignPayloadProvider } from '../../shared/state/keysignPayload';
-import { useJoinKeysignMessagePayload } from '../state/joinKeysignMessagePayload';
+import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload';
 import { KeysignCustomMessageInfo } from './KeysignCustomMessageInfo';
 
 export const KeysignTxOverview = () => {
-  const keysignMessagePayload = useJoinKeysignMessagePayload();
+  const keysignMessagePayload = useKeysignMessagePayload();
 
   return (
     <MatchRecordUnion
       value={keysignMessagePayload}
       handlers={{
-        keysign: keysignPayload => (
-          <KeysignPayloadProvider value={keysignPayload}>
-            {keysignPayload.swapPayload.value ? (
-              <KeysignSwapTxInfo />
-            ) : (
-              <KeysignTxPrimaryInfo />
-            )}
-          </KeysignPayloadProvider>
-        ),
+        keysign: payload =>
+          payload.swapPayload ? (
+            <KeysignSwapTxInfo />
+          ) : (
+            <KeysignTxPrimaryInfo value={payload} />
+          ),
         custom: value => <KeysignCustomMessageInfo value={value} />,
       }}
     />

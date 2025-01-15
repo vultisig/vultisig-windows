@@ -375,6 +375,8 @@ export const en = {
   secureVault: 'Secure Vault',
   active: 'Active',
   sign: 'Sign',
+  sign_custom_message: 'Sign custom message',
+  sign_message: 'Sign message',
   action: 'Action',
   fast_vault_setup_prop_0: 'Single Device Setup',
   fast_vault_setup_prop_1: 'Transaction Alerts & Policies',
@@ -627,6 +629,8 @@ export const en = {
   },
   signing_method: 'Signing Method',
   message_to_sign: 'Message to sign',
+  method_required: 'Signing method is required',
+  message_required: 'Message is required',
   saving_vault: 'Saving Vault...',
   scan_with_devices: 'Scan with devices to join the vault generation',
   scan_with_devices_to_sign:
