@@ -25,9 +25,7 @@ export const processKeysignPayload = async (
         address: coin.contractAddress as `0x${string}`,
       });
 
-      const hasEnoughAllowance = BigInt(allowance) >= BigInt(payload.toAmount);
-
-      if (!hasEnoughAllowance) {
+      if (allowance < BigInt(payload.toAmount)) {
         result.erc20ApprovePayload = new Erc20ApprovePayload({
           amount: payload.toAmount,
           spender: payload.toAddress,
