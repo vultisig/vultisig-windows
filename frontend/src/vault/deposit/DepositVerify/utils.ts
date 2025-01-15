@@ -1,3 +1,5 @@
+import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
+import { Chain } from '../../../model/chain';
 import { ChainAction } from '../ChainAction';
 import { AMOUNT_FOR_THORCHAIN_UNBOND } from './constants';
 
@@ -11,6 +13,12 @@ export const getFormattedFormData = (
     const value = formData[key];
 
     if (!value) return;
+
+    // For THORChain leave we need to hardcode the amount to 0.00000001 RUNE for the transaction
+    if (chainAction === 'leave') {
+      const runeDecimals = getChainFeeCoin(Chain.THORChain)?.decimals;
+      formData['amount'] = AMOUNT_FOR_THORCHAIN_UNBOND.toFixed(runeDecimals);
+    }
 
     // For THORChain unbond we need to hardcode the amount to 0.00000001 RUNE on the UI
     if (key === 'amount' && chainAction === 'unbond') {

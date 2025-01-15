@@ -182,11 +182,7 @@ export const requiredFieldsPerChainAction = {
         label: 'chainFunctions.unbond.labels.unbondAmount',
       },
     ],
-    schema: (
-      chain: Chain,
-      walletCore: WalletCore,
-      totalAmountAvailable: number
-    ) =>
+    schema: (chain: Chain, walletCore: WalletCore) =>
       z.object({
         nodeAddress: z
           .string()
@@ -205,19 +201,7 @@ export const requiredFieldsPerChainAction = {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
             }
           ),
-        amount: z
-          .string()
-          .transform(val => Number(val))
-          .pipe(
-            z
-              .number()
-              .positive()
-              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
-              .min(0.01, 'chainFunctions.unbond.validations.amount')
-              .refine(val => val > 0, {
-                message: 'chainFunctions.unbond.validations.amount',
-              })
-          ),
+        amount: z.string().transform(val => Number(val)),
         provider: z.string().optional(),
       }),
   },

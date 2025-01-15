@@ -76,7 +76,7 @@ export const generateMemo = ({
       // "UNBOND:bondableAsset:lpUnits:nodeAddress"
       return `UNBOND:${bondableAsset}:${lpUnits}:${nodeAddress}`;
     case 'unbond': {
-      const runeDecimals = getChainFeeCoin(Chain.THORChain)?.decimals || 8;
+      const runeDecimals = getChainFeeCoin(Chain.THORChain)?.decimals;
       const amountInUnits = amount
         ? Math.round(amount * Math.pow(10, runeDecimals))
         : 0;
