@@ -1,5 +1,6 @@
 import { TW } from '@trustwallet/wallet-core';
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import bs58 from 'bs58';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
@@ -9,9 +10,11 @@ import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { assertField } from '../../../lib/utils/record/assertField';
 import { BlockchainService } from '../BlockchainService';
-import { IBlockchainService } from '../IBlockchainService';
+import {
+  IBlockchainService,
+  SignedTransactionResult,
+} from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
-import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceSolana
   extends BlockchainService
@@ -176,11 +179,12 @@ export class BlockchainServiceSolana
 
     assertErrorMessage(solanaErrorMessage);
 
-    const result = new SignedTransactionResult(
-      encoded,
-      encoded // TODO: Change this to the actual transaction hash
-    );
+    const encodedBytes = Buffer.from(encoded);
+    const txHash = bs58.encode(this.walletCore.Hash.sha256(encodedBytes));
 
-    return result;
+    return {
+      rawTx: encoded,
+      txHash,
+    };
   }
 }

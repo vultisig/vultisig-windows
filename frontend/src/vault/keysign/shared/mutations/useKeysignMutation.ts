@@ -8,6 +8,7 @@ import { generateSignatureWithRecoveryId } from '../../../../chain/utils/generat
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { getLastItem } from '../../../../lib/utils/array/getLastItem';
+import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '../../../../lib/utils/matchRecordUnion';
 import { chainPromises } from '../../../../lib/utils/promise/chainPromises';
 import { recordFromItems } from '../../../../lib/utils/record/recordFromItems';
@@ -90,7 +91,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
           const hashes = await chainPromises(
             inputs.map(async txInputData => {
-              const { rawTransaction, signature, transactionHash } =
+              const { rawTx, txHash, signature } =
                 await blockchainService.getSignedTransaction(
                   publicKey,
                   txInputData,
@@ -101,19 +102,20 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
               // TODO: Transaction broadcasting interface should be redesigned
               // It should receive a typed input instead of a string
-              if (chain === Chain.Sui) {
-                return rpcService.broadcastTransaction(
-                  JSON.stringify({
-                    unsignedTransaction: rawTransaction,
-                    signature: signature,
-                  })
-                );
+              const broadcastedTxHash = await rpcService.broadcastTransaction(
+                chain === Chain.Sui
+                  ? JSON.stringify({
+                      unsignedTransaction: rawTx,
+                      signature: shouldBePresent(signature),
+                    })
+                  : rawTx
+              );
+
+              if (broadcastedTxHash) {
+                return broadcastedTxHash;
               }
 
-              const broadcastedTransactionHash =
-                await rpcService.broadcastTransaction(rawTransaction);
-
-              return broadcastedTransactionHash || transactionHash;
+              return txHash;
             })
           );
 

@@ -12,9 +12,11 @@ import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage'
 import { assertField } from '../../../lib/utils/record/assertField';
 import { Chain } from '../../../model/chain';
 import { BlockchainService } from '../BlockchainService';
-import { IBlockchainService } from '../IBlockchainService';
+import {
+  IBlockchainService,
+  SignedTransactionResult,
+} from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
-import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceRipple
   extends BlockchainService
@@ -121,11 +123,9 @@ export class BlockchainServiceRipple
 
     assertErrorMessage(errorMessage);
 
-    const result = new SignedTransactionResult(
-      stripHexPrefix(this.walletCore.HexCoding.encode(encoded)),
-      '',
-      undefined
-    );
-    return result;
+    return {
+      rawTx: stripHexPrefix(this.walletCore.HexCoding.encode(encoded)),
+      txHash: '',
+    };
   }
 }

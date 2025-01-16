@@ -8,8 +8,10 @@ import { tss } from '../../../wailsjs/go/models';
 import { getCoinType } from '../../chain/walletCore/getCoinType';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../../model/chain';
-import { IBlockchainService } from './IBlockchainService';
-import { SignedTransactionResult } from './signed-transaction-result';
+import {
+  IBlockchainService,
+  SignedTransactionResult,
+} from './IBlockchainService';
 
 export class BlockchainService implements IBlockchainService {
   chain: Chain;
