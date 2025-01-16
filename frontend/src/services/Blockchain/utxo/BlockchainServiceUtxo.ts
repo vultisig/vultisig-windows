@@ -117,9 +117,6 @@ export class BlockchainServiceUtxo
     });
     hashes.forEach(hash => {
       const signature = signatureProvider.getDerSignature(hash);
-      if (signature === undefined) {
-        return;
-      }
 
       assertSignature({
         publicKey,
