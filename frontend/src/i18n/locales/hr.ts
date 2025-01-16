@@ -622,4 +622,7 @@ export const hr = {
   sign_message: 'Potpišite poruku',
   method_required: 'Potreban je način potpisivanja',
   message_required: 'Poruka je obavezna',
+  something_went_wrong: 'Nešto nije u redu',
+  report_error: 'Prijavi pogrešku',
+  go_to_home_page: 'Idi na početnu stranicu',
 };

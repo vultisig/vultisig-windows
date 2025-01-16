@@ -2,6 +2,8 @@ import { createBrowserRouter, Outlet } from 'react-router-dom';
 
 import { AddressPage } from './chain/components/address/AddressPage';
 import { DeeplinkPage } from './deeplink/components/DeeplinkPage';
+import { ErrorBoundary } from './errors/components/ErrorBoundary';
+import { FullSizeErrorFallback } from './errors/components/FullSizeErrorFallback';
 import { LauncherObserver } from './launcher/components/LauncherObserver';
 import { appPaths } from './navigation';
 import { CompletedOnboardingOnly } from './onboarding/CompletedOnboardingOnly';
@@ -55,10 +57,10 @@ import { CreateVaultFolderPage } from './vaults/folders/create/CreateVaultFolder
 import { ManageVaultsPage } from './vaults/manage/ManageVaultsPage';
 
 const Root = () => (
-  <>
+  <ErrorBoundary renderFallback={props => <FullSizeErrorFallback {...props} />}>
     <LauncherObserver />
     <Outlet />
-  </>
+  </ErrorBoundary>
 );
 
 export const router = createBrowserRouter([

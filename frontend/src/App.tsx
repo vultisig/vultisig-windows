@@ -5,6 +5,7 @@ import { RouterProvider } from 'react-router-dom';
 
 import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly';
 import { GlobalStyle } from './lib/ui/css/GlobalStyle';
+import { VStack } from './lib/ui/layout/Stack';
 import { darkTheme } from './lib/ui/theme/darkTheme';
 import { ThemeProvider } from './lib/ui/theme/ThemeProvider';
 import { ToastProvider } from './lib/ui/toast/ToastProvider';
@@ -22,7 +23,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={darkTheme}>
           <GlobalStyle />
-          <div className="w-full min-h-screen bg-primary h-full flex flex-col">
+          <VStack fullSize>
             <RemoteStateDependant>
               <InitializedWalletOnly>
                 <OnboardingResetter>
@@ -32,7 +33,7 @@ const App = () => {
                 </OnboardingResetter>
               </InitializedWalletOnly>
             </RemoteStateDependant>
-          </div>
+          </VStack>
         </ThemeProvider>
       </QueryClientProvider>
     </WalletCoreProvider>

@@ -644,4 +644,7 @@ export const de = {
   sign_message: 'Nachricht signieren',
   method_required: 'Signaturmethode ist erforderlich',
   message_required: 'Nachricht ist erforderlich',
+  something_went_wrong: 'Da ist etwas schiefgelaufen',
+  report_error: 'Fehler melden',
+  go_to_home_page: 'Zur Startseite',
 };
