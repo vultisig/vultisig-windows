@@ -78,7 +78,7 @@ export const getEthereumSpecific = async ({
   return new EthereumSpecific({
     maxFeePerGasWei: maxFeePerGasWei.toString(),
     priorityFee: priorityFee.toString(),
-    nonce: BigInt(nonce),
+    nonce,
     gasLimit: gasLimit.toString(),
   });
 };
