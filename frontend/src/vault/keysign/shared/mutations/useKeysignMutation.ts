@@ -90,7 +90,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
           const hashes = await chainPromises(
             inputs.map(async txInputData => {
-              const { rawTransaction, signature } =
+              const { rawTransaction, signature, transactionHash } =
                 await blockchainService.getSignedTransaction(
                   publicKey,
                   txInputData,
@@ -110,7 +110,10 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 );
               }
 
-              return rpcService.broadcastTransaction(rawTransaction);
+              const broadcastedTransactionHash =
+                await rpcService.broadcastTransaction(rawTransaction);
+
+              return broadcastedTransactionHash || transactionHash;
             })
           );
 
