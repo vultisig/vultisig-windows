@@ -1,6 +1,7 @@
 import { queryUrl } from '../../../lib/utils/query/queryUrl';
-import { Endpoint } from '../../../services/Endpoint';
+import { UtxoChain } from '../../../model/chain';
 import { ChainAccount } from '../../ChainAccount';
+import { getBlockchairBaseUrl } from './getBlockchairBaseUrl';
 
 type BlockchairAddressResponse = {
   data: {
@@ -23,10 +24,11 @@ type BlockchairAddressResponse = {
   };
 };
 
-export const getUtxoAddressInfo = ({ address, chain }: ChainAccount) => {
-  const coinName = chain.toLowerCase();
-
-  const url = `${Endpoint.vultisigApiProxy}/blockchair/${coinName}/dashboards/address/${address}?state=latest`;
+export const getUtxoAddressInfo = ({
+  address,
+  chain,
+}: ChainAccount<UtxoChain>) => {
+  const url = `${getBlockchairBaseUrl(chain)}/dashboards/address/${address}?state=latest`;
 
   return queryUrl<BlockchairAddressResponse>(url);
 };
