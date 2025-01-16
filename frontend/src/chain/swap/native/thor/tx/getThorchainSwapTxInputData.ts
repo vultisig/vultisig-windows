@@ -4,11 +4,12 @@ import Long from 'long';
 import { getCoinKey } from '../../../../../coin/utils/coin';
 import { EthereumSpecific } from '../../../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { THORChainSwapPayload } from '../../../../../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
 import { shouldBePresent } from '../../../../../lib/utils/assert/shouldBePresent';
+import { getDiscriminatedUnionValue } from '../../../../../lib/utils/getDiscriminatedUnionValue';
 import { match } from '../../../../../lib/utils/match';
 import { Chain } from '../../../../../model/chain';
 import { getSigningInputEnvelopedTxFields } from '../../../../evm/tx/getSigningInputEnvelopedTxFields';
+import { toKeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload';
 import { nativeSwapAffiliateConfig } from '../../nativeSwapAffiliateConfig';
 import { toThorchainSwapAssetProto } from '../asset/toThorchainSwapAssetProto';
 import { ThorchainSwapEnabledChain } from '../thorchainSwapProtoChains';
@@ -22,8 +23,12 @@ export const getThorchainSwapTxInputData = async ({
   keysignPayload,
   walletCore,
 }: Input): Promise<Uint8Array> => {
-  const swapPayload = shouldBePresent(keysignPayload.swapPayload)
-    .value as THORChainSwapPayload;
+  const swapPayload = getDiscriminatedUnionValue(
+    toKeysignSwapPayload(keysignPayload.swapPayload),
+    'case',
+    'value',
+    'thorchainSwapPayload'
+  );
 
   const fromCoin = shouldBePresent(swapPayload.fromCoin);
   const fromChain = fromCoin.chain as ThorchainSwapEnabledChain;
