@@ -17,7 +17,7 @@ import { GeneratedHexEncryptionKeyProvider } from '../../../setup/state/currentH
 import { ServerUrlDerivedFromServerTypeProvider } from '../../../setup/state/serverUrlDerivedFromServerType';
 import { useCurrentVault } from '../../../state/currentVault';
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep';
-import { KeysignPayloadProvider } from '../../shared/state/keysignPayload';
+import { KeysignMessagePayloadProvider } from '../../shared/state/keysignMessagePayload';
 import { PeersSelectionRecordProvider } from '../../shared/state/selectedPeers';
 import { FastKeysignServerStep } from './FastKeysignServerStep';
 
@@ -42,9 +42,9 @@ export const StartFastKeysignPage = () => {
   const { t } = useTranslation();
 
   return (
-    <PasswordProvider initialValue="">
-      <CurrentLocalPartyIdProvider value={local_party_id}>
-        <KeysignPayloadProvider value={keysignPayload}>
+    <KeysignMessagePayloadProvider value={keysignPayload}>
+      <PasswordProvider initialValue="">
+        <CurrentLocalPartyIdProvider value={local_party_id}>
           <GeneratedServiceNameProvider>
             <PeersSelectionRecordProvider initialValue={{}}>
               <GeneratedSessionIdProvider>
@@ -70,9 +70,7 @@ export const StartFastKeysignPage = () => {
                           <FastKeysignServerStep onForward={toNextStep} />
                         )}
                         sign={() => (
-                          <KeysignSigningStep
-                            payload={{ keysign: keysignPayload }}
-                          />
+                          <KeysignSigningStep payload={keysignPayload} />
                         )}
                       />
                     </ServerUrlDerivedFromServerTypeProvider>
@@ -81,8 +79,8 @@ export const StartFastKeysignPage = () => {
               </GeneratedSessionIdProvider>
             </PeersSelectionRecordProvider>
           </GeneratedServiceNameProvider>
-        </KeysignPayloadProvider>
-      </CurrentLocalPartyIdProvider>
-    </PasswordProvider>
+        </CurrentLocalPartyIdProvider>
+      </PasswordProvider>
+    </KeysignMessagePayloadProvider>
   );
 };

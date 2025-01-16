@@ -13,11 +13,13 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { ChainAction } from '../ChainAction';
 import { DepositConfirmButton } from '../DepositConfirmButton';
 import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig';
 import { DepositFee } from '../fee/DepositFee';
 import { DepositFiatFee } from '../fee/DepositFiatFee';
+import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
 import { useSender } from '../hooks/useSender';
 import { StrictText, StrictTextContrast } from './DepositVerify.styled';
 import { getFormattedFormData } from './utils';
@@ -33,10 +35,14 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   depositFormData,
   selectedChainAction,
 }) => {
+  const [coinKey] = useCurrentDepositCoin();
+  const coin = useCurrentVaultCoin(coinKey);
   const formattedDepositFormData = getFormattedFormData(
     depositFormData,
-    selectedChainAction
+    selectedChainAction,
+    coin
   );
+
   const sender = useSender();
   const { t } = useTranslation();
   const actionFields = selectedChainAction
@@ -60,13 +66,15 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
             </TxOverviewColumn>
             {actionFields.map(field => {
               if (!formattedDepositFormData[field.name]) return null;
+
               return field.type === 'number' || field.type === 'percentage' ? (
                 <TxOverviewRowDepositsFlow key={field.name}>
                   <Text size={18} weight={700}>
                     {t(field.label)}
                   </Text>
                   <StrictText>
-                    {String(formattedDepositFormData[field.name])}
+                    {String(formattedDepositFormData[field.name])}{' '}
+                    {field.name === 'amount' && coin.ticker}
                   </StrictText>
                 </TxOverviewRowDepositsFlow>
               ) : (
@@ -80,6 +88,16 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                 </TxOverviewColumn>
               );
             })}
+            {selectedChainAction === 'leave' && (
+              <TxOverviewRowDepositsFlow>
+                <Text size={18} weight={700}>
+                  {t('amount')}
+                </Text>
+                <StrictText>
+                  {String(formattedDepositFormData.amount)} {coin.ticker}
+                </StrictText>
+              </TxOverviewRowDepositsFlow>
+            )}
             <TxOverviewRow key="memo">
               <Text size={18} weight={700}>
                 {t('chainFunctions.memo')}
@@ -98,7 +116,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
         </WithProgressIndicator>
         <DepositConfirmButton
           action={selectedChainAction}
-          depositFormData={depositFormData}
+          depositFormData={formattedDepositFormData}
         />
       </PageContent>
     </>

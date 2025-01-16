@@ -17,14 +17,9 @@ import { KeysignPeerDiscoveryQrCode } from '../KeysignPeerDiscoveryCode';
 import { Content } from './KeysignPeerDiscoveryStep.styled';
 import { KeysignPeersManager } from './KeysignPeersManager';
 
-type KeysignPeerDiscoveryStepProps = ComponentWithForwardActionProps & {
-  actionType?: 'send' | 'deposit';
-};
-
 export const KeysignPeerDiscoveryStep = ({
   onForward,
-  actionType,
-}: KeysignPeerDiscoveryStepProps) => {
+}: ComponentWithForwardActionProps) => {
   const { t } = useTranslation();
 
   const isDisabled = useIsPeerDiscoveryStepDisabled();
@@ -38,11 +33,7 @@ export const KeysignPeerDiscoveryStep = ({
   return (
     <>
       <PageHeader
-        title={
-          <PageHeaderTitle>
-            {t(actionType === 'deposit' ? 'deposit' : 'send')}
-          </PageHeaderTitle>
-        }
+        title={<PageHeaderTitle>{t('keysign')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={<DownloadKeysignQrCode />}
       />

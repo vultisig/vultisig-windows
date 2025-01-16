@@ -1,25 +1,42 @@
+import { storage } from '../../../../wailsjs/go/models';
+import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
+import { Chain } from '../../../model/chain';
 import { ChainAction } from '../ChainAction';
-import { AMOUNT_FOR_THORCHAIN_UNBOND } from './constants';
+
+function getDustDepositAmountString(decimals: number) {
+  return (1 / Math.pow(10, decimals)).toFixed(decimals);
+}
 
 export const getFormattedFormData = (
   formData: Record<string, unknown>,
-  chainAction: ChainAction
+  chainAction: ChainAction,
+  coin: storage.Coin
 ) => {
-  const formattedFormData: Record<string, unknown> = {};
+  const formattedFormData = { ...formData };
+  const decimals = getChainFeeCoin(coin.chain as Chain)?.decimals;
+  const dustAmount = getDustDepositAmountString(decimals);
 
-  Object.keys(formData).forEach(key => {
-    const value = formData[key];
+  // For THORChain / MayaChain LEAVE we need to hardcode the amount for the transaction
+  if (
+    chainAction === 'leave' &&
+    (coin.ticker === 'RUNE' || coin.ticker === 'CACAO')
+  ) {
+    formattedFormData.amount = dustAmount;
+  }
 
-    if (!value) return;
+  // For THORChain unbond and MayaChain unbond_with_lp we need to hardcode the amount on the UI
+  if (
+    ('amount' in formData && chainAction === 'unbond') ||
+    ('amount' in formData && chainAction === 'unbond_with_lp')
+  ) {
+    formattedFormData.unbondAmount = formData.amount;
+    formattedFormData.amount = dustAmount;
+  }
 
-    // For THORChain unbond we need to hardcode the amount to 0.00000001 RUNE on the UI
-    if (key === 'amount' && chainAction === 'unbond') {
-      formattedFormData['unbondAmount'] = formData[key];
-      formattedFormData[key] = `${AMOUNT_FOR_THORCHAIN_UNBOND.toFixed(8)} RUNE`;
-    } else {
-      formattedFormData[key] = value;
-    }
-  });
+  // If 'amount' doesn't exist in the current formData as it's not mandatory for MayaChain unbond_with_lp Form, we need to hardcode the amount to 0.00000001 for the transaction
+  if (chainAction === 'unbond_with_lp') {
+    formattedFormData.amount = dustAmount;
+  }
 
   return formattedFormData;
 };

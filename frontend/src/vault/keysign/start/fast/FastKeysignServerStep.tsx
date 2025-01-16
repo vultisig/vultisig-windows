@@ -1,14 +1,16 @@
 import { useMutation } from '@tanstack/react-query';
+import { keccak256 } from 'js-sha3';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
+import { assertChainField } from '../../../../chain/utils/assertChainField';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
-import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
-import { Chain } from '../../../../model/chain';
+import { matchRecordUnion } from '../../../../lib/utils/matchRecordUnion';
+import { assertField } from '../../../../lib/utils/record/assertField';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
 import { FullPageFlowErrorState } from '../../../../ui/flow/FullPageFlowErrorState';
 import { PageHeader } from '../../../../ui/page/PageHeader';
@@ -20,7 +22,8 @@ import { WaitForServerLoader } from '../../../server/components/WaitForServerLoa
 import { useVaultPassword } from '../../../server/password/state/password';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { useCurrentVault } from '../../../state/currentVault';
-import { useKeysignPayload } from '../../shared/state/keysignPayload';
+import { customMessageConfig } from '../../customMessage/config';
+import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload';
 import { getTssKeysignType } from '../../utils/getTssKeysignType';
 import { getTxInputData } from '../../utils/getTxInputData';
 
@@ -34,9 +37,7 @@ export const FastKeysignServerStep: React.FC<
   const sessionId = useCurrentSessionId();
   const hexEncryptionKey = useCurrentHexEncryptionKey();
 
-  const payload = useKeysignPayload();
-
-  const coin = shouldBePresent(payload.coin);
+  const payload = useKeysignMessagePayload();
 
   const walletCore = useAssertWalletCore();
 
@@ -44,36 +45,57 @@ export const FastKeysignServerStep: React.FC<
 
   const { mutate, ...state } = useMutation({
     mutationFn: async () => {
-      const chain = coin.chain as Chain;
-
-      const inputs = await getTxInputData({
-        keysignPayload: payload,
-        walletCore,
-      });
-
-      const messages = inputs.flatMap(txInputData =>
-        getPreSigningHashes({
-          txInputData,
-          walletCore,
-          chain,
-        }).map(value =>
-          hexEncode({
-            value,
+      return matchRecordUnion(payload, {
+        keysign: async keysignPayload => {
+          const inputs = await getTxInputData({
+            keysignPayload,
             walletCore,
-          })
-        )
-      );
+          });
 
-      return signWithServer({
-        public_key: public_key_ecdsa,
-        messages,
-        session: sessionId,
-        hex_encryption_key: hexEncryptionKey,
-        derive_path: walletCore.CoinTypeExt.derivationPath(
-          getCoinType({ walletCore, chain })
-        ),
-        is_ecdsa: getTssKeysignType(chain) === 'ecdsa',
-        vault_password: password,
+          const coin = assertField(keysignPayload, 'coin');
+          const { chain } = assertChainField(coin);
+
+          const messages = inputs.flatMap(txInputData =>
+            getPreSigningHashes({
+              txInputData,
+              walletCore,
+              chain,
+            }).map(value =>
+              hexEncode({
+                value,
+                walletCore,
+              })
+            )
+          );
+
+          return signWithServer({
+            public_key: public_key_ecdsa,
+            messages,
+            session: sessionId,
+            hex_encryption_key: hexEncryptionKey,
+            derive_path: walletCore.CoinTypeExt.derivationPath(
+              getCoinType({ walletCore, chain })
+            ),
+            is_ecdsa: getTssKeysignType(chain) === 'ecdsa',
+            vault_password: password,
+          });
+        },
+        custom: ({ message }) => {
+          return signWithServer({
+            public_key: public_key_ecdsa,
+            messages: [keccak256(message)],
+            session: sessionId,
+            hex_encryption_key: hexEncryptionKey,
+            derive_path: walletCore.CoinTypeExt.derivationPath(
+              getCoinType({
+                walletCore,
+                chain: customMessageConfig.chain,
+              })
+            ),
+            is_ecdsa: customMessageConfig.tssType === 'ecdsa',
+            vault_password: password,
+          });
+        },
       });
     },
     onSuccess: onForward,

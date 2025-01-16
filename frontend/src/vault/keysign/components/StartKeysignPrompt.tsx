@@ -28,7 +28,9 @@ export const StartKeysignPrompt = ({
           onClick={() => {
             navigate('fastKeysign', {
               state: {
-                keysignPayload,
+                keysignPayload: {
+                  keysign: keysignPayload,
+                },
               },
             });
           }}
@@ -42,7 +44,9 @@ export const StartKeysignPrompt = ({
           onClick={() => {
             navigate('keysign', {
               state: {
-                keysignPayload,
+                keysignPayload: {
+                  keysign: keysignPayload,
+                },
               },
             });
           }}
@@ -59,7 +63,9 @@ export const StartKeysignPrompt = ({
       onClick={() => {
         navigate('keysign', {
           state: {
-            keysignPayload,
+            keysignPayload: {
+              keysign: keysignPayload,
+            },
           },
         });
       }}

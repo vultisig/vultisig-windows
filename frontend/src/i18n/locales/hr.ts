@@ -618,4 +618,8 @@ export const hr = {
   signature: 'Potpis',
   signing_method: 'Način potpisivanja',
   message_to_sign: 'Poruka za potpisivanje',
+  sign_custom_message: 'Potpišite prilagođenu poruku',
+  sign_message: 'Potpišite poruku',
+  method_required: 'Potreban je način potpisivanja',
+  message_required: 'Poruka je obavezna',
 };

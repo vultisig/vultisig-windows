@@ -636,4 +636,8 @@ export const it = {
   signature: 'Firma',
   signing_method: 'Metodo di firma',
   message_to_sign: 'Messaggio da firmare',
+  sign_custom_message: 'Firma messaggio personalizzato',
+  sign_message: 'Messaggio del segno',
+  method_required: 'È richiesto il metodo di firma',
+  message_required: 'Il messaggio è obbligatorio',
 };
