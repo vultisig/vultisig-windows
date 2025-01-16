@@ -10,7 +10,6 @@ import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { getLastItem } from '../../../../lib/utils/array/getLastItem';
 import { matchRecordUnion } from '../../../../lib/utils/matchRecordUnion';
 import { chainPromises } from '../../../../lib/utils/promise/chainPromises';
-import { pick } from '../../../../lib/utils/record/pick';
 import { recordFromItems } from '../../../../lib/utils/record/recordFromItems';
 import { Chain } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
@@ -90,14 +89,12 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
           });
 
           const hashes = await chainPromises(
-            inputs.map(async (txInputData, index) => {
-              const msgs = groupedMsgs[index];
-
+            inputs.map(async txInputData => {
               const { rawTransaction, signature } =
                 await blockchainService.getSignedTransaction(
                   publicKey,
                   txInputData,
-                  pick(signaturesRecord, msgs)
+                  signaturesRecord
                 );
 
               const rpcService = RpcServiceFactory.createRpcService(chain);
