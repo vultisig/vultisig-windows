@@ -4,14 +4,19 @@ import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { minBigInt } from '../../../lib/utils/math/minBigInt';
 import { maxSendAmountEnabledChains } from '../../../model/chain';
 
-type Input = {
+export type CapSendAmountToMaxInput = {
   coin: Coin;
   amount: bigint;
   fee: bigint;
   balance: bigint;
 };
 
-export const capSendAmountToMax = ({ coin, amount, fee, balance }: Input) => {
+export const capSendAmountToMax = ({
+  coin,
+  amount,
+  fee,
+  balance,
+}: CapSendAmountToMaxInput) => {
   if (!coin.isNativeToken) {
     return amount;
   }
