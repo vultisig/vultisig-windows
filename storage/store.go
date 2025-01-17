@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
@@ -28,7 +29,16 @@ type Store struct {
 
 // NewStore creates a new store
 func NewStore() (*Store, error) {
-	db, err := sql.Open("sqlite3", DbFileName)
+	// Get the current running folder
+	exePath, err := os.Executable()
+	if err != nil {
+		return nil, fmt.Errorf("fail to get current directory, err: %w", err)
+	}
+	exeDir := filepath.Dir(exePath)
+	// Construct the full path to the database file
+	dbFilePath := filepath.Join(exeDir, DbFileName)
+
+	db, err := sql.Open("sqlite3", dbFilePath)
 	if err != nil {
 		return nil, fmt.Errorf("fail to open sqlite db, err: %w", err)
 	}
@@ -199,7 +209,6 @@ func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 	return &vault, nil
 }
 
-
 func (s *Store) closeRows(rows *sql.Rows) {
 	err := rows.Close()
 	if err != nil {
@@ -353,7 +362,6 @@ func (s *Store) SaveSettings(setting Settings) (*Settings, error) {
 				currency
 			) VALUES (?, ?);`
 
-
 	_, err = s.db.Exec(insertQuery, setting.Language, setting.Currency)
 	if err != nil {
 		return nil, fmt.Errorf("could not insert settings, err: %w", err)
@@ -385,8 +393,8 @@ func (s *Store) GetSettings() ([]Settings, error) {
 
 	for rows.Next() {
 		var (
-			language      string
-			currency      string
+			language string
+			currency string
 		)
 
 		if err := rows.Scan(
@@ -396,11 +404,9 @@ func (s *Store) GetSettings() ([]Settings, error) {
 			return nil, fmt.Errorf("could not scan settings, err: %w", err)
 		}
 
-
-
 		setting := Settings{
-			Language:      language,
-			Currency:      currency,
+			Language: language,
+			Currency: currency,
 		}
 
 		settings = append(settings, setting)
@@ -442,23 +448,23 @@ func (s *Store) UpdateAddressBookItem(item AddressBookItem) error {
 
 // Get all address book items
 func (s *Store) GetAllAddressBookItems() ([]AddressBookItem, error) {
-    query := `SELECT id, title, address, chain, "order" FROM address_book`
-    rows, err := s.db.Query(query)
-    if err != nil {
-        return nil, fmt.Errorf("could not query address book, err: %w", err)
-    }
-    defer s.closeRows(rows)
+	query := `SELECT id, title, address, chain, "order" FROM address_book`
+	rows, err := s.db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("could not query address book, err: %w", err)
+	}
+	defer s.closeRows(rows)
 
-    var addressBookItems []AddressBookItem
-    for rows.Next() {
-        var addressBookItem AddressBookItem
-        if err := rows.Scan(&addressBookItem.ID, &addressBookItem.Title, &addressBookItem.Address, &addressBookItem.Chain, &addressBookItem.Order); err != nil {
-            return nil, fmt.Errorf("could not scan address book item, err: %w", err)
-        }
-        addressBookItems = append(addressBookItems, addressBookItem)
-    }
+	var addressBookItems []AddressBookItem
+	for rows.Next() {
+		var addressBookItem AddressBookItem
+		if err := rows.Scan(&addressBookItem.ID, &addressBookItem.Title, &addressBookItem.Address, &addressBookItem.Chain, &addressBookItem.Order); err != nil {
+			return nil, fmt.Errorf("could not scan address book item, err: %w", err)
+		}
+		addressBookItems = append(addressBookItems, addressBookItem)
+	}
 
-    return addressBookItems, nil
+	return addressBookItems, nil
 
 }
 
@@ -591,12 +597,12 @@ func (s *Store) SaveVaultFolder(folder *VaultFolder) (string, error) {
 }
 
 func (s *Store) UpdateVaultFolderName(id string, name string) error {
-    query := `UPDATE vault_folders SET name = ? WHERE id = ?`
-    _, err := s.db.Exec(query, name, id)
-    if err != nil {
-        return fmt.Errorf("could not update vault folder name, err: %w", err)
-    }
-    return nil
+	query := `UPDATE vault_folders SET name = ? WHERE id = ?`
+	_, err := s.db.Exec(query, name, id)
+	if err != nil {
+		return fmt.Errorf("could not update vault folder name, err: %w", err)
+	}
+	return nil
 }
 
 func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
@@ -653,13 +659,13 @@ func (s *Store) DeleteVaultFolder(id string) error {
 	// Set folder_id to NULL for all vaults that reference the folder being deleted
 	_, err := s.db.Exec("UPDATE vaults SET folder_id = NULL WHERE folder_id = ?", id)
 	if err != nil {
-			return fmt.Errorf("could not update vaults to set folder_id to NULL, err: %w", err)
+		return fmt.Errorf("could not update vaults to set folder_id to NULL, err: %w", err)
 	}
 
 	// Delete the vault folder
 	_, err = s.db.Exec("DELETE FROM vault_folders WHERE id = ?", id)
 	if err != nil {
-			return fmt.Errorf("could not delete vault folder, err: %w", err)
+		return fmt.Errorf("could not delete vault folder, err: %w", err)
 	}
 	return nil
 }
