@@ -8,14 +8,12 @@ import { generateSignatureWithRecoveryId } from '../../../../chain/utils/generat
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { getLastItem } from '../../../../lib/utils/array/getLastItem';
-import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '../../../../lib/utils/matchRecordUnion';
 import { chainPromises } from '../../../../lib/utils/promise/chainPromises';
 import { recordFromItems } from '../../../../lib/utils/record/recordFromItems';
 import { Chain } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
 import { BlockchainServiceFactory } from '../../../../services/Blockchain/BlockchainServiceFactory';
-import { RpcServiceFactory } from '../../../../services/Rpc/RpcServiceFactory';
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
 import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
 import { getVaultPublicKey } from '../../../publicKey/getVaultPublicKey';
@@ -90,33 +88,13 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
           });
 
           const hashes = await chainPromises(
-            inputs.map(async txInputData => {
-              const { rawTx, txHash, signature } =
-                await blockchainService.getSignedTransaction(
-                  publicKey,
-                  txInputData,
-                  signaturesRecord
-                );
-
-              const rpcService = RpcServiceFactory.createRpcService(chain);
-
-              // TODO: Transaction broadcasting interface should be redesigned
-              // It should receive a typed input instead of a string
-              const broadcastedTxHash = await rpcService.broadcastTransaction(
-                chain === Chain.Sui
-                  ? JSON.stringify({
-                      unsignedTransaction: rawTx,
-                      signature: shouldBePresent(signature),
-                    })
-                  : rawTx
-              );
-
-              if (broadcastedTxHash) {
-                return broadcastedTxHash;
-              }
-
-              return txHash;
-            })
+            inputs.map(async txInputData =>
+              blockchainService.executeTransaction(
+                publicKey,
+                txInputData,
+                signaturesRecord
+              )
+            )
           );
 
           return getLastItem(hashes);

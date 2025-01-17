@@ -1,6 +1,5 @@
 import { TW } from '@trustwallet/wallet-core';
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
-import bs58 from 'bs58';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
@@ -9,11 +8,9 @@ import { assertSignature } from '../../../chain/utils/assertSignature';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { assertField } from '../../../lib/utils/record/assertField';
+import { RpcServiceSolana } from '../../Rpc/solana/RpcServiceSolana';
 import { BlockchainService } from '../BlockchainService';
-import {
-  IBlockchainService,
-  SignedTransactionResult,
-} from '../IBlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
 
 export class BlockchainServiceSolana
@@ -133,11 +130,11 @@ export class BlockchainServiceSolana
     }
   }
 
-  public async getSignedTransaction(
+  public async executeTransaction(
     publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
-  ): Promise<SignedTransactionResult> {
+  ): Promise<string> {
     const publicKeyData = publicKey.data();
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
@@ -179,12 +176,8 @@ export class BlockchainServiceSolana
 
     assertErrorMessage(solanaErrorMessage);
 
-    const encodedBytes = Buffer.from(encoded);
-    const txHash = bs58.encode(this.walletCore.Hash.sha256(encodedBytes));
+    const rpcService = new RpcServiceSolana();
 
-    return {
-      rawTx: encoded,
-      txHash,
-    };
+    return rpcService.broadcastTransaction(encoded);
   }
 }

@@ -1,7 +1,4 @@
-import {
-  getCosmosBalanceUrl,
-  getCosmosTxBroadcastUrl,
-} from '../../../chain/cosmos/cosmosRpcUrl';
+import { getCosmosBalanceUrl } from '../../../chain/cosmos/cosmosRpcUrl';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { Endpoint } from '../../Endpoint';
@@ -26,22 +23,6 @@ export class RpcServiceThorchain implements IRpcService {
         (b: any) => b.denom.toLowerCase() === coin.ticker.toLowerCase()
       )?.amount ?? 0
     );
-  }
-
-  async broadcastTransaction(hex: string): Promise<string> {
-    const url = getCosmosTxBroadcastUrl(Chain.THORChain);
-
-    // fetch to post the transaction
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: hex,
-    });
-
-    const data = await response.json();
-    return data.tx_response?.txhash;
   }
 
   static async getTHORChainChainID(): Promise<string> {

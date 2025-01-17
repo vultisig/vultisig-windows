@@ -1,11 +1,7 @@
-import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
+import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
 import { cosmosFeeCoinDenom } from '../../../chain/cosmos/cosmosFeeCoinDenom';
-import {
-  getCosmosBalanceUrl,
-  getCosmosTxBroadcastUrl,
-} from '../../../chain/cosmos/cosmosRpcUrl';
+import { getCosmosBalanceUrl } from '../../../chain/cosmos/cosmosRpcUrl';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { CosmosChain } from '../../../model/chain';
 import { IRpcService } from '../IRpcService';
 
@@ -49,24 +45,6 @@ export class RpcServiceCosmos implements IRpcService {
     const response: CosmosBalanceResponse = await Fetch(url);
     return response.balances;
   }
-
-  async broadcastTransaction(jsonString: string): Promise<string> {
-    const url = getCosmosTxBroadcastUrl(this.chain as CosmosChain);
-
-    const response = await Post(url, JSON.parse(jsonString));
-
-    const data: CosmosTransactionBroadcastResponse = response;
-
-    if (
-      data.tx_response?.raw_log &&
-      data.tx_response?.raw_log !== '' &&
-      data.tx_response?.raw_log !== '[]'
-    ) {
-      return data.tx_response.raw_log;
-    }
-
-    return shouldBePresent(data.tx_response?.txhash);
-  }
 }
 
 interface CosmosBalance {
@@ -76,12 +54,4 @@ interface CosmosBalance {
 
 interface CosmosBalanceResponse {
   balances: CosmosBalance[];
-}
-
-interface CosmosTransactionBroadcastResponse {
-  tx_response?: {
-    code?: number;
-    txhash?: string;
-    raw_log?: string;
-  };
 }

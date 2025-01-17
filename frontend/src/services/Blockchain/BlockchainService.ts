@@ -8,10 +8,7 @@ import { tss } from '../../../wailsjs/go/models';
 import { getCoinType } from '../../chain/walletCore/getCoinType';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../../model/chain';
-import {
-  IBlockchainService,
-  SignedTransactionResult,
-} from './IBlockchainService';
+import { IBlockchainService } from './IBlockchainService';
 
 export class BlockchainService implements IBlockchainService {
   chain: Chain;
@@ -28,11 +25,11 @@ export class BlockchainService implements IBlockchainService {
     throw new Error('Method not implemented.');
   }
 
-  getSignedTransaction(
+  executeTransaction(
     _vaultPublicKey: PublicKey,
     _txInputData: Uint8Array,
     _signatures: { [key: string]: tss.KeysignResponse }
-  ): Promise<SignedTransactionResult> {
+  ): Promise<string> {
     throw new Error('Method not implemented.');
   }
 }

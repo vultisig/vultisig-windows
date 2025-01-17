@@ -1,18 +1,13 @@
 import { ethers, TransactionRequest } from 'ethers';
 
 import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
-import {
-  getEvmChainId,
-  getEvmChainRpcUrl,
-  getEvmPublicClient,
-} from '../../../chain/evm/chainInfo';
+import { getEvmChainId, getEvmChainRpcUrl } from '../../../chain/evm/chainInfo';
 import { getErc20Balance } from '../../../chain/evm/erc20/getErc20Balance';
 import { FeePriority } from '../../../chain/fee/FeePriority';
 import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
-import { areLowerCaseEqual } from '../../../lib/utils/string/areLowerCaseEqual';
 import { Chain, EvmChain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Endpoint } from '../../Endpoint';
@@ -98,38 +93,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
     } catch (error) {
       console.error('getGasHistory::', error);
       return [];
-    }
-  }
-
-  async broadcastTransaction(
-    encodedTransaction: string
-  ): Promise<string | null> {
-    const publicClient = getEvmPublicClient(this.chain as EvmChain);
-
-    try {
-      const hash = await publicClient.sendRawTransaction({
-        serializedTransaction: encodedTransaction as `0x${string}`,
-      });
-      return hash;
-    } catch (error) {
-      // Common errors when transaction was already broadcast
-      const alreadyBroadcastErrors = [
-        'already known',
-        'transaction is temporarily banned',
-        'nonce too low',
-        'transaction already exists',
-      ];
-
-      const errorMessage = extractErrorMsg(error);
-      const isAlreadyBroadcast = alreadyBroadcastErrors.some(msg =>
-        areLowerCaseEqual(msg, errorMessage)
-      );
-
-      if (isAlreadyBroadcast) {
-        return null;
-      }
-
-      throw error;
     }
   }
 

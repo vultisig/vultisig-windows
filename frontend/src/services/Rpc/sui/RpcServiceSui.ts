@@ -9,17 +9,6 @@ export class RpcServiceSui extends RpcService implements IRpcService {
     return await this.getReferenceGasPrice();
   }
 
-  async broadcastTransaction(obj: string): Promise<string> {
-    const objParsed = JSON.parse(obj);
-
-    const result = await this.callRPC('sui_executeTransactionBlock', [
-      objParsed.unsignedTransaction,
-      [objParsed.signature],
-    ]);
-
-    return result.digest;
-  }
-
   async getBalance(coin: Coin): Promise<string> {
     const result = await this.callRPC('suix_getBalance', [coin.address]);
     return result.totalBalance;

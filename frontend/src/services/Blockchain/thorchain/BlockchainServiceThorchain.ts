@@ -3,16 +3,13 @@ import { TW } from '@trustwallet/wallet-core';
 import { tss } from '../../../../wailsjs/go/models';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain, CosmosChain } from '../../../model/chain';
-import {
-  IBlockchainService,
-  SignedTransactionResult,
-} from '../IBlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
-import { signCosmosTx } from '../../../chain/cosmos/tx/signCosmosTx';
+import { executeCosmosTx } from '../../../chain/cosmos/tx/executeCosmosTx';
 import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getCoinType } from '../../../chain/walletCore/getCoinType';
 import { RpcServiceThorchain } from '../../Rpc/thorchain/RpcServiceThorchain';
@@ -123,12 +120,12 @@ export class BlockchainServiceThorchain
     return TW.Cosmos.Proto.SigningInput.encode(input).finish();
   }
 
-  async getSignedTransaction(
+  async executeTransaction(
     publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
-  ): Promise<SignedTransactionResult> {
-    return signCosmosTx({
+  ): Promise<string> {
+    return executeCosmosTx({
       publicKey,
       txInputData,
       signatures,

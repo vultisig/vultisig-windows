@@ -3,19 +3,18 @@ import { TW } from '@trustwallet/wallet-core';
 import { tss } from '../../../../wailsjs/go/models';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../../../model/chain';
-import {
-  IBlockchainService,
-  SignedTransactionResult,
-} from '../IBlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
 import TxCompiler = TW.TxCompiler;
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
+import { callRpc } from '../../../chain/rpc/callRpc';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { bigIntToHex } from '../../../chain/utils/bigIntToHex';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
+import { Endpoint } from '../../Endpoint';
 import { BlockchainService } from '../BlockchainService';
 import SignatureProvider from '../signature-provider';
 
@@ -97,11 +96,11 @@ export class BlockchainServicePolkadot
     return new Uint8Array(Buffer.from(hex, 'hex'));
   }
 
-  public async getSignedTransaction(
+  public async executeTransaction(
     publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
-  ): Promise<SignedTransactionResult> {
+  ): Promise<string> {
     const publicKeyData = publicKey.data();
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
@@ -143,11 +142,12 @@ export class BlockchainServicePolkadot
 
     assertErrorMessage(polkadotErrorMessage);
 
-    return {
-      rawTx: this.walletCore.HexCoding.encode(encoded),
-      txHash: this.walletCore.HexCoding.encode(
-        this.walletCore.Hash.blake2b(encoded, 32)
-      ),
-    };
+    const rawTx = this.walletCore.HexCoding.encode(encoded);
+
+    return callRpc({
+      url: Endpoint.polkadotServiceRpc,
+      method: 'author_submitExtrinsic',
+      params: [rawTx],
+    });
   }
 }

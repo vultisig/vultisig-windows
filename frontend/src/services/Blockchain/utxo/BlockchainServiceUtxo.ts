@@ -6,6 +6,7 @@ import { tss } from '../../../../wailsjs/go/models';
 import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
+import { broadcastUtxoTransaction } from '../../../chain/utxo/blockchair/broadcastUtxoTransaction';
 import { utxoChainScriptType } from '../../../chain/utxo/UtxoScriptType';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
@@ -13,10 +14,7 @@ import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { match } from '../../../lib/utils/match';
 import { UtxoChain } from '../../../model/chain';
 import { BlockchainService } from '../BlockchainService';
-import {
-  IBlockchainService,
-  SignedTransactionResult,
-} from '../IBlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
 
 export class BlockchainServiceUtxo
@@ -105,7 +103,7 @@ export class BlockchainServiceUtxo
     publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
-  ): Promise<SignedTransactionResult> {
+  ): Promise<string> {
     const allSignatures = this.walletCore.DataVector.create();
     const publicKeys = this.walletCore.DataVector.create();
     const signatureProvider = new SignatureProvider(
@@ -140,12 +138,14 @@ export class BlockchainServiceUtxo
       );
     const output = TW.Bitcoin.Proto.SigningOutput.decode(compileWithSignatures);
 
-    return {
-      rawTx: hexEncode({
+    await broadcastUtxoTransaction({
+      chain: this.chain as UtxoChain,
+      tx: hexEncode({
         value: output.encoded,
         walletCore: this.walletCore,
       }),
-      txHash: output.transactionId,
-    };
+    });
+
+    return output.transactionId;
   }
 }

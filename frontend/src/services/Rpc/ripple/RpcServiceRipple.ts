@@ -10,33 +10,6 @@ export class RpcServiceRipple extends RpcService implements IRpcService {
     return balance ?? '0';
   }
 
-  async broadcastTransaction(hex: string): Promise<string | null> {
-    const data = await super.callRpc(Endpoint.rippleServiceRpc, 'submit', [
-      {
-        tx_blob: hex,
-      },
-    ]);
-
-    if (data?.engine_result && data?.engine_result !== 'tesSUCCESS') {
-      if (data?.engine_result_message) {
-        if (
-          data?.engine_result_message.toLowerCase() ===
-            'this sequence number has already passed.' &&
-          data?.tx_json?.hash
-        ) {
-          return data?.tx_json.hash;
-        }
-        return data?.engine_result_message;
-      }
-    }
-
-    if (data?.tx_json?.hash) {
-      return data?.tx_json.hash;
-    }
-
-    return null;
-  }
-
   async fetchAccountsInfo(walletAddress: string): Promise<any> {
     try {
       return await super.callRpc(Endpoint.rippleServiceRpc, 'account_info', [

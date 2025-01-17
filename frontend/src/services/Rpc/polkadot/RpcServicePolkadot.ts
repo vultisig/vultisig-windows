@@ -9,14 +9,6 @@ export class RpcServicePolkadot extends RpcService implements IRpcService {
     return balance.toString();
   }
 
-  async broadcastTransaction(hex: string): Promise<string> {
-    const hexWithPrefix = hex.startsWith('0x') ? hex : '0x(hex)';
-    const result: string = await this.callRPC('author_submitExtrinsic', [
-      hexWithPrefix,
-    ]);
-    return result;
-  }
-
   private async fetchBalance(address: string): Promise<bigint> {
     const body = { key: address };
     const maxRetries = 3;

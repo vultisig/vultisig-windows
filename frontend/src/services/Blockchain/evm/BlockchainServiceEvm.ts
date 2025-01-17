@@ -3,6 +3,7 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { keccak256 } from 'js-sha3';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { getEvmPublicClient } from '../../../chain/evm/chainInfo';
 import { getSigningInputEnvelopedTxFields } from '../../../chain/evm/tx/getSigningInputEnvelopedTxFields';
 import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
@@ -13,12 +14,12 @@ import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
+import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { assertField } from '../../../lib/utils/record/assertField';
+import { areLowerCaseEqual } from '../../../lib/utils/string/areLowerCaseEqual';
+import { EvmChain } from '../../../model/chain';
 import { BlockchainService } from '../BlockchainService';
-import {
-  IBlockchainService,
-  SignedTransactionResult,
-} from '../IBlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
 
 export class BlockchainServiceEvm
   extends BlockchainService
@@ -79,11 +80,11 @@ export class BlockchainServiceEvm
     return TW.Ethereum.Proto.SigningInput.encode(input).finish();
   }
 
-  public async getSignedTransaction(
+  public async executeTransaction(
     publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
-  ): Promise<SignedTransactionResult> {
+  ): Promise<string> {
     const [dataHash] = getPreSigningHashes({
       walletCore: this.walletCore,
       chain: this.chain,
@@ -116,9 +117,35 @@ export class BlockchainServiceEvm
 
     assertErrorMessage(errorMessage);
 
-    return {
-      rawTx: this.walletCore.HexCoding.encode(encoded),
-      txHash: '0x' + keccak256(encoded),
-    };
+    const rawTx = this.walletCore.HexCoding.encode(encoded);
+    const txHash = '0x' + keccak256(encoded);
+
+    const publicClient = getEvmPublicClient(this.chain as EvmChain);
+
+    try {
+      const hash = await publicClient.sendRawTransaction({
+        serializedTransaction: rawTx as `0x${string}`,
+      });
+      return hash;
+    } catch (error) {
+      // Common errors when transaction was already broadcast
+      const alreadyBroadcastErrors = [
+        'already known',
+        'transaction is temporarily banned',
+        'nonce too low',
+        'transaction already exists',
+      ];
+
+      const errorMessage = extractErrorMsg(error);
+      const isAlreadyBroadcast = alreadyBroadcastErrors.some(msg =>
+        areLowerCaseEqual(msg, errorMessage)
+      );
+
+      if (isAlreadyBroadcast) {
+        return txHash;
+      }
+
+      throw error;
+    }
   }
 }

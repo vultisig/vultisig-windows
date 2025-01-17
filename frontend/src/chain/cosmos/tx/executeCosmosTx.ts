@@ -6,13 +6,14 @@ import {
 import { createHash } from 'crypto';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { CosmosChain } from '../../../model/chain';
-import { SignedTransaction } from '../../tx/SignedTransaction';
 import { getPreSigningHashes } from '../../tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../utils/assertSignature';
 import { generateSignatureWithRecoveryId } from '../../utils/generateSignatureWithRecoveryId';
 import { getCoinType } from '../../walletCore/getCoinType';
 import { hexEncode } from '../../walletCore/hexEncode';
+import { getCosmosTxBroadcastUrl } from '../cosmosRpcUrl';
 
 type Input = {
   publicKey: PublicKey;
@@ -22,13 +23,13 @@ type Input = {
   chain: CosmosChain;
 };
 
-export const signCosmosTx = ({
+export const executeCosmosTx = async ({
   publicKey,
   txInputData,
   signatures,
   walletCore,
   chain,
-}: Input): SignedTransaction => {
+}: Input): Promise<string> => {
   const publicKeyData = publicKey.data();
 
   const [dataHash] = getPreSigningHashes({
@@ -73,8 +74,27 @@ export const signCosmosTx = ({
     .update(decodedTxBytes as any)
     .digest('hex');
 
-  return {
-    rawTx,
-    txHash,
-  };
+  const url = getCosmosTxBroadcastUrl(chain);
+
+  const response = await Post(url, parsedData);
+
+  const data: CosmosTransactionBroadcastResponse = response;
+
+  if (
+    data.tx_response?.raw_log &&
+    data.tx_response?.raw_log !== '' &&
+    data.tx_response?.raw_log !== '[]'
+  ) {
+    return data.tx_response.raw_log;
+  }
+
+  return txHash;
 };
+
+interface CosmosTransactionBroadcastResponse {
+  tx_response?: {
+    code?: number;
+    txhash?: string;
+    raw_log?: string;
+  };
+}
