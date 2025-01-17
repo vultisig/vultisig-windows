@@ -1,5 +1,6 @@
 import { TW } from '@trustwallet/wallet-core';
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
+import { createHash } from 'crypto';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
@@ -123,9 +124,16 @@ export class BlockchainServiceRipple
 
     assertErrorMessage(errorMessage);
 
+    const rawTx = stripHexPrefix(this.walletCore.HexCoding.encode(encoded));
+
+    const txBytes = walletCore.HexCoding.decode(rawTx);
+    const hash = createHash('sha512');
+    hash.update(Buffer.from(txBytes));
+    const txHash = hash.digest('hex').slice(0, 64);
+
     return {
       rawTx: stripHexPrefix(this.walletCore.HexCoding.encode(encoded)),
-      txHash: '',
+      txHash,
     };
   }
 }
