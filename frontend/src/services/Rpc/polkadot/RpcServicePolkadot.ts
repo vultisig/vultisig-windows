@@ -1,9 +1,9 @@
+import { callRpc } from '../../../chain/rpc/callRpc';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
-import { RpcService } from '../RpcService';
 
-export class RpcServicePolkadot extends RpcService implements IRpcService {
+export class RpcServicePolkadot implements IRpcService {
   async getBalance(coin: Coin): Promise<string> {
     const balance = await this.fetchBalance(coin.address);
     return balance.toString();
@@ -50,7 +50,11 @@ export class RpcServicePolkadot extends RpcService implements IRpcService {
   }
 
   async callRPC(method: string, params: any[]): Promise<any> {
-    return await super.callRpc(Endpoint.polkadotServiceRpc, method, params);
+    return await callRpc({
+      url: Endpoint.polkadotServiceRpc,
+      method,
+      params,
+    });
   }
 
   async fetchNonce(address: string): Promise<number> {
