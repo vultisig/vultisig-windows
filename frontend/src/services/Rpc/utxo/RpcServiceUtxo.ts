@@ -12,7 +12,7 @@ export class RpcServiceUtxo extends RpcService implements IRpcService {
     return data[coin.address].address.balance.toString();
   }
 
-  async broadcastTransaction(tx: string): Promise<string> {
+  async broadcastTransaction(tx: string): Promise<string | null> {
     return broadcastUtxoTransaction({
       chain: this.chain as UtxoChain,
       tx,

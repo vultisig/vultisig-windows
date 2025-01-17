@@ -38,9 +38,12 @@ export const broadcastUtxoTransaction = async ({
     return response.data.transaction_hash;
   }
 
-  throw new Error(
-    `Failed to broadcast transaction: ${
-      'context' in response ? response.context.error : extractErrorMsg(response)
-    }`
-  );
+  const message =
+    'context' in response ? response.context.error : extractErrorMsg(response);
+
+  if (message.includes('txn-mempool-conflict')) {
+    return null;
+  }
+
+  throw new Error(`Failed to broadcast transaction: ${message}`);
 };
