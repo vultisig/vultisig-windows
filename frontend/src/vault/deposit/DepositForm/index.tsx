@@ -185,8 +185,10 @@ export const DepositForm: FC<DepositFormProps> = ({
                     </Text>
                     <InputFieldWrapper
                       as="input"
+                      onWheel={e => e.currentTarget.blur()}
                       type={field.type}
                       step="0.01"
+                      min={0}
                       {...register(field.name)}
                       required={field.required}
                     />

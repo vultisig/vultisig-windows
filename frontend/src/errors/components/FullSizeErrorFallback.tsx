@@ -1,18 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { BrowserOpenURL } from '../../../wailsjs/runtime/runtime';
+import { BrowserOpenURL, WindowReload } from '../../../wailsjs/runtime/runtime';
 import { Button } from '../../lib/ui/buttons/Button';
 import { UniformColumnGrid } from '../../lib/ui/css/uniformColumnGrid';
 import { FilledAlertIcon } from '../../lib/ui/icons/FilledAlertIcon';
 import { VStack } from '../../lib/ui/layout/Stack';
 import { Text, text } from '../../lib/ui/text';
 import { extractErrorMsg } from '../../lib/utils/error/extractErrorMsg';
-import { makeAppPath } from '../../navigation';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { ErrorState } from './ErrorBoundary';
 
@@ -33,7 +30,6 @@ export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
   return (
     <>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
         title={<PageHeaderTitle>{t('something_went_wrong')}</PageHeaderTitle>}
       />
       <PageContent gap={20}>
@@ -67,9 +63,13 @@ export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
           >
             {t('report_error')}
           </Button>
-          <Link to={makeAppPath('vault')}>
-            <Button as="div">{t('go_to_home_page')}</Button>
-          </Link>
+          <Button
+            onClick={() => {
+              WindowReload();
+            }}
+          >
+            {t('try_again')}
+          </Button>
         </UniformColumnGrid>
       </PageContent>
     </>
