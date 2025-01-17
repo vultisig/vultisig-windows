@@ -10,7 +10,10 @@ import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery';
 import { useSendAmount } from '../state/amount';
 import { useCurrentSendCoin } from '../state/sendCoin';
-import { capSendAmountToMax } from '../utils/capSendAmountToMax';
+import {
+  capSendAmountToMax,
+  CapSendAmountToMaxInput,
+} from '../utils/capSendAmountToMax';
 
 export const useSendCappedAmountQuery = () => {
   const [coinKey] = useCurrentSendCoin();
@@ -25,25 +28,27 @@ export const useSendCappedAmountQuery = () => {
       chainSpecific: chainSpecificQuery.data,
       balance: balanceQuery.data,
     },
-    getQuery: ({ chainSpecific, balance }) => ({
-      queryKey: ['sendCappedAmount'],
-      queryFn: async (): Promise<CoinAmount> => {
-        const { decimals } = coin;
+    getQuery: ({ chainSpecific, balance }) => {
+      const { decimals } = coin;
 
-        const chainAmount = toChainAmount(shouldBePresent(amount), decimals);
+      const chainAmount = toChainAmount(shouldBePresent(amount), decimals);
 
-        const feeAmount = getFeeAmount(chainSpecific);
+      const feeAmount = getFeeAmount(chainSpecific);
 
-        return {
+      const input: CapSendAmountToMaxInput = {
+        coin,
+        amount: chainAmount,
+        fee: feeAmount,
+        balance: balance.amount,
+      };
+
+      return {
+        queryKey: ['sendCappedAmount', input],
+        queryFn: async (): Promise<CoinAmount> => ({
           decimals,
-          amount: capSendAmountToMax({
-            amount: chainAmount,
-            coin,
-            fee: feeAmount,
-            balance: balance.amount,
-          }),
-        };
-      },
-    }),
+          amount: capSendAmountToMax(input),
+        }),
+      };
+    },
   });
 };
