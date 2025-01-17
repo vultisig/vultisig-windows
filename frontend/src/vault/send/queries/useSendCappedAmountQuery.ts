@@ -24,6 +24,7 @@ export const useSendCappedAmountQuery = () => {
     state: {
       chainSpecific: chainSpecificQuery.data,
       balance: balanceQuery.data,
+      amount,
     },
     getQuery: ({ chainSpecific, balance }) => ({
       queryKey: ['sendCappedAmount', amount],
