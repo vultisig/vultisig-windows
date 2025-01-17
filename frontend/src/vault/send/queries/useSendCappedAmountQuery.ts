@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
@@ -24,22 +26,25 @@ export const useSendCappedAmountQuery = () => {
       chainSpecific: chainSpecificQuery,
       balance: balanceQuery,
     },
-    ({ chainSpecific, balance }) => {
-      const { decimals } = coin;
+    useCallback(
+      ({ chainSpecific, balance }) => {
+        const { decimals } = coin;
 
-      const chainAmount = toChainAmount(shouldBePresent(amount), decimals);
+        const chainAmount = toChainAmount(shouldBePresent(amount), decimals);
 
-      const feeAmount = getFeeAmount(chainSpecific);
+        const feeAmount = getFeeAmount(chainSpecific);
 
-      return {
-        decimals,
-        amount: capSendAmountToMax({
-          amount: chainAmount,
-          coin,
-          fee: feeAmount,
-          balance: balance.amount,
-        }),
-      };
-    }
+        return {
+          decimals,
+          amount: capSendAmountToMax({
+            amount: chainAmount,
+            coin,
+            fee: feeAmount,
+            balance: balance.amount,
+          }),
+        };
+      },
+      [coin, amount]
+    )
   );
 };
