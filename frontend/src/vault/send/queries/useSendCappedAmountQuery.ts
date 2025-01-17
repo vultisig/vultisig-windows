@@ -26,7 +26,7 @@ export const useSendCappedAmountQuery = () => {
       balance: balanceQuery.data,
     },
     getQuery: ({ chainSpecific, balance }) => ({
-      queryKey: ['sendCappedAmount'],
+      queryKey: ['sendCappedAmount', amount],
       queryFn: async (): Promise<CoinAmount> => {
         const { decimals } = coin;
 
