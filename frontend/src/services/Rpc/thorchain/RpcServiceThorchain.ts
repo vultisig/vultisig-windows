@@ -8,10 +8,6 @@ import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceThorchain implements IRpcService {
-  async sendTransaction(encodedTransaction: string): Promise<string> {
-    return await this.broadcastTransaction(encodedTransaction);
-  }
-
   async getBalance(coin: Coin): Promise<string> {
     const url = getCosmosBalanceUrl({
       chain: Chain.THORChain,
@@ -46,21 +42,6 @@ export class RpcServiceThorchain implements IRpcService {
 
     const data = await response.json();
     return data.tx_response?.txhash;
-  }
-
-  async resolveENS?(ensName: string): Promise<string> {
-    const url = Endpoint.resolveTNS(ensName);
-    const response = await fetch(url);
-    const data = await response.json();
-    const entry = data.entries.find(
-      (e: any) =>
-        e.chain.toLowerCase() === Chain.THORChain.toString().toLowerCase()
-    );
-
-    if (!entry) {
-      throw new Error('TNS entry not found');
-    }
-    return entry.address;
   }
 
   static async getTHORChainChainID(): Promise<string> {

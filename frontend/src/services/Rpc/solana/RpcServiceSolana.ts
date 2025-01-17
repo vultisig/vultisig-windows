@@ -10,65 +10,60 @@ const rpcURL2 = Endpoint.solanaServiceRpc;
 const tokenInfoServiceURL = Endpoint.solanaTokenInfoServiceRpc;
 
 export class RpcServiceSolana implements IRpcService, ITokenService {
-  async sendTransaction(encodedTransaction: string): Promise<string> {
-    try {
-      // Simulate transaction before sending
-      const isSimulationSuccessful =
-        await this.simulateTransaction(encodedTransaction);
-      if (!isSimulationSuccessful.success) {
-        console.error(isSimulationSuccessful.error);
-        return (
-          isSimulationSuccessful.error || 'Error to simulate the transaction'
-        );
-      }
-
-      // Send transaction
-      const requestBody = {
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'sendTransaction',
-        params: [
-          encodedTransaction,
-          {
-            preflightCommitment: 'confirmed',
-            skipPreflight: true,
-          },
-        ],
-      };
-
-      const post = await fetch(rpcURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody),
-      });
-
-      const response = await post.json();
-
-      if (response.error) {
-        console.error(`Error sending transaction: ${response.error.message}`);
-        return response.error.message;
-      }
-
-      const transactionHash = response.result as string;
-
-      // Confirm transaction
-      const isConfirmed = await this.confirmTransaction(transactionHash);
-      if (!isConfirmed.success) {
-        console.error(
-          isConfirmed.error ||
-            'Transaction confirmation failed or transaction was rejected.'
-        );
-        return (
-          isConfirmed.error ||
-          'Transaction confirmation failed or transaction was rejected.'
-        );
-      }
-
-      return transactionHash;
-    } catch (error) {
-      console.error(`Error sending transaction: ${(error as any).message}`);
-      return '';
+  async broadcastTransaction(encodedTransaction: string): Promise<string> {
+    // Simulate transaction before sending
+    const isSimulationSuccessful =
+      await this.simulateTransaction(encodedTransaction);
+    if (!isSimulationSuccessful.success) {
+      console.error(isSimulationSuccessful.error);
+      return (
+        isSimulationSuccessful.error || 'Error to simulate the transaction'
+      );
     }
+
+    // Send transaction
+    const requestBody = {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'sendTransaction',
+      params: [
+        encodedTransaction,
+        {
+          preflightCommitment: 'confirmed',
+          skipPreflight: true,
+        },
+      ],
+    };
+
+    const post = await fetch(rpcURL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestBody),
+    });
+
+    const response = await post.json();
+
+    if (response.error) {
+      console.error(`Error sending transaction: ${response.error.message}`);
+      return response.error.message;
+    }
+
+    const transactionHash = response.result as string;
+
+    // Confirm transaction
+    const isConfirmed = await this.confirmTransaction(transactionHash);
+    if (!isConfirmed.success) {
+      console.error(
+        isConfirmed.error ||
+          'Transaction confirmation failed or transaction was rejected.'
+      );
+      return (
+        isConfirmed.error ||
+        'Transaction confirmation failed or transaction was rejected.'
+      );
+    }
+
+    return transactionHash;
   }
 
   async simulateTransaction(
@@ -230,11 +225,6 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
       );
       return tokenBalance?.toString() || '0';
     }
-  }
-
-  async broadcastTransaction(hex: string): Promise<string> {
-    // Solana does not broadcast via hex in the same way EVM chains do. Instead, you broadcast an encoded transaction.
-    return this.sendTransaction(hex);
   }
 
   async fetchRecentBlockhash(): Promise<string> {

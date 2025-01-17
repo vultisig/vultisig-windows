@@ -13,9 +13,11 @@ import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { match } from '../../../lib/utils/match';
 import { UtxoChain } from '../../../model/chain';
 import { BlockchainService } from '../BlockchainService';
-import { IBlockchainService } from '../IBlockchainService';
+import {
+  IBlockchainService,
+  SignedTransactionResult,
+} from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
-import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceUtxo
   extends BlockchainService
@@ -117,9 +119,6 @@ export class BlockchainServiceUtxo
     });
     hashes.forEach(hash => {
       const signature = signatureProvider.getDerSignature(hash);
-      if (signature === undefined) {
-        return;
-      }
 
       assertSignature({
         publicKey,
@@ -140,13 +139,13 @@ export class BlockchainServiceUtxo
         publicKeys
       );
     const output = TW.Bitcoin.Proto.SigningOutput.decode(compileWithSignatures);
-    const result = new SignedTransactionResult(
-      hexEncode({
+
+    return {
+      rawTx: hexEncode({
         value: output.encoded,
         walletCore: this.walletCore,
       }),
-      output.transactionId
-    );
-    return result;
+      txHash: output.transactionId,
+    };
   }
 }

@@ -9,9 +9,11 @@ import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { assertField } from '../../../lib/utils/record/assertField';
 import { BlockchainService } from '../BlockchainService';
-import { IBlockchainService } from '../IBlockchainService';
+import {
+  IBlockchainService,
+  SignedTransactionResult,
+} from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
-import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceTon
   extends BlockchainService
@@ -107,11 +109,9 @@ export class BlockchainServiceTon
 
     assertErrorMessage(output.errorMessage);
 
-    const result = new SignedTransactionResult(
-      output.encoded,
-      Buffer.from(output.hash).toString('base64')
-    );
-
-    return result;
+    return {
+      rawTx: output.encoded,
+      txHash: Buffer.from(output.hash).toString('base64'),
+    };
   }
 }

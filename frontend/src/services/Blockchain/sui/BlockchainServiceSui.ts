@@ -11,9 +11,11 @@ import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain } from '../../../model/chain';
 import { BlockchainService } from '../BlockchainService';
-import { IBlockchainService } from '../IBlockchainService';
+import {
+  IBlockchainService,
+  SignedTransactionResult,
+} from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
-import { SignedTransactionResult } from '../signed-transaction-result';
 
 export class BlockchainServiceSui
   extends BlockchainService
@@ -93,16 +95,23 @@ export class BlockchainServiceSui
       publicKeys
     );
 
-    const output = TW.Sui.Proto.SigningOutput.decode(compiled);
+    const {
+      unsignedTx,
+      errorMessage: suiErrorMessage,
+      signature: compiledSignature,
+    } = TW.Sui.Proto.SigningOutput.decode(compiled);
 
-    assertErrorMessage(output.errorMessage);
+    assertErrorMessage(suiErrorMessage);
 
-    const result = new SignedTransactionResult(
-      output.unsignedTx,
-      '',
-      output.signature
+    const txBytes = Buffer.from(unsignedTx, 'base64');
+    const txHash = Buffer.from(this.walletCore.Hash.sha3_256(txBytes)).toString(
+      'base64'
     );
 
-    return result;
+    return {
+      rawTx: unsignedTx,
+      txHash,
+      signature: compiledSignature,
+    };
   }
 }

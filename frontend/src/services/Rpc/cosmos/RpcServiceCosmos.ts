@@ -15,9 +15,6 @@ export class RpcServiceCosmos implements IRpcService {
   constructor(chain: CosmosChain) {
     this.chain = chain;
   }
-  sendTransaction(encodedTransaction: string): Promise<string> {
-    return this.broadcastTransaction(encodedTransaction);
-  }
 
   async getBalance(coin: Coin): Promise<string> {
     const balances = await this.fetchBalances(coin.address);

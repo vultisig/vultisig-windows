@@ -6,12 +6,14 @@ import { getUtxoAddressInfo } from '../blockchair/getUtxoAddressInfo';
 export const getUtxos = async (account: ChainAccount<UtxoChain>) => {
   const { data } = await getUtxoAddressInfo(account);
 
-  return data[account.address].utxo.map(
-    utxo =>
+  const { utxo } = data[account.address];
+
+  return utxo.map(
+    ({ transaction_hash, value, index }) =>
       new UtxoInfo({
-        hash: utxo.transaction_hash,
-        amount: BigInt(utxo.value),
-        index: Number(utxo.index),
+        hash: transaction_hash,
+        amount: BigInt(value),
+        index,
       })
   );
 };

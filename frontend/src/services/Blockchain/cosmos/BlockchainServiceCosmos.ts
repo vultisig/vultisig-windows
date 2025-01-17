@@ -1,8 +1,10 @@
 import { TW } from '@trustwallet/wallet-core';
 
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { IBlockchainService } from '../IBlockchainService';
-import { SignedTransactionResult } from '../signed-transaction-result';
+import {
+  IBlockchainService,
+  SignedTransactionResult,
+} from '../IBlockchainService';
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
@@ -135,14 +137,17 @@ export class BlockchainServiceCosmos
       );
     const output = TW.Cosmos.Proto.SigningOutput.decode(compileWithSignatures);
 
-    const serializedData = output.serialized;
-    const parsedData = JSON.parse(serializedData);
+    const rawTx = output.serialized;
+    const parsedData = JSON.parse(rawTx);
     const txBytes = parsedData.tx_bytes;
     const decodedTxBytes = Buffer.from(txBytes, 'base64');
-    const hash = createHash('sha256')
+    const txHash = createHash('sha256')
       .update(decodedTxBytes as any)
       .digest('hex');
-    const result = new SignedTransactionResult(serializedData, hash, undefined);
-    return result;
+
+    return {
+      rawTx,
+      txHash,
+    };
   }
 }

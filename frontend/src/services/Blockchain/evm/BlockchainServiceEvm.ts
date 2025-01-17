@@ -15,8 +15,10 @@ import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { assertField } from '../../../lib/utils/record/assertField';
 import { BlockchainService } from '../BlockchainService';
-import { IBlockchainService } from '../IBlockchainService';
-import { SignedTransactionResult } from '../signed-transaction-result';
+import {
+  IBlockchainService,
+  SignedTransactionResult,
+} from '../IBlockchainService';
 
 export class BlockchainServiceEvm
   extends BlockchainService
@@ -114,10 +116,9 @@ export class BlockchainServiceEvm
 
     assertErrorMessage(errorMessage);
 
-    const result = new SignedTransactionResult(
-      this.walletCore.HexCoding.encode(encoded),
-      '0x' + keccak256(encoded)
-    );
-    return result;
+    return {
+      rawTx: this.walletCore.HexCoding.encode(encoded),
+      txHash: '0x' + keccak256(encoded),
+    };
   }
 }

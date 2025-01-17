@@ -1,4 +1,4 @@
-import { Chain } from 'viem';
+import { Chain, createPublicClient, http, PublicClient } from 'viem';
 import {
   arbitrum,
   avalanche,
@@ -12,58 +12,62 @@ import {
   zksync,
 } from 'viem/chains';
 
+import { recordMap } from '../../lib/utils/record/recordMap';
 import { EvmChain } from '../../model/chain';
 import { Endpoint } from '../../services/Endpoint';
 
-const withCustomRpcUrl = (chain: Chain, rpcUrl: string): Chain => ({
-  ...chain,
-  rpcUrls: {
-    ...chain.rpcUrls,
-    default: { http: [rpcUrl] },
-  },
-});
-
-const evmChainInfo: Record<EvmChain, Chain> = {
-  [EvmChain.Ethereum]: withCustomRpcUrl(
-    mainnet,
-    `${Endpoint.vultisigApiProxy}/eth/`
-  ),
-  [EvmChain.Base]: withCustomRpcUrl(base, `${Endpoint.vultisigApiProxy}/base/`),
-  [EvmChain.Arbitrum]: withCustomRpcUrl(
-    arbitrum,
-    `${Endpoint.vultisigApiProxy}/arb/`
-  ),
-  [EvmChain.Polygon]: withCustomRpcUrl(
-    polygon,
-    `${Endpoint.vultisigApiProxy}/polygon/`
-  ),
-  [EvmChain.Optimism]: withCustomRpcUrl(
-    optimism,
-    `${Endpoint.vultisigApiProxy}/opt/`
-  ),
-  [EvmChain.CronosChain]: withCustomRpcUrl(
-    cronos,
-    'https://cronos-evm-rpc.publicnode.com'
-  ),
-  [EvmChain.Blast]: withCustomRpcUrl(
-    blast,
-    `${Endpoint.vultisigApiProxy}/blast/`
-  ),
-  [EvmChain.BSC]: withCustomRpcUrl(bsc, `${Endpoint.vultisigApiProxy}/bsc/`),
-  [EvmChain.Zksync]: withCustomRpcUrl(
-    zksync,
-    `${Endpoint.vultisigApiProxy}/zksync/`
-  ),
-  [EvmChain.Avalanche]: withCustomRpcUrl(
-    avalanche,
-    'https://avalanche-c-chain-rpc.publicnode.com'
-  ),
+export const evmChainRpcUrls: Record<EvmChain, string> = {
+  [EvmChain.Ethereum]: `${Endpoint.vultisigApiProxy}/eth/`,
+  [EvmChain.Base]: `${Endpoint.vultisigApiProxy}/base/`,
+  [EvmChain.Arbitrum]: `${Endpoint.vultisigApiProxy}/arb/`,
+  [EvmChain.Polygon]: `${Endpoint.vultisigApiProxy}/polygon/`,
+  [EvmChain.Optimism]: `${Endpoint.vultisigApiProxy}/opt/`,
+  [EvmChain.CronosChain]: 'https://cronos-evm-rpc.publicnode.com',
+  [EvmChain.Blast]: `${Endpoint.vultisigApiProxy}/blast/`,
+  [EvmChain.BSC]: `${Endpoint.vultisigApiProxy}/bsc/`,
+  [EvmChain.Zksync]: `${Endpoint.vultisigApiProxy}/zksync/`,
+  [EvmChain.Avalanche]: 'https://avalanche-c-chain-rpc.publicnode.com',
 };
+
+const evmDefaultChainInfo: Record<EvmChain, Chain> = {
+  [EvmChain.Ethereum]: mainnet,
+  [EvmChain.Base]: base,
+  [EvmChain.Arbitrum]: arbitrum,
+  [EvmChain.Polygon]: polygon,
+  [EvmChain.Optimism]: optimism,
+  [EvmChain.CronosChain]: cronos,
+  [EvmChain.Blast]: blast,
+  [EvmChain.BSC]: bsc,
+  [EvmChain.Zksync]: zksync,
+  [EvmChain.Avalanche]: avalanche,
+};
+
+export const evmChainInfo = recordMap(
+  evmDefaultChainInfo,
+  (chain, chainKey) => {
+    const rpcUrl = evmChainRpcUrls[chainKey];
+
+    return {
+      ...chain,
+      rpcUrls: {
+        ...chain.rpcUrls,
+        default: { http: [rpcUrl] },
+      },
+    };
+  }
+);
 
 export const getEvmChainId = (chain: EvmChain): number => {
   return evmChainInfo[chain].id;
 };
 
 export const getEvmChainRpcUrl = (chain: EvmChain): string => {
-  return evmChainInfo[chain].rpcUrls.default.http[0];
+  return evmChainRpcUrls[chain];
+};
+
+export const getEvmPublicClient = (chain: EvmChain): PublicClient => {
+  return createPublicClient({
+    chain: evmChainInfo[chain],
+    transport: http(),
+  });
 };

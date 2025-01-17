@@ -3,8 +3,10 @@ import { TW } from '@trustwallet/wallet-core';
 import { tss } from '../../../../wailsjs/go/models';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../../../model/chain';
-import { IBlockchainService } from '../IBlockchainService';
-import { SignedTransactionResult } from '../signed-transaction-result';
+import {
+  IBlockchainService,
+  SignedTransactionResult,
+} from '../IBlockchainService';
 import TxCompiler = TW.TxCompiler;
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
@@ -141,13 +143,11 @@ export class BlockchainServicePolkadot
 
     assertErrorMessage(polkadotErrorMessage);
 
-    const result = new SignedTransactionResult(
-      this.walletCore.HexCoding.encode(encoded),
-      this.walletCore.HexCoding.encode(
+    return {
+      rawTx: this.walletCore.HexCoding.encode(encoded),
+      txHash: this.walletCore.HexCoding.encode(
         this.walletCore.Hash.blake2b(encoded, 32)
-      )
-    );
-
-    return result;
+      ),
+    };
   }
 }

@@ -8,9 +8,9 @@ import { generateSignatureWithRecoveryId } from '../../../../chain/utils/generat
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { getLastItem } from '../../../../lib/utils/array/getLastItem';
+import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '../../../../lib/utils/matchRecordUnion';
 import { chainPromises } from '../../../../lib/utils/promise/chainPromises';
-import { pick } from '../../../../lib/utils/record/pick';
 import { recordFromItems } from '../../../../lib/utils/record/recordFromItems';
 import { Chain } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
@@ -90,30 +90,32 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
           });
 
           const hashes = await chainPromises(
-            inputs.map(async (txInputData, index) => {
-              const msgs = groupedMsgs[index];
-
-              const { rawTransaction, signature } =
+            inputs.map(async txInputData => {
+              const { rawTx, txHash, signature } =
                 await blockchainService.getSignedTransaction(
                   publicKey,
                   txInputData,
-                  pick(signaturesRecord, msgs)
+                  signaturesRecord
                 );
 
               const rpcService = RpcServiceFactory.createRpcService(chain);
 
               // TODO: Transaction broadcasting interface should be redesigned
               // It should receive a typed input instead of a string
-              if (chain === Chain.Sui) {
-                return rpcService.broadcastTransaction(
-                  JSON.stringify({
-                    unsignedTransaction: rawTransaction,
-                    signature: signature,
-                  })
-                );
+              const broadcastedTxHash = await rpcService.broadcastTransaction(
+                chain === Chain.Sui
+                  ? JSON.stringify({
+                      unsignedTransaction: rawTx,
+                      signature: shouldBePresent(signature),
+                    })
+                  : rawTx
+              );
+
+              if (broadcastedTxHash) {
+                return broadcastedTxHash;
               }
 
-              return rpcService.broadcastTransaction(rawTransaction);
+              return txHash;
             })
           );
 
