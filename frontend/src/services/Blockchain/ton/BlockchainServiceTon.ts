@@ -111,7 +111,7 @@ export class BlockchainServiceTon
 
     return {
       rawTx: output.encoded,
-      txHash: Buffer.from(output.hash).toString('base64'),
+      txHash: Buffer.from(output.hash).toString('hex'),
     };
   }
 }
