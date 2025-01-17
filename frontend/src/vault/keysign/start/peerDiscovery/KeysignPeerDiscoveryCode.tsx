@@ -4,20 +4,20 @@ import styled from 'styled-components';
 import { centerContent } from '../../../../lib/ui/css/centerContent';
 import { FramedQrCode } from '../../../../lib/ui/qr/FramedQrCode';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
-import { useKeysignMsgQuery } from '../../shared/queries/useKeysignMsgQuery';
+import { useJoinKeysignUrlQuery } from '../../shared/queries/useJoinKeysignUrlQuery';
 
 const Container = styled.div`
   ${centerContent};
 `;
 
 export const KeysignPeerDiscoveryQrCode = () => {
-  const keygenMsgQuery = useKeysignMsgQuery();
+  const joinKeysignUrlQuery = useJoinKeysignUrlQuery();
 
   const { t } = useTranslation();
 
   return (
     <MatchQuery
-      value={keygenMsgQuery}
+      value={joinKeysignUrlQuery}
       success={data => (
         <Container>
           <FramedQrCode value={data} />
