@@ -1,15 +1,33 @@
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 
-import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { withoutNullOrUndefined } from '../../../lib/utils/array/withoutNullOrUndefined';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { Chain, UtxoChain } from '../../../model/chain';
+import { Chain, ChainKind, chainKindRecord } from '../../../model/chain';
 import { getCoinType } from '../../walletCore/getCoinType';
 
 type Input = {
   walletCore: WalletCore;
   chain: Chain;
   txInputData: Uint8Array;
+};
+
+const decoders: Record<
+  ChainKind,
+  (
+    preHashes: Uint8Array
+  ) =>
+    | TW.Bitcoin.Proto.PreSigningOutput
+    | TW.Solana.Proto.PreSigningOutput
+    | TW.TxCompiler.Proto.PreSigningOutput
+> = {
+  utxo: TW.Bitcoin.Proto.PreSigningOutput.decode,
+  solana: TW.Solana.Proto.PreSigningOutput.decode,
+  evm: TW.TxCompiler.Proto.PreSigningOutput.decode,
+  cosmos: TW.TxCompiler.Proto.PreSigningOutput.decode,
+  polkadot: TW.TxCompiler.Proto.PreSigningOutput.decode,
+  ton: TW.TxCompiler.Proto.PreSigningOutput.decode,
+  sui: TW.TxCompiler.Proto.PreSigningOutput.decode,
+  ripple: TW.TxCompiler.Proto.PreSigningOutput.decode,
 };
 
 export const getPreSigningHashes = ({
@@ -25,34 +43,29 @@ export const getPreSigningHashes = ({
     txInputData
   );
 
-  if (isOneOf(chain, Object.values(UtxoChain))) {
-    const { errorMessage, hashPublicKeys } =
-      TW.Bitcoin.Proto.PreSigningOutput.decode(preHashes);
+  const chainKind = chainKindRecord[chain];
 
-    assertErrorMessage(errorMessage);
+  const decoder = decoders[chainKind];
 
-    return withoutNullOrUndefined(hashPublicKeys.map(hash => hash?.dataHash));
-  } else if (chain === Chain.Solana) {
-    const { errorMessage, data } =
-      TW.Solana.Proto.PreSigningOutput.decode(preHashes);
+  const output = decoder(preHashes);
 
-    assertErrorMessage(errorMessage);
+  assertErrorMessage(output.errorMessage);
 
-    return [data];
+  if ('hashPublicKeys' in output) {
+    return withoutNullOrUndefined(
+      output.hashPublicKeys.map(hash => hash?.dataHash)
+    );
   }
 
-  const { errorMessage, dataHash, data } =
-    TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
-
-  assertErrorMessage(errorMessage);
-
-  if (dataHash.length === 0) {
-    if (chain === Chain.Sui) {
-      return [walletCore.Hash.blake2b(data, 32)];
-    }
-
-    return [data];
+  if ('dataHash' in output && output.dataHash.length > 0) {
+    return [output.dataHash];
   }
 
-  return [dataHash];
+  const { data } = output;
+
+  if (chain === Chain.Sui) {
+    return [walletCore.Hash.blake2b(data, 32)];
+  }
+
+  return [data];
 };
