@@ -1,20 +1,14 @@
 import { ethers, TransactionRequest } from 'ethers';
 
-import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
-import { getEvmChainId, getEvmChainRpcUrl } from '../../../chain/evm/chainInfo';
+import { getEvmChainRpcUrl } from '../../../chain/evm/chainInfo';
 import { getErc20Balance } from '../../../chain/evm/erc20/getErc20Balance';
 import { FeePriority } from '../../../chain/fee/FeePriority';
-import { oneInchTokenToCoinMeta } from '../../../coin/oneInch/token';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
-import { Chain, EvmChain } from '../../../model/chain';
-import { CoinMeta } from '../../../model/coin-meta';
-import { Endpoint } from '../../Endpoint';
-import { ITokenService } from '../../Tokens/ITokenService';
+import { EvmChain } from '../../../model/chain';
 import { IRpcService } from '../IRpcService';
 
-export class RpcServiceEvm implements IRpcService, ITokenService {
+export class RpcServiceEvm implements IRpcService {
   provider: ethers.JsonRpcProvider;
   chain: EvmChain;
 
@@ -147,87 +141,6 @@ export class RpcServiceEvm implements IRpcService, ITokenService {
 
   sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
-    try {
-      const chain = isOneOf(nativeToken.chain, Object.values(Chain));
-
-      if (!chain) {
-        throw new Error('Invalid chain');
-      }
-
-      const oneInchChainId = getEvmChainId(chain as EvmChain);
-      const oneInchEndpoint = Endpoint.fetch1InchsTokensBalance(
-        oneInchChainId.toString(),
-        nativeToken.address
-      );
-
-      const balanceData = await Fetch(oneInchEndpoint);
-
-      await this.sleep(1000); // We have some rate limits on 1 inch, so I will wait a bit
-
-      // Filter tokens with non-zero balance
-      const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
-        .filter(([_, balance]) => BigInt(balance as string) > 0n) // Ensure the balance is non-zero
-        .map(([tokenAddress]) => tokenAddress)
-        .filter(
-          tokenAddress =>
-            tokenAddress !== '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-        );
-
-      if (nonZeroBalanceTokenAddresses.length === 0) {
-        return [];
-      }
-
-      // Fetch token information for the non-zero balance tokens
-      const tokenInfoEndpoint = Endpoint.fetch1InchsTokensInfo(
-        oneInchChainId.toString(),
-        nonZeroBalanceTokenAddresses
-      );
-
-      const tokenInfoData = await Fetch(tokenInfoEndpoint);
-
-      // Map the fetched token information to CoinMeta[] format
-      return nonZeroBalanceTokenAddresses
-        .map(tokenAddress => {
-          const tokenInfo = tokenInfoData[tokenAddress];
-          if (!tokenInfo) return null;
-
-          return oneInchTokenToCoinMeta({
-            token: tokenInfo,
-            chain: chain,
-          });
-        })
-        .filter((token): token is CoinMeta => token !== null); // Type guard to filter out null values
-    } catch (error) {
-      console.error('getTokens::', error);
-      return [];
-    }
-  }
-
-  async estimateGasForERC20Transfer(
-    senderAddress: string,
-    contractAddress: string,
-    recipientAddress: string,
-    value: bigint
-  ): Promise<bigint> {
-    const data = this.constructERC20TransferData(recipientAddress, value);
-
-    const nonce = await this.provider.getTransactionCount(senderAddress);
-    const gasPrice = await this.provider.send('eth_gasPrice', []);
-
-    const transactionObject: ethers.TransactionRequest = {
-      from: senderAddress,
-      to: contractAddress,
-      value: '0x0',
-      data: data,
-      nonce: nonce,
-      gasPrice: gasPrice,
-    };
-
-    const gasEstimate = await this.provider.estimateGas(transactionObject);
-    return BigInt(gasEstimate.toString());
   }
 
   private constructERC20TransferData(

@@ -4,7 +4,7 @@ import { createCoin } from '../../coin/utils/createCoin';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { CoinMeta } from '../../model/coin-meta';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
+import { CoinService } from '../../services/Coin/CoinService';
 import { getVaultPublicKey } from '../publicKey/getVaultPublicKey';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
 import { useCurrentVault } from '../state/currentVault';
@@ -21,10 +21,7 @@ export const useSaveCoinMutation = () => {
       console.error('save coin error: ', error);
     },
     mutationFn: async (coinMeta: CoinMeta) => {
-      const coinService = CoinServiceFactory.createCoinService(
-        coinMeta.chain,
-        walletCore
-      );
+      const coinService = new CoinService(coinMeta.chain, walletCore);
 
       const publicKey = await getVaultPublicKey({
         vault,

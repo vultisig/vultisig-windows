@@ -1,15 +1,15 @@
+import { ChainAccount } from '../../../chain/ChainAccount';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Endpoint } from '../../Endpoint';
-import { ITokenService } from '../../Tokens/ITokenService';
 import { IRpcService } from '../IRpcService';
 
 const rpcURL = Endpoint.solanaServiceRpc;
 const rpcURL2 = Endpoint.solanaServiceRpc;
 const tokenInfoServiceURL = Endpoint.solanaTokenInfoServiceRpc;
 
-export class RpcServiceSolana implements IRpcService, ITokenService {
+export class RpcServiceSolana implements IRpcService {
   async broadcastTransaction(encodedTransaction: string): Promise<string> {
     // Simulate transaction before sending
     const isSimulationSuccessful =
@@ -295,12 +295,12 @@ export class RpcServiceSolana implements IRpcService, ITokenService {
     return response.result?.value || [];
   }
 
-  async getTokens(nativeToken: Coin): Promise<CoinMeta[]> {
-    if (!nativeToken?.address) {
+  async getTokens(account: ChainAccount): Promise<CoinMeta[]> {
+    if (!account.address) {
       throw new Error('Invalid native token: Address is required');
     }
 
-    const accounts = await this.fetchTokenAccountsByOwner(nativeToken.address);
+    const accounts = await this.fetchTokenAccountsByOwner(account.address);
     if (!accounts.length) {
       return [];
     }

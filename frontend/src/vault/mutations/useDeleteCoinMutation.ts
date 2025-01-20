@@ -5,7 +5,7 @@ import { CoinKey } from '../../coin/Coin';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { Chain } from '../../model/chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { CoinServiceFactory } from '../../services/Coin/CoinServiceFactory';
+import { CoinService } from '../../services/Coin/CoinService';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
 import {
   useCurrentVault,
@@ -24,10 +24,7 @@ export const useDeleteCoinMutation = () => {
 
   return useMutation({
     mutationFn: async (key: CoinKey) => {
-      const coinService = CoinServiceFactory.createCoinService(
-        key.chain as Chain,
-        walletCore
-      );
+      const coinService = new CoinService(key.chain, walletCore);
 
       const address = addresses[key.chain as Chain];
 
