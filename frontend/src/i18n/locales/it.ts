@@ -9,6 +9,8 @@ export const it = {
     "Vultisig è, per natura, un'applicazione multi-dispositivo. Richiede almeno due dispositivi per creare una cassaforte sicura: un dispositivo iniziale e un dispositivo di accoppiamento.",
   onboarding_view4_description:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
+  tokens: 'token',
+  selected: 'selezionato',
   create_new_vault: 'Crea nuova cassaforte',
   import_existing_vault: 'Importa cassaforte esistente',
   scan_with_devices:
