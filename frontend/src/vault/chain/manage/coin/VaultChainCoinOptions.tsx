@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { areEqualCoins, coinKeyToString } from '../../../../coin/Coin';
-import { useAutoDiscoverTokensForNativeToken } from '../../../../coin/query/useAutoDiscoverTokensForNativeToken';
+import { useTokensAutoDiscoveryQuery } from '../../../../coin/query/useTokensAutoDiscoveryQuery';
 import { useWhitelistedCoinsQuery } from '../../../../coin/query/useWhitelistedCoinsQuery';
 import {
   getCoinMetaKey,
@@ -30,7 +30,7 @@ export const VaultChainCoinOptions = () => {
     data: autoDiscoveredTokens = [],
     isLoading: isLoadingAutoDiscover,
     error: errorAutoDiscover,
-  } = useAutoDiscoverTokensForNativeToken({
+  } = useTokensAutoDiscoveryQuery({
     chain,
     coin: storageCoinToCoin(nativeToken),
   });

@@ -2,7 +2,6 @@ import { match } from '../../lib/utils/match';
 import { Chain, EvmChain } from '../../model/chain';
 import { RpcServiceCosmos } from './cosmos/RpcServiceCosmos';
 import { RpcServiceEvm } from './evm/RpcServiceEvm';
-import { RpcServiceZksync } from './evm/RpcServiceZkSyncEvm';
 import { IRpcService } from './IRpcService';
 import { RpcServiceMaya } from './maya/RpcServiceMaya';
 import { RpcServicePolkadot } from './polkadot/RpcServicePolkadot';
@@ -30,7 +29,7 @@ export class RpcServiceFactory {
       [Chain.Base]: () => new RpcServiceEvm(chain as EvmChain),
       [Chain.CronosChain]: () => new RpcServiceEvm(chain as EvmChain),
       [Chain.BSC]: () => new RpcServiceEvm(chain as EvmChain),
-      [Chain.Zksync]: () => new RpcServiceZksync(),
+      [Chain.Zksync]: () => new RpcServiceEvm(chain as EvmChain),
       [Chain.THORChain]: () => new RpcServiceThorchain(),
       [Chain.MayaChain]: () => new RpcServiceMaya(),
       [Chain.Bitcoin]: () => new RpcServiceUtxo(),

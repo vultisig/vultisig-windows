@@ -6,7 +6,7 @@ import { IRpcService } from '../../services/Rpc/IRpcService';
 import { RpcServiceFactory } from '../../services/Rpc/RpcServiceFactory';
 import { ITokenService } from '../../services/Tokens/ITokenService';
 
-export const useAutoDiscoverTokensForNativeToken = ({
+export const useTokensAutoDiscoveryQuery = ({
   chain,
   coin,
 }: {
