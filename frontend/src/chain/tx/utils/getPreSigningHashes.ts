@@ -57,14 +57,10 @@ export const getPreSigningHashes = ({
     );
   }
 
-  if ('dataHash' in output && output.dataHash.length > 0) {
-    return [output.dataHash];
-  }
-
   const { data } = output;
 
-  if (chain === Chain.Sui) {
-    return [walletCore.Hash.blake2b(data, 32)];
+  if ('dataHash' in output && output.dataHash.length > 0) {
+    return [output.dataHash];
   }
 
   return [data];
