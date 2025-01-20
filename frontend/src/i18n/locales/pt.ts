@@ -14,6 +14,8 @@ export const pt = {
   missing_public_key_ecdsa: 'Chave pública ECDSA ausente',
   missing_verification_code: 'Código de verificação ausente',
   next: 'Próximo',
+  tokens: 'tokens',
+  selected: 'selecionado',
   required_field_missing: 'Campo obrigatório em falta',
   failed_to_confirm_email_code:
     'Falha ao confirmar o código de verificação de e-mail',
