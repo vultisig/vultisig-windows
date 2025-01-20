@@ -1,8 +1,7 @@
+import { KeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload';
 import { deepLinkBaseUrl } from '../../../../deeplink/config';
-import {
-  KeysignMessage,
-  KeysignPayload,
-} from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { KeysignMessage } from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { matchRecordUnion } from '../../../../lib/utils/matchRecordUnion';
 import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
 import { toCompressedString } from '../../../../utils/protobuf/toCompressedString';
 import {
@@ -16,7 +15,7 @@ export type GetJoinKeysignUrlInput = {
   serviceName: string;
   sessionId: string;
   hexEncryptionKey: string;
-  payload?: KeysignPayload;
+  payload?: KeysignMessagePayload;
   payloadId?: string;
   vaultId: string;
 };
@@ -37,9 +36,19 @@ export const getJoinKeysignUrl = async ({
     serviceName: serviceName,
     encryptionKeyHex: hexEncryptionKey,
     useVultisigRelay: serverType === 'relay',
-    keysignPayload: payload,
     payloadId,
   });
+
+  if (payload) {
+    matchRecordUnion(payload, {
+      keysign: keysignPayload => {
+        keysignMessage.keysignPayload = keysignPayload;
+      },
+      custom: customPayload => {
+        keysignMessage.customMessagePayload = customPayload;
+      },
+    });
+  }
 
   const jsonData = await toCompressedString(keysignMessage);
 
@@ -49,8 +58,8 @@ export const getJoinKeysignUrl = async ({
     jsonData,
   });
 
-  if (payload && urlWithPayload.length > urlMaxLength) {
-    const compressedPayload = await toCompressedString(payload);
+  if (payload && 'keysign' in payload && urlWithPayload.length > urlMaxLength) {
+    const compressedPayload = await toCompressedString(payload.keysign);
     const payloadId = await uploadPayloadToServer({
       payload: compressedPayload,
       serverUrl: keygenServerUrl[serverType],

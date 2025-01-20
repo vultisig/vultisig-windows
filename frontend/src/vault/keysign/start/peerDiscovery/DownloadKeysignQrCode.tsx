@@ -7,10 +7,10 @@ import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode';
 import { getVaultPublicKeyExport } from '../../../share/utils/getVaultPublicKeyExport';
 import { useCurrentVault } from '../../../state/currentVault';
-import { useKeysignMsgQuery } from '../../shared/queries/useKeysignMsgQuery';
+import { useJoinKeysignUrlQuery } from '../../shared/queries/useJoinKeysignUrlQuery';
 
 export const DownloadKeysignQrCode = () => {
-  const msgQuery = useKeysignMsgQuery();
+  const joinKeysignUrlQuery = useJoinKeysignUrlQuery();
   const { t } = useTranslation();
   const vault = useCurrentVault();
   const { name } = vault;
@@ -19,7 +19,7 @@ export const DownloadKeysignQrCode = () => {
 
   return (
     <MatchQuery
-      value={msgQuery}
+      value={joinKeysignUrlQuery}
       success={data => (
         <SaveAsImage
           fileName={`VaultKeysignQR-${name}-${lastThreeUID}`}

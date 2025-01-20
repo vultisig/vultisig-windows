@@ -1,10 +1,11 @@
+import { useCallback } from 'react';
+
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
-import { CoinAmount } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useTransform } from '../../../lib/ui/hooks/useTransform';
-import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
+import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery';
@@ -20,14 +21,13 @@ export const useSendCappedAmountQuery = () => {
   const chainSpecificQuery = useSendChainSpecificQuery();
   const balanceQuery = useBalanceQuery(coin);
 
-  return useStateDependentQuery({
-    state: {
-      chainSpecific: chainSpecificQuery.data,
-      balance: balanceQuery.data,
+  return useTransformQueriesData(
+    {
+      chainSpecific: chainSpecificQuery,
+      balance: balanceQuery,
     },
-    getQuery: ({ chainSpecific, balance }) => ({
-      queryKey: ['sendCappedAmount'],
-      queryFn: async (): Promise<CoinAmount> => {
+    useCallback(
+      ({ chainSpecific, balance }) => {
         const { decimals } = coin;
 
         const chainAmount = toChainAmount(shouldBePresent(amount), decimals);
@@ -44,6 +44,7 @@ export const useSendCappedAmountQuery = () => {
           }),
         };
       },
-    }),
-  });
+      [coin, amount]
+    )
+  );
 };
