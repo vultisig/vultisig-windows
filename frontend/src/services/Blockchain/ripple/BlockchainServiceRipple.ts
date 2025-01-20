@@ -4,19 +4,27 @@ import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
+import { callRpc } from '../../../chain/rpc/callRpc';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { shouldBeDefined } from '../../../lib/utils/assert/shouldBeDefined';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { assertField } from '../../../lib/utils/record/assertField';
 import { Chain } from '../../../model/chain';
+import { Endpoint } from '../../Endpoint';
 import { BlockchainService } from '../BlockchainService';
-import {
-  IBlockchainService,
-  SignedTransactionResult,
-} from '../IBlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
+
+interface RippleSubmitResponse {
+  engine_result?: string;
+  engine_result_message?: string;
+  tx_json?: {
+    hash?: string;
+  };
+}
 
 export class BlockchainServiceRipple
   extends BlockchainService
@@ -78,11 +86,11 @@ export class BlockchainServiceRipple
     }
   }
 
-  async getSignedTransaction(
+  async executeTransaction(
     publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
-  ): Promise<SignedTransactionResult> {
+  ): Promise<string> {
     const walletCore = this.walletCore;
 
     const publicKeyData = publicKey.data();
@@ -123,9 +131,32 @@ export class BlockchainServiceRipple
 
     assertErrorMessage(errorMessage);
 
-    return {
-      rawTx: stripHexPrefix(this.walletCore.HexCoding.encode(encoded)),
-      txHash: '',
-    };
+    const rawTx = stripHexPrefix(this.walletCore.HexCoding.encode(encoded));
+
+    const { engine_result, engine_result_message, tx_json } =
+      await callRpc<RippleSubmitResponse>({
+        url: Endpoint.rippleServiceRpc,
+        method: 'submit',
+        params: [
+          {
+            tx_blob: rawTx,
+          },
+        ],
+      });
+
+    if (engine_result && engine_result !== 'tesSUCCESS') {
+      if (engine_result_message) {
+        if (
+          engine_result_message.toLowerCase() ===
+            'this sequence number has already passed.' &&
+          tx_json?.hash
+        ) {
+          return tx_json.hash;
+        }
+        return engine_result_message;
+      }
+    }
+
+    return shouldBeDefined(tx_json?.hash);
   }
 }

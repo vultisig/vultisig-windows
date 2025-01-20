@@ -3,16 +3,15 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
+import { Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { assertField } from '../../../lib/utils/record/assertField';
+import { Endpoint } from '../../Endpoint';
 import { BlockchainService } from '../BlockchainService';
-import {
-  IBlockchainService,
-  SignedTransactionResult,
-} from '../IBlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
 
 export class BlockchainServiceTon
@@ -64,11 +63,11 @@ export class BlockchainServiceTon
     return encodedInput;
   }
 
-  public async getSignedTransaction(
+  public async executeTransaction(
     publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
-  ): Promise<SignedTransactionResult> {
+  ): Promise<string> {
     const publicKeyData = publicKey.data();
 
     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
@@ -109,9 +108,10 @@ export class BlockchainServiceTon
 
     assertErrorMessage(output.errorMessage);
 
-    return {
-      rawTx: output.encoded,
-      txHash: Buffer.from(output.hash).toString('base64'),
-    };
+    const response = await Post(Endpoint.broadcastTonTransaction(), {
+      boc: output.encoded,
+    });
+
+    return Buffer.from(response.result.hash, 'base64').toString('hex');
   }
 }

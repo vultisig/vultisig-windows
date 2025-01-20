@@ -1,18 +1,9 @@
-import { Fetch, Post } from '../../../../wailsjs/go/utils/GoHttp';
+import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
-import { RpcService } from '../RpcService';
 
-export class RpcServiceTon extends RpcService implements IRpcService {
-  async broadcastTransaction(obj: string): Promise<string> {
-    const response = await Post(Endpoint.broadcastTonTransaction(), {
-      boc: obj,
-    });
-
-    return Buffer.from(response.result.hash, 'base64').toString('hex');
-  }
-
+export class RpcServiceTon implements IRpcService {
   async getBalance(coin: Coin): Promise<string> {
     const response: TonAddressInformation = await this.getAddressInformation(
       coin.address

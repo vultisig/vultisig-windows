@@ -4,17 +4,16 @@ import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
+import { callRpc } from '../../../chain/rpc/callRpc';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { SuiCoin } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { Chain } from '../../../model/chain';
+import { Endpoint } from '../../Endpoint';
 import { BlockchainService } from '../BlockchainService';
-import {
-  IBlockchainService,
-  SignedTransactionResult,
-} from '../IBlockchainService';
+import { IBlockchainService } from '../IBlockchainService';
 import SignatureProvider from '../signature-provider';
 
 export class BlockchainServiceSui
@@ -61,7 +60,7 @@ export class BlockchainServiceSui
     publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
-  ): Promise<SignedTransactionResult> {
+  ): Promise<string> {
     const publicKeyData = publicKey.data();
 
     const allSignatures = this.walletCore.DataVector.create();
@@ -103,15 +102,16 @@ export class BlockchainServiceSui
 
     assertErrorMessage(suiErrorMessage);
 
-    const txBytes = Buffer.from(unsignedTx, 'base64');
-    const txHash = Buffer.from(this.walletCore.Hash.sha3_256(txBytes)).toString(
-      'base64'
-    );
+    const { digest } = await callRpc<SuiExecuteTransactionBlockResult>({
+      url: Endpoint.suiServiceRpc,
+      method: 'sui_executeTransactionBlock',
+      params: [unsignedTx, [compiledSignature]],
+    });
 
-    return {
-      rawTx: unsignedTx,
-      txHash,
-      signature: compiledSignature,
-    };
+    return digest;
   }
 }
+
+type SuiExecuteTransactionBlockResult = {
+  digest: string;
+};

@@ -1,23 +1,12 @@
+import { callRpc } from '../../../chain/rpc/callRpc';
 import { SuiCoin } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
-import { RpcService } from '../RpcService';
 
-export class RpcServiceSui extends RpcService implements IRpcService {
+export class RpcServiceSui implements IRpcService {
   async calculateFee(_coin: Coin): Promise<number> {
     return await this.getReferenceGasPrice();
-  }
-
-  async broadcastTransaction(obj: string): Promise<string> {
-    const objParsed = JSON.parse(obj);
-
-    const result = await this.callRPC('sui_executeTransactionBlock', [
-      objParsed.unsignedTransaction,
-      [objParsed.signature],
-    ]);
-
-    return result.digest;
   }
 
   async getBalance(coin: Coin): Promise<string> {
@@ -50,6 +39,10 @@ export class RpcServiceSui extends RpcService implements IRpcService {
   }
 
   private async callRPC(method: string, params: any[]): Promise<any> {
-    return await super.callRpc(Endpoint.suiServiceRpc, method, params);
+    return callRpc({
+      url: Endpoint.suiServiceRpc,
+      method,
+      params,
+    });
   }
 }
