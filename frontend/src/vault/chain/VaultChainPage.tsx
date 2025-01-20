@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -7,14 +8,17 @@ import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
-import { useAutoDiscoverAndSaveTokens } from '../../coin/query/useAutoDiscoverAndSaveTokens';
 import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
+import { useSaveCoinsMutation } from '../../coin/query/useSaveCoinsMutation';
+import {
+  getTokensAutoDiscoveryQueryKey,
+  useTokensAutoDiscoveryQuery,
+} from '../../coin/query/useTokensAutoDiscoveryQuery';
+import { coinToStorageCoin } from '../../coin/utils/coin';
+import { createCoin } from '../../coin/utils/createCoin';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
 import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
-import {
-  getStorageCoinKey,
-  storageCoinToCoin,
-} from '../../coin/utils/storageCoin';
+import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
@@ -30,6 +34,7 @@ import { splitBy } from '../../lib/utils/array/splitBy';
 import { sum } from '../../lib/utils/array/sum';
 import { formatAmount } from '../../lib/utils/formatAmount';
 import { makeAppPath } from '../../navigation';
+import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { TokensStore } from '../../services/Coin/CoinList';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
@@ -39,6 +44,7 @@ import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions';
+import { useVaultPublicKeyQuery } from '../publicKey/queries/useVaultPublicKeyQuery';
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import { useCurrentVaultNativeCoin } from '../state/currentVault';
@@ -59,16 +65,48 @@ export const VaultChainPage = () => {
   const invalidateQueryKey = getBalanceQueryKey(storageCoinKey);
   const { t } = useTranslation();
 
+  const account = useMemo(
+    () => ({
+      address: nativeCoin.address,
+      chain,
+    }),
+    [nativeCoin.address, chain]
+  );
+
   const { mutate: refreshBalance, isPending } = useMutation({
     mutationFn: () => {
-      return invalidateQueries(invalidateQueryKey);
+      return invalidateQueries(
+        invalidateQueryKey,
+        getTokensAutoDiscoveryQueryKey(account)
+      );
     },
   });
 
-  const { refetch: retriggerAutoDiscover } = useAutoDiscoverAndSaveTokens({
-    chain,
-    coin: storageCoinToCoin(nativeCoin),
-  });
+  const findTokensQuery = useTokensAutoDiscoveryQuery(account);
+
+  const { mutate: saveCoins } = useSaveCoinsMutation();
+
+  const walletCore = useAssertWalletCore();
+
+  const publicKeyQuery = useVaultPublicKeyQuery(chain);
+
+  // It's a bad solution, but better than what we had before
+  // TODO: Implement an abstraction auto-discovery mechanism at the root of the app
+  useEffect(() => {
+    if (findTokensQuery.data && publicKeyQuery.data) {
+      saveCoins(
+        findTokensQuery.data.map(coinMeta =>
+          coinToStorageCoin(
+            createCoin({
+              coinMeta,
+              publicKey: publicKeyQuery.data,
+              walletCore,
+            })
+          )
+        )
+      );
+    }
+  }, [findTokensQuery.data, publicKeyQuery.data, saveCoins, walletCore]);
 
   const hasMultipleCoinsSupport = !isEmpty(
     TokensStore.TokenSelectionAssets.filter(
@@ -85,7 +123,6 @@ export const VaultChainPage = () => {
             <PageHeaderIconButton
               onClick={() => {
                 refreshBalance();
-                retriggerAutoDiscover();
               }}
               icon={isPending ? <Spinner /> : <RefreshIcon />}
             />
