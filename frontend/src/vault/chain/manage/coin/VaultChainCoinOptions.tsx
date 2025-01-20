@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import { useMemo } from 'react';
 
 import { storage } from '../../../../../wailsjs/go/models';
@@ -7,7 +8,10 @@ import {
   getCoinMetaKey,
   getCoinMetaSearchStrings,
 } from '../../../../coin/utils/coinMeta';
-import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
+import {
+  getStorageCoinKey,
+  storageCoinToCoin,
+} from '../../../../coin/utils/storageCoin';
 import { VStack } from '../../../../lib/ui/layout/Stack';
 import { useCurrentSearch } from '../../../../lib/ui/search/CurrentSearchProvider';
 import { useSearchFilter } from '../../../../lib/ui/search/hooks/useSearchFilter';
@@ -18,6 +22,7 @@ import {
   PersistentStateKey,
   usePersistentState,
 } from '../../../../state/persistentState';
+import { useCurrentVaultCoins } from '../../../state/currentVault';
 import { useCurrentVaultChain } from '../../useCurrentVaultChain';
 import { ManageVaultChainCoin } from './ManageVaultChainCoin';
 
@@ -33,16 +38,40 @@ export const VaultChainCoinOptions = () => {
   );
   const query = useWhitelistedCoinsQuery(chain);
   const [searchQuery] = useCurrentSearch();
+  const vaultCoins = useCurrentVaultCoins();
+  const { selectedCoins, unselectedCoins } = coins
+    .filter(coin => !coin.is_native_token)
+    .reduce<{
+      selectedCoins: CoinMeta[];
+      unselectedCoins: CoinMeta[];
+    }>(
+      (result, coin) => {
+        const isSelected = vaultCoins.some(c =>
+          areEqualCoins(getStorageCoinKey(c), getStorageCoinKey(coin))
+        );
+
+        if (isSelected) {
+          result.selectedCoins.push(CoinMeta.fromCoin(storageCoinToCoin(coin)));
+        } else {
+          result.unselectedCoins.push(
+            CoinMeta.fromCoin(storageCoinToCoin(coin))
+          );
+        }
+
+        return result;
+      },
+      { selectedCoins: [], unselectedCoins: [] }
+    );
 
   const initialItems = useMemo(() => {
-    const suggestedItems = coins
-      .filter(token => token.chain === chain)
-      .map(coin => CoinMeta.fromCoin(storageCoinToCoin(coin)));
+    const suggestedItems = unselectedCoins.filter(
+      token => token.chain === chain
+    );
 
     return withoutDuplicates(suggestedItems, (one, another) =>
       areEqualCoins(getCoinMetaKey(one), getCoinMetaKey(another))
     ).filter(({ isNativeToken }) => !isNativeToken);
-  }, [chain, coins]);
+  }, [chain, unselectedCoins]);
 
   const allUniqueItems = useMemo(() => {
     return withoutDuplicates(
@@ -64,12 +93,32 @@ export const VaultChainCoinOptions = () => {
 
   return (
     <>
-      {sortedOptions.map(option => (
-        <ManageVaultChainCoin
-          key={coinKeyToString(getCoinMetaKey(option))}
-          value={option}
-        />
-      ))}
+      {selectedCoins.length > 0 && (
+        <>
+          <Text size={18} color="shy">
+            {t('selected').toUpperCase()}
+          </Text>
+          {selectedCoins.map(option => (
+            <ManageVaultChainCoin
+              key={coinKeyToString(getCoinMetaKey(option))}
+              value={option}
+            />
+          ))}
+        </>
+      )}
+      {unselectedCoins.length > 0 && (
+        <>
+          <Text size={18} color="shy">
+            {t('tokens').toUpperCase()}
+          </Text>
+          {sortedOptions.map(option => (
+            <ManageVaultChainCoin
+              key={coinKeyToString(getCoinMetaKey(option))}
+              value={option}
+            />
+          ))}
+        </>
+      )}
       {searchQuery && query.isPending && (
         <VStack fullWidth alignItems="center">
           <Text>Searching ...</Text>
