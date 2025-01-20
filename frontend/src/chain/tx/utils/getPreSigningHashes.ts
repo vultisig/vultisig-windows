@@ -32,6 +32,13 @@ export const getPreSigningHashes = ({
     assertErrorMessage(errorMessage);
 
     return withoutNullOrUndefined(hashPublicKeys.map(hash => hash?.dataHash));
+  } else if (chain === Chain.Solana) {
+    const { errorMessage, data } =
+      TW.Solana.Proto.PreSigningOutput.decode(preHashes);
+
+    assertErrorMessage(errorMessage);
+
+    return [data];
   }
 
   const { errorMessage, dataHash, data } =
