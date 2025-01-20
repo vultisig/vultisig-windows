@@ -33,6 +33,7 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
   const pricesQuery = useCoinPricesQuery(
     coins.map(storageCoinToCoin).map(CoinMeta.fromCoin)
   );
+
   const balancesQuery = useBalancesQuery(coins.map(storageCoinToCoin));
 
   return useMemo((): Query<VaultChainCoin[]> => {
