@@ -99,7 +99,7 @@ export class BlockchainServiceUtxo
     return TW.Bitcoin.Proto.SigningInput.encode(input).finish();
   }
 
-  public async getSignedTransaction(
+  public async executeTransaction(
     publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
