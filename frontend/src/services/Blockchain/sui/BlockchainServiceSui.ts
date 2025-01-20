@@ -56,7 +56,7 @@ export class BlockchainServiceSui
     return input;
   }
 
-  public async getSignedTransaction(
+  public async executeTransaction(
     publicKey: PublicKey,
     txInputData: Uint8Array,
     signatures: { [key: string]: tss.KeysignResponse }
