@@ -48,6 +48,8 @@ export const en = {
   m_of_n_vault: 'M of N Vault',
   invalid_vault_parse_to_string: "Couldn't parse vault to string",
   invalid_vault_data: 'Invalid vault data',
+  tokens: 'tokens',
+  selected: 'selected',
   invalid_vault_data_message:
     "Data extracted from the vault backup couldn't be parsed.",
   current_vaults: 'Current Vaults',
