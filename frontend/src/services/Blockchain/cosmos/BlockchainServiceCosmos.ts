@@ -9,6 +9,7 @@ import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { cosmosFeeCoinDenom } from '../../../chain/cosmos/cosmosFeeCoinDenom';
+import { cosmosGasLimitRecord } from '../../../chain/cosmos/cosmosGasLimitRecord';
 import { executeCosmosTx } from '../../../chain/cosmos/tx/executeCosmosTx';
 import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { TransactionType } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
@@ -67,7 +68,7 @@ export class BlockchainServiceCosmos
           : '',
       messages: message,
       fee: TW.Cosmos.Proto.Fee.create({
-        gas: new Long(Number(cosmosSpecific.gas)),
+        gas: new Long(Number(cosmosGasLimitRecord[this.chain as CosmosChain])),
         amounts: [
           TW.Cosmos.Proto.Amount.create({
             amount: cosmosSpecific.gas.toString(),
