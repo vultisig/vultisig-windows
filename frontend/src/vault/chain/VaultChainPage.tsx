@@ -118,11 +118,7 @@ export const VaultChainPage = () => {
           )
         )
       );
-    }
-  }, [findTokensQuery.data, publicKeyQuery.data, saveCoins, walletCore]);
 
-  useEffect(() => {
-    if (currentChainCoins && findTokensQuery.data && publicKeyQuery.data) {
       setAllChainTokens(pv => ({
         ...pv,
         [chain]: withoutDuplicates(
@@ -147,6 +143,7 @@ export const VaultChainPage = () => {
     currentChainCoins,
     findTokensQuery.data,
     publicKeyQuery.data,
+    saveCoins,
     setAllChainTokens,
     walletCore,
   ]);
@@ -255,11 +252,12 @@ export const VaultChainPage = () => {
             error={() => t('failed_to_load')}
             pending={() => t('loading')}
             success={coins => {
-              const orderedCoins = splitBy(coins, coin =>
-                isNativeCoin(coin) ? 0 : 1
-              )
-                .map(sortCoinsByBalance)
-                .flat();
+              const orderedCoins = withoutDuplicates(
+                splitBy(coins, coin => (isNativeCoin(coin) ? 0 : 1))
+                  .map(sortCoinsByBalance)
+                  .flat(),
+                (one, another) => one.ticker === another.ticker
+              );
 
               return (
                 <>
