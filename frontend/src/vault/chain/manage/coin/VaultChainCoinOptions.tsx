@@ -18,6 +18,7 @@ import { useSearchFilter } from '../../../../lib/ui/search/hooks/useSearchFilter
 import { Text } from '../../../../lib/ui/text';
 import { withoutDuplicates } from '../../../../lib/utils/array/withoutDuplicates';
 import { CoinMeta } from '../../../../model/coin-meta';
+import { TokensStore } from '../../../../services/Coin/CoinList';
 import {
   PersistentStateKey,
   usePersistentState,
@@ -64,9 +65,11 @@ export const VaultChainCoinOptions = () => {
     );
 
   const initialItems = useMemo(() => {
-    const suggestedItems = unselectedCoins.filter(
-      token => token.chain === chain
-    );
+    const tokenStoreItems =
+      TokensStore.TokenSelectionAssets.filter(token => token.chain === chain) ||
+      [];
+
+    const suggestedItems = [...unselectedCoins, ...tokenStoreItems];
 
     return withoutDuplicates(suggestedItems, (one, another) =>
       areEqualCoins(getCoinMetaKey(one), getCoinMetaKey(another))
@@ -106,7 +109,7 @@ export const VaultChainCoinOptions = () => {
           ))}
         </>
       )}
-      {unselectedCoins.length > 0 && (
+      {sortedOptions.length > 0 && (
         <>
           <Text size={18} color="shy">
             {t('tokens').toUpperCase()}
