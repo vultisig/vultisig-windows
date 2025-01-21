@@ -13,9 +13,12 @@ import { useCurrentVaultCoins } from '../../../../../../state/currentVault';
 
 export function splitCoinsIntoSelectedAndUnselected(
   coins: CoinMeta[],
-  vaultCoins: storage.Coin[]
+  vaultCoins: storage.Coin[],
+  chain: Chain
 ): { selectedCoins: CoinMeta[]; unselectedCoins: CoinMeta[] } {
-  const vaultCoinTickers = new Set(vaultCoins.map(coin => coin.ticker));
+  const vaultCoinTickers = new Set(
+    vaultCoins.filter(coin => coin.chain === chain).map(coin => coin.ticker)
+  );
   const selectedCoins: CoinMeta[] = [];
   const unselectedCoins: CoinMeta[] = [];
   const seenSelected = new Set<string>();
@@ -71,6 +74,5 @@ export const useCoinsForChainCoinOptionsMenu = (chain: Chain) => {
   );
 
   const coins = [...storedCoins, ...tokenStoreItems];
-
-  return splitCoinsIntoSelectedAndUnselected(coins, vaultCoins);
+  return splitCoinsIntoSelectedAndUnselected(coins, vaultCoins, chain);
 };
