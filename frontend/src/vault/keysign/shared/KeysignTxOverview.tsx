@@ -45,6 +45,10 @@ export const KeysignTxOverview = ({
     swapPayload,
   } = value;
 
+  const isSwapTx =
+    (swapPayload && swapPayload.value) ||
+    memo?.startsWith('=') ||
+    memo?.toLowerCase().startsWith('swap');
   const coin = shouldBePresent(potentialCoin);
 
   const { decimals } = shouldBePresent(coin);
@@ -68,7 +72,7 @@ export const KeysignTxOverview = ({
   }, [blockchainSpecific, chain]);
 
   const blockExplorerChain: Chain = useMemo(() => {
-    if (swapPayload && swapPayload.value) {
+    if (isSwapTx && swapPayload && swapPayload.value) {
       return matchDiscriminatedUnion(swapPayload, 'case', 'value', {
         thorchainSwapPayload: () => Chain.THORChain,
         mayachainSwapPayload: () => Chain.MayaChain,
@@ -77,7 +81,7 @@ export const KeysignTxOverview = ({
     }
 
     return chain as Chain;
-  }, [chain, swapPayload]);
+  }, [chain, isSwapTx, swapPayload]);
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: blockExplorerChain,
@@ -133,11 +137,9 @@ export const KeysignTxOverview = ({
           </TxOverviewPrimaryRow>
         )}
       </VStack>
-      {swapPayload &&
-        swapPayload.value &&
-        isOneOf(blockExplorerChain, nativeSwapChains) && (
-          <SwapTrackingLink value={blockExplorerUrl} />
-        )}
+      {isSwapTx && isOneOf(blockExplorerChain, nativeSwapChains) && (
+        <SwapTrackingLink value={blockExplorerUrl} />
+      )}
     </VStack>
   );
 };
