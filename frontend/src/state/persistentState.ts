@@ -13,7 +13,7 @@ export enum PersistentStateKey {
   AddressBook = 'addressBook',
   FavouriteTokens = 'favouriteTokens',
   DefaultChains = 'defaultChains',
-  ChainVisibilityAutoDiscovery = 'ChainVisibilityAutoDiscovery',
+  HasAutoDiscoveryBeenDoneForChain = 'HasAutoDiscoveryBeenDoneForChain',
   ChainAllTokens = 'ChainAllTokens',
 }
 
