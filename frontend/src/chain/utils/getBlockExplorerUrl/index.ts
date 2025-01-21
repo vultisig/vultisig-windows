@@ -15,7 +15,6 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Litecoin]: 'https://blockchair.com/litecoin',
   [Chain.Dogecoin]: 'https://blockchair.com/dogecoin',
   [Chain.Dash]: 'https://blockchair.com/dash',
-  [Chain.THORChain]: 'https://thorchain.net',
   [Chain.Solana]: 'https://solscan.io',
   [Chain.Ethereum]: 'https://etherscan.io',
   [Chain.Cosmos]: 'https://www.mintscan.io/cosmos',
@@ -23,7 +22,6 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Kujira]: 'https://finder.kujira.network/kaiyo-1',
   [Chain.Avalanche]: 'https://snowtrace.io',
   [Chain.BSC]: 'https://bscscan.com',
-  [Chain.MayaChain]: 'https://www.mayascan.org',
   [Chain.Arbitrum]: 'https://arbiscan.io',
   [Chain.Base]: 'https://basescan.org',
   [Chain.Optimism]: 'https://optimistic.etherscan.io',
@@ -39,6 +37,8 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.TerraClassic]: 'https://finder.terra.money/classic',
   [Chain.Noble]: 'https://www.mintscan.io/noble',
   [Chain.Ripple]: 'https://xrpscan.com',
+  [Chain.THORChain]: 'https://www.xscanner.org',
+  [Chain.MayaChain]: 'https://www.xscanner.org',
 };
 
 export const getBlockExplorerUrl = ({
@@ -95,7 +95,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Kujira]: () => `${baseUrl}/tx/${value}`,
         [Chain.Avalanche]: () => `${baseUrl}/tx/${value}`,
         [Chain.BSC]: () => `${baseUrl}/tx/${value}`,
-        [Chain.MayaChain]: () => `https://www.xscanner.org/tx/${value}`,
+        [Chain.MayaChain]: () => `${baseUrl}/tx/${value}`,
         [Chain.Arbitrum]: () => `${baseUrl}/tx/${value}`,
         [Chain.Base]: () => `${baseUrl}/tx/${value}`,
         [Chain.Optimism]: () => `${baseUrl}/tx/${value}`,

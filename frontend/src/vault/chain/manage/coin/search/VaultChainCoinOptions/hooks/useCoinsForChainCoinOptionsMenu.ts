@@ -9,7 +9,7 @@ import {
   PersistentStateKey,
   usePersistentState,
 } from '../../../../../../../state/persistentState';
-import { useCurrentVaultCoins } from '../../../../../../state/currentVault';
+import { useCurrentVaultChainCoins } from '../../../../../../state/currentVault';
 
 export function splitCoinsIntoSelectedAndUnselected(
   coins: CoinMeta[],
@@ -51,7 +51,7 @@ export const useCoinsForChainCoinOptionsMenu = (chain: Chain) => {
     {}
   );
 
-  const vaultCoins = useCurrentVaultCoins();
+  const vaultCoins = useCurrentVaultChainCoins(chain);
 
   const storedCoins = useMemo(
     () =>
@@ -71,6 +71,5 @@ export const useCoinsForChainCoinOptionsMenu = (chain: Chain) => {
   );
 
   const coins = [...storedCoins, ...tokenStoreItems];
-
   return splitCoinsIntoSelectedAndUnselected(coins, vaultCoins);
 };
