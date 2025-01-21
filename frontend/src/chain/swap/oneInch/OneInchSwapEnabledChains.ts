@@ -6,6 +6,7 @@ export const oneInchSwapEnabledChains = [
   Chain.Avalanche,
   Chain.Optimism,
   Chain.Polygon,
+  Chain.Base,
 ] as const;
 
 export type OneInchSwapEnabledChain = (typeof oneInchSwapEnabledChains)[number];
