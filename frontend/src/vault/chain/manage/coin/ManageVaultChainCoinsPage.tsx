@@ -9,7 +9,7 @@ import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../../ui/page/PageSlice';
 import { CoinSearch } from './search/CoinSearch';
-import { VaultChainCoinOptions } from './VaultChainCoinOptions';
+import { VaultChainCoinOptions } from './search/VaultChainCoinOptions';
 
 export const ManageVaultChainCoinsPage = () => {
   const { t } = useTranslation();
