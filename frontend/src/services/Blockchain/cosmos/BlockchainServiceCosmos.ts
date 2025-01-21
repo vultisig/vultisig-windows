@@ -37,15 +37,6 @@ export class BlockchainServiceCosmos
       throw new Error('invalid hex public key');
     }
 
-    const toAddress = walletCore.AnyAddress.createWithString(
-      keysignPayload.toAddress,
-      this.coinType
-    );
-
-    if (!toAddress) {
-      throw new Error('invalid to address');
-    }
-
     const denom = cosmosFeeCoinDenom[this.chain as CosmosChain];
 
     const message: TW.Cosmos.Proto.Message[] = [
@@ -76,7 +67,7 @@ export class BlockchainServiceCosmos
           : '',
       messages: message,
       fee: TW.Cosmos.Proto.Fee.create({
-        gas: new Long(200000),
+        gas: new Long(Number(cosmosSpecific.gas)),
         amounts: [
           TW.Cosmos.Proto.Amount.create({
             amount: cosmosSpecific.gas.toString(),
