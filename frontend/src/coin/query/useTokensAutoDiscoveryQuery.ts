@@ -13,23 +13,25 @@ export const getTokensAutoDiscoveryQueryKey = (account: ChainAccount) => [
 ];
 
 export const useTokensAutoDiscoveryQuery = (account: ChainAccount) => {
-  const [hasSeenChainPage, setHasSeenChainPage] = usePersistentState<
-    Record<string, boolean>
-  >(PersistentStateKey.ChainVisibilityAutoDiscovery, {});
+  const [
+    hasAutoDiscoveryBeenDoneForChain,
+    setHasAutoDiscoveryBeenDoneForChain,
+  ] = usePersistentState<Record<string, boolean>>(
+    PersistentStateKey.HasAutoDiscoveryBeenDoneForChain,
+    {}
+  );
 
-  const isFirstVisit = !hasSeenChainPage[account.chain];
+  const isFirstVisit = !hasAutoDiscoveryBeenDoneForChain[account.chain];
 
   return useQuery({
     queryKey: getTokensAutoDiscoveryQueryKey(account),
     queryFn: async () => {
       const coins = await findAccountCoins(account);
 
-      if (isFirstVisit) {
-        setHasSeenChainPage({
-          ...hasSeenChainPage,
-          [account.chain]: true,
-        });
-      }
+      setHasAutoDiscoveryBeenDoneForChain({
+        ...hasAutoDiscoveryBeenDoneForChain,
+        [account.chain]: true,
+      });
 
       return coins;
     },
