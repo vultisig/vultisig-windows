@@ -54,7 +54,7 @@ import { useVaultPublicKeyQuery } from '../publicKey/queries/useVaultPublicKeyQu
 import { useVaultAddressQuery } from '../queries/useVaultAddressQuery';
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery';
 import {
-  useCurrentVaultCoins,
+  useCurrentVaultChainCoins,
   useCurrentVaultNativeCoin,
 } from '../state/currentVault';
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt';
@@ -66,12 +66,8 @@ export const VaultChainPage = () => {
   const [, setAllChainTokens] = usePersistentState<
     Record<string, storage.Coin[]>
   >(PersistentStateKey.ChainAllTokens, {});
-  const currentVaultCoins = useCurrentVaultCoins();
   const chain = useCurrentVaultChain();
-  const currentChainCoins = useMemo(
-    () => currentVaultCoins.filter(coin => coin.chain === chain) || [],
-    [chain, currentVaultCoins]
-  );
+  const currentChainCoins = useCurrentVaultChainCoins(chain);
   const invalidateQueries = useInvalidateQueries();
   const { globalCurrency } = useGlobalCurrency();
   const publicKeyQuery = useVaultPublicKeyQuery(chain);
