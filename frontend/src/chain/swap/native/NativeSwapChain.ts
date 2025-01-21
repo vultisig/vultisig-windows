@@ -26,6 +26,7 @@ export const nativeSwapEnabledChainsRecord = {
     Chain.Cosmos,
     Chain.Litecoin,
     Chain.THORChain,
+    Chain.Base,
   ],
   [Chain.MayaChain]: [
     Chain.MayaChain,
@@ -59,4 +60,5 @@ export const nativeSwapChainIds: Record<NativeSwapEnabledChain, string> = {
   [Chain.Kujira]: 'KUJI',
   [Chain.Dash]: 'DASH',
   [Chain.Arbitrum]: 'ARB',
+  [Chain.Base]: 'BASE',
 };
