@@ -22,4 +22,5 @@ export const thorchainSwapProtoChains: Record<
   [Chain.Cosmos]: TW.THORChainSwap.Proto.Chain.ATOM,
   [Chain.Litecoin]: TW.THORChainSwap.Proto.Chain.LTC,
   [Chain.THORChain]: TW.THORChainSwap.Proto.Chain.THOR,
+  [Chain.Base]: TW.THORChainSwap.Proto.Chain.BASE,
 };

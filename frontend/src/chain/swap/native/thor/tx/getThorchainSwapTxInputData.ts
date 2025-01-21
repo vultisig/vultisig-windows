@@ -121,5 +121,6 @@ export const getThorchainSwapTxInputData = async ({
     [Chain.BSC]: getEvmTxInputData,
     [Chain.Ethereum]: getEvmTxInputData,
     [Chain.Avalanche]: getEvmTxInputData,
+    [Chain.Base]: getEvmTxInputData,
   });
 };
