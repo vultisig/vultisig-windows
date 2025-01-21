@@ -14,9 +14,8 @@ import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
 import { hexEncode } from '../../../chain/walletCore/hexEncode';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
+import { isInError } from '../../../lib/utils/error/isInError';
 import { assertField } from '../../../lib/utils/record/assertField';
-import { areLowerCaseEqual } from '../../../lib/utils/string/areLowerCaseEqual';
 import { EvmChain } from '../../../model/chain';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
@@ -128,17 +127,12 @@ export class BlockchainServiceEvm
       });
       return hash;
     } catch (error) {
-      // Common errors when transaction was already broadcast
-      const alreadyBroadcastErrors = [
+      const isAlreadyBroadcast = isInError(
+        error,
         'already known',
         'transaction is temporarily banned',
         'nonce too low',
-        'transaction already exists',
-      ];
-
-      const errorMessage = extractErrorMsg(error);
-      const isAlreadyBroadcast = alreadyBroadcastErrors.some(msg =>
-        areLowerCaseEqual(msg, errorMessage)
+        'transaction already exists'
       );
 
       if (isAlreadyBroadcast) {
