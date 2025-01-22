@@ -6,6 +6,7 @@ import { useCurrentTxHash } from '../../../chain/state/currentTxHash';
 import { nativeSwapChains } from '../../../chain/swap/native/NativeSwapChain';
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
 import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
+import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
@@ -91,7 +92,7 @@ export const KeysignTxOverview = ({
   });
 
   return (
-    <VStack gap={4}>
+    <>
       <VStack gap={16}>
         <HStack alignItems="center" gap={4}>
           <Text weight="600" size={20} color="contrast">
@@ -108,43 +109,41 @@ export const KeysignTxOverview = ({
         <Text family="mono" color="primary" size={14} weight="400">
           {txHash}
         </Text>
-        {toAddress && (
-          <TxOverviewPrimaryRow title={t('to')}>
-            {toAddress}
-          </TxOverviewPrimaryRow>
-        )}
-        <TxOverviewAmount
-          value={fromChainAmount(BigInt(toAmount), decimals)}
-          ticker={coin.ticker}
-        />
-        {memo && (
-          <TxOverviewPrimaryRow title={t('memo')}>{memo}</TxOverviewPrimaryRow>
-        )}
-        {formattedToAmount && (
-          <>
-            <MatchQuery
-              value={coinPriceQuery}
-              success={price =>
-                price ? (
-                  <TxOverviewPrimaryRow title={t('value')}>
-                    {formatAmount(formattedToAmount * price, globalCurrency)}
-                  </TxOverviewPrimaryRow>
-                ) : null
-              }
-              error={() => null}
-              pending={() => null}
-            />
-          </>
-        )}
-        {networkFeesFormatted && (
-          <TxOverviewPrimaryRow title={t('network_fee')}>
-            {networkFeesFormatted}
-          </TxOverviewPrimaryRow>
-        )}
       </VStack>
+      {toAddress && (
+        <TxOverviewPrimaryRow title={t('to')}>{toAddress}</TxOverviewPrimaryRow>
+      )}
+      <TxOverviewAmount
+        value={fromChainAmount(BigInt(toAmount), decimals)}
+        ticker={coin.ticker}
+      />
+      {memo && (
+        <TxOverviewPrimaryRow title={t('memo')}>{memo}</TxOverviewPrimaryRow>
+      )}
+      {formattedToAmount && (
+        <>
+          <MatchQuery
+            value={coinPriceQuery}
+            success={price =>
+              price ? (
+                <TxOverviewRow title={t('value')}>
+                  {formatAmount(formattedToAmount * price, globalCurrency)}
+                </TxOverviewRow>
+              ) : null
+            }
+            error={() => null}
+            pending={() => null}
+          />
+        </>
+      )}
+      {networkFeesFormatted && (
+        <TxOverviewRow title={t('network_fee')}>
+          {networkFeesFormatted}
+        </TxOverviewRow>
+      )}
       {isSwapTx && isOneOf(blockExplorerChain, nativeSwapChains) && (
         <SwapTrackingLink value={blockExplorerUrl} />
       )}
-    </VStack>
+    </>
   );
 };
