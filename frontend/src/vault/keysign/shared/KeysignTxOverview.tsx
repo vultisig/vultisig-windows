@@ -4,7 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime';
 import { useCurrentTxHash } from '../../../chain/state/currentTxHash';
 import { nativeSwapChains } from '../../../chain/swap/native/NativeSwapChain';
-import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
+import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
+import {
+  TxOverviewChainDataRow,
+  TxOverviewRow,
+} from '../../../chain/tx/components/TxOverviewRow';
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
@@ -25,6 +29,7 @@ import { formatAmount } from '../../../lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
+import { KeysignSwapTxInfo } from '../../swap/keysign/KeysignSwapTxInfo';
 import { SwapTrackingLink } from './SwapTrackingLink';
 
 export const KeysignTxOverview = ({
@@ -90,7 +95,7 @@ export const KeysignTxOverview = ({
   });
 
   return (
-    <VStack gap={4}>
+    <>
       <VStack gap={16}>
         <HStack alignItems="center" gap={4}>
           <Text weight="600" size={20} color="contrast">
@@ -107,39 +112,58 @@ export const KeysignTxOverview = ({
         <Text family="mono" color="primary" size={14} weight="400">
           {txHash}
         </Text>
-        {toAddress && (
-          <TxOverviewPrimaryRow title={t('to')}>
-            {toAddress}
-          </TxOverviewPrimaryRow>
-        )}
-        {memo && (
-          <TxOverviewPrimaryRow title={t('memo')}>{memo}</TxOverviewPrimaryRow>
-        )}
-        {formattedToAmount && (
-          <>
-            <MatchQuery
-              value={coinPriceQuery}
-              success={price =>
-                price ? (
-                  <TxOverviewPrimaryRow title={t('value')}>
-                    {formatAmount(formattedToAmount * price, globalCurrency)}
-                  </TxOverviewPrimaryRow>
-                ) : null
-              }
-              error={() => null}
-              pending={() => null}
-            />
-          </>
-        )}
-        {networkFeesFormatted && (
-          <TxOverviewPrimaryRow title={t('network_fee')}>
-            {networkFeesFormatted}
-          </TxOverviewPrimaryRow>
-        )}
       </VStack>
+
+      {swapPayload.value ? (
+        <KeysignSwapTxInfo value={value} />
+      ) : (
+        <>
+          {toAddress && (
+            <TxOverviewRow>
+              <span>{t('to')}</span>
+              <span>{toAddress}</span>
+            </TxOverviewRow>
+          )}
+          <TxOverviewAmount
+            value={fromChainAmount(BigInt(toAmount), decimals)}
+            ticker={coin.ticker}
+          />
+        </>
+      )}
+      {memo && (
+        <TxOverviewChainDataRow>
+          <span>{t('memo')}</span>
+          <span>{memo}</span>
+        </TxOverviewChainDataRow>
+      )}
+      {formattedToAmount && (
+        <>
+          <MatchQuery
+            value={coinPriceQuery}
+            success={price =>
+              price ? (
+                <TxOverviewRow>
+                  <span>{t('value')}</span>
+                  <span>
+                    {formatAmount(formattedToAmount * price, globalCurrency)}
+                  </span>
+                </TxOverviewRow>
+              ) : null
+            }
+            error={() => null}
+            pending={() => null}
+          />
+        </>
+      )}
+      {networkFeesFormatted && (
+        <TxOverviewRow>
+          <span>{t('network_fee')}</span>
+          <span>{networkFeesFormatted}</span>
+        </TxOverviewRow>
+      )}
       {isSwapTx && isOneOf(blockExplorerChain, nativeSwapChains) && (
         <SwapTrackingLink value={blockExplorerUrl} />
       )}
-    </VStack>
+    </>
   );
 };

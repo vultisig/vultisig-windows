@@ -2,25 +2,26 @@ import { useTranslation } from 'react-i18next';
 
 import { toKeysignSwapPayload } from '../../../chain/keysign/KeysignSwapPayload';
 import { oneInchName } from '../../../chain/swap/oneInch/config';
-import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
+import {
+  TxOverviewChainDataRow,
+  TxOverviewRow,
+} from '../../../chain/tx/components/TxOverviewRow';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
+import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { withoutUndefined } from '../../../lib/utils/array/withoutUndefined';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { getDiscriminatedUnionValue } from '../../../lib/utils/getDiscriminatedUnionValue';
-import { getRecordUnionValue } from '../../../lib/utils/getRecordUnionValue';
 import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
 import { assertField } from '../../../lib/utils/record/assertField';
 import { Chain } from '../../../model/chain';
-import { useKeysignMessagePayload } from '../../keysign/shared/state/keysignMessagePayload';
 
-export const KeysignSwapTxInfo = () => {
-  const payload = useKeysignMessagePayload();
+export const KeysignSwapTxInfo = ({
+  value,
+}: ComponentWithValueProps<KeysignPayload>) => {
+  const { erc20ApprovePayload, toAmount: fromAmount } = value;
 
-  const keysignPayload = getRecordUnionValue(payload, 'keysign');
-
-  const { erc20ApprovePayload, toAmount: fromAmount } = keysignPayload;
-
-  const fromCoin = assertField(keysignPayload, 'coin');
+  const fromCoin = assertField(value, 'coin');
 
   const { t } = useTranslation();
 
@@ -29,7 +30,7 @@ export const KeysignSwapTxInfo = () => {
     t('swap'),
   ]).join(` ${t('and')} `);
 
-  const swapPayload = toKeysignSwapPayload(keysignPayload.swapPayload);
+  const swapPayload = toKeysignSwapPayload(value.swapPayload);
 
   const swapPayloadValue = getDiscriminatedUnionValue(
     swapPayload,
@@ -49,31 +50,43 @@ export const KeysignSwapTxInfo = () => {
 
   return (
     <>
-      <TxOverviewPrimaryRow title={t('action')}>{action}</TxOverviewPrimaryRow>
-      <TxOverviewPrimaryRow title={t('provider')}>
-        {provider}
-      </TxOverviewPrimaryRow>
-      <TxOverviewPrimaryRow title={t('from_asset')}>
-        {formatAmount(
-          fromChainAmount(fromAmount, fromCoin.decimals),
-          fromCoin.ticker
-        )}
-      </TxOverviewPrimaryRow>
-      <TxOverviewPrimaryRow title={t('to_asset')}>
-        {formatAmount(toAmount, toCoin.ticker)}
-      </TxOverviewPrimaryRow>
+      <TxOverviewRow>
+        <span>{t('action')}</span>
+        <span>{action}</span>
+      </TxOverviewRow>
+      <TxOverviewRow>
+        <span>{t('provider')}</span>
+        <span>{provider}</span>
+      </TxOverviewRow>
+      <TxOverviewRow>
+        <span>{t('from_asset')}</span>
+        <span>
+          {formatAmount(
+            fromChainAmount(fromAmount, fromCoin.decimals),
+            fromCoin.ticker
+          )}
+        </span>
+      </TxOverviewRow>
+      <TxOverviewRow>
+        <span>{t('to_asset')}</span>
+        <span>{formatAmount(toAmount, toCoin.ticker)}</span>
+      </TxOverviewRow>
 
       {erc20ApprovePayload && (
         <>
-          <TxOverviewPrimaryRow title={t('allowance_spender')}>
-            {erc20ApprovePayload.spender}
-          </TxOverviewPrimaryRow>
-          <TxOverviewPrimaryRow title={t('allowance_amount')}>
-            {formatAmount(
-              fromChainAmount(erc20ApprovePayload.amount, fromCoin.decimals),
-              fromCoin.ticker
-            )}
-          </TxOverviewPrimaryRow>
+          <TxOverviewChainDataRow>
+            <span>{t('allowance_spender')}</span>
+            <span>{erc20ApprovePayload.spender}</span>
+          </TxOverviewChainDataRow>
+          <TxOverviewChainDataRow>
+            <span>{t('allowance_amount')}</span>
+            <span>
+              {formatAmount(
+                fromChainAmount(erc20ApprovePayload.amount, fromCoin.decimals),
+                fromCoin.ticker
+              )}
+            </span>
+          </TxOverviewChainDataRow>
         </>
       )}
     </>

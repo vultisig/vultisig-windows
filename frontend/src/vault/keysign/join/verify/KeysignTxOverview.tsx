@@ -13,7 +13,7 @@ export const KeysignTxOverview = () => {
       handlers={{
         keysign: payload =>
           payload.swapPayload.value ? (
-            <KeysignSwapTxInfo />
+            <KeysignSwapTxInfo value={payload} />
           ) : (
             <KeysignTxPrimaryInfo value={payload} />
           ),
