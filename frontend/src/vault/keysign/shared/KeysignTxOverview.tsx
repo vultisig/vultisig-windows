@@ -27,6 +27,7 @@ import { formatAmount } from '../../../lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
+import { KeysignSwapTxInfo } from '../../swap/keysign/KeysignSwapTxInfo';
 import { SwapTrackingLink } from './SwapTrackingLink';
 
 export const KeysignTxOverview = ({
@@ -110,13 +111,22 @@ export const KeysignTxOverview = ({
           {txHash}
         </Text>
       </VStack>
-      {toAddress && (
-        <TxOverviewPrimaryRow title={t('to')}>{toAddress}</TxOverviewPrimaryRow>
+
+      {swapPayload.value ? (
+        <KeysignSwapTxInfo value={value} />
+      ) : (
+        <>
+          {toAddress && (
+            <TxOverviewPrimaryRow title={t('to')}>
+              {toAddress}
+            </TxOverviewPrimaryRow>
+          )}
+          <TxOverviewAmount
+            value={fromChainAmount(BigInt(toAmount), decimals)}
+            ticker={coin.ticker}
+          />
+        </>
       )}
-      <TxOverviewAmount
-        value={fromChainAmount(BigInt(toAmount), decimals)}
-        ticker={coin.ticker}
-      />
       {memo && (
         <TxOverviewPrimaryRow title={t('memo')}>{memo}</TxOverviewPrimaryRow>
       )}

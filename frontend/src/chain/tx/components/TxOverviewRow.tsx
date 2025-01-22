@@ -26,6 +26,21 @@ export const TxOverviewRow = styled.div`
   }
 `;
 
+export const TxOverviewChainDataRow = styled(TxOverviewRow)`
+  ${vStack({
+    gap: 8,
+  })}
+
+  > *:last-child {
+    ${text({
+      family: 'mono',
+      color: 'primary',
+      size: 13,
+      weight: 700,
+    })}
+  }
+`;
+
 export const TxOverviewRowDepositsFlow = styled.div`
   ${hStack({
     fullWidth: true,
