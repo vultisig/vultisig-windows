@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
 import {
-  TxOverviewChainDataRow,
   TxOverviewPrimaryRowTitle,
   TxOverviewRow,
 } from '../../../chain/tx/components/TxOverviewRow';
@@ -52,21 +51,23 @@ export const SwapVerify: React.FC<ComponentWithBackActionProps> = ({
       <PageContent gap={40}>
         <WithProgressIndicator value={0.3}>
           <TxOverviewPanel>
-            <TxOverviewChainDataRow>
+            <TxOverviewRow>
               <TxOverviewPrimaryRowTitle>{t('from')}</TxOverviewPrimaryRowTitle>
               <span>
                 {formatAmount(shouldBePresent(fromAmount), fromCoin.ticker)}
               </span>
-            </TxOverviewChainDataRow>
-            <TxOverviewChainDataRow>
+            </TxOverviewRow>
+            <TxOverviewRow>
               <TxOverviewPrimaryRowTitle>{t('to')}</TxOverviewPrimaryRowTitle>
-              <MatchQuery
-                value={outAmountQuery}
-                error={() => t('failed_to_load')}
-                pending={() => t('loading')}
-                success={amount => formatAmount(amount, toCoin.ticker)}
-              />
-            </TxOverviewChainDataRow>
+              <span>
+                <MatchQuery
+                  value={outAmountQuery}
+                  error={() => t('failed_to_load')}
+                  pending={() => t('loading')}
+                  success={amount => formatAmount(amount, toCoin.ticker)}
+                />
+              </span>
+            </TxOverviewRow>
 
             <SwapAllowance />
             <SwapFees RowComponent={TxOverviewRow} />
