@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime';
 import { useCurrentTxHash } from '../../../chain/state/currentTxHash';
 import { nativeSwapChains } from '../../../chain/swap/native/NativeSwapChain';
+import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
 import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
@@ -112,6 +113,10 @@ export const KeysignTxOverview = ({
             {toAddress}
           </TxOverviewPrimaryRow>
         )}
+        <TxOverviewAmount
+          value={fromChainAmount(BigInt(toAmount), decimals)}
+          ticker={coin.ticker}
+        />
         {memo && (
           <TxOverviewPrimaryRow title={t('memo')}>{memo}</TxOverviewPrimaryRow>
         )}
