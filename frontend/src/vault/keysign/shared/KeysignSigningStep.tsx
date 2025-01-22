@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { KeysignMessagePayload } from '../../../chain/keysign/KeysignMessagePayload';
 import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash';
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
-import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
+import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow';
 import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { ProgressLine } from '../../../lib/ui/flow/ProgressLine';
@@ -63,9 +63,10 @@ export const KeysignSigningStep = ({
                     custom: payload => (
                       <>
                         <KeysignCustomMessageInfo value={payload} />
-                        <TxOverviewPrimaryRow title={t('signature')}>
-                          {value}
-                        </TxOverviewPrimaryRow>
+                        <TxOverviewChainDataRow>
+                          <span>{t('signature')}</span>
+                          <span>{value}</span>
+                        </TxOverviewChainDataRow>
                       </>
                     ),
                   }}

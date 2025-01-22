@@ -2,8 +2,10 @@ import { useTranslation } from 'react-i18next';
 
 import { toKeysignSwapPayload } from '../../../chain/keysign/KeysignSwapPayload';
 import { oneInchName } from '../../../chain/swap/oneInch/config';
-import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
-import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
+import {
+  TxOverviewChainDataRow,
+  TxOverviewRow,
+} from '../../../chain/tx/components/TxOverviewRow';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
@@ -72,15 +74,19 @@ export const KeysignSwapTxInfo = ({
 
       {erc20ApprovePayload && (
         <>
-          <TxOverviewPrimaryRow title={t('allowance_spender')}>
-            {erc20ApprovePayload.spender}
-          </TxOverviewPrimaryRow>
-          <TxOverviewPrimaryRow title={t('allowance_amount')}>
-            {formatAmount(
-              fromChainAmount(erc20ApprovePayload.amount, fromCoin.decimals),
-              fromCoin.ticker
-            )}
-          </TxOverviewPrimaryRow>
+          <TxOverviewChainDataRow>
+            <span>{t('allowance_spender')}</span>
+            <span>{erc20ApprovePayload.spender}</span>
+          </TxOverviewChainDataRow>
+          <TxOverviewChainDataRow>
+            <span>{t('allowance_amount')}</span>
+            <span>
+              {formatAmount(
+                fromChainAmount(erc20ApprovePayload.amount, fromCoin.decimals),
+                fromCoin.ticker
+              )}
+            </span>
+          </TxOverviewChainDataRow>
         </>
       )}
     </>

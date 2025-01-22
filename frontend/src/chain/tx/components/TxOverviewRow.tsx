@@ -26,6 +26,14 @@ export const TxOverviewRow = styled.div`
   }
 `;
 
+export const TxOverviewPrimaryRowTitle = styled.span`
+  ${text({
+    weight: 600,
+    size: 20,
+    color: 'contrast',
+  })}
+`;
+
 export const TxOverviewChainDataRow = styled(TxOverviewRow)`
   ${vStack({
     gap: 8,

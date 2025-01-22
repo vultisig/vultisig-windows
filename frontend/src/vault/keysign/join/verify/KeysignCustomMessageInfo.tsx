@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
-import { TxOverviewPrimaryRow } from '../../../../chain/tx/components/TxOverviewPrimaryRow';
+import {
+  TxOverviewChainDataRow,
+  TxOverviewRow,
+} from '../../../../chain/tx/components/TxOverviewRow';
 import { CustomMessagePayload } from '../../../../gen/vultisig/keysign/v1/custom_message_payload_pb';
 import { ComponentWithValueProps } from '../../../../lib/ui/props';
 
@@ -11,12 +14,14 @@ export const KeysignCustomMessageInfo = ({
 
   return (
     <>
-      <TxOverviewPrimaryRow title={t('method')}>
+      <TxOverviewRow>
+        <span>{t('method')}</span>
         {value.method}
-      </TxOverviewPrimaryRow>
-      <TxOverviewPrimaryRow title={t('message')}>
-        {value.message}
-      </TxOverviewPrimaryRow>
+      </TxOverviewRow>
+      <TxOverviewChainDataRow>
+        <span>{t('message')}</span>
+        <span>{value.message}</span>
+      </TxOverviewChainDataRow>
     </>
   );
 };

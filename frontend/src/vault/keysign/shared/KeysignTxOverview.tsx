@@ -5,8 +5,10 @@ import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime';
 import { useCurrentTxHash } from '../../../chain/state/currentTxHash';
 import { nativeSwapChains } from '../../../chain/swap/native/NativeSwapChain';
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
-import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
-import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
+import {
+  TxOverviewChainDataRow,
+  TxOverviewRow,
+} from '../../../chain/tx/components/TxOverviewRow';
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
@@ -117,9 +119,10 @@ export const KeysignTxOverview = ({
       ) : (
         <>
           {toAddress && (
-            <TxOverviewPrimaryRow title={t('to')}>
-              {toAddress}
-            </TxOverviewPrimaryRow>
+            <TxOverviewRow>
+              <span>{t('to')}</span>
+              <span>{toAddress}</span>
+            </TxOverviewRow>
           )}
           <TxOverviewAmount
             value={fromChainAmount(BigInt(toAmount), decimals)}
@@ -128,7 +131,10 @@ export const KeysignTxOverview = ({
         </>
       )}
       {memo && (
-        <TxOverviewPrimaryRow title={t('memo')}>{memo}</TxOverviewPrimaryRow>
+        <TxOverviewChainDataRow>
+          <span>{t('memo')}</span>
+          <span>{memo}</span>
+        </TxOverviewChainDataRow>
       )}
       {formattedToAmount && (
         <>
