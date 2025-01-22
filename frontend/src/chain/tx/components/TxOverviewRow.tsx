@@ -36,6 +36,7 @@ export const TxOverviewPrimaryRowTitle = styled.span`
 
 export const TxOverviewChainDataRow = styled(TxOverviewRow)`
   ${vStack({
+    alignItems: 'start',
     gap: 8,
   })}
 
