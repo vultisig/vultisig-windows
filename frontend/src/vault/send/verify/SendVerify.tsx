@@ -3,8 +3,11 @@ import { useTranslation } from 'react-i18next';
 
 import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
-import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
-import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
+import {
+  TxOverviewChainDataRow,
+  TxOverviewPrimaryRowTitle,
+  TxOverviewRow,
+} from '../../../chain/tx/components/TxOverviewRow';
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
@@ -57,17 +60,19 @@ export const SendVerify: FC<ComponentWithBackActionProps> = ({ onBack }) => {
       <PageContent gap={40}>
         <WithProgressIndicator value={0.3}>
           <TxOverviewPanel>
-            <TxOverviewPrimaryRow title={t('from')}>
-              {sender}
-            </TxOverviewPrimaryRow>
-            <TxOverviewPrimaryRow title={t('to')}>
+            <TxOverviewChainDataRow>
+              <TxOverviewPrimaryRowTitle>{t('from')}</TxOverviewPrimaryRowTitle>
+              <span>{sender}</span>
+            </TxOverviewChainDataRow>
+            <TxOverviewChainDataRow>
+              <TxOverviewPrimaryRowTitle>{t('to')}</TxOverviewPrimaryRowTitle>
               {receiver}
-            </TxOverviewPrimaryRow>
+            </TxOverviewChainDataRow>
             {memo && <TxOverviewMemo value={memo} />}
 
             <TxOverviewRow>
-              <Text>{t('amount')}</Text>
-              <Text family="mono">
+              <span>{t('amount')}</span>
+              <span>
                 <MatchQuery
                   value={cappedAmountQuery}
                   error={() => <Text>{t('failed_to_load')}</Text>}
@@ -76,12 +81,12 @@ export const SendVerify: FC<ComponentWithBackActionProps> = ({ onBack }) => {
                     formatAmount(fromChainAmount(amount, decimals), coin.ticker)
                   }
                 />
-              </Text>
+              </span>
             </TxOverviewRow>
 
             <TxOverviewRow>
-              <Text>{t('value')}</Text>
-              <Text family="mono">
+              <span>{t('value')}</span>
+              <span>
                 <MatchQuery
                   value={cappedAmountQuery}
                   error={() => <Text>{t('failed_to_load')}</Text>}
@@ -99,7 +104,7 @@ export const SendVerify: FC<ComponentWithBackActionProps> = ({ onBack }) => {
                     />
                   )}
                 />
-              </Text>
+              </span>
             </TxOverviewRow>
 
             <TxOverviewRow>

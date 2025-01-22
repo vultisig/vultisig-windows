@@ -3,8 +3,11 @@ import { useTranslation } from 'react-i18next';
 
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
 import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
-import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
-import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
+import {
+  TxOverviewChainDataRow,
+  TxOverviewPrimaryRowTitle,
+  TxOverviewRow,
+} from '../../../chain/tx/components/TxOverviewRow';
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
@@ -12,7 +15,6 @@ import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { assertField } from '../../../lib/utils/record/assertField';
@@ -44,11 +46,15 @@ export const KeysignTxPrimaryInfo = ({
 
   return (
     <>
-      <TxOverviewPrimaryRow title={t('from')}>
-        {coin.address}
-      </TxOverviewPrimaryRow>
+      <TxOverviewChainDataRow>
+        <TxOverviewPrimaryRowTitle>{t('from')}</TxOverviewPrimaryRowTitle>
+        <span>{coin.address}</span>
+      </TxOverviewChainDataRow>
 
-      <TxOverviewPrimaryRow title={t('to')}>{toAddress}</TxOverviewPrimaryRow>
+      <TxOverviewChainDataRow>
+        <TxOverviewPrimaryRowTitle>{t('to')}</TxOverviewPrimaryRowTitle>
+        <span>{toAddress}</span>
+      </TxOverviewChainDataRow>
       {memo && <TxOverviewMemo value={memo} />}
       <TxOverviewAmount
         value={fromChainAmount(BigInt(toAmount), decimals)}
@@ -59,13 +65,13 @@ export const KeysignTxPrimaryInfo = ({
         success={price =>
           price ? (
             <TxOverviewRow>
-              <Text>{t('value')}</Text>
-              <Text family="mono">
+              <span>{t('value')}</span>
+              <span>
                 {formatAmount(
                   fromChainAmount(BigInt(toAmount), decimals) * price,
                   globalCurrency
                 )}
-              </Text>
+              </span>
             </TxOverviewRow>
           ) : null
         }
@@ -73,9 +79,10 @@ export const KeysignTxPrimaryInfo = ({
         pending={() => null}
       />
       {networkFeesFormatted && (
-        <TxOverviewPrimaryRow title={t('network_fee')}>
-          {networkFeesFormatted}
-        </TxOverviewPrimaryRow>
+        <TxOverviewRow>
+          <span>{t('network_fee')}</span>
+          <span>{networkFeesFormatted}</span>
+        </TxOverviewRow>
       )}
     </>
   );

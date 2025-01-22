@@ -13,9 +13,41 @@ export const TxOverviewRow = styled.div`
   })}
 
   ${text({
-    weight: 700,
+    weight: 600,
     size: 16,
+    color: 'contrast',
+    family: 'mono',
   })}
+
+  > *:last-child {
+    ${text({
+      family: 'mono',
+    })}
+  }
+`;
+
+export const TxOverviewPrimaryRowTitle = styled.span`
+  ${text({
+    weight: 600,
+    size: 20,
+    color: 'contrast',
+  })}
+`;
+
+export const TxOverviewChainDataRow = styled(TxOverviewRow)`
+  ${vStack({
+    alignItems: 'start',
+    gap: 8,
+  })}
+
+  > *:last-child {
+    ${text({
+      family: 'mono',
+      color: 'primary',
+      size: 13,
+      weight: 700,
+    })}
+  }
 `;
 
 export const TxOverviewRowDepositsFlow = styled.div`

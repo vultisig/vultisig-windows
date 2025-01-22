@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
-import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
-import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
+import {
+  TxOverviewPrimaryRowTitle,
+  TxOverviewRow,
+} from '../../../chain/tx/components/TxOverviewRow';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ComponentWithBackActionProps } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
@@ -49,17 +51,23 @@ export const SwapVerify: React.FC<ComponentWithBackActionProps> = ({
       <PageContent gap={40}>
         <WithProgressIndicator value={0.3}>
           <TxOverviewPanel>
-            <TxOverviewPrimaryRow title={t('from')}>
-              {formatAmount(shouldBePresent(fromAmount), fromCoin.ticker)}
-            </TxOverviewPrimaryRow>
-            <TxOverviewPrimaryRow title={t('to')}>
-              <MatchQuery
-                value={outAmountQuery}
-                error={() => t('failed_to_load')}
-                pending={() => t('loading')}
-                success={amount => formatAmount(amount, toCoin.ticker)}
-              />
-            </TxOverviewPrimaryRow>
+            <TxOverviewRow>
+              <TxOverviewPrimaryRowTitle>{t('from')}</TxOverviewPrimaryRowTitle>
+              <span>
+                {formatAmount(shouldBePresent(fromAmount), fromCoin.ticker)}
+              </span>
+            </TxOverviewRow>
+            <TxOverviewRow>
+              <TxOverviewPrimaryRowTitle>{t('to')}</TxOverviewPrimaryRowTitle>
+              <span>
+                <MatchQuery
+                  value={outAmountQuery}
+                  error={() => t('failed_to_load')}
+                  pending={() => t('loading')}
+                  success={amount => formatAmount(amount, toCoin.ticker)}
+                />
+              </span>
+            </TxOverviewRow>
 
             <SwapAllowance />
             <SwapFees RowComponent={TxOverviewRow} />

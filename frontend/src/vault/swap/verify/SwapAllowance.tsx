@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { TxOverviewPrimaryRow } from '../../../chain/tx/components/TxOverviewPrimaryRow';
+import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
@@ -25,12 +25,15 @@ export const SwapAllowance = () => {
         const { decimals, ticker } = shouldBePresent(coin);
 
         return (
-          <TxOverviewPrimaryRow title={t('allowance')}>
-            {formatAmount(
-              fromChainAmount(erc20ApprovePayload.amount, decimals),
-              ticker
-            )}
-          </TxOverviewPrimaryRow>
+          <TxOverviewChainDataRow>
+            <span>{t('allowance')}</span>
+            <span>
+              {formatAmount(
+                fromChainAmount(erc20ApprovePayload.amount, decimals),
+                ticker
+              )}
+            </span>
+          </TxOverviewChainDataRow>
         );
       }}
     />
