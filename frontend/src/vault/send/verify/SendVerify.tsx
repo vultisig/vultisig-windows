@@ -66,8 +66,8 @@ export const SendVerify: FC<ComponentWithBackActionProps> = ({ onBack }) => {
             {memo && <TxOverviewMemo value={memo} />}
 
             <TxOverviewRow>
-              <Text>{t('amount')}</Text>
-              <Text family="mono">
+              <span>{t('amount')}</span>
+              <span>
                 <MatchQuery
                   value={cappedAmountQuery}
                   error={() => <Text>{t('failed_to_load')}</Text>}
@@ -76,12 +76,12 @@ export const SendVerify: FC<ComponentWithBackActionProps> = ({ onBack }) => {
                     formatAmount(fromChainAmount(amount, decimals), coin.ticker)
                   }
                 />
-              </Text>
+              </span>
             </TxOverviewRow>
 
             <TxOverviewRow>
-              <Text>{t('value')}</Text>
-              <Text family="mono">
+              <span>{t('value')}</span>
+              <span>
                 <MatchQuery
                   value={cappedAmountQuery}
                   error={() => <Text>{t('failed_to_load')}</Text>}
@@ -99,7 +99,7 @@ export const SendVerify: FC<ComponentWithBackActionProps> = ({ onBack }) => {
                     />
                   )}
                 />
-              </Text>
+              </span>
             </TxOverviewRow>
 
             <TxOverviewRow>

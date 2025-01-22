@@ -126,8 +126,11 @@ export const KeysignTxOverview = ({
             value={coinPriceQuery}
             success={price =>
               price ? (
-                <TxOverviewRow title={t('value')}>
-                  {formatAmount(formattedToAmount * price, globalCurrency)}
+                <TxOverviewRow>
+                  <span>{t('value')}</span>
+                  <span>
+                    {formatAmount(formattedToAmount * price, globalCurrency)}
+                  </span>
                 </TxOverviewRow>
               ) : null
             }
@@ -137,8 +140,9 @@ export const KeysignTxOverview = ({
         </>
       )}
       {networkFeesFormatted && (
-        <TxOverviewRow title={t('network_fee')}>
-          {networkFeesFormatted}
+        <TxOverviewRow>
+          <span>{t('network_fee')}</span>
+          <span>{networkFeesFormatted}</span>
         </TxOverviewRow>
       )}
       {isSwapTx && isOneOf(blockExplorerChain, nativeSwapChains) && (

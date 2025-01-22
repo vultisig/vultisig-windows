@@ -12,7 +12,6 @@ import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { assertField } from '../../../lib/utils/record/assertField';
@@ -59,13 +58,13 @@ export const KeysignTxPrimaryInfo = ({
         success={price =>
           price ? (
             <TxOverviewRow>
-              <Text>{t('value')}</Text>
-              <Text family="mono">
+              <span>{t('value')}</span>
+              <span>
                 {formatAmount(
                   fromChainAmount(BigInt(toAmount), decimals) * price,
                   globalCurrency
                 )}
-              </Text>
+              </span>
             </TxOverviewRow>
           ) : null
         }
