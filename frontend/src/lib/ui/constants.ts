@@ -10,7 +10,3 @@ export const QUERIES = {
   laptopAndUp: `(min-width: ${BREAKPOINTS.tablet / 16}rem)`,
   desktopAndUp: `(min-width: ${BREAKPOINTS.laptop / 16}rem)`,
 };
-
-export const FEATURE_FLAGS = {
-  RIVE_ANIMATIONS_ENABLED: false,
-};

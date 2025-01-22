@@ -1,9 +1,7 @@
-import Rive from '@rive-app/react-canvas';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import UpdateAvailablePopup from '../../components/updateAvailablePopup/UpdateAvailablePopup';
-import { FEATURE_FLAGS } from '../../lib/ui/constants';
 import { toSizeUnit } from '../../lib/ui/css/toSizeUnit';
 import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
 import { VStack } from '../../lib/ui/layout/Stack';
@@ -65,9 +63,6 @@ export const VaultPage = () => {
         <VaultOverview />
       </VStack>
       <UpdateAvailablePopup />
-      {FEATURE_FLAGS.RIVE_ANIMATIONS_ENABLED && (
-        <Rive src="/riveAnimations.riv" />
-      )}
     </>
   );
 };
