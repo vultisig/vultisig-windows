@@ -19,7 +19,7 @@ export const NoVaultsHomePage = () => {
         <Button onClick={() => navigate('setupVault', { params: {} })}>
           {t('create_new_vault')}
         </Button>
-        <Button onClick={() => navigate('importVault')} kind="outlined">
+        <Button onClick={() => navigate('importVault')} kind="secondary">
           {t('import_vault')}
         </Button>
       </VStack>
