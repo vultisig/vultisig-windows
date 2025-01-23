@@ -9,7 +9,7 @@ interface ThemeGetterParams {
 
 type ColorName = keyof Pick<
   ThemeColors,
-  'foreground' | 'primary' | 'idle' | 'textDark'
+  'foreground' | 'primary' | 'idle' | 'buttonSecondaryHover'
 >;
 
 export const getHoverVariant =
@@ -17,7 +17,7 @@ export const getHoverVariant =
   ({ theme }: ThemeGetterParams) =>
     match(color, {
       foreground: () => theme.colors.foreground.getVariant({ l: l => l + 4 }),
-      primary: () => theme.colors.primary.getVariant({ l: l => l * 0.92 }),
-      textDark: () => theme.colors.textDark.getVariant({ l: l => l + 4 }),
+      primary: () => theme.colors.primary.getVariant({ l: l => l * 0.85 }),
+      buttonSecondaryHover: () => theme.colors.buttonSecondaryHover,
       idle: () => theme.colors.idle.getVariant({ l: l => l + 4 }),
     }).toCssValue();

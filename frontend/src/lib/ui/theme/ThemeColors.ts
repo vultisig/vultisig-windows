@@ -21,6 +21,7 @@ export type ThemeColors = {
   white: HSLA;
   danger: HSLA;
   buttonBackgroundDisabled: HSLA;
+  buttonSecondaryHover: HSLA;
 };
 
 export type ThemeGradients = {
