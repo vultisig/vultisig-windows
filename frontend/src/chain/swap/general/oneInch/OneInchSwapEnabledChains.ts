@@ -1,7 +1,9 @@
-import { Chain } from '../../../model/chain';
+import { Chain } from '../../../../model/chain';
 
 export const oneInchSwapEnabledChains = [
   Chain.Ethereum,
+  Chain.Arbitrum,
+  Chain.Zksync,
   Chain.BSC,
   Chain.Avalanche,
   Chain.Optimism,

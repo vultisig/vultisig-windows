@@ -1,6 +1,6 @@
-import { lifiSwapEnabledChains } from './lifi/LifiSwapEnabledChains';
+import { lifiSwapEnabledChains } from './general/lifi/LifiSwapEnabledChains';
+import { oneInchSwapEnabledChains } from './general/oneInch/OneInchSwapEnabledChains';
 import { nativeSwapEnabledChains } from './native/NativeSwapChain';
-import { oneInchSwapEnabledChains } from './oneInch/OneInchSwapEnabledChains';
 
 export const swapEnabledChains = [
   ...nativeSwapEnabledChains,

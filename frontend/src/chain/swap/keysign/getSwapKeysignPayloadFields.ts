@@ -14,7 +14,7 @@ import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
 import { EvmChain } from '../../../model/chain';
 import { getChainFeeCoin } from '../../tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../utils/fromChainAmount';
-import { GeneralSwapQuote } from '../GeneralSwapQuote';
+import { GeneralSwapQuote } from '../general/GeneralSwapQuote';
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload';
 import { SwapQuote } from '../quote/SwapQuote';
 
@@ -36,36 +36,33 @@ export const getSwapKeysignPayloadFields = ({
 }: Input): Output => {
   const fromCoinKey = getCoinKey(fromCoin);
 
-  const toOneInchSwapPayload = (quote: GeneralSwapQuote): Output => {
-    const swapPayload = new OneInchSwapPayload({
-      fromCoin,
-      toCoin,
-      fromAmount: amount.toString(),
-      toAmountDecimal: fromChainAmount(
-        quote.dstAmount,
-        toCoin.decimals
-      ).toFixed(toCoin.decimals),
-      quote: new OneInchQuote({
-        dstAmount: quote.dstAmount,
-        tx: new OneInchTransaction({
-          ...quote.tx,
-          gas: BigInt(quote.tx.gas),
-        }),
-      }),
-    });
-
-    return {
-      toAddress: quote.tx.to,
-      swapPayload: {
-        case: 'oneinchSwapPayload',
-        value: swapPayload,
-      },
-    };
-  };
-
   return matchRecordUnion(quote, {
-    oneInch: toOneInchSwapPayload,
-    lifi: toOneInchSwapPayload,
+    general: (quote: GeneralSwapQuote): Output => {
+      const swapPayload = new OneInchSwapPayload({
+        fromCoin,
+        toCoin,
+        fromAmount: amount.toString(),
+        toAmountDecimal: fromChainAmount(
+          quote.dstAmount,
+          toCoin.decimals
+        ).toFixed(toCoin.decimals),
+        quote: new OneInchQuote({
+          dstAmount: quote.dstAmount,
+          tx: new OneInchTransaction({
+            ...quote.tx,
+            gas: BigInt(quote.tx.gas),
+          }),
+        }),
+      });
+
+      return {
+        toAddress: quote.tx.to,
+        swapPayload: {
+          case: 'oneinchSwapPayload',
+          value: swapPayload,
+        },
+      };
+    },
     native: quote => {
       const { memo, swapChain } = quote;
 

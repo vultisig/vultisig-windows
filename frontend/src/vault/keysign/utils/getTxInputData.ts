@@ -2,8 +2,8 @@ import { WalletCore } from '@trustwallet/wallet-core';
 
 import { getErc20ApproveTxInputData } from '../../../chain/evm/tx/getErc20ApproveTxInputData';
 import { incrementKeysignPayloadNonce } from '../../../chain/evm/tx/incrementKeysignPayloadNonce';
+import { getOneInchSwapTxInputData } from '../../../chain/swap/general/oneInch/tx/getOneInchSwapTxInputData';
 import { getThorchainSwapTxInputData } from '../../../chain/swap/native/thor/tx/getThorchainSwapTxInputData';
-import { getOneInchSwapTxInputData } from '../../../chain/swap/oneInch/tx/getOneInchSwapTxInputData';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
 import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';

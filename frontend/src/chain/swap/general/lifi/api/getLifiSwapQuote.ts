@@ -1,11 +1,11 @@
 import { createConfig, getQuote } from '@lifi/sdk';
 
-import { CoinKey } from '../../../../coin/Coin';
-import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
-import { match } from '../../../../lib/utils/match';
-import { TransferDirection } from '../../../../lib/utils/TransferDirection';
-import { type DeriveChainKind, getChainKind } from '../../../../model/chain';
-import { defaultEvmSwapGasLimit } from '../../../evm/evmGasLimit';
+import { CoinKey } from '../../../../../coin/Coin';
+import { shouldBePresent } from '../../../../../lib/utils/assert/shouldBePresent';
+import { match } from '../../../../../lib/utils/match';
+import { TransferDirection } from '../../../../../lib/utils/TransferDirection';
+import { DeriveChainKind, getChainKind } from '../../../../../model/chain';
+import { defaultEvmSwapGasLimit } from '../../../../evm/evmGasLimit';
 import { GeneralSwapQuote } from '../../GeneralSwapQuote';
 import { lifiConfig } from '../config';
 import {
@@ -50,6 +50,7 @@ export const getLifiSwapQuote = async ({
 
   return {
     dstAmount: estimate.toAmount,
+    provider: 'lifi',
     tx: match<DeriveChainKind<LifiSwapEnabledChain>, GeneralSwapQuote['tx']>(
       chainKind,
       {

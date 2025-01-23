@@ -1,12 +1,10 @@
 import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
-import { lifiConfig } from '../lifi/config';
-import { oneInchName } from '../oneInch/config';
+import { generalSwapProviderName } from '../general/GeneralSwapProvider';
 import { SwapQuote } from './SwapQuote';
 
 export const getSwapQuoteProviderName = (quote: SwapQuote) => {
   return matchRecordUnion(quote, {
     native: ({ swapChain }) => swapChain,
-    oneInch: () => oneInchName,
-    lifi: () => lifiConfig.name,
+    general: ({ provider }) => generalSwapProviderName[provider],
   });
 };

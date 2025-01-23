@@ -1,4 +1,4 @@
-import { GeneralSwapQuote } from '../../../chain/swap/GeneralSwapQuote';
+import { GeneralSwapQuote } from '../../../chain/swap/general/GeneralSwapQuote';
 import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';

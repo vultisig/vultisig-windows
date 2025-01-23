@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { toKeysignSwapPayload } from '../../../chain/keysign/KeysignSwapPayload';
-import { oneInchName } from '../../../chain/swap/oneInch/config';
+import { generalSwapProviderName } from '../../../chain/swap/general/GeneralSwapProvider';
 import {
   TxOverviewChainDataRow,
   TxOverviewRow,
@@ -45,7 +45,7 @@ export const KeysignSwapTxInfo = ({
   const provider = matchDiscriminatedUnion(swapPayload, 'case', 'value', {
     thorchainSwapPayload: () => Chain.THORChain,
     mayachainSwapPayload: () => Chain.MayaChain,
-    oneinchSwapPayload: () => oneInchName,
+    oneinchSwapPayload: () => generalSwapProviderName.oneinch,
   });
 
   return (
