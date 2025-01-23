@@ -79,7 +79,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
     match(kind, {
       primary: () => css`
         background: ${getColor('primary')};
-        color: ${getColor('contrast')};
+        color: ${getColor('textDark')};
 
         &:disabled {
           background: ${getColor('buttonBackgroundDisabled')};
@@ -87,7 +87,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
         }
       `,
       secondary: () => css`
-        background: ${getColor('textDark')};
+        background: ${getColor('foregroundExtra')};
         color: ${getColor('contrast')};
 
         &:disabled {
@@ -123,7 +123,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
             background: ${getHoverVariant('primary')};
           `,
           secondary: () => css`
-            background: ${getHoverVariant('textDark')};
+            background: ${getHoverVariant('buttonSecondaryHover')};
           `,
           outlined: () => css``,
           ghost: () => css`
