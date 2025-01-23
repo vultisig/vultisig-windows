@@ -28,6 +28,7 @@ export const darkTheme: DefaultTheme = {
     mistExtra: new HSLA(0, 0, 100, 0.13),
     danger: new HSLA(0, 100, 68, 1.0),
     buttonBackgroundDisabled: new HSLA(217, 57, 14),
+    buttonSecondaryHover: new HSLA(207, 42, 40),
   },
   gradients: {
     primary: `linear-gradient(135deg, #0339C7, #2155DF)`,
