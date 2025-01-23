@@ -1,14 +1,15 @@
-import { Fetch } from '../../../../../wailsjs/go/utils/GoHttp';
-import { addQueryParams } from '../../../../lib/utils/query/addQueryParams';
-import { pick } from '../../../../lib/utils/record/pick';
-import { EvmChain } from '../../../../model/chain';
-import { Endpoint } from '../../../../services/Endpoint';
-import { ChainAccount } from '../../../ChainAccount';
-import { getEvmChainId } from '../../../evm/chainInfo';
-import { defaultEvmSwapGasLimit } from '../../../evm/evmGasLimit';
-import { isNativeCoin } from '../../../utils/isNativeCoin';
+import { Fetch } from '../../../../../../wailsjs/go/utils/GoHttp';
+import { addQueryParams } from '../../../../../lib/utils/query/addQueryParams';
+import { pick } from '../../../../../lib/utils/record/pick';
+import { EvmChain } from '../../../../../model/chain';
+import { Endpoint } from '../../../../../services/Endpoint';
+import { ChainAccount } from '../../../../ChainAccount';
+import { getEvmChainId } from '../../../../evm/chainInfo';
+import { defaultEvmSwapGasLimit } from '../../../../evm/evmGasLimit';
+import { isNativeCoin } from '../../../../utils/isNativeCoin';
+import { GeneralSwapQuote } from '../../GeneralSwapQuote';
 import { oneInchAffiliateConfig } from '../oneInchAffiliateConfig';
-import { OneInchSwapQuote } from '../OneInchSwapQuote';
+import { OneInchSwapQuoteResponse } from './OneInchSwapQuoteResponse';
 
 type Input = {
   account: ChainAccount;
@@ -29,7 +30,7 @@ export const getOneInchSwapQuote = async ({
   toCoinId,
   amount,
   isAffiliate,
-}: Input): Promise<OneInchSwapQuote> => {
+}: Input): Promise<GeneralSwapQuote> => {
   const chainId = getEvmChainId(account.chain as EvmChain);
 
   const params = {
@@ -49,17 +50,14 @@ export const getOneInchSwapQuote = async ({
 
   const url = addQueryParams(getBaseUrl(chainId), params);
 
-  const result: OneInchSwapQuote = await Fetch(url);
+  const { dstAmount, tx }: OneInchSwapQuoteResponse = await Fetch(url);
 
-  if (!result.tx.gas) {
-    return {
-      ...result,
-      tx: {
-        ...result.tx,
-        gas: defaultEvmSwapGasLimit,
-      },
-    };
-  }
-
-  return result;
+  return {
+    dstAmount,
+    provider: 'oneinch',
+    tx: {
+      ...tx,
+      gas: tx.gas || defaultEvmSwapGasLimit,
+    },
+  };
 };

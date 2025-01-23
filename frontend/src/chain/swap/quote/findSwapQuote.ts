@@ -8,14 +8,16 @@ import { pick } from '../../../lib/utils/record/pick';
 import { TransferDirection } from '../../../lib/utils/TransferDirection';
 import { ChainAccount } from '../../ChainAccount';
 import { toChainAmount } from '../../utils/toChainAmount';
+import { getLifiSwapQuote } from '../general/lifi/api/getLifiSwapQuote';
+import { lifiSwapEnabledChains } from '../general/lifi/LifiSwapEnabledChains';
+import { getOneInchSwapQuote } from '../general/oneInch/api/getOneInchSwapQuote';
+import { oneInchSwapEnabledChains } from '../general/oneInch/OneInchSwapEnabledChains';
 import { getNativeSwapQuote } from '../native/api/getNativeSwapQuote';
 import { toNativeSwapAsset } from '../native/asset/toNativeSwapAsset';
 import {
   nativeSwapChains,
   nativeSwapEnabledChainsRecord,
 } from '../native/NativeSwapChain';
-import { getOneInchSwapQuote } from '../oneInch/api/getOneInchSwapQuote';
-import { oneInchSwapEnabledChains } from '../oneInch/OneInchSwapEnabledChains';
 import { SwapQuote } from './SwapQuote';
 
 type FindSwapQuoteInput = Record<
@@ -65,7 +67,7 @@ export const findSwapQuote = ({
     from.chain === to.chain
   ) {
     fetchers.push(async (): Promise<SwapQuote> => {
-      const oneInch = await getOneInchSwapQuote({
+      const general = await getOneInchSwapQuote({
         account: pick(from, ['address', 'chain']),
         fromCoinId: from.id,
         toCoinId: to.id,
@@ -73,7 +75,29 @@ export const findSwapQuote = ({
         isAffiliate,
       });
 
-      return { oneInch };
+      return { general };
+    });
+  }
+
+  const fromLifiChain = isOneOf(from.chain, lifiSwapEnabledChains);
+  const toLifiChain = isOneOf(to.chain, lifiSwapEnabledChains);
+
+  if (fromLifiChain && toLifiChain) {
+    fetchers.push(async (): Promise<SwapQuote> => {
+      const general = await getLifiSwapQuote({
+        from: {
+          ...from,
+          chain: fromLifiChain,
+        },
+        to: {
+          ...to,
+          chain: toLifiChain,
+        },
+        amount: toChainAmount(amount, from.decimals),
+        address: from.address,
+      });
+
+      return { general };
     });
   }
 

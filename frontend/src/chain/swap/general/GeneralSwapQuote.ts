@@ -1,5 +1,8 @@
-export type OneInchSwapQuote = {
+import { GeneralSwapProvider } from './GeneralSwapProvider';
+
+export type GeneralSwapQuote = {
   dstAmount: string;
+  provider: GeneralSwapProvider;
   tx: {
     from: string;
     to: string;

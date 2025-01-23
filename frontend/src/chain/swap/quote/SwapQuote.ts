@@ -1,12 +1,12 @@
+import { GeneralSwapQuote } from '../general/GeneralSwapQuote';
 import { NativeSwapQuote } from '../native/NativeSwapQuote';
-import { OneInchSwapQuote } from '../oneInch/OneInchSwapQuote';
 
-export const swapTypes = ['native', 'oneInch'] as const;
+export const swapTypes = ['native', 'general'] as const;
 export type SwapType = (typeof swapTypes)[number];
 
 interface SwapQuoteMap {
   native: NativeSwapQuote;
-  oneInch: OneInchSwapQuote;
+  general: GeneralSwapQuote;
 }
 
 export type SwapQuote = {

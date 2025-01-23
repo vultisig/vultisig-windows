@@ -14,6 +14,7 @@ import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
 import { EvmChain } from '../../../model/chain';
 import { getChainFeeCoin } from '../../tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../utils/fromChainAmount';
+import { GeneralSwapQuote } from '../general/GeneralSwapQuote';
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload';
 import { SwapQuote } from '../quote/SwapQuote';
 
@@ -36,7 +37,7 @@ export const getSwapKeysignPayloadFields = ({
   const fromCoinKey = getCoinKey(fromCoin);
 
   return matchRecordUnion(quote, {
-    oneInch: quote => {
+    general: (quote: GeneralSwapQuote): Output => {
       const swapPayload = new OneInchSwapPayload({
         fromCoin,
         toCoin,
@@ -54,15 +55,13 @@ export const getSwapKeysignPayloadFields = ({
         }),
       });
 
-      const result: Output = {
+      return {
         toAddress: quote.tx.to,
         swapPayload: {
           case: 'oneinchSwapPayload',
           value: swapPayload,
         },
       };
-
-      return result;
     },
     native: quote => {
       const { memo, swapChain } = quote;

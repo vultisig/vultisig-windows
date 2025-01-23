@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { GeneralSwapQuote } from '../../../chain/swap/general/GeneralSwapQuote';
 import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
@@ -24,8 +25,9 @@ export const useSwapOutputAmountQuery = () => {
               expected_amount_out,
               getNativeSwapDecimals(toCoinKey.chain as NativeSwapEnabledChain)
             ),
-          oneInch: ({ dstAmount }) =>
-            fromChainAmount(dstAmount, toCoin.decimals),
+          general: (quote: GeneralSwapQuote) => {
+            return fromChainAmount(quote.dstAmount, toCoin.decimals);
+          },
         });
       },
       [toCoin.decimals, toCoinKey.chain]

@@ -2,7 +2,7 @@ import { TW, WalletCore } from '@trustwallet/wallet-core';
 
 import { withoutNullOrUndefined } from '../../../lib/utils/array/withoutNullOrUndefined';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { Chain, ChainKind, chainKindRecord } from '../../../model/chain';
+import { Chain, ChainKind, getChainKind } from '../../../model/chain';
 import { getCoinType } from '../../walletCore/getCoinType';
 
 type Input = {
@@ -43,7 +43,7 @@ export const getPreSigningHashes = ({
     txInputData
   );
 
-  const chainKind = chainKindRecord[chain];
+  const chainKind = getChainKind(chain);
 
   const decoder = decoders[chainKind];
 
