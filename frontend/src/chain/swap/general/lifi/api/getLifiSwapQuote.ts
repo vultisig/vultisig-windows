@@ -3,6 +3,7 @@ import { createConfig, getQuote } from '@lifi/sdk';
 import { CoinKey } from '../../../../../coin/Coin';
 import { shouldBePresent } from '../../../../../lib/utils/assert/shouldBePresent';
 import { match } from '../../../../../lib/utils/match';
+import { memoize } from '../../../../../lib/utils/memoize';
 import { TransferDirection } from '../../../../../lib/utils/TransferDirection';
 import { DeriveChainKind, getChainKind } from '../../../../../model/chain';
 import { defaultEvmSwapGasLimit } from '../../../../evm/evmGasLimit';
@@ -18,14 +19,18 @@ type Input = Record<TransferDirection, CoinKey<LifiSwapEnabledChain>> & {
   amount: bigint;
 };
 
+const setupLifi = memoize(() => {
+  createConfig({
+    integrator: lifiConfig.integratorName,
+  });
+});
+
 export const getLifiSwapQuote = async ({
   amount,
   address,
   ...transfer
 }: Input): Promise<GeneralSwapQuote> => {
-  createConfig({
-    integrator: lifiConfig.integratorName,
-  });
+  setupLifi();
 
   const [fromChain, toChain] = [transfer.from, transfer.to].map(
     ({ chain }) => lifiSwapChainId[chain]
