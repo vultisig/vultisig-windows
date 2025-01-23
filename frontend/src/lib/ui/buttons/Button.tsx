@@ -17,7 +17,13 @@ export const buttonSizes = ['xs', 's', 'm', 'l', 'xl'] as const;
 
 type ButtonSize = (typeof buttonSizes)[number];
 
-export const buttonKinds = ['primary', 'outlined', 'ghost', 'idle'] as const;
+export const buttonKinds = [
+  'primary',
+  'secondary',
+  'outlined',
+  'ghost',
+  'idle',
+] as const;
 
 export type ButtonKind = (typeof buttonKinds)[number];
 
@@ -73,7 +79,21 @@ const Container = styled(UnstyledButton)<ContainerProps>`
     match(kind, {
       primary: () => css`
         background: ${getColor('primary')};
-        color: ${getColor('foreground')};
+        color: ${getColor('contrast')};
+
+        &:disabled {
+          background: ${getColor('buttonBackgroundDisabled')};
+          color: ${getColor('mistExtra')};
+        }
+      `,
+      secondary: () => css`
+        background: ${getColor('textDark')};
+        color: ${getColor('contrast')};
+
+        &:disabled {
+          background: ${getColor('buttonBackgroundDisabled')};
+          color: ${getColor('mistExtra')};
+        }
       `,
       outlined: () => css`
         font-weight: 700;
@@ -101,6 +121,9 @@ const Container = styled(UnstyledButton)<ContainerProps>`
         ${match(kind, {
           primary: () => css`
             background: ${getHoverVariant('primary')};
+          `,
+          secondary: () => css`
+            background: ${getHoverVariant('textDark')};
           `,
           outlined: () => css``,
           ghost: () => css`

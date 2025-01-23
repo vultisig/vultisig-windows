@@ -4,6 +4,28 @@ import { match } from '../../utils/match';
 import { cropText } from '../css/cropText';
 import { toSizeUnit } from '../css/toSizeUnit';
 
+type TextVariant = 'h1Hero' | 'h1Regular';
+
+const textVariantsRecord: Record<
+  TextVariant,
+  Pick<TextProps, 'size' | 'height' | 'weight' | 'cropped' | 'letterSpacing'>
+> = {
+  h1Hero: {
+    size: 72,
+    height: 'large',
+    weight: 500,
+    cropped: false,
+    letterSpacing: -1.8,
+  },
+  h1Regular: {
+    size: 60,
+    height: 'large',
+    weight: 500,
+    cropped: false,
+    letterSpacing: -1.5,
+  },
+};
+
 const getTextColorRecord = ({ colors }: DefaultTheme) =>
   ({
     regular: colors.text,
@@ -33,6 +55,7 @@ export interface TextProps {
   size?: number;
   height?: TextHeight;
   centerHorizontally?: boolean;
+  letterSpacing?: number;
   centerVertically?:
     | boolean
     | {
@@ -42,6 +65,7 @@ export interface TextProps {
   nowrap?: boolean;
   family?: TextFontFamily;
   as?: React.ElementType;
+  variant?: TextVariant;
 }
 
 export const text = ({
@@ -49,57 +73,73 @@ export const text = ({
   weight,
   size,
   height,
+  letterSpacing,
+  variant,
   centerHorizontally,
   centerVertically,
   cropped,
   nowrap,
   family = 'regular',
-}: TextProps) => css`
-  overflow-wrap: break-word;
+}: TextProps) => {
+  const variantStyles = variant ? textVariantsRecord[variant] : {};
 
-  ${({ theme }) =>
-    color &&
+  return css`
+    overflow-wrap: break-word;
+
+    ${({ theme }) =>
+      color &&
+      css`
+        color: ${getTextColorRecord(theme)[color].toCssValue()};
+      `}
+    ${weight || variantStyles.weight
+      ? css`
+          font-weight: ${weight ?? variantStyles.weight};
+        `
+      : ''}
+    ${height || variantStyles.height
+      ? css`
+          line-height: ${lineHeight[
+            height ?? (variantStyles.height as TextHeight)
+          ]};
+        `
+      : ''}
+    ${(size ?? variantStyles.size)
+      ? css`
+          font-size: ${toSizeUnit((size ?? variantStyles.size) as number)};
+        `
+      : ''}
+    ${letterSpacing || variantStyles.letterSpacing
+      ? css`
+          letter-spacing: ${toSizeUnit((size ?? variantStyles.size) as number)};
+        `
+      : ''}
+    ${centerHorizontally &&
     css`
-      color: ${getTextColorRecord(theme)[color].toCssValue()};
+      text-align: center;
     `}
-  ${weight &&
-  css`
-    font-weight: ${weight};
-  `}
-  ${height &&
-  css`
-    line-height: ${lineHeight[height]};
-  `}
-  ${size &&
-  css`
-    font-size: ${toSizeUnit(size)};
-  `}
-  ${centerHorizontally &&
-  css`
-    text-align: center;
-  `}
-  ${nowrap &&
-  css`
-    white-space: nowrap;
-  `}
-  ${cropped && cropText}
-
-  ${centerVertically &&
-  css`
-    display: inline-flex;
-    align-items: center;
-
-    ${typeof centerVertically === 'object' &&
+    ${nowrap &&
     css`
-      gap: ${toSizeUnit(centerVertically.gap)};
+      white-space: nowrap;
     `}
-  `}
+    ${cropped || variantStyles.cropped ? cropText : ''}
 
-  font-family: ${match(family, {
-    mono: () => 'Menlo, monospace',
-    regular: () => 'inherit',
-  })};
-`;
+    ${centerVertically &&
+    css`
+      display: inline-flex;
+      align-items: center;
+
+      ${typeof centerVertically === 'object' &&
+      css`
+        gap: ${toSizeUnit(centerVertically.gap)};
+      `}
+    `}
+
+    font-family: ${match(family, {
+      mono: () => 'Menlo, monospace',
+      regular: () => 'inherit',
+    })};
+  `;
+};
 
 export const Text = styled.p<TextProps>`
   ${text};
