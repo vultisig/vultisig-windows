@@ -33,7 +33,7 @@ export const getLifiSwapQuote = async ({
 
   const [fromToken, toToken] = [transfer.from, transfer.to].map(({ id }) => id);
 
-  const { transactionRequest, estimate } = await getQuote({
+  const quote = await getQuote({
     fromChain,
     toChain,
     fromToken,
@@ -42,6 +42,8 @@ export const getLifiSwapQuote = async ({
     fromAddress: address,
     fee: lifiConfig.afffiliateFee,
   });
+
+  const { transactionRequest, estimate } = quote;
 
   const chainKind = getChainKind(transfer.from.chain);
 
@@ -61,9 +63,9 @@ export const getLifiSwapQuote = async ({
           from: shouldBePresent(from),
           to: shouldBePresent(to),
           data: shouldBePresent(data),
-          value: shouldBePresent(value),
-          gasPrice: shouldBePresent(gasPrice),
-          gas: Number(gasLimit) || defaultEvmSwapGasLimit,
+          value: BigInt(shouldBePresent(value)).toString(),
+          gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
+          gas: Number(shouldBePresent(gasLimit)) || defaultEvmSwapGasLimit,
         }),
       }
     ),
