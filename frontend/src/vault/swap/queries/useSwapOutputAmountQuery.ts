@@ -19,18 +19,15 @@ export const useSwapOutputAmountQuery = () => {
     useSwapQuoteQuery(),
     useCallback(
       swapQuote => {
-        const fromGeneralSwapQuote = (quote: GeneralSwapQuote) => {
-          return fromChainAmount(quote.dstAmount, toCoin.decimals);
-        };
-
         return matchRecordUnion(swapQuote, {
           native: ({ expected_amount_out }) =>
             fromChainAmount(
               expected_amount_out,
               getNativeSwapDecimals(toCoinKey.chain as NativeSwapEnabledChain)
             ),
-          oneInch: fromGeneralSwapQuote,
-          lifi: fromGeneralSwapQuote,
+          general: (quote: GeneralSwapQuote) => {
+            return fromChainAmount(quote.dstAmount, toCoin.decimals);
+          },
         });
       },
       [toCoin.decimals, toCoinKey.chain]
