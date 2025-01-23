@@ -1,8 +1,8 @@
+import { ChainEntity } from '../chain/ChainEntity';
 import { haveEqualFields } from '../lib/utils/record/haveEqualFields';
 import { Chain } from '../model/chain';
 
-export type CoinKey = {
-  chain: Chain;
+export type CoinKey<T extends Chain = Chain> = ChainEntity<T> & {
   id: string;
 };
 
