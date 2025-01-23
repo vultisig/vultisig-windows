@@ -14,6 +14,7 @@ import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
 import { EvmChain } from '../../../model/chain';
 import { getChainFeeCoin } from '../../tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../utils/fromChainAmount';
+import { GeneralSwapQuote } from '../GeneralSwapQuote';
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload';
 import { SwapQuote } from '../quote/SwapQuote';
 
@@ -35,35 +36,36 @@ export const getSwapKeysignPayloadFields = ({
 }: Input): Output => {
   const fromCoinKey = getCoinKey(fromCoin);
 
-  return matchRecordUnion(quote, {
-    oneInch: quote => {
-      const swapPayload = new OneInchSwapPayload({
-        fromCoin,
-        toCoin,
-        fromAmount: amount.toString(),
-        toAmountDecimal: fromChainAmount(
-          quote.dstAmount,
-          toCoin.decimals
-        ).toFixed(toCoin.decimals),
-        quote: new OneInchQuote({
-          dstAmount: quote.dstAmount,
-          tx: new OneInchTransaction({
-            ...quote.tx,
-            gas: BigInt(quote.tx.gas),
-          }),
+  const toOneInchSwapPayload = (quote: GeneralSwapQuote): Output => {
+    const swapPayload = new OneInchSwapPayload({
+      fromCoin,
+      toCoin,
+      fromAmount: amount.toString(),
+      toAmountDecimal: fromChainAmount(
+        quote.dstAmount,
+        toCoin.decimals
+      ).toFixed(toCoin.decimals),
+      quote: new OneInchQuote({
+        dstAmount: quote.dstAmount,
+        tx: new OneInchTransaction({
+          ...quote.tx,
+          gas: BigInt(quote.tx.gas),
         }),
-      });
+      }),
+    });
 
-      const result: Output = {
-        toAddress: quote.tx.to,
-        swapPayload: {
-          case: 'oneinchSwapPayload',
-          value: swapPayload,
-        },
-      };
+    return {
+      toAddress: quote.tx.to,
+      swapPayload: {
+        case: 'oneinchSwapPayload',
+        value: swapPayload,
+      },
+    };
+  };
 
-      return result;
-    },
+  return matchRecordUnion(quote, {
+    oneInch: toOneInchSwapPayload,
+    lifi: toOneInchSwapPayload,
     native: quote => {
       const { memo, swapChain } = quote;
 

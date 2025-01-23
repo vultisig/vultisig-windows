@@ -1,3 +1,4 @@
+import { GeneralSwapQuote } from '../../../chain/swap/GeneralSwapQuote';
 import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
@@ -27,6 +28,18 @@ export const useSwapFeesQuery = () => {
     ({ swapQuote, chainSpecific }): SwapFees => {
       const fromFeeCoin = getChainFeeCoin(fromCoinKey.chain);
 
+      const fromGeneralSwapQuote = ({
+        tx: { gasPrice, gas },
+      }: GeneralSwapQuote) => {
+        return {
+          swap: {
+            ...getCoinMetaKey(fromFeeCoin),
+            amount: BigInt(gasPrice) * BigInt(gas),
+            decimals: fromFeeCoin.decimals,
+          },
+        };
+      };
+
       return matchRecordUnion(swapQuote, {
         native: ({ fees }): SwapFees => {
           const decimals = getNativeSwapDecimals(
@@ -49,15 +62,8 @@ export const useSwapFeesQuery = () => {
             },
           };
         },
-        oneInch: ({ tx: { gasPrice, gas } }): SwapFees => {
-          return {
-            swap: {
-              ...getCoinMetaKey(fromFeeCoin),
-              amount: BigInt(gasPrice) * BigInt(gas),
-              decimals: fromFeeCoin.decimals,
-            },
-          };
-        },
+        oneInch: fromGeneralSwapQuote,
+        lifi: fromGeneralSwapQuote,
       });
     }
   );

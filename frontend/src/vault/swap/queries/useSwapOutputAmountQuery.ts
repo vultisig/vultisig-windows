@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { GeneralSwapQuote } from '../../../chain/swap/GeneralSwapQuote';
 import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
@@ -18,14 +19,18 @@ export const useSwapOutputAmountQuery = () => {
     useSwapQuoteQuery(),
     useCallback(
       swapQuote => {
+        const fromGeneralSwapQuote = (quote: GeneralSwapQuote) => {
+          return fromChainAmount(quote.dstAmount, toCoin.decimals);
+        };
+
         return matchRecordUnion(swapQuote, {
           native: ({ expected_amount_out }) =>
             fromChainAmount(
               expected_amount_out,
               getNativeSwapDecimals(toCoinKey.chain as NativeSwapEnabledChain)
             ),
-          oneInch: ({ dstAmount }) =>
-            fromChainAmount(dstAmount, toCoin.decimals),
+          oneInch: fromGeneralSwapQuote,
+          lifi: fromGeneralSwapQuote,
         });
       },
       [toCoin.decimals, toCoinKey.chain]
