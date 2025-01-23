@@ -1,8 +1,12 @@
 import { createConfig, getQuote } from '@lifi/sdk';
 
 import { CoinKey } from '../../../../coin/Coin';
+import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
+import { match } from '../../../../lib/utils/match';
 import { TransferDirection } from '../../../../lib/utils/TransferDirection';
-import { OneInchSwapQuote } from '../../oneInch/OneInchSwapQuote';
+import { type DeriveChainKind, getChainKind } from '../../../../model/chain';
+import { defaultEvmSwapGasLimit } from '../../../evm/evmGasLimit';
+import { GeneralSwapQuote } from '../../GeneralSwapQuote';
 import { lifiConfig } from '../config';
 import {
   lifiSwapChainId,
@@ -15,24 +19,52 @@ type Input = Record<TransferDirection, CoinKey<LifiSwapEnabledChain>> & {
 };
 
 export const getLifiSwapQuote = async ({
-  from,
-  to,
   amount,
   address,
-}: Input): Promise<OneInchSwapQuote> => {
+  ...transfer
+}: Input): Promise<GeneralSwapQuote> => {
   createConfig({
     integrator: lifiConfig.integratorName,
   });
 
-  const quote = await getQuote({
-    fromChain: lifiSwapChainId[from.chain],
-    toChain: lifiSwapChainId[to.chain],
-    fromToken: from.id,
-    toToken: to.id,
+  const [fromChain, toChain] = [transfer.from, transfer.to].map(
+    ({ chain }) => lifiSwapChainId[chain]
+  );
+
+  const [fromToken, toToken] = [transfer.from, transfer.to].map(({ id }) => id);
+
+  const { transactionRequest, estimate } = await getQuote({
+    fromChain,
+    toChain,
+    fromToken,
+    toToken,
     fromAmount: amount.toString(),
     fromAddress: address,
     fee: lifiConfig.afffiliateFee,
   });
 
-  return quote;
+  const chainKind = getChainKind(transfer.from.chain);
+
+  const { value, gasPrice, gasLimit, data, from, to } =
+    shouldBePresent(transactionRequest);
+
+  return {
+    dstAmount: estimate.toAmount,
+    tx: match<DeriveChainKind<LifiSwapEnabledChain>, GeneralSwapQuote['tx']>(
+      chainKind,
+      {
+        solana: () => {
+          throw new Error('Solana swaps are not supported yet');
+        },
+        evm: () => ({
+          from: shouldBePresent(from),
+          to: shouldBePresent(to),
+          data: shouldBePresent(data),
+          value: shouldBePresent(value),
+          gasPrice: shouldBePresent(gasPrice),
+          gas: Number(gasLimit) || defaultEvmSwapGasLimit,
+        }),
+      }
+    ),
+  };
 };

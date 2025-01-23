@@ -1,4 +1,4 @@
-export type OneInchSwapQuote = {
+export type OneInchSwapQuoteResponse = {
   dstAmount: string;
   tx: {
     from: string;
