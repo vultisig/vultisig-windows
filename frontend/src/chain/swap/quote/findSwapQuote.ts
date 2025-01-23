@@ -8,6 +8,8 @@ import { pick } from '../../../lib/utils/record/pick';
 import { TransferDirection } from '../../../lib/utils/TransferDirection';
 import { ChainAccount } from '../../ChainAccount';
 import { toChainAmount } from '../../utils/toChainAmount';
+import { getLifiSwapQuote } from '../lifi/api/getLifiSwapQuote';
+import { lifiSwapEnabledChains } from '../lifi/LifiSwapEnabledChains';
 import { getNativeSwapQuote } from '../native/api/getNativeSwapQuote';
 import { toNativeSwapAsset } from '../native/asset/toNativeSwapAsset';
 import {
@@ -74,6 +76,28 @@ export const findSwapQuote = ({
       });
 
       return { oneInch };
+    });
+  }
+
+  const fromLifiChain = isOneOf(from.chain, lifiSwapEnabledChains);
+  const toLifiChain = isOneOf(to.chain, lifiSwapEnabledChains);
+
+  if (fromLifiChain && toLifiChain) {
+    fetchers.push(async (): Promise<SwapQuote> => {
+      const lifi = await getLifiSwapQuote({
+        from: {
+          ...from,
+          chain: fromLifiChain,
+        },
+        to: {
+          ...to,
+          chain: toLifiChain,
+        },
+        amount: toChainAmount(amount, from.decimals),
+        address: from.address,
+      });
+
+      return { lifi };
     });
   }
 
