@@ -12,6 +12,8 @@ type DeriveAddressInput = {
   walletCore: WalletCore;
 };
 
+const bitcoinCashPrefix = 'bitcoincash:';
+
 export const deriveAddress = ({
   chain,
   publicKey,
@@ -30,5 +32,14 @@ export const deriveAddress = ({
     ).description();
   }
 
-  return walletCore.CoinTypeExt.deriveAddressFromPublicKey(coinType, publicKey);
+  const address = walletCore.CoinTypeExt.deriveAddressFromPublicKey(
+    coinType,
+    publicKey
+  );
+
+  if (chain === Chain.BitcoinCash && address.startsWith(bitcoinCashPrefix)) {
+    return address.slice(bitcoinCashPrefix.length);
+  }
+
+  return address;
 };
