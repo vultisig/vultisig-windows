@@ -1,9 +1,10 @@
 import { areEqualCoins, CoinKey } from '../../../coin/Coin';
+import { coinsRecord } from '../../../coin/coins';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
-import { TokensStore } from '../../../services/Coin/CoinList';
 
 export const isNativeCoin = (key: CoinKey) => {
-  return TokensStore.TokenSelectionAssets.some(
-    token => token.isNativeToken && areEqualCoins(getCoinMetaKey(token), key)
+  const chainCoins = coinsRecord[key.chain];
+  return chainCoins.some(
+    coin => coin.isNativeToken && areEqualCoins(getCoinMetaKey(coin), key)
   );
 };

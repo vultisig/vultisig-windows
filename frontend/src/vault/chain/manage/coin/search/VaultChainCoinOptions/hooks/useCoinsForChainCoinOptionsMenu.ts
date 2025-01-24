@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
 import { storage } from '../../../../../../../../wailsjs/go/models';
+import { coinsRecord } from '../../../../../../../coin/coins';
 import { storageCoinToCoin } from '../../../../../../../coin/utils/storageCoin';
 import { Chain } from '../../../../../../../model/chain';
 import { CoinMeta } from '../../../../../../../model/coin-meta';
-import { TokensStore } from '../../../../../../../services/Coin/CoinList';
 import {
   PersistentStateKey,
   usePersistentState,
@@ -63,13 +63,6 @@ export const useCoinsForChainCoinOptionsMenu = (chain: Chain) => {
     [chain, chainToCoinsMap]
   );
 
-  const tokenStoreItems = useMemo(
-    () =>
-      TokensStore.TokenSelectionAssets.filter(token => token.chain === chain) ||
-      [],
-    [chain]
-  );
-
-  const coins = [...storedCoins, ...tokenStoreItems];
+  const coins = [...storedCoins, ...coinsRecord[chain]];
   return splitCoinsIntoSelectedAndUnselected(coins, vaultCoins);
 };

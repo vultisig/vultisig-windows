@@ -1,4 +1,6 @@
-import { TokensStore } from '../services/Coin/CoinList';
+import { coinsRecord } from '../coin/coins';
 
 export const getNativeTokens = () =>
-  TokensStore.TokenSelectionAssets.filter(token => token.isNativeToken);
+  Object.values(coinsRecord)
+    .flat()
+    .filter(token => token.isNativeToken);
