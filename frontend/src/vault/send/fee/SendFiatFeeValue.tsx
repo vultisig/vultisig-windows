@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
-import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
+import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
@@ -26,7 +26,7 @@ export const SendFiatFeeValue = () => {
     CoinMeta.fromCoin(storageCoinToCoin(coin))
   );
 
-  const { decimals } = getChainFeeCoin(coinKey.chain);
+  const { decimals } = chainFeeCoin[coinKey.chain];
   const humanReadableFeeValue = fromChainAmount(fee, decimals);
 
   let formattedAmount: string | null = null;

@@ -1,94 +1,8 @@
 import { Chain } from '../model/chain';
 import { CoinMeta } from '../model/coin-meta';
 
-export const coinsRecord: Record<Chain, CoinMeta[]> = {
-  [Chain.Bitcoin]: [
-    {
-      chain: Chain.Bitcoin,
-      ticker: 'BTC',
-      logo: 'btc',
-      decimals: 8,
-      priceProviderId: 'bitcoin',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
-  [Chain.BitcoinCash]: [
-    {
-      chain: Chain.BitcoinCash,
-      ticker: 'BCH',
-      logo: 'bch',
-      decimals: 8,
-      priceProviderId: 'bitcoin-cash',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
-  [Chain.Litecoin]: [
-    {
-      chain: Chain.Litecoin,
-      ticker: 'LTC',
-      logo: 'ltc',
-      decimals: 8,
-      priceProviderId: 'litecoin',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
-  [Chain.Dogecoin]: [
-    {
-      chain: Chain.Dogecoin,
-      ticker: 'DOGE',
-      logo: 'doge',
-      decimals: 8,
-      priceProviderId: 'dogecoin',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
-  [Chain.Dash]: [
-    {
-      chain: Chain.Dash,
-      ticker: 'DASH',
-      logo: 'dash',
-      decimals: 8,
-      priceProviderId: 'dash',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
-  [Chain.Ripple]: [
-    {
-      chain: Chain.Ripple,
-      ticker: 'XRP',
-      logo: 'xrp',
-      decimals: 6,
-      priceProviderId: 'ripple',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
-  [Chain.THORChain]: [
-    {
-      chain: Chain.THORChain,
-      ticker: 'RUNE',
-      logo: 'rune',
-      decimals: 8,
-      priceProviderId: 'thorchain',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
+export const chainTokens: Partial<Record<Chain, CoinMeta[]>> = {
   [Chain.MayaChain]: [
-    {
-      chain: Chain.MayaChain,
-      ticker: 'CACAO',
-      logo: 'cacao',
-      decimals: 10,
-      priceProviderId: 'cacao',
-      contractAddress: '',
-      isNativeToken: true,
-    },
     {
       chain: Chain.MayaChain,
       ticker: 'MAYA',
@@ -102,15 +16,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
   [Chain.Solana]: [
     {
       chain: Chain.Solana,
-      ticker: 'SOL',
-      logo: 'solana',
-      decimals: 9,
-      priceProviderId: 'solana',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-    {
-      chain: Chain.Solana,
       ticker: 'JUP',
       logo: 'https://static.jup.ag/jup/icon.png',
       decimals: 6,
@@ -119,27 +24,7 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
       isNativeToken: false,
     },
   ],
-  [Chain.Ton]: [
-    {
-      chain: Chain.Ton,
-      ticker: 'TON',
-      logo: 'ton',
-      decimals: 9,
-      priceProviderId: 'the-open-network',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
   [Chain.Ethereum]: [
-    {
-      chain: Chain.Ethereum,
-      ticker: 'ETH',
-      logo: 'eth',
-      decimals: 18,
-      priceProviderId: 'ethereum',
-      contractAddress: '',
-      isNativeToken: true,
-    },
     {
       chain: Chain.Ethereum,
       ticker: 'USDC',
@@ -342,15 +227,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
   [Chain.Avalanche]: [
     {
       chain: Chain.Avalanche,
-      ticker: 'AVAX',
-      logo: 'avax',
-      decimals: 18,
-      priceProviderId: 'avalanche-2',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-    {
-      chain: Chain.Avalanche,
       ticker: 'USDC',
       logo: 'usdc',
       decimals: 6,
@@ -443,15 +319,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
   [Chain.BSC]: [
     {
       chain: Chain.BSC,
-      ticker: 'BNB',
-      logo: 'bsc',
-      decimals: 18,
-      priceProviderId: 'binancecoin',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-    {
-      chain: Chain.BSC,
       ticker: 'USDT',
       logo: 'usdt',
       decimals: 18,
@@ -533,24 +400,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
     },
   ],
   [Chain.Base]: [
-    {
-      chain: Chain.Base,
-      ticker: 'ETH',
-      logo: 'base',
-      decimals: 18,
-      priceProviderId: 'ethereum',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-    {
-      chain: Chain.Base,
-      ticker: 'USDC',
-      logo: 'usdc',
-      decimals: 6,
-      priceProviderId: 'usd-coin',
-      contractAddress: '0x833589fcd6edb6e08f4c7c32d4f71b54bda02913',
-      isNativeToken: false,
-    },
     {
       chain: Chain.Base,
       ticker: 'WEWE',
@@ -643,15 +492,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
     },
   ],
   [Chain.Arbitrum]: [
-    {
-      chain: Chain.Arbitrum,
-      ticker: 'ETH',
-      logo: 'arbitrum',
-      decimals: 18,
-      priceProviderId: 'ethereum',
-      contractAddress: '',
-      isNativeToken: true,
-    },
     {
       chain: Chain.Arbitrum,
       ticker: 'ARB',
@@ -791,15 +631,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
   [Chain.Optimism]: [
     {
       chain: Chain.Optimism,
-      ticker: 'ETH',
-      logo: 'optimism',
-      decimals: 18,
-      priceProviderId: 'ethereum',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-    {
-      chain: Chain.Optimism,
       ticker: 'OP',
       logo: 'optimism',
       decimals: 18,
@@ -899,15 +730,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
     },
   ],
   [Chain.Polygon]: [
-    {
-      chain: Chain.Polygon,
-      ticker: 'MATIC',
-      logo: 'matic',
-      decimals: 18,
-      priceProviderId: 'matic-network',
-      contractAddress: '',
-      isNativeToken: true,
-    },
     {
       chain: Chain.Polygon,
       ticker: 'WETH',
@@ -1020,15 +842,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
   [Chain.Blast]: [
     {
       chain: Chain.Blast,
-      ticker: 'ETH',
-      logo: 'blast',
-      decimals: 18,
-      priceProviderId: 'ethereum',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-    {
-      chain: Chain.Blast,
       ticker: 'WETH',
       logo: 'weth',
       decimals: 18,
@@ -1136,38 +949,7 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
       isNativeToken: false,
     },
   ],
-  [Chain.CronosChain]: [
-    {
-      chain: Chain.CronosChain,
-      ticker: 'CRO',
-      logo: 'cro',
-      decimals: 18,
-      priceProviderId: 'crypto-com-chain',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
-  [Chain.Zksync]: [
-    {
-      chain: Chain.Zksync,
-      ticker: 'ETH',
-      logo: 'zksync',
-      decimals: 18,
-      priceProviderId: 'ethereum',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
   [Chain.Cosmos]: [
-    {
-      chain: Chain.Cosmos,
-      ticker: 'ATOM',
-      logo: 'atom',
-      decimals: 6,
-      priceProviderId: 'cosmos',
-      contractAddress: '',
-      isNativeToken: true,
-    },
     {
       chain: Chain.Cosmos,
       ticker: 'USDC',
@@ -1182,32 +964,12 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
   [Chain.Osmosis]: [
     {
       chain: Chain.Osmosis,
-      ticker: 'OSMO',
-      logo: 'osmo',
-      decimals: 6,
-      priceProviderId: 'osmosis',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-    {
-      chain: Chain.Osmosis,
       ticker: 'ION',
       logo: 'ion',
       decimals: 6,
       priceProviderId: 'ion',
       contractAddress: 'uion',
       isNativeToken: false,
-    },
-  ],
-  [Chain.Dydx]: [
-    {
-      chain: Chain.Dydx,
-      ticker: 'DYDX',
-      logo: 'dydx',
-      decimals: 18,
-      priceProviderId: 'dydx-chain',
-      contractAddress: '',
-      isNativeToken: true,
     },
   ],
   [Chain.Kujira]: [
@@ -1263,15 +1025,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
     },
     {
       chain: Chain.Kujira,
-      ticker: 'KUJI',
-      logo: 'kuji',
-      decimals: 6,
-      priceProviderId: 'kujira',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-    {
-      chain: Chain.Kujira,
       ticker: 'ASTRO',
       logo: 'terra-astroport.png',
       decimals: 6,
@@ -1292,15 +1045,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
     },
   ],
   [Chain.Terra]: [
-    {
-      chain: Chain.Terra,
-      ticker: 'LUNA',
-      logo: 'luna',
-      decimals: 6,
-      priceProviderId: 'terra-luna-2',
-      contractAddress: '',
-      isNativeToken: true,
-    },
     {
       chain: Chain.Terra,
       ticker: 'TPT',
@@ -1335,15 +1079,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
   [Chain.TerraClassic]: [
     {
       chain: Chain.TerraClassic,
-      ticker: 'LUNC',
-      logo: 'lunc',
-      decimals: 6,
-      priceProviderId: 'terra-luna',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-    {
-      chain: Chain.TerraClassic,
       ticker: 'USTC',
       logo: 'ustc.png',
       decimals: 6,
@@ -1359,50 +1094,6 @@ export const coinsRecord: Record<Chain, CoinMeta[]> = {
       priceProviderId: 'astroport',
       contractAddress: 'terra1xj49zyqrwpv5k928jwfpfy2ha668nwdgkwlrg3',
       isNativeToken: false,
-    },
-  ],
-  [Chain.Sui]: [
-    {
-      chain: Chain.Sui,
-      ticker: 'SUI',
-      logo: 'sui',
-      decimals: 9,
-      priceProviderId: 'sui',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
-  [Chain.Polkadot]: [
-    {
-      chain: Chain.Polkadot,
-      ticker: 'DOT',
-      logo: 'dot',
-      decimals: 10,
-      priceProviderId: 'polkadot',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
-  [Chain.Noble]: [
-    {
-      chain: Chain.Noble,
-      ticker: 'USDC',
-      logo: 'usdc',
-      decimals: 6,
-      priceProviderId: 'usd-coin',
-      contractAddress: '',
-      isNativeToken: true,
-    },
-  ],
-  [Chain.Akash]: [
-    {
-      chain: Chain.Akash,
-      ticker: 'AKT',
-      logo: 'akash',
-      decimals: 6,
-      priceProviderId: 'akt',
-      contractAddress: '',
-      isNativeToken: true,
     },
   ],
 };

@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 
 import { storage } from '../../../../../../../../wailsjs/go/models';
-import { coinsRecord } from '../../../../../../../coin/coins';
+import { chainFeeCoin } from '../../../../../../../coin/chainFeeCoin';
+import { chainTokens } from '../../../../../../../coin/chainTokens';
 import { storageCoinToCoin } from '../../../../../../../coin/utils/storageCoin';
 import { Chain } from '../../../../../../../model/chain';
 import { CoinMeta } from '../../../../../../../model/coin-meta';
@@ -63,6 +64,10 @@ export const useCoinsForChainCoinOptionsMenu = (chain: Chain) => {
     [chain, chainToCoinsMap]
   );
 
-  const coins = [...storedCoins, ...coinsRecord[chain]];
+  const coins = [
+    ...storedCoins,
+    chainFeeCoin[chain],
+    ...(chainTokens[chain] ?? []),
+  ];
   return splitCoinsIntoSelectedAndUnselected(coins, vaultCoins);
 };

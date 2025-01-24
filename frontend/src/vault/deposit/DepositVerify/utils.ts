@@ -1,5 +1,5 @@
 import { storage } from '../../../../wailsjs/go/models';
-import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
+import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { Chain } from '../../../model/chain';
 import { ChainAction } from '../ChainAction';
 
@@ -13,7 +13,7 @@ export const getFormattedFormData = (
   coin: storage.Coin
 ) => {
   const formattedFormData = { ...formData };
-  const decimals = getChainFeeCoin(coin.chain as Chain)?.decimals;
+  const { decimals } = chainFeeCoin[coin.chain as Chain];
   const dustAmount = getDustDepositAmountString(decimals);
 
   // For THORChain / MayaChain LEAVE we need to hardcode the amount for the transaction

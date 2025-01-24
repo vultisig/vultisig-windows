@@ -1,11 +1,11 @@
-import { getNativeTokens } from '../../../../utils/getNativeTokens';
+import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
 
 export const getCoinOptions = () => {
-  const nativeTokens = getNativeTokens();
-  return nativeTokens.map(({ chain, ticker, logo }, index) => ({
+  const coins = Object.values(chainFeeCoin);
+  return coins.map(({ chain, ticker, logo }, index) => ({
     value: chain,
     label: ticker,
     logo: logo,
-    isLastOption: index === nativeTokens.length - 1,
+    isLastOption: index === coins.length - 1,
   }));
 };

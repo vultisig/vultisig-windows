@@ -9,7 +9,7 @@ import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
-import { coinsRecord } from '../../coin/coins';
+import { chainTokens } from '../../coin/chainTokens';
 import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
 import { useSaveCoinsMutation } from '../../coin/query/useSaveCoinsMutation';
 import {
@@ -143,7 +143,7 @@ export const VaultChainPage = () => {
     walletCore,
   ]);
 
-  const hasMultipleCoinsSupport = coinsRecord[chain].length > 1;
+  const hasMultipleCoinsSupport = chain in chainTokens;
 
   return (
     <VStack flexGrow>
