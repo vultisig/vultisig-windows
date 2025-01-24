@@ -78,6 +78,8 @@ export class BlockchainServiceFactory {
         return new BlockchainServiceCosmos(chain, walletCore);
       case Chain.Ripple:
         return new BlockchainServiceRipple(chain, walletCore);
+      case Chain.Akash:
+        return new BlockchainServiceCosmos(chain, walletCore);
       default:
         throw new Error('Chain not supported');
     }
