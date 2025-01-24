@@ -9,6 +9,7 @@ import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
+import { chainTokens } from '../../coin/chainTokens';
 import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
 import { useSaveCoinsMutation } from '../../coin/query/useSaveCoinsMutation';
 import {
@@ -30,14 +31,12 @@ import { Panel } from '../../lib/ui/panel/Panel';
 import { MatchQuery } from '../../lib/ui/query/components/MatchQuery';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { Text } from '../../lib/ui/text';
-import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { splitBy } from '../../lib/utils/array/splitBy';
 import { sum } from '../../lib/utils/array/sum';
 import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
 import { formatAmount } from '../../lib/utils/formatAmount';
 import { makeAppPath } from '../../navigation';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { TokensStore } from '../../services/Coin/CoinList';
 import {
   PersistentStateKey,
   usePersistentState,
@@ -144,11 +143,7 @@ export const VaultChainPage = () => {
     walletCore,
   ]);
 
-  const hasMultipleCoinsSupport = !isEmpty(
-    TokensStore.TokenSelectionAssets.filter(
-      token => token.chain === chain && !token.isNativeToken
-    )
-  );
+  const hasMultipleCoinsSupport = chain in chainTokens;
 
   return (
     <VStack flexGrow>

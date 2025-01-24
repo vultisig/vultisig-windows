@@ -49,6 +49,7 @@ export class RpcServiceFactory {
         new RpcServiceTerraClassic(Chain.TerraClassic),
       [Chain.Noble]: () => new RpcServiceCosmos(Chain.Noble),
       [Chain.Ripple]: () => new RpcServiceRipple(),
+      [Chain.Akash]: () => new RpcServiceCosmos(Chain.Akash),
     });
   }
 }

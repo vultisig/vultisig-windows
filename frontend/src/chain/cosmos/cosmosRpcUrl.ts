@@ -11,6 +11,7 @@ export const cosmosRpcUrl: Record<CosmosChain, string> = {
   Noble: 'https://noble-api.polkachu.com',
   THORChain: 'https://thornode.ninerealms.com',
   MayaChain: 'https://mayanode.mayachain.info',
+  Akash: 'https://akash-rest.publicnode.com',
 };
 
 export const getCosmosTxBroadcastUrl = (chain: CosmosChain) =>

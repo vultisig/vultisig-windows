@@ -1,8 +1,8 @@
 import { getChainSpecific } from '../../../chain/keysign/chainSpecific/getChainSpecific';
 import { GetChainSpecificInput } from '../../../chain/keysign/chainSpecific/GetChainSpecificInput';
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields';
-import { getChainFeeCoin } from '../../../chain/tx/fee/utils/getChainFeeCoin';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
+import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { areEqualCoins } from '../../../coin/Coin';
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
@@ -50,7 +50,7 @@ export const useSwapChainSpecificQuery = () => {
 
       if ('native' in swapQuote) {
         const { swapChain } = swapQuote.native;
-        const nativeFeeCoin = getCoinMetaKey(getChainFeeCoin(swapChain));
+        const nativeFeeCoin = getCoinMetaKey(chainFeeCoin[swapChain]);
 
         input.isDeposit = areEqualCoins(fromCoinKey, nativeFeeCoin);
       }

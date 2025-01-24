@@ -1,8 +1,8 @@
+import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
 import { isOneOf } from '../../../../lib/utils/array/isOneOf';
 import { Chain, EvmChain, UtxoChain } from '../../../../model/chain';
 import { getUtxoFeeUnit } from '../../../utxo/fee/getUtxoFeeUnit';
 import { gwei } from './evm';
-import { getChainFeeCoin } from './getChainFeeCoin';
 
 export const getFeeUnit = (chain: Chain): string => {
   if (isOneOf(chain, Object.values(EvmChain))) {
@@ -13,5 +13,5 @@ export const getFeeUnit = (chain: Chain): string => {
     return getUtxoFeeUnit(chain as UtxoChain);
   }
 
-  return getChainFeeCoin(chain).ticker;
+  return chainFeeCoin[chain].ticker;
 };

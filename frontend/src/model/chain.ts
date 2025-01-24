@@ -35,6 +35,7 @@ export enum CosmosChain {
   Terra = 'Terra',
   TerraClassic = 'TerraClassic',
   Noble = 'Noble',
+  Akash = 'Akash',
 }
 
 export enum OtherChain {
@@ -86,6 +87,7 @@ export const chainKindRecord = {
   [CosmosChain.Terra]: 'cosmos',
   [CosmosChain.TerraClassic]: 'cosmos',
   [CosmosChain.Noble]: 'cosmos',
+  [CosmosChain.Akash]: 'cosmos',
 
   [OtherChain.Sui]: 'sui',
   [OtherChain.Solana]: 'solana',

@@ -1,8 +1,8 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 
+import { match } from '../../lib/utils/match';
 import { Chain } from '../../model/chain';
 import { BlockchainServiceCosmos } from './cosmos/BlockchainServiceCosmos';
-import { BlockchainServiceTerra } from './cosmos/BlockchainServiceTerra';
 import { BlockchainServiceEvm } from './evm/BlockchainServiceEvm';
 import { IBlockchainService } from './IBlockchainService';
 import { BlockchainServiceMaya } from './maya/BlockchainServiceMaya';
@@ -19,67 +19,39 @@ export class BlockchainServiceFactory {
     chain: Chain,
     walletCore: WalletCore
   ): IBlockchainService {
-    switch (chain) {
-      case Chain.THORChain:
-        return new BlockchainServiceThorchain(chain, walletCore);
-      case Chain.MayaChain:
-        return new BlockchainServiceMaya(chain, walletCore);
-      case Chain.Bitcoin:
-        return new BlockchainServiceUtxo(chain, walletCore);
-      case Chain.BitcoinCash:
-        return new BlockchainServiceUtxo(chain, walletCore);
-      case Chain.Litecoin:
-        return new BlockchainServiceUtxo(chain, walletCore);
-      case Chain.Dash:
-        return new BlockchainServiceUtxo(chain, walletCore);
-      case Chain.Dogecoin:
-        return new BlockchainServiceUtxo(chain, walletCore);
-      case Chain.Ethereum:
-        return new BlockchainServiceEvm(chain, walletCore);
-      case Chain.Avalanche:
-        return new BlockchainServiceEvm(chain, walletCore);
-      case Chain.Arbitrum:
-        return new BlockchainServiceEvm(chain, walletCore);
-      case Chain.BSC:
-        return new BlockchainServiceEvm(chain, walletCore);
-      case Chain.Blast:
-        return new BlockchainServiceEvm(chain, walletCore);
-      case Chain.Base:
-        return new BlockchainServiceEvm(chain, walletCore);
-      case Chain.CronosChain:
-        return new BlockchainServiceEvm(chain, walletCore);
-      case Chain.Optimism:
-        return new BlockchainServiceEvm(chain, walletCore);
-      case Chain.Polygon:
-        return new BlockchainServiceEvm(chain, walletCore);
-      case Chain.Zksync:
-        return new BlockchainServiceEvm(chain, walletCore);
-      case Chain.Solana:
-        return new BlockchainServiceSolana(chain, walletCore);
-      case Chain.Sui:
-        return new BlockchainServiceSui(chain, walletCore);
-      case Chain.Cosmos:
-        return new BlockchainServiceCosmos(chain, walletCore);
-      case Chain.Osmosis:
-        return new BlockchainServiceCosmos(chain, walletCore);
-      case Chain.Kujira:
-        return new BlockchainServiceCosmos(chain, walletCore);
-      case Chain.Dydx:
-        return new BlockchainServiceCosmos(chain, walletCore);
-      case Chain.Terra:
-        return new BlockchainServiceTerra(chain, walletCore);
-      case Chain.TerraClassic:
-        return new BlockchainServiceTerra(chain, walletCore);
-      case Chain.Polkadot:
-        return new BlockchainServicePolkadot(chain, walletCore);
-      case Chain.Ton:
-        return new BlockchainServiceTon(chain, walletCore);
-      case Chain.Noble:
-        return new BlockchainServiceCosmos(chain, walletCore);
-      case Chain.Ripple:
-        return new BlockchainServiceRipple(chain, walletCore);
-      default:
-        throw new Error('Chain not supported');
-    }
+    return match(chain, {
+      [Chain.THORChain]: () =>
+        new BlockchainServiceThorchain(chain, walletCore),
+      [Chain.MayaChain]: () => new BlockchainServiceMaya(chain, walletCore),
+      [Chain.Bitcoin]: () => new BlockchainServiceUtxo(chain, walletCore),
+      [Chain.BitcoinCash]: () => new BlockchainServiceUtxo(chain, walletCore),
+      [Chain.Litecoin]: () => new BlockchainServiceUtxo(chain, walletCore),
+      [Chain.Dash]: () => new BlockchainServiceUtxo(chain, walletCore),
+      [Chain.Dogecoin]: () => new BlockchainServiceUtxo(chain, walletCore),
+      [Chain.Avalanche]: () => new BlockchainServiceEvm(chain, walletCore),
+      [Chain.Sui]: () => new BlockchainServiceSui(chain, walletCore),
+      [Chain.Cosmos]: () => new BlockchainServiceCosmos(chain, walletCore),
+      [Chain.Akash]: () => new BlockchainServiceCosmos(chain, walletCore),
+      [Chain.Ripple]: () => new BlockchainServiceRipple(chain, walletCore),
+      [Chain.Noble]: () => new BlockchainServiceCosmos(chain, walletCore),
+      [Chain.Osmosis]: () => new BlockchainServiceCosmos(chain, walletCore),
+      [Chain.Kujira]: () => new BlockchainServiceCosmos(chain, walletCore),
+      [Chain.Dydx]: () => new BlockchainServiceCosmos(chain, walletCore),
+      [Chain.Terra]: () => new BlockchainServiceCosmos(chain, walletCore),
+      [Chain.TerraClassic]: () =>
+        new BlockchainServiceCosmos(chain, walletCore),
+      [Chain.Ton]: () => new BlockchainServiceTon(chain, walletCore),
+      [Chain.Polkadot]: () => new BlockchainServicePolkadot(chain, walletCore),
+      [Chain.BSC]: () => new BlockchainServiceEvm(chain, walletCore),
+      [Chain.Zksync]: () => new BlockchainServiceEvm(chain, walletCore),
+      [Chain.Optimism]: () => new BlockchainServiceEvm(chain, walletCore),
+      [Chain.CronosChain]: () => new BlockchainServiceEvm(chain, walletCore),
+      [Chain.Base]: () => new BlockchainServiceEvm(chain, walletCore),
+      [Chain.Arbitrum]: () => new BlockchainServiceEvm(chain, walletCore),
+      [Chain.Blast]: () => new BlockchainServiceEvm(chain, walletCore),
+      [Chain.Polygon]: () => new BlockchainServiceEvm(chain, walletCore),
+      [Chain.Solana]: () => new BlockchainServiceSolana(chain, walletCore),
+      [Chain.Ethereum]: () => new BlockchainServiceEvm(chain, walletCore),
+    });
   }
 }

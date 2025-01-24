@@ -43,4 +43,5 @@ export const getCoinType = ({
     [Chain.TerraClassic]: () => CoinType.terra,
     [Chain.Noble]: () => CoinType.noble,
     [Chain.Ripple]: () => CoinType.xrp,
+    [Chain.Akash]: () => CoinType.akash,
   });

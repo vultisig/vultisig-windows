@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useDefaultChains } from '../../../chain/state/defaultChains';
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
+import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { useCurrentSearch } from '../../../lib/ui/search/CurrentSearchProvider';
 import { without } from '../../../lib/utils/array/without';
@@ -10,7 +11,6 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
-import { getNativeTokens } from '../../../utils/getNativeTokens';
 import { CoinSearch } from '../../../vault/chain/manage/coin/search/CoinSearch';
 import {
   ChainButton,
@@ -27,7 +27,7 @@ const VaultDefaultChains = () => {
 
   const [value, setValue] = useDefaultChains();
 
-  const nativeTokens = getNativeTokens();
+  const nativeTokens = Object.values(chainFeeCoin);
   const filteredNativeTokens = useMemo(() => {
     if (!searchQuery) {
       return nativeTokens;

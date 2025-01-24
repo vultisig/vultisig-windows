@@ -2,7 +2,7 @@ import { WalletCore } from '@trustwallet/wallet-core';
 
 import { storage } from '../../../wailsjs/go/models';
 import { SaveCoins } from '../../../wailsjs/go/storage/Store';
-import { getChainFeeCoin } from '../../chain/tx/fee/utils/getChainFeeCoin';
+import { chainFeeCoin } from '../../coin/chainFeeCoin';
 import { coinToStorageCoin } from '../../coin/utils/coin';
 import { createCoin } from '../../coin/utils/createCoin';
 import { Chain } from '../../model/chain';
@@ -29,7 +29,7 @@ export const createVaultDefaultCoins = async ({
       });
 
       const coin = createCoin({
-        coinMeta: getChainFeeCoin(chain),
+        coinMeta: chainFeeCoin[chain],
         publicKey,
         walletCore,
       });

@@ -1,3 +1,4 @@
+import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
 import { isOneOf } from '../../../../lib/utils/array/isOneOf';
 import { formatAmount } from '../../../../lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '../../../../lib/utils/matchDiscriminatedUnion';
@@ -10,7 +11,6 @@ import { tonConfig } from '../../../ton/config';
 import { fromChainAmount } from '../../../utils/fromChainAmount';
 import { gwei } from './evm';
 import { getFeeUnit } from './feeUnit';
-import { getChainFeeCoin } from './getChainFeeCoin';
 
 type FormatFeeInput = {
   chain: Chain;
@@ -38,7 +38,7 @@ export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
 
   const decimals = isOneOf(chain, Object.values(EvmChain))
     ? gwei.decimals
-    : getChainFeeCoin(chain).decimals;
+    : chainFeeCoin[chain].decimals;
 
   const amount = fromChainAmount(feeAmount, decimals);
 

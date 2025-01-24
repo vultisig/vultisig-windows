@@ -1,3 +1,4 @@
+import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { areEqualCoins } from '../../../coin/Coin';
 import { getCoinKey } from '../../../coin/utils/coin';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
@@ -12,7 +13,6 @@ import { isOneOf } from '../../../lib/utils/array/isOneOf';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
 import { EvmChain } from '../../../model/chain';
-import { getChainFeeCoin } from '../../tx/fee/utils/getChainFeeCoin';
 import { fromChainAmount } from '../../utils/fromChainAmount';
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote';
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload';
@@ -89,7 +89,7 @@ export const getSwapKeysignPayloadFields = ({
         return result;
       }
 
-      const nativeFeeCoin = getCoinMetaKey(getChainFeeCoin(swapChain));
+      const nativeFeeCoin = getCoinMetaKey(chainFeeCoin[swapChain]);
 
       const isDeposit = areEqualCoins(fromCoinKey, nativeFeeCoin);
 
