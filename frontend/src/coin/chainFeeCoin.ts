@@ -250,7 +250,7 @@ export const chainFeeCoin: Record<Chain, CoinMeta> = {
     ticker: 'AKT',
     logo: 'akash',
     decimals: 6,
-    priceProviderId: 'akt',
+    priceProviderId: 'akash-network',
     contractAddress: '',
     isNativeToken: true,
   },
