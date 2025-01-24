@@ -1483,6 +1483,16 @@ export class TokensStore {
       contractAddress: '',
       isNativeToken: true,
     }),
+
+    akt: (): CoinMeta => ({
+      chain: Chain.Akash,
+      ticker: 'AKT',
+      logo: 'akash',
+      decimals: 6,
+      priceProviderId: 'akt',
+      contractAddress: '',
+      isNativeToken: true,
+    }),
   };
 
   static TokenSelectionAssets: CoinMeta[] = [

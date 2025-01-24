@@ -10,4 +10,5 @@ export const cosmosFeeCoinDenom: Record<CosmosChain, string> = {
   [CosmosChain.Terra]: 'uluna',
   [CosmosChain.TerraClassic]: 'uluna',
   [CosmosChain.Noble]: 'uusdc',
+  [CosmosChain.Akash]: 'uakt',
 };

@@ -9,6 +9,8 @@ type GetBlockExplorerUrlInput = {
   value: string;
 };
 
+const cosmosBlockExplorer = 'https://www.mintscan.io';
+
 const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Bitcoin]: 'https://mempool.space',
   [Chain.BitcoinCash]: 'https://blockchair.com/bitcoin-cash',
@@ -17,8 +19,8 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Dash]: 'https://blockchair.com/dash',
   [Chain.Solana]: 'https://solscan.io',
   [Chain.Ethereum]: 'https://etherscan.io',
-  [Chain.Cosmos]: 'https://www.mintscan.io/cosmos',
-  [Chain.Dydx]: 'https://www.mintscan.io/dydx',
+  [Chain.Cosmos]: `${cosmosBlockExplorer}/cosmos`,
+  [Chain.Dydx]: `${cosmosBlockExplorer}/dydx`,
   [Chain.Kujira]: 'https://finder.kujira.network/kaiyo-1',
   [Chain.Avalanche]: 'https://snowtrace.io',
   [Chain.BSC]: 'https://bscscan.com',
@@ -32,13 +34,14 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Polkadot]: 'https://polkadot.subscan.io',
   [Chain.Zksync]: 'https://explorer.zksync.io',
   [Chain.Ton]: 'https://tonviewer.com',
-  [Chain.Osmosis]: 'https://www.mintscan.io/osmosis',
-  [Chain.Terra]: 'https://www.mintscan.io/terra',
+  [Chain.Osmosis]: `${cosmosBlockExplorer}/osmosis`,
+  [Chain.Terra]: `${cosmosBlockExplorer}/terra`,
   [Chain.TerraClassic]: 'https://finder.terra.money/classic',
-  [Chain.Noble]: 'https://www.mintscan.io/noble',
+  [Chain.Noble]: `${cosmosBlockExplorer}/noble`,
   [Chain.Ripple]: 'https://xrpscan.com',
   [Chain.THORChain]: 'https://www.xscanner.org',
   [Chain.MayaChain]: 'https://www.xscanner.org',
+  [Chain.Akash]: `${cosmosBlockExplorer}/akash`,
 };
 
 export const getBlockExplorerUrl = ({
@@ -79,6 +82,7 @@ export const getBlockExplorerUrl = ({
         [Chain.TerraClassic]: () => `${baseUrl}/classic/address/${value}`,
         [Chain.Noble]: () => `${baseUrl}/address/${value}`,
         [Chain.Ripple]: () => `${baseUrl}/account/${value}`,
+        [Chain.Akash]: () => `${baseUrl}/address/${value}`,
       }),
     tx: () =>
       match(chain, {
@@ -111,6 +115,7 @@ export const getBlockExplorerUrl = ({
         [Chain.TerraClassic]: () => `${baseUrl}/tx/${value}`,
         [Chain.Noble]: () => `${baseUrl}/tx/${value}`,
         [Chain.Ripple]: () => `${baseUrl}/transaction/${value}`,
+        [Chain.Akash]: () => `${baseUrl}/tx/${value}`,
       }),
   });
 };

@@ -57,6 +57,7 @@ const accountInfoHandler: Record<
   [Chain.Noble]: getBetaAuthAccountInfo,
   [Chain.THORChain]: getAuthAccountInfo,
   [Chain.MayaChain]: getAuthAccountInfo,
+  [Chain.Akash]: getAuthAccountInfo,
 };
 
 export const getCosmosAccountInfo = async (

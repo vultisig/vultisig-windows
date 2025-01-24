@@ -22,6 +22,7 @@ const defaultGasRecord: Record<CosmosSpecificChain, number> = {
   [Chain.Dydx]: 2500000000000000,
   [Chain.TerraClassic]: 100000000,
   [Chain.Noble]: 30000,
+  [Chain.Akash]: 200000,
 };
 
 export const getCosmosSpecific = async ({
