@@ -1528,6 +1528,9 @@ export class TokensStore {
     // NOBLE
     TokensStore.Token.nobleUUSDC(),
 
+    // AKASH
+    TokensStore.Token.akt(),
+
     // TERRA
     TokensStore.Token.terraLuna(),
     TokensStore.Token.terraLunc(),
