@@ -3,6 +3,7 @@ import { ChainCoinIcon } from '../../chain/ui/ChainCoinIcon';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
+import { chainFeeCoin } from '../../coin/chainFeeCoin';
 import { CoinAmount, CoinKey } from '../../coin/Coin';
 import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
 import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
@@ -12,7 +13,14 @@ import { Text } from '../../lib/ui/text';
 import { EntityWithLogo } from '../../lib/utils/entities/EntityWithLogo';
 import { EntityWithTicker } from '../../lib/utils/entities/EntityWithTicker';
 import { formatAmount } from '../../lib/utils/formatAmount';
+import { Chain } from '../../model/chain';
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
+import {
+  isETHGasTokenAndNotGovernanceToken,
+  shouldDisplayChainLogo,
+} from './utils';
+
+const ETHLogo = chainFeeCoin[Chain.Ethereum].logo;
 
 export const VaultChainCoinItem = ({
   value,
@@ -30,9 +38,22 @@ export const VaultChainCoinItem = ({
   return (
     <HStack fullWidth alignItems="center" gap={12}>
       <ChainCoinIcon
-        coinSrc={getCoinMetaIconSrc({ logo })}
+        coinSrc={getCoinMetaIconSrc({
+          logo: isETHGasTokenAndNotGovernanceToken({
+            chain,
+            ticker,
+          })
+            ? ETHLogo
+            : logo,
+        })}
         chainSrc={
-          isNativeCoin({ id, chain }) ? undefined : getChainEntityIconSrc(chain)
+          shouldDisplayChainLogo({
+            ticker,
+            chain,
+            isNative: isNativeCoin({ id, chain }),
+          })
+            ? getChainEntityIconSrc(chain)
+            : undefined
         }
         style={{ fontSize: 32 }}
       />
