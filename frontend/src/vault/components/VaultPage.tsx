@@ -16,7 +16,6 @@ import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle';
 import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance';
 import { VaultOverview } from '../../vault/components/VaultOverview';
 import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt';
-import { NoVaultsHomePage } from '../../vaults/components/NoVaultsHomePage';
 import { useCurrentVault } from '../state/currentVault';
 
 const PositionQrPrompt = styled.div`
@@ -31,8 +30,6 @@ const PositionQrPrompt = styled.div`
 export const VaultPage = () => {
   const navigate = useAppNavigate();
   const { name } = useCurrentVault();
-
-  return <NoVaultsHomePage />;
 
   return (
     <>
