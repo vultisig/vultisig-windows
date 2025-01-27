@@ -11,7 +11,7 @@ import { Text } from '../../../lib/ui/text';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
 import { PageContent } from '../../../ui/page/PageContent';
-import { vaultContainerFromString } from '../utils/vaultContainerFromString';
+import { vaultContainerFromFile } from '../utils/vaultContainerFromFile';
 import { BackupFileDropzone } from './BackupFileDropzone';
 import { UploadedBackupFile } from './UploadedBackupFile';
 
@@ -23,16 +23,7 @@ export const UploadBackupFileStep = ({
   const [file, setFile] = useState<File | null>(null);
 
   const { mutate, isPending, error } = useMutation({
-    mutationFn: async (file: File) => {
-      const fileContent = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = () => reject(reader.error);
-        reader.readAsText(file);
-      });
-
-      return vaultContainerFromString(fileContent);
-    },
+    mutationFn: vaultContainerFromFile,
     onSuccess: onFinish,
   });
 
