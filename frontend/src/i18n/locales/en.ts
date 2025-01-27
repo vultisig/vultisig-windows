@@ -28,7 +28,7 @@ export const en = {
   incorrect_password: 'Incorrect Password',
   backup_decryption_failed_title: 'Failed to decrypt the backup',
   backup_decryption_failed: 'Please try again.',
-  upload_previous_vault: 'Upload your previously created vault share :',
+  upload_previous_vault: 'Upload your previously created vault share:',
   select_backup_file: 'Select backup file',
   continue: 'Continue',
   ok: 'OK',
