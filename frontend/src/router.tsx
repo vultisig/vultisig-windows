@@ -44,6 +44,7 @@ import { SecureReshareVaultPage } from './vault/reshare/secure/SecureReshareVaul
 import { SendPage } from './vault/send/SendPage';
 import { SetupActiveVaultPage } from './vault/setup/active/SetupActiveVaultPage';
 import { SetupFastVaultPage } from './vault/setup/fast/SetupFastVaultPage';
+import { OnboardingCompletionProvider } from './vault/setup/onboarding/state/OnboardingCompletionProvider';
 import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage';
 import { SetupVaultPageController } from './vault/setup/SetupVaultPageController';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
@@ -103,7 +104,11 @@ export const router = createBrowserRouter([
       },
       {
         path: appPaths.setupVault,
-        element: <SetupVaultPageController />,
+        element: (
+          <OnboardingCompletionProvider>
+            <SetupVaultPageController />,
+          </OnboardingCompletionProvider>
+        ),
       },
       {
         path: appPaths.importVault,
