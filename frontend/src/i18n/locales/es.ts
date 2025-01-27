@@ -14,6 +14,8 @@ export const es = {
   next: 'Siguiente',
   skip: 'Omitir',
   tokens: 'tokens',
+  sayGoodbyeTo: 'Adiós a',
+  seedPhrases: 'frases semilla',
   selected: 'seleccionado',
   required_field_missing: 'Campo requerido faltante',
   enter_password: 'Ingrese la contraseña',

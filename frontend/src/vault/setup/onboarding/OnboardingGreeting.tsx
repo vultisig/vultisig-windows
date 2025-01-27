@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility';
@@ -18,6 +19,7 @@ const Wrapper = styled.div`
 export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
   onNextStep,
 }) => {
+  const { t } = useTranslation();
   return (
     <Wrapper data-testid="OnboardingGreeting-Wrapper">
       <AnimatedVisibility
@@ -31,7 +33,8 @@ export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
         }}
       >
         <Text variant="h1Regular">
-          Say goodbye to <GradientText as="span">seed phrases</GradientText>
+          {t('sayGoodbyeTo')}{' '}
+          <GradientText as="span">{t('seedPhrases')}</GradientText>
         </Text>
       </AnimatedVisibility>
     </Wrapper>
