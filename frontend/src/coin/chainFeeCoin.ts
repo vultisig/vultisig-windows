@@ -122,7 +122,7 @@ export const chainFeeCoin: Record<Chain, CoinMeta> = {
   [Chain.Base]: {
     chain: Chain.Base,
     ticker: 'ETH',
-    logo: 'base',
+    logo: 'ethereum',
     decimals: 18,
     priceProviderId: 'ethereum',
     contractAddress: '',
@@ -131,7 +131,7 @@ export const chainFeeCoin: Record<Chain, CoinMeta> = {
   [Chain.Arbitrum]: {
     chain: Chain.Arbitrum,
     ticker: 'ETH',
-    logo: 'arbitrum',
+    logo: 'ethereum',
     decimals: 18,
     priceProviderId: 'ethereum',
     contractAddress: '',
@@ -140,7 +140,7 @@ export const chainFeeCoin: Record<Chain, CoinMeta> = {
   [Chain.Optimism]: {
     chain: Chain.Optimism,
     ticker: 'ETH',
-    logo: 'optimism',
+    logo: 'ethereum',
     decimals: 18,
     priceProviderId: 'ethereum',
     contractAddress: '',
@@ -158,7 +158,7 @@ export const chainFeeCoin: Record<Chain, CoinMeta> = {
   [Chain.Blast]: {
     chain: Chain.Blast,
     ticker: 'ETH',
-    logo: 'blast',
+    logo: 'ethereum',
     decimals: 18,
     priceProviderId: 'ethereum',
     contractAddress: '',
@@ -176,7 +176,7 @@ export const chainFeeCoin: Record<Chain, CoinMeta> = {
   [Chain.Zksync]: {
     chain: Chain.Zksync,
     ticker: 'ETH',
-    logo: 'zksync',
+    logo: 'ethereum',
     decimals: 18,
     priceProviderId: 'ethereum',
     contractAddress: '',
