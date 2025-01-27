@@ -1,0 +1,2 @@
+// TBD
+export const VaultSharesIntro = () => <></>;
