@@ -15,7 +15,6 @@ import {
   DepositChainSpecificProvider,
   useDepositChainSpecific,
 } from './fee/DepositChainSpecificProvider';
-import { useMemoGenerator } from './hooks/useMemoGenerator';
 
 const depositSteps = ['form', 'verify'] as const;
 
@@ -47,13 +46,6 @@ export const DepositPageController = () => {
 
   const chainSpecific = useDepositChainSpecific();
 
-  const depositFormDataWithMemo = useMemoGenerator({
-    depositFormData: state.depositFormData,
-    selectedChainAction: state.selectedChainAction,
-    bondableAsset: state.depositFormData?.bondableAsset,
-    fee: getFeeAmount(chainSpecific),
-  });
-
   return (
     <DepositChainSpecificProvider>
       <Match
@@ -76,7 +68,8 @@ export const DepositPageController = () => {
           <DepositVerify
             selectedChainAction={state.selectedChainAction}
             onBack={toPreviousStep}
-            depositFormData={depositFormDataWithMemo}
+            depositFormData={state.depositFormData}
+            fee={getFeeAmount(chainSpecific)}
           />
         )}
       />
