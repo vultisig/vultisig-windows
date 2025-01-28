@@ -28,14 +28,13 @@ export const generateMemo = ({
     percentage,
     provider,
     operatorFee,
-    affiliateFee,
   } = extractFormValues(depositFormData);
 
   return match(selectedChainAction, {
     stake: () => 'd',
     unstake: () => 'w',
     withdrawPool: () =>
-      `POOL-:${Math.round(shouldBePresent(percentage, 'Percentage')) * 100}:${nativeSwapAffiliateConfig.affiliateFeeAddress}:${affiliateFee || nativeSwapAffiliateConfig.affiliateFeeRateBps}`,
+      `POOL-:${Math.round(shouldBePresent(percentage, 'Percentage')) * 100}:${nativeSwapAffiliateConfig.affiliateFeeAddress}:${nativeSwapAffiliateConfig.affiliateFeeRateBps}`,
     addPool: () => 'POOL+',
     bond_with_lp: () => {
       if (provider) {
