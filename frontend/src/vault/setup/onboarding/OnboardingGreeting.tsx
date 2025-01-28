@@ -20,6 +20,7 @@ export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
   onNextStep,
 }) => {
   const { t } = useTranslation();
+
   return (
     <Wrapper data-testid="OnboardingGreeting-Wrapper">
       <AnimatedVisibility
@@ -29,7 +30,7 @@ export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
         animationConfig="bottomToTop"
         delay={300}
         onAnimationComplete={() => {
-          setTimeout(() => onNextStep(), 1000);
+          setTimeout(() => onNextStep(), 500);
         }}
       >
         <Text variant="h1Regular">
