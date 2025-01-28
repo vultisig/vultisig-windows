@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
@@ -20,25 +21,35 @@ import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
 import { DepositFee } from '../fee/DepositFee';
 import { DepositFiatFee } from '../fee/DepositFiatFee';
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
+import { useMemoGenerator } from '../hooks/useMemoGenerator';
 import { useSender } from '../hooks/useSender';
 import { StrictText, StrictTextContrast } from './DepositVerify.styled';
 import { getFormattedFormData } from './utils';
 
 type DepositVerifyProps = {
-  depositFormData: Record<string, unknown>;
+  depositFormData: FieldValues;
   selectedChainAction: ChainAction;
   onBack: () => void;
+  fee: bigint;
 };
 
 export const DepositVerify: FC<DepositVerifyProps> = ({
   onBack,
   depositFormData,
   selectedChainAction,
+  fee,
 }) => {
+  const depositFormDataWithMemo = useMemoGenerator({
+    depositFormData: depositFormData,
+    selectedChainAction: selectedChainAction,
+    bondableAsset: depositFormData?.bondableAsset,
+    fee,
+  });
+
   const [coinKey] = useCurrentDepositCoin();
   const coin = useCurrentVaultCoin(coinKey);
   const formattedDepositFormData = getFormattedFormData(
-    depositFormData,
+    depositFormDataWithMemo,
     selectedChainAction,
     coin
   );
