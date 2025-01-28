@@ -1,12 +1,15 @@
 import { FieldValues } from 'react-hook-form';
 
+import { nativeSwapAffiliateConfig } from '../../../../chain/swap/native/nativeSwapAffiliateConfig';
 import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
 import { MayaChainPool } from '../../../../lib/types/deposit';
+import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
+import { match } from '../../../../lib/utils/match';
 import { Chain } from '../../../../model/chain';
 import { ChainAction } from '../../ChainAction';
 
 interface MemoParams {
-  selectedChainAction?: ChainAction;
+  selectedChainAction: ChainAction;
   depositFormData: FieldValues;
   bondableAsset: MayaChainPool['asset'];
   fee?: number | bigint;
@@ -16,7 +19,6 @@ export const generateMemo = ({
   selectedChainAction,
   depositFormData,
   bondableAsset,
-  fee,
 }: MemoParams): string => {
   const {
     nodeAddress,
@@ -24,45 +26,25 @@ export const generateMemo = ({
     lpUnits,
     customMemo,
     percentage,
-    affiliateFee,
     provider,
     operatorFee,
   } = extractFormValues(depositFormData);
 
-  // If "custom" is selected and a custom memo exists, return it directly.
-  if (selectedChainAction === 'custom' && customMemo) {
-    return customMemo;
-  }
-
-  const action = selectedChainAction || '';
-
-  switch (selectedChainAction) {
-    case 'stake':
-      return 'd';
-    case 'unstake':
-      return 'w';
-    case 'withdrawPool':
-      // Format: "POOL-:percentage:affiliateFee:fee"
-      return `POOL-:${percentage}:${affiliateFee}:${fee}`;
-
-    case 'addPool':
-      // Simple static memo
-      return 'POOL+';
-
-    case 'bond_with_lp':
-      // If provider is given:
-      //    with operatorFee: "BOND:nodeAddress:provider:operatorFee"
-      //    without operatorFee: "BOND:nodeAddress:provider"
-      // If no provider: "BOND:bondableAsset:lpUnits:nodeAddress"
+  return match(selectedChainAction, {
+    stake: () => 'd',
+    unstake: () => 'w',
+    withdrawPool: () =>
+      `POOL-:${Math.round(shouldBePresent(percentage, 'Percentage')) * 100}:${nativeSwapAffiliateConfig.affiliateFeeAddress}:${nativeSwapAffiliateConfig.affiliateFeeRateBps}`,
+    addPool: () => 'POOL+',
+    bond_with_lp: () => {
       if (provider) {
         return operatorFee
           ? `BOND:${nodeAddress}:${provider}:${operatorFee}`
           : `BOND:${nodeAddress}:${provider}`;
       }
       return `BOND:${bondableAsset}:${lpUnits}:${nodeAddress}`;
-
-    case 'bond':
-      // If provider exists, return with operatorFee if present
+    },
+    bond: () => {
       if (provider) {
         return operatorFee
           ? `BOND:${nodeAddress}:${provider}:${operatorFee}`
@@ -72,10 +54,9 @@ export const generateMemo = ({
       return operatorFee
         ? `BOND:${nodeAddress}:${operatorFee}`
         : `BOND:${nodeAddress}`;
-    case 'unbond_with_lp':
-      // "UNBOND:bondableAsset:lpUnits:nodeAddress"
-      return `UNBOND:${bondableAsset}:${lpUnits}:${nodeAddress}`;
-    case 'unbond': {
+    },
+    unbond_with_lp: () => `UNBOND:${bondableAsset}:${lpUnits}:${nodeAddress}`,
+    unbond: () => {
       const runeDecimals = chainFeeCoin[Chain.THORChain].decimals;
       const amountInUnits = amount
         ? Math.round(amount * Math.pow(10, runeDecimals))
@@ -83,11 +64,11 @@ export const generateMemo = ({
       return provider
         ? `UNBOND:${nodeAddress}:${amountInUnits}:${provider}`
         : `UNBOND:${nodeAddress}:${amountInUnits}`;
-    }
-    default:
-      // Default: If nodeAddress present: "ACTION:nodeAddress", else "ACTION"
-      return nodeAddress ? `${action}:${nodeAddress}` : action;
-  }
+    },
+    custom: () => shouldBePresent(customMemo, 'Custom memo'),
+    leave: () => 'LEAVE',
+    vote: () => 'VOTE',
+  });
 };
 
 function extractFormValues(formData: FieldValues) {

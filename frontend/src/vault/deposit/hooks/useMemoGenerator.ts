@@ -7,7 +7,7 @@ import { generateMemo } from '../utils/memoGenerator';
 
 type UseMemoGeneratorProps = {
   depositFormData: FieldValues;
-  selectedChainAction?: ChainAction;
+  selectedChainAction: ChainAction;
   bondableAsset: MayaChainPool['asset'];
   fee?: number | bigint;
 };
