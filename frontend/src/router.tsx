@@ -106,7 +106,7 @@ export const router = createBrowserRouter([
         path: appPaths.setupVault,
         element: (
           <OnboardingCompletionProvider>
-            <SetupVaultPageController />,
+            <SetupVaultPageController />
           </OnboardingCompletionProvider>
         ),
       },

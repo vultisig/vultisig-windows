@@ -10,6 +10,11 @@ export const it = {
   onboarding_view4_description:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   tokens: 'token',
+  sayHelloTo: 'Dì ciao a',
+  recoverYourVault: 'Recupera la tua cassaforte anche',
+  deviceLostOrDamaged: 'se un dispositivo è perso o danneggiato',
+  vaultShares: 'azioni della cassaforte',
+  yourNewRecoveryMethod: 'il tuo nuovo metodo di recupero',
   sayGoodbyeTo: 'Addio a',
   seedPhrases: 'frasi semina',
   selected: 'selezionato',
