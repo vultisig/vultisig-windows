@@ -382,12 +382,6 @@ export const requiredFieldsPerChainAction = {
   withdrawPool: {
     fields: [
       {
-        name: 'affiliateFee',
-        type: 'number',
-        label: 'chainFunctions.withdrawPool.labels.affiliateFee',
-        required: false,
-      },
-      {
         name: 'percentage',
         type: 'number',
         label: 'chainFunctions.withdrawPool.labels.percentage',
@@ -395,11 +389,6 @@ export const requiredFieldsPerChainAction = {
       },
     ],
     schema: z.object({
-      affiliateFee: z
-        .string()
-        .optional()
-        .transform(val => (val ? Number(val) : undefined))
-        .pipe(z.number().optional()),
       percentage: z
         .string()
         .transform(val => Number(val))
