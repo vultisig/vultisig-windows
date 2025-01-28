@@ -6,7 +6,7 @@ import { ComponentWithValueProps } from '../../../lib/ui/props';
 import { fromBase64 } from '../../../lib/utils/fromBase64';
 import { pipe } from '../../../lib/utils/pipe';
 import { toStorageVault } from '../../utils/storageVault';
-import { DecryptVaultStep } from './DecryptVaultStep';
+import { DecryptVaultContainerStep } from './DecryptVaultContainerStep';
 import { SaveImportedVaultStep } from './SaveImportedVaultStep';
 
 export const ProcessVaultContainer = ({
@@ -17,7 +17,10 @@ export const ProcessVaultContainer = ({
     return (
       <ValueTransfer<storage.Vault>
         from={({ onFinish }) => (
-          <DecryptVaultStep value={vaultAsBase64String} onFinish={onFinish} />
+          <DecryptVaultContainerStep
+            value={vaultAsBase64String}
+            onFinish={onFinish}
+          />
         )}
         to={({ value }) => <SaveImportedVaultStep value={value} />}
       />

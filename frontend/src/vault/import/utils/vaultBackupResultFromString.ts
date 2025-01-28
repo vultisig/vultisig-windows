@@ -13,13 +13,16 @@ export const vaultBackupResultFromString = ({
   extension,
 }: Input): VaultBackupResult => {
   if (extension === 'dat') {
-    const decodedString = Buffer.from(value, 'hex').toString('utf8');
+    try {
+      const decodedString = Buffer.from(value, 'hex').toString('utf8');
 
-    const datBackup = JSON.parse(decodedString) as DatBackup;
+      const datBackup = JSON.parse(decodedString) as DatBackup;
+      const vault = fromDatBackup(datBackup);
 
-    const vault = fromDatBackup(datBackup);
-
-    return { vault };
+      return { vault };
+    } catch {
+      return { encryptedVault: value };
+    }
   }
 
   return { vaultContainer: vaultContainerFromString(value) };
