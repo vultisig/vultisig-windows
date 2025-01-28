@@ -1,7 +1,7 @@
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { getVaultBackupExtension } from '../VaultBackupExtension';
 import { VaultBackupResult } from '../VaultBakupResult';
-import { vaultBackupResultFromString } from './vaultBackupResultFromString';
+import { vaultBackupResultFromFileContent } from './vaultBackupResultFromString';
 
 export const vaultBackupResultFromFile = (file: File) =>
   new Promise<VaultBackupResult>((resolve, reject) => {
@@ -10,11 +10,12 @@ export const vaultBackupResultFromFile = (file: File) =>
     reader.onload = () => {
       try {
         const fileContent = shouldBePresent(reader.result);
-        if (fileContent instanceof ArrayBuffer) {
-          throw new Error('Backup file content expected to be a string');
+
+        if (typeof fileContent === 'string') {
+          throw new Error('Backup file content expected to be an ArrayBuffer');
         }
 
-        const result = vaultBackupResultFromString({
+        const result = vaultBackupResultFromFileContent({
           value: fileContent,
           extension: getVaultBackupExtension(file.name),
         });
@@ -27,5 +28,5 @@ export const vaultBackupResultFromFile = (file: File) =>
 
     reader.onerror = () => reject(reader.error);
 
-    reader.readAsText(file);
+    reader.readAsArrayBuffer(file);
   });

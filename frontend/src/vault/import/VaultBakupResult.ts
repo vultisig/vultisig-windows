@@ -9,5 +9,5 @@ export type VaultBackupResult =
       vault: storage.Vault;
     }
   | {
-      encryptedVault: string;
+      encryptedVault: ArrayBuffer;
     };

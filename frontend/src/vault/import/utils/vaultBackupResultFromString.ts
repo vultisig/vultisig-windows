@@ -5,16 +5,18 @@ import { vaultContainerFromString } from './vaultContainerFromString';
 
 type Input = {
   extension: VaultBackupExtension;
-  value: string;
+  value: ArrayBuffer;
 };
 
-export const vaultBackupResultFromString = ({
+export const vaultBackupResultFromFileContent = ({
   value,
   extension,
 }: Input): VaultBackupResult => {
+  const valueAsString = new TextDecoder().decode(value);
+
   if (extension === 'dat') {
     try {
-      const decodedString = Buffer.from(value, 'hex').toString('utf8');
+      const decodedString = Buffer.from(valueAsString, 'hex').toString('utf8');
 
       const datBackup = JSON.parse(decodedString) as DatBackup;
       const vault = fromDatBackup(datBackup);
@@ -25,5 +27,5 @@ export const vaultBackupResultFromString = ({
     }
   }
 
-  return { vaultContainer: vaultContainerFromString(value) };
+  return { vaultContainer: vaultContainerFromString(valueAsString) };
 };

@@ -10,7 +10,7 @@ import { DecryptVaultView } from './DecryptVaultView';
 export const DecryptVaultStep = ({
   value,
   onFinish,
-}: ComponentWithValueProps<string> & ValueFinishProps<storage.Vault>) => {
+}: ComponentWithValueProps<ArrayBuffer> & ValueFinishProps<storage.Vault>) => {
   const { mutate, error, isPending } = useMutation({
     mutationFn: async (password: string) => {
       throw new Error(`Not implemented: ${password}, ${value}`);
