@@ -764,6 +764,14 @@ const leanChainTokens: Partial<Record<Chain, TokenCoinMeta[]>> = {
       priceProviderId: 'ion',
       contractAddress: 'uion',
     },
+    {
+      ticker: 'LVN',
+      logo: 'levana',
+      decimals: 6,
+      priceProviderId: 'levana-protocol',
+      contractAddress:
+        'factory/osmo1mlng7pz4pnyxtpq0akfwall37czyk9lukaucsrn30ameplhhshtqdvfm5c/ulvn',
+    },
   ],
   [Chain.Kujira]: [
     {
