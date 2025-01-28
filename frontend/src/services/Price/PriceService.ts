@@ -29,8 +29,6 @@ export class PriceService implements IPriceService {
         .toLowerCase()
     );
 
-    console.log('endpoint', endpoint);
-
     const response = await fetch(endpoint);
 
     if (!response.ok) {
