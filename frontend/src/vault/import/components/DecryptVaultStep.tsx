@@ -5,6 +5,8 @@ import {
   ComponentWithValueProps,
   ValueFinishProps,
 } from '../../../lib/ui/props';
+import { decryptDatBackup } from '../utils/decryptDatBackup';
+import { fromDatBackupString } from '../utils/fromDatBackupString';
 import { DecryptVaultView } from './DecryptVaultView';
 
 export const DecryptVaultStep = ({
@@ -13,7 +15,14 @@ export const DecryptVaultStep = ({
 }: ComponentWithValueProps<ArrayBuffer> & ValueFinishProps<storage.Vault>) => {
   const { mutate, error, isPending } = useMutation({
     mutationFn: async (password: string) => {
-      throw new Error(`Not implemented: ${password}, ${value}`);
+      const decrypted = await decryptDatBackup({
+        backup: value,
+        password,
+      });
+
+      const valueAsString = new TextDecoder().decode(decrypted);
+
+      return fromDatBackupString(valueAsString);
     },
     onSuccess: onFinish,
   });

@@ -1,6 +1,6 @@
 import { VaultBackupExtension } from '../VaultBackupExtension';
 import { VaultBackupResult } from '../VaultBakupResult';
-import { DatBackup, fromDatBackup } from './fromDatBackup';
+import { fromDatBackupString } from './fromDatBackupString';
 import { vaultContainerFromString } from './vaultContainerFromString';
 
 type Input = {
@@ -16,10 +16,7 @@ export const vaultBackupResultFromFileContent = ({
 
   if (extension === 'dat') {
     try {
-      const decodedString = Buffer.from(valueAsString, 'hex').toString('utf8');
-
-      const datBackup = JSON.parse(decodedString) as DatBackup;
-      const vault = fromDatBackup(datBackup);
+      const vault = fromDatBackupString(valueAsString);
 
       return { vault };
     } catch {
