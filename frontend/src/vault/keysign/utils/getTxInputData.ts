@@ -2,11 +2,11 @@ import { WalletCore } from '@trustwallet/wallet-core';
 
 import { getErc20ApproveTxInputData } from '../../../chain/evm/tx/getErc20ApproveTxInputData';
 import { incrementKeysignPayloadNonce } from '../../../chain/evm/tx/incrementKeysignPayloadNonce';
+import { getPreSignedInputData } from '../../../chain/keysign/preSignedInputData/getPreSignedInputData';
 import { getOneInchSwapTxInputData } from '../../../chain/swap/general/oneInch/tx/getOneInchSwapTxInputData';
 import { getThorchainSwapTxInputData } from '../../../chain/swap/native/thor/tx/getThorchainSwapTxInputData';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
-import { BlockchainServiceFactory } from '../../../services/Blockchain/BlockchainServiceFactory';
 import { getKeysignChain } from './getKeysignChain';
 
 type Input = {
@@ -62,9 +62,11 @@ export const getTxInputData = async ({
     return [txInputData];
   }
 
-  const service = BlockchainServiceFactory.createService(chain, walletCore);
-
-  const txInputData = await service.getPreSignedInputData(keysignPayload);
+  const txInputData = await getPreSignedInputData({
+    keysignPayload,
+    walletCore,
+    chain,
+  });
 
   return [txInputData];
 };

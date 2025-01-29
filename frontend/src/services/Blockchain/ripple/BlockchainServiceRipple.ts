@@ -1,18 +1,13 @@
 import { TW } from '@trustwallet/wallet-core';
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
-import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
-import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { callRpc } from '../../../chain/rpc/callRpc';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
 import { stripHexPrefix } from '../../../chain/utils/stripHexPrefix';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { shouldBeDefined } from '../../../lib/utils/assert/shouldBeDefined';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { assertField } from '../../../lib/utils/record/assertField';
-import { Chain } from '../../../model/chain';
 import { Endpoint } from '../../Endpoint';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
@@ -30,62 +25,6 @@ export class BlockchainServiceRipple
   extends BlockchainService
   implements IBlockchainService
 {
-  async getPreSignedInputData(
-    keysignPayload: KeysignPayload
-  ): Promise<Uint8Array> {
-    const walletCore = this.walletCore;
-
-    if (keysignPayload.coin?.chain !== Chain.Ripple) {
-      console.error('Coin is not Ripple');
-      console.error('keysignPayload.coin?.chain:', keysignPayload.coin?.chain);
-      throw new Error('Coin is not Ripple');
-    }
-
-    const { gas, sequence } = getBlockchainSpecificValue(
-      keysignPayload.blockchainSpecific,
-      'rippleSpecific'
-    );
-
-    const coin = assertField(keysignPayload, 'coin');
-
-    const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex');
-    if (!pubKeyData) {
-      console.error('invalid hex public key');
-      throw new Error('invalid hex public key');
-    }
-
-    const toAddress = walletCore.AnyAddress.createWithString(
-      keysignPayload.toAddress,
-      this.coinType
-    );
-
-    if (!toAddress) {
-      console.error('invalid to address');
-      throw new Error('invalid to address');
-    }
-
-    try {
-      const input = TW.Ripple.Proto.SigningInput.create({
-        account: coin.address,
-        fee: Long.fromString(gas.toString()),
-        sequence: Number(sequence),
-        publicKey: new Uint8Array(pubKeyData),
-        opPayment: TW.Ripple.Proto.OperationPayment.create({
-          destination: keysignPayload.toAddress,
-          amount: Long.fromString(keysignPayload.toAmount),
-          destinationTag: keysignPayload.memo
-            ? Long.fromString(keysignPayload.memo)
-            : undefined,
-        }),
-      });
-
-      return TW.Ripple.Proto.SigningInput.encode(input).finish();
-    } catch (e: any) {
-      console.error('Error in getPreSignedInputData:', e);
-      throw new Error(e.message);
-    }
-  }
-
   async executeTransaction(
     publicKey: PublicKey,
     txInputData: Uint8Array,

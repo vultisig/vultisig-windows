@@ -1,16 +1,11 @@
 import { TW } from '@trustwallet/wallet-core';
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
-import Long from 'long';
 
 import { tss } from '../../../../wailsjs/go/models';
-import { getBlockchainSpecificValue } from '../../../chain/keysign/KeysignChainSpecific';
 import { callRpc } from '../../../chain/rpc/callRpc';
 import { getPreSigningHashes } from '../../../chain/tx/utils/getPreSigningHashes';
 import { assertSignature } from '../../../chain/utils/assertSignature';
-import { SuiCoin } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { Chain } from '../../../model/chain';
 import { Endpoint } from '../../Endpoint';
 import { BlockchainService } from '../BlockchainService';
 import { IBlockchainService } from '../IBlockchainService';
@@ -20,42 +15,6 @@ export class BlockchainServiceSui
   extends BlockchainService
   implements IBlockchainService
 {
-  async getPreSignedInputData(
-    keysignPayload: KeysignPayload
-  ): Promise<Uint8Array> {
-    if (keysignPayload.coin?.chain !== Chain.Sui) {
-      console.error('Coin is not Sui');
-      console.error('keysignPayload.coin?.chain:', keysignPayload.coin?.chain);
-    }
-
-    const { coins, referenceGasPrice } = getBlockchainSpecificValue(
-      keysignPayload.blockchainSpecific,
-      'suicheSpecific'
-    );
-
-    const inputData = TW.Sui.Proto.SigningInput.create({
-      referenceGasPrice: Long.fromString(referenceGasPrice),
-      signer: keysignPayload.coin?.address,
-      gasBudget: Long.fromString('3000000'),
-
-      paySui: TW.Sui.Proto.PaySui.create({
-        inputCoins: coins.map((coin: SuiCoin) => {
-          const obj = TW.Sui.Proto.ObjectRef.create({
-            objectDigest: coin.digest,
-            objectId: coin.coinObjectId,
-            version: Long.fromString(coin.version),
-          });
-          return obj;
-        }),
-        recipients: [keysignPayload.toAddress],
-        amounts: [Long.fromString(keysignPayload.toAmount)],
-      }),
-    });
-
-    const input = TW.Sui.Proto.SigningInput.encode(inputData).finish();
-    return input;
-  }
-
   public async executeTransaction(
     publicKey: PublicKey,
     txInputData: Uint8Array,

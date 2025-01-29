@@ -11,6 +11,9 @@ export type KeysignChainSpecificKey = KeysignChainSpecific['case'];
 
 export type KeysignChainSpecificValue = KeysignChainSpecific['value'];
 
+export type KeysignChainSpecificValueByKey<T extends KeysignChainSpecificKey> =
+  Extract<KeysignChainSpecific, { case: T }>['value'];
+
 export const chainSpecificRecord = {
   [Chain.Arbitrum]: 'ethereumSpecific',
   [Chain.Avalanche]: 'ethereumSpecific',
