@@ -8,7 +8,7 @@ import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
 import InfoGradientIcon from '../../../lib/ui/icons/InfoGradientIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries';
-import { Text } from '../../../lib/ui/text';
+import { GradientText, Text } from '../../../lib/ui/text';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -23,7 +23,6 @@ import {
 } from './schemas/vaultBackupSchema';
 import {
   ActionsWrapper,
-  GradientText,
   IconButton,
   InfoPill,
   InputField,

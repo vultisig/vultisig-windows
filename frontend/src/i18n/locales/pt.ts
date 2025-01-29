@@ -14,6 +14,8 @@ export const pt = {
   missing_public_key_ecdsa: 'Chave pública ECDSA ausente',
   missing_verification_code: 'Código de verificação ausente',
   next: 'Próximo',
+  sayGoodbyeTo: 'Adeus às',
+  seedPhrases: 'frases semente',
   tokens: 'tokens',
   selected: 'selecionado',
   required_field_missing: 'Campo obrigatório em falta',

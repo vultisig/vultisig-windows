@@ -13,6 +13,8 @@ export const de = {
   import_existing_vault: 'Bestehenden Tresor importieren',
   tokens: 'Token',
   selected: 'ausgewählt',
+  sayGoodbyeTo: 'Auf Wiedersehen zu',
+  seedPhrases: 'Seed-Wörter',
   required_field_missing: 'Erforderliches Feld fehlt',
   email_confirmation_code_label:
     'Geben Sie den Code ein, den Sie mit Ihrem Backup per E-Mail erhalten haben',

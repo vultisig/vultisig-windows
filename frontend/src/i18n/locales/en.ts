@@ -376,6 +376,8 @@ export const en = {
   secure: 'Secure',
   secureVault: 'Secure Vault',
   active: 'Active',
+  sayGoodbyeTo: 'Say goodbye to',
+  seedPhrases: 'seed phrases',
   sign: 'Sign',
   sign_custom_message: 'Sign custom message',
   sign_message: 'Sign message',

@@ -15,6 +15,8 @@ export const hr = {
   email_confirmation: 'Adja meg a kódot',
   create_new_vault: 'Kreiraj novi trezor',
   tokens: 'tokenek',
+  sayGoodbyeTo: 'Búcsúzz el a',
+  seedPhrases: 'seed kívána',
   selected: 'kiválasztott',
   required_field_missing: 'Hiányzó kötelező mező',
   import_existing_vault: 'Uvezi postojeći trezor',

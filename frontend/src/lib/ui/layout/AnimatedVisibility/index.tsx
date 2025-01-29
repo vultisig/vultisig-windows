@@ -1,4 +1,9 @@
-import { animated, useTransition } from '@react-spring/web';
+import {
+  animated,
+  AnimationConfig,
+  AnimationResult,
+  useTransition,
+} from '@react-spring/web';
 import { CSSProperties, FC, ReactNode, useLayoutEffect, useState } from 'react';
 
 import { ConfigKey, configsMap, ConfigValue } from './animationConfigs';
@@ -10,7 +15,9 @@ type AnimatedVisibilityProps = {
   animationConfig?: ConfigKey;
   isOpen?: boolean;
   delay?: number;
+  config?: Partial<AnimationConfig>;
   overlayStyles?: CSSProperties;
+  onAnimationComplete?: () => void;
 };
 
 export const AnimatedVisibility: FC<AnimatedVisibilityProps> = ({
@@ -21,6 +28,8 @@ export const AnimatedVisibility: FC<AnimatedVisibilityProps> = ({
   animationConfig = 'scale',
   className,
   delay = 0,
+  onAnimationComplete,
+  config,
 }) => {
   const [delayedIsOpen, setDelayedIsOpen] = useState(false);
 
@@ -40,10 +49,16 @@ export const AnimatedVisibility: FC<AnimatedVisibilityProps> = ({
     config: {
       duration: animationConfigDerived.duration,
       easing: animationConfigDerived.easing,
+      ...config,
     },
     enter: animationConfigDerived.enter,
     from: animationConfigDerived.from,
     leave: animationConfigDerived.leave,
+    onRest: (animationResult: AnimationResult) => {
+      const result = animationResult.value as { opacity: number };
+      if (result.opacity !== 0) return;
+      if (animationResult.finished) onAnimationComplete?.();
+    },
   });
 
   return transitions(

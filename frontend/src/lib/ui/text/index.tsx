@@ -15,14 +15,12 @@ const textVariantsRecord: Record<
     height: 'large',
     weight: 500,
     cropped: false,
-    letterSpacing: -1.8,
   },
   h1Regular: {
     size: 60,
     height: 'large',
     weight: 500,
     cropped: false,
-    letterSpacing: -1.5,
   },
 };
 
@@ -156,4 +154,12 @@ export const strictText = css`
 
 export const StrictText = styled(Text)`
   ${strictText}
+`;
+
+export const GradientText = styled(Text)`
+  background: linear-gradient(90deg, #33e6bf, #0439c7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 `;
