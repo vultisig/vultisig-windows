@@ -19,7 +19,6 @@ const NextAnimationButton = styled(IconButton)`
   height: 48px;
   border-radius: 99px;
   background-color: ${getColor('primary')};
-  margin-top: 12px;
   align-self: center;
 
   &:hover {
@@ -55,22 +54,24 @@ export const OnboardingSteps = () => {
   return (
     <PageContent>
       <WithProgressIndicator value={progressRaw}>
-        <VStack flexGrow>
+        <VStack justifyContent="space-between" flexGrow>
           <RiveWrapper>
             <AnimationComponent />
           </RiveWrapper>
-          <AnimationDescription animation={currentAnimation} />
-          <NextAnimationButton
-            disabled={isLoading}
-            icon={<ChevronRightIcon />}
-            onClick={
-              currentAnimation !== lastAnimation
-                ? handleNextAnimation
-                : () => setIsOnboarded(true)
-            }
-          >
-            {t('tap')}
-          </NextAnimationButton>
+          <VStack gap={12}>
+            <AnimationDescription animation={currentAnimation} />
+            <NextAnimationButton
+              disabled={isLoading}
+              icon={<ChevronRightIcon />}
+              onClick={
+                currentAnimation !== lastAnimation
+                  ? handleNextAnimation
+                  : () => setIsOnboarded(true)
+              }
+            >
+              {t('tap')}
+            </NextAnimationButton>
+          </VStack>
         </VStack>
       </WithProgressIndicator>
     </PageContent>
