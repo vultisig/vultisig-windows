@@ -38,6 +38,7 @@ export const executeCosmosTx = async ({
     publicKey,
     message: dataHash,
     signature,
+    chain,
   });
 
   allSignatures.add(signature);

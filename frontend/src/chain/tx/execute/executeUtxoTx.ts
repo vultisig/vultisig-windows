@@ -31,7 +31,7 @@ export const executeUtxoTx = async ({
       publicKey,
       message: hash,
       signature,
-      signatureFormat: 'der',
+      chain,
     });
 
     allSignatures.add(signature);

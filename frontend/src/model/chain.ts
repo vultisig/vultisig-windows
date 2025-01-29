@@ -107,3 +107,16 @@ export function getChainKind<T extends Chain>(chain: T): DeriveChainKind<T> {
 }
 
 export const maxSendAmountEnabledChains = Object.values(UtxoChain);
+
+export type SignatureFormat = 'raw' | 'der';
+
+export const signatureFormatRecord: Record<ChainKind, SignatureFormat> = {
+  evm: 'raw',
+  cosmos: 'raw',
+  sui: 'raw',
+  solana: 'raw',
+  polkadot: 'raw',
+  ton: 'raw',
+  utxo: 'der',
+  ripple: 'der',
+};

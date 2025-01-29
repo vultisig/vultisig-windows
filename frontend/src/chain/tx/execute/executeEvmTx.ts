@@ -35,6 +35,7 @@ export const executeEvmTx = async ({
     publicKey,
     signature,
     message: dataHash,
+    chain,
   });
 
   const allSignatures = walletCore.DataVector.createWithData(signature);

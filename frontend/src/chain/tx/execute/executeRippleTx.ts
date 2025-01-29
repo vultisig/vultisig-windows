@@ -44,7 +44,7 @@ export const executeRippleTx = async ({
     publicKey,
     message: dataHash,
     signature,
-    signatureFormat: 'der',
+    chain,
   });
 
   allSignatures.add(signature);

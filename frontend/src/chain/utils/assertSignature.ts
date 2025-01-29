@@ -1,23 +1,22 @@
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 import { match } from '../../lib/utils/match';
-
-type SignatureFormat = 'raw' | 'der';
+import { Chain, getChainKind, signatureFormatRecord } from '../../model/chain';
 
 type Input = {
   publicKey: PublicKey;
   message: Uint8Array;
   signature: Uint8Array;
-  signatureFormat?: SignatureFormat;
+  chain: Chain;
 };
 
 export const assertSignature = ({
   publicKey,
   message,
   signature,
-  signatureFormat = 'raw',
+  chain,
 }: Input) => {
-  const isValid = match(signatureFormat, {
+  const isValid = match(signatureFormatRecord[getChainKind(chain)], {
     raw: () => publicKey.verify(signature, message),
     der: () => publicKey.verifyAsDER(signature, message),
   });

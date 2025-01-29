@@ -38,6 +38,7 @@ export const executeSuiTx = async ({
     publicKey,
     signature,
     message: dataHash,
+    chain,
   });
 
   allSignatures.add(signature);

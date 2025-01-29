@@ -40,6 +40,7 @@ export const executeSolanaTx = async ({
     publicKey,
     message: data,
     signature,
+    chain,
   });
 
   allSignatures.add(signature);
