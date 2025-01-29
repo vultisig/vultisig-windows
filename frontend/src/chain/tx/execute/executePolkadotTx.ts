@@ -16,27 +16,25 @@ export const executePolkadotTx = async ({
   walletCore,
   chain,
 }: ExecuteTxInput): Promise<string> => {
-  const publicKeyData = publicKey.data();
-
-  const coinType = getCoinType({
-    chain,
-    walletCore,
-  });
-
   const [dataHash] = getPreSigningHashes({
     walletCore,
     txInputData,
     chain,
   });
-
   const signatureProvider = new SignatureProvider(walletCore, signatures);
   const signature = signatureProvider.getSignature(dataHash);
-
   assertSignature({
     publicKey,
     message: dataHash,
     signature,
     chain,
+  });
+
+  const publicKeyData = publicKey.data();
+
+  const coinType = getCoinType({
+    chain,
+    walletCore,
   });
 
   const allSignatures = walletCore.DataVector.create();

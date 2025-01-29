@@ -15,17 +15,13 @@ export const executeSolanaTx = async ({
   walletCore,
   chain,
 }: ExecuteTxInput): Promise<string> => {
-  const publicKeyData = publicKey.data();
-
   const [dataHash] = getPreSigningHashes({
     walletCore,
     txInputData,
     chain,
   });
-
   const signatureProvider = new SignatureProvider(walletCore, signatures);
   const signature = signatureProvider.getSignature(dataHash);
-
   assertSignature({
     publicKey,
     message: dataHash,
@@ -35,6 +31,7 @@ export const executeSolanaTx = async ({
 
   const allSignatures = walletCore.DataVector.create();
   const publicKeys = walletCore.DataVector.create();
+  const publicKeyData = publicKey.data();
 
   allSignatures.add(signature);
   publicKeys.add(publicKeyData);

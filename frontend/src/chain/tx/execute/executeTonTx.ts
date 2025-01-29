@@ -21,12 +21,8 @@ export const executeTonTx = async ({
     txInputData,
     chain,
   });
-
-  const allSignatures = walletCore.DataVector.create();
-  const publicKeys = walletCore.DataVector.create();
   const signatureProvider = new SignatureProvider(walletCore, signatures);
   const signature = signatureProvider.getSignature(dataHash);
-
   assertSignature({
     publicKey,
     message: dataHash,
@@ -34,6 +30,8 @@ export const executeTonTx = async ({
     chain,
   });
 
+  const allSignatures = walletCore.DataVector.create();
+  const publicKeys = walletCore.DataVector.create();
   const publicKeyData = publicKey.data();
 
   const coinType = getCoinType({

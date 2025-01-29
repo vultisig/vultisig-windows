@@ -24,13 +24,11 @@ export const executeEvmTx = async ({
     chain: chain,
     txInputData,
   });
-
   const signature = generateSignatureWithRecoveryId({
     walletCore: walletCore,
     signature:
       signatures[hexEncode({ value: dataHash, walletCore: walletCore })],
   });
-
   assertSignature({
     publicKey,
     signature,

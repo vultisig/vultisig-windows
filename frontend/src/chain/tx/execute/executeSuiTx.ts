@@ -21,15 +21,12 @@ export const executeSuiTx = async ({
   chain,
 }: ExecuteTxInput): Promise<string> => {
   const signatureProvider = new SignatureProvider(walletCore, signatures);
-
   const [dataHash] = getPreSigningHashes({
     walletCore: walletCore,
     txInputData,
     chain: chain,
   });
-
   const signature = signatureProvider.getSignature(dataHash);
-
   assertSignature({
     publicKey,
     signature,

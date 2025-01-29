@@ -18,19 +18,15 @@ export const executeCosmosTx = async ({
   walletCore,
   chain,
 }: ExecuteTxInput<CosmosChain>): Promise<string> => {
-  const publicKeyData = publicKey.data();
-
   const [dataHash] = getPreSigningHashes({
     walletCore,
     txInputData,
     chain,
   });
-
   const signature = generateSignatureWithRecoveryId({
     walletCore,
     signature: signatures[hexEncode({ value: dataHash, walletCore })],
   });
-
   assertSignature({
     publicKey,
     message: dataHash,
@@ -41,6 +37,7 @@ export const executeCosmosTx = async ({
   const allSignatures = walletCore.DataVector.create();
   const publicKeys = walletCore.DataVector.create();
 
+  const publicKeyData = publicKey.data();
   allSignatures.add(signature);
   publicKeys.add(publicKeyData);
 
