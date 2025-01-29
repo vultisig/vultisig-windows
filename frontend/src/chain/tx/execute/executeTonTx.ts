@@ -6,6 +6,7 @@ import SignatureProvider from '../../../services/Blockchain/signature-provider';
 import { Endpoint } from '../../../services/Endpoint';
 import { assertSignature } from '../../utils/assertSignature';
 import { getCoinType } from '../../walletCore/getCoinType';
+import { getPreSigningHashes } from '../utils/getPreSigningHashes';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeTonTx = async ({
@@ -15,33 +16,29 @@ export const executeTonTx = async ({
   walletCore,
   chain,
 }: ExecuteTxInput): Promise<string> => {
+  const [dataHash] = getPreSigningHashes({
+    walletCore,
+    txInputData,
+    chain,
+  });
+
+  const allSignatures = walletCore.DataVector.create();
+  const publicKeys = walletCore.DataVector.create();
+  const signatureProvider = new SignatureProvider(walletCore, signatures);
+  const signature = signatureProvider.getSignature(dataHash);
+
+  assertSignature({
+    publicKey,
+    message: dataHash,
+    signature,
+    chain,
+  });
+
   const publicKeyData = publicKey.data();
 
   const coinType = getCoinType({
     chain,
     walletCore,
-  });
-
-  const preHashes = walletCore.TransactionCompiler.preImageHashes(
-    coinType,
-    txInputData
-  );
-
-  const { data, errorMessage } =
-    TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
-
-  assertErrorMessage(errorMessage);
-
-  const allSignatures = walletCore.DataVector.create();
-  const publicKeys = walletCore.DataVector.create();
-  const signatureProvider = new SignatureProvider(walletCore, signatures);
-  const signature = signatureProvider.getSignature(data);
-
-  assertSignature({
-    publicKey,
-    message: data,
-    signature,
-    chain,
   });
 
   allSignatures.add(signature);

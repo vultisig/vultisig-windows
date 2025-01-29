@@ -28,9 +28,6 @@ export const executeRippleTx = async ({
 }: ExecuteTxInput): Promise<string> => {
   const publicKeyData = publicKey.data();
 
-  const allSignatures = walletCore.DataVector.create();
-  const publicKeys = walletCore.DataVector.create();
-
   const [dataHash] = getPreSigningHashes({
     walletCore,
     txInputData,
@@ -46,6 +43,9 @@ export const executeRippleTx = async ({
     signature,
     chain,
   });
+
+  const allSignatures = walletCore.DataVector.create();
+  const publicKeys = walletCore.DataVector.create();
 
   allSignatures.add(signature);
   publicKeys.add(publicKeyData);

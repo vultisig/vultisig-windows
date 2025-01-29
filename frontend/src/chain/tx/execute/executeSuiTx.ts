@@ -20,10 +20,6 @@ export const executeSuiTx = async ({
   walletCore,
   chain,
 }: ExecuteTxInput): Promise<string> => {
-  const publicKeyData = publicKey.data();
-
-  const allSignatures = walletCore.DataVector.create();
-  const publicKeys = walletCore.DataVector.create();
   const signatureProvider = new SignatureProvider(walletCore, signatures);
 
   const [dataHash] = getPreSigningHashes({
@@ -40,6 +36,11 @@ export const executeSuiTx = async ({
     message: dataHash,
     chain,
   });
+
+  const publicKeyData = publicKey.data();
+
+  const allSignatures = walletCore.DataVector.create();
+  const publicKeys = walletCore.DataVector.create();
 
   allSignatures.add(signature);
   publicKeys.add(publicKeyData);

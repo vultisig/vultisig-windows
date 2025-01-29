@@ -26,9 +26,6 @@ export const executeCosmosTx = async ({
     chain,
   });
 
-  const allSignatures = walletCore.DataVector.create();
-  const publicKeys = walletCore.DataVector.create();
-
   const signature = generateSignatureWithRecoveryId({
     walletCore,
     signature: signatures[hexEncode({ value: dataHash, walletCore })],
@@ -40,6 +37,9 @@ export const executeCosmosTx = async ({
     signature,
     chain,
   });
+
+  const allSignatures = walletCore.DataVector.create();
+  const publicKeys = walletCore.DataVector.create();
 
   allSignatures.add(signature);
   publicKeys.add(publicKeyData);

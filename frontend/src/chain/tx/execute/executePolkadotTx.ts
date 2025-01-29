@@ -6,6 +6,7 @@ import { Endpoint } from '../../../services/Endpoint';
 import { callRpc } from '../../rpc/callRpc';
 import { assertSignature } from '../../utils/assertSignature';
 import { getCoinType } from '../../walletCore/getCoinType';
+import { getPreSigningHashes } from '../utils/getPreSigningHashes';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executePolkadotTx = async ({
@@ -22,27 +23,24 @@ export const executePolkadotTx = async ({
     walletCore,
   });
 
-  const preHashes = walletCore.TransactionCompiler.preImageHashes(
-    coinType,
-    txInputData
-  );
+  const [dataHash] = getPreSigningHashes({
+    walletCore,
+    txInputData,
+    chain,
+  });
 
-  const { data, errorMessage } =
-    TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes);
-
-  assertErrorMessage(errorMessage);
-
-  const allSignatures = walletCore.DataVector.create();
-  const publicKeys = walletCore.DataVector.create();
   const signatureProvider = new SignatureProvider(walletCore, signatures);
-  const signature = signatureProvider.getSignature(data);
+  const signature = signatureProvider.getSignature(dataHash);
 
   assertSignature({
     publicKey,
-    message: data,
+    message: dataHash,
     signature,
     chain,
   });
+
+  const allSignatures = walletCore.DataVector.create();
+  const publicKeys = walletCore.DataVector.create();
 
   allSignatures.add(signature);
   publicKeys.add(publicKeyData);
