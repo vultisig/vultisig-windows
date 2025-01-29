@@ -18,6 +18,7 @@ export const assertSignature = ({
 }: Input) => {
   const isValid = match(signatureFormatRecord[getChainKind(chain)], {
     raw: () => publicKey.verify(signature, message),
+    rawWithRecoveryId: () => publicKey.verify(signature, message),
     der: () => publicKey.verifyAsDER(signature, message),
   });
 

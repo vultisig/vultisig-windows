@@ -3,9 +3,10 @@ import { keccak256 } from 'js-sha3';
 
 import { Keysign } from '../../../../../wailsjs/go/tss/TssService';
 import { KeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload';
+import { compileTx } from '../../../../chain/tx/compile/compileTx';
 import { executeTx } from '../../../../chain/tx/execute/executeTx';
+import { generateSignature } from '../../../../chain/tx/signature/generateSignature';
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
-import { generateSignatureWithRecoveryId } from '../../../../chain/utils/generateSignatureWithRecoveryId';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { getLastItem } from '../../../../lib/utils/array/getLastItem';
@@ -82,15 +83,21 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
           });
 
           const hashes = await chainPromises(
-            inputs.map(async txInputData =>
-              executeTx({
-                publicKey,
+            inputs.map(async txInputData => {
+              const compiledTx = compileTx({
+                walletCore,
                 txInputData,
+                chain,
+                publicKey,
                 signatures: signaturesRecord,
+              });
+
+              return executeTx({
+                compiledTx,
                 walletCore,
                 chain,
-              })
-            )
+              });
+            })
           );
 
           return getLastItem(hashes);
@@ -111,9 +118,10 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             customMessageConfig.tssType
           );
 
-          const result = generateSignatureWithRecoveryId({
+          const result = generateSignature({
             walletCore,
             signature,
+            chain: customMessageConfig.chain,
           });
 
           return Buffer.from(result).toString('hex');

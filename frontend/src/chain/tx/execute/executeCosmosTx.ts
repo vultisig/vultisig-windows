@@ -4,53 +4,13 @@ import { createHash } from 'crypto';
 import { Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { CosmosChain } from '../../../model/chain';
 import { getCosmosTxBroadcastUrl } from '../../cosmos/cosmosRpcUrl';
-import { assertSignature } from '../../utils/assertSignature';
-import { generateSignatureWithRecoveryId } from '../../utils/generateSignatureWithRecoveryId';
-import { getCoinType } from '../../walletCore/getCoinType';
-import { hexEncode } from '../../walletCore/hexEncode';
-import { getPreSigningHashes } from '../utils/getPreSigningHashes';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeCosmosTx = async ({
-  publicKey,
-  txInputData,
-  signatures,
-  walletCore,
   chain,
+  compiledTx,
 }: ExecuteTxInput<CosmosChain>): Promise<string> => {
-  const [dataHash] = getPreSigningHashes({
-    walletCore,
-    txInputData,
-    chain,
-  });
-  const signature = generateSignatureWithRecoveryId({
-    walletCore,
-    signature: signatures[hexEncode({ value: dataHash, walletCore })],
-  });
-  assertSignature({
-    publicKey,
-    message: dataHash,
-    signature,
-    chain,
-  });
-
-  const allSignatures = walletCore.DataVector.create();
-  const publicKeys = walletCore.DataVector.create();
-
-  const publicKeyData = publicKey.data();
-  allSignatures.add(signature);
-  publicKeys.add(publicKeyData);
-
-  const coinType = getCoinType({ walletCore, chain });
-
-  const compileWithSignatures =
-    walletCore.TransactionCompiler.compileWithSignatures(
-      coinType,
-      txInputData,
-      allSignatures,
-      publicKeys
-    );
-  const output = TW.Cosmos.Proto.SigningOutput.decode(compileWithSignatures);
+  const output = TW.Cosmos.Proto.SigningOutput.decode(compiledTx);
 
   const rawTx = output.serialized;
   const parsedData = JSON.parse(rawTx);

@@ -2,13 +2,9 @@ import { TW } from '@trustwallet/wallet-core';
 
 import { shouldBeDefined } from '../../../lib/utils/assert/shouldBeDefined';
 import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import SignatureProvider from '../../../services/Blockchain/signature-provider';
 import { Endpoint } from '../../../services/Endpoint';
 import { callRpc } from '../../rpc/callRpc';
-import { assertSignature } from '../../utils/assertSignature';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';
-import { getCoinType } from '../../walletCore/getCoinType';
-import { getPreSigningHashes } from '../utils/getPreSigningHashes';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 interface RippleSubmitResponse {
@@ -20,50 +16,11 @@ interface RippleSubmitResponse {
 }
 
 export const executeRippleTx = async ({
-  publicKey,
-  txInputData,
-  signatures,
   walletCore,
-  chain,
+  compiledTx,
 }: ExecuteTxInput): Promise<string> => {
-  const [dataHash] = getPreSigningHashes({
-    walletCore,
-    txInputData,
-    chain,
-  });
-  const signatureProvider = new SignatureProvider(walletCore, signatures);
-  const signature = signatureProvider.getDerSignature(dataHash);
-  assertSignature({
-    publicKey,
-    message: dataHash,
-    signature,
-    chain,
-  });
-
-  const allSignatures = walletCore.DataVector.create();
-  const publicKeys = walletCore.DataVector.create();
-
-  const publicKeyData = publicKey.data();
-
-  allSignatures.add(signature);
-  publicKeys.add(publicKeyData);
-
-  const coinType = getCoinType({
-    chain,
-    walletCore,
-  });
-
-  const compileWithSignatures =
-    walletCore.TransactionCompiler.compileWithSignatures(
-      coinType,
-      txInputData,
-      allSignatures,
-      publicKeys
-    );
-
-  const { encoded, errorMessage } = TW.Ripple.Proto.SigningOutput.decode(
-    compileWithSignatures
-  );
+  const { encoded, errorMessage } =
+    TW.Ripple.Proto.SigningOutput.decode(compiledTx);
 
   assertErrorMessage(errorMessage);
 
