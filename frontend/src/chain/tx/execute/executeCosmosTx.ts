@@ -1,27 +1,15 @@
 import { TW } from '@trustwallet/wallet-core';
-import {
-  PublicKey,
-  WalletCore,
-} from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { createHash } from 'crypto';
 
-import { tss } from '../../../../wailsjs/go/models';
 import { Post } from '../../../../wailsjs/go/utils/GoHttp';
 import { CosmosChain } from '../../../model/chain';
-import { getPreSigningHashes } from '../../tx/utils/getPreSigningHashes';
+import { getCosmosTxBroadcastUrl } from '../../cosmos/cosmosRpcUrl';
 import { assertSignature } from '../../utils/assertSignature';
 import { generateSignatureWithRecoveryId } from '../../utils/generateSignatureWithRecoveryId';
 import { getCoinType } from '../../walletCore/getCoinType';
 import { hexEncode } from '../../walletCore/hexEncode';
-import { getCosmosTxBroadcastUrl } from '../cosmosRpcUrl';
-
-type Input = {
-  publicKey: PublicKey;
-  txInputData: Uint8Array;
-  signatures: Record<string, tss.KeysignResponse>;
-  walletCore: WalletCore;
-  chain: CosmosChain;
-};
+import { getPreSigningHashes } from '../utils/getPreSigningHashes';
+import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeCosmosTx = async ({
   publicKey,
@@ -29,7 +17,7 @@ export const executeCosmosTx = async ({
   signatures,
   walletCore,
   chain,
-}: Input): Promise<string> => {
+}: ExecuteTxInput<CosmosChain>): Promise<string> => {
   const publicKeyData = publicKey.data();
 
   const [dataHash] = getPreSigningHashes({

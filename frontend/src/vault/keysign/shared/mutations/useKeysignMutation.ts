@@ -3,6 +3,7 @@ import { keccak256 } from 'js-sha3';
 
 import { Keysign } from '../../../../../wailsjs/go/tss/TssService';
 import { KeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload';
+import { executeTx } from '../../../../chain/tx/execute/executeTx';
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { generateSignatureWithRecoveryId } from '../../../../chain/utils/generateSignatureWithRecoveryId';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
@@ -11,9 +12,7 @@ import { getLastItem } from '../../../../lib/utils/array/getLastItem';
 import { matchRecordUnion } from '../../../../lib/utils/matchRecordUnion';
 import { chainPromises } from '../../../../lib/utils/promise/chainPromises';
 import { recordFromItems } from '../../../../lib/utils/record/recordFromItems';
-import { Chain } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
-import { BlockchainServiceFactory } from '../../../../services/Blockchain/BlockchainServiceFactory';
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
 import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
 import { getVaultPublicKey } from '../../../publicKey/getVaultPublicKey';
@@ -57,11 +56,6 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
           const msgs = groupedMsgs.flat().sort();
 
-          const blockchainService = BlockchainServiceFactory.createService(
-            chain as Chain,
-            walletCore
-          );
-
           const tssType = getTssKeysignType(chain);
 
           const coinType = getCoinType({ walletCore, chain });
@@ -89,11 +83,13 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
           const hashes = await chainPromises(
             inputs.map(async txInputData =>
-              blockchainService.executeTransaction(
+              executeTx({
                 publicKey,
                 txInputData,
-                signaturesRecord
-              )
+                signatures: signaturesRecord,
+                walletCore,
+                chain,
+              })
             )
           );
 
