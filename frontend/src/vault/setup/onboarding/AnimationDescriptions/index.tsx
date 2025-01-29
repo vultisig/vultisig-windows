@@ -11,7 +11,7 @@ import { VaultSharesIntro } from './VaultSharesIntro';
 import { VaultUnlock } from './VaultUnlock';
 
 const Wrapper = styled.div`
-  flex-shrink: 0;
+  height: 144px;
 `;
 
 type AnimationDescriptionProps = {
