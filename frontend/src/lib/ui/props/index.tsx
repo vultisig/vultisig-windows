@@ -86,3 +86,7 @@ export type ValueFinishProps<T> = {
 export type OptionalValueFinishProps<T> = {
   onFinish: (value?: T) => void;
 };
+
+export type ComponentWithIconProps = {
+  icon: ReactNode;
+};

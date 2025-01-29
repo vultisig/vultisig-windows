@@ -8,13 +8,12 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { ValueFinishProps } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
-import { fromBase64 } from '../../../lib/utils/fromBase64';
-import { pipe } from '../../../lib/utils/pipe';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
 import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent';
+import { vaultContainerFromString } from '../utils/vaultContainerFromString';
 
 export const ReadBackupFileStep = ({
   onFinish,
@@ -22,8 +21,11 @@ export const ReadBackupFileStep = ({
   const { filePath } = useAppPathState<'importVaultFromFile'>();
 
   const { mutate, ...mutationState } = useMutation({
-    mutationFn: async () =>
-      pipe(await ReadTextFile(filePath), fromBase64, VaultContainer.fromBinary),
+    mutationFn: async () => {
+      const fileContent = await ReadTextFile(filePath);
+
+      return vaultContainerFromString(fileContent);
+    },
     onSuccess: onFinish,
   });
 

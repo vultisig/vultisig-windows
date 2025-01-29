@@ -14,7 +14,6 @@ import VaultBackupPage from './pages/edItVault/vaultBackupSettings/VaultBackupPa
 import DeleteVaultPage from './pages/edItVault/vaultDeleteSettings/DeleteVaultPage';
 import VaultDetailsPage from './pages/edItVault/vaultDetailsSettings/VaultDetailsPage';
 import VaultRenamePage from './pages/edItVault/vaultRenameSettings/VaultRenamePage';
-import ImportVaultView from './pages/importVault/ImportVaultView';
 import RegisterForAirdropPage from './pages/registerForAirdrop/RegisterForAirdropPage';
 import SettingsVaultPage from './pages/vaultSettings/SettingsVaultPage';
 import AddressBookSettingsPage from './pages/vaultSettings/vaultAddressBook/AddressBookSettingsPage';
@@ -32,6 +31,7 @@ import { EmptyVaultsOnly } from './vault/components/EmptyVaultsOnly';
 import { VaultPage } from './vault/components/VaultPage';
 import { DepositPage } from './vault/deposit/DepositPage';
 import { ImportVaultFromFilePage } from './vault/import/components/ImportVaultFromFilePage';
+import { ImportVaultPage } from './vault/import/components/ImportVaultPage';
 import { JoinKeygenPage } from './vault/keygen/join/JoinKeygenPage';
 import { SignCustomMessagePage } from './vault/keysign/customMessage/SignCustomMessagePage';
 import { JoinKeysignPage } from './vault/keysign/join/JoinKeysignPage';
@@ -112,7 +112,7 @@ export const router = createBrowserRouter([
       },
       {
         path: appPaths.importVault,
-        element: <ImportVaultView />,
+        element: <ImportVaultPage />,
       },
       {
         path: appPaths.importVaultFromFile,
