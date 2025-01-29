@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import styled from 'styled-components';
 
 import { Match } from '../../../../lib/ui/base/Match';
 import { ONBOARDING_ANIMATIONS } from '../hooks/useOnboardingStepsAnimations';
@@ -9,19 +10,25 @@ import { VaultSharesInfo } from './VaultSharesInfo';
 import { VaultSharesIntro } from './VaultSharesIntro';
 import { VaultUnlock } from './VaultUnlock';
 
+const Wrapper = styled.div`
+  flex-shrink: 0;
+`;
+
 type AnimationDescriptionProps = {
   animation: (typeof ONBOARDING_ANIMATIONS)[number];
 };
 export const AnimationDescription: FC<AnimationDescriptionProps> = ({
   animation,
 }) => (
-  <Match
-    value={animation}
-    vaultSharesIntro={() => <VaultSharesIntro />}
-    vaultSharesInfo={() => <VaultSharesInfo />}
-    vaultDevice={() => <VaultDevice />}
-    vaultRecovery={() => <VaultRecovery />}
-    vaultBackup={() => <VaultBackup />}
-    vaultUnlock={() => <VaultUnlock />}
-  />
+  <Wrapper>
+    <Match
+      value={animation}
+      vaultSharesIntro={() => <VaultSharesIntro />}
+      vaultSharesInfo={() => <VaultSharesInfo />}
+      vaultDevice={() => <VaultDevice />}
+      vaultRecovery={() => <VaultRecovery />}
+      vaultBackup={() => <VaultBackup />}
+      vaultUnlock={() => <VaultUnlock />}
+    />
+  </Wrapper>
 );

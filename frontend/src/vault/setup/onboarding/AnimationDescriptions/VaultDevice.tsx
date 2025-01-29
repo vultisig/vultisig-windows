@@ -1,21 +1,15 @@
-import { useTranslation } from 'react-i18next';
-
 import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility';
 import { GradientText, Text } from '../../../../lib/ui/text';
 import { TextWrapper } from './AnimationDescriptions.styled';
 
 export const VaultDevice = () => {
-  const { t } = useTranslation();
-
   return (
     <AnimatedVisibility>
       <TextWrapper>
-        <Text as="span" variant="h1Regular">
-          {t('recoverYourVault')}{' '}
+        <Text as="span" size={48}>
+          <GradientText as="span">Each device</GradientText> in your vault holds{' '}
+          <GradientText as="span">one vault share</GradientText>
         </Text>
-        <GradientText as="span" variant="h1Regular">
-          {t('deviceLostOrDamaged')}
-        </GradientText>
       </TextWrapper>
     </AnimatedVisibility>
   );

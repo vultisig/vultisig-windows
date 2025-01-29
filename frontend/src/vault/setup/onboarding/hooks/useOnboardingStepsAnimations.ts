@@ -16,7 +16,6 @@ export const ONBOARDING_ANIMATIONS = [
 ] as const;
 
 export const useOnboardingStepsAnimations = () => {
-  // Need to use step navigation to track at which animation we are, because stateMachineInput doesn't provide a unique identifier for different animations, just a .fire() function
   const { step: currentAnimation, toNextStep: toNextAnimation } =
     useStepNavigation({
       steps: ONBOARDING_ANIMATIONS,
@@ -46,5 +45,6 @@ export const useOnboardingStepsAnimations = () => {
     animationComponent: RiveComponent,
     currentAnimation,
     handleNextAnimation,
+    isLoading: !rive,
   };
 };

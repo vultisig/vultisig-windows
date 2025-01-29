@@ -10,10 +10,10 @@ export const VaultUnlock = () => {
   return (
     <AnimatedVisibility>
       <TextWrapper>
-        <Text as="span" variant="h1Regular">
+        <Text as="span" size={48}>
           {t('recoverYourVault')}{' '}
         </Text>
-        <GradientText as="span" variant="h1Regular">
+        <GradientText as="span" size={48}>
           {t('deviceLostOrDamaged')}
         </GradientText>
       </TextWrapper>
