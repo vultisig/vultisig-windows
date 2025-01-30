@@ -2,6 +2,7 @@ import { TW } from '@trustwallet/wallet-core';
 import { createHash } from 'crypto';
 
 import { Post } from '../../../../wailsjs/go/utils/GoHttp';
+import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
 import { CosmosChain } from '../../../model/chain';
 import { getCosmosTxBroadcastUrl } from '../../cosmos/cosmosRpcUrl';
 import { ExecuteTxInput } from './ExecuteTxInput';
@@ -11,6 +12,8 @@ export const executeCosmosTx = async ({
   compiledTx,
 }: ExecuteTxInput<CosmosChain>): Promise<string> => {
   const output = TW.Cosmos.Proto.SigningOutput.decode(compiledTx);
+
+  assertErrorMessage(output.errorMessage);
 
   const rawTx = output.serialized;
   const parsedData = JSON.parse(rawTx);
