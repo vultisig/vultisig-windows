@@ -71,7 +71,7 @@ export const OnboardingSteps = () => {
             onClick={() => navigate('setupVault', { params: {} })}
           >
             <IconButton icon={<ChevronLeftIcon width={24} height={24} />} />
-            <Text size={18}>{t('intro')}</Text>
+            <Text size={18}>{t('introOnboarding')}</Text>
           </HStack>
           <UnstyledButton onClick={handleOnboardingFinish}>
             <Text color="shy" size={18}>
