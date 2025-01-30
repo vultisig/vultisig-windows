@@ -123,7 +123,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
             background: ${getHoverVariant('primary')};
           `,
           secondary: () => css`
-            background: ${getHoverVariant('buttonSecondaryHover')};
+            background: ${getHoverVariant('foregroundSuperContrast')};
           `,
           outlined: () => css``,
           ghost: () => css`
