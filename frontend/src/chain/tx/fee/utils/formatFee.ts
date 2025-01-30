@@ -3,8 +3,8 @@ import { isOneOf } from '../../../../lib/utils/array/isOneOf';
 import { formatAmount } from '../../../../lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '../../../../lib/utils/matchDiscriminatedUnion';
 import { Chain, EvmChain } from '../../../../model/chain';
+import { cosmosGasLimitRecord } from '../../../cosmos/cosmosGasLimitRecord';
 import { KeysignChainSpecific } from '../../../keysign/KeysignChainSpecific';
-import { mayaConfig } from '../../../maya/config';
 import { polkadotConfig } from '../../../polkadot/config';
 import { rippleConfig } from '../../../ripple/config';
 import { tonConfig } from '../../../ton/config';
@@ -28,7 +28,7 @@ export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
       suicheSpecific: ({ referenceGasPrice }) => BigInt(referenceGasPrice),
       solanaSpecific: ({ priorityFee }) => BigInt(priorityFee),
       thorchainSpecific: ({ fee }) => BigInt(fee),
-      mayaSpecific: () => mayaConfig.fee,
+      mayaSpecific: () => BigInt(cosmosGasLimitRecord[Chain.MayaChain]),
       cosmosSpecific: ({ gas }) => BigInt(gas),
       polkadotSpecific: () => polkadotConfig.fee,
       tonSpecific: () => tonConfig.fee,
