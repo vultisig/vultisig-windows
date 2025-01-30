@@ -1,4 +1,4 @@
-import { ethers, TransactionRequest } from 'ethers';
+import { ethers } from 'ethers';
 
 import { getEvmChainRpcUrl } from '../../../chain/evm/chainInfo';
 import { getErc20Balance } from '../../../chain/evm/erc20/getErc20Balance';
@@ -88,73 +88,5 @@ export class RpcServiceEvm implements IRpcService {
       console.error('getGasHistory::', error);
       return [];
     }
-  }
-
-  async estimateGas(
-    senderAddress: string,
-    recipientAddress: string,
-    value: bigint,
-    memo?: string
-  ): Promise<bigint> {
-    try {
-      const transactionObject: TransactionRequest = {
-        from: senderAddress,
-        to: recipientAddress,
-        value: value,
-        data: memo ? ethers.hexlify(ethers.toUtf8Bytes(memo)) : '0x',
-      };
-
-      const gasEstimate = await this.provider.estimateGas(transactionObject);
-      return BigInt(gasEstimate.toString());
-    } catch (error) {
-      console.error('estimateGas::', error);
-      return BigInt(0);
-    }
-  }
-
-  async getTokenInfo(
-    contractAddress: string
-  ): Promise<{ name: string; symbol: string; decimals: number }> {
-    try {
-      const erc20Contract = new ethers.Contract(
-        contractAddress,
-        [
-          'function name() view returns (string)',
-          'function symbol() view returns (string)',
-          'function decimals() view returns (uint8)',
-        ],
-        this.provider
-      );
-
-      const [name, symbol, decimals] = await Promise.all([
-        erc20Contract.name(),
-        erc20Contract.symbol(),
-        erc20Contract.decimals(),
-      ]);
-
-      return { name, symbol, decimals: decimals };
-    } catch (error) {
-      console.error('getTokenInfo::', error);
-      return { name: '', symbol: '', decimals: 0 };
-    }
-  }
-
-  sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  private constructERC20TransferData(
-    recipientAddress: string,
-    value: bigint
-  ): string {
-    const methodId = 'a9059cbb'; // Method ID for `transfer(address,uint256)`
-
-    const strippedRecipientAddress = recipientAddress.replace(/^0x/, '');
-    const paddedAddress = strippedRecipientAddress.padStart(64, '0');
-
-    const valueHex = value.toString(16);
-    const paddedValue = valueHex.padStart(64, '0');
-
-    return '0x' + methodId + paddedAddress + paddedValue;
   }
 }
