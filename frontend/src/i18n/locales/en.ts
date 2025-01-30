@@ -423,6 +423,18 @@ export const en = {
   part_n_of_m: 'Part {{n}} of {{m}}',
   password_to_decrypt: 'This Password decrypts your FastVault Share',
   fast_vault_password: 'FastVault Password',
+  alwaysBackUpEachVaultShare: 'Always back up each vault share',
+  separatelyIna: 'separately in a',
+  differentLocation: 'different location',
+  eachDevice: 'Each device',
+  inYourVaultHolds: 'in your vault holds',
+  oneVaultShare: 'one vault share',
+  theyRe: 'They’re',
+  splitIntoParts: 'split into parts',
+  toIncreaseSecurity: 'to increase security and',
+  removeSinglePointOfFailure: 'remove single point-of-failure',
+  theseSharesCollaborate: 'These shares collaborate to',
+  unlockYourVault: 'unlock your vault',
   vault_missing_public_key_message:
     'Vault file is corrupted or missing a public key. Please try again or select a different vault.',
   min_signers_disclaimer:
