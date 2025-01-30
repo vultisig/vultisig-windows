@@ -17,10 +17,6 @@ export const generateSignature = ({
   signature,
   signatureFormat,
 }: Input) => {
-  console.log('generate signature: ', {
-    signatureFormat,
-    signature,
-  });
   return match(signatureFormat, {
     rawWithRecoveryId: () => {
       const { r, s, recovery_id } = recordMap(
