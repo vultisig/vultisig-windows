@@ -32,7 +32,7 @@ jobs:
           submodules: recursive
 
       - name: Build wails
-        uses: dAppServer/wails-build-action@v2.2
+        uses: csbzy/wails-build-action@v2.6
         id: build
         with:
           build-name: ${{ matrix.build.name }}
