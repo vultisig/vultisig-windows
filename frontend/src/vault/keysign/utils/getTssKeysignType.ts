@@ -1,10 +1,9 @@
 import {
-  edDsaChains,
   TssKeysignType,
+  tssKeysignTypeRecord,
 } from '../../../chain/keysign/TssKeysignType';
-import { isOneOf } from '../../../lib/utils/array/isOneOf';
-import { Chain } from '../../../model/chain';
+import { Chain, getChainKind } from '../../../model/chain';
 
 export const getTssKeysignType = (chain: Chain): TssKeysignType => {
-  return isOneOf(chain, edDsaChains) ? 'eddsa' : 'ecdsa';
+  return tssKeysignTypeRecord[getChainKind(chain)];
 };
