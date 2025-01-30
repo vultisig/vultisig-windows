@@ -23,6 +23,8 @@ export const it = {
   removeSinglePointOfFailure: 'eliminare il singolo punto di guasto',
   theseSharesCollaborate: 'Queste quote collaborano per',
   unlockYourVault: 'sbloccare il tuo caveau',
+  chooseSetup: 'Scegli configurazione',
+  introOnboarding: 'Bevezető',
   sayHelloTo: 'Dì ciao a',
   recoverYourVault: 'Recupera la tua cassaforte anche',
   deviceLostOrDamaged: 'se un dispositivo è perso o danneggiato',
@@ -103,10 +105,10 @@ export const it = {
   information_note1:
     'Mantieni i dispositivi sulla stessa rete Wi-Fi, cassaforte corretta e accoppia i dispositivi.',
   secureVault: 'Secure Vault',
-  secure_vault_setup_prop_0:
-    '2of3, 3of4, 4of6 configurazioni dispositivo disponibili',
-  secure_vault_setup_prop_1: 'Un backup per dispositivo',
-  secure_vault_setup_prop_2: 'Ridondante, sicuro',
+  secure_vault_setup_title: 'Sicurezza Ultimata',
+  secure_vault_setup_prop_0: 'Controllo totale, solo i tuoi dispositivi',
+  secure_vault_setup_prop_1: 'Più dispositivi per firmare transazioni',
+  secure_vault_setup_prop_2: 'Usare come caveau freddo',
   save_changes: 'Salva modifiche',
   information_note2:
     'Assicurati che nessun altro dispositivo stia eseguendo Vultisig.',
@@ -397,9 +399,11 @@ export const it = {
   fast: 'Veloce',
   secure: 'Sicuro',
   active: 'Attivo',
-  fast_vault_setup_prop_0: 'Configurazione di un singolo dispositivo',
-  fast_vault_setup_prop_1: 'Avvisi e politiche sulle transazioni',
-  fast_vault_setup_prop_2: 'Backup del Vault inviato tramite e-mail',
+  fast_vault_setup_title: 'Configurazione veloce, 1 dispositivo',
+  fast_vault_setup_prop_0: 'È necessario solo 1 dispositivo',
+  fast_vault_setup_prop_1: 'Conserva piccoli fondi per azioni rapide',
+  fast_vault_setup_prop_2:
+    'La cassaforte dipende dalla disponibilità del server',
   active_vault_setup_prop_0: 'Firma veloce in movimento',
   active_vault_setup_prop_1: 'Avvisi e politiche sulle transazioni',
   active_vault_setup_prop_2: 'Completamente auto-affidabile',
