@@ -3,11 +3,15 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { IconButton } from '../../../lib/ui/buttons/IconButton';
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
+import { MultistepProgressIndicator } from '../../../lib/ui/flow/MultistepProgressIndicator';
+import { ChevronLeftIcon } from '../../../lib/ui/icons/ChevronLeftIcon';
 import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon';
-import { VStack } from '../../../lib/ui/layout/Stack';
+import { HStack, VStack } from '../../../lib/ui/layout/Stack';
+import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { PageContent } from '../../../ui/page/PageContent';
-import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
 import { AnimationDescription } from './AnimationDescriptions';
 import { useOnboardingStepsAnimations } from './hooks/useOnboardingStepsAnimations';
 import { RiveWrapper } from './Onobarding.styled';
@@ -30,6 +34,11 @@ const NextAnimationButton = styled(IconButton)`
   }
 `;
 
+const ProgressWrapper = styled(VStack)`
+  margin-inline: auto;
+  margin-top: 48px;
+`;
+
 export type SharedOnboardingScreensProps = {
   animationComponent: (props: ComponentProps<'canvas'>) => JSX.Element;
   onNextAnimation: () => void;
@@ -37,8 +46,8 @@ export type SharedOnboardingScreensProps = {
 
 export const OnboardingSteps = () => {
   const [, setIsOnboarded] = useOnboardingCompletion();
-
   const { t } = useTranslation();
+  const navigate = useAppNavigate();
   const {
     animations,
     handleNextAnimation,
@@ -47,33 +56,56 @@ export const OnboardingSteps = () => {
     isLoading,
   } = useOnboardingStepsAnimations();
 
-  const currentIndex = animations.indexOf(currentAnimation);
-  const progressRaw = (currentIndex + 1) / animations.length;
   const lastAnimation = animations[animations.length - 1];
+
+  const handleOnboardingFinish = () => setIsOnboarded(true);
 
   return (
     <PageContent>
-      <WithProgressIndicator value={progressRaw}>
-        <VStack justifyContent="space-between" flexGrow>
-          <RiveWrapper>
-            <AnimationComponent />
-          </RiveWrapper>
-          <VStack gap={12}>
-            <AnimationDescription animation={currentAnimation} />
-            <NextAnimationButton
-              disabled={isLoading}
-              icon={<ChevronRightIcon />}
-              onClick={
-                currentAnimation !== lastAnimation
-                  ? handleNextAnimation
-                  : () => setIsOnboarded(true)
-              }
-            >
-              {t('tap')}
-            </NextAnimationButton>
-          </VStack>
+      <ProgressWrapper gap={16}>
+        <HStack justifyContent="space-between" alignItems="baseline">
+          <HStack
+            as="button"
+            alignItems="center"
+            gap={4}
+            onClick={() => navigate('setupVault', { params: {} })}
+          >
+            <IconButton icon={<ChevronLeftIcon width={24} height={24} />} />
+            <Text size={18}>{t('intro')}</Text>
+          </HStack>
+          <UnstyledButton onClick={handleOnboardingFinish}>
+            <Text color="shy" size={18}>
+              {t('skip')}
+            </Text>
+          </UnstyledButton>
+        </HStack>
+        <MultistepProgressIndicator
+          markPreviousStepsAsCompleted
+          steps={6}
+          stepWidth={`100px`}
+          value={animations.indexOf(currentAnimation) + 1}
+          variant="bars"
+        />
+      </ProgressWrapper>
+      <VStack justifyContent="space-between" flexGrow>
+        <RiveWrapper>
+          <AnimationComponent />
+        </RiveWrapper>
+        <VStack gap={12}>
+          <AnimationDescription animation={currentAnimation} />
+          <NextAnimationButton
+            disabled={isLoading}
+            icon={<ChevronRightIcon />}
+            onClick={
+              currentAnimation !== lastAnimation
+                ? handleNextAnimation
+                : handleOnboardingFinish
+            }
+          >
+            {t('tap')}
+          </NextAnimationButton>
         </VStack>
-      </WithProgressIndicator>
+      </VStack>
     </PageContent>
   );
 };
