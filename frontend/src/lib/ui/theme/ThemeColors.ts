@@ -12,6 +12,7 @@ export type ThemeColors = {
   foreground: HSLA;
   foregroundExtra: HSLA;
   foregroundSuper: HSLA;
+  foregroundSuperContrast: HSLA;
   overlay: HSLA;
   contrast: HSLA;
   success: HSLA;
@@ -21,7 +22,6 @@ export type ThemeColors = {
   white: HSLA;
   danger: HSLA;
   buttonBackgroundDisabled: HSLA;
-  buttonSecondaryHover: HSLA;
 };
 
 export type ThemeGradients = {
