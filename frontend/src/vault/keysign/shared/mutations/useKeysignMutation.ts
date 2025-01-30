@@ -94,8 +94,6 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 signatures: signaturesRecord,
               });
 
-              console.log('compiledTx', compiledTx);
-
               return executeTx({
                 compiledTx,
                 walletCore,
