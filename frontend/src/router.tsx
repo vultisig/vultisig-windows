@@ -42,7 +42,6 @@ import { FastReshareVaultPage } from './vault/reshare/fast/FastReshareVaultPage'
 import { ReshareVaultPage } from './vault/reshare/ReshareVaultPage';
 import { SecureReshareVaultPage } from './vault/reshare/secure/SecureReshareVaultPage';
 import { SendPage } from './vault/send/SendPage';
-import { SetupActiveVaultPage } from './vault/setup/active/SetupActiveVaultPage';
 import { SetupFastVaultPage } from './vault/setup/fast/SetupFastVaultPage';
 import { OnboardingCompletionProvider } from './vault/setup/onboarding/state/OnboardingCompletionProvider';
 import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage';
@@ -93,10 +92,6 @@ export const router = createBrowserRouter([
       {
         path: appPaths.setupFastVault,
         element: <SetupFastVaultPage />,
-      },
-      {
-        path: appPaths.setupActiveVault,
-        element: <SetupActiveVaultPage />,
       },
       {
         path: appPaths.setupSecureVault,

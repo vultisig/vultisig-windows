@@ -43,14 +43,13 @@ const Dot = styled.div`
 export const SetupVaultPage = () => {
   const { t } = useTranslation();
   const [value, setValue] = useSetupVaultType();
-
   const navigate = useAppNavigate();
+
   const onStart = useCallback(() => {
     navigate(
       match(value, {
         fast: () => 'setupFastVault',
         secure: () => 'setupSecureVault',
-        active: () => 'setupActiveVault',
       })
     );
   }, [navigate, value]);
@@ -72,7 +71,6 @@ export const SetupVaultPage = () => {
           <UniformColumnGrid fullWidth gap={8}>
             {setupVaultTypes.map(option => {
               const text = t(option).toUpperCase();
-
               const isSelected = value === option;
 
               return (
