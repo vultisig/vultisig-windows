@@ -4,7 +4,7 @@ import { ComponentWithChildrenProps } from '../lib/ui/props';
 import { useAppNavigate } from '../navigation/hooks/useAppNavigate';
 import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding';
 
-export const CompletedOnboardingOnly = ({
+export const CompletedOnboardingProvider = ({
   children,
 }: ComponentWithChildrenProps) => {
   const [hasCompletedOnboarding] = useHasFinishedOnboarding();

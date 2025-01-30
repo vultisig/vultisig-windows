@@ -6,7 +6,6 @@ import { ErrorBoundary } from './errors/components/ErrorBoundary';
 import { FullSizeErrorFallback } from './errors/components/FullSizeErrorFallback';
 import { LauncherObserver } from './launcher/components/LauncherObserver';
 import { appPaths } from './navigation';
-import { CompletedOnboardingOnly } from './onboarding/CompletedOnboardingOnly';
 import { OnboardingPage } from './onboarding/components/OnboardingPage';
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
 import EditVaultPage from './pages/edItVault/EditVaultPage';
@@ -43,7 +42,6 @@ import { ReshareVaultPage } from './vault/reshare/ReshareVaultPage';
 import { SecureReshareVaultPage } from './vault/reshare/secure/SecureReshareVaultPage';
 import { SendPage } from './vault/send/SendPage';
 import { SetupFastVaultPage } from './vault/setup/fast/SetupFastVaultPage';
-import { OnboardingCompletionProvider } from './vault/setup/onboarding/state/OnboardingCompletionProvider';
 import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage';
 import { SetupVaultPageController } from './vault/setup/SetupVaultPageController';
 import { ShareVaultPage } from './vault/share/ShareVaultPage';
@@ -71,9 +69,7 @@ export const router = createBrowserRouter([
         path: appPaths.root,
         element: (
           <EmptyVaultsOnly>
-            <CompletedOnboardingOnly>
-              <NoVaultsHomePage />
-            </CompletedOnboardingOnly>
+            <NoVaultsHomePage />
           </EmptyVaultsOnly>
         ),
       },
@@ -99,11 +95,7 @@ export const router = createBrowserRouter([
       },
       {
         path: appPaths.setupVault,
-        element: (
-          <OnboardingCompletionProvider>
-            <SetupVaultPageController />
-          </OnboardingCompletionProvider>
-        ),
+        element: <SetupVaultPageController />,
       },
       {
         path: appPaths.importVault,
