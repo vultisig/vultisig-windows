@@ -1,10 +1,14 @@
-import { Chain } from '../../model/chain';
+import { ChainKind } from '../../model/chain';
 
 export type TssKeysignType = 'ecdsa' | 'eddsa';
 
-export const edDsaChains = [
-  Chain.Solana,
-  Chain.Polkadot,
-  Chain.Sui,
-  Chain.Ton,
-] as const;
+export const tssKeysignTypeRecord: Record<ChainKind, TssKeysignType> = {
+  evm: 'ecdsa',
+  utxo: 'ecdsa',
+  cosmos: 'ecdsa',
+  sui: 'eddsa',
+  solana: 'eddsa',
+  polkadot: 'eddsa',
+  ton: 'eddsa',
+  ripple: 'ecdsa',
+};

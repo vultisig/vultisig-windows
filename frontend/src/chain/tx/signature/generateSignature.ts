@@ -28,7 +28,7 @@ export const generateSignature = ({
     },
     raw: () => {
       const { r, s } = recordMap(pick(signature, ['r', 's']), value =>
-        walletCore.HexCoding.decode(value)
+        walletCore.HexCoding.decode(value).reverse()
       );
 
       return new Uint8Array([...r, ...s]);
