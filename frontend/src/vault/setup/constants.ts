@@ -1,1 +1,0 @@
-export const ARE_FAST_AND_ACTIVE_VAULTS_DISABLED = true;

@@ -1,10 +1,7 @@
 import { range } from '../../../lib/utils/array/range';
 
-const allSetupVaultTypes = ['fast', 'active', 'secure'] as const;
-const disabledSetupVaultTypes = new Set(['fast', 'active']);
-export const setupVaultTypes = allSetupVaultTypes.filter(
-  type => !disabledSetupVaultTypes.has(type)
-);
+export const setupVaultTypes = ['fast', 'secure'] as const;
+
 export type SetupVaultType = (typeof setupVaultTypes)[number];
 
 export const defaultSetupVaultType: SetupVaultType = 'secure';
