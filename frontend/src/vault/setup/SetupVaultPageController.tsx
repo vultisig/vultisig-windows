@@ -1,9 +1,9 @@
+import { useHasFinishedOnboarding } from '../../onboarding/hooks/useHasFinishedOnboarding';
 import { OnboardingController } from './onboarding/OnboardingController';
-import { useOnboardingCompletion } from './onboarding/state/OnboardingCompletionProvider';
 import { SetupVaultPage } from './SetupVaultPage';
 
 export const SetupVaultPageController = () => {
-  const [isOnboarded] = useOnboardingCompletion();
+  const [hasFinishedOnboarding] = useHasFinishedOnboarding();
 
-  return isOnboarded ? <SetupVaultPage /> : <OnboardingController />;
+  return hasFinishedOnboarding ? <SetupVaultPage /> : <OnboardingController />;
 };

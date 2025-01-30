@@ -11,11 +11,11 @@ import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
+import { useHasFinishedOnboarding } from '../../../onboarding/hooks/useHasFinishedOnboarding';
 import { PageContent } from '../../../ui/page/PageContent';
 import { AnimationDescription } from './AnimationDescriptions';
 import { useOnboardingStepsAnimations } from './hooks/useOnboardingStepsAnimations';
 import { RiveWrapper } from './Onobarding.styled';
-import { useOnboardingCompletion } from './state/OnboardingCompletionProvider';
 
 const NextAnimationButton = styled(IconButton)`
   flex-shrink: 0;
@@ -45,9 +45,10 @@ export type SharedOnboardingScreensProps = {
 };
 
 export const OnboardingSteps = () => {
-  const [, setIsOnboarded] = useOnboardingCompletion();
+  const [, setHasFinishedOnboarding] = useHasFinishedOnboarding();
   const { t } = useTranslation();
   const navigate = useAppNavigate();
+
   const {
     animations,
     handleNextAnimation,
@@ -57,8 +58,7 @@ export const OnboardingSteps = () => {
   } = useOnboardingStepsAnimations();
 
   const lastAnimation = animations[animations.length - 1];
-
-  const handleOnboardingFinish = () => setIsOnboarded(true);
+  const handleOnboardingFinish = () => setHasFinishedOnboarding(true);
 
   return (
     <PageContent>
