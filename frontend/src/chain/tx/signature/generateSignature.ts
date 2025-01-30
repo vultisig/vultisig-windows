@@ -4,22 +4,19 @@ import { tss } from '../../../../wailsjs/go/models';
 import { match } from '../../../lib/utils/match';
 import { pick } from '../../../lib/utils/record/pick';
 import { recordMap } from '../../../lib/utils/record/recordMap';
-import {
-  Chain,
-  getChainKind,
-  signatureFormatRecord,
-} from '../../../model/chain';
+import { SignatureFormat } from '../../../model/chain';
 
 type Input = {
   walletCore: WalletCore;
   signature: tss.KeysignResponse;
-  chain: Chain;
+  signatureFormat: SignatureFormat;
 };
 
-export const generateSignature = ({ walletCore, signature, chain }: Input) => {
-  const chainKind = getChainKind(chain);
-  const signatureFormat = signatureFormatRecord[chainKind];
-
+export const generateSignature = ({
+  walletCore,
+  signature,
+  signatureFormat,
+}: Input) => {
   return match(signatureFormat, {
     rawWithRecoveryId: () => {
       const { r, s, recovery_id } = recordMap(

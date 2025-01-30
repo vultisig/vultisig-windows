@@ -2,7 +2,11 @@ import { WalletCore } from '@trustwallet/wallet-core';
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 import { tss } from '../../../../wailsjs/go/models';
-import { Chain } from '../../../model/chain';
+import {
+  Chain,
+  getChainKind,
+  signatureFormatRecord,
+} from '../../../model/chain';
 import { assertSignature } from '../../utils/assertSignature';
 import { getCoinType } from '../../walletCore/getCoinType';
 import { hexEncode } from '../../walletCore/hexEncode';
@@ -24,31 +28,37 @@ export const compileTx = ({
   chain,
   walletCore,
 }: Input) => {
+  const hashes = getPreSigningHashes({
+    walletCore,
+    txInputData,
+    chain,
+  });
+
   const allSignatures = walletCore.DataVector.create();
   const publicKeys = walletCore.DataVector.create();
 
-  const hashes = getPreSigningHashes({
-    walletCore: walletCore,
-    txInputData,
-    chain: chain,
-  });
-
   hashes.forEach(hash => {
+    const chainKind = getChainKind(chain);
+    const signatureFormat = signatureFormatRecord[chainKind];
+
     const signature = generateSignature({
       walletCore,
       signature: signatures[hexEncode({ value: hash, walletCore })],
-      chain,
+      signatureFormat,
     });
 
     assertSignature({
       publicKey,
       message: hash,
       signature,
-      chain,
+      signatureFormat,
     });
 
     allSignatures.add(signature);
-    publicKeys.add(publicKey.data());
+
+    if (signatureFormat !== 'rawWithRecoveryId') {
+      publicKeys.add(publicKey.data());
+    }
   });
 
   const coinType = getCoinType({

@@ -13,6 +13,8 @@ import { getLastItem } from '../../../../lib/utils/array/getLastItem';
 import { matchRecordUnion } from '../../../../lib/utils/matchRecordUnion';
 import { chainPromises } from '../../../../lib/utils/promise/chainPromises';
 import { recordFromItems } from '../../../../lib/utils/record/recordFromItems';
+import { getChainKind } from '../../../../model/chain';
+import { signatureFormatRecord } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
 import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
@@ -92,6 +94,8 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 signatures: signaturesRecord,
               });
 
+              console.log('compiledTx', compiledTx);
+
               return executeTx({
                 compiledTx,
                 walletCore,
@@ -118,10 +122,13 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             customMessageConfig.tssType
           );
 
+          const signatureFormat =
+            signatureFormatRecord[getChainKind(customMessageConfig.chain)];
+
           const result = generateSignature({
             walletCore,
             signature,
-            chain: customMessageConfig.chain,
+            signatureFormat,
           });
 
           return Buffer.from(result).toString('hex');
