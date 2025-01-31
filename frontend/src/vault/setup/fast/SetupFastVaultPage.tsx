@@ -13,6 +13,8 @@ import { ServerEmailStep } from '../../server/email/ServerEmailStep';
 import { EmailProvider } from '../../server/email/state/email';
 import { SetServerPasswordStep } from '../../server/password/SetServerPasswordStep';
 import { PasswordProvider } from '../../server/password/state/password';
+import { ServerPasswordHintStep } from '../../server/password-hint/ServerPasswordHintStep';
+import { PasswordHintProvider } from '../../server/password-hint/state/password-hint';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
 import { SetupVaultKeygenStep } from '../shared/SetupVaultKeygenStep';
 import { VaultTypeProvider } from '../shared/state/vaultType';
@@ -22,14 +24,13 @@ import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryption
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType';
 import { SetupVaultNameProvider } from '../state/vaultName';
 import { SetupVaultServerStep } from './SetupVaultServerStep';
-import { SetupVaultWaitServerStep } from './SetupVaultWaitServerStep';
 
 const steps = [
   'name',
   'email',
   'password',
+  'hint',
   'server',
-  'waitServer',
   'startSession',
   'keygen',
 ] as const;
@@ -59,50 +60,52 @@ export const SetupFastVaultPage = () => {
                               <CurrentKeygenTypeProvider
                                 value={KeygenType.Keygen}
                               >
-                                <Match
-                                  value={step}
-                                  name={() => (
-                                    <SetupVaultNameStep
-                                      onForward={toNextStep}
-                                    />
-                                  )}
-                                  email={() => (
-                                    <ServerEmailStep
-                                      onBack={toPreviousStep}
-                                      onForward={toNextStep}
-                                    />
-                                  )}
-                                  password={() => (
-                                    <SetServerPasswordStep
-                                      onBack={toPreviousStep}
-                                      onForward={toNextStep}
-                                    />
-                                  )}
-                                  server={() => (
-                                    <SetupVaultServerStep
-                                      onBack={() => setStep(lastEditableStep)}
-                                      onForward={toNextStep}
-                                    />
-                                  )}
-                                  waitServer={() => (
-                                    <SetupVaultWaitServerStep
-                                      onBack={() => setStep(lastEditableStep)}
-                                      onForward={toNextStep}
-                                    />
-                                  )}
-                                  startSession={() => (
-                                    <KeygenStartSessionStep
-                                      onBack={() => setStep(lastEditableStep)}
-                                      onForward={toNextStep}
-                                    />
-                                  )}
-                                  keygen={() => (
-                                    <SetupVaultKeygenStep
-                                      onTryAgain={() => setStep(steps[0])}
-                                      onBack={() => setStep(lastEditableStep)}
-                                    />
-                                  )}
-                                />
+                                <PasswordHintProvider initialValue="">
+                                  <Match
+                                    value={step}
+                                    name={() => (
+                                      <SetupVaultNameStep
+                                        onForward={toNextStep}
+                                      />
+                                    )}
+                                    email={() => (
+                                      <ServerEmailStep
+                                        onBack={toPreviousStep}
+                                        onForward={toNextStep}
+                                      />
+                                    )}
+                                    password={() => (
+                                      <SetServerPasswordStep
+                                        onBack={toPreviousStep}
+                                        onForward={toNextStep}
+                                      />
+                                    )}
+                                    hint={() => (
+                                      <ServerPasswordHintStep
+                                        onBack={toPreviousStep}
+                                        onForward={toNextStep}
+                                      />
+                                    )}
+                                    server={() => (
+                                      <SetupVaultServerStep
+                                        onBack={() => setStep(lastEditableStep)}
+                                        onForward={toNextStep}
+                                      />
+                                    )}
+                                    startSession={() => (
+                                      <KeygenStartSessionStep
+                                        onBack={() => setStep(lastEditableStep)}
+                                        onForward={toNextStep}
+                                      />
+                                    )}
+                                    keygen={() => (
+                                      <SetupVaultKeygenStep
+                                        onTryAgain={() => setStep(steps[0])}
+                                        onBack={() => setStep(lastEditableStep)}
+                                      />
+                                    )}
+                                  />
+                                </PasswordHintProvider>
                               </CurrentKeygenTypeProvider>
                             </StartKeygenVaultProvider>
                           </SetupVaultNameProvider>
