@@ -3,7 +3,15 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement';
 import { Button } from '../../../lib/ui/buttons/Button';
+import { iconButtonIconSizeRecord } from '../../../lib/ui/buttons/IconButton';
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
+import {
+  textInputHeight,
+  textInputHorizontalPadding,
+} from '../../../lib/ui/css/textInput';
+import { CircledCloseIcon } from '../../../lib/ui/icons/CircledCloseIcon';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import {
@@ -65,15 +73,29 @@ export const ServerEmailStep = ({
             </Text>
           </VStack>
           <VStack gap={4}>
-            <TextInput
-              {...register('email')}
-              withResetValueBtn
-              isValid={isValid}
-              isInvalid={!!errors.email}
-              placeholder={t('email')}
-              autoFocus
-              onValueChange={value => setValue('email', value)}
+            <ActionInsideInteractiveElement
+              render={() => (
+                <TextInput
+                  {...register('email')}
+                  validationState={
+                    isValid ? 'valid' : errors.email ? 'invalid' : undefined
+                  }
+                  placeholder={t('email')}
+                  autoFocus
+                  onValueChange={value => setValue('email', value)}
+                />
+              )}
+              action={
+                <UnstyledButton onClick={() => setValue('email', '')}>
+                  <CircledCloseIcon />
+                </UnstyledButton>
+              }
+              actionPlacerStyles={{
+                right: textInputHorizontalPadding,
+                bottom: (textInputHeight - iconButtonIconSizeRecord.l) / 2,
+              }}
             />
+
             {errors.email && errors.email.message && (
               <Text color="danger" size={12}>
                 {t(errors.email.message)}
