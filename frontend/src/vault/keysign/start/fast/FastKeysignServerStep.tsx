@@ -18,7 +18,7 @@ import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
 import { signWithServer } from '../../../fast/api/signWithServer';
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
-import { WaitForServerLoader } from '../../../server/components/WaitForServerLoader';
+import { WaitForServerStates } from '../../../server/components/WaitForServerLoader';
 import { useVaultPassword } from '../../../server/password/state/password';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { useCurrentVault } from '../../../state/currentVault';
@@ -119,13 +119,13 @@ export const FastKeysignServerStep: React.FC<
         pending={() => (
           <>
             {header}
-            <WaitForServerLoader />
+            <WaitForServerStates state="pending" />
           </>
         )}
         success={() => (
           <>
             {header}
-            <WaitForServerLoader />
+            <WaitForServerStates state="success" />
           </>
         )}
         error={error => (
