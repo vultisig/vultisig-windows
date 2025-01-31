@@ -17,15 +17,12 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { useVaultEmail } from './state/email';
 
-{
-  // TODO: translations
-}
 const emailSchema = z.object({
   email: z
     .string()
-    .min(1, { message: 'Email is required' })
+    .min(1, { message: 'emailRequired' })
     .refine(val => !validateEmail(val), {
-      message: 'Incorrect e-mail, please check',
+      message: 'emailIncorrect',
     }),
 });
 
@@ -62,12 +59,9 @@ export const ServerEmailStep = ({
       <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
         <VStack flexGrow gap={16}>
           <VStack>
-            {
-              // TODO: translations
-            }
-            <Text variant="h1Regular">Enter your e-mail</Text>
+            <Text variant="h1Regular">{t('enterEmail')}</Text>
             <Text size={14} color="shy">
-              This email is only used to send the backup of the server
+              {t('emailSetupTitle')}
             </Text>
           </VStack>
           <VStack gap={4}>
@@ -80,9 +74,9 @@ export const ServerEmailStep = ({
               autoFocus
               onValueChange={value => setValue('email', value)}
             />
-            {errors.email && (
+            {errors.email && errors.email.message && (
               <Text color="danger" size={12}>
-                {errors.email.message}
+                {t(errors.email.message)}
               </Text>
             )}
           </VStack>

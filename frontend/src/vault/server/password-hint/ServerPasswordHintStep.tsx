@@ -17,11 +17,8 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { useVaultPasswordHint } from './state/password-hint';
 
-{
-  // TODO: translations
-}
 const passwordHintSchema = z.object({
-  passwordHint: z.string().min(1, { message: 'Hint is empty' }),
+  passwordHint: z.string().min(1, { message: 'hintEmpty' }),
 });
 
 type PasswordHintSchema = z.infer<typeof passwordHintSchema>;
@@ -57,12 +54,9 @@ export const ServerPasswordHintStep = ({
       <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
         <VStack flexGrow gap={16}>
           <VStack>
-            {
-              // TODO: translations
-            }
-            <Text variant="h1Regular">Add optional hint</Text>
+            <Text variant="h1Regular">{t('addOptionalHint')}</Text>
             <Text size={14} color="shy">
-              This will be shown in case your forget your password
+              {t('hintDescription')}
             </Text>
           </VStack>
           <VStack gap={4}>
@@ -71,14 +65,13 @@ export const ServerPasswordHintStep = ({
               withResetValueBtn
               isValid={isValid}
               isInvalid={!!errors.passwordHint}
-              // TODO: translations
-              placeholder="Enter hint"
+              placeholder={t('enterHint')}
               autoFocus
               onValueChange={value => setValue('passwordHint', value)}
             />
-            {errors.passwordHint && (
+            {errors.passwordHint && errors.passwordHint.message && (
               <Text color="danger" size={12}>
-                {errors.passwordHint.message}
+                {t(errors.passwordHint.message)}
               </Text>
             )}
           </VStack>
