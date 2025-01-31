@@ -47,6 +47,7 @@ export const TxOverviewChainDataRow = styled(TxOverviewRow)`
       size: 13,
       weight: 700,
     })}
+    word-break: break-word;
   }
 `;
 
