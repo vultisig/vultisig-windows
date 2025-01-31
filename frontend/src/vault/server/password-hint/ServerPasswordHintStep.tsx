@@ -18,7 +18,7 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { useVaultPasswordHint } from './state/password-hint';
 
 const passwordHintSchema = z.object({
-  passwordHint: z.string().min(1, { message: 'hintEmpty' }),
+  passwordHint: z.string().min(1, { message: 'fastVaultSetup.hintEmpty' }),
 });
 
 type PasswordHintSchema = z.infer<typeof passwordHintSchema>;
@@ -54,9 +54,11 @@ export const ServerPasswordHintStep = ({
       <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
         <VStack flexGrow gap={16}>
           <VStack>
-            <Text variant="h1Regular">{t('addOptionalHint')}</Text>
+            <Text variant="h1Regular">
+              {t('fastVaultSetup.addOptionalHint')}
+            </Text>
             <Text size={14} color="shy">
-              {t('hintDescription')}
+              {t('fastVaultSetup.hintDescription')}
             </Text>
           </VStack>
           <VStack gap={4}>
@@ -65,7 +67,7 @@ export const ServerPasswordHintStep = ({
               withResetValueBtn
               isValid={isValid}
               isInvalid={!!errors.passwordHint}
-              placeholder={t('enterHint')}
+              placeholder={t('fastVaultSetup.enterHint')}
               autoFocus
               onValueChange={value => setValue('passwordHint', value)}
             />
