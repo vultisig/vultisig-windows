@@ -8,7 +8,7 @@ import { useCurrentLocalPartyId } from '../../../state/currentLocalPartyId';
 import { useCurrentServerUrl } from '../../../state/currentServerUrl';
 import { useCurrentSessionId } from '../../state/currentSessionId';
 
-export const usePeerOptionsQuery = () => {
+export const usePeerOptionsQuery = ({ enabled = true } = {}) => {
   const sessionId = useCurrentSessionId();
   const localPartyId = useCurrentLocalPartyId();
   const serverUrl = useCurrentServerUrl();
@@ -20,6 +20,7 @@ export const usePeerOptionsQuery = () => {
 
       return without(withoutDuplicates(response), localPartyId);
     },
+    enabled,
     ...pollingQueryOptions(2000),
   });
 };
