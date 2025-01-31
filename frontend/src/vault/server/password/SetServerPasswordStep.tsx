@@ -24,14 +24,13 @@ const PasswordWarningBlock = styled(WarningBlock)`
   font-size: 13px;
 `;
 
-// TODO: translations
 const passwordSchema = z
   .object({
-    password: z.string().min(1, 'Password is required'),
-    confirmPassword: z.string().min(1, 'Confirm password is required'),
+    password: z.string().min(1, 'passwordRequired'),
+    confirmPassword: z.string().min(1, 'confirmPasswordIsRequired'),
   })
   .refine(data => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
+    message: 'passwordDoNotMatch',
     path: ['confirmPassword'],
   });
 
@@ -72,13 +71,9 @@ export const SetServerPasswordStep = ({
       <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
         <VStack flexGrow gap={16}>
           <VStack gap={8}>
-            {
-              // TODO: translations
-            }
-            <Text variant="h1Regular">Password</Text>
+            <Text variant="h1Regular">{t('password')}</Text>
             <PasswordWarningBlock>
-              {/* TODO: add tooltip with additional information */}
-              Password cannot be reset or recovered
+              {t('passwordCannotBeRecovered')}
             </PasswordWarningBlock>
           </VStack>
           <VStack gap={8}>
@@ -105,9 +100,9 @@ export const SetServerPasswordStep = ({
                 placeholder={t('verify_password')}
                 onValueChange={value => setValue('confirmPassword', value)}
               />
-              {errors.confirmPassword && (
+              {errors.confirmPassword && errors.confirmPassword.message && (
                 <Text color="danger" size={12}>
-                  {errors.confirmPassword.message}
+                  {t(errors.confirmPassword.message)}
                 </Text>
               )}
             </VStack>

@@ -1,5 +1,6 @@
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas';
 import React, { FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
@@ -37,6 +38,7 @@ type WaitForServerStatesProps = {
 };
 
 const WaitForServerStatesRaw: FC<WaitForServerStatesProps> = ({ state }) => {
+  const { t } = useTranslation();
   const { RiveComponent, rive } = useRive({
     src: '/rive-animations/fast-vault-keygen.riv',
     stateMachines: 'State Machine 1',
@@ -47,7 +49,6 @@ const WaitForServerStatesRaw: FC<WaitForServerStatesProps> = ({ state }) => {
 
   useEffect(() => {
     if (state === 'success') {
-      console.log('## input', input);
       input?.fire();
     }
   }, [input, state]);
@@ -60,15 +61,14 @@ const WaitForServerStatesRaw: FC<WaitForServerStatesProps> = ({ state }) => {
         </LoaderWrapper>
         <VStack gap={8} alignItems="center">
           <Text variant="h1Regular" size={32} color="contrast">
-            {/* TODO: translations */}
             {state === 'pending'
-              ? 'Connecting with server...'
-              : 'Connection successful!'}
+              ? t('fastVaultSetup.connectingWithServer')
+              : t('fastVaultSetup.connectionSuccess')}
           </Text>
           <Text size={14} color="shy">
             {state === 'pending'
-              ? 'This should only take a minute'
-              : 'Vault initiation starting...'}
+              ? t('fastVaultSetup.takeMinute')
+              : t('fastVaultSetup.vaultInitializationStarting')}
           </Text>
         </VStack>
       </ContentWrapper>

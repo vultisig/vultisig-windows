@@ -399,6 +399,27 @@ export const it = {
   fast: 'Veloce',
   secure: 'Sicuro',
   active: 'Attivo',
+  fastVaultSetup: {
+    connectingWithServer: 'Connessione al server...',
+    connectionSuccess: 'Connessione riuscita!',
+    takeMinute: 'Questo richiederà solo un minuto',
+    vaultInitializationStarting: "Avvio dell'inizializzazione del vault...",
+    emailRequired: 'Email richiesta',
+    emailIncorrect: 'Email errata, si prega di controllare',
+    enterEmail: 'Inserisci la tua email',
+    emailSetupTitle:
+      'Questa email viene utilizzata solo per inviare il backup del server',
+    passwordRequired: 'Password richiesta',
+    passwordCannotBeRecovered:
+      'La password non può essere reimpostata o recuperata',
+    confirmPasswordIsRequired: 'Conferma password richiesta',
+    passwordDoNotMatch: 'Le password non corrispondono',
+    hintEmpty: 'Suggerimento vuoto',
+    addOptionalHint: 'Aggiungi suggerimento opzionale',
+    hintDescription:
+      'Questo verrà mostrato nel caso in cui dimentichi la password',
+    enterHint: 'Inserisci un suggerimento',
+  },
   fast_vault_setup_title: 'Configurazione veloce, 1 dispositivo',
   fast_vault_setup_prop_0: 'È necessario solo 1 dispositivo',
   fast_vault_setup_prop_1: 'Conserva piccoli fondi per azioni rapide',
