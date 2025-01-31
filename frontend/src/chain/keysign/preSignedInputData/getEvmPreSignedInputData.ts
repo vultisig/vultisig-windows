@@ -6,6 +6,14 @@ import { bigIntToHex } from '../../utils/bigIntToHex';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
 
+const toTransferData = (memo: string | undefined) => {
+  if (memo && memo.startsWith('0x')) {
+    return Buffer.from(stripHexPrefix(memo), 'hex');
+  }
+
+  return Buffer.from(memo ?? '', 'utf8');
+};
+
 export const getEvmPreSignedInputData = ({
   keysignPayload,
   walletCore,
@@ -27,7 +35,7 @@ export const getEvmPreSignedInputData = ({
   let evmTransaction = TW.Ethereum.Proto.Transaction.create({
     transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
       amount: amountHex,
-      data: Buffer.from(keysignPayload.memo ?? '', 'utf8'),
+      data: toTransferData(keysignPayload.memo),
     }),
   });
 

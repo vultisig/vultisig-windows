@@ -5,10 +5,8 @@ import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime';
 import { useCurrentTxHash } from '../../../chain/state/currentTxHash';
 import { nativeSwapChains } from '../../../chain/swap/native/NativeSwapChain';
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
-import {
-  TxOverviewChainDataRow,
-  TxOverviewRow,
-} from '../../../chain/tx/components/TxOverviewRow';
+import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
+import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
@@ -130,12 +128,7 @@ export const KeysignTxOverview = ({
           />
         </>
       )}
-      {memo && (
-        <TxOverviewChainDataRow>
-          <span>{t('memo')}</span>
-          <span>{memo}</span>
-        </TxOverviewChainDataRow>
-      )}
+      {memo && <TxOverviewMemo value={memo} />}
       {formattedToAmount && (
         <>
           <MatchQuery
