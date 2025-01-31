@@ -10,18 +10,15 @@ import { isEmpty } from '../../../lib/utils/array/isEmpty';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { recordFromKeys } from '../../../lib/utils/record/recordFromKeys';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { usePeerOptionsQuery } from '../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery';
 import { usePeersSelectionRecord } from '../../keysign/shared/state/selectedPeers';
-import { WaitForServerLoader } from './WaitForServerLoader';
+import { WaitForServerStates } from './WaitForServerLoader';
 
 export const WaitForServerToJoinStep: React.FC<
   ComponentWithForwardActionProps &
     Partial<ComponentWithBackActionProps> &
     TitledComponentProps
-> = ({ onForward, onBack, title }) => {
+> = ({ onForward, title }) => {
   const peerOptionsQuery = usePeerOptionsQuery();
 
   const [, setRecord] = usePeersSelectionRecord();
@@ -30,33 +27,16 @@ export const WaitForServerToJoinStep: React.FC<
   useEffect(() => {
     if (data && !isEmpty(data)) {
       setRecord(recordFromKeys(data, () => true));
-      onForward();
+      setTimeout(() => onForward(), 2000);
     }
   }, [data, onForward, setRecord]);
-
-  const header = (
-    <PageHeader
-      title={<PageHeaderTitle>{title}</PageHeaderTitle>}
-      primaryControls={<PageHeaderBackButton onClick={onBack} />}
-    />
-  );
 
   return (
     <>
       <MatchQuery
         value={peerOptionsQuery}
-        pending={() => (
-          <>
-            {header}
-            <WaitForServerLoader />
-          </>
-        )}
-        success={() => (
-          <>
-            {header}
-            <WaitForServerLoader />
-          </>
-        )}
+        pending={() => <WaitForServerStates state="pending" />}
+        success={() => <WaitForServerStates state="success" />}
         error={error => (
           <FullPageFlowErrorState
             message={extractErrorMsg(error)}
