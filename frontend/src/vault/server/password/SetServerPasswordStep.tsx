@@ -30,7 +30,7 @@ const passwordSchema = z
     confirmPassword: z.string().min(1, 'confirmPasswordIsRequired'),
   })
   .refine(data => data.password === data.confirmPassword, {
-    message: 'passwordDoNotMatch',
+    message: 'fastVaultSetup.passwordDoNotMatch',
     path: ['confirmPassword'],
   });
 
@@ -73,7 +73,7 @@ export const SetServerPasswordStep = ({
           <VStack gap={8}>
             <Text variant="h1Regular">{t('password')}</Text>
             <PasswordWarningBlock>
-              {t('passwordCannotBeRecovered')}
+              {t('fastVaultSetup.passwordCannotBeRecovered')}
             </PasswordWarningBlock>
           </VStack>
           <VStack gap={8}>

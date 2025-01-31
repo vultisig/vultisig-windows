@@ -20,9 +20,9 @@ import { useVaultEmail } from './state/email';
 const emailSchema = z.object({
   email: z
     .string()
-    .min(1, { message: 'emailRequired' })
+    .min(1, { message: 'fastVaultSetup.emailRequired' })
     .refine(val => !validateEmail(val), {
-      message: 'emailIncorrect',
+      message: 'fastVaultSetup.emailIncorrect',
     }),
 });
 
@@ -59,9 +59,9 @@ export const ServerEmailStep = ({
       <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
         <VStack flexGrow gap={16}>
           <VStack>
-            <Text variant="h1Regular">{t('enterEmail')}</Text>
+            <Text variant="h1Regular">{t('fastVaultSetup.enterEmail')}</Text>
             <Text size={14} color="shy">
-              {t('emailSetupTitle')}
+              {t('fastVaultSetup.emailSetupTitle')}
             </Text>
           </VStack>
           <VStack gap={4}>
