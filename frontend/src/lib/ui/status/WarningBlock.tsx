@@ -9,18 +9,17 @@ import { text } from '../text';
 import { getColor } from '../theme/getters';
 
 const Container = styled.div`
-  ${borderRadius.s};
-  border: 1px solid ${getColor('idle')};
-  background: ${({ theme }) =>
-    theme.colors.idle.getVariant({ a: () => 0.35 }).toCssValue()};
-  padding: 20px 12px;
-
-  color: ${getColor('contrast')};
+  ${borderRadius.m};
+  border: 1px solid
+    ${({ theme }) =>
+      theme.colors.idle.getVariant({ a: () => 0.25 }).toCssValue()};
+  background: ${getColor('idleDark')};
+  padding: 16px;
 
   ${hStack({
     fullWidth: true,
     alignItems: 'center',
-    gap: 20,
+    gap: 12,
   })}
 `;
 
@@ -32,7 +31,7 @@ const IconContainer = styled(IconWrapper)`
 const Content = styled.div`
   flex: 1;
   ${text({
-    color: 'contrast',
+    color: 'idle',
     centerHorizontally: true,
     weight: '600',
   })}
@@ -43,10 +42,10 @@ type WarningBlockProps = ComponentWithChildrenProps & UIComponentProps;
 export const WarningBlock = ({ children, ...rest }: WarningBlockProps) => {
   return (
     <Container {...rest}>
+      <Content>{children}</Content>
       <IconContainer>
         <TriangleAlertIcon />
       </IconContainer>
-      <Content>{children}</Content>
     </Container>
   );
 };
