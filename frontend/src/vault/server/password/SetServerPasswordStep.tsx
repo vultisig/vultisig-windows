@@ -27,7 +27,9 @@ const PasswordWarningBlock = styled(WarningBlock)`
 const passwordSchema = z
   .object({
     password: z.string().min(1, 'passwordRequired'),
-    confirmPassword: z.string().min(1, 'confirmPasswordIsRequired'),
+    confirmPassword: z
+      .string()
+      .min(1, 'fastVaultSetup.confirmPasswordIsRequired'),
   })
   .refine(data => data.password === data.confirmPassword, {
     message: 'fastVaultSetup.passwordDoNotMatch',
@@ -80,8 +82,9 @@ export const SetServerPasswordStep = ({
             <VStack gap={4}>
               <PasswordInput
                 {...register('password')}
-                isValid={isValid}
-                isInvalid={!!errors.password}
+                validationState={
+                  isValid ? 'valid' : errors.password ? 'invalid' : undefined
+                }
                 placeholder={t('enter_password')}
                 onValueChange={value => setValue('password', value)}
                 autoFocus
@@ -95,8 +98,13 @@ export const SetServerPasswordStep = ({
             <VStack gap={4}>
               <PasswordInput
                 {...register('confirmPassword')}
-                isValid={isValid}
-                isInvalid={!!errors.confirmPassword}
+                validationState={
+                  isValid
+                    ? 'valid'
+                    : errors.confirmPassword
+                      ? 'invalid'
+                      : undefined
+                }
                 placeholder={t('verify_password')}
                 onValueChange={value => setValue('confirmPassword', value)}
               />

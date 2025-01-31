@@ -4,7 +4,15 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { z } from 'zod';
 
+import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement';
 import { Button } from '../../../lib/ui/buttons/Button';
+import { iconButtonIconSizeRecord } from '../../../lib/ui/buttons/IconButton';
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
+import {
+  textInputHeight,
+  textInputHorizontalPadding,
+} from '../../../lib/ui/css/textInput';
+import { CircledCloseIcon } from '../../../lib/ui/icons/CircledCloseIcon';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import {
@@ -62,14 +70,31 @@ export const ServerPasswordHintStep = ({
             </Text>
           </VStack>
           <VStack gap={4}>
-            <TextInput
-              {...register('passwordHint')}
-              withResetValueBtn
-              isValid={isValid}
-              isInvalid={!!errors.passwordHint}
-              placeholder={t('fastVaultSetup.enterHint')}
-              autoFocus
-              onValueChange={value => setValue('passwordHint', value)}
+            <ActionInsideInteractiveElement
+              render={() => (
+                <TextInput
+                  {...register('passwordHint')}
+                  validationState={
+                    isValid
+                      ? 'valid'
+                      : errors.passwordHint
+                        ? 'invalid'
+                        : undefined
+                  }
+                  placeholder={t('fastVaultSetup.enterHint')}
+                  autoFocus
+                  onValueChange={value => setValue('passwordHint', value)}
+                />
+              )}
+              action={
+                <UnstyledButton onClick={() => setValue('passwordHint', '')}>
+                  <CircledCloseIcon />
+                </UnstyledButton>
+              }
+              actionPlacerStyles={{
+                right: textInputHorizontalPadding,
+                bottom: (textInputHeight - iconButtonIconSizeRecord.l) / 2,
+              }}
             />
             {errors.passwordHint && errors.passwordHint.message && (
               <Text color="danger" size={12}>
