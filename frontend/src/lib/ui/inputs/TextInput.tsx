@@ -1,10 +1,13 @@
 import { ChangeEvent, ComponentProps, forwardRef, Ref } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
+import { UnstyledButton } from '../buttons/UnstyledButton';
 import { textInput } from '../css/textInput';
+import { CircledCloseIcon } from '../icons/CircledCloseIcon';
 import { VStack } from '../layout/Stack';
 import { Spinner } from '../loaders/Spinner';
 import { LabeledComponentProps, UIComponentProps } from '../props';
+import { getColor } from '../theme/getters';
 import { InputContainer } from './InputContainer';
 import { InputLabel } from './InputLabel';
 
@@ -12,6 +15,9 @@ export type SharedTextInputProps = Partial<LabeledComponentProps> &
   ComponentProps<typeof TextInputContainer> & {
     onValueChange?: (value: string) => void;
     isLoading?: boolean;
+    isValid?: boolean;
+    isInvalid?: boolean;
+    withResetValueBtn?: boolean;
   };
 
 export interface TextInputProps
@@ -27,6 +33,7 @@ export const TextInput = forwardRef(function TextInputInner(
     isLoading,
     className,
     label,
+    withResetValueBtn,
     ...props
   }: TextInputProps,
   ref: Ref<HTMLInputElement> | null
@@ -49,6 +56,11 @@ export const TextInput = forwardRef(function TextInputInner(
           />
         )}
         {inputOverlay}
+        {!isLoading && withResetValueBtn && (
+          <ClearInputBtn onClick={() => onValueChange?.('')}>
+            <CircledCloseIcon />
+          </ClearInputBtn>
+        )}
       </InputWr>
     </InputContainer>
   );
@@ -59,10 +71,39 @@ const InputWr = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 `;
 
-export const TextInputContainer = styled.input`
+const ClearInputBtn = styled(UnstyledButton)`
+  position: absolute;
+  right: 16px;
+`;
+
+export const TextInputContainer = styled.input<{
+  isValid?: boolean;
+  isInvalid?: boolean;
+}>`
   ${textInput};
+
+  ${({ isValid, isInvalid }) =>
+    isValid
+      ? css`
+          border-color: ${getColor('primary')};
+
+          &:focus,
+          &:hover {
+            border-color: ${getColor('primary')};
+          }
+        `
+      : isInvalid &&
+        css`
+          border-color: ${getColor('danger')};
+
+          &:focus,
+          &:hover {
+            border-color: ${getColor('danger')};
+          }
+        `}
 `;
 
 export const TextInputLoader = (props: UIComponentProps) => (
