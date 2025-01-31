@@ -31,8 +31,7 @@ export const interactiveTextInput = css`
 
   &:focus,
   &:active {
-    border-color: ${getColor('mistExtra')};
-    border-color: ${getColor('mistExtra')};
+    border-color: ${getColor('foregroundSuper')};
   }
 `;
 
@@ -49,7 +48,6 @@ export const textInput = css`
       color: 'shy',
       size: 12,
       weight: '400',
-      family: 'mono',
     })}
   }
 
