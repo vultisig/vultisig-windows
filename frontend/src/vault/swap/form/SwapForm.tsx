@@ -3,7 +3,7 @@ import { t } from 'i18next';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
+import { OnForwardProp } from '../../../lib/ui/props';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -16,9 +16,7 @@ import { SwapInfo } from './info/SwapInfo';
 import { ManageFromCoin } from './ManageFromCoin';
 import { ManageToCoin } from './ManageToCoin';
 
-export const SwapForm: React.FC<ComponentWithForwardActionProps> = ({
-  onForward,
-}) => {
+export const SwapForm: React.FC<OnForwardProp> = ({ onForward }) => {
   const isDisabled = useIsSwapFormDisabled();
 
   return (

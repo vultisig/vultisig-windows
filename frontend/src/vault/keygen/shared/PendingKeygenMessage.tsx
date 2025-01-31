@@ -3,13 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { Panel } from '../../../lib/ui/panel/Panel';
-import { ComponentWithChildrenProps } from '../../../lib/ui/props';
+import { ChildrenProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { useCurrentLocalPartyId } from '../state/currentLocalPartyId';
 
-export const PendingKeygenMessage = ({
-  children,
-}: ComponentWithChildrenProps) => {
+export const PendingKeygenMessage = ({ children }: ChildrenProp) => {
   const localPartyId = useCurrentLocalPartyId();
 
   const { t } = useTranslation();

@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 
-import { ComponentWithChildrenProps } from '../props';
+import { ChildrenProp } from '../props';
 import { createContextHook } from '../state/createContextHook';
 import { ToastItem } from './ToastItem';
 
@@ -20,7 +20,7 @@ const toastDefaultDuration = 3000;
 
 const ToastContext = createContext<ToastContextState | undefined>(undefined);
 
-export const ToastProvider = ({ children }: ComponentWithChildrenProps) => {
+export const ToastProvider = ({ children }: ChildrenProp) => {
   const [toast, setToast] = useState<Toast | null>(null);
 
   useEffect(() => {

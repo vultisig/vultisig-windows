@@ -2,10 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  ComponentWithBackActionProps,
-  ComponentWithForwardActionProps,
-} from '../../../lib/ui/props';
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -21,7 +18,7 @@ import { useCurrentSessionId } from './state/currentSessionId';
 export const KeygenStartSessionStep = ({
   onBack,
   onForward,
-}: Partial<ComponentWithBackActionProps> & ComponentWithForwardActionProps) => {
+}: Partial<OnBackProp> & OnForwardProp) => {
   const { t } = useTranslation();
 
   const sessionId = useCurrentSessionId();

@@ -5,7 +5,7 @@ import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
 import { IconWrapper } from '../../../lib/ui/icons/IconWrapper';
 import { PlusIcon } from '../../../lib/ui/icons/PlusIcon';
 import { getColor } from '../../../lib/ui/theme/getters';
-import { AsElementComponent } from '../props';
+import { AsProp } from '../props';
 
 const Container = styled(UnstyledButton)`
   gap: 16px;
@@ -24,7 +24,7 @@ const IconContainer = styled(IconWrapper)`
 export const ListAddButton = ({
   children,
   ...rest
-}: ComponentProps<typeof Container> & AsElementComponent) => {
+}: ComponentProps<typeof Container> & AsProp) => {
   return (
     <Container {...rest}>
       <IconContainer>

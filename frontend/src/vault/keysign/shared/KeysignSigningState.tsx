@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ProgressLine } from '../../../lib/ui/flow/ProgressLine';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { FancyLoader } from '../../../ui/pending/FancyLoader';
 import { KeygenStatus } from '../../keygen/shared/MatchKeygenSessionStatus';
@@ -13,9 +13,7 @@ const keysignCompletion: Record<KeygenStatus, number> = {
   eddsa: 0.9,
 };
 
-export const KeysignSigningState = ({
-  value,
-}: ComponentWithValueProps<KeygenStatus>) => {
+export const KeysignSigningState = ({ value }: ValueProp<KeygenStatus>) => {
   const { t } = useTranslation();
 
   const keygenStageText: Record<KeygenStatus, string> = {

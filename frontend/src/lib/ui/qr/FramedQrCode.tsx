@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { borderRadius } from '../../../lib/ui/css/borderRadius';
 import { toSizeUnit } from '../../../lib/ui/css/toSizeUnit';
-import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
 import { getColor } from '../../../lib/ui/theme/getters';
 
 const DEFAULT_QR_CODE_SIZE = 365;
@@ -26,7 +26,7 @@ const Container = styled.div`
   padding: ${toSizeUnit(codePadding)};
 `;
 
-type FramedQrCode = ComponentWithValueProps<string> & {
+type FramedQrCode = ValueProp<string> & {
   size?: number;
 } & ComponentProps<typeof Wrapper>;
 

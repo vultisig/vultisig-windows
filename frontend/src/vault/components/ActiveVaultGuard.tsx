@@ -1,15 +1,13 @@
 import { useEffect } from 'react';
 
-import { ComponentWithChildrenProps } from '../../lib/ui/props';
+import { ChildrenProp } from '../../lib/ui/props';
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { useVaults } from '../queries/useVaultsQuery';
 import { CurrentVaultProvider } from '../state/currentVault';
 import { useCurrentVaultId } from '../state/currentVaultId';
 import { getStorageVaultId } from '../utils/storageVault';
 
-export const ActiveVaultGuard: React.FC<ComponentWithChildrenProps> = ({
-  children,
-}) => {
+export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
   const [currentVaultId] = useCurrentVaultId();
   const vaults = useVaults();
 

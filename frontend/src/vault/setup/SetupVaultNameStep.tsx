@@ -13,10 +13,7 @@ import { getFormProps } from '../../lib/ui/form/utils/getFormProps';
 import { CircledCloseIcon } from '../../lib/ui/icons/CircledCloseIcon';
 import { TextInput } from '../../lib/ui/inputs/TextInput';
 import { VStack } from '../../lib/ui/layout/Stack';
-import {
-  ComponentWithBackActionProps,
-  ComponentWithForwardActionProps,
-} from '../../lib/ui/props';
+import { OnBackProp, OnForwardProp } from '../../lib/ui/props';
 import { Text } from '../../lib/ui/text';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
@@ -28,7 +25,7 @@ import { useVaultName } from './state/vaultName';
 export const SetupVaultNameStep = ({
   onForward,
   onBack,
-}: ComponentWithForwardActionProps & Partial<ComponentWithBackActionProps>) => {
+}: OnForwardProp & Partial<OnBackProp>) => {
   const { t } = useTranslation();
   const [value, setValue] = useVaultName();
   const names = useVaultNames();

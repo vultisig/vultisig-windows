@@ -1,12 +1,10 @@
 import { useEffect } from 'react';
 
-import { ComponentWithChildrenProps } from '../lib/ui/props';
+import { ChildrenProp } from '../lib/ui/props';
 import { useAppNavigate } from '../navigation/hooks/useAppNavigate';
 import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding';
 
-export const IncompleteOnboardingOnly = ({
-  children,
-}: ComponentWithChildrenProps) => {
+export const IncompleteOnboardingOnly = ({ children }: ChildrenProp) => {
   const [hasCompletedOnboarding] = useHasFinishedOnboarding();
 
   const navigate = useAppNavigate();

@@ -7,15 +7,11 @@ import { getCoinMetaIconSrc } from '../../../coin/utils/coinMeta';
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { panel } from '../../../lib/ui/panel/Panel';
-import {
-  ClickableComponentProps,
-  ComponentWithActiveState,
-  ComponentWithValueProps,
-} from '../../../lib/ui/props';
+import { IsActiveProp, OnClickProp, ValueProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { getColor, matchColor } from '../../../lib/ui/theme/getters';
 
-const Container = styled(UnstyledButton)<ComponentWithActiveState>`
+const Container = styled(UnstyledButton)<IsActiveProp>`
   ${panel()};
 
   position: relative;
@@ -32,9 +28,7 @@ export const CoinOption = ({
   value,
   onClick,
   isActive,
-}: ComponentWithValueProps<storage.Coin> &
-  ClickableComponentProps &
-  ComponentWithActiveState) => {
+}: ValueProp<storage.Coin> & OnClickProp & IsActiveProp) => {
   const { is_native_token, chain, logo, ticker } = value;
 
   return (

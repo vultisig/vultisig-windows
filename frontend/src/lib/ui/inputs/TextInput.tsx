@@ -4,12 +4,12 @@ import styled, { css } from 'styled-components';
 import { textInput } from '../css/textInput';
 import { VStack } from '../layout/Stack';
 import { Spinner } from '../loaders/Spinner';
-import { LabeledComponentProps, UIComponentProps } from '../props';
+import { LabelProp, UiProps } from '../props';
 import { getColor } from '../theme/getters';
 import { InputContainer } from './InputContainer';
 import { InputLabel } from './InputLabel';
 
-export type SharedTextInputProps = Partial<LabeledComponentProps> &
+export type SharedTextInputProps = Partial<LabelProp> &
   ComponentProps<typeof TextInputContainer> & {
     onValueChange?: (value: string) => void;
     isLoading?: boolean;
@@ -90,7 +90,7 @@ export const TextInputContainer = styled.input<{
         `}
 `;
 
-export const TextInputLoader = (props: UIComponentProps) => (
+export const TextInputLoader = (props: UiProps) => (
   <TextInputContainer as="div" {...props}>
     <VStack fullHeight justifyContent="center">
       <Spinner />

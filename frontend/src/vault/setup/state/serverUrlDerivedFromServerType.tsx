@@ -1,11 +1,11 @@
-import { ComponentWithChildrenProps } from '../../../lib/ui/props';
+import { ChildrenProp } from '../../../lib/ui/props';
 import { keygenServerUrl } from '../../keygen/server/KeygenServerType';
 import { useCurrentServerType } from '../../keygen/state/currentServerType';
 import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl';
 
 export const ServerUrlDerivedFromServerTypeProvider = ({
   children,
-}: ComponentWithChildrenProps) => {
+}: ChildrenProp) => {
   const [serverType] = useCurrentServerType();
 
   return (

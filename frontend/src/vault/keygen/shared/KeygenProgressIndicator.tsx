@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import RingProgress from '../../../components/ringProgress/RingProgress';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { match } from '../../../lib/utils/match';
 import { KeygenType } from '../KeygenType';
@@ -15,9 +15,7 @@ const keygenCompletion: Record<KeygenStatus, number> = {
   eddsa: 70,
 };
 
-export const KeygenProgressIndicator = ({
-  value,
-}: ComponentWithValueProps<KeygenStatus>) => {
+export const KeygenProgressIndicator = ({ value }: ValueProp<KeygenStatus>) => {
   const { t } = useTranslation();
 
   const keygenType = useCurrentKeygenType();

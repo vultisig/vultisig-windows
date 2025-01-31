@@ -7,7 +7,7 @@ import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
 import { centerContent } from '../../../../lib/ui/css/centerContent';
 import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
-import { ComponentWithValueProps } from '../../../../lib/ui/props';
+import { ValueProp } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { text } from '../../../../lib/ui/text';
 import { EntityWithAmount } from '../../../../lib/utils/entities/EntityWithAmount';
@@ -30,7 +30,7 @@ const Container = styled.div`
 
 export const SwapFiatAmount = ({
   value,
-}: ComponentWithValueProps<CoinKey & EntityWithAmount>) => {
+}: ValueProp<CoinKey & EntityWithAmount>) => {
   const coin = useCurrentVaultCoin(value);
 
   const query = useCoinPriceQuery(CoinMeta.fromCoin(storageCoinToCoin(coin)));

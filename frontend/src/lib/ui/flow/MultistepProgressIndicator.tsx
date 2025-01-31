@@ -4,10 +4,10 @@ import { range } from '../../utils/array/range';
 import { round } from '../css/round';
 import { sameDimensions } from '../css/sameDimensions';
 import { HStack } from '../layout/Stack';
-import { ComponentWithActiveState, ComponentWithValueProps } from '../props';
+import { IsActiveProp, ValueProp } from '../props';
 import { matchColor } from '../theme/getters';
 
-type MultistepProgressIndicatorProps = ComponentWithValueProps<number> & {
+type MultistepProgressIndicatorProps = ValueProp<number> & {
   steps: number;
   variant?: 'dots' | 'bars';
   stepWidth?: string | number;
@@ -15,7 +15,7 @@ type MultistepProgressIndicatorProps = ComponentWithValueProps<number> & {
 };
 
 const Step = styled.div<
-  ComponentWithActiveState & {
+  IsActiveProp & {
     width?: number | string;
     variant: 'dots' | 'bars';
   }

@@ -2,11 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { storage } from '../../../../wailsjs/go/models';
-import {
-  ComponentWithForwardActionProps,
-  ComponentWithValueProps,
-  TitledComponentProps,
-} from '../../../lib/ui/props';
+import { OnForwardProp, TitleProp, ValueProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';
@@ -15,9 +11,7 @@ import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent'
 import { useSaveVaultMutation } from '../../mutations/useSaveVaultMutation';
 
 export const SaveVaultStep: React.FC<
-  ComponentWithValueProps<storage.Vault> &
-    ComponentWithForwardActionProps &
-    TitledComponentProps
+  ValueProp<storage.Vault> & OnForwardProp & TitleProp
 > = ({ value, onForward, title }) => {
   const { t } = useTranslation();
 

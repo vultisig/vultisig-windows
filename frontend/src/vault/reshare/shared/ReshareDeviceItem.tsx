@@ -6,10 +6,10 @@ import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding';
 import { toSizeUnit } from '../../../lib/ui/css/toSizeUnit';
 import { hStack } from '../../../lib/ui/layout/Stack';
 import {
-  ComponentWithActiveState,
-  ComponentWithIndexProps,
-  ComponentWithStatusProps,
-  ComponentWithValueProps,
+  IndexProp,
+  IsActiveProp,
+  StatusProp,
+  ValueProp,
 } from '../../../lib/ui/props';
 import { text } from '../../../lib/ui/text';
 import { match } from '../../../lib/utils/match';
@@ -20,12 +20,12 @@ import {
 
 type ReshareDeviceStatus = 'add' | 'remove';
 
-type ReshareDeviceItemProps = ComponentWithValueProps<string> &
-  ComponentWithIndexProps &
-  ComponentWithActiveState &
-  ComponentWithStatusProps<ReshareDeviceStatus>;
+type ReshareDeviceItemProps = ValueProp<string> &
+  IndexProp &
+  IsActiveProp &
+  StatusProp<ReshareDeviceStatus>;
 
-const Container = styled.div<ComponentWithStatusProps<ReshareDeviceStatus>>`
+const Container = styled.div<StatusProp<ReshareDeviceStatus>>`
   height: ${toSizeUnit(64)};
   ${horizontalPadding(20)};
   ${borderRadius.m};

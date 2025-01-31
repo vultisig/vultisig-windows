@@ -5,15 +5,12 @@ import { ReactNode } from 'react';
 import styled from 'styled-components';
 
 import { SaveFile } from '../../../wailsjs/go/main/App';
-import {
-  ClickableComponentProps,
-  ComponentWithValueProps,
-} from '../../lib/ui/props';
+import { OnClickProp, ValueProp } from '../../lib/ui/props';
 import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
 
-type SaveAsImageProps = ComponentWithValueProps<ReactNode> & {
+type SaveAsImageProps = ValueProp<ReactNode> & {
   fileName: string;
-  renderTrigger: (props: ClickableComponentProps) => ReactNode;
+  renderTrigger: (props: OnClickProp) => ReactNode;
 };
 
 const Wrapper = styled.div`

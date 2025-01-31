@@ -16,7 +16,7 @@ import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput';
 import { VStack } from '../../../../../lib/ui/layout/Stack';
 import { Spinner } from '../../../../../lib/ui/loaders/Spinner';
 import { Modal } from '../../../../../lib/ui/modal';
-import { ClosableComponentProps } from '../../../../../lib/ui/props';
+import { OnCloseProp } from '../../../../../lib/ui/props';
 import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery';
 import { getDiscriminatedUnionValue } from '../../../../../lib/utils/getDiscriminatedUnionValue';
 import { useSendChainSpecificQuery } from '../../../queries/useSendChainSpecificQuery';
@@ -35,9 +35,7 @@ type FeeSettingsFormShape = {
   gasLimit: number | null;
 };
 
-export const ManageEvmFeeSettings: React.FC<ClosableComponentProps> = ({
-  onClose,
-}) => {
+export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
   const { t } = useTranslation();
 
   const [persistentValue, setPersistentValue] =

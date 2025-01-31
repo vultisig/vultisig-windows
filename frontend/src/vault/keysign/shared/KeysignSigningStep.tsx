@@ -10,7 +10,7 @@ import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { ProgressLine } from '../../../lib/ui/flow/ProgressLine';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { ComponentWithBackActionProps } from '../../../lib/ui/props';
+import { OnBackProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { makeAppPath } from '../../../navigation';
@@ -30,7 +30,7 @@ import { WithProgressIndicator } from './WithProgressIndicator';
 
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload;
-} & Partial<ComponentWithBackActionProps>;
+} & Partial<OnBackProp>;
 
 export const KeysignSigningStep = ({
   onBack,

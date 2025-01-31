@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { ComponentWithChildrenProps } from '../../../lib/ui/props';
+import { ChildrenProp } from '../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../lib/ui/state/getStateProviderSetup';
 import { useGenerateVaultName } from '../../hooks/useGenerateVaultName';
 import { useVaultType } from '../shared/state/vaultType';
@@ -8,7 +8,7 @@ import { useVaultType } from '../shared/state/vaultType';
 export const { useState: useVaultName, provider: VaultNameProvider } =
   getStateProviderSetup<string>('VaultName');
 
-export const SetupVaultNameProvider: React.FC<ComponentWithChildrenProps> = ({
+export const SetupVaultNameProvider: React.FC<ChildrenProp> = ({
   children,
 }) => {
   const type = useVaultType();

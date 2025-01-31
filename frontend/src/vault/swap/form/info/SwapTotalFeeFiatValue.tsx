@@ -9,7 +9,7 @@ import {
   storageCoinToCoin,
 } from '../../../../coin/utils/storageCoin';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
-import { ComponentWithValueProps } from '../../../../lib/ui/props';
+import { ValueProp } from '../../../../lib/ui/props';
 import { MatchEagerQuery } from '../../../../lib/ui/query/components/MatchEagerQuery';
 import { useTransformQueryData } from '../../../../lib/ui/query/hooks/useTransformQueryData';
 import { sum } from '../../../../lib/utils/array/sum';
@@ -18,9 +18,7 @@ import { CoinMeta } from '../../../../model/coin-meta';
 import { useCurrentVaultCoins } from '../../../state/currentVault';
 import { SwapFee } from '../../types/SwapFee';
 
-export const SwapFeeFiatValue = ({
-  value,
-}: ComponentWithValueProps<SwapFee[]>) => {
+export const SwapFeeFiatValue = ({ value }: ValueProp<SwapFee[]>) => {
   const vaultCoins = useCurrentVaultCoins();
   const coins = useMemo(
     () =>

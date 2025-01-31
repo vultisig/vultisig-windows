@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ReadTextFile } from '../../../../wailsjs/go/main/App';
 import { VaultContainer } from '../../../gen/vultisig/vault/v1/vault_container_pb';
 import { Button } from '../../../lib/ui/buttons/Button';
-import { ValueFinishProps } from '../../../lib/ui/props';
+import { OnFinishProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
@@ -17,7 +17,7 @@ import { vaultContainerFromString } from '../utils/vaultContainerFromString';
 
 export const ReadBackupFileStep = ({
   onFinish,
-}: ValueFinishProps<VaultContainer>) => {
+}: OnFinishProp<VaultContainer>) => {
   const { filePath } = useAppPathState<'importVaultFromFile'>();
 
   const { mutate, ...mutationState } = useMutation({

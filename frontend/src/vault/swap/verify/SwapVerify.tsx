@@ -6,7 +6,7 @@ import {
   TxOverviewRow,
 } from '../../../chain/tx/components/TxOverviewRow';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { ComponentWithBackActionProps } from '../../../lib/ui/props';
+import { OnBackProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { range } from '../../../lib/utils/array/range';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
@@ -27,9 +27,7 @@ import { SwapAllowance } from './SwapAllowance';
 import { SwapConfirm } from './SwapConfirm';
 import { SwapTerms } from './SwapTerms';
 
-export const SwapVerify: React.FC<ComponentWithBackActionProps> = ({
-  onBack,
-}) => {
+export const SwapVerify: React.FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation();
 
   const [fromCoinKey] = useFromCoin();

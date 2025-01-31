@@ -6,7 +6,7 @@ import { CoinKey } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { text } from '../../../lib/ui/text';
 import { formatAmount } from '../../../lib/utils/formatAmount';
@@ -23,9 +23,7 @@ const Container = styled.div`
   })}
 `;
 
-export const SwapCoinBalance = ({
-  value,
-}: ComponentWithValueProps<CoinKey>) => {
+export const SwapCoinBalance = ({ value }: ValueProp<CoinKey>) => {
   const { t } = useTranslation();
 
   const coin = useCurrentVaultCoin(value);

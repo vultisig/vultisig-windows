@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
-import { TitledComponentProps } from '../../../lib/ui/props';
+import { TitleProp } from '../../../lib/ui/props';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { KeygenEducationPrompt } from './KeygenEducationPrompt';
 
-export const KeygenPageHeader = ({ title }: Partial<TitledComponentProps>) => {
+export const KeygenPageHeader = ({ title }: Partial<TitleProp>) => {
   const { t } = useTranslation();
 
   return (

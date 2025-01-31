@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { ComponentWithChildrenProps } from '../../../lib/ui/props';
+import { ChildrenProp } from '../../../lib/ui/props';
 import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup';
 import { generateHexEncryptionKey } from '../../keygen/utils/generateHexEncryptionKey';
 
@@ -11,7 +11,7 @@ export const {
 
 export const GeneratedHexEncryptionKeyProvider = ({
   children,
-}: ComponentWithChildrenProps) => {
+}: ChildrenProp) => {
   const HexEncryptionKey = useMemo(generateHexEncryptionKey, []);
 
   return (

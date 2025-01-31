@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { match } from '../../../utils/match';
 import { interactive } from '../../css/interactive';
 import { HStack } from '../../layout/Stack';
-import { InputProps, UIComponentProps } from '../../props';
+import { InputProps, UiProps } from '../../props';
 import { Text } from '../../text';
 import { getColor } from '../../theme/getters';
 import { InvisibleHTMLCheckbox } from '../checkbox/InvisibleHTMLCheckbox';
@@ -12,7 +12,7 @@ import { SwitchSize } from './config';
 import { SwitchContainer } from './SwitchContainer';
 import { SwitchControl } from './SwitchControl';
 
-type SwitchProps = UIComponentProps &
+type SwitchProps = UiProps &
   InputProps<boolean> & {
     size?: SwitchSize;
     label?: ReactNode;

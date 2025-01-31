@@ -6,10 +6,10 @@ import { VStack } from '../../../../../lib/ui/layout/Stack';
 import { TakeWholeSpaceCenterContent } from '../../../../../lib/ui/layout/TakeWholeSpaceCenterContent';
 import { Spinner } from '../../../../../lib/ui/loaders/Spinner';
 import {
-  ComponentWithBackActionProps,
-  ComponentWithDisabledState,
-  ComponentWithForwardActionProps,
-  TitledComponentProps,
+  IsDisabledProp,
+  OnBackProp,
+  OnForwardProp,
+  TitleProp,
 } from '../../../../../lib/ui/props';
 import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery';
 import { Query } from '../../../../../lib/ui/query/Query';
@@ -26,10 +26,10 @@ import { KeygenPeersManager } from '../KeygenPeersManager';
 import { ManageServerType } from '../ManageServerType';
 import { Content } from './KegenPeerDiscoveryStep.styled';
 
-type KeygenPeerDiscoveryStepProps = ComponentWithForwardActionProps &
-  Partial<ComponentWithBackActionProps> &
-  TitledComponentProps &
-  ComponentWithDisabledState & {
+type KeygenPeerDiscoveryStepProps = OnForwardProp &
+  Partial<OnBackProp> &
+  TitleProp &
+  IsDisabledProp & {
     joinUrlQuery: Query<string>;
   };
 

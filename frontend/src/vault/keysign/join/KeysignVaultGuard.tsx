@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { Button } from '../../../lib/ui/buttons/Button';
-import { ComponentWithChildrenProps } from '../../../lib/ui/props';
+import { ChildrenProp } from '../../../lib/ui/props';
 import { makeAppPath } from '../../../navigation';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
@@ -12,7 +12,7 @@ import { useCurrentVaultId } from '../../state/currentVaultId';
 import { getStorageVaultId } from '../../utils/storageVault';
 import { CurrentKeysignVaultProvider } from './state/currentKeysignVault';
 
-export const KeysignVaultGuard = ({ children }: ComponentWithChildrenProps) => {
+export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
   const { vaultId } = useAppPathState<'joinKeysign'>();
   const vaults = useVaults();
 

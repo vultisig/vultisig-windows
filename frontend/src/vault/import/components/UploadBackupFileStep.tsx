@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { ValueFinishProps } from '../../../lib/ui/props';
+import { OnFinishProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
@@ -18,7 +18,7 @@ import { UploadedBackupFile } from './UploadedBackupFile';
 
 export const UploadBackupFileStep = ({
   onFinish,
-}: ValueFinishProps<VaultBackupResult>) => {
+}: OnFinishProp<VaultBackupResult>) => {
   const { t } = useTranslation();
 
   const [file, setFile] = useState<File | null>(null);

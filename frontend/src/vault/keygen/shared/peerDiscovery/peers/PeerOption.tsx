@@ -7,10 +7,7 @@ import { round } from '../../../../../lib/ui/css/round';
 import { sameDimensions } from '../../../../../lib/ui/css/sameDimensions';
 import { CheckIcon } from '../../../../../lib/ui/icons/CheckIcon';
 import { VStack, vStack } from '../../../../../lib/ui/layout/Stack';
-import {
-  ComponentWithActiveState,
-  ComponentWithValueProps,
-} from '../../../../../lib/ui/props';
+import { IsActiveProp, ValueProp } from '../../../../../lib/ui/props';
 import { Text } from '../../../../../lib/ui/text';
 import { getColor } from '../../../../../lib/ui/theme/getters';
 import { usePeersSelectionRecord } from '../../../../keysign/shared/state/selectedPeers';
@@ -21,7 +18,7 @@ import {
 } from '../../../utils/localPartyId';
 import { KeygenDeviceIcon } from '../../device/KeygenDeviceIcon';
 
-const Container = styled(UnstyledButton)<ComponentWithActiveState>`
+const Container = styled(UnstyledButton)<IsActiveProp>`
   position: relative;
 
   ${borderRadius.s}
@@ -58,7 +55,7 @@ const Indicator = styled.div`
   font-size: 10px;
 `;
 
-export const PeerOption = ({ value }: ComponentWithValueProps<string>) => {
+export const PeerOption = ({ value }: ValueProp<string>) => {
   const [record, setRecord] = usePeersSelectionRecord();
 
   const isSelected = record[value];

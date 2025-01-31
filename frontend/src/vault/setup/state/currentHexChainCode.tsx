@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { ComponentWithChildrenProps } from '../../../lib/ui/props';
+import { ChildrenProp } from '../../../lib/ui/props';
 import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup';
 import { generateHexChainCode } from '../../keygen/utils/generateHexChainCode';
 
@@ -9,9 +9,7 @@ export const {
   provider: CurrentHexChainCodeProvider,
 } = getValueProviderSetup<string>('CurrentHexChainCode');
 
-export const GeneratedHexChainCodeProvider = ({
-  children,
-}: ComponentWithChildrenProps) => {
+export const GeneratedHexChainCodeProvider = ({ children }: ChildrenProp) => {
   const HexChainCode = useMemo(generateHexChainCode, []);
 
   return (

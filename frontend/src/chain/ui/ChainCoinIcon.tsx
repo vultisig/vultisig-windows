@@ -1,8 +1,8 @@
-import { UIComponentProps } from '../../lib/ui/props';
+import { UiProps } from '../../lib/ui/props';
 import { ChainEntityIcon } from './ChainEntityIcon';
 import { WithChainIcon } from './WithChainIcon';
 
-type ChainCoinIconProps = UIComponentProps & {
+type ChainCoinIconProps = UiProps & {
   chainSrc?: string;
   coinSrc?: string;
 };

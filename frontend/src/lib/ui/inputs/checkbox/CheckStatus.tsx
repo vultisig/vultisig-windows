@@ -5,14 +5,14 @@ import { centerContent } from '../../css/centerContent';
 import { interactive } from '../../css/interactive';
 import { CheckIcon } from '../../icons/CheckIcon';
 import { IconWrapper } from '../../icons/IconWrapper';
-import { ComponentWithChildrenProps, UIComponentProps } from '../../props';
+import { ChildrenProp, UiProps } from '../../props';
 import { getColor } from '../../theme/getters';
 
-type CheckStatusProps = UIComponentProps & {
+type CheckStatusProps = UiProps & {
   value: boolean;
   as?: React.ElementType;
   isInteractive?: boolean;
-} & Partial<ComponentWithChildrenProps>;
+} & Partial<ChildrenProp>;
 
 const IconContainer = styled(IconWrapper)``;
 

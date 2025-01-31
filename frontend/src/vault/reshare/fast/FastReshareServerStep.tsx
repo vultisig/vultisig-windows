@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
+import { OnForwardProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -20,9 +20,9 @@ import {
   useVaultServerStatus,
 } from '../../state/currentVault';
 
-export const FastReshareServerStep: React.FC<
-  ComponentWithForwardActionProps
-> = ({ onForward }) => {
+export const FastReshareServerStep: React.FC<OnForwardProp> = ({
+  onForward,
+}) => {
   const { t } = useTranslation();
 
   const sessionId = useCurrentSessionId();

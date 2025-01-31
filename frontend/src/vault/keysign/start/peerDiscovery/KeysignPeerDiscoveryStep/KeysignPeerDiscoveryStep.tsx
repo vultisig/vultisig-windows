@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../../../../lib/ui/layout/Stack';
-import { ComponentWithForwardActionProps } from '../../../../../lib/ui/props';
+import { OnForwardProp } from '../../../../../lib/ui/props';
 import { PageContent } from '../../../../../ui/page/PageContent';
 import { PageHeader } from '../../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
@@ -17,9 +17,7 @@ import { KeysignPeerDiscoveryQrCode } from '../KeysignPeerDiscoveryCode';
 import { Content } from './KeysignPeerDiscoveryStep.styled';
 import { KeysignPeersManager } from './KeysignPeersManager';
 
-export const KeysignPeerDiscoveryStep = ({
-  onForward,
-}: ComponentWithForwardActionProps) => {
+export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
   const { t } = useTranslation();
 
   const isDisabled = useIsPeerDiscoveryStepDisabled();

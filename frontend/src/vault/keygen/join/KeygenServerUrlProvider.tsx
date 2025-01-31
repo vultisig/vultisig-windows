@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { ComponentWithChildrenProps } from '../../../lib/ui/props';
+import { ChildrenProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -13,9 +13,7 @@ import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl';
 import { useKeygenServerUrlQuery } from '../server/queries/useKeygenServerUrlQuery';
 import { useCurrentServiceName } from '../shared/state/currentServiceName';
 
-export const KeygenServerUrlProvider = ({
-  children,
-}: ComponentWithChildrenProps) => {
+export const KeygenServerUrlProvider = ({ children }: ChildrenProp) => {
   const [serverType] = useCurrentServerType();
   const [serviceName] = useCurrentServiceName();
 

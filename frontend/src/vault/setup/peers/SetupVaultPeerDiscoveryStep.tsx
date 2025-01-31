@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  ComponentWithBackActionProps,
-  ComponentWithForwardActionProps,
-} from '../../../lib/ui/props';
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep/KeygenPeerDiscoveryStep';
 import { useSelectedPeers } from '../../keysign/shared/state/selectedPeers';
 import { useVaultType } from '../shared/state/vaultType';
@@ -13,7 +10,7 @@ import { useJoinKeygenUrlQuery } from './queries/useJoinKeygenUrlQuery';
 const requiredPeers = 1;
 
 export const SetupVaultPeerDiscoveryStep: React.FC<
-  ComponentWithForwardActionProps & ComponentWithBackActionProps
+  OnForwardProp & OnBackProp
 > = ({ onForward, onBack }) => {
   const { t } = useTranslation();
   const peers = useSelectedPeers();
