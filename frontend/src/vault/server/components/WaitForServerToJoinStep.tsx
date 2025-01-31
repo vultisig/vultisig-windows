@@ -20,23 +20,23 @@ export const WaitForServerToJoinStep: React.FC<
     TitledComponentProps
 > = ({ onForward, title }) => {
   const peerOptionsQuery = usePeerOptionsQuery();
-
   const [, setRecord] = usePeersSelectionRecord();
-
   const { data } = peerOptionsQuery;
+
   useEffect(() => {
     if (data && !isEmpty(data)) {
       setRecord(recordFromKeys(data, () => true));
-      setTimeout(() => onForward(), 2000);
     }
-  }, [data, onForward, setRecord]);
+  }, [data, setRecord]);
 
   return (
     <>
       <MatchQuery
         value={peerOptionsQuery}
         pending={() => <WaitForServerStates state="pending" />}
-        success={() => <WaitForServerStates state="success" />}
+        success={() => (
+          <WaitForServerStates state="success" onForward={onForward} />
+        )}
         error={error => (
           <FullPageFlowErrorState
             message={extractErrorMsg(error)}

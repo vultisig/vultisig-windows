@@ -35,23 +35,30 @@ const LoaderWrapper = styled(HStack)`
 
 type WaitForServerStatesProps = {
   state: 'success' | 'pending';
+  onForward?: () => void;
 };
 
-const WaitForServerStatesRaw: FC<WaitForServerStatesProps> = ({ state }) => {
+const WaitForServerStatesRaw: FC<WaitForServerStatesProps> = ({
+  state,
+  onForward,
+}) => {
   const { t } = useTranslation();
   const { RiveComponent, rive } = useRive({
     src: '/rive-animations/fast-vault-keygen.riv',
     stateMachines: 'State Machine 1',
     autoplay: true,
+    onStop: () => {
+      onForward?.();
+    },
   });
 
   const input = useStateMachineInput(rive, 'State Machine 1', 'Connected');
 
   useEffect(() => {
-    if (state === 'success') {
+    if (rive && state === 'success') {
       input?.fire();
     }
-  }, [input, state]);
+  }, [rive, input, state, onForward]);
 
   return (
     <PageContent alignItems="center" justifyContent="center" gap={24}>
