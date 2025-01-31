@@ -4,11 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '../../lib/ui/buttons/Button';
 import { FilledAlertIcon } from '../../lib/ui/icons/FilledAlertIcon';
 import { VStack } from '../../lib/ui/layout/Stack';
-import {
-  ComponentWithActionProps,
-  ComponentWithMessageProps,
-  TitledComponentProps,
-} from '../../lib/ui/props';
+import { ActionProp, MessageProp, TitleProp } from '../../lib/ui/props';
 import { StrictText, Text } from '../../lib/ui/text';
 import { makeAppPath } from '../../navigation';
 import { PageContent } from '../page/PageContent';
@@ -17,9 +13,7 @@ export const FlowErrorPageContent = ({
   action,
   message,
   title,
-}: Partial<ComponentWithActionProps> &
-  Partial<ComponentWithMessageProps> &
-  TitledComponentProps) => {
+}: Partial<ActionProp> & Partial<MessageProp> & TitleProp) => {
   const { t } = useTranslation();
 
   return (

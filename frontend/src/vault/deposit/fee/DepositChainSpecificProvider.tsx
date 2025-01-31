@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { ComponentWithChildrenProps } from '../../../lib/ui/props';
+import { ChildrenProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup';
 import { StrictText } from '../../../lib/ui/text';
@@ -13,9 +13,9 @@ export const {
   provider: DepositChainSpecificValueProvider,
 } = getValueProviderSetup<KeysignChainSpecific>('DepositChainSpecific');
 
-export const DepositChainSpecificProvider: React.FC<
-  ComponentWithChildrenProps
-> = ({ children }) => {
+export const DepositChainSpecificProvider: React.FC<ChildrenProp> = ({
+  children,
+}) => {
   const chainSpecificQuery = useDepositChainSpecificQuery();
   const { t } = useTranslation();
 

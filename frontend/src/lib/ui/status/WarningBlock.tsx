@@ -4,7 +4,7 @@ import { borderRadius } from '../css/borderRadius';
 import { IconWrapper } from '../icons/IconWrapper';
 import { TriangleAlertIcon } from '../icons/TriangleAlertIcon';
 import { hStack } from '../layout/Stack';
-import { ComponentWithChildrenProps, UIComponentProps } from '../props';
+import { ChildrenProp, UiProps } from '../props';
 import { text } from '../text';
 import { getColor } from '../theme/getters';
 
@@ -37,7 +37,7 @@ const Content = styled.div`
   })}
 `;
 
-type WarningBlockProps = ComponentWithChildrenProps & UIComponentProps;
+type WarningBlockProps = ChildrenProp & UiProps;
 
 export const WarningBlock = ({ children, ...rest }: WarningBlockProps) => {
   return (

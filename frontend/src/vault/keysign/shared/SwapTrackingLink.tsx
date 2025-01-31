@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime';
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
-import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
 import { text } from '../../../lib/ui/text';
 
 const Container = styled(UnstyledButton)`
@@ -15,9 +15,7 @@ const Container = styled(UnstyledButton)`
   text-decoration: underline;
 `;
 
-export const SwapTrackingLink = ({
-  value,
-}: ComponentWithValueProps<string>) => {
+export const SwapTrackingLink = ({ value }: ValueProp<string>) => {
   const { t } = useTranslation();
 
   return (

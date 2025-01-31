@@ -2,7 +2,7 @@ import { t } from 'i18next';
 
 import { Opener } from '../../../../lib/ui/base/Opener';
 import { SettingsIcon } from '../../../../lib/ui/icons/SettingsIcon';
-import { ClosableComponentProps } from '../../../../lib/ui/props';
+import { OnCloseProp } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { FailedQueryOverlay } from '../../../../lib/ui/query/components/overlay/FailedQueryOverlay';
 import { PendingQueryOverlay } from '../../../../lib/ui/query/components/overlay/PendingQueryOverlay';
@@ -12,7 +12,7 @@ import { useSendChainSpecificQuery } from '../../queries/useSendChainSpecificQue
 import { SendChainSpecificValueProvider } from '../SendChainSpecificProvider';
 
 type ManageFeeSettingsFrameProps = {
-  render: (props: ClosableComponentProps) => React.ReactNode;
+  render: (props: OnCloseProp) => React.ReactNode;
 };
 
 export const ManageFeeSettingsFrame = ({

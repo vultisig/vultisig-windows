@@ -7,10 +7,7 @@ import { z } from 'zod';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import {
-  ComponentWithBackActionProps,
-  ComponentWithForwardActionProps,
-} from '../../../lib/ui/props';
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock';
 import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -41,7 +38,7 @@ type PasswordSchema = z.infer<typeof passwordSchema>;
 export const SetServerPasswordStep = ({
   onForward,
   onBack,
-}: ComponentWithForwardActionProps & Partial<ComponentWithBackActionProps>) => {
+}: OnForwardProp & Partial<OnBackProp>) => {
   const { t } = useTranslation();
   const [storedPassword, setStoredPassword] = useVaultPassword();
 

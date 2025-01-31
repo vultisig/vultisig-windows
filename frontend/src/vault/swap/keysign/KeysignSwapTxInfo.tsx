@@ -8,7 +8,7 @@ import {
 } from '../../../chain/tx/components/TxOverviewRow';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
 import { withoutUndefined } from '../../../lib/utils/array/withoutUndefined';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { getDiscriminatedUnionValue } from '../../../lib/utils/getDiscriminatedUnionValue';
@@ -16,9 +16,7 @@ import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUn
 import { assertField } from '../../../lib/utils/record/assertField';
 import { Chain } from '../../../model/chain';
 
-export const KeysignSwapTxInfo = ({
-  value,
-}: ComponentWithValueProps<KeysignPayload>) => {
+export const KeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
   const { erc20ApprovePayload, toAmount: fromAmount } = value;
 
   const fromCoin = assertField(value, 'coin');

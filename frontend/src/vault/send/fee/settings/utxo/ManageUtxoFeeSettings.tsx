@@ -16,7 +16,7 @@ import { InputLabel } from '../../../../../lib/ui/inputs/InputLabel';
 import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput';
 import { VStack } from '../../../../../lib/ui/layout/Stack';
 import { Modal } from '../../../../../lib/ui/modal';
-import { ClosableComponentProps } from '../../../../../lib/ui/props';
+import { OnCloseProp } from '../../../../../lib/ui/props';
 import { shouldBePresent } from '../../../../../lib/utils/assert/shouldBePresent';
 import { getDiscriminatedUnionValue } from '../../../../../lib/utils/getDiscriminatedUnionValue';
 import { useSendChainSpecific } from '../../SendChainSpecificProvider';
@@ -26,9 +26,7 @@ type FormShape = {
   priority: FeePriority | number | null;
 };
 
-export const ManageUtxoFeeSettings: React.FC<ClosableComponentProps> = ({
-  onClose,
-}) => {
+export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
   const { t } = useTranslation();
 
   const [persistentValue, setPersistentValue] =

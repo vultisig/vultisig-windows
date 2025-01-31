@@ -14,7 +14,7 @@ import {
 } from '@dnd-kit/sortable';
 import { ReactNode, useCallback, useId, useState } from 'react';
 
-import { ComponentWithChildrenProps } from '../ui/props';
+import { ChildrenProp } from '../ui/props';
 import { shouldBePresent } from '../utils/assert/shouldBePresent';
 import { DnDItem } from './DnDItem';
 import { DnDItemStatus } from './DnDItemStatus';
@@ -23,7 +23,7 @@ export type ItemChangeParams = {
   index: number;
 };
 
-type RednerListProps = Record<string, any> & ComponentWithChildrenProps;
+type RednerListProps = Record<string, any> & ChildrenProp;
 
 type RenderListParams = {
   props: RednerListProps;

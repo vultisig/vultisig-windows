@@ -1,15 +1,14 @@
 import { FC } from 'react';
 
 import { storage } from '../../../../wailsjs/go/models';
-import { ComponentWithOptionsProps, InputProps } from '../../../lib/ui/props';
+import { InputProps, OptionsProp } from '../../../lib/ui/props';
 import { without } from '../../../lib/utils/array/without';
 import { CurrentVaultProvider } from '../../../vault/state/currentVault';
 import { getStorageVaultId } from '../../../vault/utils/storageVault';
 import { AddVaultsToFolderContainer } from './AddVaultsToFolderContainer';
 import { FolderVaultOption } from './FolderVaultOption';
 
-type FolderVaultsInputProps = InputProps<string[]> &
-  ComponentWithOptionsProps<storage.Vault>;
+type FolderVaultsInputProps = InputProps<string[]> & OptionsProp<storage.Vault>;
 
 export const FolderVaultsInput: FC<FolderVaultsInputProps> = ({
   value,

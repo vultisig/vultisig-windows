@@ -14,10 +14,7 @@ import {
 import { CircledCloseIcon } from '../../../lib/ui/icons/CircledCloseIcon';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import {
-  ComponentWithBackActionProps,
-  ComponentWithForwardActionProps,
-} from '../../../lib/ui/props';
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { validateEmail } from '../../../lib/utils/validation/validateEmail';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -39,7 +36,7 @@ type EmailSchema = z.infer<typeof emailSchema>;
 export const ServerEmailStep = ({
   onForward,
   onBack,
-}: ComponentWithForwardActionProps & Partial<ComponentWithBackActionProps>) => {
+}: OnForwardProp & Partial<OnBackProp>) => {
   const { t } = useTranslation();
   const [storedEmail, setStoredEmail] = useVaultEmail();
 

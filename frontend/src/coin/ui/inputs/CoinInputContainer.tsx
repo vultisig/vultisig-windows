@@ -11,10 +11,7 @@ import {
 } from '../../../lib/ui/css/textInput';
 import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon';
 import { HStack, hStack } from '../../../lib/ui/layout/Stack';
-import {
-  ComponentWithChildrenProps,
-  ComponentWithValueProps,
-} from '../../../lib/ui/props';
+import { ChildrenProp, ValueProp } from '../../../lib/ui/props';
 import { Text, text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { CoinMeta } from '../../../model/coin-meta';
@@ -42,10 +39,10 @@ const Container = styled(UnstyledButton)`
   }
 `;
 
-type CoinInputContainerProps = ComponentWithValueProps<
+type CoinInputContainerProps = ValueProp<
   CoinKey & Pick<CoinMeta, 'logo' | 'ticker'>
 > &
-  Partial<ComponentWithChildrenProps> &
+  Partial<ChildrenProp> &
   Omit<ComponentProps<typeof Container>, 'value'>;
 
 export const CoinInputContainer = ({

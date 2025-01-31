@@ -3,10 +3,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { VStack } from '../../../lib/ui/layout/Stack';
-import {
-  ComponentWithBackActionProps,
-  ComponentWithForwardActionProps,
-} from '../../../lib/ui/props';
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -23,7 +20,7 @@ import { useCurrentSessionId } from './state/currentSessionId';
 export const JoinKeygenSessionStep = ({
   onForward,
   onBack,
-}: ComponentWithForwardActionProps & Partial<ComponentWithBackActionProps>) => {
+}: OnForwardProp & Partial<OnBackProp>) => {
   const sessionId = useCurrentSessionId();
 
   const serverUrl = useCurrentServerUrl();

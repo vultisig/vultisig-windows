@@ -1,8 +1,8 @@
 import { Button } from '../buttons/Button';
 import { UniformColumnGrid } from '../css/uniformColumnGrid';
-import { UIComponentProps } from '../props';
+import { UiProps } from '../props';
 
-type RadioInputProps<T extends string> = UIComponentProps & {
+type RadioInputProps<T extends string> = UiProps & {
   value: T | null;
   onChange: (value: T) => void;
   options: readonly T[];

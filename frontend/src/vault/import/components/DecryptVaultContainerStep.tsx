@@ -2,10 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { storage } from '../../../../wailsjs/go/models';
 import { Vault } from '../../../gen/vultisig/vault/v1/vault_pb';
-import {
-  ComponentWithValueProps,
-  ValueFinishProps,
-} from '../../../lib/ui/props';
+import { OnFinishProp, ValueProp } from '../../../lib/ui/props';
 import { fromBase64 } from '../../../lib/utils/fromBase64';
 import { pipe } from '../../../lib/utils/pipe';
 import { decryptVault } from '../../encryption/decryptVault';
@@ -15,7 +12,7 @@ import { DecryptVaultView } from './DecryptVaultView';
 export const DecryptVaultContainerStep = ({
   value,
   onFinish,
-}: ComponentWithValueProps<string> & ValueFinishProps<storage.Vault>) => {
+}: ValueProp<string> & OnFinishProp<storage.Vault>) => {
   const { mutate, error, isPending } = useMutation({
     mutationFn: async (password: string) =>
       pipe(

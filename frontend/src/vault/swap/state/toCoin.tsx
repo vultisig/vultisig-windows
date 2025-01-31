@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { areEqualCoins, CoinKey } from '../../../coin/Coin';
 import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
-import { ComponentWithChildrenProps } from '../../../lib/ui/props';
+import { ChildrenProp } from '../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../lib/ui/state/getStateProviderSetup';
 import { useCurrentVaultNativeCoins } from '../../state/currentVault';
 import { useFromCoin } from './fromCoin';
@@ -12,9 +12,7 @@ const { useState: useToCoin, provider: ToCoinInternalProvider } =
 
 export { useToCoin };
 
-export const ToCoinProvider: React.FC<ComponentWithChildrenProps> = ({
-  children,
-}) => {
+export const ToCoinProvider: React.FC<ChildrenProp> = ({ children }) => {
   const [fromCoin] = useFromCoin();
 
   const nativeCoins = useCurrentVaultNativeCoins();

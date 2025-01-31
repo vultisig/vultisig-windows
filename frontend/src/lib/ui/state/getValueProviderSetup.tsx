@@ -1,13 +1,13 @@
 import { createContext } from 'react';
 
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
-import { ComponentWithChildrenProps } from '../props';
+import { ChildrenProp } from '../props';
 import { createContextHook } from './createContextHook';
 
 export function getValueProviderSetup<T>(name: string) {
   const ValueContext = createContext<T | undefined>(undefined);
 
-  type Props = ComponentWithChildrenProps & { value: T };
+  type Props = ChildrenProp & { value: T };
 
   const ValueProvider = ({ children, value }: Props) => {
     return (

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { toSizeUnit } from '../css/toSizeUnit';
 import { BodyPortal } from '../dom/BodyPortal';
 import { HStack, VStack } from '../layout/Stack';
-import { AsElementComponent, TitledComponentProps } from '../props';
+import { AsProp, TitleProp } from '../props';
 import { Backdrop } from './Backdrop';
 import { modalConfig } from './config';
 import { ModalCloseButton } from './ModalCloseButton';
@@ -13,9 +13,9 @@ import { ModalContent } from './ModalContent';
 import { ModalSubTitleText } from './ModalSubTitleText';
 import { ModalTitleText } from './ModalTitleText';
 
-export type ModalProps = AsElementComponent &
+export type ModalProps = AsProp &
   Omit<ComponentProps<typeof Container>, 'title'> &
-  TitledComponentProps & {
+  TitleProp & {
     onClose?: () => void;
     subTitle?: ReactNode;
     placement?: ModalPlacement;

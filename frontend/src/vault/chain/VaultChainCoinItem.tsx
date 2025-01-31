@@ -7,7 +7,7 @@ import { CoinAmount, CoinKey } from '../../coin/Coin';
 import { getCoinMetaIconSrc } from '../../coin/utils/coinMeta';
 import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
-import { ComponentWithValueProps } from '../../lib/ui/props';
+import { ValueProp } from '../../lib/ui/props';
 import { Text } from '../../lib/ui/text';
 import { EntityWithLogo } from '../../lib/utils/entities/EntityWithLogo';
 import { EntityWithTicker } from '../../lib/utils/entities/EntityWithTicker';
@@ -17,7 +17,7 @@ import { shouldDisplayChainLogo } from './utils';
 
 export const VaultChainCoinItem = ({
   value,
-}: ComponentWithValueProps<
+}: ValueProp<
   EntityWithLogo &
     EntityWithTicker &
     CoinAmount &

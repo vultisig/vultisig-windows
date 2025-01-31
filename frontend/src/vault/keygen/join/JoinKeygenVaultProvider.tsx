@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 
 import { storage } from '../../../../wailsjs/go/models';
-import { ComponentWithChildrenProps } from '../../../lib/ui/props';
+import { ChildrenProp } from '../../../lib/ui/props';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { useVaults } from '../../queries/useVaultsQuery';
 import { CurrentKeygenVaultProvider } from '../state/currentKeygenVault';
 import { CurrentLocalPartyIdProvider } from '../state/currentLocalPartyId';
 import { generateLocalPartyId } from '../utils/localPartyId';
 
-export const JoinKeygenVaultProvider: React.FC<ComponentWithChildrenProps> = ({
+export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
   children,
 }) => {
   const { keygenMsg } = useAppPathState<'joinKeygen'>();

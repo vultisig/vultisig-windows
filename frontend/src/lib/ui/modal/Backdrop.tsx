@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { centerContent } from '../css/centerContent';
 import { takeWholeSpace } from '../css/takeWholeSpace';
 import { useKeyDown } from '../hooks/useKeyDown';
-import { ClosableComponentProps } from '../props';
+import { OnCloseProp } from '../props';
 import { getColor } from '../theme/getters';
 
 const Container = styled.div`
@@ -21,7 +21,7 @@ const Container = styled.div`
 export const Backdrop = ({
   onClose,
   ...props
-}: Partial<ClosableComponentProps> & ComponentProps<typeof Container>) => {
+}: Partial<OnCloseProp> & ComponentProps<typeof Container>) => {
   const isPointerDownInside = useRef(false);
   useKeyDown('Escape', onClose);
 

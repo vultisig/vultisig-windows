@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
-import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
 import { TxOverviewChainDataRow } from './TxOverviewRow';
 
-export const TxOverviewMemo = ({ value }: ComponentWithValueProps<string>) => {
+export const TxOverviewMemo = ({ value }: ValueProp<string>) => {
   const { t } = useTranslation();
 
   return (

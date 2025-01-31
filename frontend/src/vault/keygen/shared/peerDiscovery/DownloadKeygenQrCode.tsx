@@ -1,16 +1,14 @@
 import { useTranslation } from 'react-i18next';
 
 import { FileUpIcon } from '../../../../lib/ui/icons/FileUpIcon';
-import { ComponentWithValueProps } from '../../../../lib/ui/props';
+import { ValueProp } from '../../../../lib/ui/props';
 import { SaveAsImage } from '../../../../ui/file/SaveAsImage';
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode';
 import { getVaultPublicKeyExport } from '../../../share/utils/getVaultPublicKeyExport';
 import { useCurrentKeygenVault } from '../../state/currentKeygenVault';
 
-export const DownloadKeygenQrCode = ({
-  value,
-}: ComponentWithValueProps<string>) => {
+export const DownloadKeygenQrCode = ({ value }: ValueProp<string>) => {
   const vault = useCurrentKeygenVault();
   const { name } = vault;
   const { t } = useTranslation();

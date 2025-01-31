@@ -4,7 +4,7 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { StrictInfoRow } from '../../../lib/ui/layout/StrictInfoRow';
-import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
+import { OnForwardProp } from '../../../lib/ui/props';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -22,7 +22,7 @@ import { RefreshSend } from '../RefreshSend';
 import { Sender } from '../sender/Sender';
 import { useIsSendFormDisabled } from './hooks/useIsSendFormDisabled';
 
-export const SendForm = ({ onForward }: ComponentWithForwardActionProps) => {
+export const SendForm = ({ onForward }: OnForwardProp) => {
   const { t } = useTranslation();
   const isDisabled = useIsSendFormDisabled();
 

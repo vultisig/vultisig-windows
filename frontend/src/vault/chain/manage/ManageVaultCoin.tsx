@@ -9,7 +9,7 @@ import { sameDimensions } from '../../../lib/ui/css/sameDimensions';
 import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Panel } from '../../../lib/ui/panel/Panel';
-import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation';
@@ -24,7 +24,7 @@ const Check = styled(CheckStatus)`
   ${sameDimensions(24)};
 `;
 
-type ManageVaultCoinProps = ComponentWithValueProps<CoinMeta> & {
+type ManageVaultCoinProps = ValueProp<CoinMeta> & {
   icon: ReactNode;
 };
 

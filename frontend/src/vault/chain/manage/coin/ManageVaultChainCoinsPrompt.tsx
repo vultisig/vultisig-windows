@@ -2,13 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { ListAddButton } from '../../../../lib/ui/list/ListAddButton';
-import { ComponentWithValueProps } from '../../../../lib/ui/props';
+import { ValueProp } from '../../../../lib/ui/props';
 import { Chain } from '../../../../model/chain';
 import { makeAppPath } from '../../../../navigation';
 
-export const ManageVaultChainCoinsPrompt = ({
-  value,
-}: ComponentWithValueProps<Chain>) => {
+export const ManageVaultChainCoinsPrompt = ({ value }: ValueProp<Chain>) => {
   const { t } = useTranslation();
 
   return (

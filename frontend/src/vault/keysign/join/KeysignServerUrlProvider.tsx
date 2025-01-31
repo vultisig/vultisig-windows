@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { ComponentWithChildrenProps } from '../../../lib/ui/props';
+import { ChildrenProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
@@ -13,9 +13,7 @@ import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
 import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl';
 
-export const KeysignServerUrlProvider = ({
-  children,
-}: ComponentWithChildrenProps) => {
+export const KeysignServerUrlProvider = ({ children }: ChildrenProp) => {
   const {
     keysignMsg: { serviceName, useVultisigRelay },
   } = useAppPathState<'joinKeysign'>();

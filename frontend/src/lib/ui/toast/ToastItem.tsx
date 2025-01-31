@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import { centerContent } from '../css/centerContent';
 import { horizontalPadding } from '../css/horizontalPadding';
 import { round } from '../css/round';
-import { ComponentWithChildrenProps } from '../props';
+import { ChildrenProp } from '../props';
 import { getColor } from '../theme/getters';
 
 const appearFromBottom = keyframes`
@@ -35,7 +35,7 @@ const Container = styled.div`
   color: ${getColor('contrast')};
 `;
 
-export const ToastItem = ({ children }: ComponentWithChildrenProps) => {
+export const ToastItem = ({ children }: ChildrenProp) => {
   return (
     <Position>
       <Container>{children}</Container>

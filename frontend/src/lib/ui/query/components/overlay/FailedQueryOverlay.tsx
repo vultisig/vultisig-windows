@@ -2,11 +2,11 @@ import { Button } from '../../../buttons/Button';
 import { BodyPortal } from '../../../dom/BodyPortal';
 import { VStack } from '../../../layout/Stack';
 import { Backdrop } from '../../../modal/Backdrop';
-import { ClosableComponentProps, TitledComponentProps } from '../../../props';
+import { OnCloseProp, TitleProp } from '../../../props';
 import { QueryOverlayContent } from './QueryOverlayContent';
 
-type FailedQueryOverlayProps = TitledComponentProps &
-  ClosableComponentProps & {
+type FailedQueryOverlayProps = TitleProp &
+  OnCloseProp & {
     closeText?: string;
   };
 

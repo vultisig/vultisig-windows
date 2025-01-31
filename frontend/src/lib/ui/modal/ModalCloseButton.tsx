@@ -4,7 +4,7 @@ import { Hoverable } from '../base/Hoverable';
 import { centerContent } from '../css/centerContent';
 import { sameDimensions } from '../css/sameDimensions';
 import { CloseIcon } from '../icons/CloseIcon';
-import { ClickableComponentProps } from '../props';
+import { OnClickProp, UiProps } from '../props';
 import { getColor } from '../theme/getters';
 
 const IconWrapper = styled.div`
@@ -20,12 +20,9 @@ const Container = styled(Hoverable)`
   }
 `;
 
-export const ModalCloseButton = ({
-  onClick,
-  className,
-}: ClickableComponentProps) => {
+export const ModalCloseButton = (props: OnClickProp & UiProps) => {
   return (
-    <Container className={className} onClick={onClick}>
+    <Container {...props}>
       <IconWrapper>
         <CloseIcon />
       </IconWrapper>

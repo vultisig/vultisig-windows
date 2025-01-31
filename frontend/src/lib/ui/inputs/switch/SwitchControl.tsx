@@ -4,7 +4,7 @@ import { centerContent } from '../../css/centerContent';
 import { round } from '../../css/round';
 import { sameDimensions } from '../../css/sameDimensions';
 import { toSizeUnit } from '../../css/toSizeUnit';
-import { ComponentWithActiveState } from '../../props';
+import { IsActiveProp } from '../../props';
 import { getColor } from '../../theme/getters';
 import {
   getControlSize,
@@ -13,9 +13,7 @@ import {
   SwitchSize,
 } from './config';
 
-export const SwitchControl = styled.div<
-  ComponentWithActiveState & { size: SwitchSize }
->`
+export const SwitchControl = styled.div<IsActiveProp & { size: SwitchSize }>`
   ${({ size }) => sameDimensions(getControlSize(size))};
   margin-left: ${({ isActive, size }) =>
     toSizeUnit(

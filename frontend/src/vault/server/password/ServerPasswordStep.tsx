@@ -6,7 +6,7 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
+import { OnForwardProp } from '../../../lib/ui/props';
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock';
 import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -18,9 +18,7 @@ import { useCurrentVault } from '../../state/currentVault';
 import { getStorageVaultId } from '../../utils/storageVault';
 import { useVaultPassword } from './state/password';
 
-export const ServerPasswordStep: React.FC<ComponentWithForwardActionProps> = ({
-  onForward,
-}) => {
+export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
   const { t } = useTranslation();
 
   const [password, setPassword] = useVaultPassword();

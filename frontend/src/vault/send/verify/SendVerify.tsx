@@ -14,7 +14,7 @@ import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { ComponentWithBackActionProps } from '../../../lib/ui/props';
+import { OnBackProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
 import { range } from '../../../lib/utils/array/range';
@@ -37,7 +37,7 @@ import { SendConfirm } from './SendConfirm';
 import { SendTerms } from './SendTerms';
 import { sendTermsCount, SendTermsProvider } from './state/sendTerms';
 
-export const SendVerify: FC<ComponentWithBackActionProps> = ({ onBack }) => {
+export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation();
   const [coinKey] = useCurrentSendCoin();
   const sender = useSender();

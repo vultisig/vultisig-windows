@@ -5,11 +5,11 @@ import {
   TxOverviewRow,
 } from '../../../../chain/tx/components/TxOverviewRow';
 import { CustomMessagePayload } from '../../../../gen/vultisig/keysign/v1/custom_message_payload_pb';
-import { ComponentWithValueProps } from '../../../../lib/ui/props';
+import { ValueProp } from '../../../../lib/ui/props';
 
 export const KeysignCustomMessageInfo = ({
   value,
-}: ComponentWithValueProps<CustomMessagePayload>) => {
+}: ValueProp<CustomMessagePayload>) => {
   const { t } = useTranslation();
 
   return (

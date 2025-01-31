@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
 import { EntityWithTicker } from '../../../lib/utils/entities/EntityWithTicker';
 import { formatAmount } from '../../../lib/utils/formatAmount';
 import { TxOverviewRow } from './TxOverviewRow';
@@ -8,7 +8,7 @@ import { TxOverviewRow } from './TxOverviewRow';
 export const TxOverviewAmount = ({
   value,
   ticker,
-}: ComponentWithValueProps<number> & EntityWithTicker) => {
+}: ValueProp<number> & EntityWithTicker) => {
   const { t } = useTranslation();
 
   return (

@@ -6,7 +6,7 @@ import { sameDimensions } from '../../lib/ui/css/sameDimensions';
 import { PictureIcon } from '../../lib/ui/icons/PictureIcon';
 import { ContainImage } from '../../lib/ui/images/ContainImage';
 import { SafeImage } from '../../lib/ui/images/SafeImage';
-import { ComponentWithValueProps, UIComponentProps } from '../../lib/ui/props';
+import { UiProps, ValueProp } from '../../lib/ui/props';
 import { getColor } from '../../lib/ui/theme/getters';
 
 const Icon = styled(ContainImage)`
@@ -24,8 +24,7 @@ const Fallback = styled.div`
   }
 `;
 
-type ChainEntityIconProps = Partial<ComponentWithValueProps<string>> &
-  UIComponentProps;
+type ChainEntityIconProps = Partial<ValueProp<string>> & UiProps;
 
 export const ChainEntityIcon = ({ value, ...rest }: ChainEntityIconProps) => {
   return (

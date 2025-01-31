@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
-import { ComponentWithChildrenProps } from '../../lib/ui/props';
+import { ChildrenProp } from '../../lib/ui/props';
 import { isEmpty } from '../../lib/utils/array/isEmpty';
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { useVaults } from '../queries/useVaultsQuery';
 
-export const EmptyVaultsOnly = ({ children }: ComponentWithChildrenProps) => {
+export const EmptyVaultsOnly = ({ children }: ChildrenProp) => {
   const navigate = useAppNavigate();
 
   const vaults = useVaults();

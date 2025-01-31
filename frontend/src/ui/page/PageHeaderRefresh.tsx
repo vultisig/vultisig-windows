@@ -1,9 +1,9 @@
 import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
 import { Spinner } from '../../lib/ui/loaders/Spinner';
-import { ClickableComponentProps } from '../../lib/ui/props';
+import { OnClickProp } from '../../lib/ui/props';
 import { PageHeaderIconButton } from './PageHeaderIconButton';
 
-type PageHeaderRefreshProps = ClickableComponentProps & {
+type PageHeaderRefreshProps = OnClickProp & {
   isPending?: boolean;
 };
 

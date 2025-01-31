@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { EvmFeeSettings } from '../../../../../chain/evm/fee/EvmFeeSettings';
 import { isNativeCoin } from '../../../../../chain/utils/isNativeCoin';
 import { UtxoFeeSettings } from '../../../../../chain/utxo/fee/UtxoFeeSettings';
-import { ComponentWithChildrenProps } from '../../../../../lib/ui/props';
+import { ChildrenProp } from '../../../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../../../lib/ui/state/getStateProviderSetup';
 import { omit } from '../../../../../lib/utils/record/omit';
 import { Chain } from '../../../../../model/chain';
@@ -24,9 +24,7 @@ const feeSettingsKeyToString = (key: FeeSettingsKey): string =>
 const { useState: useFeeSettingsRecord, provider: FeeSettingsRecordProvider } =
   getStateProviderSetup<FeeSettingsRecord>('FeeSettings');
 
-export const FeeSettingsProvider = ({
-  children,
-}: ComponentWithChildrenProps) => (
+export const FeeSettingsProvider = ({ children }: ChildrenProp) => (
   <FeeSettingsRecordProvider initialValue={{}}>
     {children}
   </FeeSettingsRecordProvider>

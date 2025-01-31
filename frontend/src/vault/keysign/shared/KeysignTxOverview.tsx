@@ -18,7 +18,7 @@ import { IconButton } from '../../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../../lib/ui/icons/CopyIcon';
 import { LinkIcon } from '../../../lib/ui/icons/LinkIcon';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
-import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
 import { isOneOf } from '../../../lib/utils/array/isOneOf';
@@ -30,9 +30,7 @@ import { CoinMeta } from '../../../model/coin-meta';
 import { KeysignSwapTxInfo } from '../../swap/keysign/KeysignSwapTxInfo';
 import { SwapTrackingLink } from './SwapTrackingLink';
 
-export const KeysignTxOverview = ({
-  value,
-}: ComponentWithValueProps<KeysignPayload>) => {
+export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const txHash = useCurrentTxHash();
 
   const { t } = useTranslation();

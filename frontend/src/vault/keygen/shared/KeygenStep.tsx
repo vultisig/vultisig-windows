@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
 
 import { StepTransition } from '../../../lib/ui/base/StepTransition';
-import {
-  ComponentWithBackActionProps,
-  TitledComponentProps,
-} from '../../../lib/ui/props';
+import { OnBackProp, TitleProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -16,8 +13,8 @@ import { KeygenPendingState } from './KeygenPendingState';
 import { KeygenSuccessStep } from './KeygenSuccessStep';
 import { useKeygenMutation } from './mutations/useKeygenMutation';
 
-type KeygenStepProps = ComponentWithBackActionProps &
-  TitledComponentProps & {
+type KeygenStepProps = OnBackProp &
+  TitleProp & {
     onTryAgain: () => void;
   };
 

@@ -3,10 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../../../lib/ui/layout/Stack';
-import {
-  ComponentWithBackActionProps,
-  ComponentWithForwardActionProps,
-} from '../../../../lib/ui/props';
+import { OnBackProp, OnForwardProp } from '../../../../lib/ui/props';
 import { InfoBlock } from '../../../../lib/ui/status/InfoBlock';
 import { Text } from '../../../../lib/ui/text';
 import { PageContent } from '../../../../ui/page/PageContent';
@@ -20,7 +17,7 @@ import { VaultDeviceItem } from './VaultDeviceItem';
 export const KeygenVerifyStep = ({
   onBack,
   onForward,
-}: ComponentWithForwardActionProps & ComponentWithBackActionProps) => {
+}: OnForwardProp & OnBackProp) => {
   const { t } = useTranslation();
 
   const devices = useVaultKeygenDevices();

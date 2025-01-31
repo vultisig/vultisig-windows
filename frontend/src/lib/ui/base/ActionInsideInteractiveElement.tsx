@@ -8,7 +8,7 @@ import {
 } from 'react';
 import styled from 'styled-components';
 
-import { ComponentWithActionProps } from '../props';
+import { ActionProp } from '../props';
 import { ElementSizeAware } from './ElementSizeAware';
 
 interface ActionInsideInteractiveElementRenderParams<
@@ -25,7 +25,7 @@ const Container = styled.div`
 type ActionInsideInteractiveElementProps<
   T extends CSSProperties = CSSProperties,
 > = ComponentProps<typeof Container> &
-  ComponentWithActionProps & {
+  ActionProp & {
     render: (
       params: ActionInsideInteractiveElementRenderParams<T>
     ) => ReactNode;

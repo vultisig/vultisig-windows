@@ -3,10 +3,7 @@ import styled from 'styled-components';
 
 import { borderRadius } from '../../../../lib/ui/css/borderRadius';
 import { horizontalPadding } from '../../../../lib/ui/css/horizontalPadding';
-import {
-  ComponentWithIndexProps,
-  ComponentWithValueProps,
-} from '../../../../lib/ui/props';
+import { IndexProp, ValueProp } from '../../../../lib/ui/props';
 import { text } from '../../../../lib/ui/text';
 import { getColor } from '../../../../lib/ui/theme/getters';
 import { useVaultKeygenDevices } from '../../../setup/hooks/useVaultKegenDevices';
@@ -34,7 +31,7 @@ const Container = styled.div`
 export const VaultDeviceItem = ({
   value,
   index,
-}: ComponentWithValueProps<string> & ComponentWithIndexProps) => {
+}: ValueProp<string> & IndexProp) => {
   const localPartyId = useCurrentLocalPartyId();
 
   const isCurrentDevice = localPartyId === value;

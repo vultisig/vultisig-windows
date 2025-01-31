@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { toPercents } from '../../utils/toPercents';
 import { round } from '../css/round';
 import { vStack } from '../layout/Stack';
-import { ComponentWithValueProps } from '../props';
+import { ValueProp } from '../props';
 import { getColor } from '../theme/getters';
 
 const Container = styled.div`
@@ -24,9 +24,7 @@ const Filler = styled.div`
   );
 `;
 
-export const ProgressLine: React.FC<ComponentWithValueProps<number>> = ({
-  value,
-}) => (
+export const ProgressLine: React.FC<ValueProp<number>> = ({ value }) => (
   <Container>
     <Filler style={{ width: toPercents(value) }} />
   </Container>

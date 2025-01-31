@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { ComponentWithChildrenProps } from '../../../../lib/ui/props';
+import { ChildrenProp } from '../../../../lib/ui/props';
 import { getValueProviderSetup } from '../../../../lib/ui/state/getValueProviderSetup';
 import { generateServiceName } from '../../utils/generateServiceName';
 
@@ -9,9 +9,7 @@ export const {
   provider: CurrentServiceNameProvider,
 } = getValueProviderSetup<string>('CurrentServiceName');
 
-export const GeneratedServiceNameProvider = ({
-  children,
-}: ComponentWithChildrenProps) => {
+export const GeneratedServiceNameProvider = ({ children }: ChildrenProp) => {
   const serviceName = useMemo(generateServiceName, []);
 
   return (

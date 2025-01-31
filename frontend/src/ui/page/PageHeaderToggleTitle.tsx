@@ -2,11 +2,10 @@ import styled from 'styled-components';
 
 import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
 import { CollapsableStateIndicator } from '../../lib/ui/layout/CollapsableStateIndicator';
-import { ComponentWithChildrenProps, InputProps } from '../../lib/ui/props';
+import { ChildrenProp, InputProps } from '../../lib/ui/props';
 import { PageHeaderTitle } from './PageHeaderTitle';
 
-type PageHeaderToggleTitleProps = ComponentWithChildrenProps &
-  InputProps<boolean>;
+type PageHeaderToggleTitleProps = ChildrenProp & InputProps<boolean>;
 
 const Indicator = styled(CollapsableStateIndicator)`
   font-size: 12px;

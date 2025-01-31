@@ -6,7 +6,7 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { ComponentWithForwardActionProps } from '../../../lib/ui/props';
+import { OnForwardProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
 import { PageContent } from '../../../ui/page/PageContent';
@@ -14,7 +14,7 @@ import { verifyVaultEmailCode } from '../api/verifyVaultEmailCode';
 
 type VerifyEmailStepProps = {
   vaultId: string;
-} & ComponentWithForwardActionProps;
+} & OnForwardProp;
 
 export const VerifyEmailStep = ({
   vaultId,

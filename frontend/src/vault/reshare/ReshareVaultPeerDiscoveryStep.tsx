@@ -1,14 +1,12 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ComponentWithForwardActionProps } from '../../lib/ui/props';
+import { OnForwardProp } from '../../lib/ui/props';
 import { KeygenPeerDiscoveryStep } from '../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep/KeygenPeerDiscoveryStep';
 import { useSelectedPeers } from '../keysign/shared/state/selectedPeers';
 import { useJoinReshareUrlQuery } from './queries/useJoinReshareUrlQuery';
 
-export const ReshareVaultPeerDiscoveryStep = ({
-  onForward,
-}: ComponentWithForwardActionProps) => {
+export const ReshareVaultPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
   const { t } = useTranslation();
   const peers = useSelectedPeers();
 

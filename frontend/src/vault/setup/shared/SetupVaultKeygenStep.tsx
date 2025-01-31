@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
-import { ComponentWithBackActionProps } from '../../../lib/ui/props';
+import { OnBackProp } from '../../../lib/ui/props';
 import { KeygenStep } from '../../keygen/shared/KeygenStep';
 import { useVaultType } from './state/vaultType';
 
-type SetupVaultKeygenStepProps = ComponentWithBackActionProps & {
+type SetupVaultKeygenStepProps = OnBackProp & {
   onTryAgain: () => void;
 };
 

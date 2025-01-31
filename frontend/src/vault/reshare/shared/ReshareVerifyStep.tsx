@@ -6,10 +6,7 @@ import { borderRadius } from '../../../lib/ui/css/borderRadius';
 import { centerContent } from '../../../lib/ui/css/centerContent';
 import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import {
-  ComponentWithBackActionProps,
-  ComponentWithForwardActionProps,
-} from '../../../lib/ui/props';
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock';
 import { Text, text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
@@ -35,9 +32,10 @@ const Pill = styled.div`
   background: ${getColor('foreground')};
 `;
 
-export const ReshareVerifyStep: React.FC<
-  ComponentWithBackActionProps & ComponentWithForwardActionProps
-> = ({ onBack, onForward }) => {
+export const ReshareVerifyStep: React.FC<OnBackProp & OnForwardProp> = ({
+  onBack,
+  onForward,
+}) => {
   const { t } = useTranslation();
 
   const devices = useVaultKeygenDevices();

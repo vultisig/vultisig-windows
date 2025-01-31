@@ -7,14 +7,14 @@ import {
 } from 'react';
 
 import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
-import { ComponentWithChildrenProps } from '../props';
+import { ChildrenProp } from '../props';
 
 export function getStateProviderSetup<T>(name: string) {
   type ContextState = { value: T; setValue: Dispatch<SetStateAction<T>> };
 
   const Context = createContext<ContextState | undefined>(undefined);
 
-  type Props = ComponentWithChildrenProps & { initialValue: T };
+  type Props = ChildrenProp & { initialValue: T };
 
   const Provider = ({ children, initialValue }: Props) => {
     const [value, setValue] = useState(initialValue);

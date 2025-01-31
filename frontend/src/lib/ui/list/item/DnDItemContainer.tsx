@@ -4,7 +4,7 @@ import { DnDItemStatus } from '../../../dnd/DnDItemStatus';
 import { match } from '../../../utils/match';
 import { absoluteOutline } from '../../css/absoluteOutline';
 import { borderRadius } from '../../css/borderRadius';
-import { ComponentWithStatusProps } from '../../props';
+import { StatusProp } from '../../props';
 import { getColor } from '../../theme/getters';
 
 export const DnDItemHighlight = styled.div`
@@ -15,9 +15,7 @@ export const DnDItemHighlight = styled.div`
   border: 2px solid ${getColor('primary')};
 `;
 
-export const DnDItemContainer = styled.div<
-  ComponentWithStatusProps<DnDItemStatus>
->`
+export const DnDItemContainer = styled.div<StatusProp<DnDItemStatus>>`
   position: relative;
   ${({ status }) =>
     match(status, {

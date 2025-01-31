@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { ComponentWithChildrenProps } from '../../lib/ui/props';
+import { ChildrenProp } from '../../lib/ui/props';
 
 export type ErrorState = {
   error: Error;
   info: React.ErrorInfo | null;
 };
 
-type ErrorBoundaryProps = ComponentWithChildrenProps & {
+type ErrorBoundaryProps = ChildrenProp & {
   renderFallback?: (params: ErrorState) => React.ReactNode;
 };
 

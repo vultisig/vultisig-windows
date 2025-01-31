@@ -1,10 +1,6 @@
 import { useEffect } from 'react';
 
-import {
-  ComponentWithBackActionProps,
-  ComponentWithForwardActionProps,
-  TitledComponentProps,
-} from '../../../lib/ui/props';
+import { OnBackProp, OnForwardProp, TitleProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { isEmpty } from '../../../lib/utils/array/isEmpty';
 import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
@@ -15,9 +11,7 @@ import { usePeersSelectionRecord } from '../../keysign/shared/state/selectedPeer
 import { WaitForServerStates } from './WaitForServerLoader';
 
 export const WaitForServerToJoinStep: React.FC<
-  ComponentWithForwardActionProps &
-    Partial<ComponentWithBackActionProps> &
-    TitledComponentProps
+  OnForwardProp & Partial<OnBackProp> & TitleProp
 > = ({ onForward, title }) => {
   const peerOptionsQuery = usePeerOptionsQuery();
   const [, setRecord] = usePeersSelectionRecord();

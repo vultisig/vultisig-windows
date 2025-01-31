@@ -5,10 +5,7 @@ import { horizontalPadding } from '../../css/horizontalPadding';
 import { interactive } from '../../css/interactive';
 import { ChevronRightIcon } from '../../icons/ChevronRightIcon';
 import { HStack, hStack } from '../../layout/Stack';
-import {
-  ClickableComponentProps,
-  ComponentWithChildrenProps,
-} from '../../props';
+import { ChildrenProp, OnClickProp } from '../../props';
 import { text } from '../../text';
 import { getHoverVariant } from '../../theme/getHoverVariant';
 import { getColor } from '../../theme/getters';
@@ -54,8 +51,8 @@ const Content = styled.div`
 
 type ListItemProps = {
   isDraggable?: boolean;
-} & ComponentWithChildrenProps &
-  Partial<ClickableComponentProps>;
+} & ChildrenProp &
+  Partial<OnClickProp>;
 
 export const ListItem = ({ children, onClick, isDraggable }: ListItemProps) => {
   return (

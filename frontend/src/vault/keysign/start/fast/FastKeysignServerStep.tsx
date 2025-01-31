@@ -7,7 +7,7 @@ import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHas
 import { assertChainField } from '../../../../chain/utils/assertChainField';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
-import { ComponentWithForwardActionProps } from '../../../../lib/ui/props';
+import { OnForwardProp } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { matchRecordUnion } from '../../../../lib/utils/matchRecordUnion';
 import { assertField } from '../../../../lib/utils/record/assertField';
@@ -27,9 +27,9 @@ import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePaylo
 import { getTssKeysignType } from '../../utils/getTssKeysignType';
 import { getTxInputData } from '../../utils/getTxInputData';
 
-export const FastKeysignServerStep: React.FC<
-  ComponentWithForwardActionProps
-> = ({ onForward }) => {
+export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
+  onForward,
+}) => {
   const { t } = useTranslation();
 
   const { public_key_ecdsa } = useCurrentVault();

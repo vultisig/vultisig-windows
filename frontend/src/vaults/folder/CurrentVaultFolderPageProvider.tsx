@@ -1,14 +1,12 @@
 import { useEffect } from 'react';
 
-import { ComponentWithChildrenProps } from '../../lib/ui/props';
+import { ChildrenProp } from '../../lib/ui/props';
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
 import { useVaultFolder } from '../folders/queries/useVaultFoldersQuery';
 import { VaultFolderProvider } from './state/currentVaultFolder';
 
-export const CurrentVaultFolderPageProvider = ({
-  children,
-}: ComponentWithChildrenProps) => {
+export const CurrentVaultFolderPageProvider = ({ children }: ChildrenProp) => {
   const [{ id }] = useAppPathParams<'vaultFolder'>();
 
   const value = useVaultFolder(id);

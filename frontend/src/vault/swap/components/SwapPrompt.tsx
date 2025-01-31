@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 import { CoinKey, coinKeyToString } from '../../../coin/Coin';
 import { Button } from '../../../lib/ui/buttons/Button';
-import { ComponentWithValueProps } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
 import { makeAppPath } from '../../../navigation';
 
-export const SwapPrompt = ({ value }: ComponentWithValueProps<CoinKey>) => {
+export const SwapPrompt = ({ value }: ValueProp<CoinKey>) => {
   const { t } = useTranslation();
 
   return (
