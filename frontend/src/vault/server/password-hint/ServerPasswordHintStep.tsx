@@ -15,10 +15,7 @@ import {
 import { CircledCloseIcon } from '../../../lib/ui/icons/CircledCloseIcon';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
-import {
-  ComponentWithBackActionProps,
-  ComponentWithForwardActionProps,
-} from '../../../lib/ui/props';
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -34,7 +31,7 @@ type PasswordHintSchema = z.infer<typeof passwordHintSchema>;
 export const ServerPasswordHintStep = ({
   onForward,
   onBack,
-}: ComponentWithForwardActionProps & Partial<ComponentWithBackActionProps>) => {
+}: OnForwardProp & Partial<OnBackProp>) => {
   const { t } = useTranslation();
   const [storedPasswordHint, setStoredPasswordHint] = useVaultPasswordHint();
 
