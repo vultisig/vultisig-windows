@@ -56,7 +56,7 @@ export const compileTx = ({
 
     allSignatures.add(signature);
 
-    if (signatureFormat !== 'rawWithRecoveryId') {
+    if (chainKind !== 'evm') {
       publicKeys.add(publicKey.data());
     }
   });
