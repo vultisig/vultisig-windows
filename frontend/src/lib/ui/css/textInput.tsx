@@ -7,7 +7,7 @@ import { horizontalPadding } from './horizontalPadding';
 import { toSizeUnit } from './toSizeUnit';
 
 export const textInputHorizontalPadding = 12;
-export const textInputHeight = 48;
+export const textInputHeight = 56;
 export const textInputBorderRadius = borderRadius.s;
 
 export const textInputFrame = css`

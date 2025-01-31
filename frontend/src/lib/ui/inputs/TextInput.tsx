@@ -1,9 +1,7 @@
 import { ChangeEvent, ComponentProps, forwardRef, Ref } from 'react';
 import styled, { css } from 'styled-components';
 
-import { UnstyledButton } from '../buttons/UnstyledButton';
 import { textInput } from '../css/textInput';
-import { CircledCloseIcon } from '../icons/CircledCloseIcon';
 import { VStack } from '../layout/Stack';
 import { Spinner } from '../loaders/Spinner';
 import { LabeledComponentProps, UIComponentProps } from '../props';
@@ -15,9 +13,7 @@ export type SharedTextInputProps = Partial<LabeledComponentProps> &
   ComponentProps<typeof TextInputContainer> & {
     onValueChange?: (value: string) => void;
     isLoading?: boolean;
-    isValid?: boolean;
-    isInvalid?: boolean;
-    withResetValueBtn?: boolean;
+    validationState?: 'valid' | 'invalid';
   };
 
 export interface TextInputProps
@@ -33,7 +29,6 @@ export const TextInput = forwardRef(function TextInputInner(
     isLoading,
     className,
     label,
-    withResetValueBtn,
     ...props
   }: TextInputProps,
   ref: Ref<HTMLInputElement> | null
@@ -56,11 +51,6 @@ export const TextInput = forwardRef(function TextInputInner(
           />
         )}
         {inputOverlay}
-        {!isLoading && withResetValueBtn && (
-          <ClearInputBtn onClick={() => onValueChange?.('')}>
-            <CircledCloseIcon />
-          </ClearInputBtn>
-        )}
       </InputWr>
     </InputContainer>
   );
@@ -74,19 +64,13 @@ const InputWr = styled.div`
   justify-content: space-between;
 `;
 
-const ClearInputBtn = styled(UnstyledButton)`
-  position: absolute;
-  right: 16px;
-`;
-
 export const TextInputContainer = styled.input<{
-  isValid?: boolean;
-  isInvalid?: boolean;
+  validationState?: 'valid' | 'invalid';
 }>`
   ${textInput};
 
-  ${({ isValid, isInvalid }) =>
-    isValid
+  ${({ validationState }) =>
+    validationState === 'valid'
       ? css`
           border-color: ${getColor('primary')};
 
@@ -95,7 +79,7 @@ export const TextInputContainer = styled.input<{
             border-color: ${getColor('primary')};
           }
         `
-      : isInvalid &&
+      : validationState === 'invalid' &&
         css`
           border-color: ${getColor('danger')};
 
