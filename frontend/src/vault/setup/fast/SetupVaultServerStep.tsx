@@ -11,12 +11,12 @@ import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { KeygenFailedState } from '../../keygen/shared/KeygenFailedState';
 import { WaitForServerStates } from '../../server/components/WaitForServerLoader';
 import { useVaultType } from '../shared/state/vaultType';
-import { useVaultServerAndPeersSetup } from './hooks/useVaultServerAndPeersSetup';
+import { useVaultCreationPreparation } from './hooks/useVaultCreationPreparation';
 
 export const SetupVaultServerStep: FC<
   ComponentWithForwardActionProps & ComponentWithBackActionProps
 > = ({ onForward, onBack }) => {
-  const state = useVaultServerAndPeersSetup();
+  const state = useVaultCreationPreparation();
   const { t } = useTranslation();
   const type = useVaultType();
 
