@@ -77,6 +77,7 @@ export const SetServerPasswordStep = ({
             }
             <Text variant="h1Regular">Password</Text>
             <PasswordWarningBlock>
+              {/* TODO: add tooltip with additional information */}
               Password cannot be reset or recovered
             </PasswordWarningBlock>
           </VStack>
