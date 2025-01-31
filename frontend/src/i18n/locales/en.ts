@@ -441,7 +441,7 @@ export const en = {
   fast_sign: 'Fast Sign',
   paired_sign: 'Paired Sign',
   part_n_of_m: 'Part {{n}} of {{m}}',
-  chooseSetup: 'Choose Setup',
+  chooseSetup: 'Choose Set-up',
   introOnboarding: 'Intro',
   password_to_decrypt: 'This Password decrypts your FastVault Share',
   fast_vault_password: 'FastVault Password',
