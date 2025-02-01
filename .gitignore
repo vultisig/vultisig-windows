@@ -3,6 +3,8 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+.yarn/build-state.yml
+.yarn/install-state.gz
 # Dependency directories
 vendor/
 
