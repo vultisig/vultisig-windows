@@ -21,14 +21,14 @@ export default defineConfig({
           src: normalizePath(
             path.resolve(
               __dirname,
-              'node_modules/@trustwallet/wallet-core/dist/lib/wallet-core.wasm'
+              '../../node_modules/@trustwallet/wallet-core/dist/lib/wallet-core.wasm'
             )
           ),
           dest: '',
         },
         {
           src: normalizePath(
-            path.resolve(__dirname, 'node_modules/7z-wasm/7zz.wasm')
+            path.resolve(__dirname, '../../node_modules/7z-wasm/7zz.wasm')
           ),
           dest: '7z-wasm',
         },

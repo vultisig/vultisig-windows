@@ -1,0 +1,26 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
+    "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'",
+    "format:wails": "prettier --write 'wailsjs/**/*.{ts,js}'",
+    "format:pb": "prettier --write 'src/gen/**/*.{ts,js}'",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vite": "^4.0.0",
+    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite-plugin-node-stdlib-browser": "^0.2.1",
+    "vite-plugin-static-copy": "0.17.0",
+    "vitest": "^2.0.5"
+  }
+}
