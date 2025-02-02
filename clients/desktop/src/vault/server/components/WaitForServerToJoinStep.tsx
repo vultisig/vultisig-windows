@@ -8,7 +8,7 @@ import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { usePeerOptionsQuery } from '../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery';
 import { usePeersSelectionRecord } from '../../keysign/shared/state/selectedPeers';
-import { WaitForServerStates } from './WaitForServerLoader';
+import { WaitForServerStates } from './WaitForServerStates';
 
 export const WaitForServerToJoinStep: React.FC<
   OnForwardProp & Partial<OnBackProp> & TitleProp

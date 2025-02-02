@@ -11,7 +11,7 @@ import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { reshareWithServer } from '../../fast/api/reshareWithServer';
 import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId';
 import { generateLocalPartyId } from '../../keygen/utils/localPartyId';
-import { WaitForServerStates } from '../../server/components/WaitForServerLoader';
+import { WaitForServerLoader } from '../../server/components/WaitForServerLoader';
 import { useVaultEmail } from '../../server/email/state/email';
 import { useVaultPassword } from '../../server/password/state/password';
 import { useCurrentHexEncryptionKey } from '../../setup/state/currentHexEncryptionKey';
@@ -73,13 +73,13 @@ export const FastReshareServerStep: React.FC<OnForwardProp> = ({
         pending={() => (
           <>
             {header}
-            <WaitForServerStates state="pending" />
+            <WaitForServerLoader />
           </>
         )}
         success={() => (
           <>
             {header}
-            <WaitForServerStates state="success" />
+            <WaitForServerLoader />
           </>
         )}
         error={error => (
