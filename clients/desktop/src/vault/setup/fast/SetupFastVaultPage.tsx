@@ -2,7 +2,6 @@ import { Match } from '../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { KeygenType } from '../../keygen/KeygenType';
-import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType';
@@ -31,7 +30,6 @@ const steps = [
   'password',
   'hint',
   'server',
-  'startSession',
   'keygen',
 ] as const;
 
@@ -88,12 +86,6 @@ export const SetupFastVaultPage = () => {
                                     )}
                                     server={() => (
                                       <SetupVaultServerStep
-                                        onBack={() => setStep(lastEditableStep)}
-                                        onForward={toNextStep}
-                                      />
-                                    )}
-                                    startSession={() => (
-                                      <KeygenStartSessionStep
                                         onBack={() => setStep(lastEditableStep)}
                                         onForward={toNextStep}
                                       />

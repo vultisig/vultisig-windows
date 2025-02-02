@@ -22,16 +22,16 @@ export const KeygenStartSessionStep = ({
   const { t } = useTranslation();
 
   const sessionId = useCurrentSessionId();
-
   const serverUrl = useCurrentServerUrl();
-
   const devices = useVaultKeygenDevices();
 
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {
       return startSession({ serverUrl, sessionId, devices });
     },
-    onSuccess: () => onForward(),
+    onSuccess: () => {
+      setTimeout(onForward, 30000);
+    },
   });
 
   useEffect(() => start(), [start]);

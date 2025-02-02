@@ -20,7 +20,7 @@ export const SetupVaultServerStep: FC<OnForwardProp & OnBackProp> = ({
 
   useEffect(() => {
     if (state.data) {
-      setTimeout(() => onForward(), 3000);
+      onForward();
     }
   }, [onForward, state.data]);
 
