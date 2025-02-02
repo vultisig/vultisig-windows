@@ -34,6 +34,7 @@ export const KeygenProgressIndicator = ({ value }: ValueProp<KeygenStatus>) => {
 
   const completion = keygenCompletion[value];
   const text = keygenStageText[value];
+  console.log('## text', text);
 
   return (
     <VStack gap={12} alignItems="center">
