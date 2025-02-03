@@ -1,4 +1,4 @@
-import { TonSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { TonSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { getTonAccountInfo } from '../../ton/account/getTonAccountInfo';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
 import { GetChainSpecificInput } from './GetChainSpecificInput';

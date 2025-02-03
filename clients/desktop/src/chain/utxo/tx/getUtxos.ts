@@ -1,4 +1,4 @@
-import { UtxoInfo } from '../../../gen/vultisig/keysign/v1/utxo_info_pb';
+import { UtxoInfo } from '@core/communication/vultisig/keysign/v1/utxo_info_pb';
 import { UtxoChain } from '../../../model/chain';
 import { ChainAccount } from '../../ChainAccount';
 import { getUtxoAddressInfo } from '../blockchair/getUtxoAddressInfo';

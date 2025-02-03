@@ -1,5 +1,5 @@
 import { assertChainField } from '../../../chain/utils/assertChainField';
-import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { minBigInt } from '@lib/utils/math/minBigInt';
 import { maxSendAmountEnabledChains } from '../../../model/chain';

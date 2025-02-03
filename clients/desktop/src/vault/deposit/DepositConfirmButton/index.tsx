@@ -4,7 +4,7 @@ import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { coinKeyFromString } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';

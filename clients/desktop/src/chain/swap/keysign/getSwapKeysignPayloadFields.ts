@@ -10,9 +10,9 @@ import {
   OneInchQuote,
   OneInchSwapPayload,
   OneInchTransaction,
-} from '../../../gen/vultisig/keysign/v1/1inch_swap_payload_pb';
-import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+} from '@core/communication/vultisig/keysign/v1/1inch_swap_payload_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { EvmChain } from '../../../model/chain';
 import { fromChainAmount } from '../../utils/fromChainAmount';
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote';

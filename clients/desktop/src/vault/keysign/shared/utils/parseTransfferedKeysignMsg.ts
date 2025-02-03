@@ -1,7 +1,7 @@
 import {
   KeysignMessage,
   KeysignPayload,
-} from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
+} from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { getKeygenServerUrl } from '../../../keygen/server/utils/getKeygenServerUrl';
 import { decompressQrPayload } from '../../../qr/upload/utils/decompressQrPayload';
 import { getPayloadFromServer } from '../../../server/utils/getPayloadFromServer';

@@ -1,4 +1,4 @@
-import { THORChainSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { THORChainSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { CosmosChain } from '../../../model/chain';
 import { getCosmosAccountInfo } from '../../cosmos/account/getCosmosAccountInfo';
 import { getThorNetworkInfo } from '../../thor/getThorNetworkInfo';

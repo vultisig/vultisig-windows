@@ -1,4 +1,4 @@
-import { PolkadotSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { PolkadotSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { RpcServicePolkadot } from '../../../services/Rpc/polkadot/RpcServicePolkadot';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
 import { GetChainSpecificInput } from './GetChainSpecificInput';

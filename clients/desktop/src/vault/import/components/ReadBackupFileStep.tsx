@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReadTextFile } from '../../../../wailsjs/go/main/App';
-import { VaultContainer } from '../../../gen/vultisig/vault/v1/vault_container_pb';
+import { VaultContainer } from '@core/communication/vultisig/vault/v1/vault_container_pb';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { OnFinishProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';

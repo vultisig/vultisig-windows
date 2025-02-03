@@ -1,5 +1,6 @@
+import { Vault } from '@core/communication/vultisig/vault/v1/vault_pb';
+
 import { storage } from '../../../wailsjs/go/models';
-import { Vault } from '../../gen/vultisig/vault/v1/vault_pb';
 
 export const getStorageVaultId = (vault: storage.Vault): string =>
   vault.public_key_ecdsa;

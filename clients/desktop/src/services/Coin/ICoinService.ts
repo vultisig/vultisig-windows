@@ -1,5 +1,5 @@
 import { storage } from '../../../wailsjs/go/models';
-import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 
 export interface ICoinService {
   saveCoin(coin: Coin, vault: storage.Vault): Promise<void>;

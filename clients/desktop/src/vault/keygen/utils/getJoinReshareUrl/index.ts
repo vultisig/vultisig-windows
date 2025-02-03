@@ -1,7 +1,7 @@
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config';
-import { ReshareMessage } from '../../../../gen/vultisig/keygen/v1/reshare_message_pb';
+import { ReshareMessage } from '@core/communication/vultisig/keygen/v1/reshare_message_pb';
 import { toCompressedString } from '../../../../utils/protobuf/toCompressedString';
 import { KeygenServerType } from '../../server/KeygenServerType';
 

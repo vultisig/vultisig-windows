@@ -1,6 +1,6 @@
 import { assertChainField } from '../../../chain/utils/assertChainField';
 import { getUtxoAddressInfo } from '../../../chain/utxo/blockchair/getUtxoAddressInfo';
-import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { IRpcService } from '../IRpcService';
 
 export class RpcServiceUtxo implements IRpcService {

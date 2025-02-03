@@ -3,7 +3,7 @@ import { WalletCore } from '@trustwallet/wallet-core';
 import { storage } from '../../../wailsjs/go/models';
 import { DeleteCoin, SaveCoin } from '../../../wailsjs/go/storage/Store';
 import { coinToStorageCoin } from '../../coin/utils/coin';
-import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../model/chain';
 import { ICoinService } from './ICoinService';
 

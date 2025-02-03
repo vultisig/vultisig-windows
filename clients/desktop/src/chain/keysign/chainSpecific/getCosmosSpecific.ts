@@ -1,7 +1,9 @@
+import { create } from '@bufbuild/protobuf';
 import {
-  CosmosSpecific,
+  CosmosSpecificSchema,
   TransactionType,
-} from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+
 import { Chain } from '../../../model/chain';
 import { getCosmosAccountInfo } from '../../cosmos/account/getCosmosAccountInfo';
 import {
@@ -36,7 +38,7 @@ export const getCosmosSpecific = async ({
 
   const gas = BigInt(defaultGasRecord[chain]);
 
-  return new CosmosSpecific({
+  return create(CosmosSpecificSchema, {
     accountNumber: BigInt(accountNumber),
     sequence: BigInt(sequence),
     gas,

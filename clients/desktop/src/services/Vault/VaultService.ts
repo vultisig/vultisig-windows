@@ -1,4 +1,9 @@
 import { Timestamp } from '@bufbuild/protobuf';
+import { VaultContainer } from '@core/communication/vultisig/vault/v1/vault_container_pb';
+import {
+  Vault,
+  Vault_KeyShare,
+} from '@core/communication/vultisig/vault/v1/vault_pb';
 import crypto from 'crypto';
 
 import { SaveFileBkp } from '../../../wailsjs/go/main/App';
@@ -12,8 +17,6 @@ import {
   UpdateAddressBookItem,
   UpdateVaultName,
 } from '../../../wailsjs/go/storage/Store';
-import { VaultContainer } from '../../gen/vultisig/vault/v1/vault_container_pb';
-import { Vault, Vault_KeyShare } from '../../gen/vultisig/vault/v1/vault_pb';
 import { AddressBookItem } from '../../lib/types/address-book';
 import { IVaultService } from './IVaultService';
 

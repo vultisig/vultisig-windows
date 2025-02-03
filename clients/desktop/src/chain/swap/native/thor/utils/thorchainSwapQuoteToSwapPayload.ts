@@ -1,8 +1,8 @@
 import { convertDuration } from '@lib/utils/time/convertDuration';
 import { addMinutes } from 'date-fns';
 
-import { Coin } from '../../../../../gen/vultisig/keysign/v1/coin_pb';
-import { THORChainSwapPayload } from '../../../../../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
+import { THORChainSwapPayload } from '@core/communication/vultisig/keysign/v1/thorchain_swap_payload_pb';
 import { KeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload';
 import { fromChainAmount } from '../../../../utils/fromChainAmount';
 import { nativeSwapStreamingInterval } from '../../NativeSwapChain';

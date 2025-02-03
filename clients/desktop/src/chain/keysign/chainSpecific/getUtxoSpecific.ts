@@ -1,5 +1,5 @@
 import { getCoinBalance } from '../../../coin/balance/getCoinBalance';
-import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { UTXOSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { UtxoChain } from '../../../model/chain';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
 import { toChainAmount } from '../../utils/toChainAmount';

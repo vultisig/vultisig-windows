@@ -5,7 +5,7 @@ import { incrementKeysignPayloadNonce } from '../../../chain/evm/tx/incrementKey
 import { getPreSignedInputData } from '../../../chain/keysign/preSignedInputData/getPreSignedInputData';
 import { getOneInchSwapTxInputData } from '../../../chain/swap/general/oneInch/tx/getOneInchSwapTxInputData';
 import { getThorchainSwapTxInputData } from '../../../chain/swap/native/thor/tx/getThorchainSwapTxInputData';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
 import { getKeysignChain } from './getKeysignChain';
 

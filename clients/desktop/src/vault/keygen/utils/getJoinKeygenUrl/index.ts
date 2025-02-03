@@ -1,7 +1,7 @@
+import { KeygenMessage } from '@core/communication/vultisig/keygen/v1/keygen_message_pb';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config';
-import { KeygenMessage } from '../../../../gen/vultisig/keygen/v1/keygen_message_pb';
 import { toCompressedString } from '../../../../utils/protobuf/toCompressedString';
 import { KeygenServerType } from '../../server/KeygenServerType';
 

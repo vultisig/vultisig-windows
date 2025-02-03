@@ -1,4 +1,4 @@
-import { RippleSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { RippleSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { RpcServiceRipple } from '../../../services/Rpc/ripple/RpcServiceRipple';
 import { rippleConfig } from '../../ripple/config';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';

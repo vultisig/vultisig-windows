@@ -1,6 +1,8 @@
+import { create } from '@bufbuild/protobuf';
+import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
+
 import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { useTransform } from '../../../lib/ui/hooks/useTransform';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault';
@@ -30,17 +32,17 @@ export const useSendTxKeysignPayloadQuery = () => {
     getQuery: ({ chainSpecific, cappedAmount }) => ({
       queryKey: ['sendKeysignPayload'],
       queryFn: async () => {
-        const result = new KeysignPayload({
-          coin,
-          toAddress: receiver,
-          toAmount: cappedAmount.amount.toString(),
-          blockchainSpecific: chainSpecific,
-          memo,
-          vaultLocalPartyId: vault.local_party_id,
-          vaultPublicKeyEcdsa: vault.public_key_ecdsa,
-        });
-
-        return processKeysignPayload(result);
+        return processKeysignPayload(
+          create(KeysignPayloadSchema, {
+            coin,
+            toAddress: receiver,
+            toAmount: cappedAmount.amount.toString(),
+            blockchainSpecific: chainSpecific,
+            memo,
+            vaultLocalPartyId: vault.local_party_id,
+            vaultPublicKeyEcdsa: vault.public_key_ecdsa,
+          })
+        );
       },
     }),
   });

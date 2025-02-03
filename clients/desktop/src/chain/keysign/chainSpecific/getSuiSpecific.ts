@@ -1,4 +1,4 @@
-import { SuiSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { SuiSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { RpcServiceSui } from '../../../services/Rpc/sui/RpcServiceSui';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
 import { GetChainSpecificInput } from './GetChainSpecificInput';

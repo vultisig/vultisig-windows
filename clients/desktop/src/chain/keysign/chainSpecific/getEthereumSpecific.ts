@@ -2,7 +2,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { ethers } from 'ethers';
 import { publicActionsL2 } from 'viem/zksync';
 
-import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { Chain, EvmChain } from '../../../model/chain';
 import { RpcServiceEvm } from '../../../services/Rpc/evm/RpcServiceEvm';
 import {

@@ -1,6 +1,6 @@
 import { callRpc } from '../../../chain/rpc/callRpc';
-import { SuiCoin } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { SuiCoin } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 
