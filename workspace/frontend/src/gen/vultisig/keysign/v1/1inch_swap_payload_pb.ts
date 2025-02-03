@@ -48,6 +48,11 @@ export class OneInchTransaction extends Message<OneInchTransaction> {
    */
   gas = protoInt64.zero;
 
+  /**
+   * @generated from field: string swap_fee = 7;
+   */
+  swapFee = '';
+
   constructor(data?: PartialMessage<OneInchTransaction>) {
     super();
     proto3.util.initPartial(data, this);
@@ -62,6 +67,7 @@ export class OneInchTransaction extends Message<OneInchTransaction> {
     { no: 4, name: 'value', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
     { no: 5, name: 'gas_price', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
     { no: 6, name: 'gas', kind: 'scalar', T: 3 /* ScalarType.INT64 */ },
+    { no: 7, name: 'swap_fee', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(
