@@ -6,7 +6,7 @@ import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
 import { startSession } from '../../../keygen/utils/startSession';
 import { useVaultKeygenDevices } from '../../hooks/useVaultKegenDevices';
 
-export const useStartFastVaultCreationKeygen = (enabled: boolean) => {
+export const useStartFastVaultKeygenSessionMutation = (enabled: boolean) => {
   const sessionId = useCurrentSessionId();
   const serverUrl = useCurrentServerUrl();
   const devices = useVaultKeygenDevices();

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { borderRadius } from '../../../../../lib/ui/css/borderRadius';
 import { CheckIcon } from '../../../../../lib/ui/icons/CheckIcon';
-import { LoadingIcon } from '../../../../../lib/ui/icons/LoadingIcon';
+import { LoadingIndicatorImage } from '../../../../../lib/ui/images/LoadingIndicatorImage';
 import { HStack, VStack } from '../../../../../lib/ui/layout/Stack';
 import { Text } from '../../../../../lib/ui/text';
 import { getColor } from '../../../../../lib/ui/theme/getters';
@@ -60,7 +60,7 @@ export const SlidesLoader = () => {
         <Text color="shy">{t('fastVaultSetup.generatingECDSAKey')}</Text>
       </HStack>
       <ProgressBarWrapper>
-        <LoadingIcon />
+        <LoadingIndicatorImage />
       </ProgressBarWrapper>
     </Wrapper>
   );
