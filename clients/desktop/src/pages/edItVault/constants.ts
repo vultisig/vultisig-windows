@@ -1,5 +1,5 @@
 import BackupIcon from '../../lib/ui/icons/BackupIcon';
-import { InfoIcon } from '../../lib/ui/icons/InfoIcon';
+import { QuestionMarkIcon } from '../../lib/ui/icons/QuestionMarkIcon';
 import ReshareIcon from '../../lib/ui/icons/ReshareIcon';
 import { SignatureIcon } from '../../lib/ui/icons/SignatureIcon';
 import SquareAndPencilIcon from '../../lib/ui/icons/SquareAndPencilIcon';
@@ -19,7 +19,7 @@ export const editVaultSettingsItems: SettingItem[] = [
   {
     titleKey: 'vault_settings_edit_vault_details_title',
     subtitleKey: 'vault_setting_edit_vault_details_subtitle',
-    icon: InfoIcon,
+    icon: QuestionMarkIcon,
     path: 'vaultDetails',
   },
   {
