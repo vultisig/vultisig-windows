@@ -82,17 +82,3 @@ yarn build:extension
 2. Enable "Developer mode" (top-right corner)
 3. Click "Load unpacked" and select the `dist` folder from the extension
 4. The extension should now be installed and ready to use
-
-## Linux Users
-
-Vultisig under linux require `libwebkit2gtk-4.0-dev` , usually you can run the following commands to install it:
-
-```
-sudo apt update
-sudo apt install libwebkit2gtk-4.0-dev
-```
-
-If you are using Ubuntu 24.4 and it can't find `libwebkit2gtk-4.0-dev`, then here is the workaround:
-
-1. add `deb http://gb.archive.ubuntu.com/ubuntu jammy main` to `/etc/apt/sources.list`
-2. and run `sudo apt update` and `sudo apt install libwebkit2gtk-4.0-dev`
