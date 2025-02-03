@@ -4,9 +4,9 @@
   "outputfilename": "vultisig",
   "packageManager": "yarn@4.5.2",
   "workspaces": [
-    "frontend"
+    "clients/desktop"
   ],
-  "frontend:dir": "workspace/frontend",
+  "frontend:dir": "clients/desktop",
   "frontend:install": "yarn install",
   "frontend:build": "yarn build",
   "frontend:dev:watcher": "yarn dev",

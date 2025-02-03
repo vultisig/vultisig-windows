@@ -1,5 +1,5 @@
 {
-  "name": "vulticonnect",
+  "name": "@clients/extension",
   "private": true,
   "version": "0.1.0",
   "description": "VultiConnect is a Chrome extension that integrates Vultisig into web applications, enabling users to securely sign transactions.",

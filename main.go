@@ -19,7 +19,7 @@ import (
 	"github.com/vultisig/vultisig-win/utils"
 )
 
-//go:embed all:workspace/frontend/dist
+//go:embed all:clients/desktop/dist
 var assets embed.FS
 
 //go:embed appicon.png

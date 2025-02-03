@@ -7,8 +7,8 @@ echo "Syncing and reinitializing submodules..."
 git submodule init
 git submodule update --init --recursive
 
-# Go to workspace/frontend
-cd workspace/frontend
+# Go to clients/desktop
+cd clients/desktop
 
 echo "Generating protobuf files..."
 npx buf generate commondata/proto
@@ -18,7 +18,7 @@ yarn format:pb
 
 echo "Cleaning up submodule..."
 cd ../..
-git submodule deinit -f workspace/frontend/commondata
+git submodule deinit -f clients/desktop/commondata
 
 echo "Done! Protobuf files have been synced and formatted."
 
