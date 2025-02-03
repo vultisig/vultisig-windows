@@ -1,75 +1,84 @@
-# README
+# Vultisig Desktop & VultiConnect
 
-This is Vultisig windows application
+This monorepo contains two main components:
+1. The Vultisig Desktop Application (currently Windows-only, with support for other platforms coming soon)
+2. The VultiConnect Browser Extension - A Chrome extension for bridging your Vultisig vaults to dApps
 
-## Install wails
+## Desktop Application
 
-This project is using a tool call wails, please refer to https://wails.io/docs/gettingstarted/installation/ to install wails
+### Technical Requirements
 
-## Live Development
+This project uses Wails. Please refer to https://wails.io/docs/gettingstarted/installation/ for installation instructions.
 
-To run in live development mode, run `wails dev` in the project directory. This will run a Vite development
-server that will provide very fast hot reload of your frontend changes. If you want to develop in a browser
-and have access to your Go methods, there is also a dev server that runs on http://localhost:34115. Connect
-to this in your browser, and you can call your Go code from devtools.
+### For Linux Users
 
-## Building
-
-To build a redistributable, production mode package, use `wails build`.
-
-## Generate protobuf files for type script
-
-The keysign / keygen related messages are defined in https://github.com/vultisig/commondata , it is shared between IOS/Android/Windows , and also other projects
-If you need to make an update to the proto file, make sure you raise a PR in https://github.com/vultisig/commondata
-
-To generate the proto files for typescript, run the following command in the frontend directory
+Vultisig under Linux requires `libwebkit2gtk-4.0-dev`. Install it with:
 
 ```bash
-. ./scripts/sync_protobuf.sh
-```
-
-## Update protobuf files for type script
-
-To git pull for a submodule, you have a few options:
-
-1. Pull for the specific submodule:
-
-```bash
-git submodule update --remote frontend/commondata
-```
-
-2. Pull for all submodules:
-
-```bash
-git submodule update --remote
-```
-
-3. If you want to pull and also initialize/update nested submodules:
-
-```bash
-git submodule update --init --recursive
-```
-
-4. If you want to pull the main repository and all its submodules in one command:
-
-```bash
-git pull --recurse-submodules
-```
-
-Each of these commands will fetch and update the submodule to its latest commit on the remote branch.
-
-Tip: Make sure you're in the root directory of your main repository when running these commands.
-
-## FOR Linux user
-
-Vultisig under linux require `libwebkit2gtk-4.0-dev` , usually you can run the following command to install it
-
-```
 sudo apt update
 sudo apt install libwebkit2gtk-4.0-dev
 ```
 
-If you are using ubuntu 24.4 and it can't find `libwebkit2gtk-4.0-dev` , then here is the workaround
+### Development
 
-1. add `deb http://gb.archive.ubuntu.com/ubuntu jammy main` to `/etc/apt/sources.list`
-2. and run `sudo apt update` and `sudo apt install libwebkit2gtk-4.0-dev`
+To run the desktop application in development mode:
+
+```bash
+yarn dev:desktop
+```
+
+**Important Note:** This will expose two dev servers: one on 34115 (the Wails development server) and a Vite development server on port 5173.
+Always use the former, as the Vite development server won't have the requited Wails-injected scripts.
+
+### Building
+
+To build the desktop app dist:
+
+```bash
+yarn build:desktop
+```
+
+For Ubuntu 24.4 users who can't find `libwebkit2gtk-4.0-dev`:
+1. Add `deb http://gb.archive.ubuntu.com/ubuntu jammy main` to `/etc/apt/sources.list`
+2. Run `sudo apt update && sudo apt install libwebkit2gtk-4.0-dev`
+
+## VultiConnect Extension
+
+> Note: The VultiConnect repository has been moved into this monorepo (https://github.com/vultisig/vultisig-windows) to enable code sharing between the extension and desktop application.
+
+### What is VultiConnect?
+
+VultiConnect is a Chrome extension similar to MetaMask but much safer. It does not store any critical information such as private keys or passwords. Instead, it acts as a bridge that allows you to connect your Vultisig app to DeFi applications, enabling you to interact with them and sign transactions securely on your devices.
+
+### How Safe is VultiConnect?
+
+You only need to import public keys and vault information into VultiConnect. Unlike MetaMask, if someone hacks your Chrome or the extension, they cannot execute transactions without your approval on your Vultisig devices, as they only have access to public information.
+
+### Requirements
+
+Before building VultiConnect, ensure you have the following installed:
+- `Node.js` (version 18.10.0 or later)
+- `yarn` (for managing packages)
+
+### Development
+
+To run the Vulticonnect extension in development mode:
+
+```bash
+yarn dev:extension
+```
+
+### Building
+
+To build the extension:
+
+```bash
+yarn build:extension
+```
+
+### Installing in Chrome
+
+1. Open Chrome and navigate to `chrome://extensions`
+2. Enable "Developer mode" (top-right corner)
+3. Click "Load unpacked" and select the `dist` folder from the extension
+4. The extension should now be installed and ready to use
