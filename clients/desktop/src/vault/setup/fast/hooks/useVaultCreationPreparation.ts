@@ -25,6 +25,6 @@ export const useVaultCreationPreparation = () => {
               : 'failed_to_start_keygen',
           }
         : null,
-    data: keygenSetup.isSuccess ? true : null,
+    data: keygenSetup.isSuccess ? true : undefined,
   };
 };
