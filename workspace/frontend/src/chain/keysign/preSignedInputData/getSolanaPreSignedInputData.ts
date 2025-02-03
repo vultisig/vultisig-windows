@@ -1,7 +1,7 @@
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { assertField } from '../../../lib/utils/record/assertField';
+import { assertField } from '@lib/utils/record/assertField';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
 
 export const getSolanaPreSignedInputData = ({

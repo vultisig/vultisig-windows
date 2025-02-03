@@ -6,7 +6,7 @@ import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useTransform } from '../../../lib/ui/hooks/useTransform';
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery';
 import { useSendAmount } from '../state/amount';

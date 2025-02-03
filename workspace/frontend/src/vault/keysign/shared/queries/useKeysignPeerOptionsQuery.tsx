@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { useTransformQueryData } from '../../../../lib/ui/query/hooks/useTransformQueryData';
-import { intersection } from '../../../../lib/utils/array/intersection';
+import { intersection } from '@lib/utils/array/intersection';
 import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery';
 import { useCurrentVault } from '../../../state/currentVault';
 

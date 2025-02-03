@@ -1,4 +1,4 @@
-import { match } from '../../../lib/utils/match';
+import { match } from '@lib/utils/match';
 import { Chain } from '../../../model/chain';
 
 type ChainEntity = 'address' | 'tx';

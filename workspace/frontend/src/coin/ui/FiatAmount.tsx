@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormatFiatAmount } from '../../chain/ui/hooks/useFormatFiatAmount';
 import { Spinner } from '../../lib/ui/loaders/Spinner';
 import { MatchQuery } from '../../lib/ui/query/components/MatchQuery';
-import { EntityWithAmount } from '../../lib/utils/entities/EntityWithAmount';
+import { EntityWithAmount } from '@lib/utils/entities/EntityWithAmount';
 import { CoinMeta } from '../../model/coin-meta';
 import { useCurrentVaultCoin } from '../../vault/state/currentVault';
 import { CoinKey } from '../Coin';

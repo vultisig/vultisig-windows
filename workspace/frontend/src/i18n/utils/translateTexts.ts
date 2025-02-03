@@ -1,6 +1,6 @@
 import { TranslationServiceClient } from '@google-cloud/translate';
 
-import { toBatches } from '../../lib/utils/array/toBatches';
+import { toBatches } from '@lib/utils/array/toBatches';
 import { Language } from '../Language';
 
 const batchSize = 600;

@@ -4,7 +4,7 @@ import RingProgress from '../../../components/ringProgress/RingProgress';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { ValueProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
-import { match } from '../../../lib/utils/match';
+import { match } from '@lib/utils/match';
 import { KeygenType } from '../KeygenType';
 import { useCurrentKeygenType } from '../state/currentKeygenType';
 import { KeygenStatus } from './MatchKeygenSessionStatus';

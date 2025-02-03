@@ -1,3 +1,7 @@
+import { isOneOf } from '@lib/utils/array/isOneOf';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
+
 import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { areEqualCoins } from '../../../coin/Coin';
 import { getCoinKey } from '../../../coin/utils/coin';
@@ -9,9 +13,6 @@ import {
 } from '../../../gen/vultisig/keysign/v1/1inch_swap_payload_pb';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { isOneOf } from '../../../lib/utils/array/isOneOf';
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
-import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
 import { EvmChain } from '../../../model/chain';
 import { fromChainAmount } from '../../utils/fromChainAmount';
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote';

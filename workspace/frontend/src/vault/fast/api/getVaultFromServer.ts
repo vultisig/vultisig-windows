@@ -1,5 +1,6 @@
-import { base64Encode } from '../../../lib/utils/base64Encode';
-import { assertFetchResponse } from '../../../lib/utils/fetch/assertFetchResponse';
+import { base64Encode } from '@lib/utils/base64Encode';
+import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse';
+
 import { fastVaultServerUrl } from '../config';
 
 type GetVaultFromServerInput = {

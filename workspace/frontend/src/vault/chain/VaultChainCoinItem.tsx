@@ -9,9 +9,9 @@ import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { ValueProp } from '../../lib/ui/props';
 import { Text } from '../../lib/ui/text';
-import { EntityWithLogo } from '../../lib/utils/entities/EntityWithLogo';
-import { EntityWithTicker } from '../../lib/utils/entities/EntityWithTicker';
-import { formatAmount } from '../../lib/utils/formatAmount';
+import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo';
+import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
+import { formatAmount } from '@lib/utils/formatAmount';
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
 import { shouldDisplayChainLogo } from './utils';
 

@@ -1,7 +1,7 @@
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { assertField } from '../../../lib/utils/record/assertField';
+import { assertField } from '@lib/utils/record/assertField';
 import { cosmosGasLimitRecord } from '../../cosmos/cosmosGasLimitRecord';
 import { getCoinType } from '../../walletCore/getCoinType';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';

@@ -4,7 +4,7 @@ import { storage } from '../../../wailsjs/go/models';
 import { SaveVault } from '../../../wailsjs/go/storage/Store';
 import { useDefaultChains } from '../../chain/state/defaultChains';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
-import { getLastItemOrder } from '../../lib/utils/order/getLastItemOrder';
+import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { createVaultDefaultCoins } from '../coins/createVaultDefaultCoins';
 import { useVaults, vaultsQueryKey } from '../queries/useVaultsQuery';

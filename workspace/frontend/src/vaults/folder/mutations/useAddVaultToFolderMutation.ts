@@ -5,8 +5,8 @@ import {
   UpdateVaultOrder,
 } from '../../../../wailsjs/go/storage/Store';
 import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries';
-import { isEmpty } from '../../../lib/utils/array/isEmpty';
-import { getLastItemOrder } from '../../../lib/utils/order/getLastItemOrder';
+import { isEmpty } from '@lib/utils/array/isEmpty';
+import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder';
 import {
   useVaults,
   vaultsQueryKey,

@@ -2,8 +2,7 @@
   "name": "vultisig-windows",
   "packageManager": "yarn@4.6.0",
   "workspaces": [
-    "workspace/frontend",
-    "workspace/vulticonnect"
+    "./**"
   ],
   "scripts": {
     "build": "yarn workspace frontend build"

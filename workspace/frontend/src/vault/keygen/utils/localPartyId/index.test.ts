@@ -1,7 +1,7 @@
+import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter';
+import { randomIntegerInRange } from '@lib/utils/randomInRange';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { capitalizeFirstLetter } from '../../../../lib/utils/capitalizeFirstLetter';
-import { randomIntegerInRange } from '../../../../lib/utils/randomInRange';
 import {
   formatKeygenDeviceName,
   generateLocalPartyId,
@@ -10,13 +10,13 @@ import {
   parseLocalPartyId,
 } from '.';
 
-vi.mock('../../../../lib/utils/capitalizeFirstLetter', () => ({
+vi.mock('@lib/utils/capitalizeFirstLetter', () => ({
   capitalizeFirstLetter: vi.fn(
     str => str.charAt(0).toUpperCase() + str.slice(1)
   ),
 }));
 
-vi.mock('../../../../lib/utils/randomInRange.ts', () => ({
+vi.mock('@lib/utils/randomIntegerInRange', () => ({
   randomIntegerInRange: vi.fn(() => 123),
 }));
 

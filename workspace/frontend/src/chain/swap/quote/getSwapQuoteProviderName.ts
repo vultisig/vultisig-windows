@@ -1,4 +1,4 @@
-import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 import { generalSwapProviderName } from '../general/GeneralSwapProvider';
 import { SwapQuote } from './SwapQuote';
 

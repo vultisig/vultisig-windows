@@ -31,10 +31,10 @@ import { Panel } from '../../lib/ui/panel/Panel';
 import { MatchQuery } from '../../lib/ui/query/components/MatchQuery';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { Text } from '../../lib/ui/text';
-import { splitBy } from '../../lib/utils/array/splitBy';
-import { sum } from '../../lib/utils/array/sum';
-import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
-import { formatAmount } from '../../lib/utils/formatAmount';
+import { splitBy } from '@lib/utils/array/splitBy';
+import { sum } from '@lib/utils/array/sum';
+import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
+import { formatAmount } from '@lib/utils/formatAmount';
 import { makeAppPath } from '../../navigation';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import {

@@ -12,7 +12,7 @@ import {
   zksync,
 } from 'viem/chains';
 
-import { recordMap } from '../../lib/utils/record/recordMap';
+import { recordMap } from '@lib/utils/record/recordMap';
 import { EvmChain } from '../../model/chain';
 import { Endpoint } from '../../services/Endpoint';
 

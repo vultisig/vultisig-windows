@@ -1,3 +1,5 @@
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
+import { assertField } from '@lib/utils/record/assertField';
 import { useMutation } from '@tanstack/react-query';
 import { keccak256 } from 'js-sha3';
 import { useEffect } from 'react';
@@ -9,8 +11,6 @@ import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { OnForwardProp } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
-import { matchRecordUnion } from '../../../../lib/utils/matchRecordUnion';
-import { assertField } from '../../../../lib/utils/record/assertField';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
 import { FullPageFlowErrorState } from '../../../../ui/flow/FullPageFlowErrorState';
 import { PageHeader } from '../../../../ui/page/PageHeader';

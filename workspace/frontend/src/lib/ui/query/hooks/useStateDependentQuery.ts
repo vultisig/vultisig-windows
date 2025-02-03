@@ -4,9 +4,9 @@ import {
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import { areEqualRecords } from '../../../utils/record/areEqualRecords';
-import { withoutUndefinedFields } from '../../../utils/record/withoutUndefinedFields';
-import { WithoutUndefinedFields } from '../../../utils/types/WithoutUndefinedFields';
+import { areEqualRecords } from '@lib/utils/record/areEqualRecords';
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
+import { WithoutUndefinedFields } from '@lib/utils/types/WithoutUndefinedFields';
 import { inactiveQuery, Query } from '../Query';
 
 type Input<

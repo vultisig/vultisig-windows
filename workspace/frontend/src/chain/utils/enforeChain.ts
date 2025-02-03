@@ -1,4 +1,4 @@
-import { isOneOf } from '../../lib/utils/array/isOneOf';
+import { isOneOf } from '@lib/utils/array/isOneOf';
 import { Chain } from '../../model/chain';
 import { ChainEntity } from '../ChainEntity';
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { toPercents } from '../../utils/toPercents';
+import { toPercents } from '@lib/utils/toPercents';
 import { round } from '../css/round';
 import { vStack } from '../layout/Stack';
 import { ValueProp } from '../props';

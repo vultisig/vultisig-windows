@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-import { match } from '../../../utils/match';
+import { match } from '@lib/utils/match';
 import { interactive } from '../../css/interactive';
 import { HStack } from '../../layout/Stack';
 import { InputProps, UiProps } from '../../props';

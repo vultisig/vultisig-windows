@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 
-import { capitalizeFirstLetter } from '../../utils/capitalizeFirstLetter';
+import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter';
 import { ChildrenProp } from '../props';
 
 export function getStateProviderSetup<T>(name: string) {

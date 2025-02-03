@@ -8,7 +8,7 @@ import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQu
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
-import { isOneOf } from '../../../lib/utils/array/isOneOf';
+import { isOneOf } from '@lib/utils/array/isOneOf';
 import { UtxoChain } from '../../../model/chain';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromAmount } from '../state/fromAmount';

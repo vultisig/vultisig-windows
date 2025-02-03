@@ -1,6 +1,6 @@
 import styled, { css, DefaultTheme } from 'styled-components';
 
-import { match } from '../../utils/match';
+import { match } from '@lib/utils/match';
 import { cropText } from '../css/cropText';
 import { toSizeUnit } from '../css/toSizeUnit';
 

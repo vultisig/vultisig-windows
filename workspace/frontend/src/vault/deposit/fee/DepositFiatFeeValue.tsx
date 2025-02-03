@@ -6,7 +6,7 @@ import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { formatAmount } from '../../../lib/utils/formatAmount';
+import { formatAmount } from '@lib/utils/formatAmount';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';

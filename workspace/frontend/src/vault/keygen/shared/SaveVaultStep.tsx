@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { storage } from '../../../../wailsjs/go/models';
 import { OnForwardProp, TitleProp, ValueProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
 import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent';

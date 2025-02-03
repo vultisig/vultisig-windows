@@ -1,7 +1,7 @@
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
-import { queryUrl } from '../../lib/utils/query/queryUrl';
-import { toEntries } from '../../lib/utils/record/toEntries';
-import { areLowerCaseEqual } from '../../lib/utils/string/areLowerCaseEqual';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { queryUrl } from '@lib/utils/query/queryUrl';
+import { toEntries } from '@lib/utils/record/toEntries';
+import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual';
 import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
 import { Fiat } from '../../model/fiat';

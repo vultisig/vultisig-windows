@@ -3,7 +3,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
-import { recordMap } from '../lib/utils/record/recordMap';
+import { recordMap } from '@lib/utils/record/recordMap';
 import { primaryLanguage } from './Language';
 import { translations } from './translations';
 

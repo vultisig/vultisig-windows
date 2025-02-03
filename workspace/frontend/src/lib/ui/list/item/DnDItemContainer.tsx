@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 import { DnDItemStatus } from '../../../dnd/DnDItemStatus';
-import { match } from '../../../utils/match';
+import { match } from '@lib/utils/match';
 import { absoluteOutline } from '../../css/absoluteOutline';
 import { borderRadius } from '../../css/borderRadius';
 import { StatusProp } from '../../props';

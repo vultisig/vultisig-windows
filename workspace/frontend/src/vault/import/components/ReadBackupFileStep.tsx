@@ -7,7 +7,7 @@ import { VaultContainer } from '../../../gen/vultisig/vault/v1/vault_container_p
 import { Button } from '../../../lib/ui/buttons/Button';
 import { OnFinishProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';

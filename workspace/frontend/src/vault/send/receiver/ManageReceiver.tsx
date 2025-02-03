@@ -20,7 +20,7 @@ import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { HStack } from '../../../lib/ui/layout/Stack';
 import { Modal } from '../../../lib/ui/modal';
 import { text } from '../../../lib/ui/text';
-import { asyncAttempt } from '../../../lib/utils/promise/asyncAttempt';
+import { asyncAttempt } from '@lib/utils/promise/asyncAttempt';
 import { ScanQrView } from '../../qr/upload/ScanQrView';
 import AddressSelector from '../addressSelector/AddressSelector';
 import { useSendReceiver } from '../state/receiver';

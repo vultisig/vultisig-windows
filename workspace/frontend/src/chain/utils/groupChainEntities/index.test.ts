@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { groupItems } from '../../../lib/utils/array/groupItems';
+import { groupItems } from '@lib/utils/array/groupItems';
 import { Chain } from '../../../model/chain';
 import { ChainEntity } from '../../ChainEntity';
 import { groupChainEntities } from '../groupChainEntities';

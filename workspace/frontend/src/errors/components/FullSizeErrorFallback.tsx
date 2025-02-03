@@ -7,7 +7,7 @@ import { UniformColumnGrid } from '../../lib/ui/css/uniformColumnGrid';
 import { FilledAlertIcon } from '../../lib/ui/icons/FilledAlertIcon';
 import { VStack } from '../../lib/ui/layout/Stack';
 import { Text, text } from '../../lib/ui/text';
-import { extractErrorMsg } from '../../lib/utils/error/extractErrorMsg';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';

@@ -7,7 +7,7 @@ import { Opener } from '../../../lib/ui/base/Opener';
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel';
 import { Text } from '../../../lib/ui/text';
-import { formatAmount } from '../../../lib/utils/formatAmount';
+import { formatAmount } from '@lib/utils/formatAmount';
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,

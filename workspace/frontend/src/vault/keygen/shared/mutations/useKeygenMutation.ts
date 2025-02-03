@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService';
-import { match } from '../../../../lib/utils/match';
+import { match } from '@lib/utils/match';
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
 import { KeygenType } from '../../KeygenType';
 import { useCurrentKeygenType } from '../../state/currentKeygenType';

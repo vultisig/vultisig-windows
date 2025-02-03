@@ -1,11 +1,12 @@
+import { isEmpty } from '@lib/utils/array/isEmpty';
+import { isOneOf } from '@lib/utils/array/isOneOf';
+import { EntityWithId } from '@lib/utils/entities/EntityWithId';
+import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
+import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain';
+import { pick } from '@lib/utils/record/pick';
+import { TransferDirection } from '@lib/utils/TransferDirection';
+
 import { EntityWithDecimals } from '../../../coin/Coin';
-import { isEmpty } from '../../../lib/utils/array/isEmpty';
-import { isOneOf } from '../../../lib/utils/array/isOneOf';
-import { EntityWithId } from '../../../lib/utils/entities/EntityWithId';
-import { EntityWithTicker } from '../../../lib/utils/entities/EntityWithTicker';
-import { asyncFallbackChain } from '../../../lib/utils/promise/asyncFallbackChain';
-import { pick } from '../../../lib/utils/record/pick';
-import { TransferDirection } from '../../../lib/utils/TransferDirection';
 import { ChainAccount } from '../../ChainAccount';
 import { toChainAmount } from '../../utils/toChainAmount';
 import { getLifiSwapQuote } from '../general/lifi/api/getLifiSwapQuote';

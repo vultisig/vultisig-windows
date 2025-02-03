@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
-import { extractErrorMsg } from '../../../../lib/utils/error/extractErrorMsg';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { useCurrentVaultCoin } from '../../../state/currentVault';
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery';
 import { useFromAmount } from '../../state/fromAmount';

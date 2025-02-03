@@ -16,7 +16,7 @@ import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
-import { validateEmail } from '../../../lib/utils/validation/validateEmail';
+import { validateEmail } from '@lib/utils/validation/validateEmail';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';

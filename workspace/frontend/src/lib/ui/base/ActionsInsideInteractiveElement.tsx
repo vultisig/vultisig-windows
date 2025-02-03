@@ -8,12 +8,12 @@ import {
 } from 'react';
 import styled from 'styled-components';
 
-import { Dimensions } from '../../utils/entities/Dimensions';
-import { getRecordKeys } from '../../utils/record/getRecordKeys';
-import { getRecordSize } from '../../utils/record/getRecordSize';
-import { makeRecord } from '../../utils/record/makeRecord';
-import { pick } from '../../utils/record/pick';
-import { toEntries } from '../../utils/record/toEntries';
+import { Dimensions } from '@lib/utils/entities/Dimensions';
+import { getRecordKeys } from '@lib/utils/record/getRecordKeys';
+import { getRecordSize } from '@lib/utils/record/getRecordSize';
+import { makeRecord } from '@lib/utils/record/makeRecord';
+import { pick } from '@lib/utils/record/pick';
+import { toEntries } from '@lib/utils/record/toEntries';
 import { useStateCorrector } from '../state/useStateCorrector';
 import { ElementSizeAware } from './ElementSizeAware';
 

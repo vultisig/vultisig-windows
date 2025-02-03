@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-import { assertFetchResponse } from '../../../lib/utils/fetch/assertFetchResponse';
+import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse';
 
 type UploadPayloadToServerInput = {
   serverUrl: string;

@@ -10,7 +10,7 @@ import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { ValueProp } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { text } from '../../../../lib/ui/text';
-import { EntityWithAmount } from '../../../../lib/utils/entities/EntityWithAmount';
+import { EntityWithAmount } from '@lib/utils/entities/EntityWithAmount';
 import { CoinMeta } from '../../../../model/coin-meta';
 import { useCurrentVaultCoin } from '../../../state/currentVault';
 import { amountConfig } from './config';

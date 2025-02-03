@@ -9,7 +9,7 @@ import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { ValueProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { text } from '../../../lib/ui/text';
-import { formatAmount } from '../../../lib/utils/formatAmount';
+import { formatAmount } from '@lib/utils/formatAmount';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 
 const Container = styled.div`

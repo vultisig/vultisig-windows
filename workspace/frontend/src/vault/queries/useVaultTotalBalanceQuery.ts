@@ -13,8 +13,8 @@ import {
   pendingQuery,
   Query,
 } from '../../lib/ui/query/Query';
-import { sum } from '../../lib/utils/array/sum';
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
+import { sum } from '@lib/utils/array/sum';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { CoinMeta } from '../../model/coin-meta';
 import { useCurrentVaultCoins } from '../state/currentVault';
 

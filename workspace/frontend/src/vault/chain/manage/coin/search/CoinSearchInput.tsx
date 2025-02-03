@@ -11,7 +11,7 @@ import { SearchIcon } from '../../../../../lib/ui/icons/SearchIcon';
 import { hStack } from '../../../../../lib/ui/layout/Stack';
 import { useCurrentSearch } from '../../../../../lib/ui/search/CurrentSearchProvider';
 import { getColor } from '../../../../../lib/ui/theme/getters';
-import { withoutUndefinedFields } from '../../../../../lib/utils/record/withoutUndefinedFields';
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
 import { coinSearchConfig } from './config';
 
 const IconContainer = styled(IconWrapper)`

@@ -18,7 +18,7 @@ import { Spinner } from '../../../../../lib/ui/loaders/Spinner';
 import { Modal } from '../../../../../lib/ui/modal';
 import { OnCloseProp } from '../../../../../lib/ui/props';
 import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery';
-import { getDiscriminatedUnionValue } from '../../../../../lib/utils/getDiscriminatedUnionValue';
+import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
 import { useSendChainSpecificQuery } from '../../../queries/useSendChainSpecificQuery';
 import {
   SendChainSpecificValueProvider,

@@ -1,3 +1,5 @@
+import { sum } from '@lib/utils/array/sum';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useCallback, useMemo } from 'react';
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount';
@@ -12,8 +14,6 @@ import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { ValueProp } from '../../../../lib/ui/props';
 import { MatchEagerQuery } from '../../../../lib/ui/query/components/MatchEagerQuery';
 import { useTransformQueryData } from '../../../../lib/ui/query/hooks/useTransformQueryData';
-import { sum } from '../../../../lib/utils/array/sum';
-import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
 import { CoinMeta } from '../../../../model/coin-meta';
 import { useCurrentVaultCoins } from '../../../state/currentVault';
 import { SwapFee } from '../../types/SwapFee';

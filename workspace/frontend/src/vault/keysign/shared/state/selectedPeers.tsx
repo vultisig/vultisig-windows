@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { getStateProviderSetup } from '../../../../lib/ui/state/getStateProviderSetup';
-import { toEntries } from '../../../../lib/utils/record/toEntries';
+import { toEntries } from '@lib/utils/record/toEntries';
 
 export const {
   useState: usePeersSelectionRecord,

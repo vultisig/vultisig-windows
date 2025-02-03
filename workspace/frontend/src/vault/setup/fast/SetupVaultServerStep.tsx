@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { KeygenFailedState } from '../../keygen/shared/KeygenFailedState';
 import { WaitForServerStates } from '../../server/components/WaitForServerLoader';

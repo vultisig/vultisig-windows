@@ -12,7 +12,7 @@ import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { HStack } from '../../../lib/ui/layout/Stack';
 import { text } from '../../../lib/ui/text';
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { CoinMeta } from '../../../model/coin-meta';
 import { useCurrentVaultCoins } from '../../state/currentVault';
 import { useSendAmount } from '../state/amount';

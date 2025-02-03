@@ -1,9 +1,9 @@
+import { parseUrlSearchString } from '@lib/utils/query/parseUrlSearchString';
+import { toEntries } from '@lib/utils/record/toEntries';
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { parseUrlSearchString } from '../../lib/utils/query/parseUrlSearchString';
-import { toEntries } from '../../lib/utils/record/toEntries';
-import { withoutUndefinedFields } from '../../lib/utils/record/withoutUndefinedFields';
 import { AppPathParams, AppPathsWithParams } from '..';
 
 export function useAppPathParams<P extends AppPathsWithParams>() {

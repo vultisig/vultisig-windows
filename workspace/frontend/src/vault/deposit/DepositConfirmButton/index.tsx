@@ -8,8 +8,8 @@ import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { isOneOf } from '../../../lib/utils/array/isOneOf';
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { isOneOf } from '@lib/utils/array/isOneOf';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { Chain } from '../../../model/chain';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';

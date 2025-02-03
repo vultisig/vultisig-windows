@@ -1,7 +1,8 @@
+import { isOneOf } from '@lib/utils/array/isOneOf';
+import { assertField } from '@lib/utils/record/assertField';
+
 import { Erc20ApprovePayload } from '../../gen/vultisig/keysign/v1/erc20_approve_payload_pb';
 import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { isOneOf } from '../../lib/utils/array/isOneOf';
-import { assertField } from '../../lib/utils/record/assertField';
 import { EvmChain, UtxoChain } from '../../model/chain';
 import { getErc20Allowance } from '../evm/erc20/getErc20Allowance';
 import { assertChainField } from '../utils/assertChainField';

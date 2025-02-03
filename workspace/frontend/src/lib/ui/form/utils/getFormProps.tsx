@@ -1,6 +1,6 @@
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
 import { FormEvent, KeyboardEvent } from 'react';
 
-import { withoutUndefinedFields } from '../../../utils/record/withoutUndefinedFields';
 import { preventDefault } from '../../utils/preventDefault';
 import { stopPropagation } from '../../utils/stopPropagation';
 

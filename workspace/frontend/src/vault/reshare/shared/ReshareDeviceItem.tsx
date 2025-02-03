@@ -12,7 +12,7 @@ import {
   ValueProp,
 } from '../../../lib/ui/props';
 import { text } from '../../../lib/ui/text';
-import { match } from '../../../lib/utils/match';
+import { match } from '@lib/utils/match';
 import {
   formatKeygenDeviceName,
   parseLocalPartyId,

@@ -1,5 +1,5 @@
 import { Post } from '../../../wailsjs/go/utils/GoHttp';
-import { extractErrorMsg } from '../../lib/utils/error/extractErrorMsg';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 
 type CallRpcParams = {
   url: string;

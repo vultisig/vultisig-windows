@@ -1,10 +1,10 @@
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { match } from '@lib/utils/match';
 import { FieldValues } from 'react-hook-form';
 
 import { nativeSwapAffiliateConfig } from '../../../../chain/swap/native/nativeSwapAffiliateConfig';
 import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
 import { MayaChainPool } from '../../../../lib/types/deposit';
-import { shouldBePresent } from '../../../../lib/utils/assert/shouldBePresent';
-import { match } from '../../../../lib/utils/match';
 import { Chain } from '../../../../model/chain';
 import { ChainAction } from '../../ChainAction';
 

@@ -9,9 +9,9 @@ import {
   DnDItemHighlight,
 } from '../../../lib/ui/list/item/DnDItemContainer';
 import { Text } from '../../../lib/ui/text';
-import { isEmpty } from '../../../lib/utils/array/isEmpty';
-import { sortEntitiesWithOrder } from '../../../lib/utils/entities/EntityWithOrder';
-import { getNewOrder } from '../../../lib/utils/order/getNewOrder';
+import { isEmpty } from '@lib/utils/array/isEmpty';
+import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder';
+import { getNewOrder } from '@lib/utils/order/getNewOrder';
 import { useUpdateVaultOrderMutation } from '../../../vault/mutations/useUpdateVaultOrderMutation';
 import { useFolderVaults } from '../../../vault/queries/useVaultsQuery';
 import { CurrentVaultProvider } from '../../../vault/state/currentVault';

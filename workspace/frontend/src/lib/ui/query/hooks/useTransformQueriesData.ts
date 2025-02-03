@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 
-import { getRecordSize } from '../../../utils/record/getRecordSize';
-import { recordMap } from '../../../utils/record/recordMap';
-import { withoutUndefinedFields } from '../../../utils/record/withoutUndefinedFields';
-import { NonUndefined } from '../../../utils/types/NonUndefined';
+import { getRecordSize } from '@lib/utils/record/getRecordSize';
+import { recordMap } from '@lib/utils/record/recordMap';
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
+import { NonUndefined } from '@lib/utils/types/NonUndefined';
 import { Query } from '../Query';
 
 export function useTransformQueriesData<

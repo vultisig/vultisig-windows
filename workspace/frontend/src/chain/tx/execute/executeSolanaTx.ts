@@ -1,6 +1,6 @@
 import { TW } from '@trustwallet/wallet-core';
 
-import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
+import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { RpcServiceSolana } from '../../../services/Rpc/solana/RpcServiceSolana';
 import { ExecuteTxInput } from './ExecuteTxInput';
 

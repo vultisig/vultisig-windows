@@ -3,7 +3,7 @@ import { WalletCore } from '@trustwallet/wallet-core';
 import { storage } from '../../../wailsjs/go/models';
 import { GetDerivedPubKey } from '../../../wailsjs/go/tss/TssService';
 import { getCoinType } from '../../chain/walletCore/getCoinType';
-import { match } from '../../lib/utils/match';
+import { match } from '@lib/utils/match';
 import { Chain } from '../../model/chain';
 import { getTssKeysignType } from '../keysign/utils/getTssKeysignType';
 

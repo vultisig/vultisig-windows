@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { match } from '../../lib/utils/match';
-import { getRawQueryParams } from '../../lib/utils/query/getRawQueryParams';
+import { match } from '@lib/utils/match';
+import { getRawQueryParams } from '@lib/utils/query/getRawQueryParams';
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { keygenMsgRecord, KeygenType } from '../../vault/keygen/KeygenType';
 import { parseTransferredKeysignMsg } from '../../vault/keysign/shared/utils/parseTransfferedKeysignMsg';

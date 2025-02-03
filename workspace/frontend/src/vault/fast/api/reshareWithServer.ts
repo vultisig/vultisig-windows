@@ -1,4 +1,4 @@
-import { assertFetchResponse } from '../../../lib/utils/fetch/assertFetchResponse';
+import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse';
 import { fastVaultServerUrl } from '../config';
 
 type Input = {

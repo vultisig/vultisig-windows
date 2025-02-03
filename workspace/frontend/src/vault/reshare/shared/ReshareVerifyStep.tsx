@@ -10,7 +10,7 @@ import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock';
 import { Text, text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
-import { without } from '../../../lib/utils/array/without';
+import { without } from '@lib/utils/array/without';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
 import { PageContent } from '../../../ui/page/PageContent';
 import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
