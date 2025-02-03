@@ -1,5 +1,5 @@
-import { isEmpty } from '../../utils/array/isEmpty';
-import { withoutNullOrUndefined } from '../../utils/array/withoutNullOrUndefined';
+import { isEmpty } from '@lib/utils/array/isEmpty';
+import { withoutNullOrUndefined } from '@lib/utils/array/withoutNullOrUndefined';
 
 export const mergeRefs = <T>(
   ...refs: (React.Ref<T> | undefined | null)[]

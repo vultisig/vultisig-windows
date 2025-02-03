@@ -1,6 +1,6 @@
+import { assertField } from '@lib/utils/record/assertField';
 import { TW } from '@trustwallet/wallet-core';
 
-import { assertField } from '@lib/utils/record/assertField';
 import { getSigningInputEnvelopedTxFields } from '../../evm/tx/getSigningInputEnvelopedTxFields';
 import { bigIntToHex } from '../../utils/bigIntToHex';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';

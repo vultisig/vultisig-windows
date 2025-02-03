@@ -1,8 +1,8 @@
+import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
+import { formatAmount } from '@lib/utils/formatAmount';
 import { useTranslation } from 'react-i18next';
 
 import { ValueProp } from '../../../lib/ui/props';
-import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
-import { formatAmount } from '@li@li@lib/utils';
 import { TxOverviewRow } from './TxOverviewRow';
 
 export const TxOverviewAmount = ({

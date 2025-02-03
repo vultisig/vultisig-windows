@@ -1,6 +1,6 @@
+import { makeRecord } from '@lib/utils/record/makeRecord';
 import { ChainId } from '@lifi/sdk';
 
-import { makeRecord } from '../@lib/utils/record/makeRecord';
 import { Chain, EvmChain } from '../../../../model/chain';
 import { getEvmChainId } from '../../../evm/chainInfo';
 

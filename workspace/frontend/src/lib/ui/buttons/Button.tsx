@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 
-import { match } from '../../utils/match';
+import { match } from '@lib/utils/match';
 import { MergeRefs } from '../base/MergeRefs';
 import { centerContent } from '../css/centerContent';
 import { horizontalPadding } from '../css/horizontalPadding';

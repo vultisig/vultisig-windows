@@ -1,5 +1,5 @@
-import { capitalizeFirstLetter } from '../@lib/utils/capitalizeFirstLetter';
-import { randomIntegerInRange } from '../@li@li@lib/utilse';
+import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter';
+import { randomIntegerInRange } from '@lib/utils/randomInRange';
 
 export const keygenDevices = [
   'windows',

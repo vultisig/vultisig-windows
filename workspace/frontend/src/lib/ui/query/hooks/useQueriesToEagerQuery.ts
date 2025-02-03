@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { isEmpty } from '../../../utils/array/isEmpty';
-import { withoutUndefined } from '../../../utils/array/withoutUndefined';
+import { isEmpty } from '@lib/utils/array/isEmpty';
+import { withoutUndefined } from '@lib/utils/array/withoutUndefined';
 import { EagerQuery, Query } from '../Query';
 
 type ToEagerQueryInput<T, R, E = unknown> = {

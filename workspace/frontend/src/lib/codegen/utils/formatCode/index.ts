@@ -3,7 +3,7 @@ import { dirname } from 'path';
 import { format, resolveConfig } from 'prettier';
 import { fileURLToPath } from 'url';
 
-import { match } from '../../../utils/match';
+import { match } from '@lib/utils/match';
 
 const currentDirname = dirname(fileURLToPath(import.meta.url));
 

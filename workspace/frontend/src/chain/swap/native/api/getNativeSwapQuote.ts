@@ -1,6 +1,7 @@
-import { formatAmount } from '../@lib/utils/formatAmount';
-import { addQueryParams } from '../@li@li@lib/utilsryParams';
-import { queryUrl } from '../@li@li@lib/utilsrl';
+import { formatAmount } from '@lib/utils/formatAmount';
+import { addQueryParams } from '@lib/utils/query/addQueryParams';
+import { queryUrl } from '@lib/utils/query/queryUrl';
+
 import { fromChainAmount } from '../../../utils/fromChainAmount';
 import { toChainAmount } from '../../../utils/toChainAmount';
 import { extractChainFromNativeSwapAsset } from '../asset/extractChainFromNativeSwapAsset';

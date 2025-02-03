@@ -17,8 +17,8 @@ import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput';
 import { VStack } from '../../../../../lib/ui/layout/Stack';
 import { Modal } from '../../../../../lib/ui/modal';
 import { OnCloseProp } from '../../../../../lib/ui/props';
-import { shouldBePresent } from '../../@lib/utils/assert/shouldBePresent';
-import { getDiscriminatedUnionValue } from '../../@lib/utils/getDiscriminatedUnionValue';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
 import { useSendChainSpecific } from '../../SendChainSpecificProvider';
 import { useFeeSettings } from '../state/feeSettings';
 

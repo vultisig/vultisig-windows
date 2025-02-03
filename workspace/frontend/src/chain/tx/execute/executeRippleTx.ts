@@ -1,7 +1,7 @@
+import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined';
+import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { TW } from '@trustwallet/wallet-core';
 
-import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined';
-import { assertErrorMessage } from '@li@li@lib/utilsErrorMessage';
 import { Endpoint } from '../../../services/Endpoint';
 import { callRpc } from '../../rpc/callRpc';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';

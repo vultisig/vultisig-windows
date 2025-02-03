@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-import { range } from '../../utils/array/range';
+import { range } from '@lib/utils/array/range';
 import { round } from '../css/round';
 import { sameDimensions } from '../css/sameDimensions';
 import { HStack } from '../layout/Stack';

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { getRecordKeys } from '../../utils/record/getRecordKeys';
+import { getRecordKeys } from '@lib/utils/record/getRecordKeys';
 
 type MatchRecordUnionProps<
   U extends object,

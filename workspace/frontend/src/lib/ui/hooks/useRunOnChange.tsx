@@ -1,6 +1,6 @@
 import { DependencyList, useEffect, useRef } from 'react';
 
-import { haveSameContent } from '../../utils/array/haveSameContent';
+import { haveSameContent } from '@lib/utils/array/haveSameContent';
 
 export const useRunOnChange = (effect: () => void, deps: DependencyList) => {
   const prevDeps = useRef(deps);

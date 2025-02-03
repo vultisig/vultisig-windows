@@ -7,7 +7,7 @@ import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { text } from '../../../../lib/ui/text';
-import { formatAmount } from '../@lib/utils/formatAmount';
+import { formatAmount } from '@lib/utils/formatAmount';
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery';
 import { useToCoin } from '../../state/toCoin';
 import { AmountContainer } from './AmountContainer';

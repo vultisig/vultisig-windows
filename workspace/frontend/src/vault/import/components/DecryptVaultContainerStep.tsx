@@ -1,10 +1,10 @@
+import { fromBase64 } from '@lib/utils/fromBase64';
+import { pipe } from '@lib/utils/pipe';
 import { useMutation } from '@tanstack/react-query';
 
 import { storage } from '../../../../wailsjs/go/models';
 import { Vault } from '../../../gen/vultisig/vault/v1/vault_pb';
 import { OnFinishProp, ValueProp } from '../../../lib/ui/props';
-import { fromBase64 } from '@lib/utils/fromBase64';
-import { pipe } from '@lib/utils/pipe';
 import { decryptVault } from '../../encryption/decryptVault';
 import { toStorageVault } from '../../utils/storageVault';
 import { DecryptVaultView } from './DecryptVaultView';

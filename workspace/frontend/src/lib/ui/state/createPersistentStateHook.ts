@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 
-import { shouldBeDefined } from '../../utils/assert/shouldBeDefined';
+import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined';
 import { OnValueChangeListener } from './PersistentStorage';
 import { PersistentStorage } from './PersistentStorage';
 

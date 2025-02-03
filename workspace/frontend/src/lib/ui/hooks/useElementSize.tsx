@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useIsomorphicLayoutEffect } from 'react-use';
 
-import { debounce } from '../../utils/debounce';
-import { Dimensions } from '../../utils/entities/Dimensions';
-import { pick } from '../../utils/record/pick';
+import { debounce } from '@lib/utils/debounce';
+import { Dimensions } from '@lib/utils/entities/Dimensions';
+import { pick } from '@lib/utils/record/pick';
 
 const getElementSize = (element: HTMLElement): Dimensions =>
   pick(element.getBoundingClientRect(), ['height', 'width']);

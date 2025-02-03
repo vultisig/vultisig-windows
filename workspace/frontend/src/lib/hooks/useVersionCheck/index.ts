@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import buildInfo from '../../../../build.json';
-import { attempt } from '../../utils/attempt';
+import { attempt } from '@lib/utils/attempt';
 import { LATEST_VERSION_QUERY_KEY, VULTISIG_RELEASES_API } from './constants';
 import { isValidVersion, isVersionNewer } from './utils';
 

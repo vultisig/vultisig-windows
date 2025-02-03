@@ -1,8 +1,9 @@
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
+import { addQueryParams } from '@lib/utils/query/addQueryParams';
+
 import { KeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload';
 import { deepLinkBaseUrl } from '../../../../deeplink/config';
 import { KeysignMessage } from '../../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { matchRecordUnion } from '../@lib/utils/matchRecordUnion';
-import { addQueryParams } from '../@lib/utils/query/addQueryParams';
 import { toCompressedString } from '../../../../utils/protobuf/toCompressedString';
 import {
   KeygenServerType,

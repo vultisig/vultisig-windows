@@ -12,10 +12,10 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { ReactNode, useCallback, useId, useState } from 'react';
 
 import { ChildrenProp } from '../ui/props';
-import { shouldBePresent } from '../utils/assert/shouldBePresent';
 import { DnDItem } from './DnDItem';
 import { DnDItemStatus } from './DnDItemStatus';
 

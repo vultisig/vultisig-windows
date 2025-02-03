@@ -4,7 +4,7 @@ import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewR
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { formatAmount } from '@li@li@lib/utils';
+import { formatAmount } from '@lib/utils/formatAmount';
 import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery';
 
 export const SwapAllowance = () => {

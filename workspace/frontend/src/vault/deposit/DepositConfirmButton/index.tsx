@@ -9,7 +9,7 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { isOneOf } from '@lib/utils/array/isOneOf';
-import { shouldBePresent } from '@li@li@lib/utilsdBePresent';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { Chain } from '../../../model/chain';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
