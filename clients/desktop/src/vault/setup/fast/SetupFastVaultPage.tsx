@@ -15,13 +15,13 @@ import { PasswordProvider } from '../../server/password/state/password';
 import { ServerPasswordHintStep } from '../../server/password-hint/ServerPasswordHintStep';
 import { PasswordHintProvider } from '../../server/password-hint/state/password-hint';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
-import { SetupVaultKeygenStep } from '../shared/SetupVaultKeygenStep';
 import { VaultTypeProvider } from '../shared/state/vaultType';
 import { StartKeygenVaultProvider } from '../StartKeygenVaultProvider';
 import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode';
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType';
 import { SetupVaultNameProvider } from '../state/vaultName';
+import { SetupFastVaultCreationStep } from './SetupFastVaultCreationStep';
 import { SetupVaultServerStep } from './SetupVaultServerStep';
 
 const steps = [
@@ -29,8 +29,8 @@ const steps = [
   'email',
   'password',
   'hint',
-  'server',
-  'keygen',
+  'setupForCreateVault',
+  'createVault',
 ] as const;
 
 const lastEditableStep = 'password';
@@ -84,14 +84,14 @@ export const SetupFastVaultPage = () => {
                                         onForward={toNextStep}
                                       />
                                     )}
-                                    server={() => (
+                                    setupForCreateVault={() => (
                                       <SetupVaultServerStep
                                         onBack={() => setStep(lastEditableStep)}
                                         onForward={toNextStep}
                                       />
                                     )}
-                                    keygen={() => (
-                                      <SetupVaultKeygenStep
+                                    createVault={() => (
+                                      <SetupFastVaultCreationStep
                                         onTryAgain={() => setStep(steps[0])}
                                         onBack={() => setStep(lastEditableStep)}
                                       />

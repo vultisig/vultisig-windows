@@ -10,6 +10,8 @@ import { WaitForServerStates } from '../../server/components/WaitForServerStates
 import { useVaultType } from '../shared/state/vaultType';
 import { useVaultCreationPreparation } from './hooks/useVaultCreationPreparation';
 
+const SUCCESS_SCREEN_PERSISTENCE_IN_MS = 2500;
+
 export const SetupVaultServerStep: FC<OnForwardProp & OnBackProp> = ({
   onForward,
   onBack,
@@ -20,7 +22,7 @@ export const SetupVaultServerStep: FC<OnForwardProp & OnBackProp> = ({
 
   useEffect(() => {
     if (state.data) {
-      onForward();
+      setTimeout(onForward, SUCCESS_SCREEN_PERSISTENCE_IN_MS);
     }
   }, [onForward, state.data]);
 
