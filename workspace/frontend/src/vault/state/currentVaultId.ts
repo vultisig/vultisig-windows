@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useCallback } from 'react';
 
 import { useStateCorrector } from '../../lib/ui/state/useStateCorrector';
-import { isEmpty } from '../../lib/utils/array/isEmpty';
+import { isEmpty } from '@lib/utils/array/isEmpty';
 import {
   PersistentStateKey,
   usePersistentState,

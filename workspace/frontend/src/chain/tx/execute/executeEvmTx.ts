@@ -1,8 +1,8 @@
 import { TW } from '@trustwallet/wallet-core';
 import { keccak256 } from 'js-sha3';
 
-import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
-import { isInError } from '../../../lib/utils/error/isInError';
+import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
+import { isInError } from '@li@li@lib/utilsror';
 import { EvmChain } from '../../../model/chain';
 import { getEvmPublicClient } from '../../evm/chainInfo';
 import { ExecuteTxInput } from './ExecuteTxInput';

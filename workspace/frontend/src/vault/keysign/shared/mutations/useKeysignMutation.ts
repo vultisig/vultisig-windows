@@ -9,10 +9,10 @@ import { generateSignature } from '../../../../chain/tx/signature/generateSignat
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
-import { getLastItem } from '../../../../lib/utils/array/getLastItem';
-import { matchRecordUnion } from '../../../../lib/utils/matchRecordUnion';
-import { chainPromises } from '../../../../lib/utils/promise/chainPromises';
-import { recordFromItems } from '../../../../lib/utils/record/recordFromItems';
+import { getLastItem } from '../@lib/utils/array/getLastItem';
+import { matchRecordUnion } from '../@lib/utils/matchRecordUnion';
+import { chainPromises } from '../@lib/utils/promise/chainPromises';
+import { recordFromItems } from '../@lib/utils/record/recordFromItems';
 import { getChainKind } from '../../../../model/chain';
 import { signatureFormatRecord } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';

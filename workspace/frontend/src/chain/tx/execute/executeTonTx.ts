@@ -1,7 +1,7 @@
 import { TW } from '@trustwallet/wallet-core';
 
 import { Post } from '../../../../wailsjs/go/utils/GoHttp';
-import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
+import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { Endpoint } from '../../../services/Endpoint';
 import { ExecuteTxInput } from './ExecuteTxInput';
 

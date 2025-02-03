@@ -4,7 +4,7 @@ import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
-import { matchRecordUnion } from '../../../lib/utils/matchRecordUnion';
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
 import { SwapFees } from '../types/SwapFee';

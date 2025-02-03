@@ -12,7 +12,7 @@ import { ProgressLine } from '../../../lib/ui/flow/ProgressLine';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { OnBackProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { makeAppPath } from '../../../navigation';
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { PageContent } from '../../../ui/page/PageContent';

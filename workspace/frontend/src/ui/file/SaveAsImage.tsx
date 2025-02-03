@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { SaveFile } from '../../../wailsjs/go/main/App';
 import { OnClickProp, ValueProp } from '../../lib/ui/props';
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 
 type SaveAsImageProps = ValueProp<ReactNode> & {
   fileName: string;

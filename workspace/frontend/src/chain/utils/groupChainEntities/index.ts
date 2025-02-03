@@ -1,4 +1,4 @@
-import { groupItems } from '../../../lib/utils/array/groupItems';
+import { groupItems } from '@lib/utils/array/groupItems';
 import { ChainEntity } from '../../ChainEntity';
 
 export const groupChainEntities = <T extends ChainEntity>(items: T[]) => {

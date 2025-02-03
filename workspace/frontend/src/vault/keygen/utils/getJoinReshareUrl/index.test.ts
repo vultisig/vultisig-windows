@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config';
 import { ReshareMessage } from '../../../../gen/vultisig/keygen/v1/reshare_message_pb';
-import * as queryUtils from '../../../../lib/utils/query/addQueryParams';
+import * as queryUtils from '../@lib/utils/query/addQueryParams';
 import * as protobufUtils from '../../../../utils/protobuf/toCompressedString';
 import { KeygenServerType } from '../../server/KeygenServerType';
 import { getJoinReshareUrl } from '.';

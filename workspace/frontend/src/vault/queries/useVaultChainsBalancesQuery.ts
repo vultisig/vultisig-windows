@@ -9,10 +9,10 @@ import {
   storageCoinToCoin,
 } from '../../coin/utils/storageCoin';
 import { EagerQuery } from '../../lib/ui/query/Query';
-import { order } from '../../lib/utils/array/order';
-import { sum } from '../../lib/utils/array/sum';
-import { recordMap } from '../../lib/utils/record/recordMap';
-import { toEntries } from '../../lib/utils/record/toEntries';
+import { order } from '@lib/utils/array/order';
+import { sum } from '@lib/utils/array/sum';
+import { recordMap } from '@lib/utils/record/recordMap';
+import { toEntries } from '@lib/utils/record/toEntries';
 import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
 import {

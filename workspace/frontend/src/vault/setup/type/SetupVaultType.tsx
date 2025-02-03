@@ -1,4 +1,4 @@
-import { range } from '../../../lib/utils/array/range';
+import { range } from '@lib/utils/array/range';
 
 export const setupVaultTypes = ['fast', 'secure'] as const;
 

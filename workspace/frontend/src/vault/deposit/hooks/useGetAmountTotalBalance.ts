@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { getCoinValue } from '../../../coin/utils/getCoinValue';
-import { sum } from '../../../lib/utils/array/sum';
+import { sum } from '@lib/utils/array/sum';
 import { Chain } from '../../../model/chain';
 import { useVaultChainCoinsQuery } from '../../queries/useVaultChainCoinsQuery';
 

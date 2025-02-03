@@ -1,6 +1,6 @@
-import { getLastItem } from '../../lib/utils/array/getLastItem';
-import { isOneOf } from '../../lib/utils/array/isOneOf';
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
+import { getLastItem } from '@lib/utils/array/getLastItem';
+import { isOneOf } from '@lib/utils/array/isOneOf';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 
 export const vaultBackupExtensions = ['bak', 'vult', 'dat'];
 

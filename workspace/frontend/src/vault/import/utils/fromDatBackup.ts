@@ -2,7 +2,7 @@ import { Timestamp } from '@bufbuild/protobuf';
 
 import { storage } from '../../../../wailsjs/go/models';
 import { Vault, Vault_KeyShare } from '../../../gen/vultisig/vault/v1/vault_pb';
-import { convertDuration } from '../../../lib/utils/time/convertDuration';
+import { convertDuration } from '@lib/utils/time/convertDuration';
 import { toStorageVault } from '../../utils/storageVault';
 
 export type DatBackup = {

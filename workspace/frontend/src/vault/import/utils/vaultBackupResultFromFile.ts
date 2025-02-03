@@ -1,4 +1,4 @@
-import { readFileAsArrayBuffer } from '../../../lib/utils/file/readFileAsArrayBuffer';
+import { readFileAsArrayBuffer } from '@lib/utils/file/readFileAsArrayBuffer';
 import { getVaultBackupExtension } from '../VaultBackupExtension';
 import { vaultBackupResultFromFileContent } from './vaultBackupResultFromString';
 

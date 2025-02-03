@@ -4,7 +4,7 @@ import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 import { HStack } from '../../lib/ui/layout/Stack';
 import { MatchQuery } from '../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../lib/ui/text';
-import { formatAmount } from '../../lib/utils/formatAmount';
+import { formatAmount } from '@lib/utils/formatAmount';
 import { useVaultTotalBalanceQuery } from '../queries/useVaultTotalBalanceQuery';
 import { BalanceVisibilityAware } from './visibility/BalanceVisibilityAware';
 import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVisibility';

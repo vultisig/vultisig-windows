@@ -2,7 +2,7 @@ import { TW, WalletCore } from '@trustwallet/wallet-core';
 
 import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { Chain } from '../../../model/chain';
 import { bigIntToHex } from '../../utils/bigIntToHex';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';

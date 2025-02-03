@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import { isEmpty } from '../../../../lib/utils/array/isEmpty';
-import { recordFromKeys } from '../../../../lib/utils/record/recordFromKeys';
+import { isEmpty } from '../@lib/utils/array/isEmpty';
+import { recordFromKeys } from '../@li@li@lib/utilsdFromKeys';
 import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery';
 import { usePeersSelectionRecord } from '../../../keysign/shared/state/selectedPeers';
 

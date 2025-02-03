@@ -13,10 +13,10 @@ import {
   pendingQuery,
   Query,
 } from '../../lib/ui/query/Query';
-import { withoutUndefined } from '../../lib/utils/array/withoutUndefined';
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
-import { EntityWithLogo } from '../../lib/utils/entities/EntityWithLogo';
-import { EntityWithTicker } from '../../lib/utils/entities/EntityWithTicker';
+import { withoutUndefined } from '@lib/utils/array/withoutUndefined';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo';
+import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
 import { Chain } from '../../model/chain';
 import { CoinMeta } from '../../model/coin-meta';
 import { useCurrentVaultChainCoins } from '../state/currentVault';

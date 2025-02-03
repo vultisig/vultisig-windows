@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { StrictText } from '../../../lib/ui/text';
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt';
 import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery';
 import { useSwapTerms } from './state/swapTerms';

@@ -1,9 +1,9 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 
 import { tss } from '../../../../wailsjs/go/models';
-import { match } from '../../../lib/utils/match';
-import { pick } from '../../../lib/utils/record/pick';
-import { recordMap } from '../../../lib/utils/record/recordMap';
+import { match } from '@lib/utils/match';
+import { pick } from '@lib/utils/record/pick';
+import { recordMap } from '@li@li@lib/utilsdMap';
 import { SignatureFormat } from '../../../model/chain';
 
 type Input = {

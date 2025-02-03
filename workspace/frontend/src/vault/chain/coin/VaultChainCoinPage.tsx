@@ -14,7 +14,7 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { Panel } from '../../../lib/ui/panel/Panel';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { CoinMeta } from '../../../model/coin-meta';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';

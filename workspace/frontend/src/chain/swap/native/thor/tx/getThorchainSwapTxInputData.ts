@@ -1,12 +1,12 @@
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
+import { match } from '@lib/utils/match';
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 import Long from 'long';
 
 import { getCoinKey } from '../../../../../coin/utils/coin';
 import { EthereumSpecific } from '../../../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '../../../../../gen/vultisig/keysign/v1/keysign_message_pb';
-import { shouldBePresent } from '../../../../../lib/utils/assert/shouldBePresent';
-import { getDiscriminatedUnionValue } from '../../../../../lib/utils/getDiscriminatedUnionValue';
-import { match } from '../../../../../lib/utils/match';
 import { Chain } from '../../../../../model/chain';
 import { getSigningInputEnvelopedTxFields } from '../../../../evm/tx/getSigningInputEnvelopedTxFields';
 import { toKeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload';

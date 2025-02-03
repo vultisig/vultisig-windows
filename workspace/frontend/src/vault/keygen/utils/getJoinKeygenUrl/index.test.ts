@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config';
 import { KeygenMessage } from '../../../../gen/vultisig/keygen/v1/keygen_message_pb';
-import * as queryUtils from '../../../../lib/utils/query/addQueryParams';
+import * as queryUtils from '../@lib/utils/query/addQueryParams';
 import * as protobufUtils from '../../../../utils/protobuf/toCompressedString';
 import { KeygenServerType } from '../../server/KeygenServerType';
 import { getJoinKeygenUrl } from '.';

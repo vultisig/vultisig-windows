@@ -7,7 +7,7 @@ import { OnClickProp, ValueProp } from '../../../lib/ui/props';
 import { text } from '../../../lib/ui/text';
 import { getHoverVariant } from '../../../lib/ui/theme/getHoverVariant';
 import { getColor } from '../../../lib/ui/theme/getters';
-import { toPercents } from '../../../lib/utils/toPercents';
+import { toPercents } from '@lib/utils/toPercents';
 
 const Container = styled(UnstyledButton)`
   width: 56px;

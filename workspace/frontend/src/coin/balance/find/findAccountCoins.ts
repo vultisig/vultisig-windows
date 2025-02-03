@@ -1,5 +1,5 @@
 import { ChainAccount } from '../../../chain/ChainAccount';
-import { isOneOf } from '../../../lib/utils/array/isOneOf';
+import { isOneOf } from '@lib/utils/array/isOneOf';
 import { Chain, EvmChain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { findEvmAccountCoins } from './findEvmAccountCoins';

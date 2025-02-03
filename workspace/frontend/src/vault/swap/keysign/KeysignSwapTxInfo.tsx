@@ -9,11 +9,11 @@ import {
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { ValueProp } from '../../../lib/ui/props';
-import { withoutUndefined } from '../../../lib/utils/array/withoutUndefined';
-import { formatAmount } from '../../../lib/utils/formatAmount';
-import { getDiscriminatedUnionValue } from '../../../lib/utils/getDiscriminatedUnionValue';
-import { matchDiscriminatedUnion } from '../../../lib/utils/matchDiscriminatedUnion';
-import { assertField } from '../../../lib/utils/record/assertField';
+import { withoutUndefined } from '@lib/utils/array/withoutUndefined';
+import { formatAmount } from '@li@li@lib/utils';
+import { getDiscriminatedUnionValue } from '@li@li@lib/utilsatedUnionValue';
+import { matchDiscriminatedUnion } from '@li@li@lib/utilsinatedUnion';
+import { assertField } from '@li@li@lib/utilstField';
 import { Chain } from '../../../model/chain';
 
 export const KeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {

@@ -2,7 +2,7 @@ import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persist
 import { QueryClient } from '@tanstack/react-query';
 import { persistQueryClient } from '@tanstack/react-query-persist-client';
 
-import { convertDuration } from '../lib/utils/time/convertDuration';
+import { convertDuration } from '@lib/utils/time/convertDuration';
 import { PersistentStateKey } from '../state/persistentState';
 
 const maxAge = convertDuration(1, 'd', 'ms');

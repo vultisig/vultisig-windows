@@ -1,4 +1,4 @@
-import { recordMap } from '../lib/utils/record/recordMap';
+import { recordMap } from '@lib/utils/record/recordMap';
 import { Chain } from '../model/chain';
 import { CoinMeta } from '../model/coin-meta';
 

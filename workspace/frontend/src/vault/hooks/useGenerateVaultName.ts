@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { withoutUndefined } from '../../lib/utils/array/withoutUndefined';
+import { withoutUndefined } from '@lib/utils/array/withoutUndefined';
 import { SetupVaultType } from '../setup/type/SetupVaultType';
 import { useVaultNames } from './useVaultNames';
 

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { match } from '../../../lib/utils/match';
+import { match } from '@lib/utils/match';
 import { PageContent } from '../../../ui/page/PageContent';
 import { KeygenType } from '../KeygenType';
 import { useCurrentKeygenType } from '../state/currentKeygenType';

@@ -1,5 +1,5 @@
 import { ChainAccount } from '../chain/ChainAccount';
-import { haveEqualFields } from '../lib/utils/record/haveEqualFields';
+import { haveEqualFields } from '@lib/utils/record/haveEqualFields';
 import { CoinKey } from './Coin';
 
 export type AccountCoinKey = CoinKey & ChainAccount;

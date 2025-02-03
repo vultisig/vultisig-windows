@@ -1,4 +1,4 @@
-import { match } from '../../lib/utils/match';
+import { match } from '@lib/utils/match';
 import { Chain, EvmChain } from '../../model/chain';
 import { RpcServiceCosmos } from './cosmos/RpcServiceCosmos';
 import { RpcServiceEvm } from './evm/RpcServiceEvm';

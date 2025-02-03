@@ -1595,6 +1595,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lib/utils@workspace:lib/utils":
+  version: 0.0.0-use.local
+  resolution: "@lib/utils@workspace:lib/utils"
+  dependencies:
+    date-fns: "npm:^4.1.0"
+  languageName: unknown
+  linkType: soft
+
 "@lifi/sdk@npm:^3.5.2":
   version: 3.5.2
   resolution: "@lifi/sdk@npm:3.5.2"
@@ -3020,6 +3028,12 @@ __metadata:
   checksum: 10c0/d4a29ecd8f6c24c790e4c009f313a044d89e664e331bc9c3cfb57fe1380fb1d2999706dbbfc291f067d6c489602e76d00435309fbc906197c0d01f831ca17d64
   languageName: node
   linkType: hard
+
+"@wailsapp/runtime@workspace:workspace/frontend/wailsjs/runtime":
+  version: 0.0.0-use.local
+  resolution: "@wailsapp/runtime@workspace:workspace/frontend/wailsjs/runtime"
+  languageName: unknown
+  linkType: soft
 
 "@wallet-standard/base@npm:^1.0.1, @wallet-standard/base@npm:^1.1.0":
   version: 1.1.0

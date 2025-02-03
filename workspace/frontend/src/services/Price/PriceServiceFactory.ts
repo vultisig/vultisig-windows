@@ -1,4 +1,4 @@
-import { match } from '../../lib/utils/match';
+import { match } from '@lib/utils/match';
 import { Chain, getChainKind } from '../../model/chain';
 import { IPriceService } from './IPriceService';
 import { PriceService } from './PriceService';

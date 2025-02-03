@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { CoinKey, coinKeyToString } from '../../coin/Coin';
 import { Button } from '../../lib/ui/buttons/Button';
 import { ValueProp } from '../../lib/ui/props';
-import { isOneOf } from '../../lib/utils/array/isOneOf';
+import { isOneOf } from '@lib/utils/array/isOneOf';
 import { makeAppPath } from '../../navigation';
 import { depositEnabledChains } from '../deposit/DepositEnabledChain';
 

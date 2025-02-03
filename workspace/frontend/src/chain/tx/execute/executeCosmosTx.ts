@@ -2,7 +2,7 @@ import { TW } from '@trustwallet/wallet-core';
 import { createHash } from 'crypto';
 
 import { Post } from '../../../../wailsjs/go/utils/GoHttp';
-import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
+import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { CosmosChain } from '../../../model/chain';
 import { getCosmosTxBroadcastUrl } from '../../cosmos/cosmosRpcUrl';
 import { ExecuteTxInput } from './ExecuteTxInput';

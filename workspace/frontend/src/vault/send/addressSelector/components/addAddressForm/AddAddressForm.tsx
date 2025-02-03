@@ -6,7 +6,7 @@ import Select from 'react-select';
 import { z } from 'zod';
 
 import { Text } from '../../../../../lib/ui/text';
-import { extractErrorMsg } from '../../../../../lib/utils/error/extractErrorMsg';
+import { extractErrorMsg } from '../../@lib/utils/error/extractErrorMsg';
 import { Chain } from '../../../../../model/chain';
 import { useAssertWalletCore } from '../../../../../providers/WalletCoreProvider';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';

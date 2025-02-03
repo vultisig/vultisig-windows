@@ -1,7 +1,7 @@
 import { initWasm, WalletCore } from '@trustwallet/wallet-core';
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import { shouldBePresent } from '../lib/utils/assert/shouldBePresent';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 
 const WalletCoreContext = createContext<WalletCore | null>(null);
 

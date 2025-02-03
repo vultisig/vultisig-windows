@@ -1,6 +1,7 @@
+import { addQueryParams } from '@lib/utils/query/addQueryParams';
+import { pick } from '@lib/utils/record/pick';
+
 import { Fetch } from '../../../../../../wailsjs/go/utils/GoHttp';
-import { addQueryParams } from '../../../../../lib/utils/query/addQueryParams';
-import { pick } from '../../../../../lib/utils/record/pick';
 import { EvmChain } from '../../../../../model/chain';
 import { Endpoint } from '../../../../../services/Endpoint';
 import { ChainAccount } from '../../../../ChainAccount';

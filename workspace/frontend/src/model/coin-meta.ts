@@ -1,5 +1,5 @@
 import { Coin } from '../gen/vultisig/keysign/v1/coin_pb';
-import { isOneOf } from '../lib/utils/array/isOneOf';
+import { isOneOf } from '@lib/utils/array/isOneOf';
 import { Chain } from './chain';
 
 export type CoinMeta = {

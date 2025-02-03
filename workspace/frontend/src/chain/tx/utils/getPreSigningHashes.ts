@@ -1,7 +1,7 @@
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 
-import { withoutNullOrUndefined } from '../../../lib/utils/array/withoutNullOrUndefined';
-import { assertErrorMessage } from '../../../lib/utils/error/assertErrorMessage';
+import { withoutNullOrUndefined } from '@lib/utils/array/withoutNullOrUndefined';
+import { assertErrorMessage } from '@li@li@lib/utilsErrorMessage';
 import { Chain, ChainKind, getChainKind } from '../../../model/chain';
 import { getCoinType } from '../../walletCore/getCoinType';
 

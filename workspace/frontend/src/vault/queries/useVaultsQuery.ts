@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { GetVaults } from '../../../wailsjs/go/storage/Store';
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
-import { sortEntitiesWithOrder } from '../../lib/utils/entities/EntityWithOrder';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder';
 
 export const vaultsQueryKey = ['vaults'];
 

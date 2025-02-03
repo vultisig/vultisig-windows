@@ -7,7 +7,7 @@ import { InputContainer } from '../../../../../../lib/ui/inputs/InputContainer';
 import { InputLabel } from '../../../../../../lib/ui/inputs/InputLabel';
 import { Spinner } from '../../../../../../lib/ui/loaders/Spinner';
 import { MatchQuery } from '../../../../../../lib/ui/query/components/MatchQuery';
-import { formatAmount } from '../../../../../../lib/utils/formatAmount';
+import { formatAmount } from '../../../@lib/utils/formatAmount';
 import { EvmChain } from '../../../../../../model/chain';
 import { useCurrentSendCoin } from '../../../../state/sendCoin';
 import { FeeContainer } from '../../FeeContainer';

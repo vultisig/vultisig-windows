@@ -11,7 +11,7 @@ import ShieldCheckIcon from '../../../lib/ui/icons/ShieldCheckIcon';
 import { HStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { ToggleSwitch } from '../../../lib/ui/toggle-switch/ToggleSwitch';
-import { match } from '../../../lib/utils/match';
+import { match } from '@lib/utils/match';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';

@@ -1,5 +1,5 @@
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
-import { isInError } from '../../../lib/utils/error/isInError';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
+import { isInError } from '@li@li@lib/utilsror';
 import { UtxoChain } from '../../../model/chain';
 import { getBlockchairBaseUrl } from './getBlockchairBaseUrl';
 

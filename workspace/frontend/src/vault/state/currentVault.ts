@@ -4,9 +4,9 @@ import { storage } from '../../../wailsjs/go/models';
 import { areEqualCoins, CoinKey } from '../../coin/Coin';
 import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import { getValueProviderSetup } from '../../lib/ui/state/getValueProviderSetup';
-import { groupItems } from '../../lib/utils/array/groupItems';
-import { withoutDuplicates } from '../../lib/utils/array/withoutDuplicates';
-import { shouldBePresent } from '../../lib/utils/assert/shouldBePresent';
+import { groupItems } from '@lib/utils/array/groupItems';
+import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { Chain } from '../../model/chain';
 import { haveServerSigner } from '../fast/utils/haveServerSigner';
 

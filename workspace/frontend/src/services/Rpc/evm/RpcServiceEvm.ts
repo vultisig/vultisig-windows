@@ -4,7 +4,7 @@ import { getEvmChainRpcUrl } from '../../../chain/evm/chainInfo';
 import { getErc20Balance } from '../../../chain/evm/erc20/getErc20Balance';
 import { FeePriority } from '../../../chain/fee/FeePriority';
 import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { extractErrorMsg } from '../../../lib/utils/error/extractErrorMsg';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { EvmChain } from '../../../model/chain';
 import { IRpcService } from '../IRpcService';
 

@@ -1,8 +1,8 @@
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { match } from '@lib/utils/match';
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { shouldBePresent } from '../../../lib/utils/assert/shouldBePresent';
-import { match } from '../../../lib/utils/match';
 import { UtxoChain } from '../../../model/chain';
 import { utxoChainScriptType } from '../../utxo/UtxoScriptType';
 import { getCoinType } from '../../walletCore/getCoinType';

@@ -1,4 +1,4 @@
-import { isEmpty } from '../../lib/utils/array/isEmpty';
+import { isEmpty } from '@lib/utils/array/isEmpty';
 import { useFolderlessVaults } from '../../vault/queries/useVaultsQuery';
 import { CurrentVaultProvider } from '../../vault/state/currentVault';
 import { getStorageVaultId } from '../../vault/utils/storageVault';

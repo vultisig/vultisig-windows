@@ -6,7 +6,7 @@ import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
-import { getLastItemOrder } from '../../../lib/utils/order/getLastItemOrder';
+import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder';
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
 import { PageContent } from '../../../ui/page/PageContent';

@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { storage } from '../../../../wailsjs/go/models';
 import { InputProps, OptionsProp } from '../../../lib/ui/props';
-import { without } from '../../../lib/utils/array/without';
+import { without } from '@lib/utils/array/without';
 import { CurrentVaultProvider } from '../../../vault/state/currentVault';
 import { getStorageVaultId } from '../../../vault/utils/storageVault';
 import { AddVaultsToFolderContainer } from './AddVaultsToFolderContainer';

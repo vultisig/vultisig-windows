@@ -6,7 +6,7 @@ import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSr
 import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { useCurrentSearch } from '../../../lib/ui/search/CurrentSearchProvider';
-import { without } from '../../../lib/utils/array/without';
+import { without } from '@lib/utils/array/without';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
