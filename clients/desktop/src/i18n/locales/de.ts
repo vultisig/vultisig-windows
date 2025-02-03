@@ -394,7 +394,37 @@ export const de = {
   fast: 'Schnell',
   secure: 'Sicher',
   active: 'Aktiv',
+  while_you_wait_vultisig_is: 'Während du wartest, ist Vultisig...',
+  while_you_wait_vultisig_has: 'Während du wartest, hat Vultisig...',
+  creating_vault: 'Tresor wird erstellt',
   fastVaultSetup: {
+    preparingVault: 'Tresor wird vorbereitet',
+    generatingECDSAKey: 'ECDSA-Schlüssel wird generiert',
+    createVault: {
+      multiFactor: {
+        subtitle: 'Dies sollte nicht länger als 1 Minute dauern',
+        description:
+          'Mehrfaktor-Sicherheit, Eliminierung des einzigen Ausfallpunkts',
+      },
+      selfCustodial: {
+        description:
+          'Selbstverwahrung, vollständige Kontrolle über deine Vermögenswerte',
+      },
+      crossChain: {
+        description:
+          'Cross-Chain. Tausche deine Lieblings-Token in einem einzigen Tresor',
+      },
+      over30Chains: {
+        description:
+          'Über 30 Blockchains zur Speicherung deines Lieblingstokens',
+      },
+      availablePlatforms: {
+        description: 'Verfügbar für Android, iOS, macOS und Windows',
+      },
+      seedlessWallet: {
+        description: 'Eine seedlose Wallet – lass dich nie wieder betrügen',
+      },
+    },
     connectingWithServer: 'Mit dem Server verbinden...',
     connectionSuccess: 'Verbindung erfolgreich!',
     takeMinute: 'Dies sollte nur eine Minute dauern',

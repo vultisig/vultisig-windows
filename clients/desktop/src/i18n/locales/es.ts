@@ -391,7 +391,35 @@ export const es = {
   fast: 'Rápido',
   secure: 'Seguro',
   active: 'Activo',
+  while_you_wait_vultisig_is: 'Mientras esperas, Vultisig es...',
+  while_you_wait_vultisig_has: 'Mientras esperas, Vultisig tiene...',
+  creating_vault: 'Creando Bóveda',
   fastVaultSetup: {
+    preparingVault: 'Preparando Bóveda',
+    generatingECDSAKey: 'Generando Clave ECDSA',
+    createVault: {
+      multiFactor: {
+        subtitle: 'Esto no debería tardar más de 1 minuto',
+        description:
+          'Seguridad multifactor, eliminando el único punto de falla',
+      },
+      selfCustodial: {
+        description: 'Autocustodia, brindando control total sobre tus activos',
+      },
+      crossChain: {
+        description:
+          'Interoperabilidad entre cadenas. Intercambia tus tokens favoritos en una sola bóveda',
+      },
+      over30Chains: {
+        description: 'Más de 30 cadenas para almacenar tu token favorito',
+      },
+      availablePlatforms: {
+        description: 'Disponible en Android, iOS, macOS y Windows',
+      },
+      seedlessWallet: {
+        description: 'Un monedero sin semilla, no vuelvas a ser estafado',
+      },
+    },
     connectingWithServer: 'Conectando con el servidor...',
     connectionSuccess: '¡Conexión exitosa!',
     takeMinute: 'Esto solo tomará un minuto',

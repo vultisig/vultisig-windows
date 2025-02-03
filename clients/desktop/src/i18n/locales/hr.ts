@@ -383,7 +383,36 @@ export const hr = {
   secure: 'Siguran',
   active: 'Aktivan',
   save_changes: 'Mentések mentése',
+  while_you_wait_vultisig_is: 'Amíg vársz, a Vultisig...',
+  while_you_wait_vultisig_has: 'Amíg vársz, a Vultisig rendelkezik...',
+  creating_vault: 'Tárca létrehozása',
   fastVaultSetup: {
+    preparingVault: 'Tárca előkészítése',
+    generatingECDSAKey: 'ECDSA kulcs generálása',
+    createVault: {
+      multiFactor: {
+        subtitle: 'Ez nem tarthat tovább 1 percnél',
+        description:
+          'Többfaktoros biztonság, az egyetlen hibapont megszüntetése',
+      },
+      selfCustodial: {
+        description:
+          'Önálló letétkezelés, teljes ellenőrzés az eszközeid felett',
+      },
+      crossChain: {
+        description:
+          'Több blokkláncos. Cseréld kedvenc tokenjeidet egyetlen tárcában',
+      },
+      over30Chains: {
+        description: 'Több mint 30 blokklánc a kedvenc tokenjeid tárolására',
+      },
+      availablePlatforms: {
+        description: 'Elérhető Androidon, iOS-en, macOS-en és Windows-on',
+      },
+      seedlessWallet: {
+        description: 'Egy mag nélküli tárca – ne hagyd, hogy újra átverjenek',
+      },
+    },
     connectingWithServer: 'Csatlakozás a szerverhez...',
     connectionSuccess: 'Sikeres csatlakozás!',
     takeMinute: 'Ez csak egy percet vesz igénybe',
