@@ -6,6 +6,19 @@ This monorepo contains two main components:
 
 ## Desktop Application
 
+### Technical Requirements
+
+This project uses Wails. Please refer to https://wails.io/docs/gettingstarted/installation/ for installation instructions.
+
+### For Linux Users
+
+Vultisig under Linux requires `libwebkit2gtk-4.0-dev`. Install it with:
+
+```bash
+sudo apt update
+sudo apt install libwebkit2gtk-4.0-dev
+```
+
 ### Development
 
 To run the desktop application in development mode:
@@ -23,19 +36,6 @@ To build the desktop app dist:
 
 ```bash
 yarn build:desktop
-```
-
-### Technical Requirements
-
-This project uses Wails. Please refer to https://wails.io/docs/gettingstarted/installation/ for installation instructions.
-
-### For Linux Users
-
-Vultisig under Linux requires `libwebkit2gtk-4.0-dev`. Install it with:
-
-```bash
-sudo apt update
-sudo apt install libwebkit2gtk-4.0-dev
 ```
 
 For Ubuntu 24.4 users who can't find `libwebkit2gtk-4.0-dev`:
