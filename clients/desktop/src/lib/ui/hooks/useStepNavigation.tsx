@@ -4,12 +4,14 @@ type UseStepNavigationInput<T> = {
   steps: readonly T[];
   initialStep?: T;
   onExit?: () => void;
+  circular?: boolean;
 };
 
 export function useStepNavigation<T>({
   steps,
   initialStep = steps[0],
   onExit,
+  circular = false,
 }: UseStepNavigationInput<T>) {
   const [step, setStep] = useState<T>(initialStep);
 
@@ -18,17 +20,28 @@ export function useStepNavigation<T>({
   }, [steps, initialStep]);
 
   const toNextStep = useCallback(() => {
-    setStep(prev => steps[steps.indexOf(prev) + 1]);
-  }, [steps]);
+    setStep(prev => {
+      const currentIndex = steps.indexOf(prev);
+
+      if (currentIndex === steps.length - 1) {
+        return circular ? steps[0] : prev;
+      }
+
+      return steps[currentIndex + 1];
+    });
+  }, [steps, circular]);
 
   const toPreviousStep = useCallback(() => {
-    const currentStepIndex = steps.indexOf(step);
-    if (currentStepIndex === 0) {
-      onExit?.();
-    } else {
-      setStep(prev => steps[steps.indexOf(prev) - 1]);
-    }
-  }, [onExit, step, steps]);
+    setStep(prev => {
+      const currentIndex = steps.indexOf(prev);
+
+      if (currentIndex === 0) {
+        return circular ? steps[steps.length - 1] : (onExit?.(), prev);
+      }
+
+      return steps[currentIndex - 1];
+    });
+  }, [steps, circular, onExit]);
 
   return { step, setStep, toNextStep, toPreviousStep };
 }
