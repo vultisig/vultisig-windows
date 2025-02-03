@@ -387,7 +387,34 @@ export const en = {
   sign_custom_message: 'Sign custom message',
   sign_message: 'Sign message',
   action: 'Action',
+  while_you_wait_vultisig_is: 'While you wait, Vultisig is...',
+  while_you_wait_vultisig_has: 'While you wait, Vultisig has...',
+  creating_vault: 'Creating Vault',
   fastVaultSetup: {
+    preparingVault: 'Preparing Vault',
+    generatingECDSAKey: 'Generating ECDSA Key',
+    createVault: {
+      multiFactor: {
+        subtitle: 'This shouldn’t take longer than 1 minute',
+        description:
+          'Multi-factor security, Removing the single-point of failure',
+      },
+      selfCustodial: {
+        description: 'Self-custodial, giving complete control over your assets',
+      },
+      crossChain: {
+        description: 'Cross-chain. Swap your favourite tokens all in one vault',
+      },
+      over30Chains: {
+        description: 'Over 30 chains to store your favorite token',
+      },
+      availablePlatforms: {
+        description: 'Available on Android, iOS, macOS and Windows',
+      },
+      seedlessWallet: {
+        description: 'A seedless wallet, do not get scammed again',
+      },
+    },
     connectingWithServer: 'Connecting with server...',
     connectionSuccess: 'Connection successful!',
     takeMinute: 'This should only take a minute',

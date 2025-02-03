@@ -399,7 +399,36 @@ export const it = {
   fast: 'Veloce',
   secure: 'Sicuro',
   active: 'Attivo',
+  while_you_wait_vultisig_is: 'Mentre aspetti, Vultisig è...',
+  while_you_wait_vultisig_has: 'Mentre aspetti, Vultisig ha...',
+  creating_vault: 'Creazione della Cassaforte',
   fastVaultSetup: {
+    preparingVault: 'Preparazione della Cassaforte',
+    generatingECDSAKey: 'Generazione della Chiave ECDSA',
+    createVault: {
+      multiFactor: {
+        subtitle: 'Non dovrebbe richiedere più di 1 minuto',
+        description:
+          'Sicurezza multifattore, eliminando il punto singolo di guasto',
+      },
+      selfCustodial: {
+        description: 'Autocustodia, dando pieno controllo sui tuoi asset',
+      },
+      crossChain: {
+        description:
+          'Cross-chain. Scambia i tuoi token preferiti in un’unica cassaforte',
+      },
+      over30Chains: {
+        description:
+          'Oltre 30 blockchain per conservare il tuo token preferito',
+      },
+      availablePlatforms: {
+        description: 'Disponibile su Android, iOS, macOS e Windows',
+      },
+      seedlessWallet: {
+        description: 'Un wallet senza seed, non farti più truffare',
+      },
+    },
     connectingWithServer: 'Connessione al server...',
     connectionSuccess: 'Connessione riuscita!',
     takeMinute: 'Questo richiederà solo un minuto',
