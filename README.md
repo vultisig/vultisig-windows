@@ -25,7 +25,7 @@ If you need to make an update to the proto file, make sure you raise a PR in htt
 To generate the proto files for typescript, run the following command in the frontend directory
 
 ```bash
-cd frontend && npx buf generate commondata/proto
+. ./scripts/sync_protobuf.sh
 ```
 
 ## Update protobuf files for type script
