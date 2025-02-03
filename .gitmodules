@@ -1,3 +1,3 @@
-[submodule "workspace/frontend/commondata"]
-	path = workspace/frontend/commondata
+[submodule "clients/desktop/commondata"]
+	path = clients/desktop/commondata
 	url = https://github.com/vultisig/commondata
