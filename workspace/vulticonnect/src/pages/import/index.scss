@@ -1,0 +1,158 @@
+@use "~variables" as *;
+
+.import-page {
+  .ant-upload-wrapper {
+    .state {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: opacity 0.3s;
+
+      &-default {
+        opacity: 1;
+      }
+
+      &-hover {
+        opacity: 0;
+      }
+
+      &-done {
+        opacity: 0;
+      }
+    }
+
+    .ant-upload-btn {
+      height: rem(310);
+      padding: rem(32);
+    }
+
+    .ant-upload-drag {
+      background-color: $blue-base;
+      border-color: rgba($color: $cyan-base, $alpha: 0.4);
+      height: auto;
+    }
+
+    .ant-upload-drag-container {
+      height: 100%;
+      position: relative;
+    }
+
+    &.default {
+      .ant-upload-drag-hover {
+        .state {
+          &-default {
+            opacity: 0;
+          }
+
+          &-hover {
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    &.success,
+    &.error {
+      .state {
+        &-default {
+          opacity: 0;
+        }
+
+        &-done {
+          opacity: 1;
+        }
+      }
+    }
+
+    &.error {
+      .ant-upload-drag {
+        background-color: rgba($color: $red-base, $alpha: 0.1);
+        border-color: $red-base;
+        border-style: solid;
+      }
+    }
+
+    &.success {
+      .ant-upload-drag {
+        background-color: rgba($color: $cyan-dark, $alpha: 0.05);
+        border-color: $cyan-base;
+        border-style: solid;
+      }
+    }
+  }
+
+  .content {
+    .title {
+      display: block;
+      color: rgba(255, 255, 255, 0.85) !important;
+      font-size: rem(16);
+      font-weight: 700;
+      line-height: rem(22);
+      margin-top: rem(16);
+    }
+
+    .desc {
+      color: $gray-6;
+      font-size: rem(12);
+      font-weight: 600;
+      line-height: rem(22);
+      margin-top: rem(4);
+    }
+
+    .msg {
+      font-weight: 600;
+      line-height: rem(22);
+      margin-bottom: rem(12);
+    }
+
+    .image {
+      height: rem(136);
+      max-width: rem(136);
+    }
+
+    .name {
+      color: $gray-6;
+      font-size: rem(12);
+      font-weight: 600;
+      line-height: rem(22);
+      margin-top: rem(8);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    .hint {
+      color: $gray-6;
+      display: block;
+      font-size: rem(12);
+      font-weight: 600;
+      line-height: rem(22);
+      margin-top: rem(16);
+      text-align: center;
+    }
+
+    .clear {
+      background-color: transparent;
+      border-radius: rem(12);
+      cursor: pointer;
+      height: rem(32);
+      padding: rem(8);
+      position: absolute;
+      right: rem(32);
+      top: rem(32);
+      transition: background-color 0.3s;
+      width: rem(32);
+
+      &:hover {
+        background-color: rgba($color: $gray-13, $alpha: 0.2);
+      }
+    }
+  }
+}

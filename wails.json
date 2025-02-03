@@ -2,9 +2,14 @@
   "$schema": "https://wails.io/schemas/config.v2.json",
   "name": "Vultisig",
   "outputfilename": "vultisig",
-  "frontend:install": "npm install",
-  "frontend:build": "npm run build",
-  "frontend:dev:watcher": "npm run dev",
+  "packageManager": "yarn@4.5.2",
+  "workspaces": [
+    "frontend"
+  ],
+  "frontend:dir": "workspace/frontend",
+  "frontend:install": "yarn install",
+  "frontend:build": "yarn build",
+  "frontend:dev:watcher": "yarn dev",
   "frontend:dev:serverUrl": "auto",
   "description": "Vultisig for Windows",
   "info": {

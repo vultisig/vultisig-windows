@@ -1,0 +1,71 @@
+@use "~variables" as *;
+
+@keyframes loading-after {
+  0% {
+    left: rem(20);
+    z-index: 0;
+  }
+  25% {
+    left: rem(0);
+  }
+  50% {
+    z-index: 1;
+  }
+  75% {
+    left: rem(40);
+  }
+  100% {
+    left: rem(20);
+    z-index: 0;
+  }
+}
+
+@keyframes loading-before {
+  0% {
+    left: rem(20);
+    z-index: 1;
+  }
+  25% {
+    left: rem(40);
+  }
+  50% {
+    z-index: 0;
+  }
+  75% {
+    left: rem(0);
+  }
+  100% {
+    left: rem(20);
+    z-index: 1;
+  }
+}
+
+.vulti-loading {
+  height: rem(20);
+  position: relative;
+  width: rem(60);
+
+  &::after,
+  &::before {
+    animation-delay: 0;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    border-radius: 50%;
+    content: "";
+    height: rem(20);
+    position: absolute;
+    transition: all 0.3s;
+    width: rem(20);
+  }
+
+  &::after {
+    background-color: $blue-light;
+    animation-name: loading-after;
+  }
+
+  &::before {
+    background-color: $cyan-base;
+    animation-name: loading-before;
+  }
+}

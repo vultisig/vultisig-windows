@@ -1,0 +1,11 @@
+@use "~variables" as *;
+
+.middle-truncate {
+  display: block;
+  position: relative;
+
+  span {
+    position: absolute;
+    visibility: hidden;
+  }
+}
