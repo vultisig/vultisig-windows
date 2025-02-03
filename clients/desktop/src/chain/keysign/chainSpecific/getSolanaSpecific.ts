@@ -1,4 +1,6 @@
-import { SolanaSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+import { create } from '@bufbuild/protobuf';
+import { SolanaSpecificSchema } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+
 import { RpcServiceSolana } from '../../../services/Rpc/solana/RpcServiceSolana';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
@@ -40,7 +42,7 @@ export const getSolanaSpecific = async ({
     toAddressPubKey = associatedTokenAddressTo;
   }
 
-  return new SolanaSpecific({
+  return create(SolanaSpecificSchema, {
     recentBlockHash,
     priorityFee: highPriorityFee.toString(),
     fromTokenAssociatedAddress: fromAddressPubKey,

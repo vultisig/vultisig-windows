@@ -1,7 +1,8 @@
+import { create } from '@bufbuild/protobuf';
+import { CustomMessagePayloadSchema } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CustomMessagePayload } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
@@ -34,7 +35,7 @@ export const SignCustomMessagePage = () => {
             navigate('keysign', {
               state: {
                 keysignPayload: {
-                  custom: new CustomMessagePayload({
+                  custom: create(CustomMessagePayloadSchema, {
                     method,
                     message,
                   }),

@@ -1,5 +1,10 @@
+import { create } from '@bufbuild/protobuf';
+import {
+  Coin,
+  CoinSchema,
+} from '@core/communication/vultisig/keysign/v1/coin_pb';
+
 import { storage } from '../../../wailsjs/go/models';
-import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../model/chain';
 import { AccountCoinKey } from '../AccountCoin';
 
@@ -30,7 +35,7 @@ export const storageCoinToCoin = (storageCoin: storage.Coin): Coin => {
     decimals,
   } = storageCoin;
 
-  return new Coin({
+  return create(CoinSchema, {
     chain,
     ticker,
     address,

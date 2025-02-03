@@ -1,4 +1,8 @@
-import { KeysignMessage } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
+import { create, toBinary } from '@bufbuild/protobuf';
+import {
+  KeysignMessageSchema,
+  KeysignPayloadSchema,
+} from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 
@@ -32,7 +36,7 @@ export const getJoinKeysignUrl = async ({
   payloadId,
   vaultId,
 }: GetJoinKeysignUrlInput): Promise<string> => {
-  const keysignMessage = new KeysignMessage({
+  const keysignMessage = create(KeysignMessageSchema, {
     sessionId,
     serviceName: serviceName,
     encryptionKeyHex: hexEncryptionKey,
@@ -51,7 +55,9 @@ export const getJoinKeysignUrl = async ({
     });
   }
 
-  const jsonData = await toCompressedString(keysignMessage);
+  const binary = toBinary(KeysignMessageSchema, keysignMessage);
+
+  const jsonData = await toCompressedString(binary);
 
   const urlWithPayload = addQueryParams(deepLinkBaseUrl, {
     type: 'SignTransaction',
@@ -60,7 +66,8 @@ export const getJoinKeysignUrl = async ({
   });
 
   if (payload && 'keysign' in payload && urlWithPayload.length > urlMaxLength) {
-    const compressedPayload = await toCompressedString(payload.keysign);
+    const binary = toBinary(KeysignPayloadSchema, payload.keysign);
+    const compressedPayload = await toCompressedString(binary);
     const payloadId = await uploadPayloadToServer({
       payload: compressedPayload,
       serverUrl: keygenServerUrl[serverType],

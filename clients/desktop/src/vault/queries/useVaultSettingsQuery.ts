@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { VaultService } from '../../services/Vault/VaultService';
+import { GetSettings } from '../../../wailsjs/go/storage/Store';
 import { mapLanguageToLanguageNameUI } from '../mappers/mapLanguageToLanguageUI';
 
 export const vaultSettingsQueryKey = ['vaultSettings'];
@@ -13,13 +13,12 @@ const DEFAULT_SETTINGS = {
 };
 
 export const useVaultSettingsQuery = () => {
-  const vaultService = new VaultService();
   const { t } = useTranslation();
 
   return useQuery({
     queryKey: [vaultSettingsQueryKey],
     queryFn: async () => {
-      const data = await vaultService.getVaultSettings();
+      const data = await GetSettings();
       const currency = data?.[0]?.currency;
       const language = data?.[0]?.language;
 

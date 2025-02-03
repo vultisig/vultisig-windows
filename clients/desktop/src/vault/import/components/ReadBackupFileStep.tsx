@@ -1,13 +1,13 @@
+import { VaultContainer } from '@core/communication/vultisig/vault/v1/vault_container_pb';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReadTextFile } from '../../../../wailsjs/go/main/App';
-import { VaultContainer } from '@core/communication/vultisig/vault/v1/vault_container_pb';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { OnFinishProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState';
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';

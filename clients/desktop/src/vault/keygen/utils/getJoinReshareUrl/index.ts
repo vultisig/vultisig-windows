@@ -1,7 +1,8 @@
+import { create, toBinary } from '@bufbuild/protobuf';
+import { ReshareMessageSchema } from '@core/communication/vultisig/keygen/v1/reshare_message_pb';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config';
-import { ReshareMessage } from '@core/communication/vultisig/keygen/v1/reshare_message_pb';
 import { toCompressedString } from '../../../../utils/protobuf/toCompressedString';
 import { KeygenServerType } from '../../server/KeygenServerType';
 
@@ -28,7 +29,7 @@ export const getJoinReshareUrl = async ({
   oldResharePrefix = '',
   oldParties,
 }: GetJoinReshareUrlInput) => {
-  const keygenMessage = new ReshareMessage({
+  const keygenMessage = create(ReshareMessageSchema, {
     sessionId,
     hexChainCode,
     serviceName,
@@ -40,7 +41,9 @@ export const getJoinReshareUrl = async ({
     oldParties,
   });
 
-  const jsonData = await toCompressedString(keygenMessage);
+  const binary = toBinary(ReshareMessageSchema, keygenMessage);
+
+  const jsonData = await toCompressedString(binary);
 
   return addQueryParams(deepLinkBaseUrl, {
     type: 'NewVault',

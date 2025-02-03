@@ -1,4 +1,9 @@
-import { THORChainSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+import { create } from '@bufbuild/protobuf';
+import {
+  THORChainSpecific,
+  THORChainSpecificSchema,
+} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+
 import { CosmosChain } from '../../../model/chain';
 import { getCosmosAccountInfo } from '../../cosmos/account/getCosmosAccountInfo';
 import { getThorNetworkInfo } from '../../thor/getThorNetworkInfo';
@@ -18,7 +23,7 @@ export const getThorchainSpecific = async ({
 
   const { native_tx_fee_rune } = await getThorNetworkInfo();
 
-  return new THORChainSpecific({
+  return create(THORChainSpecificSchema, {
     accountNumber: BigInt(accountNumber),
     sequence: BigInt(sequence ?? 0),
     fee: BigInt(native_tx_fee_rune),

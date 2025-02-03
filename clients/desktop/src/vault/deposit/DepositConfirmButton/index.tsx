@@ -1,15 +1,16 @@
+import { create } from '@bufbuild/protobuf';
+import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
+import { isOneOf } from '@lib/utils/array/isOneOf';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useTranslation } from 'react-i18next';
 
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { coinKeyFromString } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { isOneOf } from '@lib/utils/array/isOneOf';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { Chain } from '../../../model/chain';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
@@ -62,7 +63,7 @@ export const DepositConfirmButton = ({
 
   const startKeysign = (type: DepositType) => {
     // TODO: handle affiliate fee and percentage
-    const keysignPayload = new KeysignPayload({
+    const keysignPayload = create(KeysignPayloadSchema, {
       coin: storageCoinToCoin(coin),
       memo,
       blockchainSpecific: shouldBePresent(chainSpecificQuery.data),

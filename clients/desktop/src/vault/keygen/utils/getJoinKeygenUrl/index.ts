@@ -1,4 +1,5 @@
-import { KeygenMessage } from '@core/communication/vultisig/keygen/v1/keygen_message_pb';
+import { create, toBinary } from '@bufbuild/protobuf';
+import { KeygenMessageSchema } from '@core/communication/vultisig/keygen/v1/keygen_message_pb';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config';
@@ -22,7 +23,7 @@ export const getJoinKeygenUrl = async ({
   hexEncryptionKey,
   hexChainCode,
 }: GetJoinKeygenUrlInput) => {
-  const keygenMessage = new KeygenMessage({
+  const keygenMessage = create(KeygenMessageSchema, {
     sessionId,
     hexChainCode,
     serviceName,
@@ -31,7 +32,9 @@ export const getJoinKeygenUrl = async ({
     vaultName: vaultName,
   });
 
-  const jsonData = await toCompressedString(keygenMessage);
+  const binary = toBinary(KeygenMessageSchema, keygenMessage);
+
+  const jsonData = await toCompressedString(binary);
 
   return addQueryParams(deepLinkBaseUrl, {
     type: 'NewVault',
