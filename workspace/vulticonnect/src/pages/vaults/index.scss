@@ -1,0 +1,33 @@
+@use "~variables" as *;
+
+.layout {
+  > .header {
+    .title {
+      font-size: rem(16);
+      font-weight: 700;
+      left: rem(66);
+      line-height: rem(22);
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  > .content {
+    .ant-checkbox {
+      + span {
+        padding-right: 0;
+        width: 100%;
+
+        .name {
+          display: block;
+          font-size: rem(14);
+          line-height: rem(20);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}

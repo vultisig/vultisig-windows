@@ -1,0 +1,28 @@
+@use "~variables" as *;
+
+.vaults-page {
+  .content {
+    .label {
+      font-weight: 600 !important;
+    }
+
+    .extra {
+      background-color: $blue-light;
+      border-radius: rem(12);
+      padding: 0 rem(14);
+      right: rem(10) !important;
+
+      .text {
+        background-image: linear-gradient(
+          100deg,
+          $cyan-base 14%,
+          $blue-sharp 140%
+        );
+        background-clip: text;
+        color: transparent;
+        display: block;
+        line-height: rem(36);
+      }
+    }
+  }
+}

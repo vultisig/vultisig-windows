@@ -1,0 +1,52 @@
+@use "~variables" as *;
+
+.layout {
+  > .header {
+    .title {
+      font-size: rem(16);
+      font-weight: 700;
+      left: rem(66);
+      line-height: rem(22);
+      margin-top: rem(-10);
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .origin {
+      color: $gray-6;
+      font-size: rem(12);
+      font-weight: 600;
+      left: rem(66);
+      margin-top: rem(10);
+      line-height: rem(12);
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  > .content {
+    .ant-checkbox {
+      + span {
+        padding-right: 0;
+        width: 100%;
+
+        .name {
+          display: block;
+          font-size: rem(14);
+          line-height: rem(18);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .middle-truncate {
+          color: $gray-6;
+          font-size: rem(12);
+          line-height: rem(16);
+        }
+      }
+    }
+  }
+}
