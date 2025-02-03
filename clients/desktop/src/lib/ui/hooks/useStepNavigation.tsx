@@ -1,17 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
 
-type UseStepNavigationInput<T> = {
+type BaseProps<T> = {
   steps: readonly T[];
   initialStep?: T;
-  onExit?: () => void;
-  circular?: boolean;
 };
+
+type CircularProps<T> = BaseProps<T> & { circular: true; onExit?: never };
+type LinearProps<T> = BaseProps<T> & { circular?: false; onExit?: () => void };
+
+type UseStepNavigationInput<T> = CircularProps<T> | LinearProps<T>;
 
 export function useStepNavigation<T>({
   steps,
   initialStep = steps[0],
-  onExit,
   circular = false,
+  onExit,
 }: UseStepNavigationInput<T>) {
   const [step, setStep] = useState<T>(initialStep);
 
@@ -22,21 +25,20 @@ export function useStepNavigation<T>({
   const toNextStep = useCallback(() => {
     setStep(prev => {
       const currentIndex = steps.indexOf(prev);
+      const isLast = currentIndex === steps.length - 1;
 
-      if (currentIndex === steps.length - 1) {
-        return circular ? steps[0] : prev;
-      }
-
-      return steps[currentIndex + 1];
+      return isLast ? (circular ? steps[0] : prev) : steps[currentIndex + 1];
     });
   }, [steps, circular]);
 
   const toPreviousStep = useCallback(() => {
     setStep(prev => {
       const currentIndex = steps.indexOf(prev);
+      const isFirst = currentIndex === 0;
 
-      if (currentIndex === 0) {
-        return circular ? steps[steps.length - 1] : (onExit?.(), prev);
+      if (isFirst) {
+        if (circular) return steps[steps.length - 1];
+        onExit?.();
       }
 
       return steps[currentIndex - 1];

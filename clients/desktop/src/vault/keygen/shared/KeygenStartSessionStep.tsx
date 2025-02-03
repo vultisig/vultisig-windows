@@ -29,9 +29,7 @@ export const KeygenStartSessionStep = ({
     mutationFn: () => {
       return startSession({ serverUrl, sessionId, devices });
     },
-    onSuccess: () => {
-      setTimeout(onForward, 30000);
-    },
+    onSuccess: () => onForward(),
   });
 
   useEffect(() => start(), [start]);
