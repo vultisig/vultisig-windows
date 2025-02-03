@@ -1,4 +1,3 @@
-import { match } from '../../../lib/utils/match';
 import { assertChainField } from '../../utils/assertChainField';
 import {
   chainSpecificRecord,
@@ -18,6 +17,25 @@ import { getThorchainSpecific } from './getThorchainSpecific';
 import { getTonSpecific } from './getTonSpecific';
 import { getUtxoSpecific } from './getUtxoSpecific';
 
+const handlers: Record<
+  KeysignChainSpecificKey,
+  (input: GetChainSpecificInput) => Promise<KeysignChainSpecificValue>
+> = {
+  ethereumSpecific: getEthereumSpecific,
+  utxoSpecific: getUtxoSpecific,
+  thorchainSpecific: getThorchainSpecific,
+  mayaSpecific: getMayaSpecific,
+  cosmosSpecific: getCosmosSpecific,
+  solanaSpecific: getSolanaSpecific,
+  rippleSpecific: getRippleSpecific,
+  polkadotSpecific: getPolkadotSpecific,
+  suicheSpecific: getSuiSpecific,
+  tonSpecific: getTonSpecific,
+  tronSpecific: () => {
+    throw new Error('Tron is not supported');
+  },
+};
+
 export const getChainSpecific = async (
   input: GetChainSpecificInput
 ): Promise<KeysignChainSpecific> => {
@@ -25,21 +43,7 @@ export const getChainSpecific = async (
 
   const chainSpecificCase = chainSpecificRecord[chain];
 
-  const value = await match<
-    KeysignChainSpecificKey,
-    Promise<KeysignChainSpecificValue>
-  >(chainSpecificCase, {
-    ethereumSpecific: () => getEthereumSpecific(input),
-    utxoSpecific: () => getUtxoSpecific(input),
-    thorchainSpecific: () => getThorchainSpecific(input),
-    mayaSpecific: () => getMayaSpecific(input),
-    cosmosSpecific: () => getCosmosSpecific(input),
-    solanaSpecific: () => getSolanaSpecific(input),
-    rippleSpecific: () => getRippleSpecific(input),
-    polkadotSpecific: () => getPolkadotSpecific(input),
-    suicheSpecific: () => getSuiSpecific(input),
-    tonSpecific: () => getTonSpecific(input),
-  });
+  const value = await handlers[chainSpecificCase](input);
 
   return {
     case: chainSpecificCase,

@@ -38,6 +38,9 @@ const handlers: Record<
   thorchainSpecific: getThorPreSignedInputData,
   tonSpecific: getTonPreSignedInputData,
   utxoSpecific: getUtxoPreSignedInputData,
+  tronSpecific: () => {
+    throw new Error('Tron is not supported');
+  },
 };
 
 export const getPreSignedInputData = (input: Input) => {
