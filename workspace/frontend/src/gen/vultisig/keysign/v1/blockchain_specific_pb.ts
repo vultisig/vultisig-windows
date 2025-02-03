@@ -497,6 +497,11 @@ export class SolanaSpecific extends Message<SolanaSpecific> {
    */
   toTokenAssociatedAddress?: string;
 
+  /**
+   * @generated from field: optional bool program_id = 5;
+   */
+  programId?: boolean;
+
   constructor(data?: PartialMessage<SolanaSpecific>) {
     super();
     proto3.util.initPartial(data, this);
@@ -529,6 +534,13 @@ export class SolanaSpecific extends Message<SolanaSpecific> {
       name: 'to_token_associated_address',
       kind: 'scalar',
       T: 9 /* ScalarType.STRING */,
+      opt: true,
+    },
+    {
+      no: 5,
+      name: 'program_id',
+      kind: 'scalar',
+      T: 8 /* ScalarType.BOOL */,
       opt: true,
     },
   ]);
@@ -933,5 +945,137 @@ export class RippleSpecific extends Message<RippleSpecific> {
     b: RippleSpecific | PlainMessage<RippleSpecific> | undefined
   ): boolean {
     return proto3.util.equals(RippleSpecific, a, b);
+  }
+}
+
+/**
+ * @generated from message vultisig.keysign.v1.TronSpecific
+ */
+export class TronSpecific extends Message<TronSpecific> {
+  /**
+   * @generated from field: uint64 timestamp = 1;
+   */
+  timestamp = protoInt64.zero;
+
+  /**
+   * @generated from field: uint64 expiration = 2;
+   */
+  expiration = protoInt64.zero;
+
+  /**
+   * @generated from field: uint64 block_header_timestamp = 3;
+   */
+  blockHeaderTimestamp = protoInt64.zero;
+
+  /**
+   * @generated from field: uint64 block_header_number = 4;
+   */
+  blockHeaderNumber = protoInt64.zero;
+
+  /**
+   * @generated from field: uint64 block_header_version = 5;
+   */
+  blockHeaderVersion = protoInt64.zero;
+
+  /**
+   * @generated from field: string block_header_tx_trie_root = 6;
+   */
+  blockHeaderTxTrieRoot = '';
+
+  /**
+   * @generated from field: string block_header_parent_hash = 7;
+   */
+  blockHeaderParentHash = '';
+
+  /**
+   * @generated from field: string block_header_witness_address = 8;
+   */
+  blockHeaderWitnessAddress = '';
+
+  /**
+   * @generated from field: uint64 gas_estimation = 9;
+   */
+  gasEstimation = protoInt64.zero;
+
+  constructor(data?: PartialMessage<TronSpecific>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = 'vultisig.keysign.v1.TronSpecific';
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'timestamp', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: 'expiration', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    {
+      no: 3,
+      name: 'block_header_timestamp',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+    {
+      no: 4,
+      name: 'block_header_number',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+    {
+      no: 5,
+      name: 'block_header_version',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+    {
+      no: 6,
+      name: 'block_header_tx_trie_root',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 7,
+      name: 'block_header_parent_hash',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 8,
+      name: 'block_header_witness_address',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 9,
+      name: 'gas_estimation',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+  ]);
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): TronSpecific {
+    return new TronSpecific().fromBinary(bytes, options);
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): TronSpecific {
+    return new TronSpecific().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): TronSpecific {
+    return new TronSpecific().fromJsonString(jsonString, options);
+  }
+
+  static equals(
+    a: TronSpecific | PlainMessage<TronSpecific> | undefined,
+    b: TronSpecific | PlainMessage<TronSpecific> | undefined
+  ): boolean {
+    return proto3.util.equals(TronSpecific, a, b);
   }
 }

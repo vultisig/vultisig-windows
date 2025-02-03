@@ -24,6 +24,7 @@ import {
   SuiSpecific,
   THORChainSpecific,
   TonSpecific,
+  TronSpecific,
   UTXOSpecific,
 } from './blockchain_specific_pb.js';
 import { UtxoInfo } from './utxo_info_pb.js';
@@ -230,6 +231,13 @@ export class KeysignPayload extends Message<KeysignPayload> {
         value: RippleSpecific;
         case: 'rippleSpecific';
       }
+    | {
+        /**
+         * @generated from field: vultisig.keysign.v1.TronSpecific tron_specific = 14;
+         */
+        value: TronSpecific;
+        case: 'tronSpecific';
+      }
     | { case: undefined; value?: undefined } = { case: undefined };
 
   /**
@@ -363,6 +371,13 @@ export class KeysignPayload extends Message<KeysignPayload> {
       name: 'ripple_specific',
       kind: 'message',
       T: RippleSpecific,
+      oneof: 'blockchain_specific',
+    },
+    {
+      no: 14,
+      name: 'tron_specific',
+      kind: 'message',
+      T: TronSpecific,
       oneof: 'blockchain_specific',
     },
     { no: 20, name: 'utxo_info', kind: 'message', T: UtxoInfo, repeated: true },
