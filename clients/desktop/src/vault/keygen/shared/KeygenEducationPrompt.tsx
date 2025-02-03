@@ -1,5 +1,5 @@
 import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime';
-import { InfoIcon } from '../../../lib/ui/icons/InfoIcon';
+import { QuestionMarkIcon } from '../../../lib/ui/icons/QuestionMarkIcon';
 import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton';
 
 const resourceUrl =
@@ -11,7 +11,7 @@ export const KeygenEducationPrompt = () => {
       onClick={() => {
         BrowserOpenURL(resourceUrl);
       }}
-      icon={<InfoIcon />}
+      icon={<QuestionMarkIcon />}
     />
   );
 };
