@@ -15,9 +15,14 @@ import { getErc20Prices } from '../price/api/evm/getErc20Prices';
 import { getCoinPrices } from '../price/api/getCoinPrices';
 import { FiatCurrency } from '../price/FiatCurrency';
 
-export const getCoinPricesQueryKeys = (coins: CoinKey[]) => [
+type GetCoinPricesQueryKeysInput = {
+  coins: CoinKey[];
+  fiatCurrency: FiatCurrency;
+};
+
+export const getCoinPricesQueryKeys = (input: GetCoinPricesQueryKeysInput) => [
   'coinPrices',
-  coins,
+  input,
 ];
 
 type UseCoinPricesQueryInput = {
@@ -25,17 +30,14 @@ type UseCoinPricesQueryInput = {
   fiatCurrency?: FiatCurrency;
 };
 
-export const useCoinPricesQuery = ({
-  coins,
-  fiatCurrency: optionalFiatCurrency,
-}: UseCoinPricesQueryInput) => {
+export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
   const [defaultFiatCurrency] = useFiatCurrency();
 
-  const fiatCurrency = optionalFiatCurrency ?? defaultFiatCurrency;
+  const fiatCurrency = input.fiatCurrency ?? defaultFiatCurrency;
 
   const queries = [];
 
-  const [regularCoins, erc20Coins] = splitBy(coins, coin =>
+  const [regularCoins, erc20Coins] = splitBy(input.coins, coin =>
     isOneOf(coin.chain, Object.values(EvmChain)) && !isNativeCoin(coin) ? 1 : 0
   );
 
@@ -44,7 +46,10 @@ export const useCoinPricesQuery = ({
 
     Object.entries(groupedByChain).forEach(([chain, coins]) => {
       queries.push({
-        queryKey: getCoinPricesQueryKeys(coins),
+        queryKey: getCoinPricesQueryKeys({
+          coins,
+          fiatCurrency,
+        }),
         queryFn: async () => {
           const prices = await getErc20Prices({
             ids: coins.map(coin => coin.id),
@@ -68,7 +73,10 @@ export const useCoinPricesQuery = ({
 
   if (!isEmpty(regularCoins)) {
     queries.push({
-      queryKey: getCoinPricesQueryKeys(regularCoins),
+      queryKey: getCoinPricesQueryKeys({
+        coins: regularCoins,
+        fiatCurrency,
+      }),
       queryFn: async () => {
         const prices = await getCoinPrices({
           ids: regularCoins.map(coin => coin.priceProviderId),
