@@ -88,7 +88,11 @@ const SettingsVaultPage = () => {
                         {id === 'language' || id === 'currency' ? (
                           <HStack gap={8} alignItems="center">
                             <Text size={14} color="contrast">
-                              {id === 'language' ? languageUI : fiatCurrency}
+                              {id === 'language'
+                                ? t(
+                                    `vault_settings_language_settings_title_${language}`
+                                  )
+                                : fiatCurrency}
                             </Text>
                             <ChevronRightIcon />
                           </HStack>
