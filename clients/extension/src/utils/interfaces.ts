@@ -1,9 +1,12 @@
 import { ChainKey, Currency, Language } from "utils/constants";
+import { TransactionResponse } from "ethers";
+import { ThorchainProviderMethod } from "types/thorchain";
+import { ThorchainProviderResponse } from "types/thorchain";
 
 export namespace Messaging {
   export namespace Chain {
     export type Request = { method: string; params: Record<string, any>[] };
-    export type Response = string | string[];
+    export type Response = string | string[] | ThorchainProviderResponse<ThorchainProviderMethod> | TransactionResponse
   }
 
   export namespace GetVaults {
