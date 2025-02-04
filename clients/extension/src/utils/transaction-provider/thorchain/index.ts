@@ -8,24 +8,24 @@ import Long from "long";
 import {
   THORChainSpecificSchema,
   THORChainSpecific,
-} from "protos/blockchain_specific_pb";
+} from "../../../protos/blockchain_specific_pb";
 import {
   KeysignPayloadSchema,
   KeysignPayload,
-} from "protos/keysign_message_pb";
-import { CoinSchema, Coin } from "protos/coin_pb";
+} from "../../../protos/keysign_message_pb";
+import { CoinSchema, Coin } from "../../../protos/coin_pb";
 
-import { ChainKey } from "utils/constants";
+import { ChainKey } from "../../constants";
 import type {
   ITransaction,
   SignatureProps,
   SignedTransaction,
   SpecificThorchain,
   VaultProps,
-} from "utils/interfaces";
-import api from "utils/api";
-import { SignedTransactionResult } from "utils/signed-transaction-result";
-import BaseTransactionProvider from "utils/transaction-provider/base";
+} from "../../interfaces";
+import api from "../../api";
+import { SignedTransactionResult } from "../../signed-transaction-result";
+import BaseTransactionProvider from "../../transaction-provider/base";
 
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
@@ -37,10 +37,6 @@ export default class ThorchainTransactionProvider extends BaseTransactionProvide
     walletCore: WalletCore
   ) {
     super(chainKey, chainRef, dataEncoder, walletCore);
-    this.chainKey = chainKey;
-    this.chainRef = chainRef;
-    this.dataEncoder = dataEncoder;
-    this.walletCore = walletCore;
   }
 
   public getSpecificTransactionInfo = (

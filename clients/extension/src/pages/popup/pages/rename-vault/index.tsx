@@ -2,13 +2,13 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Form, Input } from "antd";
 
-import { VaultProps } from "utils/interfaces";
-import { getStoredVaults, setStoredVaults } from "utils/storage";
-import useGoBack from "hooks/go-back";
-import messageKeys from "utils/message-keys";
-import routeKeys from "utils/route-keys";
+import { VaultProps } from "../../../../utils/interfaces";
+import { getStoredVaults, setStoredVaults } from "../../../../utils/storage";
+import useGoBack from "../../../../hooks/go-back";
+import messageKeys from "../../../../utils/message-keys";
+import routeKeys from "../../../../utils/route-keys";
 
-import { ArrowLeft } from "icons";
+import { ArrowLeft } from "../../../../icons";
 
 const Component = () => {
   const { t } = useTranslation();

@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { getStoredVaults } from "utils/storage";
-import type { VaultProps } from "utils/interfaces";
-import useGoBack from "hooks/go-back";
-import messageKeys from "utils/message-keys";
-import routeKeys from "utils/route-keys";
+import { getStoredVaults } from "../../../../utils/storage";
+import type { VaultProps } from "../../../../utils/interfaces";
+import useGoBack from "../../../../hooks/go-back";
+import messageKeys from "../../../../utils/message-keys";
+import routeKeys from "../../../../utils/route-keys";
 
-import { ArrowLeft, ArrowRight, NoteEdit, Trash } from "icons";
+import { ArrowLeft, ArrowRight, NoteEdit, Trash } from "../../../../icons";
 
 interface InitialState {
   vault?: VaultProps;

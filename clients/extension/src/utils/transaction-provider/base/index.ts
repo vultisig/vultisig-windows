@@ -3,20 +3,20 @@ import { TW, WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 import { toBinary } from "@bufbuild/protobuf";
 
-import { ChainKey } from "utils/constants";
+import { ChainKey } from "../../constants";
 import {
   ITransaction,
   SignatureProps,
   SignedTransaction,
   VaultProps,
-} from "utils/interfaces";
+} from "../../interfaces";
 
 import {
   KeysignMessage,
   KeysignMessageSchema,
   KeysignPayload,
-} from "protos/keysign_message_pb";
-import { CustomMessagePayload } from "protos/custom_message_payload_pb";
+} from "../../../protos/keysign_message_pb";
+import { CustomMessagePayload } from "../../../protos/custom_message_payload_pb";
 
 interface ChainRef {
   [chainKey: string]: CoinType;

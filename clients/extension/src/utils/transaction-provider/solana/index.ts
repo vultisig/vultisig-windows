@@ -6,25 +6,25 @@ import Long from "long";
 import {
   SolanaSpecificSchema,
   SolanaSpecific,
-} from "protos/blockchain_specific_pb";
+} from "../../../protos/blockchain_specific_pb";
 import {
   KeysignPayloadSchema,
   KeysignPayload,
-} from "protos/keysign_message_pb";
-import { CoinSchema } from "protos/coin_pb";
+} from "../../../protos/keysign_message_pb";
+import { CoinSchema } from "../../../protos/coin_pb";
 
-import { ChainKey, rpcUrl } from "utils/constants";
+import { ChainKey, rpcUrl } from "../../constants";
 import type {
   ITransaction,
   SignatureProps,
   SignedTransaction,
   SpecificSolana,
   VaultProps,
-} from "utils/interfaces";
-import api from "utils/api";
-import BaseTransactionProvider from "utils/transaction-provider/base";
+} from "../../interfaces";
+import api from "../../api";
+import BaseTransactionProvider from "../../transaction-provider/base";
 
-import { SignedTransactionResult } from "utils/signed-transaction-result";
+import { SignedTransactionResult } from "../../signed-transaction-result";
 export default class SolanaTransactionProvider extends BaseTransactionProvider {
   constructor(
     chainKey: ChainKey,
@@ -33,10 +33,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
     walletCore: WalletCore
   ) {
     super(chainKey, chainRef, dataEncoder, walletCore);
-    this.chainKey = chainKey;
-    this.chainRef = chainRef;
-    this.dataEncoder = dataEncoder;
-    this.walletCore = walletCore;
+ 
   }
 
   async fetchTokenAssociatedAccountByOwner(

@@ -1,5 +1,5 @@
-import { MessageKey, SenderKey } from "utils/constants";
-import { Messaging } from "utils/interfaces";
+import { MessageKey, SenderKey } from "../utils/constants";
+import { Messaging } from "../utils/interfaces";
 
 const sendToBackground = <Request, Response>(
   type: MessageKey,

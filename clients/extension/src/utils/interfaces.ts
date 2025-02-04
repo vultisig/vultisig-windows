@@ -1,7 +1,7 @@
-import { ChainKey, Currency, Language } from "utils/constants";
+import { ChainKey, Currency, Language } from "./constants";
 import { TransactionResponse } from "ethers";
-import { ThorchainProviderMethod } from "types/thorchain";
-import { ThorchainProviderResponse } from "types/thorchain";
+import { ThorchainProviderMethod } from "../types/thorchain";
+import { ThorchainProviderResponse } from "../types/thorchain";
 
 export namespace Messaging {
   export namespace Chain {

@@ -14,9 +14,9 @@ import {
   MessageKey,
   RequestMethod,
   SenderKey,
-} from "utils/constants";
-import { Messaging, VaultProps } from "utils/interfaces";
-import VULTI_ICON_RAW_SVG from "content/icon";
+} from "../utils/constants";
+import { Messaging, VaultProps } from "../utils/interfaces";
+import VULTI_ICON_RAW_SVG from "./icon";
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
