@@ -7,7 +7,7 @@ import { defaultFiatCurrency } from '../FiatCurrency';
 import { CoinPricesResponse } from './CoinPricesResponse';
 import { GetCoinPricesInput } from './GetCoinPricesInput';
 
-const baseUrl = `${Endpoint.vultisigApiProxy}/coingecko/api/v3/simple/price`;
+const baseUrl = `${Endpoint.vultisigApiProxy}/coingeicko/api/v3/simple/price`;
 
 export const getCoinPrices = async ({
   ids,
