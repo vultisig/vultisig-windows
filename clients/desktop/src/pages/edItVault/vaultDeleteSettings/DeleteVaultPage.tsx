@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
+import { fiatCurrencySymbolRecord } from '../../../coin/price/FiatCurrency';
 import DangerSignRedIcon from '../../../lib/ui/icons/DangerSignRedIcon';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
+import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
@@ -47,7 +48,8 @@ const DeleteVaultPage = () => {
   const { mutate: deleteVault, isPending, error } = useDeleteVaultMutation();
   const vault = useCurrentVault();
   const navigate = useAppNavigate();
-  const { currencySymbol } = useGlobalCurrency();
+  const [fiatCurrency] = useFiatCurrency();
+
   const { signers, name, public_key_eddsa, public_key_ecdsa, local_party_id } =
     vault;
 
@@ -57,11 +59,13 @@ const DeleteVaultPage = () => {
       local_party_id,
     });
 
+  const currencySymbol = fiatCurrencySymbolRecord[fiatCurrency];
+
   const vaultDetails = [
     { label: t('vault_delete_page_vault_name'), value: name },
     {
       label: t('vault_delete_page_vault_value'),
-      value: vaultBalance + ' ' + currencySymbol?.symbol,
+      value: vaultBalance + ' ' + currencySymbol,
     },
     {
       label: t('vault_delete_page_vault_part'),

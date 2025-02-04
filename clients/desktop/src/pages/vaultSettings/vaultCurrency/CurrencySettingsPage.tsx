@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
+import { fiatCurrencies } from '../../../coin/price/FiatCurrency';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
 import { ScrollableFlexboxFiller } from '../../../lib/ui/layout/ScrollableFlexboxFiller';
@@ -8,7 +9,6 @@ import { Text } from '../../../lib/ui/text';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { currencyOptions } from './constants';
 import {
   CurrencyBox,
   CurrencyButton,
@@ -31,17 +31,17 @@ const CurrencySettingsPage = () => {
           }
         />
         <StyledPageSlice gap={16} flexGrow={true}>
-          {currencyOptions.map(({ title, value }, index) => (
+          {fiatCurrencies.map((fiat, index) => (
             <CurrencyButton
               key={index}
-              onClick={() => updateGlobalCurrency(value)}
+              onClick={() => updateGlobalCurrency(fiat)}
             >
               <CurrencyBox>
                 <Text size={16} color="contrast" weight="600">
-                  {t(title)}
+                  {t(`vault_settings_currency_settings_title_${fiat}`)}
                 </Text>
               </CurrencyBox>
-              {value === globalCurrency && <CheckIcon />}
+              {fiat === globalCurrency && <CheckIcon />}
             </CurrencyButton>
           ))}
         </StyledPageSlice>

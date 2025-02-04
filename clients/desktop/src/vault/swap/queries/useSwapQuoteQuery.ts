@@ -5,10 +5,7 @@ import { swapConfig } from '../../../chain/swap/config';
 import { findSwapQuote } from '../../../chain/swap/quote/findSwapQuote';
 import { CoinKey } from '../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
-import { CoinMeta } from '../../../model/coin-meta';
-import { Fiat } from '../../../model/fiat';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
@@ -35,10 +32,13 @@ export const useSwapQuoteQuery = () => {
   const fromCoin = useCurrentVaultCoin(fromCoinKey);
   const toCoin = useCurrentVaultCoin(toCoinKey);
 
-  const fromCoinUsdPrice = useCoinPriceQuery(
-    CoinMeta.fromCoin(storageCoinToCoin(fromCoin)),
-    Fiat.USD
-  );
+  const fromCoinUsdPrice = useCoinPriceQuery({
+    coin: {
+      ...fromCoinKey,
+      priceProviderId: fromCoin.price_provider_id,
+    },
+    fiatCurrency: 'usd',
+  });
 
   return useStateDependentQuery({
     state: {
