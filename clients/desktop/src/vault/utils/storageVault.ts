@@ -1,5 +1,5 @@
 import { create } from '@bufbuild/protobuf';
-import { TimestampSchema } from '@bufbuild/protobuf/wkt';
+import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt';
 import {
   Vault,
   Vault_KeyShareSchema,
@@ -41,16 +41,19 @@ export const toStorageVault = ({
   convertValues: () => {},
 });
 
+export const secondsTimestamptToProtoTimestamp = (seconds: number): Timestamp =>
+  create(TimestampSchema, {
+    seconds: BigInt(Math.floor(seconds)),
+    nanos: Math.floor(convertDuration(seconds % 1, 's', 'ns')),
+  });
+
 export const fromStorageVault = (vault: storage.Vault): Vault =>
   create(VaultSchema, {
     name: vault.name,
     publicKeyEcdsa: vault.public_key_ecdsa,
     publicKeyEddsa: vault.public_key_eddsa,
     signers: vault.signers,
-    createdAt: create(TimestampSchema, {
-      seconds: BigInt(Math.floor(vault.created_at)),
-      nanos: Math.floor(convertDuration(vault.created_at % 1, 's', 'ns')),
-    }),
+    createdAt: secondsTimestamptToProtoTimestamp(vault.created_at),
     hexChainCode: vault.hex_chain_code,
     localPartyId: vault.local_party_id,
     keyShares: vault.keyshares.map(({ public_key, keyshare }) =>
