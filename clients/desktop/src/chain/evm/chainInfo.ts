@@ -26,7 +26,7 @@ export const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.Blast]: `${Endpoint.vultisigApiProxy}/blast/`,
   [EvmChain.BSC]: `${Endpoint.vultisigApiProxy}/bsc/`,
   [EvmChain.Zksync]: `${Endpoint.vultisigApiProxy}/zksync/`,
-  [EvmChain.Avalanche]: 'https://avalanche-c-chain-rpc.publicnode.com',
+  [EvmChain.Avalanche]: `${Endpoint.vultisigApiProxy}/avax/`,
 };
 
 const evmDefaultChainInfo: Record<EvmChain, Chain> = {
