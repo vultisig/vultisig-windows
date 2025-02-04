@@ -395,6 +395,20 @@ export const es = {
   while_you_wait_vultisig_has: 'Mientras esperas, Vultisig tiene...',
   creating_vault: 'Creando Bóveda',
   fastVaultSetup: {
+    summary: {
+      title: 'Resumen Rápido',
+      pillText: 'Participaciones del Bóveda',
+      summaryItemOneTitle:
+        'Haga una copia de seguridad de cada participación del bóveda por separado',
+      summaryItemTwoTitle:
+        'Mantenga las participaciones del bóveda en diferentes ubicaciones',
+      summaryItemThreeTitle:
+        'Todas las participaciones del bóveda garantizan un acceso seguro a sus fondos',
+      summaryItemFourTitle:
+        'No almacene su participación del bóveda en el propio dispositivo, en caso de pérdida o daño',
+      agreementText: 'He leído y entiendo qué hacer',
+      ctaText: 'Cree su bóveda',
+    },
     preparingVault: 'Preparando Bóveda',
     generatingECDSAKey: 'Generando Clave ECDSA',
     createVault: {

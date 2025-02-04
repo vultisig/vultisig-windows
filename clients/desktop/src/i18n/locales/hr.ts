@@ -387,6 +387,19 @@ export const hr = {
   while_you_wait_vultisig_has: 'Amíg vársz, a Vultisig rendelkezik...',
   creating_vault: 'Tárca létrehozása',
   fastVaultSetup: {
+    summary: {
+      title: 'Gyors Összefoglaló',
+      pillText: 'Tároló Megosztások',
+      summaryItemOneTitle:
+        'Mentsen biztonsági másolatot minden tároló megosztásról külön-külön',
+      summaryItemTwoTitle: 'Tartsa a tároló megosztásokat különböző helyeken',
+      summaryItemThreeTitle:
+        'Minden tároló megosztás biztosítja a biztonságos hozzáférést az alapjaihoz',
+      summaryItemFourTitle:
+        'Ne tárolja a tároló megosztását magán az eszközön, elvesztés vagy sérülés esetén',
+      agreementText: 'Elolvastam és megértettem, mit kell tenni',
+      ctaText: 'Hozza létre a tárolóját',
+    },
     preparingVault: 'Tárca előkészítése',
     generatingECDSAKey: 'ECDSA kulcs generálása',
     createVault: {

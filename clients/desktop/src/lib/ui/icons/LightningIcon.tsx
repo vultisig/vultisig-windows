@@ -1,5 +1,10 @@
 export const LightningIcon = ({ color = '#fff' }: { color?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={16} height={20} fill="none">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="0.8em"
+    height="1em"
+    fill="none"
+  >
     <path
       stroke={color}
       strokeLinecap="round"
