@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button, ConfigProvider } from "antd";
 
-import { getStoredVaults, setStoredVaults } from "utils/storage";
-import type { VaultProps } from "utils/interfaces";
-import useGoBack from "hooks/go-back";
-import messageKeys from "utils/message-keys";
-import routeKeys from "utils/route-keys";
+import { getStoredVaults, setStoredVaults } from "../../../../utils/storage";
+import type { VaultProps } from "../../../../utils/interfaces";
+import useGoBack from "../../../../hooks/go-back";
+import messageKeys from "../../../../utils/message-keys";
+import routeKeys from "../../../../utils/route-keys";
 
-import { ArrowLeft, TriangleWarning } from "icons";
+import { ArrowLeft, TriangleWarning } from "../../../../icons";
 
 interface InitialState {
   vault?: VaultProps;

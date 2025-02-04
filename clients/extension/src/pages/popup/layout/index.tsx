@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-import { getStoredVaults } from "utils/storage";
-import routerKeys from "utils/route-keys";
+import { getStoredVaults } from "../../../utils/storage";
+import routerKeys from "../../../utils/route-keys";
 
 interface InitialState {
   loaded: boolean;

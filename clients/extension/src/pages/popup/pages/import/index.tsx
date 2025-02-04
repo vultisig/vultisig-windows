@@ -5,17 +5,17 @@ import { Button, Upload, UploadProps } from "antd";
 import { ReaderOptions, readBarcodesFromImageFile } from "zxing-wasm";
 import { UAParser } from "ua-parser-js";
 
-import { calculateWindowPosition, toCamelCase } from "utils/functions";
-import { ChainKey, chains, errorKey } from "utils/constants";
-import { getStoredVaults, setStoredVaults } from "utils/storage";
-import { VaultProps } from "utils/interfaces";
-import useGoBack from "hooks/go-back";
-import AddressProvider from "utils/address-provider";
-import messageKeys from "utils/message-keys";
-import routeKeys from "utils/route-keys";
-import WalletCoreProvider from "utils/wallet-core-provider";
+import { calculateWindowPosition, toCamelCase } from "../../../../utils/functions";
+import { ChainKey, chains, errorKey } from "../../../../utils/constants";
+import { getStoredVaults, setStoredVaults } from "../../../../utils/storage";
+import { VaultProps } from "../../../../utils/interfaces";
+import useGoBack from "../../../../hooks/go-back";
+import AddressProvider from "../../../../utils/address-provider";
+import messageKeys from "../../../../utils/message-keys";
+import routeKeys from "../../../../utils/route-keys";
+import WalletCoreProvider from "../../../../utils/wallet-core-provider";
 
-import { ArrowLeft, CloseLG } from "icons";
+import { ArrowLeft, CloseLG } from "../../../../icons";
 
 interface InitialState {
   file?: File;

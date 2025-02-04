@@ -6,20 +6,20 @@ import {
   type RouteObject,
 } from "react-router-dom";
 
-import routerKeys from "utils/route-keys";
+import routerKeys from "../../../utils/route-keys";
 
-import Layout from "pages/popup/layout";
+import Layout from "../../../pages/popup/layout";
 
-import CurrencyPage from "pages/popup/pages/currency";
-import DeleteVaultPage from "pages/popup/pages/delete-vault";
-import ImportPage from "pages/popup/pages/import";
-import LandingPage from "pages/popup/pages/landing";
-import LanguagePage from "pages/popup/pages/language";
-import MainPage from "pages/popup/pages/main";
-import RenameVaultPage from "pages/popup/pages/rename-vault";
-import SettingsPage from "pages/popup/pages/settings";
-import VaultSettingsPage from "pages/popup/pages/vault-settings";
-import VaultsPage from "pages/popup/pages/vaults";
+import CurrencyPage from "../../../pages/popup/pages/currency";
+import DeleteVaultPage from "../../../pages/popup/pages/delete-vault";
+import ImportPage from "../../../pages/popup/pages/import";
+import LandingPage from "../../../pages/popup/pages/landing";
+import LanguagePage from "../../../pages/popup/pages/language";
+import MainPage from "../../../pages/popup/pages/main";
+import RenameVaultPage from "../../../pages/popup/pages/rename-vault";
+import SettingsPage from "../../../pages/popup/pages/settings";
+import VaultSettingsPage from "../../../pages/popup/pages/vault-settings";
+import VaultsPage from "../../../pages/popup/pages/vaults";
 
 interface RouteConfig {
   path: string;

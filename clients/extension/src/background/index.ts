@@ -11,9 +11,14 @@ import {
   cosmosChains,
   evmChains,
   rpcUrl,
-} from "utils/constants";
-import { calculateWindowPosition, findChainByProp } from "utils/functions";
-import { ChainProps, ITransaction, Messaging } from "utils/interfaces";
+} from "../utils/constants";
+import { calculateWindowPosition, findChainByProp } from "../utils/functions";
+import {
+  ChainProps,
+  ITransaction,
+  Messaging,
+  VaultProps,
+} from "../utils/interfaces";
 
 import {
   getIsPriority,
@@ -25,9 +30,12 @@ import {
   setStoredRequest,
   setStoredTransactions,
   setStoredVaults,
-} from "utils/storage";
-import api from "utils/api";
-import { ThorchainProviderMethod, ThorchainProviderResponse } from "types/thorchain";
+} from "../utils/storage";
+import api from "../utils/api";
+import {
+  ThorchainProviderMethod,
+  ThorchainProviderResponse,
+} from "../types/thorchain";
 
 let rpcProvider: JsonRpcProvider;
 
@@ -54,7 +62,7 @@ const handleOpenPanel = (name: string): Promise<number> => {
         },
         (window) => {
           resolve(window?.id ?? 0);
-        }
+        },
       );
     });
   });
@@ -72,7 +80,7 @@ const handleProvider = (chain: ChainKey, update?: boolean) => {
 
 const handleFindAccounts = (
   chain: ChainKey,
-  sender: string
+  sender: string,
 ): Promise<string[]> => {
   return new Promise((resolve) => {
     getStoredVaults()
@@ -82,11 +90,12 @@ const handleFindAccounts = (
             active && apps
               ? chains
                   .filter(
-                    ({ name }) => name === chain && apps.indexOf(sender) >= 0
+                    (selectedChain: ChainProps) =>
+                      selectedChain.name === chain && apps.indexOf(sender) >= 0,
                   )
                   .map(({ address }) => address ?? "")
-              : []
-          )
+              : [],
+          ),
         );
       })
       .catch(() => resolve([]));
@@ -95,7 +104,7 @@ const handleFindAccounts = (
 
 const handleGetAccounts = (
   chain: ChainKey,
-  sender: string
+  sender: string,
 ): Promise<string[]> => {
   return new Promise((resolve) => {
     if (instance[Instance.ACCOUNTS]) {
@@ -139,7 +148,7 @@ const handleGetVaults = (): Promise<Messaging.GetVaults.Response> => {
   return new Promise((resolve) => {
     getStoredVaults().then((vaults) => {
       setStoredVaults(
-        vaults.map((vault) => ({ ...vault, selected: false }))
+        vaults.map((vault) => ({ ...vault, selected: false })),
       ).then(() => {
         handleOpenPanel("vaults").then((createdWindowId) => {
           chrome.windows.onRemoved.addListener((closedWindowId) => {
@@ -163,8 +172,8 @@ const handleGetVaults = (): Promise<Messaging.GetVaults.Response> => {
                         publicKeyEddsa,
                         transactions: [],
                         uid,
-                      })
-                    )
+                      }),
+                    ),
                 );
               });
             }
@@ -178,7 +187,7 @@ const handleGetVaults = (): Promise<Messaging.GetVaults.Response> => {
 const handleSendTransaction = (
   transaction: ITransaction.METAMASK,
   chain: ChainProps,
-  isDeposit?: boolean
+  isDeposit?: boolean,
 ): Promise<{ txResponse: string; raw: any }> => {
   return new Promise((resolve, reject) => {
     getStoredTransactions().then((transactions) => {
@@ -200,8 +209,8 @@ const handleSendTransaction = (
               transactions.map((transaction) =>
                 transaction.id === uuid
                   ? { ...transaction, windowId: createdWindowId }
-                  : transaction
-              )
+                  : transaction,
+              ),
             );
           });
 
@@ -209,7 +218,7 @@ const handleSendTransaction = (
             if (closedWindowId === createdWindowId) {
               getStoredTransactions().then((transactions) => {
                 const transaction = transactions.find(
-                  ({ windowId }) => windowId === createdWindowId
+                  ({ windowId }) => windowId === createdWindowId,
                 );
 
                 if (transaction) {
@@ -219,8 +228,8 @@ const handleSendTransaction = (
                         transactions.filter(
                           (transaction) =>
                             transaction.id !== uuid &&
-                            transaction.windowId !== createdWindowId
-                        )
+                            transaction.windowId !== createdWindowId,
+                        ),
                       ).then(reject);
                     });
                   } else {
@@ -229,7 +238,7 @@ const handleSendTransaction = (
                         vaults.map((vault) => ({
                           ...vault,
                           transactions: [transaction, ...vault.transactions],
-                        }))
+                        })),
                       ).then(() => {
                         if (transaction.customSignature) {
                           resolve({
@@ -262,8 +271,10 @@ const handleSendTransaction = (
 const handleRequest = (
   body: Messaging.Chain.Request,
   chain: ChainProps,
-  sender: string
-): Promise<Messaging.Chain.Response | ThorchainProviderResponse<ThorchainProviderMethod>> => {
+  sender: string,
+): Promise<
+  Messaging.Chain.Response | ThorchainProviderResponse<ThorchainProviderMethod>
+> => {
   return new Promise((resolve, reject) => {
     const { method, params } = body;
     if (evmChains.includes(chain.name)) {
@@ -355,7 +366,7 @@ const handleRequest = (
               .then((result) =>
                 chain.name === ChainKey.SOLANA
                   ? resolve([result.txResponse, result.raw])
-                  : resolve(result.txResponse)
+                  : resolve(result.txResponse),
               )
               .catch(reject);
           } else {
@@ -396,7 +407,7 @@ const handleRequest = (
                       .catch(reject);
                   })
                   .catch((error) =>
-                    reject(`Could not initialize Tendermint Client: ${error}`)
+                    reject(`Could not initialize Tendermint Client: ${error}`),
                   );
 
                 break;
@@ -463,7 +474,10 @@ const handleRequest = (
                 setStoredChains([
                   { ...supportedChain, active: true },
                   ...storedChains
-                    .filter(({ name }) => name !== supportedChain.name)
+                    .filter(
+                      (storedChain: ChainProps) =>
+                        storedChain.name !== supportedChain.name,
+                    )
                     .map((chain) => ({ ...chain, active: false })),
                 ])
                   .then(() => resolve(supportedChain.id))
@@ -497,7 +511,7 @@ const handleRequest = (
             vaults.map((vault) => ({
               ...vault,
               apps: vault.apps?.filter((app) => app !== sender),
-            }))
+            })),
           ).then(() => resolve(""));
         });
 
@@ -539,7 +553,7 @@ const handleRequest = (
                     storedChains.map((chain) => ({
                       ...chain,
                       active: chain.id === param.chainId,
-                    }))
+                    })),
                   )
                     .then(() => resolve(param.chainId))
                     .catch(reject);
@@ -547,7 +561,7 @@ const handleRequest = (
                   handleRequest(
                     { method: RequestMethod.VULTISIG.WALLET_ADD_CHAIN, params },
                     chain,
-                    sender
+                    sender,
                   )
                     .then(resolve)
                     .catch(reject);
@@ -669,7 +683,7 @@ const handleRequest = (
               to: "",
               isDeposit: false,
             },
-            chain
+            chain,
           )
             .then((result) => resolve(result.txResponse))
             .catch(reject);
@@ -757,7 +771,7 @@ chrome.runtime.onMessage.addListener(
   (
     { message, type }: { message: any; type: MessageKey },
     sender,
-    sendResponse
+    sendResponse,
   ) => {
     const { origin = "" } = sender;
 
@@ -779,7 +793,8 @@ chrome.runtime.onMessage.addListener(
       case MessageKey.COSMOS_REQUEST: {
         getStoredChains().then((storedChains) => {
           const chain = storedChains.find(
-            (chain) => chain.active && cosmosChains.includes(chain.name)
+            (storedChain: ChainProps) =>
+              storedChain.active && cosmosChains.includes(storedChain.name),
           );
 
           if (chain) {
@@ -789,16 +804,19 @@ chrome.runtime.onMessage.addListener(
                   message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
                 ) {
                   try {
-                    getStoredVaults().then((vaults) => {
-                      const vault = vaults.find((vault) => {
+                    getStoredVaults().then((vaults: VaultProps[]) => {
+                      const vault = vaults.find((vault: VaultProps) => {
                         return (
-                          vault.chains.find(({ name }) => name === chain.name)
-                            ?.address === response
+                          vault.chains.find(
+                            (selectedChain: ChainProps) =>
+                              selectedChain.name === chain.name,
+                          )?.address === response
                         );
                       });
 
                       const storedChain = vault!.chains.find(
-                        ({ name }) => name === chain.name
+                        (selectedChain: ChainProps) =>
+                          selectedChain.name === chain.name,
                       )!;
                       const derivationKey = storedChain.derivationKey;
                       if (!derivationKey) {
@@ -806,7 +824,7 @@ chrome.runtime.onMessage.addListener(
                       }
 
                       const keyBytes = Uint8Array.from(
-                        Buffer.from(derivationKey, "hex")
+                        Buffer.from(derivationKey, "hex"),
                       );
 
                       const account = [
@@ -836,7 +854,7 @@ chrome.runtime.onMessage.addListener(
                 params: [{ chainId: chains[ChainKey.GAIACHAIN].id }],
               },
               chains[ChainKey.GAIACHAIN],
-              origin
+              origin,
             )
               .then(() =>
                 handleRequest(message, chains[ChainKey.GAIACHAIN], origin)
@@ -844,16 +862,18 @@ chrome.runtime.onMessage.addListener(
                     if (
                       message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
                     ) {
-                      getStoredVaults().then((vaults) => {
-                        const vault = vaults.find((vault) => {
+                      getStoredVaults().then((vaults: VaultProps[]) => {
+                        const vault = vaults.find((vault: VaultProps) => {
                           return (
                             vault.chains.find(
-                              ({ name }) => name === ChainKey.GAIACHAIN
+                              (selectedChain: ChainProps) =>
+                                selectedChain.name === ChainKey.GAIACHAIN,
                             )?.address === response
                           );
                         });
                         const storedChain = vault!.chains.find(
-                          ({ name }) => name === ChainKey.GAIACHAIN
+                          (storedChain: ChainProps) =>
+                            storedChain.name === ChainKey.GAIACHAIN,
                         )!;
                         const derivationKey = storedChain.derivationKey;
                         if (!derivationKey) {
@@ -861,7 +881,7 @@ chrome.runtime.onMessage.addListener(
                         }
                         try {
                           const keyBytes = Uint8Array.from(
-                            Buffer.from(derivationKey, "hex")
+                            Buffer.from(derivationKey, "hex"),
                           );
 
                           const account = [
@@ -882,7 +902,7 @@ chrome.runtime.onMessage.addListener(
                     }
                   })
 
-                  .catch((error) => sendResponse({ error }))
+                  .catch((error) => sendResponse({ error })),
               )
               .catch((error) => sendResponse({ error }));
           }
@@ -907,7 +927,8 @@ chrome.runtime.onMessage.addListener(
       case MessageKey.ETHEREUM_REQUEST: {
         getStoredChains().then((storedChains) => {
           const chain = storedChains.find(
-            (chain) => chain.active && evmChains.indexOf(chain.name) >= 0
+            (storedChain: ChainProps) =>
+              storedChain.active && evmChains.indexOf(storedChain.name) >= 0,
           );
 
           if (chain) {
@@ -921,12 +942,12 @@ chrome.runtime.onMessage.addListener(
                 params: [{ chainId: chains[ChainKey.ETHEREUM].id }],
               },
               chains[ChainKey.ETHEREUM],
-              origin
+              origin,
             )
               .then(() =>
                 handleRequest(message, chains[ChainKey.ETHEREUM], origin)
                   .then(sendResponse)
-                  .catch((error) => sendResponse({ error }))
+                  .catch((error) => sendResponse({ error })),
               )
               .catch((error) => sendResponse({ error }));
           }
@@ -978,5 +999,5 @@ chrome.runtime.onMessage.addListener(
     }
 
     return true;
-  }
+  },
 );

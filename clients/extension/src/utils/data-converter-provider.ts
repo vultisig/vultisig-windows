@@ -1,7 +1,7 @@
 import { Buffer } from "buffer";
 import SevenZip, { SevenZipModule } from "7z-wasm";
 
-import { errorKey } from "utils/constants";
+import { errorKey } from "./constants";
 
 export default class DataConverterProvider {
   private sevenZip?: SevenZipModule;
