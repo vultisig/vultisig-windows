@@ -397,6 +397,20 @@ export const pt = {
   while_you_wait_vultisig_has: 'Enquanto espera, Vultisig tem...',
   creating_vault: 'Criando Cofre',
   fastVaultSetup: {
+    summary: {
+      title: 'Resumo Rápido',
+      pillText: 'Participações do Cofre',
+      summaryItemOneTitle:
+        'Faça backup de cada participação do cofre separadamente',
+      summaryItemTwoTitle:
+        'Mantenha as participações do cofre em diferentes locais',
+      summaryItemThreeTitle:
+        'Todas as participações do cofre garantem acesso seguro aos seus fundos',
+      summaryItemFourTitle:
+        'Não armazene sua participação do cofre no próprio dispositivo, em caso de perda ou dano',
+      agreementText: 'Eu li e entendo o que fazer',
+      ctaText: 'Crie seu cofre',
+    },
     preparingVault: 'Preparando Cofre',
     generatingECDSAKey: 'Gerando Chave ECDSA',
     createVault: {

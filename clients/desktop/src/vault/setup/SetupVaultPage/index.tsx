@@ -1,17 +1,17 @@
+import { match } from '@lib/utils/match';
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
+import { LightningGradientIcon } from '../../../lib/ui/icons/LightningGradientIcon';
 import { LightningIcon } from '../../../lib/ui/icons/LightningIcon';
-import { MinusIcon } from '../../../lib/ui/icons/MinusIcon';
 import ShieldCheckIcon from '../../../lib/ui/icons/ShieldCheckIcon';
 import { HStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
+import { GradientText, Text } from '../../../lib/ui/text';
 import { ToggleSwitch } from '../../../lib/ui/toggle-switch/ToggleSwitch';
-import { match } from '@lib/utils/match';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -98,15 +98,18 @@ export const SetupVaultPage = () => {
                 {
                   label: 'Fast',
                   value: 'fast',
-                  icon: (
-                    <LightningIcon
-                      color={
-                        value === 'fast'
-                          ? theme.colors.idle.toCssValue()
-                          : theme.colors.contrast.toCssValue()
-                      }
-                    />
-                  ),
+                  icon:
+                    value === 'fast' ? (
+                      <LightningGradientIconWrapper>
+                        <LightningGradientIcon />
+                      </LightningGradientIconWrapper>
+                    ) : (
+                      <LightningIconWrapper>
+                        <LightningIcon
+                        color={theme.colors.contrast.toCssValue()}
+                      />
+                      </LightningIconWrapper>
+                    ),
                 },
               ]}
               selected={value}
@@ -118,22 +121,21 @@ export const SetupVaultPage = () => {
           </div>
           <DescriptionWrapper alignItems="flex-start">
             <DescriptionTitleWrapper>
-              <Text
-                color={value === 'secure' ? 'primary' : 'idle'}
-                weight={500}
-              >
-                {t(`${value}_vault_setup_title`)}
-              </Text>
+              {value === 'fast' ? (
+                <GradientText weight={500}>
+                  {t(`${value}_vault_setup_title`)}
+                </GradientText>
+              ) : (
+                <Text color="primary" weight={500}>
+                  {t(`${value}_vault_setup_title`)}
+                </Text>
+              )}
             </DescriptionTitleWrapper>
             <DescriptionContentWrapper>
               {getSetupVaultProperties(value).map(prop => (
                 <HStack key={prop} alignItems="center" gap={6}>
                   <IconWrapper>
-                    {prop === 'fast_vault_setup_prop_2' ? (
-                      <MinusIcon />
-                    ) : (
-                      <CheckIcon />
-                    )}
+                    <CheckIcon />
                   </IconWrapper>
                   <Text size={14} weight="600" color="contrast">
                     {t(prop)}
@@ -148,3 +150,14 @@ export const SetupVaultPage = () => {
     </>
   );
 };
+
+// @antonio: optical alignment
+const LightningGradientIconWrapper = styled.div`
+  position: relative;
+  right: -4px;
+  font-size: 24px;
+`;
+
+export const LightningIconWrapper = styled.div`
+  font-size: 20px;
+`;

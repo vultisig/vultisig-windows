@@ -398,6 +398,19 @@ export const de = {
   while_you_wait_vultisig_has: 'Während du wartest, hat Vultisig...',
   creating_vault: 'Tresor wird erstellt',
   fastVaultSetup: {
+    summary: {
+      title: 'Kurze Zusammenfassung',
+      pillText: 'Tresoranteile',
+      summaryItemOneTitle: 'Sichern Sie jeden Tresoranteil separat',
+      summaryItemTwoTitle:
+        'Bewahren Sie Tresoranteile an verschiedenen Orten auf',
+      summaryItemThreeTitle:
+        'Alle Tresoranteile gewährleisten sicheren Zugriff auf Ihre Gelder',
+      summaryItemFourTitle:
+        'Speichern Sie Ihren Tresoranteil nicht auf dem Gerät selbst, um Verlust oder Beschädigung zu vermeiden',
+      agreementText: 'Ich habe gelesen und verstanden, was zu tun ist',
+      ctaText: 'Erstellen Sie Ihren Tresor',
+    },
     preparingVault: 'Tresor wird vorbereitet',
     generatingECDSAKey: 'ECDSA-Schlüssel wird generiert',
     createVault: {

@@ -391,6 +391,18 @@ export const en = {
   while_you_wait_vultisig_has: 'While you wait, Vultisig has...',
   creating_vault: 'Creating Vault',
   fastVaultSetup: {
+    summary: {
+      title: 'Quick Summary',
+      pillText: 'Vault Shares',
+      summaryItemOneTitle: 'Backup each vault share separately',
+      summaryItemTwoTitle: 'Keep vault shares in different locations',
+      summaryItemThreeTitle:
+        'All vault shares ensure secure access to your funds',
+      summaryItemFourTitle:
+        'Do not store your vault share on the device itself, in case of loss or damage',
+      agreementText: 'I have read and understand what to do',
+      ctaText: 'Create your vault',
+    },
     preparingVault: 'Preparing Vault',
     generatingECDSAKey: 'Generating ECDSA Key',
     createVault: {
