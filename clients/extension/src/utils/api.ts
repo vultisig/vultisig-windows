@@ -71,14 +71,6 @@ api.interceptors.response.use((response) => {
 });
 
 export default {
-  checkVaultExist: (ecdsa: string): Promise<boolean> => {
-    return new Promise((resolve) => {
-      api
-        .get(`${apiRef.vultisig.api}vault/exist/${ecdsa}`)
-        .then(() => resolve(true))
-        .catch(() => resolve(false));
-    });
-  },
   cryptoCurrency: (cmcId: number, currency: Currency): Promise<number> => {
     return new Promise((resolve) => {
       api

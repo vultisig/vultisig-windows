@@ -359,10 +359,10 @@ const Component = () => {
               .then((sendKey) => {
                 api.fastVault
                   .assertVaultExist(vault.publicKeyEcdsa)
-                  .then(() => {
+                  .then((exist) => {
                     setState((prevState) => ({
                       ...prevState,
-                      fastSign: true,
+                      fastSign: exist,
                       loading: false,
                       sendKey,
                       step,
@@ -387,10 +387,10 @@ const Component = () => {
                   .then((sendKey) => {
                     api.fastVault
                       .assertVaultExist(vault.publicKeyEcdsa)
-                      .then(() => {
+                      .then((exist) => {
                         setState((prevState) => ({
                           ...prevState,
-                          fastSign: true,
+                          fastSign: exist,
                           loading: false,
                           sendKey,
                           step,
