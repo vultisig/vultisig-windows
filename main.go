@@ -34,10 +34,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	goHttp, err := utils.NewGoHttp()
-	if err != nil {
-		panic(err)
-	}
+	goHttp := utils.NewGoHttp()
 	mediator, err := mediator.NewRelayServer()
 	if err != nil {
 		panic(err)
