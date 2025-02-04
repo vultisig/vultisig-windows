@@ -7,18 +7,18 @@ import {
   getStoredLanguage,
   getStoredVaults,
   setStoredVaults,
-} from "utils/storage";
-import { VaultProps } from "utils/interfaces";
-import i18n from "i18n/config";
-import messageKeys from "utils/message-keys";
+} from "../../utils/storage";
+import { VaultProps } from "../../utils/interfaces";
+import i18n from "../../i18n/config";
+import messageKeys from "../../utils/message-keys";
 
-import { Vultisig } from "icons";
-import ConfigProvider from "components/config-provider";
-import VultiLoading from "components/vulti-loading";
-import VultiError from "components/vulti-error";
+import { Vultisig } from "../../icons";
+import ConfigProvider from "../../components/config-provider";
+import VultiLoading from "../../components/vulti-loading";
+import VultiError from "../../components/vulti-error";
 
-import "styles/index.scss";
-import "pages/vaults/index.scss";
+import "../../styles/index.scss";
+import "../../pages/vaults/index.scss";
 
 interface FormProps {
   uids: string[];
@@ -51,7 +51,7 @@ const Component = () => {
             vaults.map((vault) => ({
               ...vault,
               selected: uids.indexOf(vault.uid) >= 0,
-            }))
+            })),
           ).then(() => {
             handleClose();
           });
@@ -137,5 +137,5 @@ const Component = () => {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Component />
-  </StrictMode>
+  </StrictMode>,
 );

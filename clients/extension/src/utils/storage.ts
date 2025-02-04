@@ -1,11 +1,11 @@
-import { ChainKey, chains, Currency, Language } from "utils/constants";
+import { ChainKey, chains, Currency, Language } from "./constants";
 import {
   AccountsProps,
   ChainProps,
   ITransaction,
   VaultProps,
-} from "utils/interfaces";
-import i18n from "i18n/config";
+} from "./interfaces";
+import i18n from "../i18n/config";
 
 interface EthProviderState {
   accounts: string[];

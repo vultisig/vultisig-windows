@@ -1,16 +1,16 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import { Language } from "utils/constants";
+import { Language } from "../utils/constants";
 
-import enTranslation from "i18n/locales/en_UK";
-import esTranslation from "i18n/locales/es_ES";
-import nlTranslation from "i18n/locales/nl_NL";
-import hrTranslation from "i18n/locales/hr_HR";
-import deTranslation from "i18n/locales/de_DE";
-import itTranslation from "i18n/locales/it_IT";
-import ruTranslation from "i18n/locales/ru_RU";
-import ptTranslation from "i18n/locales/pt_PT";
+import enTranslation from "./locales/en_UK";
+import esTranslation from "./locales/es_ES";
+import nlTranslation from "./locales/nl_NL";
+import hrTranslation from "./locales/hr_HR";
+import deTranslation from "./locales/de_DE";
+import itTranslation from "./locales/it_IT";
+import ruTranslation from "./locales/ru_RU";
+import ptTranslation from "./locales/pt_PT";
 
 i18n.use(initReactI18next).init({
   resources: {

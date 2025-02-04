@@ -9,14 +9,14 @@ import {
   CosmosSpecificSchema,
   TransactionType,
   CosmosSpecific,
-} from "protos/blockchain_specific_pb";
-import { CoinSchema, Coin } from "protos/coin_pb";
+} from "../../../protos/blockchain_specific_pb";
+import { CoinSchema, Coin } from "../../../protos/coin_pb";
 import {
   KeysignPayloadSchema,
   KeysignPayload,
-} from "protos/keysign_message_pb";
+} from "../../../protos/keysign_message_pb";
 
-import { ChainKey } from "utils/constants";
+import { ChainKey } from "../../constants";
 import {
   CosmosAccountData,
   ITransaction,
@@ -24,10 +24,10 @@ import {
   SignedTransaction,
   SpecificCosmos,
   VaultProps,
-} from "utils/interfaces";
-import { SignedTransactionResult } from "utils/signed-transaction-result";
-import BaseTransactionProvider from "utils/transaction-provider/base";
-import api from "utils/api";
+} from "../../interfaces";
+import { SignedTransactionResult } from "../..//signed-transaction-result";
+import BaseTransactionProvider from "../../transaction-provider/base";
+import api from "../../api";
 
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
@@ -40,10 +40,7 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
     walletCore: WalletCore
   ) {
     super(chainKey, chainRef, dataEncoder, walletCore);
-    this.chainKey = chainKey;
-    this.chainRef = chainRef;
-    this.dataEncoder = dataEncoder;
-    this.walletCore = walletCore;
+
   }
 
   public getSpecificTransactionInfo = (coin: Coin): Promise<SpecificCosmos> => {

@@ -1,8 +1,8 @@
 import axios from "axios";
 import { TransactionResponse } from "ethers";
 
-import { toCamelCase, toSnakeCase } from "utils/functions";
-import { ChainKey, Currency } from "utils/constants";
+import { toCamelCase, toSnakeCase } from "./functions";
+import { ChainKey, Currency } from "./constants";
 import {
   CosmosAccountData,
   CosmosAccountDataResponse,
@@ -10,7 +10,7 @@ import {
   MayaAccountDataResponse,
   SignatureProps,
   ThorchainAccountDataResponse,
-} from "utils/interfaces";
+} from "./interfaces";
 import { ThornodeTxResponse, ThornodeTxResponseSuccess, ThornodeNetworkResponse } from '../types/thorchain';
 
 namespace CryptoCurrency {

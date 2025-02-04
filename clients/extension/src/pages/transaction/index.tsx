@@ -6,33 +6,33 @@ import { create } from "@bufbuild/protobuf";
 import ReactDOM from "react-dom/client";
 import html2canvas from "html2canvas";
 
-import { CoinSchema } from "protos/coin_pb";
+import { CoinSchema } from "../../protos/coin_pb";
 
 import {
   chains,
   evmChains,
   explorerUrl,
   TssKeysignType,
-} from "utils/constants";
+} from "../../utils/constants";
 import {
   formatDisplayNumber,
   getTssKeysignType,
   parseMemo,
   splitString,
-} from "utils/functions";
+} from "../../utils/functions";
 import {
   ITransaction,
   ParsedMemo,
   SignatureProps,
   VaultProps,
-} from "utils/interfaces";
+} from "../../utils/interfaces";
 import {
   getStoredCurrency,
   getStoredLanguage,
   getStoredTransactions,
   getStoredVaults,
   setStoredTransaction,
-} from "utils/storage";
+} from "../../utils/storage";
 import {
   EVMTransactionProvider,
   MayaTransactionProvider,
@@ -40,12 +40,12 @@ import {
   ThorchainTransactionProvider,
   CosmosTransactionProvider,
   BaseTransactionProvider,
-} from "utils/transaction-provider";
-import i18n from "i18n/config";
-import api from "utils/api";
-import messageKeys from "utils/message-keys";
-import DataConverterProvider from "utils/data-converter-provider";
-import WalletCoreProvider from "utils/wallet-core-provider";
+} from "../../utils/transaction-provider";
+import i18n from "../../i18n/config";
+import api from "../../utils/api";
+import messageKeys from "../../utils/message-keys";
+import DataConverterProvider from "../../utils/data-converter-provider";
+import WalletCoreProvider from "../../utils/wallet-core-provider";
 
 import {
   ArrowLeft,
@@ -53,16 +53,16 @@ import {
   QRCodeBorder,
   SquareArrow,
   SquareBehindSquare,
-} from "icons";
-import ConfigProvider from "components/config-provider";
-import MiddleTruncate from "components/middle-truncate";
-import VultiLoading from "components/vulti-loading";
-import VultiError from "components/vulti-error";
+} from "../../icons";
+import ConfigProvider from "../../components/config-provider";
+import MiddleTruncate from "../../components/middle-truncate";
+import VultiLoading from "../../components/vulti-loading";
+import VultiError from "../../components/vulti-error";
 
-import "styles/index.scss";
-import "pages/transaction/index.scss";
-import "utils/prototypes";
-import UTXOTransactionProvider from "utils/transaction-provider/utxo";
+import "../../styles/index.scss";
+import "../../pages/transaction/index.scss";
+import "../../utils/prototypes";
+import UTXOTransactionProvider from "../../utils/transaction-provider/utxo";
 
 interface FormProps {
   password: string;
@@ -155,7 +155,7 @@ const Component = () => {
 
   const handlePending = (
     preSignedImageHash: string,
-    preSignedInputData: Uint8Array
+    preSignedInputData: Uint8Array,
   ): void => {
     if (transaction && txProvider) {
       const retryTimeout = setTimeout(() => {
@@ -212,7 +212,7 @@ const Component = () => {
                     type: "error",
                     content: t(messageKeys.RETRY_ERROR),
                   });
-                }
+                },
               );
             }
           });
@@ -241,7 +241,7 @@ const Component = () => {
         .then((data) => {
           clearTimeout(retryTimeout);
           const customSignature = txProvider.getEncodedSignature(
-            data as SignatureProps
+            data as SignatureProps,
           );
           setStoredTransaction({
             ...transaction,
@@ -272,7 +272,7 @@ const Component = () => {
                   type: "error",
                   content: t(messageKeys.RETRY_ERROR),
                 });
-              }
+              },
             );
           }
         });
@@ -311,7 +311,7 @@ const Component = () => {
                               }));
                               handlePending(
                                 preSignedImageHash,
-                                preSignedInputData
+                                preSignedInputData,
                               );
                             })
                             .catch((err) => {
@@ -359,20 +359,22 @@ const Component = () => {
               .getTransactionKey(
                 vault.publicKeyEcdsa,
                 transaction,
-                vault.hexChainCode
+                vault.hexChainCode,
               )
               .then((sendKey) => {
-                api.fastVault.assertVaultExist(vault.publicKeyEcdsa).then(() => {
-                  setState((prevState) => ({
-                    ...prevState,
-                    fastSign: true,
-                    loading: false,
-                    sendKey,
-                    step,
-                  }));
+                api.fastVault
+                  .assertVaultExist(vault.publicKeyEcdsa)
+                  .then(() => {
+                    setState((prevState) => ({
+                      ...prevState,
+                      fastSign: true,
+                      loading: false,
+                      sendKey,
+                      step,
+                    }));
 
-                  handleStart();
-                });
+                    handleStart();
+                  });
               })
               .catch(() => {
                 setState((prevState) => ({ ...prevState, loading: false }));
@@ -385,11 +387,10 @@ const Component = () => {
                   .getTransactionKey(
                     vault.publicKeyEcdsa,
                     transaction,
-                    vault.hexChainCode
+                    vault.hexChainCode,
                   )
                   .then((sendKey) => {
-                    api
-                      .fastVault
+                    api.fastVault
                       .assertVaultExist(vault.publicKeyEcdsa)
                       .then(() => {
                         setState((prevState) => ({
@@ -449,13 +450,13 @@ const Component = () => {
                       getTssKeysignType(transaction.chain.name) ===
                       TssKeysignType.ECDSA,
                     derive_path: txProvider.getDerivePath(
-                      transaction.chain.name
+                      transaction.chain.name,
                     ),
                     messages: [preSignedImageHash],
                     public_key:
                       tssType === TssKeysignType.ECDSA
-                        ? vault?.publicKeyEcdsa ?? ""
-                        : vault?.publicKeyEddsa ?? "",
+                        ? (vault?.publicKeyEcdsa ?? "")
+                        : (vault?.publicKeyEddsa ?? ""),
                     session: transaction.id,
                   })
                   .then(() => {
@@ -491,8 +492,8 @@ const Component = () => {
         ({ chains }) =>
           chains.findIndex(
             ({ address }) =>
-              address?.toLowerCase() === transaction?.from.toLowerCase()
-          ) >= 0
+              address?.toLowerCase() === transaction?.from.toLowerCase(),
+          ) >= 0,
       );
 
       if (vault) {
@@ -506,7 +507,7 @@ const Component = () => {
               transaction.chain.name,
               chainRef,
               dataConverter.compactEncoder,
-              walletCore
+              walletCore,
             );
 
             // Improve
@@ -615,8 +616,8 @@ const Component = () => {
                   step === 1
                     ? messageKeys.VERIFY_SEND
                     : step === 5
-                    ? messageKeys.TRANSACTION_SUCCESSFUL
-                    : messageKeys.SIGN_TRANSACTION
+                      ? messageKeys.TRANSACTION_SUCCESSFUL
+                      : messageKeys.SIGN_TRANSACTION,
                 )}
               </span>
               {step === 2 && (
@@ -659,7 +660,7 @@ const Component = () => {
                           <span className="label">{t(messageKeys.AMOUNT)}</span>
                           <span className="extra">{`${formatUnits(
                             transaction.value,
-                            transaction.chain.decimals
+                            transaction.chain.decimals,
                           )} ${transaction.chain.ticker}`}</span>
                         </div>
                       )}
@@ -671,7 +672,7 @@ const Component = () => {
                               {splitString(transaction.memo, 32).map(
                                 (str, index) => (
                                   <div key={index}>{str}</div>
-                                )
+                                ),
                               )}
                             </div>
                           </span>
@@ -684,7 +685,7 @@ const Component = () => {
                         <span className="extra">
                           {formatDisplayNumber(
                             transaction.gasPrice!,
-                            transaction.chain.ticker
+                            transaction.chain.ticker,
                           )}
                         </span>
                       </div>
@@ -849,7 +850,7 @@ const Component = () => {
                           <span className="label">{t(messageKeys.AMOUNT)}</span>
                           <span className="extra">{`${formatUnits(
                             transaction.value,
-                            transaction.chain.decimals
+                            transaction.chain.decimals,
                           )} ${transaction.chain.ticker}`}</span>
                         </div>
                       )}
@@ -862,7 +863,7 @@ const Component = () => {
                               {splitString(transaction.memo, 32).map(
                                 (str, index) => (
                                   <div key={index}>{str}</div>
-                                )
+                                ),
                               )}
                             </div>
                           </span>
@@ -914,5 +915,5 @@ export default Component;
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Component />
-  </StrictMode>
+  </StrictMode>,
 );

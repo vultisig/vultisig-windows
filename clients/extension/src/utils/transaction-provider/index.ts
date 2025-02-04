@@ -1,13 +1,13 @@
 import { WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 
-import { ChainKey } from "utils/constants";
-import BaseTransactionProvider from "utils/transaction-provider/base";
-import CosmosTransactionProvider from "utils/transaction-provider/cosmos";
-import EVMTransactionProvider from "utils/transaction-provider/evm";
-import GaiaTransactionProvider from "utils/transaction-provider/gaia";
-import MayaTransactionProvider from "utils/transaction-provider/maya";
-import ThorchainTransactionProvider from "utils/transaction-provider/thorchain";
+import { ChainKey } from "../constants";
+import BaseTransactionProvider from "../transaction-provider/base";
+import CosmosTransactionProvider from "../transaction-provider/cosmos";
+import EVMTransactionProvider from "../transaction-provider/evm";
+import GaiaTransactionProvider from "../transaction-provider/gaia";
+import MayaTransactionProvider from "../transaction-provider/maya";
+import ThorchainTransactionProvider from "../transaction-provider/thorchain";
 import DydxTransactionProvider from "./dydx";
 import KujiraTransactionProvider from "./kujira";
 import OsmosisTransactionProvider from "./osmosis";

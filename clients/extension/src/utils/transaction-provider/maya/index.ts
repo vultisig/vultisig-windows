@@ -8,24 +8,24 @@ import Long from "long";
 import {
   MAYAChainSpecificSchema,
   type MAYAChainSpecific,
-} from "protos/blockchain_specific_pb";
-import { CoinSchema, type Coin } from "protos/coin_pb";
+} from "../../../protos/blockchain_specific_pb";
+import { CoinSchema, type Coin } from "../../../protos/coin_pb";
 import {
   KeysignPayloadSchema,
   type KeysignPayload,
-} from "protos/keysign_message_pb";
+} from "../../../protos/keysign_message_pb";
 
-import { ChainKey } from "utils/constants";
+import { ChainKey } from "../../constants";
 import {
   ITransaction,
   SignatureProps,
   SignedTransaction,
   SpecificThorchain,
   VaultProps,
-} from "utils/interfaces";
-import api from "utils/api";
-import { SignedTransactionResult } from "utils/signed-transaction-result";
-import BaseTransactionProvider from "utils/transaction-provider/base";
+} from "../../interfaces";
+import api from "../../api";
+import { SignedTransactionResult } from "../../signed-transaction-result";
+import BaseTransactionProvider from "../../transaction-provider/base";
 
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
@@ -38,11 +38,6 @@ export default class MayaTransactionProvider extends BaseTransactionProvider {
     walletCore: WalletCore
   ) {
     super(chainKey, chainRef, dataEncoder, walletCore);
-
-    this.chainKey = chainKey;
-    this.chainRef = chainRef;
-    this.dataEncoder = dataEncoder;
-    this.walletCore = walletCore;
   }
 
   public getSpecificTransactionInfo = (

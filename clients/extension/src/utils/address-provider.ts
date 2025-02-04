@@ -1,9 +1,9 @@
 import { WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 
-import { ChainKey, errorKey } from "utils/constants";
-import { VaultProps } from "utils/interfaces";
-import api from "utils/api";
+import { ChainKey, errorKey } from "./constants";
+import { VaultProps } from "./interfaces";
+import api from "./api";
 
 interface AddressProps {
   address: string;

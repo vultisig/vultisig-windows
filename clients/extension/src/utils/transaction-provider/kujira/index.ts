@@ -1,9 +1,9 @@
 import { WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 
-import { ChainKey } from "utils/constants";
+import { ChainKey } from "../../constants";
 
-import CosmosTransactionProvider from "../cosmos";
+import CosmosTransactionProvider from "../../transaction-provider/cosmos";
 
 export default class KujiraTransactionProvider extends CosmosTransactionProvider {
   constructor(
@@ -13,10 +13,6 @@ export default class KujiraTransactionProvider extends CosmosTransactionProvider
     walletCore: WalletCore
   ) {
     super(chainKey, chainRef, dataEncoder, walletCore);
-    this.chainKey = chainKey;
-    this.chainRef = chainRef;
-    this.dataEncoder = dataEncoder;
-    this.walletCore = walletCore;
   }
 
   protected accountNumberURL(address: string): string | null {

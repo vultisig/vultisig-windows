@@ -3,25 +3,25 @@ import { useTranslation } from "react-i18next";
 import { Button, Checkbox, Form } from "antd";
 import ReactDOM from "react-dom/client";
 
-import { ChainKey } from "utils/constants";
+import { ChainKey } from "../../utils/constants";
 import {
   getStoredLanguage,
   getStoredRequest,
   getStoredVaults,
   setStoredVaults,
-} from "utils/storage";
-import { VaultProps } from "utils/interfaces";
-import i18n from "i18n/config";
-import messageKeys from "utils/message-keys";
+} from "../../utils/storage";
+import { VaultProps } from "../../utils/interfaces";
+import i18n from "../../i18n/config";
+import messageKeys from "../../utils/message-keys";
 
-import { Vultisig } from "icons";
-import ConfigProvider from "components/config-provider";
-import MiddleTruncate from "components/middle-truncate";
-import VultiError from "components/vulti-error";
-import VultiLoading from "components/vulti-loading";
+import { Vultisig } from "../../icons";
+import ConfigProvider from "../../components/config-provider";
+import MiddleTruncate from "../../components/middle-truncate";
+import VultiError from "../../components/vulti-error";
+import VultiLoading from "../../components/vulti-loading";
 
-import "styles/index.scss";
-import "pages/accounts/index.scss";
+import "../../styles/index.scss";
+import "../accounts/index.scss";
 
 interface FormProps {
   uids: string[];
