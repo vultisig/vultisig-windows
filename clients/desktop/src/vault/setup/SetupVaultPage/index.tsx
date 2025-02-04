@@ -95,19 +95,19 @@ export const SetupVaultPage = () => {
                     />
                   ),
                 },
-                // {
-                //   label: 'Fast',
-                //   value: 'fast',
-                //   icon: (
-                //     <LightningIcon
-                //       color={
-                //         value === 'fast'
-                //           ? theme.colors.idle.toCssValue()
-                //           : theme.colors.contrast.toCssValue()
-                //       }
-                //     />
-                //   ),
-                // },
+                {
+                  label: 'Fast',
+                  value: 'fast',
+                  icon: (
+                    <LightningIcon
+                      color={
+                        value === 'fast'
+                          ? theme.colors.idle.toCssValue()
+                          : theme.colors.contrast.toCssValue()
+                      }
+                    />
+                  ),
+                },
               ]}
               selected={value}
               onChange={newValue => {
