@@ -33,7 +33,10 @@ import {
   StdSignDoc,
   StdTx,
 } from "@keplr-wallet/types";
-import { ThorchainProviderRequest, ThorchainProviderResponse } from "../types/thorchain";
+import {
+  ThorchainProviderRequest,
+  ThorchainProviderResponse,
+} from "../types/thorchain";
 import { ThorchainProviderMethod } from "../types/thorchain";
 
 enum NetworkKey {
@@ -41,11 +44,14 @@ enum NetworkKey {
   TESTNET = "testnet",
 }
 window.ctrlKeplrProviders = {};
-type Callback = (error: Error | null, result?: Messaging.Chain.Response) => void;
+type Callback = (
+  error: Error | null,
+  result?: Messaging.Chain.Response,
+) => void;
 
 const sendToBackgroundViaRelay = <Request, Response>(
   type: MessageKey,
-  message: Request
+  message: Request,
 ): Promise<Response> => {
   return new Promise((resolve, reject) => {
     const id = uuidv4();
@@ -101,7 +107,7 @@ class XDEFIKeplrProvider extends Keplr {
       XDEFIKeplrProvider.instance = new XDEFIKeplrProvider(
         "0.0.1",
         "extension",
-        new XDEFIMessageRequester()
+        new XDEFIMessageRequester(),
       );
     }
     return XDEFIKeplrProvider.instance;
@@ -130,12 +136,12 @@ class XDEFIKeplrProvider extends Keplr {
   }
   getOfflineSigner(
     chainId: string,
-    _signOptions?: KeplrSignOptions
+    _signOptions?: KeplrSignOptions,
   ): OfflineAminoSigner & OfflineDirectSigner {
     const cosmSigner = new CosmJSOfflineSigner(
       chainId,
       window.xfi.keplr,
-      _signOptions
+      _signOptions,
     );
 
     cosmSigner.getAccounts = async () => {
@@ -168,12 +174,12 @@ class XDEFIKeplrProvider extends Keplr {
 
   getOfflineSignerOnlyAmino(
     chainId: string,
-    signOptions?: KeplrSignOptions
+    signOptions?: KeplrSignOptions,
   ): OfflineAminoSigner {
     const cosmSigner = new CosmJSOfflineSignerOnlyAmino(
       chainId,
       window.xfi.keplr,
-      signOptions
+      signOptions,
     );
 
     cosmSigner.getAccounts = async () => {
@@ -207,7 +213,7 @@ class XDEFIKeplrProvider extends Keplr {
   sendTx(
     _chainId: string,
     _tx: StdTx | Uint8Array,
-    _mode: BroadcastMode
+    _mode: BroadcastMode,
   ): Promise<Uint8Array> {
     return new Promise<Uint8Array>((resolve, reject) => {
       cosmosProvider
@@ -227,7 +233,7 @@ class XDEFIKeplrProvider extends Keplr {
     _chainId: string,
     _signer: string,
     signDoc: StdSignDoc,
-    _signOptions?: KeplrSignOptions
+    _signOptions?: KeplrSignOptions,
   ): Promise<AminoSignResponse> {
     return new Promise<AminoSignResponse>((resolve) => {
       const txDetails = signDoc.msgs.map((msg) => {
@@ -258,7 +264,7 @@ class XDEFIKeplrProvider extends Keplr {
   async sendSimpleMessage(
     _type: string,
     _method: string,
-    _payload: any
+    _payload: any,
   ): Promise<any> {
     return;
   }
@@ -564,7 +570,7 @@ namespace Provider {
     _disconnect = (error?: { code: number; message: string }): void => {
       this.emit(
         EventMethod.DISCONNECT,
-        error || { code: 4900, message: "Provider disconnected" }
+        error || { code: 4900, message: "Provider disconnected" },
       );
     };
   }
@@ -601,8 +607,8 @@ namespace Provider {
 
       const modifiedTransfer = {
         lamports: decodedTransfer.lamports.toString(),
-        fromPubkey: decodedTransfer.fromPubkey.toString(),
-        toPubkey: decodedTransfer.toPubkey.toString(),
+        from: decodedTransfer.fromPubkey.toString(),
+        to: decodedTransfer.toPubkey.toString(),
       };
       return await this.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
@@ -686,7 +692,10 @@ namespace Provider {
 
     async request<T extends ThorchainProviderMethod>(
       data: ThorchainProviderRequest<T>,
-      callback?: (error: Error | null, result?: ThorchainProviderResponse<T>) => void
+      callback?: (
+        error: Error | null,
+        result?: ThorchainProviderResponse<T>,
+      ) => void,
     ): Promise<ThorchainProviderResponse<T>> {
       return await sendToBackgroundViaRelay<
         ThorchainProviderRequest<T>,
@@ -739,7 +748,10 @@ namespace Provider {
 
     async request<T extends ThorchainProviderMethod>(
       data: ThorchainProviderRequest<T>,
-      callback?: (error: Error | null, result?: ThorchainProviderResponse<T>) => void
+      callback?: (
+        error: Error | null,
+        result?: ThorchainProviderResponse<T>,
+      ) => void,
     ): Promise<ThorchainProviderResponse<T>> {
       return await sendToBackgroundViaRelay<
         ThorchainProviderRequest<T>,
@@ -759,22 +771,22 @@ namespace Provider {
 
 const bitcoinProvider = new Provider.UTXO(
   MessageKey.BITCOIN_REQUEST,
-  "Bitcoin_bitcoin-mainnet"
+  "Bitcoin_bitcoin-mainnet",
 );
 const bitcoinCashProvider = new Provider.UTXO(
   MessageKey.BITCOIN_CASH_REQUEST,
-  "Bitcoincash_bitcoincash"
+  "Bitcoincash_bitcoincash",
 );
 const cosmosProvider = new Provider.Cosmos();
 const dashProvider = new Provider.Dash();
 const dogecoinProvider = new Provider.UTXO(
   MessageKey.DOGECOIN_REQUEST,
-  "Dogecoin_dogecoin"
+  "Dogecoin_dogecoin",
 );
 const ethereumProvider = new Provider.Ethereum();
 const litecoinProvider = new Provider.UTXO(
   MessageKey.LITECOIN_REQUEST,
-  "Litecoin_litecoin"
+  "Litecoin_litecoin",
 );
 const mayachainProvider = new Provider.MAYAChain();
 const solanaProvider = new Provider.Solana();
@@ -862,7 +874,7 @@ const intervalRef = setInterval(() => {
       if (res) {
         const providerCopy = Object.create(
           Object.getPrototypeOf(ethereumProvider),
-          Object.getOwnPropertyDescriptors(ethereumProvider)
+          Object.getOwnPropertyDescriptors(ethereumProvider),
         );
 
         providerCopy.isMetaMask = false;

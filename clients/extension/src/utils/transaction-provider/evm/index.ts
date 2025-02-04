@@ -2,6 +2,7 @@ import { Buffer } from "buffer";
 import {
   JsonRpcProvider,
   Transaction,
+  formatEther,
   formatUnits,
   keccak256,
   toUtf8String,
@@ -76,7 +77,7 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
       this.provider
         .getFeeData()
         .then(({ gasPrice, maxPriorityFeePerGas }) => {
-          this.gasPrice = gasPrice ?? BigInt(0);
+          this.gasPrice = BigInt(formatEther(gasPrice!)) ?? BigInt(0);
           this.maxPriorityFeePerGas = maxPriorityFeePerGas ?? BigInt(0);
 
           resolve();

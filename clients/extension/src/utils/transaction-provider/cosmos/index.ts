@@ -1,5 +1,5 @@
 import { Buffer } from "buffer";
-import { sha256 } from "ethers";
+import { formatUnits, sha256 } from "ethers";
 import { create } from "@bufbuild/protobuf";
 import { TW, WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
@@ -52,7 +52,7 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
       const result: SpecificCosmos = {
         gas: defaultGas,
         transactionType: 0,
-        gasPrice: defaultGas,
+        gasPrice: Number(formatUnits(defaultGas, coin.decimals)),
         fee: defaultGas,
         accountNumber: 0,
         sequence: 0,
