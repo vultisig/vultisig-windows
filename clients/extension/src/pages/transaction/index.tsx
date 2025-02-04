@@ -362,10 +362,10 @@ const Component = () => {
                 vault.hexChainCode
               )
               .then((sendKey) => {
-                api.checkVaultExist(vault.publicKeyEcdsa).then((fastSign) => {
+                api.fastVault.assertVaultExist(vault.publicKeyEcdsa).then(() => {
                   setState((prevState) => ({
                     ...prevState,
-                    fastSign,
+                    fastSign: true,
                     loading: false,
                     sendKey,
                     step,
@@ -389,11 +389,12 @@ const Component = () => {
                   )
                   .then((sendKey) => {
                     api
-                      .checkVaultExist(vault.publicKeyEcdsa)
-                      .then((fastSign) => {
+                      .fastVault
+                      .assertVaultExist(vault.publicKeyEcdsa)
+                      .then(() => {
                         setState((prevState) => ({
                           ...prevState,
-                          fastSign,
+                          fastSign: true,
                           loading: false,
                           sendKey,
                           step,

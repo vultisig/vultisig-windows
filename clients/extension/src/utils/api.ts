@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TransactionResponse } from "ethers";
 
 import { toCamelCase, toSnakeCase } from "utils/functions";
 import { ChainKey, Currency } from "utils/constants";
@@ -10,6 +11,7 @@ import {
   SignatureProps,
   ThorchainAccountDataResponse,
 } from "utils/interfaces";
+import { ThornodeTxResponse, ThornodeTxResponseSuccess, ThornodeNetworkResponse } from '../types/thorchain';
 
 namespace CryptoCurrency {
   export interface Props {
@@ -152,16 +154,12 @@ export default {
     },
   },
   fastVault: {
-    checkVaultExist: (ecdsa: string): Promise<boolean> => {
+    assertVaultExist: (ecdsa: string): Promise<boolean> => {
       return new Promise((resolve) => {
         api
           .get(`${apiRef.vultisig.api}vault/exist/${ecdsa}`)
-          .then(() => {
-            resolve(true);
-          })
-          .catch(() => {
-            resolve(false);
-          });
+          .then(() => resolve(true))
+          .catch(() => resolve(false));
       });
     },
     signWithServer: async (input: FastSignInput) => {
@@ -185,9 +183,9 @@ export default {
     },
   },
   ethereum: {
-    async getTransactionByHash(path: string, hash: string) {
+    async getTransactionByHash(path: string, hash: string): Promise<TransactionResponse> {
       return await api
-        .post<{ result: string }>(path, {
+        .post<{ result: TransactionResponse }>(path, {
           id: 1,
           jsonrpc: "2.0",
           method: "eth_getTransactionByHash",
@@ -220,33 +218,35 @@ export default {
           .catch(reject);
       });
     },
-    getFeeData: () => {
+    getFeeData(): Promise<string> {
       return new Promise((resolve, reject) => {
         const url = `${apiRef.nineRealms.thornode}thorchain/network`;
         api
-          .get(url)
-          .then((res) => {
-            resolve(res.data.nativeTxFeeRune);
-          })
+          .get<ThornodeNetworkResponse>(url)
+          .then(({ data }) => resolve(data.native_tx_fee_rune))
           .catch(reject);
       });
     },
-
     getTHORChainChainID(): Promise<string> {
       return new Promise((resolve, reject) => {
         api
-          .get<{ result: { nodeInfo: { network: string } } }>(
+          .get<{ result: { node_info: { network: string } } }>(
             `${apiRef.nineRealms.rpc}status`
           )
-          .then(({ data }) => resolve(data.result.nodeInfo.network))
+          .then(({ data }) => resolve(data.result.node_info.network))
           .catch(reject);
       });
     },
-    getTransactionByHash(hash: string): Promise<any> {
+    getTransactionByHash(hash: string): Promise<ThornodeTxResponseSuccess> {
       return new Promise((resolve, reject) => {
         api
-          .get<{ tx: string }>(`${apiRef.nineRealms.thornode}txs/${hash}`)
-          .then(({ data }) => resolve(data.tx))
+          .get<ThornodeTxResponse>(`${apiRef.nineRealms.thornode}thorchain/tx/${hash}`)
+          .then(({ data }) => {
+            if ('code' in data) {
+              throw new Error(data.message);
+            }
+            resolve(data)
+          })
           .catch(reject);
       });
     },

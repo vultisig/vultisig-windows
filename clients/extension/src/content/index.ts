@@ -33,12 +33,15 @@ import {
   StdSignDoc,
   StdTx,
 } from "@keplr-wallet/types";
+import { ThorchainProviderRequest, ThorchainProviderResponse } from "../types/thorchain";
+import { ThorchainProviderMethod } from "../types/thorchain";
+
 enum NetworkKey {
   MAINNET = "mainnet",
   TESTNET = "testnet",
 }
 window.ctrlKeplrProviders = {};
-type Callback = (error: Error | null, result?: string | string[]) => void;
+type Callback = (error: Error | null, result?: Messaging.Chain.Response) => void;
 
 const sendToBackgroundViaRelay = <Request, Response>(
   type: MessageKey,
@@ -681,10 +684,13 @@ namespace Provider {
       this.emit(EventMethod.ACCOUNTS_CHANGED, {});
     }
 
-    async request(data: Messaging.Chain.Request, callback?: Callback) {
+    async request<T extends ThorchainProviderMethod>(
+      data: ThorchainProviderRequest<T>,
+      callback?: (error: Error | null, result?: ThorchainProviderResponse<T>) => void
+    ): Promise<ThorchainProviderResponse<T>> {
       return await sendToBackgroundViaRelay<
-        Messaging.Chain.Request,
-        Messaging.Chain.Response
+        ThorchainProviderRequest<T>,
+        ThorchainProviderResponse<T>
       >(MessageKey.MAYA_REQUEST, data)
         .then((result) => {
           if (callback) callback(null, result);
@@ -731,19 +737,20 @@ namespace Provider {
       this.emit(EventMethod.ACCOUNTS_CHANGED, {});
     }
 
-    async request(data: Messaging.Chain.Request, callback?: Callback) {
+    async request<T extends ThorchainProviderMethod>(
+      data: ThorchainProviderRequest<T>,
+      callback?: (error: Error | null, result?: ThorchainProviderResponse<T>) => void
+    ): Promise<ThorchainProviderResponse<T>> {
       return await sendToBackgroundViaRelay<
-        Messaging.Chain.Request,
-        Messaging.Chain.Response
+        ThorchainProviderRequest<T>,
+        ThorchainProviderResponse<T>
       >(MessageKey.THOR_REQUEST, data)
         .then((result) => {
           if (callback) callback(null, result);
-
           return result;
         })
         .catch((error) => {
           if (callback) callback(error);
-
           return error;
         });
     }
