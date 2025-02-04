@@ -1,14 +1,13 @@
 import { create } from '@bufbuild/protobuf';
+import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt';
 import {
   Vault_KeyShareSchema,
   VaultSchema,
 } from '@core/communication/vultisig/vault/v1/vault_pb';
+import { convertDuration } from '@lib/utils/time/convertDuration';
 
 import { storage } from '../../../../wailsjs/go/models';
-import {
-  secondsTimestamptToProtoTimestamp,
-  toStorageVault,
-} from '../../utils/storageVault';
+import { toStorageVault } from '../../utils/storageVault';
 
 export type DatBackup = {
   name: string;
@@ -25,6 +24,12 @@ type DatBackupKeyshare = {
   pubkey: string;
   keyshare: string;
 };
+
+const secondsTimestamptToProtoTimestamp = (seconds: number): Timestamp =>
+  create(TimestampSchema, {
+    seconds: BigInt(Math.floor(seconds)),
+    nanos: Math.floor(convertDuration(seconds % 1, 's', 'ns')),
+  });
 
 export const fromDatBackup = (backup: DatBackup): storage.Vault => {
   const keyShares = backup.keyshares.map(({ pubkey, keyshare }) =>

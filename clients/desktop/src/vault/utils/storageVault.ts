@@ -27,7 +27,9 @@ export const toStorageVault = ({
   public_key_ecdsa: publicKeyEcdsa,
   public_key_eddsa: publicKeyEddsa,
   signers: signers,
-  created_at: createdAt,
+  created_at: createdAt
+    ? protoTimestampToISOString(createdAt)
+    : new Date().toISOString(),
   hex_chain_code: hexChainCode,
   keyshares: keyShares.map(share => ({
     public_key: share.publicKey,
@@ -41,11 +43,23 @@ export const toStorageVault = ({
   convertValues: () => {},
 });
 
-export const secondsTimestamptToProtoTimestamp = (seconds: number): Timestamp =>
-  create(TimestampSchema, {
-    seconds: BigInt(Math.floor(seconds)),
-    nanos: Math.floor(convertDuration(seconds % 1, 's', 'ns')),
-  });
+export const protoTimestampToISOString = (timestamp: Timestamp): string => {
+  const date = new Date(convertDuration(Number(timestamp.seconds), 's', 'ms'));
+  const isoWithoutNanos = date.toISOString().slice(0, -1); // Remove the Z
+  const nanoStr = timestamp.nanos.toString().padStart(9, '0');
+  return `${isoWithoutNanos}${nanoStr}Z`;
+};
+
+export const isoStringToProtoTimestamp = (isoString: string): Timestamp => {
+  const date = new Date(isoString);
+  const seconds = BigInt(
+    Math.floor(convertDuration(date.getTime(), 'ms', 's'))
+  );
+  const nanos = Number(
+    isoString.split('.')[1]?.replace('Z', '').padEnd(9, '0') || 0
+  );
+  return create(TimestampSchema, { seconds, nanos });
+};
 
 export const fromStorageVault = (vault: storage.Vault): Vault =>
   create(VaultSchema, {
@@ -53,7 +67,7 @@ export const fromStorageVault = (vault: storage.Vault): Vault =>
     publicKeyEcdsa: vault.public_key_ecdsa,
     publicKeyEddsa: vault.public_key_eddsa,
     signers: vault.signers,
-    createdAt: secondsTimestamptToProtoTimestamp(vault.created_at),
+    createdAt: isoStringToProtoTimestamp(vault.created_at),
     hexChainCode: vault.hex_chain_code,
     localPartyId: vault.local_party_id,
     keyShares: vault.keyshares.map(({ public_key, keyshare }) =>
