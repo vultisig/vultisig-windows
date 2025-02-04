@@ -9,12 +9,15 @@ import {
   CosmosSpecificSchema,
   TransactionType,
   CosmosSpecific,
-} from "../../../protos/blockchain_specific_pb";
-import { CoinSchema, Coin } from "../../../protos/coin_pb";
+} from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
+import {
+  CoinSchema,
+  Coin,
+} from "@core/communication/vultisig/keysign/v1/coin_pb";
 import {
   KeysignPayloadSchema,
   KeysignPayload,
-} from "../../../protos/keysign_message_pb";
+} from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
 
 import { ChainKey } from "../../constants";
 import {
@@ -37,10 +40,9 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
     chainKey: ChainKey,
     chainRef: { [chainKey: string]: CoinType },
     dataEncoder: (data: Uint8Array) => Promise<string>,
-    walletCore: WalletCore
+    walletCore: WalletCore,
   ) {
     super(chainKey, chainRef, dataEncoder, walletCore);
-
   }
 
   public getSpecificTransactionInfo = (coin: Coin): Promise<SpecificCosmos> => {
@@ -75,7 +77,7 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
 
   public getKeysignPayload = (
     transaction: ITransaction.METAMASK,
-    vault: VaultProps
+    vault: VaultProps,
   ): Promise<KeysignPayload> => {
     return new Promise((resolve) => {
       const coin = create(CoinSchema, {
@@ -84,7 +86,7 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
         address: transaction.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
-          (chain) => chain.name === transaction.chain.name
+          (chain) => chain.name === transaction.chain.name,
         )?.derivationKey,
         isNativeToken: true,
         logo: transaction.chain.ticker.toLowerCase(),
@@ -124,11 +126,11 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
       const coinType = this.chainRef[this.chainKey];
       const pubKeyData = Buffer.from(
         this.keysignPayload?.coin?.hexPublicKey ?? "",
-        "hex"
+        "hex",
       );
       const toAddr = this.walletCore.AnyAddress.createWithString(
         this.keysignPayload?.toAddress ?? "",
-        coinType
+        coinType,
       );
 
       if (!toAddr) {
@@ -165,7 +167,7 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
         mode: BroadcastMode.SYNC,
         memo:
           cosmosSpecific.transactionType !== TransactionType.VOTE
-            ? this.keysignPayload?.memo ?? ""
+            ? (this.keysignPayload?.memo ?? "")
             : "",
         messages: message,
         fee: TW.Cosmos.Proto.Fee.create({
@@ -191,7 +193,7 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
     return new Promise((resolve, reject) => {
       if (inputData && transaction && vault) {
         const pubkeyCosmos = vault.chains.find(
-          (chain) => chain.name === transaction.chain.name
+          (chain) => chain.name === transaction.chain.name,
         )?.derivationKey;
 
         if (pubkeyCosmos) {
@@ -209,10 +211,10 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
               coinType,
               inputData,
               allSignatures,
-              publicKeys
+              publicKeys,
             );
           const output = TW.Cosmos.Proto.SigningOutput.decode(
-            compileWithSignatures
+            compileWithSignatures,
           );
           const serializedData = output.serialized;
           const parsedData = JSON.parse(serializedData);
@@ -222,7 +224,7 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
           const result = new SignedTransactionResult(
             serializedData,
             hash,
-            undefined
+            undefined,
           );
 
           resolve({ txHash: result.transactionHash, raw: serializedData });
@@ -239,10 +241,10 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
     const rData = this.walletCore.HexCoding.decode(signature.R);
     const sData = this.walletCore.HexCoding.decode(signature.S);
     const recoveryIDdata = this.walletCore.HexCoding.decode(
-      signature.RecoveryID
+      signature.RecoveryID,
     );
     const combinedData = new Uint8Array(
-      rData.length + sData.length + recoveryIDdata.length
+      rData.length + sData.length + recoveryIDdata.length,
     );
     combinedData.set(rData);
     combinedData.set(sData, rData.length);
@@ -251,7 +253,7 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
   }
 
   protected async getAccountData(
-    address: string
+    address: string,
   ): Promise<CosmosAccountData | null> {
     const url = this.accountNumberURL(address);
 
