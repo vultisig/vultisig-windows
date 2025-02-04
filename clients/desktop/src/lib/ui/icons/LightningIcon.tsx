@@ -1,5 +1,18 @@
-export const LightningIcon = ({ color = '#fff' }: { color?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={16} height={20} fill="none">
+export const LightningIcon = ({
+  color = '#fff',
+  height = '1em',
+  width = '1em',
+}: {
+  color?: string;
+  height?: string | number;
+  width?: string | number;
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={width}
+    height={height}
+    fill="none"
+  >
     <path
       stroke={color}
       strokeLinecap="round"
