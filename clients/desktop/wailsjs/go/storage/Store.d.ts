@@ -18,8 +18,6 @@ export function GetAllAddressBookItems():Promise<Array<storage.AddressBookItem>>
 
 export function GetCoins(arg1:string):Promise<Array<storage.Coin>>;
 
-export function GetSettings():Promise<Array<storage.Settings>>;
-
 export function GetVault(arg1:string):Promise<storage.Vault>;
 
 export function GetVaultFolder(arg1:string):Promise<storage.VaultFolder>;
@@ -35,8 +33,6 @@ export function SaveAddressBookItem(arg1:storage.AddressBookItem):Promise<string
 export function SaveCoin(arg1:string,arg2:storage.Coin):Promise<string>;
 
 export function SaveCoins(arg1:string,arg2:Array<storage.Coin>):Promise<Array<string>>;
-
-export function SaveSettings(arg1:storage.Settings):Promise<storage.Settings>;
 
 export function SaveVault(arg1:storage.Vault):Promise<void>;
 
