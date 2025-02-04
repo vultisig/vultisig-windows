@@ -1,7 +1,7 @@
 import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
 import { cosmosFeeCoinDenom } from '../../../chain/cosmos/cosmosFeeCoinDenom';
 import { getCosmosBalanceUrl } from '../../../chain/cosmos/cosmosRpcUrl';
-import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { CosmosChain } from '../../../model/chain';
 import { IRpcService } from '../IRpcService';
 

@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { SaveAddressBookItem } from '../../../wailsjs/go/storage/Store';
 import { isValidAddress } from '../../chain/utils/isValidAddress';
 import { AddressBookItem } from '../../lib/types/address-book';
 import { Chain } from '../../model/chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { VaultService } from '../../services/Vault/VaultService';
 import {
   addressBookItemsQueryKey,
   useAddressBookItemsQuery,
@@ -17,7 +17,6 @@ export const useAddAddressBookItemMutation = ({
 } = {}) => {
   const queryClient = useQueryClient();
   const walletCore = useAssertWalletCore();
-  const vaultService = new VaultService();
   const { data: addressBookItems } = useAddressBookItemsQuery();
 
   return useMutation({
@@ -42,7 +41,7 @@ export const useAddAddressBookItemMutation = ({
         throw new Error('vault_settings_address_book_repeated_address_error');
       }
 
-      return await vaultService.saveAddressBookItem(addressBookItem);
+      return SaveAddressBookItem(addressBookItem as any);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

@@ -1,7 +1,7 @@
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { SuiCoin } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { SuiCoin } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
 
 export const getSuiPreSignedInputData = ({

@@ -1,8 +1,9 @@
+import { create } from '@bufbuild/protobuf';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
+import { THORChainSwapPayloadSchema } from '@core/communication/vultisig/keysign/v1/thorchain_swap_payload_pb';
 import { convertDuration } from '@lib/utils/time/convertDuration';
 import { addMinutes } from 'date-fns';
 
-import { Coin } from '../../../../../gen/vultisig/keysign/v1/coin_pb';
-import { THORChainSwapPayload } from '../../../../../gen/vultisig/keysign/v1/thorchain_swap_payload_pb';
 import { KeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload';
 import { fromChainAmount } from '../../../../utils/fromChainAmount';
 import { nativeSwapStreamingInterval } from '../../NativeSwapChain';
@@ -30,7 +31,7 @@ export const thorchainSwapQuoteToSwapPayload = ({
 
   return {
     case: 'thorchainSwapPayload',
-    value: new THORChainSwapPayload({
+    value: create(THORChainSwapPayloadSchema, {
       fromAddress,
       fromCoin,
       toCoin,

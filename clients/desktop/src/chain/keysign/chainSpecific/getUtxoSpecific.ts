@@ -1,5 +1,10 @@
+import { create } from '@bufbuild/protobuf';
+import {
+  UTXOSpecific,
+  UTXOSpecificSchema,
+} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+
 import { getCoinBalance } from '../../../coin/balance/getCoinBalance';
-import { UTXOSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { UtxoChain } from '../../../model/chain';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
 import { toChainAmount } from '../../utils/toChainAmount';
@@ -24,7 +29,7 @@ export const getUtxoSpecific = async ({
     byteFee = adjustByteFee(byteFee, feeSettings);
   }
 
-  const result = new UTXOSpecific({
+  const result = create(UTXOSpecificSchema, {
     byteFee: byteFee.toString(),
   });
 

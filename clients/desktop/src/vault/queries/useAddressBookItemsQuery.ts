@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { storage } from '../../../wailsjs/go/models';
+import { GetAllAddressBookItems } from '../../../wailsjs/go/storage/Store';
 import { AddressBookItem } from '../../lib/types/address-book';
-import { VaultService } from '../../services/Vault/VaultService';
 
 const transformAddressBookItemsResponse = (
   addressBookItems: storage.AddressBookItem[]
@@ -17,12 +17,10 @@ const transformAddressBookItemsResponse = (
 
 export const addressBookItemsQueryKey = 'addressBookItems';
 export const useAddressBookItemsQuery = () => {
-  const vaultService = new VaultService();
-
   return useQuery({
     queryKey: [addressBookItemsQueryKey],
     queryFn: async () => {
-      const addressBookItems = await vaultService.getAllAddressBookItems();
+      const addressBookItems = await GetAllAddressBookItems();
       if (!addressBookItems) {
         return [];
       }

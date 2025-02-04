@@ -1,8 +1,12 @@
+import { create } from '@bufbuild/protobuf';
+import { Erc20ApprovePayloadSchema } from '@core/communication/vultisig/keysign/v1/erc20_approve_payload_pb';
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { assertField } from '@lib/utils/record/assertField';
 
-import { Erc20ApprovePayload } from '../../gen/vultisig/keysign/v1/erc20_approve_payload_pb';
-import { KeysignPayload } from '../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { EvmChain, UtxoChain } from '../../model/chain';
 import { getErc20Allowance } from '../evm/erc20/getErc20Allowance';
 import { assertChainField } from '../utils/assertChainField';
@@ -11,7 +15,7 @@ import { getUtxos } from '../utxo/tx/getUtxos';
 export const processKeysignPayload = async (
   payload: KeysignPayload
 ): Promise<KeysignPayload> => {
-  const result = new KeysignPayload(payload);
+  const result = create(KeysignPayloadSchema, payload);
 
   const coin = assertChainField(assertField(payload, 'coin'));
   const { chain } = coin;
@@ -27,7 +31,7 @@ export const processKeysignPayload = async (
       });
 
       if (allowance < BigInt(payload.toAmount)) {
-        result.erc20ApprovePayload = new Erc20ApprovePayload({
+        result.erc20ApprovePayload = create(Erc20ApprovePayloadSchema, {
           amount: payload.toAmount,
           spender: payload.toAddress,
         });

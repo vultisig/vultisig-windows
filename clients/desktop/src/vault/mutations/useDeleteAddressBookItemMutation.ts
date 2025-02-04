@@ -1,15 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { VaultService } from '../../services/Vault/VaultService';
+import { DeleteAddressBookItem } from '../../../wailsjs/go/storage/Store';
 import { addressBookItemsQueryKey } from '../queries/useAddressBookItemsQuery';
 
 export const useDeleteAddressBookItemMutation = () => {
   const queryClient = useQueryClient();
-  const vaultService = new VaultService();
 
   return useMutation({
     mutationFn: async (id: string) => {
-      await vaultService.deleteAddressBookItem(id);
+      await DeleteAddressBookItem(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({

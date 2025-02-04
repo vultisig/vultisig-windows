@@ -1,9 +1,10 @@
+import { fromBinary } from '@bufbuild/protobuf';
+import { VaultSchema } from '@core/communication/vultisig/vault/v1/vault_pb';
 import { fromBase64 } from '@lib/utils/fromBase64';
 import { pipe } from '@lib/utils/pipe';
 import { useMutation } from '@tanstack/react-query';
 
 import { storage } from '../../../../wailsjs/go/models';
-import { Vault } from '../../../gen/vultisig/vault/v1/vault_pb';
 import { OnFinishProp, ValueProp } from '../../../lib/ui/props';
 import { decryptVault } from '../../encryption/decryptVault';
 import { toStorageVault } from '../../utils/storageVault';
@@ -24,7 +25,7 @@ export const DecryptVaultContainerStep = ({
             vault,
           }),
         v => new Uint8Array(v),
-        Vault.fromBinary,
+        binary => fromBinary(VaultSchema, binary),
         toStorageVault
       ),
     onSuccess: onFinish,

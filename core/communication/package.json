@@ -1,0 +1,17 @@
+{
+  "name": "@core/communication",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'"
+  },
+  "devDependencies": {
+    "@bufbuild/protoc-gen-es": "^2.2.3"
+  },
+  "dependencies": {
+    "7z-wasm": "^1.1.0",
+    "@bufbuild/buf": "^1.50.0",
+    "@bufbuild/protobuf": "^2.2.3"
+  }
+}

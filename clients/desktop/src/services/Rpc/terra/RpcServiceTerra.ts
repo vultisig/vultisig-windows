@@ -1,5 +1,5 @@
 import { cosmosFeeCoinDenom } from '../../../chain/cosmos/cosmosFeeCoinDenom';
-import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
 import { RpcServiceCosmos } from '../cosmos/RpcServiceCosmos';
 

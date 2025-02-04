@@ -1,8 +1,10 @@
+import { create } from '@bufbuild/protobuf';
+import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
+
 import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload';
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { useTransform } from '../../../lib/ui/hooks/useTransform';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault';
@@ -48,7 +50,7 @@ export const useSwapKeysignPayloadQuery = () => {
           toCoin,
         });
 
-        const result = new KeysignPayload({
+        const result = create(KeysignPayloadSchema, {
           coin: fromCoin,
           toAmount: amount.toString(),
           blockchainSpecific: chainSpecific,
