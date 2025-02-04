@@ -17,7 +17,7 @@ export const PasswordInput: React.FC<
     <ActionInsideInteractiveElement
       render={({ actionSize }) => (
         <TextInput
-          type={shouldHideValue ? 'password' : 'text'}
+          type={shouldHideValue ? 'text' : 'password'}
           autoComplete="off"
           spellCheck="false"
           {...rest}
