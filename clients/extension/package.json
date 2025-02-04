@@ -17,7 +17,8 @@
     "build": "npm-run-all --serial build:app build:content build:relay build:manifest",
     "dev": "nodemon --watch src --ext ts,tsx,scss --exec \"npm run build\"",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@keplr-wallet/provider": "^0.12.169",
