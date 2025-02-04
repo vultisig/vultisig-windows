@@ -1,19 +1,18 @@
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { areEqualCoins } from '../../../coin/Coin';
-import { useCoinPricesQuery } from '../../../coin/query/useCoinPricesQuery';
+import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import {
   getStorageCoinKey,
   storageCoinToCoin,
 } from '../../../coin/utils/storageCoin';
-import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { HStack } from '../../../lib/ui/layout/Stack';
 import { text } from '../../../lib/ui/text';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { CoinMeta } from '../../../model/coin-meta';
+import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
 import { useCurrentVaultCoins } from '../../state/currentVault';
 import { useSendAmount } from '../state/amount';
 import { useCurrentSendCoin } from '../state/sendCoin';
@@ -31,7 +30,7 @@ export const AmountInGlobalCurrencyDisplay = () => {
   const [sendAmount] = useSendAmount();
   const [coinKey] = useCurrentSendCoin();
   const coins = useCurrentVaultCoins();
-  const { globalCurrency } = useGlobalCurrency();
+  const [fiatCurrency] = useFiatCurrency();
   const coin = useMemo(() => {
     return storageCoinToCoin(
       shouldBePresent(
@@ -43,13 +42,18 @@ export const AmountInGlobalCurrencyDisplay = () => {
   const {
     data: prices,
     isPending,
-    errors,
-  } = useCoinPricesQuery([CoinMeta.fromCoin(coin)]);
+    error,
+  } = useCoinPriceQuery({
+    coin: {
+      ...coinKey,
+      priceProviderId: coin.priceProviderId,
+    },
+  });
 
   const normalizedPrices = Array.isArray(prices)
     ? prices.map(p => ({
         ...p,
-        price: p.price || (p as any)[globalCurrency],
+        price: p.price || (p as any)[fiatCurrency],
       }))
     : [];
 
@@ -66,14 +70,14 @@ export const AmountInGlobalCurrencyDisplay = () => {
           gap={16}
           fullWidth
         >
-          {`Amount (in ${globalCurrency})`}
+          {`Amount (in ${fiatCurrency})`}
         </HStack>
       }
       value={
-        (sendAmount && !calculatedSendAmountInFiat) || errors.length > 0
+        (sendAmount && !calculatedSendAmountInFiat) || error
           ? t('failed_to_load')
           : calculatedSendAmountInFiat !== undefined
-            ? calculatedSendAmountInFiat.toFixed(2) + ' ' + globalCurrency
+            ? calculatedSendAmountInFiat.toFixed(2) + ' ' + fiatCurrency
             : ''
       }
       disabled
