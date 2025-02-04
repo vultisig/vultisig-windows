@@ -6,14 +6,9 @@ import { create } from "@bufbuild/protobuf";
 import ReactDOM from "react-dom/client";
 import html2canvas from "html2canvas";
 
-import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb';
+import { CoinSchema } from "@core/communication/vultisig/keysign/v1/coin_pb";
 
-import {
-  chains,
-  evmChains,
-  explorerUrl,
-  TssKeysignType,
-} from "../../utils/constants";
+import { evmChains, explorerUrl, TssKeysignType } from "../../utils/constants";
 import {
   formatDisplayNumber,
   getTssKeysignType,
@@ -558,11 +553,7 @@ const Component = () => {
               )
                 .getSpecificTransactionInfo(coin)
                 .then((blockchainSpecific) => {
-                  transaction.gasPrice =
-                    coin.ticker === chains.THORChain.ticker
-                      ? String(blockchainSpecific.gasPrice)
-                      : formatUnits(blockchainSpecific.gasPrice, coin.decimals);
-
+                  transaction.gasPrice = String(blockchainSpecific.gasPrice);
                   try {
                     transaction.memo = toUtf8String(transaction.data);
                   } catch (err) {
