@@ -1,4 +1,6 @@
-import { PolkadotSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
+import { create } from '@bufbuild/protobuf';
+import { PolkadotSpecificSchema } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+
 import { RpcServicePolkadot } from '../../../services/Rpc/polkadot/RpcServicePolkadot';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
@@ -16,7 +18,7 @@ export const getPolkadotSpecific = async ({
   const { specVersion, transactionVersion } =
     await rpcService.fetchRuntimeVersion();
 
-  return new PolkadotSpecific({
+  return create(PolkadotSpecificSchema, {
     recentBlockHash,
     nonce: BigInt(nonce),
     currentBlockNumber: currentBlockNumber.toString(),

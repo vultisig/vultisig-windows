@@ -12,7 +12,7 @@ import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getBlockExplorerUrl } from '../../../chain/utils/getBlockExplorerUrl';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
 import { IconButton } from '../../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../../lib/ui/icons/CopyIcon';

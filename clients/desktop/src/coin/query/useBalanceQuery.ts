@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { Coin } from '../../gen/vultisig/keysign/v1/coin_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../model/chain';
 import { AccountCoinKey } from '../AccountCoin';
 import { getCoinBalance } from '../balance/getCoinBalance';

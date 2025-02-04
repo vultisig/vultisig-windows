@@ -1,8 +1,12 @@
+import { create } from '@bufbuild/protobuf';
+import {
+  EthereumSpecific,
+  EthereumSpecificSchema,
+} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { ethers } from 'ethers';
 import { publicActionsL2 } from 'viem/zksync';
 
-import { EthereumSpecific } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
 import { Chain, EvmChain } from '../../../model/chain';
 import { RpcServiceEvm } from '../../../services/Rpc/evm/RpcServiceEvm';
 import {
@@ -47,7 +51,7 @@ export const getEthereumSpecific = async ({
         value,
       });
 
-    return new EthereumSpecific({
+    return create(EthereumSpecificSchema, {
       maxFeePerGasWei: maxFeePerGas.toString(),
       priorityFee: maxPriorityFeePerGas.toString(),
       gasLimit: gasLimit.toString(),
@@ -75,7 +79,7 @@ export const getEthereumSpecific = async ({
     BigInt(Math.round(Number(baseFee) * baseFeeMultiplier + priorityFee))
   );
 
-  return new EthereumSpecific({
+  return create(EthereumSpecificSchema, {
     maxFeePerGasWei: maxFeePerGasWei.toString(),
     priorityFee: priorityFee.toString(),
     nonce,

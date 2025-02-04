@@ -1,5 +1,5 @@
 import { getCosmosBalanceUrl } from '../../../chain/cosmos/cosmosRpcUrl';
-import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { IRpcService } from '../IRpcService';
 

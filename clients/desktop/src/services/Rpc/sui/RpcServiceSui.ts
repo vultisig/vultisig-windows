@@ -1,6 +1,11 @@
+import { create } from '@bufbuild/protobuf';
+import {
+  SuiCoin,
+  SuiCoinSchema,
+} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
+
 import { callRpc } from '../../../chain/rpc/callRpc';
-import { SuiCoin } from '../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 
@@ -25,15 +30,7 @@ export class RpcServiceSui implements IRpcService {
     const suiCoins: SuiCoin[] = rawCoins
       .filter(f => f.coinType == '0x2::sui::SUI')
       .map((coin: SuiCoin) => {
-        const suiCoin = new SuiCoin();
-        suiCoin.balance = coin.balance;
-        suiCoin.coinType = coin.coinType;
-        suiCoin.coinObjectId = coin.coinObjectId;
-        suiCoin.digest = coin.digest;
-        suiCoin.version = coin.version;
-        suiCoin.previousTransaction = coin.previousTransaction;
-
-        return suiCoin;
+        return create(SuiCoinSchema, coin);
       });
     return suiCoins;
   }

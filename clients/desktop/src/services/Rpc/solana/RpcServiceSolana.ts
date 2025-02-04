@@ -1,5 +1,5 @@
 import { ChainAccount } from '../../../chain/ChainAccount';
-import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { Chain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { Endpoint } from '../../Endpoint';

@@ -1,16 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { SaveSettings } from '../../../wailsjs/go/storage/Store';
 import { Settings } from '../../lib/types/settings';
-import { VaultService } from '../../services/Vault/VaultService';
 import { vaultSettingsQueryKey } from '../queries/useVaultSettingsQuery';
 
 export const useUpdateVaultSettingsMutation = () => {
-  const vaultService = new VaultService();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (settings: Settings) => {
-      const result = await vaultService.updateVaultSettings({
+      const result = await SaveSettings({
         currency: settings.currency,
         language: settings.language,
       });

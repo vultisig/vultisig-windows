@@ -1,9 +1,10 @@
+import { convertDuration } from '@lib/utils/time/convertDuration';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { QueryClient } from '@tanstack/react-query';
 import { persistQueryClient } from '@tanstack/react-query-persist-client';
 
-import { convertDuration } from '@lib/utils/time/convertDuration';
 import { PersistentStateKey } from '../state/persistentState';
+import { queryKeyHashFn } from './queryKeyHashFn';
 
 const maxAge = convertDuration(1, 'd', 'ms');
 
@@ -23,6 +24,7 @@ export const getQueryClient = () => {
     defaultOptions: {
       queries: {
         gcTime: maxAge,
+        queryKeyHashFn,
       },
     },
   });

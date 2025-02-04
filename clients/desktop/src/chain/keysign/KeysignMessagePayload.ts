@@ -1,8 +1,8 @@
-import { CustomMessagePayload } from '../../gen/vultisig/keysign/v1/custom_message_payload_pb';
+import { CustomMessagePayload } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb';
 import {
   KeysignMessage,
   KeysignPayload,
-} from '../../gen/vultisig/keysign/v1/keysign_message_pb';
+} from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 
 export const keysignMessagePayloadTypes = ['custom', 'keysign'] as const;
 export type KeysignMessagePayloadType =

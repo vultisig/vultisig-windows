@@ -4,7 +4,7 @@ import {
   TxOverviewChainDataRow,
   TxOverviewRow,
 } from '../../../../chain/tx/components/TxOverviewRow';
-import { CustomMessagePayload } from '../../../../gen/vultisig/keysign/v1/custom_message_payload_pb';
+import { CustomMessagePayload } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb';
 import { ValueProp } from '../../../../lib/ui/props';
 
 export const KeysignCustomMessageInfo = ({

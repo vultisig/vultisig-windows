@@ -1,9 +1,9 @@
+import { OneInchSwapPayload } from '@core/communication/vultisig/keysign/v1/1inch_swap_payload_pb';
+import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 
-import { OneInchSwapPayload } from '../../../../../gen/vultisig/keysign/v1/1inch_swap_payload_pb';
-import { EthereumSpecific } from '../../../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { KeysignPayload } from '../../../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { getSigningInputLegacyTxFields } from '../../../../evm/tx/getSigningInputLegacyTxFields';
 import { bigIntToHex } from '../../../../utils/bigIntToHex';
 import { stripHexPrefix } from '../../../../utils/stripHexPrefix';

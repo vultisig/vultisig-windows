@@ -11,7 +11,7 @@ import { TextInput } from './TextInput';
 export const PasswordInput: React.FC<
   ComponentPropsWithoutRef<typeof TextInput>
 > = ({ ...rest }) => {
-  const [shouldHideValue, { toggle }] = useBoolean(false);
+  const [shouldHideValue, { toggle }] = useBoolean(true);
 
   return (
     <ActionInsideInteractiveElement

@@ -5,8 +5,8 @@ import { TW, WalletCore } from '@trustwallet/wallet-core';
 import Long from 'long';
 
 import { getCoinKey } from '../../../../../coin/utils/coin';
-import { EthereumSpecific } from '../../../../../gen/vultisig/keysign/v1/blockchain_specific_pb';
-import { KeysignPayload } from '../../../../../gen/vultisig/keysign/v1/keysign_message_pb';
+import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '../../../../../model/chain';
 import { getSigningInputEnvelopedTxFields } from '../../../../evm/tx/getSigningInputEnvelopedTxFields';
 import { toKeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload';

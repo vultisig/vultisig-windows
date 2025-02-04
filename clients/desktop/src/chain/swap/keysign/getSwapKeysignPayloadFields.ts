@@ -1,3 +1,11 @@
+import { create } from '@bufbuild/protobuf';
+import {
+  OneInchQuoteSchema,
+  OneInchSwapPayloadSchema,
+  OneInchTransactionSchema,
+} from '@core/communication/vultisig/keysign/v1/1inch_swap_payload_pb';
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
@@ -6,13 +14,6 @@ import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { areEqualCoins } from '../../../coin/Coin';
 import { getCoinKey } from '../../../coin/utils/coin';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
-import {
-  OneInchQuote,
-  OneInchSwapPayload,
-  OneInchTransaction,
-} from '../../../gen/vultisig/keysign/v1/1inch_swap_payload_pb';
-import { Coin } from '../../../gen/vultisig/keysign/v1/coin_pb';
-import { KeysignPayload } from '../../../gen/vultisig/keysign/v1/keysign_message_pb';
 import { EvmChain } from '../../../model/chain';
 import { fromChainAmount } from '../../utils/fromChainAmount';
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote';
@@ -39,7 +40,7 @@ export const getSwapKeysignPayloadFields = ({
 
   return matchRecordUnion(quote, {
     general: (quote: GeneralSwapQuote): Output => {
-      const swapPayload = new OneInchSwapPayload({
+      const swapPayload = create(OneInchSwapPayloadSchema, {
         fromCoin,
         toCoin,
         fromAmount: amount.toString(),
@@ -47,9 +48,9 @@ export const getSwapKeysignPayloadFields = ({
           quote.dstAmount,
           toCoin.decimals
         ).toFixed(toCoin.decimals),
-        quote: new OneInchQuote({
+        quote: create(OneInchQuoteSchema, {
           dstAmount: quote.dstAmount,
-          tx: new OneInchTransaction({
+          tx: create(OneInchTransactionSchema, {
             ...quote.tx,
             gas: BigInt(quote.tx.gas),
           }),

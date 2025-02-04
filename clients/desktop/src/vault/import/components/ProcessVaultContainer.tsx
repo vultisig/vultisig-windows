@@ -1,9 +1,10 @@
+import { fromBinary } from '@bufbuild/protobuf';
+import { VaultContainer } from '@core/communication/vultisig/vault/v1/vault_container_pb';
+import { VaultSchema } from '@core/communication/vultisig/vault/v1/vault_pb';
 import { fromBase64 } from '@lib/utils/fromBase64';
 import { pipe } from '@lib/utils/pipe';
 
 import { storage } from '../../../../wailsjs/go/models';
-import { VaultContainer } from '../../../gen/vultisig/vault/v1/vault_container_pb';
-import { Vault } from '../../../gen/vultisig/vault/v1/vault_pb';
 import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer';
 import { ValueProp } from '../../../lib/ui/props';
 import { toStorageVault } from '../../utils/storageVault';
@@ -30,7 +31,7 @@ export const ProcessVaultContainer = ({ value }: ValueProp<VaultContainer>) => {
     vaultAsBase64String,
     fromBase64,
     v => new Uint8Array(v),
-    Vault.fromBinary,
+    v => fromBinary(VaultSchema, v),
     toStorageVault
   );
 
