@@ -403,6 +403,19 @@ export const it = {
   while_you_wait_vultisig_has: 'Mentre aspetti, Vultisig ha...',
   creating_vault: 'Creazione della Cassaforte',
   fastVaultSetup: {
+    summary: {
+      title: 'Riepilogo Rapido',
+      pillText: 'Quote del Vault',
+      summaryItemOneTitle:
+        'Esegui il backup di ciascuna quota del vault separatamente',
+      summaryItemTwoTitle: 'Conserva le quote del vault in diverse posizioni',
+      summaryItemThreeTitle:
+        'Tutte le quote del vault garantiscono un accesso sicuro ai tuoi fondi',
+      summaryItemFourTitle:
+        'Non memorizzare la tua quota del vault sul dispositivo stesso, in caso di perdita o danneggiamento',
+      agreementText: 'Ho letto e capisco cosa fare',
+      ctaText: 'Crea il tuo vault',
+    },
     preparingVault: 'Preparazione della Cassaforte',
     generatingECDSAKey: 'Generazione della Chiave ECDSA',
     createVault: {
