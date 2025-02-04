@@ -11,6 +11,7 @@ export type ThemeColors = {
   idleDark: HSLA;
   background: HSLA;
   foreground: HSLA;
+  foregroundDark: HSLA;
   foregroundExtra: HSLA;
   foregroundSuper: HSLA;
   foregroundSuperContrast: HSLA;

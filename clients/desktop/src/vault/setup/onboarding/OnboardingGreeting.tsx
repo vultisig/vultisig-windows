@@ -5,8 +5,10 @@ import styled from 'styled-components';
 import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility';
 import { GradientText, Text } from '../../../lib/ui/text';
 
+const DELAY_BEFORE_NEXT_STEP_IN_MS = 500;
+
 type OnboardingGreetingProps = {
-  onNextStep: () => void;
+  onCompleteGreeting: () => void;
 };
 
 const Wrapper = styled.div`
@@ -17,7 +19,7 @@ const Wrapper = styled.div`
 `;
 
 export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
-  onNextStep,
+  onCompleteGreeting,
 }) => {
   const { t } = useTranslation();
 
@@ -29,9 +31,9 @@ export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
         }}
         animationConfig="bottomToTop"
         delay={300}
-        onAnimationComplete={() => {
-          setTimeout(() => onNextStep(), 500);
-        }}
+        onAnimationComplete={() =>
+          setTimeout(onCompleteGreeting, DELAY_BEFORE_NEXT_STEP_IN_MS)
+        }
       >
         <Text variant="h1Regular">
           {t('sayGoodbyeTo')}{' '}
