@@ -19,6 +19,7 @@ export const darkTheme: DefaultTheme = {
     idle: new HSLA(38, 100, 68),
     idleDark: new HSLA(39, 40, 15),
     background: new HSLA(backgroundHue, backgroundSaturation, 9),
+    foregroundDark: new HSLA(213, 80, 14),
     foreground: new HSLA(216, 81, 13),
     foregroundExtra: new HSLA(216, 63, 18),
     foregroundSuper: new HSLA(215, 62, 28),
