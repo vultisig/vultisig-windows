@@ -64,20 +64,6 @@ export namespace storage {
 	        this.keyshare = source["keyshare"];
 	    }
 	}
-	export class Settings {
-	    language: string;
-	    currency: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new Settings(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.language = source["language"];
-	        this.currency = source["currency"];
-	    }
-	}
 	export class Vault {
 	    name: string;
 	    public_key_ecdsa: string;
