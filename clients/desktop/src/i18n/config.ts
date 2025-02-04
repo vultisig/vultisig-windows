@@ -6,17 +6,15 @@ import { initReactI18next } from 'react-i18next';
 import { primaryLanguage } from './Language';
 import { translations } from './translations';
 
-// Initialization
-i18n
-  .use(Backend)
-  .use(initReactI18next) // Passes i18n instance to react-i18next
-  .init({
-    resources: recordMap(translations, translation => ({ translation })),
-    fallbackLng: primaryLanguage,
-    debug: false,
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+const i18nInstance = i18n.use(Backend).use(initReactI18next);
 
-export default i18n;
+i18nInstance.init({
+  resources: recordMap(translations, translation => ({ translation })),
+  fallbackLng: primaryLanguage,
+  debug: false,
+  interpolation: {
+    escapeValue: false,
+  },
+});
+
+export default i18nInstance;
