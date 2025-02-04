@@ -1,13 +1,13 @@
+import { formatAmount } from '@lib/utils/formatAmount';
 import { useCallback } from 'react';
 
-import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
-import { formatAmount } from '@lib/utils/formatAmount';
+import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
 
 export const useFormatFiatAmount = () => {
-  const { globalCurrency } = useGlobalCurrency();
+  const [fiatCurrency] = useFiatCurrency();
 
   return useCallback(
-    (value: number) => formatAmount(value, globalCurrency),
-    [globalCurrency]
+    (value: number) => formatAmount(value, fiatCurrency),
+    [fiatCurrency]
   );
 };
