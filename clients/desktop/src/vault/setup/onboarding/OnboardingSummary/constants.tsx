@@ -18,6 +18,10 @@ export const SUMMARY_ITEMS = [
   },
   {
     title: 'summaryItemFourTitle',
-    icon: TriangleExclamationIcon,
+    icon: () => (
+      <div style={{ fontSize: 24 }}>
+        <TriangleExclamationIcon />
+      </div>
+    ),
   },
 ];

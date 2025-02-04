@@ -100,15 +100,15 @@ export const SetupVaultPage = () => {
                   value: 'fast',
                   icon:
                     value === 'fast' ? (
-                      <LightningIconWrapper>
-                        <LightningGradientIcon width={24} height={24} />
-                      </LightningIconWrapper>
+                      <LightningGradientIconWrapper>
+                        <LightningGradientIcon />
+                      </LightningGradientIconWrapper>
                     ) : (
-                      <LightningIcon
-                        width={16}
-                        height={20}
+                      <LightningIconWrapper>
+                        <LightningIcon
                         color={theme.colors.contrast.toCssValue()}
                       />
+                      </LightningIconWrapper>
                     ),
                 },
               ]}
@@ -152,7 +152,12 @@ export const SetupVaultPage = () => {
 };
 
 // @antonio: optical alignment
-const LightningIconWrapper = styled.div`
+const LightningGradientIconWrapper = styled.div`
   position: relative;
   right: -4px;
+  font-size: 24px;
+`;
+
+export const LightningIconWrapper = styled.div`
+  font-size: 20px;
 `;
