@@ -8,12 +8,12 @@ import Long from "long";
 import {
   MAYAChainSpecificSchema,
   type MAYAChainSpecific,
-} from "../../../protos/blockchain_specific_pb";
-import { CoinSchema, type Coin } from "../../../protos/coin_pb";
+} from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
+import { CoinSchema, type Coin } from "@core/communication/vultisig/keysign/v1/coin_pb";
 import {
   KeysignPayloadSchema,
   type KeysignPayload,
-} from "../../../protos/keysign_message_pb";
+} from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
 
 import { ChainKey } from "../../constants";
 import {

@@ -15,8 +15,8 @@ import {
   KeysignMessage,
   KeysignMessageSchema,
   KeysignPayload,
-} from "../../../protos/keysign_message_pb";
-import { CustomMessagePayload } from "../../../protos/custom_message_payload_pb";
+} from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
+import { CustomMessagePayload } from "@core/communication/vultisig/keysign/v1/custom_message_payload_pb";
 
 interface ChainRef {
   [chainKey: string]: CoinType;
@@ -33,7 +33,7 @@ export default abstract class BaseTransactionProvider {
     chainKey: ChainKey,
     chainRef: ChainRef,
     dataEncoder: (data: Uint8Array) => Promise<string>,
-    walletCore: WalletCore
+    walletCore: WalletCore,
   ) {
     this.chainKey = chainKey;
     this.chainRef = chainRef;
@@ -59,7 +59,7 @@ export default abstract class BaseTransactionProvider {
 
   protected ensurePriorityFeeValue = (
     priorityFee: bigint,
-    chainKey: ChainKey
+    chainKey: ChainKey,
   ): bigint => {
     switch (chainKey) {
       case ChainKey.AVALANCHE:
@@ -73,12 +73,12 @@ export default abstract class BaseTransactionProvider {
   };
 
   public getPreSignedImageHash = (
-    preSignedInputData: Uint8Array
+    preSignedInputData: Uint8Array,
   ): Promise<string> => {
     return new Promise((resolve, reject) => {
       const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
         this.chainRef[this.chainKey],
-        preSignedInputData
+        preSignedInputData,
       );
 
       const preSigningOutput =
@@ -88,7 +88,7 @@ export default abstract class BaseTransactionProvider {
         reject(preSigningOutput.errorMessage);
 
       const imageHash = this.walletCore.HexCoding.encode(
-        preSigningOutput.dataHash
+        preSigningOutput.dataHash,
       )?.replace(/^0x/, "");
 
       resolve(imageHash);
@@ -98,7 +98,7 @@ export default abstract class BaseTransactionProvider {
   public getTransactionKey = (
     publicKeyEcdsa: string,
     transaction: ITransaction.METAMASK,
-    hexChainCode: string
+    hexChainCode: string,
   ): Promise<string> => {
     return new Promise((resolve) => {
       let messsage: KeysignMessage = {
@@ -123,7 +123,7 @@ export default abstract class BaseTransactionProvider {
 
       this.dataEncoder(binary).then((base64EncodedData) => {
         resolve(
-          `vultisig://vultisig.com?type=SignTransaction&vault=${publicKeyEcdsa}&jsonData=${base64EncodedData}`
+          `vultisig://vultisig.com?type=SignTransaction&vault=${publicKeyEcdsa}&jsonData=${base64EncodedData}`,
         );
       });
     });
@@ -145,7 +145,7 @@ export default abstract class BaseTransactionProvider {
 
   abstract getKeysignPayload(
     transaction: ITransaction.METAMASK,
-    vault: VaultProps
+    vault: VaultProps,
   ): Promise<KeysignPayload>;
 
   protected encodeData(data: Uint8Array): Promise<string> {
@@ -167,8 +167,8 @@ export default abstract class BaseTransactionProvider {
   public getEncodedSignature(signature: SignatureProps): string {
     return this.ensureHexPrefix(
       this.walletCore.HexCoding.encode(
-        this.getCustomMessageSignature(signature)
-      )
+        this.getCustomMessageSignature(signature),
+      ),
     );
   }
 }

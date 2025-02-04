@@ -6,7 +6,7 @@ import { create } from "@bufbuild/protobuf";
 import ReactDOM from "react-dom/client";
 import html2canvas from "html2canvas";
 
-import { CoinSchema } from "../../protos/coin_pb";
+import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb';
 
 import {
   chains,

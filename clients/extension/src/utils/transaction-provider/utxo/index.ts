@@ -19,16 +19,19 @@ import {
   SpecificUtxoInfo,
   VaultProps,
 } from "../../interfaces";
-import { Coin, CoinSchema } from "../../../protos/coin_pb";
+import {
+  Coin,
+  CoinSchema,
+} from "@core/communication/vultisig/keysign/v1/coin_pb";
 import {
   KeysignPayload,
   KeysignPayloadSchema,
-} from "../../../protos/keysign_message_pb";
+} from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
 import {
   UTXOSpecific,
   UTXOSpecificSchema,
-} from "../../../protos/blockchain_specific_pb";
-import { UtxoInfoSchema } from "../../../protos/utxo_info_pb";
+} from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
+import { UtxoInfoSchema } from "@core/communication/vultisig/keysign/v1/utxo_info_pb";
 
 interface ChainRef {
   [chainKey: string]: CoinType;

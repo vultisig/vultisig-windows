@@ -8,12 +8,12 @@ import Long from "long";
 import {
   THORChainSpecificSchema,
   THORChainSpecific,
-} from "../../../protos/blockchain_specific_pb";
+} from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
 import {
   KeysignPayloadSchema,
   KeysignPayload,
-} from "../../../protos/keysign_message_pb";
-import { CoinSchema, Coin } from "../../../protos/coin_pb";
+} from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
+import { CoinSchema, Coin } from "@core/communication/vultisig/keysign/v1/coin_pb";
 
 import { ChainKey } from "../../constants";
 import type {
