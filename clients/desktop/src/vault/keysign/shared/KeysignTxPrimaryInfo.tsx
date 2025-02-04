@@ -15,10 +15,10 @@ import {
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
+import { getCoinKey } from '../../../coin/utils/coin';
 import { ValueProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Chain } from '../../../model/chain';
-import { CoinMeta } from '../../../model/coin-meta';
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
 
 export const KeysignTxPrimaryInfo = ({ value }: ValueProp<KeysignPayload>) => {
@@ -30,7 +30,12 @@ export const KeysignTxPrimaryInfo = ({ value }: ValueProp<KeysignPayload>) => {
 
   const { t } = useTranslation();
 
-  const coinPriceQuery = useCoinPriceQuery(CoinMeta.fromCoin(coin));
+  const coinPriceQuery = useCoinPriceQuery({
+    coin: {
+      ...getCoinKey(coin),
+      priceProviderId: coin.priceProviderId,
+    },
+  });
 
   const [fiatCurrency] = useFiatCurrency();
 

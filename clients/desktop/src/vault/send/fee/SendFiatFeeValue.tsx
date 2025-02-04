@@ -5,9 +5,8 @@ import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
+import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { CoinMeta } from '../../../model/coin-meta';
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useCurrentSendCoin } from '../state/sendCoin';
@@ -22,9 +21,12 @@ export const SendFiatFeeValue = () => {
   const fee = getFeeAmount(chainSpecific);
   const coin = useCurrentVaultCoin(coinKey);
 
-  const { isPending, data: price } = useCoinPriceQuery(
-    CoinMeta.fromCoin(storageCoinToCoin(coin))
-  );
+  const { isPending, data: price } = useCoinPriceQuery({
+    coin: {
+      ...getStorageCoinKey(coin),
+      priceProviderId: coin.price_provider_id,
+    },
+  });
 
   const { decimals } = chainFeeCoin[coinKey.chain];
   const humanReadableFeeValue = fromChainAmount(fee, decimals);

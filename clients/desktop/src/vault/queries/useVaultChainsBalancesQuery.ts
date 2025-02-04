@@ -1,6 +1,10 @@
+import { order } from '@lib/utils/array/order';
+import { sum } from '@lib/utils/array/sum';
+import { recordMap } from '@lib/utils/record/recordMap';
+import { toEntries } from '@lib/utils/record/toEntries';
 import { useMemo } from 'react';
 
-import { areEqualCoins } from '../../coin/Coin';
+import { areEqualCoins, coinKeyToString } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
@@ -9,12 +13,7 @@ import {
   storageCoinToCoin,
 } from '../../coin/utils/storageCoin';
 import { EagerQuery } from '../../lib/ui/query/Query';
-import { order } from '@lib/utils/array/order';
-import { sum } from '@lib/utils/array/sum';
-import { recordMap } from '@lib/utils/record/recordMap';
-import { toEntries } from '@lib/utils/record/toEntries';
 import { Chain } from '../../model/chain';
-import { CoinMeta } from '../../model/coin-meta';
 import {
   useCurrentVaultCoins,
   useCurrentVaultCoinsByChain,
@@ -32,9 +31,12 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
   const coins = useCurrentVaultCoins();
   const groupedCoins = useCurrentVaultCoinsByChain();
 
-  const pricesQuery = useCoinPricesQuery(
-    coins.map(storageCoinToCoin).map(CoinMeta.fromCoin)
-  );
+  const pricesQuery = useCoinPricesQuery({
+    coins: coins.map(coin => ({
+      ...getStorageCoinKey(coin),
+      priceProviderId: coin.price_provider_id,
+    })),
+  });
 
   const balancesQuery = useBalancesQuery(coins.map(storageCoinToCoin));
 
@@ -50,9 +52,9 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
         );
         const amount = balance?.amount || BigInt(0);
 
-        const price =
-          (pricesQuery.data ?? []).find(item => areEqualCoins(item, coinKey))
-            ?.price ?? 0;
+        const price = pricesQuery.data
+          ? pricesQuery.data[coinKeyToString(coinKey)]
+          : 0;
 
         return {
           ...coinKey,
