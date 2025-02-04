@@ -10,25 +10,25 @@ import type {
   WalletCore,
 } from "@trustwallet/wallet-core/dist/src/wallet-core";
 import { TW } from "@trustwallet/wallet-core";
-import { BaseTransactionProvider } from "..";
-import { ChainKey } from "utils/constants";
+import BaseTransactionProvider from "../base/index";
+import { ChainKey } from "../../constants";
 import {
   ITransaction,
   SignatureProps,
   SpecificUtxo,
   SpecificUtxoInfo,
   VaultProps,
-} from "utils/interfaces";
-import { Coin, CoinSchema } from "protos/coin_pb";
+} from "../../interfaces";
+import { Coin, CoinSchema } from "../../../protos/coin_pb";
 import {
   KeysignPayload,
   KeysignPayloadSchema,
-} from "protos/keysign_message_pb";
+} from "../../../protos/keysign_message_pb";
 import {
   UTXOSpecific,
   UTXOSpecificSchema,
-} from "protos/blockchain_specific_pb";
-import { UtxoInfoSchema } from "protos/utxo_info_pb";
+} from "../../../protos/blockchain_specific_pb";
+import { UtxoInfoSchema } from "../../../protos/utxo_info_pb";
 
 interface ChainRef {
   [chainKey: string]: CoinType;
@@ -39,13 +39,9 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
     chainKey: ChainKey,
     chainRef: ChainRef,
     dataEncoder: (data: Uint8Array) => Promise<string>,
-    walletCore: WalletCore
+    walletCore: WalletCore,
   ) {
     super(chainKey, chainRef, dataEncoder, walletCore);
-    this.chainKey = chainKey;
-    this.chainRef = chainRef;
-    this.dataEncoder = dataEncoder;
-    this.walletCore = walletCore;
   }
 
   public getSpecificTransactionInfo = (coin: Coin): Promise<SpecificUtxo> => {
@@ -65,7 +61,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
 
   public getKeysignPayload = (
     transaction: ITransaction.METAMASK,
-    vault: VaultProps
+    vault: VaultProps,
   ): Promise<KeysignPayload> => {
     return new Promise((resolve) => {
       const coin = create(CoinSchema, {
@@ -74,7 +70,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
         address: transaction.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
-          (chain) => chain.name === transaction.chain.name
+          (chain) => chain.name === transaction.chain.name,
         )!.derivationKey,
         isNativeToken: true,
         logo: transaction.chain.ticker.toLowerCase(),
@@ -118,7 +114,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
       const inputData = TW.Bitcoin.Proto.SigningInput.encode(input).finish();
       const plan = this.walletCore.AnySigner.plan(
         inputData,
-        this.chainRef[this.chainKey]
+        this.chainRef[this.chainKey],
       );
       input.plan = TW.Bitcoin.Proto.TransactionPlan.decode(plan);
       return TW.Bitcoin.Proto.SigningInput.encode(input).finish();
@@ -153,7 +149,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
     for (const utxo of this.keysignPayload!.utxoInfo) {
       const lockScript = this.walletCore.BitcoinScript.lockScriptForAddress(
         this.keysignPayload!.coin!.address,
-        coinType
+        coinType,
       );
       switch (coinType) {
         case this.walletCore.CoinType.bitcoin:
@@ -161,11 +157,11 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
           const segWitPubKeyHash = lockScript.matchPayToWitnessPublicKeyHash();
           const redeemScript =
             this.walletCore.BitcoinScript.buildPayToWitnessPubkeyHash(
-              segWitPubKeyHash
+              segWitPubKeyHash,
             );
           input.scripts[
             this.stripHexPrefix(
-              this.walletCore.HexCoding.encode(segWitPubKeyHash)
+              this.walletCore.HexCoding.encode(segWitPubKeyHash),
             )
           ] = redeemScript.data();
           break;
@@ -215,7 +211,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
       const allSignatures = this.walletCore.DataVector.create();
       const publicKeys = this.walletCore.DataVector.create();
       const pubkeyUTXO = vault.chains.find(
-        (chain) => chain.name === this.chainKey
+        (chain) => chain.name === this.chainKey,
       )!.derivationKey!;
       const publicKeyData = Buffer.from(pubkeyUTXO, "hex");
       const modifiedSig = this.getSignature(signature);
@@ -227,21 +223,21 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
             coinType,
             inputData,
             allSignatures,
-            publicKeys
+            publicKeys,
           );
 
         const output = TW.Bitcoin.Proto.SigningOutput.decode(
-          compileWithSignatures
+          compileWithSignatures,
         );
 
         const result = new SignedTransactionResult(
           this.stripHexPrefix(this.walletCore.HexCoding.encode(output.encoded)),
-          output.transactionId
+          output.transactionId,
         );
         resolve({
           txHash: result.transactionHash,
           raw: this.stripHexPrefix(
-            this.walletCore.HexCoding.encode(output.encoded)
+            this.walletCore.HexCoding.encode(output.encoded),
           ),
         });
       } catch (err) {
@@ -269,7 +265,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
   private async getUtxos(coin: Coin): Promise<SpecificUtxoInfo[]> {
     const result = (await api.utxo.blockchairDashboard(
       coin.address,
-      coin.chain
+      coin.chain,
     )) as { [key: string]: { utxo: any[] } };
     return result[coin.address].utxo.map((utxo: any) => {
       return {

@@ -1,14 +1,14 @@
 import { StrictMode, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 
-import { getStoredLanguage } from "utils/storage";
-import i18n from "i18n/config";
+import { getStoredLanguage } from "../../utils/storage";
+import i18n from "../../i18n/config";
 
-import ConfigProvider from "components/config-provider";
-import Routing from "pages/popup/routes";
+import ConfigProvider from "../../components/config-provider";
+import Routing from "../../pages/popup/routes";
 
-import "styles/index.scss";
-import "pages/popup/index.scss";
+import "../../styles/index.scss";
+import "../../pages/popup/index.scss";
 
 const Component = () => {
   const componentDidMount = (): void => {

@@ -1,4 +1,4 @@
-import messageKeys from "utils/message-keys";
+import messageKeys from "../../utils/message-keys";
 
 export default {
   // A

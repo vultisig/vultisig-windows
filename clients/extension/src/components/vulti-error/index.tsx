@@ -2,9 +2,9 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "antd";
 
-import messageKeys from "utils/message-keys";
+import messageKeys from "../../utils/message-keys";
 
-import { TriangleWarning } from "icons";
+import { TriangleWarning } from "../../icons";
 
 interface ComponentProps {
   onClose: () => void;

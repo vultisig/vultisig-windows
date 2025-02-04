@@ -1,8 +1,8 @@
 import { Interface } from "ethers";
 
-import { ChainKey, TssKeysignType } from "utils/constants";
-import { ChainObjRef, ChainProps, ParsedMemo } from "utils/interfaces";
-import api from "utils/api";
+import { ChainKey, TssKeysignType } from "./constants";
+import { ChainObjRef, ChainProps, ParsedMemo } from "./interfaces";
+import api from "./api";
 
 const getFunctionSignature = async (inputHex: string): Promise<string> => {
   if (!inputHex || inputHex === "0x") {

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { getStoredCurrency, setStoredCurrency } from "utils/storage";
-import { Currency, currencyName } from "utils/constants";
-import useGoBack from "hooks/go-back";
-import messageKeys from "utils/message-keys";
-import routeKeys from "utils/route-keys";
+import { getStoredCurrency, setStoredCurrency } from "../../../../utils/storage";
+import { Currency, currencyName } from "../../../../utils/constants";
+import useGoBack from "../../../../hooks/go-back";
+import messageKeys from "../../../../utils/message-keys";
+import routeKeys from "../../../../utils/route-keys";
 
-import { ArrowLeft } from "icons";
+import { ArrowLeft } from "../../../../icons";
 
 interface InitialState {
   currency: Currency;

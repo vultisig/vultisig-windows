@@ -13,18 +13,18 @@ import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 import {
   EthereumSpecificSchema,
   EthereumSpecific,
-} from "protos/blockchain_specific_pb";
-import { CoinSchema } from "protos/coin_pb";
+} from "../../../protos/blockchain_specific_pb";
+import { CoinSchema } from "../../../protos/coin_pb";
 import {
   KeysignPayloadSchema,
   KeysignPayload,
-} from "protos/keysign_message_pb";
+} from "../../../protos/keysign_message_pb";
 
-import { ChainKey, Currency, rpcUrl } from "utils/constants";
-import { bigintToByteArray, checkERC20Function } from "utils/functions";
-import { ITransaction, SignedTransaction, VaultProps } from "utils/interfaces";
-import BaseTransactionProvider from "utils/transaction-provider/base";
-import api from "utils/api";
+import { ChainKey, Currency, rpcUrl } from "../../constants";
+import { bigintToByteArray, checkERC20Function } from "../../functions";
+import { ITransaction, SignedTransaction, VaultProps } from "../../interfaces";
+import BaseTransactionProvider from "../../transaction-provider/base";
+import api from "../../api";
 
 interface ChainRef {
   [chainKey: string]: CoinType;
@@ -44,10 +44,6 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
     walletCore: WalletCore
   ) {
     super(chainKey, chainRef, dataEncoder, walletCore);
-    this.chainKey = chainKey;
-    this.chainRef = chainRef;
-    this.dataEncoder = dataEncoder;
-    this.walletCore = walletCore;
 
     this.provider = new JsonRpcProvider(rpcUrl[this.chainKey]);
   }

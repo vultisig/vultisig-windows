@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { getStoredVaults, setStoredVaults } from "utils/storage";
-import type { VaultProps } from "utils/interfaces";
-import useGoBack from "hooks/go-back";
-import messageKeys from "utils/message-keys";
-import routeKeys from "utils/route-keys";
+import { getStoredVaults, setStoredVaults } from "../../../../utils/storage";
+import type { VaultProps } from "../../../../utils/interfaces";
+import useGoBack from "../../../../hooks/go-back";
+import messageKeys from "../../../../utils/message-keys";
+import routeKeys from "../../../../utils/route-keys";
 
-import { ArrowLeft, ArrowRight } from "icons";
+import { ArrowLeft, ArrowRight } from "../../../../icons";
 import { Button } from "antd";
 
 interface InitialState {
@@ -26,7 +26,7 @@ const Component = () => {
 
   const handleSelect = (uid: string) => {
     setStoredVaults(
-      vaults.map((vault) => ({ ...vault, active: vault.uid === uid }))
+      vaults.map((vault) => ({ ...vault, active: vault.uid === uid })),
     ).then(() => {
       goBack(routeKeys.main);
     });

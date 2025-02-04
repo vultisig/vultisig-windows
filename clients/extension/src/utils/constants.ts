@@ -5,7 +5,7 @@ import type {
   ChainStrRef,
   CurrencyRef,
   LanguageRef,
-} from "utils/interfaces";
+} from "./interfaces";
 
 export enum CosmosMsgType {
   MSG_SEND = "cosmos-sdk/MsgSend",

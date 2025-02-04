@@ -1,4 +1,4 @@
-import { Currency, currencySymbol } from "utils/constants";
+import { Currency, currencySymbol } from "./constants";
 
 declare global {
   interface Number {

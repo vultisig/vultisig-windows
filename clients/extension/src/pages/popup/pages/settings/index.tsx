@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getStoredCurrency, getStoredLanguage } from "utils/storage";
-import { Currency, Language, languageName } from "utils/constants";
-import useGoBack from "hooks/go-back";
-import messageKeys from "utils/message-keys";
-import routeKeys from "utils/route-keys";
+import {
+  getStoredCurrency,
+  getStoredLanguage,
+} from "../../../../utils/storage";
+import { Currency, Language, languageName } from "../../../../utils/constants";
+import useGoBack from "../../../../hooks/go-back";
+import messageKeys from "../../../../utils/message-keys";
+import routeKeys from "../../../../utils/route-keys";
 
 import {
   ArrowLeft,
@@ -15,7 +18,7 @@ import {
   SettingsOne,
   Translate,
   Vultisig,
-} from "icons";
+} from "../../../../icons";
 
 import packageJson from "../../../../../package.json";
 

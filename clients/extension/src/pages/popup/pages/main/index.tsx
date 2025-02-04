@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button, Empty, message, Modal, Select, Switch, Tooltip } from "antd";
 
-import { chains } from "utils/constants";
-import { VaultProps } from "utils/interfaces";
+import { chains } from "../../../../utils/constants";
+import { VaultProps } from "../../../../utils/interfaces";
 import {
   getIsPriority,
   getStoredChains,
@@ -12,9 +12,9 @@ import {
   setIsPriority,
   setStoredChains,
   setStoredVaults,
-} from "utils/storage";
-import messageKeys from "utils/message-keys";
-import routeKeys from "utils/route-keys";
+} from "../../../../utils/storage";
+import messageKeys from "../../../../utils/message-keys";
+import routeKeys from "../../../../utils/route-keys";
 
 import {
   ArrowRight,
@@ -22,8 +22,8 @@ import {
   CircleInfo,
   SettingsTwo,
   Vultisig,
-} from "icons";
-import { findChainByProp } from "utils/functions";
+} from "../../../../icons";
+import { findChainByProp } from "../../../../utils/functions";
 
 interface SelectOption {
   value: string;
