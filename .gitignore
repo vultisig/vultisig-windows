@@ -82,8 +82,8 @@ frontend/vite.config.ts.timestamp-*
 set_env_vars.sh
 credentials.json
 
+.pnp.*
 .yarn/*
-!.yarn/cache
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
