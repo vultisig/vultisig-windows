@@ -60,7 +60,7 @@ export default {
   [messageKeys.RETRY_ERROR]: "An error happened! Please retry",
   // S
   [messageKeys.SAVE]: "Save",
-  [messageKeys.SCAN_QR_WITH_DEVICE]: "Scan QR code with pair device",
+  [messageKeys.SCAN_QR_WITH_DEVICE]: "Scan QR code with two devices",
   [messageKeys.SCAN_FIRST]:
     "Please first scan the QR code with your device and Join Keysign",
   [messageKeys.SETTINGS]: "Settings",
