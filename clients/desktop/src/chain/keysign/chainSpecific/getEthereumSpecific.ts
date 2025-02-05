@@ -14,6 +14,7 @@ import {
   getEvmPublicClient,
 } from '../../evm/chainInfo';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
+import { getEvmMaxPriorityFee } from '../../evm/fee/getEvmMaxPriorityFee';
 import { getEvmBaseFee } from '../../evm/utils/getEvmBaseFee';
 import { getEvmGasLimit } from '../../evm/utils/getEvmGasLimit';
 import { defaultFeePriority } from '../../fee/FeePriority';
@@ -67,7 +68,7 @@ export const getEthereumSpecific = async ({
 
   const baseFee = await getEvmBaseFee(chain);
 
-  const priorityFeeMapValue = await rpcService.fetchMaxPriorityFeesPerGas();
+  const priorityFeeMapValue = await getEvmMaxPriorityFee(chain);
 
   const feePriority = feeSettings?.priority ?? defaultFeePriority;
   const priorityFee = priorityFeeMapValue[feePriority];
