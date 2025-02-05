@@ -1,26 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
-import { Chain } from '../../model/chain';
-import { AccountCoinKey } from '../AccountCoin';
+import { CoinBalanceResolverInput } from '../balance/CoinBalanceResolver';
 import { getCoinBalance } from '../balance/getCoinBalance';
-import { CoinAmount } from '../Coin';
-import { getCoinMetaKey } from '../utils/coinMeta';
 
-export const getBalanceQueryKey = (key: AccountCoinKey) => ['coinBalance', key];
+export const getBalanceQueryKey = (input: CoinBalanceResolverInput) => [
+  'coinBalance',
+  input,
+];
 
-export const useBalanceQuery = (coin: Coin) => {
-  const chain = coin.chain as Chain;
-  const key = getCoinMetaKey({
-    ...coin,
-    chain,
-  });
-
+export const useBalanceQuery = (input: CoinBalanceResolverInput) => {
   return useQuery({
-    queryKey: getBalanceQueryKey({
-      ...key,
-      address: coin.address,
-    }),
-    queryFn: async (): Promise<CoinAmount> => getCoinBalance(coin),
+    queryKey: getBalanceQueryKey(input),
+    queryFn: () => getCoinBalance(input),
   });
 };
