@@ -3,11 +3,11 @@ import { cosmosFeeCoinDenom } from '../../chain/cosmos/cosmosFeeCoinDenom';
 import { getCosmosBalanceUrl } from '../../chain/cosmos/cosmosRpcUrl';
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
 import { CosmosChain } from '../../model/chain';
-import { GetCoinBalanceInput } from './GetCoinBalanceInput';
+import { CoinBalanceResolver } from './CoinBalanceResolver';
 
-export const getCosmosCoinBalance = async (
-  input: GetCoinBalanceInput<CosmosChain>
-) => {
+export const getCosmosCoinBalance: CoinBalanceResolver<
+  CosmosChain
+> = async input => {
   const url = getCosmosBalanceUrl(input);
 
   const { balances }: CosmosBalanceResponse = await Fetch(url);

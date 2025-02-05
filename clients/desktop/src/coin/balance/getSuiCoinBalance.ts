@@ -1,12 +1,12 @@
 import { callRpc } from '../../chain/rpc/callRpc';
 import { Endpoint } from '../../services/Endpoint';
-import { GetCoinBalanceInput } from './GetCoinBalanceInput';
+import { CoinBalanceResolver } from './CoinBalanceResolver';
 
 interface SuiBalanceResponse {
   totalBalance: string;
 }
 
-export const getSuiCoinBalance = async (input: GetCoinBalanceInput) => {
+export const getSuiCoinBalance: CoinBalanceResolver = async input => {
   const { totalBalance } = await callRpc<SuiBalanceResponse>({
     url: Endpoint.suiServiceRpc,
     method: 'suix_getBalance',

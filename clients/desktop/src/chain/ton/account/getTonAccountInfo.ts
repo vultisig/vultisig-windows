@@ -2,10 +2,30 @@ import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
 import { Endpoint } from '../../../services/Endpoint';
 
 interface TonAccountInfoResponse {
+  ok: boolean;
   result: {
+    address: {
+      account_address: string;
+    };
+    balance: string;
+    last_transaction_id: {
+      lt: string;
+      hash: string;
+    };
+    block_id: {
+      workchain: number;
+      shard: string;
+      seqno: number;
+      root_hash: string;
+      file_hash: string;
+    };
+    sync_utime: number;
     account_state: {
+      wallet_id: string;
       seqno: number;
     };
+    revision: number;
+    '@extra': string;
   };
 }
 

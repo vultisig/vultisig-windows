@@ -1,5 +1,6 @@
-import { callRpc } from '../../../chain/rpc/callRpc';
 import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
+
+import { callRpc } from '../../../chain/rpc/callRpc';
 import { Endpoint } from '../../Endpoint';
 import { IRpcService } from '../IRpcService';
 
