@@ -82,7 +82,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
         </HStack>
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted
-          steps={6}
+          steps={animations.length}
           stepWidth={`100px`}
           value={animations.indexOf(currentAnimation) + 1}
           variant="bars"
