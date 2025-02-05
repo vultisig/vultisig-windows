@@ -70,8 +70,7 @@ frontend/.parcel-cache/
 # TypeScript cache
 *.tsbuildinfo
 
-# yarn install state
-.yarn/install-state.gz
+
 
 # Ignore compiled Go files
 *.o
