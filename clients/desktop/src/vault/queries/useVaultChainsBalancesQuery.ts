@@ -4,14 +4,11 @@ import { recordMap } from '@lib/utils/record/recordMap';
 import { toEntries } from '@lib/utils/record/toEntries';
 import { useMemo } from 'react';
 
-import { areEqualCoins, coinKeyToString } from '../../coin/Coin';
+import { coinKeyToString } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
-import {
-  getStorageCoinKey,
-  storageCoinToCoin,
-} from '../../coin/utils/storageCoin';
+import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import { EagerQuery } from '../../lib/ui/query/Query';
 import { Chain } from '../../model/chain';
 import {
@@ -38,7 +35,7 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
     })),
   });
 
-  const balancesQuery = useBalancesQuery(coins.map(storageCoinToCoin));
+  const balancesQuery = useBalancesQuery(coins.map(getStorageCoinKey));
 
   return useMemo(() => {
     const isPending = pricesQuery.isPending || balancesQuery.isPending;
@@ -47,10 +44,16 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
       return coins.map(coin => {
         const coinKey = getStorageCoinKey(coin);
 
-        const balance = (balancesQuery.data ?? []).find(balance =>
-          areEqualCoins(balance, coinKey)
-        );
-        const amount = balance?.amount || BigInt(0);
+        const getAmount = () => {
+          if (balancesQuery.data) {
+            const key = coinKeyToString(coinKey);
+            if (key) {
+              return balancesQuery.data[key];
+            }
+          }
+
+          return BigInt(0);
+        };
 
         const price = pricesQuery.data
           ? pricesQuery.data[coinKeyToString(coinKey)]
@@ -61,7 +64,7 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
           ticker: coin.ticker,
           decimals: coin.decimals,
           logo: coin.logo,
-          amount,
+          amount: getAmount(),
           price,
         };
       });
