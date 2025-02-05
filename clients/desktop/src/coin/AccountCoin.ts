@@ -1,8 +1,10 @@
-import { ChainAccount } from '../chain/ChainAccount';
 import { haveEqualFields } from '@lib/utils/record/haveEqualFields';
+
+import { ChainAccount } from '../chain/ChainAccount';
+import { Chain } from '../model/chain';
 import { CoinKey } from './Coin';
 
-export type AccountCoinKey = CoinKey & ChainAccount;
+export type AccountCoinKey<T extends Chain = Chain> = CoinKey & ChainAccount<T>;
 
 export const areEqualAccountCoins = (
   one: AccountCoinKey,

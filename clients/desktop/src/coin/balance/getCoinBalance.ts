@@ -1,17 +1,26 @@
-import { assertChainField } from '../../chain/utils/assertChainField';
-import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
-import { RpcServiceFactory } from '../../services/Rpc/RpcServiceFactory';
-import { CoinAmount } from '../Coin';
+import { ChainKind, getChainKind } from '../../model/chain';
+import { GetCoinBalanceInput } from './GetCoinBalanceInput';
+import { getCosmosCoinBalance } from './getCosmosCoinBalance';
+import { getEvmCoinBalance } from './getEvmCoinBalance';
+import { getSuiCoinBalance } from './getSuiCoinBalance';
+import { getUtxoCoinBalance } from './getUtxoCoinBalance';
 
-export const getCoinBalance = async (coin: Coin): Promise<CoinAmount> => {
-  const { chain } = assertChainField(coin);
+const handlers: Record<
+  ChainKind,
+  (input: GetCoinBalanceInput<any>) => Promise<bigint>
+> = {
+  utxo: getUtxoCoinBalance,
+  cosmos: getCosmosCoinBalance,
+  sui: getSuiCoinBalance,
+  evm: getEvmCoinBalance,
+};
 
-  const rpcService = RpcServiceFactory.createRpcService(chain);
+export const getCoinBalance = async (
+  input: GetCoinBalanceInput
+): Promise<bigint> => {
+  const chainKind = getChainKind(input.chain);
 
-  const balance = await rpcService.getBalance(coin);
+  const handler = handlers[chainKind];
 
-  return {
-    amount: BigInt(balance),
-    decimals: coin.decimals,
-  };
+  return handler(input);
 };
