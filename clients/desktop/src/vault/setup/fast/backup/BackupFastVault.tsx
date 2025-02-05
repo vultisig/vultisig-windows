@@ -1,6 +1,9 @@
+import { FC } from 'react';
+
 import { Match } from '../../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
-import { BackupOverviewSlides } from './BackupOverviewSlidesPart1';
+import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne';
+import { EmailConfirmationSlides } from './EmailConfirmationSlides';
 
 const steps = [
   'vaultOverview',
@@ -9,7 +12,11 @@ const steps = [
   'backupGuide',
 ] as const;
 
-export const BackupFastVault = () => {
+type BackupFastVaultProps = {
+  vaultId: string;
+};
+
+export const BackupFastVault: FC<BackupFastVaultProps> = ({ vaultId }) => {
   const { step, toNextStep } = useStepNavigation({
     steps,
   });
@@ -17,8 +24,12 @@ export const BackupFastVault = () => {
   return (
     <Match
       value={step}
-      vaultOverview={() => <BackupOverviewSlides onCompleted={toNextStep} />}
-      enterEmailCode={() => <></>}
+      vaultOverview={() => (
+        <BackupOverviewSlidesPartOne onCompleted={toNextStep} />
+      )}
+      enterEmailCode={() => (
+        <EmailConfirmationSlides onCompleted={toNextStep} vaultId={vaultId} />
+      )}
       backupConfirmation={() => <></>}
       backupGuide={() => <></>}
     />

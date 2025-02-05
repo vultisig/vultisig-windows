@@ -79,7 +79,7 @@ export const SetServerPasswordStep = ({
             <VStack gap={4}>
               <PasswordInput
                 {...register('password')}
-                validationState={
+                validation={
                   isValid ? 'valid' : errors.password ? 'invalid' : undefined
                 }
                 placeholder={t('enter_password')}
@@ -95,7 +95,7 @@ export const SetServerPasswordStep = ({
             <VStack gap={4}>
               <PasswordInput
                 {...register('confirmPassword')}
-                validationState={
+                validation={
                   isValid
                     ? 'valid'
                     : errors.confirmPassword

@@ -71,7 +71,7 @@ export const ServerPasswordHintStep = ({
               render={() => (
                 <TextInput
                   {...register('passwordHint')}
-                  validationState={
+                  validation={
                     isValid
                       ? 'valid'
                       : errors.passwordHint

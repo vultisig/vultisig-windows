@@ -13,7 +13,7 @@ export type SharedTextInputProps = Partial<LabelProp> &
   ComponentProps<typeof TextInputContainer> & {
     onValueChange?: (value: string) => void;
     isLoading?: boolean;
-    validationState?: 'valid' | 'invalid';
+    validation?: 'valid' | 'invalid';
   };
 
 export interface TextInputProps
@@ -65,12 +65,12 @@ const InputWr = styled.div`
 `;
 
 export const TextInputContainer = styled.input<{
-  validationState?: 'valid' | 'invalid';
+  validation?: 'valid' | 'invalid';
 }>`
   ${textInput};
 
-  ${({ validationState }) =>
-    validationState === 'valid'
+  ${({ validation }) =>
+    validation === 'valid'
       ? css`
           border-color: ${getColor('primary')};
 
@@ -79,7 +79,7 @@ export const TextInputContainer = styled.input<{
             border-color: ${getColor('primary')};
           }
         `
-      : validationState === 'invalid' &&
+      : validation === 'invalid' &&
         css`
           border-color: ${getColor('danger')};
 
