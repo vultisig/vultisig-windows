@@ -77,7 +77,7 @@ export const DepositConfirmButton = ({
       );
     }
 
-    if (!isOneOf(action, ['vote', 'withdrawPool'])) {
+    if (!isOneOf(action, ['vote'])) {
       keysignPayload.toAmount = toChainAmount(
         shouldBePresent(amount),
         coin.decimals

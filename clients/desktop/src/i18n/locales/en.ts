@@ -572,8 +572,6 @@ export const en = {
   bond: 'Bond',
   unbond: 'Unbond',
   leave: 'Leave',
-  addPool: 'Add Pool',
-  withdrawPool: 'Withdraw Pool',
   custom: 'Custom Action',
   vote: 'Vote',
   stake: 'Stake',
@@ -661,23 +659,6 @@ export const en = {
       validations: {
         amount: 'Amount must be positive',
         customMemo: 'Custom Memo is required',
-      },
-    },
-    addPool: {
-      labels: {
-        amount: 'Amount',
-      },
-      validations: {
-        amount: 'Amount must be positive',
-      },
-    },
-    withdrawPool: {
-      labels: {
-        affiliateFee: "Affiliate's Fee",
-        percentage: 'Percentage',
-      },
-      validations: {
-        percentage: 'Percentage is required and must be between 0 and 100',
       },
     },
     vote: {

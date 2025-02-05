@@ -617,16 +617,6 @@ export const hr = {
         customMemo: 'Prilagođena bilješka je obavezna',
       },
     },
-    addPool: {
-      labels: { amount: 'Iznos' },
-      validations: { amount: 'Iznos mora biti pozitivan' },
-    },
-    withdrawPool: {
-      labels: { affiliateFee: 'Naknada za Partnera', percentage: 'Postotak' },
-      validations: {
-        percentage: 'Postotak je obavezan i mora biti između 0 i 100',
-      },
-    },
     vote: {
       labels: { proposalId: 'ID Prijedloga', support: 'Podrška' },
       validations: {
@@ -654,8 +644,6 @@ export const hr = {
   bond: 'Veza',
   unbond: 'Odvezati se',
   leave: 'Otiđi',
-  addPool: 'Dodaj bazen',
-  withdrawPool: 'Skup povlačenja',
   custom: 'Prilagođena radnja',
   vote: 'Glasanje',
   stake: 'Ulog',

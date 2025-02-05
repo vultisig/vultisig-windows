@@ -353,56 +353,6 @@ export const requiredFieldsPerChainAction = {
           .min(1, 'chainFunctions.custom.validations.customMemo'),
       }),
   },
-  addPool: {
-    fields: [
-      {
-        name: 'amount',
-        type: 'number',
-        label: 'chainFunctions.addPool.labels.amount',
-        required: true,
-      },
-    ],
-    schema: (chain: Chain, walletCore: any, totalAmountAvailable: number) =>
-      z.object({
-        amount: z
-          .string()
-          .transform(val => Number(val))
-          .pipe(
-            z
-              .number()
-              .positive()
-              .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
-              .min(0.01, 'chainFunctions.addPool.validations.amount')
-              .refine(val => val > 0, {
-                message: 'chainFunctions.addPool.validations.amount',
-              })
-          ),
-      }),
-  },
-  withdrawPool: {
-    fields: [
-      {
-        name: 'percentage',
-        type: 'number',
-        label: 'chainFunctions.withdrawPool.labels.percentage',
-        required: true,
-      },
-    ],
-    schema: z.object({
-      percentage: z
-        .string()
-        .transform(val => Number(val))
-        .pipe(
-          z
-            .number()
-            .min(0)
-            .max(100)
-            .refine(val => val >= 0 && val <= 100, {
-              message: 'chainFunctions.withdrawPool.validations.percentage',
-            })
-        ),
-    }),
-  },
   vote: {
     fields: [
       {

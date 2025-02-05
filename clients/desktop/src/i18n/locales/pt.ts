@@ -631,16 +631,6 @@ export const pt = {
         customMemo: 'Memo personalizado é obrigatório',
       },
     },
-    addPool: {
-      labels: { amount: 'Quantidade' },
-      validations: { amount: 'Quantidade deve ser positiva' },
-    },
-    withdrawPool: {
-      labels: { affiliateFee: 'Taxa de Afiliado', percentage: 'Porcentagem' },
-      validations: {
-        percentage: 'Porcentagem é obrigatória e deve estar entre 0 e 100',
-      },
-    },
     vote: {
       labels: { proposalId: 'ID da proposta', support: 'Suporte' },
       validates: {
@@ -668,8 +658,6 @@ export const pt = {
   bond: 'Ligação',
   unbond: 'Desvincular',
   leave: 'Deixar',
-  addPool: 'Adicionar Pool',
-  withdrawPool: 'Retirar Pool',
   custom: 'Ação personalizada',
   vote: 'Voto',
   stake: 'Estaca',
