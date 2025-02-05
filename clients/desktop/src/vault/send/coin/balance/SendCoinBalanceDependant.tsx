@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
-import { CoinAmount } from '../../../../coin/Coin';
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery';
-import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
+import { getStorageCoinKey } from '../../../../coin/utils/storageCoin';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import {
   MatchQuery,
@@ -12,12 +11,12 @@ import { useCurrentVaultCoin } from '../../../state/currentVault';
 import { useCurrentSendCoin } from '../../state/sendCoin';
 
 export const SendCoinBalanceDependant: React.FC<
-  MatchQueryWrapperProps<CoinAmount>
+  MatchQueryWrapperProps<bigint>
 > = props => {
   const [coinKey] = useCurrentSendCoin();
   const coin = useCurrentVaultCoin(coinKey);
 
-  const query = useBalanceQuery(storageCoinToCoin(coin));
+  const query = useBalanceQuery(getStorageCoinKey(coin));
 
   const { t } = useTranslation();
 

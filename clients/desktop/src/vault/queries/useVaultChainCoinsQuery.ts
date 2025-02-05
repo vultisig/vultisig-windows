@@ -5,18 +5,10 @@ import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
 import { useMemo } from 'react';
 
 import { EntityWithPrice } from '../../chain/EntityWithPrice';
-import {
-  areEqualCoins,
-  CoinAmount,
-  CoinKey,
-  coinKeyToString,
-} from '../../coin/Coin';
+import { CoinAmount, CoinKey, coinKeyToString } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
-import {
-  getStorageCoinKey,
-  storageCoinToCoin,
-} from '../../coin/utils/storageCoin';
+import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import {
   getResolvedQuery,
   pendingQuery,
@@ -41,7 +33,7 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
     })),
   });
 
-  const balancesQuery = useBalancesQuery(coins.map(storageCoinToCoin));
+  const balancesQuery = useBalancesQuery(coins.map(getStorageCoinKey));
 
   return useMemo((): Query<VaultChainCoin[]> => {
     if (pricesQuery.isPending || balancesQuery.isPending) {
@@ -53,10 +45,9 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
         coins.map(coin => {
           const coinKey = getStorageCoinKey(coin);
 
-          const balance = shouldBePresent(balancesQuery.data).find(balance =>
-            areEqualCoins(balance, coinKey)
-          );
-          const amount = balance?.amount || BigInt(0);
+          const amount =
+            shouldBePresent(balancesQuery.data)[coinKeyToString(coinKey)] ||
+            BigInt(0);
 
           const price = shouldBePresent(pricesQuery.data)[
             coinKeyToString(coinKey)

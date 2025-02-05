@@ -1,12 +1,10 @@
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useCallback } from 'react';
 
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
-import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
-import { useTransform } from '../../../lib/ui/hooks/useTransform';
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery';
 import { useSendAmount } from '../state/amount';
@@ -15,11 +13,14 @@ import { capSendAmountToMax } from '../utils/capSendAmountToMax';
 
 export const useSendCappedAmountQuery = () => {
   const [coinKey] = useCurrentSendCoin();
-  const coin = useTransform(useCurrentVaultCoin(coinKey), storageCoinToCoin);
+  const { decimals, address } = useCurrentVaultCoin(coinKey);
   const [amount] = useSendAmount();
 
   const chainSpecificQuery = useSendChainSpecificQuery();
-  const balanceQuery = useBalanceQuery(coin);
+  const balanceQuery = useBalanceQuery({
+    ...coinKey,
+    address,
+  });
 
   return useTransformQueriesData(
     {
@@ -28,8 +29,6 @@ export const useSendCappedAmountQuery = () => {
     },
     useCallback(
       ({ chainSpecific, balance }) => {
-        const { decimals } = coin;
-
         const chainAmount = toChainAmount(shouldBePresent(amount), decimals);
 
         const feeAmount = getFeeAmount(chainSpecific);
@@ -38,13 +37,13 @@ export const useSendCappedAmountQuery = () => {
           decimals,
           amount: capSendAmountToMax({
             amount: chainAmount,
-            coin,
+            coin: coinKey,
             fee: feeAmount,
             balance: balance.amount,
           }),
         };
       },
-      [coin, amount]
+      [amount, coinKey, decimals]
     )
   );
 };
