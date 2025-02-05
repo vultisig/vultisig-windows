@@ -95,7 +95,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
           background: ${getColor('buttonBackgroundDisabled')};
           color: ${getColor('mistExtra')};
 
-          &:hover 
+          &:hover {
             background: ${getColor('buttonBackgroundDisabled')};
           }
         }
