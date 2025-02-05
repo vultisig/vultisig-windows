@@ -8,7 +8,6 @@ import { ethers } from 'ethers';
 import { publicActionsL2 } from 'viem/zksync';
 
 import { Chain, EvmChain } from '../../../model/chain';
-import { RpcServiceEvm } from '../../../services/Rpc/evm/RpcServiceEvm';
 import {
   evmChainInfo,
   getEvmChainRpcUrl,
@@ -67,8 +66,6 @@ export const getEthereumSpecific = async ({
     });
 
   const baseFee = await getEvmBaseFee(chain);
-
-  const rpcService = new RpcServiceEvm(chain);
 
   const priorityFeeMapValue = await rpcService.fetchMaxPriorityFeesPerGas();
 

@@ -1,5 +1,5 @@
 import { cosmosRpcUrl } from '../chain/cosmos/cosmosRpcUrl';
-import { Chain, CosmosChain } from '../model/chain';
+import { Chain } from '../model/chain';
 
 export class Endpoint {
   static VULTISIG_RELAY: string = 'https://api.vultisig.com/router';
@@ -142,19 +142,5 @@ export class Endpoint {
 
   static fetchLitecoinTransactions(userAddress: string): string {
     return `https://litecoinspace.org/api/address/${userAddress}/txs`;
-  }
-
-  static fetchTerraClassicWasmTokenBalance(
-    contractAddress: string,
-    base64Payload: string
-  ): string {
-    return `${cosmosRpcUrl[CosmosChain.TerraClassic]}/cosmwasm/wasm/v1/contract/${contractAddress}/smart/${base64Payload}`;
-  }
-
-  static fetchTerraV2WasmTokenBalance(
-    contractAddress: string,
-    base64Payload: string
-  ): string {
-    return `${cosmosRpcUrl[CosmosChain.Terra]}/cosmwasm/wasm/v1/contract/${contractAddress}/smart/${base64Payload}`;
   }
 }
