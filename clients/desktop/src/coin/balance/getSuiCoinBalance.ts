@@ -1,16 +1,11 @@
-import { callRpc } from '../../chain/rpc/callRpc';
-import { Endpoint } from '../../services/Endpoint';
+import { getSuiRpcClient } from '../../chain/sui/rpc/getSuiRpcClient';
 import { CoinBalanceResolver } from './CoinBalanceResolver';
 
-interface SuiBalanceResponse {
-  totalBalance: string;
-}
-
 export const getSuiCoinBalance: CoinBalanceResolver = async input => {
-  const { totalBalance } = await callRpc<SuiBalanceResponse>({
-    url: Endpoint.suiServiceRpc,
-    method: 'suix_getBalance',
-    params: [input.address],
+  const rpcClient = getSuiRpcClient();
+
+  const { totalBalance } = await rpcClient.getBalance({
+    owner: input.address,
   });
 
   return BigInt(totalBalance);

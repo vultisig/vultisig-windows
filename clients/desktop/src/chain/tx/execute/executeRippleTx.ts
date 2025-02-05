@@ -2,18 +2,9 @@ import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined';
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { TW } from '@trustwallet/wallet-core';
 
-import { Endpoint } from '../../../services/Endpoint';
-import { callRpc } from '../../rpc/callRpc';
+import { getRippleRpcClient } from '../../ripple/rpc/getRippleRpcClient';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';
 import { ExecuteTxInput } from './ExecuteTxInput';
-
-interface RippleSubmitResponse {
-  engine_result?: string;
-  engine_result_message?: string;
-  tx_json?: {
-    hash?: string;
-  };
-}
 
 export const executeRippleTx = async ({
   walletCore,
@@ -26,16 +17,14 @@ export const executeRippleTx = async ({
 
   const rawTx = stripHexPrefix(walletCore.HexCoding.encode(encoded));
 
-  const { engine_result, engine_result_message, tx_json } =
-    await callRpc<RippleSubmitResponse>({
-      url: Endpoint.rippleServiceRpc,
-      method: 'submit',
-      params: [
-        {
-          tx_blob: rawTx,
-        },
-      ],
-    });
+  const rpcClient = await getRippleRpcClient();
+
+  const { result } = await rpcClient.request({
+    command: 'submit',
+    tx_blob: rawTx,
+  });
+
+  const { engine_result, engine_result_message, tx_json } = result;
 
   if (engine_result && engine_result !== 'tesSUCCESS') {
     if (engine_result_message) {

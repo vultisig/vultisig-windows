@@ -1,8 +1,7 @@
+import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { TW } from '@trustwallet/wallet-core';
 
-import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
-import { Endpoint } from '../../../services/Endpoint';
-import { callRpc } from '../../rpc/callRpc';
+import { getPolkadotApiClient } from '../../polkadot/api/getPolkadotApiClient';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executePolkadotTx = async ({
@@ -16,9 +15,9 @@ export const executePolkadotTx = async ({
 
   const rawTx = walletCore.HexCoding.encode(encoded);
 
-  return callRpc({
-    url: Endpoint.polkadotServiceRpc,
-    method: 'author_submitExtrinsic',
-    params: [rawTx],
-  });
+  const rpcClient = await getPolkadotApiClient();
+
+  const { hash } = await rpcClient.rpc.author.submitExtrinsic(rawTx);
+
+  return hash.toHex();
 };
