@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { useStepNavigation } from '../../../../../../lib/ui/hooks/useStepNavigation';
 
 const STATE_MACHINE_NAME = 'State Machine 1';
-const INPUT_NAME = 'Next';
+const INPUT_NAME = 'Index';
 
 export const BACKUP_VAULT_ANIMATIONS = [1, 2, 3] as const;
 
@@ -27,8 +27,8 @@ export const useBackupOverviewStepsAnimations = () => {
   );
 
   const handleNextAnimation = useCallback(() => {
-    if (stateMachineInput) {
-      stateMachineInput.fire();
+    if (stateMachineInput && typeof stateMachineInput.value === 'number') {
+      stateMachineInput.value += 1;
       toNextAnimation();
     }
   }, [stateMachineInput, toNextAnimation]);
