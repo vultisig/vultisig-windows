@@ -69,7 +69,7 @@ describe('getBlockExplorerUrl', () => {
       entity: 'address',
       value: address,
     });
-    expect(url).toBe(`https://explorer.solana.com/address/${address}`);
+    expect(url).toBe(`https://solscan.io/address/${address}`);
   });
 
   it('should generate the correct transaction URL for Solana', () => {
@@ -78,6 +78,6 @@ describe('getBlockExplorerUrl', () => {
       entity: 'tx',
       value: tx,
     });
-    expect(url).toBe(`https://explorer.solana.com/tx/${tx}`);
+    expect(url).toBe(`https://solscan.io/tx/${tx}`);
   });
 });
