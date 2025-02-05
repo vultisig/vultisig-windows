@@ -1,3 +1,6 @@
+import { isEmpty } from '@lib/utils/array/isEmpty';
+import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder';
+import { getNewOrder } from '@lib/utils/order/getNewOrder';
 import { useEffect, useState } from 'react';
 
 import { storage } from '../../../../wailsjs/go/models';
@@ -6,9 +9,6 @@ import {
   DnDItemContainer,
   DnDItemHighlight,
 } from '../../../lib/ui/list/item/DnDItemContainer';
-import { isEmpty } from '@lib/utils/array/isEmpty';
-import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder';
-import { getNewOrder } from '@lib/utils/order/getNewOrder';
 import { useUpdateVaultFolderOrderMutation } from '../../folder/mutations/useUpdateVaultFolderOrderMutation';
 import { FolderListItem } from '../components/FolderListItem';
 import { VaultFoldersContainer } from '../components/VaultFoldersContainer';

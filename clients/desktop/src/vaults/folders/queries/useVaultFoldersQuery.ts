@@ -10,11 +10,7 @@ export const vaultFoldersQueryKey = ['vaultFolders'];
 export const vaultFoldersQueryFn = async () => {
   const result = await GetVaultFolders();
 
-  if (result === null) {
-    return [];
-  }
-
-  return sortEntitiesWithOrder(result);
+  return sortEntitiesWithOrder(result ?? []);
 };
 
 export const useVaultFoldersQuery = () => {
@@ -26,9 +22,7 @@ export const useVaultFoldersQuery = () => {
 
 export const useVaultFolders = () => {
   const { data } = useVaultFoldersQuery();
-  if (!data || data.length === 0) {
-    return [];
-  }
+
   return shouldBePresent(data);
 };
 
