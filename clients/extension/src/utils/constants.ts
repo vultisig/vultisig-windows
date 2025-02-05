@@ -265,7 +265,7 @@ export const explorerUrl: ChainStrRef = {
   [ChainKey.OSMOSIS]: "https://www.mintscan.io/osmosis",
   [ChainKey.POLKADOT]: "https://polkadot.subscan.io/account",
   [ChainKey.POLYGON]: "https://polygonscan.com",
-  [ChainKey.SOLANA]: "https://explorer.solana.com",
+  [ChainKey.SOLANA]: "https://solscan.io",
   [ChainKey.SUI]: "",
   [ChainKey.TERRA]: "",
   [ChainKey.TERRACLASSIC]: "",
