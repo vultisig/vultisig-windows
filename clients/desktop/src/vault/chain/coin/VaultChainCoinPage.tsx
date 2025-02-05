@@ -39,7 +39,10 @@ export const VaultChainCoinPage = () => {
     );
   }, [coins, coinKey]);
 
-  const balanceQuery = useBalanceQuery(coin);
+  const balanceQuery = useBalanceQuery({
+    ...getCoinKey(coin),
+    address: coin.address,
+  });
   const { refetch, isFetching } = balanceQuery;
 
   const priceQuery = useCoinPriceQuery({
@@ -72,13 +75,13 @@ export const VaultChainCoinPage = () => {
             value={balanceQuery}
             error={() => t('failed_to_load')}
             pending={() => t('loading')}
-            success={({ amount, decimals }) => {
+            success={amount => {
               const price = priceQuery.data;
               return (
                 <VaultChainCoinItem
                   value={{
                     amount,
-                    decimals,
+                    decimals: coin.decimals,
                     logo: coin.logo,
                     ticker: coin.ticker,
                     price,
