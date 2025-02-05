@@ -1,9 +1,10 @@
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { areEqualCoins } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
-import { useCoinPricesQuery } from '../../../coin/query/useCoinPricesQuery';
+import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { getCoinKey } from '../../../coin/utils/coin';
 import {
   getStorageCoinKey,
@@ -14,8 +15,6 @@ import { VStack } from '../../../lib/ui/layout/Stack';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { Panel } from '../../../lib/ui/panel/Panel';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { CoinMeta } from '../../../model/coin-meta';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -43,7 +42,12 @@ export const VaultChainCoinPage = () => {
   const balanceQuery = useBalanceQuery(coin);
   const { refetch, isFetching } = balanceQuery;
 
-  const pricesQuery = useCoinPricesQuery([CoinMeta.fromCoin(coin)]);
+  const priceQuery = useCoinPriceQuery({
+    coin: {
+      ...coinKey,
+      priceProviderId: coin.priceProviderId,
+    },
+  });
 
   const { t } = useTranslation();
 
@@ -69,9 +73,7 @@ export const VaultChainCoinPage = () => {
             error={() => t('failed_to_load')}
             pending={() => t('loading')}
             success={({ amount, decimals }) => {
-              const price = pricesQuery.data
-                ? pricesQuery.data[0]?.price
-                : undefined;
+              const price = priceQuery.data;
               return (
                 <VaultChainCoinItem
                   value={{

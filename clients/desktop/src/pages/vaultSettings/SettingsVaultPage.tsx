@@ -10,10 +10,11 @@ import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFi
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { Text } from '../../lib/ui/text';
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
+import { useFiatCurrency } from '../../preferences/state/fiatCurrency';
+import { useLanguage } from '../../preferences/state/language';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
-import { useVaultSettingsQuery } from '../../vault/queries/useVaultSettingsQuery';
 import {
   settingsItems,
   VULTISIG_DISCORD_LINK,
@@ -34,8 +35,9 @@ import {
 const SettingsVaultPage = () => {
   const navigate = useAppNavigate();
   const { t } = useTranslation();
-  const { data: vaultSettings } = useVaultSettingsQuery();
-  const { currency, languageUI } = vaultSettings;
+
+  const [fiatCurrency] = useFiatCurrency();
+  const [language] = useLanguage();
 
   return (
     <Container flexGrow gap={16}>
@@ -86,7 +88,11 @@ const SettingsVaultPage = () => {
                         {id === 'language' || id === 'currency' ? (
                           <HStack gap={8} alignItems="center">
                             <Text size={14} color="contrast">
-                              {id === 'language' ? languageUI : currency}
+                              {id === 'language'
+                                ? t(
+                                    `vault_settings_language_settings_title_${language}`
+                                  )
+                                : fiatCurrency}
                             </Text>
                             <ChevronRightIcon />
                           </HStack>

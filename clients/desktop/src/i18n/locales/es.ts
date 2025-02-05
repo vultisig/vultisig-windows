@@ -215,18 +215,18 @@ export const es = {
   vault_setting_edit_vault_delete_title: 'Eliminar',
   vault_setting_edit_vault_delete_subtitle:
     'Eliminar su bóveda permanentemente',
-  vault_settings_language_settings_title_english: 'Inglés',
-  vault_settings_language_settings_title_german: 'Alemán',
-  vault_settings_language_settings_title_spanish: 'Español',
-  vault_settings_language_settings_title_italian: 'Italiano',
-  vault_settings_language_settings_title_croatian: 'Croata',
-  vault_settings_language_settings_title_portugal: 'Portugués',
-  vault_settings_language_settings_subtitle_english: 'Inglés del Reino Unido',
-  vault_settings_language_settings_subtitle_german: 'Alemán',
-  vault_settings_language_settings_subtitle_spanish: 'Español',
-  vault_settings_language_settings_subtitle_italian: 'Italiano',
-  vault_settings_language_settings_subtitle_croatian: 'Croata',
-  vault_settings_language_settings_subtitle_portugal: 'Portugal',
+  vault_settings_language_settings_title_en: 'Inglés',
+  vault_settings_language_settings_title_de: 'Alemán',
+  vault_settings_language_settings_title_es: 'Español',
+  vault_settings_language_settings_title_it: 'Italiano',
+  vault_settings_language_settings_title_hr: 'Croata',
+  vault_settings_language_settings_title_pt: 'Portugués',
+  vault_settings_language_settings_subtitle_en: 'Inglés del Reino Unido',
+  vault_settings_language_settings_subtitle_de: 'Alemán',
+  vault_settings_language_settings_subtitle_es: 'Español',
+  vault_settings_language_settings_subtitle_it: 'Italiano',
+  vault_settings_language_settings_subtitle_hr: 'Croata',
+  vault_settings_language_settings_subtitle_pt: 'Portugal',
   address: 'Dirección',
   download_qr_code: 'Descargar código QR',
   vault_backup_page_password_protection:
@@ -395,6 +395,20 @@ export const es = {
   while_you_wait_vultisig_has: 'Mientras esperas, Vultisig tiene...',
   creating_vault: 'Creando Bóveda',
   fastVaultSetup: {
+    summary: {
+      title: 'Resumen Rápido',
+      pillText: 'Participaciones del Bóveda',
+      summaryItemOneTitle:
+        'Haga una copia de seguridad de cada participación del bóveda por separado',
+      summaryItemTwoTitle:
+        'Mantenga las participaciones del bóveda en diferentes ubicaciones',
+      summaryItemThreeTitle:
+        'Todas las participaciones del bóveda garantizan un acceso seguro a sus fondos',
+      summaryItemFourTitle:
+        'No almacene su participación del bóveda en el propio dispositivo, en caso de pérdida o daño',
+      agreementText: 'He leído y entiendo qué hacer',
+      ctaText: 'Cree su bóveda',
+    },
     preparingVault: 'Preparando Bóveda',
     generatingECDSAKey: 'Generando Clave ECDSA',
     createVault: {
@@ -624,19 +638,6 @@ export const es = {
         customMemo: 'El memo personalizado es obligatorio',
       },
     },
-    addPool: {
-      labels: { amount: 'Cantidad' },
-      validations: { amount: 'La cantidad debe ser positiva' },
-    },
-    withdrawPool: {
-      labels: {
-        affiliateFee: 'Comisión de Afiliado',
-        percentage: 'Porcentaje',
-      },
-      validations: {
-        percentage: 'El porcentaje es obligatorio y debe estar entre 0 y 100',
-      },
-    },
     vote: {
       labels: { proposalId: 'ID de la propuesta', support: 'Soporte' },
       validations: {
@@ -666,8 +667,6 @@ export const es = {
   bond: 'Vínculo',
   unbond: 'Desatar',
   leave: 'Dejar',
-  addPool: 'Agregar piscina',
-  withdrawPool: 'Fondo de retiro',
   custom: 'Acción personalizada',
   vote: 'Votar',
   stake: 'Apostar',

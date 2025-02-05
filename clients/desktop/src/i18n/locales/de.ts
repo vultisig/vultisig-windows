@@ -215,18 +215,18 @@ export const de = {
   vault_setting_edit_vault_delete_title: 'Löschen',
   vault_setting_edit_vault_delete_subtitle:
     'Löschen Sie Ihren Tresor dauerhaft',
-  vault_settings_language_settings_title_english: 'Englisch',
-  vault_settings_language_settings_title_german: 'Deutsch',
-  vault_settings_language_settings_title_spanish: 'Spanisch',
-  vault_settings_language_settings_title_italian: 'Italienisch',
-  vault_settings_language_settings_title_croatian: 'Kroatisch',
-  vault_settings_language_settings_title_portugal: 'Portugiesisch',
-  vault_settings_language_settings_subtitle_english: 'Englisch (UK)',
-  vault_settings_language_settings_subtitle_german: 'Deutsch',
-  vault_settings_language_settings_subtitle_spanish: 'Spanisch',
-  vault_settings_language_settings_subtitle_italian: 'Italienisch',
-  vault_settings_language_settings_subtitle_croatian: 'Kroatisch',
-  vault_settings_language_settings_subtitle_portugal: 'Portugal',
+  vault_settings_language_settings_title_en: 'Englisch',
+  vault_settings_language_settings_title_de: 'Deutsch',
+  vault_settings_language_settings_title_es: 'Spanisch',
+  vault_settings_language_settings_title_it: 'Italienisch',
+  vault_settings_language_settings_title_hr: 'Kroatisch',
+  vault_settings_language_settings_title_pt: 'Portugiesisch',
+  vault_settings_language_settings_subtitle_en: 'Englisch (UK)',
+  vault_settings_language_settings_subtitle_de: 'Deutsch',
+  vault_settings_language_settings_subtitle_es: 'Spanisch',
+  vault_settings_language_settings_subtitle_it: 'Italienisch',
+  vault_settings_language_settings_subtitle_hr: 'Kroatisch',
+  vault_settings_language_settings_subtitle_pt: 'Portugal',
   address: 'Adresse',
   download_qr_code: 'QR-Code herunterladen',
   vault_backup_page_password_protection:
@@ -398,6 +398,19 @@ export const de = {
   while_you_wait_vultisig_has: 'Während du wartest, hat Vultisig...',
   creating_vault: 'Tresor wird erstellt',
   fastVaultSetup: {
+    summary: {
+      title: 'Kurze Zusammenfassung',
+      pillText: 'Tresoranteile',
+      summaryItemOneTitle: 'Sichern Sie jeden Tresoranteil separat',
+      summaryItemTwoTitle:
+        'Bewahren Sie Tresoranteile an verschiedenen Orten auf',
+      summaryItemThreeTitle:
+        'Alle Tresoranteile gewährleisten sicheren Zugriff auf Ihre Gelder',
+      summaryItemFourTitle:
+        'Speichern Sie Ihren Tresoranteil nicht auf dem Gerät selbst, um Verlust oder Beschädigung zu vermeiden',
+      agreementText: 'Ich habe gelesen und verstanden, was zu tun ist',
+      ctaText: 'Erstellen Sie Ihren Tresor',
+    },
     preparingVault: 'Tresor wird vorbereitet',
     generatingECDSAKey: 'ECDSA-Schlüssel wird generiert',
     createVault: {
@@ -626,17 +639,6 @@ export const de = {
         customMemo: 'Benutzerdefiniertes Memo ist erforderlich',
       },
     },
-    addPool: {
-      labels: { amount: 'Betrag' },
-      validations: { amount: 'Betrag muss positiv sein' },
-    },
-    withdrawPool: {
-      labels: { affiliateFee: 'Partnergebühr', percentage: 'Prozentsatz' },
-      validations: {
-        percentage:
-          'Prozentsatz ist erforderlich und muss zwischen 0 und 100 liegen',
-      },
-    },
     vote: {
       labels: { proposalId: 'Vorschlags-ID', support: 'Support' },
       validations: {
@@ -664,8 +666,6 @@ export const de = {
   bond: 'Bindung',
   unbond: 'Bindung lösen',
   leave: 'Verlassen',
-  addPool: 'Pool hinzufügen',
-  withdrawPool: 'Pool abheben',
   custom: 'Benutzerdefinierte Aktion',
   vote: 'Abstimmung',
   stake: 'Einsatz',

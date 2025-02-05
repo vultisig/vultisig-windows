@@ -1,3 +1,7 @@
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { formatAmount } from '@lib/utils/formatAmount';
+import { assertField } from '@lib/utils/record/assertField';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -11,15 +15,11 @@ import {
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
-import { useGlobalCurrency } from '../../../lib/hooks/useGlobalCurrency';
+import { getCoinKey } from '../../../coin/utils/coin';
 import { ValueProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { formatAmount } from '@lib/utils/formatAmount';
-import { assertField } from '@lib/utils/record/assertField';
 import { Chain } from '../../../model/chain';
-import { CoinMeta } from '../../../model/coin-meta';
+import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
 
 export const KeysignTxPrimaryInfo = ({ value }: ValueProp<KeysignPayload>) => {
   const { toAddress, memo, toAmount, blockchainSpecific } = value;
@@ -30,9 +30,14 @@ export const KeysignTxPrimaryInfo = ({ value }: ValueProp<KeysignPayload>) => {
 
   const { t } = useTranslation();
 
-  const coinPriceQuery = useCoinPriceQuery(CoinMeta.fromCoin(coin));
+  const coinPriceQuery = useCoinPriceQuery({
+    coin: {
+      ...getCoinKey(coin),
+      priceProviderId: coin.priceProviderId,
+    },
+  });
 
-  const { globalCurrency } = useGlobalCurrency();
+  const [fiatCurrency] = useFiatCurrency();
 
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) return null;
@@ -67,7 +72,7 @@ export const KeysignTxPrimaryInfo = ({ value }: ValueProp<KeysignPayload>) => {
               <span>
                 {formatAmount(
                   fromChainAmount(BigInt(toAmount), decimals) * price,
-                  globalCurrency
+                  fiatCurrency
                 )}
               </span>
             </TxOverviewRow>

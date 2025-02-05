@@ -1,17 +1,16 @@
+import { EntityWithAmount } from '@lib/utils/entities/EntityWithAmount';
 import styled from 'styled-components';
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount';
 import { CoinKey } from '../../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../../coin/query/useCoinPriceQuery';
-import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
+import { getStorageCoinKey } from '../../../../coin/utils/storageCoin';
 import { centerContent } from '../../../../lib/ui/css/centerContent';
 import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { ValueProp } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { text } from '../../../../lib/ui/text';
-import { EntityWithAmount } from '@lib/utils/entities/EntityWithAmount';
-import { CoinMeta } from '../../../../model/coin-meta';
 import { useCurrentVaultCoin } from '../../../state/currentVault';
 import { amountConfig } from './config';
 
@@ -33,7 +32,12 @@ export const SwapFiatAmount = ({
 }: ValueProp<CoinKey & EntityWithAmount>) => {
   const coin = useCurrentVaultCoin(value);
 
-  const query = useCoinPriceQuery(CoinMeta.fromCoin(storageCoinToCoin(coin)));
+  const query = useCoinPriceQuery({
+    coin: {
+      ...getStorageCoinKey(coin),
+      priceProviderId: coin.price_provider_id,
+    },
+  });
 
   const formatFiatAmount = useFormatFiatAmount();
 

@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -11,7 +11,6 @@ import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
-import { useHasFinishedOnboarding } from '../../../onboarding/hooks/useHasFinishedOnboarding';
 import { PageContent } from '../../../ui/page/PageContent';
 import { AnimationDescription } from './AnimationDescriptions';
 import { useOnboardingStepsAnimations } from './hooks/useOnboardingStepsAnimations';
@@ -44,8 +43,13 @@ export type SharedOnboardingScreensProps = {
   onNextAnimation: () => void;
 };
 
-export const OnboardingSteps = () => {
-  const [, setHasFinishedOnboarding] = useHasFinishedOnboarding();
+type OnboardingStepsProps = {
+  onCompleteSteps: () => void;
+};
+
+export const OnboardingSteps: FC<OnboardingStepsProps> = ({
+  onCompleteSteps,
+}) => {
   const { t } = useTranslation();
   const navigate = useAppNavigate();
 
@@ -56,9 +60,6 @@ export const OnboardingSteps = () => {
     animationComponent: AnimationComponent,
     isLoading,
   } = useOnboardingStepsAnimations();
-
-  const lastAnimation = animations[animations.length - 1];
-  const handleOnboardingFinish = () => setHasFinishedOnboarding(true);
 
   return (
     <PageContent>
@@ -73,7 +74,7 @@ export const OnboardingSteps = () => {
             <IconButton icon={<ChevronLeftIcon width={24} height={24} />} />
             <Text size={18}>{t('introOnboarding')}</Text>
           </HStack>
-          <UnstyledButton onClick={handleOnboardingFinish}>
+          <UnstyledButton onClick={onCompleteSteps}>
             <Text color="shy" size={18}>
               {t('skip')}
             </Text>
@@ -97,9 +98,9 @@ export const OnboardingSteps = () => {
             disabled={isLoading}
             icon={<ChevronRightIcon />}
             onClick={
-              currentAnimation !== lastAnimation
+              currentAnimation !== animations[animations.length - 1]
                 ? handleNextAnimation
-                : handleOnboardingFinish
+                : onCompleteSteps
             }
           >
             {t('tap')}

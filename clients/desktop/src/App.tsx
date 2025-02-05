@@ -1,9 +1,8 @@
-import './i18n/config';
-
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider } from 'react-router-dom';
 
 import { InitializedWalletOnly } from './components/wallet/InitializedWalletOnly';
+import { I18nProvider } from './i18n/I18nProvider';
 import { GlobalStyle } from './lib/ui/css/GlobalStyle';
 import { VStack } from './lib/ui/layout/Stack';
 import { darkTheme } from './lib/ui/theme/darkTheme';
@@ -22,18 +21,20 @@ const App = () => {
     <WalletCoreProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={darkTheme}>
-          <GlobalStyle />
-          <VStack fullSize>
-            <RemoteStateDependant>
-              <InitializedWalletOnly>
-                <OnboardingResetter>
-                  <ToastProvider>
-                    <RouterProvider router={router} />
-                  </ToastProvider>
-                </OnboardingResetter>
-              </InitializedWalletOnly>
-            </RemoteStateDependant>
-          </VStack>
+          <I18nProvider>
+            <GlobalStyle />
+            <VStack fullSize>
+              <RemoteStateDependant>
+                <InitializedWalletOnly>
+                  <OnboardingResetter>
+                    <ToastProvider>
+                      <RouterProvider router={router} />
+                    </ToastProvider>
+                  </OnboardingResetter>
+                </InitializedWalletOnly>
+              </RemoteStateDependant>
+            </VStack>
+          </I18nProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </WalletCoreProvider>

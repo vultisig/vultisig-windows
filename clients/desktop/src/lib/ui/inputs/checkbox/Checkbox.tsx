@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 
-import { borderRadius } from '../../css/borderRadius';
 import { centerContent } from '../../css/centerContent';
 import { interactive } from '../../css/interactive';
 import { sameDimensions } from '../../css/sameDimensions';
@@ -22,22 +21,22 @@ interface CheckboxProps extends InvisibleHTMLCheckboxProps {
 const Box = styled.div<{ isChecked: boolean }>`
   ${sameDimensions(24)}
   ${centerContent};
-  ${borderRadius.xs};
-  color: ${getColor('contrast')};
-
+  border-radius: 100%;
+  color: ${getColor('success')};
   background: ${getColor('foregroundExtra')};
-
   font-size: 16px;
 
   ${({ isChecked }) =>
     isChecked
       ? css`
-          background: ${getColor('primary')};
+          border: 1px solid ${getColor('success')};
         `
       : css`
           &:hover {
             background: ${getColor('foregroundSuper')};
           }
+          border: 1px solid ${getColor('foregroundSuper')};
+          background: ${getColor('foregroundExtra')};
         `};
 `;
 

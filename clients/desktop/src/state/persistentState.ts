@@ -9,7 +9,7 @@ export enum PersistentStateKey {
   ReactQueryState = 'reactQueryState',
   HasFinishedOnboarding = 'HasFinishedOnboarding',
   Language = 'language',
-  Currency = 'currency',
+  FiatCurrency = 'fiatCurrency',
   AddressBook = 'addressBook',
   FavouriteTokens = 'favouriteTokens',
   DefaultChains = 'defaultChains',

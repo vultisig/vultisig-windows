@@ -394,7 +394,7 @@ const sendChainTransaction = async (chain) => {
 
 #### THORChain
 
-In addition to send transactions, THORChain supports deposit transactions for operations such as `bond`, `unbond`, `addPool`, `withdrawPool`, etc.
+In addition to send transactions, THORChain supports deposit transactions for operations such as `bond`, `unbond`,  etc.
 
 ```javascript
 const THORChainDepositTransaction = async (txDetails) => {

@@ -1,19 +1,19 @@
 import { useTranslation } from 'react-i18next';
 
-import { useInAppLanguage } from '../../../lib/hooks/useInAppLanguage';
+import { languages } from '../../../i18n/Language';
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
+import { useLanguage } from '../../../preferences/state/language';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { PageSlice } from '../../../ui/page/PageSlice';
-import { languageOptions } from './constants';
 import { LanguageBox, LanguageButton } from './LanguageSettingsPage.styles';
 
 const LanguageSettingsPage = () => {
   const { t } = useTranslation();
-  const { language, updateInAppLanguage } = useInAppLanguage();
+  const [value, setValue] = useLanguage();
 
   return (
     <VStack flexGrow gap={16}>
@@ -24,22 +24,21 @@ const LanguageSettingsPage = () => {
         }
       />
       <PageSlice gap={16} flexGrow={true}>
-        {languageOptions.map(({ title, subtitle, value }, index) => (
-          <LanguageButton
-            key={index}
-            onClick={() => updateInAppLanguage(value)}
-          >
-            <LanguageBox>
-              <Text size={16} color="contrast" weight="600">
-                {t(title)}
-              </Text>
-              <Text size={12} color="contrast" weight="500">
-                {t(subtitle)}
-              </Text>
-            </LanguageBox>
-            {value === language && <CheckIcon />}
-          </LanguageButton>
-        ))}
+        {languages.map((language, index) => {
+          return (
+            <LanguageButton key={index} onClick={() => setValue(language)}>
+              <LanguageBox>
+                <Text size={16} color="contrast" weight="600">
+                  {t(`vault_settings_language_settings_title_${language}`)}
+                </Text>
+                <Text size={12} color="contrast" weight="500">
+                  {t(`vault_settings_language_settings_subtitle_${language}`)}
+                </Text>
+              </LanguageBox>
+              {value === language && <CheckIcon />}
+            </LanguageButton>
+          );
+        })}
       </PageSlice>
     </VStack>
   );
