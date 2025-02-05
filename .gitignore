@@ -70,8 +70,6 @@ frontend/.parcel-cache/
 # TypeScript cache
 *.tsbuildinfo
 
-
-
 # Ignore compiled Go files
 *.o
 *.a
