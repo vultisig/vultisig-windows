@@ -1,5 +1,3 @@
-import { getBalance } from 'viem/_types/actions/public/getBalance';
-
 import { getEvmPublicClient } from '../../chain/evm/chainInfo';
 import { getErc20Balance } from '../../chain/evm/erc20/getErc20Balance';
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
@@ -8,7 +6,7 @@ import { CoinBalanceResolver } from './CoinBalanceResolver';
 
 export const getEvmCoinBalance: CoinBalanceResolver<EvmChain> = async input => {
   return isNativeCoin(input)
-    ? getBalance(getEvmPublicClient(input.chain), {
+    ? getEvmPublicClient(input.chain).getBalance({
         address: input.address as `0x${string}`,
       })
     : getErc20Balance({
