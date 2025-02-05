@@ -1,71 +1,27 @@
-import { callRpc } from '../../chain/rpc/callRpc';
+import { Address } from '@solana/web3.js';
+
+import { getSolanaRpcClient } from '../../chain/solana/rpc/getSolanaRpcClient';
+import { getSplAccounts } from '../../chain/solana/rpc/getSplAccounts';
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
-import { Endpoint } from '../../services/Endpoint';
 import { CoinBalanceResolver } from './CoinBalanceResolver';
 
-interface SolanaAccountBalance {
-  value: number | null;
-  context: {
-    slot: number;
-  };
-}
-
-interface TokenAccountInfo {
-  pubkey: string;
-  account: {
-    data: {
-      program: string;
-      parsed: {
-        info: {
-          mint: string;
-          owner: string;
-          tokenAmount: {
-            amount: string;
-            decimals: number;
-            uiAmount: number;
-          };
-        };
-        type: string;
-      };
-    };
-    executable: boolean;
-    lamports: number;
-    owner: string;
-    rentEpoch: number;
-  };
-}
-
-const SPL_TOKEN_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
-
 export const getSolanaCoinBalance: CoinBalanceResolver = async input => {
-  if (isNativeCoin(input)) {
-    const { value } = await callRpc<SolanaAccountBalance>({
-      url: Endpoint.solanaServiceRpc,
-      method: 'getBalance',
-      params: [input.address],
-    });
+  const client = getSolanaRpcClient();
 
-    return BigInt(value ?? 0);
+  if (isNativeCoin(input)) {
+    const { value } = await client.getBalance(input.address as Address).send();
+
+    return value.valueOf();
   }
 
-  const accounts = await callRpc<TokenAccountInfo[]>({
-    url: Endpoint.solanaServiceRpc,
-    method: 'getTokenAccountsByOwner',
-    params: [
-      input.address,
-      {
-        programId: SPL_TOKEN_PROGRAM_ID,
-      },
-      {
-        encoding: 'jsonParsed',
-      },
-    ],
-  });
+  const accounts = await getSplAccounts(input.address);
 
   const tokenAccount = accounts.find(
     account => account.account.data.parsed.info.mint === input.id
   );
+
   const tokenAmount =
     tokenAccount?.account?.data?.parsed?.info?.tokenAmount?.amount;
+
   return BigInt(tokenAmount ?? 0);
 };
