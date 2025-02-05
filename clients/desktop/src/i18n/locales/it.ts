@@ -220,18 +220,18 @@ export const it = {
   vault_setting_edit_vault_delete_title: 'Elimina',
   vault_setting_edit_vault_delete_subtitle:
     'Elimina definitivamente la tua cassaforte',
-  vault_settings_language_settings_title_english: 'Inglese',
-  vault_settings_language_settings_title_german: 'Tedesco',
-  vault_settings_language_settings_title_spanish: 'Spagnolo',
-  vault_settings_language_settings_title_italian: 'Italiano',
-  vault_settings_language_settings_title_croatian: 'Croato',
-  vault_settings_language_settings_title_portugal: 'Portoghese',
-  vault_settings_language_settings_subtitle_english: 'Inglese del Regno Unito',
-  vault_settings_language_settings_subtitle_german: 'Tedesco',
-  vault_settings_language_settings_subtitle_spanish: 'Spagnolo',
-  vault_settings_language_settings_subtitle_italian: 'Italiano',
-  vault_settings_language_settings_subtitle_croatian: 'Croato',
-  vault_settings_language_settings_subtitle_portugal: 'Portogallo',
+  vault_settings_language_settings_title_en: 'Inglese',
+  vault_settings_language_settings_title_de: 'Tedesco',
+  vault_settings_language_settings_title_es: 'Spagnolo',
+  vault_settings_language_settings_title_it: 'Italiano',
+  vault_settings_language_settings_title_hr: 'Croato',
+  vault_settings_language_settings_title_pt: 'Portoghese',
+  vault_settings_language_settings_subtitle_en: 'Inglese del Regno Unito',
+  vault_settings_language_settings_subtitle_de: 'Tedesco',
+  vault_settings_language_settings_subtitle_es: 'Spagnolo',
+  vault_settings_language_settings_subtitle_it: 'Italiano',
+  vault_settings_language_settings_subtitle_hr: 'Croato',
+  vault_settings_language_settings_subtitle_pt: 'Portogallo',
   address: 'Indirizzo',
   download_qr_code: 'Scarica codice QR',
   vault_backup_page_password_protection:
@@ -403,6 +403,19 @@ export const it = {
   while_you_wait_vultisig_has: 'Mentre aspetti, Vultisig ha...',
   creating_vault: 'Creazione della Cassaforte',
   fastVaultSetup: {
+    summary: {
+      title: 'Riepilogo Rapido',
+      pillText: 'Quote del Vault',
+      summaryItemOneTitle:
+        'Esegui il backup di ciascuna quota del vault separatamente',
+      summaryItemTwoTitle: 'Conserva le quote del vault in diverse posizioni',
+      summaryItemThreeTitle:
+        'Tutte le quote del vault garantiscono un accesso sicuro ai tuoi fondi',
+      summaryItemFourTitle:
+        'Non memorizzare la tua quota del vault sul dispositivo stesso, in caso di perdita o danneggiamento',
+      agreementText: 'Ho letto e capisco cosa fare',
+      ctaText: 'Crea il tuo vault',
+    },
     preparingVault: 'Preparazione della Cassaforte',
     generatingECDSAKey: 'Generazione della Chiave ECDSA',
     createVault: {
@@ -625,19 +638,6 @@ export const it = {
         customMemo: 'Memo personalizzato è obbligatorio',
       },
     },
-    addPool: {
-      labels: { amount: 'Importo' },
-      validations: { amount: "L'importo deve essere positivo" },
-    },
-    withdrawPool: {
-      labels: {
-        affiliateFee: "Tariffa dell'Affiliato",
-        percentage: 'Percentuale',
-      },
-      validations: {
-        percentage: 'La percentuale è obbligatoria e deve essere tra 0 e 100',
-      },
-    },
     vote: {
       labels: { proposalId: 'ID proposta', support: 'Supporto' },
       validations: {
@@ -665,8 +665,6 @@ export const it = {
   bond: 'Legame',
   unbond: 'Slegare',
   leave: 'Partire',
-  addPool: 'Aggiungi piscina',
-  withdrawPool: 'Prelevare il pool',
   custom: 'Azione personalizzata',
   vote: 'Votare',
   stake: 'Palo',

@@ -13,8 +13,6 @@ export const transactionConfig: Record<ChainAction, TransactionConfig> = {
   unbond: { requiresAmount: true, requiresNodeAddress: true },
   leave: { requiresNodeAddress: true, requiresAmount: true },
   custom: { requiresAmount: true },
-  addPool: { requiresAmount: true },
-  withdrawPool: {},
   stake: { requiresAmount: true, requiresNodeAddress: true },
   unstake: { requiresAmount: true, requiresNodeAddress: true },
   vote: { requiresAmount: false, requiresNodeAddress: false },

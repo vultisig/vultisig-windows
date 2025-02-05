@@ -378,7 +378,8 @@ const handleRequest = (
 
         break;
       }
-      case RequestMethod.VULTISIG.GET_TRANSACTION_BY_HASH: {
+      case RequestMethod.VULTISIG.GET_TRANSACTION_BY_HASH: 
+      case RequestMethod.METAMASK.ETH_GET_TRANSACTION_BY_HASH: {
         if (Array.isArray(params)) {
           const [hash] = params;
 

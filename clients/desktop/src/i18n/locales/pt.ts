@@ -213,18 +213,18 @@ export const pt = {
   vault_setting_edit_vault_delete_title: 'Excluir',
   vault_setting_edit_vault_delete_subtitle:
     'Exclua permanentemente o seu cofre',
-  vault_settings_language_settings_title_english: 'Inglês',
-  vault_settings_language_settings_title_german: 'Alemão',
-  vault_settings_language_settings_title_spanish: 'Espanhol',
-  vault_settings_language_settings_title_italian: 'Italiano',
-  vault_settings_language_settings_title_croatian: 'Croata',
-  vault_settings_language_settings_title_portugal: 'Português',
-  vault_settings_language_settings_subtitle_english: 'Inglês do Reino Unido',
-  vault_settings_language_settings_subtitle_german: 'Alemão',
-  vault_settings_language_settings_subtitle_spanish: 'Espanhol',
-  vault_settings_language_settings_subtitle_italian: 'Italiano',
-  vault_settings_language_settings_subtitle_croatian: 'Croata',
-  vault_settings_language_settings_subtitle_portugal: 'Portugal',
+  vault_settings_language_settings_title_en: 'Inglês',
+  vault_settings_language_settings_title_de: 'Alemão',
+  vault_settings_language_settings_title_es: 'Espanhol',
+  vault_settings_language_settings_title_it: 'Italiano',
+  vault_settings_language_settings_title_hr: 'Croata',
+  vault_settings_language_settings_title_pt: 'Português',
+  vault_settings_language_settings_subtitle_en: 'Inglês do Reino Unido',
+  vault_settings_language_settings_subtitle_de: 'Alemão',
+  vault_settings_language_settings_subtitle_es: 'Espanhol',
+  vault_settings_language_settings_subtitle_it: 'Italiano',
+  vault_settings_language_settings_subtitle_hr: 'Croata',
+  vault_settings_language_settings_subtitle_pt: 'Portugal',
   address: 'Endereço',
   download_qr_code: 'Baixar código QR',
   vault_backup_page_password_protection:
@@ -397,6 +397,20 @@ export const pt = {
   while_you_wait_vultisig_has: 'Enquanto espera, Vultisig tem...',
   creating_vault: 'Criando Cofre',
   fastVaultSetup: {
+    summary: {
+      title: 'Resumo Rápido',
+      pillText: 'Participações do Cofre',
+      summaryItemOneTitle:
+        'Faça backup de cada participação do cofre separadamente',
+      summaryItemTwoTitle:
+        'Mantenha as participações do cofre em diferentes locais',
+      summaryItemThreeTitle:
+        'Todas as participações do cofre garantem acesso seguro aos seus fundos',
+      summaryItemFourTitle:
+        'Não armazene sua participação do cofre no próprio dispositivo, em caso de perda ou dano',
+      agreementText: 'Eu li e entendo o que fazer',
+      ctaText: 'Crie seu cofre',
+    },
     preparingVault: 'Preparando Cofre',
     generatingECDSAKey: 'Gerando Chave ECDSA',
     createVault: {
@@ -617,16 +631,6 @@ export const pt = {
         customMemo: 'Memo personalizado é obrigatório',
       },
     },
-    addPool: {
-      labels: { amount: 'Quantidade' },
-      validations: { amount: 'Quantidade deve ser positiva' },
-    },
-    withdrawPool: {
-      labels: { affiliateFee: 'Taxa de Afiliado', percentage: 'Porcentagem' },
-      validations: {
-        percentage: 'Porcentagem é obrigatória e deve estar entre 0 e 100',
-      },
-    },
     vote: {
       labels: { proposalId: 'ID da proposta', support: 'Suporte' },
       validates: {
@@ -654,8 +658,6 @@ export const pt = {
   bond: 'Ligação',
   unbond: 'Desvincular',
   leave: 'Deixar',
-  addPool: 'Adicionar Pool',
-  withdrawPool: 'Retirar Pool',
   custom: 'Ação personalizada',
   vote: 'Voto',
   stake: 'Estaca',

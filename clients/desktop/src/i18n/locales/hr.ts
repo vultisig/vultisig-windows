@@ -208,18 +208,18 @@ export const hr = {
     'Ponovno podijelite trezor s novom grupom uređaja.',
   vault_setting_edit_vault_delete_title: 'Izbriši',
   vault_setting_edit_vault_delete_subtitle: 'Trajno izbrišite svoj trezor',
-  vault_settings_language_settings_title_english: 'Engleski',
-  vault_settings_language_settings_title_german: 'Njemački',
-  vault_settings_language_settings_title_spanish: 'Španjolski',
-  vault_settings_language_settings_title_italian: 'Talijanski',
-  vault_settings_language_settings_title_croatian: 'Hrvatski',
-  vault_settings_language_settings_title_portugal: 'Portugalski',
-  vault_settings_language_settings_subtitle_english: 'Engleski UK',
-  vault_settings_language_settings_subtitle_german: 'Njemački',
-  vault_settings_language_settings_subtitle_spanish: 'Španjolski',
-  vault_settings_language_settings_subtitle_italian: 'Talijanski',
-  vault_settings_language_settings_subtitle_croatian: 'Hrvatski',
-  vault_settings_language_settings_subtitle_portugal: 'Portugal',
+  vault_settings_language_settings_title_en: 'Engleski',
+  vault_settings_language_settings_title_de: 'Njemački',
+  vault_settings_language_settings_title_es: 'Španjolski',
+  vault_settings_language_settings_title_it: 'Talijanski',
+  vault_settings_language_settings_title_hr: 'Hrvatski',
+  vault_settings_language_settings_title_pt: 'Portugalski',
+  vault_settings_language_settings_subtitle_en: 'Engleski UK',
+  vault_settings_language_settings_subtitle_de: 'Njemački',
+  vault_settings_language_settings_subtitle_es: 'Španjolski',
+  vault_settings_language_settings_subtitle_it: 'Talijanski',
+  vault_settings_language_settings_subtitle_hr: 'Hrvatski',
+  vault_settings_language_settings_subtitle_pt: 'Portugal',
   address: 'Adresa',
   download_qr_code: 'Preuzmi QR kod',
   vault_backup_page_password_protection:
@@ -387,6 +387,19 @@ export const hr = {
   while_you_wait_vultisig_has: 'Amíg vársz, a Vultisig rendelkezik...',
   creating_vault: 'Tárca létrehozása',
   fastVaultSetup: {
+    summary: {
+      title: 'Gyors Összefoglaló',
+      pillText: 'Tároló Megosztások',
+      summaryItemOneTitle:
+        'Mentsen biztonsági másolatot minden tároló megosztásról külön-külön',
+      summaryItemTwoTitle: 'Tartsa a tároló megosztásokat különböző helyeken',
+      summaryItemThreeTitle:
+        'Minden tároló megosztás biztosítja a biztonságos hozzáférést az alapjaihoz',
+      summaryItemFourTitle:
+        'Ne tárolja a tároló megosztását magán az eszközön, elvesztés vagy sérülés esetén',
+      agreementText: 'Elolvastam és megértettem, mit kell tenni',
+      ctaText: 'Hozza létre a tárolóját',
+    },
     preparingVault: 'Tárca előkészítése',
     generatingECDSAKey: 'ECDSA kulcs generálása',
     createVault: {
@@ -604,16 +617,6 @@ export const hr = {
         customMemo: 'Prilagođena bilješka je obavezna',
       },
     },
-    addPool: {
-      labels: { amount: 'Iznos' },
-      validations: { amount: 'Iznos mora biti pozitivan' },
-    },
-    withdrawPool: {
-      labels: { affiliateFee: 'Naknada za Partnera', percentage: 'Postotak' },
-      validations: {
-        percentage: 'Postotak je obavezan i mora biti između 0 i 100',
-      },
-    },
     vote: {
       labels: { proposalId: 'ID Prijedloga', support: 'Podrška' },
       validations: {
@@ -641,8 +644,6 @@ export const hr = {
   bond: 'Veza',
   unbond: 'Odvezati se',
   leave: 'Otiđi',
-  addPool: 'Dodaj bazen',
-  withdrawPool: 'Skup povlačenja',
   custom: 'Prilagođena radnja',
   vote: 'Glasanje',
   stake: 'Ulog',

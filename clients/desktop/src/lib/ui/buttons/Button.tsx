@@ -1,7 +1,7 @@
+import { match } from '@lib/utils/match';
 import React, { forwardRef } from 'react';
 import styled, { css } from 'styled-components';
 
-import { match } from '@lib/utils/match';
 import { MergeRefs } from '../base/MergeRefs';
 import { centerContent } from '../css/centerContent';
 import { horizontalPadding } from '../css/horizontalPadding';
@@ -37,13 +37,10 @@ interface ContainerProps {
 
 const Container = styled(UnstyledButton)<ContainerProps>`
   ${centerContent};
-
   position: relative;
-
   white-space: nowrap;
   font-weight: 600;
   flex-shrink: 0;
-
   ${round};
 
   ${({ size }) =>
@@ -84,6 +81,10 @@ const Container = styled(UnstyledButton)<ContainerProps>`
         &:disabled {
           background: ${getColor('buttonBackgroundDisabled')};
           color: ${getColor('mistExtra')};
+
+          &:hover {
+            background: ${getColor('buttonBackgroundDisabled')};
+          }
         }
       `,
       secondary: () => css`
@@ -93,6 +94,10 @@ const Container = styled(UnstyledButton)<ContainerProps>`
         &:disabled {
           background: ${getColor('buttonBackgroundDisabled')};
           color: ${getColor('mistExtra')};
+
+          &:hover {
+            background: ${getColor('buttonBackgroundDisabled')};
+          }
         }
       `,
       outlined: () => css`

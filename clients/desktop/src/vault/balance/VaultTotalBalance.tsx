@@ -1,17 +1,17 @@
+import { formatAmount } from '@lib/utils/formatAmount';
 import { useTranslation } from 'react-i18next';
 
-import { useGlobalCurrency } from '../../lib/hooks/useGlobalCurrency';
 import { HStack } from '../../lib/ui/layout/Stack';
 import { MatchQuery } from '../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../lib/ui/text';
-import { formatAmount } from '@lib/utils/formatAmount';
+import { useFiatCurrency } from '../../preferences/state/fiatCurrency';
 import { useVaultTotalBalanceQuery } from '../queries/useVaultTotalBalanceQuery';
 import { BalanceVisibilityAware } from './visibility/BalanceVisibilityAware';
 import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVisibility';
 
 export const VaultTotalBalance = () => {
   const query = useVaultTotalBalanceQuery();
-  const { globalCurrency } = useGlobalCurrency();
+  const [fiatCurrency] = useFiatCurrency();
 
   const { t } = useTranslation();
 
@@ -24,7 +24,7 @@ export const VaultTotalBalance = () => {
         success={value => (
           <Text color="contrast" weight="700" size={26} centerVertically>
             <BalanceVisibilityAware size="l">
-              {formatAmount(value, globalCurrency)}
+              {formatAmount(value, fiatCurrency)}
             </BalanceVisibilityAware>{' '}
           </Text>
         )}

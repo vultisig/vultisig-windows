@@ -197,18 +197,18 @@ export const en = {
   vault_setting_edit_vault_reshare_subtitle: 'Reshare vault with new committee',
   vault_setting_edit_vault_delete_title: 'Delete',
   vault_setting_edit_vault_delete_subtitle: 'Delete your vault permanently',
-  vault_settings_language_settings_title_english: 'English',
-  vault_settings_language_settings_title_german: 'Deutch',
-  vault_settings_language_settings_title_spanish: 'Espanol',
-  vault_settings_language_settings_title_italian: 'Italiano',
-  vault_settings_language_settings_title_croatian: 'Hrvatski',
-  vault_settings_language_settings_title_portugal: 'Portuguese',
-  vault_settings_language_settings_subtitle_english: 'English UK',
-  vault_settings_language_settings_subtitle_german: 'German',
-  vault_settings_language_settings_subtitle_spanish: 'Spanish',
-  vault_settings_language_settings_subtitle_italian: 'Italian',
-  vault_settings_language_settings_subtitle_croatian: 'Croatian',
-  vault_settings_language_settings_subtitle_portugal: 'Portugal',
+  vault_settings_language_settings_title_en: 'English',
+  vault_settings_language_settings_title_de: 'Deutch',
+  vault_settings_language_settings_title_es: 'Espanol',
+  vault_settings_language_settings_title_it: 'Italiano',
+  vault_settings_language_settings_title_hr: 'Hrvatski',
+  vault_settings_language_settings_title_pt: 'Portuguese',
+  vault_settings_language_settings_subtitle_en: 'English UK',
+  vault_settings_language_settings_subtitle_de: 'German',
+  vault_settings_language_settings_subtitle_es: 'Spanish',
+  vault_settings_language_settings_subtitle_it: 'Italian',
+  vault_settings_language_settings_subtitle_hr: 'Croatian',
+  vault_settings_language_settings_subtitle_pt: 'Portugal',
   address: 'Address',
   download_qr_code: 'Download QR Code',
   vault_backup_page_password_protection:
@@ -391,6 +391,18 @@ export const en = {
   while_you_wait_vultisig_has: 'While you wait, Vultisig has...',
   creating_vault: 'Creating Vault',
   fastVaultSetup: {
+    summary: {
+      title: 'Quick Summary',
+      pillText: 'Vault Shares',
+      summaryItemOneTitle: 'Backup each vault share separately',
+      summaryItemTwoTitle: 'Keep vault shares in different locations',
+      summaryItemThreeTitle:
+        'All vault shares ensure secure access to your funds',
+      summaryItemFourTitle:
+        'Do not store your vault share on the device itself, in case of loss or damage',
+      agreementText: 'I have read and understand what to do',
+      ctaText: 'Create your vault',
+    },
     preparingVault: 'Preparing Vault',
     generatingECDSAKey: 'Generating ECDSA Key',
     createVault: {
@@ -560,8 +572,6 @@ export const en = {
   bond: 'Bond',
   unbond: 'Unbond',
   leave: 'Leave',
-  addPool: 'Add Pool',
-  withdrawPool: 'Withdraw Pool',
   custom: 'Custom Action',
   vote: 'Vote',
   stake: 'Stake',
@@ -649,23 +659,6 @@ export const en = {
       validations: {
         amount: 'Amount must be positive',
         customMemo: 'Custom Memo is required',
-      },
-    },
-    addPool: {
-      labels: {
-        amount: 'Amount',
-      },
-      validations: {
-        amount: 'Amount must be positive',
-      },
-    },
-    withdrawPool: {
-      labels: {
-        affiliateFee: "Affiliate's Fee",
-        percentage: 'Percentage',
-      },
-      validations: {
-        percentage: 'Percentage is required and must be between 0 and 100',
       },
     },
     vote: {
