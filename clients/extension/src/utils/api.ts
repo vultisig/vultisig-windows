@@ -11,7 +11,11 @@ import {
   SignatureProps,
   ThorchainAccountDataResponse,
 } from "./interfaces";
-import { ThornodeTxResponse, ThornodeTxResponseSuccess, ThornodeNetworkResponse } from '../types/thorchain';
+import {
+  ThornodeTxResponse,
+  ThornodeTxResponseSuccess,
+  ThornodeNetworkResponse,
+} from "../types/thorchain";
 
 namespace CryptoCurrency {
   export interface Props {
@@ -61,7 +65,7 @@ api.interceptors.request.use(
   (config) => config,
   (error) => {
     return Promise.reject(error.response);
-  }
+  },
 );
 
 api.interceptors.response.use((response) => {
@@ -75,7 +79,7 @@ export default {
     return new Promise((resolve) => {
       api
         .get<CryptoCurrency.Props>(
-          `${apiRef.vultisig.api}cmc/v2/cryptocurrency/quotes/latest?id=${cmcId}&aux=platform&convert=${currency}`
+          `${apiRef.vultisig.api}cmc/v2/cryptocurrency/quotes/latest?id=${cmcId}&aux=platform&convert=${currency}`,
         )
         .then(({ data }) => {
           if (
@@ -94,14 +98,14 @@ export default {
   derivePublicKey: async (params: Derivation.Params) => {
     return await api.post<Derivation.Props>(
       `${apiRef.vultisig.airdrop}api/derive-public-key`,
-      toSnakeCase(params)
+      toSnakeCase(params),
     );
   },
   getFunctionSelector: async (hexFunction: string) => {
     return new Promise<string>((resolve, reject) => {
       api
         .get<{ results: { textSignature: string }[] }>(
-          `${apiRef.fourByte}api/v1/signatures/?format=json&hex_signature=${hexFunction}&ordering=created_at`
+          `${apiRef.fourByte}api/v1/signatures/?format=json&hex_signature=${hexFunction}&ordering=created_at`,
         )
         .then(({ data }) => {
           if (data.results?.length) {
@@ -119,7 +123,7 @@ export default {
     return new Promise<boolean>((resolve) => {
       api
         .get<{ count: number }>(
-          `${apiRef.fourByte}api/v1/signatures/?format=json&hex_signature=${hexFunction}&ordering=created_at`
+          `${apiRef.fourByte}api/v1/signatures/?format=json&hex_signature=${hexFunction}&ordering=created_at`,
         )
         .then(({ data }) => resolve(data.count > 0))
         .catch(() => resolve(false));
@@ -175,7 +179,10 @@ export default {
     },
   },
   ethereum: {
-    async getTransactionByHash(path: string, hash: string): Promise<TransactionResponse> {
+    async getTransactionByHash(
+      path: string,
+      hash: string,
+    ): Promise<TransactionResponse> {
       return await api
         .post<{ result: TransactionResponse }>(path, {
           id: 1,
@@ -191,7 +198,7 @@ export default {
       return new Promise<MayaAccountDataResponse>((resolve, reject) => {
         api
           .get<{ result: { value: MayaAccountDataResponse } }>(
-            `${apiRef.mayaChain}auth/accounts/${address}`
+            `${apiRef.mayaChain}auth/accounts/${address}`,
           )
           .then(({ data }) => resolve(data.result.value))
           .catch(reject);
@@ -204,7 +211,7 @@ export default {
         api
           .get<{ result: { value: ThorchainAccountDataResponse } }>(
             `${apiRef.nineRealms.thornode}auth/accounts/${address}`,
-            { headers: { "X-Client-ID": "vultisig" } }
+            { headers: { "X-Client-ID": "vultisig" } },
           )
           .then(({ data }) => resolve(data.result.value))
           .catch(reject);
@@ -215,7 +222,7 @@ export default {
         const url = `${apiRef.nineRealms.thornode}thorchain/network`;
         api
           .get<ThornodeNetworkResponse>(url)
-          .then(({ data }) => resolve(data.native_tx_fee_rune))
+          .then(({ data }) => resolve(data.nativeTxFeeRune))
           .catch(reject);
       });
     },
@@ -223,7 +230,7 @@ export default {
       return new Promise((resolve, reject) => {
         api
           .get<{ result: { node_info: { network: string } } }>(
-            `${apiRef.nineRealms.rpc}status`
+            `${apiRef.nineRealms.rpc}status`,
           )
           .then(({ data }) => resolve(data.result.node_info.network))
           .catch(reject);
@@ -232,12 +239,14 @@ export default {
     getTransactionByHash(hash: string): Promise<ThornodeTxResponseSuccess> {
       return new Promise((resolve, reject) => {
         api
-          .get<ThornodeTxResponse>(`${apiRef.nineRealms.thornode}thorchain/tx/${hash}`)
+          .get<ThornodeTxResponse>(
+            `${apiRef.nineRealms.thornode}thorchain/tx/${hash}`,
+          )
           .then(({ data }) => {
-            if ('code' in data) {
+            if ("code" in data) {
               throw new Error(data.message);
             }
-            resolve(data)
+            resolve(data);
           })
           .catch(reject);
       });
@@ -249,7 +258,7 @@ export default {
         api
           .get<SignatureProps>(
             `${apiRef.vultisig.api}router/complete/${uuid}/keysign`,
-            { headers: { message_id: message ?? "" } }
+            { headers: { message_id: message ?? "" } },
           )
           .then(({ data, status }) => {
             if (status === 200) {
@@ -259,7 +268,7 @@ export default {
                   acc[newKey] = value;
                   return acc;
                 },
-                {} as { [key: string]: any }
+                {} as { [key: string]: any },
               );
 
               resolve(transformed);
@@ -274,7 +283,7 @@ export default {
     setStart: async (uuid: string, devices: string[]) => {
       return await api.post(
         `${apiRef.vultisig.api}router/start/${uuid}`,
-        devices
+        devices,
       );
     },
   },
@@ -287,7 +296,7 @@ export default {
           .get<{ data: string }>(
             `${
               apiRef.vultisig.api
-            }/blockchair/${coinName.toLowerCase()}/dashboards/address/${address}?state=latest`
+            }/blockchair/${coinName.toLowerCase()}/dashboards/address/${address}?state=latest`,
           )
           .then(({ data }) => resolve(data.data))
           .catch(reject);
@@ -315,7 +324,7 @@ export default {
       return new Promise((resolve, reject) => {
         api
           .get<{ data: string }>(
-            `${apiRef.vultisig.api}/blockchair/${chainName.toLowerCase()}/stats`
+            `${apiRef.vultisig.api}/blockchair/${chainName.toLowerCase()}/stats`,
           )
           .then(({ data }) => resolve(data.data))
           .catch(reject);
