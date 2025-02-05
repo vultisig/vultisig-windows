@@ -2,12 +2,16 @@ import { FC } from 'react';
 
 import { Match } from '../../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
+import { BackupConfirmation } from './BackupConfirmation';
 import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne';
+import { BackupOverviewSlidesPartTwo } from './BackupOverviewSlidesPartTwo';
+import { BackupSuccessSlides } from './BackupSuccessSlides';
 import { EmailConfirmationSlides } from './EmailConfirmationSlides';
 
 const steps = [
-  'vaultOverview',
+  'backupSlideshowPartOne',
   'enterEmailCode',
+  'backupSlideshowPartTwo',
   'backupConfirmation',
   'backupGuide',
 ] as const;
@@ -24,14 +28,17 @@ export const BackupFastVault: FC<BackupFastVaultProps> = ({ vaultId }) => {
   return (
     <Match
       value={step}
-      vaultOverview={() => (
+      backupSlideshowPartOne={() => (
         <BackupOverviewSlidesPartOne onCompleted={toNextStep} />
       )}
       enterEmailCode={() => (
         <EmailConfirmationSlides onCompleted={toNextStep} vaultId={vaultId} />
       )}
-      backupConfirmation={() => <></>}
-      backupGuide={() => <></>}
+      backupSlideshowPartTwo={() => (
+        <BackupOverviewSlidesPartTwo onCompleted={toNextStep} />
+      )}
+      backupConfirmation={() => <BackupConfirmation />}
+      backupGuide={() => <BackupSuccessSlides />}
     />
   );
 };
