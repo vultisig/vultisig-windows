@@ -638,19 +638,6 @@ export const it = {
         customMemo: 'Memo personalizzato è obbligatorio',
       },
     },
-    addPool: {
-      labels: { amount: 'Importo' },
-      validations: { amount: "L'importo deve essere positivo" },
-    },
-    withdrawPool: {
-      labels: {
-        affiliateFee: "Tariffa dell'Affiliato",
-        percentage: 'Percentuale',
-      },
-      validations: {
-        percentage: 'La percentuale è obbligatoria e deve essere tra 0 e 100',
-      },
-    },
     vote: {
       labels: { proposalId: 'ID proposta', support: 'Supporto' },
       validations: {
@@ -678,8 +665,6 @@ export const it = {
   bond: 'Legame',
   unbond: 'Slegare',
   leave: 'Partire',
-  addPool: 'Aggiungi piscina',
-  withdrawPool: 'Prelevare il pool',
   custom: 'Azione personalizzata',
   vote: 'Votare',
   stake: 'Palo',

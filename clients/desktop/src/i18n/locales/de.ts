@@ -639,17 +639,6 @@ export const de = {
         customMemo: 'Benutzerdefiniertes Memo ist erforderlich',
       },
     },
-    addPool: {
-      labels: { amount: 'Betrag' },
-      validations: { amount: 'Betrag muss positiv sein' },
-    },
-    withdrawPool: {
-      labels: { affiliateFee: 'Partnergebühr', percentage: 'Prozentsatz' },
-      validations: {
-        percentage:
-          'Prozentsatz ist erforderlich und muss zwischen 0 und 100 liegen',
-      },
-    },
     vote: {
       labels: { proposalId: 'Vorschlags-ID', support: 'Support' },
       validations: {
@@ -677,8 +666,6 @@ export const de = {
   bond: 'Bindung',
   unbond: 'Bindung lösen',
   leave: 'Verlassen',
-  addPool: 'Pool hinzufügen',
-  withdrawPool: 'Pool abheben',
   custom: 'Benutzerdefinierte Aktion',
   vote: 'Abstimmung',
   stake: 'Einsatz',
