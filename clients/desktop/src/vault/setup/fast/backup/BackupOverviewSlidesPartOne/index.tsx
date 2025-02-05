@@ -22,7 +22,7 @@ type OnboardingStepsProps = {
   onCompleted: () => void;
 };
 
-export const BackupOverviewSlides: FC<OnboardingStepsProps> = ({
+export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
   onCompleted,
 }) => {
   const { t } = useTranslation();
