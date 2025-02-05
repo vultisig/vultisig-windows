@@ -38,6 +38,7 @@
     "@bufbuild/protobuf": "^2.2.3",
     "@mysten/sui": "^1.21.1",
     "@polkadot/api": "^15.5.2",
-    "@solana/web3.js": "^2.0.0"
+    "@solana/web3.js": "^2.0.0",
+    "xrpl": "^4.1.0"
   }
 }
