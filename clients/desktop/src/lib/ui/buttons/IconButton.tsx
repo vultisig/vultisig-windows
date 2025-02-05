@@ -1,7 +1,7 @@
+import { match } from '@lib/utils/match';
 import { ComponentProps, forwardRef, Ref } from 'react';
 import styled, { css } from 'styled-components';
 
-import { match } from '@lib/utils/match';
 import { borderRadius } from '../css/borderRadius';
 import { centerContent } from '../css/centerContent';
 import { sameDimensions } from '../css/sameDimensions';
