@@ -1,6 +1,7 @@
 import { create } from '@bufbuild/protobuf';
 import { SolanaSpecificSchema } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { asyncAttempt } from '@lib/utils/promise/asyncAttempt';
 import { Address } from '@solana/web3.js';
 
 import { getSolanaClient } from '../../solana/client/getSolanaClient';
@@ -37,10 +38,14 @@ export const getSolanaSpecific = async ({
       account: coin.address,
       token: coin.contractAddress,
     });
-    result.toTokenAssociatedAddress = await getSolanaTokenAssociatedAccount({
-      account: shouldBePresent(receiver),
-      token: coin.contractAddress,
-    });
+    result.toTokenAssociatedAddress = await asyncAttempt(
+      () =>
+        getSolanaTokenAssociatedAccount({
+          account: shouldBePresent(receiver),
+          token: coin.contractAddress,
+        }),
+      undefined
+    );
   }
 
   return result;

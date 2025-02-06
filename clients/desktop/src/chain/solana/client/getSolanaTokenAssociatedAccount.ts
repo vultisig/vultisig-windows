@@ -14,10 +14,20 @@ export const getSolanaTokenAssociatedAccount = async ({
   const client = getSolanaClient();
 
   const { value } = await client
-    .getTokenAccountsByOwner(account as Address, {
-      mint: token as Address,
-    })
+    .getTokenAccountsByOwner(
+      account as Address,
+      {
+        mint: token as Address,
+      },
+      {
+        encoding: 'jsonParsed',
+      }
+    )
     .send();
+
+  if (!value) {
+    throw new Error('No associated token account found');
+  }
 
   return value[0].pubkey;
 };
