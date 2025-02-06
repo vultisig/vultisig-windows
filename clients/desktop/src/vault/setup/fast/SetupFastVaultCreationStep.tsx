@@ -7,7 +7,6 @@ import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { KeygenFailedState } from '../../keygen/shared/KeygenFailedState';
 import { useKeygenMutation } from '../../keygen/shared/mutations/useKeygenMutation';
-import { getStorageVaultId } from '../../utils/storageVault';
 import { BackupFastVault } from './backup/BackupFastVault';
 import { SetupFastVaultEducationSlides } from './SetupFastVaultEducationSlides';
 
@@ -24,7 +23,7 @@ export const SetupFastVaultCreationStep = ({ onTryAgain }: KeygenStepProps) => {
   return (
     <MatchQuery
       value={mutationState}
-      success={vault => <BackupFastVault vaultId={getStorageVaultId(vault)} />}
+      success={vault => <BackupFastVault vault={vault} />}
       error={error => (
         <>
           <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />

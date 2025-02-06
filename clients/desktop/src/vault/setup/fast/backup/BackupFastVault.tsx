@@ -1,26 +1,32 @@
 import { FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import { storage } from '../../../../../wailsjs/go/models';
 import { Match } from '../../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
+import { appPaths } from '../../../../navigation';
+import { getStorageVaultId } from '../../../utils/storageVault';
+import { EmailConfirmation } from '.';
 import { BackupConfirmation } from './BackupConfirmation';
 import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne';
 import { BackupOverviewSlidesPartTwo } from './BackupOverviewSlidesPartTwo';
-import { BackupSuccessSlides } from './BackupSuccessSlides';
-import { EmailConfirmationSlides } from './EmailConfirmationSlides';
+import { BackupSuccessSlide } from './BackupSuccessSlides';
 
 const steps = [
   'backupSlideshowPartOne',
-  'enterEmailCode',
+  'emailVerification',
   'backupSlideshowPartTwo',
   'backupConfirmation',
-  'backupGuide',
+  'backupSuccessfulSlideshow',
 ] as const;
 
 type BackupFastVaultProps = {
-  vaultId: string;
+  vault: storage.Vault;
 };
 
-export const BackupFastVault: FC<BackupFastVaultProps> = ({ vaultId }) => {
+export const BackupFastVault: FC<BackupFastVaultProps> = ({ vault }) => {
+  const navigate = useNavigate();
+  const vaultId = getStorageVaultId(vault);
   const { step, toNextStep } = useStepNavigation({
     steps,
   });
@@ -31,14 +37,18 @@ export const BackupFastVault: FC<BackupFastVaultProps> = ({ vaultId }) => {
       backupSlideshowPartOne={() => (
         <BackupOverviewSlidesPartOne onCompleted={toNextStep} />
       )}
-      enterEmailCode={() => (
-        <EmailConfirmationSlides onCompleted={toNextStep} vaultId={vaultId} />
+      emailVerification={() => (
+        <EmailConfirmation onCompleted={toNextStep} vaultId={vaultId} />
       )}
       backupSlideshowPartTwo={() => (
         <BackupOverviewSlidesPartTwo onCompleted={toNextStep} />
       )}
-      backupConfirmation={() => <BackupConfirmation />}
-      backupGuide={() => <BackupSuccessSlides />}
+      backupConfirmation={() => (
+        <BackupConfirmation onCompleted={toNextStep} vault={vault} />
+      )}
+      backupSuccessfulSlideshow={() => (
+        <BackupSuccessSlide onCompleted={() => navigate(appPaths.vault)} />
+      )}
     />
   );
 };
