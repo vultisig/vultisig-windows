@@ -1,5 +1,5 @@
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 const STATE_MACHINE_NAME = 'State Machine 1';
 const INPUT_NAME = 'Next';
