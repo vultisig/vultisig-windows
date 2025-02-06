@@ -47,7 +47,7 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
         const getAmount = () => {
           if (balancesQuery.data) {
             const key = coinKeyToString(coinKey);
-            if (key) {
+            if (key in balancesQuery.data) {
               return balancesQuery.data[key];
             }
           }
