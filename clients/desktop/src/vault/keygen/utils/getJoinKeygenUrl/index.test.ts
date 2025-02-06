@@ -2,6 +2,7 @@ import * as queryUtils from '@lib/utils/query/addQueryParams';
 import { describe, expect, it, vi } from 'vitest';
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config';
+import * as protobufUtils from '../../../../utils/protobuf/toCompressedString';
 import { KeygenServerType } from '../../server/KeygenServerType';
 import { getJoinKeygenUrl } from '.';
 
@@ -18,13 +19,24 @@ describe('getJoinKeygenUrl', () => {
 
     const mockCompressedString = 'mockCompressedString';
 
+    vi.spyOn(protobufUtils, 'toCompressedString').mockResolvedValue(
+      mockCompressedString
+    );
+
     const addQueryParamsSpy = vi
       .spyOn(queryUtils, 'addQueryParams')
       .mockReturnValue(
-        'https://example.com?type=NewVault&tssType=Keygen&jsonData=mockCompressedString'
+        `https://example.com?type=NewVault&tssType=Keygen&jsonData=${mockCompressedString}`
       );
 
     const result = await getJoinKeygenUrl(mockInput);
+
+    console.log('deepLinkBaseUrl:', deepLinkBaseUrl);
+    console.log('Expected Query Params:', {
+      type: 'NewVault',
+      tssType: 'Keygen',
+      jsonData: mockCompressedString,
+    });
 
     expect(addQueryParamsSpy).toHaveBeenCalledWith(deepLinkBaseUrl, {
       type: 'NewVault',
@@ -33,7 +45,7 @@ describe('getJoinKeygenUrl', () => {
     });
 
     expect(result).toBe(
-      'https://example.com?type=NewVault&tssType=Keygen&jsonData=mockCompressedString'
+      `https://example.com?type=NewVault&tssType=Keygen&jsonData=${mockCompressedString}`
     );
 
     addQueryParamsSpy.mockRestore();
