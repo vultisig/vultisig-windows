@@ -4,7 +4,7 @@ import { TW } from '@trustwallet/wallet-core';
 import { keccak256 } from 'js-sha3';
 
 import { EvmChain } from '../../../model/chain';
-import { getEvmPublicClient } from '../../evm/chainInfo';
+import { getEvmClient } from '../../evm/client/getEvmClient';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeEvmTx = async ({
@@ -20,7 +20,7 @@ export const executeEvmTx = async ({
   const rawTx = walletCore.HexCoding.encode(encoded);
   const txHash = '0x' + keccak256(encoded);
 
-  const publicClient = getEvmPublicClient(chain as EvmChain);
+  const publicClient = getEvmClient(chain);
 
   try {
     const hash = await publicClient.sendRawTransaction({

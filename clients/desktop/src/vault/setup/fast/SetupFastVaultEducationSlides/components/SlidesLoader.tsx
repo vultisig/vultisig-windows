@@ -1,4 +1,3 @@
-import { useRive } from '@rive-app/react-canvas';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -8,6 +7,7 @@ import { LoadingIndicatorImage } from '../../../../../lib/ui/images/LoadingIndic
 import { HStack, VStack } from '../../../../../lib/ui/layout/Stack';
 import { Text } from '../../../../../lib/ui/text';
 import { getColor } from '../../../../../lib/ui/theme/getters';
+import { AnimatedLoader } from '../../../../../ui/pending/AnimatedLoader';
 
 const Wrapper = styled(VStack)`
   overflow-y: hidden;
@@ -39,11 +39,6 @@ export const IconWrapper = styled(VStack)`
 
 export const SlidesLoader = () => {
   const { t } = useTranslation();
-  const { RiveComponent } = useRive({
-    src: '/rive-animations/fast-vault-keygen.riv',
-    stateMachines: 'State Machine 1',
-    autoplay: true,
-  });
 
   return (
     <Wrapper justifyContent="center">
@@ -55,7 +50,7 @@ export const SlidesLoader = () => {
       </HStack>
       <HStack gap={8}>
         <LoaderWrapper>
-          <RiveComponent />
+          <AnimatedLoader />
         </LoaderWrapper>
         <Text color="shy">{t('fastVaultSetup.generatingECDSAKey')}</Text>
       </HStack>

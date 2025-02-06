@@ -395,7 +395,37 @@ export const es = {
   while_you_wait_vultisig_is: 'Mientras esperas, Vultisig es...',
   while_you_wait_vultisig_has: 'Mientras esperas, Vultisig tiene...',
   creating_vault: 'Creando Bóveda',
+  learnMore: 'Aprender más',
   fastVaultSetup: {
+    backup: {
+      heldByServer: 'mantenido por el servidor',
+      part1: 'La parte 1 de las acciones del monedero será',
+      backUpNow: 'Hacer una copia de seguridad ahora',
+      vaultShares: 'Tu monedero contiene 2 acciones,',
+      completeCustody: 'Se te envía para su custodia completa.',
+      setNewStandard: 'Estás listo para usar un nuevo estándar de monedero.',
+      checkEmail: 'Revisa tu correo electrónico para verificar',
+      wellDone: 'Bien hecho',
+      enterCode:
+        'Introduce el código de 4 dígitos que te enviamos por correo electrónico',
+      codeInfo:
+        'Este código confirmará que has recibido tu acción del monedero 1 por correo electrónico',
+      verifyingCode: 'Verificando código, por favor espera',
+      backUpNowVault: 'Hacer copia de seguridad ahora',
+      backUp: 'Hacer copia de seguridad',
+      backupVault: 'Hacer copia de seguridad del monedero',
+      shareOnlineBackup: 'en línea.',
+      shareSecurely: 'compartir de forma segura, preferiblemente',
+      backup: 'Hacer copia de seguridad',
+      thisVault: 'este monedero',
+      this_vault: 'esta acción del monedero',
+      securely: 'de forma segura, preferiblemente',
+      online: 'en línea',
+      backupConfirmationDescription:
+        'Haz una copia de seguridad de tu acción del monedero en línea',
+      onlineStorageDescription:
+        'El almacenamiento en línea es recomendado y seguro; las acciones del monedero están diseñadas para esto.',
+    },
     summary: {
       title: 'Resumen Rápido',
       pillText: 'Participaciones del Bóveda',

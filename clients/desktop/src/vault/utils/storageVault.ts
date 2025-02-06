@@ -58,9 +58,14 @@ export const isoStringToProtoTimestamp = (isoString: string): Timestamp => {
   const seconds = BigInt(
     Math.floor(convertDuration(date.getTime(), 'ms', 's'))
   );
+
   const nanos = Number(
-    isoString.split('.')[1]?.replace('Z', '').padEnd(9, '0') || 0
+    isoString
+      .split('.')[1]
+      ?.split(/Z|[+-]/)[0]
+      .padEnd(9, '0') || 0
   );
+
   return create(TimestampSchema, { seconds, nanos });
 };
 

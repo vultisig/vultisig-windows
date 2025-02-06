@@ -1,3 +1,4 @@
+import { formatAmount } from '@lib/utils/formatAmount';
 import { useTranslation } from 'react-i18next';
 
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
@@ -7,7 +8,6 @@ import { Opener } from '../../../lib/ui/base/Opener';
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel';
 import { Text } from '../../../lib/ui/text';
-import { formatAmount } from '@lib/utils/formatAmount';
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
@@ -55,8 +55,8 @@ export const ManageSendCoin = () => {
       >
         <span>{t('balance')}:</span>
         <SendCoinBalanceDependant
-          success={({ amount, decimals }) => (
-            <span>{formatAmount(fromChainAmount(amount, decimals))}</span>
+          success={amount => (
+            <span>{formatAmount(fromChainAmount(amount, coin.decimals))}</span>
           )}
         />
       </Text>

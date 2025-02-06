@@ -1,11 +1,13 @@
-import { assertChainField } from '../../../chain/utils/assertChainField';
-import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { minBigInt } from '@lib/utils/math/minBigInt';
+
+import { assertChainField } from '../../../chain/utils/assertChainField';
+import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
+import { CoinKey } from '../../../coin/Coin';
 import { maxSendAmountEnabledChains } from '../../../model/chain';
 
 export type CapSendAmountToMaxInput = {
-  coin: Coin;
+  coin: CoinKey;
   amount: bigint;
   fee: bigint;
   balance: bigint;
@@ -17,7 +19,7 @@ export const capSendAmountToMax = ({
   fee,
   balance,
 }: CapSendAmountToMaxInput) => {
-  if (!coin.isNativeToken) {
+  if (!isNativeCoin(coin)) {
     return amount;
   }
 

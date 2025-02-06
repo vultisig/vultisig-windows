@@ -398,7 +398,37 @@ export const de = {
   while_you_wait_vultisig_is: 'Während du wartest, ist Vultisig...',
   while_you_wait_vultisig_has: 'Während du wartest, hat Vultisig...',
   creating_vault: 'Tresor wird erstellt',
+  learnMore: 'Mehr erfahren',
   fastVaultSetup: {
+    backup: {
+      heldByServer: 'vom Server gehalten',
+      part1: 'Teil 1 der Tresoranteile wird',
+      backUpNow: 'Jetzt sichern',
+      vaultShares: 'Ihr Tresor enthält 2 Anteile,',
+      completeCustody:
+        'Er wird Ihnen zur vollständigen Selbstverwahrung gesendet!',
+      setNewStandard: 'Sie sind bereit, einen neuen Wallet-Standard zu nutzen.',
+      checkEmail: 'Überprüfen Sie Ihre E-Mail zur Verifizierung',
+      wellDone: 'Gut gemacht',
+      enterCode:
+        'Geben Sie den 4-stelligen Code ein, den wir Ihnen per E-Mail gesendet haben',
+      codeInfo:
+        'Dieser Code bestätigt, dass Sie Ihren Tresoranteil 1 per E-Mail erhalten haben',
+      verifyingCode: 'Code wird überprüft, bitte warten',
+      backUpNowVault: 'Jetzt sichern',
+      backUp: 'Sichern',
+      backupVault: 'Tresor sichern',
+      shareOnlineBackup: 'online.',
+      shareSecurely: 'sicher teilen, vorzugsweise',
+      backup: 'Sichern',
+      thisVault: 'diesen Tresor',
+      this_vault: 'diesen Tresoranteil',
+      securely: 'sicher, vorzugsweise',
+      online: 'online',
+      backupConfirmationDescription: 'Sichern Sie Ihren Tresoranteil online',
+      onlineStorageDescription:
+        'Die Online-Speicherung wird empfohlen und ist sicher – Tresoranteile sind dafür ausgelegt.',
+    },
     summary: {
       title: 'Kurze Zusammenfassung',
       pillText: 'Tresoranteile',

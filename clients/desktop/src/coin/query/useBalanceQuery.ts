@@ -1,26 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
+import { pick } from '@lib/utils/record/pick';
+import { useMemo } from 'react';
 
-import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
-import { Chain } from '../../model/chain';
-import { AccountCoinKey } from '../AccountCoin';
-import { getCoinBalance } from '../balance/getCoinBalance';
-import { CoinAmount } from '../Coin';
-import { getCoinMetaKey } from '../utils/coinMeta';
+import { CoinBalanceResolverInput } from '../balance/CoinBalanceResolver';
+import { coinKeyToString } from '../Coin';
+import { useBalancesQuery } from './useBalancesQuery';
 
-export const getBalanceQueryKey = (key: AccountCoinKey) => ['coinBalance', key];
+export const useBalanceQuery = (input: CoinBalanceResolverInput) => {
+  const query = useBalancesQuery([input]);
 
-export const useBalanceQuery = (coin: Coin) => {
-  const chain = coin.chain as Chain;
-  const key = getCoinMetaKey({
-    ...coin,
-    chain,
-  });
+  return useMemo(() => {
+    const error = query.errors[0] ?? null;
 
-  return useQuery({
-    queryKey: getBalanceQueryKey({
-      ...key,
-      address: coin.address,
-    }),
-    queryFn: async (): Promise<CoinAmount> => getCoinBalance(coin),
-  });
+    const data = query.data?.[coinKeyToString(input)];
+
+    return {
+      data,
+      ...pick(query, ['isPending', 'isLoading']),
+      error,
+    };
+  }, [query, input]);
 };

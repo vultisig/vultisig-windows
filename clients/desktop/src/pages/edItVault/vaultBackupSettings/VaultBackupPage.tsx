@@ -52,7 +52,6 @@ const VaultBackupPage = () => {
 
   const onSubmit = async (data?: FieldValues) => {
     const password = data?.password;
-    if (!vault) return;
 
     backupVault(
       { vault, password },

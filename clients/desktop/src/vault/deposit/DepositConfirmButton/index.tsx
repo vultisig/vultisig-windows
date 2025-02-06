@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { coinKeyFromString } from '../../../coin/Coin';
-import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
@@ -43,7 +42,6 @@ export const DepositConfirmButton = ({
   const coin = useCurrentVaultCoin(coinKey);
   const navigate = useAppNavigate();
   const chainSpecificQuery = useDepositChainSpecificQuery();
-  const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
 
   const vault = useCurrentVault();
 
@@ -100,14 +98,8 @@ export const DepositConfirmButton = ({
     return <Text color="danger">{t('required_field_missing')}</Text>;
   }
 
-  if (balanceQuery.error || chainSpecificQuery.error) {
+  if (chainSpecificQuery.error) {
     return <Text color="danger">{t('failed_to_load')}</Text>;
-  }
-
-  const isPending = balanceQuery.isPending || chainSpecificQuery.isPending;
-
-  if (isPending) {
-    return <Text>{t('loading')}</Text>;
   }
 
   if (hasServer && !isBackup) {

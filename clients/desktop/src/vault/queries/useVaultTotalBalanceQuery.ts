@@ -2,14 +2,11 @@ import { sum } from '@lib/utils/array/sum';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useMemo } from 'react';
 
-import { areEqualCoins, coinKeyToString } from '../../coin/Coin';
+import { coinKeyToString } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
-import {
-  getStorageCoinKey,
-  storageCoinToCoin,
-} from '../../coin/utils/storageCoin';
+import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import {
   getResolvedQuery,
   pendingQuery,
@@ -27,7 +24,7 @@ export const useVaultTotalBalanceQuery = () => {
     })),
   });
 
-  const balancesQuery = useBalancesQuery(coins.map(storageCoinToCoin));
+  const balancesQuery = useBalancesQuery(coins.map(getStorageCoinKey));
 
   return useMemo((): Query<number> => {
     if (pricesQuery.isPending || balancesQuery.isPending) {
@@ -39,16 +36,16 @@ export const useVaultTotalBalanceQuery = () => {
         coins.map(coin => {
           const key = getStorageCoinKey(coin);
           const price = shouldBePresent(pricesQuery.data)[coinKeyToString(key)];
-          const balance = shouldBePresent(balancesQuery.data).find(item =>
-            areEqualCoins(item, key)
-          );
+          const amount = shouldBePresent(balancesQuery.data)[
+            coinKeyToString(key)
+          ];
 
-          if (price === undefined || balance === undefined) {
+          if (price === undefined || amount === undefined) {
             return 0;
           }
 
           return getCoinValue({
-            amount: balance.amount,
+            amount,
             decimals: coin.decimals,
             price: price,
           });

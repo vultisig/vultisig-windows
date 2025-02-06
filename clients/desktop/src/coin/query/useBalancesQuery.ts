@@ -1,33 +1,26 @@
+import { mergeRecords } from '@lib/utils/record/mergeRecords';
 import { useQueries } from '@tanstack/react-query';
 
-import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEagerQuery';
-import { Chain } from '../../model/chain';
+import { CoinBalanceResolverInput } from '../balance/CoinBalanceResolver';
 import { getCoinBalance } from '../balance/getCoinBalance';
-import { CoinAmount, CoinKey } from '../Coin';
-import { getCoinMetaKey } from '../utils/coinMeta';
-import { getBalanceQueryKey } from './useBalanceQuery';
+import { coinKeyToString } from '../Coin';
 
-export const useBalancesQuery = (coins: Coin[]) => {
+export const getBalanceQueryKey = (input: CoinBalanceResolverInput) => [
+  'coinBalance',
+  input,
+];
+
+export const useBalancesQuery = (inputs: CoinBalanceResolverInput[]) => {
   const queries = useQueries({
-    queries: coins.map(coin => {
-      const chain = coin.chain as Chain;
-      const key = getCoinMetaKey({
-        ...coin,
-        chain,
-      });
-
+    queries: inputs.map(input => {
       return {
-        queryKey: getBalanceQueryKey({
-          ...key,
-          address: coin.address,
-        }),
-        queryFn: async (): Promise<CoinAmount & CoinKey> => {
-          const balance = await getCoinBalance(coin);
+        queryKey: getBalanceQueryKey(input),
+        queryFn: async () => {
+          const amount = await getCoinBalance(input);
 
           return {
-            ...balance,
-            ...key,
+            [coinKeyToString(input)]: amount,
           };
         },
       };
@@ -36,6 +29,6 @@ export const useBalancesQuery = (coins: Coin[]) => {
 
   return useQueriesToEagerQuery({
     queries,
-    joinData: data => data,
+    joinData: data => mergeRecords(...data),
   });
 };
