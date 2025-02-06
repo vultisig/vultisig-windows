@@ -176,6 +176,7 @@ export const hr = {
   vault_backup_banner_title:
     'Sada napravite sigurnosnu kopiju svog udjela trezora na ovom uređaju!',
   vault_details_page_vault_part: 'Dio trezora',
+  vault_details_page_vault_type: 'Tip trezora',
   vault_details_page_vault_name: 'Naziv trezora',
   vault_details_page_vault_ECDSA: 'ECDSA',
   vault_details_page_vault_EDDSA: 'EdDSA',

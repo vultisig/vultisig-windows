@@ -24,4 +24,5 @@ type Vault struct {
 	IsBackedUp     bool       `json:"is_backed_up"`
 	Coins          []Coin     `json:"coins"`
 	FolderID			 *string `json:"folder_id,omitempty"`
+	LibType			 string   `json:"lib_type"`
 }

@@ -17,11 +17,16 @@ export function MatchQuery<T, E = unknown>({
   success,
   inactive = () => null,
 }: MatchQueryProps<T, E>) {
+
+  console.log('value', value);
+
   if (value.data !== undefined) {
     return <>{success(value.data)}</>;
   }
 
   if (value.error) {
+    console.error('value.error', value.error);
+
     return <>{error(value.error)}</>;
   }
 

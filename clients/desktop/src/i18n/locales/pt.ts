@@ -177,6 +177,7 @@ export const pt = {
   wrong_vault_try_again: 'Cofre ou dispositivo de pareamento incorreto.',
   vault_details_page_title: 'Detalhes',
   vault_details_page_vault_part: 'Parte do Cofre',
+  vault_details_page_vault_type: 'Tipo de Cofre',
   vault_backup_page_title: 'Backup',
   vault_backup_banner_title:
     'Faça já o backup da partilha do cofre deste dispositivo!',
