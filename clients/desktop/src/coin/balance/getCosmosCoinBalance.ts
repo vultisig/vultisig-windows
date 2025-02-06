@@ -1,6 +1,5 @@
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
-import { Fetch } from '../../../wailsjs/go/utils/GoHttp';
 import { cosmosFeeCoinDenom } from '../../chain/cosmos/cosmosFeeCoinDenom';
 import {
   getCosmosBalanceUrl,
@@ -13,10 +12,13 @@ import { CoinBalanceResolver } from './CoinBalanceResolver';
 export const getCosmosCoinBalance: CoinBalanceResolver<
   CosmosChain
 > = async input => {
-  if (isNativeCoin(input) || ['ibc/', 'factory/'].some(input.id.includes)) {
+  if (
+    isNativeCoin(input) ||
+    ['ibc/', 'factory/'].some(prefix => input.id.includes(prefix))
+  ) {
     const url = getCosmosBalanceUrl(input);
 
-    const { balances }: CosmosBalanceResponse = await Fetch(url);
+    const { balances } = await queryUrl<CosmosBalanceResponse>(url);
 
     const denom = cosmosFeeCoinDenom[input.chain];
 
