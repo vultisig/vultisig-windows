@@ -2,7 +2,7 @@ import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined';
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { TW } from '@trustwallet/wallet-core';
 
-import { getRippleRpcClient } from '../../ripple/rpc/getRippleRpcClient';
+import { getRippleClient } from '../../ripple/client/getRippleClient';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
@@ -17,7 +17,7 @@ export const executeRippleTx = async ({
 
   const rawTx = stripHexPrefix(walletCore.HexCoding.encode(encoded));
 
-  const rpcClient = await getRippleRpcClient();
+  const rpcClient = await getRippleClient();
 
   const { result } = await rpcClient.request({
     command: 'submit',

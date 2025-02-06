@@ -1,11 +1,11 @@
 import { EvmChain } from '../../../model/chain';
 import { FeePriority } from '../../fee/FeePriority';
-import { getEvmPublicClient } from '../chainInfo';
+import { getEvmClient } from '../client/getEvmClient';
 
 export const getEvmMaxPriorityFee = async (
   chain: EvmChain
 ): Promise<Record<FeePriority, number>> => {
-  const publicClient = getEvmPublicClient(chain);
+  const publicClient = getEvmClient(chain);
 
   const maxPriorityFeePerGas =
     await publicClient.estimateMaxPriorityFeePerGas();

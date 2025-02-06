@@ -3,8 +3,8 @@ import { SolanaSpecificSchema } from '@core/communication/vultisig/keysign/v1/bl
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { Address } from '@solana/web3.js';
 
-import { getSolanaRpcClient } from '../../solana/rpc/getSolanaRpcClient';
-import { getSolanaTokenAssociatedAccount } from '../../solana/rpc/getSolanaTokenAssociatedAccount';
+import { getSolanaClient } from '../../solana/client/getSolanaClient';
+import { getSolanaTokenAssociatedAccount } from '../../solana/client/getSolanaTokenAssociatedAccount';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
 
@@ -12,7 +12,7 @@ export const getSolanaSpecific = async ({
   coin,
   receiver,
 }: GetChainSpecificInput): Promise<KeysignChainSpecificValue> => {
-  const client = getSolanaRpcClient();
+  const client = getSolanaClient();
 
   const recentBlockHash = (
     await client.getLatestBlockhash().send()

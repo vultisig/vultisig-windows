@@ -1,4 +1,5 @@
-import { Chain, createPublicClient, http, PublicClient } from 'viem';
+import { recordMap } from '@lib/utils/record/recordMap';
+import { Chain } from 'viem';
 import {
   arbitrum,
   avalanche,
@@ -12,7 +13,6 @@ import {
   zksync,
 } from 'viem/chains';
 
-import { recordMap } from '@lib/utils/record/recordMap';
 import { EvmChain } from '../../model/chain';
 import { Endpoint } from '../../services/Endpoint';
 
@@ -63,11 +63,4 @@ export const getEvmChainId = (chain: EvmChain): number => {
 
 export const getEvmChainRpcUrl = (chain: EvmChain): string => {
   return evmChainRpcUrls[chain];
-};
-
-export const getEvmPublicClient = (chain: EvmChain): PublicClient => {
-  return createPublicClient({
-    chain: evmChainInfo[chain],
-    transport: http(),
-  });
 };

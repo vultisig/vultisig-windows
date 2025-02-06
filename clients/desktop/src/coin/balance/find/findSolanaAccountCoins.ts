@@ -2,7 +2,7 @@
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
 import { ChainAccount } from '../../../chain/ChainAccount';
-import { getSplAccounts } from '../../../chain/solana/rpc/getSplAccounts';
+import { getSplAccounts } from '../../../chain/solana/client/getSplAccounts';
 import { Chain } from '../../../model/chain';
 import { Endpoint } from '../../../services/Endpoint';
 

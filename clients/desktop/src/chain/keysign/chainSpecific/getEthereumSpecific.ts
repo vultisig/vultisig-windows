@@ -8,11 +8,8 @@ import { ethers } from 'ethers';
 import { publicActionsL2 } from 'viem/zksync';
 
 import { Chain, EvmChain } from '../../../model/chain';
-import {
-  evmChainInfo,
-  getEvmChainRpcUrl,
-  getEvmPublicClient,
-} from '../../evm/chainInfo';
+import { evmChainInfo, getEvmChainRpcUrl } from '../../evm/chainInfo';
+import { getEvmClient } from '../../evm/client/getEvmClient';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
 import { getEvmMaxPriorityFee } from '../../evm/fee/getEvmMaxPriorityFee';
 import { getEvmBaseFee } from '../../evm/utils/getEvmBaseFee';
@@ -39,7 +36,7 @@ export const getEthereumSpecific = async ({
   const nonce = BigInt(await provider.getTransactionCount(coin.address));
 
   if (chain === Chain.Zksync) {
-    const client = getEvmPublicClient(chain).extend(publicActionsL2());
+    const client = getEvmClient(chain).extend(publicActionsL2());
 
     const value = toChainAmount(shouldBePresent(amount), coin.decimals);
 

@@ -1,7 +1,7 @@
-import { getRippleRpcClient } from '../rpc/getRippleRpcClient';
+import { getRippleClient } from '../client/getRippleClient';
 
 export const getRippleAccountInfo = async (address: string) => {
-  const client = await getRippleRpcClient();
+  const client = await getRippleClient();
 
   const { result } = await client.request({
     command: 'account_info',

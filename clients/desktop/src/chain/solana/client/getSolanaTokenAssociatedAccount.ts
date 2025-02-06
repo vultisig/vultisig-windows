@@ -1,6 +1,6 @@
 import { Address } from '@solana/web3.js';
 
-import { getSolanaRpcClient } from './getSolanaRpcClient';
+import { getSolanaClient } from './getSolanaClient';
 
 type Input = {
   account: string;
@@ -11,7 +11,7 @@ export const getSolanaTokenAssociatedAccount = async ({
   account,
   token,
 }: Input): Promise<Address> => {
-  const client = getSolanaRpcClient();
+  const client = getSolanaClient();
 
   const { value } = await client
     .getTokenAccountsByOwner(account as Address, {

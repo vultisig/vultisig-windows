@@ -4,14 +4,14 @@ import {
   SuiSpecificSchema,
 } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 
-import { getSuiRpcClient } from '../../sui/rpc/getSuiRpcClient';
+import { getSuiClient } from '../../sui/client/getSuiClient';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
 
 export const getSuiSpecific = async ({
   coin,
 }: GetChainSpecificInput): Promise<KeysignChainSpecificValue> => {
-  const client = getSuiRpcClient();
+  const client = getSuiClient();
 
   const gasPrice = await client.getReferenceGasPrice();
 

@@ -1,11 +1,11 @@
 import { Address } from '@solana/web3.js';
 
-import { getSolanaRpcClient } from './getSolanaRpcClient';
+import { getSolanaClient } from './getSolanaClient';
 
 const SPL_TOKEN_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
 
 export const getSplAccounts = async (address: string) => {
-  const client = getSolanaRpcClient();
+  const client = getSolanaClient();
 
   const { value } = await client
     .getTokenAccountsByOwner(

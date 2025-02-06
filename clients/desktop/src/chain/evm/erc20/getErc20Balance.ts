@@ -1,7 +1,7 @@
 import { Address, erc20Abi } from 'viem';
 
 import { EvmChain } from '../../../model/chain';
-import { getEvmPublicClient } from '../chainInfo';
+import { getEvmClient } from '../client/getEvmClient';
 
 type Input = {
   chain: EvmChain;
@@ -14,7 +14,7 @@ export const getErc20Balance = async ({
   address,
   accountAddress,
 }: Input) => {
-  const publicClient = getEvmPublicClient(chain);
+  const publicClient = getEvmClient(chain);
 
   return publicClient.readContract({
     address,

@@ -1,7 +1,7 @@
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { TW } from '@trustwallet/wallet-core';
 
-import { getSuiRpcClient } from '../../sui/rpc/getSuiRpcClient';
+import { getSuiClient } from '../../sui/client/getSuiClient';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeSuiTx = async ({
@@ -15,7 +15,7 @@ export const executeSuiTx = async ({
 
   assertErrorMessage(suiErrorMessage);
 
-  const rpcClient = getSuiRpcClient();
+  const rpcClient = getSuiClient();
 
   const { digest } = await rpcClient.executeTransactionBlock({
     transactionBlock: unsignedTx,
