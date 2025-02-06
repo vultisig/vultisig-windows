@@ -65,7 +65,6 @@ const manifestData = {
       js: [contentJS],
       matches: ["<all_urls>"],
       world: "MAIN",
-      run_at: "document_idle",
     },
     {
       js: [relayJS],
