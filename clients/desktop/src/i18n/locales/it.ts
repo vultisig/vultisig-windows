@@ -402,7 +402,37 @@ export const it = {
   while_you_wait_vultisig_is: 'Mentre aspetti, Vultisig è...',
   while_you_wait_vultisig_has: 'Mentre aspetti, Vultisig ha...',
   creating_vault: 'Creazione della Cassaforte',
+  learnMore: 'Scopri di più',
   fastVaultSetup: {
+    backup: {
+      heldByServer: 'conservato dal server',
+      part1: 'La parte 1 delle quote del vault sarà',
+      backUpNow: 'Esegui il backup ora',
+      vaultShares: 'Il tuo vault contiene 2 quote,',
+      completeCustody: 'Ti viene inviato per una custodia completa!',
+      setNewStandard: 'Sei pronto per utilizzare un nuovo standard di wallet.',
+      checkEmail: 'Controlla la tua e-mail per verificare',
+      wellDone: 'Ben fatto',
+      enterCode:
+        'Inserisci il codice di 4 cifre che ti abbiamo inviato via e-mail',
+      codeInfo:
+        'Questo codice confermerà che hai ricevuto la tua quota del vault 1 via e-mail',
+      verifyingCode: 'Verifica del codice in corso, attendere',
+      backUpNowVault: 'Esegui il backup ora',
+      backUp: 'Esegui il backup',
+      backupVault: 'Esegui il backup del vault',
+      shareOnlineBackup: 'online.',
+      shareSecurely: 'condividi in modo sicuro, preferibilmente',
+      backup: 'Esegui il backup',
+      thisVault: 'questo vault',
+      this_vault: 'questa quota del vault',
+      securely: 'in modo sicuro, preferibilmente',
+      online: 'online',
+      backupConfirmationDescription:
+        'Esegui il backup della tua quota del vault online',
+      onlineStorageDescription:
+        "L'archiviazione online è consigliata e sicura: le quote del vault sono progettate per questo.",
+    },
     summary: {
       title: 'Riepilogo Rapido',
       pillText: 'Quote del Vault',

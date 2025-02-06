@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { validateEmail } from '@lib/utils/validation/validateEmail';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -16,7 +17,6 @@ import { TextInput } from '../../../lib/ui/inputs/TextInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
-import { validateEmail } from '@lib/utils/validation/validateEmail';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -74,7 +74,7 @@ export const ServerEmailStep = ({
               render={() => (
                 <TextInput
                   {...register('email')}
-                  validationState={
+                  validation={
                     isValid ? 'valid' : errors.email ? 'invalid' : undefined
                   }
                   placeholder={t('email')}

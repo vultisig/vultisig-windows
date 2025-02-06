@@ -386,7 +386,36 @@ export const hr = {
   while_you_wait_vultisig_is: 'Amíg vársz, a Vultisig...',
   while_you_wait_vultisig_has: 'Amíg vársz, a Vultisig rendelkezik...',
   creating_vault: 'Tárca létrehozása',
+  learnMore: 'Tudj meg többet',
   fastVaultSetup: {
+    backup: {
+      heldByServer: 'a szerver tárolja',
+      part1: 'A trezor megosztásainak 1. része lesz',
+      backUpNow: 'Készíts biztonsági mentést most',
+      vaultShares: 'A trezorod 2 megosztást tartalmaz,',
+      completeCustody: 'Teljes önálló letétkezelésre küldjük el neked!',
+      setNewStandard: 'Készen állsz egy új pénztárca szabvány használatára.',
+      checkEmail: 'Ellenőrizd az e-mailedet a hitelesítéshez',
+      wellDone: 'Szép munka',
+      enterCode: 'Írd be az 4 jegyű kódot, amelyet e-mailben küldtünk el neked',
+      codeInfo:
+        'Ez a kód megerősíti, hogy megkaptad az 1. trezor megosztásodat e-mailben',
+      verifyingCode: 'Kód ellenőrzése, kérlek várj',
+      backUpNowVault: 'Készíts biztonsági mentést most',
+      backUp: 'Biztonsági mentés',
+      backupVault: 'Trezor biztonsági mentése',
+      shareOnlineBackup: 'online.',
+      shareSecurely: 'megosztás biztonságosan, lehetőleg',
+      backup: 'Biztonsági mentés',
+      thisVault: 'ez a trezor',
+      this_vault: 'ez a trezor megosztás',
+      securely: 'biztonságosan, lehetőleg',
+      online: 'online',
+      backupConfirmationDescription:
+        'Készíts biztonsági mentést a trezor megosztásodról online',
+      onlineStorageDescription:
+        'Az online tárolás ajánlott és biztonságos – a trezor megosztások erre vannak tervezve.',
+    },
     summary: {
       title: 'Gyors Összefoglaló',
       pillText: 'Tároló Megosztások',
