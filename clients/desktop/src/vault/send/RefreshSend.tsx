@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
+import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery';
 import { chainSpecificQueryKeyPrefix } from '../../coin/query/useChainSpecificQuery';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { PageHeaderRefresh } from '../../ui/page/PageHeaderRefresh';

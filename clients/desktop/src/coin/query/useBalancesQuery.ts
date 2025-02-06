@@ -5,7 +5,11 @@ import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEag
 import { CoinBalanceResolverInput } from '../balance/CoinBalanceResolver';
 import { getCoinBalance } from '../balance/getCoinBalance';
 import { coinKeyToString } from '../Coin';
-import { getBalanceQueryKey } from './useBalanceQuery';
+
+export const getBalanceQueryKey = (input: CoinBalanceResolverInput) => [
+  'coinBalance',
+  input,
+];
 
 export const useBalancesQuery = (inputs: CoinBalanceResolverInput[]) => {
   const queries = useQueries({

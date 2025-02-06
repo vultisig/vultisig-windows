@@ -14,7 +14,7 @@ import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
 import { chainTokens } from '../../coin/chainTokens';
-import { getBalanceQueryKey } from '../../coin/query/useBalanceQuery';
+import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery';
 import { useSaveCoinsMutation } from '../../coin/query/useSaveCoinsMutation';
 import {
   getTokensAutoDiscoveryQueryKey,
