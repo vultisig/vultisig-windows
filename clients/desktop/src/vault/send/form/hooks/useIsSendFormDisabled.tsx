@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useValidateAddressQuery } from '../../../../chain/queries/useValidateAddressQuery';
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery';
-import { storageCoinToCoin } from '../../../../coin/utils/storageCoin';
+import { getStorageCoinKey } from '../../../../coin/utils/storageCoin';
 import { useCurrentVaultCoin } from '../../../state/currentVault';
 import { useSendAmount } from '../../state/amount';
 import { useSendReceiver } from '../../state/receiver';
@@ -17,7 +17,7 @@ export const useIsSendFormDisabled = () => {
 
   const { t } = useTranslation();
   const coin = useCurrentVaultCoin(coinKey);
-  const balanceQuery = useBalanceQuery(storageCoinToCoin(coin));
+  const balanceQuery = useBalanceQuery(getStorageCoinKey(coin));
 
   const addressValidationQuery = useValidateAddressQuery({
     address: receiver,
@@ -45,8 +45,8 @@ export const useIsSendFormDisabled = () => {
       return t('amount_required');
     }
 
-    const { amount: maxChainAmount, decimals } = balanceQuery.data;
-    const maxAmount = fromChainAmount(maxChainAmount, decimals);
+    const maxChainAmount = balanceQuery.data;
+    const maxAmount = fromChainAmount(maxChainAmount, coin.decimals);
 
     if (amount > maxAmount) {
       return t('send_amount_exceeds_balance');
@@ -57,6 +57,7 @@ export const useIsSendFormDisabled = () => {
     amount,
     balanceQuery.data,
     balanceQuery.isPending,
+    coin.decimals,
     t,
   ]);
 };

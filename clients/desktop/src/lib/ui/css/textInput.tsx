@@ -40,7 +40,7 @@ export const textInput = css`
   font-size: 14px;
   font-weight: 700;
 
-  background: ${getColor('foreground')};
+  ${textInputBackground};
   color: ${getColor('contrast')};
 
   &::placeholder {

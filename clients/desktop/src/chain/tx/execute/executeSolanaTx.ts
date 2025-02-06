@@ -1,7 +1,8 @@
+import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
+import { Base64EncodedWireTransaction } from '@solana/web3.js';
 import { TW } from '@trustwallet/wallet-core';
 
-import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
-import { RpcServiceSolana } from '../../../services/Rpc/solana/RpcServiceSolana';
+import { getSolanaClient } from '../../solana/client/getSolanaClient';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeSolanaTx = async ({
@@ -12,7 +13,15 @@ export const executeSolanaTx = async ({
 
   assertErrorMessage(solanaErrorMessage);
 
-  const rpcService = new RpcServiceSolana();
+  const client = getSolanaClient();
 
-  return rpcService.broadcastTransaction(encoded);
+  const result = await client
+    .sendTransaction(encoded as Base64EncodedWireTransaction, {
+      skipPreflight: false,
+      preflightCommitment: 'confirmed',
+      maxRetries: BigInt(3),
+    })
+    .send();
+
+  return result;
 };

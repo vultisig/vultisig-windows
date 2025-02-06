@@ -1,3 +1,6 @@
+import { base64Encode } from '@lib/utils/base64Encode';
+
+import { AccountCoinKey } from '../../coin/AccountCoin';
 import { CosmosChain } from '../../model/chain';
 import { ChainAccount } from '../ChainAccount';
 
@@ -22,3 +25,10 @@ export const getCosmosBalanceUrl = ({
   address,
 }: ChainAccount<CosmosChain>) =>
   `${cosmosRpcUrl[chain]}/cosmos/bank/v1beta1/balances/${address}`;
+
+export const getCosmosWasmTokenBalanceUrl = ({
+  chain,
+  id,
+  address,
+}: AccountCoinKey<CosmosChain>) =>
+  `${cosmosRpcUrl[chain]}/cosmwasm/wasm/v1/contract/${id}/smart/${base64Encode(JSON.stringify({ balance: { address } }))}`;

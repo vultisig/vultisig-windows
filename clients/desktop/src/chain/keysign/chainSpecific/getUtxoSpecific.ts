@@ -5,6 +5,7 @@ import {
 } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 
 import { getCoinBalance } from '../../../coin/balance/getCoinBalance';
+import { getCoinKey } from '../../../coin/utils/coin';
 import { UtxoChain } from '../../../model/chain';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
 import { toChainAmount } from '../../utils/toChainAmount';
@@ -34,10 +35,12 @@ export const getUtxoSpecific = async ({
   });
 
   if (amount) {
-    const balance = await getCoinBalance(coin);
+    const balance = await getCoinBalance({
+      ...getCoinKey(coin),
+      address: coin.address,
+    });
 
-    result.sendMaxAmount =
-      toChainAmount(amount, coin.decimals) === balance.amount;
+    result.sendMaxAmount = toChainAmount(amount, coin.decimals) === balance;
   }
 
   return result;

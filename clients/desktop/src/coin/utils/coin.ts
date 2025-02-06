@@ -1,5 +1,6 @@
-import { storage } from '../../../wailsjs/go/models';
 import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
+
+import { storage } from '../../../wailsjs/go/models';
 import { Chain } from '../../model/chain';
 import { AccountCoinKey, accountCoinKeyToString } from '../AccountCoin';
 import { getCoinMetaKey } from './coinMeta';

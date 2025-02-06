@@ -13,8 +13,10 @@ import { AmountTextInput } from '../../../lib/ui/inputs/AmountTextInput';
 import { HStack } from '../../../lib/ui/layout/Stack';
 import { text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant';
 import { useSendAmount } from '../state/amount';
+import { useCurrentSendCoin } from '../state/sendCoin';
 import { AmountSuggestion } from './AmountSuggestion';
 
 const suggestions = [0.25, 0.5];
@@ -45,6 +47,9 @@ export const ManageAmount = () => {
   const [value, setValue] = useSendAmount();
   const { t } = useTranslation();
 
+  const [coinKey] = useCurrentSendCoin();
+  const { decimals } = useCurrentVaultCoin(coinKey);
+
   return (
     <ActionInsideInteractiveElement
       render={() => (
@@ -54,7 +59,7 @@ export const ManageAmount = () => {
             <SendCoinBalanceDependant
               pending={() => null}
               error={() => null}
-              success={({ amount, decimals }) => (
+              success={amount => (
                 <HStack alignItems="center" gap={4}>
                   {suggestions.map(suggestion => (
                     <AmountSuggestion
@@ -80,7 +85,7 @@ export const ManageAmount = () => {
         <SendCoinBalanceDependant
           pending={() => null}
           error={() => null}
-          success={({ amount, decimals }) => (
+          success={amount => (
             <MaxButton
               onClick={() => {
                 setValue(fromChainAmount(amount, decimals));

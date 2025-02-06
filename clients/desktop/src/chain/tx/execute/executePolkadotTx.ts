@@ -1,8 +1,8 @@
+import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
+import { isInError } from '@lib/utils/error/isInError';
 import { TW } from '@trustwallet/wallet-core';
 
-import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
-import { Endpoint } from '../../../services/Endpoint';
-import { callRpc } from '../../rpc/callRpc';
+import { getPolkadotClient } from '../../polkadot/client/getPolkadotClient';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executePolkadotTx = async ({
@@ -16,9 +16,20 @@ export const executePolkadotTx = async ({
 
   const rawTx = walletCore.HexCoding.encode(encoded);
 
-  return callRpc({
-    url: Endpoint.polkadotServiceRpc,
-    method: 'author_submitExtrinsic',
-    params: [rawTx],
-  });
+  const rpcClient = await getPolkadotClient();
+
+  try {
+    const { hash } = await rpcClient.rpc.author.submitExtrinsic(rawTx);
+    return hash.toHex();
+  } catch (error) {
+    if (isInError(error, 'Transaction is temporarily banned')) {
+      const extrinsic = rpcClient.createType('Extrinsic', rawTx, {
+        isSigned: true,
+        version: 4,
+      });
+      return extrinsic.hash.toHex();
+    }
+
+    throw error;
+  }
 };
