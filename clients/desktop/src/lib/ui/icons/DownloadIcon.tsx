@@ -1,30 +1,16 @@
-const DownloadIcon = ({
-  width = 22,
-  height = 22,
-}: {
-  width?: number;
-  height?: number;
-}) => (
+const DownloadIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={width}
-    height={height}
+    width="1em"
+    height="0.95em"
     fill="none"
-    viewBox="0 0 22 22"
   >
     <path
-      stroke="#fff"
-      strokeDasharray="2 2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M11 21c5.523 0 10-4.477 10-10S16.523 1 11 1 1 5.477 1 11s4.477 10 10 10Z"
-    />
-    <path
-      stroke="#fff"
+      stroke="#02122B"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}
-      d="m6 12.667 5 5 5-5M11 3.5v14.167"
+      d="M18 12.5v3.333a1.666 1.666 0 0 1-1.667 1.667H4.667A1.667 1.667 0 0 1 3 15.833V12.5m3.333-4.167L10.5 12.5m0 0 4.167-4.167M10.5 12.5v-10"
     />
   </svg>
 );
