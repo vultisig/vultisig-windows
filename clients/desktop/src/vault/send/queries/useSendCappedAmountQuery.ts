@@ -22,6 +22,9 @@ export const useSendCappedAmountQuery = () => {
     address,
   });
 
+  console.log('chainSpecificQuery', chainSpecificQuery);
+  console.log('balanceQuery', balanceQuery);
+
   return useTransformQueriesData(
     {
       chainSpecific: chainSpecificQuery,
@@ -39,7 +42,7 @@ export const useSendCappedAmountQuery = () => {
             amount: chainAmount,
             coin: coinKey,
             fee: feeAmount,
-            balance: balance.amount,
+            balance,
           }),
         };
       },
