@@ -15,9 +15,8 @@ export const executeSolanaTx = async ({
 
   const client = getSolanaRpcClient();
 
-  const encodedTx = Buffer.from(encoded).toString('base64');
   const result = await client
-    .sendTransaction(encodedTx as Base64EncodedWireTransaction, {
+    .sendTransaction(encoded as Base64EncodedWireTransaction, {
       skipPreflight: false,
       preflightCommitment: 'confirmed',
       maxRetries: BigInt(3),
