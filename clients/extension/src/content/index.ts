@@ -607,8 +607,8 @@ namespace Provider {
 
       const modifiedTransfer = {
         lamports: decodedTransfer.lamports.toString(),
-        fromPubkey: decodedTransfer.fromPubkey.toString(),
-        toPubkey: decodedTransfer.toPubkey.toString(),
+        from: decodedTransfer.fromPubkey.toString(),
+        to: decodedTransfer.toPubkey.toString(),
       };
       return await this.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
