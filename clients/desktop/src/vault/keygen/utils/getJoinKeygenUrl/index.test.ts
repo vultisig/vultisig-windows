@@ -31,13 +31,6 @@ describe('getJoinKeygenUrl', () => {
 
     const result = await getJoinKeygenUrl(mockInput);
 
-    console.log('deepLinkBaseUrl:', deepLinkBaseUrl);
-    console.log('Expected Query Params:', {
-      type: 'NewVault',
-      tssType: 'Keygen',
-      jsonData: mockCompressedString,
-    });
-
     expect(addQueryParamsSpy).toHaveBeenCalledWith(deepLinkBaseUrl, {
       type: 'NewVault',
       tssType: 'Keygen',
