@@ -8,7 +8,7 @@ import { GradientText, Text } from '../../../../../lib/ui/text';
 import { PageContent } from '../../../../../ui/page/PageContent';
 import { AnimatedLoader } from '../../../../../ui/pending/AnimatedLoader';
 
-const BACKUP_SUCCESS_WAIT_TIME_IN_MS = 3000;
+const BACKUP_SUCCESS_WAIT_TIME_IN_MS = 6000;
 
 type BackupSuccessSlideProps = {
   onCompleted: () => void;

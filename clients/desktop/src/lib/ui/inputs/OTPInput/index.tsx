@@ -1,4 +1,3 @@
-import { forwardRef, Ref } from 'react';
 import { ComponentProps } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -16,18 +15,15 @@ export interface OTPInputProps
   validation: 'invalid' | 'valid' | undefined;
 }
 
-export const OTPInput = forwardRef(function OTPInputInner(
-  {
-    length = 5,
-    onValueChange,
-    onCompleted,
-    className,
-    validation,
-    ...props
-  }: OTPInputProps,
-  ref: Ref<HTMLInputElement> | null
-) {
-  const { otp, handleChange, handleKeyDown, handlePaste } = useOtp(
+export const OTPInput = ({
+  length = 4,
+  onValueChange,
+  onCompleted,
+  className,
+  validation,
+  ...props
+}: OTPInputProps) => {
+  const { otp, handleChange, handleKeyDown, handlePaste, inputRefs } = useOtp(
     length,
     onValueChange,
     onCompleted
@@ -40,20 +36,20 @@ export const OTPInput = forwardRef(function OTPInputInner(
           validation={validation}
           autoFocus={index === 0}
           key={index}
-          id={`otp-${index}`}
           type="text"
           value={data}
           onKeyDown={e => handleKeyDown(e, index)}
           onChange={e => handleChange(e, index)}
+          onPaste={handlePaste}
           maxLength={1}
-          ref={index === 0 ? ref : null}
+          ref={el => (inputRefs.current[index] = el)}
           {...props}
         />
       ))}
-      <PasteButton onClick={handlePaste}>Paste</PasteButton>
+      <PasteButton onClick={() => handlePaste()}>Paste</PasteButton>
     </HStack>
   );
-});
+};
 
 const InputBoxContainer = styled.input<{
   validation?: 'invalid' | 'valid';
@@ -74,7 +70,6 @@ const InputBoxContainer = styled.input<{
     validation === 'valid'
       ? css`
           border-color: ${getColor('primary')};
-          background-color: ${getColor('primary')};
 
           &:focus,
           &:hover {

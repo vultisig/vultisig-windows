@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, ClipboardEvent, useRef, useState } from 'react';
 
 export const useOtp = (
   length: number,
@@ -6,6 +6,7 @@ export const useOtp = (
   onCompleted?: (value: string) => void
 ) => {
   const [otp, setOtp] = useState(new Array(length).fill(''));
+  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const value = e.target.value;
@@ -23,7 +24,7 @@ export const useOtp = (
     }
 
     if (value && index < length - 1) {
-      document.getElementById(`otp-${index + 1}`)?.focus();
+      inputRefs.current[index + 1]?.focus();
     }
   };
 
@@ -32,24 +33,44 @@ export const useOtp = (
     index: number
   ) => {
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      document.getElementById(`otp-${index - 1}`)?.focus();
+      inputRefs.current[index - 1]?.focus();
     }
   };
 
-  const handlePaste = async () => {
+  const handlePaste = async (event?: ClipboardEvent<HTMLInputElement>) => {
     try {
-      const text = await navigator.clipboard.readText();
+      let text = '';
+      if (event) {
+        event.preventDefault();
+        text = event.clipboardData.getData('text');
+      } else {
+        text = await navigator.clipboard.readText();
+      }
+
       if (!text) return;
+
       const pastedOtp = text.slice(0, length).split('');
-      setOtp(pastedOtp);
-      onValueChange?.(pastedOtp.join(''));
-      if (pastedOtp.length === length) {
-        onCompleted?.(pastedOtp.join(''));
+
+      const newOtp = [...otp];
+      pastedOtp.forEach((char, index) => {
+        newOtp[index] = char;
+      });
+
+      setOtp(newOtp);
+      onValueChange?.(newOtp.join(''));
+
+      if (newOtp.length === length) {
+        onCompleted?.(newOtp.join(''));
+      }
+
+      const lastFilledIndex = pastedOtp.length - 1;
+      if (lastFilledIndex < length) {
+        inputRefs.current[lastFilledIndex]?.focus();
       }
     } catch (err) {
       console.error('Failed to read clipboard contents: ', err);
     }
   };
 
-  return { otp, handleChange, handleKeyDown, handlePaste };
+  return { otp, handleChange, handleKeyDown, handlePaste, inputRefs };
 };

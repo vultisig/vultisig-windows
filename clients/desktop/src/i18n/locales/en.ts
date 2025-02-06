@@ -401,7 +401,7 @@ export const en = {
       setNewStandard: 'You’re ready to use a new wallet standard.',
       checkEmail: 'Check your e-mail to verify',
       wellDone: 'Well done',
-      enterCode: 'Enter the 5 digit code we emailed you',
+      enterCode: 'Enter the 4 digit code we emailed you',
       codeInfo:
         'This code will confirm that you’ve received your vault share 1 via email',
       verifyingCode: 'Verifying code, please wait',

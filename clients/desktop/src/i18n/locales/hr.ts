@@ -397,7 +397,7 @@ export const hr = {
       setNewStandard: 'Készen állsz egy új pénztárca szabvány használatára.',
       checkEmail: 'Ellenőrizd az e-mailedet a hitelesítéshez',
       wellDone: 'Szép munka',
-      enterCode: 'Írd be az 5 jegyű kódot, amelyet e-mailben küldtünk el neked',
+      enterCode: 'Írd be az 4 jegyű kódot, amelyet e-mailben küldtünk el neked',
       codeInfo:
         'Ez a kód megerősíti, hogy megkaptad az 1. trezor megosztásodat e-mailben',
       verifyingCode: 'Kód ellenőrzése, kérlek várj',

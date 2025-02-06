@@ -58,7 +58,6 @@ export const useBackupVaultMutation = () => {
     }) => {
       const base64Data = await createBackup(fromStorageVault(vault), password);
       await SaveFileBkp(getExportName(vault), base64Data);
-
       await UpdateVaultIsBackedUp(getStorageVaultId(vault), true);
     },
     onSuccess: () => {

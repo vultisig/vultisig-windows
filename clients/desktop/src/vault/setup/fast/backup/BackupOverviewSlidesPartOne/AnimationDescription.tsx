@@ -13,8 +13,8 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
   animation,
 }) => {
   const { t } = useTranslation();
-  const stepToAnimationDescription = {
-    1: () => (
+  const stepToAnimationDescription = [
+    () => (
       <Text size={48}>
         {t('fastVaultSetup.backup.vaultShares')}{' '}
         <GradientText as="span">
@@ -22,7 +22,7 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
         </GradientText>
       </Text>
     ),
-    2: () => (
+    () => (
       <Text size={48}>
         {t('fastVaultSetup.backup.part1')}{' '}
         <GradientText as="span">
@@ -31,7 +31,7 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
         .
       </Text>
     ),
-    3: () => (
+    () => (
       <Text size={48}>
         {t('fastVaultSetup.backup.completeCustody')}{' '}
         <GradientText as="span">
@@ -39,12 +39,12 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
         </GradientText>
       </Text>
     ),
-  };
+  ];
 
   return (
     <Wrapper>
       <AnimatedVisibility>
-        <TextWrapper>{stepToAnimationDescription[animation]()}</TextWrapper>
+        <TextWrapper>{stepToAnimationDescription[animation - 1]()}</TextWrapper>
       </AnimatedVisibility>
     </Wrapper>
   );
