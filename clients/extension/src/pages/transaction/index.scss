@@ -1,5 +1,8 @@
 @use "~variables" as *;
-
+#root {
+  width: 100vw !important;
+  max-width: 24rem;
+}
 .layout {
   > .header {
     .progress {
@@ -61,15 +64,15 @@
       .qr-container {
         border: rem(2) solid white;
         margin: rem(5);
+        height: 90% !important;
+        width: 90% !important;
       }
       .ant-qrcode {
         padding: 0 !important;
         border-radius: 0 !important;
         border: rem(2) solid black !important;
-        // margin: rem(24);
-        // border: 5px white;
-        // border: none;
-        // padding: rem(24);
+        width: 100% !important;
+        height: 100% !important;
       }
 
       .qrcode {
@@ -77,9 +80,10 @@
         align-items: center;
         justify-content: center;
         height: rem(312);
+        width: 95vw !important;
         overflow: hidden;
         position: relative;
-        width: rem(312);
+        max-width: rem(312);
       }
     }
 
@@ -143,4 +147,33 @@
   padding: rem(10) !important;
   border-radius: rem(5) !important;
   white-space: pre-wrap !important;
+}
+
+@media only screen and (max-height: 570px) {
+  .layout.step-2 > .content .qr-container {
+    width: unset !important;
+  }
+
+  .layout.step-2 > .content .border {
+    height: 100%;
+    margin-inline: auto;
+  }
+}
+
+@media only screen and (max-width: 330px) {
+  .layout.step-2 > .content .qr-container {
+    height: unset !important;
+    position: absolute;
+    top: 0.4rem;
+  }
+}
+
+@media only screen and (max-height: 570px) and (max-width: 330px) {
+  .layout.step-2 > .content .qr-container {
+    width: 90% !important;
+    height: 90% !important;
+  }
+  .layout.step-2 > .content .border {
+    display: none;
+  }
 }

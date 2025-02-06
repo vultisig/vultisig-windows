@@ -10,38 +10,38 @@ const relayManifestPath = "dist/relay/.vite";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const packageJson = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, "package.json"), "utf8")
+  fs.readFileSync(path.resolve(__dirname, "package.json"), "utf8"),
 );
 
 const appManifestJson = JSON.parse(
   fs.readFileSync(
     path.resolve(__dirname, appManifestPath, manifestFileName),
-    "utf8"
-  )
+    "utf8",
+  ),
 );
 
 const contentManifestJson = JSON.parse(
   fs.readFileSync(
     path.resolve(__dirname, contentManifestPath, manifestFileName),
-    "utf8"
-  )
+    "utf8",
+  ),
 );
 
 const relayManifestJson = JSON.parse(
   fs.readFileSync(
     path.resolve(__dirname, relayManifestPath, manifestFileName),
-    "utf8"
-  )
+    "utf8",
+  ),
 );
 
-const { author, description, manifest, name, version } = packageJson;
+const { author, description, manifest, version } = packageJson;
 
 const contentJS = `content/${contentManifestJson[manifest.content].file}`;
 const relayJS = `relay/${relayManifestJson[manifest.relay].file}`;
 
 const manifestData = {
   manifest_version: 3,
-  name,
+  name: "Vulticonnect",
   description,
   author,
   version: version,
@@ -101,7 +101,7 @@ const manifestData = {
 fs.writeFileSync(
   path.resolve(__dirname, "dist", manifestFileName),
   JSON.stringify(manifestData, null, 2),
-  "utf8"
+  "utf8",
 );
 
 function deleteFolderRecursive(folderPath) {
