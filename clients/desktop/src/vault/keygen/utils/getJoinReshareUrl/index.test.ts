@@ -2,6 +2,7 @@ import * as queryUtils from '@lib/utils/query/addQueryParams';
 import { describe, expect, it, vi } from 'vitest';
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config';
+import * as protobufUtils from '../../../../utils/protobuf/toCompressedString';
 import { KeygenServerType } from '../../server/KeygenServerType';
 import { getJoinReshareUrl } from '.';
 
@@ -21,10 +22,14 @@ describe('getJoinReshareUrl', () => {
 
     const mockCompressedString = 'mockCompressedString';
 
+    vi.spyOn(protobufUtils, 'toCompressedString').mockResolvedValue(
+      mockCompressedString
+    );
+
     const addQueryParamsSpy = vi
       .spyOn(queryUtils, 'addQueryParams')
       .mockReturnValue(
-        'https://example.com?type=NewVault&tssType=Reshare&jsonData=mockCompressedString'
+        `https://example.com?type=NewVault&tssType=Reshare&jsonData=${mockCompressedString}`
       );
 
     const result = await getJoinReshareUrl(mockInput);
@@ -36,7 +41,7 @@ describe('getJoinReshareUrl', () => {
     });
 
     expect(result).toBe(
-      'https://example.com?type=NewVault&tssType=Reshare&jsonData=mockCompressedString'
+      `https://example.com?type=NewVault&tssType=Reshare&jsonData=${mockCompressedString}`
     );
 
     addQueryParamsSpy.mockRestore();
@@ -55,6 +60,10 @@ describe('getJoinReshareUrl', () => {
     };
 
     const mockCompressedString = 'mockCompressedString';
+
+    vi.spyOn(protobufUtils, 'toCompressedString').mockResolvedValue(
+      mockCompressedString
+    );
 
     vi.spyOn(queryUtils, 'addQueryParams').mockReturnValue(
       `https://example.com?type=NewVault&tssType=Reshare&jsonData=${mockCompressedString}`

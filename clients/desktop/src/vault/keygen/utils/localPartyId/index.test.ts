@@ -12,17 +12,27 @@ import {
 
 vi.mock('@lib/utils/capitalizeFirstLetter', () => ({
   capitalizeFirstLetter: vi.fn(
-    str => str.charAt(0).toUpperCase() + str.slice(1)
+    (str: string) => str.charAt(0).toUpperCase() + str.slice(1)
   ),
 }));
 
-vi.mock('@lib/utils/randomIntegerInRange', () => ({
-  randomIntegerInRange: vi.fn(() => 123),
+vi.mock('@lib/utils/randomInRange', () => ({
+  randomIntegerInRange: vi.fn((min: number, max?: number) => {
+    if (min === 1000) {
+      return 4567;
+    } else if (max !== undefined) {
+      return 123;
+    } else {
+      return 123;
+    }
+  }),
 }));
 
 describe('Keygen Utilities', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+    vi.spyOn(global.Math, 'random').mockReturnValue(0.5);
+    vi.spyOn(global.console, 'error').mockImplementation(() => {});
   });
 
   describe('generateLocalPartyId', () => {
@@ -32,9 +42,8 @@ describe('Keygen Utilities', () => {
     });
 
     it('generates local party ID for the "server" device', () => {
-      (randomIntegerInRange as any).mockReturnValue(4567);
       const result = generateLocalPartyId('server');
-      expect(result).toBe('Server-4567'); // Capitalized
+      expect(result).toBe('Server-4567');
       expect(capitalizeFirstLetter).toHaveBeenCalledWith('server');
     });
 
