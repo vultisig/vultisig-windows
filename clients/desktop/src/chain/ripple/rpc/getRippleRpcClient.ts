@@ -1,10 +1,8 @@
 import { memoizeAsync } from '@lib/utils/memoizeAsync';
 import { Client } from 'xrpl';
 
-import { Endpoint } from '../../../services/Endpoint';
-
 export const getRippleRpcClient = memoizeAsync(async () => {
-  const client = new Client(Endpoint.rippleServiceRpc);
+  const client = new Client('wss://xrplcluster.com');
   await client.connect();
 
   return client;
