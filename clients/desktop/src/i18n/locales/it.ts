@@ -414,7 +414,7 @@ export const it = {
       checkEmail: 'Controlla la tua e-mail per verificare',
       wellDone: 'Ben fatto',
       enterCode:
-        'Inserisci il codice di 5 cifre che ti abbiamo inviato via e-mail',
+        'Inserisci il codice di 4 cifre che ti abbiamo inviato via e-mail',
       codeInfo:
         'Questo codice confermerà che hai ricevuto la tua quota del vault 1 via e-mail',
       verifyingCode: 'Verifica del codice in corso, attendere',

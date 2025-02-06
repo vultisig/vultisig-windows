@@ -406,7 +406,7 @@ export const es = {
       checkEmail: 'Revisa tu correo electrónico para verificar',
       wellDone: 'Bien hecho',
       enterCode:
-        'Introduce el código de 5 dígitos que te enviamos por correo electrónico',
+        'Introduce el código de 4 dígitos que te enviamos por correo electrónico',
       codeInfo:
         'Este código confirmará que has recibido tu acción del monedero 1 por correo electrónico',
       verifyingCode: 'Verificando código, por favor espera',

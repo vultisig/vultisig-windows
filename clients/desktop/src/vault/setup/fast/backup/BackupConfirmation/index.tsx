@@ -14,6 +14,7 @@ import { PageHeader } from '../../../../../ui/page/PageHeader';
 import { AnimatedLoader } from '../../../../../ui/pending/AnimatedLoader';
 import { useBackupVaultMutation } from '../../../../mutations/useBackupVaultMutation';
 import { vaultsQueryKey } from '../../../../queries/useVaultsQuery';
+import { useVaultPassword } from '../../../../server/password/state/password';
 
 export const steps = [
   'multiFactor',
@@ -53,12 +54,12 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
   const { t } = useTranslation();
   const invalidateQueries = useInvalidateQueries();
   const { mutate: backupVault, isPending, error } = useBackupVaultMutation();
-
+  const [password] = useVaultPassword();
   const handleBackup = async () => {
     if (!vault) return;
 
     backupVault(
-      { vault, password: '' },
+      { vault, password },
       {
         onSuccess: () => {
           onCompleted();

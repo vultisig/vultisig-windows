@@ -407,7 +407,7 @@ export const pt = {
       setNewStandard: 'Você está pronto para usar um novo padrão de carteira.',
       checkEmail: 'Verifique seu e-mail para confirmar',
       wellDone: 'Muito bem',
-      enterCode: 'Digite o código de 5 dígitos que enviamos por e-mail',
+      enterCode: 'Digite o código de 4 dígitos que enviamos por e-mail',
       codeInfo:
         'Este código confirmará que você recebeu sua ação do cofre 1 por e-mail',
       verifyingCode: 'Verificando código, por favor aguarde',

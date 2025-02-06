@@ -410,7 +410,7 @@ export const de = {
       checkEmail: 'Überprüfen Sie Ihre E-Mail zur Verifizierung',
       wellDone: 'Gut gemacht',
       enterCode:
-        'Geben Sie den 5-stelligen Code ein, den wir Ihnen per E-Mail gesendet haben',
+        'Geben Sie den 4-stelligen Code ein, den wir Ihnen per E-Mail gesendet haben',
       codeInfo:
         'Dieser Code bestätigt, dass Sie Ihren Tresoranteil 1 per E-Mail erhalten haben',
       verifyingCode: 'Code wird überprüft, bitte warten',
