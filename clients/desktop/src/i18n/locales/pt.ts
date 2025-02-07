@@ -15,6 +15,9 @@ export const pt = {
   missing_verification_code: 'Código de verificação ausente',
   next: 'Próximo',
   alwaysBackUpEachVaultShare: 'Sempre faça backup de cada parte do cofre',
+  serverTimedOut: 'O servidor demorou muito',
+  serverTookTooLong:
+    'O servidor demorou muito para responder. Verifique sua conexão com a internet e tente novamente.',
   separatelyIna: 'separadamente em um',
   differentLocation: 'local diferente',
   eachDevice: 'Cada dispositivo',

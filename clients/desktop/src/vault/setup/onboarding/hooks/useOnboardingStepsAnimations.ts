@@ -4,16 +4,9 @@ import { useCallback } from 'react';
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
 
 const STATE_MACHINE_NAME = 'State Machine 1';
-const INPUT_NAME = 'Next';
+const INPUT_NAME = 'Index';
 
-export const ONBOARDING_ANIMATIONS = [
-  'vaultSharesIntro',
-  'vaultSharesInfo',
-  'vaultDevice',
-  'vaultRecovery',
-  'vaultBackup',
-  'vaultUnlock',
-] as const;
+export const ONBOARDING_ANIMATIONS = [0, 1, 2, 3, 4, 5] as const;
 
 export const useOnboardingStepsAnimations = () => {
   const { step: currentAnimation, toNextStep: toNextAnimation } =
@@ -22,7 +15,7 @@ export const useOnboardingStepsAnimations = () => {
     });
 
   const { RiveComponent, rive } = useRive({
-    src: '/rive-animations/onboarding-screen.riv',
+    src: '/assets/animations/onboarding-screen/onboarding.riv',
     autoplay: true,
     stateMachines: [STATE_MACHINE_NAME],
   });
@@ -34,8 +27,8 @@ export const useOnboardingStepsAnimations = () => {
   );
 
   const handleNextAnimation = useCallback(() => {
-    if (stateMachineInput) {
-      stateMachineInput.fire();
+    if (stateMachineInput && typeof stateMachineInput.value === 'number') {
+      stateMachineInput.value += 1;
       toNextAnimation();
     }
   }, [stateMachineInput, toNextAnimation]);

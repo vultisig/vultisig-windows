@@ -14,6 +14,9 @@ export const es = {
     'Siempre haga una copia de seguridad de cada parte del depósito',
   separatelyIna: 'separadamente en una',
   differentLocation: 'ubicación diferente',
+  serverTimedOut: 'El servidor agotó el tiempo de espera',
+  serverTookTooLong:
+    'El servidor tardó demasiado en responder. Por favor, verifica tu conexión a internet e inténtalo de nuevo.',
   eachDevice: 'Cada dispositivo',
   inYourVaultHolds: 'en su depósito contiene',
   chooseSetup: 'Elegir configuración',
