@@ -23,7 +23,7 @@ const PasswordWarningBlock = styled(WarningBlock)`
 
 const passwordSchema = z
   .object({
-    password: z.string().min(1, 'passwordRequired'),
+    password: z.string().min(1, 'fastVaultSetup.passwordRequired'),
     confirmPassword: z
       .string()
       .min(1, 'fastVaultSetup.confirmPasswordIsRequired'),
@@ -86,9 +86,9 @@ export const SetServerPasswordStep = ({
                 onValueChange={value => setValue('password', value)}
                 autoFocus
               />
-              {errors.password && (
+              {errors.password && errors.password?.message && (
                 <Text color="danger" size={12}>
-                  {errors.password.message}
+                  {t(errors.password.message)}
                 </Text>
               )}
             </VStack>
@@ -113,7 +113,7 @@ export const SetServerPasswordStep = ({
             </VStack>
           </VStack>
         </VStack>
-        <Button type="submit" isDisabled={Boolean(errors)}>
+        <Button kind="primary" type="submit" isDisabled={!isValid}>
           {t('next')}
         </Button>
       </PageContent>

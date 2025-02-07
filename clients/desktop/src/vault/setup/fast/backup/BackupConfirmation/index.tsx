@@ -1,3 +1,4 @@
+import { useRive } from '@rive-app/react-canvas';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -28,7 +29,7 @@ export const steps = [
 export type SetupFastVaultEducationSlidesStep = (typeof steps)[number];
 
 const Wrapper = styled(VStack)`
-  max-width: 500px;
+  max-width: 800px;
   align-self: center;
 `;
 
@@ -36,9 +37,9 @@ const Content = styled(VStack)`
   flex: 1;
 `;
 
-const MissingRiveAnimationPlaceholder = styled(VStack)`
+const RivePlaceholder = styled(VStack)`
+  position: relative;
   flex: 1;
-  background-color: purple;
   width: 100%;
 `;
 
@@ -55,6 +56,11 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
   const invalidateQueries = useInvalidateQueries();
   const { mutate: backupVault, isPending, error } = useBackupVaultMutation();
   const [password] = useVaultPassword();
+  const { RiveComponent } = useRive({
+    src: '/assets/animations/fast-vault-backup/fast-vault-backup-screen-splash/backupvault_splash.riv',
+    autoplay: true,
+  });
+
   const handleBackup = async () => {
     if (!vault) return;
 
@@ -85,12 +91,9 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
         gap={48}
       >
         <Content alignItems="center" justifyContent="space-between" gap={40}>
-          <MissingRiveAnimationPlaceholder
-            alignItems="center"
-            justifyContent="center"
-          >
-            Placeholder (Missing Rive Animation Component)
-          </MissingRiveAnimationPlaceholder>
+          <RivePlaceholder alignItems="center" justifyContent="center">
+            <RiveComponent />
+          </RivePlaceholder>
           <VStack gap={16}>
             <Text centerHorizontally variant="h1Regular">
               {t('fastVaultSetup.backup.backupConfirmationDescription')}
