@@ -3,25 +3,24 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { VStack } from '../../../lib/ui/layout/Stack';
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { AnimatedLoader } from '../../../ui/pending/AnimatedLoader';
+import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId';
+import { useCurrentServerUrl } from '../../keygen/state/currentServerUrl';
+import { startSession } from '../../keygen/utils/startSession';
 import { useVaultKeygenDevices } from '../../setup/hooks/useVaultKegenDevices';
-import { useCurrentServerUrl } from '../state/currentServerUrl';
-import { startSession } from '../utils/startSession';
-import { useCurrentSessionId } from './state/currentSessionId';
 
-export const KeygenStartSessionStep = ({
+export const SecureVaultKeygenStartSessionStep = ({
   onBack,
   onForward,
 }: Partial<OnBackProp> & OnForwardProp) => {
   const { t } = useTranslation();
+
   const sessionId = useCurrentSessionId();
   const serverUrl = useCurrentServerUrl();
   const devices = useVaultKeygenDevices();
@@ -37,10 +36,7 @@ export const KeygenStartSessionStep = ({
 
   return (
     <>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        title={<PageHeaderTitle>{t('keygen')}</PageHeaderTitle>}
-      />
+      <PageHeader primaryControls={<PageHeaderBackButton onClick={onBack} />} />
       <PageContent
         justifyContent="center"
         alignItems="center"
@@ -53,15 +49,15 @@ export const KeygenStartSessionStep = ({
               <AnimatedLoader />
             </AnimatedLoaderWrapper>
           )}
-          error={() => <Text>{t('failed_to_start_keygen')}</Text>}
           success={() => null}
+          error={() => <Text>{t('failed_to_start_keygen')}</Text>}
         />
       </PageContent>
     </>
   );
 };
 
-const AnimatedLoaderWrapper = styled(VStack)`
+const AnimatedLoaderWrapper = styled.div`
   width: 48px;
   height: 48px;
 `;

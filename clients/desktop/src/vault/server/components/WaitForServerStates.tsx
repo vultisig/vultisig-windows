@@ -37,7 +37,6 @@ export const WaitForServerStates: FC<WaitForServerStatesProps> = ({
             {match(state, {
               success: () => t('fastVaultSetup.connectionSuccess'),
               pending: () => t('fastVaultSetup.connectingWithServer'),
-
               error: () => t('serverTimedOut'),
             })}
           </Text>
