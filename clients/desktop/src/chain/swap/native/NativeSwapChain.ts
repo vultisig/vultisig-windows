@@ -1,4 +1,5 @@
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
+
 import { Chain } from '../../../model/chain';
 import { cosmosRpcUrl } from '../../cosmos/cosmosRpcUrl';
 
