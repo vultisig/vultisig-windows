@@ -20,7 +20,6 @@ CREATE TABLE
         "order" REAL NOT NULL DEFAULT 0,
         folder_id TEXT,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        lib_type TEXT NOT NULL DEFAULT 'GG20',
         FOREIGN KEY (folder_id) REFERENCES vault_folders(id) ON DELETE SET NULL
     );
 
