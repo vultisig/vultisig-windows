@@ -23,7 +23,7 @@ CREATE TABLE
         FOREIGN KEY (folder_id) REFERENCES vault_folders(id) ON DELETE SET NULL
     );
 
-INSERT INTO vaults_new SELECT public_key_ecdsa, name, local_party_id, public_key_eddsa, hex_chain_code, reshare_prefix, signers, is_backedup, listorder as "order", NULL as folder_id,created_at, lib_type FROM vaults;
+INSERT INTO vaults_new SELECT public_key_ecdsa, name, local_party_id, public_key_eddsa, hex_chain_code, reshare_prefix, signers, is_backedup, listorder as "order", NULL as folder_id,created_at FROM vaults;
 
 DROP TABLE vaults;
 
