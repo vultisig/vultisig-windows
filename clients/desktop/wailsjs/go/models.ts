@@ -79,6 +79,7 @@ export namespace storage {
 	    is_backed_up: boolean;
 	    coins: Coin[];
 	    folder_id?: string;
+	    lib_type: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new Vault(source);
@@ -99,6 +100,7 @@ export namespace storage {
 	        this.is_backed_up = source["is_backed_up"];
 	        this.coins = this.convertValues(source["coins"], Coin);
 	        this.folder_id = source["folder_id"];
+	        this.lib_type = source["lib_type"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

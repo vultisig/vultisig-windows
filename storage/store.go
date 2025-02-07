@@ -91,8 +91,8 @@ func (s *Store) SaveVault(vault *Vault) error {
 
 	query := `INSERT OR REPLACE INTO vaults (
 		name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
-		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id
-	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type
+	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
 	_, err = s.db.Exec(query,
 		vault.Name,
@@ -106,6 +106,7 @@ func (s *Store) SaveVault(vault *Vault) error {
 		vault.Order,
 		vault.IsBackedUp,
 		vault.FolderID,
+		vault.LibType,
 	)
 	if err != nil {
 		return fmt.Errorf("could not upsert vault, err: %w", err)
@@ -164,7 +165,7 @@ func (s *Store) UpdateVaultIsBackedUp(publicKeyECDSA string, isBackedUp bool) er
 // GetVault gets a vault
 func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
-		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id
+		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type
 		FROM vaults WHERE public_key_ecdsa = ?`
 	row := s.db.QueryRow(query, publicKeyEcdsa)
 	var signers string
@@ -181,6 +182,7 @@ func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 		&vault.Order,
 		&vault.IsBackedUp,
 		&folderID,
+		&vault.LibType,
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -246,7 +248,7 @@ func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
 // GetVaults gets all vaults
 func (s *Store) GetVaults() ([]*Vault, error) {
 	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
-		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id FROM vaults`
+		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type FROM vaults`
 	rows, err := s.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("could not query vaults, err: %w", err)
@@ -269,6 +271,7 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 			&vault.Order,
 			&vault.IsBackedUp,
 			&folderID,
+			&vault.LibType,
 		)
 		if err != nil {
 			return nil, fmt.Errorf("could not scan vault, err: %w", err)

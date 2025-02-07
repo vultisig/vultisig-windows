@@ -179,6 +179,7 @@ export const es = {
   wrong_vault_try_again: 'Bóveda o dispositivo de emparejamiento incorrecto.',
   vault_details_page_title: 'Detalles',
   vault_details_page_vault_part: 'Parte de la bóveda',
+  vault_details_page_vault_type: 'Tipo de bóveda',
   vault_backup_page_title: 'Respaldo',
   vault_backup_banner_title:
     '¡Realice una copia de seguridad de su parte de bóveda de este dispositivo ahora!',

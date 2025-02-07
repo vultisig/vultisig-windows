@@ -180,6 +180,7 @@ export const de = {
   wrong_vault_try_again: 'Falscher Tresor oder Paarungsgerät.',
   vault_details_page_title: 'Details',
   vault_details_page_vault_part: 'Tresorteil',
+  vault_details_page_vault_type: 'Tresortyp',
   vault_backup_page_title: 'Backup',
   vault_backup_banner_title:
     'Sichern Sie jetzt Ihre Tresorfreigabe dieses Geräts!',

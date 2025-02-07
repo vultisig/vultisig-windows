@@ -1,5 +1,5 @@
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
@@ -10,8 +10,6 @@ import { WaitForServerStates } from '../../server/components/WaitForServerStates
 import { useVaultType } from '../shared/state/vaultType';
 import { useVaultCreationPreparation } from './hooks/useVaultCreationPreparation';
 
-const SUCCESS_SCREEN_PERSISTENCE_IN_MS = 2500;
-
 export const SetupVaultServerStep: FC<OnForwardProp & OnBackProp> = ({
   onForward,
   onBack,
@@ -20,17 +18,13 @@ export const SetupVaultServerStep: FC<OnForwardProp & OnBackProp> = ({
   const { t } = useTranslation();
   const type = useVaultType();
 
-  useEffect(() => {
-    if (state.data) {
-      setTimeout(onForward, SUCCESS_SCREEN_PERSISTENCE_IN_MS);
-    }
-  }, [onForward, state.data]);
-
   return (
     <MatchQuery
       value={state}
       pending={() => <WaitForServerStates state="pending" />}
-      success={() => <WaitForServerStates state="success" />}
+      success={() => (
+        <WaitForServerStates state="success" onForward={onForward} />
+      )}
       error={error =>
         error.peersStepError ? (
           <KeygenFailedState
