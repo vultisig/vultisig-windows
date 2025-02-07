@@ -12,7 +12,7 @@ type WaitForServerStatesProps = {
   onForward?: () => void;
 };
 
-const WaitForServerStatesRaw: FC<WaitForServerStatesProps> = ({
+export const WaitForServerStates: FC<WaitForServerStatesProps> = ({
   state,
   onForward,
 }) => {
@@ -44,8 +44,6 @@ const WaitForServerStatesRaw: FC<WaitForServerStatesProps> = ({
     </PageContent>
   );
 };
-
-export const WaitForServerStates = React.memo(WaitForServerStatesRaw);
 
 const ContentWrapper = styled(VStack)`
   position: relative;
