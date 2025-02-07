@@ -1,19 +1,22 @@
-import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
+import { rootApiUrl } from '@core/config';
+import { queryUrl } from '@lib/utils/query/queryUrl';
+
 import { ChainAccount } from '../../../chain/ChainAccount';
 import { getEvmChainId } from '../../../chain/evm/chainInfo';
 import { EvmChain } from '../../../model/chain';
 import { CoinMeta } from '../../../model/coin-meta';
-import { Endpoint } from '../../../services/Endpoint';
-import { oneInchTokenToCoinMeta } from '../../oneInch/token';
+import { OneInchToken, oneInchTokenToCoinMeta } from '../../oneInch/token';
+
+interface OneInchBalanceResponse {
+  [tokenAddress: string]: string;
+}
 
 export const findEvmAccountCoins = async (account: ChainAccount<EvmChain>) => {
   const oneInchChainId = getEvmChainId(account.chain);
-  const oneInchEndpoint = Endpoint.fetch1InchsTokensBalance(
-    oneInchChainId.toString(),
-    account.address
-  );
 
-  const balanceData = await Fetch(oneInchEndpoint);
+  const url = `${rootApiUrl}/1inch/balance/v1.2/${oneInchChainId}/balances/${account.address}`;
+
+  const balanceData = await queryUrl<OneInchBalanceResponse>(url);
 
   await new Promise(resolve => setTimeout(resolve, 1000)); // We have some rate limits on 1 inch, so I will wait a bit
 
@@ -31,12 +34,9 @@ export const findEvmAccountCoins = async (account: ChainAccount<EvmChain>) => {
   }
 
   // Fetch token information for the non-zero balance tokens
-  const tokenInfoEndpoint = Endpoint.fetch1InchsTokensInfo(
-    oneInchChainId.toString(),
-    nonZeroBalanceTokenAddresses
-  );
-
-  const tokenInfoData = await Fetch(tokenInfoEndpoint);
+  const tokenInfoUrl = `${rootApiUrl}/1inch/token/v1.2/${oneInchChainId}/custom?addresses=${nonZeroBalanceTokenAddresses.join(',')}`;
+  const tokenInfoData =
+    await queryUrl<Record<string, OneInchToken>>(tokenInfoUrl);
 
   // Map the fetched token information to CoinMeta[] format
   return nonZeroBalanceTokenAddresses

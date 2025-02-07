@@ -1,14 +1,14 @@
+import { rootApiUrl } from '@core/config';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 import { recordMap } from '@lib/utils/record/recordMap';
 
 import { EvmChain } from '../../../../model/chain';
-import { Endpoint } from '../../../../services/Endpoint';
 import { defaultFiatCurrency } from '../../FiatCurrency';
 import { CoinPricesResponse } from '../CoinPricesResponse';
 import { GetCoinPricesInput } from '../GetCoinPricesInput';
 
-const baseUrl = `${Endpoint.vultisigApiProxy}/coingeicko/api/v3/simple/token_price/`;
+const baseUrl = `${rootApiUrl}/coingeicko/api/v3/simple/token_price/`;
 
 type Input = GetCoinPricesInput & {
   chain: EvmChain;

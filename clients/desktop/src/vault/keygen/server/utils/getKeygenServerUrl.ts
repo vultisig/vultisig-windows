@@ -1,6 +1,5 @@
 import { DiscoveryService } from '../../../../../wailsjs/go/mediator/Server';
-import { Endpoint } from '../../../../services/Endpoint';
-import { KeygenServerType } from '../KeygenServerType';
+import { KeygenServerType, keygenServerUrl } from '../KeygenServerType';
 
 export type GetKeygenServerUrlInput = {
   serverType: KeygenServerType;
@@ -12,7 +11,7 @@ export const getKeygenServerUrl = async ({
   serviceName,
 }: GetKeygenServerUrlInput): Promise<string> => {
   if (serverType === 'relay') {
-    return Endpoint.VULTISIG_RELAY;
+    return keygenServerUrl.relay;
   }
 
   return DiscoveryService(serviceName);
