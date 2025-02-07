@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
-import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep/KeygenPeerDiscoveryStep';
+import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
 import { useSelectedPeers } from '../../keysign/shared/state/selectedPeers';
-import { useVaultType } from '../shared/state/vaultType';
+import { SecureVaultKeygenPeerDiscoveryStep } from '../secure/SecureVaultKeygenPeerDiscoveryStep';
 import { useJoinKeygenUrlQuery } from './queries/useJoinKeygenUrlQuery';
 
 const requiredPeers = 1;
@@ -14,8 +14,7 @@ export const SetupVaultPeerDiscoveryStep: React.FC<
 > = ({ onForward, onBack }) => {
   const { t } = useTranslation();
   const peers = useSelectedPeers();
-
-  const type = useVaultType();
+  const currentDevice = useCurrentLocalPartyId();
 
   const isDisabled = useMemo(() => {
     if (peers.length < requiredPeers) {
@@ -26,8 +25,8 @@ export const SetupVaultPeerDiscoveryStep: React.FC<
   const joinUrlQuery = useJoinKeygenUrlQuery();
 
   return (
-    <KeygenPeerDiscoveryStep
-      title={t('keygen_for_vault', { type: t(type) })}
+    <SecureVaultKeygenPeerDiscoveryStep
+      currentDevice={currentDevice}
       onBack={onBack}
       onForward={onForward}
       isDisabled={isDisabled}
