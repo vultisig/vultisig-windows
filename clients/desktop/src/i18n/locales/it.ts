@@ -10,6 +10,21 @@ export const it = {
   onboarding_view4_description:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   tokens: 'token',
+  thisDevice: 'Questo dispositivo',
+  optionalDevice: 'Dispositivo opzionale',
+  scanWithDevice: 'Scansiona con il {{deviceNumber}}° dispositivo',
+  localMode: 'Sei in modalità locale',
+  scanQrInstruction:
+    'Scansiona il QR con un altro dispositivo. Si consiglia un setup a 3 dispositivi, 2 sono sufficienti.',
+  devicesStatus: 'Dispositivi ({{currentPeers}}/3)',
+  waitingOnDevices: 'In attesa dei dispositivi...',
+  switchToInternet: 'Torna alla modalità Internet',
+  signPrivately: 'Vuoi firmare in privato?',
+  switchToLocal: 'Passa alla modalità locale',
+  scanThe: 'Scansiona',
+  qrCode: 'il codice QR',
+  downloadVultisig:
+    'Scarica Vultisig sugli altri dispositivi e seleziona "Scansiona codice QR"',
   alwaysBackUpEachVaultShare:
     'Esegui sempre il backup di ogni quota del caveau',
   separatelyIna: 'separatamente in una',
@@ -121,7 +136,7 @@ export const it = {
   select_your_vault_type: 'Seleziona il tuo tipo di cassaforte',
   pair: 'Accoppia',
   create_qr: 'Crea QR Code',
-  scan_qr: 'Scansiona QR / Accoppia dispositivo',
+  scan_qr: 'Scansiona QR',
   this_device_is_the: 'Questo dispositivo è il',
   initiating_device: 'Dispositivo iniziale',
   pairing_device: 'Dispositivo di accoppiamento',
