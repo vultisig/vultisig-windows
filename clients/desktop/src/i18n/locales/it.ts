@@ -183,6 +183,7 @@ export const it = {
   wrong_vault_try_again: 'Cassaforte o dispositivo di accoppiamento errato.',
   vault_details_page_title: 'Dettagli',
   vault_details_page_vault_part: 'Parte del caveau',
+  vault_details_page_vault_type: 'Tipo di caveau',
   vault_backup_page_title: 'Backup',
   vault_backup_banner_title:
     'Esegui subito il backup della condivisione vault di questo dispositivo!',

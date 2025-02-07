@@ -23,8 +23,14 @@ const VaultDetailsPage = () => {
     return <></>;
   }
 
-  const { name, public_key_eddsa, public_key_ecdsa, signers, local_party_id } =
-    currentVault;
+  const {
+    name,
+    public_key_eddsa,
+    public_key_ecdsa,
+    signers,
+    local_party_id,
+    lib_type,
+  } = currentVault;
   const { localPartyIndex, totalSigners } =
     getVaultParticipantInfoFormattedForUI({
       signers,
@@ -56,6 +62,14 @@ const VaultDetailsPage = () => {
             <Text color="supporting" size={13}>
               {t('vault_details_page_part_of_vault')} {localPartyIndex}{' '}
               {t('vault_details_page_of_word')} {totalSigners}
+            </Text>
+          </VStack>
+        </ListItemPanel>
+        <ListItemPanel>
+          <VStack fullWidth alignItems="start" justifyContent="space-between">
+            <Text weight={900}>{t('vault_details_page_vault_type')}</Text>
+            <Text color="supporting" size={13}>
+              {lib_type}
             </Text>
           </VStack>
         </ListItemPanel>
