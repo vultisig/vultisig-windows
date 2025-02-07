@@ -15,13 +15,13 @@ import { PasswordProvider } from '../../server/password/state/password';
 import { ServerPasswordHintStep } from '../../server/password-hint/ServerPasswordHintStep';
 import { PasswordHintProvider } from '../../server/password-hint/state/password-hint';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
+import { SetupVaultCreationStep } from '../shared/SetupVaultCreationStep';
 import { VaultTypeProvider } from '../shared/state/vaultType';
 import { StartKeygenVaultProvider } from '../StartKeygenVaultProvider';
 import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode';
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType';
 import { SetupVaultNameProvider } from '../state/vaultName';
-import { SetupFastVaultCreationStep } from './SetupFastVaultCreationStep';
 import { SetupVaultServerStep } from './SetupVaultServerStep';
 
 const steps = [
@@ -91,7 +91,8 @@ export const SetupFastVaultPage = () => {
                                       />
                                     )}
                                     createVault={() => (
-                                      <SetupFastVaultCreationStep
+                                      <SetupVaultCreationStep
+                                        vaultType="fast"
                                         onTryAgain={() => setStep(steps[0])}
                                         onBack={() => setStep(lastEditableStep)}
                                       />
