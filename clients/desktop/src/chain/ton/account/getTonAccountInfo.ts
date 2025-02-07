@@ -1,5 +1,6 @@
+import { rootApiUrl } from '@core/config';
+
 import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
-import { Endpoint } from '../../../services/Endpoint';
 
 interface TonAccountInfoResponse {
   ok: boolean;
@@ -30,7 +31,7 @@ interface TonAccountInfoResponse {
 }
 
 export async function getTonAccountInfo(address: string) {
-  const url = `${Endpoint.vultisigApiProxy}/ton/v2/getExtendedAddressInformation?address=${address}`;
+  const url = `${rootApiUrl}/ton/v2/getExtendedAddressInformation?address=${address}`;
   const { result } = (await Fetch(url)) as TonAccountInfoResponse;
 
   return result;

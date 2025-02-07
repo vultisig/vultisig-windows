@@ -1,9 +1,7 @@
 import { memoizeAsync } from '@lib/utils/memoizeAsync';
 import { ApiPromise, HttpProvider } from '@polkadot/api';
 
-import { Endpoint } from '../../../services/Endpoint';
-
 export const getPolkadotClient = memoizeAsync(() => {
-  const provider = new HttpProvider(Endpoint.polkadotServiceRpc);
+  const provider = new HttpProvider('https://polkadot-rpc.publicnode.com');
   return ApiPromise.create({ provider });
 });

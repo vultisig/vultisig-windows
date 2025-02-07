@@ -1,9 +1,9 @@
+import { rootApiUrl } from '@core/config';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 import { pick } from '@lib/utils/record/pick';
 
 import { Fetch } from '../../../../../../wailsjs/go/utils/GoHttp';
 import { EvmChain } from '../../../../../model/chain';
-import { Endpoint } from '../../../../../services/Endpoint';
 import { ChainAccount } from '../../../../ChainAccount';
 import { getEvmChainId } from '../../../../evm/chainInfo';
 import { defaultEvmSwapGasLimit } from '../../../../evm/evmGasLimit';
@@ -21,7 +21,7 @@ type Input = {
 };
 
 const getBaseUrl = (chainId: number) =>
-  `${Endpoint.vultisigApiProxy}/1inch/swap/v6.0/${chainId}/swap`;
+  `${rootApiUrl}/1inch/swap/v6.0/${chainId}/swap`;
 
 const nativeCoinAddress = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 

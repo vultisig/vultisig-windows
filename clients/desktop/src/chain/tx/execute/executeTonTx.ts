@@ -1,8 +1,8 @@
+import { rootApiUrl } from '@core/config';
+import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { TW } from '@trustwallet/wallet-core';
 
 import { Post } from '../../../../wailsjs/go/utils/GoHttp';
-import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
-import { Endpoint } from '../../../services/Endpoint';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeTonTx = async ({
@@ -12,7 +12,9 @@ export const executeTonTx = async ({
 
   assertErrorMessage(output.errorMessage);
 
-  const response = await Post(Endpoint.broadcastTonTransaction(), {
+  const url = `${rootApiUrl}/ton/v2/sendBocReturnHash`;
+
+  const response = await Post(url, {
     boc: output.encoded,
   });
 

@@ -1,3 +1,4 @@
+import { rootApiUrl } from '@core/config';
 import { recordMap } from '@lib/utils/record/recordMap';
 import { Chain } from 'viem';
 import {
@@ -14,19 +15,18 @@ import {
 } from 'viem/chains';
 
 import { EvmChain } from '../../model/chain';
-import { Endpoint } from '../../services/Endpoint';
 
 export const evmChainRpcUrls: Record<EvmChain, string> = {
-  [EvmChain.Ethereum]: `${Endpoint.vultisigApiProxy}/eth/`,
-  [EvmChain.Base]: `${Endpoint.vultisigApiProxy}/base/`,
-  [EvmChain.Arbitrum]: `${Endpoint.vultisigApiProxy}/arb/`,
-  [EvmChain.Polygon]: `${Endpoint.vultisigApiProxy}/polygon/`,
-  [EvmChain.Optimism]: `${Endpoint.vultisigApiProxy}/opt/`,
+  [EvmChain.Ethereum]: `${rootApiUrl}/eth/`,
+  [EvmChain.Base]: `${rootApiUrl}/base/`,
+  [EvmChain.Arbitrum]: `${rootApiUrl}/arb/`,
+  [EvmChain.Polygon]: `${rootApiUrl}/polygon/`,
+  [EvmChain.Optimism]: `${rootApiUrl}/opt/`,
   [EvmChain.CronosChain]: 'https://cronos-evm-rpc.publicnode.com',
-  [EvmChain.Blast]: `${Endpoint.vultisigApiProxy}/blast/`,
-  [EvmChain.BSC]: `${Endpoint.vultisigApiProxy}/bsc/`,
-  [EvmChain.Zksync]: `${Endpoint.vultisigApiProxy}/zksync/`,
-  [EvmChain.Avalanche]: `${Endpoint.vultisigApiProxy}/avax/`,
+  [EvmChain.Blast]: `${rootApiUrl}/blast/`,
+  [EvmChain.BSC]: `${rootApiUrl}/bsc/`,
+  [EvmChain.Zksync]: `${rootApiUrl}/zksync/`,
+  [EvmChain.Avalanche]: `${rootApiUrl}/avax/`,
 };
 
 const evmDefaultChainInfo: Record<EvmChain, Chain> = {

@@ -1,13 +1,13 @@
+import { rootApiUrl } from '@core/config';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 import { recordMap } from '@lib/utils/record/recordMap';
 
-import { Endpoint } from '../../../services/Endpoint';
 import { defaultFiatCurrency } from '../FiatCurrency';
 import { CoinPricesResponse } from './CoinPricesResponse';
 import { GetCoinPricesInput } from './GetCoinPricesInput';
 
-const baseUrl = `${Endpoint.vultisigApiProxy}/coingeicko/api/v3/simple/price`;
+const baseUrl = `${rootApiUrl}/coingeicko/api/v3/simple/price`;
 
 export const getCoinPrices = async ({
   ids,

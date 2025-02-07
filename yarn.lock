@@ -611,6 +611,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@core/config@workspace:core/config":
+  version: 0.0.0-use.local
+  resolution: "@core/config@workspace:core/config"
+  languageName: unknown
+  linkType: soft
+
 "@cosmjs/amino@npm:^0.33.0":
   version: 0.33.0
   resolution: "@cosmjs/amino@npm:0.33.0"
