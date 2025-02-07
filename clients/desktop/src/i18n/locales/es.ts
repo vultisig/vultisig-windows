@@ -10,6 +10,21 @@ export const es = {
   onboarding_view4_description:
     'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   create_new_vault: 'Crear nueva bóveda',
+  thisDevice: 'Este dispositivo',
+  optionalDevice: 'Dispositivo opcional',
+  scanWithDevice: 'Escanear con el {{deviceNumber}}º dispositivo',
+  localMode: 'Estás en modo local',
+  scanQrInstruction:
+    'Escanea el QR con otro dispositivo. Se recomienda configuración de 3 dispositivos, 2 son suficientes.',
+  devicesStatus: 'Dispositivos ({{currentPeers}}/3)',
+  waitingOnDevices: 'Esperando dispositivos...',
+  switchToInternet: 'Volver al modo de internet',
+  signPrivately: '¿Quieres firmar en privado?',
+  switchToLocal: 'Cambiar al modo local',
+  scanThe: 'Escanea',
+  qrCode: 'el código QR',
+  downloadVultisig:
+    'Descarga Vultisig en tus otros dispositivos y selecciona "Escanear código QR"',
   alwaysBackUpEachVaultShare:
     'Siempre haga una copia de seguridad de cada parte del depósito',
   separatelyIna: 'separadamente en una',
@@ -117,7 +132,7 @@ export const es = {
   select_your_vault_type: 'Seleccione su tipo de bóveda',
   pair: 'Emparejar',
   create_qr: 'Crear código QR',
-  scan_qr: 'Leer código QR / Emparejar dispositivo',
+  scan_qr: 'Leer código QR',
   this_device_is_the: 'Este dispositivo es el',
   initiating_device: 'Dispositivo iniciador',
   pairing_device: 'Dispositivo de emparejamiento',
