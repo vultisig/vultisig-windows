@@ -4,7 +4,6 @@ import { queryUrl } from '@lib/utils/query/queryUrl';
 import { ChainAccount } from '../../../chain/ChainAccount';
 import { getSplAccounts } from '../../../chain/solana/client/getSplAccounts';
 import { Chain } from '../../../model/chain';
-import { Endpoint } from '../../../services/Endpoint';
 
 export const findSolanaAccountCoins = async (account: ChainAccount) => {
   if (!account.address) {
@@ -46,7 +45,7 @@ const fetchSolanaTokenInfoList = async (
   const results: Record<string, any> = {};
   const missingTokens: string[] = [];
 
-  const solanaFmResults = await queryUrl(Endpoint.solanaTokenInfoServiceRpc, {
+  const solanaFmResults = await queryUrl('https://api.solana.fm/v1/tokens', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -88,7 +87,7 @@ const fetchFromJupiterBatch = async (
 };
 
 const fetchFromJupiter = async (contractAddress: string): Promise<any> => {
-  const url = Endpoint.solanaTokenInfoJupiterServiceRpc(contractAddress);
+  const url = `https://api.jup.ag/token/${contractAddress}`;
 
   const response = await fetch(url, {
     method: 'GET',

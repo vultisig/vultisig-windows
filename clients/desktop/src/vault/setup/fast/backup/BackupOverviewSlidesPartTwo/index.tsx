@@ -26,13 +26,8 @@ export const BackupOverviewSlidesPartTwo: FC<OnboardingStepsProps> = ({
   onCompleted,
 }) => {
   const { t } = useTranslation();
-  const {
-    animations,
-    handleNextAnimation,
-    currentAnimation,
-    animationComponent: AnimationComponent,
-    isLoading,
-  } = useBackupOverviewStepsAnimationsPartTwo();
+  const { animationComponent: AnimationComponent, isLoading } =
+    useBackupOverviewStepsAnimationsPartTwo();
 
   return (
     <PageContent>
@@ -40,9 +35,9 @@ export const BackupOverviewSlidesPartTwo: FC<OnboardingStepsProps> = ({
         <Text size={18}>{t('Vault Overview')}</Text>
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted
-          steps={animations.length}
+          steps={3}
           stepWidth={`100px`}
-          value={animations.indexOf(currentAnimation) + 1}
+          value={3}
           variant="bars"
         />
       </ProgressWrapper>
@@ -51,15 +46,11 @@ export const BackupOverviewSlidesPartTwo: FC<OnboardingStepsProps> = ({
           <AnimationComponent />
         </RiveWrapper>
         <VStack gap={12}>
-          <AnimationDescription animation={currentAnimation} />
+          <AnimationDescription />
           <NextAnimationButton
             disabled={isLoading}
             icon={<ChevronRightIcon />}
-            onClick={
-              currentAnimation !== animations[animations.length - 1]
-                ? handleNextAnimation
-                : onCompleted
-            }
+            onClick={onCompleted}
           >
             {t('tap')}
           </NextAnimationButton>

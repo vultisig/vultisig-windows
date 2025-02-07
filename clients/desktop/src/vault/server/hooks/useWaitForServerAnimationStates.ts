@@ -1,37 +1,46 @@
+import { match } from '@lib/utils/match';
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas';
 import { useEffect } from 'react';
 
-const SUCCESS_SCREEN_PERSISTENCE_IN_MS = 2000;
-
+const ANIMATION_END_SCREEN_PERSISTENCE_IN_MS = 2000;
 type UseWaitForServerAnimationStatesProps = {
   onAnimationEnd?: () => void;
-  state?: 'success' | 'pending';
+  state: 'success' | 'pending' | 'error';
 };
+
+export type ServerAnimationStates =
+  UseWaitForServerAnimationStatesProps['state'];
 
 export const useWaitForServerAnimationStates = ({
   onAnimationEnd,
-  state = 'pending',
+  state,
 }: UseWaitForServerAnimationStatesProps) => {
   const { RiveComponent, rive } = useRive({
-    src: '/rive-animations/fast-vault-keygen.riv',
+    src: '/assets/animations/keygen-fast-vault/connecting-with-server.riv',
     stateMachines: 'State Machine 1',
     autoplay: true,
   });
 
-  const input = useStateMachineInput(rive, 'State Machine 1', 'Connected');
+  const successInput = useStateMachineInput(rive, 'State Machine 1', 'Succes');
+  const errorInput = useStateMachineInput(rive, 'State Machine 1', 'Error');
 
   useEffect(() => {
-    if (rive && state === 'success') {
-      input?.fire();
+    if (!rive) return;
 
-      const timeoutId = setTimeout(
-        () => onAnimationEnd?.(),
-        SUCCESS_SCREEN_PERSISTENCE_IN_MS
-      );
+    const timeoutId = setTimeout(
+      () => onAnimationEnd?.(),
+      ANIMATION_END_SCREEN_PERSISTENCE_IN_MS
+    );
+    return () => clearTimeout(timeoutId);
+  }, [state, rive, successInput, errorInput, onAnimationEnd]);
 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [input, onAnimationEnd, rive, state]);
+  useEffect(() => {
+    match(state, {
+      success: () => successInput?.fire(),
+      error: () => errorInput?.fire(),
+      pending: () => null,
+    });
+  }, [errorInput, state, successInput]);
 
   return RiveComponent;
 };

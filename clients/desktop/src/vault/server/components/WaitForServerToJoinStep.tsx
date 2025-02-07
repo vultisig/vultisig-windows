@@ -44,13 +44,10 @@ export const WaitForServerToJoinStep: React.FC<
         value={processedQuery}
         pending={() => <WaitForServerStates state="pending" />}
         success={() => (
-          <WaitForServerStates state="success" onForward={onForward} />
+          <WaitForServerStates state="success" onAnimationEnd={onForward} />
         )}
-        error={error => (
-          <FullPageFlowErrorState
-            message={extractErrorMsg(error)}
-            title={title}
-          />
+        error={() => (
+          <WaitForServerStates state="error" onAnimationEnd={onForward} />
         )}
       />
     </>

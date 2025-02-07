@@ -20,7 +20,7 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
   const { t } = useTranslation();
   // TODO: @antonio to adjust animations when they're handed over by designer
   const { RiveComponent } = useRive({
-    src: '/rive-animations/backup-screen-fast-vault-part-3.riv',
+    src: '/assets/animations/fast-vault-backup/fast-vault-backup-screen-part-3/fastvault-backup-succes.riv',
     stateMachines: 'State Machine 1',
     autoplay: true,
   });

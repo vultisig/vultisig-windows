@@ -16,6 +16,9 @@ export const hr = {
   create_new_vault: 'Kreiraj novi trezor',
   sayHelloTo: 'Mondd, hogy helló',
   vaultShares: 'széf részvények',
+  serverTimedOut: 'A szerver időtúllépés miatt megszakadt',
+  serverTookTooLong:
+    'A szerver túl sokáig tartott a válaszadással. Kérlek, ellenőrizd az internetkapcsolatodat, és próbáld újra.',
   alwaysBackUpEachVaultShare:
     'Mindig készíts biztonsági másolatot minden tárhelyrészről',
   separatelyIna: 'külön egy',

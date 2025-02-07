@@ -338,6 +338,9 @@ export const en = {
   failed_to_join_session: 'Failed to join session',
   join_session: 'Join Session',
   waiting_for_keysign_start: 'Waiting for the signing process to begin...',
+  serverTimedOut: 'Server timed out',
+  serverTookTooLong:
+    'The server took too long to respond, please check your internet connection and try again.',
   transaction: 'Transaction',
   transaction_hash_copied: 'Transaction hash copied',
   asset: 'Asset',
