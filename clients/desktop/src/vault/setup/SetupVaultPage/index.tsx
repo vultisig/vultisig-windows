@@ -38,7 +38,7 @@ export const SetupVaultPage = () => {
   const navigate = useAppNavigate();
   const theme = useTheme();
   const { RiveComponent, rive } = useRive({
-    src: '/rive-animations/choose-vault.riv',
+    src: '/assets/animations/choose-vault/index.riv',
     autoplay: true,
     stateMachines: [STATE_MACHINE_NAME],
   });
@@ -106,8 +106,8 @@ export const SetupVaultPage = () => {
                     ) : (
                       <LightningIconWrapper>
                         <LightningIcon
-                        color={theme.colors.contrast.toCssValue()}
-                      />
+                          color={theme.colors.contrast.toCssValue()}
+                        />
                       </LightningIconWrapper>
                     ),
                 },

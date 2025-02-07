@@ -11,6 +11,9 @@ export const de = {
     'Vultisig ist eine Wallet ohne Seed-Phrases. Stattdessen verwendet es einfach zu verwaltende Fragmente. Jedes Gerät hat sein eigenes einzigartiges Fragment, das separat gesichert werden muss.',
   create_new_vault: 'Neuen Tresor erstellen',
   import_existing_vault: 'Bestehenden Tresor importieren',
+  serverTimedOut: 'Server hat die Zeit überschritten',
+  serverTookTooLong:
+    'Der Server hat zu lange gebraucht, um zu antworten. Bitte überprüfe deine Internetverbindung und versuche es erneut.',
   sayHelloTo: 'Sag hallo zu',
   alwaysBackUpEachVaultShare: 'Sichern Sie jede Tresorfreigabe immer',
   separatelyIna: 'separat in einer',

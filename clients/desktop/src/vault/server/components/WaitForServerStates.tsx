@@ -1,3 +1,4 @@
+import { match } from '@lib/utils/match';
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -5,20 +6,23 @@ import styled from 'styled-components';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
-import { useWaitForServerAnimationStates } from '../hooks/useWaitForServerAnimationStates';
+import {
+  ServerAnimationStates,
+  useWaitForServerAnimationStates,
+} from '../hooks/useWaitForServerAnimationStates';
 
 type WaitForServerStatesProps = {
-  state: 'success' | 'pending';
-  onForward?: () => void;
+  state: ServerAnimationStates;
+  onAnimationEnd?: () => void;
 };
 
 export const WaitForServerStates: FC<WaitForServerStatesProps> = ({
   state,
-  onForward,
+  onAnimationEnd,
 }) => {
   const { t } = useTranslation();
   const RiveComponent = useWaitForServerAnimationStates({
-    onAnimationEnd: onForward,
+    onAnimationEnd,
     state,
   });
 
@@ -30,14 +34,19 @@ export const WaitForServerStates: FC<WaitForServerStatesProps> = ({
         </LoaderWrapper>
         <VStack gap={8} alignItems="center">
           <Text variant="h1Regular" size={32} color="contrast">
-            {state === 'pending'
-              ? t('fastVaultSetup.connectingWithServer')
-              : t('fastVaultSetup.connectionSuccess')}
+            {match(state, {
+              success: () => t('fastVaultSetup.connectionSuccess'),
+              pending: () => t('fastVaultSetup.connectingWithServer'),
+
+              error: () => t('serverTimedOut'),
+            })}
           </Text>
           <Text size={14} color="shy">
-            {state === 'pending'
-              ? t('fastVaultSetup.takeMinute')
-              : t('fastVaultSetup.vaultInitializationStarting')}
+            {match(state, {
+              success: () => t('fastVaultSetup.vaultInitializationStarting'),
+              pending: () => t('fastVaultSetup.takeMinute'),
+              error: () => t('serverTookTooLong'),
+            })}
           </Text>
         </VStack>
       </ContentWrapper>

@@ -17,6 +17,9 @@ export const it = {
   eachDevice: 'Ogni dispositivo',
   inYourVaultHolds: 'nel tuo caveau contiene',
   oneVaultShare: 'una quota del caveau',
+  serverTimedOut: 'Il server ha impiegato troppo tempo',
+  serverTookTooLong:
+    'Il server ha impiegato troppo tempo per rispondere. Controlla la tua connessione a Internet e riprova.',
   theyRe: 'Sono',
   splitIntoParts: 'divisi in parti',
   toIncreaseSecurity: 'per aumentare la sicurezza e',
