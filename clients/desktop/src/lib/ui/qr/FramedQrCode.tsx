@@ -1,44 +1,46 @@
+import { useRive } from '@rive-app/react-canvas';
 import { ComponentProps } from 'react';
 import QRCode from 'react-qr-code';
 import styled from 'styled-components';
 
-import { borderRadius } from '../../../lib/ui/css/borderRadius';
-import { toSizeUnit } from '../../../lib/ui/css/toSizeUnit';
 import { ValueProp } from '../../../lib/ui/props';
-import { getColor } from '../../../lib/ui/theme/getters';
 
 const DEFAULT_QR_CODE_SIZE = 365;
-const codeOffset = 24;
-const codePadding = 16;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{
+  size: number;
+}>`
+  position: relative;
   box-sizing: border-box;
-  ${borderRadius.l};
-  background: ${getColor('foreground')};
-  padding: ${toSizeUnit(codeOffset)};
-  border: 5px dashed ${({ theme }) => theme.colors.primary.toCssValue()};
-  width: DEFAULT_QR_CODE_SIZE + 'px';
+  width: ${({ size }) => size}px;
+  padding: 24px;
 `;
 
-const Container = styled.div`
-  ${borderRadius.m};
-  background: ${getColor('contrast')};
-  padding: ${toSizeUnit(codePadding)};
+const RiveWrapper = styled.div`
+  position: absolute;
+  inset: -9px;
+  z-index: -1;
 `;
 
-type FramedQrCode = ValueProp<string> & {
-  size?: number;
-} & ComponentProps<typeof Wrapper>;
+type FramedQrCode = ValueProp<string> &
+  Omit<ComponentProps<typeof Wrapper>, 'size'> & {
+    size?: number;
+  };
 
-export const FramedQrCode = ({
-  size = DEFAULT_QR_CODE_SIZE,
-  value,
-}: FramedQrCode) => {
+export const FramedQrCode = ({ size, value }: FramedQrCode) => {
+  const { RiveComponent } = useRive({
+    src: '/assets/animations/keygen-secure-vault/qr-scanned.riv',
+    autoplay: true,
+  });
+
   return (
-    <Wrapper>
-      <Container>
-        <QRCode size={size} value={value} />
-      </Container>
+    <Wrapper size={size ?? DEFAULT_QR_CODE_SIZE}>
+      <RiveWrapper>
+        <RiveComponent />
+      </RiveWrapper>
+      <div>
+        <QRCode size={size ?? DEFAULT_QR_CODE_SIZE} value={value} />
+      </div>
     </Wrapper>
   );
 };
