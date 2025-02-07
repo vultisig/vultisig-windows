@@ -22,33 +22,33 @@ type ThorNodeCoinSchema = {
 type ThorNodeTx = {
   id: string;
   chain: ThorchainChain;
-  from_address: string;
-  to_address: string;
+  fromAddress: string;
+  toAddress: string;
   coins: ThorNodeCoinSchema[];
   gas: ThorNodeCoinSchema[];
   memo?: string;
 };
 
 export type ThornodeTxResponseSuccess = {
-  observed_tx: {
+  observedTx: {
     tx: ThorNodeTx;
-    observed_pub_key?: string;
-    external_observed_height?: number;
-    external_confirmation_delay_height?: number;
+    observedPubKey?: string;
+    externalObservedHeight?: number;
+    externalConfirmationDelayHeight?: number;
     aggregator?: string;
-    aggregator_target?: string;
-    aggregator_target_limit?: string;
+    aggregatorTarget?: string;
+    aggregatorTargetLimit?: string;
     signers?: string[];
-    keysign_ms?: number;
-    out_hashes?: string[];
+    keysignMs?: number;
+    outHashes?: string[];
     status?: "done" | "incomplete";
   };
-  consensus_height?: number;
-  finalised_height?: number;
-  outbound_height?: number;
-  keysign_metric?: {
-    tx_id?: string;
-    node_tss_times: { address?: string; tss_time?: number }[];
+  consensusHeight?: number;
+  finalisedHeight?: number;
+  outboundHeight?: number;
+  keysignMetric?: {
+    txId?: string;
+    nodeTssTimes: { address?: string; tssTime?: number }[];
   };
 };
 
