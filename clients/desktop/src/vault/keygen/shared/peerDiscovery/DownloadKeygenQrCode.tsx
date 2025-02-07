@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { FileUpIcon } from '../../../../lib/ui/icons/FileUpIcon';
+import { ShareIconNew } from '../../../../lib/ui/icons/ShareIconNew';
 import { ValueProp } from '../../../../lib/ui/props';
 import { SaveAsImage } from '../../../../ui/file/SaveAsImage';
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
@@ -19,7 +19,7 @@ export const DownloadKeygenQrCode = ({ value }: ValueProp<string>) => {
     <SaveAsImage
       fileName={`VayltKeygenQR-${name}-${lastThreeUID}`}
       renderTrigger={({ onClick }) => (
-        <PageHeaderIconButton icon={<FileUpIcon />} onClick={onClick} />
+        <PageHeaderIconButton icon={<ShareIconNew />} onClick={onClick} />
       )}
       value={
         <PrintableQrCode
