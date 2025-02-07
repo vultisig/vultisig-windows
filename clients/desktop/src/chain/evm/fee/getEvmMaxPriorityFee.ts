@@ -1,4 +1,4 @@
-import { EvmChain } from '../../../model/chain';
+import { EvmChain } from '@core/chain/Chain';
 import { FeePriority } from '../../fee/FeePriority';
 import { getEvmClient } from '../client/getEvmClient';
 

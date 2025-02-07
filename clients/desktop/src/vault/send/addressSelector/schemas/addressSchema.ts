@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { isValidAddress } from '../../../../chain/utils/isValidAddress';
 import { AddressBookItem } from '../../../../lib/types/address-book';
-import { Chain } from '../../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 
 export const getAddressSchema = ({
   walletCore,

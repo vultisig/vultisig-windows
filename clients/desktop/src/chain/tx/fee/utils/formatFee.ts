@@ -3,7 +3,7 @@ import { formatAmount } from '@lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
 
 import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
-import { Chain, EvmChain } from '../../../../model/chain';
+import { Chain, EvmChain } from '@core/chain/Chain';
 import { cosmosGasLimitRecord } from '../../../cosmos/cosmosGasLimitRecord';
 import { KeysignChainSpecific } from '../../../keysign/KeysignChainSpecific';
 import { polkadotConfig } from '../../../polkadot/config';

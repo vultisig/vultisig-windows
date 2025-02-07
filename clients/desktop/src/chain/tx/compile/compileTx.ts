@@ -1,12 +1,10 @@
+import { Chain } from '@core/chain/Chain';
+import { getChainKind } from '@core/chain/ChainKind';
+import { signatureFormats } from '@core/chain/signing/SignatureFormat';
 import { WalletCore } from '@trustwallet/wallet-core';
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 import { tss } from '../../../../wailsjs/go/models';
-import {
-  Chain,
-  getChainKind,
-  signatureFormatRecord,
-} from '../../../model/chain';
 import { assertSignature } from '../../utils/assertSignature';
 import { getCoinType } from '../../walletCore/getCoinType';
 import { hexEncode } from '../../walletCore/hexEncode';
@@ -39,7 +37,7 @@ export const compileTx = ({
 
   hashes.forEach(hash => {
     const chainKind = getChainKind(chain);
-    const signatureFormat = signatureFormatRecord[chainKind];
+    const signatureFormat = signatureFormats[chainKind];
 
     const signature = generateSignature({
       walletCore,

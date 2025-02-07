@@ -14,7 +14,7 @@ import {
   pendingQuery,
   Query,
 } from '../../lib/ui/query/Query';
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useCurrentVaultChainCoins } from '../state/currentVault';
 
 export type VaultChainCoin = CoinKey &

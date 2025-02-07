@@ -7,7 +7,7 @@ import {
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { assertField } from '@lib/utils/record/assertField';
 
-import { EvmChain, UtxoChain } from '../../model/chain';
+import { EvmChain, UtxoChain } from '@core/chain/Chain';
 import { getErc20Allowance } from '../evm/erc20/getErc20Allowance';
 import { assertChainField } from '../utils/assertChainField';
 import { getUtxos } from '../utxo/tx/getUtxos';

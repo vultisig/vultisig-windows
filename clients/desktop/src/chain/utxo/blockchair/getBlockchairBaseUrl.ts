@@ -1,6 +1,6 @@
 import { rootApiUrl } from '@core/config';
 
-import { UtxoChain } from '../../../model/chain';
+import { UtxoChain } from '@core/chain/Chain';
 
 export const getBlockchairBaseUrl = (chain: UtxoChain) =>
   `${rootApiUrl}/blockchair/${chain.toLowerCase()}`;

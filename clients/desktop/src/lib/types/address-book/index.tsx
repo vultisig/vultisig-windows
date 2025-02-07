@@ -1,4 +1,4 @@
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 
 export type AddressBookItem = {
   id: string;

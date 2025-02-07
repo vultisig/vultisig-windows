@@ -1,7 +1,7 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import {
   getBlockchainSpecificValue,
   KeysignChainSpecificKey,

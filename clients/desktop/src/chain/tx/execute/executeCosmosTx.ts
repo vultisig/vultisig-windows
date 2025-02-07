@@ -1,7 +1,7 @@
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { TW } from '@trustwallet/wallet-core';
 
-import { CosmosChain } from '../../../model/chain';
+import { CosmosChain } from '@core/chain/Chain';
 import { getCosmosClient } from '../../cosmos/client/getCosmosClient';
 import { ExecuteTxInput } from './ExecuteTxInput';
 

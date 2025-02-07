@@ -3,7 +3,7 @@ import { match } from '@lib/utils/match';
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { UtxoChain } from '../../../model/chain';
+import { UtxoChain } from '@core/chain/Chain';
 import { utxoChainScriptType } from '../../utxo/UtxoScriptType';
 import { getCoinType } from '../../walletCore/getCoinType';
 import { hexEncode } from '../../walletCore/hexEncode';

@@ -14,7 +14,7 @@ import {
   zksync,
 } from 'viem/chains';
 
-import { EvmChain } from '../../model/chain';
+import { EvmChain } from '@core/chain/Chain';
 
 export const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.Ethereum]: `${rootApiUrl}/eth/`,

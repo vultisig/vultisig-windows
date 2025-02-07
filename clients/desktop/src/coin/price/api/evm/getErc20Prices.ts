@@ -3,7 +3,7 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 import { recordMap } from '@lib/utils/record/recordMap';
 
-import { EvmChain } from '../../../../model/chain';
+import { EvmChain } from '@core/chain/Chain';
 import { defaultFiatCurrency } from '../../FiatCurrency';
 import { CoinPricesResponse } from '../CoinPricesResponse';
 import { GetCoinPricesInput } from '../GetCoinPricesInput';

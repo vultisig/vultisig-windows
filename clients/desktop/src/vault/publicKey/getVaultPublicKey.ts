@@ -1,11 +1,12 @@
+import { Chain } from '@core/chain/Chain';
+import { getChainKind } from '@core/chain/ChainKind';
+import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm';
+import { match } from '@lib/utils/match';
 import { WalletCore } from '@trustwallet/wallet-core';
 
 import { storage } from '../../../wailsjs/go/models';
 import { GetDerivedPubKey } from '../../../wailsjs/go/tss/TssService';
 import { getCoinType } from '../../chain/walletCore/getCoinType';
-import { match } from '@lib/utils/match';
-import { Chain } from '../../model/chain';
-import { getTssKeysignType } from '../keysign/utils/getTssKeysignType';
 
 type Input = {
   chain: Chain;
@@ -26,7 +27,7 @@ export const getVaultPublicKey = async ({
     chain,
   });
 
-  const keysignType = getTssKeysignType(chain);
+  const keysignType = signatureAlgorithms[getChainKind(chain)];
 
   const publicKeyType = match(keysignType, {
     ecdsa: () => walletCore.PublicKeyType.secp256k1,

@@ -1,4 +1,5 @@
-import { ChainKind, getChainKind } from '../../model/chain';
+import { ChainKind, getChainKind } from '@core/chain/ChainKind';
+
 import { CoinBalanceResolver } from './CoinBalanceResolver';
 import { getCosmosCoinBalance } from './getCosmosCoinBalance';
 import { getEvmCoinBalance } from './getEvmCoinBalance';

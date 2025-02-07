@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UpdateAddressBookItem } from '../../../wailsjs/go/storage/Store';
 import { isValidAddress } from '../../chain/utils/isValidAddress';
 import { AddressBookItem } from '../../lib/types/address-book';
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { addressBookItemsQueryKey } from '../queries/useAddressBookItemsQuery';
 

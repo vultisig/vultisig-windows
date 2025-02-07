@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import { CoinKey } from '../../../coin/Coin';
-import { EvmChain } from '../../../model/chain';
+import { EvmChain } from '@core/chain/Chain';
 import { isNativeCoin } from '../isNativeCoin';
 
 vi.mock('../../../services/Coin/CoinList', () => ({

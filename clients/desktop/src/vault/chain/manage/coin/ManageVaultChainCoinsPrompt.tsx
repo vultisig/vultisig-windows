@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { ListAddButton } from '../../../../lib/ui/list/ListAddButton';
 import { ValueProp } from '../../../../lib/ui/props';
-import { Chain } from '../../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { makeAppPath } from '../../../../navigation';
 
 export const ManageVaultChainCoinsPrompt = ({ value }: ValueProp<Chain>) => {

@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 
-import { EvmChain } from '../../../model/chain';
+import { EvmChain } from '@core/chain/Chain';
 import { getEvmChainRpcUrl } from '../chainInfo';
 
 export const getEvmBaseFee = async (chain: EvmChain) => {

@@ -9,7 +9,7 @@ import { AddressBookItem } from '../../../../../lib/types/address-book';
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { Text } from '../../../../../lib/ui/text';
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { Chain } from '../../../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useAssertWalletCore } from '../../../../../providers/WalletCoreProvider';
 import { useUpdateAddressBookItemMutation } from '../../../../../vault/mutations/useUpdateAddressBookItemMutation';
 import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';

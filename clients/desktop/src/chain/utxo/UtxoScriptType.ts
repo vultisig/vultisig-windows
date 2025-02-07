@@ -1,4 +1,4 @@
-import { UtxoChain } from '../../model/chain';
+import { UtxoChain } from '@core/chain/Chain';
 
 export type UtxoScriptType = 'wpkh' | 'pkh';
 

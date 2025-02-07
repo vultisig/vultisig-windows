@@ -3,7 +3,7 @@ import { queryUrl } from '@lib/utils/query/queryUrl';
 import { useQuery } from '@tanstack/react-query';
 
 import { getEvmChainId } from '../../chain/evm/chainInfo';
-import { Chain, EvmChain } from '../../model/chain';
+import { Chain, EvmChain } from '@core/chain/Chain';
 import {
   OneInchTokensResponse,
   oneInchTokenToCoinMeta,

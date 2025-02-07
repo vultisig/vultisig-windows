@@ -1,6 +1,6 @@
+import { CosmosChain } from '@core/chain/Chain';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 
-import { CosmosChain } from '../../../model/chain';
 import { ChainAccount } from '../../ChainAccount';
 import { getCosmosClient } from '../client/getCosmosClient';
 

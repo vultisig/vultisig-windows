@@ -18,7 +18,7 @@ import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { getCoinKey } from '../../../coin/utils/coin';
 import { ValueProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
 
 export const KeysignTxPrimaryInfo = ({ value }: ValueProp<KeysignPayload>) => {

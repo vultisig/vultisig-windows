@@ -1,8 +1,9 @@
+import { Chain } from '@core/chain/Chain';
+import { ChainKind, getChainKind } from '@core/chain/ChainKind';
 import { withoutNullOrUndefined } from '@lib/utils/array/withoutNullOrUndefined';
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 
-import { Chain, ChainKind, getChainKind } from '../../../model/chain';
 import { getCoinType } from '../../walletCore/getCoinType';
 
 type Input = {

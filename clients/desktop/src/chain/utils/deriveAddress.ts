@@ -3,7 +3,7 @@ import {
   WalletCore,
 } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { getCoinType } from '../walletCore/getCoinType';
 
 type DeriveAddressInput = {

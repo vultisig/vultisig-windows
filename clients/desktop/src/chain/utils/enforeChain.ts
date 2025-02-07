@@ -1,5 +1,5 @@
 import { isOneOf } from '@lib/utils/array/isOneOf';
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { ChainEntity } from '../ChainEntity';
 
 type HasChain = {
