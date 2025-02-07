@@ -1,6 +1,5 @@
 import { rootApiUrl } from '@core/config';
-
-import { Fetch } from '../../../../wailsjs/go/utils/GoHttp';
+import { queryUrl } from '@lib/utils/query/queryUrl';
 
 interface TonAccountInfoResponse {
   ok: boolean;
@@ -32,7 +31,7 @@ interface TonAccountInfoResponse {
 
 export async function getTonAccountInfo(address: string) {
   const url = `${rootApiUrl}/ton/v2/getExtendedAddressInformation?address=${address}`;
-  const { result } = (await Fetch(url)) as TonAccountInfoResponse;
+  const { result } = await queryUrl<TonAccountInfoResponse>(url);
 
   return result;
 }

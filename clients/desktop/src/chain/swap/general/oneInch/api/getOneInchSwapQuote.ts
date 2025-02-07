@@ -1,8 +1,8 @@
 import { rootApiUrl } from '@core/config';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
+import { queryUrl } from '@lib/utils/query/queryUrl';
 import { pick } from '@lib/utils/record/pick';
 
-import { Fetch } from '../../../../../../wailsjs/go/utils/GoHttp';
 import { EvmChain } from '../../../../../model/chain';
 import { ChainAccount } from '../../../../ChainAccount';
 import { getEvmChainId } from '../../../../evm/chainInfo';
@@ -51,7 +51,8 @@ export const getOneInchSwapQuote = async ({
 
   const url = addQueryParams(getBaseUrl(chainId), params);
 
-  const { dstAmount, tx }: OneInchSwapQuoteResponse = await Fetch(url);
+  const { dstAmount, tx }: OneInchSwapQuoteResponse =
+    await queryUrl<OneInchSwapQuoteResponse>(url);
 
   return {
     dstAmount,
