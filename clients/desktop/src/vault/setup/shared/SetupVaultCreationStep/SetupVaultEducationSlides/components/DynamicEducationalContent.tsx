@@ -50,14 +50,14 @@ export const DynamicEducationContent: FC<DynamicEducationContentProps> = ({
 
   return (
     <VStack justifyContent="center" gap={12}>
-      <Text centerHorizontally color="shy" size={22}>
+      <Text centerHorizontally color="shy" size={16}>
         {t(title)}
       </Text>
       <VStack justifyContent="center">
         <GradientText centerHorizontally size={42} weight={500}>
           {t(descriptionOne)}
         </GradientText>{' '}
-        <Text weight={500} centerHorizontally as="span" size={34}>
+        <Text weight={500} centerHorizontally as="span" size={30}>
           {t(descriptionTwo)}
         </Text>
       </VStack>

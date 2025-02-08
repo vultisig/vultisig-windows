@@ -9,6 +9,7 @@ import { appPaths } from '../../../../navigation';
 import { useVaults } from '../../../queries/useVaultsQuery';
 import { getStorageVaultId } from '../../../utils/storageVault';
 import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep';
+import VaultBackupPage from '../../shared/vaultBackupSettings/VaultBackupPage';
 import { EmailConfirmation } from '.';
 import { BackupConfirmation } from './BackupConfirmation';
 import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne';
@@ -20,6 +21,7 @@ const steps = [
   'emailVerification',
   'backupSlideshowPartTwo',
   'backupConfirmation',
+  'backupPage',
   'backupSuccessfulSlideshow',
 ] as const;
 
@@ -48,8 +50,9 @@ export const BackupFastVault: FC<BackupFastVaultProps> = ({ vault }) => {
       backupSlideshowPartTwo={() => (
         <BackupOverviewSlidesPartTwo onCompleted={toNextStep} />
       )}
-      backupConfirmation={() => (
-        <BackupConfirmation onCompleted={toNextStep} vault={vault} />
+      backupConfirmation={() => <BackupConfirmation onCompleted={toNextStep} />}
+      backupPage={() => (
+        <VaultBackupPage onBackupCompleted={toNextStep} vault={vault} />
       )}
       backupSuccessfulSlideshow={() =>
         shouldShowBackupSummary ? (
