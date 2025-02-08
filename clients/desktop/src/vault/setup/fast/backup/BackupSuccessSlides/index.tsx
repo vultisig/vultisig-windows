@@ -9,7 +9,6 @@ import { PageContent } from '../../../../../ui/page/PageContent';
 import { AnimatedLoader } from '../../../../../ui/pending/AnimatedLoader';
 
 const BACKUP_SUCCESS_WAIT_TIME_IN_MS = 6000;
-
 type BackupSuccessSlideProps = {
   onCompleted: () => void;
 };
@@ -18,7 +17,7 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
   onCompleted,
 }) => {
   const { t } = useTranslation();
-  // TODO: @antonio to adjust animations when they're handed over by designer
+  // @tony: animation file is incomplete so currently we're only showing 1 animation
   const { RiveComponent } = useRive({
     src: '/assets/animations/fast-vault-backup/fast-vault-backup-screen-part-3/fastvault-backup-succes.riv',
     stateMachines: 'State Machine 1',
@@ -41,9 +40,7 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
             <GradientText>{t('fastVaultSetup.backup.wellDone')}</GradientText>{' '}
             {t('fastVaultSetup.backup.setNewStandard')}
           </Text>
-          <LoaderWrapper>
-            <AnimatedLoader />
-          </LoaderWrapper>
+          <AnimatedLoader />
         </VStack>
       </VStack>
     </Wrapper>
@@ -53,11 +50,6 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
 const RiveWrapper = styled(HStack)`
   position: relative;
   flex: 1;
-`;
-
-const LoaderWrapper = styled.div`
-  width: 48px;
-  height: 48px;
 `;
 
 const Wrapper = styled(PageContent)`

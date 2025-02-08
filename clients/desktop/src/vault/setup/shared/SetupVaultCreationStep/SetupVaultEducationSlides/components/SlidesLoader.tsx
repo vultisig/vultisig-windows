@@ -20,8 +20,7 @@ const Wrapper = styled(VStack)`
   width: 100%;
 `;
 
-const LoaderWrapper = styled.div`
-  position: relative;
+const Loader = styled(AnimatedLoader)`
   width: 20px;
   height: 20px;
 `;
@@ -49,9 +48,7 @@ export const SlidesLoader = () => {
         <Text color="shy">{t('fastVaultSetup.preparingVault')}</Text>
       </HStack>
       <HStack gap={8}>
-        <LoaderWrapper>
-          <AnimatedLoader />
-        </LoaderWrapper>
+        <Loader />
         <Text color="shy">{t('fastVaultSetup.generatingECDSAKey')}</Text>
       </HStack>
       <ProgressBarWrapper>

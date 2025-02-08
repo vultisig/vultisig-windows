@@ -419,6 +419,16 @@ export const pt = {
   while_you_wait_vultisig_has: 'Enquanto espera, Vultisig tem...',
   creating_vault: 'Criando Cofre',
   learnMore: 'Saiba mais',
+  vaultOverview: 'Visão geral do cofre',
+  backupShare: 'Backup da participação do cofre',
+  vaultCreated: 'Cofre criado',
+  successfully: 'Com sucesso',
+  secureVaultSetup: {
+    backup: {
+      shares: 'Seu cofre contém {{shares}} partes',
+      eachDeviceNeedsBackup: 'Cada dispositivo precisa do seu próprio backup.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'mantido pelo servidor',
@@ -479,10 +489,10 @@ export const pt = {
         description: 'Mais de 30 blockchains para armazenar seu token favorito',
       },
       availablePlatforms: {
-        description: 'Disponível para Android, iOS, macOS e Windows',
+        description: 'disponível para Android, iOS, macOS e Windows',
       },
       seedlessWallet: {
-        description: 'Uma carteira sem seed – não seja enganado novamente',
+        description: 'uma carteira sem seed – não seja enganado novamente',
       },
     },
     connectingWithServer: 'Conectando com o servidor...',

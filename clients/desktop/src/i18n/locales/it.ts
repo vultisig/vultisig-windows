@@ -425,6 +425,16 @@ export const it = {
   while_you_wait_vultisig_has: 'Mentre aspetti, Vultisig ha...',
   creating_vault: 'Creazione della Cassaforte',
   learnMore: 'Scopri di più',
+  vaultOverview: 'Panoramica della Cassaforte',
+  backupShare: 'Backup della quota della cassaforte',
+  vaultCreated: 'Cassaforte creata',
+  successfully: 'Con successo',
+  secureVaultSetup: {
+    backup: {
+      shares: 'La tua cassaforte contiene {{shares}} quote',
+      eachDeviceNeedsBackup: 'Ogni dispositivo necessita del proprio backup.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'conservato dal server',
@@ -488,10 +498,10 @@ export const it = {
           'Oltre 30 blockchain per conservare il tuo token preferito',
       },
       availablePlatforms: {
-        description: 'Disponibile su Android, iOS, macOS e Windows',
+        description: 'disponibile su Android, iOS, macOS e Windows',
       },
       seedlessWallet: {
-        description: 'Un wallet senza seed, non farti più truffare',
+        description: 'un wallet senza seed, non farti più truffare',
       },
     },
     connectingWithServer: 'Connessione al server...',

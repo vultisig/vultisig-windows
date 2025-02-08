@@ -420,6 +420,16 @@ export const de = {
   while_you_wait_vultisig_has: 'Während du wartest, hat Vultisig...',
   creating_vault: 'Tresor wird erstellt',
   learnMore: 'Mehr erfahren',
+  vaultOverview: 'Tresorübersicht',
+  backupShare: 'Tresor-Backup-Teil',
+  vaultCreated: 'Tresor erstellt',
+  successfully: 'Erfolgreich',
+  secureVaultSetup: {
+    backup: {
+      shares: 'Dein Tresor enthält {{shares}} Anteile',
+      eachDeviceNeedsBackup: 'Jedes Gerät benötigt ein eigenes Backup.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'vom Server gehalten',
@@ -484,10 +494,10 @@ export const de = {
           'Über 30 Blockchains zur Speicherung deines Lieblingstokens',
       },
       availablePlatforms: {
-        description: 'Verfügbar für Android, iOS, macOS und Windows',
+        description: 'verfügbar für Android, iOS, macOS und Windows',
       },
       seedlessWallet: {
-        description: 'Eine seedlose Wallet – lass dich nie wieder betrügen',
+        description: 'aine seedlose Wallet – lass dich nie wieder betrügen',
       },
     },
     connectingWithServer: 'Mit dem Server verbinden...',

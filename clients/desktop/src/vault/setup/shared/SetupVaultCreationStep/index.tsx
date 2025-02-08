@@ -1,6 +1,7 @@
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useTranslation } from 'react-i18next';
 
+import { StepTransition } from '../../../../lib/ui/base/StepTransition';
 import { OnBackProp } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { PageHeader } from '../../../../ui/page/PageHeader';
@@ -10,6 +11,7 @@ import { useCreateVaultSetup } from '../../fast/hooks/useCreateVaultSetup';
 import { BackupSecureVault } from '../../secure/backup/BackupSecureVault';
 import { SetupVaultType } from '../../type/SetupVaultType';
 import { FailedSetupVaultKeygenStep } from '../FailedSetupVaultKeygenStep';
+import { SetupVaultSuccessScreen } from '../SetupVaultSuccessScreen';
 import { SetupVaultEducationSlides } from './SetupVaultEducationSlides';
 
 type KeygenStepProps = OnBackProp & {
@@ -28,13 +30,20 @@ export const SetupVaultCreationStep = ({
   return (
     <MatchQuery
       value={state}
-      success={() =>
-        vaultType === 'fast' ? (
-          <BackupFastVault vault={shouldBePresent(vault)} />
-        ) : (
-          <BackupSecureVault vault={shouldBePresent(vault)} />
-        )
-      }
+      success={() => (
+        <StepTransition
+          from={({ onForward }) => (
+            <SetupVaultSuccessScreen onForward={onForward} />
+          )}
+          to={() =>
+            vaultType === 'fast' ? (
+              <BackupFastVault vault={shouldBePresent(vault)} />
+            ) : (
+              <BackupSecureVault vault={shouldBePresent(vault)} />
+            )
+          }
+        />
+      )}
       error={() => (
         <>
           <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />

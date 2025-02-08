@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
@@ -44,11 +43,7 @@ export const SecureVaultKeygenStartSessionStep = ({
       >
         <MatchQuery
           value={status}
-          pending={() => (
-            <AnimatedLoaderWrapper>
-              <AnimatedLoader />
-            </AnimatedLoaderWrapper>
-          )}
+          pending={() => <AnimatedLoader />}
           success={() => null}
           error={() => <Text>{t('failed_to_start_keygen')}</Text>}
         />
@@ -56,8 +51,3 @@ export const SecureVaultKeygenStartSessionStep = ({
     </>
   );
 };
-
-const AnimatedLoaderWrapper = styled.div`
-  width: 48px;
-  height: 48px;
-`;

@@ -409,6 +409,16 @@ export const hr = {
   while_you_wait_vultisig_has: 'Amíg vársz, a Vultisig rendelkezik...',
   creating_vault: 'Tárca létrehozása',
   learnMore: 'Tudj meg többet',
+  vaultOverview: 'Visão geral do cofre',
+  backupShare: 'Backup da participação do cofre',
+  vaultCreated: 'Cofre criado',
+  successfully: 'Com sucesso',
+  secureVaultSetup: {
+    backup: {
+      shares: 'Seu cofre contém {{shares}} partes',
+      eachDeviceNeedsBackup: 'Cada dispositivo precisa do seu próprio backup.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'a szerver tárolja',
@@ -471,10 +481,10 @@ export const hr = {
         description: 'Több mint 30 blokklánc a kedvenc tokenjeid tárolására',
       },
       availablePlatforms: {
-        description: 'Elérhető Androidon, iOS-en, macOS-en és Windows-on',
+        description: 'elérhető Androidon, iOS-en, macOS-en és Windows-on',
       },
       seedlessWallet: {
-        description: 'Egy mag nélküli tárca – ne hagyd, hogy újra átverjenek',
+        description: 'egy mag nélküli tárca – ne hagyd, hogy újra átverjenek',
       },
     },
     connectingWithServer: 'Csatlakozás a szerverhez...',
