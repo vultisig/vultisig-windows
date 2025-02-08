@@ -11,6 +11,9 @@ export const es = {
     'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   create_new_vault: 'Crear nueva bóveda',
   thisDevice: 'Este dispositivo',
+  tookTooLongToRespond:
+    'El servidor tardó demasiado en responder. Por favor, revisa tu conexión a internet y vuelve a intentarlo.',
+  errorTimedOut: 'Error: Tiempo de espera del servidor agotado',
   optionalDevice: 'Dispositivo opcional',
   scanWithDevice: 'Escanear con el {{deviceNumber}}º dispositivo',
   localMode: 'Estás en modo local',

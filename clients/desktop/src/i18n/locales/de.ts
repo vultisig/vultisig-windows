@@ -27,6 +27,9 @@ export const de = {
   switchToLocal: 'Wechseln Sie in den lokalen Modus',
   scanThe: 'Scannen Sie',
   qrCode: 'den QR-Code',
+  tookTooLongToRespond:
+    'Der Server hat zu lange gebraucht, um zu antworten. Bitte überprüfe deine Internetverbindung und versuche es erneut.',
+  errorTimedOut: 'Fehler: Server-Zeitüberschreitung',
   downloadVultisig:
     'Laden Sie Vultisig auf Ihr anderes Gerät(e) herunter und wählen Sie „QR-Code scannen“',
   sayHelloTo: 'Sag hallo zu',
