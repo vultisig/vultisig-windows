@@ -417,6 +417,17 @@ export const es = {
   while_you_wait_vultisig_has: 'Mientras esperas, Vultisig tiene...',
   creating_vault: 'Creando Bóveda',
   learnMore: 'Aprender más',
+  vaultOverview: 'Resumen del Bóveda',
+  backupShare: 'Copia de seguridad de la participación de la bóveda',
+  vaultCreated: 'Bóveda creada',
+  successfully: 'Exitosamente',
+  secureVaultSetup: {
+    backup: {
+      shares: 'Tu bóveda contiene {{shares}} participaciones',
+      eachDeviceNeedsBackup:
+        'Cada dispositivo necesita su propia copia de seguridad.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'mantenido por el servidor',
@@ -480,10 +491,10 @@ export const es = {
         description: 'Más de 30 cadenas para almacenar tu token favorito',
       },
       availablePlatforms: {
-        description: 'Disponible en Android, iOS, macOS y Windows',
+        description: 'disponible en Android, iOS, macOS y Windows',
       },
       seedlessWallet: {
-        description: 'Un monedero sin semilla, no vuelvas a ser estafado',
+        description: 'un monedero sin semilla, no vuelvas a ser estafado',
       },
     },
     connectingWithServer: 'Conectando con el servidor...',

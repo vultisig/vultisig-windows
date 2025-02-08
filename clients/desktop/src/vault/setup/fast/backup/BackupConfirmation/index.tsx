@@ -113,9 +113,7 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
           </VStack>
         </Content>
         {isPending ? (
-          <LoaderWrapper>
-            <AnimatedLoader />
-          </LoaderWrapper>
+          <Loader />
         ) : (
           <VStack gap={4}>
             <BackupButton onClick={handleBackup} size="m">
@@ -141,7 +139,7 @@ const BackupButton = styled(Button)`
   gap: 8px;
 `;
 
-const LoaderWrapper = styled(VStack)`
+const Loader = styled(AnimatedLoader)`
   height: 24px;
   width: 24px;
 `;

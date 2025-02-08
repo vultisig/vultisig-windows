@@ -1,9 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
-import { VStack } from '../../../lib/ui/layout/Stack';
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
@@ -48,11 +46,7 @@ export const KeygenStartSessionStep = ({
       >
         <MatchQuery
           value={status}
-          pending={() => (
-            <AnimatedLoaderWrapper>
-              <AnimatedLoader />
-            </AnimatedLoaderWrapper>
-          )}
+          pending={() => <AnimatedLoader />}
           error={() => <Text>{t('failed_to_start_keygen')}</Text>}
           success={() => null}
         />
@@ -60,8 +54,3 @@ export const KeygenStartSessionStep = ({
     </>
   );
 };
-
-const AnimatedLoaderWrapper = styled(VStack)`
-  width: 48px;
-  height: 48px;
-`;

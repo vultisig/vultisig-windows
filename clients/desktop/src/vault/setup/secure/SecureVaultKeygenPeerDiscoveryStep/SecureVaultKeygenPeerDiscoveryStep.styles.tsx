@@ -22,16 +22,16 @@ export const RiveWrapper = styled.div`
 export const PhoneImageOverlay = styled.div`
   position: absolute;
   inset: 0;
-  background-color: rgba(42, 83, 150, 0.09);
+  background-color: rgba(42, 83, 150, 0.08);
 `;
 
-export const OverlayWrapper = styled(VStack)`
+export const OverlayContentWrapper = styled(VStack)`
   padding: 0px 35px 48px 35px;
   background-color: ${getColor('foreground')};
   max-width: 800px;
 `;
 
-export const PulseRiveWrapper = styled(VStack)`
+export const OverlayWrapper = styled(VStack)`
   position: fixed;
   width: 100%;
   height: 100%;
@@ -41,13 +41,15 @@ export const PulseRiveWrapper = styled(VStack)`
 
 export const PhoneImageWrapper = styled(VStack)`
   position: relative;
-  border-bottom-left-radius: 24px;
-  border-bottom-right-radius: 24px;
+  border-bottom-left-radius: 44px;
+  border-bottom-right-radius: 44px;
   object-fit: contain;
   width: 600px;
   height: 450px;
   overflow: hidden;
-
+  box-shadow:
+    0px -1.284px 5.136px 0px rgba(255, 255, 255, 0.2) inset,
+    -2.568px 0px 6.163px -3.852px rgba(255, 255, 255, 0.4) inset;
   padding: 0px 24px 24px 24px;
   background-color: ${getColor('foregroundExtra')};
 
@@ -56,7 +58,15 @@ export const PhoneImageWrapper = styled(VStack)`
   }
 `;
 
-export const InfoIconWrapper = styled.div``;
+export const InfoIconWrapper = styled.a`
+  display: block;
+  color: ${getColor('contrast')};
+  font-size: 20px;
+`;
+
+export const InfoIconWrapperForBanner = styled.div`
+  color: ${getColor('textShy')};
+`;
 
 export const PillPlaceholder = styled.div`
   height: 52.5px;

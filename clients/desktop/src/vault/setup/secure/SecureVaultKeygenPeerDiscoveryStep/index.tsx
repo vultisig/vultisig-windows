@@ -36,15 +36,16 @@ import {
   CloudOffWrapper,
   ContentWrapper,
   InfoIconWrapper,
+  InfoIconWrapperForBanner,
   LocalPillWrapper,
   OverlayContent,
+  OverlayContentWrapper,
   OverlayWrapper,
   PageWrapper,
   PhoneImageOverlay,
   PhoneImageWrapper,
   PillPlaceholder,
   PillWrapper,
-  PulseRiveWrapper,
   RiveWrapper,
   SwitchModeButton,
   SwitchModeWrapper,
@@ -56,6 +57,9 @@ type KeygenPeerDiscoveryStepProps = OnForwardProp &
     joinUrlQuery: Query<string>;
     currentDevice: string;
   };
+
+const QR_CODE_LINK =
+  'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault';
 
 export const SecureVaultKeygenPeerDiscoveryStep = ({
   onForward,
@@ -91,7 +95,18 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
         secondaryControls={
           <MatchQuery
             value={joinUrlQuery}
-            success={value => <DownloadKeygenQrCode value={value} />}
+            success={value => (
+              <HStack gap={12} alignItems="center">
+                <InfoIconWrapper
+                  href={QR_CODE_LINK}
+                  target="_blank"
+                  referrerPolicy="no-referrer"
+                >
+                  <InfoIcon />
+                </InfoIconWrapper>
+                <DownloadKeygenQrCode value={value} />
+              </HStack>
+            )}
             error={() => null}
             pending={() => null}
           />
@@ -136,9 +151,9 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
               relay={() =>
                 showWarning ? (
                   <PillWrapper gap={12} alignItems="baseline">
-                    <InfoIconWrapper>
+                    <InfoIconWrapperForBanner>
                       <InfoIcon />
-                    </InfoIconWrapper>
+                    </InfoIconWrapperForBanner>
                     <Text weight={500} color="shy" size={13}>
                       {t('scanQrInstruction')}
                     </Text>
@@ -206,9 +221,9 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
           </SwitchModeWrapper>
         </BottomItemsWrapper>
         {overlayShown && (
-          <PulseRiveWrapper justifyContent="flex-end">
+          <OverlayWrapper justifyContent="flex-end">
             <OverlayContent alignItems="center">
-              <OverlayWrapper justifyContent="center" gap={36}>
+              <OverlayContentWrapper justifyContent="center" gap={36}>
                 <PhoneImageWrapper>
                   <PhoneImageOverlay />
                   <img src="/assets/images/vultisig-peak.svg" alt="" />
@@ -238,9 +253,9 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
                 <Button onClick={() => setHasShownOverlay(false)}>
                   {t('next')}
                 </Button>
-              </OverlayWrapper>
+              </OverlayContentWrapper>
             </OverlayContent>
-          </PulseRiveWrapper>
+          </OverlayWrapper>
         )}
       </PageWrapper>
     </>

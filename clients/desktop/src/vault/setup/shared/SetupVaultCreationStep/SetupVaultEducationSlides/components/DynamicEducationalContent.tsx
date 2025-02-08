@@ -25,10 +25,6 @@ const contents: Record<
     title: 'while_you_wait_vultisig_is',
     description: 'fastVaultSetup.createVault.crossChain.description',
   },
-  over30Chains: {
-    title: 'while_you_wait_vultisig_has',
-    description: 'fastVaultSetup.createVault.over30Chains.description',
-  },
   availablePlatforms: {
     title: 'while_you_wait_vultisig_is',
     description: 'fastVaultSetup.createVault.availablePlatforms.description',

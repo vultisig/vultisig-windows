@@ -8,6 +8,7 @@ import { appPaths } from '../../../../navigation';
 import { BackupConfirmation } from './BackupConfirmation';
 import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne';
 import { BackupSuccessSlide } from './BackupSuccessSlides';
+import { VaultSharesProvider } from './state/VaultSharesProvider';
 
 const steps = [
   'backupSlideshowPartOne',
@@ -26,17 +27,19 @@ export const BackupSecureVault: FC<BackupFastVaultProps> = ({ vault }) => {
   });
 
   return (
-    <Match
-      value={step}
-      backupSlideshowPartOne={() => (
-        <BackupOverviewSlidesPartOne onCompleted={toNextStep} />
-      )}
-      backupConfirmation={() => (
-        <BackupConfirmation onCompleted={toNextStep} vault={vault} />
-      )}
-      backupSuccessfulSlideshow={() => (
-        <BackupSuccessSlide onCompleted={() => navigate(appPaths.vault)} />
-      )}
-    />
+    <VaultSharesProvider initialValue={vault.keyshares}>
+      <Match
+        value={step}
+        backupSlideshowPartOne={() => (
+          <BackupOverviewSlidesPartOne onCompleted={toNextStep} />
+        )}
+        backupConfirmation={() => (
+          <BackupConfirmation onCompleted={toNextStep} vault={vault} />
+        )}
+        backupSuccessfulSlideshow={() => (
+          <BackupSuccessSlide onCompleted={() => navigate(appPaths.vault)} />
+        )}
+      />
+    </VaultSharesProvider>
   );
 };

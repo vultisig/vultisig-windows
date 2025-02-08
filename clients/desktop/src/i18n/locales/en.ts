@@ -410,6 +410,16 @@ export const en = {
   while_you_wait_vultisig_has: 'While you wait, Vultisig has...',
   creating_vault: 'Creating Vault',
   learnMore: 'Learn More',
+  vaultOverview: 'Vault Overview',
+  backupShare: 'Back-up Vault Share',
+  vaultCreated: 'Vault created',
+  successfully: 'Successfully',
+  secureVaultSetup: {
+    backup: {
+      shares: 'Your vault holds {{shares}} shares',
+      eachDeviceNeedsBackup: 'each device needs its own backup.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'held by the server',
@@ -468,10 +478,10 @@ export const en = {
         description: 'Over 30 chains to store your favorite token',
       },
       availablePlatforms: {
-        description: 'Available on Android, iOS, macOS and Windows',
+        description: 'available on Android, iOS, macOS and Windows',
       },
       seedlessWallet: {
-        description: 'A seedless wallet, do not get scammed again',
+        description: 'a seedless wallet, do not get scammed again',
       },
     },
     connectingWithServer: 'Connecting with server...',

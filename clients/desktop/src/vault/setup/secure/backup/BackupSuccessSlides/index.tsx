@@ -1,5 +1,5 @@
 import { useRive } from '@rive-app/react-canvas';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -18,17 +18,13 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
   onCompleted,
 }) => {
   const { t } = useTranslation();
-  // TODO: @antonio to adjust animations when they're handed over by designer
   const { RiveComponent } = useRive({
-    src: '/assets/animations/fast-vault-backup/fast-vault-backup-screen-part-3/fastvault-backup-succes.riv',
+    src: '/assets/animations/secure-vault-backup/secure-vault-backup-screen-part-3/index.riv',
     stateMachines: 'State Machine 1',
     autoplay: true,
+    onStateChange: () =>
+      setTimeout(onCompleted, BACKUP_SUCCESS_WAIT_TIME_IN_MS),
   });
-
-  useEffect(() => {
-    const timeoutId = setTimeout(onCompleted, BACKUP_SUCCESS_WAIT_TIME_IN_MS);
-    return () => clearTimeout(timeoutId);
-  }, [onCompleted]);
 
   return (
     <Wrapper>
@@ -41,9 +37,7 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
             <GradientText>{t('fastVaultSetup.backup.wellDone')}</GradientText>{' '}
             {t('fastVaultSetup.backup.setNewStandard')}
           </Text>
-          <LoaderWrapper>
-            <AnimatedLoader />
-          </LoaderWrapper>
+          <AnimatedLoader />
         </VStack>
       </VStack>
     </Wrapper>
@@ -53,11 +47,6 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
 const RiveWrapper = styled(HStack)`
   position: relative;
   flex: 1;
-`;
-
-const LoaderWrapper = styled.div`
-  width: 48px;
-  height: 48px;
 `;
 
 const Wrapper = styled(PageContent)`

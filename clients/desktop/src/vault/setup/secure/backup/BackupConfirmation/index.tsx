@@ -108,25 +108,25 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
             </Text>
           </VStack>
         </Content>
-        {isPending ? (
-          <LoaderWrapper>
-            <AnimatedLoader />
-          </LoaderWrapper>
-        ) : (
-          <VStack gap={4}>
-            <BackupButton onClick={handleBackup} size="m">
-              <DownloadIcon />
-              <Text as="span" size={14}>
-                {t('fastVaultSetup.backup.backUpNow')}
-              </Text>
-            </BackupButton>
-            {error && (
-              <Text size={12} color="danger">
-                {error.message}
-              </Text>
-            )}
-          </VStack>
-        )}
+        <BottomItemsWrapper>
+          {isPending ? (
+            <Loader />
+          ) : (
+            <VStack gap={4}>
+              <BackupButton onClick={handleBackup} size="m">
+                <DownloadIcon />
+                <Text as="span" size={14}>
+                  {t('fastVaultSetup.backup.backUpNow')}
+                </Text>
+              </BackupButton>
+              {error && (
+                <Text size={12} color="danger">
+                  {error.message}
+                </Text>
+              )}
+            </VStack>
+          )}
+        </BottomItemsWrapper>
       </Wrapper>
     </PageContent>
   );
@@ -137,7 +137,11 @@ const BackupButton = styled(Button)`
   gap: 8px;
 `;
 
-const LoaderWrapper = styled(VStack)`
+const Loader = styled(AnimatedLoader)`
   height: 24px;
   width: 24px;
+`;
+
+const BottomItemsWrapper = styled(VStack)`
+  min-height: 30px;
 `;
