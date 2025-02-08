@@ -7,6 +7,9 @@ export const es = {
     'Vultisig no rastrea sus actividades ni requiere ningún registro. Vultisig es de código abierto, garantizando transparencia y confianza.',
   onboarding_view3_description:
     'Vultisig es, por naturaleza, una aplicación multi-dispositivo. Requiere al menos dos dispositivos para crear una bóveda segura: un dispositivo iniciador y un dispositivo de emparejamiento.',
+  moreInfo: 'Más información',
+  secureVaultSetupPasswordTooltipContent:
+    'Esto sucede porque la contraseña cifra el archivo de respaldo localmente, como cifrar un disco duro. En el siguiente paso, tienes la posibilidad de añadir una pista.',
   onboarding_view4_description:
     'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   create_new_vault: 'Crear nueva bóveda',
@@ -17,6 +20,7 @@ export const es = {
   optionalDevice: 'Dispositivo opcional',
   scanWithDevice: 'Escanear con el {{deviceNumber}}º dispositivo',
   localMode: 'Estás en modo local',
+  fastVault: 'Fast Vault',
   scanQrInstruction:
     'Escanea el QR con otro dispositivo. Se recomienda configuración de 3 dispositivos, 2 son suficientes.',
   devicesStatus: 'Dispositivos ({{currentPeers}}/3)',
@@ -420,6 +424,10 @@ export const es = {
   vaultOverview: 'Resumen del Bóveda',
   backupShare: 'Copia de seguridad de la participación de la bóveda',
   vaultCreated: 'Bóveda creada',
+  backupGuide: 'Guía de respaldo',
+  receivedShare1Email: 'Compartición de bóveda 1 recibida por correo',
+  yourVaultShares: 'Tu bóveda tiene {{shares}} comparticiones de bóveda',
+  share2StoredByYou: 'Compartición de bóveda 2 almacenada por ti',
   successfully: 'Exitosamente',
   secureVaultSetup: {
     backup: {
@@ -476,25 +484,24 @@ export const es = {
     generatingECDSAKey: 'Generando Clave ECDSA',
     createVault: {
       multiFactor: {
-        subtitle: 'Esto no debería tardar más de 1 minuto',
-        description:
-          'Seguridad multifactor, eliminando el único punto de falla',
+        descriptionOne: 'Seguridad multifactor,',
+        descriptionTwo: 'Eliminando el punto único de fallo',
       },
       selfCustodial: {
-        description: 'Autocustodia, brindando control total sobre tus activos',
+        descriptionOne: 'Autocustodia,',
+        descriptionTwo: 'brindando control total sobre tus activos',
       },
       crossChain: {
-        description:
-          'Interoperabilidad entre cadenas. Intercambia tus tokens favoritos en una sola bóveda',
-      },
-      over30Chains: {
-        description: 'Más de 30 cadenas para almacenar tu token favorito',
+        descriptionOne: 'Multicadena.',
+        descriptionTwo: 'Intercambia tus tokens favoritos en una sola bóveda',
       },
       availablePlatforms: {
-        description: 'disponible en Android, iOS, macOS y Windows',
+        descriptionOne: 'disponible',
+        descriptionTwo: 'en Android, iOS, macOS y Windows',
       },
       seedlessWallet: {
-        description: 'un monedero sin semilla, no vuelvas a ser estafado',
+        descriptionOne: 'una billetera sin semilla,',
+        descriptionTwo: 'no vuelvas a ser estafado',
       },
     },
     connectingWithServer: 'Conectando con el servidor...',

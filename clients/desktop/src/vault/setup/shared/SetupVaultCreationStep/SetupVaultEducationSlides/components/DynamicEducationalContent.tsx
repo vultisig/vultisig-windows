@@ -15,23 +15,30 @@ const contents: Record<
 > = {
   multiFactor: {
     title: 'while_you_wait_vultisig_is',
-    description: 'fastVaultSetup.createVault.multiFactor.description',
+    descriptionOne: 'fastVaultSetup.createVault.multiFactor.descriptionOne',
+    descriptionTwo: 'fastVaultSetup.createVault.multiFactor.descriptionTwo',
   },
   selfCustodial: {
     title: 'while_you_wait_vultisig_is',
-    description: 'fastVaultSetup.createVault.selfCustodial.description',
+    descriptionOne: 'fastVaultSetup.createVault.selfCustodial.descriptionOne',
+    descriptionTwo: 'fastVaultSetup.createVault.selfCustodial.descriptionTwo',
   },
   crossChain: {
     title: 'while_you_wait_vultisig_is',
-    description: 'fastVaultSetup.createVault.crossChain.description',
+    descriptionOne: 'fastVaultSetup.createVault.crossChain.descriptionOne',
+    descriptionTwo: 'fastVaultSetup.createVault.crossChain.descriptionTwo',
   },
   availablePlatforms: {
     title: 'while_you_wait_vultisig_is',
-    description: 'fastVaultSetup.createVault.availablePlatforms.description',
+    descriptionOne:
+      'fastVaultSetup.createVault.availablePlatforms.descriptionOne',
+    descriptionTwo:
+      'fastVaultSetup.createVault.availablePlatforms.descriptionTwo',
   },
   seedlessWallet: {
     title: 'while_you_wait_vultisig_is',
-    description: 'fastVaultSetup.createVault.seedlessWallet.description',
+    descriptionOne: 'fastVaultSetup.createVault.seedlessWallet.descriptionOne',
+    descriptionTwo: 'fastVaultSetup.createVault.seedlessWallet.descriptionTwo',
   },
 };
 
@@ -39,16 +46,21 @@ export const DynamicEducationContent: FC<DynamicEducationContentProps> = ({
   value,
 }) => {
   const { t } = useTranslation();
-  const { title, description } = contents[value];
+  const { title, descriptionOne, descriptionTwo } = contents[value];
 
   return (
     <VStack justifyContent="center" gap={12}>
       <Text centerHorizontally color="shy" size={22}>
         {t(title)}
       </Text>
-      <GradientText centerHorizontally size={38}>
-        {t(description)}
-      </GradientText>
+      <VStack justifyContent="center">
+        <GradientText centerHorizontally size={42} weight={500}>
+          {t(descriptionOne)}
+        </GradientText>{' '}
+        <Text weight={500} centerHorizontally as="span" size={34}>
+          {t(descriptionTwo)}
+        </Text>
+      </VStack>
     </VStack>
   );
 };

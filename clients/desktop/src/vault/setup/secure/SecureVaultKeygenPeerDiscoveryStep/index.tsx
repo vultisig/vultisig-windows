@@ -245,7 +245,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
                     centerHorizontally
                     size={14}
                     weight={500}
-                    color="contrast"
+                    color="supporting"
                   >
                     {t('downloadVultisig')}
                   </Text>

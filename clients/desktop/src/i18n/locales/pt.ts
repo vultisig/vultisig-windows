@@ -7,6 +7,9 @@ export const pt = {
     'O Vultisig não rastreia suas atividades nem exige nenhum registro. O Vultisig é de código aberto, garantindo transparência e confiança.',
   onboarding_view3_description:
     'O Vultisig é, por natureza, um aplicativo multi-dispositivo. Exige pelo menos dois dispositivos para criar um cofre seguro: um dispositivo inicializador e um dispositivo de pareamento.',
+  moreInfo: 'Mais informações',
+  secureVaultSetupPasswordTooltipContent:
+    'Isso acontece porque a senha criptografa o arquivo de backup localmente, como criptografar um disco rígido. No próximo passo, você tem a possibilidade de adicionar uma dica.',
   onboarding_view4_description:
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   create_new_vault: 'Criar novo cofre',
@@ -421,6 +424,11 @@ export const pt = {
   learnMore: 'Saiba mais',
   vaultOverview: 'Visão geral do cofre',
   backupShare: 'Backup da participação do cofre',
+  fastVault: 'Cofre Rápido',
+  backupGuide: 'Guia de backup',
+  receivedShare1Email: 'Parte do Cofre 1 recebida por e-mail',
+  yourVaultShares: 'Seu cofre tem {{shares}} partes',
+  share2StoredByYou: 'Parte do Cofre 2 armazenada por você',
   vaultCreated: 'Cofre criado',
   successfully: 'Com sucesso',
   secureVaultSetup: {
@@ -475,24 +483,24 @@ export const pt = {
     generatingECDSAKey: 'Gerando Chave ECDSA',
     createVault: {
       multiFactor: {
-        subtitle: 'Isso não deve levar mais de 1 minuto',
-        description: 'Segurança multifator, eliminando o ponto único de falha',
+        descriptionOne: 'Segurança multifatorial,',
+        descriptionTwo: 'Eliminando um único ponto de falha',
       },
       selfCustodial: {
-        description: 'Autocustódia, dando controle total sobre seus ativos',
+        descriptionOne: 'Autocustódia,',
+        descriptionTwo: 'controle total sobre seus ativos',
       },
       crossChain: {
-        description:
-          'Cross-chain. Troque seus tokens favoritos em um único cofre',
-      },
-      over30Chains: {
-        description: 'Mais de 30 blockchains para armazenar seu token favorito',
+        descriptionOne: 'Cross-chain.',
+        descriptionTwo: 'Troque seus tokens favoritos em um único cofre',
       },
       availablePlatforms: {
-        description: 'disponível para Android, iOS, macOS e Windows',
+        descriptionOne: 'disponível',
+        descriptionTwo: 'no Android, iOS, macOS e Windows',
       },
       seedlessWallet: {
-        description: 'uma carteira sem seed – não seja enganado novamente',
+        descriptionOne: 'uma carteira sem seed,',
+        descriptionTwo: 'não caia mais em golpes',
       },
     },
     connectingWithServer: 'Conectando com o servidor...',

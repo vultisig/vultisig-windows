@@ -16,6 +16,7 @@ import { AnimatedLoader } from '../../../../../ui/pending/AnimatedLoader';
 import { useBackupVaultMutation } from '../../../../mutations/useBackupVaultMutation';
 import { vaultsQueryKey } from '../../../../queries/useVaultsQuery';
 import { useVaultPassword } from '../../../../server/password/state/password';
+import { BACKUP_LINK } from '../../../secure/backup/BackupConfirmation';
 
 export const steps = [
   'multiFactor',
@@ -100,15 +101,11 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
             </Text>
             <Text centerHorizontally color="shy" size={14}>
               {t('fastVaultSetup.backup.onlineStorageDescription')}{' '}
-              <UnstyledButton
-                onClick={() => {
-                  // TODO: Tony to add learn more link when available
-                }}
-              >
+              <StyledAnchor href={BACKUP_LINK} target="_blank" rel="noreferrer">
                 <Text centerHorizontally color="supporting" as="span">
                   {t('learnMore')}
                 </Text>
-              </UnstyledButton>
+              </StyledAnchor>
             </Text>
           </VStack>
         </Content>
@@ -142,4 +139,8 @@ const BackupButton = styled(Button)`
 const Loader = styled(AnimatedLoader)`
   height: 24px;
   width: 24px;
+`;
+
+const StyledAnchor = styled.a`
+  text-decoration: underline;
 `;
