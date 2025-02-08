@@ -1,0 +1,17 @@
+{
+  "platforms": [
+    "apple",
+    "android",
+    "web"
+  ],
+  "apple": {
+    "modules": [
+      "MobileTssModule"
+    ]
+  },
+  "android": {
+    "modules": [
+      "expo.modules.mobiletss.MobileTssModule"
+    ]
+  }
+}
