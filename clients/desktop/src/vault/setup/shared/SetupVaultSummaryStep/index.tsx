@@ -1,25 +1,39 @@
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../../../lib/ui/buttons/Button';
 import { useBoolean } from '../../../../lib/ui/hooks/useBoolean';
+import { LightningIcon } from '../../../../lib/ui/icons/LightningIcon';
 import { Checkbox } from '../../../../lib/ui/inputs/checkbox/Checkbox';
 import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility';
 import { HStack, VStack } from '../../../../lib/ui/layout/Stack';
+import { OnForwardProp } from '../../../../lib/ui/props';
 import { Text } from '../../../../lib/ui/text';
-import { useHasFinishedOnboarding } from '../../../../onboarding/hooks/useHasFinishedOnboarding';
-import { SUMMARY_ITEMS } from './constants';
+import { SetupVaultType } from '../../type/SetupVaultType';
+import { getBackupItemsForVaultType } from './constants';
 import {
   ContentWrapper,
   IconWrapper,
+  LightningIconWrapper,
   PillWrapper,
   SummaryListItem,
   Wrapper,
-} from './OnboardingSummary.styles';
+} from './SetupVaultSummaryStep.styles';
 
-export const OnboardingSummary = () => {
+type SetupVaultSummaryStepProps = OnForwardProp & {
+  vaultType: SetupVaultType;
+  vaultShares?: number;
+};
+
+export const SetupVaultSummaryStep: FC<SetupVaultSummaryStepProps> = ({
+  vaultType,
+  onForward,
+  vaultShares,
+}) => {
   const { t } = useTranslation();
-  const [, setHasFinishedOnboarding] = useHasFinishedOnboarding();
   const [isChecked, { toggle }] = useBoolean(false);
+  const summaryItems = getBackupItemsForVaultType(vaultType);
+  const isFastVault = vaultType === 'fast';
 
   return (
     <AnimatedVisibility
@@ -30,21 +44,33 @@ export const OnboardingSummary = () => {
       delay={300}
     >
       <Wrapper data-testid="OnboardingSummary-Wrapper">
-        <PillWrapper data-testid="OnboardingSummary-PillWrapper">
-          <Text size={12} color="shy">
-            {t('fastVaultSetup.summary.pillText')}
-          </Text>
-        </PillWrapper>
+        {isFastVault && (
+          <PillWrapper
+            data-testid="OnboardingSummary-PillWrapper"
+            alignItems="center"
+            gap={8}
+          >
+            <LightningIconWrapper>
+              <LightningIcon color="#FFC25C" />
+            </LightningIconWrapper>
+            <Text size={12} color="shy">
+              {t('fastVault')}
+            </Text>
+          </PillWrapper>
+        )}
         <ContentWrapper>
-          <Text variant="h1Regular">{t('fastVaultSetup.summary.title')}</Text>
+          <Text variant="h1Regular">{t('backupGuide')}</Text>
           <VStack gap={24}>
-            {SUMMARY_ITEMS.map(({ title, icon: Icon }) => (
+            {summaryItems.map(({ title, icon: Icon }) => (
               <SummaryListItem alignItems="center" key={title}>
                 <IconWrapper>
                   <Icon />
                 </IconWrapper>
                 <Text color="contrast" weight={500} size={13}>
-                  {t(`fastVaultSetup.summary.${title}`)}
+                  {t(
+                    title,
+                    title === 'yourVaultShares' ? { shares: vaultShares } : {}
+                  )}
                 </Text>
               </SummaryListItem>
             ))}
@@ -57,10 +83,7 @@ export const OnboardingSummary = () => {
               {t('fastVaultSetup.summary.agreementText')}
             </Text>
           </HStack>
-          <Button
-            isDisabled={!isChecked}
-            onClick={() => setHasFinishedOnboarding(true)}
-          >
+          <Button isDisabled={!isChecked} onClick={onForward}>
             {t('fastVaultSetup.summary.ctaText')}
           </Button>
         </VStack>

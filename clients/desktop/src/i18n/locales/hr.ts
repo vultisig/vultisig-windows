@@ -45,6 +45,9 @@ export const hr = {
   inYourVaultHolds: 'a tárhelyedben tartalmaz',
   oneVaultShare: 'egy tárhelyrészt',
   theyRe: 'Ezek',
+  moreInfo: 'További információ',
+  secureVaultSetupPasswordTooltipContent:
+    'Ez azért történik, mert a jelszó helyben titkosítja a biztonsági mentési fájlt, hasonlóan egy merevlemez titkosításához. A következő lépésben lehetőséged van egy tippet hozzáadni.',
   splitIntoParts: 'részekre vannak osztva',
   toIncreaseSecurity: 'a biztonság növelése érdekében és',
   removeSinglePointOfFailure:
@@ -413,6 +416,11 @@ export const hr = {
   backupShare: 'Backup da participação do cofre',
   vaultCreated: 'Cofre criado',
   successfully: 'Com sucesso',
+  fastVault: 'Brzi Trezor',
+  backupGuide: 'Vodič za sigurnosnu kopiju',
+  receivedShare1Email: 'Dio trezora 1 primljen putem e-pošte',
+  yourVaultShares: 'Vaš trezor ima {{shares}} dijelova trezora',
+  share2StoredByYou: 'Dio trezora 2 pohranjen kod vas',
   secureVaultSetup: {
     backup: {
       shares: 'Seu cofre contém {{shares}} partes',
@@ -465,26 +473,24 @@ export const hr = {
     generatingECDSAKey: 'ECDSA kulcs generálása',
     createVault: {
       multiFactor: {
-        subtitle: 'Ez nem tarthat tovább 1 percnél',
-        description:
-          'Többfaktoros biztonság, az egyetlen hibapont megszüntetése',
+        descriptionOne: 'Többfaktoros biztonság,',
+        descriptionTwo: 'Az egyetlen hibapont megszüntetése',
       },
       selfCustodial: {
-        description:
-          'Önálló letétkezelés, teljes ellenőrzés az eszközeid felett',
+        descriptionOne: 'Önfelügyeleti,',
+        descriptionTwo: 'teljes ellenőrzést biztosít az eszközeid felett',
       },
       crossChain: {
-        description:
-          'Több blokkláncos. Cseréld kedvenc tokenjeidet egyetlen tárcában',
-      },
-      over30Chains: {
-        description: 'Több mint 30 blokklánc a kedvenc tokenjeid tárolására',
+        descriptionOne: 'Cross-chain.',
+        descriptionTwo: 'Cseréld kedvenc tokenjeidet egyetlen tárcában',
       },
       availablePlatforms: {
-        description: 'elérhető Androidon, iOS-en, macOS-en és Windows-on',
+        descriptionOne: 'elérhető',
+        descriptionTwo: 'Androidon, iOS-en, macOS-en és Windowson',
       },
       seedlessWallet: {
-        description: 'egy mag nélküli tárca – ne hagyd, hogy újra átverjenek',
+        descriptionOne: 'egy mag nélküli tárca,',
+        descriptionTwo: 'ne hagyd magad újra átverni',
       },
     },
     connectingWithServer: 'Csatlakozás a szerverhez...',

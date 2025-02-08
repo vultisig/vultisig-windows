@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { AnimatedVisibility } from '../../../../../lib/ui/layout/AnimatedVisibility';
 import { GradientText, Text } from '../../../../../lib/ui/text';
-import { useVaultShares } from '../state/VaultSharesProvider';
+import { useNewVault } from '../state/NewVaultProvider';
 import { BACKUP_VAULT_ANIMATIONS } from './hooks/useBackupOverviewStepsAnimations';
 
 type AnimationDescriptionProps = {
@@ -14,13 +14,13 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
   animation,
 }) => {
   const { t } = useTranslation();
-  const vaultSharesNumber = useVaultShares().length;
+  const [vault] = useNewVault();
 
   const stepToAnimationDescription = [
     () => (
       <Text size={48}>
         {t('secureVaultSetup.backup.shares', {
-          shares: vaultSharesNumber,
+          shares: vault.keyshares.length,
         })}{' '}
         <GradientText as="span">
           {t('secureVaultSetup.backup.eachDeviceNeedsBackup')}

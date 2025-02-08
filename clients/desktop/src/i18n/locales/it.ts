@@ -7,6 +7,9 @@ export const it = {
     'Vultisig non traccia le tue attività né richiede alcuna registrazione. Vultisig è open-source, garantendo trasparenza e fiducia.',
   onboarding_view3_description:
     "Vultisig è, per natura, un'applicazione multi-dispositivo. Richiede almeno due dispositivi per creare una cassaforte sicura: un dispositivo iniziale e un dispositivo di accoppiamento.",
+  moreInfo: 'Maggiori informazioni',
+  secureVaultSetupPasswordTooltipContent:
+    'Questo accade perché la password crittografa il file di backup localmente, come la crittografia di un disco rigido. Nel prossimo passaggio, hai la possibilità di aggiungere un suggerimento.',
   onboarding_view4_description:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   tokens: 'token',
@@ -426,6 +429,11 @@ export const it = {
   creating_vault: 'Creazione della Cassaforte',
   learnMore: 'Scopri di più',
   vaultOverview: 'Panoramica della Cassaforte',
+  fastVault: 'Cassaforte Veloce',
+  backupGuide: 'Guida di backup',
+  receivedShare1Email: 'Condivisione della cassaforte 1 ricevuta via mail',
+  yourVaultShares: 'La tua cassaforte ha {{shares}} condivisioni',
+  share2StoredByYou: 'Condivisione della cassaforte 2 archiviata da te',
   backupShare: 'Backup della quota della cassaforte',
   vaultCreated: 'Cassaforte creata',
   successfully: 'Con successo',
@@ -482,26 +490,24 @@ export const it = {
     generatingECDSAKey: 'Generazione della Chiave ECDSA',
     createVault: {
       multiFactor: {
-        subtitle: 'Non dovrebbe richiedere più di 1 minuto',
-        description:
-          'Sicurezza multifattore, eliminando il punto singolo di guasto',
+        descriptionOne: 'Sicurezza multifattore,',
+        descriptionTwo: 'Eliminando il punto di errore singolo',
       },
       selfCustodial: {
-        description: 'Autocustodia, dando pieno controllo sui tuoi asset',
+        descriptionOne: 'Autocustodia,',
+        descriptionTwo: 'controllo completo sui tuoi asset',
       },
       crossChain: {
-        description:
-          'Cross-chain. Scambia i tuoi token preferiti in un’unica cassaforte',
-      },
-      over30Chains: {
-        description:
-          'Oltre 30 blockchain per conservare il tuo token preferito',
+        descriptionOne: 'Cross-chain.',
+        descriptionTwo: 'Scambia i tuoi token preferiti in un unico vault',
       },
       availablePlatforms: {
-        description: 'disponibile su Android, iOS, macOS e Windows',
+        descriptionOne: 'disponibile',
+        descriptionTwo: 'su Android, iOS, macOS e Windows',
       },
       seedlessWallet: {
-        description: 'un wallet senza seed, non farti più truffare',
+        descriptionOne: 'un wallet senza seed,',
+        descriptionTwo: 'non farti truffare di nuovo',
       },
     },
     connectingWithServer: 'Connessione al server...',

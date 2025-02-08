@@ -15,7 +15,7 @@ import { AnimatedLoader } from '../../../../../ui/pending/AnimatedLoader';
 import { useBackupVaultMutation } from '../../../../mutations/useBackupVaultMutation';
 import { vaultsQueryKey } from '../../../../queries/useVaultsQuery';
 
-const BACKUP_LINK =
+export const BACKUP_LINK =
   'https://docs.vultisig.com/vultisig-user-actions/managing-your-vault/vault-backup';
 
 export const steps = [
@@ -100,11 +100,11 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
             </Text>
             <Text centerHorizontally color="shy" size={14}>
               {t('fastVaultSetup.backup.onlineStorageDescription')}{' '}
-              <a href={BACKUP_LINK} target="_blank" rel="noreferrer">
+              <StyledAnchor href={BACKUP_LINK} target="_blank" rel="noreferrer">
                 <Text as="span" centerHorizontally color="supporting">
                   {t('learnMore')}
                 </Text>
-              </a>
+              </StyledAnchor>
             </Text>
           </VStack>
         </Content>
@@ -144,4 +144,8 @@ const Loader = styled(AnimatedLoader)`
 
 const BottomItemsWrapper = styled(VStack)`
   min-height: 30px;
+`;
+
+const StyledAnchor = styled.a`
+  text-decoration: underline;
 `;

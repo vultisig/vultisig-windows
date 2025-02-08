@@ -14,9 +14,9 @@ export const AnimationDescription = () => {
           <Text size={48}>
             {t('fastVaultSetup.backup.backUp')}{' '}
             <GradientText as="span">
-              {t('fastVaultSetup.backup.thisVault')}
+              {t('fastVaultSetup.backup.this_vault')}
             </GradientText>{' '}
-            {t('fastVaultSetup.backup.shareSecurely')}{' '}
+            {t('fastVaultSetup.backup.securely')}{' '}
             <GradientText as="span">
               {t('fastVaultSetup.backup.shareOnlineBackup')}
             </GradientText>

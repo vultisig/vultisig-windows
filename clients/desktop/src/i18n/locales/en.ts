@@ -410,10 +410,18 @@ export const en = {
   while_you_wait_vultisig_has: 'While you wait, Vultisig has...',
   creating_vault: 'Creating Vault',
   learnMore: 'Learn More',
+  moreInfo: 'More Info',
+  secureVaultSetupPasswordTooltipContent:
+    'This happens because the password encrypts the backup file locally, like encrypting a hard drive. In the next step you have the possibility to add a hint.',
   vaultOverview: 'Vault Overview',
   backupShare: 'Back-up Vault Share',
   vaultCreated: 'Vault created',
   successfully: 'Successfully',
+  backupGuide: 'Back-up guide',
+  receivedShare1Email: 'Vault Share 1 received via mail',
+  yourVaultShares: 'Your vault has {{shares}} Vault Shares',
+  fastVault: 'Fast Vault',
+  share2StoredByYou: 'Vault Share 2 stored by you',
   secureVaultSetup: {
     backup: {
       shares: 'Your vault holds {{shares}} shares',
@@ -424,7 +432,8 @@ export const en = {
     backup: {
       heldByServer: 'held by the server',
       part1: 'Part 1 of the vault shares will be',
-      backUpNow: 'Back them up now',
+      backUpNow: 'Back up now',
+      backThemUpNow: 'back them up now',
       vaultShares: 'Your vault holds 2 shares,',
       completeCustody: 'It is sent to you for complete self-custody!',
       setNewStandard: 'You’re ready to use a new wallet standard.',
@@ -464,24 +473,24 @@ export const en = {
     generatingECDSAKey: 'Generating ECDSA Key',
     createVault: {
       multiFactor: {
-        subtitle: 'This shouldn’t take longer than 1 minute',
-        description:
-          'Multi-factor security, Removing the single-point of failure',
+        descriptionOne: 'Multi-factor security,',
+        descriptionTwo: 'Removing the single-point of failure',
       },
       selfCustodial: {
-        description: 'Self-custodial, giving complete control over your assets',
+        descriptionOne: 'Self-custodial,',
+        descriptionTwo: 'giving complete control over your assets',
       },
       crossChain: {
-        description: 'Cross-chain. Swap your favourite tokens all in one vault',
-      },
-      over30Chains: {
-        description: 'Over 30 chains to store your favorite token',
+        descriptionOne: 'Cross-chain.',
+        descriptionTwo: 'Swap your favourite tokens all in one vault',
       },
       availablePlatforms: {
-        description: 'available on Android, iOS, macOS and Windows',
+        descriptionOne: 'available',
+        descriptionTwo: 'on Android, iOS, macOS and Windows',
       },
       seedlessWallet: {
-        description: 'a seedless wallet, do not get scammed again',
+        descriptionOne: 'a seedless wallet,',
+        descriptionTwo: 'do not get scammed again',
       },
     },
     connectingWithServer: 'Connecting with server...',
