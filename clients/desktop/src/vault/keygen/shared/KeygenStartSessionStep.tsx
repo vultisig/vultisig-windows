@@ -9,10 +9,10 @@ import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
+import { AnimatedLoader } from '../../../ui/pending/AnimatedLoader';
 import { useVaultKeygenDevices } from '../../setup/hooks/useVaultKegenDevices';
 import { useCurrentServerUrl } from '../state/currentServerUrl';
 import { startSession } from '../utils/startSession';
-import { PendingKeygenMessage } from './PendingKeygenMessage';
 import { useCurrentSessionId } from './state/currentSessionId';
 
 export const KeygenStartSessionStep = ({
@@ -20,7 +20,6 @@ export const KeygenStartSessionStep = ({
   onForward,
 }: Partial<OnBackProp> & OnForwardProp) => {
   const { t } = useTranslation();
-
   const sessionId = useCurrentSessionId();
   const serverUrl = useCurrentServerUrl();
   const devices = useVaultKeygenDevices();
@@ -47,9 +46,7 @@ export const KeygenStartSessionStep = ({
       >
         <MatchQuery
           value={status}
-          pending={() => (
-            <PendingKeygenMessage>{t('starting_keygen')}</PendingKeygenMessage>
-          )}
+          pending={() => <AnimatedLoader />}
           error={() => <Text>{t('failed_to_start_keygen')}</Text>}
           success={() => null}
         />

@@ -72,32 +72,30 @@ const Container = styled(UnstyledButton)<ContainerProps>`
       `,
     })}
 
-  ${({ kind }) =>
+  ${({ kind, isDisabled }) =>
     match(kind, {
       primary: () => css`
-        background: ${getColor('primary')};
-        color: ${getColor('textDark')};
+        background: ${isDisabled
+          ? getColor('buttonBackgroundDisabled')
+          : getColor('primary')};
+        color: ${isDisabled ? getColor('mistExtra') : getColor('textDark')};
 
-        &:disabled {
-          background: ${getColor('buttonBackgroundDisabled')};
-          color: ${getColor('mistExtra')};
-
-          &:hover {
-            background: ${getColor('buttonBackgroundDisabled')};
-          }
+        &:hover {
+          background: ${isDisabled
+            ? getColor('buttonBackgroundDisabled')
+            : getColor('primary')};
         }
       `,
       secondary: () => css`
-        background: ${getColor('foregroundExtra')};
-        color: ${getColor('contrast')};
+        background: ${isDisabled
+          ? getColor('buttonBackgroundDisabled')
+          : getColor('foregroundExtra')};
+        color: ${isDisabled ? getColor('mistExtra') : getColor('contrast')};
 
-        &:disabled {
-          background: ${getColor('buttonBackgroundDisabled')};
-          color: ${getColor('mistExtra')};
-
-          &:hover {
-            background: ${getColor('buttonBackgroundDisabled')};
-          }
+        &:hover {
+          background: ${isDisabled
+            ? getColor('buttonBackgroundDisabled')
+            : getColor('foregroundExtra')};
         }
       `,
       outlined: () => css`

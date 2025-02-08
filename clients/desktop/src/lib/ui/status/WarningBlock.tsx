@@ -1,3 +1,4 @@
+import React, { ElementType, ReactNode } from 'react';
 import styled from 'styled-components';
 
 import { borderRadius } from '../css/borderRadius';
@@ -7,6 +8,7 @@ import { hStack } from '../layout/Stack';
 import { ChildrenProp, UiProps } from '../props';
 import { text } from '../text';
 import { getColor } from '../theme/getters';
+import { Tooltip } from '../tooltips/Tooltip';
 
 const Container = styled.div`
   ${borderRadius.m};
@@ -37,15 +39,38 @@ const Content = styled.div`
   })}
 `;
 
-type WarningBlockProps = ChildrenProp & UiProps;
+type WarningBlockProps = {
+  icon?: ElementType;
+  iconTooltipContent?: ReactNode;
+} & ChildrenProp &
+  UiProps;
 
-export const WarningBlock = ({ children, ...rest }: WarningBlockProps) => {
+export const WarningBlock = ({
+  children,
+  iconTooltipContent,
+  icon: Icon,
+  ...rest
+}: WarningBlockProps) => {
+  const icon = Icon ? (
+    <Icon />
+  ) : (
+    <IconContainer>
+      <TriangleAlertIcon />
+    </IconContainer>
+  );
+
   return (
     <Container {...rest}>
       <Content>{children}</Content>
-      <IconContainer>
-        <TriangleAlertIcon />
-      </IconContainer>
+      {iconTooltipContent ? (
+        <Tooltip
+          content={iconTooltipContent}
+          placement="top"
+          renderOpener={props => <div {...props}>{icon}</div>}
+        />
+      ) : (
+        icon
+      )}
     </Container>
   );
 };

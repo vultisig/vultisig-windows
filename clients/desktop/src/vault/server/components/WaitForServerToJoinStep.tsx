@@ -1,7 +1,7 @@
 import { isEmpty } from '@lib/utils/array/isEmpty';
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { recordFromKeys } from '@lib/utils/record/recordFromKeys';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { OnBackProp, OnForwardProp, TitleProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
@@ -15,7 +15,22 @@ export const WaitForServerToJoinStep: React.FC<
 > = ({ onForward, title }) => {
   const peerOptionsQuery = usePeerOptionsQuery();
   const [, setRecord] = usePeersSelectionRecord();
-  const { data } = peerOptionsQuery;
+
+  // @antonio: the query is automatically polling when there are no peers yet. We want the query to be still in pending state during that time.
+  const processedQuery = useMemo(
+    () => ({
+      ...peerOptionsQuery,
+      isPending:
+        peerOptionsQuery.data?.length === 0 || peerOptionsQuery.isPending,
+      data:
+        peerOptionsQuery.data?.length === 0 || !peerOptionsQuery.data
+          ? undefined
+          : peerOptionsQuery.data,
+    }),
+    [peerOptionsQuery]
+  );
+
+  const { data } = processedQuery;
 
   useEffect(() => {
     if (data && !isEmpty(data)) {
@@ -26,16 +41,13 @@ export const WaitForServerToJoinStep: React.FC<
   return (
     <>
       <MatchQuery
-        value={peerOptionsQuery}
+        value={processedQuery}
         pending={() => <WaitForServerStates state="pending" />}
         success={() => (
-          <WaitForServerStates state="success" onForward={onForward} />
+          <WaitForServerStates state="success" onAnimationEnd={onForward} />
         )}
-        error={error => (
-          <FullPageFlowErrorState
-            message={extractErrorMsg(error)}
-            title={title}
-          />
+        error={() => (
+          <WaitForServerStates state="error" onAnimationEnd={onForward} />
         )}
       />
     </>

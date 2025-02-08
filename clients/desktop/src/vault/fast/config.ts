@@ -1,3 +1,2 @@
-import { Endpoint } from '../../services/Endpoint';
-
-export const fastVaultServerUrl = `${Endpoint.vultisigApiProxy}/vault`;
+import { rootApiUrl } from '@core/config';
+export const fastVaultServerUrl = `${rootApiUrl}/vault`;

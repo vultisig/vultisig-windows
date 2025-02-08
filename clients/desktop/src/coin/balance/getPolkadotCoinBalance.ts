@@ -2,7 +2,6 @@ import { queryUrl } from '@lib/utils/query/queryUrl';
 
 import { toChainAmount } from '../../chain/utils/toChainAmount';
 import { Chain } from '../../model/chain';
-import { Endpoint } from '../../services/Endpoint';
 import { chainFeeCoin } from '../chainFeeCoin';
 import { CoinBalanceResolver } from './CoinBalanceResolver';
 
@@ -16,7 +15,7 @@ interface PolkadotAccountBalance {
 
 export const getPolkadotCoinBalance: CoinBalanceResolver = async input => {
   const { data } = await queryUrl<PolkadotAccountBalance>(
-    Endpoint.polkadotServiceBalance,
+    'https://polkadot.api.subscan.io/api/v2/scan/search',
     {
       method: 'POST',
       body: JSON.stringify({ key: input.address }),

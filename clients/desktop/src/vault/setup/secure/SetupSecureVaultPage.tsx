@@ -6,29 +6,30 @@ import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionSt
 import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager';
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
-import { KeygenVerifyStep } from '../../keygen/shared/verify/KeygenVerifyStep';
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType';
 import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
 import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers';
 import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep';
 import { SetupVaultNameStep } from '../SetupVaultNameStep';
-import { SetupVaultKeygenStep } from '../shared/SetupVaultKeygenStep';
+import { SetupVaultCreationStep } from '../shared/SetupVaultCreationStep';
 import { VaultTypeProvider } from '../shared/state/vaultType';
 import { StartKeygenVaultProvider } from '../StartKeygenVaultProvider';
 import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode';
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey';
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType';
 import { SetupVaultNameProvider } from '../state/vaultName';
+import { SecureVaultKeygenStartSessionStep } from './SecureVaultKeygenStartSessionStep';
 
 const steps = [
   'name',
   'joinSession',
   'peers',
-  'verify',
   'startSession',
   'keygen',
 ] as const;
+
+const lastEditableStep = steps[0];
 
 export const SetupSecureVaultPage = () => {
   const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
@@ -56,7 +57,7 @@ export const SetupSecureVaultPage = () => {
                                 <SetupVaultNameStep onForward={toNextStep} />
                               )}
                               joinSession={() => (
-                                <KeygenStartSessionStep
+                                <SecureVaultKeygenStartSessionStep
                                   onBack={toPreviousStep}
                                   onForward={toNextStep}
                                 />
@@ -67,12 +68,6 @@ export const SetupSecureVaultPage = () => {
                                   onForward={toNextStep}
                                 />
                               )}
-                              verify={() => (
-                                <KeygenVerifyStep
-                                  onBack={toPreviousStep}
-                                  onForward={toNextStep}
-                                />
-                              )}
                               startSession={() => (
                                 <KeygenStartSessionStep
                                   onBack={toPreviousStep}
@@ -80,9 +75,10 @@ export const SetupSecureVaultPage = () => {
                                 />
                               )}
                               keygen={() => (
-                                <SetupVaultKeygenStep
+                                <SetupVaultCreationStep
+                                  vaultType="secure"
                                   onTryAgain={() => setStep(steps[0])}
-                                  onBack={() => setStep('verify')}
+                                  onBack={() => setStep(lastEditableStep)}
                                 />
                               )}
                             />

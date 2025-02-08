@@ -7,13 +7,38 @@ export const es = {
     'Vultisig no rastrea sus actividades ni requiere ningún registro. Vultisig es de código abierto, garantizando transparencia y confianza.',
   onboarding_view3_description:
     'Vultisig es, por naturaleza, una aplicación multi-dispositivo. Requiere al menos dos dispositivos para crear una bóveda segura: un dispositivo iniciador y un dispositivo de emparejamiento.',
+  moreInfo: 'Más información',
+  secureVaultSetupPasswordTooltipContent:
+    'Esto sucede porque la contraseña cifra el archivo de respaldo localmente, como cifrar un disco duro. En el siguiente paso, tienes la posibilidad de añadir una pista.',
   onboarding_view4_description:
     'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   create_new_vault: 'Crear nueva bóveda',
+  thisDevice: 'Este dispositivo',
+  tookTooLongToRespond:
+    'El servidor tardó demasiado en responder. Por favor, revisa tu conexión a internet y vuelve a intentarlo.',
+  errorTimedOut: 'Error: Tiempo de espera del servidor agotado',
+  optionalDevice: 'Dispositivo opcional',
+  scanWithDevice: 'Escanear con el {{deviceNumber}}º dispositivo',
+  localMode: 'Estás en modo local',
+  fastVault: 'Fast Vault',
+  scanQrInstruction:
+    'Escanea el QR con otro dispositivo. Se recomienda configuración de 3 dispositivos, 2 son suficientes.',
+  devicesStatus: 'Dispositivos ({{currentPeers}}/3)',
+  waitingOnDevices: 'Esperando dispositivos...',
+  switchToInternet: 'Volver al modo de internet',
+  signPrivately: '¿Quieres firmar en privado?',
+  switchToLocal: 'Cambiar al modo local',
+  scanThe: 'Escanea',
+  qrCode: 'el código QR',
+  downloadVultisig:
+    'Descarga Vultisig en tus otros dispositivos y selecciona "Escanear código QR"',
   alwaysBackUpEachVaultShare:
     'Siempre haga una copia de seguridad de cada parte del depósito',
   separatelyIna: 'separadamente en una',
   differentLocation: 'ubicación diferente',
+  serverTimedOut: 'El servidor agotó el tiempo de espera',
+  serverTookTooLong:
+    'El servidor tardó demasiado en responder. Por favor, verifica tu conexión a internet e inténtalo de nuevo.',
   eachDevice: 'Cada dispositivo',
   inYourVaultHolds: 'en su depósito contiene',
   chooseSetup: 'Elegir configuración',
@@ -114,7 +139,7 @@ export const es = {
   select_your_vault_type: 'Seleccione su tipo de bóveda',
   pair: 'Emparejar',
   create_qr: 'Crear código QR',
-  scan_qr: 'Leer código QR / Emparejar dispositivo',
+  scan_qr: 'Leer código QR',
   this_device_is_the: 'Este dispositivo es el',
   initiating_device: 'Dispositivo iniciador',
   pairing_device: 'Dispositivo de emparejamiento',
@@ -179,6 +204,7 @@ export const es = {
   wrong_vault_try_again: 'Bóveda o dispositivo de emparejamiento incorrecto.',
   vault_details_page_title: 'Detalles',
   vault_details_page_vault_part: 'Parte de la bóveda',
+  vault_details_page_vault_type: 'Tipo de bóveda',
   vault_backup_page_title: 'Respaldo',
   vault_backup_banner_title:
     '¡Realice una copia de seguridad de su parte de bóveda de este dispositivo ahora!',
@@ -395,6 +421,21 @@ export const es = {
   while_you_wait_vultisig_has: 'Mientras esperas, Vultisig tiene...',
   creating_vault: 'Creando Bóveda',
   learnMore: 'Aprender más',
+  vaultOverview: 'Resumen del Bóveda',
+  backupShare: 'Copia de seguridad de la participación de la bóveda',
+  vaultCreated: 'Bóveda creada',
+  backupGuide: 'Guía de respaldo',
+  receivedShare1Email: 'Compartición de bóveda 1 recibida por correo',
+  yourVaultShares: 'Tu bóveda tiene {{shares}} comparticiones de bóveda',
+  share2StoredByYou: 'Compartición de bóveda 2 almacenada por ti',
+  successfully: 'Exitosamente',
+  secureVaultSetup: {
+    backup: {
+      shares: 'Tu bóveda contiene {{shares}} participaciones',
+      eachDeviceNeedsBackup:
+        'Cada dispositivo necesita su propia copia de seguridad.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'mantenido por el servidor',
@@ -443,25 +484,24 @@ export const es = {
     generatingECDSAKey: 'Generando Clave ECDSA',
     createVault: {
       multiFactor: {
-        subtitle: 'Esto no debería tardar más de 1 minuto',
-        description:
-          'Seguridad multifactor, eliminando el único punto de falla',
+        descriptionOne: 'Seguridad multifactor,',
+        descriptionTwo: 'Eliminando el punto único de fallo',
       },
       selfCustodial: {
-        description: 'Autocustodia, brindando control total sobre tus activos',
+        descriptionOne: 'Autocustodia,',
+        descriptionTwo: 'brindando control total sobre tus activos',
       },
       crossChain: {
-        description:
-          'Interoperabilidad entre cadenas. Intercambia tus tokens favoritos en una sola bóveda',
-      },
-      over30Chains: {
-        description: 'Más de 30 cadenas para almacenar tu token favorito',
+        descriptionOne: 'Multicadena.',
+        descriptionTwo: 'Intercambia tus tokens favoritos en una sola bóveda',
       },
       availablePlatforms: {
-        description: 'Disponible en Android, iOS, macOS y Windows',
+        descriptionOne: 'disponible',
+        descriptionTwo: 'en Android, iOS, macOS y Windows',
       },
       seedlessWallet: {
-        description: 'Un monedero sin semilla, no vuelvas a ser estafado',
+        descriptionOne: 'una billetera sin semilla,',
+        descriptionTwo: 'no vuelvas a ser estafado',
       },
     },
     connectingWithServer: 'Conectando con el servidor...',

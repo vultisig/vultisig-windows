@@ -1,11 +1,57 @@
-import { useRive, useStateMachineInput } from '@rive-app/react-canvas';
-import React, { FC, useEffect } from 'react';
+import { match } from '@lib/utils/match';
+import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
+import {
+  ServerAnimationStates,
+  useWaitForServerAnimationStates,
+} from '../hooks/useWaitForServerAnimationStates';
+
+type WaitForServerStatesProps = {
+  state: ServerAnimationStates;
+  onAnimationEnd?: () => void;
+};
+
+export const WaitForServerStates: FC<WaitForServerStatesProps> = ({
+  state,
+  onAnimationEnd,
+}) => {
+  const { t } = useTranslation();
+  const RiveComponent = useWaitForServerAnimationStates({
+    onAnimationEnd,
+    state,
+  });
+
+  return (
+    <PageContent alignItems="center" justifyContent="center" gap={24}>
+      <ContentWrapper justifyContent="center" alignItems="center" gap={24}>
+        <LoaderWrapper alignItems="center" justifyContent="center">
+          <RiveComponent />
+        </LoaderWrapper>
+        <VStack gap={8} alignItems="center">
+          <Text variant="h1Regular" size={32} color="contrast">
+            {match(state, {
+              success: () => t('fastVaultSetup.connectionSuccess'),
+              pending: () => t('fastVaultSetup.connectingWithServer'),
+              error: () => t('serverTimedOut'),
+            })}
+          </Text>
+          <Text size={14} color="shy">
+            {match(state, {
+              success: () => t('fastVaultSetup.vaultInitializationStarting'),
+              pending: () => t('fastVaultSetup.takeMinute'),
+              error: () => t('serverTookTooLong'),
+            })}
+          </Text>
+        </VStack>
+      </ContentWrapper>
+    </PageContent>
+  );
+};
 
 const ContentWrapper = styled(VStack)`
   position: relative;
@@ -32,55 +78,3 @@ const LoaderWrapper = styled(HStack)`
   width: 48px;
   height: 48px;
 `;
-
-type WaitForServerStatesProps = {
-  state: 'success' | 'pending';
-  onForward?: () => void;
-};
-
-const WaitForServerStatesRaw: FC<WaitForServerStatesProps> = ({
-  state,
-  onForward,
-}) => {
-  const { t } = useTranslation();
-  const { RiveComponent, rive } = useRive({
-    src: '/rive-animations/fast-vault-keygen.riv',
-    stateMachines: 'State Machine 1',
-    autoplay: true,
-    onStop: () => {
-      onForward?.();
-    },
-  });
-
-  const input = useStateMachineInput(rive, 'State Machine 1', 'Connected');
-
-  useEffect(() => {
-    if (rive && state === 'success') {
-      input?.fire();
-    }
-  }, [rive, input, state, onForward]);
-
-  return (
-    <PageContent alignItems="center" justifyContent="center" gap={24}>
-      <ContentWrapper justifyContent="center" alignItems="center" gap={24}>
-        <LoaderWrapper alignItems="center" justifyContent="center">
-          <RiveComponent />
-        </LoaderWrapper>
-        <VStack gap={8} alignItems="center">
-          <Text variant="h1Regular" size={32} color="contrast">
-            {state === 'pending'
-              ? t('fastVaultSetup.connectingWithServer')
-              : t('fastVaultSetup.connectionSuccess')}
-          </Text>
-          <Text size={14} color="shy">
-            {state === 'pending'
-              ? t('fastVaultSetup.takeMinute')
-              : t('fastVaultSetup.vaultInitializationStarting')}
-          </Text>
-        </VStack>
-      </ContentWrapper>
-    </PageContent>
-  );
-};
-
-export const WaitForServerStates = React.memo(WaitForServerStatesRaw);

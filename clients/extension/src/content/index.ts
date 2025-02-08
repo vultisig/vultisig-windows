@@ -602,7 +602,7 @@ namespace Provider {
 
     async signTransaction(transaction: Transaction) {
       const decodedTransfer = SystemInstruction.decodeTransfer(
-        transaction.instructions[0]
+        transaction.instructions[0],
       );
 
       const modifiedTransfer = {
@@ -899,94 +899,199 @@ const intervalRef = setInterval(() => {
           provider: providerCopy as Provider.Ethereum as EIP1193Provider,
         });
 
-        Object.defineProperties(window, {
-          vultisig: {
-            value: vultisigProvider,
-            configurable: false,
-            writable: false,
-          },
-          ethereum: {
-            get() {
-              return window.vultiConnectRouter.currentProvider;
+        if (document.readyState === "complete") {
+          Object.defineProperties(window, {
+            vultisig: {
+              value: vultisigProvider,
+              configurable: false,
+              writable: false,
             },
-            set(newProvider) {
-              window.vultiConnectRouter?.addProvider(newProvider);
+            ethereum: {
+              get() {
+                return window.vultiConnectRouter.currentProvider;
+              },
+              set(newProvider) {
+                window.vultiConnectRouter?.addProvider(newProvider);
+              },
+              configurable: false,
             },
-            configurable: false,
-          },
-          vultiConnectRouter: {
-            value: {
-              ethereumProvider,
-              lastInjectedProvider: window.ethereum,
-              currentProvider: ethereumProvider,
-              providers: [
+            vultiConnectRouter: {
+              value: {
                 ethereumProvider,
-                ...(window.ethereum ? [window.ethereum] : []),
-              ],
-              setDefaultProvider(vultiAsDefault: boolean) {
-                if (vultiAsDefault) {
-                  window.vultiConnectRouter.currentProvider = window.vultisig;
-                } else {
-                  const nonDefaultProvider =
-                    window.vultiConnectRouter?.lastInjectedProvider ??
-                    window.ethereum;
-                  window.vultiConnectRouter.currentProvider =
-                    nonDefaultProvider;
-                }
+                lastInjectedProvider: window.ethereum,
+                currentProvider: ethereumProvider,
+                providers: [
+                  ethereumProvider,
+                  ...(window.ethereum ? [window.ethereum] : []),
+                ],
+                setDefaultProvider(vultiAsDefault: boolean) {
+                  if (vultiAsDefault) {
+                    window.vultiConnectRouter.currentProvider = window.vultisig;
+                  } else {
+                    const nonDefaultProvider =
+                      window.vultiConnectRouter?.lastInjectedProvider ??
+                      window.ethereum;
+                    window.vultiConnectRouter.currentProvider =
+                      nonDefaultProvider;
+                  }
+                },
+                addProvider(provider: Provider.Ethereum) {
+                  if (
+                    !window.vultiConnectRouter?.providers?.includes(provider)
+                  ) {
+                    window.vultiConnectRouter?.providers?.push(provider);
+                  }
+                  if (ethereumProvider !== provider) {
+                    window.vultiConnectRouter.lastInjectedProvider = provider;
+                  }
+                },
               },
-              addProvider(provider: Provider.Ethereum) {
-                if (!window.vultiConnectRouter?.providers?.includes(provider)) {
-                  window.vultiConnectRouter?.providers?.push(provider);
-                }
-                if (ethereumProvider !== provider) {
-                  window.vultiConnectRouter.lastInjectedProvider = provider;
-                }
-              },
+              configurable: false,
+              writable: false,
             },
-            configurable: false,
-            writable: false,
-          },
-          bitcoin: {
-            value: { ...bitcoinProvider },
-            configurable: false,
-            writable: false,
-          },
-          bitcoincash: {
-            value: { ...bitcoinCashProvider },
-            configurable: false,
-            writable: false,
-          },
-          cosmos: {
-            value: { ...cosmosProvider },
-            configurable: false,
-            writable: false,
-          },
-          dash: {
-            value: { ...dashProvider },
-            configurable: false,
-            writable: false,
-          },
-          dogecoin: {
-            value: { ...dogecoinProvider },
-            configurable: false,
-            writable: false,
-          },
-          litecoin: {
-            value: { ...litecoinProvider },
-            configurable: false,
-            writable: false,
-          },
-          maya: {
-            value: { ...mayachainProvider },
-            configurable: false,
-            writable: false,
-          },
-          thorchain: {
-            value: { ...thorchainProvider },
-            configurable: false,
-            writable: false,
-          },
-        });
+            bitcoin: {
+              value: { ...bitcoinProvider },
+              configurable: false,
+              writable: false,
+            },
+            bitcoincash: {
+              value: { ...bitcoinCashProvider },
+              configurable: false,
+              writable: false,
+            },
+            cosmos: {
+              value: { ...cosmosProvider },
+              configurable: false,
+              writable: false,
+            },
+            dash: {
+              value: { ...dashProvider },
+              configurable: false,
+              writable: false,
+            },
+            dogecoin: {
+              value: { ...dogecoinProvider },
+              configurable: false,
+              writable: false,
+            },
+            litecoin: {
+              value: { ...litecoinProvider },
+              configurable: false,
+              writable: false,
+            },
+            maya: {
+              value: { ...mayachainProvider },
+              configurable: false,
+              writable: false,
+            },
+            thorchain: {
+              value: { ...thorchainProvider },
+              configurable: false,
+              writable: false,
+            },
+          });
+        } else {
+          window.addEventListener(
+            "load",
+            () => {
+              Object.defineProperties(window, {
+                vultisig: {
+                  value: vultisigProvider,
+                  configurable: false,
+                  writable: false,
+                },
+                ethereum: {
+                  get() {
+                    return window.vultiConnectRouter.currentProvider;
+                  },
+                  set(newProvider) {
+                    window.vultiConnectRouter?.addProvider(newProvider);
+                  },
+                  configurable: false,
+                },
+                vultiConnectRouter: {
+                  value: {
+                    ethereumProvider,
+                    lastInjectedProvider: window.ethereum,
+                    currentProvider: ethereumProvider,
+                    providers: [
+                      ethereumProvider,
+                      ...(window.ethereum ? [window.ethereum] : []),
+                    ],
+                    setDefaultProvider(vultiAsDefault: boolean) {
+                      if (vultiAsDefault) {
+                        window.vultiConnectRouter.currentProvider =
+                          window.vultisig;
+                      } else {
+                        const nonDefaultProvider =
+                          window.vultiConnectRouter?.lastInjectedProvider ??
+                          window.ethereum;
+                        window.vultiConnectRouter.currentProvider =
+                          nonDefaultProvider;
+                      }
+                    },
+                    addProvider(provider: Provider.Ethereum) {
+                      if (
+                        !window.vultiConnectRouter?.providers?.includes(
+                          provider,
+                        )
+                      ) {
+                        window.vultiConnectRouter?.providers?.push(provider);
+                      }
+                      if (ethereumProvider !== provider) {
+                        window.vultiConnectRouter.lastInjectedProvider =
+                          provider;
+                      }
+                    },
+                  },
+                  configurable: false,
+                  writable: false,
+                },
+                bitcoin: {
+                  value: { ...bitcoinProvider },
+                  configurable: false,
+                  writable: false,
+                },
+                bitcoincash: {
+                  value: { ...bitcoinCashProvider },
+                  configurable: false,
+                  writable: false,
+                },
+                cosmos: {
+                  value: { ...cosmosProvider },
+                  configurable: false,
+                  writable: false,
+                },
+                dash: {
+                  value: { ...dashProvider },
+                  configurable: false,
+                  writable: false,
+                },
+                dogecoin: {
+                  value: { ...dogecoinProvider },
+                  configurable: false,
+                  writable: false,
+                },
+                litecoin: {
+                  value: { ...litecoinProvider },
+                  configurable: false,
+                  writable: false,
+                },
+                maya: {
+                  value: { ...mayachainProvider },
+                  configurable: false,
+                  writable: false,
+                },
+                thorchain: {
+                  value: { ...thorchainProvider },
+                  configurable: false,
+                  writable: false,
+                },
+              });
+            },
+            { once: true },
+          );
+        }
       } else {
         prioritize = false;
       }

@@ -55,9 +55,7 @@ export const EmailConfirmation: FC<EmailConfirmationProps> = ({
             ) : (
               isPending && (
                 <HStack gap={4}>
-                  <LoaderWrapper>
-                    <AnimatedLoader />
-                  </LoaderWrapper>
+                  <StyledAnimatedLoader />
                   <Text weight={500} as="span" color="contrast" size={13}>
                     {t('fastVaultSetup.backup.verifyingCode')}
                   </Text>
@@ -79,7 +77,7 @@ export const EmailConfirmation: FC<EmailConfirmationProps> = ({
   );
 };
 
-const LoaderWrapper = styled.div`
+const StyledAnimatedLoader = styled(AnimatedLoader)`
   width: fit-content;
   position: relative;
   width: 20px;

@@ -1,9 +1,9 @@
+import { rootApiUrl } from '@core/config';
+import { queryUrl } from '@lib/utils/query/queryUrl';
 import { useQuery } from '@tanstack/react-query';
 
-import { Fetch } from '../../../wailsjs/go/utils/GoHttp';
 import { getEvmChainId } from '../../chain/evm/chainInfo';
 import { Chain, EvmChain } from '../../model/chain';
-import { Endpoint } from '../../services/Endpoint';
 import {
   OneInchTokensResponse,
   oneInchTokenToCoinMeta,
@@ -15,9 +15,8 @@ export const useWhitelistedCoinsQuery = (chain: Chain) => {
     queryFn: async () => {
       const evmChainId = getEvmChainId(chain as EvmChain);
       if (evmChainId) {
-        const data = (await Fetch(
-          Endpoint.fetchTokens(evmChainId)
-        )) as OneInchTokensResponse;
+        const url = `${rootApiUrl}/1inch/swap/v6.0/${evmChainId}/tokens`;
+        const data = await queryUrl<OneInchTokensResponse>(url);
 
         const oneInchTokens = Object.values(data.tokens);
 

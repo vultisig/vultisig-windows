@@ -7,14 +7,38 @@ export const pt = {
     'O Vultisig não rastreia suas atividades nem exige nenhum registro. O Vultisig é de código aberto, garantindo transparência e confiança.',
   onboarding_view3_description:
     'O Vultisig é, por natureza, um aplicativo multi-dispositivo. Exige pelo menos dois dispositivos para criar um cofre seguro: um dispositivo inicializador e um dispositivo de pareamento.',
+  moreInfo: 'Mais informações',
+  secureVaultSetupPasswordTooltipContent:
+    'Isso acontece porque a senha criptografa o arquivo de backup localmente, como criptografar um disco rígido. No próximo passo, você tem a possibilidade de adicionar uma dica.',
   onboarding_view4_description:
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   create_new_vault: 'Criar novo cofre',
+  tookTooLongToRespond:
+    'O servidor demorou muito para responder. Por favor, verifique sua conexão com a internet e tente novamente.',
+  errorTimedOut: 'Erro: Tempo limite do servidor esgotado',
+  thisDevice: 'Este dispositivo',
+  optionalDevice: 'Dispositivo opcional',
+  scanWithDevice: 'Escanear com o {{deviceNumber}}º dispositivo',
+  localMode: 'Você está no modo local',
+  scanQrInstruction:
+    'Escaneie o QR com outro dispositivo. Configuração de 3 dispositivos recomendada, 2 são suficientes.',
+  devicesStatus: 'Dispositivos ({{currentPeers}}/3)',
+  waitingOnDevices: 'Aguardando dispositivos...',
+  switchToInternet: 'Voltar ao modo internet',
+  signPrivately: 'Quer assinar em privado?',
+  switchToLocal: 'Mudar para o modo local',
+  scanThe: 'Escaneie',
+  qrCode: 'o código QR',
+  downloadVultisig:
+    'Baixe o Vultisig nos seus outros dispositivos e selecione "Escanear código QR"',
   import_existing_vault: 'Importar cofre existente',
   missing_public_key_ecdsa: 'Chave pública ECDSA ausente',
   missing_verification_code: 'Código de verificação ausente',
   next: 'Próximo',
   alwaysBackUpEachVaultShare: 'Sempre faça backup de cada parte do cofre',
+  serverTimedOut: 'O servidor demorou muito',
+  serverTookTooLong:
+    'O servidor demorou muito para responder. Verifique sua conexão com a internet e tente novamente.',
   separatelyIna: 'separadamente em um',
   differentLocation: 'local diferente',
   eachDevice: 'Cada dispositivo',
@@ -112,7 +136,7 @@ export const pt = {
   select_your_vault_type: 'Selecione o seu tipo de cofre',
   pair: 'Parear',
   create_qr: 'Criar código QR',
-  scan_qr: 'Ler código QR / Parear dispositivo',
+  scan_qr: 'Ler código QR',
   this_device_is_the: 'Este dispositivo é o',
   initiating_device: 'Dispositivo inicializador',
   pairing_device: 'Dispositivo de pareamento',
@@ -177,6 +201,7 @@ export const pt = {
   wrong_vault_try_again: 'Cofre ou dispositivo de pareamento incorreto.',
   vault_details_page_title: 'Detalhes',
   vault_details_page_vault_part: 'Parte do Cofre',
+  vault_details_page_vault_type: 'Tipo de Cofre',
   vault_backup_page_title: 'Backup',
   vault_backup_banner_title:
     'Faça já o backup da partilha do cofre deste dispositivo!',
@@ -397,6 +422,21 @@ export const pt = {
   while_you_wait_vultisig_has: 'Enquanto espera, Vultisig tem...',
   creating_vault: 'Criando Cofre',
   learnMore: 'Saiba mais',
+  vaultOverview: 'Visão geral do cofre',
+  backupShare: 'Backup da participação do cofre',
+  fastVault: 'Cofre Rápido',
+  backupGuide: 'Guia de backup',
+  receivedShare1Email: 'Parte do Cofre 1 recebida por e-mail',
+  yourVaultShares: 'Seu cofre tem {{shares}} partes',
+  share2StoredByYou: 'Parte do Cofre 2 armazenada por você',
+  vaultCreated: 'Cofre criado',
+  successfully: 'Com sucesso',
+  secureVaultSetup: {
+    backup: {
+      shares: 'Seu cofre contém {{shares}} partes',
+      eachDeviceNeedsBackup: 'Cada dispositivo precisa do seu próprio backup.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'mantido pelo servidor',
@@ -443,24 +483,24 @@ export const pt = {
     generatingECDSAKey: 'Gerando Chave ECDSA',
     createVault: {
       multiFactor: {
-        subtitle: 'Isso não deve levar mais de 1 minuto',
-        description: 'Segurança multifator, eliminando o ponto único de falha',
+        descriptionOne: 'Segurança multifatorial,',
+        descriptionTwo: 'Eliminando um único ponto de falha',
       },
       selfCustodial: {
-        description: 'Autocustódia, dando controle total sobre seus ativos',
+        descriptionOne: 'Autocustódia,',
+        descriptionTwo: 'controle total sobre seus ativos',
       },
       crossChain: {
-        description:
-          'Cross-chain. Troque seus tokens favoritos em um único cofre',
-      },
-      over30Chains: {
-        description: 'Mais de 30 blockchains para armazenar seu token favorito',
+        descriptionOne: 'Cross-chain.',
+        descriptionTwo: 'Troque seus tokens favoritos em um único cofre',
       },
       availablePlatforms: {
-        description: 'Disponível para Android, iOS, macOS e Windows',
+        descriptionOne: 'disponível',
+        descriptionTwo: 'no Android, iOS, macOS e Windows',
       },
       seedlessWallet: {
-        description: 'Uma carteira sem seed – não seja enganado novamente',
+        descriptionOne: 'uma carteira sem seed,',
+        descriptionTwo: 'não caia mais em golpes',
       },
     },
     connectingWithServer: 'Conectando com o servidor...',

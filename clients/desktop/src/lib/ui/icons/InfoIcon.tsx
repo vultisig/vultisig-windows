@@ -1,8 +1,14 @@
 export const InfoIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    fill="none"
+    viewBox="0 0 16 16"
+  >
     <g clipPath="url(#a)">
       <path
-        stroke="#C9D6E8"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.5}

@@ -7,9 +7,30 @@ export const it = {
     'Vultisig non traccia le tue attività né richiede alcuna registrazione. Vultisig è open-source, garantendo trasparenza e fiducia.',
   onboarding_view3_description:
     "Vultisig è, per natura, un'applicazione multi-dispositivo. Richiede almeno due dispositivi per creare una cassaforte sicura: un dispositivo iniziale e un dispositivo di accoppiamento.",
+  moreInfo: 'Maggiori informazioni',
+  secureVaultSetupPasswordTooltipContent:
+    'Questo accade perché la password crittografa il file di backup localmente, come la crittografia di un disco rigido. Nel prossimo passaggio, hai la possibilità di aggiungere un suggerimento.',
   onboarding_view4_description:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   tokens: 'token',
+  tookTooLongToRespond:
+    'Il server ha impiegato troppo tempo per rispondere. Controlla la tua connessione a Internet e riprova.',
+  errorTimedOut: 'Errore: Timeout del server',
+  thisDevice: 'Questo dispositivo',
+  optionalDevice: 'Dispositivo opzionale',
+  scanWithDevice: 'Scansiona con il {{deviceNumber}}° dispositivo',
+  localMode: 'Sei in modalità locale',
+  scanQrInstruction:
+    'Scansiona il QR con un altro dispositivo. Si consiglia un setup a 3 dispositivi, 2 sono sufficienti.',
+  devicesStatus: 'Dispositivi ({{currentPeers}}/3)',
+  waitingOnDevices: 'In attesa dei dispositivi...',
+  switchToInternet: 'Torna alla modalità Internet',
+  signPrivately: 'Vuoi firmare in privato?',
+  switchToLocal: 'Passa alla modalità locale',
+  scanThe: 'Scansiona',
+  qrCode: 'il codice QR',
+  downloadVultisig:
+    'Scarica Vultisig sugli altri dispositivi e seleziona "Scansiona codice QR"',
   alwaysBackUpEachVaultShare:
     'Esegui sempre il backup di ogni quota del caveau',
   separatelyIna: 'separatamente in una',
@@ -17,6 +38,9 @@ export const it = {
   eachDevice: 'Ogni dispositivo',
   inYourVaultHolds: 'nel tuo caveau contiene',
   oneVaultShare: 'una quota del caveau',
+  serverTimedOut: 'Il server ha impiegato troppo tempo',
+  serverTookTooLong:
+    'Il server ha impiegato troppo tempo per rispondere. Controlla la tua connessione a Internet e riprova.',
   theyRe: 'Sono',
   splitIntoParts: 'divisi in parti',
   toIncreaseSecurity: 'per aumentare la sicurezza e',
@@ -118,7 +142,7 @@ export const it = {
   select_your_vault_type: 'Seleziona il tuo tipo di cassaforte',
   pair: 'Accoppia',
   create_qr: 'Crea QR Code',
-  scan_qr: 'Scansiona QR / Accoppia dispositivo',
+  scan_qr: 'Scansiona QR',
   this_device_is_the: 'Questo dispositivo è il',
   initiating_device: 'Dispositivo iniziale',
   pairing_device: 'Dispositivo di accoppiamento',
@@ -183,6 +207,7 @@ export const it = {
   wrong_vault_try_again: 'Cassaforte o dispositivo di accoppiamento errato.',
   vault_details_page_title: 'Dettagli',
   vault_details_page_vault_part: 'Parte del caveau',
+  vault_details_page_vault_type: 'Tipo di caveau',
   vault_backup_page_title: 'Backup',
   vault_backup_banner_title:
     'Esegui subito il backup della condivisione vault di questo dispositivo!',
@@ -403,6 +428,21 @@ export const it = {
   while_you_wait_vultisig_has: 'Mentre aspetti, Vultisig ha...',
   creating_vault: 'Creazione della Cassaforte',
   learnMore: 'Scopri di più',
+  vaultOverview: 'Panoramica della Cassaforte',
+  fastVault: 'Cassaforte Veloce',
+  backupGuide: 'Guida di backup',
+  receivedShare1Email: 'Condivisione della cassaforte 1 ricevuta via mail',
+  yourVaultShares: 'La tua cassaforte ha {{shares}} condivisioni',
+  share2StoredByYou: 'Condivisione della cassaforte 2 archiviata da te',
+  backupShare: 'Backup della quota della cassaforte',
+  vaultCreated: 'Cassaforte creata',
+  successfully: 'Con successo',
+  secureVaultSetup: {
+    backup: {
+      shares: 'La tua cassaforte contiene {{shares}} quote',
+      eachDeviceNeedsBackup: 'Ogni dispositivo necessita del proprio backup.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'conservato dal server',
@@ -450,26 +490,24 @@ export const it = {
     generatingECDSAKey: 'Generazione della Chiave ECDSA',
     createVault: {
       multiFactor: {
-        subtitle: 'Non dovrebbe richiedere più di 1 minuto',
-        description:
-          'Sicurezza multifattore, eliminando il punto singolo di guasto',
+        descriptionOne: 'Sicurezza multifattore,',
+        descriptionTwo: 'Eliminando il punto di errore singolo',
       },
       selfCustodial: {
-        description: 'Autocustodia, dando pieno controllo sui tuoi asset',
+        descriptionOne: 'Autocustodia,',
+        descriptionTwo: 'controllo completo sui tuoi asset',
       },
       crossChain: {
-        description:
-          'Cross-chain. Scambia i tuoi token preferiti in un’unica cassaforte',
-      },
-      over30Chains: {
-        description:
-          'Oltre 30 blockchain per conservare il tuo token preferito',
+        descriptionOne: 'Cross-chain.',
+        descriptionTwo: 'Scambia i tuoi token preferiti in un unico vault',
       },
       availablePlatforms: {
-        description: 'Disponibile su Android, iOS, macOS e Windows',
+        descriptionOne: 'disponibile',
+        descriptionTwo: 'su Android, iOS, macOS e Windows',
       },
       seedlessWallet: {
-        description: 'Un wallet senza seed, non farti più truffare',
+        descriptionOne: 'un wallet senza seed,',
+        descriptionTwo: 'non farti truffare di nuovo',
       },
     },
     connectingWithServer: 'Connessione al server...',

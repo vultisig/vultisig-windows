@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf';
 import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt';
+import { LibType } from '@core/communication/vultisig/keygen/v1/lib_type_message_pb';
 import {
   Vault,
   Vault_KeyShareSchema,
@@ -22,6 +23,7 @@ export const toStorageVault = ({
   keyShares,
   localPartyId,
   resharePrefix,
+  libType = LibType.GG20,
 }: Vault): storage.Vault => ({
   name: name,
   public_key_ecdsa: publicKeyEcdsa,
@@ -40,6 +42,7 @@ export const toStorageVault = ({
   order: 0,
   is_backed_up: true,
   coins: [],
+  lib_type: LibType[libType] ?? 'GG20',
   convertValues: () => {},
 });
 
@@ -82,4 +85,5 @@ export const fromStorageVault = (vault: storage.Vault): Vault =>
       })
     ),
     resharePrefix: vault.reshare_prefix,
+    libType: LibType[vault.lib_type as keyof typeof LibType] ?? LibType.GG20,
   });

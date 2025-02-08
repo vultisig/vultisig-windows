@@ -1,3 +1,4 @@
+import { match } from '@lib/utils/match';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../../lib/ui/buttons/Button';
@@ -5,7 +6,6 @@ import { FilledAlertIcon } from '../../../lib/ui/icons/FilledAlertIcon';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock';
 import { Text } from '../../../lib/ui/text';
-import { match } from '@lib/utils/match';
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
 import { PageContent } from '../../../ui/page/PageContent';
 import { KeygenType } from '../KeygenType';

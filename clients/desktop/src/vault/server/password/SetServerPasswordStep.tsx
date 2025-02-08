@@ -5,11 +5,13 @@ import styled from 'styled-components';
 import { z } from 'zod';
 
 import { Button } from '../../../lib/ui/buttons/Button';
+import { InfoIcon } from '../../../lib/ui/icons/InfoIcon';
 import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock';
 import { Text } from '../../../lib/ui/text';
+import { getColor } from '../../../lib/ui/theme/getters';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
@@ -23,7 +25,7 @@ const PasswordWarningBlock = styled(WarningBlock)`
 
 const passwordSchema = z
   .object({
-    password: z.string().min(1, 'passwordRequired'),
+    password: z.string().min(1, 'fastVaultSetup.passwordRequired'),
     confirmPassword: z
       .string()
       .min(1, 'fastVaultSetup.confirmPasswordIsRequired'),
@@ -71,7 +73,23 @@ export const SetServerPasswordStep = ({
         <VStack flexGrow gap={16}>
           <VStack gap={8}>
             <Text variant="h1Regular">{t('password')}</Text>
-            <PasswordWarningBlock>
+            <PasswordWarningBlock
+              iconTooltipContent={
+                <TooltipWrapper>
+                  <Text color="reversed" size={16}>
+                    {t('moreInfo')}
+                  </Text>
+                  <Text size={13} color="shy">
+                    {t('secureVaultSetupPasswordTooltipContent')}
+                  </Text>
+                </TooltipWrapper>
+              }
+              icon={() => (
+                <IconWrapper>
+                  <InfoIcon />
+                </IconWrapper>
+              )}
+            >
               {t('fastVaultSetup.passwordCannotBeRecovered')}
             </PasswordWarningBlock>
           </VStack>
@@ -86,9 +104,9 @@ export const SetServerPasswordStep = ({
                 onValueChange={value => setValue('password', value)}
                 autoFocus
               />
-              {errors.password && (
+              {errors.password && errors.password?.message && (
                 <Text color="danger" size={12}>
-                  {errors.password.message}
+                  {t(errors.password.message)}
                 </Text>
               )}
             </VStack>
@@ -113,10 +131,20 @@ export const SetServerPasswordStep = ({
             </VStack>
           </VStack>
         </VStack>
-        <Button type="submit" isDisabled={Boolean(errors)}>
+        <Button kind="primary" type="submit" isDisabled={!isValid}>
           {t('next')}
         </Button>
       </PageContent>
     </>
   );
 };
+
+const IconWrapper = styled.div`
+  font-size: 16px;
+  color: ${getColor('idle')};
+`;
+
+const TooltipWrapper = styled.div`
+  background-color: ${getColor('white')};
+  color: ${getColor('text')};
+`;
