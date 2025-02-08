@@ -70,9 +70,11 @@ export const getEthereumSpecific = async ({
   const feePriority = feeSettings?.priority ?? defaultFeePriority;
   const priorityFee = priorityFeeMapValue[feePriority];
 
-  const maxFeePerGasWei = Number(
+  let maxFeePerGasWei = Number(
     BigInt(Math.round(Number(baseFee) * baseFeeMultiplier + priorityFee))
   );
+
+  if (maxFeePerGasWei < 1) maxFeePerGasWei = 1;
 
   return create(EthereumSpecificSchema, {
     maxFeePerGasWei: maxFeePerGasWei.toString(),
