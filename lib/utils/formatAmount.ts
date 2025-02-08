@@ -3,7 +3,10 @@ const billion = 1000000000;
 
 const defaultFractionDigits = 2;
 
-const getFractionDigits = (amount: number): number => {
+const getFractionDigits = (amount: number, currency?: string): number => {
+
+  if (!currency) return 8;
+
   const amountStr = amount.toFixed(20);
   if (amountStr.startsWith('0') && amount > 0) {
     const fractionPartDigits = amountStr.split('.')[1].split('');
@@ -36,7 +39,7 @@ export const formatAmount = (
     return `${formatAmount(amount / million, currency, locale)}M`;
   }
 
-  const fractionDigits = getFractionDigits(amount);
+  const fractionDigits = getFractionDigits(amount, currency);
 
   // Validate and set locale safely
   let validLocale = 'en-US';
