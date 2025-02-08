@@ -10,6 +10,9 @@ export const it = {
   onboarding_view4_description:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   tokens: 'token',
+  tookTooLongToRespond:
+    'Il server ha impiegato troppo tempo per rispondere. Controlla la tua connessione a Internet e riprova.',
+  errorTimedOut: 'Errore: Timeout del server',
   thisDevice: 'Questo dispositivo',
   optionalDevice: 'Dispositivo opzionale',
   scanWithDevice: 'Scansiona con il {{deviceNumber}}° dispositivo',

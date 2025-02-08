@@ -10,6 +10,9 @@ export const pt = {
   onboarding_view4_description:
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   create_new_vault: 'Criar novo cofre',
+  tookTooLongToRespond:
+    'O servidor demorou muito para responder. Por favor, verifique sua conexão com a internet e tente novamente.',
+  errorTimedOut: 'Erro: Tempo limite do servidor esgotado',
   thisDevice: 'Este dispositivo',
   optionalDevice: 'Dispositivo opcional',
   scanWithDevice: 'Escanear com o {{deviceNumber}}º dispositivo',

@@ -20,6 +20,9 @@ export const hr = {
     'Olvassa be a QR-kódot egy másik eszközzel. 3 eszköz ajánlott, 2 elegendő.',
   devicesStatus: 'Eszközök ({{currentPeers}}/3)',
   waitingOnDevices: 'Eszközökre várakozás...',
+  tookTooLongToRespond:
+    'A szerver túl sokáig válaszolt. Kérlek, ellenőrizd az internetkapcsolatodat, és próbáld újra.',
+  errorTimedOut: 'Hiba: A szerver időtúllépést kapott',
   switchToInternet: 'Váltás vissza az internetes módra',
   signPrivately: 'Szeretne privát módon aláírni?',
   switchToLocal: 'Váltás helyi módra',
