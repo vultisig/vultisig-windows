@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Checkbox, Form } from "antd";
 import ReactDOM from "react-dom/client";
 
-import { ChainKey } from "../../utils/constants";
+import { ChainKey } from "@core/chain-utils";
 import {
   getStoredLanguage,
   getStoredRequest,
@@ -61,8 +61,8 @@ const Component = () => {
                       sender,
                       ...(vault.apps?.filter((app) => app !== sender) ?? []),
                     ]
-                  : vault.apps?.filter((app) => app !== sender) ?? [],
-            }))
+                  : (vault.apps?.filter((app) => app !== sender) ?? []),
+            })),
           ).then(() => {
             handleClose();
           });
@@ -169,5 +169,5 @@ const Component = () => {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Component />
-  </StrictMode>
+  </StrictMode>,
 );

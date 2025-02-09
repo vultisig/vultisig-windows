@@ -1,8 +1,9 @@
 import { Interface } from "ethers";
 
-import { ChainKey, TssKeysignType } from "./constants";
-import { ChainObjRef, ChainProps, ParsedMemo } from "./interfaces";
+import { TssKeysignType } from "./constants";
+import { ParsedMemo } from "./interfaces";
 import api from "./api";
+import { ChainKey, ChainObjRef, ChainProps } from "@core/chain-utils";
 
 const getFunctionSignature = async (inputHex: string): Promise<string> => {
   if (!inputHex || inputHex === "0x") {
@@ -41,7 +42,7 @@ const processDecodedData = (data: any): any => {
 
 const toCamel = (value: string): string => {
   return value.replace(/([-_][a-z])/gi, ($1) =>
-    $1.toUpperCase().replace("-", "").replace("_", "")
+    $1.toUpperCase().replace("-", "").replace("_", ""),
   );
 };
 
@@ -64,7 +65,7 @@ export const bigintToByteArray = (bigNumber: bigint): Uint8Array => {
 };
 
 export const calculateWindowPosition = (
-  currentWindow: chrome.windows.Window
+  currentWindow: chrome.windows.Window,
 ) => {
   const height = 639;
   const width = 376;
@@ -85,7 +86,7 @@ export const calculateWindowPosition = (
 };
 
 export const checkERC20Function = async (
-  inputHex: string
+  inputHex: string,
 ): Promise<boolean> => {
   if (!inputHex || inputHex === "0x")
     return new Promise((resolve) => resolve(false));
@@ -97,7 +98,7 @@ export const checkERC20Function = async (
 
 export const formatDisplayNumber = (
   _number: number | string,
-  ticker: string
+  ticker: string,
 ) => {
   if (String(_number).includes("$")) {
     // gasPrice is in usd and already formatted
@@ -135,11 +136,11 @@ export const formatDisplayNumber = (
 export const findChainByProp = (
   chains: ChainObjRef,
   property: keyof ChainProps,
-  value: any
+  value: any,
 ): ChainProps | undefined => {
   return (
     (Object.entries(chains).find(
-      ([_key, chain]) => chain[property] === value
+      ([_key, chain]) => chain[property] === value,
     )?.[1] as ChainProps) ?? undefined
   );
 };
@@ -165,7 +166,7 @@ export const parseMemo = (memo: string): Promise<ParsedMemo> => {
         try {
           const decodedData = abi.decodeFunctionData(
             signature.split("(")[0],
-            memo
+            memo,
           );
 
           const processedData = processDecodedData(decodedData);

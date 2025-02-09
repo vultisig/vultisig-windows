@@ -18,7 +18,7 @@ import {
   type KeysignPayload,
 } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
 
-import { ChainKey } from "../../constants";
+import { ChainKey } from "@core/chain-utils";
 import {
   ITransaction,
   SignatureProps,

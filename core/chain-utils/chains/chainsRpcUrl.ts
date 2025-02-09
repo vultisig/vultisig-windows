@@ -1,0 +1,33 @@
+import { ChainStrRef } from "../types";
+import { ChainKey } from "./chainKeys";
+
+export const CHAIN_RPC: ChainStrRef = {
+  [ChainKey.ARBITRUM]: "https://api.vultisig.com/arb/",
+  [ChainKey.AVALANCHE]: "https://api.vultisig.com/avax/",
+  [ChainKey.BASE]: "https://api.vultisig.com/base/",
+  [ChainKey.BITCOIN]: "",
+  [ChainKey.BITCOINCASH]: "",
+  [ChainKey.BLAST]: "https://api.vultisig.com/blast/",
+  [ChainKey.BSCCHAIN]: "https://api.vultisig.com/bnb/",
+  [ChainKey.CRONOSCHAIN]: "https://cronos-evm-rpc.publicnode.com",
+  [ChainKey.DASH]: "",
+  [ChainKey.DOGECOIN]: "",
+  [ChainKey.DYDX]: "https://dydx-rpc.publicnode.com",
+  [ChainKey.ETHEREUM]: "https://api.vultisig.com/eth/",
+  [ChainKey.GAIACHAIN]: "https://cosmos-rpc.publicnode.com",
+  [ChainKey.KUJIRA]: "https://kujira-rpc.publicnode.com",
+  [ChainKey.LITECOIN]: "",
+  [ChainKey.MAYACHAIN]: "",
+  [ChainKey.OPTIMISM]: "https://api.vultisig.com/opt/",
+  [ChainKey.OSMOSIS]: "https://osmosis-rpc.publicnode.com",
+  [ChainKey.POLKADOT]: "",
+  [ChainKey.POLYGON]: "https://api.vultisig.com/polygon/",
+  [ChainKey.SOLANA]: "https://solana-rpc.publicnode.com",
+  [ChainKey.SUI]: "",
+  [ChainKey.TERRA]: "",
+  [ChainKey.TERRACLASSIC]: "",
+  [ChainKey.THORCHAIN]: "https://rpc.ninerealms.com/",
+  [ChainKey.TON]: "",
+  [ChainKey.XRP]: "https://rpc.ninerealms.com/",
+  [ChainKey.ZKSYNC]: "https://api.vultisig.com/zksync/",
+};

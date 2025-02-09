@@ -8,7 +8,7 @@ import html2canvas from "html2canvas";
 
 import { CoinSchema } from "@core/communication/vultisig/keysign/v1/coin_pb";
 
-import { evmChains, explorerUrl, TssKeysignType } from "../../utils/constants";
+import { evmChains, TssKeysignType } from "../../utils/constants";
 import {
   formatDisplayNumber,
   getTssKeysignType,
@@ -58,6 +58,7 @@ import "../../styles/index.scss";
 import "../../pages/transaction/index.scss";
 import "../../utils/prototypes";
 import UTXOTransactionProvider from "../../utils/transaction-provider/utxo";
+import { CHAIN_EXPLORER } from "@core/chain-utils";
 
 interface FormProps {
   password: string;
@@ -816,7 +817,7 @@ const Component = () => {
                         <MiddleTruncate text={transaction.txHash!} />
                         <div className="actions">
                           <a
-                            href={`${explorerUrl[transaction.chain.name]}/tx/${
+                            href={`${CHAIN_EXPLORER[transaction.chain.name]}/tx/${
                               transaction.txHash
                             }`}
                             rel="noopener noreferrer"

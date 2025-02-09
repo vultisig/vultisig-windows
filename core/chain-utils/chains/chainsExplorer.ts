@@ -1,0 +1,33 @@
+import { ChainStrRef } from "../types";
+import { ChainKey } from "./chainKeys";
+
+export const CHAIN_EXPLORER: ChainStrRef = {
+  [ChainKey.ARBITRUM]: "https://arbiscan.io",
+  [ChainKey.AVALANCHE]: "https://snowtrace.io",
+  [ChainKey.BASE]: "https://basescan.org",
+  [ChainKey.BITCOIN]: "https://blockchair.com/bitcoin",
+  [ChainKey.BITCOINCASH]: "https://blockchair.com/bitcoin-cash",
+  [ChainKey.BLAST]: "https://blastscan.io",
+  [ChainKey.BSCCHAIN]: "https://bscscan.com",
+  [ChainKey.CRONOSCHAIN]: "https://cronoscan.com",
+  [ChainKey.DASH]: "https://blockchair.com/dash",
+  [ChainKey.DOGECOIN]: "https://blockchair.com/dogecoin",
+  [ChainKey.DYDX]: "https://www.mintscan.io/dydx",
+  [ChainKey.ETHEREUM]: "https://etherscan.io",
+  [ChainKey.GAIACHAIN]: "https://www.mintscan.io/cosmos",
+  [ChainKey.KUJIRA]: "https://finder.kujira.network",
+  [ChainKey.LITECOIN]: "https://blockchair.com/litecoin",
+  [ChainKey.MAYACHAIN]: "https://www.mayascan.org",
+  [ChainKey.OPTIMISM]: "https://optimistic.etherscan.io",
+  [ChainKey.OSMOSIS]: "https://www.mintscan.io/osmosis",
+  [ChainKey.POLKADOT]: "https://polkadot.subscan.io/account",
+  [ChainKey.POLYGON]: "https://polygonscan.com",
+  [ChainKey.SOLANA]: "https://solscan.io",
+  [ChainKey.SUI]: "",
+  [ChainKey.TERRA]: "",
+  [ChainKey.TERRACLASSIC]: "",
+  [ChainKey.THORCHAIN]: "https://thorchain.net",
+  [ChainKey.TON]: "https://tonscan.org/",
+  [ChainKey.XRP]: "",
+  [ChainKey.ZKSYNC]: "https://explorer.zksync.io",
+};

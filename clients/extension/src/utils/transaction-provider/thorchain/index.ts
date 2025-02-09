@@ -18,7 +18,7 @@ import {
   Coin,
 } from "@core/communication/vultisig/keysign/v1/coin_pb";
 
-import { ChainKey } from "../../constants";
+import { ChainKey } from "@core/chain-utils";
 import type {
   ITransaction,
   SignatureProps,

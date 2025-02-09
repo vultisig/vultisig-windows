@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button, Empty, message, Modal, Select, Switch, Tooltip } from "antd";
 
-import { chains } from "../../../../utils/constants";
+
 import { VaultProps } from "../../../../utils/interfaces";
 import {
   getIsPriority,
@@ -24,6 +24,7 @@ import {
   Vultisig,
 } from "../../../../icons";
 import { findChainByProp } from "../../../../utils/functions";
+import { CHAINS } from "@core/chain-utils";
 
 interface SelectOption {
   value: string;
@@ -109,7 +110,7 @@ const Component = () => {
 
     if (selectedNetwork) {
       setStoredChains(
-        Object.values(chains).map((chain) => ({
+        Object.values(CHAINS).map((chain) => ({
           ...chain,
           active: chain.id === selectedOption,
         }))
@@ -140,7 +141,7 @@ const Component = () => {
 
       if (vault) {
         const supportedChains = vault.chains.filter(
-          ({ id }) => !!findChainByProp(chains, "id", id)
+          ({ id }) => !!findChainByProp(CHAINS, "id", id)
         );
 
         const networkOptions = supportedChains.map((chain) => ({

@@ -13,7 +13,7 @@ import {
 } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
 import { CoinSchema } from "@core/communication/vultisig/keysign/v1/coin_pb";
 
-import { ChainKey, rpcUrl } from "../../constants";
+import { ChainKey, CHAIN_RPC } from "@core/chain-utils";
 import type {
   ITransaction,
   SignatureProps,
@@ -51,7 +51,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
       ],
     };
 
-    const response = await api.rpc.post(rpcUrl.Solana, requestBody);
+    const response = await api.rpc.post(CHAIN_RPC.Solana, requestBody);
     const accounts = response.result?.value || [];
     return accounts.length > 0 ? accounts[0].pubkey : "";
   }
@@ -63,7 +63,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
       method: "getLatestBlockhash",
       params: [{ commitment: "confirmed" }],
     };
-    const response = await api.rpc.post(rpcUrl.Solana, requestBody);
+    const response = await api.rpc.post(CHAIN_RPC.Solana, requestBody);
     return response.result?.value?.blockhash as string;
   }
 

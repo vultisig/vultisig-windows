@@ -1,7 +1,7 @@
 import { WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 
-import { ChainKey } from "../constants";
+import { ChainKey } from "@core/chain-utils";
 import BaseTransactionProvider from "../transaction-provider/base";
 import CosmosTransactionProvider from "../transaction-provider/cosmos";
 import EVMTransactionProvider from "../transaction-provider/evm";

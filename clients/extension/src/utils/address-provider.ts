@@ -1,7 +1,8 @@
 import { WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 
-import { ChainKey, errorKey } from "./constants";
+import { errorKey } from "./constants";
+import { ChainKey } from "@core/chain-utils";
 import { VaultProps } from "./interfaces";
 import api from "./api";
 
@@ -13,7 +14,7 @@ interface AddressProps {
 export default class AddressProvider {
   constructor(
     private chainRef: { [chainKey: string]: CoinType },
-    private walletCore: WalletCore
+    private walletCore: WalletCore,
   ) {
     this.chainRef = chainRef;
     this.walletCore = walletCore;
@@ -22,7 +23,7 @@ export default class AddressProvider {
   private getECDSAAddress = (
     chain: ChainKey,
     vault: VaultProps,
-    prefix?: string
+    prefix?: string,
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
       const coin = this.chainRef[chain];
@@ -39,22 +40,21 @@ export default class AddressProvider {
 
           const publicKey = this.walletCore.PublicKey.createWithData(
             bytes,
-            this.walletCore.PublicKeyType.secp256k1
+            this.walletCore.PublicKeyType.secp256k1,
           );
 
           if (prefix) {
             address = this.walletCore.AnyAddress.createBech32WithPublicKey(
               publicKey,
               coin,
-              prefix
+              prefix,
             )?.description();
           } else {
             address = this.walletCore.AnyAddress.createWithPublicKey(
               publicKey,
-              coin
+              coin,
             )?.description();
           }
-
 
           address
             ? resolve({
@@ -71,7 +71,7 @@ export default class AddressProvider {
 
   private getEDDSAAddress = (
     chain: ChainKey,
-    vault: VaultProps
+    vault: VaultProps,
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
       const coin = this.chainRef[chain];
@@ -80,12 +80,12 @@ export default class AddressProvider {
 
       const publicKey = this.walletCore.PublicKey.createWithData(
         bytes,
-        this.walletCore.PublicKeyType.ed25519
+        this.walletCore.PublicKeyType.ed25519,
       );
 
       const address = this.walletCore.AnyAddress.createWithPublicKey(
         publicKey,
-        coin
+        coin,
       )?.description();
 
       address
@@ -96,7 +96,7 @@ export default class AddressProvider {
 
   public getAddress = (
     chain: ChainKey,
-    vault: VaultProps
+    vault: VaultProps,
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
       switch (chain) {

@@ -11,7 +11,7 @@ import type {
 } from "@trustwallet/wallet-core/dist/src/wallet-core";
 import { TW } from "@trustwallet/wallet-core";
 import BaseTransactionProvider from "../base/index";
-import { ChainKey } from "../../constants";
+import { ChainKey } from "@core/chain-utils";
 import {
   ITransaction,
   SignatureProps,

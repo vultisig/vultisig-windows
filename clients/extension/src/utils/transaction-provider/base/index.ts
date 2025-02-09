@@ -3,7 +3,7 @@ import { TW, WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 import { toBinary } from "@bufbuild/protobuf";
 
-import { ChainKey } from "../../constants";
+import { ChainKey } from "@core/chain-utils";
 import {
   ITransaction,
   SignatureProps,

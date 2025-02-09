@@ -6,7 +6,7 @@ import { ReaderOptions, readBarcodesFromImageFile } from "zxing-wasm";
 import { UAParser } from "ua-parser-js";
 
 import { calculateWindowPosition, toCamelCase } from "../../../../utils/functions";
-import { ChainKey, chains, errorKey } from "../../../../utils/constants";
+import { errorKey } from "../../../../utils/constants";
 import { getStoredVaults, setStoredVaults } from "../../../../utils/storage";
 import { VaultProps } from "../../../../utils/interfaces";
 import useGoBack from "../../../../hooks/go-back";
@@ -16,6 +16,7 @@ import routeKeys from "../../../../utils/route-keys";
 import WalletCoreProvider from "../../../../utils/wallet-core-provider";
 
 import { ArrowLeft, CloseLG } from "../../../../icons";
+import { ChainKey, CHAINS } from "@core/chain-utils";
 
 interface InitialState {
   file?: File;
@@ -65,12 +66,12 @@ const Component = () => {
             .then(({ chainRef, walletCore }) => {
               const addressProvider = new AddressProvider(chainRef, walletCore);
 
-              const promises = Object.keys(chains).map((key) =>
+              const promises = Object.keys(CHAINS).map((key) =>
                 addressProvider.getAddress(key as ChainKey, vault)
               );
 
               Promise.all(promises).then((props) => {
-                vault.chains = Object.values(chains).map((chain, index) => ({
+                vault.chains = Object.values(CHAINS).map((chain, index) => ({
                   ...chain,
                   ...props[index],
                 }));

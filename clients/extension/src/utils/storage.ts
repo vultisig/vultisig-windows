@@ -1,11 +1,11 @@
-import { ChainKey, chains, Currency, Language } from "./constants";
+import {  Currency, Language } from "./constants";
 import {
   AccountsProps,
-  ChainProps,
   ITransaction,
   VaultProps,
 } from "./interfaces";
 import i18n from "../i18n/config";
+import { ChainKey, ChainProps, CHAINS } from "@core/chain-utils";
 
 interface EthProviderState {
   accounts: string[];
@@ -54,7 +54,7 @@ export const getStoredChains = (): Promise<ChainProps[]> => {
       if (res.chains?.length) {
         resolve(res.chains);
       } else {
-        const defaultChain = chains[ChainKey.ETHEREUM];
+        const defaultChain = CHAINS[ChainKey.ETHEREUM];
 
         resolve(defaultChain ? [{ ...defaultChain, active: true }] : []);
       }

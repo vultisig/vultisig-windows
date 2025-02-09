@@ -1,7 +1,8 @@
 import { initWasm, WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 
-import { ChainKey, errorKey } from "../utils/constants";
+import { errorKey } from "../utils/constants";
+import { ChainKey } from "@core/chain-utils";
 
 export default class WalletCoreProvider {
   private chainRef?: { [chainKey: string]: CoinType };

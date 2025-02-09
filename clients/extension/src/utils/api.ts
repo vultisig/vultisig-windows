@@ -2,7 +2,7 @@ import axios from "axios";
 import { TransactionResponse } from "ethers";
 
 import { toCamelCase, toSnakeCase } from "./functions";
-import { ChainKey, Currency } from "./constants";
+import { Currency } from "./constants";
 import {
   CosmosAccountData,
   CosmosAccountDataResponse,
@@ -16,6 +16,7 @@ import {
   ThornodeTxResponseSuccess,
   ThornodeNetworkResponse,
 } from "../types/thorchain";
+import { ChainKey } from "@core/chain-utils";
 
 namespace CryptoCurrency {
   export interface Props {

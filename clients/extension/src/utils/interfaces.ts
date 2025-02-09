@@ -1,12 +1,17 @@
-import { ChainKey, Currency, Language } from "./constants";
+import { Currency, Language } from "./constants";
 import { TransactionResponse } from "ethers";
 import { ThorchainProviderMethod } from "../types/thorchain";
 import { ThorchainProviderResponse } from "../types/thorchain";
+import { ChainKey, ChainProps } from "@core/chain-utils";
 
 export namespace Messaging {
   export namespace Chain {
     export type Request = { method: string; params: Record<string, any>[] };
-    export type Response = string | string[] | ThorchainProviderResponse<ThorchainProviderMethod> | TransactionResponse
+    export type Response =
+      | string
+      | string[]
+      | ThorchainProviderResponse<ThorchainProviderMethod>
+      | TransactionResponse;
   }
 
   export namespace GetVaults {
@@ -23,72 +28,6 @@ export namespace Messaging {
 export interface AccountsProps {
   chain: ChainKey;
   sender: string;
-}
-
-export interface ChainProps {
-  active?: boolean;
-  address?: string;
-  cmcId: number;
-  decimals: number;
-  derivationKey?: string;
-  id: string;
-  name: ChainKey;
-  ticker: string;
-}
-
-export interface ChainObjRef {
-  [ChainKey.ARBITRUM]: ChainProps;
-  [ChainKey.AVALANCHE]: ChainProps;
-  [ChainKey.BASE]: ChainProps;
-  [ChainKey.BITCOIN]: ChainProps;
-  [ChainKey.BITCOINCASH]: ChainProps;
-  [ChainKey.BLAST]: ChainProps;
-  [ChainKey.BSCCHAIN]: ChainProps;
-  [ChainKey.CRONOSCHAIN]: ChainProps;
-  [ChainKey.DASH]: ChainProps;
-  [ChainKey.DOGECOIN]: ChainProps;
-  [ChainKey.DYDX]: ChainProps;
-  [ChainKey.ETHEREUM]: ChainProps;
-  [ChainKey.GAIACHAIN]: ChainProps;
-  [ChainKey.KUJIRA]: ChainProps;
-  [ChainKey.LITECOIN]: ChainProps;
-  [ChainKey.MAYACHAIN]: ChainProps;
-  [ChainKey.OPTIMISM]: ChainProps;
-  [ChainKey.OSMOSIS]: ChainProps;
-  [ChainKey.POLYGON]: ChainProps;
-  [ChainKey.SOLANA]: ChainProps;
-  [ChainKey.THORCHAIN]: ChainProps;
-}
-
-export interface ChainStrRef {
-  [ChainKey.ARBITRUM]: string;
-  [ChainKey.AVALANCHE]: string;
-  [ChainKey.BASE]: string;
-  [ChainKey.BITCOIN]: string;
-  [ChainKey.BITCOINCASH]: string;
-  [ChainKey.BLAST]: string;
-  [ChainKey.BSCCHAIN]: string;
-  [ChainKey.CRONOSCHAIN]: string;
-  [ChainKey.DASH]: string;
-  [ChainKey.DOGECOIN]: string;
-  [ChainKey.DYDX]: string;
-  [ChainKey.ETHEREUM]: string;
-  [ChainKey.GAIACHAIN]: string;
-  [ChainKey.KUJIRA]: string;
-  [ChainKey.LITECOIN]: string;
-  [ChainKey.MAYACHAIN]: string;
-  [ChainKey.OPTIMISM]: string;
-  [ChainKey.OSMOSIS]: string;
-  [ChainKey.POLKADOT]: string;
-  [ChainKey.POLYGON]: string;
-  [ChainKey.SOLANA]: string;
-  [ChainKey.SUI]: string;
-  [ChainKey.THORCHAIN]: string;
-  [ChainKey.TERRA]: string;
-  [ChainKey.TERRACLASSIC]: string;
-  [ChainKey.TON]: string;
-  [ChainKey.XRP]: string;
-  [ChainKey.ZKSYNC]: string;
 }
 
 export interface CurrencyRef {
