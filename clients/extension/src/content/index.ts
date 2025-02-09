@@ -16,7 +16,7 @@ import {
   SenderKey,
 } from "../utils/constants";
 import { Messaging, VaultProps } from "../utils/interfaces";
-import VULTI_ICON_RAW_SVG from "./icon";
+import VULTI_ICON_RAW_PNG from "./icon";
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
@@ -836,7 +836,7 @@ const vultisigProvider = {
 };
 
 window.bitcoin = bitcoinProvider;
-window.bitcoincash = litecoinProvider;
+window.bitcoincash = bitcoinCashProvider;
 window.cosmos = cosmosProvider;
 window.dash = dashProvider;
 window.dogecoin = dogecoinProvider;
@@ -852,7 +852,7 @@ if (!window.ethereum) window.ethereum = ethereumProvider;
 
 announceProvider({
   info: {
-    icon: VULTI_ICON_RAW_SVG,
+    icon: VULTI_ICON_RAW_PNG,
     name: "Vultisig",
     rdns: "me.vultisig",
     uuid: uuidv4(),
@@ -882,7 +882,7 @@ const intervalRef = setInterval(() => {
         window.xfi.installed = true;
         announceProvider({
           info: {
-            icon: VULTI_ICON_RAW_SVG,
+            icon: VULTI_ICON_RAW_PNG,
             name: "Vultisig",
             rdns: "me.vultisig",
             uuid: uuidv4(),
@@ -891,7 +891,7 @@ const intervalRef = setInterval(() => {
         });
         announceProvider({
           info: {
-            icon: VULTI_ICON_RAW_SVG,
+            icon: VULTI_ICON_RAW_PNG,
             name: "Ctrl Wallet",
             rdns: "io.xdefi",
             uuid: uuidv4(),
