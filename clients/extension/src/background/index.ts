@@ -670,7 +670,8 @@ const handleRequest = (
 
         break;
       }
-      case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4: {
+      case (RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4,
+      RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V3): {
         if (Array.isArray(params)) {
           try {
             const [address, msgParamsString] = params;
