@@ -1,13 +1,12 @@
 Pod::Spec.new do |s|
   s.name           = 'MobileTss'
   s.version        = '1.0.0'
-  s.summary        = 'A sample project summary'
+  s.summary        = 'Native Module to allow vultisig app to support GG20 TSS'
   s.description    = 'A sample project description'
   s.author         = ''
-  s.homepage       = 'https://docs.expo.dev/modules/'
+  s.homepage       = 'https://vultisig.com'
   s.platforms      = {
     :ios => '15.1',
-    :tvos => '15.1'
   }
   s.source         = { git: '' }
   s.static_framework = true

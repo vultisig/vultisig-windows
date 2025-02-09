@@ -3,7 +3,6 @@ import { NativeModule, requireNativeModule } from 'expo';
 import { MobileTssModuleEvents } from './MobileTss.types';
 
 declare class MobileTssModule extends NativeModule<MobileTssModuleEvents> {
-  PI: number;
   hello(): string;
   setValueAsync(value: string): Promise<void>;
 }

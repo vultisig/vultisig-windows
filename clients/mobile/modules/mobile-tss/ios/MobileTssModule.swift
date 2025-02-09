@@ -10,13 +10,8 @@ public class MobileTssModule: Module {
     // The module will be accessible from `requireNativeModule('MobileTss')` in JavaScript.
     Name("MobileTss")
 
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants([
-      "PI": Double.pi
-    ])
-
     // Defines event names that the module can send to JavaScript.
-    Events("onChange")
+    Events("onProgress","onError")
 
     // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
     Function("hello") {
@@ -30,19 +25,6 @@ public class MobileTssModule: Module {
       self.sendEvent("onChange", [
         "value": value
       ])
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of the
-    // view definition: Prop, Events.
-    View(MobileTssView.self) {
-      // Defines a setter for the `url` prop.
-      Prop("url") { (view: MobileTssView, url: URL) in
-        if view.webView.url != url {
-          view.webView.load(URLRequest(url: url))
-        }
-      }
-
-      Events("onLoad")
     }
   }
 }
