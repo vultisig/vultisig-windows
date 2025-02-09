@@ -836,7 +836,7 @@ const vultisigProvider = {
 };
 
 window.bitcoin = bitcoinProvider;
-window.bitcoincash = litecoinProvider;
+window.bitcoincash = bitcoinCashProvider;
 window.cosmos = cosmosProvider;
 window.dash = dashProvider;
 window.dogecoin = dogecoinProvider;
