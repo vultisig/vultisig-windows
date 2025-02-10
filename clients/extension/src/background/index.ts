@@ -1,5 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
-import { JsonRpcProvider, TransactionRequest, toUtf8String } from "ethers";
+import {
+  JsonRpcProvider,
+  TransactionRequest,
+  TypedDataEncoder,
+  toUtf8String,
+} from "ethers";
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 
 import {
@@ -378,7 +383,7 @@ const handleRequest = (
 
         break;
       }
-      case RequestMethod.VULTISIG.GET_TRANSACTION_BY_HASH: 
+      case RequestMethod.VULTISIG.GET_TRANSACTION_BY_HASH:
       case RequestMethod.METAMASK.ETH_GET_TRANSACTION_BY_HASH: {
         if (Array.isArray(params)) {
           const [hash] = params;
@@ -665,6 +670,50 @@ const handleRequest = (
 
         break;
       }
+      case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4:
+      case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V3: {
+        if (Array.isArray(params)) {
+          try {
+            const [address, msgParamsString] = params;
+            const msgParams = JSON.parse(String(msgParamsString));
+            let { domain, types, message } = msgParams;
+            // "EIP712Domain" is removed (ethers handles it separately)
+            if (types["EIP712Domain"]) {
+              delete types["EIP712Domain"];
+            }
+
+            const hashMessage = TypedDataEncoder.encode(domain, types, message);
+            handleSendTransaction(
+              {
+                customMessage: {
+                  method,
+                  address: String(address),
+                  message: hashMessage,
+                },
+                isCustomMessage: true,
+                chain: chain,
+                data: "",
+                from: String(address),
+                id: "",
+                status: "default",
+                to: "",
+                isDeposit: false,
+              },
+              chain,
+            )
+              .then((result) => resolve(result.txResponse))
+              .catch((error) => {
+                reject(error);
+              });
+          } catch (error) {
+            reject(error);
+          }
+        } else {
+          reject(new Error("Invalid parameters"));
+        }
+        break;
+      }
+
       case RequestMethod.METAMASK.PERSONAL_SIGN: {
         if (Array.isArray(params)) {
           const [message, address] = params;
@@ -672,6 +721,7 @@ const handleRequest = (
           handleSendTransaction(
             {
               customMessage: {
+                method,
                 address: String(address),
                 message: `\x19Ethereum Signed Message:\n${utf8Message.length}${utf8Message}`,
               },
