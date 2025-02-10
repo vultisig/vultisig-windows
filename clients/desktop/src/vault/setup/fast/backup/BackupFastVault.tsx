@@ -36,7 +36,7 @@ export const BackupFastVault: FC<BackupFastVaultProps> = ({ vault }) => {
     steps,
   });
   const vaults = useVaults();
-  const shouldShowBackupSummary = vaults.length === 2;
+  const shouldShowBackupSummary = vaults.length > 1;
 
   return (
     <Match

@@ -32,7 +32,7 @@ export const BackupSecureVault: FC<BackupFastVaultProps> = ({ vault }) => {
   });
   const vaults = useVaults();
   // @antonio: by design we only need to show the summary step if user has exactly 2 vaults
-  const shouldShowBackupSummary = vaults.length === 2;
+  const shouldShowBackupSummary = vaults.length > 1;
 
   return (
     <NewVaultProvider initialValue={vault}>
