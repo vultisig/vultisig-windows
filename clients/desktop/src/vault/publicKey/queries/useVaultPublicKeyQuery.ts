@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { useCurrentVault } from '../../state/currentVault';
 import { getVaultPublicKey } from '../getVaultPublicKey';

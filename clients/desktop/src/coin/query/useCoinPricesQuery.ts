@@ -8,7 +8,7 @@ import { useQueries } from '@tanstack/react-query';
 
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
 import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEagerQuery';
-import { EvmChain } from '../../model/chain';
+import { EvmChain } from '@core/chain/Chain';
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency';
 import { CoinKey, coinKeyToString, PriceProviderIdField } from '../Coin';
 import { getErc20Prices } from '../price/api/evm/getErc20Prices';

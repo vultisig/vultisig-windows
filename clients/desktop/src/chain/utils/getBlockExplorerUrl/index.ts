@@ -1,5 +1,5 @@
 import { match } from '@lib/utils/match';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 
 type ChainEntity = 'address' | 'tx';
 

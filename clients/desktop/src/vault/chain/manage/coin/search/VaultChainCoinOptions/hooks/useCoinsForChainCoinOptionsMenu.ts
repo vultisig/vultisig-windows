@@ -1,10 +1,10 @@
+import { Chain } from '@core/chain/Chain';
 import { useMemo } from 'react';
 
 import { storage } from '../../../../../../../../wailsjs/go/models';
 import { chainFeeCoin } from '../../../../../../../coin/chainFeeCoin';
 import { chainTokens } from '../../../../../../../coin/chainTokens';
 import { storageCoinToCoin } from '../../../../../../../coin/utils/storageCoin';
-import { Chain } from '../../../../../../../model/chain';
 import { CoinMeta } from '../../../../../../../model/coin-meta';
 import {
   PersistentStateKey,

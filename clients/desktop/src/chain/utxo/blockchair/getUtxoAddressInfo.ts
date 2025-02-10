@@ -1,6 +1,6 @@
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
-import { UtxoChain } from '../../../model/chain';
+import { UtxoChain } from '@core/chain/Chain';
 import { ChainAccount } from '../../ChainAccount';
 import { getBlockchairBaseUrl } from './getBlockchairBaseUrl';
 

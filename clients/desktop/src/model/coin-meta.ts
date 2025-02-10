@@ -1,7 +1,6 @@
+import { Chain } from '@core/chain/Chain';
 import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { isOneOf } from '@lib/utils/array/isOneOf';
-
-import { Chain } from './chain';
 
 export type CoinMeta = {
   chain: Chain;

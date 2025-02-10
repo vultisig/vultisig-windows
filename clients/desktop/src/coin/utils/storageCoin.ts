@@ -5,7 +5,7 @@ import {
 } from '@core/communication/vultisig/keysign/v1/coin_pb';
 
 import { storage } from '../../../wailsjs/go/models';
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { AccountCoinKey } from '../AccountCoin';
 
 export const getStorageCoinKey = ({

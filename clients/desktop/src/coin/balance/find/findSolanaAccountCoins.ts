@@ -3,7 +3,7 @@ import { queryUrl } from '@lib/utils/query/queryUrl';
 
 import { ChainAccount } from '../../../chain/ChainAccount';
 import { getSplAccounts } from '../../../chain/solana/client/getSplAccounts';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 
 export const findSolanaAccountCoins = async (account: ChainAccount) => {
   if (!account.address) {

@@ -1,7 +1,7 @@
 import { base64Encode } from '@lib/utils/base64Encode';
 
 import { AccountCoinKey } from '../../coin/AccountCoin';
-import { CosmosChain } from '../../model/chain';
+import { CosmosChain } from '@core/chain/Chain';
 import { ChainAccount } from '../ChainAccount';
 
 export const cosmosRpcUrl: Record<CosmosChain, string> = {

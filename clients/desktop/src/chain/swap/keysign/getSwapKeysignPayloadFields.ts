@@ -14,7 +14,7 @@ import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { areEqualCoins } from '../../../coin/Coin';
 import { getCoinKey } from '../../../coin/utils/coin';
 import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
-import { EvmChain } from '../../../model/chain';
+import { EvmChain } from '@core/chain/Chain';
 import { fromChainAmount } from '../../utils/fromChainAmount';
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote';
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload';

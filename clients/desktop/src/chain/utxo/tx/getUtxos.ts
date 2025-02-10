@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf';
 import { UtxoInfoSchema } from '@core/communication/vultisig/keysign/v1/utxo_info_pb';
 
-import { UtxoChain } from '../../../model/chain';
+import { UtxoChain } from '@core/chain/Chain';
 import { ChainAccount } from '../../ChainAccount';
 import { getUtxoAddressInfo } from '../blockchair/getUtxoAddressInfo';
 

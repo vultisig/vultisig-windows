@@ -1,6 +1,6 @@
 import { TW } from '@trustwallet/wallet-core';
 
-import { Chain } from '../../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { nativeSwapEnabledChainsRecord } from '../NativeSwapChain';
 
 export const thorchainSwapEnabledChains =

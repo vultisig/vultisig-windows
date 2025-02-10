@@ -3,7 +3,7 @@ import { queryUrl } from '@lib/utils/query/queryUrl';
 
 import { ChainAccount } from '../../../chain/ChainAccount';
 import { getEvmChainId } from '../../../chain/evm/chainInfo';
-import { EvmChain } from '../../../model/chain';
+import { EvmChain } from '@core/chain/Chain';
 import { CoinMeta } from '../../../model/coin-meta';
 import { OneInchToken, oneInchTokenToCoinMeta } from '../../oneInch/token';
 

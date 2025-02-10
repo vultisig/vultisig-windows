@@ -25,7 +25,7 @@ import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { ValueProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
 import { KeysignSwapTxInfo } from '../../swap/keysign/KeysignSwapTxInfo';
 import { SwapTrackingLink } from './SwapTrackingLink';

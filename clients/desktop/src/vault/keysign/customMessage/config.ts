@@ -1,9 +1,5 @@
-import { TssKeysignType } from '../../../chain/keysign/TssKeysignType';
-import { Chain } from '../../../model/chain';
-
-const tssType: TssKeysignType = 'ecdsa';
+import { Chain } from '@core/chain/Chain';
 
 export const customMessageConfig = {
   chain: Chain.Ethereum,
-  tssType,
 };

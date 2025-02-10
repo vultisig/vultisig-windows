@@ -5,7 +5,7 @@ import { SaveCoins } from '../../../wailsjs/go/storage/Store';
 import { chainFeeCoin } from '../../coin/chainFeeCoin';
 import { coinToStorageCoin } from '../../coin/utils/coin';
 import { createCoin } from '../../coin/utils/createCoin';
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { getVaultPublicKey } from '../publicKey/getVaultPublicKey';
 import { getStorageVaultId } from '../utils/storageVault';
 

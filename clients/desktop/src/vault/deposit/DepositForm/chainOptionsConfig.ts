@@ -2,7 +2,7 @@ import { WalletCore } from '@trustwallet/wallet-core';
 import { z } from 'zod';
 
 import { isValidAddress } from '../../../chain/utils/isValidAddress';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 
 export const DISABLED_FIELDS_NAMES = ['unbondAmount'];
 

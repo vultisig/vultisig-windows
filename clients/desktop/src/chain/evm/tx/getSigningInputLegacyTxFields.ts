@@ -1,6 +1,6 @@
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { bigIntToHex } from '../../utils/bigIntToHex';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';
 import { getCoinType } from '../../walletCore/getCoinType';

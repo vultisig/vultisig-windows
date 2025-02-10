@@ -1,5 +1,5 @@
 import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
-import { Chain } from '../../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { NativeSwapEnabledChain } from '../NativeSwapChain';
 
 export const getNativeSwapDecimals = (chain: NativeSwapEnabledChain) => {

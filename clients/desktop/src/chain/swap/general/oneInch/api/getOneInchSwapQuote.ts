@@ -3,7 +3,7 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 import { pick } from '@lib/utils/record/pick';
 
-import { EvmChain } from '../../../../../model/chain';
+import { EvmChain } from '@core/chain/Chain';
 import { ChainAccount } from '../../../../ChainAccount';
 import { getEvmChainId } from '../../../../evm/chainInfo';
 import { defaultEvmSwapGasLimit } from '../../../../evm/evmGasLimit';

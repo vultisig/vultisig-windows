@@ -1,4 +1,4 @@
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { AccountCoinKey } from '../AccountCoin';
 
 export type CoinBalanceResolverInput<T extends Chain = Chain> =

@@ -11,7 +11,7 @@ import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { ValueProp } from '../../../../lib/ui/props';
 import { MatchEagerQuery } from '../../../../lib/ui/query/components/MatchEagerQuery';
 import { useTransformQueryData } from '../../../../lib/ui/query/hooks/useTransformQueryData';
-import { Chain } from '../../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useCurrentVaultCoins } from '../../../state/currentVault';
 import { SwapFee } from '../../types/SwapFee';
 

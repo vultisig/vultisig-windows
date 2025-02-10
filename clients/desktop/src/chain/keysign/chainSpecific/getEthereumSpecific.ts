@@ -7,7 +7,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { ethers } from 'ethers';
 import { publicActionsL2 } from 'viem/zksync';
 
-import { Chain, EvmChain } from '../../../model/chain';
+import { Chain, EvmChain } from '@core/chain/Chain';
 import { evmChainInfo, getEvmChainRpcUrl } from '../../evm/chainInfo';
 import { getEvmClient } from '../../evm/client/getEvmClient';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';

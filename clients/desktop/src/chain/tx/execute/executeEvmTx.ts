@@ -3,7 +3,7 @@ import { isInError } from '@lib/utils/error/isInError';
 import { TW } from '@trustwallet/wallet-core';
 import { keccak256 } from 'js-sha3';
 
-import { EvmChain } from '../../../model/chain';
+import { EvmChain } from '@core/chain/Chain';
 import { getEvmClient } from '../../evm/client/getEvmClient';
 import { ExecuteTxInput } from './ExecuteTxInput';
 

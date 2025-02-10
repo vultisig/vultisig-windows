@@ -1,7 +1,6 @@
-import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
-
+import { SignatureFormat } from '@core/chain/signing/SignatureFormat';
 import { match } from '@lib/utils/match';
-import { SignatureFormat } from '../../model/chain';
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 type Input = {
   publicKey: PublicKey;

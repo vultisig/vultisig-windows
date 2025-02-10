@@ -1,4 +1,4 @@
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { CoinMeta } from '../../model/coin-meta';
 
 export type OneInchToken = {

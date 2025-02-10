@@ -1,4 +1,4 @@
-import { Chain, CosmosChain } from '../../model/chain';
+import { Chain, CosmosChain } from '@core/chain/Chain';
 
 export const cosmosGasLimitRecord: Record<CosmosChain, number> = {
   [Chain.Cosmos]: 200000,

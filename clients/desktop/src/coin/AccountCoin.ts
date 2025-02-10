@@ -1,7 +1,7 @@
 import { haveEqualFields } from '@lib/utils/record/haveEqualFields';
 
 import { ChainAccount } from '../chain/ChainAccount';
-import { Chain } from '../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { CoinKey } from './Coin';
 
 export type AccountCoinKey<T extends Chain = Chain> = CoinKey & ChainAccount<T>;

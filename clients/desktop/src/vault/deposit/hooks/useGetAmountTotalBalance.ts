@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { getCoinValue } from '../../../coin/utils/getCoinValue';
 import { sum } from '@lib/utils/array/sum';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useVaultChainCoinsQuery } from '../../queries/useVaultChainCoinsQuery';
 
 export const useGetTotalAmountAvailableForChain = (chain: Chain) => {

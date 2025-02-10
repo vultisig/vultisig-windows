@@ -7,7 +7,7 @@ import Long from 'long';
 import { getCoinKey } from '../../../../../coin/utils/coin';
 import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
-import { Chain } from '../../../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { getSigningInputEnvelopedTxFields } from '../../../../evm/tx/getSigningInputEnvelopedTxFields';
 import { toKeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload';
 import { nativeSwapAffiliateConfig } from '../../nativeSwapAffiliateConfig';
