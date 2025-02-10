@@ -3,8 +3,7 @@ import { NativeModule, requireNativeModule } from 'expo';
 import { MobileTssModuleEvents } from './MobileTss.types';
 
 declare class MobileTssModule extends NativeModule<MobileTssModuleEvents> {
-  hello(): string;
-  setValueAsync(value: string): Promise<void>;
+  getDerivedPublicKey(hexPublicKey: string,hexChainCode: string, derivePath: string): string;
 }
 
 // This call loads the native module object from the JSI.
