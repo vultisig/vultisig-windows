@@ -600,6 +600,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@core/chain-utils@workspace:core/chain-utils":
+  version: 0.0.0-use.local
+  resolution: "@core/chain-utils@workspace:core/chain-utils"
+  languageName: unknown
+  linkType: soft
+
 "@core/communication@workspace:core/communication":
   version: 0.0.0-use.local
   resolution: "@core/communication@workspace:core/communication"
