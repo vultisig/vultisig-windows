@@ -33,8 +33,8 @@ export const VaultChainCoinOptions = () => {
     useCallback(
       coins =>
         coins
-          .filter(coin =>
-            areEqualCoins(assertChainField(coin), chainFeeCoin[chain])
+          .filter(
+            coin => !areEqualCoins(assertChainField(coin), chainFeeCoin[chain])
           )
           .map(fromStorageCoin),
       [chain]
