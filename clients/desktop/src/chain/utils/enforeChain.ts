@@ -1,6 +1,6 @@
-import { isOneOf } from '@lib/utils/array/isOneOf';
 import { Chain } from '@core/chain/Chain';
-import { ChainEntity } from '../ChainEntity';
+import { ChainEntity } from '@core/chain/ChainEntity';
+import { isOneOf } from '@lib/utils/array/isOneOf';
 
 type HasChain = {
   chain: string;

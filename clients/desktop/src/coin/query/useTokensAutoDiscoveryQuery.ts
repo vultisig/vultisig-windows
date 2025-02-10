@@ -1,6 +1,6 @@
+import { ChainAccount } from '@core/chain/ChainAccount';
 import { useQuery } from '@tanstack/react-query';
 
-import { ChainAccount } from '../../chain/ChainAccount';
 import {
   PersistentStateKey,
   usePersistentState,

@@ -1,8 +1,8 @@
 import { EvmChain } from '@core/chain/Chain';
+import { ChainAccount } from '@core/chain/ChainAccount';
 import { rootApiUrl } from '@core/config';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
-import { ChainAccount } from '../../../chain/ChainAccount';
 import { getEvmChainId } from '../../../chain/evm/chainInfo';
 import { fromOneInchToken, OneInchToken } from '../../oneInch/token';
 

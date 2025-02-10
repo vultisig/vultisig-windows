@@ -5,17 +5,11 @@ import { WalletCore } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 import { deriveAddress } from '../../chain/utils/deriveAddress';
 import { stripHexPrefix } from '../../chain/utils/stripHexPrefix';
-import { DecimalsField, PriceProviderIdField, TickerField } from '../Coin';
-import { CoinKey } from '../Coin';
-import { LogoField } from '../Coin';
+import { Coin } from '../Coin';
 import { isFeeCoin } from './isFeeCoin';
 
 type CreateCoinInput = {
-  coin: LogoField &
-    TickerField &
-    CoinKey &
-    Partial<PriceProviderIdField> &
-    DecimalsField;
+  coin: Coin;
   publicKey: PublicKey;
   walletCore: WalletCore;
 };

@@ -1,7 +1,7 @@
+import { UtxoChain } from '@core/chain/Chain';
+import { ChainAccount } from '@core/chain/ChainAccount';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
-import { UtxoChain } from '@core/chain/Chain';
-import { ChainAccount } from '../../ChainAccount';
 import { getBlockchairBaseUrl } from './getBlockchairBaseUrl';
 
 type BlockchairAddressResponse = {

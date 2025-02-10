@@ -1,7 +1,7 @@
+import { ChainAccount } from '@core/chain/ChainAccount';
 import { useQuery } from '@tanstack/react-query';
 
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
-import { ChainAccount } from '../ChainAccount';
 import { isValidAddress } from '../utils/isValidAddress';
 
 export const useValidateAddressQuery = ({ chain, address }: ChainAccount) => {

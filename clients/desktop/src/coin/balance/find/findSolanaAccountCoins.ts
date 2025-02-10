@@ -1,8 +1,8 @@
 // TODO: REWRITE THIS
 import { Chain } from '@core/chain/Chain';
+import { ChainAccount } from '@core/chain/ChainAccount';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
-import { ChainAccount } from '../../../chain/ChainAccount';
 import { getSplAccounts } from '../../../chain/solana/client/getSplAccounts';
 import { Coin } from '../../Coin';
 

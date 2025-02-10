@@ -1,8 +1,8 @@
 import { create } from '@bufbuild/protobuf';
+import { UtxoChain } from '@core/chain/Chain';
+import { ChainAccount } from '@core/chain/ChainAccount';
 import { UtxoInfoSchema } from '@core/communication/vultisig/keysign/v1/utxo_info_pb';
 
-import { UtxoChain } from '@core/chain/Chain';
-import { ChainAccount } from '../../ChainAccount';
 import { getUtxoAddressInfo } from '../blockchair/getUtxoAddressInfo';
 
 export const getUtxos = async (account: ChainAccount<UtxoChain>) => {

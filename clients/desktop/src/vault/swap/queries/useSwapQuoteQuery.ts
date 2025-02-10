@@ -1,5 +1,4 @@
 import { withoutNullOrUndefined } from '@lib/utils/array/withoutNullOrUndefined';
-import { pick } from '@lib/utils/record/pick';
 
 import { swapConfig } from '../../../chain/swap/config';
 import { findSwapQuote } from '../../../chain/swap/quote/findSwapQuote';
@@ -54,14 +53,8 @@ export const useSwapQuoteQuery = () => {
         const isAffiliate = usdAmount >= swapConfig.minUsdAffiliateAmount;
 
         return findSwapQuote({
-          from: {
-            ...fromCoinKey,
-            ...pick(fromCoin, ['ticker', 'decimals', 'address']),
-          },
-          to: {
-            ...toCoinKey,
-            ...pick(toCoin, ['ticker', 'decimals', 'address']),
-          },
+          from: fromCoin,
+          to: toCoin,
           amount: fromAmount,
           isAffiliate,
         });

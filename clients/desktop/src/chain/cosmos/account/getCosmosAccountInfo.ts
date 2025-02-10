@@ -1,7 +1,7 @@
 import { CosmosChain } from '@core/chain/Chain';
+import { ChainAccount } from '@core/chain/ChainAccount';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 
-import { ChainAccount } from '../../ChainAccount';
 import { getCosmosClient } from '../client/getCosmosClient';
 
 export const getCosmosAccountInfo = async ({
