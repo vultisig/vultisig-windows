@@ -12,6 +12,24 @@ export const hr = {
   email_confirmation_code_label:
     'Írja be a biztonsági másolattal e-mailben kapott kódot',
   email_confirmation_code_error: 'Érvénytelen kód',
+  thisDevice: 'Ez az eszköz',
+  optionalDevice: 'Opcionális eszköz',
+  scanWithDevice: 'Beolvasás a {{deviceNumber}}. eszközzel',
+  localMode: 'Helyi módban van',
+  scanQrInstruction:
+    'Olvassa be a QR-kódot egy másik eszközzel. 3 eszköz ajánlott, 2 elegendő.',
+  devicesStatus: 'Eszközök ({{currentPeers}}/3)',
+  waitingOnDevices: 'Eszközökre várakozás...',
+  tookTooLongToRespond:
+    'A szerver túl sokáig válaszolt. Kérlek, ellenőrizd az internetkapcsolatodat, és próbáld újra.',
+  errorTimedOut: 'Hiba: A szerver időtúllépést kapott',
+  switchToInternet: 'Váltás vissza az internetes módra',
+  signPrivately: 'Szeretne privát módon aláírni?',
+  switchToLocal: 'Váltás helyi módra',
+  scanThe: 'Olvassa be',
+  qrCode: 'a QR-kódot',
+  downloadVultisig:
+    'Töltse le a Vultisig alkalmazást más eszközeire, és válassza a „QR-kód beolvasása” lehetőséget',
   email_confirmation: 'Adja meg a kódot',
   create_new_vault: 'Kreiraj novi trezor',
   sayHelloTo: 'Mondd, hogy helló',
@@ -27,6 +45,9 @@ export const hr = {
   inYourVaultHolds: 'a tárhelyedben tartalmaz',
   oneVaultShare: 'egy tárhelyrészt',
   theyRe: 'Ezek',
+  moreInfo: 'További információ',
+  secureVaultSetupPasswordTooltipContent:
+    'Ez azért történik, mert a jelszó helyben titkosítja a biztonsági mentési fájlt, hasonlóan egy merevlemez titkosításához. A következő lépésben lehetőséged van egy tippet hozzáadni.',
   splitIntoParts: 'részekre vannak osztva',
   toIncreaseSecurity: 'a biztonság növelése érdekében és',
   removeSinglePointOfFailure:
@@ -112,7 +133,7 @@ export const hr = {
   select_your_vault_type: 'Odaberite svoj tip trezora',
   pair: 'Upari',
   create_qr: 'Kreiraj QR kod',
-  scan_qr: 'Skeniraj QR / Upari uređaj',
+  scan_qr: 'Skeniraj QR',
   this_device_is_the: 'Ovaj uređaj je',
   initiating_device: 'Inicijalni uređaj',
   pairing_device: 'Uređaj za uparivanje',
@@ -391,6 +412,21 @@ export const hr = {
   while_you_wait_vultisig_has: 'Amíg vársz, a Vultisig rendelkezik...',
   creating_vault: 'Tárca létrehozása',
   learnMore: 'Tudj meg többet',
+  vaultOverview: 'Visão geral do cofre',
+  backupShare: 'Backup da participação do cofre',
+  vaultCreated: 'Cofre criado',
+  successfully: 'Com sucesso',
+  fastVault: 'Brzi Trezor',
+  backupGuide: 'Vodič za sigurnosnu kopiju',
+  receivedShare1Email: 'Dio trezora 1 primljen putem e-pošte',
+  yourVaultShares: 'Vaš trezor ima {{shares}} dijelova trezora',
+  share2StoredByYou: 'Dio trezora 2 pohranjen kod vas',
+  secureVaultSetup: {
+    backup: {
+      shares: 'Seu cofre contém {{shares}} partes',
+      eachDeviceNeedsBackup: 'Cada dispositivo precisa do seu próprio backup.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'a szerver tárolja',
@@ -437,26 +473,24 @@ export const hr = {
     generatingECDSAKey: 'ECDSA kulcs generálása',
     createVault: {
       multiFactor: {
-        subtitle: 'Ez nem tarthat tovább 1 percnél',
-        description:
-          'Többfaktoros biztonság, az egyetlen hibapont megszüntetése',
+        descriptionOne: 'Többfaktoros biztonság,',
+        descriptionTwo: 'Az egyetlen hibapont megszüntetése',
       },
       selfCustodial: {
-        description:
-          'Önálló letétkezelés, teljes ellenőrzés az eszközeid felett',
+        descriptionOne: 'Önfelügyeleti,',
+        descriptionTwo: 'teljes ellenőrzést biztosít az eszközeid felett',
       },
       crossChain: {
-        description:
-          'Több blokkláncos. Cseréld kedvenc tokenjeidet egyetlen tárcában',
-      },
-      over30Chains: {
-        description: 'Több mint 30 blokklánc a kedvenc tokenjeid tárolására',
+        descriptionOne: 'Cross-chain.',
+        descriptionTwo: 'Cseréld kedvenc tokenjeidet egyetlen tárcában',
       },
       availablePlatforms: {
-        description: 'Elérhető Androidon, iOS-en, macOS-en és Windows-on',
+        descriptionOne: 'elérhető',
+        descriptionTwo: 'Androidon, iOS-en, macOS-en és Windowson',
       },
       seedlessWallet: {
-        description: 'Egy mag nélküli tárca – ne hagyd, hogy újra átverjenek',
+        descriptionOne: 'egy mag nélküli tárca,',
+        descriptionTwo: 'ne hagyd magad újra átverni',
       },
     },
     connectingWithServer: 'Csatlakozás a szerverhez...',

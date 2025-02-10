@@ -96,6 +96,7 @@ export const theme = {
       black: 900,
     },
     fontFamily: {
+      brockmann: ['Brockmann', 'sans-serif'],
       menlo: ['Menlo', 'monospace'],
       montserrat: ['Montserrat', 'sans-serif'],
       american: ['AmericanTypewriter', 'serif'],

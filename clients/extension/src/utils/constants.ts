@@ -158,6 +158,7 @@ export namespace RequestMethod {
     ETH_SEND_TRANSACTION = "eth_sendTransaction",
     ETH_SIGN = "eth_sign",
     ETH_SIGN_TYPED_DATA_V4 = "eth_signTypedData_v4",
+    ETH_SIGN_TYPED_DATA_V3 = "eth_signTypedData_v3",
     ETH_SUBSCRIBE = "eth_subscribe",
     ETH_SYNCING = "eth_syncing",
     ETH_UNINSTALL_FILTER = "eth_uninstallFilter",

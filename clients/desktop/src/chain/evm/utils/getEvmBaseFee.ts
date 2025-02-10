@@ -10,10 +10,10 @@ export const getEvmBaseFee = async (chain: EvmChain) => {
   if (!baseFee) {
     throw new Error(`Failed to get base fee for chain ${chain}`);
   }
-
+  
   const { baseFeePerGas } = baseFee;
 
-  if (!baseFeePerGas) {
+  if (baseFeePerGas === undefined || baseFeePerGas === null) {
     throw new Error(`Failed to get base fee per gas for chain ${chain}`);
   }
 

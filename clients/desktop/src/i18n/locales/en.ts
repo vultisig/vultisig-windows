@@ -93,7 +93,7 @@ export const en = {
   select_your_vault_type: 'Select your Vault Type',
   pair: 'Pair',
   create_qr: 'Create QR',
-  scan_qr: 'Scan QR / Pair device',
+  scan_qr: 'Scan QR',
   deeplink: 'Deeplink',
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
   upload_qr_code_image: 'Upload QR Code Image',
@@ -339,6 +339,21 @@ export const en = {
   join_session: 'Join Session',
   waiting_for_keysign_start: 'Waiting for the signing process to begin...',
   serverTimedOut: 'Server timed out',
+  thisDevice: 'This device',
+  optionalDevice: 'Optional Device',
+  scanWithDevice: 'Scan with {{deviceNumber}} device',
+  localMode: 'You’re in local mode',
+  scanQrInstruction:
+    'Scan QR with other device. 3-device setup recommended, 2 is sufficient.',
+  devicesStatus: 'Devices ({{currentPeers}}/3)',
+  waitingOnDevices: 'Waiting on devices...',
+  switchToInternet: 'Switch back to internet mode',
+  signPrivately: 'Want to sign privately?',
+  switchToLocal: 'Switch to local mode',
+  scanThe: 'Scan the',
+  qrCode: 'QR code',
+  downloadVultisig:
+    'Download Vultisig on your other device(s) and select ‘Scan QR code’',
   serverTookTooLong:
     'The server took too long to respond, please check your internet connection and try again.',
   transaction: 'Transaction',
@@ -395,11 +410,30 @@ export const en = {
   while_you_wait_vultisig_has: 'While you wait, Vultisig has...',
   creating_vault: 'Creating Vault',
   learnMore: 'Learn More',
+  moreInfo: 'More Info',
+  secureVaultSetupPasswordTooltipContent:
+    'This happens because the password encrypts the backup file locally, like encrypting a hard drive. In the next step you have the possibility to add a hint.',
+  vaultOverview: 'Vault Overview',
+  backupShare: 'Back-up Vault Share',
+  vaultCreated: 'Vault created',
+  successfully: 'Successfully',
+  backupGuide: 'Back-up guide',
+  receivedShare1Email: 'Vault Share 1 received via mail',
+  yourVaultShares: 'Your vault has {{shares}} Vault Shares',
+  fastVault: 'Fast Vault',
+  share2StoredByYou: 'Vault Share 2 stored by you',
+  secureVaultSetup: {
+    backup: {
+      shares: 'Your vault holds {{shares}} shares',
+      eachDeviceNeedsBackup: 'each device needs its own backup.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'held by the server',
       part1: 'Part 1 of the vault shares will be',
-      backUpNow: 'Back them up now',
+      backUpNow: 'Back up now',
+      backThemUpNow: 'back them up now',
       vaultShares: 'Your vault holds 2 shares,',
       completeCustody: 'It is sent to you for complete self-custody!',
       setNewStandard: 'You’re ready to use a new wallet standard.',
@@ -439,24 +473,24 @@ export const en = {
     generatingECDSAKey: 'Generating ECDSA Key',
     createVault: {
       multiFactor: {
-        subtitle: 'This shouldn’t take longer than 1 minute',
-        description:
-          'Multi-factor security, Removing the single-point of failure',
+        descriptionOne: 'Multi-factor security,',
+        descriptionTwo: 'Removing the single-point of failure',
       },
       selfCustodial: {
-        description: 'Self-custodial, giving complete control over your assets',
+        descriptionOne: 'Self-custodial,',
+        descriptionTwo: 'giving complete control over your assets',
       },
       crossChain: {
-        description: 'Cross-chain. Swap your favourite tokens all in one vault',
-      },
-      over30Chains: {
-        description: 'Over 30 chains to store your favorite token',
+        descriptionOne: 'Cross-chain.',
+        descriptionTwo: 'Swap your favourite tokens all in one vault',
       },
       availablePlatforms: {
-        description: 'Available on Android, iOS, macOS and Windows',
+        descriptionOne: 'available',
+        descriptionTwo: 'on Android, iOS, macOS and Windows',
       },
       seedlessWallet: {
-        description: 'A seedless wallet, do not get scammed again',
+        descriptionOne: 'a seedless wallet,',
+        descriptionTwo: 'do not get scammed again',
       },
     },
     connectingWithServer: 'Connecting with server...',

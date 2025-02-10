@@ -1,28 +1,8 @@
 const million = 1000000;
 const billion = 1000000000;
 
-const defaultFractionDigits = 2;
-
-const getFractionDigits = (amount: number): number => {
-  const amountStr = amount.toFixed(20);
-  if (amountStr.startsWith('0') && amount > 0) {
-    const fractionPartDigits = amountStr.split('.')[1].split('');
-
-    const nonZeroDigitIndex = fractionPartDigits.findIndex(
-      digit => digit !== '0'
-    );
-
-    if (nonZeroDigitIndex < 0) {
-      return defaultFractionDigits;
-    }
-
-    const isFollowingZero = fractionPartDigits[nonZeroDigitIndex + 1] === '0';
-
-    return nonZeroDigitIndex + (isFollowingZero ? 1 : 2);
-  }
-
-  return defaultFractionDigits;
-};
+const fiatDecimalPlaces = 2;
+const tokenMaxDecimalPlaces = 8;
 
 export const formatAmount = (
   amount: number,
@@ -36,7 +16,7 @@ export const formatAmount = (
     return `${formatAmount(amount / million, currency, locale)}M`;
   }
 
-  const fractionDigits = getFractionDigits(amount);
+  const fractionDigits = fiatDecimalPlaces; 
 
   // Validate and set locale safely
   let validLocale = 'en-US';
@@ -69,8 +49,8 @@ export const formatAmount = (
   }
 
   const formatter = new Intl.NumberFormat(validLocale, {
-    minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
+    minimumFractionDigits: fiatDecimalPlaces,
+    maximumFractionDigits: tokenMaxDecimalPlaces,
   });
 
   return formatter.format(amount);

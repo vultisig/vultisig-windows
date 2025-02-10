@@ -112,7 +112,7 @@ export default abstract class BaseTransactionProvider {
       if (transaction.isCustomMessage) {
         messsage.customMessagePayload = {
           $typeName: "vultisig.keysign.v1.CustomMessagePayload",
-          method: "personal_sign",
+          method: transaction.customMessage?.method,
           message: transaction.customMessage!.message,
         } as CustomMessagePayload;
       } else {

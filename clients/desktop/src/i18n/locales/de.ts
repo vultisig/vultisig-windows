@@ -7,6 +7,9 @@ export const de = {
     'Vultisig verfolgt Ihre Aktivitäten nicht und erfordert keine Registrierung. Vultisig ist Open-Source, was Transparenz und Vertrauen gewährleistet.',
   onboarding_view3_description:
     'Vultisig ist von Natur aus eine Mehrgeräte-Anwendung. Erfordert mindestens zwei Geräte, um einen sicheren Tresor zu erstellen: ein initiierendes Gerät und ein Paarungsgerät.',
+  moreInfo: 'Mehr Info',
+  secureVaultSetupPasswordTooltipContent:
+    'Dies geschieht, weil das Passwort die Sicherungsdatei lokal verschlüsselt, ähnlich wie das Verschlüsseln einer Festplatte. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
   onboarding_view4_description:
     'Vultisig ist eine Wallet ohne Seed-Phrases. Stattdessen verwendet es einfach zu verwaltende Fragmente. Jedes Gerät hat sein eigenes einzigartiges Fragment, das separat gesichert werden muss.',
   create_new_vault: 'Neuen Tresor erstellen',
@@ -14,6 +17,24 @@ export const de = {
   serverTimedOut: 'Server hat die Zeit überschritten',
   serverTookTooLong:
     'Der Server hat zu lange gebraucht, um zu antworten. Bitte überprüfe deine Internetverbindung und versuche es erneut.',
+  thisDevice: 'Dieses Gerät',
+  optionalDevice: 'Optionales Gerät',
+  scanWithDevice: 'Scannen mit {{deviceNumber}}. Gerät',
+  localMode: 'Sie sind im lokalen Modus',
+  scanQrInstruction:
+    'QR mit einem anderen Gerät scannen. 3-Geräte-Setup empfohlen, 2 reichen aus.',
+  devicesStatus: 'Geräte ({{currentPeers}}/3)',
+  waitingOnDevices: 'Warten auf Geräte...',
+  switchToInternet: 'Zurück in den Internetmodus wechseln',
+  signPrivately: 'Möchten Sie privat signieren?',
+  switchToLocal: 'Wechseln Sie in den lokalen Modus',
+  scanThe: 'Scannen Sie',
+  qrCode: 'den QR-Code',
+  tookTooLongToRespond:
+    'Der Server hat zu lange gebraucht, um zu antworten. Bitte überprüfe deine Internetverbindung und versuche es erneut.',
+  errorTimedOut: 'Fehler: Server-Zeitüberschreitung',
+  downloadVultisig:
+    'Laden Sie Vultisig auf Ihr anderes Gerät(e) herunter und wählen Sie „QR-Code scannen“',
   sayHelloTo: 'Sag hallo zu',
   alwaysBackUpEachVaultShare: 'Sichern Sie jede Tresorfreigabe immer',
   separatelyIna: 'separat in einer',
@@ -117,7 +138,7 @@ export const de = {
   select_your_vault_type: 'Wählen Sie Ihren Tresortyp',
   pair: 'Paaren',
   create_qr: 'QR-Code erstellen',
-  scan_qr: 'QR scannen / Gerät paaren',
+  scan_qr: 'QR scannen',
   this_device_is_the: 'Dieses Gerät ist das',
   initiating_device: 'Initiierendes Gerät',
   pairing_device: 'Paarungsgerät',
@@ -374,6 +395,11 @@ export const de = {
   optional: 'optional',
   enter_memo: 'Memo eingeben',
   complete: 'Vollständig',
+  fastVault: 'Schneller Tresor',
+  backupGuide: 'Sicherungsanleitung',
+  receivedShare1Email: 'Tresor-Teil 1 per E-Mail erhalten',
+  yourVaultShares: 'Ihr Tresor hat {{shares}} Tresor-Teile',
+  share2StoredByYou: 'Tresor-Teil 2 von Ihnen gespeichert',
   auto: 'automatisch',
   join_reshare: 'Erneutes Teilen beitreten',
   reshare: 'Erneut teilen',
@@ -402,6 +428,16 @@ export const de = {
   while_you_wait_vultisig_has: 'Während du wartest, hat Vultisig...',
   creating_vault: 'Tresor wird erstellt',
   learnMore: 'Mehr erfahren',
+  vaultOverview: 'Tresorübersicht',
+  backupShare: 'Tresor-Backup-Teil',
+  vaultCreated: 'Tresor erstellt',
+  successfully: 'Erfolgreich',
+  secureVaultSetup: {
+    backup: {
+      shares: 'Dein Tresor enthält {{shares}} Anteile',
+      eachDeviceNeedsBackup: 'Jedes Gerät benötigt ein eigenes Backup.',
+    },
+  },
   fastVaultSetup: {
     backup: {
       heldByServer: 'vom Server gehalten',
@@ -449,27 +485,24 @@ export const de = {
     generatingECDSAKey: 'ECDSA-Schlüssel wird generiert',
     createVault: {
       multiFactor: {
-        subtitle: 'Dies sollte nicht länger als 1 Minute dauern',
-        description:
-          'Mehrfaktor-Sicherheit, Eliminierung des einzigen Ausfallpunkts',
+        descriptionOne: 'Mehrfaktor-Sicherheit,',
+        descriptionTwo: 'Beseitigung eines einzelnen Schwachpunkts',
       },
       selfCustodial: {
-        description:
-          'Selbstverwahrung, vollständige Kontrolle über deine Vermögenswerte',
+        descriptionOne: 'Selbstverwahrung,',
+        descriptionTwo: 'volle Kontrolle über deine Vermögenswerte',
       },
       crossChain: {
-        description:
-          'Cross-Chain. Tausche deine Lieblings-Token in einem einzigen Tresor',
-      },
-      over30Chains: {
-        description:
-          'Über 30 Blockchains zur Speicherung deines Lieblingstokens',
+        descriptionOne: 'Cross-Chain.',
+        descriptionTwo: 'Tausche deine Lieblingstokens in einer einzigen Vault',
       },
       availablePlatforms: {
-        description: 'Verfügbar für Android, iOS, macOS und Windows',
+        descriptionOne: 'verfügbar',
+        descriptionTwo: 'auf Android, iOS, macOS und Windows',
       },
       seedlessWallet: {
-        description: 'Eine seedlose Wallet – lass dich nie wieder betrügen',
+        descriptionOne: 'eine seedlose Wallet,',
+        descriptionTwo: 'lass dich nicht erneut betrügen',
       },
     },
     connectingWithServer: 'Mit dem Server verbinden...',

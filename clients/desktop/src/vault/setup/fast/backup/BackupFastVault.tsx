@@ -3,9 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { storage } from '../../../../../wailsjs/go/models';
 import { Match } from '../../../../lib/ui/base/Match';
+import { StepTransition } from '../../../../lib/ui/base/StepTransition';
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
 import { appPaths } from '../../../../navigation';
+import { useVaults } from '../../../queries/useVaultsQuery';
 import { getStorageVaultId } from '../../../utils/storageVault';
+import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep';
+import VaultBackupPage from '../../shared/vaultBackupSettings/VaultBackupPage';
 import { EmailConfirmation } from '.';
 import { BackupConfirmation } from './BackupConfirmation';
 import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne';
@@ -17,6 +21,7 @@ const steps = [
   'emailVerification',
   'backupSlideshowPartTwo',
   'backupConfirmation',
+  'backupPage',
   'backupSuccessfulSlideshow',
 ] as const;
 
@@ -30,6 +35,8 @@ export const BackupFastVault: FC<BackupFastVaultProps> = ({ vault }) => {
   const { step, toNextStep } = useStepNavigation({
     steps,
   });
+  const vaults = useVaults();
+  const shouldShowBackupSummary = vaults.length === 2;
 
   return (
     <Match
@@ -43,12 +50,26 @@ export const BackupFastVault: FC<BackupFastVaultProps> = ({ vault }) => {
       backupSlideshowPartTwo={() => (
         <BackupOverviewSlidesPartTwo onCompleted={toNextStep} />
       )}
-      backupConfirmation={() => (
-        <BackupConfirmation onCompleted={toNextStep} vault={vault} />
+      backupConfirmation={() => <BackupConfirmation onCompleted={toNextStep} />}
+      backupPage={() => (
+        <VaultBackupPage onBackupCompleted={toNextStep} vault={vault} />
       )}
-      backupSuccessfulSlideshow={() => (
-        <BackupSuccessSlide onCompleted={() => navigate(appPaths.vault)} />
-      )}
+      backupSuccessfulSlideshow={() =>
+        shouldShowBackupSummary ? (
+          <StepTransition
+            from={({ onForward }) => (
+              <SetupVaultSummaryStep onForward={onForward} vaultType="fast" />
+            )}
+            to={() => (
+              <BackupSuccessSlide
+                onCompleted={() => navigate(appPaths.vault)}
+              />
+            )}
+          />
+        ) : (
+          <BackupSuccessSlide onCompleted={() => navigate(appPaths.vault)} />
+        )
+      }
     />
   );
 };
