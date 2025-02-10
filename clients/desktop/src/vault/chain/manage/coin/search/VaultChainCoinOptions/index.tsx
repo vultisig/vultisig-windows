@@ -1,3 +1,4 @@
+import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
 import { t } from 'i18next';
 import { useCallback, useMemo } from 'react';
 
@@ -41,22 +42,24 @@ export const VaultChainCoinOptions = () => {
   );
 
   const allItems = useMemo(() => {
-    const options: Coin[] = [];
-
-    if (query.data) {
-      options.push(...query.data);
-    }
+    let result: Coin[] = [];
 
     const tokens = chainTokens[chain];
 
     if (tokens) {
-      options.push(...tokens);
+      result.push(...tokens);
     }
 
-    return options.filter(
+    if (query.data) {
+      result.push(...query.data);
+    }
+
+    result = result.filter(
       coin =>
         !selectedCoins.some(selectedCoin => areEqualCoins(selectedCoin, coin))
     );
+
+    return withoutDuplicates(result, areEqualCoins);
   }, [chain, query.data, selectedCoins]);
 
   const options = useTransform(
@@ -67,10 +70,6 @@ export const VaultChainCoinOptions = () => {
     }),
     sortCoinsAlphabetically
   );
-
-  const sortedOptions = useMemo(() => {
-    return options.sort((a, b) => a.ticker.localeCompare(b.ticker));
-  }, [options]);
 
   return (
     <>
@@ -91,7 +90,7 @@ export const VaultChainCoinOptions = () => {
         )}
       />
       <NonEmptyOnly
-        value={sortedOptions}
+        value={options}
         render={coins => (
           <>
             <Text size={18} color="shy">
