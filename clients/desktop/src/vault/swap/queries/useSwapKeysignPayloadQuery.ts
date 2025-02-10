@@ -4,8 +4,6 @@ import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/ke
 import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload';
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
-import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
-import { useTransform } from '../../../lib/ui/hooks/useTransform';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromAmount } from '../state/fromAmount';
@@ -16,14 +14,10 @@ import { useSwapQuoteQuery } from './useSwapQuoteQuery';
 
 export const useSwapKeysignPayloadQuery = () => {
   const [fromCoinKey] = useFromCoin();
-  const fromCoin = useTransform(
-    useCurrentVaultCoin(fromCoinKey),
-    storageCoinToCoin
-  );
+  const fromCoin = useCurrentVaultCoin(fromCoinKey);
 
   const [toCoinKey] = useToCoin();
-  const toStorageCoin = useCurrentVaultCoin(toCoinKey);
-  const toCoin = storageCoinToCoin(toStorageCoin);
+  const toCoin = useCurrentVaultCoin(toCoinKey);
 
   const [fromAmount] = useFromAmount();
 
@@ -43,7 +37,7 @@ export const useSwapKeysignPayloadQuery = () => {
       queryKey: ['swapKeysignPayload'],
       queryFn: async () => {
         const amount = toChainAmount(fromAmount, fromCoin.decimals);
-        const swapSpecificFields = await getSwapKeysignPayloadFields({
+        const swapSpecificFields = getSwapKeysignPayloadFields({
           amount,
           quote: swapQuote,
           fromCoin,

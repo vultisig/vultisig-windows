@@ -1,3 +1,5 @@
+import { isOneOf } from '@lib/utils/array/isOneOf';
+import { pick } from '@lib/utils/record/pick';
 import { useMemo } from 'react';
 
 import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains';
@@ -6,8 +8,6 @@ import { CoinInputContainer } from '../../../coin/ui/inputs/CoinInputContainer';
 import { SelectCoinOverlay } from '../../../coin/ui/inputs/SelectCoinOverlay';
 import { Opener } from '../../../lib/ui/base/Opener';
 import { InputProps } from '../../../lib/ui/props';
-import { isOneOf } from '@lib/utils/array/isOneOf';
-import { pick } from '@lib/utils/record/pick';
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,

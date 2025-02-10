@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery';
-import { getStorageCoinKey } from '../../../../coin/utils/storageCoin';
 import { useCurrentVaultCoin } from '../../../state/currentVault';
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery';
 import { useFromAmount } from '../../state/fromAmount';
@@ -15,7 +14,7 @@ export const useIsSwapFormDisabled = () => {
 
   const [coinKey] = useFromCoin();
   const coin = useCurrentVaultCoin(coinKey);
-  const balanceQuery = useBalanceQuery(getStorageCoinKey(coin));
+  const balanceQuery = useBalanceQuery(coin);
 
   const { t } = useTranslation();
 

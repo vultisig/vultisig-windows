@@ -3,7 +3,7 @@ import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { storage } from '../../../wailsjs/go/models';
 import { assertChainField } from '../../chain/utils/assertChainField';
 import { AccountCoinKey, accountCoinKeyToString } from '../AccountCoin';
-import { chainFeeCoin } from '../chainFeeCoins';
+import { chainFeeCoin } from '../chainFeeCoin';
 
 type CoinToStorageCoinInput = Coin & {
   address: string;

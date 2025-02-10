@@ -27,11 +27,17 @@ export type LogoField = {
   logo: string;
 };
 
+export type AddressField = {
+  address: string;
+};
+
 export type Coin = Partial<PriceProviderIdField> &
   DecimalsField &
   TickerField &
   LogoField &
   CoinKey;
+
+export type AccountCoin = Coin & AddressField;
 
 export const areEqualCoins = (one: CoinKey, another: CoinKey): boolean =>
   haveEqualFields(['chain', 'id'], one, another);

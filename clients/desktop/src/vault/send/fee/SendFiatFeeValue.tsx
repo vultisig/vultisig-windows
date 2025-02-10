@@ -3,9 +3,8 @@ import { useEffect } from 'react';
 
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
-import { chainFeeCoin } from '../../../coin/chainFeeCoins';
+import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
 import { useCurrentVaultCoin } from '../../state/currentVault';
@@ -22,10 +21,7 @@ export const SendFiatFeeValue = () => {
   const coin = useCurrentVaultCoin(coinKey);
 
   const { isPending, data: price } = useCoinPriceQuery({
-    coin: {
-      ...getStorageCoinKey(coin),
-      priceProviderId: coin.price_provider_id,
-    },
+    coin,
   });
 
   const { decimals } = chainFeeCoin[coinKey.chain];

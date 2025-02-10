@@ -1,10 +1,10 @@
 import { create } from '@bufbuild/protobuf';
+import { Chain } from '@core/chain/Chain';
 import {
   CosmosSpecificSchema,
   TransactionType,
 } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 
-import { Chain } from '@core/chain/Chain';
 import { getCosmosAccountInfo } from '../../cosmos/account/getCosmosAccountInfo';
 import {
   ChainsBySpecific,

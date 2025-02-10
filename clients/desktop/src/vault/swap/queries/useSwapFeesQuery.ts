@@ -3,7 +3,7 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
-import { chainFeeCoin } from '../../../coin/chainFeeCoins';
+import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
@@ -35,7 +35,7 @@ export const useSwapFeesQuery = () => {
 
           const feeAmount = getFeeAmount(chainSpecific);
 
-          return {
+          const result: SwapFees = {
             swap: {
               ...toCoinKey,
               amount: BigInt(fees.total),
@@ -48,6 +48,8 @@ export const useSwapFeesQuery = () => {
               chainSpecific,
             },
           };
+
+          return result;
         },
         general: ({ tx: { gasPrice, gas } }) => {
           return {

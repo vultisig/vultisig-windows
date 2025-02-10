@@ -1,4 +1,6 @@
+import { Chain } from '@core/chain/Chain';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -6,8 +8,6 @@ import Select from 'react-select';
 import { z } from 'zod';
 
 import { Text } from '../../../../../lib/ui/text';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { Chain } from '@core/chain/Chain';
 import { useAssertWalletCore } from '../../../../../providers/WalletCoreProvider';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';

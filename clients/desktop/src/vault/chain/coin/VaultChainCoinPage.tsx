@@ -1,16 +1,8 @@
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { areEqualCoins } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { getBalanceQueryKey } from '../../../coin/query/useBalancesQuery';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { getCoinKey } from '../../../coin/utils/coin';
-import {
-  getStorageCoinKey,
-  storageCoinToCoin,
-} from '../../../coin/utils/storageCoin';
 import { RefreshIcon } from '../../../lib/ui/icons/RefreshIcon';
 import { Center } from '../../../lib/ui/layout/Center';
 import { VStack } from '../../../lib/ui/layout/Stack';
@@ -25,22 +17,14 @@ import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton';
 import { PageHeaderIconButtons } from '../../../ui/page/PageHeaderIconButtons';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
 import { VaultPrimaryActions } from '../../components/VaultPrimaryActions';
-import { useCurrentVaultCoins } from '../../state/currentVault';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { VaultChainCoinItem } from '../VaultChainCoinItem';
 import { useCurrentVaultCoinKey } from './useCurrentVaultCoinKey';
 
 export const VaultChainCoinPage = () => {
   const coinKey = useCurrentVaultCoinKey();
 
-  const coins = useCurrentVaultCoins();
-
-  const coin = useMemo(() => {
-    return storageCoinToCoin(
-      shouldBePresent(
-        coins.find(coin => areEqualCoins(getStorageCoinKey(coin), coinKey))
-      )
-    );
-  }, [coins, coinKey]);
+  const coin = useCurrentVaultCoin(coinKey);
 
   const balanceQuery = useBalanceQuery({
     ...coinKey,
@@ -48,10 +32,7 @@ export const VaultChainCoinPage = () => {
   });
 
   const priceQuery = useCoinPriceQuery({
-    coin: {
-      ...coinKey,
-      priceProviderId: coin.priceProviderId,
-    },
+    coin,
   });
 
   const { mutate: invalidateQueries, isPending: isInvalidating } =
@@ -81,7 +62,7 @@ export const VaultChainCoinPage = () => {
         title={<PageHeaderTitle>{coin.ticker}</PageHeaderTitle>}
       />
       <PageContent gap={16}>
-        <VaultPrimaryActions value={getCoinKey(coin)} />
+        <VaultPrimaryActions value={coin} />
         <Panel>
           <MatchQuery
             value={balanceQuery}

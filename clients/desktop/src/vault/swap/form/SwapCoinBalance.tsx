@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { CoinKey } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
-import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { ValueProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
@@ -28,7 +27,7 @@ export const SwapCoinBalance = ({ value }: ValueProp<CoinKey>) => {
 
   const coin = useCurrentVaultCoin(value);
 
-  const query = useBalanceQuery(getStorageCoinKey(coin));
+  const query = useBalanceQuery(coin);
 
   return (
     <Container>

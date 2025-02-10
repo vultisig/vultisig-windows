@@ -1,19 +1,20 @@
+import { EvmChain } from '@core/chain/Chain';
 import { groupItems } from '@lib/utils/array/groupItems';
 import { isEmpty } from '@lib/utils/array/isEmpty';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { splitBy } from '@lib/utils/array/splitBy';
+import { withoutUndefined } from '@lib/utils/array/withoutUndefined';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { mergeRecords } from '@lib/utils/record/mergeRecords';
 import { useQueries } from '@tanstack/react-query';
 
-import { isNativeCoin } from '../../chain/utils/isNativeCoin';
 import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEagerQuery';
-import { EvmChain } from '@core/chain/Chain';
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency';
-import { CoinKey, coinKeyToString, PriceProviderIdField } from '../Coin';
+import { Coin, CoinKey, coinKeyToString } from '../Coin';
 import { getErc20Prices } from '../price/api/evm/getErc20Prices';
 import { getCoinPrices } from '../price/api/getCoinPrices';
 import { FiatCurrency } from '../price/FiatCurrency';
+import { isFeeCoin } from '../utils/isFeeCoin';
 
 type GetCoinPricesQueryKeysInput = {
   coins: CoinKey[];
@@ -26,7 +27,7 @@ export const getCoinPricesQueryKeys = (input: GetCoinPricesQueryKeysInput) => [
 ];
 
 type UseCoinPricesQueryInput = {
-  coins: (CoinKey & PriceProviderIdField)[];
+  coins: Pick<Coin, 'id' | 'chain' | 'priceProviderId'>[];
   fiatCurrency?: FiatCurrency;
 };
 
@@ -38,7 +39,7 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
   const queries = [];
 
   const [regularCoins, erc20Coins] = splitBy(input.coins, coin =>
-    isOneOf(coin.chain, Object.values(EvmChain)) && !isNativeCoin(coin) ? 1 : 0
+    isOneOf(coin.chain, Object.values(EvmChain)) && !isFeeCoin(coin) ? 1 : 0
   );
 
   if (!isEmpty(erc20Coins)) {
@@ -79,7 +80,7 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
       }),
       queryFn: async () => {
         const prices = await getCoinPrices({
-          ids: regularCoins.map(coin => coin.priceProviderId),
+          ids: withoutUndefined(regularCoins.map(coin => coin.priceProviderId)),
           fiatCurrency,
         });
 

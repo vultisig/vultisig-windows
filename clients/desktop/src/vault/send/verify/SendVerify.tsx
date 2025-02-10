@@ -13,7 +13,6 @@ import {
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { OnBackProp } from '../../../lib/ui/props';
@@ -46,10 +45,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const formatFiat = useFormatFiatAmount();
 
   const coinPriceQuery = useCoinPriceQuery({
-    coin: {
-      ...getStorageCoinKey(coin),
-      priceProviderId: coin.price_provider_id,
-    },
+    coin,
   });
 
   const cappedAmountQuery = useSendCappedAmountQuery();

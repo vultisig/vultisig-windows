@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf';
+import { Chain } from '@core/chain/Chain';
 import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
@@ -6,11 +7,9 @@ import { useTranslation } from 'react-i18next';
 
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { coinKeyFromString } from '../../../coin/Coin';
-import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { Chain } from '@core/chain/Chain';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 import {
@@ -62,7 +61,7 @@ export const DepositConfirmButton = ({
   const startKeysign = (type: DepositType) => {
     // TODO: handle affiliate fee and percentage
     const keysignPayload = create(KeysignPayloadSchema, {
-      coin: storageCoinToCoin(coin),
+      coin,
       memo,
       blockchainSpecific: shouldBePresent(chainSpecificQuery.data),
       vaultLocalPartyId: vault.local_party_id,

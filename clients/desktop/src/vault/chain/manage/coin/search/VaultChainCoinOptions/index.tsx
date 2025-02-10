@@ -2,8 +2,6 @@ import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
 import { t } from 'i18next';
 import { useCallback, useMemo } from 'react';
 
-import { assertChainField } from '../../../../../../chain/utils/assertChainField';
-import { chainFeeCoin } from '../../../../../../coin/chainFeeCoins';
 import { chainTokens } from '../../../../../../coin/chainTokens';
 import {
   areEqualCoins,
@@ -11,8 +9,8 @@ import {
   coinKeyToString,
 } from '../../../../../../coin/Coin';
 import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitelistedCoinsQuery';
-import { fromStorageCoin } from '../../../../../../coin/utils/fromStorageCoin';
 import { getCoinSearchString } from '../../../../../../coin/utils/getCoinSearchStrings';
+import { isFeeCoin } from '../../../../../../coin/utils/isFeeCoin';
 import { sortCoinsAlphabetically } from '../../../../../../coin/utils/sortCoinsAlphabetically';
 import { NonEmptyOnly } from '../../../../../../lib/ui/base/NonEmptyOnly';
 import { useTransform } from '../../../../../../lib/ui/hooks/useTransform';
@@ -30,15 +28,7 @@ export const VaultChainCoinOptions = () => {
   const [searchQuery] = useCurrentSearch();
   const selectedCoins = useTransform(
     useCurrentVaultChainCoins(chain),
-    useCallback(
-      coins =>
-        coins
-          .filter(
-            coin => !areEqualCoins(assertChainField(coin), chainFeeCoin[chain])
-          )
-          .map(fromStorageCoin),
-      [chain]
-    )
+    useCallback(coins => coins.filter(coin => !isFeeCoin(coin)), [])
   );
 
   const allItems = useMemo(() => {

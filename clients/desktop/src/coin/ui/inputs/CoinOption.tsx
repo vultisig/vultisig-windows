@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-import { storage } from '../../../../wailsjs/go/models';
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon';
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
@@ -9,7 +8,9 @@ import { panel } from '../../../lib/ui/panel/Panel';
 import { IsActiveProp, OnClickProp, ValueProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { getColor, matchColor } from '../../../lib/ui/theme/getters';
+import { Coin } from '../../Coin';
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc';
+import { isFeeCoin } from '../../utils/isFeeCoin';
 
 const Container = styled(UnstyledButton)<IsActiveProp>`
   ${panel()};
@@ -28,15 +29,15 @@ export const CoinOption = ({
   value,
   onClick,
   isActive,
-}: ValueProp<storage.Coin> & OnClickProp & IsActiveProp) => {
-  const { is_native_token, chain, logo, ticker } = value;
+}: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
+  const { chain, logo, ticker } = value;
 
   return (
     <Container isActive={isActive} onClick={onClick}>
       <HStack fullWidth alignItems="center" gap={12}>
         <ChainCoinIcon
           coinSrc={getCoinLogoSrc(logo)}
-          chainSrc={is_native_token ? undefined : getChainEntityIconSrc(chain)}
+          chainSrc={isFeeCoin(value) ? undefined : getChainEntityIconSrc(chain)}
           style={{ fontSize: 32 }}
         />
         <VStack alignItems="start">

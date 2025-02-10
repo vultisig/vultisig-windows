@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain';
 import { order } from '@lib/utils/array/order';
 import { sum } from '@lib/utils/array/sum';
 import { recordMap } from '@lib/utils/record/recordMap';
@@ -8,9 +9,7 @@ import { coinKeyToString } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
-import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import { EagerQuery } from '../../lib/ui/query/Query';
-import { Chain } from '@core/chain/Chain';
 import {
   useCurrentVaultCoins,
   useCurrentVaultCoinsByChain,
@@ -29,24 +28,19 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
   const groupedCoins = useCurrentVaultCoinsByChain();
 
   const pricesQuery = useCoinPricesQuery({
-    coins: coins.map(coin => ({
-      ...getStorageCoinKey(coin),
-      priceProviderId: coin.price_provider_id,
-    })),
+    coins: coins,
   });
 
-  const balancesQuery = useBalancesQuery(coins.map(getStorageCoinKey));
+  const balancesQuery = useBalancesQuery(coins);
 
   return useMemo(() => {
     const isPending = pricesQuery.isPending || balancesQuery.isPending;
 
     const balancesByChain = recordMap(groupedCoins, coins => {
       return coins.map(coin => {
-        const coinKey = getStorageCoinKey(coin);
-
         const getAmount = () => {
           if (balancesQuery.data) {
-            const key = coinKeyToString(coinKey);
+            const key = coinKeyToString(coin);
             if (key in balancesQuery.data) {
               return balancesQuery.data[key];
             }
@@ -56,14 +50,11 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
         };
 
         const price = pricesQuery.data
-          ? pricesQuery.data[coinKeyToString(coinKey)]
+          ? pricesQuery.data[coinKeyToString(coin)]
           : 0;
 
         return {
-          ...coinKey,
-          ticker: coin.ticker,
-          decimals: coin.decimals,
-          logo: coin.logo,
+          ...coin,
           amount: getAmount(),
           price,
         };

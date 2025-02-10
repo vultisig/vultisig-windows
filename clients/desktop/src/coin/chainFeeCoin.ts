@@ -15,7 +15,7 @@ type FeeCoin = PriceProviderIdField &
   LogoField &
   CoinKey;
 
-const leanChainFeeCoins: Record<Chain, Omit<FeeCoin, 'chain' | 'id'>> = {
+const leanChainFeeCoin: Record<Chain, Omit<FeeCoin, 'chain' | 'id'>> = {
   [Chain.Bitcoin]: {
     ticker: 'BTC',
     logo: 'btc',
@@ -199,7 +199,7 @@ const leanChainFeeCoins: Record<Chain, Omit<FeeCoin, 'chain' | 'id'>> = {
 };
 
 export const chainFeeCoin: Record<Chain, FeeCoin> = recordMap(
-  leanChainFeeCoins,
+  leanChainFeeCoin,
   (coin, chain) => ({
     ...coin,
     chain,

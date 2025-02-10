@@ -2,7 +2,6 @@ import { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { areEqualCoins, Coin } from '../../../coin/Coin';
-import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { interactive } from '../../../lib/ui/css/interactive';
 import { sameDimensions } from '../../../lib/ui/css/sameDimensions';
 import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus';
@@ -30,7 +29,7 @@ export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const [optimisticIsChecked, setOptimisticIsChecked] = useState(false);
 
   const coins = useCurrentVaultCoins();
-  const isChecked = coins.some(c => areEqualCoins(getStorageCoinKey(c), value));
+  const isChecked = coins.some(c => areEqualCoins(c, value));
 
   const { mutate: saveCoin, isPending: isSaving } = useSaveCoinMutation();
   const { mutate: deleteCoin, isPending: isDeleting } = useDeleteCoinMutation();

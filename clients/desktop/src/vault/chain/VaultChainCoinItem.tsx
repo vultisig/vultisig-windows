@@ -6,9 +6,9 @@ import { EntityWithPrice } from '../../chain/EntityWithPrice';
 import { ChainCoinIcon } from '../../chain/ui/ChainCoinIcon';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
-import { isNativeCoin } from '../../chain/utils/isNativeCoin';
 import { CoinAmount, CoinKey } from '../../coin/Coin';
 import { getCoinLogoSrc } from '../../coin/logo/getCoinLogoSrc';
+import { isFeeCoin } from '../../coin/utils/isFeeCoin';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { ValueProp } from '../../lib/ui/props';
 import { Text } from '../../lib/ui/text';
@@ -37,7 +37,7 @@ export const VaultChainCoinItem = ({
           shouldDisplayChainLogo({
             ticker,
             chain,
-            isNative: isNativeCoin({ id, chain }),
+            isNative: isFeeCoin({ id, chain }),
           })
             ? getChainEntityIconSrc(chain)
             : undefined

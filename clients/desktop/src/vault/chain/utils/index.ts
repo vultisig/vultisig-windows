@@ -1,4 +1,4 @@
-import { chainFeeCoin } from '../../../coin/chainFeeCoins';
+import { chainFeeCoin } from '../../../coin/chainFeeCoin';
 import { Chain } from '@core/chain/Chain';
 
 const ETHTicker = chainFeeCoin[Chain.Ethereum].ticker;

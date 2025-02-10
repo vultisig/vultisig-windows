@@ -1,6 +1,7 @@
-import { storage } from '../../../../wailsjs/go/models';
-import { chainFeeCoin } from '../../../coin/chainFeeCoins';
 import { Chain } from '@core/chain/Chain';
+
+import { chainFeeCoin } from '../../../coin/chainFeeCoin';
+import { Coin } from '../../../coin/Coin';
 import { ChainAction } from '../ChainAction';
 
 function getDustDepositAmountString(decimals: number) {
@@ -10,7 +11,7 @@ function getDustDepositAmountString(decimals: number) {
 export const getFormattedFormData = (
   formData: Record<string, unknown>,
   chainAction: ChainAction,
-  coin: storage.Coin
+  coin: Coin
 ) => {
   const formattedFormData = { ...formData };
   const { decimals } = chainFeeCoin[coin.chain as Chain];

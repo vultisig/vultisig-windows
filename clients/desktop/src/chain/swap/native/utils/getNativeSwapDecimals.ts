@@ -1,10 +1,8 @@
-import { chainFeeCoin } from '../../../../coin/chainFeeCoins';
-import { Chain } from '@core/chain/Chain';
+import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
 import { NativeSwapEnabledChain } from '../NativeSwapChain';
 
 export const getNativeSwapDecimals = (chain: NativeSwapEnabledChain) => {
-  const { decimals } =
-    chainFeeCoin[chain === Chain.MayaChain ? Chain.MayaChain : Chain.THORChain];
+  const { decimals } = chainFeeCoin[chain];
 
   return decimals;
 };

@@ -3,7 +3,7 @@ import { WalletCore } from '@trustwallet/wallet-core';
 
 import { storage } from '../../../wailsjs/go/models';
 import { SaveCoins } from '../../../wailsjs/go/storage/Store';
-import { chainFeeCoin } from '../../coin/chainFeeCoins';
+import { chainFeeCoin } from '../../coin/chainFeeCoin';
 import { coinToStorageCoin } from '../../coin/utils/coin';
 import { createCoin } from '../../coin/utils/createCoin';
 import { getVaultPublicKey } from '../publicKey/getVaultPublicKey';

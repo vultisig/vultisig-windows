@@ -33,10 +33,7 @@ export const useSwapQuoteQuery = () => {
   const toCoin = useCurrentVaultCoin(toCoinKey);
 
   const fromCoinUsdPrice = useCoinPriceQuery({
-    coin: {
-      ...fromCoinKey,
-      priceProviderId: fromCoin.price_provider_id,
-    },
+    coin: fromCoin,
     fiatCurrency: 'usd',
   });
 

@@ -4,11 +4,11 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { WalletCore } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 import { deriveAddress } from '../../chain/utils/deriveAddress';
-import { isNativeCoin } from '../../chain/utils/isNativeCoin';
 import { stripHexPrefix } from '../../chain/utils/stripHexPrefix';
 import { DecimalsField, PriceProviderIdField, TickerField } from '../Coin';
 import { CoinKey } from '../Coin';
 import { LogoField } from '../Coin';
+import { isFeeCoin } from './isFeeCoin';
 
 type CreateCoinInput = {
   coin: LogoField &
@@ -35,7 +35,7 @@ export const createCoin = ({
     walletCore.HexCoding.encode(publicKey.data())
   );
 
-  const isNativeToken = isNativeCoin(coin);
+  const isNativeToken = isFeeCoin(coin);
 
   return create(CoinSchema, {
     ...coin,

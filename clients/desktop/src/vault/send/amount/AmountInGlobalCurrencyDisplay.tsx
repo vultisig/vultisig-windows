@@ -38,10 +38,7 @@ export const AmountInGlobalCurrencyDisplay = () => {
   const [fiatCurrency] = useFiatCurrency();
 
   const priceQuery = useCoinPriceQuery({
-    coin: {
-      ...coinKey,
-      priceProviderId: coin.price_provider_id,
-    },
+    coin,
   });
 
   return (

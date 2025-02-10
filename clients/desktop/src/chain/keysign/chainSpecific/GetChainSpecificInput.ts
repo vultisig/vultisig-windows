@@ -1,7 +1,7 @@
-import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
+import { AccountCoin } from '../../../coin/Coin';
 
 export type GetChainSpecificInput<T = any> = {
-  coin: Coin;
+  coin: AccountCoin;
   receiver?: string;
   feeSettings?: T;
   isDeposit?: boolean;

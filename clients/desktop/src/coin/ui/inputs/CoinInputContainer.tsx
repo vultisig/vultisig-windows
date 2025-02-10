@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon';
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
-import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
 import {
   textInputBackground,
@@ -17,6 +16,7 @@ import { getColor } from '../../../lib/ui/theme/getters';
 import { IconWrapper } from '../../../pages/edItVault/EditVaultPage.styles';
 import { CoinKey, LogoField, TickerField } from '../../Coin';
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc';
+import { isFeeCoin } from '../../utils/isFeeCoin';
 
 const Container = styled(UnstyledButton)`
   ${textInputFrame};
@@ -53,7 +53,7 @@ export const CoinInputContainer = ({
         <ChainCoinIcon
           coinSrc={getCoinLogoSrc(value.logo)}
           chainSrc={
-            isNativeCoin(value) ? undefined : getChainEntityIconSrc(value.chain)
+            isFeeCoin(value) ? undefined : getChainEntityIconSrc(value.chain)
           }
           style={{ fontSize: 32 }}
         />

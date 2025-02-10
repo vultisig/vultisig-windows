@@ -1,8 +1,8 @@
 import { storage } from '../../../wailsjs/go/models';
-import { Coin } from '../Coin';
+import { AccountCoin } from '../Coin';
 import { getStorageCoinKey } from './storageCoin';
 
-export const fromStorageCoin = (storageCoin: storage.Coin): Coin => {
+export const fromStorageCoin = (storageCoin: storage.Coin): AccountCoin => {
   const { chain, id } = getStorageCoinKey(storageCoin);
 
   return {
@@ -12,5 +12,6 @@ export const fromStorageCoin = (storageCoin: storage.Coin): Coin => {
     logo: storageCoin.logo,
     chain,
     id,
+    address: storageCoin.address,
   };
 };
