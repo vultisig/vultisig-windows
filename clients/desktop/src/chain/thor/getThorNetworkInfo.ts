@@ -1,6 +1,6 @@
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { cosmosTendermintRpcUrl } from '../cosmos/cosmosTendermintRpcUrl';
 
 interface NetworkInfo {

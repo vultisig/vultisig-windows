@@ -1,3 +1,5 @@
+import { getChainKind } from '@core/chain/ChainKind';
+import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm';
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 import { assertField } from '@lib/utils/record/assertField';
 import { useMutation } from '@tanstack/react-query';
@@ -24,7 +26,6 @@ import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncry
 import { useCurrentVault } from '../../../state/currentVault';
 import { customMessageConfig } from '../../customMessage/config';
 import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload';
-import { getTssKeysignType } from '../../utils/getTssKeysignType';
 import { getTxInputData } from '../../utils/getTxInputData';
 
 export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
@@ -76,7 +77,7 @@ export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
             derive_path: walletCore.CoinTypeExt.derivationPath(
               getCoinType({ walletCore, chain })
             ),
-            is_ecdsa: getTssKeysignType(chain) === 'ecdsa',
+            is_ecdsa: signatureAlgorithms[getChainKind(chain)] === 'ecdsa',
             vault_password: password,
           });
         },
@@ -92,7 +93,9 @@ export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
                 chain: customMessageConfig.chain,
               })
             ),
-            is_ecdsa: customMessageConfig.tssType === 'ecdsa',
+            is_ecdsa:
+              signatureAlgorithms[getChainKind(customMessageConfig.chain)] ===
+              'ecdsa',
             vault_password: password,
           });
         },

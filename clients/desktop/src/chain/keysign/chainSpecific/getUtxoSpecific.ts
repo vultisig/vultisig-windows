@@ -6,7 +6,7 @@ import {
 
 import { getCoinBalance } from '../../../coin/balance/getCoinBalance';
 import { getCoinKey } from '../../../coin/utils/coin';
-import { UtxoChain } from '../../../model/chain';
+import { UtxoChain } from '@core/chain/Chain';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
 import { toChainAmount } from '../../utils/toChainAmount';
 import { getUtxoStats } from '../../utxo/blockchair/getUtxoStats';

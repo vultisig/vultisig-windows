@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { useCurrentSearch } from '../../../../lib/ui/search/CurrentSearchProvider';
-import { Chain } from '../../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { ManageVaultChain } from '../ManageVaultChain';
 
 const ManageVaultChainsList = () => {

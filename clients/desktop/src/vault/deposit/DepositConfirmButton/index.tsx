@@ -10,7 +10,7 @@ import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 import {

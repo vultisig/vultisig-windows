@@ -10,7 +10,7 @@ import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
 import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import { EagerQuery } from '../../lib/ui/query/Query';
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import {
   useCurrentVaultCoins,
   useCurrentVaultCoinsByChain,

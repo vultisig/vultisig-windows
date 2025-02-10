@@ -1,5 +1,5 @@
 import { getUtxoAddressInfo } from '../../chain/utxo/blockchair/getUtxoAddressInfo';
-import { UtxoChain } from '../../model/chain';
+import { UtxoChain } from '@core/chain/Chain';
 import { CoinBalanceResolver } from './CoinBalanceResolver';
 
 export const getUtxoCoinBalance: CoinBalanceResolver<

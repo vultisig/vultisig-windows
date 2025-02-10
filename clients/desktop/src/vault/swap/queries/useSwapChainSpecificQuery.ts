@@ -9,7 +9,7 @@ import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { isOneOf } from '@lib/utils/array/isOneOf';
-import { UtxoChain } from '../../../model/chain';
+import { UtxoChain } from '@core/chain/Chain';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';

@@ -1,3 +1,6 @@
+import { getChainKind } from '@core/chain/ChainKind';
+import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm';
+import { signatureFormats } from '@core/chain/signing/SignatureFormat';
 import { getLastItem } from '@lib/utils/array/getLastItem';
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 import { chainPromises } from '@lib/utils/promise/chainPromises';
@@ -13,8 +16,6 @@ import { generateSignature } from '../../../../chain/tx/signature/generateSignat
 import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
-import { getChainKind } from '../../../../model/chain';
-import { signatureFormatRecord } from '../../../../model/chain';
 import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
 import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
@@ -23,7 +24,6 @@ import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncry
 import { useCurrentVault } from '../../../state/currentVault';
 import { customMessageConfig } from '../../customMessage/config';
 import { getKeysignChain } from '../../utils/getKeysignChain';
-import { getTssKeysignType } from '../../utils/getTssKeysignType';
 import { getTxInputData } from '../../utils/getTxInputData';
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
@@ -59,7 +59,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
           const msgs = groupedMsgs.flat().sort();
 
-          const tssType = getTssKeysignType(chain);
+          const tssType = signatureAlgorithms[getChainKind(chain)];
 
           const coinType = getCoinType({ walletCore, chain });
 
@@ -117,11 +117,11 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             sessionId,
             encryptionKeyHex,
             serverUrl,
-            customMessageConfig.tssType
+            signatureAlgorithms[getChainKind(customMessageConfig.chain)]
           );
 
           const signatureFormat =
-            signatureFormatRecord[getChainKind(customMessageConfig.chain)];
+            signatureFormats[getChainKind(customMessageConfig.chain)];
 
           const result = generateSignature({
             walletCore,

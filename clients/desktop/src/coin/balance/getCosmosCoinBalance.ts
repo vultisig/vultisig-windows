@@ -4,7 +4,7 @@ import { getCosmosClient } from '../../chain/cosmos/client/getCosmosClient';
 import { cosmosFeeCoinDenom } from '../../chain/cosmos/cosmosFeeCoinDenom';
 import { getCosmosWasmTokenBalanceUrl } from '../../chain/cosmos/cosmosRpcUrl';
 import { isNativeCoin } from '../../chain/utils/isNativeCoin';
-import { CosmosChain } from '../../model/chain';
+import { CosmosChain } from '@core/chain/Chain';
 import { CoinBalanceResolver } from './CoinBalanceResolver';
 
 export const getCosmosCoinBalance: CoinBalanceResolver<

@@ -3,7 +3,7 @@ import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { bigIntToHex } from '../../utils/bigIntToHex';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';
 import { getSigningInputEnvelopedTxFields } from './getSigningInputEnvelopedTxFields';

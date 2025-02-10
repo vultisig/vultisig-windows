@@ -14,7 +14,7 @@ import {
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { ValueProp } from '../../../lib/ui/props';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 
 export const KeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
   const { erc20ApprovePayload, toAmount: fromAmount } = value;

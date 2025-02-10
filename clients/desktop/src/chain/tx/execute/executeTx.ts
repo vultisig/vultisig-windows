@@ -1,4 +1,5 @@
-import { ChainKind, getChainKind } from '../../../model/chain';
+import { ChainKind, getChainKind } from '@core/chain/ChainKind';
+
 import { executeCosmosTx } from './executeCosmosTx';
 import { executeEvmTx } from './executeEvmTx';
 import { executePolkadotTx } from './executePolkadotTx';

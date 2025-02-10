@@ -1,3 +1,4 @@
+import { EvmChain } from '@core/chain/Chain';
 import { formatAmount } from '@lib/utils/formatAmount';
 import { useTranslation } from 'react-i18next';
 
@@ -8,7 +9,6 @@ import { InputContainer } from '../../../../../../lib/ui/inputs/InputContainer';
 import { InputLabel } from '../../../../../../lib/ui/inputs/InputLabel';
 import { Spinner } from '../../../../../../lib/ui/loaders/Spinner';
 import { MatchQuery } from '../../../../../../lib/ui/query/components/MatchQuery';
-import { EvmChain } from '../../../../../../model/chain';
 import { useCurrentSendCoin } from '../../../../state/sendCoin';
 import { FeeContainer } from '../../FeeContainer';
 

@@ -1,4 +1,4 @@
-import { EvmChain } from '../../model/chain';
+import { EvmChain } from '@core/chain/Chain';
 
 export const evmNativeTokenGasLimit: Record<EvmChain, number> = {
   [EvmChain.Ethereum]: 23000,

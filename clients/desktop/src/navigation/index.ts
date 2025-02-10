@@ -4,7 +4,7 @@ import { ReshareMessage } from '@core/communication/vultisig/keygen/v1/reshare_m
 import { KeysignMessage } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
-import { Chain } from '../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { KeygenType } from '../vault/keygen/KeygenType';
 import { SetupVaultType } from '../vault/setup/type/SetupVaultType';
 

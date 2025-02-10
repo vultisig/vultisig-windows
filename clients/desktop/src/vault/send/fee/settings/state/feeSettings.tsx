@@ -1,3 +1,5 @@
+import { Chain } from '@core/chain/Chain';
+import { omit } from '@lib/utils/record/omit';
 import { useCallback, useMemo } from 'react';
 
 import { EvmFeeSettings } from '../../../../../chain/evm/fee/EvmFeeSettings';
@@ -5,8 +7,6 @@ import { isNativeCoin } from '../../../../../chain/utils/isNativeCoin';
 import { UtxoFeeSettings } from '../../../../../chain/utxo/fee/UtxoFeeSettings';
 import { ChildrenProp } from '../../../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../../../lib/ui/state/getStateProviderSetup';
-import { omit } from '@lib/utils/record/omit';
-import { Chain } from '../../../../../model/chain';
 import { useCurrentSendCoin } from '../../../state/sendCoin';
 
 type FeeSettings = EvmFeeSettings | UtxoFeeSettings;

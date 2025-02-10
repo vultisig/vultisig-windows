@@ -1,6 +1,6 @@
+import { EvmChain } from '@core/chain/Chain';
 import { describe, expect, it, vi } from 'vitest';
 
-import { EvmChain } from '../../../../model/chain';
 import { getEvmGasLimit } from '../getEvmGasLimit';
 
 vi.mock('../evmGasLimit', () => ({

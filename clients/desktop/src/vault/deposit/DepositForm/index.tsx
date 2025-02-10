@@ -10,7 +10,7 @@ import { IconWrapper } from '../../../lib/ui/icons/IconWrapper';
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';

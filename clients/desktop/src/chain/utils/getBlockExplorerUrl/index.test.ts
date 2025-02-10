@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { getBlockExplorerUrl } from '../getBlockExplorerUrl';
 
 describe('getBlockExplorerUrl', () => {

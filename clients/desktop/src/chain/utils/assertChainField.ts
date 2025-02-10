@@ -1,6 +1,6 @@
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 
 export const assertChainField = <C extends Chain, T extends { chain?: string }>(
   input: T

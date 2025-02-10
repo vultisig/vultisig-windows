@@ -1,5 +1,5 @@
 import { chainFeeCoin } from '../../../coin/chainFeeCoin';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 
 const ETHTicker = chainFeeCoin[Chain.Ethereum].ticker;
 export const shouldDisplayChainLogo = ({

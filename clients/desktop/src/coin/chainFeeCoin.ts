@@ -1,6 +1,6 @@
 import { recordMap } from '@lib/utils/record/recordMap';
 
-import { Chain } from '../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { CoinMeta } from '../model/coin-meta';
 
 type ChainFeeCoinMeta = Omit<

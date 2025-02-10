@@ -1535,6 +1535,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@core/chain@workspace:core/chain":
+  version: 0.0.0-use.local
+  resolution: "@core/chain@workspace:core/chain"
+  languageName: unknown
+  linkType: soft
+
 "@core/communication@workspace:core/communication":
   version: 0.0.0-use.local
   resolution: "@core/communication@workspace:core/communication"

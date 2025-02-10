@@ -1,6 +1,6 @@
 import { deriveAddress } from '../../chain/utils/deriveAddress';
 import { useStateDependentQuery } from '../../lib/ui/query/hooks/useStateDependentQuery';
-import { Chain } from '../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { useVaultPublicKeyQuery } from '../publicKey/queries/useVaultPublicKeyQuery';
 import { useCurrentVaultId } from '../state/currentVaultId';

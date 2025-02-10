@@ -1,5 +1,5 @@
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
-import { Chain } from '../../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { cosmosGasLimitRecord } from '../../../cosmos/cosmosGasLimitRecord';
 import { KeysignChainSpecific } from '../../../keysign/KeysignChainSpecific';
 import { polkadotConfig } from '../../../polkadot/config';

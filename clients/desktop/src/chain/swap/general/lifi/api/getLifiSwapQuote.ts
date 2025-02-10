@@ -1,3 +1,4 @@
+import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { match } from '@lib/utils/match';
 import { memoize } from '@lib/utils/memoize';
@@ -5,7 +6,6 @@ import { TransferDirection } from '@lib/utils/TransferDirection';
 import { createConfig, getQuote } from '@lifi/sdk';
 
 import { CoinKey } from '../../../../../coin/Coin';
-import { DeriveChainKind, getChainKind } from '../../../../../model/chain';
 import { defaultEvmSwapGasLimit } from '../../../../evm/evmGasLimit';
 import { GeneralSwapQuote } from '../../GeneralSwapQuote';
 import { lifiConfig } from '../config';

@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 import { Text } from '../../../../../lib/ui/text';
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { Chain } from '../../../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { useAssertWalletCore } from '../../../../../providers/WalletCoreProvider';
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';

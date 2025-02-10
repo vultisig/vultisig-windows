@@ -1,6 +1,6 @@
 import { storage } from '../../../../wailsjs/go/models';
 import { chainFeeCoin } from '../../../coin/chainFeeCoin';
-import { Chain } from '../../../model/chain';
+import { Chain } from '@core/chain/Chain';
 import { ChainAction } from '../ChainAction';
 
 function getDustDepositAmountString(decimals: number) {

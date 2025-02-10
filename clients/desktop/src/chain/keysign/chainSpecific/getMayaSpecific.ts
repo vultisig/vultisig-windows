@@ -4,7 +4,7 @@ import {
   MAYAChainSpecificSchema,
 } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 
-import { CosmosChain } from '../../../model/chain';
+import { CosmosChain } from '@core/chain/Chain';
 import { getCosmosAccountInfo } from '../../cosmos/account/getCosmosAccountInfo';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
 
