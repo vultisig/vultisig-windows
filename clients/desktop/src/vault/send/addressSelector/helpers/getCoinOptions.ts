@@ -1,4 +1,4 @@
-import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
+import { chainFeeCoin } from '../../../../coin/chainFeeCoins';
 
 export const getCoinOptions = () => {
   const coins = Object.values(chainFeeCoin);

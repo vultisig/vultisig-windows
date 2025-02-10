@@ -1,49 +1,72 @@
 import { t } from 'i18next';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import { areEqualCoins, coinKeyToString } from '../../../../../../coin/Coin';
-import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitelistedCoinsQuery';
+import { assertChainField } from '../../../../../../chain/utils/assertChainField';
+import { chainFeeCoin } from '../../../../../../coin/chainFeeCoins';
+import { chainTokens } from '../../../../../../coin/chainTokens';
 import {
-  getCoinMetaKey,
-  getCoinMetaSearchStrings,
-} from '../../../../../../coin/utils/coinMeta';
+  areEqualCoins,
+  Coin,
+  coinKeyToString,
+} from '../../../../../../coin/Coin';
+import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitelistedCoinsQuery';
+import { fromStorageCoin } from '../../../../../../coin/utils/fromStorageCoin';
+import { getCoinSearchString } from '../../../../../../coin/utils/getCoinSearchStrings';
+import { sortCoinsAlphabetically } from '../../../../../../coin/utils/sortCoinsAlphabetically';
+import { NonEmptyOnly } from '../../../../../../lib/ui/base/NonEmptyOnly';
+import { useTransform } from '../../../../../../lib/ui/hooks/useTransform';
 import { VStack } from '../../../../../../lib/ui/layout/Stack';
 import { useCurrentSearch } from '../../../../../../lib/ui/search/CurrentSearchProvider';
 import { useSearchFilter } from '../../../../../../lib/ui/search/hooks/useSearchFilter';
 import { Text } from '../../../../../../lib/ui/text';
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
+import { useCurrentVaultChainCoins } from '../../../../../state/currentVault';
 import { useCurrentVaultChain } from '../../../../useCurrentVaultChain';
 import { ManageVaultChainCoin } from '../../ManageVaultChainCoin';
-import { useCoinsForChainCoinOptionsMenu } from './hooks/useCoinsForChainCoinOptionsMenu';
 
 export const VaultChainCoinOptions = () => {
   const chain = useCurrentVaultChain();
   const query = useWhitelistedCoinsQuery(chain);
   const [searchQuery] = useCurrentSearch();
-  const { selectedCoins, unselectedCoins } =
-    useCoinsForChainCoinOptionsMenu(chain);
+  const selectedCoins = useTransform(
+    useCurrentVaultChainCoins(chain),
+    useCallback(
+      coins =>
+        coins
+          .filter(coin =>
+            areEqualCoins(assertChainField(coin), chainFeeCoin[chain])
+          )
+          .map(fromStorageCoin),
+      [chain]
+    )
+  );
 
-  const initialItems = useMemo(() => {
-    const suggestedItems = [...unselectedCoins];
+  const allItems = useMemo(() => {
+    const options: Coin[] = [];
 
-    return withoutDuplicates(suggestedItems, (one, another) =>
-      areEqualCoins(getCoinMetaKey(one), getCoinMetaKey(another))
-    ).filter(({ isNativeToken }) => !isNativeToken);
-  }, [unselectedCoins]);
+    if (query.data) {
+      options.push(...query.data);
+    }
 
-  const allUniqueItems = useMemo(() => {
-    return withoutDuplicates(
-      [...initialItems, ...(query.data ?? [])],
-      (one, another) =>
-        areEqualCoins(getCoinMetaKey(one), getCoinMetaKey(another))
+    const tokens = chainTokens[chain];
+
+    if (tokens) {
+      options.push(...tokens);
+    }
+
+    return options.filter(
+      coin =>
+        !selectedCoins.some(selectedCoin => areEqualCoins(selectedCoin, coin))
     );
-  }, [initialItems, query.data]);
+  }, [chain, query.data, selectedCoins]);
 
-  const options = useSearchFilter({
-    searchQuery,
-    items: searchQuery ? allUniqueItems : initialItems,
-    getSearchStrings: getCoinMetaSearchStrings,
-  });
+  const options = useTransform(
+    useSearchFilter({
+      searchQuery,
+      items: allItems,
+      getSearchStrings: getCoinSearchString,
+    }),
+    sortCoinsAlphabetically
+  );
 
   const sortedOptions = useMemo(() => {
     return options.sort((a, b) => a.ticker.localeCompare(b.ticker));
@@ -51,32 +74,38 @@ export const VaultChainCoinOptions = () => {
 
   return (
     <>
-      {selectedCoins.length > 0 && (
-        <>
-          <Text size={18} color="shy">
-            {t('selected').toUpperCase()}
-          </Text>
-          {selectedCoins.map(option => (
-            <ManageVaultChainCoin
-              key={coinKeyToString(getCoinMetaKey(option))}
-              value={option}
-            />
-          ))}
-        </>
-      )}
-      {sortedOptions.length > 0 && (
-        <>
-          <Text size={18} color="shy">
-            {t('tokens').toUpperCase()}
-          </Text>
-          {sortedOptions.map(option => (
-            <ManageVaultChainCoin
-              key={coinKeyToString(getCoinMetaKey(option))}
-              value={option}
-            />
-          ))}
-        </>
-      )}
+      <NonEmptyOnly
+        value={selectedCoins}
+        render={coins => (
+          <>
+            <Text size={18} color="shy">
+              {t('selected').toUpperCase()}
+            </Text>
+            {coins.map(option => (
+              <ManageVaultChainCoin
+                key={coinKeyToString(option)}
+                value={option}
+              />
+            ))}
+          </>
+        )}
+      />
+      <NonEmptyOnly
+        value={sortedOptions}
+        render={coins => (
+          <>
+            <Text size={18} color="shy">
+              {t('tokens').toUpperCase()}
+            </Text>
+            {coins.map(option => (
+              <ManageVaultChainCoin
+                key={coinKeyToString(option)}
+                value={option}
+              />
+            ))}
+          </>
+        )}
+      />
       {searchQuery && query.isPending && (
         <VStack fullWidth alignItems="center">
           <Text>Searching ...</Text>

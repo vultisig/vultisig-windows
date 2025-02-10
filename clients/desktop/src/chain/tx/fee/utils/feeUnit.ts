@@ -1,4 +1,4 @@
-import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
+import { chainFeeCoin } from '../../../../coin/chainFeeCoins';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { Chain, EvmChain, UtxoChain } from '@core/chain/Chain';
 import { getUtxoFeeUnit } from '../../../utxo/fee/getUtxoFeeUnit';

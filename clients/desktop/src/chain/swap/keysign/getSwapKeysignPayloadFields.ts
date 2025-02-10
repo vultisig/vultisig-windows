@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf';
+import { EvmChain } from '@core/chain/Chain';
 import {
   OneInchQuoteSchema,
   OneInchSwapPayloadSchema,
@@ -10,11 +11,9 @@ import { isOneOf } from '@lib/utils/array/isOneOf';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 
-import { chainFeeCoin } from '../../../coin/chainFeeCoin';
+import { chainFeeCoin } from '../../../coin/chainFeeCoins';
 import { areEqualCoins } from '../../../coin/Coin';
 import { getCoinKey } from '../../../coin/utils/coin';
-import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
-import { EvmChain } from '@core/chain/Chain';
 import { fromChainAmount } from '../../utils/fromChainAmount';
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote';
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload';
@@ -91,7 +90,7 @@ export const getSwapKeysignPayloadFields = ({
         return result;
       }
 
-      const nativeFeeCoin = getCoinMetaKey(chainFeeCoin[swapChain]);
+      const nativeFeeCoin = chainFeeCoin[swapChain];
 
       const isDeposit = areEqualCoins(fromCoinKey, nativeFeeCoin);
 

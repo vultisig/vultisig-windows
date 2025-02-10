@@ -103,10 +103,10 @@ export const VaultChainPage = () => {
   useEffect(() => {
     if (findTokensQuery.data && publicKeyQuery.data) {
       saveCoins(
-        findTokensQuery.data.map(coinMeta =>
+        findTokensQuery.data.map(coin =>
           coinToStorageCoin(
             createCoin({
-              coinMeta,
+              coin,
               publicKey: publicKeyQuery.data,
               walletCore,
             })
@@ -119,10 +119,10 @@ export const VaultChainPage = () => {
         [chain]: withoutDuplicates(
           [
             ...currentChainCoins,
-            ...findTokensQuery.data.map(coinMeta =>
+            ...findTokensQuery.data.map(coin =>
               coinToStorageCoin(
                 createCoin({
-                  coinMeta,
+                  coin,
                   publicKey: publicKeyQuery.data,
                   walletCore,
                 })

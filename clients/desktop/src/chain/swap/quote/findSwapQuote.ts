@@ -6,7 +6,7 @@ import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain';
 import { pick } from '@lib/utils/record/pick';
 import { TransferDirection } from '@lib/utils/TransferDirection';
 
-import { EntityWithDecimals } from '../../../coin/Coin';
+import { DecimalsField } from '../../../coin/Coin';
 import { ChainAccount } from '../../ChainAccount';
 import { toChainAmount } from '../../utils/toChainAmount';
 import { getLifiSwapQuote } from '../general/lifi/api/getLifiSwapQuote';
@@ -23,7 +23,7 @@ import { SwapQuote } from './SwapQuote';
 
 type FindSwapQuoteInput = Record<
   TransferDirection,
-  ChainAccount & EntityWithId & EntityWithTicker & EntityWithDecimals
+  ChainAccount & EntityWithId & EntityWithTicker & DecimalsField
 > & {
   amount: number;
 

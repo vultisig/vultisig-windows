@@ -11,13 +11,27 @@ export type PriceProviderIdField = {
   priceProviderId: string;
 };
 
-export type EntityWithDecimals = {
+export type DecimalsField = {
   decimals: number;
 };
 
-export type CoinAmount = EntityWithDecimals & {
+export type CoinAmount = DecimalsField & {
   amount: bigint;
 };
+
+export type TickerField = {
+  ticker: string;
+};
+
+export type LogoField = {
+  logo: string;
+};
+
+export type Coin = Partial<PriceProviderIdField> &
+  DecimalsField &
+  TickerField &
+  LogoField &
+  CoinKey;
 
 export const areEqualCoins = (one: CoinKey, another: CoinKey): boolean =>
   haveEqualFields(['chain', 'id'], one, another);

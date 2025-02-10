@@ -2,7 +2,7 @@ import { queryUrl } from '@lib/utils/query/queryUrl';
 
 import { toChainAmount } from '../../chain/utils/toChainAmount';
 import { Chain } from '@core/chain/Chain';
-import { chainFeeCoin } from '../chainFeeCoin';
+import { chainFeeCoin } from '../chainFeeCoins';
 import { CoinBalanceResolver } from './CoinBalanceResolver';
 
 interface PolkadotAccountBalance {

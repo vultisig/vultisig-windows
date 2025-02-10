@@ -1,11 +1,10 @@
+import { EvmChain } from '@core/chain/Chain';
 import { rootApiUrl } from '@core/config';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
 import { ChainAccount } from '../../../chain/ChainAccount';
 import { getEvmChainId } from '../../../chain/evm/chainInfo';
-import { EvmChain } from '@core/chain/Chain';
-import { CoinMeta } from '../../../model/coin-meta';
-import { OneInchToken, oneInchTokenToCoinMeta } from '../../oneInch/token';
+import { fromOneInchToken, OneInchToken } from '../../oneInch/token';
 
 interface OneInchBalanceResponse {
   [tokenAddress: string]: string;
@@ -44,10 +43,10 @@ export const findEvmAccountCoins = async (account: ChainAccount<EvmChain>) => {
       const tokenInfo = tokenInfoData[tokenAddress];
       if (!tokenInfo) return null;
 
-      return oneInchTokenToCoinMeta({
+      return fromOneInchToken({
         token: tokenInfo,
         chain: account.chain,
       });
     })
-    .filter((token): token is CoinMeta => token !== null);
+    .filter(token => token !== null);
 };

@@ -14,10 +14,9 @@ import { HStack, hStack } from '../../../lib/ui/layout/Stack';
 import { ChildrenProp, ValueProp } from '../../../lib/ui/props';
 import { Text, text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
-import { CoinMeta } from '../../../model/coin-meta';
 import { IconWrapper } from '../../../pages/edItVault/EditVaultPage.styles';
-import { CoinKey } from '../../Coin';
-import { getCoinMetaIconSrc } from '../../utils/coinMeta';
+import { CoinKey, LogoField, TickerField } from '../../Coin';
+import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc';
 
 const Container = styled(UnstyledButton)`
   ${textInputFrame};
@@ -39,9 +38,7 @@ const Container = styled(UnstyledButton)`
   }
 `;
 
-type CoinInputContainerProps = ValueProp<
-  CoinKey & Pick<CoinMeta, 'logo' | 'ticker'>
-> &
+type CoinInputContainerProps = ValueProp<CoinKey & LogoField & TickerField> &
   Partial<ChildrenProp> &
   Omit<ComponentProps<typeof Container>, 'value'>;
 
@@ -54,7 +51,7 @@ export const CoinInputContainer = ({
     <Container {...rest}>
       <HStack alignItems="center" gap={8}>
         <ChainCoinIcon
-          coinSrc={getCoinMetaIconSrc(value)}
+          coinSrc={getCoinLogoSrc(value.logo)}
           chainSrc={
             isNativeCoin(value) ? undefined : getChainEntityIconSrc(value.chain)
           }

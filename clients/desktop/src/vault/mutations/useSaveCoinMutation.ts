@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { SaveCoin } from '../../../wailsjs/go/storage/Store';
+import { Coin } from '../../coin/Coin';
 import { coinToStorageCoin } from '../../coin/utils/coin';
 import { createCoin } from '../../coin/utils/createCoin';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
-import { CoinMeta } from '../../model/coin-meta';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { getVaultPublicKey } from '../publicKey/getVaultPublicKey';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
@@ -22,20 +22,20 @@ export const useSaveCoinMutation = () => {
     onError: error => {
       console.error('save coin error: ', error);
     },
-    mutationFn: async (coinMeta: CoinMeta) => {
+    mutationFn: async (coin: Coin) => {
       const publicKey = await getVaultPublicKey({
         vault,
-        chain: coinMeta.chain,
+        chain: coin.chain,
         walletCore,
       });
 
-      const coin = createCoin({
-        coinMeta,
+      const communicationCoin = createCoin({
+        coin,
         publicKey,
         walletCore,
       });
 
-      const storageCoin = coinToStorageCoin(coin);
+      const storageCoin = coinToStorageCoin(communicationCoin);
       await SaveCoin(getStorageVaultId(vault), storageCoin);
 
       await invalidate(vaultsQueryKey);

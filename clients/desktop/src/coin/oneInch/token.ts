@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain';
-import { CoinMeta } from '../../model/coin-meta';
+
+import { Coin } from '../Coin';
 
 export type OneInchToken = {
   address: string;
@@ -15,22 +16,20 @@ export type OneInchTokensResponse = {
   tokens: Record<string, OneInchToken>;
 };
 
-type OneInchTokenToCoinMeta = {
+type FromOneInchTokenInput = {
   token: OneInchToken;
   chain: Chain;
 };
 
-export const oneInchTokenToCoinMeta = ({
+export const fromOneInchToken = ({
   token,
   chain,
-}: OneInchTokenToCoinMeta): CoinMeta => {
+}: FromOneInchTokenInput): Coin => {
   return {
     chain,
-    contractAddress: token.address,
+    id: token.address,
     decimals: token.decimals,
-    isNativeToken: false,
     logo: token.logoURI,
-    priceProviderId: '',
     ticker: token.symbol,
   };
 };

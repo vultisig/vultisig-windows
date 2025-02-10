@@ -1,29 +1,26 @@
 import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb';
 
 import { storage } from '../../../wailsjs/go/models';
-import { Chain } from '@core/chain/Chain';
+import { assertChainField } from '../../chain/utils/assertChainField';
 import { AccountCoinKey, accountCoinKeyToString } from '../AccountCoin';
-import { getCoinMetaKey } from './coinMeta';
+import { chainFeeCoin } from '../chainFeeCoins';
 
 type CoinToStorageCoinInput = Coin & {
   address: string;
 };
 
-export const getCoinKey = ({
-  ticker,
-  contractAddress,
-  isNativeToken,
-  chain,
-  address,
-}: Coin): AccountCoinKey => ({
-  ...getCoinMetaKey({
-    ticker,
-    contractAddress,
-    isNativeToken,
-    chain: chain as Chain,
-  }),
-  address,
-});
+export const getCoinKey = (coin: Coin): AccountCoinKey => {
+  const { chain } = assertChainField(coin);
+  const feeCoin = chainFeeCoin[chain];
+
+  const id = feeCoin ? coin.contractAddress : coin.ticker;
+
+  return {
+    chain,
+    id,
+    address: coin.address,
+  };
+};
 
 export const coinToStorageCoin = (
   input: CoinToStorageCoinInput

@@ -1,5 +1,5 @@
 import { storage } from '../../../../wailsjs/go/models';
-import { chainFeeCoin } from '../../../coin/chainFeeCoin';
+import { chainFeeCoin } from '../../../coin/chainFeeCoins';
 import { Chain } from '@core/chain/Chain';
 import { ChainAction } from '../ChainAction';
 
