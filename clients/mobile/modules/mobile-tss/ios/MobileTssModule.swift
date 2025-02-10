@@ -1,4 +1,6 @@
+
 import ExpoModulesCore
+import Tss
 
 public class MobileTssModule: Module {
   // Each module class must implement the definition function. The definition consists of components
@@ -14,17 +16,14 @@ public class MobileTssModule: Module {
     Events("onProgress","onError")
 
     // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      return "Hello world! 👋"
+    Function("getDerivedPublicKey") { (hexPublicKey: String,hexChainCode: String, derivePath: String) in
+        return PublicKeyHelper.getDerivedPubKey(hexPubKey: hexPublicKey, hexChainCode: hexChainCode, derivePath: derivePath)
     }
 
     // Defines a JavaScript function that always returns a Promise and whose native code
     // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { (value: String) in
-      // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
+    AsyncFunction("keygen") { (name: String) in
+      
     }
   }
 }
