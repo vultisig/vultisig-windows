@@ -9,7 +9,7 @@ export const pt = {
     'O Vultisig é, por natureza, um aplicativo multi-dispositivo. Exige pelo menos dois dispositivos para criar um cofre seguro: um dispositivo inicializador e um dispositivo de pareamento.',
   moreInfo: 'Mais informações',
   secureVaultSetupPasswordTooltipContent:
-    'Isso acontece porque a senha criptografa o arquivo de backup localmente, como criptografar um disco rígido. No próximo passo, você tem a possibilidade de adicionar uma dica.',
+    'Isso ocorre porque a senha é usada para criptografar localmente o arquivo de backup, de forma semelhante à criptografia de um disco rígido. No próximo passo, você tem a opção de adicionar uma dica.',
   onboarding_view4_description:
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   create_new_vault: 'Criar novo cofre',

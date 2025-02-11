@@ -412,7 +412,7 @@ export const en = {
   learnMore: 'Learn More',
   moreInfo: 'More Info',
   secureVaultSetupPasswordTooltipContent:
-    'This happens because the password encrypts the backup file locally, like encrypting a hard drive. In the next step you have the possibility to add a hint.',
+    'This occurs because the password is used to locally encrypt the backup file, similar to how a hard drive is encrypted. In the following step, you have the option to add a hint.',
   vaultOverview: 'Vault Overview',
   backupShare: 'Back-up Vault Share',
   vaultCreated: 'Vault created',

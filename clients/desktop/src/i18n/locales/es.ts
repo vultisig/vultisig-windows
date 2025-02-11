@@ -9,7 +9,7 @@ export const es = {
     'Vultisig es, por naturaleza, una aplicación multi-dispositivo. Requiere al menos dos dispositivos para crear una bóveda segura: un dispositivo iniciador y un dispositivo de emparejamiento.',
   moreInfo: 'Más información',
   secureVaultSetupPasswordTooltipContent:
-    'Esto sucede porque la contraseña cifra el archivo de respaldo localmente, como cifrar un disco duro. En el siguiente paso, tienes la posibilidad de añadir una pista.',
+    'Esto ocurre porque la contraseña se usa para cifrar localmente el archivo de copia de seguridad, de manera similar a cómo se cifra un disco duro. En el siguiente paso, tienes la opción de añadir una pista.',
   onboarding_view4_description:
     'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   create_new_vault: 'Crear nueva bóveda',
