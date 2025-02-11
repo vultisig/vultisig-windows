@@ -6,7 +6,7 @@ export type OneInchToken = {
   symbol: string;
   decimals: number;
   name: string;
-  logoURI: string;
+  logoURI?: string;
   eip2612: boolean;
   tags: string[];
 };
@@ -15,20 +15,28 @@ export type OneInchTokensResponse = {
   tokens: Record<string, OneInchToken>;
 };
 
-type FromOneInchTokenInput = {
-  token: OneInchToken;
+type FromOneInchTokensInput = {
+  tokens: OneInchToken[];
   chain: Chain;
 };
 
-export const fromOneInchToken = ({
-  token,
+export const fromOneInchTokens = ({
+  tokens,
   chain,
-}: FromOneInchTokenInput): Coin => {
-  return {
-    chain,
-    id: token.address,
-    decimals: token.decimals,
-    logo: token.logoURI,
-    ticker: token.symbol,
-  };
+}: FromOneInchTokensInput): Coin[] => {
+  const result: Coin[] = [];
+
+  tokens.forEach(token => {
+    if (token.logoURI) {
+      result.push({
+        chain,
+        id: token.address,
+        decimals: token.decimals,
+        logo: token.logoURI,
+        ticker: token.symbol,
+      });
+    }
+  });
+
+  return result;
 };
