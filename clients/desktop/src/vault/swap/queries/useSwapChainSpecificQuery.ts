@@ -6,7 +6,7 @@ import { getChainSpecific } from '../../../chain/keysign/chainSpecific/getChainS
 import { GetChainSpecificInput } from '../../../chain/keysign/chainSpecific/GetChainSpecificInput';
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
-import { chainFeeCoin } from '../../../coin/chainFeeCoin';
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { useCurrentVaultCoin } from '../../state/currentVault';

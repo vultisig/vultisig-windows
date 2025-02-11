@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain';
 
-import { chainFeeCoin } from '../../../coin/chainFeeCoin';
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { Coin } from '@core/chain/coin/Coin';
 import { ChainAction } from '../ChainAction';
 

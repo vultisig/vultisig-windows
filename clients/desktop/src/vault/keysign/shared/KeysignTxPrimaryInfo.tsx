@@ -1,3 +1,5 @@
+import { Chain } from '@core/chain/Chain';
+import { fromCommCoin } from '@core/communication/utils/commCoin';
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { formatAmount } from '@lib/utils/formatAmount';
@@ -15,26 +17,21 @@ import {
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { getCoinKey } from '../../../coin/utils/coin';
 import { ValueProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { Chain } from '@core/chain/Chain';
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
 
 export const KeysignTxPrimaryInfo = ({ value }: ValueProp<KeysignPayload>) => {
   const { toAddress, memo, toAmount, blockchainSpecific } = value;
 
-  const coin = assertField(value, 'coin');
+  const coin = fromCommCoin(assertField(value, 'coin'));
 
   const { decimals, ticker } = shouldBePresent(coin);
 
   const { t } = useTranslation();
 
   const coinPriceQuery = useCoinPriceQuery({
-    coin: {
-      ...getCoinKey(coin),
-      priceProviderId: coin.priceProviderId,
-    },
+    coin,
   });
 
   const [fiatCurrency] = useFiatCurrency();

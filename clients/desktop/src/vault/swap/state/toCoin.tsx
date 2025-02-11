@@ -1,7 +1,6 @@
 import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin';
 import { useMemo } from 'react';
 
-import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { ChildrenProp } from '../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../lib/ui/state/getStateProviderSetup';
 import { useCurrentVaultNativeCoins } from '../../state/currentVault';
@@ -18,8 +17,9 @@ export const ToCoinProvider: React.FC<ChildrenProp> = ({ children }) => {
   const nativeCoins = useCurrentVaultNativeCoins();
 
   const initialValue = useMemo(() => {
-    const coinKeys = nativeCoins.map(getStorageCoinKey);
-    return coinKeys.find(coin => !areEqualCoins(coin, fromCoin)) ?? coinKeys[0];
+    return (
+      nativeCoins.find(coin => !areEqualCoins(coin, fromCoin)) ?? nativeCoins[0]
+    );
   }, [fromCoin, nativeCoins]);
 
   return (

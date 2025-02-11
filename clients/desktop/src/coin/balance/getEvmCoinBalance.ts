@@ -1,8 +1,8 @@
 import { EvmChain } from '@core/chain/Chain';
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 
 import { getEvmClient } from '../../chain/evm/client/getEvmClient';
 import { getErc20Balance } from '../../chain/evm/erc20/getErc20Balance';
-import { isFeeCoin } from '../utils/isFeeCoin';
 import { CoinBalanceResolver } from './CoinBalanceResolver';
 
 export const getEvmCoinBalance: CoinBalanceResolver<EvmChain> = async input => {

@@ -1,12 +1,12 @@
+import { chainTokens } from '@core/chain/coin/chainTokens';
 import { areEqualCoins, Coin, coinKeyToString } from '@core/chain/coin/Coin';
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
 import { t } from 'i18next';
 import { useCallback, useMemo } from 'react';
 
-import { chainTokens } from '../../../../../../coin/chainTokens';
 import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitelistedCoinsQuery';
 import { getCoinSearchString } from '../../../../../../coin/utils/getCoinSearchStrings';
-import { isFeeCoin } from '../../../../../../coin/utils/isFeeCoin';
 import { sortCoinsAlphabetically } from '../../../../../../coin/utils/sortCoinsAlphabetically';
 import { NonEmptyOnly } from '../../../../../../lib/ui/base/NonEmptyOnly';
 import { useTransform } from '../../../../../../lib/ui/hooks/useTransform';

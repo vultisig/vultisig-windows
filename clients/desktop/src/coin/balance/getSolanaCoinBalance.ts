@@ -1,8 +1,8 @@
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { Address } from '@solana/web3.js';
 
 import { getSolanaClient } from '../../chain/solana/client/getSolanaClient';
 import { getSplAccounts } from '../../chain/solana/client/getSplAccounts';
-import { isFeeCoin } from '../utils/isFeeCoin';
 import { CoinBalanceResolver } from './CoinBalanceResolver';
 
 export const getSolanaCoinBalance: CoinBalanceResolver = async input => {

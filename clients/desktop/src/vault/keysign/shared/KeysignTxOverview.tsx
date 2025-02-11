@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain';
+import { fromCommCoin } from '@core/communication/utils/commCoin';
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
@@ -18,7 +19,6 @@ import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getBlockExplorerUrl } from '../../../chain/utils/getBlockExplorerUrl';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { getCoinKey } from '../../../coin/utils/coin';
 import { IconButton } from '../../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../../lib/ui/icons/CopyIcon';
 import { LinkIcon } from '../../../lib/ui/icons/LinkIcon';
@@ -50,14 +50,11 @@ export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     (swapPayload && swapPayload.value) ||
     memo?.startsWith('=') ||
     memo?.toLowerCase().startsWith('swap');
-  const coin = shouldBePresent(potentialCoin);
+  const coin = fromCommCoin(shouldBePresent(potentialCoin));
   const { decimals } = coin;
 
   const coinPriceQuery = useCoinPriceQuery({
-    coin: {
-      ...getCoinKey(coin),
-      priceProviderId: coin.priceProviderId,
-    },
+    coin,
   });
 
   const formattedToAmount = useMemo(() => {

@@ -3,7 +3,6 @@ import { isEmpty } from '@lib/utils/array/isEmpty';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 
 import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains';
-import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { UniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';
 import { ValueProp } from '../../../lib/ui/props';
 import { SendPrompt } from '../../send/SendPrompt';
@@ -18,7 +17,7 @@ export const VaultPrimaryActions = ({ value }: Partial<ValueProp<CoinKey>>) => {
     return null;
   }
 
-  const coinKey = value ?? getStorageCoinKey(nativeCoins[0]);
+  const coinKey = value ?? nativeCoins[0];
 
   return (
     <UniformColumnGrid fullWidth gap={12}>

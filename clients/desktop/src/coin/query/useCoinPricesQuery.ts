@@ -1,5 +1,6 @@
 import { EvmChain } from '@core/chain/Chain';
 import { Coin, CoinKey, coinKeyToString } from '@core/chain/coin/Coin';
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { findBy } from '@lib/utils/array/findBy';
 import { groupItems } from '@lib/utils/array/groupItems';
 import { isEmpty } from '@lib/utils/array/isEmpty';
@@ -16,7 +17,6 @@ import { useFiatCurrency } from '../../preferences/state/fiatCurrency';
 import { getErc20Prices } from '../price/api/evm/getErc20Prices';
 import { getCoinPrices } from '../price/api/getCoinPrices';
 import { FiatCurrency } from '../price/FiatCurrency';
-import { isFeeCoin } from '../utils/isFeeCoin';
 
 type GetCoinPricesQueryKeysInput = {
   coins: CoinKey[];

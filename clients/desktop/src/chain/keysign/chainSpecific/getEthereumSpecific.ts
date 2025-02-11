@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf';
 import { Chain, EvmChain } from '@core/chain/Chain';
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import {
   EthereumSpecific,
   EthereumSpecificSchema,
@@ -8,7 +9,6 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { ethers } from 'ethers';
 import { publicActionsL2 } from 'viem/zksync';
 
-import { isFeeCoin } from '../../../coin/utils/isFeeCoin';
 import { evmChainInfo, getEvmChainRpcUrl } from '../../evm/chainInfo';
 import { getEvmClient } from '../../evm/client/getEvmClient';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';

@@ -2,10 +2,11 @@ import { Coin } from '@core/chain/coin/Coin';
 import { useMutation } from '@tanstack/react-query';
 
 import { SaveCoin } from '../../../wailsjs/go/storage/Store';
-import { coinToStorageCoin } from '../../coin/utils/coin';
-import { createCoin } from '../../coin/utils/createCoin';
+import { deriveAddress } from '../../chain/utils/deriveAddress';
+import { stripHexPrefix } from '../../chain/utils/stripHexPrefix';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
+import { toStorageCoin } from '../../storage/storageCoin';
 import { getVaultPublicKey } from '../publicKey/getVaultPublicKey';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
 import { useCurrentVault } from '../state/currentVault';
@@ -29,13 +30,22 @@ export const useSaveCoinMutation = () => {
         walletCore,
       });
 
-      const communicationCoin = createCoin({
-        coin,
+      const address = deriveAddress({
+        chain: coin.chain,
         publicKey,
         walletCore,
       });
 
-      const storageCoin = coinToStorageCoin(communicationCoin);
+      const hexPublicKey = stripHexPrefix(
+        walletCore.HexCoding.encode(publicKey.data())
+      );
+
+      const storageCoin = toStorageCoin({
+        ...coin,
+        address,
+        hexPublicKey,
+      });
+
       await SaveCoin(getStorageVaultId(vault), storageCoin);
 
       await invalidate(vaultsQueryKey);

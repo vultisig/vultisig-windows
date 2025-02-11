@@ -1,4 +1,5 @@
 import { CoinAmount, CoinKey } from '@core/chain/coin/Coin';
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo';
 import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
 import { formatAmount } from '@lib/utils/formatAmount';
@@ -8,7 +9,6 @@ import { ChainCoinIcon } from '../../chain/ui/ChainCoinIcon';
 import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { getCoinLogoSrc } from '../../coin/logo/getCoinLogoSrc';
-import { isFeeCoin } from '../../coin/utils/isFeeCoin';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { ValueProp } from '../../lib/ui/props';
 import { Text } from '../../lib/ui/text';
