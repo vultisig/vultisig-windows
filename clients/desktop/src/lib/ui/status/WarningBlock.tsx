@@ -20,7 +20,7 @@ const Container = styled.div`
 
   ${hStack({
     fullWidth: true,
-    alignItems: 'center',
+    alignItems: 'baseline',
     gap: 12,
   })}
 `;
@@ -65,7 +65,7 @@ export const WarningBlock = ({
       {iconTooltipContent ? (
         <Tooltip
           content={iconTooltipContent}
-          placement="top"
+          placement="bottom"
           renderOpener={props => <div {...props}>{icon}</div>}
         />
       ) : (

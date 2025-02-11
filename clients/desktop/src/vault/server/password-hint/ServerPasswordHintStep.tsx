@@ -45,7 +45,7 @@ export const ServerPasswordHintStep = ({
     defaultValues: {
       passwordHint: storedPasswordHint || '',
     },
-    mode: 'onBlur',
+    mode: 'all',
   });
 
   const onSubmit = (data: PasswordHintSchema) => {
