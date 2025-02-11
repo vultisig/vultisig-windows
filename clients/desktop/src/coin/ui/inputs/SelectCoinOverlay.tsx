@@ -1,9 +1,10 @@
+import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin';
+import { Coin } from '@core/chain/coin/Coin';
 import { useTranslation } from 'react-i18next';
 
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Modal } from '../../../lib/ui/modal';
 import { OnFinishProp, OptionsProp, ValueProp } from '../../../lib/ui/props';
-import { areEqualCoins, Coin, CoinKey } from '../../Coin';
 import { CoinOption } from './CoinOption';
 
 export const SelectCoinOverlay = ({

@@ -1,4 +1,5 @@
 import { UtxoChain } from '@core/chain/Chain';
+import { areEqualCoins } from '@core/chain/coin/Coin';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 
 import { getChainSpecific } from '../../../chain/keysign/chainSpecific/getChainSpecific';
@@ -6,7 +7,6 @@ import { GetChainSpecificInput } from '../../../chain/keysign/chainSpecific/GetC
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { chainFeeCoin } from '../../../coin/chainFeeCoin';
-import { areEqualCoins } from '../../../coin/Coin';
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { useCurrentVaultCoin } from '../../state/currentVault';

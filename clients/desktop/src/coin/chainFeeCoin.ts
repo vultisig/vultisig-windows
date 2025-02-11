@@ -1,7 +1,6 @@
 import { Chain } from '@core/chain/Chain';
+import { Coin } from '@core/chain/coin/Coin';
 import { recordMap } from '@lib/utils/record/recordMap';
-
-import { Coin } from './Coin';
 
 const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
   [Chain.Bitcoin]: {

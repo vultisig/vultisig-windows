@@ -1,11 +1,11 @@
 import { create } from '@bufbuild/protobuf';
+import { Coin } from '@core/chain/coin/Coin';
 import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb';
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 import { WalletCore } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 import { deriveAddress } from '../../chain/utils/deriveAddress';
 import { stripHexPrefix } from '../../chain/utils/stripHexPrefix';
-import { Coin } from '../Coin';
 import { isFeeCoin } from './isFeeCoin';
 
 type CreateCoinInput = {

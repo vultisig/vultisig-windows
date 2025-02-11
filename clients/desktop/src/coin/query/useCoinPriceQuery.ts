@@ -1,9 +1,8 @@
+import { Coin, coinKeyToString } from '@core/chain/coin/Coin';
 import { pick } from '@lib/utils/record/pick';
 import { useMemo } from 'react';
 
 import { Query } from '../../lib/ui/query/Query';
-import { Coin } from '../Coin';
-import { coinKeyToString } from '../Coin';
 import { FiatCurrency } from '../price/FiatCurrency';
 import { useCoinPricesQuery } from './useCoinPricesQuery';
 

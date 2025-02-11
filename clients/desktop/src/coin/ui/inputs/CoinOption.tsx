@@ -1,3 +1,4 @@
+import { Coin } from '@core/chain/coin/Coin';
 import styled from 'styled-components';
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon';
@@ -8,7 +9,6 @@ import { panel } from '../../../lib/ui/panel/Panel';
 import { IsActiveProp, OnClickProp, ValueProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
 import { getColor, matchColor } from '../../../lib/ui/theme/getters';
-import { Coin } from '../../Coin';
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc';
 import { isFeeCoin } from '../../utils/isFeeCoin';
 

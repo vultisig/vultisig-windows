@@ -1,6 +1,6 @@
+import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin';
 import { useMemo } from 'react';
 
-import { areEqualCoins, CoinKey } from '../../../coin/Coin';
 import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { ChildrenProp } from '../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../lib/ui/state/getStateProviderSetup';

@@ -1,11 +1,11 @@
 import { Chain } from '@core/chain/Chain';
+import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin';
 import { groupItems } from '@lib/utils/array/groupItems';
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useMemo } from 'react';
 
 import { storage } from '../../../wailsjs/go/models';
-import { areEqualCoins, CoinKey } from '../../coin/Coin';
 import { fromStorageCoin } from '../../coin/utils/fromStorageCoin';
 import { getValueProviderSetup } from '../../lib/ui/state/getValueProviderSetup';
 import { haveServerSigner } from '../fast/utils/haveServerSigner';

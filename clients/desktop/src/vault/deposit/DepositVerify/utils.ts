@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain';
 
 import { chainFeeCoin } from '../../../coin/chainFeeCoin';
-import { Coin } from '../../../coin/Coin';
+import { Coin } from '@core/chain/coin/Coin';
 import { ChainAction } from '../ChainAction';
 
 function getDustDepositAmountString(decimals: number) {

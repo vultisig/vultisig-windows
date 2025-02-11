@@ -1,5 +1,6 @@
+import { Coin } from '@core/chain/coin/Coin';
+
 import { ChainEntityIcon } from '../../../../chain/ui/ChainEntityIcon';
-import { Coin } from '../../../../coin/Coin';
 import { getCoinLogoSrc } from '../../../../coin/logo/getCoinLogoSrc';
 import { ValueProp } from '../../../../lib/ui/props';
 import { ManageVaultCoin } from '../ManageVaultCoin';

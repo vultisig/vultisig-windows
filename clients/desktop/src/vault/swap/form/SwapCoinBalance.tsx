@@ -1,9 +1,9 @@
+import { CoinKey } from '@core/chain/coin/Coin';
 import { formatAmount } from '@lib/utils/formatAmount';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
-import { CoinKey } from '../../../coin/Coin';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { ValueProp } from '../../../lib/ui/props';

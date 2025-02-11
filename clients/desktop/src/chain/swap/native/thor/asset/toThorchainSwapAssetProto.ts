@@ -1,9 +1,9 @@
+import { CoinKey } from '@core/chain/coin/Coin';
 import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
 import { match } from '@lib/utils/match';
 import { TransferDirection } from '@lib/utils/TransferDirection';
 import { TW } from '@trustwallet/wallet-core';
 
-import { CoinKey } from '../../../../../coin/Coin';
 import { isFeeCoin } from '../../../../../coin/utils/isFeeCoin';
 import {
   ThorchainSwapEnabledChain,

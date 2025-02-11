@@ -1,4 +1,4 @@
-import { AccountCoin } from '../../../coin/Coin';
+import { AccountCoin } from '@core/chain/coin/AccountCoin';
 
 export type GetChainSpecificInput<T = any> = {
   coin: AccountCoin;

@@ -1,5 +1,5 @@
-import { TickerField } from '../Coin';
+import { Coin } from '@core/chain/coin/Coin';
 
-export const getCoinSearchString = ({ ticker }: TickerField) => {
+export const getCoinSearchString = ({ ticker }: Pick<Coin, 'ticker'>) => {
   return [ticker];
 };

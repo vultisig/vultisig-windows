@@ -1,5 +1,7 @@
 import { create } from '@bufbuild/protobuf';
 import { EvmChain } from '@core/chain/Chain';
+import { AccountCoin } from '@core/chain/coin/AccountCoin';
+import { Coin } from '@core/chain/coin/Coin';
 import {
   OneInchQuoteSchema,
   OneInchSwapPayloadSchema,
@@ -10,7 +12,6 @@ import { isOneOf } from '@lib/utils/array/isOneOf';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 
-import { AccountCoin, Coin } from '../../../coin/Coin';
 import { isFeeCoin } from '../../../coin/utils/isFeeCoin';
 import { fromChainAmount } from '../../utils/fromChainAmount';
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote';

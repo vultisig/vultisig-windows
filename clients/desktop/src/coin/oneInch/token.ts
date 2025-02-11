@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain';
-
-import { Coin } from '../Coin';
+import { Coin } from '@core/chain/coin/Coin';
 
 export type OneInchToken = {
   address: string;

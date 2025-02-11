@@ -1,3 +1,4 @@
+import { Coin } from '@core/chain/coin/Coin';
 import { ComponentProps } from 'react';
 import styled from 'styled-components';
 
@@ -14,7 +15,6 @@ import { ChildrenProp, ValueProp } from '../../../lib/ui/props';
 import { Text, text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { IconWrapper } from '../../../pages/edItVault/EditVaultPage.styles';
-import { CoinKey, LogoField, TickerField } from '../../Coin';
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc';
 import { isFeeCoin } from '../../utils/isFeeCoin';
 
@@ -38,7 +38,9 @@ const Container = styled(UnstyledButton)`
   }
 `;
 
-type CoinInputContainerProps = ValueProp<CoinKey & LogoField & TickerField> &
+type CoinInputContainerProps = ValueProp<
+  Pick<Coin, 'id' | 'chain' | 'logo' | 'ticker'>
+> &
   Partial<ChildrenProp> &
   Omit<ComponentProps<typeof Container>, 'value'>;
 

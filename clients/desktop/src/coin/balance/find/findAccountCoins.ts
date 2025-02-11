@@ -1,8 +1,8 @@
 import { Chain, EvmChain } from '@core/chain/Chain';
 import { ChainAccount } from '@core/chain/ChainAccount';
+import { Coin } from '@core/chain/coin/Coin';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 
-import { Coin } from '../../Coin';
 import { findEvmAccountCoins } from './findEvmAccountCoins';
 import { findSolanaAccountCoins } from './findSolanaAccountCoins';
 

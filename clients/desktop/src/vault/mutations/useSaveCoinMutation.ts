@@ -1,7 +1,7 @@
+import { Coin } from '@core/chain/coin/Coin';
 import { useMutation } from '@tanstack/react-query';
 
 import { SaveCoin } from '../../../wailsjs/go/storage/Store';
-import { Coin } from '../../coin/Coin';
 import { coinToStorageCoin } from '../../coin/utils/coin';
 import { createCoin } from '../../coin/utils/createCoin';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';

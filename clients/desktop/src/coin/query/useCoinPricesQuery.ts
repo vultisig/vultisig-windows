@@ -1,4 +1,5 @@
 import { EvmChain } from '@core/chain/Chain';
+import { Coin, CoinKey, coinKeyToString } from '@core/chain/coin/Coin';
 import { groupItems } from '@lib/utils/array/groupItems';
 import { isEmpty } from '@lib/utils/array/isEmpty';
 import { isOneOf } from '@lib/utils/array/isOneOf';
@@ -10,7 +11,6 @@ import { useQueries } from '@tanstack/react-query';
 
 import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEagerQuery';
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency';
-import { Coin, CoinKey, coinKeyToString } from '../Coin';
 import { getErc20Prices } from '../price/api/evm/getErc20Prices';
 import { getCoinPrices } from '../price/api/getCoinPrices';
 import { FiatCurrency } from '../price/FiatCurrency';

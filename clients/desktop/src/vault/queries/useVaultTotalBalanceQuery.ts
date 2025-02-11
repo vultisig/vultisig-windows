@@ -1,8 +1,8 @@
+import { coinKeyToString } from '@core/chain/coin/Coin';
 import { sum } from '@lib/utils/array/sum';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useMemo } from 'react';
 
-import { coinKeyToString } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';

@@ -1,10 +1,10 @@
 // TODO: REWRITE THIS
 import { Chain } from '@core/chain/Chain';
 import { ChainAccount } from '@core/chain/ChainAccount';
+import { Coin } from '@core/chain/coin/Coin';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
 import { getSplAccounts } from '../../../chain/solana/client/getSplAccounts';
-import { Coin } from '../../Coin';
 
 export const findSolanaAccountCoins = async (account: ChainAccount) => {
   if (!account.address) {

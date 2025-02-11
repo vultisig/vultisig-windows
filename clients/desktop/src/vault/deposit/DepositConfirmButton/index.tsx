@@ -1,12 +1,12 @@
 import { create } from '@bufbuild/protobuf';
 import { Chain } from '@core/chain/Chain';
+import { coinKeyFromString } from '@core/chain/coin/Coin';
 import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useTranslation } from 'react-i18next';
 
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
-import { coinKeyFromString } from '../../../coin/Coin';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';

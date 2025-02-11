@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain';
+import { CoinAmount, CoinKey, coinKeyToString } from '@core/chain/coin/Coin';
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo';
@@ -6,7 +7,6 @@ import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
 import { useMemo } from 'react';
 
 import { EntityWithPrice } from '../../chain/EntityWithPrice';
-import { CoinAmount, CoinKey, coinKeyToString } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
 import {

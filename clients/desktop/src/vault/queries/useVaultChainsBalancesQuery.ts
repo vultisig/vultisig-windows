@@ -1,11 +1,11 @@
 import { Chain } from '@core/chain/Chain';
+import { coinKeyToString } from '@core/chain/coin/Coin';
 import { order } from '@lib/utils/array/order';
 import { sum } from '@lib/utils/array/sum';
 import { recordMap } from '@lib/utils/record/recordMap';
 import { toEntries } from '@lib/utils/record/toEntries';
 import { useMemo } from 'react';
 
-import { coinKeyToString } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';

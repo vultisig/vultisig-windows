@@ -1,6 +1,6 @@
+import { CoinKey } from '@core/chain/coin/Coin';
 import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
 
-import { CoinKey } from '../../../../coin/Coin';
 import { isFeeCoin } from '../../../../coin/utils/isFeeCoin';
 import { NativeSwapChain, nativeSwapChainIds } from '../NativeSwapChain';
 
