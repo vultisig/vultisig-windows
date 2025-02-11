@@ -1,5 +1,6 @@
 import { EvmChain } from '@core/chain/Chain';
 import { Coin, CoinKey, coinKeyToString } from '@core/chain/coin/Coin';
+import { findBy } from '@lib/utils/array/findBy';
 import { groupItems } from '@lib/utils/array/groupItems';
 import { isEmpty } from '@lib/utils/array/isEmpty';
 import { isOneOf } from '@lib/utils/array/isOneOf';
@@ -7,6 +8,7 @@ import { splitBy } from '@lib/utils/array/splitBy';
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { mergeRecords } from '@lib/utils/record/mergeRecords';
+import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual';
 import { useQueries } from '@tanstack/react-query';
 
 import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEagerQuery';
@@ -61,7 +63,9 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
           const result: Record<string, number> = {};
 
           Object.entries(prices).forEach(([id, price]) => {
-            const coin = shouldBePresent(coins.find(coin => coin.id === id));
+            const coin = shouldBePresent(
+              coins.find(coin => areLowerCaseEqual(coin.id, id))
+            );
 
             result[coinKeyToString(coin)] = price;
           });
@@ -88,7 +92,7 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
         Object.entries(prices).forEach(([priceProviderId, price]) => {
           const coin = shouldBePresent(
-            regularCoins.find(coin => coin.priceProviderId === priceProviderId)
+            findBy(regularCoins, 'priceProviderId', priceProviderId)
           );
 
           result[coinKeyToString(coin)] = price;
