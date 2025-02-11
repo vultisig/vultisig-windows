@@ -16,28 +16,6 @@ import { AnimationDescription } from './AnimationDescriptions';
 import { useOnboardingStepsAnimations } from './hooks/useOnboardingStepsAnimations';
 import { RiveWrapper } from './Onobarding.styled';
 
-const NextAnimationButton = styled(IconButton)`
-  flex-shrink: 0;
-  width: 84px;
-  height: 48px;
-  border-radius: 99px;
-  background-color: ${getColor('primary')};
-  align-self: center;
-
-  &:hover {
-    background-color: ${getColor('primary')};
-  }
-
-  & svg {
-    stroke: ${getColor('textDark')};
-  }
-`;
-
-const ProgressWrapper = styled(VStack)`
-  margin-inline: auto;
-  margin-top: 48px;
-`;
-
 export type SharedOnboardingScreensProps = {
   animationComponent: (props: ComponentProps<'canvas'>) => JSX.Element;
   onNextAnimation: () => void;
@@ -88,7 +66,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
           variant="bars"
         />
       </ProgressWrapper>
-      <VStack justifyContent="space-between" flexGrow>
+      <ContentWrapper justifyContent="space-between" flexGrow>
         <RiveWrapper>
           <AnimationComponent />
         </RiveWrapper>
@@ -106,7 +84,34 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             {t('tap')}
           </NextAnimationButton>
         </VStack>
-      </VStack>
+      </ContentWrapper>
     </PageContent>
   );
 };
+
+const NextAnimationButton = styled(IconButton)`
+  flex-shrink: 0;
+  width: 84px;
+  height: 48px;
+  border-radius: 99px;
+  background-color: ${getColor('primary')};
+  align-self: center;
+
+  &:hover {
+    background-color: ${getColor('primary')};
+  }
+
+  & svg {
+    stroke: ${getColor('textDark')};
+  }
+`;
+
+const ProgressWrapper = styled(VStack)`
+  margin-inline: auto;
+  margin-top: 48px;
+`;
+
+const ContentWrapper = styled(VStack)`
+  max-width: 640px;
+  margin-inline: auto;
+`;
