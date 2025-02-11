@@ -14,7 +14,7 @@ import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
 import { deriveAddress } from '../../chain/utils/deriveAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
-import { stripHexPrefix } from '../../chain/utils/stripHexPrefix';
+import { toHexPublicKey } from '../../chain/utils/toHexPublicKey';
 import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery';
 import { useSaveCoinsMutation } from '../../coin/query/useSaveCoinsMutation';
 import {
@@ -96,9 +96,10 @@ export const VaultChainPage = () => {
         walletCore,
       });
 
-      const hexPublicKey = stripHexPrefix(
-        walletCore.HexCoding.encode(publicKey.data())
-      );
+      const hexPublicKey = toHexPublicKey({
+        publicKey,
+        walletCore,
+      });
 
       saveCoins(
         findTokensQuery.data.map(coin =>

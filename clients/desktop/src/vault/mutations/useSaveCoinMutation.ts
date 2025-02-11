@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { SaveCoin } from '../../../wailsjs/go/storage/Store';
 import { deriveAddress } from '../../chain/utils/deriveAddress';
-import { stripHexPrefix } from '../../chain/utils/stripHexPrefix';
+import { toHexPublicKey } from '../../chain/utils/toHexPublicKey';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
 import { toStorageCoin } from '../../storage/storageCoin';
@@ -36,9 +36,10 @@ export const useSaveCoinMutation = () => {
         walletCore,
       });
 
-      const hexPublicKey = stripHexPrefix(
-        walletCore.HexCoding.encode(publicKey.data())
-      );
+      const hexPublicKey = toHexPublicKey({
+        publicKey,
+        walletCore,
+      });
 
       const storageCoin = toStorageCoin({
         ...coin,
