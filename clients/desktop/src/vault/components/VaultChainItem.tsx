@@ -29,11 +29,11 @@ const Pill = styled.div`
 `;
 
 type VaultChainItemProps = {
-  vault: VaultChainBalance;
+  balance: VaultChainBalance;
 };
 
-export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
-  const { chain, coins } = vault;
+export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
+  const { chain, coins } = balance;
   const [fiatCurrency] = useFiatCurrency();
 
   const addresses = useCurrentVaultAddreses();
@@ -57,7 +57,7 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
   );
 
   return (
-    <Panel data-testid="VaultChainItem-Panel" {...pressHandlers}>
+    <StyledPanel data-testid="VaultChainItem-Panel" {...pressHandlers}>
       <HStack fullWidth alignItems="center" gap={16}>
         <ChainEntityIcon
           value={getChainEntityIconSrc(chain)}
@@ -104,6 +104,12 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
           </Text>
         </VStack>
       </HStack>
-    </Panel>
+    </StyledPanel>
   );
 };
+
+const StyledPanel = styled(Panel)`
+  &:hover {
+    background-color: ${getColor('foregroundExtra')};
+  }
+`;

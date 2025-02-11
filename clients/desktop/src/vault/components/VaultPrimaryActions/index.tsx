@@ -1,10 +1,11 @@
-import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains';
 import { CoinKey } from '@core/chain/coin/Coin';
+import { isEmpty } from '@lib/utils/array/isEmpty';
+import { isOneOf } from '@lib/utils/array/isOneOf';
+
+import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains';
 import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { UniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';
 import { ValueProp } from '../../../lib/ui/props';
-import { isEmpty } from '@lib/utils/array/isEmpty';
-import { isOneOf } from '@lib/utils/array/isOneOf';
 import { SendPrompt } from '../../send/SendPrompt';
 import { useCurrentVaultNativeCoins } from '../../state/currentVault';
 import { SwapPrompt } from '../../swap/components/SwapPrompt';

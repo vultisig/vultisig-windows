@@ -58,7 +58,7 @@ const EditVaultPage = () => {
                       <TextWrapper>
                         <Text
                           size={14}
-                          weight="500"
+                          weight="600"
                           color={textColor || 'contrast'}
                         >
                           {t(titleKey)}
