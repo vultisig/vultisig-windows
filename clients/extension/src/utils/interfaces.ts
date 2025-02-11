@@ -1,4 +1,4 @@
-import { ChainKey, Currency, Language } from "./constants";
+import { ChainKey, ChainTicker, Currency, Language } from "./constants";
 import { TransactionResponse } from "ethers";
 import { ThorchainProviderMethod } from "../types/thorchain";
 import { ThorchainProviderResponse } from "../types/thorchain";
@@ -37,7 +37,7 @@ export interface ChainProps {
   derivationKey?: string;
   id: string;
   name: ChainKey;
-  ticker: string;
+  ticker: ChainTicker;
 }
 
 export interface ChainObjRef {
@@ -138,46 +138,66 @@ export interface ScreenProps {
   width: number;
 }
 
-export namespace ITransaction {
-  export interface CTRL {
-    amount: {
-      amount: number;
-      decimals: number;
-    };
-    // asset: {
-    //   chain: string;
-    //   symbol: string;
-    //   ticker: string;
-    // };
-    from: string;
-    gasLimit?: string;
-    memo: string;
-    recipient: string;
-  }
+export interface TransactionDetails {
+  asset: {
+    chain: ChainTicker;
+    symbol: string;
+    ticker: string;
+  };
+  from: string;
+  to?: string;
+  amount?: { amount: string; decimals: number };
+  data?: string;
+  gasLimit?: string;
+}
 
-  export interface METAMASK {
-    chain: ChainProps;
-    contract?: string;
-    customMessage?: CustomMessage;
-    customSignature?: string;
-    data: string;
-    from: string;
-    id: string;
-    status: "default" | "error" | "pending" | "success";
-    memo?: string;
-    to: string;
-    value?: string;
-    gas?: string;
-    gasLimit?: string;
-    gasPrice?: string;
-    isDeposit?: boolean;
-    isCustomMessage?: boolean;
-    maxFeePerGas?: string;
-    maxPriorityFeePerGas?: string;
-    txHash?: string;
-    windowId?: number;
-    raw?: any;
-  }
+export interface METAMASK_TRANSACTION {
+  from: string;
+  to: string;
+  value?: string;
+  data: string;
+  gas?: string;
+  gasPrice?: string;
+  nonce?: string;
+  chainId?: string;
+  type?: string;
+}
+
+export interface CTRL_TRANSACTION {
+  amount: {
+    amount: string;
+    decimals: number;
+  };
+  asset: {
+    chain: ChainTicker;
+    symbol: string;
+    ticker: string;
+  };
+  from: string;
+  gasLimit?: string;
+  memo: string;
+  recipient: string;
+}
+
+export interface ITransaction {
+  transactionDetails: TransactionDetails;
+  chain: ChainProps;
+  contract?: string;
+  customMessage?: CustomMessage;
+  customSignature?: string;
+  id: string;
+  status: "default" | "error" | "pending" | "success";
+  memo?: string;
+  gas?: string;
+  gasLimit?: string;
+  gasPrice?: string;
+  isDeposit?: boolean;
+  isCustomMessage?: boolean;
+  maxFeePerGas?: string;
+  maxPriorityFeePerGas?: string;
+  txHash?: string;
+  windowId?: number;
+  raw?: any;
 }
 
 export interface VaultProps {
@@ -189,7 +209,7 @@ export interface VaultProps {
   publicKeyEcdsa: string;
   publicKeyEddsa: string;
   selected?: boolean;
-  transactions: ITransaction.METAMASK[];
+  transactions: ITransaction[];
   uid: string;
 }
 
@@ -256,7 +276,7 @@ export interface CosmosAccountDataResponse {
 export interface SignedTransaction {
   inputData?: Uint8Array;
   signature: SignatureProps;
-  transaction?: ITransaction.METAMASK;
+  transaction?: ITransaction;
   vault?: VaultProps;
 }
 
