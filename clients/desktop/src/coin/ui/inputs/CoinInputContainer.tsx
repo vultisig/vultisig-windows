@@ -1,9 +1,9 @@
+import { Coin } from '@core/chain/coin/Coin';
 import { ComponentProps } from 'react';
 import styled from 'styled-components';
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon';
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
-import { isNativeCoin } from '../../../chain/utils/isNativeCoin';
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
 import {
   textInputBackground,
@@ -14,10 +14,9 @@ import { HStack, hStack } from '../../../lib/ui/layout/Stack';
 import { ChildrenProp, ValueProp } from '../../../lib/ui/props';
 import { Text, text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
-import { CoinMeta } from '../../../model/coin-meta';
 import { IconWrapper } from '../../../pages/edItVault/EditVaultPage.styles';
-import { CoinKey } from '../../Coin';
-import { getCoinMetaIconSrc } from '../../utils/coinMeta';
+import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc';
+import { isFeeCoin } from '../../utils/isFeeCoin';
 
 const Container = styled(UnstyledButton)`
   ${textInputFrame};
@@ -40,7 +39,7 @@ const Container = styled(UnstyledButton)`
 `;
 
 type CoinInputContainerProps = ValueProp<
-  CoinKey & Pick<CoinMeta, 'logo' | 'ticker'>
+  Pick<Coin, 'id' | 'chain' | 'logo' | 'ticker'>
 > &
   Partial<ChildrenProp> &
   Omit<ComponentProps<typeof Container>, 'value'>;
@@ -54,9 +53,9 @@ export const CoinInputContainer = ({
     <Container {...rest}>
       <HStack alignItems="center" gap={8}>
         <ChainCoinIcon
-          coinSrc={getCoinMetaIconSrc(value)}
+          coinSrc={getCoinLogoSrc(value.logo)}
           chainSrc={
-            isNativeCoin(value) ? undefined : getChainEntityIconSrc(value.chain)
+            isFeeCoin(value) ? undefined : getChainEntityIconSrc(value.chain)
           }
           style={{ fontSize: 32 }}
         />

@@ -1,4 +1,5 @@
-import { CoinKey } from '../../../coin/Coin';
+import { CoinKey } from '@core/chain/coin/Coin';
+
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 
 export const useCurrentVaultCoinKey = (): CoinKey => {

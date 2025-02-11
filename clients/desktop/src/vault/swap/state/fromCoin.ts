@@ -1,10 +1,10 @@
-import { useCallback, useMemo } from 'react';
-
 import {
   CoinKey,
   coinKeyFromString,
   coinKeyToString,
-} from '../../../coin/Coin';
+} from '@core/chain/coin/Coin';
+import { useCallback, useMemo } from 'react';
+
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
 
 export const useFromCoin = () => {

@@ -1,10 +1,10 @@
+import { Chain } from '@core/chain/Chain';
+import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin';
+import { CoinKey } from '@core/chain/coin/Coin';
 import { useMutation } from '@tanstack/react-query';
 
 import { DeleteCoin } from '../../../wailsjs/go/storage/Store';
-import { accountCoinKeyToString } from '../../coin/AccountCoin';
-import { CoinKey } from '../../coin/Coin';
 import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
-import { Chain } from '@core/chain/Chain';
 import { vaultsQueryKey } from '../queries/useVaultsQuery';
 import {
   useCurrentVault,

@@ -4,7 +4,6 @@ import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapCha
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
 import { chainFeeCoin } from '../../../coin/chainFeeCoin';
-import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
@@ -36,24 +35,27 @@ export const useSwapFeesQuery = () => {
 
           const feeAmount = getFeeAmount(chainSpecific);
 
-          return {
+          const result: SwapFees = {
             swap: {
               ...toCoinKey,
               amount: BigInt(fees.total),
               decimals,
             },
             network: {
-              ...getCoinMetaKey(fromFeeCoin),
+              ...fromFeeCoin,
               amount: feeAmount,
               decimals: fromFeeCoin.decimals,
               chainSpecific,
             },
           };
+
+          return result;
         },
         general: ({ tx: { gasPrice, gas } }) => {
           return {
             swap: {
-              ...getCoinMetaKey(fromFeeCoin),
+              chain: fromCoinKey.chain,
+              id: fromCoinKey.id,
               amount: BigInt(gasPrice) * BigInt(gas),
               decimals: fromFeeCoin.decimals,
             },

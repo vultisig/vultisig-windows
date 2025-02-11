@@ -1,9 +1,10 @@
-import { EntityWithPrice } from '../../chain/EntityWithPrice';
-import { fromChainAmount } from '../../chain/utils/fromChainAmount';
+import { CoinAmount } from '@core/chain/coin/Coin';
 import { order } from '@lib/utils/array/order';
 import { splitBy } from '@lib/utils/array/splitBy';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { CoinAmount } from '../Coin';
+
+import { EntityWithPrice } from '../../chain/EntityWithPrice';
+import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getCoinValue } from './getCoinValue';
 
 export const sortCoinsByBalance = <

@@ -1,5 +1,5 @@
 import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains';
-import { CoinKey } from '../../../coin/Coin';
+import { CoinKey } from '@core/chain/coin/Coin';
 import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { UniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';
 import { ValueProp } from '../../../lib/ui/props';

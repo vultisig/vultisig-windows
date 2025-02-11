@@ -2,8 +2,6 @@ import { create } from '@bufbuild/protobuf';
 import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 
 import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload';
-import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
-import { useTransform } from '../../../lib/ui/hooks/useTransform';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault';
 import { useSendCappedAmountQuery } from '../queries/useSendCappedAmountQuery';
@@ -14,7 +12,7 @@ import { useCurrentSendCoin } from './sendCoin';
 
 export const useSendTxKeysignPayloadQuery = () => {
   const [coinKey] = useCurrentSendCoin();
-  const coin = useTransform(useCurrentVaultCoin(coinKey), storageCoinToCoin);
+  const coin = useCurrentVaultCoin(coinKey);
   const [receiver] = useSendReceiver();
   const [memo] = useSendMemo();
 

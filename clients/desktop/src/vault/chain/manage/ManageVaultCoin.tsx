@@ -1,9 +1,7 @@
+import { areEqualCoins, Coin } from '@core/chain/coin/Coin';
 import { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { areEqualCoins } from '../../../coin/Coin';
-import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
-import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
 import { interactive } from '../../../lib/ui/css/interactive';
 import { sameDimensions } from '../../../lib/ui/css/sameDimensions';
 import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus';
@@ -11,7 +9,6 @@ import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Panel } from '../../../lib/ui/panel/Panel';
 import { ValueProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
-import { CoinMeta } from '../../../model/coin-meta';
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation';
 import { useSaveCoinMutation } from '../../mutations/useSaveCoinMutation';
 import { useCurrentVaultCoins } from '../../state/currentVault';
@@ -24,16 +21,15 @@ const Check = styled(CheckStatus)`
   ${sameDimensions(24)};
 `;
 
-type ManageVaultCoinProps = ValueProp<CoinMeta> & {
+type ManageVaultCoinProps = ValueProp<Coin> & {
   icon: ReactNode;
 };
 
 export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
   const [optimisticIsChecked, setOptimisticIsChecked] = useState(false);
-  const key = getCoinMetaKey(value);
 
   const coins = useCurrentVaultCoins();
-  const isChecked = coins.some(c => areEqualCoins(getStorageCoinKey(c), key));
+  const isChecked = coins.some(c => areEqualCoins(c, value));
 
   const { mutate: saveCoin, isPending: isSaving } = useSaveCoinMutation();
   const { mutate: deleteCoin, isPending: isDeleting } = useDeleteCoinMutation();
@@ -51,7 +47,7 @@ export const ManageVaultCoin = ({ value, icon }: ManageVaultCoinProps) => {
       onClick={() => {
         if (isChecked) {
           setOptimisticIsChecked(false);
-          deleteCoin(key);
+          deleteCoin(value);
         } else {
           setOptimisticIsChecked(true);
           saveCoin(value);

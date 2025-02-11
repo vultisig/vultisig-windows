@@ -1,14 +1,8 @@
+import { Chain } from '@core/chain/Chain';
+import { Coin } from '@core/chain/coin/Coin';
 import { recordMap } from '@lib/utils/record/recordMap';
 
-import { Chain } from '@core/chain/Chain';
-import { CoinMeta } from '../model/coin-meta';
-
-type ChainFeeCoinMeta = Omit<
-  CoinMeta,
-  'contractAddress' | 'isNativeToken' | 'chain'
->;
-
-const leanChainFeeCoin: Record<Chain, ChainFeeCoinMeta> = {
+const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
   [Chain.Bitcoin]: {
     ticker: 'BTC',
     logo: 'btc',
@@ -191,12 +185,11 @@ const leanChainFeeCoin: Record<Chain, ChainFeeCoinMeta> = {
   },
 };
 
-export const chainFeeCoin: Record<Chain, CoinMeta> = recordMap(
+export const chainFeeCoin: Record<Chain, Coin> = recordMap(
   leanChainFeeCoin,
-  (meta, chain) => ({
-    ...meta,
+  (coin, chain) => ({
+    ...coin,
     chain,
-    isNativeToken: true,
-    contractAddress: '',
+    id: coin.ticker,
   })
 );

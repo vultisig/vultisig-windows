@@ -1,5 +1,5 @@
 import { Chain } from '@core/chain/Chain';
-import { AccountCoinKey } from '../AccountCoin';
+import { AccountCoinKey } from '@core/chain/coin/AccountCoin';
 
 export type CoinBalanceResolverInput<T extends Chain = Chain> =
   AccountCoinKey<T>;

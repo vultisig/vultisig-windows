@@ -1,12 +1,11 @@
+import { coinKeyToString } from '@core/chain/coin/Coin';
 import { sum } from '@lib/utils/array/sum';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useMemo } from 'react';
 
-import { coinKeyToString } from '../../coin/Coin';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
-import { getStorageCoinKey } from '../../coin/utils/storageCoin';
 import {
   getResolvedQuery,
   pendingQuery,
@@ -18,13 +17,10 @@ export const useVaultTotalBalanceQuery = () => {
   const coins = useCurrentVaultCoins();
 
   const pricesQuery = useCoinPricesQuery({
-    coins: coins.map(coin => ({
-      ...getStorageCoinKey(coin),
-      priceProviderId: coin.price_provider_id,
-    })),
+    coins,
   });
 
-  const balancesQuery = useBalancesQuery(coins.map(getStorageCoinKey));
+  const balancesQuery = useBalancesQuery(coins);
 
   return useMemo((): Query<number> => {
     if (pricesQuery.isPending || balancesQuery.isPending) {
@@ -34,10 +30,11 @@ export const useVaultTotalBalanceQuery = () => {
     if (pricesQuery.data && balancesQuery.data) {
       const data = sum(
         coins.map(coin => {
-          const key = getStorageCoinKey(coin);
-          const price = shouldBePresent(pricesQuery.data)[coinKeyToString(key)];
+          const price = shouldBePresent(pricesQuery.data)[
+            coinKeyToString(coin)
+          ];
           const amount = shouldBePresent(balancesQuery.data)[
-            coinKeyToString(key)
+            coinKeyToString(coin)
           ];
 
           if (price === undefined || amount === undefined) {

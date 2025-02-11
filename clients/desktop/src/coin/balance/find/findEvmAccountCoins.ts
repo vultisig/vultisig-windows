@@ -1,11 +1,11 @@
+import { EvmChain } from '@core/chain/Chain';
+import { ChainAccount } from '@core/chain/ChainAccount';
 import { rootApiUrl } from '@core/config';
+import { withoutUndefined } from '@lib/utils/array/withoutUndefined';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
-import { ChainAccount } from '../../../chain/ChainAccount';
 import { getEvmChainId } from '../../../chain/evm/chainInfo';
-import { EvmChain } from '@core/chain/Chain';
-import { CoinMeta } from '../../../model/coin-meta';
-import { OneInchToken, oneInchTokenToCoinMeta } from '../../oneInch/token';
+import { fromOneInchTokens, OneInchToken } from '../../oneInch/token';
 
 interface OneInchBalanceResponse {
   [tokenAddress: string]: string;
@@ -38,16 +38,14 @@ export const findEvmAccountCoins = async (account: ChainAccount<EvmChain>) => {
   const tokenInfoData =
     await queryUrl<Record<string, OneInchToken>>(tokenInfoUrl);
 
-  // Map the fetched token information to CoinMeta[] format
-  return nonZeroBalanceTokenAddresses
-    .map(tokenAddress => {
-      const tokenInfo = tokenInfoData[tokenAddress];
-      if (!tokenInfo) return null;
+  const tokens = withoutUndefined(
+    nonZeroBalanceTokenAddresses.map(
+      tokenAddress => tokenInfoData[tokenAddress]
+    )
+  );
 
-      return oneInchTokenToCoinMeta({
-        token: tokenInfo,
-        chain: account.chain,
-      });
-    })
-    .filter((token): token is CoinMeta => token !== null);
+  return fromOneInchTokens({
+    tokens,
+    chain: account.chain,
+  });
 };

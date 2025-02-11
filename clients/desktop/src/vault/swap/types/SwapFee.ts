@@ -1,5 +1,6 @@
+import { CoinAmount, CoinKey } from '@core/chain/coin/Coin';
+
 import { KeysignChainSpecific } from '../../../chain/keysign/KeysignChainSpecific';
-import { CoinAmount, CoinKey } from '../../../coin/Coin';
 
 export type SwapFee = CoinKey & CoinAmount;
 

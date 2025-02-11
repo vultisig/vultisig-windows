@@ -1,9 +1,10 @@
 // TODO: REWRITE THIS
+import { Chain } from '@core/chain/Chain';
+import { ChainAccount } from '@core/chain/ChainAccount';
+import { Coin } from '@core/chain/coin/Coin';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
-import { ChainAccount } from '../../../chain/ChainAccount';
 import { getSplAccounts } from '../../../chain/solana/client/getSplAccounts';
-import { Chain } from '@core/chain/Chain';
 
 export const findSolanaAccountCoins = async (account: ChainAccount) => {
   if (!account.address) {
@@ -28,15 +29,18 @@ export const findSolanaAccountCoins = async (account: ChainAccount) => {
         decimals: info.decimals,
       })
     )
-    .map(([address, info]) => ({
-      chain: Chain.Solana,
-      ticker: (info.tokenList?.symbol || '').toUpperCase(),
-      logo: info.tokenList?.image || '',
-      decimals: info.decimals || 0,
-      contractAddress: address,
-      isNativeToken: false,
-      priceProviderId: info.tokenList?.extensions?.coingeckoId || '',
-    }));
+    .map(([address, info]) => {
+      const token: Coin = {
+        chain: Chain.Solana,
+        ticker: (info.tokenList?.symbol || '').toUpperCase(),
+        logo: info.tokenList?.image || '',
+        decimals: info.decimals || 0,
+        id: address,
+        priceProviderId: info.tokenList?.extensions?.coingeckoId || '',
+      };
+
+      return token;
+    });
 };
 
 const fetchSolanaTokenInfoList = async (

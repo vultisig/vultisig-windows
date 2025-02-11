@@ -1,13 +1,13 @@
+import { EvmChain } from '@core/chain/Chain';
+import { ChainAccount } from '@core/chain/ChainAccount';
 import { rootApiUrl } from '@core/config';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 import { pick } from '@lib/utils/record/pick';
 
-import { EvmChain } from '@core/chain/Chain';
-import { ChainAccount } from '../../../../ChainAccount';
+import { isFeeCoin } from '../../../../../coin/utils/isFeeCoin';
 import { getEvmChainId } from '../../../../evm/chainInfo';
 import { defaultEvmSwapGasLimit } from '../../../../evm/evmGasLimit';
-import { isNativeCoin } from '../../../../utils/isNativeCoin';
 import { GeneralSwapQuote } from '../../GeneralSwapQuote';
 import { oneInchAffiliateConfig } from '../oneInchAffiliateConfig';
 import { OneInchSwapQuoteResponse } from './OneInchSwapQuoteResponse';
@@ -35,10 +35,10 @@ export const getOneInchSwapQuote = async ({
   const chainId = getEvmChainId(account.chain as EvmChain);
 
   const params = {
-    src: isNativeCoin({ id: fromCoinId, chain: account.chain })
+    src: isFeeCoin({ id: fromCoinId, chain: account.chain })
       ? nativeCoinAddress
       : fromCoinId,
-    dst: isNativeCoin({ id: toCoinId, chain: account.chain })
+    dst: isFeeCoin({ id: toCoinId, chain: account.chain })
       ? nativeCoinAddress
       : toCoinId,
     amount: amount.toString(),

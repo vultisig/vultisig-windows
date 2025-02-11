@@ -3,8 +3,8 @@ import { omit } from '@lib/utils/record/omit';
 import { useCallback, useMemo } from 'react';
 
 import { EvmFeeSettings } from '../../../../../chain/evm/fee/EvmFeeSettings';
-import { isNativeCoin } from '../../../../../chain/utils/isNativeCoin';
 import { UtxoFeeSettings } from '../../../../../chain/utxo/fee/UtxoFeeSettings';
+import { isFeeCoin } from '../../../../../coin/utils/isFeeCoin';
 import { ChildrenProp } from '../../../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../../../lib/ui/state/getStateProviderSetup';
 import { useCurrentSendCoin } from '../../../state/sendCoin';
@@ -37,7 +37,7 @@ export const useFeeSettings = <T extends FeeSettings>() => {
   const value = useMemo(() => {
     const stringKey = feeSettingsKeyToString({
       chain: coin.chain,
-      isNativeToken: isNativeCoin(coin),
+      isNativeToken: isFeeCoin(coin),
     });
 
     if (stringKey in record) {
@@ -51,7 +51,7 @@ export const useFeeSettings = <T extends FeeSettings>() => {
     (value: T | null) => {
       const stringKey = feeSettingsKeyToString({
         chain: coin.chain,
-        isNativeToken: isNativeCoin(coin),
+        isNativeToken: isFeeCoin(coin),
       });
 
       setRecord(record => {

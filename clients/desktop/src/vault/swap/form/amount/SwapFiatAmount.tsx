@@ -1,10 +1,9 @@
+import { CoinKey } from '@core/chain/coin/Coin';
 import { EntityWithAmount } from '@lib/utils/entities/EntityWithAmount';
 import styled from 'styled-components';
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount';
-import { CoinKey } from '../../../../coin/Coin';
 import { useCoinPriceQuery } from '../../../../coin/query/useCoinPriceQuery';
-import { getStorageCoinKey } from '../../../../coin/utils/storageCoin';
 import { centerContent } from '../../../../lib/ui/css/centerContent';
 import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
@@ -33,10 +32,7 @@ export const SwapFiatAmount = ({
   const coin = useCurrentVaultCoin(value);
 
   const query = useCoinPriceQuery({
-    coin: {
-      ...getStorageCoinKey(coin),
-      priceProviderId: coin.price_provider_id,
-    },
+    coin,
   });
 
   const formatFiatAmount = useFormatFiatAmount();

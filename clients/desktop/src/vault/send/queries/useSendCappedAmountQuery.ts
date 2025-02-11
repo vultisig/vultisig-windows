@@ -13,17 +13,11 @@ import { capSendAmountToMax } from '../utils/capSendAmountToMax';
 
 export const useSendCappedAmountQuery = () => {
   const [coinKey] = useCurrentSendCoin();
-  const { decimals, address } = useCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey);
   const [amount] = useSendAmount();
 
   const chainSpecificQuery = useSendChainSpecificQuery();
-  const balanceQuery = useBalanceQuery({
-    ...coinKey,
-    address,
-  });
-
-  console.log('chainSpecificQuery', chainSpecificQuery);
-  console.log('balanceQuery', balanceQuery);
+  const balanceQuery = useBalanceQuery(coin);
 
   return useTransformQueriesData(
     {
@@ -32,21 +26,24 @@ export const useSendCappedAmountQuery = () => {
     },
     useCallback(
       ({ chainSpecific, balance }) => {
-        const chainAmount = toChainAmount(shouldBePresent(amount), decimals);
+        const chainAmount = toChainAmount(
+          shouldBePresent(amount),
+          coin.decimals
+        );
 
         const feeAmount = getFeeAmount(chainSpecific);
 
         return {
-          decimals,
+          decimals: coin.decimals,
           amount: capSendAmountToMax({
             amount: chainAmount,
-            coin: coinKey,
+            coin: coin,
             fee: feeAmount,
             balance,
           }),
         };
       },
-      [amount, coinKey, decimals]
+      [amount, coin]
     )
   );
 };

@@ -1,12 +1,12 @@
 import { Chain } from '@core/chain/Chain';
-import { CoinMeta } from '../../model/coin-meta';
+import { Coin } from '@core/chain/coin/Coin';
 
 export type OneInchToken = {
   address: string;
   symbol: string;
   decimals: number;
   name: string;
-  logoURI: string;
+  logoURI?: string;
   eip2612: boolean;
   tags: string[];
 };
@@ -15,22 +15,28 @@ export type OneInchTokensResponse = {
   tokens: Record<string, OneInchToken>;
 };
 
-type OneInchTokenToCoinMeta = {
-  token: OneInchToken;
+type FromOneInchTokensInput = {
+  tokens: OneInchToken[];
   chain: Chain;
 };
 
-export const oneInchTokenToCoinMeta = ({
-  token,
+export const fromOneInchTokens = ({
+  tokens,
   chain,
-}: OneInchTokenToCoinMeta): CoinMeta => {
-  return {
-    chain,
-    contractAddress: token.address,
-    decimals: token.decimals,
-    isNativeToken: false,
-    logo: token.logoURI,
-    priceProviderId: '',
-    ticker: token.symbol,
-  };
+}: FromOneInchTokensInput): Coin[] => {
+  const result: Coin[] = [];
+
+  tokens.forEach(token => {
+    if (token.logoURI) {
+      result.push({
+        chain,
+        id: token.address,
+        decimals: token.decimals,
+        logo: token.logoURI,
+        ticker: token.symbol,
+      });
+    }
+  });
+
+  return result;
 };

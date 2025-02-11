@@ -1,13 +1,10 @@
+import { AccountCoin } from '@core/chain/coin/AccountCoin';
 import { isEmpty } from '@lib/utils/array/isEmpty';
 import { isOneOf } from '@lib/utils/array/isOneOf';
-import { EntityWithId } from '@lib/utils/entities/EntityWithId';
-import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
 import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain';
 import { pick } from '@lib/utils/record/pick';
 import { TransferDirection } from '@lib/utils/TransferDirection';
 
-import { EntityWithDecimals } from '../../../coin/Coin';
-import { ChainAccount } from '../../ChainAccount';
 import { toChainAmount } from '../../utils/toChainAmount';
 import { getLifiSwapQuote } from '../general/lifi/api/getLifiSwapQuote';
 import { lifiSwapEnabledChains } from '../general/lifi/LifiSwapEnabledChains';
@@ -21,10 +18,7 @@ import {
 } from '../native/NativeSwapChain';
 import { SwapQuote } from './SwapQuote';
 
-type FindSwapQuoteInput = Record<
-  TransferDirection,
-  ChainAccount & EntityWithId & EntityWithTicker & EntityWithDecimals
-> & {
+type FindSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   amount: number;
 
   isAffiliate: boolean;

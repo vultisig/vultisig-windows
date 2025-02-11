@@ -1,12 +1,12 @@
 import { create } from '@bufbuild/protobuf';
+import { Chain } from '@core/chain/Chain';
+import { AccountCoinKey } from '@core/chain/coin/AccountCoin';
 import {
   Coin,
   CoinSchema,
 } from '@core/communication/vultisig/keysign/v1/coin_pb';
 
 import { storage } from '../../../wailsjs/go/models';
-import { Chain } from '@core/chain/Chain';
-import { AccountCoinKey } from '../AccountCoin';
 
 export const getStorageCoinKey = ({
   ticker,

@@ -1,5 +1,6 @@
-import { chainFeeCoin } from '../../coin/chainFeeCoin';
 import { Chain } from '@core/chain/Chain';
+
+import { chainFeeCoin } from '../../coin/chainFeeCoin';
 import { toChainAmount } from '../utils/toChainAmount';
 
 export const tonConfig = {

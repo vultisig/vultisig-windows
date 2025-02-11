@@ -1,15 +1,14 @@
+import { UtxoChain } from '@core/chain/Chain';
+import { areEqualCoins } from '@core/chain/coin/Coin';
+import { isOneOf } from '@lib/utils/array/isOneOf';
+
 import { getChainSpecific } from '../../../chain/keysign/chainSpecific/getChainSpecific';
 import { GetChainSpecificInput } from '../../../chain/keysign/chainSpecific/GetChainSpecificInput';
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields';
 import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { chainFeeCoin } from '../../../coin/chainFeeCoin';
-import { areEqualCoins } from '../../../coin/Coin';
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery';
-import { getCoinMetaKey } from '../../../coin/utils/coinMeta';
-import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
-import { isOneOf } from '@lib/utils/array/isOneOf';
-import { UtxoChain } from '@core/chain/Chain';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromAmount } from '../state/fromAmount';
 import { useFromCoin } from '../state/fromCoin';
@@ -18,12 +17,10 @@ import { useSwapQuoteQuery } from './useSwapQuoteQuery';
 
 export const useSwapChainSpecificQuery = () => {
   const [fromCoinKey] = useFromCoin();
-  const fromStorageCoin = useCurrentVaultCoin(fromCoinKey);
-  const fromCoin = storageCoinToCoin(fromStorageCoin);
+  const fromCoin = useCurrentVaultCoin(fromCoinKey);
 
   const [toCoinKey] = useToCoin();
-  const toStorageCoin = useCurrentVaultCoin(toCoinKey);
-  const toCoin = storageCoinToCoin(toStorageCoin);
+  const toCoin = useCurrentVaultCoin(toCoinKey);
 
   const [fromAmount] = useFromAmount();
 
@@ -50,7 +47,7 @@ export const useSwapChainSpecificQuery = () => {
 
       if ('native' in swapQuote) {
         const { swapChain } = swapQuote.native;
-        const nativeFeeCoin = getCoinMetaKey(chainFeeCoin[swapChain]);
+        const nativeFeeCoin = chainFeeCoin[swapChain];
 
         input.isDeposit = areEqualCoins(fromCoinKey, nativeFeeCoin);
       }

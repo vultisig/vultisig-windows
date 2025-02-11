@@ -1,14 +1,13 @@
+import { Coin, coinKeyToString } from '@core/chain/coin/Coin';
 import { pick } from '@lib/utils/record/pick';
 import { useMemo } from 'react';
 
 import { Query } from '../../lib/ui/query/Query';
-import { PriceProviderIdField } from '../Coin';
-import { CoinKey, coinKeyToString } from '../Coin';
 import { FiatCurrency } from '../price/FiatCurrency';
 import { useCoinPricesQuery } from './useCoinPricesQuery';
 
 type UseCoinPricesQueryInput = {
-  coin: CoinKey & PriceProviderIdField;
+  coin: Pick<Coin, 'id' | 'chain' | 'priceProviderId'>;
   fiatCurrency?: FiatCurrency;
 };
 

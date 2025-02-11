@@ -1,7 +1,6 @@
 import { getChainSpecific } from '../../../chain/keysign/chainSpecific/getChainSpecific';
 import { GetChainSpecificInput } from '../../../chain/keysign/chainSpecific/GetChainSpecificInput';
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery';
-import { storageCoinToCoin } from '../../../coin/utils/storageCoin';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useFeeSettings } from '../fee/settings/state/feeSettings';
@@ -24,7 +23,7 @@ export const useSendChainSpecificQuery = () => {
     },
     getQuery: ({ amount }) => {
       const input: GetChainSpecificInput = {
-        coin: storageCoinToCoin(coin),
+        coin,
         receiver,
         feeSettings,
         amount,

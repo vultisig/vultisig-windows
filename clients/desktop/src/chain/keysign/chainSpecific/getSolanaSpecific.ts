@@ -4,6 +4,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { asyncAttempt } from '@lib/utils/promise/asyncAttempt';
 import { Address } from '@solana/web3.js';
 
+import { isFeeCoin } from '../../../coin/utils/isFeeCoin';
 import { getSolanaClient } from '../../solana/client/getSolanaClient';
 import { getSolanaTokenAssociatedAccount } from '../../solana/client/getSolanaTokenAssociatedAccount';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
@@ -33,16 +34,16 @@ export const getSolanaSpecific = async ({
     priorityFee: highPriorityFee.toString(),
   });
 
-  if (!coin.isNativeToken) {
+  if (!isFeeCoin(coin)) {
     result.fromTokenAssociatedAddress = await getSolanaTokenAssociatedAccount({
       account: coin.address,
-      token: coin.contractAddress,
+      token: coin.id,
     });
     result.toTokenAssociatedAddress = await asyncAttempt(
       () =>
         getSolanaTokenAssociatedAccount({
           account: shouldBePresent(receiver),
-          token: coin.contractAddress,
+          token: coin.id,
         }),
       undefined
     );

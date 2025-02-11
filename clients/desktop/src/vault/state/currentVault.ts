@@ -1,13 +1,13 @@
+import { Chain } from '@core/chain/Chain';
+import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin';
 import { groupItems } from '@lib/utils/array/groupItems';
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useMemo } from 'react';
 
 import { storage } from '../../../wailsjs/go/models';
-import { areEqualCoins, CoinKey } from '../../coin/Coin';
-import { getStorageCoinKey } from '../../coin/utils/storageCoin';
+import { fromStorageCoin } from '../../coin/utils/fromStorageCoin';
 import { getValueProviderSetup } from '../../lib/ui/state/getValueProviderSetup';
-import { Chain } from '@core/chain/Chain';
 import { haveServerSigner } from '../fast/utils/haveServerSigner';
 
 export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
@@ -37,7 +37,10 @@ export const useCurrentVaultCoins = () => {
   const vault = useCurrentVault();
 
   return useMemo(
-    () => (vault.coins || []).filter(coin => chains.includes(coin.chain)),
+    () =>
+      (vault.coins || [])
+        .filter(coin => chains.includes(coin.chain))
+        .map(fromStorageCoin),
     [chains, vault.coins]
   );
 };
@@ -84,9 +87,7 @@ export const useCurrentVaultNativeCoin = (chain: string) => {
 export const useCurrentVaultCoin = (coinKey: CoinKey) => {
   const coins = useCurrentVaultCoins();
 
-  return shouldBePresent(
-    coins.find(coin => areEqualCoins(getStorageCoinKey(coin), coinKey))
-  );
+  return shouldBePresent(coins.find(coin => areEqualCoins(coin, coinKey)));
 };
 
 export const useVaultServerStatus = () => {
