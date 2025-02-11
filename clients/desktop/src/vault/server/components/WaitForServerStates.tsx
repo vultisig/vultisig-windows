@@ -33,14 +33,19 @@ export const WaitForServerStates: FC<WaitForServerStatesProps> = ({
           <RiveComponent />
         </LoaderWrapper>
         <VStack gap={8} alignItems="center">
-          <Text variant="h1Regular" size={32} color="contrast">
+          <Text
+            centerHorizontally
+            variant="h1Regular"
+            size={32}
+            color="contrast"
+          >
             {match(state, {
               success: () => t('fastVaultSetup.connectionSuccess'),
               pending: () => t('fastVaultSetup.connectingWithServer'),
               error: () => t('serverTimedOut'),
             })}
           </Text>
-          <Text size={14} color="shy">
+          <Text centerHorizontally size={14} color="shy">
             {match(state, {
               success: () => t('fastVaultSetup.vaultInitializationStarting'),
               pending: () => t('fastVaultSetup.takeMinute'),
