@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
-import { getCoinValue } from '../../coin/utils/getCoinValue';
+import { getCoinValue } from '@core/chain/coin/utils/getCoinValue';
 import { centerContent } from '../../lib/ui/css/centerContent';
 import { horizontalPadding } from '../../lib/ui/css/horizontalPadding';
 import { round } from '../../lib/ui/css/round';

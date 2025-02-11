@@ -8,7 +8,7 @@ import { useMemo } from 'react';
 
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
-import { getCoinValue } from '../../coin/utils/getCoinValue';
+import { getCoinValue } from '@core/chain/coin/utils/getCoinValue';
 import { EagerQuery } from '../../lib/ui/query/Query';
 import {
   useCurrentVaultCoins,

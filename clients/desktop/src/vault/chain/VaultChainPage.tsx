@@ -21,8 +21,8 @@ import {
   getTokensAutoDiscoveryQueryKey,
   useTokensAutoDiscoveryQuery,
 } from '../../coin/query/useTokensAutoDiscoveryQuery';
-import { getCoinValue } from '../../coin/utils/getCoinValue';
-import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
+import { getCoinValue } from '@core/chain/coin/utils/getCoinValue';
+import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
 import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';

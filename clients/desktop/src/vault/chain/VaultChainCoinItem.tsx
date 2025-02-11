@@ -5,7 +5,7 @@ import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo';
 import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
 import { formatAmount } from '@lib/utils/formatAmount';
 
-import { EntityWithPrice } from '../../chain/EntityWithPrice';
+import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice';
 import { ChainCoinIcon } from '../../chain/ui/ChainCoinIcon';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { getCoinLogoSrc } from '../../coin/logo/getCoinLogoSrc';
