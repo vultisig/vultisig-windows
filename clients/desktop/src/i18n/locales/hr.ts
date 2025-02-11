@@ -47,7 +47,7 @@ export const hr = {
   theyRe: 'Ezek',
   moreInfo: 'További információ',
   secureVaultSetupPasswordTooltipContent:
-    'Ez azért történik, mert a jelszó helyben titkosítja a biztonsági mentési fájlt, hasonlóan egy merevlemez titkosításához. A következő lépésben lehetőséged van egy tippet hozzáadni.',
+    'Ez azért történik, mert a jelszót a biztonsági mentési fájl helyi titkosítására használják, hasonlóan egy merevlemez titkosításához. A következő lépésben lehetősége van egy tippet hozzáadni.',
   splitIntoParts: 'részekre vannak osztva',
   toIncreaseSecurity: 'a biztonság növelése érdekében és',
   removeSinglePointOfFailure:

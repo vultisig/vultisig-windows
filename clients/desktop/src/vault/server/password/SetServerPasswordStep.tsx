@@ -18,11 +18,6 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { KeygenEducationPrompt } from '../../keygen/shared/KeygenEducationPrompt';
 import { useVaultPassword } from './state/password';
 
-const PasswordWarningBlock = styled(WarningBlock)`
-  max-width: max-content;
-  font-size: 13px;
-`;
-
 const passwordSchema = z
   .object({
     password: z.string().min(1, 'fastVaultSetup.passwordRequired'),
@@ -51,7 +46,7 @@ export const SetServerPasswordStep = ({
     formState: { errors, isValid },
   } = useForm({
     resolver: zodResolver(passwordSchema),
-    mode: 'onBlur',
+    mode: 'all',
     defaultValues: {
       password: storedPassword || '',
       confirmPassword: '',
@@ -138,6 +133,11 @@ export const SetServerPasswordStep = ({
     </>
   );
 };
+
+const PasswordWarningBlock = styled(WarningBlock)`
+  font-size: 13px;
+  max-width: fit-content;
+`;
 
 const IconWrapper = styled.div`
   font-size: 16px;

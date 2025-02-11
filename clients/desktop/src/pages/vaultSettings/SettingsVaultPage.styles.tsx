@@ -15,6 +15,10 @@ export const ListItemPanel = styled(Panel)<{
     isSpecialItem ? getColor('foreground') : getColor('contrast')};
   background-color: ${({ isSpecialItem }) =>
     isSpecialItem ? getColor('primary') : getColor('foreground')};
+
+  &:hover {
+    background-color: ${getColor('foregroundExtra')};
+  }
 `;
 
 export const Container = styled(VStack)`

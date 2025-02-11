@@ -50,7 +50,7 @@ export const ServerEmailStep = ({
     defaultValues: {
       email: storedEmail || '',
     },
-    mode: 'onBlur',
+    mode: 'all',
   });
 
   const onSubmit = (data: EmailSchema) => {

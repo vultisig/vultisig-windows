@@ -77,8 +77,14 @@ export const SetupVaultSummaryStep: FC<SetupVaultSummaryStepProps> = ({
           </VStack>
         </ContentWrapper>
         <VStack gap={16}>
-          <HStack alignItems="center" gap={8}>
-            <Checkbox value={isChecked} onChange={toggle} />
+          <HStack
+            role="button"
+            onClick={toggle}
+            tabIndex={0}
+            alignItems="center"
+            gap={8}
+          >
+            <Checkbox onChange={() => {}} value={isChecked} />
             <Text color="contrast" weight={500} size={14}>
               {t('fastVaultSetup.summary.agreementText')}
             </Text>

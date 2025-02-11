@@ -34,11 +34,8 @@ export const VaultOverview = () => {
             <VaultPrimaryActions />
           </VStack>
           <VStack gap={16}>
-            {vaultChainBalances.map(vaultChainBalance => (
-              <VaultChainItem
-                key={vaultChainBalance.chain}
-                vault={vaultChainBalance}
-              />
+            {vaultChainBalances.map(balance => (
+              <VaultChainItem key={balance.chain} balance={balance} />
             ))}
             <ManageVaultChainsPrompt />
           </VStack>

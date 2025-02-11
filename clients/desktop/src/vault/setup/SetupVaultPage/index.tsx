@@ -151,11 +151,10 @@ export const SetupVaultPage = () => {
   );
 };
 
-// @antonio: optical alignment
 const LightningGradientIconWrapper = styled.div`
   position: relative;
-  right: -4px;
   font-size: 24px;
+  margin-top: -1px;
 `;
 
 export const LightningIconWrapper = styled.div`

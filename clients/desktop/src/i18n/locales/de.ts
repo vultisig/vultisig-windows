@@ -9,7 +9,7 @@ export const de = {
     'Vultisig ist von Natur aus eine Mehrgeräte-Anwendung. Erfordert mindestens zwei Geräte, um einen sicheren Tresor zu erstellen: ein initiierendes Gerät und ein Paarungsgerät.',
   moreInfo: 'Mehr Info',
   secureVaultSetupPasswordTooltipContent:
-    'Dies geschieht, weil das Passwort die Sicherungsdatei lokal verschlüsselt, ähnlich wie das Verschlüsseln einer Festplatte. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
+    'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie eine Festplatte verschlüsselt wird. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
   onboarding_view4_description:
     'Vultisig ist eine Wallet ohne Seed-Phrases. Stattdessen verwendet es einfach zu verwaltende Fragmente. Jedes Gerät hat sein eigenes einzigartiges Fragment, das separat gesichert werden muss.',
   create_new_vault: 'Neuen Tresor erstellen',
