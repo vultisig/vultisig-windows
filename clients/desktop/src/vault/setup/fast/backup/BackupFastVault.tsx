@@ -36,7 +36,8 @@ export const BackupFastVault: FC<BackupFastVaultProps> = ({ vault }) => {
     steps,
   });
   const vaults = useVaults();
-  const shouldShowBackupSummary = vaults.length === 2;
+  // @antonio: by design we only need to show the summary step if user has more than 2 vaults
+  const shouldShowBackupSummary = vaults.length > 1;
 
   return (
     <Match

@@ -1,19 +1,17 @@
-import type { StyleProp, ViewStyle } from 'react-native';
-
-export type OnLoadEventPayload = {
-  url: string;
-};
-
 export type MobileTssModuleEvents = {
   onChange: (params: ChangeEventPayload) => void;
+  onProgress: (params: ProgressEventPayload) => void;
+  onError: (params: ErrorEventPayload) => void;
 };
 
 export type ChangeEventPayload = {
   value: string;
 };
 
-export type MobileTssViewProps = {
-  url: string;
-  onLoad: (event: { nativeEvent: OnLoadEventPayload }) => void;
-  style?: StyleProp<ViewStyle>;
+export type ProgressEventPayload = {
+  value: string;
+};
+
+export type ErrorEventPayload = {
+  error: string;
 };
