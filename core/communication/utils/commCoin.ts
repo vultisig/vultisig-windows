@@ -1,6 +1,5 @@
 import { Chain } from "@core/chain/Chain";
 import { AccountCoin } from "@core/chain/coin/AccountCoin";
-import { Coin } from "@core/chain/coin/Coin";
 import {
   CoinSchema,
   Coin as CommCoin,

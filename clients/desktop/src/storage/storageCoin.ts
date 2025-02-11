@@ -32,7 +32,7 @@ export const toStorageCoin = (coin: ToStorageCoinInput): storage.Coin => {
     address: coin.address,
     hex_public_key: coin.hexPublicKey,
     ticker: coin.ticker,
-    contract_address: isFeeCoin(coin) ? '' : coin.id,
+    contract_address: isNativeToken ? '' : coin.id,
     is_native_token: isNativeToken,
     logo: coin.logo,
     price_provider_id: coin.priceProviderId ?? '',
