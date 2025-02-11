@@ -1,10 +1,10 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { areEqualCoins, coinKeyToString } from '@core/chain/coin/Coin';
 import { sum } from '@lib/utils/array/sum';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useCallback, useMemo } from 'react';
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount';
-import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { useCoinPricesQuery } from '../../../../coin/query/useCoinPricesQuery';
 import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { ValueProp } from '../../../../lib/ui/props';

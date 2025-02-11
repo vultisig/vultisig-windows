@@ -1,9 +1,9 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
+import { toChainAmount } from '@core/chain/amount/toChainAmount';
 import { formatAmount } from '@lib/utils/formatAmount';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
-import { fromChainAmount } from '../../../utils/fromChainAmount';
-import { toChainAmount } from '../../../utils/toChainAmount';
 import { extractChainFromNativeSwapAsset } from '../asset/extractChainFromNativeSwapAsset';
 import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig';
 import {

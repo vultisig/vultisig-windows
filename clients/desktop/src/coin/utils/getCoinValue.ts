@@ -1,7 +1,7 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { CoinAmount } from '@core/chain/coin/Coin';
 
 import { EntityWithPrice } from '../../chain/EntityWithPrice';
-import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 
 export const getCoinValue = ({
   amount,

@@ -6,7 +6,7 @@ import { t } from 'i18next';
 import { useCallback, useMemo } from 'react';
 
 import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitelistedCoinsQuery';
-import { getCoinSearchString } from '../../../../../../coin/utils/getCoinSearchStrings';
+import { getCoinSearchString } from '@core/chain/coin/utils/getCoinSearchStrings';
 import { sortCoinsAlphabetically } from '../../../../../../coin/utils/sortCoinsAlphabetically';
 import { NonEmptyOnly } from '../../../../../../lib/ui/base/NonEmptyOnly';
 import { useTransform } from '../../../../../../lib/ui/hooks/useTransform';

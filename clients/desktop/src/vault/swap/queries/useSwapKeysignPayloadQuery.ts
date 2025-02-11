@@ -1,9 +1,9 @@
 import { create } from '@bufbuild/protobuf';
+import { toChainAmount } from '@core/chain/amount/toChainAmount';
 import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 
 import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload';
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields';
-import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromAmount } from '../state/fromAmount';

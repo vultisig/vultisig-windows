@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf';
+import { toChainAmount } from '@core/chain/amount/toChainAmount';
 import { Chain, EvmChain } from '@core/chain/Chain';
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import {
@@ -16,7 +17,6 @@ import { getEvmMaxPriorityFee } from '../../evm/fee/getEvmMaxPriorityFee';
 import { getEvmBaseFee } from '../../evm/utils/getEvmBaseFee';
 import { getEvmGasLimit } from '../../evm/utils/getEvmGasLimit';
 import { defaultFeePriority } from '../../fee/FeePriority';
-import { toChainAmount } from '../../utils/toChainAmount';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
 
 const baseFeeMultiplier = 1.5;

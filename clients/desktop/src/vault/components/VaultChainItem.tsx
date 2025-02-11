@@ -1,9 +1,9 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { sum } from '@lib/utils/array/sum';
 import { formatAmount } from '@lib/utils/formatAmount';
 import styled from 'styled-components';
 
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
-import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
 import { getCoinValue } from '../../coin/utils/getCoinValue';
 import { centerContent } from '../../lib/ui/css/centerContent';

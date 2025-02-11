@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf';
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { EvmChain } from '@core/chain/Chain';
 import { AccountCoin } from '@core/chain/coin/AccountCoin';
 import { Coin } from '@core/chain/coin/Coin';
@@ -13,7 +14,6 @@ import { isOneOf } from '@lib/utils/array/isOneOf';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 
-import { fromChainAmount } from '../../utils/fromChainAmount';
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote';
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload';
 import { SwapQuote } from '../quote/SwapQuote';

@@ -1,7 +1,7 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement';
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
 import { borderRadius } from '../../../lib/ui/css/borderRadius';

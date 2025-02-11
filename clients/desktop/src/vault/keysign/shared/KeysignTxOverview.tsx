@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { Chain } from '@core/chain/Chain';
 import { fromCommCoin } from '@core/communication/utils/commCoin';
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
@@ -16,7 +17,6 @@ import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
 import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
 import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { getBlockExplorerUrl } from '../../../chain/utils/getBlockExplorerUrl';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { IconButton } from '../../../lib/ui/buttons/IconButton';

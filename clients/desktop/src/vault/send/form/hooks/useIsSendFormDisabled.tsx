@@ -1,8 +1,8 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useValidateAddressQuery } from '../../../../chain/queries/useValidateAddressQuery';
-import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery';
 import { useCurrentVaultCoin } from '../../../state/currentVault';
 import { useSendAmount } from '../../state/amount';
