@@ -45,9 +45,7 @@ export const DepositConfirmButton = ({
   const coin = useCurrentVaultCoin(coinKey);
   const navigate = useAppNavigate();
   const chainSpecificQuery = useDepositChainSpecificQuery();
-
   const vault = useCurrentVault();
-
   const config = transactionConfig[action] || {};
 
   const receiver = config.requiresNodeAddress
@@ -106,7 +104,8 @@ export const DepositConfirmButton = ({
   const { hasServer, isBackup } = useVaultServerStatus();
 
   if (
-    (config.requiresAmount && !amount) ||
+    (config.requiresAmount && !Number.isFinite(amount)) ||
+    amount < 0 ||
     (config.requiresNodeAddress && !receiver && !isTonFunction)
   ) {
     return <Text color="danger">{t('required_field_missing')}</Text>;
