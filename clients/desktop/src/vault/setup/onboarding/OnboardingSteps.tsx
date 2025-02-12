@@ -40,7 +40,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
   } = useOnboardingStepsAnimations();
 
   return (
-    <PageContent>
+    <PageContent style={{ overflowY: 'hidden' }}>
       <ProgressWrapper gap={16}>
         <HStack justifyContent="space-between" alignItems="baseline">
           <HStack
@@ -67,7 +67,9 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
         />
       </ProgressWrapper>
       <ContentWrapper justifyContent="space-between" flexGrow>
-        <RiveWrapper>
+        <RiveWrapper
+          isLastAnimation={currentAnimation === animations.length - 1}
+        >
           <AnimationComponent />
         </RiveWrapper>
         <VStack gap={12}>
@@ -112,6 +114,5 @@ const ProgressWrapper = styled(VStack)`
 `;
 
 const ContentWrapper = styled(VStack)`
-  max-width: 640px;
   margin-inline: auto;
 `;

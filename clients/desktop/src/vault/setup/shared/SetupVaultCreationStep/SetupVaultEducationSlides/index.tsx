@@ -7,7 +7,7 @@ import { PageContent } from '../../../../../ui/page/PageContent';
 import { DynamicEducationContent } from './components/DynamicEducationalContent';
 import { SlidesLoader } from './components/SlidesLoader';
 
-const SLIDE_DURATION_IN_MS = 3000;
+const SLIDE_DURATION_IN_MS = 6000;
 export const steps = [
   'multiFactor',
   'selfCustodial',
@@ -40,6 +40,6 @@ export const SetupVaultEducationSlides = () => {
 };
 
 const Wrapper = styled(VStack)`
-  max-width: 550px;
+  width: 550px;
   align-self: center;
 `;
