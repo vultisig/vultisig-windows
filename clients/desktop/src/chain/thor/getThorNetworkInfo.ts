@@ -1,11 +1,11 @@
+import { Chain } from '@core/chain/Chain';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
-import { Chain } from '@core/chain/Chain';
-import { cosmosTendermintRpcUrl } from '../cosmos/cosmosTendermintRpcUrl';
+import { cosmosRpcUrl } from '../cosmos/cosmosRpcUrl';
 
 interface NetworkInfo {
   native_tx_fee_rune: string;
 }
 
 export const getThorNetworkInfo = async () =>
-  queryUrl<NetworkInfo>(`${cosmosTendermintRpcUrl[Chain.THORChain]}/status`);
+  queryUrl<NetworkInfo>(`${cosmosRpcUrl[Chain.THORChain]}/thorchain/network`);
