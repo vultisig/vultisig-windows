@@ -1,10 +1,8 @@
+import { Chain } from '@core/chain/Chain';
 import { WalletCore } from '@trustwallet/wallet-core';
 import { z } from 'zod';
 
 import { isValidAddress } from '../../../chain/utils/isValidAddress';
-import { Chain } from '@core/chain/Chain';
-
-export const DISABLED_FIELDS_NAMES = ['unbondAmount'];
 
 export const requiredFieldsPerChainAction = {
   bond: {
@@ -176,11 +174,6 @@ export const requiredFieldsPerChainAction = {
         label: 'chainFunctions.unbond.labels.provider',
         required: false,
       },
-      {
-        name: 'unbondAmount',
-        type: 'number',
-        label: 'chainFunctions.unbond.labels.unbondAmount',
-      },
     ],
     schema: (chain: Chain, walletCore: WalletCore) =>
       z.object({
@@ -320,7 +313,7 @@ export const requiredFieldsPerChainAction = {
         name: 'amount',
         type: 'number',
         label: 'chainFunctions.custom.labels.amount',
-        required: true,
+        required: false,
       },
       {
         name: 'customMemo',
@@ -337,7 +330,10 @@ export const requiredFieldsPerChainAction = {
       z.object({
         amount: z
           .string()
-          .transform(val => Number(val))
+          .optional()
+          .transform(val =>
+            val === '' || val === undefined ? undefined : Number(val)
+          )
           .pipe(
             z
               .number()
@@ -347,6 +343,7 @@ export const requiredFieldsPerChainAction = {
               .refine(val => val > 0, {
                 message: 'chainFunctions.custom.validations.amount',
               })
+              .optional()
           ),
         customMemo: z
           .string()
