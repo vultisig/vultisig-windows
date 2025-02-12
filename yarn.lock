@@ -1538,6 +1538,8 @@ __metadata:
 "@core/chain@workspace:core/chain":
   version: 0.0.0-use.local
   resolution: "@core/chain@workspace:core/chain"
+  dependencies:
+    "@solana/web3.js": "npm:^1.98.0"
   languageName: unknown
   linkType: soft
 

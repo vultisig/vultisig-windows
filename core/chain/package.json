@@ -4,5 +4,8 @@
   "private": true,
   "scripts": {
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^2.0.0"
   }
 }

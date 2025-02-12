@@ -1,7 +1,6 @@
-import { Address, erc20Abi } from 'viem';
-
 import { EvmChain } from '@core/chain/Chain';
-import { getEvmClient } from '../client/getEvmClient';
+import { getEvmClient } from '@core/chain/chains/evm/client';
+import { Address, erc20Abi } from 'viem';
 
 type Input = {
   chain: EvmChain;

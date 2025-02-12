@@ -1,11 +1,11 @@
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
-import { Address } from '@solana/web3.js';
+import { isFeeCoin } from "@core/chain/coin/utils/isFeeCoin";
+import { Address } from "@solana/web3.js";
 
-import { getSolanaClient } from '../../chain/solana/client/getSolanaClient';
-import { getSplAccounts } from '../../chain/solana/client/getSplAccounts';
-import { CoinBalanceResolver } from './CoinBalanceResolver';
+import { getSolanaClient } from "../../chain/solana/client/getSolanaClient";
+import { getSplAccounts } from "../../chain/solana/client/getSplAccounts";
+import { CoinBalanceResolver } from "./CoinBalanceResolver";
 
-export const getSolanaCoinBalance: CoinBalanceResolver = async input => {
+export const getSolanaCoinBalance: CoinBalanceResolver = async (input) => {
   const client = getSolanaClient();
 
   if (isFeeCoin(input)) {
@@ -17,7 +17,7 @@ export const getSolanaCoinBalance: CoinBalanceResolver = async input => {
   const accounts = await getSplAccounts(input.address);
 
   const tokenAccount = accounts.find(
-    account => account.account.data.parsed.info.mint === input.id
+    (account) => account.account.data.parsed.info.mint === input.id,
   );
 
   const tokenAmount =
