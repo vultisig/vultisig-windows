@@ -22,7 +22,7 @@ export interface LocalStorage {
   vaults?: VaultProps[];
   isPriority?: boolean;
   ethProviderState?: EthProviderState;
-  transactions?: ITransaction.METAMASK[];
+  transactions?: ITransaction[];
 }
 export type LocalStorageKeys = keyof LocalStorage;
 
@@ -135,12 +135,12 @@ export const setStoredVaults = (vaults: VaultProps[]): Promise<void> => {
 };
 
 export const setStoredTransaction = (
-  transaction: ITransaction.METAMASK
+  transaction: ITransaction,
 ): Promise<void> => {
   return new Promise((resolve) => {
     getStoredTransactions().then((transactions) => {
       setStoredTransactions(
-        transactions.map((tx) => (tx.id === transaction.id ? transaction : tx))
+        transactions.map((tx) => (tx.id === transaction.id ? transaction : tx)),
       ).then(resolve);
     });
   });
@@ -176,14 +176,14 @@ export const getStoredEthProviderState = (): Promise<EthProviderState> => {
           chainId: "0x1",
           chainKey: ChainKey.ETHEREUM,
           isConnected: false,
-        }
+        },
       );
     });
   });
 };
 
 export const setStoredEthProviderState = (
-  ethProviderState: EthProviderState
+  ethProviderState: EthProviderState,
 ): Promise<void> => {
   const vals: LocalStorage = { ethProviderState };
 
@@ -194,7 +194,7 @@ export const setStoredEthProviderState = (
   });
 };
 
-export const getStoredTransactions = (): Promise<ITransaction.METAMASK[]> => {
+export const getStoredTransactions = (): Promise<ITransaction[]> => {
   const keys: LocalStorageKeys[] = ["transactions"];
 
   return new Promise((resolve) => {
@@ -205,7 +205,7 @@ export const getStoredTransactions = (): Promise<ITransaction.METAMASK[]> => {
 };
 
 export const setStoredTransactions = (
-  transactions: ITransaction.METAMASK[]
+  transactions: ITransaction[],
 ): Promise<void> => {
   const vals: LocalStorage = { transactions };
 

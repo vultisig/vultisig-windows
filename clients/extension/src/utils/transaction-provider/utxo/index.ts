@@ -63,14 +63,14 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
   };
 
   public getKeysignPayload = (
-    transaction: ITransaction.METAMASK,
+    transaction: ITransaction,
     vault: VaultProps,
   ): Promise<KeysignPayload> => {
     return new Promise((resolve) => {
       const coin = create(CoinSchema, {
         chain: transaction.chain.name,
         ticker: transaction.chain.ticker,
-        address: transaction.from,
+        address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
           (chain) => chain.name === transaction.chain.name,
@@ -85,11 +85,13 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
         });
 
         const keysignPayload = create(KeysignPayloadSchema, {
-          toAddress: transaction.to,
-          toAmount: transaction.value
-            ? BigInt(parseInt(transaction.value)).toString()
+          toAddress: transaction.transactionDetails.to,
+          toAmount: transaction.transactionDetails.amount?.amount
+            ? BigInt(
+                parseInt(transaction.transactionDetails.amount.amount),
+              ).toString()
             : "0",
-          memo: transaction.data,
+          memo: transaction.transactionDetails.data,
           vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
           vaultLocalPartyId: "VultiConnect",
           coin,
@@ -204,7 +206,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
     inputData,
     vault,
   }: {
-    transaction: ITransaction.METAMASK;
+    transaction: ITransaction;
     signature: SignatureProps;
     inputData: Uint8Array;
     vault: VaultProps;

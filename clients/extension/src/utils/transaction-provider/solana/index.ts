@@ -30,15 +30,14 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
     chainKey: ChainKey,
     chainRef: { [chainKey: string]: CoinType },
     dataEncoder: (data: Uint8Array) => Promise<string>,
-    walletCore: WalletCore
+    walletCore: WalletCore,
   ) {
     super(chainKey, chainRef, dataEncoder, walletCore);
- 
   }
 
   async fetchTokenAssociatedAccountByOwner(
     walletAddress: string,
-    mintAddress: string
+    mintAddress: string,
   ): Promise<string> {
     const requestBody = {
       jsonrpc: "2.0",
@@ -89,17 +88,17 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
   }
 
   public getKeysignPayload = (
-    transaction: ITransaction.METAMASK,
-    vault: VaultProps
+    transaction: ITransaction,
+    vault: VaultProps,
   ): Promise<KeysignPayload> => {
     return new Promise((resolve) => {
       const coin = create(CoinSchema, {
         chain: transaction.chain.name,
         ticker: transaction.chain.ticker,
-        address: transaction.from,
+        address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
-          (chain) => chain.name === transaction.chain.name
+          (chain) => chain.name === transaction.chain.name,
         )?.derivationKey,
         isNativeToken: true,
         logo: transaction.chain.ticker.toLowerCase(),
@@ -113,9 +112,11 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
         });
 
         const keysignPayload = create(KeysignPayloadSchema, {
-          toAddress: transaction.to,
-          toAmount: transaction.value
-            ? BigInt(parseInt(transaction.value)).toString()
+          toAddress: transaction.transactionDetails.to,
+          toAmount: transaction.transactionDetails.amount?.amount
+            ? BigInt(
+                parseInt(transaction.transactionDetails.amount.amount),
+              ).toString()
             : "0",
           vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
           vaultLocalPartyId: "VultiConnect",
@@ -194,15 +195,15 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
           // Generate the associated address if `toTokenAssociatedAddress` is missing
           const receiverAddress =
             this.walletCore.SolanaAddress.createWithString(
-              this.keysignPayload.toAddress
+              this.keysignPayload.toAddress,
             );
           const generatedAssociatedAddress =
             receiverAddress.defaultTokenAddress(
-              this.keysignPayload.coin.contractAddress
+              this.keysignPayload.coin.contractAddress,
             );
           if (!generatedAssociatedAddress) {
             throw new Error(
-              "We must have the association between the minted token and the TO address"
+              "We must have the association between the minted token and the TO address",
             );
           }
           const createAndTransferTokenMessage =
@@ -228,7 +229,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
           resolve(TW.Solana.Proto.SigningInput.encode(input).finish());
         } else {
           throw new Error(
-            "To send tokens we must have the association between the minted token and the TO address"
+            "To send tokens we must have the association between the minted token and the TO address",
           );
         }
       }
@@ -245,13 +246,13 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
         try {
           const coinType = this.walletCore.CoinType.solana;
           const pubkeySolana = vault.chains.find(
-            (chain) => chain.name === ChainKey.SOLANA
+            (chain) => chain.name === ChainKey.SOLANA,
           )?.derivationKey;
           const allSignatures = this.walletCore.DataVector.create();
           const publicKeys = this.walletCore.DataVector.create();
           const pubkey = this.walletCore.PublicKey.createWithData(
             Buffer.from(pubkeySolana!, "hex"),
-            this.walletCore.PublicKeyType.ed25519
+            this.walletCore.PublicKeyType.ed25519,
           );
           const modifiedSig = this.getSignature(signature);
           if (!pubkey.verify(modifiedSig, inputData)) {
@@ -264,7 +265,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
               coinType,
               inputData,
               allSignatures,
-              publicKeys
+              publicKeys,
             );
           const {
             encoded,
@@ -277,7 +278,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
             const result = new SignedTransactionResult(
               encoded,
               signatures[0].signature!,
-              undefined
+              undefined,
             );
             resolve({ txHash: result.transactionHash, raw: encoded });
           }

@@ -95,14 +95,14 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
   };
 
   public getKeysignPayload = (
-    transaction: ITransaction.METAMASK,
+    transaction: ITransaction,
     vault: VaultProps,
   ): Promise<KeysignPayload> => {
     return new Promise((resolve, reject) => {
       const coin = create(CoinSchema, {
         chain: transaction.chain.name,
         ticker: transaction.chain.ticker,
-        address: transaction.from,
+        address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.hexChainCode,
         isNativeToken: true,
@@ -110,7 +110,7 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
       });
 
       this.provider
-        .getTransactionCount(transaction.from)
+        .getTransactionCount(transaction.transactionDetails.from)
         .then((nonce) => {
           this.nonce = BigInt(nonce);
           const ethereumSpecific = create(EthereumSpecificSchema, {
@@ -127,33 +127,39 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
               this.chainKey,
             ).toString(),
           });
-          checkERC20Function(transaction.data).then((isMemoFunction) => {
-            let modifiedMemo: string;
-            try {
-              modifiedMemo =
-                isMemoFunction || transaction.data === "0x"
-                  ? (transaction.data ?? "")
-                  : toUtf8String(transaction.data);
-            } catch {
-              modifiedMemo = transaction.data;
-            }
-            const keysignPayload = create(KeysignPayloadSchema, {
-              toAddress: transaction.to,
-              toAmount: transaction.value
-                ? BigInt(parseInt(transaction.value)).toString()
-                : "0",
-              memo: modifiedMemo,
-              vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
-              vaultLocalPartyId: "VultiConnect",
-              coin,
-              blockchainSpecific: {
-                case: "ethereumSpecific",
-                value: ethereumSpecific,
-              },
-            });
-            this.keysignPayload = keysignPayload;
-            resolve(keysignPayload);
-          });
+          checkERC20Function(transaction.transactionDetails.data!).then(
+            (isMemoFunction) => {
+              let modifiedMemo: string;
+              try {
+                modifiedMemo =
+                  isMemoFunction || transaction.transactionDetails.data === "0x"
+                    ? (transaction.transactionDetails.data ?? "")
+                    : toUtf8String(transaction.transactionDetails.data!);
+              } catch {
+                modifiedMemo = transaction.transactionDetails.data!;
+              }
+              const keysignPayload = create(KeysignPayloadSchema, {
+                toAddress: transaction.transactionDetails.to,
+                toAmount: transaction.transactionDetails.amount?.amount
+                  ? BigInt(
+                      parseInt(
+                        String(transaction.transactionDetails.amount.amount),
+                      ),
+                    ).toString()
+                  : "0",
+                memo: modifiedMemo,
+                vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
+                vaultLocalPartyId: "VultiConnect",
+                coin,
+                blockchainSpecific: {
+                  case: "ethereumSpecific",
+                  value: ethereumSpecific,
+                },
+              });
+              this.keysignPayload = keysignPayload;
+              resolve(keysignPayload);
+            },
+          );
         })
         .catch(() => {
           reject();
@@ -259,8 +265,10 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
               : this.maxPriorityFeePerGas,
             this.chainKey,
           ).toString(),
-          to: transaction.to,
-          value: transaction.value ? BigInt(transaction.value) : BigInt(0),
+          to: transaction.transactionDetails.to,
+          value: transaction.transactionDetails.amount?.amount
+            ? BigInt(transaction.transactionDetails.amount.amount)
+            : BigInt(0),
           signature: {
             v: BigInt(signature.RecoveryID),
             r: `0x${signature.R}`,
@@ -268,8 +276,8 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
           },
         };
 
-        const tx = transaction.data
-          ? { ...props, data: transaction.data }
+        const tx = transaction.transactionDetails.data
+          ? { ...props, data: transaction.transactionDetails.data }
           : props;
 
         const txHash = keccak256(Transaction.from(tx).serialized);
