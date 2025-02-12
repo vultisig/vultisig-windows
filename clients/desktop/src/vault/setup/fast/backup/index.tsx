@@ -1,9 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-import { Button } from '../../../../lib/ui/buttons/Button';
 import { OTPInput } from '../../../../lib/ui/inputs/OTPInput';
 import { HStack, VStack } from '../../../../lib/ui/layout/Stack';
 import { Text } from '../../../../lib/ui/text';
@@ -11,6 +10,8 @@ import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader';
 import { PageContent } from '../../../../ui/page/PageContent';
 import { AnimatedLoader } from '../../../../ui/pending/AnimatedLoader';
 import { verifyVaultEmailCode } from '../../../fast/api/verifyVaultEmailCode';
+
+const ON_COMPLETE_DELAY = 1000;
 
 type EmailConfirmationProps = {
   vaultId: string;
@@ -30,12 +31,19 @@ export const EmailConfirmation: FC<EmailConfirmationProps> = ({
       }),
   });
 
+  useEffect(() => {
+    if (isSuccess) {
+      const timeoutId = setTimeout(() => onCompleted(), ON_COMPLETE_DELAY);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isSuccess, onCompleted]);
+
   return (
     <>
       <FlowPageHeader title={t('email')} />
       <PageContent>
-        <VStack flexGrow gap={12}>
-          <VStack>
+        <VStack flexGrow gap={48}>
+          <VStack gap={4}>
             <Text variant="h1Regular">
               {t('fastVaultSetup.backup.enterCode')}
             </Text>
@@ -64,14 +72,6 @@ export const EmailConfirmation: FC<EmailConfirmationProps> = ({
             )}
           </VStack>
         </VStack>
-        <Button
-          isLoading={isPending}
-          type="button"
-          isDisabled={!isSuccess}
-          onClick={onCompleted}
-        >
-          {t('continue')}
-        </Button>
       </PageContent>
     </>
   );
