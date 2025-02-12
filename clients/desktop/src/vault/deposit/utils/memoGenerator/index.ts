@@ -1,11 +1,10 @@
+import { Chain } from '@core/chain/Chain';
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { match } from '@lib/utils/match';
 import { FieldValues } from 'react-hook-form';
 
-import { nativeSwapAffiliateConfig } from '../../../../chain/swap/native/nativeSwapAffiliateConfig';
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { MayaChainPool } from '../../../../lib/types/deposit';
-import { Chain } from '@core/chain/Chain';
 import { ChainAction } from '../../ChainAction';
 
 interface MemoParams {
@@ -20,15 +19,8 @@ export const generateMemo = ({
   depositFormData,
   bondableAsset,
 }: MemoParams): string => {
-  const {
-    nodeAddress,
-    amount,
-    lpUnits,
-    customMemo,
-    percentage,
-    provider,
-    operatorFee,
-  } = extractFormValues(depositFormData);
+  const { nodeAddress, amount, lpUnits, customMemo, provider, operatorFee } =
+    extractFormValues(depositFormData);
 
   return match(selectedChainAction, {
     stake: () => 'd',
@@ -63,7 +55,7 @@ export const generateMemo = ({
         : `UNBOND:${nodeAddress}:${amountInUnits}`;
     },
     custom: () => shouldBePresent(customMemo, 'Custom memo'),
-    leave: () => 'LEAVE',
+    leave: () => `LEAVE:${nodeAddress}`,
     vote: () => 'VOTE',
   });
 };
