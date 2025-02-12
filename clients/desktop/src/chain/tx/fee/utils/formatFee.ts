@@ -5,7 +5,7 @@ import { isOneOf } from '@lib/utils/array/isOneOf';
 import { formatAmount } from '@lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
 
-import { cosmosGasLimitRecord } from '../../../cosmos/cosmosGasLimitRecord';
+import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
 import { KeysignChainSpecific } from '../../../keysign/KeysignChainSpecific';
 import { polkadotConfig } from '../../../polkadot/config';
 import { rippleConfig } from '../../../ripple/config';

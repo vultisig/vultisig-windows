@@ -1,7 +1,7 @@
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
 
 import { Chain } from '@core/chain/Chain';
-import { cosmosRpcUrl } from '../../cosmos/cosmosRpcUrl';
+import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl';
 
 export const nativeSwapChains = [Chain.THORChain, Chain.MayaChain] as const;
 export type NativeSwapChain = (typeof nativeSwapChains)[number];

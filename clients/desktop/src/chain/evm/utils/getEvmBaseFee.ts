@@ -1,21 +1,10 @@
-import { ethers } from 'ethers';
-
 import { EvmChain } from '@core/chain/Chain';
-import { getEvmChainRpcUrl } from '../chainInfo';
+import { getEvmClient } from '@core/chain/chains/evm/client';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 
 export const getEvmBaseFee = async (chain: EvmChain) => {
-  const provider = new ethers.JsonRpcProvider(getEvmChainRpcUrl(chain));
-  const baseFee = await provider.getBlock('latest');
+  const client = getEvmClient(chain);
+  const { baseFeePerGas } = await client.getBlock();
 
-  if (!baseFee) {
-    throw new Error(`Failed to get base fee for chain ${chain}`);
-  }
-  
-  const { baseFeePerGas } = baseFee;
-
-  if (baseFeePerGas === undefined || baseFeePerGas === null) {
-    throw new Error(`Failed to get base fee per gas for chain ${chain}`);
-  }
-
-  return baseFeePerGas;
+  return shouldBePresent(baseFeePerGas);
 };

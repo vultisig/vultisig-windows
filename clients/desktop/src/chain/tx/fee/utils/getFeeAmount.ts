@@ -1,6 +1,6 @@
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
 import { Chain } from '@core/chain/Chain';
-import { cosmosGasLimitRecord } from '../../../cosmos/cosmosGasLimitRecord';
+import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
 import { KeysignChainSpecific } from '../../../keysign/KeysignChainSpecific';
 import { polkadotConfig } from '../../../polkadot/config';
 import { rippleConfig } from '../../../ripple/config';

@@ -1,17 +1,16 @@
 import { create } from '@bufbuild/protobuf';
 import { toChainAmount } from '@core/chain/amount/toChainAmount';
 import { Chain, EvmChain } from '@core/chain/Chain';
+import { evmChainInfo } from '@core/chain/chains/evm/chainInfo';
+import { getEvmClient } from '@core/chain/chains/evm/client';
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import {
   EthereumSpecific,
   EthereumSpecificSchema,
 } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { ethers } from 'ethers';
 import { publicActionsL2 } from 'viem/zksync';
 
-import { evmChainInfo, getEvmChainRpcUrl } from '../../evm/chainInfo';
-import { getEvmClient } from '../../evm/client/getEvmClient';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
 import { getEvmMaxPriorityFee } from '../../evm/fee/getEvmMaxPriorityFee';
 import { getEvmBaseFee } from '../../evm/utils/getEvmBaseFee';
@@ -32,13 +31,14 @@ export const getEthereumSpecific = async ({
 >): Promise<EthereumSpecific> => {
   const chain = coin.chain as EvmChain;
 
-  const provider = new ethers.JsonRpcProvider(getEvmChainRpcUrl(chain));
-
-  const nonce = BigInt(await provider.getTransactionCount(coin.address));
+  const nonce = BigInt(
+    await getEvmClient(chain).getTransactionCount({
+      address: coin.address as `0x${string}`,
+    })
+  );
 
   if (chain === Chain.Zksync) {
     const client = getEvmClient(chain).extend(publicActionsL2());
-
     const value = toChainAmount(shouldBePresent(amount), coin.decimals);
 
     const { maxFeePerGas, maxPriorityFeePerGas, gasLimit } =

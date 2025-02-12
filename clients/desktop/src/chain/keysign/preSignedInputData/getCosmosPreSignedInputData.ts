@@ -3,8 +3,8 @@ import Long from 'long';
 
 import { TransactionType } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { assertField } from '@lib/utils/record/assertField';
-import { cosmosFeeCoinDenom } from '../../cosmos/cosmosFeeCoinDenom';
-import { cosmosGasLimitRecord } from '../../cosmos/cosmosGasLimitRecord';
+import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom';
+import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
 import { getCoinType } from '../../walletCore/getCoinType';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
 

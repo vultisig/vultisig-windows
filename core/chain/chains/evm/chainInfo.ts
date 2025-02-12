@@ -1,6 +1,7 @@
-import { rootApiUrl } from '@core/config';
-import { recordMap } from '@lib/utils/record/recordMap';
-import { Chain } from 'viem';
+import { EvmChain } from "@core/chain/Chain";
+import { rootApiUrl } from "@core/config";
+import { recordMap } from "@lib/utils/record/recordMap";
+import { Chain } from "viem";
 import {
   arbitrum,
   avalanche,
@@ -12,9 +13,7 @@ import {
   optimism,
   polygon,
   zksync,
-} from 'viem/chains';
-
-import { EvmChain } from '@core/chain/Chain';
+} from "viem/chains";
 
 export const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.Ethereum]: `${rootApiUrl}/eth/`,
@@ -22,7 +21,7 @@ export const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.Arbitrum]: `${rootApiUrl}/arb/`,
   [EvmChain.Polygon]: `${rootApiUrl}/polygon/`,
   [EvmChain.Optimism]: `${rootApiUrl}/opt/`,
-  [EvmChain.CronosChain]: 'https://cronos-evm-rpc.publicnode.com',
+  [EvmChain.CronosChain]: "https://cronos-evm-rpc.publicnode.com",
   [EvmChain.Blast]: `${rootApiUrl}/blast/`,
   [EvmChain.BSC]: `${rootApiUrl}/bsc/`,
   [EvmChain.Zksync]: `${rootApiUrl}/zksync/`,
@@ -54,7 +53,7 @@ export const evmChainInfo = recordMap(
         default: { http: [rpcUrl] },
       },
     };
-  }
+  },
 );
 
 export const getEvmChainId = (chain: EvmChain): number => {
