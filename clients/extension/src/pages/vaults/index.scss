@@ -29,5 +29,21 @@
         }
       }
     }
+
+    .ant-radio {
+      + span {
+        padding-right: 0;
+        width: 100%;
+
+        .name {
+          display: block;
+          font-size: rem(14);
+          line-height: rem(20);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
   }
 }
