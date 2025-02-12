@@ -39,7 +39,7 @@
     "@fontsource/montserrat": "^5.1.0",
     "@fontsource/roboto-mono": "^5.1.0",
     "@keplr-wallet/types": "^0.12.169",
-    "@solana/web3.js": "^2.0.0",
+    "@solana/web3.js": "^1.98.0",
     "@trustwallet/wallet-core": "^4.1.21",
     "@types/chrome": "^0.0.287",
     "@types/keymirror": "^0.1.4",
