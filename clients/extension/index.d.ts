@@ -13,6 +13,7 @@ interface Window {
   vultisig: any;
   keplr: any;
   vultiConnect: { getVaults: () => Promise<VaultProps[]> };
+  phantom: any;
   vultiConnectRouter: {
     vultisigProvider: EthereumProvider;
     lastInjectedProvider?: EthereumProvider;
