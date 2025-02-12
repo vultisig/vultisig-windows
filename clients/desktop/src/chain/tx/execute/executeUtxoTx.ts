@@ -1,7 +1,7 @@
 import { TW } from '@trustwallet/wallet-core';
 
 import { UtxoChain } from '@core/chain/Chain';
-import { broadcastUtxoTransaction } from '../../utxo/blockchair/broadcastUtxoTransaction';
+import { broadcastUtxoTransaction } from '@core/chain/chains/utxo/client/broadcastUtxoTransaction';
 import { hexEncode } from '../../walletCore/hexEncode';
 import { ExecuteTxInput } from './ExecuteTxInput';
 

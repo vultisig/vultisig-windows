@@ -1,9 +1,9 @@
 import { Chain, EvmChain } from '@core/chain/Chain';
+import { getEvmChainId } from '@core/chain/chains/evm/chainInfo';
 import { rootApiUrl } from '@core/config';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 import { useQuery } from '@tanstack/react-query';
 
-import { getEvmChainId } from '../../chain/evm/chainInfo';
 import { fromOneInchTokens, OneInchTokensResponse } from '../oneInch/token';
 
 export const useWhitelistedCoinsQuery = (chain: Chain) => {

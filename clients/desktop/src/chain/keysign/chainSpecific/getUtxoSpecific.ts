@@ -1,14 +1,14 @@
 import { create } from '@bufbuild/protobuf';
 import { toChainAmount } from '@core/chain/amount/toChainAmount';
 import { UtxoChain } from '@core/chain/Chain';
+import { getUtxoStats } from '@core/chain/chains/utxo/client/getUtxoStats';
+import { getCoinBalance } from '@core/chain/coin/balance';
 import {
   UTXOSpecific,
   UTXOSpecificSchema,
 } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 
-import { getCoinBalance } from '../../../coin/balance/getCoinBalance';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
-import { getUtxoStats } from '../../utxo/blockchair/getUtxoStats';
 import { adjustByteFee } from '../../utxo/fee/adjustByteFee';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
 

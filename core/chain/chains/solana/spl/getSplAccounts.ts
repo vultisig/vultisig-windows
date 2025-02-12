@@ -1,8 +1,7 @@
-import { Address } from '@solana/web3.js';
+import { Address } from "@solana/web3.js";
+import { getSolanaClient } from "../client";
 
-import { getSolanaClient } from './getSolanaClient';
-
-const SPL_TOKEN_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
+const SPL_TOKEN_PROGRAM_ID = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 
 export const getSplAccounts = async (address: string) => {
   const client = getSolanaClient();
@@ -14,8 +13,8 @@ export const getSplAccounts = async (address: string) => {
         programId: SPL_TOKEN_PROGRAM_ID as Address,
       },
       {
-        encoding: 'jsonParsed',
-      }
+        encoding: "jsonParsed",
+      },
     )
     .send();
 

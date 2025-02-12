@@ -3,7 +3,7 @@ import { UtxoChain } from '@core/chain/Chain';
 import { ChainAccount } from '@core/chain/ChainAccount';
 import { UtxoInfoSchema } from '@core/communication/vultisig/keysign/v1/utxo_info_pb';
 
-import { getUtxoAddressInfo } from '../blockchair/getUtxoAddressInfo';
+import { getUtxoAddressInfo } from '@core/chain/chains/utxo/client/getUtxoAddressInfo';
 
 export const getUtxos = async (account: ChainAccount<UtxoChain>) => {
   const { data } = await getUtxoAddressInfo(account);

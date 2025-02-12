@@ -1,10 +1,10 @@
 import { create } from '@bufbuild/protobuf';
+import { getSuiClient } from '@core/chain/chains/sui/client';
 import {
   SuiCoinSchema,
   SuiSpecificSchema,
 } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 
-import { getSuiClient } from '../../sui/client/getSuiClient';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
 

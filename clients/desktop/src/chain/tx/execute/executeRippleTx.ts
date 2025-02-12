@@ -1,8 +1,8 @@
+import { getRippleClient } from '@core/chain/chains/ripple/client';
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined';
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { TW } from '@trustwallet/wallet-core';
 
-import { getRippleClient } from '../../ripple/client/getRippleClient';
 import { stripHexPrefix } from '../../utils/stripHexPrefix';
 import { ExecuteTxInput } from './ExecuteTxInput';
 

@@ -59,7 +59,3 @@ export const evmChainInfo = recordMap(
 export const getEvmChainId = (chain: EvmChain): number => {
   return evmChainInfo[chain].id;
 };
-
-export const getEvmChainRpcUrl = (chain: EvmChain): string => {
-  return evmChainRpcUrls[chain];
-};

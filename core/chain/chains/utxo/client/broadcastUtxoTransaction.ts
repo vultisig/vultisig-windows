@@ -1,7 +1,7 @@
+import { UtxoChain } from '@core/chain/Chain';
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { isInError } from '@lib/utils/error/isInError';
 
-import { UtxoChain } from '@core/chain/Chain';
 import { getBlockchairBaseUrl } from './getBlockchairBaseUrl';
 
 type BlockchairBroadcastResponse =
