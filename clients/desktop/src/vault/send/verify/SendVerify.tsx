@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { range } from '@lib/utils/array/range';
 import { formatAmount } from '@lib/utils/formatAmount';
 import { FC } from 'react';
@@ -11,7 +12,6 @@ import {
   TxOverviewRow,
 } from '../../../chain/tx/components/TxOverviewRow';
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount';
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';

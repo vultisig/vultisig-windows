@@ -6,8 +6,8 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useMemo } from 'react';
 
 import { storage } from '../../../wailsjs/go/models';
-import { fromStorageCoin } from '../../coin/utils/fromStorageCoin';
 import { getValueProviderSetup } from '../../lib/ui/state/getValueProviderSetup';
+import { fromStorageCoin } from '../../storage/storageCoin';
 import { haveServerSigner } from '../fast/utils/haveServerSigner';
 
 export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
@@ -17,7 +17,10 @@ export const useCurrentVaultNativeCoins = () => {
   const vault = useCurrentVault();
 
   return useMemo(
-    () => (vault.coins || []).filter(coin => coin.is_native_token),
+    () =>
+      (vault.coins || [])
+        .filter(coin => coin.is_native_token)
+        .map(fromStorageCoin),
     [vault.coins]
   );
 };
@@ -39,8 +42,8 @@ export const useCurrentVaultCoins = () => {
   return useMemo(
     () =>
       (vault.coins || [])
-        .filter(coin => chains.includes(coin.chain))
-        .map(fromStorageCoin),
+        .map(fromStorageCoin)
+        .filter(coin => chains.includes(coin.chain)),
     [chains, vault.coins]
   );
 };

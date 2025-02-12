@@ -1,7 +1,7 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { formatAmount } from '@lib/utils/formatAmount';
 import { useTranslation } from 'react-i18next';
 
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { CoinInputContainer } from '../../../coin/ui/inputs/CoinInputContainer';
 import { SelectCoinOverlay } from '../../../coin/ui/inputs/SelectCoinOverlay';
 import { Opener } from '../../../lib/ui/base/Opener';

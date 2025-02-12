@@ -1,6 +1,6 @@
 import { ChainEntityIcon } from '../../../chain/ui/ChainEntityIcon';
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
-import { chainFeeCoin } from '../../../coin/chainFeeCoin';
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { ValueProp } from '../../../lib/ui/props';
 import { Chain } from '@core/chain/Chain';
 import { ManageVaultCoin } from './ManageVaultCoin';

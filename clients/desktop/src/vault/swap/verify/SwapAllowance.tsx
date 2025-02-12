@@ -1,10 +1,10 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { formatAmount } from '@lib/utils/formatAmount';
 import { useTranslation } from 'react-i18next';
 
 import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow';
-import { fromChainAmount } from '../../../chain/utils/fromChainAmount';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { formatAmount } from '@lib/utils/formatAmount';
 import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery';
 
 export const SwapAllowance = () => {

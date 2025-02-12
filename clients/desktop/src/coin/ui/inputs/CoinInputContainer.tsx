@@ -1,4 +1,5 @@
 import { Coin } from '@core/chain/coin/Coin';
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { ComponentProps } from 'react';
 import styled from 'styled-components';
 
@@ -16,7 +17,6 @@ import { Text, text } from '../../../lib/ui/text';
 import { getColor } from '../../../lib/ui/theme/getters';
 import { IconWrapper } from '../../../pages/edItVault/EditVaultPage.styles';
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc';
-import { isFeeCoin } from '../../utils/isFeeCoin';
 
 const Container = styled(UnstyledButton)`
   ${textInputFrame};

@@ -1,8 +1,8 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { fromChainAmount } from '../../../../chain/utils/fromChainAmount';
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery';
 import { useCurrentVaultCoin } from '../../../state/currentVault';
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery';

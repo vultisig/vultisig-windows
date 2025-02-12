@@ -1,3 +1,5 @@
+import { chainTokens } from '@core/chain/coin/chainTokens';
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { splitBy } from '@lib/utils/array/splitBy';
 import { sum } from '@lib/utils/array/sum';
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
@@ -10,20 +12,17 @@ import { Link } from 'react-router-dom';
 import { AddressPageShyPrompt } from '../../chain/components/address/AddressPageShyPrompt';
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
 import { useCopyAddress } from '../../chain/ui/hooks/useCopyAddress';
+import { deriveAddress } from '../../chain/utils/deriveAddress';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
-import { chainTokens } from '../../coin/chainTokens';
+import { toHexPublicKey } from '../../chain/utils/toHexPublicKey';
 import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery';
 import { useSaveCoinsMutation } from '../../coin/query/useSaveCoinsMutation';
 import {
   getTokensAutoDiscoveryQueryKey,
   useTokensAutoDiscoveryQuery,
 } from '../../coin/query/useTokensAutoDiscoveryQuery';
-import { coinToStorageCoin } from '../../coin/utils/coin';
-import { createCoin } from '../../coin/utils/createCoin';
-import { getCoinValue } from '../../coin/utils/getCoinValue';
-import { isFeeCoin } from '../../coin/utils/isFeeCoin';
-import { sortCoinsByBalance } from '../../coin/utils/sortCoinsByBalance';
-import { getStorageCoinKey } from '../../coin/utils/storageCoin';
+import { getCoinValue } from '@core/chain/coin/utils/getCoinValue';
+import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance';
 import { IconButton } from '../../lib/ui/buttons/IconButton';
 import { CopyIcon } from '../../lib/ui/icons/CopyIcon';
 import { RefreshIcon } from '../../lib/ui/icons/RefreshIcon';
@@ -36,6 +35,7 @@ import { Text } from '../../lib/ui/text';
 import { makeAppPath } from '../../navigation';
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency';
 import { useAssertWalletCore } from '../../providers/WalletCoreProvider';
+import { toStorageCoin } from '../../storage/storageCoin';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
@@ -62,8 +62,7 @@ export const VaultChainPage = () => {
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain);
   const nativeCoin = useCurrentVaultNativeCoin(chain);
   const copyAddress = useCopyAddress();
-  const storageCoinKey = getStorageCoinKey(nativeCoin);
-  const invalidateQueryKey = getBalanceQueryKey(storageCoinKey);
+  const invalidateQueryKey = getBalanceQueryKey(nativeCoin);
   const walletCore = useAssertWalletCore();
   const { t } = useTranslation();
   const { mutate: saveCoins } = useSaveCoinsMutation();
@@ -90,19 +89,29 @@ export const VaultChainPage = () => {
   // TODO: Implement an abstraction auto-discovery mechanism at the root of the app
   useEffect(() => {
     if (findTokensQuery.data && publicKeyQuery.data) {
+      const publicKey = publicKeyQuery.data;
+      const address = deriveAddress({
+        chain,
+        publicKey,
+        walletCore,
+      });
+
+      const hexPublicKey = toHexPublicKey({
+        publicKey,
+        walletCore,
+      });
+
       saveCoins(
         findTokensQuery.data.map(coin =>
-          coinToStorageCoin(
-            createCoin({
-              coin,
-              publicKey: publicKeyQuery.data,
-              walletCore,
-            })
-          )
+          toStorageCoin({
+            ...coin,
+            address,
+            hexPublicKey,
+          })
         )
       );
     }
-  }, [findTokensQuery.data, publicKeyQuery.data, saveCoins, walletCore]);
+  }, [chain, findTokensQuery.data, publicKeyQuery.data, saveCoins, walletCore]);
 
   const hasMultipleCoinsSupport = chain in chainTokens;
 
@@ -123,7 +132,7 @@ export const VaultChainPage = () => {
         title={<PageHeaderTitle>{chain}</PageHeaderTitle>}
       />
       <PageContent gap={16} data-testid="VaultChainPage-Content">
-        <VaultPrimaryActions value={getStorageCoinKey(nativeCoin)} />
+        <VaultPrimaryActions value={nativeCoin} />
         <Panel withSections>
           <VStack fullWidth gap={8}>
             <HStack

@@ -1,15 +1,15 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
+import { Chain, EvmChain } from '@core/chain/Chain';
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { formatAmount } from '@lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
 
-import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
-import { Chain, EvmChain } from '@core/chain/Chain';
 import { cosmosGasLimitRecord } from '../../../cosmos/cosmosGasLimitRecord';
 import { KeysignChainSpecific } from '../../../keysign/KeysignChainSpecific';
 import { polkadotConfig } from '../../../polkadot/config';
 import { rippleConfig } from '../../../ripple/config';
 import { tonConfig } from '../../../ton/config';
-import { fromChainAmount } from '../../../utils/fromChainAmount';
 import { gwei } from './evm';
 import { getFeeUnit } from './feeUnit';
 

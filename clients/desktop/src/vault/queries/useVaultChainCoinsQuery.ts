@@ -6,7 +6,7 @@ import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo';
 import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
 import { useMemo } from 'react';
 
-import { EntityWithPrice } from '../../chain/EntityWithPrice';
+import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice';
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery';
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery';
 import {
