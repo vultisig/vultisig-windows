@@ -1,10 +1,10 @@
+import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom';
+import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
+import { TransactionType } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+import { assertField } from '@lib/utils/record/assertField';
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { TransactionType } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
-import { assertField } from '@lib/utils/record/assertField';
-import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom';
-import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
 import { getCoinType } from '../../walletCore/getCoinType';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
 
