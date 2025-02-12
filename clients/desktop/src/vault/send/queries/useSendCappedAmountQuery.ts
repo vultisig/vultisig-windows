@@ -1,8 +1,8 @@
+import { toChainAmount } from '@core/chain/amount/toChainAmount';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useCallback } from 'react';
 
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
-import { toChainAmount } from '../../../chain/utils/toChainAmount';
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
 import { useCurrentVaultCoin } from '../../state/currentVault';

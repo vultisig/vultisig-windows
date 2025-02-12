@@ -1,5 +1,7 @@
 import { create } from '@bufbuild/protobuf';
+import { toChainAmount } from '@core/chain/amount/toChainAmount';
 import { Chain, EvmChain } from '@core/chain/Chain';
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import {
   EthereumSpecific,
   EthereumSpecificSchema,
@@ -8,7 +10,6 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { ethers } from 'ethers';
 import { publicActionsL2 } from 'viem/zksync';
 
-import { isFeeCoin } from '../../../coin/utils/isFeeCoin';
 import { evmChainInfo, getEvmChainRpcUrl } from '../../evm/chainInfo';
 import { getEvmClient } from '../../evm/client/getEvmClient';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
@@ -16,7 +17,6 @@ import { getEvmMaxPriorityFee } from '../../evm/fee/getEvmMaxPriorityFee';
 import { getEvmBaseFee } from '../../evm/utils/getEvmBaseFee';
 import { getEvmGasLimit } from '../../evm/utils/getEvmGasLimit';
 import { defaultFeePriority } from '../../fee/FeePriority';
-import { toChainAmount } from '../../utils/toChainAmount';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
 
 const baseFeeMultiplier = 1.5;

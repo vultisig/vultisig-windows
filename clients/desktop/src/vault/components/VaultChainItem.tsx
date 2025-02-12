@@ -1,11 +1,11 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { sum } from '@lib/utils/array/sum';
 import { formatAmount } from '@lib/utils/formatAmount';
 import styled from 'styled-components';
 
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon';
-import { fromChainAmount } from '../../chain/utils/fromChainAmount';
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
-import { getCoinValue } from '../../coin/utils/getCoinValue';
+import { getCoinValue } from '@core/chain/coin/utils/getCoinValue';
 import { centerContent } from '../../lib/ui/css/centerContent';
 import { horizontalPadding } from '../../lib/ui/css/horizontalPadding';
 import { round } from '../../lib/ui/css/round';
@@ -29,11 +29,11 @@ const Pill = styled.div`
 `;
 
 type VaultChainItemProps = {
-  vault: VaultChainBalance;
+  balance: VaultChainBalance;
 };
 
-export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
-  const { chain, coins } = vault;
+export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
+  const { chain, coins } = balance;
   const [fiatCurrency] = useFiatCurrency();
 
   const addresses = useCurrentVaultAddreses();
@@ -57,7 +57,7 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
   );
 
   return (
-    <Panel data-testid="VaultChainItem-Panel" {...pressHandlers}>
+    <StyledPanel data-testid="VaultChainItem-Panel" {...pressHandlers}>
       <HStack fullWidth alignItems="center" gap={16}>
         <ChainEntityIcon
           value={getChainEntityIconSrc(chain)}
@@ -104,6 +104,12 @@ export const VaultChainItem = ({ vault }: VaultChainItemProps) => {
           </Text>
         </VStack>
       </HStack>
-    </Panel>
+    </StyledPanel>
   );
 };
+
+const StyledPanel = styled(Panel)`
+  &:hover {
+    background-color: ${getColor('foregroundExtra')};
+  }
+`;

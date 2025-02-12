@@ -1,13 +1,13 @@
+import { Chain } from '@core/chain/Chain';
+import { fromCommCoin } from '@core/communication/utils/commCoin';
+import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
 import { match } from '@lib/utils/match';
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { getCoinKey } from '../../../../../coin/utils/coin';
-import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
-import { Chain } from '@core/chain/Chain';
 import { getSigningInputEnvelopedTxFields } from '../../../../evm/tx/getSigningInputEnvelopedTxFields';
 import { toKeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload';
 import { nativeSwapAffiliateConfig } from '../../nativeSwapAffiliateConfig';
@@ -30,22 +30,20 @@ export const getThorchainSwapTxInputData = async ({
     'thorchainSwapPayload'
   );
 
-  const fromCoin = shouldBePresent(swapPayload.fromCoin);
+  const fromCoin = fromCommCoin(shouldBePresent(swapPayload.fromCoin));
   const fromChain = fromCoin.chain as ThorchainSwapEnabledChain;
 
-  const toCoin = shouldBePresent(swapPayload.toCoin);
+  const toCoin = fromCommCoin(shouldBePresent(swapPayload.toCoin));
 
   const swapInput = TW.THORChainSwap.Proto.SwapInput.create({
     fromAsset: toThorchainSwapAssetProto({
-      ...getCoinKey(fromCoin),
+      ...fromCoin,
       direction: 'from',
-      ticker: fromCoin.ticker,
     }),
     fromAddress: swapPayload.fromAddress,
     toAsset: toThorchainSwapAssetProto({
-      ...getCoinKey(toCoin),
+      ...toCoin,
       direction: 'to',
-      ticker: toCoin.ticker,
     }),
     toAddress: swapPayload.toCoin?.address,
     vaultAddress: swapPayload.vaultAddress,

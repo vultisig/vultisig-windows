@@ -3,7 +3,7 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
-import { chainFeeCoin } from '../../../coin/chainFeeCoin';
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';

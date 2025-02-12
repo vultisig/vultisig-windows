@@ -1,17 +1,21 @@
 import { create } from '@bufbuild/protobuf';
+import { toChainAmount } from '@core/chain/amount/toChainAmount';
 import { Chain } from '@core/chain/Chain';
 import { coinKeyFromString } from '@core/chain/coin/Coin';
+import { toCommCoin } from '@core/communication/utils/commCoin';
 import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { useTranslation } from 'react-i18next';
 
-import { toChainAmount } from '../../../chain/utils/toChainAmount';
+import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey';
 import { Button } from '../../../lib/ui/buttons/Button';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams';
+import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
+import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery';
 import {
   useCurrentVault,
   useCurrentVaultCoin,
@@ -58,10 +62,21 @@ export const DepositConfirmButton = ({
 
   const memo = (depositFormData['memo'] as string) ?? '';
 
+  const publicKeyQuery = useVaultPublicKeyQuery(coin.chain);
+
+  const walletCore = useAssertWalletCore();
+
   const startKeysign = (type: DepositType) => {
     // TODO: handle affiliate fee and percentage
+    const publicKey = shouldBePresent(publicKeyQuery.data);
     const keysignPayload = create(KeysignPayloadSchema, {
-      coin,
+      coin: toCommCoin({
+        ...coin,
+        hexPublicKey: toHexPublicKey({
+          publicKey,
+          walletCore,
+        }),
+      }),
       memo,
       blockchainSpecific: shouldBePresent(chainSpecificQuery.data),
       vaultLocalPartyId: vault.local_party_id,
@@ -97,8 +112,12 @@ export const DepositConfirmButton = ({
     return <Text color="danger">{t('required_field_missing')}</Text>;
   }
 
-  if (chainSpecificQuery.error) {
+  if (chainSpecificQuery.error || publicKeyQuery.error) {
     return <Text color="danger">{t('failed_to_load')}</Text>;
+  }
+
+  if (chainSpecificQuery.isLoading || publicKeyQuery.isLoading) {
+    return <Text>{t('loading')}</Text>;
   }
 
   if (hasServer && !isBackup) {

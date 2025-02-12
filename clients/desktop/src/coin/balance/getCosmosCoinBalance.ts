@@ -1,10 +1,10 @@
 import { CosmosChain } from '@core/chain/Chain';
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
 import { getCosmosClient } from '../../chain/cosmos/client/getCosmosClient';
 import { cosmosFeeCoinDenom } from '../../chain/cosmos/cosmosFeeCoinDenom';
 import { getCosmosWasmTokenBalanceUrl } from '../../chain/cosmos/cosmosRpcUrl';
-import { isFeeCoin } from '../utils/isFeeCoin';
 import { CoinBalanceResolver } from './CoinBalanceResolver';
 
 export const getCosmosCoinBalance: CoinBalanceResolver<

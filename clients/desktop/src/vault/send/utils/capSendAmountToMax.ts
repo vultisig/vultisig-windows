@@ -1,9 +1,8 @@
 import { UtxoChain } from '@core/chain/Chain';
 import { CoinKey } from '@core/chain/coin/Coin';
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { minBigInt } from '@lib/utils/math/minBigInt';
-
-import { isFeeCoin } from '../../../coin/utils/isFeeCoin';
 
 export type CapSendAmountToMaxInput = {
   coin: CoinKey;

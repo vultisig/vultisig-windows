@@ -1,7 +1,7 @@
 import { Chain, EvmChain, UtxoChain } from '@core/chain/Chain';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 
-import { chainFeeCoin } from '../../../../coin/chainFeeCoin';
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { getUtxoFeeUnit } from '../../../utxo/fee/getUtxoFeeUnit';
 import { gwei } from './evm';
 

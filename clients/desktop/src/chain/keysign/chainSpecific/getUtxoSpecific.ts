@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf';
+import { toChainAmount } from '@core/chain/amount/toChainAmount';
 import { UtxoChain } from '@core/chain/Chain';
 import {
   UTXOSpecific,
@@ -7,7 +8,6 @@ import {
 
 import { getCoinBalance } from '../../../coin/balance/getCoinBalance';
 import { EvmFeeSettings } from '../../evm/fee/EvmFeeSettings';
-import { toChainAmount } from '../../utils/toChainAmount';
 import { getUtxoStats } from '../../utxo/blockchair/getUtxoStats';
 import { adjustByteFee } from '../../utxo/fee/adjustByteFee';
 import { GetChainSpecificInput } from './GetChainSpecificInput';

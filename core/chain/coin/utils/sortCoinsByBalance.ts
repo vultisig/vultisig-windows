@@ -1,11 +1,10 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { CoinAmount } from '@core/chain/coin/Coin';
+import { getCoinValue } from '@core/chain/coin/utils/getCoinValue';
 import { order } from '@lib/utils/array/order';
 import { splitBy } from '@lib/utils/array/splitBy';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-
-import { EntityWithPrice } from '../../chain/EntityWithPrice';
-import { fromChainAmount } from '../../chain/utils/fromChainAmount';
-import { getCoinValue } from './getCoinValue';
+import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice';
 
 export const sortCoinsByBalance = <
   T extends CoinAmount & Partial<EntityWithPrice>,

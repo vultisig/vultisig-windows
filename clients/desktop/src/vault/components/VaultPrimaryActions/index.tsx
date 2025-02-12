@@ -1,10 +1,10 @@
-import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains';
 import { CoinKey } from '@core/chain/coin/Coin';
-import { getStorageCoinKey } from '../../../coin/utils/storageCoin';
-import { UniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';
-import { ValueProp } from '../../../lib/ui/props';
 import { isEmpty } from '@lib/utils/array/isEmpty';
 import { isOneOf } from '@lib/utils/array/isOneOf';
+
+import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains';
+import { UniformColumnGrid } from '../../../lib/ui/css/uniformColumnGrid';
+import { ValueProp } from '../../../lib/ui/props';
 import { SendPrompt } from '../../send/SendPrompt';
 import { useCurrentVaultNativeCoins } from '../../state/currentVault';
 import { SwapPrompt } from '../../swap/components/SwapPrompt';
@@ -17,7 +17,7 @@ export const VaultPrimaryActions = ({ value }: Partial<ValueProp<CoinKey>>) => {
     return null;
   }
 
-  const coinKey = value ?? getStorageCoinKey(nativeCoins[0]);
+  const coinKey = value ?? nativeCoins[0];
 
   return (
     <UniformColumnGrid fullWidth gap={12}>
