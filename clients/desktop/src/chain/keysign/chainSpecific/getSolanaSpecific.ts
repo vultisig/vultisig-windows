@@ -1,11 +1,11 @@
 import { create } from '@bufbuild/protobuf';
+import { getSolanaClient } from '@core/chain/chains/solana/client';
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { SolanaSpecificSchema } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { asyncAttempt } from '@lib/utils/promise/asyncAttempt';
 import { Address } from '@solana/web3.js';
 
-import { getSolanaClient } from '../../solana/client/getSolanaClient';
 import { getSolanaTokenAssociatedAccount } from '../../solana/client/getSolanaTokenAssociatedAccount';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
 import { GetChainSpecificInput } from './GetChainSpecificInput';

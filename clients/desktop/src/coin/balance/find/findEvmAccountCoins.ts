@@ -1,10 +1,10 @@
 import { EvmChain } from '@core/chain/Chain';
 import { ChainAccount } from '@core/chain/ChainAccount';
+import { getEvmChainId } from '@core/chain/chains/evm/chainInfo';
 import { rootApiUrl } from '@core/config';
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 
-import { getEvmChainId } from '../../../chain/evm/chainInfo';
 import { fromOneInchTokens, OneInchToken } from '../../oneInch/token';
 
 interface OneInchBalanceResponse {

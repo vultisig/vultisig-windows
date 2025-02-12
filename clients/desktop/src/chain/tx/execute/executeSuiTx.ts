@@ -1,7 +1,7 @@
+import { getSuiClient } from '@core/chain/chains/sui/client';
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { TW } from '@trustwallet/wallet-core';
 
-import { getSuiClient } from '../../sui/client/getSuiClient';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeSuiTx = async ({

@@ -1,8 +1,8 @@
+import { getSolanaClient } from '@core/chain/chains/solana/client';
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { Base64EncodedWireTransaction } from '@solana/web3.js';
 import { TW } from '@trustwallet/wallet-core';
 
-import { getSolanaClient } from '../../solana/client/getSolanaClient';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeSolanaTx = async ({

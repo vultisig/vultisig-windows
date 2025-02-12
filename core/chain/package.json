@@ -4,5 +4,12 @@
   "private": true,
   "scripts": {
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cosmjs/stargate": "^0.33.0",
+    "@mysten/sui": "^1.21.2",
+    "@solana/web3.js": "^2.0.0",
+    "viem": "^2.23.2",
+    "xrpl": "^4.1.0"
   }
 }

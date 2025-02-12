@@ -1,10 +1,10 @@
+import { getCoinBalance } from '@core/chain/coin/balance';
+import { CoinBalanceResolverInput } from '@core/chain/coin/balance/CoinBalanceResolver';
 import { coinKeyToString } from '@core/chain/coin/Coin';
 import { mergeRecords } from '@lib/utils/record/mergeRecords';
 import { useQueries } from '@tanstack/react-query';
 
 import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEagerQuery';
-import { CoinBalanceResolverInput } from '../balance/CoinBalanceResolver';
-import { getCoinBalance } from '../balance/getCoinBalance';
 
 export const getBalanceQueryKey = (input: CoinBalanceResolverInput) => [
   'coinBalance',

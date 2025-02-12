@@ -1,6 +1,5 @@
+import { getSolanaClient } from '@core/chain/chains/solana/client';
 import { Address } from '@solana/web3.js';
-
-import { getSolanaClient } from './getSolanaClient';
 
 type Input = {
   account: string;

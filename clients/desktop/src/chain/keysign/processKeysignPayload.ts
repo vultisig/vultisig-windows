@@ -8,7 +8,7 @@ import {
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { assertField } from '@lib/utils/record/assertField';
 
-import { getErc20Allowance } from '../evm/erc20/getErc20Allowance';
+import { getErc20Allowance } from '@core/chain/chains/evm/erc20/getErc20Allowance';
 import { assertChainField } from '../utils/assertChainField';
 import { getUtxos } from '../utxo/tx/getUtxos';
 

@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf';
+import { getRippleAccountInfo } from '@core/chain/chains/ripple/account/getRippleAccountInfo';
 import { RippleSpecificSchema } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 
-import { getRippleAccountInfo } from '../../ripple/account/getRippleAccountInfo';
 import { rippleConfig } from '../../ripple/config';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
 import { GetChainSpecificInput } from './GetChainSpecificInput';

@@ -1,6 +1,7 @@
 import { EvmChain } from '@core/chain/Chain';
+import { getEvmClient } from '@core/chain/chains/evm/client';
+
 import { FeePriority } from '../../fee/FeePriority';
-import { getEvmClient } from '../client/getEvmClient';
 
 export const getEvmMaxPriorityFee = async (
   chain: EvmChain

@@ -1,8 +1,8 @@
+import { CoinBalanceResolverInput } from '@core/chain/coin/balance/CoinBalanceResolver';
 import { coinKeyToString } from '@core/chain/coin/Coin';
 import { pick } from '@lib/utils/record/pick';
 import { useMemo } from 'react';
 
-import { CoinBalanceResolverInput } from '../balance/CoinBalanceResolver';
 import { useBalancesQuery } from './useBalancesQuery';
 
 export const useBalanceQuery = (input: CoinBalanceResolverInput) => {

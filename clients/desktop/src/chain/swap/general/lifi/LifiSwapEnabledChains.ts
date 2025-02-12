@@ -1,8 +1,7 @@
+import { Chain, EvmChain } from '@core/chain/Chain';
+import { getEvmChainId } from '@core/chain/chains/evm/chainInfo';
 import { makeRecord } from '@lib/utils/record/makeRecord';
 import { ChainId } from '@lifi/sdk';
-
-import { Chain, EvmChain } from '@core/chain/Chain';
-import { getEvmChainId } from '../../../evm/chainInfo';
 
 export const lifiSwapEnabledChains = [
   ...Object.values(EvmChain),

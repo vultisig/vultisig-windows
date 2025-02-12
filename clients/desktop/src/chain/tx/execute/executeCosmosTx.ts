@@ -1,8 +1,8 @@
+import { CosmosChain } from '@core/chain/Chain';
+import { getCosmosClient } from '@core/chain/chains/cosmos/client';
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { TW } from '@trustwallet/wallet-core';
 
-import { CosmosChain } from '@core/chain/Chain';
-import { getCosmosClient } from '../../cosmos/client/getCosmosClient';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeCosmosTx = async ({
