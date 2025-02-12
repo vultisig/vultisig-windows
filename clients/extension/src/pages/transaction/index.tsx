@@ -68,7 +68,7 @@ interface InitialState {
   loading?: boolean;
   sendKey?: string;
   step: number;
-  transaction?: ITransaction.METAMASK;
+  transaction?: ITransaction;
   txProvider?: BaseTransactionProvider;
   parsedMemo?: ParsedMemo;
   vault?: VaultProps;
@@ -487,7 +487,8 @@ const Component = () => {
         ({ chains }) =>
           chains.findIndex(
             ({ address }) =>
-              address?.toLowerCase() === transaction?.from.toLowerCase(),
+              address?.toLowerCase() ===
+              transaction?.transactionDetails.from.toLowerCase(),
           ) >= 0,
       );
 
@@ -507,7 +508,7 @@ const Component = () => {
 
             // Improve
             if (evmChains.indexOf(transaction.chain.name) >= 0) {
-              parseMemo(transaction.data)
+              parseMemo(transaction.transactionDetails.data!)
                 .then((memo) => {
                   setState({ ...state, parsedMemo: memo });
                 })
@@ -519,7 +520,9 @@ const Component = () => {
                   .then((gasPrice) => {
                     transaction.gasPrice = gasPrice;
                     try {
-                      transaction.memo = toUtf8String(transaction.data);
+                      transaction.memo = toUtf8String(
+                        transaction.transactionDetails.data!,
+                      );
                     } catch (err) {}
                     setStoredTransaction(transaction).then(() => {
                       setState((prevState) => ({
@@ -537,7 +540,7 @@ const Component = () => {
               const coin = create(CoinSchema, {
                 chain: transaction.chain.name,
                 ticker: transaction.chain.ticker,
-                address: transaction.from,
+                address: transaction.transactionDetails.from,
                 decimals: transaction.chain.decimals,
                 hexPublicKey: vault.hexChainCode,
                 isNativeToken: true,
@@ -555,10 +558,12 @@ const Component = () => {
                 .then((blockchainSpecific) => {
                   transaction.gasPrice = String(blockchainSpecific.gasPrice);
                   try {
-                    transaction.memo = toUtf8String(transaction.data);
+                    transaction.memo = toUtf8String(
+                      transaction.transactionDetails.data!,
+                    );
                   } catch (err) {
                     if (!parsedMemo) {
-                      transaction.memo = transaction.data;
+                      transaction.memo = transaction.transactionDetails.data;
                     }
                   }
                   setStoredTransaction(transaction).then(() => {
@@ -638,21 +643,25 @@ const Component = () => {
                     <div className="list">
                       <div className="list-item">
                         <span className="label">{t(messageKeys.FROM)}</span>
-                        <MiddleTruncate text={transaction.from} />
+                        <MiddleTruncate
+                          text={transaction.transactionDetails.from}
+                        />
                       </div>
-                      {transaction.to && (
+                      {transaction.transactionDetails.to && (
                         <div className="list-item">
                           <span className="label">{t(messageKeys.TO)}</span>
-                          <MiddleTruncate text={transaction.to} />
+                          <MiddleTruncate
+                            text={transaction.transactionDetails.to}
+                          />
                         </div>
                       )}
-                      {transaction.value && (
+                      {transaction.transactionDetails.amount?.amount && (
                         <div className="list-item">
                           <span className="label">{t(messageKeys.AMOUNT)}</span>
                           <span className="extra">{`${formatUnits(
-                            transaction.value,
-                            transaction.chain.decimals,
-                          )} ${transaction.chain.ticker}`}</span>
+                            transaction.transactionDetails.amount.amount,
+                            transaction.transactionDetails.amount.decimals,
+                          )} ${transaction.transactionDetails.asset.ticker}`}</span>
                         </div>
                       )}
                       {transaction.memo && !parsedMemo && (
@@ -710,7 +719,9 @@ const Component = () => {
                     <div className="list">
                       <div className="list-item">
                         <span className="label">{t(messageKeys.ADDRESS)}</span>
-                        <MiddleTruncate text={transaction.from} />
+                        <MiddleTruncate
+                          text={transaction.transactionDetails.from}
+                        />
                       </div>
                       <div className="list-item">
                         <span className="label">{t(messageKeys.MESSAGE)}</span>
@@ -832,17 +843,22 @@ const Component = () => {
                           </span>
                         </div>
                       </div>
-                      <div className="list-item">
-                        <span className="label">{t(messageKeys.TO)}</span>
-                        <MiddleTruncate text={transaction.to} />
-                      </div>
-                      {transaction.value && (
+                      {transaction.transactionDetails.to && (
+                        <div className="list-item">
+                          <span className="label">{t(messageKeys.TO)}</span>
+                          <MiddleTruncate
+                            text={transaction.transactionDetails.to}
+                          />
+                        </div>
+                      )}
+
+                      {transaction.transactionDetails.amount?.amount && (
                         <div className="list-item">
                           <span className="label">{t(messageKeys.AMOUNT)}</span>
                           <span className="extra">{`${formatUnits(
-                            transaction.value,
-                            transaction.chain.decimals,
-                          )} ${transaction.chain.ticker}`}</span>
+                            transaction.transactionDetails.amount.amount,
+                            transaction.transactionDetails.amount.decimals,
+                          )} ${transaction.transactionDetails.asset.ticker}`}</span>
                         </div>
                       )}
 
