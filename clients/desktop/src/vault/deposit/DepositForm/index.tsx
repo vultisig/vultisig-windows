@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FC } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -10,7 +11,6 @@ import { IconWrapper } from '../../../lib/ui/icons/IconWrapper';
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
-import { Chain } from '@core/chain/Chain';
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
 import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
@@ -25,7 +25,6 @@ import {
   getFieldsForChainAction,
   resolveSchema,
 } from '../utils/schema';
-import { DISABLED_FIELDS_NAMES } from './chainOptionsConfig';
 import { DepositActionItemExplorer } from './DepositActionItemExplorer';
 import {
   AssetRequiredLabel,
@@ -79,7 +78,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     resolver: schemaForChainAction
       ? zodResolver(schemaForChainAction)
       : undefined,
-    mode: 'onBlur',
+    mode: 'onSubmit',
   });
 
   const handleFormSubmit = (data: FieldValues) => {
@@ -87,6 +86,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   };
 
   const selectedBondableAsset = getValues('bondableAsset');
+
   return (
     <>
       <PageHeader
@@ -165,46 +165,44 @@ export const DepositForm: FC<DepositFormProps> = ({
             )}
           {selectedChainAction && fieldsForChainAction.length > 0 && (
             <VStack gap={12}>
-              {fieldsForChainAction
-                .filter(field => !DISABLED_FIELDS_NAMES.includes(field.name))
-                .map(field => (
-                  <InputContainer key={field.name}>
-                    <Text size={15} weight="400">
-                      {t(
-                        `chainFunctions.${selectedChainAction}.labels.${field.name}`
-                      )}{' '}
-                      {field.required ? (
-                        <Text as="span" color="danger" size={14}>
-                          *
-                        </Text>
-                      ) : (
-                        <Text as="span" size={14}>
-                          ({t('chainFunctions.optional_validation')})
-                        </Text>
-                      )}
-                    </Text>
-                    <InputFieldWrapper
-                      as="input"
-                      onWheel={e => e.currentTarget.blur()}
-                      type={field.type}
-                      step="0.01"
-                      min={0}
-                      {...register(field.name)}
-                      required={field.required}
-                    />
-                    {errors[field.name] && (
-                      <ErrorText color="danger" size={13} className="error">
-                        {t(errors[field.name]?.message as string, {
-                          defaultValue: t('chainFunctions.default_validation'),
-                        })}
-                      </ErrorText>
+              {fieldsForChainAction.map(field => (
+                <InputContainer key={field.name}>
+                  <Text size={15} weight="400">
+                    {t(
+                      `chainFunctions.${selectedChainAction}.labels.${field.name}`
+                    )}{' '}
+                    {field.required ? (
+                      <Text as="span" color="danger" size={14}>
+                        *
+                      </Text>
+                    ) : (
+                      <Text as="span" size={14}>
+                        ({t('chainFunctions.optional_validation')})
+                      </Text>
                     )}
-                  </InputContainer>
-                ))}
+                  </Text>
+                  <InputFieldWrapper
+                    as="input"
+                    onWheel={e => e.currentTarget.blur()}
+                    type={field.type}
+                    step="0.01"
+                    min={0}
+                    {...register(field.name)}
+                    required={field.required}
+                  />
+                  {errors[field.name] && (
+                    <ErrorText color="danger" size={13} className="error">
+                      {t(errors[field.name]?.message as string, {
+                        defaultValue: t('chainFunctions.default_validation'),
+                      })}
+                    </ErrorText>
+                  )}
+                </InputContainer>
+              ))}
             </VStack>
           )}
         </WithProgressIndicator>
-        <Button type="submit" disabled={!isValid}>
+        <Button type="submit" isDisabled={!isValid}>
           {t('continue')}
         </Button>
       </PageContent>
