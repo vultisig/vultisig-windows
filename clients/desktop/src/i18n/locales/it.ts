@@ -330,6 +330,8 @@ export const it = {
   or: 'o',
   enter_vault_name: 'Inserisci il nome della cassaforte',
   vault_name_required: 'Il nome della cassaforte è obbligatorio',
+  vault_name_max_length_error:
+    'Il nome della cassaforte deve essere inferiore a 50 caratteri',
   vault_name_already_exists: 'Il nome della cassaforte deve essere univoco',
   vault_settings_address_book_save_addresses_button: 'Salva indirizzo',
   vault_settings_address_book_add_addresses_title: 'Aggiungi indirizzo',

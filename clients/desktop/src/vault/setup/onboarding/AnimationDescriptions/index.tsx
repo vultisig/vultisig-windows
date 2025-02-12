@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
+import { VStack } from '../../../../lib/ui/layout/Stack';
 import { ONBOARDING_ANIMATIONS } from '../hooks/useOnboardingStepsAnimations';
 import { VaultBackup } from './VaultBackup';
 import { VaultDevice } from './VaultDevice';
@@ -9,7 +10,7 @@ import { VaultSharesInfo } from './VaultSharesInfo';
 import { VaultSharesIntro } from './VaultSharesIntro';
 import { VaultUnlock } from './VaultUnlock';
 
-const Wrapper = styled.div`
+const Wrapper = styled(VStack)`
   height: 144px;
 `;
 
@@ -27,4 +28,6 @@ type AnimationDescriptionProps = {
 };
 export const AnimationDescription: FC<AnimationDescriptionProps> = ({
   animation,
-}) => <Wrapper>{ANIMATIONS_CONTENT[animation]()}</Wrapper>;
+}) => (
+  <Wrapper justifyContent="center">{ANIMATIONS_CONTENT[animation]()}</Wrapper>
+);
