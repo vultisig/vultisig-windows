@@ -1,7 +1,7 @@
+import { Chain } from '@core/chain/Chain';
 import { WalletCore } from '@trustwallet/wallet-core';
 import { ZodObject } from 'zod';
 
-import { Chain } from '@core/chain/Chain';
 import { ChainAction } from '../ChainAction';
 import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig';
 
