@@ -1,6 +1,6 @@
+import { fiatCurrencies } from '@core/config/FiatCurrency';
 import { useTranslation } from 'react-i18next';
 
-import { fiatCurrencies } from '../../../coin/price/FiatCurrency';
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
 import { ScrollableFlexboxFiller } from '../../../lib/ui/layout/ScrollableFlexboxFiller';
 import { VStack } from '../../../lib/ui/layout/Stack';

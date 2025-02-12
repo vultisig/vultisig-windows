@@ -1,6 +1,9 @@
 import { EvmChain } from '@core/chain/Chain';
 import { Coin, CoinKey, coinKeyToString } from '@core/chain/coin/Coin';
+import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices';
+import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices';
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
+import { FiatCurrency } from '@core/config/FiatCurrency';
 import { findBy } from '@lib/utils/array/findBy';
 import { groupItems } from '@lib/utils/array/groupItems';
 import { isEmpty } from '@lib/utils/array/isEmpty';
@@ -14,9 +17,6 @@ import { useQueries } from '@tanstack/react-query';
 
 import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEagerQuery';
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency';
-import { getErc20Prices } from '../price/api/evm/getErc20Prices';
-import { getCoinPrices } from '../price/api/getCoinPrices';
-import { FiatCurrency } from '../price/FiatCurrency';
 
 type GetCoinPricesQueryKeysInput = {
   coins: CoinKey[];

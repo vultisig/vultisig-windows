@@ -1,5 +1,5 @@
-import { FiatCurrency } from '../../coin/price/FiatCurrency';
-import { defaultFiatCurrency } from '../../coin/price/FiatCurrency';
+import { defaultFiatCurrency, FiatCurrency } from '@core/config/FiatCurrency';
+
 import {
   PersistentStateKey,
   usePersistentState,
