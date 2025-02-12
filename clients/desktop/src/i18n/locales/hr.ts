@@ -314,6 +314,7 @@ export const hr = {
   or: 'ili',
   enter_vault_name: 'Unesite naziv trezora',
   vault_name_required: 'Naziv trezora je obavezan',
+  vault_name_max_length_error: 'A tároló neve legfeljebb 50 karakter lehet',
   vault_name_already_exists: 'Naziv trezora mora biti jedinstven',
   vault_settings_address_book_save_addresses_button: 'Spremi adresu',
   vault_settings_address_book_add_addresses_title: 'Dodaj adresu',

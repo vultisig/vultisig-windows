@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ActionInsideInteractiveElement } from '../../lib/ui/base/ActionInsideInteractiveElement';
@@ -18,8 +17,8 @@ import { Text } from '../../lib/ui/text';
 import { PageContent } from '../../ui/page/PageContent';
 import { PageHeader } from '../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
-import { useVaultNames } from '../hooks/useVaultNames';
 import { KeygenEducationPrompt } from '../keygen/shared/KeygenEducationPrompt';
+import { useValidateVaultName } from './shared/hooks';
 import { useVaultName } from './state/vaultName';
 
 export const SetupVaultNameStep = ({
@@ -28,17 +27,7 @@ export const SetupVaultNameStep = ({
 }: OnForwardProp & Partial<OnBackProp>) => {
   const { t } = useTranslation();
   const [value, setValue] = useVaultName();
-  const names = useVaultNames();
-
-  const errorMessage = useMemo(() => {
-    if (!value) {
-      return t('vault_name_required');
-    }
-
-    if (names.includes(value)) {
-      return t('vault_name_already_exists');
-    }
-  }, [names, t, value]);
+  const errorMessage = useValidateVaultName();
 
   return (
     <>
