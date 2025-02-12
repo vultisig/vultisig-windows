@@ -282,6 +282,7 @@ export const en = {
   enter_vault_name: 'Enter Vault Name',
   vault_name_required: 'Vault name is required',
   vault_name_already_exists: 'Vault name must be unique',
+  vault_name_max_length_error: 'Vault name must be less than 50 characters',
   vault_settings_address_book_save_addresses_button: 'Save Address',
   vault_settings_address_book_add_addresses_title: 'Add Address',
   vault_settings_address_book_edit_addresses_title: 'Edit Address',

@@ -323,6 +323,8 @@ export const pt = {
   or: 'ou',
   enter_vault_name: 'Insira o nome do cofre',
   vault_name_required: 'Nome do cofre obrigatório',
+  vault_name_max_length_error:
+    'O nome do cofre deve ter menos de 50 caracteres',
   vault_name_already_exists: 'O nome do cofre deve ser exclusivo',
   vault_settings_address_book_save_addresses_button: 'Salvar endereço',
   vault_settings_address_book_add_addresses_title: 'Adicionar endereço',

@@ -34,13 +34,14 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
   const {
     animations,
     handleNextAnimation,
+    handlePrevAnimation,
     currentAnimation,
     animationComponent: AnimationComponent,
     isLoading,
   } = useOnboardingStepsAnimations();
 
   return (
-    <PageContent>
+    <PageContent style={{ overflowY: 'hidden' }}>
       <ProgressWrapper gap={16}>
         <HStack justifyContent="space-between" alignItems="baseline">
           <HStack
@@ -49,8 +50,16 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
             gap={4}
             onClick={() => navigate('setupVault', { params: {} })}
           >
-            <IconButton icon={<ChevronLeftIcon width={24} height={24} />} />
-            <Text size={18}>{t('introOnboarding')}</Text>
+            <HStack
+              gap={4}
+              alignItems="center"
+              role="button"
+              tabIndex={0}
+              onClick={handlePrevAnimation}
+            >
+              <ChevronLeftIcon width={24} height={24} />
+              <Text size={18}>{t('back')}</Text>
+            </HStack>
           </HStack>
           <UnstyledButton onClick={onCompleteSteps}>
             <Text color="shy" size={18}>
@@ -67,7 +76,9 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
         />
       </ProgressWrapper>
       <ContentWrapper justifyContent="space-between" flexGrow>
-        <RiveWrapper>
+        <RiveWrapper
+          isLastAnimation={currentAnimation === animations.length - 1}
+        >
           <AnimationComponent />
         </RiveWrapper>
         <VStack gap={12}>
@@ -112,6 +123,5 @@ const ProgressWrapper = styled(VStack)`
 `;
 
 const ContentWrapper = styled(VStack)`
-  max-width: 640px;
   margin-inline: auto;
 `;

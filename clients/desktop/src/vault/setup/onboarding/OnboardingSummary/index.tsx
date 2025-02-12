@@ -51,8 +51,14 @@ export const OnboardingSummary = () => {
           </VStack>
         </ContentWrapper>
         <VStack gap={16}>
-          <HStack alignItems="center" gap={8}>
-            <Checkbox value={isChecked} onChange={toggle} />
+          <HStack
+            role="button"
+            tabIndex={0}
+            onClick={toggle}
+            alignItems="center"
+            gap={8}
+          >
+            <Checkbox value={isChecked} onChange={() => {}} />
             <Text color="contrast" weight={500} size={14}>
               {t('fastVaultSetup.summary.agreementText')}
             </Text>
