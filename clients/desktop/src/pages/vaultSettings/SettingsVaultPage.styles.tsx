@@ -17,7 +17,8 @@ export const ListItemPanel = styled(Panel)<{
     isSpecialItem ? getColor('primary') : getColor('foreground')};
 
   &:hover {
-    background-color: ${getColor('foregroundExtra')};
+    background-color: ${({ isSpecialItem }) =>
+      !isSpecialItem && getColor('foregroundExtra')};
   }
 `;
 
