@@ -15,7 +15,7 @@ type FramedQrCode = ValueProp<string> &
   };
 
 export const FramedQrCode = ({ size, value, scaling = true }: FramedQrCode) => {
-  const scale = useQRCodeScaleFactor({ enabled: scaling });
+  const scale = useQRCodeScaleFactor(scaling);
   const { RiveComponent } = useRive({
     src: '/assets/animations/keygen-secure-vault/qr-scanned.riv',
     autoplay: true,
