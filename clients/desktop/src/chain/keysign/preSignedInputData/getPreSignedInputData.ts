@@ -5,7 +5,7 @@ import { Chain } from '@core/chain/Chain';
 import {
   getBlockchainSpecificValue,
   KeysignChainSpecificKey,
-} from '../KeysignChainSpecific';
+} from '../../../../../../core/keysign/chainSpecific/KeysignChainSpecific';
 import { getCosmosPreSignedInputData } from './getCosmosPreSignedInputData';
 import { getEvmPreSignedInputData } from './getEvmPreSignedInputData';
 import { getMayaPreSignedInputData } from './getMayaPreSignedInputData';

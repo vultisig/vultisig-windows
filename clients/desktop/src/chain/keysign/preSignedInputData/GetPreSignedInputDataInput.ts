@@ -5,7 +5,7 @@ import {
   ChainsBySpecific,
   KeysignChainSpecificKey,
   KeysignChainSpecificValueByKey,
-} from '../KeysignChainSpecific';
+} from '../../../../../../core/keysign/chainSpecific/KeysignChainSpecific';
 
 export type GetPreSignedInputDataInput<T extends KeysignChainSpecificKey> = {
   keysignPayload: KeysignPayload;

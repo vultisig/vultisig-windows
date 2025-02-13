@@ -2,13 +2,13 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { Chain, EvmChain } from '@core/chain/Chain';
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
+import { rippleTxFee } from '@core/chain/tx/fee/ripple';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { formatAmount } from '@lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
 
-import { KeysignChainSpecific } from '../../../keysign/KeysignChainSpecific';
+import { KeysignChainSpecific } from '../../../../../../../core/keysign/chainSpecific/KeysignChainSpecific';
 import { polkadotConfig } from '../../../polkadot/config';
-import { rippleConfig } from '../../../ripple/config';
 import { tonConfig } from '../../../ton/config';
 import { gwei } from './evm';
 import { getFeeUnit } from './feeUnit';
@@ -33,7 +33,7 @@ export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
       cosmosSpecific: ({ gas }) => BigInt(gas),
       polkadotSpecific: () => polkadotConfig.fee,
       tonSpecific: () => tonConfig.fee,
-      rippleSpecific: () => rippleConfig.fee,
+      rippleSpecific: () => rippleTxFee,
       tronSpecific: () => {
         throw new Error('Tron fee not implemented');
       },

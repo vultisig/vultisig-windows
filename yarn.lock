@@ -1566,6 +1566,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@core/keysign@workspace:core/keysign":
+  version: 0.0.0-use.local
+  resolution: "@core/keysign@workspace:core/keysign"
+  dependencies:
+    "@solana/web3.js": "npm:^2.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@cosmjs/amino@npm:^0.33.0":
   version: 0.33.0
   resolution: "@cosmjs/amino@npm:0.33.0"
