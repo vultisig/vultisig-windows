@@ -11,15 +11,11 @@ const DEFAULT_QR_CODE_SIZE = 365;
 type FramedQrCode = ValueProp<string> &
   Omit<ComponentProps<typeof Wrapper>, 'size' | 'scale'> & {
     size?: number;
-    enableScaling?: boolean;
+    scaling?: boolean;
   };
 
-export const FramedQrCode = ({
-  size,
-  value,
-  enableScaling = false,
-}: FramedQrCode) => {
-  const scale = useQRCodeScaleFactor({ enabled: enableScaling });
+export const FramedQrCode = ({ size, value, scaling = true }: FramedQrCode) => {
+  const scale = useQRCodeScaleFactor({ enabled: scaling });
   const { RiveComponent } = useRive({
     src: '/assets/animations/keygen-secure-vault/qr-scanned.riv',
     autoplay: true,
