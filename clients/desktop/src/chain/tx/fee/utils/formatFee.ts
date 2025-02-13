@@ -3,11 +3,11 @@ import { Chain, EvmChain } from '@core/chain/Chain';
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { rippleTxFee } from '@core/chain/tx/fee/ripple';
-import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { formatAmount } from '@lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
 
+import { KeysignChainSpecific } from '../../../../../../../core/keysign/chainSpecific/KeysignChainSpecific';
 import { polkadotConfig } from '../../../polkadot/config';
 import { tonConfig } from '../../../ton/config';
 import { gwei } from './evm';
