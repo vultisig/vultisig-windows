@@ -27,7 +27,7 @@ export const SetupVaultSuccessScreen = ({ onForward }: OnForwardProp) => {
 
   return (
     <Wrapper justifyContent="center" alignItems="center">
-      <VStack flexGrow justifyContent="center" gap={48}>
+      <VStack flexGrow justifyContent="center" alignItems="center" gap={48}>
         <RiveWrapper>
           <RiveComponent />
         </RiveWrapper>
@@ -50,6 +50,6 @@ const Wrapper = styled(VStack)`
 `;
 
 const RiveWrapper = styled.div`
-  width: 500px;
-  height: 500px;
+  width: 300px;
+  height: 300px;
 `;
