@@ -9,8 +9,5 @@ export const getCosmosAccountInfo = async ({
 }: ChainAccount<CosmosChain>) => {
   const client = await getCosmosClient(chain);
   const accountInfo = await client.getAccount(address);
-
-  console.log('accountInfo', accountInfo);
-
   return shouldBePresent(accountInfo, `Account: ${address}`);
 };

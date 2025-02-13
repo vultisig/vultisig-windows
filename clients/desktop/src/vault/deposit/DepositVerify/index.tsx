@@ -76,7 +76,12 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
               <StrictTextContrast>{sender}</StrictTextContrast>
             </TxOverviewColumn>
             {actionFields.map(field => {
-              if (!formattedDepositFormData[field.name]) return null;
+              if (
+                formattedDepositFormData[field.name] == null ||
+                formattedDepositFormData[field.name] === ''
+              ) {
+                return null;
+              }
 
               return field.type === 'number' || field.type === 'percentage' ? (
                 <TxOverviewRowDepositsFlow key={field.name}>
@@ -104,9 +109,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                 <Text size={18} weight={700}>
                   {t('amount')}
                 </Text>
-                <StrictText>
-                  {String(formattedDepositFormData.amount)} {coin.ticker}
-                </StrictText>
+                <StrictText>0 {coin.ticker}</StrictText>
               </TxOverviewRowDepositsFlow>
             )}
             <TxOverviewRow key="memo">

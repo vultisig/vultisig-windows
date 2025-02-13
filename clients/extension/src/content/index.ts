@@ -587,7 +587,7 @@ namespace Provider {
       super();
       this.chainId = "Solana_mainnet-beta";
       this.isConnected = false;
-      this.isPhantom = false;
+      this.isPhantom = true;
       this.isXDEFI = false;
       this.network = NetworkKey.MAINNET;
       this.request = this.request;
@@ -655,6 +655,63 @@ namespace Provider {
 
           return error;
         });
+    }
+
+    async signAllTransactions(transactions: Transaction[]) {
+      if (!transactions || !transactions.length) {
+        return Promise.reject({
+          code: -32000,
+          message: "Missing or invalid parameters.",
+        });
+      }
+
+      const results: VersionedTransaction[] = [];
+
+      for (const transaction of transactions) {
+        try {
+          const result = await this.signTransaction(transaction);
+          results.push(result);
+        } catch (error) {
+          throw error;
+        }
+      }
+
+      return results;
+    }
+
+    async signAndSendTransaction() {
+      return Promise.reject({
+        code: -32603,
+        message: "This function is not supported by Vultisig",
+      });
+    }
+
+    async signAndSendAllTransactions() {
+      return Promise.reject({
+        code: -32603,
+        message: "This function is not supported by Vultisig",
+      });
+    }
+
+    async signMessage() {
+      return Promise.reject({
+        code: -32603,
+        message: "This function is not supported by Vultisig",
+      });
+    }
+
+    async signIn() {
+      return Promise.reject({
+        code: -32603,
+        message: "This function is not supported by Vultisig",
+      });
+    }
+
+    async handleNotification() {
+      return Promise.reject({
+        code: -32603,
+        message: "This function is not supported by Vultisig",
+      });
     }
   }
 
@@ -793,6 +850,12 @@ const solanaProvider = new Provider.Solana();
 const thorchainProvider = new Provider.THORChain();
 const keplrProvider = XDEFIKeplrProvider.getInstance();
 
+const phantomProvider = {
+  bitcoin: bitcoinProvider,
+  ethereum: ethereumProvider,
+  solana: solanaProvider,
+};
+
 const xfiProvider = {
   bitcoin: bitcoinProvider,
   bitcoincash: bitcoinCashProvider,
@@ -840,12 +903,13 @@ window.bitcoincash = bitcoinCashProvider;
 window.cosmos = cosmosProvider;
 window.dash = dashProvider;
 window.dogecoin = dogecoinProvider;
+window.keplr = keplrProvider;
 window.litecoin = litecoinProvider;
 window.maya = mayachainProvider;
+window.phantom = phantomProvider;
 window.thorchain = thorchainProvider;
 window.vultisig = vultisigProvider;
 window.xfi = xfiProvider;
-window.keplr = keplrProvider;
 window.xfi.kepler = keplrProvider;
 
 if (!window.ethereum) window.ethereum = ethereumProvider;
@@ -989,6 +1053,11 @@ const intervalRef = setInterval(() => {
               configurable: false,
               writable: false,
             },
+            phantom: {
+              value: { ...phantomProvider },
+              configurable: false,
+              writable: false,
+            },
           });
         } else {
           window.addEventListener(
@@ -1084,6 +1153,11 @@ const intervalRef = setInterval(() => {
                 },
                 thorchain: {
                   value: { ...thorchainProvider },
+                  configurable: false,
+                  writable: false,
+                },
+                phantom: {
+                  value: { ...phantomProvider },
                   configurable: false,
                   writable: false,
                 },

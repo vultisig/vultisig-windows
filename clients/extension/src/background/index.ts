@@ -9,6 +9,7 @@ import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 
 import {
   ChainKey,
+  ChainTicker,
   Instance,
   MessageKey,
   RequestMethod,
@@ -20,8 +21,11 @@ import {
 import { calculateWindowPosition, findChainByProp } from "../utils/functions";
 import {
   ChainProps,
+  CTRL_TRANSACTION,
   ITransaction,
   Messaging,
+  METAMASK_TRANSACTION,
+  TransactionDetails,
   VaultProps,
 } from "../utils/interfaces";
 
@@ -190,7 +194,7 @@ const handleGetVaults = (): Promise<Messaging.GetVaults.Response> => {
 };
 
 const handleSendTransaction = (
-  transaction: ITransaction.METAMASK,
+  transaction: ITransaction,
   chain: ChainProps,
   isDeposit?: boolean,
 ): Promise<{ txResponse: string; raw: any }> => {
@@ -344,13 +348,69 @@ const handleRequest = (
 
         break;
       }
-      case RequestMethod.VULTISIG.SEND_TRANSACTION:
+      case RequestMethod.VULTISIG.SEND_TRANSACTION: {
+        const [_transaction] = params;
+        if (_transaction) {
+          let modifiedTransaction: ITransaction = {} as ITransaction;
+          if (_transaction.value) {
+            modifiedTransaction = {
+              transactionDetails: {
+                from: _transaction.from,
+                to: _transaction.to,
+                asset: {
+                  chain: chain.ticker,
+                  symbol: chain.ticker,
+                  ticker: chain.ticker,
+                },
+                amount: _transaction.value
+                  ? { amount: _transaction.value, decimals: chain.decimals }
+                  : undefined,
+                data: _transaction.data,
+              },
+              chain,
+              id: "",
+              status: "default",
+            };
+          } else {
+            modifiedTransaction = {
+              transactionDetails: _transaction as TransactionDetails,
+              chain,
+              id: "",
+              status: "default",
+            };
+          }
+
+          handleSendTransaction(modifiedTransaction, chain)
+            .then((result) => resolve(result.txResponse))
+            .catch(reject);
+        } else {
+          reject();
+        }
+        break;
+      }
       case RequestMethod.METAMASK.ETH_SEND_TRANSACTION: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction.METAMASK[];
-
-          if (transaction) {
-            handleSendTransaction(transaction, chain)
+          const [_transaction] = params as METAMASK_TRANSACTION[];
+          if (_transaction) {
+            const modifiedTransaction: ITransaction = {
+              transactionDetails: {
+                from: _transaction.from,
+                to: _transaction.to,
+                asset: {
+                  chain: chain.ticker,
+                  symbol: chain.ticker,
+                  ticker: chain.ticker,
+                },
+                amount: _transaction.value
+                  ? { amount: _transaction.value, decimals: chain.decimals }
+                  : undefined,
+                data: _transaction.data,
+              },
+              chain,
+              id: "",
+              status: "default",
+            };
+            handleSendTransaction(modifiedTransaction, chain)
               .then((result) => resolve(result.txResponse))
               .catch(reject);
           } else {
@@ -364,7 +424,7 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.DEPOSIT_TRANSACTION: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction.METAMASK[];
+          const [transaction] = params as ITransaction[];
 
           if (transaction) {
             handleSendTransaction(transaction, chain, true)
@@ -629,7 +689,7 @@ const handleRequest = (
       }
       case RequestMethod.METAMASK.ETH_CALL: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction.METAMASK[];
+          const [transaction] = params as ITransaction[];
 
           transaction ? resolve(rpcProvider.call(transaction)) : reject();
         } else {
@@ -640,7 +700,7 @@ const handleRequest = (
       }
       case RequestMethod.METAMASK.ETH_GET_TRANSACTION_RECEIPT: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction.METAMASK[];
+          const [transaction] = params as ITransaction[];
 
           rpcProvider
             .getTransactionReceipt(String(transaction))
@@ -670,8 +730,7 @@ const handleRequest = (
 
         break;
       }
-      case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4:
-      case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V3: {
+      case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4: {
         if (Array.isArray(params)) {
           try {
             const [address, msgParamsString] = params;
@@ -692,11 +751,18 @@ const handleRequest = (
                 },
                 isCustomMessage: true,
                 chain: chain,
-                data: "",
-                from: String(address),
+                transactionDetails: {
+                  amount: { amount: "0", decimals: 0 },
+                  from: String(address),
+                  to: "",
+                  asset: {
+                    chain: ChainTicker.ETH,
+                    symbol: ChainTicker.ETH,
+                    ticker: ChainTicker.ETH,
+                  },
+                },
                 id: "",
                 status: "default",
-                to: "",
                 isDeposit: false,
               },
               chain,
@@ -727,11 +793,18 @@ const handleRequest = (
               },
               isCustomMessage: true,
               chain: chain,
-              data: "",
-              from: String(address),
+              transactionDetails: {
+                amount: { amount: "0", decimals: 0 },
+                from: String(address),
+                to: "",
+                asset: {
+                  chain: ChainTicker.ETH,
+                  symbol: ChainTicker.ETH,
+                  ticker: ChainTicker.ETH,
+                },
+              },
               id: "",
               status: "default",
-              to: "",
               isDeposit: false,
             },
             chain,
@@ -750,18 +823,24 @@ const handleRequest = (
       }
       case RequestMethod.CTRL.DEPOSIT: {
         if (Array.isArray(params)) {
-          const [_transaction] = params as ITransaction.CTRL[];
+          const [_transaction] = params as CTRL_TRANSACTION[];
 
           if (_transaction) {
-            const transaction = {
+            const modifiedTransaction: TransactionDetails = {
+              asset: _transaction.asset,
               data: _transaction.memo,
               from: _transaction.from,
               gasLimit: _transaction.gasLimit,
               to: _transaction.recipient,
-              value: _transaction.amount.amount.toString(),
-            } as ITransaction.METAMASK;
-
-            handleSendTransaction(transaction, chain, true)
+              amount: _transaction.amount,
+            };
+            const tx: ITransaction = {
+              transactionDetails: modifiedTransaction,
+              chain: chain,
+              id: "",
+              status: "default",
+            };
+            handleSendTransaction(tx, chain, true)
               .then((result) => resolve(result.txResponse))
               .catch(reject);
           } else {
@@ -775,18 +854,24 @@ const handleRequest = (
       }
       case RequestMethod.CTRL.TRANSFER: {
         if (Array.isArray(params)) {
-          const [_transaction] = params as ITransaction.CTRL[];
+          const [_transaction] = params as CTRL_TRANSACTION[];
 
           if (_transaction) {
-            const transaction = {
+            const modifiedTransaction: TransactionDetails = {
+              asset: _transaction.asset,
               data: _transaction.memo,
               from: _transaction.from,
               gasLimit: _transaction.gasLimit,
               to: _transaction.recipient,
-              value: _transaction.amount.amount.toString(),
-            } as ITransaction.METAMASK;
-
-            handleSendTransaction(transaction, chain)
+              amount: _transaction.amount,
+            };
+            const tx: ITransaction = {
+              transactionDetails: modifiedTransaction,
+              chain: chain,
+              id: "",
+              status: "default",
+            };
+            handleSendTransaction(tx, chain)
               .then((result) => resolve(result.txResponse))
               .catch(reject);
           } else {

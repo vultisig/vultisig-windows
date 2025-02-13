@@ -97,7 +97,7 @@ export default abstract class BaseTransactionProvider {
 
   public getTransactionKey = (
     publicKeyEcdsa: string,
-    transaction: ITransaction.METAMASK,
+    transaction: ITransaction,
     hexChainCode: string,
   ): Promise<string> => {
     return new Promise((resolve) => {
@@ -144,7 +144,7 @@ export default abstract class BaseTransactionProvider {
   }: SignedTransaction): Promise<{ txHash: string; raw: any }>;
 
   abstract getKeysignPayload(
-    transaction: ITransaction.METAMASK,
+    transaction: ITransaction,
     vault: VaultProps,
   ): Promise<KeysignPayload>;
 
