@@ -1,4 +1,3 @@
-import { useRive } from '@rive-app/react-canvas';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -19,7 +18,7 @@ import {
 } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
 import { Query } from '../../../../lib/ui/query/Query';
-import { GradientText, Text } from '../../../../lib/ui/text';
+import { Text } from '../../../../lib/ui/text';
 import { PageHeader } from '../../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
@@ -29,7 +28,8 @@ import { DownloadKeygenQrCode } from '../../../keygen/shared/peerDiscovery/Downl
 import { KeygenPeerDiscoveryQrCode } from '../../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryQrCode';
 import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery';
 import { useCurrentServerType } from '../../../keygen/state/currentServerType';
-import { SecureVaultPeerOption } from '../SecureVaultPeerOption';
+import { SecureVaultKeygenOverlay } from '../components/SecureVaultKeygenOverlay';
+import { SecureVaultPeerOption } from '../components/SecureVaultPeerOption';
 import {
   BottomItemsWrapper,
   CloseIconWrapper,
@@ -38,15 +38,9 @@ import {
   InfoIconWrapper,
   InfoIconWrapperForBanner,
   LocalPillWrapper,
-  OverlayContent,
-  OverlayContentWrapper,
-  OverlayWrapper,
   PageWrapper,
-  PhoneImageOverlay,
-  PhoneImageWrapper,
   PillPlaceholder,
   PillWrapper,
-  RiveWrapper,
   SwitchModeButton,
   SwitchModeWrapper,
 } from './SecureVaultKeygenPeerDiscoveryStep.styles';
@@ -68,10 +62,6 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
   joinUrlQuery,
   currentDevice,
 }: KeygenPeerDiscoveryStepProps) => {
-  const { RiveComponent } = useRive({
-    src: '/assets/animations/keygen-secure-vault/pulse.riv',
-    autoplay: true,
-  });
   const [overlayShown, setHasShownOverlay] = useState(true);
   const [serverType, setServerType] = useCurrentServerType();
   const isLocalServerType = serverType === 'local';
@@ -221,41 +211,9 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
           </SwitchModeWrapper>
         </BottomItemsWrapper>
         {overlayShown && (
-          <OverlayWrapper justifyContent="flex-end">
-            <OverlayContent alignItems="center">
-              <OverlayContentWrapper justifyContent="center" gap={36}>
-                <PhoneImageWrapper>
-                  <PhoneImageOverlay />
-                  <img src="/assets/images/vultisig-peak.svg" alt="" />
-                  <RiveWrapper>
-                    <RiveComponent />
-                  </RiveWrapper>
-                </PhoneImageWrapper>
-                <VStack gap={12} justifyContent="center">
-                  <Text
-                    centerHorizontally
-                    size={32}
-                    weight={500}
-                    color="contrast"
-                  >
-                    {t('scanThe')}{' '}
-                    <GradientText as="span">{t('qrCode')}</GradientText>
-                  </Text>
-                  <Text
-                    centerHorizontally
-                    size={14}
-                    weight={500}
-                    color="supporting"
-                  >
-                    {t('downloadVultisig')}
-                  </Text>
-                </VStack>
-                <Button onClick={() => setHasShownOverlay(false)}>
-                  {t('next')}
-                </Button>
-              </OverlayContentWrapper>
-            </OverlayContent>
-          </OverlayWrapper>
+          <SecureVaultKeygenOverlay
+            onCompleted={() => setHasShownOverlay(false)}
+          />
         )}
       </PageWrapper>
     </>
