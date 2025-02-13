@@ -1,7 +1,7 @@
+import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { fiatCurrencySymbolRecord } from '../../../coin/price/FiatCurrency';
 import DangerSignRedIcon from '../../../lib/ui/icons/DangerSignRedIcon';
 import { HStack, VStack } from '../../../lib/ui/layout/Stack';
 import { Text } from '../../../lib/ui/text';
