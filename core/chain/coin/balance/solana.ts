@@ -1,27 +1,28 @@
 import { isFeeCoin } from "@core/chain/coin/utils/isFeeCoin";
-import { Address } from "@solana/web3.js";
-
 import { CoinBalanceResolver } from "./CoinBalanceResolver";
 import { getSolanaClient } from "../../chains/solana/client";
 import { getSplAccounts } from "../../chains/solana/spl/getSplAccounts";
+import { PublicKey } from "@solana/web3.js";
+import { AccountLayout } from "@solana/spl-token";
 
 export const getSolanaCoinBalance: CoinBalanceResolver = async (input) => {
   const client = getSolanaClient();
 
   if (isFeeCoin(input)) {
-    const { value } = await client.getBalance(input.address as Address).send();
-
-    return value.valueOf();
+    const value = await client.getBalance(new PublicKey(input.address));
+    return BigInt(value);
   }
 
   const accounts = await getSplAccounts(input.address);
 
-  const tokenAccount = accounts.find(
-    (account) => account.account.data.parsed.info.mint === input.id,
-  );
+  const tokenAccount = accounts.find((account) => {
+    const decodedData = AccountLayout.decode(account.account.data);
+    return decodedData.mint.toBase58() === input.id;
+  });
 
-  const tokenAmount =
-    tokenAccount?.account?.data?.parsed?.info?.tokenAmount?.amount;
+  const tokenAmount = tokenAccount
+    ? BigInt(AccountLayout.decode(tokenAccount.account.data).amount)
+    : BigInt(0);
 
-  return BigInt(tokenAmount ?? 0);
+  return tokenAmount;
 };

@@ -39,7 +39,7 @@
     "@cosmjs/stargate": "^0.33.0",
     "@mysten/sui": "^1.21.2",
     "@polkadot/api": "^15.5.2",
-    "@solana/web3.js": "^2.0.0",
+    "@solana/web3.js": "^1.98.0",
     "xrpl": "^4.1.0"
   }
 }

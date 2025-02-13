@@ -1,8 +1,8 @@
 import { getSolanaClient } from '@core/chain/chains/solana/client';
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
-import { Base64EncodedWireTransaction } from '@solana/web3.js';
+import { Transaction } from '@solana/web3.js';
 import { TW } from '@trustwallet/wallet-core';
-
+import base58 from 'bs58';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeSolanaTx = async ({
@@ -14,14 +14,14 @@ export const executeSolanaTx = async ({
   assertErrorMessage(solanaErrorMessage);
 
   const client = getSolanaClient();
+  const transactionBuffer = base58.decode(encoded);
+  const transaction = Transaction.from(transactionBuffer);
 
-  const result = await client
-    .sendTransaction(encoded as Base64EncodedWireTransaction, {
-      skipPreflight: false,
-      preflightCommitment: 'confirmed',
-      maxRetries: BigInt(3),
-    })
-    .send();
+  const result = await client.sendRawTransaction(transaction.serialize(), {
+    skipPreflight: false,
+    preflightCommitment: 'confirmed',
+    maxRetries: 3,
+  });
 
   return result;
 };

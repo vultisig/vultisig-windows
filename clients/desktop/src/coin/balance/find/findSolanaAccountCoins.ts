@@ -4,6 +4,7 @@ import { ChainAccount } from '@core/chain/ChainAccount';
 import { getSplAccounts } from '@core/chain/chains/solana/spl/getSplAccounts';
 import { Coin } from '@core/chain/coin/Coin';
 import { queryUrl } from '@lib/utils/query/queryUrl';
+import { AccountLayout } from '@solana/spl-token';
 
 export const findSolanaAccountCoins = async (account: ChainAccount) => {
   if (!account.address) {
@@ -15,8 +16,8 @@ export const findSolanaAccountCoins = async (account: ChainAccount) => {
     return [];
   }
 
-  const tokenAddresses = accounts.map(
-    account => account.account.data.parsed.info.mint
+  const tokenAddresses = accounts.map(account =>
+    AccountLayout.decode(account.account.data).mint.toString()
   );
   const tokenInfos = await fetchSolanaTokenInfoList(tokenAddresses);
 
