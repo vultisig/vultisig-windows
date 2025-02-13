@@ -1,6 +1,6 @@
+import { Chain } from '@core/chain/Chain';
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
-import { Chain } from '@core/chain/Chain';
 
 export type KeysignChainSpecific = Exclude<
   KeysignPayload['blockchainSpecific'],

@@ -5,6 +5,7 @@ import { useCallback } from 'react';
 import { GeneralSwapQuote } from '../../../chain/swap/general/GeneralSwapQuote';
 import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
+import { SwapQuote } from '../../../chain/swap/quote/SwapQuote';
 import { useTransformQueryData } from '../../../lib/ui/query/hooks/useTransformQueryData';
 import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useToCoin } from '../state/toCoin';
@@ -19,7 +20,7 @@ export const useSwapOutputAmountQuery = () => {
     useSwapQuoteQuery(),
     useCallback(
       swapQuote => {
-        return matchRecordUnion(swapQuote, {
+        return matchRecordUnion<SwapQuote, number>(swapQuote, {
           native: ({ expected_amount_out }) =>
             fromChainAmount(
               expected_amount_out,

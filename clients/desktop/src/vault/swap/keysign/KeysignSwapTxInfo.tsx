@@ -8,7 +8,10 @@ import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
 import { assertField } from '@lib/utils/record/assertField';
 import { useTranslation } from 'react-i18next';
 
-import { toKeysignSwapPayload } from '../../../chain/keysign/KeysignSwapPayload';
+import {
+  KeysignSwapPayload,
+  toKeysignSwapPayload,
+} from '../../../chain/keysign/KeysignSwapPayload';
 import { generalSwapProviderName } from '../../../chain/swap/general/GeneralSwapProvider';
 import {
   TxOverviewChainDataRow,
@@ -40,11 +43,16 @@ export const KeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
   const toCoin = assertField(swapPayloadValue, 'toCoin');
   const toAmount = Number(swapPayloadValue.toAmountDecimal);
 
-  const provider = matchDiscriminatedUnion(swapPayload, 'case', 'value', {
-    thorchainSwapPayload: () => Chain.THORChain,
-    mayachainSwapPayload: () => Chain.MayaChain,
-    oneinchSwapPayload: () => generalSwapProviderName.oneinch,
-  });
+  const provider = matchDiscriminatedUnion<KeysignSwapPayload, string>(
+    swapPayload,
+    'case',
+    'value',
+    {
+      thorchainSwapPayload: () => Chain.THORChain,
+      mayachainSwapPayload: () => Chain.MayaChain,
+      oneinchSwapPayload: () => generalSwapProviderName.oneinch,
+    }
+  );
 
   return (
     <>

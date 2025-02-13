@@ -35,7 +35,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
   return useMutation({
     mutationFn: async () => {
-      return matchRecordUnion(payload, {
+      return matchRecordUnion<KeysignMessagePayload, Promise<string>>(payload, {
         keysign: async payload => {
           const chain = getKeysignChain(payload);
 
