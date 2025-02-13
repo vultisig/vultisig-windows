@@ -12,7 +12,7 @@ export const transactionConfig: Record<ChainAction, TransactionConfig> = {
   bond: { requiresAmount: true, requiresNodeAddress: true },
   unbond: { requiresAmount: true, requiresNodeAddress: true },
   leave: { requiresNodeAddress: true, requiresAmount: true },
-  custom: { requiresAmount: true },
+  custom: {},
   stake: { requiresAmount: true, requiresNodeAddress: true },
   unstake: { requiresAmount: true, requiresNodeAddress: true },
   vote: { requiresAmount: false, requiresNodeAddress: false },
