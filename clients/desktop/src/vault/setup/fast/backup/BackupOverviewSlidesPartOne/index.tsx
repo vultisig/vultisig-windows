@@ -51,7 +51,7 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
         <RiveWrapper>
           <AnimationComponent />
         </RiveWrapper>
-        <VStack gap={12}>
+        <BottomItemsWrapper gap={12} alignItems="center">
           <AnimationDescription animation={currentAnimation} />
           <NextAnimationButton
             disabled={isLoading}
@@ -64,7 +64,7 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
           >
             {t('tap')}
           </NextAnimationButton>
-        </VStack>
+        </BottomItemsWrapper>
       </VStack>
     </PageContent>
   );
@@ -90,4 +90,9 @@ const NextAnimationButton = styled(IconButton)`
 const ProgressWrapper = styled(VStack)`
   margin-inline: auto;
   margin-top: 48px;
+`;
+
+const BottomItemsWrapper = styled(VStack)`
+  max-width: 500px;
+  margin-inline: auto;
 `;

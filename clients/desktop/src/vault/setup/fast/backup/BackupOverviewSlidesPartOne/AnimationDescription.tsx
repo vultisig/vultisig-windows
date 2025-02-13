@@ -50,7 +50,7 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
 };
 
 const Wrapper = styled.div`
-  height: 144px;
+  min-height: 144px;
 `;
 
 export const TextWrapper = styled.div`
