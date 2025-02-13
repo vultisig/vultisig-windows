@@ -1,6 +1,6 @@
 import { StrictMode, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Checkbox, Form } from "antd";
+import { Button, Form, Radio } from "antd";
 import ReactDOM from "react-dom/client";
 
 import { ChainKey } from "../../utils/constants";
@@ -24,7 +24,7 @@ import "../../styles/index.scss";
 import "../accounts/index.scss";
 
 interface FormProps {
-  uids: string[];
+  uid: string;
 }
 
 interface InitialState {
@@ -49,20 +49,21 @@ const Component = () => {
   };
 
   const handleSubmit = () => {
-    form.validateFields().then(({ uids }: FormProps) => {
+    form.validateFields().then(({ uid }: FormProps) => {
       if (sender) {
         getStoredVaults().then((vaults) => {
           setStoredVaults(
             vaults.map((vault) => ({
               ...vault,
               apps:
-                uids.indexOf(vault.uid) >= 0
+                uid === vault.uid
                   ? [
                       sender,
                       ...(vault.apps?.filter((app) => app !== sender) ?? []),
                     ]
-                  : vault.apps?.filter((app) => app !== sender) ?? [],
-            }))
+                  : (vault.apps?.filter((app) => app !== sender) ?? []),
+              active: uid === vault.uid ? true : false,
+            })),
           ).then(() => {
             handleClose();
           });
@@ -127,14 +128,14 @@ const Component = () => {
             <div className="content">
               <Form form={form} onFinish={handleSubmit}>
                 <Form.Item<FormProps>
-                  name="uids"
+                  name="uid"
                   rules={[
                     { required: true, message: t(messageKeys.SELECT_A_VAULT) },
                   ]}
                 >
-                  <Checkbox.Group>
+                  <Radio.Group>
                     {vaults.map(({ chains, name, uid }) => (
-                      <Checkbox key={uid} value={uid}>
+                      <Radio key={uid} value={uid}>
                         <span className="name">{name}</span>
                         <MiddleTruncate
                           text={
@@ -142,9 +143,9 @@ const Component = () => {
                               ?.address ?? ""
                           }
                         />
-                      </Checkbox>
+                      </Radio>
                     ))}
-                  </Checkbox.Group>
+                  </Radio.Group>
                 </Form.Item>
                 <Button htmlType="submit" />
               </Form>
@@ -169,5 +170,5 @@ const Component = () => {
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Component />
-  </StrictMode>
+  </StrictMode>,
 );

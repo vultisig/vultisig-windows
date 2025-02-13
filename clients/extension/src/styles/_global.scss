@@ -194,6 +194,53 @@ body {
   }
 }
 
+.ant-radio-group {
+  border-radius: rem(12);
+  overflow: hidden;
+
+  .ant-radio-wrapper {
+    background-color: $blue-base;
+    line-height: rem(24);
+    padding: rem(16) rem(20);
+    position: relative;
+    transition: background-color 0.3s;
+    width: 100%;
+
+    .ant-radio-input {
+      height: rem(20);
+      width: rem(20);
+    }
+
+    .ant-radio-inner {
+      background-color: transparent;
+      border-color: $blue-light;
+      border-width: rem(2);
+      height: rem(20);
+      width: rem(20);
+    }
+
+    .ant-radio-checked {
+      .ant-radio-inner {
+        background-color: $cyan-base;
+        border-color: $cyan-base;
+      }
+    }
+
+    + .ant-radio-wrapper {
+      &::before {
+        background-color: $blue-light;
+        content: "";
+        height: rem(1);
+        left: rem(20);
+        position: absolute;
+        right: rem(20);
+        top: 0;
+        transition: background-color 0.3s;
+      }
+    }
+  }
+}
+
 .ant-modal {
   .ant-modal-content {
     background-color: $blue-dark;
