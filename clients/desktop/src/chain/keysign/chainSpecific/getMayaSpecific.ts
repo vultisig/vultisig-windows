@@ -1,11 +1,11 @@
 import { create } from '@bufbuild/protobuf';
+import { CosmosChain } from '@core/chain/Chain';
+import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo';
 import {
   MAYAChainSpecific,
   MAYAChainSpecificSchema,
 } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 
-import { CosmosChain } from '@core/chain/Chain';
-import { getCosmosAccountInfo } from '../../cosmos/account/getCosmosAccountInfo';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
 
 export const getMayaSpecific = async ({

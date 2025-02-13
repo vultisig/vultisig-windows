@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf';
+import { getPolkadotClient } from '@core/chain/chains/polkadot/client';
 import { PolkadotSpecificSchema } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 
-import { getPolkadotClient } from '../../polkadot/client/getPolkadotClient';
 import { KeysignChainSpecificValue } from '../KeysignChainSpecific';
 import { GetChainSpecificInput } from './GetChainSpecificInput';
 

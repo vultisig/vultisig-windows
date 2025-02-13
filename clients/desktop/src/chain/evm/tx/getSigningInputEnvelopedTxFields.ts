@@ -1,8 +1,8 @@
+import { Chain } from '@core/chain/Chain';
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix';
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 
-import { Chain } from '@core/chain/Chain';
 import { bigIntToHex } from '../../utils/bigIntToHex';
-import { stripHexPrefix } from '../../utils/stripHexPrefix';
 import { getCoinType } from '../../walletCore/getCoinType';
 
 type Input = {

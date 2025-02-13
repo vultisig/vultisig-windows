@@ -1,6 +1,5 @@
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix';
 import { WalletCore } from '@trustwallet/wallet-core';
-
-import { stripHexPrefix } from '../utils/stripHexPrefix';
 
 type Input = {
   value: Uint8Array | Buffer;
