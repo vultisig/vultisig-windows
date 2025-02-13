@@ -338,7 +338,7 @@ export const requiredFieldsPerChainAction = {
             z
               .number()
               .max(totalAmountAvailable, 'chainFunctions.amountExceeded')
-              .min(0, 'chainFunctions.custom.validations.amount') // Allow 0
+              .min(0, 'chainFunctions.custom.validations.amount')
               .refine(val => val >= 0, {
                 message: 'chainFunctions.custom.validations.amount',
               })
