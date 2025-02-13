@@ -1,6 +1,7 @@
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
 import { Chain } from '@core/chain/Chain';
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
+import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
+
 import { KeysignChainSpecific } from '../../../keysign/KeysignChainSpecific';
 import { polkadotConfig } from '../../../polkadot/config';
 import { rippleConfig } from '../../../ripple/config';
@@ -19,4 +20,7 @@ export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
     polkadotSpecific: () => polkadotConfig.fee,
     tonSpecific: () => tonConfig.fee,
     rippleSpecific: () => rippleConfig.fee,
+    tronSpecific: () => {
+      throw new Error('Tron fee not implemented');
+    },
   });

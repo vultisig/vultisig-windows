@@ -1,11 +1,11 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { Chain, EvmChain } from '@core/chain/Chain';
+import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 import { formatAmount } from '@lib/utils/formatAmount';
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
 
-import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
 import { KeysignChainSpecific } from '../../../keysign/KeysignChainSpecific';
 import { polkadotConfig } from '../../../polkadot/config';
 import { rippleConfig } from '../../../ripple/config';
@@ -34,6 +34,9 @@ export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
       polkadotSpecific: () => polkadotConfig.fee,
       tonSpecific: () => tonConfig.fee,
       rippleSpecific: () => rippleConfig.fee,
+      tronSpecific: () => {
+        throw new Error('Tron fee not implemented');
+      },
     }
   );
 
