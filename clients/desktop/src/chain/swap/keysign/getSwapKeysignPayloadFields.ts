@@ -14,7 +14,6 @@ import { isOneOf } from '@lib/utils/array/isOneOf';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 
-import { GeneralSwapQuote } from '../general/GeneralSwapQuote';
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload';
 import { SwapQuote } from '../quote/SwapQuote';
 
@@ -35,7 +34,7 @@ export const getSwapKeysignPayloadFields = ({
   toCoin,
 }: Input): Output => {
   return matchRecordUnion(quote, {
-    general: (quote: GeneralSwapQuote): Output => {
+    general: quote => {
       const swapPayload = create(OneInchSwapPayloadSchema, {
         fromCoin,
         toCoin,
