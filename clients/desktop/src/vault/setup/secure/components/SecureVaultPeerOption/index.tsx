@@ -1,18 +1,22 @@
 import { useRive } from '@rive-app/react-canvas';
 import { useTranslation } from 'react-i18next';
-import styled, { css } from 'styled-components';
 
-import { Match } from '../../../lib/ui/base/Match';
-import { CheckIconGreen } from '../../../lib/ui/icons/CheckIconGreen';
-import { HStack, hStack, VStack } from '../../../lib/ui/layout/Stack';
-import { ValueProp } from '../../../lib/ui/props';
-import { Text } from '../../../lib/ui/text';
-import { getColor } from '../../../lib/ui/theme/getters';
+import { Match } from '../../../../../lib/ui/base/Match';
+import { CheckIconGreen } from '../../../../../lib/ui/icons/CheckIconGreen';
+import { HStack, VStack } from '../../../../../lib/ui/layout/Stack';
+import { ValueProp } from '../../../../../lib/ui/props';
+import { Text } from '../../../../../lib/ui/text';
 import {
   formatKeygenDeviceName,
   parseLocalPartyId,
-} from '../../keygen/utils/localPartyId';
-import { usePeersSelectionRecord } from '../../keysign/shared/state/selectedPeers';
+} from '../../../../keygen/utils/localPartyId';
+import { usePeersSelectionRecord } from '../../../../keysign/shared/state/selectedPeers';
+import {
+  CheckIconWrapper,
+  RiveWrapper,
+  StyledText,
+  Wrapper,
+} from './SecureVaultPeerOption.styled';
 
 type SecureVaultPeerOptionProps = {
   isCurrentDevice: boolean;
@@ -36,18 +40,20 @@ export const SecureVaultPeerOption = ({
     autoplay: true,
   });
 
+  const handleClick = () => {
+    if (isCurrentDevice || !value) return;
+
+    setRecord(prev => ({
+      ...prev,
+      [value]: !isSelected,
+    }));
+  };
+
   return (
     <Wrapper
       role="button"
       tabIndex={0}
-      onClick={() => {
-        if (isCurrentDevice || !value) return;
-
-        setRecord(prev => ({
-          ...prev,
-          [value]: !isSelected,
-        }));
-      }}
+      onClick={handleClick}
       isActive={isSelected}
       isCurrentDevice={isCurrentDevice}
       gap={8}
@@ -104,44 +110,3 @@ export const SecureVaultPeerOption = ({
     </Wrapper>
   );
 };
-
-const Wrapper = styled(HStack)<{
-  isActive: boolean;
-  isCurrentDevice: boolean;
-}>`
-  padding: 16px;
-  border-radius: 16px;
-  width: 150px;
-
-  ${({ isCurrentDevice, isActive }) =>
-    isCurrentDevice || isActive
-      ? css`
-          cursor: initial;
-          background: #042436;
-          border: 1px solid
-            ${isActive ? getColor('primary') : 'rgba(19, 200, 157, 0.25)'};
-        `
-      : css`
-          border: 1px dashed ${getColor('foregroundSuper')};
-        `}
-`;
-
-const RiveWrapper = styled.div`
-  flex-shrink: 0;
-  height: 24px;
-  width: 24px;
-`;
-
-const CheckIconWrapper = styled.div`
-  ${hStack()}
-  align-items: center;
-  justify-content: center;
-  padding: 1px;
-  background-color: ${getColor('primary')};
-  border-radius: 50%;
-  font-size: 24px;
-`;
-
-const StyledText = styled(Text)`
-  word-break: break-all;
-`;
