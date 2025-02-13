@@ -273,7 +273,7 @@ export const en = {
     'Vultisig only charges a flat fee on swap and bridging. There are no other hidden fees.',
   faq_recover_assets_title: 'Can I recover my assets if I lose a device?',
   faq_recover_assets_content:
-    'You can back-up your vault by exporting the vault shares.',
+    'You can back up your vault by exporting the vault shares.',
   faq_need_to_register_title: 'Do I need to register?',
   faq_need_to_register_content: 'No, there are no registration requirements.',
   vault_settings_address_book_no_addresses_title: 'No saved addresses',
@@ -415,10 +415,10 @@ export const en = {
   secureVaultSetupPasswordTooltipContent:
     'This occurs because the password is used to locally encrypt the backup file, similar to how a hard drive is encrypted. In the following step, you have the option to add a hint.',
   vaultOverview: 'Vault Overview',
-  backupShare: 'Back-up Vault Share',
+  backupShare: 'Back up Vault Share',
   vaultCreated: 'Vault created',
   successfully: 'Successfully',
-  backupGuide: 'Back-up guide',
+  backupGuide: 'Back up guide',
   receivedShare1Email: 'Vault Share 1 received via mail',
   yourVaultShares: 'Your vault has {{shares}} Vault Shares',
   fastVault: 'Fast Vault',
