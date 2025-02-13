@@ -39,7 +39,6 @@ import {
   InfoIconWrapperForBanner,
   LocalPillWrapper,
   PageWrapper,
-  PillPlaceholder,
   PillWrapper,
   SwitchModeButton,
   SwitchModeWrapper,
@@ -139,7 +138,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
                 </LocalPillWrapper>
               )}
               relay={() =>
-                showWarning ? (
+                showWarning && (
                   <PillWrapper gap={12} alignItems="baseline">
                     <InfoIconWrapperForBanner>
                       <InfoIcon />
@@ -155,8 +154,6 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
                       <CloseIcon />
                     </CloseIconWrapper>
                   </PillWrapper>
-                ) : (
-                  <PillPlaceholder />
                 )
               }
             />
