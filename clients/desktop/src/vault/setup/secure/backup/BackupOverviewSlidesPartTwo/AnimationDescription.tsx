@@ -28,7 +28,9 @@ export const AnimationDescription = () => {
 };
 
 const Wrapper = styled.div`
-  height: 144px;
+  min-height: 144px;
+  max-width: 500px;
+  align-self: center;
 `;
 
 export const TextWrapper = styled.div`
