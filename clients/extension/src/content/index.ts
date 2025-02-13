@@ -912,7 +912,6 @@ window.vultisig = vultisigProvider;
 window.xfi = xfiProvider;
 window.xfi.kepler = keplrProvider;
 
-if (!window.ethereum) window.ethereum = ethereumProvider;
 
 announceProvider({
   info: {
