@@ -15,7 +15,6 @@ export function MatchRecordUnion<U>({
   value,
   handlers,
 }: MatchRecordUnionProps<U>) {
-  // Each union member is an object with exactly one key
   const key = Object.keys(value as any)[0] as KeyOfUnion<U>;
   const content = handlers[key]((value as any)[key]);
   return <>{content}</>;
