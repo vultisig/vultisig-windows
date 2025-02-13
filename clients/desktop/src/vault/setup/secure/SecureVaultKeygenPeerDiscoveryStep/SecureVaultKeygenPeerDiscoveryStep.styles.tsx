@@ -16,11 +16,6 @@ export const InfoIconWrapperForBanner = styled.div`
   color: ${getColor('textShy')};
 `;
 
-export const PillPlaceholder = styled.div`
-  height: 52.5px;
-  align-self: stretch;
-`;
-
 export const CloseIconWrapper = styled.div`
   font-size: 12px;
   padding: 4px 6px;
