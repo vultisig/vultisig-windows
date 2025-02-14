@@ -38,7 +38,7 @@ func NewStore() (*Store, error) {
 	// Construct the full path to the database file
 	dbFilePath := filepath.Join(exeDir, DbFileName)
 
-	db, err := sql.Open("sqlite3", dbFilePath)
+	db, err := sql.Open("sqlite3", dbFilePath+"?_journal_mode=WAL")
 	if err != nil {
 		return nil, fmt.Errorf("fail to open sqlite db, err: %w", err)
 	}
