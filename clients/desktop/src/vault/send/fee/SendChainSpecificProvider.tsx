@@ -1,6 +1,6 @@
+import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific';
 import { useTranslation } from 'react-i18next';
 
-import { KeysignChainSpecific } from '../../../../../../core/keysign/chainSpecific/KeysignChainSpecific';
 import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { ChildrenProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
