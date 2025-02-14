@@ -28,8 +28,8 @@ export const FramedQrCode = ({ size, value, scaling = true }: FramedQrCode) => {
       </RiveWrapper>
       <QRCodeWrapper>
         <QRCode
-          fgColor="#000000"
-          bgColor="#FFFFFF"
+          fgColor="#FFFFFF"
+          bgColor="#000000"
           size={size ?? DEFAULT_QR_CODE_SIZE}
           value={value}
         />
