@@ -1,10 +1,9 @@
+import { Chain } from '@core/chain/Chain';
+import { getCoinType } from '@core/chain/coin/coinType';
 import {
   PublicKey,
   WalletCore,
 } from '@trustwallet/wallet-core/dist/src/wallet-core';
-
-import { Chain } from '@core/chain/Chain';
-import { getCoinType } from '../walletCore/getCoinType';
 
 type DeriveAddressInput = {
   chain: Chain;

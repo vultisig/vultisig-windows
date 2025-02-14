@@ -1,12 +1,11 @@
-import { Chain } from '@core/chain/Chain';
-import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix';
-import { TW, WalletCore } from '@trustwallet/wallet-core';
-
-import { bigIntToHex } from '../../utils/bigIntToHex';
-import { getSigningInputEnvelopedTxFields } from './getSigningInputEnvelopedTxFields';
+import { Chain } from "@core/chain/Chain";
+import { EthereumSpecific } from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
+import { KeysignPayload } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
+import { shouldBePresent } from "@lib/utils/assert/shouldBePresent";
+import { stripHexPrefix } from "@lib/utils/hex/stripHexPrefix";
+import { TW, WalletCore } from "@trustwallet/wallet-core";
+import { getSigningInputEnvelopedTxFields } from "./getSigningInputEnvelopedTxFields";
+import { bigIntToHex } from "@lib/utils/bigint/bigIntToHex";
 
 type Input = {
   keysignPayload: KeysignPayload;
@@ -18,12 +17,12 @@ export const getErc20ApproveTxInputData = ({
   walletCore,
 }: Input) => {
   const { amount, spender } = shouldBePresent(
-    keysignPayload.erc20ApprovePayload
+    keysignPayload.erc20ApprovePayload,
   );
 
   const amountHex = Buffer.from(
     stripHexPrefix(bigIntToHex(BigInt(amount))),
-    'hex'
+    "hex",
   );
 
   const coin = shouldBePresent(keysignPayload.coin);

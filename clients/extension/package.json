@@ -40,7 +40,7 @@
     "@fontsource/roboto-mono": "^5.1.0",
     "@keplr-wallet/types": "^0.12.169",
     "@solana/web3.js": "^1.98.0",
-    "@trustwallet/wallet-core": "^4.1.21",
+    "@trustwallet/wallet-core": "^4.2.10",
     "@types/chrome": "^0.0.287",
     "@types/keymirror": "^0.1.4",
     "@types/node": "^22.8.1",

@@ -1,9 +1,8 @@
-import { Chain } from '@core/chain/Chain';
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix';
-import { TW, WalletCore } from '@trustwallet/wallet-core';
-
-import { bigIntToHex } from '../../utils/bigIntToHex';
-import { getCoinType } from '../../walletCore/getCoinType';
+import { Chain } from "@core/chain/Chain";
+import { getCoinType } from "@core/chain/coin/coinType";
+import { bigIntToHex } from "@lib/utils/bigint/bigIntToHex";
+import { stripHexPrefix } from "@lib/utils/hex/stripHexPrefix";
+import { TW, WalletCore } from "@trustwallet/wallet-core";
 
 type Input = {
   chain: Chain;
@@ -16,12 +15,12 @@ type Input = {
 
 type Output = Pick<
   TW.Ethereum.Proto.SigningInput,
-  | 'chainId'
-  | 'nonce'
-  | 'gasLimit'
-  | 'maxFeePerGas'
-  | 'maxInclusionFeePerGas'
-  | 'txMode'
+  | "chainId"
+  | "nonce"
+  | "gasLimit"
+  | "maxFeePerGas"
+  | "maxInclusionFeePerGas"
+  | "txMode"
 >;
 
 export const getSigningInputEnvelopedTxFields = ({
@@ -42,23 +41,23 @@ export const getSigningInputEnvelopedTxFields = ({
   return {
     chainId: Buffer.from(
       stripHexPrefix(
-        chainId.toString(16).padStart(chain === Chain.Zksync ? 4 : 2, '0')
+        chainId.toString(16).padStart(chain === Chain.Zksync ? 4 : 2, "0"),
       ),
-      'hex'
+      "hex",
     ),
     nonce: Buffer.from(
-      stripHexPrefix(bigIntToHex(nonce).padStart(2, '0')),
-      'hex'
+      stripHexPrefix(bigIntToHex(nonce).padStart(2, "0")),
+      "hex",
     ),
     txMode: TW.Ethereum.Proto.TransactionMode.Enveloped,
-    gasLimit: Buffer.from(stripHexPrefix(bigIntToHex(BigInt(gasLimit))), 'hex'),
+    gasLimit: Buffer.from(stripHexPrefix(bigIntToHex(BigInt(gasLimit))), "hex"),
     maxFeePerGas: Buffer.from(
       stripHexPrefix(bigIntToHex(BigInt(maxFeePerGasWei))),
-      'hex'
+      "hex",
     ),
     maxInclusionFeePerGas: Buffer.from(
       stripHexPrefix(bigIntToHex(BigInt(priorityFee))),
-      'hex'
+      "hex",
     ),
   };
 };
