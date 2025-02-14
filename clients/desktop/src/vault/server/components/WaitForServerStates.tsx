@@ -8,8 +8,8 @@ import { Text } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
 import {
   ServerAnimationStates,
-  useWaitForServerAnimationStates,
-} from '../hooks/useWaitForServerAnimationStates';
+  useQueryAnimations,
+} from '../hooks/useQueryAnimations';
 
 type WaitForServerStatesProps = {
   state: ServerAnimationStates;
@@ -21,7 +21,7 @@ export const WaitForServerStates: FC<WaitForServerStatesProps> = ({
   onAnimationEnd,
 }) => {
   const { t } = useTranslation();
-  const RiveComponent = useWaitForServerAnimationStates({
+  const RiveComponent = useQueryAnimations({
     onAnimationEnd,
     state,
   });

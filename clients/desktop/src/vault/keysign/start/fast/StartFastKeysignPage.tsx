@@ -1,5 +1,3 @@
-import { useTranslation } from 'react-i18next';
-
 import { Match } from '../../../../lib/ui/base/Match';
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState';
@@ -39,8 +37,6 @@ export const StartFastKeysignPage = () => {
     onExit: useNavigateBack(),
   });
 
-  const { t } = useTranslation();
-
   return (
     <KeysignMessagePayloadProvider value={keysignPayload}>
       <PasswordProvider initialValue="">
@@ -61,10 +57,7 @@ export const StartFastKeysignPage = () => {
                           <KeygenStartSessionStep onForward={toNextStep} />
                         )}
                         waitServer={() => (
-                          <WaitForServerToJoinStep
-                            title={t('fast_sign')}
-                            onForward={toNextStep}
-                          />
+                          <WaitForServerToJoinStep onForward={toNextStep} />
                         )}
                         server={() => (
                           <FastKeysignServerStep onForward={toNextStep} />
