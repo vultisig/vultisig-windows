@@ -15,5 +15,8 @@ export const Wrapper = styled.div<{
 export const RiveWrapper = styled.div`
   position: absolute;
   inset: -9px;
-  z-index: -1;
+`;
+
+export const QRCodeWrapper = styled.div`
+  position: relative;
 `;
