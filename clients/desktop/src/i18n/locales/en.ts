@@ -30,6 +30,7 @@ export const en = {
   backup_decryption_failed: 'Please try again.',
   upload_previous_vault: 'Upload your previously created vault share:',
   select_backup_file: 'Import your vault share',
+  supported_file_types: 'Supported file types: .bak & .vult',
   continue: 'Continue',
   ok: 'OK',
   cancel: 'Cancel',

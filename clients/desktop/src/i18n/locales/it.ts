@@ -17,6 +17,7 @@ export const it = {
     'Il server ha impiegato troppo tempo per rispondere. Controlla la tua connessione a Internet e riprova.',
   errorTimedOut: 'Errore: Timeout del server',
   thisDevice: 'Questo dispositivo',
+  supported_file_types: 'Tipi di file supportati: .bak & .vult',
   optionalDevice: 'Dispositivo opzionale',
   scanWithDevice: 'Scansiona con il {{deviceNumber}}° dispositivo',
   localMode: 'Sei in modalità locale',

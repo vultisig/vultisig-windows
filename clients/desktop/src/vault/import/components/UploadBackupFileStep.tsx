@@ -43,7 +43,7 @@ export const UploadBackupFileStep = ({
       >
         <VStack gap={20} flexGrow>
           {file ? (
-            <UploadedBackupFile value={file} onRemove={() => setFile(null)} />
+            <UploadedBackupFile value={file} />
           ) : (
             <BackupFileDropzone onFinish={setFile} />
           )}
