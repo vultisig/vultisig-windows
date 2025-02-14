@@ -1,8 +1,8 @@
+import { getPolkadotClient } from '@core/chain/chains/polkadot/client';
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
 import { isInError } from '@lib/utils/error/isInError';
 import { TW } from '@trustwallet/wallet-core';
 
-import { getPolkadotClient } from '../../polkadot/client/getPolkadotClient';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executePolkadotTx = async ({

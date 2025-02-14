@@ -1,10 +1,10 @@
 import { Chain } from '@core/chain/Chain';
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
+import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings';
+import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings';
 import { omit } from '@lib/utils/record/omit';
 import { useCallback, useMemo } from 'react';
 
-import { EvmFeeSettings } from '../../../../../chain/evm/fee/EvmFeeSettings';
-import { UtxoFeeSettings } from '../../../../../chain/utxo/fee/UtxoFeeSettings';
 import { ChildrenProp } from '../../../../../lib/ui/props';
 import { getStateProviderSetup } from '../../../../../lib/ui/state/getStateProviderSetup';
 import { useCurrentSendCoin } from '../../../state/sendCoin';

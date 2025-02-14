@@ -1,9 +1,9 @@
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix';
 import { assertField } from '@lib/utils/record/assertField';
 import { TW } from '@trustwallet/wallet-core';
 
 import { getSigningInputEnvelopedTxFields } from '../../evm/tx/getSigningInputEnvelopedTxFields';
 import { bigIntToHex } from '../../utils/bigIntToHex';
-import { stripHexPrefix } from '../../utils/stripHexPrefix';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
 
 const toTransferData = (memo: string | undefined) => {

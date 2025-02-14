@@ -1,12 +1,13 @@
-import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-
-import { EvmFeeSettings } from '../../../../../chain/evm/fee/EvmFeeSettings';
+import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings';
 import {
   defaultFeePriority,
   feePriorities,
   FeePriority,
-} from '../../../../../chain/fee/FeePriority';
+} from '@core/chain/tx/fee/FeePriority';
+import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps';
 import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput';
@@ -18,7 +19,6 @@ import { Spinner } from '../../../../../lib/ui/loaders/Spinner';
 import { Modal } from '../../../../../lib/ui/modal';
 import { OnCloseProp } from '../../../../../lib/ui/props';
 import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery';
-import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
 import { useSendChainSpecificQuery } from '../../../queries/useSendChainSpecificQuery';
 import {
   SendChainSpecificValueProvider,

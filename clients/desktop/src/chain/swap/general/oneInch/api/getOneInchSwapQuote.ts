@@ -2,12 +2,12 @@ import { EvmChain } from '@core/chain/Chain';
 import { ChainAccount } from '@core/chain/ChainAccount';
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo';
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
+import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit';
 import { rootApiUrl } from '@core/config';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 import { pick } from '@lib/utils/record/pick';
 
-import { defaultEvmSwapGasLimit } from '../../../../evm/evmGasLimit';
 import { GeneralSwapQuote } from '../../GeneralSwapQuote';
 import { oneInchAffiliateConfig } from '../oneInchAffiliateConfig';
 import { OneInchSwapQuoteResponse } from './OneInchSwapQuoteResponse';
