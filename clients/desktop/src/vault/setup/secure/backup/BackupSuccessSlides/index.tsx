@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { HStack, VStack } from '../../../../../lib/ui/layout/Stack';
+import { Spinner } from '../../../../../lib/ui/loaders/Spinner';
 import { GradientText, Text } from '../../../../../lib/ui/text';
 import { PageContent } from '../../../../../ui/page/PageContent';
-import { AnimatedLoader } from '../../../../../ui/pending/AnimatedLoader';
 
 const BACKUP_SUCCESS_WAIT_TIME_IN_MS = 6000;
 
@@ -37,7 +37,7 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
             <GradientText>{t('fastVaultSetup.backup.wellDone')}</GradientText>{' '}
             {t('fastVaultSetup.backup.setNewStandard')}
           </Text>
-          <AnimatedLoader size="3em" />
+          <Spinner size="3em" />
         </VStack>
       </VStack>
     </Wrapper>

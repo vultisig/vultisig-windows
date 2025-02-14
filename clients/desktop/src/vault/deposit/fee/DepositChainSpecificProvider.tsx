@@ -1,12 +1,12 @@
 import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific';
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 
+import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { ChildrenProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup';
 import { StrictText } from '../../../lib/ui/text';
 import { PageContent } from '../../../ui/page/PageContent';
-import { AnimatedLoader } from '../../../ui/pending/AnimatedLoader';
 import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery';
 
 export const {
@@ -24,7 +24,7 @@ export const DepositChainSpecificProvider: React.FC<ChildrenProp> = ({
       value={chainSpecificQuery}
       pending={() => (
         <PageContent justifyContent="center" alignItems="center">
-          <AnimatedLoader size="3em" />
+          <Spinner size="3em" />
         </PageContent>
       )}
       error={error => <StrictText>{extractErrorMsg(error)}</StrictText>}

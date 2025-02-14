@@ -5,10 +5,10 @@ import styled from 'styled-components';
 
 import { OTPInput } from '../../../../lib/ui/inputs/OTPInput';
 import { HStack, VStack } from '../../../../lib/ui/layout/Stack';
+import { Spinner } from '../../../../lib/ui/loaders/Spinner';
 import { Text } from '../../../../lib/ui/text';
 import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader';
 import { PageContent } from '../../../../ui/page/PageContent';
-import { AnimatedLoader } from '../../../../ui/pending/AnimatedLoader';
 import { verifyVaultEmailCode } from '../../../fast/api/verifyVaultEmailCode';
 
 const ON_COMPLETE_DELAY = 1000;
@@ -77,9 +77,8 @@ export const EmailConfirmation: FC<EmailConfirmationProps> = ({
   );
 };
 
-const StyledAnimatedLoader = styled(AnimatedLoader)`
+const StyledAnimatedLoader = styled(Spinner)`
   width: fit-content;
   position: relative;
-  width: 20px;
-  height: 20px;
+  font-size: 20px;
 `;

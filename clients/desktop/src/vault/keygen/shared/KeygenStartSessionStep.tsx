@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
 import { Text } from '../../../lib/ui/text';
@@ -9,7 +10,6 @@ import { PageContent } from '../../../ui/page/PageContent';
 import { PageHeader } from '../../../ui/page/PageHeader';
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { AnimatedLoader } from '../../../ui/pending/AnimatedLoader';
 import { useVaultKeygenDevices } from '../../setup/hooks/useVaultKegenDevices';
 import { useCurrentServerUrl } from '../state/currentServerUrl';
 import { startSession } from '../utils/startSession';
@@ -46,7 +46,7 @@ export const KeygenStartSessionStep = ({
       >
         <MatchQuery
           value={status}
-          pending={() => <AnimatedLoader size="3em" />}
+          pending={() => <Spinner size="3em" />}
           error={() => <Text>{t('failed_to_start_keygen')}</Text>}
           success={() => null}
         />
