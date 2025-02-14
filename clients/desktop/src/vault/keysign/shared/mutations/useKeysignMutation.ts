@@ -108,10 +108,12 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
           const derivePath = walletCore.CoinTypeExt.derivationPath(
             getCoinType({ walletCore, chain: customMessageConfig.chain })
           );
-
+          const messageToHash = message.startsWith('0x')
+            ? Buffer.from(message.slice(2), 'hex')
+            : message;
           const [signature] = await Keysign(
             vault,
-            [keccak256(message)],
+            [keccak256(messageToHash)],
             vault.local_party_id,
             derivePath,
             sessionId,
