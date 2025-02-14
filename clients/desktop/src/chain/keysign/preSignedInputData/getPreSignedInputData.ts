@@ -1,11 +1,11 @@
-import { WalletCore } from '@trustwallet/wallet-core';
-
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { Chain } from '@core/chain/Chain';
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import {
   getBlockchainSpecificValue,
   KeysignChainSpecificKey,
-} from '../KeysignChainSpecific';
+} from '@core/keysign/chainSpecific/KeysignChainSpecific';
+import { WalletCore } from '@trustwallet/wallet-core';
+
 import { getCosmosPreSignedInputData } from './getCosmosPreSignedInputData';
 import { getEvmPreSignedInputData } from './getEvmPreSignedInputData';
 import { getMayaPreSignedInputData } from './getMayaPreSignedInputData';

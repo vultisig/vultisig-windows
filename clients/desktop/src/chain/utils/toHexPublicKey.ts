@@ -1,7 +1,6 @@
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix';
 import { WalletCore } from '@trustwallet/wallet-core';
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
-
-import { stripHexPrefix } from './stripHexPrefix';
 
 type ToHexPublicKeyInput = {
   publicKey: PublicKey;

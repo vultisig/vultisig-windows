@@ -23,7 +23,6 @@ export const SetupVaultCreationStep = ({
   vaultType,
 }: KeygenStepProps) => {
   const { vault, ...state } = useCreateVaultSetup();
-
   const { t } = useTranslation();
   const title = t('creating_vault');
 

@@ -1,11 +1,11 @@
+import { Chain } from '@core/chain/Chain';
 import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix';
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 
-import { Chain } from '@core/chain/Chain';
 import { bigIntToHex } from '../../utils/bigIntToHex';
-import { stripHexPrefix } from '../../utils/stripHexPrefix';
 import { getSigningInputEnvelopedTxFields } from './getSigningInputEnvelopedTxFields';
 
 type Input = {

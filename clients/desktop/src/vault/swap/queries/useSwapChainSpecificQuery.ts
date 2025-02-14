@@ -2,10 +2,10 @@ import { toChainAmount } from '@core/chain/amount/toChainAmount';
 import { UtxoChain } from '@core/chain/Chain';
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { areEqualCoins } from '@core/chain/coin/Coin';
+import { getChainSpecific } from '@core/keysign/chainSpecific';
+import { ChainSpecificResolverInput } from '@core/keysign/chainSpecific/ChainSpecificResolver';
 import { isOneOf } from '@lib/utils/array/isOneOf';
 
-import { getChainSpecific } from '../../../chain/keysign/chainSpecific/getChainSpecific';
-import { GetChainSpecificInput } from '../../../chain/keysign/chainSpecific/GetChainSpecificInput';
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields';
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
@@ -39,7 +39,7 @@ export const useSwapChainSpecificQuery = () => {
         toCoin: toCoin,
       });
 
-      const input: GetChainSpecificInput = {
+      const input: ChainSpecificResolverInput = {
         coin: fromCoin,
         amount: fromAmount,
         receiver: toAddress,

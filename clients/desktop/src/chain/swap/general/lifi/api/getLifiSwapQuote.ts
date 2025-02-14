@@ -6,7 +6,6 @@ import { memoize } from '@lib/utils/memoize';
 import { TransferDirection } from '@lib/utils/TransferDirection';
 import { createConfig, getQuote } from '@lifi/sdk';
 
-import { defaultEvmSwapGasLimit } from '../../../../evm/evmGasLimit';
 import { GeneralSwapQuote } from '../../GeneralSwapQuote';
 import { lifiConfig } from '../config';
 import {
@@ -70,7 +69,7 @@ export const getLifiSwapQuote = async ({
           data: shouldBePresent(data),
           value: BigInt(shouldBePresent(value)).toString(),
           gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
-          gas: Number(shouldBePresent(gasLimit)) || defaultEvmSwapGasLimit,
+          gas: Number(shouldBePresent(gasLimit)),
         }),
       }
     ),

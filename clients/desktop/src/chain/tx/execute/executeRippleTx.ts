@@ -1,9 +1,9 @@
 import { getRippleClient } from '@core/chain/chains/ripple/client';
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined';
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage';
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix';
 import { TW } from '@trustwallet/wallet-core';
 
-import { stripHexPrefix } from '../../utils/stripHexPrefix';
 import { ExecuteTxInput } from './ExecuteTxInput';
 
 export const executeRippleTx = async ({

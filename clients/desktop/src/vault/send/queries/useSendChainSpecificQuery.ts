@@ -1,5 +1,6 @@
-import { getChainSpecific } from '../../../chain/keysign/chainSpecific/getChainSpecific';
-import { GetChainSpecificInput } from '../../../chain/keysign/chainSpecific/GetChainSpecificInput';
+import { getChainSpecific } from '@core/keysign/chainSpecific';
+import { ChainSpecificResolverInput } from '@core/keysign/chainSpecific/ChainSpecificResolver';
+
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery';
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
 import { useCurrentVaultCoin } from '../../state/currentVault';
@@ -22,7 +23,7 @@ export const useSendChainSpecificQuery = () => {
       amount: amount ?? undefined,
     },
     getQuery: ({ amount }) => {
-      const input: GetChainSpecificInput = {
+      const input: ChainSpecificResolverInput = {
         coin,
         receiver,
         feeSettings,

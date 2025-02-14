@@ -1,13 +1,15 @@
-import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-
 import {
   defaultFeePriority,
   feePriorities,
   FeePriority,
-} from '../../../../../chain/fee/FeePriority';
-import { adjustByteFee } from '../../../../../chain/utxo/fee/adjustByteFee';
-import { UtxoFeeSettings } from '../../../../../chain/utxo/fee/UtxoFeeSettings';
+} from '@core/chain/tx/fee/FeePriority';
+import { adjustByteFee } from '@core/chain/tx/fee/utxo/adjustByteFee';
+import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings';
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { Button } from '../../../../../lib/ui/buttons/Button';
 import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps';
 import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput';
@@ -17,8 +19,6 @@ import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput';
 import { VStack } from '../../../../../lib/ui/layout/Stack';
 import { Modal } from '../../../../../lib/ui/modal';
 import { OnCloseProp } from '../../../../../lib/ui/props';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
 import { useSendChainSpecific } from '../../SendChainSpecificProvider';
 import { useFeeSettings } from '../state/feeSettings';
 
