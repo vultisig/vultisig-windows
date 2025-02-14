@@ -1,7 +1,7 @@
+import { assertField } from '@lib/utils/record/assertField';
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { assertField } from '@lib/utils/record/assertField';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
 
 export const getRipplePreSignedInputData = ({
@@ -22,9 +22,7 @@ export const getRipplePreSignedInputData = ({
     opPayment: TW.Ripple.Proto.OperationPayment.create({
       destination: keysignPayload.toAddress,
       amount: Long.fromString(keysignPayload.toAmount),
-      destinationTag: keysignPayload.memo
-        ? Long.fromString(keysignPayload.memo)
-        : undefined,
+      destinationTag: keysignPayload.memo ? Number(keysignPayload.memo) : null,
     }),
   });
 

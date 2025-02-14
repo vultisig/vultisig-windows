@@ -5,7 +5,7 @@ import { assertField } from '@lib/utils/record/assertField';
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { getCoinType } from '../../walletCore/getCoinType';
+import { getCoinType } from '@core/chain/coin/coinType';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
 
 export const getCosmosPreSignedInputData = ({

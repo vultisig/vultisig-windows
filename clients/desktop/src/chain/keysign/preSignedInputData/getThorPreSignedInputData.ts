@@ -3,7 +3,7 @@ import Long from 'long';
 
 import { assertField } from '@lib/utils/record/assertField';
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
-import { getCoinType } from '../../walletCore/getCoinType';
+import { getCoinType } from '@core/chain/coin/coinType';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
 
 export const getThorPreSignedInputData = ({

@@ -1,9 +1,9 @@
+import { getCoinType } from '@core/chain/coin/coinType';
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix';
 import { TW } from '@trustwallet/wallet-core';
 import Long from 'long';
 
 import { bigIntToHex } from '../../utils/bigIntToHex';
-import { getCoinType } from '../../walletCore/getCoinType';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
 
 export const getPolkadotPreSignedInputData = ({

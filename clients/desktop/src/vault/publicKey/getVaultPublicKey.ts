@@ -1,12 +1,12 @@
 import { Chain } from '@core/chain/Chain';
 import { getChainKind } from '@core/chain/ChainKind';
+import { getCoinType } from '@core/chain/coin/coinType';
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm';
 import { match } from '@lib/utils/match';
 import { WalletCore } from '@trustwallet/wallet-core';
 
 import { storage } from '../../../wailsjs/go/models';
 import { GetDerivedPubKey } from '../../../wailsjs/go/tss/TssService';
-import { getCoinType } from '../../chain/walletCore/getCoinType';
 
 type Input = {
   chain: Chain;

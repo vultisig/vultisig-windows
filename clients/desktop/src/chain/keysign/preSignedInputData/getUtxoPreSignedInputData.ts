@@ -5,7 +5,7 @@ import Long from 'long';
 
 import { UtxoChain } from '@core/chain/Chain';
 import { utxoChainScriptType } from '../../utxo/UtxoScriptType';
-import { getCoinType } from '../../walletCore/getCoinType';
+import { getCoinType } from '@core/chain/coin/coinType';
 import { hexEncode } from '../../walletCore/hexEncode';
 import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
 

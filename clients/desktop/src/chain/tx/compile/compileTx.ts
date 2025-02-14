@@ -1,15 +1,15 @@
 import { Chain } from '@core/chain/Chain';
 import { getChainKind } from '@core/chain/ChainKind';
+import { getCoinType } from '@core/chain/coin/coinType';
 import { signatureFormats } from '@core/chain/signing/SignatureFormat';
+import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes';
 import { WalletCore } from '@trustwallet/wallet-core';
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 import { tss } from '../../../../wailsjs/go/models';
 import { assertSignature } from '../../utils/assertSignature';
-import { getCoinType } from '../../walletCore/getCoinType';
 import { hexEncode } from '../../walletCore/hexEncode';
 import { generateSignature } from '../signature/generateSignature';
-import { getPreSigningHashes } from '../utils/getPreSigningHashes';
 
 type Input = {
   publicKey: PublicKey;

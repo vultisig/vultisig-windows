@@ -1,7 +1,7 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 
 import { Chain } from '@core/chain/Chain';
-import { getCoinType } from '../walletCore/getCoinType';
+import { getCoinType } from '@core/chain/coin/coinType';
 
 type Input = {
   chain: Chain;
