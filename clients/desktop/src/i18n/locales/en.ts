@@ -273,7 +273,7 @@ export const en = {
     'Vultisig only charges a flat fee on swap and bridging. There are no other hidden fees.',
   faq_recover_assets_title: 'Can I recover my assets if I lose a device?',
   faq_recover_assets_content:
-    'You can back up your vault by exporting the vault shares.',
+    'You can backup your vault by exporting the vault shares.',
   faq_need_to_register_title: 'Do I need to register?',
   faq_need_to_register_content: 'No, there are no registration requirements.',
   vault_settings_address_book_no_addresses_title: 'No saved addresses',
