@@ -1,10 +1,10 @@
 import { t } from 'i18next';
 import { useDropzone } from 'react-dropzone';
 
-import { FileIcon } from '../../../lib/ui/icons/FileIcon';
+import { CloudUploadIcon } from '../../../lib/ui/icons/CloudUploadIcon';
 import { InteractiveDropZoneContainer } from '../../../lib/ui/inputs/upload/DropZoneContainer';
 import { DropZoneContent } from '../../../lib/ui/inputs/upload/DropZoneContent';
-import { StrictText } from '../../../lib/ui/text';
+import { Text } from '../../../lib/ui/text';
 import { vaultBackupExtensions } from '../VaultBackupExtension';
 
 type BackupFileDropzoneProps = {
@@ -28,13 +28,13 @@ export const BackupFileDropzone = ({ onFinish }: BackupFileDropzoneProps) => {
 
   return (
     <>
-      <StrictText centerHorizontally>{t('upload_previous_vault')}</StrictText>
       <InteractiveDropZoneContainer {...getRootProps()}>
-        <DropZoneContent icon={<FileIcon />}>
-          {t('select_backup_file')}
+        <DropZoneContent icon={<CloudUploadIcon />}>
+          <Text color="supporting">{t('select_backup_file')}</Text>
         </DropZoneContent>
         <input {...getInputProps()} />
       </InteractiveDropZoneContainer>
+      <Text color="shy">Supported file types: .bak & .vult</Text>
     </>
   );
 };
