@@ -3,7 +3,7 @@ import { ComponentProps } from 'react';
 import QRCode from 'react-qr-code';
 
 import { ValueProp } from '../../../lib/ui/props';
-import { RiveWrapper, Wrapper } from './FramedQrCode.styled';
+import { QRCodeWrapper, RiveWrapper, Wrapper } from './FramedQrCode.styled';
 import { useQRCodeScaleFactor } from './hooks/useQRCodeScaleFactor';
 
 const DEFAULT_QR_CODE_SIZE = 365;
@@ -26,9 +26,14 @@ export const FramedQrCode = ({ size, value, scaling = true }: FramedQrCode) => {
       <RiveWrapper>
         <RiveComponent />
       </RiveWrapper>
-      <div>
-        <QRCode size={size ?? DEFAULT_QR_CODE_SIZE} value={value} />
-      </div>
+      <QRCodeWrapper>
+        <QRCode
+          fgColor="#000000"
+          bgColor="#FFFFFF"
+          size={size ?? DEFAULT_QR_CODE_SIZE}
+          value={value}
+        />
+      </QRCodeWrapper>
     </Wrapper>
   );
 };
