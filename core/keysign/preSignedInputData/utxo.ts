@@ -1,20 +1,20 @@
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { match } from '@lib/utils/match';
-import { TW } from '@trustwallet/wallet-core';
-import Long from 'long';
+import { shouldBePresent } from "@lib/utils/assert/shouldBePresent";
+import { match } from "@lib/utils/match";
+import { TW } from "@trustwallet/wallet-core";
+import Long from "long";
 
-import { UtxoChain } from '@core/chain/Chain';
-import { utxoChainScriptType } from '../../utxo/UtxoScriptType';
-import { getCoinType } from '@core/chain/coin/coinType';
-import { hexEncode } from '../../walletCore/hexEncode';
-import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
+import { UtxoChain } from "@core/chain/Chain";
+import { getCoinType } from "@core/chain/coin/coinType";
+import { GetPreSignedInputDataInput } from "./PreSignedInputDataResolver";
+import { utxoChainScriptType } from "@core/chain/chains/utxo/tx/UtxoScriptType";
+import { stripHexPrefix } from "@lib/utils/hex/stripHexPrefix";
 
 export const getUtxoPreSignedInputData = ({
   keysignPayload,
   walletCore,
   chain,
   chainSpecific,
-}: GetPreSignedInputDataInput<'utxoSpecific'>) => {
+}: GetPreSignedInputDataInput<"utxoSpecific">) => {
   const { byteFee, sendMaxAmount } = chainSpecific;
 
   const coin = shouldBePresent(keysignPayload.coin);
@@ -26,7 +26,7 @@ export const getUtxoPreSignedInputData = ({
 
   const lockScript = walletCore.BitcoinScript.lockScriptForAddress(
     coin.address,
-    coinType
+    coinType,
   );
 
   const scriptType = utxoChainScriptType[coin.chain as UtxoChain];
@@ -36,10 +36,7 @@ export const getUtxoPreSignedInputData = ({
     pkh: () => lockScript.matchPayToPubkeyHash(),
   });
 
-  const scriptKey = hexEncode({
-    value: pubKeyHash,
-    walletCore,
-  });
+  const scriptKey = stripHexPrefix(walletCore.HexCoding.encode(pubKeyHash));
 
   const script = match(scriptType, {
     wpkh: () =>
@@ -70,7 +67,7 @@ export const getUtxoPreSignedInputData = ({
           sequence: 0xffffffff,
         }),
         script: lockScript.data(),
-      })
+      }),
     ),
   });
 

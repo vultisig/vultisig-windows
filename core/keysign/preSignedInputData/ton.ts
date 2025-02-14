@@ -1,25 +1,24 @@
-import { TW } from '@trustwallet/wallet-core';
-import Long from 'long';
+import { TW } from "@trustwallet/wallet-core";
+import Long from "long";
 
-import { assertField } from '@lib/utils/record/assertField';
-import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
+import { assertField } from "@lib/utils/record/assertField";
+import { PreSignedInputDataResolver } from "./PreSignedInputDataResolver";
 
-export const getTonPreSignedInputData = ({
-  keysignPayload,
-  chainSpecific,
-}: GetPreSignedInputDataInput<'tonSpecific'>) => {
-  const coin = assertField(keysignPayload, 'coin');
+export const getTonPreSignedInputData: PreSignedInputDataResolver<
+  "tonSpecific"
+> = ({ keysignPayload, chainSpecific }) => {
+  const coin = assertField(keysignPayload, "coin");
 
   const { expireAt, sequenceNumber } = chainSpecific;
 
-  const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex');
+  const pubKeyData = Buffer.from(coin.hexPublicKey, "hex");
 
   const tokenTransferMessage = TW.TheOpenNetwork.Proto.Transfer.create({
     dest: keysignPayload.toAddress,
     amount: new Long(Number(keysignPayload.toAmount)),
     bounceable:
       (keysignPayload.memo &&
-        ['d', 'w'].includes(keysignPayload.memo.trim())) ||
+        ["d", "w"].includes(keysignPayload.memo.trim())) ||
       false,
     comment: keysignPayload.memo,
     mode:

@@ -1,30 +1,27 @@
-import { TW } from '@trustwallet/wallet-core';
-import Long from 'long';
+import { TW } from "@trustwallet/wallet-core";
+import Long from "long";
 
-import { assertField } from '@lib/utils/record/assertField';
-import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
-import { getCoinType } from '@core/chain/coin/coinType';
-import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
+import { assertField } from "@lib/utils/record/assertField";
+import { cosmosGasLimitRecord } from "@core/chain/chains/cosmos/cosmosGasLimitRecord";
+import { getCoinType } from "@core/chain/coin/coinType";
+import { PreSignedInputDataResolver } from "./PreSignedInputDataResolver";
 
-export const getThorPreSignedInputData = ({
-  keysignPayload,
-  walletCore,
-  chain,
-  chainSpecific,
-}: GetPreSignedInputDataInput<'thorchainSpecific'>) => {
+export const getThorPreSignedInputData: PreSignedInputDataResolver<
+  "thorchainSpecific"
+> = ({ keysignPayload, walletCore, chain, chainSpecific }) => {
   const coinType = getCoinType({
     walletCore,
     chain,
   });
 
-  const coin = assertField(keysignPayload, 'coin');
+  const coin = assertField(keysignPayload, "coin");
 
   const fromAddr = walletCore.AnyAddress.createWithString(
     coin.address,
-    coinType
+    coinType,
   );
 
-  const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex');
+  const pubKeyData = Buffer.from(coin.hexPublicKey, "hex");
 
   let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({});
   let message: TW.Cosmos.Proto.Message[];
@@ -32,14 +29,14 @@ export const getThorPreSignedInputData = ({
   if (chainSpecific.isDeposit) {
     thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
       asset: TW.Cosmos.Proto.THORChainAsset.create({
-        chain: 'THOR',
-        symbol: 'RUNE',
-        ticker: 'RUNE',
+        chain: "THOR",
+        symbol: "RUNE",
+        ticker: "RUNE",
         synth: false,
       }),
       decimals: new Long(8),
     });
-    const toAmount = Number(keysignPayload.toAmount || '0');
+    const toAmount = Number(keysignPayload.toAmount || "0");
     if (toAmount > 0) {
       thorchainCoin.amount = keysignPayload.toAmount;
     }
@@ -49,7 +46,7 @@ export const getThorPreSignedInputData = ({
         thorchainDepositMessage:
           TW.Cosmos.Proto.Message.THORChainDeposit.create({
             signer: fromAddr.data(),
-            memo: keysignPayload.memo || '',
+            memo: keysignPayload.memo || "",
             coins: [thorchainCoin],
           }),
       }),
@@ -57,10 +54,10 @@ export const getThorPreSignedInputData = ({
   } else {
     const toAddress = walletCore.AnyAddress.createWithString(
       keysignPayload.toAddress,
-      coinType
+      coinType,
     );
     if (!toAddress) {
-      throw new Error('invalid to address');
+      throw new Error("invalid to address");
     }
     message = [
       TW.Cosmos.Proto.Message.create({
@@ -68,7 +65,7 @@ export const getThorPreSignedInputData = ({
           fromAddress: fromAddr.data(),
           amounts: [
             TW.Cosmos.Proto.Amount.create({
-              denom: 'rune',
+              denom: "rune",
               amount: keysignPayload.toAmount,
             }),
           ],
@@ -85,7 +82,7 @@ export const getThorPreSignedInputData = ({
     accountNumber: new Long(Number(chainSpecific.accountNumber)),
     sequence: new Long(Number(chainSpecific.sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
-    memo: keysignPayload.memo || '',
+    memo: keysignPayload.memo || "",
     messages: message,
     fee: TW.Cosmos.Proto.Fee.create({
       gas: new Long(cosmosGasLimitRecord[chain]),

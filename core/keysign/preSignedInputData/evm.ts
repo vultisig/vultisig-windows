@@ -1,33 +1,30 @@
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix';
-import { assertField } from '@lib/utils/record/assertField';
-import { TW } from '@trustwallet/wallet-core';
+import { stripHexPrefix } from "@lib/utils/hex/stripHexPrefix";
+import { assertField } from "@lib/utils/record/assertField";
+import { TW } from "@trustwallet/wallet-core";
 
-import { getSigningInputEnvelopedTxFields } from '../../evm/tx/getSigningInputEnvelopedTxFields';
-import { bigIntToHex } from '../../utils/bigIntToHex';
-import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
+import { PreSignedInputDataResolver } from "./PreSignedInputDataResolver";
+import { bigIntToHex } from "@lib/utils/bigint/bigIntToHex";
+import { getSigningInputEnvelopedTxFields } from "@core/chain/chains/evm/tx/getSigningInputEnvelopedTxFields";
 
 const toTransferData = (memo: string | undefined) => {
-  if (memo && memo.startsWith('0x')) {
-    return Buffer.from(stripHexPrefix(memo), 'hex');
+  if (memo && memo.startsWith("0x")) {
+    return Buffer.from(stripHexPrefix(memo), "hex");
   }
 
-  return Buffer.from(memo ?? '', 'utf8');
+  return Buffer.from(memo ?? "", "utf8");
 };
 
-export const getEvmPreSignedInputData = ({
-  keysignPayload,
-  walletCore,
-  chain,
-  chainSpecific,
-}: GetPreSignedInputDataInput<'ethereumSpecific'>) => {
-  const coin = assertField(keysignPayload, 'coin');
+export const getEvmPreSignedInputData: PreSignedInputDataResolver<
+  "ethereumSpecific"
+> = ({ keysignPayload, walletCore, chain, chainSpecific }) => {
+  const coin = assertField(keysignPayload, "coin");
 
   const { gasLimit, maxFeePerGasWei, nonce, priorityFee } = chainSpecific;
 
   // Amount: converted to hexadecimal, stripped of '0x'
   const amountHex = Buffer.from(
     stripHexPrefix(bigIntToHex(BigInt(keysignPayload.toAmount))),
-    'hex'
+    "hex",
   );
 
   // Send native tokens

@@ -1,16 +1,18 @@
-import { assertField } from '@lib/utils/record/assertField';
-import { TW } from '@trustwallet/wallet-core';
-import Long from 'long';
+import { assertField } from "@lib/utils/record/assertField";
+import { TW } from "@trustwallet/wallet-core";
+import Long from "long";
 
-import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
+import {
+  GetPreSignedInputDataInput,
+  PreSignedInputDataResolver,
+} from "./PreSignedInputDataResolver";
 
-export const getRipplePreSignedInputData = ({
-  keysignPayload,
-  chainSpecific,
-}: GetPreSignedInputDataInput<'rippleSpecific'>) => {
-  const coin = assertField(keysignPayload, 'coin');
+export const getRipplePreSignedInputData: PreSignedInputDataResolver<
+  "rippleSpecific"
+> = ({ keysignPayload, chainSpecific }) => {
+  const coin = assertField(keysignPayload, "coin");
 
-  const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex');
+  const pubKeyData = Buffer.from(coin.hexPublicKey, "hex");
 
   const { gas, sequence } = chainSpecific;
 

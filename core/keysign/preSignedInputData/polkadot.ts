@@ -1,17 +1,17 @@
-import { getCoinType } from '@core/chain/coin/coinType';
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix';
-import { TW } from '@trustwallet/wallet-core';
-import Long from 'long';
+import { getCoinType } from "@core/chain/coin/coinType";
+import { stripHexPrefix } from "@lib/utils/hex/stripHexPrefix";
+import { TW } from "@trustwallet/wallet-core";
+import Long from "long";
 
-import { bigIntToHex } from '../../utils/bigIntToHex';
-import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
+import { GetPreSignedInputDataInput } from "./PreSignedInputDataResolver";
+import { bigIntToHex } from "@lib/utils/bigint/bigIntToHex";
 
 export const getPolkadotPreSignedInputData = ({
   keysignPayload,
   walletCore,
   chain,
   chainSpecific,
-}: GetPreSignedInputDataInput<'polkadotSpecific'>) => {
+}: GetPreSignedInputDataInput<"polkadotSpecific">) => {
   const {
     recentBlockHash,
     nonce,
@@ -24,13 +24,13 @@ export const getPolkadotPreSignedInputData = ({
   // Amount: converted to hexadecimal, stripped of '0x'
   const amountHex = Buffer.from(
     stripHexPrefix(bigIntToHex(BigInt(keysignPayload.toAmount))),
-    'hex'
+    "hex",
   );
 
   const t = TW.Polkadot.Proto.Balance.Transfer.create({
     toAddress: keysignPayload.toAddress,
     value: new Uint8Array(amountHex),
-    memo: keysignPayload.memo || '',
+    memo: keysignPayload.memo || "",
   });
 
   const balance = TW.Polkadot.Proto.Balance.create({
@@ -40,7 +40,7 @@ export const getPolkadotPreSignedInputData = ({
   const nonceLong =
     nonce == BigInt(0) ? Long.ZERO : Long.fromString(nonce.toString());
   const currentBlockNumberLong = Long.fromString(currentBlockNumber);
-  const periodLong = Long.fromString('64');
+  const periodLong = Long.fromString("64");
 
   const era = TW.Polkadot.Proto.Era.create({
     blockNumber: currentBlockNumberLong,
@@ -53,7 +53,7 @@ export const getPolkadotPreSignedInputData = ({
   });
 
   const hexToBytes = (hex: string): Uint8Array =>
-    new Uint8Array(Buffer.from(stripHexPrefix(hex), 'hex'));
+    new Uint8Array(Buffer.from(stripHexPrefix(hex), "hex"));
 
   const ss58Prefix = walletCore.CoinTypeExt.ss58Prefix(coinType);
   const input = TW.Polkadot.Proto.SigningInput.create({
