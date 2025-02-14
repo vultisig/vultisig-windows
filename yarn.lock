@@ -1500,7 +1500,7 @@ __metadata:
     "@keplr-wallet/provider": "npm:^0.12.169"
     "@keplr-wallet/types": "npm:^0.12.169"
     "@solana/web3.js": "npm:^1.98.0"
-    "@trustwallet/wallet-core": "npm:^4.1.21"
+    "@trustwallet/wallet-core": "npm:^4.2.10"
     "@types/chrome": "npm:^0.0.287"
     "@types/keymirror": "npm:^0.1.4"
     "@types/node": "npm:^22.8.1"
@@ -5782,15 +5782,6 @@ __metadata:
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
   checksum: 10c0/073bfa548026b1ebaf1659eb8961e526be22fa77139b10d60e712f46d2f0f05f4e6c8bec62a087d41088ee9e29faa7f54838568e475ab2f776171003c3920858
-  languageName: node
-  linkType: hard
-
-"@trustwallet/wallet-core@npm:^4.1.21":
-  version: 4.2.5
-  resolution: "@trustwallet/wallet-core@npm:4.2.5"
-  dependencies:
-    protobufjs: "npm:>=6.11.3"
-  checksum: 10c0/9eb924b95ff77be95f98f3a41221e1fb81b708e4577472405b737cf91adc1896d4ad28481175b7fddc2ccff73a52296f208b5aef164380f0c437f050b293eb77
   languageName: node
   linkType: hard
 
@@ -20265,7 +20256,7 @@ __metadata:
     "@tanstack/query-sync-storage-persister": "npm:^5.54.1"
     "@tanstack/react-query": "npm:^5.52.0"
     "@tanstack/react-query-persist-client": "npm:^5.54.1"
-    "@trustwallet/wallet-core": "npm:^4.1.21"
+    "@trustwallet/wallet-core": "npm:^4.2.10"
     "@types/bs58": "npm:^4.0.4"
     "@types/node": "npm:^22.8.1"
     "@types/react": "npm:~18.3.12"

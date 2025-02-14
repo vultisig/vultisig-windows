@@ -1,15 +1,13 @@
-import { TW } from '@trustwallet/wallet-core';
-import Long from 'long';
+import { TW } from "@trustwallet/wallet-core";
+import Long from "long";
 
-import { assertField } from '@lib/utils/record/assertField';
-import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
+import { assertField } from "@lib/utils/record/assertField";
+import { PreSignedInputDataResolver } from "./PreSignedInputDataResolver";
 
-export const getSolanaPreSignedInputData = ({
-  keysignPayload,
-  walletCore,
-  chainSpecific,
-}: GetPreSignedInputDataInput<'solanaSpecific'>) => {
-  const coin = assertField(keysignPayload, 'coin');
+export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
+  "solanaSpecific"
+> = ({ keysignPayload, chainSpecific, walletCore }) => {
+  const coin = assertField(keysignPayload, "coin");
 
   const {
     recentBlockHash,
@@ -71,15 +69,15 @@ export const getSolanaPreSignedInputData = ({
     } else if (fromTokenAssociatedAddress && !toTokenAssociatedAddress) {
       // Generate the associated address if `toTokenAssociatedAddress` is missing
       const receiverAddress = walletCore.SolanaAddress.createWithString(
-        keysignPayload.toAddress
+        keysignPayload.toAddress,
       );
       const generatedAssociatedAddress = receiverAddress.defaultTokenAddress(
-        coin.contractAddress
+        coin.contractAddress,
       );
 
       if (!generatedAssociatedAddress) {
         throw new Error(
-          'We must have the association between the minted token and the TO address'
+          "We must have the association between the minted token and the TO address",
         );
       }
 
@@ -108,7 +106,7 @@ export const getSolanaPreSignedInputData = ({
       return TW.Solana.Proto.SigningInput.encode(input).finish();
     } else {
       throw new Error(
-        'To send tokens we must have the association between the minted token and the TO address'
+        "To send tokens we must have the association between the minted token and the TO address",
       );
     }
   }

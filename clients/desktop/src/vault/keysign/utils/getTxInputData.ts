@@ -1,14 +1,14 @@
 import { create } from '@bufbuild/protobuf';
+import { getErc20ApproveTxInputData } from '@core/chain/chains/evm/tx/getErc20ApproveTxInputData';
+import { incrementKeysignPayloadNonce } from '@core/chain/chains/evm/tx/incrementKeysignPayloadNonce';
 import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
+import { getPreSignedInputData } from '@core/keysign/preSignedInputData/index';
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
 import { WalletCore } from '@trustwallet/wallet-core';
 
-import { getErc20ApproveTxInputData } from '../../../chain/evm/tx/getErc20ApproveTxInputData';
-import { incrementKeysignPayloadNonce } from '../../../chain/evm/tx/incrementKeysignPayloadNonce';
-import { getPreSignedInputData } from '../../../chain/keysign/preSignedInputData/getPreSignedInputData';
 import { getOneInchSwapTxInputData } from '../../../chain/swap/general/oneInch/tx/getOneInchSwapTxInputData';
 import { getThorchainSwapTxInputData } from '../../../chain/swap/native/thor/tx/getThorchainSwapTxInputData';
 import { getKeysignChain } from './getKeysignChain';

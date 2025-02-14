@@ -34,7 +34,7 @@
     "@tanstack/query-sync-storage-persister": "^5.54.1",
     "@tanstack/react-query": "^5.52.0",
     "@tanstack/react-query-persist-client": "^5.54.1",
-    "@trustwallet/wallet-core": "^4.1.21",
+    "@trustwallet/wallet-core": "^4.2.10",
     "@types/bs58": "^4.0.4",
     "bs58": "^6.0.0",
     "buffer": "^6.0.3",

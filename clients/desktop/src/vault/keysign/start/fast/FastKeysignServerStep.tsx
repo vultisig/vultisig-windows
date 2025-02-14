@@ -1,5 +1,7 @@
 import { getChainKind } from '@core/chain/ChainKind';
+import { getCoinType } from '@core/chain/coin/coinType';
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm';
+import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes';
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 import { assertField } from '@lib/utils/record/assertField';
 import { useMutation } from '@tanstack/react-query';
@@ -7,9 +9,7 @@ import { keccak256 } from 'js-sha3';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getPreSigningHashes } from '../../../../chain/tx/utils/getPreSigningHashes';
 import { assertChainField } from '../../../../chain/utils/assertChainField';
-import { getCoinType } from '../../../../chain/walletCore/getCoinType';
 import { hexEncode } from '../../../../chain/walletCore/hexEncode';
 import { OnForwardProp } from '../../../../lib/ui/props';
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';

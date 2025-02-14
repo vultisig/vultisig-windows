@@ -1,22 +1,19 @@
-import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom';
-import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
-import { TransactionType } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
-import { assertField } from '@lib/utils/record/assertField';
-import { TW } from '@trustwallet/wallet-core';
-import Long from 'long';
+import { cosmosFeeCoinDenom } from "@core/chain/chains/cosmos/cosmosFeeCoinDenom";
+import { cosmosGasLimitRecord } from "@core/chain/chains/cosmos/cosmosGasLimitRecord";
+import { TransactionType } from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
+import { assertField } from "@lib/utils/record/assertField";
+import { TW } from "@trustwallet/wallet-core";
+import Long from "long";
 
-import { getCoinType } from '../../walletCore/getCoinType';
-import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
+import { getCoinType } from "@core/chain/coin/coinType";
+import { PreSignedInputDataResolver } from "./PreSignedInputDataResolver";
 
-export const getCosmosPreSignedInputData = ({
-  keysignPayload,
-  walletCore,
-  chain,
-  chainSpecific,
-}: GetPreSignedInputDataInput<'cosmosSpecific'>) => {
-  const coin = assertField(keysignPayload, 'coin');
+export const getCosmosPreSignedInputData: PreSignedInputDataResolver<
+  "cosmosSpecific"
+> = ({ keysignPayload, walletCore, chain, chainSpecific }) => {
+  const coin = assertField(keysignPayload, "coin");
 
-  const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex');
+  const pubKeyData = Buffer.from(coin.hexPublicKey, "hex");
 
   const denom = cosmosFeeCoinDenom[chain];
 
@@ -49,8 +46,8 @@ export const getCosmosPreSignedInputData = ({
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
     memo:
       chainSpecific.transactionType !== TransactionType.VOTE
-        ? keysignPayload.memo || ''
-        : '',
+        ? keysignPayload.memo || ""
+        : "",
     messages: message,
     fee: TW.Cosmos.Proto.Fee.create({
       gas: new Long(Number(cosmosGasLimitRecord[chain])),

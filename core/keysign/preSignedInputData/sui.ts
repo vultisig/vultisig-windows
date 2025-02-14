@@ -1,19 +1,18 @@
-import { TW } from '@trustwallet/wallet-core';
-import Long from 'long';
+import { TW } from "@trustwallet/wallet-core";
+import Long from "long";
 
-import { SuiCoin } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
-import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
+import { SuiCoin } from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
+import { PreSignedInputDataResolver } from "./PreSignedInputDataResolver";
 
-export const getSuiPreSignedInputData = ({
-  keysignPayload,
-  chainSpecific,
-}: GetPreSignedInputDataInput<'suicheSpecific'>) => {
+export const getSuiPreSignedInputData: PreSignedInputDataResolver<
+  "suicheSpecific"
+> = ({ keysignPayload, chainSpecific }) => {
   const { coins, referenceGasPrice } = chainSpecific;
 
   const inputData = TW.Sui.Proto.SigningInput.create({
     referenceGasPrice: Long.fromString(referenceGasPrice),
     signer: keysignPayload.coin?.address,
-    gasBudget: Long.fromString('3000000'),
+    gasBudget: Long.fromString("3000000"),
 
     paySui: TW.Sui.Proto.PaySui.create({
       inputCoins: coins.map((coin: SuiCoin) => {

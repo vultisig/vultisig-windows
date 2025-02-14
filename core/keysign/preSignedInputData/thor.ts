@@ -1,31 +1,27 @@
-import { TW } from '@trustwallet/wallet-core';
-import Long from 'long';
+import { TW } from "@trustwallet/wallet-core";
+import Long from "long";
 
-import { assertField } from '@lib/utils/record/assertField';
-import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
-import { getCoinType } from '../../walletCore/getCoinType';
-import { GetPreSignedInputDataInput } from './GetPreSignedInputDataInput';
+import { assertField } from "@lib/utils/record/assertField";
+import { cosmosGasLimitRecord } from "@core/chain/chains/cosmos/cosmosGasLimitRecord";
+import { getCoinType } from "@core/chain/coin/coinType";
+import { PreSignedInputDataResolver } from "./PreSignedInputDataResolver";
 
-export const getMayaPreSignedInputData = ({
-  keysignPayload,
-  walletCore,
-  chain,
-  chainSpecific,
-}: GetPreSignedInputDataInput<'mayaSpecific'>) => {
+export const getThorPreSignedInputData: PreSignedInputDataResolver<
+  "thorchainSpecific"
+> = ({ keysignPayload, walletCore, chain, chainSpecific }) => {
   const coinType = getCoinType({
     walletCore,
     chain,
   });
 
-  const coin = assertField(keysignPayload, 'coin');
+  const coin = assertField(keysignPayload, "coin");
 
-  const fromAddr = walletCore.AnyAddress.createBech32(
+  const fromAddr = walletCore.AnyAddress.createWithString(
     coin.address,
     coinType,
-    'maya'
   );
 
-  const pubKeyData = Buffer.from(coin.hexPublicKey, 'hex');
+  const pubKeyData = Buffer.from(coin.hexPublicKey, "hex");
 
   let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({});
   let message: TW.Cosmos.Proto.Message[];
@@ -33,15 +29,14 @@ export const getMayaPreSignedInputData = ({
   if (chainSpecific.isDeposit) {
     thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
       asset: TW.Cosmos.Proto.THORChainAsset.create({
-        chain: 'MAYA',
-        symbol: 'CACAO',
-        ticker: 'CACAO',
+        chain: "THOR",
+        symbol: "RUNE",
+        ticker: "RUNE",
         synth: false,
       }),
-      decimals: new Long(coin.decimals),
+      decimals: new Long(8),
     });
-
-    const toAmount = Number(keysignPayload.toAmount || '0');
+    const toAmount = Number(keysignPayload.toAmount || "0");
     if (toAmount > 0) {
       thorchainCoin.amount = keysignPayload.toAmount;
     }
@@ -51,29 +46,26 @@ export const getMayaPreSignedInputData = ({
         thorchainDepositMessage:
           TW.Cosmos.Proto.Message.THORChainDeposit.create({
             signer: fromAddr.data(),
-            memo: keysignPayload.memo || '',
+            memo: keysignPayload.memo || "",
             coins: [thorchainCoin],
           }),
       }),
     ];
   } else {
-    const toAddress = walletCore.AnyAddress.createBech32(
+    const toAddress = walletCore.AnyAddress.createWithString(
       keysignPayload.toAddress,
       coinType,
-      'maya'
     );
-
-    if (toAddress.description() !== keysignPayload.toAddress) {
-      throw new Error('To address is different from the bech32 address');
+    if (!toAddress) {
+      throw new Error("invalid to address");
     }
-
     message = [
       TW.Cosmos.Proto.Message.create({
         thorchainSendMessage: TW.Cosmos.Proto.Message.THORChainSend.create({
           fromAddress: fromAddr.data(),
           amounts: [
             TW.Cosmos.Proto.Amount.create({
-              denom: coin.ticker.toLowerCase(),
+              denom: "rune",
               amount: keysignPayload.toAmount,
             }),
           ],
@@ -86,11 +78,11 @@ export const getMayaPreSignedInputData = ({
   const input = TW.Cosmos.Proto.SigningInput.create({
     publicKey: new Uint8Array(pubKeyData),
     signingMode: TW.Cosmos.Proto.SigningMode.Protobuf,
-    chainId: 'mayachain-mainnet-v1',
+    chainId: walletCore.CoinTypeExt.chainId(coinType),
     accountNumber: new Long(Number(chainSpecific.accountNumber)),
     sequence: new Long(Number(chainSpecific.sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
-    memo: keysignPayload.memo || '',
+    memo: keysignPayload.memo || "",
     messages: message,
     fee: TW.Cosmos.Proto.Fee.create({
       gas: new Long(cosmosGasLimitRecord[chain]),

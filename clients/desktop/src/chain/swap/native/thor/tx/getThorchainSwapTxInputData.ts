@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain';
+import { getSigningInputEnvelopedTxFields } from '@core/chain/chains/evm/tx/getSigningInputEnvelopedTxFields';
 import { fromCommCoin } from '@core/communication/utils/commCoin';
 import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
@@ -8,7 +9,6 @@ import { match } from '@lib/utils/match';
 import { TW, WalletCore } from '@trustwallet/wallet-core';
 import Long from 'long';
 
-import { getSigningInputEnvelopedTxFields } from '../../../../evm/tx/getSigningInputEnvelopedTxFields';
 import { toKeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload';
 import { nativeSwapAffiliateConfig } from '../../nativeSwapAffiliateConfig';
 import { toThorchainSwapAssetProto } from '../asset/toThorchainSwapAssetProto';
