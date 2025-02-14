@@ -37,7 +37,7 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
             <GradientText>{t('fastVaultSetup.backup.wellDone')}</GradientText>{' '}
             {t('fastVaultSetup.backup.setNewStandard')}
           </Text>
-          <AnimatedLoader />
+          <AnimatedLoader size="3em" />
         </VStack>
       </VStack>
     </Wrapper>

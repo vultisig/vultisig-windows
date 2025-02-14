@@ -43,7 +43,7 @@ export const SecureVaultKeygenStartSessionStep = ({
       >
         <MatchQuery
           value={status}
-          pending={() => <AnimatedLoader />}
+          pending={() => <AnimatedLoader size="3em" />}
           success={() => null}
           error={() => <Text>{t('failed_to_start_keygen')}</Text>}
         />

@@ -35,7 +35,7 @@ export const SetupVaultSuccessScreen = ({ onForward }: OnForwardProp) => {
           <Text centerHorizontally variant="h1Regular">
             {t('vaultCreated')} <GradientText>{t('successfully')}</GradientText>
           </Text>
-          <AnimatedLoader />
+          <AnimatedLoader size="3em" />
         </VStack>
       </VStack>
     </Wrapper>
