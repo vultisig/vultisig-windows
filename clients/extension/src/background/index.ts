@@ -112,7 +112,7 @@ const handleFindAccounts = (
   });
 };
 
-const handleFindtVault = (
+const handleFindVault = (
   sender: string,
 ): Promise<Messaging.GetVault.Response> => {
   return new Promise((resolve) => {
@@ -179,13 +179,13 @@ const handleGetVault = (
         if (!instance[Instance.VAULT]) {
           clearInterval(interval);
 
-          handleFindtVault(sender).then(resolve);
+          handleFindVault(sender).then(resolve);
         }
       }, 250);
     } else {
       instance[Instance.VAULT] = true;
 
-      handleFindtVault(sender).then((vault) => {
+      handleFindVault(sender).then((vault) => {
         if (vault) {
           instance[Instance.VAULT] = false;
 
@@ -200,7 +200,7 @@ const handleGetVault = (
                 if (closedWindowId === createdWindowId) {
                   instance[Instance.VAULT] = false;
 
-                  handleFindtVault(sender).then(resolve);
+                  handleFindVault(sender).then(resolve);
                 }
               });
             });
