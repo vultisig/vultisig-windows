@@ -51,6 +51,7 @@ let rpcProvider: JsonRpcProvider;
 const instance = {
   [Instance.ACCOUNTS]: false,
   [Instance.TRANSACTION]: false,
+  [Instance.VAULT]: false,
   [Instance.VAULTS]: false,
 };
 
@@ -111,6 +112,22 @@ const handleFindAccounts = (
   });
 };
 
+const handleFindtVault = (
+  sender: string,
+): Promise<Messaging.GetVault.Response> => {
+  return new Promise((resolve) => {
+    getStoredVaults()
+      .then((vaults) => {
+        resolve(
+          vaults.find(
+            ({ active, apps = [] }) => active && apps.indexOf(sender) >= 0,
+          ),
+        );
+      })
+      .catch(() => resolve(undefined));
+  });
+};
+
 const handleGetAccounts = (
   chain: ChainKey,
   sender: string,
@@ -143,6 +160,47 @@ const handleGetAccounts = (
                   instance[Instance.ACCOUNTS] = false;
 
                   handleFindAccounts(chain, sender).then(resolve);
+                }
+              });
+            });
+          });
+        }
+      });
+    }
+  });
+};
+
+const handleGetVault = (
+  sender: string,
+): Promise<Messaging.GetVault.Response> => {
+  return new Promise((resolve) => {
+    if (instance[Instance.VAULT]) {
+      let interval = setInterval(() => {
+        if (!instance[Instance.VAULT]) {
+          clearInterval(interval);
+
+          handleFindtVault(sender).then(resolve);
+        }
+      }, 250);
+    } else {
+      instance[Instance.VAULT] = true;
+
+      handleFindtVault(sender).then((vault) => {
+        if (vault) {
+          instance[Instance.VAULT] = false;
+
+          resolve(vault);
+        } else {
+          setStoredRequest({
+            chain: ChainKey.ETHEREUM,
+            sender,
+          }).then(() => {
+            handleOpenPanel(Instance.VAULT).then((createdWindowId) => {
+              chrome.windows.onRemoved.addListener((closedWindowId) => {
+                if (closedWindowId === createdWindowId) {
+                  instance[Instance.VAULT] = false;
+
+                  handleFindtVault(sender).then(resolve);
                 }
               });
             });
@@ -1121,6 +1179,11 @@ chrome.runtime.onMessage.addListener(
       }
       case MessageKey.PRIORITY: {
         handleSetPriority(message).then(sendResponse);
+
+        break;
+      }
+      case MessageKey.VAULT: {
+        handleGetVault(origin).then(sendResponse);
 
         break;
       }
