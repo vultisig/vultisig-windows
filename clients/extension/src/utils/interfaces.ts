@@ -13,6 +13,11 @@ export namespace Messaging {
       | TransactionResponse;
   }
 
+  export namespace GetVault {
+    export type Request = any;
+    export type Response = VaultProps | undefined;
+  }
+
   export namespace GetVaults {
     export type Request = any;
     export type Response = VaultProps[];
