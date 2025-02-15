@@ -606,7 +606,7 @@ namespace Provider {
       );
 
       const modifiedTransfer = {
-        lamports: decodedTransfer.lamports.toString(),
+        value: decodedTransfer.lamports.toString(),
         from: decodedTransfer.fromPubkey.toString(),
         to: decodedTransfer.toPubkey.toString(),
       };
@@ -911,7 +911,6 @@ window.thorchain = thorchainProvider;
 window.vultisig = vultisigProvider;
 window.xfi = xfiProvider;
 window.xfi.kepler = keplrProvider;
-
 
 announceProvider({
   info: {
