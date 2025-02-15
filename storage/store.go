@@ -56,7 +56,9 @@ func NewStore() (*Store, error) {
 
 // Migrate migrates the db
 func (s *Store) Migrate() error {
-	driver, err := sqlite3.WithInstance(s.db, &sqlite3.Config{})
+	driver, err := sqlite3.WithInstance(s.db, &sqlite3.Config{
+		NoTxWrap: true,
+	})
 	if err != nil {
 		return fmt.Errorf("could not create sqlite driver, err: %w", err)
 	}
@@ -74,7 +76,6 @@ func (s *Store) Migrate() error {
 	if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		return fmt.Errorf("could not apply migrations, err: %w", err)
 	}
-
 	return nil
 }
 
