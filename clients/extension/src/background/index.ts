@@ -381,7 +381,11 @@ const handleRequest = (
           }
 
           handleSendTransaction(modifiedTransaction, chain)
-            .then((result) => resolve(result.txResponse))
+            .then((result) =>
+              chain.name === ChainKey.SOLANA
+                ? resolve([result.txResponse, result.raw])
+                : resolve(result.txResponse),
+            )
             .catch(reject);
         } else {
           reject();
@@ -411,7 +415,11 @@ const handleRequest = (
               status: "default",
             };
             handleSendTransaction(modifiedTransaction, chain)
-              .then((result) => resolve(result.txResponse))
+              .then((result) =>
+                chain.name === ChainKey.SOLANA
+                  ? resolve([result.txResponse, result.raw])
+                  : resolve(result.txResponse),
+              )
               .catch(reject);
           } else {
             reject();
