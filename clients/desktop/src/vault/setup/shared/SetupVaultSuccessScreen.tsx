@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { VStack } from '../../../lib/ui/layout/Stack';
+import { Spinner } from '../../../lib/ui/loaders/Spinner';
 import { OnForwardProp } from '../../../lib/ui/props';
 import { GradientText, Text } from '../../../lib/ui/text';
-import { AnimatedLoader } from '../../../ui/pending/AnimatedLoader';
 
 const SETUP_VAULT_SUCCESS_SCREEN_TIME_IN_MS = 2500;
 export const SetupVaultSuccessScreen = ({ onForward }: OnForwardProp) => {
@@ -35,7 +35,7 @@ export const SetupVaultSuccessScreen = ({ onForward }: OnForwardProp) => {
           <Text centerHorizontally variant="h1Regular">
             {t('vaultCreated')} <GradientText>{t('successfully')}</GradientText>
           </Text>
-          <AnimatedLoader />
+          <Spinner size="3em" />
         </VStack>
       </VStack>
     </Wrapper>

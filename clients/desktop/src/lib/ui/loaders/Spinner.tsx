@@ -1,19 +1,31 @@
-import styled, { keyframes } from 'styled-components';
+import { useRive } from '@rive-app/react-canvas';
+import { FC } from 'react';
+import styled from 'styled-components';
 
-const animationForRotation = keyframes`
-  to {
-    transform: rotate(360deg);
-  }
-`;
+import { ClassNameProp } from '../props';
 
-export const Spinner = styled.span`
-  width: 1em;
-  height: 1em;
-  display: inline-block;
+type Props = ClassNameProp & {
+  size?: string;
+};
 
-  border: 0.08em solid;
-  border-radius: 100%;
-  border-top-color: transparent;
+export const Spinner: FC<Props> = ({ size = '1em', className }) => {
+  const { RiveComponent } = useRive({
+    src: '/assets/animations/keygen-fast-vault/connecting-with-server.riv',
+    stateMachines: 'State Machine 1',
+    autoplay: true,
+  });
 
-  animation: ${animationForRotation} 1s infinite linear;
+  return (
+    <SpinnerWrapper size={size} className={className}>
+      <RiveComponent />
+    </SpinnerWrapper>
+  );
+};
+
+const SpinnerWrapper = styled.div<{
+  size: number | string;
+}>`
+  position: relative;
+  width: ${({ size }) => size};
+  height: ${({ size }) => size};
 `;

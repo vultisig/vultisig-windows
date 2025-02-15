@@ -1,3 +1,5 @@
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,8 +9,6 @@ import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
 import { VStack } from '../../../lib/ui/layout/Stack';
 import { OnFinishProp } from '../../../lib/ui/props';
 import { Text } from '../../../lib/ui/text';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
 import { PageContent } from '../../../ui/page/PageContent';
 import { vaultBackupResultFromFile } from '../utils/vaultBackupResultFromFile';
@@ -20,7 +20,6 @@ export const UploadBackupFileStep = ({
   onFinish,
 }: OnFinishProp<VaultBackupResult>) => {
   const { t } = useTranslation();
-
   const [file, setFile] = useState<File | null>(null);
 
   const { mutate, isPending, error } = useMutation({
@@ -44,7 +43,7 @@ export const UploadBackupFileStep = ({
       >
         <VStack gap={20} flexGrow>
           {file ? (
-            <UploadedBackupFile value={file} onRemove={() => setFile(null)} />
+            <UploadedBackupFile value={file} />
           ) : (
             <BackupFileDropzone onFinish={setFile} />
           )}

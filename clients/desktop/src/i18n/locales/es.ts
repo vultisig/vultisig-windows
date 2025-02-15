@@ -328,6 +328,7 @@ export const es = {
   or: 'o',
   enter_vault_name: 'Ingrese el nombre de la bóveda',
   vault_name_required: 'Se requiere el nombre de la bóveda',
+  supported_file_types: 'Tipos de archivo compatibles: .bak & .vult',
   vault_name_max_length_error:
     'El nombre del bóveda debe tener menos de 50 caracteres',
   vault_name_already_exists: 'El nombre de la bóveda debe ser único',

@@ -1,25 +1,28 @@
-import { t } from 'i18next';
+import styled from 'styled-components';
 
-import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
+import { PageCheckIcon } from '../../../lib/ui/icons/PageCheckIcon';
 import { DropZoneContainer } from '../../../lib/ui/inputs/upload/DropZoneContainer';
 import { DropZoneContent } from '../../../lib/ui/inputs/upload/DropZoneContent';
-import { UploadedFileItem } from '../../../lib/ui/inputs/upload/UploadedFileItem';
-import { OnRemoveProp, ValueProp } from '../../../lib/ui/props';
+import { ValueProp } from '../../../lib/ui/props';
+import { Text } from '../../../lib/ui/text';
+import { getColor } from '../../../lib/ui/theme/getters';
 
-type UploadedBackupFileProps = ValueProp<File> & OnRemoveProp;
+type UploadedBackupFileProps = ValueProp<File>;
 
-export const UploadedBackupFile = ({
-  value,
-  onRemove,
-}: UploadedBackupFileProps) => {
+export const UploadedBackupFile = ({ value }: UploadedBackupFileProps) => {
   return (
     <>
-      <DropZoneContainer>
-        <DropZoneContent icon={<CheckIcon />}>
-          {t('select_backup_file')}
+      <SuccessfulUploadedContainer>
+        <DropZoneContent icon={<PageCheckIcon />}>
+          <Text color="primary">{value.name}</Text>
         </DropZoneContent>
-      </DropZoneContainer>
-      <UploadedFileItem fileName={value.name} onRemove={onRemove} />
+      </SuccessfulUploadedContainer>
     </>
   );
 };
+
+const SuccessfulUploadedContainer = styled(DropZoneContainer)`
+  border: 1px solid ${getColor('success')};
+  background: ${({ theme }) =>
+    theme.colors.success.getVariant({ a: () => 0.1 }).toCssValue()};
+`;

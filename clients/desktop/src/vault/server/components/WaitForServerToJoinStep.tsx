@@ -1,18 +1,16 @@
 import { isEmpty } from '@lib/utils/array/isEmpty';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
 import { recordFromKeys } from '@lib/utils/record/recordFromKeys';
 import { useEffect, useMemo } from 'react';
 
-import { OnBackProp, OnForwardProp, TitleProp } from '../../../lib/ui/props';
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
 import { usePeerOptionsQuery } from '../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery';
 import { usePeersSelectionRecord } from '../../keysign/shared/state/selectedPeers';
 import { WaitForServerStates } from './WaitForServerStates';
 
 export const WaitForServerToJoinStep: React.FC<
-  OnForwardProp & Partial<OnBackProp> & TitleProp
-> = ({ onForward, title }) => {
+  OnForwardProp & Partial<OnBackProp>
+> = ({ onForward }) => {
   const peerOptionsQuery = usePeerOptionsQuery();
   const [, setRecord] = usePeersSelectionRecord();
 

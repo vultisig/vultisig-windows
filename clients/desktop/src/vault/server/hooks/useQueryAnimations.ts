@@ -11,7 +11,7 @@ type UseWaitForServerAnimationStatesProps = {
 export type ServerAnimationStates =
   UseWaitForServerAnimationStatesProps['state'];
 
-export const useWaitForServerAnimationStates = ({
+export const useQueryAnimations = ({
   onAnimationEnd,
   state,
 }: UseWaitForServerAnimationStatesProps) => {

@@ -330,6 +330,7 @@ export const de = {
   vault_name_required: 'Tresorname ist erforderlich',
   vault_name_max_length_error:
     'Der Tresorname darf höchstens 50 Zeichen lang sein',
+  supported_file_types: 'Unterstützte Dateitypen: .bak & .vult',
   vault_name_already_exists: 'Tresorname muss eindeutig sein',
   vault_settings_address_book_save_addresses_button: 'Adresse speichern',
   vault_settings_address_book_add_addresses_title: 'Adresse hinzufügen',

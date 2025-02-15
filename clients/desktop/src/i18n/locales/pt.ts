@@ -42,6 +42,7 @@ export const pt = {
   separatelyIna: 'separadamente em um',
   differentLocation: 'local diferente',
   eachDevice: 'Cada dispositivo',
+  supported_file_types: 'Tipos de arquivo suportados: .bak & .vult',
   inYourVaultHolds: 'no seu cofre contém',
   chooseSetup: 'Escolher configuração',
   introOnboarding: 'Intro',

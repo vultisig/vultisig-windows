@@ -16,7 +16,7 @@ export const DropZoneContent = ({
   icon,
 }: ChildrenProp & IconProp) => {
   return (
-    <VStack gap={8} alignItems="center">
+    <VStack gap={16} alignItems="center">
       <IconContainer>{icon}</IconContainer>
       <Text color="regular" weight="600" size={14}>
         {children}

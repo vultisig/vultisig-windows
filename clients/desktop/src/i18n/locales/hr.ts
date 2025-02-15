@@ -79,6 +79,7 @@ export const hr = {
   ok: 'OK',
   cancel: 'Otkaži',
   internet: 'Internet',
+  supported_file_types: 'Támogatott fájltípusok: .bak & .vult',
   local: 'Lokalno',
   current_vaults: 'Trenutni Trezori',
   looking_for_devices: 'Traženje uređaja...',
