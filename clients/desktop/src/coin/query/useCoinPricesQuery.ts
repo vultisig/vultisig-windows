@@ -91,11 +91,15 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
         const result: Record<string, number> = {};
 
         Object.entries(prices).forEach(([priceProviderId, price]) => {
-          const coin = shouldBePresent(
+          // multiple coins can have the same price provider
+          // so we need to find all coins with the same price provider
+          // for example: ETH.ETH, ARBITRUM.ETH, OPTIMISM.ETH there are all ETH , so they have the same price provider
+          const matchedCoins = shouldBePresent(
             findBy(regularCoins, 'priceProviderId', priceProviderId)
           );
-
-          result[coinKeyToString(coin)] = price;
+          matchedCoins.forEach(coin => {
+            result[coinKeyToString(coin)] = price;
+          });
         });
 
         return result;

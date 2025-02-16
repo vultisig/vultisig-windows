@@ -49,10 +49,9 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
           return BigInt(0);
         };
 
-        const price = pricesQuery.data
+        const price = pricesQuery.data && pricesQuery.data[coinKeyToString(coin)] !== undefined
           ? pricesQuery.data[coinKeyToString(coin)]
           : 0;
-
         return {
           ...coin,
           amount: getAmount(),
