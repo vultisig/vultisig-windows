@@ -22,16 +22,15 @@ export function MatchQuery<T, E = unknown>({
   }
 
   if (value.error) {
-    console.error('value.error', value.error);
     return <>{error(value.error)}</>;
-  }
-
-  if (value.isPending) {
-    return <>{pending()}</>;
   }
 
   if (value.isLoading === false) {
     return <>{inactive()}</>;
+  }
+
+  if (value.isPending) {
+    return <>{pending()}</>;
   }
 
   return null;

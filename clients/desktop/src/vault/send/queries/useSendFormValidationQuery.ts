@@ -44,13 +44,13 @@ export const useSendFormValidationQuery = () => {
         }
 
         if (!amount) {
-          return t('amount_required');
+          throw new Error(t('amount_required'));
         }
 
         const maxAmount = fromChainAmount(balance, coin.decimals);
 
         if (amount > maxAmount) {
-          return t('send_amount_exceeds_balance');
+          throw new Error(t('send_amount_exceeds_balance'));
         }
 
         return null;
