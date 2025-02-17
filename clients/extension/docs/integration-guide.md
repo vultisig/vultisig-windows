@@ -19,7 +19,8 @@
 6. [Custom Message Signing](#6-custom-message-signing)
 7. [Querying Transactions](#7-querying-transactions)
 8. [Event Handling](#8-event-handling)
-9. [Summary](#summary)
+9. [Get Vault](#9-get-vault)
+10. [Summary](#summary)
 
 ---
 
@@ -28,7 +29,7 @@
 VultiConnect is a Chrome extension that enhances the experience of interacting with decentralized finance (DeFi) applications. It offers a secure way for users to connect with decentralized applications without storing private keys in their browsers. VultiConnect introduces:
 
 - **`window.vultisig.ethereum`** for Ethereum integrations (previously `window.vultisig`).
-- **`window.thorchain` and `window.vultisig.thorchain`** for THORChain support.
+- **`window.vultisig.thorchain` and `window.thorchain`** for THORChain support.
 - A MetaMask-compatible interface (`window.ethereum`) to ensure seamless integration with existing DeFi applications.
 - Support for multiple other chains including MayaChain, GaiaChain, Osmosis, Kujira, DyDx, BitcoinCash, Dash, DogeCoin, LiteCoin, and Bitcoin.
 
@@ -36,20 +37,21 @@ VultiConnect is a Chrome extension that enhances the experience of interacting w
 
 VultiConnect currently supports the following chains:
 
-| Chain       | Identifier          |
-| ----------- | ------------------- |
-| Ethereum    | `0x1`               |
-| THORChain   | `Thorchain_1`       |
-| MayaChain   | `MayaChain-1`       |
-| GaiaChain   | `cosmoshub-4`       |
-| Osmosis     | `osmosis-1`         |
-| Kujira      | `kaiyo-1`           |
-| DyDx        | `dydx-1`            |
-| BitcoinCash | `0x2710`            |
-| Dash        | `Dash_dash`         |
-| DogeCoin    | `0x7d0`             |
-| LiteCoin    | `Litecoin_litecoin` |
-| Bitcoin     | `0x1f96`            |
+| Chain       | Identifier            |
+| ----------- | --------------------- |
+| Bitcoin     | `0x1f96`              |
+| BitcoinCash | `0x2710`              |
+| Dash        | `Dash_dash`           |
+| DogeCoin    | `0x7d0`               |
+| DyDx        | `dydx-1`              |
+| Ethereum    | `0x1`                 |
+| GaiaChain   | `cosmoshub-4`         |
+| Kujira      | `kaiyo-1`             |
+| LiteCoin    | `Litecoin_litecoin`   |
+| MayaChain   | `MayaChain-1`         |
+| Osmosis     | `osmosis-1`           |
+| Solana      | `Solana_mainnet-beta` |
+| THORChain   | `Thorchain_1`         |
 
 ## How VultiConnect Works
 
@@ -57,8 +59,8 @@ VultiConnect currently supports the following chains:
 - **Compatibility**: The extension provides:
   - `window.ethereum` for MetaMask-compatible Ethereum integration.
   - `window.vultisig.ethereum` for VultiConnect-enhanced Ethereum features.
-  - `window.thorchain` and `window.vultisig.thorchain` for THORChain functionality.
-  - Additional chain support for other chains using `window.chain` and `window.vultisig.chain`.
+  - `window.vultisig.thorchain` and `window.thorchain` for THORChain functionality.
+  - Additional chain support for other chains using `window.vultisig.chain` and `window.chain`.
 
 ## Supported Methods
 
@@ -78,7 +80,7 @@ VultiConnect currently supports the following chains:
 
 ### Other Supported Chains
 
-#### THORChain (`window.thorchain` and `window.vultisig.thorchain`)
+#### THORChain (`window.vultisig.thorchain` and `window.thorchain`)
 
 - **Account Management**:
   - `request_accounts`
@@ -88,14 +90,21 @@ VultiConnect currently supports the following chains:
   - `deposit_transaction`
   - `get_transaction_by_hash`
 
-#### Cosmos-Based Chains (GaiaChain, Osmosis, Kujira, DyDx)
+#### Solana (`window.vultisig.solana` and `window.solana`)
 
 - **Account Management**:
+  - `request_accounts`
+  - `get_accounts`
+- **Transaction Management**:
+  - `send_transaction`
+  - `get_transaction_by_hash`
 
+#### Cosmos-Based Chains (DyDx, GaiaChain, Kujira, Osmosis)
+
+- **Account Management**:
   - `request_accounts`
   - `get_accounts`
   - `chain_id`
-
 - **Chain Management**:
   - `wallet_add_chain`
   - `wallet_switch_chain`
@@ -104,7 +113,7 @@ VultiConnect currently supports the following chains:
   - `get_transaction_by_hash`
 - **Notes**: Accessing a specific Cosmos-based chain (such as Kujira or Osmosis) requires calling `chain_id` to retrieve the active chain's ID or using `wallet_add_chain` and `wallet_switch_chain` to add or switch to the desired chain.
 
-#### Other Chains (`window.chain` and `window.vultisig.chain`)
+#### Other Chains (`window.vultisig[chain]` and `window[chain]`)
 
 - **Account Management**:
   - `request_accounts`
@@ -117,12 +126,12 @@ VultiConnect currently supports the following chains:
 
 The following chains are fully supported through their respective interfaces:
 
-- MayaChain
+- Bitcoin
 - BitcoinCash
 - Dash
 - DogeCoin
 - LiteCoin
-- Bitcoin
+- MayaChain
 
 ## Steps to Integrate with VultiConnect
 
@@ -137,11 +146,11 @@ if (window.vultisig?.ethereum) {
   // Fallback to MetaMask-compatible logic
 }
 
-if (window.chain || window.vultisig?.chain) {
-  console.log("VultiConnect [Chain] provider is available!");
+if (window.vultisig?.[chain] || window.[chain]) {
+  console.log(`VultiConnect [${chain}] provider is available!`);
   // Integration logic for the chain
 } else {
-  console.log("No compatible [chain] provider found.");
+  console.log(`No compatible [${chain}] provider found.`);
 }
 ```
 
@@ -154,16 +163,18 @@ if (window.chain || window.vultisig?.chain) {
 ```javascript
 const connectEthereum = async () => {
   const provider = window.vultisig?.ethereum || window.ethereum;
+
   if (provider) {
     try {
       await provider.request({ method: "eth_requestAccounts" });
+
       console.log("Connected to Ethereum wallet");
     } catch (error) {
       console.error("Ethereum connection failed", error);
     }
   } else {
     alert(
-      "No Ethereum provider found. Please install VultiConnect or MetaMask."
+      "No Ethereum provider found. Please install VultiConnect or MetaMask.",
     );
   }
 };
@@ -173,10 +184,12 @@ const connectEthereum = async () => {
 
 ```javascript
 const connectChain = async (chain) => {
-  const provider = window[chain] || window.vultisig?.[chain];
+  const provider = window.vultisig?.[chain] || window[chain];
+
   if (provider) {
     try {
       const accounts = await provider.request({ method: "request_accounts" });
+
       console.log(`Connected to ${chain} wallet:`, accounts);
     } catch (error) {
       console.error(`${chain} connection failed`, error);
@@ -187,37 +200,39 @@ const connectChain = async (chain) => {
 };
 ```
 
-Replace `chain` with the desired chain identifier such as `thorchain`, `maya`, `cosmos`, etc.
+Replace `chain` with the desired chain identifier such as `bitcoin`, `bitcoincash`, `cosmos`, `dash`, `dogecoin`, `litecoin`, `maya`, `solana`, `thorchain`, etc.
 
-Each chain uses a unified interface accessible via `window.chain` and `window.vultisig.chain` for seamless interaction across different blockchain networks.
+Each chain uses a unified interface accessible via `window.vultisig?.[chain]` and `window[chain]` for seamless interaction across different blockchain networks.
 
 ---
 
 ### 3. Connected Accounts
 
-To get connected accounts to the current dapp, use `eth_getAccounts` for EVM chains and `get_accounts` for other vulticonnect supported chains.
+To get connected accounts to the current dapp, use `eth_accounts` for EVM chains and `get_accounts` for other VultiConnect supported chains.
 
 #### Ethereum
 
 ```javascript
 const getConnectedEthereum = async () => {
   const provider = window.vultisig?.ethereum || window.ethereum;
+
   if (provider) {
     try {
-      await provider.request({ method: "eth_getAccounts" });
+      const accounts = await provider.request({ method: "eth_accounts" });
+
       if (accounts.length)
         console.log(`Currently connected address:`, accounts);
       else
         console.log(
           `Currently no account is connected to this dapp:`,
-          accounts
+          accounts,
         );
     } catch (error) {
       console.error("Ethereum getting connected accounts failed", error);
     }
   } else {
     alert(
-      "No Ethereum provider found. Please install VultiConnect or MetaMask."
+      "No Ethereum provider found. Please install VultiConnect or MetaMask.",
     );
   }
 };
@@ -227,16 +242,20 @@ const getConnectedEthereum = async () => {
 
 ```javascript
 const getConnectedAccountsChain = async (chain) => {
-  const provider = window[chain] || window.vultisig?.[chain];
+  const provider = window.vultisig?.[chain] || window[chain];
+
   if (provider) {
     try {
-      const accounts = await provider.request({ method: "get_accounts" });
+      const accounts = await provider.request({
+        method: provider.method.ETH_ACCOUNTS,
+      });
+
       if (accounts.length)
         console.log(`Currently connected address:`, accounts);
       else
         console.log(
           `Currently no account is connected to this dapp:`,
-          accounts
+          accounts,
         );
     } catch (error) {
       console.error(`${chain} getting connected accounts failed`, error);
@@ -253,7 +272,7 @@ const getConnectedAccountsChain = async (chain) => {
 
 #### Ethereum
 
-To get the current active chain ID of vulticonnect:
+To get the current active chain ID of VultiConnect:
 
 ```javascript
 const getEthereumChainId = async () => {
@@ -262,8 +281,8 @@ const getEthereumChainId = async () => {
       const chainId = await window.vultisig.ethereum.request({
         method: "eth_chainId",
       });
+
       console.log("Current Ethereum Chain ID: ", chainId);
-      return chainId;
     } catch (error) {
       console.error("Failed to get Ethereum chain ID", error);
     }
@@ -281,6 +300,7 @@ const switchEthereumChain = async (chainId) => {
         method: "wallet_switchEthereumChain",
         params: [{ chainId }],
       });
+
       console.log(`Switched to Ethereum Chain ID: ${chainId}`);
     } catch (error) {
       console.error("Failed to switch Ethereum chain", error);
@@ -300,8 +320,8 @@ const getCosmosChainId = async () => {
       const chainId = await window.vultisig.cosmos.request({
         method: "chain_id",
       });
+
       console.log("Current Cosmos Chain ID: ", chainId);
-      return chainId;
     } catch (error) {
       console.error("Failed to get Cosmos chain ID", error);
     }
@@ -319,6 +339,7 @@ const switchCosmosChain = async (chainId) => {
         method: "wallet_switch_chain",
         params: [{ chainId }],
       });
+
       console.log(`Switched to Cosmos Chain ID: ${chainId}`);
     } catch (error) {
       console.error("Failed to switch Cosmos chain", error);
@@ -365,6 +386,7 @@ const sendEthereumTransaction = async (txDetails) => {
         method: "eth_sendTransaction",
         params: [txDetails],
       });
+
       console.log("Ethereum Transaction Hash: ", transactionHash);
     } catch (error) {
       console.error("Ethereum transaction failed", error);
@@ -384,6 +406,7 @@ const sendChainTransaction = async (chain) => {
         method: "send_transaction",
         params: [txDetails],
       });
+
       console.log(`${chain} Transaction Hash:`, transactionHash);
     } catch (error) {
       console.error(`${chain} transaction failed`, error);
@@ -394,7 +417,7 @@ const sendChainTransaction = async (chain) => {
 
 #### THORChain
 
-In addition to send transactions, THORChain supports deposit transactions for operations such as `bond`, `unbond`,  etc.
+In addition to send transactions, THORChain supports deposit transactions for operations such as `bond`, `unbond`, etc.
 
 ```javascript
 const THORChainDepositTransaction = async (txDetails) => {
@@ -405,6 +428,7 @@ const THORChainDepositTransaction = async (txDetails) => {
         method: "deposit_transaction",
         params: [txDetails],
       });
+
       console.log(`THORChain Transaction Hash:`, transactionHash);
     } catch (error) {
       console.error(`THORChain transaction failed`, error);
@@ -419,7 +443,7 @@ const THORChainDepositTransaction = async (txDetails) => {
 
 #### Ethereum
 
-Vulticonnect currently supports the `personal_sign` method.
+VultiConnect currently supports the `personal_sign` method.
 
 ```javascript
 const signCustomMessage = async (hexMessage, walletAddress) => {
@@ -429,6 +453,7 @@ const signCustomMessage = async (hexMessage, walletAddress) => {
         method: "perosnal_sign",
         params: [hexMessage, walletAddress],
       });
+
       console.log("Signature:", signature);
     } catch (error) {
       console.error("Failed to sign the messsage", error);
@@ -455,6 +480,7 @@ const getEthereumTransaction = async (txHash) => {
         method: "eth_getTransactionByHash",
         params: [txHash],
       });
+
       console.log("Ethereum Transaction Details:", txDetails);
     } catch (error) {
       console.error("Failed to get Ethereum transaction details:", error);
@@ -465,7 +491,7 @@ const getEthereumTransaction = async (txHash) => {
 
 #### Other Supported Chains
 
-Retrieve transaction details of other vulticonnect supported chains using `get_transaction_by_hash`.
+Retrieve transaction details of other VultiConnect supported chains using `get_transaction_by_hash`.
 
 ```javascript
 const getChainTransaction = async (chain) => {
@@ -476,6 +502,7 @@ const getChainTransaction = async (chain) => {
         method: "get_transaction_by_hash",
         params: [txDetails],
       });
+
       console.log("Transaction Details:", txDetails);
     } catch (error) {
       console.error("Failed to get transaction details:", error);
@@ -491,9 +518,9 @@ const getChainTransaction = async (chain) => {
 VultiConnect supports the CONNECT and DISCONNECT events for all supported chains.
 
 ```javascript
-if (window.vultisig[chain] || window[chain]) {
-  const provider = window.vultisig[chain] || window[chain];
+const provider = window.vultisig?.[chain] || window[chain];
 
+if (provider) {
   provider.on("CONNECT", (info) => {
     console.log("Connected:", info);
   });
@@ -501,6 +528,25 @@ if (window.vultisig[chain] || window[chain]) {
   provider.on("DISCONNECT", (error) => {
     console.log("Disconnected:", error);
   });
+}
+```
+
+### 9. Get Vault
+
+VultiConnect provided a function to get vault properties.
+
+```javascript
+const provider = window.vultisig;
+
+if (provider) {
+  provider
+    .getVault()
+    .then((vault) => {
+      console.log("vault:", vault);
+    })
+    .catch((error) => {
+      console.log("error:", error);
+    });
 }
 ```
 
