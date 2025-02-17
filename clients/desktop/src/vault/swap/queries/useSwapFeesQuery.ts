@@ -1,10 +1,9 @@
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 
-import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
-import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
+import { useCurrentVaultCoin } from '../../state/currentVault';
 import { useFromCoin } from '../state/fromCoin';
 import { useToCoin } from '../state/toCoin';
 import { SwapFees } from '../types/SwapFee';
@@ -16,6 +15,7 @@ export const useSwapFeesQuery = () => {
 
   const [fromCoinKey] = useFromCoin();
   const [toCoinKey] = useToCoin();
+  const toCoin = useCurrentVaultCoin(toCoinKey);
 
   const chainSpecificQuery = useSwapChainSpecificQuery();
 
@@ -29,17 +29,13 @@ export const useSwapFeesQuery = () => {
 
       return matchRecordUnion(swapQuote, {
         native: ({ fees }) => {
-          const decimals = getNativeSwapDecimals(
-            fromCoinKey.chain as NativeSwapEnabledChain
-          );
-
           const feeAmount = getFeeAmount(chainSpecific);
 
           const result: SwapFees = {
             swap: {
               ...toCoinKey,
               amount: BigInt(fees.total),
-              decimals,
+              decimals: toCoin.decimals,
             },
             network: {
               ...fromFeeCoin,
