@@ -2,6 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { areEqualCoins, coinKeyToString } from '@core/chain/coin/Coin';
 import { sum } from '@lib/utils/array/sum';
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { getRecordSize } from '@lib/utils/record/getRecordSize';
 import { useCallback, useMemo } from 'react';
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount';
@@ -33,7 +34,7 @@ export const SwapFeeFiatValue = ({ value }: ValueProp<SwapFee[]>) => {
     useCoinPricesQuery({ coins }),
     useCallback(
       prices => {
-        if (prices.length !== value.length) {
+        if (getRecordSize(prices) !== value.length) {
           throw new Error('Failed to load prices');
         }
 
