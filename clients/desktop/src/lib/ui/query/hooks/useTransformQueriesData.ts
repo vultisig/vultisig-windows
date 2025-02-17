@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
-
 import { getRecordSize } from '@lib/utils/record/getRecordSize';
 import { recordMap } from '@lib/utils/record/recordMap';
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
 import { NonUndefined } from '@lib/utils/types/NonUndefined';
+import { useMemo } from 'react';
+
 import { Query } from '../Query';
 
 export function useTransformQueriesData<
@@ -15,6 +15,7 @@ export function useTransformQueriesData<
   transform: (data: { [K in keyof T]: NonUndefined<T[K]['data']> }) => R
 ): Query<R, E> {
   return useMemo(() => {
+    console.log('useTransformQueriesData', queriesRecord);
     const dataRecord = withoutUndefinedFields(
       recordMap(queriesRecord, ({ data }) => data)
     );

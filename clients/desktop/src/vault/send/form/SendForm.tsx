@@ -1,3 +1,5 @@
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '../../../lib/ui/buttons/Button';
@@ -17,14 +19,25 @@ import { SendFiatFee } from '../fee/SendFiatFeeWrapper';
 import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper';
 import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings';
 import { ManageMemo } from '../memo/ManageMemo';
+import { useSendFormValidationQuery } from '../queries/useSendFormValidationQuery';
 import { ManageReceiver } from '../receiver/ManageReceiver';
 import { RefreshSend } from '../RefreshSend';
 import { Sender } from '../sender/Sender';
-import { useIsSendFormDisabled } from './hooks/useIsSendFormDisabled';
 
 export const SendForm = ({ onForward }: OnForwardProp) => {
   const { t } = useTranslation();
-  const isDisabled = useIsSendFormDisabled();
+
+  const { error, isLoading, isPending } = useSendFormValidationQuery();
+
+  console.log({ error, isLoading, isPending });
+
+  const isDisabled = useMemo(() => {
+    if (isPending) {
+      return true;
+    }
+
+    return error ? extractErrorMsg(error) : false;
+  }, [error, isPending]);
 
   return (
     <>
@@ -64,7 +77,11 @@ export const SendForm = ({ onForward }: OnForwardProp) => {
             </VStack>
           </VStack>
         </WithProgressIndicator>
-        <Button isDisabled={isDisabled} type="submit">
+        <Button
+          isLoading={isLoading && isPending}
+          isDisabled={isDisabled}
+          type="submit"
+        >
           {t('continue')}
         </Button>
       </PageContent>
