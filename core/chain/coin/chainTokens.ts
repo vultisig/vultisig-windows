@@ -1,8 +1,9 @@
 import { Chain } from "@core/chain/Chain";
 import { Coin } from "@core/chain/coin/Coin";
+import { isEmpty } from "@lib/utils/array/isEmpty";
 import { recordMap } from "@lib/utils/record/recordMap";
 
-const leanChainTokens: Partial<Record<Chain, Omit<Coin, "chain">[]>> = {
+const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, "chain">[]>> = {
   [Chain.MayaChain]: [
     {
       ticker: "MAYA",
@@ -12,6 +13,18 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, "chain">[]>> = {
       id: "maya",
     },
   ],
+  [Chain.TerraClassic]: [
+    {
+      ticker: "USTC",
+      logo: "ustc.png",
+      decimals: 6,
+      priceProviderId: "terrausd",
+      id: "uusd",
+    },
+  ],
+};
+
+const leanChainTokens: Partial<Record<Chain, Omit<Coin, "chain">[]>> = {
   [Chain.Solana]: [
     {
       ticker: "JUP",
@@ -790,13 +803,6 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, "chain">[]>> = {
   ],
   [Chain.TerraClassic]: [
     {
-      ticker: "USTC",
-      logo: "ustc.png",
-      decimals: 6,
-      priceProviderId: "terrausd",
-      id: "uusd",
-    },
-    {
       ticker: "ASTROC",
       logo: "terra-astroport.png",
       decimals: 6,
@@ -806,7 +812,28 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, "chain">[]>> = {
   ],
 };
 
+export const chainNativeTokens: Partial<Record<Chain, Coin[]>> = recordMap(
+  leanChainNativeTokens as Record<Chain, Omit<Coin, "chain">[]>,
+  (tokens, chain) => tokens.map((token) => ({ ...token, chain })),
+);
+
+const mergedLeanChainTokens = Object.values(Chain).reduce(
+  (acc, chain) => {
+    const tokens = [
+      ...(leanChainTokens[chain] ?? []),
+      ...(leanChainNativeTokens[chain] ?? []),
+    ];
+
+    if (!isEmpty(tokens)) {
+      acc[chain] = tokens;
+    }
+
+    return acc;
+  },
+  {} as Partial<Record<Chain, Omit<Coin, "chain">[]>>,
+);
+
 export const chainTokens: Partial<Record<Chain, Coin[]>> = recordMap(
-  leanChainTokens as Record<Chain, Omit<Coin, "chain">[]>,
+  mergedLeanChainTokens as Record<Chain, Omit<Coin, "chain">[]>,
   (tokens, chain) => tokens.map((token) => ({ ...token, chain })),
 );
