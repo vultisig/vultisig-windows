@@ -131,9 +131,10 @@ export const it = {
     'Mantieni i dispositivi sulla stessa rete Wi-Fi, cassaforte corretta e accoppia i dispositivi.',
   secureVault: 'Secure Vault',
   secure_vault_setup_title: 'Sicurezza Ultimata',
-  secure_vault_setup_prop_0: 'Controllo totale, solo i tuoi dispositivi',
-  secure_vault_setup_prop_1: 'Più dispositivi per firmare transazioni',
-  secure_vault_setup_prop_2: 'Usare come caveau freddo',
+  secure_vault_setup_prop_0: 'Massima sicurezza con più dispositivi',
+  secure_vault_setup_prop_1: 'Sempre accessibile con backup dei dispositivi',
+  secure_vault_setup_prop_2: 'Proteggi qualsiasi quantità di risorse',
+
   save_changes: 'Salva modifiche',
   information_note2:
     'Assicurati che nessun altro dispositivo stia eseguendo Vultisig.',
@@ -535,9 +536,8 @@ export const it = {
   },
   fast_vault_setup_title: 'Configurazione veloce, 1 dispositivo',
   fast_vault_setup_prop_0: 'È necessario solo 1 dispositivo',
-  fast_vault_setup_prop_1: 'Conserva piccoli fondi per azioni rapide',
-  fast_vault_setup_prop_2:
-    'La cassaforte dipende dalla disponibilità del server',
+  fast_vault_setup_prop_1: 'Conserva fondi minori per l’uso quotidiano',
+  fast_vault_setup_prop_2: 'Vultiserver firma istantaneamente',
   active_vault_setup_prop_0: 'Firma veloce in movimento',
   active_vault_setup_prop_1: 'Avvisi e politiche sulle transazioni',
   active_vault_setup_prop_2: 'Completamente auto-affidabile',

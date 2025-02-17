@@ -159,4 +159,5 @@ const LightningGradientIconWrapper = styled.div`
 
 export const LightningIconWrapper = styled.div`
   font-size: 20px;
+  margin-right: 3px;
 `;
