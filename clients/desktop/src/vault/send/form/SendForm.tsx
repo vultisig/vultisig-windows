@@ -29,8 +29,6 @@ export const SendForm = ({ onForward }: OnForwardProp) => {
 
   const { error, isLoading, isPending } = useSendFormValidationQuery();
 
-  console.log({ error, isLoading, isPending });
-
   const isDisabled = useMemo(() => {
     if (isPending) {
       return true;
