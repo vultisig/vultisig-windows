@@ -227,7 +227,9 @@ class XDEFIKeplrProvider extends Keplr {
           params: [_tx],
         })
         .then((result: SendTransactionResponse) => {
-          resolve(base58.decode(result.raw));
+          const decoded = base58.decode(result.raw);
+          if (decoded) resolve(decoded);
+          else reject();
         })
         .catch(reject);
     });
