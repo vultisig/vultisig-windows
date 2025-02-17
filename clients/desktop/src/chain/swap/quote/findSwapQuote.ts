@@ -11,7 +11,6 @@ import { lifiSwapEnabledChains } from '../general/lifi/LifiSwapEnabledChains';
 import { getOneInchSwapQuote } from '../general/oneInch/api/getOneInchSwapQuote';
 import { oneInchSwapEnabledChains } from '../general/oneInch/OneInchSwapEnabledChains';
 import { getNativeSwapQuote } from '../native/api/getNativeSwapQuote';
-import { toNativeSwapAsset } from '../native/asset/toNativeSwapAsset';
 import {
   nativeSwapChains,
   nativeSwapEnabledChainsRecord,
@@ -40,15 +39,11 @@ export const findSwapQuote = ({
 
   const fetchers = matchingSwapChains.map(
     swapChain => async (): Promise<SwapQuote> => {
-      const [fromAsset, toAsset] = [from, to].map(asset =>
-        toNativeSwapAsset(pick(asset, ['id', 'chain', 'ticker']))
-      );
-
       const native = await getNativeSwapQuote({
         swapChain,
         destination: to.address,
-        fromAsset,
-        toAsset,
+        from,
+        to,
         amount,
         isAffiliate,
       });
