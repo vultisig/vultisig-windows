@@ -25,6 +25,7 @@ import {
   ITransaction,
   Messaging,
   METAMASK_TRANSACTION,
+  SendTransactionResponse,
   TransactionDetails,
   VaultProps,
 } from "../utils/interfaces";
@@ -197,7 +198,7 @@ const handleSendTransaction = (
   transaction: ITransaction,
   chain: ChainProps,
   isDeposit?: boolean,
-): Promise<{ txResponse: string; raw: any }> => {
+): Promise<SendTransactionResponse> => {
   return new Promise((resolve, reject) => {
     getStoredTransactions().then((transactions) => {
       const uuid = uuidv4();
@@ -282,7 +283,9 @@ const handleRequest = (
   chain: ChainProps,
   sender: string,
 ): Promise<
-  Messaging.Chain.Response | ThorchainProviderResponse<ThorchainProviderMethod>
+  | Messaging.Chain.Response
+  | ThorchainProviderResponse<ThorchainProviderMethod>
+  | SendTransactionResponse
 > => {
   return new Promise((resolve, reject) => {
     const { method, params } = body;
@@ -381,11 +384,7 @@ const handleRequest = (
           }
 
           handleSendTransaction(modifiedTransaction, chain)
-            .then((result) =>
-              chain.name === ChainKey.SOLANA
-                ? resolve([result.txResponse, result.raw])
-                : resolve(result.txResponse),
-            )
+            .then((result) => resolve(result))
             .catch(reject);
         } else {
           reject();
@@ -415,11 +414,7 @@ const handleRequest = (
               status: "default",
             };
             handleSendTransaction(modifiedTransaction, chain)
-              .then((result) =>
-                chain.name === ChainKey.SOLANA
-                  ? resolve([result.txResponse, result.raw])
-                  : resolve(result.txResponse),
-              )
+              .then((result) => resolve(result))
               .catch(reject);
           } else {
             reject();
@@ -436,11 +431,7 @@ const handleRequest = (
 
           if (transaction) {
             handleSendTransaction(transaction, chain, true)
-              .then((result) =>
-                chain.name === ChainKey.SOLANA
-                  ? resolve([result.txResponse, result.raw])
-                  : resolve(result.txResponse),
-              )
+              .then((result) => resolve(result))
               .catch(reject);
           } else {
             reject();
@@ -775,7 +766,7 @@ const handleRequest = (
               },
               chain,
             )
-              .then((result) => resolve(result.txResponse))
+              .then((result) => resolve(result))
               .catch((error) => {
                 reject(error);
               });
@@ -817,7 +808,7 @@ const handleRequest = (
             },
             chain,
           )
-            .then((result) => resolve(result.txResponse))
+            .then((result) => resolve(result))
             .catch(reject);
         } else {
           reject();
@@ -849,7 +840,7 @@ const handleRequest = (
               status: "default",
             };
             handleSendTransaction(tx, chain, true)
-              .then((result) => resolve(result.txResponse))
+              .then((result) => resolve(result))
               .catch(reject);
           } else {
             reject();
@@ -880,7 +871,7 @@ const handleRequest = (
               status: "default",
             };
             handleSendTransaction(tx, chain)
-              .then((result) => resolve(result.txResponse))
+              .then((result) => resolve(result))
               .catch(reject);
           } else {
             reject();

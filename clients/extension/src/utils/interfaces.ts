@@ -1,7 +1,8 @@
 import { ChainKey, ChainTicker, Currency, Language } from "./constants";
-import { TransactionResponse } from "ethers";
+
 import { ThorchainProviderMethod } from "../types/thorchain";
 import { ThorchainProviderResponse } from "../types/thorchain";
+import { TransactionResponse } from "ethers";
 
 export namespace Messaging {
   export namespace Chain {
@@ -10,7 +11,8 @@ export namespace Messaging {
       | string
       | string[]
       | ThorchainProviderResponse<ThorchainProviderMethod>
-      | TransactionResponse;
+      | TransactionResponse
+      | SendTransactionResponse;
   }
 
   export namespace GetVaults {
@@ -38,6 +40,11 @@ export interface ChainProps {
   id: string;
   name: ChainKey;
   ticker: ChainTicker;
+}
+
+export interface SendTransactionResponse {
+  raw: any;
+  txResponse: string;
 }
 
 export interface ChainObjRef {

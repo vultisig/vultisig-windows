@@ -1,7 +1,18 @@
 import { Interface } from "ethers";
 
-import { ChainKey, TssKeysignType } from "./constants";
-import { ChainObjRef, ChainProps, ParsedMemo } from "./interfaces";
+import {
+  ChainKey,
+  MessageKey,
+  RequestMethod,
+  TssKeysignType,
+} from "./constants";
+import {
+  ChainObjRef,
+  ChainProps,
+  Messaging,
+  ParsedMemo,
+  SendTransactionResponse,
+} from "./interfaces";
 import api from "./api";
 
 const getFunctionSignature = async (inputHex: string): Promise<string> => {
@@ -41,7 +52,7 @@ const processDecodedData = (data: any): any => {
 
 const toCamel = (value: string): string => {
   return value.replace(/([-_][a-z])/gi, ($1) =>
-    $1.toUpperCase().replace("-", "").replace("_", "")
+    $1.toUpperCase().replace("-", "").replace("_", ""),
   );
 };
 
@@ -64,7 +75,7 @@ export const bigintToByteArray = (bigNumber: bigint): Uint8Array => {
 };
 
 export const calculateWindowPosition = (
-  currentWindow: chrome.windows.Window
+  currentWindow: chrome.windows.Window,
 ) => {
   const height = 639;
   const width = 376;
@@ -85,7 +96,7 @@ export const calculateWindowPosition = (
 };
 
 export const checkERC20Function = async (
-  inputHex: string
+  inputHex: string,
 ): Promise<boolean> => {
   if (!inputHex || inputHex === "0x")
     return new Promise((resolve) => resolve(false));
@@ -97,7 +108,7 @@ export const checkERC20Function = async (
 
 export const formatDisplayNumber = (
   _number: number | string,
-  ticker: string
+  ticker: string,
 ) => {
   if (String(_number).includes("$")) {
     // gasPrice is in usd and already formatted
@@ -135,11 +146,11 @@ export const formatDisplayNumber = (
 export const findChainByProp = (
   chains: ChainObjRef,
   property: keyof ChainProps,
-  value: any
+  value: any,
 ): ChainProps | undefined => {
   return (
     (Object.entries(chains).find(
-      ([_key, chain]) => chain[property] === value
+      ([_key, chain]) => chain[property] === value,
     )?.[1] as ChainProps) ?? undefined
   );
 };
@@ -165,7 +176,7 @@ export const parseMemo = (memo: string): Promise<ParsedMemo> => {
         try {
           const decodedData = abi.decodeFunctionData(
             signature.split("(")[0],
-            memo
+            memo,
           );
 
           const processedData = processDecodedData(decodedData);
@@ -226,4 +237,25 @@ export const toSnakeCase = (obj: any): any => {
   }
 
   return obj;
+};
+
+export const processBackgroundResponse = (
+  data: Messaging.Chain.Request,
+  messageKey: MessageKey,
+  result: Messaging.Chain.Response,
+) => {
+  switch (data.method) {
+    case RequestMethod.CTRL.TRANSFER:
+    case RequestMethod.METAMASK.ETH_SEND_TRANSACTION:
+    case RequestMethod.VULTISIG.SEND_TRANSACTION:
+    case RequestMethod.CTRL.DEPOSIT:
+    case RequestMethod.VULTISIG.DEPOSIT_TRANSACTION: {
+      if (messageKey === MessageKey.SOLANA_REQUEST)
+        return (result as SendTransactionResponse).raw;
+      return (result as SendTransactionResponse).txResponse;
+    }
+    default: {
+      return result;
+    }
+  }
 };
