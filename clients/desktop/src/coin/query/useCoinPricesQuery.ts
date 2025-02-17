@@ -2,7 +2,7 @@ import { EvmChain, OtherChain } from '@core/chain/Chain';
 import { Coin, CoinKey, coinKeyToString } from '@core/chain/coin/Coin';
 import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices';
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices';
-import { getSolanaTokenUSDValue } from '@core/chain/coin/price/solana/getSolanaTokenUSDValue';
+import { getSolanaTokenPrices } from '@core/chain/coin/price/solana/getSolanaTokenUSDValue';
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { FiatCurrency } from '@core/config/FiatCurrency';
 import { groupItems } from '@lib/utils/array/groupItems';
@@ -50,24 +50,18 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
   );
 
   if (!isEmpty(solanaCoins)) {
-    console.log('solanaCoins', solanaCoins);
-
-    solanaCoins.forEach(coin => {
-      queries.push({
-        queryKey: getCoinPricesQueryKeys({
-          coins: [coin], // Passing a single coin
+    queries.push({
+      queryKey: getCoinPricesQueryKeys({
+        coins: solanaCoins,
+        fiatCurrency,
+      }),
+      queryFn: async () => {
+        return await getSolanaTokenPrices({
+          coins: solanaCoins,
+          chain: OtherChain.Solana,
           fiatCurrency,
-        }),
-        queryFn: async () => {
-          const price = await getSolanaTokenUSDValue(coin.id);
-
-          console.log('price SOLANA', coin, price);
-
-          return {
-            [coinKeyToString(coin)]: price,
-          };
-        },
-      });
+        });
+      },
     });
   }
 
