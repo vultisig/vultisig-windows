@@ -1,7 +1,8 @@
-import { EvmChain } from '@core/chain/Chain';
+import { EvmChain, OtherChain } from '@core/chain/Chain';
 import { Coin, CoinKey, coinKeyToString } from '@core/chain/coin/Coin';
 import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices';
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices';
+import { getSolanaTokenUSDValue } from '@core/chain/coin/price/solana/getSolanaTokenUSDValue';
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { FiatCurrency } from '@core/config/FiatCurrency';
 import { groupItems } from '@lib/utils/array/groupItems';
@@ -42,6 +43,33 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
   const [regularCoins, erc20Coins] = splitBy(input.coins, coin =>
     isOneOf(coin.chain, Object.values(EvmChain)) && !isFeeCoin(coin) ? 1 : 0
   );
+
+  // Split regular coins and Solana tokens
+  const [, solanaCoins] = splitBy(input.coins, coin =>
+    isOneOf(coin.chain, [OtherChain.Solana]) ? 1 : 0
+  );
+
+  if (!isEmpty(solanaCoins)) {
+    console.log('solanaCoins', solanaCoins);
+
+    solanaCoins.forEach(coin => {
+      queries.push({
+        queryKey: getCoinPricesQueryKeys({
+          coins: [coin], // Passing a single coin
+          fiatCurrency,
+        }),
+        queryFn: async () => {
+          const price = await getSolanaTokenUSDValue(coin.id);
+
+          console.log('price SOLANA', coin, price);
+
+          return {
+            [coinKeyToString(coin)]: price,
+          };
+        },
+      });
+    });
+  }
 
   if (!isEmpty(erc20Coins)) {
     const groupedByChain = groupItems(erc20Coins, coin => coin.chain);
