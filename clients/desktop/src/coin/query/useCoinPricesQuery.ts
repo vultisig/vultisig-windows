@@ -4,7 +4,6 @@ import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices';
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices';
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { FiatCurrency } from '@core/config/FiatCurrency';
-import { findBy } from '@lib/utils/array/findBy';
 import { groupItems } from '@lib/utils/array/groupItems';
 import { isEmpty } from '@lib/utils/array/isEmpty';
 import { isOneOf } from '@lib/utils/array/isOneOf';
