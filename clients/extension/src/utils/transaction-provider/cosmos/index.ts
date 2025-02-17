@@ -19,7 +19,6 @@ import {
   KeysignPayload,
 } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
 
-import { ChainKey } from "../../constants";
 import {
   CosmosAccountData,
   ITransaction,
@@ -34,10 +33,11 @@ import api from "../../api";
 
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
+import { Chain } from "@core/chain/Chain";
 
 export default class CosmosTransactionProvider extends BaseTransactionProvider {
   constructor(
-    chainKey: ChainKey,
+    chainKey: Chain,
     chainRef: { [chainKey: string]: CoinType },
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore,
@@ -47,7 +47,7 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
 
   public getSpecificTransactionInfo = (coin: Coin): Promise<SpecificCosmos> => {
     return new Promise<SpecificCosmos>(async (resolve) => {
-      const defaultGas = coin.chain == ChainKey.DYDX ? 2500000000000000 : 7500;
+      const defaultGas = coin.chain == Chain.Dydx ? 2500000000000000 : 7500;
 
       const result: SpecificCosmos = {
         gas: defaultGas,

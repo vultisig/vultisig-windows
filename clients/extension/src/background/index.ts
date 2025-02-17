@@ -8,14 +8,11 @@ import {
 import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 
 import {
-  ChainKey,
   ChainTicker,
   Instance,
   MessageKey,
   RequestMethod,
   chains,
-  cosmosChains,
-  evmChains,
   rpcUrl,
 } from "../utils/constants";
 import { calculateWindowPosition, findChainByProp } from "../utils/functions";
@@ -45,6 +42,8 @@ import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
 } from "../types/thorchain";
+import { Chain } from "@core/chain/Chain";
+import { getChainKind } from "@core/chain/ChainKind";
 
 let rpcProvider: JsonRpcProvider;
 
@@ -77,7 +76,7 @@ const handleOpenPanel = (name: string): Promise<number> => {
   });
 };
 
-const handleProvider = (chain: ChainKey, update?: boolean) => {
+const handleProvider = (chain: Chain, update?: boolean) => {
   const rpc = rpcUrl[chain];
 
   if (update) {
@@ -88,7 +87,7 @@ const handleProvider = (chain: ChainKey, update?: boolean) => {
 };
 
 const handleFindAccounts = (
-  chain: ChainKey,
+  chain: Chain,
   sender: string,
 ): Promise<string[]> => {
   return new Promise((resolve) => {
@@ -111,10 +110,7 @@ const handleFindAccounts = (
   });
 };
 
-const handleGetAccounts = (
-  chain: ChainKey,
-  sender: string,
-): Promise<string[]> => {
+const handleGetAccounts = (chain: Chain, sender: string): Promise<string[]> => {
   return new Promise((resolve) => {
     if (instance[Instance.ACCOUNTS]) {
       let interval = setInterval(() => {
@@ -286,7 +282,7 @@ const handleRequest = (
 > => {
   return new Promise((resolve, reject) => {
     const { method, params } = body;
-    if (evmChains.includes(chain.name)) {
+    if (getChainKind(chain.name) === "evm") {
       if (!rpcProvider) handleProvider(chain.name);
     }
 
@@ -296,10 +292,10 @@ const handleRequest = (
         handleFindAccounts(chain.name, sender)
           .then(([account]) => {
             switch (chain.name) {
-              case ChainKey.DYDX:
-              case ChainKey.GAIACHAIN:
-              case ChainKey.KUJIRA:
-              case ChainKey.OSMOSIS: {
+              case Chain.Dydx:
+              case Chain.Cosmos:
+              case Chain.Kujira:
+              case Chain.Osmosis: {
                 resolve(account);
 
                 break;
@@ -320,11 +316,11 @@ const handleRequest = (
         handleGetAccounts(chain.name, sender)
           .then(([account]) => {
             switch (chain.name) {
-              case ChainKey.DYDX:
-              case ChainKey.GAIACHAIN:
-              case ChainKey.KUJIRA:
-              case ChainKey.OSMOSIS:
-              case ChainKey.SOLANA: {
+              case Chain.Dydx:
+              case Chain.Cosmos:
+              case Chain.Kujira:
+              case Chain.Osmosis:
+              case Chain.Solana: {
                 resolve(account);
 
                 break;
@@ -429,7 +425,7 @@ const handleRequest = (
           if (transaction) {
             handleSendTransaction(transaction, chain, true)
               .then((result) =>
-                chain.name === ChainKey.SOLANA
+                chain.name === Chain.Solana
                   ? resolve([result.txResponse, result.raw])
                   : resolve(result.txResponse),
               )
@@ -451,7 +447,7 @@ const handleRequest = (
           if (hash) {
             switch (chain.name) {
               // Thor
-              case ChainKey.THORCHAIN: {
+              case Chain.THORChain: {
                 api.thorchain
                   .getTransactionByHash(String(hash))
                   .then(resolve)
@@ -460,11 +456,11 @@ const handleRequest = (
                 break;
               }
               // Cosmos
-              case ChainKey.DYDX:
-              case ChainKey.GAIACHAIN:
-              case ChainKey.KUJIRA:
-              case ChainKey.MAYACHAIN:
-              case ChainKey.OSMOSIS: {
+              case Chain.Dydx:
+              case Chain.Cosmos:
+              case Chain.Kujira:
+              case Chain.MayaChain:
+              case Chain.Osmosis: {
                 Tendermint34Client.connect(rpcUrl[chain.name])
                   .then((client) => {
                     client
@@ -479,14 +475,14 @@ const handleRequest = (
                 break;
               }
               // EVM
-              case ChainKey.AVALANCHE:
-              case ChainKey.ARBITRUM:
-              case ChainKey.BASE:
-              case ChainKey.BSCCHAIN:
-              case ChainKey.CRONOSCHAIN:
-              case ChainKey.ETHEREUM:
-              case ChainKey.OPTIMISM:
-              case ChainKey.POLYGON: {
+              case Chain.Avalanche:
+              case Chain.Arbitrum:
+              case Chain.Base:
+              case Chain.BSC:
+              case Chain.CronosChain:
+              case Chain.Ethereum:
+              case Chain.Optimism:
+              case Chain.Polygon: {
                 api.ethereum
                   .getTransactionByHash(rpcUrl[chain.name], String(hash))
                   .then(resolve)
@@ -913,14 +909,14 @@ chrome.runtime.onMessage.addListener(
 
     switch (type) {
       case MessageKey.BITCOIN_REQUEST: {
-        handleRequest(message, chains[ChainKey.BITCOIN], origin)
+        handleRequest(message, chains[Chain.Bitcoin], origin)
           .then(sendResponse)
           .catch((error) => sendResponse({ error }));
 
         break;
       }
       case MessageKey.BITCOIN_CASH_REQUEST: {
-        handleRequest(message, chains[ChainKey.BITCOINCASH], origin)
+        handleRequest(message, chains[Chain.BitcoinCash], origin)
           .then(sendResponse)
           .catch((error) => sendResponse({ error }));
 
@@ -930,7 +926,7 @@ chrome.runtime.onMessage.addListener(
         getStoredChains().then((storedChains) => {
           const chain = storedChains.find(
             (storedChain: ChainProps) =>
-              storedChain.active && cosmosChains.includes(storedChain.name),
+              storedChain.active && getChainKind(storedChain.name) === "cosmos",
           );
 
           if (chain) {
@@ -987,13 +983,13 @@ chrome.runtime.onMessage.addListener(
             handleRequest(
               {
                 method: RequestMethod.VULTISIG.WALLET_ADD_CHAIN,
-                params: [{ chainId: chains[ChainKey.GAIACHAIN].id }],
+                params: [{ chainId: chains[Chain.Cosmos].id }],
               },
-              chains[ChainKey.GAIACHAIN],
+              chains[Chain.Cosmos],
               origin,
             )
               .then(() =>
-                handleRequest(message, chains[ChainKey.GAIACHAIN], origin)
+                handleRequest(message, chains[Chain.Cosmos], origin)
                   .then((response) => {
                     if (
                       message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
@@ -1003,13 +999,13 @@ chrome.runtime.onMessage.addListener(
                           return (
                             vault.chains.find(
                               (selectedChain: ChainProps) =>
-                                selectedChain.name === ChainKey.GAIACHAIN,
+                                selectedChain.name === Chain.Cosmos,
                             )?.address === response
                           );
                         });
                         const storedChain = vault!.chains.find(
                           (storedChain: ChainProps) =>
-                            storedChain.name === ChainKey.GAIACHAIN,
+                            storedChain.name === Chain.Cosmos,
                         )!;
                         const derivationKey = storedChain.derivationKey;
                         if (!derivationKey) {
@@ -1047,14 +1043,14 @@ chrome.runtime.onMessage.addListener(
         break;
       }
       case MessageKey.DASH_REQUEST: {
-        handleRequest(message, chains[ChainKey.DASH], origin)
+        handleRequest(message, chains[Chain.Dash], origin)
           .then(sendResponse)
           .catch((error) => sendResponse({ error }));
 
         break;
       }
       case MessageKey.DOGECOIN_REQUEST: {
-        handleRequest(message, chains[ChainKey.DOGECOIN], origin)
+        handleRequest(message, chains[Chain.Dogecoin], origin)
           .then(sendResponse)
           .catch((error) => sendResponse({ error }));
 
@@ -1064,7 +1060,7 @@ chrome.runtime.onMessage.addListener(
         getStoredChains().then((storedChains) => {
           const chain = storedChains.find(
             (storedChain: ChainProps) =>
-              storedChain.active && evmChains.indexOf(storedChain.name) >= 0,
+              storedChain.active && getChainKind(storedChain.name) === "evm",
           );
 
           if (chain) {
@@ -1075,13 +1071,13 @@ chrome.runtime.onMessage.addListener(
             handleRequest(
               {
                 method: RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN,
-                params: [{ chainId: chains[ChainKey.ETHEREUM].id }],
+                params: [{ chainId: chains[Chain.Ethereum].id }],
               },
-              chains[ChainKey.ETHEREUM],
+              chains[Chain.Ethereum],
               origin,
             )
               .then(() =>
-                handleRequest(message, chains[ChainKey.ETHEREUM], origin)
+                handleRequest(message, chains[Chain.Ethereum], origin)
                   .then(sendResponse)
                   .catch((error) => sendResponse({ error })),
               )
@@ -1092,28 +1088,28 @@ chrome.runtime.onMessage.addListener(
         break;
       }
       case MessageKey.LITECOIN_REQUEST: {
-        handleRequest(message, chains[ChainKey.LITECOIN], origin)
+        handleRequest(message, chains[Chain.Litecoin], origin)
           .then(sendResponse)
           .catch((error) => sendResponse({ error }));
 
         break;
       }
       case MessageKey.MAYA_REQUEST: {
-        handleRequest(message, chains[ChainKey.MAYACHAIN], origin)
+        handleRequest(message, chains[Chain.MayaChain], origin)
           .then(sendResponse)
           .catch((error) => sendResponse({ error }));
 
         break;
       }
       case MessageKey.SOLANA_REQUEST: {
-        handleRequest(message, chains[ChainKey.SOLANA], origin)
+        handleRequest(message, chains[Chain.Solana], origin)
           .then(sendResponse)
           .catch((error) => sendResponse({ error }));
 
         break;
       }
       case MessageKey.THOR_REQUEST: {
-        handleRequest(message, chains[ChainKey.THORCHAIN], origin)
+        handleRequest(message, chains[Chain.THORChain], origin)
           .then(sendResponse)
           .catch((error) => sendResponse({ error }));
 

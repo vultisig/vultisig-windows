@@ -5,8 +5,11 @@ import { Button, Upload, UploadProps } from "antd";
 import { ReaderOptions, readBarcodesFromImageFile } from "zxing-wasm";
 import { UAParser } from "ua-parser-js";
 
-import { calculateWindowPosition, toCamelCase } from "../../../../utils/functions";
-import { ChainKey, chains, errorKey } from "../../../../utils/constants";
+import {
+  calculateWindowPosition,
+  toCamelCase,
+} from "../../../../utils/functions";
+import { chains, errorKey } from "../../../../utils/constants";
 import { getStoredVaults, setStoredVaults } from "../../../../utils/storage";
 import { VaultProps } from "../../../../utils/interfaces";
 import useGoBack from "../../../../hooks/go-back";
@@ -16,6 +19,7 @@ import routeKeys from "../../../../utils/route-keys";
 import WalletCoreProvider from "../../../../utils/wallet-core-provider";
 
 import { ArrowLeft, CloseLG } from "../../../../icons";
+import { Chain } from "@core/chain/Chain";
 
 interface InitialState {
   file?: File;
@@ -66,7 +70,7 @@ const Component = () => {
               const addressProvider = new AddressProvider(chainRef, walletCore);
 
               const promises = Object.keys(chains).map((key) =>
-                addressProvider.getAddress(key as ChainKey, vault)
+                addressProvider.getAddress(key as Chain, vault),
               );
 
               Promise.all(promises).then((props) => {
@@ -206,7 +210,7 @@ const Component = () => {
           },
           (window) => {
             if (window?.id) createdWindowId = window.id;
-          }
+          },
         );
 
         chrome.windows.onRemoved.addListener((closedWindowId) => {

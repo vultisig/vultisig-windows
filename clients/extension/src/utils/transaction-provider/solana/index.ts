@@ -13,7 +13,7 @@ import {
 } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
 import { CoinSchema } from "@core/communication/vultisig/keysign/v1/coin_pb";
 
-import { ChainKey, rpcUrl } from "../../constants";
+import { rpcUrl } from "../../constants";
 import type {
   ITransaction,
   SignatureProps,
@@ -25,9 +25,10 @@ import api from "../../api";
 import BaseTransactionProvider from "../../transaction-provider/base";
 
 import { SignedTransactionResult } from "../../signed-transaction-result";
+import { Chain } from "@core/chain/Chain";
 export default class SolanaTransactionProvider extends BaseTransactionProvider {
   constructor(
-    chainKey: ChainKey,
+    chainKey: Chain,
     chainRef: { [chainKey: string]: CoinType },
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore,
@@ -246,7 +247,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
         try {
           const coinType = this.walletCore.CoinType.solana;
           const pubkeySolana = vault.chains.find(
-            (chain) => chain.name === ChainKey.SOLANA,
+            (chain) => chain.name === Chain.Solana,
           )?.derivationKey;
           const allSignatures = this.walletCore.DataVector.create();
           const publicKeys = this.walletCore.DataVector.create();

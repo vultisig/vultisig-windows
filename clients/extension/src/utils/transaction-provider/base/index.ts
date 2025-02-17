@@ -3,7 +3,6 @@ import { TW, WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 import { toBinary } from "@bufbuild/protobuf";
 
-import { ChainKey } from "../../constants";
 import {
   ITransaction,
   SignatureProps,
@@ -17,20 +16,21 @@ import {
   KeysignPayload,
 } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
 import { CustomMessagePayload } from "@core/communication/vultisig/keysign/v1/custom_message_payload_pb";
+import { Chain } from "@core/chain/Chain";
 
 interface ChainRef {
   [chainKey: string]: CoinType;
 }
 
 export default abstract class BaseTransactionProvider {
-  protected chainKey: ChainKey;
+  protected chainKey: Chain;
   protected chainRef: ChainRef;
   protected dataEncoder: (data: Uint8Array) => Promise<string>;
   protected walletCore: WalletCore;
   protected keysignPayload?: KeysignPayload;
 
   constructor(
-    chainKey: ChainKey,
+    chainKey: Chain,
     chainRef: ChainRef,
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore,
@@ -59,11 +59,11 @@ export default abstract class BaseTransactionProvider {
 
   protected ensurePriorityFeeValue = (
     priorityFee: bigint,
-    chainKey: ChainKey,
+    chainKey: Chain,
   ): bigint => {
     switch (chainKey) {
-      case ChainKey.AVALANCHE:
-      case ChainKey.ETHEREUM: {
+      case Chain.Avalanche:
+      case Chain.Ethereum: {
         const oneGwei = 1000000000n;
         return priorityFee < oneGwei ? oneGwei : priorityFee;
       }

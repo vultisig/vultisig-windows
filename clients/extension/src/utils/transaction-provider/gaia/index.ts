@@ -1,13 +1,14 @@
 import { WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 
-import { ChainKey } from "../../constants";
+
 
 import CosmosTransactionProvider from "../../transaction-provider/cosmos";
+import { Chain } from "@core/chain/Chain";
 
 export default class GaiaTransactionProvider extends CosmosTransactionProvider {
   constructor(
-    chainKey: ChainKey,
+    chainKey: Chain,
     chainRef: { [chainKey: string]: CoinType },
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore

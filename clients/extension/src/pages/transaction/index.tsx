@@ -8,7 +8,7 @@ import html2canvas from "html2canvas";
 
 import { CoinSchema } from "@core/communication/vultisig/keysign/v1/coin_pb";
 
-import { evmChains, explorerUrl, TssKeysignType } from "../../utils/constants";
+import { explorerUrl, TssKeysignType } from "../../utils/constants";
 import {
   formatDisplayNumber,
   getTssKeysignType,
@@ -58,6 +58,7 @@ import "../../styles/index.scss";
 import "../../pages/transaction/index.scss";
 import "../../utils/prototypes";
 import UTXOTransactionProvider from "../../utils/transaction-provider/utxo";
+import { getChainKind } from "@core/chain/ChainKind";
 
 interface FormProps {
   password: string;
@@ -507,7 +508,7 @@ const Component = () => {
             );
 
             // Improve
-            if (evmChains.indexOf(transaction.chain.name) >= 0) {
+            if (getChainKind(transaction.chain.name) === "evm") {
               parseMemo(transaction.transactionDetails.data!)
                 .then((memo) => {
                   setState({ ...state, parsedMemo: memo });

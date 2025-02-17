@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Button, Form, Radio } from "antd";
 import ReactDOM from "react-dom/client";
 
-import { ChainKey } from "../../utils/constants";
 import {
   getStoredLanguage,
   getStoredRequest,
@@ -22,13 +21,14 @@ import VultiLoading from "../../components/vulti-loading";
 
 import "../../styles/index.scss";
 import "../accounts/index.scss";
+import { Chain } from "@core/chain/Chain";
 
 interface FormProps {
   uid: string;
 }
 
 interface InitialState {
-  chain?: ChainKey;
+  chain?: Chain;
   errorDescription?: string;
   errorTitle?: string;
   hasError?: boolean;
