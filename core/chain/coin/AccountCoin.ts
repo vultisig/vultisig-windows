@@ -6,7 +6,7 @@ export type AccountCoinKey<T extends Chain = Chain> = CoinKey<T> & {
   address: string;
 };
 
-export type AccountCoin = Coin & AccountCoinKey;
+export type AccountCoin<T extends Chain = Chain> = Coin & AccountCoinKey<T>;
 
 export const areEqualAccountCoins = (
   one: AccountCoinKey,
