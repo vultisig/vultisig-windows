@@ -40,7 +40,6 @@ export const useVaultTotalBalanceQuery = () => {
           if (price === undefined || amount === undefined) {
             return 0;
           }
-
           return getCoinValue({
             amount,
             decimals: coin.decimals,
