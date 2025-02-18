@@ -1,15 +1,15 @@
-import { useCallback } from 'react';
+import { useCallback } from 'react'
 
-import { useToast } from '../../../lib/ui/toast/ToastProvider';
+import { useToast } from '../../../lib/ui/toast/ToastProvider'
 
 export const useCopyAddress = () => {
-  const { addToast } = useToast();
+  const { addToast } = useToast()
 
   return useCallback(
     (address: string) => {
-      navigator.clipboard.writeText(address);
-      addToast({ message: 'Address copied' });
+      navigator.clipboard.writeText(address)
+      addToast({ message: 'Address copied' })
     },
     [addToast]
-  );
-};
+  )
+}

@@ -19,4 +19,4 @@ export const ReverseIcon = () => (
       fill="currentColor"
     />
   </svg>
-);
+)

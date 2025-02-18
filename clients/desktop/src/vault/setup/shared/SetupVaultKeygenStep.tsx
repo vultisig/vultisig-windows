@@ -1,20 +1,20 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { OnBackProp } from '../../../lib/ui/props';
-import { KeygenStep } from '../../keygen/shared/KeygenStep';
-import { useVaultType } from './state/vaultType';
+import { OnBackProp } from '../../../lib/ui/props'
+import { KeygenStep } from '../../keygen/shared/KeygenStep'
+import { useVaultType } from './state/vaultType'
 
 type SetupVaultKeygenStepProps = OnBackProp & {
-  onTryAgain: () => void;
-};
+  onTryAgain: () => void
+}
 
 export const SetupVaultKeygenStep = (props: SetupVaultKeygenStepProps) => {
-  const { t } = useTranslation();
-  const vaultType = useVaultType();
+  const { t } = useTranslation()
+  const vaultType = useVaultType()
 
   const title = t('keygen_for_vault', {
     type: t(vaultType),
-  });
+  })
 
-  return <KeygenStep {...props} title={title} />;
-};
+  return <KeygenStep {...props} title={title} />
+}

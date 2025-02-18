@@ -1,20 +1,20 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { PageContent } from '../../../ui/page/PageContent';
-import { QrImageDropZone } from './QrImageDropZone';
-import { UploadedQr } from './UploadedQr';
-import { useProcessQrMutation } from './useProcessQrMutation';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { PageContent } from '../../../ui/page/PageContent'
+import { QrImageDropZone } from './QrImageDropZone'
+import { UploadedQr } from './UploadedQr'
+import { useProcessQrMutation } from './useProcessQrMutation'
 
 export const UploadQrView = () => {
-  const { t } = useTranslation();
-  const [file, setFile] = useState<File | null>(null);
+  const { t } = useTranslation()
+  const [file, setFile] = useState<File | null>(null)
 
-  const { mutate, isPending, error } = useProcessQrMutation();
+  const { mutate, isPending, error } = useProcessQrMutation()
 
   return (
     <>
@@ -35,7 +35,7 @@ export const UploadQrView = () => {
           isLoading={isPending}
           onClick={() => {
             if (file) {
-              mutate(file);
+              mutate(file)
             }
           }}
           isDisabled={!file}
@@ -44,5 +44,5 @@ export const UploadQrView = () => {
         </Button>
       </PageContent>
     </>
-  );
-};
+  )
+}

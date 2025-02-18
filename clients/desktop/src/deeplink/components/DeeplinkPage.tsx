@@ -1,26 +1,26 @@
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../lib/ui/buttons/Button';
-import { MatchQuery } from '../../lib/ui/query/components/MatchQuery';
-import { useAppPathState } from '../../navigation/hooks/useAppPathState';
-import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
-import { FlowErrorPageContent } from '../../ui/flow/FlowErrorPageContent';
-import { FlowPageHeader } from '../../ui/flow/FlowPageHeader';
-import { FlowPendingPageContent } from '../../ui/flow/FlowPendingPageContent';
-import { useProcessDeeplinkMutation } from '../mutations/useProcessDeeplinkMutation';
+import { Button } from '../../lib/ui/buttons/Button'
+import { MatchQuery } from '../../lib/ui/query/components/MatchQuery'
+import { useAppPathState } from '../../navigation/hooks/useAppPathState'
+import { useNavigateBack } from '../../navigation/hooks/useNavigationBack'
+import { FlowErrorPageContent } from '../../ui/flow/FlowErrorPageContent'
+import { FlowPageHeader } from '../../ui/flow/FlowPageHeader'
+import { FlowPendingPageContent } from '../../ui/flow/FlowPendingPageContent'
+import { useProcessDeeplinkMutation } from '../mutations/useProcessDeeplinkMutation'
 
 export const DeeplinkPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const { url } = useAppPathState<'deeplink'>();
+  const { url } = useAppPathState<'deeplink'>()
 
-  const { mutate, ...mutationState } = useProcessDeeplinkMutation();
+  const { mutate, ...mutationState } = useProcessDeeplinkMutation()
 
-  useEffect(() => mutate(url), [url, mutate]);
+  useEffect(() => mutate(url), [url, mutate])
 
-  const goBack = useNavigateBack();
+  const goBack = useNavigateBack()
 
   return (
     <>
@@ -38,5 +38,5 @@ export const DeeplinkPage = () => {
         )}
       />
     </>
-  );
-};
+  )
+}

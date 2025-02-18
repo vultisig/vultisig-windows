@@ -1,53 +1,52 @@
-import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings';
+import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import {
   defaultFeePriority,
   feePriorities,
   FeePriority,
-} from '@core/chain/tx/fee/FeePriority';
-import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
-import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+} from '@core/chain/tx/fee/FeePriority'
+import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
+import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps';
-import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput';
-import { InputContainer } from '../../../../../lib/ui/inputs/InputContainer';
-import { InputLabel } from '../../../../../lib/ui/inputs/InputLabel';
-import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput';
-import { VStack } from '../../../../../lib/ui/layout/Stack';
-import { Spinner } from '../../../../../lib/ui/loaders/Spinner';
-import { Modal } from '../../../../../lib/ui/modal';
-import { OnCloseProp } from '../../../../../lib/ui/props';
-import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery';
-import { useSendChainSpecificQuery } from '../../../queries/useSendChainSpecificQuery';
+import { Button } from '../../../../../lib/ui/buttons/Button'
+import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps'
+import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput'
+import { InputContainer } from '../../../../../lib/ui/inputs/InputContainer'
+import { InputLabel } from '../../../../../lib/ui/inputs/InputLabel'
+import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput'
+import { VStack } from '../../../../../lib/ui/layout/Stack'
+import { Spinner } from '../../../../../lib/ui/loaders/Spinner'
+import { Modal } from '../../../../../lib/ui/modal'
+import { OnCloseProp } from '../../../../../lib/ui/props'
+import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery'
+import { useSendChainSpecificQuery } from '../../../queries/useSendChainSpecificQuery'
 import {
   SendChainSpecificValueProvider,
   useSendChainSpecific,
-} from '../../SendChainSpecificProvider';
-import { SendFiatFeeValue } from '../../SendFiatFeeValue';
-import { SendGasFeeValue } from '../../SendGasFeeValue';
-import { FeeContainer } from '../FeeContainer';
-import { useFeeSettings } from '../state/feeSettings';
-import { BaseFee } from './baseFee/BaseFee';
+} from '../../SendChainSpecificProvider'
+import { SendFiatFeeValue } from '../../SendFiatFeeValue'
+import { SendGasFeeValue } from '../../SendGasFeeValue'
+import { FeeContainer } from '../FeeContainer'
+import { useFeeSettings } from '../state/feeSettings'
+import { BaseFee } from './baseFee/BaseFee'
 
 type FeeSettingsFormShape = {
-  priority: FeePriority;
-  gasLimit: number | null;
-};
+  priority: FeePriority
+  gasLimit: number | null
+}
 
 export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const [persistentValue, setPersistentValue] =
-    useFeeSettings<EvmFeeSettings>();
+  const [persistentValue, setPersistentValue] = useFeeSettings<EvmFeeSettings>()
 
-  const sendChainSpecific = useSendChainSpecific();
+  const sendChainSpecific = useSendChainSpecific()
   const { gasLimit: defaultGasLimit } = getDiscriminatedUnionValue(
     sendChainSpecific,
     'case',
     'value',
     'ethereumSpecific'
-  );
+  )
 
   const [value, setValue] = useState<FeeSettingsFormShape>(
     () =>
@@ -55,7 +54,7 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
         priority: defaultFeePriority,
         gasLimit: Number(defaultGasLimit),
       }
-  );
+  )
 
   const guardedValue: EvmFeeSettings = useMemo(
     () => ({
@@ -63,17 +62,17 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
       gasLimit: value.gasLimit ?? 0,
     }),
     [value]
-  );
+  )
 
-  const chainSpecificQuery = useSendChainSpecificQuery();
+  const chainSpecificQuery = useSendChainSpecificQuery()
 
   return (
     <Modal
       as="form"
       {...getFormProps({
         onSubmit: () => {
-          setPersistentValue(guardedValue);
-          onClose();
+          setPersistentValue(guardedValue)
+          onClose()
         },
         onClose,
       })}
@@ -119,5 +118,5 @@ export const ManageEvmFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
         </InputContainer>
       </VStack>
     </Modal>
-  );
-};
+  )
+}

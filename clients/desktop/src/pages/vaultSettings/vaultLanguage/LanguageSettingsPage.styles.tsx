@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
-import { borderRadius } from '../../../lib/ui/css/borderRadius';
-import { getColor } from '../../../lib/ui/theme/getters';
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '../../../lib/ui/css/borderRadius'
+import { getColor } from '../../../lib/ui/theme/getters'
 
 export const LanguageBox = styled.div`
   flex: 1;
@@ -13,7 +13,7 @@ export const LanguageBox = styled.div`
   font-weight: 400;
   font-size: 16px;
   color: ${getColor('contrast')};
-`;
+`
 
 export const LanguageButton = styled(UnstyledButton)`
   display: flex;
@@ -24,4 +24,4 @@ export const LanguageButton = styled(UnstyledButton)`
   ${borderRadius.m};
   background-color: ${getColor('foreground')};
   width: 100%;
-`;
+`

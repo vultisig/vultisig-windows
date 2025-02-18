@@ -1,30 +1,30 @@
-import { match } from '@lib/utils/match';
-import React, { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { match } from '@lib/utils/match'
+import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { HStack, VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { PageContent } from '../../../ui/page/PageContent';
+import { HStack, VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { PageContent } from '../../../ui/page/PageContent'
 import {
   ServerAnimationStates,
   useQueryAnimations,
-} from '../hooks/useQueryAnimations';
+} from '../hooks/useQueryAnimations'
 
 type WaitForServerStatesProps = {
-  state: ServerAnimationStates;
-  onAnimationEnd?: () => void;
-};
+  state: ServerAnimationStates
+  onAnimationEnd?: () => void
+}
 
 export const WaitForServerStates: FC<WaitForServerStatesProps> = ({
   state,
   onAnimationEnd,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const RiveComponent = useQueryAnimations({
     onAnimationEnd,
     state,
-  });
+  })
 
   return (
     <PageContent alignItems="center" justifyContent="center" gap={24}>
@@ -55,8 +55,8 @@ export const WaitForServerStates: FC<WaitForServerStatesProps> = ({
         </VStack>
       </ContentWrapper>
     </PageContent>
-  );
-};
+  )
+}
 
 const ContentWrapper = styled(VStack)`
   position: relative;
@@ -77,9 +77,9 @@ const ContentWrapper = styled(VStack)`
     border-radius: 360px;
     z-index: -1;
   }
-`;
+`
 
 const LoaderWrapper = styled(HStack)`
   width: 48px;
   height: 48px;
-`;
+`

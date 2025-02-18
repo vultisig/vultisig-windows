@@ -1,30 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
-import { Match } from '../../../lib/ui/base/Match';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { PageSlice } from '../../../ui/page/PageSlice';
-import { useAddressBookItemsQuery } from '../../../vault/queries/useAddressBookItemsQuery';
-import AddAddressView from './components/addAddressForm/AddAddressForm';
-import AddressesListView from './components/addressesListView/AddressesListView';
-import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesView';
+import { Match } from '../../../lib/ui/base/Match'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { PageSlice } from '../../../ui/page/PageSlice'
+import { useAddressBookItemsQuery } from '../../../vault/queries/useAddressBookItemsQuery'
+import AddAddressView from './components/addAddressForm/AddAddressForm'
+import AddressesListView from './components/addressesListView/AddressesListView'
+import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesView'
 
 const AddressBookSettingsPage = () => {
-  const [isAddAddressViewOpen, setIsAddAddressViewOpen] = useState(false);
-  const [isEditModeOn, setIsEditModeOn] = useState(false);
+  const [isAddAddressViewOpen, setIsAddAddressViewOpen] = useState(false)
+  const [isEditModeOn, setIsEditModeOn] = useState(false)
   const {
     data: addressBookItems,
     isFetching: isFetchingAddressBookItems,
     refetch,
-  } = useAddressBookItemsQuery();
+  } = useAddressBookItemsQuery()
 
   const handleOpenAddAddressView = () => {
-    setIsAddAddressViewOpen(true);
-  };
+    setIsAddAddressViewOpen(true)
+  }
 
   useEffect(() => {
-    refetch();
-  }, [refetch]);
+    refetch()
+  }, [refetch])
 
   return (
     <VStack flexGrow gap={16}>
@@ -58,7 +58,7 @@ const AddressBookSettingsPage = () => {
         />
       </PageSlice>
     </VStack>
-  );
-};
+  )
+}
 
-export default AddressBookSettingsPage;
+export default AddressBookSettingsPage

@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { Text } from '../../../lib/ui/text';
-import { PageContent } from '../../../ui/page/PageContent';
-import { FancyLoader } from '../../../ui/pending/FancyLoader';
+import { Text } from '../../../lib/ui/text'
+import { PageContent } from '../../../ui/page/PageContent'
+import { FancyLoader } from '../../../ui/pending/FancyLoader'
 
 export const WaitForServerLoader = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <PageContent alignItems="center" justifyContent="center">
@@ -14,5 +14,5 @@ export const WaitForServerLoader = () => {
         {t('looking_for_server')}
       </Text>
     </PageContent>
-  );
-};
+  )
+}

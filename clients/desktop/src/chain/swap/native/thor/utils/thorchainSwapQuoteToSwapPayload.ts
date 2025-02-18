@@ -1,21 +1,21 @@
-import { create } from '@bufbuild/protobuf';
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
-import { AccountCoin } from '@core/chain/coin/AccountCoin';
-import { Coin } from '@core/chain/coin/Coin';
-import { THORChainSwapPayloadSchema } from '@core/communication/vultisig/keysign/v1/thorchain_swap_payload_pb';
-import { convertDuration } from '@lib/utils/time/convertDuration';
-import { addMinutes } from 'date-fns';
+import { create } from '@bufbuild/protobuf'
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { Coin } from '@core/chain/coin/Coin'
+import { THORChainSwapPayloadSchema } from '@core/communication/vultisig/keysign/v1/thorchain_swap_payload_pb'
+import { convertDuration } from '@lib/utils/time/convertDuration'
+import { addMinutes } from 'date-fns'
 
-import { KeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload';
-import { nativeSwapStreamingInterval } from '../../NativeSwapChain';
-import { NativeSwapQuote } from '../../NativeSwapQuote';
+import { KeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload'
+import { nativeSwapStreamingInterval } from '../../NativeSwapChain'
+import { NativeSwapQuote } from '../../NativeSwapQuote'
 
 type Input = {
-  quote: NativeSwapQuote;
-  fromCoin: AccountCoin;
-  amount: bigint;
-  toCoin: Coin;
-};
+  quote: NativeSwapQuote
+  fromCoin: AccountCoin
+  amount: bigint
+  toCoin: Coin
+}
 
 export const thorchainSwapQuoteToSwapPayload = ({
   quote,
@@ -23,10 +23,9 @@ export const thorchainSwapQuoteToSwapPayload = ({
   amount,
   toCoin,
 }: Input): KeysignSwapPayload => {
-  const isAffiliate =
-    !!quote.fees.affiliate && Number(quote.fees.affiliate) > 0;
+  const isAffiliate = !!quote.fees.affiliate && Number(quote.fees.affiliate) > 0
 
-  const streamingInterval = nativeSwapStreamingInterval[quote.swapChain];
+  const streamingInterval = nativeSwapStreamingInterval[quote.swapChain]
 
   return {
     case: 'thorchainSwapPayload',
@@ -51,5 +50,5 @@ export const thorchainSwapQuoteToSwapPayload = ({
       toAmountLimit: '0',
       isAffiliate,
     }),
-  };
-};
+  }
+}

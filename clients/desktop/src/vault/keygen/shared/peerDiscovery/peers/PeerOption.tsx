@@ -1,22 +1,22 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
-import { UnstyledButton } from '../../../../../lib/ui/buttons/UnstyledButton';
-import { borderRadius } from '../../../../../lib/ui/css/borderRadius';
-import { centerContent } from '../../../../../lib/ui/css/centerContent';
-import { round } from '../../../../../lib/ui/css/round';
-import { sameDimensions } from '../../../../../lib/ui/css/sameDimensions';
-import { CheckIcon } from '../../../../../lib/ui/icons/CheckIcon';
-import { VStack, vStack } from '../../../../../lib/ui/layout/Stack';
-import { IsActiveProp, ValueProp } from '../../../../../lib/ui/props';
-import { Text } from '../../../../../lib/ui/text';
-import { getColor } from '../../../../../lib/ui/theme/getters';
-import { usePeersSelectionRecord } from '../../../../keysign/shared/state/selectedPeers';
+import { UnstyledButton } from '../../../../../lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '../../../../../lib/ui/css/borderRadius'
+import { centerContent } from '../../../../../lib/ui/css/centerContent'
+import { round } from '../../../../../lib/ui/css/round'
+import { sameDimensions } from '../../../../../lib/ui/css/sameDimensions'
+import { CheckIcon } from '../../../../../lib/ui/icons/CheckIcon'
+import { VStack, vStack } from '../../../../../lib/ui/layout/Stack'
+import { IsActiveProp, ValueProp } from '../../../../../lib/ui/props'
+import { Text } from '../../../../../lib/ui/text'
+import { getColor } from '../../../../../lib/ui/theme/getters'
+import { usePeersSelectionRecord } from '../../../../keysign/shared/state/selectedPeers'
 import {
   formatKeygenDeviceName,
   getKeygenDeviceType,
   parseLocalPartyId,
-} from '../../../utils/localPartyId';
-import { KeygenDeviceIcon } from '../../device/KeygenDeviceIcon';
+} from '../../../utils/localPartyId'
+import { KeygenDeviceIcon } from '../../device/KeygenDeviceIcon'
 
 const Container = styled(UnstyledButton)<IsActiveProp>`
   position: relative;
@@ -41,7 +41,7 @@ const Container = styled(UnstyledButton)<IsActiveProp>`
     alignItems: 'center',
     gap: 8,
   })}
-`;
+`
 
 const Indicator = styled.div`
   position: absolute;
@@ -53,14 +53,14 @@ const Indicator = styled.div`
   color: ${getColor('contrast')};
   ${centerContent}
   font-size: 10px;
-`;
+`
 
 export const PeerOption = ({ value }: ValueProp<string>) => {
-  const [record, setRecord] = usePeersSelectionRecord();
+  const [record, setRecord] = usePeersSelectionRecord()
 
-  const isSelected = record[value];
+  const isSelected = record[value]
 
-  const { deviceName, hash } = parseLocalPartyId(value);
+  const { deviceName, hash } = parseLocalPartyId(value)
 
   return (
     <Container
@@ -68,7 +68,7 @@ export const PeerOption = ({ value }: ValueProp<string>) => {
         setRecord(prev => ({
           ...prev,
           [value]: !isSelected,
-        }));
+        }))
       }}
       isActive={isSelected}
     >
@@ -90,5 +90,5 @@ export const PeerOption = ({ value }: ValueProp<string>) => {
         </Text>
       </VStack>
     </Container>
-  );
-};
+  )
+}

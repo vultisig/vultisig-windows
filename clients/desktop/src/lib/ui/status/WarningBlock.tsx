@@ -1,14 +1,14 @@
-import React, { ElementType, ReactNode } from 'react';
-import styled from 'styled-components';
+import React, { ElementType, ReactNode } from 'react'
+import styled from 'styled-components'
 
-import { borderRadius } from '../css/borderRadius';
-import { IconWrapper } from '../icons/IconWrapper';
-import { TriangleAlertIcon } from '../icons/TriangleAlertIcon';
-import { hStack } from '../layout/Stack';
-import { ChildrenProp, UiProps } from '../props';
-import { text } from '../text';
-import { getColor } from '../theme/getters';
-import { Tooltip } from '../tooltips/Tooltip';
+import { borderRadius } from '../css/borderRadius'
+import { IconWrapper } from '../icons/IconWrapper'
+import { TriangleAlertIcon } from '../icons/TriangleAlertIcon'
+import { hStack } from '../layout/Stack'
+import { ChildrenProp, UiProps } from '../props'
+import { text } from '../text'
+import { getColor } from '../theme/getters'
+import { Tooltip } from '../tooltips/Tooltip'
 
 const Container = styled.div`
   ${borderRadius.m};
@@ -23,12 +23,12 @@ const Container = styled.div`
     alignItems: 'baseline',
     gap: 12,
   })}
-`;
+`
 
 const IconContainer = styled(IconWrapper)`
   color: ${getColor('idle')};
   font-size: 22px;
-`;
+`
 
 const Content = styled.div`
   flex: 1;
@@ -37,13 +37,13 @@ const Content = styled.div`
     centerHorizontally: true,
     weight: '600',
   })}
-`;
+`
 
 type WarningBlockProps = {
-  icon?: ElementType;
-  iconTooltipContent?: ReactNode;
+  icon?: ElementType
+  iconTooltipContent?: ReactNode
 } & ChildrenProp &
-  UiProps;
+  UiProps
 
 export const WarningBlock = ({
   children,
@@ -57,7 +57,7 @@ export const WarningBlock = ({
     <IconContainer>
       <TriangleAlertIcon />
     </IconContainer>
-  );
+  )
 
   return (
     <Container {...rest}>
@@ -72,5 +72,5 @@ export const WarningBlock = ({
         icon
       )}
     </Container>
-  );
-};
+  )
+}

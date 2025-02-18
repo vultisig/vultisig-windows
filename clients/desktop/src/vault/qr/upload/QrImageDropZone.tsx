@@ -1,13 +1,13 @@
-import { useDropzone } from 'react-dropzone';
-import { useTranslation } from 'react-i18next';
+import { useDropzone } from 'react-dropzone'
+import { useTranslation } from 'react-i18next'
 
-import { ComputerUploadIcon } from '../../../lib/ui/icons/ComputerUploadIcon';
-import { InteractiveDropZoneContainer } from '../../../lib/ui/inputs/upload/DropZoneContainer';
-import { DropZoneContent } from '../../../lib/ui/inputs/upload/DropZoneContent';
+import { ComputerUploadIcon } from '../../../lib/ui/icons/ComputerUploadIcon'
+import { InteractiveDropZoneContainer } from '../../../lib/ui/inputs/upload/DropZoneContainer'
+import { DropZoneContent } from '../../../lib/ui/inputs/upload/DropZoneContent'
 
 type QrImageDropZoneProps = {
-  onFinish: (data: File) => void;
-};
+  onFinish: (data: File) => void
+}
 
 export const QrImageDropZone = ({ onFinish }: QrImageDropZoneProps) => {
   const { getRootProps, getInputProps } = useDropzone({
@@ -21,14 +21,14 @@ export const QrImageDropZone = ({ onFinish }: QrImageDropZoneProps) => {
       'image/svg+xml': ['.svg'],
     },
     onDrop: acceptedFiles => {
-      const [file] = acceptedFiles;
+      const [file] = acceptedFiles
       if (file) {
-        onFinish(file);
+        onFinish(file)
       }
     },
-  });
+  })
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <InteractiveDropZoneContainer {...getRootProps()}>
@@ -37,5 +37,5 @@ export const QrImageDropZone = ({ onFinish }: QrImageDropZoneProps) => {
       </DropZoneContent>
       <input {...getInputProps()} />
     </InteractiveDropZoneContainer>
-  );
-};
+  )
+}

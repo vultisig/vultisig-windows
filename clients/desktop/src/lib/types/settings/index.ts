@@ -1,4 +1,4 @@
 export type Settings = {
-  currency: string;
-  language: string;
-};
+  currency: string
+  language: string
+}

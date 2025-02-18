@@ -1,22 +1,22 @@
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
-import UpdateAvailablePopup from '../../components/updateAvailablePopup/UpdateAvailablePopup';
-import { toSizeUnit } from '../../lib/ui/css/toSizeUnit';
-import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon';
-import { VStack } from '../../lib/ui/layout/Stack';
-import { makeAppPath } from '../../navigation';
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
-import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt';
-import { pageConfig } from '../../ui/page/config';
-import { PageHeader } from '../../ui/page/PageHeader';
-import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton';
-import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons';
-import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle';
-import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance';
-import { VaultOverview } from '../../vault/components/VaultOverview';
-import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt';
-import { useCurrentVault } from '../state/currentVault';
+import UpdateAvailablePopup from '../../components/updateAvailablePopup/UpdateAvailablePopup'
+import { toSizeUnit } from '../../lib/ui/css/toSizeUnit'
+import { QrCodeIcon } from '../../lib/ui/icons/QrCodeIcon'
+import { VStack } from '../../lib/ui/layout/Stack'
+import { makeAppPath } from '../../navigation'
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
+import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt'
+import { pageConfig } from '../../ui/page/config'
+import { PageHeader } from '../../ui/page/PageHeader'
+import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton'
+import { PageHeaderIconButtons } from '../../ui/page/PageHeaderIconButtons'
+import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle'
+import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance'
+import { VaultOverview } from '../../vault/components/VaultOverview'
+import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt'
+import { useCurrentVault } from '../state/currentVault'
 
 const PositionQrPrompt = styled.div`
   position: fixed;
@@ -25,11 +25,11 @@ const PositionQrPrompt = styled.div`
   transform: translateX(-50%);
   width: auto;
   z-index: 1;
-`;
+`
 
 export const VaultPage = () => {
-  const navigate = useAppNavigate();
-  const { name } = useCurrentVault();
+  const navigate = useAppNavigate()
+  const { name } = useCurrentVault()
 
   return (
     <>
@@ -49,7 +49,7 @@ export const VaultPage = () => {
             <PageHeaderToggleTitle
               value={false}
               onChange={() => {
-                navigate('vaults');
+                navigate('vaults')
               }}
             >
               {name}
@@ -64,5 +64,5 @@ export const VaultPage = () => {
       </VStack>
       <UpdateAvailablePopup />
     </>
-  );
-};
+  )
+}

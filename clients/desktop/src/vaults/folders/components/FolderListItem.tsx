@@ -1,20 +1,20 @@
-import { FolderIcon } from '../../../lib/ui/icons/FolderIcon';
-import { HStack } from '../../../lib/ui/layout/Stack';
-import { ListItem } from '../../../lib/ui/list/item/ListItem';
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
+import { FolderIcon } from '../../../lib/ui/icons/FolderIcon'
+import { HStack } from '../../../lib/ui/layout/Stack'
+import { ListItem } from '../../../lib/ui/list/item/ListItem'
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 
 type FolderListItemProps = {
-  isDraggable?: boolean;
-  name: string;
-  id: string;
-};
+  isDraggable?: boolean
+  name: string
+  id: string
+}
 
 export const FolderListItem = ({
   name,
   isDraggable,
   id,
 }: FolderListItemProps) => {
-  const navigate = useAppNavigate();
+  const navigate = useAppNavigate()
 
   return (
     <ListItem
@@ -26,5 +26,5 @@ export const FolderListItem = ({
         {name}
       </HStack>
     </ListItem>
-  );
-};
+  )
+}

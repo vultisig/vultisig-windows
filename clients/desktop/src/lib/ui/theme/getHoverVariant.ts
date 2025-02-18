@@ -1,16 +1,16 @@
-import { DefaultTheme } from 'styled-components';
+import { match } from '@lib/utils/match'
+import { DefaultTheme } from 'styled-components'
 
-import { match } from '@lib/utils/match';
-import { ThemeColors } from './ThemeColors';
+import { ThemeColors } from './ThemeColors'
 
 interface ThemeGetterParams {
-  theme: DefaultTheme;
+  theme: DefaultTheme
 }
 
 type ColorName = keyof Pick<
   ThemeColors,
   'foreground' | 'primary' | 'idle' | 'foregroundSuperContrast'
->;
+>
 
 export const getHoverVariant =
   (color: ColorName) =>
@@ -20,4 +20,4 @@ export const getHoverVariant =
       primary: () => theme.colors.primary.getVariant({ l: l => l * 0.85 }),
       foregroundSuperContrast: () => theme.colors.foregroundSuperContrast,
       idle: () => theme.colors.idle.getVariant({ l: l => l + 4 }),
-    }).toCssValue();
+    }).toCssValue()

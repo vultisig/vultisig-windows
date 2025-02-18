@@ -1,22 +1,22 @@
-import React from 'react';
+import React from 'react'
 
-import { BrowserOpenURL } from '../../../wailsjs/runtime';
-import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
+import { BrowserOpenURL } from '../../../wailsjs/runtime'
+import { useNavigateBack } from '../../navigation/hooks/useNavigationBack'
 
 interface NavBarProps {
-  title: string;
-  questionLink?: string;
-  handleBack?: () => void;
+  title: string
+  questionLink?: string
+  handleBack?: () => void
 }
 
 const NavBar: React.FC<NavBarProps> = ({ title, questionLink, handleBack }) => {
-  const goBack = useNavigateBack();
+  const goBack = useNavigateBack()
 
   const openHelp = () => {
     if (questionLink) {
-      BrowserOpenURL(questionLink);
+      BrowserOpenURL(questionLink)
     }
-  };
+  }
 
   return (
     <nav className="bg-primary text-white p-4 flex justify-between items-center border-b border-gray-400">
@@ -24,9 +24,9 @@ const NavBar: React.FC<NavBarProps> = ({ title, questionLink, handleBack }) => {
         className="bg-transparent"
         onClick={() => {
           if (handleBack) {
-            handleBack();
+            handleBack()
           } else {
-            goBack();
+            goBack()
           }
         }}
       >
@@ -46,7 +46,7 @@ const NavBar: React.FC<NavBarProps> = ({ title, questionLink, handleBack }) => {
         />
       </button>
     </nav>
-  );
-};
+  )
+}
 
-export default NavBar;
+export default NavBar

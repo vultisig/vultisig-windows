@@ -1,17 +1,17 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon';
-import { TriangleAlertIcon } from '../../../lib/ui/icons/TriangleAlertIcon';
-import { Text } from '../../../lib/ui/text';
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
+import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon'
+import { TriangleAlertIcon } from '../../../lib/ui/icons/TriangleAlertIcon'
+import { Text } from '../../../lib/ui/text'
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import {
   ChevronIconWrapper,
   ContentWrapperButton,
-} from './VaultBackupBanner.styles';
+} from './VaultBackupBanner.styles'
 
 const VaultBackupBanner = () => {
-  const { t } = useTranslation();
-  const navigate = useAppNavigate();
+  const { t } = useTranslation()
+  const navigate = useAppNavigate()
 
   return (
     <ContentWrapperButton
@@ -26,7 +26,7 @@ const VaultBackupBanner = () => {
         <ChevronRightIcon size={24} />
       </ChevronIconWrapper>
     </ContentWrapperButton>
-  );
-};
+  )
+}
 
-export default VaultBackupBanner;
+export default VaultBackupBanner

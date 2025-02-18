@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { VStack } from '../../lib/ui/layout/Stack';
-import { Text } from '../../lib/ui/text';
-import { ProductEnhancedLogo } from '../../ui/logo/ProductEnhancedLogo';
+import { VStack } from '../../lib/ui/layout/Stack'
+import { Text } from '../../lib/ui/text'
+import { ProductEnhancedLogo } from '../../ui/logo/ProductEnhancedLogo'
 
 export const ProductLogoBlock = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <VStack flexGrow alignItems="center" justifyContent="center">
@@ -17,5 +17,5 @@ export const ProductLogoBlock = () => {
         {t('secure_crypto_vault')}
       </Text>
     </VStack>
-  );
-};
+  )
+}

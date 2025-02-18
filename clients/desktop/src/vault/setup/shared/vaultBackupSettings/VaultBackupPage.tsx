@@ -1,51 +1,51 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FC, useState } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FC, useState } from 'react'
+import { FieldValues, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
-import { storage } from '../../../../../wailsjs/go/models';
-import { Button } from '../../../../lib/ui/buttons/Button';
-import { EyeIcon } from '../../../../lib/ui/icons/EyeIcon';
-import InfoGradientIcon from '../../../../lib/ui/icons/InfoGradientIcon';
-import { VStack } from '../../../../lib/ui/layout/Stack';
-import { useInvalidateQueries } from '../../../../lib/ui/query/hooks/useInvalidateQueries';
-import { GradientText, Text } from '../../../../lib/ui/text';
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate';
-import { PageHeader } from '../../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
-import { PageSlice } from '../../../../ui/page/PageSlice';
-import { useBackupVaultMutation } from '../../../mutations/useBackupVaultMutation';
-import { vaultsQueryKey } from '../../../queries/useVaultsQuery';
+import { storage } from '../../../../../wailsjs/go/models'
+import { Button } from '../../../../lib/ui/buttons/Button'
+import { EyeIcon } from '../../../../lib/ui/icons/EyeIcon'
+import InfoGradientIcon from '../../../../lib/ui/icons/InfoGradientIcon'
+import { VStack } from '../../../../lib/ui/layout/Stack'
+import { useInvalidateQueries } from '../../../../lib/ui/query/hooks/useInvalidateQueries'
+import { GradientText, Text } from '../../../../lib/ui/text'
+import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
+import { PageHeader } from '../../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
+import { PageSlice } from '../../../../ui/page/PageSlice'
+import { useBackupVaultMutation } from '../../../mutations/useBackupVaultMutation'
+import { vaultsQueryKey } from '../../../queries/useVaultsQuery'
 import {
   VaultBackupSchema,
   vaultBackupSchema,
-} from './schemas/vaultBackupSchema';
+} from './schemas/vaultBackupSchema'
 import {
   ActionsWrapper,
   IconButton,
   InfoPill,
   InputField,
   InputFieldWrapper,
-} from './VaultBackupPage.styles';
+} from './VaultBackupPage.styles'
 
 type VaultBackupPageProps = {
-  onBackupCompleted: () => void;
-  vault: storage.Vault;
-};
+  onBackupCompleted: () => void
+  vault: storage.Vault
+}
 
 const VaultBackupPage: FC<VaultBackupPageProps> = ({
   onBackupCompleted,
   vault,
 }) => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [isVerifiedPasswordVisible, setIsVerifiedPasswordVisible] =
-    useState(false);
+    useState(false)
 
-  const navigate = useAppNavigate();
-  const { t } = useTranslation();
-  const invalidateQueries = useInvalidateQueries();
-  const { mutate: backupVault, isPending, error } = useBackupVaultMutation();
+  const navigate = useAppNavigate()
+  const { t } = useTranslation()
+  const invalidateQueries = useInvalidateQueries()
+  const { mutate: backupVault, isPending, error } = useBackupVaultMutation()
 
   const {
     register,
@@ -54,25 +54,25 @@ const VaultBackupPage: FC<VaultBackupPageProps> = ({
   } = useForm<VaultBackupSchema>({
     resolver: zodResolver(vaultBackupSchema),
     mode: 'onBlur',
-  });
+  })
 
   const onSubmit = async (data?: FieldValues) => {
-    const password = data?.password;
+    const password = data?.password
 
     backupVault(
       { vault, password },
       {
         onSuccess: () => {
-          invalidateQueries(vaultsQueryKey);
+          invalidateQueries(vaultsQueryKey)
           if (onBackupCompleted) {
-            onBackupCompleted();
-            return;
+            onBackupCompleted()
+            return
           }
-          navigate('vault');
+          navigate('vault')
         },
       }
-    );
-  };
+    )
+  }
 
   return (
     <VStack flexGrow gap={16}>
@@ -179,7 +179,7 @@ const VaultBackupPage: FC<VaultBackupPageProps> = ({
         </VStack>
       </PageSlice>
     </VStack>
-  );
-};
+  )
+}
 
-export default VaultBackupPage;
+export default VaultBackupPage

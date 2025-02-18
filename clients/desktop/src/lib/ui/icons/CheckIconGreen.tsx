@@ -18,4 +18,4 @@ export const CheckIconGreen = () => (
       </clipPath>
     </defs>
   </svg>
-);
+)

@@ -1,10 +1,10 @@
-import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse';
+import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
 
 type StartSessionInput = {
-  serverUrl: string;
-  sessionId: string;
-  devices: string[];
-};
+  serverUrl: string
+  sessionId: string
+  devices: string[]
+}
 
 export const startSession = async ({
   serverUrl,
@@ -17,9 +17,9 @@ export const startSession = async ({
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(devices),
-  });
+  })
 
-  await assertFetchResponse(response);
+  await assertFetchResponse(response)
 
-  return response;
-};
+  return response
+}

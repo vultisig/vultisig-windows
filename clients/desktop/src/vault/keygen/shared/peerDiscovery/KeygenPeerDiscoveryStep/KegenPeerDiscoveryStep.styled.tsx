@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Content = styled.div`
   flex: 1;
@@ -6,4 +6,4 @@ export const Content = styled.div`
   justify-content: center;
   align-items: center;
   gap: 40px;
-`;
+`

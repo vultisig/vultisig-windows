@@ -1,14 +1,14 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { Switch } from '../../lib/ui/inputs/switch';
-import { FlowPageHeader } from '../../ui/flow/FlowPageHeader';
-import { PageContent } from '../../ui/page/PageContent';
-import { useIsDklsLibEnabled } from '../state/isDklsLibEnabled';
+import { Switch } from '../../lib/ui/inputs/switch'
+import { FlowPageHeader } from '../../ui/flow/FlowPageHeader'
+import { PageContent } from '../../ui/page/PageContent'
+import { useIsDklsLibEnabled } from '../state/isDklsLibEnabled'
 
 export const ManageDklsPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const [isDklsLibEnabled, setIsDklsLibEnabled] = useIsDklsLibEnabled();
+  const [isDklsLibEnabled, setIsDklsLibEnabled] = useIsDklsLibEnabled()
 
   return (
     <>
@@ -21,5 +21,5 @@ export const ManageDklsPage = () => {
         />
       </PageContent>
     </>
-  );
-};
+  )
+}

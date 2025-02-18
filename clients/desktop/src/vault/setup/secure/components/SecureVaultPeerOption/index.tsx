@@ -1,28 +1,28 @@
-import { useRive } from '@rive-app/react-canvas';
-import { useTranslation } from 'react-i18next';
+import { useRive } from '@rive-app/react-canvas'
+import { useTranslation } from 'react-i18next'
 
-import { Match } from '../../../../../lib/ui/base/Match';
-import { CheckIconGreen } from '../../../../../lib/ui/icons/CheckIconGreen';
-import { HStack, VStack } from '../../../../../lib/ui/layout/Stack';
-import { ValueProp } from '../../../../../lib/ui/props';
-import { Text } from '../../../../../lib/ui/text';
+import { Match } from '../../../../../lib/ui/base/Match'
+import { CheckIconGreen } from '../../../../../lib/ui/icons/CheckIconGreen'
+import { HStack, VStack } from '../../../../../lib/ui/layout/Stack'
+import { ValueProp } from '../../../../../lib/ui/props'
+import { Text } from '../../../../../lib/ui/text'
 import {
   formatKeygenDeviceName,
   parseLocalPartyId,
-} from '../../../../keygen/utils/localPartyId';
-import { usePeersSelectionRecord } from '../../../../keysign/shared/state/selectedPeers';
+} from '../../../../keygen/utils/localPartyId'
+import { usePeersSelectionRecord } from '../../../../keysign/shared/state/selectedPeers'
 import {
   CheckIconWrapper,
   RiveWrapper,
   StyledText,
   Wrapper,
-} from './SecureVaultPeerOption.styled';
+} from './SecureVaultPeerOption.styled'
 
 type SecureVaultPeerOptionProps = {
-  isCurrentDevice: boolean;
-  deviceNumber: number;
-  shouldShowOptionalDevice: boolean;
-};
+  isCurrentDevice: boolean
+  deviceNumber: number
+  shouldShowOptionalDevice: boolean
+}
 
 export const SecureVaultPeerOption = ({
   value,
@@ -30,24 +30,24 @@ export const SecureVaultPeerOption = ({
   deviceNumber,
   shouldShowOptionalDevice,
 }: ValueProp<string> & SecureVaultPeerOptionProps) => {
-  const [record, setRecord] = usePeersSelectionRecord();
-  const { t } = useTranslation();
-  const isSelected = record[value];
-  const { deviceName, hash } = parseLocalPartyId(value);
-  const formattedDeviceName = formatKeygenDeviceName(deviceName);
+  const [record, setRecord] = usePeersSelectionRecord()
+  const { t } = useTranslation()
+  const isSelected = record[value]
+  const { deviceName, hash } = parseLocalPartyId(value)
+  const formattedDeviceName = formatKeygenDeviceName(deviceName)
   const { RiveComponent } = useRive({
     src: '/assets/animations/keygen-secure-vault/waiting-on-device.riv',
     autoplay: true,
-  });
+  })
 
   const handleClick = () => {
-    if (isCurrentDevice || !value) return;
+    if (isCurrentDevice || !value) return
 
     setRecord(prev => ({
       ...prev,
       [value]: !isSelected,
-    }));
-  };
+    }))
+  }
 
   return (
     <Wrapper
@@ -108,5 +108,5 @@ export const SecureVaultPeerOption = ({
         )}
       />
     </Wrapper>
-  );
-};
+  )
+}

@@ -1,16 +1,16 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { Panel } from '../../../lib/ui/panel/Panel';
-import { ChildrenProp } from '../../../lib/ui/props';
-import { Text } from '../../../lib/ui/text';
-import { useCurrentLocalPartyId } from '../state/currentLocalPartyId';
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Spinner } from '../../../lib/ui/loaders/Spinner'
+import { Panel } from '../../../lib/ui/panel/Panel'
+import { ChildrenProp } from '../../../lib/ui/props'
+import { Text } from '../../../lib/ui/text'
+import { useCurrentLocalPartyId } from '../state/currentLocalPartyId'
 
 export const PendingKeygenMessage = ({ children }: ChildrenProp) => {
-  const localPartyId = useCurrentLocalPartyId();
+  const localPartyId = useCurrentLocalPartyId()
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <Panel>
@@ -28,5 +28,5 @@ export const PendingKeygenMessage = ({ children }: ChildrenProp) => {
         </VStack>
       </VStack>
     </Panel>
-  );
-};
+  )
+}

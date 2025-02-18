@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface DialogProps {
-  isOpen: boolean;
-  title: string;
-  content: string;
-  onClose: () => void;
-  onOk: (passwd: string) => void;
+  isOpen: boolean
+  title: string
+  content: string
+  onClose: () => void
+  onOk: (passwd: string) => void
 }
 
 const ImportVaultDialog: React.FC<DialogProps> = ({
@@ -16,25 +16,25 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
   onClose,
   onOk,
 }) => {
-  const { t } = useTranslation();
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [passwd, setPasswd] = React.useState('');
+  const { t } = useTranslation()
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const [passwd, setPasswd] = React.useState('')
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+      inputRef.current.focus()
     }
-  }, [isOpen]); // Dependency array includes isVisible
+  }, [isOpen]) // Dependency array includes isVisible
 
   const handleClose = () => {
-    setPasswd('');
-    onClose();
-  };
+    setPasswd('')
+    onClose()
+  }
 
   const handleOk = () => {
-    onOk(passwd);
-    handleClose();
-  };
+    onOk(passwd)
+    handleClose()
+  }
 
   return isOpen ? (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -84,7 +84,7 @@ const ImportVaultDialog: React.FC<DialogProps> = ({
         )}
       </div>
     </div>
-  ) : null;
-};
+  ) : null
+}
 
-export default ImportVaultDialog;
+export default ImportVaultDialog

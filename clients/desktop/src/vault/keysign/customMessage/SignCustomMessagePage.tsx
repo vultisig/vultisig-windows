@@ -1,29 +1,29 @@
-import { create } from '@bufbuild/protobuf';
-import { CustomMessagePayloadSchema } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb';
-import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { create } from '@bufbuild/protobuf'
+import { CustomMessagePayloadSchema } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
+import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
-import { TextInput } from '../../../lib/ui/inputs/TextInput';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
-import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
-import { PageContent } from '../../../ui/page/PageContent';
-import { WithProgressIndicator } from '../shared/WithProgressIndicator';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
+import { TextInput } from '../../../lib/ui/inputs/TextInput'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
+import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
+import { PageContent } from '../../../ui/page/PageContent'
+import { WithProgressIndicator } from '../shared/WithProgressIndicator'
 
 export const SignCustomMessagePage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const navigate = useAppNavigate();
+  const navigate = useAppNavigate()
 
-  const [method, setMethod] = useState('');
-  const [message, setMessage] = useState('');
+  const [method, setMethod] = useState('')
+  const [message, setMessage] = useState('')
 
   const isDisabled = useMemo(() => {
-    if (!method) return t('method_required');
-    if (!message) return t('message_required');
-  }, [method, message, t]);
+    if (!method) return t('method_required')
+    if (!message) return t('message_required')
+  }, [method, message, t])
 
   return (
     <>
@@ -41,7 +41,7 @@ export const SignCustomMessagePage = () => {
                   }),
                 },
               },
-            });
+            })
           },
           isDisabled,
         })}
@@ -67,5 +67,5 @@ export const SignCustomMessagePage = () => {
         </Button>
       </PageContent>
     </>
-  );
-};
+  )
+}

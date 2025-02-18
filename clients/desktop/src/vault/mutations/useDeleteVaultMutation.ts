@@ -1,16 +1,16 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query'
 
-import { DeleteVault } from '../../../wailsjs/go/storage/Store';
-import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries';
-import { vaultsQueryKey } from '../queries/useVaultsQuery';
+import { DeleteVault } from '../../../wailsjs/go/storage/Store'
+import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries'
+import { vaultsQueryKey } from '../queries/useVaultsQuery'
 
 export const useDeleteVaultMutation = () => {
-  const invalidateQueries = useInvalidateQueries();
+  const invalidateQueries = useInvalidateQueries()
 
   return useMutation({
     mutationFn: async (publicKeyEcdsa: string) => {
-      await DeleteVault(publicKeyEcdsa);
-      await invalidateQueries(vaultsQueryKey);
+      await DeleteVault(publicKeyEcdsa)
+      await invalidateQueries(vaultsQueryKey)
     },
-  });
-};
+  })
+}

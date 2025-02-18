@@ -1,6 +1,6 @@
-import { css } from 'styled-components';
+import { css } from 'styled-components'
 
-import { toSizeUnit } from './toSizeUnit';
+import { toSizeUnit } from './toSizeUnit'
 
 export const absoluteOutline = (
   horizontalOffset: number | string,
@@ -13,5 +13,5 @@ export const absoluteOutline = (
     top: -${toSizeUnit(verticalOffset)};
     width: calc(100% + ${toSizeUnit(horizontalOffset)} * 2);
     height: calc(100% + ${toSizeUnit(verticalOffset)} * 2);
-  `;
-};
+  `
+}

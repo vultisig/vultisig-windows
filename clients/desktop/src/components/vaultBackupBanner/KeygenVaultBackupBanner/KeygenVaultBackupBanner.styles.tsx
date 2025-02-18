@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { Text } from '../../../lib/ui/text';
+import { Text } from '../../../lib/ui/text'
 
 export const Content = styled.div`
   width: 500px;
@@ -14,9 +14,9 @@ export const Content = styled.div`
     theme.colors.danger.withAlpha(0.2).toCssValue()};
   border-radius: 12px;
   color: ${({ theme }) => theme.colors.danger.toCssValue()};
-`;
+`
 
 export const FullWidthText = styled(Text)`
   flex: 1;
   text-align: center;
-`;
+`

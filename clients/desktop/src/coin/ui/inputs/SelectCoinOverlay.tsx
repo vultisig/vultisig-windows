@@ -1,11 +1,11 @@
-import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin';
-import { Coin } from '@core/chain/coin/Coin';
-import { useTranslation } from 'react-i18next';
+import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
+import { Coin } from '@core/chain/coin/Coin'
+import { useTranslation } from 'react-i18next'
 
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Modal } from '../../../lib/ui/modal';
-import { OnFinishProp, OptionsProp, ValueProp } from '../../../lib/ui/props';
-import { CoinOption } from './CoinOption';
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Modal } from '../../../lib/ui/modal'
+import { OnFinishProp, OptionsProp, ValueProp } from '../../../lib/ui/props'
+import { CoinOption } from './CoinOption'
 
 export const SelectCoinOverlay = ({
   onFinish,
@@ -14,7 +14,7 @@ export const SelectCoinOverlay = ({
 }: OnFinishProp<CoinKey, 'optional'> &
   OptionsProp<Coin> &
   Partial<ValueProp<CoinKey>>) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <Modal
@@ -25,7 +25,7 @@ export const SelectCoinOverlay = ({
     >
       <VStack gap={20}>
         {options.map(coin => {
-          const isActive = !!value && areEqualCoins(coin, value);
+          const isActive = !!value && areEqualCoins(coin, value)
 
           return (
             <CoinOption
@@ -33,12 +33,12 @@ export const SelectCoinOverlay = ({
               value={coin}
               isActive={isActive}
               onClick={() => {
-                onFinish(coin);
+                onFinish(coin)
               }}
             />
-          );
+          )
         })}
       </VStack>
     </Modal>
-  );
-};
+  )
+}

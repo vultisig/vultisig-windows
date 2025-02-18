@@ -173,4 +173,4 @@ export const LoadingIndicatorImage = () => (
       </filter>
     </defs>
   </svg>
-);
+)

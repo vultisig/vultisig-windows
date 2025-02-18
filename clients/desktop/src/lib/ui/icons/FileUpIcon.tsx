@@ -15,4 +15,4 @@ export const FileUpIcon = () => (
     <path d="M12 12v6" />
     <path d="m15 15-3-3-3 3" />
   </svg>
-);
+)

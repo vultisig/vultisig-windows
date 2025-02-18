@@ -7,42 +7,39 @@ import {
   UniqueIdentifier,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { ReactNode, useCallback, useId, useState } from 'react';
+} from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { ReactNode, useCallback, useId, useState } from 'react'
 
-import { ChildrenProp } from '../ui/props';
-import { DnDItem } from './DnDItem';
-import { DnDItemStatus } from './DnDItemStatus';
+import { ChildrenProp } from '../ui/props'
+import { DnDItem } from './DnDItem'
+import { DnDItemStatus } from './DnDItemStatus'
 
 export type ItemChangeParams = {
-  index: number;
-};
+  index: number
+}
 
-type RednerListProps = Record<string, any> & ChildrenProp;
+type RednerListProps = Record<string, any> & ChildrenProp
 
 type RenderListParams = {
-  props: RednerListProps;
-};
+  props: RednerListProps
+}
 
 type RenderItemParams<Item> = {
-  item: Item;
-  draggableProps?: Record<string, any>;
-  dragHandleProps?: Record<string, any>;
-  status: DnDItemStatus;
-};
+  item: Item
+  draggableProps?: Record<string, any>
+  dragHandleProps?: Record<string, any>
+  status: DnDItemStatus
+}
 
 export type DnDListProps<ItemId extends UniqueIdentifier, Item> = {
-  items: Item[];
-  getItemId: (item: Item) => ItemId;
-  onChange: (itemId: ItemId, params: ItemChangeParams) => void;
-  renderList: (params: RenderListParams) => ReactNode;
-  renderItem: (params: RenderItemParams<Item>) => ReactNode;
-};
+  items: Item[]
+  getItemId: (item: Item) => ItemId
+  onChange: (itemId: ItemId, params: ItemChangeParams) => void
+  renderList: (params: RenderListParams) => ReactNode
+  renderItem: (params: RenderItemParams<Item>) => ReactNode
+}
 
 export function DnDList<ItemId extends UniqueIdentifier, Item>({
   items,
@@ -51,33 +48,33 @@ export function DnDList<ItemId extends UniqueIdentifier, Item>({
   renderItem,
   renderList,
 }: DnDListProps<ItemId, Item>) {
-  const droppableId = useId();
-  const [activeItemId, setActiveItemId] = useState<ItemId | null>(null);
+  const droppableId = useId()
+  const [activeItemId, setActiveItemId] = useState<ItemId | null>(null)
 
   const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: {
       distance: 0.01,
     },
-  });
+  })
 
-  const sensors = useSensors(pointerSensor);
+  const sensors = useSensors(pointerSensor)
 
   const handleDragEnd = useCallback(
     ({ active, over }: DragEndEvent) => {
-      const itemId = shouldBePresent(activeItemId);
+      const itemId = shouldBePresent(activeItemId)
 
-      setActiveItemId(null);
+      setActiveItemId(null)
 
       if (!over || active.id === over.id) {
-        return;
+        return
       }
 
-      const index = items.findIndex(item => getItemId(item) === over.id);
+      const index = items.findIndex(item => getItemId(item) === over.id)
 
-      onChange(itemId, { index });
+      onChange(itemId, { index })
     },
     [activeItemId, getItemId, items, onChange]
-  );
+  )
 
   return (
     <DndContext
@@ -86,7 +83,7 @@ export function DnDList<ItemId extends UniqueIdentifier, Item>({
       onDragStart={({ active }) => setActiveItemId(active.id as ItemId)}
       onDragEnd={handleDragEnd}
       onDragCancel={() => {
-        setActiveItemId(null);
+        setActiveItemId(null)
       }}
     >
       <SortableContext
@@ -99,7 +96,7 @@ export function DnDList<ItemId extends UniqueIdentifier, Item>({
             children: (
               <>
                 {items.map(item => {
-                  const key = getItemId(item);
+                  const key = getItemId(item)
                   return (
                     <DnDItem
                       key={key}
@@ -113,7 +110,7 @@ export function DnDList<ItemId extends UniqueIdentifier, Item>({
                         })
                       }
                     />
-                  );
+                  )
                 })}
               </>
             ),
@@ -131,5 +128,5 @@ export function DnDList<ItemId extends UniqueIdentifier, Item>({
         </DragOverlay>
       </SortableContext>
     </DndContext>
-  );
+  )
 }

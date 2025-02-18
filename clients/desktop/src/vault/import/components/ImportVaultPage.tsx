@@ -1,11 +1,11 @@
-import { storage } from '../../../../wailsjs/go/models';
-import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion';
-import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer';
-import { VaultBackupResult } from '../VaultBakupResult';
-import { DecryptVaultStep } from './DecryptVaultStep';
-import { ProcessVaultContainer } from './ProcessVaultContainer';
-import { SaveImportedVaultStep } from './SaveImportedVaultStep';
-import { UploadBackupFileStep } from './UploadBackupFileStep';
+import { storage } from '../../../../wailsjs/go/models'
+import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion'
+import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer'
+import { VaultBackupResult } from '../VaultBakupResult'
+import { DecryptVaultStep } from './DecryptVaultStep'
+import { ProcessVaultContainer } from './ProcessVaultContainer'
+import { SaveImportedVaultStep } from './SaveImportedVaultStep'
+import { UploadBackupFileStep } from './UploadBackupFileStep'
 
 export const ImportVaultPage = () => {
   return (
@@ -34,5 +34,5 @@ export const ImportVaultPage = () => {
         />
       )}
     />
-  );
-};
+  )
+}

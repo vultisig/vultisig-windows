@@ -1,11 +1,11 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react'
 
-import { InputProps } from '../props';
+import { InputProps } from '../props'
 
 type InputDebounceProps<T> = InputProps<T> & {
-  render: (props: InputProps<T>) => ReactNode;
-  interval?: number;
-};
+  render: (props: InputProps<T>) => ReactNode
+  interval?: number
+}
 
 export function InputDebounce<T>({
   value,
@@ -13,17 +13,17 @@ export function InputDebounce<T>({
   interval = 300,
   render,
 }: InputDebounceProps<T>) {
-  const [currentValue, setCurrentValue] = useState<T>(value);
+  const [currentValue, setCurrentValue] = useState<T>(value)
 
   useEffect(() => {
-    if (currentValue === value) return;
+    if (currentValue === value) return
 
     const timeout = setTimeout(() => {
-      onChange(currentValue);
-    }, interval);
+      onChange(currentValue)
+    }, interval)
 
-    return () => clearTimeout(timeout);
-  }, [currentValue, interval, onChange, value]);
+    return () => clearTimeout(timeout)
+  }, [currentValue, interval, onChange, value])
 
   return (
     <>
@@ -32,5 +32,5 @@ export function InputDebounce<T>({
         onChange: setCurrentValue,
       })}
     </>
-  );
+  )
 }

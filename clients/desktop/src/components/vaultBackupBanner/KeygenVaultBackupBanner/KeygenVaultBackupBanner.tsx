@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { TriangleAlertIcon } from '../../../lib/ui/icons/TriangleAlertIcon';
-import { Text } from '../../../lib/ui/text';
-import { Content, FullWidthText } from './KeygenVaultBackupBanner.styles';
+import { TriangleAlertIcon } from '../../../lib/ui/icons/TriangleAlertIcon'
+import { Text } from '../../../lib/ui/text'
+import { Content, FullWidthText } from './KeygenVaultBackupBanner.styles'
 
 const KeygenVaultBackupBanner = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <Content data-testid="VaultBackupBanner-Content">
@@ -19,7 +19,7 @@ const KeygenVaultBackupBanner = () => {
       </FullWidthText>
       <TriangleAlertIcon height={24} width={24} />
     </Content>
-  );
-};
+  )
+}
 
-export default KeygenVaultBackupBanner;
+export default KeygenVaultBackupBanner

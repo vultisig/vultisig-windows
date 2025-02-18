@@ -1,23 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
-import { ChildrenProp } from '../lib/ui/props';
-import { useAppNavigate } from '../navigation/hooks/useAppNavigate';
-import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding';
+import { ChildrenProp } from '../lib/ui/props'
+import { useAppNavigate } from '../navigation/hooks/useAppNavigate'
+import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding'
 
 export const IncompleteOnboardingOnly = ({ children }: ChildrenProp) => {
-  const [hasCompletedOnboarding] = useHasFinishedOnboarding();
+  const [hasCompletedOnboarding] = useHasFinishedOnboarding()
 
-  const navigate = useAppNavigate();
+  const navigate = useAppNavigate()
 
   useEffect(() => {
     if (hasCompletedOnboarding) {
-      navigate('root');
+      navigate('root')
     }
-  }, [hasCompletedOnboarding, navigate]);
+  }, [hasCompletedOnboarding, navigate])
 
   if (hasCompletedOnboarding) {
-    return null;
+    return null
   }
 
-  return <>{children}</>;
-};
+  return <>{children}</>
+}

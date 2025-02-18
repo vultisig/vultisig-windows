@@ -7,4 +7,4 @@ export const MinusIcon = () => (
       d="M.75 1h10.5"
     />
   </svg>
-);
+)

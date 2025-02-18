@@ -1,35 +1,35 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react'
 
-import { EventsOff, EventsOn } from '../../../../wailsjs/runtime/runtime';
+import { EventsOff, EventsOn } from '../../../../wailsjs/runtime/runtime'
 
-export type KeygenStatus = 'prepareVault' | 'ecdsa' | 'eddsa';
+export type KeygenStatus = 'prepareVault' | 'ecdsa' | 'eddsa'
 
 type MatchKeygenSessionStatusProps = {
-  pending: () => ReactNode;
-  active: (status: KeygenStatus) => ReactNode;
-};
+  pending: () => ReactNode
+  active: (status: KeygenStatus) => ReactNode
+}
 
 export const MatchKeygenSessionStatus = ({
   pending,
   active,
 }: MatchKeygenSessionStatusProps) => {
-  const [status, setStatus] = useState<KeygenStatus | null>(null);
+  const [status, setStatus] = useState<KeygenStatus | null>(null)
 
   useEffect(() => {
-    const prepareVaultListenerName = 'PrepareVault';
-    const ecdsaListenerName = 'ECDSA';
-    const eddsaListenerName = 'EdDSA';
+    const prepareVaultListenerName = 'PrepareVault'
+    const ecdsaListenerName = 'ECDSA'
+    const eddsaListenerName = 'EdDSA'
 
-    EventsOn(prepareVaultListenerName, () => setStatus('prepareVault'));
-    EventsOn(ecdsaListenerName, () => setStatus('ecdsa'));
-    EventsOn(eddsaListenerName, () => setStatus('eddsa'));
+    EventsOn(prepareVaultListenerName, () => setStatus('prepareVault'))
+    EventsOn(ecdsaListenerName, () => setStatus('ecdsa'))
+    EventsOn(eddsaListenerName, () => setStatus('eddsa'))
 
     return () => {
-      EventsOff(prepareVaultListenerName);
-      EventsOff(ecdsaListenerName);
-      EventsOff(eddsaListenerName);
-    };
-  }, []);
+      EventsOff(prepareVaultListenerName)
+      EventsOff(ecdsaListenerName)
+      EventsOff(eddsaListenerName)
+    }
+  }, [])
 
-  return <>{status === null ? pending() : active(status)}</>;
-};
+  return <>{status === null ? pending() : active(status)}</>
+}

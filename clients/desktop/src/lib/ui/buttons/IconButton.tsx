@@ -1,36 +1,36 @@
-import { match } from '@lib/utils/match';
-import { ComponentProps, forwardRef, Ref } from 'react';
-import styled, { css } from 'styled-components';
+import { match } from '@lib/utils/match'
+import { ComponentProps, forwardRef, Ref } from 'react'
+import styled, { css } from 'styled-components'
 
-import { borderRadius } from '../css/borderRadius';
-import { centerContent } from '../css/centerContent';
-import { sameDimensions } from '../css/sameDimensions';
-import { toSizeUnit } from '../css/toSizeUnit';
-import { getColor, matchColor } from '../theme/getters';
-import { UnstyledButton } from './UnstyledButton';
+import { borderRadius } from '../css/borderRadius'
+import { centerContent } from '../css/centerContent'
+import { sameDimensions } from '../css/sameDimensions'
+import { toSizeUnit } from '../css/toSizeUnit'
+import { getColor, matchColor } from '../theme/getters'
+import { UnstyledButton } from './UnstyledButton'
 
-export const iconButtonSizes = ['s', 'm', 'l'] as const;
-export type IconButtonSize = (typeof iconButtonSizes)[number];
+export const iconButtonSizes = ['s', 'm', 'l'] as const
+export type IconButtonSize = (typeof iconButtonSizes)[number]
 
-export const iconButtonKinds = ['regular'] as const;
-export type IconButtonKind = (typeof iconButtonKinds)[number];
+export const iconButtonKinds = ['regular'] as const
+export type IconButtonKind = (typeof iconButtonKinds)[number]
 
 export const iconButtonSizeRecord: Record<IconButtonSize, number> = {
   s: 24,
   m: 32,
   l: 40,
-};
+}
 
 export const iconButtonIconSizeRecord: Record<IconButtonSize, number> = {
   s: 14,
   m: 16,
   l: 18,
-};
+}
 
 interface ContainerProps {
-  size: IconButtonSize;
-  kind: IconButtonKind;
-  isDisabled?: boolean;
+  size: IconButtonSize
+  kind: IconButtonKind
+  isDisabled?: boolean
 }
 
 const Container = styled(UnstyledButton)<ContainerProps>`
@@ -67,19 +67,19 @@ const Container = styled(UnstyledButton)<ContainerProps>`
 
   cursor: ${({ isDisabled }) => (isDisabled ? 'initial' : 'pointer')};
   opacity: ${({ isDisabled }) => (isDisabled ? 0.8 : 1)};
-`;
+`
 
 export type IconButtonProps = Omit<
   ComponentProps<typeof Container>,
   'size' | 'kind' | 'isDisabled'
 > & {
-  icon: React.ReactNode;
-  size?: IconButtonSize;
-  kind?: IconButtonKind;
-  title?: string;
-  as?: React.ElementType;
-  isDisabled?: boolean | string;
-};
+  icon: React.ReactNode
+  size?: IconButtonSize
+  kind?: IconButtonKind
+  title?: string
+  as?: React.ElementType
+  isDisabled?: boolean | string
+}
 
 export const IconButton = forwardRef(function IconButton(
   {
@@ -101,11 +101,11 @@ export const IconButton = forwardRef(function IconButton(
     isDisabled: !!isDisabled,
     onClick: isDisabled ? undefined : onClick,
     ...rest,
-  };
+  }
 
   return (
     <Container ref={ref} {...containerProps}>
       {icon}
     </Container>
-  );
-});
+  )
+})

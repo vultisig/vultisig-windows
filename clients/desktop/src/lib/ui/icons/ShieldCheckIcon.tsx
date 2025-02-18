@@ -21,5 +21,5 @@ const ShieldCheckIcon = ({ color = '#fff' }: { color?: string }) => (
       d="m13.438 7.5-4.584 4.375-2.291-2.188"
     />
   </svg>
-);
-export default ShieldCheckIcon;
+)
+export default ShieldCheckIcon

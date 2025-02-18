@@ -1,19 +1,19 @@
-import { motion } from 'framer-motion';
-import React from 'react';
+import { motion } from 'framer-motion'
+import React from 'react'
 import {
   components,
   MenuProps,
   OptionProps,
   SingleValueProps,
   StylesConfig,
-} from 'react-select';
-import styled from 'styled-components';
+} from 'react-select'
+import styled from 'styled-components'
 
-import { getChainEntityIconSrc } from '../../../../../chain/utils/getChainEntityIconSrc';
-import { Button } from '../../../../../lib/ui/buttons/Button';
-import { Input } from '../../../../../lib/ui/inputs/text-input/Input';
-import { Panel } from '../../../../../lib/ui/panel/Panel';
-import { getColor } from '../../../../../lib/ui/theme/getters';
+import { getChainEntityIconSrc } from '../../../../../chain/utils/getChainEntityIconSrc'
+import { Button } from '../../../../../lib/ui/buttons/Button'
+import { Input } from '../../../../../lib/ui/inputs/text-input/Input'
+import { Panel } from '../../../../../lib/ui/panel/Panel'
+import { getColor } from '../../../../../lib/ui/theme/getters'
 
 export const Container = styled.div`
   height: 100%;
@@ -21,7 +21,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 32px;
-`;
+`
 
 export const Form = styled.form`
   display: flex;
@@ -31,7 +31,7 @@ export const Form = styled.form`
   & > :first-child {
     padding: 8px;
   }
-`;
+`
 
 export const FormField = styled(Panel)`
   font-weight: 400;
@@ -40,14 +40,14 @@ export const FormField = styled(Panel)`
   display: flex;
   flex-direction: column;
   gap: 12px;
-`;
+`
 
 export const FormFieldLabel = styled.label`
   font-weight: 500;
   color: ${getColor('contrast')};
   display: inline-block;
   margin-bottom: 6px;
-`;
+`
 
 export const FormInput = styled(Input)`
   color: ${getColor('contrast')};
@@ -57,14 +57,14 @@ export const FormInput = styled(Input)`
     font-size: 13px;
     color: ${getColor('textShy')};
   }
-`;
+`
 
 export type ChainOption = {
-  value: string;
-  label: string;
-  logo: string;
-  isLastOption: boolean;
-};
+  value: string
+  label: string
+  logo: string
+  isLastOption: boolean
+}
 
 export const customSelectStyles: StylesConfig<ChainOption, false> = {
   control: base => ({
@@ -116,10 +116,10 @@ export const customSelectStyles: StylesConfig<ChainOption, false> = {
     ...base,
     padding: '0',
   }),
-};
+}
 
 export const customSelectMenu = (props: MenuProps<ChainOption, false>) => {
-  const { children, innerProps } = props;
+  const { children, innerProps } = props
   return (
     <motion.div
       {...(innerProps as any)}
@@ -130,11 +130,11 @@ export const customSelectMenu = (props: MenuProps<ChainOption, false>) => {
     >
       {children}
     </motion.div>
-  );
-};
+  )
+}
 
 export const customSelectOption = (props: OptionProps<ChainOption, false>) => {
-  const iconSrc = getChainEntityIconSrc(props.data.value);
+  const iconSrc = getChainEntityIconSrc(props.data.value)
   return (
     <components.Option {...props}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -146,13 +146,13 @@ export const customSelectOption = (props: OptionProps<ChainOption, false>) => {
         {props.data.label}
       </div>
     </components.Option>
-  );
-};
+  )
+}
 
 export const customSingleValue = (
   props: SingleValueProps<ChainOption, false>
 ) => {
-  const iconSrc = getChainEntityIconSrc(props.data.value);
+  const iconSrc = getChainEntityIconSrc(props.data.value)
   return (
     <components.SingleValue {...props}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -164,9 +164,9 @@ export const customSingleValue = (
         {props.data.label}
       </div>
     </components.SingleValue>
-  );
-};
+  )
+}
 
 export const AddButton = styled(Button)`
   width: 100%;
-`;
+`

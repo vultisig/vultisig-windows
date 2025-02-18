@@ -14,20 +14,20 @@ import {
   useInteractions,
   useRole,
   useTransitionStyles,
-} from '@floating-ui/react';
-import { ReactNode, useRef, useState } from 'react';
-import styled from 'styled-components';
+} from '@floating-ui/react'
+import { ReactNode, useRef, useState } from 'react'
+import styled from 'styled-components'
 
-import { getColor } from '../theme/getters';
+import { getColor } from '../theme/getters'
 
 export interface RenderOpenerProps extends Record<string, unknown> {
-  ref: (node: ReferenceType | null) => void;
+  ref: (node: ReferenceType | null) => void
 }
 
 interface TooltipProps {
-  content?: ReactNode;
-  renderOpener: (props: RenderOpenerProps) => ReactNode;
-  placement?: Placement;
+  content?: ReactNode
+  renderOpener: (props: RenderOpenerProps) => ReactNode
+  placement?: Placement
 }
 
 const Container = styled.div`
@@ -38,16 +38,16 @@ const Container = styled.div`
   font-size: 14px;
   font-weight: 500;
   max-width: 320px;
-`;
+`
 
 const Arrow = styled(FloatingArrow)`
   fill: ${getColor('contrast')};
-`;
+`
 
 export const Tooltip = ({ content, renderOpener, placement }: TooltipProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
-  const arrowRef = useRef(null);
+  const arrowRef = useRef(null)
 
   const {
     refs: { setReference, setFloating },
@@ -66,26 +66,26 @@ export const Tooltip = ({ content, renderOpener, placement }: TooltipProps) => {
       }),
     ],
     whileElementsMounted: autoUpdate,
-  });
+  })
 
-  const hover = useHover(context, { move: false });
-  const focus = useFocus(context);
-  const dismiss = useDismiss(context);
-  const role = useRole(context, { role: 'tooltip' });
+  const hover = useHover(context, { move: false })
+  const focus = useFocus(context)
+  const dismiss = useDismiss(context)
+  const role = useRole(context, { role: 'tooltip' })
 
   const { styles: transitionStyles } = useTransitionStyles(context, {
     initial: {
       opacity: 0,
       transform: 'scale(0.8)',
     },
-  });
+  })
 
   const { getReferenceProps, getFloatingProps } = useInteractions([
     hover,
     focus,
     dismiss,
     role,
-  ]);
+  ])
 
   return (
     <>
@@ -103,5 +103,5 @@ export const Tooltip = ({ content, renderOpener, placement }: TooltipProps) => {
         </div>
       )}
     </>
-  );
-};
+  )
+}

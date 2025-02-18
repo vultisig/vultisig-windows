@@ -1,4 +1,4 @@
-import { Chain } from '@core/chain/Chain';
+import { Chain } from '@core/chain/Chain'
 
 export const oneInchSwapEnabledChains = [
   Chain.Ethereum,
@@ -9,6 +9,6 @@ export const oneInchSwapEnabledChains = [
   Chain.Optimism,
   Chain.Polygon,
   Chain.Base,
-] as const;
+] as const
 
-export type OneInchSwapEnabledChain = (typeof oneInchSwapEnabledChains)[number];
+export type OneInchSwapEnabledChain = (typeof oneInchSwapEnabledChains)[number]

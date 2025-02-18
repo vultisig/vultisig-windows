@@ -1,10 +1,10 @@
-import { createFile } from './createFile';
-import { formatCode } from './formatCode';
+import { createFile } from './createFile'
+import { formatCode } from './formatCode'
 
 interface CreateJsonFileParams {
-  directory: string;
-  fileName: string;
-  content: string;
+  directory: string
+  fileName: string
+  content: string
 }
 
 export const createJsonFile = async ({
@@ -12,17 +12,17 @@ export const createJsonFile = async ({
   fileName,
   content,
 }: CreateJsonFileParams) => {
-  const extension = 'json';
+  const extension = 'json'
 
   const code = await formatCode({
     extension,
     content,
-  });
+  })
 
   createFile({
     directory,
     fileName,
     content: code,
     extension,
-  });
-};
+  })
+}

@@ -18,4 +18,4 @@ export const CircleInfoIcon = () => (
       d="M12 7.375h-.125v1.25h1.25v-1.25H12Z"
     />
   </svg>
-);
+)

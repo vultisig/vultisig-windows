@@ -1,28 +1,28 @@
-import { VaultBackupExtension } from '../VaultBackupExtension';
-import { VaultBackupResult } from '../VaultBakupResult';
-import { fromDatBackupString } from './fromDatBackupString';
-import { vaultContainerFromString } from './vaultContainerFromString';
+import { VaultBackupExtension } from '../VaultBackupExtension'
+import { VaultBackupResult } from '../VaultBakupResult'
+import { fromDatBackupString } from './fromDatBackupString'
+import { vaultContainerFromString } from './vaultContainerFromString'
 
 type Input = {
-  extension: VaultBackupExtension;
-  value: ArrayBuffer;
-};
+  extension: VaultBackupExtension
+  value: ArrayBuffer
+}
 
 export const vaultBackupResultFromFileContent = ({
   value,
   extension,
 }: Input): VaultBackupResult => {
-  const valueAsString = new TextDecoder().decode(value);
+  const valueAsString = new TextDecoder().decode(value)
 
   if (extension === 'dat') {
     try {
-      const vault = fromDatBackupString(valueAsString);
+      const vault = fromDatBackupString(valueAsString)
 
-      return { vault };
+      return { vault }
     } catch {
-      return { encryptedVault: value };
+      return { encryptedVault: value }
     }
   }
 
-  return { vaultContainer: vaultContainerFromString(valueAsString) };
-};
+  return { vaultContainer: vaultContainerFromString(valueAsString) }
+}

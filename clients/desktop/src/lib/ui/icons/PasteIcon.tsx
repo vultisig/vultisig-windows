@@ -13,4 +13,4 @@ export const PasteIcon = () => (
       strokeWidth="1.5"
     />
   </svg>
-);
+)

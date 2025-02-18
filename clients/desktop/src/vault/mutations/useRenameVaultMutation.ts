@@ -1,8 +1,8 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query'
 
-import { storage } from '../../../wailsjs/go/models';
-import { UpdateVaultName } from '../../../wailsjs/go/storage/Store';
-import { getStorageVaultId } from '../utils/storageVault';
+import { storage } from '../../../wailsjs/go/models'
+import { UpdateVaultName } from '../../../wailsjs/go/storage/Store'
+import { getStorageVaultId } from '../utils/storageVault'
 
 export const useRenameVaultMutation = () => {
   return useMutation({
@@ -10,10 +10,10 @@ export const useRenameVaultMutation = () => {
       vault,
       newName,
     }: {
-      vault: storage.Vault;
-      newName: string;
+      vault: storage.Vault
+      newName: string
     }) => {
-      await UpdateVaultName(getStorageVaultId(vault), newName);
+      await UpdateVaultName(getStorageVaultId(vault), newName)
     },
-  });
-};
+  })
+}

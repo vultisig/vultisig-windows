@@ -1,14 +1,14 @@
-import { ActionProp, MessageProp, TitleProp } from '../../lib/ui/props';
-import { PageHeader } from '../page/PageHeader';
-import { PageHeaderBackButton } from '../page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../page/PageHeaderTitle';
-import { FlowErrorPageContent } from './FlowErrorPageContent';
+import { ActionProp, MessageProp, TitleProp } from '../../lib/ui/props'
+import { PageHeader } from '../page/PageHeader'
+import { PageHeaderBackButton } from '../page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../page/PageHeaderTitle'
+import { FlowErrorPageContent } from './FlowErrorPageContent'
 
 type FullPageFlowErrorStateProps = TitleProp &
   Partial<ActionProp> &
   MessageProp & {
-    errorMessage?: string;
-  };
+    errorMessage?: string
+  }
 
 export const FullPageFlowErrorState = ({
   title,
@@ -28,5 +28,5 @@ export const FullPageFlowErrorState = ({
         message={errorMessage}
       />
     </>
-  );
-};
+  )
+}

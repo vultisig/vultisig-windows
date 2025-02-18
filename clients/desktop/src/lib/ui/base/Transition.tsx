@@ -1,19 +1,19 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState } from 'react'
 
-import { useTimeout } from '../hooks/useTimeout';
+import { useTimeout } from '../hooks/useTimeout'
 
 type TransitionProps = {
-  from: ReactNode;
-  to: ReactNode;
-  delay: number;
-};
+  from: ReactNode
+  to: ReactNode
+  delay: number
+}
 
 export const Transition = ({ from, to, delay }: TransitionProps) => {
-  const [hasTransitioned, setHasTransitioned] = useState(false);
+  const [hasTransitioned, setHasTransitioned] = useState(false)
 
   useTimeout(() => {
-    setHasTransitioned(true);
-  }, delay);
+    setHasTransitioned(true)
+  }, delay)
 
-  return <>{hasTransitioned ? to : from}</>;
-};
+  return <>{hasTransitioned ? to : from}</>
+}

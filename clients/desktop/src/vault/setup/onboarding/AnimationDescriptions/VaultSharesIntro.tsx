@@ -1,17 +1,17 @@
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility';
-import { GradientText, Text } from '../../../../lib/ui/text';
+import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility'
+import { GradientText, Text } from '../../../../lib/ui/text'
 
 const TextWrapper = styled.div`
   margin-inline: auto;
   max-width: 800px;
   text-align: center;
-`;
+`
 
 export const VaultSharesIntro = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <AnimatedVisibility>
@@ -27,5 +27,5 @@ export const VaultSharesIntro = () => {
         </Text>
       </TextWrapper>
     </AnimatedVisibility>
-  );
-};
+  )
+}

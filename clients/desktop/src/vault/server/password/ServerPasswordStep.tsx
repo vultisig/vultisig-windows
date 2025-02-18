@@ -1,29 +1,29 @@
-import { useMutation } from '@tanstack/react-query';
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
-import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { OnForwardProp } from '../../../lib/ui/props';
-import { InfoBlock } from '../../../lib/ui/status/InfoBlock';
-import { Text } from '../../../lib/ui/text';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { getVaultFromServer } from '../../fast/api/getVaultFromServer';
-import { useCurrentVault } from '../../state/currentVault';
-import { getStorageVaultId } from '../../utils/storageVault';
-import { useVaultPassword } from './state/password';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
+import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { OnForwardProp } from '../../../lib/ui/props'
+import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
+import { Text } from '../../../lib/ui/text'
+import { PageContent } from '../../../ui/page/PageContent'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { getVaultFromServer } from '../../fast/api/getVaultFromServer'
+import { useCurrentVault } from '../../state/currentVault'
+import { getStorageVaultId } from '../../utils/storageVault'
+import { useVaultPassword } from './state/password'
 
 export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const [password, setPassword] = useVaultPassword();
+  const [password, setPassword] = useVaultPassword()
 
-  const vault = useCurrentVault();
+  const vault = useCurrentVault()
 
   const { mutate, error, isPending } = useMutation({
     mutationFn: async () =>
@@ -32,13 +32,13 @@ export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
         password,
       }),
     onSuccess: onForward,
-  });
+  })
 
   const isDisabled = useMemo(() => {
     if (!password) {
-      return t('password_required');
+      return t('password_required')
     }
-  }, [password, t]);
+  }, [password, t])
 
   return (
     <>
@@ -70,5 +70,5 @@ export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
         </VStack>
       </PageContent>
     </>
-  );
-};
+  )
+}

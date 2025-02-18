@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { SVGProps } from 'react'
 
 export const ServerIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -121,4 +121,4 @@ export const ServerIcon = (props: SVGProps<SVGSVGElement>) => (
       </clipPath>
     </defs>
   </svg>
-);
+)

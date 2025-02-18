@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import { motion } from 'framer-motion'
+import styled from 'styled-components'
 
-import { Text } from '../../../../../../lib/ui/text';
-import { getColor } from '../../../../../../lib/ui/theme/getters';
+import { Text } from '../../../../../../lib/ui/text'
+import { getColor } from '../../../../../../lib/ui/theme/getters'
 
 export const Container = styled.div`
   height: 100%;
@@ -10,11 +10,11 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 32px;
-`;
+`
 
 export const ListItem = styled(motion.button)<{
-  isEditModeOn: boolean;
-  isCurrentlyBeingDragged: boolean;
+  isEditModeOn: boolean
+  isCurrentlyBeingDragged: boolean
 }>`
   border-radius: 12px;
   padding: 16px;
@@ -35,43 +35,43 @@ export const ListItem = styled(motion.button)<{
   grid-template-columns: fit-content(200px) 1fr fit-content(200px);
   grid-template-rows: 1fr 1fr;
   column-gap: 8px;
-`;
+`
 
 export const ItemText = styled(Text)`
   font-size: 14px;
-`;
+`
 
 export const ColumnOneBothRowsItem = styled(ItemText)`
   grid-column: 1;
   grid-row: 1 / span 2;
   align-self: center;
-`;
+`
 
 export const ColumnTwoRowOneItem = styled(ItemText)`
   grid-column: 2;
   grid-row: 1;
   text-align: start;
-`;
+`
 
 export const ColumnTwoRowTwoItem = styled(ItemText)`
   grid-column: 2;
   grid-row: 2;
   text-align: start;
-`;
+`
 
 export const ColumnThreeRowOneItem = styled(ItemText)`
   grid-column: 3;
   grid-row: 1;
-`;
+`
 
 export const ModifyButtonWrapper = styled(motion.div)`
   display: grid;
   place-items: center;
-`;
+`
 
 export const ItemWrapper = styled(motion.div)`
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-`;
+`

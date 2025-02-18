@@ -1,27 +1,27 @@
-import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility';
-import { GradientText, Text } from '../../../lib/ui/text';
+import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility'
+import { GradientText, Text } from '../../../lib/ui/text'
 
-const DELAY_BEFORE_NEXT_STEP_IN_MS = 500;
+const DELAY_BEFORE_NEXT_STEP_IN_MS = 500
 
 type OnboardingGreetingProps = {
-  onCompleteGreeting: () => void;
-};
+  onCompleteGreeting: () => void
+}
 
 const Wrapper = styled.div`
   position: fixed;
   inset: 0;
   display: grid;
   place-items: center;
-`;
+`
 
 export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
   onCompleteGreeting,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <Wrapper data-testid="OnboardingGreeting-Wrapper">
@@ -41,5 +41,5 @@ export const OnboardingGreeting: FC<OnboardingGreetingProps> = ({
         </Text>
       </AnimatedVisibility>
     </Wrapper>
-  );
-};
+  )
+}

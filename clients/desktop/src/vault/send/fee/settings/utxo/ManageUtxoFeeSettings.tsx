@@ -2,57 +2,57 @@ import {
   defaultFeePriority,
   feePriorities,
   FeePriority,
-} from '@core/chain/tx/fee/FeePriority';
-import { adjustByteFee } from '@core/chain/tx/fee/utxo/adjustByteFee';
-import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
-import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+} from '@core/chain/tx/fee/FeePriority'
+import { adjustByteFee } from '@core/chain/tx/fee/utxo/adjustByteFee'
+import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
+import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps';
-import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput';
-import { InputContainer } from '../../../../../lib/ui/inputs/InputContainer';
-import { InputLabel } from '../../../../../lib/ui/inputs/InputLabel';
-import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput';
-import { VStack } from '../../../../../lib/ui/layout/Stack';
-import { Modal } from '../../../../../lib/ui/modal';
-import { OnCloseProp } from '../../../../../lib/ui/props';
-import { useSendChainSpecific } from '../../SendChainSpecificProvider';
-import { useFeeSettings } from '../state/feeSettings';
+import { Button } from '../../../../../lib/ui/buttons/Button'
+import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps'
+import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput'
+import { InputContainer } from '../../../../../lib/ui/inputs/InputContainer'
+import { InputLabel } from '../../../../../lib/ui/inputs/InputLabel'
+import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput'
+import { VStack } from '../../../../../lib/ui/layout/Stack'
+import { Modal } from '../../../../../lib/ui/modal'
+import { OnCloseProp } from '../../../../../lib/ui/props'
+import { useSendChainSpecific } from '../../SendChainSpecificProvider'
+import { useFeeSettings } from '../state/feeSettings'
 
 type FormShape = {
-  priority: FeePriority | number | null;
-};
+  priority: FeePriority | number | null
+}
 
 export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const [persistentValue, setPersistentValue] =
-    useFeeSettings<UtxoFeeSettings>();
+    useFeeSettings<UtxoFeeSettings>()
 
-  const chainSpecific = useSendChainSpecific();
+  const chainSpecific = useSendChainSpecific()
 
   const { byteFee } = getDiscriminatedUnionValue(
     chainSpecific,
     'case',
     'value',
     'utxoSpecific'
-  );
+  )
 
   const [value, setValue] = useState<FormShape>(
     () =>
       persistentValue ?? {
         priority: defaultFeePriority,
       }
-  );
+  )
 
   const isDisabled = useMemo(() => {
     if (!value.priority) {
-      return t('network_rate_required');
+      return t('network_rate_required')
     }
-  }, [t, value.priority]);
+  }, [t, value.priority])
 
   return (
     <Modal
@@ -61,8 +61,8 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
         onSubmit: () => {
           setPersistentValue({
             priority: shouldBePresent(value.priority),
-          });
-          onClose();
+          })
+          onClose()
         },
         onClose,
         isDisabled,
@@ -98,5 +98,5 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
         />
       </VStack>
     </Modal>
-  );
-};
+  )
+}

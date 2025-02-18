@@ -61,4 +61,4 @@ export const ProductSimpleLogo = () => (
       strokeWidth="0.127805"
     />
   </svg>
-);
+)
