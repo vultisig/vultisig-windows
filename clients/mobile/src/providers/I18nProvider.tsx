@@ -2,7 +2,7 @@ import { FC, PropsWithChildren, useEffect } from 'react'
 import { I18nextProvider } from 'react-i18next'
 
 import { useAppLanguage } from '../hooks/useAppLanguage'
-import i18nInstance from './config'
+import i18nInstance from '../i18n/config'
 
 export const I18nProvider: FC<PropsWithChildren> = ({ children }) => {
   const [language] = useAppLanguage()
