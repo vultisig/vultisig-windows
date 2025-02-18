@@ -473,6 +473,7 @@ export const hr = {
     },
     preparingVault: 'Tárca előkészítése',
     generatingECDSAKey: 'ECDSA kulcs generálása',
+    generatingEDDSAKey: 'EdDSA kulcs generálása',
     createVault: {
       multiFactor: {
         descriptionOne: 'Többfaktoros biztonság,',

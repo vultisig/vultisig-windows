@@ -3,7 +3,7 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
 import { useCallback } from 'react';
 
 import { GeneralSwapQuote } from '../../../chain/swap/general/GeneralSwapQuote';
-import { nativeSwapDecimals } from '../../../chain/swap/native/config';
+import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
 import { SwapQuote } from '../../../chain/swap/quote/SwapQuote';
 import { useTransformQueryData } from '../../../lib/ui/query/hooks/useTransformQueryData';
 import { useCurrentVaultCoin } from '../../state/currentVault';
@@ -21,13 +21,16 @@ export const useSwapOutputAmountQuery = () => {
       swapQuote => {
         return matchRecordUnion<SwapQuote, number>(swapQuote, {
           native: ({ expected_amount_out }) =>
-            fromChainAmount(expected_amount_out, nativeSwapDecimals),
+            fromChainAmount(
+              expected_amount_out,
+              getNativeSwapDecimals(toCoinKey)
+            ),
           general: (quote: GeneralSwapQuote) => {
             return fromChainAmount(quote.dstAmount, toCoin.decimals);
           },
         });
       },
-      [toCoin.decimals]
+      [toCoin.decimals, toCoinKey]
     )
   );
 };
