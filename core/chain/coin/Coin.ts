@@ -11,6 +11,7 @@ export type Coin = CoinKey & {
   decimals: number;
   ticker: string;
   logo: string;
+  cmcId?: number;
 };
 
 export type CoinAmount = {
