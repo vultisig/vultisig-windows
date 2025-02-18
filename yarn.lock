@@ -1566,11 +1566,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@core/keygen@workspace:core/keygen":
+  version: 0.0.0-use.local
+  resolution: "@core/keygen@workspace:core/keygen"
+  languageName: unknown
+  linkType: soft
+
 "@core/keysign@workspace:core/keysign":
   version: 0.0.0-use.local
   resolution: "@core/keysign@workspace:core/keysign"
   dependencies:
     "@solana/web3.js": "npm:^2.0.0"
+  languageName: unknown
+  linkType: soft
+
+"@core/mpc@workspace:core/mpc":
+  version: 0.0.0-use.local
+  resolution: "@core/mpc@workspace:core/mpc"
   languageName: unknown
   linkType: soft
 

@@ -14,6 +14,7 @@ export enum PersistentStateKey {
   FavouriteTokens = 'favouriteTokens',
   DefaultChains = 'defaultChains',
   HasAutoDiscoveryBeenDoneForChain = 'HasAutoDiscoveryBeenDoneForChain',
+  IsDklsLibEnabled = 'isDklsLibEnabled',
 }
 
 const persistentStorage =

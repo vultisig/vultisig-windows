@@ -1,11 +1,12 @@
 import { create } from '@bufbuild/protobuf';
 import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt';
-import { LibType } from '@core/communication/vultisig/keygen/v1/lib_type_message_pb';
 import {
   Vault,
   Vault_KeyShareSchema,
   VaultSchema,
 } from '@core/communication/vultisig/vault/v1/vault_pb';
+import { mpcLibName } from '@core/mpc/mpcLibName';
+import { mirrorRecord } from '@lib/utils/record/mirrorRecord';
 import { convertDuration } from '@lib/utils/time/convertDuration';
 
 import { storage } from '../../../wailsjs/go/models';
@@ -23,7 +24,7 @@ export const toStorageVault = ({
   keyShares,
   localPartyId,
   resharePrefix,
-  libType = LibType.GG20,
+  libType,
 }: Vault): storage.Vault => ({
   name: name,
   public_key_ecdsa: publicKeyEcdsa,
@@ -42,7 +43,7 @@ export const toStorageVault = ({
   order: 0,
   is_backed_up: true,
   coins: [],
-  lib_type: LibType[libType] ?? 'GG20',
+  lib_type: mpcLibName[libType],
   convertValues: () => {},
 });
 
@@ -85,5 +86,5 @@ export const fromStorageVault = (vault: storage.Vault): Vault =>
       })
     ),
     resharePrefix: vault.reshare_prefix,
-    libType: LibType[vault.lib_type as keyof typeof LibType] ?? LibType.GG20,
+    libType: mirrorRecord(mpcLibName)[vault.lib_type],
   });
