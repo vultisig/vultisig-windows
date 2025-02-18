@@ -774,4 +774,5 @@ export const en = {
   to_asset: 'To Asset',
   allowance_spender: 'Allowance spender',
   allowance_amount: 'Allowance amount',
+  enable_dkls: 'Enable DKLS',
 };

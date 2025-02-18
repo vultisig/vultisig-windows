@@ -5,6 +5,7 @@ import { DeeplinkPage } from './deeplink/components/DeeplinkPage';
 import { ErrorBoundary } from './errors/components/ErrorBoundary';
 import { FullSizeErrorFallback } from './errors/components/FullSizeErrorFallback';
 import { LauncherObserver } from './launcher/components/LauncherObserver';
+import { ManageDklsPage } from './mpc/dkls/ManageDklsPage';
 import { appPaths } from './navigation';
 import { OnboardingPage } from './onboarding/components/OnboardingPage';
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly';
@@ -53,7 +54,6 @@ import { ManageVaultFolderPage } from './vaults/folder/manage/ManageVaultFolderP
 import { VaultFolderPage } from './vaults/folder/VaultFolderPage';
 import { CreateVaultFolderPage } from './vaults/folders/create/CreateVaultFolderPage';
 import { ManageVaultsPage } from './vaults/manage/ManageVaultsPage';
-
 const Root = () => (
   <ErrorBoundary renderFallback={props => <FullSizeErrorFallback {...props} />}>
     <LauncherObserver />
@@ -364,6 +364,10 @@ export const router = createBrowserRouter([
       {
         path: appPaths.signCustomMessage,
         element: <SignCustomMessagePage />,
+      },
+      {
+        path: appPaths.dkls,
+        element: <ManageDklsPage />,
       },
     ],
   },
