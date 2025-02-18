@@ -39,7 +39,7 @@ export const getThorPreSignedInputData: PreSignedInputDataResolver<
     const toAmount = Number(keysignPayload.toAmount || "0");
     if (toAmount > 0) {
       thorchainCoin.amount = keysignPayload.toAmount;
-      thorchainCoin.decimals =  new Long(8);
+      thorchainCoin.decimals =  new Long(coin.decimals);
     }
 
     message = [
