@@ -32,7 +32,7 @@ export const SlidesLoader = () => {
       eddsa: { progress: 0.9, checkedSteps: 3 },
     };
 
-    const { progress, checkedSteps = 0 } = steps[value || 'loading'];
+    const { progress, checkedSteps } = steps[value || 'loading'];
     console.log(value);
 
     return (
