@@ -486,6 +486,7 @@ export const de = {
     },
     preparingVault: 'Tresor wird vorbereitet',
     generatingECDSAKey: 'ECDSA-Schlüssel wird generiert',
+    generatingEDDSAKey: 'Generiere EdDSA-Schlüssel',
     createVault: {
       multiFactor: {
         descriptionOne: 'Mehrfaktor-Sicherheit,',
