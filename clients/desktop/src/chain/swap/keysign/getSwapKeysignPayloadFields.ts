@@ -62,7 +62,6 @@ export const getSwapKeysignPayloadFields = ({
     },
     native: quote => {
       const { memo } = quote;
-      console.log('fromCoin', fromCoin);
       if (
         isOneOf(fromCoin.chain, Object.values(EvmChain)) &&
         !isFeeCoin(fromCoin)
@@ -91,7 +90,6 @@ export const getSwapKeysignPayloadFields = ({
         toAddress: isDeposit ? '' : shouldBePresent(quote.inbound_address),
         memo,
       };
-      console.log("result", result);
       return result;
     },
   });
