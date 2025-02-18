@@ -1,12 +1,11 @@
 import { create } from '@bufbuild/protobuf';
 import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt';
+import { toLibType } from '@core/communication/utils/libType';
 import {
   Vault_KeyShareSchema,
   VaultSchema,
 } from '@core/communication/vultisig/vault/v1/vault_pb';
-import { defaultMpcLib } from '@core/mpc/config';
-import { mpcLibName } from '@core/mpc/mpcLibName';
-import { mirrorRecord } from '@lib/utils/record/mirrorRecord';
+import { defaultMpcLib } from '@core/mpc/mpcLib';
 import { convertDuration } from '@lib/utils/time/convertDuration';
 
 import { storage } from '../../../../wailsjs/go/models';
@@ -51,7 +50,7 @@ export const fromDatBackup = (backup: DatBackup): storage.Vault => {
     hexChainCode: backup.hexChainCode,
     localPartyId: backup.localPartyID,
     keyShares,
-    libType: mirrorRecord(mpcLibName)[backup.libType ?? defaultMpcLib],
+    libType: toLibType(backup.libType ?? defaultMpcLib),
   });
 
   return toStorageVault(vault);
