@@ -84,7 +84,7 @@ class MessagePuller {
             throw TssRuntimeError("invalid http response")
         }
         
-        if httpResponse.statusCode >= 200 && httpResponse.statusCode <= 299 {
+        if httpResponse.statusCode < 200 || httpResponse.statusCode >= 300 {
             throw TssRuntimeError("invalid response code: \(httpResponse.statusCode)")
         }
         

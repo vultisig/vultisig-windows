@@ -9,6 +9,11 @@
 import Foundation
 import OSLog
 
+private struct Constants {
+    static let timeout: TimeInterval = 30
+    static let maxRetries = 3
+    static let retryDelay: TimeInterval = 1
+}
 class KeygenVerify: ObservableObject {
     private let logger = Logger(subsystem: "keygen-verify", category: "tss")
     let serverURL: String
@@ -23,33 +28,44 @@ class KeygenVerify: ObservableObject {
         self.keygenCommittee = keygenCommittee
     }
     
-    func markLocalPartyComplete() async {
+    func markLocalPartyCompleteWithRetry() async {
+        var retryCount = 0
+        for _ in 0..<Constants.maxRetries {
+            do {
+                try await markLocalPartyComplete()
+                return
+            } catch {
+                logger.error("failed to mark local party complete, retrying in \(Constants.retryDelay) seconds...")
+            }
+            retryCount += 1
+        }
+    }
+    
+    func markLocalPartyComplete() async throws{
         let urlString = "\(self.serverURL)/complete/\(self.sessionID)"
         let body = [self.localPartyID]
-        do {
-            guard let url = URL(string: urlString) else {
-                throw TssRuntimeError("invalid url: \(urlString)")
-            }
-            let jsonData = try JSONEncoder().encode(body)
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = jsonData
-            let (_, response) = try await URLSession.shared.data(for: request)
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                throw TssRuntimeError("invalid response")
-            }
-            
-            switch httpResponse.statusCode {
-            case 200...299:
-                return
-            default:
-                throw TssRuntimeError("unexpected status code: \(httpResponse.statusCode)")
-            }
-        } catch {
-            self.logger.error("Failed to mark local party keygen complete, error:\(error)")
+        guard let url = URL(string: urlString) else {
+            throw TssRuntimeError("invalid url: \(urlString)")
         }
+        let jsonData = try JSONEncoder().encode(body)
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = Constants.timeout
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        let (_, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw TssRuntimeError("invalid response")
+        }
+        
+        switch httpResponse.statusCode {
+        case 200...299:
+            return
+        default:
+            throw TssRuntimeError("unexpected status code: \(httpResponse.statusCode)")
+        }
+        
     }
     
     func checkCompletedParties() async throws -> Bool {

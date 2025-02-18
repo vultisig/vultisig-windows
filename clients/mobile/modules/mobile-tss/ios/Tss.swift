@@ -15,15 +15,18 @@ class TssService {
     let serverURL: String
     let encryptionKeyHex: String
     let sessionID: String
+    let sendEvent: (String, [String: Any]) -> Void
     
     init(localPartyID: String,
          serverURL: String,
          encryptionKeyHex: String,
-         sessionID: String) {
+         sessionID: String,
+         sendEvent: @escaping (String, [String: Any]) -> Void) {
         self.localPartyID = localPartyID
         self.serverURL = serverURL
         self.encryptionKeyHex = encryptionKeyHex
         self.sessionID = sessionID
+        self.sendEvent = sendEvent
     }
     
     private let tssMessenger: TssMessengerProtocol? = nil
@@ -53,16 +56,18 @@ class TssService {
             keygenReq.allParties = keygenCommittee.joined(separator: ",")
             keygenReq.chainCodeHex = hexChainCode
             self.logger.info("chaincode:\(hexChainCode)")
+            self.sendEvent("onKeygen",["current":"ECDSA"])
             let keygenRespECDSA = try tssService.keygenECDSA(keygenReq)
             
             try await Task.sleep(for: .seconds(1)) // Sleep one sec to allow other parties to get in the same step
+            self.sendEvent("onKeygen",["current":"EdDSA"])
             let keygenRespEdDSA = try tssService.keygenEdDSA(keygenReq)
             
             let keygenVerify = KeygenVerify(serverURL: self.serverURL,
                                             sessionID: self.sessionID,
                                             localPartyID: self.localPartyID,
                                             keygenCommittee: keygenCommittee)
-            await keygenVerify.markLocalPartyComplete()
+            await keygenVerify.markLocalPartyCompleteWithRetry()
             let allFinished = try await keygenVerify.checkCompletedParties()
             if !allFinished {
                 throw TssRuntimeError("partial vault created, not all parties finished successfully")
@@ -80,13 +85,17 @@ class TssService {
         return ""
     }
     
+    func waitingForKeygenStart() {
+        
+    }
+    
     func KeygenWithRetry(hexChainCode: String) async throws -> String {
-        //TODO: wait for keygen to start
+        
         let keygenCommittee: [String] = []
         let isEncryptGCM = await FeatureFlagService().isFeatureEnabled(feature: .EncryptGCM)
         let messengerImpl = TssMessengerImpl(serverURL: self.serverURL, sessionID: self.sessionID, messageID: nil, encryptionKeyHex: self.encryptionKeyHex, encryptGCM: isEncryptGCM)
         let stateAccessorImpl = LocalStateAccessorImpl()
-        
+        self.sendEvent("onKeygen",["current":"PrepareVault"])
         // this might take a while
         guard let tssService = try await createTssInstance(messenger: messengerImpl, stateAccessor: stateAccessorImpl,generatePrime: true) else {
             throw TssRuntimeError("Failed to create TssService instance")

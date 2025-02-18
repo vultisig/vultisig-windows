@@ -13,7 +13,7 @@ public class MobileTssModule: Module {
         Name("MobileTss")
         
         // Defines event names that the module can send to JavaScript.
-        Events("onProgress","onError")
+        Events("onKeygen","onError")
         
         // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
         Function("getDerivedPublicKey") { (hexPublicKey: String,hexChainCode: String, derivePath: String) in
@@ -41,6 +41,7 @@ public class MobileTssModule: Module {
                   let tssType = data["tssType"] as? String else {
                 throw NSError(domain: "InvalidArguments", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid arguments"])
             }
+            
             return [String: Any]()
         }
         

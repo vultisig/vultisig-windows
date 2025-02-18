@@ -67,7 +67,7 @@ final class TssMessengerImpl: NSObject, TssMessengerProtocol {
                           from: fromParty,
                           to: [to],
                           body: encryptedBody,
-                          hash: Utils.getMessageBodyHash(msg: body),
+                          hash: Utils.getMD5Hash(msg: body),
                           sequenceNo: self.counter)
         self.counter += 1
         do {
