@@ -10,8 +10,8 @@ type TransactionConfig = {
 
 export const transactionConfig: Record<ChainAction, TransactionConfig> = {
   bond: { requiresAmount: true, requiresNodeAddress: true },
-  unbond: { requiresAmount: true, requiresNodeAddress: true },
-  leave: { requiresNodeAddress: true, requiresAmount: true },
+  unbond: { requiresAmount: false, requiresNodeAddress: true },
+  leave: { requiresNodeAddress: true, requiresAmount: false },
   custom: {},
   stake: { requiresAmount: true, requiresNodeAddress: true },
   unstake: { requiresAmount: true, requiresNodeAddress: true },
