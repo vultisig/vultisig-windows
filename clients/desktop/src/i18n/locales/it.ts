@@ -488,6 +488,7 @@ export const it = {
     },
     preparingVault: 'Preparazione della Cassaforte',
     generatingECDSAKey: 'Generazione della Chiave ECDSA',
+    generatingEDDSAKey: 'Generazione della chiave EdDSA',
     createVault: {
       multiFactor: {
         descriptionOne: 'Sicurezza multifattore,',

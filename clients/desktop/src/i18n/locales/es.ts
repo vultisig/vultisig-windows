@@ -482,6 +482,7 @@ export const es = {
     },
     preparingVault: 'Preparando Bóveda',
     generatingECDSAKey: 'Generando Clave ECDSA',
+    generatingEDDSAKey: 'Generando clave EdDSA',
     createVault: {
       multiFactor: {
         descriptionOne: 'Seguridad multifactor,',

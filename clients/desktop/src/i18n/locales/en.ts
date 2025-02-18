@@ -473,6 +473,7 @@ export const en = {
     },
     preparingVault: 'Preparing Vault',
     generatingECDSAKey: 'Generating ECDSA Key',
+    generatingEDDSAKey: 'Generating EdDSA Key',
     createVault: {
       multiFactor: {
         descriptionOne: 'Multi-factor security,',
