@@ -930,6 +930,14 @@ const vultisigProvider = {
   maya: mayachainProvider,
   solana: solanaProvider,
   thorchain: thorchainProvider,
+  getVault: (): Promise<Messaging.GetVault.Response> => {
+    return new Promise((resolve) => {
+      sendToBackgroundViaRelay<
+        Messaging.GetVault.Request,
+        Messaging.GetVault.Response
+      >(MessageKey.VAULT, {}).then((vaults) => resolve(vaults));
+    });
+  },
   getVaults: (): Promise<VaultProps[]> => {
     return new Promise((resolve) => {
       sendToBackgroundViaRelay<

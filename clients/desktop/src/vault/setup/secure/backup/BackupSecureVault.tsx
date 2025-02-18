@@ -51,7 +51,10 @@ export const BackupSecureVault: FC<BackupFastVaultProps> = ({ vault }) => {
           shouldShowBackupSummary ? (
             <StepTransition
               from={({ onForward }) => (
-                <SetupVaultSummaryStep onForward={onForward} vaultType="fast" />
+                <SetupVaultSummaryStep
+                  onForward={onForward}
+                  vaultType="secure"
+                />
               )}
               to={() => (
                 <BackupSuccessSlide

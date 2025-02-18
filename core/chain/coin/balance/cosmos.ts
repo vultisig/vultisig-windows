@@ -6,21 +6,21 @@ import { getCosmosClient } from "../../chains/cosmos/client";
 import { cosmosFeeCoinDenom } from "../../chains/cosmos/cosmosFeeCoinDenom";
 import { getCosmosWasmTokenBalanceUrl } from "../../chains/cosmos/cosmosRpcUrl";
 import { isFeeCoin } from "../utils/isFeeCoin";
+import { isNativeCoin } from "../utils/isNativeCoin";
+import { CoinKey } from "../Coin";
 
-const isCosmosNativeCoin = (id: string) => {
-  if (["ibc/", "factory/"].some((prefix) => id.includes(prefix))) {
+const isCosmosNativeCoin = (coin: CoinKey) => {
+  if (["ibc/", "factory/"].some((prefix) => coin.id.includes(prefix))) {
     return true;
   }
 
-  const isContractAddress = id.match(/^[a-zA-Z0-9]{40,}/) !== null;
-
-  return !isContractAddress;
+  return isNativeCoin(coin);
 };
 
 export const getCosmosCoinBalance: CoinBalanceResolver<CosmosChain> = async (
   input,
 ) => {
-  if (isCosmosNativeCoin(input.id)) {
+  if (isCosmosNativeCoin(input)) {
     const client = await getCosmosClient(input.chain);
 
     const denom = isFeeCoin(input) ? cosmosFeeCoinDenom[input.chain] : input.id;

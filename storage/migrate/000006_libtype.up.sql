@@ -1,3 +1,4 @@
+PRAGMA foreign_keys = OFF;
 CREATE TABLE
     IF NOT EXISTS vaults_new (
         public_key_ecdsa TEXT PRIMARY KEY NOT NULL,
@@ -46,6 +47,6 @@ DROP TABLE vaults;
 
 ALTER TABLE vaults_new RENAME TO vaults;
 
-
+PRAGMA foreign_keys = ON;
 CREATE INDEX IF NOT EXISTS idx_vaults_folder_id ON vaults (folder_id);
 CREATE INDEX IF NOT EXISTS idx_coins_public_key_ecdsa_chain ON coins (public_key_ecdsa, chain);

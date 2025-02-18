@@ -4,7 +4,6 @@ import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices';
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices';
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { FiatCurrency } from '@core/config/FiatCurrency';
-import { findBy } from '@lib/utils/array/findBy';
 import { groupItems } from '@lib/utils/array/groupItems';
 import { isEmpty } from '@lib/utils/array/isEmpty';
 import { isOneOf } from '@lib/utils/array/isOneOf';
@@ -91,11 +90,15 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
         const result: Record<string, number> = {};
 
         Object.entries(prices).forEach(([priceProviderId, price]) => {
-          const coin = shouldBePresent(
-            findBy(regularCoins, 'priceProviderId', priceProviderId)
+          // multiple coins can have the same price provider
+          // so we need to find all coins with the same price provider
+          // for example: ETH.ETH, ARBITRUM.ETH, OPTIMISM.ETH there are all ETH , so they have the same price provider
+          const matchedCoins = shouldBePresent(
+            regularCoins.filter(coin => coin.priceProviderId == priceProviderId)
           );
-
-          result[coinKeyToString(coin)] = price;
+          matchedCoins.forEach(coin => {
+            result[coinKeyToString(coin)] = price;
+          });
         });
 
         return result;
