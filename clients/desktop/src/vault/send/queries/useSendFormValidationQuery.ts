@@ -38,9 +38,7 @@ export const useSendFormValidationQuery = () => {
             walletCore,
           })
         ) {
-          {
-            return t('send_invalid_receiver_address');
-          }
+          throw new Error(t('send_invalid_receiver_address'));
         }
 
         if (!amount) {
