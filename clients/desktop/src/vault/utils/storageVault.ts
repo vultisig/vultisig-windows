@@ -5,6 +5,7 @@ import {
   Vault_KeyShareSchema,
   VaultSchema,
 } from '@core/communication/vultisig/vault/v1/vault_pb';
+import { defaultMpcLib } from '@core/mpc/config';
 import { mpcLibName } from '@core/mpc/mpcLibName';
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord';
 import { convertDuration } from '@lib/utils/time/convertDuration';
@@ -24,7 +25,7 @@ export const toStorageVault = ({
   keyShares,
   localPartyId,
   resharePrefix,
-  libType,
+  libType = defaultMpcLib,
 }: Vault): storage.Vault => ({
   name: name,
   public_key_ecdsa: publicKeyEcdsa,
