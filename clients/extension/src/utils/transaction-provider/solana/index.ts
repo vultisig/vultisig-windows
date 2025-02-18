@@ -11,7 +11,10 @@ import {
   KeysignPayloadSchema,
   KeysignPayload,
 } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
-import { CoinSchema } from "@core/communication/vultisig/keysign/v1/coin_pb";
+import {
+  Coin,
+  CoinSchema,
+} from "@core/communication/vultisig/keysign/v1/coin_pb";
 
 import { rpcUrl } from "../../constants";
 import type {
@@ -25,6 +28,8 @@ import api from "../../api";
 import BaseTransactionProvider from "../../transaction-provider/base";
 
 import { SignedTransactionResult } from "../../signed-transaction-result";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { formatUnits } from "ethers";
 import { Chain } from "@core/chain/Chain";
 export default class SolanaTransactionProvider extends BaseTransactionProvider {
   constructor(
@@ -56,6 +61,20 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
     return accounts.length > 0 ? accounts[0].pubkey : "";
   }
 
+  async fetchHighPriorityFee(address: string): Promise<number> {
+    const client = new Connection(rpcUrl.Solana);
+    const prioritizationFees = await client.getRecentPrioritizationFees({
+      lockedWritableAccounts: [new PublicKey(address)],
+    });
+    const highPriorityFee = Math.max(
+      ...prioritizationFees.map((fee) =>
+        Number(fee.prioritizationFee.valueOf()),
+      ),
+      0,
+    );
+    return highPriorityFee;
+  }
+
   async fetchRecentBlockhash(): Promise<string> {
     const requestBody = {
       jsonrpc: "2.0",
@@ -67,10 +86,11 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
     return response.result?.value?.blockhash as string;
   }
 
-  public async getSpecificTransactionInfo(): Promise<SpecificSolana> {
+  public async getSpecificTransactionInfo(coin: Coin): Promise<SpecificSolana> {
     try {
-      const [recentBlockHash] = await Promise.all([
+      const [recentBlockHash, highPriorityFee] = await Promise.all([
         this.fetchRecentBlockhash(),
+        this.fetchHighPriorityFee(coin.address),
       ]);
 
       if (!recentBlockHash) {
@@ -79,9 +99,8 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
 
       return {
         recentBlockHash,
-        priorityFee: 1_000,
-        gasPrice: 1_000_000 / Math.pow(10, 9),
-        fee: 1_000_000,
+        priorityFee: highPriorityFee,
+        gasPrice: Number(formatUnits(1_000_000, 9)),
       } as SpecificSolana;
     } catch (error) {
       throw new Error(`Error fetching gas info: ${(error as any).message}`);
@@ -92,7 +111,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
     transaction: ITransaction,
     vault: VaultProps,
   ): Promise<KeysignPayload> => {
-    return new Promise((resolve) => {
+    return new Promise((resolve) => {    
       const coin = create(CoinSchema, {
         chain: transaction.chain.name,
         ticker: transaction.chain.ticker,
@@ -102,10 +121,10 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
           (chain) => chain.name === transaction.chain.name,
         )?.derivationKey,
         isNativeToken: true,
-        logo: transaction.chain.ticker.toLowerCase(),
+        logo: transaction.chain.name.toLowerCase(),
         priceProviderId: "solana",
       });
-      this.getSpecificTransactionInfo().then((specificData) => {
+      this.getSpecificTransactionInfo(coin).then((specificData) => {
         const solanaSpecific = create(SolanaSpecificSchema, {
           $typeName: "vultisig.keysign.v1.SolanaSpecific",
           recentBlockHash: specificData.recentBlockHash,
@@ -126,6 +145,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
             case: "solanaSpecific",
             value: solanaSpecific,
           },
+          memo: "",
         });
 
         this.keysignPayload = keysignPayload;
@@ -143,7 +163,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
         fromTokenAssociatedAddress,
         toTokenAssociatedAddress,
       } = solanaSpecific;
-      const priorityFeePrice = 1_000;
+      const priorityFeePrice = 1_000_000;
       const priorityFeeLimit = Number(100_000);
       const newRecentBlockHash = recentBlockHash;
       if (!this.keysignPayload || !this.keysignPayload.coin) {
@@ -156,11 +176,15 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
           transferTransaction: TW.Solana.Proto.Transfer.create({
             recipient: this.keysignPayload.toAddress,
             value: Long.fromString(this.keysignPayload.toAmount),
+            memo: this.keysignPayload.memo,
           }),
           recentBlockhash: newRecentBlockHash,
           sender: this.keysignPayload.coin.address,
           priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
             price: Long.fromString(priorityFeePrice.toString()),
+          }),
+          priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
+            limit: priorityFeeLimit,
           }),
         });
 
@@ -256,9 +280,6 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
             this.walletCore.PublicKeyType.ed25519,
           );
           const modifiedSig = this.getSignature(signature);
-          if (!pubkey.verify(modifiedSig, inputData)) {
-            console.error("error verifying signature");
-          }
           allSignatures.add(modifiedSig);
           publicKeys.add(pubkey.data());
           const compileWithSignatures =

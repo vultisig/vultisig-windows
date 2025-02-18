@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import styled, { useTheme } from 'styled-components';
 
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
+import { useBoolean } from '../../../lib/ui/hooks/useBoolean';
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
 import { LightningGradientIcon } from '../../../lib/ui/icons/LightningGradientIcon';
 import { LightningIcon } from '../../../lib/ui/icons/LightningIcon';
@@ -33,6 +34,8 @@ const STATE_MACHINE_NAME = 'State Machine 1';
 const STATE_INPUT_NAME = 'Switch';
 
 export const SetupVaultPage = () => {
+  const [hasAnimationRan, { toggle }] = useBoolean(false);
+
   const { t } = useTranslation();
   const [value, setValue] = useSetupVaultType();
   const navigate = useAppNavigate();
@@ -115,7 +118,10 @@ export const SetupVaultPage = () => {
               selected={value}
               onChange={newValue => {
                 setValue(newValue);
-                stateMachineInput?.fire();
+                if (!hasAnimationRan) {
+                  stateMachineInput?.fire();
+                  toggle();
+                }
               }}
             />
           </div>
@@ -159,4 +165,5 @@ const LightningGradientIconWrapper = styled.div`
 
 export const LightningIconWrapper = styled.div`
   font-size: 20px;
+  margin-right: 3px;
 `;

@@ -1,7 +1,13 @@
 import { Interface } from "ethers";
 
-import { TssKeysignType } from "./constants";
-import { ChainObjRef, ChainProps, ParsedMemo } from "./interfaces";
+import { MessageKey, RequestMethod, TssKeysignType } from "./constants";
+import {
+  ChainObjRef,
+  ChainProps,
+  Messaging,
+  ParsedMemo,
+  SendTransactionResponse,
+} from "./interfaces";
 import api from "./api";
 import { Chain } from "@core/chain/Chain";
 
@@ -227,4 +233,25 @@ export const toSnakeCase = (obj: any): any => {
   }
 
   return obj;
+};
+
+export const processBackgroundResponse = (
+  data: Messaging.Chain.Request,
+  messageKey: MessageKey,
+  result: Messaging.Chain.Response,
+) => {
+  switch (data.method) {
+    case RequestMethod.CTRL.TRANSFER:
+    case RequestMethod.METAMASK.ETH_SEND_TRANSACTION:
+    case RequestMethod.VULTISIG.SEND_TRANSACTION:
+    case RequestMethod.CTRL.DEPOSIT:
+    case RequestMethod.VULTISIG.DEPOSIT_TRANSACTION: {
+      if (messageKey === MessageKey.SOLANA_REQUEST)
+        return (result as SendTransactionResponse).raw;
+      return (result as SendTransactionResponse).txResponse;
+    }
+    default: {
+      return result;
+    }
+  }
 };

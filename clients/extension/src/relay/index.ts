@@ -3,7 +3,7 @@ import { Messaging } from "../utils/interfaces";
 
 const sendToBackground = <Request, Response>(
   type: MessageKey,
-  message: Request
+  message: Request,
 ): Promise<Response> => {
   return new Promise((resolve) => {
     chrome.runtime.sendMessage({ message, type }, resolve);
@@ -43,7 +43,7 @@ window.addEventListener(
       case MessageKey.THOR_REQUEST: {
         sendToBackground<Messaging.Chain.Request, Messaging.Chain.Response>(
           data.type,
-          data.message
+          data.message,
         ).then((result) => {
           window.postMessage(
             {
@@ -52,7 +52,7 @@ window.addEventListener(
               sender: SenderKey.RELAY,
               type: data.type,
             },
-            "*"
+            "*",
           );
         });
 
@@ -70,7 +70,25 @@ window.addEventListener(
               sender: SenderKey.RELAY,
               type: data.type,
             },
-            "*"
+            "*",
+          );
+        });
+
+        break;
+      }
+      case MessageKey.VAULT: {
+        sendToBackground<
+          Messaging.GetVault.Request,
+          Messaging.GetVault.Response
+        >(data.type, data.message).then((result) => {
+          window.postMessage(
+            {
+              id: data.id,
+              message: result,
+              sender: SenderKey.RELAY,
+              type: data.type,
+            },
+            "*",
           );
         });
 
@@ -88,7 +106,7 @@ window.addEventListener(
               sender: SenderKey.RELAY,
               type: data.type,
             },
-            "*"
+            "*",
           );
         });
 
@@ -98,5 +116,5 @@ window.addEventListener(
         break;
       }
     }
-  }
+  },
 );
