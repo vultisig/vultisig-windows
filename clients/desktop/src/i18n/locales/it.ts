@@ -13,9 +13,6 @@ export const it = {
   onboarding_view4_description:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   tokens: 'token',
-  tookTooLongToRespond:
-    'Il server ha impiegato troppo tempo per rispondere. Controlla la tua connessione a Internet e riprova.',
-  errorTimedOut: 'Errore: Timeout del server',
   thisDevice: 'Questo dispositivo',
   supported_file_types: 'Tipi di file supportati: .bak & .vult',
   optionalDevice: 'Dispositivo opzionale',
@@ -134,7 +131,6 @@ export const it = {
   secure_vault_setup_prop_0: 'Massima sicurezza con più dispositivi',
   secure_vault_setup_prop_1: 'Sempre accessibile con backup dei dispositivi',
   secure_vault_setup_prop_2: 'Proteggi qualsiasi quantità di risorse',
-
   save_changes: 'Salva modifiche',
   information_note2:
     'Assicurati che nessun altro dispositivo stia eseguendo Vultisig.',
@@ -788,4 +784,5 @@ export const it = {
   something_went_wrong: 'Qualcosa è andato storto',
   report_error: 'Segnala errore',
   go_to_home_page: 'Vai alla Home Page',
+  enableDkls: 'Abilita DKLS',
 };
