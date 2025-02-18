@@ -56,7 +56,7 @@ export const DepositConfirmButton = ({
 
   const amount = config.requiresAmount
     ? Number(depositFormData['amount'])
-    : config.defaultAmount || 0;
+    : 0;
 
   const memo = (depositFormData['memo'] as string) ?? '';
 

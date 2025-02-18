@@ -1,15 +1,12 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
 import { toChainAmount } from '@core/chain/amount/toChainAmount';
 import { AccountCoin } from '@core/chain/coin/AccountCoin';
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { formatAmount } from '@lib/utils/formatAmount';
 import { addQueryParams } from '@lib/utils/query/addQueryParams';
 import { queryUrl } from '@lib/utils/query/queryUrl';
 import { TransferDirection } from '@lib/utils/TransferDirection';
 
 import { toNativeSwapAsset } from '../asset/toNativeSwapAsset';
-import { nativeSwapDecimals } from '../config';
 import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig';
 import {
   nativeSwapApiBaseUrl,
@@ -17,6 +14,7 @@ import {
   nativeSwapStreamingInterval,
 } from '../NativeSwapChain';
 import { NativeSwapQuote } from '../NativeSwapQuote';
+import { getNativeSwapDecimals } from '../utils/getNativeSwapDecimals';
 
 export type GetNativeSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   swapChain: NativeSwapChain;
@@ -43,11 +41,7 @@ export const getNativeSwapQuote = async ({
     toNativeSwapAsset(asset)
   );
 
-  const isDeposit = isFeeCoin(from) && from.chain === swapChain;
-
-  const fromDecimals = isDeposit
-    ? chainFeeCoin[swapChain].decimals
-    : nativeSwapDecimals;
+  const fromDecimals = getNativeSwapDecimals(from);
 
   const chainAmount = toChainAmount(amount, fromDecimals);
 
@@ -79,7 +73,7 @@ export const getNativeSwapQuote = async ({
   if (BigInt(result.recommended_min_amount_in) > chainAmount) {
     const minAmount = fromChainAmount(
       result.recommended_min_amount_in,
-      nativeSwapDecimals
+      fromDecimals
     );
 
     const formattedMinAmount = formatAmount(minAmount);

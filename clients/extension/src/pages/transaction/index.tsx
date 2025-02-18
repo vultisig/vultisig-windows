@@ -1,10 +1,9 @@
-import { StrictMode, useEffect, useState } from "react";
+import { StrictMode, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, QRCode, message, Form, Input } from "antd";
 import { formatUnits, toUtf8String } from "ethers";
 import { create } from "@bufbuild/protobuf";
 import ReactDOM from "react-dom/client";
-import html2canvas from "html2canvas";
 
 import { CoinSchema } from "@core/communication/vultisig/keysign/v1/coin_pb";
 
@@ -99,6 +98,7 @@ const Component = () => {
     parsedMemo,
   } = state;
   const [messageApi, contextHolder] = message.useMessage();
+  const qrContainerRef = useRef<HTMLDivElement>(null);
 
   const handleApp = (): void => {
     window.open(sendKey, "_self");
@@ -128,19 +128,15 @@ const Component = () => {
   };
 
   const exportQRCode = () => {
-    const qrContainer = document.querySelector(".qrcode") as HTMLElement;
-
-    if (qrContainer) {
-      html2canvas(qrContainer, {
-        backgroundColor: null,
-        logging: false,
-        useCORS: true,
-      }).then((canvas) => {
+    if (qrContainerRef.current) {
+      const canvas = qrContainerRef.current.querySelector("canvas");
+      if (canvas) {
+        const dataURL = canvas.toDataURL("image/png");
         const link = document.createElement("a");
-        link.download = "qr-code.jpg";
-        link.href = canvas.toDataURL("image/jpeg");
+        link.href = dataURL;
+        link.download = "qrcode.png";
         link.click();
-      });
+      }
     }
   };
 
@@ -752,10 +748,10 @@ const Component = () => {
                   </span>
                   <div className="qrcode">
                     <QRCodeBorder className="border" />
-                    <div className="qr-container">
+                    <div className="qr-container" ref={qrContainerRef}>
                       <QRCode
                         bordered
-                        size={275}
+                        size={1000}
                         value={sendKey || ""}
                         color="white"
                       />

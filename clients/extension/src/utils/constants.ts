@@ -77,6 +77,7 @@ export enum MessageKey {
   SOLANA_REQUEST = "solana",
   THOR_REQUEST = "thor",
   PRIORITY = "priority",
+  VAULT = "vault",
   VAULTS = "vaults",
 }
 
@@ -101,6 +102,7 @@ export enum Currency {
 export enum Instance {
   ACCOUNTS = "accounts",
   TRANSACTION = "transaction",
+  VAULT = "vault",
   VAULTS = "vaults",
 }
 

@@ -15,7 +15,11 @@ import {
   RequestMethod,
   SenderKey,
 } from "../utils/constants";
-import { Messaging, VaultProps } from "../utils/interfaces";
+import {
+  Messaging,
+  SendTransactionResponse,
+  VaultProps,
+} from "../utils/interfaces";
 import VULTI_ICON_RAW_PNG from "./icon";
 import {
   CosmJSOfflineSigner,
@@ -38,6 +42,7 @@ import {
   ThorchainProviderResponse,
 } from "../types/thorchain";
 import { ThorchainProviderMethod } from "../types/thorchain";
+import { processBackgroundResponse } from "../utils/functions";
 
 enum NetworkKey {
   MAINNET = "mainnet",
@@ -221,8 +226,10 @@ class XDEFIKeplrProvider extends Keplr {
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
           params: [_tx],
         })
-        .then((result) => {
-          resolve(result);
+        .then((result: SendTransactionResponse) => {
+          const decoded = base58.decode(result.raw);
+          if (decoded) resolve(decoded);
+          else reject();
         })
         .catch(reject);
     });
@@ -252,7 +259,7 @@ class XDEFIKeplrProvider extends Keplr {
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
           params: [txDetails[0]!],
         })
-        .then((result) => {
+        .then((result: SendTransactionResponse) => {
           resolve(result as any);
         });
     });
@@ -360,7 +367,12 @@ namespace Provider {
         Messaging.Chain.Request,
         Messaging.Chain.Response
       >(this.providerType, data)
-        .then((result) => {
+        .then((response) => {
+          const result = processBackgroundResponse(
+            data,
+            this.providerType,
+            response,
+          );
           if (callback) callback(null, result);
 
           return result;
@@ -387,7 +399,12 @@ namespace Provider {
         Messaging.Chain.Request,
         Messaging.Chain.Response
       >(MessageKey.COSMOS_REQUEST, data)
-        .then((result) => {
+        .then((response) => {
+          const result = processBackgroundResponse(
+            data,
+            MessageKey.COSMOS_REQUEST,
+            response,
+          );
           if (callback) callback(null, result);
 
           return result;
@@ -427,7 +444,12 @@ namespace Provider {
         Messaging.Chain.Request,
         Messaging.Chain.Response
       >(MessageKey.DASH_REQUEST, data)
-        .then((result) => {
+        .then((response) => {
+          const result = processBackgroundResponse(
+            data,
+            MessageKey.DASH_REQUEST,
+            response,
+          );
           if (callback) callback(null, result);
 
           return result;
@@ -537,7 +559,12 @@ namespace Provider {
         Messaging.Chain.Request,
         Messaging.Chain.Response
       >(MessageKey.ETHEREUM_REQUEST, data)
-        .then((result) => {
+        .then((response) => {
+          const result = processBackgroundResponse(
+            data,
+            MessageKey.ETHEREUM_REQUEST,
+            response,
+          );
           switch (data.method) {
             case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
             case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
@@ -606,15 +633,15 @@ namespace Provider {
       );
 
       const modifiedTransfer = {
-        lamports: decodedTransfer.lamports.toString(),
+        value: decodedTransfer.lamports.toString(),
         from: decodedTransfer.fromPubkey.toString(),
         to: decodedTransfer.toPubkey.toString(),
       };
       return await this.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
         params: [modifiedTransfer],
-      }).then((result) => {
-        const rawData = base58.decode(result[1]);
+      }).then((result: SendTransactionResponse) => {
+        const rawData = base58.decode(result.raw);
         return VersionedTransaction.deserialize(rawData);
       });
     }
@@ -645,7 +672,12 @@ namespace Provider {
         Messaging.Chain.Request,
         Messaging.Chain.Response
       >(MessageKey.SOLANA_REQUEST, data)
-        .then((result) => {
+        .then((response) => {
+          const result = processBackgroundResponse(
+            data,
+            MessageKey.SOLANA_REQUEST,
+            response,
+          );
           if (callback) callback(null, result);
 
           return result;
@@ -758,7 +790,12 @@ namespace Provider {
         ThorchainProviderRequest<T>,
         ThorchainProviderResponse<T>
       >(MessageKey.MAYA_REQUEST, data)
-        .then((result) => {
+        .then((response) => {
+          const result = processBackgroundResponse(
+            data,
+            MessageKey.MAYA_REQUEST,
+            response,
+          );
           if (callback) callback(null, result);
 
           return result;
@@ -814,7 +851,12 @@ namespace Provider {
         ThorchainProviderRequest<T>,
         ThorchainProviderResponse<T>
       >(MessageKey.THOR_REQUEST, data)
-        .then((result) => {
+        .then((response) => {
+          const result = processBackgroundResponse(
+            data,
+            MessageKey.THOR_REQUEST,
+            response,
+          );
           if (callback) callback(null, result);
           return result;
         })
@@ -888,6 +930,14 @@ const vultisigProvider = {
   maya: mayachainProvider,
   solana: solanaProvider,
   thorchain: thorchainProvider,
+  getVault: (): Promise<Messaging.GetVault.Response> => {
+    return new Promise((resolve) => {
+      sendToBackgroundViaRelay<
+        Messaging.GetVault.Request,
+        Messaging.GetVault.Response
+      >(MessageKey.VAULT, {}).then((vaults) => resolve(vaults));
+    });
+  },
   getVaults: (): Promise<VaultProps[]> => {
     return new Promise((resolve) => {
       sendToBackgroundViaRelay<
@@ -911,7 +961,6 @@ window.thorchain = thorchainProvider;
 window.vultisig = vultisigProvider;
 window.xfi = xfiProvider;
 window.xfi.kepler = keplrProvider;
-
 
 announceProvider({
   info: {

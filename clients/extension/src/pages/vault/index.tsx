@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { Button, Form, Radio } from "antd";
 import ReactDOM from "react-dom/client";
 
-import { ChainKey } from "../../utils/constants";
 import {
   getStoredLanguage,
   getStoredRequest,
@@ -14,14 +13,14 @@ import { VaultProps } from "../../utils/interfaces";
 import i18n from "../../i18n/config";
 import messageKeys from "../../utils/message-keys";
 
+import { ChainKey } from "../../utils/constants";
 import { Vultisig } from "../../icons";
 import ConfigProvider from "../../components/config-provider";
-import MiddleTruncate from "../../components/middle-truncate";
-import VultiError from "../../components/vulti-error";
 import VultiLoading from "../../components/vulti-loading";
+import VultiError from "../../components/vulti-error";
 
 import "../../styles/index.scss";
-import "../accounts/index.scss";
+import "../../pages/vaults/index.scss";
 
 interface FormProps {
   uid: string;
@@ -40,8 +39,7 @@ const Component = () => {
   const { t } = useTranslation();
   const initialState: InitialState = { vaults: [] };
   const [state, setState] = useState(initialState);
-  const { chain, errorDescription, errorTitle, hasError, sender, vaults } =
-    state;
+  const { errorDescription, errorTitle, hasError, sender, vaults } = state;
   const [form] = Form.useForm();
 
   const handleClose = () => {
@@ -61,8 +59,8 @@ const Component = () => {
                       sender,
                       ...(vault.apps?.filter((app) => app !== sender) ?? []),
                     ]
-                  : (vault.apps?.filter((app) => app !== sender) ?? []),
-              active: uid === vault.uid ? true : false,
+                  : vault.apps,
+              active: uid === vault.uid,
             })),
           ).then(() => {
             handleClose();
@@ -72,17 +70,16 @@ const Component = () => {
     });
   };
 
-  useEffect(() => {
+  const componentDidMount = (): void => {
     getStoredLanguage().then((language) => {
       i18n.changeLanguage(language);
 
       getStoredRequest()
-        .then(({ chain, sender }) => {
+        .then(({ sender }) => {
           getStoredVaults().then((vaults) => {
             if (vaults.length) {
               setState((prevState) => ({
                 ...prevState,
-                chain,
                 sender,
                 vaults,
                 hasError: false,
@@ -97,9 +94,18 @@ const Component = () => {
             }
           });
         })
-        .catch(() => {});
+        .catch(() => {
+          setState((prevState) => ({
+            ...prevState,
+            errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
+            errorTitle: t(messageKeys.GET_VAULT_FAILED),
+            hasError: true,
+          }));
+        });
     });
-  }, []);
+  };
+
+  useEffect(componentDidMount, []);
 
   return (
     <ConfigProvider>
@@ -117,7 +123,6 @@ const Component = () => {
               <span className="title">
                 {t(messageKeys.CONNECT_WITH_VULTISIG)}
               </span>
-              <span className="origin">{sender}</span>
             </div>
             <div className="content">
               <Form form={form} onFinish={handleSubmit}>
@@ -128,15 +133,9 @@ const Component = () => {
                   ]}
                 >
                   <Radio.Group>
-                    {vaults.map(({ chains, name, uid }) => (
+                    {vaults.map(({ name, uid }) => (
                       <Radio key={uid} value={uid}>
                         <span className="name">{name}</span>
-                        <MiddleTruncate
-                          text={
-                            chains.find(({ name }) => name === chain)
-                              ?.address ?? ""
-                          }
-                        />
                       </Radio>
                     ))}
                   </Radio.Group>
