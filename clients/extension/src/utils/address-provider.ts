@@ -1,9 +1,10 @@
 import { WalletCore } from "@trustwallet/wallet-core";
 import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
 
-import { ChainKey, errorKey } from "./constants";
+import { errorKey } from "./constants";
 import { VaultProps } from "./interfaces";
 import api from "./api";
+import { Chain } from "@core/chain/Chain";
 
 interface AddressProps {
   address: string;
@@ -13,16 +14,16 @@ interface AddressProps {
 export default class AddressProvider {
   constructor(
     private chainRef: { [chainKey: string]: CoinType },
-    private walletCore: WalletCore
+    private walletCore: WalletCore,
   ) {
     this.chainRef = chainRef;
     this.walletCore = walletCore;
   }
 
   private getECDSAAddress = (
-    chain: ChainKey,
+    chain: Chain,
     vault: VaultProps,
-    prefix?: string
+    prefix?: string,
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
       const coin = this.chainRef[chain];
@@ -39,22 +40,21 @@ export default class AddressProvider {
 
           const publicKey = this.walletCore.PublicKey.createWithData(
             bytes,
-            this.walletCore.PublicKeyType.secp256k1
+            this.walletCore.PublicKeyType.secp256k1,
           );
 
           if (prefix) {
             address = this.walletCore.AnyAddress.createBech32WithPublicKey(
               publicKey,
               coin,
-              prefix
+              prefix,
             )?.description();
           } else {
             address = this.walletCore.AnyAddress.createWithPublicKey(
               publicKey,
-              coin
+              coin,
             )?.description();
           }
-
 
           address
             ? resolve({
@@ -70,8 +70,8 @@ export default class AddressProvider {
   };
 
   private getEDDSAAddress = (
-    chain: ChainKey,
-    vault: VaultProps
+    chain: Chain,
+    vault: VaultProps,
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
       const coin = this.chainRef[chain];
@@ -80,12 +80,12 @@ export default class AddressProvider {
 
       const publicKey = this.walletCore.PublicKey.createWithData(
         bytes,
-        this.walletCore.PublicKeyType.ed25519
+        this.walletCore.PublicKeyType.ed25519,
       );
 
       const address = this.walletCore.AnyAddress.createWithPublicKey(
         publicKey,
-        coin
+        coin,
       )?.description();
 
       address
@@ -95,46 +95,46 @@ export default class AddressProvider {
   };
 
   public getAddress = (
-    chain: ChainKey,
-    vault: VaultProps
+    chain: Chain,
+    vault: VaultProps,
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
       switch (chain) {
         // EDDSA
-        case ChainKey.POLKADOT:
-        case ChainKey.SOLANA:
-        case ChainKey.SUI: {
+        case Chain.Polkadot:
+        case Chain.Solana:
+        case Chain.Sui: {
           this.getEDDSAAddress(chain, vault).then(resolve).catch(reject);
 
           break;
         }
         // ECDSA
-        case ChainKey.MAYACHAIN: {
+        case Chain.MayaChain: {
           this.getECDSAAddress(chain, vault, "maya")
             .then(resolve)
             .catch(reject);
 
           break;
         }
-        case ChainKey.OSMOSIS: {
+        case Chain.Osmosis: {
           this.getECDSAAddress(chain, vault, "osmo")
             .then(resolve)
             .catch(reject);
           break;
         }
-        case ChainKey.DYDX: {
+        case Chain.Dydx: {
           this.getECDSAAddress(chain, vault, "dydx")
             .then(resolve)
             .catch(reject);
           break;
         }
-        case ChainKey.KUJIRA: {
+        case Chain.Kujira: {
           this.getECDSAAddress(chain, vault, "kujira")
             .then(resolve)
             .catch(reject);
           break;
         }
-        case ChainKey.BITCOINCASH: {
+        case Chain.BitcoinCash: {
           this.getECDSAAddress(chain, vault)
             .then(({ address, derivationKey }) => {
               resolve({

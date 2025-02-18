@@ -18,7 +18,6 @@ import {
   type KeysignPayload,
 } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
 
-import { ChainKey } from "../../constants";
 import {
   ITransaction,
   SignatureProps,
@@ -32,10 +31,11 @@ import BaseTransactionProvider from "../../transaction-provider/base";
 
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
+import { Chain } from "@core/chain/Chain";
 
 export default class MayaTransactionProvider extends BaseTransactionProvider {
   constructor(
-    chainKey: ChainKey,
+    chainKey: Chain,
     chainRef: { [chainKey: string]: CoinType },
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore,
@@ -203,7 +203,7 @@ export default class MayaTransactionProvider extends BaseTransactionProvider {
     return new Promise((resolve, reject) => {
       if (inputData && vault) {
         const pubkeyMaya = vault.chains.find(
-          (chain) => chain.name === ChainKey.MAYACHAIN,
+          (chain) => chain.name === Chain.MayaChain,
         )?.derivationKey;
 
         if (pubkeyMaya) {
