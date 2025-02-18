@@ -87,12 +87,6 @@ const Component = () => {
                 vaults,
                 hasError: false,
               }));
-
-              form.setFieldsValue({
-                uids: vaults
-                  .filter(({ apps }) => apps && apps.indexOf(sender) >= 0)
-                  .map(({ uid }) => uid),
-              });
             } else {
               setState((prevState) => ({
                 ...prevState,

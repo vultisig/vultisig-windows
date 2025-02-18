@@ -1,15 +1,15 @@
 import { create } from '@bufbuild/protobuf';
 import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt';
-import { LibType } from '@core/communication/vultisig/keygen/v1/lib_type_message_pb';
+import { toLibType } from '@core/communication/utils/libType';
 import {
   Vault_KeyShareSchema,
   VaultSchema,
 } from '@core/communication/vultisig/vault/v1/vault_pb';
+import { defaultMpcLib } from '@core/mpc/mpcLib';
 import { convertDuration } from '@lib/utils/time/convertDuration';
 
 import { storage } from '../../../../wailsjs/go/models';
 import { toStorageVault } from '../../utils/storageVault';
-
 export type DatBackup = {
   name: string;
   pubKeyECDSA: string;
@@ -19,7 +19,7 @@ export type DatBackup = {
   pubKeyEdDSA: string;
   hexChainCode: string;
   localPartyID: string;
-  libType: string;
+  libType?: string;
 };
 
 type DatBackupKeyshare = {
@@ -50,7 +50,7 @@ export const fromDatBackup = (backup: DatBackup): storage.Vault => {
     hexChainCode: backup.hexChainCode,
     localPartyId: backup.localPartyID,
     keyShares,
-    libType: LibType[backup.libType as keyof typeof LibType] ?? LibType.GG20,
+    libType: toLibType(backup.libType ?? defaultMpcLib),
   });
 
   return toStorageVault(vault);

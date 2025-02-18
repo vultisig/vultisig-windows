@@ -9,6 +9,7 @@ import TwitterIcon from '../../lib/ui/icons/TwitterIcon';
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller';
 import { HStack, VStack } from '../../lib/ui/layout/Stack';
 import { Text } from '../../lib/ui/text';
+import { NavigateToDklsPage } from '../../mpc/dkls/NavigateToDklsPage';
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency';
 import { useLanguage } from '../../preferences/state/language';
@@ -124,15 +125,17 @@ const SettingsVaultPage = () => {
                 <DiscordIcon />
               </UnstyledButton>
             </HStack>
-            <VStack alignItems="center">
-              <Text size={14} color="primary" weight="600">
-                {t('settings_vault_page_footer')}
-                {__APP_VERSION__}
-              </Text>
-              <Text size={14} color="primary" weight="600">
-                (BUILD {__APP_BUILD__})
-              </Text>
-            </VStack>
+            <NavigateToDklsPage>
+              <VStack alignItems="center">
+                <Text size={14} color="primary" weight="600">
+                  {t('settings_vault_page_footer')}
+                  {__APP_VERSION__}
+                </Text>
+                <Text size={14} color="primary" weight="600">
+                  (BUILD {__APP_BUILD__})
+                </Text>
+              </VStack>
+            </NavigateToDklsPage>
           </Footer>
         </StyledPageSlice>
       </ScrollableFlexboxFiller>

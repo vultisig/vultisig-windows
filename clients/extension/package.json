@@ -74,6 +74,7 @@
     "popup": "popup.html",
     "relay": "src/relay/index.ts",
     "transaction": "transaction.html",
+    "vault": "vault.html",
     "vaults": "vaults.html"
   }
 }
