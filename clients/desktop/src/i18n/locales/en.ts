@@ -774,4 +774,6 @@ export const en = {
   to_asset: 'To Asset',
   allowance_spender: 'Allowance spender',
   allowance_amount: 'Allowance amount',
+  function_arguments: 'Function Arguments',
+  function_signature: 'Function Signature',
 };
