@@ -484,6 +484,7 @@ export const pt = {
     },
     preparingVault: 'Preparando Cofre',
     generatingECDSAKey: 'Gerando Chave ECDSA',
+    generatingEDDSAKey: 'Gerando chave EdDSA',
     createVault: {
       multiFactor: {
         descriptionOne: 'Segurança multifatorial,',
