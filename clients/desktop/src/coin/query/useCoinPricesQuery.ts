@@ -1,8 +1,7 @@
-import { EvmChain, OtherChain } from '@core/chain/Chain';
+import { EvmChain } from '@core/chain/Chain';
 import { Coin, CoinKey, coinKeyToString } from '@core/chain/coin/Coin';
 import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices';
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices';
-import { getSolanaTokenPrices } from '@core/chain/coin/price/solana/getSolanaTokenUSDValue';
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
 import { FiatCurrency } from '@core/config/FiatCurrency';
 import { groupItems } from '@lib/utils/array/groupItems';
@@ -29,7 +28,7 @@ export const getCoinPricesQueryKeys = (input: GetCoinPricesQueryKeysInput) => [
 ];
 
 type UseCoinPricesQueryInput = {
-  coins: Pick<Coin, 'id' | 'chain' | 'priceProviderId'>[];
+  coins: Coin[];
   fiatCurrency?: FiatCurrency;
 };
 
@@ -40,30 +39,11 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
   const queries = [];
 
-  const [regularCoins, erc20Coins] = splitBy(input.coins, coin =>
-    isOneOf(coin.chain, Object.values(EvmChain)) && !isFeeCoin(coin) ? 1 : 0
+  const [regularCoins, erc20Coins] = splitBy(
+    input.coins.filter(f => f.priceProviderId),
+    coin =>
+      isOneOf(coin.chain, Object.values(EvmChain)) && !isFeeCoin(coin) ? 1 : 0
   );
-
-  // Split regular coins and Solana tokens
-  const [, solanaCoins] = splitBy(input.coins, coin =>
-    isOneOf(coin.chain, [OtherChain.Solana]) ? 1 : 0
-  );
-
-  if (!isEmpty(solanaCoins)) {
-    queries.push({
-      queryKey: getCoinPricesQueryKeys({
-        coins: solanaCoins,
-        fiatCurrency,
-      }),
-      queryFn: async () => {
-        return await getSolanaTokenPrices({
-          coins: solanaCoins,
-          chain: OtherChain.Solana,
-          fiatCurrency,
-        });
-      },
-    });
-  }
 
   if (!isEmpty(erc20Coins)) {
     const groupedByChain = groupItems(erc20Coins, coin => coin.chain);
