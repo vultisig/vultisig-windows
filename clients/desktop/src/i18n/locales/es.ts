@@ -789,5 +789,5 @@ export const es = {
   something_went_wrong: 'Algo salió mal',
   report_error: 'Informar error',
   go_to_home_page: 'Ir a la página de inicio',
-  enableDkls: 'Habilitar DKLS',
+  enable_dkls: 'Habilitar DKLS',
 };

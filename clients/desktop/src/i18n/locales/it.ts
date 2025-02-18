@@ -784,5 +784,5 @@ export const it = {
   something_went_wrong: 'Qualcosa è andato storto',
   report_error: 'Segnala errore',
   go_to_home_page: 'Vai alla Home Page',
-  enableDkls: 'Abilita DKLS',
+  enable_dkls: 'Abilita DKLS',
 };

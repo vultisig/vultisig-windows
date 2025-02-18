@@ -766,5 +766,5 @@ export const hr = {
   go_to_home_page: 'Idi na početnu stranicu',
   chooseSetup: 'Odaberite Postavljanje',
   introOnboarding: 'uvod',
-  enableDkls: 'Omogući DKLS',
+  enable_dkls: 'Omogući DKLS',
 };

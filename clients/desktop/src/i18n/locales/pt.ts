@@ -778,5 +778,5 @@ export const pt = {
   something_went_wrong: 'Algo deu errado',
   report_error: 'Relatar erro',
   go_to_home_page: 'Ir para a página inicial',
-  enableDkls: 'Habilitar DKLS',
+  enable_dkls: 'Habilitar DKLS',
 };

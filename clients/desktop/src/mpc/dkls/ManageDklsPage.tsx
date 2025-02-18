@@ -17,7 +17,7 @@ export const ManageDklsPage = () => {
         <Switch
           value={isDklsLibEnabled}
           onChange={setIsDklsLibEnabled}
-          label={t('enableDklsLib')}
+          label={t('enable_dkls')}
         />
       </PageContent>
     </>

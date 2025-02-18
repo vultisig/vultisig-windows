@@ -789,5 +789,5 @@ export const de = {
   something_went_wrong: 'Da ist etwas schiefgelaufen',
   report_error: 'Fehler melden',
   go_to_home_page: 'Zur Startseite',
-  enableDkls: 'DKLS aktivieren',
+  enable_dkls: 'DKLS aktivieren',
 };
