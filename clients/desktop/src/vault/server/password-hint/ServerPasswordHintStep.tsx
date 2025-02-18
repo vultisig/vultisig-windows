@@ -1,39 +1,39 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
-import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+import { z } from 'zod'
 
-import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement';
-import { Button } from '../../../lib/ui/buttons/Button';
-import { iconButtonIconSizeRecord } from '../../../lib/ui/buttons/IconButton';
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
+import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement'
+import { Button } from '../../../lib/ui/buttons/Button'
+import { iconButtonIconSizeRecord } from '../../../lib/ui/buttons/IconButton'
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
-} from '../../../lib/ui/css/textInput';
-import { CircledCloseIcon } from '../../../lib/ui/icons/CircledCloseIcon';
-import { TextInput } from '../../../lib/ui/inputs/TextInput';
-import { HStack, VStack } from '../../../lib/ui/layout/Stack';
-import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
-import { Text } from '../../../lib/ui/text';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { useVaultPasswordHint } from './state/password-hint';
+} from '../../../lib/ui/css/textInput'
+import { CircledCloseIcon } from '../../../lib/ui/icons/CircledCloseIcon'
+import { TextInput } from '../../../lib/ui/inputs/TextInput'
+import { HStack, VStack } from '../../../lib/ui/layout/Stack'
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
+import { Text } from '../../../lib/ui/text'
+import { PageContent } from '../../../ui/page/PageContent'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { useVaultPasswordHint } from './state/password-hint'
 
 const passwordHintSchema = z.object({
   passwordHint: z.string().min(1, { message: 'fastVaultSetup.hintEmpty' }),
-});
+})
 
-type PasswordHintSchema = z.infer<typeof passwordHintSchema>;
+type PasswordHintSchema = z.infer<typeof passwordHintSchema>
 
 export const ServerPasswordHintStep = ({
   onForward,
   onBack,
 }: OnForwardProp & Partial<OnBackProp>) => {
-  const { t } = useTranslation();
-  const [storedPasswordHint, setStoredPasswordHint] = useVaultPasswordHint();
+  const { t } = useTranslation()
+  const [storedPasswordHint, setStoredPasswordHint] = useVaultPasswordHint()
 
   const {
     register,
@@ -46,12 +46,12 @@ export const ServerPasswordHintStep = ({
       passwordHint: storedPasswordHint || '',
     },
     mode: 'onChange',
-  });
+  })
 
   const onSubmit = (data: PasswordHintSchema) => {
-    setStoredPasswordHint(data.passwordHint);
-    onForward();
-  };
+    setStoredPasswordHint(data.passwordHint)
+    onForward()
+  }
 
   return (
     <>
@@ -114,13 +114,13 @@ export const ServerPasswordHintStep = ({
         </ButtonsWrapper>
       </PageContent>
     </>
-  );
-};
+  )
+}
 
 const ButtonsWrapper = styled(HStack)`
   align-self: center;
-`;
+`
 
 const StyledButton = styled(Button)`
   flex: 1;
-`;
+`

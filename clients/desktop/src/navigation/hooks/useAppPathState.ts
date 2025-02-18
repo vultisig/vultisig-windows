@@ -1,9 +1,9 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'
 
-import { AppPathState, AppPathsWithState } from '..';
+import { AppPathState, AppPathsWithState } from '..'
 
 export function useAppPathState<P extends AppPathsWithState>() {
-  const { state } = useLocation();
+  const { state } = useLocation()
 
-  return state as AppPathState[P];
+  return state as AppPathState[P]
 }

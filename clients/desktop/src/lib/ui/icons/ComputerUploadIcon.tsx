@@ -18,4 +18,4 @@ export const ComputerUploadIcon = () => (
       </clipPath>
     </defs>
   </svg>
-);
+)

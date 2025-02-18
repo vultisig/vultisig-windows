@@ -1,24 +1,24 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMemo } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import Select from 'react-select';
-import { z } from 'zod';
+import { Chain } from '@core/chain/Chain'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useMemo } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import Select from 'react-select'
+import { z } from 'zod'
 
-import { AddressBookItem } from '../../../../../lib/types/address-book';
-import { Button } from '../../../../../lib/ui/buttons/Button';
-import { Text } from '../../../../../lib/ui/text';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { Chain } from '@core/chain/Chain';
-import { useAssertWalletCore } from '../../../../../providers/WalletCoreProvider';
-import { useUpdateAddressBookItemMutation } from '../../../../../vault/mutations/useUpdateAddressBookItemMutation';
-import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';
-import { getCoinOptions } from '../../helpers/getCoinOptions';
-import { getModifyAddressSchema } from '../../schemas/addressSchema';
+import { AddressBookItem } from '../../../../../lib/types/address-book'
+import { Button } from '../../../../../lib/ui/buttons/Button'
+import { Text } from '../../../../../lib/ui/text'
+import { useAssertWalletCore } from '../../../../../providers/WalletCoreProvider'
+import { useUpdateAddressBookItemMutation } from '../../../../../vault/mutations/useUpdateAddressBookItemMutation'
+import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery'
+import { getCoinOptions } from '../../helpers/getCoinOptions'
+import { getModifyAddressSchema } from '../../schemas/addressSchema'
 import {
   customSelectOption,
   customSingleValue,
-} from '../addAddressForm/AddAddressForm.styles';
+} from '../addAddressForm/AddAddressForm.styles'
 import {
   ButtonWrapper,
   CoinOption,
@@ -29,26 +29,26 @@ import {
   FormField,
   FormFieldLabel,
   FormInput,
-} from './ModifyAddressForm.styles';
+} from './ModifyAddressForm.styles'
 
 type ModifyAddressFormProps = {
-  onClose: () => void;
-  addressBookItem: AddressBookItem;
-};
+  onClose: () => void
+  addressBookItem: AddressBookItem
+}
 
 const ModifyAddressForm = ({
   onClose,
   addressBookItem,
 }: ModifyAddressFormProps) => {
-  const { t } = useTranslation();
-  const chainOptions = useMemo(() => getCoinOptions(), []);
-  const { data: addressBookItems } = useAddressBookItemsQuery();
-  const walletCore = useAssertWalletCore();
+  const { t } = useTranslation()
+  const chainOptions = useMemo(() => getCoinOptions(), [])
+  const { data: addressBookItems } = useAddressBookItemsQuery()
+  const walletCore = useAssertWalletCore()
   const addressSchema = getModifyAddressSchema({
     walletCore,
     addressBookItems,
-  });
-  type AddressFormValues = z.infer<typeof addressSchema>;
+  })
+  type AddressFormValues = z.infer<typeof addressSchema>
 
   const {
     register,
@@ -63,7 +63,7 @@ const ModifyAddressForm = ({
       address: addressBookItem.address,
       chain: addressBookItem.chain,
     },
-  });
+  })
 
   const {
     mutate: updateAddressBookItem,
@@ -71,10 +71,10 @@ const ModifyAddressForm = ({
     error: addAddressBookAddressError,
   } = useUpdateAddressBookItemMutation({
     onSuccess: onClose,
-  });
+  })
 
   const handleModifyAddress = (data: AddressFormValues) => {
-    const { address, chain, title } = data;
+    const { address, chain, title } = data
     updateAddressBookItem({
       addressBookItem: {
         ...addressBookItem,
@@ -83,8 +83,8 @@ const ModifyAddressForm = ({
         chain: chain as Chain,
       },
       chain: chain as Chain,
-    });
-  };
+    })
+  }
 
   return (
     <Container>
@@ -101,7 +101,7 @@ const ModifyAddressForm = ({
                 }
                 defaultValue={chainOptions[0]}
                 onChange={selectedOption => {
-                  field.onChange(selectedOption?.value);
+                  field.onChange(selectedOption?.value)
                 }}
                 onBlur={field.onBlur}
                 options={chainOptions}
@@ -169,7 +169,7 @@ const ModifyAddressForm = ({
         )}
       </ButtonWrapper>
     </Container>
-  );
-};
+  )
+}
 
-export default ModifyAddressForm;
+export default ModifyAddressForm

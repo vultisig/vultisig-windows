@@ -1,21 +1,21 @@
-import { ReactNode } from 'react';
-import styled, { css } from 'styled-components';
+import { ReactNode } from 'react'
+import styled, { css } from 'styled-components'
 
-import { centerContent } from '../../css/centerContent';
-import { interactive } from '../../css/interactive';
-import { sameDimensions } from '../../css/sameDimensions';
-import { CheckIcon } from '../../icons/CheckIcon';
-import { HStack } from '../../layout/Stack';
-import { Text, text } from '../../text';
-import { getColor } from '../../theme/getters';
+import { centerContent } from '../../css/centerContent'
+import { interactive } from '../../css/interactive'
+import { sameDimensions } from '../../css/sameDimensions'
+import { CheckIcon } from '../../icons/CheckIcon'
+import { HStack } from '../../layout/Stack'
+import { Text, text } from '../../text'
+import { getColor } from '../../theme/getters'
 import {
   InvisibleHTMLCheckbox,
   InvisibleHTMLCheckboxProps,
-} from './InvisibleHTMLCheckbox';
+} from './InvisibleHTMLCheckbox'
 
 interface CheckboxProps extends InvisibleHTMLCheckboxProps {
-  label?: ReactNode;
-  className?: string;
+  label?: ReactNode
+  className?: string
 }
 
 const Box = styled.div<{ isChecked: boolean }>`
@@ -38,7 +38,7 @@ const Box = styled.div<{ isChecked: boolean }>`
           border: 1px solid ${getColor('foregroundSuper')};
           background: ${getColor('foregroundExtra')};
         `};
-`;
+`
 
 const Container = styled(HStack)<{ isChecked: boolean }>`
   ${text({
@@ -58,7 +58,7 @@ const Container = styled(HStack)<{ isChecked: boolean }>`
         background: ${getColor('foregroundSuper')};
       }
     `}
-`;
+`
 
 export const Checkbox = ({
   value,
@@ -77,4 +77,4 @@ export const Checkbox = ({
     {label && <Text as="div">{label}</Text>}
     <InvisibleHTMLCheckbox value={value} onChange={onChange} />
   </Container>
-);
+)

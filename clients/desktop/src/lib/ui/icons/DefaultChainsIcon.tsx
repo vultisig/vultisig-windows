@@ -15,5 +15,5 @@ const DefaultChainsIcon = () => (
       </clipPath>
     </defs>
   </svg>
-);
-export default DefaultChainsIcon;
+)
+export default DefaultChainsIcon

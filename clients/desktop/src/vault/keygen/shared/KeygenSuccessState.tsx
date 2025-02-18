@@ -1,15 +1,15 @@
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { centerContent } from '../../../lib/ui/css/centerContent';
-import { round } from '../../../lib/ui/css/round';
-import { sameDimensions } from '../../../lib/ui/css/sameDimensions';
-import { CheckIcon } from '../../../lib/ui/icons/CheckIcon';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { PageContent } from '../../../ui/page/PageContent';
-import { KeygenNetworkReminder } from './KeygenNetworkReminder';
+import { centerContent } from '../../../lib/ui/css/centerContent'
+import { round } from '../../../lib/ui/css/round'
+import { sameDimensions } from '../../../lib/ui/css/sameDimensions'
+import { CheckIcon } from '../../../lib/ui/icons/CheckIcon'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { getColor } from '../../../lib/ui/theme/getters'
+import { PageContent } from '../../../ui/page/PageContent'
+import { KeygenNetworkReminder } from './KeygenNetworkReminder'
 
 const Circle = styled.div`
   ${round};
@@ -18,10 +18,10 @@ const Circle = styled.div`
   ${centerContent};
   font-size: 44px;
   color: ${getColor('contrast')};
-`;
+`
 
 export const KeygenSuccessState = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <PageContent>
@@ -35,5 +35,5 @@ export const KeygenSuccessState = () => {
       </VStack>
       <KeygenNetworkReminder />
     </PageContent>
-  );
-};
+  )
+}

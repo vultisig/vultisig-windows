@@ -1,23 +1,23 @@
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { Text } from '../../../lib/ui/text';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt';
-import { useSendTxKeysignPayloadQuery } from '../state/useSendTxKeysignPayloadQuery';
-import { useSendTerms } from './state/sendTerms';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { Text } from '../../../lib/ui/text'
+import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt'
+import { useSendTxKeysignPayloadQuery } from '../state/useSendTxKeysignPayloadQuery'
+import { useSendTerms } from './state/sendTerms'
 
 export const SendConfirm = () => {
-  const { t } = useTranslation();
-  const keysignPayloadQuery = useSendTxKeysignPayloadQuery();
-  const [terms] = useSendTerms();
+  const { t } = useTranslation()
+  const keysignPayloadQuery = useSendTxKeysignPayloadQuery()
+  const [terms] = useSendTerms()
 
   const isDisabled = useMemo(() => {
     if (terms.some(term => !term)) {
-      return t('terms_required');
+      return t('terms_required')
     }
-  }, [t, terms]);
+  }, [t, terms])
 
   return (
     <MatchQuery
@@ -28,5 +28,5 @@ export const SendConfirm = () => {
         <StartKeysignPrompt value={value} isDisabled={isDisabled} />
       )}
     />
-  );
-};
+  )
+}

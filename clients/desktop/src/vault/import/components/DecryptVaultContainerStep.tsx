@@ -1,14 +1,14 @@
-import { fromBinary } from '@bufbuild/protobuf';
-import { VaultSchema } from '@core/communication/vultisig/vault/v1/vault_pb';
-import { fromBase64 } from '@lib/utils/fromBase64';
-import { pipe } from '@lib/utils/pipe';
-import { useMutation } from '@tanstack/react-query';
+import { fromBinary } from '@bufbuild/protobuf'
+import { VaultSchema } from '@core/communication/vultisig/vault/v1/vault_pb'
+import { fromBase64 } from '@lib/utils/fromBase64'
+import { pipe } from '@lib/utils/pipe'
+import { useMutation } from '@tanstack/react-query'
 
-import { storage } from '../../../../wailsjs/go/models';
-import { OnFinishProp, ValueProp } from '../../../lib/ui/props';
-import { decryptVault } from '../../encryption/decryptVault';
-import { toStorageVault } from '../../utils/storageVault';
-import { DecryptVaultView } from './DecryptVaultView';
+import { storage } from '../../../../wailsjs/go/models'
+import { OnFinishProp, ValueProp } from '../../../lib/ui/props'
+import { decryptVault } from '../../encryption/decryptVault'
+import { toStorageVault } from '../../utils/storageVault'
+import { DecryptVaultView } from './DecryptVaultView'
 
 export const DecryptVaultContainerStep = ({
   value,
@@ -29,9 +29,9 @@ export const DecryptVaultContainerStep = ({
         toStorageVault
       ),
     onSuccess: onFinish,
-  });
+  })
 
   return (
     <DecryptVaultView isPending={isPending} error={error} onSubmit={mutate} />
-  );
-};
+  )
+}

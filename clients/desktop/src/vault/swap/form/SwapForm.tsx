@@ -1,23 +1,23 @@
-import { t } from 'i18next';
+import { t } from 'i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { OnForwardProp } from '../../../lib/ui/props';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
-import { RefreshSwap } from '../components/RefreshSwap';
-import { SwapAmount } from './amount/SwapAmount';
-import { useIsSwapFormDisabled } from './hooks/useIsSwapFormDisabled';
-import { SwapInfo } from './info/SwapInfo';
-import { ManageFromCoin } from './ManageFromCoin';
-import { ManageToCoin } from './ManageToCoin';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { OnForwardProp } from '../../../lib/ui/props'
+import { PageContent } from '../../../ui/page/PageContent'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
+import { RefreshSwap } from '../components/RefreshSwap'
+import { SwapAmount } from './amount/SwapAmount'
+import { useIsSwapFormDisabled } from './hooks/useIsSwapFormDisabled'
+import { SwapInfo } from './info/SwapInfo'
+import { ManageFromCoin } from './ManageFromCoin'
+import { ManageToCoin } from './ManageToCoin'
 
 export const SwapForm: React.FC<OnForwardProp> = ({ onForward }) => {
-  const isDisabled = useIsSwapFormDisabled();
+  const isDisabled = useIsSwapFormDisabled()
 
   return (
     <>
@@ -49,5 +49,5 @@ export const SwapForm: React.FC<OnForwardProp> = ({ onForward }) => {
         </Button>
       </PageContent>
     </>
-  );
-};
+  )
+}

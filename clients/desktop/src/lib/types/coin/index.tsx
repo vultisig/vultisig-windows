@@ -1,3 +1,3 @@
-import { storage } from '../../../../wailsjs/go/models';
+import { storage } from '../../../../wailsjs/go/models'
 
-export type Coin = storage.Coin;
+export type Coin = storage.Coin

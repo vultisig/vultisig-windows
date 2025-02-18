@@ -1,41 +1,41 @@
-import { useMutation } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { attempt } from '@lib/utils/attempt'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useMutation } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { takeWholeSpaceAbsolutely } from '../../../lib/ui/css/takeWholeSpaceAbsolutely';
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { attempt } from '@lib/utils/attempt';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';
-import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent';
-import { PageContent } from '../../../ui/page/PageContent';
-import { readQrCode } from './utils/readQrCode';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { takeWholeSpaceAbsolutely } from '../../../lib/ui/css/takeWholeSpaceAbsolutely'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent'
+import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent'
+import { PageContent } from '../../../ui/page/PageContent'
+import { readQrCode } from './utils/readQrCode'
 
 const Container = styled(PageContent)`
   position: relative;
   justify-content: flex-end;
-`;
+`
 
 const Video = styled.video`
   ${takeWholeSpaceAbsolutely}
   object-fit: cover;
-`;
+`
 
 type ScanQrViewProps = {
-  onUploadQrViewRequest?: () => void;
-  onScanSuccess: (value: string) => void;
-  className?: string;
-};
+  onUploadQrViewRequest?: () => void
+  onScanSuccess: (value: string) => void
+  className?: string
+}
 
 export const ScanQrView = ({
   onUploadQrViewRequest,
   onScanSuccess,
   className,
 }: ScanQrViewProps) => {
-  const { t } = useTranslation();
-  const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  const { t } = useTranslation()
+  const [video, setVideo] = useState<HTMLVideoElement | null>(null)
 
   const { mutate: getStream, ...streamMutationState } = useMutation({
     mutationFn: () =>
@@ -57,34 +57,34 @@ export const ScanQrView = ({
           },
         },
       }),
-  });
+  })
 
-  const { data: stream, reset: resetStreamState } = streamMutationState;
-
-  useEffect(() => {
-    if (!stream || !video) return;
-
-    video.srcObject = stream;
-    video.play();
-
-    return () => stream.getTracks().forEach(track => track.stop());
-  }, [video, stream]);
-
-  useEffect(getStream, [getStream]);
+  const { data: stream, reset: resetStreamState } = streamMutationState
 
   useEffect(() => {
-    if (!video) return;
+    if (!stream || !video) return
 
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
+    video.srcObject = stream
+    video.play()
 
-    if (!context) return;
+    return () => stream.getTracks().forEach(track => track.stop())
+  }, [video, stream])
 
-    let animationFrameId: number;
+  useEffect(getStream, [getStream])
+
+  useEffect(() => {
+    if (!video) return
+
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')
+
+    if (!context) return
+
+    let animationFrameId: number
 
     const scan = () => {
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      canvas.width = video.videoWidth
+      canvas.height = video.videoHeight
 
       const scanData = attempt(
         () =>
@@ -93,19 +93,19 @@ export const ScanQrView = ({
             image: video,
           }),
         undefined
-      );
+      )
 
       if (scanData) {
-        onScanSuccess(scanData);
+        onScanSuccess(scanData)
       } else {
-        animationFrameId = requestAnimationFrame(scan);
+        animationFrameId = requestAnimationFrame(scan)
       }
-    };
+    }
 
-    animationFrameId = requestAnimationFrame(scan);
+    animationFrameId = requestAnimationFrame(scan)
 
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [onScanSuccess, video]);
+    return () => cancelAnimationFrame(animationFrameId)
+  }, [onScanSuccess, video])
 
   return (
     <Container className={className}>
@@ -122,8 +122,8 @@ export const ScanQrView = ({
             action={
               <Button
                 onClick={() => {
-                  resetStreamState();
-                  getStream();
+                  resetStreamState()
+                  getStream()
                 }}
               >
                 {t('try_again')}
@@ -138,5 +138,5 @@ export const ScanQrView = ({
         </Button>
       )}
     </Container>
-  );
-};
+  )
+}

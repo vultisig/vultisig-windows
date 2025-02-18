@@ -1,41 +1,38 @@
-import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind';
-import { CoinKey } from '@core/chain/coin/Coin';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { match } from '@lib/utils/match';
-import { memoize } from '@lib/utils/memoize';
-import { TransferDirection } from '@lib/utils/TransferDirection';
-import { createConfig, getQuote } from '@lifi/sdk';
+import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
+import { CoinKey } from '@core/chain/coin/Coin'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { match } from '@lib/utils/match'
+import { memoize } from '@lib/utils/memoize'
+import { TransferDirection } from '@lib/utils/TransferDirection'
+import { createConfig, getQuote } from '@lifi/sdk'
 
-import { GeneralSwapQuote } from '../../GeneralSwapQuote';
-import { lifiConfig } from '../config';
-import {
-  lifiSwapChainId,
-  LifiSwapEnabledChain,
-} from '../LifiSwapEnabledChains';
+import { GeneralSwapQuote } from '../../GeneralSwapQuote'
+import { lifiConfig } from '../config'
+import { lifiSwapChainId, LifiSwapEnabledChain } from '../LifiSwapEnabledChains'
 
 type Input = Record<TransferDirection, CoinKey<LifiSwapEnabledChain>> & {
-  address: string;
-  amount: bigint;
-};
+  address: string
+  amount: bigint
+}
 
 const setupLifi = memoize(() => {
   createConfig({
     integrator: lifiConfig.integratorName,
-  });
-});
+  })
+})
 
 export const getLifiSwapQuote = async ({
   amount,
   address,
   ...transfer
 }: Input): Promise<GeneralSwapQuote> => {
-  setupLifi();
+  setupLifi()
 
   const [fromChain, toChain] = [transfer.from, transfer.to].map(
     ({ chain }) => lifiSwapChainId[chain]
-  );
+  )
 
-  const [fromToken, toToken] = [transfer.from, transfer.to].map(({ id }) => id);
+  const [fromToken, toToken] = [transfer.from, transfer.to].map(({ id }) => id)
 
   const quote = await getQuote({
     fromChain,
@@ -45,14 +42,14 @@ export const getLifiSwapQuote = async ({
     fromAmount: amount.toString(),
     fromAddress: address,
     fee: lifiConfig.afffiliateFee,
-  });
+  })
 
-  const { transactionRequest, estimate } = quote;
+  const { transactionRequest, estimate } = quote
 
-  const chainKind = getChainKind(transfer.from.chain);
+  const chainKind = getChainKind(transfer.from.chain)
 
   const { value, gasPrice, gasLimit, data, from, to } =
-    shouldBePresent(transactionRequest);
+    shouldBePresent(transactionRequest)
 
   return {
     dstAmount: estimate.toAmount,
@@ -61,7 +58,7 @@ export const getLifiSwapQuote = async ({
       chainKind,
       {
         solana: () => {
-          throw new Error('Solana swaps are not supported yet');
+          throw new Error('Solana swaps are not supported yet')
         },
         evm: () => ({
           from: shouldBePresent(from),
@@ -73,5 +70,5 @@ export const getLifiSwapQuote = async ({
         }),
       }
     ),
-  };
-};
+  }
+}

@@ -19,4 +19,4 @@ export const CloudCheckIcon = () => (
       d="m9.25 17.5 2.5 2.75 5-5.5"
     />
   </svg>
-);
+)

@@ -1,19 +1,19 @@
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { formatAmount } from '@lib/utils/formatAmount'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { horizontalPadding } from '../../../../lib/ui/css/horizontalPadding';
-import { takeWholeSpace } from '../../../../lib/ui/css/takeWholeSpace';
-import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit';
-import { Spinner } from '../../../../lib/ui/loaders/Spinner';
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
-import { text } from '../../../../lib/ui/text';
-import { formatAmount } from '@lib/utils/formatAmount';
-import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery';
-import { useToCoin } from '../../state/toCoin';
-import { AmountContainer } from './AmountContainer';
-import { AmountLabel } from './AmountLabel';
-import { amountConfig } from './config';
-import { SwapFiatAmount } from './SwapFiatAmount';
+import { horizontalPadding } from '../../../../lib/ui/css/horizontalPadding'
+import { takeWholeSpace } from '../../../../lib/ui/css/takeWholeSpace'
+import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit'
+import { Spinner } from '../../../../lib/ui/loaders/Spinner'
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { text } from '../../../../lib/ui/text'
+import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
+import { useToCoin } from '../../state/toCoin'
+import { AmountContainer } from './AmountContainer'
+import { AmountLabel } from './AmountLabel'
+import { amountConfig } from './config'
+import { SwapFiatAmount } from './SwapFiatAmount'
 
 const Value = styled.div`
   ${takeWholeSpace};
@@ -27,13 +27,13 @@ const Value = styled.div`
     color: 'supporting',
     centerVertically: true,
   })}
-`;
+`
 
 export const ToAmount = () => {
-  const query = useSwapOutputAmountQuery();
-  const [toCoin] = useToCoin();
+  const query = useSwapOutputAmountQuery()
+  const [toCoin] = useToCoin()
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <AmountContainer>
@@ -56,5 +56,5 @@ export const ToAmount = () => {
         />
       </Value>
     </AmountContainer>
-  );
-};
+  )
+}

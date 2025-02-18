@@ -1,21 +1,21 @@
-import { Chain } from '@core/chain/Chain';
-import { getChainKind } from '@core/chain/ChainKind';
-import { getCoinType } from '@core/chain/coin/coinType';
-import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm';
-import { match } from '@lib/utils/match';
-import { WalletCore } from '@trustwallet/wallet-core';
+import { Chain } from '@core/chain/Chain'
+import { getChainKind } from '@core/chain/ChainKind'
+import { getCoinType } from '@core/chain/coin/coinType'
+import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { match } from '@lib/utils/match'
+import { WalletCore } from '@trustwallet/wallet-core'
 
-import { storage } from '../../../wailsjs/go/models';
-import { GetDerivedPubKey } from '../../../wailsjs/go/tss/TssService';
+import { storage } from '../../../wailsjs/go/models'
+import { GetDerivedPubKey } from '../../../wailsjs/go/tss/TssService'
 
 type Input = {
-  chain: Chain;
-  walletCore: WalletCore;
+  chain: Chain
+  walletCore: WalletCore
   vault: Pick<
     storage.Vault,
     'hex_chain_code' | 'public_key_ecdsa' | 'public_key_eddsa'
-  >;
-};
+  >
+}
 
 export const getVaultPublicKey = async ({
   chain,
@@ -25,14 +25,14 @@ export const getVaultPublicKey = async ({
   const coinType = getCoinType({
     walletCore,
     chain,
-  });
+  })
 
-  const keysignType = signatureAlgorithms[getChainKind(chain)];
+  const keysignType = signatureAlgorithms[getChainKind(chain)]
 
   const publicKeyType = match(keysignType, {
     ecdsa: () => walletCore.PublicKeyType.secp256k1,
     eddsa: () => walletCore.PublicKeyType.ed25519,
-  });
+  })
 
   const derivedPublicKey = await match(keysignType, {
     ecdsa: () =>
@@ -43,10 +43,10 @@ export const getVaultPublicKey = async ({
         false
       ),
     eddsa: async () => vault.public_key_eddsa,
-  });
+  })
 
   return walletCore.PublicKey.createWithData(
     Buffer.from(derivedPublicKey, 'hex'),
     publicKeyType
-  );
-};
+  )
+}

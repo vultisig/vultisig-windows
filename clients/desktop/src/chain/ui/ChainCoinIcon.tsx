@@ -1,11 +1,11 @@
-import { UiProps } from '../../lib/ui/props';
-import { ChainEntityIcon } from './ChainEntityIcon';
-import { WithChainIcon } from './WithChainIcon';
+import { UiProps } from '../../lib/ui/props'
+import { ChainEntityIcon } from './ChainEntityIcon'
+import { WithChainIcon } from './WithChainIcon'
 
 type ChainCoinIconProps = UiProps & {
-  chainSrc?: string;
-  coinSrc?: string;
-};
+  chainSrc?: string
+  coinSrc?: string
+}
 
 export const ChainCoinIcon = ({
   chainSrc,
@@ -17,8 +17,8 @@ export const ChainCoinIcon = ({
       <WithChainIcon {...rest} src={chainSrc}>
         <ChainEntityIcon value={coinSrc} />
       </WithChainIcon>
-    );
+    )
   }
 
-  return <ChainEntityIcon {...rest} value={coinSrc} />;
-};
+  return <ChainEntityIcon {...rest} value={coinSrc} />
+}

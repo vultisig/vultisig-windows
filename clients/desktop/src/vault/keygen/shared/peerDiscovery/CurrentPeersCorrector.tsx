@@ -1,31 +1,31 @@
-import { useEffect } from 'react';
+import { omit } from '@lib/utils/record/omit'
+import { useEffect } from 'react'
 
-import { omit } from '@lib/utils/record/omit';
-import { usePeersSelectionRecord } from '../../../keysign/shared/state/selectedPeers';
-import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery';
+import { usePeersSelectionRecord } from '../../../keysign/shared/state/selectedPeers'
+import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery'
 
 export const CurrentPeersCorrector = () => {
-  const [value, setValue] = usePeersSelectionRecord();
+  const [value, setValue] = usePeersSelectionRecord()
 
-  const peerOptionsQuery = usePeerOptionsQuery();
+  const peerOptionsQuery = usePeerOptionsQuery()
 
   useEffect(() => {
-    const options = peerOptionsQuery.data ?? [];
+    const options = peerOptionsQuery.data ?? []
 
-    let newValue = value;
+    let newValue = value
 
-    [...Object.keys(newValue), ...options].forEach(peer => {
+    ;[...Object.keys(newValue), ...options].forEach(peer => {
       if (!options.includes(peer)) {
-        newValue = omit(newValue, peer);
+        newValue = omit(newValue, peer)
       } else if (!(peer in newValue)) {
-        newValue = { ...newValue, [peer]: true };
+        newValue = { ...newValue, [peer]: true }
       }
-    });
+    })
 
     if (newValue !== value) {
-      setValue(newValue);
+      setValue(newValue)
     }
-  }, [peerOptionsQuery.data, setValue, value]);
+  }, [peerOptionsQuery.data, setValue, value])
 
-  return null;
-};
+  return null
+}

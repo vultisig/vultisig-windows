@@ -1,7 +1,7 @@
-import { ThemeColors } from './ThemeColors';
-import { ThemeName } from './ThemeName';
+import { ThemeColors } from './ThemeColors'
+import { ThemeName } from './ThemeName'
 
 export interface Theme {
-  name: ThemeName;
-  colors: ThemeColors;
+  name: ThemeName
+  colors: ThemeColors
 }

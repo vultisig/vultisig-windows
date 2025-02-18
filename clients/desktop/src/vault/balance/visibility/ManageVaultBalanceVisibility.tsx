@@ -1,10 +1,10 @@
-import { IconButton } from '../../../lib/ui/buttons/IconButton';
-import { EyeIcon } from '../../../lib/ui/icons/EyeIcon';
-import { EyeOffIcon } from '../../../lib/ui/icons/EyeOffIcon';
-import { useIsVaultBalanceVisible } from './useIsVaultBalanceVisible';
+import { IconButton } from '../../../lib/ui/buttons/IconButton'
+import { EyeIcon } from '../../../lib/ui/icons/EyeIcon'
+import { EyeOffIcon } from '../../../lib/ui/icons/EyeOffIcon'
+import { useIsVaultBalanceVisible } from './useIsVaultBalanceVisible'
 
 export const ManageVaultBalanceVisibility = () => {
-  const [value, setValue] = useIsVaultBalanceVisible();
+  const [value, setValue] = useIsVaultBalanceVisible()
 
   return (
     <IconButton
@@ -13,5 +13,5 @@ export const ManageVaultBalanceVisibility = () => {
       onClick={() => setValue(!value)}
       title={value ? 'Hide balance' : 'Show balance'}
     />
-  );
-};
+  )
+}

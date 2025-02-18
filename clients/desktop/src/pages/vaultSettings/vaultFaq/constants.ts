@@ -29,4 +29,4 @@ export const faqData = [
     title: 'faq_need_to_register_title',
     content: 'faq_need_to_register_content',
   },
-];
+]

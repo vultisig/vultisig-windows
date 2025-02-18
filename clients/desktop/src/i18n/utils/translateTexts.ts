@@ -1,14 +1,14 @@
-import { TranslationServiceClient } from '@google-cloud/translate';
+import { TranslationServiceClient } from '@google-cloud/translate'
+import { toBatches } from '@lib/utils/array/toBatches'
 
-import { toBatches } from '@lib/utils/array/toBatches';
-import { Language } from '../Language';
+import { Language } from '../Language'
 
-const batchSize = 600;
+const batchSize = 600
 
 interface TranslateTextsParams {
-  texts: string[];
-  from: Language;
-  to: Language;
+  texts: string[]
+  from: Language
+  to: Language
 }
 
 export const translateTexts = async ({
@@ -16,16 +16,16 @@ export const translateTexts = async ({
   from,
   to,
 }: TranslateTextsParams): Promise<string[]> => {
-  console.log(`Translating ${texts.length} texts from ${from} to ${to}`);
+  console.log(`Translating ${texts.length} texts from ${from} to ${to}`)
   if (texts.length === 0) {
-    return [];
+    return []
   }
 
-  const translationClient = new TranslationServiceClient();
+  const translationClient = new TranslationServiceClient()
 
-  const batches = toBatches(texts, batchSize);
+  const batches = toBatches(texts, batchSize)
 
-  const result = [];
+  const result = []
   for (const contents of batches) {
     const request = {
       parent: `projects/${process.env.GOOGLE_TRANSLATE_PROJECT_ID}/locations/global`,
@@ -33,28 +33,28 @@ export const translateTexts = async ({
       mimeType: 'text/plain',
       sourceLanguageCode: from,
       targetLanguageCode: to,
-    };
+    }
 
-    const [{ translations }] = await translationClient.translateText(request);
+    const [{ translations }] = await translationClient.translateText(request)
     if (!translations) {
-      throw new Error('No translations');
+      throw new Error('No translations')
     }
 
     result.push(
       ...translations.map((translation, index) => {
-        let { translatedText } = translation;
+        let { translatedText } = translation
         if (!translatedText) {
-          throw new Error('No translatedText');
+          throw new Error('No translatedText')
         }
 
         if (contents[index].endsWith('?') && !translatedText.endsWith('?')) {
-          translatedText += '?';
+          translatedText += '?'
         }
 
-        return translatedText;
+        return translatedText
       })
-    );
+    )
   }
 
-  return result;
-};
+  return result
+}

@@ -1,15 +1,15 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
-import { ProductLogoBlock } from '../../../ui/logo/ProductLogoBlock';
-import { Wrapper } from './NoVaultsHomePage.styled';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
+import { ProductLogoBlock } from '../../../ui/logo/ProductLogoBlock'
+import { Wrapper } from './NoVaultsHomePage.styled'
 
 export const NoVaultsHomePage = () => {
-  const { t } = useTranslation();
-  const navigate = useAppNavigate();
+  const { t } = useTranslation()
+  const navigate = useAppNavigate()
 
   return (
     <Wrapper>
@@ -29,5 +29,5 @@ export const NoVaultsHomePage = () => {
         </VStack>
       </AnimatedVisibility>
     </Wrapper>
-  );
-};
+  )
+}

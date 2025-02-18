@@ -1,24 +1,24 @@
-import { match } from '@lib/utils/match';
-import { useMutation } from '@tanstack/react-query';
+import { match } from '@lib/utils/match'
+import { useMutation } from '@tanstack/react-query'
 
-import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService';
-import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
-import { KeygenType } from '../../KeygenType';
-import { useCurrentKeygenType } from '../../state/currentKeygenType';
-import { useCurrentKeygenVault } from '../../state/currentKeygenVault';
-import { useCurrentServerUrl } from '../../state/currentServerUrl';
-import { useCurrentSessionId } from '../state/currentSessionId';
+import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService'
+import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
+import { KeygenType } from '../../KeygenType'
+import { useCurrentKeygenType } from '../../state/currentKeygenType'
+import { useCurrentKeygenVault } from '../../state/currentKeygenVault'
+import { useCurrentServerUrl } from '../../state/currentServerUrl'
+import { useCurrentSessionId } from '../state/currentSessionId'
 
 export const useKeygenMutation = () => {
-  const keygenType = useCurrentKeygenType();
+  const keygenType = useCurrentKeygenType()
 
-  const serverUrl = useCurrentServerUrl();
+  const serverUrl = useCurrentServerUrl()
 
-  const encryptionKeyHex = useCurrentHexEncryptionKey();
+  const encryptionKeyHex = useCurrentHexEncryptionKey()
 
-  const sessionId = useCurrentSessionId();
+  const sessionId = useCurrentSessionId()
 
-  const vault = useCurrentKeygenVault();
+  const vault = useCurrentKeygenVault()
 
   return useMutation({
     mutationFn: async () =>
@@ -35,5 +35,5 @@ export const useKeygenMutation = () => {
         [KeygenType.Reshare]: () =>
           Reshare(vault, sessionId, encryptionKeyHex, serverUrl),
       }),
-  });
-};
+  })
+}

@@ -1,20 +1,20 @@
-import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin';
-import { isOneOf } from '@lib/utils/array/isOneOf';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
+import { isOneOf } from '@lib/utils/array/isOneOf'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
-import { Button } from '../../lib/ui/buttons/Button';
-import { ValueProp } from '../../lib/ui/props';
-import { makeAppPath } from '../../navigation';
-import { depositEnabledChains } from '../deposit/DepositEnabledChain';
+import { Button } from '../../lib/ui/buttons/Button'
+import { ValueProp } from '../../lib/ui/props'
+import { makeAppPath } from '../../navigation'
+import { depositEnabledChains } from '../deposit/DepositEnabledChain'
 
 export const DepositPrompt = ({ value }: ValueProp<CoinKey>) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const chain = isOneOf(value.chain, depositEnabledChains);
+  const chain = isOneOf(value.chain, depositEnabledChains)
 
   if (!chain) {
-    return null;
+    return null
   }
 
   return (
@@ -27,5 +27,5 @@ export const DepositPrompt = ({ value }: ValueProp<CoinKey>) => {
         {t('deposit')}
       </Button>
     </Link>
-  );
-};
+  )
+}

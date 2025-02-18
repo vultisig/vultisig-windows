@@ -1,11 +1,11 @@
-import { Chain } from '@core/chain/Chain';
-import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord';
-import { rippleTxFee } from '@core/chain/tx/fee/ripple';
-import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific';
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
+import { Chain } from '@core/chain/Chain'
+import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
+import { rippleTxFee } from '@core/chain/tx/fee/ripple'
+import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
+import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 
-import { polkadotConfig } from '../../../polkadot/config';
-import { tonConfig } from '../../../ton/config';
+import { polkadotConfig } from '../../../polkadot/config'
+import { tonConfig } from '../../../ton/config'
 
 export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
   matchDiscriminatedUnion(chainSpecific, 'case', 'value', {
@@ -20,7 +20,7 @@ export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
     polkadotSpecific: () => polkadotConfig.fee,
     tonSpecific: () => tonConfig.fee,
     tronSpecific: () => {
-      throw new Error('Tron fee not implemented');
+      throw new Error('Tron fee not implemented')
     },
     rippleSpecific: () => rippleTxFee,
-  });
+  })

@@ -1,11 +1,11 @@
-import { Chain } from '@core/chain/Chain';
+import { Chain } from '@core/chain/Chain'
 import {
   AccountCoin,
   accountCoinKeyToString,
-} from '@core/chain/coin/AccountCoin';
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
+} from '@core/chain/coin/AccountCoin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 
-import { storage } from '../../wailsjs/go/models';
+import { storage } from '../../wailsjs/go/models'
 
 export const fromStorageCoin = (coin: storage.Coin): AccountCoin => {
   return {
@@ -16,15 +16,15 @@ export const fromStorageCoin = (coin: storage.Coin): AccountCoin => {
     logo: coin.logo,
     priceProviderId: coin.price_provider_id,
     decimals: coin.decimals,
-  };
-};
+  }
+}
 
 type ToStorageCoinInput = AccountCoin & {
-  hexPublicKey: string;
-};
+  hexPublicKey: string
+}
 
 export const toStorageCoin = (coin: ToStorageCoinInput): storage.Coin => {
-  const isNativeToken = isFeeCoin(coin);
+  const isNativeToken = isFeeCoin(coin)
 
   return {
     id: accountCoinKeyToString(coin),
@@ -37,5 +37,5 @@ export const toStorageCoin = (coin: ToStorageCoinInput): storage.Coin => {
     logo: coin.logo,
     price_provider_id: coin.priceProviderId ?? '',
     decimals: coin.decimals,
-  };
-};
+  }
+}

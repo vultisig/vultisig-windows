@@ -1,10 +1,10 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { toSizeUnit } from '../../../../../lib/ui/css/toSizeUnit';
-import { hStack } from '../../../../../lib/ui/layout/Stack';
-import { CoinSearchInput } from './CoinSearchInput';
-import { coinSearchConfig } from './config';
-import { SaveCoinSearch } from './SaveCoinSearch';
+import { toSizeUnit } from '../../../../../lib/ui/css/toSizeUnit'
+import { hStack } from '../../../../../lib/ui/layout/Stack'
+import { CoinSearchInput } from './CoinSearchInput'
+import { coinSearchConfig } from './config'
+import { SaveCoinSearch } from './SaveCoinSearch'
 
 const Container = styled.div`
   ${hStack({
@@ -13,7 +13,7 @@ const Container = styled.div`
     gap: 8,
   })}
   height: ${toSizeUnit(coinSearchConfig.height)};
-`;
+`
 
 export const CoinSearch = () => {
   return (
@@ -21,5 +21,5 @@ export const CoinSearch = () => {
       <CoinSearchInput />
       <SaveCoinSearch />
     </Container>
-  );
-};
+  )
+}

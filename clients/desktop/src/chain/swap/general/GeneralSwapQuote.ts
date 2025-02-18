@@ -1,14 +1,14 @@
-import { GeneralSwapProvider } from './GeneralSwapProvider';
+import { GeneralSwapProvider } from './GeneralSwapProvider'
 
 export type GeneralSwapQuote = {
-  dstAmount: string;
-  provider: GeneralSwapProvider;
+  dstAmount: string
+  provider: GeneralSwapProvider
   tx: {
-    from: string;
-    to: string;
-    data: string;
-    value: string;
-    gasPrice: string;
-    gas: number;
-  };
-};
+    from: string
+    to: string
+    data: string
+    value: string
+    gasPrice: string
+    gas: number
+  }
+}

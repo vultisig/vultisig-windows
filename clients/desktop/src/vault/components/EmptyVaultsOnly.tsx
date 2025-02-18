@@ -1,26 +1,26 @@
-import { useEffect } from 'react';
+import { isEmpty } from '@lib/utils/array/isEmpty'
+import { useEffect } from 'react'
 
-import { ChildrenProp } from '../../lib/ui/props';
-import { isEmpty } from '@lib/utils/array/isEmpty';
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
-import { useVaults } from '../queries/useVaultsQuery';
+import { ChildrenProp } from '../../lib/ui/props'
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
+import { useVaults } from '../queries/useVaultsQuery'
 
 export const EmptyVaultsOnly = ({ children }: ChildrenProp) => {
-  const navigate = useAppNavigate();
+  const navigate = useAppNavigate()
 
-  const vaults = useVaults();
+  const vaults = useVaults()
 
-  const hasVaults = !isEmpty(vaults);
+  const hasVaults = !isEmpty(vaults)
 
   useEffect(() => {
     if (hasVaults) {
-      navigate('vault');
+      navigate('vault')
     }
-  }, [hasVaults, navigate]);
+  }, [hasVaults, navigate])
 
   if (hasVaults) {
-    return null;
+    return null
   }
 
-  return <>{children}</>;
-};
+  return <>{children}</>
+}

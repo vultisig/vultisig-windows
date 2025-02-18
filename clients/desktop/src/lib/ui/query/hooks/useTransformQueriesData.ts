@@ -1,10 +1,10 @@
-import { getRecordSize } from '@lib/utils/record/getRecordSize';
-import { recordMap } from '@lib/utils/record/recordMap';
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
-import { NonUndefined } from '@lib/utils/types/NonUndefined';
-import { useMemo } from 'react';
+import { getRecordSize } from '@lib/utils/record/getRecordSize'
+import { recordMap } from '@lib/utils/record/recordMap'
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
+import { NonUndefined } from '@lib/utils/types/NonUndefined'
+import { useMemo } from 'react'
 
-import { Query } from '../Query';
+import { Query } from '../Query'
 
 export function useTransformQueriesData<
   T extends Record<string, Query<any, E>>,
@@ -17,14 +17,14 @@ export function useTransformQueriesData<
   return useMemo(() => {
     const dataRecord = withoutUndefinedFields(
       recordMap(queriesRecord, ({ data }) => data)
-    );
+    )
 
-    const queries = Object.values(queriesRecord);
+    const queries = Object.values(queriesRecord)
 
     const error =
-      Object.values(queriesRecord).find(({ error }) => error)?.error ?? null;
-    const isPending = queries.some(({ isPending }) => isPending);
-    const isLoading = queries.some(({ isLoading }) => isLoading);
+      Object.values(queriesRecord).find(({ error }) => error)?.error ?? null
+    const isPending = queries.some(({ isPending }) => isPending)
+    const isLoading = queries.some(({ isLoading }) => isLoading)
 
     if (getRecordSize(dataRecord) === getRecordSize(queriesRecord)) {
       try {
@@ -35,14 +35,14 @@ export function useTransformQueriesData<
           isPending,
           isLoading,
           error,
-        };
+        }
       } catch (error) {
         return {
           data: undefined,
           isPending,
           isLoading,
           error: error as E,
-        };
+        }
       }
     }
 
@@ -51,6 +51,6 @@ export function useTransformQueriesData<
       error,
       isPending,
       isLoading,
-    };
-  }, [queriesRecord, transform]);
+    }
+  }, [queriesRecord, transform])
 }

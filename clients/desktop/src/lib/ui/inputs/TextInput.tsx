@@ -1,25 +1,25 @@
-import { ChangeEvent, ComponentProps, forwardRef, Ref } from 'react';
-import styled, { css } from 'styled-components';
+import { ChangeEvent, ComponentProps, forwardRef, Ref } from 'react'
+import styled, { css } from 'styled-components'
 
-import { textInput } from '../css/textInput';
-import { VStack } from '../layout/Stack';
-import { Spinner } from '../loaders/Spinner';
-import { LabelProp, UiProps } from '../props';
-import { getColor } from '../theme/getters';
-import { InputContainer } from './InputContainer';
-import { InputLabel } from './InputLabel';
+import { textInput } from '../css/textInput'
+import { VStack } from '../layout/Stack'
+import { Spinner } from '../loaders/Spinner'
+import { LabelProp, UiProps } from '../props'
+import { getColor } from '../theme/getters'
+import { InputContainer } from './InputContainer'
+import { InputLabel } from './InputLabel'
 
 export type SharedTextInputProps = Partial<LabelProp> &
   ComponentProps<typeof TextInputContainer> & {
-    onValueChange?: (value: string) => void;
-    isLoading?: boolean;
-    validation?: 'valid' | 'invalid';
-  };
+    onValueChange?: (value: string) => void
+    isLoading?: boolean
+    validation?: 'valid' | 'invalid'
+  }
 
 export interface TextInputProps
   extends ComponentProps<typeof TextInputContainer>,
     SharedTextInputProps {
-  inputOverlay?: React.ReactNode;
+  inputOverlay?: React.ReactNode
 }
 
 export const TextInput = forwardRef(function TextInputInner(
@@ -45,16 +45,16 @@ export const TextInput = forwardRef(function TextInputInner(
             className={className}
             ref={ref}
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
-              props.onChange?.(event);
-              onValueChange?.(event.currentTarget.value);
+              props.onChange?.(event)
+              onValueChange?.(event.currentTarget.value)
             }}
           />
         )}
         {inputOverlay}
       </InputWr>
     </InputContainer>
-  );
-});
+  )
+})
 
 const InputWr = styled.div`
   width: 100%;
@@ -62,10 +62,10 @@ const InputWr = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`;
+`
 
 export const TextInputContainer = styled.input<{
-  validation?: 'valid' | 'invalid';
+  validation?: 'valid' | 'invalid'
 }>`
   ${textInput};
 
@@ -88,7 +88,7 @@ export const TextInputContainer = styled.input<{
             border-color: ${getColor('danger')};
           }
         `}
-`;
+`
 
 export const TextInputLoader = (props: UiProps) => (
   <TextInputContainer as="div" {...props}>
@@ -96,4 +96,4 @@ export const TextInputLoader = (props: UiProps) => (
       <Spinner />
     </VStack>
   </TextInputContainer>
-);
+)

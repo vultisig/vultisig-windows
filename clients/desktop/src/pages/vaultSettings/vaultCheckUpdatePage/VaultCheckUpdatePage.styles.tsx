@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
-import { Text } from '../../../lib/ui/text';
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
+import { Text } from '../../../lib/ui/text'
 
 export const FixedWrapper = styled.div`
   position: fixed;
@@ -14,14 +14,14 @@ export const FixedWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 12px;
-`;
+`
 
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
-`;
+`
 
 export const CenteredText = styled(Text)`
   text-align: center;
@@ -29,7 +29,7 @@ export const CenteredText = styled(Text)`
   flex-direction: column;
   align-items: center;
   gap: 4px;
-`;
+`
 
 export const DownloadButton = styled(UnstyledButton)`
   margin-left: 8px;
@@ -39,4 +39,4 @@ export const DownloadButton = styled(UnstyledButton)`
   background-color: ${({ theme }) => theme.colors.foreground.toCssValue()};
   color: ${({ theme }) => theme.colors.primary.toCssValue()};
   font-weight: 600;
-`;
+`

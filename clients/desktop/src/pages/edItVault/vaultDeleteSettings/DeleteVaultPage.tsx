@@ -1,65 +1,65 @@
-import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import DangerSignRedIcon from '../../../lib/ui/icons/DangerSignRedIcon';
-import { HStack, VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
-import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { PageSlice } from '../../../ui/page/PageSlice';
-import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation';
-import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery';
-import { useCurrentVault } from '../../../vault/state/currentVault';
-import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers';
-import { getStorageVaultId } from '../../../vault/utils/storageVault';
+import DangerSignRedIcon from '../../../lib/ui/icons/DangerSignRedIcon'
+import { HStack, VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
+import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { PageSlice } from '../../../ui/page/PageSlice'
+import { useDeleteVaultMutation } from '../../../vault/mutations/useDeleteVaultMutation'
+import { useVaultTotalBalanceQuery } from '../../../vault/queries/useVaultTotalBalanceQuery'
+import { useCurrentVault } from '../../../vault/state/currentVault'
+import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers'
+import { getStorageVaultId } from '../../../vault/utils/storageVault'
 import {
   ActionsWrapper,
   Check,
   Container,
   DeleteButton,
   ListItemPanel,
-} from './DeleteVaultPage.styles';
+} from './DeleteVaultPage.styles'
 
 type DeleteTerms = {
-  firstTermAccepted: boolean;
-  secondTermAccepted: boolean;
-  thirdTermAccepted: boolean;
-};
+  firstTermAccepted: boolean
+  secondTermAccepted: boolean
+  thirdTermAccepted: boolean
+}
 
 const deleteTermsConfig: { key: keyof DeleteTerms; labelKey: string }[] = [
   { key: 'firstTermAccepted', labelKey: 'vault_delete_page_term_1' },
   { key: 'secondTermAccepted', labelKey: 'vault_delete_page_term_2' },
   { key: 'thirdTermAccepted', labelKey: 'vault_delete_page_term_3' },
-];
+]
 
 const DeleteVaultPage = () => {
   const [deleteTerms, setDeleteTerms] = useState<DeleteTerms>({
     firstTermAccepted: false,
     secondTermAccepted: false,
     thirdTermAccepted: false,
-  });
+  })
 
-  const { t } = useTranslation();
-  const { data: vaultBalance } = useVaultTotalBalanceQuery();
-  const { mutate: deleteVault, isPending, error } = useDeleteVaultMutation();
-  const vault = useCurrentVault();
-  const navigate = useAppNavigate();
-  const [fiatCurrency] = useFiatCurrency();
+  const { t } = useTranslation()
+  const { data: vaultBalance } = useVaultTotalBalanceQuery()
+  const { mutate: deleteVault, isPending, error } = useDeleteVaultMutation()
+  const vault = useCurrentVault()
+  const navigate = useAppNavigate()
+  const [fiatCurrency] = useFiatCurrency()
 
   const { signers, name, public_key_eddsa, public_key_ecdsa, local_party_id } =
-    vault;
+    vault
 
   const { localPartyIndex, totalSigners } =
     getVaultParticipantInfoFormattedForUI({
       signers,
       local_party_id,
-    });
+    })
 
-  const currencySymbol = fiatCurrencySymbolRecord[fiatCurrency];
+  const currencySymbol = fiatCurrencySymbolRecord[fiatCurrency]
 
   const vaultDetails = [
     { label: t('vault_delete_page_vault_name'), value: name },
@@ -74,16 +74,16 @@ const DeleteVaultPage = () => {
     { label: t('vault_delete_page_device_id'), value: local_party_id },
     { label: t('vault_delete_page_ecdsa_key'), value: public_key_ecdsa },
     { label: t('vault_delete_page_eddsa_key'), value: public_key_eddsa },
-  ];
+  ]
 
   const toggleDeleteTerm = (key: keyof DeleteTerms) => {
     setDeleteTerms(prev => ({
       ...prev,
       [key]: !prev[key],
-    }));
-  };
+    }))
+  }
 
-  const isDeleteDisabled = !Object.values(deleteTerms).every(Boolean);
+  const isDeleteDisabled = !Object.values(deleteTerms).every(Boolean)
 
   return (
     <Container flexGrow gap={16}>
@@ -148,7 +148,7 @@ const DeleteVaultPage = () => {
               onClick={() => {
                 deleteVault(getStorageVaultId(vault), {
                   onSuccess: () => navigate('vault'),
-                });
+                })
               }}
               color="danger"
               isDisabled={isDeleteDisabled}
@@ -164,7 +164,7 @@ const DeleteVaultPage = () => {
         </VStack>
       </PageSlice>
     </Container>
-  );
-};
+  )
+}
 
-export default DeleteVaultPage;
+export default DeleteVaultPage

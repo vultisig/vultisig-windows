@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Input = styled.input`
   margin: 0;
@@ -9,4 +9,4 @@ export const Input = styled.input`
   font-family: inherit;
   font-size: inherit;
   color: inherit;
-`;
+`

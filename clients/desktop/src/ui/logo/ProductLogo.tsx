@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { SVGProps } from 'react'
 
 export const ProductLogo = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -198,4 +198,4 @@ export const ProductLogo = (props: SVGProps<SVGSVGElement>) => (
       </linearGradient>
     </defs>
   </svg>
-);
+)

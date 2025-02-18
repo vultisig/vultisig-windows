@@ -1,42 +1,42 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
-import { Chain } from '@core/chain/Chain';
-import { fromCommCoin } from '@core/communication/utils/commCoin';
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
-import { isOneOf } from '@lib/utils/array/isOneOf';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { formatAmount } from '@lib/utils/formatAmount';
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion';
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { Chain } from '@core/chain/Chain'
+import { fromCommCoin } from '@core/communication/utils/commCoin'
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { isOneOf } from '@lib/utils/array/isOneOf'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { formatAmount } from '@lib/utils/formatAmount'
+import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime';
-import { useCurrentTxHash } from '../../../chain/state/currentTxHash';
-import { nativeSwapChains } from '../../../chain/swap/native/NativeSwapChain';
-import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount';
-import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
-import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow';
-import { formatFee } from '../../../chain/tx/fee/utils/formatFee';
-import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash';
-import { getBlockExplorerUrl } from '../../../chain/utils/getBlockExplorerUrl';
-import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { IconButton } from '../../../lib/ui/buttons/IconButton';
-import { CopyIcon } from '../../../lib/ui/icons/CopyIcon';
-import { LinkIcon } from '../../../lib/ui/icons/LinkIcon';
-import { HStack, VStack } from '../../../lib/ui/layout/Stack';
-import { ValueProp } from '../../../lib/ui/props';
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { Text } from '../../../lib/ui/text';
-import { useFiatCurrency } from '../../../preferences/state/fiatCurrency';
-import { KeysignSwapTxInfo } from '../../swap/keysign/KeysignSwapTxInfo';
-import { SwapTrackingLink } from './SwapTrackingLink';
+import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime'
+import { useCurrentTxHash } from '../../../chain/state/currentTxHash'
+import { nativeSwapChains } from '../../../chain/swap/native/NativeSwapChain'
+import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount'
+import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo'
+import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow'
+import { formatFee } from '../../../chain/tx/fee/utils/formatFee'
+import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash'
+import { getBlockExplorerUrl } from '../../../chain/utils/getBlockExplorerUrl'
+import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
+import { IconButton } from '../../../lib/ui/buttons/IconButton'
+import { CopyIcon } from '../../../lib/ui/icons/CopyIcon'
+import { LinkIcon } from '../../../lib/ui/icons/LinkIcon'
+import { HStack, VStack } from '../../../lib/ui/layout/Stack'
+import { ValueProp } from '../../../lib/ui/props'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { Text } from '../../../lib/ui/text'
+import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
+import { KeysignSwapTxInfo } from '../../swap/keysign/KeysignSwapTxInfo'
+import { SwapTrackingLink } from './SwapTrackingLink'
 
 export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
-  const txHash = useCurrentTxHash();
+  const txHash = useCurrentTxHash()
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const copyTxHash = useCopyTxHash();
-  const [fiatCurrency] = useFiatCurrency();
+  const copyTxHash = useCopyTxHash()
+  const [fiatCurrency] = useFiatCurrency()
   const {
     coin: potentialCoin,
     toAddress,
@@ -44,35 +44,35 @@ export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     toAmount,
     blockchainSpecific,
     swapPayload,
-  } = value;
+  } = value
 
   const isSwapTx =
     (swapPayload && swapPayload.value) ||
     memo?.startsWith('=') ||
-    memo?.toLowerCase().startsWith('swap');
-  const coin = fromCommCoin(shouldBePresent(potentialCoin));
-  const { decimals } = coin;
+    memo?.toLowerCase().startsWith('swap')
+  const coin = fromCommCoin(shouldBePresent(potentialCoin))
+  const { decimals } = coin
 
   const coinPriceQuery = useCoinPriceQuery({
     coin,
-  });
+  })
 
   const formattedToAmount = useMemo(() => {
-    if (!toAmount) return null;
+    if (!toAmount) return null
 
-    return fromChainAmount(BigInt(toAmount), decimals);
-  }, [toAmount, decimals]);
+    return fromChainAmount(BigInt(toAmount), decimals)
+  }, [toAmount, decimals])
 
-  const { chain } = shouldBePresent(coin);
+  const { chain } = shouldBePresent(coin)
 
   const networkFeesFormatted = useMemo(() => {
-    if (!blockchainSpecific.value) return null;
+    if (!blockchainSpecific.value) return null
 
     return formatFee({
       chain: chain as Chain,
       chainSpecific: blockchainSpecific,
-    });
-  }, [blockchainSpecific, chain]);
+    })
+  }, [blockchainSpecific, chain])
 
   const blockExplorerChain: Chain = useMemo(() => {
     if (isSwapTx && swapPayload && swapPayload.value) {
@@ -80,17 +80,17 @@ export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
         thorchainSwapPayload: () => Chain.THORChain,
         mayachainSwapPayload: () => Chain.MayaChain,
         oneinchSwapPayload: () => chain as Chain,
-      });
+      })
     }
 
-    return chain as Chain;
-  }, [chain, isSwapTx, swapPayload]);
+    return chain as Chain
+  }, [chain, isSwapTx, swapPayload])
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: blockExplorerChain,
     entity: 'tx',
     value: txHash,
-  });
+  })
 
   return (
     <>
@@ -102,7 +102,7 @@ export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
           <IconButton icon={<CopyIcon />} onClick={() => copyTxHash(txHash)} />
           <IconButton
             onClick={() => {
-              BrowserOpenURL(blockExplorerUrl);
+              BrowserOpenURL(blockExplorerUrl)
             }}
             icon={<LinkIcon />}
           />
@@ -158,5 +158,5 @@ export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
         <SwapTrackingLink value={blockExplorerUrl} />
       )}
     </>
-  );
-};
+  )
+}

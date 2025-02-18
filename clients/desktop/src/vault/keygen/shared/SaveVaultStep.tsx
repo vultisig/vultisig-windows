@@ -1,27 +1,27 @@
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { storage } from '../../../../wailsjs/go/models';
-import { OnForwardProp, TitleProp, ValueProp } from '../../../lib/ui/props';
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent';
-import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
-import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent';
-import { useSaveVaultMutation } from '../../mutations/useSaveVaultMutation';
+import { storage } from '../../../../wailsjs/go/models'
+import { OnForwardProp, TitleProp, ValueProp } from '../../../lib/ui/props'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent'
+import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
+import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent'
+import { useSaveVaultMutation } from '../../mutations/useSaveVaultMutation'
 
 export const SaveVaultStep: React.FC<
   ValueProp<storage.Vault> & OnForwardProp & TitleProp
 > = ({ value, onForward, title }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const { mutate, ...mutationState } = useSaveVaultMutation({
     onSuccess: onForward,
-  });
+  })
 
   useEffect(() => {
-    mutate(value);
-  }, [mutate, value]);
+    mutate(value)
+  }, [mutate, value])
 
   return (
     <>
@@ -38,5 +38,5 @@ export const SaveVaultStep: React.FC<
         )}
       />
     </>
-  );
-};
+  )
+}

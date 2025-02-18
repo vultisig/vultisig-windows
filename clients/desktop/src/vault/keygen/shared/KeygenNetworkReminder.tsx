@@ -1,14 +1,14 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { useCurrentServerType } from '../state/currentServerType';
-import { KeygenServerTypeIcon } from './KeygenServerTypeIcon';
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { useCurrentServerType } from '../state/currentServerType'
+import { KeygenServerTypeIcon } from './KeygenServerTypeIcon'
 
 export const KeygenNetworkReminder = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const [serverType] = useCurrentServerType();
+  const [serverType] = useCurrentServerType()
 
   return (
     <VStack alignItems="center" gap={8}>
@@ -26,5 +26,5 @@ export const KeygenNetworkReminder = () => {
         {t(`keygen_reminder_${serverType}`)}
       </Text>
     </VStack>
-  );
-};
+  )
+}

@@ -1,15 +1,15 @@
-import { match } from '@lib/utils/match';
-import { Chain } from '@core/chain/Chain';
+import { Chain } from '@core/chain/Chain'
+import { match } from '@lib/utils/match'
 
-type ChainEntity = 'address' | 'tx';
+type ChainEntity = 'address' | 'tx'
 
 type GetBlockExplorerUrlInput = {
-  chain: Chain;
-  entity: ChainEntity;
-  value: string;
-};
+  chain: Chain
+  entity: ChainEntity
+  value: string
+}
 
-const cosmosBlockExplorer = 'https://www.mintscan.io';
+const cosmosBlockExplorer = 'https://www.mintscan.io'
 
 const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Bitcoin]: 'https://mempool.space',
@@ -42,14 +42,14 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.THORChain]: 'https://www.xscanner.org',
   [Chain.MayaChain]: 'https://www.xscanner.org',
   [Chain.Akash]: `${cosmosBlockExplorer}/akash`,
-};
+}
 
 export const getBlockExplorerUrl = ({
   chain,
   entity,
   value,
 }: GetBlockExplorerUrlInput): string => {
-  const baseUrl = blockExplorerBaseUrl[chain];
+  const baseUrl = blockExplorerBaseUrl[chain]
   return match(entity, {
     address: () =>
       match(chain, {
@@ -117,5 +117,5 @@ export const getBlockExplorerUrl = ({
         [Chain.Ripple]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Akash]: () => `${baseUrl}/tx/${value}`,
       }),
-  });
-};
+  })
+}

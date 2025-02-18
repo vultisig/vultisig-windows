@@ -1,21 +1,21 @@
-import { Chain } from '@core/chain/Chain';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { useMemo } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import Select from 'react-select';
-import { z } from 'zod';
+import { Chain } from '@core/chain/Chain'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useMemo } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import Select from 'react-select'
+import { z } from 'zod'
 
-import { Text } from '../../../../../lib/ui/text';
-import { useAssertWalletCore } from '../../../../../providers/WalletCoreProvider';
-import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
-import { useAddAddressBookItemMutation } from '../../../../../vault/mutations/useAddAddressBookItemMutation';
-import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';
-import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles';
-import { getCoinOptions } from '../../helpers/getCoinOptions';
-import { getAddressSchema } from '../../schemas/addressSchema';
+import { Text } from '../../../../../lib/ui/text'
+import { useAssertWalletCore } from '../../../../../providers/WalletCoreProvider'
+import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle'
+import { useAddAddressBookItemMutation } from '../../../../../vault/mutations/useAddAddressBookItemMutation'
+import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery'
+import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles'
+import { getCoinOptions } from '../../helpers/getCoinOptions'
+import { getAddressSchema } from '../../schemas/addressSchema'
 import {
   AddButton,
   ChainOption,
@@ -28,23 +28,23 @@ import {
   FormField,
   FormFieldLabel,
   FormInput,
-} from './AddAddressForm.styles';
+} from './AddAddressForm.styles'
 
 type AddAddressFormProps = {
-  onClose: () => void;
-};
+  onClose: () => void
+}
 
 const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
-  const { data: addressBookItems } = useAddressBookItemsQuery();
-  const { t } = useTranslation();
-  const chainOptions = useMemo(() => getCoinOptions(), []);
-  const walletCore = useAssertWalletCore();
+  const { data: addressBookItems } = useAddressBookItemsQuery()
+  const { t } = useTranslation()
+  const chainOptions = useMemo(() => getCoinOptions(), [])
+  const walletCore = useAssertWalletCore()
   const addressSchema = getAddressSchema({
     walletCore,
     addressBookItems,
-  });
+  })
 
-  type AddressFormValues = z.infer<typeof addressSchema>;
+  type AddressFormValues = z.infer<typeof addressSchema>
 
   const {
     register,
@@ -59,7 +59,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
       title: '',
       address: '',
     },
-  });
+  })
 
   const {
     mutate: addAddressBookItem,
@@ -67,18 +67,18 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     error: addAddressBookAddressError,
   } = useAddAddressBookItemMutation({
     onSuccess: onClose,
-  });
+  })
 
   const handleAddAddress = (data: AddressFormValues) => {
-    const { address, chain, title } = data;
+    const { address, chain, title } = data
 
     addAddressBookItem({
       order: addressBookItems.length,
       title,
       address,
       chain: chain as Chain,
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -106,7 +106,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
                   }
                   defaultValue={chainOptions[0]}
                   onChange={selectedOption => {
-                    field.onChange(selectedOption?.value);
+                    field.onChange(selectedOption?.value)
                   }}
                   onBlur={field.onBlur}
                   options={chainOptions}
@@ -178,7 +178,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
         </div>
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default AddAddressForm;
+export default AddAddressForm

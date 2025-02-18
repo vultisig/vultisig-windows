@@ -1,43 +1,43 @@
-import { useRive } from '@rive-app/react-canvas';
-import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useRive } from '@rive-app/react-canvas'
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { Button } from '../../../../../lib/ui/buttons/Button';
-import DownloadIcon from '../../../../../lib/ui/icons/DownloadIcon';
-import { VStack } from '../../../../../lib/ui/layout/Stack';
-import { Text } from '../../../../../lib/ui/text';
-import { PageContent } from '../../../../../ui/page/PageContent';
-import { PageHeader } from '../../../../../ui/page/PageHeader';
-import { BACKUP_LINK } from '../../../secure/backup/BackupConfirmation';
+import { Button } from '../../../../../lib/ui/buttons/Button'
+import DownloadIcon from '../../../../../lib/ui/icons/DownloadIcon'
+import { VStack } from '../../../../../lib/ui/layout/Stack'
+import { Text } from '../../../../../lib/ui/text'
+import { PageContent } from '../../../../../ui/page/PageContent'
+import { PageHeader } from '../../../../../ui/page/PageHeader'
+import { BACKUP_LINK } from '../../../secure/backup/BackupConfirmation'
 
 const Wrapper = styled(VStack)`
   max-width: 800px;
   align-self: center;
-`;
+`
 
 const Content = styled(VStack)`
   flex: 1;
-`;
+`
 
 const RivePlaceholder = styled(VStack)`
   position: relative;
   flex: 1;
   width: 100%;
-`;
+`
 
 type BackupConfirmationProps = {
-  onCompleted: () => void;
-};
+  onCompleted: () => void
+}
 
 export const BackupConfirmation: FC<BackupConfirmationProps> = ({
   onCompleted,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const { RiveComponent } = useRive({
     src: '/assets/animations/fast-vault-backup/fast-vault-backup-screen-splash/backupvault_splash.riv',
     autoplay: true,
-  });
+  })
 
   return (
     <PageContent>
@@ -82,14 +82,14 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
         </VStack>
       </Wrapper>
     </PageContent>
-  );
-};
+  )
+}
 
 const BackupButton = styled(Button)`
   font-size: 20px;
   gap: 8px;
-`;
+`
 
 const StyledAnchor = styled.a`
   text-decoration: underline;
-`;
+`

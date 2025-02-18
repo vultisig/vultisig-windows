@@ -1,7 +1,7 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components'
 
-import { getColor } from '../theme/getters';
-import { themedScrollbars } from './themedScrollbars';
+import { getColor } from '../theme/getters'
+import { themedScrollbars } from './themedScrollbars'
 
 export const GlobalStyle = createGlobalStyle`
    @font-face {
@@ -102,4 +102,4 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ${themedScrollbars}
-`;
+`

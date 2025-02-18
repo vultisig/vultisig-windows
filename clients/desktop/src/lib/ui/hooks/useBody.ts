@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect';
+import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 
 export function useBody() {
-  const [body, setBody] = useState<HTMLBodyElement | null>(null);
+  const [body, setBody] = useState<HTMLBodyElement | null>(null)
 
   useIsomorphicLayoutEffect(() => {
-    setBody(document.body as HTMLBodyElement);
-  }, []);
+    setBody(document.body as HTMLBodyElement)
+  }, [])
 
-  return body;
+  return body
 }

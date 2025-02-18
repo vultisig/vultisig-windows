@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import { Chain } from '@core/chain/Chain'
+import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
+import { sum } from '@lib/utils/array/sum'
+import { useEffect, useState } from 'react'
 
-import { getCoinValue } from '@core/chain/coin/utils/getCoinValue';
-import { sum } from '@lib/utils/array/sum';
-import { Chain } from '@core/chain/Chain';
-import { useVaultChainCoinsQuery } from '../../queries/useVaultChainCoinsQuery';
+import { useVaultChainCoinsQuery } from '../../queries/useVaultChainCoinsQuery'
 
 export const useGetTotalAmountAvailableForChain = (chain: Chain) => {
-  const [totalAmountAvailable, setTotalAmountAvailable] = useState(0);
-  const { data: coins } = useVaultChainCoinsQuery(chain);
+  const [totalAmountAvailable, setTotalAmountAvailable] = useState(0)
+  const { data: coins } = useVaultChainCoinsQuery(chain)
 
   useEffect(() => {
     if (coins && coins?.length > 0) {
@@ -23,9 +23,9 @@ export const useGetTotalAmountAvailableForChain = (chain: Chain) => {
               )
             )
           : 0
-      );
+      )
     }
-  }, [coins]);
+  }, [coins])
 
-  return totalAmountAvailable;
-};
+  return totalAmountAvailable
+}

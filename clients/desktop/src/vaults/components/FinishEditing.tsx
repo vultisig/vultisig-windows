@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { Hoverable } from '../../lib/ui/base/Hoverable';
-import { OnClickProp } from '../../lib/ui/props';
-import { Text } from '../../lib/ui/text';
+import { Hoverable } from '../../lib/ui/base/Hoverable'
+import { OnClickProp } from '../../lib/ui/props'
+import { Text } from '../../lib/ui/text'
 
 export const FinishEditing: React.FC<OnClickProp> = ({ onClick }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <Hoverable onClick={onClick}>
@@ -13,5 +13,5 @@ export const FinishEditing: React.FC<OnClickProp> = ({ onClick }) => {
         {t('done')}
       </Text>
     </Hoverable>
-  );
-};
+  )
+}

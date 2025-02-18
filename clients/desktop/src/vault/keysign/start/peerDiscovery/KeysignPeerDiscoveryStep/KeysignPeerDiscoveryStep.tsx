@@ -1,32 +1,32 @@
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps';
-import { VStack } from '../../../../../lib/ui/layout/Stack';
-import { OnForwardProp } from '../../../../../lib/ui/props';
-import { PageContent } from '../../../../../ui/page/PageContent';
-import { PageHeader } from '../../../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
-import { KeygenNetworkReminder } from '../../../../keygen/shared/KeygenNetworkReminder';
-import { ManageServerType } from '../../../../keygen/shared/peerDiscovery/ManageServerType';
-import { DownloadKeysignQrCode } from '../DownloadKeysignQrCode';
-import { useIsPeerDiscoveryStepDisabled } from '../hooks/useIsPeerDiscoveryStepDisabled';
-import { KeysignPeerDiscoveryQrCode } from '../KeysignPeerDiscoveryCode';
-import { Content } from './KeysignPeerDiscoveryStep.styled';
-import { KeysignPeersManager } from './KeysignPeersManager';
+import { Button } from '../../../../../lib/ui/buttons/Button'
+import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps'
+import { VStack } from '../../../../../lib/ui/layout/Stack'
+import { OnForwardProp } from '../../../../../lib/ui/props'
+import { PageContent } from '../../../../../ui/page/PageContent'
+import { PageHeader } from '../../../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle'
+import { KeygenNetworkReminder } from '../../../../keygen/shared/KeygenNetworkReminder'
+import { ManageServerType } from '../../../../keygen/shared/peerDiscovery/ManageServerType'
+import { DownloadKeysignQrCode } from '../DownloadKeysignQrCode'
+import { useIsPeerDiscoveryStepDisabled } from '../hooks/useIsPeerDiscoveryStepDisabled'
+import { KeysignPeerDiscoveryQrCode } from '../KeysignPeerDiscoveryCode'
+import { Content } from './KeysignPeerDiscoveryStep.styled'
+import { KeysignPeersManager } from './KeysignPeersManager'
 
 export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const isDisabled = useIsPeerDiscoveryStepDisabled();
+  const isDisabled = useIsPeerDiscoveryStepDisabled()
 
   useEffect(() => {
     if (!isDisabled) {
-      onForward();
+      onForward()
     }
-  }, [isDisabled, onForward]);
+  }, [isDisabled, onForward])
 
   return (
     <>
@@ -57,5 +57,5 @@ export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
         </Button>
       </PageContent>
     </>
-  );
-};
+  )
+}

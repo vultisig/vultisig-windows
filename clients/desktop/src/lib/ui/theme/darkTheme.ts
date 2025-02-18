@@ -1,10 +1,10 @@
-import { DefaultTheme } from 'styled-components';
+import { DefaultTheme } from 'styled-components'
 
-import { HSLA } from '../colors/HSLA';
-import { sharedColors } from './shared';
+import { HSLA } from '../colors/HSLA'
+import { sharedColors } from './shared'
 
-const backgroundHue = 217;
-const backgroundSaturation = 91;
+const backgroundHue = 217
+const backgroundSaturation = 91
 
 export const darkTheme: DefaultTheme = {
   name: 'dark',
@@ -38,4 +38,4 @@ export const darkTheme: DefaultTheme = {
     alert: `linear-gradient(45deg, #FF5C5C, #5CA7FF)`,
     overlay: `linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8))`,
   },
-};
+}

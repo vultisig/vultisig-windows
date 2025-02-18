@@ -1,15 +1,15 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
-import { CoinKey } from '@core/chain/coin/Coin';
-import { formatAmount } from '@lib/utils/formatAmount';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { CoinKey } from '@core/chain/coin/Coin'
+import { formatAmount } from '@lib/utils/formatAmount'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
-import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { ValueProp } from '../../../lib/ui/props';
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { text } from '../../../lib/ui/text';
-import { useCurrentVaultCoin } from '../../state/currentVault';
+import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
+import { Spinner } from '../../../lib/ui/loaders/Spinner'
+import { ValueProp } from '../../../lib/ui/props'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { text } from '../../../lib/ui/text'
+import { useCurrentVaultCoin } from '../../state/currentVault'
 
 const Container = styled.div`
   ${text({
@@ -20,14 +20,14 @@ const Container = styled.div`
       gap: 8,
     },
   })}
-`;
+`
 
 export const SwapCoinBalance = ({ value }: ValueProp<CoinKey>) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const coin = useCurrentVaultCoin(value);
+  const coin = useCurrentVaultCoin(value)
 
-  const query = useBalanceQuery(coin);
+  const query = useBalanceQuery(coin)
 
   return (
     <Container>
@@ -43,5 +43,5 @@ export const SwapCoinBalance = ({ value }: ValueProp<CoinKey>) => {
         />
       </span>
     </Container>
-  );
-};
+  )
+}

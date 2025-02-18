@@ -1,23 +1,23 @@
-import { Chain } from '@core/chain/Chain';
-import { getSigningInputEnvelopedTxFields } from '@core/chain/chains/evm/tx/getSigningInputEnvelopedTxFields';
-import { fromCommCoin } from '@core/communication/utils/commCoin';
-import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
-import { match } from '@lib/utils/match';
-import { TW, WalletCore } from '@trustwallet/wallet-core';
-import Long from 'long';
+import { Chain } from '@core/chain/Chain'
+import { getSigningInputEnvelopedTxFields } from '@core/chain/chains/evm/tx/getSigningInputEnvelopedTxFields'
+import { fromCommCoin } from '@core/communication/utils/commCoin'
+import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
+import { match } from '@lib/utils/match'
+import { TW, WalletCore } from '@trustwallet/wallet-core'
+import Long from 'long'
 
-import { toKeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload';
-import { nativeSwapAffiliateConfig } from '../../nativeSwapAffiliateConfig';
-import { toThorchainSwapAssetProto } from '../asset/toThorchainSwapAssetProto';
-import { ThorchainSwapEnabledChain } from '../thorchainSwapProtoChains';
+import { toKeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload'
+import { nativeSwapAffiliateConfig } from '../../nativeSwapAffiliateConfig'
+import { toThorchainSwapAssetProto } from '../asset/toThorchainSwapAssetProto'
+import { ThorchainSwapEnabledChain } from '../thorchainSwapProtoChains'
 
 type Input = {
-  keysignPayload: KeysignPayload;
-  walletCore: WalletCore;
-};
+  keysignPayload: KeysignPayload
+  walletCore: WalletCore
+}
 
 export const getThorchainSwapTxInputData = async ({
   keysignPayload,
@@ -28,12 +28,12 @@ export const getThorchainSwapTxInputData = async ({
     'case',
     'value',
     'thorchainSwapPayload'
-  );
+  )
 
-  const fromCoin = fromCommCoin(shouldBePresent(swapPayload.fromCoin));
-  const fromChain = fromCoin.chain as ThorchainSwapEnabledChain;
+  const fromCoin = fromCommCoin(shouldBePresent(swapPayload.fromCoin))
+  const fromChain = fromCoin.chain as ThorchainSwapEnabledChain
 
-  const toCoin = fromCommCoin(shouldBePresent(swapPayload.toCoin));
+  const toCoin = fromCommCoin(shouldBePresent(swapPayload.toCoin))
 
   const swapInput = TW.THORChainSwap.Proto.SwapInput.create({
     fromAsset: toThorchainSwapAssetProto({
@@ -61,24 +61,24 @@ export const getThorchainSwapTxInputData = async ({
           affiliateFeeRateBps: nativeSwapAffiliateConfig.affiliateFeeRateBps,
         }
       : {}),
-  });
+  })
 
   const swapInputData =
-    TW.THORChainSwap.Proto.SwapInput.encode(swapInput).finish();
+    TW.THORChainSwap.Proto.SwapInput.encode(swapInput).finish()
 
-  const swapOutputData = walletCore.THORChainSwap.buildSwap(swapInputData);
+  const swapOutputData = walletCore.THORChainSwap.buildSwap(swapInputData)
 
-  const swapOutput = TW.THORChainSwap.Proto.SwapOutput.decode(swapOutputData);
+  const swapOutput = TW.THORChainSwap.Proto.SwapOutput.decode(swapOutputData)
 
   if (swapOutput.error?.message) {
-    throw new Error(swapOutput.error.message);
+    throw new Error(swapOutput.error.message)
   }
 
   const getEvmTxInputData = () => {
-    const { blockchainSpecific } = keysignPayload;
+    const { blockchainSpecific } = keysignPayload
 
     const { maxFeePerGasWei, priorityFee, nonce, gasLimit } =
-      blockchainSpecific.value as EthereumSpecific;
+      blockchainSpecific.value as EthereumSpecific
 
     const signingInput = TW.Ethereum.Proto.SigningInput.create({
       ...shouldBePresent(swapOutput.ethereum),
@@ -90,24 +90,24 @@ export const getThorchainSwapTxInputData = async ({
         nonce,
         gasLimit,
       }),
-    });
+    })
 
-    return TW.Ethereum.Proto.SigningInput.encode(signingInput).finish();
-  };
+    return TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()
+  }
 
   // Since currently only EVM chains use SwapPayload
   // we've implemented only EVM tx input data for now
   const getUtxoTxInputData = () => {
-    throw new Error('Not implemented');
-  };
+    throw new Error('Not implemented')
+  }
 
   const getThorTxInputData = () => {
-    throw new Error('Not implemented');
-  };
+    throw new Error('Not implemented')
+  }
 
   const getCosmosTxInputData = () => {
-    throw new Error('Not implemented');
-  };
+    throw new Error('Not implemented')
+  }
 
   return match(fromChain as ThorchainSwapEnabledChain, {
     [Chain.THORChain]: getThorTxInputData,
@@ -119,5 +119,5 @@ export const getThorchainSwapTxInputData = async ({
     [Chain.BSC]: getEvmTxInputData,
     [Chain.Ethereum]: getEvmTxInputData,
     [Chain.Avalanche]: getEvmTxInputData,
-  });
-};
+  })
+}

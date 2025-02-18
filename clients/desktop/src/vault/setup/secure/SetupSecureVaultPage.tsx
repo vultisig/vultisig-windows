@@ -1,25 +1,25 @@
-import { Match } from '../../../lib/ui/base/Match';
-import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
-import { KeygenType } from '../../keygen/KeygenType';
-import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep';
-import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager';
-import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName';
-import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId';
-import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType';
-import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId';
-import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType';
-import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers';
-import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep';
-import { SetupVaultNameStep } from '../SetupVaultNameStep';
-import { SetupVaultCreationStep } from '../shared/SetupVaultCreationStep';
-import { VaultTypeProvider } from '../shared/state/vaultType';
-import { StartKeygenVaultProvider } from '../StartKeygenVaultProvider';
-import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode';
-import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey';
-import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType';
-import { SetupVaultNameProvider } from '../state/vaultName';
-import { SecureVaultKeygenStartSessionStep } from './SecureVaultKeygenStartSessionStep';
+import { Match } from '../../../lib/ui/base/Match'
+import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
+import { KeygenType } from '../../keygen/KeygenType'
+import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
+import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager'
+import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
+import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId'
+import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
+import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
+import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType'
+import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
+import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep'
+import { SetupVaultNameStep } from '../SetupVaultNameStep'
+import { SetupVaultCreationStep } from '../shared/SetupVaultCreationStep'
+import { VaultTypeProvider } from '../shared/state/vaultType'
+import { StartKeygenVaultProvider } from '../StartKeygenVaultProvider'
+import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
+import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey'
+import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType'
+import { SetupVaultNameProvider } from '../state/vaultName'
+import { SecureVaultKeygenStartSessionStep } from './SecureVaultKeygenStartSessionStep'
 
 const steps = [
   'name',
@@ -27,15 +27,15 @@ const steps = [
   'peers',
   'startSession',
   'keygen',
-] as const;
+] as const
 
-const lastEditableStep = steps[0];
+const lastEditableStep = steps[0]
 
 export const SetupSecureVaultPage = () => {
   const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
     steps,
     onExit: useNavigateBack(),
-  });
+  })
 
   return (
     <VaultTypeProvider value="secure">
@@ -94,5 +94,5 @@ export const SetupSecureVaultPage = () => {
         </PeersSelectionRecordProvider>
       </GeneratedServiceNameProvider>
     </VaultTypeProvider>
-  );
-};
+  )
+}

@@ -21,5 +21,5 @@ const NoteIcon = () => (
       d="M16.818 12.499H12.5v4.319"
     />
   </svg>
-);
-export default NoteIcon;
+)
+export default NoteIcon

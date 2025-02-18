@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { SVGProps } from 'react'
 
 export const WifiIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -16,4 +16,4 @@ export const WifiIcon = (props: SVGProps<SVGSVGElement>) => (
       fill="currentColor"
     />
   </svg>
-);
+)

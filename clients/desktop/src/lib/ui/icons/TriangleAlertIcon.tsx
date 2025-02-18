@@ -2,8 +2,8 @@ export const TriangleAlertIcon = ({
   width = '1em',
   height = '0.84em',
 }: {
-  width?: number | string;
-  height?: number | string;
+  width?: number | string
+  height?: number | string
 }) => (
   <svg
     width={width}
@@ -25,4 +25,4 @@ export const TriangleAlertIcon = ({
       fill="currentColor"
     />
   </svg>
-);
+)

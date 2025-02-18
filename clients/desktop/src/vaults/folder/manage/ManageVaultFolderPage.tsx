@@ -1,30 +1,30 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { TextInput } from '../../../lib/ui/inputs/TextInput';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { Text } from '../../../lib/ui/text';
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageFooter } from '../../../ui/page/PageFooter';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder';
-import { useUpdateVaultFolderNameMutation } from '../mutations/useUpdateVaultFoderNameMutation';
-import { useCurrentVaultFolder } from '../state/currentVaultFolder';
-import { DeleteVaultFolder } from './DeleteVaultFolder';
-import { ManageFolderVaults } from './ManageFolderVaults';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { TextInput } from '../../../lib/ui/inputs/TextInput'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Spinner } from '../../../lib/ui/loaders/Spinner'
+import { Text } from '../../../lib/ui/text'
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
+import { PageContent } from '../../../ui/page/PageContent'
+import { PageFooter } from '../../../ui/page/PageFooter'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { AddVaultsToFolder } from '../../manage/AddVaultsToFolder'
+import { useUpdateVaultFolderNameMutation } from '../mutations/useUpdateVaultFoderNameMutation'
+import { useCurrentVaultFolder } from '../state/currentVaultFolder'
+import { DeleteVaultFolder } from './DeleteVaultFolder'
+import { ManageFolderVaults } from './ManageFolderVaults'
 
 export const ManageVaultFolderPage = () => {
-  const navigate = useAppNavigate();
-  const { id, name: initialName } = useCurrentVaultFolder();
-  const [name, setName] = useState(initialName);
-  const { t } = useTranslation();
+  const navigate = useAppNavigate()
+  const { id, name: initialName } = useCurrentVaultFolder()
+  const [name, setName] = useState(initialName)
+  const { t } = useTranslation()
 
-  const { mutateAsync, isPending } = useUpdateVaultFolderNameMutation();
+  const { mutateAsync, isPending } = useUpdateVaultFolderNameMutation()
 
   return (
     <>
@@ -50,8 +50,8 @@ export const ManageVaultFolderPage = () => {
         <Button
           type="button"
           onClick={async () => {
-            await mutateAsync({ id, name });
-            navigate('vaultFolder', { params: { id } });
+            await mutateAsync({ id, name })
+            navigate('vaultFolder', { params: { id } })
           }}
         >
           <Text color="reversed" size={14} weight="600">
@@ -60,5 +60,5 @@ export const ManageVaultFolderPage = () => {
         </Button>
       </PageFooter>
     </>
-  );
-};
+  )
+}

@@ -1,20 +1,20 @@
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { UnstyledButton } from '../../../../lib/ui/buttons/UnstyledButton';
-import { centerContent } from '../../../../lib/ui/css/centerContent';
-import { round } from '../../../../lib/ui/css/round';
-import { HStack, hStack } from '../../../../lib/ui/layout/Stack';
-import { IsActiveProp } from '../../../../lib/ui/props';
-import { text } from '../../../../lib/ui/text';
-import { matchColor } from '../../../../lib/ui/theme/getters';
-import { IconWrapper } from '../../../../pages/edItVault/EditVaultPage.styles';
+import { UnstyledButton } from '../../../../lib/ui/buttons/UnstyledButton'
+import { centerContent } from '../../../../lib/ui/css/centerContent'
+import { round } from '../../../../lib/ui/css/round'
+import { HStack, hStack } from '../../../../lib/ui/layout/Stack'
+import { IsActiveProp } from '../../../../lib/ui/props'
+import { text } from '../../../../lib/ui/text'
+import { matchColor } from '../../../../lib/ui/theme/getters'
+import { IconWrapper } from '../../../../pages/edItVault/EditVaultPage.styles'
 import {
   KeygenServerType,
   keygenServerTypes,
-} from '../../server/KeygenServerType';
-import { useCurrentServerType } from '../../state/currentServerType';
-import { KeygenServerTypeIcon } from '../KeygenServerTypeIcon';
+} from '../../server/KeygenServerType'
+import { useCurrentServerType } from '../../state/currentServerType'
+import { KeygenServerTypeIcon } from '../KeygenServerTypeIcon'
 
 const Option = styled(UnstyledButton)<IsActiveProp>`
   ${round};
@@ -41,24 +41,24 @@ const Option = styled(UnstyledButton)<IsActiveProp>`
     true: 'foregroundSuper',
     false: 'foregroundExtra',
   })};
-`;
+`
 
 const IconContainer = styled(IconWrapper)`
   ${text({
     color: 'primary',
     size: 16,
   })}
-`;
+`
 
 export const ManageServerType = () => {
-  const [serverType, setServerType] = useCurrentServerType();
+  const [serverType, setServerType] = useCurrentServerType()
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const textRecord: Record<KeygenServerType, string> = {
     relay: t('internet'),
     local: t('local'),
-  };
+  }
 
   return (
     <HStack gap={16}>
@@ -75,5 +75,5 @@ export const ManageServerType = () => {
         </Option>
       ))}
     </HStack>
-  );
-};
+  )
+}

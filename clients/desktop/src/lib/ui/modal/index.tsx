@@ -1,31 +1,31 @@
-import { ComponentProps, ReactNode } from 'react';
-import styled from 'styled-components';
+import { ComponentProps, ReactNode } from 'react'
+import styled from 'styled-components'
 
-import { toSizeUnit } from '../css/toSizeUnit';
-import { BodyPortal } from '../dom/BodyPortal';
-import { HStack, VStack } from '../layout/Stack';
-import { AsProp, TitleProp } from '../props';
-import { Backdrop } from './Backdrop';
-import { modalConfig } from './config';
-import { ModalCloseButton } from './ModalCloseButton';
-import { ModalContainer, ModalPlacement } from './ModalContainer';
-import { ModalContent } from './ModalContent';
-import { ModalSubTitleText } from './ModalSubTitleText';
-import { ModalTitleText } from './ModalTitleText';
+import { toSizeUnit } from '../css/toSizeUnit'
+import { BodyPortal } from '../dom/BodyPortal'
+import { HStack, VStack } from '../layout/Stack'
+import { AsProp, TitleProp } from '../props'
+import { Backdrop } from './Backdrop'
+import { modalConfig } from './config'
+import { ModalCloseButton } from './ModalCloseButton'
+import { ModalContainer, ModalPlacement } from './ModalContainer'
+import { ModalContent } from './ModalContent'
+import { ModalSubTitleText } from './ModalSubTitleText'
+import { ModalTitleText } from './ModalTitleText'
 
 export type ModalProps = AsProp &
   Omit<ComponentProps<typeof Container>, 'title'> &
   TitleProp & {
-    onClose?: () => void;
-    subTitle?: ReactNode;
-    placement?: ModalPlacement;
-    footer?: ReactNode;
-    targetWidth?: number;
-    titleAlign?: 'left' | 'center' | 'right';
-    withDefaultStructure?: boolean;
-  };
+    onClose?: () => void
+    subTitle?: ReactNode
+    placement?: ModalPlacement
+    footer?: ReactNode
+    targetWidth?: number
+    titleAlign?: 'left' | 'center' | 'right'
+    withDefaultStructure?: boolean
+  }
 
-const contentVerticalPadding = 8;
+const contentVerticalPadding = 8
 
 const Container = styled(ModalContainer)`
   > * {
@@ -39,7 +39,7 @@ const Container = styled(ModalContainer)`
   > *:not(:first-child):not(:last-child) {
     padding-bottom: ${toSizeUnit(contentVerticalPadding)};
   }
-`;
+`
 
 export const Modal = ({
   title,
@@ -75,5 +75,5 @@ export const Modal = ({
         )}
       </Backdrop>
     </BodyPortal>
-  );
-};
+  )
+}

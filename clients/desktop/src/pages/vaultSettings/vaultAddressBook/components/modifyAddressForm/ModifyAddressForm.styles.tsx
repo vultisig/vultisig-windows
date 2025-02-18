@@ -1,11 +1,11 @@
-import { motion } from 'framer-motion';
-import React from 'react';
-import { MenuProps, StylesConfig } from 'react-select';
-import styled from 'styled-components';
+import { motion } from 'framer-motion'
+import React from 'react'
+import { MenuProps, StylesConfig } from 'react-select'
+import styled from 'styled-components'
 
-import { Input } from '../../../../../lib/ui/inputs/text-input/Input';
-import { Panel } from '../../../../../lib/ui/panel/Panel';
-import { getColor } from '../../../../../lib/ui/theme/getters';
+import { Input } from '../../../../../lib/ui/inputs/text-input/Input'
+import { Panel } from '../../../../../lib/ui/panel/Panel'
+import { getColor } from '../../../../../lib/ui/theme/getters'
 
 export const Container = styled.div`
   height: 100%;
@@ -13,7 +13,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 32px;
-`;
+`
 
 export const Form = styled.form`
   display: flex;
@@ -23,7 +23,7 @@ export const Form = styled.form`
   & > :first-child {
     padding: 8px;
   }
-`;
+`
 
 export const FormField = styled(Panel)`
   font-weight: 400;
@@ -32,14 +32,14 @@ export const FormField = styled(Panel)`
   display: flex;
   flex-direction: column;
   gap: 12px;
-`;
+`
 
 export const FormFieldLabel = styled.label`
   font-weight: 500;
   color: ${getColor('contrast')};
   display: inline-block;
   margin-bottom: 6px;
-`;
+`
 
 export const FormInput = styled(Input)`
   color: ${getColor('contrast')};
@@ -49,14 +49,14 @@ export const FormInput = styled(Input)`
     font-size: 13px;
     color: ${getColor('textShy')};
   }
-`;
+`
 
 export type CoinOption = {
-  value: string;
-  label: string;
-  logo: string;
-  isLastOption: boolean;
-};
+  value: string
+  label: string
+  logo: string
+  isLastOption: boolean
+}
 
 export const customSelectStyles: StylesConfig<CoinOption, false> = {
   control: base => ({
@@ -108,10 +108,10 @@ export const customSelectStyles: StylesConfig<CoinOption, false> = {
     ...base,
     padding: '0',
   }),
-};
+}
 
 export const customSelectMenu = (props: MenuProps<CoinOption, false>) => {
-  const { children, innerProps } = props;
+  const { children, innerProps } = props
   return (
     <motion.div
       {...(innerProps as any)}
@@ -122,11 +122,11 @@ export const customSelectMenu = (props: MenuProps<CoinOption, false>) => {
     >
       {children}
     </motion.div>
-  );
-};
+  )
+}
 
 export const ButtonWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-`;
+`

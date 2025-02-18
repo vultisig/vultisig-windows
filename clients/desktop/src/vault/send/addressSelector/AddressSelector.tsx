@@ -1,28 +1,28 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-import { Match } from '../../../lib/ui/base/Match';
-import { Text } from '../../../lib/ui/text';
-import { PageSlice } from '../../../ui/page/PageSlice';
-import { useAddressBookItemsQuery } from '../../queries/useAddressBookItemsQuery';
-import { Wrapper } from './AddressSelector.styles';
-import AddAddressView from './components/addAddressForm/AddAddressForm';
-import AddressesListView from './components/addressesListView/AddressesListView';
-import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesView';
+import { Match } from '../../../lib/ui/base/Match'
+import { Text } from '../../../lib/ui/text'
+import { PageSlice } from '../../../ui/page/PageSlice'
+import { useAddressBookItemsQuery } from '../../queries/useAddressBookItemsQuery'
+import { Wrapper } from './AddressSelector.styles'
+import AddAddressView from './components/addAddressForm/AddAddressForm'
+import AddressesListView from './components/addressesListView/AddressesListView'
+import EmptyAddressesView from './components/emptyAddressesView/EmptyAddressesView'
 
 type AddressSelectorProps = {
-  onAddressClick: (address: string) => void;
-  onClose: () => void;
-};
+  onAddressClick: (address: string) => void
+  onClose: () => void
+}
 
 const AddressSelector = ({ onAddressClick, onClose }: AddressSelectorProps) => {
-  const [isAddAddressViewOpen, setIsAddAddressViewOpen] = useState(false);
-  const [isEditModeOn, setIsEditModeOn] = useState(false);
+  const [isAddAddressViewOpen, setIsAddAddressViewOpen] = useState(false)
+  const [isEditModeOn, setIsEditModeOn] = useState(false)
   const { data: addressBookItems, isFetching: isFetchingAddressBookItems } =
-    useAddressBookItemsQuery();
+    useAddressBookItemsQuery()
 
   const handleOpenAddAddressView = () => {
-    setIsAddAddressViewOpen(true);
-  };
+    setIsAddAddressViewOpen(true)
+  }
 
   return (
     <Wrapper flexGrow gap={16}>
@@ -58,7 +58,7 @@ const AddressSelector = ({ onAddressClick, onClose }: AddressSelectorProps) => {
         />
       </PageSlice>
     </Wrapper>
-  );
-};
+  )
+}
 
-export default AddressSelector;
+export default AddressSelector

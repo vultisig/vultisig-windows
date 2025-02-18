@@ -1,16 +1,16 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { BrowserOpenURL } from '../../../wailsjs/runtime/runtime';
-import { SaveAsImage } from '../../ui/file/SaveAsImage';
-import { ProductLogo } from '../../ui/logo/ProductLogo';
-import { PageContent } from '../../ui/page/PageContent';
-import { PageHeader } from '../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
-import { PageSlice } from '../../ui/page/PageSlice';
-import { ShareVaultCard } from '../../vault/share/ShareVaultCard';
-import { useCurrentVault } from '../../vault/state/currentVault';
-import { VULTISIG_WEBSITE_LINK } from '../vaultSettings/constants';
+import { BrowserOpenURL } from '../../../wailsjs/runtime/runtime'
+import { SaveAsImage } from '../../ui/file/SaveAsImage'
+import { ProductLogo } from '../../ui/logo/ProductLogo'
+import { PageContent } from '../../ui/page/PageContent'
+import { PageHeader } from '../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
+import { PageSlice } from '../../ui/page/PageSlice'
+import { ShareVaultCard } from '../../vault/share/ShareVaultCard'
+import { useCurrentVault } from '../../vault/state/currentVault'
+import { VULTISIG_WEBSITE_LINK } from '../vaultSettings/constants'
 import {
   ListItem,
   ListWrapper,
@@ -19,11 +19,11 @@ import {
   ProductLogoWrapper,
   StretchedButton,
   Wrapper,
-} from './RegisterForAirdropPage.styles';
+} from './RegisterForAirdropPage.styles'
 
 const RegisterForAirdropPage = () => {
-  const { t } = useTranslation();
-  const vault = useCurrentVault();
+  const { t } = useTranslation()
+  const vault = useCurrentVault()
 
   return (
     <PageSlice flexGrow>
@@ -74,7 +74,7 @@ const RegisterForAirdropPage = () => {
         </Wrapper>
       </PageContent>
     </PageSlice>
-  );
-};
+  )
+}
 
-export default RegisterForAirdropPage;
+export default RegisterForAirdropPage

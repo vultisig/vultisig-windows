@@ -1,47 +1,47 @@
-import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import CaretDownIcon from '../../../lib/ui/icons/CaretDownIcon';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { PageSlice } from '../../../ui/page/PageSlice';
-import { faqData } from './constants';
+import CaretDownIcon from '../../../lib/ui/icons/CaretDownIcon'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { PageSlice } from '../../../ui/page/PageSlice'
+import { faqData } from './constants'
 import {
   FaqButton,
   FaqContent,
   HorizontalLine,
   Row,
-} from './FaqVaultPage.styles';
+} from './FaqVaultPage.styles'
 
 const faqContentTransition = {
   duration: 0.3,
   ease: 'easeInOut',
-};
+}
 
 type RowsOpenState = {
-  [key: number]: boolean;
-};
+  [key: number]: boolean
+}
 
 const FaqVaultPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const [rowsExpanded, setRowsExpanded] = useState<RowsOpenState>(
     faqData.reduce<RowsOpenState>((acc, { id }) => {
-      acc[id] = false;
-      return acc;
+      acc[id] = false
+      return acc
     }, {})
-  );
+  )
 
   const toggleRow = (id: number) => {
     setRowsExpanded(prevState => ({
       ...prevState,
       [id]: !prevState[id],
-    }));
-  };
+    }))
+  }
 
   return (
     <VStack flexGrow gap={16}>
@@ -55,7 +55,7 @@ const FaqVaultPage = () => {
       />
       <PageSlice gap={16} flexGrow={true}>
         {faqData.map(({ id, title, content }) => {
-          const isCurrentRowExpanded = rowsExpanded[id];
+          const isCurrentRowExpanded = rowsExpanded[id]
 
           return (
             <FaqButton key={id} onClick={() => toggleRow(id)}>
@@ -87,11 +87,11 @@ const FaqVaultPage = () => {
                 </FaqContent>
               </motion.div>
             </FaqButton>
-          );
+          )
         })}
       </PageSlice>
     </VStack>
-  );
-};
+  )
+}
 
-export default FaqVaultPage;
+export default FaqVaultPage

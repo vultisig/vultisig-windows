@@ -1,13 +1,13 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
 import {
   textInputBackground,
   textInputFrame,
-} from '../../../lib/ui/css/textInput';
-import { hStack, vStack } from '../../../lib/ui/layout/Stack';
-import { Text, text } from '../../../lib/ui/text';
-import { getColor } from '../../../lib/ui/theme/getters';
+} from '../../../lib/ui/css/textInput'
+import { hStack, vStack } from '../../../lib/ui/layout/Stack'
+import { Text, text } from '../../../lib/ui/text'
+import { getColor } from '../../../lib/ui/theme/getters'
 
 export const Container = styled(UnstyledButton)`
   ${textInputFrame};
@@ -23,7 +23,7 @@ export const Container = styled(UnstyledButton)`
   &:hover {
     background: ${getColor('foregroundExtra')};
   }
-`;
+`
 
 export const InputFieldWrapper = styled.div`
   ${textInputFrame};
@@ -40,13 +40,13 @@ export const InputFieldWrapper = styled.div`
     color: 'contrast',
     family: 'mono',
   })}
-`;
+`
 
 export const ErrorText = styled(Text)`
   display: inline-block;
   margin-top: -5px;
-`;
+`
 
 export const AssetRequiredLabel = styled(Text)`
   align-self: flex-start;
-`;
+`

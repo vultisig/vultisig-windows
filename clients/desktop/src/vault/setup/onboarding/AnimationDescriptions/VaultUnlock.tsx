@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility';
-import { GradientText, Text } from '../../../../lib/ui/text';
-import { TextWrapper } from './AnimationDescriptions.styled';
+import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility'
+import { GradientText, Text } from '../../../../lib/ui/text'
+import { TextWrapper } from './AnimationDescriptions.styled'
 
 export const VaultUnlock = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <AnimatedVisibility>
@@ -18,5 +18,5 @@ export const VaultUnlock = () => {
         </GradientText>
       </TextWrapper>
     </AnimatedVisibility>
-  );
-};
+  )
+}
