@@ -1,38 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-export class FinalSession {
-  free(): void;
-  constructor(setup: Uint8Array, id: string, pre: PreSign);
-  static setup(session_id: Uint8Array, message: Uint8Array, ids: string[]): Uint8Array;
-  /**
-   * Extract message hash form the setup message.
-   */
-  static setupMessageHash(setup_msg: Uint8Array): Uint8Array | undefined;
-  /**
-   * Extract session ID from a setup message.
-   */
-  static setupKeyId(setup_msg: Uint8Array): Uint8Array | undefined;
-  /**
-   * Get next output message. If no pending output message available,
-   * `undefined` will be returned.
-   *
-   * Messages are authenticated and encrypted if required.
-   */
-  outputMessage(): Message | undefined;
-  /**
-   * Handle an input message. If processing of the input message moves the
-   * session into some final state then it will return `true`.
-   *
-   * Passing messages out of order is OK.
-   *
-   * Invalid messages will be silently ignored.
-   */
-  inputMessage(msg: Uint8Array): boolean;
-  /**
-   * Finish the session and return resulting signature.
-   */
-  finish(): Uint8Array;
-}
 export class KeyExportSession {
   private constructor();
   free(): void;
@@ -185,6 +152,10 @@ export class Keyshare {
    * Deserialize keyshare from the array of bytes.
    */
   static fromBytes(bytes: Uint8Array): Keyshare;
+  /**
+   * Returns the common  chaincode that has been computed at keygen
+   */
+  rootChainCode(): Uint8Array;
 }
 export class Message {
   private constructor();
@@ -197,18 +168,6 @@ export class Message {
    * A list of message receviers.
    */
   readonly receivers: string[];
-}
-export class PreSign {
-  private constructor();
-  free(): void;
-  /**
-   * Serialize the PreSign into array of bytes.
-   */
-  toBytes(): Uint8Array;
-  /**
-   * Deserialize PreSign from the array of bytes.
-   */
-  static fromBytes(bytes: Uint8Array): PreSign;
 }
 export class SignSession {
   free(): void;
@@ -233,13 +192,11 @@ export class SignSession {
    *
    * * `chain_path`   - Key derivation path
    *
-   * * `message_hash` - optional 32 bytes of hash of a message to sign.
-   *                    If not passed then generate setup message for
-   *                    a pre-sign session.
+   * * `message`      - message to sign.
    *
    * * `ids`          - Array of party identifiers
    */
-  static setup(key_id: Uint8Array, chain_path: string, message: Uint8Array | null | undefined, ids: string[]): Uint8Array;
+  static setup(key_id: Uint8Array, chain_path: string, message: Uint8Array, ids: string[]): Uint8Array;
   /**
    * Extract message hash form the setup message.
    */
@@ -274,19 +231,14 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly __wbg_keygensession_free: (a: number, b: number) => void;
-  readonly keygensession_new: (a: number, b: number, c: number, d: number, e: number) => void;
-  readonly keygensession_refresh: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
-  readonly keygensession_setup: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
-  readonly keygensession_setupKeyId: (a: number, b: number, c: number) => void;
-  readonly keygensession_outputMessage: (a: number) => number;
-  readonly keygensession_inputMessage: (a: number, b: number, c: number) => number;
-  readonly keygensession_finish: (a: number, b: number) => void;
-  readonly __wbg_keyshare_free: (a: number, b: number) => void;
-  readonly keyshare_publicKey: (a: number, b: number) => void;
-  readonly keyshare_keyId: (a: number, b: number) => void;
-  readonly keyshare_toBytes: (a: number, b: number) => void;
-  readonly keyshare_fromBytes: (a: number, b: number, c: number) => void;
+  readonly __wbg_signsession_free: (a: number, b: number) => void;
+  readonly signsession_new: (a: number, b: number, c: number, d: number, e: number) => void;
+  readonly signsession_setup: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => void;
+  readonly signsession_setupMessageHash: (a: number, b: number, c: number) => void;
+  readonly signsession_setupKeyId: (a: number, b: number, c: number) => void;
+  readonly signsession_outputMessage: (a: number) => number;
+  readonly signsession_inputMessage: (a: number, b: number, c: number) => number;
+  readonly signsession_finish: (a: number, b: number) => void;
   readonly __wbg_keyexportsession_free: (a: number, b: number) => void;
   readonly keyexportsession_new: (a: number, b: number, c: number) => number;
   readonly keyexportsession_setup: (a: number, b: number) => void;
@@ -298,34 +250,29 @@ export interface InitOutput {
   readonly keyimportsession_outputMessage: (a: number) => number;
   readonly keyimportsession_inputMessage: (a: number, b: number, c: number) => number;
   readonly keyimportsession_finish: (a: number, b: number) => void;
-  readonly __wbg_presign_free: (a: number, b: number) => void;
-  readonly __wbg_finalsession_free: (a: number, b: number) => void;
-  readonly finalsession_new: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
-  readonly finalsession_setup: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => void;
-  readonly finalsession_setupMessageHash: (a: number, b: number, c: number) => void;
-  readonly finalsession_setupKeyId: (a: number, b: number, c: number) => void;
-  readonly finalsession_outputMessage: (a: number) => number;
-  readonly finalsession_inputMessage: (a: number, b: number, c: number) => number;
-  readonly finalsession_finish: (a: number, b: number) => void;
-  readonly presign_toBytes: (a: number, b: number) => void;
-  readonly presign_fromBytes: (a: number, b: number, c: number) => void;
+  readonly __wbg_keyshare_free: (a: number, b: number) => void;
+  readonly keyshare_publicKey: (a: number, b: number) => void;
+  readonly keyshare_keyId: (a: number, b: number) => void;
+  readonly keyshare_toBytes: (a: number, b: number) => void;
+  readonly keyshare_fromBytes: (a: number, b: number, c: number) => void;
+  readonly keyshare_rootChainCode: (a: number, b: number) => void;
   readonly __wbg_message_free: (a: number, b: number) => void;
   readonly message_body: (a: number, b: number) => void;
   readonly message_receivers: (a: number, b: number) => void;
+  readonly __wbg_keygensession_free: (a: number, b: number) => void;
+  readonly keygensession_new: (a: number, b: number, c: number, d: number, e: number) => void;
+  readonly keygensession_refresh: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
+  readonly keygensession_setup: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
+  readonly keygensession_setupKeyId: (a: number, b: number, c: number) => void;
+  readonly keygensession_outputMessage: (a: number) => number;
+  readonly keygensession_inputMessage: (a: number, b: number, c: number) => number;
+  readonly keygensession_finish: (a: number, b: number) => void;
   readonly __wbg_keyimportinitiator_free: (a: number, b: number) => void;
   readonly keyimportinitiator_new: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
   readonly keyimportinitiator_setup: (a: number, b: number) => void;
   readonly keyimportinitiator_outputMessage: (a: number) => number;
   readonly keyimportinitiator_inputMessage: (a: number, b: number, c: number) => number;
   readonly keyimportinitiator_finish: (a: number, b: number) => void;
-  readonly __wbg_signsession_free: (a: number, b: number) => void;
-  readonly signsession_new: (a: number, b: number, c: number, d: number, e: number) => void;
-  readonly signsession_setup: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => void;
-  readonly signsession_setupMessageHash: (a: number, b: number, c: number) => void;
-  readonly signsession_setupKeyId: (a: number, b: number, c: number) => void;
-  readonly signsession_outputMessage: (a: number) => number;
-  readonly signsession_inputMessage: (a: number, b: number, c: number) => number;
-  readonly signsession_finish: (a: number, b: number) => void;
   readonly __wbindgen_exn_store: (a: number) => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;

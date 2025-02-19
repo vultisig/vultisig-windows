@@ -185,6 +185,10 @@ export class Keyshare {
    * Deserialize keyshare from the array of bytes.
    */
   static fromBytes(bytes: Uint8Array): Keyshare;
+  /**
+   * Returns the common  chaincode that has been computed at keygen
+   */
+  rootChainCode(): Uint8Array;
 }
 export class Message {
   private constructor();
@@ -330,6 +334,9 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly __wbg_message_free: (a: number, b: number) => void;
+  readonly message_body: (a: number, b: number) => void;
+  readonly message_receivers: (a: number, b: number) => void;
   readonly __wbg_keyexportsession_free: (a: number, b: number) => void;
   readonly keyexportsession_new: (a: number, b: number, c: number) => number;
   readonly keyexportsession_setup: (a: number, b: number) => void;
@@ -344,6 +351,19 @@ export interface InitOutput {
   readonly signsession_outputMessage: (a: number) => number;
   readonly signsession_inputMessage: (a: number, b: number, c: number) => number;
   readonly signsession_finish: (a: number, b: number) => void;
+  readonly __wbg_keyshare_free: (a: number, b: number) => void;
+  readonly keyshare_publicKey: (a: number) => number;
+  readonly keyshare_keyId: (a: number) => number;
+  readonly keyshare_toBytes: (a: number) => number;
+  readonly keyshare_fromBytes: (a: number, b: number) => void;
+  readonly keyshare_rootChainCode: (a: number) => number;
+  readonly __wbg_qcsession_free: (a: number, b: number) => void;
+  readonly qcsession_new: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
+  readonly qcsession_setup: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => void;
+  readonly qcsession_setupKeyId: (a: number, b: number, c: number) => void;
+  readonly qcsession_outputMessage: (a: number) => number;
+  readonly qcsession_inputMessage: (a: number, b: number, c: number) => number;
+  readonly qcsession_finish: (a: number, b: number) => void;
   readonly keyimportsession_new: (a: number, b: number, c: number, d: number, e: number) => void;
   readonly keyimportsession_finish: (a: number, b: number) => void;
   readonly __wbg_presign_free: (a: number, b: number) => void;
@@ -357,24 +377,9 @@ export interface InitOutput {
   readonly finalsession_finish: (a: number, b: number) => void;
   readonly presign_toBytes: (a: number) => number;
   readonly presign_fromBytes: (a: number, b: number, c: number) => void;
-  readonly __wbg_message_free: (a: number, b: number) => void;
-  readonly message_body: (a: number, b: number) => void;
-  readonly message_receivers: (a: number, b: number) => void;
   readonly keyimportsession_inputMessage: (a: number, b: number, c: number) => number;
   readonly __wbg_keyimportersession_free: (a: number, b: number) => void;
   readonly keyimportsession_outputMessage: (a: number) => number;
-  readonly __wbg_keyshare_free: (a: number, b: number) => void;
-  readonly keyshare_publicKey: (a: number) => number;
-  readonly keyshare_keyId: (a: number) => number;
-  readonly keyshare_toBytes: (a: number) => number;
-  readonly keyshare_fromBytes: (a: number, b: number) => void;
-  readonly __wbg_qcsession_free: (a: number, b: number) => void;
-  readonly qcsession_new: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
-  readonly qcsession_setup: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => void;
-  readonly qcsession_setupKeyId: (a: number, b: number, c: number) => void;
-  readonly qcsession_outputMessage: (a: number) => number;
-  readonly qcsession_inputMessage: (a: number, b: number, c: number) => number;
-  readonly qcsession_finish: (a: number, b: number) => void;
   readonly __wbg_keygensession_free: (a: number, b: number) => void;
   readonly keygensession_new: (a: number, b: number, c: number, d: number, e: number) => void;
   readonly keygensession_refresh: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
