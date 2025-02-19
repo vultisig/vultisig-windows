@@ -3386,6 +3386,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lib/dkls@workspace:lib/dkls":
+  version: 0.0.0-use.local
+  resolution: "@lib/dkls@workspace:lib/dkls"
+  languageName: unknown
+  linkType: soft
+
+"@lib/schnorr@workspace:lib/schnorr":
+  version: 0.0.0-use.local
+  resolution: "@lib/schnorr@workspace:lib/schnorr"
+  languageName: unknown
+  linkType: soft
+
 "@lib/utils@workspace:lib/utils":
   version: 0.0.0-use.local
   resolution: "@lib/utils@workspace:lib/utils"
