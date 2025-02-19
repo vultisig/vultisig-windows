@@ -95,6 +95,3 @@ credentials.json
 clients/desktop/wailsjs/runtime/package.json
 clients/desktop/wailsjs/runtime/runtime.d.ts
 clients/desktop/wailsjs/runtime/runtime.js
-clients/desktop/wailsjs/runtime/package.json
-clients/desktop/wailsjs/runtime/runtime.d.ts
-clients/desktop/wailsjs/runtime/runtime.js
