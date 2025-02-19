@@ -60,6 +60,18 @@ jobs:
         run: yarn lint
       - name: run unit test
         run: yarn workspace @clients/desktop test
+  extension:
+    needs: [setup,lint]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: yarn install
+      - name: Build extension
+        run: yarn workspace @clients/extension build
   build:
     needs: lint
     strategy:
@@ -103,5 +115,3 @@ jobs:
           package: false
           go-version: "1.21"
           node-version: "23.7.0"
-      - name: build extension
-        run: yarn workspace @clients/extension build
