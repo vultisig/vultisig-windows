@@ -65,12 +65,12 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
   ): Promise<KeysignPayload> => {
     return new Promise(resolve => {
       const coin = create(CoinSchema, {
-        chain: transaction.chain.name,
+        chain: transaction.chain.chain,
         ticker: transaction.chain.ticker,
         address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
-          chain => chain.name === transaction.chain.name
+          chain => chain.chain === transaction.chain.chain
         )!.derivationKey,
         isNativeToken: true,
         logo: transaction.chain.ticker.toLowerCase(),
@@ -213,7 +213,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
       const allSignatures = this.walletCore.DataVector.create()
       const publicKeys = this.walletCore.DataVector.create()
       const pubkeyUTXO = vault.chains.find(
-        chain => chain.name === this.chainKey
+        chain => chain.chain === this.chainKey
       )!.derivationKey!
       const publicKeyData = Buffer.from(pubkeyUTXO, 'hex')
       const modifiedSig = this.getSignature(signature)

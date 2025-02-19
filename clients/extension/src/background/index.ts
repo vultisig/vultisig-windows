@@ -4,17 +4,14 @@ import {
 } from '@clients/extension/src/types/thorchain'
 import api from '@clients/extension/src/utils/api'
 import {
-  chains,
   ChainTicker,
   Instance,
+  isSupportedChain,
   MessageKey,
   RequestMethod,
   rpcUrl,
 } from '@clients/extension/src/utils/constants'
-import {
-  calculateWindowPosition,
-  findChainByProp,
-} from '@clients/extension/src/utils/functions'
+import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import {
   ChainProps,
   CTRL_TRANSACTION,
@@ -46,6 +43,8 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
+import { getChainByChainId, getChainId } from '@core/chain/coin/chainId'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 let rpcProvider: JsonRpcProvider
 
@@ -102,7 +101,7 @@ const handleFindAccounts = (
               ? chains
                   .filter(
                     (selectedChain: ChainProps) =>
-                      selectedChain.name === chain && apps.indexOf(sender) >= 0
+                      selectedChain.chain === chain && apps.indexOf(sender) >= 0
                   )
                   .map(({ address }) => address ?? '')
               : []
@@ -344,16 +343,16 @@ const handleRequest = (
 > => {
   return new Promise((resolve, reject) => {
     const { method, params } = body
-    if (getChainKind(chain.name) === 'evm') {
-      if (!rpcProvider) handleProvider(chain.name)
+    if (getChainKind(chain.chain) === 'evm') {
+      if (!rpcProvider) handleProvider(chain.chain)
     }
 
     switch (method) {
       case RequestMethod.VULTISIG.GET_ACCOUNTS:
       case RequestMethod.METAMASK.ETH_ACCOUNTS: {
-        handleFindAccounts(chain.name, sender)
+        handleFindAccounts(chain.chain, sender)
           .then(([account]) => {
-            switch (chain.name) {
+            switch (chain.chain) {
               case Chain.Dydx:
               case Chain.Cosmos:
               case Chain.Kujira:
@@ -375,9 +374,9 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.REQUEST_ACCOUNTS:
       case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
-        handleGetAccounts(chain.name, sender)
+        handleGetAccounts(chain.chain, sender)
           .then(([account]) => {
-            switch (chain.name) {
+            switch (chain.chain) {
               case Chain.Dydx:
               case Chain.Cosmos:
               case Chain.Kujira:
@@ -400,9 +399,9 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.CHAIN_ID:
       case RequestMethod.METAMASK.ETH_CHAIN_ID: {
-        handleProvider(chain.name, true)
+        handleProvider(chain.chain, true)
 
-        resolve(chain.id)
+        resolve(getChainId(chain.chain))
 
         break
       }
@@ -503,7 +502,7 @@ const handleRequest = (
           const [hash] = params
 
           if (hash) {
-            switch (chain.name) {
+            switch (chain.chain) {
               // Thor
               case Chain.THORChain: {
                 api.thorchain
@@ -519,7 +518,7 @@ const handleRequest = (
               case Chain.Kujira:
               case Chain.MayaChain:
               case Chain.Osmosis: {
-                Tendermint34Client.connect(rpcUrl[chain.name])
+                Tendermint34Client.connect(rpcUrl[chain.chain])
                   .then(client => {
                     client
                       .tx({ hash: Buffer.from(String(hash)) })
@@ -542,7 +541,7 @@ const handleRequest = (
               case Chain.Optimism:
               case Chain.Polygon: {
                 api.ethereum
-                  .getTransactionByHash(rpcUrl[chain.name], String(hash))
+                  .getTransactionByHash(rpcUrl[chain.chain], String(hash))
                   .then(resolve)
                   .catch(reject)
 
@@ -550,7 +549,7 @@ const handleRequest = (
               }
               default: {
                 api.utxo
-                  .blockchairGetTx(chain.name, String(hash))
+                  .blockchairGetTx(chain.chain, String(hash))
                   .then(res => resolve(JSON.stringify(res)))
                   .catch(reject)
 
@@ -587,20 +586,23 @@ const handleRequest = (
           const [param] = params
 
           if (param?.chainId) {
-            const supportedChain = findChainByProp(chains, 'id', param.chainId)
-
+            const supportedChain = isSupportedChain(
+              getChainByChainId(param.chainId)
+            )
+              ? getChainByChainId(param.chainId)
+              : null
             if (supportedChain) {
               getStoredChains().then(storedChains => {
                 setStoredChains([
-                  { ...supportedChain, active: true },
+                  { ...chainFeeCoin[supportedChain], active: true },
                   ...storedChains
                     .filter(
                       (storedChain: ChainProps) =>
-                        storedChain.name !== supportedChain.name
+                        storedChain.chain !== supportedChain
                     )
                     .map(chain => ({ ...chain, active: false })),
                 ])
-                  .then(() => resolve(supportedChain.id))
+                  .then(() => resolve(param.chainId))
                   .catch(reject)
               })
             } else {
@@ -661,18 +663,23 @@ const handleRequest = (
           const [param] = params
 
           if (param?.chainId) {
-            const supportedChain = findChainByProp(chains, 'id', param.chainId)
-
+            const supportedChain = isSupportedChain(
+              getChainByChainId(param.chainId)
+            )
+              ? getChainByChainId(param.chainId)
+              : null
             if (supportedChain) {
               getStoredChains().then(storedChains => {
                 const existed =
-                  storedChains.findIndex(({ id }) => id === param.chainId) >= 0
+                  storedChains.findIndex(
+                    ({ chain }) => chain === supportedChain
+                  ) >= 0
 
                 if (existed) {
                   setStoredChains(
                     storedChains.map(chain => ({
                       ...chain,
-                      active: chain.id === param.chainId,
+                      active: chain.chain === supportedChain,
                     }))
                   )
                     .then(() => resolve(param.chainId))
@@ -877,7 +884,7 @@ const handleRequest = (
         break
       }
       case RequestMethod.METAMASK.NET_VERSION: {
-        resolve(String(parseInt(chain.id, 16)))
+        resolve(String(parseInt(getChainId(chain.chain), 16)))
         break
       }
       case RequestMethod.CTRL.DEPOSIT: {
@@ -972,14 +979,14 @@ chrome.runtime.onMessage.addListener(
 
     switch (type) {
       case MessageKey.BITCOIN_REQUEST: {
-        handleRequest(message, chains[Chain.Bitcoin], origin)
+        handleRequest(message, chainFeeCoin.Bitcoin, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.BITCOIN_CASH_REQUEST: {
-        handleRequest(message, chains[Chain.BitcoinCash], origin)
+        handleRequest(message, chainFeeCoin['Bitcoin-Cash'], origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
@@ -989,7 +996,7 @@ chrome.runtime.onMessage.addListener(
         getStoredChains().then(storedChains => {
           const chain = storedChains.find(
             (storedChain: ChainProps) =>
-              storedChain.active && getChainKind(storedChain.name) === 'cosmos'
+              storedChain.active && getChainKind(storedChain.chain) === 'cosmos'
           )
 
           if (chain) {
@@ -1004,14 +1011,14 @@ chrome.runtime.onMessage.addListener(
                         return (
                           vault.chains.find(
                             (selectedChain: ChainProps) =>
-                              selectedChain.name === chain.name
+                              selectedChain.chain === chain.chain
                           )?.address === response
                         )
                       })
 
                       const storedChain = vault!.chains.find(
                         (selectedChain: ChainProps) =>
-                          selectedChain.name === chain.name
+                          selectedChain.chain === chain.chain
                       )!
                       const derivationKey = storedChain.derivationKey
                       if (!derivationKey) {
@@ -1046,13 +1053,13 @@ chrome.runtime.onMessage.addListener(
             handleRequest(
               {
                 method: RequestMethod.VULTISIG.WALLET_ADD_CHAIN,
-                params: [{ chainId: chains[Chain.Cosmos].id }],
+                params: [{ chainId: getChainId(Chain.Cosmos) }],
               },
-              chains[Chain.Cosmos],
+              chainFeeCoin.Cosmos,
               origin
             )
               .then(() =>
-                handleRequest(message, chains[Chain.Cosmos], origin)
+                handleRequest(message, chainFeeCoin.Cosmos, origin)
                   .then(response => {
                     if (
                       message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
@@ -1062,13 +1069,13 @@ chrome.runtime.onMessage.addListener(
                           return (
                             vault.chains.find(
                               (selectedChain: ChainProps) =>
-                                selectedChain.name === Chain.Cosmos
+                                selectedChain.chain === Chain.Cosmos
                             )?.address === response
                           )
                         })
                         const storedChain = vault!.chains.find(
                           (storedChain: ChainProps) =>
-                            storedChain.name === Chain.Cosmos
+                            storedChain.chain === Chain.Cosmos
                         )!
                         const derivationKey = storedChain.derivationKey
                         if (!derivationKey) {
@@ -1106,14 +1113,14 @@ chrome.runtime.onMessage.addListener(
         break
       }
       case MessageKey.DASH_REQUEST: {
-        handleRequest(message, chains[Chain.Dash], origin)
+        handleRequest(message, chainFeeCoin.Dash, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.DOGECOIN_REQUEST: {
-        handleRequest(message, chains[Chain.Dogecoin], origin)
+        handleRequest(message, chainFeeCoin.Dogecoin, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
@@ -1123,7 +1130,7 @@ chrome.runtime.onMessage.addListener(
         getStoredChains().then(storedChains => {
           const chain = storedChains.find(
             (storedChain: ChainProps) =>
-              storedChain.active && getChainKind(storedChain.name) === 'evm'
+              storedChain.active && getChainKind(storedChain.chain) === 'evm'
           )
 
           if (chain) {
@@ -1134,13 +1141,13 @@ chrome.runtime.onMessage.addListener(
             handleRequest(
               {
                 method: RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN,
-                params: [{ chainId: chains[Chain.Ethereum].id }],
+                params: [{ chainId: getChainId(Chain.Ethereum) }],
               },
-              chains[Chain.Ethereum],
+              chainFeeCoin.Ethereum,
               origin
             )
               .then(() =>
-                handleRequest(message, chains[Chain.Ethereum], origin)
+                handleRequest(message, chainFeeCoin.Ethereum, origin)
                   .then(sendResponse)
                   .catch(error => sendResponse({ error }))
               )
@@ -1151,28 +1158,28 @@ chrome.runtime.onMessage.addListener(
         break
       }
       case MessageKey.LITECOIN_REQUEST: {
-        handleRequest(message, chains[Chain.Litecoin], origin)
+        handleRequest(message, chainFeeCoin.Litecoin, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.MAYA_REQUEST: {
-        handleRequest(message, chains[Chain.MayaChain], origin)
+        handleRequest(message, chainFeeCoin.MayaChain, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.SOLANA_REQUEST: {
-        handleRequest(message, chains[Chain.Solana], origin)
+        handleRequest(message, chainFeeCoin.Solana, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 
         break
       }
       case MessageKey.THOR_REQUEST: {
-        handleRequest(message, chains[Chain.THORChain], origin)
+        handleRequest(message, chainFeeCoin.THORChain, origin)
           .then(sendResponse)
           .catch(error => sendResponse({ error }))
 

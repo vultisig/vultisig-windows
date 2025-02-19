@@ -78,12 +78,12 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
   ): Promise<KeysignPayload> => {
     return new Promise(resolve => {
       const coin = create(CoinSchema, {
-        chain: transaction.chain.name,
+        chain: transaction.chain.chain,
         ticker: transaction.chain.ticker,
         address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
-          chain => chain.name === transaction.chain.name
+          chain => chain.chain === transaction.chain.chain
         )?.derivationKey,
         isNativeToken: true,
         logo: transaction.chain.ticker.toLowerCase(),
@@ -192,7 +192,7 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
     return new Promise((resolve, reject) => {
       if (inputData && transaction && vault) {
         const pubkeyCosmos = vault.chains.find(
-          chain => chain.name === transaction.chain.name
+          chain => chain.chain === transaction.chain.chain
         )?.derivationKey
 
         if (pubkeyCosmos) {

@@ -1,4 +1,4 @@
-import { Chain, CosmosChain, EvmChain, OtherChain, UtxoChain } from '../Chain';
+import { Chain, CosmosChain, EvmChain, OtherChain, UtxoChain } from '../Chain'
 
 export const chainIdRecord = {
   [EvmChain.Arbitrum]: '0xa4b1',
@@ -34,14 +34,24 @@ export const chainIdRecord = {
   [OtherChain.Polkadot]: '0x3e4',
   [OtherChain.Ton]: '0x44c',
   [OtherChain.Ripple]: '0x1df4',
-} as const;
+} as const
 
-export type ChainId = (typeof chainIdRecord)[Chain];
+export type ChainId = (typeof chainIdRecord)[Chain]
 
 export type DeriveChainId<T> = T extends Chain
   ? (typeof chainIdRecord)[T]
-  : never;
+  : never
 
 export function getChainId<T extends Chain>(chain: T): DeriveChainId<T> {
-  return chainIdRecord[chain] as DeriveChainId<T>;
+  return chainIdRecord[chain] as DeriveChainId<T>
+}
+
+export function isSupportedChainId(chainId: string): chainId is ChainId {
+  return Object.values(chainIdRecord).includes(chainId as ChainId)
+}
+
+export function getChainByChainId(chainId: string): Chain | undefined {
+  return Object.entries(chainIdRecord).find(([, id]) => id === chainId)?.[0] as
+    | Chain
+    | undefined
 }

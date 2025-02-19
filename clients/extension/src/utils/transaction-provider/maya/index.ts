@@ -66,12 +66,12 @@ export default class MayaTransactionProvider extends BaseTransactionProvider {
   ): Promise<KeysignPayload> => {
     return new Promise(resolve => {
       const coin = create(CoinSchema, {
-        chain: transaction.chain.name,
+        chain: transaction.chain.chain,
         ticker: transaction.chain.ticker,
         address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
-          chain => chain.name === transaction.chain.name
+          chain => chain.chain === transaction.chain.chain
         )?.derivationKey,
         isNativeToken: true,
         logo: transaction.chain.ticker.toLowerCase(),
@@ -200,7 +200,7 @@ export default class MayaTransactionProvider extends BaseTransactionProvider {
     return new Promise((resolve, reject) => {
       if (inputData && vault) {
         const pubkeyMaya = vault.chains.find(
-          chain => chain.name === Chain.MayaChain
+          chain => chain.chain === Chain.MayaChain
         )?.derivationKey
 
         if (pubkeyMaya) {

@@ -95,6 +95,7 @@ export default class AddressProvider {
     vault: VaultProps
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
+      console.log('getAddress:', chain)
       switch (chain) {
         // EDDSA
         case Chain.Polkadot:
