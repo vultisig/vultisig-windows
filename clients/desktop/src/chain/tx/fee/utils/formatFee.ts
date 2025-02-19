@@ -12,6 +12,7 @@ import { polkadotConfig } from '../../../polkadot/config'
 import { tonConfig } from '../../../ton/config'
 import { gwei } from './evm'
 import { getFeeUnit } from './feeUnit'
+import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
 
 type FormatFeeInput = {
   chain: Chain
@@ -27,7 +28,7 @@ export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
       utxoSpecific: ({ byteFee }) => BigInt(byteFee),
       ethereumSpecific: ({ maxFeePerGasWei }) => BigInt(maxFeePerGasWei),
       suicheSpecific: ({ referenceGasPrice }) => BigInt(referenceGasPrice),
-      solanaSpecific: ({ priorityFee }) => BigInt(priorityFee),
+      solanaSpecific: ({ priorityFee }) => BigInt(priorityFee) == BigInt(0) ? BigInt(solanaConfig.priorityFeeLimit) : BigInt(priorityFee), // currently we hardcode the priority fee to 100_000 lamports
       thorchainSpecific: ({ fee }) => BigInt(fee),
       mayaSpecific: () => BigInt(cosmosGasLimitRecord[Chain.MayaChain]),
       cosmosSpecific: ({ gas }) => BigInt(gas),
