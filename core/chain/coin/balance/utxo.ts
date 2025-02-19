@@ -1,11 +1,12 @@
-import { UtxoChain } from "@core/chain/Chain";
-import { CoinBalanceResolver } from "./CoinBalanceResolver";
-import { getUtxoAddressInfo } from "../../chains/utxo/client/getUtxoAddressInfo";
+import { UtxoChain } from '@core/chain/Chain'
 
-export const getUtxoCoinBalance: CoinBalanceResolver<UtxoChain> = async (
-  input,
-) => {
-  const { data } = await getUtxoAddressInfo(input);
+import { getUtxoAddressInfo } from '../../chains/utxo/client/getUtxoAddressInfo'
+import { CoinBalanceResolver } from './CoinBalanceResolver'
 
-  return BigInt(data[input.address].address.balance);
-};
+export const getUtxoCoinBalance: CoinBalanceResolver<
+  UtxoChain
+> = async input => {
+  const { data } = await getUtxoAddressInfo(input)
+
+  return BigInt(data[input.address].address.balance)
+}

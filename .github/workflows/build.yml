@@ -1,4 +1,4 @@
-name: Wails build
+name: Vultisig build
 
 on:
   push:
@@ -11,6 +11,27 @@ env:
   NODE_OPTIONS: "--max-old-space-size=4096"
 
 jobs:
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "23.7.0"
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Prepare Yarn
+        run: corepack prepare yarn@4.6.0 --activate
+      - name: Install dependencies
+        run: yarn install
+      - name: Lint
+        run: yarn lint
+      - name: run unit test
+        run: yarn workspace @clients/desktop test
   build:
     strategy:
       # Failure in one platform build won't impact the others
@@ -43,9 +64,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-
-      - name: run unit test
-        run: yarn workspace @clients/desktop test
 
       - name: Build wails
         uses: dAppServer/wails-build-action@main

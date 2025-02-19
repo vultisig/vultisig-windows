@@ -1,23 +1,22 @@
 import {
   ChainSpecificResolver,
   ChainSpecificResolverInput,
-} from "./ChainSpecificResolver";
-
-import { getCosmosSpecific } from "./cosmos";
-import { getEthereumSpecific } from "./evm";
-import { getMayaSpecific } from "./maya";
-import { getPolkadotSpecific } from "./polkadot";
-import { getRippleSpecific } from "./ripple";
-import { getSolanaSpecific } from "./solana";
-import { getSuiSpecific } from "./sui";
-import { getThorchainSpecific } from "./thor";
-import { getTonSpecific } from "./ton";
-import { getUtxoSpecific } from "./utxo";
+} from './ChainSpecificResolver'
+import { getCosmosSpecific } from './cosmos'
+import { getEthereumSpecific } from './evm'
 import {
-  KeysignChainSpecificKey,
-  KeysignChainSpecific,
   chainSpecificRecord,
-} from "./KeysignChainSpecific";
+  KeysignChainSpecific,
+  KeysignChainSpecificKey,
+} from './KeysignChainSpecific'
+import { getMayaSpecific } from './maya'
+import { getPolkadotSpecific } from './polkadot'
+import { getRippleSpecific } from './ripple'
+import { getSolanaSpecific } from './solana'
+import { getSuiSpecific } from './sui'
+import { getThorchainSpecific } from './thor'
+import { getTonSpecific } from './ton'
+import { getUtxoSpecific } from './utxo'
 
 const handlers: Record<KeysignChainSpecificKey, ChainSpecificResolver> = {
   ethereumSpecific: getEthereumSpecific,
@@ -31,19 +30,19 @@ const handlers: Record<KeysignChainSpecificKey, ChainSpecificResolver> = {
   suicheSpecific: getSuiSpecific,
   tonSpecific: getTonSpecific,
   tronSpecific: () => {
-    throw new Error("Tron is not supported");
+    throw new Error('Tron is not supported')
   },
-};
+}
 
 export const getChainSpecific = async (
-  input: ChainSpecificResolverInput,
+  input: ChainSpecificResolverInput
 ): Promise<KeysignChainSpecific> => {
-  const chainSpecificCase = chainSpecificRecord[input.coin.chain];
+  const chainSpecificCase = chainSpecificRecord[input.coin.chain]
 
-  const value = await handlers[chainSpecificCase](input);
+  const value = await handlers[chainSpecificCase](input)
 
   return {
     case: chainSpecificCase,
     value,
-  } as KeysignChainSpecific;
-};
+  } as KeysignChainSpecific
+}

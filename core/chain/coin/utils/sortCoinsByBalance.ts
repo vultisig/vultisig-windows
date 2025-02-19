@@ -1,10 +1,10 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
-import { CoinAmount } from '@core/chain/coin/Coin';
-import { getCoinValue } from '@core/chain/coin/utils/getCoinValue';
-import { order } from '@lib/utils/array/order';
-import { splitBy } from '@lib/utils/array/splitBy';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice';
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { CoinAmount } from '@core/chain/coin/Coin'
+import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
+import { order } from '@lib/utils/array/order'
+import { splitBy } from '@lib/utils/array/splitBy'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice'
 
 export const sortCoinsByBalance = <
   T extends CoinAmount & Partial<EntityWithPrice>,
@@ -14,12 +14,12 @@ export const sortCoinsByBalance = <
   const [itemsWithBalance, itemsWithoutBalance] = splitBy(
     items,
     ({ amount }) => (amount ? 0 : 1)
-  );
+  )
 
   const [itemsWithPrice, itemsWithoutPrice] = splitBy(
     itemsWithBalance,
     ({ price }) => (price ? 0 : 1)
-  );
+  )
 
   return [
     ...order(
@@ -38,5 +38,5 @@ export const sortCoinsByBalance = <
       'desc'
     ),
     ...itemsWithoutBalance,
-  ];
-};
+  ]
+}
