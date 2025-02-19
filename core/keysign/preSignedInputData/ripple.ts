@@ -2,9 +2,7 @@ import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
-import { 
-  PreSignedInputDataResolver, 
-} from './PreSignedInputDataResolver'
+import { PreSignedInputDataResolver } from './PreSignedInputDataResolver'
 
 export const getRipplePreSignedInputData: PreSignedInputDataResolver<
   'rippleSpecific'
