@@ -1,35 +1,38 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-
-import { getStoredVaults } from "../../../../utils/storage";
-import type { VaultProps } from "../../../../utils/interfaces";
-import useGoBack from "../../../../hooks/go-back";
-import messageKeys from "../../../../utils/message-keys";
-import routeKeys from "../../../../utils/route-keys";
-
-import { ArrowLeft, ArrowRight, NoteEdit, Trash } from "../../../../icons";
+import useGoBack from '@clients/extension/src/hooks/go-back'
+import {
+  ArrowLeft,
+  ArrowRight,
+  NoteEdit,
+  Trash,
+} from '@clients/extension/src/icons'
+import type { VaultProps } from '@clients/extension/src/utils/interfaces'
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import routeKeys from '@clients/extension/src/utils/route-keys'
+import { getStoredVaults } from '@clients/extension/src/utils/storage'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 interface InitialState {
-  vault?: VaultProps;
+  vault?: VaultProps
 }
 
 const Component = () => {
-  const { t } = useTranslation();
-  const initialState: InitialState = {};
-  const [state, setState] = useState(initialState);
-  const { vault } = state;
-  const goBack = useGoBack();
+  const { t } = useTranslation()
+  const initialState: InitialState = {}
+  const [state, setState] = useState(initialState)
+  const { vault } = state
+  const goBack = useGoBack()
 
   const componentDidMount = (): void => {
-    getStoredVaults().then((vaults) => {
-      const vault = vaults.find(({ active }) => active);
+    getStoredVaults().then(vaults => {
+      const vault = vaults.find(({ active }) => active)
 
-      setState((prevState) => ({ ...prevState, vault }));
-    });
-  };
+      setState(prevState => ({ ...prevState, vault }))
+    })
+  }
 
-  useEffect(componentDidMount, []);
+  useEffect(componentDidMount, [])
 
   return (
     <div className="layout vault-settings-page">
@@ -63,7 +66,7 @@ const Component = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Component;
+export default Component

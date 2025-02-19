@@ -1,166 +1,165 @@
-import { Buffer } from "buffer";
-import { formatUnits, sha256 } from "ethers";
-import { create } from "@bufbuild/protobuf";
-import { TW, WalletCore } from "@trustwallet/wallet-core";
-import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
-import Long from "long";
-
-import {
-  THORChainSpecificSchema,
-  THORChainSpecific,
-} from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
-import {
-  KeysignPayloadSchema,
-  KeysignPayload,
-} from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
-import {
-  CoinSchema,
-  Coin,
-} from "@core/communication/vultisig/keysign/v1/coin_pb";
-
+import { create } from '@bufbuild/protobuf'
+import api from '@clients/extension/src/utils/api'
 import type {
   ITransaction,
   SignatureProps,
   SignedTransaction,
   SpecificThorchain,
   VaultProps,
-} from "../../interfaces";
-import api from "../../api";
-import { SignedTransactionResult } from "../../signed-transaction-result";
-import BaseTransactionProvider from "../../transaction-provider/base";
+} from '@clients/extension/src/utils/interfaces'
+import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
+import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
+import { Chain } from '@core/chain/Chain'
+import {
+  THORChainSpecific,
+  THORChainSpecificSchema,
+} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import {
+  Coin,
+  CoinSchema,
+} from '@core/communication/vultisig/keysign/v1/coin_pb'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { TW, WalletCore } from '@trustwallet/wallet-core'
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
+import { Buffer } from 'buffer'
+import { formatUnits, sha256 } from 'ethers'
+import Long from 'long'
 
-import SigningMode = TW.Cosmos.Proto.SigningMode;
-import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
-import { Chain } from "@core/chain/Chain";
+import SigningMode = TW.Cosmos.Proto.SigningMode
+import BroadcastMode = TW.Cosmos.Proto.BroadcastMode
+
 export default class ThorchainTransactionProvider extends BaseTransactionProvider {
   constructor(
     chainKey: Chain,
     chainRef: { [chainKey: string]: CoinType },
     dataEncoder: (data: Uint8Array) => Promise<string>,
-    walletCore: WalletCore,
+    walletCore: WalletCore
   ) {
-    super(chainKey, chainRef, dataEncoder, walletCore);
+    super(chainKey, chainRef, dataEncoder, walletCore)
   }
 
   public getSpecificTransactionInfo = (
     coin: Coin,
-    isDeposit?: boolean,
+    isDeposit?: boolean
   ): Promise<SpecificThorchain> => {
-    return new Promise<SpecificThorchain>((resolve) => {
-      api.thorchain.fetchAccountNumber(coin.address).then((accountData) => {
-        this.calculateFee(coin).then((fee) => {
+    return new Promise<SpecificThorchain>(resolve => {
+      api.thorchain.fetchAccountNumber(coin.address).then(accountData => {
+        this.calculateFee(coin).then(fee => {
           const specificThorchain: SpecificThorchain = {
             fee,
             gasPrice: Number(formatUnits(fee, coin.decimals)),
             accountNumber: Number(accountData?.accountNumber),
             sequence: Number(accountData.sequence ?? 0),
             isDeposit: isDeposit ?? false,
-          } as SpecificThorchain;
+          } as SpecificThorchain
 
-          resolve(specificThorchain);
-        });
-      });
-    });
-  };
+          resolve(specificThorchain)
+        })
+      })
+    })
+  }
 
   public getKeysignPayload = (
     transaction: ITransaction,
-    vault: VaultProps,
+    vault: VaultProps
   ): Promise<KeysignPayload> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const coin = create(CoinSchema, {
         chain: transaction.chain.name,
         ticker: transaction.chain.ticker,
         address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
-          (chain) => chain.name === transaction.chain.name,
+          chain => chain.name === transaction.chain.name
         )?.derivationKey,
         isNativeToken: true,
         logo: transaction.chain.ticker.toLowerCase(),
-      });
+      })
 
       this.getSpecificTransactionInfo(coin, transaction.isDeposit).then(
-        (specificData) => {
+        specificData => {
           const thorchainSpecific = create(THORChainSpecificSchema, {
             accountNumber: BigInt(specificData.accountNumber),
             fee: BigInt(specificData.fee),
             isDeposit: specificData.isDeposit,
             sequence: BigInt(specificData.sequence),
-          });
+          })
 
           const keysignPayload = create(KeysignPayloadSchema, {
             toAddress: transaction.transactionDetails.to,
             toAmount: transaction.transactionDetails.amount?.amount
               ? BigInt(
-                  parseInt(transaction.transactionDetails.amount.amount),
+                  parseInt(transaction.transactionDetails.amount.amount)
                 ).toString()
-              : "0",
+              : '0',
             memo: transaction.transactionDetails.data,
             vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
-            vaultLocalPartyId: "VultiConnect",
+            vaultLocalPartyId: 'VultiConnect',
             coin,
             blockchainSpecific: {
-              case: "thorchainSpecific",
+              case: 'thorchainSpecific',
               value: thorchainSpecific,
             },
-          });
+          })
 
-          this.keysignPayload = keysignPayload;
+          this.keysignPayload = keysignPayload
 
-          resolve(keysignPayload);
-        },
-      );
-    });
-  };
+          resolve(keysignPayload)
+        }
+      )
+    })
+  }
 
   public getPreSignedInputData = (): Promise<Uint8Array> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const thorchainSpecific = this.keysignPayload?.blockchainSpecific
-        .value as unknown as THORChainSpecific;
-      let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({});
-      let message: TW.Cosmos.Proto.Message[];
-      const coinType = this.walletCore.CoinType.thorchain;
+        .value as unknown as THORChainSpecific
+      let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({})
+      let message: TW.Cosmos.Proto.Message[]
+      const coinType = this.walletCore.CoinType.thorchain
       const pubKeyData = Buffer.from(
-        this.keysignPayload?.coin?.hexPublicKey ?? "",
-        "hex",
-      );
+        this.keysignPayload?.coin?.hexPublicKey ?? '',
+        'hex'
+      )
       const fromAddr = this.walletCore.AnyAddress.createWithString(
-        this.keysignPayload?.coin?.address ?? "",
-        this.walletCore.CoinType.thorchain,
-      );
+        this.keysignPayload?.coin?.address ?? '',
+        this.walletCore.CoinType.thorchain
+      )
       if (thorchainSpecific.isDeposit) {
         thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
           asset: TW.Cosmos.Proto.THORChainAsset.create({
-            chain: "THOR",
-            symbol: "RUNE",
-            ticker: "RUNE",
+            chain: 'THOR',
+            symbol: 'RUNE',
+            ticker: 'RUNE',
             synth: false,
           }),
           decimals: new Long(8),
-        });
-        const toAmount = Number(this.keysignPayload?.toAmount || "0");
+        })
+        const toAmount = Number(this.keysignPayload?.toAmount || '0')
 
         if (toAmount > 0)
-          thorchainCoin.amount = this.keysignPayload?.toAmount ?? "0";
+          thorchainCoin.amount = this.keysignPayload?.toAmount ?? '0'
 
         message = [
           TW.Cosmos.Proto.Message.create({
             thorchainDepositMessage:
               TW.Cosmos.Proto.Message.THORChainDeposit.create({
                 signer: fromAddr.data(),
-                memo: this.keysignPayload?.memo ?? "",
+                memo: this.keysignPayload?.memo ?? '',
                 coins: [thorchainCoin],
               }),
           }),
-        ];
+        ]
       } else {
         const toAddress = this.walletCore.AnyAddress.createWithString(
-          this.keysignPayload?.toAddress ?? "",
-          coinType,
-        );
+          this.keysignPayload?.toAddress ?? '',
+          coinType
+        )
         if (!toAddress) {
-          throw new Error("invalid to address");
+          throw new Error('invalid to address')
         }
         message = [
           TW.Cosmos.Proto.Message.create({
@@ -168,20 +167,20 @@ export default class ThorchainTransactionProvider extends BaseTransactionProvide
               fromAddress: fromAddr.data(),
               amounts: [
                 TW.Cosmos.Proto.Amount.create({
-                  denom: "rune",
+                  denom: 'rune',
                   amount: this.keysignPayload?.toAmount,
                 }),
               ],
               toAddress: toAddress.data(),
             }),
           }),
-        ];
+        ]
       }
 
-      var chainID = this.walletCore.CoinTypeExt.chainId(coinType);
-      api.thorchain.getTHORChainChainID().then((thorChainId) => {
+      let chainID = this.walletCore.CoinTypeExt.chainId(coinType)
+      api.thorchain.getTHORChainChainID().then(thorChainId => {
         if (thorChainId && chainID != thorChainId) {
-          chainID = thorChainId;
+          chainID = thorChainId
         }
 
         const input = TW.Cosmos.Proto.SigningInput.create({
@@ -191,16 +190,16 @@ export default class ThorchainTransactionProvider extends BaseTransactionProvide
           accountNumber: new Long(Number(thorchainSpecific.accountNumber)),
           sequence: new Long(Number(thorchainSpecific.sequence)),
           mode: BroadcastMode.SYNC,
-          memo: this.keysignPayload?.memo ?? "",
+          memo: this.keysignPayload?.memo ?? '',
           messages: message,
           fee: TW.Cosmos.Proto.Fee.create({
             gas: new Long(20000000),
           }),
-        });
-        resolve(TW.Cosmos.Proto.SigningInput.encode(input).finish());
-      });
-    });
-  };
+        })
+        resolve(TW.Cosmos.Proto.SigningInput.encode(input).finish())
+      })
+    })
+  }
 
   public getSignedTransaction = ({
     inputData,
@@ -210,70 +209,70 @@ export default class ThorchainTransactionProvider extends BaseTransactionProvide
     return new Promise((resolve, reject) => {
       if (inputData && vault) {
         const pubkeyThorchain = vault.chains.find(
-          (chain) => chain.name === Chain.THORChain,
-        )?.derivationKey;
+          chain => chain.name === Chain.THORChain
+        )?.derivationKey
 
         if (pubkeyThorchain) {
-          const coinType = this.walletCore.CoinType.thorchain;
-          const allSignatures = this.walletCore.DataVector.create();
-          const publicKeys = this.walletCore.DataVector.create();
-          const publicKeyData = Buffer.from(pubkeyThorchain, "hex");
-          const modifiedSig = this.getSignature(signature);
+          const coinType = this.walletCore.CoinType.thorchain
+          const allSignatures = this.walletCore.DataVector.create()
+          const publicKeys = this.walletCore.DataVector.create()
+          const publicKeyData = Buffer.from(pubkeyThorchain, 'hex')
+          const modifiedSig = this.getSignature(signature)
 
-          allSignatures.add(modifiedSig);
-          publicKeys.add(publicKeyData);
+          allSignatures.add(modifiedSig)
+          publicKeys.add(publicKeyData)
 
           const compileWithSignatures =
             this.walletCore.TransactionCompiler.compileWithSignatures(
               coinType,
               inputData,
               allSignatures,
-              publicKeys,
-            );
+              publicKeys
+            )
           const output = TW.Cosmos.Proto.SigningOutput.decode(
-            compileWithSignatures,
-          );
-          const serializedData = output.serialized;
-          const parsedData = JSON.parse(serializedData);
-          const txBytes = parsedData.tx_bytes;
-          const decodedTxBytes = Buffer.from(txBytes, "base64");
-          const hash = sha256(decodedTxBytes);
+            compileWithSignatures
+          )
+          const serializedData = output.serialized
+          const parsedData = JSON.parse(serializedData)
+          const txBytes = parsedData.tx_bytes
+          const decodedTxBytes = Buffer.from(txBytes, 'base64')
+          const hash = sha256(decodedTxBytes)
           const result = new SignedTransactionResult(
             serializedData,
             hash,
-            undefined,
-          );
+            undefined
+          )
 
-          resolve({ txHash: result.transactionHash, raw: serializedData });
+          resolve({ txHash: result.transactionHash, raw: serializedData })
         } else {
-          reject();
+          reject()
         }
       } else {
-        reject();
+        reject()
       }
-    });
-  };
+    })
+  }
 
   private getSignature(signature: SignatureProps): Uint8Array {
-    const rData = this.walletCore.HexCoding.decode(signature.R);
-    const sData = this.walletCore.HexCoding.decode(signature.S);
+    const rData = this.walletCore.HexCoding.decode(signature.R)
+    const sData = this.walletCore.HexCoding.decode(signature.S)
     const recoveryIDdata = this.walletCore.HexCoding.decode(
-      signature.RecoveryID,
-    );
+      signature.RecoveryID
+    )
     const combinedData = new Uint8Array(
-      rData.length + sData.length + recoveryIDdata.length,
-    );
-    combinedData.set(rData);
-    combinedData.set(sData, rData.length);
-    combinedData.set(recoveryIDdata, rData.length + sData.length);
-    return combinedData;
+      rData.length + sData.length + recoveryIDdata.length
+    )
+    combinedData.set(rData)
+    combinedData.set(sData, rData.length)
+    combinedData.set(recoveryIDdata, rData.length + sData.length)
+    return combinedData
   }
 
   private calculateFee(_coin?: Coin): Promise<number> {
-    return new Promise((resolve) => {
-      api.thorchain.getFeeData().then((feeData) => {
-        resolve(Number(feeData));
-      });
-    });
+    return new Promise(resolve => {
+      api.thorchain.getFeeData().then(feeData => {
+        resolve(Number(feeData))
+      })
+    })
   }
 }

@@ -1,3 +1,3 @@
-const Component = () => <div className="vulti-loading" />;
+const Component = () => <div className="vulti-loading" />
 
-export default Component;
+export default Component

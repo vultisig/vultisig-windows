@@ -1,31 +1,27 @@
-import { EIP1193Provider, announceProvider } from "mipd";
-import { v4 as uuidv4 } from "uuid";
+import VULTI_ICON_RAW_PNG from '@clients/extension/src/content/icon'
 import {
-  PublicKey,
-  Transaction,
-  SystemInstruction,
-  VersionedTransaction,
-} from "@solana/web3.js";
-import EventEmitter from "events";
-import base58 from "bs58";
+  ThorchainProviderRequest,
+  ThorchainProviderResponse,
+} from '@clients/extension/src/types/thorchain'
+import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import {
   CosmosMsgType,
   EventMethod,
   MessageKey,
   RequestMethod,
   SenderKey,
-} from "../utils/constants";
+} from '@clients/extension/src/utils/constants'
+import { processBackgroundResponse } from '@clients/extension/src/utils/functions'
 import {
   Messaging,
   SendTransactionResponse,
   VaultProps,
-} from "../utils/interfaces";
-import VULTI_ICON_RAW_PNG from "./icon";
+} from '@clients/extension/src/utils/interfaces'
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
   Keplr,
-} from "@keplr-wallet/provider";
+} from '@keplr-wallet/provider'
 import {
   AminoSignResponse,
   BroadcastMode,
@@ -36,40 +32,41 @@ import {
   OfflineDirectSigner,
   StdSignDoc,
   StdTx,
-} from "@keplr-wallet/types";
+} from '@keplr-wallet/types'
 import {
-  ThorchainProviderRequest,
-  ThorchainProviderResponse,
-} from "../types/thorchain";
-import { ThorchainProviderMethod } from "../types/thorchain";
-import { processBackgroundResponse } from "../utils/functions";
+  PublicKey,
+  SystemInstruction,
+  Transaction,
+  VersionedTransaction,
+} from '@solana/web3.js'
+import base58 from 'bs58'
+import EventEmitter from 'events'
+import { announceProvider, EIP1193Provider } from 'mipd'
+import { v4 as uuidv4 } from 'uuid'
 
 enum NetworkKey {
-  MAINNET = "mainnet",
-  TESTNET = "testnet",
+  MAINNET = 'mainnet',
+  TESTNET = 'testnet',
 }
-window.ctrlKeplrProviders = {};
-type Callback = (
-  error: Error | null,
-  result?: Messaging.Chain.Response,
-) => void;
+window.ctrlKeplrProviders = {}
+type Callback = (error: Error | null, result?: Messaging.Chain.Response) => void
 
 const sendToBackgroundViaRelay = <Request, Response>(
   type: MessageKey,
-  message: Request,
+  message: Request
 ): Promise<Response> => {
   return new Promise((resolve, reject) => {
-    const id = uuidv4();
+    const id = uuidv4()
 
     const callback = ({
       data,
       source,
     }: MessageEvent<{
-      error: string;
-      id: string;
-      message: Response;
-      sender: SenderKey;
-      type: MessageKey;
+      error: string
+      id: string
+      message: Response
+      sender: SenderKey
+      type: MessageKey
     }>) => {
       if (
         source !== window ||
@@ -77,56 +74,60 @@ const sendToBackgroundViaRelay = <Request, Response>(
         data.sender !== SenderKey.RELAY ||
         data.type !== type
       )
-        return;
+        return
 
-      window.removeEventListener("message", callback);
+      window.removeEventListener('message', callback)
 
-      data.error ? reject(data.error) : resolve(data.message);
-    };
+      if (data.error) {
+        reject(data.error)
+      } else {
+        resolve(data.message)
+      }
+    }
 
-    window.postMessage({ id, message, sender: SenderKey.PAGE, type }, "*");
+    window.postMessage({ id, message, sender: SenderKey.PAGE, type }, '*')
 
-    window.addEventListener("message", callback);
-  });
-};
+    window.addEventListener('message', callback)
+  })
+}
 
 class XDEFIMessageRequester {
   constructor() {
-    this.sendMessage = this.sendMessage.bind(this);
+    this.sendMessage = this.sendMessage.bind(this)
   }
   // Expected for Ctrl
   public async sendMessage(_message: any, _params: any): Promise<void> {
-    return new Promise((resolve) => {
-      resolve();
-    });
+    return new Promise(resolve => {
+      resolve()
+    })
   }
 }
 
 class XDEFIKeplrProvider extends Keplr {
-  static instance: XDEFIKeplrProvider | null = null;
-  isXDEFI: boolean;
-  isVulticonnect: boolean;
+  static instance: XDEFIKeplrProvider | null = null
+  isXDEFI: boolean
+  isVulticonnect: boolean
 
   public static getInstance(): XDEFIKeplrProvider {
     if (!XDEFIKeplrProvider.instance) {
       XDEFIKeplrProvider.instance = new XDEFIKeplrProvider(
-        "0.0.1",
-        "extension",
-        new XDEFIMessageRequester(),
-      );
+        '0.0.1',
+        'extension',
+        new XDEFIMessageRequester()
+      )
     }
-    return XDEFIKeplrProvider.instance;
+    return XDEFIKeplrProvider.instance
   }
 
   emitAccountsChanged(): void {
-    window.dispatchEvent(new Event("keplr_keystorechange"));
+    window.dispatchEvent(new Event('keplr_keystorechange'))
   }
 
   constructor(version: string, mode: KeplrMode, requester: any) {
-    super(version, mode, requester);
-    this.isXDEFI = true;
-    this.isVulticonnect = true;
-    window.ctrlKeplrProviders["Ctrl Wallet"] = this;
+    super(version, mode, requester)
+    this.isXDEFI = true
+    this.isVulticonnect = true
+    window.ctrlKeplrProviders['Ctrl Wallet'] = this
   }
   enable(_chainIds: string | string[]): Promise<void> {
     return new Promise<void>((resolve, reject) => {
@@ -136,23 +137,23 @@ class XDEFIKeplrProvider extends Keplr {
           params: [],
         })
         .then(resolve)
-        .catch(reject);
-    });
+        .catch(reject)
+    })
   }
   getOfflineSigner(
     chainId: string,
-    _signOptions?: KeplrSignOptions,
+    _signOptions?: KeplrSignOptions
   ): OfflineAminoSigner & OfflineDirectSigner {
     const cosmSigner = new CosmJSOfflineSigner(
       chainId,
       window.xfi.keplr,
-      _signOptions,
-    );
+      _signOptions
+    )
 
     cosmSigner.getAccounts = async () => {
       return cosmosProvider
         .request({ method: RequestMethod.VULTISIG.CHAIN_ID, params: [] })
-        .then(async (currentChainID) => {
+        .then(async currentChainID => {
           if (currentChainID !== chainId) {
             return await cosmosProvider
               .request({
@@ -163,34 +164,34 @@ class XDEFIKeplrProvider extends Keplr {
                 return await cosmosProvider.request({
                   method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
                   params: [],
-                });
-              });
+                })
+              })
           } else {
             return await cosmosProvider.request({
               method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
               params: [],
-            });
+            })
           }
-        });
-    };
+        })
+    }
 
-    return cosmSigner as OfflineAminoSigner & OfflineDirectSigner;
+    return cosmSigner as OfflineAminoSigner & OfflineDirectSigner
   }
 
   getOfflineSignerOnlyAmino(
     chainId: string,
-    signOptions?: KeplrSignOptions,
+    signOptions?: KeplrSignOptions
   ): OfflineAminoSigner {
     const cosmSigner = new CosmJSOfflineSignerOnlyAmino(
       chainId,
       window.xfi.keplr,
-      signOptions,
-    );
+      signOptions
+    )
 
     cosmSigner.getAccounts = async () => {
       return cosmosProvider
         .request({ method: RequestMethod.VULTISIG.CHAIN_ID, params: [] })
-        .then(async (currentChainID) => {
+        .then(async currentChainID => {
           if (currentChainID !== chainId) {
             return await cosmosProvider
               .request({
@@ -201,24 +202,24 @@ class XDEFIKeplrProvider extends Keplr {
                 return await cosmosProvider.request({
                   method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
                   params: [],
-                });
-              });
+                })
+              })
           } else {
             return await cosmosProvider.request({
               method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
               params: [],
-            });
+            })
           }
-        });
-    };
+        })
+    }
 
-    return cosmSigner as OfflineAminoSigner;
+    return cosmSigner as OfflineAminoSigner
   }
 
   sendTx(
     _chainId: string,
     _tx: StdTx | Uint8Array,
-    _mode: BroadcastMode,
+    _mode: BroadcastMode
   ): Promise<Uint8Array> {
     return new Promise<Uint8Array>((resolve, reject) => {
       cosmosProvider
@@ -227,12 +228,12 @@ class XDEFIKeplrProvider extends Keplr {
           params: [_tx],
         })
         .then((result: SendTransactionResponse) => {
-          const decoded = base58.decode(result.raw);
-          if (decoded) resolve(decoded);
-          else reject();
+          const decoded = base58.decode(result.raw)
+          if (decoded) resolve(decoded)
+          else reject()
         })
-        .catch(reject);
-    });
+        .catch(reject)
+    })
   }
   async sendMessage() {}
 
@@ -240,19 +241,19 @@ class XDEFIKeplrProvider extends Keplr {
     _chainId: string,
     _signer: string,
     signDoc: StdSignDoc,
-    _signOptions?: KeplrSignOptions,
+    _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
-    return new Promise<AminoSignResponse>((resolve) => {
-      const txDetails = signDoc.msgs.map((msg) => {
+    return new Promise<AminoSignResponse>(resolve => {
+      const txDetails = signDoc.msgs.map(msg => {
         if (msg.type === CosmosMsgType.MSG_SEND) {
           return {
             from: msg.value.from_address,
             to: msg.value.to_address,
             value: msg.value.amount[0].amount,
             data: signDoc.memo || msg.value.memo,
-          };
+          }
         }
-      });
+      })
 
       cosmosProvider
         .request({
@@ -260,26 +261,26 @@ class XDEFIKeplrProvider extends Keplr {
           params: [txDetails[0]!],
         })
         .then((result: SendTransactionResponse) => {
-          resolve(result as any);
-        });
-    });
+          resolve(result as any)
+        })
+    })
   }
 
   async experimentalSuggestChain(_chainInfo: any) {
-    return;
+    return
   }
   async sendSimpleMessage(
     _type: string,
     _method: string,
-    _payload: any,
+    _payload: any
   ): Promise<any> {
-    return;
+    return
   }
 
   async getKey(chainId: string): Promise<Key> {
     return cosmosProvider
       .request({ method: RequestMethod.VULTISIG.CHAIN_ID, params: [] })
-      .then(async (currentChainID) => {
+      .then(async currentChainID => {
         if (currentChainID !== chainId) {
           return await cosmosProvider
             .request({
@@ -292,74 +293,73 @@ class XDEFIKeplrProvider extends Keplr {
                   method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
                   params: [],
                 })
-              )[0];
-            });
+              )[0]
+            })
         } else {
           return (
             await cosmosProvider.request({
               method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
               params: [],
             })
-          )[0];
+          )[0]
         }
-      });
+      })
   }
 }
 
 namespace Provider {
   export class UTXO extends EventEmitter {
-    public chainId: string;
-    public network: string;
-    public requestAccounts;
-    private providerType: MessageKey;
-    public static instances: Map<string, UTXO>;
+    public chainId: string
+    public network: string
+    public requestAccounts
+    private providerType: MessageKey
+    public static instances: Map<string, UTXO>
     constructor(providerType: string, chainId: string) {
-      super();
-      this.providerType = providerType as MessageKey;
-      this.chainId = chainId;
-      this.network = NetworkKey.MAINNET;
-      this.request = this.request;
-      this.requestAccounts = this.getAccounts;
+      super()
+      this.providerType = providerType as MessageKey
+      this.chainId = chainId
+      this.network = NetworkKey.MAINNET
+      this.requestAccounts = this.getAccounts
     }
 
     static getInstance(providerType: string, chainId: string): UTXO {
       if (!UTXO.instances) {
-        UTXO.instances = new Map<string, UTXO>();
+        UTXO.instances = new Map<string, UTXO>()
       }
 
       if (!UTXO.instances.has(providerType)) {
-        UTXO.instances.set(providerType, new UTXO(providerType, chainId));
+        UTXO.instances.set(providerType, new UTXO(providerType, chainId))
       }
-      return UTXO.instances.get(providerType)!;
+      return UTXO.instances.get(providerType)!
     }
 
     async getAccounts() {
       return await this.request({
         method: RequestMethod.VULTISIG.GET_ACCOUNTS,
         params: [],
-      });
+      })
     }
 
     async signPsbt() {
       return await this.request({
         method: RequestMethod.CTRL.SIGN_PSBT,
         params: [],
-      });
+      })
     }
 
     changeNetwork(network: NetworkKey) {
       if (network !== NetworkKey.MAINNET && network !== NetworkKey.TESTNET)
-        throw Error(`Invalid network ${network}`);
+        throw Error(`Invalid network ${network}`)
       else if (network === NetworkKey.TESTNET)
-        throw Error(`We only support the ${NetworkKey.MAINNET} network.`);
+        throw Error(`We only support the ${NetworkKey.MAINNET} network.`)
 
-      this.chainId = `Bitcoin_bitcoin-${network}`;
-      this.network = network;
-      this.emit(EventMethod.CHAIN_CHANGED, { chainId: this.chainId, network });
+      this.chainId = `Bitcoin_bitcoin-${network}`
+      this.network = network
+      this.emit(EventMethod.CHAIN_CHANGED, { chainId: this.chainId, network })
     }
 
     emitAccountsChanged() {
-      this.emit(EventMethod.ACCOUNTS_CHANGED, {});
+      this.emit(EventMethod.ACCOUNTS_CHANGED, {})
     }
 
     async request(data: Messaging.Chain.Request, callback?: Callback) {
@@ -367,31 +367,30 @@ namespace Provider {
         Messaging.Chain.Request,
         Messaging.Chain.Response
       >(this.providerType, data)
-        .then((response) => {
+        .then(response => {
           const result = processBackgroundResponse(
             data,
             this.providerType,
-            response,
-          );
-          if (callback) callback(null, result);
+            response
+          )
+          if (callback) callback(null, result)
 
-          return result;
+          return result
         })
-        .catch((error) => {
-          if (callback) callback(error);
+        .catch(error => {
+          if (callback) callback(error)
 
-          return error;
-        });
+          return error
+        })
     }
   }
 
   export class Cosmos extends EventEmitter {
-    public isVultiConnect: boolean;
+    public isVultiConnect: boolean
 
     constructor() {
-      super();
-      this.isVultiConnect = true;
-      this.request = this.request;
+      super()
+      this.isVultiConnect = true
     }
 
     async request(data: Messaging.Chain.Request, callback?: Callback) {
@@ -399,44 +398,43 @@ namespace Provider {
         Messaging.Chain.Request,
         Messaging.Chain.Response
       >(MessageKey.COSMOS_REQUEST, data)
-        .then((response) => {
+        .then(response => {
           const result = processBackgroundResponse(
             data,
             MessageKey.COSMOS_REQUEST,
-            response,
-          );
-          if (callback) callback(null, result);
+            response
+          )
+          if (callback) callback(null, result)
 
-          return result;
+          return result
         })
-        .catch((error) => {
-          if (callback) callback(error);
+        .catch(error => {
+          if (callback) callback(error)
 
-          return error;
-        });
+          return error
+        })
     }
   }
 
   export class Dash extends EventEmitter {
-    public chainId: string;
-    public network: string;
-    public static instance: Dash | null = null;
+    public chainId: string
+    public network: string
+    public static instance: Dash | null = null
     constructor() {
-      super();
-      this.chainId = "Dash_dash";
-      this.network = NetworkKey.MAINNET;
-      this.request = this.request;
+      super()
+      this.chainId = 'Dash_dash'
+      this.network = NetworkKey.MAINNET
     }
 
     static getInstance(): Dash {
       if (!Dash.instance) {
-        Dash.instance = new Dash();
+        Dash.instance = new Dash()
       }
-      return Dash.instance;
+      return Dash.instance
     }
 
     emitAccountsChanged() {
-      this.emit(EventMethod.ACCOUNTS_CHANGED, {});
+      this.emit(EventMethod.ACCOUNTS_CHANGED, {})
     }
 
     async request(data: Messaging.Chain.Request, callback?: Callback) {
@@ -444,88 +442,87 @@ namespace Provider {
         Messaging.Chain.Request,
         Messaging.Chain.Response
       >(MessageKey.DASH_REQUEST, data)
-        .then((response) => {
+        .then(response => {
           const result = processBackgroundResponse(
             data,
             MessageKey.DASH_REQUEST,
-            response,
-          );
-          if (callback) callback(null, result);
+            response
+          )
+          if (callback) callback(null, result)
 
-          return result;
+          return result
         })
-        .catch((error) => {
-          if (callback) callback(error);
+        .catch(error => {
+          if (callback) callback(error)
 
-          return error;
-        });
+          return error
+        })
     }
   }
 
   export class Ethereum extends EventEmitter {
-    public chainId: string;
-    public connected: boolean;
-    public isCtrl: boolean;
-    public isMetaMask: boolean;
-    public isVultiConnect: boolean;
-    public isXDEFI: boolean;
-    public networkVersion: string;
-    public selectedAddress: string;
-    public sendAsync;
-    public static instance: Ethereum | null = null;
+    public chainId: string
+    public connected: boolean
+    public isCtrl: boolean
+    public isMetaMask: boolean
+    public isVultiConnect: boolean
+    public isXDEFI: boolean
+    public networkVersion: string
+    public selectedAddress: string
+    public sendAsync
+    public static instance: Ethereum | null = null
 
     constructor() {
-      super();
-      this.chainId = "0x1";
-      this.connected = false;
-      this.isCtrl = true;
-      this.isMetaMask = true;
-      this.isVultiConnect = true;
-      this.isXDEFI = true;
-      this.networkVersion = "1";
-      this.selectedAddress = "";
+      super()
+      this.chainId = '0x1'
+      this.connected = false
+      this.isCtrl = true
+      this.isMetaMask = true
+      this.isVultiConnect = true
+      this.isXDEFI = true
+      this.networkVersion = '1'
+      this.selectedAddress = ''
 
-      this.sendAsync = this.request;
-      this.request = this.request;
+      this.sendAsync = this.request
     }
 
     static getInstance(_chain: string): Ethereum {
       if (!Ethereum.instance) {
-        Ethereum.instance = new Ethereum();
+        Ethereum.instance = new Ethereum()
       }
-      window.ctrlEthProviders["Ctrl Wallet"] = Ethereum.instance;
-      window.isCtrl = true;
-      return Ethereum.instance;
+      window.ctrlEthProviders['Ctrl Wallet'] = Ethereum.instance
+      window.isCtrl = true
+      return Ethereum.instance
     }
 
     async enable() {
       return await this.request({
         method: RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS,
         params: [],
-      });
+      })
     }
 
     emitAccountsChanged(addresses: string[]) {
       if (addresses.length) {
-        const [address] = addresses;
+        const [address] = addresses
 
-        this.selectedAddress = address ?? "";
-        this.emit(EventMethod.ACCOUNTS_CHANGED, address ? [address] : []);
+        this.selectedAddress = address ?? ''
+        this.emit(EventMethod.ACCOUNTS_CHANGED, address ? [address] : [])
       } else {
-        this.selectedAddress = "";
-        this.emit(EventMethod.ACCOUNTS_CHANGED, []);
+        this.selectedAddress = ''
+        this.emit(EventMethod.ACCOUNTS_CHANGED, [])
       }
     }
 
     emitUpdateNetwork({ chainId }: { chainId: string }) {
-      if (Number(chainId) && this.chainId !== chainId) this.chainId = chainId;
+      if (Number(chainId) && this.chainId !== chainId) this.chainId = chainId
 
-      this.emit(EventMethod.NETWORK_CHANGED, Number(this.chainId));
-      this.emit(EventMethod.CHAIN_CHANGED, this.chainId);
+      this.emit(EventMethod.NETWORK_CHANGED, Number(this.chainId))
+      this.emit(EventMethod.CHAIN_CHANGED, this.chainId)
     }
 
     isConnected() {
-      return this.connected;
+      return this.connected
     }
 
     on = (event: string, callback: (data: any) => void): this => {
@@ -533,24 +530,24 @@ namespace Provider {
         this.request({
           method: RequestMethod.METAMASK.ETH_CHAIN_ID,
           params: [],
-        }).then((chainId) => callback({ chainId }));
+        }).then(chainId => callback({ chainId }))
       } else {
-        super.on(event, callback);
+        super.on(event, callback)
       }
 
-      return this;
-    };
+      return this
+    }
 
     async send(x: any, y: any) {
-      if (typeof x === "string") {
+      if (typeof x === 'string') {
         return await this.request({
           method: x,
           params: y ?? [],
-        });
-      } else if (typeof y === "function") {
-        this.request(x, y);
+        })
+      } else if (typeof y === 'function') {
+        this.request(x, y)
       } else {
-        return await this.request(x);
+        return await this.request(x)
       }
     }
 
@@ -559,112 +556,111 @@ namespace Provider {
         Messaging.Chain.Request,
         Messaging.Chain.Response
       >(MessageKey.ETHEREUM_REQUEST, data)
-        .then((response) => {
+        .then(response => {
           const result = processBackgroundResponse(
             data,
             MessageKey.ETHEREUM_REQUEST,
-            response,
-          );
+            response
+          )
           switch (data.method) {
             case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
             case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
-              this.emitUpdateNetwork({ chainId: result as string });
+              this.emitUpdateNetwork({ chainId: result as string })
 
-              break;
+              break
             }
             case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
-              this.emit(EventMethod.DISCONNECT, result);
+              this.emit(EventMethod.DISCONNECT, result)
 
-              break;
+              break
             }
           }
 
-          if (callback) callback(null, result);
+          if (callback) callback(null, result)
 
-          return result;
+          return result
         })
-        .catch((error) => {
-          if (callback) callback(error);
+        .catch(error => {
+          if (callback) callback(error)
 
-          return error;
-        });
+          return error
+        })
     }
 
     _connect = (): void => {
-      this.emit(EventMethod.CONNECT, "");
-    };
+      this.emit(EventMethod.CONNECT, '')
+    }
 
     _disconnect = (error?: { code: number; message: string }): void => {
       this.emit(
         EventMethod.DISCONNECT,
-        error || { code: 4900, message: "Provider disconnected" },
-      );
-    };
+        error || { code: 4900, message: 'Provider disconnected' }
+      )
+    }
   }
 
   export class Solana extends EventEmitter {
-    public chainId: string;
-    public isConnected: boolean;
-    public isPhantom: boolean;
-    public isXDEFI: boolean;
-    public network: string;
-    public publicKey?: PublicKey;
-    public static instance: Solana | null = null;
+    public chainId: string
+    public isConnected: boolean
+    public isPhantom: boolean
+    public isXDEFI: boolean
+    public network: string
+    public publicKey?: PublicKey
+    public static instance: Solana | null = null
     constructor() {
-      super();
-      this.chainId = "Solana_mainnet-beta";
-      this.isConnected = false;
-      this.isPhantom = true;
-      this.isXDEFI = false;
-      this.network = NetworkKey.MAINNET;
-      this.request = this.request;
+      super()
+      this.chainId = 'Solana_mainnet-beta'
+      this.isConnected = false
+      this.isPhantom = true
+      this.isXDEFI = false
+      this.network = NetworkKey.MAINNET
     }
 
     static getInstance(): Solana {
       if (!Solana.instance) {
-        Solana.instance = new Solana();
+        Solana.instance = new Solana()
       }
-      return Solana.instance;
+      return Solana.instance
     }
 
     async signTransaction(transaction: Transaction) {
       const decodedTransfer = SystemInstruction.decodeTransfer(
-        transaction.instructions[0],
-      );
+        transaction.instructions[0]
+      )
 
       const modifiedTransfer = {
         value: decodedTransfer.lamports.toString(),
         from: decodedTransfer.fromPubkey.toString(),
         to: decodedTransfer.toPubkey.toString(),
-      };
+      }
       return await this.request({
         method: RequestMethod.VULTISIG.SEND_TRANSACTION,
         params: [modifiedTransfer],
       }).then((result: SendTransactionResponse) => {
-        const rawData = base58.decode(result.raw);
-        return VersionedTransaction.deserialize(rawData);
-      });
+        const rawData = base58.decode(result.raw)
+        return VersionedTransaction.deserialize(rawData)
+      })
     }
 
     async connect() {
       return await this.request({
         method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
         params: [],
-      }).then((account) => {
-        this.isConnected = true;
-        this.publicKey = new PublicKey(account);
-        this.emit(EventMethod.CONNECT, this.publicKey);
+      }).then(account => {
+        this.isConnected = true
+        this.publicKey = new PublicKey(account)
+        this.emit(EventMethod.CONNECT, this.publicKey)
 
-        return { publicKey: this.publicKey };
-      });
+        return { publicKey: this.publicKey }
+      })
     }
 
     async disconnect() {
-      this.isConnected = false;
-      this.publicKey = undefined;
-      this.emit(EventMethod.DISCONNECT);
+      this.isConnected = false
+      this.publicKey = undefined
+      this.emit(EventMethod.DISCONNECT)
 
-      await Promise.resolve();
+      await Promise.resolve()
     }
 
     async request(data: Messaging.Chain.Request, callback?: Callback) {
@@ -672,231 +668,225 @@ namespace Provider {
         Messaging.Chain.Request,
         Messaging.Chain.Response
       >(MessageKey.SOLANA_REQUEST, data)
-        .then((response) => {
+        .then(response => {
           const result = processBackgroundResponse(
             data,
             MessageKey.SOLANA_REQUEST,
-            response,
-          );
-          if (callback) callback(null, result);
+            response
+          )
+          if (callback) callback(null, result)
 
-          return result;
+          return result
         })
-        .catch((error) => {
-          if (callback) callback(error);
+        .catch(error => {
+          if (callback) callback(error)
 
-          return error;
-        });
+          return error
+        })
     }
 
     async signAllTransactions(transactions: Transaction[]) {
       if (!transactions || !transactions.length) {
         return Promise.reject({
           code: -32000,
-          message: "Missing or invalid parameters.",
-        });
+          message: 'Missing or invalid parameters.',
+        })
       }
 
-      const results: VersionedTransaction[] = [];
+      const results: VersionedTransaction[] = []
 
       for (const transaction of transactions) {
-        try {
-          const result = await this.signTransaction(transaction);
-          results.push(result);
-        } catch (error) {
-          throw error;
-        }
+        const result = await this.signTransaction(transaction)
+        results.push(result)
       }
 
-      return results;
+      return results
     }
 
     async signAndSendTransaction() {
       return Promise.reject({
         code: -32603,
-        message: "This function is not supported by Vultisig",
-      });
+        message: 'This function is not supported by Vultisig',
+      })
     }
 
     async signAndSendAllTransactions() {
       return Promise.reject({
         code: -32603,
-        message: "This function is not supported by Vultisig",
-      });
+        message: 'This function is not supported by Vultisig',
+      })
     }
 
     async signMessage() {
       return Promise.reject({
         code: -32603,
-        message: "This function is not supported by Vultisig",
-      });
+        message: 'This function is not supported by Vultisig',
+      })
     }
 
     async signIn() {
       return Promise.reject({
         code: -32603,
-        message: "This function is not supported by Vultisig",
-      });
+        message: 'This function is not supported by Vultisig',
+      })
     }
 
     async handleNotification() {
       return Promise.reject({
         code: -32603,
-        message: "This function is not supported by Vultisig",
-      });
+        message: 'This function is not supported by Vultisig',
+      })
     }
   }
 
   export class MAYAChain extends EventEmitter {
-    public chainId: string;
-    public network: string;
-    public static instance: MAYAChain | null = null;
+    public chainId: string
+    public network: string
+    public static instance: MAYAChain | null = null
     constructor() {
-      super();
-      this.chainId = "Thorchain_mayachain";
-      this.network = NetworkKey.MAINNET;
-      this.request = this.request;
+      super()
+      this.chainId = 'Thorchain_mayachain'
+      this.network = NetworkKey.MAINNET
     }
 
     getInstace(): MAYAChain {
       if (!MAYAChain.instance) {
-        MAYAChain.instance = new MAYAChain();
+        MAYAChain.instance = new MAYAChain()
       }
-      return MAYAChain.instance;
+      return MAYAChain.instance
     }
 
     changeNetwork(network: NetworkKey) {
       if (network !== NetworkKey.MAINNET && network !== NetworkKey.TESTNET)
-        throw Error(`Invalid network ${network}`);
+        throw Error(`Invalid network ${network}`)
       else if (network === NetworkKey.TESTNET)
-        throw Error(`We only support the ${NetworkKey.MAINNET} network.`);
+        throw Error(`We only support the ${NetworkKey.MAINNET} network.`)
 
-      this.network = network;
-      this.emit(EventMethod.CHAIN_CHANGED, { chainId: this.chainId, network });
+      this.network = network
+      this.emit(EventMethod.CHAIN_CHANGED, { chainId: this.chainId, network })
     }
 
     emitAccountsChanged() {
-      this.emit(EventMethod.ACCOUNTS_CHANGED, {});
+      this.emit(EventMethod.ACCOUNTS_CHANGED, {})
     }
 
     async request<T extends ThorchainProviderMethod>(
       data: ThorchainProviderRequest<T>,
       callback?: (
         error: Error | null,
-        result?: ThorchainProviderResponse<T>,
-      ) => void,
+        result?: ThorchainProviderResponse<T>
+      ) => void
     ): Promise<ThorchainProviderResponse<T>> {
       return await sendToBackgroundViaRelay<
         ThorchainProviderRequest<T>,
         ThorchainProviderResponse<T>
       >(MessageKey.MAYA_REQUEST, data)
-        .then((response) => {
+        .then(response => {
           const result = processBackgroundResponse(
             data,
             MessageKey.MAYA_REQUEST,
-            response,
-          );
-          if (callback) callback(null, result);
+            response
+          )
+          if (callback) callback(null, result)
 
-          return result;
+          return result
         })
-        .catch((error) => {
-          if (callback) callback(error);
+        .catch(error => {
+          if (callback) callback(error)
 
-          return error;
-        });
+          return error
+        })
     }
   }
 
   export class THORChain extends EventEmitter {
-    public chainId: string;
-    public network: NetworkKey;
-    public static instance: THORChain | null = null;
+    public chainId: string
+    public network: NetworkKey
+    public static instance: THORChain | null = null
     constructor() {
-      super();
-      this.chainId = "Thorchain_thorchain";
-      this.network = NetworkKey.MAINNET;
-      this.request = this.request;
+      super()
+      this.chainId = 'Thorchain_thorchain'
+      this.network = NetworkKey.MAINNET
     }
 
     static getInstance(): THORChain {
       if (!THORChain.instance) {
-        THORChain.instance = new THORChain();
+        THORChain.instance = new THORChain()
       }
-      return THORChain.instance;
+      return THORChain.instance
     }
 
     changeNetwork(network: NetworkKey) {
       if (network !== NetworkKey.MAINNET && network !== NetworkKey.TESTNET)
-        throw Error(`Invalid network ${network}`);
+        throw Error(`Invalid network ${network}`)
       else if (network === NetworkKey.TESTNET)
-        throw Error(`We only support the ${NetworkKey.MAINNET} network.`);
+        throw Error(`We only support the ${NetworkKey.MAINNET} network.`)
 
-      this.network = network;
-      this.emit(EventMethod.CHAIN_CHANGED, { chainId: this.chainId, network });
+      this.network = network
+      this.emit(EventMethod.CHAIN_CHANGED, { chainId: this.chainId, network })
     }
 
     emitAccountsChanged() {
-      this.emit(EventMethod.ACCOUNTS_CHANGED, {});
+      this.emit(EventMethod.ACCOUNTS_CHANGED, {})
     }
 
     async request<T extends ThorchainProviderMethod>(
       data: ThorchainProviderRequest<T>,
       callback?: (
         error: Error | null,
-        result?: ThorchainProviderResponse<T>,
-      ) => void,
+        result?: ThorchainProviderResponse<T>
+      ) => void
     ): Promise<ThorchainProviderResponse<T>> {
       return await sendToBackgroundViaRelay<
         ThorchainProviderRequest<T>,
         ThorchainProviderResponse<T>
       >(MessageKey.THOR_REQUEST, data)
-        .then((response) => {
+        .then(response => {
           const result = processBackgroundResponse(
             data,
             MessageKey.THOR_REQUEST,
-            response,
-          );
-          if (callback) callback(null, result);
-          return result;
+            response
+          )
+          if (callback) callback(null, result)
+          return result
         })
-        .catch((error) => {
-          if (callback) callback(error);
-          return error;
-        });
+        .catch(error => {
+          if (callback) callback(error)
+          return error
+        })
     }
   }
 }
 
 const bitcoinProvider = new Provider.UTXO(
   MessageKey.BITCOIN_REQUEST,
-  "Bitcoin_bitcoin-mainnet",
-);
+  'Bitcoin_bitcoin-mainnet'
+)
 const bitcoinCashProvider = new Provider.UTXO(
   MessageKey.BITCOIN_CASH_REQUEST,
-  "Bitcoincash_bitcoincash",
-);
-const cosmosProvider = new Provider.Cosmos();
-const dashProvider = new Provider.Dash();
+  'Bitcoincash_bitcoincash'
+)
+const cosmosProvider = new Provider.Cosmos()
+const dashProvider = new Provider.Dash()
 const dogecoinProvider = new Provider.UTXO(
   MessageKey.DOGECOIN_REQUEST,
-  "Dogecoin_dogecoin",
-);
-const ethereumProvider = new Provider.Ethereum();
+  'Dogecoin_dogecoin'
+)
+const ethereumProvider = new Provider.Ethereum()
 const litecoinProvider = new Provider.UTXO(
   MessageKey.LITECOIN_REQUEST,
-  "Litecoin_litecoin",
-);
-const mayachainProvider = new Provider.MAYAChain();
-const solanaProvider = new Provider.Solana();
-const thorchainProvider = new Provider.THORChain();
-const keplrProvider = XDEFIKeplrProvider.getInstance();
+  'Litecoin_litecoin'
+)
+const mayachainProvider = new Provider.MAYAChain()
+const solanaProvider = new Provider.Solana()
+const thorchainProvider = new Provider.THORChain()
+const keplrProvider = XDEFIKeplrProvider.getInstance()
 
 const phantomProvider = {
   bitcoin: bitcoinProvider,
   ethereum: ethereumProvider,
   solana: solanaProvider,
-};
+}
 
 const xfiProvider = {
   bitcoin: bitcoinProvider,
@@ -914,10 +904,10 @@ const xfiProvider = {
     isCtrl: false,
     isVultiConnect: true,
     network: NetworkKey.MAINNET,
-    version: "0.0.1",
+    version: '0.0.1',
   },
   installed: true,
-};
+}
 
 const vultisigProvider = {
   bitcoin: bitcoinProvider,
@@ -931,87 +921,77 @@ const vultisigProvider = {
   solana: solanaProvider,
   thorchain: thorchainProvider,
   getVault: (): Promise<Messaging.GetVault.Response> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       sendToBackgroundViaRelay<
         Messaging.GetVault.Request,
         Messaging.GetVault.Response
-      >(MessageKey.VAULT, {}).then((vaults) => resolve(vaults));
-    });
+      >(MessageKey.VAULT, {}).then(vaults => resolve(vaults))
+    })
   },
   getVaults: (): Promise<VaultProps[]> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       sendToBackgroundViaRelay<
         Messaging.GetVaults.Request,
         Messaging.GetVaults.Response
-      >(MessageKey.VAULTS, {}).then((vaults) => resolve(vaults));
-    });
+      >(MessageKey.VAULTS, {}).then(vaults => resolve(vaults))
+    })
   },
-};
+}
 
-window.bitcoin = bitcoinProvider;
-window.bitcoincash = bitcoinCashProvider;
-window.cosmos = cosmosProvider;
-window.dash = dashProvider;
-window.dogecoin = dogecoinProvider;
-window.keplr = keplrProvider;
-window.litecoin = litecoinProvider;
-window.maya = mayachainProvider;
-window.phantom = phantomProvider;
-window.thorchain = thorchainProvider;
-window.vultisig = vultisigProvider;
-window.xfi = xfiProvider;
-window.xfi.kepler = keplrProvider;
+window.vultisig = vultisigProvider
+window.xfi = xfiProvider
+window.xfi.kepler = keplrProvider
 
 announceProvider({
   info: {
     icon: VULTI_ICON_RAW_PNG,
-    name: "Vultisig",
-    rdns: "me.vultisig",
+    name: 'Vultisig',
+    rdns: 'me.vultisig',
     uuid: uuidv4(),
   },
   provider: ethereumProvider as Provider.Ethereum as EIP1193Provider,
-});
+})
 
-let prioritize: boolean = true;
+let prioritize: boolean = true
 
 const intervalRef = setInterval(() => {
   if ((window.ethereum && window.vultisig) || prioritize == false)
-    clearInterval(intervalRef);
+    clearInterval(intervalRef)
 
   sendToBackgroundViaRelay<
     Messaging.SetPriority.Request,
     Messaging.SetPriority.Response
   >(MessageKey.PRIORITY, {})
-    .then((res) => {
+    .then(res => {
       if (res) {
         const providerCopy = Object.create(
           Object.getPrototypeOf(ethereumProvider),
-          Object.getOwnPropertyDescriptors(ethereumProvider),
-        );
+          Object.getOwnPropertyDescriptors(ethereumProvider)
+        )
 
-        providerCopy.isMetaMask = false;
-        window.isCtrl = true;
-        window.xfi.installed = true;
+        providerCopy.isMetaMask = false
+        window.isCtrl = true
+        window.xfi.installed = true
         announceProvider({
           info: {
             icon: VULTI_ICON_RAW_PNG,
-            name: "Vultisig",
-            rdns: "me.vultisig",
+            name: 'Vultisig',
+            rdns: 'me.vultisig',
             uuid: uuidv4(),
           },
           provider: providerCopy as Provider.Ethereum as EIP1193Provider,
-        });
+        })
         announceProvider({
           info: {
             icon: VULTI_ICON_RAW_PNG,
-            name: "Ctrl Wallet",
-            rdns: "io.xdefi",
+            name: 'Ctrl Wallet',
+            rdns: 'io.xdefi',
             uuid: uuidv4(),
           },
           provider: providerCopy as Provider.Ethereum as EIP1193Provider,
-        });
+        })
 
-        if (document.readyState === "complete") {
+        if (document.readyState === 'complete') {
           Object.defineProperties(window, {
             vultisig: {
               value: vultisigProvider,
@@ -1020,10 +1000,10 @@ const intervalRef = setInterval(() => {
             },
             ethereum: {
               get() {
-                return window.vultiConnectRouter.currentProvider;
+                return window.vultiConnectRouter.currentProvider
               },
               set(newProvider) {
-                window.vultiConnectRouter?.addProvider(newProvider);
+                window.vultiConnectRouter?.addProvider(newProvider)
               },
               configurable: false,
             },
@@ -1038,23 +1018,23 @@ const intervalRef = setInterval(() => {
                 ],
                 setDefaultProvider(vultiAsDefault: boolean) {
                   if (vultiAsDefault) {
-                    window.vultiConnectRouter.currentProvider = window.vultisig;
+                    window.vultiConnectRouter.currentProvider = window.vultisig
                   } else {
                     const nonDefaultProvider =
                       window.vultiConnectRouter?.lastInjectedProvider ??
-                      window.ethereum;
+                      window.ethereum
                     window.vultiConnectRouter.currentProvider =
-                      nonDefaultProvider;
+                      nonDefaultProvider
                   }
                 },
                 addProvider(provider: Provider.Ethereum) {
                   if (
                     !window.vultiConnectRouter?.providers?.includes(provider)
                   ) {
-                    window.vultiConnectRouter?.providers?.push(provider);
+                    window.vultiConnectRouter?.providers?.push(provider)
                   }
                   if (ethereumProvider !== provider) {
-                    window.vultiConnectRouter.lastInjectedProvider = provider;
+                    window.vultiConnectRouter.lastInjectedProvider = provider
                   }
                 },
               },
@@ -1106,10 +1086,10 @@ const intervalRef = setInterval(() => {
               configurable: false,
               writable: false,
             },
-          });
+          })
         } else {
           window.addEventListener(
-            "load",
+            'load',
             () => {
               Object.defineProperties(window, {
                 vultisig: {
@@ -1119,10 +1099,10 @@ const intervalRef = setInterval(() => {
                 },
                 ethereum: {
                   get() {
-                    return window.vultiConnectRouter.currentProvider;
+                    return window.vultiConnectRouter.currentProvider
                   },
                   set(newProvider) {
-                    window.vultiConnectRouter?.addProvider(newProvider);
+                    window.vultiConnectRouter?.addProvider(newProvider)
                   },
                   configurable: false,
                 },
@@ -1138,26 +1118,26 @@ const intervalRef = setInterval(() => {
                     setDefaultProvider(vultiAsDefault: boolean) {
                       if (vultiAsDefault) {
                         window.vultiConnectRouter.currentProvider =
-                          window.vultisig;
+                          window.vultisig
                       } else {
                         const nonDefaultProvider =
                           window.vultiConnectRouter?.lastInjectedProvider ??
-                          window.ethereum;
+                          window.ethereum
                         window.vultiConnectRouter.currentProvider =
-                          nonDefaultProvider;
+                          nonDefaultProvider
                       }
                     },
                     addProvider(provider: Provider.Ethereum) {
                       if (
                         !window.vultiConnectRouter?.providers?.includes(
-                          provider,
+                          provider
                         )
                       ) {
-                        window.vultiConnectRouter?.providers?.push(provider);
+                        window.vultiConnectRouter?.providers?.push(provider)
                       }
                       if (ethereumProvider !== provider) {
                         window.vultiConnectRouter.lastInjectedProvider =
-                          provider;
+                          provider
                       }
                     },
                   },
@@ -1209,14 +1189,14 @@ const intervalRef = setInterval(() => {
                   configurable: false,
                   writable: false,
                 },
-              });
+              })
             },
-            { once: true },
-          );
+            { once: true }
+          )
         }
       } else {
-        prioritize = false;
+        prioritize = false
       }
     })
-    .catch(() => {});
-}, 500);
+    .catch(() => {})
+}, 500)
