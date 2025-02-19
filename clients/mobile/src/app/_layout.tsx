@@ -6,16 +6,18 @@ import { ReactQueryProvider } from '../providers/ReactQueryProvider'
 import { ThemeProvider } from '../providers/ThemeProvider'
 import { darkTheme } from '../ui/theme/darkTheme'
 
-const Layout = () => (
-  <ReactQueryProvider>
-    <ThemeProvider theme={darkTheme}>
-      <AuthRedirectProvider>
-        <I18nProvider>
-          <Stack screenOptions={{ headerShown: false }} />
-        </I18nProvider>
-      </AuthRedirectProvider>
-    </ThemeProvider>
-  </ReactQueryProvider>
-)
+const Layout = () => {
+  return (
+    <ReactQueryProvider>
+      <ThemeProvider theme={darkTheme}>
+        <AuthRedirectProvider>
+          <I18nProvider>
+            <Stack screenOptions={{ headerShown: false }} />
+          </I18nProvider>
+        </AuthRedirectProvider>
+      </ThemeProvider>
+    </ReactQueryProvider>
+  )
+}
 
 export default Layout

@@ -12,11 +12,14 @@ export const AuthRedirectProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     if (isFetching) return
 
-    const inVaultFlow = segments[0] === 'vault'
+    const inNoVaultFlow = segments[0] === 'no-vault'
 
-    if (hasVault && !inVaultFlow) {
-      router.replace('/vault')
-    } else if (!hasVault && inVaultFlow) {
+    if (hasVault && inNoVaultFlow) {
+      router.replace('/')
+      return
+    }
+
+    if (!hasVault && !inNoVaultFlow) {
       router.replace('/no-vault')
     }
   }, [hasVault, isFetching, router, segments])

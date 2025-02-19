@@ -1,9 +1,10 @@
 export const vaultsQueryKey = ['vaults']
 import { useQuery } from '@tanstack/react-query'
 
+import { shouldBePresent } from '@/lib/utils/assert/shouldBePresent'
+import { sortEntitiesWithOrder } from '@/lib/utils/entities/EntityWithOrder'
+
 import { GetVaults } from '../../../../desktop/wailsjs/go/storage/Store'
-import { sortEntitiesWithOrder } from '../../utils/array/sortEntitiesWithOrder'
-import { shouldBePresent } from '../../utils/shouldBePresents'
 
 export const vaultsQueryFn = async () => {
   const result = await GetVaults()
