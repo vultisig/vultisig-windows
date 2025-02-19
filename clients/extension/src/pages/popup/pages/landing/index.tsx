@@ -1,13 +1,13 @@
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { Button } from "antd";
+import { Button } from 'antd'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
-import messageKeys from "../../../../utils/message-keys";
-import routeKeys from "../../../../utils/route-keys";
+import messageKeys from '../../../../utils/message-keys'
+import routeKeys from '../../../../utils/route-keys'
 
 const Component = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation()
+  const navigate = useNavigate()
 
   return (
     <div className="layout landing-page">
@@ -27,7 +27,7 @@ const Component = () => {
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Component;
+export default Component

@@ -1,19 +1,18 @@
-import { FC } from "react";
-import { useTranslation } from "react-i18next";
-import { Button } from "antd";
+import { Button } from 'antd'
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import messageKeys from "../../utils/message-keys";
-
-import { TriangleWarning } from "../../icons";
+import { TriangleWarning } from '../../icons'
+import messageKeys from '../../utils/message-keys'
 
 interface ComponentProps {
-  onClose: () => void;
-  description: string;
-  title: string;
+  onClose: () => void
+  description: string
+  title: string
 }
 
 const Component: FC<ComponentProps> = ({ onClose, description, title }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <>
@@ -34,7 +33,7 @@ const Component: FC<ComponentProps> = ({ onClose, description, title }) => {
         </Button>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Component;
+export default Component

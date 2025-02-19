@@ -1,40 +1,39 @@
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { getStoredLanguage, setStoredLanguage } from "../../../../utils/storage";
-import { Language, languageName } from "../../../../utils/constants";
-import useGoBack from "../../../../hooks/go-back";
-import messageKeys from "../../../../utils/message-keys";
-import routeKeys from "../../../../utils/route-keys";
-
-import { ArrowLeft } from "../../../../icons";
+import useGoBack from '../../../../hooks/go-back'
+import { ArrowLeft } from '../../../../icons'
+import { Language, languageName } from '../../../../utils/constants'
+import messageKeys from '../../../../utils/message-keys'
+import routeKeys from '../../../../utils/route-keys'
+import { getStoredLanguage, setStoredLanguage } from '../../../../utils/storage'
 
 interface InitialState {
-  language: Language;
+  language: Language
 }
 
 const Component = () => {
-  const { t } = useTranslation();
-  const initialState: InitialState = { language: Language.ENGLISH };
-  const [state, setState] = useState(initialState);
-  const { language } = state;
-  const goBack = useGoBack();
+  const { t } = useTranslation()
+  const initialState: InitialState = { language: Language.ENGLISH }
+  const [state, setState] = useState(initialState)
+  const { language } = state
+  const goBack = useGoBack()
 
   const changeLanguage = (language: Language) => {
     setStoredLanguage(language).then(() => {
-      setState((prevState) => ({ ...prevState, language }));
+      setState(prevState => ({ ...prevState, language }))
 
-      goBack(routeKeys.settings.root);
-    });
-  };
+      goBack(routeKeys.settings.root)
+    })
+  }
 
   const componentDidMount = (): void => {
-    getStoredLanguage().then((language) => {
-      setState((prevState) => ({ ...prevState, language }));
-    });
-  };
+    getStoredLanguage().then(language => {
+      setState(prevState => ({ ...prevState, language }))
+    })
+  }
 
-  useEffect(componentDidMount, []);
+  useEffect(componentDidMount, [])
 
   const data = [
     {
@@ -69,7 +68,7 @@ const Component = () => {
       key: Language.PORTUGUESE,
       title: languageName[Language.PORTUGUESE],
     },
-  ];
+  ]
 
   return (
     <div className="layout language-page">
@@ -83,18 +82,18 @@ const Component = () => {
       <div className="content">
         <div className="list list-action">
           {data.map(({ key, title }) => (
-            <div
+            <button
               key={key}
-              className={`list-item${key === language ? " active" : ""}`}
+              className={`list-item${key === language ? ' active' : ''}`}
               onClick={() => changeLanguage(key)}
             >
               {title}
-            </div>
+            </button>
           ))}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Component;
+export default Component

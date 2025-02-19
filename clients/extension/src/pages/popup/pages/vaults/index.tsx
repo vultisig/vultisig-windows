@@ -1,46 +1,45 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { Button } from 'antd'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
-import { getStoredVaults, setStoredVaults } from "../../../../utils/storage";
-import type { VaultProps } from "../../../../utils/interfaces";
-import useGoBack from "../../../../hooks/go-back";
-import messageKeys from "../../../../utils/message-keys";
-import routeKeys from "../../../../utils/route-keys";
-
-import { ArrowLeft, ArrowRight } from "../../../../icons";
-import { Button } from "antd";
+import useGoBack from '../../../../hooks/go-back'
+import { ArrowLeft, ArrowRight } from '../../../../icons'
+import type { VaultProps } from '../../../../utils/interfaces'
+import messageKeys from '../../../../utils/message-keys'
+import routeKeys from '../../../../utils/route-keys'
+import { getStoredVaults, setStoredVaults } from '../../../../utils/storage'
 
 interface InitialState {
-  vault?: VaultProps;
-  vaults: VaultProps[];
+  vault?: VaultProps
+  vaults: VaultProps[]
 }
 
 const Component = () => {
-  const { t } = useTranslation();
-  const initialState: InitialState = { vaults: [] };
-  const [state, setState] = useState(initialState);
-  const { vault, vaults } = state;
-  const navigate = useNavigate();
-  const goBack = useGoBack();
+  const { t } = useTranslation()
+  const initialState: InitialState = { vaults: [] }
+  const [state, setState] = useState(initialState)
+  const { vault, vaults } = state
+  const navigate = useNavigate()
+  const goBack = useGoBack()
 
   const handleSelect = (uid: string) => {
     setStoredVaults(
-      vaults.map((vault) => ({ ...vault, active: vault.uid === uid })),
+      vaults.map(vault => ({ ...vault, active: vault.uid === uid }))
     ).then(() => {
-      goBack(routeKeys.main);
-    });
-  };
+      goBack(routeKeys.main)
+    })
+  }
 
   const componentDidMount = (): void => {
-    getStoredVaults().then((vaults) => {
-      const vault = vaults.find(({ active }) => active);
+    getStoredVaults().then(vaults => {
+      const vault = vaults.find(({ active }) => active)
 
-      setState((prevState) => ({ ...prevState, vault, vaults }));
-    });
-  };
+      setState(prevState => ({ ...prevState, vault, vaults }))
+    })
+  }
 
-  useEffect(componentDidMount, []);
+  useEffect(componentDidMount, [])
 
   return vault ? (
     <div className="layout vaults-page">
@@ -67,14 +66,14 @@ const Component = () => {
               {vaults
                 .filter(({ uid }) => uid !== vault.uid)
                 .map(({ name, uid }) => (
-                  <div
+                  <button
                     key={uid}
                     onClick={() => handleSelect(uid)}
                     className="list-item"
                   >
                     <span className="label">{name}</span>
                     <ArrowRight className="action" />
-                  </div>
+                  </button>
                 ))}
             </div>
           </>
@@ -92,7 +91,7 @@ const Component = () => {
     </div>
   ) : (
     <></>
-  );
-};
+  )
+}
 
-export default Component;
+export default Component

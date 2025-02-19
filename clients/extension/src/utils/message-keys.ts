@@ -1,11 +1,11 @@
-import keyMirror from "keymirror";
+import keyMirror from 'keymirror'
 
 export default keyMirror({
   // A
   ACTIVE: true,
   ADD_NEW_VAULT: true,
   ADD_VAULT_QRCODE: true,
-  ADDRESS:true,
+  ADDRESS: true,
   AMOUNT: true,
   // B
   // C
@@ -62,7 +62,7 @@ export default keyMirror({
   REALOAD_MESSAGE: true,
   REMOVING_VAULT_WARNING: true,
   RENAME_VAULT: true,
-  RETRY_ERROR:true,
+  RETRY_ERROR: true,
   // S
   SAVE: true,
   SCAN_QR_WITH_DEVICE: true,
@@ -103,4 +103,4 @@ export default keyMirror({
   // W
   // Y
   // Z
-});
+})
