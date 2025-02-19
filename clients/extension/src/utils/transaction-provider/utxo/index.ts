@@ -11,7 +11,7 @@ import type {
 } from "@trustwallet/wallet-core/dist/src/wallet-core";
 import { TW } from "@trustwallet/wallet-core";
 import BaseTransactionProvider from "../base/index";
-import { ChainKey } from "../../constants";
+
 import {
   ITransaction,
   SignatureProps,
@@ -32,6 +32,7 @@ import {
   UTXOSpecificSchema,
 } from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
 import { UtxoInfoSchema } from "@core/communication/vultisig/keysign/v1/utxo_info_pb";
+import { Chain } from "@core/chain/Chain";
 
 interface ChainRef {
   [chainKey: string]: CoinType;
@@ -39,7 +40,7 @@ interface ChainRef {
 
 export default class UTXOTransactionProvider extends BaseTransactionProvider {
   constructor(
-    chainKey: ChainKey,
+    chainKey: Chain,
     chainRef: ChainRef,
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore,

@@ -3,4 +3,4 @@ export const coinSearchConfig = {
   input: {
     horizontalPadding: 12,
   },
-};
+}

@@ -1,20 +1,20 @@
-import { forwardRef, ReactNode, Ref, useState } from 'react';
-import styled from 'styled-components';
+import { forwardRef, ReactNode, Ref, useState } from 'react'
+import styled from 'styled-components'
 
-import { borderRadius } from '../css/borderRadius';
-import { centerContent } from '../css/centerContent';
-import { HStack } from '../layout/Stack';
-import { text } from '../text';
-import { TextInput, TextInputProps } from './TextInput';
+import { borderRadius } from '../css/borderRadius'
+import { centerContent } from '../css/centerContent'
+import { HStack } from '../layout/Stack'
+import { text } from '../text'
+import { TextInput, TextInputProps } from './TextInput'
 
 type AmountTextInputProps = Omit<TextInputProps, 'value' | 'onValueChange'> & {
-  value: number | null;
-  onValueChange?: (value: number | null) => void;
-  unit?: ReactNode;
-  shouldBePositive?: boolean;
-  shouldBeInteger?: boolean;
-  suggestion?: ReactNode;
-};
+  value: number | null
+  onValueChange?: (value: number | null) => void
+  unit?: ReactNode
+  shouldBePositive?: boolean
+  shouldBeInteger?: boolean
+  suggestion?: ReactNode
+}
 
 const UnitContainer = styled.div`
   ${borderRadius.s};
@@ -22,7 +22,7 @@ const UnitContainer = styled.div`
   position: absolute;
   left: 12px;
   ${centerContent};
-`;
+`
 
 const Input = styled(TextInput)`
   ${text({
@@ -30,7 +30,7 @@ const Input = styled(TextInput)`
     size: 16,
     weight: '400',
   })}
-`;
+`
 
 export const AmountTextInput = forwardRef(function AmountInputInner(
   {
@@ -47,8 +47,8 @@ export const AmountTextInput = forwardRef(function AmountInputInner(
   }: AmountTextInputProps,
   ref: Ref<HTMLInputElement> | null
 ) {
-  const valueAsString = value?.toString() ?? '';
-  const [inputValue, setInputValue] = useState<string>(valueAsString);
+  const valueAsString = value?.toString() ?? ''
+  const [inputValue, setInputValue] = useState<string>(valueAsString)
 
   return (
     <Input
@@ -77,26 +77,26 @@ export const AmountTextInput = forwardRef(function AmountInputInner(
       inputOverlay={unit ? <UnitContainer>{unit}</UnitContainer> : undefined}
       onValueChange={(value: string) => {
         if (shouldBePositive) {
-          value = value.replace(/-/g, '');
+          value = value.replace(/-/g, '')
         }
 
         if (value === '') {
-          setInputValue('');
-          onValueChange?.(null);
-          return;
+          setInputValue('')
+          onValueChange?.(null)
+          return
         }
 
-        const parse = shouldBeInteger ? parseInt : parseFloat;
-        const valueAsNumber = parse(value);
+        const parse = shouldBeInteger ? parseInt : parseFloat
+        const valueAsNumber = parse(value)
         if (isNaN(valueAsNumber)) {
-          return;
+          return
         }
 
         setInputValue(
           valueAsNumber.toString() !== value ? value : valueAsNumber.toString()
-        );
-        onValueChange?.(valueAsNumber);
+        )
+        onValueChange?.(valueAsNumber)
       }}
     />
-  );
-});
+  )
+})

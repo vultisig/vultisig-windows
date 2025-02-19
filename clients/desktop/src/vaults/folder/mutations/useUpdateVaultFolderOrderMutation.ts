@@ -1,21 +1,21 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query'
 
-import { UpdateVaultFolderOrder } from '../../../../wailsjs/go/storage/Store';
-import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries';
-import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery';
+import { UpdateVaultFolderOrder } from '../../../../wailsjs/go/storage/Store'
+import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries'
+import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery'
 
 type Input = {
-  id: string;
-  order: number;
-};
+  id: string
+  order: number
+}
 
 export const useUpdateVaultFolderOrderMutation = () => {
-  const invalidate = useInvalidateQueries();
+  const invalidate = useInvalidateQueries()
 
   return useMutation({
     mutationFn: ({ id, order }: Input) => UpdateVaultFolderOrder(id, order),
     onSuccess: () => {
-      invalidate(vaultFoldersQueryKey);
+      invalidate(vaultFoldersQueryKey)
     },
-  });
-};
+  })
+}

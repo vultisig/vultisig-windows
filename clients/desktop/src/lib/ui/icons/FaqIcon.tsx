@@ -22,5 +22,5 @@ const FaqIcon = () => (
       d="M10 11.25v-.625a2.187 2.187 0 1 0-2.188-2.188"
     />
   </svg>
-);
-export default FaqIcon;
+)
+export default FaqIcon

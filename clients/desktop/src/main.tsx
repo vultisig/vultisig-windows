@@ -1,14 +1,14 @@
-import './App.css';
-import './extensions/string';
+import './App.css'
+import './extensions/string'
 
-import { Buffer } from 'buffer';
-import { createRoot } from 'react-dom/client';
+import { Buffer } from 'buffer'
+import { createRoot } from 'react-dom/client'
 
-import App from './App';
+import App from './App'
 
 // Make sure Buffer is available globally
-window.Buffer = Buffer;
+window.Buffer = Buffer
 
-const root = createRoot(document.getElementById('root')!);
+const root = createRoot(document.getElementById('root')!)
 
-root.render(<App />);
+root.render(<App />)

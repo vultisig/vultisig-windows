@@ -1,23 +1,23 @@
-import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific';
-import { useTranslation } from 'react-i18next';
+import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
+import { useTranslation } from 'react-i18next'
 
-import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { ChildrenProp } from '../../../lib/ui/props';
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup';
-import { StrictText } from '../../../lib/ui/text';
-import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery';
+import { Spinner } from '../../../lib/ui/loaders/Spinner'
+import { ChildrenProp } from '../../../lib/ui/props'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup'
+import { StrictText } from '../../../lib/ui/text'
+import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 
 export const {
   useValue: useSendChainSpecific,
   provider: SendChainSpecificValueProvider,
-} = getValueProviderSetup<KeysignChainSpecific>('SendChainSpecific');
+} = getValueProviderSetup<KeysignChainSpecific>('SendChainSpecific')
 
 export const SendChainSpecificProvider: React.FC<ChildrenProp> = ({
   children,
 }) => {
-  const chainSpecificQuery = useSendChainSpecificQuery();
-  const { t } = useTranslation();
+  const chainSpecificQuery = useSendChainSpecificQuery()
+  const { t } = useTranslation()
 
   return (
     <MatchQuery
@@ -30,5 +30,5 @@ export const SendChainSpecificProvider: React.FC<ChildrenProp> = ({
         </SendChainSpecificValueProvider>
       )}
     />
-  );
-};
+  )
+}

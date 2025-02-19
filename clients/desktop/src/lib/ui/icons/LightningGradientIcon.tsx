@@ -32,4 +32,4 @@ export const LightningGradientIcon = () => (
       </clipPath>
     </defs>
   </svg>
-);
+)

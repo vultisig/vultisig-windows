@@ -17,4 +17,4 @@ export const PictureIcon = () => (
       strokeLinejoin="round"
     />
   </svg>
-);
+)

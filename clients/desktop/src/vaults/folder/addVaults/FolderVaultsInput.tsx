@@ -1,14 +1,14 @@
-import { FC } from 'react';
+import { without } from '@lib/utils/array/without'
+import { FC } from 'react'
 
-import { storage } from '../../../../wailsjs/go/models';
-import { InputProps, OptionsProp } from '../../../lib/ui/props';
-import { without } from '@lib/utils/array/without';
-import { CurrentVaultProvider } from '../../../vault/state/currentVault';
-import { getStorageVaultId } from '../../../vault/utils/storageVault';
-import { AddVaultsToFolderContainer } from './AddVaultsToFolderContainer';
-import { FolderVaultOption } from './FolderVaultOption';
+import { storage } from '../../../../wailsjs/go/models'
+import { InputProps, OptionsProp } from '../../../lib/ui/props'
+import { CurrentVaultProvider } from '../../../vault/state/currentVault'
+import { getStorageVaultId } from '../../../vault/utils/storageVault'
+import { AddVaultsToFolderContainer } from './AddVaultsToFolderContainer'
+import { FolderVaultOption } from './FolderVaultOption'
 
-type FolderVaultsInputProps = InputProps<string[]> & OptionsProp<storage.Vault>;
+type FolderVaultsInputProps = InputProps<string[]> & OptionsProp<storage.Vault>
 
 export const FolderVaultsInput: FC<FolderVaultsInputProps> = ({
   value,
@@ -18,7 +18,7 @@ export const FolderVaultsInput: FC<FolderVaultsInputProps> = ({
   return (
     <AddVaultsToFolderContainer>
       {options.map(vault => {
-        const vaultId = getStorageVaultId(vault);
+        const vaultId = getStorageVaultId(vault)
 
         return (
           <CurrentVaultProvider value={vault} key={vaultId}>
@@ -30,8 +30,8 @@ export const FolderVaultsInput: FC<FolderVaultsInputProps> = ({
               key={vaultId}
             />
           </CurrentVaultProvider>
-        );
+        )
       })}
     </AddVaultsToFolderContainer>
-  );
-};
+  )
+}

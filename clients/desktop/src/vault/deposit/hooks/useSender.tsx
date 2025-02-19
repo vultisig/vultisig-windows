@@ -1,7 +1,7 @@
-import { useCurrentVaultAddress } from '../../state/currentVault';
-import { useCurrentDepositCoin } from './useCurrentDepositCoin';
+import { useCurrentVaultAddress } from '../../state/currentVault'
+import { useCurrentDepositCoin } from './useCurrentDepositCoin'
 
 export const useSender = () => {
-  const [{ chain }] = useCurrentDepositCoin();
-  return useCurrentVaultAddress(chain);
-};
+  const [{ chain }] = useCurrentDepositCoin()
+  return useCurrentVaultAddress(chain)
+}

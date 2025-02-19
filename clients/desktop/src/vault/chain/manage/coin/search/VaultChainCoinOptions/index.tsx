@@ -1,52 +1,52 @@
-import { chainTokens } from '@core/chain/coin/chainTokens';
-import { areEqualCoins, Coin, coinKeyToString } from '@core/chain/coin/Coin';
-import { getCoinSearchString } from '@core/chain/coin/utils/getCoinSearchStrings';
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
-import { sortCoinsAlphabetically } from '@core/chain/coin/utils/sortCoinsAlphabetically';
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates';
-import { t } from 'i18next';
-import { useCallback, useMemo } from 'react';
+import { chainTokens } from '@core/chain/coin/chainTokens'
+import { areEqualCoins, Coin, coinKeyToString } from '@core/chain/coin/Coin'
+import { getCoinSearchString } from '@core/chain/coin/utils/getCoinSearchStrings'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { sortCoinsAlphabetically } from '@core/chain/coin/utils/sortCoinsAlphabetically'
+import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
+import { t } from 'i18next'
+import { useCallback, useMemo } from 'react'
 
-import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitelistedCoinsQuery';
-import { NonEmptyOnly } from '../../../../../../lib/ui/base/NonEmptyOnly';
-import { useTransform } from '../../../../../../lib/ui/hooks/useTransform';
-import { VStack } from '../../../../../../lib/ui/layout/Stack';
-import { useCurrentSearch } from '../../../../../../lib/ui/search/CurrentSearchProvider';
-import { useSearchFilter } from '../../../../../../lib/ui/search/hooks/useSearchFilter';
-import { Text } from '../../../../../../lib/ui/text';
-import { useCurrentVaultChainCoins } from '../../../../../state/currentVault';
-import { useCurrentVaultChain } from '../../../../useCurrentVaultChain';
-import { ManageVaultChainCoin } from '../../ManageVaultChainCoin';
+import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitelistedCoinsQuery'
+import { NonEmptyOnly } from '../../../../../../lib/ui/base/NonEmptyOnly'
+import { useTransform } from '../../../../../../lib/ui/hooks/useTransform'
+import { VStack } from '../../../../../../lib/ui/layout/Stack'
+import { useCurrentSearch } from '../../../../../../lib/ui/search/CurrentSearchProvider'
+import { useSearchFilter } from '../../../../../../lib/ui/search/hooks/useSearchFilter'
+import { Text } from '../../../../../../lib/ui/text'
+import { useCurrentVaultChainCoins } from '../../../../../state/currentVault'
+import { useCurrentVaultChain } from '../../../../useCurrentVaultChain'
+import { ManageVaultChainCoin } from '../../ManageVaultChainCoin'
 
 export const VaultChainCoinOptions = () => {
-  const chain = useCurrentVaultChain();
-  const query = useWhitelistedCoinsQuery(chain);
-  const [searchQuery] = useCurrentSearch();
+  const chain = useCurrentVaultChain()
+  const query = useWhitelistedCoinsQuery(chain)
+  const [searchQuery] = useCurrentSearch()
   const selectedCoins = useTransform(
     useCurrentVaultChainCoins(chain),
     useCallback(coins => coins.filter(coin => !isFeeCoin(coin)), [])
-  );
+  )
 
   const allItems = useMemo(() => {
-    let result: Coin[] = [];
+    let result: Coin[] = []
 
-    const tokens = chainTokens[chain];
+    const tokens = chainTokens[chain]
 
     if (tokens) {
-      result.push(...tokens);
+      result.push(...tokens)
     }
 
     if (query.data) {
-      result.push(...query.data);
+      result.push(...query.data)
     }
 
     result = result.filter(
       coin =>
         !selectedCoins.some(selectedCoin => areEqualCoins(selectedCoin, coin))
-    );
+    )
 
-    return withoutDuplicates(result, areEqualCoins);
-  }, [chain, query.data, selectedCoins]);
+    return withoutDuplicates(result, areEqualCoins)
+  }, [chain, query.data, selectedCoins])
 
   const options = useTransform(
     useSearchFilter({
@@ -55,7 +55,7 @@ export const VaultChainCoinOptions = () => {
       getSearchStrings: getCoinSearchString,
     }),
     sortCoinsAlphabetically
-  );
+  )
 
   return (
     <>
@@ -97,5 +97,5 @@ export const VaultChainCoinOptions = () => {
         </VStack>
       )}
     </>
-  );
-};
+  )
+}

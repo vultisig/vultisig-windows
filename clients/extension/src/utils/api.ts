@@ -2,7 +2,7 @@ import axios from "axios";
 import { TransactionResponse } from "ethers";
 
 import { toCamelCase, toSnakeCase } from "./functions";
-import { ChainKey, Currency } from "./constants";
+import { Currency } from "./constants";
 import {
   CosmosAccountData,
   CosmosAccountDataResponse,
@@ -16,6 +16,7 @@ import {
   ThornodeTxResponseSuccess,
   ThornodeNetworkResponse,
 } from "../types/thorchain";
+import { Chain } from "@core/chain/Chain";
 
 namespace CryptoCurrency {
   export interface Props {
@@ -289,7 +290,7 @@ export default {
   },
   utxo: {
     blockchairDashboard: (address: string, coinName: string) => {
-      if (coinName === ChainKey.BITCOINCASH) coinName = "bitcoin-cash";
+      if (coinName === Chain.BitcoinCash) coinName = "bitcoin-cash";
 
       return new Promise((resolve, reject) => {
         api
@@ -303,7 +304,7 @@ export default {
       });
     },
     blockchairGetTx: (chainName: string, txHash: string) => {
-      if (chainName === ChainKey.BITCOINCASH) chainName = "bitcoin-cash";
+      if (chainName === Chain.BitcoinCash) chainName = "bitcoin-cash";
 
       return new Promise((resolve, reject) => {
         const url = `${
@@ -319,7 +320,7 @@ export default {
       });
     },
     blockchairStats: (chainName: string) => {
-      if (chainName === ChainKey.BITCOINCASH) chainName = "bitcoin-cash";
+      if (chainName === Chain.BitcoinCash) chainName = "bitcoin-cash";
 
       return new Promise((resolve, reject) => {
         api

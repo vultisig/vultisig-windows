@@ -1,24 +1,24 @@
-import { t } from 'i18next';
+import { t } from 'i18next'
 
-import { Opener } from '../../../../lib/ui/base/Opener';
-import { SettingsIcon } from '../../../../lib/ui/icons/SettingsIcon';
-import { OnCloseProp } from '../../../../lib/ui/props';
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
-import { FailedQueryOverlay } from '../../../../lib/ui/query/components/overlay/FailedQueryOverlay';
-import { PendingQueryOverlay } from '../../../../lib/ui/query/components/overlay/PendingQueryOverlay';
-import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton';
-import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled';
-import { useSendChainSpecificQuery } from '../../queries/useSendChainSpecificQuery';
-import { SendChainSpecificValueProvider } from '../SendChainSpecificProvider';
+import { Opener } from '../../../../lib/ui/base/Opener'
+import { SettingsIcon } from '../../../../lib/ui/icons/SettingsIcon'
+import { OnCloseProp } from '../../../../lib/ui/props'
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { FailedQueryOverlay } from '../../../../lib/ui/query/components/overlay/FailedQueryOverlay'
+import { PendingQueryOverlay } from '../../../../lib/ui/query/components/overlay/PendingQueryOverlay'
+import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
+import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled'
+import { useSendChainSpecificQuery } from '../../queries/useSendChainSpecificQuery'
+import { SendChainSpecificValueProvider } from '../SendChainSpecificProvider'
 
 type ManageFeeSettingsFrameProps = {
-  render: (props: OnCloseProp) => React.ReactNode;
-};
+  render: (props: OnCloseProp) => React.ReactNode
+}
 
 export const ManageFeeSettingsFrame = ({
   render,
 }: ManageFeeSettingsFrameProps) => {
-  const chainSpecificQuery = useSendChainSpecificQuery();
+  const chainSpecificQuery = useSendChainSpecificQuery()
 
   return (
     <Opener
@@ -49,5 +49,5 @@ export const ManageFeeSettingsFrame = ({
         />
       )}
     />
-  );
-};
+  )
+}

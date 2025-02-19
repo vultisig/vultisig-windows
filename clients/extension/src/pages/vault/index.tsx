@@ -13,7 +13,6 @@ import { VaultProps } from "../../utils/interfaces";
 import i18n from "../../i18n/config";
 import messageKeys from "../../utils/message-keys";
 
-import { ChainKey } from "../../utils/constants";
 import { Vultisig } from "../../icons";
 import ConfigProvider from "../../components/config-provider";
 import VultiLoading from "../../components/vulti-loading";
@@ -21,13 +20,14 @@ import VultiError from "../../components/vulti-error";
 
 import "../../styles/index.scss";
 import "../../pages/vaults/index.scss";
+import { Chain } from "@core/chain/Chain";
 
 interface FormProps {
   uid: string;
 }
 
 interface InitialState {
-  chain?: ChainKey;
+  chain?: Chain;
   errorDescription?: string;
   errorTitle?: string;
   hasError?: boolean;

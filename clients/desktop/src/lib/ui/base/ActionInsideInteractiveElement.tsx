@@ -1,40 +1,38 @@
-import { Dimensions } from '@floating-ui/react';
+import { Dimensions } from '@floating-ui/react'
 import {
   ComponentProps,
   CSSProperties,
   forwardRef,
   ReactNode,
   Ref,
-} from 'react';
-import styled from 'styled-components';
+} from 'react'
+import styled from 'styled-components'
 
-import { ActionProp } from '../props';
-import { ElementSizeAware } from './ElementSizeAware';
+import { ActionProp } from '../props'
+import { ElementSizeAware } from './ElementSizeAware'
 
 interface ActionInsideInteractiveElementRenderParams<
   T extends CSSProperties = CSSProperties,
 > {
-  actionSize: Dimensions;
-  actionPlacerStyles: T;
+  actionSize: Dimensions
+  actionPlacerStyles: T
 }
 
 const Container = styled.div`
   position: relative;
-`;
+`
 
 type ActionInsideInteractiveElementProps<
   T extends CSSProperties = CSSProperties,
 > = ComponentProps<typeof Container> &
   ActionProp & {
-    render: (
-      params: ActionInsideInteractiveElementRenderParams<T>
-    ) => ReactNode;
-    actionPlacerStyles: T;
-  };
+    render: (params: ActionInsideInteractiveElementRenderParams<T>) => ReactNode
+    actionPlacerStyles: T
+  }
 
 const ActionPlacer = styled.div`
   position: absolute;
-`;
+`
 
 export const ActionInsideInteractiveElement = forwardRef(
   function ActionInsideInteractiveElement<
@@ -67,6 +65,6 @@ export const ActionInsideInteractiveElement = forwardRef(
           )}
         />
       </Container>
-    );
+    )
   }
-);
+)

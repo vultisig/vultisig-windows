@@ -768,4 +768,4 @@ export const hr = {
   chooseSetup: 'Odaberite Postavljanje',
   introOnboarding: 'uvod',
   enable_dkls: 'Omogući DKLS',
-};
+}

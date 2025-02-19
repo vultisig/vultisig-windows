@@ -1,17 +1,17 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { centerContent } from '../../lib/ui/css/centerContent';
-import { round } from '../../lib/ui/css/round';
-import { sameDimensions } from '../../lib/ui/css/sameDimensions';
-import { PictureIcon } from '../../lib/ui/icons/PictureIcon';
-import { ContainImage } from '../../lib/ui/images/ContainImage';
-import { SafeImage } from '../../lib/ui/images/SafeImage';
-import { UiProps, ValueProp } from '../../lib/ui/props';
-import { getColor } from '../../lib/ui/theme/getters';
+import { centerContent } from '../../lib/ui/css/centerContent'
+import { round } from '../../lib/ui/css/round'
+import { sameDimensions } from '../../lib/ui/css/sameDimensions'
+import { PictureIcon } from '../../lib/ui/icons/PictureIcon'
+import { ContainImage } from '../../lib/ui/images/ContainImage'
+import { SafeImage } from '../../lib/ui/images/SafeImage'
+import { UiProps, ValueProp } from '../../lib/ui/props'
+import { getColor } from '../../lib/ui/theme/getters'
 
 const Icon = styled(ContainImage)`
   ${sameDimensions('1em')};
-`;
+`
 
 const Fallback = styled.div`
   ${round};
@@ -22,9 +22,9 @@ const Fallback = styled.div`
   svg {
     font-size: 0.44em;
   }
-`;
+`
 
-type ChainEntityIconProps = Partial<ValueProp<string>> & UiProps;
+type ChainEntityIconProps = Partial<ValueProp<string>> & UiProps
 
 export const ChainEntityIcon = ({ value, ...rest }: ChainEntityIconProps) => {
   return (
@@ -37,5 +37,5 @@ export const ChainEntityIcon = ({ value, ...rest }: ChainEntityIconProps) => {
         </Fallback>
       }
     />
-  );
-};
+  )
+}

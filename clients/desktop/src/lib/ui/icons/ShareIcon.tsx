@@ -21,5 +21,5 @@ const ShareIcon = ({ strokeColor = '#fff' }: { strokeColor: string }) => (
       d="M5.861 13.75a7.503 7.503 0 0 1 7.264-5.625H17.5"
     />
   </svg>
-);
-export default ShareIcon;
+)
+export default ShareIcon

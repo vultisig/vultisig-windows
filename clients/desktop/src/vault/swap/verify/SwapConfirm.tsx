@@ -1,23 +1,23 @@
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { StrictText } from '../../../lib/ui/text';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt';
-import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery';
-import { useSwapTerms } from './state/swapTerms';
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { StrictText } from '../../../lib/ui/text'
+import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt'
+import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery'
+import { useSwapTerms } from './state/swapTerms'
 
 export const SwapConfirm = () => {
-  const { t } = useTranslation();
-  const keysignPayloadQuery = useSwapKeysignPayloadQuery();
+  const { t } = useTranslation()
+  const keysignPayloadQuery = useSwapKeysignPayloadQuery()
 
-  const [terms] = useSwapTerms();
+  const [terms] = useSwapTerms()
   const isDisabled = useMemo(() => {
     if (terms.some(term => !term)) {
-      return t('terms_required');
+      return t('terms_required')
     }
-  }, [t, terms]);
+  }, [t, terms])
 
   return (
     <MatchQuery
@@ -28,5 +28,5 @@ export const SwapConfirm = () => {
         <StartKeysignPrompt value={keysignPayload} isDisabled={isDisabled} />
       )}
     />
-  );
-};
+  )
+}

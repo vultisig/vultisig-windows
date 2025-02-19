@@ -13,5 +13,5 @@ const DownloadIcon = () => (
       d="M18 12.5v3.333a1.666 1.666 0 0 1-1.667 1.667H4.667A1.667 1.667 0 0 1 3 15.833V12.5m3.333-4.167L10.5 12.5m0 0 4.167-4.167M10.5 12.5v-10"
     />
   </svg>
-);
-export default DownloadIcon;
+)
+export default DownloadIcon

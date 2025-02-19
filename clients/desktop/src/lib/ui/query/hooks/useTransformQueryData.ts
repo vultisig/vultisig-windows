@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo } from 'react'
 
 type Query<T> = {
-  data: T | undefined;
-};
+  data: T | undefined
+}
 
 export const useTransformQueryData = <T, V, B>(
   queryResult: B & Query<T>,
@@ -16,13 +16,13 @@ export const useTransformQueryData = <T, V, B>(
           queryResult.data !== undefined
             ? transform(queryResult.data)
             : undefined,
-      } as B & Query<V>;
+      } as B & Query<V>
     } catch (error) {
       return {
         ...queryResult,
         data: undefined,
         error,
-      };
+      }
     }
-  }, [queryResult, transform]);
-};
+  }, [queryResult, transform])
+}

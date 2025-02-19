@@ -3,22 +3,22 @@ import {
   AnimationConfig,
   AnimationResult,
   useTransition,
-} from '@react-spring/web';
-import { CSSProperties, FC, ReactNode, useLayoutEffect, useState } from 'react';
+} from '@react-spring/web'
+import { CSSProperties, FC, ReactNode, useLayoutEffect, useState } from 'react'
 
-import { ConfigKey, configsMap, ConfigValue } from './animationConfigs';
+import { ConfigKey, configsMap, ConfigValue } from './animationConfigs'
 
 type AnimatedVisibilityProps = {
-  customAnimationConfig?: ConfigValue;
-  children: ReactNode;
-  className?: string;
-  animationConfig?: ConfigKey;
-  isOpen?: boolean;
-  delay?: number;
-  config?: Partial<AnimationConfig>;
-  overlayStyles?: CSSProperties;
-  onAnimationComplete?: () => void;
-};
+  customAnimationConfig?: ConfigValue
+  children: ReactNode
+  className?: string
+  animationConfig?: ConfigKey
+  isOpen?: boolean
+  delay?: number
+  config?: Partial<AnimationConfig>
+  overlayStyles?: CSSProperties
+  onAnimationComplete?: () => void
+}
 
 export const AnimatedVisibility: FC<AnimatedVisibilityProps> = ({
   isOpen = true,
@@ -31,19 +31,19 @@ export const AnimatedVisibility: FC<AnimatedVisibilityProps> = ({
   onAnimationComplete,
   config,
 }) => {
-  const [delayedIsOpen, setDelayedIsOpen] = useState(false);
+  const [delayedIsOpen, setDelayedIsOpen] = useState(false)
 
   useLayoutEffect(() => {
     if (isOpen) {
-      const timeout = setTimeout(() => setDelayedIsOpen(true), delay);
-      return () => clearTimeout(timeout);
+      const timeout = setTimeout(() => setDelayedIsOpen(true), delay)
+      return () => clearTimeout(timeout)
     } else {
-      setDelayedIsOpen(false);
+      setDelayedIsOpen(false)
     }
-  }, [isOpen, delay]);
+  }, [isOpen, delay])
 
   const animationConfigDerived =
-    customAnimationConfig ?? configsMap[animationConfig];
+    customAnimationConfig ?? configsMap[animationConfig]
 
   const transitions = useTransition(delayedIsOpen, {
     config: {
@@ -55,11 +55,11 @@ export const AnimatedVisibility: FC<AnimatedVisibilityProps> = ({
     from: animationConfigDerived.from,
     leave: animationConfigDerived.leave,
     onRest: (animationResult: AnimationResult) => {
-      const result = animationResult.value as { opacity: number };
-      if (result.opacity !== 0) return;
-      if (animationResult.finished) onAnimationComplete?.();
+      const result = animationResult.value as { opacity: number }
+      if (result.opacity !== 0) return
+      if (animationResult.finished) onAnimationComplete?.()
     },
-  });
+  })
 
   return transitions(
     (styles, item) =>
@@ -74,5 +74,5 @@ export const AnimatedVisibility: FC<AnimatedVisibilityProps> = ({
           {children}
         </animated.div>
       )
-  );
-};
+  )
+}

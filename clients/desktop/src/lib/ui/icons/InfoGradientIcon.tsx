@@ -72,5 +72,5 @@ const InfoGradientIcon = () => (
       </linearGradient>
     </defs>
   </svg>
-);
-export default InfoGradientIcon;
+)
+export default InfoGradientIcon

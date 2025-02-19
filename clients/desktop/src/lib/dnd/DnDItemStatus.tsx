@@ -1,1 +1,1 @@
-export type DnDItemStatus = 'idle' | 'overlay' | 'placeholder';
+export type DnDItemStatus = 'idle' | 'overlay' | 'placeholder'

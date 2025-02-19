@@ -1,7 +1,7 @@
 export const ChevronRightIcon = ({
   size = '1em',
 }: {
-  size?: number | string;
+  size?: number | string
 }) => {
   return (
     <svg
@@ -18,5 +18,5 @@ export const ChevronRightIcon = ({
     >
       <polyline points="9 18 15 12 9 6"></polyline>
     </svg>
-  );
-};
+  )
+}

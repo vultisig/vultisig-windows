@@ -1,14 +1,14 @@
-import { GeneralSwapQuote } from '../general/GeneralSwapQuote';
-import { NativeSwapQuote } from '../native/NativeSwapQuote';
+import { GeneralSwapQuote } from '../general/GeneralSwapQuote'
+import { NativeSwapQuote } from '../native/NativeSwapQuote'
 
-export const swapTypes = ['native', 'general'] as const;
-export type SwapType = (typeof swapTypes)[number];
+export const swapTypes = ['native', 'general'] as const
+export type SwapType = (typeof swapTypes)[number]
 
 interface SwapQuoteMap {
-  native: NativeSwapQuote;
-  general: GeneralSwapQuote;
+  native: NativeSwapQuote
+  general: GeneralSwapQuote
 }
 
 export type SwapQuote = {
-  [T in SwapType]: { [K in T]: SwapQuoteMap[T] };
-}[SwapType];
+  [T in SwapType]: { [K in T]: SwapQuoteMap[T] }
+}[SwapType]

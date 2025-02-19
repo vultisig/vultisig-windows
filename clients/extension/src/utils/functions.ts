@@ -1,11 +1,6 @@
 import { Interface } from "ethers";
 
-import {
-  ChainKey,
-  MessageKey,
-  RequestMethod,
-  TssKeysignType,
-} from "./constants";
+import { MessageKey, RequestMethod, TssKeysignType } from "./constants";
 import {
   ChainObjRef,
   ChainProps,
@@ -14,6 +9,7 @@ import {
   SendTransactionResponse,
 } from "./interfaces";
 import api from "./api";
+import { Chain } from "@core/chain/Chain";
 
 const getFunctionSignature = async (inputHex: string): Promise<string> => {
   if (!inputHex || inputHex === "0x") {
@@ -155,12 +151,12 @@ export const findChainByProp = (
   );
 };
 
-export const getTssKeysignType = (chain: ChainKey): TssKeysignType => {
+export const getTssKeysignType = (chain: Chain): TssKeysignType => {
   switch (chain) {
-    case ChainKey.SOLANA:
-    case ChainKey.POLKADOT:
-    case ChainKey.SUI:
-    case ChainKey.TON:
+    case Chain.Solana:
+    case Chain.Polkadot:
+    case Chain.Sui:
+    case Chain.Ton:
       return TssKeysignType.EdDSA;
     default:
       return TssKeysignType.ECDSA;

@@ -1,28 +1,28 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { z } from 'zod'
 
-import { ActionInsideInteractiveElement } from '../../lib/ui/base/ActionInsideInteractiveElement';
-import { Button } from '../../lib/ui/buttons/Button';
-import { iconButtonIconSizeRecord } from '../../lib/ui/buttons/IconButton';
-import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
+import { ActionInsideInteractiveElement } from '../../lib/ui/base/ActionInsideInteractiveElement'
+import { Button } from '../../lib/ui/buttons/Button'
+import { iconButtonIconSizeRecord } from '../../lib/ui/buttons/IconButton'
+import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
-} from '../../lib/ui/css/textInput';
-import { CircledCloseIcon } from '../../lib/ui/icons/CircledCloseIcon';
-import { TextInput } from '../../lib/ui/inputs/TextInput';
-import { VStack } from '../../lib/ui/layout/Stack';
-import { OnBackProp, OnForwardProp } from '../../lib/ui/props';
-import { Text } from '../../lib/ui/text';
-import { PageContent } from '../../ui/page/PageContent';
-import { PageHeader } from '../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
-import { useVaultNames } from '../hooks/useVaultNames';
-import { KeygenEducationPrompt } from '../keygen/shared/KeygenEducationPrompt';
-import { MAX_VAULT_NAME_LENGTH } from './shared/constants';
-import { useVaultName } from './state/vaultName';
+} from '../../lib/ui/css/textInput'
+import { CircledCloseIcon } from '../../lib/ui/icons/CircledCloseIcon'
+import { TextInput } from '../../lib/ui/inputs/TextInput'
+import { VStack } from '../../lib/ui/layout/Stack'
+import { OnBackProp, OnForwardProp } from '../../lib/ui/props'
+import { Text } from '../../lib/ui/text'
+import { PageContent } from '../../ui/page/PageContent'
+import { PageHeader } from '../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
+import { useVaultNames } from '../hooks/useVaultNames'
+import { KeygenEducationPrompt } from '../keygen/shared/KeygenEducationPrompt'
+import { MAX_VAULT_NAME_LENGTH } from './shared/constants'
+import { useVaultName } from './state/vaultName'
 
 export const vaultNameSchema = (existingNames: string[]) =>
   z.object({
@@ -33,17 +33,17 @@ export const vaultNameSchema = (existingNames: string[]) =>
       .refine(name => !existingNames.includes(name), {
         message: 'vault_name_already_exists',
       }),
-  });
+  })
 
-type VaultNameSchemaType = z.infer<ReturnType<typeof vaultNameSchema>>;
+type VaultNameSchemaType = z.infer<ReturnType<typeof vaultNameSchema>>
 
 export const SetupVaultNameStep = ({
   onForward,
   onBack,
 }: OnForwardProp & Partial<OnBackProp>) => {
-  const { t } = useTranslation();
-  const [_, setName] = useVaultName();
-  const existingVaultNames = useVaultNames();
+  const { t } = useTranslation()
+  const [, setName] = useVaultName()
+  const existingVaultNames = useVaultNames()
 
   const {
     control,
@@ -54,12 +54,12 @@ export const SetupVaultNameStep = ({
     resolver: zodResolver(vaultNameSchema(existingVaultNames)),
     defaultValues: { vaultName: '' },
     mode: 'all',
-  });
+  })
 
   const onSubmit: SubmitHandler<VaultNameSchemaType> = ({ vaultName }) => {
-    setName(vaultName);
-    onForward();
-  };
+    setName(vaultName)
+    onForward()
+  }
 
   return (
     <>
@@ -112,5 +112,5 @@ export const SetupVaultNameStep = ({
         </Button>
       </PageContent>
     </>
-  );
-};
+  )
+}

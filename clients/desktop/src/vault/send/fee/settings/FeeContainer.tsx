@@ -1,11 +1,11 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 import {
   textInputBackground,
   textInputFrame,
-} from '../../../../lib/ui/css/textInput';
-import { hStack } from '../../../../lib/ui/layout/Stack';
-import { text } from '../../../../lib/ui/text';
+} from '../../../../lib/ui/css/textInput'
+import { hStack } from '../../../../lib/ui/layout/Stack'
+import { text } from '../../../../lib/ui/text'
 
 export const FeeContainer = styled.div`
   ${textInputFrame};
@@ -20,4 +20,4 @@ export const FeeContainer = styled.div`
     alignItems: 'center',
     justifyContent: 'space-between',
   })}
-`;
+`

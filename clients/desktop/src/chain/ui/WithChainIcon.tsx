@@ -1,20 +1,20 @@
-import { ComponentProps } from 'react';
-import styled from 'styled-components';
+import { ComponentProps } from 'react'
+import styled from 'styled-components'
 
-import { centerContent } from '../../lib/ui/css/centerContent';
-import { round } from '../../lib/ui/css/round';
-import { sameDimensions } from '../../lib/ui/css/sameDimensions';
-import { getColor } from '../../lib/ui/theme/getters';
-import { ChainEntityIcon } from './ChainEntityIcon';
+import { centerContent } from '../../lib/ui/css/centerContent'
+import { round } from '../../lib/ui/css/round'
+import { sameDimensions } from '../../lib/ui/css/sameDimensions'
+import { getColor } from '../../lib/ui/theme/getters'
+import { ChainEntityIcon } from './ChainEntityIcon'
 
 const Wrapper = styled.div`
   ${sameDimensions('1em')};
   position: relative;
-`;
+`
 
 type WithChainIconProps = ComponentProps<typeof Wrapper> & {
-  src?: string;
-};
+  src?: string
+}
 
 const Position = styled.div`
   position: absolute;
@@ -25,7 +25,7 @@ const Position = styled.div`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foreground')};
   ${centerContent};
-`;
+`
 
 export const WithChainIcon = ({
   children,
@@ -39,5 +39,5 @@ export const WithChainIcon = ({
         <ChainEntityIcon value={src} />
       </Position>
     </Wrapper>
-  );
-};
+  )
+}

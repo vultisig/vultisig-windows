@@ -1,15 +1,15 @@
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
-import { FormEvent, KeyboardEvent } from 'react';
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
+import { FormEvent, KeyboardEvent } from 'react'
 
-import { preventDefault } from '../../utils/preventDefault';
-import { stopPropagation } from '../../utils/stopPropagation';
+import { preventDefault } from '../../utils/preventDefault'
+import { stopPropagation } from '../../utils/stopPropagation'
 
 type GetFormPropsInput = {
-  onClose?: () => void;
-  onSubmit?: () => void;
-  isDisabled?: boolean | string;
-  isPending?: boolean;
-};
+  onClose?: () => void
+  onSubmit?: () => void
+  isDisabled?: boolean | string
+  isPending?: boolean
+}
 
 export const getFormProps = ({
   onClose,
@@ -21,19 +21,19 @@ export const getFormProps = ({
     onKeyDown: onClose
       ? (event: KeyboardEvent<HTMLFormElement>) => {
           if (event.key === 'Escape') {
-            event.stopPropagation();
-            onClose();
+            event.stopPropagation()
+            onClose()
           }
         }
       : undefined,
     onSubmit: onSubmit
       ? stopPropagation<FormEvent>(
           preventDefault(() => {
-            if (isDisabled || isPending) return;
+            if (isDisabled || isPending) return
 
-            onSubmit();
+            onSubmit()
           })
         )
       : undefined,
-  });
-};
+  })
+}

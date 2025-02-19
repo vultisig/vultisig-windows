@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { QUERIES } from '../../../../../lib/ui/constants';
-import { Text } from '../../../../../lib/ui/text';
+import { QUERIES } from '../../../../../lib/ui/constants'
+import { Text } from '../../../../../lib/ui/text'
 
 export const Container = styled.div`
   height: 100%;
@@ -9,7 +9,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   margin-bottom: 32px;
-`;
+`
 
 export const CenteredBox = styled.div`
   position: fixed;
@@ -22,7 +22,7 @@ export const CenteredBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-`;
+`
 
 export const ResponsiveText = styled(Text)`
   font-size: 18px;
@@ -30,7 +30,7 @@ export const ResponsiveText = styled(Text)`
   @media (${QUERIES.desktopAndUp}) {
     font-size: 22px;
   }
-`;
+`
 
 export const ResponsiveImage = styled.img`
   width: 120px;
@@ -40,4 +40,4 @@ export const ResponsiveImage = styled.img`
     width: 150px;
     height: 150px;
   }
-`;
+`

@@ -1,20 +1,20 @@
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { BrowserOpenURL, WindowReload } from '../../../wailsjs/runtime/runtime';
-import { Button } from '../../lib/ui/buttons/Button';
-import { UniformColumnGrid } from '../../lib/ui/css/uniformColumnGrid';
-import { FilledAlertIcon } from '../../lib/ui/icons/FilledAlertIcon';
-import { VStack } from '../../lib/ui/layout/Stack';
-import { Text, text } from '../../lib/ui/text';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { PageContent } from '../../ui/page/PageContent';
-import { PageHeader } from '../../ui/page/PageHeader';
-import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
-import { ErrorState } from './ErrorBoundary';
+import { BrowserOpenURL, WindowReload } from '../../../wailsjs/runtime/runtime'
+import { Button } from '../../lib/ui/buttons/Button'
+import { UniformColumnGrid } from '../../lib/ui/css/uniformColumnGrid'
+import { FilledAlertIcon } from '../../lib/ui/icons/FilledAlertIcon'
+import { VStack } from '../../lib/ui/layout/Stack'
+import { Text, text } from '../../lib/ui/text'
+import { PageContent } from '../../ui/page/PageContent'
+import { PageHeader } from '../../ui/page/PageHeader'
+import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
+import { ErrorState } from './ErrorBoundary'
 
 const reportErrorUrl =
-  'https://discord.com/channels/1203844257220395078/1294500829482450944';
+  'https://discord.com/channels/1203844257220395078/1294500829482450944'
 
 const StackTrace = styled.pre`
   ${text({
@@ -22,10 +22,10 @@ const StackTrace = styled.pre`
     size: 12,
     weight: '400',
   })}
-`;
+`
 
 export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <>
@@ -57,7 +57,7 @@ export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
         <UniformColumnGrid gap={20}>
           <Button
             onClick={() => {
-              BrowserOpenURL(reportErrorUrl);
+              BrowserOpenURL(reportErrorUrl)
             }}
             kind="outlined"
           >
@@ -65,7 +65,7 @@ export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
           </Button>
           <Button
             onClick={() => {
-              WindowReload();
+              WindowReload()
             }}
           >
             {t('try_again')}
@@ -73,5 +73,5 @@ export const FullSizeErrorFallback = ({ error, info }: ErrorState) => {
         </UniformColumnGrid>
       </PageContent>
     </>
-  );
-};
+  )
+}

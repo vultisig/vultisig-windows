@@ -1,12 +1,12 @@
-import React from 'react';
+import React from 'react'
 
-import { InputProps } from '../../props';
-import { InvisibleInput } from '../InvisibleInput';
+import { InputProps } from '../../props'
+import { InvisibleInput } from '../InvisibleInput'
 
 export type InvisibleHTMLCheckboxProps = InputProps<boolean> & {
-  id?: string;
-  groupName?: string;
-};
+  id?: string
+  groupName?: string
+}
 
 export const InvisibleHTMLCheckbox: React.FC<InvisibleHTMLCheckboxProps> = ({
   id,
@@ -21,4 +21,4 @@ export const InvisibleHTMLCheckbox: React.FC<InvisibleHTMLCheckboxProps> = ({
     value={id}
     onChange={event => onChange(event.target.checked)}
   />
-);
+)

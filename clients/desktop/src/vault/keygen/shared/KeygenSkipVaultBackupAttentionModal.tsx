@@ -1,18 +1,18 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { Checkbox } from '../../../lib/ui/inputs/checkbox/Checkbox';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Modal } from '../../../lib/ui/modal';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { Checkbox } from '../../../lib/ui/inputs/checkbox/Checkbox'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Modal } from '../../../lib/ui/modal'
 
 const StyledModal = styled(Modal)`
   border: none;
-`;
+`
 
 const OrangeButton = styled(Button)<{
-  isActive: boolean;
+  isActive: boolean
 }>`
   background-color: ${({ theme, isActive }) =>
     !isActive
@@ -25,17 +25,17 @@ const OrangeButton = styled(Button)<{
         ? theme.colors.idle.withAlpha(0.8).toCssValue()
         : theme.colors.idle.toCssValue()};
   }
-`;
+`
 
 const KeygenSkipVaultBackupAttentionModal = ({
   onClose,
   onSkip,
 }: {
-  onClose: () => void;
-  onSkip: () => void;
+  onClose: () => void
+  onSkip: () => void
 }) => {
-  const [hasAcceptedRisk, setHasAcceptedRisk] = useState(false);
-  const { t } = useTranslation();
+  const [hasAcceptedRisk, setHasAcceptedRisk] = useState(false)
+  const { t } = useTranslation()
 
   return (
     <StyledModal
@@ -60,7 +60,7 @@ const KeygenSkipVaultBackupAttentionModal = ({
         </Button>
       </VStack>
     </StyledModal>
-  );
-};
+  )
+}
 
-export default KeygenSkipVaultBackupAttentionModal;
+export default KeygenSkipVaultBackupAttentionModal

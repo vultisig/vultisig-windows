@@ -13,5 +13,5 @@ const DiscordIcon = () => (
       fill="#33E6BF"
     />
   </svg>
-);
-export default DiscordIcon;
+)
+export default DiscordIcon

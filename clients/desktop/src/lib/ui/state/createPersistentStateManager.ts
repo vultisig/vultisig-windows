@@ -1,4 +1,4 @@
-import { PersistentStorage } from './PersistentStorage';
+import { PersistentStorage } from './PersistentStorage'
 
 export function createPersistentStateManager<T extends string>(
   storage: PersistentStorage<T>
@@ -7,8 +7,8 @@ export function createPersistentStateManager<T extends string>(
     return {
       get: () => storage.getItem<V | undefined>(key),
       set: (value: V | undefined) => storage.setItem(key, value),
-    };
+    }
   }
 
-  return managePersistentState;
+  return managePersistentState
 }

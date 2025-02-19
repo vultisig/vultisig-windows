@@ -1,12 +1,12 @@
-import { useRive, useStateMachineInput } from '@rive-app/react-canvas';
-import { useCallback } from 'react';
+import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
+import { useCallback } from 'react'
 
-import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
+import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
 
-const STATE_MACHINE_NAME = 'State Machine 1';
-const INPUT_NAME = 'Index';
+const STATE_MACHINE_NAME = 'State Machine 1'
+const INPUT_NAME = 'Index'
 
-export const ONBOARDING_ANIMATIONS = [0, 1, 2, 3, 4, 5] as const;
+export const ONBOARDING_ANIMATIONS = [0, 1, 2, 3, 4, 5] as const
 
 export const useOnboardingStepsAnimations = () => {
   const {
@@ -15,26 +15,26 @@ export const useOnboardingStepsAnimations = () => {
     toPreviousStep: toPrevAnimation,
   } = useStepNavigation({
     steps: ONBOARDING_ANIMATIONS,
-  });
+  })
 
   const { RiveComponent, rive } = useRive({
     src: '/assets/animations/onboarding-screen/onboarding.riv',
     autoplay: true,
     stateMachines: [STATE_MACHINE_NAME],
-  });
+  })
 
   const stateMachineInput = useStateMachineInput(
     rive,
     STATE_MACHINE_NAME,
     INPUT_NAME
-  );
+  )
 
   const handleNextAnimation = useCallback(() => {
     if (stateMachineInput && typeof stateMachineInput.value === 'number') {
-      stateMachineInput.value += 1;
-      toNextAnimation();
+      stateMachineInput.value += 1
+      toNextAnimation()
     }
-  }, [stateMachineInput, toNextAnimation]);
+  }, [stateMachineInput, toNextAnimation])
 
   // TODO: tony to refactor when the designer gives us the animations that work backwards
   const handlePrevAnimation = useCallback(() => {
@@ -43,10 +43,10 @@ export const useOnboardingStepsAnimations = () => {
       typeof stateMachineInput.value === 'number' &&
       stateMachineInput.value - 1 >= 0
     ) {
-      stateMachineInput.value -= 1;
-      toPrevAnimation();
+      stateMachineInput.value -= 1
+      toPrevAnimation()
     }
-  }, [stateMachineInput, toPrevAnimation]);
+  }, [stateMachineInput, toPrevAnimation])
 
   return {
     animations: ONBOARDING_ANIMATIONS,
@@ -55,5 +55,5 @@ export const useOnboardingStepsAnimations = () => {
     handlePrevAnimation,
     handleNextAnimation,
     isLoading: !rive,
-  };
-};
+  }
+}

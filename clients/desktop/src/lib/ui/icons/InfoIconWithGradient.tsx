@@ -78,4 +78,4 @@ export const InfoIconWithGradient = () => (
       </linearGradient>
     </defs>
   </svg>
-);
+)

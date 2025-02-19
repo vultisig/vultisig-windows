@@ -1,14 +1,13 @@
-import { create } from '@bufbuild/protobuf';
-import { UtxoChain } from '@core/chain/Chain';
-import { ChainAccount } from '@core/chain/ChainAccount';
-import { UtxoInfoSchema } from '@core/communication/vultisig/keysign/v1/utxo_info_pb';
-
-import { getUtxoAddressInfo } from '@core/chain/chains/utxo/client/getUtxoAddressInfo';
+import { create } from '@bufbuild/protobuf'
+import { UtxoChain } from '@core/chain/Chain'
+import { ChainAccount } from '@core/chain/ChainAccount'
+import { getUtxoAddressInfo } from '@core/chain/chains/utxo/client/getUtxoAddressInfo'
+import { UtxoInfoSchema } from '@core/communication/vultisig/keysign/v1/utxo_info_pb'
 
 export const getUtxos = async (account: ChainAccount<UtxoChain>) => {
-  const { data } = await getUtxoAddressInfo(account);
+  const { data } = await getUtxoAddressInfo(account)
 
-  const { utxo } = data[account.address];
+  const { utxo } = data[account.address]
 
   return utxo.map(({ transaction_hash, value, index }) =>
     create(UtxoInfoSchema, {
@@ -16,5 +15,5 @@ export const getUtxos = async (account: ChainAccount<UtxoChain>) => {
       amount: BigInt(value),
       index,
     })
-  );
-};
+  )
+}

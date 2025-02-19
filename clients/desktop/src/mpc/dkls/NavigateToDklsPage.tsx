@@ -1,19 +1,19 @@
-import { useRef } from 'react';
+import { useRef } from 'react'
 
-import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton';
-import { ChildrenProp } from '../../lib/ui/props';
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
+import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton'
+import { ChildrenProp } from '../../lib/ui/props'
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 
 export const NavigateToDklsPage = ({ children }: ChildrenProp) => {
-  const navigate = useAppNavigate();
-  const clickCount = useRef(0);
+  const navigate = useAppNavigate()
+  const clickCount = useRef(0)
 
   const handleClick = () => {
-    clickCount.current += 1;
+    clickCount.current += 1
     if (clickCount.current >= 5) {
-      navigate('dkls');
+      navigate('dkls')
     }
-  };
+  }
 
-  return <UnstyledButton onClick={handleClick}>{children}</UnstyledButton>;
-};
+  return <UnstyledButton onClick={handleClick}>{children}</UnstyledButton>
+}

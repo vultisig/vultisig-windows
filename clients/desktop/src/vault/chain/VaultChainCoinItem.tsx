@@ -1,20 +1,20 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
-import { CoinAmount, CoinKey } from '@core/chain/coin/Coin';
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin';
-import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo';
-import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker';
-import { formatAmount } from '@lib/utils/formatAmount';
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { CoinAmount, CoinKey } from '@core/chain/coin/Coin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo'
+import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice'
+import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
+import { formatAmount } from '@lib/utils/formatAmount'
 
-import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice';
-import { ChainCoinIcon } from '../../chain/ui/ChainCoinIcon';
-import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
-import { getCoinLogoSrc } from '../../coin/logo/getCoinLogoSrc';
-import { HStack, VStack } from '../../lib/ui/layout/Stack';
-import { ValueProp } from '../../lib/ui/props';
-import { Text } from '../../lib/ui/text';
-import { useFiatCurrency } from '../../preferences/state/fiatCurrency';
-import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware';
-import { shouldDisplayChainLogo } from './utils';
+import { ChainCoinIcon } from '../../chain/ui/ChainCoinIcon'
+import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc'
+import { getCoinLogoSrc } from '../../coin/logo/getCoinLogoSrc'
+import { HStack, VStack } from '../../lib/ui/layout/Stack'
+import { ValueProp } from '../../lib/ui/props'
+import { Text } from '../../lib/ui/text'
+import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
+import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
+import { shouldDisplayChainLogo } from './utils'
 
 export const VaultChainCoinItem = ({
   value,
@@ -25,9 +25,9 @@ export const VaultChainCoinItem = ({
     Partial<EntityWithPrice> &
     CoinKey
 >) => {
-  const { logo, ticker, amount, decimals, price, id, chain } = value;
-  const [fiatCurrency] = useFiatCurrency();
-  const balance = fromChainAmount(amount, decimals);
+  const { logo, ticker, amount, decimals, price, id, chain } = value
+  const [fiatCurrency] = useFiatCurrency()
+  const balance = fromChainAmount(amount, decimals)
 
   return (
     <HStack fullWidth alignItems="center" gap={12}>
@@ -62,5 +62,5 @@ export const VaultChainCoinItem = ({
         </Text>
       </VStack>
     </HStack>
-  );
-};
+  )
+}

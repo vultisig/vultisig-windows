@@ -1,8 +1,8 @@
-import { SVGProps } from 'react';
-import { useTheme } from 'styled-components';
+import { SVGProps } from 'react'
+import { useTheme } from 'styled-components'
 
 export const FilledAlertIcon = (props: SVGProps<SVGSVGElement>) => {
-  const { colors } = useTheme();
+  const { colors } = useTheme()
 
   return (
     <svg
@@ -26,5 +26,5 @@ export const FilledAlertIcon = (props: SVGProps<SVGSVGElement>) => {
         fill={colors.contrast.toCssValue()}
       />
     </svg>
-  );
-};
+  )
+}

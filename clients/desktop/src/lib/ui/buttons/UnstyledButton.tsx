@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { interactive } from '../css/interactive';
+import { interactive } from '../css/interactive'
 
 export const UnstyledButton = styled.button`
   ${interactive};
@@ -13,8 +13,8 @@ export const UnstyledButton = styled.button`
   font-weight: inherit;
   font-family: inherit;
   line-height: inherit;
-`;
+`
 
 UnstyledButton.defaultProps = {
   type: 'button',
-};
+}

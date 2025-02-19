@@ -1,24 +1,24 @@
 // TODO: REWRITE THIS
-import { Chain } from '@core/chain/Chain';
-import { ChainAccount } from '@core/chain/ChainAccount';
-import { getSplAccounts } from '@core/chain/chains/solana/spl/getSplAccounts';
-import { Coin } from '@core/chain/coin/Coin';
-import { queryUrl } from '@lib/utils/query/queryUrl';
+import { Chain } from '@core/chain/Chain'
+import { ChainAccount } from '@core/chain/ChainAccount'
+import { getSplAccounts } from '@core/chain/chains/solana/spl/getSplAccounts'
+import { Coin } from '@core/chain/coin/Coin'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 
 export const findSolanaAccountCoins = async (account: ChainAccount) => {
   if (!account.address) {
-    throw new Error('Invalid native token: Address is required');
+    throw new Error('Invalid native token: Address is required')
   }
 
-  const accounts = await getSplAccounts(account.address);
+  const accounts = await getSplAccounts(account.address)
   if (!accounts.length) {
-    return [];
+    return []
   }
 
   const tokenAddresses = accounts.map(
     account => account.account.data.parsed.info.mint
-  );
-  const tokenInfos = await fetchSolanaTokenInfoList(tokenAddresses);
+  )
+  const tokenInfos = await fetchSolanaTokenInfoList(tokenAddresses)
 
   return Object.entries(tokenInfos)
     .filter(([_, info = {}]) =>
@@ -36,17 +36,17 @@ export const findSolanaAccountCoins = async (account: ChainAccount) => {
         decimals: info.decimals || 0,
         id: address,
         priceProviderId: info.tokenList?.extensions?.coingeckoId || '',
-      };
+      }
 
-      return token;
-    });
-};
+      return token
+    })
+}
 
 const fetchSolanaTokenInfoList = async (
   contractAddresses: string[]
 ): Promise<Record<string, any>> => {
-  const results: Record<string, any> = {};
-  const missingTokens: string[] = [];
+  const results: Record<string, any> = {}
+  const missingTokens: string[] = []
 
   const solanaFmResults = await queryUrl('https://api.solana.fm/v1/tokens', {
     method: 'POST',
@@ -54,23 +54,23 @@ const fetchSolanaTokenInfoList = async (
     body: JSON.stringify({
       tokens: contractAddresses,
     }),
-  });
+  })
 
-  Object.assign(results, solanaFmResults);
+  Object.assign(results, solanaFmResults)
 
-  missingTokens.push(...contractAddresses.filter(addr => !results[addr]));
+  missingTokens.push(...contractAddresses.filter(addr => !results[addr]))
 
   if (missingTokens.length) {
-    console.warn(`Missing tokens from Solana.fm: ${missingTokens.join(', ')}`);
+    console.warn(`Missing tokens from Solana.fm: ${missingTokens.join(', ')}`)
 
-    const fallbackResults = await fetchFromJupiterBatch(missingTokens);
+    const fallbackResults = await fetchFromJupiterBatch(missingTokens)
 
     fallbackResults.forEach(({ address, data }) => {
-      if (data) results[address] = data;
-    });
+      if (data) results[address] = data
+    })
   }
-  return results;
-};
+  return results
+}
 
 const fetchFromJupiterBatch = async (
   contractAddresses: string[]
@@ -81,39 +81,39 @@ const fetchFromJupiterBatch = async (
       .catch(error => {
         console.error(
           `Error fetching token ${address} from Jupiter API: ${error.message}`
-        );
-        return { address, data: null };
+        )
+        return { address, data: null }
       })
-  );
+  )
 
-  return Promise.all(fetchPromises);
-};
+  return Promise.all(fetchPromises)
+}
 
 const fetchFromJupiter = async (contractAddress: string): Promise<any> => {
-  const url = `https://api.jup.ag/token/${contractAddress}`;
+  const url = `https://api.jup.ag/token/${contractAddress}`
 
   const response = await fetch(url, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
-  });
+  })
 
   if (!response.ok) {
-    throw new Error(`HTTP error: ${response.status}`);
+    throw new Error(`HTTP error: ${response.status}`)
   }
 
-  return await response.json();
-};
+  return await response.json()
+}
 
 const isValidToken = (tokenInfo: {
-  coingeckoId?: string;
-  symbol?: string;
-  decimals?: number;
+  coingeckoId?: string
+  symbol?: string
+  decimals?: number
 }): boolean => {
   if (!tokenInfo?.symbol || !tokenInfo?.decimals || !tokenInfo?.coingeckoId) {
     console.warn(
       `Skipping token with incomplete metadata: ${JSON.stringify(tokenInfo)}`
-    );
-    return false;
+    )
+    return false
   }
-  return true;
-};
+  return true
+}

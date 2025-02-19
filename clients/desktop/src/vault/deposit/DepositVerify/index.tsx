@@ -1,37 +1,37 @@
-import { FC } from 'react';
-import { FieldValues } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { FC } from 'react'
+import { FieldValues } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
-import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
+import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
 import {
   TxOverviewColumn,
   TxOverviewRow,
   TxOverviewRowDepositsFlow,
-} from '../../../chain/tx/components/TxOverviewRow';
-import { Text } from '../../../lib/ui/text';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
-import { useCurrentVaultCoin } from '../../state/currentVault';
-import { ChainAction } from '../ChainAction';
-import { DepositConfirmButton } from '../DepositConfirmButton';
-import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig';
-import { DepositFee } from '../fee/DepositFee';
-import { DepositFiatFee } from '../fee/DepositFiatFee';
-import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin';
-import { useMemoGenerator } from '../hooks/useMemoGenerator';
-import { useSender } from '../hooks/useSender';
-import { StrictText, StrictTextContrast } from './DepositVerify.styled';
-import { getFormattedFormData } from './utils';
+} from '../../../chain/tx/components/TxOverviewRow'
+import { Text } from '../../../lib/ui/text'
+import { PageContent } from '../../../ui/page/PageContent'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
+import { useCurrentVaultCoin } from '../../state/currentVault'
+import { ChainAction } from '../ChainAction'
+import { DepositConfirmButton } from '../DepositConfirmButton'
+import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
+import { DepositFee } from '../fee/DepositFee'
+import { DepositFiatFee } from '../fee/DepositFiatFee'
+import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
+import { useMemoGenerator } from '../hooks/useMemoGenerator'
+import { useSender } from '../hooks/useSender'
+import { StrictText, StrictTextContrast } from './DepositVerify.styled'
+import { getFormattedFormData } from './utils'
 
 type DepositVerifyProps = {
-  depositFormData: FieldValues;
-  selectedChainAction: ChainAction;
-  onBack: () => void;
-  fee: bigint;
-};
+  depositFormData: FieldValues
+  selectedChainAction: ChainAction
+  onBack: () => void
+  fee: bigint
+}
 
 export const DepositVerify: FC<DepositVerifyProps> = ({
   onBack,
@@ -44,21 +44,21 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
     selectedChainAction: selectedChainAction,
     bondableAsset: depositFormData?.bondableAsset,
     fee,
-  });
+  })
 
-  const [coinKey] = useCurrentDepositCoin();
-  const coin = useCurrentVaultCoin(coinKey);
+  const [coinKey] = useCurrentDepositCoin()
+  const coin = useCurrentVaultCoin(coinKey)
   const formattedDepositFormData = getFormattedFormData(
     depositFormDataWithMemo,
     selectedChainAction,
     coin
-  );
+  )
 
-  const sender = useSender();
-  const { t } = useTranslation();
+  const sender = useSender()
+  const { t } = useTranslation()
   const actionFields = selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.fields
-    : [];
+    : []
 
   return (
     <>
@@ -80,7 +80,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                 formattedDepositFormData[field.name] == null ||
                 formattedDepositFormData[field.name] === ''
               ) {
-                return null;
+                return null
               }
 
               return field.type === 'number' || field.type === 'percentage' ? (
@@ -102,7 +102,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
                     {String(formattedDepositFormData[field.name])}
                   </StrictTextContrast>
                 </TxOverviewColumn>
-              );
+              )
             })}
             {selectedChainAction === 'leave' && (
               <TxOverviewRowDepositsFlow>
@@ -134,5 +134,5 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
         />
       </PageContent>
     </>
-  );
-};
+  )
+}

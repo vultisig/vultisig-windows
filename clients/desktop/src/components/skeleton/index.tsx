@@ -1,9 +1,9 @@
-import './skeleton.styled.css';
+import './skeleton.styled.css'
 
 type SkeletonProps = {
-  height: string;
-  width?: string;
-};
+  height: string
+  width?: string
+}
 
 export default function Skeleton({ height, width = '100%' }: SkeletonProps) {
   return (
@@ -16,5 +16,5 @@ export default function Skeleton({ height, width = '100%' }: SkeletonProps) {
         WebkitMaskImage: '-webkit-linear-gradient(white, white)',
       }}
     />
-  );
+  )
 }

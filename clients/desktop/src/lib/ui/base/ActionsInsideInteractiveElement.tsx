@@ -1,3 +1,9 @@
+import { Dimensions } from '@lib/utils/entities/Dimensions'
+import { getRecordKeys } from '@lib/utils/record/getRecordKeys'
+import { getRecordSize } from '@lib/utils/record/getRecordSize'
+import { makeRecord } from '@lib/utils/record/makeRecord'
+import { pick } from '@lib/utils/record/pick'
+import { toEntries } from '@lib/utils/record/toEntries'
 import {
   ComponentProps,
   CSSProperties,
@@ -5,42 +11,36 @@ import {
   ReactNode,
   Ref,
   useState,
-} from 'react';
-import styled from 'styled-components';
+} from 'react'
+import styled from 'styled-components'
 
-import { Dimensions } from '@lib/utils/entities/Dimensions';
-import { getRecordKeys } from '@lib/utils/record/getRecordKeys';
-import { getRecordSize } from '@lib/utils/record/getRecordSize';
-import { makeRecord } from '@lib/utils/record/makeRecord';
-import { pick } from '@lib/utils/record/pick';
-import { toEntries } from '@lib/utils/record/toEntries';
-import { useStateCorrector } from '../state/useStateCorrector';
-import { ElementSizeAware } from './ElementSizeAware';
+import { useStateCorrector } from '../state/useStateCorrector'
+import { ElementSizeAware } from './ElementSizeAware'
 
 type RenderParams<K extends string> = {
-  actions: Record<K, { size: Dimensions; placerStyles: CSSProperties }>;
-};
+  actions: Record<K, { size: Dimensions; placerStyles: CSSProperties }>
+}
 
 const Container = styled.div`
   position: relative;
-`;
+`
 
 type ActionInsideInteractiveElementProps<K extends string> = ComponentProps<
   typeof Container
 > & {
-  render: (params: RenderParams<K>) => ReactNode;
+  render: (params: RenderParams<K>) => ReactNode
   actions: Record<
     K,
     {
-      placerStyles: CSSProperties;
-      node: ReactNode;
+      placerStyles: CSSProperties
+      node: ReactNode
     }
-  >;
-};
+  >
+}
 
 const ActionPlacer = styled.div`
   position: absolute;
-`;
+`
 
 export const ActionsInsideInteractiveElement = forwardRef(
   function ActionInsideInteractiveElement<K extends string>(
@@ -52,26 +52,26 @@ export const ActionsInsideInteractiveElement = forwardRef(
         makeRecord(getRecordKeys(actions), () => ({ width: 0, height: 0 }))
       ),
       sizes => {
-        let result = sizes;
+        let result = sizes
 
-        const keys = getRecordKeys(actions);
+        const keys = getRecordKeys(actions)
 
         keys.forEach(key => {
           if (!sizes[key]) {
             result = {
               ...result,
               [key]: { width: 0, height: 0 },
-            };
+            }
           }
-        });
+        })
 
         if (getRecordSize(result) !== keys.length) {
-          return pick(result, keys);
+          return pick(result, keys)
         }
 
-        return result;
+        return result
       }
-    );
+    )
 
     return (
       <Container ref={ref} {...rest}>
@@ -82,7 +82,7 @@ export const ActionsInsideInteractiveElement = forwardRef(
           })),
         })}
         {toEntries(actions).map(({ key, value }) => {
-          const { node, placerStyles } = value;
+          const { node, placerStyles } = value
           return (
             <ElementSizeAware
               key={key}
@@ -91,7 +91,7 @@ export const ActionsInsideInteractiveElement = forwardRef(
                   setSizes(sizes => ({
                     ...sizes,
                     [key]: size,
-                  }));
+                  }))
                 }
               }}
               render={({ setElement, size }) => {
@@ -102,12 +102,12 @@ export const ActionsInsideInteractiveElement = forwardRef(
                   >
                     {node}
                   </ActionPlacer>
-                );
+                )
               }}
             />
-          );
+          )
         })}
       </Container>
-    );
+    )
   }
-);
+)

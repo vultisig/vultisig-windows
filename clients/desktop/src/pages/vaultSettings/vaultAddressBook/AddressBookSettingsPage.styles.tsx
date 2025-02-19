@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { PageHeader } from '../../../ui/page/PageHeader';
+import { PageHeader } from '../../../ui/page/PageHeader'
 
 export const AddressBookPageHeader = styled(PageHeader)`
   padding-inline: 0px;
@@ -8,4 +8,4 @@ export const AddressBookPageHeader = styled(PageHeader)`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`;
+`

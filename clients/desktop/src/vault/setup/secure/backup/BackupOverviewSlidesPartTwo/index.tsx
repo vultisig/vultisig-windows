@@ -1,33 +1,33 @@
-import { ComponentProps, FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { ComponentProps, FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { IconButton } from '../../../../../lib/ui/buttons/IconButton';
-import { MultistepProgressIndicator } from '../../../../../lib/ui/flow/MultistepProgressIndicator';
-import { ChevronRightIcon } from '../../../../../lib/ui/icons/ChevronRightIcon';
-import { VStack } from '../../../../../lib/ui/layout/Stack';
-import { Text } from '../../../../../lib/ui/text';
-import { getColor } from '../../../../../lib/ui/theme/getters';
-import { PageContent } from '../../../../../ui/page/PageContent';
-import { AnimationDescription } from './AnimationDescription';
-import { useBackupOverviewStepsAnimationsPartTwo } from './hooks/useBackupOverviewStepsAnimationsPartTwo';
-import { RiveWrapper } from './VaultOverviewSlides.styles';
+import { IconButton } from '../../../../../lib/ui/buttons/IconButton'
+import { MultistepProgressIndicator } from '../../../../../lib/ui/flow/MultistepProgressIndicator'
+import { ChevronRightIcon } from '../../../../../lib/ui/icons/ChevronRightIcon'
+import { VStack } from '../../../../../lib/ui/layout/Stack'
+import { Text } from '../../../../../lib/ui/text'
+import { getColor } from '../../../../../lib/ui/theme/getters'
+import { PageContent } from '../../../../../ui/page/PageContent'
+import { AnimationDescription } from './AnimationDescription'
+import { useBackupOverviewStepsAnimationsPartTwo } from './hooks/useBackupOverviewStepsAnimationsPartTwo'
+import { RiveWrapper } from './VaultOverviewSlides.styles'
 
 export type SharedOnboardingScreensProps = {
-  animationComponent: (props: ComponentProps<'canvas'>) => JSX.Element;
-  onNextAnimation: () => void;
-};
+  animationComponent: (props: ComponentProps<'canvas'>) => JSX.Element
+  onNextAnimation: () => void
+}
 
 type OnboardingStepsProps = {
-  onCompleted: () => void;
-};
+  onCompleted: () => void
+}
 
 export const BackupOverviewSlidesPartTwo: FC<OnboardingStepsProps> = ({
   onCompleted,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const { animationComponent: AnimationComponent, isLoading } =
-    useBackupOverviewStepsAnimationsPartTwo();
+    useBackupOverviewStepsAnimationsPartTwo()
 
   return (
     <PageContent>
@@ -57,8 +57,8 @@ export const BackupOverviewSlidesPartTwo: FC<OnboardingStepsProps> = ({
         </VStack>
       </VStack>
     </PageContent>
-  );
-};
+  )
+}
 
 const NextAnimationButton = styled(IconButton)`
   flex-shrink: 0;
@@ -75,9 +75,9 @@ const NextAnimationButton = styled(IconButton)`
   & svg {
     stroke: ${getColor('textDark')};
   }
-`;
+`
 
 const ProgressWrapper = styled(VStack)`
   margin-inline: auto;
   margin-top: 48px;
-`;
+`

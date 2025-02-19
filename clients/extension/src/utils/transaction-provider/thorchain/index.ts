@@ -18,7 +18,6 @@ import {
   Coin,
 } from "@core/communication/vultisig/keysign/v1/coin_pb";
 
-import { ChainKey } from "../../constants";
 import type {
   ITransaction,
   SignatureProps,
@@ -32,9 +31,10 @@ import BaseTransactionProvider from "../../transaction-provider/base";
 
 import SigningMode = TW.Cosmos.Proto.SigningMode;
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
+import { Chain } from "@core/chain/Chain";
 export default class ThorchainTransactionProvider extends BaseTransactionProvider {
   constructor(
-    chainKey: ChainKey,
+    chainKey: Chain,
     chainRef: { [chainKey: string]: CoinType },
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore,
@@ -210,7 +210,7 @@ export default class ThorchainTransactionProvider extends BaseTransactionProvide
     return new Promise((resolve, reject) => {
       if (inputData && vault) {
         const pubkeyThorchain = vault.chains.find(
-          (chain) => chain.name === ChainKey.THORCHAIN,
+          (chain) => chain.name === Chain.THORChain,
         )?.derivationKey;
 
         if (pubkeyThorchain) {

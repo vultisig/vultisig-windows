@@ -1,24 +1,24 @@
-import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime';
-import useVersionCheck from '../../../lib/hooks/useVersionCheck';
-import { Text } from '../../../lib/ui/text';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { ProductLogo } from '../../../ui/logo/ProductLogo';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageSlice } from '../../../ui/page/PageSlice';
-import { VULTISIG_GITHUB_RELEASES_LINK } from '../constants';
+import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime'
+import useVersionCheck from '../../../lib/hooks/useVersionCheck'
+import { Text } from '../../../lib/ui/text'
+import { ProductLogo } from '../../../ui/logo/ProductLogo'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageSlice } from '../../../ui/page/PageSlice'
+import { VULTISIG_GITHUB_RELEASES_LINK } from '../constants'
 import {
   CenteredText,
   Content,
   DownloadButton,
   FixedWrapper,
-} from './VaultCheckUpdatePage.styles';
+} from './VaultCheckUpdatePage.styles'
 
 const VaultCheckUpdatePage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const {
     localVersion,
     latestVersion,
@@ -26,20 +26,20 @@ const VaultCheckUpdatePage = () => {
     isLocalVersionValid,
     remoteError,
     isLoading,
-  } = useVersionCheck();
+  } = useVersionCheck()
 
-  let content: ReactNode;
+  let content: ReactNode
 
   if (!isLocalVersionValid) {
-    content = t('vaultCheckUpdatePage.errorLoadingLocalVersion');
+    content = t('vaultCheckUpdatePage.errorLoadingLocalVersion')
   } else if (remoteError) {
     content = t('vaultCheckUpdatePage.errorFetchingLatestVersion', {
       error: extractErrorMsg(remoteError),
-    });
+    })
   } else if (isLoading) {
-    content = t('vaultCheckUpdatePage.fetchingLatestVersion');
+    content = t('vaultCheckUpdatePage.fetchingLatestVersion')
   } else if (!updateAvailable) {
-    content = t('vaultCheckUpdatePage.applicationUpToDate');
+    content = t('vaultCheckUpdatePage.applicationUpToDate')
   } else if (updateAvailable) {
     content = (
       <CenteredText>
@@ -50,7 +50,7 @@ const VaultCheckUpdatePage = () => {
           {t('vaultCheckUpdatePage.downloadButton')}
         </DownloadButton>
       </CenteredText>
-    );
+    )
   }
 
   return (
@@ -74,7 +74,7 @@ const VaultCheckUpdatePage = () => {
         </Content>
       </FixedWrapper>
     </PageSlice>
-  );
-};
+  )
+}
 
-export default VaultCheckUpdatePage;
+export default VaultCheckUpdatePage

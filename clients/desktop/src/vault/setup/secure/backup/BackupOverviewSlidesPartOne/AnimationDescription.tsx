@@ -1,20 +1,20 @@
-import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { AnimatedVisibility } from '../../../../../lib/ui/layout/AnimatedVisibility';
-import { GradientText, Text } from '../../../../../lib/ui/text';
-import { useNewVault } from '../state/NewVaultProvider';
-import { BACKUP_VAULT_ANIMATIONS } from './hooks/useBackupOverviewStepsAnimations';
+import { AnimatedVisibility } from '../../../../../lib/ui/layout/AnimatedVisibility'
+import { GradientText, Text } from '../../../../../lib/ui/text'
+import { useNewVault } from '../state/NewVaultProvider'
+import { BACKUP_VAULT_ANIMATIONS } from './hooks/useBackupOverviewStepsAnimations'
 
 type AnimationDescriptionProps = {
-  animation: (typeof BACKUP_VAULT_ANIMATIONS)[number];
-};
+  animation: (typeof BACKUP_VAULT_ANIMATIONS)[number]
+}
 export const AnimationDescription: FC<AnimationDescriptionProps> = ({
   animation,
 }) => {
-  const { t } = useTranslation();
-  const [vault] = useNewVault();
+  const { t } = useTranslation()
+  const [vault] = useNewVault()
 
   const stepToAnimationDescription = [
     () => (
@@ -39,7 +39,7 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
         </GradientText>
       </Text>
     ),
-  ];
+  ]
 
   return (
     <Wrapper>
@@ -47,17 +47,17 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
         <TextWrapper>{stepToAnimationDescription[animation - 1]()}</TextWrapper>
       </AnimatedVisibility>
     </Wrapper>
-  );
-};
+  )
+}
 
 const Wrapper = styled.div`
   min-height: 144px;
   max-width: 500px;
   align-self: center;
-`;
+`
 
 export const TextWrapper = styled.div`
   margin-inline: auto;
   max-width: 1200px;
   text-align: center;
-`;
+`

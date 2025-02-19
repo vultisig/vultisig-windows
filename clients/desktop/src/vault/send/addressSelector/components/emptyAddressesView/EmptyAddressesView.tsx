@@ -1,24 +1,24 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../../lib/ui/buttons/Button';
-import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
-import { AddressBookPageHeader } from '../../AddressSelector.styles';
+import { Button } from '../../../../../lib/ui/buttons/Button'
+import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle'
+import { AddressBookPageHeader } from '../../AddressSelector.styles'
 import {
   CenteredBox,
   Container,
   ResponsiveImage,
   ResponsiveText,
-} from './EmptyAddressView.styles';
+} from './EmptyAddressView.styles'
 
 type EmptyAddressesViewProps = {
-  onOpenAddAddressView: () => void;
-};
+  onOpenAddAddressView: () => void
+}
 
 const EmptyAddressesView = ({
   onOpenAddAddressView,
 }: EmptyAddressesViewProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <>
@@ -46,7 +46,7 @@ const EmptyAddressesView = ({
         </Button>
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default EmptyAddressesView;
+export default EmptyAddressesView

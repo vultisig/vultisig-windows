@@ -1,39 +1,39 @@
-import { create } from '@bufbuild/protobuf';
-import { toChainAmount } from '@core/chain/amount/toChainAmount';
-import { toCommCoin } from '@core/communication/utils/commCoin';
-import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
+import { create } from '@bufbuild/protobuf'
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
+import { toCommCoin } from '@core/communication/utils/commCoin'
+import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 
-import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload';
-import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields';
-import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey';
-import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery';
-import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
-import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery';
-import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault';
-import { useFromAmount } from '../state/fromAmount';
-import { useFromCoin } from '../state/fromCoin';
-import { useToCoin } from '../state/toCoin';
-import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery';
-import { useSwapQuoteQuery } from './useSwapQuoteQuery';
+import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload'
+import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields'
+import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
+import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery'
+import { useAssertWalletCore } from '../../../providers/WalletCoreProvider'
+import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
+import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault'
+import { useFromAmount } from '../state/fromAmount'
+import { useFromCoin } from '../state/fromCoin'
+import { useToCoin } from '../state/toCoin'
+import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery'
+import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
 export const useSwapKeysignPayloadQuery = () => {
-  const [fromCoinKey] = useFromCoin();
-  const fromCoin = useCurrentVaultCoin(fromCoinKey);
+  const [fromCoinKey] = useFromCoin()
+  const fromCoin = useCurrentVaultCoin(fromCoinKey)
 
-  const [toCoinKey] = useToCoin();
-  const toCoin = useCurrentVaultCoin(toCoinKey);
+  const [toCoinKey] = useToCoin()
+  const toCoin = useCurrentVaultCoin(toCoinKey)
 
-  const [fromAmount] = useFromAmount();
+  const [fromAmount] = useFromAmount()
 
-  const swapQuoteQuery = useSwapQuoteQuery();
+  const swapQuoteQuery = useSwapQuoteQuery()
 
-  const vault = useCurrentVault();
+  const vault = useCurrentVault()
 
-  const chainSpecificQuery = useSwapChainSpecificQuery();
+  const chainSpecificQuery = useSwapChainSpecificQuery()
 
-  const publicKeyQuery = useVaultPublicKeyQuery(fromCoin.chain);
+  const publicKeyQuery = useVaultPublicKeyQuery(fromCoin.chain)
 
-  const walletCore = useAssertWalletCore();
+  const walletCore = useAssertWalletCore()
 
   return useStateDependentQuery({
     state: {
@@ -45,13 +45,13 @@ export const useSwapKeysignPayloadQuery = () => {
     getQuery: ({ swapQuote, chainSpecific, fromAmount, publicKey }) => ({
       queryKey: ['swapKeysignPayload'],
       queryFn: async () => {
-        const amount = toChainAmount(fromAmount, fromCoin.decimals);
+        const amount = toChainAmount(fromAmount, fromCoin.decimals)
         const swapSpecificFields = getSwapKeysignPayloadFields({
           amount,
           quote: swapQuote,
           fromCoin,
           toCoin,
-        });
+        })
 
         const result = create(KeysignPayloadSchema, {
           coin: toCommCoin({
@@ -66,10 +66,10 @@ export const useSwapKeysignPayloadQuery = () => {
           vaultLocalPartyId: vault.local_party_id,
           vaultPublicKeyEcdsa: vault.public_key_ecdsa,
           ...swapSpecificFields,
-        });
+        })
 
-        return processKeysignPayload(result);
+        return processKeysignPayload(result)
       },
     }),
-  });
-};
+  })
+}

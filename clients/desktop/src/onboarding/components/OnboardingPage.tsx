@@ -1,21 +1,21 @@
-import { ReactNode, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { ReactNode, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { Button } from '../../lib/ui/buttons/Button';
-import { MultistepProgressIndicator } from '../../lib/ui/flow/MultistepProgressIndicator';
-import { ContainImage } from '../../lib/ui/images/ContainImage';
-import { SafeImage } from '../../lib/ui/images/SafeImage';
-import { HStack, VStack, vStack } from '../../lib/ui/layout/Stack';
-import { Text, text } from '../../lib/ui/text';
-import { ProductLogo } from '../../ui/logo/ProductLogo';
-import { PageContent } from '../../ui/page/PageContent';
-import { useHasFinishedOnboarding } from '../hooks/useHasFinishedOnboarding';
+import { Button } from '../../lib/ui/buttons/Button'
+import { MultistepProgressIndicator } from '../../lib/ui/flow/MultistepProgressIndicator'
+import { ContainImage } from '../../lib/ui/images/ContainImage'
+import { SafeImage } from '../../lib/ui/images/SafeImage'
+import { HStack, VStack, vStack } from '../../lib/ui/layout/Stack'
+import { Text, text } from '../../lib/ui/text'
+import { ProductLogo } from '../../ui/logo/ProductLogo'
+import { PageContent } from '../../ui/page/PageContent'
+import { useHasFinishedOnboarding } from '../hooks/useHasFinishedOnboarding'
 
 type OnboardingStep = {
-  artUrl: string;
-  content: ReactNode;
-};
+  artUrl: string
+  content: ReactNode
+}
 
 const Container = styled.div`
   ${vStack({
@@ -26,7 +26,7 @@ const Container = styled.div`
   })}
 
   max-width: 320px;
-`;
+`
 
 const Content = styled.div`
   ${text({
@@ -35,22 +35,22 @@ const Content = styled.div`
     centerHorizontally: true,
   })}
   min-height: 100px;
-`;
+`
 
 const ArtContainer = styled.div`
   height: 260px;
-`;
+`
 
 export const OnboardingPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const [stepIndex, setStepIndex] = useState(0);
+  const [stepIndex, setStepIndex] = useState(0)
 
-  const [, hasFinishedOnboarding] = useHasFinishedOnboarding();
+  const [, hasFinishedOnboarding] = useHasFinishedOnboarding()
 
   const completeOnboarding = () => {
-    hasFinishedOnboarding(true);
-  };
+    hasFinishedOnboarding(true)
+  }
 
   const steps: OnboardingStep[] = [
     {
@@ -69,11 +69,11 @@ export const OnboardingPage = () => {
       artUrl: 'assets/images/Onboarding4.svg',
       content: t('onboarding_view4_description'),
     },
-  ];
+  ]
 
-  const { artUrl, content } = steps[stepIndex];
+  const { artUrl, content } = steps[stepIndex]
 
-  const isLastScreen = stepIndex === steps.length - 1;
+  const isLastScreen = stepIndex === steps.length - 1
 
   return (
     <PageContent alignItems="center">
@@ -97,9 +97,9 @@ export const OnboardingPage = () => {
             <Button
               onClick={() => {
                 if (isLastScreen) {
-                  completeOnboarding();
+                  completeOnboarding()
                 } else {
-                  setStepIndex(prev => prev + 1);
+                  setStepIndex(prev => prev + 1)
                 }
               }}
             >
@@ -112,5 +112,5 @@ export const OnboardingPage = () => {
         </VStack>
       </Container>
     </PageContent>
-  );
-};
+  )
+}

@@ -1,16 +1,16 @@
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { borderRadius } from '../../lib/ui/css/borderRadius';
-import { centerContent } from '../../lib/ui/css/centerContent';
-import { horizontalPadding } from '../../lib/ui/css/horizontalPadding';
-import { HStack } from '../../lib/ui/layout/Stack';
-import { Text, text } from '../../lib/ui/text';
-import { getColor } from '../../lib/ui/theme/getters';
+import { borderRadius } from '../../lib/ui/css/borderRadius'
+import { centerContent } from '../../lib/ui/css/centerContent'
+import { horizontalPadding } from '../../lib/ui/css/horizontalPadding'
+import { HStack } from '../../lib/ui/layout/Stack'
+import { Text, text } from '../../lib/ui/text'
+import { getColor } from '../../lib/ui/theme/getters'
 import {
   useCurrentVault,
   useVaultServerStatus,
-} from '../../vault/state/currentVault';
+} from '../../vault/state/currentVault'
 
 const Tag = styled.div`
   height: 22px;
@@ -24,15 +24,15 @@ const Tag = styled.div`
     size: 14,
     nowrap: true,
   })}
-`;
+`
 
 export const VaultSigningInfo = () => {
-  const { hasServer, isBackup } = useVaultServerStatus();
-  const { signers, local_party_id } = useCurrentVault();
+  const { hasServer, isBackup } = useVaultServerStatus()
+  const { signers, local_party_id } = useCurrentVault()
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const index = signers.indexOf(local_party_id);
+  const index = signers.indexOf(local_party_id)
 
   return (
     <HStack alignItems="center" gap={8}>
@@ -43,5 +43,5 @@ export const VaultSigningInfo = () => {
       )}
       {hasServer && !isBackup && <Tag>{t('fast_sign')}</Tag>}
     </HStack>
-  );
-};
+  )
+}

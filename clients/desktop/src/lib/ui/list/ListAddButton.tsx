@@ -1,11 +1,11 @@
-import { ComponentProps } from 'react';
-import styled from 'styled-components';
+import { ComponentProps } from 'react'
+import styled from 'styled-components'
 
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
-import { IconWrapper } from '../../../lib/ui/icons/IconWrapper';
-import { PlusIcon } from '../../../lib/ui/icons/PlusIcon';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { AsProp } from '../props';
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
+import { IconWrapper } from '../../../lib/ui/icons/IconWrapper'
+import { PlusIcon } from '../../../lib/ui/icons/PlusIcon'
+import { getColor } from '../../../lib/ui/theme/getters'
+import { AsProp } from '../props'
 
 const Container = styled(UnstyledButton)`
   gap: 16px;
@@ -15,11 +15,11 @@ const Container = styled(UnstyledButton)`
   font-weight: 700;
   font-size: 16px;
   color: ${getColor('primary')};
-`;
+`
 
 const IconContainer = styled(IconWrapper)`
   font-size: 20px;
-`;
+`
 
 export const ListAddButton = ({
   children,
@@ -32,5 +32,5 @@ export const ListAddButton = ({
       </IconContainer>
       {children}
     </Container>
-  );
-};
+  )
+}

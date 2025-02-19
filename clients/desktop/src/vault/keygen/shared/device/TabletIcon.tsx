@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { SVGProps } from 'react'
 
 export const TabletIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -30,4 +30,4 @@ export const TabletIcon = (props: SVGProps<SVGSVGElement>) => (
       fill="#162A48"
     />
   </svg>
-);
+)

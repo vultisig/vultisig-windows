@@ -1,21 +1,21 @@
-import { Chain } from '@core/chain/Chain';
-import { Coin } from '@core/chain/coin/Coin';
+import { Chain } from '@core/chain/Chain'
+import { Coin } from '@core/chain/coin/Coin'
 
 export type SolanaJupiterToken = {
-  address: string;
-  name: string;
-  symbol: string;
-  decimals: number;
-  logoURI?: string;
+  address: string
+  name: string
+  symbol: string
+  decimals: number
+  logoURI?: string
   extensions?: {
-    coingeckoId?: string;
-  };
-};
+    coingeckoId?: string
+  }
+}
 
 export type FromSolanaJupiterTokensInput = {
-  tokens: SolanaJupiterToken[];
-  chain: Chain;
-};
+  tokens: SolanaJupiterToken[]
+  chain: Chain
+}
 
 export const fromSolanaJupiterTokens = ({
   tokens,
@@ -30,5 +30,5 @@ export const fromSolanaJupiterTokens = ({
       logo: token.logoURI || '',
       ticker: token.symbol,
       priceProviderId: token.extensions?.coingeckoId || '',
-    }));
-};
+    }))
+}

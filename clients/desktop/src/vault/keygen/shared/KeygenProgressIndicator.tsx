@@ -1,24 +1,24 @@
-import { match } from '@lib/utils/match';
-import { useTranslation } from 'react-i18next';
+import { match } from '@lib/utils/match'
+import { useTranslation } from 'react-i18next'
 
-import RingProgress from '../../../components/ringProgress/RingProgress';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { ValueProp } from '../../../lib/ui/props';
-import { Text } from '../../../lib/ui/text';
-import { KeygenType } from '../KeygenType';
-import { useCurrentKeygenType } from '../state/currentKeygenType';
-import { KeygenStatus } from './MatchKeygenSessionStatus';
+import RingProgress from '../../../components/ringProgress/RingProgress'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { ValueProp } from '../../../lib/ui/props'
+import { Text } from '../../../lib/ui/text'
+import { KeygenType } from '../KeygenType'
+import { useCurrentKeygenType } from '../state/currentKeygenType'
+import { KeygenStatus } from './MatchKeygenSessionStatus'
 
 const keygenCompletion: Record<KeygenStatus, number> = {
   prepareVault: 25,
   ecdsa: 50,
   eddsa: 70,
-};
+}
 
 export const KeygenProgressIndicator = ({ value }: ValueProp<KeygenStatus>) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const keygenType = useCurrentKeygenType();
+  const keygenType = useCurrentKeygenType()
 
   const keygenStageText: Record<KeygenStatus, string | null> = {
     prepareVault: t('prepareVault'),
@@ -30,10 +30,10 @@ export const KeygenProgressIndicator = ({ value }: ValueProp<KeygenStatus>) => {
       [KeygenType.Keygen]: () => t('generating_eddsa_key'),
       [KeygenType.Reshare]: () => t('resharing_eddsa_key'),
     }),
-  };
+  }
 
-  const completion = keygenCompletion[value];
-  const text = keygenStageText[value];
+  const completion = keygenCompletion[value]
+  const text = keygenStageText[value]
 
   return (
     <VStack gap={12} alignItems="center">
@@ -44,5 +44,5 @@ export const KeygenProgressIndicator = ({ value }: ValueProp<KeygenStatus>) => {
         </Text>
       )}
     </VStack>
-  );
-};
+  )
+}

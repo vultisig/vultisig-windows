@@ -1,23 +1,23 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
-import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount';
-import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData';
-import { useCurrentVaultCoin } from '../../state/currentVault';
-import { useFromCoin } from '../state/fromCoin';
-import { useToCoin } from '../state/toCoin';
-import { SwapFees } from '../types/SwapFee';
-import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery';
-import { useSwapQuoteQuery } from './useSwapQuoteQuery';
+import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount'
+import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData'
+import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useFromCoin } from '../state/fromCoin'
+import { useToCoin } from '../state/toCoin'
+import { SwapFees } from '../types/SwapFee'
+import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery'
+import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
 export const useSwapFeesQuery = () => {
-  const swapQuoteQuery = useSwapQuoteQuery();
+  const swapQuoteQuery = useSwapQuoteQuery()
 
-  const [fromCoinKey] = useFromCoin();
-  const [toCoinKey] = useToCoin();
-  const toCoin = useCurrentVaultCoin(toCoinKey);
+  const [fromCoinKey] = useFromCoin()
+  const [toCoinKey] = useToCoin()
+  const toCoin = useCurrentVaultCoin(toCoinKey)
 
-  const chainSpecificQuery = useSwapChainSpecificQuery();
+  const chainSpecificQuery = useSwapChainSpecificQuery()
 
   return useTransformQueriesData(
     {
@@ -25,11 +25,11 @@ export const useSwapFeesQuery = () => {
       chainSpecific: chainSpecificQuery,
     },
     ({ swapQuote, chainSpecific }): SwapFees => {
-      const fromFeeCoin = chainFeeCoin[fromCoinKey.chain];
+      const fromFeeCoin = chainFeeCoin[fromCoinKey.chain]
 
       return matchRecordUnion(swapQuote, {
         native: ({ fees }) => {
-          const feeAmount = getFeeAmount(chainSpecific);
+          const feeAmount = getFeeAmount(chainSpecific)
 
           const result: SwapFees = {
             swap: {
@@ -43,9 +43,9 @@ export const useSwapFeesQuery = () => {
               decimals: fromFeeCoin.decimals,
               chainSpecific,
             },
-          };
+          }
 
-          return result;
+          return result
         },
         general: ({ tx: { gasPrice, gas } }) => {
           return {
@@ -55,9 +55,9 @@ export const useSwapFeesQuery = () => {
               amount: BigInt(gasPrice) * BigInt(gas),
               decimals: fromFeeCoin.decimals,
             },
-          };
+          }
         },
-      });
+      })
     }
-  );
-};
+  )
+}

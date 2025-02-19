@@ -1,26 +1,26 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { PageSlice } from '../../../ui/page/PageSlice';
-import { getVaultTypeText } from '../../../utils/util';
-import { useCurrentVault } from '../../../vault/state/currentVault';
-import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers';
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { PageSlice } from '../../../ui/page/PageSlice'
+import { getVaultTypeText } from '../../../utils/util'
+import { useCurrentVault } from '../../../vault/state/currentVault'
+import { getVaultParticipantInfoFormattedForUI } from '../../../vault/utils/helpers'
 import {
   AutoCenteredText,
   Container,
   ListItemPanel,
-} from './VaultDetailsPage.styles';
+} from './VaultDetailsPage.styles'
 
 const VaultDetailsPage = () => {
-  const { t } = useTranslation();
-  const currentVault = useCurrentVault();
+  const { t } = useTranslation()
+  const currentVault = useCurrentVault()
 
   if (!currentVault) {
-    return <></>;
+    return <></>
   }
 
   const {
@@ -30,14 +30,14 @@ const VaultDetailsPage = () => {
     signers,
     local_party_id,
     lib_type,
-  } = currentVault;
+  } = currentVault
   const { localPartyIndex, totalSigners } =
     getVaultParticipantInfoFormattedForUI({
       signers,
       local_party_id,
-    });
+    })
 
-  const vaultTypeText = getVaultTypeText(signers.length, t);
+  const vaultTypeText = getVaultTypeText(signers.length, t)
 
   return (
     <Container flexGrow gap={16}>
@@ -105,7 +105,7 @@ const VaultDetailsPage = () => {
         ))}
       </PageSlice>
     </Container>
-  );
-};
+  )
+}
 
-export default VaultDetailsPage;
+export default VaultDetailsPage

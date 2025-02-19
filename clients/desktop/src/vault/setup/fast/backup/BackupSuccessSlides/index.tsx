@@ -1,33 +1,33 @@
-import { useRive } from '@rive-app/react-canvas';
-import { FC, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useRive } from '@rive-app/react-canvas'
+import { FC, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { HStack, VStack } from '../../../../../lib/ui/layout/Stack';
-import { Spinner } from '../../../../../lib/ui/loaders/Spinner';
-import { GradientText, Text } from '../../../../../lib/ui/text';
-import { PageContent } from '../../../../../ui/page/PageContent';
+import { HStack, VStack } from '../../../../../lib/ui/layout/Stack'
+import { Spinner } from '../../../../../lib/ui/loaders/Spinner'
+import { GradientText, Text } from '../../../../../lib/ui/text'
+import { PageContent } from '../../../../../ui/page/PageContent'
 
-const BACKUP_SUCCESS_WAIT_TIME_IN_MS = 6000;
+const BACKUP_SUCCESS_WAIT_TIME_IN_MS = 6000
 type BackupSuccessSlideProps = {
-  onCompleted: () => void;
-};
+  onCompleted: () => void
+}
 
 export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
   onCompleted,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   // @tony: animation file is incomplete so currently we're only showing 1 animation
   const { RiveComponent } = useRive({
     src: '/assets/animations/fast-vault-backup/fast-vault-backup-screen-part-3/fastvault-backup-succes.riv',
     stateMachines: 'State Machine 1',
     autoplay: true,
-  });
+  })
 
   useEffect(() => {
-    const timeoutId = setTimeout(onCompleted, BACKUP_SUCCESS_WAIT_TIME_IN_MS);
-    return () => clearTimeout(timeoutId);
-  }, [onCompleted]);
+    const timeoutId = setTimeout(onCompleted, BACKUP_SUCCESS_WAIT_TIME_IN_MS)
+    return () => clearTimeout(timeoutId)
+  }, [onCompleted])
 
   return (
     <Wrapper>
@@ -44,16 +44,16 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
         </VStack>
       </VStack>
     </Wrapper>
-  );
-};
+  )
+}
 
 const RiveWrapper = styled(HStack)`
   position: relative;
   flex: 1;
-`;
+`
 
 const Wrapper = styled(PageContent)`
   margin-top: 48px;
   margin-inline: auto;
   max-width: 800px;
-`;
+`

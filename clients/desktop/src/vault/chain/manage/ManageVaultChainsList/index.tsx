@@ -1,17 +1,17 @@
-import { useMemo } from 'react';
+import { Chain } from '@core/chain/Chain'
+import { useMemo } from 'react'
 
-import { useCurrentSearch } from '../../../../lib/ui/search/CurrentSearchProvider';
-import { Chain } from '@core/chain/Chain';
-import { ManageVaultChain } from '../ManageVaultChain';
+import { useCurrentSearch } from '../../../../lib/ui/search/CurrentSearchProvider'
+import { ManageVaultChain } from '../ManageVaultChain'
 
 const ManageVaultChainsList = () => {
-  const [searchQuery] = useCurrentSearch();
+  const [searchQuery] = useCurrentSearch()
 
   const filteredChains = useMemo(() => {
     return Object.values(Chain).filter(chain =>
       chain.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery]);
+    )
+  }, [searchQuery])
 
   return (
     <>
@@ -19,7 +19,7 @@ const ManageVaultChainsList = () => {
         <ManageVaultChain key={chain} value={chain} />
       ))}
     </>
-  );
-};
+  )
+}
 
-export default ManageVaultChainsList;
+export default ManageVaultChainsList

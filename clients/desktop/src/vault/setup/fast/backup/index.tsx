@@ -1,42 +1,42 @@
-import { useMutation } from '@tanstack/react-query';
-import { FC, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useMutation } from '@tanstack/react-query'
+import { FC, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { OTPInput } from '../../../../lib/ui/inputs/OTPInput';
-import { HStack, VStack } from '../../../../lib/ui/layout/Stack';
-import { Spinner } from '../../../../lib/ui/loaders/Spinner';
-import { Text } from '../../../../lib/ui/text';
-import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader';
-import { PageContent } from '../../../../ui/page/PageContent';
-import { verifyVaultEmailCode } from '../../../fast/api/verifyVaultEmailCode';
+import { OTPInput } from '../../../../lib/ui/inputs/OTPInput'
+import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
+import { Spinner } from '../../../../lib/ui/loaders/Spinner'
+import { Text } from '../../../../lib/ui/text'
+import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
+import { PageContent } from '../../../../ui/page/PageContent'
+import { verifyVaultEmailCode } from '../../../fast/api/verifyVaultEmailCode'
 
-const ON_COMPLETE_DELAY = 1000;
+const ON_COMPLETE_DELAY = 1000
 
 type EmailConfirmationProps = {
-  vaultId: string;
-  onCompleted: () => void;
-};
+  vaultId: string
+  onCompleted: () => void
+}
 
 export const EmailConfirmation: FC<EmailConfirmationProps> = ({
   vaultId,
   onCompleted,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const { isPending, mutate, error, isSuccess } = useMutation({
     mutationFn: (code: string) =>
       verifyVaultEmailCode({
         vaultId,
         code,
       }),
-  });
+  })
 
   useEffect(() => {
     if (isSuccess) {
-      const timeoutId = setTimeout(() => onCompleted(), ON_COMPLETE_DELAY);
-      return () => clearTimeout(timeoutId);
+      const timeoutId = setTimeout(() => onCompleted(), ON_COMPLETE_DELAY)
+      return () => clearTimeout(timeoutId)
     }
-  }, [isSuccess, onCompleted]);
+  }, [isSuccess, onCompleted])
 
   return (
     <>
@@ -74,11 +74,11 @@ export const EmailConfirmation: FC<EmailConfirmationProps> = ({
         </VStack>
       </PageContent>
     </>
-  );
-};
+  )
+}
 
 const StyledAnimatedLoader = styled(Spinner)`
   width: fit-content;
   position: relative;
   font-size: 20px;
-`;
+`

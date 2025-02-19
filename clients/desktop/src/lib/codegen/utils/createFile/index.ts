@@ -1,10 +1,10 @@
-import fs from 'fs';
+import fs from 'fs'
 
 interface CreateFileParams {
-  directory: string;
-  fileName: string;
-  content: string;
-  extension: string;
+  directory: string
+  fileName: string
+  content: string
+  extension: string
 }
 
 export const createFile = ({
@@ -13,9 +13,9 @@ export const createFile = ({
   content,
   extension,
 }: CreateFileParams) => {
-  fs.mkdirSync(directory, { recursive: true });
+  fs.mkdirSync(directory, { recursive: true })
 
-  const tsFilePath = `${directory}/${fileName}.${extension}`;
+  const tsFilePath = `${directory}/${fileName}.${extension}`
 
-  fs.writeFileSync(tsFilePath, content);
-};
+  fs.writeFileSync(tsFilePath, content)
+}

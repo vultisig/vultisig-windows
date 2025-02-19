@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const vaultBackupSchema = z
   .object({
@@ -11,6 +11,6 @@ export const vaultBackupSchema = z
   .refine(data => data.password === data.verifiedPassword, {
     message: 'vault_backup_page_verified_password_error',
     path: ['verifiedPassword'],
-  });
+  })
 
-export type VaultBackupSchema = z.infer<typeof vaultBackupSchema>;
+export type VaultBackupSchema = z.infer<typeof vaultBackupSchema>

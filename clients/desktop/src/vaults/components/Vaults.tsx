@@ -1,12 +1,12 @@
-import { NonEmptyOnly } from '../../lib/ui/base/NonEmptyOnly';
-import { useFolderlessVaults } from '../../vault/queries/useVaultsQuery';
-import { CurrentVaultProvider } from '../../vault/state/currentVault';
-import { getStorageVaultId } from '../../vault/utils/storageVault';
-import { VaultListItem } from './VaultListItem';
-import { VaultsContainer } from './VaultsContainer';
+import { NonEmptyOnly } from '../../lib/ui/base/NonEmptyOnly'
+import { useFolderlessVaults } from '../../vault/queries/useVaultsQuery'
+import { CurrentVaultProvider } from '../../vault/state/currentVault'
+import { getStorageVaultId } from '../../vault/utils/storageVault'
+import { VaultListItem } from './VaultListItem'
+import { VaultsContainer } from './VaultsContainer'
 
 export const Vaults = () => {
-  const vaults = useFolderlessVaults();
+  const vaults = useFolderlessVaults()
 
   return (
     <NonEmptyOnly
@@ -21,5 +21,5 @@ export const Vaults = () => {
         </VaultsContainer>
       )}
     />
-  );
-};
+  )
+}

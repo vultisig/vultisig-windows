@@ -1,14 +1,14 @@
-import { Button } from '../buttons/Button';
-import { UniformColumnGrid } from '../css/uniformColumnGrid';
-import { UiProps } from '../props';
+import { Button } from '../buttons/Button'
+import { UniformColumnGrid } from '../css/uniformColumnGrid'
+import { UiProps } from '../props'
 
 type RadioInputProps<T extends string> = UiProps & {
-  value: T | null;
-  onChange: (value: T) => void;
-  options: readonly T[];
-  renderOption: (option: T) => React.ReactNode;
-  minOptionHeight?: number;
-};
+  value: T | null
+  onChange: (value: T) => void
+  options: readonly T[]
+  renderOption: (option: T) => React.ReactNode
+  minOptionHeight?: number
+}
 
 export const RadioInput = <T extends string>({
   value,
@@ -20,7 +20,7 @@ export const RadioInput = <T extends string>({
   return (
     <UniformColumnGrid gap={8} {...rest}>
       {options.map(option => {
-        const isActive = option === value;
+        const isActive = option === value
 
         return (
           <Button
@@ -30,8 +30,8 @@ export const RadioInput = <T extends string>({
           >
             {renderOption(option)}
           </Button>
-        );
+        )
       })}
     </UniformColumnGrid>
-  );
-};
+  )
+}

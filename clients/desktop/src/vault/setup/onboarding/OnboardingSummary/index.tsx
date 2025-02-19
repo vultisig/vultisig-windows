@@ -1,25 +1,25 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../lib/ui/buttons/Button';
-import { useBoolean } from '../../../../lib/ui/hooks/useBoolean';
-import { Checkbox } from '../../../../lib/ui/inputs/checkbox/Checkbox';
-import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility';
-import { HStack, VStack } from '../../../../lib/ui/layout/Stack';
-import { Text } from '../../../../lib/ui/text';
-import { useHasFinishedOnboarding } from '../../../../onboarding/hooks/useHasFinishedOnboarding';
-import { SUMMARY_ITEMS } from './constants';
+import { Button } from '../../../../lib/ui/buttons/Button'
+import { useBoolean } from '../../../../lib/ui/hooks/useBoolean'
+import { Checkbox } from '../../../../lib/ui/inputs/checkbox/Checkbox'
+import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility'
+import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
+import { Text } from '../../../../lib/ui/text'
+import { useHasFinishedOnboarding } from '../../../../onboarding/hooks/useHasFinishedOnboarding'
+import { SUMMARY_ITEMS } from './constants'
 import {
   ContentWrapper,
   IconWrapper,
   PillWrapper,
   SummaryListItem,
   Wrapper,
-} from './OnboardingSummary.styles';
+} from './OnboardingSummary.styles'
 
 export const OnboardingSummary = () => {
-  const { t } = useTranslation();
-  const [, setHasFinishedOnboarding] = useHasFinishedOnboarding();
-  const [isChecked, { toggle }] = useBoolean(false);
+  const { t } = useTranslation()
+  const [, setHasFinishedOnboarding] = useHasFinishedOnboarding()
+  const [isChecked, { toggle }] = useBoolean(false)
 
   return (
     <AnimatedVisibility
@@ -72,5 +72,5 @@ export const OnboardingSummary = () => {
         </VStack>
       </Wrapper>
     </AnimatedVisibility>
-  );
-};
+  )
+}

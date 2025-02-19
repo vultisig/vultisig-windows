@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 
 interface RingProgressProps {
-  size: number;
-  strokeWidth: number;
-  progress: number; // percentage (0-100)
+  size: number
+  strokeWidth: number
+  progress: number // percentage (0-100)
 }
 
 const RingProgress: React.FC<RingProgressProps> = ({
@@ -11,9 +11,9 @@ const RingProgress: React.FC<RingProgressProps> = ({
   strokeWidth,
   progress,
 }) => {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (progress / 100) * circumference;
+  const radius = (size - strokeWidth) / 2
+  const circumference = 2 * Math.PI * radius
+  const offset = circumference - (progress / 100) * circumference
 
   return (
     <svg width={size} height={size} className="rotate-[-90deg]">
@@ -44,7 +44,7 @@ const RingProgress: React.FC<RingProgressProps> = ({
         </linearGradient>
       </defs>
     </svg>
-  );
-};
+  )
+}
 
-export default RingProgress;
+export default RingProgress

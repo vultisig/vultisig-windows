@@ -20,11 +20,12 @@ import {
   KeysignPayload,
 } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
 
-import { ChainKey, Currency, rpcUrl } from "../../constants";
+import { Currency, rpcUrl } from "../../constants";
 import { bigintToByteArray, checkERC20Function } from "../../functions";
 import { ITransaction, SignedTransaction, VaultProps } from "../../interfaces";
 import BaseTransactionProvider from "../../transaction-provider/base";
 import api from "../../api";
+import { Chain } from "@core/chain/Chain";
 
 interface ChainRef {
   [chainKey: string]: CoinType;
@@ -38,7 +39,7 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
   private provider: JsonRpcProvider;
 
   constructor(
-    chainKey: ChainKey,
+    chainKey: Chain,
     chainRef: ChainRef,
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore,
