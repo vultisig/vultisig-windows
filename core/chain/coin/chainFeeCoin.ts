@@ -127,7 +127,7 @@ const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
     logo: 'ethereum',
     decimals: 18,
     priceProviderId: 'ethereum',
-    cmcId: 3890,
+    cmcId: 1027,
   },
   [Chain.CronosChain]: {
     ticker: 'CRO',
@@ -141,7 +141,7 @@ const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
     logo: 'ethereum',
     decimals: 18,
     priceProviderId: 'ethereum',
-    cmcId: 3635,
+    cmcId: 1027,
   },
   [Chain.Dydx]: {
     ticker: 'DYDX',
