@@ -211,14 +211,16 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
   }): Promise<{ txHash: string; raw: any }> => {
     return new Promise((resolve, reject) => {
       const coinType = this.chainRef[this.chainKey]
-      const allSignatures = this.walletCore.DataVector.create()
-      const publicKeys = this.walletCore.DataVector.create()
+      let allSignatures: any = null
+      let publicKeys: any = null
       const pubkeyUTXO = vault.chains.find(
         chain => chain.name === this.chainKey
       )!.derivationKey!
       const publicKeyData = Buffer.from(pubkeyUTXO, 'hex')
       const modifiedSig = this.getSignature(signature)
       try {
+        allSignatures = this.walletCore.DataVector.create()
+        publicKeys = this.walletCore.DataVector.create()
         allSignatures.add(modifiedSig)
         publicKeys.add(publicKeyData)
         const compileWithSignatures =
@@ -246,6 +248,9 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
       } catch (err) {
         console.log(err)
         reject(err)
+      } finally {
+        if (allSignatures) allSignatures.delete()
+        if (publicKeys) publicKeys.delete()
       }
     })
   }
