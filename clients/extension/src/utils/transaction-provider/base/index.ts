@@ -17,6 +17,7 @@ import {
 } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
 import { CustomMessagePayload } from "@core/communication/vultisig/keysign/v1/custom_message_payload_pb";
 import { Chain } from "@core/chain/Chain";
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 interface ChainRef {
   [chainKey: string]: CoinType;
@@ -116,7 +117,21 @@ export default abstract class BaseTransactionProvider {
           message: transaction.customMessage!.message,
         } as CustomMessagePayload;
       } else {
-        messsage.keysignPayload = this.keysignPayload;
+        const priceProviderId =
+          chainFeeCoin[this.keysignPayload?.coin?.chain as Chain]
+            ?.priceProviderId
+
+        if (priceProviderId) {
+          messsage.keysignPayload = {
+            ...this.keysignPayload,
+            coin: {
+              ...this.keysignPayload?.coin,
+              priceProviderId,
+            } as KeysignPayload['coin'],
+          } as KeysignPayload
+        } else {
+          messsage.keysignPayload = this.keysignPayload
+        }
       }
 
       const binary = toBinary(KeysignMessageSchema, messsage);
