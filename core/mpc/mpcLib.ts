@@ -1,4 +1,4 @@
-export const mpcLibs = ['GG20', 'DKLS']
+export const mpcLibs = ['GG20', 'DKLS'] as const
 
 export type MpcLib = (typeof mpcLibs)[number]
 
