@@ -6,7 +6,7 @@ import {
   Vault_KeyShareSchema,
   VaultSchema,
 } from '@core/communication/vultisig/vault/v1/vault_pb'
-import { defaultMpcLib } from '@core/mpc/mpcLib'
+import { defaultMpcLib, MpcLib } from '@core/mpc/mpcLib'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
 import { storage } from '../../../wailsjs/go/models'
@@ -84,5 +84,5 @@ export const fromStorageVault = (vault: storage.Vault): Vault =>
       })
     ),
     resharePrefix: vault.reshare_prefix,
-    libType: toLibType(vault.lib_type ?? defaultMpcLib),
+    libType: toLibType(vault.lib_type as MpcLib),
   })
