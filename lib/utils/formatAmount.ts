@@ -15,7 +15,8 @@ export const formatAmount = (
   if (amount > million) {
     return `${formatAmount(amount / million, currency, locale)}M`;
   }
-
+  console.log('amount', amount);
+  console.log('currency', currency ?? 'no currency');
   // Validate and set locale safely
   let validLocale = 'en-US';
   try {

@@ -5,7 +5,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { rippleTxFee } from '@core/chain/tx/fee/ripple'
 import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 
 import { polkadotConfig } from '../../../polkadot/config'
@@ -47,5 +47,5 @@ export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
 
   const amount = fromChainAmount(feeAmount, decimals)
 
-  return formatAmount(amount, getFeeUnit(chain))
+  return formatTokenAmount(amount, getFeeUnit(chain))
 }

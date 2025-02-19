@@ -76,8 +76,10 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                   value={cappedAmountQuery}
                   error={() => <Text>{t('failed_to_load')}</Text>}
                   pending={() => <Spinner />}
-                  success={({ amount, decimals }) =>
-                    formatAmount(fromChainAmount(amount, decimals), coin.ticker)
+                  success={({ amount, decimals }) => {
+                    console.log('what is amount', amount)
+                    return `${fromChainAmount(amount, decimals)} ${coin.ticker}`
+                  }
                   }
                 />
               </span>
