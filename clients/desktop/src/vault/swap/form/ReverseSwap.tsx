@@ -1,3 +1,4 @@
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
@@ -5,7 +6,6 @@ import { centerContent } from '../../../lib/ui/css/centerContent'
 import { round } from '../../../lib/ui/css/round'
 import { sameDimensions } from '../../../lib/ui/css/sameDimensions'
 import { ReverseIcon } from '../../../lib/ui/icons/ReverseIcon'
-import { getColor } from '../../../lib/ui/theme/getters'
 import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'
 

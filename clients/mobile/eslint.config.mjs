@@ -54,15 +54,6 @@ export default [
       react: {
         version: 'detect',
       },
-      'import/resolver': {
-        typescript: {
-          project: './tsconfig.json',
-        },
-        alias: {
-          map: [['@', path.resolve(__dirname, '../../')]],
-          extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
-        },
-      },
     },
 
     rules: {
