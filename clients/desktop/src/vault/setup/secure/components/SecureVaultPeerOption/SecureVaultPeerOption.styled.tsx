@@ -1,9 +1,9 @@
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 import { css } from 'styled-components'
 
 import { HStack, hStack } from '../../../../../lib/ui/layout/Stack'
 import { Text } from '../../../../../lib/ui/text'
-import { getColor } from '../../../../../lib/ui/theme/getters'
 
 export const Wrapper = styled(HStack)<{
   isActive: boolean

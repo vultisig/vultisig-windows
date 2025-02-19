@@ -1,31 +1,27 @@
+import Layout from '@clients/extension/src/pages/popup/layout'
+import CurrencyPage from '@clients/extension/src/pages/popup/pages/currency'
+import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vault'
+import ImportPage from '@clients/extension/src/pages/popup/pages/import'
+import LandingPage from '@clients/extension/src/pages/popup/pages/landing'
+import LanguagePage from '@clients/extension/src/pages/popup/pages/language'
+import MainPage from '@clients/extension/src/pages/popup/pages/main'
+import RenameVaultPage from '@clients/extension/src/pages/popup/pages/rename-vault'
+import SettingsPage from '@clients/extension/src/pages/popup/pages/settings'
+import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-settings'
+import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
+import routerKeys from '@clients/extension/src/utils/route-keys'
 import {
-  Navigate,
-  RouterProvider,
-  //createBrowserRouter,
   createHashRouter,
+  Navigate,
   type RouteObject,
-} from "react-router-dom";
-
-import routerKeys from "../../../utils/route-keys";
-
-import Layout from "../../../pages/popup/layout";
-
-import CurrencyPage from "../../../pages/popup/pages/currency";
-import DeleteVaultPage from "../../../pages/popup/pages/delete-vault";
-import ImportPage from "../../../pages/popup/pages/import";
-import LandingPage from "../../../pages/popup/pages/landing";
-import LanguagePage from "../../../pages/popup/pages/language";
-import MainPage from "../../../pages/popup/pages/main";
-import RenameVaultPage from "../../../pages/popup/pages/rename-vault";
-import SettingsPage from "../../../pages/popup/pages/settings";
-import VaultSettingsPage from "../../../pages/popup/pages/vault-settings";
-import VaultsPage from "../../../pages/popup/pages/vaults";
+  RouterProvider,
+} from 'react-router-dom'
 
 interface RouteConfig {
-  path: string;
-  element?: React.ReactNode;
-  children?: RouteConfig[];
-  redirect?: string;
+  path: string
+  element?: React.ReactNode
+  children?: RouteConfig[]
+  redirect?: string
 }
 
 const routes: RouteConfig[] = [
@@ -82,16 +78,16 @@ const routes: RouteConfig[] = [
         element: <DeleteVaultPage />,
       },
       {
-        path: "*",
+        path: '*',
         redirect: routerKeys.root,
       },
     ],
   },
   {
-    path: "*",
+    path: '*',
     redirect: routerKeys.root,
   },
-];
+]
 
 const processRoutes = (routes: RouteConfig[]): RouteObject[] => {
   return routes.reduce<RouteObject[]>(
@@ -100,27 +96,27 @@ const processRoutes = (routes: RouteConfig[]): RouteObject[] => {
         const processedRoute: RouteObject = {
           path,
           element: <Navigate to={redirect} replace />,
-        };
-        acc.push(processedRoute);
+        }
+        acc.push(processedRoute)
       } else if (element) {
         const processedRoute: RouteObject = {
           path,
           element,
           children: children ? processRoutes(children) : undefined,
-        };
-        acc.push(processedRoute);
+        }
+        acc.push(processedRoute)
       }
 
-      return acc;
+      return acc
     },
     []
-  );
-};
+  )
+}
 
 const router = createHashRouter(processRoutes(routes), {
   basename: routerKeys.basePath,
-});
+})
 
-const Component = () => <RouterProvider router={router} />;
+const Component = () => <RouterProvider router={router} />
 
-export default Component;
+export default Component

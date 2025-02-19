@@ -1,24 +1,23 @@
-import { initWasm, WalletCore } from "@trustwallet/wallet-core";
-import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
-
-import { errorKey } from "../utils/constants";
-import { Chain } from "@core/chain/Chain";
+import { errorKey } from '@clients/extension/src/utils/constants'
+import { Chain } from '@core/chain/Chain'
+import { initWasm, WalletCore } from '@trustwallet/wallet-core'
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 export default class WalletCoreProvider {
-  private chainRef?: { [Chain: string]: CoinType };
-  private walletCore?: WalletCore;
+  private chainRef?: { [Chain: string]: CoinType }
+  private walletCore?: WalletCore
 
   public getCore = (): Promise<{
-    chainRef: { [Chain: string]: CoinType };
-    walletCore: WalletCore;
+    chainRef: { [Chain: string]: CoinType }
+    walletCore: WalletCore
   }> => {
     return new Promise((resolve, reject) => {
       if (this.chainRef && this.walletCore) {
-        resolve({ chainRef: this.chainRef, walletCore: this.walletCore });
+        resolve({ chainRef: this.chainRef, walletCore: this.walletCore })
       } else {
         initWasm()
-          .then((walletCore) => {
-            this.walletCore = walletCore;
+          .then(walletCore => {
+            this.walletCore = walletCore
 
             this.chainRef = {
               [Chain.Arbitrum]: walletCore.CoinType.arbitrum,
@@ -45,14 +44,14 @@ export default class WalletCoreProvider {
               [Chain.Sui]: walletCore.CoinType.sui,
               [Chain.THORChain]: walletCore.CoinType.thorchain,
               [Chain.Zksync]: walletCore.CoinType.zksync,
-            };
+            }
 
-            resolve({ chainRef: this.chainRef, walletCore: this.walletCore });
+            resolve({ chainRef: this.chainRef, walletCore: this.walletCore })
           })
           .catch(() => {
-            reject(errorKey.FAIL_TO_INIT_WASM);
-          });
+            reject(errorKey.FAIL_TO_INIT_WASM)
+          })
       }
-    });
-  };
+    })
+  }
 }

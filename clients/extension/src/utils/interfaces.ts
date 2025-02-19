@@ -1,325 +1,325 @@
-import { ChainTicker, Currency, Language } from "./constants";
+import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
+import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
+import { Chain } from '@core/chain/Chain'
+import { TransactionResponse } from 'ethers'
 
-import { ThorchainProviderMethod } from "../types/thorchain";
-import { ThorchainProviderResponse } from "../types/thorchain";
-import { TransactionResponse } from "ethers";
-import { Chain } from "@core/chain/Chain";
+import { ChainTicker, Currency, Language } from './constants'
 
 export namespace Messaging {
   export namespace Chain {
-    export type Request = { method: string; params: Record<string, any>[] };
+    export type Request = { method: string; params: Record<string, any>[] }
     export type Response =
       | string
       | string[]
       | ThorchainProviderResponse<ThorchainProviderMethod>
       | TransactionResponse
-      | SendTransactionResponse;
+      | SendTransactionResponse
   }
 
   export namespace GetVault {
-    export type Request = any;
-    export type Response = VaultProps | undefined;
+    export type Request = any
+    export type Response = VaultProps | undefined
   }
 
   export namespace GetVaults {
-    export type Request = any;
-    export type Response = VaultProps[];
+    export type Request = any
+    export type Response = VaultProps[]
   }
 
   export namespace SetPriority {
-    export type Request = { priority?: boolean };
-    export type Response = any;
+    export type Request = { priority?: boolean }
+    export type Response = any
   }
 }
 
 export interface AccountsProps {
-  chain: Chain;
-  sender: string;
+  chain: Chain
+  sender: string
 }
 
 export interface ChainProps {
-  active?: boolean;
-  address?: string;
-  cmcId: number;
-  decimals: number;
-  derivationKey?: string;
-  id: string;
-  name: Chain;
-  ticker: ChainTicker;
+  active?: boolean
+  address?: string
+  cmcId: number
+  decimals: number
+  derivationKey?: string
+  id: string
+  name: Chain
+  ticker: ChainTicker
 }
 
 export interface SendTransactionResponse {
-  raw: any;
-  txResponse: string;
+  raw: any
+  txResponse: string
 }
 
 export interface ChainObjRef {
-  [Chain.Arbitrum]: ChainProps;
-  [Chain.Avalanche]: ChainProps;
-  [Chain.Base]: ChainProps;
-  [Chain.Bitcoin]: ChainProps;
-  [Chain.BitcoinCash]: ChainProps;
-  [Chain.Blast]: ChainProps;
-  [Chain.BSC]: ChainProps;
-  [Chain.CronosChain]: ChainProps;
-  [Chain.Dash]: ChainProps;
-  [Chain.Dogecoin]: ChainProps;
-  [Chain.Dydx]: ChainProps;
-  [Chain.Ethereum]: ChainProps;
-  [Chain.Cosmos]: ChainProps;
-  [Chain.Kujira]: ChainProps;
-  [Chain.Litecoin]: ChainProps;
-  [Chain.MayaChain]: ChainProps;
-  [Chain.Optimism]: ChainProps;
-  [Chain.Osmosis]: ChainProps;
-  [Chain.Polygon]: ChainProps;
-  [Chain.Solana]: ChainProps;
-  [Chain.THORChain]: ChainProps;
+  [Chain.Arbitrum]: ChainProps
+  [Chain.Avalanche]: ChainProps
+  [Chain.Base]: ChainProps
+  [Chain.Bitcoin]: ChainProps
+  [Chain.BitcoinCash]: ChainProps
+  [Chain.Blast]: ChainProps
+  [Chain.BSC]: ChainProps
+  [Chain.CronosChain]: ChainProps
+  [Chain.Dash]: ChainProps
+  [Chain.Dogecoin]: ChainProps
+  [Chain.Dydx]: ChainProps
+  [Chain.Ethereum]: ChainProps
+  [Chain.Cosmos]: ChainProps
+  [Chain.Kujira]: ChainProps
+  [Chain.Litecoin]: ChainProps
+  [Chain.MayaChain]: ChainProps
+  [Chain.Optimism]: ChainProps
+  [Chain.Osmosis]: ChainProps
+  [Chain.Polygon]: ChainProps
+  [Chain.Solana]: ChainProps
+  [Chain.THORChain]: ChainProps
 }
 
 export interface ChainStrRef {
-  [Chain.Arbitrum]: string;
-  [Chain.Avalanche]: string;
-  [Chain.Base]: string;
-  [Chain.Bitcoin]: string;
-  [Chain.BitcoinCash]: string;
-  [Chain.Blast]: string;
-  [Chain.BSC]: string;
-  [Chain.CronosChain]: string;
-  [Chain.Dash]: string;
-  [Chain.Dogecoin]: string;
-  [Chain.Dydx]: string;
-  [Chain.Ethereum]: string;
-  [Chain.Cosmos]: string;
-  [Chain.Kujira]: string;
-  [Chain.Litecoin]: string;
-  [Chain.MayaChain]: string;
-  [Chain.Optimism]: string;
-  [Chain.Osmosis]: string;
-  [Chain.Polkadot]: string;
-  [Chain.Polygon]: string;
-  [Chain.Solana]: string;
-  [Chain.Sui]: string;
-  [Chain.THORChain]: string;
-  [Chain.Terra]: string;
-  [Chain.TerraClassic]: string;
-  [Chain.Ton]: string;
-  [Chain.Ripple]: string;
-  [Chain.Zksync]: string;
-  [Chain.Noble]: string;
-  [Chain.Akash]: string;
+  [Chain.Arbitrum]: string
+  [Chain.Avalanche]: string
+  [Chain.Base]: string
+  [Chain.Bitcoin]: string
+  [Chain.BitcoinCash]: string
+  [Chain.Blast]: string
+  [Chain.BSC]: string
+  [Chain.CronosChain]: string
+  [Chain.Dash]: string
+  [Chain.Dogecoin]: string
+  [Chain.Dydx]: string
+  [Chain.Ethereum]: string
+  [Chain.Cosmos]: string
+  [Chain.Kujira]: string
+  [Chain.Litecoin]: string
+  [Chain.MayaChain]: string
+  [Chain.Optimism]: string
+  [Chain.Osmosis]: string
+  [Chain.Polkadot]: string
+  [Chain.Polygon]: string
+  [Chain.Solana]: string
+  [Chain.Sui]: string
+  [Chain.THORChain]: string
+  [Chain.Terra]: string
+  [Chain.TerraClassic]: string
+  [Chain.Ton]: string
+  [Chain.Ripple]: string
+  [Chain.Zksync]: string
+  [Chain.Noble]: string
+  [Chain.Akash]: string
 }
 
 export interface CurrencyRef {
-  [Currency.AUD]: string;
-  [Currency.CAD]: string;
-  [Currency.CNY]: string;
-  [Currency.EUR]: string;
-  [Currency.GBP]: string;
-  [Currency.JPY]: string;
-  [Currency.RUB]: string;
-  [Currency.SEK]: string;
-  [Currency.SGD]: string;
-  [Currency.USD]: string;
+  [Currency.AUD]: string
+  [Currency.CAD]: string
+  [Currency.CNY]: string
+  [Currency.EUR]: string
+  [Currency.GBP]: string
+  [Currency.JPY]: string
+  [Currency.RUB]: string
+  [Currency.SEK]: string
+  [Currency.SGD]: string
+  [Currency.USD]: string
 }
 
 export interface CustomMessage {
-  method: string;
-  address: string;
-  message: string;
+  method: string
+  address: string
+  message: string
 }
 
 export interface SignatureProps {
-  Msg: string;
-  R: string;
-  S: string;
-  DerSignature: string;
-  RecoveryID: string;
+  Msg: string
+  R: string
+  S: string
+  DerSignature: string
+  RecoveryID: string
 }
 
 export interface LanguageRef {
-  [Language.CROATIA]: string;
-  [Language.DUTCH]: string;
-  [Language.ENGLISH]: string;
-  [Language.GERMAN]: string;
-  [Language.ITALIAN]: string;
-  [Language.PORTUGUESE]: string;
-  [Language.RUSSIAN]: string;
-  [Language.SPANISH]: string;
+  [Language.CROATIA]: string
+  [Language.DUTCH]: string
+  [Language.ENGLISH]: string
+  [Language.GERMAN]: string
+  [Language.ITALIAN]: string
+  [Language.PORTUGUESE]: string
+  [Language.RUSSIAN]: string
+  [Language.SPANISH]: string
 }
 
 export interface ScreenProps {
-  height: number;
-  width: number;
+  height: number
+  width: number
 }
 
 export interface TransactionDetails {
   asset: {
-    chain: ChainTicker;
-    symbol: string;
-    ticker: string;
-  };
-  from: string;
-  to?: string;
-  amount?: { amount: string; decimals: number };
-  data?: string;
-  gasLimit?: string;
+    chain: ChainTicker
+    symbol: string
+    ticker: string
+  }
+  from: string
+  to?: string
+  amount?: { amount: string; decimals: number }
+  data?: string
+  gasLimit?: string
 }
 
 export interface METAMASK_TRANSACTION {
-  from: string;
-  to: string;
-  value?: string;
-  data: string;
-  gas?: string;
-  gasPrice?: string;
-  nonce?: string;
-  chainId?: string;
-  type?: string;
+  from: string
+  to: string
+  value?: string
+  data: string
+  gas?: string
+  gasPrice?: string
+  nonce?: string
+  chainId?: string
+  type?: string
 }
 
 export interface CTRL_TRANSACTION {
   amount: {
-    amount: string;
-    decimals: number;
-  };
+    amount: string
+    decimals: number
+  }
   asset: {
-    chain: ChainTicker;
-    symbol: string;
-    ticker: string;
-  };
-  from: string;
-  gasLimit?: string;
-  memo: string;
-  recipient: string;
+    chain: ChainTicker
+    symbol: string
+    ticker: string
+  }
+  from: string
+  gasLimit?: string
+  memo: string
+  recipient: string
 }
 
 export interface ITransaction {
-  transactionDetails: TransactionDetails;
-  chain: ChainProps;
-  contract?: string;
-  customMessage?: CustomMessage;
-  customSignature?: string;
-  id: string;
-  status: "default" | "error" | "pending" | "success";
-  memo?: string;
-  gas?: string;
-  gasLimit?: string;
-  gasPrice?: string;
-  isDeposit?: boolean;
-  isCustomMessage?: boolean;
-  maxFeePerGas?: string;
-  maxPriorityFeePerGas?: string;
-  txHash?: string;
-  windowId?: number;
-  raw?: any;
+  transactionDetails: TransactionDetails
+  chain: ChainProps
+  contract?: string
+  customMessage?: CustomMessage
+  customSignature?: string
+  id: string
+  status: 'default' | 'error' | 'pending' | 'success'
+  memo?: string
+  gas?: string
+  gasLimit?: string
+  gasPrice?: string
+  isDeposit?: boolean
+  isCustomMessage?: boolean
+  maxFeePerGas?: string
+  maxPriorityFeePerGas?: string
+  txHash?: string
+  windowId?: number
+  raw?: any
 }
 
 export interface VaultProps {
-  active?: boolean;
-  apps?: string[];
-  chains: ChainProps[];
-  hexChainCode: string;
-  name: string;
-  publicKeyEcdsa: string;
-  publicKeyEddsa: string;
-  selected?: boolean;
-  transactions: ITransaction[];
-  uid: string;
+  active?: boolean
+  apps?: string[]
+  chains: ChainProps[]
+  hexChainCode: string
+  name: string
+  publicKeyEcdsa: string
+  publicKeyEddsa: string
+  selected?: boolean
+  transactions: ITransaction[]
+  uid: string
 }
 
 export interface ParsedMemo {
-  signature: string;
-  inputs: string;
+  signature: string
+  inputs: string
 }
 
 export interface ThorchainAccountDataResponse {
-  address: string;
+  address: string
   publicKey: {
-    type: string;
-    value: string;
-  };
-  accountNumber: string;
-  sequence: string;
+    type: string
+    value: string
+  }
+  accountNumber: string
+  sequence: string
 }
 
 export interface MayaAccountDataResponse {
-  address: string;
+  address: string
   publicKey: {
-    type: string;
-    value: string;
-  };
-  accountNumber: string;
-  sequence: string;
+    type: string
+    value: string
+  }
+  accountNumber: string
+  sequence: string
 }
 
 export interface BaseSpecificTransactionInfo {
-  gasPrice: number;
-  fee: number;
+  gasPrice: number
+  fee: number
 }
 
 export interface SpecificThorchain extends BaseSpecificTransactionInfo {
-  accountNumber: number;
-  sequence: number;
-  isDeposit: boolean;
+  accountNumber: number
+  sequence: number
+  isDeposit: boolean
 }
 
 export interface SpecificCosmos extends BaseSpecificTransactionInfo {
-  accountNumber: number;
-  sequence: number;
-  gas: number;
-  transactionType: number;
+  accountNumber: number
+  sequence: number
+  gas: number
+  transactionType: number
 }
 
 export interface SpecificThorchain {
-  fee: number;
-  gasPrice: number;
-  accountNumber: number;
-  sequence: number;
-  isDeposit: boolean;
+  fee: number
+  gasPrice: number
+  accountNumber: number
+  sequence: number
+  isDeposit: boolean
 }
 
 export interface CosmosAccountData {
-  accountNumber: string;
-  sequence: string;
+  accountNumber: string
+  sequence: string
 }
 
 export interface CosmosAccountDataResponse {
-  account: CosmosAccountData;
+  account: CosmosAccountData
 }
 
 export interface SignedTransaction {
-  inputData?: Uint8Array;
-  signature: SignatureProps;
-  transaction?: ITransaction;
-  vault?: VaultProps;
+  inputData?: Uint8Array
+  signature: SignatureProps
+  transaction?: ITransaction
+  vault?: VaultProps
 }
 
 export interface SpecificUtxoInfo {
-  hash: string;
-  amount: bigint;
-  index: number;
+  hash: string
+  amount: bigint
+  index: number
 }
 
 export interface SpecificUtxo extends BaseSpecificTransactionInfo {
-  byteFee: number;
-  sendMaxAmount: boolean;
-  utxos: SpecificUtxoInfo[];
+  byteFee: number
+  sendMaxAmount: boolean
+  utxos: SpecificUtxoInfo[]
 }
 
 export interface SpecificSolana extends BaseSpecificTransactionInfo {
-  recentBlockHash: string;
-  priorityFee: number;
-  fromAddressPubKey: string | undefined;
-  toAddressPubKey: string | undefined;
+  recentBlockHash: string
+  priorityFee: number
+  fromAddressPubKey: string | undefined
+  toAddressPubKey: string | undefined
 }
 
 export interface FastSignInput {
-  public_key: string;
-  messages: string[];
-  session: string;
-  hex_encryption_key: string;
-  derive_path: string;
-  is_ecdsa: boolean;
-  vault_password: string;
+  public_key: string
+  messages: string[]
+  session: string
+  hex_encryption_key: string
+  derive_path: string
+  is_ecdsa: boolean
+  vault_password: string
 }

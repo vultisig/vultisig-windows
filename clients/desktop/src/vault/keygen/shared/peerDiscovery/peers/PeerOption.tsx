@@ -1,3 +1,4 @@
+import { getColor } from '@lib/ui/theme/getters'
 import styled, { css } from 'styled-components'
 
 import { UnstyledButton } from '../../../../../lib/ui/buttons/UnstyledButton'
@@ -9,7 +10,6 @@ import { CheckIcon } from '../../../../../lib/ui/icons/CheckIcon'
 import { VStack, vStack } from '../../../../../lib/ui/layout/Stack'
 import { IsActiveProp, ValueProp } from '../../../../../lib/ui/props'
 import { Text } from '../../../../../lib/ui/text'
-import { getColor } from '../../../../../lib/ui/theme/getters'
 import { usePeersSelectionRecord } from '../../../../keysign/shared/state/selectedPeers'
 import {
   formatKeygenDeviceName,
