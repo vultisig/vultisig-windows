@@ -3,6 +3,7 @@ import Long from "long";
 
 import { assertField } from "@lib/utils/record/assertField";
 import { PreSignedInputDataResolver } from "./PreSignedInputDataResolver";
+import { solanaConfig } from "@core/chain/chains/solana/solanaConfig";
 
 export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
   "solanaSpecific"
@@ -15,8 +16,6 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
     toTokenAssociatedAddress,
   } = chainSpecific;
 
-  const priorityFeePrice = 1_000_000; // Turbo fee in lamports, around 5 cents
-  const priorityFeeLimit = Number(100_000); // Turbo fee in lamports, around 5 cents
   const newRecentBlockHash = recentBlockHash; // DKLS should fix it. Using the same, since fetching the latest block hash won't match with IOS and Android
 
   if (coin.isNativeToken) {
@@ -30,10 +29,10 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
       recentBlockhash: newRecentBlockHash,
       sender: coin.address,
       priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-        price: Long.fromString(priorityFeePrice.toString()),
+        price: Long.fromString(solanaConfig.priorityFeePrice.toString()),
       }),
       priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
-        limit: priorityFeeLimit,
+        limit: solanaConfig.priorityFeeLimit,
       }),
     });
 
@@ -58,10 +57,10 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
         recentBlockhash: newRecentBlockHash,
         sender: coin.address,
         priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-          price: Long.fromString(priorityFeePrice.toString()),
+          price: Long.fromString(solanaConfig.priorityFeePrice.toString()),
         }),
         priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
-          limit: priorityFeeLimit,
+          limit: solanaConfig.priorityFeeLimit,
         }),
       });
 
@@ -96,10 +95,10 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
         recentBlockhash: newRecentBlockHash,
         sender: coin.address,
         priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-          price: Long.fromString(priorityFeePrice.toString()),
+          price: Long.fromString(solanaConfig.priorityFeePrice.toString()),
         }),
         priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
-          limit: priorityFeeLimit,
+          limit: solanaConfig.priorityFeeLimit,
         }),
       });
 
