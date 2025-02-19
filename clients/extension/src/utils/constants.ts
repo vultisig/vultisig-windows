@@ -1,13 +1,11 @@
-import { Chain } from '@core/chain/Chain'
-import keyMirror from 'keymirror'
-
 import type {
   ChainObjRef,
   ChainStrRef,
   CurrencyRef,
   LanguageRef,
-} from './interfaces'
-
+} from '@clients/extension/src/utils/interfaces'
+import { Chain } from '@core/chain/Chain'
+import keyMirror from 'keymirror'
 export enum CosmosMsgType {
   MSG_SEND = 'cosmos-sdk/MsgSend',
 }

@@ -1,51 +1,46 @@
-import '../../styles/index.scss'
-import '../../pages/transaction/index.scss'
-import '../../utils/prototypes'
+import '@clients/extension/src/styles/index.scss'
+import '@clients/extension/src/pages/transaction/index.scss'
+import '@clients/extension/src/utils/prototypes'
 
 import { create } from '@bufbuild/protobuf'
-import { getChainKind } from '@core/chain/ChainKind'
-import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb'
-import { Button, Form, Input, message, QRCode } from 'antd'
-import { formatUnits, toUtf8String } from 'ethers'
-import { StrictMode, useEffect, useRef, useState } from 'react'
-import ReactDOM from 'react-dom/client'
-import { useTranslation } from 'react-i18next'
-
-import ConfigProvider from '../../components/config-provider'
-import MiddleTruncate from '../../components/middle-truncate'
-import VultiError from '../../components/vulti-error'
-import VultiLoading from '../../components/vulti-loading'
-import i18n from '../../i18n/config'
+import ConfigProvider from '@clients/extension/src/components/config-provider'
+import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
+import VultiError from '@clients/extension/src/components/vulti-error'
+import VultiLoading from '@clients/extension/src/components/vulti-loading'
+import i18n from '@clients/extension/src/i18n/config'
 import {
   ArrowLeft,
   LinkExternal,
   QRCodeBorder,
   SquareArrow,
   SquareBehindSquare,
-} from '../../icons'
-import api from '../../utils/api'
-import { explorerUrl, TssKeysignType } from '../../utils/constants'
-import DataConverterProvider from '../../utils/data-converter-provider'
+} from '@clients/extension/src/icons'
+import api from '@clients/extension/src/utils/api'
+import {
+  explorerUrl,
+  TssKeysignType,
+} from '@clients/extension/src/utils/constants'
+import DataConverterProvider from '@clients/extension/src/utils/data-converter-provider'
 import {
   formatDisplayNumber,
   getTssKeysignType,
   parseMemo,
   splitString,
-} from '../../utils/functions'
+} from '@clients/extension/src/utils/functions'
 import {
   ITransaction,
   ParsedMemo,
   SignatureProps,
   VaultProps,
-} from '../../utils/interfaces'
-import messageKeys from '../../utils/message-keys'
+} from '@clients/extension/src/utils/interfaces'
+import messageKeys from '@clients/extension/src/utils/message-keys'
 import {
   getStoredCurrency,
   getStoredLanguage,
   getStoredTransactions,
   getStoredVaults,
   setStoredTransaction,
-} from '../../utils/storage'
+} from '@clients/extension/src/utils/storage'
 import {
   BaseTransactionProvider,
   CosmosTransactionProvider,
@@ -53,9 +48,16 @@ import {
   MayaTransactionProvider,
   ThorchainTransactionProvider,
   TransactionProvider,
-} from '../../utils/transaction-provider'
-import UTXOTransactionProvider from '../../utils/transaction-provider/utxo'
-import WalletCoreProvider from '../../utils/wallet-core-provider'
+} from '@clients/extension/src/utils/transaction-provider'
+import UTXOTransactionProvider from '@clients/extension/src/utils/transaction-provider/utxo'
+import WalletCoreProvider from '@clients/extension/src/utils/wallet-core-provider'
+import { getChainKind } from '@core/chain/ChainKind'
+import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb'
+import { Button, Form, Input, message, QRCode } from 'antd'
+import { formatUnits, toUtf8String } from 'ethers'
+import { StrictMode, useEffect, useRef, useState } from 'react'
+import ReactDOM from 'react-dom/client'
+import { useTranslation } from 'react-i18next'
 
 interface FormProps {
   password: string

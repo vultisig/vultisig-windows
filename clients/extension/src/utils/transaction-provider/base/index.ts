@@ -1,4 +1,10 @@
 import { toBinary } from '@bufbuild/protobuf'
+import {
+  ITransaction,
+  SignatureProps,
+  SignedTransaction,
+  VaultProps,
+} from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { CustomMessagePayload } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
 import {
@@ -9,13 +15,6 @@ import {
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { randomBytes } from 'ethers'
-
-import {
-  ITransaction,
-  SignatureProps,
-  SignedTransaction,
-  VaultProps,
-} from '../../interfaces'
 
 interface ChainRef {
   [chainKey: string]: CoinType

@@ -1,15 +1,18 @@
-import { Chain } from '@core/chain/Chain'
-import { Interface } from 'ethers'
-
-import api from './api'
-import { MessageKey, RequestMethod, TssKeysignType } from './constants'
+import api from '@clients/extension/src/utils/api'
+import {
+  MessageKey,
+  RequestMethod,
+  TssKeysignType,
+} from '@clients/extension/src/utils/constants'
 import {
   ChainObjRef,
   ChainProps,
   Messaging,
   ParsedMemo,
   SendTransactionResponse,
-} from './interfaces'
+} from '@clients/extension/src/utils/interfaces'
+import { Chain } from '@core/chain/Chain'
+import { Interface } from 'ethers'
 
 const getFunctionSignature = async (inputHex: string): Promise<string> => {
   if (!inputHex || inputHex === '0x') {

@@ -1,4 +1,15 @@
 import { create } from '@bufbuild/protobuf'
+import api from '@clients/extension/src/utils/api'
+import { rpcUrl } from '@clients/extension/src/utils/constants'
+import type {
+  ITransaction,
+  SignatureProps,
+  SignedTransaction,
+  SpecificSolana,
+  VaultProps,
+} from '@clients/extension/src/utils/interfaces'
+import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
+import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
 import { Chain } from '@core/chain/Chain'
 import {
   SolanaSpecific,
@@ -19,17 +30,6 @@ import { Buffer } from 'buffer'
 import { formatUnits } from 'ethers'
 import Long from 'long'
 
-import api from '../../api'
-import { rpcUrl } from '../../constants'
-import type {
-  ITransaction,
-  SignatureProps,
-  SignedTransaction,
-  SpecificSolana,
-  VaultProps,
-} from '../../interfaces'
-import { SignedTransactionResult } from '../../signed-transaction-result'
-import BaseTransactionProvider from '../../transaction-provider/base'
 export default class SolanaTransactionProvider extends BaseTransactionProvider {
   constructor(
     chainKey: Chain,

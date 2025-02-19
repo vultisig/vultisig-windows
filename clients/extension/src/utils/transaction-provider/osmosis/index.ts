@@ -1,8 +1,7 @@
+import CosmosTransactionProvider from '@clients/extension/src/utils/transaction-provider/cosmos'
 import { Chain } from '@core/chain/Chain'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
-
-import CosmosTransactionProvider from '../../transaction-provider/cosmos'
 
 export default class OsmosisTransactionProvider extends CosmosTransactionProvider {
   constructor(

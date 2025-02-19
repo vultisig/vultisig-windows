@@ -1,4 +1,14 @@
 import { create } from '@bufbuild/protobuf'
+import api from '@clients/extension/src/utils/api'
+import {
+  ITransaction,
+  SignatureProps,
+  SpecificUtxo,
+  SpecificUtxoInfo,
+  VaultProps,
+} from '@clients/extension/src/utils/interfaces'
+import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
+import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base/index'
 import { Chain } from '@core/chain/Chain'
 import {
   UTXOSpecific,
@@ -19,17 +29,6 @@ import type {
   WalletCore,
 } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import Long from 'long'
-
-import api from '../../api'
-import {
-  ITransaction,
-  SignatureProps,
-  SpecificUtxo,
-  SpecificUtxoInfo,
-  VaultProps,
-} from '../../interfaces'
-import { SignedTransactionResult } from '../../signed-transaction-result'
-import BaseTransactionProvider from '../base/index'
 
 interface ChainRef {
   [chainKey: string]: CoinType

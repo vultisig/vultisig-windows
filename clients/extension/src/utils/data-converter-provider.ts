@@ -1,7 +1,6 @@
+import { errorKey } from '@clients/extension/src/utils/constants'
 import SevenZip, { SevenZipModule } from '7z-wasm'
 import { Buffer } from 'buffer'
-
-import { errorKey } from './constants'
 
 export default class DataConverterProvider {
   private sevenZip?: SevenZipModule

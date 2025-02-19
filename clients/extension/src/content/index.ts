@@ -1,3 +1,22 @@
+import VULTI_ICON_RAW_PNG from '@clients/extension/src/content/icon'
+import {
+  ThorchainProviderRequest,
+  ThorchainProviderResponse,
+} from '@clients/extension/src/types/thorchain'
+import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
+import {
+  CosmosMsgType,
+  EventMethod,
+  MessageKey,
+  RequestMethod,
+  SenderKey,
+} from '@clients/extension/src/utils/constants'
+import { processBackgroundResponse } from '@clients/extension/src/utils/functions'
+import {
+  Messaging,
+  SendTransactionResponse,
+  VaultProps,
+} from '@clients/extension/src/utils/interfaces'
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
@@ -24,26 +43,6 @@ import base58 from 'bs58'
 import EventEmitter from 'events'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
-
-import {
-  ThorchainProviderRequest,
-  ThorchainProviderResponse,
-} from '../types/thorchain'
-import { ThorchainProviderMethod } from '../types/thorchain'
-import {
-  CosmosMsgType,
-  EventMethod,
-  MessageKey,
-  RequestMethod,
-  SenderKey,
-} from '../utils/constants'
-import { processBackgroundResponse } from '../utils/functions'
-import {
-  Messaging,
-  SendTransactionResponse,
-  VaultProps,
-} from '../utils/interfaces'
-import VULTI_ICON_RAW_PNG from './icon'
 
 enum NetworkKey {
   MAINNET = 'mainnet',

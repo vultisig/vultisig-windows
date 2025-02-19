@@ -1,4 +1,16 @@
 import { create } from '@bufbuild/protobuf'
+import api from '@clients/extension/src/utils/api'
+import { Currency, rpcUrl } from '@clients/extension/src/utils/constants'
+import {
+  bigintToByteArray,
+  checkERC20Function,
+} from '@clients/extension/src/utils/functions'
+import {
+  ITransaction,
+  SignedTransaction,
+  VaultProps,
+} from '@clients/extension/src/utils/interfaces'
+import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
 import { Chain } from '@core/chain/Chain'
 import {
   EthereumSpecific,
@@ -19,12 +31,6 @@ import {
   toUtf8String,
   Transaction,
 } from 'ethers'
-
-import api from '../../api'
-import { Currency, rpcUrl } from '../../constants'
-import { bigintToByteArray, checkERC20Function } from '../../functions'
-import { ITransaction, SignedTransaction, VaultProps } from '../../interfaces'
-import BaseTransactionProvider from '../../transaction-provider/base'
 
 interface ChainRef {
   [chainKey: string]: CoinType

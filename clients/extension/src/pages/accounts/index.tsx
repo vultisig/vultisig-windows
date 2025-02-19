@@ -1,26 +1,25 @@
-import '../../styles/index.scss'
-import '../accounts/index.scss'
+import '@clients/extension/src/styles/index.scss'
+import '@clients/extension/src/pages/accounts/index.scss'
 
-import { Chain } from '@core/chain/Chain'
-import { Button, Form, Radio } from 'antd'
-import { StrictMode, useEffect, useState } from 'react'
-import ReactDOM from 'react-dom/client'
-import { useTranslation } from 'react-i18next'
-
-import ConfigProvider from '../../components/config-provider'
-import MiddleTruncate from '../../components/middle-truncate'
-import VultiError from '../../components/vulti-error'
-import VultiLoading from '../../components/vulti-loading'
-import i18n from '../../i18n/config'
-import { Vultisig } from '../../icons'
-import { VaultProps } from '../../utils/interfaces'
-import messageKeys from '../../utils/message-keys'
+import ConfigProvider from '@clients/extension/src/components/config-provider'
+import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
+import VultiError from '@clients/extension/src/components/vulti-error'
+import VultiLoading from '@clients/extension/src/components/vulti-loading'
+import i18n from '@clients/extension/src/i18n/config'
+import { Vultisig } from '@clients/extension/src/icons'
+import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import messageKeys from '@clients/extension/src/utils/message-keys'
 import {
   getStoredLanguage,
   getStoredRequest,
   getStoredVaults,
   setStoredVaults,
-} from '../../utils/storage'
+} from '@clients/extension/src/utils/storage'
+import { Chain } from '@core/chain/Chain'
+import { Button, Form, Radio } from 'antd'
+import { StrictMode, useEffect, useState } from 'react'
+import ReactDOM from 'react-dom/client'
+import { useTranslation } from 'react-i18next'
 
 interface FormProps {
   uid: string

@@ -1,13 +1,12 @@
-import '../../styles/index.scss'
-import '../../pages/popup/index.scss'
+import '@clients/extension/src/styles/index.scss'
+import '@clients/extension/src/pages/popup/index.scss'
 
+import ConfigProvider from '@clients/extension/src/components/config-provider'
+import i18n from '@clients/extension/src/i18n/config'
+import Routing from '@clients/extension/src/pages/popup/routes'
+import { getStoredLanguage } from '@clients/extension/src/utils/storage'
 import { StrictMode, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
-
-import ConfigProvider from '../../components/config-provider'
-import i18n from '../../i18n/config'
-import Routing from '../../pages/popup/routes'
-import { getStoredLanguage } from '../../utils/storage'
 
 const Component = () => {
   const componentDidMount = (): void => {

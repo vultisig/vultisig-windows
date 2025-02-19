@@ -1,13 +1,15 @@
+import useGoBack from '@clients/extension/src/hooks/go-back'
+import { ArrowLeft } from '@clients/extension/src/icons'
+import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import routeKeys from '@clients/extension/src/utils/route-keys'
+import {
+  getStoredVaults,
+  setStoredVaults,
+} from '@clients/extension/src/utils/storage'
 import { Button, Form, Input } from 'antd'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import useGoBack from '../../../../hooks/go-back'
-import { ArrowLeft } from '../../../../icons'
-import { VaultProps } from '../../../../utils/interfaces'
-import messageKeys from '../../../../utils/message-keys'
-import routeKeys from '../../../../utils/route-keys'
-import { getStoredVaults, setStoredVaults } from '../../../../utils/storage'
 
 const Component = () => {
   const { t } = useTranslation()

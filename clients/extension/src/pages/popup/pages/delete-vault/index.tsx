@@ -1,14 +1,16 @@
+import useGoBack from '@clients/extension/src/hooks/go-back'
+import { ArrowLeft, TriangleWarning } from '@clients/extension/src/icons'
+import type { VaultProps } from '@clients/extension/src/utils/interfaces'
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import routeKeys from '@clients/extension/src/utils/route-keys'
+import {
+  getStoredVaults,
+  setStoredVaults,
+} from '@clients/extension/src/utils/storage'
 import { Button, ConfigProvider } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-
-import useGoBack from '../../../../hooks/go-back'
-import { ArrowLeft, TriangleWarning } from '../../../../icons'
-import type { VaultProps } from '../../../../utils/interfaces'
-import messageKeys from '../../../../utils/message-keys'
-import routeKeys from '../../../../utils/route-keys'
-import { getStoredVaults, setStoredVaults } from '../../../../utils/storage'
 
 interface InitialState {
   vault?: VaultProps

@@ -1,9 +1,8 @@
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import routeKeys from '@clients/extension/src/utils/route-keys'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-
-import messageKeys from '../../../../utils/message-keys'
-import routeKeys from '../../../../utils/route-keys'
 
 const Component = () => {
   const { t } = useTranslation()

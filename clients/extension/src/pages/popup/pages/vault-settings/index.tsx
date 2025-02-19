@@ -1,13 +1,17 @@
+import useGoBack from '@clients/extension/src/hooks/go-back'
+import {
+  ArrowLeft,
+  ArrowRight,
+  NoteEdit,
+  Trash,
+} from '@clients/extension/src/icons'
+import type { VaultProps } from '@clients/extension/src/utils/interfaces'
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import routeKeys from '@clients/extension/src/utils/route-keys'
+import { getStoredVaults } from '@clients/extension/src/utils/storage'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-
-import useGoBack from '../../../../hooks/go-back'
-import { ArrowLeft, ArrowRight, NoteEdit, Trash } from '../../../../icons'
-import type { VaultProps } from '../../../../utils/interfaces'
-import messageKeys from '../../../../utils/message-keys'
-import routeKeys from '../../../../utils/route-keys'
-import { getStoredVaults } from '../../../../utils/storage'
 
 interface InitialState {
   vault?: VaultProps

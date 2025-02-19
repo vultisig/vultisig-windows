@@ -1,4 +1,4 @@
-import messageKeys from '../../utils/message-keys'
+import messageKeys from '@clients/extension/src/utils/message-keys'
 
 export default {
   // A

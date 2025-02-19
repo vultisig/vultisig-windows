@@ -1,9 +1,8 @@
+import { TriangleWarning } from '@clients/extension/src/icons'
+import messageKeys from '@clients/extension/src/utils/message-keys'
 import { Button } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { TriangleWarning } from '../../icons'
-import messageKeys from '../../utils/message-keys'
 
 interface ComponentProps {
   onClose: () => void

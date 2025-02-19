@@ -1,12 +1,14 @@
+import useGoBack from '@clients/extension/src/hooks/go-back'
+import { ArrowLeft } from '@clients/extension/src/icons'
+import { Currency, currencyName } from '@clients/extension/src/utils/constants'
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import routeKeys from '@clients/extension/src/utils/route-keys'
+import {
+  getStoredCurrency,
+  setStoredCurrency,
+} from '@clients/extension/src/utils/storage'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import useGoBack from '../../../../hooks/go-back'
-import { ArrowLeft } from '../../../../icons'
-import { Currency, currencyName } from '../../../../utils/constants'
-import messageKeys from '../../../../utils/message-keys'
-import routeKeys from '../../../../utils/route-keys'
-import { getStoredCurrency, setStoredCurrency } from '../../../../utils/storage'
 
 interface InitialState {
   currency: Currency

@@ -1,8 +1,8 @@
+import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
+import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { Chain } from '@core/chain/Chain'
 import { TransactionResponse } from 'ethers'
 
-import { ThorchainProviderMethod } from '../types/thorchain'
-import { ThorchainProviderResponse } from '../types/thorchain'
 import { ChainTicker, Currency, Language } from './constants'
 
 export namespace Messaging {

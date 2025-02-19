@@ -1,10 +1,9 @@
+import api from '@clients/extension/src/utils/api'
+import { errorKey } from '@clients/extension/src/utils/constants'
+import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
-
-import api from './api'
-import { errorKey } from './constants'
-import { VaultProps } from './interfaces'
 
 interface AddressProps {
   address: string

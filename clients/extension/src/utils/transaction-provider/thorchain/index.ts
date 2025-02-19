@@ -1,4 +1,15 @@
 import { create } from '@bufbuild/protobuf'
+import api from '@clients/extension/src/utils/api'
+import type {
+  ITransaction,
+  SignatureProps,
+  SignedTransaction,
+  SpecificThorchain,
+  VaultProps,
+} from '@clients/extension/src/utils/interfaces'
+import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
+import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
+import { Chain } from '@core/chain/Chain'
 import {
   THORChainSpecific,
   THORChainSpecificSchema,
@@ -17,20 +28,9 @@ import { Buffer } from 'buffer'
 import { formatUnits, sha256 } from 'ethers'
 import Long from 'long'
 
-import api from '../../api'
-import type {
-  ITransaction,
-  SignatureProps,
-  SignedTransaction,
-  SpecificThorchain,
-  VaultProps,
-} from '../../interfaces'
-import { SignedTransactionResult } from '../../signed-transaction-result'
-import BaseTransactionProvider from '../../transaction-provider/base'
-
 import SigningMode = TW.Cosmos.Proto.SigningMode
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode
-import { Chain } from '@core/chain/Chain'
+
 export default class ThorchainTransactionProvider extends BaseTransactionProvider {
   constructor(
     chainKey: Chain,

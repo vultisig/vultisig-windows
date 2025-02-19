@@ -1,4 +1,7 @@
-import { Currency, currencySymbol } from './constants'
+import {
+  Currency,
+  currencySymbol,
+} from '@clients/extension/src/utils/constants'
 
 declare global {
   interface Number {

@@ -1,15 +1,14 @@
-import '../../styles/index.scss'
-import '../../pages/popup/index.scss'
+import '@clients/extension/src/styles/index.scss'
+import '@clients/extension/src/pages/popup/index.scss'
 
+import ConfigProvider from '@clients/extension/src/components/config-provider'
+import i18n from '@clients/extension/src/i18n/config'
+import ImportPage from '@clients/extension/src/pages/popup/pages/import'
+import routerKeys from '@clients/extension/src/utils/route-keys'
+import { getStoredLanguage } from '@clients/extension/src/utils/storage'
 import { StrictMode, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom'
-
-import ConfigProvider from '../../components/config-provider'
-import i18n from '../../i18n/config'
-import ImportPage from '../../pages/popup/pages/import'
-import routerKeys from '../../utils/route-keys'
-import { getStoredLanguage } from '../../utils/storage'
 
 const router = createHashRouter(
   [

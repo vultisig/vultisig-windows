@@ -1,19 +1,8 @@
-import { Chain } from '@core/chain/Chain'
-import { getChainKind } from '@core/chain/ChainKind'
-import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
-import {
-  JsonRpcProvider,
-  toUtf8String,
-  TransactionRequest,
-  TypedDataEncoder,
-} from 'ethers'
-import { v4 as uuidv4 } from 'uuid'
-
 import {
   ThorchainProviderMethod,
   ThorchainProviderResponse,
-} from '../types/thorchain'
-import api from '../utils/api'
+} from '@clients/extension/src/types/thorchain'
+import api from '@clients/extension/src/utils/api'
 import {
   chains,
   ChainTicker,
@@ -21,8 +10,11 @@ import {
   MessageKey,
   RequestMethod,
   rpcUrl,
-} from '../utils/constants'
-import { calculateWindowPosition, findChainByProp } from '../utils/functions'
+} from '@clients/extension/src/utils/constants'
+import {
+  calculateWindowPosition,
+  findChainByProp,
+} from '@clients/extension/src/utils/functions'
 import {
   ChainProps,
   CTRL_TRANSACTION,
@@ -32,7 +24,7 @@ import {
   SendTransactionResponse,
   TransactionDetails,
   VaultProps,
-} from '../utils/interfaces'
+} from '@clients/extension/src/utils/interfaces'
 import {
   getIsPriority,
   getStoredChains,
@@ -43,7 +35,17 @@ import {
   setStoredRequest,
   setStoredTransactions,
   setStoredVaults,
-} from '../utils/storage'
+} from '@clients/extension/src/utils/storage'
+import { Chain } from '@core/chain/Chain'
+import { getChainKind } from '@core/chain/ChainKind'
+import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
+import {
+  JsonRpcProvider,
+  toUtf8String,
+  TransactionRequest,
+  TypedDataEncoder,
+} from 'ethers'
+import { v4 as uuidv4 } from 'uuid'
 
 let rpcProvider: JsonRpcProvider
 

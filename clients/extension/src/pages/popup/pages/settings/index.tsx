@@ -1,9 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
-
-import packageJson from '../../../../../package.json'
-import useGoBack from '../../../../hooks/go-back'
+import packageJson from '@clients/extension/package.json'
+import useGoBack from '@clients/extension/src/hooks/go-back'
 import {
   ArrowLeft,
   ArrowRight,
@@ -12,11 +8,21 @@ import {
   SettingsOne,
   Translate,
   Vultisig,
-} from '../../../../icons'
-import { Currency, Language, languageName } from '../../../../utils/constants'
-import messageKeys from '../../../../utils/message-keys'
-import routeKeys from '../../../../utils/route-keys'
-import { getStoredCurrency, getStoredLanguage } from '../../../../utils/storage'
+} from '@clients/extension/src/icons'
+import {
+  Currency,
+  Language,
+  languageName,
+} from '@clients/extension/src/utils/constants'
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import routeKeys from '@clients/extension/src/utils/route-keys'
+import {
+  getStoredCurrency,
+  getStoredLanguage,
+} from '@clients/extension/src/utils/storage'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 interface InitialState {
   currency: Currency

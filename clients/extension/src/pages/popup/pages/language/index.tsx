@@ -1,12 +1,14 @@
+import useGoBack from '@clients/extension/src/hooks/go-back'
+import { ArrowLeft } from '@clients/extension/src/icons'
+import { Language, languageName } from '@clients/extension/src/utils/constants'
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import routeKeys from '@clients/extension/src/utils/route-keys'
+import {
+  getStoredLanguage,
+  setStoredLanguage,
+} from '@clients/extension/src/utils/storage'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import useGoBack from '../../../../hooks/go-back'
-import { ArrowLeft } from '../../../../icons'
-import { Language, languageName } from '../../../../utils/constants'
-import messageKeys from '../../../../utils/message-keys'
-import routeKeys from '../../../../utils/route-keys'
-import { getStoredLanguage, setStoredLanguage } from '../../../../utils/storage'
 
 interface InitialState {
   language: Language

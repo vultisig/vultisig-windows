@@ -1,20 +1,15 @@
-import { Button, Empty, message, Modal, Select, Switch, Tooltip } from 'antd'
-import { type FC, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
-
 import {
   ArrowRight,
   BrokenLink,
   CircleInfo,
   SettingsTwo,
   Vultisig,
-} from '../../../../icons'
-import { chains } from '../../../../utils/constants'
-import { findChainByProp } from '../../../../utils/functions'
-import { VaultProps } from '../../../../utils/interfaces'
-import messageKeys from '../../../../utils/message-keys'
-import routeKeys from '../../../../utils/route-keys'
+} from '@clients/extension/src/icons'
+import { chains } from '@clients/extension/src/utils/constants'
+import { findChainByProp } from '@clients/extension/src/utils/functions'
+import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getIsPriority,
   getStoredChains,
@@ -22,7 +17,11 @@ import {
   setIsPriority,
   setStoredChains,
   setStoredVaults,
-} from '../../../../utils/storage'
+} from '@clients/extension/src/utils/storage'
+import { Button, Empty, message, Modal, Select, Switch, Tooltip } from 'antd'
+import { type FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface SelectOption {
   value: string

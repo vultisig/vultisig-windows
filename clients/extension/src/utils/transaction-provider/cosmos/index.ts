@@ -1,4 +1,16 @@
 import { create } from '@bufbuild/protobuf'
+import api from '@clients/extension/src/utils/api'
+import {
+  CosmosAccountData,
+  ITransaction,
+  SignatureProps,
+  SignedTransaction,
+  SpecificCosmos,
+  VaultProps,
+} from '@clients/extension/src/utils/interfaces'
+import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
+import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
+import { Chain } from '@core/chain/Chain'
 import {
   CosmosSpecific,
   CosmosSpecificSchema,
@@ -17,22 +29,8 @@ import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { Buffer } from 'buffer'
 import { formatUnits, sha256 } from 'ethers'
 import Long from 'long'
-
-import { SignedTransactionResult } from '../..//signed-transaction-result'
-import api from '../../api'
-import {
-  CosmosAccountData,
-  ITransaction,
-  SignatureProps,
-  SignedTransaction,
-  SpecificCosmos,
-  VaultProps,
-} from '../../interfaces'
-import BaseTransactionProvider from '../../transaction-provider/base'
-
 import SigningMode = TW.Cosmos.Proto.SigningMode
 import BroadcastMode = TW.Cosmos.Proto.BroadcastMode
-import { Chain } from '@core/chain/Chain'
 
 export default class CosmosTransactionProvider extends BaseTransactionProvider {
   constructor(

@@ -1,13 +1,16 @@
-import { Chain } from '@core/chain/Chain'
-
-import i18n from '../i18n/config'
-import { chains, Currency, Language } from './constants'
+import i18n from '@clients/extension/src/i18n/config'
+import {
+  chains,
+  Currency,
+  Language,
+} from '@clients/extension/src/utils/constants'
 import {
   AccountsProps,
   ChainProps,
   ITransaction,
   VaultProps,
-} from './interfaces'
+} from '@clients/extension/src/utils/interfaces'
+import { Chain } from '@core/chain/Chain'
 
 interface EthProviderState {
   accounts: string[]

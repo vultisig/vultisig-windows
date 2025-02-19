@@ -1,14 +1,13 @@
-import { Chain } from '@core/chain/Chain'
-import axios from 'axios'
-import { TransactionResponse } from 'ethers'
-
 import {
   ThornodeNetworkResponse,
   ThornodeTxResponse,
   ThornodeTxResponseSuccess,
-} from '../types/thorchain'
-import { Currency } from './constants'
-import { toCamelCase, toSnakeCase } from './functions'
+} from '@clients/extension/src/types/thorchain'
+import { Currency } from '@clients/extension/src/utils/constants'
+import {
+  toCamelCase,
+  toSnakeCase,
+} from '@clients/extension/src/utils/functions'
 import {
   CosmosAccountData,
   CosmosAccountDataResponse,
@@ -16,7 +15,10 @@ import {
   MayaAccountDataResponse,
   SignatureProps,
   ThorchainAccountDataResponse,
-} from './interfaces'
+} from '@clients/extension/src/utils/interfaces'
+import { Chain } from '@core/chain/Chain'
+import axios from 'axios'
+import { TransactionResponse } from 'ethers'
 
 namespace CryptoCurrency {
   export interface Props {

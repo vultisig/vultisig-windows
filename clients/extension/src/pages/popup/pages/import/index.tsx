@@ -1,3 +1,19 @@
+import useGoBack from '@clients/extension/src/hooks/go-back'
+import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
+import AddressProvider from '@clients/extension/src/utils/address-provider'
+import { chains, errorKey } from '@clients/extension/src/utils/constants'
+import {
+  calculateWindowPosition,
+  toCamelCase,
+} from '@clients/extension/src/utils/functions'
+import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import routeKeys from '@clients/extension/src/utils/route-keys'
+import {
+  getStoredVaults,
+  setStoredVaults,
+} from '@clients/extension/src/utils/storage'
+import WalletCoreProvider from '@clients/extension/src/utils/wallet-core-provider'
 import { Chain } from '@core/chain/Chain'
 import { Button, Upload, UploadProps } from 'antd'
 import { useEffect, useState } from 'react'
@@ -5,20 +21,6 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { UAParser } from 'ua-parser-js'
 import { readBarcodesFromImageFile, ReaderOptions } from 'zxing-wasm'
-
-import useGoBack from '../../../../hooks/go-back'
-import { ArrowLeft, CloseLG } from '../../../../icons'
-import AddressProvider from '../../../../utils/address-provider'
-import { chains, errorKey } from '../../../../utils/constants'
-import {
-  calculateWindowPosition,
-  toCamelCase,
-} from '../../../../utils/functions'
-import { VaultProps } from '../../../../utils/interfaces'
-import messageKeys from '../../../../utils/message-keys'
-import routeKeys from '../../../../utils/route-keys'
-import { getStoredVaults, setStoredVaults } from '../../../../utils/storage'
-import WalletCoreProvider from '../../../../utils/wallet-core-provider'
 
 interface InitialState {
   file?: File
