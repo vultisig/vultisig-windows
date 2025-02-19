@@ -18,6 +18,7 @@ import {
 import { CustomMessagePayload } from "@core/communication/vultisig/keysign/v1/custom_message_payload_pb";
 import { Chain } from "@core/chain/Chain";
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { chainTokens } from '@core/chain/coin/chainTokens'
 
 interface ChainRef {
   [chainKey: string]: CoinType;
@@ -117,9 +118,17 @@ export default abstract class BaseTransactionProvider {
           message: transaction.customMessage!.message,
         } as CustomMessagePayload;
       } else {
-        const priceProviderId =
-          chainFeeCoin[this.keysignPayload?.coin?.chain as Chain]
-            ?.priceProviderId
+        let priceProviderId: string | undefined
+
+        if (this.keysignPayload?.coin) {
+          const { chain, isNativeToken, ticker } = this.keysignPayload.coin
+
+          priceProviderId = isNativeToken
+            ? chainFeeCoin[chain as Chain]?.priceProviderId
+            : chainTokens[chain as Chain]?.find(
+                token => token.ticker === ticker
+              )?.priceProviderId
+        }
 
         if (priceProviderId) {
           messsage.keysignPayload = {
