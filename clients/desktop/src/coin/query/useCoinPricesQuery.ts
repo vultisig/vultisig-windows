@@ -39,10 +39,8 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
   const queries = [];
 
-  const [regularCoins, erc20Coins] = splitBy(
-    input.coins.filter(f => f.priceProviderId),
-    coin =>
-      isOneOf(coin.chain, Object.values(EvmChain)) && !isFeeCoin(coin) ? 1 : 0
+  const [regularCoins, erc20Coins] = splitBy(input.coins, coin =>
+    isOneOf(coin.chain, Object.values(EvmChain)) && !isFeeCoin(coin) ? 1 : 0
   );
 
   if (!isEmpty(erc20Coins)) {
