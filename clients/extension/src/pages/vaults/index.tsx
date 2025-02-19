@@ -1,85 +1,83 @@
-import { StrictMode, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Button, Checkbox, Form } from "antd";
-import ReactDOM from "react-dom/client";
+import '@clients/extension/src/styles/index.scss'
+import '@clients/extension/src/pages/vaults/index.scss'
 
+import ConfigProvider from '@clients/extension/src/components/config-provider'
+import VultiError from '@clients/extension/src/components/vulti-error'
+import VultiLoading from '@clients/extension/src/components/vulti-loading'
+import i18n from '@clients/extension/src/i18n/config'
+import { Vultisig } from '@clients/extension/src/icons'
+import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import messageKeys from '@clients/extension/src/utils/message-keys'
 import {
   getStoredLanguage,
   getStoredVaults,
   setStoredVaults,
-} from "../../utils/storage";
-import { VaultProps } from "../../utils/interfaces";
-import i18n from "../../i18n/config";
-import messageKeys from "../../utils/message-keys";
-
-import { Vultisig } from "../../icons";
-import ConfigProvider from "../../components/config-provider";
-import VultiLoading from "../../components/vulti-loading";
-import VultiError from "../../components/vulti-error";
-
-import "../../styles/index.scss";
-import "../../pages/vaults/index.scss";
+} from '@clients/extension/src/utils/storage'
+import { Button, Checkbox, Form } from 'antd'
+import { StrictMode, useEffect, useState } from 'react'
+import ReactDOM from 'react-dom/client'
+import { useTranslation } from 'react-i18next'
 
 interface FormProps {
-  uids: string[];
+  uids: string[]
 }
 
 interface InitialState {
-  errorDescription?: string;
-  errorTitle?: string;
-  hasError?: boolean;
-  vaults: VaultProps[];
+  errorDescription?: string
+  errorTitle?: string
+  hasError?: boolean
+  vaults: VaultProps[]
 }
 
 const Component = () => {
-  const { t } = useTranslation();
-  const initialState: InitialState = { vaults: [] };
-  const [state, setState] = useState(initialState);
-  const { errorDescription, errorTitle, hasError, vaults } = state;
-  const [form] = Form.useForm();
+  const { t } = useTranslation()
+  const initialState: InitialState = { vaults: [] }
+  const [state, setState] = useState(initialState)
+  const { errorDescription, errorTitle, hasError, vaults } = state
+  const [form] = Form.useForm()
 
   const handleClose = () => {
-    window.close();
-  };
+    window.close()
+  }
 
   const handleSubmit = () => {
     form
       .validateFields()
       .then(({ uids }: FormProps) => {
-        getStoredVaults().then((vaults) => {
+        getStoredVaults().then(vaults => {
           setStoredVaults(
-            vaults.map((vault) => ({
+            vaults.map(vault => ({
               ...vault,
               selected: uids.indexOf(vault.uid) >= 0,
-            })),
+            }))
           ).then(() => {
-            handleClose();
-          });
-        });
+            handleClose()
+          })
+        })
       })
-      .catch(() => {});
-  };
+      .catch(() => {})
+  }
 
   const componentDidMount = (): void => {
-    getStoredLanguage().then((language) => {
-      i18n.changeLanguage(language);
+    getStoredLanguage().then(language => {
+      i18n.changeLanguage(language)
 
-      getStoredVaults().then((vaults) => {
+      getStoredVaults().then(vaults => {
         if (vaults.length) {
-          setState((prevState) => ({ ...prevState, vaults, hasError: false }));
+          setState(prevState => ({ ...prevState, vaults, hasError: false }))
         } else {
-          setState((prevState) => ({
+          setState(prevState => ({
             ...prevState,
             errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
             errorTitle: t(messageKeys.GET_VAULT_FAILED),
             hasError: true,
-          }));
+          }))
         }
-      });
-    });
-  };
-
-  useEffect(componentDidMount, []);
+      })
+    })
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(componentDidMount, [])
 
   return (
     <ConfigProvider>
@@ -87,8 +85,8 @@ const Component = () => {
         {hasError ? (
           <VultiError
             onClose={handleClose}
-            description={errorDescription ?? ""}
-            title={errorTitle ?? ""}
+            description={errorDescription ?? ''}
+            title={errorTitle ?? ''}
           />
         ) : vaults.length ? (
           <>
@@ -131,11 +129,11 @@ const Component = () => {
         )}
       </div>
     </ConfigProvider>
-  );
-};
+  )
+}
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Component />
-  </StrictMode>,
-);
+  </StrictMode>
+)

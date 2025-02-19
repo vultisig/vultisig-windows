@@ -1,16 +1,14 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-
-import { Language } from "../utils/constants";
-
-import enTranslation from "./locales/en_UK";
-import esTranslation from "./locales/es_ES";
-import nlTranslation from "./locales/nl_NL";
-import hrTranslation from "./locales/hr_HR";
-import deTranslation from "./locales/de_DE";
-import itTranslation from "./locales/it_IT";
-import ruTranslation from "./locales/ru_RU";
-import ptTranslation from "./locales/pt_PT";
+import deTranslation from '@clients/extension/src/i18n/locales/de_DE'
+import enTranslation from '@clients/extension/src/i18n/locales/en_UK'
+import esTranslation from '@clients/extension/src/i18n/locales/es_ES'
+import hrTranslation from '@clients/extension/src/i18n/locales/hr_HR'
+import itTranslation from '@clients/extension/src/i18n/locales/it_IT'
+import nlTranslation from '@clients/extension/src/i18n/locales/nl_NL'
+import ptTranslation from '@clients/extension/src/i18n/locales/pt_PT'
+import ruTranslation from '@clients/extension/src/i18n/locales/ru_RU'
+import { Language } from '@clients/extension/src/utils/constants'
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -39,11 +37,11 @@ i18n.use(initReactI18next).init({
       translation: esTranslation,
     },
   },
-  fallbackLng: "en",
+  fallbackLng: 'en',
   debug: false,
   interpolation: {
     escapeValue: false,
   },
-});
+})
 
-export default i18n;
+export default i18n

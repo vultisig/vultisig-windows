@@ -1,166 +1,169 @@
-import { Buffer } from "buffer";
-import { sha256 } from "ethers";
-import { create } from "@bufbuild/protobuf";
-import { TW, WalletCore } from "@trustwallet/wallet-core";
-import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
-import Long from "long";
-
-import {
-  MAYAChainSpecificSchema,
-  type MAYAChainSpecific,
-} from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
-import {
-  CoinSchema,
-  type Coin,
-} from "@core/communication/vultisig/keysign/v1/coin_pb";
-import {
-  KeysignPayloadSchema,
-  type KeysignPayload,
-} from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
-
+import { create } from '@bufbuild/protobuf'
+import api from '@clients/extension/src/utils/api'
 import {
   ITransaction,
   SignatureProps,
   SignedTransaction,
   SpecificThorchain,
   VaultProps,
-} from "../../interfaces";
-import api from "../../api";
-import { SignedTransactionResult } from "../../signed-transaction-result";
-import BaseTransactionProvider from "../../transaction-provider/base";
-
-import SigningMode = TW.Cosmos.Proto.SigningMode;
-import BroadcastMode = TW.Cosmos.Proto.BroadcastMode;
-import { Chain } from "@core/chain/Chain";
+} from '@clients/extension/src/utils/interfaces'
+import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
+import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
+import { Chain } from '@core/chain/Chain'
+import {
+  type MAYAChainSpecific,
+  MAYAChainSpecificSchema,
+} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import {
+  type Coin,
+  CoinSchema,
+} from '@core/communication/vultisig/keysign/v1/coin_pb'
+import {
+  type KeysignPayload,
+  KeysignPayloadSchema,
+} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { TW, WalletCore } from '@trustwallet/wallet-core'
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
+import { Buffer } from 'buffer'
+import { sha256 } from 'ethers'
+import Long from 'long'
+import SigningMode = TW.Cosmos.Proto.SigningMode
+import BroadcastMode = TW.Cosmos.Proto.BroadcastMode
 
 export default class MayaTransactionProvider extends BaseTransactionProvider {
   constructor(
     chainKey: Chain,
     chainRef: { [chainKey: string]: CoinType },
     dataEncoder: (data: Uint8Array) => Promise<string>,
-    walletCore: WalletCore,
+    walletCore: WalletCore
   ) {
-    super(chainKey, chainRef, dataEncoder, walletCore);
+    super(chainKey, chainRef, dataEncoder, walletCore)
   }
 
   public getSpecificTransactionInfo = (
-    coin: Coin,
+    coin: Coin
   ): Promise<SpecificThorchain> => {
-    return new Promise<SpecificThorchain>((resolve) => {
-      api.maya.fetchAccountNumber(coin.address).then((accountData) => {
-        this.calculateFee(coin).then((fee) => {
-          const specificThorchain: SpecificThorchain = {
-            fee,
-            gasPrice: fee,
-            accountNumber: Number(accountData?.accountNumber),
-            sequence: Number(accountData.sequence ?? 0),
-            isDeposit: false,
-          } as SpecificThorchain;
+    return new Promise<SpecificThorchain>(resolve => {
+      api.maya
+        .fetchAccountNumber(coin.address)
+        .then(accountData => {
+          this.calculateFee(coin).then(fee => {
+            const specificThorchain: SpecificThorchain = {
+              fee,
+              gasPrice: fee,
+              accountNumber: Number(accountData?.accountNumber),
+              sequence: Number(accountData.sequence ?? 0),
+              isDeposit: false,
+            } as SpecificThorchain
 
-          resolve(specificThorchain);
-        });
-      });
-    });
-  };
+            resolve(specificThorchain)
+          })
+        })
+        .catch(error => {
+          console.error('Failed to fetch account data:', error)
+          throw error
+        })
+    })
+  }
 
   public getKeysignPayload = (
     transaction: ITransaction,
-    vault: VaultProps,
+    vault: VaultProps
   ): Promise<KeysignPayload> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const coin = create(CoinSchema, {
         chain: transaction.chain.name,
         ticker: transaction.chain.ticker,
         address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
-          (chain) => chain.name === transaction.chain.name,
+          chain => chain.name === transaction.chain.name
         )?.derivationKey,
         isNativeToken: true,
         logo: transaction.chain.ticker.toLowerCase(),
-      });
+      })
 
-      this.getSpecificTransactionInfo(coin).then((specificData) => {
+      this.getSpecificTransactionInfo(coin).then(specificData => {
         const mayaSpecific = create(MAYAChainSpecificSchema, {
           accountNumber: BigInt(specificData.accountNumber),
           isDeposit: false,
           sequence: BigInt(specificData.sequence),
-        });
+        })
 
         const keysignPayload = create(KeysignPayloadSchema, {
           toAddress: transaction.transactionDetails.to,
           toAmount: transaction.transactionDetails.amount?.amount
             ? BigInt(
-                parseInt(String(transaction.transactionDetails.amount.amount)),
+                parseInt(String(transaction.transactionDetails.amount.amount))
               ).toString()
-            : "0",
+            : '0',
           memo: transaction.transactionDetails.data,
           vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
-          vaultLocalPartyId: "VultiConnect",
+          vaultLocalPartyId: 'VultiConnect',
           coin,
           blockchainSpecific: {
-            case: "mayaSpecific",
+            case: 'mayaSpecific',
             value: mayaSpecific,
           },
-        });
+        })
 
-        this.keysignPayload = keysignPayload;
+        this.keysignPayload = keysignPayload
 
-        resolve(keysignPayload);
-      });
-    });
-  };
+        resolve(keysignPayload)
+      })
+    })
+  }
 
   public getPreSignedInputData = (): Promise<Uint8Array> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const mayaSpecific = this.keysignPayload?.blockchainSpecific
-        .value as unknown as MAYAChainSpecific;
-      let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({});
-      let message: TW.Cosmos.Proto.Message[];
-      const coinType = this.walletCore.CoinType.thorchain;
+        .value as unknown as MAYAChainSpecific
+      let thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({})
+      let message: TW.Cosmos.Proto.Message[]
+      const coinType = this.walletCore.CoinType.thorchain
       const pubKeyData = Buffer.from(
-        this.keysignPayload?.coin?.hexPublicKey ?? "",
-        "hex",
-      );
+        this.keysignPayload?.coin?.hexPublicKey ?? '',
+        'hex'
+      )
       const fromAddr = this.walletCore.AnyAddress.createBech32(
-        this.keysignPayload?.coin?.address ?? "",
+        this.keysignPayload?.coin?.address ?? '',
         this.walletCore.CoinType.thorchain,
-        "maya",
-      );
+        'maya'
+      )
 
       if (mayaSpecific.isDeposit) {
         thorchainCoin = TW.Cosmos.Proto.THORChainCoin.create({
           asset: TW.Cosmos.Proto.THORChainAsset.create({
-            chain: "MAYA",
-            symbol: "CACAO",
-            ticker: "CACAO",
+            chain: 'MAYA',
+            symbol: 'CACAO',
+            ticker: 'CACAO',
             synth: false,
           }),
           decimals: new Long(this.keysignPayload?.coin?.decimals ?? 0),
-        });
-        const toAmount = Number(this.keysignPayload?.toAmount ?? "0");
+        })
+        const toAmount = Number(this.keysignPayload?.toAmount ?? '0')
 
         if (toAmount > 0)
-          thorchainCoin.amount = this.keysignPayload?.toAmount ?? "0";
+          thorchainCoin.amount = this.keysignPayload?.toAmount ?? '0'
 
         message = [
           TW.Cosmos.Proto.Message.create({
             thorchainDepositMessage:
               TW.Cosmos.Proto.Message.THORChainDeposit.create({
                 signer: fromAddr.data(),
-                memo: this.keysignPayload?.memo ?? "",
+                memo: this.keysignPayload?.memo ?? '',
                 coins: [thorchainCoin],
               }),
           }),
-        ];
+        ]
       } else {
         const toAddress = this.walletCore.AnyAddress.createBech32(
-          this.keysignPayload?.toAddress ?? "",
+          this.keysignPayload?.toAddress ?? '',
           coinType,
-          "maya",
-        );
+          'maya'
+        )
         if (!toAddress) {
-          throw new Error("invalid to address");
+          throw new Error('invalid to address')
         }
         message = [
           TW.Cosmos.Proto.Message.create({
@@ -175,25 +178,25 @@ export default class MayaTransactionProvider extends BaseTransactionProvider {
               toAddress: toAddress.data(),
             }),
           }),
-        ];
+        ]
       }
 
       const input = TW.Cosmos.Proto.SigningInput.create({
         publicKey: new Uint8Array(pubKeyData),
         signingMode: SigningMode.Protobuf,
-        chainId: "mayachain-mainnet-v1",
+        chainId: 'mayachain-mainnet-v1',
         accountNumber: new Long(Number(mayaSpecific.accountNumber)),
         sequence: new Long(Number(mayaSpecific.sequence)),
         mode: BroadcastMode.SYNC,
-        memo: this.keysignPayload?.memo ?? "",
+        memo: this.keysignPayload?.memo ?? '',
         messages: message,
         fee: TW.Cosmos.Proto.Fee.create({
           gas: new Long(2000000000),
         }),
-      });
-      resolve(TW.Cosmos.Proto.SigningInput.encode(input).finish());
-    });
-  };
+      })
+      resolve(TW.Cosmos.Proto.SigningInput.encode(input).finish())
+    })
+  }
 
   public getSignedTransaction = ({
     inputData,
@@ -203,66 +206,66 @@ export default class MayaTransactionProvider extends BaseTransactionProvider {
     return new Promise((resolve, reject) => {
       if (inputData && vault) {
         const pubkeyMaya = vault.chains.find(
-          (chain) => chain.name === Chain.MayaChain,
-        )?.derivationKey;
+          chain => chain.name === Chain.MayaChain
+        )?.derivationKey
 
         if (pubkeyMaya) {
-          const coinType = this.walletCore.CoinType.thorchain;
-          const allSignatures = this.walletCore.DataVector.create();
-          const publicKeys = this.walletCore.DataVector.create();
-          const publicKeyData = Buffer.from(pubkeyMaya, "hex");
-          const modifiedSig = this.getSignature(signature);
+          const coinType = this.walletCore.CoinType.thorchain
+          const allSignatures = this.walletCore.DataVector.create()
+          const publicKeys = this.walletCore.DataVector.create()
+          const publicKeyData = Buffer.from(pubkeyMaya, 'hex')
+          const modifiedSig = this.getSignature(signature)
 
-          allSignatures.add(modifiedSig);
-          publicKeys.add(publicKeyData);
+          allSignatures.add(modifiedSig)
+          publicKeys.add(publicKeyData)
 
           const compileWithSignatures =
             this.walletCore.TransactionCompiler.compileWithSignatures(
               coinType,
               inputData,
               allSignatures,
-              publicKeys,
-            );
+              publicKeys
+            )
           const output = TW.Cosmos.Proto.SigningOutput.decode(
-            compileWithSignatures,
-          );
-          const serializedData = output.serialized;
-          const parsedData = JSON.parse(serializedData);
-          const txBytes = parsedData.tx_bytes;
-          const decodedTxBytes = Buffer.from(txBytes, "base64");
-          const hash = sha256(decodedTxBytes);
+            compileWithSignatures
+          )
+          const serializedData = output.serialized
+          const parsedData = JSON.parse(serializedData)
+          const txBytes = parsedData.tx_bytes
+          const decodedTxBytes = Buffer.from(txBytes, 'base64')
+          const hash = sha256(decodedTxBytes)
           const result = new SignedTransactionResult(
             serializedData,
             hash,
-            undefined,
-          );
+            undefined
+          )
 
-          resolve({ txHash: result.transactionHash, raw: serializedData });
+          resolve({ txHash: result.transactionHash, raw: serializedData })
         } else {
-          reject();
+          reject()
         }
       } else {
-        reject();
+        reject()
       }
-    });
-  };
+    })
+  }
 
   private getSignature(signature: SignatureProps): Uint8Array {
-    const rData = this.walletCore.HexCoding.decode(signature.R);
-    const sData = this.walletCore.HexCoding.decode(signature.S);
+    const rData = this.walletCore.HexCoding.decode(signature.R)
+    const sData = this.walletCore.HexCoding.decode(signature.S)
     const recoveryIDdata = this.walletCore.HexCoding.decode(
-      signature.RecoveryID,
-    );
+      signature.RecoveryID
+    )
     const combinedData = new Uint8Array(
-      rData.length + sData.length + recoveryIDdata.length,
-    );
-    combinedData.set(rData);
-    combinedData.set(sData, rData.length);
-    combinedData.set(recoveryIDdata, rData.length + sData.length);
-    return combinedData;
+      rData.length + sData.length + recoveryIDdata.length
+    )
+    combinedData.set(rData)
+    combinedData.set(sData, rData.length)
+    combinedData.set(recoveryIDdata, rData.length + sData.length)
+    return combinedData
   }
 
   private async calculateFee(_coin?: Coin): Promise<number> {
-    return 2000000000;
+    return 2000000000
   }
 }
