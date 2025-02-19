@@ -18,10 +18,10 @@ export const chainIdRecord = {
   [UtxoChain.Dogecoin]: '0x7d0',
   [UtxoChain.Dash]: 'Dash_dash',
 
-  [CosmosChain.THORChain]: 'Thorchain_1',
+  [CosmosChain.THORChain]: 'thorchain-1',
   [CosmosChain.Cosmos]: 'cosmoshub-4',
   [CosmosChain.Osmosis]: 'osmosis-1',
-  [CosmosChain.MayaChain]: 'MayaChain-1',
+  [CosmosChain.MayaChain]: 'mayachain-mainnet-v1',
   [CosmosChain.Dydx]: 'dydx-1',
   [CosmosChain.Kujira]: 'kaiyo-1',
   [CosmosChain.Terra]: 'phoenix-1',
