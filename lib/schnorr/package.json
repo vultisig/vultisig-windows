@@ -1,0 +1,19 @@
+{
+  "name": "@lib/schnorr",
+  "type": "module",
+  "collaborators": [
+    "Artem Mironov <artem.mironov@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "license": "SLL",
+  "files": [
+    "vs_schnorr_wasm_bg.wasm",
+    "vs_schnorr_wasm.js",
+    "vs_schnorr_wasm.d.ts"
+  ],
+  "main": "vs_schnorr_wasm.js",
+  "types": "vs_schnorr_wasm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
