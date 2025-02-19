@@ -1,3 +1,4 @@
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { centerContent } from '../../css/centerContent'
@@ -5,7 +6,6 @@ import { round } from '../../css/round'
 import { sameDimensions } from '../../css/sameDimensions'
 import { toSizeUnit } from '../../css/toSizeUnit'
 import { IsActiveProp } from '../../props'
-import { getColor } from '../../theme/getters'
 import {
   getControlSize,
   getSwitchWidth,
