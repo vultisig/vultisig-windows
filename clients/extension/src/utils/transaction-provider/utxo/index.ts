@@ -29,6 +29,7 @@ import type {
   WalletCore,
 } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import Long from 'long'
+import { BlockchairUtxoResponse } from '@clients/extension/src/types/utxo'
 
 interface ChainRef {
   [chainKey: string]: CoinType
@@ -268,7 +269,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
     const result = (await api.utxo.blockchairDashboard(
       coin.address,
       coin.chain
-    )) as { [key: string]: { utxo: any[] } }
+    )) as BlockchairUtxoResponse
     return result[coin.address].utxo.map((utxo: any) => {
       return {
         hash: utxo.transactionHash,

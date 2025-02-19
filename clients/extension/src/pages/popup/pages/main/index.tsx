@@ -22,6 +22,7 @@ import { Button, Empty, message, Modal, Select, Switch, Tooltip } from 'antd'
 import { type FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
+const VULTISIG_WEB_URL = 'https://airdrop.vultisig.com'
 
 interface SelectOption {
   value: string
@@ -83,8 +84,17 @@ const Component = () => {
   }
 
   const handleViewinWeb = () => {
-    const VULTISIG_WEB_URL = 'https://airdrop.vultisig.com'
+    if (!vault?.publicKeyEcdsa || !vault?.publicKeyEddsa) {
+      console.error('Missing required vault keys')
+      return
+    }
     const url = `${VULTISIG_WEB_URL}/redirect/${vault?.publicKeyEcdsa}/${vault?.publicKeyEddsa}`
+    try {
+      new URL(url)
+    } catch (error) {
+      console.error('Invalid URL:', error)
+      return
+    }
     chrome.tabs.create({ url })
   }
 

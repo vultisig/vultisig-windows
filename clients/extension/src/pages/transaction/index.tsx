@@ -463,7 +463,14 @@ const Component = () => {
                     })
                   })
               })
-              .catch(() => {})
+              .catch(error => {
+                if (error.errorFields) {
+                  messageApi.open({
+                    type: 'error',
+                    content: t(messageKeys.INVALID_PASSWORD),
+                  })
+                }
+              })
           }
         })
     })

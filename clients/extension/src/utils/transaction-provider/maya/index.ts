@@ -44,19 +44,25 @@ export default class MayaTransactionProvider extends BaseTransactionProvider {
     coin: Coin
   ): Promise<SpecificThorchain> => {
     return new Promise<SpecificThorchain>(resolve => {
-      api.maya.fetchAccountNumber(coin.address).then(accountData => {
-        this.calculateFee(coin).then(fee => {
-          const specificThorchain: SpecificThorchain = {
-            fee,
-            gasPrice: fee,
-            accountNumber: Number(accountData?.accountNumber),
-            sequence: Number(accountData.sequence ?? 0),
-            isDeposit: false,
-          } as SpecificThorchain
+      api.maya
+        .fetchAccountNumber(coin.address)
+        .then(accountData => {
+          this.calculateFee(coin).then(fee => {
+            const specificThorchain: SpecificThorchain = {
+              fee,
+              gasPrice: fee,
+              accountNumber: Number(accountData?.accountNumber),
+              sequence: Number(accountData.sequence ?? 0),
+              isDeposit: false,
+            } as SpecificThorchain
 
-          resolve(specificThorchain)
+            resolve(specificThorchain)
+          })
         })
-      })
+        .catch(error => {
+          console.error('Failed to fetch account data:', error)
+          throw error
+        })
     })
   }
 
