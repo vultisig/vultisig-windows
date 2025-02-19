@@ -16,8 +16,10 @@ export const getHoverVariant =
   (color: ColorName) =>
   ({ theme }: ThemeGetterParams) =>
     match(color, {
-      foreground: () => theme.colors.foreground.getVariant({ l: l => l + 4 }),
-      primary: () => theme.colors.primary.getVariant({ l: l => l * 0.85 }),
+      foreground: () =>
+        theme.colors.foreground.getVariant({ l: (l: number) => l + 4 }),
+      primary: () =>
+        theme.colors.primary.getVariant({ l: (l: number) => l * 0.85 }),
       foregroundSuperContrast: () => theme.colors.foregroundSuperContrast,
-      idle: () => theme.colors.idle.getVariant({ l: l => l + 4 }),
+      idle: () => theme.colors.idle.getVariant({ l: (l: number) => l + 4 }),
     }).toCssValue()
