@@ -7,9 +7,9 @@ import { Query } from '../../lib/ui/query/Query'
 import { useCoinPricesQuery } from './useCoinPricesQuery'
 
 type UseCoinPricesQueryInput = {
-  coin: Pick<Coin, 'id' | 'chain' | 'priceProviderId'>
+  coin: Coin
   fiatCurrency?: FiatCurrency
-}
+};
 
 export const useCoinPriceQuery = ({
   coin,

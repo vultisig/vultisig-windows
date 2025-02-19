@@ -28,7 +28,7 @@ export const getCoinPricesQueryKeys = (input: GetCoinPricesQueryKeysInput) => [
 ]
 
 type UseCoinPricesQueryInput = {
-  coins: Pick<Coin, 'id' | 'chain' | 'priceProviderId'>[]
+  coins: Coin[]
   fiatCurrency?: FiatCurrency
 }
 

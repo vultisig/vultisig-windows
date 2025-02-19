@@ -29,5 +29,6 @@ export const fromSolanaJupiterTokens = ({
       decimals: token.decimals,
       logo: token.logoURI || '',
       ticker: token.symbol,
+      priceProviderId: token.extensions?.coingeckoId || '',
     }))
 }
