@@ -4,9 +4,10 @@ const billion = 1000000000;
 const fiatMaxDecimalPlaces = 3;
 const tokenMaxDecimalPlaces = 8;
 
+// formatAmount is used to format a Fiat amount or a Token amount
 export const formatAmount = (
   amount: number,
-  currency?: string,
+  currency: string,
   locale = 'en-us'
 ): string => {
   if (amount > billion) {
@@ -15,8 +16,7 @@ export const formatAmount = (
   if (amount > million) {
     return `${formatAmount(amount / million, currency, locale)}M`;
   }
-  console.log('amount', amount);
-  console.log('currency', currency ?? 'no currency');
+
   // Validate and set locale safely
   let validLocale = 'en-US';
   try {
@@ -27,27 +27,19 @@ export const formatAmount = (
     );
   }
 
-  if (currency) {
-    try {
-      const formatter = new Intl.NumberFormat(validLocale, {
-        style: 'currency',
-        currency: currency,
-        maximumFractionDigits: fiatMaxDecimalPlaces,
-      });
+  try {
+    const formatter = new Intl.NumberFormat(validLocale, {
+      style: 'currency',
+      currency: currency,
+      maximumFractionDigits: fiatMaxDecimalPlaces,
+    });
 
-      return formatter.format(amount);
-    } catch {
-      const formatter = new Intl.NumberFormat(validLocale, {
-        maximumFractionDigits: tokenMaxDecimalPlaces,
-      });
+    return formatter.format(amount);
+  } catch {
+    const formatter = new Intl.NumberFormat(validLocale, {
+      maximumFractionDigits: tokenMaxDecimalPlaces,
+    });
 
-      return `${formatter.format(amount)} ${currency}`;
-    }
+    return `${formatter.format(amount)} ${currency}`;
   }
-
-  const formatter = new Intl.NumberFormat(validLocale, {
-    maximumFractionDigits: tokenMaxDecimalPlaces,
-  });
-
-  return formatter.format(amount);
 };

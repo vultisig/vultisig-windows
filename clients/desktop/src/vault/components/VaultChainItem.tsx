@@ -18,6 +18,7 @@ import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityA
 import { VaultChainBalance } from '../queries/useVaultChainsBalancesQuery'
 import { useCurrentVaultAddreses } from '../state/currentVault'
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 const Pill = styled.div`
   height: 24px;
@@ -78,7 +79,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
               {singleCoin ? (
                 <Text color="contrast" weight="400" size={12} centerVertically>
                   <BalanceVisibilityAware>
-                    {formatAmount(
+                    {formatTokenAmount(
                       fromChainAmount(singleCoin.amount, singleCoin.decimals)
                     )}
                   </BalanceVisibilityAware>

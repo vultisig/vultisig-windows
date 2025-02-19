@@ -15,6 +15,7 @@ import { Text } from '../../lib/ui/text'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { shouldDisplayChainLogo } from './utils'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 export const VaultChainCoinItem = ({
   value,
@@ -57,7 +58,7 @@ export const VaultChainCoinItem = ({
         </HStack>
         <Text color="contrast" size={18} weight="500" centerVertically>
           <BalanceVisibilityAware>
-            {formatAmount(balance)}
+            {formatTokenAmount(balance)}
           </BalanceVisibilityAware>
         </Text>
       </VStack>

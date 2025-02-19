@@ -14,6 +14,7 @@ import { AmountContainer } from './AmountContainer'
 import { AmountLabel } from './AmountLabel'
 import { amountConfig } from './config'
 import { SwapFiatAmount } from './SwapFiatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 const Value = styled.div`
   ${takeWholeSpace};
@@ -50,9 +51,9 @@ export const ToAmount = () => {
         <MatchQuery
           value={query}
           pending={() => <Spinner />}
-          error={() => formatAmount(0)}
-          inactive={() => formatAmount(0)}
-          success={value => formatAmount(value)}
+          error={() => formatTokenAmount(0)}
+          inactive={() => formatTokenAmount(0)}
+          success={value => formatTokenAmount(value)}
         />
       </Value>
     </AmountContainer>

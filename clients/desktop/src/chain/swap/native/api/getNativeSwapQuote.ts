@@ -1,7 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TransferDirection } from '@lib/utils/TransferDirection'
@@ -15,6 +14,7 @@ import {
 } from '../NativeSwapChain'
 import { NativeSwapQuote } from '../NativeSwapQuote'
 import { getNativeSwapDecimals } from '../utils/getNativeSwapDecimals'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 export type GetNativeSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   swapChain: NativeSwapChain
@@ -74,7 +74,7 @@ export const getNativeSwapQuote = async ({
       fromDecimals
     )
 
-    const formattedMinAmount = formatAmount(minAmount)
+    const formattedMinAmount = formatTokenAmount(minAmount)
 
     const msg = `Swap amount too small. Recommended amount ${formattedMinAmount}`
 

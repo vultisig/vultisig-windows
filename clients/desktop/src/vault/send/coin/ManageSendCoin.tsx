@@ -14,6 +14,7 @@ import {
 } from '../../state/currentVault'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { SendCoinBalanceDependant } from './balance/SendCoinBalanceDependant'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 export const ManageSendCoin = () => {
   const [value, setValue] = useCurrentSendCoin()
@@ -56,7 +57,7 @@ export const ManageSendCoin = () => {
         <span>{t('balance')}:</span>
         <SendCoinBalanceDependant
           success={amount => (
-            <span>{formatAmount(fromChainAmount(amount, coin.decimals))}</span>
+            <span>{formatTokenAmount(fromChainAmount(amount, coin.decimals))}</span>
           )}
         />
       </Text>

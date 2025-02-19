@@ -3,16 +3,14 @@ const tokenMaxDecimalPlaces = 8;
 
 export const formatTokenAmount = (
   amount: number,
-  tokenUnit: string,
+  tokenUnit?: string,
 ): string => {
   
-  console.log('amount', amount);
-  console.log('tokenUnit', tokenUnit ?? 'no tokenUnit');
   // Validate and set locale safely
   let validLocale = 'en-US';
   const formatter = new Intl.NumberFormat(validLocale, {
     maximumFractionDigits: tokenMaxDecimalPlaces,
   });
 
-  return `${formatter.format(amount)} ${tokenUnit}`;
+  return `${formatter.format(amount)} ${tokenUnit ?? ''}`;
 };

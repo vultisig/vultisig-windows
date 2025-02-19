@@ -1,11 +1,11 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
 import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 export const SwapAllowance = () => {
   const query = useSwapKeysignPayloadQuery()
@@ -28,7 +28,7 @@ export const SwapAllowance = () => {
           <TxOverviewChainDataRow>
             <span>{t('allowance')}</span>
             <span>
-              {formatAmount(
+              {formatTokenAmount(
                 fromChainAmount(erc20ApprovePayload.amount, decimals),
                 ticker
               )}

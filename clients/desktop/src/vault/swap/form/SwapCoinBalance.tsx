@@ -10,6 +10,7 @@ import { ValueProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { text } from '../../../lib/ui/text'
 import { useCurrentVaultCoin } from '../../state/currentVault'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 const Container = styled.div`
   ${text({
@@ -38,7 +39,7 @@ export const SwapCoinBalance = ({ value }: ValueProp<CoinKey>) => {
           pending={() => <Spinner />}
           error={() => t('failed_to_load')}
           success={amount => (
-            <span>{formatAmount(fromChainAmount(amount, coin.decimals))}</span>
+            <span>{formatTokenAmount(fromChainAmount(amount, coin.decimals))}</span>
           )}
         />
       </span>
