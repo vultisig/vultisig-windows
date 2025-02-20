@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { SVGProps } from 'react'
 
 export const DesktopIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -40,4 +40,4 @@ export const DesktopIcon = (props: SVGProps<SVGSVGElement>) => (
     <path d="M169.628 108.32H14.394V109.304H169.628V108.32Z" fill="#36537D" />
     <path d="M165.932 105.587H19.616V106.571H165.932V105.587Z" fill="#36537D" />
   </svg>
-);
+)

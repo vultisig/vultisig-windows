@@ -1,35 +1,35 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Match } from '../../../../lib/ui/base/Match';
-import { Button } from '../../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps';
-import { useBoolean } from '../../../../lib/ui/hooks/useBoolean';
-import { CloseIcon } from '../../../../lib/ui/icons/CloseIcon';
-import { CloudOffIcon } from '../../../../lib/ui/icons/CloudOffIcon';
-import { InfoIcon } from '../../../../lib/ui/icons/InfoIcon';
-import { HStack, VStack } from '../../../../lib/ui/layout/Stack';
-import { TakeWholeSpaceCenterContent } from '../../../../lib/ui/layout/TakeWholeSpaceCenterContent';
-import { Spinner } from '../../../../lib/ui/loaders/Spinner';
+import { Match } from '../../../../lib/ui/base/Match'
+import { Button } from '../../../../lib/ui/buttons/Button'
+import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps'
+import { useBoolean } from '../../../../lib/ui/hooks/useBoolean'
+import { CloseIcon } from '../../../../lib/ui/icons/CloseIcon'
+import { CloudOffIcon } from '../../../../lib/ui/icons/CloudOffIcon'
+import { InfoIcon } from '../../../../lib/ui/icons/InfoIcon'
+import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
+import { TakeWholeSpaceCenterContent } from '../../../../lib/ui/layout/TakeWholeSpaceCenterContent'
+import { Spinner } from '../../../../lib/ui/loaders/Spinner'
 import {
   IsDisabledProp,
   OnBackProp,
   OnForwardProp,
-} from '../../../../lib/ui/props';
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
-import { Query } from '../../../../lib/ui/query/Query';
-import { Text } from '../../../../lib/ui/text';
-import { PageHeader } from '../../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
-import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled';
-import { CurrentPeersCorrector } from '../../../keygen/shared/peerDiscovery/CurrentPeersCorrector';
-import { DownloadKeygenQrCode } from '../../../keygen/shared/peerDiscovery/DownloadKeygenQrCode';
-import { KeygenPeerDiscoveryQrCode } from '../../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryQrCode';
-import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery';
-import { useCurrentServerType } from '../../../keygen/state/currentServerType';
-import { SecureVaultKeygenOverlay } from '../components/SecureVaultKeygenOverlay';
-import { SecureVaultPeerOption } from '../components/SecureVaultPeerOption';
+} from '../../../../lib/ui/props'
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { Query } from '../../../../lib/ui/query/Query'
+import { Text } from '../../../../lib/ui/text'
+import { PageHeader } from '../../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
+import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled'
+import { CurrentPeersCorrector } from '../../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
+import { DownloadKeygenQrCode } from '../../../keygen/shared/peerDiscovery/DownloadKeygenQrCode'
+import { KeygenPeerDiscoveryQrCode } from '../../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryQrCode'
+import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
+import { useCurrentServerType } from '../../../keygen/state/currentServerType'
+import { SecureVaultKeygenOverlay } from '../components/SecureVaultKeygenOverlay'
+import { SecureVaultPeerOption } from '../components/SecureVaultPeerOption'
 import {
   BottomItemsWrapper,
   CloseIconWrapper,
@@ -42,17 +42,17 @@ import {
   PillWrapper,
   SwitchModeButton,
   SwitchModeWrapper,
-} from './SecureVaultKeygenPeerDiscoveryStep.styles';
+} from './SecureVaultKeygenPeerDiscoveryStep.styles'
 
 type KeygenPeerDiscoveryStepProps = OnForwardProp &
   Partial<OnBackProp> &
   IsDisabledProp & {
-    joinUrlQuery: Query<string>;
-    currentDevice: string;
-  };
+    joinUrlQuery: Query<string>
+    currentDevice: string
+  }
 
 const QR_CODE_LINK =
-  'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault';
+  'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
 
 export const SecureVaultKeygenPeerDiscoveryStep = ({
   onForward,
@@ -61,19 +61,19 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
   joinUrlQuery,
   currentDevice,
 }: KeygenPeerDiscoveryStepProps) => {
-  const [overlayShown, setHasShownOverlay] = useState(true);
-  const [serverType, setServerType] = useCurrentServerType();
-  const isLocalServerType = serverType === 'local';
-  const [showWarning, { toggle }] = useBoolean(true);
-  const { t } = useTranslation();
-  const queryResult = usePeerOptionsQuery();
-  const peers = queryResult.data || [];
-  const displayedDevices = [currentDevice, ...peers];
-  const shouldShowOptional = displayedDevices.length === 3;
-  const numberOfItems = shouldShowOptional ? 4 : 3;
+  const [overlayShown, setHasShownOverlay] = useState(true)
+  const [serverType, setServerType] = useCurrentServerType()
+  const isLocalServerType = serverType === 'local'
+  const [showWarning, { toggle }] = useBoolean(true)
+  const { t } = useTranslation()
+  const queryResult = usePeerOptionsQuery()
+  const peers = queryResult.data || []
+  const displayedDevices = [currentDevice, ...peers]
+  const shouldShowOptional = displayedDevices.length === 3
+  const numberOfItems = shouldShowOptional ? 4 : 3
 
   while (displayedDevices.length < numberOfItems) {
-    displayedDevices.push('');
+    displayedDevices.push('')
   }
 
   return (
@@ -214,5 +214,5 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
         )}
       </PageWrapper>
     </>
-  );
-};
+  )
+}

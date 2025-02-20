@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-import { ChildrenProp, UiProps } from '../props';
+import { ChildrenProp, UiProps } from '../props'
 
 export const ScrollableFlexboxFiller = ({
   children,
@@ -10,4 +10,4 @@ export const ScrollableFlexboxFiller = ({
   <div className={`flex-1 relative ${className}`} style={style}>
     <div className="absolute inset-0 overflow-auto">{children}</div>
   </div>
-);
+)

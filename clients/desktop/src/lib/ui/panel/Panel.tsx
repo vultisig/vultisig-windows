@@ -1,22 +1,22 @@
-import styled, { css } from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import styled, { css } from 'styled-components'
 
-import { borderRadius } from '../css/borderRadius';
-import { toSizeUnit } from '../css/toSizeUnit';
-import { getColor } from '../theme/getters';
+import { borderRadius } from '../css/borderRadius'
+import { toSizeUnit } from '../css/toSizeUnit'
 
 type PanelProps = {
-  withSections?: boolean;
-};
+  withSections?: boolean
+}
 
-export const panelPaddingInPx = 16;
+export const panelPaddingInPx = 16
 
 export const panelPadding = css`
   padding: ${toSizeUnit(panelPaddingInPx)};
-`;
+`
 
 export const panelBackground = css`
   background: ${getColor('foreground')};
-`;
+`
 
 export const panel = ({ withSections }: PanelProps = {}) => css`
   ${borderRadius.m};
@@ -38,8 +38,8 @@ export const panel = ({ withSections }: PanelProps = {}) => css`
         ${panelPadding};
         ${panelBackground};
       `}
-`;
+`
 
 export const Panel = styled.div<PanelProps>`
   ${panel};
-`;
+`

@@ -1,16 +1,16 @@
-import { getChainSpecific } from '@core/keysign/chainSpecific';
-import { ChainSpecificResolverInput } from '@core/keysign/chainSpecific/ChainSpecificResolver';
-import { withoutUndefined } from '@lib/utils/array/withoutUndefined';
-import { useQuery } from '@tanstack/react-query';
+import { getChainSpecific } from '@core/keysign/chainSpecific'
+import { ChainSpecificResolverInput } from '@core/keysign/chainSpecific/ChainSpecificResolver'
+import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
+import { useQuery } from '@tanstack/react-query'
 
-export const chainSpecificQueryKeyPrefix = 'chainSpecific';
+export const chainSpecificQueryKeyPrefix = 'chainSpecific'
 
 export const getChainSpecificQueryKey = (input: ChainSpecificResolverInput) =>
-  withoutUndefined([chainSpecificQueryKeyPrefix, ...Object.values(input)]);
+  withoutUndefined([chainSpecificQueryKeyPrefix, ...Object.values(input)])
 
 export const useChainSpecificQuery = (input: ChainSpecificResolverInput) => {
   return useQuery({
     queryKey: getChainSpecificQueryKey(input),
     queryFn: () => getChainSpecific(input),
-  });
-};
+  })
+}

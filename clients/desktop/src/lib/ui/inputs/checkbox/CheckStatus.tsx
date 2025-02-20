@@ -1,20 +1,20 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import React from 'react'
+import styled, { css } from 'styled-components'
 
-import { centerContent } from '../../css/centerContent';
-import { interactive } from '../../css/interactive';
-import { CheckIcon } from '../../icons/CheckIcon';
-import { IconWrapper } from '../../icons/IconWrapper';
-import { ChildrenProp, UiProps } from '../../props';
-import { getColor } from '../../theme/getters';
+import { centerContent } from '../../css/centerContent'
+import { interactive } from '../../css/interactive'
+import { CheckIcon } from '../../icons/CheckIcon'
+import { IconWrapper } from '../../icons/IconWrapper'
+import { ChildrenProp, UiProps } from '../../props'
 
 type CheckStatusProps = UiProps & {
-  value: boolean;
-  as?: React.ElementType;
-  isInteractive?: boolean;
-} & Partial<ChildrenProp>;
+  value: boolean
+  as?: React.ElementType
+  isInteractive?: boolean
+} & Partial<ChildrenProp>
 
-const IconContainer = styled(IconWrapper)``;
+const IconContainer = styled(IconWrapper)``
 
 const Container = styled.div<{ isChecked: boolean; isInteractive?: boolean }>`
   width: 100%;
@@ -54,7 +54,7 @@ const Container = styled.div<{ isChecked: boolean; isInteractive?: boolean }>`
         }
       `}
     `};
-`;
+`
 
 export const CheckStatus = ({
   value,
@@ -69,5 +69,5 @@ export const CheckStatus = ({
       </IconContainer>
       {children}
     </Container>
-  );
-};
+  )
+}

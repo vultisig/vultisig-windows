@@ -1,17 +1,17 @@
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { without } from '@lib/utils/array/without'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { useDefaultChains } from '../../../chain/state/defaultChains';
-import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { useCurrentSearch } from '../../../lib/ui/search/CurrentSearchProvider';
-import { without } from '@lib/utils/array/without';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { PageSlice } from '../../../ui/page/PageSlice';
-import { CoinSearch } from '../../../vault/chain/manage/coin/search/CoinSearch';
+import { useDefaultChains } from '../../../chain/state/defaultChains'
+import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { useCurrentSearch } from '../../../lib/ui/search/CurrentSearchProvider'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { PageSlice } from '../../../ui/page/PageSlice'
+import { CoinSearch } from '../../../vault/chain/manage/coin/search/CoinSearch'
 import {
   ChainButton,
   Check,
@@ -19,23 +19,23 @@ import {
   ColumnTwoRowOneItem,
   ColumnTwoRowTwoItem,
   HeaderWrapper,
-} from './VaultDefaultChains.styles';
+} from './VaultDefaultChains.styles'
 
 const VaultDefaultChains = () => {
-  const { t } = useTranslation();
-  const [searchQuery] = useCurrentSearch();
+  const { t } = useTranslation()
+  const [searchQuery] = useCurrentSearch()
 
-  const [value, setValue] = useDefaultChains();
+  const [value, setValue] = useDefaultChains()
 
-  const nativeTokens = Object.values(chainFeeCoin);
+  const nativeTokens = Object.values(chainFeeCoin)
   const filteredNativeTokens = useMemo(() => {
     if (!searchQuery) {
-      return nativeTokens;
+      return nativeTokens
     }
     return nativeTokens.filter(token =>
       token.ticker.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [nativeTokens, searchQuery]);
+    )
+  }, [nativeTokens, searchQuery])
 
   return (
     <VStack flexGrow gap={16}>
@@ -52,9 +52,9 @@ const VaultDefaultChains = () => {
       <PageSlice gap={16} flexGrow={true}>
         <CoinSearch />
         {filteredNativeTokens.map(({ ticker, chain }, index) => {
-          const imgSrc = getChainEntityIconSrc(chain as string);
+          const imgSrc = getChainEntityIconSrc(chain as string)
 
-          const isSelected = value.includes(chain);
+          const isSelected = value.includes(chain)
 
           return (
             <ChainButton
@@ -79,11 +79,11 @@ const VaultDefaultChains = () => {
               </ColumnTwoRowTwoItem>
               <Check value={isSelected} />
             </ChainButton>
-          );
+          )
         })}
       </PageSlice>
     </VStack>
-  );
-};
+  )
+}
 
-export default VaultDefaultChains;
+export default VaultDefaultChains

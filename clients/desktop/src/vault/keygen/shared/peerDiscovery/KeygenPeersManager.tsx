@@ -1,8 +1,8 @@
-import { PeersManager } from './PeersManager';
-import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery';
+import { PeersManager } from './PeersManager'
+import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery'
 
 export const KeygenPeersManager = () => {
-  const peerOptionsQuery = usePeerOptionsQuery();
+  const peerOptionsQuery = usePeerOptionsQuery()
 
-  return <PeersManager peerOptionsQuery={peerOptionsQuery} />;
-};
+  return <PeersManager peerOptionsQuery={peerOptionsQuery} />
+}

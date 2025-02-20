@@ -13,4 +13,4 @@ export const CloudWithToolkeyIcon = () => (
       d="m8.75 17.5 2.5 2.75 5-5.5"
     />
   </svg>
-);
+)

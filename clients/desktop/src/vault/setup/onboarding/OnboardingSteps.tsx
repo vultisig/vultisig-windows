@@ -1,35 +1,35 @@
-import { ComponentProps, FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import { ComponentProps, FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { IconButton } from '../../../lib/ui/buttons/IconButton';
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
-import { MultistepProgressIndicator } from '../../../lib/ui/flow/MultistepProgressIndicator';
-import { ChevronLeftIcon } from '../../../lib/ui/icons/ChevronLeftIcon';
-import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon';
-import { HStack, VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
-import { PageContent } from '../../../ui/page/PageContent';
-import { AnimationDescription } from './AnimationDescriptions';
-import { useOnboardingStepsAnimations } from './hooks/useOnboardingStepsAnimations';
-import { RiveWrapper } from './Onobarding.styled';
+import { IconButton } from '../../../lib/ui/buttons/IconButton'
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
+import { MultistepProgressIndicator } from '../../../lib/ui/flow/MultistepProgressIndicator'
+import { ChevronLeftIcon } from '../../../lib/ui/icons/ChevronLeftIcon'
+import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon'
+import { HStack, VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
+import { PageContent } from '../../../ui/page/PageContent'
+import { AnimationDescription } from './AnimationDescriptions'
+import { useOnboardingStepsAnimations } from './hooks/useOnboardingStepsAnimations'
+import { RiveWrapper } from './Onobarding.styled'
 
 export type SharedOnboardingScreensProps = {
-  animationComponent: (props: ComponentProps<'canvas'>) => JSX.Element;
-  onNextAnimation: () => void;
-};
+  animationComponent: (props: ComponentProps<'canvas'>) => JSX.Element
+  onNextAnimation: () => void
+}
 
 type OnboardingStepsProps = {
-  onCompleteSteps: () => void;
-};
+  onCompleteSteps: () => void
+}
 
 export const OnboardingSteps: FC<OnboardingStepsProps> = ({
   onCompleteSteps,
 }) => {
-  const { t } = useTranslation();
-  const navigate = useAppNavigate();
+  const { t } = useTranslation()
+  const navigate = useAppNavigate()
 
   const {
     animations,
@@ -38,7 +38,7 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
     currentAnimation,
     animationComponent: AnimationComponent,
     isLoading,
-  } = useOnboardingStepsAnimations();
+  } = useOnboardingStepsAnimations()
 
   return (
     <PageContent style={{ overflowY: 'hidden' }}>
@@ -97,8 +97,8 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
         </VStack>
       </ContentWrapper>
     </PageContent>
-  );
-};
+  )
+}
 
 const NextAnimationButton = styled(IconButton)`
   flex-shrink: 0;
@@ -115,13 +115,13 @@ const NextAnimationButton = styled(IconButton)`
   & svg {
     stroke: ${getColor('textDark')};
   }
-`;
+`
 
 const ProgressWrapper = styled(VStack)`
   margin-inline: auto;
   margin-top: 48px;
-`;
+`
 
 const ContentWrapper = styled(VStack)`
   margin-inline: auto;
-`;
+`

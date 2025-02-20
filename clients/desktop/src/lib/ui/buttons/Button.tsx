@@ -1,21 +1,21 @@
-import { match } from '@lib/utils/match';
-import React, { forwardRef } from 'react';
-import styled, { css } from 'styled-components';
+import { getHoverVariant } from '@lib/ui/theme/getHoverVariant'
+import { getColor } from '@lib/ui/theme/getters'
+import { match } from '@lib/utils/match'
+import React, { forwardRef } from 'react'
+import styled, { css } from 'styled-components'
 
-import { MergeRefs } from '../base/MergeRefs';
-import { centerContent } from '../css/centerContent';
-import { horizontalPadding } from '../css/horizontalPadding';
-import { round } from '../css/round';
-import { CenterAbsolutely } from '../layout/CenterAbsolutely';
-import { Spinner } from '../loaders/Spinner';
-import { getHoverVariant } from '../theme/getHoverVariant';
-import { getColor } from '../theme/getters';
-import { Tooltip } from '../tooltips/Tooltip';
-import { UnstyledButton } from './UnstyledButton';
+import { MergeRefs } from '../base/MergeRefs'
+import { centerContent } from '../css/centerContent'
+import { horizontalPadding } from '../css/horizontalPadding'
+import { round } from '../css/round'
+import { CenterAbsolutely } from '../layout/CenterAbsolutely'
+import { Spinner } from '../loaders/Spinner'
+import { Tooltip } from '../tooltips/Tooltip'
+import { UnstyledButton } from './UnstyledButton'
 
-export const buttonSizes = ['xs', 's', 'm', 'l', 'xl'] as const;
+export const buttonSizes = ['xs', 's', 'm', 'l', 'xl'] as const
 
-type ButtonSize = (typeof buttonSizes)[number];
+type ButtonSize = (typeof buttonSizes)[number]
 
 export const buttonKinds = [
   'primary',
@@ -23,16 +23,16 @@ export const buttonKinds = [
   'outlined',
   'ghost',
   'idle',
-] as const;
+] as const
 
-export type ButtonKind = (typeof buttonKinds)[number];
+export type ButtonKind = (typeof buttonKinds)[number]
 
 interface ContainerProps {
-  size: ButtonSize;
-  isDisabled?: boolean;
-  isLoading?: boolean;
-  isRounded?: boolean;
-  kind: ButtonKind;
+  size: ButtonSize
+  isDisabled?: boolean
+  isLoading?: boolean
+  isRounded?: boolean
+  kind: ButtonKind
 }
 
 const Container = styled(UnstyledButton)<ContainerProps>`
@@ -147,24 +147,24 @@ const Container = styled(UnstyledButton)<ContainerProps>`
     css`
       opacity: 0.8;
     `};
-`;
+`
 
 export type ButtonProps = Omit<
   React.ComponentProps<typeof Container>,
   'size' | 'kind' | 'isDisabled'
 > & {
-  size?: ButtonSize;
-  isDisabled?: boolean | string;
-  isLoading?: boolean;
-  isRounded?: boolean;
-  kind?: ButtonKind;
-  onClick?: () => void;
-  as?: React.ElementType;
-};
+  size?: ButtonSize
+  isDisabled?: boolean | string
+  isLoading?: boolean
+  isRounded?: boolean
+  kind?: ButtonKind
+  onClick?: () => void
+  as?: React.ElementType
+}
 
 const Hide = styled.div`
   opacity: 0;
-`;
+`
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -188,7 +188,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       </>
     ) : (
       children
-    );
+    )
 
     const containerProps = {
       kind,
@@ -197,7 +197,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       isLoading,
       onClick: isDisabled || isLoading ? undefined : onClick,
       ...rest,
-    };
+    }
 
     if (typeof isDisabled === 'string') {
       return (
@@ -213,18 +213,18 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
                   </Container>
                 )}
               />
-            );
+            )
           }}
         />
-      );
+      )
     }
 
     return (
       <Container ref={ref} {...containerProps}>
         {content}
       </Container>
-    );
+    )
   }
-);
+)
 
-Button.displayName = 'Button';
+Button.displayName = 'Button'

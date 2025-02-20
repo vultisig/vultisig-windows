@@ -1,111 +1,103 @@
-import { StrictMode, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Button, Form, Radio } from "antd";
-import ReactDOM from "react-dom/client";
+import '@clients/extension/src/styles/index.scss'
+import '@clients/extension/src/pages/accounts/index.scss'
 
-import { ChainKey } from "../../utils/constants";
+import ConfigProvider from '@clients/extension/src/components/config-provider'
+import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
+import VultiError from '@clients/extension/src/components/vulti-error'
+import VultiLoading from '@clients/extension/src/components/vulti-loading'
+import i18n from '@clients/extension/src/i18n/config'
+import { Vultisig } from '@clients/extension/src/icons'
+import { VaultProps } from '@clients/extension/src/utils/interfaces'
+import messageKeys from '@clients/extension/src/utils/message-keys'
 import {
   getStoredLanguage,
   getStoredRequest,
   getStoredVaults,
   setStoredVaults,
-} from "../../utils/storage";
-import { VaultProps } from "../../utils/interfaces";
-import i18n from "../../i18n/config";
-import messageKeys from "../../utils/message-keys";
-
-import { Vultisig } from "../../icons";
-import ConfigProvider from "../../components/config-provider";
-import MiddleTruncate from "../../components/middle-truncate";
-import VultiError from "../../components/vulti-error";
-import VultiLoading from "../../components/vulti-loading";
-
-import "../../styles/index.scss";
-import "../accounts/index.scss";
+} from '@clients/extension/src/utils/storage'
+import { Chain } from '@core/chain/Chain'
+import { Button, Form, Radio } from 'antd'
+import { StrictMode, useEffect, useState } from 'react'
+import ReactDOM from 'react-dom/client'
+import { useTranslation } from 'react-i18next'
 
 interface FormProps {
-  uid: string;
+  uid: string
 }
 
 interface InitialState {
-  chain?: ChainKey;
-  errorDescription?: string;
-  errorTitle?: string;
-  hasError?: boolean;
-  sender?: string;
-  vaults: VaultProps[];
+  chain?: Chain
+  errorDescription?: string
+  errorTitle?: string
+  hasError?: boolean
+  sender?: string
+  vaults: VaultProps[]
 }
 
 const Component = () => {
-  const { t } = useTranslation();
-  const initialState: InitialState = { vaults: [] };
-  const [state, setState] = useState(initialState);
+  const { t } = useTranslation()
+  const initialState: InitialState = { vaults: [] }
+  const [state, setState] = useState(initialState)
   const { chain, errorDescription, errorTitle, hasError, sender, vaults } =
-    state;
-  const [form] = Form.useForm();
+    state
+  const [form] = Form.useForm()
 
   const handleClose = () => {
-    window.close();
-  };
+    window.close()
+  }
 
   const handleSubmit = () => {
     form.validateFields().then(({ uid }: FormProps) => {
       if (sender) {
-        getStoredVaults().then((vaults) => {
+        getStoredVaults().then(vaults => {
           setStoredVaults(
-            vaults.map((vault) => ({
+            vaults.map(vault => ({
               ...vault,
               apps:
                 uid === vault.uid
                   ? [
                       sender,
-                      ...(vault.apps?.filter((app) => app !== sender) ?? []),
+                      ...(vault.apps?.filter(app => app !== sender) ?? []),
                     ]
-                  : (vault.apps?.filter((app) => app !== sender) ?? []),
+                  : (vault.apps?.filter(app => app !== sender) ?? []),
               active: uid === vault.uid ? true : false,
-            })),
+            }))
           ).then(() => {
-            handleClose();
-          });
-        });
+            handleClose()
+          })
+        })
       }
-    });
-  };
+    })
+  }
 
   useEffect(() => {
-    getStoredLanguage().then((language) => {
-      i18n.changeLanguage(language);
+    getStoredLanguage().then(language => {
+      i18n.changeLanguage(language)
 
       getStoredRequest()
         .then(({ chain, sender }) => {
-          getStoredVaults().then((vaults) => {
+          getStoredVaults().then(vaults => {
             if (vaults.length) {
-              setState((prevState) => ({
+              setState(prevState => ({
                 ...prevState,
                 chain,
                 sender,
                 vaults,
                 hasError: false,
-              }));
-
-              form.setFieldsValue({
-                uids: vaults
-                  .filter(({ apps }) => apps && apps.indexOf(sender) >= 0)
-                  .map(({ uid }) => uid),
-              });
+              }))
             } else {
-              setState((prevState) => ({
+              setState(prevState => ({
                 ...prevState,
                 errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
                 errorTitle: t(messageKeys.GET_VAULT_FAILED),
                 hasError: true,
-              }));
+              }))
             }
-          });
+          })
         })
-        .catch(() => {});
-    });
-  }, []);
+        .catch(() => {})
+    })
+  }, [t])
 
   return (
     <ConfigProvider>
@@ -113,8 +105,8 @@ const Component = () => {
         {hasError ? (
           <VultiError
             onClose={handleClose}
-            description={errorDescription ?? ""}
-            title={errorTitle ?? ""}
+            description={errorDescription ?? ''}
+            title={errorTitle ?? ''}
           />
         ) : vaults.length ? (
           <>
@@ -140,7 +132,7 @@ const Component = () => {
                         <MiddleTruncate
                           text={
                             chains.find(({ name }) => name === chain)
-                              ?.address ?? ""
+                              ?.address ?? ''
                           }
                         />
                       </Radio>
@@ -164,11 +156,11 @@ const Component = () => {
         )}
       </div>
     </ConfigProvider>
-  );
-};
+  )
+}
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Component />
-  </StrictMode>,
-);
+  </StrictMode>
+)

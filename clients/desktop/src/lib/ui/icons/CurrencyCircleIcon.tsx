@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 
 const CurrencyCircleIcon = () => (
   <svg
@@ -23,5 +23,5 @@ const CurrencyCircleIcon = () => (
       d="M8.125 13.125h2.813a1.563 1.563 0 0 0 0-3.125H9.062a1.562 1.562 0 1 1 0-3.125h2.813"
     />
   </svg>
-);
-export default CurrencyCircleIcon;
+)
+export default CurrencyCircleIcon

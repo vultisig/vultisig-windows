@@ -1,28 +1,28 @@
-import { useTranslation } from 'react-i18next';
+import { getKeygenThreshold } from '@core/keygen/utils/getKeygenThreshold'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps';
-import { VStack } from '../../../../lib/ui/layout/Stack';
-import { OnBackProp, OnForwardProp } from '../../../../lib/ui/props';
-import { InfoBlock } from '../../../../lib/ui/status/InfoBlock';
-import { Text } from '../../../../lib/ui/text';
-import { PageContent } from '../../../../ui/page/PageContent';
-import { PageHeader } from '../../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle';
-import { useVaultKeygenDevices } from '../../../setup/hooks/useVaultKegenDevices';
-import { getVaultActionSignersMin } from '../../utils/getVaultActionSignersMin';
-import { VaultDeviceItem } from './VaultDeviceItem';
+import { Button } from '../../../../lib/ui/buttons/Button'
+import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps'
+import { VStack } from '../../../../lib/ui/layout/Stack'
+import { OnBackProp, OnForwardProp } from '../../../../lib/ui/props'
+import { InfoBlock } from '../../../../lib/ui/status/InfoBlock'
+import { Text } from '../../../../lib/ui/text'
+import { PageContent } from '../../../../ui/page/PageContent'
+import { PageHeader } from '../../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
+import { useVaultKeygenDevices } from '../../../setup/hooks/useVaultKegenDevices'
+import { VaultDeviceItem } from './VaultDeviceItem'
 
 export const KeygenVerifyStep = ({
   onBack,
   onForward,
 }: OnForwardProp & OnBackProp) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const devices = useVaultKeygenDevices();
+  const devices = useVaultKeygenDevices()
 
-  const minSigners = getVaultActionSignersMin(devices.length);
+  const minSigners = getKeygenThreshold(devices.length)
 
   return (
     <>
@@ -64,5 +64,5 @@ export const KeygenVerifyStep = ({
         <Button type="submit">{t('continue')}</Button>
       </PageContent>
     </>
-  );
-};
+  )
+}

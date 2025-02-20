@@ -1,19 +1,19 @@
-import { createContext } from 'react';
+import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
+import { createContext } from 'react'
 
-import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter';
-import { ChildrenProp } from '../props';
-import { createContextHook } from './createContextHook';
+import { ChildrenProp } from '../props'
+import { createContextHook } from './createContextHook'
 
 export function getValueProviderSetup<T>(name: string) {
-  const ValueContext = createContext<T | undefined>(undefined);
+  const ValueContext = createContext<T | undefined>(undefined)
 
-  type Props = ChildrenProp & { value: T };
+  type Props = ChildrenProp & { value: T }
 
   const ValueProvider = ({ children, value }: Props) => {
     return (
       <ValueContext.Provider value={value}>{children}</ValueContext.Provider>
-    );
-  };
+    )
+  }
 
   return {
     provider: ValueProvider,
@@ -21,5 +21,5 @@ export function getValueProviderSetup<T>(name: string) {
       ValueContext,
       `${capitalizeFirstLetter(name)}Context`
     ),
-  };
+  }
 }

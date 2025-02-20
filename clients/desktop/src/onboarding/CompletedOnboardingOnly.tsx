@@ -1,25 +1,25 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
-import { ChildrenProp } from '../lib/ui/props';
-import { useAppNavigate } from '../navigation/hooks/useAppNavigate';
-import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding';
+import { ChildrenProp } from '../lib/ui/props'
+import { useAppNavigate } from '../navigation/hooks/useAppNavigate'
+import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding'
 
 export const CompletedOnboardingProvider = ({ children }: ChildrenProp) => {
-  const [hasCompletedOnboarding] = useHasFinishedOnboarding();
+  const [hasCompletedOnboarding] = useHasFinishedOnboarding()
 
-  const navigate = useAppNavigate();
+  const navigate = useAppNavigate()
 
-  const isDisabled = !hasCompletedOnboarding;
+  const isDisabled = !hasCompletedOnboarding
 
   useEffect(() => {
     if (isDisabled) {
-      navigate('onboarding');
+      navigate('onboarding')
     }
-  }, [isDisabled, navigate]);
+  }, [isDisabled, navigate])
 
   if (isDisabled) {
-    return null;
+    return null
   }
 
-  return <>{children}</>;
-};
+  return <>{children}</>
+}

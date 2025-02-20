@@ -3,6 +3,6 @@ export const injectPathParams = (
   params: Record<string, string>
 ) => {
   return Object.entries(params).reduce((acc, [key, value]) => {
-    return acc.replace(`:${key}`, value);
-  }, path);
-};
+    return acc.replace(`:${key}`, value)
+  }, path)
+}

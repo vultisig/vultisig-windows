@@ -1,11 +1,11 @@
-import styled, { css } from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import { match } from '@lib/utils/match'
+import styled, { css } from 'styled-components'
 
-import { DnDItemStatus } from '../../../dnd/DnDItemStatus';
-import { match } from '@lib/utils/match';
-import { absoluteOutline } from '../../css/absoluteOutline';
-import { borderRadius } from '../../css/borderRadius';
-import { StatusProp } from '../../props';
-import { getColor } from '../../theme/getters';
+import { DnDItemStatus } from '../../../dnd/DnDItemStatus'
+import { absoluteOutline } from '../../css/absoluteOutline'
+import { borderRadius } from '../../css/borderRadius'
+import { StatusProp } from '../../props'
 
 export const DnDItemHighlight = styled.div`
   position: absolute;
@@ -13,7 +13,7 @@ export const DnDItemHighlight = styled.div`
   ${absoluteOutline(0, 0)}
 
   border: 2px solid ${getColor('primary')};
-`;
+`
 
 export const DnDItemContainer = styled.div<StatusProp<DnDItemStatus>>`
   position: relative;
@@ -27,4 +27,4 @@ export const DnDItemContainer = styled.div<StatusProp<DnDItemStatus>>`
         opacity: 0.4;
       `,
     })}
-`;
+`

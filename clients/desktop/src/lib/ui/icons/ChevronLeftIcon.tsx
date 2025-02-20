@@ -2,8 +2,8 @@ export const ChevronLeftIcon = ({
   width = '1em',
   height = '1em',
 }: {
-  width?: string | number;
-  height?: string | number;
+  width?: string | number
+  height?: string | number
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -18,4 +18,4 @@ export const ChevronLeftIcon = ({
   >
     <polyline points="15 18 9 12 15 6"></polyline>
   </svg>
-);
+)

@@ -1,9 +1,9 @@
-import { Chain } from '@core/chain/Chain';
-import { WalletCore } from '@trustwallet/wallet-core';
-import { ZodObject } from 'zod';
+import { Chain } from '@core/chain/Chain'
+import { WalletCore } from '@trustwallet/wallet-core'
+import { ZodObject } from 'zod'
 
-import { ChainAction } from '../ChainAction';
-import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig';
+import { ChainAction } from '../ChainAction'
+import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
 
 export const isSchemaFunction = (
   schema: unknown
@@ -12,8 +12,8 @@ export const isSchemaFunction = (
   walletCore: any,
   totalAmountAvailable: number
 ) => ZodObject<any> => {
-  return typeof schema === 'function';
-};
+  return typeof schema === 'function'
+}
 
 export const getFieldsForChainAction = (
   chain: Chain,
@@ -21,7 +21,7 @@ export const getFieldsForChainAction = (
 ) =>
   chain && selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.fields || []
-    : [];
+    : []
 
 export const getChainActionSchema = (
   chain: Chain,
@@ -29,7 +29,7 @@ export const getChainActionSchema = (
 ) =>
   chain && selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.schema
-    : undefined;
+    : undefined
 
 // @antonio: using any because Zod can't be configured
 export const resolveSchema = (
@@ -42,4 +42,4 @@ export const resolveSchema = (
     ? isSchemaFunction(schema)
       ? schema(chain, walletCore, totalAmountAvailable)
       : schema
-    : undefined;
+    : undefined

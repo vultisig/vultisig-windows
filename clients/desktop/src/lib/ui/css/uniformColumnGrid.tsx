@@ -1,25 +1,25 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
-import { toSizeUnit } from '../css/toSizeUnit';
+import { toSizeUnit } from '../css/toSizeUnit'
 
 export type UniformColumnGridParams = {
-  gap: number;
-  minChildrenWidth?: number;
-  maxChildrenWidth?: number;
-  childrenWidth?: number;
-  rowHeight?: number;
-  fullWidth?: boolean;
-  maxColumns?: number;
-};
+  gap: number
+  minChildrenWidth?: number
+  maxChildrenWidth?: number
+  childrenWidth?: number
+  rowHeight?: number
+  fullWidth?: boolean
+  maxColumns?: number
+}
 
 const getColumnMax = (maxColumns: number | undefined, gap: number) => {
-  if (!maxColumns) return `0px`;
+  if (!maxColumns) return `0px`
 
-  const gapCount = maxColumns - 1;
-  const totalGapWidth = `calc(${gapCount} * ${toSizeUnit(gap)})`;
+  const gapCount = maxColumns - 1
+  const totalGapWidth = `calc(${gapCount} * ${toSizeUnit(gap)})`
 
-  return `calc((100% - ${totalGapWidth}) / ${maxColumns})`;
-};
+  return `calc((100% - ${totalGapWidth}) / ${maxColumns})`
+}
 
 const getColumnWidth = ({
   minChildrenWidth,
@@ -29,7 +29,7 @@ const getColumnWidth = ({
   childrenWidth,
 }: UniformColumnGridParams) => {
   if (childrenWidth !== undefined) {
-    return toSizeUnit(childrenWidth);
+    return toSizeUnit(childrenWidth)
   }
 
   return `
@@ -39,8 +39,8 @@ const getColumnWidth = ({
         ${getColumnMax(maxColumns, gap)}
       ),
       ${maxChildrenWidth ? toSizeUnit(maxChildrenWidth) : '1fr'}
-  )`;
-};
+  )`
+}
 
 export const uniformColumnGrid = (params: UniformColumnGridParams) => css`
   display: grid;
@@ -54,8 +54,8 @@ export const uniformColumnGrid = (params: UniformColumnGridParams) => css`
   css`
     width: 100%;
   `}
-`;
+`
 
 export const UniformColumnGrid = styled.div<UniformColumnGridParams>`
   ${uniformColumnGrid}
-`;
+`

@@ -1,15 +1,15 @@
-import { FC } from 'react';
+import { FC } from 'react'
 
-import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { WaitForServerStates } from '../../server/components/WaitForServerStates';
-import { useVaultCreationPreparation } from './hooks/useVaultCreationPreparation';
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { WaitForServerStates } from '../../server/components/WaitForServerStates'
+import { useVaultCreationPreparation } from './hooks/useVaultCreationPreparation'
 
 export const SetupVaultServerStep: FC<OnForwardProp & OnBackProp> = ({
   onForward,
   onBack,
 }) => {
-  const state = useVaultCreationPreparation();
+  const state = useVaultCreationPreparation()
 
   return (
     <MatchQuery
@@ -22,5 +22,5 @@ export const SetupVaultServerStep: FC<OnForwardProp & OnBackProp> = ({
         <WaitForServerStates state="error" onAnimationEnd={onBack} />
       )}
     />
-  );
-};
+  )
+}

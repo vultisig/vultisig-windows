@@ -1,33 +1,33 @@
-import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
-import { reorder } from '@atlaskit/pragmatic-drag-and-drop/reorder';
-import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
-import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types';
-import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
+import { reorder } from '@atlaskit/pragmatic-drag-and-drop/reorder'
+import { extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge'
+import { Edge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/dist/types/types'
+import { getReorderDestinationIndex } from '@atlaskit/pragmatic-drag-and-drop-hitbox/util/get-reorder-destination-index'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { AddressBookItem } from '../../../../../lib/types/address-book';
-import { Button } from '../../../../../lib/ui/buttons/Button';
-import { UnstyledButton } from '../../../../../lib/ui/buttons/UnstyledButton';
-import SquareAndPencilIcon from '../../../../../lib/ui/icons/SquareAndPencilIcon';
-import { Text } from '../../../../../lib/ui/text';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle';
-import { useDeleteAddressBookItemMutation } from '../../../../../vault/mutations/useDeleteAddressBookItemMutation';
-import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery';
-import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles';
-import ModifyAddressForm from '../modifyAddressForm/ModifyAddressForm';
-import AddressBookListItem from './AddressBookListItem/AddressBookListItem';
-import { ButtonWrapper, Container, Main } from './AddressesListView.styles';
-import { ListContext } from './list-context/useListContext';
-import { getItemRegistry } from './utils/getItemRegistry';
+import { AddressBookItem } from '../../../../../lib/types/address-book'
+import { Button } from '../../../../../lib/ui/buttons/Button'
+import { UnstyledButton } from '../../../../../lib/ui/buttons/UnstyledButton'
+import SquareAndPencilIcon from '../../../../../lib/ui/icons/SquareAndPencilIcon'
+import { Text } from '../../../../../lib/ui/text'
+import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle'
+import { useDeleteAddressBookItemMutation } from '../../../../../vault/mutations/useDeleteAddressBookItemMutation'
+import { useAddressBookItemsQuery } from '../../../../../vault/queries/useAddressBookItemsQuery'
+import { AddressBookPageHeader } from '../../AddressBookSettingsPage.styles'
+import ModifyAddressForm from '../modifyAddressForm/ModifyAddressForm'
+import AddressBookListItem from './AddressBookListItem/AddressBookListItem'
+import { ButtonWrapper, Container, Main } from './AddressesListView.styles'
+import { ListContext } from './list-context/useListContext'
+import { getItemRegistry } from './utils/getItemRegistry'
 
 type AddressesListViewProps = {
-  onOpenAddAddressView: () => void;
-  isEditModeOn: boolean;
-  onEditModeToggle: () => void;
-};
+  onOpenAddAddressView: () => void
+  isEditModeOn: boolean
+  onEditModeToggle: () => void
+}
 
 const AddressesListView = ({
   onOpenAddAddressView,
@@ -36,42 +36,41 @@ const AddressesListView = ({
 }: AddressesListViewProps) => {
   const [modifyAddressItemId, setModifyAddressItemId] = useState<string | null>(
     null
-  );
-  const isModifyViewOpen = modifyAddressItemId !== null;
-  const { t } = useTranslation();
+  )
+  const isModifyViewOpen = modifyAddressItemId !== null
+  const { t } = useTranslation()
   const {
     data: addressBookItems,
     isFetching: isFetchingAddressBookItems,
     error: addressBookItemsError,
-  } = useAddressBookItemsQuery();
+  } = useAddressBookItemsQuery()
 
-  const [items, setItems] = useState<AddressBookItem[]>([]);
-  const [registry] = useState(getItemRegistry);
+  const [items, setItems] = useState<AddressBookItem[]>([])
+  const [registry] = useState(getItemRegistry)
 
   useEffect(() => {
     if (addressBookItems) {
-      setItems(addressBookItems);
+      setItems(addressBookItems)
     }
-  }, [addressBookItems]);
+  }, [addressBookItems])
 
   const {
     mutate: deleteAddressBookItem,
     isPending: isDeleteAddressBookItemLoading,
     error: deleteAddressBookItemError,
-  } = useDeleteAddressBookItemMutation();
+  } = useDeleteAddressBookItemMutation()
 
-  const isLoading =
-    isFetchingAddressBookItems || isDeleteAddressBookItemLoading;
-  const error = addressBookItemsError || deleteAddressBookItemError;
+  const isLoading = isFetchingAddressBookItems || isDeleteAddressBookItemLoading
+  const error = addressBookItemsError || deleteAddressBookItemError
   const itemToModify = useMemo(
     () => items.find(item => item.id === modifyAddressItemId),
     [items, modifyAddressItemId]
-  );
+  )
 
   const getItemIndex = useCallback(
     (id: string) => items.findIndex(item => item.id === id),
     [items]
-  );
+  )
 
   const reorderItem = useCallback(
     ({
@@ -79,19 +78,19 @@ const AddressesListView = ({
       indexOfTarget,
       closestEdgeOfTarget,
     }: {
-      startIndex: number;
-      indexOfTarget: number;
-      closestEdgeOfTarget: Edge | null;
+      startIndex: number
+      indexOfTarget: number
+      closestEdgeOfTarget: Edge | null
     }) => {
       const finishIndex = getReorderDestinationIndex({
         startIndex,
         closestEdgeOfTarget,
         indexOfTarget,
         axis: 'vertical',
-      });
+      })
 
       if (finishIndex === startIndex) {
-        return;
+        return
       }
 
       setItems(prevItems =>
@@ -100,10 +99,10 @@ const AddressesListView = ({
           startIndex,
           finishIndex,
         })
-      );
+      )
     },
     []
-  );
+  )
 
   const contextValue = useMemo(
     () => ({
@@ -112,43 +111,43 @@ const AddressesListView = ({
       getItemIndex,
     }),
     [registry.register, reorderItem, getItemIndex]
-  );
+  )
 
   const handleDeleteAddress = (id: string) => {
-    void deleteAddressBookItem(id);
-  };
+    void deleteAddressBookItem(id)
+  }
 
   useEffect(() => {
     return monitorForElements({
       onDrop({ location, source }) {
-        const target = location.current.dropTargets[0];
+        const target = location.current.dropTargets[0]
         if (!target) {
-          return;
+          return
         }
 
-        const sourceData = source.data as { id: string; index: number };
-        const targetData = target.data as { id: string; index: number };
+        const sourceData = source.data as { id: string; index: number }
+        const targetData = target.data as { id: string; index: number }
 
-        const sourceIndex = sourceData.index;
-        const targetIndex = targetData.index;
+        const sourceIndex = sourceData.index
+        const targetIndex = targetData.index
 
         if (
           typeof sourceIndex !== 'number' ||
           typeof targetIndex !== 'number'
         ) {
-          return;
+          return
         }
 
-        const closestEdgeOfTarget = extractClosestEdge(targetData);
+        const closestEdgeOfTarget = extractClosestEdge(targetData)
 
         reorderItem({
           startIndex: sourceIndex,
           indexOfTarget: targetIndex,
           closestEdgeOfTarget,
-        });
+        })
       },
-    });
-  }, [reorderItem]);
+    })
+  }, [reorderItem])
 
   if (isModifyViewOpen && itemToModify) {
     return (
@@ -171,7 +170,7 @@ const AddressesListView = ({
           onClose={() => setModifyAddressItemId(null)}
         />
       </>
-    );
+    )
   }
 
   return (
@@ -211,7 +210,7 @@ const AddressesListView = ({
                   onClick={() => setModifyAddressItemId(id)}
                   handleDeleteAddress={handleDeleteAddress}
                 />
-              );
+              )
             })}
           </Main>
         </ListContext.Provider>
@@ -227,7 +226,7 @@ const AddressesListView = ({
         </ButtonWrapper>
       </Container>
     </>
-  );
-};
+  )
+}
 
-export default AddressesListView;
+export default AddressesListView

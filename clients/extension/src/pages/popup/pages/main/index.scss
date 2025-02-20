@@ -1,4 +1,4 @@
-@use "~variables" as *;
+@use '~variables' as *;
 
 .main-page {
   .header {
@@ -34,7 +34,7 @@
         }
 
         .title {
-          align-items: "center";
+          align-items: 'center';
           display: flex;
           gap: rem(4);
         }
@@ -107,4 +107,7 @@
 .chain-item {
   display: flex;
   align-items: center;
+}
+button {
+  border: 0;
 }

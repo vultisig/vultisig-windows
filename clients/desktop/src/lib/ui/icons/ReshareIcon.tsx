@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 
 const ReshareIcon = () => (
   <svg
@@ -20,5 +20,5 @@ const ReshareIcon = () => (
       </clipPath>
     </defs>
   </svg>
-);
-export default ReshareIcon;
+)
+export default ReshareIcon

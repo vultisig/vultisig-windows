@@ -1,16 +1,16 @@
-import { ReactNode, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useInterval } from 'react-use';
-import styled from 'styled-components';
+import { ReactNode, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useInterval } from 'react-use'
+import styled from 'styled-components'
 
-import { MultistepProgressIndicator } from '../../../lib/ui/flow/MultistepProgressIndicator';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text, text } from '../../../lib/ui/text';
+import { MultistepProgressIndicator } from '../../../lib/ui/flow/MultistepProgressIndicator'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Text, text } from '../../../lib/ui/text'
 
 type KeygenEducation = {
-  title: ReactNode;
-  content: ReactNode;
-};
+  title: ReactNode
+  content: ReactNode
+}
 
 const Content = styled.p`
   ${text({
@@ -29,11 +29,11 @@ const Content = styled.p`
       color: 'primary',
     })}
   }
-`;
+`
 
 export const KeygenEducation = () => {
-  const { t } = useTranslation();
-  const [index, setIndex] = useState<number>(0);
+  const { t } = useTranslation()
+  const [index, setIndex] = useState<number>(0)
 
   const items: KeygenEducation[] = [
     {
@@ -105,13 +105,13 @@ export const KeygenEducation = () => {
         </>
       ),
     },
-  ];
+  ]
 
   useInterval(() => {
-    setIndex(prevIndex => (prevIndex + 1) % items.length);
-  }, 3000);
+    setIndex(prevIndex => (prevIndex + 1) % items.length)
+  }, 3000)
 
-  const { content, title } = items[index];
+  const { content, title } = items[index]
 
   return (
     <VStack alignItems="center" justifyContent="center" gap={48}>
@@ -123,5 +123,5 @@ export const KeygenEducation = () => {
       </VStack>
       <MultistepProgressIndicator value={index} steps={items.length} />
     </VStack>
-  );
-};
+  )
+}

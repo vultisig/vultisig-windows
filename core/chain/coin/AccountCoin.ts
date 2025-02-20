@@ -1,20 +1,21 @@
-import { haveEqualFields } from "@lib/utils/record/haveEqualFields";
-import { Chain } from "../Chain";
-import { Coin, CoinKey } from "@core/chain/coin/Coin";
+import { Coin, CoinKey } from '@core/chain/coin/Coin'
+import { haveEqualFields } from '@lib/utils/record/haveEqualFields'
+
+import { Chain } from '../Chain'
 
 export type AccountCoinKey<T extends Chain = Chain> = CoinKey<T> & {
-  address: string;
-};
+  address: string
+}
 
-export type AccountCoin = Coin & AccountCoinKey;
+export type AccountCoin<T extends Chain = Chain> = Coin & AccountCoinKey<T>
 
 export const areEqualAccountCoins = (
   one: AccountCoinKey,
-  another: AccountCoinKey,
-): boolean => haveEqualFields(["chain", "id", "address"], one, another);
+  another: AccountCoinKey
+): boolean => haveEqualFields(['chain', 'id', 'address'], one, another)
 
 export const accountCoinKeyToString = ({
   chain,
   id,
   address,
-}: AccountCoinKey): string => [chain, id, address].join(":");
+}: AccountCoinKey): string => [chain, id, address].join(':')

@@ -1,10 +1,10 @@
-import styled, { keyframes } from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import styled, { keyframes } from 'styled-components'
 
-import { centerContent } from '../css/centerContent';
-import { horizontalPadding } from '../css/horizontalPadding';
-import { round } from '../css/round';
-import { ChildrenProp } from '../props';
-import { getColor } from '../theme/getters';
+import { centerContent } from '../css/centerContent'
+import { horizontalPadding } from '../css/horizontalPadding'
+import { round } from '../css/round'
+import { ChildrenProp } from '../props'
 
 const appearFromBottom = keyframes`
   from {
@@ -13,7 +13,7 @@ const appearFromBottom = keyframes`
   to {
     transform: translateX(-50%) translateY(0);
   }
-`;
+`
 
 const Position = styled.div`
   position: fixed;
@@ -23,7 +23,7 @@ const Position = styled.div`
   width: auto;
   z-index: 1;
   animation: ${appearFromBottom} 0.5s ease-out;
-`;
+`
 
 const Container = styled.div`
   ${round};
@@ -33,12 +33,12 @@ const Container = styled.div`
   ${centerContent};
   font-weight: 600;
   color: ${getColor('contrast')};
-`;
+`
 
 export const ToastItem = ({ children }: ChildrenProp) => {
   return (
     <Position>
       <Container>{children}</Container>
     </Position>
-  );
-};
+  )
+}

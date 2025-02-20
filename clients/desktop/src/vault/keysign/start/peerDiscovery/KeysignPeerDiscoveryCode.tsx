@@ -1,19 +1,19 @@
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { centerContent } from '../../../../lib/ui/css/centerContent';
-import { FramedQrCode } from '../../../../lib/ui/qr/FramedQrCode';
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
-import { useJoinKeysignUrlQuery } from '../../shared/queries/useJoinKeysignUrlQuery';
+import { centerContent } from '../../../../lib/ui/css/centerContent'
+import { FramedQrCode } from '../../../../lib/ui/qr/FramedQrCode'
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { useJoinKeysignUrlQuery } from '../../shared/queries/useJoinKeysignUrlQuery'
 
 const Container = styled.div`
   ${centerContent};
-`;
+`
 
 export const KeysignPeerDiscoveryQrCode = () => {
-  const joinKeysignUrlQuery = useJoinKeysignUrlQuery();
+  const joinKeysignUrlQuery = useJoinKeysignUrlQuery()
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <MatchQuery
@@ -26,5 +26,5 @@ export const KeysignPeerDiscoveryQrCode = () => {
       error={() => t('failed_to_load')}
       pending={() => t('loading')}
     />
-  );
-};
+  )
+}

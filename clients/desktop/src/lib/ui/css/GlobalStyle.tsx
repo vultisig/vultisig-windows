@@ -1,7 +1,7 @@
-import { createGlobalStyle } from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import { createGlobalStyle } from 'styled-components'
 
-import { getColor } from '../theme/getters';
-import { themedScrollbars } from './themedScrollbars';
+import { themedScrollbars } from './themedScrollbars'
 
 export const GlobalStyle = createGlobalStyle`
    @font-face {
@@ -68,6 +68,10 @@ export const GlobalStyle = createGlobalStyle`
   img, picture, video, canvas, svg {
     max-width: 100%;
   }
+  
+  input {
+    border: none;
+  }
 
   svg {
     display: inline;
@@ -102,4 +106,4 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   ${themedScrollbars}
-`;
+`

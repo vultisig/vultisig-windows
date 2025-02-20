@@ -1,21 +1,21 @@
-import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
+import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine'
 import {
   draggable,
   dropTargetForElements,
-} from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+} from '@atlaskit/pragmatic-drag-and-drop/element/adapter'
 import {
   attachClosestEdge,
   Edge,
   extractClosestEdge,
-} from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
-import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+} from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge'
+import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { getChainEntityIconSrc } from '../../../../../../chain/utils/getChainEntityIconSrc';
-import { UnstyledButton } from '../../../../../../lib/ui/buttons/UnstyledButton';
-import { BinIcon } from '../../../../../../lib/ui/icons/BinIcon';
-import { MenuIcon } from '../../../../../../lib/ui/icons/MenuIcon';
-import { useListContext } from '../list-context/useListContext';
+import { getChainEntityIconSrc } from '../../../../../../chain/utils/getChainEntityIconSrc'
+import { UnstyledButton } from '../../../../../../lib/ui/buttons/UnstyledButton'
+import { BinIcon } from '../../../../../../lib/ui/icons/BinIcon'
+import { MenuIcon } from '../../../../../../lib/ui/icons/MenuIcon'
+import { useListContext } from '../list-context/useListContext'
 import {
   ColumnOneBothRowsItem,
   ColumnThreeRowOneItem,
@@ -24,17 +24,17 @@ import {
   ItemWrapper,
   ListItem,
   ModifyButtonWrapper,
-} from './AddressBookListItem.styles';
+} from './AddressBookListItem.styles'
 
 type AddressBookListItemProps = {
-  id: string;
-  title: string;
-  address: string;
-  chain: string;
-  isEditModeOn: boolean;
-  handleDeleteAddress: (id: string) => void;
-  onClick: () => void;
-};
+  id: string
+  title: string
+  address: string
+  chain: string
+  isEditModeOn: boolean
+  handleDeleteAddress: (id: string) => void
+  onClick: () => void
+}
 
 const AddressBookItem = ({
   id,
@@ -45,25 +45,25 @@ const AddressBookItem = ({
   handleDeleteAddress,
   onClick,
 }: AddressBookListItemProps) => {
-  const [closestEdge, setClosestEdge] = useState<Edge | null>(null);
-  const { registerItem, getItemIndex } = useListContext();
-  const itemRef = useRef<HTMLDivElement>(null);
-  const { t } = useTranslation();
+  const [closestEdge, setClosestEdge] = useState<Edge | null>(null)
+  const { registerItem, getItemIndex } = useListContext()
+  const itemRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (!isEditModeOn) {
-      return;
+      return
     }
 
-    const element = itemRef.current;
+    const element = itemRef.current
     if (!element) {
-      return;
+      return
     }
 
-    const index = getItemIndex(id);
-    const data = { id, index };
+    const index = getItemIndex(id)
+    const data = { id, index }
 
-    const unregister = registerItem({ itemId: id, element });
+    const unregister = registerItem({ itemId: id, element })
 
     const cleanup = combine(
       unregister,
@@ -81,33 +81,33 @@ const AddressBookItem = ({
           }),
         onDrag({ self, source }) {
           if ((source.data as { id: string }).id === id) {
-            setClosestEdge(null);
-            return;
+            setClosestEdge(null)
+            return
           }
-          const edge = extractClosestEdge(self.data);
-          setClosestEdge(edge);
+          const edge = extractClosestEdge(self.data)
+          setClosestEdge(edge)
         },
         onDragLeave() {
-          setClosestEdge(null);
+          setClosestEdge(null)
         },
         onDrop() {
-          setClosestEdge(null);
+          setClosestEdge(null)
         },
       })
-    );
+    )
 
     return () => {
-      cleanup();
-    };
-  }, [isEditModeOn, id, registerItem, getItemIndex]);
+      cleanup()
+    }
+  }, [isEditModeOn, id, registerItem, getItemIndex])
 
   const handleOnListItemClick = () => {
     if (!isEditModeOn) {
-      onClick();
+      onClick()
     }
-  };
+  }
 
-  const iconSrc = getChainEntityIconSrc(chain);
+  const iconSrc = getChainEntityIconSrc(chain)
 
   return (
     <ItemWrapper ref={itemRef}>
@@ -149,7 +149,7 @@ const AddressBookItem = ({
         </ModifyButtonWrapper>
       )}
     </ItemWrapper>
-  );
-};
+  )
+}
 
-export default AddressBookItem;
+export default AddressBookItem

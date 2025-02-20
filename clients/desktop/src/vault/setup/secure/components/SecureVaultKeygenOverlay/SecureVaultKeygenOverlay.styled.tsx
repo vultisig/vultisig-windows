@@ -1,17 +1,17 @@
-import styled from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import styled from 'styled-components'
 
-import { VStack } from '../../../../../lib/ui/layout/Stack';
-import { getColor } from '../../../../../lib/ui/theme/getters';
+import { VStack } from '../../../../../lib/ui/layout/Stack'
 
 export const OverlayContent = styled(VStack)`
   background-color: ${getColor('foregroundDark')};
-`;
+`
 
 export const OverlayContentWrapper = styled(VStack)`
   padding: 0px 35px 48px 35px;
   background-color: ${getColor('foreground')};
   max-width: 800px;
-`;
+`
 
 export const RiveWrapper = styled.div`
   position: absolute;
@@ -20,13 +20,13 @@ export const RiveWrapper = styled.div`
   z-index: 3;
   width: 60px;
   height: 60px;
-`;
+`
 
 export const PhoneImageOverlay = styled.div`
   position: absolute;
   inset: 0;
   background-color: rgba(42, 83, 150, 0.08);
-`;
+`
 
 export const OverlayWrapper = styled(VStack)`
   position: fixed;
@@ -34,7 +34,7 @@ export const OverlayWrapper = styled(VStack)`
   height: 100%;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
-`;
+`
 
 export const PhoneImageWrapper = styled(VStack)`
   position: relative;
@@ -53,4 +53,4 @@ export const PhoneImageWrapper = styled(VStack)`
   & > img {
     margin-top: -50px;
   }
-`;
+`

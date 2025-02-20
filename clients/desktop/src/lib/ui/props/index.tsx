@@ -1,34 +1,33 @@
-import { ElementType, ReactNode } from 'react';
-
-import { HSLA } from '../colors/HSLA';
+import { HSLA } from '@lib/ui/colors/HSLA'
+import { ElementType, ReactNode } from 'react'
 
 export type OnCloseProp = {
-  onClose: () => void;
-};
+  onClose: () => void
+}
 
 export type IconProp = {
-  icon: ReactNode;
-};
+  icon: ReactNode
+}
 
 export type ChildrenProp = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 export type OnBackProp = {
-  onBack: () => void;
-};
+  onBack: () => void
+}
 
 export type OnForwardProp = {
-  onForward: () => void;
-};
+  onForward: () => void
+}
 
 export type ClassNameProp = {
-  className?: string;
-};
+  className?: string
+}
 
 export type OnClickProp = {
-  onClick: () => void;
-};
+  onClick: () => void
+}
 
 export type OnFinishProp<
   T = void,
@@ -37,129 +36,129 @@ export type OnFinishProp<
   ? { onFinish: () => void }
   : Mode extends 'optional'
     ? { onFinish: (value?: T) => void }
-    : { onFinish: (value: T) => void };
+    : { onFinish: (value: T) => void }
 
 export type InputProps<T> = {
-  value: T;
-  onChange: (value: T) => void;
-};
+  value: T
+  onChange: (value: T) => void
+}
 
 export type ErrorProp = {
-  error?: string;
-};
+  error?: string
+}
 
 export type TitleProp = {
-  title: ReactNode;
-};
+  title: ReactNode
+}
 
 export type StyledColorProp = {
-  $color: HSLA;
-};
+  $color: HSLA
+}
 
 export type OnSelectProp<T> = {
-  onSelect: (value: T) => void;
-};
+  onSelect: (value: T) => void
+}
 
 export type UiProps = {
-  style?: React.CSSProperties;
-  className?: string;
-};
+  style?: React.CSSProperties
+  className?: string
+}
 
 export type LabelProp = {
-  label: ReactNode;
-};
+  label: ReactNode
+}
 
 export type PromptProps = {
-  onSuccess: () => void;
-  onCancel: () => void;
-};
+  onSuccess: () => void
+  onCancel: () => void
+}
 
 export type ValueProp<T> = {
-  value: T;
-};
+  value: T
+}
 
 export type InitialValueProp<T> = {
-  initialValue: T;
-};
+  initialValue: T
+}
 
 export type OptionsProp<T> = {
-  options: readonly T[];
-};
+  options: readonly T[]
+}
 
 export type ActionGuardProps<T = () => void | Promise<void>> = {
-  action: T;
-  render: (params: { action: T }) => ReactNode;
-};
+  action: T
+  render: (params: { action: T }) => ReactNode
+}
 
 export type WidthProp = {
-  width: number;
-};
+  width: number
+}
 
 export type IsActiveProp = {
-  isActive?: boolean;
-};
+  isActive?: boolean
+}
 
 export type IsSelectedProp = {
-  isSelected: boolean;
-};
+  isSelected: boolean
+}
 
 export type IsDisabledProp = {
-  isDisabled?: boolean | string;
-};
+  isDisabled?: boolean | string
+}
 
 export type IndexProp = {
-  index: number;
-};
+  index: number
+}
 
 export type OnRemoveProp = {
-  onRemove: () => void;
-};
+  onRemove: () => void
+}
 
 export type AsProp<T extends ElementType = ElementType> = {
-  as?: T;
-};
+  as?: T
+}
 
 export type IsDraggingProp = {
-  isDragging?: boolean;
-};
+  isDragging?: boolean
+}
 
 export type ProgressProps = {
-  target: number;
-  current: number;
-};
+  target: number
+  current: number
+}
 
 export type ColorProp = {
-  color: HSLA;
-};
+  color: HSLA
+}
 
 export type ActionProp = {
-  action: ReactNode;
-};
+  action: ReactNode
+}
 
 export type OnSubmitProp = {
-  onSubmit: () => void;
-};
+  onSubmit: () => void
+}
 
 export type ItemsProp<T> = {
-  items: T[];
-};
+  items: T[]
+}
 
 export type SizeProp<T = number> = {
-  size: T;
-};
+  size: T
+}
 
 export type StatusProp<T> = {
-  status: T;
-};
+  status: T
+}
 
 export type NameProp = {
-  name: string;
-};
+  name: string
+}
 
 export type KindProp<T> = {
-  kind: T;
-};
+  kind: T
+}
 
 export type MessageProp = {
-  message: ReactNode;
-};
+  message: ReactNode
+}

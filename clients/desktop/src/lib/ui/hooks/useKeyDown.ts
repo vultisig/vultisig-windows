@@ -1,12 +1,12 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react'
 
-type Key = string;
+type Key = string
 
 interface UseKeyPressOptions {
-  isEnabled?: boolean;
-  shouldStopPropagation?: boolean;
-  shouldPreventDefault?: boolean;
-  target?: HTMLElement | Window | Document;
+  isEnabled?: boolean
+  shouldStopPropagation?: boolean
+  shouldPreventDefault?: boolean
+  target?: HTMLElement | Window | Document
 }
 
 export const useKeyDown = (
@@ -19,38 +19,38 @@ export const useKeyDown = (
     shouldStopPropagation = false,
     shouldPreventDefault = false,
     target = typeof window !== 'undefined' ? window : undefined,
-  } = options;
+  } = options
 
   const handleKeyDown = useCallback(
     (event: Event) => {
-      const keyboardEvent = event as KeyboardEvent;
+      const keyboardEvent = event as KeyboardEvent
 
-      if (!('key' in keyboardEvent)) return;
+      if (!('key' in keyboardEvent)) return
 
-      const keyList = Array.isArray(keys) ? keys : [keys];
+      const keyList = Array.isArray(keys) ? keys : [keys]
 
-      if (!keyList.includes(keyboardEvent.key)) return;
+      if (!keyList.includes(keyboardEvent.key)) return
 
       if (shouldStopPropagation) {
-        event.stopPropagation();
+        event.stopPropagation()
       }
 
       if (shouldPreventDefault) {
-        event.preventDefault();
+        event.preventDefault()
       }
 
-      handler?.(keyboardEvent);
+      handler?.(keyboardEvent)
     },
     [handler, keys, shouldStopPropagation, shouldPreventDefault]
-  );
+  )
 
   useEffect(() => {
-    if (!isEnabled || !target) return;
+    if (!isEnabled || !target) return
 
-    target.addEventListener('keydown', handleKeyDown);
+    target.addEventListener('keydown', handleKeyDown)
 
     return () => {
-      target.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [handleKeyDown, isEnabled, target]);
-};
+      target.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleKeyDown, isEnabled, target])
+}

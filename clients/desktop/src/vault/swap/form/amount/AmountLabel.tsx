@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit';
-import { text } from '../../../../lib/ui/text';
-import { amountConfig } from './config';
+import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit'
+import { text } from '../../../../lib/ui/text'
+import { amountConfig } from './config'
 
 export const AmountLabel = styled.div`
   position: absolute;
@@ -14,4 +14,4 @@ export const AmountLabel = styled.div`
     weight: 700,
     centerVertically: true,
   })}
-`;
+`

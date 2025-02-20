@@ -13,4 +13,4 @@ export const LightningIcon = ({ color = '#fff' }: { color?: string }) => (
       d="M8.75 1v7h6l-8 11v-7h-6l8-11Z"
     />
   </svg>
-);
+)

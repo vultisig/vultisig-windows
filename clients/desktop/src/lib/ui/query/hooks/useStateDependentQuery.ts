@@ -1,13 +1,13 @@
+import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
+import { WithoutUndefinedFields } from '@lib/utils/types/WithoutUndefinedFields'
 import {
   useQueries,
   UseQueryOptions,
   UseQueryResult,
-} from '@tanstack/react-query';
+} from '@tanstack/react-query'
 
-import { areEqualRecords } from '@lib/utils/record/areEqualRecords';
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
-import { WithoutUndefinedFields } from '@lib/utils/types/WithoutUndefinedFields';
-import { inactiveQuery, Query } from '../Query';
+import { inactiveQuery, Query } from '../Query'
 
 type Input<
   T extends Record<string, any>,
@@ -16,11 +16,11 @@ type Input<
   TData = TQueryFnData,
   TQueryKey extends readonly unknown[] = readonly unknown[],
 > = {
-  state: T;
+  state: T
   getQuery: (
     state: WithoutUndefinedFields<T>
-  ) => UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>;
-};
+  ) => UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>
+}
 
 export const useStateDependentQuery = <
   T extends Record<string, any>,
@@ -32,13 +32,13 @@ export const useStateDependentQuery = <
   state,
   getQuery,
 }: Input<T, TQueryFnData, TError, TData, TQueryKey>): Query<TData, TError> => {
-  const presentState = withoutUndefinedFields(state);
+  const presentState = withoutUndefinedFields(state)
 
   const [query] = useQueries({
     queries: [
       ...(areEqualRecords(state, presentState) ? [getQuery(presentState)] : []),
     ],
-  }) as UseQueryResult<TData, TError>[];
+  }) as UseQueryResult<TData, TError>[]
 
-  return query ?? inactiveQuery;
-};
+  return query ?? inactiveQuery
+}

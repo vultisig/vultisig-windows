@@ -1,1 +1,1 @@
-export const deepLinkBaseUrl = 'vultisig://vultisig.com';
+export const deepLinkBaseUrl = 'vultisig://vultisig.com'

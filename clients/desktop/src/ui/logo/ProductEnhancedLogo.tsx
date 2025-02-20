@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { SVGProps } from 'react'
 
 export const ProductEnhancedLogo = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -341,4 +341,4 @@ export const ProductEnhancedLogo = (props: SVGProps<SVGSVGElement>) => (
       </linearGradient>
     </defs>
   </svg>
-);
+)

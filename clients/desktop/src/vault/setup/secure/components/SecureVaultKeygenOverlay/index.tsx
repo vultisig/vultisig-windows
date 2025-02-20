@@ -1,10 +1,10 @@
-import { useRive } from '@rive-app/react-canvas';
-import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useRive } from '@rive-app/react-canvas'
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../../lib/ui/buttons/Button';
-import { VStack } from '../../../../../lib/ui/layout/Stack';
-import { GradientText, Text } from '../../../../../lib/ui/text';
+import { Button } from '../../../../../lib/ui/buttons/Button'
+import { VStack } from '../../../../../lib/ui/layout/Stack'
+import { GradientText, Text } from '../../../../../lib/ui/text'
 import {
   OverlayContent,
   OverlayContentWrapper,
@@ -12,18 +12,18 @@ import {
   PhoneImageOverlay,
   PhoneImageWrapper,
   RiveWrapper,
-} from './SecureVaultKeygenOverlay.styled';
+} from './SecureVaultKeygenOverlay.styled'
 
 type Props = {
-  onCompleted?: () => void;
-};
+  onCompleted?: () => void
+}
 
 export const SecureVaultKeygenOverlay: FC<Props> = ({ onCompleted }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const { RiveComponent } = useRive({
     src: '/assets/animations/keygen-secure-vault/pulse.riv',
     autoplay: true,
-  });
+  })
 
   return (
     <OverlayWrapper justifyContent="flex-end">
@@ -49,5 +49,5 @@ export const SecureVaultKeygenOverlay: FC<Props> = ({ onCompleted }) => {
         </OverlayContentWrapper>
       </OverlayContent>
     </OverlayWrapper>
-  );
-};
+  )
+}

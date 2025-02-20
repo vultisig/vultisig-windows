@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { SVGProps } from 'react'
 
 export const QuestionMarkIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -28,4 +28,4 @@ export const QuestionMarkIcon = (props: SVGProps<SVGSVGElement>) => (
       strokeLinejoin="round"
     />
   </svg>
-);
+)

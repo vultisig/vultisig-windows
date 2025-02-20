@@ -1,14 +1,14 @@
-import { parseUrlSearchString } from '@lib/utils/query/parseUrlSearchString';
-import { toEntries } from '@lib/utils/record/toEntries';
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
-import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { parseUrlSearchString } from '@lib/utils/query/parseUrlSearchString'
+import { toEntries } from '@lib/utils/record/toEntries'
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
+import { useCallback, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
-import { AppPathParams, AppPathsWithParams } from '..';
+import { AppPathParams, AppPathsWithParams } from '..'
 
 export function useAppPathParams<P extends AppPathsWithParams>() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const searchString = searchParams.toString();
+  const [searchParams, setSearchParams] = useSearchParams()
+  const searchString = searchParams.toString()
 
   const setParams = useCallback(
     (
@@ -20,28 +20,28 @@ export function useAppPathParams<P extends AppPathsWithParams>() {
         prevSearchParams => {
           const prevParams = parseUrlSearchString<AppPathParams[P]>(
             prevSearchParams.toString()
-          );
+          )
 
           const updatedParams =
             typeof newParams === 'function'
               ? newParams(prevParams)
-              : { ...prevParams, ...newParams };
+              : { ...prevParams, ...newParams }
 
-          const result = new URLSearchParams({});
+          const result = new URLSearchParams({})
 
           toEntries(withoutUndefinedFields(updatedParams)).forEach(
             ({ key, value }) => {
-              result.set(key, String(value));
+              result.set(key, String(value))
             }
-          );
+          )
 
-          return result;
+          return result
         },
         { replace: true }
-      );
+      )
     },
     [setSearchParams]
-  );
+  )
 
   return [
     useMemo(
@@ -49,5 +49,5 @@ export function useAppPathParams<P extends AppPathsWithParams>() {
       [searchString]
     ),
     setParams,
-  ] as const;
+  ] as const
 }

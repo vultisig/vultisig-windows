@@ -1,22 +1,22 @@
-import { useTranslation } from 'react-i18next';
-import styled, { CSSProperties } from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
+import { useTranslation } from 'react-i18next'
+import styled, { CSSProperties } from 'styled-components'
 
-import { ActionsInsideInteractiveElement } from '../../../../../lib/ui/base/ActionsInsideInteractiveElement';
-import { IconButton } from '../../../../../lib/ui/buttons/IconButton';
-import { borderRadius } from '../../../../../lib/ui/css/borderRadius';
-import { takeWholeSpace } from '../../../../../lib/ui/css/takeWholeSpace';
-import { CloseIcon } from '../../../../../lib/ui/icons/CloseIcon';
-import { IconWrapper } from '../../../../../lib/ui/icons/IconWrapper';
-import { SearchIcon } from '../../../../../lib/ui/icons/SearchIcon';
-import { hStack } from '../../../../../lib/ui/layout/Stack';
-import { useCurrentSearch } from '../../../../../lib/ui/search/CurrentSearchProvider';
-import { getColor } from '../../../../../lib/ui/theme/getters';
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
-import { coinSearchConfig } from './config';
+import { ActionsInsideInteractiveElement } from '../../../../../lib/ui/base/ActionsInsideInteractiveElement'
+import { IconButton } from '../../../../../lib/ui/buttons/IconButton'
+import { borderRadius } from '../../../../../lib/ui/css/borderRadius'
+import { takeWholeSpace } from '../../../../../lib/ui/css/takeWholeSpace'
+import { CloseIcon } from '../../../../../lib/ui/icons/CloseIcon'
+import { IconWrapper } from '../../../../../lib/ui/icons/IconWrapper'
+import { SearchIcon } from '../../../../../lib/ui/icons/SearchIcon'
+import { hStack } from '../../../../../lib/ui/layout/Stack'
+import { useCurrentSearch } from '../../../../../lib/ui/search/CurrentSearchProvider'
+import { coinSearchConfig } from './config'
 
 const IconContainer = styled(IconWrapper)`
   color: ${getColor('textSupporting')};
-`;
+`
 
 const Wrapper = styled(ActionsInsideInteractiveElement)`
   height: 100%;
@@ -29,17 +29,17 @@ const Wrapper = styled(ActionsInsideInteractiveElement)`
   ${IconContainer} {
     color: ${getColor('contrast')};
   }
-`;
+`
 
 const Input = styled.input`
   ${borderRadius.m};
   background: ${getColor('foreground')};
   ${takeWholeSpace};
-`;
+`
 
 export const CoinSearchInput = () => {
-  const [value, setValue] = useCurrentSearch();
-  const { t } = useTranslation();
+  const [value, setValue] = useCurrentSearch()
+  const { t } = useTranslation()
 
   return (
     <Wrapper
@@ -86,5 +86,5 @@ export const CoinSearchInput = () => {
         />
       )}
     />
-  );
-};
+  )
+}

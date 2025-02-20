@@ -1,22 +1,22 @@
-import { ReactNode } from 'react';
-import styled from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import { match } from '@lib/utils/match'
+import { ReactNode } from 'react'
+import styled from 'styled-components'
 
-import { match } from '@lib/utils/match';
-import { interactive } from '../../css/interactive';
-import { HStack } from '../../layout/Stack';
-import { InputProps, UiProps } from '../../props';
-import { Text } from '../../text';
-import { getColor } from '../../theme/getters';
-import { InvisibleHTMLCheckbox } from '../checkbox/InvisibleHTMLCheckbox';
-import { SwitchSize } from './config';
-import { SwitchContainer } from './SwitchContainer';
-import { SwitchControl } from './SwitchControl';
+import { interactive } from '../../css/interactive'
+import { HStack } from '../../layout/Stack'
+import { InputProps, UiProps } from '../../props'
+import { Text } from '../../text'
+import { InvisibleHTMLCheckbox } from '../checkbox/InvisibleHTMLCheckbox'
+import { SwitchSize } from './config'
+import { SwitchContainer } from './SwitchContainer'
+import { SwitchControl } from './SwitchControl'
 
 type SwitchProps = UiProps &
   InputProps<boolean> & {
-    size?: SwitchSize;
-    label?: ReactNode;
-  };
+    size?: SwitchSize
+    label?: ReactNode
+  }
 
 const Wrapper = styled(HStack)`
   ${interactive};
@@ -30,7 +30,7 @@ const Wrapper = styled(HStack)`
   &:hover ${SwitchControl} {
     transform: scale(1.08);
   }
-`;
+`
 
 export const Switch = ({
   value,
@@ -51,5 +51,5 @@ export const Switch = ({
         </Text>
       )}
     </Wrapper>
-  );
-};
+  )
+}

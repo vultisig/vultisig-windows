@@ -1,13 +1,13 @@
-import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
-import { Button } from '../../lib/ui/buttons/Button';
-import { ValueProp } from '../../lib/ui/props';
-import { makeAppPath } from '../../navigation';
+import { Button } from '../../lib/ui/buttons/Button'
+import { ValueProp } from '../../lib/ui/props'
+import { makeAppPath } from '../../navigation'
 
 export const SendPrompt = ({ value }: ValueProp<CoinKey>) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <Link
@@ -19,5 +19,5 @@ export const SendPrompt = ({ value }: ValueProp<CoinKey>) => {
         {t('send')}
       </Button>
     </Link>
-  );
-};
+  )
+}

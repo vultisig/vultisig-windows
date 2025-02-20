@@ -1,37 +1,37 @@
-import { useMutation } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { Text } from '../../../lib/ui/text';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId';
-import { useCurrentServerUrl } from '../../keygen/state/currentServerUrl';
-import { startSession } from '../../keygen/utils/startSession';
-import { useVaultKeygenDevices } from '../../setup/hooks/useVaultKegenDevices';
+import { Spinner } from '../../../lib/ui/loaders/Spinner'
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { Text } from '../../../lib/ui/text'
+import { PageContent } from '../../../ui/page/PageContent'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId'
+import { useCurrentServerUrl } from '../../keygen/state/currentServerUrl'
+import { startSession } from '../../keygen/utils/startSession'
+import { useVaultKeygenDevices } from '../../setup/hooks/useVaultKegenDevices'
 
 export const SecureVaultKeygenStartSessionStep = ({
   onBack,
   onForward,
 }: Partial<OnBackProp> & OnForwardProp) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const sessionId = useCurrentSessionId();
-  const serverUrl = useCurrentServerUrl();
-  const devices = useVaultKeygenDevices();
+  const sessionId = useCurrentSessionId()
+  const serverUrl = useCurrentServerUrl()
+  const devices = useVaultKeygenDevices()
 
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {
-      return startSession({ serverUrl, sessionId, devices });
+      return startSession({ serverUrl, sessionId, devices })
     },
     onSuccess: () => onForward(),
-  });
+  })
 
-  useEffect(() => start(), [start]);
+  useEffect(() => start(), [start])
 
   return (
     <>
@@ -49,5 +49,5 @@ export const SecureVaultKeygenStartSessionStep = ({
         />
       </PageContent>
     </>
-  );
-};
+  )
+}

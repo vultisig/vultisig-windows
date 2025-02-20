@@ -1,20 +1,19 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
-import { useCallback } from 'react';
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { useCallback } from 'react'
 
-import { GeneralSwapQuote } from '../../../chain/swap/general/GeneralSwapQuote';
-import { NativeSwapEnabledChain } from '../../../chain/swap/native/NativeSwapChain';
-import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals';
-import { SwapQuote } from '../../../chain/swap/quote/SwapQuote';
-import { useTransformQueryData } from '../../../lib/ui/query/hooks/useTransformQueryData';
-import { useCurrentVaultCoin } from '../../state/currentVault';
-import { useToCoin } from '../state/toCoin';
-import { useSwapQuoteQuery } from './useSwapQuoteQuery';
+import { GeneralSwapQuote } from '../../../chain/swap/general/GeneralSwapQuote'
+import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals'
+import { SwapQuote } from '../../../chain/swap/quote/SwapQuote'
+import { useTransformQueryData } from '../../../lib/ui/query/hooks/useTransformQueryData'
+import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useToCoin } from '../state/toCoin'
+import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
 export const useSwapOutputAmountQuery = () => {
-  const [toCoinKey] = useToCoin();
+  const [toCoinKey] = useToCoin()
 
-  const toCoin = useCurrentVaultCoin(toCoinKey);
+  const toCoin = useCurrentVaultCoin(toCoinKey)
 
   return useTransformQueryData(
     useSwapQuoteQuery(),
@@ -24,14 +23,14 @@ export const useSwapOutputAmountQuery = () => {
           native: ({ expected_amount_out }) =>
             fromChainAmount(
               expected_amount_out,
-              getNativeSwapDecimals(toCoinKey.chain as NativeSwapEnabledChain)
+              getNativeSwapDecimals(toCoinKey)
             ),
           general: (quote: GeneralSwapQuote) => {
-            return fromChainAmount(quote.dstAmount, toCoin.decimals);
+            return fromChainAmount(quote.dstAmount, toCoin.decimals)
           },
-        });
+        })
       },
-      [toCoin.decimals, toCoinKey.chain]
+      [toCoin.decimals, toCoinKey]
     )
-  );
-};
+  )
+}

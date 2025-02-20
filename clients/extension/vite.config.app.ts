@@ -1,7 +1,7 @@
-import { defineConfig } from "vite";
-import path from "path";
+import path from 'path'
+import { defineConfig } from 'vite'
 
-import { manifest } from "./package.json";
+import { manifest } from './package.json'
 
 export default defineConfig({
   build: {
@@ -14,8 +14,9 @@ export default defineConfig({
         import: path.resolve(__dirname, manifest.import),
         popup: path.resolve(__dirname, manifest.popup),
         transaction: path.resolve(__dirname, manifest.transaction),
+        vault: path.resolve(__dirname, manifest.vault),
         vaults: path.resolve(__dirname, manifest.vaults),
       },
     },
   },
-});
+})

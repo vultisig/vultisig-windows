@@ -1,102 +1,108 @@
-import { Buffer } from "buffer";
+import { create } from '@bufbuild/protobuf'
+import api from '@clients/extension/src/utils/api'
+import { Currency, rpcUrl } from '@clients/extension/src/utils/constants'
 import {
-  JsonRpcProvider,
-  Transaction,
+  bigintToByteArray,
+  checkERC20Function,
+} from '@clients/extension/src/utils/functions'
+import {
+  ITransaction,
+  SignedTransaction,
+  VaultProps,
+} from '@clients/extension/src/utils/interfaces'
+import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
+import { Chain } from '@core/chain/Chain'
+import {
+  EthereumSpecific,
+  EthereumSpecificSchema,
+} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { TW, WalletCore } from '@trustwallet/wallet-core'
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
+import { Buffer } from 'buffer'
+import {
   formatUnits,
+  JsonRpcProvider,
   keccak256,
   toUtf8String,
-} from "ethers";
-import { create } from "@bufbuild/protobuf";
-import { TW, WalletCore } from "@trustwallet/wallet-core";
-import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
-
-import {
-  EthereumSpecificSchema,
-  EthereumSpecific,
-} from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
-import { CoinSchema } from "@core/communication/vultisig/keysign/v1/coin_pb";
-import {
-  KeysignPayloadSchema,
-  KeysignPayload,
-} from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
-
-import { ChainKey, Currency, rpcUrl } from "../../constants";
-import { bigintToByteArray, checkERC20Function } from "../../functions";
-import { ITransaction, SignedTransaction, VaultProps } from "../../interfaces";
-import BaseTransactionProvider from "../../transaction-provider/base";
-import api from "../../api";
+  Transaction,
+} from 'ethers'
 
 interface ChainRef {
-  [chainKey: string]: CoinType;
+  [chainKey: string]: CoinType
 }
 
 export default class EVMTransactionProvider extends BaseTransactionProvider {
-  private gasPrice?: bigint;
-  private maxPriorityFeePerGas?: bigint;
-  private nonce?: bigint;
+  private gasPrice?: bigint
+  private maxPriorityFeePerGas?: bigint
+  private nonce?: bigint
 
-  private provider: JsonRpcProvider;
+  private provider: JsonRpcProvider
 
   constructor(
-    chainKey: ChainKey,
+    chainKey: Chain,
     chainRef: ChainRef,
     dataEncoder: (data: Uint8Array) => Promise<string>,
-    walletCore: WalletCore,
+    walletCore: WalletCore
   ) {
-    super(chainKey, chainRef, dataEncoder, walletCore);
+    super(chainKey, chainRef, dataEncoder, walletCore)
 
-    this.provider = new JsonRpcProvider(rpcUrl[this.chainKey]);
+    this.provider = new JsonRpcProvider(rpcUrl[this.chainKey])
   }
 
   public getEstimateTransactionFee = (
     cmcId: number,
-    currency: Currency,
+    currency: Currency
   ): Promise<string> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       api
         .cryptoCurrency(cmcId, currency)
-        .then((price) => {
+        .then(price => {
           const gwei = formatUnits(
             ((this.gasPrice ?? BigInt(0)) +
               (this.maxPriorityFeePerGas ?? BigInt(0))) *
               BigInt(this.getGasLimit()),
-            "gwei",
-          );
+            'gwei'
+          )
 
-          resolve((parseInt(gwei) * 1e-9 * price).toValueFormat(currency));
+          resolve((parseInt(gwei) * 1e-9 * price).toValueFormat(currency))
         })
         .catch(() => {
-          resolve((0).toValueFormat(currency));
-        });
-    });
-  };
+          resolve((0).toValueFormat(currency))
+        })
+    })
+  }
 
   public getFeeData = (): Promise<void> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.provider
         .getFeeData()
         .then(({ gasPrice, maxPriorityFeePerGas }) => {
-          this.gasPrice = BigInt(gasPrice!) ?? BigInt(0);
-          this.maxPriorityFeePerGas = maxPriorityFeePerGas ?? BigInt(0);
+          this.gasPrice = BigInt(gasPrice!) ?? BigInt(0)
+          this.maxPriorityFeePerGas = maxPriorityFeePerGas ?? BigInt(0)
 
-          resolve();
+          resolve()
         })
         .catch(() => {
-          this.gasPrice = BigInt(0);
-          this.maxPriorityFeePerGas = BigInt(0);
+          this.gasPrice = BigInt(0)
+          this.maxPriorityFeePerGas = BigInt(0)
 
-          resolve();
-        });
-    });
-  };
+          resolve()
+        })
+    })
+  }
 
   public getGasLimit = (): number => {
-    return 600000;
-  };
+    return 600000
+  }
 
   public getKeysignPayload = (
     transaction: ITransaction,
-    vault: VaultProps,
+    vault: VaultProps
   ): Promise<KeysignPayload> => {
     return new Promise((resolve, reject) => {
       const coin = create(CoinSchema, {
@@ -107,12 +113,12 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
         hexPublicKey: vault.hexChainCode,
         isNativeToken: true,
         logo: transaction.chain.ticker.toLowerCase(),
-      });
+      })
 
       this.provider
         .getTransactionCount(transaction.transactionDetails.from)
-        .then((nonce) => {
-          this.nonce = BigInt(nonce);
+        .then(nonce => {
+          this.nonce = BigInt(nonce)
           const ethereumSpecific = create(EthereumSpecificSchema, {
             gasLimit: this.getGasLimit().toString(),
             maxFeePerGasWei: (
@@ -124,114 +130,114 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
               !this.maxPriorityFeePerGas || this.maxPriorityFeePerGas === 0n
                 ? this.gasPrice!
                 : this.maxPriorityFeePerGas,
-              this.chainKey,
+              this.chainKey
             ).toString(),
-          });
+          })
           checkERC20Function(transaction.transactionDetails.data!).then(
-            (isMemoFunction) => {
-              let modifiedMemo: string;
+            isMemoFunction => {
+              let modifiedMemo: string
               try {
                 modifiedMemo =
-                  isMemoFunction || transaction.transactionDetails.data === "0x"
-                    ? (transaction.transactionDetails.data ?? "")
-                    : toUtf8String(transaction.transactionDetails.data!);
+                  isMemoFunction || transaction.transactionDetails.data === '0x'
+                    ? (transaction.transactionDetails.data ?? '')
+                    : toUtf8String(transaction.transactionDetails.data!)
               } catch {
-                modifiedMemo = transaction.transactionDetails.data!;
+                modifiedMemo = transaction.transactionDetails.data!
               }
               const keysignPayload = create(KeysignPayloadSchema, {
                 toAddress: transaction.transactionDetails.to,
                 toAmount: transaction.transactionDetails.amount?.amount
                   ? BigInt(
                       parseInt(
-                        String(transaction.transactionDetails.amount.amount),
-                      ),
+                        String(transaction.transactionDetails.amount.amount)
+                      )
                     ).toString()
-                  : "0",
+                  : '0',
                 memo: modifiedMemo,
                 vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
-                vaultLocalPartyId: "VultiConnect",
+                vaultLocalPartyId: 'VultiConnect',
                 coin,
                 blockchainSpecific: {
-                  case: "ethereumSpecific",
+                  case: 'ethereumSpecific',
                   value: ethereumSpecific,
                 },
-              });
-              this.keysignPayload = keysignPayload;
-              resolve(keysignPayload);
-            },
-          );
+              })
+              this.keysignPayload = keysignPayload
+              resolve(keysignPayload)
+            }
+          )
         })
         .catch(() => {
-          reject();
-        });
-    });
-  };
+          reject()
+        })
+    })
+  }
 
   public getPreSignedInputData = (): Promise<Uint8Array> => {
     return new Promise((resolve, reject) => {
       if (!this.keysignPayload) {
-        reject("Invalid keysign payload");
-        return;
+        reject('Invalid keysign payload')
+        return
       }
       const blockchainSpecific = this.keysignPayload.blockchainSpecific as
-        | { case: "ethereumSpecific"; value: EthereumSpecific }
-        | undefined;
+        | { case: 'ethereumSpecific'; value: EthereumSpecific }
+        | undefined
 
       if (
         !blockchainSpecific ||
-        blockchainSpecific.case !== "ethereumSpecific"
+        blockchainSpecific.case !== 'ethereumSpecific'
       ) {
-        reject("Invalid blockchain specific");
+        reject('Invalid blockchain specific')
       } else if (!this.keysignPayload?.coin) {
-        reject("Invalid coin");
+        reject('Invalid coin')
       }
 
       if (!blockchainSpecific) {
-        reject("Invalid blockchain specific");
-        return;
+        reject('Invalid blockchain specific')
+        return
       }
 
       const { gasLimit, maxFeePerGasWei, nonce, priorityFee } =
-        blockchainSpecific.value;
+        blockchainSpecific.value
 
       const chainId: bigint = BigInt(
-        this.walletCore.CoinTypeExt.chainId(this.chainRef[this.chainKey]),
-      );
+        this.walletCore.CoinTypeExt.chainId(this.chainRef[this.chainKey])
+      )
 
-      const chainIdHex = bigintToByteArray(BigInt(chainId));
+      const chainIdHex = bigintToByteArray(BigInt(chainId))
 
-      const nonceHex = bigintToByteArray(BigInt(nonce));
+      const nonceHex = bigintToByteArray(BigInt(nonce))
 
-      const gasLimitHex = bigintToByteArray(BigInt(gasLimit));
+      const gasLimitHex = bigintToByteArray(BigInt(gasLimit))
 
-      const maxFeePerGasHex = bigintToByteArray(BigInt(maxFeePerGasWei));
+      const maxFeePerGasHex = bigintToByteArray(BigInt(maxFeePerGasWei))
 
-      const maxInclusionFeePerGasHex = bigintToByteArray(BigInt(priorityFee));
+      const maxInclusionFeePerGasHex = bigintToByteArray(BigInt(priorityFee))
 
-      const amountHex = bigintToByteArray(BigInt(this.keysignPayload.toAmount));
-      let toAddress = this.keysignPayload.toAddress;
+      const amountHex = bigintToByteArray(BigInt(this.keysignPayload.toAmount))
+      let toAddress = this.keysignPayload.toAddress
       let evmTransaction = TW.Ethereum.Proto.Transaction.create({
         transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
           amount: amountHex,
           data: Buffer.from(
             this.keysignPayload.memo
               ? this.stripHexPrefix(this.keysignPayload.memo)
-              : "",
-            "utf8",
+              : '',
+            'utf8'
           ),
         }),
-      });
+      })
       if (
         this.keysignPayload?.coin &&
         !this.keysignPayload.coin.isNativeToken
       ) {
-        toAddress = this.keysignPayload.coin.contractAddress;
+        toAddress = this.keysignPayload.coin.contractAddress
         evmTransaction = TW.Ethereum.Proto.Transaction.create({
           erc20Transfer: TW.Ethereum.Proto.Transaction.ERC20Transfer.create({
             amount: amountHex,
             to: this.keysignPayload.toAddress,
           }),
-        });
+        })
       }
       const input = TW.Ethereum.Proto.SigningInput.create({
         toAddress: toAddress,
@@ -242,11 +248,11 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
         maxInclusionFeePerGas: maxInclusionFeePerGasHex,
         txMode: TW.Ethereum.Proto.TransactionMode.Enveloped,
         transaction: evmTransaction,
-      });
+      })
 
-      resolve(TW.Ethereum.Proto.SigningInput.encode(input).finish());
-    });
-  };
+      resolve(TW.Ethereum.Proto.SigningInput.encode(input).finish())
+    })
+  }
 
   public getSignedTransaction = ({
     signature,
@@ -263,7 +269,7 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
             !this.maxPriorityFeePerGas || this.maxPriorityFeePerGas === 0n
               ? this.gasPrice!
               : this.maxPriorityFeePerGas,
-            this.chainKey,
+            this.chainKey
           ).toString(),
           to: transaction.transactionDetails.to,
           value: transaction.transactionDetails.amount?.amount
@@ -274,18 +280,18 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
             r: `0x${signature.R}`,
             s: `0x${signature.S}`,
           },
-        };
+        }
 
         const tx = transaction.transactionDetails.data
           ? { ...props, data: transaction.transactionDetails.data }
-          : props;
+          : props
 
-        const txHash = keccak256(Transaction.from(tx).serialized);
+        const txHash = keccak256(Transaction.from(tx).serialized)
 
-        resolve({ txHash: txHash, raw: Transaction.from(tx).serialized });
+        resolve({ txHash: txHash, raw: Transaction.from(tx).serialized })
       } else {
-        reject();
+        reject()
       }
-    });
-  };
+    })
+  }
 }

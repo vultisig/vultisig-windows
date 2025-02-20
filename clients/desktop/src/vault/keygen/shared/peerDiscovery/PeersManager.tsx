@@ -1,19 +1,19 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { HStack, VStack } from '../../../../lib/ui/layout/Stack';
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery';
-import { Query } from '../../../../lib/ui/query/Query';
-import { Text } from '../../../../lib/ui/text';
-import { CurrentPeersCorrector } from './CurrentPeersCorrector';
-import { LookingForDevices } from './LookingForDevices';
-import { PeerOption } from './peers/PeerOption';
+import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { Query } from '../../../../lib/ui/query/Query'
+import { Text } from '../../../../lib/ui/text'
+import { CurrentPeersCorrector } from './CurrentPeersCorrector'
+import { LookingForDevices } from './LookingForDevices'
+import { PeerOption } from './peers/PeerOption'
 
 type PeersManageProps = {
-  peerOptionsQuery: Query<string[]>;
-};
+  peerOptionsQuery: Query<string[]>
+}
 
 export const PeersManager = ({ peerOptionsQuery }: PeersManageProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <VStack
@@ -46,5 +46,5 @@ export const PeersManager = ({ peerOptionsQuery }: PeersManageProps) => {
         )}
       />
     </VStack>
-  );
-};
+  )
+}

@@ -1,48 +1,48 @@
-import { getChainKind } from '@core/chain/ChainKind';
-import { getCoinType } from '@core/chain/coin/coinType';
-import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm';
-import { signatureFormats } from '@core/chain/signing/SignatureFormat';
-import { executeTx } from '@core/chain/tx/execute';
-import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes';
-import { getLastItem } from '@lib/utils/array/getLastItem';
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion';
-import { chainPromises } from '@lib/utils/promise/chainPromises';
-import { recordFromItems } from '@lib/utils/record/recordFromItems';
-import { useMutation } from '@tanstack/react-query';
-import { keccak256 } from 'js-sha3';
+import { getChainKind } from '@core/chain/ChainKind'
+import { getCoinType } from '@core/chain/coin/coinType'
+import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { signatureFormats } from '@core/chain/signing/SignatureFormat'
+import { executeTx } from '@core/chain/tx/execute'
+import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
+import { getLastItem } from '@lib/utils/array/getLastItem'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { chainPromises } from '@lib/utils/promise/chainPromises'
+import { recordFromItems } from '@lib/utils/record/recordFromItems'
+import { useMutation } from '@tanstack/react-query'
+import { keccak256 } from 'js-sha3'
 
-import { Keysign } from '../../../../../wailsjs/go/tss/TssService';
-import { KeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload';
-import { compileTx } from '../../../../chain/tx/compile/compileTx';
-import { generateSignature } from '../../../../chain/tx/signature/generateSignature';
-import { hexEncode } from '../../../../chain/walletCore/hexEncode';
-import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider';
-import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId';
-import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl';
-import { getVaultPublicKey } from '../../../publicKey/getVaultPublicKey';
-import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey';
-import { useCurrentVault } from '../../../state/currentVault';
-import { customMessageConfig } from '../../customMessage/config';
-import { getKeysignChain } from '../../utils/getKeysignChain';
-import { getTxInputData } from '../../utils/getTxInputData';
+import { Keysign } from '../../../../../wailsjs/go/tss/TssService'
+import { KeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload'
+import { compileTx } from '../../../../chain/tx/compile/compileTx'
+import { generateSignature } from '../../../../chain/tx/signature/generateSignature'
+import { hexEncode } from '../../../../chain/walletCore/hexEncode'
+import { useAssertWalletCore } from '../../../../providers/WalletCoreProvider'
+import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId'
+import { useCurrentServerUrl } from '../../../keygen/state/currentServerUrl'
+import { getVaultPublicKey } from '../../../publicKey/getVaultPublicKey'
+import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
+import { useCurrentVault } from '../../../state/currentVault'
+import { customMessageConfig } from '../../customMessage/config'
+import { getKeysignChain } from '../../utils/getKeysignChain'
+import { getTxInputData } from '../../utils/getTxInputData'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
-  const walletCore = useAssertWalletCore();
-  const vault = useCurrentVault();
-  const sessionId = useCurrentSessionId();
-  const encryptionKeyHex = useCurrentHexEncryptionKey();
-  const serverUrl = useCurrentServerUrl();
+  const walletCore = useAssertWalletCore()
+  const vault = useCurrentVault()
+  const sessionId = useCurrentSessionId()
+  const encryptionKeyHex = useCurrentHexEncryptionKey()
+  const serverUrl = useCurrentServerUrl()
 
   return useMutation({
     mutationFn: async () => {
       return matchRecordUnion<KeysignMessagePayload, Promise<string>>(payload, {
         keysign: async payload => {
-          const chain = getKeysignChain(payload);
+          const chain = getKeysignChain(payload)
 
           const inputs = await getTxInputData({
             keysignPayload: payload,
             walletCore,
-          });
+          })
 
           const groupedMsgs = inputs.map(txInputData =>
             getPreSigningHashes({
@@ -55,13 +55,13 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 walletCore,
               })
             )
-          );
+          )
 
-          const msgs = groupedMsgs.flat().sort();
+          const msgs = groupedMsgs.flat().sort()
 
-          const tssType = signatureAlgorithms[getChainKind(chain)];
+          const tssType = signatureAlgorithms[getChainKind(chain)]
 
-          const coinType = getCoinType({ walletCore, chain });
+          const coinType = getCoinType({ walletCore, chain })
 
           const signatures = await Keysign(
             vault,
@@ -72,17 +72,17 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             encryptionKeyHex,
             serverUrl,
             tssType
-          );
+          )
 
           const signaturesRecord = recordFromItems(signatures, ({ msg }) =>
             Buffer.from(msg, 'base64').toString('hex')
-          );
+          )
 
           const publicKey = await getVaultPublicKey({
             vault,
             chain,
             walletCore,
-          });
+          })
 
           const hashes = await chainPromises(
             inputs.map(async txInputData => {
@@ -92,25 +92,25 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 chain,
                 publicKey,
                 signatures: signaturesRecord,
-              });
+              })
 
               return executeTx({
                 compiledTx,
                 walletCore,
                 chain,
-              });
+              })
             })
-          );
+          )
 
-          return getLastItem(hashes);
+          return getLastItem(hashes)
         },
         custom: async ({ message }) => {
           const derivePath = walletCore.CoinTypeExt.derivationPath(
             getCoinType({ walletCore, chain: customMessageConfig.chain })
-          );
+          )
           const messageToHash = message.startsWith('0x')
             ? Buffer.from(message.slice(2), 'hex')
-            : message;
+            : message
           const [signature] = await Keysign(
             vault,
             [keccak256(messageToHash)],
@@ -120,20 +120,20 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             encryptionKeyHex,
             serverUrl,
             signatureAlgorithms[getChainKind(customMessageConfig.chain)]
-          );
+          )
 
           const signatureFormat =
-            signatureFormats[getChainKind(customMessageConfig.chain)];
+            signatureFormats[getChainKind(customMessageConfig.chain)]
 
           const result = generateSignature({
             walletCore,
             signature,
             signatureFormat,
-          });
+          })
 
-          return Buffer.from(result).toString('hex');
+          return Buffer.from(result).toString('hex')
         },
-      });
+      })
     },
-  });
-};
+  })
+}

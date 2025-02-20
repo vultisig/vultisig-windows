@@ -1,1 +1,1 @@
-export const rippleTxFee = BigInt(180000);
+export const rippleTxFee = BigInt(180000)

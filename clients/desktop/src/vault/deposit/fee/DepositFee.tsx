@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { DepositFeeValue } from './DepositFeeValue';
+import { DepositFeeValue } from './DepositFeeValue'
 
 export const DepositFee = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <>
@@ -12,5 +12,5 @@ export const DepositFee = () => {
       </span>
       <DepositFeeValue />
     </>
-  );
-};
+  )
+}

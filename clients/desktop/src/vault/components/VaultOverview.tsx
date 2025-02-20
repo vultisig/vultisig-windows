@@ -1,24 +1,24 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import VaultBackupBanner from '../../components/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner';
-import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller';
-import { VStack } from '../../lib/ui/layout/Stack';
-import { PageContent } from '../../ui/page/PageContent';
-import { VaultTotalBalance } from '../balance/VaultTotalBalance';
-import { ManageVaultChainsPrompt } from '../chain/manage/ManageVaultChainsPrompt';
-import { useVaultChainsBalancesQuery } from '../queries/useVaultChainsBalancesQuery';
-import { useCurrentVault } from '../state/currentVault';
-import { VaultChainItem } from './VaultChainItem';
-import { VaultPrimaryActions } from './VaultPrimaryActions';
+import VaultBackupBanner from '../../components/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner'
+import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller'
+import { VStack } from '../../lib/ui/layout/Stack'
+import { PageContent } from '../../ui/page/PageContent'
+import { VaultTotalBalance } from '../balance/VaultTotalBalance'
+import { ManageVaultChainsPrompt } from '../chain/manage/ManageVaultChainsPrompt'
+import { useVaultChainsBalancesQuery } from '../queries/useVaultChainsBalancesQuery'
+import { useCurrentVault } from '../state/currentVault'
+import { VaultChainItem } from './VaultChainItem'
+import { VaultPrimaryActions } from './VaultPrimaryActions'
 
 const VaultBannerWrapper = styled.div`
   padding-inline: 20px;
   margin-top: 12px;
-`;
+`
 
 export const VaultOverview = () => {
-  const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery();
-  const vault = useCurrentVault();
+  const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
+  const vault = useCurrentVault()
 
   return (
     <ScrollableFlexboxFiller>
@@ -42,5 +42,5 @@ export const VaultOverview = () => {
         </VStack>
       </PageContent>
     </ScrollableFlexboxFiller>
-  );
-};
+  )
+}

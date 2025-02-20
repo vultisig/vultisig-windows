@@ -1,22 +1,22 @@
-import { useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { Button } from '../../lib/ui/buttons/Button';
-import { getFormProps } from '../../lib/ui/form/utils/getFormProps';
-import { ContainImage } from '../../lib/ui/images/ContainImage';
-import { SafeImage } from '../../lib/ui/images/SafeImage';
-import { HStack, VStack, vStack } from '../../lib/ui/layout/Stack';
-import { Text } from '../../lib/ui/text';
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
-import { PageContent } from '../../ui/page/PageContent';
-import { PageHeader } from '../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle';
+import { Button } from '../../lib/ui/buttons/Button'
+import { getFormProps } from '../../lib/ui/form/utils/getFormProps'
+import { ContainImage } from '../../lib/ui/images/ContainImage'
+import { SafeImage } from '../../lib/ui/images/SafeImage'
+import { HStack, VStack, vStack } from '../../lib/ui/layout/Stack'
+import { Text } from '../../lib/ui/text'
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
+import { PageContent } from '../../ui/page/PageContent'
+import { PageHeader } from '../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
 import {
   getSetupVaultArt,
   getSetupVaultProperties,
-} from './type/SetupVaultType';
+} from './type/SetupVaultType'
 
 const ArtContainer = styled.div`
   ${vStack({
@@ -24,14 +24,14 @@ const ArtContainer = styled.div`
   })}
   flex-basis: 0;
   overflow: hidden;
-`;
+`
 
 export const SecureSetupVaultPage = () => {
-  const navigate = useAppNavigate();
-  const { t } = useTranslation();
+  const navigate = useAppNavigate()
+  const { t } = useTranslation()
   const onStart = useCallback(() => {
-    navigate('setupSecureVault');
-  }, [navigate]);
+    navigate('setupSecureVault')
+  }, [navigate])
 
   return (
     <>
@@ -93,5 +93,5 @@ export const SecureSetupVaultPage = () => {
         </VStack>
       </PageContent>
     </>
-  );
-};
+  )
+}

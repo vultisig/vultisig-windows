@@ -1,10 +1,11 @@
-import styled from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import { toPercents } from '@lib/utils/toPercents'
+import { FC } from 'react'
+import styled from 'styled-components'
 
-import { toPercents } from '@lib/utils/toPercents';
-import { round } from '../css/round';
-import { vStack } from '../layout/Stack';
-import { ValueProp } from '../props';
-import { getColor } from '../theme/getters';
+import { round } from '../css/round'
+import { vStack } from '../layout/Stack'
+import { ValueProp } from '../props'
 
 const Container = styled.div`
   width: 100%;
@@ -13,7 +14,7 @@ const Container = styled.div`
   height: 10px;
   overflow: hidden;
   ${vStack()};
-`;
+`
 
 const Filler = styled.div`
   height: 100%;
@@ -22,10 +23,12 @@ const Filler = styled.div`
     ${getColor('primaryAlt')},
     ${getColor('primary')}
   );
-`;
+`
 
-export const ProgressLine: React.FC<ValueProp<number>> = ({ value }) => (
-  <Container>
+type ProgressLineProps = ValueProp<number> & { className?: string }
+
+export const ProgressLine: FC<ProgressLineProps> = ({ value, className }) => (
+  <Container className={className}>
     <Filler style={{ width: toPercents(value) }} />
   </Container>
-);
+)

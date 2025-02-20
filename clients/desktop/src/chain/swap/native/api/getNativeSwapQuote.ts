@@ -1,48 +1,49 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
-import { toChainAmount } from '@core/chain/amount/toChainAmount';
-import { formatAmount } from '@lib/utils/formatAmount';
-import { addQueryParams } from '@lib/utils/query/addQueryParams';
-import { queryUrl } from '@lib/utils/query/queryUrl';
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { addQueryParams } from '@lib/utils/query/addQueryParams'
+import { queryUrl } from '@lib/utils/query/queryUrl'
+import { TransferDirection } from '@lib/utils/TransferDirection'
 
-import { extractChainFromNativeSwapAsset } from '../asset/extractChainFromNativeSwapAsset';
-import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig';
+import { toNativeSwapAsset } from '../asset/toNativeSwapAsset'
+import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig'
 import {
   nativeSwapApiBaseUrl,
   NativeSwapChain,
   nativeSwapStreamingInterval,
-} from '../NativeSwapChain';
-import { NativeSwapQuote } from '../NativeSwapQuote';
-import { getNativeSwapDecimals } from '../utils/getNativeSwapDecimals';
+} from '../NativeSwapChain'
+import { NativeSwapQuote } from '../NativeSwapQuote'
+import { getNativeSwapDecimals } from '../utils/getNativeSwapDecimals'
 
-export type GetNativeSwapQuoteInput = {
-  swapChain: NativeSwapChain;
-  destination: string;
-  fromAsset: string;
-  toAsset: string;
-  amount: number;
-  isAffiliate: boolean;
-};
+export type GetNativeSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
+  swapChain: NativeSwapChain
+  destination: string
+  amount: number
+  isAffiliate: boolean
+}
 
 type NativeSwapQuoteErrorResponse = {
-  error: string;
-};
+  error: string
+}
 
-type NativeSwapQuoteResponse = Omit<NativeSwapQuote, 'swapChain'>;
+type NativeSwapQuoteResponse = Omit<NativeSwapQuote, 'swapChain'>
 
 export const getNativeSwapQuote = async ({
   swapChain,
   destination,
-  fromAsset,
-  toAsset,
+  from,
+  to,
   amount,
   isAffiliate,
 }: GetNativeSwapQuoteInput): Promise<NativeSwapQuote> => {
-  const decimals = getNativeSwapDecimals(
-    extractChainFromNativeSwapAsset(fromAsset)
-  );
-  const chainAmount = toChainAmount(amount, decimals);
+  const [fromAsset, toAsset] = [from, to].map(asset => toNativeSwapAsset(asset))
 
-  const swapBaseUrl = `${nativeSwapApiBaseUrl[swapChain]}/quote/swap`;
+  const fromDecimals = getNativeSwapDecimals(from)
+
+  const chainAmount = toChainAmount(amount, fromDecimals)
+
+  const swapBaseUrl = `${nativeSwapApiBaseUrl[swapChain]}/quote/swap`
   const params = {
     from_asset: fromAsset,
     to_asset: toAsset,
@@ -55,33 +56,33 @@ export const getNativeSwapQuote = async ({
           affiliate_bps: nativeSwapAffiliateConfig.affiliateFeeRateBps,
         }
       : {}),
-  };
+  }
 
-  const url = addQueryParams(swapBaseUrl, params);
+  const url = addQueryParams(swapBaseUrl, params)
 
   const result = await queryUrl<
     NativeSwapQuoteResponse | NativeSwapQuoteErrorResponse
-  >(url);
+  >(url)
 
   if ('error' in result) {
-    throw new Error(result.error);
+    throw new Error(result.error)
   }
 
   if (BigInt(result.recommended_min_amount_in) > chainAmount) {
     const minAmount = fromChainAmount(
       result.recommended_min_amount_in,
-      decimals
-    );
+      fromDecimals
+    )
 
-    const formattedMinAmount = formatAmount(minAmount);
+    const formattedMinAmount = formatTokenAmount(minAmount)
 
-    const msg = `Swap amount too small. Recommended amount ${formattedMinAmount}`;
+    const msg = `Swap amount too small. Recommended amount ${formattedMinAmount}`
 
-    throw new Error(msg);
+    throw new Error(msg)
   }
 
   return {
     ...result,
     swapChain,
-  };
-};
+  }
+}

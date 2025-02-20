@@ -1,12 +1,12 @@
-import { SVGProps } from 'react';
+import { SVGProps } from 'react'
 
-import { Match } from '../../../../lib/ui/base/Match';
-import { ValueProp } from '../../../../lib/ui/props';
-import { DeviceType } from '../../utils/localPartyId';
-import { DesktopIcon } from './DesktopIcon';
-import { PhoneIcon } from './PhoneIcon';
-import { ServerIcon } from './ServerIcon';
-import { TabletIcon } from './TabletIcon';
+import { Match } from '../../../../lib/ui/base/Match'
+import { ValueProp } from '../../../../lib/ui/props'
+import { DeviceType } from '../../utils/localPartyId'
+import { DesktopIcon } from './DesktopIcon'
+import { PhoneIcon } from './PhoneIcon'
+import { ServerIcon } from './ServerIcon'
+import { TabletIcon } from './TabletIcon'
 
 export const KeygenDeviceIcon = ({
   value,
@@ -20,5 +20,5 @@ export const KeygenDeviceIcon = ({
       tablet={() => <TabletIcon {...props} />}
       server={() => <ServerIcon {...props} />}
     />
-  );
-};
+  )
+}

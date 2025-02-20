@@ -1,50 +1,50 @@
-import { coinKeyFromString } from '@core/chain/coin/Coin';
-import { useState } from 'react';
-import { FieldValues } from 'react-hook-form';
+import { coinKeyFromString } from '@core/chain/coin/Coin'
+import { useState } from 'react'
+import { FieldValues } from 'react-hook-form'
 
-import { getFeeAmount } from '../../chain/tx/fee/utils/getFeeAmount';
-import { Match } from '../../lib/ui/base/Match';
-import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation';
-import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
-import { useNavigateBack } from '../../navigation/hooks/useNavigationBack';
-import { ChainAction, chainActionsRecord } from './ChainAction';
-import { DepositEnabledChain } from './DepositEnabledChain';
-import { DepositForm } from './DepositForm';
-import { DepositVerify } from './DepositVerify';
+import { getFeeAmount } from '../../chain/tx/fee/utils/getFeeAmount'
+import { Match } from '../../lib/ui/base/Match'
+import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation'
+import { useAppPathParams } from '../../navigation/hooks/useAppPathParams'
+import { useNavigateBack } from '../../navigation/hooks/useNavigationBack'
+import { ChainAction, chainActionsRecord } from './ChainAction'
+import { DepositEnabledChain } from './DepositEnabledChain'
+import { DepositForm } from './DepositForm'
+import { DepositVerify } from './DepositVerify'
 import {
   DepositChainSpecificProvider,
   useDepositChainSpecific,
-} from './fee/DepositChainSpecificProvider';
+} from './fee/DepositChainSpecificProvider'
 
-const depositSteps = ['form', 'verify'] as const;
+const depositSteps = ['form', 'verify'] as const
 
 export const DepositPageController = () => {
-  const [{ coin: coinName }] = useAppPathParams<'deposit'>();
-  const { chain: chain } = coinKeyFromString(coinName);
-  const chainActionOptions = chainActionsRecord[chain as DepositEnabledChain];
+  const [{ coin: coinName }] = useAppPathParams<'deposit'>()
+  const { chain: chain } = coinKeyFromString(coinName)
+  const chainActionOptions = chainActionsRecord[chain as DepositEnabledChain]
 
   const [state, setState] = useState<{
-    depositFormData: FieldValues;
-    selectedChainAction: ChainAction;
+    depositFormData: FieldValues
+    selectedChainAction: ChainAction
   }>({
     depositFormData: {},
     selectedChainAction: chainActionOptions[0] as ChainAction,
-  });
+  })
 
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps: depositSteps,
     onExit: useNavigateBack(),
-  });
+  })
 
   const handleDepositFormSubmit = (data: FieldValues) => {
     setState(prevState => ({
       ...prevState,
       depositFormData: data,
-    }));
-    toNextStep();
-  };
+    }))
+    toNextStep()
+  }
 
-  const chainSpecific = useDepositChainSpecific();
+  const chainSpecific = useDepositChainSpecific()
 
   return (
     <DepositChainSpecificProvider>
@@ -74,5 +74,5 @@ export const DepositPageController = () => {
         )}
       />
     </DepositChainSpecificProvider>
-  );
-};
+  )
+}

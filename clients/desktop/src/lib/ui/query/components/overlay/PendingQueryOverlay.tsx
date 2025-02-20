@@ -1,9 +1,9 @@
-import { BodyPortal } from '../../../dom/BodyPortal';
-import { VStack } from '../../../layout/Stack';
-import { Spinner } from '../../../loaders/Spinner';
-import { Backdrop } from '../../../modal/Backdrop';
-import { OnCloseProp, TitleProp } from '../../../props';
-import { QueryOverlayContent } from './QueryOverlayContent';
+import { BodyPortal } from '../../../dom/BodyPortal'
+import { VStack } from '../../../layout/Stack'
+import { Spinner } from '../../../loaders/Spinner'
+import { Backdrop } from '../../../modal/Backdrop'
+import { OnCloseProp, TitleProp } from '../../../props'
+import { QueryOverlayContent } from './QueryOverlayContent'
 
 export const PendingQueryOverlay: React.FC<TitleProp & OnCloseProp> = ({
   title,
@@ -19,4 +19,4 @@ export const PendingQueryOverlay: React.FC<TitleProp & OnCloseProp> = ({
       </QueryOverlayContent>
     </Backdrop>
   </BodyPortal>
-);
+)

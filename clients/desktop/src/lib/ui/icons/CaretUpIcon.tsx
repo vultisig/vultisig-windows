@@ -8,5 +8,5 @@ const CaretUpIcon = () => (
       d="M4.5 15 12 7.5l7.5 7.5"
     />
   </svg>
-);
-export default CaretUpIcon;
+)
+export default CaretUpIcon

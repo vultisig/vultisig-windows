@@ -1,30 +1,41 @@
-import { useTranslation } from 'react-i18next';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { StrictInfoRow } from '../../../lib/ui/layout/StrictInfoRow';
-import { OnForwardProp } from '../../../lib/ui/props';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
-import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay';
-import { ManageAmount } from '../amount/ManageSendAmount';
-import { ManageSendCoin } from '../coin/ManageSendCoin';
-import { SendFiatFee } from '../fee/SendFiatFeeWrapper';
-import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper';
-import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings';
-import { ManageMemo } from '../memo/ManageMemo';
-import { ManageReceiver } from '../receiver/ManageReceiver';
-import { RefreshSend } from '../RefreshSend';
-import { Sender } from '../sender/Sender';
-import { useIsSendFormDisabled } from './hooks/useIsSendFormDisabled';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { StrictInfoRow } from '../../../lib/ui/layout/StrictInfoRow'
+import { OnForwardProp } from '../../../lib/ui/props'
+import { PageContent } from '../../../ui/page/PageContent'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
+import { AmountInGlobalCurrencyDisplay } from '../amount/AmountInGlobalCurrencyDisplay'
+import { ManageAmount } from '../amount/ManageSendAmount'
+import { ManageSendCoin } from '../coin/ManageSendCoin'
+import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
+import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
+import { ManageFeeSettings } from '../fee/settings/ManageFeeSettings'
+import { ManageMemo } from '../memo/ManageMemo'
+import { useSendFormValidationQuery } from '../queries/useSendFormValidationQuery'
+import { ManageReceiver } from '../receiver/ManageReceiver'
+import { RefreshSend } from '../RefreshSend'
+import { Sender } from '../sender/Sender'
 
 export const SendForm = ({ onForward }: OnForwardProp) => {
-  const { t } = useTranslation();
-  const isDisabled = useIsSendFormDisabled();
+  const { t } = useTranslation()
+
+  const { error, isLoading, isPending } = useSendFormValidationQuery()
+
+  const isDisabled = useMemo(() => {
+    if (isPending) {
+      return true
+    }
+
+    return error ? extractErrorMsg(error) : false
+  }, [error, isPending])
 
   return (
     <>
@@ -64,10 +75,14 @@ export const SendForm = ({ onForward }: OnForwardProp) => {
             </VStack>
           </VStack>
         </WithProgressIndicator>
-        <Button isDisabled={isDisabled} type="submit">
+        <Button
+          isLoading={isLoading && isPending}
+          isDisabled={isDisabled}
+          type="submit"
+        >
           {t('continue')}
         </Button>
       </PageContent>
     </>
-  );
-};
+  )
+}

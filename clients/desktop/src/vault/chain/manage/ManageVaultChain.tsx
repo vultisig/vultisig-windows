@@ -1,12 +1,13 @@
-import { ChainEntityIcon } from '../../../chain/ui/ChainEntityIcon';
-import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc';
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin';
-import { ValueProp } from '../../../lib/ui/props';
-import { Chain } from '@core/chain/Chain';
-import { ManageVaultCoin } from './ManageVaultCoin';
+import { Chain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+
+import { ChainEntityIcon } from '../../../chain/ui/ChainEntityIcon'
+import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
+import { ValueProp } from '../../../lib/ui/props'
+import { ManageVaultCoin } from './ManageVaultCoin'
 
 export const ManageVaultChain = ({ value }: ValueProp<Chain>) => {
-  const coin = chainFeeCoin[value];
+  const coin = chainFeeCoin[value]
 
   return (
     <ManageVaultCoin
@@ -18,5 +19,5 @@ export const ManageVaultChain = ({ value }: ValueProp<Chain>) => {
         />
       }
     />
-  );
-};
+  )
+}

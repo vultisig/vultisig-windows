@@ -1,27 +1,27 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
-import { formatAmount } from '@lib/utils/formatAmount';
-import { useTranslation } from 'react-i18next';
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { useTranslation } from 'react-i18next'
 
-import { CoinInputContainer } from '../../../coin/ui/inputs/CoinInputContainer';
-import { SelectCoinOverlay } from '../../../coin/ui/inputs/SelectCoinOverlay';
-import { Opener } from '../../../lib/ui/base/Opener';
-import { InputContainer } from '../../../lib/ui/inputs/InputContainer';
-import { InputLabel } from '../../../lib/ui/inputs/InputLabel';
-import { Text } from '../../../lib/ui/text';
+import { CoinInputContainer } from '../../../coin/ui/inputs/CoinInputContainer'
+import { SelectCoinOverlay } from '../../../coin/ui/inputs/SelectCoinOverlay'
+import { Opener } from '../../../lib/ui/base/Opener'
+import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
+import { InputLabel } from '../../../lib/ui/inputs/InputLabel'
+import { Text } from '../../../lib/ui/text'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
-} from '../../state/currentVault';
-import { useCurrentSendCoin } from '../state/sendCoin';
-import { SendCoinBalanceDependant } from './balance/SendCoinBalanceDependant';
+} from '../../state/currentVault'
+import { useCurrentSendCoin } from '../state/sendCoin'
+import { SendCoinBalanceDependant } from './balance/SendCoinBalanceDependant'
 
 export const ManageSendCoin = () => {
-  const [value, setValue] = useCurrentSendCoin();
-  const coin = useCurrentVaultCoin(value);
+  const [value, setValue] = useCurrentSendCoin()
+  const coin = useCurrentVaultCoin(value)
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const options = useCurrentVaultCoins();
+  const options = useCurrentVaultCoins()
 
   return (
     <InputContainer>
@@ -37,9 +37,9 @@ export const ManageSendCoin = () => {
           <SelectCoinOverlay
             onFinish={newValue => {
               if (newValue) {
-                setValue(newValue);
+                setValue(newValue)
               }
-              onClose();
+              onClose()
             }}
             options={options}
           />
@@ -56,10 +56,12 @@ export const ManageSendCoin = () => {
         <span>{t('balance')}:</span>
         <SendCoinBalanceDependant
           success={amount => (
-            <span>{formatAmount(fromChainAmount(amount, coin.decimals))}</span>
+            <span>
+              {formatTokenAmount(fromChainAmount(amount, coin.decimals))}
+            </span>
           )}
         />
       </Text>
     </InputContainer>
-  );
-};
+  )
+}

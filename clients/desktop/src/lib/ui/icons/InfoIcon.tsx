@@ -21,4 +21,4 @@ export const InfoIcon = () => (
       </clipPath>
     </defs>
   </svg>
-);
+)

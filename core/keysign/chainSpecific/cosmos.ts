@@ -1,18 +1,18 @@
-import { create } from "@bufbuild/protobuf";
-import { Chain } from "@core/chain/Chain";
-import { getCosmosAccountInfo } from "@core/chain/chains/cosmos/account/getCosmosAccountInfo";
+import { create } from '@bufbuild/protobuf'
+import { Chain } from '@core/chain/Chain'
+import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import {
   CosmosSpecific,
   CosmosSpecificSchema,
   TransactionType,
-} from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
+} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
 
-import { ChainsBySpecific } from "./KeysignChainSpecific";
-import { ChainSpecificResolver } from "./ChainSpecificResolver";
+import { ChainSpecificResolver } from './ChainSpecificResolver'
+import { ChainsBySpecific } from './KeysignChainSpecific'
 
-type CosmosSpecificChain = ChainsBySpecific<"cosmosSpecific">;
+type CosmosSpecificChain = ChainsBySpecific<'cosmosSpecific'>
 
-const defaultGas = 7500;
+const defaultGas = 7500
 
 const defaultGasRecord: Record<CosmosSpecificChain, number> = {
   [Chain.Cosmos]: defaultGas,
@@ -23,23 +23,23 @@ const defaultGasRecord: Record<CosmosSpecificChain, number> = {
   [Chain.TerraClassic]: 100000000,
   [Chain.Noble]: 30000,
   [Chain.Akash]: 200000,
-};
+}
 
 export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
   coin,
 }) => {
-  const chain = coin.chain as CosmosSpecificChain;
+  const chain = coin.chain as CosmosSpecificChain
   const { accountNumber, sequence } = await getCosmosAccountInfo({
     address: coin.address,
     chain,
-  });
+  })
 
-  const gas = BigInt(defaultGasRecord[chain]);
+  const gas = BigInt(defaultGasRecord[chain])
 
   return create(CosmosSpecificSchema, {
     accountNumber: BigInt(accountNumber),
     sequence: BigInt(sequence),
     gas,
     transactionType: TransactionType.UNSPECIFIED,
-  });
-};
+  })
+}

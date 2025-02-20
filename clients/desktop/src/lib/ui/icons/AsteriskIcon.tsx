@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { SVGProps } from 'react'
 
 export const AsteriskIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -17,4 +17,4 @@ export const AsteriskIcon = (props: SVGProps<SVGSVGElement>) => (
     <path d="M17.196 9 6.804 15" />
     <path d="m6.804 9 10.392 6" />
   </svg>
-);
+)

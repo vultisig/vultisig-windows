@@ -1,28 +1,28 @@
-import { Chain } from "@core/chain/Chain";
-import { KeysignPayload } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
+import { Chain } from '@core/chain/Chain'
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 import {
   getBlockchainSpecificValue,
   KeysignChainSpecificKey,
-} from "@core/keysign/chainSpecific/KeysignChainSpecific";
-import { WalletCore } from "@trustwallet/wallet-core";
+} from '@core/keysign/chainSpecific/KeysignChainSpecific'
+import { WalletCore } from '@trustwallet/wallet-core'
 
-import { getCosmosPreSignedInputData } from "./cosmos";
-import { getEvmPreSignedInputData } from "./evm";
-import { getMayaPreSignedInputData } from "./maya";
-import { getPolkadotPreSignedInputData } from "./polkadot";
-import { GetPreSignedInputDataInput } from "./PreSignedInputDataResolver";
-import { getRipplePreSignedInputData } from "./ripple";
-import { getSolanaPreSignedInputData } from "./solana";
-import { getSuiPreSignedInputData } from "./sui";
-import { getThorPreSignedInputData } from "./thor";
-import { getTonPreSignedInputData } from "./ton";
-import { getUtxoPreSignedInputData } from "./utxo";
+import { getCosmosPreSignedInputData } from './cosmos'
+import { getEvmPreSignedInputData } from './evm'
+import { getMayaPreSignedInputData } from './maya'
+import { getPolkadotPreSignedInputData } from './polkadot'
+import { GetPreSignedInputDataInput } from './PreSignedInputDataResolver'
+import { getRipplePreSignedInputData } from './ripple'
+import { getSolanaPreSignedInputData } from './solana'
+import { getSuiPreSignedInputData } from './sui'
+import { getThorPreSignedInputData } from './thor'
+import { getTonPreSignedInputData } from './ton'
+import { getUtxoPreSignedInputData } from './utxo'
 
 type Input = {
-  keysignPayload: KeysignPayload;
-  walletCore: WalletCore;
-  chain: Chain;
-};
+  keysignPayload: KeysignPayload
+  walletCore: WalletCore
+  chain: Chain
+}
 
 const handlers: Record<
   KeysignChainSpecificKey,
@@ -39,25 +39,25 @@ const handlers: Record<
   tonSpecific: getTonPreSignedInputData,
   utxoSpecific: getUtxoPreSignedInputData,
   tronSpecific: () => {
-    throw new Error("Tron is not supported");
+    throw new Error('Tron is not supported')
   },
-};
+}
 
 export const getPreSignedInputData = (input: Input) => {
-  const { blockchainSpecific } = input.keysignPayload;
+  const { blockchainSpecific } = input.keysignPayload
   if (!blockchainSpecific.case) {
-    throw new Error("Invalid blockchain specific");
+    throw new Error('Invalid blockchain specific')
   }
 
   const chainSpecific = getBlockchainSpecificValue(
     blockchainSpecific,
-    blockchainSpecific.case,
-  );
+    blockchainSpecific.case
+  )
 
-  const chainSpecificHandler = handlers[blockchainSpecific.case];
+  const chainSpecificHandler = handlers[blockchainSpecific.case]
 
   return chainSpecificHandler({
     ...input,
     chainSpecific,
-  });
-};
+  })
+}

@@ -1,28 +1,27 @@
-import { toChainAmount } from '@core/chain/amount/toChainAmount';
-import { AccountCoin } from '@core/chain/coin/AccountCoin';
-import { isEmpty } from '@lib/utils/array/isEmpty';
-import { isOneOf } from '@lib/utils/array/isOneOf';
-import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain';
-import { pick } from '@lib/utils/record/pick';
-import { TransferDirection } from '@lib/utils/TransferDirection';
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { isEmpty } from '@lib/utils/array/isEmpty'
+import { isOneOf } from '@lib/utils/array/isOneOf'
+import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain'
+import { pick } from '@lib/utils/record/pick'
+import { TransferDirection } from '@lib/utils/TransferDirection'
 
-import { getLifiSwapQuote } from '../general/lifi/api/getLifiSwapQuote';
-import { lifiSwapEnabledChains } from '../general/lifi/LifiSwapEnabledChains';
-import { getOneInchSwapQuote } from '../general/oneInch/api/getOneInchSwapQuote';
-import { oneInchSwapEnabledChains } from '../general/oneInch/OneInchSwapEnabledChains';
-import { getNativeSwapQuote } from '../native/api/getNativeSwapQuote';
-import { toNativeSwapAsset } from '../native/asset/toNativeSwapAsset';
+import { getLifiSwapQuote } from '../general/lifi/api/getLifiSwapQuote'
+import { lifiSwapEnabledChains } from '../general/lifi/LifiSwapEnabledChains'
+import { getOneInchSwapQuote } from '../general/oneInch/api/getOneInchSwapQuote'
+import { oneInchSwapEnabledChains } from '../general/oneInch/OneInchSwapEnabledChains'
+import { getNativeSwapQuote } from '../native/api/getNativeSwapQuote'
 import {
   nativeSwapChains,
   nativeSwapEnabledChainsRecord,
-} from '../native/NativeSwapChain';
-import { SwapQuote } from './SwapQuote';
+} from '../native/NativeSwapChain'
+import { SwapQuote } from './SwapQuote'
 
 type FindSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
-  amount: number;
+  amount: number
 
-  isAffiliate: boolean;
-};
+  isAffiliate: boolean
+}
 
 export const findSwapQuote = ({
   from,
@@ -30,32 +29,28 @@ export const findSwapQuote = ({
   amount,
   isAffiliate,
 }: FindSwapQuoteInput): Promise<SwapQuote> => {
-  const involvedChains = [from.chain, to.chain];
+  const involvedChains = [from.chain, to.chain]
 
   const matchingSwapChains = nativeSwapChains.filter(swapChain =>
     involvedChains.every(chain =>
       isOneOf(chain, nativeSwapEnabledChainsRecord[swapChain])
     )
-  );
+  )
 
   const fetchers = matchingSwapChains.map(
     swapChain => async (): Promise<SwapQuote> => {
-      const [fromAsset, toAsset] = [from, to].map(asset =>
-        toNativeSwapAsset(pick(asset, ['id', 'chain', 'ticker']))
-      );
-
       const native = await getNativeSwapQuote({
         swapChain,
         destination: to.address,
-        fromAsset,
-        toAsset,
+        from,
+        to,
         amount,
         isAffiliate,
-      });
+      })
 
-      return { native };
+      return { native }
     }
-  );
+  )
 
   if (
     isOneOf(from.chain, oneInchSwapEnabledChains) &&
@@ -68,14 +63,14 @@ export const findSwapQuote = ({
         toCoinId: to.id,
         amount: toChainAmount(amount, from.decimals),
         isAffiliate,
-      });
+      })
 
-      return { general };
-    });
+      return { general }
+    })
   }
 
-  const fromLifiChain = isOneOf(from.chain, lifiSwapEnabledChains);
-  const toLifiChain = isOneOf(to.chain, lifiSwapEnabledChains);
+  const fromLifiChain = isOneOf(from.chain, lifiSwapEnabledChains)
+  const toLifiChain = isOneOf(to.chain, lifiSwapEnabledChains)
 
   if (fromLifiChain && toLifiChain) {
     fetchers.push(async (): Promise<SwapQuote> => {
@@ -90,15 +85,15 @@ export const findSwapQuote = ({
         },
         amount: toChainAmount(amount, from.decimals),
         address: from.address,
-      });
+      })
 
-      return { general };
-    });
+      return { general }
+    })
   }
 
   if (isEmpty(fetchers)) {
-    throw new Error(`No swap routes found.`);
+    throw new Error(`No swap routes found.`)
   }
 
-  return asyncFallbackChain(...fetchers);
-};
+  return asyncFallbackChain(...fetchers)
+}

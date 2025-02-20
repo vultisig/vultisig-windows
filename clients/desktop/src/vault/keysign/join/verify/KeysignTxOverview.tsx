@@ -1,11 +1,11 @@
-import { MatchRecordUnion } from '../../../../lib/ui/base/MatchRecordUnion';
-import { KeysignSwapTxInfo } from '../../../swap/keysign/KeysignSwapTxInfo';
-import { KeysignTxPrimaryInfo } from '../../shared/KeysignTxPrimaryInfo';
-import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload';
-import { KeysignCustomMessageInfo } from './KeysignCustomMessageInfo';
+import { MatchRecordUnion } from '../../../../lib/ui/base/MatchRecordUnion'
+import { KeysignSwapTxInfo } from '../../../swap/keysign/KeysignSwapTxInfo'
+import { KeysignTxPrimaryInfo } from '../../shared/KeysignTxPrimaryInfo'
+import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload'
+import { KeysignCustomMessageInfo } from './KeysignCustomMessageInfo'
 
 export const KeysignTxOverview = () => {
-  const keysignMessagePayload = useKeysignMessagePayload();
+  const keysignMessagePayload = useKeysignMessagePayload()
 
   return (
     <MatchRecordUnion
@@ -20,5 +20,5 @@ export const KeysignTxOverview = () => {
         custom: value => <KeysignCustomMessageInfo value={value} />,
       }}
     />
-  );
-};
+  )
+}

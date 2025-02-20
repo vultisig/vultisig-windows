@@ -1,8 +1,8 @@
-import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc';
+import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc'
 
 export const getCoinLogoSrc = (logo: string) => {
   if (logo.startsWith('https://')) {
-    return logo;
+    return logo
   }
-  return getChainEntityIconSrc(logo);
-};
+  return getChainEntityIconSrc(logo)
+}

@@ -1,17 +1,17 @@
-import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { TriangleAlertIcon } from '../../../lib/ui/icons/TriangleAlertIcon';
-import { HStack, VStack } from '../../../lib/ui/layout/Stack';
-import { OnBackProp } from '../../../lib/ui/props';
-import { Text } from '../../../lib/ui/text';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { PageContent } from '../../../ui/page/PageContent';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { TriangleAlertIcon } from '../../../lib/ui/icons/TriangleAlertIcon'
+import { HStack, VStack } from '../../../lib/ui/layout/Stack'
+import { OnBackProp } from '../../../lib/ui/props'
+import { Text } from '../../../lib/ui/text'
+import { PageContent } from '../../../ui/page/PageContent'
 
 export const FailedSetupVaultKeygenStep: FC<OnBackProp> = ({ onBack }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <PageContent alignItems="center" gap={24}>
@@ -37,12 +37,12 @@ export const FailedSetupVaultKeygenStep: FC<OnBackProp> = ({ onBack }) => {
         </ErrorInfoBoxWrapper>
       </VStack>
     </PageContent>
-  );
-};
+  )
+}
 
 const TryAgainBtn = styled(Button)`
   align-self: center;
-`;
+`
 
 const ErrorInfoBoxWrapper = styled(HStack)`
   width: 100%;
@@ -51,4 +51,4 @@ const ErrorInfoBoxWrapper = styled(HStack)`
   border-radius: 24px;
   background-color: #2b1111;
   color: ${getColor('danger')};
-`;
+`

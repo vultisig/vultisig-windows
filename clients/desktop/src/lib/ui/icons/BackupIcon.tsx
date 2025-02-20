@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 
 const BackupIcon = () => (
   <svg
@@ -20,5 +20,5 @@ const BackupIcon = () => (
       </clipPath>
     </defs>
   </svg>
-);
-export default BackupIcon;
+)
+export default BackupIcon

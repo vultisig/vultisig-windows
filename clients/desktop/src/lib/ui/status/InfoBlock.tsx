@@ -1,15 +1,15 @@
-import styled from 'styled-components';
+import { getColor } from '@lib/ui/theme/getters'
+import styled from 'styled-components'
 
-import { borderRadius } from '../css/borderRadius';
-import { InfoIcon } from '../icons/InfoIcon';
-import { hStack } from '../layout/Stack';
-import { ChildrenProp, UiProps } from '../props';
-import { text } from '../text';
-import { getColor } from '../theme/getters';
+import { borderRadius } from '../css/borderRadius'
+import { InfoIcon } from '../icons/InfoIcon'
+import { hStack } from '../layout/Stack'
+import { ChildrenProp, UiProps } from '../props'
+import { text } from '../text'
 
 const IconWrapper = styled.div`
   font-size: 16px;
-`;
+`
 
 const Container = styled.div`
   ${borderRadius.m};
@@ -22,7 +22,7 @@ const Container = styled.div`
     alignItems: 'center',
     gap: 8,
   })}
-`;
+`
 
 const Content = styled.div`
   flex: 1;
@@ -31,9 +31,9 @@ const Content = styled.div`
     weight: '400',
     size: 14,
   })}
-`;
+`
 
-type WarningBlockProps = ChildrenProp & UiProps;
+type WarningBlockProps = ChildrenProp & UiProps
 
 export const InfoBlock = ({ children, ...rest }: WarningBlockProps) => {
   return (
@@ -43,5 +43,5 @@ export const InfoBlock = ({ children, ...rest }: WarningBlockProps) => {
       </IconWrapper>
       <Content>{children}</Content>
     </Container>
-  );
-};
+  )
+}

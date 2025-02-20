@@ -1,7 +1,7 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components'
 
 export const RiveWrapper = styled.div<{
-  isLastAnimation: boolean;
+  isLastAnimation: boolean
 }>`
   ${({ isLastAnimation }) =>
     isLastAnimation &&
@@ -10,4 +10,4 @@ export const RiveWrapper = styled.div<{
       z-index: -1;
     `}
   flex: 1;
-`;
+`

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const IconWrapper = styled.span`
   display: inline-flex;
@@ -9,4 +9,4 @@ export const IconWrapper = styled.span`
   height: fit-content;
   overflow: hidden;
   flex-shrink: 0;
-`;
+`
