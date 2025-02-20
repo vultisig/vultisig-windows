@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
@@ -46,28 +47,30 @@ export const JoinKeygenPage = () => {
   })
 
   return (
-    <MpcLibProvider value={fromLibType(libType)}>
-      <CurrentServiceNameProvider value={serviceName}>
-        <CurrentServerTypeProvider initialValue={serverType}>
-          <CurrentSessionIdProvider value={sessionId}>
-            <CurrentKeygenTypeProvider value={keygenType}>
-              <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
-                <JoinKeygenVaultProvider>
-                  <KeygenServerUrlProvider>
-                    <Match
-                      value={step}
-                      session={() => (
-                        <JoinKeygenSessionStep onForward={toNextStep} />
-                      )}
-                      keygen={() => <JoinKeygenProcess title={title} />}
-                    />
-                  </KeygenServerUrlProvider>
-                </JoinKeygenVaultProvider>
-              </CurrentHexEncryptionKeyProvider>
-            </CurrentKeygenTypeProvider>
-          </CurrentSessionIdProvider>
-        </CurrentServerTypeProvider>
-      </CurrentServiceNameProvider>
-    </MpcLibProvider>
+    <IsInitiatingDeviceProvider value={false}>
+      <MpcLibProvider value={fromLibType(libType)}>
+        <CurrentServiceNameProvider value={serviceName}>
+          <CurrentServerTypeProvider initialValue={serverType}>
+            <CurrentSessionIdProvider value={sessionId}>
+              <CurrentKeygenTypeProvider value={keygenType}>
+                <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
+                  <JoinKeygenVaultProvider>
+                    <KeygenServerUrlProvider>
+                      <Match
+                        value={step}
+                        session={() => (
+                          <JoinKeygenSessionStep onForward={toNextStep} />
+                        )}
+                        keygen={() => <JoinKeygenProcess title={title} />}
+                      />
+                    </KeygenServerUrlProvider>
+                  </JoinKeygenVaultProvider>
+                </CurrentHexEncryptionKeyProvider>
+              </CurrentKeygenTypeProvider>
+            </CurrentSessionIdProvider>
+          </CurrentServerTypeProvider>
+        </CurrentServiceNameProvider>
+      </MpcLibProvider>
+    </IsInitiatingDeviceProvider>
   )
 }

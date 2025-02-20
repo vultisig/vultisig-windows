@@ -1,6 +1,7 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { useDefaultMpcLib } from '../../../mpc/state/defaultMpcLib'
+import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { KeygenType } from '../../keygen/KeygenType'
@@ -42,65 +43,69 @@ export const SetupSecureVaultPage = () => {
   const mpcLib = useDefaultMpcLib()
 
   return (
-    <MpcLibProvider value={mpcLib}>
-      <VaultTypeProvider value="secure">
-        <GeneratedServiceNameProvider>
-          <PeersSelectionRecordProvider initialValue={{}}>
-            <GeneratedSessionIdProvider>
-              <GeneratedHexEncryptionKeyProvider>
-                <GeneratedHexChainCodeProvider>
-                  <CurrentServerTypeProvider initialValue="relay">
-                    <ServerUrlDerivedFromServerTypeProvider>
-                      <GeneratedLocalPartyIdProvider>
-                        <SetupVaultNameProvider>
-                          <StartKeygenVaultProvider>
-                            <CurrentKeygenTypeProvider
-                              value={KeygenType.Keygen}
-                            >
-                              <MediatorManager />
-                              <Match
-                                value={step}
-                                name={() => (
-                                  <SetupVaultNameStep onForward={toNextStep} />
-                                )}
-                                joinSession={() => (
-                                  <SecureVaultKeygenStartSessionStep
-                                    onBack={toPreviousStep}
-                                    onForward={toNextStep}
-                                  />
-                                )}
-                                peers={() => (
-                                  <SetupVaultPeerDiscoveryStep
-                                    onBack={() => setStep(steps[0])}
-                                    onForward={toNextStep}
-                                  />
-                                )}
-                                startSession={() => (
-                                  <KeygenStartSessionStep
-                                    onBack={toPreviousStep}
-                                    onForward={toNextStep}
-                                  />
-                                )}
-                                keygen={() => (
-                                  <SetupVaultCreationStep
-                                    vaultType="secure"
-                                    onTryAgain={() => setStep(steps[0])}
-                                    onBack={() => setStep(lastEditableStep)}
-                                  />
-                                )}
-                              />
-                            </CurrentKeygenTypeProvider>
-                          </StartKeygenVaultProvider>
-                        </SetupVaultNameProvider>
-                      </GeneratedLocalPartyIdProvider>
-                    </ServerUrlDerivedFromServerTypeProvider>
-                  </CurrentServerTypeProvider>
-                </GeneratedHexChainCodeProvider>
-              </GeneratedHexEncryptionKeyProvider>
-            </GeneratedSessionIdProvider>
-          </PeersSelectionRecordProvider>
-        </GeneratedServiceNameProvider>
-      </VaultTypeProvider>
-    </MpcLibProvider>
+    <IsInitiatingDeviceProvider value={false}>
+      <MpcLibProvider value={mpcLib}>
+        <VaultTypeProvider value="secure">
+          <GeneratedServiceNameProvider>
+            <PeersSelectionRecordProvider initialValue={{}}>
+              <GeneratedSessionIdProvider>
+                <GeneratedHexEncryptionKeyProvider>
+                  <GeneratedHexChainCodeProvider>
+                    <CurrentServerTypeProvider initialValue="relay">
+                      <ServerUrlDerivedFromServerTypeProvider>
+                        <GeneratedLocalPartyIdProvider>
+                          <SetupVaultNameProvider>
+                            <StartKeygenVaultProvider>
+                              <CurrentKeygenTypeProvider
+                                value={KeygenType.Keygen}
+                              >
+                                <MediatorManager />
+                                <Match
+                                  value={step}
+                                  name={() => (
+                                    <SetupVaultNameStep
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  joinSession={() => (
+                                    <SecureVaultKeygenStartSessionStep
+                                      onBack={toPreviousStep}
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  peers={() => (
+                                    <SetupVaultPeerDiscoveryStep
+                                      onBack={() => setStep(steps[0])}
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  startSession={() => (
+                                    <KeygenStartSessionStep
+                                      onBack={toPreviousStep}
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  keygen={() => (
+                                    <SetupVaultCreationStep
+                                      vaultType="secure"
+                                      onTryAgain={() => setStep(steps[0])}
+                                      onBack={() => setStep(lastEditableStep)}
+                                    />
+                                  )}
+                                />
+                              </CurrentKeygenTypeProvider>
+                            </StartKeygenVaultProvider>
+                          </SetupVaultNameProvider>
+                        </GeneratedLocalPartyIdProvider>
+                      </ServerUrlDerivedFromServerTypeProvider>
+                    </CurrentServerTypeProvider>
+                  </GeneratedHexChainCodeProvider>
+                </GeneratedHexEncryptionKeyProvider>
+              </GeneratedSessionIdProvider>
+            </PeersSelectionRecordProvider>
+          </GeneratedServiceNameProvider>
+        </VaultTypeProvider>
+      </MpcLibProvider>
+    </IsInitiatingDeviceProvider>
   )
 }

@@ -1,6 +1,7 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { useDefaultMpcLib } from '../../../mpc/state/defaultMpcLib'
+import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { KeygenType } from '../../keygen/KeygenType'
@@ -25,6 +26,7 @@ import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryption
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType'
 import { SetupVaultNameProvider } from '../state/vaultName'
 import { SetupVaultServerStep } from './SetupVaultServerStep'
+
 const steps = [
   'name',
   'email',
@@ -45,82 +47,84 @@ export const SetupFastVaultPage = () => {
   const mpcLib = useDefaultMpcLib()
 
   return (
-    <MpcLibProvider value={mpcLib}>
-      <VaultTypeProvider value="fast">
-        <EmailProvider initialValue="">
-          <PasswordProvider initialValue="">
-            <GeneratedServiceNameProvider>
-              <PeersSelectionRecordProvider initialValue={{}}>
-                <GeneratedSessionIdProvider>
-                  <GeneratedHexEncryptionKeyProvider>
-                    <GeneratedHexChainCodeProvider>
-                      <CurrentServerTypeProvider initialValue="relay">
-                        <ServerUrlDerivedFromServerTypeProvider>
-                          <GeneratedLocalPartyIdProvider>
-                            <SetupVaultNameProvider>
-                              <StartKeygenVaultProvider>
-                                <CurrentKeygenTypeProvider
-                                  value={KeygenType.Keygen}
-                                >
-                                  <PasswordHintProvider initialValue="">
-                                    <Match
-                                      value={step}
-                                      name={() => (
-                                        <SetupVaultNameStep
-                                          onForward={toNextStep}
-                                        />
-                                      )}
-                                      email={() => (
-                                        <ServerEmailStep
-                                          onBack={toPreviousStep}
-                                          onForward={toNextStep}
-                                        />
-                                      )}
-                                      password={() => (
-                                        <SetServerPasswordStep
-                                          onBack={toPreviousStep}
-                                          onForward={toNextStep}
-                                        />
-                                      )}
-                                      hint={() => (
-                                        <ServerPasswordHintStep
-                                          onBack={toPreviousStep}
-                                          onForward={toNextStep}
-                                        />
-                                      )}
-                                      setupForCreateVault={() => (
-                                        <SetupVaultServerStep
-                                          onBack={() =>
-                                            setStep(lastEditableStep)
-                                          }
-                                          onForward={toNextStep}
-                                        />
-                                      )}
-                                      createVault={() => (
-                                        <SetupVaultCreationStep
-                                          vaultType="fast"
-                                          onTryAgain={() => setStep(steps[0])}
-                                          onBack={() =>
-                                            setStep(lastEditableStep)
-                                          }
-                                        />
-                                      )}
-                                    />
-                                  </PasswordHintProvider>
-                                </CurrentKeygenTypeProvider>
-                              </StartKeygenVaultProvider>
-                            </SetupVaultNameProvider>
-                          </GeneratedLocalPartyIdProvider>
-                        </ServerUrlDerivedFromServerTypeProvider>
-                      </CurrentServerTypeProvider>
-                    </GeneratedHexChainCodeProvider>
-                  </GeneratedHexEncryptionKeyProvider>
-                </GeneratedSessionIdProvider>
-              </PeersSelectionRecordProvider>
-            </GeneratedServiceNameProvider>
-          </PasswordProvider>
-        </EmailProvider>
-      </VaultTypeProvider>
-    </MpcLibProvider>
+    <IsInitiatingDeviceProvider value={true}>
+      <MpcLibProvider value={mpcLib}>
+        <VaultTypeProvider value="fast">
+          <EmailProvider initialValue="">
+            <PasswordProvider initialValue="">
+              <GeneratedServiceNameProvider>
+                <PeersSelectionRecordProvider initialValue={{}}>
+                  <GeneratedSessionIdProvider>
+                    <GeneratedHexEncryptionKeyProvider>
+                      <GeneratedHexChainCodeProvider>
+                        <CurrentServerTypeProvider initialValue="relay">
+                          <ServerUrlDerivedFromServerTypeProvider>
+                            <GeneratedLocalPartyIdProvider>
+                              <SetupVaultNameProvider>
+                                <StartKeygenVaultProvider>
+                                  <CurrentKeygenTypeProvider
+                                    value={KeygenType.Keygen}
+                                  >
+                                    <PasswordHintProvider initialValue="">
+                                      <Match
+                                        value={step}
+                                        name={() => (
+                                          <SetupVaultNameStep
+                                            onForward={toNextStep}
+                                          />
+                                        )}
+                                        email={() => (
+                                          <ServerEmailStep
+                                            onBack={toPreviousStep}
+                                            onForward={toNextStep}
+                                          />
+                                        )}
+                                        password={() => (
+                                          <SetServerPasswordStep
+                                            onBack={toPreviousStep}
+                                            onForward={toNextStep}
+                                          />
+                                        )}
+                                        hint={() => (
+                                          <ServerPasswordHintStep
+                                            onBack={toPreviousStep}
+                                            onForward={toNextStep}
+                                          />
+                                        )}
+                                        setupForCreateVault={() => (
+                                          <SetupVaultServerStep
+                                            onBack={() =>
+                                              setStep(lastEditableStep)
+                                            }
+                                            onForward={toNextStep}
+                                          />
+                                        )}
+                                        createVault={() => (
+                                          <SetupVaultCreationStep
+                                            vaultType="fast"
+                                            onTryAgain={() => setStep(steps[0])}
+                                            onBack={() =>
+                                              setStep(lastEditableStep)
+                                            }
+                                          />
+                                        )}
+                                      />
+                                    </PasswordHintProvider>
+                                  </CurrentKeygenTypeProvider>
+                                </StartKeygenVaultProvider>
+                              </SetupVaultNameProvider>
+                            </GeneratedLocalPartyIdProvider>
+                          </ServerUrlDerivedFromServerTypeProvider>
+                        </CurrentServerTypeProvider>
+                      </GeneratedHexChainCodeProvider>
+                    </GeneratedHexEncryptionKeyProvider>
+                  </GeneratedSessionIdProvider>
+                </PeersSelectionRecordProvider>
+              </GeneratedServiceNameProvider>
+            </PasswordProvider>
+          </EmailProvider>
+        </VaultTypeProvider>
+      </MpcLibProvider>
+    </IsInitiatingDeviceProvider>
   )
 }
