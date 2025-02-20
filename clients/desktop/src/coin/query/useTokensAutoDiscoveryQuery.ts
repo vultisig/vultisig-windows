@@ -15,6 +15,6 @@ export const useTokensAutoDiscoveryQuery = (account: ChainAccount) => {
       const coins = await findAccountCoins(account)
       return coins
     },
-    enabled: true,
+    staleTime: 5 * 60 * 1000,
   })
 }
