@@ -21,6 +21,7 @@ import { Button, Empty, message, Modal, Select, Switch, Tooltip } from 'antd'
 import { type FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
+
 import { isSupportedChain } from '../../../../utils/constants'
 const VULTISIG_WEB_URL = 'https://airdrop.vultisig.com'
 

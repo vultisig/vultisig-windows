@@ -35,6 +35,8 @@ import {
 } from '@clients/extension/src/utils/storage'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getChainByChainId, getChainId } from '@core/chain/coin/chainId'
 import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
 import {
   JsonRpcProvider,
@@ -43,8 +45,6 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-import { getChainByChainId, getChainId } from '@core/chain/coin/chainId'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 let rpcProvider: JsonRpcProvider
 
