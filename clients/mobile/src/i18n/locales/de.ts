@@ -791,4 +791,4 @@ export const de = {
   report_error: 'Fehler melden',
   go_to_home_page: 'Zur Startseite',
   enable_dkls: 'DKLS aktivieren',
-};
+}

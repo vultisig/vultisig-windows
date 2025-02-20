@@ -1,4 +1,4 @@
-import { EvmChain } from "@core/chain/Chain";
+import { EvmChain } from '@core/chain/Chain'
 
 export const evmNativeTokenGasLimit: Record<EvmChain, number> = {
   [EvmChain.Ethereum]: 23000,
@@ -11,7 +11,7 @@ export const evmNativeTokenGasLimit: Record<EvmChain, number> = {
   [EvmChain.BSC]: 40000,
   [EvmChain.Avalanche]: 23000,
   [EvmChain.Zksync]: 200000,
-};
+}
 
 export const evmTokenGasLimit: Record<EvmChain, number> = {
   [EvmChain.Ethereum]: 120000,
@@ -24,6 +24,6 @@ export const evmTokenGasLimit: Record<EvmChain, number> = {
   [EvmChain.BSC]: 120000,
   [EvmChain.Avalanche]: 120000,
   [EvmChain.Zksync]: 200000,
-};
+}
 
-export const defaultEvmSwapGasLimit = 600000;
+export const defaultEvmSwapGasLimit = 600000

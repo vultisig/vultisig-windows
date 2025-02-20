@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { BlockchairUtxoResponse } from '@clients/extension/src/types/utxo'
 import api from '@clients/extension/src/utils/api'
 import {
   ITransaction,
@@ -29,7 +30,6 @@ import type {
   WalletCore,
 } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import Long from 'long'
-import { BlockchairUtxoResponse } from '@clients/extension/src/types/utxo'
 
 interface ChainRef {
   [chainKey: string]: CoinType

@@ -1,4 +1,4 @@
-name: Wails build
+name: Vultisig build
 
 on:
   push:
@@ -11,10 +11,71 @@ env:
   NODE_OPTIONS: "--max-old-space-size=4096"
 
 jobs:
+  setup:
+    runs-on: ubuntu-22.04
+    outputs:
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "23.7.0"
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Prepare Yarn
+        run: corepack prepare yarn@4.6.0 --activate
+
+      - name: Cache node_modules
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: yarn install
+  lint:
+    needs: setup
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: yarn install
+      - name: Lint
+        run: yarn lint
+      - name: run unit test
+        run: yarn workspace @clients/desktop test
+  extension:
+    needs: [setup,lint]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: yarn install
+      - name: Build extension
+        run: yarn workspace @clients/extension build
   build:
+    needs: lint
     strategy:
       # Failure in one platform build won't impact the others
-      fail-fast: false
+      fail-fast: true
       matrix:
         build:
           - name: "App"
@@ -27,11 +88,11 @@ jobs:
     runs-on: ${{ matrix.build.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "23.7.0"
 
@@ -44,9 +105,6 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: run unit test
-        run: yarn workspace @clients/desktop test
-
       - name: Build wails
         uses: dAppServer/wails-build-action@main
         id: build
@@ -56,5 +114,3 @@ jobs:
           package: false
           go-version: "1.21"
           node-version: "23.7.0"
-      - name: build extension
-        run: yarn workspace @clients/extension build

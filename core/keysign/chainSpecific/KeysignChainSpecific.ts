@@ -1,18 +1,18 @@
-import { Chain } from '@core/chain/Chain';
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
-import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue';
+import { Chain } from '@core/chain/Chain'
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 
 export type KeysignChainSpecific = Exclude<
   KeysignPayload['blockchainSpecific'],
   { case: undefined; value?: undefined }
->;
+>
 
-export type KeysignChainSpecificKey = KeysignChainSpecific['case'];
+export type KeysignChainSpecificKey = KeysignChainSpecific['case']
 
-export type KeysignChainSpecificValue = KeysignChainSpecific['value'];
+export type KeysignChainSpecificValue = KeysignChainSpecific['value']
 
 export type KeysignChainSpecificValueByKey<T extends KeysignChainSpecificKey> =
-  Extract<KeysignChainSpecific, { case: T }>['value'];
+  Extract<KeysignChainSpecific, { case: T }>['value']
 
 export const chainSpecificRecord = {
   [Chain.Arbitrum]: 'ethereumSpecific',
@@ -54,20 +54,20 @@ export const chainSpecificRecord = {
   [Chain.Ton]: 'tonSpecific',
 
   [Chain.Ripple]: 'rippleSpecific',
-} as const satisfies Record<Chain, KeysignChainSpecificKey>;
+} as const satisfies Record<Chain, KeysignChainSpecificKey>
 
 export type ChainsBySpecific<T extends KeysignChainSpecificKey> = {
   [K in keyof typeof chainSpecificRecord]: (typeof chainSpecificRecord)[K] extends T
     ? K
-    : never;
-}[keyof typeof chainSpecificRecord];
+    : never
+}[keyof typeof chainSpecificRecord]
 
 export const getBlockchainSpecificValue = <T extends KeysignChainSpecificKey>(
   blockchainSpecific: KeysignPayload['blockchainSpecific'],
   expectedCase: T
 ): Extract<KeysignChainSpecific, { case: T }>['value'] => {
   if (!blockchainSpecific.case) {
-    throw new Error('Invalid blockchain specific');
+    throw new Error('Invalid blockchain specific')
   }
 
   return getDiscriminatedUnionValue(
@@ -75,5 +75,5 @@ export const getBlockchainSpecificValue = <T extends KeysignChainSpecificKey>(
     'case',
     'value',
     expectedCase
-  ) as any;
-};
+  ) as any
+}

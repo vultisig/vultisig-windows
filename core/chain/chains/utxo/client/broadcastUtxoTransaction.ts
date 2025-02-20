@@ -1,32 +1,32 @@
-import { UtxoChain } from '@core/chain/Chain';
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { isInError } from '@lib/utils/error/isInError';
+import { UtxoChain } from '@core/chain/Chain'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { isInError } from '@lib/utils/error/isInError'
 
-import { getBlockchairBaseUrl } from './getBlockchairBaseUrl';
+import { getBlockchairBaseUrl } from './getBlockchairBaseUrl'
 
 type BlockchairBroadcastResponse =
   | {
       data: {
-        transaction_hash: string;
-      } | null;
+        transaction_hash: string
+      } | null
     }
   | {
-      data: null;
+      data: null
       context: {
-        error: string;
-      };
-    };
+        error: string
+      }
+    }
 
 type BroadcastUtxoTransactionInput = {
-  chain: UtxoChain;
-  tx: string;
-};
+  chain: UtxoChain
+  tx: string
+}
 
 export const broadcastUtxoTransaction = async ({
   chain,
   tx,
 }: BroadcastUtxoTransactionInput) => {
-  const url = `${getBlockchairBaseUrl(chain)}/push/transaction`;
+  const url = `${getBlockchairBaseUrl(chain)}/push/transaction`
 
   const response: BlockchairBroadcastResponse = await fetch(url, {
     method: 'POST',
@@ -34,18 +34,18 @@ export const broadcastUtxoTransaction = async ({
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ data: tx }),
-  }).then(res => res.json());
+  }).then(res => res.json())
 
   if (response.data) {
-    return response.data.transaction_hash;
+    return response.data.transaction_hash
   }
 
   const error =
-    'context' in response ? response.context.error : extractErrorMsg(response);
+    'context' in response ? response.context.error : extractErrorMsg(response)
 
   if (isInError(error, 'txn-mempool-conflict')) {
-    return null;
+    return null
   }
 
-  throw new Error(`Failed to broadcast transaction: ${extractErrorMsg(error)}`);
-};
+  throw new Error(`Failed to broadcast transaction: ${extractErrorMsg(error)}`)
+}
