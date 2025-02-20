@@ -1,10 +1,11 @@
-import { EvmChain } from "@core/chain/Chain";
-import { getEvmClient } from "@core/chain/chains/evm/client";
-import { assertErrorMessage } from "@lib/utils/error/assertErrorMessage";
-import { isInError } from "@lib/utils/error/isInError";
-import { TW } from "@trustwallet/wallet-core";
-import { ExecuteTxResolver } from "./ExecuteTxResolver";
-import { keccak256 } from "viem";
+import { EvmChain } from '@core/chain/Chain'
+import { getEvmClient } from '@core/chain/chains/evm/client'
+import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
+import { isInError } from '@lib/utils/error/isInError'
+import { TW } from '@trustwallet/wallet-core'
+import { keccak256 } from 'viem'
+
+import { ExecuteTxResolver } from './ExecuteTxResolver'
 
 export const executeEvmTx: ExecuteTxResolver<EvmChain> = async ({
   walletCore,
@@ -12,33 +13,33 @@ export const executeEvmTx: ExecuteTxResolver<EvmChain> = async ({
   compiledTx,
 }) => {
   const { errorMessage, encoded } =
-    TW.Ethereum.Proto.SigningOutput.decode(compiledTx);
+    TW.Ethereum.Proto.SigningOutput.decode(compiledTx)
 
-  assertErrorMessage(errorMessage);
+  assertErrorMessage(errorMessage)
 
-  const rawTx = walletCore.HexCoding.encode(encoded);
-  const txHash = keccak256(encoded);
+  const rawTx = walletCore.HexCoding.encode(encoded)
+  const txHash = keccak256(encoded)
 
-  const publicClient = getEvmClient(chain);
+  const publicClient = getEvmClient(chain)
 
   try {
     const hash = await publicClient.sendRawTransaction({
       serializedTransaction: rawTx as `0x${string}`,
-    });
-    return hash;
+    })
+    return hash
   } catch (error) {
     const isAlreadyBroadcast = isInError(
       error,
-      "already known",
-      "transaction is temporarily banned",
-      "nonce too low",
-      "transaction already exists",
-    );
+      'already known',
+      'transaction is temporarily banned',
+      'nonce too low',
+      'transaction already exists'
+    )
 
     if (isAlreadyBroadcast) {
-      return txHash;
+      return txHash
     }
 
-    throw error;
+    throw error
   }
-};
+}

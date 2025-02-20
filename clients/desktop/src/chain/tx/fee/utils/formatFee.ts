@@ -1,6 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain, EvmChain } from '@core/chain/Chain'
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
+import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { rippleTxFee } from '@core/chain/tx/fee/ripple'
 import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
@@ -12,7 +13,6 @@ import { polkadotConfig } from '../../../polkadot/config'
 import { tonConfig } from '../../../ton/config'
 import { gwei } from './evm'
 import { getFeeUnit } from './feeUnit'
-import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
 
 type FormatFeeInput = {
   chain: Chain
@@ -28,7 +28,10 @@ export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
       utxoSpecific: ({ byteFee }) => BigInt(byteFee),
       ethereumSpecific: ({ maxFeePerGasWei }) => BigInt(maxFeePerGasWei),
       suicheSpecific: ({ referenceGasPrice }) => BigInt(referenceGasPrice),
-      solanaSpecific: ({ priorityFee }) => BigInt(priorityFee) == BigInt(0) ? BigInt(solanaConfig.priorityFeeLimit) : BigInt(priorityFee), // currently we hardcode the priority fee to 100_000 lamports
+      solanaSpecific: ({ priorityFee }) =>
+        BigInt(priorityFee) == BigInt(0)
+          ? BigInt(solanaConfig.priorityFeeLimit)
+          : BigInt(priorityFee), // currently we hardcode the priority fee to 100_000 lamports
       thorchainSpecific: ({ fee }) => BigInt(fee),
       mayaSpecific: () => BigInt(cosmosGasLimitRecord[Chain.MayaChain]),
       cosmosSpecific: ({ gas }) => BigInt(gas),

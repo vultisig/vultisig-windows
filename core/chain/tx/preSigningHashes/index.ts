@@ -1,20 +1,21 @@
-import { Chain } from "@core/chain/Chain";
-import { ChainKind, getChainKind } from "@core/chain/ChainKind";
-import { withoutNullOrUndefined } from "@lib/utils/array/withoutNullOrUndefined";
-import { assertErrorMessage } from "@lib/utils/error/assertErrorMessage";
-import { TW, WalletCore } from "@trustwallet/wallet-core";
-import { getCoinType } from "../../coin/coinType";
+import { Chain } from '@core/chain/Chain'
+import { ChainKind, getChainKind } from '@core/chain/ChainKind'
+import { withoutNullOrUndefined } from '@lib/utils/array/withoutNullOrUndefined'
+import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
+import { TW, WalletCore } from '@trustwallet/wallet-core'
+
+import { getCoinType } from '../../coin/coinType'
 
 type Input = {
-  walletCore: WalletCore;
-  chain: Chain;
-  txInputData: Uint8Array;
-};
+  walletCore: WalletCore
+  chain: Chain
+  txInputData: Uint8Array
+}
 
 const decoders: Record<
   ChainKind,
   (
-    preHashes: Uint8Array,
+    preHashes: Uint8Array
   ) =>
     | TW.Bitcoin.Proto.PreSigningOutput
     | TW.Solana.Proto.PreSigningOutput
@@ -28,7 +29,7 @@ const decoders: Record<
   ton: TW.TxCompiler.Proto.PreSigningOutput.decode,
   sui: TW.TxCompiler.Proto.PreSigningOutput.decode,
   ripple: TW.TxCompiler.Proto.PreSigningOutput.decode,
-};
+}
 
 export const getPreSigningHashes = ({
   walletCore,
@@ -40,28 +41,28 @@ export const getPreSigningHashes = ({
       walletCore,
       chain,
     }),
-    txInputData,
-  );
+    txInputData
+  )
 
-  const chainKind = getChainKind(chain);
+  const chainKind = getChainKind(chain)
 
-  const decoder = decoders[chainKind];
+  const decoder = decoders[chainKind]
 
-  const output = decoder(preHashes);
+  const output = decoder(preHashes)
 
-  assertErrorMessage(output.errorMessage);
+  assertErrorMessage(output.errorMessage)
 
-  if ("hashPublicKeys" in output) {
+  if ('hashPublicKeys' in output) {
     return withoutNullOrUndefined(
-      output.hashPublicKeys.map((hash) => hash?.dataHash),
-    );
+      output.hashPublicKeys.map(hash => hash?.dataHash)
+    )
   }
 
-  const { data } = output;
+  const { data } = output
 
-  if ("dataHash" in output && output.dataHash.length > 0) {
-    return [output.dataHash];
+  if ('dataHash' in output && output.dataHash.length > 0) {
+    return [output.dataHash]
   }
 
-  return [data];
-};
+  return [data]
+}

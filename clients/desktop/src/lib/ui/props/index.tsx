@@ -1,6 +1,5 @@
-import { ElementType, ReactNode } from 'react'
-
 import { HSLA } from '@lib/ui/colors/HSLA'
+import { ElementType, ReactNode } from 'react'
 
 export type OnCloseProp = {
   onClose: () => void
