@@ -594,7 +594,7 @@ const handleRequest = (
             if (supportedChain) {
               getStoredChains().then(storedChains => {
                 setStoredChains([
-                  { ...chainFeeCoin[supportedChain], active: true },
+                  { ...chainFeeCoin[supportedChain as Chain], active: true },
                   ...storedChains
                     .filter(
                       (storedChain: ChainProps) =>
