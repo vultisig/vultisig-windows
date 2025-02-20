@@ -16,6 +16,7 @@ import { HStack, hStack } from '../../../lib/ui/layout/Stack'
 import { ChildrenProp, ValueProp } from '../../../lib/ui/props'
 import { Text, text } from '../../../lib/ui/text'
 import { IconWrapper } from '../../../pages/edItVault/EditVaultPage.styles'
+import { shouldDisplayChainLogo } from '../../../vault/chain/utils'
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
 
 const Container = styled(UnstyledButton)`
@@ -49,13 +50,21 @@ export const CoinInputContainer = ({
   value,
   ...rest
 }: CoinInputContainerProps) => {
+  const { ticker, chain, id } = value
+
   return (
     <Container {...rest}>
       <HStack alignItems="center" gap={8}>
         <ChainCoinIcon
           coinSrc={getCoinLogoSrc(value.logo)}
           chainSrc={
-            isFeeCoin(value) ? undefined : getChainEntityIconSrc(value.chain)
+            shouldDisplayChainLogo({
+              ticker,
+              chain,
+              isNative: isFeeCoin({ id, chain }),
+            })
+              ? getChainEntityIconSrc(chain)
+              : undefined
           }
           style={{ fontSize: 32 }}
         />
