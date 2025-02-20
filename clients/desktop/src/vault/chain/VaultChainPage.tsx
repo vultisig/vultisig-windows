@@ -88,7 +88,12 @@ export const VaultChainPage = () => {
   // It's a bad solution, but better than what we had before
   // TODO: Implement an abstraction auto-discovery mechanism at the root of the app
   useEffect(() => {
-    if (findTokensQuery.data && publicKeyQuery.data) {
+    if (
+      findTokensQuery.data &&
+      publicKeyQuery.data &&
+      publicKeyQuery.data != null &&
+      Object.keys(publicKeyQuery.data).length > 0
+    ) {
       const publicKey = publicKeyQuery.data
       const address = deriveAddress({
         chain,

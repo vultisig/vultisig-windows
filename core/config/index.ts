@@ -1,1 +1,1 @@
-export const rootApiUrl = "https://api.vultisig.com";
+export const rootApiUrl = 'https://api.vultisig.com'

@@ -1,3 +1,4 @@
+import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps, ReactNode } from 'react'
 import styled from 'styled-components'
 
@@ -5,7 +6,6 @@ import { centerContent } from '../../lib/ui/css/centerContent'
 import { horizontalPadding } from '../../lib/ui/css/horizontalPadding'
 import { TakeWholeSpace } from '../../lib/ui/css/takeWholeSpace'
 import { hStack } from '../../lib/ui/layout/Stack'
-import { getColor } from '../../lib/ui/theme/getters'
 import { pageConfig } from './config'
 
 const Container = styled.header<{ hasBorder?: boolean }>`

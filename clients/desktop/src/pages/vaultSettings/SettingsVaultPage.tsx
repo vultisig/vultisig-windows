@@ -28,7 +28,9 @@ import {
 import {
   Container,
   Footer,
+  IconWrapper,
   ListItemPanel,
+  OpticallyAdjustedText,
   StyledPageSlice,
   StyledVStack,
 } from './SettingsVaultPage.styles'
@@ -83,8 +85,12 @@ const SettingsVaultPage = () => {
                         justifyContent="space-between"
                       >
                         <HStack gap={12}>
-                          <Icon />
-                          <Text>{t(titleKey)}</Text>
+                          <IconWrapper>
+                            <Icon />
+                          </IconWrapper>
+                          <OpticallyAdjustedText>
+                            {t(titleKey)}
+                          </OpticallyAdjustedText>
                         </HStack>
                         {id === 'language' || id === 'currency' ? (
                           <HStack gap={8} alignItems="center">

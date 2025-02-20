@@ -1,14 +1,14 @@
-import { byteFeeMultiplier, UtxoFeeSettings } from "./UtxoFeeSettings";
+import { byteFeeMultiplier, UtxoFeeSettings } from './UtxoFeeSettings'
 
 export const adjustByteFee = (
   byteFee: number,
-  { priority }: UtxoFeeSettings,
+  { priority }: UtxoFeeSettings
 ) => {
-  if (typeof priority === "number") {
-    return priority;
+  if (typeof priority === 'number') {
+    return priority
   }
 
-  const multiplier = byteFeeMultiplier[priority];
+  const multiplier = byteFeeMultiplier[priority]
 
-  return Math.ceil(byteFee * multiplier);
-};
+  return Math.ceil(byteFee * multiplier)
+}

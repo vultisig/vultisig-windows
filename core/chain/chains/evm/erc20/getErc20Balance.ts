@@ -1,24 +1,24 @@
-import { EvmChain } from '@core/chain/Chain';
-import { getEvmClient } from '@core/chain/chains/evm/client';
-import { Address, erc20Abi } from 'viem';
+import { EvmChain } from '@core/chain/Chain'
+import { getEvmClient } from '@core/chain/chains/evm/client'
+import { Address, erc20Abi } from 'viem'
 
 type Input = {
-  chain: EvmChain;
-  address: Address;
-  accountAddress: Address;
-};
+  chain: EvmChain
+  address: Address
+  accountAddress: Address
+}
 
 export const getErc20Balance = async ({
   chain,
   address,
   accountAddress,
 }: Input) => {
-  const publicClient = getEvmClient(chain);
+  const publicClient = getEvmClient(chain)
 
   return publicClient.readContract({
     address,
     abi: erc20Abi,
     functionName: 'balanceOf',
     args: [accountAddress],
-  });
-};
+  })
+}
