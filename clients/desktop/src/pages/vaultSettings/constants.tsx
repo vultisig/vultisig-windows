@@ -99,7 +99,7 @@ export const settingsItems: SettingSection[] = [
       {
         id: 'check-for-update',
         titleKey: 'vault_settings_check_for_update',
-        icon: DownloadIcon,
+        icon: () => <DownloadIcon stroke="white" />,
         path: 'checkUpdate',
       },
     ],
