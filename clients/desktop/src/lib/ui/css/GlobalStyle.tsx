@@ -68,6 +68,10 @@ export const GlobalStyle = createGlobalStyle`
   img, picture, video, canvas, svg {
     max-width: 100%;
   }
+  
+  input {
+    border: none;
+  }
 
   svg {
     display: inline;
