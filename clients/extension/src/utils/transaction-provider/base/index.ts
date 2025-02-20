@@ -101,7 +101,7 @@ export default abstract class BaseTransactionProvider {
     hexChainCode: string
   ): Promise<string> => {
     return new Promise(resolve => {
-      const messsage: KeysignMessage = {
+      const message: KeysignMessage = {
         $typeName: 'vultisig.keysign.v1.KeysignMessage',
         sessionId: transaction.id,
         serviceName: 'VultiConnect',
@@ -110,7 +110,7 @@ export default abstract class BaseTransactionProvider {
         payloadId: '',
       }
       if (transaction.isCustomMessage) {
-        messsage.customMessagePayload = {
+        message.customMessagePayload = {
           $typeName: 'vultisig.keysign.v1.CustomMessagePayload',
           method: transaction.customMessage?.method,
           message: transaction.customMessage!.message,
@@ -129,7 +129,7 @@ export default abstract class BaseTransactionProvider {
         }
 
         if (priceProviderId) {
-          messsage.keysignPayload = {
+          message.keysignPayload = {
             ...this.keysignPayload,
             coin: {
               ...this.keysignPayload?.coin,
@@ -137,11 +137,11 @@ export default abstract class BaseTransactionProvider {
             } as KeysignPayload['coin'],
           } as KeysignPayload
         } else {
-          messsage.keysignPayload = this.keysignPayload
+          message.keysignPayload = this.keysignPayload
         }
       }
 
-      const binary = toBinary(KeysignMessageSchema, messsage)
+      const binary = toBinary(KeysignMessageSchema, message)
 
       this.dataEncoder(binary).then(base64EncodedData => {
         resolve(
