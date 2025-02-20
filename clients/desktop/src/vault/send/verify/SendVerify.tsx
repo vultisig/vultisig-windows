@@ -1,5 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { range } from '@lib/utils/array/range'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -75,10 +76,12 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                   value={cappedAmountQuery}
                   error={() => <Text>{t('failed_to_load')}</Text>}
                   pending={() => <Spinner />}
-                  success={({ amount, decimals }) => {
-                    console.log('what is amount', amount)
-                    return `${fromChainAmount(amount, decimals)} ${coin.ticker}`
-                  }}
+                  success={({ amount, decimals }) =>
+                    formatTokenAmount(
+                      fromChainAmount(amount, decimals),
+                      coin.ticker
+                    )
+                  }
                 />
               </span>
             </TxOverviewRow>
