@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react'
-import { DefaultTheme } from 'styled-components'
+import { DefaultTheme } from 'styled-components/native'
 import { ThemeProvider as StyledComponentsThemeProvider } from 'styled-components/native'
 
 type ThemeProviderProps = PropsWithChildren & {
