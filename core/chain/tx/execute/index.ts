@@ -1,14 +1,14 @@
-import { ChainKind, getChainKind } from "@core/chain/ChainKind";
+import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
-import { executeCosmosTx } from "./cosmos";
-import { executeEvmTx } from "./evm";
-import { executePolkadotTx } from "./polkadot";
-import { executeRippleTx } from "./ripple";
-import { executeSolanaTx } from "./solana";
-import { executeSuiTx } from "./sui";
-import { executeTonTx } from "./ton";
-import { executeUtxoTx } from "./utxo";
-import { ExecuteTxResolver } from "./ExecuteTxResolver";
+import { executeCosmosTx } from './cosmos'
+import { executeEvmTx } from './evm'
+import { ExecuteTxResolver } from './ExecuteTxResolver'
+import { executePolkadotTx } from './polkadot'
+import { executeRippleTx } from './ripple'
+import { executeSolanaTx } from './solana'
+import { executeSuiTx } from './sui'
+import { executeTonTx } from './ton'
+import { executeUtxoTx } from './utxo'
 
 const handlers: Record<ChainKind, ExecuteTxResolver<any>> = {
   cosmos: executeCosmosTx,
@@ -19,12 +19,12 @@ const handlers: Record<ChainKind, ExecuteTxResolver<any>> = {
   sui: executeSuiTx,
   ton: executeTonTx,
   utxo: executeUtxoTx,
-};
+}
 
-export const executeTx: ExecuteTxResolver = (input) => {
-  const chainKind = getChainKind(input.chain);
+export const executeTx: ExecuteTxResolver = input => {
+  const chainKind = getChainKind(input.chain)
 
-  const handler = handlers[chainKind];
+  const handler = handlers[chainKind]
 
-  return handler(input);
-};
+  return handler(input)
+}

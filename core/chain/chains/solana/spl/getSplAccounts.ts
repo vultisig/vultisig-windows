@@ -1,14 +1,15 @@
-import { Address } from "@solana/web3.js";
-import { getSolanaClient } from "../client";
+import { Address } from '@solana/web3.js'
 
-const SPL_TOKEN_PROGRAM_ID = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
-const TOKEN_2022_PROGRAM_ID = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb";
+import { getSolanaClient } from '../client'
+
+const SPL_TOKEN_PROGRAM_ID = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
+const TOKEN_2022_PROGRAM_ID = 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'
 
 export const getSplAccounts = async (address: string) => {
-  const client = getSolanaClient();
-  const programs = [SPL_TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID];
+  const client = getSolanaClient()
+  const programs = [SPL_TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID]
 
-  let allAccounts: any[] = [];
+  let allAccounts: any[] = []
 
   for (const programId of programs) {
     const { value } = await client
@@ -18,13 +19,13 @@ export const getSplAccounts = async (address: string) => {
           programId: programId as Address,
         },
         {
-          encoding: "jsonParsed",
-        },
+          encoding: 'jsonParsed',
+        }
       )
-      .send();
+      .send()
 
-    allAccounts = [...allAccounts, ...value];
+    allAccounts = [...allAccounts, ...value]
   }
 
-  return allAccounts;
-};
+  return allAccounts
+}
