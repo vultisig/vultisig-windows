@@ -225,21 +225,17 @@ export const VaultChainPage = () => {
                 (one, another) => one.ticker === another.ticker
               )
 
-              return (
-                <>
-                  {orderedCoins.map(coin => (
-                    <Link
-                      key={coin.id}
-                      to={makeAppPath('vaultChainCoinDetail', {
-                        chain: chain,
-                        coin: coin.id,
-                      })}
-                    >
-                      <VaultChainCoinItem value={coin} />
-                    </Link>
-                  ))}
-                </>
-              )
+              return orderedCoins.map(coin => (
+                <Link
+                  key={coin.id}
+                  to={makeAppPath('vaultChainCoinDetail', {
+                    chain: chain,
+                    coin: coin.id,
+                  })}
+                >
+                  <VaultChainCoinItem value={coin} />
+                </Link>
+              ))
             }}
           />
         </Panel>
