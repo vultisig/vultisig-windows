@@ -1,6 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TransferDirection } from '@lib/utils/TransferDirection'
@@ -14,7 +15,6 @@ import {
 } from '../NativeSwapChain'
 import { NativeSwapQuote } from '../NativeSwapQuote'
 import { getNativeSwapDecimals } from '../utils/getNativeSwapDecimals'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 export type GetNativeSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   swapChain: NativeSwapChain

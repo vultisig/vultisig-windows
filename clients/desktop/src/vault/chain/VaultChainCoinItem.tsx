@@ -5,6 +5,7 @@ import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo'
 import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice'
 import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 import { ChainCoinIcon } from '../../chain/ui/ChainCoinIcon'
 import { getChainEntityIconSrc } from '../../chain/utils/getChainEntityIconSrc'
@@ -15,7 +16,6 @@ import { Text } from '../../lib/ui/text'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { shouldDisplayChainLogo } from './utils'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 export const VaultChainCoinItem = ({
   value,

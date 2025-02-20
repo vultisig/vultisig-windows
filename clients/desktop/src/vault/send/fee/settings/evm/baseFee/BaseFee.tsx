@@ -1,5 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { EvmChain } from '@core/chain/Chain'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { useEvmBaseFeeQuery } from '../../../../../../chain/evm/queries/useEvmBaseFeeQuery'
@@ -10,7 +11,6 @@ import { Spinner } from '../../../../../../lib/ui/loaders/Spinner'
 import { MatchQuery } from '../../../../../../lib/ui/query/components/MatchQuery'
 import { useCurrentSendCoin } from '../../../../state/sendCoin'
 import { FeeContainer } from '../../FeeContainer'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 export const BaseFee = () => {
   const { t } = useTranslation()
@@ -27,7 +27,9 @@ export const BaseFee = () => {
       <FeeContainer>
         <MatchQuery
           value={query}
-          success={data => formatTokenAmount(fromChainAmount(data, gwei.decimals))}
+          success={data =>
+            formatTokenAmount(fromChainAmount(data, gwei.decimals))
+          }
           error={() => null}
           pending={() => <Spinner />}
         />

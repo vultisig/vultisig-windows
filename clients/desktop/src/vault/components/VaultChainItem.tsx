@@ -3,6 +3,7 @@ import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { getColor } from '@lib/ui/theme/getters'
 import { sum } from '@lib/utils/array/sum'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
 
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon'
@@ -18,7 +19,6 @@ import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityA
 import { VaultChainBalance } from '../queries/useVaultChainsBalancesQuery'
 import { useCurrentVaultAddreses } from '../state/currentVault'
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 const Pill = styled.div`
   height: 24px;

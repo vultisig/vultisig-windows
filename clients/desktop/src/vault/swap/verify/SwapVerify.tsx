@@ -1,5 +1,6 @@
 import { range } from '@lib/utils/array/range'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
@@ -25,7 +26,6 @@ import { swapTermsCount, SwapTermsProvider } from './state/swapTerms'
 import { SwapAllowance } from './SwapAllowance'
 import { SwapConfirm } from './SwapConfirm'
 import { SwapTerms } from './SwapTerms'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 export const SwapVerify: React.FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
@@ -52,7 +52,10 @@ export const SwapVerify: React.FC<OnBackProp> = ({ onBack }) => {
             <TxOverviewRow>
               <TxOverviewPrimaryRowTitle>{t('from')}</TxOverviewPrimaryRowTitle>
               <span>
-                {formatTokenAmount(shouldBePresent(fromAmount), fromCoin.ticker)}
+                {formatTokenAmount(
+                  shouldBePresent(fromAmount),
+                  fromCoin.ticker
+                )}
               </span>
             </TxOverviewRow>
             <TxOverviewRow>

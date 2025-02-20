@@ -1,4 +1,4 @@
-import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -14,7 +14,6 @@ import { AmountContainer } from './AmountContainer'
 import { AmountLabel } from './AmountLabel'
 import { amountConfig } from './config'
 import { SwapFiatAmount } from './SwapFiatAmount'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
 const Value = styled.div`
   ${takeWholeSpace};

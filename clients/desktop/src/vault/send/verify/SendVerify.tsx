@@ -1,6 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { range } from '@lib/utils/array/range'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -79,8 +78,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                   success={({ amount, decimals }) => {
                     console.log('what is amount', amount)
                     return `${fromChainAmount(amount, decimals)} ${coin.ticker}`
-                  }
-                  }
+                  }}
                 />
               </span>
             </TxOverviewRow>
