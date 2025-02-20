@@ -36,7 +36,7 @@ import {
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getChainByChainId, getChainId } from '@core/chain/coin/chainId'
+import { getChainByChainId, getChainId } from '@core/chain/coin/ChainId'
 import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
 import {
   JsonRpcProvider,
