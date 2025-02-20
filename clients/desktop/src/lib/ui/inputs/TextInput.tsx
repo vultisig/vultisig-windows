@@ -1,3 +1,4 @@
+import { getColor } from '@lib/ui/theme/getters'
 import { ChangeEvent, ComponentProps, forwardRef, Ref } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -5,7 +6,6 @@ import { textInput } from '../css/textInput'
 import { VStack } from '../layout/Stack'
 import { Spinner } from '../loaders/Spinner'
 import { LabelProp, UiProps } from '../props'
-import { getColor } from '../theme/getters'
 import { InputContainer } from './InputContainer'
 import { InputLabel } from './InputLabel'
 

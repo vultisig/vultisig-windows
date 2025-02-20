@@ -1,15 +1,16 @@
-import react from 'eslint-plugin-react'
-import typescriptEslint from '@typescript-eslint/eslint-plugin'
-import jsxA11Y from 'eslint-plugin-jsx-a11y'
-import reactHooks from 'eslint-plugin-react-hooks'
-import simpleImportSort from 'eslint-plugin-simple-import-sort'
-import { fixupPluginRules } from '@eslint/compat'
-import globals from 'globals'
-import tsParser from '@typescript-eslint/parser'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import js from '@eslint/js'
+
+import { fixupPluginRules } from '@eslint/compat'
 import { FlatCompat } from '@eslint/eslintrc'
+import js from '@eslint/js'
+import typescriptEslint from '@typescript-eslint/eslint-plugin'
+import tsParser from '@typescript-eslint/parser'
+import jsxA11Y from 'eslint-plugin-jsx-a11y'
+import react from 'eslint-plugin-react'
+import reactHooks from 'eslint-plugin-react-hooks'
+import simpleImportSort from 'eslint-plugin-simple-import-sort'
+import globals from 'globals'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -21,7 +22,14 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['**/node_modules', '**/dist', '**/wailsjs', '**/*_pb.ts'],
+    ignores: [
+      '**/node_modules',
+      '**/dist',
+      '**/wailsjs',
+      '**/*_pb.ts',
+      'lib/dkls',
+      'lib/schnorr',
+    ],
   },
   ...compat.extends(
     'eslint:recommended',

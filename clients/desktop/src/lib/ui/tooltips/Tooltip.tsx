@@ -15,10 +15,9 @@ import {
   useRole,
   useTransitionStyles,
 } from '@floating-ui/react'
+import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useRef, useState } from 'react'
 import styled from 'styled-components'
-
-import { getColor } from '../theme/getters'
 
 export interface RenderOpenerProps extends Record<string, unknown> {
   ref: (node: ReferenceType | null) => void

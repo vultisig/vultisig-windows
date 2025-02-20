@@ -1,8 +1,8 @@
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { VStack } from '../../lib/ui/layout/Stack'
 import { Panel } from '../../lib/ui/panel/Panel'
-import { getColor } from '../../lib/ui/theme/getters'
 import { pageConfig } from '../../ui/page/config'
 import { PageSlice } from '../../ui/page/PageSlice'
 

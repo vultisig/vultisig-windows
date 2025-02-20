@@ -1,18 +1,17 @@
-import { WalletCore } from "@trustwallet/wallet-core";
-import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
-
-import BaseTransactionProvider from "../transaction-provider/base";
-import CosmosTransactionProvider from "../transaction-provider/cosmos";
-import EVMTransactionProvider from "../transaction-provider/evm";
-import GaiaTransactionProvider from "../transaction-provider/gaia";
-import MayaTransactionProvider from "../transaction-provider/maya";
-import ThorchainTransactionProvider from "../transaction-provider/thorchain";
-import DydxTransactionProvider from "./dydx";
-import KujiraTransactionProvider from "./kujira";
-import OsmosisTransactionProvider from "./osmosis";
-import UTXOTransactionProvider from "./utxo";
-import SolanaTransactionProvider from "./solana";
-import { Chain } from "@core/chain/Chain";
+import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
+import CosmosTransactionProvider from '@clients/extension/src/utils/transaction-provider/cosmos'
+import DydxTransactionProvider from '@clients/extension/src/utils/transaction-provider/dydx'
+import EVMTransactionProvider from '@clients/extension/src/utils/transaction-provider/evm'
+import GaiaTransactionProvider from '@clients/extension/src/utils/transaction-provider/gaia'
+import KujiraTransactionProvider from '@clients/extension/src/utils/transaction-provider/kujira'
+import MayaTransactionProvider from '@clients/extension/src/utils/transaction-provider/maya'
+import OsmosisTransactionProvider from '@clients/extension/src/utils/transaction-provider/osmosis'
+import SolanaTransactionProvider from '@clients/extension/src/utils/transaction-provider/solana'
+import ThorchainTransactionProvider from '@clients/extension/src/utils/transaction-provider/thorchain'
+import UTXOTransactionProvider from '@clients/extension/src/utils/transaction-provider/utxo'
+import { Chain } from '@core/chain/Chain'
+import { WalletCore } from '@trustwallet/wallet-core'
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 export {
   BaseTransactionProvider,
@@ -21,10 +20,10 @@ export {
   GaiaTransactionProvider,
   MayaTransactionProvider,
   ThorchainTransactionProvider,
-};
+}
 
 interface ChainRef {
-  [Chain: string]: CoinType;
+  [Chain: string]: CoinType
 }
 
 export class TransactionProvider {
@@ -32,7 +31,7 @@ export class TransactionProvider {
     chainKey: Chain,
     chainRef: ChainRef,
     dataEncoder: (data: Uint8Array) => Promise<string>,
-    walletCore: WalletCore,
+    walletCore: WalletCore
   ) {
     switch (chainKey) {
       case Chain.THORChain: {
@@ -40,56 +39,56 @@ export class TransactionProvider {
           chainKey,
           chainRef,
           dataEncoder,
-          walletCore,
-        );
+          walletCore
+        )
       }
       case Chain.MayaChain: {
         return new MayaTransactionProvider(
           chainKey,
           chainRef,
           dataEncoder,
-          walletCore,
-        );
+          walletCore
+        )
       }
       case Chain.Cosmos: {
         return new GaiaTransactionProvider(
           chainKey,
           chainRef,
           dataEncoder,
-          walletCore,
-        );
+          walletCore
+        )
       }
       case Chain.Osmosis: {
         return new OsmosisTransactionProvider(
           chainKey,
           chainRef,
           dataEncoder,
-          walletCore,
-        );
+          walletCore
+        )
       }
       case Chain.Kujira: {
         return new KujiraTransactionProvider(
           chainKey,
           chainRef,
           dataEncoder,
-          walletCore,
-        );
+          walletCore
+        )
       }
       case Chain.Dydx: {
         return new DydxTransactionProvider(
           chainKey,
           chainRef,
           dataEncoder,
-          walletCore,
-        );
+          walletCore
+        )
       }
       case Chain.Solana: {
         return new SolanaTransactionProvider(
           chainKey,
           chainRef,
           dataEncoder,
-          walletCore,
-        );
+          walletCore
+        )
       }
       case Chain.BitcoinCash:
       case Chain.Dash:
@@ -100,16 +99,16 @@ export class TransactionProvider {
           chainKey,
           chainRef,
           dataEncoder,
-          walletCore,
-        );
+          walletCore
+        )
       }
       default: {
         return new EVMTransactionProvider(
           chainKey,
           chainRef,
           dataEncoder,
-          walletCore,
-        );
+          walletCore
+        )
       }
     }
   }
