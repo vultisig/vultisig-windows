@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain';
-import { Coin } from '@core/chain/coin/Coin';
-import { recordMap } from '@lib/utils/record/recordMap';
+import { Chain } from '@core/chain/Chain'
+import { Coin } from '@core/chain/coin/Coin'
+import { recordMap } from '@lib/utils/record/recordMap'
 
 const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
   [Chain.Bitcoin]: {
@@ -213,7 +213,7 @@ const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
     priceProviderId: 'osmosis',
     cmcId: 12220,
   },
-};
+}
 
 export const chainFeeCoin: Record<Chain, Coin> = recordMap(
   leanChainFeeCoin,
@@ -222,4 +222,4 @@ export const chainFeeCoin: Record<Chain, Coin> = recordMap(
     chain,
     id: coin.ticker,
   })
-);
+)

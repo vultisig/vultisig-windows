@@ -1,6 +1,6 @@
 export const fromChainAmount = (
   amount: bigint | number | string,
-  decimals: number,
+  decimals: number
 ) => {
-  return Number(amount) / Math.pow(10, decimals);
-};
+  return Number(amount) / Math.pow(10, decimals)
+}

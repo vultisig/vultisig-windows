@@ -9,7 +9,7 @@ import { useCoinPricesQuery } from './useCoinPricesQuery'
 type UseCoinPricesQueryInput = {
   coin: Coin
   fiatCurrency?: FiatCurrency
-};
+}
 
 export const useCoinPriceQuery = ({
   coin,

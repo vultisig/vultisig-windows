@@ -1,37 +1,38 @@
-import { Chain } from "@core/chain/Chain";
-import { EthereumSpecific } from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
-import { KeysignPayload } from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
-import { shouldBePresent } from "@lib/utils/assert/shouldBePresent";
-import { stripHexPrefix } from "@lib/utils/hex/stripHexPrefix";
-import { TW, WalletCore } from "@trustwallet/wallet-core";
-import { getSigningInputEnvelopedTxFields } from "./getSigningInputEnvelopedTxFields";
-import { bigIntToHex } from "@lib/utils/bigint/bigIntToHex";
+import { Chain } from '@core/chain/Chain'
+import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
+import { TW, WalletCore } from '@trustwallet/wallet-core'
+
+import { getSigningInputEnvelopedTxFields } from './getSigningInputEnvelopedTxFields'
 
 type Input = {
-  keysignPayload: KeysignPayload;
-  walletCore: WalletCore;
-};
+  keysignPayload: KeysignPayload
+  walletCore: WalletCore
+}
 
 export const getErc20ApproveTxInputData = ({
   keysignPayload,
   walletCore,
 }: Input) => {
   const { amount, spender } = shouldBePresent(
-    keysignPayload.erc20ApprovePayload,
-  );
+    keysignPayload.erc20ApprovePayload
+  )
 
   const amountHex = Buffer.from(
     stripHexPrefix(bigIntToHex(BigInt(amount))),
-    "hex",
-  );
+    'hex'
+  )
 
-  const coin = shouldBePresent(keysignPayload.coin);
-  const chain = coin.chain as Chain;
+  const coin = shouldBePresent(keysignPayload.coin)
+  const chain = coin.chain as Chain
 
-  const { blockchainSpecific } = keysignPayload;
+  const { blockchainSpecific } = keysignPayload
 
   const { maxFeePerGasWei, priorityFee, nonce, gasLimit } =
-    blockchainSpecific.value as EthereumSpecific;
+    blockchainSpecific.value as EthereumSpecific
 
   const signingInput = TW.Ethereum.Proto.SigningInput.create({
     transaction: {
@@ -49,7 +50,7 @@ export const getErc20ApproveTxInputData = ({
       nonce,
       gasLimit,
     }),
-  });
+  })
 
-  return TW.Ethereum.Proto.SigningInput.encode(signingInput).finish();
-};
+  return TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()
+}

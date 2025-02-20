@@ -1,14 +1,14 @@
-import { ChainKind, getChainKind } from "@core/chain/ChainKind";
+import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
-import { CoinBalanceResolver } from "./CoinBalanceResolver";
-import { getCosmosCoinBalance } from "./cosmos";
-import { getEvmCoinBalance } from "./evm";
-import { getPolkadotCoinBalance } from "./polkadot";
-import { getRippleCoinBalance } from "./ripple";
-import { getSolanaCoinBalance } from "./solana";
-import { getSuiCoinBalance } from "./sui";
-import { getTonCoinBalance } from "./ton";
-import { getUtxoCoinBalance } from "./utxo";
+import { CoinBalanceResolver } from './CoinBalanceResolver'
+import { getCosmosCoinBalance } from './cosmos'
+import { getEvmCoinBalance } from './evm'
+import { getPolkadotCoinBalance } from './polkadot'
+import { getRippleCoinBalance } from './ripple'
+import { getSolanaCoinBalance } from './solana'
+import { getSuiCoinBalance } from './sui'
+import { getTonCoinBalance } from './ton'
+import { getUtxoCoinBalance } from './utxo'
 
 const handlers: Record<ChainKind, CoinBalanceResolver<any>> = {
   utxo: getUtxoCoinBalance,
@@ -19,12 +19,12 @@ const handlers: Record<ChainKind, CoinBalanceResolver<any>> = {
   ripple: getRippleCoinBalance,
   polkadot: getPolkadotCoinBalance,
   solana: getSolanaCoinBalance,
-};
+}
 
-export const getCoinBalance: CoinBalanceResolver = async (input) => {
-  const chainKind = getChainKind(input.chain);
+export const getCoinBalance: CoinBalanceResolver = async input => {
+  const chainKind = getChainKind(input.chain)
 
-  const handler = handlers[chainKind];
+  const handler = handlers[chainKind]
 
-  return handler(input);
-};
+  return handler(input)
+}
