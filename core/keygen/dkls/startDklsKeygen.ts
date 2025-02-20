@@ -1,6 +1,8 @@
+import { base64Encode } from '@lib/utils/base64Encode'
+import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
+
 import { KeygenSession } from '../../../lib/dkls/vs_wasm'
 import { getKeygenThreshold } from '../utils/getKeygenThreshold'
-import { encryptSetupMessage } from './encryptSetupMessge'
 import { uploadSetupMessage } from './uploadSetupMessage'
 
 type StartDklsKeygenInput = {
@@ -22,10 +24,12 @@ export const startDklsKeygen = async ({
     const threshold = getKeygenThreshold(signers.length)
     const setupMessage = KeygenSession.setup(null, threshold, signers)
 
-    const encryptedSetupMessage = encryptSetupMessage({
-      message: setupMessage,
-      hexEncryptionKey,
-    })
+    const encryptedSetupMessage = base64Encode(
+      encryptWithAesGcm({
+        key: hexEncryptionKey,
+        value: Buffer.from(setupMessage),
+      })
+    )
 
     await uploadSetupMessage({
       serverUrl,
