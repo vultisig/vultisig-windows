@@ -134,12 +134,15 @@ const DeleteVaultPage = () => {
                 <HStack
                   key={key}
                   onClick={() => toggleDeleteTerm(key)}
-                  as="button"
+                  role="button"
+                  tabIndex={0}
                   alignItems="center"
                   gap={8}
                 >
                   <Check value={deleteTerms[key]} />
-                  <Text color="contrast">{t(labelKey)}</Text>
+                  <Text as="span" color="contrast">
+                    {t(labelKey)}
+                  </Text>
                 </HStack>
               ))}
             </ActionsWrapper>
@@ -150,7 +153,6 @@ const DeleteVaultPage = () => {
                   onSuccess: () => navigate('vault'),
                 })
               }}
-              color="danger"
               isDisabled={isDeleteDisabled}
             >
               {t('vault_delete_button_text')}
