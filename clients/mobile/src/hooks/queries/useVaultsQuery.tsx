@@ -1,8 +1,7 @@
 export const vaultsQueryKey = ['vaults']
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useQuery } from '@tanstack/react-query'
-
-import { shouldBePresent } from '@/lib/utils/assert/shouldBePresent'
-import { sortEntitiesWithOrder } from '@/lib/utils/entities/EntityWithOrder'
 
 import { GetVaults } from '../../../../desktop/wailsjs/go/storage/Store'
 

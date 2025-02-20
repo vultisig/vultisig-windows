@@ -28,6 +28,7 @@ export const Check = styled(CheckStatus)`
 
 export const DeleteButton = styled(Button)`
   background-color: ${getColor('danger')};
+  color: ${getColor('textDark')};
 
   &:hover {
     background-color: ${({ theme }) =>
