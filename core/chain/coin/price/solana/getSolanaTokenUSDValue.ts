@@ -1,5 +1,5 @@
 import { Coin } from '@core/chain/coin/Coin'
-import { defaultFiatCurrency, FiatCurrency } from '@core/config/FiatCurrency'
+import { FiatCurrency } from '@core/config/FiatCurrency'
 
 import { OtherChain } from '../../../Chain'
 import { coinKeyToString } from '../../Coin'
@@ -23,7 +23,6 @@ const generateSolanaTokenQuoteUrl = (
 
 export const getSolanaTokenPrices = async ({
   coins,
-  _fiatCurrency = defaultFiatCurrency,
 }: Input): Promise<Record<string, number>> => {
   const result: Record<string, number> = {}
   const amountDecimal = 1_000_000 // 1 USDC
