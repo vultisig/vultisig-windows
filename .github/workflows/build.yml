@@ -59,6 +59,8 @@ jobs:
         run: yarn lint
       - name: run unit test
         run: yarn workspace @clients/desktop test
+      - name: run typecheck
+        run: yarn typecheck
   extension:
     needs: [setup,lint]
     runs-on: ubuntu-22.04
