@@ -1,6 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { CoinKey } from '@core/chain/coin/Coin'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -38,7 +38,9 @@ export const SwapCoinBalance = ({ value }: ValueProp<CoinKey>) => {
           pending={() => <Spinner />}
           error={() => t('failed_to_load')}
           success={amount => (
-            <span>{formatAmount(fromChainAmount(amount, coin.decimals))}</span>
+            <span>
+              {formatTokenAmount(fromChainAmount(amount, coin.decimals))}
+            </span>
           )}
         />
       </span>

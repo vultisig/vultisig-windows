@@ -3,6 +3,7 @@ import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { getColor } from '@lib/ui/theme/getters'
 import { sum } from '@lib/utils/array/sum'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
 
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon'
@@ -78,7 +79,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
               {singleCoin ? (
                 <Text color="contrast" weight="400" size={12} centerVertically>
                   <BalanceVisibilityAware>
-                    {formatAmount(
+                    {formatTokenAmount(
                       fromChainAmount(singleCoin.amount, singleCoin.decimals)
                     )}
                   </BalanceVisibilityAware>
