@@ -18,8 +18,8 @@ import { CurrentServiceNameProvider } from '../shared/state/currentServiceName'
 import { CurrentSessionIdProvider } from '../shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../state/currentKeygenType'
 import { CurrentServerTypeProvider } from '../state/currentServerType'
+import { JoinKeygenPeersStep } from './JoinKeygenPeersStep'
 import { JoinKeygenProcess } from './JoinKeygenProcess'
-import { JoinKeygenSignersStep } from './JoinKeygenSignersStep'
 import { JoinKeygenVaultProvider } from './JoinKeygenVaultProvider'
 import { KeygenServerUrlProvider } from './KeygenServerUrlProvider'
 
@@ -66,13 +66,13 @@ export const JoinKeygenPage = () => {
                           <JoinKeygenSessionStep onForward={toNextStep} />
                         )}
                         keygen={() => (
-                          <ValueTransfer<{ peers: string[] }>
+                          <ValueTransfer<string[]>
                             from={({ onFinish }) => (
-                              <JoinKeygenSignersStep onFinish={onFinish} />
+                              <JoinKeygenPeersStep onFinish={onFinish} />
                             )}
-                            to={({ value: { peers } }) => (
+                            to={({ value }) => (
                               <PeersSelectionRecordProvider
-                                initialValue={makeRecord(peers, () => true)}
+                                initialValue={makeRecord(value, () => true)}
                               >
                                 <JoinKeygenProcess title={title} />
                               </PeersSelectionRecordProvider>
