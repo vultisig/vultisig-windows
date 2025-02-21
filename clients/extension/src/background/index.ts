@@ -343,8 +343,11 @@ const handleRequest = (
 > => {
   return new Promise((resolve, reject) => {
     const { method, params } = body
-    if (getChainKind(chain.chain) === 'evm') {
+    const chainKind = getChainKind(chain.chain)
+    if (chainKind === 'evm') {
       if (!rpcProvider) handleProvider(chain.chain)
+    } else if (chainKind !== 'cosmos' && chainKind !== 'utxo') {
+      throw new Error(`Unsupported chain kind: ${chainKind}`)
     }
 
     switch (method) {
@@ -693,7 +696,7 @@ const handleRequest = (
                 }
               })
             } else {
-              reject('Chain not Supported')
+              reject(`Chain ${param?.chainId} is not supported`)
             }
           } else {
             reject()
