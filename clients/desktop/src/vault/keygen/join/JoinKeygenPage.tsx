@@ -16,10 +16,11 @@ import { CurrentSessionIdProvider } from '../shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../state/currentKeygenType'
 import { CurrentServerTypeProvider } from '../state/currentServerType'
 import { JoinKeygenProcess } from './JoinKeygenProcess'
+import { JoinKeygenSessionStartStep } from './JoinKeygenSessionStartStep'
 import { JoinKeygenVaultProvider } from './JoinKeygenVaultProvider'
 import { KeygenServerUrlProvider } from './KeygenServerUrlProvider'
 
-const keygenSteps = ['session', 'keygen'] as const
+const keygenSteps = ['session', 'sessionStart', 'keygen'] as const
 
 export const JoinKeygenPage = () => {
   const { keygenType, keygenMsg } = useAppPathState<'joinKeygen'>()
@@ -60,6 +61,9 @@ export const JoinKeygenPage = () => {
                         value={step}
                         session={() => (
                           <JoinKeygenSessionStep onForward={toNextStep} />
+                        )}
+                        sessionStart={() => (
+                          <JoinKeygenSessionStartStep onForward={toNextStep} />
                         )}
                         keygen={() => <JoinKeygenProcess title={title} />}
                       />
