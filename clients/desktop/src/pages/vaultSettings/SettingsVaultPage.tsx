@@ -31,6 +31,7 @@ import {
   IconWrapper,
   ListItemPanel,
   OpticallyAdjustedText,
+  StyledListItemContentWrapper,
   StyledPageSlice,
   StyledVStack,
 } from './SettingsVaultPage.styles'
@@ -79,7 +80,7 @@ const SettingsVaultPage = () => {
                     <ListItemPanel
                       isSpecialItem={id === 'register-for-airdrop'}
                     >
-                      <HStack
+                      <StyledListItemContentWrapper
                         fullWidth
                         alignItems="center"
                         justifyContent="space-between"
@@ -106,7 +107,7 @@ const SettingsVaultPage = () => {
                         ) : (
                           <ChevronRightIcon />
                         )}
-                      </HStack>
+                      </StyledListItemContentWrapper>
                     </ListItemPanel>
                   </UnstyledButton>
                 ))}

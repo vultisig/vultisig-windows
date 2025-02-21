@@ -1,7 +1,7 @@
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { VStack } from '../../lib/ui/layout/Stack'
+import { HStack, VStack } from '../../lib/ui/layout/Stack'
 import { Panel } from '../../lib/ui/panel/Panel'
 import { Text } from '../../lib/ui/text'
 import { pageConfig } from '../../ui/page/config'
@@ -56,4 +56,9 @@ export const OpticallyAdjustedText = styled(Text)`
 
 export const IconWrapper = styled.div`
   font-size: 24px;
+`
+
+export const StyledListItemContentWrapper = styled(HStack)`
+  // @tony: Added margin for optical vertical alignment
+  margin-top: 5px;
 `
