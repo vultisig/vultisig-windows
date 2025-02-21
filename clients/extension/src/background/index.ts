@@ -586,10 +586,9 @@ const handleRequest = (
           const [param] = params
 
           if (param?.chainId) {
-            const supportedChain = isSupportedChain(
-              getChainByChainId(param.chainId)
-            )
-              ? getChainByChainId(param.chainId)
+            const chainFromId = getChainByChainId(param.chainId)
+            const supportedChain = isSupportedChain(chainFromId)
+              ? chainFromId
               : null
             if (supportedChain) {
               getStoredChains().then(storedChains => {
@@ -663,10 +662,9 @@ const handleRequest = (
           const [param] = params
 
           if (param?.chainId) {
-            const supportedChain = isSupportedChain(
-              getChainByChainId(param.chainId)
-            )
-              ? getChainByChainId(param.chainId)
+            const chainFromId = getChainByChainId(param.chainId)
+            const supportedChain = isSupportedChain(chainFromId)
+              ? chainFromId
               : null
             if (supportedChain) {
               getStoredChains().then(storedChains => {

@@ -77,7 +77,7 @@ const Component = () => {
                 : item
             )
           ).then(() => {
-            componentDidMount()
+            initializePage()
           })
         })
       },
@@ -140,11 +140,11 @@ const Component = () => {
   const showReloadMessage = () => {
     messageApi.open({
       type: 'info',
-      content: t(t(messageKeys.REALOAD_MESSAGE)),
+      content: t(messageKeys.REALOAD_MESSAGE),
     })
   }
 
-  const componentDidMount = (): void => {
+  const initializePage = () => {
     getStoredVaults().then(vaults => {
       const vault = vaults.find(({ active }) => active)
 
@@ -167,18 +167,19 @@ const Component = () => {
           ),
         }))
 
-        setState({ ...state, networkOptions })
+        setState({ ...state, networkOptions, vault })
 
         getCurrentNetwork(networkOptions)
-
-        getIsPriority().then(isPriority => {
-          setState(prevState => ({ ...prevState, isPriority, vault }))
-        })
       }
     })
   }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(componentDidMount, [])
+
+  useEffect(() => {
+    initializePage()
+    getIsPriority().then(isPriority => {
+      setState(prevState => ({ ...prevState, isPriority }))
+    })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return vault ? (
     <>
