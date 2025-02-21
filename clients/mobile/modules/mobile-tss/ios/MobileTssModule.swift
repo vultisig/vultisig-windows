@@ -13,7 +13,7 @@ public class MobileTssModule: Module {
         Name("MobileTss")
         
         // Defines event names that the module can send to JavaScript.
-        Events("onProgress","onError")
+        Events("onKeygen","onError")
         
         // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
         Function("getDerivedPublicKey") { (hexPublicKey: String,hexChainCode: String, derivePath: String) in
@@ -23,7 +23,21 @@ public class MobileTssModule: Module {
         // keygen function
         AsyncFunction("keygen") { (name: String, localPartyID: String, sessionID: String, hexChainCode: String, hexEncryptionKey: String, serverURL: String) in
             print("start keygen , vault name: \(name), localPartyID: \(localPartyID), sessionID: \(sessionID), hexChainCode: \(hexChainCode), hexEncryptionKey: \(hexEncryptionKey), serverURL: \(serverURL)")
-            return [String: Any]()
+            let tssService = TssService(name: name,
+                                        localPartyID: localPartyID,
+                                        serverURL: serverURL,
+                                        encryptionKeyHex: hexEncryptionKey,
+                                        sessionID: sessionID,
+                                        sendEvent: self.sendEvent)
+            let vaultMeta = try await tssService.KeygenWithRetry(hexChainCode: hexChainCode)
+            guard let vaultMeta = vaultMeta else {
+                throw TssRuntimeError("fail to create vault")
+            }
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .secondsSince1970
+            let data = try encoder.encode(vaultMeta)
+            let dictionary = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+            return dictionary
         }
         
         
@@ -41,6 +55,7 @@ public class MobileTssModule: Module {
                   let tssType = data["tssType"] as? String else {
                 throw NSError(domain: "InvalidArguments", code: 400, userInfo: [NSLocalizedDescriptionKey: "Invalid arguments"])
             }
+            
             return [String: Any]()
         }
         
