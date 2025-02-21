@@ -8,10 +8,10 @@ import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
 import { KeygenPageHeader } from '../shared/KeygenPageHeader'
 import { PendingKeygenMessage } from '../shared/PendingKeygenMessage'
-import { useSessionStartQuery } from './queries/useSessionStartQuery'
+import { useKeygenSignersQuery } from './queries/useKeygenSignersQuery'
 
-export const JoinKeygenSessionStartStep = ({ onForward }: OnForwardProp) => {
-  const sessionQuery = useSessionStartQuery()
+export const JoinKeygenSignersStep = ({ onForward }: OnForwardProp) => {
+  const sessionQuery = useKeygenSignersQuery()
 
   const { t } = useTranslation()
   const title = t('join_keygen')

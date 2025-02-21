@@ -6,12 +6,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useCurrentSessionId } from '../../shared/state/currentSessionId'
 import { useCurrentServerUrl } from '../../state/currentServerUrl'
 
-export const useSessionStartQuery = () => {
+export const useKeygenSignersQuery = () => {
   const serverUrl = useCurrentServerUrl()
   const sessionId = useCurrentSessionId()
 
   return useQuery({
-    queryKey: ['sessionStart', sessionId],
+    queryKey: ['keygenSigners', sessionId],
     queryFn: async () => {
       const signers = await queryUrl<string[]>(
         `${serverUrl}/start/${sessionId}`
