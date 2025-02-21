@@ -37,11 +37,11 @@ export const getSolanaSpecific: ChainSpecificResolver<SolanaSpecific> = async ({
   })
 
   if (!isFeeCoin(coin)) {
-    result.fromTokenAssociatedAddress = await getSplAssociatedAccount({
+    const fromAccount = await getSplAssociatedAccount({
       account: coin.address,
       token: coin.id,
     })
-    result.toTokenAssociatedAddress = await asyncAttempt(
+    const toAccount = await asyncAttempt(
       () =>
         getSplAssociatedAccount({
           account: shouldBePresent(receiver),
@@ -49,6 +49,9 @@ export const getSolanaSpecific: ChainSpecificResolver<SolanaSpecific> = async ({
         }),
       undefined
     )
+    result.toTokenAssociatedAddress = toAccount?.address
+    result.fromTokenAssociatedAddress = fromAccount.address
+    result.programId = toAccount?.isToken2022
   }
 
   return result
