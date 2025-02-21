@@ -50,6 +50,7 @@ export const useKeygenMutation = () => {
                 sessionId,
                 hexEncryptionKey: encryptionKeyHex,
                 serverUrl,
+                localPartyId: local_party_id,
               })
 
               throw new Error('DKLS is not supported yet')
