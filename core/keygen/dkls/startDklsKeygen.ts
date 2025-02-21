@@ -54,14 +54,10 @@ export const startDklsKeygen = async ({
       attempts: 10,
     })
 
-    console.log('encodedSetupMessage', encodedSetupMessage)
-
     const setupMessage = decryptWithAesGcm({
       key: hexEncryptionKey,
       value: fromBase64(encodedSetupMessage),
     })
-
-    console.log('setupMessage', setupMessage)
 
     const keygenSession = new KeygenSession(setupMessage, localPartyId)
 

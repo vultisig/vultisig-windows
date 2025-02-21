@@ -8,10 +8,5 @@ type DownloadSetupMessageInput = {
 export const downloadSetupMessage = async ({
   serverUrl,
   sessionId,
-}: DownloadSetupMessageInput) => {
-  const msg = await queryUrl<string>(`${serverUrl}/setup-message/${sessionId}`)
-
-  console.log('setup message', msg)
-
-  return msg
-}
+}: DownloadSetupMessageInput) =>
+  queryUrl<string>(`${serverUrl}/setup-message/${sessionId}`)
