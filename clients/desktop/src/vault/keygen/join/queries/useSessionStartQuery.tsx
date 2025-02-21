@@ -1,3 +1,5 @@
+import { isEmpty } from '@lib/utils/array/isEmpty'
+import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
@@ -10,8 +12,18 @@ export const useSessionStartQuery = () => {
 
   return useQuery({
     queryKey: ['sessionStart', sessionId],
-    queryFn: () => {
-      return queryUrl(`${serverUrl}/start/${sessionId}`)
+    queryFn: async () => {
+      const signers = await queryUrl<string[]>(
+        `${serverUrl}/start/${sessionId}`
+      )
+
+      const uniqueSigners = withoutDuplicates(signers)
+
+      if (isEmpty(uniqueSigners)) {
+        throw new Error('Session have not started yet')
+      }
+
+      return uniqueSigners
     },
     retry: true,
     retryDelay: 1000,
