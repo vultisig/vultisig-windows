@@ -1,4 +1,4 @@
-import { queryUrl } from '@lib/utils/query/queryUrl'
+import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
 
 type DownloadSetupMessageInput = {
   serverUrl: string
@@ -8,5 +8,14 @@ type DownloadSetupMessageInput = {
 export const downloadSetupMessage = async ({
   serverUrl,
   sessionId,
-}: DownloadSetupMessageInput) =>
-  queryUrl<string>(`${serverUrl}/setup-message/${sessionId}`)
+}: DownloadSetupMessageInput) => {
+  const response = await fetch(`${serverUrl}/setup-message/${sessionId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  await assertFetchResponse(response)
+
+  return response.text()
+}
