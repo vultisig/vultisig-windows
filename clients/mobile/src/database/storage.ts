@@ -16,40 +16,63 @@ const db = DB.get('vultisig.db')
 // ------------------------------------
 export async function SaveVault(vault: Vault): Promise<void> {
   if (!vault.PublicKeyECDSA) {
-    throw new Error('invalid vault, public key ecdsa is required')
+    throw new Error('Invalid vault, public key ECDSA is required')
   }
 
   const signersJSON = JSON.stringify(vault.Signers || [])
   const isBackedUpVal = vault.IsBackedUp ? 1 : 0
 
-  const query = `
-    INSERT OR REPLACE INTO vaults (
-      name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
-      local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `
-  await db.executeSql(query, [
-    vault.Name,
-    vault.PublicKeyECDSA,
-    vault.PublicKeyEdDSA,
-    vault.CreatedAt,
-    vault.HexChainCode,
-    vault.LocalPartyID,
-    signersJSON,
-    vault.ResharePrefix,
-    vault.Order,
-    isBackedUpVal,
-    vault.FolderID ?? null,
-    vault.LibType,
-  ])
+  await db.executeTransaction(
+    {
+      sql: `
+        INSERT OR REPLACE INTO vaults (
+          name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
+          local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [
+        vault.Name,
+        vault.PublicKeyECDSA,
+        vault.PublicKeyEdDSA,
+        vault.CreatedAt,
+        vault.HexChainCode,
+        vault.LocalPartyID,
+        signersJSON,
+        vault.ResharePrefix,
+        vault.Order,
+        isBackedUpVal,
+        vault.FolderID ?? null,
+        vault.LibType,
+      ],
+    },
 
-  for (const ks of vault.KeyShares) {
-    await saveKeyShare(vault.PublicKeyECDSA, ks)
-  }
+    ...vault.KeyShares.map(ks => ({
+      sql: `
+        INSERT OR REPLACE INTO keyshares (public_key_ecdsa, public_key, keyshare)
+        VALUES (?, ?, ?)`,
+      args: [vault.PublicKeyECDSA, ks.publicKey, ks.keyShare],
+    })),
 
-  for (const coin of vault.Coins) {
-    await SaveCoin(vault.PublicKeyECDSA, coin)
-  }
+    ...vault.Coins.map(coin => ({
+      sql: `
+        INSERT OR REPLACE INTO coins (
+          id, chain, address, hex_public_key, ticker, contract_address,
+          is_native_token, logo, price_provider_id, decimals, public_key_ecdsa
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [
+        coin.ID || uuidv4(),
+        coin.Chain,
+        coin.Address,
+        coin.HexPublicKey,
+        coin.Ticker,
+        coin.ContractAddress,
+        coin.IsNativeToken ? 1 : 0,
+        coin.Logo,
+        coin.PriceProviderID,
+        coin.Decimals,
+        vault.PublicKeyECDSA,
+      ],
+    }))
+  )
 }
 
 export async function UpdateVaultName(publicKeyECDSA: string, name: string) {
@@ -173,20 +196,6 @@ export async function DeleteVault(publicKeyECDSA: string): Promise<void> {
 // ------------------------------------
 //  KeyShares (internal helper)
 // ------------------------------------
-async function saveKeyShare(
-  vaultPublicKeyECDSA: string,
-  keyShare: KeyShare
-): Promise<void> {
-  const query = `
-    INSERT OR REPLACE INTO keyshares (public_key_ecdsa, public_key, keyshare)
-    VALUES (?, ?, ?)
-  `
-  await db.executeSql(query, [
-    vaultPublicKeyECDSA,
-    keyShare.publicKey,
-    keyShare.keyShare,
-  ])
-}
 
 async function getKeyShares(vaultPublicKeyECDSA: string): Promise<KeyShare[]> {
   const query = `
