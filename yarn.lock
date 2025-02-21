@@ -6288,6 +6288,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-native-sqlite-storage@npm:6.0.5":
+  version: 6.0.5
+  resolution: "@types/react-native-sqlite-storage@npm:6.0.5"
+  checksum: 10c0/273dc0bc4cf6938ffd5463106c1a208e1459c0fa8e1c01c4dee51c67affee1def15a7210fe118d2676af97a091786379e0e69c3f2f297501af97ee9488168482
+  languageName: node
+  linkType: hard
+
 "@types/react-native@npm:^0.70":
   version: 0.70.19
   resolution: "@types/react-native@npm:0.70.19"
@@ -14622,6 +14629,7 @@ __metadata:
     "@types/eslint-plugin-jsx-a11y": "npm:6"
     "@types/jest": "npm:29.5.12"
     "@types/react": "npm:~18.3.12"
+    "@types/react-native-sqlite-storage": "npm:6.0.5"
     "@types/react-test-renderer": "npm:18.3.0"
     "@types/styled-components-react-native": "npm:5.2.5"
     "@typescript-eslint/eslint-plugin": "npm:8.23.0"
@@ -14654,6 +14662,8 @@ __metadata:
     react-native-reanimated: "npm:~3.16.1"
     react-native-safe-area-context: "npm:4.12.0"
     react-native-screens: "npm:~4.4.0"
+    react-native-sqlite-manager: "npm:0.6.1"
+    react-native-sqlite-storage: "npm:6.0.1"
     react-native-web: "npm:~0.19.13"
     react-native-webview: "npm:13.12.5"
     react-test-renderer: "npm:18.3.1"
@@ -16958,6 +16968,27 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/63eff2f7761109ed05b0656c28bf34c83d5d7ebbcd92931202a250cab0e54109c764fac3471db7ae52f5c6c782bfca5caf5d8f1dc9a4a27a4b9889aeec7a4dcc
+  languageName: node
+  linkType: hard
+
+"react-native-sqlite-manager@npm:0.6.1":
+  version: 0.6.1
+  resolution: "react-native-sqlite-manager@npm:0.6.1"
+  dependencies:
+    react-native-sqlite-storage: "npm:^6.0.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/c1baabe8313aa191779a6ff1faf510ad363d6fc901c18b4cf8cfa2d714f8f0eacf56ff148497f2fab9e41e5a575070b43ffb067ea23b8fd4e32341501083af54
+  languageName: node
+  linkType: hard
+
+"react-native-sqlite-storage@npm:6.0.1, react-native-sqlite-storage@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "react-native-sqlite-storage@npm:6.0.1"
+  peerDependencies:
+    react-native: ">=0.14.0"
+  checksum: 10c0/631787a64bf6ade75758a23289c138bb1346e0418d75fb013f7a64822560e0f29e1193ef20290c3eb7fbeb6d594b8f49b256895dfc188f7f0023a55f1ba57134
   languageName: node
   linkType: hard
 
