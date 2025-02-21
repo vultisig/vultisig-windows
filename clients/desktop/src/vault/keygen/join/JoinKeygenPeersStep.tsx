@@ -36,7 +36,7 @@ export const JoinKeygenPeersStep = ({ onFinish }: OnFinishProp<string[]>) => {
       value={peersQuery}
       pending={() => (
         <>
-          <KeygenPageHeader title={title} />s{' '}
+          <KeygenPageHeader title={title} />
           <PageContent alignItems="center" justifyContent="center">
             <PendingKeygenMessage>
               {t('waiting_for_keygen_start')}
