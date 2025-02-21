@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService'
 import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
 import { useMpcLib } from '../../../../mpc/state/mpcLib'
+import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
 import { KeygenType } from '../../KeygenType'
 import { useCurrentKeygenType } from '../../state/currentKeygenType'
@@ -23,9 +24,11 @@ export const useKeygenMutation = () => {
 
   const vault = useCurrentKeygenVault()
 
-  const { name, local_party_id, hex_chain_code, signers } = vault
+  const { name, local_party_id, hex_chain_code } = vault
 
   const mpcLib = useMpcLib()
+
+  const peers = useSelectedPeers()
 
   const isInitiatingDevice = useIsInitiatingDevice()
 
@@ -46,7 +49,7 @@ export const useKeygenMutation = () => {
             DKLS: async () => {
               await startDklsKeygen({
                 isInitiatingDevice,
-                signers,
+                peers,
                 sessionId,
                 hexEncryptionKey: encryptionKeyHex,
                 serverUrl,

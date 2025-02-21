@@ -11,7 +11,7 @@ import { uploadSetupMessage } from './uploadSetupMessage'
 
 type StartDklsKeygenInput = {
   isInitiatingDevice: boolean
-  signers: string[]
+  peers: string[]
   sessionId: string
   hexEncryptionKey: string
   serverUrl: string
@@ -20,12 +20,14 @@ type StartDklsKeygenInput = {
 
 export const startDklsKeygen = async ({
   isInitiatingDevice,
-  signers,
+  peers,
   hexEncryptionKey,
   serverUrl,
   sessionId,
   localPartyId,
 }: StartDklsKeygenInput) => {
+  const signers = [...peers, localPartyId]
+
   if (isInitiatingDevice) {
     const threshold = getKeygenThreshold(signers.length)
     const setupMessage = KeygenSession.setup(null, threshold, signers)

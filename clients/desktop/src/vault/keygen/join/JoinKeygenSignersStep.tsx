@@ -1,26 +1,34 @@
+import { without } from '@lib/utils/array/without'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { OnForwardProp } from '../../../lib/ui/props'
+import { OnFinishProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
 import { KeygenPageHeader } from '../shared/KeygenPageHeader'
 import { PendingKeygenMessage } from '../shared/PendingKeygenMessage'
+import { useCurrentLocalPartyId } from '../state/currentLocalPartyId'
 import { useKeygenSignersQuery } from './queries/useKeygenSignersQuery'
 
-export const JoinKeygenSignersStep = ({ onForward }: OnForwardProp) => {
+export const JoinKeygenSignersStep = ({
+  onFinish,
+}: OnFinishProp<{ peers: string[] }>) => {
   const sessionQuery = useKeygenSignersQuery()
 
   const { t } = useTranslation()
   const title = t('join_keygen')
 
+  const localPartyId = useCurrentLocalPartyId()
+
   useEffect(() => {
-    if (sessionQuery.data) {
-      onForward()
+    const signers = sessionQuery.data
+
+    if (signers) {
+      onFinish({ peers: without(signers, localPartyId) })
     }
-  }, [sessionQuery.data, onForward])
+  }, [localPartyId, onFinish, sessionQuery.data])
 
   return (
     <MatchQuery
