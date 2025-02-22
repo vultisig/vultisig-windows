@@ -5,7 +5,6 @@ export default class Migration extends ItMigration {
     const schema = new Schema(db)
 
     await schema.create('vaults', table => {
-      table.increments('id')
       table.text('name')
       table.text('public_key_ecdsa').primaryKey()
       table.text('public_key_eddsa')
