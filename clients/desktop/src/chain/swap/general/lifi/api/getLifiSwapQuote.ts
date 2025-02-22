@@ -41,6 +41,7 @@ export const getLifiSwapQuote = async ({
     toToken,
     fromAmount: amount.toString(),
     fromAddress: address,
+    integrator: lifiConfig.integratorName,
     fee: lifiConfig.afffiliateFee,
   })
 
