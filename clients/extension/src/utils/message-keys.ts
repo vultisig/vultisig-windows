@@ -60,7 +60,7 @@ export default keyMirror({
   // P
   // Q
   // R
-  REALOAD_MESSAGE: true,
+  RELOAD_MESSAGE: true,
   REMOVING_VAULT_WARNING: true,
   RENAME_VAULT: true,
   RETRY_ERROR: true,
