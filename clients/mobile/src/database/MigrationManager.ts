@@ -3,7 +3,6 @@ import SQLite from 'react-native-sqlite-storage'
 export type Migration = {
   version: number
   up: (db: SQLite.SQLiteDatabase) => Promise<void>
-  down?: (db: SQLite.SQLiteDatabase) => Promise<void>
 }
 
 class MigrationManager {
@@ -30,9 +29,9 @@ class MigrationManager {
                   resolve(parseInt(result.rows.item(0).value, 10))
                 } else {
                   tx.executeSql(
-                    'INSERT INTO Version (key, value) VALUES ("schema_version", "1");',
+                    'INSERT INTO Version (key, value) VALUES ("schema_version", "0");',
                     [],
-                    () => resolve(1),
+                    () => resolve(0),
                     (_, error) => reject(error)
                   )
                 }
