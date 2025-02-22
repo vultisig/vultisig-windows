@@ -1,13 +1,5 @@
-import { base64Encode } from '@lib/utils/base64Encode'
-import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
-import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
-import { fromBase64 } from '@lib/utils/fromBase64'
-import { retry } from '@lib/utils/query/retry'
-
-import { KeygenSession } from '../../../lib/dkls/vs_wasm'
-import { getKeygenThreshold } from '../utils/getKeygenThreshold'
-import { downloadSetupMessage } from './downloadSetupMessage'
-import { uploadSetupMessage } from './uploadSetupMessage'
+import __wbg_init, { KeygenSession } from '../../../lib/dkls/vs_wasm'
+import { initSetupMessage } from './initSetupMessage'
 
 type StartDklsKeygenInput = {
   isInitiatingDevice: boolean
@@ -26,41 +18,18 @@ export const startDklsKeygen = async ({
   sessionId,
   localPartyId,
 }: StartDklsKeygenInput) => {
-  const signers = [...peers, localPartyId]
+  await __wbg_init()
 
-  if (isInitiatingDevice) {
-    const threshold = getKeygenThreshold(signers.length)
-    const setupMessage = KeygenSession.setup(null, threshold, signers)
+  const setupMessage = await initSetupMessage({
+    isInitiatingDevice,
+    peers,
+    hexEncryptionKey,
+    serverUrl,
+    sessionId,
+    localPartyId,
+  })
 
-    const encryptedSetupMessage = base64Encode(
-      encryptWithAesGcm({
-        key: hexEncryptionKey,
-        value: Buffer.from(setupMessage),
-      })
-    )
+  const keygenSession = new KeygenSession(setupMessage, localPartyId)
 
-    await uploadSetupMessage({
-      serverUrl,
-      message: encryptedSetupMessage,
-      sessionId,
-    })
-  } else {
-    const encodedSetupMessage = await retry({
-      func: () =>
-        downloadSetupMessage({
-          serverUrl,
-          sessionId,
-        }),
-      attempts: 10,
-    })
-
-    const setupMessage = decryptWithAesGcm({
-      key: hexEncryptionKey,
-      value: fromBase64(encodedSetupMessage),
-    })
-
-    const keygenSession = new KeygenSession(setupMessage, localPartyId)
-
-    console.log('keygenSession', keygenSession)
-  }
+  console.log('keygenSession', keygenSession)
 }
