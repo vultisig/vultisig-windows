@@ -1430,6 +1430,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@boltcode/react-native-sqlite-storage@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@boltcode/react-native-sqlite-storage@npm:7.0.0"
+  peerDependencies:
+    react-native: ">=0.14.0"
+  checksum: 10c0/05f9994495298c9675d8cc83f44fbd6f1090a28bae91f3c5e7539876ea6015a73a9d757b5f3bfc3a6a801afd170b3065a3276355ae822099b395ff67fb132a34
+  languageName: node
+  linkType: hard
+
 "@bufbuild/buf-darwin-arm64@npm:1.50.0":
   version: 1.50.0
   resolution: "@bufbuild/buf-darwin-arm64@npm:1.50.0"
@@ -14622,6 +14631,7 @@ __metadata:
   resolution: "mobile@workspace:clients/mobile"
   dependencies:
     "@babel/core": "npm:7.25.2"
+    "@boltcode/react-native-sqlite-storage": "npm:7.0.0"
     "@expo/vector-icons": "npm:14.0.2"
     "@react-native-async-storage/async-storage": "npm:2.1.1"
     "@react-navigation/bottom-tabs": "npm:7.2.0"
@@ -14663,7 +14673,6 @@ __metadata:
     react-native-safe-area-context: "npm:4.12.0"
     react-native-screens: "npm:~4.4.0"
     react-native-sqlite-manager: "npm:0.6.1"
-    react-native-sqlite-storage: "npm:6.0.1"
     react-native-web: "npm:~0.19.13"
     react-native-webview: "npm:13.12.5"
     react-test-renderer: "npm:18.3.1"
@@ -16983,7 +16992,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-sqlite-storage@npm:6.0.1, react-native-sqlite-storage@npm:^6.0.1":
+"react-native-sqlite-storage@npm:^6.0.1":
   version: 6.0.1
   resolution: "react-native-sqlite-storage@npm:6.0.1"
   peerDependencies:
