@@ -183,8 +183,6 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
         programId,
       } = solanaSpecific
 
-      console.log('solanaSpecific', solanaSpecific)
-
       const priorityFeePrice = 1_000_000
       const priorityFeeLimit = Number(100_000)
       const newRecentBlockHash = recentBlockHash
