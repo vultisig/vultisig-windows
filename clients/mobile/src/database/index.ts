@@ -1,17 +1,24 @@
-import { DB } from 'react-native-sqlite-manager'
+import SQLite from 'react-native-sqlite-storage'
 
-import Migration from './Migration'
-
+import MigrationManager, { Migration } from './MigrationManager'
+import migration1 from './migrations/1'
 const DATABASE_NAME = 'vultisig.db'
-const DATABASE_VERSION = 1
 
-export const initializeDatabase = async () => {
-  const db = DB.get(DATABASE_NAME)
+const initializeDatabase = async (): Promise<void> => {
+  const db = await SQLite.openDatabase({
+    name: DATABASE_NAME,
+    location: 'default',
+  })
+
+  const migrations: Migration[] = [migration1]
+  const migrationManager = new MigrationManager(db, migrations)
 
   try {
-    await db.migrate(new Migration(), DATABASE_VERSION)
+    await migrationManager.migrate()
     console.log('Database initialized and migrated successfully')
   } catch (error) {
     console.error('Database migration failed', error)
   }
 }
+
+export default initializeDatabase

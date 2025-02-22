@@ -1,6 +1,9 @@
+import { SQLiteDatabase } from 'react-native-sqlite-storage'
+
 export default {
-  name: '1',
-  up: `
+  version: 1,
+  up: async (db: SQLiteDatabase) => {
+    await db.executeSql(`
     -- Create vaults table
     CREATE TABLE IF NOT EXISTS vaults (
       public_key_ecdsa TEXT PRIMARY KEY NOT NULL,
@@ -74,12 +77,15 @@ export default {
     -- Create indexes for address_book table
     CREATE INDEX IF NOT EXISTS idx_address_book_chain ON address_book (chain);
     CREATE UNIQUE INDEX IF NOT EXISTS idx_address_book_address_chain ON address_book (address, chain);
-  `,
-  down: `
+  `)
+  },
+  down: async (db: SQLiteDatabase) => {
+    await db.executeSql(`
     DROP TABLE IF EXISTS address_book;
     DROP TABLE IF EXISTS coins;
     DROP TABLE IF EXISTS keyshares;
     DROP TABLE IF EXISTS vaults;
     DROP TABLE IF EXISTS settings;
-  `,
+  `)
+  },
 }
