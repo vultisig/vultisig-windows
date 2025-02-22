@@ -1,13 +1,5 @@
-import { base64Encode } from '@lib/utils/base64Encode'
-import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
-import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
-import { fromBase64 } from '@lib/utils/fromBase64'
-import { retry } from '@lib/utils/query/retry'
-
 import __wbg_init, { KeygenSession } from '../../../lib/dkls/vs_wasm'
-import { getKeygenThreshold } from '../utils/getKeygenThreshold'
-import { downloadSetupMessage } from './downloadSetupMessage'
-import { uploadSetupMessage } from './uploadSetupMessage'
+import { initSetupMessage } from './initSetupMessage'
 
 type StartDklsKeygenInput = {
   isInitiatingDevice: boolean
@@ -28,41 +20,16 @@ export const startDklsKeygen = async ({
 }: StartDklsKeygenInput) => {
   await __wbg_init()
 
-  const signers = [...peers, localPartyId]
+  const setupMessage = await initSetupMessage({
+    isInitiatingDevice,
+    peers,
+    hexEncryptionKey,
+    serverUrl,
+    sessionId,
+    localPartyId,
+  })
 
-  if (isInitiatingDevice) {
-    const threshold = getKeygenThreshold(signers.length)
-    const setupMessage = KeygenSession.setup(null, threshold, signers)
+  const keygenSession = new KeygenSession(setupMessage, localPartyId)
 
-    const encryptedSetupMessage = base64Encode(
-      encryptWithAesGcm({
-        key: Buffer.from(hexEncryptionKey, 'hex'),
-        value: Buffer.from(setupMessage),
-      })
-    )
-
-    await uploadSetupMessage({
-      serverUrl,
-      message: encryptedSetupMessage,
-      sessionId,
-    })
-  } else {
-    const encodedSetupMessage = await retry({
-      func: () =>
-        downloadSetupMessage({
-          serverUrl,
-          sessionId,
-        }),
-      attempts: 10,
-    })
-
-    const setupMessage = decryptWithAesGcm({
-      key: Buffer.from(hexEncryptionKey, 'hex'),
-      value: fromBase64(encodedSetupMessage),
-    })
-
-    const keygenSession = new KeygenSession(setupMessage, localPartyId)
-
-    console.log('keygenSession', keygenSession)
-  }
+  console.log('keygenSession', keygenSession)
 }
