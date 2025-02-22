@@ -1499,6 +1499,7 @@ __metadata:
     "@fontsource/roboto-mono": "npm:^5.1.0"
     "@keplr-wallet/provider": "npm:^0.12.169"
     "@keplr-wallet/types": "npm:^0.12.169"
+    "@solana/compat": "npm:2.0.0"
     "@solana/web3.js": "npm:^1.98.0"
     "@trustwallet/wallet-core": "npm:^4.2.10"
     "@types/chrome": "npm:^0.0.287"
@@ -5223,6 +5224,21 @@ __metadata:
   peerDependencies:
     typescript: ">=5"
   checksum: 10c0/922d4a1800e6d363ae687d9053c5653768f59a7c6a203d277d17eac0d5aafcbedbf206ae9dff063a95b7989a8b336fa085cb5d8063953d4efda7c0f1b86c084c
+  languageName: node
+  linkType: hard
+
+"@solana/compat@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@solana/compat@npm:2.0.0"
+  dependencies:
+    "@solana/addresses": "npm:2.0.0"
+    "@solana/codecs-core": "npm:2.0.0"
+    "@solana/errors": "npm:2.0.0"
+    "@solana/keys": "npm:2.0.0"
+    "@solana/transactions": "npm:2.0.0"
+  peerDependencies:
+    typescript: ">=5"
+  checksum: 10c0/7971aa603117223d41294764fa961d85017a9792f1c7ac783fc5b84c57e0370a89594eb85ebf153fe5745d4ccd7fda369b4ab994bef54f2dc3a06752f1c33602
   languageName: node
   linkType: hard
 

@@ -9,7 +9,7 @@ import OsmosisTransactionProvider from '@clients/extension/src/utils/transaction
 import SolanaTransactionProvider from '@clients/extension/src/utils/transaction-provider/solana'
 import ThorchainTransactionProvider from '@clients/extension/src/utils/transaction-provider/thorchain'
 import UTXOTransactionProvider from '@clients/extension/src/utils/transaction-provider/utxo'
-import { Chain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
@@ -104,7 +104,7 @@ export class TransactionProvider {
       }
       default: {
         return new EVMTransactionProvider(
-          chainKey,
+          chainKey as EvmChain,
           chainRef,
           dataEncoder,
           walletCore

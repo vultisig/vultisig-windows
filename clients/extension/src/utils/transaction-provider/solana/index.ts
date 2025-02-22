@@ -1,6 +1,4 @@
 import { create } from '@bufbuild/protobuf'
-import api from '@clients/extension/src/utils/api'
-import { rpcUrl } from '@clients/extension/src/utils/constants'
 import type {
   ITransaction,
   SignatureProps,
@@ -11,6 +9,7 @@ import type {
 import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
 import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
 import { Chain } from '@core/chain/Chain'
+import { getSolanaClient } from '@core/chain/chains/solana/client'
 import {
   SolanaSpecific,
   SolanaSpecificSchema,
@@ -23,64 +22,45 @@ import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
-import { Connection, PublicKey } from '@solana/web3.js'
-import { TW, WalletCore } from '@trustwallet/wallet-core'
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
+import { fromLegacyPublicKey } from '@solana/compat'
+import { PublicKey } from '@solana/web3.js'
+import { TW } from '@trustwallet/wallet-core'
 import { Buffer } from 'buffer'
 import { formatUnits } from 'ethers'
 import Long from 'long'
-
 export default class SolanaTransactionProvider extends BaseTransactionProvider {
-  constructor(
-    chainKey: Chain,
-    chainRef: { [chainKey: string]: CoinType },
-    dataEncoder: (data: Uint8Array) => Promise<string>,
-    walletCore: WalletCore
-  ) {
-    super(chainKey, chainRef, dataEncoder, walletCore)
-  }
-
-  async fetchTokenAssociatedAccountByOwner(
-    walletAddress: string,
-    mintAddress: string
-  ): Promise<string> {
-    const requestBody = {
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'getTokenAccountsByOwner',
-      params: [
-        walletAddress,
-        { mint: mintAddress },
-        { encoding: 'jsonParsed' },
-      ],
-    }
-
-    const response = await api.rpc.post(rpcUrl.Solana, requestBody)
-    const accounts = response.result?.value || []
-    return accounts.length > 0 ? accounts[0].pubkey : ''
-  }
-
-  async fetchHighPriorityFee(address: string): Promise<number> {
-    const client = new Connection(rpcUrl.Solana)
-    const prioritizationFees = await client.getRecentPrioritizationFees({
-      lockedWritableAccounts: [new PublicKey(address)],
+  fetchHighPriorityFee(address: string): Promise<number> {
+    return new Promise((resolve, reject) => {
+      const client = getSolanaClient()
+      client
+        .getRecentPrioritizationFees([
+          fromLegacyPublicKey(new PublicKey(address)),
+        ])
+        .send()
+        .then(prioritizationFees => {
+          const highPriorityFee = Math.max(
+            ...prioritizationFees.map(fee =>
+              Number(fee.prioritizationFee.valueOf())
+            ),
+            0
+          )
+          resolve(highPriorityFee)
+        })
+        .catch(reject)
     })
-    const highPriorityFee = Math.max(
-      ...prioritizationFees.map(fee => Number(fee.prioritizationFee.valueOf())),
-      0
-    )
-    return highPriorityFee
   }
 
   async fetchRecentBlockhash(): Promise<string> {
-    const requestBody = {
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'getLatestBlockhash',
-      params: [{ commitment: 'confirmed' }],
-    }
-    const response = await api.rpc.post(rpcUrl.Solana, requestBody)
-    return response.result?.value?.blockhash as string
+    return new Promise((resolve, reject) => {
+      const client = getSolanaClient()
+      client
+        .getLatestBlockhash({ commitment: 'confirmed' })
+        .send()
+        .then(response => {
+          resolve(response?.value.blockhash as string)
+        })
+        .catch(reject)
+    })
   }
 
   public async getSpecificTransactionInfo(coin: Coin): Promise<SpecificSolana> {

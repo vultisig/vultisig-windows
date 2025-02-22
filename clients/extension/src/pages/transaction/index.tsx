@@ -16,10 +16,7 @@ import {
   SquareBehindSquare,
 } from '@clients/extension/src/icons'
 import api from '@clients/extension/src/utils/api'
-import {
-  explorerUrl,
-  TssKeysignType,
-} from '@clients/extension/src/utils/constants'
+import { TssKeysignType } from '@clients/extension/src/utils/constants'
 import DataConverterProvider from '@clients/extension/src/utils/data-converter-provider'
 import {
   formatDisplayNumber,
@@ -52,13 +49,13 @@ import {
 import UTXOTransactionProvider from '@clients/extension/src/utils/transaction-provider/utxo'
 import WalletCoreProvider from '@clients/extension/src/utils/wallet-core-provider'
 import { getChainKind } from '@core/chain/ChainKind'
+import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb'
 import { Button, Form, Input, message, QRCode } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
-
 interface FormProps {
   password: string
 }
@@ -827,9 +824,7 @@ const Component = () => {
                         <MiddleTruncate text={transaction.txHash!} />
                         <div className="actions">
                           <a
-                            href={`${explorerUrl[transaction.chain.chain]}/tx/${
-                              transaction.txHash
-                            }`}
+                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: transaction.txHash! })}`}
                             rel="noopener noreferrer"
                             target="_blank"
                             className="btn"
