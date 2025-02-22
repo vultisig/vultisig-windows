@@ -4,7 +4,7 @@ import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGc
 import { fromBase64 } from '@lib/utils/fromBase64'
 import { retry } from '@lib/utils/query/retry'
 
-import { KeygenSession } from '../../../lib/dkls/vs_wasm'
+import __wbg_init, { KeygenSession } from '../../../lib/dkls/vs_wasm'
 import { getKeygenThreshold } from '../utils/getKeygenThreshold'
 import { downloadSetupMessage } from './downloadSetupMessage'
 import { uploadSetupMessage } from './uploadSetupMessage'
@@ -26,6 +26,8 @@ export const startDklsKeygen = async ({
   sessionId,
   localPartyId,
 }: StartDklsKeygenInput) => {
+  await __wbg_init()
+
   const signers = [...peers, localPartyId]
 
   if (isInitiatingDevice) {
@@ -34,7 +36,7 @@ export const startDklsKeygen = async ({
 
     const encryptedSetupMessage = base64Encode(
       encryptWithAesGcm({
-        key: hexEncryptionKey,
+        key: Buffer.from(hexEncryptionKey, 'hex'),
         value: Buffer.from(setupMessage),
       })
     )
@@ -55,7 +57,7 @@ export const startDklsKeygen = async ({
     })
 
     const setupMessage = decryptWithAesGcm({
-      key: hexEncryptionKey,
+      key: Buffer.from(hexEncryptionKey, 'hex'),
       value: fromBase64(encodedSetupMessage),
     })
 
