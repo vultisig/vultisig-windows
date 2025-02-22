@@ -7,7 +7,7 @@ export default class Migration extends ItMigration {
     await schema.create('vaults', table => {
       table.increments('id')
       table.text('name')
-      table.text('public_key_ecdsa')
+      table.text('public_key_ecdsa').primaryKey()
       table.text('public_key_eddsa')
       table.text('created_at')
       table.text('hex_chain_code')
