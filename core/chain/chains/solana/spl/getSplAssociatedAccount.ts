@@ -9,8 +9,11 @@ type Input = {
 export const getSplAssociatedAccount = async ({
   account,
   token,
-}: Input): Promise<Address> => {
+}: Input): Promise<{ address: Address; isToken2022: boolean }> => {
   const client = getSolanaClient()
+
+  const TOKEN_PROGRAM_ID_TOKEN_2022 =
+    'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'
 
   const { value } = await client
     .getTokenAccountsByOwner(
@@ -28,5 +31,10 @@ export const getSplAssociatedAccount = async ({
     throw new Error('No associated token account found')
   }
 
-  return value[0].pubkey
+  const isToken2022 = value[0].account.owner == TOKEN_PROGRAM_ID_TOKEN_2022
+
+  return {
+    address: value[0].pubkey,
+    isToken2022: isToken2022,
+  }
 }

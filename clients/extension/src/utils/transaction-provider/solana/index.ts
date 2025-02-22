@@ -1,3 +1,12 @@
+/* 
+
+DEPRECATED! This file is no longer used in the project.
+It was replaced by the file on CORE
+
+@rcoderdev @johnnyluo please deprecate all files you are moving to core. 
+
+*/
+
 import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { rpcUrl } from '@clients/extension/src/utils/constants'
@@ -43,7 +52,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
   async fetchTokenAssociatedAccountByOwner(
     walletAddress: string,
     mintAddress: string
-  ): Promise<string> {
+  ): Promise<{ pubkey: string; isToken2022: boolean }> {
     const requestBody = {
       jsonrpc: '2.0',
       id: 1,
@@ -57,7 +66,19 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
 
     const response = await api.rpc.post(rpcUrl.Solana, requestBody)
     const accounts = response.result?.value || []
-    return accounts.length > 0 ? accounts[0].pubkey : ''
+
+    if (accounts.length === 0) {
+      return { pubkey: '', isToken2022: false }
+    }
+
+    const isToken2022 =
+      accounts[0].account.owner.account.owner ==
+      'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'
+
+    return {
+      pubkey: accounts.length > 0 ? accounts[0].pubkey : '',
+      isToken2022: isToken2022,
+    }
   }
 
   async fetchHighPriorityFee(address: string): Promise<number> {
@@ -159,7 +180,9 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
         recentBlockHash,
         fromTokenAssociatedAddress,
         toTokenAssociatedAddress,
+        programId,
       } = solanaSpecific
+
       const priorityFeePrice = 1_000_000
       const priorityFeeLimit = Number(100_000)
       const newRecentBlockHash = recentBlockHash
@@ -199,6 +222,9 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
             recipientTokenAddress: toTokenAssociatedAddress,
             amount: Long.fromString(this.keysignPayload.toAmount),
             decimals: this.keysignPayload.coin.decimals,
+            tokenProgramId: programId
+              ? TW.Solana.Proto.TokenProgramId.Token2022Program
+              : TW.Solana.Proto.TokenProgramId.TokenProgram,
           })
           const input = TW.Solana.Proto.SigningInput.create({
             tokenTransferTransaction: tokenTransferMessage,
@@ -235,6 +261,9 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
               senderTokenAddress: fromTokenAssociatedAddress,
               amount: Long.fromString(this.keysignPayload.toAmount),
               decimals: this.keysignPayload.coin.decimals,
+              tokenProgramId: programId
+                ? TW.Solana.Proto.TokenProgramId.Token2022Program
+                : TW.Solana.Proto.TokenProgramId.TokenProgram,
             })
           const input = TW.Solana.Proto.SigningInput.create({
             createAndTransferTokenTransaction: createAndTransferTokenMessage,

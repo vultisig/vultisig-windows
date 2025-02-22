@@ -14,6 +14,7 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
     recentBlockHash,
     fromTokenAssociatedAddress,
     toTokenAssociatedAddress,
+    programId,
   } = chainSpecific
 
   const newRecentBlockHash = recentBlockHash // DKLS should fix it. Using the same, since fetching the latest block hash won't match with IOS and Android
@@ -50,6 +51,9 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
         recipientTokenAddress: toTokenAssociatedAddress,
         amount: Long.fromString(keysignPayload.toAmount),
         decimals: coin.decimals,
+        tokenProgramId: programId
+          ? TW.Solana.Proto.TokenProgramId.Token2022Program
+          : TW.Solana.Proto.TokenProgramId.TokenProgram,
       })
 
       const input = TW.Solana.Proto.SigningInput.create({
@@ -88,6 +92,9 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
           senderTokenAddress: fromTokenAssociatedAddress,
           amount: Long.fromString(keysignPayload.toAmount),
           decimals: coin.decimals,
+          tokenProgramId: programId
+            ? TW.Solana.Proto.TokenProgramId.Token2022Program
+            : TW.Solana.Proto.TokenProgramId.TokenProgram,
         })
 
       const input = TW.Solana.Proto.SigningInput.create({
