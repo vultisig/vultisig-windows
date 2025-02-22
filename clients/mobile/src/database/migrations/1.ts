@@ -37,18 +37,20 @@ export default {
     -- Create coins table
     CREATE TABLE IF NOT EXISTS coins (
       id TEXT PRIMARY KEY,
-      chain TEXT,
-      address TEXT,
-      hex_public_key TEXT,
-      ticker TEXT,
+      chain TEXT NOT NULL,
+      address TEXT NOT NULL,
+      hex_public_key TEXT NOT NULL,
+      ticker TEXT NOT NULL,
       contract_address TEXT,
-      is_native_token INTEGER,
+      is_native_token INTEGER NOT NULL DEFAULT 0,
       logo TEXT,
       price_provider_id TEXT,
-      decimals INTEGER,
-      public_key_ecdsa TEXT,
+      decimals INTEGER NOT NULL,
+      public_key_ecdsa TEXT NOT NULL,
       FOREIGN KEY(public_key_ecdsa) REFERENCES vaults(public_key_ecdsa) ON DELETE CASCADE
     );
+    CREATE INDEX idx_coins_chain_address ON coins(chain, address);
+    CREATE INDEX idx_coins_public_key_ecdsa ON coins(public_key_ecdsa);
 
     -- Create address_book table (if you want)
     CREATE TABLE IF NOT EXISTS address_book (
