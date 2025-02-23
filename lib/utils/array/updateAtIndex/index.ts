@@ -3,5 +3,5 @@ export function updateAtIndex<T>(
   index: number,
   update: (value: T) => T
 ) {
-  return array.map((value, i) => (i === index ? update(value) : value));
+  return array.map((value, i) => (i === index ? update(value) : value))
 }

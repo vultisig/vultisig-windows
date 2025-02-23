@@ -1,1 +1,1 @@
-export type TransferDirection = 'from' | 'to';
+export type TransferDirection = 'from' | 'to'

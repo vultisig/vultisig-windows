@@ -1,7 +1,7 @@
 export const attempt = <T>(func: () => T, fallback: T): T => {
   try {
-    return func();
+    return func()
   } catch {
-    return fallback;
+    return fallback
   }
-};
+}

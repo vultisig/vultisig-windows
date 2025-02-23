@@ -1,4 +1,4 @@
-import { assertFetchResponse } from '../fetch/assertFetchResponse';
+import { assertFetchResponse } from '../fetch/assertFetchResponse'
 
 export const queryUrl = async <T>(
   url: string | URL,
@@ -7,9 +7,9 @@ export const queryUrl = async <T>(
   const response = await fetch(url, {
     method: 'GET',
     ...options,
-  });
+  })
 
-  await assertFetchResponse(response);
+  await assertFetchResponse(response)
 
-  return response.json();
-};
+  return response.json()
+}
