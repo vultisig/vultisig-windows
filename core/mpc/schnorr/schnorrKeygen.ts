@@ -1,21 +1,18 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
-import __wbg_init, { KeygenSession } from '../../../lib/dkls/vs_wasm'
+import __wbg_init, { KeygenSession } from '../../../lib/schnorr/vs_schnorr_wasm'
 import { deleteRelayMessage } from '../deleteRelayMessage'
 import { downloadRelayMessage, RelayMessage } from '../downloadRelayMessage'
-import { waitForSetupMessage } from '../downloadSetupMessage'
 import {
   decodeDecryptMessage,
   encodeEncryptMessage,
 } from '../encodingAndEncryption'
-import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
 import { KeygenType } from '../tssType'
-import { uploadSetupMessage } from '../uploadSetupMessage'
 
-export class DKLSKeygen {
+export class Schnorr {
   private readonly tssType: KeygenType
   private readonly isInitiateDevice: boolean
   private readonly serverURL: string
@@ -36,7 +33,8 @@ export class DKLSKeygen {
     localPartyId: string,
     keygenCommittee: string[],
     oldKeygenCommittee: string[],
-    hexEncryptionKey: string
+    hexEncryptionKey: string,
+    setupMessage: Uint8Array // DKLS/Schnorr keygen only need to setup message once, thus for EdDSA , we could reuse the setup message from DKLS
   ) {
     this.tssType = tssType
     this.isInitiateDevice = isInitiateDevice
@@ -46,6 +44,7 @@ export class DKLSKeygen {
     this.keygenCommittee = keygenCommittee
     this.oldKeygenCommittee = oldKeygenCommittee
     this.hexEncryptionKey = hexEncryptionKey
+    this.setupMessage = setupMessage
   }
 
   private async processOutbound(session: KeygenSession) {
@@ -136,40 +135,12 @@ export class DKLSKeygen {
   }
 
   private async startKeygen(attempt: number) {
+    if (this.setupMessage === undefined || this.setupMessage.length === 0) {
+      throw new Error('setup message is empty')
+    }
     console.log('startKeygen attempt:', attempt)
     console.log('session id:', this.sessionId)
     try {
-      if (this.isInitiateDevice) {
-        const threshold = getKeygenThreshold(this.keygenCommittee.length)
-        this.setupMessage = KeygenSession.setup(
-          undefined,
-          threshold,
-          this.keygenCommittee
-        )
-        // upload setup message to server
-        const encryptedSetupMsg = await encodeEncryptMessage(
-          this.setupMessage,
-          this.hexEncryptionKey
-        )
-
-        await uploadSetupMessage({
-          serverUrl: this.serverURL,
-          message: encryptedSetupMsg,
-          sessionId: this.sessionId,
-          messageId: undefined,
-          additionalHeaders: undefined,
-        })
-        console.log('uploaded setup message successfully')
-      } else {
-        const encodedEncryptedSetupMsg = await waitForSetupMessage({
-          serverURL: this.serverURL,
-          sessionId: this.sessionId,
-        })
-        this.setupMessage = await decodeDecryptMessage(
-          encodedEncryptedSetupMsg,
-          this.hexEncryptionKey
-        )
-      }
       const session = new KeygenSession(this.setupMessage, this.localPartyId)
       const outbound = this.processOutbound(session)
       const inbound = this.processInbound(session)
@@ -184,8 +155,8 @@ export class DKLSKeygen {
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.error('DKLS keygen error:', error)
-        console.error('DKLS keygen error:', error.stack)
+        console.error('Schnorr keygen error:', error)
+        console.error('Schnorr keygen error:', error.stack)
       }
       throw error
     }
@@ -200,7 +171,7 @@ export class DKLSKeygen {
           return result
         }
       } catch (error) {
-        console.error('DKLS keygen error:', error)
+        console.error('Schnorr keygen error:', error)
       }
     }
   }

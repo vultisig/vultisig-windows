@@ -1,7 +1,8 @@
-import { DKLSKeygen } from '@core/mpc/dkls/dklsKeygen'
+import { MPC } from '@core/mpc/mpc'
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 
+import { storage } from '../../../../../wailsjs/go/models'
 import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService'
 import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
 import { useMpcLib } from '../../../../mpc/state/mpcLib'
@@ -47,7 +48,7 @@ export const useKeygenMutation = () => {
                 serverUrl
               ),
             DKLS: async () => {
-              const dklsKeygen = new DKLSKeygen(
+              const mpcKeygen = new MPC(
                 KeygenType.Keygen,
                 isInitiatingDevice,
                 serverUrl,
@@ -57,18 +58,35 @@ export const useKeygenMutation = () => {
                 [],
                 encryptionKeyHex
               )
-              const result = await dklsKeygen.startKeygenWithRetry()
-              console.log('DKLS keygen result:', result)
-              // await startDklsKeygen({
-              //   isInitiatingDevice,
-              //   peers,
-              //   sessionId,
-              //   hexEncryptionKey: encryptionKeyHex,
-              //   serverUrl,
-              //   localPartyId: local_party_id,
-              // })
-
-              throw new Error('DKLS is not supported yet')
+              const result = await mpcKeygen.startKeygen()
+              if (!result) {
+                throw new Error('DKLS keygen failed')
+              }
+              const vault = storage.Vault.createFrom({
+                name,
+                public_key_ecdsa: result.dkls.publicKey,
+                public_key_eddsa: result.schnorr.publicKey,
+                signers: [local_party_id, ...peers],
+                created_at: new Date().toISOString(),
+                hex_chain_code: result.dkls.chaincode,
+                keyshares: [
+                  storage.KeyShare.createFrom({
+                    public_key: result.dkls.publicKey,
+                    keyshare: result.dkls.keyshare,
+                  }),
+                  storage.KeyShare.createFrom({
+                    public_key: result.schnorr.publicKey,
+                    keyshare: result.schnorr.keyshare,
+                  }),
+                ],
+                local_party_id,
+                reshare_prefix: '',
+                order: 0,
+                is_backed_up: false,
+                coins: [],
+                lib_type: 'DKLS',
+              })
+              return vault
             },
           })
         },
