@@ -43,7 +43,7 @@ export const SetupSecureVaultPage = () => {
   const mpcLib = useDefaultMpcLib()
 
   return (
-    <IsInitiatingDeviceProvider value={false}>
+    <IsInitiatingDeviceProvider value={true}>
       <MpcLibProvider value={mpcLib}>
         <VaultTypeProvider value="secure">
           <GeneratedServiceNameProvider>
