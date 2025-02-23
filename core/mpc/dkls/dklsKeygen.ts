@@ -1,8 +1,11 @@
 import { base64Encode } from '@lib/utils/base64Encode'
+import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
+import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 
 import __wbg_init, { KeygenSession } from '../../../lib/dkls/vs_wasm'
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { KeygenType } from '../tssType'
+import { waitForSetupMessage } from './downloadSetupMessage'
 import { uploadSetupMessage } from './uploadSetupMessage'
 
 export class DKLSKeygen {
@@ -34,6 +37,15 @@ export class DKLSKeygen {
     this.hexEncryptionKey = hexEncryptionKey
   }
 
+  private decodeDecryptMessage(message: string) {
+    const encryptedMessage = Buffer.from(message, 'base64')
+    const decryptedMessage = decryptWithAesGcm({
+      key: Buffer.from(this.hexEncryptionKey, 'hex'),
+      value: encryptedMessage,
+    })
+    return Buffer.from(decryptedMessage.toString(), 'base64')
+  }
+
   private async startKeygen(attempt: number) {
     await __wbg_init()
     console.log('startKeygen attempt:', attempt)
@@ -49,15 +61,24 @@ export class DKLSKeygen {
         )
         // upload setup message to server
         const base64EncodedSetupMsg = base64Encode(setupMessage)
+        const encryptedSetupMsg = encryptWithAesGcm({
+          key: Buffer.from(this.hexEncryptionKey, 'hex'),
+          value: Buffer.from(base64EncodedSetupMsg),
+        })
+
         await uploadSetupMessage({
           serverUrl: this.serverURL,
-          message: base64EncodedSetupMsg,
+          message: base64Encode(encryptedSetupMsg),
           sessionId: this.sessionId,
           messageId: undefined,
           additionalHeaders: undefined,
         })
       } else {
-
+        const encodedEncryptedSetupMsg = await waitForSetupMessage({
+          serverURL: this.serverURL,
+          sessionId: this.sessionId,
+        })
+        setupMessage = this.decodeDecryptMessage(encodedEncryptedSetupMsg)
       }
       const session = new KeygenSession(setupMessage, this.localPartyId)
     } catch (error) {

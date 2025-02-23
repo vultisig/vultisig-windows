@@ -1,4 +1,5 @@
 import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
+import { retry } from '@lib/utils/query/retry'
 
 type DownloadSetupMessageInput = {
   serverURL: string
@@ -40,4 +41,24 @@ export const downloadSetupMessage = async ({
     )
   }
   return response.text()
+}
+
+export const waitForSetupMessage = async ({
+  serverURL,
+  sessionId,
+  messageId,
+  additionalHeaders,
+}: DownloadSetupMessageInput): Promise<string> => {
+  const setupMessage = await retry({
+    func: () =>
+      downloadSetupMessage({
+        serverURL,
+        sessionId,
+        messageId,
+        additionalHeaders,
+      }),
+    attempts: 10,
+    delay: 1000,
+  })
+  return setupMessage
 }
