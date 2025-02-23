@@ -40,12 +40,12 @@ export interface AccountsProps {
 export interface ChainProps {
   active?: boolean
   address?: string
-  cmcId: number
+  cmcId?: number
   decimals: number
   derivationKey?: string
   id: string
-  name: Chain
-  ticker: ChainTicker
+  chain: Chain
+  ticker: string
 }
 
 export interface SendTransactionResponse {
@@ -155,7 +155,7 @@ export interface ScreenProps {
 
 export interface TransactionDetails {
   asset: {
-    chain: ChainTicker
+    chain: string
     symbol: string
     ticker: string
   }

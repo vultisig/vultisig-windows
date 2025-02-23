@@ -45,3 +45,13 @@ export type DeriveChainId<T> = T extends Chain
 export function getChainId<T extends Chain>(chain: T): DeriveChainId<T> {
   return chainIdRecord[chain] as DeriveChainId<T>
 }
+
+export function isSupportedChainId(chainId: string): chainId is ChainId {
+  return Object.values(chainIdRecord).includes(chainId as ChainId)
+}
+
+export function getChainByChainId(chainId: string): Chain | undefined {
+  return Object.entries(chainIdRecord).find(([, id]) => id === chainId)?.[0] as
+    | Chain
+    | undefined
+}
