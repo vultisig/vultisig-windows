@@ -1,4 +1,4 @@
-import { retry } from "@lib/utils/query/retry"
+import { retry } from '@lib/utils/query/retry'
 
 type SetKeygenCompleteInput = {
   serverURL: string
