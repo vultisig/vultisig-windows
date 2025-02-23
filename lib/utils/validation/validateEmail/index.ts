@@ -4,6 +4,6 @@ const emailRegex =
 
 export const validateEmail = (value: string) => {
   if (!emailRegex.test(value)) {
-    return 'Please enter a valid email address';
+    return 'Please enter a valid email address'
   }
-};
+}
