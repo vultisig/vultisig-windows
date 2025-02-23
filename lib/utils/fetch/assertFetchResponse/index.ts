@@ -13,3 +13,4 @@ export const assertFetchResponse = async (response: Response) => {
     throw new Error(msg);
   }
 };
+
