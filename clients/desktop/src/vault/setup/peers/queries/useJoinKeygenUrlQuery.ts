@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName'
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId'
 import { useCurrentServerType } from '../../../keygen/state/currentServerType'
@@ -18,6 +19,7 @@ export const useJoinKeygenUrlQuery = () => {
   const serviceName = useCurrentServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const hexChainCode = useCurrentHexChainCode()
+  const mpcLibType = useMpcLib()
 
   const input: GetJoinKeygenUrlInput = {
     sessionId,
@@ -26,6 +28,7 @@ export const useJoinKeygenUrlQuery = () => {
     serviceName,
     hexEncryptionKey,
     hexChainCode,
+    mpcLibType,
   }
 
   return useQuery({

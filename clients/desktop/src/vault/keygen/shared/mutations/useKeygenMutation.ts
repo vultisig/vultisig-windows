@@ -1,4 +1,4 @@
-import { startDklsKeygen } from '@core/keygen/dkls/startDklsKeygen'
+import { DKLSKeygen } from '@core/mpc/dkls/dklsKeygen'
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 
@@ -47,14 +47,26 @@ export const useKeygenMutation = () => {
                 serverUrl
               ),
             DKLS: async () => {
-              await startDklsKeygen({
+              const dklsKeygen = new DKLSKeygen(
+                KeygenType.Keygen,
                 isInitiatingDevice,
-                peers,
-                sessionId,
-                hexEncryptionKey: encryptionKeyHex,
                 serverUrl,
-                localPartyId: local_party_id,
-              })
+                sessionId,
+                local_party_id,
+                [local_party_id, ...peers],
+                [],
+                encryptionKeyHex
+              )
+              const result = await dklsKeygen.startKeygenWithRetry()
+              console.log('DKLS keygen result:', result)
+              // await startDklsKeygen({
+              //   isInitiatingDevice,
+              //   peers,
+              //   sessionId,
+              //   hexEncryptionKey: encryptionKeyHex,
+              //   serverUrl,
+              //   localPartyId: local_party_id,
+              // })
 
               throw new Error('DKLS is not supported yet')
             },

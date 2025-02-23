@@ -11,7 +11,7 @@ export const decodeDecryptMessage = async (
     key: Buffer.from(hexEncryptionKey, 'hex'),
     value: encryptedMessage,
   })
-  return Buffer.from(decryptedMessage.toString(), 'base64')
+  return Buffer.from(decryptedMessage.toString('utf-8'), 'base64')
 }
 
 export const encodeEncryptMessage = async (
@@ -23,5 +23,5 @@ export const encodeEncryptMessage = async (
     key: Buffer.from(hexEncryptionKey, 'hex'),
     value: Buffer.from(base64EncodedMessage),
   })
-  return base64Encode(encryptedMessage)
+  return encryptedMessage.toString('base64')
 }

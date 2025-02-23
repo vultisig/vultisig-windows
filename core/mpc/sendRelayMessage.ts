@@ -30,16 +30,14 @@ export const sendRelayMessage = async ({
   const response = await fetch(`${serverURL}/message/${sessionId}`, {
     method: 'POST',
     headers,
-    body: JSON.stringify([
-      {
-        session_id: sessionId,
-        from: localPartyId,
-        to,
-        body: message,
-        hash: messageHash,
-        sequence_no: sequenceNo,
-      },
-    ]),
+    body: JSON.stringify({
+      session_id: sessionId,
+      from: localPartyId,
+      to: [to],
+      body: message,
+      hash: messageHash,
+      sequence_no: sequenceNo,
+    }),
   })
   await assertFetchResponse(response)
   if (response.status < 200 || response.status > 299) {

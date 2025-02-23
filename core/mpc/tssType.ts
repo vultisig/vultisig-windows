@@ -1,4 +1,4 @@
 export enum KeygenType {
-    Keygen = 'Keygen',
-    Reshare = 'Reshare',
-  }
+  Keygen = 'Keygen',
+  Reshare = 'Reshare',
+}

@@ -1,4 +1,4 @@
-import { getKeygenThreshold } from '@core/keygen/utils/getKeygenThreshold'
+import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '../../../../lib/ui/buttons/Button'
