@@ -1,4 +1,4 @@
-import { Injector } from './Injector';
+import { Injector } from './Injector'
 
 export const injectVariables: Injector<string> = ({
   template,
@@ -7,8 +7,8 @@ export const injectVariables: Injector<string> = ({
 }) => {
   return template.replace(variablePattern, (match, variableName) => {
     if (variableName in variables) {
-      return variables[variableName];
+      return variables[variableName]
     }
-    return match;
-  });
-};
+    return match
+  })
+}

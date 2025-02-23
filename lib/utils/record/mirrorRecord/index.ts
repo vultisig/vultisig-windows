@@ -4,10 +4,10 @@ export const mirrorRecord = <
 >(
   record: Record<K, V>
 ): Record<V, K> => {
-  const result = {} as Record<V, K>;
+  const result = {} as Record<V, K>
   for (const key in record) {
-    result[record[key]] = key;
+    result[record[key]] = key
   }
 
-  return result;
-};
+  return result
+}

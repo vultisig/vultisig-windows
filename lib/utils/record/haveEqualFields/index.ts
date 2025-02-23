@@ -4,4 +4,4 @@ export const haveEqualFields = <T extends Record<string, any>>(
 ) =>
   records.every(record =>
     fields.every(field => record[field] === records[0][field])
-  );
+  )
