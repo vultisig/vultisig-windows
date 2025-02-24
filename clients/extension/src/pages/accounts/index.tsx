@@ -26,7 +26,7 @@ interface FormProps {
 }
 
 interface InitialState {
-  chain?: Chain
+  chainKey?: Chain
   errorDescription?: string
   errorTitle?: string
   hasError?: boolean
@@ -38,7 +38,7 @@ const Component = () => {
   const { t } = useTranslation()
   const initialState: InitialState = { vaults: [] }
   const [state, setState] = useState(initialState)
-  const { chain, errorDescription, errorTitle, hasError, sender, vaults } =
+  const { chainKey, errorDescription, errorTitle, hasError, sender, vaults } =
     state
   const [form] = Form.useForm()
 
@@ -131,7 +131,7 @@ const Component = () => {
                         <span className="name">{name}</span>
                         <MiddleTruncate
                           text={
-                            chains.find(({ name }) => name === chain)
+                            chains.find(({ chain }) => chain === chainKey)
                               ?.address ?? ''
                           }
                         />

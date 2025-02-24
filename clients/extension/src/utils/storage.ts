@@ -1,9 +1,5 @@
 import i18n from '@clients/extension/src/i18n/config'
-import {
-  chains,
-  Currency,
-  Language,
-} from '@clients/extension/src/utils/constants'
+import { Currency, Language } from '@clients/extension/src/utils/constants'
 import {
   AccountsProps,
   ChainProps,
@@ -11,6 +7,7 @@ import {
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 interface EthProviderState {
   accounts: string[]
@@ -63,7 +60,7 @@ export const getStoredChains = (): Promise<ChainProps[]> => {
       if (res.chains?.length) {
         resolve(res.chains)
       } else {
-        const defaultChain = chains[Chain.Ethereum]
+        const defaultChain = chainFeeCoin.Ethereum
 
         resolve(defaultChain ? [{ ...defaultChain, active: true }] : [])
       }

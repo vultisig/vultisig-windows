@@ -5,8 +5,6 @@ import {
   SettingsTwo,
   Vultisig,
 } from '@clients/extension/src/icons'
-import { chains } from '@clients/extension/src/utils/constants'
-import { findChainByProp } from '@clients/extension/src/utils/functions'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import messageKeys from '@clients/extension/src/utils/message-keys'
 import routeKeys from '@clients/extension/src/utils/route-keys'
@@ -18,10 +16,13 @@ import {
   setStoredChains,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Button, Empty, message, Modal, Select, Switch, Tooltip } from 'antd'
 import { type FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
+
+import { isSupportedChain } from '../../../../utils/constants'
 const VULTISIG_WEB_URL = 'https://airdrop.vultisig.com'
 
 interface SelectOption {
@@ -76,7 +77,7 @@ const Component = () => {
                 : item
             )
           ).then(() => {
-            componentDidMount()
+            initializePage()
           })
         })
       },
@@ -103,7 +104,7 @@ const Component = () => {
       const activeChain = chains.find(({ active }) => active)
 
       const selectedNetwork = options.find(
-        option => option.value === activeChain?.id
+        option => option.value === activeChain?.chain
       )
 
       setState(prevState => ({ ...prevState, selectedNetwork }))
@@ -114,13 +115,14 @@ const Component = () => {
     const selectedNetwork = networkOptions.find(
       option => option.value === String(selectedOption)
     )
-
     if (selectedNetwork) {
       setStoredChains(
-        Object.values(chains).map(chain => ({
-          ...chain,
-          active: chain.id === selectedOption,
-        }))
+        Object.values(chainFeeCoin)
+          .filter(chain => isSupportedChain(chain.chain))
+          .map(chain => ({
+            ...chain,
+            active: chain.chain === selectedNetwork.value,
+          }))
       ).then(() => {
         setState(prevState => ({ ...prevState, selectedNetwork }))
       })
@@ -138,48 +140,46 @@ const Component = () => {
   const showReloadMessage = () => {
     messageApi.open({
       type: 'info',
-      content: t(t(messageKeys.REALOAD_MESSAGE)),
+      content: t(messageKeys.RELOAD_MESSAGE),
     })
   }
 
-  const componentDidMount = (): void => {
+  const initializePage = () => {
     getStoredVaults().then(vaults => {
       const vault = vaults.find(({ active }) => active)
 
       if (vault) {
-        const supportedChains = vault.chains.filter(
-          ({ id }) => !!findChainByProp(chains, 'id', id)
-        )
-
+        const supportedChains = vault.chains
         const networkOptions = supportedChains.map(chain => ({
-          value: chain.id,
+          value: chain.chain,
           label: (
             <>
               <div className="chain-item">
                 <img
-                  src={`/chains/${chain.name.toLowerCase()}.svg`}
-                  alt={chain.name}
+                  src={`/chains/${chain.chain.toLowerCase()}.svg`}
+                  alt={chain.chain}
                   style={{ width: 20, marginRight: 8 }}
                 />
-                {chain.name}
+                {chain.chain}
               </div>
               <span className="address">{chain.address}</span>
             </>
           ),
         }))
 
-        setState({ ...state, networkOptions })
+        setState({ ...state, networkOptions, vault })
 
         getCurrentNetwork(networkOptions)
-
-        getIsPriority().then(isPriority => {
-          setState(prevState => ({ ...prevState, isPriority, vault }))
-        })
       }
     })
   }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(componentDidMount, [])
+
+  useEffect(() => {
+    initializePage()
+    getIsPriority().then(isPriority => {
+      setState(prevState => ({ ...prevState, isPriority }))
+    })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return vault ? (
     <>

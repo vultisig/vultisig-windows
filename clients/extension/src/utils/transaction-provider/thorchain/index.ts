@@ -68,12 +68,12 @@ export default class ThorchainTransactionProvider extends BaseTransactionProvide
   ): Promise<KeysignPayload> => {
     return new Promise(resolve => {
       const coin = create(CoinSchema, {
-        chain: transaction.chain.name,
+        chain: transaction.chain.chain,
         ticker: transaction.chain.ticker,
         address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
-          chain => chain.name === transaction.chain.name
+          chain => chain.chain === transaction.chain.chain
         )?.derivationKey,
         isNativeToken: true,
         logo: transaction.chain.ticker.toLowerCase(),
@@ -209,7 +209,7 @@ export default class ThorchainTransactionProvider extends BaseTransactionProvide
     return new Promise((resolve, reject) => {
       if (inputData && vault) {
         const pubkeyThorchain = vault.chains.find(
-          chain => chain.name === Chain.THORChain
+          chain => chain.chain === Chain.THORChain
         )?.derivationKey
 
         if (pubkeyThorchain) {

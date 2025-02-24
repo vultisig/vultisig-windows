@@ -106,7 +106,7 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
   ): Promise<KeysignPayload> => {
     return new Promise((resolve, reject) => {
       const coin = create(CoinSchema, {
-        chain: transaction.chain.name,
+        chain: transaction.chain.chain,
         ticker: transaction.chain.ticker,
         address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,

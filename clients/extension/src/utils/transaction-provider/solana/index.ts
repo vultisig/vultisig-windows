@@ -131,15 +131,15 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
   ): Promise<KeysignPayload> => {
     return new Promise(resolve => {
       const coin = create(CoinSchema, {
-        chain: transaction.chain.name,
+        chain: transaction.chain.chain,
         ticker: transaction.chain.ticker,
         address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
-          chain => chain.name === transaction.chain.name
+          chain => chain.chain === transaction.chain.chain
         )?.derivationKey,
         isNativeToken: true,
-        logo: transaction.chain.name.toLowerCase(),
+        logo: transaction.chain.chain.toLowerCase(),
         priceProviderId: 'solana',
       })
       this.getSpecificTransactionInfo(coin).then(specificData => {
@@ -296,7 +296,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
         try {
           const coinType = this.walletCore.CoinType.solana
           const pubkeySolana = vault.chains.find(
-            chain => chain.name === Chain.Solana
+            chain => chain.chain === Chain.Solana
           )?.derivationKey
           const allSignatures = this.walletCore.DataVector.create()
           const publicKeys = this.walletCore.DataVector.create()

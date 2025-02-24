@@ -65,14 +65,19 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
     vault: VaultProps
   ): Promise<KeysignPayload> => {
     return new Promise(resolve => {
+      const chain = vault.chains.find(chain => chain.chain === this.chainKey)
+      if (!chain?.derivationKey) {
+        throw new Error(
+          `Chain ${this.chainKey} not found in vault or missing derivation key`
+        )
+      }
+      const pubkeyUTXO = chain.derivationKey
       const coin = create(CoinSchema, {
-        chain: transaction.chain.name,
+        chain: transaction.chain.chain,
         ticker: transaction.chain.ticker,
         address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
-        hexPublicKey: vault.chains.find(
-          chain => chain.name === transaction.chain.name
-        )!.derivationKey,
+        hexPublicKey: pubkeyUTXO,
         isNativeToken: true,
         logo: transaction.chain.ticker.toLowerCase(),
       })
@@ -214,7 +219,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
       let allSignatures: any = null
       let publicKeys: any = null
       const pubkeyUTXO = vault.chains.find(
-        chain => chain.name === this.chainKey
+        chain => chain.chain === this.chainKey
       )!.derivationKey!
       const publicKeyData = Buffer.from(pubkeyUTXO, 'hex')
       const modifiedSig = this.getSignature(signature)
