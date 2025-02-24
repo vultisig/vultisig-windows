@@ -153,7 +153,6 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
                   value: ethereumSpecific,
                 },
               })
-              console.log('pyaload:', keysignPayload)
 
               this.keysignPayload = keysignPayload
               resolve(keysignPayload)
