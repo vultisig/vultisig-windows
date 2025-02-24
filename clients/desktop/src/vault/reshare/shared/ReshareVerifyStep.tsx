@@ -1,4 +1,4 @@
-import { getKeygenThreshold } from '@core/keygen/utils/getKeygenThreshold'
+import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { getColor } from '@lib/ui/theme/getters'
 import { without } from '@lib/utils/array/without'
 import { useTranslation } from 'react-i18next'

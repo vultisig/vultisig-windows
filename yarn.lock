@@ -1668,12 +1668,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@core/keygen@workspace:core/keygen":
-  version: 0.0.0-use.local
-  resolution: "@core/keygen@workspace:core/keygen"
-  languageName: unknown
-  linkType: soft
-
 "@core/keysign@workspace:core/keysign":
   version: 0.0.0-use.local
   resolution: "@core/keysign@workspace:core/keysign"
@@ -1685,6 +1679,8 @@ __metadata:
 "@core/mpc@workspace:core/mpc":
   version: 0.0.0-use.local
   resolution: "@core/mpc@workspace:core/mpc"
+  dependencies:
+    vitest: "npm:^2.1.9"
   languageName: unknown
   linkType: soft
 
@@ -3523,6 +3519,7 @@ __metadata:
   resolution: "@lib/utils@workspace:lib/utils"
   dependencies:
     date-fns: "npm:^4.1.0"
+    vitest: "npm:^2.1.9"
   languageName: unknown
   linkType: soft
 
