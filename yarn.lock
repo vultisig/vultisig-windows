@@ -6403,7 +6403,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/styled-components-react-native@npm:5.2.5":
+"@types/styled-components-react-native@npm:^5.2.5":
   version: 5.2.5
   resolution: "@types/styled-components-react-native@npm:5.2.5"
   dependencies:
@@ -6414,7 +6414,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/styled-components@npm:*":
+"@types/styled-components@npm:*, @types/styled-components@npm:^5.1.34":
   version: 5.1.34
   resolution: "@types/styled-components@npm:5.1.34"
   dependencies:
@@ -14654,7 +14654,8 @@ __metadata:
     "@types/react": "npm:~18.3.12"
     "@types/react-native-sqlite-storage": "npm:6.0.5"
     "@types/react-test-renderer": "npm:18.3.0"
-    "@types/styled-components-react-native": "npm:5.2.5"
+    "@types/styled-components": "npm:^5.1.34"
+    "@types/styled-components-react-native": "npm:^5.2.5"
     "@typescript-eslint/eslint-plugin": "npm:8.23.0"
     "@typescript-eslint/parser": "npm:8.23.0"
     eslint: "npm:9.20.0"
@@ -14686,6 +14687,7 @@ __metadata:
     react-native-safe-area-context: "npm:4.12.0"
     react-native-screens: "npm:~4.4.0"
     react-native-sqlite-manager: "npm:0.6.1"
+    react-native-styled-components: "npm:^2.1.0"
     react-native-web: "npm:~0.19.13"
     react-native-webview: "npm:13.12.5"
     react-test-renderer: "npm:18.3.1"
@@ -17011,6 +17013,16 @@ __metadata:
   peerDependencies:
     react-native: ">=0.14.0"
   checksum: 10c0/631787a64bf6ade75758a23289c138bb1346e0418d75fb013f7a64822560e0f29e1193ef20290c3eb7fbeb6d594b8f49b256895dfc188f7f0023a55f1ba57134
+  languageName: node
+  linkType: hard
+
+"react-native-styled-components@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "react-native-styled-components@npm:2.1.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/9c8d81b4fe75251d2e7c82c268d1553a4a630d8349f807bc501c58c1b10ebe842646f6bf40eba0473c81bf0e0cbae2a06d3adcd0e9c2b4c5b7c2b9715e67f8cd
   languageName: node
   linkType: hard
 

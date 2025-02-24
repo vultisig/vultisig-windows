@@ -1,11 +1,16 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { SafeAreaView } from 'react-native'
+import { useTheme } from 'styled-components/native'
+
+import { Text } from '../lib/ui/components/Text'
 
 const VaultPage = () => {
   return (
-    <View>
-      <Text>VaultPage</Text>
-    </View>
+    <SafeAreaView>
+      <Text size={24} color="regular" centerHorizontally>
+        Hello World
+      </Text>
+    </SafeAreaView>
   )
 }
 
