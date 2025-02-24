@@ -1,11 +1,11 @@
 import { base64Encode } from '@lib/utils/base64Encode'
-import { encode as asn1Encode } from 'asn1.js'
 
 import __wbg_init, {
   Keyshare,
   SignSession,
 } from '../../../lib/schnorr/vs_schnorr_wasm'
 import { deleteRelayMessage } from '../deleteRelayMessage'
+import { encodeDERSignature } from '../derSignature'
 import { downloadRelayMessage, RelayMessage } from '../downloadRelayMessage'
 import { waitForSetupMessage } from '../downloadSetupMessage'
 import {
@@ -13,10 +13,11 @@ import {
   encodeEncryptMessage,
 } from '../encodingAndEncryption'
 import { getMessageHash } from '../getMessageHash'
+import { markLocalPartyKeysignComplete } from '../keysignComplete'
+import { KeysignSignature } from '../keysignSignature'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
 import { uploadSetupMessage } from '../uploadSetupMessage'
-import { KeysignSignature } from './signature'
 
 export class SchnorrKeysign {
   private readonly serverURL: string
@@ -205,22 +206,23 @@ export class SchnorrKeysign {
       const r = signature.slice(0, 32)
       const s = signature.slice(32, 64)
       const recoveryId = signature[64]
-      const Signature = asn1Encode('Signature', {
-        type: 'SEQUENCE',
-        value: [
-          { name: 'r', type: 'INTEGER' },
-          { name: 's', type: 'INTEGER' },
-        ],
-      })
 
-      const derSignature = Signature.encode({ r, s }, 'der')
-      return new KeysignSignature({
+      const derSignature = encodeDERSignature(r, s)
+      const keysignSig = new KeysignSignature({
         msg: messageToSign,
         r: Buffer.from(r).toString('hex'),
         s: Buffer.from(s).toString('hex'),
-        recoveryId: recoveryId.toString(16).padStart(2, '0'),
-        derSignature: Buffer.from(derSignature).toString('hex'),
+        recovery_id: recoveryId.toString(16).padStart(2, '0'),
+        der_signature: Buffer.from(derSignature).toString('hex'),
       })
+      await markLocalPartyKeysignComplete({
+        serverURL: this.serverURL,
+        localPartyId: this.localPartyId,
+        sessionId: this.sessionId,
+        messageId: messageHash,
+        jsonSignature: JSON.stringify(keysignSig),
+      })
+      return keysignSig
     }
   }
   private async keygienWithRetry(messageToSign: string) {
@@ -237,14 +239,14 @@ export class SchnorrKeysign {
   }
   public async startKeysign(messsagesToSign: string[]) {
     await __wbg_init()
-    let results: any[] = []
-    messsagesToSign.forEach(async message => {
+    let results: KeysignSignature[] = []
+    for (const message of messsagesToSign) {
       const signResult = await this.keygienWithRetry(message)
       if (signResult === undefined) {
         throw new Error('failed to sign message')
       }
       results = [...results, signResult]
-    })
+    }
     return results
   }
 }

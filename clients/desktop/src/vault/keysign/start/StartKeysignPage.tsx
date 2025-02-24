@@ -1,5 +1,6 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
@@ -30,43 +31,45 @@ export const StartKeysignPage = () => {
   })
 
   return (
-    <KeysignMessagePayloadProvider value={keysignPayload}>
-      <CurrentLocalPartyIdProvider value={local_party_id}>
-        <GeneratedServiceNameProvider>
-          <PeersSelectionRecordProvider initialValue={{}}>
-            <GeneratedSessionIdProvider>
-              <GeneratedHexEncryptionKeyProvider>
-                <CurrentServerTypeProvider initialValue="relay">
-                  <ServerUrlDerivedFromServerTypeProvider>
-                    <MediatorManager />
-                    <Match
-                      value={step}
-                      joinSession={() => (
-                        <JoinKeygenSessionStep onForward={toNextStep} />
-                      )}
-                      peers={() => (
-                        <KeysignPeerDiscoveryStep onForward={toNextStep} />
-                      )}
-                      session={() => (
-                        <KeygenStartSessionStep
-                          onForward={toNextStep}
-                          onBack={toPreviousStep}
-                        />
-                      )}
-                      sign={() => (
-                        <KeysignSigningStep
-                          payload={keysignPayload}
-                          onBack={() => setStep('peers')}
-                        />
-                      )}
-                    />
-                  </ServerUrlDerivedFromServerTypeProvider>
-                </CurrentServerTypeProvider>
-              </GeneratedHexEncryptionKeyProvider>
-            </GeneratedSessionIdProvider>
-          </PeersSelectionRecordProvider>
-        </GeneratedServiceNameProvider>
-      </CurrentLocalPartyIdProvider>
-    </KeysignMessagePayloadProvider>
+    <IsInitiatingDeviceProvider value={true}>
+      <KeysignMessagePayloadProvider value={keysignPayload}>
+        <CurrentLocalPartyIdProvider value={local_party_id}>
+          <GeneratedServiceNameProvider>
+            <PeersSelectionRecordProvider initialValue={{}}>
+              <GeneratedSessionIdProvider>
+                <GeneratedHexEncryptionKeyProvider>
+                  <CurrentServerTypeProvider initialValue="relay">
+                    <ServerUrlDerivedFromServerTypeProvider>
+                      <MediatorManager />
+                      <Match
+                        value={step}
+                        joinSession={() => (
+                          <JoinKeygenSessionStep onForward={toNextStep} />
+                        )}
+                        peers={() => (
+                          <KeysignPeerDiscoveryStep onForward={toNextStep} />
+                        )}
+                        session={() => (
+                          <KeygenStartSessionStep
+                            onForward={toNextStep}
+                            onBack={toPreviousStep}
+                          />
+                        )}
+                        sign={() => (
+                          <KeysignSigningStep
+                            payload={keysignPayload}
+                            onBack={() => setStep('peers')}
+                          />
+                        )}
+                      />
+                    </ServerUrlDerivedFromServerTypeProvider>
+                  </CurrentServerTypeProvider>
+                </GeneratedHexEncryptionKeyProvider>
+              </GeneratedSessionIdProvider>
+            </PeersSelectionRecordProvider>
+          </GeneratedServiceNameProvider>
+        </CurrentLocalPartyIdProvider>
+      </KeysignMessagePayloadProvider>
+    </IsInitiatingDeviceProvider>
   )
 }

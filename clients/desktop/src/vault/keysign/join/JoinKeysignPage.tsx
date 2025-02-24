@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { getKeysignMessagePayload } from '../../../chain/keysign/KeysignMessagePayload'
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
@@ -36,35 +37,37 @@ export const JoinKeysignPage = () => {
   )
 
   return (
-    <KeysignMessagePayloadProvider value={keysignMessagePayload}>
-      <CurrentLocalPartyIdProvider value={local_party_id}>
-        <KeysignVaultGuard>
-          <KeysignServerUrlProvider>
-            <CurrentSessionIdProvider value={sessionId}>
-              <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
-                <Match
-                  value={step}
-                  verify={() => (
-                    <JoinKeysignVerifyStep onForward={toNextStep} />
-                  )}
-                  session={() => (
-                    <JoinKeygenSessionStep
-                      onForward={toNextStep}
-                      onBack={() => setStep('verify')}
-                    />
-                  )}
-                  sign={() => (
-                    <KeysignSigningStep
-                      payload={getKeysignMessagePayload(keysignMsg)}
-                      onBack={() => setStep('verify')}
-                    />
-                  )}
-                />
-              </CurrentHexEncryptionKeyProvider>
-            </CurrentSessionIdProvider>
-          </KeysignServerUrlProvider>
-        </KeysignVaultGuard>
-      </CurrentLocalPartyIdProvider>
-    </KeysignMessagePayloadProvider>
+    <IsInitiatingDeviceProvider value={false}>
+      <KeysignMessagePayloadProvider value={keysignMessagePayload}>
+        <CurrentLocalPartyIdProvider value={local_party_id}>
+          <KeysignVaultGuard>
+            <KeysignServerUrlProvider>
+              <CurrentSessionIdProvider value={sessionId}>
+                <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
+                  <Match
+                    value={step}
+                    verify={() => (
+                      <JoinKeysignVerifyStep onForward={toNextStep} />
+                    )}
+                    session={() => (
+                      <JoinKeygenSessionStep
+                        onForward={toNextStep}
+                        onBack={() => setStep('verify')}
+                      />
+                    )}
+                    sign={() => (
+                      <KeysignSigningStep
+                        payload={getKeysignMessagePayload(keysignMsg)}
+                        onBack={() => setStep('verify')}
+                      />
+                    )}
+                  />
+                </CurrentHexEncryptionKeyProvider>
+              </CurrentSessionIdProvider>
+            </KeysignServerUrlProvider>
+          </KeysignVaultGuard>
+        </CurrentLocalPartyIdProvider>
+      </KeysignMessagePayloadProvider>
+    </IsInitiatingDeviceProvider>
   )
 }
