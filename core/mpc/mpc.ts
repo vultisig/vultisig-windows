@@ -5,7 +5,7 @@ import { setKeygenComplete, waitForKeygenComplete } from './keygenComplete'
 import { Schnorr } from './schnorr/schnorrKeygen'
 import { KeygenType } from './tssType'
 /**
- * MPC class - this class handle keygen/keysign/reshare using DKLS/Schnorr library
+ * MPC class - this class handle keygen/reshare using DKLS/Schnorr library
  * NOTE: this class doesn't handle GG20 keygen/keysign/reshare, GG20 is handled by the method defined in golang
  * for react-native , GG20 will be handled by the method defined in the native modules
  */

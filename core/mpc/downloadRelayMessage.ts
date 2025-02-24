@@ -11,19 +11,19 @@ type DownloadRelayMessageInput = {
   serverURL: string
   localPartyId: string
   sessionId: string
-  messageID?: string
+  messageId?: string
 }
 export const downloadRelayMessage = async ({
   serverURL,
   localPartyId,
   sessionId,
-  messageID,
+  messageId,
 }: DownloadRelayMessageInput): Promise<string> => {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   }
-  if (messageID) {
-    headers['message_id'] = messageID
+  if (messageId) {
+    headers['message_id'] = messageId
   }
 
   const response = await fetch(
