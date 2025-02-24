@@ -5,8 +5,6 @@ import {
   TssKeysignType,
 } from '@clients/extension/src/utils/constants'
 import {
-  ChainObjRef,
-  ChainProps,
   Messaging,
   ParsedMemo,
   SendTransactionResponse,
@@ -140,18 +138,6 @@ export const formatDisplayNumber = (
   } else {
     return `${Number((n / 1000000).toFixed(0)).toLocaleString()}M ${ticker}`
   }
-}
-
-export const findChainByProp = (
-  chains: ChainObjRef,
-  property: keyof ChainProps,
-  value: any
-): ChainProps | undefined => {
-  return (
-    (Object.entries(chains).find(
-      ([_key, chain]) => chain[property] === value
-    )?.[1] as ChainProps) ?? undefined
-  )
 }
 
 export const getTssKeysignType = (chain: Chain): TssKeysignType => {
