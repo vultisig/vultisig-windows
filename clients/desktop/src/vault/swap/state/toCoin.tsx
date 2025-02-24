@@ -18,7 +18,9 @@ export const ToCoinProvider: React.FC<ChildrenProp> = ({ children }) => {
 
   const initialValue = useMemo(() => {
     return (
-      nativeCoins.find(coin => !areEqualCoins(coin, fromCoin)) ?? nativeCoins[0]
+      nativeCoins.find(
+        coin => !areEqualCoins(coin, fromCoin) && coin.chain == fromCoin.chain
+      ) ?? nativeCoins[0]
     )
   }, [fromCoin, nativeCoins])
 
