@@ -1,7 +1,8 @@
 import { Chain, OtherChain, UtxoChain } from '@core/chain/Chain'
-import { evmChainRpcUrls } from '../../chains/evm/chainInfo'
-import { cosmosRpcUrl } from '../../chains/cosmos/cosmosRpcUrl'
 import { rootApiUrl } from '@core/config'
+
+import { cosmosRpcUrl } from '../../chains/cosmos/cosmosRpcUrl'
+import { evmChainRpcUrls } from '../../chains/evm/chainInfo'
 
 export const chainRpcUrl: Record<Chain, string> = {
   ...evmChainRpcUrls,
