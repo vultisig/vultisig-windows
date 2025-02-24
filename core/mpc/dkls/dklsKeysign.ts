@@ -228,7 +228,7 @@ export class DKLSKeysign {
           return result
         }
       } catch (error) {
-        console.error('Schnorr keysign error:', error)
+        console.error('dkls keysign error:', error)
       }
     }
   }
