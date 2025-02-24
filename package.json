@@ -5,8 +5,8 @@
     "./**"
   ],
   "scripts": {
-    "lint": "eslint 'clients/desktop/src/**/*.{js,jsx,ts,tsx}' 'clients/extension/src/**/*.{js,jsx,ts,tsx}' 'clients/mobile/src/**/*.{js,jsx,ts,tsx}' 'core/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "eslint 'clients/desktop/src/**/*.{js,jsx,ts,tsx}' 'clients/extension/src/**/*.{js,jsx,ts,tsx}' 'clients/mobile/src/**/*.{js,jsx,ts,tsx}' 'core/**/*.{js,jsx,ts,tsx}' --fix",
+    "lint": "eslint 'clients/desktop/src/**/*.{js,jsx,ts,tsx}' 'clients/extension/src/**/*.{js,jsx,ts,tsx}' 'clients/mobile/src/**/*.{js,jsx,ts,tsx}' 'core/**/*.{js,jsx,ts,tsx}' 'lib/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint 'clients/desktop/src/**/*.{js,jsx,ts,tsx}' 'clients/extension/src/**/*.{js,jsx,ts,tsx}' 'clients/mobile/src/**/*.{js,jsx,ts,tsx}' 'core/**/*.{js,jsx,ts,tsx}' 'lib/**/*.{js,jsx,ts,tsx}' --fix",
     "dev:desktop": "wails dev",
     "dev:desktop:vite": "yarn workspace @clients/desktop dev",
     "build:desktop": "yarn workspace @clients/desktop build",

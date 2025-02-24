@@ -1,3 +1,4 @@
+import { mpcLibs } from '@core/mpc/mpcLib'
 import * as queryUtils from '@lib/utils/query/addQueryParams'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -15,6 +16,7 @@ describe('getJoinKeygenUrl', () => {
       sessionId: '1234-session',
       hexEncryptionKey: 'abcdef1234567890',
       hexChainCode: '123456abcdef7890',
+      mpcLibType: mpcLibs[0],
     }
 
     const mockCompressedString = 'mockCompressedString'

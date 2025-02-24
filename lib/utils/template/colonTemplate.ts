@@ -1,3 +1,3 @@
-export const toColonTemplateVariable = (name: string) => `:${name}`;
+export const toColonTemplateVariable = (name: string) => `:${name}`
 
-export const colonVariablePattern = /:(\w+)/g;
+export const colonVariablePattern = /:(\w+)/g

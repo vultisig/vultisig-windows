@@ -1,5 +1,6 @@
 import { Match } from '../../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
+import { IsInitiatingDeviceProvider } from '../../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack'
 import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep'
@@ -38,42 +39,44 @@ export const StartFastKeysignPage = () => {
   })
 
   return (
-    <KeysignMessagePayloadProvider value={keysignPayload}>
-      <PasswordProvider initialValue="">
-        <CurrentLocalPartyIdProvider value={local_party_id}>
-          <GeneratedServiceNameProvider>
-            <PeersSelectionRecordProvider initialValue={{}}>
-              <GeneratedSessionIdProvider>
-                <GeneratedHexEncryptionKeyProvider>
-                  <CurrentServerTypeProvider initialValue="relay">
-                    <ServerUrlDerivedFromServerTypeProvider>
-                      <MediatorManager />
-                      <Match
-                        value={step}
-                        password={() => (
-                          <ServerPasswordStep onForward={toNextStep} />
-                        )}
-                        startSession={() => (
-                          <KeygenStartSessionStep onForward={toNextStep} />
-                        )}
-                        waitServer={() => (
-                          <WaitForServerToJoinStep onForward={toNextStep} />
-                        )}
-                        server={() => (
-                          <FastKeysignServerStep onForward={toNextStep} />
-                        )}
-                        sign={() => (
-                          <KeysignSigningStep payload={keysignPayload} />
-                        )}
-                      />
-                    </ServerUrlDerivedFromServerTypeProvider>
-                  </CurrentServerTypeProvider>
-                </GeneratedHexEncryptionKeyProvider>
-              </GeneratedSessionIdProvider>
-            </PeersSelectionRecordProvider>
-          </GeneratedServiceNameProvider>
-        </CurrentLocalPartyIdProvider>
-      </PasswordProvider>
-    </KeysignMessagePayloadProvider>
+    <IsInitiatingDeviceProvider value={true}>
+      <KeysignMessagePayloadProvider value={keysignPayload}>
+        <PasswordProvider initialValue="">
+          <CurrentLocalPartyIdProvider value={local_party_id}>
+            <GeneratedServiceNameProvider>
+              <PeersSelectionRecordProvider initialValue={{}}>
+                <GeneratedSessionIdProvider>
+                  <GeneratedHexEncryptionKeyProvider>
+                    <CurrentServerTypeProvider initialValue="relay">
+                      <ServerUrlDerivedFromServerTypeProvider>
+                        <MediatorManager />
+                        <Match
+                          value={step}
+                          password={() => (
+                            <ServerPasswordStep onForward={toNextStep} />
+                          )}
+                          startSession={() => (
+                            <KeygenStartSessionStep onForward={toNextStep} />
+                          )}
+                          waitServer={() => (
+                            <WaitForServerToJoinStep onForward={toNextStep} />
+                          )}
+                          server={() => (
+                            <FastKeysignServerStep onForward={toNextStep} />
+                          )}
+                          sign={() => (
+                            <KeysignSigningStep payload={keysignPayload} />
+                          )}
+                        />
+                      </ServerUrlDerivedFromServerTypeProvider>
+                    </CurrentServerTypeProvider>
+                  </GeneratedHexEncryptionKeyProvider>
+                </GeneratedSessionIdProvider>
+              </PeersSelectionRecordProvider>
+            </GeneratedServiceNameProvider>
+          </CurrentLocalPartyIdProvider>
+        </PasswordProvider>
+      </KeysignMessagePayloadProvider>
+    </IsInitiatingDeviceProvider>
   )
 }

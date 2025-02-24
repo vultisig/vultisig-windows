@@ -3,9 +3,9 @@ export const asyncAttempt = async <T>(
   fallback: T
 ): Promise<T> => {
   try {
-    const result = await func();
-    return result;
+    const result = await func()
+    return result
   } catch {
-    return fallback;
+    return fallback
   }
-};
+}

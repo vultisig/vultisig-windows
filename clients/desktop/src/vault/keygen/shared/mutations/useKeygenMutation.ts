@@ -1,7 +1,8 @@
-import { startDklsKeygen } from '@core/keygen/dkls/startDklsKeygen'
+import { MPC } from '@core/mpc/mpc'
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 
+import { storage } from '../../../../../wailsjs/go/models'
 import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService'
 import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
 import { useMpcLib } from '../../../../mpc/state/mpcLib'
@@ -47,16 +48,45 @@ export const useKeygenMutation = () => {
                 serverUrl
               ),
             DKLS: async () => {
-              await startDklsKeygen({
+              const mpcKeygen = new MPC(
+                KeygenType.Keygen,
                 isInitiatingDevice,
-                peers,
-                sessionId,
-                hexEncryptionKey: encryptionKeyHex,
                 serverUrl,
-                localPartyId: local_party_id,
+                sessionId,
+                local_party_id,
+                [local_party_id, ...peers],
+                [],
+                encryptionKeyHex
+              )
+              const result = await mpcKeygen.startKeygen()
+              if (!result) {
+                throw new Error('DKLS keygen failed')
+              }
+              const vault = storage.Vault.createFrom({
+                name,
+                public_key_ecdsa: result.dkls.publicKey,
+                public_key_eddsa: result.schnorr.publicKey,
+                signers: [local_party_id, ...peers],
+                created_at: new Date().toISOString(),
+                hex_chain_code: result.dkls.chaincode,
+                keyshares: [
+                  storage.KeyShare.createFrom({
+                    public_key: result.dkls.publicKey,
+                    keyshare: result.dkls.keyshare,
+                  }),
+                  storage.KeyShare.createFrom({
+                    public_key: result.schnorr.publicKey,
+                    keyshare: result.schnorr.keyshare,
+                  }),
+                ],
+                local_party_id,
+                reshare_prefix: '',
+                order: 0,
+                is_backed_up: false,
+                coins: [],
+                lib_type: 'DKLS',
               })
-
-              throw new Error('DKLS is not supported yet')
+              return vault
             },
           })
         },

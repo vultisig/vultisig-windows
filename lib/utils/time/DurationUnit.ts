@@ -1,5 +1,5 @@
-export const durationUnits = ['ns', 'ms', 's', 'min', 'h', 'd', 'w'] as const;
-export type DurationUnit = (typeof durationUnits)[number];
+export const durationUnits = ['ns', 'ms', 's', 'min', 'h', 'd', 'w'] as const
+export type DurationUnit = (typeof durationUnits)[number]
 
 export const durationUnitName = {
   ms: 'millisecond',
@@ -9,4 +9,4 @@ export const durationUnitName = {
   d: 'day',
   w: 'week',
   ns: 'nanosecond',
-};
+}
