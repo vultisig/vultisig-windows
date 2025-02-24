@@ -7,6 +7,7 @@ import { CoinInputContainer } from '../../../coin/ui/inputs/CoinInputContainer'
 import { SelectCoinOverlay } from '../../../coin/ui/inputs/SelectCoinOverlay'
 import { Opener } from '../../../lib/ui/base/Opener'
 import { InputProps } from '../../../lib/ui/props'
+import { useCurrentVaultCoin } from '../../state/currentVault'
 import { useFromCoin } from '../state/fromCoin'
 import { SwapCoinBalance } from './SwapCoinBalance'
 
@@ -15,6 +16,10 @@ export const SwapCoinInput: React.FC<InputProps<CoinKey>> = ({
   onChange,
 }) => {
   const [coin] = useFromCoin()
+
+  const selectedCoin = useCurrentVaultCoin(value)
+
+  console.log('[SwapCoinInput] Current Coin:', selectedCoin)
 
   const whitelistedCoins = useWhitelistedCoinsQuery(coin?.chain) || { data: [] }
 
@@ -32,40 +37,25 @@ export const SwapCoinInput: React.FC<InputProps<CoinKey>> = ({
     })) as Coin[]
   }, [whitelistedCoins.data])
 
-  console.log('[SwapCoinInput] Available Coins:', coins)
-
-  // Convert `Coin[]` to `CoinKey[]` for `onFinish`
-  const coinKeyOptions = useMemo(() => {
-    return coins.map(({ id, chain }) => ({ id, chain })) as CoinKey[]
-  }, [coins])
-
-  console.log('[SwapCoinInput] Available CoinKey Options:', coinKeyOptions)
-
-  // Ensure value has logo/ticker, otherwise use first available option
-  const selectedCoin = useMemo(() => {
-    return (
-      coins.find(c => c.id === value?.id && c.chain === value?.chain) ||
-      coins[0] || {
-        id: value?.id || 'UNKNOWN',
-        chain: value?.chain || 'UNKNOWN',
-        ticker: 'UNKNOWN',
-        logo: '',
-        priceProviderId: '',
-        decimals: 18,
-      }
-    )
-  }, [value, coins])
-
-  console.log('[SwapCoinInput] Selected Coin:', selectedCoin)
-
   return (
     <Opener
       renderOpener={({ onOpen }) => (
         <CoinInputContainer
-          value={{ ...value, ...pick(selectedCoin, ['logo', 'ticker']) }}
+          value={{
+            ...{
+              id: selectedCoin.id,
+              chain: selectedCoin.chain,
+            },
+            ...pick(selectedCoin, ['logo', 'ticker']),
+          }}
           onClick={onOpen}
         >
-          <SwapCoinBalance value={value} />
+          <SwapCoinBalance
+            value={{
+              id: selectedCoin.id,
+              chain: selectedCoin.chain,
+            }}
+          />
         </CoinInputContainer>
       )}
       renderContent={({ onClose }) => (
@@ -75,12 +65,12 @@ export const SwapCoinInput: React.FC<InputProps<CoinKey>> = ({
               const coinKey: CoinKey = {
                 id: newValue.id,
                 chain: newValue.chain,
-              } // ✅ Convert `Coin` → `CoinKey`
+              }
               onChange(coinKey)
             }
             onClose()
           }}
-          options={coins} // ✅ Pass `Coin[]` as expected
+          options={coins}
         />
       )}
     />
