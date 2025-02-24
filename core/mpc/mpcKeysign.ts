@@ -39,7 +39,6 @@ export class MPCKeysign {
     publicKey: string,
     chainPath: string
   ) {
-    console.log('startKeysign')
     const result = await match(algo, {
       ecdsa: async () => {
         EventsEmit('PrepareVault')
@@ -74,6 +73,5 @@ export class MPCKeysign {
       },
     })
     return result
-    console.log('startKeysign done')
   }
 }

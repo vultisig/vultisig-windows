@@ -213,7 +213,6 @@ export class DKLSKeysign {
       })
       await markLocalPartyKeysignComplete({
         serverURL: this.serverURL,
-        localPartyId: this.localPartyId,
         sessionId: this.sessionId,
         messageId: messageHash,
         jsonSignature: JSON.stringify(keysignSig),

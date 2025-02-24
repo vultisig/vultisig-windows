@@ -57,7 +57,7 @@ export const JoinKeysignPage = () => {
                     )}
                     sign={() => (
                       <KeysignSigningStep
-                        payload={getKeysignMessagePayload(keysignMsg)}
+                        payload={keysignMessagePayload}
                         onBack={() => setStep('verify')}
                       />
                     )}
