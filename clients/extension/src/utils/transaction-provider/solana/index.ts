@@ -38,38 +38,25 @@ import { Buffer } from 'buffer'
 import { formatUnits } from 'ethers'
 import Long from 'long'
 export default class SolanaTransactionProvider extends BaseTransactionProvider {
-  fetchHighPriorityFee(address: string): Promise<number> {
-    return new Promise((resolve, reject) => {
-      const client = getSolanaClient()
-      client
-        .getRecentPrioritizationFees([
-          fromLegacyPublicKey(new PublicKey(address)),
-        ])
-        .send()
-        .then(prioritizationFees => {
-          const highPriorityFee = Math.max(
-            ...prioritizationFees.map(fee =>
-              Number(fee.prioritizationFee.valueOf())
-            ),
-            0
-          )
-          resolve(highPriorityFee)
-        })
-        .catch(reject)
-    })
+  async fetchHighPriorityFee(address: string): Promise<number> {
+    const client = getSolanaClient()
+    const prioritizationFees = await client
+      .getRecentPrioritizationFees([
+        fromLegacyPublicKey(new PublicKey(address)),
+      ])
+      .send()
+    return Math.max(
+      ...prioritizationFees.map(fee => Number(fee.prioritizationFee.valueOf())),
+      0
+    )
   }
 
   async fetchRecentBlockhash(): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const client = getSolanaClient()
-      client
-        .getLatestBlockhash({ commitment: 'confirmed' })
-        .send()
-        .then(response => {
-          resolve(response?.value.blockhash as string)
-        })
-        .catch(reject)
-    })
+    const client = getSolanaClient()
+    const response = await client
+      .getLatestBlockhash({ commitment: 'confirmed' })
+      .send()
+    return response?.value.blockhash as string
   }
 
   public async getSpecificTransactionInfo(coin: Coin): Promise<SpecificSolana> {

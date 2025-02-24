@@ -80,13 +80,12 @@ const handleOpenPanel = (name: string): Promise<number> => {
 
 const handleProvider = (chain: Chain, update?: boolean) => {
   const rpc = chainRpcUrl[chain]
-  if (rpc) {
-    if (update) {
-      if (rpcProvider) rpcProvider = new JsonRpcProvider(rpc)
-    } else {
-      rpcProvider = new JsonRpcProvider(rpc)
-    }
+  if (!rpc) return
+  if (update && rpcProvider) {
+    rpcProvider = new JsonRpcProvider(rpc)
+    return
   }
+  rpcProvider = new JsonRpcProvider(rpc)
 }
 
 const handleFindAccounts = (
