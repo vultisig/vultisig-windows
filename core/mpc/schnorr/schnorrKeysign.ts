@@ -209,7 +209,7 @@ export class SchnorrKeysign {
 
       const derSignature = encodeDERSignature(r, s)
       const keysignSig = new KeysignSignature({
-        msg: messageToSign,
+        msg: Buffer.from(messageToSign, 'hex').toString('base64'),
         r: Buffer.from(r).toString('hex'),
         s: Buffer.from(s).toString('hex'),
         recovery_id: recoveryId.toString(16).padStart(2, '0'),
