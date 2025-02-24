@@ -11,7 +11,7 @@ import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { rpcUrl } from '@clients/extension/src/utils/constants'
 import type {
-  ITransaction,
+  TransactionProps,
   SignatureProps,
   SignedTransaction,
   SpecificSolana,
@@ -126,7 +126,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
   }
 
   public getKeysignPayload = (
-    transaction: ITransaction,
+    transaction: TransactionProps,
     vault: VaultProps
   ): Promise<KeysignPayload> => {
     return new Promise(resolve => {

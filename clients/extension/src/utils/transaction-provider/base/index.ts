@@ -1,6 +1,6 @@
 import { toBinary } from '@bufbuild/protobuf'
 import {
-  ITransaction,
+  TransactionProps,
   SignatureProps,
   SignedTransaction,
   VaultProps,
@@ -97,7 +97,7 @@ export default abstract class BaseTransactionProvider {
 
   public getTransactionKey = (
     publicKeyEcdsa: string,
-    transaction: ITransaction,
+    transaction: TransactionProps,
     hexChainCode: string
   ): Promise<string> => {
     return new Promise(resolve => {
@@ -166,7 +166,7 @@ export default abstract class BaseTransactionProvider {
   }: SignedTransaction): Promise<{ txHash: string; raw: any }>
 
   abstract getKeysignPayload(
-    transaction: ITransaction,
+    transaction: TransactionProps,
     vault: VaultProps
   ): Promise<KeysignPayload>
 

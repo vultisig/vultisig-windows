@@ -8,8 +8,8 @@ import {
   CosmosMsgType,
   EventMethod,
   MessageKey,
-  RequestMethod,
   SenderKey,
+  requestMethod,
 } from '@clients/extension/src/utils/constants'
 import { processBackgroundResponse } from '@clients/extension/src/utils/functions'
 import {
@@ -43,6 +43,8 @@ import base58 from 'bs58'
 import EventEmitter from 'events'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
+import { Chain } from '@core/chain/Chain'
+import { getChainId } from '@core/chain/coin/ChainId'
 
 enum NetworkKey {
   MAINNET = 'mainnet',
@@ -133,7 +135,7 @@ class XDEFIKeplrProvider extends Keplr {
     return new Promise<void>((resolve, reject) => {
       cosmosProvider
         .request({
-          method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+          method: requestMethod.vultisig.requestAccounts.key,
           params: [],
         })
         .then(resolve)
@@ -152,23 +154,23 @@ class XDEFIKeplrProvider extends Keplr {
 
     cosmSigner.getAccounts = async () => {
       return cosmosProvider
-        .request({ method: RequestMethod.VULTISIG.CHAIN_ID, params: [] })
+        .request({ method: requestMethod.vultisig.chainId.key, params: [] })
         .then(async currentChainID => {
           if (currentChainID !== chainId) {
             return await cosmosProvider
               .request({
-                method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
+                method: requestMethod.vultisig.switchChain.key,
                 params: [{ chainId }],
               })
               .then(async () => {
                 return await cosmosProvider.request({
-                  method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+                  method: requestMethod.vultisig.requestAccounts.key,
                   params: [],
                 })
               })
           } else {
             return await cosmosProvider.request({
-              method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+              method: requestMethod.vultisig.requestAccounts.key,
               params: [],
             })
           }
@@ -190,23 +192,23 @@ class XDEFIKeplrProvider extends Keplr {
 
     cosmSigner.getAccounts = async () => {
       return cosmosProvider
-        .request({ method: RequestMethod.VULTISIG.CHAIN_ID, params: [] })
+        .request({ method: requestMethod.vultisig.chainId.key, params: [] })
         .then(async currentChainID => {
           if (currentChainID !== chainId) {
             return await cosmosProvider
               .request({
-                method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
+                method: requestMethod.vultisig.switchChain.key,
                 params: [{ chainId }],
               })
               .then(async () => {
                 return await cosmosProvider.request({
-                  method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+                  method: requestMethod.vultisig.requestAccounts.key,
                   params: [],
                 })
               })
           } else {
             return await cosmosProvider.request({
-              method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+              method: requestMethod.vultisig.requestAccounts.key,
               params: [],
             })
           }
@@ -224,7 +226,7 @@ class XDEFIKeplrProvider extends Keplr {
     return new Promise<Uint8Array>((resolve, reject) => {
       cosmosProvider
         .request({
-          method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+          method: requestMethod.vultisig.sendTransaction.key,
           params: [_tx],
         })
         .then((result: SendTransactionResponse) => {
@@ -257,7 +259,7 @@ class XDEFIKeplrProvider extends Keplr {
 
       cosmosProvider
         .request({
-          method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+          method: requestMethod.vultisig.sendTransaction.key,
           params: [txDetails[0]!],
         })
         .then((result: SendTransactionResponse) => {
@@ -279,18 +281,18 @@ class XDEFIKeplrProvider extends Keplr {
 
   async getKey(chainId: string): Promise<Key> {
     return cosmosProvider
-      .request({ method: RequestMethod.VULTISIG.CHAIN_ID, params: [] })
+      .request({ method: requestMethod.vultisig.chainId.key, params: [] })
       .then(async currentChainID => {
         if (currentChainID !== chainId) {
           return await cosmosProvider
             .request({
-              method: RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN,
+              method: requestMethod.vultisig.switchChain.key,
               params: [{ chainId }],
             })
             .then(async () => {
               return (
                 await cosmosProvider.request({
-                  method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+                  method: requestMethod.vultisig.requestAccounts.key,
                   params: [],
                 })
               )[0]
@@ -298,7 +300,7 @@ class XDEFIKeplrProvider extends Keplr {
         } else {
           return (
             await cosmosProvider.request({
-              method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+              method: requestMethod.vultisig.requestAccounts.key,
               params: [],
             })
           )[0]
@@ -335,14 +337,14 @@ namespace Provider {
 
     async getAccounts() {
       return await this.request({
-        method: RequestMethod.VULTISIG.GET_ACCOUNTS,
+        method: requestMethod.vultisig.getAccounts.key,
         params: [],
       })
     }
 
     async signPsbt() {
       return await this.request({
-        method: RequestMethod.CTRL.SIGN_PSBT,
+        method: requestMethod.ctrl.signPsbt.key,
         params: [],
       })
     }
@@ -420,9 +422,10 @@ namespace Provider {
     public chainId: string
     public network: string
     public static instance: Dash | null = null
+
     constructor() {
       super()
-      this.chainId = 'Dash_dash'
+      this.chainId = getChainId(Chain.Dash)
       this.network = NetworkKey.MAINNET
     }
 
@@ -472,9 +475,30 @@ namespace Provider {
     public sendAsync
     public static instance: Ethereum | null = null
 
+    public methods = {
+      addChain: requestMethod.metamask.addChain,
+      blockNumber: requestMethod.metamask.blockNumber,
+      call: requestMethod.metamask.call,
+      chainId: requestMethod.metamask.chainId,
+      estimateGas: requestMethod.metamask.estimateGas,
+      getAccounts: requestMethod.metamask.getAccounts,
+      gasPrice: requestMethod.metamask.gasPrice,
+      getBalance: requestMethod.metamask.getBalance,
+      getBlockByNumber: requestMethod.metamask.getBlockByNumber,
+      getCode: requestMethod.metamask.getCode,
+      getTransactionByHash: requestMethod.metamask.getTransactionByHash,
+      getTransactionCount: requestMethod.metamask.getTransactionCount,
+      getTransactionReceipt: requestMethod.metamask.getTransactionReceipt,
+      maxPriorityFeePerGas: requestMethod.metamask.maxPriorityFeePerGas,
+      requestAccounts: requestMethod.metamask.requestAccounts,
+      revokePermissions: requestMethod.metamask.revokePermissions,
+      sendTransaction: requestMethod.metamask.sendTransaction,
+      switchChain: requestMethod.metamask.switchChain,
+    }
+
     constructor() {
       super()
-      this.chainId = '0x1'
+      this.chainId = getChainId(Chain.Ethereum)
       this.connected = false
       this.isCtrl = true
       this.isMetaMask = true
@@ -497,7 +521,7 @@ namespace Provider {
 
     async enable() {
       return await this.request({
-        method: RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS,
+        method: requestMethod.metamask.requestAccounts.key,
         params: [],
       })
     }
@@ -528,7 +552,7 @@ namespace Provider {
     on = (event: string, callback: (data: any) => void): this => {
       if (event === EventMethod.CONNECT && this.isConnected()) {
         this.request({
-          method: RequestMethod.METAMASK.ETH_CHAIN_ID,
+          method: requestMethod.metamask.chainId.key,
           params: [],
         }).then(chainId => callback({ chainId }))
       } else {
@@ -563,13 +587,13 @@ namespace Provider {
             response
           )
           switch (data.method) {
-            case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
-            case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
+            case requestMethod.metamask.addChain.key:
+            case requestMethod.metamask.switchChain.key: {
               this.emitUpdateNetwork({ chainId: result as string })
 
               break
             }
-            case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
+            case requestMethod.metamask.revokePermissions.key: {
               this.emit(EventMethod.DISCONNECT, result)
 
               break
@@ -607,9 +631,10 @@ namespace Provider {
     public network: string
     public publicKey?: PublicKey
     public static instance: Solana | null = null
+
     constructor() {
       super()
-      this.chainId = 'Solana_mainnet-beta'
+      this.chainId = getChainId(Chain.Solana)
       this.isConnected = false
       this.isPhantom = true
       this.isXDEFI = false
@@ -634,7 +659,7 @@ namespace Provider {
         to: decodedTransfer.toPubkey.toString(),
       }
       return await this.request({
-        method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+        method: requestMethod.vultisig.sendTransaction.key,
         params: [modifiedTransfer],
       }).then((result: SendTransactionResponse) => {
         const rawData = base58.decode(result.raw)
@@ -644,7 +669,7 @@ namespace Provider {
 
     async connect() {
       return await this.request({
-        method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
+        method: requestMethod.vultisig.requestAccounts.key,
         params: [],
       }).then(account => {
         this.isConnected = true
@@ -743,9 +768,10 @@ namespace Provider {
     public chainId: string
     public network: string
     public static instance: MAYAChain | null = null
+
     constructor() {
       super()
-      this.chainId = 'Thorchain_mayachain'
+      this.chainId = getChainId(Chain.MayaChain)
       this.network = NetworkKey.MAINNET
     }
 
@@ -803,9 +829,10 @@ namespace Provider {
     public chainId: string
     public network: NetworkKey
     public static instance: THORChain | null = null
+
     constructor() {
       super()
-      this.chainId = 'Thorchain_thorchain'
+      this.chainId = getChainId(Chain.THORChain)
       this.network = NetworkKey.MAINNET
     }
 
@@ -860,22 +887,22 @@ namespace Provider {
 
 const bitcoinProvider = new Provider.UTXO(
   MessageKey.BITCOIN_REQUEST,
-  'Bitcoin_bitcoin-mainnet'
+  getChainId(Chain.Bitcoin)
 )
 const bitcoinCashProvider = new Provider.UTXO(
   MessageKey.BITCOIN_CASH_REQUEST,
-  'Bitcoincash_bitcoincash'
+  getChainId(Chain.BitcoinCash)
 )
 const cosmosProvider = new Provider.Cosmos()
 const dashProvider = new Provider.Dash()
 const dogecoinProvider = new Provider.UTXO(
   MessageKey.DOGECOIN_REQUEST,
-  'Dogecoin_dogecoin'
+  getChainId(Chain.Dogecoin)
 )
 const ethereumProvider = new Provider.Ethereum()
 const litecoinProvider = new Provider.UTXO(
   MessageKey.LITECOIN_REQUEST,
-  'Litecoin_litecoin'
+  getChainId(Chain.Litecoin)
 )
 const mayachainProvider = new Provider.MAYAChain()
 const solanaProvider = new Provider.Solana()

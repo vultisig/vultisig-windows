@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import {
-  ITransaction,
+  TransactionProps,
   SignatureProps,
   SignedTransaction,
   SpecificThorchain,
@@ -67,7 +67,7 @@ export default class MayaTransactionProvider extends BaseTransactionProvider {
   }
 
   public getKeysignPayload = (
-    transaction: ITransaction,
+    transaction: TransactionProps,
     vault: VaultProps
   ): Promise<KeysignPayload> => {
     return new Promise(resolve => {

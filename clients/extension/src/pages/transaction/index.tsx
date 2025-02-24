@@ -28,9 +28,9 @@ import {
   splitString,
 } from '@clients/extension/src/utils/functions'
 import {
-  ITransaction,
   ParsedMemo,
   SignatureProps,
+  TransactionProps,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import messageKeys from '@clients/extension/src/utils/message-keys'
@@ -68,7 +68,7 @@ interface InitialState {
   loading?: boolean
   sendKey?: string
   step: number
-  transaction?: ITransaction
+  transaction?: TransactionProps
   txProvider?: BaseTransactionProvider
   parsedMemo?: ParsedMemo
   vault?: VaultProps

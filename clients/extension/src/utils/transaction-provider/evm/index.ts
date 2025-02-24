@@ -6,7 +6,7 @@ import {
   checkERC20Function,
 } from '@clients/extension/src/utils/functions'
 import {
-  ITransaction,
+  TransactionProps,
   SignedTransaction,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
@@ -101,7 +101,7 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
   }
 
   public getKeysignPayload = (
-    transaction: ITransaction,
+    transaction: TransactionProps,
     vault: VaultProps
   ): Promise<KeysignPayload> => {
     return new Promise((resolve, reject) => {

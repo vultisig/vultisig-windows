@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import type {
-  ITransaction,
+  TransactionProps,
   SignatureProps,
   SignedTransaction,
   SpecificThorchain,
@@ -63,7 +63,7 @@ export default class ThorchainTransactionProvider extends BaseTransactionProvide
   }
 
   public getKeysignPayload = (
-    transaction: ITransaction,
+    transaction: TransactionProps,
     vault: VaultProps
   ): Promise<KeysignPayload> => {
     return new Promise(resolve => {

@@ -99,84 +99,289 @@ export enum TssKeysignType {
   EdDSA = 'EdDSA',
 }
 
-export namespace RequestMethod {
-  export enum CTRL {
-    DEPOSIT = 'deposit',
-    GET_UNSPENT_UTXOS = 'get_unspent_utxos',
-    REQUEST_ACCOUNTS_AND_KEYS = 'request_accounts_and_keys',
-    SIGN_MESSAGE = 'sign_message',
-    SIGN_PSBT = 'sign_psbt',
-    SIGN_TRANSACTION = 'sign_transaction',
-    TRANSFER = 'transfer',
-  }
-
-  export enum METAMASK {
-    ETH_ACCOUNTS = 'eth_accounts',
-    ETH_BLOB_BASE_FEE = 'eth_blobBaseFee',
-    ETH_BLOCK_NUMBER = 'eth_blockNumber',
-    ETH_CALL = 'eth_call',
-    ETH_CHAIN_ID = 'eth_chainId',
-    ETH_COINBASE = 'eth_coinbase',
-    ETH_DECRYPT = 'eth_decrypt',
-    ETH_ESTIMATE_GAS = 'eth_estimateGas',
-    ETH_FEE_HISTORY = 'eth_feeHistory',
-    ETH_GAS_PRICE = 'eth_gasPrice',
-    ETH_GET_BALANCE = 'eth_getBalance',
-    ETH_GET_BLOCK_BY_HASH = 'eth_getBlockByHash',
-    ETH_GET_BLOCK_BY_NUMBER = 'eth_getBlockByNumber',
-    ETH_GET_BLOCK_RECEIPTS = 'eth_getBlockReceipts',
-    ETH_GET_BLOCK_TRANSACTION_COUNT_BY_HASH = 'eth_getBlockTransactionCountByHash',
-    ETH_GET_BLOCK_TRANSACTION_COUNT_BY_NUMBER = 'eth_getBlockTransactionCountByNumber',
-    ETH_GET_CODE = 'eth_getCode',
-    ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
-    ETH_GET_FILTER_CHANGES = 'eth_getFilterChanges',
-    ETH_GET_FILTER_LOGS = 'eth_getFilterLogs',
-    ETH_GET_LOGS = 'eth_getLogs',
-    ETH_GET_PROOF = 'eth_getProof',
-    ETH_GET_STORAGEAT = 'eth_getStorageAt',
-    ETH_GET_TRANSACTION_BY_BLOCK_HASH_AND_INDEX = 'eth_getTransactionByBlockHashAndIndex',
-    ETH_GET_TRANSACTION_BY_BLOCK_NUMBER_AND_INDEX = 'eth_getTransactionByBlockNumberAndIndex',
-    ETH_GET_TRANSACTION_BY_HASH = 'eth_getTransactionByHash',
-    ETH_GET_TRANSACTION_COUNT = 'eth_getTransactionCount',
-    ETH_GET_TRANSACTION_RECEIPT = 'eth_getTransactionReceipt',
-    ETH_GET_UNCLE_COUNT_BY_BLOCK_HASH = 'eth_getUncleCountByBlockHash',
-    ETH_GET_UNCLE_COUNT_BY_BLOCK_NUMBER = 'eth_getUncleCountByBlockNumber',
-    ETH_MAX_PRIORITY_FEE_PER_GAS = 'eth_maxPriorityFeePerGas',
-    ETH_NEW_BLOCK_FILTER = 'eth_newBlockFilter',
-    ETH_NEW_FILTER = 'eth_newFilter',
-    ETH_NEW_PENDING_TRANSACTION_FILTER = 'eth_newPendingTransactionFilter',
-    ETH_REQUEST_ACCOUNTS = 'eth_requestAccounts',
-    ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
-    ETH_SEND_TRANSACTION = 'eth_sendTransaction',
-    ETH_SIGN = 'eth_sign',
-    ETH_SIGN_TYPED_DATA_V4 = 'eth_signTypedData_v4',
-    ETH_SUBSCRIBE = 'eth_subscribe',
-    ETH_SYNCING = 'eth_syncing',
-    ETH_UNINSTALL_FILTER = 'eth_uninstallFilter',
-    ETH_UNSUBSCRIBE = 'eth_unsubscribe',
-    NET_VERSION = 'net_version',
-    PERSONAL_SIGN = 'personal_sign',
-    WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
-    WALLET_GET_PERMISSIONS = 'wallet_getPermissions',
-    WALLET_REGISTER_ONBOARDING = 'wallet_registerOnboarding',
-    WALLET_REQUEST_PERMISSIONS = 'wallet_requestPermissions',
-    WALLET_REVOKE_PERMISSIONS = 'wallet_revokePermissions',
-    WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
-    WALLET_SCAN_QR_CODE = 'wallet_scanQRCode',
-    WALLET_WATCH_ASSET = 'wallet_watchAsset',
-    WEB3_CLIENT_VERSION = 'web3_clientVersion',
-  }
-
-  export enum VULTISIG {
-    GET_ACCOUNTS = 'get_accounts',
-    CHAIN_ID = 'chain_id',
-    DEPOSIT_TRANSACTION = 'deposit_transaction',
-    GET_TRANSACTION_BY_HASH = 'get_transaction_by_hash',
-    REQUEST_ACCOUNTS = 'request_accounts',
-    SEND_TRANSACTION = 'send_transaction',
-    WALLET_ADD_CHAIN = 'wallet_add_chain',
-    WALLET_SWITCH_CHAIN = 'wallet_switch_chain',
-  }
+export const requestMethod = {
+  ctrl: {
+    deposit: {
+      key: 'deposit',
+      auth: false,
+    },
+    getUnspentUtxos: {
+      key: 'get_unspent_utxos',
+      auth: false,
+    },
+    requestAccountsAndKeys: {
+      key: 'request_accounts_and_keys',
+      auth: false,
+    },
+    signMessage: {
+      key: 'sign_message',
+      auth: false,
+    },
+    signPsbt: {
+      key: 'sign_psbt',
+      auth: false,
+    },
+    signTransaction: {
+      key: 'sign_transaction',
+      auth: false,
+    },
+    transfer: {
+      key: 'transfer',
+      auth: false,
+    },
+  },
+  metamask: {
+    addChain: {
+      key: 'wallet_addEthereumChain',
+      auth: false,
+    },
+    blobBaseFee: {
+      key: 'eth_blobBaseFee',
+      auth: false,
+    },
+    blockNumber: {
+      key: 'eth_blockNumber',
+      auth: false,
+    },
+    call: {
+      key: 'eth_call',
+      auth: false,
+    },
+    chainId: {
+      key: 'eth_chainId',
+      auth: false,
+    },
+    coinbase: {
+      key: 'eth_coinbase',
+      auth: false,
+    },
+    decrypt: {
+      key: 'eth_decrypt',
+      auth: false,
+    },
+    estimateGas: {
+      key: 'eth_estimateGas',
+      auth: false,
+    },
+    feeHistory: {
+      key: 'eth_feeHistory',
+      auth: false,
+    },
+    getAccounts: {
+      key: 'eth_accounts',
+      auth: false,
+    },
+    getBalance: {
+      key: 'eth_getBalance',
+      auth: false,
+    },
+    getBlockByHash: {
+      key: 'eth_getBlockByHash',
+      auth: false,
+    },
+    getBlockByNumber: {
+      key: 'eth_getBlockByNumber',
+      auth: false,
+    },
+    getBlockReceipts: {
+      key: 'eth_getBlockReceipts',
+      auth: false,
+    },
+    getBlockTransactionCountByHash: {
+      key: 'eth_getBlockTransactionCountByHash',
+      auth: false,
+    },
+    getBlockTransactionCountByNumber: {
+      key: 'eth_getBlockTransactionCountByNumber',
+      auth: false,
+    },
+    getEncryptionPublicKey: {
+      key: 'eth_getEncryptionPublicKey',
+      auth: false,
+    },
+    getCode: {
+      key: 'eth_getCode',
+      auth: false,
+    },
+    getFilterChanges: {
+      key: 'eth_getFilterChanges',
+      auth: false,
+    },
+    getFilterLogs: {
+      key: 'eth_getFilterLogs',
+      auth: false,
+    },
+    getLogs: {
+      key: 'eth_getLogs',
+      auth: false,
+    },
+    getPermissions: {
+      key: 'wallet_getPermissions',
+      auth: false,
+    },
+    gasPrice: {
+      key: 'eth_gasPrice',
+      auth: false,
+    },
+    getProof: {
+      key: 'eth_getProof',
+      auth: false,
+    },
+    getStorageat: {
+      key: 'eth_getStorageAt',
+      auth: false,
+    },
+    getTransactionByBlockHashAndIndex: {
+      key: 'eth_getTransactionByBlockHashAndIndex',
+      auth: false,
+    },
+    getTransactionByBlockNumberAndIndex: {
+      key: 'eth_getTransactionByBlockNumberAndIndex',
+      auth: false,
+    },
+    getTransactionByHash: {
+      key: 'eth_getTransactionByHash',
+      auth: false,
+    },
+    getTransactionCount: {
+      key: 'eth_getTransactionCount',
+      auth: false,
+    },
+    getTransactionReceipt: {
+      key: 'eth_getTransactionReceipt',
+      auth: false,
+    },
+    getUncleCountByBlockHash: {
+      key: 'eth_getUncleCountByBlockHash',
+      auth: false,
+    },
+    getUncleCountByBlockNumber: {
+      key: 'eth_getUncleCountByBlockNumber',
+      auth: false,
+    },
+    maxPriorityFeePerGas: {
+      key: 'eth_maxPriorityFeePerGas',
+      auth: false,
+    },
+    netVersion: {
+      key: 'net_version',
+      auth: false,
+    },
+    newBlockFilter: {
+      key: 'eth_newBlockFilter',
+      auth: false,
+    },
+    newFilter: {
+      key: 'eth_newFilter',
+      auth: false,
+    },
+    newPendingTransactionFilter: {
+      key: 'eth_newPendingTransactionFilter',
+      auth: false,
+    },
+    requestAccounts: {
+      key: 'eth_requestAccounts',
+      auth: false,
+    },
+    personalSign: {
+      key: 'personal_sign',
+      auth: false,
+    },
+    registerOnboarding: {
+      key: 'wallet_registerOnboarding',
+      auth: false,
+    },
+    requestPermissions: {
+      key: 'wallet_requestPermissions',
+      auth: false,
+    },
+    revokePermissions: {
+      key: 'wallet_revokePermissions',
+      auth: false,
+    },
+    scanQRCode: {
+      key: 'wallet_scanQRCode',
+      auth: false,
+    },
+    sendRawTransaction: {
+      key: 'eth_sendRawTransaction',
+      auth: false,
+    },
+    sendTransaction: {
+      key: 'eth_sendTransaction',
+      auth: false,
+    },
+    sign: {
+      key: 'eth_sign',
+      auth: false,
+    },
+    signTypedDataV4: {
+      key: 'eth_signTypedData_v4',
+      auth: false,
+    },
+    subscribe: {
+      key: 'eth_subscribe',
+      auth: false,
+    },
+    switchChain: {
+      key: 'wallet_switchEthereumChain',
+      auth: false,
+    },
+    syncing: {
+      key: 'eth_syncing',
+      auth: false,
+    },
+    uninstallFilter: {
+      key: 'eth_uninstallFilter',
+      auth: false,
+    },
+    unsubscribe: {
+      key: 'eth_unsubscribe',
+      auth: false,
+    },
+    watchAsset: {
+      key: 'wallet_watchAsset',
+      auth: false,
+    },
+    web3ClientVersion: {
+      key: 'web3_clientVersion',
+      auth: false,
+    },
+  },
+  vultisig: {
+    addChain: {
+      key: 'wallet_add_chain',
+      auth: false,
+    },
+    chainId: {
+      key: 'chain_id',
+      auth: false,
+    },
+    depositTransaction: {
+      key: 'deposit_transaction',
+      auth: false,
+    },
+    getAccounts: {
+      key: 'get_accounts',
+      auth: false,
+    },
+    getTransactionByHash: {
+      key: 'get_transaction_by_hash',
+      auth: false,
+    },
+    requestAccounts: {
+      key: 'request_accounts',
+      auth: false,
+    },
+    sendTransaction: {
+      key: 'send_transaction',
+      auth: false,
+    },
+    switchChain: {
+      key: 'wallet_switch_chain',
+      auth: false,
+    },
+  },
 }
 
 export const storageKey = keyMirror({

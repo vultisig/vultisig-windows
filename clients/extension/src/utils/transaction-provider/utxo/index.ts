@@ -2,7 +2,7 @@ import { create } from '@bufbuild/protobuf'
 import { BlockchairUtxoResponse } from '@clients/extension/src/types/utxo'
 import api from '@clients/extension/src/utils/api'
 import {
-  ITransaction,
+  TransactionProps,
   SignatureProps,
   SpecificUtxo,
   SpecificUtxoInfo,
@@ -61,7 +61,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
   }
 
   public getKeysignPayload = (
-    transaction: ITransaction,
+    transaction: TransactionProps,
     vault: VaultProps
   ): Promise<KeysignPayload> => {
     return new Promise(resolve => {
@@ -209,7 +209,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
     inputData,
     vault,
   }: {
-    transaction: ITransaction
+    transaction: TransactionProps
     signature: SignatureProps
     inputData: Uint8Array
     vault: VaultProps

@@ -194,7 +194,7 @@ export interface CTRL_TRANSACTION {
   recipient: string
 }
 
-export interface ITransaction {
+export interface TransactionProps {
   transactionDetails: TransactionDetails
   chain: ChainProps
   contract?: string
@@ -224,7 +224,7 @@ export interface VaultProps {
   publicKeyEcdsa: string
   publicKeyEddsa: string
   selected?: boolean
-  transactions: ITransaction[]
+  transactions: TransactionProps[]
   uid: string
 }
 
@@ -291,7 +291,7 @@ export interface CosmosAccountDataResponse {
 export interface SignedTransaction {
   inputData?: Uint8Array
   signature: SignatureProps
-  transaction?: ITransaction
+  transaction?: TransactionProps
   vault?: VaultProps
 }
 

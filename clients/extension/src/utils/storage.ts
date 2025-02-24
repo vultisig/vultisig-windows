@@ -3,7 +3,7 @@ import { Currency, Language } from '@clients/extension/src/utils/constants'
 import {
   AccountsProps,
   ChainProps,
-  ITransaction,
+  TransactionProps,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
@@ -24,7 +24,7 @@ export interface LocalStorage {
   vaults?: VaultProps[]
   isPriority?: boolean
   ethProviderState?: EthProviderState
-  transactions?: ITransaction[]
+  transactions?: TransactionProps[]
 }
 export type LocalStorageKeys = keyof LocalStorage
 
@@ -141,7 +141,7 @@ export const setStoredVaults = (vaults: VaultProps[]): Promise<void> => {
 }
 
 export const setStoredTransaction = (
-  transaction: ITransaction
+  transaction: TransactionProps
 ): Promise<void> => {
   return new Promise(resolve => {
     getStoredTransactions().then(transactions => {
@@ -200,7 +200,7 @@ export const setStoredEthProviderState = (
   })
 }
 
-export const getStoredTransactions = (): Promise<ITransaction[]> => {
+export const getStoredTransactions = (): Promise<TransactionProps[]> => {
   const keys: LocalStorageKeys[] = ['transactions']
 
   return new Promise(resolve => {
@@ -211,7 +211,7 @@ export const getStoredTransactions = (): Promise<ITransaction[]> => {
 }
 
 export const setStoredTransactions = (
-  transactions: ITransaction[]
+  transactions: TransactionProps[]
 ): Promise<void> => {
   const vals: LocalStorage = { transactions }
 

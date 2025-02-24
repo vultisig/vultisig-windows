@@ -8,18 +8,18 @@ import {
   Instance,
   isSupportedChain,
   MessageKey,
-  RequestMethod,
+  requestMethod,
   rpcUrl,
 } from '@clients/extension/src/utils/constants'
 import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import {
   ChainProps,
   CTRL_TRANSACTION,
-  ITransaction,
   Messaging,
   METAMASK_TRANSACTION,
   SendTransactionResponse,
   TransactionDetails,
+  TransactionProps,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import {
@@ -249,7 +249,7 @@ const handleGetVaults = (): Promise<Messaging.GetVaults.Response> => {
 }
 
 const handleSendTransaction = (
-  transaction: ITransaction,
+  transaction: TransactionProps,
   chain: ChainProps,
   isDeposit?: boolean
 ): Promise<SendTransactionResponse> => {
@@ -351,8 +351,8 @@ const handleRequest = (
     }
 
     switch (method) {
-      case RequestMethod.VULTISIG.GET_ACCOUNTS:
-      case RequestMethod.METAMASK.ETH_ACCOUNTS: {
+      case requestMethod.vultisig.getAccounts.key:
+      case requestMethod.metamask.getAccounts.key: {
         handleFindAccounts(chain.chain, sender)
           .then(([account]) => {
             switch (chain.chain) {
@@ -375,8 +375,8 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.VULTISIG.REQUEST_ACCOUNTS:
-      case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
+      case requestMethod.vultisig.requestAccounts.key:
+      case requestMethod.metamask.requestAccounts.key: {
         handleGetAccounts(chain.chain, sender)
           .then(([account]) => {
             switch (chain.chain) {
@@ -400,18 +400,18 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.VULTISIG.CHAIN_ID:
-      case RequestMethod.METAMASK.ETH_CHAIN_ID: {
+      case requestMethod.vultisig.chainId.key:
+      case requestMethod.metamask.chainId.key: {
         handleProvider(chain.chain, true)
 
         resolve(getChainId(chain.chain))
 
         break
       }
-      case RequestMethod.VULTISIG.SEND_TRANSACTION: {
+      case requestMethod.vultisig.sendTransaction.key: {
         const [_transaction] = params
         if (_transaction) {
-          let modifiedTransaction: ITransaction = {} as ITransaction
+          let modifiedTransaction = {} as TransactionProps
           if (_transaction.value) {
             modifiedTransaction = {
               transactionDetails: {
@@ -448,11 +448,11 @@ const handleRequest = (
         }
         break
       }
-      case RequestMethod.METAMASK.ETH_SEND_TRANSACTION: {
+      case requestMethod.metamask.sendTransaction.key: {
         if (Array.isArray(params)) {
           const [_transaction] = params as METAMASK_TRANSACTION[]
           if (_transaction) {
-            const modifiedTransaction: ITransaction = {
+            const modifiedTransaction: TransactionProps = {
               transactionDetails: {
                 from: _transaction.from,
                 to: _transaction.to,
@@ -482,9 +482,9 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.VULTISIG.DEPOSIT_TRANSACTION: {
+      case requestMethod.vultisig.depositTransaction.key: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction[]
+          const [transaction] = params as TransactionProps[]
 
           if (transaction) {
             handleSendTransaction(transaction, chain, true)
@@ -499,8 +499,8 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.VULTISIG.GET_TRANSACTION_BY_HASH:
-      case RequestMethod.METAMASK.ETH_GET_TRANSACTION_BY_HASH: {
+      case requestMethod.vultisig.getTransactionByHash.key:
+      case requestMethod.metamask.getTransactionByHash.key: {
         if (Array.isArray(params)) {
           const [hash] = params
 
@@ -568,14 +568,14 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.ETH_GET_TRANSACTION_COUNT: {
+      case requestMethod.metamask.getTransactionCount.key: {
         const [address, tag] = params
         rpcProvider
           .getTransactionCount(String(address), String(tag))
           .then(count => resolve(String(count)))
         break
       }
-      case RequestMethod.METAMASK.ETH_BLOCK_NUMBER: {
+      case requestMethod.metamask.blockNumber.key: {
         rpcProvider
           .getBlock('latest')
           .then(block => resolve(String(block?.number)))
@@ -583,8 +583,8 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.VULTISIG.WALLET_ADD_CHAIN:
-      case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN: {
+      case requestMethod.vultisig.addChain.key:
+      case requestMethod.metamask.addChain.key: {
         if (Array.isArray(params)) {
           const [param] = params
 
@@ -619,17 +619,17 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.WALLET_GET_PERMISSIONS: {
+      case requestMethod.metamask.getPermissions.key: {
         resolve([])
 
         break
       }
-      case RequestMethod.METAMASK.WALLET_REQUEST_PERMISSIONS: {
+      case requestMethod.metamask.requestPermissions.key: {
         resolve([])
 
         break
       }
-      case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
+      case requestMethod.metamask.revokePermissions.key: {
         getStoredVaults().then(vaults => {
           setStoredVaults(
             vaults.map(vault => ({
@@ -641,7 +641,7 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.ETH_ESTIMATE_GAS: {
+      case requestMethod.metamask.estimateGas.key: {
         if (Array.isArray(params)) {
           const [transaction] = params as TransactionRequest[]
 
@@ -659,8 +659,8 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.VULTISIG.WALLET_SWITCH_CHAIN:
-      case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
+      case requestMethod.vultisig.switchChain.key:
+      case requestMethod.metamask.switchChain.key: {
         if (Array.isArray(params)) {
           const [param] = params
 
@@ -687,7 +687,7 @@ const handleRequest = (
                     .catch(reject)
                 } else {
                   handleRequest(
-                    { method: RequestMethod.VULTISIG.WALLET_ADD_CHAIN, params },
+                    { method: requestMethod.vultisig.addChain.key, params },
                     chain,
                     sender
                   )
@@ -707,7 +707,7 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.ETH_GET_BALANCE: {
+      case requestMethod.metamask.getBalance.key: {
         if (Array.isArray(params)) {
           const [address, tag] = params
 
@@ -725,7 +725,7 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.ETH_GET_BLOCK_BY_NUMBER: {
+      case requestMethod.metamask.getBlockByNumber.key: {
         const [tag, refresh] = params
         rpcProvider
           .getBlock(String(tag), Boolean(refresh))
@@ -734,7 +734,7 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.ETH_GAS_PRICE: {
+      case requestMethod.metamask.gasPrice.key: {
         rpcProvider
           .getFeeData()
           .then(({ gasPrice }) => resolve(gasPrice!.toString()))
@@ -742,16 +742,16 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.ETH_MAX_PRIORITY_FEE_PER_GAS: {
+      case requestMethod.metamask.maxPriorityFeePerGas.key: {
         rpcProvider
           .getFeeData()
           .then(({ maxFeePerGas }) => resolve(maxFeePerGas!.toString()))
 
         break
       }
-      case RequestMethod.METAMASK.ETH_CALL: {
+      case requestMethod.metamask.call.key: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction[]
+          const [transaction] = params as TransactionProps[]
 
           if (transaction) {
             rpcProvider.call(transaction).then(resolve).catch(reject)
@@ -765,9 +765,9 @@ const handleRequest = (
         break
       }
 
-      case RequestMethod.METAMASK.ETH_GET_TRANSACTION_RECEIPT: {
+      case requestMethod.metamask.getTransactionReceipt.key: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction[]
+          const [transaction] = params as TransactionProps[]
 
           rpcProvider
             .getTransactionReceipt(String(transaction))
@@ -779,7 +779,7 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.ETH_GET_CODE: {
+      case requestMethod.metamask.getCode.key: {
         if (Array.isArray(params)) {
           const [address, tag] = params
 
@@ -797,7 +797,7 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4: {
+      case requestMethod.metamask.signTypedDataV4.key: {
         if (Array.isArray(params)) {
           try {
             const [address, msgParamsString] = params
@@ -847,7 +847,7 @@ const handleRequest = (
         break
       }
 
-      case RequestMethod.METAMASK.PERSONAL_SIGN: {
+      case requestMethod.metamask.personalSign.key: {
         if (Array.isArray(params)) {
           const [message, address] = params
           const utf8Message = toUtf8String(String(message))
@@ -884,11 +884,11 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.METAMASK.NET_VERSION: {
+      case requestMethod.metamask.netVersion.key: {
         resolve(String(parseInt(getChainId(chain.chain), 16)))
         break
       }
-      case RequestMethod.CTRL.DEPOSIT: {
+      case requestMethod.ctrl.deposit.key: {
         if (Array.isArray(params)) {
           const [_transaction] = params as CTRL_TRANSACTION[]
 
@@ -901,7 +901,7 @@ const handleRequest = (
               to: _transaction.recipient,
               amount: _transaction.amount,
             }
-            const tx: ITransaction = {
+            const tx: TransactionProps = {
               transactionDetails: modifiedTransaction,
               chain: chain,
               id: '',
@@ -919,7 +919,7 @@ const handleRequest = (
 
         break
       }
-      case RequestMethod.CTRL.TRANSFER: {
+      case requestMethod.ctrl.transfer.key: {
         if (Array.isArray(params)) {
           const [_transaction] = params as CTRL_TRANSACTION[]
 
@@ -932,7 +932,7 @@ const handleRequest = (
               to: _transaction.recipient,
               amount: _transaction.amount,
             }
-            const tx: ITransaction = {
+            const tx: TransactionProps = {
               transactionDetails: modifiedTransaction,
               chain: chain,
               id: '',
@@ -1004,7 +1004,7 @@ chrome.runtime.onMessage.addListener(
             handleRequest(message, chain, origin)
               .then(response => {
                 if (
-                  message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
+                  message.method === requestMethod.vultisig.requestAccounts.key
                 ) {
                   try {
                     getStoredVaults().then((vaults: VaultProps[]) => {
@@ -1053,7 +1053,7 @@ chrome.runtime.onMessage.addListener(
           } else {
             handleRequest(
               {
-                method: RequestMethod.VULTISIG.WALLET_ADD_CHAIN,
+                method: requestMethod.vultisig.addChain.key,
                 params: [{ chainId: getChainId(Chain.Cosmos) }],
               },
               chainFeeCoin.Cosmos,
@@ -1063,7 +1063,8 @@ chrome.runtime.onMessage.addListener(
                 handleRequest(message, chainFeeCoin.Cosmos, origin)
                   .then(response => {
                     if (
-                      message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
+                      message.method ===
+                      requestMethod.vultisig.requestAccounts.key
                     ) {
                       getStoredVaults().then((vaults: VaultProps[]) => {
                         const vault = vaults.find((vault: VaultProps) => {
@@ -1141,7 +1142,7 @@ chrome.runtime.onMessage.addListener(
           } else {
             handleRequest(
               {
-                method: RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN,
+                method: requestMethod.metamask.switchChain.key,
                 params: [{ chainId: getChainId(Chain.Ethereum) }],
               },
               chainFeeCoin.Ethereum,

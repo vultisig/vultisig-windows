@@ -2,7 +2,7 @@ import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import {
   CosmosAccountData,
-  ITransaction,
+  TransactionProps,
   SignatureProps,
   SignedTransaction,
   SpecificCosmos,
@@ -73,7 +73,7 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
   }
 
   public getKeysignPayload = (
-    transaction: ITransaction,
+    transaction: TransactionProps,
     vault: VaultProps
   ): Promise<KeysignPayload> => {
     return new Promise(resolve => {
