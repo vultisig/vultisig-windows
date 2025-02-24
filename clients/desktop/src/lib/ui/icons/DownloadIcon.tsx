@@ -1,4 +1,4 @@
-const DownloadIcon = () => (
+const DownloadIcon = ({ stroke = '#02122B' }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
@@ -6,7 +6,7 @@ const DownloadIcon = () => (
     fill="none"
   >
     <path
-      stroke="#02122B"
+      stroke={stroke}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}

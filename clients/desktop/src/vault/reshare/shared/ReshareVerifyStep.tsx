@@ -1,3 +1,5 @@
+import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { getColor } from '@lib/ui/theme/getters'
 import { without } from '@lib/utils/array/without'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -10,11 +12,9 @@ import { VStack } from '../../../lib/ui/layout/Stack'
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
 import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
 import { Text, text } from '../../../lib/ui/text'
-import { getColor } from '../../../lib/ui/theme/getters'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../ui/page/PageContent'
 import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId'
-import { getVaultActionSignersMin } from '../../keygen/utils/getVaultActionSignersMin'
 import { useVaultKeygenDevices } from '../../setup/hooks/useVaultKegenDevices'
 import { useCurrentVault } from '../../state/currentVault'
 import { ReshareDeviceItem } from './ReshareDeviceItem'
@@ -42,7 +42,7 @@ export const ReshareVerifyStep: React.FC<OnBackProp & OnForwardProp> = ({
   const localPartyId = useCurrentLocalPartyId()
   const { signers } = useCurrentVault()
 
-  const thresholdText = `${getVaultActionSignersMin(devices.length)} ${t('of')} ${devices.length}`
+  const thresholdText = `${getKeygenThreshold(devices.length)} ${t('of')} ${devices.length}`
 
   return (
     <>

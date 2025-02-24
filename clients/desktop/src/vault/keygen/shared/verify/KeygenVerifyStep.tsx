@@ -1,3 +1,4 @@
+import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '../../../../lib/ui/buttons/Button'
@@ -11,7 +12,6 @@ import { PageHeader } from '../../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
 import { useVaultKeygenDevices } from '../../../setup/hooks/useVaultKegenDevices'
-import { getVaultActionSignersMin } from '../../utils/getVaultActionSignersMin'
 import { VaultDeviceItem } from './VaultDeviceItem'
 
 export const KeygenVerifyStep = ({
@@ -22,7 +22,7 @@ export const KeygenVerifyStep = ({
 
   const devices = useVaultKeygenDevices()
 
-  const minSigners = getVaultActionSignersMin(devices.length)
+  const minSigners = getKeygenThreshold(devices.length)
 
   return (
     <>

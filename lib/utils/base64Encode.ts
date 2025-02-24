@@ -1,3 +1,3 @@
 export const base64Encode = (msg: any): string => {
-  return Buffer.from(msg).toString('base64');
-};
+  return Buffer.from(msg).toString('base64')
+}

@@ -1,5 +1,6 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { getColor, matchColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
@@ -9,7 +10,7 @@ import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { panel } from '../../../lib/ui/panel/Panel'
 import { IsActiveProp, OnClickProp, ValueProp } from '../../../lib/ui/props'
 import { Text } from '../../../lib/ui/text'
-import { getColor, matchColor } from '../../../lib/ui/theme/getters'
+import { shouldDisplayChainLogo } from '../../../vault/chain/utils'
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
 
 const Container = styled(UnstyledButton)<IsActiveProp>`
@@ -30,14 +31,22 @@ export const CoinOption = ({
   onClick,
   isActive,
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
-  const { chain, logo, ticker } = value
+  const { chain, logo, ticker, id } = value
 
   return (
     <Container isActive={isActive} onClick={onClick}>
       <HStack fullWidth alignItems="center" gap={12}>
         <ChainCoinIcon
           coinSrc={getCoinLogoSrc(logo)}
-          chainSrc={isFeeCoin(value) ? undefined : getChainEntityIconSrc(chain)}
+          chainSrc={
+            shouldDisplayChainLogo({
+              ticker,
+              chain,
+              isNative: isFeeCoin({ id, chain }),
+            })
+              ? getChainEntityIconSrc(chain)
+              : undefined
+          }
           style={{ fontSize: 32 }}
         />
         <VStack alignItems="start">

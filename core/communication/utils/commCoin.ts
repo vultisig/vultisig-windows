@@ -1,11 +1,11 @@
-import { Chain } from "@core/chain/Chain";
-import { AccountCoin } from "@core/chain/coin/AccountCoin";
+import { create } from '@bufbuild/protobuf'
+import { Chain } from '@core/chain/Chain'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
-  CoinSchema,
   Coin as CommCoin,
-} from "@core/communication/vultisig/keysign/v1/coin_pb";
-import { isFeeCoin } from "@core/chain/coin/utils/isFeeCoin";
-import { create } from "@bufbuild/protobuf";
+  CoinSchema,
+} from '@core/communication/vultisig/keysign/v1/coin_pb'
 
 export const fromCommCoin = (coin: CommCoin): AccountCoin => {
   return {
@@ -16,25 +16,25 @@ export const fromCommCoin = (coin: CommCoin): AccountCoin => {
     logo: coin.logo,
     priceProviderId: coin.priceProviderId,
     decimals: coin.decimals,
-  };
-};
+  }
+}
 
 type ToCommCoinInput = AccountCoin & {
-  hexPublicKey: string;
-};
+  hexPublicKey: string
+}
 
 export const toCommCoin = (coin: ToCommCoinInput): CommCoin => {
-  const isNativeToken = isFeeCoin(coin);
+  const isNativeToken = isFeeCoin(coin)
 
   return create(CoinSchema, {
     chain: coin.chain,
     ticker: coin.ticker,
     address: coin.address,
-    contractAddress: isNativeToken ? "" : coin.id,
+    contractAddress: isNativeToken ? '' : coin.id,
     hexPublicKey: coin.hexPublicKey,
     isNativeToken: isNativeToken,
     logo: coin.logo,
-    priceProviderId: coin.priceProviderId ?? "",
+    priceProviderId: coin.priceProviderId ?? '',
     decimals: coin.decimals,
-  });
-};
+  })
+}

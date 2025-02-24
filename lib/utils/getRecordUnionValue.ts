@@ -1,14 +1,14 @@
-import { getRecordKeys } from './record/getRecordKeys';
+import { getRecordKeys } from './record/getRecordKeys'
 
 export function getRecordUnionValue<U, K extends string>(
   value: U,
   key: K
 ): Extract<U, Record<K, unknown>>[K] {
-  const keys = getRecordKeys(value as Record<string, unknown>);
+  const keys = getRecordKeys(value as Record<string, unknown>)
 
   if (!keys.includes(key)) {
-    throw new Error(`Key "${key}" not found in record union`);
+    throw new Error(`Key "${key}" not found in record union`)
   }
 
-  return (value as Extract<U, Record<K, unknown>>)[key];
+  return (value as Extract<U, Record<K, unknown>>)[key]
 }

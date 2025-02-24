@@ -41,6 +41,7 @@ export default keyMirror({
   IMPORT_FAILED: true,
   IMPORT_SUCCESSED: true,
   IMPORT_VAULT: true,
+  INVALID_PASSWORD: true,
   // J
   // K
   // L
@@ -59,7 +60,7 @@ export default keyMirror({
   // P
   // Q
   // R
-  REALOAD_MESSAGE: true,
+  RELOAD_MESSAGE: true,
   REMOVING_VAULT_WARNING: true,
   RENAME_VAULT: true,
   RETRY_ERROR: true,

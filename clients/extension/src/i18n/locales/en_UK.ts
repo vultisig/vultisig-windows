@@ -40,6 +40,7 @@ export default {
   [messageKeys.IMPORT_FAILED]: 'QR code invalid, please retry',
   [messageKeys.IMPORT_SUCCESSED]: 'Imported successfully',
   [messageKeys.IMPORT_VAULT]: 'Import Vault',
+  [messageKeys.INVALID_PASSWORD]: 'Invalid Password',
   // L
   [messageKeys.LANGUAGE]: 'Language',
   // M
@@ -54,7 +55,7 @@ export default {
   [messageKeys.OTHER]: 'Other',
   [messageKeys.OTHER_VAULTS]: 'Other Vaults',
   // R
-  [messageKeys.REALOAD_MESSAGE]: 'Please reload your webpage to see effects',
+  [messageKeys.RELOAD_MESSAGE]: 'Please reload your webpage to see effects',
   [messageKeys.REMOVING_VAULT_WARNING]: 'You are removing Vault',
   [messageKeys.RENAME_VAULT]: 'Rename Vault',
   [messageKeys.RETRY_ERROR]: 'An error happened! Please retry',

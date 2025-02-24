@@ -1,5 +1,5 @@
 import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { ValueProp } from '../../../lib/ui/props'
@@ -14,7 +14,7 @@ export const TxOverviewAmount = ({
   return (
     <TxOverviewRow>
       <span>{t('amount')}</span>
-      <span>{formatAmount(value, ticker)}</span>
+      <span>{formatTokenAmount(value, ticker)}</span>
     </TxOverviewRow>
   )
 }

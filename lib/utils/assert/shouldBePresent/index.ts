@@ -3,8 +3,8 @@ export function shouldBePresent<T>(
   valueName: string = 'value'
 ): T {
   if (value === undefined || value === null) {
-    throw new Error(`${valueName} is required`);
+    throw new Error(`${valueName} is required`)
   }
 
-  return value;
+  return value
 }

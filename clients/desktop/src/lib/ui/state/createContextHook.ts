@@ -7,7 +7,7 @@ export function createContextHook<T>(
   return () => {
     const context = useContext(Context)
 
-    if (!context) {
+    if (context === undefined) {
       throw new Error(`${contextName} is not provided`)
     }
 

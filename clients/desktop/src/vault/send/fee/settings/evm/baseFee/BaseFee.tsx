@@ -1,6 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { EvmChain } from '@core/chain/Chain'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { useEvmBaseFeeQuery } from '../../../../../../chain/evm/queries/useEvmBaseFeeQuery'
@@ -27,7 +27,9 @@ export const BaseFee = () => {
       <FeeContainer>
         <MatchQuery
           value={query}
-          success={data => formatAmount(fromChainAmount(data, gwei.decimals))}
+          success={data =>
+            formatTokenAmount(fromChainAmount(data, gwei.decimals))
+          }
           error={() => null}
           pending={() => <Spinner />}
         />

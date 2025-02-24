@@ -1,16 +1,16 @@
-import { create } from '@bufbuild/protobuf';
-import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb';
+import { create } from '@bufbuild/protobuf'
+import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
-} from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
+} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 
 export const incrementKeysignPayloadNonce = (
   keysignPayload: KeysignPayload
 ): KeysignPayload => {
-  const { blockchainSpecific } = keysignPayload;
+  const { blockchainSpecific } = keysignPayload
 
-  const { nonce, ...rest } = blockchainSpecific.value as EthereumSpecific;
+  const { nonce, ...rest } = blockchainSpecific.value as EthereumSpecific
 
   return create(KeysignPayloadSchema, {
     ...keysignPayload,
@@ -21,5 +21,5 @@ export const incrementKeysignPayloadNonce = (
         nonce: nonce + 1n,
       },
     },
-  });
-};
+  })
+}

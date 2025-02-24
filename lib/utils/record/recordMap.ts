@@ -7,5 +7,5 @@ export const recordMap = <K extends string | number, T, V>(
       key,
       fn(value as T, key as K),
     ])
-  ) as Record<K, V>;
-};
+  ) as Record<K, V>
+}

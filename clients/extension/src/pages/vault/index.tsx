@@ -68,42 +68,36 @@ const Component = () => {
     })
   }
 
-  const componentDidMount = (): void => {
-    getStoredLanguage().then(language => {
-      i18n.changeLanguage(language)
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const language = await getStoredLanguage()
+        await i18n.changeLanguage(language)
 
-      getStoredRequest()
-        .then(({ sender }) => {
-          getStoredVaults().then(vaults => {
-            if (vaults.length) {
-              setState(prevState => ({
-                ...prevState,
-                sender,
-                vaults,
-                hasError: false,
-              }))
-            } else {
-              setState(prevState => ({
-                ...prevState,
-                errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
-                errorTitle: t(messageKeys.GET_VAULT_FAILED),
-                hasError: true,
-              }))
-            }
-          })
-        })
-        .catch(() => {
-          setState(prevState => ({
-            ...prevState,
+        const { sender } = await getStoredRequest()
+        const vaults = await getStoredVaults()
+
+        setState(prevState => ({
+          ...prevState,
+          sender,
+          vaults,
+          hasError: !vaults.length,
+          ...(!vaults.length && {
             errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
             errorTitle: t(messageKeys.GET_VAULT_FAILED),
-            hasError: true,
-          }))
-        })
-    })
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(componentDidMount, [])
+          }),
+        }))
+      } catch (error) {
+        console.error('Failed to initialize:', error)
+        setState(prevState => ({
+          ...prevState,
+          errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
+          errorTitle: t(messageKeys.GET_VAULT_FAILED),
+          hasError: true,
+        }))
+      }
+    })()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <ConfigProvider>

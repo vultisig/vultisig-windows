@@ -28,9 +28,13 @@ const Component = () => {
   const handleSelect = (uid: string) => {
     setStoredVaults(
       vaults.map(vault => ({ ...vault, active: vault.uid === uid }))
-    ).then(() => {
-      goBack(routeKeys.main)
-    })
+    )
+      .then(() => {
+        goBack(routeKeys.main)
+      })
+      .catch(error => {
+        console.error('Failed to update vault settings:', error)
+      })
   }
 
   const componentDidMount = (): void => {

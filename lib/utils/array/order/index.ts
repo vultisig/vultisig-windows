@@ -1,4 +1,4 @@
-import { Order } from '../../order/Order';
+import { Order } from '../../order/Order'
 
 export const order = <T>(
   array: T[],
@@ -7,9 +7,9 @@ export const order = <T>(
 ) => {
   return [...array].sort((a, b) => {
     if (order === 'asc') {
-      return getValue(a) - getValue(b);
+      return getValue(a) - getValue(b)
     } else {
-      return getValue(b) - getValue(a);
+      return getValue(b) - getValue(a)
     }
-  });
-};
+  })
+}

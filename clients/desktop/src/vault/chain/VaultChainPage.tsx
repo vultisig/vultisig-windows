@@ -85,24 +85,24 @@ export const VaultChainPage = () => {
     },
   })
 
-  // It's a bad solution, but better than what we had before
-  // TODO: Implement an abstraction auto-discovery mechanism at the root of the app
   useEffect(() => {
-    if (findTokensQuery.data && publicKeyQuery.data) {
-      const publicKey = publicKeyQuery.data
-      const address = deriveAddress({
-        chain,
-        publicKey,
-        walletCore,
-      })
+    // Ensure findTokensQuery.data is an array
+    const tokens = Array.isArray(findTokensQuery.data)
+      ? findTokensQuery.data
+      : []
 
-      const hexPublicKey = toHexPublicKey({
-        publicKey,
-        walletCore,
-      })
+    const isValidPublicKey =
+      publicKeyQuery.data &&
+      typeof publicKeyQuery.data.data === 'function' &&
+      publicKeyQuery.data.data().length > 0 // Ensure it contains meaningful data
+
+    if (tokens.length > 0 && publicKeyQuery.isSuccess && isValidPublicKey) {
+      const publicKey = publicKeyQuery.data
+      const address = deriveAddress({ chain, publicKey, walletCore })
+      const hexPublicKey = toHexPublicKey({ publicKey, walletCore })
 
       saveCoins(
-        findTokensQuery.data.map(coin =>
+        tokens.map(coin =>
           toStorageCoin({
             ...coin,
             address,
@@ -111,7 +111,14 @@ export const VaultChainPage = () => {
         )
       )
     }
-  }, [chain, findTokensQuery.data, publicKeyQuery.data, saveCoins, walletCore])
+  }, [
+    chain,
+    findTokensQuery.data,
+    publicKeyQuery.data,
+    publicKeyQuery.isSuccess,
+    saveCoins,
+    walletCore,
+  ])
 
   const hasMultipleCoinsSupport = chain in chainTokens
 
@@ -220,21 +227,17 @@ export const VaultChainPage = () => {
                 (one, another) => one.ticker === another.ticker
               )
 
-              return (
-                <>
-                  {orderedCoins.map(coin => (
-                    <Link
-                      key={coin.id}
-                      to={makeAppPath('vaultChainCoinDetail', {
-                        chain: chain,
-                        coin: coin.id,
-                      })}
-                    >
-                      <VaultChainCoinItem value={coin} />
-                    </Link>
-                  ))}
-                </>
-              )
+              return orderedCoins.map(coin => (
+                <Link
+                  key={coin.id}
+                  to={makeAppPath('vaultChainCoinDetail', {
+                    chain: chain,
+                    coin: coin.id,
+                  })}
+                >
+                  <VaultChainCoinItem value={coin} />
+                </Link>
+              ))
             }}
           />
         </Panel>

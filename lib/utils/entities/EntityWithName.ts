@@ -1,3 +1,3 @@
 export type EntityWithName = {
-  name: string;
-};
+  name: string
+}

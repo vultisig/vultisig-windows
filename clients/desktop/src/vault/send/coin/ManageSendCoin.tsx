@@ -1,5 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { CoinInputContainer } from '../../../coin/ui/inputs/CoinInputContainer'
@@ -56,7 +56,9 @@ export const ManageSendCoin = () => {
         <span>{t('balance')}:</span>
         <SendCoinBalanceDependant
           success={amount => (
-            <span>{formatAmount(fromChainAmount(amount, coin.decimals))}</span>
+            <span>
+              {formatTokenAmount(fromChainAmount(amount, coin.decimals))}
+            </span>
           )}
         />
       </Text>

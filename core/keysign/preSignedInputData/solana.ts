@@ -1,22 +1,23 @@
-import { TW } from "@trustwallet/wallet-core";
-import Long from "long";
+import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
+import { assertField } from '@lib/utils/record/assertField'
+import { TW } from '@trustwallet/wallet-core'
+import Long from 'long'
 
-import { assertField } from "@lib/utils/record/assertField";
-import { PreSignedInputDataResolver } from "./PreSignedInputDataResolver";
-import { solanaConfig } from "@core/chain/chains/solana/solanaConfig";
+import { PreSignedInputDataResolver } from './PreSignedInputDataResolver'
 
 export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
-  "solanaSpecific"
+  'solanaSpecific'
 > = ({ keysignPayload, chainSpecific, walletCore }) => {
-  const coin = assertField(keysignPayload, "coin");
+  const coin = assertField(keysignPayload, 'coin')
 
   const {
     recentBlockHash,
     fromTokenAssociatedAddress,
     toTokenAssociatedAddress,
-  } = chainSpecific;
+    programId,
+  } = chainSpecific
 
-  const newRecentBlockHash = recentBlockHash; // DKLS should fix it. Using the same, since fetching the latest block hash won't match with IOS and Android
+  const newRecentBlockHash = recentBlockHash // DKLS should fix it. Using the same, since fetching the latest block hash won't match with IOS and Android
 
   if (coin.isNativeToken) {
     // Native token transfer
@@ -34,12 +35,12 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
       priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
         limit: solanaConfig.priorityFeeLimit,
       }),
-    });
+    })
 
     // Encode the input
-    const encodedInput = TW.Solana.Proto.SigningInput.encode(input).finish();
+    const encodedInput = TW.Solana.Proto.SigningInput.encode(input).finish()
 
-    return encodedInput;
+    return encodedInput
   } else {
     // Token transfer
     if (fromTokenAssociatedAddress && toTokenAssociatedAddress) {
@@ -50,7 +51,10 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
         recipientTokenAddress: toTokenAssociatedAddress,
         amount: Long.fromString(keysignPayload.toAmount),
         decimals: coin.decimals,
-      });
+        tokenProgramId: programId
+          ? TW.Solana.Proto.TokenProgramId.Token2022Program
+          : TW.Solana.Proto.TokenProgramId.TokenProgram,
+      })
 
       const input = TW.Solana.Proto.SigningInput.create({
         tokenTransferTransaction: tokenTransferMessage,
@@ -62,22 +66,22 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
         priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
           limit: solanaConfig.priorityFeeLimit,
         }),
-      });
+      })
 
-      return TW.Solana.Proto.SigningInput.encode(input).finish();
+      return TW.Solana.Proto.SigningInput.encode(input).finish()
     } else if (fromTokenAssociatedAddress && !toTokenAssociatedAddress) {
       // Generate the associated address if `toTokenAssociatedAddress` is missing
       const receiverAddress = walletCore.SolanaAddress.createWithString(
-        keysignPayload.toAddress,
-      );
+        keysignPayload.toAddress
+      )
       const generatedAssociatedAddress = receiverAddress.defaultTokenAddress(
-        coin.contractAddress,
-      );
+        coin.contractAddress
+      )
 
       if (!generatedAssociatedAddress) {
         throw new Error(
-          "We must have the association between the minted token and the TO address",
-        );
+          'We must have the association between the minted token and the TO address'
+        )
       }
 
       const createAndTransferTokenMessage =
@@ -88,7 +92,10 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
           senderTokenAddress: fromTokenAssociatedAddress,
           amount: Long.fromString(keysignPayload.toAmount),
           decimals: coin.decimals,
-        });
+          tokenProgramId: programId
+            ? TW.Solana.Proto.TokenProgramId.Token2022Program
+            : TW.Solana.Proto.TokenProgramId.TokenProgram,
+        })
 
       const input = TW.Solana.Proto.SigningInput.create({
         createAndTransferTokenTransaction: createAndTransferTokenMessage,
@@ -100,13 +107,13 @@ export const getSolanaPreSignedInputData: PreSignedInputDataResolver<
         priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
           limit: solanaConfig.priorityFeeLimit,
         }),
-      });
+      })
 
-      return TW.Solana.Proto.SigningInput.encode(input).finish();
+      return TW.Solana.Proto.SigningInput.encode(input).finish()
     } else {
       throw new Error(
-        "To send tokens we must have the association between the minted token and the TO address",
-      );
+        'To send tokens we must have the association between the minted token and the TO address'
+      )
     }
   }
-};
+}

@@ -1,3 +1,12 @@
+/* 
+
+DEPRECATED! This file is no longer used in the project.
+It was replaced by the file on CORE
+
+@rcoderdev @johnnyluo please deprecate all files you are moving to core. 
+
+*/
+
 import { create } from '@bufbuild/protobuf'
 import type {
   ITransaction,
@@ -139,7 +148,9 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
         recentBlockHash,
         fromTokenAssociatedAddress,
         toTokenAssociatedAddress,
+        programId,
       } = solanaSpecific
+
       const priorityFeePrice = 1_000_000
       const priorityFeeLimit = Number(100_000)
       const newRecentBlockHash = recentBlockHash
@@ -179,6 +190,9 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
             recipientTokenAddress: toTokenAssociatedAddress,
             amount: Long.fromString(this.keysignPayload.toAmount),
             decimals: this.keysignPayload.coin.decimals,
+            tokenProgramId: programId
+              ? TW.Solana.Proto.TokenProgramId.Token2022Program
+              : TW.Solana.Proto.TokenProgramId.TokenProgram,
           })
           const input = TW.Solana.Proto.SigningInput.create({
             tokenTransferTransaction: tokenTransferMessage,
@@ -215,6 +229,9 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
               senderTokenAddress: fromTokenAssociatedAddress,
               amount: Long.fromString(this.keysignPayload.toAmount),
               decimals: this.keysignPayload.coin.decimals,
+              tokenProgramId: programId
+                ? TW.Solana.Proto.TokenProgramId.Token2022Program
+                : TW.Solana.Proto.TokenProgramId.TokenProgram,
             })
           const input = TW.Solana.Proto.SigningInput.create({
             createAndTransferTokenTransaction: createAndTransferTokenMessage,

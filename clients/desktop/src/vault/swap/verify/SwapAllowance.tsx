@@ -1,6 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow'
@@ -28,7 +28,7 @@ export const SwapAllowance = () => {
           <TxOverviewChainDataRow>
             <span>{t('allowance')}</span>
             <span>
-              {formatAmount(
+              {formatTokenAmount(
                 fromChainAmount(erc20ApprovePayload.amount, decimals),
                 ticker
               )}

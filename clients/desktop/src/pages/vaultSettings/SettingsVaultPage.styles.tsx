@@ -1,8 +1,9 @@
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { VStack } from '../../lib/ui/layout/Stack'
+import { HStack, VStack } from '../../lib/ui/layout/Stack'
 import { Panel } from '../../lib/ui/panel/Panel'
-import { getColor } from '../../lib/ui/theme/getters'
+import { Text } from '../../lib/ui/text'
 import { pageConfig } from '../../ui/page/config'
 import { PageSlice } from '../../ui/page/PageSlice'
 
@@ -47,4 +48,17 @@ export const StyledPageSlice = styled(PageSlice)`
   display: flex;
   flex-direction: column;
   gap: 32px;
+`
+
+export const OpticallyAdjustedText = styled(Text)`
+  margin-top: 2px;
+`
+
+export const IconWrapper = styled.div`
+  font-size: 24px;
+`
+
+export const StyledListItemContentWrapper = styled(HStack)`
+  // @tony: Added margin for optical vertical alignment
+  margin-top: 5px;
 `

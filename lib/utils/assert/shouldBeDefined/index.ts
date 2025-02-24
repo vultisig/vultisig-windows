@@ -3,8 +3,8 @@ export function shouldBeDefined<T>(
   valueName: string = 'value'
 ): T {
   if (value === undefined) {
-    throw new Error(`${valueName} is undefined`);
+    throw new Error(`${valueName} is undefined`)
   }
 
-  return value;
+  return value
 }

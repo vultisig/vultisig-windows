@@ -344,8 +344,11 @@ const handleRequest = (
 > => {
   return new Promise((resolve, reject) => {
     const { method, params } = body
-    if (getChainKind(chain.chain) === 'evm') {
+    const chainKind = getChainKind(chain.chain)
+    if (chainKind === 'evm') {
       if (!rpcProvider) handleProvider(chain.chain)
+    } else if (chainKind !== 'cosmos' && chainKind !== 'utxo') {
+      throw new Error(`Unsupported chain kind: ${chainKind}`)
     }
 
     switch (method) {
@@ -588,15 +591,14 @@ const handleRequest = (
           const [param] = params
 
           if (param?.chainId) {
-            const supportedChain = isSupportedChain(
-              getChainByChainId(param.chainId)
-            )
-              ? getChainByChainId(param.chainId)
+            const chainFromId = getChainByChainId(param.chainId)
+            const supportedChain = isSupportedChain(chainFromId)
+              ? chainFromId
               : null
             if (supportedChain) {
               getStoredChains().then(storedChains => {
                 setStoredChains([
-                  { ...chainFeeCoin[supportedChain], active: true },
+                  { ...chainFeeCoin[supportedChain as Chain], active: true },
                   ...storedChains
                     .filter(
                       (storedChain: ChainProps) =>
@@ -665,10 +667,9 @@ const handleRequest = (
           const [param] = params
 
           if (param?.chainId) {
-            const supportedChain = isSupportedChain(
-              getChainByChainId(param.chainId)
-            )
-              ? getChainByChainId(param.chainId)
+            const chainFromId = getChainByChainId(param.chainId)
+            const supportedChain = isSupportedChain(chainFromId)
+              ? chainFromId
               : null
             if (supportedChain) {
               getStoredChains().then(storedChains => {
@@ -697,7 +698,7 @@ const handleRequest = (
                 }
               })
             } else {
-              reject('Chain not Supported')
+              reject(`Chain ${param?.chainId} is not supported`)
             }
           } else {
             reject()

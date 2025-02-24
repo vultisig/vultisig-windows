@@ -1,12 +1,12 @@
-import { Chain } from "@core/chain/Chain";
-import { match } from "@lib/utils/match";
-import { WalletCore } from "@trustwallet/wallet-core";
-import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
+import { Chain } from '@core/chain/Chain'
+import { match } from '@lib/utils/match'
+import { WalletCore } from '@trustwallet/wallet-core'
+import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 type Input = {
-  walletCore: WalletCore;
-  chain: Chain;
-};
+  walletCore: WalletCore
+  chain: Chain
+}
 
 export const getCoinType = ({
   walletCore: { CoinType },
@@ -43,4 +43,4 @@ export const getCoinType = ({
     [Chain.Noble]: () => CoinType.noble,
     [Chain.Ripple]: () => CoinType.xrp,
     [Chain.Akash]: () => CoinType.akash,
-  });
+  })

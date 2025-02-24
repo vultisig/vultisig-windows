@@ -12,8 +12,8 @@ export function getDiscriminatedUnionValue<
   if (unionValue[discriminantKey] !== expectedCase) {
     throw new Error(
       `Expected case "${expectedCase}", but got "${unionValue[discriminantKey]}".`
-    );
+    )
   }
 
-  return (unionValue as Extract<U, { [P in D]: T }>)[valueKey];
+  return (unionValue as Extract<U, { [P in D]: T }>)[valueKey]
 }

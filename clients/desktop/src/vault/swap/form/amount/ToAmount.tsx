@@ -1,4 +1,4 @@
-import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -50,9 +50,9 @@ export const ToAmount = () => {
         <MatchQuery
           value={query}
           pending={() => <Spinner />}
-          error={() => formatAmount(0)}
-          inactive={() => formatAmount(0)}
-          success={value => formatAmount(value)}
+          error={() => formatTokenAmount(0)}
+          inactive={() => formatTokenAmount(0)}
+          success={value => formatTokenAmount(value)}
         />
       </Value>
     </AmountContainer>

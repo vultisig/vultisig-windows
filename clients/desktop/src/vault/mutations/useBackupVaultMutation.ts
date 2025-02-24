@@ -4,12 +4,12 @@ import {
   Vault,
   VaultSchema,
 } from '@core/communication/vultisig/vault/v1/vault_pb'
+import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { SaveFileBkp } from '../../../wailsjs/go/main/App'
 import { storage } from '../../../wailsjs/go/models'
 import { UpdateVaultIsBackedUp } from '../../../wailsjs/go/storage/Store'
-import { encryptVault } from '../encryption/encryptVault'
 import { vaultsQueryKey } from '../queries/useVaultsQuery'
 import { fromStorageVault, getStorageVaultId } from '../utils/storageVault'
 
@@ -31,9 +31,9 @@ const createBackup = async (vault: Vault, password: string) => {
 
   if (password) {
     vaultContainer.isEncrypted = true
-    const encryptedVault = encryptVault({
-      password,
-      vault: Buffer.from(vaultData),
+    const encryptedVault = encryptWithAesGcm({
+      key: password,
+      value: Buffer.from(vaultData),
     })
     vaultContainer.vault = encryptedVault.toString('base64')
   } else {

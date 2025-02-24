@@ -1,7 +1,9 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
+import { getColor } from '@lib/ui/theme/getters'
 import { sum } from '@lib/utils/array/sum'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
 
 import { ChainEntityIcon } from '../../chain/ui/ChainEntityIcon'
@@ -12,7 +14,6 @@ import { round } from '../../lib/ui/css/round'
 import { HStack, VStack } from '../../lib/ui/layout/Stack'
 import { Panel } from '../../lib/ui/panel/Panel'
 import { Text } from '../../lib/ui/text'
-import { getColor } from '../../lib/ui/theme/getters'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { VaultChainBalance } from '../queries/useVaultChainsBalancesQuery'
@@ -78,7 +79,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
               {singleCoin ? (
                 <Text color="contrast" weight="400" size={12} centerVertically>
                   <BalanceVisibilityAware>
-                    {formatAmount(
+                    {formatTokenAmount(
                       fromChainAmount(singleCoin.amount, singleCoin.decimals)
                     )}
                   </BalanceVisibilityAware>

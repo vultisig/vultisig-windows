@@ -28,7 +28,10 @@ import {
 import {
   Container,
   Footer,
+  IconWrapper,
   ListItemPanel,
+  OpticallyAdjustedText,
+  StyledListItemContentWrapper,
   StyledPageSlice,
   StyledVStack,
 } from './SettingsVaultPage.styles'
@@ -77,14 +80,18 @@ const SettingsVaultPage = () => {
                     <ListItemPanel
                       isSpecialItem={id === 'register-for-airdrop'}
                     >
-                      <HStack
+                      <StyledListItemContentWrapper
                         fullWidth
                         alignItems="center"
                         justifyContent="space-between"
                       >
                         <HStack gap={12}>
-                          <Icon />
-                          <Text>{t(titleKey)}</Text>
+                          <IconWrapper>
+                            <Icon />
+                          </IconWrapper>
+                          <OpticallyAdjustedText>
+                            {t(titleKey)}
+                          </OpticallyAdjustedText>
                         </HStack>
                         {id === 'language' || id === 'currency' ? (
                           <HStack gap={8} alignItems="center">
@@ -100,7 +107,7 @@ const SettingsVaultPage = () => {
                         ) : (
                           <ChevronRightIcon />
                         )}
-                      </HStack>
+                      </StyledListItemContentWrapper>
                     </ListItemPanel>
                   </UnstyledButton>
                 ))}
