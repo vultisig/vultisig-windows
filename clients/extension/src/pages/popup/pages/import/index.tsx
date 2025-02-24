@@ -1,7 +1,11 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
 import AddressProvider from '@clients/extension/src/utils/address-provider'
-import { chains, errorKey } from '@clients/extension/src/utils/constants'
+import {
+  errorKey,
+  isSupportedChain,
+  supportedChains,
+} from '@clients/extension/src/utils/constants'
 import {
   calculateWindowPosition,
   toCamelCase,
@@ -15,6 +19,7 @@ import {
 } from '@clients/extension/src/utils/storage'
 import WalletCoreProvider from '@clients/extension/src/utils/wallet-core-provider'
 import { Chain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Button, Upload, UploadProps } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -69,16 +74,17 @@ const Component = () => {
             .getCore()
             .then(({ chainRef, walletCore }) => {
               const addressProvider = new AddressProvider(chainRef, walletCore)
-
-              const promises = Object.keys(chains).map(key =>
-                addressProvider.getAddress(key as Chain, vault)
-              )
+              const promises = Object.keys(supportedChains)
+                .filter(key => isSupportedChain(key as Chain))
+                .map(key => addressProvider.getAddress(key as Chain, vault))
 
               Promise.all(promises).then(props => {
-                vault.chains = Object.values(chains).map((chain, index) => ({
-                  ...chain,
-                  ...props[index],
-                }))
+                vault.chains = Object.keys(supportedChains)
+                  .filter(key => isSupportedChain(key as Chain))
+                  .map((chainKey, index) => ({
+                    ...chainFeeCoin[chainKey as Chain],
+                    ...props[index],
+                  }))
 
                 const modifiedVaults = [
                   { ...vault, active: true },

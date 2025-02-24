@@ -430,7 +430,7 @@ const Component = () => {
         .getPreSignedImageHash(preSignedInputData)
         .then(preSignedImageHash => {
           if (transaction) {
-            const tssType = getTssKeysignType(transaction.chain.name)
+            const tssType = getTssKeysignType(transaction.chain.chain)
             form
               .validateFields()
               .then(({ password }: FormProps) => {
@@ -439,10 +439,10 @@ const Component = () => {
                     vault_password: password,
                     hex_encryption_key: vault?.hexChainCode ?? '',
                     is_ecdsa:
-                      getTssKeysignType(transaction.chain.name) ===
+                      getTssKeysignType(transaction.chain.chain) ===
                       TssKeysignType.ECDSA,
                     derive_path: txProvider.getDerivePath(
-                      transaction.chain.name
+                      transaction.chain.chain
                     ),
                     messages: [preSignedImageHash],
                     public_key:
@@ -504,14 +504,14 @@ const Component = () => {
           .then(({ chainRef, walletCore }) => {
             const dataConverter = new DataConverterProvider()
             const txProvider = TransactionProvider.createProvider(
-              transaction.chain.name,
+              transaction.chain.chain,
               chainRef,
               dataConverter.compactEncoder,
               walletCore
             )
 
             // Improve
-            if (getChainKind(transaction.chain.name) === 'evm') {
+            if (getChainKind(transaction.chain.chain) === 'evm') {
               parseMemo(transaction.transactionDetails.data!)
                 .then(memo => {
                   setState({ ...state, parsedMemo: memo })
@@ -521,7 +521,7 @@ const Component = () => {
                 })
               ;(txProvider as EVMTransactionProvider).getFeeData().then(() => {
                 ;(txProvider as EVMTransactionProvider)
-                  .getEstimateTransactionFee(transaction.chain.cmcId, currency)
+                  .getEstimateTransactionFee(transaction.chain.cmcId!, currency)
                   .then(gasPrice => {
                     transaction.gasPrice = gasPrice
                     try {
@@ -545,7 +545,7 @@ const Component = () => {
               })
             } else {
               const coin = create(CoinSchema, {
-                chain: transaction.chain.name,
+                chain: transaction.chain.chain,
                 ticker: transaction.chain.ticker,
                 address: transaction.transactionDetails.from,
                 decimals: transaction.chain.decimals,
@@ -834,7 +834,7 @@ const Component = () => {
                         <MiddleTruncate text={transaction.txHash!} />
                         <div className="actions">
                           <a
-                            href={`${explorerUrl[transaction.chain.name]}/tx/${
+                            href={`${explorerUrl[transaction.chain.chain]}/tx/${
                               transaction.txHash
                             }`}
                             rel="noopener noreferrer"
