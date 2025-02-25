@@ -10,6 +10,7 @@ type Input = {
   local_party_id: string
   encryption_password: string
   email: string
+  lib_type: number
 }
 
 export const setupVaultWithServer = async (input: Input) => {

@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
+import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { setupVaultWithServer } from '../../../fast/api/setupVaultWithServer'
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId'
 import { generateLocalPartyId } from '../../../keygen/utils/localPartyId'
@@ -17,6 +18,7 @@ export const useVaultServerSetup = () => {
   const sessionId = useCurrentSessionId()
   const hexChainCode = useCurrentHexChainCode()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
+  const mpcLib = useMpcLib()
 
   const { mutate, ...state } = useMutation({
     mutationFn: () =>
@@ -28,6 +30,7 @@ export const useVaultServerSetup = () => {
         local_party_id: generateLocalPartyId('server'),
         email,
         hex_encryption_key: hexEncryptionKey,
+        lib_type: mpcLib === 'GG20' ? 0 : 1,
       }),
   })
 

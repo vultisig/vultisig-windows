@@ -205,14 +205,12 @@ export class SchnorrKeysign {
       const signature = session.finish()
       const r = signature.slice(0, 32)
       const s = signature.slice(32, 64)
-      const recoveryId = signature[64]
 
       const derSignature = encodeDERSignature(r, s)
       const keysignSig = new KeysignSignature({
         msg: Buffer.from(messageToSign, 'hex').toString('base64'),
-        r: Buffer.from(r).toString('hex'),
-        s: Buffer.from(s).toString('hex'),
-        recovery_id: recoveryId.toString(16).padStart(2, '0'),
+        r: Buffer.from(r).reverse().toString('hex'),
+        s: Buffer.from(s).reverse().toString('hex'),
         der_signature: Buffer.from(derSignature).toString('hex'),
       })
       await markLocalPartyKeysignComplete({

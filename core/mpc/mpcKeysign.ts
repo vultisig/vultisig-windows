@@ -63,7 +63,7 @@ export class MPCKeysign {
           this.sessionId,
           this.hexEncryptionKey,
           publicKey,
-          '', // chainPath is only used for ECDSA right now
+          'm', // chainPath is only used for ECDSA right now , pass 'm' as a dummy value
           this.keysignCommittee,
           this.isInitiateDevice,
           keyshare
