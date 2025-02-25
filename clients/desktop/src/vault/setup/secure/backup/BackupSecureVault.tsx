@@ -54,6 +54,7 @@ export const BackupSecureVault: FC<BackupFastVaultProps> = ({ vault }) => {
                 <SetupVaultSummaryStep
                   onForward={onForward}
                   vaultType="secure"
+                  vaultShares={vault.keyshares.length}
                 />
               )}
               to={() => (

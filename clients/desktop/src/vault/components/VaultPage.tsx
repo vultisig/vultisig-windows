@@ -18,15 +18,6 @@ import { VaultOverview } from '../../vault/components/VaultOverview'
 import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt'
 import { useCurrentVault } from '../state/currentVault'
 
-const PositionQrPrompt = styled.div`
-  position: fixed;
-  bottom: ${toSizeUnit(pageConfig.verticalPadding)};
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  z-index: 1;
-`
-
 export const VaultPage = () => {
   const navigate = useAppNavigate()
   const { name } = useCurrentVault()
@@ -66,3 +57,12 @@ export const VaultPage = () => {
     </>
   )
 }
+
+const PositionQrPrompt = styled.div`
+  position: fixed;
+  bottom: ${toSizeUnit(pageConfig.verticalPadding)};
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  z-index: 1;
+`

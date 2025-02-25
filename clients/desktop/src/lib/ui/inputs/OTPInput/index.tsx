@@ -65,6 +65,7 @@ const InputBoxContainer = styled.input<{
   &:focus {
     border-color: ${getColor('foregroundSuper')};
   }
+  color: ${getColor('text')};
 
   ${({ validation }) =>
     validation === 'valid'
@@ -84,7 +85,7 @@ const InputBoxContainer = styled.input<{
           &:hover {
             border-color: ${getColor('danger')};
           }
-        `}
+        `};
 `
 
 const PasteButton = styled(Button)`
