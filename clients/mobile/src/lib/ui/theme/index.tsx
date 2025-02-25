@@ -1,4 +1,38 @@
-export const darkTheme = {
+type ThemeName = 'dark' | 'light'
+
+export type ThemeColors = Record<
+  | 'text'
+  | 'textSupporting'
+  | 'textShy'
+  | 'textDark'
+  | 'primary'
+  | 'primaryAlt'
+  | 'idle'
+  | 'idleDark'
+  | 'background'
+  | 'foreground'
+  | 'foregroundDark'
+  | 'foregroundExtra'
+  | 'foregroundSuper'
+  | 'foregroundSuperContrast'
+  | 'overlay'
+  | 'contrast'
+  | 'success'
+  | 'mist'
+  | 'mistExtra'
+  | 'transparent'
+  | 'white'
+  | 'danger'
+  | 'buttonBackgroundDisabled',
+  string
+>
+
+export interface Theme {
+  name: ThemeName
+  colors: ThemeColors
+}
+
+export const darkTheme: Theme = {
   name: 'dark',
   colors: {
     white: 'rgba(255, 255, 255, 1)',
@@ -26,5 +60,3 @@ export const darkTheme = {
     buttonBackgroundDisabled: 'rgba(14, 25, 41, 1)',
   },
 }
-
-export type ThemeColors = typeof darkTheme.colors
