@@ -1,7 +1,7 @@
 import { match } from '@lib/utils/match'
 import { FC, PropsWithChildren } from 'react'
 import { TouchableOpacity } from 'react-native'
-import styled, { css, DefaultTheme } from 'styled-components/native'
+import styled, { css } from 'styled-components/native'
 
 import { getColor } from '../utils'
 import { Text } from './Text'
@@ -28,7 +28,7 @@ export type ButtonProps = Omit<
   isLoading?: boolean
   isRounded?: boolean
   kind?: ButtonKind
-  onClick?: () => void
+  onPress?: () => void
   as?: React.ElementType
 }
 
@@ -39,6 +39,7 @@ export const Button: FC<PropsWithChildren & ButtonProps> = ({
   ...rest
 }) => {
   return (
+    // TODO: @tony to add loading state
     <Container size={size} {...rest} kind={kind}>
       <Text color="contrast" size={48}>
         {children}
@@ -52,7 +53,6 @@ const Container = styled(TouchableOpacity)<ContainerProps>`
   justify-content: center;
   align-items: center;
   position: relative;
-  white-space: nowrap;
   font-weight: 600;
   flex-shrink: 0;
   border-radius: 99px;
@@ -70,7 +70,7 @@ const Container = styled(TouchableOpacity)<ContainerProps>`
       `,
     })}
 
-  ${({ isDisabled }: { isDisabled?: boolean; theme: DefaultTheme }) =>
+  ${({ isDisabled }: { isDisabled?: boolean }) =>
     isDisabled &&
     css`
       background-color: ${getColor('buttonBackgroundDisabled')};
@@ -82,19 +82,10 @@ const Container = styled(TouchableOpacity)<ContainerProps>`
       primary: () => css`
         background-color: ${getColor('primary')};
         color: ${getColor('textDark')};
-
-        &:hover {
-          /* TODO: @tony add color to color scheme */
-          background-color: #0fbf93;
-        }
       `,
       secondary: () => css`
         background-color: ${getColor('foregroundExtra')};
         color: ${getColor('textDark')};
-
-        &:hover {
-          background-color: ${getColor('foregroundSuperContrast')};
-        }
       `,
     })}
 `
