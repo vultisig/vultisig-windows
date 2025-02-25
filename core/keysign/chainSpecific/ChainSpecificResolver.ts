@@ -3,6 +3,7 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { KeysignChainSpecificValue } from './KeysignChainSpecific'
 
 export type ChainSpecificResolverInput<T = any> = {
+  [x: string]: any
   coin: AccountCoin
   receiver?: string
   feeSettings?: T
