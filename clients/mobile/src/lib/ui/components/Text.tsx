@@ -57,7 +57,6 @@ interface TextProps {
   letterSpacing?: number
   centerVertically?: boolean | { gap: number }
   cropped?: boolean
-  nowrap?: boolean
   family?: TextFontFamily
   variant?: TextVariant
 }
@@ -72,7 +71,6 @@ const text = ({
   centerHorizontally,
   centerVertically,
   cropped,
-  nowrap,
   family = 'regular',
 }: TextProps) => {
   const variantStyles = variant ? textVariantsRecord[variant] : {}
@@ -109,10 +107,6 @@ const text = ({
     css`
       text-align: center;
     `}
-    ${nowrap &&
-    css`
-      white-space: nowrap;
-    `}
     ${cropped || variantStyles.cropped
       ? css`
           overflow: hidden;
@@ -128,7 +122,7 @@ const text = ({
         gap: ${centerVertically.gap}px;
       `}
     `}
-    font-family: ${family === 'mono' ? 'Menlo, monospace' : 'inherit'};
+    font-family: ${family === 'mono' ? 'Menlo' : 'System'};
   `
 }
 
