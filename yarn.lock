@@ -3506,16 +3506,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@lib/ui@workspace:lib/ui":
-  version: 0.0.0-use.local
-  resolution: "@lib/ui@workspace:lib/ui"
-  dependencies:
-    "@lib/utils": "npm:0.0.1"
-    styled-components: "npm:^6.1.12"
-  languageName: unknown
-  linkType: soft
-
-"@lib/utils@npm:0.0.1, @lib/utils@workspace:lib/utils":
+"@lib/utils@workspace:lib/utils":
   version: 0.0.0-use.local
   resolution: "@lib/utils@workspace:lib/utils"
   dependencies:
