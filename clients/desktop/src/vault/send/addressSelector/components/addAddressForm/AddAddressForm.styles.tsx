@@ -1,4 +1,3 @@
-import { getColor } from '@lib/ui/theme/getters'
 import { motion } from 'framer-motion'
 import React from 'react'
 import {
@@ -14,6 +13,7 @@ import { getChainEntityIconSrc } from '../../../../../chain/utils/getChainEntity
 import { Button } from '../../../../../lib/ui/buttons/Button'
 import { Input } from '../../../../../lib/ui/inputs/text-input/Input'
 import { Panel } from '../../../../../lib/ui/panel/Panel'
+import { getColor } from '../../../../../lib/ui/theme/getters'
 
 export const Container = styled.div`
   height: 100%;

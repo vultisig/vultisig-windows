@@ -1,4 +1,3 @@
-import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
@@ -8,6 +7,7 @@ import {
 } from '../../../lib/ui/css/textInput'
 import { hStack, vStack } from '../../../lib/ui/layout/Stack'
 import { Text, text } from '../../../lib/ui/text'
+import { getColor } from '../../../lib/ui/theme/getters'
 
 export const Container = styled(UnstyledButton)`
   ${textInputFrame};

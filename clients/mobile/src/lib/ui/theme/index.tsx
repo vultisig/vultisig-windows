@@ -23,13 +23,7 @@ export const darkTheme = {
     mist: 'rgba(255, 255, 255, 0.06)',
     mistExtra: 'rgba(255, 255, 255, 0.13)',
     danger: 'rgba(255, 0, 68, 1)',
-    buttonBackgroundDisabled: 'rgba(14, 25, 41, 1)', // HSLA(217, 57%, 14%)
-  },
-  gradients: {
-    primary: `linear-gradient(135deg, #0339C7, #2155DF)`,
-    button: `linear-gradient(90deg, #11C89C, #FFC25C)`,
-    alert: `linear-gradient(45deg, #FF5C5C, #5CA7FF)`,
-    overlay: `linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8))`,
+    buttonBackgroundDisabled: 'rgba(14, 25, 41, 1)',
   },
 }
 
