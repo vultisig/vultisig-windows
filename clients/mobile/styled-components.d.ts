@@ -1,5 +1,3 @@
-import 'styled-components/native'
-
 import type { CSSProp } from 'styled-components/native'
 
 import { darkTheme } from './src/lib/ui/theme'
