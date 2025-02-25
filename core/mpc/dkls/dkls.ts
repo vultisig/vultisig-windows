@@ -212,7 +212,7 @@ export class DKLS {
   public getSetupMessage() {
     return this.setupMessage
   }
-  
+
   private async startReshare(
     dklsKeyshare: string | undefined,
     attempt: number
