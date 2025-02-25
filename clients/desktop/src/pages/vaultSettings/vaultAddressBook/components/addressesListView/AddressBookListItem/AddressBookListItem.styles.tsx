@@ -1,8 +1,8 @@
-import { getColor } from '@lib/ui/theme/getters'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
 import { Text } from '../../../../../../lib/ui/text'
+import { getColor } from '../../../../../../lib/ui/theme/getters'
 
 export const Container = styled.div`
   height: 100%;

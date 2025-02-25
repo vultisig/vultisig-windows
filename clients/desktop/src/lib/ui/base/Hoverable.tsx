@@ -1,4 +1,3 @@
-import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
 
@@ -6,6 +5,7 @@ import { UnstyledButton } from '../buttons/UnstyledButton'
 import { absoluteOutline } from '../css/absoluteOutline'
 import { borderRadius } from '../css/borderRadius'
 import { centerContent } from '../css/centerContent'
+import { getColor } from '../theme/getters'
 
 interface HighlightProps {
   horizontalOffset: number | string

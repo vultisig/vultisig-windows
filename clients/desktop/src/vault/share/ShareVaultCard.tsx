@@ -1,4 +1,3 @@
-import { getColor } from '@lib/ui/theme/getters'
 import QRCode from 'react-qr-code'
 import styled, { useTheme } from 'styled-components'
 
@@ -8,6 +7,7 @@ import { sameDimensions } from '../../lib/ui/css/sameDimensions'
 import { toSizeUnit } from '../../lib/ui/css/toSizeUnit'
 import { VStack, vStack } from '../../lib/ui/layout/Stack'
 import { Text } from '../../lib/ui/text'
+import { getColor } from '../../lib/ui/theme/getters'
 import { ProductSimpleLogo } from '../../ui/logo/ProductSimpleLogo'
 import { useCurrentVault } from '../state/currentVault'
 import { getVaultPublicKeyExport } from './utils/getVaultPublicKeyExport'

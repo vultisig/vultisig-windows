@@ -1,4 +1,3 @@
-import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -8,6 +7,7 @@ import { sameDimensions } from '../../css/sameDimensions'
 import { CheckIcon } from '../../icons/CheckIcon'
 import { HStack } from '../../layout/Stack'
 import { Text, text } from '../../text'
+import { getColor } from '../../theme/getters'
 import {
   InvisibleHTMLCheckbox,
   InvisibleHTMLCheckboxProps,
