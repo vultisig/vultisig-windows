@@ -244,7 +244,7 @@ export class DKLS {
         )
         // upload setup message to server
         const encryptedSetupMsg = await encodeEncryptMessage(
-          this.setupMessage,
+          setupMessage,
           this.hexEncryptionKey
         )
         await uploadSetupMessage({
