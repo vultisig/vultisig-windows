@@ -453,7 +453,7 @@ export const en = {
       thisVault: 'this vault share',
       backup: 'Back up',
       this_vault: 'this vault share',
-      securely: 'securely, preferably ',
+      securely: 'securely, ',
       online: 'online',
       backupConfirmationDescription: 'Back up your vault share online',
       onlineStorageDescription:

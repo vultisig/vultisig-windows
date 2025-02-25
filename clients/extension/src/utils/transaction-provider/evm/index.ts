@@ -1,6 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
-import { Currency, rpcUrl } from '@clients/extension/src/utils/constants'
+import { Currency } from '@clients/extension/src/utils/constants'
 import {
   bigintToByteArray,
   checkERC20Function,
@@ -11,7 +11,8 @@ import {
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
-import { Chain } from '@core/chain/Chain'
+import { EvmChain } from '@core/chain/Chain'
+import { getEvmClient } from '@core/chain/chains/evm/client'
 import {
   EthereumSpecific,
   EthereumSpecificSchema,
@@ -24,14 +25,8 @@ import {
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { Buffer } from 'buffer'
-import {
-  formatUnits,
-  JsonRpcProvider,
-  keccak256,
-  toUtf8String,
-  Transaction,
-} from 'ethers'
-
+import { formatUnits, keccak256, toUtf8String, Transaction } from 'ethers'
+import { PublicClient } from 'viem'
 interface ChainRef {
   [chainKey: string]: CoinType
 }
@@ -41,17 +36,16 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
   private maxPriorityFeePerGas?: bigint
   private nonce?: bigint
 
-  private provider: JsonRpcProvider
+  private provider: PublicClient
 
   constructor(
-    chainKey: Chain,
+    chainKey: EvmChain,
     chainRef: ChainRef,
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore
   ) {
     super(chainKey, chainRef, dataEncoder, walletCore)
-
-    this.provider = new JsonRpcProvider(rpcUrl[this.chainKey])
+    this.provider = getEvmClient(this.chainKey as EvmChain)
   }
 
   public getEstimateTransactionFee = (
@@ -77,23 +71,18 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
     })
   }
 
-  public getFeeData = (): Promise<void> => {
-    return new Promise(resolve => {
-      this.provider
-        .getFeeData()
-        .then(({ gasPrice, maxPriorityFeePerGas }) => {
-          this.gasPrice = BigInt(gasPrice!) ?? BigInt(0)
-          this.maxPriorityFeePerGas = maxPriorityFeePerGas ?? BigInt(0)
-
-          resolve()
-        })
-        .catch(() => {
-          this.gasPrice = BigInt(0)
-          this.maxPriorityFeePerGas = BigInt(0)
-
-          resolve()
-        })
-    })
+  public getFeeData = async () => {
+    try {
+      const [gasPrice, maxPriorityFeePerGas] = await Promise.all([
+        this.provider.getGasPrice(),
+        this.provider.estimateMaxPriorityFeePerGas(),
+      ])
+      this.gasPrice = gasPrice ?? BigInt(0)
+      this.maxPriorityFeePerGas = maxPriorityFeePerGas ?? BigInt(0)
+    } catch {
+      this.gasPrice = BigInt(0)
+      this.maxPriorityFeePerGas = BigInt(0)
+    }
   }
 
   public getGasLimit = (): number => {
@@ -116,7 +105,9 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
       })
 
       this.provider
-        .getTransactionCount(transaction.transactionDetails.from)
+        .getTransactionCount({
+          address: transaction.transactionDetails.from as `0x${string}`,
+        })
         .then(nonce => {
           this.nonce = BigInt(nonce)
           const ethereumSpecific = create(EthereumSpecificSchema, {
@@ -162,6 +153,7 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
                   value: ethereumSpecific,
                 },
               })
+
               this.keysignPayload = keysignPayload
               resolve(keysignPayload)
             }

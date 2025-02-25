@@ -33,7 +33,7 @@ export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
           <RiveComponent />
         </RiveWrapper>
         <VStack alignItems="center" gap={12}>
-          <Text centerHorizontally variant="h1Regular">
+          <Text centerHorizontally size={32}>
             <GradientText>{t('fastVaultSetup.backup.wellDone')}</GradientText>{' '}
             {t('fastVaultSetup.backup.setNewStandard')}
           </Text>

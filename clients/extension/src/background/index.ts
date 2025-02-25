@@ -9,7 +9,6 @@ import {
   isSupportedChain,
   MessageKey,
   RequestMethod,
-  rpcUrl,
 } from '@clients/extension/src/utils/constants'
 import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import {
@@ -35,9 +34,11 @@ import {
 } from '@clients/extension/src/utils/storage'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
+import { getCosmosClient } from '@core/chain/chains/cosmos/client'
+import { getEvmClient } from '@core/chain/chains/evm/client'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getChainByChainId, getChainId } from '@core/chain/coin/ChainId'
-import { Tendermint34Client } from '@cosmjs/tendermint-rpc'
+import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import {
   JsonRpcProvider,
   toUtf8String,
@@ -45,7 +46,6 @@ import {
   TypedDataEncoder,
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
-
 let rpcProvider: JsonRpcProvider
 
 const instance = {
@@ -79,13 +79,13 @@ const handleOpenPanel = (name: string): Promise<number> => {
 }
 
 const handleProvider = (chain: Chain, update?: boolean) => {
-  const rpc = rpcUrl[chain]
-
-  if (update) {
-    if (rpcProvider) rpcProvider = new JsonRpcProvider(rpc)
-  } else {
+  const rpc = chainRpcUrl[chain]
+  if (!rpc) return
+  if (update && rpcProvider) {
     rpcProvider = new JsonRpcProvider(rpc)
+    return
   }
+  rpcProvider = new JsonRpcProvider(rpc)
 }
 
 const handleFindAccounts = (
@@ -521,12 +521,11 @@ const handleRequest = (
               case Chain.Kujira:
               case Chain.MayaChain:
               case Chain.Osmosis: {
-                Tendermint34Client.connect(rpcUrl[chain.chain])
+                getCosmosClient(chain.chain)
                   .then(client => {
                     client
-                      .tx({ hash: Buffer.from(String(hash)) })
-                      .then(({ result }) => resolve(JSON.stringify(result)))
-                      .catch(reject)
+                      .getTx(String(hash))
+                      .then(result => resolve(JSON.stringify(result)))
                   })
                   .catch(error =>
                     reject(`Could not initialize Tendermint Client: ${error}`)
@@ -543,10 +542,12 @@ const handleRequest = (
               case Chain.Ethereum:
               case Chain.Optimism:
               case Chain.Polygon: {
-                api.ethereum
-                  .getTransactionByHash(rpcUrl[chain.chain], String(hash))
-                  .then(resolve)
-                  .catch(reject)
+                const client = getEvmClient(chain.chain)
+                client
+                  .getTransaction({ hash: String(hash) as `0x${string}` })
+                  .then(result => {
+                    resolve(JSON.stringify(result))
+                  })
 
                 break
               }

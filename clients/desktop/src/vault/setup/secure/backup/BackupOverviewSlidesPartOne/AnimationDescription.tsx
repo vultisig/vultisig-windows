@@ -18,7 +18,7 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
 
   const stepToAnimationDescription = [
     () => (
-      <Text size={48}>
+      <Text size={32}>
         {t('secureVaultSetup.backup.shares', {
           shares: vault.keyshares.length,
         })}{' '}
@@ -28,7 +28,7 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
       </Text>
     ),
     () => (
-      <Text size={48}>
+      <Text size={32}>
         {t('fastVaultSetup.backup.backUp')}{' '}
         <GradientText as="span">
           {t('fastVaultSetup.backup.thisVault')}
@@ -51,7 +51,6 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
 }
 
 const Wrapper = styled.div`
-  min-height: 144px;
   max-width: 500px;
   align-self: center;
 `

@@ -1,5 +1,6 @@
+import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
+
 import { BrowserOpenURL } from '../../../wailsjs/runtime'
-import { getBlockExplorerUrl } from '../../chain/utils/getBlockExplorerUrl'
 import { IconButton } from '../../lib/ui/buttons/IconButton'
 import { BoxIcon } from '../../lib/ui/icons/BoxIcon'
 import { ValueProp } from '../../lib/ui/props'

@@ -15,16 +15,19 @@ type ToggleSwitchProps<T extends string | number> = {
   options: Option<T>[]
   selected: T
   onChange?: (value: T) => void
+  disabled?: boolean
 }
 
 export const ToggleSwitch = <T extends string | number>({
   options,
   selected,
   onChange,
+  disabled,
 }: ToggleSwitchProps<T>) => {
   const [active, setActive] = useState(selected)
 
   const handleClick = (value: T) => {
+    if (disabled) return
     setActive(value)
     onChange?.(value)
   }

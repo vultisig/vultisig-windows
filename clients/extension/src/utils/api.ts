@@ -132,14 +132,6 @@ export default {
         .catch(() => resolve(false))
     })
   },
-  getTransactionByHash(path: string, hash: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      api
-        .get<{ tx: string }>(`${path}/${hash}`)
-        .then(({ data }) => resolve(data.tx))
-        .catch(reject)
-    })
-  },
   rpc: {
     post: (url: string, body: any): Promise<any> => {
       return new Promise((resolve, reject) => {
