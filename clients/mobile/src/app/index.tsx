@@ -1,6 +1,5 @@
 import React from 'react'
 import { SafeAreaView } from 'react-native'
-import { useTheme } from 'styled-components/native'
 
 import { Text } from '../lib/ui/components/Text'
 
