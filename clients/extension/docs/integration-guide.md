@@ -20,7 +20,8 @@
 7. [Querying Transactions](#7-querying-transactions)
 8. [Event Handling](#8-event-handling)
 9. [Get Vault](#9-get-vault)
-10. [Summary](#summary)
+10. [Detailed Implementation Examples](#10-detailed-implementation-examples)
+11. [Summary](#summary)
 
 ---
 
@@ -77,10 +78,19 @@ VultiConnect currently supports the following chains:
   - `eth_sendTransaction`
   - `eth_getTransactionByHash`
   - `eth_estimateGas`
+- **Other Methods**:
+  - `eth_blockNumber`
+  - `eth_call`
+  - `eth_gasPrice`
+  - `eth_getBalance`
+  - `eth_getBlockByNumber`
+  - `eth_getCode`
+  - `eth_getTransactionCount`
+  - `eth_getTransactionReceipt`
+  - `eth_maxPriorityFeePerGas`
+  - `personal_sign`
 
-### Other Supported Chains
-
-#### THORChain (`window.vultisig.thorchain` and `window.thorchain`)
+### THORChain (`window.vultisig.thorchain` and `window.thorchain`)
 
 - **Account Management**:
   - `request_accounts`
@@ -90,7 +100,7 @@ VultiConnect currently supports the following chains:
   - `deposit_transaction`
   - `get_transaction_by_hash`
 
-#### Solana (`window.vultisig.solana` and `window.solana`)
+### Solana (`window.vultisig.solana` and `window.solana`)
 
 - **Account Management**:
   - `request_accounts`
@@ -99,7 +109,7 @@ VultiConnect currently supports the following chains:
   - `send_transaction`
   - `get_transaction_by_hash`
 
-#### Cosmos-Based Chains (DyDx, GaiaChain, Kujira, Osmosis)
+### Cosmos-Based Chains (DyDx, GaiaChain, Kujira, Osmosis)
 
 - **Account Management**:
   - `request_accounts`
@@ -113,7 +123,7 @@ VultiConnect currently supports the following chains:
   - `get_transaction_by_hash`
 - **Notes**: Accessing a specific Cosmos-based chain (such as Kujira or Osmosis) requires calling `chain_id` to retrieve the active chain's ID or using `wallet_add_chain` and `wallet_switch_chain` to add or switch to the desired chain.
 
-#### Other Chains (`window.vultisig[chain]` and `window[chain]`)
+### Other Chains (`window.vultisig[chain]` and `window[chain]`)
 
 - **Account Management**:
   - `request_accounts`
@@ -122,7 +132,7 @@ VultiConnect currently supports the following chains:
   - `send_transaction`
   - `get_transaction_by_hash`
 
-##### Supported Chains
+#### Supported Chains
 
 The following chains are fully supported through their respective interfaces:
 
@@ -146,15 +156,13 @@ if (window.vultisig?.ethereum) {
   // Fallback to MetaMask-compatible logic
 }
 
-if (window.vultisig?.[chain] || window.[chain]) {
+if (window.vultisig?.[chain] || window[chain]) {
   console.log(`VultiConnect [${chain}] provider is available!`);
   // Integration logic for the chain
 } else {
   console.log(`No compatible [${chain}] provider found.`);
 }
 ```
-
----
 
 ### 2. Connecting to VultiConnect
 
@@ -204,8 +212,6 @@ Replace `chain` with the desired chain identifier such as `bitcoin`, `bitcoincas
 
 Each chain uses a unified interface accessible via `window.vultisig?.[chain]` and `window[chain]` for seamless interaction across different blockchain networks.
 
----
-
 ### 3. Connected Accounts
 
 To get connected accounts to the current dapp, use `eth_accounts` for EVM chains and `get_accounts` for other VultiConnect supported chains.
@@ -247,7 +253,7 @@ const getConnectedAccountsChain = async (chain) => {
   if (provider) {
     try {
       const accounts = await provider.request({
-        method: provider.method.ETH_ACCOUNTS,
+        method: "get_accounts",
       });
 
       if (accounts.length)
@@ -265,8 +271,6 @@ const getConnectedAccountsChain = async (chain) => {
   }
 };
 ```
-
----
 
 ### 4. Managing Active Chain
 
@@ -352,8 +356,6 @@ const switchCosmosChain = async (chainId) => {
 
 Since other providers do not have different active chains, there is no need to switch chains for them. Therefore, the methods `wallet_switch_chain` and `wallet_switchEthereumChain` are not supported for chains other than Cosmos-based and Ethereum.
 
----
-
 ### 5. Handling Transactions
 
 #### Transaction Details Structure
@@ -398,8 +400,8 @@ const sendEthereumTransaction = async (txDetails) => {
 #### Other Supported Chains
 
 ```javascript
-const sendChainTransaction = async (chain) => {
-  const provider = window[chain] || window.vultisig?.[chain];
+const sendChainTransaction = async (chain, txDetails) => {
+  const provider = window.vultisig?.[chain] || window[chain];
   if (provider) {
     try {
       const transactionHash = await provider.request({
@@ -437,11 +439,9 @@ const THORChainDepositTransaction = async (txDetails) => {
 };
 ```
 
----
+## 6. Custom Message Signing
 
-### 6. Custom Message Signing
-
-#### Ethereum
+### Ethereum
 
 VultiConnect currently supports the `personal_sign` method.
 
@@ -450,25 +450,21 @@ const signCustomMessage = async (hexMessage, walletAddress) => {
   if (window.vultisig?.ethereum) {
     try {
       const signature = await window.vultisig.ethereum.request({
-        method: "perosnal_sign",
+        method: "personal_sign",
         params: [hexMessage, walletAddress],
       });
 
       console.log("Signature:", signature);
     } catch (error) {
-      console.error("Failed to sign the messsage", error);
+      console.error("Failed to sign the message", error);
     }
   }
 };
 ```
 
----
+## 7. Querying Transactions
 
-### 7. Querying Transactions
-
-#### Transaction Details Structure
-
-#### Ethereum
+### Ethereum
 
 Retrieve Ethereum transaction details with `eth_getTransactionByHash`.
 
@@ -489,18 +485,18 @@ const getEthereumTransaction = async (txHash) => {
 };
 ```
 
-#### Other Supported Chains
+### Other Supported Chains
 
 Retrieve transaction details of other VultiConnect supported chains using `get_transaction_by_hash`.
 
 ```javascript
-const getChainTransaction = async (chain) => {
-  const provider = window[chain] || window.vultisig?.[chain];
+const getChainTransaction = async (chain, txHash) => {
+  const provider = window.vultisig?.[chain] || window[chain];
   if (provider) {
     try {
       const txDetails = await provider.request({
         method: "get_transaction_by_hash",
-        params: [txDetails],
+        params: [txHash],
       });
 
       console.log("Transaction Details:", txDetails);
@@ -511,9 +507,7 @@ const getChainTransaction = async (chain) => {
 };
 ```
 
----
-
-### 8. Event Handling
+## 8. Event Handling
 
 VultiConnect supports the CONNECT and DISCONNECT events for all supported chains.
 
@@ -531,9 +525,9 @@ if (provider) {
 }
 ```
 
-### 9. Get Vault
+## 9. Get Vault
 
-VultiConnect provided a function to get vault properties.
+VultiConnect provides a function to get vault properties.
 
 ```javascript
 const provider = window.vultisig;
@@ -549,6 +543,215 @@ if (provider) {
     });
 }
 ```
+
+## 10. Detailed Implementation Examples
+
+### Transaction Object Structure
+
+```typescript
+interface Transaction {
+  from: string;        // The user's active address
+  to: string;          // Required except during contract publications
+  value?: string;      // Only required to send ether, in wei, hex format
+  gasLimit?: string;   // Customizable by the user, hex format
+  maxPriorityFeePerGas?: string; // Customizable by the user, hex format
+  maxFeePerGas?: string; // Customizable by the user, hex format
+  data?: string;       // Optional data for contract interactions, hex format
+}
+```
+
+### Ethereum Account Management Examples
+
+```typescript
+// Connect to VultiConnect
+const connectToVultiConnect = async () => {
+  try {
+    const accounts = await window.vultisig.ethereum.request({ 
+      method: "eth_requestAccounts"
+    });
+    console.log('Connected accounts:', accounts);
+    // Returns: ['0x14F6Ed6CBb27b607b0E2A48551A988F1a19c89B6']
+    return accounts;
+  } catch (error) {
+    const { code, message } = error;
+    console.error(`Connection failed - Code: ${code}, Message: ${message}`);
+    throw error;
+  }
+};
+
+// Get connected accounts
+const getConnectedAccounts = async () => {
+  try {
+    const accounts = await window.vultisig.ethereum.request({ 
+      method: "eth_accounts"
+    });
+    console.log('Connected accounts:', accounts);
+    // Returns: ['0x14F6Ed6CBb27b607b0E2A48551A988F1a19c89B6']
+    return accounts;
+  } catch (error) {
+    const { code, message } = error;
+    console.error(`Failed to get accounts - Code: ${code}, Message: ${message}`);
+    throw error;
+  }
+};
+
+// Get account balance
+const getAccountBalance = async (address: string, blockTag: string) => {
+  try {
+    const balance = await window.vultisig.ethereum.request({
+      method: "eth_getBalance",
+      params: [address, blockTag]
+    });
+    console.log('Account balance:', balance);
+    return balance; // Returns balance as string digits
+  } catch (error) {
+    const { code, message } = error;
+    console.error(`Failed to get balance - Code: ${code}, Message: ${message}`);
+    throw error;
+  }
+};
+```
+
+### Ethereum Gas Management Examples
+
+```typescript
+// Estimate gas
+const estimateGas = async (transaction: Transaction) => {
+  try {
+    const estimate = await window.vultisig.ethereum.request({
+      method: "eth_estimateGas",
+      params: [transaction]
+    });
+    console.log('Gas estimate:', estimate);
+    return estimate; // Returns string digits
+  } catch (error) {
+    const { code, message } = error;
+    console.error(`Failed to estimate gas - Code: ${code}, Message: ${message}`);
+    throw error;
+  }
+};
+
+// Get gas price
+const getGasPrice = async () => {
+  try {
+    const gasPrice = await window.vultisig.ethereum.request({
+      method: "eth_gasPrice"
+    });
+    console.log('Gas price:', gasPrice);
+    return gasPrice; // Returns string digits
+  } catch (error) {
+    const { code, message } = error;
+    console.error(`Failed to get gas price - Code: ${code}, Message: ${message}`);
+    throw error;
+  }
+};
+
+// Get max priority fee per gas
+const getMaxPriorityFeePerGas = async () => {
+  try {
+    const maxFee = await window.vultisig.ethereum.request({
+      method: "eth_maxPriorityFeePerGas"
+    });
+    console.log('Max priority fee:', maxFee);
+    return maxFee; // Returns string digits
+  } catch (error) {
+    const { code, message } = error;
+    console.error(`Failed to get max priority fee - Code: ${code}, Message: ${message}`);
+    throw error;
+  }
+};
+```
+
+### Block Information Examples
+
+```typescript
+// Get latest block number
+const getLatestBlockNumber = async () => {
+  try {
+    const blockNumber = await window.vultisig.ethereum.request({
+      method: "eth_blockNumber"
+    });
+    console.log('Latest block number:', blockNumber);
+    return blockNumber; // Returns string digits
+  } catch (error) {
+    const { code, message } = error;
+    console.error(`Failed to get block number - Code: ${code}, Message: ${message}`);
+    throw error;
+  }
+};
+
+// Get block by number
+const getBlockByNumber = async (blockTag: string, includeTxs: boolean) => {
+  try {
+    const block = await window.vultisig.ethereum.request({
+      method: "eth_getBlockByNumber",
+      params: [blockTag, includeTxs ? " " : ""]
+    });
+    console.log('Block details:', block);
+    /* Returns full block object with transaction details if requested */
+    return block;
+  } catch (error) {
+    const { code, message } = error;
+    console.error(`Failed to get block - Code: ${code}, Message: ${message}`);
+    throw error;
+  }
+};
+```
+
+### Contract Interaction Examples
+
+```typescript
+// Get contract code
+const getContractCode = async (address: string, blockTag: string) => {
+  try {
+    const code = await window.vultisig.ethereum.request({
+      method: "eth_getCode",
+      params: [address, blockTag]
+    });
+    console.log('Contract code:', code);
+    // Returns hex string of contract bytecode
+    return code;
+  } catch (error) {
+    const { code, message } = error;
+    console.error(`Failed to get contract code - Code: ${code}, Message: ${message}`);
+    throw error;
+  }
+};
+
+// Call contract method
+const callContract = async (transaction: Transaction) => {
+  try {
+    const result = await window.vultisig.ethereum.request({
+      method: "eth_call",
+      params: [transaction]
+    });
+    console.log('Call result:', result);
+    // Returns hex string
+    return result;
+  } catch (error) {
+    const { code, message } = error;
+    console.error(`Contract call failed - Code: ${code}, Message: ${message}`);
+    throw error;
+  }
+};
+```
+
+## Error Handling
+
+All methods can throw errors with the following structure:
+```typescript
+interface ProviderError {
+  code: number;
+  message: string;
+}
+```
+
+Common error codes include:
+- 4001: User rejected the request
+- 4100: Unauthorized
+- 4200: Unsupported method
+- 4900: Disconnected
+- 4901: Chain disconnected
 
 ## Summary
 
