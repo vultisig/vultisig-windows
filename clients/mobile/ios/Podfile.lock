@@ -1361,6 +1361,29 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-sqlite-manager (0.6.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - react-native-sqlite-storage (7.0.0):
+    - React-Core
   - react-native-webview (13.12.5):
     - DoubleConversion
     - glog
@@ -1649,6 +1672,27 @@ PODS:
     - React-logger (= 0.76.7)
     - React-perflogger (= 0.76.7)
     - React-utils (= 0.76.7)
+  - RNCAsyncStorage (2.1.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNGestureHandler (2.20.2):
     - DoubleConversion
     - glog
@@ -1860,6 +1904,8 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../../../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../../../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-safe-area-context (from `../../../node_modules/react-native-safe-area-context`)
+  - react-native-sqlite-manager (from `../../../node_modules/react-native-sqlite-manager`)
+  - "react-native-sqlite-storage (from `../../../node_modules/@boltcode/react-native-sqlite-storage`)"
   - react-native-webview (from `../../../node_modules/react-native-webview`)
   - React-nativeconfig (from `../../../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../../../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1888,6 +1934,7 @@ DEPENDENCIES:
   - React-utils (from `../../../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../../../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../../../node_modules/@react-native-async-storage/async-storage`)"
   - RNGestureHandler (from `../../../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../../../node_modules/react-native-reanimated`)
   - RNScreens (from `../../../node_modules/react-native-screens`)
@@ -2003,6 +2050,10 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-safe-area-context:
     :path: "../../../node_modules/react-native-safe-area-context"
+  react-native-sqlite-manager:
+    :path: "../../../node_modules/react-native-sqlite-manager"
+  react-native-sqlite-storage:
+    :path: "../../../node_modules/@boltcode/react-native-sqlite-storage"
   react-native-webview:
     :path: "../../../node_modules/react-native-webview"
   React-nativeconfig:
@@ -2059,6 +2110,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../../../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../../../node_modules/@react-native-async-storage/async-storage"
   RNGestureHandler:
     :path: "../../../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -2121,6 +2174,8 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 23ffe602d0f5ca53b861ef8534cb8c63c4479671
   React-microtasksnativemodule: 73fdf0c53b6d50d55de2d5bd9abfb8c006b043a4
   react-native-safe-area-context: 458f6b948437afcb59198016b26bbd02ff9c3b47
+  react-native-sqlite-manager: 6fb83113266d5a888f91048dac639c7b502ec025
+  react-native-sqlite-storage: 374053e4e15e5b122746f9576a979df978311697
   react-native-webview: 40b8823be3fac70f0404016e6aed754ef4307517
   React-nativeconfig: 67fa7a63ea288cb5b1d0dd2deaf240405fec164f
   React-NativeModulesApple: cbf1a34443e1f67b56344547f4b0af69e1c685ba
@@ -2149,6 +2204,7 @@ SPEC CHECKSUMS:
   React-utils: 9f9a6a31d703b136eb1614d914c10a3c96b1e6dd
   ReactCodegen: 5d7e2d2948a6629a51a59ebc99f620e2afb13ee5
   ReactCommon: 04292c6f596181ebf755e7929d96d2148542b0e8
+  RNCAsyncStorage: 0ad93525a3a72652e88e14ad109c6dac856cb693
   RNGestureHandler: fc5ce5bf284640d3af6431c3a5c3bc121e98d045
   RNReanimated: 5bc01f4a152370c333d50eef11a4169f7db81a91
   RNScreens: d022507f2b6d76c73335e9e35aedcf7bb2f791b0
