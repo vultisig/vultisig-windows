@@ -135,7 +135,7 @@ export default abstract class BaseTransactionProvider {
     })
   }
 
-  abstract getPreSignedInputData(): Promise<Uint8Array>
+  // abstract getPreSignedInputData(): Promise<Uint8Array>
 
   public getDerivePath = (chain: string) => {
     const coin = this.chainRef[chain]

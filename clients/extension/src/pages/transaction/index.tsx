@@ -2,7 +2,6 @@ import '@clients/extension/src/styles/index.scss'
 import '@clients/extension/src/pages/transaction/index.scss'
 import '@clients/extension/src/utils/prototypes'
 
-import { create } from '@bufbuild/protobuf'
 import ConfigProvider from '@clients/extension/src/components/config-provider'
 import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
 import VultiError from '@clients/extension/src/components/vulti-error'
@@ -40,22 +39,25 @@ import {
 } from '@clients/extension/src/utils/storage'
 import {
   BaseTransactionProvider,
-  CosmosTransactionProvider,
   EVMTransactionProvider,
-  MayaTransactionProvider,
-  ThorchainTransactionProvider,
   TransactionProvider,
 } from '@clients/extension/src/utils/transaction-provider'
-import UTXOTransactionProvider from '@clients/extension/src/utils/transaction-provider/utxo'
 import WalletCoreProvider from '@clients/extension/src/utils/wallet-core-provider'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
-import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb'
+
 import { Button, Form, Input, message, QRCode } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+import { getPreSignedInputData } from '@core/keysign/preSignedInputData'
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
+import { hexEncode } from '@clients/desktop/src/chain/walletCore/hexEncode'
+import { WalletCore } from '@trustwallet/wallet-core'
+import { getFeeAmount } from '@clients/desktop/src/chain/tx/fee/utils/getFeeAmount'
+import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
 interface FormProps {
   password: string
 }
@@ -72,6 +74,8 @@ interface InitialState {
   hasError?: boolean
   errorTitle?: string
   errorDescription?: string
+  keysignPayload?: KeysignPayload
+  walletCoreClient?: WalletCore
 }
 
 const Component = () => {
@@ -94,6 +98,8 @@ const Component = () => {
     errorTitle,
     errorDescription,
     parsedMemo,
+    keysignPayload,
+    walletCoreClient,
   } = state
   const [messageApi, contextHolder] = message.useMessage()
   const qrContainerRef = useRef<HTMLDivElement>(null)
@@ -288,28 +294,25 @@ const Component = () => {
                       }))
                       handleCustomMessagePending()
                     } else {
-                      txProvider
-                        .getPreSignedInputData()
-                        .then(preSignedInputData => {
-                          txProvider
-                            .getPreSignedImageHash(preSignedInputData)
-                            .then(preSignedImageHash => {
-                              setState(prevState => ({
-                                ...prevState,
-                                step: 4,
-                              }))
-                              handlePending(
-                                preSignedImageHash,
-                                preSignedInputData
-                              )
-                            })
-                            .catch(err => {
-                              console.error(err)
-                            })
-                        })
-                        .catch(err => {
-                          console.error(err)
-                        })
+                      const preSignedInputData = getPreSignedInputData({
+                        chain: transaction.chain.chain,
+                        keysignPayload: keysignPayload!,
+                        walletCore: walletCoreClient!,
+                      })
+                      const preSignedImageHashes = getPreSigningHashes({
+                        chain: transaction.chain.chain,
+                        txInputData: preSignedInputData,
+                        walletCore: walletCoreClient!,
+                      })
+                      const imageHash = hexEncode({
+                        value: preSignedImageHashes[0],
+                        walletCore: walletCoreClient!,
+                      })
+                      setState(prevState => ({
+                        ...prevState,
+                        step: 4,
+                      }))
+                      handlePending(imageHash, preSignedInputData)
                     }
                   })
                   .catch(err => {
@@ -371,7 +374,7 @@ const Component = () => {
           } else {
             txProvider
               .getKeysignPayload(transaction, vault)
-              .then(() => {
+              .then(payload => {
                 txProvider
                   .getTransactionKey(
                     vault.publicKeyEcdsa,
@@ -386,6 +389,7 @@ const Component = () => {
                           ...prevState,
                           fastSign: exist,
                           loading: false,
+                          keysignPayload: payload,
                           sendKey,
                           step,
                         }))
@@ -422,48 +426,55 @@ const Component = () => {
   }
 
   const handleSubmitFastSignPassword = (): void => {
-    txProvider?.getPreSignedInputData().then(preSignedInputData => {
-      txProvider
-        .getPreSignedImageHash(preSignedInputData)
-        .then(preSignedImageHash => {
-          if (transaction) {
-            const tssType = getTssKeysignType(transaction.chain.chain)
-            form
-              .validateFields()
-              .then(({ password }: FormProps) => {
-                api.fastVault
-                  .signWithServer({
-                    vault_password: password,
-                    hex_encryption_key: vault?.hexChainCode ?? '',
-                    is_ecdsa:
-                      getTssKeysignType(transaction.chain.chain) ===
-                      TssKeysignType.ECDSA,
-                    derive_path: txProvider.getDerivePath(
-                      transaction.chain.chain
-                    ),
-                    messages: [preSignedImageHash],
-                    public_key:
-                      tssType === TssKeysignType.ECDSA
-                        ? (vault?.publicKeyEcdsa ?? '')
-                        : (vault?.publicKeyEddsa ?? ''),
-                    session: transaction.id,
-                  })
-                  .then(() => {
-                    setState(prevState => ({ ...prevState, step: 4 }))
-                    handlePending(preSignedImageHash, preSignedInputData)
-                  })
-                  .catch(err => {
-                    console.error(err)
-                    messageApi.open({
-                      type: 'error',
-                      content: t(messageKeys.SIGNING_ERROR),
-                    })
-                  })
+    if (transaction) {
+      const preSignedInputData = getPreSignedInputData({
+        chain: transaction!.chain.chain,
+        keysignPayload: keysignPayload!,
+        walletCore: walletCoreClient!,
+      })
+      const preSignedImageHashes = getPreSigningHashes({
+        chain: transaction!.chain.chain,
+        txInputData: preSignedInputData,
+        walletCore: walletCoreClient!,
+      })
+      const imageHash = hexEncode({
+        value: preSignedImageHashes[0],
+        walletCore: walletCoreClient!,
+      })
+
+      const tssType = getTssKeysignType(transaction.chain.chain)
+      form
+        .validateFields()
+        .then(({ password }: FormProps) => {
+          api.fastVault
+            .signWithServer({
+              vault_password: password,
+              hex_encryption_key: vault?.hexChainCode ?? '',
+              is_ecdsa:
+                getTssKeysignType(transaction.chain.chain) ===
+                TssKeysignType.ECDSA,
+              derive_path: txProvider!.getDerivePath(transaction.chain.chain),
+              messages: [imageHash],
+              public_key:
+                tssType === TssKeysignType.ECDSA
+                  ? (vault?.publicKeyEcdsa ?? '')
+                  : (vault?.publicKeyEddsa ?? ''),
+              session: transaction.id,
+            })
+            .then(() => {
+              setState(prevState => ({ ...prevState, step: 4 }))
+              handlePending(imageHash, preSignedInputData)
+            })
+            .catch(err => {
+              console.error(err)
+              messageApi.open({
+                type: 'error',
+                content: t(messageKeys.SIGNING_ERROR),
               })
-              .catch(() => {})
-          }
+            })
         })
-    })
+        .catch(() => {})
+    }
   }
 
   const componentDidMount = (): void => {
@@ -492,6 +503,7 @@ const Component = () => {
         walletCore
           .getCore()
           .then(({ chainRef, walletCore }) => {
+            setState({ ...state, walletCoreClient: walletCore })
             const dataConverter = new DataConverterProvider()
             const txProvider = TransactionProvider.createProvider(
               transaction.chain.chain,
@@ -534,46 +546,30 @@ const Component = () => {
                   })
               })
             } else {
-              const coin = create(CoinSchema, {
-                chain: transaction.chain.chain,
-                ticker: transaction.chain.ticker,
-                address: transaction.transactionDetails.from,
-                decimals: transaction.chain.decimals,
-                hexPublicKey: vault.hexChainCode,
-                isNativeToken: true,
-                logo: transaction.chain.ticker.toLowerCase(),
-              })
-
-              ;(
-                txProvider as
-                  | ThorchainTransactionProvider
-                  | MayaTransactionProvider
-                  | CosmosTransactionProvider
-                  | UTXOTransactionProvider
+              transaction.gasPrice = String(
+                getFeeAmount(
+                  keysignPayload!.blockchainSpecific as KeysignChainSpecific
+                )
               )
-                .getSpecificTransactionInfo(coin)
-                .then(blockchainSpecific => {
-                  transaction.gasPrice = String(blockchainSpecific.gasPrice)
-                  try {
-                    transaction.memo = toUtf8String(
-                      transaction.transactionDetails.data!
-                    )
-                  } catch {
-                    if (!parsedMemo) {
-                      transaction.memo = transaction.transactionDetails.data
-                    }
-                  }
-                  setStoredTransaction(transaction).then(() => {
-                    setState(prevState => ({
-                      ...prevState,
-                      currency,
-                      loaded: true,
-                      transaction,
-                      txProvider,
-                      vault,
-                    }))
-                  })
-                })
+              try {
+                transaction.memo = toUtf8String(
+                  transaction.transactionDetails.data!
+                )
+              } catch {
+                if (!parsedMemo) {
+                  transaction.memo = transaction.transactionDetails.data
+                }
+              }
+              setStoredTransaction(transaction).then(() => {
+                setState(prevState => ({
+                  ...prevState,
+                  currency,
+                  loaded: true,
+                  transaction,
+                  txProvider,
+                  vault,
+                }))
+              })
             }
           })
           .catch(error => {

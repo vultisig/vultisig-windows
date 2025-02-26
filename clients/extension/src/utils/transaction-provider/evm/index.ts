@@ -1,14 +1,13 @@
 import api from '@clients/extension/src/utils/api'
 import { Currency } from '@clients/extension/src/utils/constants'
-import { bigintToByteArray } from '@clients/extension/src/utils/functions'
 import { SignedTransaction } from '@clients/extension/src/utils/interfaces'
 import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
 import { EvmChain } from '@core/chain/Chain'
 import { getEvmClient } from '@core/chain/chains/evm/client'
-import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
-import { TW, WalletCore } from '@trustwallet/wallet-core'
+
+import { WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
-import { Buffer } from 'buffer'
+
 import { formatUnits, keccak256, Transaction } from 'ethers'
 import { PublicClient } from 'viem'
 interface ChainRef {
@@ -73,86 +72,86 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
     return 600000
   }
 
-  public getPreSignedInputData = (): Promise<Uint8Array> => {
-    return new Promise((resolve, reject) => {
-      if (!this.keysignPayload) {
-        reject('Invalid keysign payload')
-        return
-      }
-      const blockchainSpecific = this.keysignPayload.blockchainSpecific as
-        | { case: 'ethereumSpecific'; value: EthereumSpecific }
-        | undefined
+  // public getPreSignedInputData = (): Promise<Uint8Array> => {
+  //   return new Promise((resolve, reject) => {
+  //     if (!this.keysignPayload) {
+  //       reject('Invalid keysign payload')
+  //       return
+  //     }
+  //     const blockchainSpecific = this.keysignPayload.blockchainSpecific as
+  //       | { case: 'ethereumSpecific'; value: EthereumSpecific }
+  //       | undefined
 
-      if (
-        !blockchainSpecific ||
-        blockchainSpecific.case !== 'ethereumSpecific'
-      ) {
-        reject('Invalid blockchain specific')
-      } else if (!this.keysignPayload?.coin) {
-        reject('Invalid coin')
-      }
+  //     if (
+  //       !blockchainSpecific ||
+  //       blockchainSpecific.case !== 'ethereumSpecific'
+  //     ) {
+  //       reject('Invalid blockchain specific')
+  //     } else if (!this.keysignPayload?.coin) {
+  //       reject('Invalid coin')
+  //     }
 
-      if (!blockchainSpecific) {
-        reject('Invalid blockchain specific')
-        return
-      }
+  //     if (!blockchainSpecific) {
+  //       reject('Invalid blockchain specific')
+  //       return
+  //     }
 
-      const { gasLimit, maxFeePerGasWei, nonce, priorityFee } =
-        blockchainSpecific.value
+  //     const { gasLimit, maxFeePerGasWei, nonce, priorityFee } =
+  //       blockchainSpecific.value
 
-      const chainId: bigint = BigInt(
-        this.walletCore.CoinTypeExt.chainId(this.chainRef[this.chainKey])
-      )
+  //     const chainId: bigint = BigInt(
+  //       this.walletCore.CoinTypeExt.chainId(this.chainRef[this.chainKey])
+  //     )
 
-      const chainIdHex = bigintToByteArray(BigInt(chainId))
+  //     const chainIdHex = bigintToByteArray(BigInt(chainId))
 
-      const nonceHex = bigintToByteArray(BigInt(nonce))
+  //     const nonceHex = bigintToByteArray(BigInt(nonce))
 
-      const gasLimitHex = bigintToByteArray(BigInt(gasLimit))
+  //     const gasLimitHex = bigintToByteArray(BigInt(gasLimit))
 
-      const maxFeePerGasHex = bigintToByteArray(BigInt(maxFeePerGasWei))
+  //     const maxFeePerGasHex = bigintToByteArray(BigInt(maxFeePerGasWei))
 
-      const maxInclusionFeePerGasHex = bigintToByteArray(BigInt(priorityFee))
+  //     const maxInclusionFeePerGasHex = bigintToByteArray(BigInt(priorityFee))
 
-      const amountHex = bigintToByteArray(BigInt(this.keysignPayload.toAmount))
-      let toAddress = this.keysignPayload.toAddress
-      let evmTransaction = TW.Ethereum.Proto.Transaction.create({
-        transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
-          amount: amountHex,
-          data: Buffer.from(
-            this.keysignPayload.memo
-              ? this.stripHexPrefix(this.keysignPayload.memo)
-              : '',
-            'utf8'
-          ),
-        }),
-      })
-      if (
-        this.keysignPayload?.coin &&
-        !this.keysignPayload.coin.isNativeToken
-      ) {
-        toAddress = this.keysignPayload.coin.contractAddress
-        evmTransaction = TW.Ethereum.Proto.Transaction.create({
-          erc20Transfer: TW.Ethereum.Proto.Transaction.ERC20Transfer.create({
-            amount: amountHex,
-            to: this.keysignPayload.toAddress,
-          }),
-        })
-      }
-      const input = TW.Ethereum.Proto.SigningInput.create({
-        toAddress: toAddress,
-        chainId: chainIdHex,
-        nonce: nonceHex,
-        gasLimit: gasLimitHex,
-        maxFeePerGas: maxFeePerGasHex,
-        maxInclusionFeePerGas: maxInclusionFeePerGasHex,
-        txMode: TW.Ethereum.Proto.TransactionMode.Enveloped,
-        transaction: evmTransaction,
-      })
+  //     const amountHex = bigintToByteArray(BigInt(this.keysignPayload.toAmount))
+  //     let toAddress = this.keysignPayload.toAddress
+  //     let evmTransaction = TW.Ethereum.Proto.Transaction.create({
+  //       transfer: TW.Ethereum.Proto.Transaction.Transfer.create({
+  //         amount: amountHex,
+  //         data: Buffer.from(
+  //           this.keysignPayload.memo
+  //             ? this.stripHexPrefix(this.keysignPayload.memo)
+  //             : '',
+  //           'utf8'
+  //         ),
+  //       }),
+  //     })
+  //     if (
+  //       this.keysignPayload?.coin &&
+  //       !this.keysignPayload.coin.isNativeToken
+  //     ) {
+  //       toAddress = this.keysignPayload.coin.contractAddress
+  //       evmTransaction = TW.Ethereum.Proto.Transaction.create({
+  //         erc20Transfer: TW.Ethereum.Proto.Transaction.ERC20Transfer.create({
+  //           amount: amountHex,
+  //           to: this.keysignPayload.toAddress,
+  //         }),
+  //       })
+  //     }
+  //     const input = TW.Ethereum.Proto.SigningInput.create({
+  //       toAddress: toAddress,
+  //       chainId: chainIdHex,
+  //       nonce: nonceHex,
+  //       gasLimit: gasLimitHex,
+  //       maxFeePerGas: maxFeePerGasHex,
+  //       maxInclusionFeePerGas: maxInclusionFeePerGasHex,
+  //       txMode: TW.Ethereum.Proto.TransactionMode.Enveloped,
+  //       transaction: evmTransaction,
+  //     })
 
-      resolve(TW.Ethereum.Proto.SigningInput.encode(input).finish())
-    })
-  }
+  //     resolve(TW.Ethereum.Proto.SigningInput.encode(input).finish())
+  //   })
+  // }
 
   public getSignedTransaction = ({
     signature,

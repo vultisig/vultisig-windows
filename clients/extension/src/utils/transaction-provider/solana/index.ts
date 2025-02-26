@@ -7,14 +7,14 @@ import { SignedTransactionResult } from '@clients/extension/src/utils/signed-tra
 import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
 import { Chain } from '@core/chain/Chain'
 import { getSolanaClient } from '@core/chain/chains/solana/client'
-import { SolanaSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+
 import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb'
 import { fromLegacyPublicKey } from '@solana/compat'
 import { PublicKey } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
 import { Buffer } from 'buffer'
 import { formatUnits } from 'ethers'
-import Long from 'long'
+
 export default class SolanaTransactionProvider extends BaseTransactionProvider {
   fetchHighPriorityFee(address: string): Promise<number> {
     return new Promise((resolve, reject) => {
@@ -71,111 +71,111 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
     }
   }
 
-  public getPreSignedInputData = (): Promise<Uint8Array> => {
-    return new Promise(resolve => {
-      const solanaSpecific = this.keysignPayload?.blockchainSpecific
-        .value as unknown as SolanaSpecific
-      const {
-        recentBlockHash,
-        fromTokenAssociatedAddress,
-        toTokenAssociatedAddress,
-      } = solanaSpecific
-      const priorityFeePrice = 1_000_000
-      const priorityFeeLimit = Number(100_000)
-      const newRecentBlockHash = recentBlockHash
-      if (!this.keysignPayload || !this.keysignPayload.coin) {
-        throw new Error('keysignPayload is missing')
-      }
+  // public getPreSignedInputData = (): Promise<Uint8Array> => {
+  //   return new Promise(resolve => {
+  //     const solanaSpecific = this.keysignPayload?.blockchainSpecific
+  //       .value as unknown as SolanaSpecific
+  //     const {
+  //       recentBlockHash,
+  //       fromTokenAssociatedAddress,
+  //       toTokenAssociatedAddress,
+  //     } = solanaSpecific
+  //     const priorityFeePrice = 1_000_000
+  //     const priorityFeeLimit = Number(100_000)
+  //     const newRecentBlockHash = recentBlockHash
+  //     if (!this.keysignPayload || !this.keysignPayload.coin) {
+  //       throw new Error('keysignPayload is missing')
+  //     }
 
-      if (this.keysignPayload.coin.isNativeToken) {
-        // Native token transfer
-        const input = TW.Solana.Proto.SigningInput.create({
-          transferTransaction: TW.Solana.Proto.Transfer.create({
-            recipient: this.keysignPayload.toAddress,
-            value: Long.fromString(this.keysignPayload.toAmount),
-            memo: this.keysignPayload.memo,
-          }),
-          recentBlockhash: newRecentBlockHash,
-          sender: this.keysignPayload.coin.address,
-          priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-            price: Long.fromString(priorityFeePrice.toString()),
-          }),
-          priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
-            limit: priorityFeeLimit,
-          }),
-        })
+  //     if (this.keysignPayload.coin.isNativeToken) {
+  //       // Native token transfer
+  //       const input = TW.Solana.Proto.SigningInput.create({
+  //         transferTransaction: TW.Solana.Proto.Transfer.create({
+  //           recipient: this.keysignPayload.toAddress,
+  //           value: Long.fromString(this.keysignPayload.toAmount),
+  //           memo: this.keysignPayload.memo,
+  //         }),
+  //         recentBlockhash: newRecentBlockHash,
+  //         sender: this.keysignPayload.coin.address,
+  //         priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
+  //           price: Long.fromString(priorityFeePrice.toString()),
+  //         }),
+  //         priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
+  //           limit: priorityFeeLimit,
+  //         }),
+  //       })
 
-        // Encode the input
-        const encodedInput = TW.Solana.Proto.SigningInput.encode(input).finish()
+  //       // Encode the input
+  //       const encodedInput = TW.Solana.Proto.SigningInput.encode(input).finish()
 
-        return resolve(encodedInput)
-      } else {
-        // Token transfer
-        if (fromTokenAssociatedAddress && toTokenAssociatedAddress) {
-          // Both addresses are available for token transfer
-          const tokenTransferMessage = TW.Solana.Proto.TokenTransfer.create({
-            tokenMintAddress: this.keysignPayload.coin.contractAddress,
-            senderTokenAddress: fromTokenAssociatedAddress,
-            recipientTokenAddress: toTokenAssociatedAddress,
-            amount: Long.fromString(this.keysignPayload.toAmount),
-            decimals: this.keysignPayload.coin.decimals,
-          })
-          const input = TW.Solana.Proto.SigningInput.create({
-            tokenTransferTransaction: tokenTransferMessage,
-            recentBlockhash: newRecentBlockHash,
-            sender: this.keysignPayload.coin.address,
-            priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-              price: Long.fromString(priorityFeePrice.toString()),
-            }),
-            priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
-              limit: priorityFeeLimit,
-            }),
-          })
-          resolve(TW.Solana.Proto.SigningInput.encode(input).finish())
-        } else if (fromTokenAssociatedAddress && !toTokenAssociatedAddress) {
-          // Generate the associated address if `toTokenAssociatedAddress` is missing
-          const receiverAddress =
-            this.walletCore.SolanaAddress.createWithString(
-              this.keysignPayload.toAddress
-            )
-          const generatedAssociatedAddress =
-            receiverAddress.defaultTokenAddress(
-              this.keysignPayload.coin.contractAddress
-            )
-          if (!generatedAssociatedAddress) {
-            throw new Error(
-              'We must have the association between the minted token and the TO address'
-            )
-          }
-          const createAndTransferTokenMessage =
-            TW.Solana.Proto.CreateAndTransferToken.create({
-              recipientMainAddress: this.keysignPayload.toAddress,
-              tokenMintAddress: this.keysignPayload.coin.contractAddress,
-              recipientTokenAddress: generatedAssociatedAddress,
-              senderTokenAddress: fromTokenAssociatedAddress,
-              amount: Long.fromString(this.keysignPayload.toAmount),
-              decimals: this.keysignPayload.coin.decimals,
-            })
-          const input = TW.Solana.Proto.SigningInput.create({
-            createAndTransferTokenTransaction: createAndTransferTokenMessage,
-            recentBlockhash: newRecentBlockHash,
-            sender: this.keysignPayload.coin.address,
-            priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
-              price: Long.fromString(priorityFeePrice.toString()),
-            }),
-            priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
-              limit: priorityFeeLimit,
-            }),
-          })
-          resolve(TW.Solana.Proto.SigningInput.encode(input).finish())
-        } else {
-          throw new Error(
-            'To send tokens we must have the association between the minted token and the TO address'
-          )
-        }
-      }
-    })
-  }
+  //       return resolve(encodedInput)
+  //     } else {
+  //       // Token transfer
+  //       if (fromTokenAssociatedAddress && toTokenAssociatedAddress) {
+  //         // Both addresses are available for token transfer
+  //         const tokenTransferMessage = TW.Solana.Proto.TokenTransfer.create({
+  //           tokenMintAddress: this.keysignPayload.coin.contractAddress,
+  //           senderTokenAddress: fromTokenAssociatedAddress,
+  //           recipientTokenAddress: toTokenAssociatedAddress,
+  //           amount: Long.fromString(this.keysignPayload.toAmount),
+  //           decimals: this.keysignPayload.coin.decimals,
+  //         })
+  //         const input = TW.Solana.Proto.SigningInput.create({
+  //           tokenTransferTransaction: tokenTransferMessage,
+  //           recentBlockhash: newRecentBlockHash,
+  //           sender: this.keysignPayload.coin.address,
+  //           priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
+  //             price: Long.fromString(priorityFeePrice.toString()),
+  //           }),
+  //           priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
+  //             limit: priorityFeeLimit,
+  //           }),
+  //         })
+  //         resolve(TW.Solana.Proto.SigningInput.encode(input).finish())
+  //       } else if (fromTokenAssociatedAddress && !toTokenAssociatedAddress) {
+  //         // Generate the associated address if `toTokenAssociatedAddress` is missing
+  //         const receiverAddress =
+  //           this.walletCore.SolanaAddress.createWithString(
+  //             this.keysignPayload.toAddress
+  //           )
+  //         const generatedAssociatedAddress =
+  //           receiverAddress.defaultTokenAddress(
+  //             this.keysignPayload.coin.contractAddress
+  //           )
+  //         if (!generatedAssociatedAddress) {
+  //           throw new Error(
+  //             'We must have the association between the minted token and the TO address'
+  //           )
+  //         }
+  //         const createAndTransferTokenMessage =
+  //           TW.Solana.Proto.CreateAndTransferToken.create({
+  //             recipientMainAddress: this.keysignPayload.toAddress,
+  //             tokenMintAddress: this.keysignPayload.coin.contractAddress,
+  //             recipientTokenAddress: generatedAssociatedAddress,
+  //             senderTokenAddress: fromTokenAssociatedAddress,
+  //             amount: Long.fromString(this.keysignPayload.toAmount),
+  //             decimals: this.keysignPayload.coin.decimals,
+  //           })
+  //         const input = TW.Solana.Proto.SigningInput.create({
+  //           createAndTransferTokenTransaction: createAndTransferTokenMessage,
+  //           recentBlockhash: newRecentBlockHash,
+  //           sender: this.keysignPayload.coin.address,
+  //           priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
+  //             price: Long.fromString(priorityFeePrice.toString()),
+  //           }),
+  //           priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
+  //             limit: priorityFeeLimit,
+  //           }),
+  //         })
+  //         resolve(TW.Solana.Proto.SigningInput.encode(input).finish())
+  //       } else {
+  //         throw new Error(
+  //           'To send tokens we must have the association between the minted token and the TO address'
+  //         )
+  //       }
+  //     }
+  //   })
+  // }
 
   public getSignedTransaction = ({
     inputData,
