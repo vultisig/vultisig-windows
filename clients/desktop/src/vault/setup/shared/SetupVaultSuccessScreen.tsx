@@ -7,6 +7,7 @@ import { VStack } from '../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { OnForwardProp } from '../../../lib/ui/props'
 import { GradientText, Text } from '../../../lib/ui/text'
+import { PageContent } from '../../../ui/page/PageContent'
 
 const SETUP_VAULT_SUCCESS_SCREEN_TIME_IN_MS = 2500
 export const SetupVaultSuccessScreen = ({ onForward }: OnForwardProp) => {
@@ -27,13 +28,14 @@ export const SetupVaultSuccessScreen = ({ onForward }: OnForwardProp) => {
 
   return (
     <Wrapper justifyContent="center" alignItems="center">
-      <VStack flexGrow justifyContent="center" alignItems="center" gap={48}>
+      <VStack flexGrow justifyContent="center" alignItems="center">
         <RiveWrapper>
           <RiveComponent />
         </RiveWrapper>
-        <VStack alignItems="center" gap={8}>
-          <Text centerHorizontally variant="h1Regular">
-            {t('vaultCreated')} <GradientText>{t('successfully')}</GradientText>
+        <VStack alignItems="center" gap={16}>
+          <Text centerHorizontally size={40}>
+            {t('vaultCreated')}{' '}
+            <GradientText as="span">{t('successfully')}</GradientText>
           </Text>
           <Spinner size="3em" />
         </VStack>
@@ -42,7 +44,7 @@ export const SetupVaultSuccessScreen = ({ onForward }: OnForwardProp) => {
   )
 }
 
-const Wrapper = styled(VStack)`
+const Wrapper = styled(PageContent)`
   position: fixed;
   inset: 0;
   width: 100%;
@@ -50,6 +52,6 @@ const Wrapper = styled(VStack)`
 `
 
 const RiveWrapper = styled.div`
-  width: 300px;
-  height: 300px;
+  width: 600px;
+  flex: 1;
 `

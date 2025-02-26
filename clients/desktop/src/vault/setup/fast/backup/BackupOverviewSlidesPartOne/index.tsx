@@ -1,4 +1,3 @@
-import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps, FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -8,6 +7,8 @@ import { MultistepProgressIndicator } from '../../../../../lib/ui/flow/Multistep
 import { ChevronRightIcon } from '../../../../../lib/ui/icons/ChevronRightIcon'
 import { VStack } from '../../../../../lib/ui/layout/Stack'
 import { Text } from '../../../../../lib/ui/text'
+import { getColor } from '../../../../../lib/ui/theme/getters'
+import { hideScrollbar } from '../../../../../lib/ui/utils/hideScrollbar'
 import { PageContent } from '../../../../../ui/page/PageContent'
 import { AnimationDescription } from './AnimationDescription'
 import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
@@ -36,7 +37,7 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
   } = useBackupOverviewStepsAnimations()
 
   return (
-    <PageContent>
+    <Wrapper>
       <ProgressWrapper gap={16}>
         <Text size={18}>{t('Vault Overview')}</Text>
         <MultistepProgressIndicator
@@ -66,7 +67,7 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
           </NextAnimationButton>
         </BottomItemsWrapper>
       </VStack>
-    </PageContent>
+    </Wrapper>
   )
 }
 
@@ -93,6 +94,10 @@ const ProgressWrapper = styled(VStack)`
 `
 
 const BottomItemsWrapper = styled(VStack)`
-  max-width: 500px;
+  max-width: 600px;
   margin-inline: auto;
+`
+
+const Wrapper = styled(PageContent)`
+  ${hideScrollbar}
 `

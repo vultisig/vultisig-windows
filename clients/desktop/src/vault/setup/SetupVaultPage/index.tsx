@@ -1,11 +1,9 @@
 import { match } from '@lib/utils/match'
-import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
-import { useBoolean } from '../../../lib/ui/hooks/useBoolean'
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '../../../lib/ui/icons/LightningGradientIcon'
 import { LightningIcon } from '../../../lib/ui/icons/LightningIcon'
@@ -20,6 +18,7 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { getSetupVaultProperties } from '../type/SetupVaultType'
 import { useSetupVaultType } from '../type/state/setupVaultType'
+import { useSetupVaultPageAnimation } from './hooks/useSetupVaultPageAnimation'
 import {
   ArtContainer,
   ConfirmButton,
@@ -30,27 +29,13 @@ import {
   IconWrapper,
 } from './SetupVaultPage.styled'
 
-const STATE_MACHINE_NAME = 'State Machine 1'
-const STATE_INPUT_NAME = 'Switch'
-
 export const SetupVaultPage = () => {
-  const [hasAnimationRan, { toggle }] = useBoolean(false)
-
+  const { RiveComponent, stateMachineInput, isPlaying, onPlay } =
+    useSetupVaultPageAnimation()
   const { t } = useTranslation()
   const [value, setValue] = useSetupVaultType()
   const navigate = useAppNavigate()
   const theme = useTheme()
-  const { RiveComponent, rive } = useRive({
-    src: '/assets/animations/choose-vault/index.riv',
-    autoplay: true,
-    stateMachines: [STATE_MACHINE_NAME],
-  })
-
-  const stateMachineInput = useStateMachineInput(
-    rive,
-    STATE_MACHINE_NAME,
-    STATE_INPUT_NAME
-  )
 
   const onStart = useCallback(() => {
     navigate(
@@ -115,13 +100,13 @@ export const SetupVaultPage = () => {
                     ),
                 },
               ]}
+              disabled={isPlaying}
               selected={value}
               onChange={newValue => {
+                if (isPlaying) return
+                onPlay()
                 setValue(newValue)
-                if (!hasAnimationRan) {
-                  stateMachineInput?.fire()
-                  toggle()
-                }
+                stateMachineInput?.fire()
               }}
             />
           </div>

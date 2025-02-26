@@ -222,8 +222,8 @@ github.com/valyala/fasttemplate v1.2.2 h1:lxLXG0uE3Qnshl9QyaK6XJxMXlQZELvChBOCmQ
 github.com/valyala/fasttemplate v1.2.2/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
 github.com/vultisig/mobile-tss-lib v0.0.0-20250113110513-b211041c087b h1:Cw9yLEU71iR4cHGjosopgDhHmMqC3Mwd441VAs75BNE=
 github.com/vultisig/mobile-tss-lib v0.0.0-20250113110513-b211041c087b/go.mod h1:r8JFhEWnQvmV/HvhSwRCK96R+68NFcQpwEC2zIbPSJ0=
-github.com/vultisig/vultisig-relay v0.0.0-20241101003153-adf172658a9a h1:lA7cPzwD+SqwZdg3wk+eI5hZ6C73PtXMBCgsV2t2mqk=
-github.com/vultisig/vultisig-relay v0.0.0-20241101003153-adf172658a9a/go.mod h1:J1EuDKnvaPSWSwxkEgKz6EMiGnuCmSfKsgELpA+XgHg=
+github.com/vultisig/vultisig-relay v0.0.0-20250123035809-437215e7ea51 h1:ri3yKCu7SfLAmU7x9hNnkoDXj5Fj0NEe3/JDXnkYcfg=
+github.com/vultisig/vultisig-relay v0.0.0-20250123035809-437215e7ea51/go.mod h1:J1EuDKnvaPSWSwxkEgKz6EMiGnuCmSfKsgELpA+XgHg=
 github.com/wailsapp/go-webview2 v1.0.19 h1:7U3QcDj1PrBPaxJNCui2k1SkWml+Q5kvFUFyTImA6NU=
 github.com/wailsapp/go-webview2 v1.0.19/go.mod h1:qJmWAmAmaniuKGZPWwne+uor3AHMB5PFhqiK0Bbj8kc=
 github.com/wailsapp/mimetype v1.4.1 h1:pQN9ycO7uo4vsUUuPeHEYoUkLVkaRntMnHJxVwYhwHs=

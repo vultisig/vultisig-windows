@@ -11,7 +11,7 @@ export const AnimationDescription = () => {
     <Wrapper>
       <AnimatedVisibility>
         <TextWrapper>
-          <Text size={48}>
+          <Text size={32}>
             {t('fastVaultSetup.backup.backUp')}{' '}
             <GradientText as="span">
               {t('fastVaultSetup.backup.this_vault')}
@@ -28,7 +28,6 @@ export const AnimationDescription = () => {
 }
 
 const Wrapper = styled.div`
-  min-height: 144px;
   max-width: 500px;
   margin-inline: auto;
 `

@@ -1,10 +1,10 @@
-import { getColor } from '@lib/ui/theme/getters'
 import styled, { keyframes } from 'styled-components'
 
 import { centerContent } from '../css/centerContent'
 import { horizontalPadding } from '../css/horizontalPadding'
 import { round } from '../css/round'
 import { ChildrenProp } from '../props'
+import { getColor } from '../theme/getters'
 
 const appearFromBottom = keyframes`
   from {

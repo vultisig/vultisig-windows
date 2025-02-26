@@ -1,11 +1,18 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { SafeAreaView } from 'react-native'
+
+import { Button } from '../../lib/ui/components/Button'
 
 const NoVaultPage = () => {
   return (
-    <View>
-      <Text>VaultPage</Text>
-    </View>
+    <SafeAreaView
+      style={{
+        backgroundColor: 'white',
+        flex: 1,
+      }}
+    >
+      <Button kind="primary">Yo</Button>
+    </SafeAreaView>
   )
 }
 

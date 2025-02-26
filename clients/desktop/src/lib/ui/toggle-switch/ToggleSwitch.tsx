@@ -1,9 +1,9 @@
-import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
 import { Button } from '../buttons/Button'
 import { HStack, hStack } from '../layout/Stack'
+import { getColor } from '../theme/getters'
 
 type Option<T extends string | number> = {
   label: string
@@ -15,16 +15,19 @@ type ToggleSwitchProps<T extends string | number> = {
   options: Option<T>[]
   selected: T
   onChange?: (value: T) => void
+  disabled?: boolean
 }
 
 export const ToggleSwitch = <T extends string | number>({
   options,
   selected,
   onChange,
+  disabled,
 }: ToggleSwitchProps<T>) => {
   const [active, setActive] = useState(selected)
 
   const handleClick = (value: T) => {
+    if (disabled) return
     setActive(value)
     onChange?.(value)
   }

@@ -6,7 +6,8 @@
   "apple": {
     "modules": [
       "MobileTssModule"
-    ]
+    ],
+    "iosDeploymentTarget": "16.0"
   },
   "android": {
     "modules": [
