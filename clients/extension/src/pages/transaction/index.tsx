@@ -18,9 +18,7 @@ import api from '@clients/extension/src/utils/api'
 import { TssKeysignType } from '@clients/extension/src/utils/constants'
 import DataConverterProvider from '@clients/extension/src/utils/data-converter-provider'
 import {
-  formatDisplayNumber,
   getTssKeysignType,
-  parseMemo,
   splitString,
 } from '@clients/extension/src/utils/functions'
 import {
@@ -39,15 +37,14 @@ import {
 } from '@clients/extension/src/utils/storage'
 import {
   BaseTransactionProvider,
-  EVMTransactionProvider,
   TransactionProvider,
 } from '@clients/extension/src/utils/transaction-provider'
 import WalletCoreProvider from '@clients/extension/src/utils/wallet-core-provider'
-import { getChainKind } from '@core/chain/ChainKind'
+
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 
 import { Button, Form, Input, message, QRCode } from 'antd'
-import { formatUnits, toUtf8String } from 'ethers'
+import { formatUnits } from 'ethers'
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
@@ -373,32 +370,24 @@ const Component = () => {
               })
           } else {
             txProvider
-              .getKeysignPayload(transaction, vault)
-              .then(payload => {
-                txProvider
-                  .getTransactionKey(
-                    vault.publicKeyEcdsa,
-                    transaction,
-                    vault.hexChainCode
-                  )
-                  .then(sendKey => {
-                    api.fastVault
-                      .assertVaultExist(vault.publicKeyEcdsa)
-                      .then(exist => {
-                        setState(prevState => ({
-                          ...prevState,
-                          fastSign: exist,
-                          loading: false,
-                          keysignPayload: payload,
-                          sendKey,
-                          step,
-                        }))
+              .getTransactionKey(
+                vault.publicKeyEcdsa,
+                transaction,
+                vault.hexChainCode
+              )
+              .then(sendKey => {
+                api.fastVault
+                  .assertVaultExist(vault.publicKeyEcdsa)
+                  .then(exist => {
+                    setState(prevState => ({
+                      ...prevState,
+                      fastSign: exist,
+                      loading: false,
+                      sendKey,
+                      step,
+                    }))
 
-                        handleStart()
-                      })
-                  })
-                  .catch(() => {
-                    setState(prevState => ({ ...prevState, loading: false }))
+                    handleStart()
                   })
               })
               .catch(() => {
@@ -504,73 +493,92 @@ const Component = () => {
           .getCore()
           .then(({ chainRef, walletCore }) => {
             setState({ ...state, walletCoreClient: walletCore })
-            const dataConverter = new DataConverterProvider()
-            const txProvider = TransactionProvider.createProvider(
-              transaction.chain.chain,
-              chainRef,
-              dataConverter.compactEncoder,
-              walletCore
-            )
-
-            // Improve
-            if (getChainKind(transaction.chain.chain) === 'evm') {
-              parseMemo(transaction.transactionDetails.data!)
-                .then(memo => {
-                  setState({ ...state, parsedMemo: memo })
-                })
-                .catch(err => {
-                  console.log('Could not parse memo:', err)
-                })
-              ;(txProvider as EVMTransactionProvider).getFeeData().then(() => {
-                ;(txProvider as EVMTransactionProvider)
-                  .getEstimateTransactionFee(transaction.chain.cmcId!, currency)
-                  .then(gasPrice => {
-                    transaction.gasPrice = gasPrice
-                    try {
-                      transaction.memo = toUtf8String(
-                        transaction.transactionDetails.data!
-                      )
-                    } catch {
-                      transaction.memo = transaction.transactionDetails.data
-                    }
-                    setStoredTransaction(transaction).then(() => {
-                      setState(prevState => ({
-                        ...prevState,
-                        currency,
-                        loaded: true,
-                        transaction,
-                        txProvider,
-                        vault,
-                      }))
-                    })
-                  })
-              })
-            } else {
-              transaction.gasPrice = String(
-                getFeeAmount(
-                  keysignPayload!.blockchainSpecific as KeysignChainSpecific
-                )
+            if (!transaction.isCustomMessage) {
+              const dataConverter = new DataConverterProvider()
+              const txProvider = TransactionProvider.createProvider(
+                transaction.chain.chain,
+                chainRef,
+                dataConverter.compactEncoder,
+                walletCore
               )
-              try {
-                transaction.memo = toUtf8String(
-                  transaction.transactionDetails.data!
-                )
-              } catch {
-                if (!parsedMemo) {
-                  transaction.memo = transaction.transactionDetails.data
-                }
-              }
-              setStoredTransaction(transaction).then(() => {
-                setState(prevState => ({
-                  ...prevState,
-                  currency,
-                  loaded: true,
-                  transaction,
-                  txProvider,
-                  vault,
-                }))
-              })
+              txProvider
+                .getKeysignPayload(transaction, vault)
+                .then(keysignPayload => {
+                  transaction.gasPrice = String(
+                    getFeeAmount(
+                      keysignPayload.blockchainSpecific as KeysignChainSpecific
+                    )
+                  )
+                  setState(prevState => ({
+                    ...prevState,
+                    currency,
+                    loaded: true,
+                    transaction,
+                    txProvider,
+                    keysignPayload,
+                    vault,
+                  }))
+                })
             }
+            // Improve
+            // if (getChainKind(transaction.chain.chain) === 'evm') {
+            //   parseMemo(transaction.transactionDetails.data!)
+            //     .then(memo => {
+            //       setState({ ...state, parsedMemo: memo })
+            //     })
+            //     .catch(err => {
+            //       console.log('Could not parse memo:', err)
+            //     })
+            //   ;(txProvider as EVMTransactionProvider).getFeeData().then(() => {
+            //     ;(txProvider as EVMTransactionProvider)
+            //       .getEstimateTransactionFee(transaction.chain.cmcId!, currency)
+            //       .then(gasPrice => {
+            //         transaction.gasPrice = gasPrice
+            //         try {
+            //           transaction.memo = toUtf8String(
+            //             transaction.transactionDetails.data!
+            //           )
+            //         } catch {
+            //           transaction.memo = transaction.transactionDetails.data
+            //         }
+            //         setStoredTransaction(transaction).then(() => {
+            //           setState(prevState => ({
+            //             ...prevState,
+            //             currency,
+            //             loaded: true,
+            //             transaction,
+            //             txProvider,
+            //             vault,
+            //           }))
+            //         })
+            //       })
+            //   })
+            // } else {
+            //   transaction.gasPrice = String(
+            //     getFeeAmount(
+            //       keysignPayload!.blockchainSpecific as KeysignChainSpecific
+            //     )
+            //   )
+            //   try {
+            //     transaction.memo = toUtf8String(
+            //       transaction.transactionDetails.data!
+            //     )
+            //   } catch {
+            //     if (!parsedMemo) {
+            //       transaction.memo = transaction.transactionDetails.data
+            //     }
+            //   }
+            //   setStoredTransaction(transaction).then(() => {
+            //     setState(prevState => ({
+            //       ...prevState,
+            //       currency,
+            //       loaded: true,
+            //       transaction,
+            //       txProvider,
+            //       vault,
+            //     }))
+            //   })
+            // }
           })
           .catch(error => {
             console.log(error)
@@ -676,10 +684,11 @@ const Component = () => {
                           {t(messageKeys.NETWORK_FEE)}
                         </span>
                         <span className="extra">
-                          {formatDisplayNumber(
+                          {transaction.gasPrice}
+                          {/* {formatDisplayNumber(
                             transaction.gasPrice!,
                             transaction.chain.ticker
-                          )}
+                          )} */}
                         </span>
                       </div>
                       {parsedMemo && (
