@@ -109,7 +109,7 @@ export class MPC {
     EventsEmit('ECDSA')
     const dklsResult = await dklsKeygen.startReshareWithRetry(ecdsaKeyshare)
     if (dklsResult === undefined) {
-      throw new Error('DKLS keygen failed')
+      throw new Error('DKLS reshare failed')
     }
     EventsEmit('EdDSA')
     const schnorrKeygen = new Schnorr(
@@ -125,7 +125,7 @@ export class MPC {
     const schnorrResult =
       await schnorrKeygen.startReshareWithRetry(eddsaKeyshare)
     if (schnorrResult === undefined) {
-      throw new Error('Schnorr keygen failed')
+      throw new Error('Schnorr reshare failed')
     }
     await setKeygenComplete({
       serverURL: this.serverURL,
@@ -138,7 +138,7 @@ export class MPC {
       peers: this.keygenCommittee,
     })
     if (!isCompleteSuccessful) {
-      throw new Error('not all peers complete keygen successfully')
+      throw new Error('not all peers complete reshare successfully')
     }
     return {
       dkls: dklsResult,
