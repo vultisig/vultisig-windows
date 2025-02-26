@@ -1,33 +1,33 @@
-import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps';
-import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
-import { PageContent } from '../../../ui/page/PageContent';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
+import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
+import { PageContent } from '../../../ui/page/PageContent'
 
 type DecryptVaultViewProps = {
-  isPending: boolean;
-  error: Error | null;
-  onSubmit: (password: string) => void;
-};
+  isPending: boolean
+  error: Error | null
+  onSubmit: (password: string) => void
+}
 
 export const DecryptVaultView = ({
   isPending,
   error,
   onSubmit,
 }: DecryptVaultViewProps) => {
-  const { t } = useTranslation();
-  const [password, setPassword] = useState('');
+  const { t } = useTranslation()
+  const [password, setPassword] = useState('')
 
   const isDisabled = useMemo(() => {
     if (!password) {
-      return t('password_required');
+      return t('password_required')
     }
-  }, [password, t]);
+  }, [password, t])
 
   return (
     <>
@@ -55,5 +55,5 @@ export const DecryptVaultView = ({
         </VStack>
       </PageContent>
     </>
-  );
-};
+  )
+}

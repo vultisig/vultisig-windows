@@ -11,4 +11,4 @@ export const EditIcon = () => (
       fill="currentColor"
     />
   </svg>
-);
+)

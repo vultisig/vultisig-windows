@@ -23,4 +23,4 @@ export const QrCodeIcon = () => (
     <path d="M21 12v.01" />
     <path d="M12 21v-1" />
   </svg>
-);
+)

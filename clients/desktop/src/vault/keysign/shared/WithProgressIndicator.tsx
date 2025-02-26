@@ -1,6 +1,6 @@
-import { ProgressLine } from '../../../lib/ui/flow/ProgressLine';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { ChildrenProp, ValueProp } from '../../../lib/ui/props';
+import { ProgressLine } from '../../../lib/ui/flow/ProgressLine'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { ChildrenProp, ValueProp } from '../../../lib/ui/props'
 
 export const WithProgressIndicator: React.FC<
   ValueProp<number> & ChildrenProp
@@ -9,4 +9,4 @@ export const WithProgressIndicator: React.FC<
     <ProgressLine value={value} />
     {children}
   </VStack>
-);
+)

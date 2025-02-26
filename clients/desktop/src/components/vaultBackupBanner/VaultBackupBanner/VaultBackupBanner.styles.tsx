@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
 
 export const ContentWrapperButton = styled(UnstyledButton)`
   width: 100%;
@@ -13,10 +13,10 @@ export const ContentWrapperButton = styled(UnstyledButton)`
     theme.colors.danger.withAlpha(0.2).toCssValue()};
   border-radius: 12px;
   color: ${({ theme }) => theme.colors.danger.toCssValue()};
-`;
+`
 
 export const ChevronIconWrapper = styled.div`
   color: ${({ theme }) => theme.colors.text.toCssValue()};
   display: grid;
   place-items: center;
-`;
+`

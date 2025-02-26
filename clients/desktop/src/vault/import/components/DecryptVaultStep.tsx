@@ -1,10 +1,10 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query'
 
-import { storage } from '../../../../wailsjs/go/models';
-import { OnFinishProp, ValueProp } from '../../../lib/ui/props';
-import { decryptDatBackup } from '../utils/decryptDatBackup';
-import { fromDatBackupString } from '../utils/fromDatBackupString';
-import { DecryptVaultView } from './DecryptVaultView';
+import { storage } from '../../../../wailsjs/go/models'
+import { OnFinishProp, ValueProp } from '../../../lib/ui/props'
+import { decryptDatBackup } from '../utils/decryptDatBackup'
+import { fromDatBackupString } from '../utils/fromDatBackupString'
+import { DecryptVaultView } from './DecryptVaultView'
 
 export const DecryptVaultStep = ({
   value,
@@ -15,16 +15,16 @@ export const DecryptVaultStep = ({
       const decrypted = await decryptDatBackup({
         backup: value,
         password,
-      });
+      })
 
-      const valueAsString = new TextDecoder().decode(decrypted);
+      const valueAsString = new TextDecoder().decode(decrypted)
 
-      return fromDatBackupString(valueAsString);
+      return fromDatBackupString(valueAsString)
     },
     onSuccess: onFinish,
-  });
+  })
 
   return (
     <DecryptVaultView isPending={isPending} error={error} onSubmit={mutate} />
-  );
-};
+  )
+}

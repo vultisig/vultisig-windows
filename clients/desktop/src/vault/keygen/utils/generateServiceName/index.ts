@@ -1,4 +1,4 @@
-import { generateRandomNumber } from '../../../../utils/util';
+import { generateRandomNumber } from '../../../../utils/util'
 
 export const generateServiceName = () =>
-  `Vultisig-Windows-${generateRandomNumber()}`;
+  `Vultisig-Windows-${generateRandomNumber()}`

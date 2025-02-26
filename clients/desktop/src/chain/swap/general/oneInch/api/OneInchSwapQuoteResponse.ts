@@ -1,11 +1,11 @@
 export type OneInchSwapQuoteResponse = {
-  dstAmount: string;
+  dstAmount: string
   tx: {
-    from: string;
-    to: string;
-    data: string;
-    value: string;
-    gasPrice: string;
-    gas: number;
-  };
-};
+    from: string
+    to: string
+    data: string
+    value: string
+    gasPrice: string
+    gas: number
+  }
+}

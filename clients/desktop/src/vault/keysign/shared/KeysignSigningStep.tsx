@@ -1,47 +1,47 @@
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
-import { KeysignMessagePayload } from '../../../chain/keysign/KeysignMessagePayload';
-import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash';
-import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
-import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow';
-import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion';
-import { Button } from '../../../lib/ui/buttons/Button';
-import { ProgressLine } from '../../../lib/ui/flow/ProgressLine';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { OnBackProp } from '../../../lib/ui/props';
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { makeAppPath } from '../../../navigation';
-import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { KeygenNetworkReminder } from '../../keygen/shared/KeygenNetworkReminder';
-import { MatchKeygenSessionStatus } from '../../keygen/shared/MatchKeygenSessionStatus';
-import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage';
-import { KeysignCustomMessageInfo } from '../join/verify/KeysignCustomMessageInfo';
-import { KeysignSigningState } from './KeysignSigningState';
-import { KeysignTxOverview } from './KeysignTxOverview';
-import { useKeysignMutation } from './mutations/useKeysignMutation';
-import { WithProgressIndicator } from './WithProgressIndicator';
+import { KeysignMessagePayload } from '../../../chain/keysign/KeysignMessagePayload'
+import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash'
+import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
+import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow'
+import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion'
+import { Button } from '../../../lib/ui/buttons/Button'
+import { ProgressLine } from '../../../lib/ui/flow/ProgressLine'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { OnBackProp } from '../../../lib/ui/props'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { makeAppPath } from '../../../navigation'
+import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
+import { PageContent } from '../../../ui/page/PageContent'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { KeygenNetworkReminder } from '../../keygen/shared/KeygenNetworkReminder'
+import { MatchKeygenSessionStatus } from '../../keygen/shared/MatchKeygenSessionStatus'
+import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage'
+import { KeysignCustomMessageInfo } from '../join/verify/KeysignCustomMessageInfo'
+import { KeysignSigningState } from './KeysignSigningState'
+import { KeysignTxOverview } from './KeysignTxOverview'
+import { useKeysignMutation } from './mutations/useKeysignMutation'
+import { WithProgressIndicator } from './WithProgressIndicator'
 
 type KeysignSigningStepProps = {
-  payload: KeysignMessagePayload;
-} & Partial<OnBackProp>;
+  payload: KeysignMessagePayload
+} & Partial<OnBackProp>
 
 export const KeysignSigningStep = ({
   onBack,
   payload,
 }: KeysignSigningStepProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const { mutate: startKeysign, ...mutationStatus } =
-    useKeysignMutation(payload);
+    useKeysignMutation(payload)
 
-  useEffect(() => startKeysign(), [startKeysign]);
+  useEffect(() => startKeysign(), [startKeysign])
 
   return (
     <MatchQuery
@@ -117,5 +117,5 @@ export const KeysignSigningStep = ({
         </>
       )}
     />
-  );
-};
+  )
+}

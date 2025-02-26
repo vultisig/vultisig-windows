@@ -1,17 +1,17 @@
-import { Match } from '../../../lib/ui/base/Match';
-import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation';
-import { OnboardingGreeting } from './OnboardingGreeting';
-import { OnboardingSteps } from './OnboardingSteps';
-import { OnboardingSummary } from './OnboardingSummary';
+import { Match } from '../../../lib/ui/base/Match'
+import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { OnboardingGreeting } from './OnboardingGreeting'
+import { OnboardingSteps } from './OnboardingSteps'
+import { OnboardingSummary } from './OnboardingSummary'
 
 const steps = [
   'onboardingGreeting',
   'onboardingSteps',
   'onboardingSummary',
-] as const;
+] as const
 
 export const OnboardingController = () => {
-  const { step, toNextStep } = useStepNavigation({ steps });
+  const { step, toNextStep } = useStepNavigation({ steps })
 
   return (
     <Match
@@ -22,5 +22,5 @@ export const OnboardingController = () => {
       onboardingSteps={() => <OnboardingSteps onCompleteSteps={toNextStep} />}
       onboardingSummary={() => <OnboardingSummary />}
     />
-  );
-};
+  )
+}

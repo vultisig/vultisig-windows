@@ -1,12 +1,13 @@
-import { KeysignMessagePayload } from '../chain/keysign/KeysignMessagePayload';
-import { KeygenMessage } from '@core/communication/vultisig/keygen/v1/keygen_message_pb';
-import { ReshareMessage } from '@core/communication/vultisig/keygen/v1/reshare_message_pb';
-import { KeysignMessage } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
-import { addQueryParams } from '@lib/utils/query/addQueryParams';
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields';
-import { Chain } from '@core/chain/Chain';
-import { KeygenType } from '../vault/keygen/KeygenType';
-import { SetupVaultType } from '../vault/setup/type/SetupVaultType';
+import { Chain } from '@core/chain/Chain'
+import { KeygenMessage } from '@core/communication/vultisig/keygen/v1/keygen_message_pb'
+import { ReshareMessage } from '@core/communication/vultisig/keygen/v1/reshare_message_pb'
+import { KeysignMessage } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { addQueryParams } from '@lib/utils/query/addQueryParams'
+import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
+
+import { KeysignMessagePayload } from '../chain/keysign/KeysignMessagePayload'
+import { KeygenType } from '../vault/keygen/KeygenType'
+import { SetupVaultType } from '../vault/setup/type/SetupVaultType'
 
 export const appPaths = {
   importVault: '/vault/import',
@@ -59,78 +60,79 @@ export const appPaths = {
   manageVaultFolder: '/vault/folder/manage',
   deposit: '/vault/item/deposit',
   deeplink: '/deeplink',
-} as const;
+  dkls: '/dkls',
+} as const
 
-type AppPaths = typeof appPaths;
-export type AppPath = keyof AppPaths;
+type AppPaths = typeof appPaths
+export type AppPath = keyof AppPaths
 
 export type AppPathParams = {
-  address: { address: string };
-  uploadQr: { title?: string };
-  manageVaultChainCoins: { chain: Chain };
-  vaultChainDetail: { chain: Chain };
-  vaultChainCoinDetail: { chain: Chain; coin: string };
-  send: { coin: string };
-  setupVault: { type?: SetupVaultType };
-  swap: { coin: string };
-  deposit: { coin: string };
-  vaultFolder: { id: string };
-  manageVaultFolder: { id: string };
-};
+  address: { address: string }
+  uploadQr: { title?: string }
+  manageVaultChainCoins: { chain: Chain }
+  vaultChainDetail: { chain: Chain }
+  vaultChainCoinDetail: { chain: Chain; coin: string }
+  send: { coin: string }
+  setupVault: { type?: SetupVaultType }
+  swap: { coin: string }
+  deposit: { coin: string }
+  vaultFolder: { id: string }
+  manageVaultFolder: { id: string }
+}
 
 export type AppPathState = {
   keysign: {
-    keysignPayload: KeysignMessagePayload;
-  };
+    keysignPayload: KeysignMessagePayload
+  }
   fastKeysign: {
-    keysignPayload: KeysignMessagePayload;
-  };
-  joinKeysign: { vaultId: string; keysignMsg: KeysignMessage };
+    keysignPayload: KeysignMessagePayload
+  }
+  joinKeysign: { vaultId: string; keysignMsg: KeysignMessage }
   joinKeygen: {
-    keygenType: KeygenType;
-    keygenMsg: KeygenMessage | ReshareMessage;
-  };
+    keygenType: KeygenType
+    keygenMsg: KeygenMessage | ReshareMessage
+  }
   deeplink: {
-    url: string;
-  };
+    url: string
+  }
   importVaultFromFile: {
-    filePath: string;
-  };
-};
+    filePath: string
+  }
+}
 
-export type AppPathsWithParams = keyof AppPathParams;
+export type AppPathsWithParams = keyof AppPathParams
 
-export type AppPathsWithState = keyof AppPathState;
+export type AppPathsWithState = keyof AppPathState
 
 export type AppPathsWithParamsAndState = Extract<
   AppPathsWithParams,
   AppPathsWithState
->;
+>
 export type AppPathsWithOnlyParams = Exclude<
   AppPathsWithParams,
   AppPathsWithParamsAndState
->;
+>
 export type AppPathsWithOnlyState = Exclude<
   AppPathsWithState,
   AppPathsWithParamsAndState
->;
+>
 export type AppPathsWithNoParamsOrState = Exclude<
   AppPath,
   AppPathsWithParams | AppPathsWithState
->;
+>
 
 export function makeAppPath<P extends keyof AppPathParams>(
   path: P,
   variables: AppPathParams[P]
-): string;
+): string
 export function makeAppPath<P extends Exclude<AppPath, keyof AppPathParams>>(
   path: P
-): string;
+): string
 export function makeAppPath(path: AppPath, variables?: any): string {
-  const basePath = appPaths[path];
+  const basePath = appPaths[path]
   if (variables) {
-    return addQueryParams(basePath, withoutUndefinedFields(variables));
+    return addQueryParams(basePath, withoutUndefinedFields(variables))
   } else {
-    return basePath;
+    return basePath
   }
 }

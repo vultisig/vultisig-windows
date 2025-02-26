@@ -1,17 +1,18 @@
-import { create } from '@bufbuild/protobuf';
-import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt';
-import { LibType } from '@core/communication/vultisig/keygen/v1/lib_type_message_pb';
+import { create } from '@bufbuild/protobuf'
+import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt'
+import { fromLibType, toLibType } from '@core/communication/utils/libType'
 import {
   Vault,
   Vault_KeyShareSchema,
   VaultSchema,
-} from '@core/communication/vultisig/vault/v1/vault_pb';
-import { convertDuration } from '@lib/utils/time/convertDuration';
+} from '@core/communication/vultisig/vault/v1/vault_pb'
+import { defaultMpcLib, MpcLib } from '@core/mpc/mpcLib'
+import { convertDuration } from '@lib/utils/time/convertDuration'
 
-import { storage } from '../../../wailsjs/go/models';
+import { storage } from '../../../wailsjs/go/models'
 
 export const getStorageVaultId = (vault: storage.Vault): string =>
-  vault.public_key_ecdsa;
+  vault.public_key_ecdsa
 
 export const toStorageVault = ({
   name,
@@ -23,7 +24,7 @@ export const toStorageVault = ({
   keyShares,
   localPartyId,
   resharePrefix,
-  libType = LibType.GG20,
+  libType = toLibType(defaultMpcLib),
 }: Vault): storage.Vault => ({
   name: name,
   public_key_ecdsa: publicKeyEcdsa,
@@ -42,32 +43,30 @@ export const toStorageVault = ({
   order: 0,
   is_backed_up: true,
   coins: [],
-  lib_type: LibType[libType] ?? 'GG20',
+  lib_type: fromLibType(libType),
   convertValues: () => {},
-});
+})
 
 export const protoTimestampToISOString = (timestamp: Timestamp): string => {
-  const date = new Date(convertDuration(Number(timestamp.seconds), 's', 'ms'));
-  const isoWithoutNanos = date.toISOString().slice(0, -1); // Remove the Z
-  const nanoStr = timestamp.nanos.toString().padStart(9, '0');
-  return `${isoWithoutNanos}${nanoStr}Z`;
-};
+  const date = new Date(convertDuration(Number(timestamp.seconds), 's', 'ms'))
+  const isoWithoutNanos = date.toISOString().slice(0, -1) // Remove the Z
+  const nanoStr = timestamp.nanos.toString().padStart(9, '0')
+  return `${isoWithoutNanos}${nanoStr}Z`
+}
 
 export const isoStringToProtoTimestamp = (isoString: string): Timestamp => {
-  const date = new Date(isoString);
-  const seconds = BigInt(
-    Math.floor(convertDuration(date.getTime(), 'ms', 's'))
-  );
+  const date = new Date(isoString)
+  const seconds = BigInt(Math.floor(convertDuration(date.getTime(), 'ms', 's')))
 
   const nanos = Number(
     isoString
       .split('.')[1]
       ?.split(/Z|[+-]/)[0]
       .padEnd(9, '0') || 0
-  );
+  )
 
-  return create(TimestampSchema, { seconds, nanos });
-};
+  return create(TimestampSchema, { seconds, nanos })
+}
 
 export const fromStorageVault = (vault: storage.Vault): Vault =>
   create(VaultSchema, {
@@ -85,5 +84,5 @@ export const fromStorageVault = (vault: storage.Vault): Vault =>
       })
     ),
     resharePrefix: vault.reshare_prefix,
-    libType: LibType[vault.lib_type as keyof typeof LibType] ?? LibType.GG20,
-  });
+    libType: toLibType(vault.lib_type as MpcLib),
+  })

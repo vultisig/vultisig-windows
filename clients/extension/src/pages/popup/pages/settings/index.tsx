@@ -1,15 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import {
-  getStoredCurrency,
-  getStoredLanguage,
-} from "../../../../utils/storage";
-import { Currency, Language, languageName } from "../../../../utils/constants";
-import useGoBack from "../../../../hooks/go-back";
-import messageKeys from "../../../../utils/message-keys";
-import routeKeys from "../../../../utils/route-keys";
-
+import packageJson from '@clients/extension/package.json'
+import useGoBack from '@clients/extension/src/hooks/go-back'
 import {
   ArrowLeft,
   ArrowRight,
@@ -18,36 +8,48 @@ import {
   SettingsOne,
   Translate,
   Vultisig,
-} from "../../../../icons";
-
-import packageJson from "../../../../../package.json";
+} from '@clients/extension/src/icons'
+import {
+  Currency,
+  Language,
+  languageName,
+} from '@clients/extension/src/utils/constants'
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import routeKeys from '@clients/extension/src/utils/route-keys'
+import {
+  getStoredCurrency,
+  getStoredLanguage,
+} from '@clients/extension/src/utils/storage'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 interface InitialState {
-  currency: Currency;
-  language: Language;
+  currency: Currency
+  language: Language
 }
 
 const Component = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
   const initialState: InitialState = {
     currency: Currency.USD,
     language: Language.ENGLISH,
-  };
-  const [state, setState] = useState(initialState);
-  const { currency, language } = state;
-  const goBack = useGoBack();
+  }
+  const [state, setState] = useState(initialState)
+  const { currency, language } = state
+  const goBack = useGoBack()
 
   const componentDidMount = (): void => {
-    getStoredCurrency().then((currency) => {
-      setState((prevState) => ({ ...prevState, currency }));
-    });
+    getStoredCurrency().then(currency => {
+      setState(prevState => ({ ...prevState, currency }))
+    })
 
-    getStoredLanguage().then((language) => {
-      setState((prevState) => ({ ...prevState, language }));
-    });
-  };
+    getStoredLanguage().then(language => {
+      setState(prevState => ({ ...prevState, language }))
+    })
+  }
 
-  useEffect(componentDidMount, []);
+  useEffect(componentDidMount, [])
 
   return (
     <div className="layout settings-page">
@@ -118,12 +120,13 @@ const Component = () => {
           target="_blank"
           href="https://chromewebstore.google.com/detail/vulticonnect/ggafhcdaplkhmmnlbfjpnnkepdfjaelb"
           className="version"
+          rel="noreferrer"
         >
           VULTICONNECT V{packageJson.version}
         </a>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Component;
+export default Component

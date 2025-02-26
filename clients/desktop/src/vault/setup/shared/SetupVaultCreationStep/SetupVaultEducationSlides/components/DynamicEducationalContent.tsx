@@ -1,13 +1,13 @@
-import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { VStack } from '../../../../../../lib/ui/layout/Stack';
-import { GradientText, Text } from '../../../../../../lib/ui/text';
-import { SetupFastVaultEducationSlidesStep } from '..';
+import { VStack } from '../../../../../../lib/ui/layout/Stack'
+import { GradientText, Text } from '../../../../../../lib/ui/text'
+import { SetupFastVaultEducationSlidesStep } from '..'
 
 type DynamicEducationContentProps = {
-  value: SetupFastVaultEducationSlidesStep;
-};
+  value: SetupFastVaultEducationSlidesStep
+}
 
 const contents: Record<
   SetupFastVaultEducationSlidesStep,
@@ -40,13 +40,13 @@ const contents: Record<
     descriptionOne: 'fastVaultSetup.createVault.seedlessWallet.descriptionOne',
     descriptionTwo: 'fastVaultSetup.createVault.seedlessWallet.descriptionTwo',
   },
-};
+}
 
 export const DynamicEducationContent: FC<DynamicEducationContentProps> = ({
   value,
 }) => {
-  const { t } = useTranslation();
-  const { title, descriptionOne, descriptionTwo } = contents[value];
+  const { t } = useTranslation()
+  const { title, descriptionOne, descriptionTwo } = contents[value]
 
   return (
     <VStack justifyContent="center" gap={12}>
@@ -62,5 +62,5 @@ export const DynamicEducationContent: FC<DynamicEducationContentProps> = ({
         </Text>
       </VStack>
     </VStack>
-  );
-};
+  )
+}

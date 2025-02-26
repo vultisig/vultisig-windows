@@ -1,44 +1,44 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { useBalanceQuery } from '../../../coin/query/useBalanceQuery';
-import { getBalanceQueryKey } from '../../../coin/query/useBalancesQuery';
-import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { RefreshIcon } from '../../../lib/ui/icons/RefreshIcon';
-import { Center } from '../../../lib/ui/layout/Center';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { Panel } from '../../../lib/ui/panel/Panel';
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { useInvalidateQueriesMutation } from '../../../lib/ui/query/hooks/useInvalidateQueriesMutation';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton';
-import { PageHeaderIconButtons } from '../../../ui/page/PageHeaderIconButtons';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { VaultPrimaryActions } from '../../components/VaultPrimaryActions';
-import { useCurrentVaultCoin } from '../../state/currentVault';
-import { VaultChainCoinItem } from '../VaultChainCoinItem';
-import { useCurrentVaultCoinKey } from './useCurrentVaultCoinKey';
+import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
+import { getBalanceQueryKey } from '../../../coin/query/useBalancesQuery'
+import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
+import { RefreshIcon } from '../../../lib/ui/icons/RefreshIcon'
+import { Center } from '../../../lib/ui/layout/Center'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Spinner } from '../../../lib/ui/loaders/Spinner'
+import { Panel } from '../../../lib/ui/panel/Panel'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { useInvalidateQueriesMutation } from '../../../lib/ui/query/hooks/useInvalidateQueriesMutation'
+import { PageContent } from '../../../ui/page/PageContent'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton'
+import { PageHeaderIconButtons } from '../../../ui/page/PageHeaderIconButtons'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { VaultPrimaryActions } from '../../components/VaultPrimaryActions'
+import { useCurrentVaultCoin } from '../../state/currentVault'
+import { VaultChainCoinItem } from '../VaultChainCoinItem'
+import { useCurrentVaultCoinKey } from './useCurrentVaultCoinKey'
 
 export const VaultChainCoinPage = () => {
-  const coinKey = useCurrentVaultCoinKey();
+  const coinKey = useCurrentVaultCoinKey()
 
-  const coin = useCurrentVaultCoin(coinKey);
+  const coin = useCurrentVaultCoin(coinKey)
 
   const balanceQuery = useBalanceQuery({
     ...coinKey,
     address: coin.address,
-  });
+  })
 
   const priceQuery = useCoinPriceQuery({
     coin,
-  });
+  })
 
   const { mutate: invalidateQueries, isPending: isInvalidating } =
-    useInvalidateQueriesMutation();
+    useInvalidateQueriesMutation()
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <VStack flexGrow data-testid="ManageVaultChainCoinPage-Coin">
@@ -69,7 +69,7 @@ export const VaultChainCoinPage = () => {
             error={() => <Center>{t('failed_to_load')}</Center>}
             pending={() => <Center>{t('loading')}</Center>}
             success={amount => {
-              const price = priceQuery.data;
+              const price = priceQuery.data
               return (
                 <VaultChainCoinItem
                   value={{
@@ -81,11 +81,11 @@ export const VaultChainCoinPage = () => {
                     ...coinKey,
                   }}
                 />
-              );
+              )
             }}
           />
         </Panel>
       </PageContent>
     </VStack>
-  );
-};
+  )
+}

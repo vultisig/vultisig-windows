@@ -21,5 +21,5 @@ const AddressBookIcon = ({ size = 20 }) => (
       d="M3.75 16.875A1.875 1.875 0 0 1 5.625 15H16.25V2.5H5.625A1.875 1.875 0 0 0 3.75 4.375v12.5ZM3.75 16.875v.625H15"
     />
   </svg>
-);
-export default AddressBookIcon;
+)
+export default AddressBookIcon

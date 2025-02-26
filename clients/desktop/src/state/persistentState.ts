@@ -1,7 +1,7 @@
-import { createPersistentStateHook } from '../lib/ui/state/createPersistentStateHook';
-import { createPersistentStateManager } from '../lib/ui/state/createPersistentStateManager';
-import { LocalStorage } from '../lib/ui/state/LocalStorage';
-import { TemporaryStorage } from '../lib/ui/state/TemporaryStorage';
+import { createPersistentStateHook } from '../lib/ui/state/createPersistentStateHook'
+import { createPersistentStateManager } from '../lib/ui/state/createPersistentStateManager'
+import { LocalStorage } from '../lib/ui/state/LocalStorage'
+import { TemporaryStorage } from '../lib/ui/state/TemporaryStorage'
 
 export enum PersistentStateKey {
   CurrentVaultId = 'currentVaultId',
@@ -14,15 +14,16 @@ export enum PersistentStateKey {
   FavouriteTokens = 'favouriteTokens',
   DefaultChains = 'defaultChains',
   HasAutoDiscoveryBeenDoneForChain = 'HasAutoDiscoveryBeenDoneForChain',
+  IsDklsLibEnabled = 'isDklsLibEnabled',
 }
 
 const persistentStorage =
   typeof window !== 'undefined'
     ? new LocalStorage<PersistentStateKey>()
-    : new TemporaryStorage<PersistentStateKey>();
+    : new TemporaryStorage<PersistentStateKey>()
 
 export const usePersistentState =
-  createPersistentStateHook<PersistentStateKey>(persistentStorage);
+  createPersistentStateHook<PersistentStateKey>(persistentStorage)
 
 export const managePersistentState =
-  createPersistentStateManager<PersistentStateKey>(persistentStorage);
+  createPersistentStateManager<PersistentStateKey>(persistentStorage)

@@ -1,23 +1,23 @@
 export const getItemRegistry = () => {
-  const registry = new Map<string, HTMLElement>();
+  const registry = new Map<string, HTMLElement>()
 
   function register({
     itemId,
     element,
   }: {
-    itemId: string;
-    element: HTMLElement;
+    itemId: string
+    element: HTMLElement
   }) {
-    registry.set(itemId, element);
+    registry.set(itemId, element)
 
     return function unregister() {
-      registry.delete(itemId);
-    };
+      registry.delete(itemId)
+    }
   }
 
   function getElement(itemId: string) {
-    return registry.get(itemId) || null;
+    return registry.get(itemId) || null
   }
 
-  return { register, getElement };
-};
+  return { register, getElement }
+}

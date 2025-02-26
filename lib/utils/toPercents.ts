@@ -1,7 +1,7 @@
-type Format = 'round';
+type Format = 'round'
 
 export const toPercents = (value: number, format?: Format) => {
-  const number = value * 100;
+  const number = value * 100
 
-  return `${format === 'round' ? Math.round(number) : number}%`;
-};
+  return `${format === 'round' ? Math.round(number) : number}%`
+}

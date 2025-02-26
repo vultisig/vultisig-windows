@@ -1,28 +1,28 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement';
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
-import { borderRadius } from '../../../lib/ui/css/borderRadius';
-import { centerContent } from '../../../lib/ui/css/centerContent';
-import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding';
-import { textInputHeight } from '../../../lib/ui/css/textInput';
-import { toSizeUnit } from '../../../lib/ui/css/toSizeUnit';
-import { AmountTextInput } from '../../../lib/ui/inputs/AmountTextInput';
-import { HStack } from '../../../lib/ui/layout/Stack';
-import { text } from '../../../lib/ui/text';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { useCurrentVaultCoin } from '../../state/currentVault';
-import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant';
-import { useSendAmount } from '../state/amount';
-import { useCurrentSendCoin } from '../state/sendCoin';
-import { AmountSuggestion } from './AmountSuggestion';
+import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement'
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '../../../lib/ui/css/borderRadius'
+import { centerContent } from '../../../lib/ui/css/centerContent'
+import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding'
+import { textInputHeight } from '../../../lib/ui/css/textInput'
+import { toSizeUnit } from '../../../lib/ui/css/toSizeUnit'
+import { AmountTextInput } from '../../../lib/ui/inputs/AmountTextInput'
+import { HStack } from '../../../lib/ui/layout/Stack'
+import { text } from '../../../lib/ui/text'
+import { getColor } from '../../../lib/ui/theme/getters'
+import { useCurrentVaultCoin } from '../../state/currentVault'
+import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
+import { useSendAmount } from '../state/amount'
+import { useCurrentSendCoin } from '../state/sendCoin'
+import { AmountSuggestion } from './AmountSuggestion'
 
-const suggestions = [0.25, 0.5];
+const suggestions = [0.25, 0.5]
 
-const maxButtonOffset = 8;
-const maxButtonHeight = textInputHeight - maxButtonOffset * 2;
+const maxButtonOffset = 8
+const maxButtonHeight = textInputHeight - maxButtonOffset * 2
 
 const MaxButton = styled(UnstyledButton)`
   ${horizontalPadding(8)};
@@ -41,14 +41,14 @@ const MaxButton = styled(UnstyledButton)`
   }
 
   text-transform: uppercase;
-`;
+`
 
 export const ManageAmount = () => {
-  const [value, setValue] = useSendAmount();
-  const { t } = useTranslation();
+  const [value, setValue] = useSendAmount()
+  const { t } = useTranslation()
 
-  const [coinKey] = useCurrentSendCoin();
-  const { decimals } = useCurrentVaultCoin(coinKey);
+  const [coinKey] = useCurrentSendCoin()
+  const { decimals } = useCurrentVaultCoin(coinKey)
 
   return (
     <ActionInsideInteractiveElement
@@ -64,9 +64,7 @@ export const ManageAmount = () => {
                   {suggestions.map(suggestion => (
                     <AmountSuggestion
                       onClick={() => {
-                        setValue(
-                          fromChainAmount(amount, decimals) * suggestion
-                        );
+                        setValue(fromChainAmount(amount, decimals) * suggestion)
                       }}
                       key={suggestion}
                       value={suggestion}
@@ -88,7 +86,7 @@ export const ManageAmount = () => {
           success={amount => (
             <MaxButton
               onClick={() => {
-                setValue(fromChainAmount(amount, decimals));
+                setValue(fromChainAmount(amount, decimals))
               }}
             >
               {t('max')}
@@ -101,5 +99,5 @@ export const ManageAmount = () => {
         bottom: maxButtonOffset,
       }}
     />
-  );
-};
+  )
+}

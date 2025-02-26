@@ -1,36 +1,36 @@
-import styled from 'styled-components';
+import { range } from '@lib/utils/array/range'
+import styled from 'styled-components'
 
-import { AsteriskIcon } from '../../../lib/ui/icons/AsteriskIcon';
-import { ChildrenProp } from '../../../lib/ui/props';
-import { range } from '@lib/utils/array/range';
-import { useIsVaultBalanceVisible } from './useIsVaultBalanceVisible';
+import { AsteriskIcon } from '../../../lib/ui/icons/AsteriskIcon'
+import { ChildrenProp } from '../../../lib/ui/props'
+import { useIsVaultBalanceVisible } from './useIsVaultBalanceVisible'
 
-type BalanceSize = 'm' | 'l' | 'xxxl';
+type BalanceSize = 'm' | 'l' | 'xxxl'
 
 type BalanceVisibilityAwareProps = ChildrenProp & {
-  size?: BalanceSize;
-};
+  size?: BalanceSize
+}
 
 const hiddenContentLength: Record<BalanceSize, number> = {
   m: 4,
   l: 8,
   xxxl: 34,
-};
+}
 
 const Icon = styled(AsteriskIcon)`
   &:not(:first-child) {
     margin-left: -0.32em;
   }
-`;
+`
 
 export const BalanceVisibilityAware = ({
   children,
   size = 'm',
 }: BalanceVisibilityAwareProps) => {
-  const [isVisible] = useIsVaultBalanceVisible();
+  const [isVisible] = useIsVaultBalanceVisible()
 
   if (isVisible) {
-    return <>{children}</>;
+    return <>{children}</>
   }
 
   return (
@@ -39,5 +39,5 @@ export const BalanceVisibilityAware = ({
         <Icon key={key} />
       ))}
     </>
-  );
-};
+  )
+}

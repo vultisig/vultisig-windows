@@ -11,7 +11,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/rs/zerolog v1.33.0
 	github.com/vultisig/mobile-tss-lib v0.0.0-20250113110513-b211041c087b
-	github.com/vultisig/vultisig-relay v0.0.0-20241101003153-adf172658a9a
+	github.com/vultisig/vultisig-relay v0.0.0-20250123035809-437215e7ea51
 	github.com/wailsapp/wails/v2 v2.10.0
 )
 

@@ -1,27 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
-import { ChildrenProp } from '../../lib/ui/props';
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
-import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
-import { useVaultFolder } from '../folders/queries/useVaultFoldersQuery';
-import { VaultFolderProvider } from './state/currentVaultFolder';
+import { ChildrenProp } from '../../lib/ui/props'
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
+import { useAppPathParams } from '../../navigation/hooks/useAppPathParams'
+import { useVaultFolder } from '../folders/queries/useVaultFoldersQuery'
+import { VaultFolderProvider } from './state/currentVaultFolder'
 
 export const CurrentVaultFolderPageProvider = ({ children }: ChildrenProp) => {
-  const [{ id }] = useAppPathParams<'vaultFolder'>();
+  const [{ id }] = useAppPathParams<'vaultFolder'>()
 
-  const value = useVaultFolder(id);
+  const value = useVaultFolder(id)
 
-  const navigate = useAppNavigate();
+  const navigate = useAppNavigate()
 
   useEffect(() => {
     if (!value) {
-      navigate('vaults');
+      navigate('vaults')
     }
-  }, [navigate, value]);
+  }, [navigate, value])
 
   if (!value) {
-    return null;
+    return null
   }
 
-  return <VaultFolderProvider value={value}>{children}</VaultFolderProvider>;
-};
+  return <VaultFolderProvider value={value}>{children}</VaultFolderProvider>
+}

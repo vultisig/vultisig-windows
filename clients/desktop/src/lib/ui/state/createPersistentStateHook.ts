@@ -1,14 +1,14 @@
+import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useEffect,
   useState,
-} from 'react';
+} from 'react'
 
-import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined';
-import { OnValueChangeListener } from './PersistentStorage';
-import { PersistentStorage } from './PersistentStorage';
+import { OnValueChangeListener } from './PersistentStorage'
+import { PersistentStorage } from './PersistentStorage'
 
 export function createPersistentStateHook<T extends string>(
   storage: PersistentStorage<T>
@@ -18,47 +18,47 @@ export function createPersistentStateHook<T extends string>(
     initialValue: V | (() => V)
   ): [V, Dispatch<SetStateAction<Exclude<V, undefined>>>] {
     const [value, setValue] = useState<V>(() => {
-      const storedValue = storage.getItem<V>(key);
+      const storedValue = storage.getItem<V>(key)
 
       if (storedValue === undefined) {
         // If initialValue is a function, invoke it to get the value
         const resolvedInitialValue =
           typeof initialValue === 'function'
             ? (initialValue as () => V)()
-            : initialValue;
-        storage.setItem(key, resolvedInitialValue);
+            : initialValue
+        storage.setItem(key, resolvedInitialValue)
 
-        return resolvedInitialValue;
+        return resolvedInitialValue
       }
 
-      return storedValue;
-    });
+      return storedValue
+    })
 
     useEffect(() => {
       const onValueChange: OnValueChangeListener<
         Exclude<V, undefined>
       > = newValue => {
-        setValue(newValue);
-      };
+        setValue(newValue)
+      }
 
-      storage.addValueChangeListener(key, onValueChange);
+      storage.addValueChangeListener(key, onValueChange)
 
       const handleStorageChange = (event: StorageEvent) => {
-        if (event.key !== key) return;
+        if (event.key !== key) return
 
-        const newValue = storage.getItem<V>(key);
+        const newValue = storage.getItem<V>(key)
         if (newValue !== undefined) {
-          setValue(newValue);
+          setValue(newValue)
         }
-      };
+      }
 
-      window.addEventListener('storage', handleStorageChange);
+      window.addEventListener('storage', handleStorageChange)
 
       return () => {
-        storage.removeValueChangeListener(key, onValueChange);
-        window.removeEventListener('storage', handleStorageChange);
-      };
-    }, [key]);
+        storage.removeValueChangeListener(key, onValueChange)
+        window.removeEventListener('storage', handleStorageChange)
+      }
+    }, [key])
 
     const setPersistentStorageValue = useCallback(
       (
@@ -73,14 +73,14 @@ export function createPersistentStateHook<T extends string>(
                   prevState: Exclude<V, undefined>
                 ) => Exclude<V, undefined>
               )(shouldBeDefined(storage.getItem<Exclude<V, undefined>>(key)))
-            : newValue;
-        storage.setItem(key, resolvedValue);
+            : newValue
+        storage.setItem(key, resolvedValue)
       },
       [key]
-    );
+    )
 
-    return [value, setPersistentStorageValue];
+    return [value, setPersistentStorageValue]
   }
 
-  return usePersistentState;
+  return usePersistentState
 }

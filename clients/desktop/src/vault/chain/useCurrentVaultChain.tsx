@@ -1,7 +1,7 @@
-import { useAppPathParams } from '../../navigation/hooks/useAppPathParams';
+import { useAppPathParams } from '../../navigation/hooks/useAppPathParams'
 
 export const useCurrentVaultChain = () => {
-  const [{ chain }] = useAppPathParams<'vaultChainDetail'>();
+  const [{ chain }] = useAppPathParams<'vaultChainDetail'>()
 
-  return chain;
-};
+  return chain
+}

@@ -1,23 +1,23 @@
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { without } from '@lib/utils/array/without'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { Button } from '../../../lib/ui/buttons/Button';
-import { borderRadius } from '../../../lib/ui/css/borderRadius';
-import { centerContent } from '../../../lib/ui/css/centerContent';
-import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
-import { InfoBlock } from '../../../lib/ui/status/InfoBlock';
-import { Text, text } from '../../../lib/ui/text';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { without } from '@lib/utils/array/without';
-import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader';
-import { PageContent } from '../../../ui/page/PageContent';
-import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId';
-import { getVaultActionSignersMin } from '../../keygen/utils/getVaultActionSignersMin';
-import { useVaultKeygenDevices } from '../../setup/hooks/useVaultKegenDevices';
-import { useCurrentVault } from '../../state/currentVault';
-import { ReshareDeviceItem } from './ReshareDeviceItem';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { borderRadius } from '../../../lib/ui/css/borderRadius'
+import { centerContent } from '../../../lib/ui/css/centerContent'
+import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
+import { InfoBlock } from '../../../lib/ui/status/InfoBlock'
+import { Text, text } from '../../../lib/ui/text'
+import { getColor } from '../../../lib/ui/theme/getters'
+import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
+import { PageContent } from '../../../ui/page/PageContent'
+import { useCurrentLocalPartyId } from '../../keygen/state/currentLocalPartyId'
+import { useVaultKeygenDevices } from '../../setup/hooks/useVaultKegenDevices'
+import { useCurrentVault } from '../../state/currentVault'
+import { ReshareDeviceItem } from './ReshareDeviceItem'
 
 const Pill = styled.div`
   height: 32px;
@@ -30,19 +30,19 @@ const Pill = styled.div`
     weight: 600,
   })}
   background: ${getColor('foreground')};
-`;
+`
 
 export const ReshareVerifyStep: React.FC<OnBackProp & OnForwardProp> = ({
   onBack,
   onForward,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
-  const devices = useVaultKeygenDevices();
-  const localPartyId = useCurrentLocalPartyId();
-  const { signers } = useCurrentVault();
+  const devices = useVaultKeygenDevices()
+  const localPartyId = useCurrentLocalPartyId()
+  const { signers } = useCurrentVault()
 
-  const thresholdText = `${getVaultActionSignersMin(devices.length)} ${t('of')} ${devices.length}`;
+  const thresholdText = `${getKeygenThreshold(devices.length)} ${t('of')} ${devices.length}`
 
   return (
     <>
@@ -82,5 +82,5 @@ export const ReshareVerifyStep: React.FC<OnBackProp & OnForwardProp> = ({
         </VStack>
       </PageContent>
     </>
-  );
-};
+  )
+}

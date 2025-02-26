@@ -1,10 +1,10 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
-import { SendChainSpecificProvider } from './SendChainSpecificProvider';
-import { SendGasFeeValue } from './SendGasFeeValue';
+import { SendChainSpecificProvider } from './SendChainSpecificProvider'
+import { SendGasFeeValue } from './SendGasFeeValue'
 
 export const SendGasFeeWrapper = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <>
@@ -15,5 +15,5 @@ export const SendGasFeeWrapper = () => {
         <SendGasFeeValue />
       </SendChainSpecificProvider>
     </>
-  );
-};
+  )
+}

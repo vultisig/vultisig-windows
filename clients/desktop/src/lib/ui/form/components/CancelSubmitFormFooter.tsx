@@ -1,13 +1,13 @@
-import { Button } from '../../buttons/Button';
-import { HStack } from '../../layout/Stack';
+import { Button } from '../../buttons/Button'
+import { HStack } from '../../layout/Stack'
 
 type CancelSubmitFormFooterProps = {
-  onCancel?: () => void;
-  isDisabled?: string | boolean;
-  isPending?: boolean;
-  submitText?: string;
-  cancelText?: string;
-};
+  onCancel?: () => void
+  isDisabled?: string | boolean
+  isPending?: boolean
+  submitText?: string
+  cancelText?: string
+}
 
 export const CancelSubmitFooter = ({
   onCancel,
@@ -27,5 +27,5 @@ export const CancelSubmitFooter = ({
         {submitText}
       </Button>
     </HStack>
-  );
-};
+  )
+}

@@ -1,8 +1,8 @@
-import { Chain } from '@core/chain/Chain';
-import { WalletCore } from '@trustwallet/wallet-core';
-import { z } from 'zod';
+import { Chain } from '@core/chain/Chain'
+import { WalletCore } from '@trustwallet/wallet-core'
+import { z } from 'zod'
 
-import { isValidAddress } from '../../../chain/utils/isValidAddress';
+import { isValidAddress } from '../../../chain/utils/isValidAddress'
 
 export const requiredFieldsPerChainAction = {
   bond: {
@@ -49,7 +49,7 @@ export const requiredFieldsPerChainAction = {
                 chain: chain as Chain,
                 address,
                 walletCore,
-              });
+              })
             },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
@@ -113,7 +113,7 @@ export const requiredFieldsPerChainAction = {
                 chain: chain as Chain,
                 address,
                 walletCore,
-              });
+              })
             },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
@@ -141,8 +141,8 @@ export const requiredFieldsPerChainAction = {
           .string()
           .optional()
           .transform(val => {
-            if (val === undefined || val === '') return undefined;
-            return Number(val);
+            if (val === undefined || val === '') return undefined
+            return Number(val)
           })
           .pipe(
             z
@@ -188,7 +188,7 @@ export const requiredFieldsPerChainAction = {
                 chain: chain as Chain,
                 address,
                 walletCore,
-              });
+              })
             },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
@@ -236,7 +236,7 @@ export const requiredFieldsPerChainAction = {
                 chain: chain as Chain,
                 address,
                 walletCore,
-              });
+              })
             },
             {
               message: 'chainFunctions.bond.validations.nodeAddressInvalid',
@@ -264,8 +264,8 @@ export const requiredFieldsPerChainAction = {
           .string()
           .optional()
           .transform(val => {
-            if (val === undefined || val === '') return undefined;
-            return Number(val);
+            if (val === undefined || val === '') return undefined
+            return Number(val)
           })
           .pipe(
             z
@@ -299,7 +299,7 @@ export const requiredFieldsPerChainAction = {
                 chain: chain as Chain,
                 address,
                 walletCore,
-              });
+              })
             },
             {
               message: 'chainFunctions.leave.validations.nodeAddressInvalid',
@@ -416,4 +416,4 @@ export const requiredFieldsPerChainAction = {
         .min(1, 'chainFunctions.unstake.validations.validatorAddress'),
     }),
   },
-};
+}

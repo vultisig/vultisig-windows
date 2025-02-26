@@ -14,5 +14,5 @@ export const ChevronDownIcon = () => {
     >
       <path d="M6 9l6 6 6-6" />
     </svg>
-  );
-};
+  )
+}

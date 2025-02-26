@@ -28,4 +28,4 @@ export const LinkIcon = () => (
       strokeLinejoin="round"
     />
   </svg>
-);
+)

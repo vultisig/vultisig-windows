@@ -1,38 +1,38 @@
-import { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { FC } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { storage } from '../../../../../wailsjs/go/models';
-import { Match } from '../../../../lib/ui/base/Match';
-import { StepTransition } from '../../../../lib/ui/base/StepTransition';
-import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation';
-import { appPaths } from '../../../../navigation';
-import { useVaults } from '../../../queries/useVaultsQuery';
-import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep';
-import VaultBackupPage from '../../shared/vaultBackupSettings/VaultBackupPage';
-import { BackupConfirmation } from './BackupConfirmation';
-import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne';
-import { BackupSuccessSlide } from './BackupSuccessSlides';
-import { NewVaultProvider } from './state/NewVaultProvider';
+import { storage } from '../../../../../wailsjs/go/models'
+import { Match } from '../../../../lib/ui/base/Match'
+import { StepTransition } from '../../../../lib/ui/base/StepTransition'
+import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
+import { appPaths } from '../../../../navigation'
+import { useVaults } from '../../../queries/useVaultsQuery'
+import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
+import VaultBackupPage from '../../shared/vaultBackupSettings/VaultBackupPage'
+import { BackupConfirmation } from './BackupConfirmation'
+import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne'
+import { BackupSuccessSlide } from './BackupSuccessSlides'
+import { NewVaultProvider } from './state/NewVaultProvider'
 
 const steps = [
   'backupSlideshowPartOne',
   'backupConfirmation',
   'backupPage',
   'backupSuccessfulSlideshow',
-] as const;
+] as const
 
 type BackupFastVaultProps = {
-  vault: storage.Vault;
-};
+  vault: storage.Vault
+}
 
 export const BackupSecureVault: FC<BackupFastVaultProps> = ({ vault }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const { step, toNextStep } = useStepNavigation({
     steps,
-  });
-  const vaults = useVaults();
+  })
+  const vaults = useVaults()
   // @antonio: by design we only need to show the summary step if user has more than 2 vaults
-  const shouldShowBackupSummary = vaults.length > 1;
+  const shouldShowBackupSummary = vaults.length > 1
 
   return (
     <NewVaultProvider initialValue={vault}>
@@ -54,6 +54,7 @@ export const BackupSecureVault: FC<BackupFastVaultProps> = ({ vault }) => {
                 <SetupVaultSummaryStep
                   onForward={onForward}
                   vaultType="secure"
+                  vaultShares={vault.keyshares.length}
                 />
               )}
               to={() => (
@@ -68,5 +69,5 @@ export const BackupSecureVault: FC<BackupFastVaultProps> = ({ vault }) => {
         }
       />
     </NewVaultProvider>
-  );
-};
+  )
+}

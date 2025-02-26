@@ -1,16 +1,16 @@
-import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../lib/ui/buttons/Button';
-import { useBoolean } from '../../../../lib/ui/hooks/useBoolean';
-import { LightningIcon } from '../../../../lib/ui/icons/LightningIcon';
-import { Checkbox } from '../../../../lib/ui/inputs/checkbox/Checkbox';
-import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility';
-import { HStack, VStack } from '../../../../lib/ui/layout/Stack';
-import { OnForwardProp } from '../../../../lib/ui/props';
-import { Text } from '../../../../lib/ui/text';
-import { SetupVaultType } from '../../type/SetupVaultType';
-import { getBackupItemsForVaultType } from './constants';
+import { Button } from '../../../../lib/ui/buttons/Button'
+import { useBoolean } from '../../../../lib/ui/hooks/useBoolean'
+import { LightningIcon } from '../../../../lib/ui/icons/LightningIcon'
+import { Checkbox } from '../../../../lib/ui/inputs/checkbox/Checkbox'
+import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility'
+import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
+import { OnForwardProp } from '../../../../lib/ui/props'
+import { Text } from '../../../../lib/ui/text'
+import { SetupVaultType } from '../../type/SetupVaultType'
+import { getBackupItemsForVaultType } from './constants'
 import {
   ContentWrapper,
   IconWrapper,
@@ -18,22 +18,22 @@ import {
   PillWrapper,
   SummaryListItem,
   Wrapper,
-} from './SetupVaultSummaryStep.styles';
+} from './SetupVaultSummaryStep.styles'
 
 type SetupVaultSummaryStepProps = OnForwardProp & {
-  vaultType: SetupVaultType;
-  vaultShares?: number;
-};
+  vaultType: SetupVaultType
+  vaultShares?: number
+}
 
 export const SetupVaultSummaryStep: FC<SetupVaultSummaryStepProps> = ({
   vaultType,
   onForward,
   vaultShares,
 }) => {
-  const { t } = useTranslation();
-  const [isChecked, { toggle }] = useBoolean(false);
-  const summaryItems = getBackupItemsForVaultType(vaultType);
-  const isFastVault = vaultType === 'fast';
+  const { t } = useTranslation()
+  const [isChecked, { toggle }] = useBoolean(false)
+  const summaryItems = getBackupItemsForVaultType(vaultType)
+  const isFastVault = vaultType === 'fast'
 
   return (
     <AnimatedVisibility
@@ -95,5 +95,5 @@ export const SetupVaultSummaryStep: FC<SetupVaultSummaryStepProps> = ({
         </VStack>
       </Wrapper>
     </AnimatedVisibility>
-  );
-};
+  )
+}

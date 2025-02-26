@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import useVersionCheck from '../../lib/hooks/useVersionCheck';
-import { Text } from '../../lib/ui/text';
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
-import { ProductLogo } from '../../ui/logo/ProductLogo';
+import useVersionCheck from '../../lib/hooks/useVersionCheck'
+import { Text } from '../../lib/ui/text'
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
+import { ProductLogo } from '../../ui/logo/ProductLogo'
 import {
   FixedWrapper,
   StyledButton,
   StyledModalCloseButton,
-} from './UpdatedAvailablePopup.styles';
+} from './UpdatedAvailablePopup.styles'
 
 const UpdateAvailablePopup = () => {
-  const { t } = useTranslation();
-  const navigate = useAppNavigate();
+  const { t } = useTranslation()
+  const navigate = useAppNavigate()
   const {
     localVersion,
     latestVersion,
@@ -21,18 +21,18 @@ const UpdateAvailablePopup = () => {
     isLocalVersionValid,
     remoteError,
     isLoading,
-  } = useVersionCheck();
-  const [isOpen, setIsOpen] = useState(false);
+  } = useVersionCheck()
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    const isError = !isLocalVersionValid || remoteError;
+    const isError = !isLocalVersionValid || remoteError
     if (!isLoading && !isError && updateAvailable) {
-      setIsOpen(true);
+      setIsOpen(true)
     }
-  }, [isLoading, isLocalVersionValid, remoteError, updateAvailable]);
+  }, [isLoading, isLocalVersionValid, remoteError, updateAvailable])
 
   if (!isOpen) {
-    return null;
+    return null
   }
 
   return (
@@ -49,7 +49,7 @@ const UpdateAvailablePopup = () => {
         {t('updatePopup.updateButton')}
       </StyledButton>
     </FixedWrapper>
-  );
-};
+  )
+}
 
-export default UpdateAvailablePopup;
+export default UpdateAvailablePopup

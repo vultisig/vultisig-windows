@@ -1,89 +1,87 @@
-import { StrictMode, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Button, QRCode, message, Form, Input } from "antd";
-import { formatUnits, toUtf8String } from "ethers";
-import { create } from "@bufbuild/protobuf";
-import ReactDOM from "react-dom/client";
+import '@clients/extension/src/styles/index.scss'
+import '@clients/extension/src/pages/transaction/index.scss'
+import '@clients/extension/src/utils/prototypes'
 
-import { CoinSchema } from "@core/communication/vultisig/keysign/v1/coin_pb";
-
-import { evmChains, explorerUrl, TssKeysignType } from "../../utils/constants";
-import {
-  formatDisplayNumber,
-  getTssKeysignType,
-  parseMemo,
-  splitString,
-} from "../../utils/functions";
-import {
-  ITransaction,
-  ParsedMemo,
-  SignatureProps,
-  VaultProps,
-} from "../../utils/interfaces";
-import {
-  getStoredCurrency,
-  getStoredLanguage,
-  getStoredTransactions,
-  getStoredVaults,
-  setStoredTransaction,
-} from "../../utils/storage";
-import {
-  EVMTransactionProvider,
-  MayaTransactionProvider,
-  TransactionProvider,
-  ThorchainTransactionProvider,
-  CosmosTransactionProvider,
-  BaseTransactionProvider,
-} from "../../utils/transaction-provider";
-import i18n from "../../i18n/config";
-import api from "../../utils/api";
-import messageKeys from "../../utils/message-keys";
-import DataConverterProvider from "../../utils/data-converter-provider";
-import WalletCoreProvider from "../../utils/wallet-core-provider";
-
+import { create } from '@bufbuild/protobuf'
+import ConfigProvider from '@clients/extension/src/components/config-provider'
+import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
+import VultiError from '@clients/extension/src/components/vulti-error'
+import VultiLoading from '@clients/extension/src/components/vulti-loading'
+import i18n from '@clients/extension/src/i18n/config'
 import {
   ArrowLeft,
   LinkExternal,
   QRCodeBorder,
   SquareArrow,
   SquareBehindSquare,
-} from "../../icons";
-import ConfigProvider from "../../components/config-provider";
-import MiddleTruncate from "../../components/middle-truncate";
-import VultiLoading from "../../components/vulti-loading";
-import VultiError from "../../components/vulti-error";
-
-import "../../styles/index.scss";
-import "../../pages/transaction/index.scss";
-import "../../utils/prototypes";
-import UTXOTransactionProvider from "../../utils/transaction-provider/utxo";
-
+} from '@clients/extension/src/icons'
+import api from '@clients/extension/src/utils/api'
+import { TssKeysignType } from '@clients/extension/src/utils/constants'
+import DataConverterProvider from '@clients/extension/src/utils/data-converter-provider'
+import {
+  formatDisplayNumber,
+  getTssKeysignType,
+  parseMemo,
+  splitString,
+} from '@clients/extension/src/utils/functions'
+import {
+  ITransaction,
+  ParsedMemo,
+  SignatureProps,
+  VaultProps,
+} from '@clients/extension/src/utils/interfaces'
+import messageKeys from '@clients/extension/src/utils/message-keys'
+import {
+  getStoredCurrency,
+  getStoredLanguage,
+  getStoredTransactions,
+  getStoredVaults,
+  setStoredTransaction,
+} from '@clients/extension/src/utils/storage'
+import {
+  BaseTransactionProvider,
+  CosmosTransactionProvider,
+  EVMTransactionProvider,
+  MayaTransactionProvider,
+  ThorchainTransactionProvider,
+  TransactionProvider,
+} from '@clients/extension/src/utils/transaction-provider'
+import UTXOTransactionProvider from '@clients/extension/src/utils/transaction-provider/utxo'
+import WalletCoreProvider from '@clients/extension/src/utils/wallet-core-provider'
+import { getChainKind } from '@core/chain/ChainKind'
+import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
+import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb'
+import { Button, Form, Input, message, QRCode } from 'antd'
+import { formatUnits, toUtf8String } from 'ethers'
+import { StrictMode, useEffect, useRef, useState } from 'react'
+import ReactDOM from 'react-dom/client'
+import { useTranslation } from 'react-i18next'
 interface FormProps {
-  password: string;
+  password: string
 }
 
 interface InitialState {
-  fastSign?: boolean;
-  loading?: boolean;
-  sendKey?: string;
-  step: number;
-  transaction?: ITransaction;
-  txProvider?: BaseTransactionProvider;
-  parsedMemo?: ParsedMemo;
-  vault?: VaultProps;
-  hasError?: boolean;
-  errorTitle?: string;
-  errorDescription?: string;
+  fastSign?: boolean
+  loading?: boolean
+  sendKey?: string
+  step: number
+  transaction?: ITransaction
+  txProvider?: BaseTransactionProvider
+  parsedMemo?: ParsedMemo
+  vault?: VaultProps
+  hasError?: boolean
+  errorTitle?: string
+  errorDescription?: string
 }
 
 const Component = () => {
-  const { t } = useTranslation();
-  const RETRY_TIMEOUT_MS = 120000;
-  const CLOSE_TIMEOUT_MS = 60000;
-  const initialState: InitialState = { step: 1, hasError: false };
-  const [connectedDevices, setConnectedDevices] = useState(0);
-  const [form] = Form.useForm();
-  const [state, setState] = useState(initialState);
+  const { t } = useTranslation()
+  const RETRY_TIMEOUT_MS = 120000
+  const CLOSE_TIMEOUT_MS = 60000
+  const initialState: InitialState = { step: 1, hasError: false }
+  const [connectedDevices, setConnectedDevices] = useState(0)
+  const [form] = Form.useForm()
+  const [state, setState] = useState(initialState)
   const {
     loading,
     fastSign,
@@ -96,17 +94,17 @@ const Component = () => {
     errorTitle,
     errorDescription,
     parsedMemo,
-  } = state;
-  const [messageApi, contextHolder] = message.useMessage();
-  const qrContainerRef = useRef<HTMLDivElement>(null);
+  } = state
+  const [messageApi, contextHolder] = message.useMessage()
+  const qrContainerRef = useRef<HTMLDivElement>(null)
 
   const handleApp = (): void => {
-    window.open(sendKey, "_self");
-  };
+    window.open(sendKey, '_self')
+  }
 
   const handleClose = (): void => {
-    window.close();
-  };
+    window.close()
+  }
 
   const handleCopy = (): void => {
     if (transaction?.txHash) {
@@ -114,57 +112,57 @@ const Component = () => {
         .writeText(transaction.txHash)
         .then(() => {
           messageApi.open({
-            type: "success",
+            type: 'success',
             content: t(messageKeys.SUCCESSFUL_COPY_LINK),
-          });
+          })
         })
         .catch(() => {
           messageApi.open({
-            type: "error",
+            type: 'error',
             content: t(messageKeys.UNSUCCESSFUL_COPY_LINK),
-          });
-        });
+          })
+        })
     }
-  };
+  }
 
   const exportQRCode = () => {
     if (qrContainerRef.current) {
-      const canvas = qrContainerRef.current.querySelector("canvas");
+      const canvas = qrContainerRef.current.querySelector('canvas')
       if (canvas) {
-        const dataURL = canvas.toDataURL("image/png");
-        const link = document.createElement("a");
-        link.href = dataURL;
-        link.download = "qrcode.png";
-        link.click();
+        const dataURL = canvas.toDataURL('image/png')
+        const link = document.createElement('a')
+        link.href = dataURL
+        link.download = 'qrcode.png'
+        link.click()
       }
     }
-  };
+  }
 
   const initCloseTimer = (timeout: number) => {
-    setTimeout(handleClose, timeout);
-  };
+    setTimeout(handleClose, timeout)
+  }
 
   const handlePending = (
     preSignedImageHash: string,
-    preSignedInputData: Uint8Array,
+    preSignedInputData: Uint8Array
   ): void => {
     if (transaction && txProvider) {
       const retryTimeout = setTimeout(() => {
-        setStoredTransaction({ ...transaction, status: "error" }).then(() => {
+        setStoredTransaction({ ...transaction, status: 'error' }).then(() => {
           setState({
             ...state,
             hasError: true,
             errorTitle: t(messageKeys.TIMEOUT_ERROR),
             errorDescription: t(messageKeys.SIGNING_TIMEOUT_DESCRIPTION),
-          });
-        });
-      }, RETRY_TIMEOUT_MS);
+          })
+        })
+      }, RETRY_TIMEOUT_MS)
 
       const attemptTransaction = (): void => {
         api.transaction
           .getComplete(transaction.id, preSignedImageHash)
-          .then((data) => {
-            clearTimeout(retryTimeout);
+          .then(data => {
+            clearTimeout(retryTimeout)
 
             txProvider
               .getSignedTransaction({
@@ -176,200 +174,200 @@ const Component = () => {
               .then(({ txHash, raw }) => {
                 setStoredTransaction({
                   ...transaction,
-                  status: "success",
+                  status: 'success',
                   txHash,
                   raw,
                 }).then(() => {
-                  setState((prevState) => ({
+                  setState(prevState => ({
                     ...prevState,
                     step: 5,
                     transaction: { ...transaction, txHash, raw },
-                  }));
+                  }))
 
-                  initCloseTimer(CLOSE_TIMEOUT_MS);
-                });
+                  initCloseTimer(CLOSE_TIMEOUT_MS)
+                })
               })
-              .catch(() => {});
+              .catch(() => {})
           })
           .catch(({ status }) => {
             if (status === 404) {
-              setTimeout(attemptTransaction, 1000);
+              setTimeout(attemptTransaction, 1000)
             } else {
-              clearTimeout(retryTimeout);
+              clearTimeout(retryTimeout)
 
-              setStoredTransaction({ ...transaction, status: "error" }).then(
+              setStoredTransaction({ ...transaction, status: 'error' }).then(
                 () => {
                   messageApi.open({
-                    type: "error",
+                    type: 'error',
                     content: t(messageKeys.RETRY_ERROR),
-                  });
-                },
-              );
+                  })
+                }
+              )
             }
-          });
-      };
+          })
+      }
 
-      attemptTransaction();
+      attemptTransaction()
     }
-  };
+  }
 
   const handleCustomMessagePending = (): void => {
-    if (!transaction || !txProvider) return;
+    if (!transaction || !txProvider) return
     const retryTimeout = setTimeout(() => {
-      setStoredTransaction({ ...transaction, status: "error" }).then(() => {
+      setStoredTransaction({ ...transaction, status: 'error' }).then(() => {
         setState({
           ...state,
           hasError: true,
           errorTitle: t(messageKeys.TIMEOUT_ERROR),
           errorDescription: t(messageKeys.SIGNING_TIMEOUT_DESCRIPTION),
-        });
-      });
-    }, RETRY_TIMEOUT_MS);
+        })
+      })
+    }, RETRY_TIMEOUT_MS)
 
     const attemptTransaction = (): void => {
       api.transaction
         .getComplete(transaction.id)
-        .then((data) => {
-          clearTimeout(retryTimeout);
+        .then(data => {
+          clearTimeout(retryTimeout)
           const customSignature = txProvider.getEncodedSignature(
-            data as SignatureProps,
-          );
+            data as SignatureProps
+          )
           setStoredTransaction({
             ...transaction,
-            status: "success",
+            status: 'success',
             customSignature,
           }).then(() => {
-            setState((prevState) => ({
+            setState(prevState => ({
               ...prevState,
               step: 5,
               transaction: {
                 ...transaction,
                 customSignature,
               },
-            }));
-            initCloseTimer(CLOSE_TIMEOUT_MS);
-          });
+            }))
+            initCloseTimer(CLOSE_TIMEOUT_MS)
+          })
         })
         .catch(({ status }) => {
           if (status === 404) {
             setTimeout(() => {
-              attemptTransaction();
-            }, 1000);
+              attemptTransaction()
+            }, 1000)
           } else {
-            clearTimeout(retryTimeout);
-            setStoredTransaction({ ...transaction, status: "error" }).then(
+            clearTimeout(retryTimeout)
+            setStoredTransaction({ ...transaction, status: 'error' }).then(
               () => {
                 messageApi.open({
-                  type: "error",
+                  type: 'error',
                   content: t(messageKeys.RETRY_ERROR),
-                });
-              },
-            );
+                })
+              }
+            )
           }
-        });
-    };
-    attemptTransaction();
-  };
+        })
+    }
+    attemptTransaction()
+  }
 
   const handleStart = (): void => {
     if (transaction && txProvider) {
       api.transaction
         .getDevices(transaction.id)
         .then(({ data }) => {
-          setConnectedDevices(data?.length);
+          setConnectedDevices(data?.length)
           if (data?.length > 1) {
             api.transaction
               .setStart(transaction.id, data)
               .then(() => {
-                setStoredTransaction({ ...transaction, status: "pending" })
+                setStoredTransaction({ ...transaction, status: 'pending' })
                   .then(() => {
                     if (transaction.isCustomMessage) {
-                      setState((prevState) => ({
+                      setState(prevState => ({
                         ...prevState,
                         step: 4,
-                      }));
-                      handleCustomMessagePending();
+                      }))
+                      handleCustomMessagePending()
                     } else {
                       txProvider
                         .getPreSignedInputData()
-                        .then((preSignedInputData) => {
+                        .then(preSignedInputData => {
                           txProvider
                             .getPreSignedImageHash(preSignedInputData)
-                            .then((preSignedImageHash) => {
-                              setState((prevState) => ({
+                            .then(preSignedImageHash => {
+                              setState(prevState => ({
                                 ...prevState,
                                 step: 4,
-                              }));
+                              }))
                               handlePending(
                                 preSignedImageHash,
-                                preSignedInputData,
-                              );
+                                preSignedInputData
+                              )
                             })
-                            .catch((err) => {
-                              console.error(err);
-                            });
+                            .catch(err => {
+                              console.error(err)
+                            })
                         })
-                        .catch((err) => {
-                          console.error(err);
-                        });
+                        .catch(err => {
+                          console.error(err)
+                        })
                     }
                   })
-                  .catch((err) => {
-                    console.log(err);
-                  });
+                  .catch(err => {
+                    console.log(err)
+                  })
               })
-              .catch((err) => {
-                console.log(err);
-              });
+              .catch(err => {
+                console.log(err)
+              })
           } else {
             setTimeout(() => {
-              handleStart();
-            }, 1000);
+              handleStart()
+            }, 1000)
           }
         })
         .catch(() => {
-          setStoredTransaction({ ...transaction, status: "error" }).then(() => {
+          setStoredTransaction({ ...transaction, status: 'error' }).then(() => {
             messageApi.open({
-              type: "error",
+              type: 'error',
               content: t(messageKeys.RETRY_ERROR),
-            });
-          });
-        });
+            })
+          })
+        })
     }
-  };
+  }
 
   const handleStep = (step: number): void => {
     switch (step) {
       case 2: {
         if (sendKey) {
-          setState((prevState) => ({ ...prevState, step }));
+          setState(prevState => ({ ...prevState, step }))
         } else if (transaction && txProvider && vault) {
-          setState((prevState) => ({ ...prevState, loading: true }));
+          setState(prevState => ({ ...prevState, loading: true }))
           if (transaction.isCustomMessage) {
             txProvider
               .getTransactionKey(
                 vault.publicKeyEcdsa,
                 transaction,
-                vault.hexChainCode,
+                vault.hexChainCode
               )
-              .then((sendKey) => {
+              .then(sendKey => {
                 api.fastVault
                   .assertVaultExist(vault.publicKeyEcdsa)
-                  .then((exist) => {
-                    setState((prevState) => ({
+                  .then(exist => {
+                    setState(prevState => ({
                       ...prevState,
                       fastSign: exist,
                       loading: false,
                       sendKey,
                       step,
-                    }));
+                    }))
 
-                    handleStart();
-                  });
+                    handleStart()
+                  })
               })
               .catch(() => {
-                setState((prevState) => ({ ...prevState, loading: false }));
-              });
+                setState(prevState => ({ ...prevState, loading: false }))
+              })
           } else {
             txProvider
               .getKeysignPayload(transaction, vault)
@@ -378,95 +376,102 @@ const Component = () => {
                   .getTransactionKey(
                     vault.publicKeyEcdsa,
                     transaction,
-                    vault.hexChainCode,
+                    vault.hexChainCode
                   )
-                  .then((sendKey) => {
+                  .then(sendKey => {
                     api.fastVault
                       .assertVaultExist(vault.publicKeyEcdsa)
-                      .then((exist) => {
-                        setState((prevState) => ({
+                      .then(exist => {
+                        setState(prevState => ({
                           ...prevState,
                           fastSign: exist,
                           loading: false,
                           sendKey,
                           step,
-                        }));
+                        }))
 
-                        handleStart();
-                      });
+                        handleStart()
+                      })
                   })
                   .catch(() => {
-                    setState((prevState) => ({ ...prevState, loading: false }));
-                  });
+                    setState(prevState => ({ ...prevState, loading: false }))
+                  })
               })
               .catch(() => {
-                setState((prevState) => ({ ...prevState, loading: false }));
-              });
+                setState(prevState => ({ ...prevState, loading: false }))
+              })
           }
         }
 
-        break;
+        break
       }
       default: {
-        setState((prevState) => ({ ...prevState, step }));
+        setState(prevState => ({ ...prevState, step }))
 
-        break;
+        break
       }
     }
-  };
+  }
   const handleFastSign = (): void => {
-    if (connectedDevices >= 1) handleStep(3);
+    if (connectedDevices >= 1) handleStep(3)
     else
       messageApi.open({
-        type: "warning",
+        type: 'warning',
         content: t(messageKeys.SCAN_FIRST),
-      });
-  };
+      })
+  }
 
   const handleSubmitFastSignPassword = (): void => {
-    txProvider?.getPreSignedInputData().then((preSignedInputData) => {
+    txProvider?.getPreSignedInputData().then(preSignedInputData => {
       txProvider
         .getPreSignedImageHash(preSignedInputData)
-        .then((preSignedImageHash) => {
+        .then(preSignedImageHash => {
           if (transaction) {
-            const tssType = getTssKeysignType(transaction.chain.name);
+            const tssType = getTssKeysignType(transaction.chain.chain)
             form
               .validateFields()
               .then(({ password }: FormProps) => {
                 api.fastVault
                   .signWithServer({
                     vault_password: password,
-                    hex_encryption_key: vault?.hexChainCode ?? "",
+                    hex_encryption_key: vault?.hexChainCode ?? '',
                     is_ecdsa:
-                      getTssKeysignType(transaction.chain.name) ===
+                      getTssKeysignType(transaction.chain.chain) ===
                       TssKeysignType.ECDSA,
                     derive_path: txProvider.getDerivePath(
-                      transaction.chain.name,
+                      transaction.chain.chain
                     ),
                     messages: [preSignedImageHash],
                     public_key:
                       tssType === TssKeysignType.ECDSA
-                        ? (vault?.publicKeyEcdsa ?? "")
-                        : (vault?.publicKeyEddsa ?? ""),
+                        ? (vault?.publicKeyEcdsa ?? '')
+                        : (vault?.publicKeyEddsa ?? ''),
                     session: transaction.id,
                   })
                   .then(() => {
-                    setState((prevState) => ({ ...prevState, step: 4 }));
-                    handlePending(preSignedImageHash, preSignedInputData);
+                    setState(prevState => ({ ...prevState, step: 4 }))
+                    handlePending(preSignedImageHash, preSignedInputData)
                   })
-                  .catch((err) => {
-                    console.error(err);
+                  .catch(err => {
+                    console.error(err)
                     messageApi.open({
-                      type: "error",
+                      type: 'error',
                       content: t(messageKeys.SIGNING_ERROR),
-                    });
-                  });
+                    })
+                  })
               })
-              .catch(() => {});
+              .catch(error => {
+                if (error.errorFields) {
+                  messageApi.open({
+                    type: 'error',
+                    content: t(messageKeys.INVALID_PASSWORD),
+                  })
+                }
+              })
           }
-        });
-    });
-  };
+        })
+    })
+  }
 
   const componentDidMount = (): void => {
     Promise.all([
@@ -475,75 +480,78 @@ const Component = () => {
       getStoredTransactions(),
       getStoredVaults(),
     ]).then(([currency, language, transactions, vaults]) => {
-      const [transaction] = transactions;
+      const [transaction] = transactions
 
-      i18n.changeLanguage(language);
+      i18n.changeLanguage(language)
 
       const vault = vaults.find(
         ({ chains }) =>
           chains.findIndex(
             ({ address }) =>
               address?.toLowerCase() ===
-              transaction?.transactionDetails.from.toLowerCase(),
-          ) >= 0,
-      );
+              transaction?.transactionDetails.from.toLowerCase()
+          ) >= 0
+      )
 
       if (vault) {
-        const walletCore = new WalletCoreProvider();
+        const walletCore = new WalletCoreProvider()
 
         walletCore
           .getCore()
           .then(({ chainRef, walletCore }) => {
-            const dataConverter = new DataConverterProvider();
+            const dataConverter = new DataConverterProvider()
             const txProvider = TransactionProvider.createProvider(
-              transaction.chain.name,
+              transaction.chain.chain,
               chainRef,
               dataConverter.compactEncoder,
-              walletCore,
-            );
+              walletCore
+            )
 
             // Improve
-            if (evmChains.indexOf(transaction.chain.name) >= 0) {
+            if (getChainKind(transaction.chain.chain) === 'evm') {
               parseMemo(transaction.transactionDetails.data!)
-                .then((memo) => {
-                  setState({ ...state, parsedMemo: memo });
+                .then(memo => {
+                  setState({ ...state, parsedMemo: memo })
                 })
-                .catch();
-
-              (txProvider as EVMTransactionProvider).getFeeData().then(() => {
-                (txProvider as EVMTransactionProvider)
-                  .getEstimateTransactionFee(transaction.chain.cmcId, currency)
-                  .then((gasPrice) => {
-                    transaction.gasPrice = gasPrice;
+                .catch(err => {
+                  console.log('Could not parse memo:', err)
+                })
+              ;(txProvider as EVMTransactionProvider).getFeeData().then(() => {
+                ;(txProvider as EVMTransactionProvider)
+                  .getEstimateTransactionFee(transaction.chain.cmcId!, currency)
+                  .then(gasPrice => {
+                    transaction.gasPrice = gasPrice
                     try {
                       transaction.memo = toUtf8String(
-                        transaction.transactionDetails.data!,
-                      );
-                    } catch (err) {}
+                        transaction.transactionDetails.data!
+                      )
+                    } catch {
+                      transaction.memo = transaction.transactionDetails.data
+                    }
                     setStoredTransaction(transaction).then(() => {
-                      setState((prevState) => ({
+                      setState(prevState => ({
                         ...prevState,
                         currency,
                         loaded: true,
                         transaction,
                         txProvider,
                         vault,
-                      }));
-                    });
-                  });
-              });
+                      }))
+                    })
+                  })
+              })
             } else {
               const coin = create(CoinSchema, {
-                chain: transaction.chain.name,
+                chain: transaction.chain.chain,
                 ticker: transaction.chain.ticker,
                 address: transaction.transactionDetails.from,
                 decimals: transaction.chain.decimals,
                 hexPublicKey: vault.hexChainCode,
                 isNativeToken: true,
                 logo: transaction.chain.ticker.toLowerCase(),
-              });
+              })
 
-              (
+              ;(
                 txProvider as
                   | ThorchainTransactionProvider
                   | MayaTransactionProvider
@@ -551,45 +559,45 @@ const Component = () => {
                   | UTXOTransactionProvider
               )
                 .getSpecificTransactionInfo(coin)
-                .then((blockchainSpecific) => {
-                  transaction.gasPrice = String(blockchainSpecific.gasPrice);
+                .then(blockchainSpecific => {
+                  transaction.gasPrice = String(blockchainSpecific.gasPrice)
                   try {
                     transaction.memo = toUtf8String(
-                      transaction.transactionDetails.data!,
-                    );
-                  } catch (err) {
+                      transaction.transactionDetails.data!
+                    )
+                  } catch {
                     if (!parsedMemo) {
-                      transaction.memo = transaction.transactionDetails.data;
+                      transaction.memo = transaction.transactionDetails.data
                     }
                   }
                   setStoredTransaction(transaction).then(() => {
-                    setState((prevState) => ({
+                    setState(prevState => ({
                       ...prevState,
                       currency,
                       loaded: true,
                       transaction,
                       txProvider,
                       vault,
-                    }));
-                  });
-                });
+                    }))
+                  })
+                })
             }
           })
-          .catch((error) => {
-            console.log(error);
-          });
+          .catch(error => {
+            console.log(error)
+          })
       } else {
         setState({
           ...state,
           hasError: true,
           errorTitle: t(messageKeys.GET_VAULT_FAILED),
           errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
-        });
+        })
       }
-    });
-  };
-
-  useEffect(componentDidMount, []);
+    })
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(componentDidMount, [])
 
   return (
     <ConfigProvider>
@@ -597,8 +605,8 @@ const Component = () => {
         {hasError ? (
           <VultiError
             onClose={handleClose}
-            description={errorDescription ?? ""}
-            title={errorTitle ?? ""}
+            description={errorDescription ?? ''}
+            title={errorTitle ?? ''}
           />
         ) : transaction ? (
           <>
@@ -609,7 +617,7 @@ const Component = () => {
                     ? messageKeys.VERIFY_SEND
                     : step === 5
                       ? messageKeys.TRANSACTION_SUCCESSFUL
-                      : messageKeys.SIGN_TRANSACTION,
+                      : messageKeys.SIGN_TRANSACTION
                 )}
               </span>
               {step === 2 && (
@@ -656,7 +664,7 @@ const Component = () => {
                           <span className="label">{t(messageKeys.AMOUNT)}</span>
                           <span className="extra">{`${formatUnits(
                             transaction.transactionDetails.amount.amount,
-                            transaction.transactionDetails.amount.decimals,
+                            transaction.transactionDetails.amount.decimals
                           )} ${transaction.transactionDetails.asset.ticker}`}</span>
                         </div>
                       )}
@@ -668,7 +676,7 @@ const Component = () => {
                               {splitString(transaction.memo, 32).map(
                                 (str, index) => (
                                   <div key={index}>{str}</div>
-                                ),
+                                )
                               )}
                             </div>
                           </span>
@@ -681,7 +689,7 @@ const Component = () => {
                         <span className="extra">
                           {formatDisplayNumber(
                             transaction.gasPrice!,
-                            transaction.chain.ticker,
+                            transaction.chain.ticker
                           )}
                         </span>
                       </div>
@@ -700,7 +708,7 @@ const Component = () => {
                               {t(messageKeys.FUNCTION_INPUTS)}
                             </span>
                             <div className="scrollable-x monospace-text ">
-                              <div style={{ width: "max-content" }}>
+                              <div style={{ width: 'max-content' }}>
                                 <div className="function-inputs">
                                   {parsedMemo.inputs}
                                 </div>
@@ -752,7 +760,7 @@ const Component = () => {
                       <QRCode
                         bordered
                         size={1000}
-                        value={sendKey || ""}
+                        value={sendKey || ''}
                         color="white"
                       />
                     </div>
@@ -823,9 +831,7 @@ const Component = () => {
                         <MiddleTruncate text={transaction.txHash!} />
                         <div className="actions">
                           <a
-                            href={`${explorerUrl[transaction.chain.name]}/tx/${
-                              transaction.txHash
-                            }`}
+                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: transaction.txHash! })}`}
                             rel="noopener noreferrer"
                             target="_blank"
                             className="btn"
@@ -833,10 +839,10 @@ const Component = () => {
                             <SquareArrow />
                             {t(messageKeys.VIEW_TX)}
                           </a>
-                          <span className="btn" onClick={() => handleCopy()}>
+                          <button className="btn" onClick={() => handleCopy()}>
                             <SquareBehindSquare />
                             {t(messageKeys.COPY_TX)}
-                          </span>
+                          </button>
                         </div>
                       </div>
                       {transaction.transactionDetails.to && (
@@ -853,7 +859,7 @@ const Component = () => {
                           <span className="label">{t(messageKeys.AMOUNT)}</span>
                           <span className="extra">{`${formatUnits(
                             transaction.transactionDetails.amount.amount,
-                            transaction.transactionDetails.amount.decimals,
+                            transaction.transactionDetails.amount.decimals
                           )} ${transaction.transactionDetails.asset.ticker}`}</span>
                         </div>
                       )}
@@ -866,7 +872,7 @@ const Component = () => {
                               {splitString(transaction.memo, 32).map(
                                 (str, index) => (
                                   <div key={index}>{str}</div>
-                                ),
+                                )
                               )}
                             </div>
                           </span>
@@ -910,13 +916,13 @@ const Component = () => {
         )}
       </div>
     </ConfigProvider>
-  );
-};
+  )
+}
 
-export default Component;
+export default Component
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Component />
-  </StrictMode>,
-);
+  </StrictMode>
+)

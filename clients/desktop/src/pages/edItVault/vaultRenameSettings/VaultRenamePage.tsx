@@ -1,32 +1,32 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect } from 'react'
+import { FieldValues, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { z } from 'zod'
 
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Text } from '../../../lib/ui/text';
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { PageSlice } from '../../../ui/page/PageSlice';
-import { useRenameVaultMutation } from '../../../vault/mutations/useRenameVaultMutation';
-import { useCurrentVault } from '../../../vault/state/currentVault';
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { PageSlice } from '../../../ui/page/PageSlice'
+import { useRenameVaultMutation } from '../../../vault/mutations/useRenameVaultMutation'
+import { useCurrentVault } from '../../../vault/state/currentVault'
 import {
   ButtonWithBottomSpace,
   InputField,
   InputFieldWrapper,
-} from './VaultRenamePage.styles';
+} from './VaultRenamePage.styles'
 
 const renameSchema = z.object({
   vaultName: z.string().min(2, 'vault_rename_page_name_error').max(50),
-});
+})
 
 const VaultRenamePage = () => {
-  const { t } = useTranslation();
-  const goBack = useNavigateBack();
-  const vault = useCurrentVault();
+  const { t } = useTranslation()
+  const goBack = useNavigateBack()
+  const vault = useCurrentVault()
   const {
     register,
     handleSubmit,
@@ -37,27 +37,27 @@ const VaultRenamePage = () => {
     defaultValues: {
       vaultName: vault.name,
     },
-  });
+  })
 
   const {
     mutate: renameVault,
     isPending,
     error,
     isSuccess,
-  } = useRenameVaultMutation();
+  } = useRenameVaultMutation()
 
   const onSubmit = (data: FieldValues) => {
     renameVault({
       vault,
       newName: data.vaultName,
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     if (isSuccess) {
-      goBack();
+      goBack()
     }
-  }, [isSuccess, goBack]);
+  }, [isSuccess, goBack])
 
   return (
     <VStack flexGrow gap={16}>
@@ -107,7 +107,7 @@ const VaultRenamePage = () => {
         </VStack>
       </PageSlice>
     </VStack>
-  );
-};
+  )
+}
 
-export default VaultRenamePage;
+export default VaultRenamePage

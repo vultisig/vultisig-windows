@@ -1,19 +1,19 @@
-import { formatAmount } from '@lib/utils/formatAmount';
-import { useTranslation } from 'react-i18next';
+import { formatAmount } from '@lib/utils/formatAmount'
+import { useTranslation } from 'react-i18next'
 
-import { HStack } from '../../lib/ui/layout/Stack';
-import { MatchQuery } from '../../lib/ui/query/components/MatchQuery';
-import { Text } from '../../lib/ui/text';
-import { useFiatCurrency } from '../../preferences/state/fiatCurrency';
-import { useVaultTotalBalanceQuery } from '../queries/useVaultTotalBalanceQuery';
-import { BalanceVisibilityAware } from './visibility/BalanceVisibilityAware';
-import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVisibility';
+import { HStack } from '../../lib/ui/layout/Stack'
+import { MatchQuery } from '../../lib/ui/query/components/MatchQuery'
+import { Text } from '../../lib/ui/text'
+import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
+import { useVaultTotalBalanceQuery } from '../queries/useVaultTotalBalanceQuery'
+import { BalanceVisibilityAware } from './visibility/BalanceVisibilityAware'
+import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVisibility'
 
 export const VaultTotalBalance = () => {
-  const query = useVaultTotalBalanceQuery();
-  const [fiatCurrency] = useFiatCurrency();
+  const query = useVaultTotalBalanceQuery()
+  const [fiatCurrency] = useFiatCurrency()
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <HStack alignItems="center" gap={4}>
@@ -31,5 +31,5 @@ export const VaultTotalBalance = () => {
       />
       <ManageVaultBalanceVisibility />
     </HStack>
-  );
-};
+  )
+}

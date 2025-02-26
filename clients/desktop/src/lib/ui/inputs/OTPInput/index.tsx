@@ -1,18 +1,18 @@
-import { ComponentProps } from 'react';
-import styled, { css } from 'styled-components';
+import { ComponentProps } from 'react'
+import styled, { css } from 'styled-components'
 
-import { Button } from '../../buttons/Button';
-import { borderRadius } from '../../css/borderRadius';
-import { HStack } from '../../layout/Stack';
-import { getColor } from '../../theme/getters';
-import { useOtp } from './useOTP';
+import { Button } from '../../buttons/Button'
+import { borderRadius } from '../../css/borderRadius'
+import { HStack } from '../../layout/Stack'
+import { getColor } from '../../theme/getters'
+import { useOtp } from './useOTP'
 
 export interface OTPInputProps
   extends ComponentProps<typeof InputBoxContainer> {
-  length?: number;
-  onCompleted?: (value: string) => void;
-  onValueChange?: (value: string) => void;
-  validation: 'invalid' | 'valid' | undefined;
+  length?: number
+  onCompleted?: (value: string) => void
+  onValueChange?: (value: string) => void
+  validation: 'invalid' | 'valid' | undefined
 }
 
 export const OTPInput = ({
@@ -27,7 +27,7 @@ export const OTPInput = ({
     length,
     onValueChange,
     onCompleted
-  );
+  )
 
   return (
     <HStack alignItems="center" gap={10} className={className}>
@@ -48,11 +48,11 @@ export const OTPInput = ({
       ))}
       <PasteButton onClick={() => handlePaste()}>Paste</PasteButton>
     </HStack>
-  );
-};
+  )
+}
 
 const InputBoxContainer = styled.input<{
-  validation?: 'invalid' | 'valid';
+  validation?: 'invalid' | 'valid'
 }>`
   width: 46px;
   height: 46px;
@@ -65,6 +65,7 @@ const InputBoxContainer = styled.input<{
   &:focus {
     border-color: ${getColor('foregroundSuper')};
   }
+  color: ${getColor('text')};
 
   ${({ validation }) =>
     validation === 'valid'
@@ -84,8 +85,8 @@ const InputBoxContainer = styled.input<{
           &:hover {
             border-color: ${getColor('danger')};
           }
-        `}
-`;
+        `};
+`
 
 const PasteButton = styled(Button)`
   background-color: ${getColor('foreground')};
@@ -97,4 +98,4 @@ const PasteButton = styled(Button)`
   &:hover {
     background-color: ${getColor('foregroundExtra')};
   }
-`;
+`

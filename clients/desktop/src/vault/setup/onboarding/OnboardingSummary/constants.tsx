@@ -1,7 +1,7 @@
-import { ArrowSplitIcon } from '../../../../lib/ui/icons/ArrowSplitIcon';
-import { CloudStackIcon } from '../../../../lib/ui/icons/CloudStackIcon';
-import { CloudWithToolkeyIcon } from '../../../../lib/ui/icons/CloudWithToolkeyIcon';
-import { TriangleExclamationIcon } from '../../../../lib/ui/icons/TriangleExclamationIcon';
+import { ArrowSplitIcon } from '../../../../lib/ui/icons/ArrowSplitIcon'
+import { CloudStackIcon } from '../../../../lib/ui/icons/CloudStackIcon'
+import { CloudWithToolkeyIcon } from '../../../../lib/ui/icons/CloudWithToolkeyIcon'
+import { TriangleExclamationIcon } from '../../../../lib/ui/icons/TriangleExclamationIcon'
 
 export const SUMMARY_ITEMS = [
   {
@@ -24,4 +24,4 @@ export const SUMMARY_ITEMS = [
       </div>
     ),
   },
-];
+]

@@ -1,22 +1,22 @@
-import { useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { horizontalPadding } from '../../../../lib/ui/css/horizontalPadding';
-import { takeWholeSpace } from '../../../../lib/ui/css/takeWholeSpace';
+import { horizontalPadding } from '../../../../lib/ui/css/horizontalPadding'
+import { takeWholeSpace } from '../../../../lib/ui/css/takeWholeSpace'
 import {
   interactiveTextInput,
   textInputBorderRadius,
-} from '../../../../lib/ui/css/textInput';
-import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit';
-import { InputDebounce } from '../../../../lib/ui/inputs/InputDebounce';
-import { text } from '../../../../lib/ui/text';
-import { useFromAmount } from '../../state/fromAmount';
-import { useFromCoin } from '../../state/fromCoin';
-import { AmountContainer } from './AmountContainer';
-import { AmountLabel } from './AmountLabel';
-import { amountConfig } from './config';
-import { SwapFiatAmount } from './SwapFiatAmount';
+} from '../../../../lib/ui/css/textInput'
+import { toSizeUnit } from '../../../../lib/ui/css/toSizeUnit'
+import { InputDebounce } from '../../../../lib/ui/inputs/InputDebounce'
+import { text } from '../../../../lib/ui/text'
+import { useFromAmount } from '../../state/fromAmount'
+import { useFromCoin } from '../../state/fromCoin'
+import { AmountContainer } from './AmountContainer'
+import { AmountLabel } from './AmountLabel'
+import { amountConfig } from './config'
+import { SwapFiatAmount } from './SwapFiatAmount'
 
 const Input = styled.input`
   ${takeWholeSpace};
@@ -41,40 +41,40 @@ const Input = styled.input`
   ${textInputBorderRadius};
 
   ${interactiveTextInput};
-`;
+`
 
 export const ManageFromAmount = () => {
-  const [value, setValue] = useFromAmount();
+  const [value, setValue] = useFromAmount()
 
-  const [fromCoin] = useFromCoin();
+  const [fromCoin] = useFromCoin()
 
-  const valueAsString = value?.toString() ?? '';
-  const [inputValue, setInputValue] = useState<string>(valueAsString);
+  const valueAsString = value?.toString() ?? ''
+  const [inputValue, setInputValue] = useState<string>(valueAsString)
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const handleInputValueChange = useCallback(
     (value: string) => {
-      value = value.replace(/-/g, '');
+      value = value.replace(/-/g, '')
 
       if (value === '') {
-        setInputValue('');
-        setValue?.(null);
-        return;
+        setInputValue('')
+        setValue?.(null)
+        return
       }
 
-      const valueAsNumber = parseFloat(value);
+      const valueAsNumber = parseFloat(value)
       if (isNaN(valueAsNumber)) {
-        return;
+        return
       }
 
       setInputValue(
         valueAsNumber.toString() !== value ? value : valueAsNumber.toString()
-      );
-      setValue?.(valueAsNumber);
+      )
+      setValue?.(valueAsNumber)
     },
     [setValue]
-  );
+  )
 
   return (
     <AmountContainer>
@@ -100,5 +100,5 @@ export const ManageFromAmount = () => {
         )}
       />
     </AmountContainer>
-  );
-};
+  )
+}

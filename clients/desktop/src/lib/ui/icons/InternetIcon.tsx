@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import { SVGProps } from 'react'
 
 export const InternetIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -34,4 +34,4 @@ export const InternetIcon = (props: SVGProps<SVGSVGElement>) => (
       strokeLinecap="round"
     />
   </svg>
-);
+)

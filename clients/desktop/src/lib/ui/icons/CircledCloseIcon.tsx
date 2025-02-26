@@ -12,4 +12,4 @@ export const CircledCloseIcon = () => (
       </clipPath>
     </defs>
   </svg>
-);
+)

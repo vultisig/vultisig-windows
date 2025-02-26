@@ -1,88 +1,62 @@
-import { Buffer } from "buffer";
-import { create } from "@bufbuild/protobuf";
-import { TW, WalletCore } from "@trustwallet/wallet-core";
-import { CoinType } from "@trustwallet/wallet-core/dist/src/wallet-core";
-import Long from "long";
-import {
-  SolanaSpecificSchema,
-  SolanaSpecific,
-} from "@core/communication/vultisig/keysign/v1/blockchain_specific_pb";
-import {
-  KeysignPayloadSchema,
-  KeysignPayload,
-} from "@core/communication/vultisig/keysign/v1/keysign_message_pb";
-import {
-  Coin,
-  CoinSchema,
-} from "@core/communication/vultisig/keysign/v1/coin_pb";
+/* 
 
-import { ChainKey, rpcUrl } from "../../constants";
+DEPRECATED! This file is no longer used in the project.
+It was replaced by the file on CORE
+
+@rcoderdev @johnnyluo please deprecate all files you are moving to core. 
+
+*/
+
+import { create } from '@bufbuild/protobuf'
 import type {
   ITransaction,
   SignatureProps,
   SignedTransaction,
   SpecificSolana,
   VaultProps,
-} from "../../interfaces";
-import api from "../../api";
-import BaseTransactionProvider from "../../transaction-provider/base";
-
-import { SignedTransactionResult } from "../../signed-transaction-result";
-import { Connection, PublicKey } from "@solana/web3.js";
-import { formatUnits } from "ethers";
+} from '@clients/extension/src/utils/interfaces'
+import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
+import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
+import { Chain } from '@core/chain/Chain'
+import { getSolanaClient } from '@core/chain/chains/solana/client'
+import {
+  SolanaSpecific,
+  SolanaSpecificSchema,
+} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import {
+  Coin,
+  CoinSchema,
+} from '@core/communication/vultisig/keysign/v1/coin_pb'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { fromLegacyPublicKey } from '@solana/compat'
+import { PublicKey } from '@solana/web3.js'
+import { TW } from '@trustwallet/wallet-core'
+import { Buffer } from 'buffer'
+import { formatUnits } from 'ethers'
+import Long from 'long'
 export default class SolanaTransactionProvider extends BaseTransactionProvider {
-  constructor(
-    chainKey: ChainKey,
-    chainRef: { [chainKey: string]: CoinType },
-    dataEncoder: (data: Uint8Array) => Promise<string>,
-    walletCore: WalletCore,
-  ) {
-    super(chainKey, chainRef, dataEncoder, walletCore);
-  }
-
-  async fetchTokenAssociatedAccountByOwner(
-    walletAddress: string,
-    mintAddress: string,
-  ): Promise<string> {
-    const requestBody = {
-      jsonrpc: "2.0",
-      id: 1,
-      method: "getTokenAccountsByOwner",
-      params: [
-        walletAddress,
-        { mint: mintAddress },
-        { encoding: "jsonParsed" },
-      ],
-    };
-
-    const response = await api.rpc.post(rpcUrl.Solana, requestBody);
-    const accounts = response.result?.value || [];
-    return accounts.length > 0 ? accounts[0].pubkey : "";
-  }
-
   async fetchHighPriorityFee(address: string): Promise<number> {
-    const client = new Connection(rpcUrl.Solana);
-    const prioritizationFees = await client.getRecentPrioritizationFees({
-      lockedWritableAccounts: [new PublicKey(address)],
-    });
-    const highPriorityFee = Math.max(
-      ...prioritizationFees.map((fee) =>
-        Number(fee.prioritizationFee.valueOf()),
-      ),
-      0,
-    );
-    return highPriorityFee;
+    const client = getSolanaClient()
+    const prioritizationFees = await client
+      .getRecentPrioritizationFees([
+        fromLegacyPublicKey(new PublicKey(address)),
+      ])
+      .send()
+    return Math.max(
+      ...prioritizationFees.map(fee => Number(fee.prioritizationFee.valueOf())),
+      0
+    )
   }
 
   async fetchRecentBlockhash(): Promise<string> {
-    const requestBody = {
-      jsonrpc: "2.0",
-      id: 1,
-      method: "getLatestBlockhash",
-      params: [{ commitment: "confirmed" }],
-    };
-    const response = await api.rpc.post(rpcUrl.Solana, requestBody);
-    return response.result?.value?.blockhash as string;
+    const client = getSolanaClient()
+    const response = await client
+      .getLatestBlockhash({ commitment: 'confirmed' })
+      .send()
+    return response?.value.blockhash as string
   }
 
   public async getSpecificTransactionInfo(coin: Coin): Promise<SpecificSolana> {
@@ -90,83 +64,85 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
       const [recentBlockHash, highPriorityFee] = await Promise.all([
         this.fetchRecentBlockhash(),
         this.fetchHighPriorityFee(coin.address),
-      ]);
+      ])
 
       if (!recentBlockHash) {
-        throw new Error("Failed to get recent block hash");
+        throw new Error('Failed to get recent block hash')
       }
 
       return {
         recentBlockHash,
         priorityFee: highPriorityFee,
         gasPrice: Number(formatUnits(1_000_000, 9)),
-      } as SpecificSolana;
+      } as SpecificSolana
     } catch (error) {
-      throw new Error(`Error fetching gas info: ${(error as any).message}`);
+      throw new Error(`Error fetching gas info: ${(error as any).message}`)
     }
   }
 
   public getKeysignPayload = (
     transaction: ITransaction,
-    vault: VaultProps,
+    vault: VaultProps
   ): Promise<KeysignPayload> => {
-    return new Promise((resolve) => {    
+    return new Promise(resolve => {
       const coin = create(CoinSchema, {
-        chain: transaction.chain.name,
+        chain: transaction.chain.chain,
         ticker: transaction.chain.ticker,
         address: transaction.transactionDetails.from,
         decimals: transaction.chain.decimals,
         hexPublicKey: vault.chains.find(
-          (chain) => chain.name === transaction.chain.name,
+          chain => chain.chain === transaction.chain.chain
         )?.derivationKey,
         isNativeToken: true,
-        logo: transaction.chain.name.toLowerCase(),
-        priceProviderId: "solana",
-      });
-      this.getSpecificTransactionInfo(coin).then((specificData) => {
+        logo: transaction.chain.chain.toLowerCase(),
+        priceProviderId: 'solana',
+      })
+      this.getSpecificTransactionInfo(coin).then(specificData => {
         const solanaSpecific = create(SolanaSpecificSchema, {
-          $typeName: "vultisig.keysign.v1.SolanaSpecific",
+          $typeName: 'vultisig.keysign.v1.SolanaSpecific',
           recentBlockHash: specificData.recentBlockHash,
           priorityFee: specificData.priorityFee.toString(),
-        });
+        })
 
         const keysignPayload = create(KeysignPayloadSchema, {
           toAddress: transaction.transactionDetails.to,
           toAmount: transaction.transactionDetails.amount?.amount
             ? BigInt(
-                parseInt(transaction.transactionDetails.amount.amount),
+                parseInt(transaction.transactionDetails.amount.amount)
               ).toString()
-            : "0",
+            : '0',
           vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
-          vaultLocalPartyId: "VultiConnect",
+          vaultLocalPartyId: 'VultiConnect',
           coin,
           blockchainSpecific: {
-            case: "solanaSpecific",
+            case: 'solanaSpecific',
             value: solanaSpecific,
           },
-          memo: "",
-        });
+          memo: '',
+        })
 
-        this.keysignPayload = keysignPayload;
-        resolve(keysignPayload);
-      });
-    });
-  };
+        this.keysignPayload = keysignPayload
+        resolve(keysignPayload)
+      })
+    })
+  }
 
   public getPreSignedInputData = (): Promise<Uint8Array> => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const solanaSpecific = this.keysignPayload?.blockchainSpecific
-        .value as unknown as SolanaSpecific;
+        .value as unknown as SolanaSpecific
       const {
         recentBlockHash,
         fromTokenAssociatedAddress,
         toTokenAssociatedAddress,
-      } = solanaSpecific;
-      const priorityFeePrice = 1_000_000;
-      const priorityFeeLimit = Number(100_000);
-      const newRecentBlockHash = recentBlockHash;
+        programId,
+      } = solanaSpecific
+
+      const priorityFeePrice = 1_000_000
+      const priorityFeeLimit = Number(100_000)
+      const newRecentBlockHash = recentBlockHash
       if (!this.keysignPayload || !this.keysignPayload.coin) {
-        throw new Error("keysignPayload is missing");
+        throw new Error('keysignPayload is missing')
       }
 
       if (this.keysignPayload.coin.isNativeToken) {
@@ -185,13 +161,12 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
           priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
             limit: priorityFeeLimit,
           }),
-        });
+        })
 
         // Encode the input
-        const encodedInput =
-          TW.Solana.Proto.SigningInput.encode(input).finish();
+        const encodedInput = TW.Solana.Proto.SigningInput.encode(input).finish()
 
-        return resolve(encodedInput);
+        return resolve(encodedInput)
       } else {
         // Token transfer
         if (fromTokenAssociatedAddress && toTokenAssociatedAddress) {
@@ -202,7 +177,10 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
             recipientTokenAddress: toTokenAssociatedAddress,
             amount: Long.fromString(this.keysignPayload.toAmount),
             decimals: this.keysignPayload.coin.decimals,
-          });
+            tokenProgramId: programId
+              ? TW.Solana.Proto.TokenProgramId.Token2022Program
+              : TW.Solana.Proto.TokenProgramId.TokenProgram,
+          })
           const input = TW.Solana.Proto.SigningInput.create({
             tokenTransferTransaction: tokenTransferMessage,
             recentBlockhash: newRecentBlockHash,
@@ -213,22 +191,22 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
             priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
               limit: priorityFeeLimit,
             }),
-          });
-          resolve(TW.Solana.Proto.SigningInput.encode(input).finish());
+          })
+          resolve(TW.Solana.Proto.SigningInput.encode(input).finish())
         } else if (fromTokenAssociatedAddress && !toTokenAssociatedAddress) {
           // Generate the associated address if `toTokenAssociatedAddress` is missing
           const receiverAddress =
             this.walletCore.SolanaAddress.createWithString(
-              this.keysignPayload.toAddress,
-            );
+              this.keysignPayload.toAddress
+            )
           const generatedAssociatedAddress =
             receiverAddress.defaultTokenAddress(
-              this.keysignPayload.coin.contractAddress,
-            );
+              this.keysignPayload.coin.contractAddress
+            )
           if (!generatedAssociatedAddress) {
             throw new Error(
-              "We must have the association between the minted token and the TO address",
-            );
+              'We must have the association between the minted token and the TO address'
+            )
           }
           const createAndTransferTokenMessage =
             TW.Solana.Proto.CreateAndTransferToken.create({
@@ -238,7 +216,10 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
               senderTokenAddress: fromTokenAssociatedAddress,
               amount: Long.fromString(this.keysignPayload.toAmount),
               decimals: this.keysignPayload.coin.decimals,
-            });
+              tokenProgramId: programId
+                ? TW.Solana.Proto.TokenProgramId.Token2022Program
+                : TW.Solana.Proto.TokenProgramId.TokenProgram,
+            })
           const input = TW.Solana.Proto.SigningInput.create({
             createAndTransferTokenTransaction: createAndTransferTokenMessage,
             recentBlockhash: newRecentBlockHash,
@@ -249,16 +230,16 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
             priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
               limit: priorityFeeLimit,
             }),
-          });
-          resolve(TW.Solana.Proto.SigningInput.encode(input).finish());
+          })
+          resolve(TW.Solana.Proto.SigningInput.encode(input).finish())
         } else {
           throw new Error(
-            "To send tokens we must have the association between the minted token and the TO address",
-          );
+            'To send tokens we must have the association between the minted token and the TO address'
+          )
         }
       }
-    });
-  };
+    })
+  }
 
   public getSignedTransaction = ({
     inputData,
@@ -268,57 +249,57 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
     return new Promise((resolve, reject) => {
       if (inputData && vault) {
         try {
-          const coinType = this.walletCore.CoinType.solana;
+          const coinType = this.walletCore.CoinType.solana
           const pubkeySolana = vault.chains.find(
-            (chain) => chain.name === ChainKey.SOLANA,
-          )?.derivationKey;
-          const allSignatures = this.walletCore.DataVector.create();
-          const publicKeys = this.walletCore.DataVector.create();
+            chain => chain.chain === Chain.Solana
+          )?.derivationKey
+          const allSignatures = this.walletCore.DataVector.create()
+          const publicKeys = this.walletCore.DataVector.create()
           const pubkey = this.walletCore.PublicKey.createWithData(
-            Buffer.from(pubkeySolana!, "hex"),
-            this.walletCore.PublicKeyType.ed25519,
-          );
-          const modifiedSig = this.getSignature(signature);
-          allSignatures.add(modifiedSig);
-          publicKeys.add(pubkey.data());
+            Buffer.from(pubkeySolana!, 'hex'),
+            this.walletCore.PublicKeyType.ed25519
+          )
+          const modifiedSig = this.getSignature(signature)
+          allSignatures.add(modifiedSig)
+          publicKeys.add(pubkey.data())
           const compileWithSignatures =
             this.walletCore.TransactionCompiler.compileWithSignatures(
               coinType,
               inputData,
               allSignatures,
-              publicKeys,
-            );
+              publicKeys
+            )
           const {
             encoded,
             signatures,
             errorMessage: solanaErrorMessage,
-          } = TW.Solana.Proto.SigningOutput.decode(compileWithSignatures);
+          } = TW.Solana.Proto.SigningOutput.decode(compileWithSignatures)
           if (solanaErrorMessage) {
-            reject(solanaErrorMessage);
+            reject(solanaErrorMessage)
           } else {
             const result = new SignedTransactionResult(
               encoded,
               signatures[0].signature!,
-              undefined,
-            );
-            resolve({ txHash: result.transactionHash, raw: encoded });
+              undefined
+            )
+            resolve({ txHash: result.transactionHash, raw: encoded })
           }
         } catch (err) {
-          console.error("Error generating signed transaction:", err);
-          reject(err);
+          console.error('Error generating signed transaction:', err)
+          reject(err)
         }
       } else {
-        reject(new Error("Public key for Solana not found"));
+        reject(new Error('Public key for Solana not found'))
       }
-    });
-  };
+    })
+  }
 
   private getSignature(signature: SignatureProps): Uint8Array {
-    const rData = this.walletCore.HexCoding.decode(signature.R).reverse();
-    const sData = this.walletCore.HexCoding.decode(signature.S).reverse();
-    const combinedData = new Uint8Array(rData.length + sData.length);
-    combinedData.set(rData);
-    combinedData.set(sData, rData.length);
-    return combinedData;
+    const rData = this.walletCore.HexCoding.decode(signature.R).reverse()
+    const sData = this.walletCore.HexCoding.decode(signature.S).reverse()
+    const combinedData = new Uint8Array(rData.length + sData.length)
+    combinedData.set(rData)
+    combinedData.set(sData, rData.length)
+    return combinedData
   }
 }

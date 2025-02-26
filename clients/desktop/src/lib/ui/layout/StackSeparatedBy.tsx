@@ -1,25 +1,25 @@
-import React, { ComponentProps, Fragment, ReactNode } from 'react';
+import React, { ComponentProps, Fragment, ReactNode } from 'react'
 
-import { Stack } from './Stack';
+import { Stack } from './Stack'
 
-export const dotSeparator = '•';
-export const slashSeparator = '/';
+export const dotSeparator = '•'
+export const slashSeparator = '/'
 
 export type StackSeparatedByProps = ComponentProps<typeof Stack> & {
-  separator: ReactNode;
-};
+  separator: ReactNode
+}
 
 export const StackSeparatedBy = ({
   children,
   separator,
   ...rest
 }: StackSeparatedByProps) => {
-  const items = React.Children.toArray(children);
+  const items = React.Children.toArray(children)
   return (
     <Stack {...rest}>
       {items.map((child, index) => {
         if (index === items.length - 1) {
-          return child;
+          return child
         }
 
         return (
@@ -27,13 +27,13 @@ export const StackSeparatedBy = ({
             {child}
             {separator}
           </Fragment>
-        );
+        )
       })}
     </Stack>
-  );
-};
+  )
+}
 
-export type HStackSeparatedByProps = Omit<StackSeparatedByProps, 'direction'>;
+export type HStackSeparatedByProps = Omit<StackSeparatedByProps, 'direction'>
 
 export const HStackSeparatedBy = ({
   alignItems = 'center',
@@ -47,5 +47,5 @@ export const HStackSeparatedBy = ({
       alignItems={alignItems}
       {...props}
     />
-  );
-};
+  )
+}

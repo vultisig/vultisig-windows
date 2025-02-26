@@ -2,8 +2,8 @@ const VultisigLogoIcon = ({
   width = 24,
   height = 24,
 }: {
-  width?: number | string;
-  height?: number | string;
+  width?: number | string
+  height?: number | string
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -195,5 +195,5 @@ const VultisigLogoIcon = ({
       </linearGradient>
     </defs>
   </svg>
-);
-export default VultisigLogoIcon;
+)
+export default VultisigLogoIcon

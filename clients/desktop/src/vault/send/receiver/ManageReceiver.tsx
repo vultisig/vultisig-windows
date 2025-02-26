@@ -1,56 +1,56 @@
-import { useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { asyncAttempt } from '@lib/utils/promise/asyncAttempt'
+import { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { ClipboardGetText } from '../../../../wailsjs/runtime/runtime';
-import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement';
-import { Match } from '../../../lib/ui/base/Match';
+import { ClipboardGetText } from '../../../../wailsjs/runtime/runtime'
+import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement'
+import { Match } from '../../../lib/ui/base/Match'
 import {
   IconButton,
   iconButtonSizeRecord,
-} from '../../../lib/ui/buttons/IconButton';
+} from '../../../lib/ui/buttons/IconButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
-} from '../../../lib/ui/css/textInput';
-import AddressBookIcon from '../../../lib/ui/icons/AddressBookIcon';
-import { CameraIcon } from '../../../lib/ui/icons/CameraIcon';
-import { PasteIcon } from '../../../lib/ui/icons/PasteIcon';
-import { TextInput } from '../../../lib/ui/inputs/TextInput';
-import { HStack } from '../../../lib/ui/layout/Stack';
-import { Modal } from '../../../lib/ui/modal';
-import { text } from '../../../lib/ui/text';
-import { asyncAttempt } from '@lib/utils/promise/asyncAttempt';
-import { ScanQrView } from '../../qr/upload/ScanQrView';
-import AddressSelector from '../addressSelector/AddressSelector';
-import { useSendReceiver } from '../state/receiver';
+} from '../../../lib/ui/css/textInput'
+import AddressBookIcon from '../../../lib/ui/icons/AddressBookIcon'
+import { CameraIcon } from '../../../lib/ui/icons/CameraIcon'
+import { PasteIcon } from '../../../lib/ui/icons/PasteIcon'
+import { TextInput } from '../../../lib/ui/inputs/TextInput'
+import { HStack } from '../../../lib/ui/layout/Stack'
+import { Modal } from '../../../lib/ui/modal'
+import { text } from '../../../lib/ui/text'
+import { ScanQrView } from '../../qr/upload/ScanQrView'
+import AddressSelector from '../addressSelector/AddressSelector'
+import { useSendReceiver } from '../state/receiver'
 
 const Input = styled(TextInput)`
   ${text({
     family: 'mono',
     weight: 400,
   })}
-`;
+`
 
 const FixedScanQRView = styled(ScanQrView)`
   position: fixed;
   inset: 0;
-`;
+`
 
-type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner';
+type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
 export const ManageReceiver = () => {
-  const [value, setValue] = useSendReceiver();
-  const [viewState, setViewState] = useState<MangeReceiverViewState>('default');
-  const { t } = useTranslation();
+  const [value, setValue] = useSendReceiver()
+  const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
+  const { t } = useTranslation()
 
   const onScanSuccess = useCallback(
     (address: string) => {
-      setValue(address);
-      setViewState('default');
+      setValue(address)
+      setViewState('default')
     },
     [setValue]
-  );
+  )
 
   return (
     <Match
@@ -68,8 +68,8 @@ export const ManageReceiver = () => {
         <Modal title="" withDefaultStructure={false}>
           <AddressSelector
             onAddressClick={address => {
-              setValue(address);
-              setViewState('default');
+              setValue(address)
+              setViewState('default')
             }}
             onClose={() => setViewState('default')}
           />
@@ -96,10 +96,10 @@ export const ManageReceiver = () => {
                   const newValue = await asyncAttempt(
                     ClipboardGetText,
                     undefined
-                  );
+                  )
 
                   if (newValue) {
-                    setValue(newValue);
+                    setValue(newValue)
                   }
                 }}
               />
@@ -120,5 +120,5 @@ export const ManageReceiver = () => {
         />
       )}
     />
-  );
-};
+  )
+}

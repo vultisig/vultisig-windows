@@ -1,26 +1,26 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { validateEmail } from '@lib/utils/validation/validateEmail';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { validateEmail } from '@lib/utils/validation/validateEmail'
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { z } from 'zod'
 
-import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement';
-import { Button } from '../../../lib/ui/buttons/Button';
-import { iconButtonIconSizeRecord } from '../../../lib/ui/buttons/IconButton';
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
+import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement'
+import { Button } from '../../../lib/ui/buttons/Button'
+import { iconButtonIconSizeRecord } from '../../../lib/ui/buttons/IconButton'
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
 import {
   textInputHeight,
   textInputHorizontalPadding,
-} from '../../../lib/ui/css/textInput';
-import { CircledCloseIcon } from '../../../lib/ui/icons/CircledCloseIcon';
-import { TextInput } from '../../../lib/ui/inputs/TextInput';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { OnBackProp, OnForwardProp } from '../../../lib/ui/props';
-import { Text } from '../../../lib/ui/text';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { useVaultEmail } from './state/email';
+} from '../../../lib/ui/css/textInput'
+import { CircledCloseIcon } from '../../../lib/ui/icons/CircledCloseIcon'
+import { TextInput } from '../../../lib/ui/inputs/TextInput'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
+import { Text } from '../../../lib/ui/text'
+import { PageContent } from '../../../ui/page/PageContent'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { useVaultEmail } from './state/email'
 
 const emailSchema = z.object({
   email: z
@@ -29,16 +29,16 @@ const emailSchema = z.object({
     .refine(val => !validateEmail(val), {
       message: 'fastVaultSetup.emailIncorrect',
     }),
-});
+})
 
-type EmailSchema = z.infer<typeof emailSchema>;
+type EmailSchema = z.infer<typeof emailSchema>
 
 export const ServerEmailStep = ({
   onForward,
   onBack,
 }: OnForwardProp & Partial<OnBackProp>) => {
-  const { t } = useTranslation();
-  const [storedEmail, setStoredEmail] = useVaultEmail();
+  const { t } = useTranslation()
+  const [storedEmail, setStoredEmail] = useVaultEmail()
 
   const {
     register,
@@ -51,12 +51,12 @@ export const ServerEmailStep = ({
       email: storedEmail || '',
     },
     mode: 'all',
-  });
+  })
 
   const onSubmit = (data: EmailSchema) => {
-    setStoredEmail(data.email);
-    onForward();
-  };
+    setStoredEmail(data.email)
+    onForward()
+  }
 
   return (
     <>
@@ -107,5 +107,5 @@ export const ServerEmailStep = ({
         </VStack>
       </PageContent>
     </>
-  );
-};
+  )
+}

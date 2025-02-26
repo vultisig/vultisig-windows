@@ -18,5 +18,5 @@ const OpenEyeIcon = () => (
       </clipPath>
     </defs>
   </svg>
-);
-export default OpenEyeIcon;
+)
+export default OpenEyeIcon

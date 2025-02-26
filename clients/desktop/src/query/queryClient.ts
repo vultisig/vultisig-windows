@@ -1,21 +1,21 @@
-import { convertDuration } from '@lib/utils/time/convertDuration';
-import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
-import { QueryClient } from '@tanstack/react-query';
-import { persistQueryClient } from '@tanstack/react-query-persist-client';
+import { convertDuration } from '@lib/utils/time/convertDuration'
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
+import { QueryClient } from '@tanstack/react-query'
+import { persistQueryClient } from '@tanstack/react-query-persist-client'
 
-import { PersistentStateKey } from '../state/persistentState';
-import { queryKeyHashFn } from './queryKeyHashFn';
+import { PersistentStateKey } from '../state/persistentState'
+import { queryKeyHashFn } from './queryKeyHashFn'
 
-const maxAge = convertDuration(1, 'd', 'ms');
+const maxAge = convertDuration(1, 'd', 'ms')
 
 interface Meta extends Record<string, unknown> {
-  disablePersist?: boolean;
+  disablePersist?: boolean
 }
 
 declare module '@tanstack/react-query' {
   interface Register {
-    queryMeta: Meta;
-    mutationMeta: Meta;
+    queryMeta: Meta
+    mutationMeta: Meta
   }
 }
 
@@ -27,12 +27,12 @@ export const getQueryClient = () => {
         queryKeyHashFn,
       },
     },
-  });
+  })
 
   const localStoragePersistor = createSyncStoragePersister({
     storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     key: PersistentStateKey.ReactQueryState,
-  });
+  })
 
   persistQueryClient({
     queryClient,
@@ -41,10 +41,10 @@ export const getQueryClient = () => {
     hydrateOptions: {},
     dehydrateOptions: {
       shouldDehydrateQuery: ({ meta }) => {
-        return !meta?.disablePersist;
+        return !meta?.disablePersist
       },
     },
-  });
+  })
 
-  return queryClient;
-};
+  return queryClient
+}

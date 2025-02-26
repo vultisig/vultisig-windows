@@ -1,5 +1,5 @@
-import { ChildrenProp, ValueProp } from '../../props';
-import { Query } from '../Query';
+import { ChildrenProp, ValueProp } from '../../props'
+import { Query } from '../Query'
 
 export const ActiveQueryOnly: React.FC<
   ChildrenProp & ValueProp<Query<any>>
@@ -7,11 +7,11 @@ export const ActiveQueryOnly: React.FC<
   const isActive =
     value.data !== undefined ||
     value.error ||
-    (value.isPending && value.isLoading);
+    (value.isPending && value.isLoading)
 
   if (isActive) {
-    return <>{children}</>;
+    return <>{children}</>
   }
 
-  return null;
-};
+  return null
+}

@@ -1,15 +1,15 @@
-import { Chain } from '@core/chain/Chain';
-import { isOneOf } from '@lib/utils/array/isOneOf';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
+import { Chain } from '@core/chain/Chain'
+import { isOneOf } from '@lib/utils/array/isOneOf'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 export const assertChainField = <C extends Chain, T extends { chain?: string }>(
   input: T
 ): T & { chain: C } => {
-  const chain = isOneOf(shouldBePresent(input.chain), Object.values(Chain));
+  const chain = isOneOf(shouldBePresent(input.chain), Object.values(Chain))
 
   if (!chain) {
-    throw new Error(`Invalid chain value: ${input.chain}`);
+    throw new Error(`Invalid chain value: ${input.chain}`)
   }
 
-  return { ...input, chain: chain as C };
-};
+  return { ...input, chain: chain as C }
+}

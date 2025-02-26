@@ -1,3 +1,3 @@
-import { MenuIcon } from '../../icons/MenuIcon';
+import { MenuIcon } from '../../icons/MenuIcon'
 
-export const DnDItemContentPrefix = () => <MenuIcon size={24} />;
+export const DnDItemContentPrefix = () => <MenuIcon size={24} />

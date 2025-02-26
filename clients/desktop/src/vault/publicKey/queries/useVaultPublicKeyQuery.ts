@@ -1,13 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import { Chain } from '@core/chain/Chain'
+import { useQuery } from '@tanstack/react-query'
 
-import { Chain } from '@core/chain/Chain';
-import { useAssertWalletCore } from '../../../providers/WalletCoreProvider';
-import { useCurrentVault } from '../../state/currentVault';
-import { getVaultPublicKey } from '../getVaultPublicKey';
+import { useAssertWalletCore } from '../../../providers/WalletCoreProvider'
+import { useCurrentVault } from '../../state/currentVault'
+import { getVaultPublicKey } from '../getVaultPublicKey'
 
 export const useVaultPublicKeyQuery = (chain: Chain) => {
-  const walletCore = useAssertWalletCore();
-  const vault = useCurrentVault();
+  const walletCore = useAssertWalletCore()
+  const vault = useCurrentVault()
 
   return useQuery({
     queryKey: ['vaultPublicKey'],
@@ -17,5 +17,5 @@ export const useVaultPublicKeyQuery = (chain: Chain) => {
         walletCore,
         vault,
       }),
-  });
-};
+  })
+}

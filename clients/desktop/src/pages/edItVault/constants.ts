@@ -1,19 +1,19 @@
-import BackupIcon from '../../lib/ui/icons/BackupIcon';
-import { QuestionMarkIcon } from '../../lib/ui/icons/QuestionMarkIcon';
-import ReshareIcon from '../../lib/ui/icons/ReshareIcon';
-import { SignatureIcon } from '../../lib/ui/icons/SignatureIcon';
-import SquareAndPencilIcon from '../../lib/ui/icons/SquareAndPencilIcon';
-import TrashIcon from '../../lib/ui/icons/TrashIcon';
-import { TextColor } from '../../lib/ui/text';
-import { AppPathsWithNoParamsOrState } from '../../navigation';
+import BackupIcon from '../../lib/ui/icons/BackupIcon'
+import { QuestionMarkIcon } from '../../lib/ui/icons/QuestionMarkIcon'
+import ReshareIcon from '../../lib/ui/icons/ReshareIcon'
+import { SignatureIcon } from '../../lib/ui/icons/SignatureIcon'
+import SquareAndPencilIcon from '../../lib/ui/icons/SquareAndPencilIcon'
+import TrashIcon from '../../lib/ui/icons/TrashIcon'
+import { TextColor } from '../../lib/ui/text'
+import { AppPathsWithNoParamsOrState } from '../../navigation'
 
 type SettingItem = {
-  titleKey: string;
-  subtitleKey: string;
-  icon: React.ElementType;
-  path: AppPathsWithNoParamsOrState;
-  textColor?: TextColor;
-};
+  titleKey: string
+  subtitleKey: string
+  icon: React.ElementType
+  path: AppPathsWithNoParamsOrState
+  textColor?: TextColor
+}
 
 export const editVaultSettingsItems: SettingItem[] = [
   {
@@ -53,4 +53,4 @@ export const editVaultSettingsItems: SettingItem[] = [
     path: 'vaultDelete',
     textColor: 'danger',
   },
-];
+]

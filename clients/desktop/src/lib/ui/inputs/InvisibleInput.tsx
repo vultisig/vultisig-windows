@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const InvisibleInput = styled.input`
   border: 0;
@@ -9,4 +9,4 @@ export const InvisibleInput = styled.input`
   padding: 0;
   position: absolute;
   width: 1px;
-`;
+`

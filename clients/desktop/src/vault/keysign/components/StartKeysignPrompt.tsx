@@ -1,21 +1,21 @@
-import { useTranslation } from 'react-i18next';
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { useTranslation } from 'react-i18next'
 
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
-import { Button } from '../../../lib/ui/buttons/Button';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { IsDisabledProp, ValueProp } from '../../../lib/ui/props';
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate';
-import { useVaultServerStatus } from '../../state/currentVault';
+import { Button } from '../../../lib/ui/buttons/Button'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { IsDisabledProp, ValueProp } from '../../../lib/ui/props'
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
+import { useVaultServerStatus } from '../../state/currentVault'
 
-type StartKeysignPromptProps = ValueProp<KeysignPayload> & IsDisabledProp;
+type StartKeysignPromptProps = ValueProp<KeysignPayload> & IsDisabledProp
 
 export const StartKeysignPrompt = ({
   value: keysignPayload,
   isDisabled,
 }: StartKeysignPromptProps) => {
-  const { t } = useTranslation();
-  const navigate = useAppNavigate();
-  const { hasServer, isBackup } = useVaultServerStatus();
+  const { t } = useTranslation()
+  const navigate = useAppNavigate()
+  const { hasServer, isBackup } = useVaultServerStatus()
 
   if (hasServer && !isBackup) {
     return (
@@ -28,7 +28,7 @@ export const StartKeysignPrompt = ({
                   keysign: keysignPayload,
                 },
               },
-            });
+            })
           }}
           isDisabled={isDisabled}
         >
@@ -44,13 +44,13 @@ export const StartKeysignPrompt = ({
                   keysign: keysignPayload,
                 },
               },
-            });
+            })
           }}
         >
           {t('paired_sign')}
         </Button>
       </VStack>
-    );
+    )
   }
 
   return (
@@ -63,10 +63,10 @@ export const StartKeysignPrompt = ({
               keysign: keysignPayload,
             },
           },
-        });
+        })
       }}
     >
       {t('continue')}
     </Button>
-  );
-};
+  )
+}

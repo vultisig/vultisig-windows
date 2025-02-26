@@ -1,44 +1,43 @@
-import { ReactNode } from 'react';
+import { ReactNode } from 'react'
 
-import { ValueProp } from '../../props';
-import { Query } from '../Query';
+import { ValueProp } from '../../props'
+import { Query } from '../Query'
 
 export type MatchQueryProps<T, E = unknown> = ValueProp<Query<T, E>> & {
-  error?: (error: E) => ReactNode;
-  pending?: () => ReactNode;
-  success: (data: T) => ReactNode;
-  inactive?: () => ReactNode;
-};
+  error?: (error: E) => ReactNode
+  pending?: () => ReactNode
+  success?: (data: T) => ReactNode
+  inactive?: () => ReactNode
+}
 
 export function MatchQuery<T, E = unknown>({
   value,
   error = () => null,
   pending = () => null,
-  success,
+  success = () => null,
   inactive = () => null,
 }: MatchQueryProps<T, E>) {
   if (value.data !== undefined) {
-    return <>{success(value.data)}</>;
+    return <>{success(value.data)}</>
   }
 
   if (value.error) {
-    console.error('value.error', value.error);
-    return <>{error(value.error)}</>;
-  }
-
-  if (value.isPending) {
-    return <>{pending()}</>;
+    return <>{error(value.error)}</>
   }
 
   if (value.isLoading === false) {
-    return <>{inactive()}</>;
+    return <>{inactive()}</>
   }
 
-  return null;
+  if (value.isPending) {
+    return <>{pending()}</>
+  }
+
+  return null
 }
 
 export type MatchQueryWrapperProps<T, E = unknown> = Pick<
   MatchQueryProps<T>,
   'success'
 > &
-  Partial<Pick<MatchQueryProps<T, E>, 'error' | 'pending' | 'inactive'>>;
+  Partial<Pick<MatchQueryProps<T, E>, 'error' | 'pending' | 'inactive'>>

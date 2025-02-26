@@ -1,7 +1,7 @@
-import { ComponentProps } from 'react';
+import { ComponentProps } from 'react'
 
-import { ChildrenProp } from '../props';
-import { VStack } from './Stack';
+import { ChildrenProp } from '../props'
+import { VStack } from './Stack'
 
 export const Center = ({
   children,
@@ -16,4 +16,4 @@ export const Center = ({
   >
     {children}
   </VStack>
-);
+)

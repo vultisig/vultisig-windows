@@ -1,54 +1,54 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
-import { range } from '@lib/utils/array/range';
-import { formatAmount } from '@lib/utils/formatAmount';
-import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { range } from '@lib/utils/array/range'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo';
-import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel';
+import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo'
+import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
 import {
   TxOverviewChainDataRow,
   TxOverviewPrimaryRowTitle,
   TxOverviewRow,
-} from '../../../chain/tx/components/TxOverviewRow';
-import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount';
-import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery';
-import { VStack } from '../../../lib/ui/layout/Stack';
-import { Spinner } from '../../../lib/ui/loaders/Spinner';
-import { OnBackProp } from '../../../lib/ui/props';
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { Text } from '../../../lib/ui/text';
-import { PageContent } from '../../../ui/page/PageContent';
-import { PageHeader } from '../../../ui/page/PageHeader';
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton';
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle';
-import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator';
-import { useCurrentVaultCoin } from '../../state/currentVault';
-import { SendFiatFee } from '../fee/SendFiatFeeWrapper';
-import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper';
-import { useSendCappedAmountQuery } from '../queries/useSendCappedAmountQuery';
-import { useSender } from '../sender/hooks/useSender';
-import { useSendMemo } from '../state/memo';
-import { useSendReceiver } from '../state/receiver';
-import { useCurrentSendCoin } from '../state/sendCoin';
-import { SendConfirm } from './SendConfirm';
-import { SendTerms } from './SendTerms';
-import { sendTermsCount, SendTermsProvider } from './state/sendTerms';
+} from '../../../chain/tx/components/TxOverviewRow'
+import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
+import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { Spinner } from '../../../lib/ui/loaders/Spinner'
+import { OnBackProp } from '../../../lib/ui/props'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { Text } from '../../../lib/ui/text'
+import { PageContent } from '../../../ui/page/PageContent'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
+import { useCurrentVaultCoin } from '../../state/currentVault'
+import { SendFiatFee } from '../fee/SendFiatFeeWrapper'
+import { SendGasFeeWrapper } from '../fee/SendGasFeeWrapper'
+import { useSendCappedAmountQuery } from '../queries/useSendCappedAmountQuery'
+import { useSender } from '../sender/hooks/useSender'
+import { useSendMemo } from '../state/memo'
+import { useSendReceiver } from '../state/receiver'
+import { useCurrentSendCoin } from '../state/sendCoin'
+import { SendConfirm } from './SendConfirm'
+import { SendTerms } from './SendTerms'
+import { sendTermsCount, SendTermsProvider } from './state/sendTerms'
 
 export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
-  const { t } = useTranslation();
-  const [coinKey] = useCurrentSendCoin();
-  const sender = useSender();
-  const coin = useCurrentVaultCoin(coinKey);
-  const [receiver] = useSendReceiver();
-  const [memo] = useSendMemo();
-  const formatFiat = useFormatFiatAmount();
+  const { t } = useTranslation()
+  const [coinKey] = useCurrentSendCoin()
+  const sender = useSender()
+  const coin = useCurrentVaultCoin(coinKey)
+  const [receiver] = useSendReceiver()
+  const [memo] = useSendMemo()
+  const formatFiat = useFormatFiatAmount()
 
   const coinPriceQuery = useCoinPriceQuery({
     coin,
-  });
+  })
 
-  const cappedAmountQuery = useSendCappedAmountQuery();
+  const cappedAmountQuery = useSendCappedAmountQuery()
 
   return (
     <>
@@ -77,7 +77,10 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                   error={() => <Text>{t('failed_to_load')}</Text>}
                   pending={() => <Spinner />}
                   success={({ amount, decimals }) =>
-                    formatAmount(fromChainAmount(amount, decimals), coin.ticker)
+                    formatTokenAmount(
+                      fromChainAmount(amount, decimals),
+                      coin.ticker
+                    )
                   }
                 />
               </span>
@@ -124,5 +127,5 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
         </SendTermsProvider>
       </PageContent>
     </>
-  );
-};
+  )
+}

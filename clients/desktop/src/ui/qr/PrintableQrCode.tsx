@@ -1,10 +1,10 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { VStack } from '../../lib/ui/layout/Stack';
-import { FramedQrCode } from '../../lib/ui/qr/FramedQrCode';
-import { Text } from '../../lib/ui/text';
-import { getColor } from '../../lib/ui/theme/getters';
-import { ProductLogo } from '../logo/ProductLogo';
+import { VStack } from '../../lib/ui/layout/Stack'
+import { FramedQrCode } from '../../lib/ui/qr/FramedQrCode'
+import { Text } from '../../lib/ui/text'
+import { getColor } from '../../lib/ui/theme/getters'
+import { ProductLogo } from '../logo/ProductLogo'
 
 const Container = styled(VStack)`
   align-items: center;
@@ -12,24 +12,24 @@ const Container = styled(VStack)`
   background: ${getColor('background')};
   gap: 40px;
   min-width: 480px;
-`;
+`
 
 const Footer = styled(VStack)`
   gap: 20px;
   align-items: center;
   justify-content: space-between;
   font-weight: 600;
-`;
+`
 
 const Logo = styled(ProductLogo)`
   font-size: 80px;
-`;
+`
 
 type PrintableQrCodeProps = {
-  value: string;
-  title?: string;
-  description?: string;
-};
+  value: string
+  title?: string
+  description?: string
+}
 
 export const PrintableQrCode = ({
   value,
@@ -54,5 +54,5 @@ export const PrintableQrCode = ({
         <Logo />
       </Footer>
     </Container>
-  );
-};
+  )
+}

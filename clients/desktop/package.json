@@ -2,7 +2,6 @@
   "name": "@clients/desktop",
   "private": true,
   "version": "0.1.0",
-  "type": "module",
   "scripts": {
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
@@ -12,7 +11,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "translate": "npx tsx src/i18n/scripts/translate.ts"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.6",
@@ -40,6 +40,7 @@
     "@mysten/sui": "^1.21.2",
     "@polkadot/api": "^15.5.2",
     "@solana/web3.js": "^2.0.0",
+    "styled-components": "^6.1.15",
     "xrpl": "^4.1.0"
   }
 }

@@ -1,6 +1,6 @@
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { Chain } from '@core/chain/Chain';
+import { Chain } from '@core/chain/Chain'
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 export const getKeysignChain = ({ coin }: KeysignPayload) =>
-  shouldBePresent(coin).chain as Chain;
+  shouldBePresent(coin).chain as Chain

@@ -1,14 +1,14 @@
-import { defineConfig } from "vite";
-import path from "path";
+import path from 'path'
+import { defineConfig } from 'vite'
 
-import { manifest } from "./package.json";
+import { manifest } from './package.json'
 
 export default defineConfig({
   build: {
     emptyOutDir: true,
     manifest: true,
-    outDir: "dist/relay",
-    assetsDir: "",
+    outDir: 'dist/relay',
+    assetsDir: '',
     copyPublicDir: false,
     rollupOptions: {
       input: {
@@ -16,4 +16,4 @@ export default defineConfig({
       },
     },
   },
-});
+})

@@ -1,28 +1,28 @@
-import styled, { css, DefaultTheme } from 'styled-components';
+import { match } from '@lib/utils/match'
+import styled, { css, DefaultTheme } from 'styled-components'
 
-import { match } from '@lib/utils/match';
-import { cropText } from '../css/cropText';
-import { toSizeUnit } from '../css/toSizeUnit';
+import { cropText } from '../css/cropText'
+import { toSizeUnit } from '../css/toSizeUnit'
 
-type TextVariant = 'h1Hero' | 'h1Regular';
+type TextVariant = 'h1Hero' | 'h1Regular'
 
 const textVariantsRecord: Record<
   TextVariant,
   Pick<TextProps, 'size' | 'height' | 'weight' | 'cropped' | 'letterSpacing'>
 > = {
   h1Hero: {
-    size: 72,
-    height: 'large',
-    weight: 500,
-    cropped: false,
-  },
-  h1Regular: {
     size: 60,
     height: 'large',
     weight: 500,
     cropped: false,
   },
-};
+  h1Regular: {
+    size: 48,
+    height: 'large',
+    weight: 500,
+    cropped: false,
+  },
+}
 
 const getTextColorRecord = ({ colors }: DefaultTheme) =>
   ({
@@ -35,36 +35,36 @@ const getTextColorRecord = ({ colors }: DefaultTheme) =>
     contrast: colors.contrast,
     danger: colors.danger,
     idle: colors.idle,
-  }) as const;
+  }) as const
 
-type TextHeight = 'small' | 'regular' | 'large';
+type TextHeight = 'small' | 'regular' | 'large'
 const lineHeight: Record<TextHeight, number> = {
   small: 1,
   regular: 1.2,
   large: 1.5,
-};
+}
 
-export type TextFontFamily = 'regular' | 'mono';
+export type TextFontFamily = 'regular' | 'mono'
 
-export type TextColor = keyof ReturnType<typeof getTextColorRecord>;
+export type TextColor = keyof ReturnType<typeof getTextColorRecord>
 
 export interface TextProps {
-  color?: TextColor;
-  weight?: React.CSSProperties['fontWeight'];
-  size?: number;
-  height?: TextHeight;
-  centerHorizontally?: boolean;
-  letterSpacing?: number;
+  color?: TextColor
+  weight?: React.CSSProperties['fontWeight']
+  size?: number
+  height?: TextHeight
+  centerHorizontally?: boolean
+  letterSpacing?: number
   centerVertically?:
     | boolean
     | {
-        gap: number;
-      };
-  cropped?: boolean;
-  nowrap?: boolean;
-  family?: TextFontFamily;
-  as?: React.ElementType;
-  variant?: TextVariant;
+        gap: number
+      }
+  cropped?: boolean
+  nowrap?: boolean
+  family?: TextFontFamily
+  as?: React.ElementType
+  variant?: TextVariant
 }
 
 export const text = ({
@@ -80,7 +80,7 @@ export const text = ({
   nowrap,
   family = 'regular',
 }: TextProps) => {
-  const variantStyles = variant ? textVariantsRecord[variant] : {};
+  const variantStyles = variant ? textVariantsRecord[variant] : {}
 
   return css`
     overflow-wrap: break-word;
@@ -137,12 +137,12 @@ export const text = ({
       mono: () => 'Menlo, monospace',
       regular: () => 'inherit',
     })};
-  `;
-};
+  `
+}
 
 export const Text = styled.p<TextProps>`
   ${text};
-`;
+`
 
 export const strictText = css`
   ${text({
@@ -151,11 +151,11 @@ export const strictText = css`
     weight: 400,
     family: 'mono',
   })}
-`;
+`
 
 export const StrictText = styled(Text)`
   ${strictText}
-`;
+`
 
 export const GradientText = styled(Text)`
   background: linear-gradient(90deg, #33e6bf, #0439c7);
@@ -163,4 +163,4 @@ export const GradientText = styled(Text)`
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-fill-color: transparent;
-`;
+`

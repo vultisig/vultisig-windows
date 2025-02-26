@@ -1,16 +1,16 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount';
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent';
-import { formatAmount } from '@lib/utils/formatAmount';
-import { useTranslation } from 'react-i18next';
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { useTranslation } from 'react-i18next'
 
-import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow';
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery';
-import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery';
+import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { useSwapKeysignPayloadQuery } from '../queries/useSwapKeysignPayloadQuery'
 
 export const SwapAllowance = () => {
-  const query = useSwapKeysignPayloadQuery();
+  const query = useSwapKeysignPayloadQuery()
 
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <MatchQuery
@@ -19,23 +19,23 @@ export const SwapAllowance = () => {
       pending={() => null}
       success={({ erc20ApprovePayload, coin }) => {
         if (!erc20ApprovePayload) {
-          return null;
+          return null
         }
 
-        const { decimals, ticker } = shouldBePresent(coin);
+        const { decimals, ticker } = shouldBePresent(coin)
 
         return (
           <TxOverviewChainDataRow>
             <span>{t('allowance')}</span>
             <span>
-              {formatAmount(
+              {formatTokenAmount(
                 fromChainAmount(erc20ApprovePayload.amount, decimals),
                 ticker
               )}
             </span>
           </TxOverviewChainDataRow>
-        );
+        )
       }}
     />
-  );
-};
+  )
+}

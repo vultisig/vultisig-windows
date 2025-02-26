@@ -12,4 +12,4 @@ export const TriangleExclamationIcon = () => (
       d="M12 10.25v4m0 2.49v.01m0-13-9.5 16h19l-9.5-16Z"
     />
   </svg>
-);
+)

@@ -1,17 +1,17 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-import { borderRadius } from '../../../lib/ui/css/borderRadius';
-import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding';
-import { interactive } from '../../../lib/ui/css/interactive';
-import { InvisibleHTMLCheckbox } from '../../../lib/ui/inputs/checkbox/InvisibleHTMLCheckbox';
-import { SwitchContainer } from '../../../lib/ui/inputs/switch/SwitchContainer';
-import { SwitchControl } from '../../../lib/ui/inputs/switch/SwitchControl';
-import { hStack } from '../../../lib/ui/layout/Stack';
-import { DnDItemContentPrefix } from '../../../lib/ui/list/item/DnDItemContentPrefix';
-import { InputProps } from '../../../lib/ui/props';
-import { text } from '../../../lib/ui/text';
-import { getColor } from '../../../lib/ui/theme/getters';
-import { VaultDescription } from '../../components/VaultDescription';
+import { borderRadius } from '../../../lib/ui/css/borderRadius'
+import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding'
+import { interactive } from '../../../lib/ui/css/interactive'
+import { InvisibleHTMLCheckbox } from '../../../lib/ui/inputs/checkbox/InvisibleHTMLCheckbox'
+import { SwitchContainer } from '../../../lib/ui/inputs/switch/SwitchContainer'
+import { SwitchControl } from '../../../lib/ui/inputs/switch/SwitchControl'
+import { hStack } from '../../../lib/ui/layout/Stack'
+import { DnDItemContentPrefix } from '../../../lib/ui/list/item/DnDItemContentPrefix'
+import { InputProps } from '../../../lib/ui/props'
+import { text } from '../../../lib/ui/text'
+import { getColor } from '../../../lib/ui/theme/getters'
+import { VaultDescription } from '../../components/VaultDescription'
 
 const Container = styled.label`
   height: 52px;
@@ -32,7 +32,7 @@ const Container = styled.label`
     alignItems: 'center',
     gap: 20,
   })}
-`;
+`
 
 const Content = styled.div`
   ${hStack({
@@ -41,18 +41,18 @@ const Content = styled.div`
     gap: 12,
   })}
   overflow: hidden;
-`;
+`
 
 type FolderVaultOptionProps = InputProps<boolean> & {
-  isDraggable?: boolean;
-};
+  isDraggable?: boolean
+}
 
 export const FolderVaultOption: React.FC<FolderVaultOptionProps> = ({
   value,
   onChange,
   isDraggable,
 }) => {
-  const size = 'm';
+  const size = 'm'
 
   return (
     <Container>
@@ -65,5 +65,5 @@ export const FolderVaultOption: React.FC<FolderVaultOptionProps> = ({
         <SwitchControl isActive={value} size={size} />
       </SwitchContainer>
     </Container>
-  );
-};
+  )
+}

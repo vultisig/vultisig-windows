@@ -1,15 +1,15 @@
-import { useStartFastVaultKeygenSessionMutation } from './useStartFastVaultKeygenSessionMutation';
-import { useVaultPeersSetup } from './useVaultPeersSetup';
-import { useVaultServerSetup } from './useVaultServerSetup';
+import { useStartFastVaultKeygenSessionMutation } from './useStartFastVaultKeygenSessionMutation'
+import { useVaultPeersSetup } from './useVaultPeersSetup'
+import { useVaultServerSetup } from './useVaultServerSetup'
 
 export const useVaultCreationPreparation = () => {
-  const serverSetup = useVaultServerSetup();
-  const shouldStartPeerSetup = serverSetup.isSuccess;
+  const serverSetup = useVaultServerSetup()
+  const shouldStartPeerSetup = serverSetup.isSuccess
 
-  const peerSetup = useVaultPeersSetup(shouldStartPeerSetup);
-  const shouldStartKeygen = shouldStartPeerSetup && peerSetup.hasPeers;
+  const peerSetup = useVaultPeersSetup(shouldStartPeerSetup)
+  const shouldStartKeygen = shouldStartPeerSetup && peerSetup.hasPeers
 
-  const keygenSetup = useStartFastVaultKeygenSessionMutation(shouldStartKeygen);
+  const keygenSetup = useStartFastVaultKeygenSessionMutation(shouldStartKeygen)
 
   return {
     isPending: [serverSetup, peerSetup, keygenSetup].some(
@@ -26,5 +26,5 @@ export const useVaultCreationPreparation = () => {
           }
         : null,
     data: keygenSetup.isSuccess ? true : undefined,
-  };
-};
+  }
+}

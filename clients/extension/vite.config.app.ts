@@ -1,7 +1,7 @@
-import { defineConfig } from "vite";
-import path from "path";
+import path from 'path'
+import { defineConfig } from 'vite'
 
-import { manifest } from "./package.json";
+import { manifest } from './package.json'
 
 export default defineConfig({
   build: {
@@ -19,4 +19,4 @@ export default defineConfig({
       },
     },
   },
-});
+})

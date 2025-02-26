@@ -1,33 +1,33 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
-import { ChildrenProp } from '../../lib/ui/props';
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate';
-import { useVaults } from '../queries/useVaultsQuery';
-import { CurrentVaultProvider } from '../state/currentVault';
-import { useCurrentVaultId } from '../state/currentVaultId';
-import { getStorageVaultId } from '../utils/storageVault';
+import { ChildrenProp } from '../../lib/ui/props'
+import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
+import { useVaults } from '../queries/useVaultsQuery'
+import { CurrentVaultProvider } from '../state/currentVault'
+import { useCurrentVaultId } from '../state/currentVaultId'
+import { getStorageVaultId } from '../utils/storageVault'
 
 export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
-  const [currentVaultId] = useCurrentVaultId();
-  const vaults = useVaults();
+  const [currentVaultId] = useCurrentVaultId()
+  const vaults = useVaults()
 
-  const navigate = useAppNavigate();
+  const navigate = useAppNavigate()
 
   const vault = vaults.find(
     vault => getStorageVaultId(vault) === currentVaultId
-  );
+  )
 
-  const isDisabled = !vault;
+  const isDisabled = !vault
 
   useEffect(() => {
     if (isDisabled) {
-      navigate('root');
+      navigate('root')
     }
-  }, [isDisabled, navigate]);
+  }, [isDisabled, navigate])
 
   if (isDisabled) {
-    return null;
+    return null
   }
 
-  return <CurrentVaultProvider value={vault}>{children}</CurrentVaultProvider>;
-};
+  return <CurrentVaultProvider value={vault}>{children}</CurrentVaultProvider>
+}

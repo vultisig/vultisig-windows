@@ -1,10 +1,10 @@
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime';
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton';
-import { ValueProp } from '../../../lib/ui/props';
-import { text } from '../../../lib/ui/text';
+import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime'
+import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
+import { ValueProp } from '../../../lib/ui/props'
+import { text } from '../../../lib/ui/text'
 
 const Container = styled(UnstyledButton)`
   align-self: flex-end;
@@ -13,18 +13,18 @@ const Container = styled(UnstyledButton)`
     color: 'primary',
   })}
   text-decoration: underline;
-`;
+`
 
 export const SwapTrackingLink = ({ value }: ValueProp<string>) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <Container
       onClick={() => {
-        BrowserOpenURL(value);
+        BrowserOpenURL(value)
       }}
     >
       {t('swap_tracking_link')}
     </Container>
-  );
-};
+  )
+}
