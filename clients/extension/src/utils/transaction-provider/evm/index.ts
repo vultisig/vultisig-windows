@@ -1,31 +1,15 @@
-import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { Currency } from '@clients/extension/src/utils/constants'
-import {
-  bigintToByteArray,
-  checkERC20Function,
-} from '@clients/extension/src/utils/functions'
-import {
-  ITransaction,
-  SignedTransaction,
-  VaultProps,
-} from '@clients/extension/src/utils/interfaces'
+import { bigintToByteArray } from '@clients/extension/src/utils/functions'
+import { SignedTransaction } from '@clients/extension/src/utils/interfaces'
 import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
 import { EvmChain } from '@core/chain/Chain'
 import { getEvmClient } from '@core/chain/chains/evm/client'
-import {
-  EthereumSpecific,
-  EthereumSpecificSchema,
-} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
-import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb'
-import {
-  KeysignPayload,
-  KeysignPayloadSchema,
-} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { Buffer } from 'buffer'
-import { formatUnits, keccak256, toUtf8String, Transaction } from 'ethers'
+import { formatUnits, keccak256, Transaction } from 'ethers'
 import { PublicClient } from 'viem'
 interface ChainRef {
   [chainKey: string]: CoinType
@@ -87,82 +71,6 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
 
   public getGasLimit = (): number => {
     return 600000
-  }
-
-  public getKeysignPayload = (
-    transaction: ITransaction,
-    vault: VaultProps
-  ): Promise<KeysignPayload> => {
-    return new Promise((resolve, reject) => {
-      const coin = create(CoinSchema, {
-        chain: transaction.chain.chain,
-        ticker: transaction.chain.ticker,
-        address: transaction.transactionDetails.from,
-        decimals: transaction.chain.decimals,
-        hexPublicKey: vault.hexChainCode,
-        isNativeToken: true,
-        logo: transaction.chain.ticker.toLowerCase(),
-      })
-
-      this.provider
-        .getTransactionCount({
-          address: transaction.transactionDetails.from as `0x${string}`,
-        })
-        .then(nonce => {
-          this.nonce = BigInt(nonce)
-          const ethereumSpecific = create(EthereumSpecificSchema, {
-            gasLimit: this.getGasLimit().toString(),
-            maxFeePerGasWei: (
-              ((this.gasPrice ?? BigInt(0)) * BigInt(5)) /
-              BigInt(2)
-            ).toString(),
-            nonce: this.nonce,
-            priorityFee: this.ensurePriorityFeeValue(
-              !this.maxPriorityFeePerGas || this.maxPriorityFeePerGas === 0n
-                ? this.gasPrice!
-                : this.maxPriorityFeePerGas,
-              this.chainKey
-            ).toString(),
-          })
-          checkERC20Function(transaction.transactionDetails.data!).then(
-            isMemoFunction => {
-              let modifiedMemo: string
-              try {
-                modifiedMemo =
-                  isMemoFunction || transaction.transactionDetails.data === '0x'
-                    ? (transaction.transactionDetails.data ?? '')
-                    : toUtf8String(transaction.transactionDetails.data!)
-              } catch {
-                modifiedMemo = transaction.transactionDetails.data!
-              }
-              const keysignPayload = create(KeysignPayloadSchema, {
-                toAddress: transaction.transactionDetails.to,
-                toAmount: transaction.transactionDetails.amount?.amount
-                  ? BigInt(
-                      parseInt(
-                        String(transaction.transactionDetails.amount.amount)
-                      )
-                    ).toString()
-                  : '0',
-                memo: modifiedMemo,
-                vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
-                vaultLocalPartyId: 'VultiConnect',
-                coin,
-                blockchainSpecific: {
-                  case: 'ethereumSpecific',
-                  value: ethereumSpecific,
-                },
-              })
-
-              this.keysignPayload = keysignPayload
-              resolve(keysignPayload)
-            }
-          )
-        })
-        .catch(() => {
-          reject()
-        })
-    })
   }
 
   public getPreSignedInputData = (): Promise<Uint8Array> => {

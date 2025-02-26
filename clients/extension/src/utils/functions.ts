@@ -5,9 +5,12 @@ import {
   TssKeysignType,
 } from '@clients/extension/src/utils/constants'
 import {
+  ChainProps,
   Messaging,
   ParsedMemo,
   SendTransactionResponse,
+  TransactionDetails,
+  TransactionType,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { Interface } from 'ethers'
@@ -241,6 +244,27 @@ export const processBackgroundResponse = (
     }
     default: {
       return result
+    }
+  }
+}
+
+export const getStandardTransactionDetails = async (
+  tx: TransactionType.Keplr,
+  chain: ChainProps
+) => {
+  switch (tx.txType) {
+    case 'Keplr': {
+      const txDetails: TransactionDetails = {
+        asset: {
+          chain: chain.ticker,
+          ticker: tx.amount[0].denom,
+        },
+        amount: { amount: tx.amount[0].amount, decimals: chain.decimals },
+        from: tx.from_address,
+        to: tx.to_address,
+      }
+
+      return txDetails
     }
   }
 }

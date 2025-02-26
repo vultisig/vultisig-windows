@@ -1,29 +1,18 @@
-import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import {
   CosmosAccountData,
-  ITransaction,
   SignatureProps,
   SignedTransaction,
   SpecificCosmos,
-  VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
 import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
 import { Chain } from '@core/chain/Chain'
 import {
   CosmosSpecific,
-  CosmosSpecificSchema,
   TransactionType,
 } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
-import {
-  Coin,
-  CoinSchema,
-} from '@core/communication/vultisig/keysign/v1/coin_pb'
-import {
-  KeysignPayload,
-  KeysignPayloadSchema,
-} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { Buffer } from 'buffer'
@@ -69,52 +58,6 @@ export default class CosmosTransactionProvider extends BaseTransactionProvider {
           console.error(error)
           resolve(result) // Ensure promise resolves even on error
         })
-    })
-  }
-
-  public getKeysignPayload = (
-    transaction: ITransaction,
-    vault: VaultProps
-  ): Promise<KeysignPayload> => {
-    return new Promise(resolve => {
-      const coin = create(CoinSchema, {
-        chain: transaction.chain.chain,
-        ticker: transaction.chain.ticker,
-        address: transaction.transactionDetails.from,
-        decimals: transaction.chain.decimals,
-        hexPublicKey: vault.chains.find(
-          chain => chain.chain === transaction.chain.chain
-        )?.derivationKey,
-        isNativeToken: true,
-        logo: transaction.chain.ticker.toLowerCase(),
-      })
-      this.getSpecificTransactionInfo(coin).then(specificData => {
-        const cosmosSpecific = create(CosmosSpecificSchema, {
-          accountNumber: BigInt(specificData.accountNumber),
-          sequence: BigInt(specificData.sequence),
-          gas: BigInt(specificData.gas),
-          transactionType: specificData.transactionType,
-        })
-
-        const keysignPayload = create(KeysignPayloadSchema, {
-          toAddress: transaction.transactionDetails.to,
-          toAmount: transaction.transactionDetails.amount?.amount
-            ? BigInt(
-                parseInt(String(transaction.transactionDetails.amount.amount))
-              ).toString()
-            : '0',
-          memo: transaction.transactionDetails.data,
-          vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
-          vaultLocalPartyId: 'VultiConnect',
-          coin,
-          blockchainSpecific: {
-            case: 'cosmosSpecific',
-            value: cosmosSpecific,
-          },
-        })
-        this.keysignPayload = keysignPayload
-        resolve(keysignPayload)
-      })
     })
   }
 

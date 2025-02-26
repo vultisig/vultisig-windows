@@ -1,5 +1,3 @@
-import { create } from '@bufbuild/protobuf'
-import { BlockchairUtxoResponse } from '@clients/extension/src/types/utxo'
 import api from '@clients/extension/src/utils/api'
 import {
   ITransaction,
@@ -11,19 +9,8 @@ import {
 import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
 import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base/index'
 import { Chain } from '@core/chain/Chain'
-import {
-  UTXOSpecific,
-  UTXOSpecificSchema,
-} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
-import {
-  Coin,
-  CoinSchema,
-} from '@core/communication/vultisig/keysign/v1/coin_pb'
-import {
-  KeysignPayload,
-  KeysignPayloadSchema,
-} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
-import { UtxoInfoSchema } from '@core/communication/vultisig/keysign/v1/utxo_info_pb'
+import { UTXOSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb'
 import { TW } from '@trustwallet/wallet-core'
 import type {
   CoinType,
@@ -56,62 +43,6 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
           utxos: await this.getUtxos(coin),
         }
         resolve(specificTransactionInfo)
-      })
-    })
-  }
-
-  public getKeysignPayload = (
-    transaction: ITransaction,
-    vault: VaultProps
-  ): Promise<KeysignPayload> => {
-    return new Promise(resolve => {
-      const chain = vault.chains.find(chain => chain.chain === this.chainKey)
-      if (!chain?.derivationKey) {
-        throw new Error(
-          `Chain ${this.chainKey} not found in vault or missing derivation key`
-        )
-      }
-      const pubkeyUTXO = chain.derivationKey
-      const coin = create(CoinSchema, {
-        chain: transaction.chain.chain,
-        ticker: transaction.chain.ticker,
-        address: transaction.transactionDetails.from,
-        decimals: transaction.chain.decimals,
-        hexPublicKey: pubkeyUTXO,
-        isNativeToken: true,
-        logo: transaction.chain.ticker.toLowerCase(),
-      })
-      this.getSpecificTransactionInfo(coin).then(specificData => {
-        const utxoSpecific = create(UTXOSpecificSchema, {
-          ...specificData,
-          byteFee: specificData.byteFee.toString(),
-        })
-
-        const keysignPayload = create(KeysignPayloadSchema, {
-          toAddress: transaction.transactionDetails.to,
-          toAmount: transaction.transactionDetails.amount?.amount
-            ? BigInt(
-                parseInt(transaction.transactionDetails.amount.amount)
-              ).toString()
-            : '0',
-          memo: transaction.transactionDetails.data,
-          vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
-          vaultLocalPartyId: 'VultiConnect',
-          coin,
-          utxoInfo: specificData.utxos.map((utxo: any) => {
-            return create(UtxoInfoSchema, {
-              hash: utxo.hash,
-              amount: utxo.amount,
-              index: utxo.index,
-            })
-          }),
-          blockchainSpecific: {
-            case: 'utxoSpecific',
-            value: utxoSpecific,
-          },
-        })
-        this.keysignPayload = keysignPayload
-        resolve(keysignPayload)
       })
     })
   }
@@ -216,16 +147,14 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
   }): Promise<{ txHash: string; raw: any }> => {
     return new Promise((resolve, reject) => {
       const coinType = this.chainRef[this.chainKey]
-      let allSignatures: any = null
-      let publicKeys: any = null
+      const allSignatures = this.walletCore.DataVector.create()
+      const publicKeys = this.walletCore.DataVector.create()
       const pubkeyUTXO = vault.chains.find(
         chain => chain.chain === this.chainKey
       )!.derivationKey!
       const publicKeyData = Buffer.from(pubkeyUTXO, 'hex')
       const modifiedSig = this.getSignature(signature)
       try {
-        allSignatures = this.walletCore.DataVector.create()
-        publicKeys = this.walletCore.DataVector.create()
         allSignatures.add(modifiedSig)
         publicKeys.add(publicKeyData)
         const compileWithSignatures =
@@ -253,9 +182,6 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
       } catch (err) {
         console.log(err)
         reject(err)
-      } finally {
-        if (allSignatures) allSignatures.delete()
-        if (publicKeys) publicKeys.delete()
       }
     })
   }
@@ -279,7 +205,7 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
     const result = (await api.utxo.blockchairDashboard(
       coin.address,
       coin.chain
-    )) as BlockchairUtxoResponse
+    )) as { [key: string]: { utxo: any[] } }
     return result[coin.address].utxo.map((utxo: any) => {
       return {
         hash: utxo.transactionHash,

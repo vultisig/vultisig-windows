@@ -1,27 +1,14 @@
-import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import {
-  ITransaction,
   SignatureProps,
   SignedTransaction,
   SpecificThorchain,
-  VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
 import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
 import { Chain } from '@core/chain/Chain'
-import {
-  type MAYAChainSpecific,
-  MAYAChainSpecificSchema,
-} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
-import {
-  type Coin,
-  CoinSchema,
-} from '@core/communication/vultisig/keysign/v1/coin_pb'
-import {
-  type KeysignPayload,
-  KeysignPayloadSchema,
-} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { type MAYAChainSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import { type Coin } from '@core/communication/vultisig/keysign/v1/coin_pb'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { Buffer } from 'buffer'
@@ -44,72 +31,18 @@ export default class MayaTransactionProvider extends BaseTransactionProvider {
     coin: Coin
   ): Promise<SpecificThorchain> => {
     return new Promise<SpecificThorchain>(resolve => {
-      api.maya
-        .fetchAccountNumber(coin.address)
-        .then(accountData => {
-          this.calculateFee(coin).then(fee => {
-            const specificThorchain: SpecificThorchain = {
-              fee,
-              gasPrice: fee,
-              accountNumber: Number(accountData?.accountNumber),
-              sequence: Number(accountData.sequence ?? 0),
-              isDeposit: false,
-            } as SpecificThorchain
+      api.maya.fetchAccountNumber(coin.address).then(accountData => {
+        this.calculateFee(coin).then(fee => {
+          const specificThorchain: SpecificThorchain = {
+            fee,
+            gasPrice: fee,
+            accountNumber: Number(accountData?.accountNumber),
+            sequence: Number(accountData.sequence ?? 0),
+            isDeposit: false,
+          } as SpecificThorchain
 
-            resolve(specificThorchain)
-          })
+          resolve(specificThorchain)
         })
-        .catch(error => {
-          console.error('Failed to fetch account data:', error)
-          throw error
-        })
-    })
-  }
-
-  public getKeysignPayload = (
-    transaction: ITransaction,
-    vault: VaultProps
-  ): Promise<KeysignPayload> => {
-    return new Promise(resolve => {
-      const coin = create(CoinSchema, {
-        chain: transaction.chain.chain,
-        ticker: transaction.chain.ticker,
-        address: transaction.transactionDetails.from,
-        decimals: transaction.chain.decimals,
-        hexPublicKey: vault.chains.find(
-          chain => chain.chain === transaction.chain.chain
-        )?.derivationKey,
-        isNativeToken: true,
-        logo: transaction.chain.ticker.toLowerCase(),
-      })
-
-      this.getSpecificTransactionInfo(coin).then(specificData => {
-        const mayaSpecific = create(MAYAChainSpecificSchema, {
-          accountNumber: BigInt(specificData.accountNumber),
-          isDeposit: false,
-          sequence: BigInt(specificData.sequence),
-        })
-
-        const keysignPayload = create(KeysignPayloadSchema, {
-          toAddress: transaction.transactionDetails.to,
-          toAmount: transaction.transactionDetails.amount?.amount
-            ? BigInt(
-                parseInt(String(transaction.transactionDetails.amount.amount))
-              ).toString()
-            : '0',
-          memo: transaction.transactionDetails.data,
-          vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
-          vaultLocalPartyId: 'VultiConnect',
-          coin,
-          blockchainSpecific: {
-            case: 'mayaSpecific',
-            value: mayaSpecific,
-          },
-        })
-
-        this.keysignPayload = keysignPayload
-
-        resolve(keysignPayload)
       })
     })
   }

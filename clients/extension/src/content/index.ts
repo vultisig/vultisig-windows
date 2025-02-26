@@ -15,6 +15,7 @@ import { processBackgroundResponse } from '@clients/extension/src/utils/function
 import {
   Messaging,
   SendTransactionResponse,
+  TransactionType,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import {
@@ -246,12 +247,7 @@ class XDEFIKeplrProvider extends Keplr {
     return new Promise<AminoSignResponse>(resolve => {
       const txDetails = signDoc.msgs.map(msg => {
         if (msg.type === CosmosMsgType.MSG_SEND) {
-          return {
-            from: msg.value.from_address,
-            to: msg.value.to_address,
-            value: msg.value.amount[0].amount,
-            data: signDoc.memo || msg.value.memo,
-          }
+          return { txType: 'Keplr', ...msg.value } as TransactionType.Keplr
         }
       })
 

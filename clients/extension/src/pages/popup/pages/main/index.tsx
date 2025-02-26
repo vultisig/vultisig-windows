@@ -23,7 +23,6 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { isSupportedChain } from '../../../../utils/constants'
-const VULTISIG_WEB_URL = 'https://airdrop.vultisig.com'
 
 interface SelectOption {
   value: string
@@ -77,7 +76,7 @@ const Component = () => {
                 : item
             )
           ).then(() => {
-            initializePage()
+            componentDidMount()
           })
         })
       },
@@ -85,17 +84,8 @@ const Component = () => {
   }
 
   const handleViewinWeb = () => {
-    if (!vault?.publicKeyEcdsa || !vault?.publicKeyEddsa) {
-      console.error('Missing required vault keys')
-      return
-    }
+    const VULTISIG_WEB_URL = 'https://airdrop.vultisig.com'
     const url = `${VULTISIG_WEB_URL}/redirect/${vault?.publicKeyEcdsa}/${vault?.publicKeyEddsa}`
-    try {
-      new URL(url)
-    } catch (error) {
-      console.error('Invalid URL:', error)
-      return
-    }
     chrome.tabs.create({ url })
   }
 
@@ -140,11 +130,11 @@ const Component = () => {
   const showReloadMessage = () => {
     messageApi.open({
       type: 'info',
-      content: t(messageKeys.RELOAD_MESSAGE),
+      content: t(t(messageKeys.REALOAD_MESSAGE)),
     })
   }
 
-  const initializePage = () => {
+  const componentDidMount = (): void => {
     getStoredVaults().then(vaults => {
       const vault = vaults.find(({ active }) => active)
 
@@ -167,19 +157,18 @@ const Component = () => {
           ),
         }))
 
-        setState({ ...state, networkOptions, vault })
+        setState({ ...state, networkOptions })
 
         getCurrentNetwork(networkOptions)
+
+        getIsPriority().then(isPriority => {
+          setState(prevState => ({ ...prevState, isPriority, vault }))
+        })
       }
     })
   }
-
-  useEffect(() => {
-    initializePage()
-    getIsPriority().then(isPriority => {
-      setState(prevState => ({ ...prevState, isPriority }))
-    })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(componentDidMount, [])
 
   return vault ? (
     <>

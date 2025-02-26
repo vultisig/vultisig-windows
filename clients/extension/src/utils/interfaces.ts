@@ -153,45 +153,58 @@ export interface ScreenProps {
   width: number
 }
 
+export namespace TransactionType {
+  export interface MetaMask {
+    txType: 'MetaMask'
+    from: string
+    to: string
+    value?: string
+    data: string
+    gas?: string
+    gasPrice?: string
+    nonce?: string
+    chainId?: string
+    type?: string
+  }
+
+  export interface Ctrl {
+    txType: 'Ctrl'
+    amount: {
+      amount: string
+      decimals: number
+    }
+    asset: {
+      chain: ChainTicker
+      symbol: string
+      ticker: string
+    }
+    from: string
+    gasLimit?: string
+    memo: string
+    recipient: string
+  }
+
+  export interface Keplr {
+    txType: 'Keplr'
+    amount: { amount: string; denom: string }[]
+    from_address: string
+    to_address: string
+  }
+
+  export type WalletTransaction = MetaMask | Ctrl | Keplr
+}
+
 export interface TransactionDetails {
   asset: {
     chain: string
-    symbol: string
     ticker: string
+    symbol?: string
   }
   from: string
   to?: string
   amount?: { amount: string; decimals: number }
   data?: string
   gasLimit?: string
-}
-
-export interface METAMASK_TRANSACTION {
-  from: string
-  to: string
-  value?: string
-  data: string
-  gas?: string
-  gasPrice?: string
-  nonce?: string
-  chainId?: string
-  type?: string
-}
-
-export interface CTRL_TRANSACTION {
-  amount: {
-    amount: string
-    decimals: number
-  }
-  asset: {
-    chain: ChainTicker
-    symbol: string
-    ticker: string
-  }
-  from: string
-  gasLimit?: string
-  memo: string
-  recipient: string
 }
 
 export interface ITransaction {

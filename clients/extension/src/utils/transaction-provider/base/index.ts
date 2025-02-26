@@ -1,4 +1,4 @@
-import { toBinary } from '@bufbuild/protobuf'
+import { create, toBinary } from '@bufbuild/protobuf'
 import {
   ITransaction,
   SignatureProps,
@@ -6,18 +6,24 @@ import {
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { chainTokens } from '@core/chain/coin/chainTokens'
+import { getChainKind } from '@core/chain/ChainKind'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb'
 import { CustomMessagePayload } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
 import {
   KeysignMessage,
   KeysignMessageSchema,
   KeysignPayload,
+  KeysignPayloadSchema,
 } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { getChainSpecific } from '@core/keysign/chainSpecific'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
-import { randomBytes } from 'ethers'
+import { randomBytes, toUtf8String } from 'ethers'
 
+import { checkERC20Function } from '../../functions'
 interface ChainRef {
   [chainKey: string]: CoinType
 }
@@ -101,7 +107,7 @@ export default abstract class BaseTransactionProvider {
     hexChainCode: string
   ): Promise<string> => {
     return new Promise(resolve => {
-      const message: KeysignMessage = {
+      const messsage: KeysignMessage = {
         $typeName: 'vultisig.keysign.v1.KeysignMessage',
         sessionId: transaction.id,
         serviceName: 'VultiConnect',
@@ -110,38 +116,16 @@ export default abstract class BaseTransactionProvider {
         payloadId: '',
       }
       if (transaction.isCustomMessage) {
-        message.customMessagePayload = {
+        messsage.customMessagePayload = {
           $typeName: 'vultisig.keysign.v1.CustomMessagePayload',
           method: transaction.customMessage?.method,
           message: transaction.customMessage!.message,
         } as CustomMessagePayload
       } else {
-        let priceProviderId: string | undefined
-
-        if (this.keysignPayload?.coin) {
-          const { chain, isNativeToken, ticker } = this.keysignPayload.coin
-
-          priceProviderId = isNativeToken
-            ? chainFeeCoin[chain as Chain]?.priceProviderId
-            : chainTokens[chain as Chain]?.find(
-                token => token.ticker === ticker
-              )?.priceProviderId
-        }
-
-        if (priceProviderId) {
-          message.keysignPayload = {
-            ...this.keysignPayload,
-            coin: {
-              ...this.keysignPayload?.coin,
-              priceProviderId,
-            } as KeysignPayload['coin'],
-          } as KeysignPayload
-        } else {
-          message.keysignPayload = this.keysignPayload
-        }
+        messsage.keysignPayload = this.keysignPayload
       }
 
-      const binary = toBinary(KeysignMessageSchema, message)
+      const binary = toBinary(KeysignMessageSchema, messsage)
 
       this.dataEncoder(binary).then(base64EncodedData => {
         resolve(
@@ -165,10 +149,74 @@ export default abstract class BaseTransactionProvider {
     vault,
   }: SignedTransaction): Promise<{ txHash: string; raw: any }>
 
-  abstract getKeysignPayload(
+  public getKeysignPayload(
     transaction: ITransaction,
     vault: VaultProps
-  ): Promise<KeysignPayload>
+  ): Promise<KeysignPayload> {
+    return new Promise(resolve => {
+      const localCoin = getCoinFromCoinKey({
+        chain: transaction.chain.chain,
+        id: transaction.transactionDetails.asset.ticker,
+      })
+
+      const accountCoin = {
+        ...localCoin,
+        address: transaction.transactionDetails.from,
+      } as AccountCoin
+
+      getChainSpecific({
+        coin: accountCoin,
+        amount: Number(transaction.transactionDetails.amount?.amount),
+        isDeposit: transaction.isDeposit,
+        receiver: transaction.transactionDetails.to,
+      }).then(chainSpecific => {
+        const coin = create(CoinSchema, {
+          chain: transaction.chain.chain,
+          ticker: accountCoin.ticker,
+          address: transaction.transactionDetails.from,
+          decimals: accountCoin.decimals,
+          hexPublicKey: vault.chains.find(
+            chain => chain.chain === transaction.chain.chain
+          )?.derivationKey,
+          isNativeToken: isFeeCoin(accountCoin),
+          logo: accountCoin.logo,
+          priceProviderId: localCoin?.priceProviderId ?? '',
+        })
+        let modifiedMemo = null
+        if (getChainKind(transaction.chain.chain) === 'evm') {
+          checkERC20Function(transaction.transactionDetails.data!).then(
+            isMemoFunction => {
+              try {
+                modifiedMemo =
+                  isMemoFunction || transaction.transactionDetails.data === '0x'
+                    ? (transaction.transactionDetails.data ?? '')
+                    : toUtf8String(transaction.transactionDetails.data!)
+              } catch {
+                modifiedMemo = transaction.transactionDetails.data!
+              }
+            }
+          )
+        }
+        const keysignPayload = create(KeysignPayloadSchema, {
+          toAddress: transaction.transactionDetails.to,
+          toAmount: transaction.transactionDetails.amount?.amount
+            ? BigInt(
+                parseInt(String(transaction.transactionDetails.amount.amount))
+              ).toString()
+            : '0',
+          memo: modifiedMemo ?? transaction.transactionDetails.data,
+          vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
+          vaultLocalPartyId: 'VultiConnect',
+          coin,
+          blockchainSpecific: chainSpecific,
+        })
+        console.log('payload:', keysignPayload)
+
+        this.keysignPayload = keysignPayload
+        resolve(keysignPayload)
+      })
+    })
+  }
 
   protected encodeData(data: Uint8Array): Promise<string> {
     return this.dataEncoder(data)

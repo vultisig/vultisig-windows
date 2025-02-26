@@ -21,7 +21,7 @@ const Component = () => {
   const { currency } = state
   const goBack = useGoBack()
 
-  const handleCurrencyChange = (currency: Currency) => {
+  const changeLanguage = (currency: Currency) => {
     setStoredCurrency(currency).then(() => {
       setState(prevState => ({ ...prevState, currency }))
 
@@ -95,7 +95,7 @@ const Component = () => {
             <button
               key={key}
               className={`list-item${key === currency ? ' active' : ''}`}
-              onClick={() => handleCurrencyChange(key)}
+              onClick={() => changeLanguage(key)}
             >
               <span className="label">{title}</span>
               <span className="extra">{key}</span>

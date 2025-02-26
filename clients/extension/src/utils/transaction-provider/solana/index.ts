@@ -1,36 +1,14 @@
-/* 
-
-DEPRECATED! This file is no longer used in the project.
-It was replaced by the file on CORE
-
-@rcoderdev @johnnyluo please deprecate all files you are moving to core. 
-
-*/
-
-import { create } from '@bufbuild/protobuf'
 import type {
-  ITransaction,
   SignatureProps,
   SignedTransaction,
   SpecificSolana,
-  VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
 import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'
 import { Chain } from '@core/chain/Chain'
 import { getSolanaClient } from '@core/chain/chains/solana/client'
-import {
-  SolanaSpecific,
-  SolanaSpecificSchema,
-} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
-import {
-  Coin,
-  CoinSchema,
-} from '@core/communication/vultisig/keysign/v1/coin_pb'
-import {
-  KeysignPayload,
-  KeysignPayloadSchema,
-} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { SolanaSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import { Coin } from '@core/communication/vultisig/keysign/v1/coin_pb'
 import { fromLegacyPublicKey } from '@solana/compat'
 import { PublicKey } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
@@ -38,25 +16,38 @@ import { Buffer } from 'buffer'
 import { formatUnits } from 'ethers'
 import Long from 'long'
 export default class SolanaTransactionProvider extends BaseTransactionProvider {
-  async fetchHighPriorityFee(address: string): Promise<number> {
-    const client = getSolanaClient()
-    const prioritizationFees = await client
-      .getRecentPrioritizationFees([
-        fromLegacyPublicKey(new PublicKey(address)),
-      ])
-      .send()
-    return Math.max(
-      ...prioritizationFees.map(fee => Number(fee.prioritizationFee.valueOf())),
-      0
-    )
+  fetchHighPriorityFee(address: string): Promise<number> {
+    return new Promise((resolve, reject) => {
+      const client = getSolanaClient()
+      client
+        .getRecentPrioritizationFees([
+          fromLegacyPublicKey(new PublicKey(address)),
+        ])
+        .send()
+        .then(prioritizationFees => {
+          const highPriorityFee = Math.max(
+            ...prioritizationFees.map(fee =>
+              Number(fee.prioritizationFee.valueOf())
+            ),
+            0
+          )
+          resolve(highPriorityFee)
+        })
+        .catch(reject)
+    })
   }
 
   async fetchRecentBlockhash(): Promise<string> {
-    const client = getSolanaClient()
-    const response = await client
-      .getLatestBlockhash({ commitment: 'confirmed' })
-      .send()
-    return response?.value.blockhash as string
+    return new Promise((resolve, reject) => {
+      const client = getSolanaClient()
+      client
+        .getLatestBlockhash({ commitment: 'confirmed' })
+        .send()
+        .then(response => {
+          resolve(response?.value.blockhash as string)
+        })
+        .catch(reject)
+    })
   }
 
   public async getSpecificTransactionInfo(coin: Coin): Promise<SpecificSolana> {
@@ -80,53 +71,6 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
     }
   }
 
-  public getKeysignPayload = (
-    transaction: ITransaction,
-    vault: VaultProps
-  ): Promise<KeysignPayload> => {
-    return new Promise(resolve => {
-      const coin = create(CoinSchema, {
-        chain: transaction.chain.chain,
-        ticker: transaction.chain.ticker,
-        address: transaction.transactionDetails.from,
-        decimals: transaction.chain.decimals,
-        hexPublicKey: vault.chains.find(
-          chain => chain.chain === transaction.chain.chain
-        )?.derivationKey,
-        isNativeToken: true,
-        logo: transaction.chain.chain.toLowerCase(),
-        priceProviderId: 'solana',
-      })
-      this.getSpecificTransactionInfo(coin).then(specificData => {
-        const solanaSpecific = create(SolanaSpecificSchema, {
-          $typeName: 'vultisig.keysign.v1.SolanaSpecific',
-          recentBlockHash: specificData.recentBlockHash,
-          priorityFee: specificData.priorityFee.toString(),
-        })
-
-        const keysignPayload = create(KeysignPayloadSchema, {
-          toAddress: transaction.transactionDetails.to,
-          toAmount: transaction.transactionDetails.amount?.amount
-            ? BigInt(
-                parseInt(transaction.transactionDetails.amount.amount)
-              ).toString()
-            : '0',
-          vaultPublicKeyEcdsa: vault.publicKeyEcdsa,
-          vaultLocalPartyId: 'VultiConnect',
-          coin,
-          blockchainSpecific: {
-            case: 'solanaSpecific',
-            value: solanaSpecific,
-          },
-          memo: '',
-        })
-
-        this.keysignPayload = keysignPayload
-        resolve(keysignPayload)
-      })
-    })
-  }
-
   public getPreSignedInputData = (): Promise<Uint8Array> => {
     return new Promise(resolve => {
       const solanaSpecific = this.keysignPayload?.blockchainSpecific
@@ -135,9 +79,7 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
         recentBlockHash,
         fromTokenAssociatedAddress,
         toTokenAssociatedAddress,
-        programId,
       } = solanaSpecific
-
       const priorityFeePrice = 1_000_000
       const priorityFeeLimit = Number(100_000)
       const newRecentBlockHash = recentBlockHash
@@ -177,9 +119,6 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
             recipientTokenAddress: toTokenAssociatedAddress,
             amount: Long.fromString(this.keysignPayload.toAmount),
             decimals: this.keysignPayload.coin.decimals,
-            tokenProgramId: programId
-              ? TW.Solana.Proto.TokenProgramId.Token2022Program
-              : TW.Solana.Proto.TokenProgramId.TokenProgram,
           })
           const input = TW.Solana.Proto.SigningInput.create({
             tokenTransferTransaction: tokenTransferMessage,
@@ -216,9 +155,6 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
               senderTokenAddress: fromTokenAssociatedAddress,
               amount: Long.fromString(this.keysignPayload.toAmount),
               decimals: this.keysignPayload.coin.decimals,
-              tokenProgramId: programId
-                ? TW.Solana.Proto.TokenProgramId.Token2022Program
-                : TW.Solana.Proto.TokenProgramId.TokenProgram,
             })
           const input = TW.Solana.Proto.SigningInput.create({
             createAndTransferTokenTransaction: createAndTransferTokenMessage,

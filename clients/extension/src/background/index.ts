@@ -10,15 +10,17 @@ import {
   MessageKey,
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
-import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
+import {
+  calculateWindowPosition,
+  getStandardTransactionDetails,
+} from '@clients/extension/src/utils/functions'
 import {
   ChainProps,
-  CTRL_TRANSACTION,
   ITransaction,
   Messaging,
-  METAMASK_TRANSACTION,
   SendTransactionResponse,
   TransactionDetails,
+  TransactionType,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import {
@@ -37,7 +39,7 @@ import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getChainByChainId, getChainId } from '@core/chain/coin/ChainId'
+import { getChainByChainId, getChainId } from '@core/chain/coin/chainId'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import {
   JsonRpcProvider,
@@ -80,12 +82,13 @@ const handleOpenPanel = (name: string): Promise<number> => {
 
 const handleProvider = (chain: Chain, update?: boolean) => {
   const rpc = chainRpcUrl[chain]
-  if (!rpc) return
-  if (update && rpcProvider) {
-    rpcProvider = new JsonRpcProvider(rpc)
-    return
+  if (rpc) {
+    if (update) {
+      if (rpcProvider) rpcProvider = new JsonRpcProvider(rpc)
+    } else {
+      rpcProvider = new JsonRpcProvider(rpc)
+    }
   }
-  rpcProvider = new JsonRpcProvider(rpc)
 }
 
 const handleFindAccounts = (
@@ -343,11 +346,8 @@ const handleRequest = (
 > => {
   return new Promise((resolve, reject) => {
     const { method, params } = body
-    const chainKind = getChainKind(chain.chain)
-    if (chainKind === 'evm') {
+    if (getChainKind(chain.chain) === 'evm') {
       if (!rpcProvider) handleProvider(chain.chain)
-    } else if (chainKind !== 'cosmos' && chainKind !== 'utxo') {
-      throw new Error(`Unsupported chain kind: ${chainKind}`)
     }
 
     switch (method) {
@@ -410,47 +410,35 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
-        if (_transaction) {
+        console.log(
+          getStandardTransactionDetails(
+            _transaction as TransactionType.Keplr,
+            chain
+          )
+        )
+        getStandardTransactionDetails(
+          _transaction as TransactionType.Keplr,
+          chain
+        ).then(standardTx => {
           let modifiedTransaction: ITransaction = {} as ITransaction
-          if (_transaction.value) {
-            modifiedTransaction = {
-              transactionDetails: {
-                from: _transaction.from,
-                to: _transaction.to,
-                asset: {
-                  chain: chain.ticker,
-                  symbol: chain.ticker,
-                  ticker: chain.ticker,
-                },
-                amount: _transaction.value
-                  ? { amount: _transaction.value, decimals: chain.decimals }
-                  : undefined,
-                data: _transaction.data,
-              },
-              chain,
-              id: '',
-              status: 'default',
-            }
-          } else {
-            modifiedTransaction = {
-              transactionDetails: _transaction as TransactionDetails,
-              chain,
-              id: '',
-              status: 'default',
-            }
-          }
 
+          modifiedTransaction = {
+            transactionDetails: standardTx as TransactionDetails,
+            chain,
+            id: '',
+            status: 'default',
+          }
           handleSendTransaction(modifiedTransaction, chain)
             .then(result => resolve(result))
             .catch(reject)
-        } else {
-          reject()
-        }
+        })
+
         break
       }
       case RequestMethod.METAMASK.ETH_SEND_TRANSACTION: {
         if (Array.isArray(params)) {
-          const [_transaction] = params as METAMASK_TRANSACTION[]
+          const [_transaction] = params as TransactionType.MetaMask[]
+
           if (_transaction) {
             const modifiedTransaction: ITransaction = {
               transactionDetails: {
@@ -458,7 +446,6 @@ const handleRequest = (
                 to: _transaction.to,
                 asset: {
                   chain: chain.ticker,
-                  symbol: chain.ticker,
                   ticker: chain.ticker,
                 },
                 amount: _transaction.value
@@ -590,14 +577,15 @@ const handleRequest = (
           const [param] = params
 
           if (param?.chainId) {
-            const chainFromId = getChainByChainId(param.chainId)
-            const supportedChain = isSupportedChain(chainFromId)
-              ? chainFromId
+            const supportedChain = isSupportedChain(
+              getChainByChainId(param.chainId)
+            )
+              ? getChainByChainId(param.chainId)
               : null
             if (supportedChain) {
               getStoredChains().then(storedChains => {
                 setStoredChains([
-                  { ...chainFeeCoin[supportedChain as Chain], active: true },
+                  { ...chainFeeCoin[supportedChain], active: true },
                   ...storedChains
                     .filter(
                       (storedChain: ChainProps) =>
@@ -666,9 +654,10 @@ const handleRequest = (
           const [param] = params
 
           if (param?.chainId) {
-            const chainFromId = getChainByChainId(param.chainId)
-            const supportedChain = isSupportedChain(chainFromId)
-              ? chainFromId
+            const supportedChain = isSupportedChain(
+              getChainByChainId(param.chainId)
+            )
+              ? getChainByChainId(param.chainId)
               : null
             if (supportedChain) {
               getStoredChains().then(storedChains => {
@@ -697,7 +686,7 @@ const handleRequest = (
                 }
               })
             } else {
-              reject(`Chain ${param?.chainId} is not supported`)
+              reject('Chain not Supported')
             }
           } else {
             reject()
@@ -825,7 +814,6 @@ const handleRequest = (
                   to: '',
                   asset: {
                     chain: ChainTicker.ETH,
-                    symbol: ChainTicker.ETH,
                     ticker: ChainTicker.ETH,
                   },
                 },
@@ -867,7 +855,6 @@ const handleRequest = (
                 to: '',
                 asset: {
                   chain: ChainTicker.ETH,
-                  symbol: ChainTicker.ETH,
                   ticker: ChainTicker.ETH,
                 },
               },
@@ -891,7 +878,7 @@ const handleRequest = (
       }
       case RequestMethod.CTRL.DEPOSIT: {
         if (Array.isArray(params)) {
-          const [_transaction] = params as CTRL_TRANSACTION[]
+          const [_transaction] = params as TransactionType.Ctrl[]
 
           if (_transaction) {
             const modifiedTransaction: TransactionDetails = {
@@ -922,7 +909,7 @@ const handleRequest = (
       }
       case RequestMethod.CTRL.TRANSFER: {
         if (Array.isArray(params)) {
-          const [_transaction] = params as CTRL_TRANSACTION[]
+          const [_transaction] = params as TransactionType.Ctrl[]
 
           if (_transaction) {
             const modifiedTransaction: TransactionDetails = {
