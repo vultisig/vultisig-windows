@@ -41,9 +41,7 @@ export const Button: FC<PropsWithChildren & ButtonProps> = ({
   return (
     // TODO: @tony to add loading state
     <Container size={size} {...rest} kind={kind}>
-      <Text color="contrast" size={48}>
-        {children}
-      </Text>
+      {children}
     </Container>
   )
 }
