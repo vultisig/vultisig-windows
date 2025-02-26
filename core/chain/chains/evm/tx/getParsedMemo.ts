@@ -54,6 +54,7 @@ export const getParsedMemo = async (
                 functionSignature: textSignature,
               }
             } catch (error) {
+              console.error(error)
               return undefined
             }
           } else {

@@ -25,7 +25,7 @@ export const TxOverviewMemo = ({ value }: ValueProp<string>) => {
       .catch(() => {})
   }
 
-  useEffect(componentDidMount, [])
+  useEffect(componentDidMount, [value])
 
   return parsedMemo ? (
     <>
