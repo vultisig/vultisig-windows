@@ -17,11 +17,9 @@ import { getMessageHash } from '../getMessageHash'
 import { combineReshareCommittee } from '../reshareCommittee'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
-import { KeygenType } from '../tssType'
 import { uploadSetupMessage } from '../uploadSetupMessage'
 
 export class DKLS {
-  private readonly tssType: KeygenType
   private readonly isInitiateDevice: boolean
   private readonly serverURL: string
   private readonly sessionId: string
@@ -34,7 +32,6 @@ export class DKLS {
   private cache: Record<string, string> = {}
   private setupMessage: Uint8Array = new Uint8Array()
   constructor(
-    tssType: KeygenType,
     isInitiateDevice: boolean,
     serverURL: string,
     sessionId: string,
@@ -43,7 +40,6 @@ export class DKLS {
     oldKeygenCommittee: string[],
     hexEncryptionKey: string
   ) {
-    this.tssType = tssType
     this.isInitiateDevice = isInitiateDevice
     this.serverURL = serverURL
     this.sessionId = sessionId
