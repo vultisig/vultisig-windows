@@ -144,6 +144,7 @@ export class Schnorr {
     }
     console.log('startKeygen attempt:', attempt)
     console.log('session id:', this.sessionId)
+    this.isKeygenComplete = false
     try {
       const session = new KeygenSession(this.setupMessage, this.localPartyId)
       const outbound = this.processOutbound(session)
@@ -181,14 +182,18 @@ export class Schnorr {
   }
 
   private async startReshare(
-    dklsKeyshare: string | undefined,
+    rawSchnorrKeyshare: string | undefined,
     attempt: number
   ) {
-    console.log('startReshare dkls, attempt:', attempt)
+    console.log('startReshare schnorr, attempt:', attempt)
+    this.isKeygenComplete = false
     let localKeyshare: Keyshare | null = null
-    if (dklsKeyshare !== undefined && dklsKeyshare.length > 0) {
-      localKeyshare = Keyshare.fromBytes(Buffer.from(dklsKeyshare, 'base64'))
+    if (rawSchnorrKeyshare !== undefined && rawSchnorrKeyshare.length > 0) {
+      localKeyshare = Keyshare.fromBytes(
+        Buffer.from(rawSchnorrKeyshare, 'base64')
+      )
     }
+
     try {
       let setupMessage: Uint8Array = new Uint8Array()
       if (this.isInitiateDevice) {
@@ -244,26 +249,25 @@ export class Schnorr {
         const inbound = this.processInbound(session)
         const [, inboundResult] = await Promise.all([outbound, inbound])
         if (inboundResult) {
-          const keyShare = session.finish()
-          if (keyShare === undefined) {
-            throw new Error('keyshare is null, dkls reshare failed')
+          const finalKeyShare = session.finish()
+          if (finalKeyShare === undefined) {
+            throw new Error('keyshare is null, schnorr reshare failed')
           }
+
           return {
-            keyshare: base64Encode(keyShare.toBytes()),
-            publicKey: Buffer.from(keyShare.publicKey()).toString('hex'),
-            chaincode: Buffer.from(keyShare.rootChainCode()).toString('hex'),
+            keyshare: base64Encode(finalKeyShare.toBytes()),
+            publicKey: Buffer.from(finalKeyShare.publicKey()).toString('hex'),
+            chaincode: Buffer.from(finalKeyShare.rootChainCode()).toString(
+              'hex'
+            ),
           }
         }
       } finally {
         session.free()
       }
     } catch (error) {
-      console.error('DKLS reshare error:', error)
+      console.error('schnorr reshare error:', error)
       throw error
-    } finally {
-      if (localKeyshare !== null) {
-        localKeyshare.free()
-      }
     }
   }
 
@@ -276,7 +280,7 @@ export class Schnorr {
           return result
         }
       } catch (error) {
-        console.error('DKLS reshare error:', error)
+        console.error('schnorr reshare error:', error)
       }
     }
   }

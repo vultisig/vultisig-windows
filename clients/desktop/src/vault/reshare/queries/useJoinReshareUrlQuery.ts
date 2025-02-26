@@ -19,7 +19,6 @@ export const useJoinReshareUrlQuery = () => {
   const hexChainCode = useCurrentHexChainCode()
   const { signers, reshare_prefix, public_key_ecdsa, name, lib_type } =
     useCurrentVault()
-
   const input: GetJoinReshareUrlInput = {
     sessionId,
     serverType,

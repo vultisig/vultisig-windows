@@ -139,6 +139,7 @@ export class DKLS {
   private async startKeygen(attempt: number) {
     console.log('startKeygen attempt:', attempt)
     console.log('session id:', this.sessionId)
+    this.isKeygenComplete = false
     try {
       if (this.isInitiateDevice) {
         const threshold = getKeygenThreshold(this.keygenCommittee.length)
@@ -214,6 +215,7 @@ export class DKLS {
     attempt: number
   ) {
     console.log('startReshare dkls, attempt:', attempt)
+    this.isKeygenComplete = false
     let localKeyshare: Keyshare | null = null
     if (dklsKeyshare !== undefined && dklsKeyshare.length > 0) {
       localKeyshare = Keyshare.fromBytes(Buffer.from(dklsKeyshare, 'base64'))
@@ -240,7 +242,6 @@ export class DKLS {
           threshold,
           newCommitteeIdxUint8
         )
-        console.log('setup message:', setupMessage)
         // upload setup message to server
         const encryptedSetupMsg = await encodeEncryptMessage(
           setupMessage,
@@ -287,7 +288,7 @@ export class DKLS {
           }
         }
       } finally {
-        //session.free()
+        session.free()
       }
     } catch (error) {
       console.error('DKLS reshare error:', error)
@@ -295,10 +296,6 @@ export class DKLS {
         console.error('DKLS reshare error:', error.stack)
       }
       throw error
-    } finally {
-      if (localKeyshare !== null) {
-        //localKeyshare.free()
-      }
     }
   }
 

@@ -93,6 +93,9 @@ export class MPC {
     ecdsaKeyshare: string | undefined,
     eddsaKeyshare: string | undefined
   ) {
+    const oldCommittee = this.oldKeygenCommittee.filter(party =>
+      this.keygenCommittee.includes(party)
+    )
     EventsEmit('PrepareVault')
     const dklsKeygen = new DKLS(
       this.isInitiateDevice,
@@ -100,7 +103,7 @@ export class MPC {
       this.sessionId,
       this.localPartyId,
       this.keygenCommittee,
-      this.oldKeygenCommittee,
+      oldCommittee,
       this.hexEncryptionKey
     )
     EventsEmit('ECDSA')
@@ -115,7 +118,7 @@ export class MPC {
       this.sessionId,
       this.localPartyId,
       this.keygenCommittee,
-      this.oldKeygenCommittee,
+      oldCommittee,
       this.hexEncryptionKey,
       new Uint8Array(0)
     )
