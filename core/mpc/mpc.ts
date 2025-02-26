@@ -117,7 +117,7 @@ export class MPC {
       this.keygenCommittee,
       this.oldKeygenCommittee,
       this.hexEncryptionKey,
-      dklsKeygen.getSetupMessage()
+      new Uint8Array(0)
     )
     const schnorrResult =
       await schnorrKeygen.startReshareWithRetry(eddsaKeyshare)

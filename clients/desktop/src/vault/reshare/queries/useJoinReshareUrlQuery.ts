@@ -17,7 +17,8 @@ export const useJoinReshareUrlQuery = () => {
   const serviceName = useCurrentServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const hexChainCode = useCurrentHexChainCode()
-  const { signers, reshare_prefix, public_key_ecdsa, name } = useCurrentVault()
+  const { signers, reshare_prefix, public_key_ecdsa, name, lib_type } =
+    useCurrentVault()
 
   const input: GetJoinReshareUrlInput = {
     sessionId,
@@ -29,6 +30,7 @@ export const useJoinReshareUrlQuery = () => {
     oldParties: signers,
     oldResharePrefix: reshare_prefix,
     publicKeyEcdsa: public_key_ecdsa,
+    libType: lib_type,
   }
 
   return useQuery({

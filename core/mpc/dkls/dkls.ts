@@ -231,18 +231,22 @@ export class DKLS {
             keygenCommittee: this.keygenCommittee,
             oldKeygenCommittee: this.oldKeygenCommittee,
           })
+        const newCommitteeIdxUint8 = new Uint8Array(newCommitteeIdx)
+        const oldCommitteeIdxUint8 = new Uint8Array(oldCommitteeIdx)
         setupMessage = QcSession.setup(
           localKeyshare,
           allCommittee,
-          new Uint8Array(oldCommitteeIdx),
+          oldCommitteeIdxUint8,
           threshold,
-          new Uint8Array(newCommitteeIdx)
+          newCommitteeIdxUint8
         )
+        console.log('setup message:', setupMessage)
         // upload setup message to server
         const encryptedSetupMsg = await encodeEncryptMessage(
           setupMessage,
           this.hexEncryptionKey
         )
+        console.log('encrypted setup message:', encryptedSetupMsg)
         await uploadSetupMessage({
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
@@ -283,14 +287,17 @@ export class DKLS {
           }
         }
       } finally {
-        session.free()
+        //session.free()
       }
     } catch (error) {
       console.error('DKLS reshare error:', error)
+      if (error instanceof Error) {
+        console.error('DKLS reshare error:', error.stack)
+      }
       throw error
     } finally {
       if (localKeyshare !== null) {
-        localKeyshare.free()
+        //localKeyshare.free()
       }
     }
   }

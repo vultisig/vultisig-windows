@@ -97,6 +97,8 @@ export const useKeygenMutation = () => {
           const eddsaKeyshare = vault.keyshares.find(
             keyshare => keyshare.public_key === vault.public_key_eddsa
           )?.keyshare
+
+          const oldKeygenCommittee = vault.signers
           return match(mpcLib, {
             GG20: () => Reshare(vault, sessionId, encryptionKeyHex, serverUrl),
             DKLS: async () => {
@@ -107,7 +109,7 @@ export const useKeygenMutation = () => {
                 sessionId,
                 local_party_id,
                 [local_party_id, ...peers],
-                [],
+                oldKeygenCommittee,
                 encryptionKeyHex
               )
 
