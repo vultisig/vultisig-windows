@@ -1578,6 +1578,7 @@ __metadata:
     eslint-plugin-simple-import-sort: "npm:^12.1.1"
     globals: "npm:^15.14.0"
     prettier: "npm:^3.4.2"
+    styled-components: "npm:^6.1.15"
     typescript: "npm:^5.7.3"
     vite: "npm:^5.1.8"
     vite-plugin-node-polyfills: "npm:^0.22.0"
@@ -3510,16 +3511,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@lib/ui@workspace:lib/ui":
-  version: 0.0.0-use.local
-  resolution: "@lib/ui@workspace:lib/ui"
-  dependencies:
-    "@lib/utils": "npm:0.0.1"
-    styled-components: "npm:^6.1.12"
-  languageName: unknown
-  linkType: soft
-
-"@lib/utils@npm:0.0.1, @lib/utils@workspace:lib/utils":
+"@lib/utils@workspace:lib/utils":
   version: 0.0.0-use.local
   resolution: "@lib/utils@workspace:lib/utils"
   dependencies:
@@ -14690,10 +14682,10 @@ __metadata:
     react-native-safe-area-context: "npm:4.12.0"
     react-native-screens: "npm:~4.4.0"
     react-native-sqlite-manager: "npm:0.6.1"
+    react-native-styled-components: "npm:2.1.0"
     react-native-web: "npm:~0.19.13"
     react-native-webview: "npm:13.12.5"
     react-test-renderer: "npm:18.3.1"
-    styled-components: "npm:6.1.15"
     typescript: "npm:5.7.3"
   languageName: unknown
   linkType: soft
@@ -15863,17 +15855,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.4.38":
-  version: 8.4.38
-  resolution: "postcss@npm:8.4.38"
-  dependencies:
-    nanoid: "npm:^3.3.7"
-    picocolors: "npm:^1.0.0"
-    source-map-js: "npm:^1.2.0"
-  checksum: 10c0/955407b8f70cf0c14acf35dab3615899a2a60a26718a63c848cf3c29f2467b0533991b985a2b994430d890bd7ec2b1963e36352b0774a19143b5f591540f7c06
-  languageName: node
-  linkType: hard
-
 "postcss@npm:8.4.49, postcss@npm:~8.4.32":
   version: 8.4.49
   resolution: "postcss@npm:8.4.49"
@@ -17015,6 +16996,16 @@ __metadata:
   peerDependencies:
     react-native: ">=0.14.0"
   checksum: 10c0/631787a64bf6ade75758a23289c138bb1346e0418d75fb013f7a64822560e0f29e1193ef20290c3eb7fbeb6d594b8f49b256895dfc188f7f0023a55f1ba57134
+  languageName: node
+  linkType: hard
+
+"react-native-styled-components@npm:2.1.0":
+  version: 2.1.0
+  resolution: "react-native-styled-components@npm:2.1.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/9c8d81b4fe75251d2e7c82c268d1553a4a630d8349f807bc501c58c1b10ebe842646f6bf40eba0473c81bf0e0cbae2a06d3adcd0e9c2b4c5b7c2b9715e67f8cd
   languageName: node
   linkType: hard
 
@@ -18444,7 +18435,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:>=0.6.2 <2.0.0, source-map-js@npm:^1.2.0, source-map-js@npm:^1.2.1":
+"source-map-js@npm:>=0.6.2 <2.0.0, source-map-js@npm:^1.2.1":
   version: 1.2.1
   resolution: "source-map-js@npm:1.2.1"
   checksum: 10c0/7bda1fc4c197e3c6ff17de1b8b2c20e60af81b63a52cb32ec5a5d67a20a7d42651e2cb34ebe93833c5a2a084377e17455854fee3e21e7925c64a51b6a52b0faf
@@ -18983,7 +18974,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:6.1.15":
+"styled-components@npm:^6.1.15":
   version: 6.1.15
   resolution: "styled-components@npm:6.1.15"
   dependencies:
@@ -19000,26 +18991,6 @@ __metadata:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
   checksum: 10c0/7c29db75af722599e10962ef74edd86423275385a3bf6baeb76783dfacc3de7608d1cc07b0d5866986e5263d60f0801b0d1f5b3b63be1af23bed68fdca8eaab6
-  languageName: node
-  linkType: hard
-
-"styled-components@npm:^6.1.12":
-  version: 6.1.14
-  resolution: "styled-components@npm:6.1.14"
-  dependencies:
-    "@emotion/is-prop-valid": "npm:1.2.2"
-    "@emotion/unitless": "npm:0.8.1"
-    "@types/stylis": "npm:4.2.5"
-    css-to-react-native: "npm:3.2.0"
-    csstype: "npm:3.1.3"
-    postcss: "npm:8.4.38"
-    shallowequal: "npm:1.1.0"
-    stylis: "npm:4.3.2"
-    tslib: "npm:2.6.2"
-  peerDependencies:
-    react: ">= 16.8.0"
-    react-dom: ">= 16.8.0"
-  checksum: 10c0/a1b982dda8e9a4e6872e293ac6845fd1d0747abd64862bdd694975e75bc4719ecbbd1636cd7819b59ad30e7a18d95d02f5de8a56e0053117d34394e02d7a8ebc
   languageName: node
   linkType: hard
 
@@ -20589,7 +20560,6 @@ __metadata:
     react-use: "npm:^17.5.1"
     rollup: "npm:^4.22.5"
     stream-browserify: "npm:^3.0.0"
-    styled-components: "npm:^6.1.12"
     syncpack: "npm:^13.0.1"
     tailwindcss: "npm:^3.4.9"
     tiny-invariant: "npm:^1.3.3"

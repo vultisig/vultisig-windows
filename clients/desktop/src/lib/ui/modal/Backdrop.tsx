@@ -1,11 +1,11 @@
-import { getColor } from '@lib/ui/theme/getters'
-import React, { ComponentProps, useRef } from 'react'
+import { ComponentProps, useRef } from 'react'
 import styled from 'styled-components'
 
 import { centerContent } from '../css/centerContent'
 import { takeWholeSpace } from '../css/takeWholeSpace'
 import { useKeyDown } from '../hooks/useKeyDown'
 import { OnCloseProp } from '../props'
+import { getColor } from '../theme/getters'
 
 const Container = styled.div`
   z-index: 1;

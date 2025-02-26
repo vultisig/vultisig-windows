@@ -1,7 +1,7 @@
-import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { toSizeUnit } from '../css/toSizeUnit'
+import { getColor } from '../theme/getters'
 import { VStack } from './Stack'
 
 export const SeparatedByLine = styled(VStack)`

@@ -2,6 +2,7 @@ import { useRouter, useSegments } from 'expo-router'
 import { FC, PropsWithChildren, useEffect } from 'react'
 
 import { useVaultsQuery } from '../hooks/queries/useVaultsQuery'
+import { Text } from '../lib/ui/components/Text'
 
 export const AuthRedirectProvider: FC<PropsWithChildren> = ({ children }) => {
   const { data: vaults = [], isFetching } = useVaultsQuery()
@@ -24,5 +25,5 @@ export const AuthRedirectProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [hasVault, isFetching, router, segments])
 
-  return children
+  return isFetching ? <Text>Loading...</Text> : children
 }

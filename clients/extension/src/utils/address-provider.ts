@@ -95,7 +95,6 @@ export default class AddressProvider {
     vault: VaultProps
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
-
       switch (chain) {
         // EDDSA
         case Chain.Polkadot:

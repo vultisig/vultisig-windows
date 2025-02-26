@@ -1,6 +1,6 @@
-import { getColor } from '@lib/ui/theme/getters'
 import { createGlobalStyle } from 'styled-components'
 
+import { getColor } from '../theme/getters'
 import { themedScrollbars } from './themedScrollbars'
 
 export const GlobalStyle = createGlobalStyle`
