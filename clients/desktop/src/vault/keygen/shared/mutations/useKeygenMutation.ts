@@ -90,8 +90,62 @@ export const useKeygenMutation = () => {
             },
           })
         },
-        [KeygenType.Reshare]: () =>
-          Reshare(vault, sessionId, encryptionKeyHex, serverUrl),
+        [KeygenType.Reshare]: () => {
+          const ecdsaKeyshare = vault.keyshares.find(
+            keyshare => keyshare.public_key === vault.public_key_ecdsa
+          )?.keyshare
+          const eddsaKeyshare = vault.keyshares.find(
+            keyshare => keyshare.public_key === vault.public_key_eddsa
+          )?.keyshare
+          return match(mpcLib, {
+            GG20: () => Reshare(vault, sessionId, encryptionKeyHex, serverUrl),
+            DKLS: async () => {
+              const mpcKeygen = new MPC(
+                KeygenType.Keygen,
+                isInitiatingDevice,
+                serverUrl,
+                sessionId,
+                local_party_id,
+                [local_party_id, ...peers],
+                [],
+                encryptionKeyHex
+              )
+
+              const result = await mpcKeygen.startReshare(
+                ecdsaKeyshare,
+                eddsaKeyshare
+              )
+              if (!result) {
+                throw new Error('DKLS keygen failed')
+              }
+              const vault = storage.Vault.createFrom({
+                name,
+                public_key_ecdsa: result.dkls.publicKey,
+                public_key_eddsa: result.schnorr.publicKey,
+                signers: [local_party_id, ...peers],
+                created_at: new Date().toISOString(),
+                hex_chain_code: result.dkls.chaincode,
+                keyshares: [
+                  storage.KeyShare.createFrom({
+                    public_key: result.dkls.publicKey,
+                    keyshare: result.dkls.keyshare,
+                  }),
+                  storage.KeyShare.createFrom({
+                    public_key: result.schnorr.publicKey,
+                    keyshare: result.schnorr.keyshare,
+                  }),
+                ],
+                local_party_id,
+                reshare_prefix: '',
+                order: 0,
+                is_backed_up: false,
+                coins: [],
+                lib_type: 'DKLS',
+              })
+              return vault
+            },
+          })
+        },
       }),
   })
 }
