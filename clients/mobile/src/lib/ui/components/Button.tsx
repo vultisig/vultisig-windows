@@ -4,7 +4,6 @@ import { TouchableOpacity } from 'react-native'
 import styled, { css } from 'styled-components/native'
 
 import { getColor } from '../utils'
-import { Text } from './Text'
 export const buttonSizes = ['medium', 'small', 'mini'] as const
 
 type ButtonSize = (typeof buttonSizes)[number]
