@@ -38,7 +38,7 @@ export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
       polkadotSpecific: () => polkadotConfig.fee,
       tonSpecific: () => tonConfig.fee,
       rippleSpecific: () => rippleTxFee,
-      tronSpecific: ({ gasEstimation }) => BigInt(gasEstimation),
+      tronSpecific: ({ gasEstimation }) => BigInt(gasEstimation) ?? BigInt(0),
     }
   )
 

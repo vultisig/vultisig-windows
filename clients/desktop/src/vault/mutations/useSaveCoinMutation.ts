@@ -24,11 +24,17 @@ export const useSaveCoinMutation = () => {
       console.error('save coin error: ', error)
     },
     mutationFn: async (coin: Coin) => {
+      console.log('coin', coin)
+      console.log('vault', vault)
+      console.log('walletCore', walletCore)
+
       const publicKey = await getVaultPublicKey({
         vault,
         chain: coin.chain,
         walletCore,
       })
+
+      console.log('publicKey', publicKey)
 
       const address = deriveAddress({
         chain: coin.chain,
@@ -36,16 +42,22 @@ export const useSaveCoinMutation = () => {
         walletCore,
       })
 
+      console.log('address', address)
+
       const hexPublicKey = toHexPublicKey({
         publicKey,
         walletCore,
       })
+
+      console.log('hexPublicKey', hexPublicKey)
 
       const storageCoin = toStorageCoin({
         ...coin,
         address,
         hexPublicKey,
       })
+
+      console.log('storageCoin', storageCoin)
 
       await SaveCoin(getStorageVaultId(vault), storageCoin)
 
