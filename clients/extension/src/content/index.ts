@@ -318,6 +318,14 @@ namespace Provider {
     public requestAccounts
     private providerType: MessageKey
     public static instances: Map<string, UTXO>
+
+    public methods = {
+      getAccounts: RequestMethod.GET_ACCOUNTS,
+      getTransactionByHash: RequestMethod.GET_TRANSACTION_BY_HASH,
+      requestAccounts: RequestMethod.REQUEST_ACCOUNTS,
+      sendTransaction: RequestMethod.SEND_TRANSACTION,
+    }
+
     constructor(providerType: string, chainId: string) {
       super()
       this.providerType = providerType as MessageKey
@@ -391,6 +399,16 @@ namespace Provider {
 
   export class Cosmos extends EventEmitter {
     public isVultiConnect: boolean
+
+    public methods = {
+      addChain: RequestMethod.WALLET_ADD_CHAIN,
+      chainId: RequestMethod.CHAIN_ID,
+      getAccounts: RequestMethod.GET_ACCOUNTS,
+      getTransactionByHash: RequestMethod.GET_TRANSACTION_BY_HASH,
+      requestAccounts: RequestMethod.REQUEST_ACCOUNTS,
+      sendTransaction: RequestMethod.SEND_TRANSACTION,
+      switchChain: RequestMethod.WALLET_SWITCH_CHAIN,
+    }
 
     constructor() {
       super()
@@ -483,7 +501,7 @@ namespace Provider {
       call: RequestMethod.ETH_CALL,
       chainId: RequestMethod.ETH_CHAIN_ID,
       estimateGas: RequestMethod.ETH_ESTIMATE_GAS,
-      getAccounts: RequestMethod.GET_ACCOUNTS,
+      getAccounts: RequestMethod.ETH_ACCOUNTS,
       gasPrice: RequestMethod.ETH_GAS_PRICE,
       getBalance: RequestMethod.ETH_GET_BALANCE,
       getBlockByNumber: RequestMethod.ETH_GET_BLOCK_BY_NUMBER,
@@ -495,7 +513,7 @@ namespace Provider {
       requestAccounts: RequestMethod.ETH_REQUEST_ACCOUNTS,
       revokePermissions: RequestMethod.WALLET_REVOKE_PERMISSIONS,
       sendTransaction: RequestMethod.ETH_SEND_TRANSACTION,
-      switchChain: RequestMethod.WALLET_SWITCH_CHAIN,
+      switchChain: RequestMethod.WALLET_SWITCH_ETHEREUM_CHAIN,
     }
 
     constructor() {
@@ -634,6 +652,13 @@ namespace Provider {
     public publicKey?: PublicKey
     public static instance: Solana | null = null
 
+    public methods = {
+      getAccounts: RequestMethod.GET_ACCOUNTS,
+      getTransactionByHash: RequestMethod.GET_TRANSACTION_BY_HASH,
+      requestAccounts: RequestMethod.REQUEST_ACCOUNTS,
+      sendTransaction: RequestMethod.SEND_TRANSACTION,
+    }
+
     constructor() {
       super()
       this.chainId = getChainId(Chain.Solana)
@@ -771,6 +796,13 @@ namespace Provider {
     public network: string
     public static instance: MAYAChain | null = null
 
+    public methods = {
+      getAccounts: RequestMethod.GET_ACCOUNTS,
+      getTransactionByHash: RequestMethod.GET_TRANSACTION_BY_HASH,
+      requestAccounts: RequestMethod.REQUEST_ACCOUNTS,
+      sendTransaction: RequestMethod.SEND_TRANSACTION,
+    }
+
     constructor() {
       super()
       this.chainId = getChainId(Chain.MayaChain)
@@ -831,6 +863,14 @@ namespace Provider {
     public chainId: string
     public network: NetworkKey
     public static instance: THORChain | null = null
+
+    public methods = {
+      depositTransaction: RequestMethod.DEPOSIT_TRANSACTION,
+      getAccounts: RequestMethod.GET_ACCOUNTS,
+      getTransactionByHash: RequestMethod.GET_TRANSACTION_BY_HASH,
+      requestAccounts: RequestMethod.REQUEST_ACCOUNTS,
+      sendTransaction: RequestMethod.SEND_TRANSACTION,
+    }
 
     constructor() {
       super()
