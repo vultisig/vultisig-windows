@@ -20,11 +20,11 @@ interface ChainRef {
 export default class UTXOTransactionProvider extends BaseTransactionProvider {
   constructor(
     chainKey: Chain,
-    chainRef: ChainRef,
+ 
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore
   ) {
-    super(chainKey, chainRef, dataEncoder, walletCore)
+    super(chainKey, dataEncoder, walletCore)
   }
 
   // public getSpecificTransactionInfo = (coin: Coin): Promise<SpecificUtxo> => {
@@ -130,60 +130,60 @@ export default class UTXOTransactionProvider extends BaseTransactionProvider {
   //   return input
   // }
 
-  public getSignedTransaction = ({
-    signature,
-    inputData,
-    vault,
-  }: {
-    transaction: ITransaction
-    signature: SignatureProps
-    inputData: Uint8Array
-    vault: VaultProps
-  }): Promise<{ txHash: string; raw: any }> => {
-    return new Promise((resolve, reject) => {
-      const coinType = this.chainRef[this.chainKey]
-      const allSignatures = this.walletCore.DataVector.create()
-      const publicKeys = this.walletCore.DataVector.create()
-      const pubkeyUTXO = vault.chains.find(
-        chain => chain.chain === this.chainKey
-      )!.derivationKey!
-      const publicKeyData = Buffer.from(pubkeyUTXO, 'hex')
-      const modifiedSig = this.getSignature(signature)
-      try {
-        allSignatures.add(modifiedSig)
-        publicKeys.add(publicKeyData)
-        const compileWithSignatures =
-          this.walletCore.TransactionCompiler.compileWithSignatures(
-            coinType,
-            inputData,
-            allSignatures,
-            publicKeys
-          )
+  // public getSignedTransaction = ({
+  //   signature,
+  //   inputData,
+  //   vault,
+  // }: {
+  //   transaction: ITransaction
+  //   signature: SignatureProps
+  //   inputData: Uint8Array
+  //   vault: VaultProps
+  // }): Promise<{ txHash: string; raw: any }> => {
+  //   return new Promise((resolve, reject) => {
+  //     const coinType = this.chainRef[this.chainKey]
+  //     const allSignatures = this.walletCore.DataVector.create()
+  //     const publicKeys = this.walletCore.DataVector.create()
+  //     const pubkeyUTXO = vault.chains.find(
+  //       chain => chain.chain === this.chainKey
+  //     )!.derivationKey!
+  //     const publicKeyData = Buffer.from(pubkeyUTXO, 'hex')
+  //     const modifiedSig = this.getSignature(signature)
+  //     try {
+  //       allSignatures.add(modifiedSig)
+  //       publicKeys.add(publicKeyData)
+  //       const compileWithSignatures =
+  //         this.walletCore.TransactionCompiler.compileWithSignatures(
+  //           coinType,
+  //           inputData,
+  //           allSignatures,
+  //           publicKeys
+  //         )
 
-        const output = TW.Bitcoin.Proto.SigningOutput.decode(
-          compileWithSignatures
-        )
+  //       const output = TW.Bitcoin.Proto.SigningOutput.decode(
+  //         compileWithSignatures
+  //       )
 
-        const result = new SignedTransactionResult(
-          this.stripHexPrefix(this.walletCore.HexCoding.encode(output.encoded)),
-          output.transactionId
-        )
-        resolve({
-          txHash: result.transactionHash,
-          raw: this.stripHexPrefix(
-            this.walletCore.HexCoding.encode(output.encoded)
-          ),
-        })
-      } catch (err) {
-        console.log(err)
-        reject(err)
-      }
-    })
-  }
+  //       const result = new SignedTransactionResult(
+  //         this.stripHexPrefix(this.walletCore.HexCoding.encode(output.encoded)),
+  //         output.transactionId
+  //       )
+  //       resolve({
+  //         txHash: result.transactionHash,
+  //         raw: this.stripHexPrefix(
+  //           this.walletCore.HexCoding.encode(output.encoded)
+  //         ),
+  //       })
+  //     } catch (err) {
+  //       console.log(err)
+  //       reject(err)
+  //     }
+  //   })
+  // }
 
-  private getSignature(signature: SignatureProps): Uint8Array {
-    return this.walletCore.HexCoding.decode(signature.DerSignature)
-  }
+  // private getSignature(signature: SignatureProps): Uint8Array {
+  //   return this.walletCore.HexCoding.decode(signature.DerSignature)
+  // }
 
   // private calculateFee(_coin: Coin): Promise<number> {
   //   return new Promise((resolve, reject) => {

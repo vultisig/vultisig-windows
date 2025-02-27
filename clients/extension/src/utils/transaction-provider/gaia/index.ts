@@ -6,11 +6,11 @@ import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 export default class GaiaTransactionProvider extends CosmosTransactionProvider {
   constructor(
     chainKey: Chain,
-    chainRef: { [chainKey: string]: CoinType },
+
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore
   ) {
-    super(chainKey, chainRef, dataEncoder, walletCore)
+    super(chainKey, dataEncoder, walletCore)
   }
 
   protected accountNumberURL(address: string): string | null {

@@ -7,6 +7,7 @@ import Routing from '@clients/extension/src/pages/popup/routes'
 import { getStoredLanguage } from '@clients/extension/src/utils/storage'
 import { StrictMode, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
+import { WalletCoreProvider } from '@clients/desktop/src/providers/WalletCoreProvider'
 
 const Component = () => {
   const componentDidMount = (): void => {
@@ -26,6 +27,8 @@ const Component = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Component />
+    <WalletCoreProvider>
+      <Component />
+    </WalletCoreProvider>
   </StrictMode>
 )

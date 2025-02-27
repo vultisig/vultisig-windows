@@ -5,6 +5,7 @@ import { TransactionResponse } from 'ethers'
 
 import { ChainTicker, Currency, Language } from './constants'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
+import { tss } from '@clients/desktop/wailsjs/go/models'
 
 export namespace Messaging {
   export namespace Chain {
@@ -218,7 +219,7 @@ export interface ITransaction {
   status: 'default' | 'error' | 'pending' | 'success'
   memo?: {
     isParsed: boolean
-    value: string | ParsedMemoParams
+    value: string | ParsedMemoParams | undefined
   }
   gas?: string
   gasLimit?: string
@@ -302,7 +303,7 @@ export interface CosmosAccountDataResponse {
 
 export interface SignedTransaction {
   inputData?: Uint8Array
-  signature: SignatureProps
+  signatures: Record<string, tss.KeysignResponse>
   transaction?: ITransaction
   vault?: VaultProps
 }

@@ -22,27 +22,28 @@ import { getChainSpecific } from '@core/keysign/chainSpecific'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { randomBytes, toUtf8String } from 'ethers'
-
+import { compileTx } from '@clients/desktop/src/chain/tx/compile/compileTx'
 import { checkERC20Function } from '../../functions'
+import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { match } from '@lib/utils/match'
+import { getSignedTx } from '../sign'
 interface ChainRef {
   [chainKey: string]: CoinType
 }
 
-export default abstract class BaseTransactionProvider {
+export default class BaseTransactionProvider {
   protected chainKey: Chain
-  protected chainRef: ChainRef
+
   protected dataEncoder: (data: Uint8Array) => Promise<string>
-  protected walletCore: WalletCore
+  private walletCore: WalletCore
   protected keysignPayload?: KeysignPayload
 
   constructor(
     chainKey: Chain,
-    chainRef: ChainRef,
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore
   ) {
     this.chainKey = chainKey
-    this.chainRef = chainRef
     this.dataEncoder = dataEncoder
     this.walletCore = walletCore
   }
@@ -78,28 +79,28 @@ export default abstract class BaseTransactionProvider {
     }
   }
 
-  public getPreSignedImageHash = (
-    preSignedInputData: Uint8Array
-  ): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
-        this.chainRef[this.chainKey],
-        preSignedInputData
-      )
+  // public getPreSignedImageHash = (
+  //   preSignedInputData: Uint8Array
+  // ): Promise<string> => {
+  //   return new Promise((resolve, reject) => {
+  //     const preHashes = this.walletCore.TransactionCompiler.preImageHashes(
+  //       this.chainRef[this.chainKey],
+  //       preSignedInputData
+  //     )
 
-      const preSigningOutput =
-        TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes)
+  //     const preSigningOutput =
+  //       TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes)
 
-      if (preSigningOutput.errorMessage !== '')
-        reject(preSigningOutput.errorMessage)
+  //     if (preSigningOutput.errorMessage !== '')
+  //       reject(preSigningOutput.errorMessage)
 
-      const imageHash = this.walletCore.HexCoding.encode(
-        preSigningOutput.dataHash
-      )?.replace(/^0x/, '')
+  //     const imageHash = this.walletCore.HexCoding.encode(
+  //       preSigningOutput.dataHash
+  //     )?.replace(/^0x/, '')
 
-      resolve(imageHash)
-    })
-  }
+  //     resolve(imageHash)
+  //   })
+  // }
 
   public getTransactionKey = (
     publicKeyEcdsa: string,
@@ -137,17 +138,65 @@ export default abstract class BaseTransactionProvider {
 
   // abstract getPreSignedInputData(): Promise<Uint8Array>
 
-  public getDerivePath = (chain: string) => {
-    const coin = this.chainRef[chain]
-    return this.walletCore.CoinTypeExt.derivationPath(coin)
-  }
+  // public getDerivePath = (chain: string) => {
+  //   const coin = this.chainRef[chain]
+  //   return this.walletCore.CoinTypeExt.derivationPath(coin)
+  // }
 
-  abstract getSignedTransaction({
+  getSignedTransaction({
     inputData,
-    signature,
+    signatures,
     transaction,
     vault,
-  }: SignedTransaction): Promise<{ txHash: string; raw: any }>
+  }: SignedTransaction): Promise<{ txHash: string; raw: any }> {
+    return new Promise((resolve, reject) => {
+      if (inputData && vault && transaction) {
+        const derivationKey = vault.chains.find(
+          chain => chain.chain === transaction.chain.chain
+        )?.derivationKey
+
+        const keysignType =
+          signatureAlgorithms[getChainKind(transaction.chain.chain)]
+
+        const publicKeyType = match(keysignType, {
+          ecdsa: () => this.walletCore.PublicKeyType.secp256k1,
+          eddsa: () => this.walletCore.PublicKeyType.ed25519,
+        })
+        const pubkey = this.walletCore.PublicKey.createWithData(
+          Buffer.from(derivationKey!, 'hex'),
+          publicKeyType
+        )
+
+        if (pubkey) {
+          const compiledTx = compileTx({
+            txInputData: inputData,
+            chain: transaction?.chain.chain,
+            publicKey: pubkey,
+            signatures,
+            walletCore: this.walletCore,
+          })
+  
+
+          getSignedTx({
+            chain: transaction.chain.chain,
+            compiledTx,
+            walletCore: this.walletCore,
+          })
+            .then(result => {
+
+              resolve({ txHash: result, raw: result })
+            })
+            .catch(err => {
+              console.error('error getSigned:', err)
+            })
+        } else {
+          reject('Chain Not Supported')
+        }
+      } else {
+        reject()
+      }
+    })
+  }
 
   public getKeysignPayload(
     transaction: ITransaction,

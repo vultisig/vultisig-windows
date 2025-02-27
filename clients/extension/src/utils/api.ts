@@ -1,3 +1,4 @@
+import { tss } from '@clients/desktop/wailsjs/go/models'
 import {
   ThornodeNetworkResponse,
   ThornodeTxResponse,
@@ -248,7 +249,10 @@ export default {
     },
   },
   transaction: {
-    getComplete: async (uuid: string, message?: string) => {
+    getComplete: async (
+      uuid: string,
+      message?: string
+    ): Promise<tss.KeysignResponse> => {
       return new Promise((resolve, reject) => {
         api
           .get<SignatureProps>(
@@ -265,8 +269,15 @@ export default {
                 },
                 {} as { [key: string]: any }
               )
+              const response: tss.KeysignResponse = {
+                der_signature: transformed.DerSignature,
+                msg: transformed.Msg,
+                r: transformed.R,
+                recovery_id: transformed.RecoveryID,
+                s: transformed.S,
+              }
 
-              resolve(transformed)
+              resolve(response)
             }
           })
           .catch(reject)

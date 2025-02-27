@@ -5946,11 +5946,11 @@ __metadata:
   linkType: hard
 
 "@trustwallet/wallet-core@npm:^4.2.10":
-  version: 4.2.10
-  resolution: "@trustwallet/wallet-core@npm:4.2.10"
+  version: 4.2.12
+  resolution: "@trustwallet/wallet-core@npm:4.2.12"
   dependencies:
     protobufjs: "npm:>=6.11.3"
-  checksum: 10c0/b3e7fb395cf9230f2c0ccabc1ef27ed58eaee8e47501e46dd7c64e103525bb3b1670255534dda383aa4019daf06526d53d05b34fb68d71f82c9d47903ea2e3fa
+  checksum: 10c0/00f265200bf1becae982f7680a80c7de6a6bd71c3a2d5592fa10adeac2e1d4907fa7310a7f77bbcf402f1877cc8f5238f359fa84702c803cf5ffab32eabce359
   languageName: node
   linkType: hard
 

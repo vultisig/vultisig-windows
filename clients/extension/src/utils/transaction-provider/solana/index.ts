@@ -177,65 +177,65 @@ export default class SolanaTransactionProvider extends BaseTransactionProvider {
   //   })
   // }
 
-  public getSignedTransaction = ({
-    inputData,
-    signature,
-    vault,
-  }: SignedTransaction): Promise<{ txHash: string; raw: any }> => {
-    return new Promise((resolve, reject) => {
-      if (inputData && vault) {
-        try {
-          const coinType = this.walletCore.CoinType.solana
-          const pubkeySolana = vault.chains.find(
-            chain => chain.chain === Chain.Solana
-          )?.derivationKey
-          const allSignatures = this.walletCore.DataVector.create()
-          const publicKeys = this.walletCore.DataVector.create()
-          const pubkey = this.walletCore.PublicKey.createWithData(
-            Buffer.from(pubkeySolana!, 'hex'),
-            this.walletCore.PublicKeyType.ed25519
-          )
-          const modifiedSig = this.getSignature(signature)
-          allSignatures.add(modifiedSig)
-          publicKeys.add(pubkey.data())
-          const compileWithSignatures =
-            this.walletCore.TransactionCompiler.compileWithSignatures(
-              coinType,
-              inputData,
-              allSignatures,
-              publicKeys
-            )
-          const {
-            encoded,
-            signatures,
-            errorMessage: solanaErrorMessage,
-          } = TW.Solana.Proto.SigningOutput.decode(compileWithSignatures)
-          if (solanaErrorMessage) {
-            reject(solanaErrorMessage)
-          } else {
-            const result = new SignedTransactionResult(
-              encoded,
-              signatures[0].signature!,
-              undefined
-            )
-            resolve({ txHash: result.transactionHash, raw: encoded })
-          }
-        } catch (err) {
-          console.error('Error generating signed transaction:', err)
-          reject(err)
-        }
-      } else {
-        reject(new Error('Public key for Solana not found'))
-      }
-    })
-  }
+  // public getSignedTransaction = ({
+  //   inputData,
+  //   signature,
+  //   vault,
+  // }: SignedTransaction): Promise<{ txHash: string; raw: any }> => {
+  //   return new Promise((resolve, reject) => {
+  //     if (inputData && vault) {
+  //       try {
+  //         const coinType = this.walletCore.CoinType.solana
+  //         const pubkeySolana = vault.chains.find(
+  //           chain => chain.chain === Chain.Solana
+  //         )?.derivationKey
+  //         const allSignatures = this.walletCore.DataVector.create()
+  //         const publicKeys = this.walletCore.DataVector.create()
+  //         const pubkey = this.walletCore.PublicKey.createWithData(
+  //           Buffer.from(pubkeySolana!, 'hex'),
+  //           this.walletCore.PublicKeyType.ed25519
+  //         )
+  //         const modifiedSig = this.getSignature(signature)
+  //         allSignatures.add(modifiedSig)
+  //         publicKeys.add(pubkey.data())
+  //         const compileWithSignatures =
+  //           this.walletCore.TransactionCompiler.compileWithSignatures(
+  //             coinType,
+  //             inputData,
+  //             allSignatures,
+  //             publicKeys
+  //           )
+  //         const {
+  //           encoded,
+  //           signatures,
+  //           errorMessage: solanaErrorMessage,
+  //         } = TW.Solana.Proto.SigningOutput.decode(compileWithSignatures)
+  //         if (solanaErrorMessage) {
+  //           reject(solanaErrorMessage)
+  //         } else {
+  //           const result = new SignedTransactionResult(
+  //             encoded,
+  //             signatures[0].signature!,
+  //             undefined
+  //           )
+  //           resolve({ txHash: result.transactionHash, raw: encoded })
+  //         }
+  //       } catch (err) {
+  //         console.error('Error generating signed transaction:', err)
+  //         reject(err)
+  //       }
+  //     } else {
+  //       reject(new Error('Public key for Solana not found'))
+  //     }
+  //   })
+  // }
 
-  private getSignature(signature: SignatureProps): Uint8Array {
-    const rData = this.walletCore.HexCoding.decode(signature.R).reverse()
-    const sData = this.walletCore.HexCoding.decode(signature.S).reverse()
-    const combinedData = new Uint8Array(rData.length + sData.length)
-    combinedData.set(rData)
-    combinedData.set(sData, rData.length)
-    return combinedData
-  }
+  // private getSignature(signature: SignatureProps): Uint8Array {
+  //   const rData = this.walletCore.HexCoding.decode(signature.R).reverse()
+  //   const sData = this.walletCore.HexCoding.decode(signature.S).reverse()
+  //   const combinedData = new Uint8Array(rData.length + sData.length)
+  //   combinedData.set(rData)
+  //   combinedData.set(sData, rData.length)
+  //   return combinedData
+  // }
 }

@@ -94,43 +94,6 @@ export const checkERC20Function = async (
   return await api.getIsFunctionSelector(functionSelector)
 }
 
-export const formatDisplayNumber = (
-  _number: number | string,
-  ticker: string
-) => {
-  if (String(_number).includes('$')) {
-    // gasPrice is in usd and already formatted
-    return _number
-  }
-  const n = Number(_number)
-
-  if (n === 0) {
-    return '0'
-  } else if (n < 0.0000001) {
-    return `${n.toFixed(9)} ${ticker}`
-  } else if (n < 0.000001) {
-    return `${n.toFixed(8)} ${ticker}`
-  } else if (n < 0.00001) {
-    return `${n.toFixed(7)} ${ticker}`
-  } else if (n < 0.0001) {
-    return `${n.toFixed(6)} ${ticker}`
-  } else if (n < 0.001) {
-    return `${n.toFixed(5)} ${ticker}`
-  } else if (n < 0.01) {
-    return `${n.toFixed(4)} ${ticker}`
-  } else if (n < 1) {
-    return `${n.toFixed(3)} ${ticker}`
-  } else if (n < 2) {
-    return `${n.toFixed(2)} ${ticker}`
-  } else if (n < 10000) {
-    return `${n.toFixed(0)} ${ticker}`
-  } else if (n < 100000) {
-    return `${Number((n / 1000).toFixed(0)).toLocaleString()}K ${ticker}`
-  } else {
-    return `${Number((n / 1000000).toFixed(0)).toLocaleString()}M ${ticker}`
-  }
-}
-
 export const getTssKeysignType = (chain: Chain): TssKeysignType => {
   switch (chain) {
     case Chain.Solana:

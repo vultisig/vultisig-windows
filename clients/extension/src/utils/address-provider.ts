@@ -2,6 +2,7 @@ import api from '@clients/extension/src/utils/api'
 import { errorKey } from '@clients/extension/src/utils/constants'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
+import { getCoinType } from '@core/chain/coin/coinType'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
@@ -11,11 +12,7 @@ interface AddressProps {
 }
 
 export default class AddressProvider {
-  constructor(
-    private chainRef: { [chainKey: string]: CoinType },
-    private walletCore: WalletCore
-  ) {
-    this.chainRef = chainRef
+  constructor(private walletCore: WalletCore) {
     this.walletCore = walletCore
   }
 
@@ -25,7 +22,7 @@ export default class AddressProvider {
     prefix?: string
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
-      const coin = this.chainRef[chain]
+      const coin = getCoinType({ walletCore: this.walletCore, chain })
 
       api
         .derivePublicKey({
@@ -72,7 +69,7 @@ export default class AddressProvider {
     vault: VaultProps
   ): Promise<AddressProps> => {
     return new Promise((resolve, reject) => {
-      const coin = this.chainRef[chain]
+      const coin = getCoinType({ walletCore: this.walletCore, chain })
 
       const bytes = this.walletCore.HexCoding.decode(vault.publicKeyEddsa)
 

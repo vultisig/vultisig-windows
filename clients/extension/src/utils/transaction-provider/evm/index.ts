@@ -23,11 +23,10 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
 
   constructor(
     chainKey: EvmChain,
-    chainRef: ChainRef,
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore
   ) {
-    super(chainKey, chainRef, dataEncoder, walletCore)
+    super(chainKey, dataEncoder, walletCore)
     this.provider = getEvmClient(this.chainKey as EvmChain)
   }
 
@@ -153,44 +152,44 @@ export default class EVMTransactionProvider extends BaseTransactionProvider {
   //   })
   // }
 
-  public getSignedTransaction = ({
-    signature,
-    transaction,
-  }: SignedTransaction): Promise<{ txHash: string; raw: any }> => {
-    return new Promise((resolve, reject) => {
-      if (transaction) {
-        const props = {
-          chainId: parseInt(transaction.chain.id).toString(),
-          nonce: Number(this.nonce),
-          gasLimit: this.getGasLimit().toString(),
-          maxFeePerGas: ((this.gasPrice ?? BigInt(0)) * BigInt(5)) / BigInt(2),
-          maxPriorityFeePerGas: this.ensurePriorityFeeValue(
-            !this.maxPriorityFeePerGas || this.maxPriorityFeePerGas === 0n
-              ? this.gasPrice!
-              : this.maxPriorityFeePerGas,
-            this.chainKey
-          ).toString(),
-          to: transaction.transactionDetails.to,
-          value: transaction.transactionDetails.amount?.amount
-            ? BigInt(transaction.transactionDetails.amount.amount)
-            : BigInt(0),
-          signature: {
-            v: BigInt(signature.RecoveryID),
-            r: `0x${signature.R}`,
-            s: `0x${signature.S}`,
-          },
-        }
+  // public getSignedTransaction = ({
+  //   signature,
+  //   transaction,
+  // }: SignedTransaction): Promise<{ txHash: string; raw: any }> => {
+  //   return new Promise((resolve, reject) => {
+  //     if (transaction) {
+  //       const props = {
+  //         chainId: parseInt(transaction.chain.id).toString(),
+  //         nonce: Number(this.nonce),
+  //         gasLimit: this.getGasLimit().toString(),
+  //         maxFeePerGas: ((this.gasPrice ?? BigInt(0)) * BigInt(5)) / BigInt(2),
+  //         maxPriorityFeePerGas: this.ensurePriorityFeeValue(
+  //           !this.maxPriorityFeePerGas || this.maxPriorityFeePerGas === 0n
+  //             ? this.gasPrice!
+  //             : this.maxPriorityFeePerGas,
+  //           this.chainKey
+  //         ).toString(),
+  //         to: transaction.transactionDetails.to,
+  //         value: transaction.transactionDetails.amount?.amount
+  //           ? BigInt(transaction.transactionDetails.amount.amount)
+  //           : BigInt(0),
+  //         signature: {
+  //           v: BigInt(signature.RecoveryID),
+  //           r: `0x${signature.R}`,
+  //           s: `0x${signature.S}`,
+  //         },
+  //       }
 
-        const tx = transaction.transactionDetails.data
-          ? { ...props, data: transaction.transactionDetails.data }
-          : props
+  //       const tx = transaction.transactionDetails.data
+  //         ? { ...props, data: transaction.transactionDetails.data }
+  //         : props
 
-        const txHash = keccak256(Transaction.from(tx).serialized)
+  //       const txHash = keccak256(Transaction.from(tx).serialized)
 
-        resolve({ txHash: txHash, raw: Transaction.from(tx).serialized })
-      } else {
-        reject()
-      }
-    })
-  }
+  //       resolve({ txHash: txHash, raw: Transaction.from(tx).serialized })
+  //     } else {
+  //       reject()
+  //     }
+  //   })
+  // }
 }

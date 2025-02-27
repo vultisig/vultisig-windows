@@ -14,11 +14,11 @@ import { sha256 } from 'ethers'
 export default class MayaTransactionProvider extends BaseTransactionProvider {
   constructor(
     chainKey: Chain,
-    chainRef: { [chainKey: string]: CoinType },
+
     dataEncoder: (data: Uint8Array) => Promise<string>,
     walletCore: WalletCore
   ) {
-    super(chainKey, chainRef, dataEncoder, walletCore)
+    super(chainKey, dataEncoder, walletCore)
   }
 
   // public getSpecificTransactionInfo = (
@@ -125,72 +125,72 @@ export default class MayaTransactionProvider extends BaseTransactionProvider {
   //   })
   // }
 
-  public getSignedTransaction = ({
-    inputData,
-    signature,
-    vault,
-  }: SignedTransaction): Promise<{ txHash: string; raw: any }> => {
-    return new Promise((resolve, reject) => {
-      if (inputData && vault) {
-        const pubkeyMaya = vault.chains.find(
-          chain => chain.chain === Chain.MayaChain
-        )?.derivationKey
+  // public getSignedTransaction = ({
+  //   inputData,
+  //   signature,
+  //   vault,
+  // }: SignedTransaction): Promise<{ txHash: string; raw: any }> => {
+  //   return new Promise((resolve, reject) => {
+  //     if (inputData && vault) {
+  //       const pubkeyMaya = vault.chains.find(
+  //         chain => chain.chain === Chain.MayaChain
+  //       )?.derivationKey
 
-        if (pubkeyMaya) {
-          const coinType = this.walletCore.CoinType.thorchain
-          const allSignatures = this.walletCore.DataVector.create()
-          const publicKeys = this.walletCore.DataVector.create()
-          const publicKeyData = Buffer.from(pubkeyMaya, 'hex')
-          const modifiedSig = this.getSignature(signature)
+  //       if (pubkeyMaya) {
+  //         const coinType = this.walletCore.CoinType.thorchain
+  //         const allSignatures = this.walletCore.DataVector.create()
+  //         const publicKeys = this.walletCore.DataVector.create()
+  //         const publicKeyData = Buffer.from(pubkeyMaya, 'hex')
+  //         const modifiedSig = this.getSignature(signature)
 
-          allSignatures.add(modifiedSig)
-          publicKeys.add(publicKeyData)
+  //         allSignatures.add(modifiedSig)
+  //         publicKeys.add(publicKeyData)
 
-          const compileWithSignatures =
-            this.walletCore.TransactionCompiler.compileWithSignatures(
-              coinType,
-              inputData,
-              allSignatures,
-              publicKeys
-            )
-          const output = TW.Cosmos.Proto.SigningOutput.decode(
-            compileWithSignatures
-          )
-          const serializedData = output.serialized
-          const parsedData = JSON.parse(serializedData)
-          const txBytes = parsedData.tx_bytes
-          const decodedTxBytes = Buffer.from(txBytes, 'base64')
-          const hash = sha256(decodedTxBytes)
-          const result = new SignedTransactionResult(
-            serializedData,
-            hash,
-            undefined
-          )
+  //         const compileWithSignatures =
+  //           this.walletCore.TransactionCompiler.compileWithSignatures(
+  //             coinType,
+  //             inputData,
+  //             allSignatures,
+  //             publicKeys
+  //           )
+  //         const output = TW.Cosmos.Proto.SigningOutput.decode(
+  //           compileWithSignatures
+  //         )
+  //         const serializedData = output.serialized
+  //         const parsedData = JSON.parse(serializedData)
+  //         const txBytes = parsedData.tx_bytes
+  //         const decodedTxBytes = Buffer.from(txBytes, 'base64')
+  //         const hash = sha256(decodedTxBytes)
+  //         const result = new SignedTransactionResult(
+  //           serializedData,
+  //           hash,
+  //           undefined
+  //         )
 
-          resolve({ txHash: result.transactionHash, raw: serializedData })
-        } else {
-          reject()
-        }
-      } else {
-        reject()
-      }
-    })
-  }
+  //         resolve({ txHash: result.transactionHash, raw: serializedData })
+  //       } else {
+  //         reject()
+  //       }
+  //     } else {
+  //       reject()
+  //     }
+  //   })
+  // }
 
-  private getSignature(signature: SignatureProps): Uint8Array {
-    const rData = this.walletCore.HexCoding.decode(signature.R)
-    const sData = this.walletCore.HexCoding.decode(signature.S)
-    const recoveryIDdata = this.walletCore.HexCoding.decode(
-      signature.RecoveryID
-    )
-    const combinedData = new Uint8Array(
-      rData.length + sData.length + recoveryIDdata.length
-    )
-    combinedData.set(rData)
-    combinedData.set(sData, rData.length)
-    combinedData.set(recoveryIDdata, rData.length + sData.length)
-    return combinedData
-  }
+  // private getSignature(signature: SignatureProps): Uint8Array {
+  //   const rData = this.walletCore.HexCoding.decode(signature.R)
+  //   const sData = this.walletCore.HexCoding.decode(signature.S)
+  //   const recoveryIDdata = this.walletCore.HexCoding.decode(
+  //     signature.RecoveryID
+  //   )
+  //   const combinedData = new Uint8Array(
+  //     rData.length + sData.length + recoveryIDdata.length
+  //   )
+  //   combinedData.set(rData)
+  //   combinedData.set(sData, rData.length)
+  //   combinedData.set(recoveryIDdata, rData.length + sData.length)
+  //   return combinedData
+  // }
 
   // private async calculateFee(_coin?: Coin): Promise<number> {
   //   return 2000000000
