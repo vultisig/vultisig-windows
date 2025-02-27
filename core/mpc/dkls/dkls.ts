@@ -1,6 +1,10 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
-import __wbg_init, { KeygenSession } from '../../../lib/dkls/vs_wasm'
+import __wbg_init, {
+  KeygenSession,
+  Keyshare,
+  QcSession,
+} from '../../../lib/dkls/vs_wasm'
 import { deleteRelayMessage } from '../deleteRelayMessage'
 import { downloadRelayMessage, RelayMessage } from '../downloadRelayMessage'
 import { waitForSetupMessage } from '../downloadSetupMessage'
@@ -10,13 +14,12 @@ import {
 } from '../encodingAndEncryption'
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
+import { combineReshareCommittee } from '../reshareCommittee'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
-import { KeygenType } from '../tssType'
 import { uploadSetupMessage } from '../uploadSetupMessage'
 
 export class DKLS {
-  private readonly tssType: KeygenType
   private readonly isInitiateDevice: boolean
   private readonly serverURL: string
   private readonly sessionId: string
@@ -29,7 +32,6 @@ export class DKLS {
   private cache: Record<string, string> = {}
   private setupMessage: Uint8Array = new Uint8Array()
   constructor(
-    tssType: KeygenType,
     isInitiateDevice: boolean,
     serverURL: string,
     sessionId: string,
@@ -38,7 +40,6 @@ export class DKLS {
     oldKeygenCommittee: string[],
     hexEncryptionKey: string
   ) {
-    this.tssType = tssType
     this.isInitiateDevice = isInitiateDevice
     this.serverURL = serverURL
     this.sessionId = sessionId
@@ -48,7 +49,7 @@ export class DKLS {
     this.hexEncryptionKey = hexEncryptionKey
   }
 
-  private async processOutbound(session: KeygenSession) {
+  private async processOutbound(session: KeygenSession | QcSession) {
     console.log('processOutbound')
     while (true) {
       try {
@@ -86,7 +87,7 @@ export class DKLS {
     }
   }
 
-  private async processInbound(session: KeygenSession) {
+  private async processInbound(session: KeygenSession | QcSession) {
     const start = Date.now()
     while (true) {
       try {
@@ -138,6 +139,7 @@ export class DKLS {
   private async startKeygen(attempt: number) {
     console.log('startKeygen attempt:', attempt)
     console.log('session id:', this.sessionId)
+    this.isKeygenComplete = false
     try {
       if (this.isInitiateDevice) {
         const threshold = getKeygenThreshold(this.keygenCommittee.length)
@@ -206,5 +208,108 @@ export class DKLS {
   }
   public getSetupMessage() {
     return this.setupMessage
+  }
+
+  private async startReshare(
+    dklsKeyshare: string | undefined,
+    attempt: number
+  ) {
+    console.log('startReshare dkls, attempt:', attempt)
+    this.isKeygenComplete = false
+    let localKeyshare: Keyshare | null = null
+    if (dklsKeyshare !== undefined && dklsKeyshare.length > 0) {
+      localKeyshare = Keyshare.fromBytes(Buffer.from(dklsKeyshare, 'base64'))
+    }
+    try {
+      let setupMessage: Uint8Array = new Uint8Array()
+      if (this.isInitiateDevice) {
+        if (localKeyshare === null) {
+          throw new Error('local keyshare is null')
+        }
+        // keygenCommittee only has new committee members
+        const threshold = getKeygenThreshold(this.keygenCommittee.length)
+        const { allCommittee, newCommitteeIdx, oldCommitteeIdx } =
+          combineReshareCommittee({
+            keygenCommittee: this.keygenCommittee,
+            oldKeygenCommittee: this.oldKeygenCommittee,
+          })
+        const newCommitteeIdxUint8 = new Uint8Array(newCommitteeIdx)
+        const oldCommitteeIdxUint8 = new Uint8Array(oldCommitteeIdx)
+        setupMessage = QcSession.setup(
+          localKeyshare,
+          allCommittee,
+          oldCommitteeIdxUint8,
+          threshold,
+          newCommitteeIdxUint8
+        )
+        // upload setup message to server
+        const encryptedSetupMsg = await encodeEncryptMessage(
+          setupMessage,
+          this.hexEncryptionKey
+        )
+        console.log('encrypted setup message:', encryptedSetupMsg)
+        await uploadSetupMessage({
+          serverUrl: this.serverURL,
+          message: encryptedSetupMsg,
+          sessionId: this.sessionId,
+          messageId: undefined,
+          additionalHeaders: undefined,
+        })
+        console.log('uploaded setup message successfully')
+      } else {
+        const encodedEncryptedSetupMsg = await waitForSetupMessage({
+          serverURL: this.serverURL,
+          sessionId: this.sessionId,
+        })
+        setupMessage = await decodeDecryptMessage(
+          encodedEncryptedSetupMsg,
+          this.hexEncryptionKey
+        )
+      }
+      const session = new QcSession(
+        setupMessage,
+        this.localPartyId,
+        localKeyshare
+      )
+
+      try {
+        const outbound = this.processOutbound(session)
+        const inbound = this.processInbound(session)
+        const [, inboundResult] = await Promise.all([outbound, inbound])
+        if (inboundResult) {
+          const keyShare = session.finish()
+          if (keyShare === undefined) {
+            throw new Error('keyshare is null, dkls reshare failed')
+          }
+          return {
+            keyshare: base64Encode(keyShare.toBytes()),
+            publicKey: Buffer.from(keyShare.publicKey()).toString('hex'),
+            chaincode: Buffer.from(keyShare.rootChainCode()).toString('hex'),
+          }
+        }
+      } finally {
+        session.free()
+      }
+    } catch (error) {
+      console.error('DKLS reshare error:', error)
+      if (error instanceof Error) {
+        console.error('DKLS reshare error:', error.stack)
+      }
+      throw error
+    }
+  }
+
+  public async startReshareWithRetry(keyshare: string | undefined) {
+    await __wbg_init()
+    for (let i = 0; i < 3; i++) {
+      try {
+        const result = await this.startReshare(keyshare, i)
+        if (result !== undefined) {
+          return result
+        }
+      } catch (error) {
+        console.error('DKLS reshare error:', error)
+      }
+    }
   }
 }

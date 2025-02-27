@@ -7,23 +7,11 @@ import {
 import {
   ChainProps,
   Messaging,
-  ParsedMemo,
   SendTransactionResponse,
   TransactionDetails,
   TransactionType,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
-import { Interface } from 'ethers'
-
-const getFunctionSignature = async (inputHex: string): Promise<string> => {
-  if (!inputHex || inputHex === '0x') {
-    return Promise.reject()
-  } else {
-    const functionSelector = inputHex.slice(0, 10) // "0x" + 8 hex chars
-
-    return await api.getFunctionSelector(functionSelector)
-  }
-}
 
 const isArray = (arr: any): arr is any[] => {
   return Array.isArray(arr)
@@ -153,32 +141,6 @@ export const getTssKeysignType = (chain: Chain): TssKeysignType => {
     default:
       return TssKeysignType.ECDSA
   }
-}
-
-export const parseMemo = (memo: string): Promise<ParsedMemo> => {
-  return new Promise((resolve, reject) => {
-    getFunctionSignature(memo)
-      .then(signature => {
-        const abi = new Interface([`function ${signature}`])
-
-        try {
-          const decodedData = abi.decodeFunctionData(
-            signature.split('(')[0],
-            memo
-          )
-
-          const processedData = processDecodedData(decodedData)
-
-          resolve({
-            signature: signature,
-            inputs: JSON.stringify(processedData, null, 2),
-          })
-        } catch (error) {
-          console.error('Error decoding input data:', error)
-        }
-      })
-      .catch(reject)
-  })
 }
 
 export const splitString = (str: string, size: number): string[] => {

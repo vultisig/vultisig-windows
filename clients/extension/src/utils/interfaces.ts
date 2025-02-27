@@ -4,6 +4,7 @@ import { Chain } from '@core/chain/Chain'
 import { TransactionResponse } from 'ethers'
 
 import { ChainTicker, Currency, Language } from './constants'
+import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 
 export namespace Messaging {
   export namespace Chain {
@@ -215,10 +216,13 @@ export interface ITransaction {
   customSignature?: string
   id: string
   status: 'default' | 'error' | 'pending' | 'success'
-  memo?: string
+  memo?: {
+    isParsed: boolean
+    value: string | ParsedMemoParams
+  }
   gas?: string
   gasLimit?: string
-  gasPrice?: string
+  txFee?: string
   isDeposit?: boolean
   isCustomMessage?: boolean
   maxFeePerGas?: string
@@ -239,11 +243,6 @@ export interface VaultProps {
   selected?: boolean
   transactions: ITransaction[]
   uid: string
-}
-
-export interface ParsedMemo {
-  signature: string
-  inputs: string
 }
 
 export interface ThorchainAccountDataResponse {
