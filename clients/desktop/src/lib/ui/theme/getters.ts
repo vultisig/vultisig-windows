@@ -10,7 +10,7 @@ type ColorName = keyof Omit<ThemeColors, 'getLabelColor'>
 
 export const getColor =
   (color: ColorName) =>
-  ({ theme }: ThemeGetterParams) =>
+  ({ theme }: ThemeGetterParams): string =>
     theme.colors[color].toCssValue()
 
 type BooleanMatcher = { true: ColorName; false: ColorName }

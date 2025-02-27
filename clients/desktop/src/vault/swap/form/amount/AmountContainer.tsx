@@ -1,7 +1,7 @@
-import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { textInputBorderRadius } from '../../../../lib/ui/css/textInput'
+import { getColor } from '../../../../lib/ui/theme/getters'
 
 export const AmountContainer = styled.div`
   position: relative;

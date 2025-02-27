@@ -1,4 +1,3 @@
-import { getColor } from '@lib/ui/theme/getters'
 import React, { ElementType, ReactNode } from 'react'
 import styled from 'styled-components'
 
@@ -8,6 +7,7 @@ import { TriangleAlertIcon } from '../icons/TriangleAlertIcon'
 import { hStack } from '../layout/Stack'
 import { ChildrenProp, UiProps } from '../props'
 import { text } from '../text'
+import { getColor } from '../theme/getters'
 import { Tooltip } from '../tooltips/Tooltip'
 
 const Container = styled.div`

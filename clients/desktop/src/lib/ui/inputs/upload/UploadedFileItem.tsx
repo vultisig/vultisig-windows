@@ -1,4 +1,3 @@
-import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { IconButton } from '../../buttons/IconButton'
@@ -7,6 +6,7 @@ import { FileIcon } from '../../icons/FileIcon'
 import { IconWrapper } from '../../icons/IconWrapper'
 import { HStack } from '../../layout/Stack'
 import { Text } from '../../text'
+import { getColor } from '../../theme/getters'
 
 const IconContainer = styled(IconWrapper)`
   color: ${getColor('primary')};

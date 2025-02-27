@@ -1,4 +1,3 @@
-import { getColor } from '@lib/ui/theme/getters'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 import { useTranslation } from 'react-i18next'
 import styled, { CSSProperties } from 'styled-components'
@@ -12,6 +11,7 @@ import { IconWrapper } from '../../../../../lib/ui/icons/IconWrapper'
 import { SearchIcon } from '../../../../../lib/ui/icons/SearchIcon'
 import { hStack } from '../../../../../lib/ui/layout/Stack'
 import { useCurrentSearch } from '../../../../../lib/ui/search/CurrentSearchProvider'
+import { getColor } from '../../../../../lib/ui/theme/getters'
 import { coinSearchConfig } from './config'
 
 const IconContainer = styled(IconWrapper)`

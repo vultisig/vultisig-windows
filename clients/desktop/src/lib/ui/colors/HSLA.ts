@@ -94,7 +94,7 @@ export class HSLA {
     return 0.2126 * srgb[0] + 0.7152 * srgb[1] + 0.0722 * srgb[2]
   }
 
-  private toRgba(): [number, number, number, number] {
+  toRgba(): [number, number, number, number] {
     const { h, s, l, a } = this
     const C = (1 - Math.abs((2 * l) / 100 - 1)) * (s / 100)
     const X = C * (1 - Math.abs(((h / 60) % 2) - 1))

@@ -1,4 +1,3 @@
-import { getColor, matchColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import { ComponentProps, forwardRef, Ref } from 'react'
 import styled, { css } from 'styled-components'
@@ -7,6 +6,7 @@ import { borderRadius } from '../css/borderRadius'
 import { centerContent } from '../css/centerContent'
 import { sameDimensions } from '../css/sameDimensions'
 import { toSizeUnit } from '../css/toSizeUnit'
+import { getColor, matchColor } from '../theme/getters'
 import { UnstyledButton } from './UnstyledButton'
 
 export const iconButtonSizes = ['s', 'm', 'l'] as const

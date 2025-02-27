@@ -1,5 +1,4 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -13,6 +12,7 @@ import { toSizeUnit } from '../../../lib/ui/css/toSizeUnit'
 import { AmountTextInput } from '../../../lib/ui/inputs/AmountTextInput'
 import { HStack } from '../../../lib/ui/layout/Stack'
 import { text } from '../../../lib/ui/text'
+import { getColor } from '../../../lib/ui/theme/getters'
 import { useCurrentVaultCoin } from '../../state/currentVault'
 import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
 import { useSendAmount } from '../state/amount'

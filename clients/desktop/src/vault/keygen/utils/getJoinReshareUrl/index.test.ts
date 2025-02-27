@@ -18,6 +18,7 @@ describe('getJoinReshareUrl', () => {
       publicKeyEcdsa: 'ecdsa-public-key',
       oldResharePrefix: 'old-prefix',
       oldParties: ['party1', 'party2', 'party3'],
+      libType: 'GG20',
     }
 
     const mockCompressedString = 'mockCompressedString'
@@ -57,6 +58,7 @@ describe('getJoinReshareUrl', () => {
       hexChainCode: '123456abcdef7890',
       publicKeyEcdsa: 'ecdsa-public-key',
       oldParties: ['party1', 'party2', 'party3'],
+      libType: 'GG20',
     }
 
     const mockCompressedString = 'mockCompressedString'

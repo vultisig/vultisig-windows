@@ -1,6 +1,6 @@
-import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { Stack } from 'expo-router'
 
+import { darkTheme } from '../lib/ui/theme'
 import { AuthRedirectProvider } from '../providers/AuthRedirectProvider'
 import { I18nProvider } from '../providers/I18nProvider'
 import { ReactQueryProvider } from '../providers/ReactQueryProvider'
