@@ -8,7 +8,8 @@ import {
   Instance,
   isSupportedChain,
   MessageKey,
-  requestMethod,
+  requestAuth,
+  RequestMethod,
   rpcUrl,
 } from '@clients/extension/src/utils/constants'
 import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
@@ -53,6 +54,27 @@ const instance = {
   [Instance.TRANSACTION]: false,
   [Instance.VAULT]: false,
   [Instance.VAULTS]: false,
+}
+
+const checkAuthorization = (
+  sender: string,
+  method: RequestMethod
+): Promise<boolean> => {
+  return new Promise(resolve => {
+    if (requestAuth[method]) {
+      getStoredVaults()
+        .then(vaults => {
+          resolve(
+            vaults.some(
+              ({ active, apps = [] }) => active && apps.includes(sender)
+            )
+          )
+        })
+        .catch(() => resolve(false))
+    } else {
+      resolve(true)
+    }
+  })
 }
 
 const handleOpenPanel = (name: string): Promise<number> => {
@@ -344,6 +366,7 @@ const handleRequest = (
   return new Promise((resolve, reject) => {
     const { method, params } = body
     const chainKind = getChainKind(chain.chain)
+
     if (chainKind === 'evm') {
       if (!rpcProvider) handleProvider(chain.chain)
     } else if (chainKind !== 'cosmos' && chainKind !== 'utxo') {
@@ -351,8 +374,8 @@ const handleRequest = (
     }
 
     switch (method) {
-      case requestMethod.vultisig.getAccounts.key:
-      case requestMethod.metamask.getAccounts.key: {
+      case RequestMethod.GET_ACCOUNTS:
+      case RequestMethod.ETH_ACCOUNTS: {
         handleFindAccounts(chain.chain, sender)
           .then(([account]) => {
             switch (chain.chain) {
@@ -375,8 +398,8 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.vultisig.requestAccounts.key:
-      case requestMethod.metamask.requestAccounts.key: {
+      case RequestMethod.REQUEST_ACCOUNTS:
+      case RequestMethod.ETH_REQUEST_ACCOUNTS: {
         handleGetAccounts(chain.chain, sender)
           .then(([account]) => {
             switch (chain.chain) {
@@ -400,15 +423,15 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.vultisig.chainId.key:
-      case requestMethod.metamask.chainId.key: {
+      case RequestMethod.CHAIN_ID:
+      case RequestMethod.ETH_CHAIN_ID: {
         handleProvider(chain.chain, true)
 
         resolve(getChainId(chain.chain))
 
         break
       }
-      case requestMethod.vultisig.sendTransaction.key: {
+      case RequestMethod.SEND_TRANSACTION: {
         const [_transaction] = params
         if (_transaction) {
           let modifiedTransaction = {} as TransactionProps
@@ -448,7 +471,7 @@ const handleRequest = (
         }
         break
       }
-      case requestMethod.metamask.sendTransaction.key: {
+      case RequestMethod.ETH_SEND_TRANSACTION: {
         if (Array.isArray(params)) {
           const [_transaction] = params as METAMASK_TRANSACTION[]
           if (_transaction) {
@@ -482,7 +505,7 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.vultisig.depositTransaction.key: {
+      case RequestMethod.DEPOSIT_TRANSACTION: {
         if (Array.isArray(params)) {
           const [transaction] = params as TransactionProps[]
 
@@ -499,8 +522,8 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.vultisig.getTransactionByHash.key:
-      case requestMethod.metamask.getTransactionByHash.key: {
+      case RequestMethod.GET_TRANSACTION_BY_HASH:
+      case RequestMethod.ETH_GET_TRANSACTION_BY_HASH: {
         if (Array.isArray(params)) {
           const [hash] = params
 
@@ -568,14 +591,14 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.metamask.getTransactionCount.key: {
+      case RequestMethod.ETH_GET_TRANSACTION_COUNT: {
         const [address, tag] = params
         rpcProvider
           .getTransactionCount(String(address), String(tag))
           .then(count => resolve(String(count)))
         break
       }
-      case requestMethod.metamask.blockNumber.key: {
+      case RequestMethod.ETH_BLOCK_NUMBER: {
         rpcProvider
           .getBlock('latest')
           .then(block => resolve(String(block?.number)))
@@ -583,8 +606,8 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.vultisig.addChain.key:
-      case requestMethod.metamask.addChain.key: {
+      case RequestMethod.WALLET_ADD_CHAIN:
+      case RequestMethod.WALLET_ADD_ETHEREUM_CHAIN: {
         if (Array.isArray(params)) {
           const [param] = params
 
@@ -619,17 +642,17 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.metamask.getPermissions.key: {
+      case RequestMethod.WALLET_GET_PERMISSIONS: {
         resolve([])
 
         break
       }
-      case requestMethod.metamask.requestPermissions.key: {
+      case RequestMethod.WALLET_REQUEST_PERMISSIONS: {
         resolve([])
 
         break
       }
-      case requestMethod.metamask.revokePermissions.key: {
+      case RequestMethod.WALLET_REVOKE_PERMISSIONS: {
         getStoredVaults().then(vaults => {
           setStoredVaults(
             vaults.map(vault => ({
@@ -641,7 +664,7 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.metamask.estimateGas.key: {
+      case RequestMethod.ETH_ESTIMATE_GAS: {
         if (Array.isArray(params)) {
           const [transaction] = params as TransactionRequest[]
 
@@ -659,8 +682,8 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.vultisig.switchChain.key:
-      case requestMethod.metamask.switchChain.key: {
+      case RequestMethod.WALLET_SWITCH_CHAIN:
+      case RequestMethod.WALLET_SWITCH_ETHEREUM_CHAIN: {
         if (Array.isArray(params)) {
           const [param] = params
 
@@ -687,7 +710,7 @@ const handleRequest = (
                     .catch(reject)
                 } else {
                   handleRequest(
-                    { method: requestMethod.vultisig.addChain.key, params },
+                    { method: RequestMethod.WALLET_ADD_CHAIN, params },
                     chain,
                     sender
                   )
@@ -707,7 +730,7 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.metamask.getBalance.key: {
+      case RequestMethod.ETH_GET_BALANCE: {
         if (Array.isArray(params)) {
           const [address, tag] = params
 
@@ -725,7 +748,7 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.metamask.getBlockByNumber.key: {
+      case RequestMethod.ETH_GET_BLOCK_BY_NUMBER: {
         const [tag, refresh] = params
         rpcProvider
           .getBlock(String(tag), Boolean(refresh))
@@ -734,7 +757,7 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.metamask.gasPrice.key: {
+      case RequestMethod.ETH_GAS_PRICE: {
         rpcProvider
           .getFeeData()
           .then(({ gasPrice }) => resolve(gasPrice!.toString()))
@@ -742,14 +765,14 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.metamask.maxPriorityFeePerGas.key: {
+      case RequestMethod.ETH_MAX_PRIORITY_FEE_PER_GAS: {
         rpcProvider
           .getFeeData()
           .then(({ maxFeePerGas }) => resolve(maxFeePerGas!.toString()))
 
         break
       }
-      case requestMethod.metamask.call.key: {
+      case RequestMethod.ETH_CALL: {
         if (Array.isArray(params)) {
           const [transaction] = params as TransactionProps[]
 
@@ -764,8 +787,7 @@ const handleRequest = (
 
         break
       }
-
-      case requestMethod.metamask.getTransactionReceipt.key: {
+      case RequestMethod.ETH_GET_TRANSACTION_RECEIPT: {
         if (Array.isArray(params)) {
           const [transaction] = params as TransactionProps[]
 
@@ -779,7 +801,7 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.metamask.getCode.key: {
+      case RequestMethod.ETH_GET_CODE: {
         if (Array.isArray(params)) {
           const [address, tag] = params
 
@@ -797,7 +819,7 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.metamask.signTypedDataV4.key: {
+      case RequestMethod.ETH_SIGN_TYPED_DATA_V4: {
         if (Array.isArray(params)) {
           try {
             const [address, msgParamsString] = params
@@ -846,8 +868,7 @@ const handleRequest = (
         }
         break
       }
-
-      case requestMethod.metamask.personalSign.key: {
+      case RequestMethod.PERSONAL_SIGN: {
         if (Array.isArray(params)) {
           const [message, address] = params
           const utf8Message = toUtf8String(String(message))
@@ -884,11 +905,11 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.metamask.netVersion.key: {
+      case RequestMethod.NET_VERSION: {
         resolve(String(parseInt(getChainId(chain.chain), 16)))
         break
       }
-      case requestMethod.ctrl.deposit.key: {
+      case RequestMethod.DEPOSIT: {
         if (Array.isArray(params)) {
           const [_transaction] = params as CTRL_TRANSACTION[]
 
@@ -919,7 +940,7 @@ const handleRequest = (
 
         break
       }
-      case requestMethod.ctrl.transfer.key: {
+      case RequestMethod.TRANSFER: {
         if (Array.isArray(params)) {
           const [_transaction] = params as CTRL_TRANSACTION[]
 
@@ -970,26 +991,24 @@ const handleSetPriority = (body: Messaging.SetPriority.Request) => {
   })
 }
 
-chrome.runtime.onMessage.addListener(
-  (
-    { message, type }: { message: any; type: MessageKey },
-    sender,
-    sendResponse
-  ) => {
-    const { origin = '' } = sender
-
+const requestManagement = (
+  message: Messaging.Chain.Request,
+  type: MessageKey,
+  sender: string
+) => {
+  return new Promise((resolve, reject) => {
     switch (type) {
       case MessageKey.BITCOIN_REQUEST: {
-        handleRequest(message, chainFeeCoin.Bitcoin, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+        handleRequest(message, chainFeeCoin.Bitcoin, sender)
+          .then(resolve)
+          .catch(error => resolve({ error }))
 
         break
       }
       case MessageKey.BITCOIN_CASH_REQUEST: {
-        handleRequest(message, chainFeeCoin['Bitcoin-Cash'], origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+        handleRequest(message, chainFeeCoin['Bitcoin-Cash'], sender)
+          .then(resolve)
+          .catch(error => resolve({ error }))
 
         break
       }
@@ -1001,11 +1020,9 @@ chrome.runtime.onMessage.addListener(
           )
 
           if (chain) {
-            handleRequest(message, chain, origin)
+            handleRequest(message, chain, sender)
               .then(response => {
-                if (
-                  message.method === requestMethod.vultisig.requestAccounts.key
-                ) {
+                if (message.method === RequestMethod.REQUEST_ACCOUNTS) {
                   try {
                     getStoredVaults().then((vaults: VaultProps[]) => {
                       const vault = vaults.find((vault: VaultProps) => {
@@ -1040,32 +1057,29 @@ chrome.runtime.onMessage.addListener(
                           isNanoLedger: false,
                         },
                       ]
-                      sendResponse(account)
+                      resolve(account)
                     })
                   } catch (e) {
-                    console.error(e)
+                    resolve(e)
                   }
                 } else {
-                  sendResponse(response)
+                  resolve(response)
                 }
               })
-              .catch(error => sendResponse({ error }))
+              .catch(error => resolve({ error }))
           } else {
             handleRequest(
               {
-                method: requestMethod.vultisig.addChain.key,
+                method: RequestMethod.WALLET_ADD_CHAIN,
                 params: [{ chainId: getChainId(Chain.Cosmos) }],
               },
               chainFeeCoin.Cosmos,
-              origin
+              sender
             )
               .then(() =>
-                handleRequest(message, chainFeeCoin.Cosmos, origin)
+                handleRequest(message, chainFeeCoin.Cosmos, sender)
                   .then(response => {
-                    if (
-                      message.method ===
-                      requestMethod.vultisig.requestAccounts.key
-                    ) {
+                    if (message.method === RequestMethod.REQUEST_ACCOUNTS) {
                       getStoredVaults().then((vaults: VaultProps[]) => {
                         const vault = vaults.find((vault: VaultProps) => {
                           return (
@@ -1096,35 +1110,35 @@ chrome.runtime.onMessage.addListener(
                             },
                           ]
 
-                          sendResponse(account)
+                          resolve(account)
                         } catch (e) {
                           console.error(e)
                         }
                       })
                     } else {
-                      sendResponse(response)
+                      resolve(response)
                     }
                   })
 
-                  .catch(error => sendResponse({ error }))
+                  .catch(error => resolve({ error }))
               )
-              .catch(error => sendResponse({ error }))
+              .catch(error => resolve({ error }))
           }
         })
 
         break
       }
       case MessageKey.DASH_REQUEST: {
-        handleRequest(message, chainFeeCoin.Dash, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+        handleRequest(message, chainFeeCoin.Dash, sender)
+          .then(resolve)
+          .catch(error => resolve({ error }))
 
         break
       }
       case MessageKey.DOGECOIN_REQUEST: {
-        handleRequest(message, chainFeeCoin.Dogecoin, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+        handleRequest(message, chainFeeCoin.Dogecoin, sender)
+          .then(resolve)
+          .catch(error => resolve({ error }))
 
         break
       }
@@ -1136,57 +1150,75 @@ chrome.runtime.onMessage.addListener(
           )
 
           if (chain) {
-            handleRequest(message, chain, origin)
-              .then(sendResponse)
-              .catch(error => sendResponse({ error }))
+            handleRequest(message, chain, sender)
+              .then(resolve)
+              .catch(error => resolve({ error }))
           } else {
             handleRequest(
               {
-                method: requestMethod.metamask.switchChain.key,
+                method: RequestMethod.WALLET_SWITCH_CHAIN,
                 params: [{ chainId: getChainId(Chain.Ethereum) }],
               },
               chainFeeCoin.Ethereum,
-              origin
+              sender
             )
               .then(() =>
-                handleRequest(message, chainFeeCoin.Ethereum, origin)
-                  .then(sendResponse)
-                  .catch(error => sendResponse({ error }))
+                handleRequest(message, chainFeeCoin.Ethereum, sender)
+                  .then(resolve)
+                  .catch(error => resolve({ error }))
               )
-              .catch(error => sendResponse({ error }))
+              .catch(error => resolve({ error }))
           }
         })
 
         break
       }
       case MessageKey.LITECOIN_REQUEST: {
-        handleRequest(message, chainFeeCoin.Litecoin, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+        handleRequest(message, chainFeeCoin.Litecoin, sender)
+          .then(resolve)
+          .catch(error => resolve({ error }))
 
         break
       }
       case MessageKey.MAYA_REQUEST: {
-        handleRequest(message, chainFeeCoin.MayaChain, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+        handleRequest(message, chainFeeCoin.MayaChain, sender)
+          .then(resolve)
+          .catch(error => resolve({ error }))
 
         break
       }
       case MessageKey.SOLANA_REQUEST: {
-        handleRequest(message, chainFeeCoin.Solana, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+        handleRequest(message, chainFeeCoin.Solana, sender)
+          .then(resolve)
+          .catch(error => resolve({ error }))
 
         break
       }
       case MessageKey.THOR_REQUEST: {
-        handleRequest(message, chainFeeCoin.THORChain, origin)
-          .then(sendResponse)
-          .catch(error => sendResponse({ error }))
+        handleRequest(message, chainFeeCoin.THORChain, sender)
+          .then(resolve)
+          .catch(error => resolve({ error }))
 
         break
       }
+      default: {
+        reject()
+
+        break
+      }
+    }
+  })
+}
+
+chrome.runtime.onMessage.addListener(
+  (
+    { message, type }: { message: any; type: MessageKey },
+    sender,
+    sendResponse
+  ) => {
+    const { origin = '' } = sender
+
+    switch (type) {
       case MessageKey.PRIORITY: {
         handleSetPriority(message).then(sendResponse)
 
@@ -1203,6 +1235,28 @@ chrome.runtime.onMessage.addListener(
         break
       }
       default: {
+        checkAuthorization(origin, message.method as RequestMethod).then(
+          isAuthorized => {
+            if (isAuthorized) {
+              requestManagement(message, type, origin)
+                .then(sendResponse)
+                .catch(() => {})
+            } else {
+              handleGetVault(origin)
+                .then(vault => {
+                  if (vault) {
+                    requestManagement(message, type, origin)
+                      .then(sendResponse)
+                      .catch(sendResponse)
+                  } else {
+                    sendResponse('Vault is not connected')
+                  }
+                })
+                .catch(() => {})
+            }
+          }
+        )
+
         break
       }
     }

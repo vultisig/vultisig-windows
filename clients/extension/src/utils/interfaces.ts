@@ -1,13 +1,15 @@
 import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
+import { ChainTicker } from '@clients/extension/src/utils/constants'
 import { Chain } from '@core/chain/Chain'
 import { TransactionResponse } from 'ethers'
 
-import { ChainTicker, Currency, Language } from './constants'
-
 export namespace Messaging {
   export namespace Chain {
-    export type Request = { method: string; params: Record<string, any>[] }
+    export type Request = {
+      method: string
+      params: Record<string, any>[]
+    }
     export type Response =
       | string
       | string[]
@@ -53,76 +55,6 @@ export interface SendTransactionResponse {
   txResponse: string
 }
 
-export interface ChainObjRef {
-  [Chain.Arbitrum]: ChainProps
-  [Chain.Avalanche]: ChainProps
-  [Chain.Base]: ChainProps
-  [Chain.Bitcoin]: ChainProps
-  [Chain.BitcoinCash]: ChainProps
-  [Chain.Blast]: ChainProps
-  [Chain.BSC]: ChainProps
-  [Chain.CronosChain]: ChainProps
-  [Chain.Dash]: ChainProps
-  [Chain.Dogecoin]: ChainProps
-  [Chain.Dydx]: ChainProps
-  [Chain.Ethereum]: ChainProps
-  [Chain.Cosmos]: ChainProps
-  [Chain.Kujira]: ChainProps
-  [Chain.Litecoin]: ChainProps
-  [Chain.MayaChain]: ChainProps
-  [Chain.Optimism]: ChainProps
-  [Chain.Osmosis]: ChainProps
-  [Chain.Polygon]: ChainProps
-  [Chain.Solana]: ChainProps
-  [Chain.THORChain]: ChainProps
-}
-
-export interface ChainStrRef {
-  [Chain.Arbitrum]: string
-  [Chain.Avalanche]: string
-  [Chain.Base]: string
-  [Chain.Bitcoin]: string
-  [Chain.BitcoinCash]: string
-  [Chain.Blast]: string
-  [Chain.BSC]: string
-  [Chain.CronosChain]: string
-  [Chain.Dash]: string
-  [Chain.Dogecoin]: string
-  [Chain.Dydx]: string
-  [Chain.Ethereum]: string
-  [Chain.Cosmos]: string
-  [Chain.Kujira]: string
-  [Chain.Litecoin]: string
-  [Chain.MayaChain]: string
-  [Chain.Optimism]: string
-  [Chain.Osmosis]: string
-  [Chain.Polkadot]: string
-  [Chain.Polygon]: string
-  [Chain.Solana]: string
-  [Chain.Sui]: string
-  [Chain.THORChain]: string
-  [Chain.Terra]: string
-  [Chain.TerraClassic]: string
-  [Chain.Ton]: string
-  [Chain.Ripple]: string
-  [Chain.Zksync]: string
-  [Chain.Noble]: string
-  [Chain.Akash]: string
-}
-
-export interface CurrencyRef {
-  [Currency.AUD]: string
-  [Currency.CAD]: string
-  [Currency.CNY]: string
-  [Currency.EUR]: string
-  [Currency.GBP]: string
-  [Currency.JPY]: string
-  [Currency.RUB]: string
-  [Currency.SEK]: string
-  [Currency.SGD]: string
-  [Currency.USD]: string
-}
-
 export interface CustomMessage {
   method: string
   address: string
@@ -135,17 +67,6 @@ export interface SignatureProps {
   S: string
   DerSignature: string
   RecoveryID: string
-}
-
-export interface LanguageRef {
-  [Language.CROATIA]: string
-  [Language.DUTCH]: string
-  [Language.ENGLISH]: string
-  [Language.GERMAN]: string
-  [Language.ITALIAN]: string
-  [Language.PORTUGUESE]: string
-  [Language.RUSSIAN]: string
-  [Language.SPANISH]: string
 }
 
 export interface ScreenProps {

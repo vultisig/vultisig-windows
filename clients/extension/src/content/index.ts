@@ -8,8 +8,8 @@ import {
   CosmosMsgType,
   EventMethod,
   MessageKey,
+  RequestMethod,
   SenderKey,
-  requestMethod,
 } from '@clients/extension/src/utils/constants'
 import { processBackgroundResponse } from '@clients/extension/src/utils/functions'
 import {
@@ -17,6 +17,8 @@ import {
   SendTransactionResponse,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
+import { Chain } from '@core/chain/Chain'
+import { getChainId } from '@core/chain/coin/ChainId'
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
@@ -43,15 +45,15 @@ import base58 from 'bs58'
 import EventEmitter from 'events'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
-import { Chain } from '@core/chain/Chain'
-import { getChainId } from '@core/chain/coin/ChainId'
 
 enum NetworkKey {
   MAINNET = 'mainnet',
   TESTNET = 'testnet',
 }
-window.ctrlKeplrProviders = {}
+
 type Callback = (error: Error | null, result?: Messaging.Chain.Response) => void
+
+window.ctrlKeplrProviders = {}
 
 const sendToBackgroundViaRelay = <Request, Response>(
   type: MessageKey,
@@ -135,7 +137,7 @@ class XDEFIKeplrProvider extends Keplr {
     return new Promise<void>((resolve, reject) => {
       cosmosProvider
         .request({
-          method: requestMethod.vultisig.requestAccounts.key,
+          method: RequestMethod.REQUEST_ACCOUNTS,
           params: [],
         })
         .then(resolve)
@@ -154,23 +156,23 @@ class XDEFIKeplrProvider extends Keplr {
 
     cosmSigner.getAccounts = async () => {
       return cosmosProvider
-        .request({ method: requestMethod.vultisig.chainId.key, params: [] })
+        .request({ method: RequestMethod.CHAIN_ID, params: [] })
         .then(async currentChainID => {
           if (currentChainID !== chainId) {
             return await cosmosProvider
               .request({
-                method: requestMethod.vultisig.switchChain.key,
+                method: RequestMethod.WALLET_SWITCH_CHAIN,
                 params: [{ chainId }],
               })
               .then(async () => {
                 return await cosmosProvider.request({
-                  method: requestMethod.vultisig.requestAccounts.key,
+                  method: RequestMethod.REQUEST_ACCOUNTS,
                   params: [],
                 })
               })
           } else {
             return await cosmosProvider.request({
-              method: requestMethod.vultisig.requestAccounts.key,
+              method: RequestMethod.REQUEST_ACCOUNTS,
               params: [],
             })
           }
@@ -192,23 +194,23 @@ class XDEFIKeplrProvider extends Keplr {
 
     cosmSigner.getAccounts = async () => {
       return cosmosProvider
-        .request({ method: requestMethod.vultisig.chainId.key, params: [] })
+        .request({ method: RequestMethod.CHAIN_ID, params: [] })
         .then(async currentChainID => {
           if (currentChainID !== chainId) {
             return await cosmosProvider
               .request({
-                method: requestMethod.vultisig.switchChain.key,
+                method: RequestMethod.WALLET_SWITCH_CHAIN,
                 params: [{ chainId }],
               })
               .then(async () => {
                 return await cosmosProvider.request({
-                  method: requestMethod.vultisig.requestAccounts.key,
+                  method: RequestMethod.REQUEST_ACCOUNTS,
                   params: [],
                 })
               })
           } else {
             return await cosmosProvider.request({
-              method: requestMethod.vultisig.requestAccounts.key,
+              method: RequestMethod.REQUEST_ACCOUNTS,
               params: [],
             })
           }
@@ -226,7 +228,7 @@ class XDEFIKeplrProvider extends Keplr {
     return new Promise<Uint8Array>((resolve, reject) => {
       cosmosProvider
         .request({
-          method: requestMethod.vultisig.sendTransaction.key,
+          method: RequestMethod.SEND_TRANSACTION,
           params: [_tx],
         })
         .then((result: SendTransactionResponse) => {
@@ -259,7 +261,7 @@ class XDEFIKeplrProvider extends Keplr {
 
       cosmosProvider
         .request({
-          method: requestMethod.vultisig.sendTransaction.key,
+          method: RequestMethod.SEND_TRANSACTION,
           params: [txDetails[0]!],
         })
         .then((result: SendTransactionResponse) => {
@@ -281,18 +283,18 @@ class XDEFIKeplrProvider extends Keplr {
 
   async getKey(chainId: string): Promise<Key> {
     return cosmosProvider
-      .request({ method: requestMethod.vultisig.chainId.key, params: [] })
+      .request({ method: RequestMethod.CHAIN_ID, params: [] })
       .then(async currentChainID => {
         if (currentChainID !== chainId) {
           return await cosmosProvider
             .request({
-              method: requestMethod.vultisig.switchChain.key,
+              method: RequestMethod.WALLET_SWITCH_CHAIN,
               params: [{ chainId }],
             })
             .then(async () => {
               return (
                 await cosmosProvider.request({
-                  method: requestMethod.vultisig.requestAccounts.key,
+                  method: RequestMethod.REQUEST_ACCOUNTS,
                   params: [],
                 })
               )[0]
@@ -300,7 +302,7 @@ class XDEFIKeplrProvider extends Keplr {
         } else {
           return (
             await cosmosProvider.request({
-              method: requestMethod.vultisig.requestAccounts.key,
+              method: RequestMethod.REQUEST_ACCOUNTS,
               params: [],
             })
           )[0]
@@ -337,14 +339,14 @@ namespace Provider {
 
     async getAccounts() {
       return await this.request({
-        method: requestMethod.vultisig.getAccounts.key,
+        method: RequestMethod.GET_ACCOUNTS,
         params: [],
       })
     }
 
     async signPsbt() {
       return await this.request({
-        method: requestMethod.ctrl.signPsbt.key,
+        method: RequestMethod.SIGN_PSBT,
         params: [],
       })
     }
@@ -476,24 +478,24 @@ namespace Provider {
     public static instance: Ethereum | null = null
 
     public methods = {
-      addChain: requestMethod.metamask.addChain,
-      blockNumber: requestMethod.metamask.blockNumber,
-      call: requestMethod.metamask.call,
-      chainId: requestMethod.metamask.chainId,
-      estimateGas: requestMethod.metamask.estimateGas,
-      getAccounts: requestMethod.metamask.getAccounts,
-      gasPrice: requestMethod.metamask.gasPrice,
-      getBalance: requestMethod.metamask.getBalance,
-      getBlockByNumber: requestMethod.metamask.getBlockByNumber,
-      getCode: requestMethod.metamask.getCode,
-      getTransactionByHash: requestMethod.metamask.getTransactionByHash,
-      getTransactionCount: requestMethod.metamask.getTransactionCount,
-      getTransactionReceipt: requestMethod.metamask.getTransactionReceipt,
-      maxPriorityFeePerGas: requestMethod.metamask.maxPriorityFeePerGas,
-      requestAccounts: requestMethod.metamask.requestAccounts,
-      revokePermissions: requestMethod.metamask.revokePermissions,
-      sendTransaction: requestMethod.metamask.sendTransaction,
-      switchChain: requestMethod.metamask.switchChain,
+      addChain: RequestMethod.WALLET_ADD_ETHEREUM_CHAIN,
+      blockNumber: RequestMethod.ETH_BLOCK_NUMBER,
+      call: RequestMethod.ETH_CALL,
+      chainId: RequestMethod.ETH_CHAIN_ID,
+      estimateGas: RequestMethod.ETH_ESTIMATE_GAS,
+      getAccounts: RequestMethod.GET_ACCOUNTS,
+      gasPrice: RequestMethod.ETH_GAS_PRICE,
+      getBalance: RequestMethod.ETH_GET_BALANCE,
+      getBlockByNumber: RequestMethod.ETH_GET_BLOCK_BY_NUMBER,
+      getCode: RequestMethod.ETH_GET_CODE,
+      getTransactionByHash: RequestMethod.ETH_GET_TRANSACTION_BY_HASH,
+      getTransactionCount: RequestMethod.ETH_GET_TRANSACTION_COUNT,
+      getTransactionReceipt: RequestMethod.ETH_GET_TRANSACTION_RECEIPT,
+      maxPriorityFeePerGas: RequestMethod.ETH_MAX_PRIORITY_FEE_PER_GAS,
+      requestAccounts: RequestMethod.ETH_REQUEST_ACCOUNTS,
+      revokePermissions: RequestMethod.WALLET_REVOKE_PERMISSIONS,
+      sendTransaction: RequestMethod.ETH_SEND_TRANSACTION,
+      switchChain: RequestMethod.WALLET_SWITCH_CHAIN,
     }
 
     constructor() {
@@ -521,7 +523,7 @@ namespace Provider {
 
     async enable() {
       return await this.request({
-        method: requestMethod.metamask.requestAccounts.key,
+        method: RequestMethod.ETH_REQUEST_ACCOUNTS,
         params: [],
       })
     }
@@ -552,7 +554,7 @@ namespace Provider {
     on = (event: string, callback: (data: any) => void): this => {
       if (event === EventMethod.CONNECT && this.isConnected()) {
         this.request({
-          method: requestMethod.metamask.chainId.key,
+          method: RequestMethod.ETH_CHAIN_ID,
           params: [],
         }).then(chainId => callback({ chainId }))
       } else {
@@ -587,13 +589,13 @@ namespace Provider {
             response
           )
           switch (data.method) {
-            case requestMethod.metamask.addChain.key:
-            case requestMethod.metamask.switchChain.key: {
+            case RequestMethod.WALLET_ADD_ETHEREUM_CHAIN:
+            case RequestMethod.WALLET_SWITCH_ETHEREUM_CHAIN: {
               this.emitUpdateNetwork({ chainId: result as string })
 
               break
             }
-            case requestMethod.metamask.revokePermissions.key: {
+            case RequestMethod.WALLET_REVOKE_PERMISSIONS: {
               this.emit(EventMethod.DISCONNECT, result)
 
               break
@@ -659,7 +661,7 @@ namespace Provider {
         to: decodedTransfer.toPubkey.toString(),
       }
       return await this.request({
-        method: requestMethod.vultisig.sendTransaction.key,
+        method: RequestMethod.SEND_TRANSACTION,
         params: [modifiedTransfer],
       }).then((result: SendTransactionResponse) => {
         const rawData = base58.decode(result.raw)
@@ -669,7 +671,7 @@ namespace Provider {
 
     async connect() {
       return await this.request({
-        method: requestMethod.vultisig.requestAccounts.key,
+        method: RequestMethod.REQUEST_ACCOUNTS,
         params: [],
       }).then(account => {
         this.isConnected = true

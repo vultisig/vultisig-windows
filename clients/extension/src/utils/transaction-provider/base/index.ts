@@ -1,8 +1,8 @@
 import { toBinary } from '@bufbuild/protobuf'
 import {
-  TransactionProps,
   SignatureProps,
   SignedTransaction,
+  TransactionProps,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'

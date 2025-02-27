@@ -2,10 +2,10 @@ import { create } from '@bufbuild/protobuf'
 import { BlockchairUtxoResponse } from '@clients/extension/src/types/utxo'
 import api from '@clients/extension/src/utils/api'
 import {
-  TransactionProps,
   SignatureProps,
   SpecificUtxo,
   SpecificUtxoInfo,
+  TransactionProps,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'

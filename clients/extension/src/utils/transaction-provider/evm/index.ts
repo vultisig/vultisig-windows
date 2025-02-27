@@ -6,8 +6,8 @@ import {
   checkERC20Function,
 } from '@clients/extension/src/utils/functions'
 import {
-  TransactionProps,
   SignedTransaction,
+  TransactionProps,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import BaseTransactionProvider from '@clients/extension/src/utils/transaction-provider/base'

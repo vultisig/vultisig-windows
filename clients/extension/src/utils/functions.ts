@@ -1,7 +1,7 @@
 import api from '@clients/extension/src/utils/api'
 import {
   MessageKey,
-  requestMethod,
+  RequestMethod,
   TssKeysignType,
 } from '@clients/extension/src/utils/constants'
 import {
@@ -230,11 +230,11 @@ export const processBackgroundResponse = (
   result: Messaging.Chain.Response
 ) => {
   switch (data.method) {
-    case requestMethod.ctrl.transfer.key:
-    case requestMethod.metamask.sendTransaction.key:
-    case requestMethod.vultisig.sendTransaction.key:
-    case requestMethod.ctrl.deposit.key:
-    case requestMethod.vultisig.depositTransaction.key: {
+    case RequestMethod.TRANSFER:
+    case RequestMethod.ETH_SEND_TRANSACTION:
+    case RequestMethod.SEND_TRANSACTION:
+    case RequestMethod.DEPOSIT:
+    case RequestMethod.DEPOSIT_TRANSACTION: {
       if (messageKey === MessageKey.SOLANA_REQUEST)
         return (result as SendTransactionResponse).raw
       return (result as SendTransactionResponse).txResponse

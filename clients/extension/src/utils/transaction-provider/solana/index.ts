@@ -11,10 +11,10 @@ import { create } from '@bufbuild/protobuf'
 import api from '@clients/extension/src/utils/api'
 import { rpcUrl } from '@clients/extension/src/utils/constants'
 import type {
-  TransactionProps,
   SignatureProps,
   SignedTransaction,
   SpecificSolana,
+  TransactionProps,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import { SignedTransactionResult } from '@clients/extension/src/utils/signed-transaction-result'
