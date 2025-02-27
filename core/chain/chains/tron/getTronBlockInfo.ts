@@ -28,7 +28,7 @@ interface BlockChainSpecificTron {
   gasFeeEstimation: number
 }
 
-export async function getBlockInfo(
+export async function getTronBlockInfo(
   coin: Coin
 ): Promise<BlockChainSpecificTron> {
   const body = {}

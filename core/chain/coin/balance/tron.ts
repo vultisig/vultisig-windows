@@ -1,4 +1,4 @@
-import { Base58 } from '@trustwallet/wallet-core/dist/src/wallet-core'
+import base58 from 'bs58'
 
 import { isNativeCoin } from '../utils/isNativeCoin'
 import { CoinBalanceResolver } from './CoinBalanceResolver'
@@ -72,7 +72,7 @@ function base58ToHex(base58String: string): string {
   try {
     // Implement Base58 decoding logic here
     // This is a placeholder - you'll need to implement actual Base58 decoding
-    const decodedData = Base58.decode(base58String)
+    const decodedData = base58.decode(base58String)
     const hex = Buffer.from(decodedData).toString('hex')
     return hex
   } catch (error) {
