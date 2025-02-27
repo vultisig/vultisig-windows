@@ -991,222 +991,31 @@ const handleSetPriority = (body: Messaging.SetPriority.Request) => {
   })
 }
 
-const requestManagement = (
-  message: Messaging.Chain.Request,
-  type: MessageKey,
+const handleValidation = (
+  body: Messaging.Chain.Request,
+  chain: ChainProps,
   sender: string
-) => {
+): Promise<
+  | Messaging.Chain.Response
+  | ThorchainProviderResponse<ThorchainProviderMethod>
+  | SendTransactionResponse
+> => {
   return new Promise((resolve, reject) => {
-    switch (type) {
-      case MessageKey.BITCOIN_REQUEST: {
-        handleRequest(message, chainFeeCoin.Bitcoin, sender)
-          .then(resolve)
-          .catch(error => resolve({ error }))
-
-        break
+    checkAuthorization(sender, body.method as RequestMethod).then(
+      isAuthorized => {
+        if (isAuthorized) {
+          handleRequest(body, chain, sender).then(resolve).catch(reject)
+        } else {
+          handleGetVault(origin).then(vault => {
+            if (vault) {
+              handleRequest(body, chain, sender).then(resolve).catch(reject)
+            } else {
+              reject('Vault is not connected')
+            }
+          })
+        }
       }
-      case MessageKey.BITCOIN_CASH_REQUEST: {
-        handleRequest(message, chainFeeCoin['Bitcoin-Cash'], sender)
-          .then(resolve)
-          .catch(error => resolve({ error }))
-
-        break
-      }
-      case MessageKey.COSMOS_REQUEST: {
-        getStoredChains().then(storedChains => {
-          const chain = storedChains.find(
-            (storedChain: ChainProps) =>
-              storedChain.active && getChainKind(storedChain.chain) === 'cosmos'
-          )
-
-          if (chain) {
-            handleRequest(message, chain, sender)
-              .then(response => {
-                if (message.method === RequestMethod.REQUEST_ACCOUNTS) {
-                  try {
-                    getStoredVaults().then((vaults: VaultProps[]) => {
-                      const vault = vaults.find((vault: VaultProps) => {
-                        return (
-                          vault.chains.find(
-                            (selectedChain: ChainProps) =>
-                              selectedChain.chain === chain.chain
-                          )?.address === response
-                        )
-                      })
-
-                      const storedChain = vault!.chains.find(
-                        (selectedChain: ChainProps) =>
-                          selectedChain.chain === chain.chain
-                      )!
-                      const derivationKey = storedChain.derivationKey
-                      if (!derivationKey) {
-                        throw new Error('Derivation key is missing!')
-                      }
-
-                      const keyBytes = Uint8Array.from(
-                        Buffer.from(derivationKey, 'hex')
-                      )
-
-                      const account = [
-                        {
-                          pubkey: Array.from(keyBytes),
-                          address: response,
-                          algo: 'secp256k1',
-                          bech32Address: response,
-                          isKeystone: false,
-                          isNanoLedger: false,
-                        },
-                      ]
-                      resolve(account)
-                    })
-                  } catch (e) {
-                    resolve(e)
-                  }
-                } else {
-                  resolve(response)
-                }
-              })
-              .catch(error => resolve({ error }))
-          } else {
-            handleRequest(
-              {
-                method: RequestMethod.WALLET_ADD_CHAIN,
-                params: [{ chainId: getChainId(Chain.Cosmos) }],
-              },
-              chainFeeCoin.Cosmos,
-              sender
-            )
-              .then(() =>
-                handleRequest(message, chainFeeCoin.Cosmos, sender)
-                  .then(response => {
-                    if (message.method === RequestMethod.REQUEST_ACCOUNTS) {
-                      getStoredVaults().then((vaults: VaultProps[]) => {
-                        const vault = vaults.find((vault: VaultProps) => {
-                          return (
-                            vault.chains.find(
-                              (selectedChain: ChainProps) =>
-                                selectedChain.chain === Chain.Cosmos
-                            )?.address === response
-                          )
-                        })
-                        const storedChain = vault!.chains.find(
-                          (storedChain: ChainProps) =>
-                            storedChain.chain === Chain.Cosmos
-                        )!
-                        const derivationKey = storedChain.derivationKey
-                        if (!derivationKey) {
-                          throw new Error('Derivation key is missing!')
-                        }
-                        try {
-                          const keyBytes = Uint8Array.from(
-                            Buffer.from(derivationKey, 'hex')
-                          )
-
-                          const account = [
-                            {
-                              address: response,
-                              algo: 'secp256k1',
-                              pubkey: Array.from(keyBytes),
-                            },
-                          ]
-
-                          resolve(account)
-                        } catch (e) {
-                          console.error(e)
-                        }
-                      })
-                    } else {
-                      resolve(response)
-                    }
-                  })
-
-                  .catch(error => resolve({ error }))
-              )
-              .catch(error => resolve({ error }))
-          }
-        })
-
-        break
-      }
-      case MessageKey.DASH_REQUEST: {
-        handleRequest(message, chainFeeCoin.Dash, sender)
-          .then(resolve)
-          .catch(error => resolve({ error }))
-
-        break
-      }
-      case MessageKey.DOGECOIN_REQUEST: {
-        handleRequest(message, chainFeeCoin.Dogecoin, sender)
-          .then(resolve)
-          .catch(error => resolve({ error }))
-
-        break
-      }
-      case MessageKey.ETHEREUM_REQUEST: {
-        getStoredChains().then(storedChains => {
-          const chain = storedChains.find(
-            (storedChain: ChainProps) =>
-              storedChain.active && getChainKind(storedChain.chain) === 'evm'
-          )
-
-          if (chain) {
-            handleRequest(message, chain, sender)
-              .then(resolve)
-              .catch(error => resolve({ error }))
-          } else {
-            handleRequest(
-              {
-                method: RequestMethod.WALLET_SWITCH_CHAIN,
-                params: [{ chainId: getChainId(Chain.Ethereum) }],
-              },
-              chainFeeCoin.Ethereum,
-              sender
-            )
-              .then(() =>
-                handleRequest(message, chainFeeCoin.Ethereum, sender)
-                  .then(resolve)
-                  .catch(error => resolve({ error }))
-              )
-              .catch(error => resolve({ error }))
-          }
-        })
-
-        break
-      }
-      case MessageKey.LITECOIN_REQUEST: {
-        handleRequest(message, chainFeeCoin.Litecoin, sender)
-          .then(resolve)
-          .catch(error => resolve({ error }))
-
-        break
-      }
-      case MessageKey.MAYA_REQUEST: {
-        handleRequest(message, chainFeeCoin.MayaChain, sender)
-          .then(resolve)
-          .catch(error => resolve({ error }))
-
-        break
-      }
-      case MessageKey.SOLANA_REQUEST: {
-        handleRequest(message, chainFeeCoin.Solana, sender)
-          .then(resolve)
-          .catch(error => resolve({ error }))
-
-        break
-      }
-      case MessageKey.THOR_REQUEST: {
-        handleRequest(message, chainFeeCoin.THORChain, sender)
-          .then(resolve)
-          .catch(error => resolve({ error }))
-
-        break
-      }
-      default: {
-        reject()
-
-        break
-      }
-    }
+    )
   })
 }
 
@@ -1219,6 +1028,369 @@ chrome.runtime.onMessage.addListener(
     const { origin = '' } = sender
 
     switch (type) {
+      case MessageKey.BITCOIN_REQUEST: {
+        switch (message.method) {
+          case RequestMethod.GET_ACCOUNTS:
+          case RequestMethod.GET_TRANSACTION_BY_HASH:
+          case RequestMethod.REQUEST_ACCOUNTS:
+          case RequestMethod.SEND_TRANSACTION: {
+            handleValidation(message, chainFeeCoin[Chain.Bitcoin], origin)
+              .then(sendResponse)
+              .catch(error => sendResponse({ error }))
+
+            break
+          }
+          default: {
+            sendResponse({ error: 'Method is not supported' })
+          }
+        }
+
+        break
+      }
+      case MessageKey.BITCOIN_CASH_REQUEST: {
+        switch (message.method) {
+          case RequestMethod.GET_ACCOUNTS:
+          case RequestMethod.GET_TRANSACTION_BY_HASH:
+          case RequestMethod.REQUEST_ACCOUNTS:
+          case RequestMethod.SEND_TRANSACTION: {
+            handleValidation(message, chainFeeCoin[Chain.BitcoinCash], origin)
+              .then(sendResponse)
+              .catch(error => sendResponse({ error }))
+
+            break
+          }
+          default: {
+            sendResponse({ error: 'Method is not supported' })
+          }
+        }
+
+        break
+      }
+      case MessageKey.COSMOS_REQUEST: {
+        switch (message.method) {
+          case RequestMethod.CHAIN_ID:
+          case RequestMethod.GET_ACCOUNTS:
+          case RequestMethod.GET_TRANSACTION_BY_HASH:
+          case RequestMethod.REQUEST_ACCOUNTS:
+          case RequestMethod.SEND_TRANSACTION:
+          case RequestMethod.WALLET_ADD_CHAIN:
+          case RequestMethod.WALLET_SWITCH_CHAIN: {
+            getStoredChains().then(storedChains => {
+              const chain = storedChains.find(
+                (storedChain: ChainProps) =>
+                  storedChain.active &&
+                  getChainKind(storedChain.chain) === 'cosmos'
+              )
+
+              if (chain) {
+                handleValidation(message, chain, origin)
+                  .then(response => {
+                    if (message.method === RequestMethod.REQUEST_ACCOUNTS) {
+                      try {
+                        getStoredVaults().then((vaults: VaultProps[]) => {
+                          const vault = vaults.find((vault: VaultProps) => {
+                            return (
+                              vault.chains.find(
+                                (selectedChain: ChainProps) =>
+                                  selectedChain.chain === chain.chain
+                              )?.address === response
+                            )
+                          })
+
+                          const storedChain = vault!.chains.find(
+                            (selectedChain: ChainProps) =>
+                              selectedChain.chain === chain.chain
+                          )!
+                          const derivationKey = storedChain.derivationKey
+                          if (!derivationKey) {
+                            throw new Error('Derivation key is missing!')
+                          }
+
+                          const keyBytes = Uint8Array.from(
+                            Buffer.from(derivationKey, 'hex')
+                          )
+
+                          const account = [
+                            {
+                              pubkey: Array.from(keyBytes),
+                              address: response,
+                              algo: 'secp256k1',
+                              bech32Address: response,
+                              isKeystone: false,
+                              isNanoLedger: false,
+                            },
+                          ]
+                          sendResponse(account)
+                        })
+                      } catch (e) {
+                        console.error(e)
+                      }
+                    } else {
+                      sendResponse(response)
+                    }
+                  })
+                  .catch(error => sendResponse({ error }))
+              } else {
+                handleValidation(
+                  {
+                    method: RequestMethod.WALLET_ADD_CHAIN,
+                    params: [{ chainId: getChainId(Chain.Cosmos) }],
+                  },
+                  chainFeeCoin[Chain.Cosmos],
+                  origin
+                )
+                  .then(() =>
+                    handleValidation(
+                      message,
+                      chainFeeCoin[Chain.Cosmos],
+                      origin
+                    )
+                      .then(response => {
+                        if (message.method === RequestMethod.REQUEST_ACCOUNTS) {
+                          getStoredVaults().then((vaults: VaultProps[]) => {
+                            const vault = vaults.find((vault: VaultProps) => {
+                              return (
+                                vault.chains.find(
+                                  (selectedChain: ChainProps) =>
+                                    selectedChain.chain === Chain.Cosmos
+                                )?.address === response
+                              )
+                            })
+                            const storedChain = vault!.chains.find(
+                              (storedChain: ChainProps) =>
+                                storedChain.chain === Chain.Cosmos
+                            )!
+                            const derivationKey = storedChain.derivationKey
+                            if (!derivationKey) {
+                              throw new Error('Derivation key is missing!')
+                            }
+                            try {
+                              const keyBytes = Uint8Array.from(
+                                Buffer.from(derivationKey, 'hex')
+                              )
+
+                              const account = [
+                                {
+                                  address: response,
+                                  algo: 'secp256k1',
+                                  pubkey: Array.from(keyBytes),
+                                },
+                              ]
+
+                              sendResponse(account)
+                            } catch (e) {
+                              console.error(e)
+                            }
+                          })
+                        } else {
+                          sendResponse(response)
+                        }
+                      })
+
+                      .catch(error => sendResponse({ error }))
+                  )
+                  .catch(error => sendResponse({ error }))
+              }
+            })
+
+            break
+          }
+          default: {
+            sendResponse({ error: 'Method is not supported' })
+          }
+        }
+
+        break
+      }
+      case MessageKey.DASH_REQUEST: {
+        switch (message.method) {
+          case RequestMethod.GET_ACCOUNTS:
+          case RequestMethod.GET_TRANSACTION_BY_HASH:
+          case RequestMethod.REQUEST_ACCOUNTS:
+          case RequestMethod.SEND_TRANSACTION: {
+            handleValidation(message, chainFeeCoin[Chain.Dash], origin)
+              .then(sendResponse)
+              .catch(error => sendResponse({ error }))
+
+            break
+          }
+          default: {
+            sendResponse({ error: 'Method is not supported' })
+          }
+        }
+
+        break
+      }
+      case MessageKey.DOGECOIN_REQUEST: {
+        switch (message.method) {
+          case RequestMethod.GET_ACCOUNTS:
+          case RequestMethod.GET_TRANSACTION_BY_HASH:
+          case RequestMethod.REQUEST_ACCOUNTS:
+          case RequestMethod.SEND_TRANSACTION: {
+            handleValidation(message, chainFeeCoin[Chain.Dogecoin], origin)
+              .then(sendResponse)
+              .catch(error => sendResponse({ error }))
+
+            break
+          }
+          default: {
+            sendResponse({ error: 'Method is not supported' })
+
+            break
+          }
+        }
+
+        break
+      }
+      case MessageKey.ETHEREUM_REQUEST: {
+        switch (message.method) {
+          case RequestMethod.ETH_BLOCK_NUMBER:
+          case RequestMethod.ETH_CALL:
+          case RequestMethod.ETH_CHAIN_ID:
+          case RequestMethod.ETH_ESTIMATE_GAS:
+          case RequestMethod.ETH_ACCOUNTS:
+          case RequestMethod.ETH_GAS_PRICE:
+          case RequestMethod.ETH_GET_BALANCE:
+          case RequestMethod.ETH_GET_BLOCK_BY_NUMBER:
+          case RequestMethod.ETH_GET_CODE:
+          case RequestMethod.ETH_GET_TRANSACTION_BY_HASH:
+          case RequestMethod.ETH_GET_TRANSACTION_COUNT:
+          case RequestMethod.ETH_GET_TRANSACTION_RECEIPT:
+          case RequestMethod.ETH_MAX_PRIORITY_FEE_PER_GAS:
+          case RequestMethod.ETH_REQUEST_ACCOUNTS:
+          case RequestMethod.ETH_SEND_TRANSACTION:
+          case RequestMethod.WALLET_ADD_ETHEREUM_CHAIN:
+          case RequestMethod.WALLET_REVOKE_PERMISSIONS:
+          case RequestMethod.WALLET_SWITCH_ETHEREUM_CHAIN: {
+            getStoredChains().then(storedChains => {
+              const chain = storedChains.find(
+                (storedChain: ChainProps) =>
+                  storedChain.active &&
+                  getChainKind(storedChain.chain) === 'evm'
+              )
+
+              if (chain) {
+                handleValidation(message, chain, origin)
+                  .then(sendResponse)
+                  .catch(error => sendResponse({ error }))
+              } else {
+                handleValidation(
+                  {
+                    method: RequestMethod.WALLET_SWITCH_ETHEREUM_CHAIN,
+                    params: [{ chainId: getChainId(Chain.Ethereum) }],
+                  },
+                  chainFeeCoin[Chain.Ethereum],
+                  origin
+                )
+                  .then(() =>
+                    handleValidation(
+                      message,
+                      chainFeeCoin[Chain.Ethereum],
+                      origin
+                    )
+                      .then(sendResponse)
+                      .catch(error => sendResponse({ error }))
+                  )
+                  .catch(error => sendResponse({ error }))
+              }
+            })
+
+            break
+          }
+          default: {
+            sendResponse({ error: 'Method is not supported' })
+
+            break
+          }
+        }
+
+        break
+      }
+      case MessageKey.LITECOIN_REQUEST: {
+        switch (message.method) {
+          case RequestMethod.GET_ACCOUNTS:
+          case RequestMethod.GET_TRANSACTION_BY_HASH:
+          case RequestMethod.REQUEST_ACCOUNTS:
+          case RequestMethod.SEND_TRANSACTION: {
+            handleValidation(message, chainFeeCoin[Chain.Litecoin], origin)
+              .then(sendResponse)
+              .catch(error => sendResponse({ error }))
+
+            break
+          }
+          default: {
+            sendResponse({ error: 'Method is not supported' })
+
+            break
+          }
+        }
+
+        break
+      }
+      case MessageKey.MAYA_REQUEST: {
+        switch (message.method) {
+          case RequestMethod.GET_ACCOUNTS:
+          case RequestMethod.GET_TRANSACTION_BY_HASH:
+          case RequestMethod.REQUEST_ACCOUNTS:
+          case RequestMethod.SEND_TRANSACTION: {
+            handleValidation(message, chainFeeCoin[Chain.MayaChain], origin)
+              .then(sendResponse)
+              .catch(error => sendResponse({ error }))
+
+            break
+          }
+          default: {
+            sendResponse({ error: 'Method is not supported' })
+
+            break
+          }
+        }
+
+        break
+      }
+      case MessageKey.SOLANA_REQUEST: {
+        switch (message.method) {
+          case RequestMethod.GET_ACCOUNTS:
+          case RequestMethod.GET_TRANSACTION_BY_HASH:
+          case RequestMethod.REQUEST_ACCOUNTS:
+          case RequestMethod.SEND_TRANSACTION: {
+            handleValidation(message, chainFeeCoin[Chain.Solana], origin)
+              .then(sendResponse)
+              .catch(error => sendResponse({ error }))
+
+            break
+          }
+          default: {
+            sendResponse({ error: 'Method is not supported' })
+
+            break
+          }
+        }
+
+        break
+      }
+      case MessageKey.THOR_REQUEST: {
+        switch (message.method) {
+          case RequestMethod.DEPOSIT_TRANSACTION:
+          case RequestMethod.GET_ACCOUNTS:
+          case RequestMethod.GET_TRANSACTION_BY_HASH:
+          case RequestMethod.REQUEST_ACCOUNTS:
+          case RequestMethod.SEND_TRANSACTION: {
+            handleValidation(message, chainFeeCoin[Chain.THORChain], origin)
+              .then(sendResponse)
+              .catch(error => sendResponse({ error }))
+
+            break
+          }
+          default: {
+            sendResponse({ error: 'Method is not supported' })
+
+            break
+          }
+        }
+
+        break
+      }
       case MessageKey.PRIORITY: {
         handleSetPriority(message).then(sendResponse)
 
@@ -1235,28 +1407,6 @@ chrome.runtime.onMessage.addListener(
         break
       }
       default: {
-        checkAuthorization(origin, message.method as RequestMethod).then(
-          isAuthorized => {
-            if (isAuthorized) {
-              requestManagement(message, type, origin)
-                .then(sendResponse)
-                .catch(() => {})
-            } else {
-              handleGetVault(origin)
-                .then(vault => {
-                  if (vault) {
-                    requestManagement(message, type, origin)
-                      .then(sendResponse)
-                      .catch(sendResponse)
-                  } else {
-                    sendResponse('Vault is not connected')
-                  }
-                })
-                .catch(() => {})
-            }
-          }
-        )
-
         break
       }
     }

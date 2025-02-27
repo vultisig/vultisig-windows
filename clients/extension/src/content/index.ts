@@ -606,6 +606,7 @@ namespace Provider {
             MessageKey.ETHEREUM_REQUEST,
             response
           )
+
           switch (data.method) {
             case RequestMethod.WALLET_ADD_ETHEREUM_CHAIN:
             case RequestMethod.WALLET_SWITCH_ETHEREUM_CHAIN: {
@@ -616,6 +617,9 @@ namespace Provider {
             case RequestMethod.WALLET_REVOKE_PERMISSIONS: {
               this.emit(EventMethod.DISCONNECT, result)
 
+              break
+            }
+            default: {
               break
             }
           }
