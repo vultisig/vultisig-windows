@@ -16,6 +16,7 @@ import { getSolanaPreSignedInputData } from './solana'
 import { getSuiPreSignedInputData } from './sui'
 import { getThorPreSignedInputData } from './thor'
 import { getTonPreSignedInputData } from './ton'
+import { getTronPreSignedInputData } from './tron'
 import { getUtxoPreSignedInputData } from './utxo'
 
 type Input = {
@@ -38,9 +39,7 @@ const handlers: Record<
   thorchainSpecific: getThorPreSignedInputData,
   tonSpecific: getTonPreSignedInputData,
   utxoSpecific: getUtxoPreSignedInputData,
-  tronSpecific: () => {
-    throw new Error('Tron is not supported')
-  },
+  tronSpecific: getTronPreSignedInputData,
 }
 
 export const getPreSignedInputData = (input: Input) => {
