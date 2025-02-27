@@ -15,7 +15,7 @@ export const useBackupOverviewStepsAnimations = () => {
     })
 
   const { RiveComponent, rive } = useRive({
-    src: '/assets//animations/secure-vault-backup/secure-vault-backup-screen/index.riv',
+    src: '/assets/animations/secure-vault-backup/secure-vault-backup-screen/index.riv',
     autoplay: true,
     stateMachines: [STATE_MACHINE_NAME],
   })
