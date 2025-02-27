@@ -16,6 +16,7 @@ export type GetJoinReshareUrlInput = {
   publicKeyEcdsa: string
   oldResharePrefix?: string
   oldParties: string[]
+  libType: string
 }
 
 export const getJoinReshareUrl = async ({
@@ -28,6 +29,7 @@ export const getJoinReshareUrl = async ({
   publicKeyEcdsa,
   oldResharePrefix = '',
   oldParties,
+  libType,
 }: GetJoinReshareUrlInput) => {
   const keygenMessage = create(ReshareMessageSchema, {
     sessionId,
@@ -39,6 +41,7 @@ export const getJoinReshareUrl = async ({
     publicKeyEcdsa,
     oldResharePrefix,
     oldParties,
+    libType: libType == 'DKLS' ? 1 : 0,
   })
 
   const binary = toBinary(ReshareMessageSchema, keygenMessage)
