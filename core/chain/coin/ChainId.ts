@@ -34,6 +34,7 @@ export const chainIdRecord = {
   [OtherChain.Polkadot]: '0x3e4',
   [OtherChain.Ton]: '0x44c',
   [OtherChain.Ripple]: '0x1df4',
+  [OtherChain.Tron]: '0x2b6653dc',
 } as const
 
 export type ChainId = (typeof chainIdRecord)[Chain]

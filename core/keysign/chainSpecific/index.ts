@@ -16,6 +16,7 @@ import { getSolanaSpecific } from './solana'
 import { getSuiSpecific } from './sui'
 import { getThorchainSpecific } from './thor'
 import { getTonSpecific } from './ton'
+import { getTronSpecific } from './tron'
 import { getUtxoSpecific } from './utxo'
 
 const handlers: Record<KeysignChainSpecificKey, ChainSpecificResolver> = {
@@ -29,9 +30,7 @@ const handlers: Record<KeysignChainSpecificKey, ChainSpecificResolver> = {
   polkadotSpecific: getPolkadotSpecific,
   suicheSpecific: getSuiSpecific,
   tonSpecific: getTonSpecific,
-  tronSpecific: () => {
-    throw new Error('Tron is not supported')
-  },
+  tronSpecific: getTronSpecific,
 }
 
 export const getChainSpecific = async (
