@@ -15,8 +15,6 @@ export const executeTronTx: ExecuteTxResolver<OtherChain> = async ({
 
   const rawTx = output.json
 
-  console.log('rawTx', rawTx)
-
   const txid = await broadcastTransaction(rawTx)
 
   return txid
