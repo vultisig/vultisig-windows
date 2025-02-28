@@ -1,10 +1,10 @@
 import { Stack } from 'expo-router'
+import { ThemeProvider } from 'styled-components/native'
 
 import { darkTheme } from '../lib/ui/theme'
 import { AuthRedirectProvider } from '../providers/AuthRedirectProvider'
 import { I18nProvider } from '../providers/I18nProvider'
 import { ReactQueryProvider } from '../providers/ReactQueryProvider'
-import { ThemeProvider } from '../providers/ThemeProvider'
 
 const Layout = () => {
   return (
