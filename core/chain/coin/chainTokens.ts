@@ -25,6 +25,15 @@ const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
 }
 
 const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
+  [Chain.Tron]: [
+    {
+      ticker: 'USDT',
+      logo: 'usdt',
+      decimals: 6,
+      priceProviderId: 'tether',
+      id: 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
+    },
+  ],
   [Chain.Solana]: [
     {
       ticker: 'JUP',
