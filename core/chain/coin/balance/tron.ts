@@ -46,8 +46,8 @@ export const getTronCoinBalance: CoinBalanceResolver = async input => {
     // TRC20 token balance
     try {
       // Decode Base58 addresses to hex
-      const hexAddress = base58ToHex(input.address)
-      const hexContractAddress = base58ToHex(input.id)
+      const hexAddress = base58TronDecode(input.address)
+      const hexContractAddress = base58TronDecode(input.id)
 
       // Fetch TRC20 token balance using EVM service
       const balance = await fetchTRC20TokenBalance(
@@ -64,17 +64,21 @@ export const getTronCoinBalance: CoinBalanceResolver = async input => {
 }
 
 /**
- * Converts Base58 string to hex
- * @param base58String - Base58 encoded string
- * @returns Hex representation of the input
+ * Decodes a Base58 string with checksum verification (similar to TrustWallet Core)
  */
-function base58ToHex(base58String: string): string {
+function base58TronDecode(address: string): string {
   try {
-    // Implement Base58 decoding logic here
-    // This is a placeholder - you'll need to implement actual Base58 decoding
-    const decodedData = base58.decode(base58String)
-    const hex = Buffer.from(decodedData).toString('hex')
-    return hex
+    // 1. Decode from Base58
+    const decoded = base58.decode(address)
+
+    // 2. The last 4 bytes are the checksum
+    const addressBytes = decoded.slice(0, -4)
+
+    // 3. Convert to hex string - extract only the address part (21 bytes)
+    const hex = Buffer.from(addressBytes).toString('hex')
+
+    // 4. Return only the valid address part (should be 42 chars including '41' prefix)
+    return hex.substring(0, 42)
   } catch (error) {
     console.error('Base58 decoding error:', error)
     return ''
@@ -142,8 +146,7 @@ async function sendRPCRequest<T>(
     id: 1,
   }
 
-  const rpcEndpoint =
-    process.env.RPC_ENDPOINT || 'https://default-rpc-endpoint.com'
+  const rpcEndpoint = 'https://api.trongrid.io/jsonrpc'
 
   try {
     const response = await fetch(rpcEndpoint, {
@@ -157,23 +160,6 @@ async function sendRPCRequest<T>(
     const data = await response.json()
 
     if (data.error) {
-      const errorMessage = data.error.message.toLowerCase()
-      const knownErrorKeywords = [
-        'known',
-        'already known',
-        'transaction is temporarily banned',
-        'nonce too low',
-        'nonce too high',
-        'transaction already exists',
-        'many requests for a specific rpc call',
-        'already',
-        'already mined',
-      ]
-
-      if (knownErrorKeywords.some(keyword => errorMessage.includes(keyword))) {
-        return decode('Transaction already broadcasted.')
-      }
-
       return decode(data.error.message)
     } else if (data.result !== undefined) {
       return decode(data.result)
