@@ -11,4 +11,5 @@ export const signatureFormats: Record<ChainKind, SignatureFormat> = {
   ton: 'raw',
   utxo: 'der',
   ripple: 'der',
+  tron: 'rawWithRecoveryId',
 }

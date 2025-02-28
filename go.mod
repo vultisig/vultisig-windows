@@ -12,7 +12,7 @@ require (
 	github.com/rs/zerolog v1.33.0
 	github.com/vultisig/mobile-tss-lib v0.0.0-20250113110513-b211041c087b
 	github.com/vultisig/vultisig-relay v0.0.0-20250123035809-437215e7ea51
-	github.com/wailsapp/wails/v2 v2.10.0
+	github.com/wailsapp/wails/v2 v2.10.1
 )
 
 require (

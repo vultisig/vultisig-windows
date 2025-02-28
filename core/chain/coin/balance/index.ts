@@ -8,6 +8,7 @@ import { getRippleCoinBalance } from './ripple'
 import { getSolanaCoinBalance } from './solana'
 import { getSuiCoinBalance } from './sui'
 import { getTonCoinBalance } from './ton'
+import { getTronCoinBalance } from './tron'
 import { getUtxoCoinBalance } from './utxo'
 
 const handlers: Record<ChainKind, CoinBalanceResolver<any>> = {
@@ -19,6 +20,7 @@ const handlers: Record<ChainKind, CoinBalanceResolver<any>> = {
   ripple: getRippleCoinBalance,
   polkadot: getPolkadotCoinBalance,
   solana: getSolanaCoinBalance,
+  tron: getTronCoinBalance,
 }
 
 export const getCoinBalance: CoinBalanceResolver = async input => {

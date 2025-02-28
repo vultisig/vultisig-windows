@@ -34,6 +34,7 @@ export const chainKindRecord = {
   [OtherChain.Polkadot]: 'polkadot',
   [OtherChain.Ton]: 'ton',
   [OtherChain.Ripple]: 'ripple',
+  [OtherChain.Tron]: 'tron',
 } as const
 
 export type ChainKind = (typeof chainKindRecord)[Chain]

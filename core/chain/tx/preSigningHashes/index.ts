@@ -29,6 +29,7 @@ const decoders: Record<
   ton: TW.TxCompiler.Proto.PreSigningOutput.decode,
   sui: TW.TxCompiler.Proto.PreSigningOutput.decode,
   ripple: TW.TxCompiler.Proto.PreSigningOutput.decode,
+  tron: TW.TxCompiler.Proto.PreSigningOutput.decode,
 }
 
 export const getPreSigningHashes = ({

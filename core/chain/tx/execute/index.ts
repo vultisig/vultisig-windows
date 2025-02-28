@@ -8,6 +8,7 @@ import { executeRippleTx } from './ripple'
 import { executeSolanaTx } from './solana'
 import { executeSuiTx } from './sui'
 import { executeTonTx } from './ton'
+import { executeTronTx } from './tron'
 import { executeUtxoTx } from './utxo'
 
 const handlers: Record<ChainKind, ExecuteTxResolver<any>> = {
@@ -19,6 +20,7 @@ const handlers: Record<ChainKind, ExecuteTxResolver<any>> = {
   sui: executeSuiTx,
   ton: executeTonTx,
   utxo: executeUtxoTx,
+  tron: executeTronTx,
 }
 
 export const executeTx: ExecuteTxResolver = input => {

@@ -266,6 +266,7 @@ export const supportedChains: Record<Chain, boolean> = {
   [Chain.Polkadot]: false,
   [Chain.Ton]: false,
   [Chain.Ripple]: false,
+  [Chain.Tron]: false,
 }
 
 export function isSupportedChain(chain?: Chain): boolean {

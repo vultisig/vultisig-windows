@@ -213,6 +213,13 @@ const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
     priceProviderId: 'osmosis',
     cmcId: 12220,
   },
+  [Chain.Tron]: {
+    ticker: 'TRX',
+    logo: 'tron',
+    decimals: 6,
+    priceProviderId: 'tron',
+    cmcId: 1958,
+  },
 }
 
 export const chainFeeCoin: Record<Chain, Coin> = recordMap(

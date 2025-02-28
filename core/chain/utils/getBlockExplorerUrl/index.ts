@@ -42,6 +42,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.THORChain]: 'https://www.xscanner.org',
   [Chain.MayaChain]: 'https://www.xscanner.org',
   [Chain.Akash]: `${cosmosBlockExplorer}/akash`,
+  [Chain.Tron]: 'https://tronscan.org/#',
 }
 
 export const getBlockExplorerUrl = ({
@@ -83,6 +84,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Noble]: () => `${baseUrl}/address/${value}`,
         [Chain.Ripple]: () => `${baseUrl}/account/${value}`,
         [Chain.Akash]: () => `${baseUrl}/address/${value}`,
+        [Chain.Tron]: () => `${baseUrl}/address/${value}`,
       }),
     tx: () =>
       match(chain, {
@@ -116,6 +118,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Noble]: () => `${baseUrl}/tx/${value}`,
         [Chain.Ripple]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Akash]: () => `${baseUrl}/tx/${value}`,
+        [Chain.Tron]: () => `${baseUrl}/transaction/${value}`,
       }),
   })
 }
