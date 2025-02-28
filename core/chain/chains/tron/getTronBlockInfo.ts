@@ -129,7 +129,7 @@ async function getTriggerConstantContractFee(
   }
 
   // 4. Make the POST request
-  const url = 'https://tron-rpc.publicnode.com/wallet/triggerconstantcontract'
+  const url = 'https://api.trongrid.io/walletsolidity/triggerconstantcontract'
 
   interface TriggerContractResponse {
     energy_used?: number
