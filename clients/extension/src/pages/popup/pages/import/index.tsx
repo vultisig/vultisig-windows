@@ -75,27 +75,36 @@ const Component = () => {
             .filter(key => isSupportedChain(key as Chain))
             .map(key => addressProvider.getAddress(key as Chain, vault))
 
-          Promise.all(promises).then(props => {
-            vault.chains = Object.keys(supportedChains)
-              .filter(key => isSupportedChain(key as Chain))
-              .map((chainKey, index) => ({
-                ...chainFeeCoin[chainKey as Chain],
-                ...props[index],
-              }))
+          Promise.all(promises)
+            .then(props => {
+              vault.chains = Object.keys(supportedChains)
+                .filter(key => isSupportedChain(key as Chain))
+                .map((chainKey, index) => ({
+                  ...chainFeeCoin[chainKey as Chain],
+                  ...props[index],
+                }))
 
-            const modifiedVaults = [
-              { ...vault, active: true },
-              ...vaults
-                .filter(({ uid }) => uid !== vault.uid)
-                .map(vault => ({ ...vault, active: false })),
-            ]
+              const modifiedVaults = [
+                { ...vault, active: true },
+                ...vaults
+                  .filter(({ uid }) => uid !== vault.uid)
+                  .map(vault => ({ ...vault, active: false })),
+              ]
 
-            setStoredVaults(modifiedVaults).then(() => {
-              setState(prevState => ({ ...prevState, loading: false }))
+              setStoredVaults(modifiedVaults).then(() => {
+                setState(prevState => ({ ...prevState, loading: false }))
 
-              handleFinish()
+                handleFinish()
+              })
             })
-          })
+            .catch(error => {
+              console.error('Failed to retrieve addresses:', error)
+              setState(prevState => ({
+                ...prevState,
+                loading: false,
+                status: 'error',
+              }))
+            })
         }
       })
     }

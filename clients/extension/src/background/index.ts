@@ -676,7 +676,7 @@ const handleRequest = (
                 }
               })
             } else {
-              reject('Chain not Supported')
+              reject(`Chain ${param?.chainId} not supported`)
             }
           } else {
             reject()

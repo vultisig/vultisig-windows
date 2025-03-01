@@ -83,6 +83,7 @@ const Component = () => {
                 hasError: false,
               }))
             } else {
+              console.error('Failed to load vaults or request data')
               setState(prevState => ({
                 ...prevState,
                 errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
@@ -93,6 +94,7 @@ const Component = () => {
           })
         })
         .catch(() => {
+          console.error('Failed to load vaults or request data')
           setState(prevState => ({
             ...prevState,
             errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),

@@ -146,6 +146,9 @@ export const getStandardTransactionDetails = async (
   tx: TransactionType.WalletTransaction,
   chain: ChainProps
 ) => {
+  if (!tx || !tx.txType) {
+    throw new Error('Invalid transaction object or missing txType')
+  }
   switch (tx.txType) {
     case 'Keplr': {
       const txDetails: TransactionDetails = {

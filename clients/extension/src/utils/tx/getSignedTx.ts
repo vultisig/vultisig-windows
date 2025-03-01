@@ -47,12 +47,12 @@ export const getSignedTransaction = ({
           walletCore: walletCore,
         })
           .then(result => resolve(result as SendTransactionResponse))
-          .catch(err => console.error('error getSigned:', err))
+          .catch(reject)
       } else {
         reject('Chain Not Supported')
       }
     } else {
-      reject()
+      reject('Missing required parameters: inputData, vault, or transaction')
     }
   })
 }

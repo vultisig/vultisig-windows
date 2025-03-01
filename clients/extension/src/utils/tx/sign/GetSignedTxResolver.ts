@@ -5,7 +5,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 type GetSignedTxInput<T extends Chain = Chain> = {
   chain: T
   walletCore: WalletCore
-  compiledTx: Uint8Array<ArrayBufferLike>
+  compiledTx: Uint8Array
 }
 
 export type GetSignedTxResolver<T extends Chain = Chain> = (

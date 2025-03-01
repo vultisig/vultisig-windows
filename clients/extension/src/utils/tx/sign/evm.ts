@@ -8,12 +8,16 @@ import { GetSignedTxResolver } from './getSignedTxResolver'
 export const getSignedEvmTx: GetSignedTxResolver<EvmChain> = async ({
   compiledTx,
 }) => {
-  const { errorMessage, encoded } =
-    TW.Ethereum.Proto.SigningOutput.decode(compiledTx)
-
-  assertErrorMessage(errorMessage)
-
-  const txHash = keccak256(encoded)
-
-  return { raw: encoded, txResponse: txHash }
+  if (!compiledTx || !(compiledTx instanceof Uint8Array)) {
+    throw new Error('Invalid compiledTx: expected non-empty Uint8Array')
+  }
+  try {
+    const { errorMessage, encoded } =
+      TW.Ethereum.Proto.SigningOutput.decode(compiledTx)
+    assertErrorMessage(errorMessage)
+    const txHash = keccak256(encoded)
+    return { raw: encoded, txResponse: txHash }
+  } catch (error) {
+    throw new Error(`Failed to decode EVM transaction: ${error}`)
+  }
 }
