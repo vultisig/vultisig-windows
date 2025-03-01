@@ -1,12 +1,12 @@
+import { GetSignedTxResolver } from '@clients/extension/src/utils/tx/sign/getSignedTxResolver'
 import { EvmChain } from '@core/chain/Chain'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { TW } from '@trustwallet/wallet-core'
 import { keccak256 } from 'viem'
 
-import { GetSignedTxResolver } from './getSignedTxResolver'
-
 export const getSignedEvmTx: GetSignedTxResolver<EvmChain> = async ({
   compiledTx,
+  chain, // eslint-disable-line @typescript-eslint/no-unused-vars
 }) => {
   if (!compiledTx || !(compiledTx instanceof Uint8Array)) {
     throw new Error('Invalid compiledTx: expected non-empty Uint8Array')

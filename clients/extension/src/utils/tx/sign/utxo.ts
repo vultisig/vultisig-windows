@@ -1,10 +1,10 @@
+import { GetSignedTxResolver } from '@clients/extension/src/utils/tx/sign/getSignedTxResolver'
 import { UtxoChain } from '@core/chain/Chain'
 import { TW } from '@trustwallet/wallet-core'
 
-import { GetSignedTxResolver } from './getSignedTxResolver'
-
 export const getSignedUtxoTx: GetSignedTxResolver<UtxoChain> = async ({
   compiledTx,
+  chain, // eslint-disable-line @typescript-eslint/no-unused-vars
 }) => {
   if (!compiledTx || !(compiledTx instanceof Uint8Array)) {
     throw new Error('Invalid compiledTx: expected non-empty Uint8Array')

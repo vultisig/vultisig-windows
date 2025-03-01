@@ -1,10 +1,10 @@
+import { GetSignedTxResolver } from '@clients/extension/src/utils/tx/sign/getSignedTxResolver'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { TW } from '@trustwallet/wallet-core'
 
-import { GetSignedTxResolver } from './getSignedTxResolver'
-
 export const getSignedSolanaTx: GetSignedTxResolver = async ({
   compiledTx,
+  chain, // eslint-disable-line @typescript-eslint/no-unused-vars
 }) => {
   const {
     encoded,
@@ -13,6 +13,8 @@ export const getSignedSolanaTx: GetSignedTxResolver = async ({
   } = TW.Solana.Proto.SigningOutput.decode(compiledTx)
 
   assertErrorMessage(solanaErrorMessage)
-
-  return { raw: encoded, txResponse: signatures[0].signature! }
+  if (!signatures.length || !signatures[0].signature) {
+    throw new Error('No valid signature found in the Solana transaction output')
+  }
+  return { raw: encoded, txResponse: signatures[0].signature }
 }

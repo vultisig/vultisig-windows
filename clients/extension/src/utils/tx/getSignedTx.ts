@@ -44,7 +44,6 @@ export const getSignedTransaction = ({
         getSignedTx({
           chain: transaction.chain.chain,
           compiledTx,
-          walletCore: walletCore,
         })
           .then(result => resolve(result as SendTransactionResponse))
           .catch(reject)

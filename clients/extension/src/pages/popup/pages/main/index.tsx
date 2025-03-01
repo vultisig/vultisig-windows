@@ -167,7 +167,7 @@ const Component = () => {
       }
     })
   }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   useEffect(initComponent, [])
 
   return vault ? (
