@@ -1,4 +1,4 @@
-import { GetSignedTxResolver } from '@clients/extension/src/utils/tx/sign/getSignedTxResolver'
+import { GetSignedTxResolver } from '@clients/extension/src/utils/tx/sign/GetSignedTxResolver'
 import { EvmChain } from '@core/chain/Chain'
 import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
 import { TW } from '@trustwallet/wallet-core'

@@ -1,4 +1,4 @@
-import { GetSignedTxResolver } from '@clients/extension/src/utils/tx/sign/getSignedTxResolver'
+import { GetSignedTxResolver } from '@clients/extension/src/utils/tx/sign/GetSignedTxResolver'
 import { UtxoChain } from '@core/chain/Chain'
 import { TW } from '@trustwallet/wallet-core'
 

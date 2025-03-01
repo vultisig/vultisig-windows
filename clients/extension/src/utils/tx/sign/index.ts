@@ -1,8 +1,8 @@
+import { GetSignedTxResolver } from '@clients/extension/src/utils/tx/sign/GetSignedTxResolver'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
 import { getSignedCosmosTx } from './cosmos'
 import { getSignedEvmTx } from './evm'
-import { GetSignedTxResolver } from './getSignedTxResolver'
 import { getSignedSolanaTx } from './solana'
 import { getSignedUtxoTx } from './utxo'
 
