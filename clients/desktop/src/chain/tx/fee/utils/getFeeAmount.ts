@@ -23,8 +23,6 @@ export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
     cosmosSpecific: ({ gas }) => BigInt(gas),
     polkadotSpecific: () => polkadotConfig.fee,
     tonSpecific: () => tonConfig.fee,
-    tronSpecific: () => {
-      throw new Error('Tron fee not implemented')
-    },
+    tronSpecific: ({ gasEstimation }) => BigInt(gasEstimation || 0),
     rippleSpecific: () => rippleTxFee,
   })

@@ -23,6 +23,9 @@ const handlers: Record<ChainKind, GetSignedTxResolver<any>> = {
     throw new Error('ton getSigned handler not implemented')
   },
   utxo: getSignedUtxoTx,
+  tron: () => {
+    throw new Error('tron getSigned handler not implemented')
+  },
 }
 
 export const getSignedTx: GetSignedTxResolver = input => {

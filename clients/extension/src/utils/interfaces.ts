@@ -111,6 +111,7 @@ export interface ChainStrRef {
   [Chain.Zksync]: string
   [Chain.Noble]: string
   [Chain.Akash]: string
+  [Chain.Tron]: string
 }
 
 export interface CurrencyRef {

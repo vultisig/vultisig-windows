@@ -45,8 +45,14 @@ export const getVaultPublicKey = async ({
     eddsa: async () => vault.public_key_eddsa,
   })
 
-  return walletCore.PublicKey.createWithData(
+  const pubkey = walletCore.PublicKey.createWithData(
     Buffer.from(derivedPublicKey, 'hex'),
     publicKeyType
   )
+
+  if (coinType == walletCore.CoinType.tron) {
+    return pubkey.uncompressed()
+  }
+
+  return pubkey
 }
