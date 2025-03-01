@@ -1,3 +1,4 @@
+import { useWalletCore } from '@clients/desktop/src/providers/WalletCoreProvider'
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
 import AddressProvider from '@clients/extension/src/utils/address-provider'
@@ -17,7 +18,6 @@ import {
   getStoredVaults,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
-import { useWalletCore } from '@clients/desktop/src/providers/WalletCoreProvider'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Button, Upload, UploadProps } from 'antd'

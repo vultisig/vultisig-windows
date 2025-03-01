@@ -4,7 +4,6 @@ import {
 } from '@clients/extension/src/types/thorchain'
 import api from '@clients/extension/src/utils/api'
 import {
-  ChainTicker,
   Instance,
   isSupportedChain,
   MessageKey,
@@ -410,14 +409,8 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
-        console.log(
-          getStandardTransactionDetails(
-            _transaction as TransactionType.Keplr,
-            chain
-          )
-        )
         getStandardTransactionDetails(
-          _transaction as TransactionType.Keplr,
+          _transaction as TransactionType.WalletTransaction,
           chain
         ).then(standardTx => {
           let modifiedTransaction: ITransaction = {} as ITransaction
@@ -440,26 +433,23 @@ const handleRequest = (
           const [_transaction] = params as TransactionType.MetaMask[]
 
           if (_transaction) {
-            const modifiedTransaction: ITransaction = {
-              transactionDetails: {
-                from: _transaction.from,
-                to: _transaction.to,
-                asset: {
-                  chain: chain.ticker,
-                  ticker: chain.ticker,
-                },
-                amount: _transaction.value
-                  ? { amount: _transaction.value, decimals: chain.decimals }
-                  : undefined,
-                data: _transaction.data,
-              },
-              chain,
-              id: '',
-              status: 'default',
-            }
-            handleSendTransaction(modifiedTransaction, chain)
-              .then(result => resolve(result))
-              .catch(reject)
+            getStandardTransactionDetails(
+              {
+                ..._transaction,
+                txType: 'MetaMask',
+              } as TransactionType.MetaMask,
+              chain
+            ).then(standardTx => {
+              const modifiedTransaction: ITransaction = {
+                transactionDetails: standardTx!,
+                chain,
+                id: '',
+                status: 'default',
+              }
+              handleSendTransaction(modifiedTransaction, chain)
+                .then(result => resolve(result))
+                .catch(reject)
+            })
           } else {
             reject()
           }
@@ -813,8 +803,8 @@ const handleRequest = (
                   from: String(address),
                   to: '',
                   asset: {
-                    chain: ChainTicker.ETH,
-                    ticker: ChainTicker.ETH,
+                    chain: 'ETH',
+                    ticker: 'ETH',
                   },
                 },
                 id: '',
@@ -854,8 +844,8 @@ const handleRequest = (
                 from: String(address),
                 to: '',
                 asset: {
-                  chain: ChainTicker.ETH,
-                  ticker: ChainTicker.ETH,
+                  chain: 'ETH',
+                  ticker: 'ETH',
                 },
               },
               id: '',
@@ -881,23 +871,20 @@ const handleRequest = (
           const [_transaction] = params as TransactionType.Ctrl[]
 
           if (_transaction) {
-            const modifiedTransaction: TransactionDetails = {
-              asset: _transaction.asset,
-              data: _transaction.memo,
-              from: _transaction.from,
-              gasLimit: _transaction.gasLimit,
-              to: _transaction.recipient,
-              amount: _transaction.amount,
-            }
-            const tx: ITransaction = {
-              transactionDetails: modifiedTransaction,
-              chain: chain,
-              id: '',
-              status: 'default',
-            }
-            handleSendTransaction(tx, chain, true)
-              .then(result => resolve(result))
-              .catch(reject)
+            getStandardTransactionDetails(
+              { ..._transaction, txType: 'Ctrl' },
+              chain
+            ).then(standardTx => {
+              const tx: ITransaction = {
+                transactionDetails: standardTx,
+                chain: chain,
+                id: '',
+                status: 'default',
+              }
+              handleSendTransaction(tx, chain, true)
+                .then(result => resolve(result))
+                .catch(reject)
+            })
           } else {
             reject()
           }
@@ -912,23 +899,20 @@ const handleRequest = (
           const [_transaction] = params as TransactionType.Ctrl[]
 
           if (_transaction) {
-            const modifiedTransaction: TransactionDetails = {
-              asset: _transaction.asset,
-              data: _transaction.memo,
-              from: _transaction.from,
-              gasLimit: _transaction.gasLimit,
-              to: _transaction.recipient,
-              amount: _transaction.amount,
-            }
-            const tx: ITransaction = {
-              transactionDetails: modifiedTransaction,
-              chain: chain,
-              id: '',
-              status: 'default',
-            }
-            handleSendTransaction(tx, chain)
-              .then(result => resolve(result))
-              .catch(reject)
+            getStandardTransactionDetails(
+              { ..._transaction, txType: 'Ctrl' },
+              chain
+            ).then(standardTx => {
+              const tx: ITransaction = {
+                transactionDetails: standardTx,
+                chain: chain,
+                id: '',
+                status: 'default',
+              }
+              handleSendTransaction(tx, chain)
+                .then(result => resolve(result))
+                .catch(reject)
+            })
           } else {
             reject()
           }

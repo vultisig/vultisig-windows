@@ -4,7 +4,6 @@ import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { WalletCore } from '@trustwallet/wallet-core'
-import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 interface AddressProps {
   address: string

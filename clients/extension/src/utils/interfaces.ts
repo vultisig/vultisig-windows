@@ -1,11 +1,12 @@
+import { tss } from '@clients/desktop/wailsjs/go/models'
 import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { Chain } from '@core/chain/Chain'
+import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
+import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
 
-import { ChainTicker, Currency, Language } from './constants'
-import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
-import { tss } from '@clients/desktop/wailsjs/go/models'
+import { Currency, Language } from './constants'
 
 export namespace Messaging {
   export namespace Chain {
@@ -176,7 +177,7 @@ export namespace TransactionType {
       decimals: number
     }
     asset: {
-      chain: ChainTicker
+      chain: string
       symbol: string
       ticker: string
     }
@@ -193,7 +194,14 @@ export namespace TransactionType {
     to_address: string
   }
 
-  export type WalletTransaction = MetaMask | Ctrl | Keplr
+  export interface Phantom {
+    txType: 'Phantom'
+    from: string
+    to: string
+    value: string
+  }
+
+  export type WalletTransaction = MetaMask | Ctrl | Keplr | Phantom
 }
 
 export interface TransactionDetails {
@@ -306,6 +314,7 @@ export interface SignedTransaction {
   signatures: Record<string, tss.KeysignResponse>
   transaction?: ITransaction
   vault?: VaultProps
+  walletCore: WalletCore
 }
 
 export interface SpecificUtxoInfo {

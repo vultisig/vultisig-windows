@@ -623,8 +623,8 @@ namespace Provider {
       const decodedTransfer = SystemInstruction.decodeTransfer(
         transaction.instructions[0]
       )
-
-      const modifiedTransfer = {
+      const modifiedTransfer: TransactionType.Phantom = {
+        txType: 'Phantom',
         value: decodedTransfer.lamports.toString(),
         from: decodedTransfer.fromPubkey.toString(),
         to: decodedTransfer.toPubkey.toString(),

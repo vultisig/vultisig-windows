@@ -2,7 +2,6 @@ import api from '@clients/extension/src/utils/api'
 import {
   MessageKey,
   RequestMethod,
-  TssKeysignType,
 } from '@clients/extension/src/utils/constants'
 import {
   ChainProps,
@@ -11,7 +10,6 @@ import {
   TransactionDetails,
   TransactionType,
 } from '@clients/extension/src/utils/interfaces'
-import { Chain } from '@core/chain/Chain'
 
 const isArray = (arr: any): arr is any[] => {
   return Array.isArray(arr)
@@ -19,23 +17,6 @@ const isArray = (arr: any): arr is any[] => {
 
 const isObject = (obj: any): obj is Record<string, any> => {
   return obj === Object(obj) && !isArray(obj) && typeof obj !== 'function'
-}
-
-const processDecodedData = (data: any): any => {
-  if (Array.isArray(data)) {
-    return data.map(item => processDecodedData(item))
-  } else if (typeof data === 'bigint') {
-    return data.toString()
-  } else if (typeof data === 'object' && data !== null) {
-    if (data.toString && (data._isBigNumber || typeof data === 'bigint')) {
-      return data.toString()
-    }
-    return Object.keys(data).reduce((acc, key) => {
-      acc[key] = processDecodedData(data[key])
-      return acc
-    }, {} as any)
-  }
-  return data
 }
 
 const toCamel = (value: string): string => {
@@ -92,18 +73,6 @@ export const checkERC20Function = async (
   const functionSelector = inputHex.slice(0, 10) // "0x" + 8 hex chars
 
   return await api.getIsFunctionSelector(functionSelector)
-}
-
-export const getTssKeysignType = (chain: Chain): TssKeysignType => {
-  switch (chain) {
-    case Chain.Solana:
-    case Chain.Polkadot:
-    case Chain.Sui:
-    case Chain.Ton:
-      return TssKeysignType.EdDSA
-    default:
-      return TssKeysignType.ECDSA
-  }
 }
 
 export const splitString = (str: string, size: number): string[] => {
@@ -174,7 +143,7 @@ export const processBackgroundResponse = (
 }
 
 export const getStandardTransactionDetails = async (
-  tx: TransactionType.Keplr,
+  tx: TransactionType.WalletTransaction,
   chain: ChainProps
 ) => {
   switch (tx.txType) {
@@ -188,8 +157,45 @@ export const getStandardTransactionDetails = async (
         from: tx.from_address,
         to: tx.to_address,
       }
-
       return txDetails
+    }
+    case 'Phantom': {
+      const txDetails: TransactionDetails = {
+        asset: {
+          chain: chain.ticker,
+          ticker: chain.ticker,
+        },
+        amount: { amount: tx.value, decimals: chain.decimals },
+        from: tx.from,
+        to: tx.to,
+      }
+      return txDetails
+    }
+    case 'MetaMask': {
+      const txDetails: TransactionDetails = {
+        from: tx.from,
+        to: tx.to,
+        asset: {
+          chain: chain.ticker,
+          ticker: chain.ticker,
+        },
+        amount: tx.value
+          ? { amount: tx.value, decimals: chain.decimals }
+          : undefined,
+        data: tx.data,
+      }
+      return txDetails
+    }
+    default: {
+      const txdetails: TransactionDetails = {
+        asset: tx.asset,
+        data: tx.memo,
+        from: tx.from,
+        gasLimit: tx.gasLimit,
+        to: tx.recipient,
+        amount: tx.amount,
+      }
+      return txdetails
     }
   }
 }

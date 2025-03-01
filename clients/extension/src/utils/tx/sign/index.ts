@@ -2,23 +2,26 @@ import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
 import { getSignedCosmosTx } from './cosmos'
 import { getSignedEvmTx } from './evm'
-
-import { getSignedPolkadotTx } from './polkadot'
-import { getSignedRippleTx } from './ripple'
+import { GetSignedTxResolver } from './getSignedTxResolver'
 import { getSignedSolanaTx } from './solana'
-import { getSignedSuiTx } from './sui'
-import { getSignedTonTx } from './ton'
 import { getSignedUtxoTx } from './utxo'
-import { GetSignedTxResolver } from './GetSignedTxResolver'
 
 const handlers: Record<ChainKind, GetSignedTxResolver<any>> = {
   cosmos: getSignedCosmosTx,
   evm: getSignedEvmTx,
-  polkadot: getSignedPolkadotTx,
-  ripple: getSignedRippleTx,
+  polkadot: () => {
+    throw new Error('polkadot getSigned handler not implemented')
+  },
   solana: getSignedSolanaTx,
-  sui: getSignedSuiTx,
-  ton: getSignedTonTx,
+  ripple: () => {
+    throw new Error('ripple getSigned handler not implemented')
+  },
+  sui: () => {
+    throw new Error('sui getSigned handler not implemented')
+  },
+  ton: () => {
+    throw new Error('ton getSigned handler not implemented')
+  },
   utxo: getSignedUtxoTx,
 }
 
