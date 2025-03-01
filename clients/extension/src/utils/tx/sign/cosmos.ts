@@ -8,12 +8,16 @@ export const getSignedCosmosTx: GetSignedTxResolver<CosmosChain> = async ({
   compiledTx,
   chain, // eslint-disable-line @typescript-eslint/no-unused-vars
 }) => {
-  const output = TW.Cosmos.Proto.SigningOutput.decode(compiledTx)
-
-  assertErrorMessage(output.errorMessage)
-
-  const rawTx = output.serialized
+  if (!compiledTx || !(compiledTx instanceof Uint8Array)) {
+    throw new Error('Invalid compiledTx: expected non-empty Uint8Array')
+  }
   try {
+    const output = TW.Cosmos.Proto.SigningOutput.decode(compiledTx)
+
+    assertErrorMessage(output.errorMessage)
+
+    const rawTx = output.serialized
+
     const parsedData = JSON.parse(rawTx)
     if (!parsedData.tx_bytes) {
       throw new Error('Missing tx_bytes in the serialized transaction')

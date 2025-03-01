@@ -18,7 +18,9 @@ export const getSignedTransaction = ({
       const derivationKey = vault.chains.find(
         chain => chain.chain === transaction.chain.chain
       )?.derivationKey
-
+      if (!derivationKey) {
+        return reject('Derivation key not found for the specified chain')
+      }
       const keysignType =
         signatureAlgorithms[getChainKind(transaction.chain.chain)]
 
@@ -28,7 +30,7 @@ export const getSignedTransaction = ({
       })
 
       const pubkey = walletCore.PublicKey.createWithData(
-        Buffer.from(derivationKey!, 'hex'),
+        Buffer.from(derivationKey, 'hex'),
         publicKeyType
       )
 

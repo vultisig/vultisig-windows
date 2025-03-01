@@ -6,15 +6,21 @@ export const getSignedSolanaTx: GetSignedTxResolver = async ({
   compiledTx,
   chain, // eslint-disable-line @typescript-eslint/no-unused-vars
 }) => {
-  const {
-    encoded,
-    signatures,
-    errorMessage: solanaErrorMessage,
-  } = TW.Solana.Proto.SigningOutput.decode(compiledTx)
+  try {
+    const {
+      encoded,
+      signatures,
+      errorMessage: solanaErrorMessage,
+    } = TW.Solana.Proto.SigningOutput.decode(compiledTx)
 
-  assertErrorMessage(solanaErrorMessage)
-  if (!signatures.length || !signatures[0].signature) {
-    throw new Error('No valid signature found in the Solana transaction output')
+    assertErrorMessage(solanaErrorMessage)
+    if (!signatures.length || !signatures[0].signature) {
+      throw new Error(
+        'No valid signature found in the Solana transaction output'
+      )
+    }
+    return { raw: encoded, txResponse: signatures[0].signature }
+  } catch (error) {
+    throw new Error(`Failed to decode Solana transaction: ${String(error)}`)
   }
-  return { raw: encoded, txResponse: signatures[0].signature }
 }
