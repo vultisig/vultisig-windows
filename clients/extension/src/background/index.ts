@@ -36,7 +36,7 @@ import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getChainByChainId, getChainId } from '@core/chain/coin/chainId'
+import { getChainByChainId, getChainId } from '@core/chain/coin/ChainId'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import {
   JsonRpcProvider,
