@@ -9,10 +9,7 @@ import {
   MessageKey,
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
-import {
-  calculateWindowPosition,
-  getStandardTransactionDetails,
-} from '@clients/extension/src/utils/functions'
+import { calculateWindowPosition } from '@clients/extension/src/utils/functions'
 import {
   ChainProps,
   ITransaction,
@@ -33,6 +30,7 @@ import {
   setStoredTransactions,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
+import { getStandardTransactionDetails } from '@clients/extension/src/utils/tx/getStandardTx'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'

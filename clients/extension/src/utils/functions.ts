@@ -4,11 +4,8 @@ import {
   RequestMethod,
 } from '@clients/extension/src/utils/constants'
 import {
-  ChainProps,
   Messaging,
   SendTransactionResponse,
-  TransactionDetails,
-  TransactionType,
 } from '@clients/extension/src/utils/interfaces'
 
 const isArray = (arr: any): arr is any[] => {
@@ -138,67 +135,6 @@ export const processBackgroundResponse = (
     }
     default: {
       return result
-    }
-  }
-}
-
-export const getStandardTransactionDetails = async (
-  tx: TransactionType.WalletTransaction,
-  chain: ChainProps
-) => {
-  if (!tx || !tx.txType) {
-    throw new Error('Invalid transaction object or missing txType')
-  }
-  switch (tx.txType) {
-    case 'Keplr': {
-      const txDetails: TransactionDetails = {
-        asset: {
-          chain: chain.ticker,
-          ticker: tx.amount[0].denom,
-        },
-        amount: { amount: tx.amount[0].amount, decimals: chain.decimals },
-        from: tx.from_address,
-        to: tx.to_address,
-      }
-      return txDetails
-    }
-    case 'Phantom': {
-      const txDetails: TransactionDetails = {
-        asset: {
-          chain: chain.ticker,
-          ticker: chain.ticker,
-        },
-        amount: { amount: tx.value, decimals: chain.decimals },
-        from: tx.from,
-        to: tx.to,
-      }
-      return txDetails
-    }
-    case 'MetaMask': {
-      const txDetails: TransactionDetails = {
-        from: tx.from,
-        to: tx.to,
-        asset: {
-          chain: chain.ticker,
-          ticker: chain.ticker,
-        },
-        amount: tx.value
-          ? { amount: tx.value, decimals: chain.decimals }
-          : undefined,
-        data: tx.data,
-      }
-      return txDetails
-    }
-    default: {
-      const txdetails: TransactionDetails = {
-        asset: tx.asset,
-        data: tx.memo,
-        from: tx.from,
-        gasLimit: tx.gasLimit,
-        to: tx.recipient,
-        amount: tx.amount,
-      }
-      return txdetails
     }
   }
 }
