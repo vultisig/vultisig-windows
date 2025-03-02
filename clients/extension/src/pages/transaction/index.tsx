@@ -2,6 +2,7 @@ import '@clients/extension/src/styles/index.scss'
 import '@clients/extension/src/pages/transaction/index.scss'
 import '@clients/extension/src/utils/prototypes'
 
+import { create } from '@bufbuild/protobuf'
 import { KeysignMessagePayload } from '@clients/desktop/src/chain/keysign/KeysignMessagePayload'
 import { getFeeAmount } from '@clients/desktop/src/chain/tx/fee/utils/getFeeAmount'
 import { hexEncode } from '@clients/desktop/src/chain/walletCore/hexEncode'
@@ -16,7 +17,6 @@ import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import i18n from '@clients/extension/src/i18n/config'
-import { keccak256 } from 'js-sha3'
 import {
   ArrowLeft,
   LinkExternal,
@@ -50,16 +50,16 @@ import { getCoinType } from '@core/chain/coin/coinType'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
+import { CustomMessagePayloadSchema } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
 import { getPreSignedInputData } from '@core/keysign/preSignedInputData'
 import { Button, Form, Input, message, QRCode } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
+import { keccak256 } from 'js-sha3'
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
-import { CustomMessagePayloadSchema } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
-import { create } from '@bufbuild/protobuf'
 
 interface FormProps {
   password: string
@@ -463,9 +463,8 @@ const Component = () => {
             })
             .then(() => {
               setState(prevState => ({ ...prevState, step: 4 }))
-              transaction.isCustomMessage
-                ? handleCustomMessagePending()
-                : handlePending(imageHash, preSignedInputData)
+              if (transaction.isCustomMessage) handleCustomMessagePending()
+              else handlePending(imageHash, preSignedInputData)
             })
             .catch(err => {
               console.error(err)
