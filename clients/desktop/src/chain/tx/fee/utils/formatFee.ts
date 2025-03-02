@@ -38,9 +38,7 @@ export const formatFee = ({ chain, chainSpecific }: FormatFeeInput) => {
       polkadotSpecific: () => polkadotConfig.fee,
       tonSpecific: () => tonConfig.fee,
       rippleSpecific: () => rippleTxFee,
-      tronSpecific: () => {
-        throw new Error('Tron fee not implemented')
-      },
+      tronSpecific: ({ gasEstimation }) => BigInt(gasEstimation || 0),
     }
   )
 

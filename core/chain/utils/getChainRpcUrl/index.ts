@@ -17,4 +17,5 @@ export const chainRpcUrl: Record<Chain, string> = {
   [OtherChain.Polkadot]: 'https://polkadot-rpc.publicnode.com',
   [OtherChain.Ton]: '',
   [OtherChain.Ripple]: '',
+  [OtherChain.Tron]: '',
 }

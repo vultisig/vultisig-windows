@@ -43,4 +43,5 @@ export const getCoinType = ({
     [Chain.Noble]: () => CoinType.noble,
     [Chain.Ripple]: () => CoinType.xrp,
     [Chain.Akash]: () => CoinType.akash,
+    [Chain.Tron]: () => CoinType.tron,
   })
