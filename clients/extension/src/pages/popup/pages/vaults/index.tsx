@@ -33,7 +33,7 @@ const Component = () => {
         goBack(routeKeys.main)
       })
       .catch(error => {
-        console.error('Failed to update vault settings:', error)
+        console.error('Error setting stored vaults:', error)
       })
   }
 

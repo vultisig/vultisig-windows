@@ -1,3 +1,4 @@
+import { useWalletCore } from '@clients/desktop/src/providers/WalletCoreProvider'
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
 import AddressProvider from '@clients/extension/src/utils/address-provider'
@@ -17,7 +18,6 @@ import {
   getStoredVaults,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
-import WalletCoreProvider from '@clients/extension/src/utils/wallet-core-provider'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Button, Upload, UploadProps } from 'antd'
@@ -43,7 +43,7 @@ const Component = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const goBack = useGoBack()
-  const walletCore = new WalletCoreProvider()
+  const walletCore = useWalletCore()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
 
   const handleFinish = (): void => {
@@ -70,38 +70,40 @@ const Component = () => {
             handleFinish()
           })
         } else {
-          walletCore
-            .getCore()
-            .then(({ chainRef, walletCore }) => {
-              const addressProvider = new AddressProvider(chainRef, walletCore)
-              const promises = Object.keys(supportedChains)
+          const addressProvider = new AddressProvider(walletCore!)
+          const promises = Object.keys(supportedChains)
+            .filter(key => isSupportedChain(key as Chain))
+            .map(key => addressProvider.getAddress(key as Chain, vault))
+
+          Promise.all(promises)
+            .then(props => {
+              vault.chains = Object.keys(supportedChains)
                 .filter(key => isSupportedChain(key as Chain))
-                .map(key => addressProvider.getAddress(key as Chain, vault))
+                .map((chainKey, index) => ({
+                  ...chainFeeCoin[chainKey as Chain],
+                  ...props[index],
+                }))
 
-              Promise.all(promises).then(props => {
-                vault.chains = Object.keys(supportedChains)
-                  .filter(key => isSupportedChain(key as Chain))
-                  .map((chainKey, index) => ({
-                    ...chainFeeCoin[chainKey as Chain],
-                    ...props[index],
-                  }))
+              const modifiedVaults = [
+                { ...vault, active: true },
+                ...vaults
+                  .filter(({ uid }) => uid !== vault.uid)
+                  .map(vault => ({ ...vault, active: false })),
+              ]
 
-                const modifiedVaults = [
-                  { ...vault, active: true },
-                  ...vaults
-                    .filter(({ uid }) => uid !== vault.uid)
-                    .map(vault => ({ ...vault, active: false })),
-                ]
+              setStoredVaults(modifiedVaults).then(() => {
+                setState(prevState => ({ ...prevState, loading: false }))
 
-                setStoredVaults(modifiedVaults).then(() => {
-                  setState(prevState => ({ ...prevState, loading: false }))
-
-                  handleFinish()
-                })
+                handleFinish()
               })
             })
             .catch(error => {
-              console.log(error)
+              console.error('Failed to retrieve addresses:', error)
+              setState(prevState => ({
+                ...prevState,
+                loading: false,
+                status: 'error',
+              }))
             })
         }
       })

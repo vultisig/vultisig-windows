@@ -1,9 +1,12 @@
+import { tss } from '@clients/desktop/wailsjs/go/models'
 import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { Chain } from '@core/chain/Chain'
+import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
+import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
 
-import { ChainTicker, Currency, Language } from './constants'
+import { Currency, Language } from './constants'
 
 export namespace Messaging {
   export namespace Chain {
@@ -154,45 +157,79 @@ export interface ScreenProps {
   width: number
 }
 
+export namespace TransactionType {
+  export interface MetaMask {
+    txType: 'MetaMask'
+    from: string
+    to: string
+    value?: string
+    data: string
+    gas?: string
+    gasPrice?: string
+    nonce?: string
+    chainId?: string
+    type?: string
+  }
+
+  export interface Ctrl {
+    txType: 'Ctrl'
+    amount: {
+      amount: string
+      decimals: number
+    }
+    asset: {
+      chain: string
+      symbol: string
+      ticker: string
+    }
+    from: string
+    gasLimit?: string
+    memo: string
+    recipient: string
+  }
+
+  export interface Vultisig {
+    txType: 'Vultisig'
+    asset: {
+      chain: string
+      ticker: string
+      symbol?: string
+    }
+    from: string
+    to?: string
+    amount?: { amount: string; decimals: number }
+    data?: string
+    gasLimit?: string
+  }
+
+  export interface Keplr {
+    txType: 'Keplr'
+    amount: { amount: string; denom: string }[]
+    from_address: string
+    to_address: string
+  }
+
+  export interface Phantom {
+    txType: 'Phantom'
+    from: string
+    to: string
+    value: string
+  }
+
+  export type WalletTransaction = MetaMask | Ctrl | Keplr | Phantom | Vultisig
+}
+
 export interface TransactionDetails {
   asset: {
     chain: string
-    symbol: string
     ticker: string
+    symbol?: string
   }
   from: string
   to?: string
   amount?: { amount: string; decimals: number }
   data?: string
   gasLimit?: string
-}
-
-export interface METAMASK_TRANSACTION {
-  from: string
-  to: string
-  value?: string
-  data: string
-  gas?: string
-  gasPrice?: string
-  nonce?: string
-  chainId?: string
-  type?: string
-}
-
-export interface CTRL_TRANSACTION {
-  amount: {
-    amount: string
-    decimals: number
-  }
-  asset: {
-    chain: ChainTicker
-    symbol: string
-    ticker: string
-  }
-  from: string
-  gasLimit?: string
-  memo: string
-  recipient: string
 }
 
 export interface ITransaction {
@@ -203,10 +240,13 @@ export interface ITransaction {
   customSignature?: string
   id: string
   status: 'default' | 'error' | 'pending' | 'success'
-  memo?: string
+  memo?: {
+    isParsed: boolean
+    value: string | ParsedMemoParams | undefined
+  }
   gas?: string
   gasLimit?: string
-  gasPrice?: string
+  txFee?: string
   isDeposit?: boolean
   isCustomMessage?: boolean
   maxFeePerGas?: string
@@ -227,11 +267,6 @@ export interface VaultProps {
   selected?: boolean
   transactions: ITransaction[]
   uid: string
-}
-
-export interface ParsedMemo {
-  signature: string
-  inputs: string
 }
 
 export interface ThorchainAccountDataResponse {
@@ -291,9 +326,10 @@ export interface CosmosAccountDataResponse {
 
 export interface SignedTransaction {
   inputData?: Uint8Array
-  signature: SignatureProps
+  signatures: Record<string, tss.KeysignResponse>
   transaction?: ITransaction
   vault?: VaultProps
+  walletCore: WalletCore
 }
 
 export interface SpecificUtxoInfo {

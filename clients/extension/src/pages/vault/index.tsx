@@ -68,36 +68,44 @@ const Component = () => {
     })
   }
 
-  useEffect(() => {
-    ;(async () => {
-      try {
-        const language = await getStoredLanguage()
-        await i18n.changeLanguage(language)
+  const componentDidMount = (): void => {
+    getStoredLanguage().then(language => {
+      i18n.changeLanguage(language)
 
-        const { sender } = await getStoredRequest()
-        const vaults = await getStoredVaults()
-
-        setState(prevState => ({
-          ...prevState,
-          sender,
-          vaults,
-          hasError: !vaults.length,
-          ...(!vaults.length && {
+      getStoredRequest()
+        .then(({ sender }) => {
+          getStoredVaults().then(vaults => {
+            if (vaults.length) {
+              setState(prevState => ({
+                ...prevState,
+                sender,
+                vaults,
+                hasError: false,
+              }))
+            } else {
+              console.error('Failed to load vaults or request data')
+              setState(prevState => ({
+                ...prevState,
+                errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
+                errorTitle: t(messageKeys.GET_VAULT_FAILED),
+                hasError: true,
+              }))
+            }
+          })
+        })
+        .catch(() => {
+          console.error('Failed to load vaults or request data')
+          setState(prevState => ({
+            ...prevState,
             errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
             errorTitle: t(messageKeys.GET_VAULT_FAILED),
-          }),
-        }))
-      } catch (error) {
-        console.error('Failed to initialize:', error)
-        setState(prevState => ({
-          ...prevState,
-          errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
-          errorTitle: t(messageKeys.GET_VAULT_FAILED),
-          hasError: true,
-        }))
-      }
-    })()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+            hasError: true,
+          }))
+        })
+    })
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(componentDidMount, [])
 
   return (
     <ConfigProvider>

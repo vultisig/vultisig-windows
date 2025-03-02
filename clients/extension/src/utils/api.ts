@@ -1,38 +1,19 @@
+import { tss } from '@clients/desktop/wailsjs/go/models'
 import {
-  ThornodeNetworkResponse,
   ThornodeTxResponse,
   ThornodeTxResponseSuccess,
 } from '@clients/extension/src/types/thorchain'
-import { Currency } from '@clients/extension/src/utils/constants'
 import {
   toCamelCase,
   toSnakeCase,
 } from '@clients/extension/src/utils/functions'
 import {
-  CosmosAccountData,
-  CosmosAccountDataResponse,
   FastSignInput,
-  MayaAccountDataResponse,
   SignatureProps,
-  ThorchainAccountDataResponse,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import axios from 'axios'
 import { TransactionResponse } from 'ethers'
-
-namespace CryptoCurrency {
-  export interface Props {
-    data: {
-      [id: string]: {
-        quote: {
-          [currency: string]: {
-            price: number
-          }
-        }
-      }
-    }
-  }
-}
 
 namespace Derivation {
   export interface Params {
@@ -78,26 +59,6 @@ api.interceptors.response.use(response => {
 })
 
 export default {
-  cryptoCurrency: (cmcId: number, currency: Currency): Promise<number> => {
-    return new Promise(resolve => {
-      api
-        .get<CryptoCurrency.Props>(
-          `${apiRef.vultisig.api}cmc/v2/cryptocurrency/quotes/latest?id=${cmcId}&aux=platform&convert=${currency}`
-        )
-        .then(({ data }) => {
-          if (
-            data?.data &&
-            data.data[cmcId]?.quote &&
-            data.data[cmcId].quote[currency]?.price
-          ) {
-            resolve(data.data[cmcId].quote[currency].price)
-          } else {
-            resolve(0)
-          }
-        })
-        .catch(() => resolve(0))
-    })
-  },
   derivePublicKey: async (params: Derivation.Params) => {
     return await api.post<Derivation.Props>(
       `${apiRef.vultisig.airdrop}api/derive-public-key`,
@@ -132,18 +93,6 @@ export default {
         .catch(() => resolve(false))
     })
   },
-  rpc: {
-    post: (url: string, body: any): Promise<any> => {
-      return new Promise((resolve, reject) => {
-        api
-          .post(url, body)
-          .then(response => {
-            resolve(response.data)
-          })
-          .catch(reject)
-      })
-    },
-  },
   fastVault: {
     assertVaultExist: (ecdsa: string): Promise<boolean> => {
       return new Promise(resolve => {
@@ -157,19 +106,6 @@ export default {
       return new Promise((resolve, reject) => {
         const url = `${apiRef.vultisig.api}vault/sign`
         api.post(url, input).then(resolve).catch(reject)
-      })
-    },
-  },
-  cosmos: {
-    getAccountData(url: string): Promise<CosmosAccountData> {
-      return new Promise((resolve, reject) => {
-        api
-          .get<CosmosAccountDataResponse>(url)
-          .then(({ data }) => {
-            if (data.account) resolve(data.account)
-            else throw new Error('Account not found')
-          })
-          .catch(reject)
       })
     },
   },
@@ -188,49 +124,7 @@ export default {
         .then(({ data }) => data.result)
     },
   },
-  maya: {
-    fetchAccountNumber: async (address: string) => {
-      return new Promise<MayaAccountDataResponse>((resolve, reject) => {
-        api
-          .get<{ result: { value: MayaAccountDataResponse } }>(
-            `${apiRef.mayaChain}auth/accounts/${address}`
-          )
-          .then(({ data }) => resolve(data.result.value))
-          .catch(reject)
-      })
-    },
-  },
   thorchain: {
-    fetchAccountNumber: async (address: string) => {
-      return new Promise<ThorchainAccountDataResponse>((resolve, reject) => {
-        api
-          .get<{ result: { value: ThorchainAccountDataResponse } }>(
-            `${apiRef.nineRealms.thornode}auth/accounts/${address}`,
-            { headers: { 'X-Client-ID': 'vultisig' } }
-          )
-          .then(({ data }) => resolve(data.result.value))
-          .catch(reject)
-      })
-    },
-    getFeeData(): Promise<string> {
-      return new Promise((resolve, reject) => {
-        const url = `${apiRef.nineRealms.thornode}thorchain/network`
-        api
-          .get<ThornodeNetworkResponse>(url)
-          .then(({ data }) => resolve(data.nativeTxFeeRune))
-          .catch(reject)
-      })
-    },
-    getTHORChainChainID(): Promise<string> {
-      return new Promise((resolve, reject) => {
-        api
-          .get<{ result: { nodeInfo: { network: string } } }>(
-            `${apiRef.nineRealms.rpc}status`
-          )
-          .then(({ data }) => resolve(data.result.nodeInfo.network))
-          .catch(reject)
-      })
-    },
     getTransactionByHash(hash: string): Promise<ThornodeTxResponseSuccess> {
       return new Promise((resolve, reject) => {
         api
@@ -248,7 +142,10 @@ export default {
     },
   },
   transaction: {
-    getComplete: async (uuid: string, message?: string) => {
+    getComplete: async (
+      uuid: string,
+      message?: string
+    ): Promise<tss.KeysignResponse> => {
       return new Promise((resolve, reject) => {
         api
           .get<SignatureProps>(
@@ -265,8 +162,15 @@ export default {
                 },
                 {} as { [key: string]: any }
               )
+              const response: tss.KeysignResponse = {
+                der_signature: transformed.DerSignature,
+                msg: transformed.Msg,
+                r: transformed.R,
+                recovery_id: transformed.RecoveryID,
+                s: transformed.S,
+              }
 
-              resolve(transformed)
+              resolve(response)
             }
           })
           .catch(reject)
@@ -283,20 +187,6 @@ export default {
     },
   },
   utxo: {
-    blockchairDashboard: (address: string, coinName: string) => {
-      if (coinName === Chain.BitcoinCash) coinName = 'bitcoin-cash'
-
-      return new Promise((resolve, reject) => {
-        api
-          .get<{ data: string }>(
-            `${
-              apiRef.vultisig.api
-            }/blockchair/${coinName.toLowerCase()}/dashboards/address/${address}?state=latest`
-          )
-          .then(({ data }) => resolve(data.data))
-          .catch(reject)
-      })
-    },
     blockchairGetTx: (chainName: string, txHash: string) => {
       if (chainName === Chain.BitcoinCash) chainName = 'bitcoin-cash'
 
@@ -310,18 +200,6 @@ export default {
           .then(({ data }) => {
             resolve(data.data[txHash])
           })
-          .catch(reject)
-      })
-    },
-    blockchairStats: (chainName: string) => {
-      if (chainName === Chain.BitcoinCash) chainName = 'bitcoin-cash'
-
-      return new Promise((resolve, reject) => {
-        api
-          .get<{ data: string }>(
-            `${apiRef.vultisig.api}/blockchair/${chainName.toLowerCase()}/stats`
-          )
-          .then(({ data }) => resolve(data.data))
           .catch(reject)
       })
     },

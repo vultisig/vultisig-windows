@@ -40,7 +40,6 @@ export default {
   [messageKeys.IMPORT_FAILED]: 'QR code invalid, please retry',
   [messageKeys.IMPORT_SUCCESSED]: 'Imported successfully',
   [messageKeys.IMPORT_VAULT]: 'Import Vault',
-  [messageKeys.INVALID_PASSWORD]: 'Invalid Password',
   // L
   [messageKeys.LANGUAGE]: 'Language',
   // M
