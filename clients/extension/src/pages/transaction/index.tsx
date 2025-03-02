@@ -16,6 +16,7 @@ import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import i18n from '@clients/extension/src/i18n/config'
+import { keccak256 } from 'js-sha3'
 import {
   ArrowLeft,
   LinkExternal,
@@ -57,6 +58,8 @@ import { formatUnits, toUtf8String } from 'ethers'
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+import { CustomMessagePayloadSchema } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
+import { create } from '@bufbuild/protobuf'
 
 interface FormProps {
   password: string
@@ -295,6 +298,8 @@ const Component = () => {
                       }))
                       handleCustomMessagePending()
                     } else {
+                      console.log('not custom')
+
                       const preSignedInputData = getPreSignedInputData({
                         chain: transaction.chain.chain,
                         keysignPayload: keysignPayload!,
@@ -350,11 +355,10 @@ const Component = () => {
           let payload: KeysignMessagePayload
           if (transaction.isCustomMessage) {
             payload = {
-              custom: {
-                $typeName: 'vultisig.keysign.v1.CustomMessagePayload',
-                method: transaction.customMessage!.method,
-                message: transaction.customMessage!.message,
-              },
+              custom: create(CustomMessagePayloadSchema, {
+                method: transaction.customMessage?.method,
+                message: transaction.customMessage?.message,
+              }),
             }
           } else {
             payload = {
@@ -409,21 +413,32 @@ const Component = () => {
   }
 
   const handleSubmitFastSignPassword = (): void => {
+    let imageHash = ''
+    let preSignedInputData: Uint8Array<ArrayBufferLike>
     if (transaction && vault) {
-      const preSignedInputData = getPreSignedInputData({
-        chain: transaction!.chain.chain,
-        keysignPayload: keysignPayload!,
-        walletCore: walletCore!,
-      })
-      const preSignedImageHashes = getPreSigningHashes({
-        chain: transaction!.chain.chain,
-        txInputData: preSignedInputData,
-        walletCore: walletCore!,
-      })
-      const imageHash = hexEncode({
-        value: preSignedImageHashes[0],
-        walletCore: walletCore!,
-      })
+      if (transaction.isCustomMessage) {
+        const msg = transaction.customMessage!.message
+        const messageToHash = msg.startsWith('0x')
+          ? Buffer.from(msg.slice(2), 'hex')
+          : msg
+
+        imageHash = keccak256(messageToHash)
+      } else {
+        preSignedInputData = getPreSignedInputData({
+          chain: transaction!.chain.chain,
+          keysignPayload: keysignPayload!,
+          walletCore: walletCore!,
+        })
+        const preSignedImageHashes = getPreSigningHashes({
+          chain: transaction!.chain.chain,
+          txInputData: preSignedInputData,
+          walletCore: walletCore!,
+        })
+        imageHash = hexEncode({
+          value: preSignedImageHashes[0],
+          walletCore: walletCore!,
+        })
+      }
       const tssType = signatureAlgorithms[getChainKind(transaction.chain.chain)]
       form
         .validateFields()
@@ -448,7 +463,9 @@ const Component = () => {
             })
             .then(() => {
               setState(prevState => ({ ...prevState, step: 4 }))
-              handlePending(imageHash, preSignedInputData)
+              transaction.isCustomMessage
+                ? handleCustomMessagePending()
+                : handlePending(imageHash, preSignedInputData)
             })
             .catch(err => {
               console.error(err)
@@ -484,56 +501,53 @@ const Component = () => {
       )
 
       if (vault) {
-        if (!transaction.isCustomMessage) {
-          getKeysignPayload(transaction, vault).then(keysignPayload => {
-            transaction.txFee = String(
-              formatUnits(
-                getFeeAmount(
-                  keysignPayload.blockchainSpecific as KeysignChainSpecific
-                ),
-                transaction.transactionDetails.amount?.decimals
-              )
+        getKeysignPayload(transaction, vault).then(keysignPayload => {
+          transaction.txFee = String(
+            formatUnits(
+              getFeeAmount(
+                keysignPayload.blockchainSpecific as KeysignChainSpecific
+              ),
+              transaction.transactionDetails.amount?.decimals
             )
+          )
 
-            // Parse Memo
-            transaction.memo = { isParsed: false, value: undefined }
-            if (getChainKind(transaction.chain.chain) == 'evm') {
-              getParsedMemo(keysignPayload.memo).then(parsedMemo => {
-                if (parsedMemo) {
-                  setState(prevState => ({
-                    ...prevState,
-                    transaction: {
-                      ...prevState.transaction!,
-                      memo: {
-                        isParsed: true,
-                        value: parsedMemo,
-                      },
+          // Parse Memo
+          transaction.memo = { isParsed: false, value: undefined }
+          if (getChainKind(transaction.chain.chain) == 'evm') {
+            getParsedMemo(keysignPayload.memo).then(parsedMemo => {
+              if (parsedMemo) {
+                setState(prevState => ({
+                  ...prevState,
+                  transaction: {
+                    ...prevState.transaction!,
+                    memo: {
+                      isParsed: true,
+                      value: parsedMemo,
                     },
-                  }))
-                }
-              })
-            }
-
-            if (!transaction.memo.isParsed) {
-              try {
-                transaction.memo.value = toUtf8String(
-                  transaction.transactionDetails.data!
-                )
-              } catch {
-                transaction.memo.value = transaction.transactionDetails.data
+                  },
+                }))
               }
+            })
+          }
+          if (!transaction.memo.isParsed) {
+            try {
+              transaction.memo.value = toUtf8String(
+                transaction.transactionDetails.data!
+              )
+            } catch {
+              transaction.memo.value = transaction.transactionDetails.data
             }
+          }
 
-            setState(prevState => ({
-              ...prevState,
-              currency,
-              loaded: true,
-              transaction,
-              keysignPayload,
-              vault,
-            }))
-          })
-        }
+          setState(prevState => ({
+            ...prevState,
+            currency,
+            loaded: true,
+            transaction,
+            keysignPayload,
+            vault,
+          }))
+        })
       } else {
         setState(prevState => ({
           ...prevState,
