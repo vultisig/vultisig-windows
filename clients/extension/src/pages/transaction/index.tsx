@@ -543,7 +543,7 @@ const Component = () => {
         }))
       }
     })
-  }, [walletCore, t]) // ✅ Added 't' to the dependency array
+  }, [walletCore]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <ConfigProvider>
