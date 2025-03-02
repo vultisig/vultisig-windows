@@ -250,8 +250,7 @@ const handleGetVaults = (): Promise<Messaging.GetVaults.Response> => {
 
 const handleSendTransaction = (
   transaction: ITransaction,
-  chain: ChainProps,
-  isDeposit?: boolean
+  chain: ChainProps
 ): Promise<SendTransactionResponse> => {
   return new Promise((resolve, reject) => {
     getStoredTransactions().then(transactions => {
@@ -260,7 +259,6 @@ const handleSendTransaction = (
       setStoredTransactions([
         {
           ...transaction,
-          isDeposit,
           chain,
           id: uuid,
           status: 'default',
@@ -459,12 +457,24 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.DEPOSIT_TRANSACTION: {
         if (Array.isArray(params)) {
-          const [transaction] = params as ITransaction[]
-
+          const [transaction] = params as TransactionType.Vultisig[]
           if (transaction) {
-            handleSendTransaction(transaction, chain, true)
-              .then(result => resolve(result))
-              .catch(reject)
+            getStandardTransactionDetails(
+              { ...transaction, txType: 'Vultisig' },
+              chain
+            ).then(standardTx => {
+              let modifiedTransaction: ITransaction = {} as ITransaction
+              modifiedTransaction = {
+                transactionDetails: standardTx as TransactionDetails,
+                isDeposit: true,
+                chain,
+                id: '',
+                status: 'default',
+              }
+              handleSendTransaction(modifiedTransaction, chain)
+                .then(result => resolve(result))
+                .catch(reject)
+            })
           } else {
             reject()
           }
@@ -875,11 +885,12 @@ const handleRequest = (
             ).then(standardTx => {
               const tx: ITransaction = {
                 transactionDetails: standardTx,
+                isDeposit: true,
                 chain: chain,
                 id: '',
                 status: 'default',
               }
-              handleSendTransaction(tx, chain, true)
+              handleSendTransaction(tx, chain)
                 .then(result => resolve(result))
                 .catch(reject)
             })

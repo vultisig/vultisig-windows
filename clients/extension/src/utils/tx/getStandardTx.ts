@@ -55,6 +55,10 @@ const transactionHandlers = {
     to: tx.recipient,
     amount: tx.amount,
   }),
+
+  Vultisig: (tx: TransactionType.Vultisig): TransactionDetails => ({
+    ...tx,
+  }),
 }
 
 export const getStandardTransactionDetails = async (
@@ -74,6 +78,8 @@ export const getStandardTransactionDetails = async (
       return transactionHandlers.MetaMask(tx, chain)
     case 'Ctrl':
       return transactionHandlers.Ctrl(tx)
+    case 'Vultisig':
+      return transactionHandlers.Vultisig(tx)
     default:
       throw new Error(`Unsupported transaction type`)
   }

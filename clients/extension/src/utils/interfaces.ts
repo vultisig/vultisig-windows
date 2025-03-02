@@ -188,6 +188,20 @@ export namespace TransactionType {
     recipient: string
   }
 
+  export interface Vultisig {
+    txType: 'Vultisig'
+    asset: {
+      chain: string
+      ticker: string
+      symbol?: string
+    }
+    from: string
+    to?: string
+    amount?: { amount: string; decimals: number }
+    data?: string
+    gasLimit?: string
+  }
+
   export interface Keplr {
     txType: 'Keplr'
     amount: { amount: string; denom: string }[]
@@ -202,7 +216,7 @@ export namespace TransactionType {
     value: string
   }
 
-  export type WalletTransaction = MetaMask | Ctrl | Keplr | Phantom
+  export type WalletTransaction = MetaMask | Ctrl | Keplr | Phantom | Vultisig
 }
 
 export interface TransactionDetails {
