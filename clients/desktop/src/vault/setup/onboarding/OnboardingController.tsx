@@ -1,8 +1,10 @@
+import { FEATURE_FLAGS } from '../../../constants'
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { OnboardingGreeting } from './OnboardingGreeting'
 import { OnboardingSteps } from './OnboardingSteps'
 import { OnboardingSummary } from './OnboardingSummary'
+import { OnboardingSummaryOld } from './OnboardingSummaryOld'
 
 const steps = [
   'onboardingGreeting',
@@ -20,7 +22,13 @@ export const OnboardingController = () => {
         <OnboardingGreeting onCompleteGreeting={toNextStep} />
       )}
       onboardingSteps={() => <OnboardingSteps onCompleteSteps={toNextStep} />}
-      onboardingSummary={() => <OnboardingSummary />}
+      onboardingSummary={() =>
+        FEATURE_FLAGS.ENABLE_NEW_SUMMARY_PAGES ? (
+          <OnboardingSummary />
+        ) : (
+          <OnboardingSummaryOld />
+        )
+      }
     />
   )
 }
