@@ -33,7 +33,8 @@ export const executeEvmTx: ExecuteTxResolver<EvmChain> = async ({
       'already known',
       'transaction is temporarily banned',
       'nonce too low',
-      'transaction already exists'
+      'transaction already exists',
+      'future transaction tries to replace pending'
     )
 
     if (isAlreadyBroadcast) {
