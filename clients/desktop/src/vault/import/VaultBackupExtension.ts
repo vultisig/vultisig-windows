@@ -2,7 +2,7 @@ import { getLastItem } from '@lib/utils/array/getLastItem'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-export const vaultBackupExtensions = ['bak', 'vult']
+export const vaultBackupExtensions = ['bak', 'vult', 'dat']
 
 export type VaultBackupExtension = (typeof vaultBackupExtensions)[number]
 
