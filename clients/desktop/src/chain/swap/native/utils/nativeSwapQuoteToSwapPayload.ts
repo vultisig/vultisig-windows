@@ -6,9 +6,9 @@ import { THORChainSwapPayloadSchema } from '@core/communication/vultisig/keysign
 import { convertDuration } from '@lib/utils/time/convertDuration'
 import { addMinutes } from 'date-fns'
 
-import { KeysignSwapPayload } from '../../../../keysign/KeysignSwapPayload'
-import { nativeSwapStreamingInterval } from '../../NativeSwapChain'
-import { NativeSwapQuote } from '../../NativeSwapQuote'
+import { KeysignSwapPayload } from '../../../keysign/KeysignSwapPayload'
+import { nativeSwapStreamingInterval } from '../NativeSwapChain'
+import { NativeSwapQuote } from '../NativeSwapQuote'
 
 type Input = {
   quote: NativeSwapQuote
@@ -17,7 +17,7 @@ type Input = {
   toCoin: Coin
 }
 
-export const thorchainSwapQuoteToSwapPayload = ({
+export const nativeSwapQuoteToSwapPayload = ({
   quote,
   fromCoin,
   amount,

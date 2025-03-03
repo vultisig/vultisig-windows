@@ -1,12 +1,11 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { UtxoChain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { areEqualCoins } from '@core/chain/coin/Coin'
 import { getChainSpecific } from '@core/keysign/chainSpecific'
 import { ChainSpecificResolverInput } from '@core/keysign/chainSpecific/ChainSpecificResolver'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields'
+import { isNativeSwapDeposit } from '../../../chain/swap/native/utils/isNativeSwapDeposit'
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery'
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery'
 import { useCurrentVaultCoin } from '../../state/currentVault'
@@ -47,9 +46,11 @@ export const useSwapChainSpecificQuery = () => {
 
       if ('native' in swapQuote) {
         const { swapChain } = swapQuote.native
-        const nativeFeeCoin = chainFeeCoin[swapChain]
 
-        input.isDeposit = areEqualCoins(fromCoinKey, nativeFeeCoin)
+        input.isDeposit = isNativeSwapDeposit({
+          fromCoin,
+          swapChain,
+        })
       }
 
       if (isOneOf(fromCoin.chain, Object.values(UtxoChain))) {

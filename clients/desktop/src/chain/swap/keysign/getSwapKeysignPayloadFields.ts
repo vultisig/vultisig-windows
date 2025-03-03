@@ -1,20 +1,18 @@
 import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { EvmChain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
   OneInchQuoteSchema,
   OneInchSwapPayloadSchema,
   OneInchTransactionSchema,
 } from '@core/communication/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
-import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
-import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload'
+import { isNativeSwapDeposit } from '../native/utils/isNativeSwapDeposit'
+import { nativeSwapQuoteToSwapPayload } from '../native/utils/nativeSwapQuoteToSwapPayload'
 import { SwapQuote } from '../quote/SwapQuote'
 
 type Input = {
@@ -61,37 +59,29 @@ export const getSwapKeysignPayloadFields = ({
       }
     },
     native: quote => {
-      const { memo } = quote
-      if (
-        isOneOf(fromCoin.chain, Object.values(EvmChain)) &&
-        !isFeeCoin(fromCoin)
-      ) {
-        const swapPayload = thorchainSwapQuoteToSwapPayload({
-          quote,
-          fromCoin,
-          amount,
-          toCoin,
-        })
+      const { memo, swapChain } = quote
 
-        const toAddress = shouldBePresent(quote.router)
-
-        const result: Output = {
-          toAddress,
-          swapPayload,
-          memo: quote.memo,
+      if (isNativeSwapDeposit({ fromCoin, swapChain })) {
+        return {
+          memo,
+          toAddress: '',
         }
-
-        return result
       }
 
-      const isDeposit =
-        isFeeCoin(fromCoin) && fromCoin.chain === quote.swapChain
+      const swapPayload = nativeSwapQuoteToSwapPayload({
+        quote,
+        fromCoin,
+        amount,
+        toCoin,
+      })
 
-      const result: Output = {
-        toAddress: isDeposit ? '' : shouldBePresent(quote.inbound_address),
+      const toAddress = shouldBePresent(quote.router || quote.inbound_address)
+
+      return {
+        toAddress,
+        swapPayload,
         memo,
       }
-      return result
     },
   })
 }
