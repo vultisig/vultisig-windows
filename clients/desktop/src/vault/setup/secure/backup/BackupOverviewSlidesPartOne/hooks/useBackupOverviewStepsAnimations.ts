@@ -8,14 +8,14 @@ const INPUT_NAME = 'Index'
 
 export const BACKUP_VAULT_ANIMATIONS = [1, 2] as const
 
-export const useBackupOverviewStepsAnimations = () => {
+export const useBackupOverviewStepsAnimations = (numberOfShares: number) => {
   const { step: currentAnimation, toNextStep: toNextAnimation } =
     useStepNavigation({
       steps: BACKUP_VAULT_ANIMATIONS,
     })
 
   const { RiveComponent, rive } = useRive({
-    src: '/assets//animations/secure-vault-backup/secure-vault-backup-screen/index.riv',
+    src: `/assets/animations/secure-vault-backup/${numberOfShares === 2 || numberOfShares === 3 ? '2of3' : numberOfShares === 4 ? '3of4' : '5plus'}.riv`,
     autoplay: true,
     stateMachines: [STATE_MACHINE_NAME],
   })
