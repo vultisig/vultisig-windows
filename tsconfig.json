@@ -14,7 +14,9 @@
     "isolatedModules": true,
     "jsx": "react-jsx"
   },
-  "references": [{ "path": "./clients/mobile" }],
+  "references": [
+    
+  ],
   "exclude": ["node_modules", "clients/**/*"],
   "include": [
     "next-env.d.ts",
