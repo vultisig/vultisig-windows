@@ -5,6 +5,7 @@ import { HStack } from '../../../../../../../lib/ui/layout/Stack'
 import { Text } from '../../../../../../../lib/ui/text'
 import {
   KeygenStatus,
+  keygenStatuses,
   MatchKeygenSessionStatus,
 } from '../../../../../../keygen/shared/MatchKeygenSessionStatus'
 import {
@@ -15,42 +16,48 @@ import {
   Wrapper,
 } from './SlidesLoader.styled'
 
+const pendingCompletion = 0.25
+
+const completion: Record<KeygenStatus, number> = {
+  prepareVault: 0.5,
+  ecdsa: 0.7,
+  eddsa: 0.9,
+}
+
 export const SlidesLoader = () => {
   const { t } = useTranslation()
 
+  const texts: Record<KeygenStatus, string> = {
+    prepareVault: t('fastVaultSetup.preparingVault'),
+    ecdsa: t('fastVaultSetup.generatingECDSAKey'),
+    eddsa: t('fastVaultSetup.generatingEDDSAKey'),
+  }
+
   const renderContent = (value?: KeygenStatus) => {
-    const texts = [
-      t('fastVaultSetup.preparingVault'),
-      t('fastVaultSetup.generatingECDSAKey'),
-      t('fastVaultSetup.generatingEDDSAKey'),
-    ]
-
-    const steps = {
-      loading: { progress: 0.25, checkedSteps: -1 },
-      prepareVault: { progress: 0.5, checkedSteps: 1 },
-      ecdsa: { progress: 0.7, checkedSteps: 2 },
-      eddsa: { progress: 0.9, checkedSteps: 3 },
-    }
-
-    const { progress, checkedSteps } = steps[value || 'loading']
-    console.log(value)
-
     return (
       <>
-        {texts.map((text, index) => (
-          <HStack gap={8} key={index} alignItems="center">
-            {index < checkedSteps ? (
-              <IconWrapper>
-                <CheckIcon />
-              </IconWrapper>
-            ) : (
-              <Loader />
-            )}
-            <Text color="shy">{text}</Text>
-          </HStack>
-        ))}
+        {keygenStatuses.map((status, index) => {
+          const isCompleted = value && keygenStatuses.indexOf(value) > index
+
+          const text = texts[status]
+
+          return (
+            <HStack gap={8} key={index} alignItems="center">
+              {isCompleted ? (
+                <IconWrapper>
+                  <CheckIcon />
+                </IconWrapper>
+              ) : (
+                <Loader />
+              )}
+              <Text color="shy">{text}</Text>
+            </HStack>
+          )
+        })}
         <ProgressBarWrapper>
-          <StyledProgressLine value={progress} />
+          <StyledProgressLine
+            value={value ? completion[value] : pendingCompletion}
+          />
         </ProgressBarWrapper>
       </>
     )
