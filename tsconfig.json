@@ -14,10 +14,8 @@
     "isolatedModules": true,
     "jsx": "react-jsx"
   },
-  "references": [
-    
-  ],
-  "exclude": ["node_modules", "clients/**/*"],
+  "references": [],
+  "exclude": ["node_modules"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

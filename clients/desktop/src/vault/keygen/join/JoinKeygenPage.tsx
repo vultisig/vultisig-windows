@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Match } from '../../../lib/ui/base/Match'
 import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
@@ -17,7 +18,6 @@ import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep'
 import { CurrentServiceNameProvider } from '../shared/state/currentServiceName'
 import { CurrentSessionIdProvider } from '../shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../state/currentKeygenType'
-import { CurrentServerTypeProvider } from '../state/currentServerType'
 import { JoinKeygenPeersStep } from './JoinKeygenPeersStep'
 import { JoinKeygenProcess } from './JoinKeygenProcess'
 import { JoinKeygenVaultProvider } from './JoinKeygenVaultProvider'
@@ -54,7 +54,7 @@ export const JoinKeygenPage = () => {
     <IsInitiatingDeviceProvider value={false}>
       <MpcLibProvider value={fromLibType(libType)}>
         <CurrentServiceNameProvider value={serviceName}>
-          <CurrentServerTypeProvider initialValue={serverType}>
+          <MpcServerTypeProvider initialValue={serverType}>
             <CurrentSessionIdProvider value={sessionId}>
               <CurrentKeygenTypeProvider value={keygenType}>
                 <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
@@ -85,7 +85,7 @@ export const JoinKeygenPage = () => {
                 </CurrentHexEncryptionKeyProvider>
               </CurrentKeygenTypeProvider>
             </CurrentSessionIdProvider>
-          </CurrentServerTypeProvider>
+          </MpcServerTypeProvider>
         </CurrentServiceNameProvider>
       </MpcLibProvider>
     </IsInitiatingDeviceProvider>

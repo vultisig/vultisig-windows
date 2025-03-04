@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName'
 import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId'
-import { useCurrentServerType } from '../../../keygen/state/currentServerType'
 import {
   getJoinKeygenUrl,
   GetJoinKeygenUrlInput,
@@ -14,7 +14,7 @@ import { useVaultName } from '../../state/vaultName'
 
 export const useJoinKeygenUrlQuery = () => {
   const sessionId = useCurrentSessionId()
-  const [serverType] = useCurrentServerType()
+  const [serverType] = useMpcServerType()
   const [vaultName] = useVaultName()
   const serviceName = useCurrentServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()

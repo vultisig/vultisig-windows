@@ -1,16 +1,9 @@
 import styled from 'styled-components'
 
-import { UnstyledButton } from '../../../../lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '../../../../lib/ui/css/borderRadius'
 import { HStack, VStack, vStack } from '../../../../lib/ui/layout/Stack'
 import { getColor } from '../../../../lib/ui/theme/getters'
 import { PageContent } from '../../../../ui/page/PageContent'
-
-export const InfoIconWrapper = styled.a`
-  display: block;
-  color: ${getColor('contrast')};
-  font-size: 20px;
-`
 
 export const InfoIconWrapperForBanner = styled.div`
   color: ${getColor('textShy')};
@@ -41,18 +34,6 @@ export const PageWrapper = styled(PageContent)`
   ${vStack({
     gap: 32,
   })};
-`
-
-export const BottomItemsWrapper = styled(VStack)`
-  align-self: stretch;
-`
-
-export const SwitchModeWrapper = styled.div`
-  align-self: center;
-`
-
-export const SwitchModeButton = styled(UnstyledButton)`
-  text-decoration: underline;
 `
 
 export const LocalPillWrapper = styled(HStack)`

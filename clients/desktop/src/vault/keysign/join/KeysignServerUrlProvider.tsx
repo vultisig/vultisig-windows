@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { ChildrenProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
@@ -10,7 +11,6 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { useKeygenServerUrlQuery } from '../../keygen/server/queries/useKeygenServerUrlQuery'
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage'
-import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType'
 import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl'
 
 export const KeysignServerUrlProvider = ({ children }: ChildrenProp) => {
@@ -32,9 +32,9 @@ export const KeysignServerUrlProvider = ({ children }: ChildrenProp) => {
       value={query}
       success={value => (
         <CurrentServerUrlProvider value={value}>
-          <CurrentServerTypeProvider initialValue={serverType}>
+          <MpcServerTypeProvider initialValue={serverType}>
             {children}
-          </CurrentServerTypeProvider>
+          </MpcServerTypeProvider>
         </CurrentServerUrlProvider>
       )}
       error={() => (
