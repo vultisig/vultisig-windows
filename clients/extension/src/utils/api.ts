@@ -1,3 +1,4 @@
+import { SolanaJupiterToken } from '@clients/desktop/src/coin/jupiter/token'
 import { tss } from '@clients/desktop/wailsjs/go/models'
 import {
   ThornodeTxResponse,
@@ -14,7 +15,6 @@ import {
 import { Chain } from '@core/chain/Chain'
 import axios from 'axios'
 import { TransactionResponse } from 'ethers'
-import { SolanaJupiterToken } from '@clients/desktop/src/coin/jupiter/token'
 namespace Derivation {
   export interface Params {
     publicKeyEcdsa: string

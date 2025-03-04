@@ -1,10 +1,10 @@
+import api from '@clients/extension/src/utils/api'
 import {
   ChainProps,
   TransactionDetails,
   TransactionType,
 } from '@clients/extension/src/utils/interfaces'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import api from '@clients/extension/src/utils/api'
 
 const transactionHandlers = {
   Keplr: (

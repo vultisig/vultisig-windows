@@ -18,6 +18,8 @@ import {
   TransactionType,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
+import { Chain } from '@core/chain/Chain'
+import { rootApiUrl } from '@core/config'
 import {
   CosmJSOfflineSigner,
   CosmJSOfflineSignerOnlyAmino,
@@ -35,6 +37,11 @@ import {
   StdTx,
 } from '@keplr-wallet/types'
 import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  getAccount,
+  TOKEN_PROGRAM_ID,
+} from '@solana/spl-token'
+import {
   Connection,
   PublicKey,
   SystemInstruction,
@@ -46,13 +53,6 @@ import base58 from 'bs58'
 import EventEmitter from 'events'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
-import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  getAccount,
-  TOKEN_PROGRAM_ID,
-} from '@solana/spl-token'
-import { Chain } from '@core/chain/Chain'
-import { rootApiUrl } from '@core/config'
 
 enum NetworkKey {
   MAINNET = 'mainnet',

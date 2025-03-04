@@ -298,7 +298,6 @@ const Component = () => {
                       }))
                       handleCustomMessagePending()
                     } else {
-
                       const preSignedInputData = getPreSignedInputData({
                         chain: transaction.chain.chain,
                         keysignPayload: keysignPayload!,
