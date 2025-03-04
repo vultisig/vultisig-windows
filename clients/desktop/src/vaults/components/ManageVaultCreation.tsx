@@ -21,14 +21,6 @@ export const ManageVaultCreation = () => {
           <PlusIcon /> {t('add_new_vault')}
         </HStack>
       </Button>
-      <Button
-        onClick={() => {
-          navigate('importVault')
-        }}
-        kind="outlined"
-      >
-        {t('import_existing_vault')}
-      </Button>
     </VStack>
   )
 }
