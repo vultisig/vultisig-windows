@@ -19,6 +19,7 @@ import {
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { Query } from '../../../../lib/ui/query/Query'
 import { Text } from '../../../../lib/ui/text'
+import { MpcServerTypeManager } from '../../../../mpc/serverType/MpcServerTypeManager'
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { PageHeader } from '../../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
@@ -40,8 +41,6 @@ import {
   LocalPillWrapper,
   PageWrapper,
   PillWrapper,
-  SwitchModeButton,
-  SwitchModeWrapper,
 } from './SecureVaultKeygenPeerDiscoveryStep.styles'
 
 type KeygenPeerDiscoveryStepProps = OnForwardProp &
@@ -62,7 +61,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
   currentDevice,
 }: KeygenPeerDiscoveryStepProps) => {
   const [overlayShown, setHasShownOverlay] = useState(true)
-  const [serverType, setServerType] = useMpcServerType()
+  const [serverType] = useMpcServerType()
   const isLocalServerType = serverType === 'local'
   const [showWarning, { toggle }] = useBoolean(true)
   const { t } = useTranslation()
@@ -182,30 +181,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
           <Button kind="primary" type="submit" isDisabled={isDisabled}>
             {isDisabled ? t('waitingOnDevices') : t('next')}
           </Button>
-          <SwitchModeWrapper>
-            {serverType === 'local' ? (
-              <Text as="div" color="shy" size={12} weight={500}>
-                <SwitchModeButton
-                  onClick={() =>
-                    setServerType(isLocalServerType ? 'relay' : 'local')
-                  }
-                >
-                  {t('switchToInternet')}
-                </SwitchModeButton>
-              </Text>
-            ) : (
-              <Text color="shy" size={12} weight={500}>
-                {t('signPrivately')}{' '}
-                <SwitchModeButton
-                  onClick={() =>
-                    setServerType(isLocalServerType ? 'relay' : 'local')
-                  }
-                >
-                  {t('switchToLocal')}
-                </SwitchModeButton>
-              </Text>
-            )}
-          </SwitchModeWrapper>
+          <MpcServerTypeManager />
         </BottomItemsWrapper>
         {overlayShown && (
           <SecureVaultKeygenOverlay
