@@ -13,7 +13,7 @@ export const ManageVaultCreation = () => {
     <VStack gap={20}>
       <Button
         onClick={() => {
-          navigate('setupVault', { params: {} })
+          navigate('newVault')
         }}
         kind="primary"
       >
