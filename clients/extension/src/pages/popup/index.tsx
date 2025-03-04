@@ -1,6 +1,7 @@
 import '@clients/extension/src/styles/index.scss'
 import '@clients/extension/src/pages/popup/index.scss'
 
+import { WalletCoreProvider } from '@clients/desktop/src/providers/WalletCoreProvider'
 import ConfigProvider from '@clients/extension/src/components/config-provider'
 import i18n from '@clients/extension/src/i18n/config'
 import Routing from '@clients/extension/src/pages/popup/routes'
@@ -26,6 +27,8 @@ const Component = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Component />
+    <WalletCoreProvider>
+      <Component />
+    </WalletCoreProvider>
   </StrictMode>
 )

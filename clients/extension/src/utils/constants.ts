@@ -8,29 +8,6 @@ export enum CosmosMsgType {
   MSG_SEND = 'cosmos-sdk/MsgSend',
 }
 
-export enum ChainTicker {
-  BTC = 'BTC',
-  DOGE = 'DOGE',
-  LTC = 'LTC',
-  BCH = 'BCH',
-  ETH = 'ETH',
-  AVAX = 'AVAX',
-  BNB = 'BNB',
-  GAIA = 'GAIA',
-  THOR = 'RUNE',
-  BSC = 'BSC',
-  BASE = 'BASE',
-  SOL = 'SOL',
-  CRO = 'CRO',
-  DYDX = 'DYDX',
-  DASH = 'DASH',
-  ATOM = 'ATOM',
-  KUJI = 'KUJI',
-  CACAO = 'CACAO',
-  OSMO = 'OSMO',
-  MATIC = 'MATIC',
-}
-
 export enum MessageKey {
   BITCOIN_REQUEST = 'bitcoin',
   BITCOIN_CASH_REQUEST = 'bitcoincash',
@@ -91,11 +68,6 @@ export enum EventMethod {
   ERROR = 'ERROR',
   MESSAGE = 'MESSAGE',
   NETWORK_CHANGED = 'networkChanged',
-}
-
-export enum TssKeysignType {
-  ECDSA = 'ECDSA',
-  EdDSA = 'EdDSA',
 }
 
 export namespace RequestMethod {
