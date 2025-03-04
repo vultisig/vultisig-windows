@@ -1,5 +1,6 @@
 import { Match } from '../../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
+import { MpcServerTypeProvider } from '../../../../mpc/serverType/state/mpcServerType'
 import { IsInitiatingDeviceProvider } from '../../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack'
@@ -8,7 +9,6 @@ import { MediatorManager } from '../../../keygen/shared/peerDiscovery/MediatorMa
 import { GeneratedServiceNameProvider } from '../../../keygen/shared/state/currentServiceName'
 import { GeneratedSessionIdProvider } from '../../../keygen/shared/state/currentSessionId'
 import { CurrentLocalPartyIdProvider } from '../../../keygen/state/currentLocalPartyId'
-import { CurrentServerTypeProvider } from '../../../keygen/state/currentServerType'
 import { WaitForServerToJoinStep } from '../../../server/components/WaitForServerToJoinStep'
 import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep'
 import { PasswordProvider } from '../../../server/password/state/password'
@@ -47,7 +47,7 @@ export const StartFastKeysignPage = () => {
               <PeersSelectionRecordProvider initialValue={{}}>
                 <GeneratedSessionIdProvider>
                   <GeneratedHexEncryptionKeyProvider>
-                    <CurrentServerTypeProvider initialValue="relay">
+                    <MpcServerTypeProvider initialValue="relay">
                       <ServerUrlDerivedFromServerTypeProvider>
                         <MediatorManager />
                         <Match
@@ -69,7 +69,7 @@ export const StartFastKeysignPage = () => {
                           )}
                         />
                       </ServerUrlDerivedFromServerTypeProvider>
-                    </CurrentServerTypeProvider>
+                    </MpcServerTypeProvider>
                   </GeneratedHexEncryptionKeyProvider>
                 </GeneratedSessionIdProvider>
               </PeersSelectionRecordProvider>

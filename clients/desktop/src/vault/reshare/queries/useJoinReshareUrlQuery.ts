@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
 import { useCurrentServiceName } from '../../keygen/shared/state/currentServiceName'
 import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId'
-import { useCurrentServerType } from '../../keygen/state/currentServerType'
 import {
   getJoinReshareUrl,
   GetJoinReshareUrlInput,
@@ -13,7 +13,7 @@ import { useCurrentVault } from '../../state/currentVault'
 
 export const useJoinReshareUrlQuery = () => {
   const sessionId = useCurrentSessionId()
-  const [serverType] = useCurrentServerType()
+  const [serverType] = useMpcServerType()
   const serviceName = useCurrentServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const hexChainCode = useCurrentHexChainCode()

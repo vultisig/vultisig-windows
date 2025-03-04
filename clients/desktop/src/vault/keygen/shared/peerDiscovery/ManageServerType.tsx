@@ -10,8 +10,8 @@ import { HStack, hStack } from '../../../../lib/ui/layout/Stack'
 import { IsActiveProp } from '../../../../lib/ui/props'
 import { text } from '../../../../lib/ui/text'
 import { matchColor } from '../../../../lib/ui/theme/getters'
+import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { IconWrapper } from '../../../../pages/edItVault/EditVaultPage.styles'
-import { useCurrentServerType } from '../../state/currentServerType'
 import { KeygenServerTypeIcon } from '../KeygenServerTypeIcon'
 
 const Option = styled(UnstyledButton)<IsActiveProp>`
@@ -49,7 +49,7 @@ const IconContainer = styled(IconWrapper)`
 `
 
 export const ManageServerType = () => {
-  const [serverType, setServerType] = useCurrentServerType()
+  const [serverType, setServerType] = useMpcServerType()
 
   const { t } = useTranslation()
 

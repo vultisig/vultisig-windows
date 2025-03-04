@@ -2,13 +2,13 @@ import { useTranslation } from 'react-i18next'
 
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
-import { useCurrentServerType } from '../state/currentServerType'
+import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
 import { KeygenServerTypeIcon } from './KeygenServerTypeIcon'
 
 export const KeygenNetworkReminder = () => {
   const { t } = useTranslation()
 
-  const [serverType] = useCurrentServerType()
+  const [serverType] = useMpcServerType()
 
   return (
     <VStack alignItems="center" gap={8}>

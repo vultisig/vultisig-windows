@@ -19,6 +19,7 @@ import {
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { Query } from '../../../../lib/ui/query/Query'
 import { Text } from '../../../../lib/ui/text'
+import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { PageHeader } from '../../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
@@ -27,7 +28,6 @@ import { CurrentPeersCorrector } from '../../../keygen/shared/peerDiscovery/Curr
 import { DownloadKeygenQrCode } from '../../../keygen/shared/peerDiscovery/DownloadKeygenQrCode'
 import { KeygenPeerDiscoveryQrCode } from '../../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryQrCode'
 import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
-import { useCurrentServerType } from '../../../keygen/state/currentServerType'
 import { SecureVaultKeygenOverlay } from '../components/SecureVaultKeygenOverlay'
 import { SecureVaultPeerOption } from '../components/SecureVaultPeerOption'
 import {
@@ -62,7 +62,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
   currentDevice,
 }: KeygenPeerDiscoveryStepProps) => {
   const [overlayShown, setHasShownOverlay] = useState(true)
-  const [serverType, setServerType] = useCurrentServerType()
+  const [serverType, setServerType] = useMpcServerType()
   const isLocalServerType = serverType === 'local'
   const [showWarning, { toggle }] = useBoolean(true)
   const { t } = useTranslation()

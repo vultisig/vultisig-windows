@@ -1,5 +1,6 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { useDefaultMpcLib } from '../../../mpc/state/defaultMpcLib'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
@@ -11,7 +12,6 @@ import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentS
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
-import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType'
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
 import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep'
 import { SetupVaultNameStep } from '../SetupVaultNameStep'
@@ -51,7 +51,7 @@ export const SetupSecureVaultPage = () => {
               <GeneratedSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>
                   <GeneratedHexChainCodeProvider>
-                    <CurrentServerTypeProvider initialValue="relay">
+                    <MpcServerTypeProvider initialValue="relay">
                       <ServerUrlDerivedFromServerTypeProvider>
                         <GeneratedLocalPartyIdProvider>
                           <SetupVaultNameProvider>
@@ -98,7 +98,7 @@ export const SetupSecureVaultPage = () => {
                           </SetupVaultNameProvider>
                         </GeneratedLocalPartyIdProvider>
                       </ServerUrlDerivedFromServerTypeProvider>
-                    </CurrentServerTypeProvider>
+                    </MpcServerTypeProvider>
                   </GeneratedHexChainCodeProvider>
                 </GeneratedHexEncryptionKeyProvider>
               </GeneratedSessionIdProvider>
