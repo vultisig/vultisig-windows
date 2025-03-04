@@ -1,5 +1,5 @@
 import { BrowserOpenURL } from '@wailsapp/runtime'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../../lib/ui/base/Match'
@@ -11,13 +11,8 @@ import { InfoIcon } from '../../../../lib/ui/icons/InfoIcon'
 import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
 import { TakeWholeSpaceCenterContent } from '../../../../lib/ui/layout/TakeWholeSpaceCenterContent'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
-import {
-  IsDisabledProp,
-  OnBackProp,
-  OnForwardProp,
-} from '../../../../lib/ui/props'
+import { OnBackProp, OnForwardProp } from '../../../../lib/ui/props'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
-import { Query } from '../../../../lib/ui/query/Query'
 import { Text } from '../../../../lib/ui/text'
 import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryFormFooter'
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
@@ -29,7 +24,9 @@ import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled'
 import { CurrentPeersCorrector } from '../../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
 import { DownloadKeygenQrCode } from '../../../keygen/shared/peerDiscovery/DownloadKeygenQrCode'
 import { KeygenPeerDiscoveryQrCode } from '../../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryQrCode'
-import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
+import { useCurrentLocalPartyId } from '../../../keygen/state/currentLocalPartyId'
+import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
+import { useJoinKeygenUrlQuery } from '../../peers/queries/useJoinKeygenUrlQuery'
 import { SecureVaultKeygenOverlay } from '../components/SecureVaultKeygenOverlay'
 import { SecureVaultPeerOption } from '../components/SecureVaultPeerOption'
 import {
@@ -42,37 +39,30 @@ import {
   PillWrapper,
 } from './SecureVaultKeygenPeerDiscoveryStep.styles'
 
-type KeygenPeerDiscoveryStepProps = OnForwardProp &
-  Partial<OnBackProp> &
-  IsDisabledProp & {
-    joinUrlQuery: Query<string>
-    currentDevice: string
-  }
-
 const educationUrl =
   'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
+
+const requiredPeers = 1
 
 export const SecureVaultKeygenPeerDiscoveryStep = ({
   onForward,
   onBack,
-  isDisabled,
-  joinUrlQuery,
-  currentDevice,
-}: KeygenPeerDiscoveryStepProps) => {
+}: OnForwardProp & OnBackProp) => {
   const [overlayShown, setHasShownOverlay] = useState(true)
   const [serverType] = useMpcServerType()
-  const isLocalServerType = serverType === 'local'
   const [showWarning, { toggle }] = useBoolean(true)
   const { t } = useTranslation()
-  const queryResult = usePeerOptionsQuery()
-  const peers = queryResult.data || []
-  const displayedDevices = [currentDevice, ...peers]
+  const joinUrlQuery = useJoinKeygenUrlQuery()
+  const currentDevice = useCurrentLocalPartyId()
+  const selectedPeers = useSelectedPeers()
+  const displayedDevices = [currentDevice, ...selectedPeers]
   const shouldShowOptional = displayedDevices.length === 3
-  const numberOfItems = shouldShowOptional ? 4 : 3
 
-  while (displayedDevices.length < numberOfItems) {
-    displayedDevices.push('')
-  }
+  const isDisabled = useMemo(() => {
+    if (selectedPeers.length < requiredPeers) {
+      return t('select_n_devices', { count: requiredPeers })
+    }
+  }, [selectedPeers.length, t])
 
   return (
     <>
@@ -93,8 +83,6 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
                 <DownloadKeygenQrCode value={value} />
               </>
             )}
-            error={() => null}
-            pending={() => null}
           />
         }
       />
@@ -123,7 +111,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
           />
           <ContentWrapper gap={24} alignItems="center">
             <Match
-              value={isLocalServerType ? 'local' : 'relay'}
+              value={serverType}
               local={() => (
                 <LocalPillWrapper alignItems="baseline">
                   <CloudOffWrapper>
@@ -157,7 +145,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
             <VStack gap={24}>
               <Text color="contrast" size={22} weight="500">
                 {t('devicesStatus', {
-                  currentPeers: peers.length + 1,
+                  currentPeers: selectedPeers.length + 1,
                 })}
               </Text>
               <CurrentPeersCorrector />
