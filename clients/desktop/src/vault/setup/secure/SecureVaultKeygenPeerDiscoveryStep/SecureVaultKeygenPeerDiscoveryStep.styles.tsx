@@ -5,14 +5,16 @@ import { HStack, VStack, vStack } from '../../../../lib/ui/layout/Stack'
 import { getColor } from '../../../../lib/ui/theme/getters'
 import { PageContent } from '../../../../ui/page/PageContent'
 
-export const InfoIconWrapperForBanner = styled.div`
+export const InfoIconWrapperForBanner = styled(HStack)`
+  align-items: center;
   color: ${getColor('textShy')};
 `
 
 export const CloseIconWrapper = styled.div`
   font-size: 12px;
-  padding: 4px 6px;
-  border-radius: 99px;
+  padding: 4px 4px;
+  padding-bottom: 1px;
+  border-radius: 24px;
   background-color: ${getColor('foregroundExtra')};
 `
 
@@ -44,6 +46,7 @@ export const LocalPillWrapper = styled(HStack)`
   align-self: stretch;
 `
 
-export const CloudOffWrapper = styled.div`
+export const CloudOffWrapper = styled(HStack)`
+  align-items: center;
   font-size: 17px;
 `
