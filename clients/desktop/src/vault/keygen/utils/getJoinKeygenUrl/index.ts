@@ -1,14 +1,14 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { KeygenMessageSchema } from '@core/communication/vultisig/keygen/v1/keygen_message_pb'
 import { MpcLib } from '@core/mpc/mpcLib'
+import { MpcServerType } from '@core/mpc/MpcServerType'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config'
 import { toCompressedString } from '../../../../utils/protobuf/toCompressedString'
-import { KeygenServerType } from '../../server/KeygenServerType'
 
 export type GetJoinKeygenUrlInput = {
-  serverType: KeygenServerType
+  serverType: MpcServerType
   vaultName: string
   serviceName: string
   sessionId: string

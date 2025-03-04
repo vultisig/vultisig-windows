@@ -3,20 +3,17 @@ import {
   KeysignMessageSchema,
   KeysignPayloadSchema,
 } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { MpcServerType, mpcServerUrl } from '@core/mpc/MpcServerType'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 
 import { KeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload'
 import { deepLinkBaseUrl } from '../../../../deeplink/config'
 import { toCompressedString } from '../../../../utils/protobuf/toCompressedString'
-import {
-  KeygenServerType,
-  keygenServerUrl,
-} from '../../../keygen/server/KeygenServerType'
 import { uploadPayloadToServer } from '../../../server/utils/uploadPayloadToServer'
 
 export type GetJoinKeysignUrlInput = {
-  serverType: KeygenServerType
+  serverType: MpcServerType
   serviceName: string
   sessionId: string
   hexEncryptionKey: string
@@ -70,7 +67,7 @@ export const getJoinKeysignUrl = async ({
     const compressedPayload = await toCompressedString(binary)
     const payloadId = await uploadPayloadToServer({
       payload: compressedPayload,
-      serverUrl: keygenServerUrl[serverType],
+      serverUrl: mpcServerUrl[serverType],
     })
 
     return getJoinKeysignUrl({

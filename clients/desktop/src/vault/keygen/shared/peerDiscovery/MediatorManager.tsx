@@ -5,12 +5,12 @@ import {
   AdvertiseMediator,
   StopAdvertiseMediator,
 } from '../../../../../wailsjs/go/mediator/Server'
-import { useCurrentServerType } from '../../state/currentServerType'
+import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { useCurrentServiceName } from '../state/currentServiceName'
 
 export const MediatorManager = () => {
   const serviceName = useCurrentServiceName()
-  const [serverType] = useCurrentServerType()
+  const [serverType] = useMpcServerType()
 
   const { mutate: start } = useMutation({
     mutationFn: async () => AdvertiseMediator(serviceName),
