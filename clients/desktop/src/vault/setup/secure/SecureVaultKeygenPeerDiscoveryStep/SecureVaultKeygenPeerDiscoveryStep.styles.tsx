@@ -42,10 +42,6 @@ export const PageWrapper = styled(PageContent)`
   })};
 `
 
-export const BottomItemsWrapper = styled(VStack)`
-  align-self: stretch;
-`
-
 export const LocalPillWrapper = styled(HStack)`
   padding: 12px;
   gap: 12px;

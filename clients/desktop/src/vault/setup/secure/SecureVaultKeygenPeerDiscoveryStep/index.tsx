@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../../lib/ui/base/Match'
-import { Button } from '../../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps'
 import { useBoolean } from '../../../../lib/ui/hooks/useBoolean'
 import { CloseIcon } from '../../../../lib/ui/icons/CloseIcon'
@@ -19,7 +18,7 @@ import {
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { Query } from '../../../../lib/ui/query/Query'
 import { Text } from '../../../../lib/ui/text'
-import { MpcServerTypeManager } from '../../../../mpc/serverType/MpcServerTypeManager'
+import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryFormFooter'
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { PageHeader } from '../../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
@@ -32,7 +31,6 @@ import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/querie
 import { SecureVaultKeygenOverlay } from '../components/SecureVaultKeygenOverlay'
 import { SecureVaultPeerOption } from '../components/SecureVaultPeerOption'
 import {
-  BottomItemsWrapper,
   CloseIconWrapper,
   CloudOffWrapper,
   ContentWrapper,
@@ -177,12 +175,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
             </VStack>
           </ContentWrapper>
         </VStack>
-        <BottomItemsWrapper gap={8}>
-          <Button kind="primary" type="submit" isDisabled={isDisabled}>
-            {isDisabled ? t('waitingOnDevices') : t('next')}
-          </Button>
-          <MpcServerTypeManager />
-        </BottomItemsWrapper>
+        <PeerDiscoveryFormFooter isDisabled={isDisabled} />
         {overlayShown && (
           <SecureVaultKeygenOverlay
             onCompleted={() => setHasShownOverlay(false)}
