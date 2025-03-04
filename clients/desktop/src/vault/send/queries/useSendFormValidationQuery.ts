@@ -11,6 +11,9 @@ import { useSendAmount } from '../state/amount'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendChainSpecificQuery } from './useSendChainSpecificQuery'
+import { useSender } from '../sender/hooks/useSender'
+import { Chain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 export const useSendFormValidationQuery = () => {
   const [receiver] = useSendReceiver()
@@ -23,6 +26,8 @@ export const useSendFormValidationQuery = () => {
   const [amount] = useSendAmount()
 
   const walletCore = useAssertWalletCore()
+
+  const senderAddress = useSender()
 
   return useTransformQueriesData(
     {
@@ -51,9 +56,17 @@ export const useSendFormValidationQuery = () => {
           throw new Error(t('send_amount_exceeds_balance'))
         }
 
+        if (
+          coin.chain == Chain.Tron &&
+          coin.ticker == chainFeeCoin[Chain.Tron].ticker &&
+          receiver === senderAddress
+        ) {
+          throw new Error(t('same_sender_receiver_error'))
+        }
+
         return null
       },
-      [amount, coin, receiver, t, walletCore]
+      [amount, coin, receiver, senderAddress, t, walletCore]
     )
   )
 }
