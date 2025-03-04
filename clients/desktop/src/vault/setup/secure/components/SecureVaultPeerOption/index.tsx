@@ -1,11 +1,13 @@
+import { recommendedPeers } from '@core/mpc/peers/config'
 import { useRive } from '@rive-app/react-canvas'
 import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../../../lib/ui/base/Match'
 import { CheckIconGreen } from '../../../../../lib/ui/icons/CheckIconGreen'
-import { HStack, VStack } from '../../../../../lib/ui/layout/Stack'
-import { ValueProp } from '../../../../../lib/ui/props'
+import { HStack } from '../../../../../lib/ui/layout/Stack'
+import { IndexProp, ValueProp } from '../../../../../lib/ui/props'
 import { Text } from '../../../../../lib/ui/text'
+import { PeerOptionContainer } from '../../../../../mpc/peers/option/PeerOptionContainer'
 import {
   formatKeygenDeviceName,
   parseLocalPartyId,
@@ -15,19 +17,15 @@ import {
   CheckIconWrapper,
   RiveWrapper,
   StyledText,
-  Wrapper,
 } from './SecureVaultPeerOption.styled'
 
-type SecureVaultPeerOptionProps = {
-  isCurrentDevice: boolean
-  deviceNumber: number
+type SecureVaultPeerOptionProps = IndexProp & {
   shouldShowOptionalDevice: boolean
 }
 
 export const SecureVaultPeerOption = ({
   value,
-  isCurrentDevice,
-  deviceNumber,
+  index,
   shouldShowOptionalDevice,
 }: ValueProp<string> & SecureVaultPeerOptionProps) => {
   const [record, setRecord] = usePeersSelectionRecord()
@@ -41,7 +39,7 @@ export const SecureVaultPeerOption = ({
   })
 
   const handleClick = () => {
-    if (isCurrentDevice || !value) return
+    if (!value) return
 
     setRecord(prev => ({
       ...prev,
@@ -50,42 +48,25 @@ export const SecureVaultPeerOption = ({
   }
 
   return (
-    <Wrapper
-      role="button"
-      tabIndex={0}
-      onClick={handleClick}
-      isActive={isSelected}
-      isCurrentDevice={isCurrentDevice}
-      gap={8}
-      alignItems="center"
-    >
+    <PeerOptionContainer onClick={handleClick} isActive={isSelected}>
       <Match
         value={
-          isCurrentDevice
-            ? 'currentDevice'
-            : value.length === 0 || shouldShowOptionalDevice
-              ? 'placeholder'
-              : 'device'
+          value.length === 0 || shouldShowOptionalDevice
+            ? 'placeholder'
+            : 'device'
         }
-        currentDevice={() => (
-          <VStack>
-            <Text color="contrast" size={14} weight="500">
-              {formattedDeviceName}
-              <Text color="shy" size={13} weight="500">
-                {t('thisDevice')}
-              </Text>
-            </Text>
-          </VStack>
-        )}
         placeholder={() => (
           <>
             <RiveWrapper>
               <RiveComponent />
             </RiveWrapper>
             <StyledText color="contrast" size={14} weight="500">
-              {t(deviceNumber === 4 ? 'optionalDevice' : 'scanWithDevice', {
-                deviceNumber,
-              })}
+              {t(
+                index > recommendedPeers ? 'optionalDevice' : 'scanWithDevice',
+                {
+                  index,
+                }
+              )}
             </StyledText>
           </>
         )}
@@ -107,6 +88,6 @@ export const SecureVaultPeerOption = ({
           </HStack>
         )}
       />
-    </Wrapper>
+    </PeerOptionContainer>
   )
 }
