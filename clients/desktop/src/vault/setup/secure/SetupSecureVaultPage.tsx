@@ -13,7 +13,6 @@ import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSes
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
-import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep'
 import { SetupVaultNameStep } from '../SetupVaultNameStep'
 import { SetupVaultCreationStep } from '../shared/SetupVaultCreationStep'
 import { VaultTypeProvider } from '../shared/state/vaultType'
@@ -22,6 +21,7 @@ import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey'
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType'
 import { SetupVaultNameProvider } from '../state/vaultName'
+import { SecureVaultKeygenPeerDiscoveryStep } from './SecureVaultKeygenPeerDiscoveryStep'
 import { SecureVaultKeygenStartSessionStep } from './SecureVaultKeygenStartSessionStep'
 
 const steps = [
@@ -74,7 +74,7 @@ export const SetupSecureVaultPage = () => {
                                     />
                                   )}
                                   peers={() => (
-                                    <SetupVaultPeerDiscoveryStep
+                                    <SecureVaultKeygenPeerDiscoveryStep
                                       onBack={() => setStep(steps[0])}
                                       onForward={toNextStep}
                                     />

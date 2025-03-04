@@ -1,3 +1,4 @@
+import { range } from '@lib/utils/array/range'
 import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -43,6 +44,7 @@ const educationUrl =
   'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
 
 const requiredPeers = 1
+const recommendedPeers = 2
 
 export const SecureVaultKeygenPeerDiscoveryStep = ({
   onForward,
@@ -56,7 +58,12 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
   const currentDevice = useCurrentLocalPartyId()
   const selectedPeers = useSelectedPeers()
   const displayedDevices = [currentDevice, ...selectedPeers]
-  const shouldShowOptional = displayedDevices.length === 3
+  const shouldShowOptional = selectedPeers.length < recommendedPeers
+  if (shouldShowOptional) {
+    displayedDevices.push(
+      ...range(recommendedPeers - selectedPeers.length).map(() => '')
+    )
+  }
 
   const isDisabled = useMemo(() => {
     if (selectedPeers.length < requiredPeers) {
