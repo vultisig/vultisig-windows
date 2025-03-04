@@ -5,12 +5,6 @@ import { HStack, VStack, vStack } from '../../../../lib/ui/layout/Stack'
 import { getColor } from '../../../../lib/ui/theme/getters'
 import { PageContent } from '../../../../ui/page/PageContent'
 
-export const InfoIconWrapper = styled.a`
-  display: block;
-  color: ${getColor('contrast')};
-  font-size: 20px;
-`
-
 export const InfoIconWrapperForBanner = styled.div`
   color: ${getColor('textShy')};
 `

@@ -1,3 +1,4 @@
+import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -22,6 +23,7 @@ import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryForm
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { PageHeader } from '../../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
+import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
 import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled'
 import { CurrentPeersCorrector } from '../../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
@@ -34,7 +36,6 @@ import {
   CloseIconWrapper,
   CloudOffWrapper,
   ContentWrapper,
-  InfoIconWrapper,
   InfoIconWrapperForBanner,
   LocalPillWrapper,
   PageWrapper,
@@ -48,7 +49,7 @@ type KeygenPeerDiscoveryStepProps = OnForwardProp &
     currentDevice: string
   }
 
-const QR_CODE_LINK =
+const educationUrl =
   'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
 
 export const SecureVaultKeygenPeerDiscoveryStep = ({
@@ -82,16 +83,15 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
           <MatchQuery
             value={joinUrlQuery}
             success={value => (
-              <HStack gap={12} alignItems="center">
-                <InfoIconWrapper
-                  href={QR_CODE_LINK}
-                  target="_blank"
-                  referrerPolicy="no-referrer"
-                >
-                  <InfoIcon />
-                </InfoIconWrapper>
+              <>
+                <PageHeaderIconButton
+                  onClick={() => {
+                    BrowserOpenURL(educationUrl)
+                  }}
+                  icon={<InfoIcon />}
+                />
                 <DownloadKeygenQrCode value={value} />
-              </HStack>
+              </>
             )}
             error={() => null}
             pending={() => null}
