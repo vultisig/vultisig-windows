@@ -178,7 +178,7 @@ export namespace TransactionType {
       decimals: number
     }
     asset: {
-      chain: string
+      chain: Chain
       symbol: string
       ticker: string
     }
@@ -191,7 +191,7 @@ export namespace TransactionType {
   export interface Vultisig {
     txType: 'Vultisig'
     asset: {
-      chain: string
+      chain: Chain
       ticker: string
       symbol?: string
     }
@@ -211,9 +211,15 @@ export namespace TransactionType {
 
   export interface Phantom {
     txType: 'Phantom'
+    asset: {
+      chain: Chain
+      ticker?: string
+      symbol?: string
+      mint?: string
+    }
     from: string
-    to: string
-    value: string
+    to?: string
+    amount: string
   }
 
   export type WalletTransaction = MetaMask | Ctrl | Keplr | Phantom | Vultisig
@@ -221,9 +227,10 @@ export namespace TransactionType {
 
 export interface TransactionDetails {
   asset: {
-    chain: string
+    chain: Chain
     ticker: string
     symbol?: string
+    mint?: string
   }
   from: string
   to?: string

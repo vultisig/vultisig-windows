@@ -14,7 +14,7 @@ import {
 import { Chain } from '@core/chain/Chain'
 import axios from 'axios'
 import { TransactionResponse } from 'ethers'
-
+import { SolanaJupiterToken } from '@clients/desktop/src/coin/jupiter/token'
 namespace Derivation {
   export interface Params {
     publicKeyEcdsa: string
@@ -42,6 +42,9 @@ const apiRef = {
   vultisig: {
     airdrop: 'https://airdrop.vultisig.com/',
     api: 'https://api.vultisig.com/',
+  },
+  jupiter: {
+    token: 'https://tokens.jup.ag/token',
   },
 }
 
@@ -122,6 +125,13 @@ export default {
           params: [hash],
         })
         .then(({ data }) => data.result)
+    },
+  },
+  solana: {
+    async fetchSolanaTokenInfo(address: string) {
+      return (
+        await api.get<SolanaJupiterToken>(`${apiRef.jupiter.token}/${address}`)
+      ).data
     },
   },
   thorchain: {

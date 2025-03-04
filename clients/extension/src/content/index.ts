@@ -35,8 +35,10 @@ import {
   StdTx,
 } from '@keplr-wallet/types'
 import {
+  Connection,
   PublicKey,
   SystemInstruction,
+  SystemProgram,
   Transaction,
   VersionedTransaction,
 } from '@solana/web3.js'
@@ -44,6 +46,13 @@ import base58 from 'bs58'
 import EventEmitter from 'events'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  getAccount,
+  TOKEN_PROGRAM_ID,
+} from '@solana/spl-token'
+import { Chain } from '@core/chain/Chain'
+import { rootApiUrl } from '@core/config'
 
 enum NetworkKey {
   MAINNET = 'mainnet',
@@ -608,7 +617,7 @@ namespace Provider {
       this.chainId = 'Solana_mainnet-beta'
       this.isConnected = false
       this.isPhantom = true
-      this.isXDEFI = false
+      this.isXDEFI = true
       this.network = NetworkKey.MAINNET
     }
 
@@ -620,22 +629,78 @@ namespace Provider {
     }
 
     async signTransaction(transaction: Transaction) {
-      const decodedTransfer = SystemInstruction.decodeTransfer(
-        transaction.instructions[0]
-      )
-      const modifiedTransfer: TransactionType.Phantom = {
-        txType: 'Phantom',
-        value: decodedTransfer.lamports.toString(),
-        from: decodedTransfer.fromPubkey.toString(),
-        to: decodedTransfer.toPubkey.toString(),
+      const connection = new Connection(`${rootApiUrl}/solana/`)
+      for (const instruction of transaction.instructions) {
+        let modifiedTransfer: TransactionType.Phantom
+
+        if (instruction.programId.equals(SystemProgram.programId)) {
+          // Handle Native SOL Transfers
+          const decodedTransfer = SystemInstruction.decodeTransfer(instruction)
+          modifiedTransfer = {
+            txType: 'Phantom',
+            asset: { chain: Chain.Solana, ticker: 'SOL' },
+            amount: decodedTransfer.lamports.toString(),
+            from: decodedTransfer.fromPubkey.toString(),
+            to: decodedTransfer.toPubkey.toString(),
+          }
+        } else if (instruction.programId.equals(TOKEN_PROGRAM_ID)) {
+          //  Handle SPL Token Transfers
+          const senderTokenAccountInfo = await getAccount(
+            connection,
+            new PublicKey(instruction.keys[0].pubkey)
+          )
+          let recipient: string
+          try {
+            // Try fetching receiver account
+            const receiverTokenAccountInfo = await getAccount(
+              connection,
+              new PublicKey(instruction.keys[2].pubkey)
+            )
+            recipient = receiverTokenAccountInfo.owner.toString()
+          } catch {
+            console.warn(
+              'Receiver token account not found. Checking for ATA...'
+            )
+            const ataInstruction = transaction.instructions.find(instr =>
+              instr.programId.equals(ASSOCIATED_TOKEN_PROGRAM_ID)
+            )
+            if (ataInstruction) {
+              // The recipient should be in the ATA instruction's keys[0] (payer) or keys[2] (owner)
+              recipient = ataInstruction.keys[2].pubkey.toString()
+            } else {
+              throw new Error('Unable to determine recipient address.')
+            }
+          }
+
+          const amountBytes = instruction.data.slice(1, 9)
+          const amount = new DataView(
+            Uint8Array.from(amountBytes).buffer
+          ).getBigUint64(0, true)
+
+          modifiedTransfer = {
+            txType: 'Phantom',
+            amount: amount.toString(),
+            asset: {
+              chain: Chain.Solana,
+              mint: senderTokenAccountInfo.mint.toString(),
+            },
+            from: senderTokenAccountInfo.owner.toString(),
+            to: recipient,
+          }
+        } else {
+          continue
+        }
+        if (!modifiedTransfer) {
+          throw new Error('Could not parse transaction')
+        }
+        return await this.request({
+          method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+          params: [modifiedTransfer],
+        }).then((result: SendTransactionResponse) => {
+          const rawData = base58.decode(result.raw)
+          return VersionedTransaction.deserialize(rawData)
+        })
       }
-      return await this.request({
-        method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-        params: [modifiedTransfer],
-      }).then((result: SendTransactionResponse) => {
-        const rawData = base58.decode(result.raw)
-        return VersionedTransaction.deserialize(rawData)
-      })
     }
 
     async connect() {
@@ -693,7 +758,7 @@ namespace Provider {
 
       for (const transaction of transactions) {
         const result = await this.signTransaction(transaction)
-        results.push(result)
+        results.push(result!)
       }
 
       return results

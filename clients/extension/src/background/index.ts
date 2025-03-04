@@ -813,7 +813,7 @@ const handleRequest = (
                   from: String(address),
                   to: '',
                   asset: {
-                    chain: 'ETH',
+                    chain: Chain.Ethereum,
                     ticker: 'ETH',
                   },
                 },
@@ -854,7 +854,7 @@ const handleRequest = (
                 from: String(address),
                 to: '',
                 asset: {
-                  chain: 'ETH',
+                  chain: Chain.Ethereum,
                   ticker: 'ETH',
                 },
               },

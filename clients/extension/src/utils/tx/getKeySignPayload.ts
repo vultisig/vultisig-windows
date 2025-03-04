@@ -11,19 +11,39 @@ import {
 import { getChainSpecific } from '@core/keysign/chainSpecific'
 import { toUtf8String } from 'ethers'
 
-import { checkERC20Function } from '../functions'
-import { ITransaction, VaultProps } from '../interfaces'
+import { checkERC20Function } from '@clients/extension/src/utils/functions'
+import {
+  ITransaction,
+  VaultProps,
+} from '@clients/extension/src/utils/interfaces'
+import { Chain } from '@core/chain/Chain'
+import api from '@clients/extension/src/utils/api'
 
 export const getKeysignPayload = (
   transaction: ITransaction,
   vault: VaultProps
 ): Promise<KeysignPayload> => {
-  return new Promise(resolve => {
-    const localCoin = getCoinFromCoinKey({
+  return new Promise(async resolve => {
+    let localCoin = getCoinFromCoinKey({
       chain: transaction.chain.chain,
       id: transaction.transactionDetails.asset.ticker,
     })
-
+    if (!localCoin && transaction.chain.chain === Chain.Solana) {
+      if (!transaction.transactionDetails.asset.mint) {
+        throw new Error('Mint address not provided')
+      }
+      const splToken = await api.solana.fetchSolanaTokenInfo(
+        transaction.transactionDetails.asset.mint
+      )
+      localCoin = {
+        chain: transaction.chain.chain,
+        decimals: splToken.decimals,
+        id: transaction.transactionDetails.asset.mint,
+        logo: splToken.logoURI!,
+        ticker: splToken.symbol,
+        priceProviderId: splToken.extensions?.coingeckoId,
+      }
+    }
     const accountCoin = {
       ...localCoin,
       address: transaction.transactionDetails.from,
@@ -46,6 +66,7 @@ export const getKeysignPayload = (
         isNativeToken: isFeeCoin(accountCoin),
         logo: accountCoin.logo,
         priceProviderId: localCoin?.priceProviderId ?? '',
+        contractAddress: localCoin?.id,
       })
       let modifiedMemo = null
       if (getChainKind(transaction.chain.chain) === 'evm') {
