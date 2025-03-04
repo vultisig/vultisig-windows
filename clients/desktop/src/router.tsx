@@ -69,9 +69,13 @@ export const router = createBrowserRouter([
         path: appPaths.root,
         element: (
           <EmptyVaultsOnly>
-            <NoVaultsHomePage />
+            <NoVaultsHomePage withBackButton={false} />
           </EmptyVaultsOnly>
         ),
+      },
+      {
+        path: appPaths.newVault,
+        element: <NoVaultsHomePage />,
       },
       {
         path: appPaths.onboarding,
