@@ -17,6 +17,7 @@ import { OnBackProp, OnForwardProp } from '../../../../lib/ui/props'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../../lib/ui/text'
 import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'
+import { PeerOption } from '../../../../mpc/peers/option/PeerOption'
 import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryFormFooter'
 import { PeerPlaceholder } from '../../../../mpc/peers/PeerPlaceholder'
 import { PeersContainer } from '../../../../mpc/peers/PeersContainer'
@@ -33,7 +34,6 @@ import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/querie
 import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
 import { useJoinKeygenUrlQuery } from '../../peers/queries/useJoinKeygenUrlQuery'
 import { SecureVaultKeygenOverlay } from '../components/SecureVaultKeygenOverlay'
-import { SecureVaultPeerOption } from '../components/SecureVaultPeerOption'
 import {
   CloseIconWrapper,
   CloudOffWrapper,
@@ -158,7 +158,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
                     return (
                       <>
                         {peerOptions.map(value => (
-                          <SecureVaultPeerOption key={value} value={value} />
+                          <PeerOption key={value} value={value} />
                         ))}
                         {range(recommendedPeers - peerOptions.length).map(
                           index => (
