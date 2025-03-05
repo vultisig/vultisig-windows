@@ -7,11 +7,9 @@ import { useTranslation } from 'react-i18next'
 import { Match } from '../../../lib/ui/base/Match'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { InfoIcon } from '../../../lib/ui/icons/InfoIcon'
-import { VStack } from '../../../lib/ui/layout/Stack'
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
 import { QueryBasedQrCode } from '../../../lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
-import { Text } from '../../../lib/ui/text'
 import { InitiatingDevice } from '../../../mpc/peers/InitiatingDevice'
 import { PeerOption } from '../../../mpc/peers/option/PeerOption'
 import { PeerDiscoveryFormFooter } from '../../../mpc/peers/PeerDiscoveryFormFooter'
@@ -19,6 +17,8 @@ import { PeerPlaceholder } from '../../../mpc/peers/PeerPlaceholder'
 import { PeerRequirementsInfo } from '../../../mpc/peers/PeerRequirementsInfo'
 import { PeersContainer } from '../../../mpc/peers/PeersContainer'
 import { PeersManagerFrame } from '../../../mpc/peers/PeersManagerFrame'
+import { PeersManagerTitle } from '../../../mpc/peers/PeersManagerTitle'
+import { PeersPageContentFrame } from '../../../mpc/peers/PeersPageContentFrame'
 import { MpcLocalServerIndicator } from '../../../mpc/serverType/MpcLocalServerIndicator'
 import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
 import { FitPageContent } from '../../../ui/page/PageContent'
@@ -84,53 +84,47 @@ export const SetupSecureVaultPeerDiscoveryStep = ({
         })}
       >
         <PageFormFrame>
-          <PeersManagerFrame>
+          <PeersPageContentFrame>
             <QueryBasedQrCode value={joinUrlQuery} />
-            <VStack fullWidth gap={24} alignItems="center">
+            <PeersManagerFrame>
               <Match
                 value={serverType}
                 local={() => <MpcLocalServerIndicator />}
                 relay={() => <PeerRequirementsInfo />}
               />
-              <VStack fullWidth gap={24}>
-                <Text color="contrast" size={22} weight="500">
-                  {t('devicesStatus', {
-                    currentPeers: selectedPeers.length + 1,
-                  })}
-                </Text>
-                <CurrentPeersCorrector />
-                <PeersContainer>
-                  <InitiatingDevice />
-                  <MatchQuery
-                    value={peerOptionsQuery}
-                    success={peerOptions => {
-                      return (
-                        <>
-                          {peerOptions.map(value => (
-                            <PeerOption key={value} value={value} />
-                          ))}
-                          {range(recommendedPeers - peerOptions.length).map(
-                            index => (
-                              <PeerPlaceholder key={index}>
-                                {t('scanWithDevice', {
-                                  deviceNumber: index + peerOptions.length + 1,
-                                })}
-                              </PeerPlaceholder>
-                            )
-                          )}
-                          {peerOptions.length >= recommendedPeers && (
-                            <PeerPlaceholder>
-                              {t('optionalDevice')}
+              <PeersManagerTitle target={recommendedPeers + 1} />
+              <CurrentPeersCorrector />
+              <PeersContainer>
+                <InitiatingDevice />
+                <MatchQuery
+                  value={peerOptionsQuery}
+                  success={peerOptions => {
+                    return (
+                      <>
+                        {peerOptions.map(value => (
+                          <PeerOption key={value} value={value} />
+                        ))}
+                        {range(recommendedPeers - peerOptions.length).map(
+                          index => (
+                            <PeerPlaceholder key={index}>
+                              {t('scanWithDevice', {
+                                deviceNumber: index + peerOptions.length + 1,
+                              })}
                             </PeerPlaceholder>
-                          )}
-                        </>
-                      )
-                    }}
-                  />
-                </PeersContainer>
-              </VStack>
-            </VStack>
-          </PeersManagerFrame>
+                          )
+                        )}
+                        {peerOptions.length >= recommendedPeers && (
+                          <PeerPlaceholder>
+                            {t('optionalDevice')}
+                          </PeerPlaceholder>
+                        )}
+                      </>
+                    )
+                  }}
+                />
+              </PeersContainer>
+            </PeersManagerFrame>
+          </PeersPageContentFrame>
           <PeerDiscoveryFormFooter isDisabled={isDisabled} />
         </PageFormFrame>
       </FitPageContent>

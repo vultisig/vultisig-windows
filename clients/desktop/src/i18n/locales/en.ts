@@ -347,7 +347,7 @@ export const en = {
   localMode: 'You’re in local mode',
   scanQrInstruction:
     'Scan QR with other device. 3-device setup recommended, 2 is sufficient.',
-  devicesStatus: 'Devices ({{currentPeers}}/3)',
+  devices: 'Devices',
   waitingOnDevices: 'Waiting on devices...',
   switchToInternet: 'Switch back to internet mode',
   signPrivately: 'Want to sign privately?',

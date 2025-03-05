@@ -7,6 +7,9 @@ import { OnForwardProp } from '../../../../../lib/ui/props'
 import { QueryBasedQrCode } from '../../../../../lib/ui/qr/QueryBasedQrCode'
 import { PeerDiscoveryFormFooter } from '../../../../../mpc/peers/PeerDiscoveryFormFooter'
 import { PeersManagerFrame } from '../../../../../mpc/peers/PeersManagerFrame'
+import { PeersPageContentFrame } from '../../../../../mpc/peers/PeersPageContentFrame'
+import { MpcLocalServerIndicator } from '../../../../../mpc/serverType/MpcLocalServerIndicator'
+import { useMpcServerType } from '../../../../../mpc/serverType/state/mpcServerType'
 import { FitPageContent } from '../../../../../ui/page/PageContent'
 import { PageFormFrame } from '../../../../../ui/page/PageFormFrame'
 import { PageHeader } from '../../../../../ui/page/PageHeader'
@@ -33,6 +36,8 @@ export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
 
   const joinUrlQuery = useJoinKeysignUrlQuery()
 
+  const [serverType] = useMpcServerType()
+
   return (
     <>
       <PageHeader
@@ -48,9 +53,12 @@ export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
         })}
       >
         <PageFormFrame>
-          <PeersManagerFrame>
+          <PeersPageContentFrame>
             <QueryBasedQrCode value={joinUrlQuery} />
-          </PeersManagerFrame>
+            <PeersManagerFrame>
+              {serverType === 'local' && <MpcLocalServerIndicator />}
+            </PeersManagerFrame>
+          </PeersPageContentFrame>
           <KeysignPeerDiscoveryQrCode />
           <VStack gap={40} alignItems="center">
             <ManageServerType />
