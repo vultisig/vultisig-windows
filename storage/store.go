@@ -29,12 +29,16 @@ type Store struct {
 
 // NewStore creates a new store
 func NewStore() (*Store, error) {
-	// Get the current running folder
-	exePath, err := os.Executable()
-	if err != nil {
-		return nil, fmt.Errorf("fail to get current directory, err: %w", err)
+	dbPath := os.Getenv(`VULTISIG_DB_PATH`)
+	if dbPath == "" {
+		// Get the current running folder
+		exePath, err := os.Executable()
+		if err != nil {
+			return nil, fmt.Errorf("fail to get current directory, err: %w", err)
+		}
+		dbPath = exePath
 	}
-	exeDir := filepath.Dir(exePath)
+	exeDir := filepath.Dir(dbPath)
 	// Construct the full path to the database file
 	dbFilePath := filepath.Join(exeDir, DbFileName)
 
