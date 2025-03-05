@@ -8,9 +8,8 @@ import { Match } from '../../../lib/ui/base/Match'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { InfoIcon } from '../../../lib/ui/icons/InfoIcon'
 import { VStack } from '../../../lib/ui/layout/Stack'
-import { TakeWholeSpaceCenterContent } from '../../../lib/ui/layout/TakeWholeSpaceCenterContent'
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
+import { QueryBasedQrCode } from '../../../lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../lib/ui/text'
 import { InitiatingDevice } from '../../../mpc/peers/InitiatingDevice'
@@ -19,6 +18,7 @@ import { PeerDiscoveryFormFooter } from '../../../mpc/peers/PeerDiscoveryFormFoo
 import { PeerPlaceholder } from '../../../mpc/peers/PeerPlaceholder'
 import { PeerRequirementsInfo } from '../../../mpc/peers/PeerRequirementsInfo'
 import { PeersContainer } from '../../../mpc/peers/PeersContainer'
+import { PeersManagerFrame } from '../../../mpc/peers/PeersManagerFrame'
 import { MpcLocalServerIndicator } from '../../../mpc/serverType/MpcLocalServerIndicator'
 import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
 import { FitPageContent } from '../../../ui/page/PageContent'
@@ -27,10 +27,8 @@ import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { StrictText } from '../../deposit/DepositVerify/DepositVerify.styled'
 import { CurrentPeersCorrector } from '../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
 import { DownloadKeygenQrCode } from '../../keygen/shared/peerDiscovery/DownloadKeygenQrCode'
-import { KeygenPeerDiscoveryQrCode } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryQrCode'
 import { usePeerOptionsQuery } from '../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
 import { useSelectedPeers } from '../../keysign/shared/state/selectedPeers'
 import { useJoinKeygenUrlQuery } from '../peers/queries/useJoinKeygenUrlQuery'
@@ -86,26 +84,8 @@ export const SetupSecureVaultPeerDiscoveryStep = ({
         })}
       >
         <PageFormFrame>
-          <VStack
-            fullWidth
-            justifyContent="center"
-            alignItems="center"
-            gap={40}
-          >
-            <MatchQuery
-              value={joinUrlQuery}
-              success={value => <KeygenPeerDiscoveryQrCode value={value} />}
-              pending={() => (
-                <TakeWholeSpaceCenterContent>
-                  <Spinner />
-                </TakeWholeSpaceCenterContent>
-              )}
-              error={() => (
-                <TakeWholeSpaceCenterContent>
-                  <StrictText>{t('failed_to_generate_qr_code')}</StrictText>
-                </TakeWholeSpaceCenterContent>
-              )}
-            />
+          <PeersManagerFrame>
+            <QueryBasedQrCode value={joinUrlQuery} />
             <VStack fullWidth gap={24} alignItems="center">
               <Match
                 value={serverType}
@@ -150,7 +130,7 @@ export const SetupSecureVaultPeerDiscoveryStep = ({
                 </PeersContainer>
               </VStack>
             </VStack>
-          </VStack>
+          </PeersManagerFrame>
           <PeerDiscoveryFormFooter isDisabled={isDisabled} />
         </PageFormFrame>
       </FitPageContent>

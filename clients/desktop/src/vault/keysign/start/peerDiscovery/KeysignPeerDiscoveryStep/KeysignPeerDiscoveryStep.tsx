@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps'
 import { VStack } from '../../../../../lib/ui/layout/Stack'
 import { OnForwardProp } from '../../../../../lib/ui/props'
+import { QueryBasedQrCode } from '../../../../../lib/ui/qr/QueryBasedQrCode'
+import { PeerDiscoveryFormFooter } from '../../../../../mpc/peers/PeerDiscoveryFormFooter'
+import { PeersManagerFrame } from '../../../../../mpc/peers/PeersManagerFrame'
 import { FitPageContent } from '../../../../../ui/page/PageContent'
 import { PageFormFrame } from '../../../../../ui/page/PageFormFrame'
 import { PageHeader } from '../../../../../ui/page/PageHeader'
@@ -12,6 +14,7 @@ import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButto
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle'
 import { KeygenNetworkReminder } from '../../../../keygen/shared/KeygenNetworkReminder'
 import { ManageServerType } from '../../../../keygen/shared/peerDiscovery/ManageServerType'
+import { useJoinKeysignUrlQuery } from '../../../shared/queries/useJoinKeysignUrlQuery'
 import { DownloadKeysignQrCode } from '../DownloadKeysignQrCode'
 import { useIsPeerDiscoveryStepDisabled } from '../hooks/useIsPeerDiscoveryStepDisabled'
 import { KeysignPeerDiscoveryQrCode } from '../KeysignPeerDiscoveryCode'
@@ -28,6 +31,8 @@ export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
     }
   }, [isDisabled, onForward])
 
+  const joinUrlQuery = useJoinKeysignUrlQuery()
+
   return (
     <>
       <PageHeader
@@ -43,6 +48,9 @@ export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
         })}
       >
         <PageFormFrame>
+          <PeersManagerFrame>
+            <QueryBasedQrCode value={joinUrlQuery} />
+          </PeersManagerFrame>
           <KeysignPeerDiscoveryQrCode />
           <VStack gap={40} alignItems="center">
             <ManageServerType />
@@ -50,9 +58,7 @@ export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
             <KeygenNetworkReminder />
           </VStack>
         </PageFormFrame>
-        <Button type="submit" isDisabled={isDisabled}>
-          {t('continue')}
-        </Button>
+        <PeerDiscoveryFormFooter isDisabled={isDisabled} />
       </FitPageContent>
     </>
   )
