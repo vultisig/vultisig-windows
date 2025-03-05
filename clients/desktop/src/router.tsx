@@ -47,7 +47,7 @@ import { SetupSecureVaultPage } from './vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPageController } from './vault/setup/SetupVaultPageController'
 import { ShareVaultPage } from './vault/share/ShareVaultPage'
 import { SwapPage } from './vault/swap/components/SwapPage'
-import { NoVaultsHomePage } from './vaults/components/NoVaultsHomePage'
+import { NewVaultPage } from './vaults/components/NewVaultPage'
 import { VaultsPage } from './vaults/components/VaultsPage'
 import { CurrentVaultFolderPageProvider } from './vaults/folder/CurrentVaultFolderPageProvider'
 import { ManageVaultFolderPage } from './vaults/folder/manage/ManageVaultFolderPage'
@@ -69,9 +69,13 @@ export const router = createBrowserRouter([
         path: appPaths.root,
         element: (
           <EmptyVaultsOnly>
-            <NoVaultsHomePage />
+            <NewVaultPage withBackButton={false} />
           </EmptyVaultsOnly>
         ),
+      },
+      {
+        path: appPaths.newVault,
+        element: <NewVaultPage />,
       },
       {
         path: appPaths.onboarding,
