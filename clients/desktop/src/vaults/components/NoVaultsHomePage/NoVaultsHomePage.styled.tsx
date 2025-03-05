@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 
-import { PageContent } from '../../../ui/page/PageContent'
+import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility'
 
-export const Wrapper = styled(PageContent)`
-  overflow-y: hidden;
+export const Wrapper = styled(AnimatedVisibility)`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `

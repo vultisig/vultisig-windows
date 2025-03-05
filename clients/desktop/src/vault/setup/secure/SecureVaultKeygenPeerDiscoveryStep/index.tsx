@@ -114,7 +114,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
             <Match
               value={serverType}
               local={() => (
-                <LocalPillWrapper alignItems="baseline">
+                <LocalPillWrapper alignItems="center">
                   <CloudOffWrapper>
                     <CloudOffIcon />
                   </CloudOffWrapper>
@@ -125,7 +125,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
               )}
               relay={() =>
                 showWarning && (
-                  <PillWrapper gap={12} alignItems="baseline">
+                  <PillWrapper gap={12} alignItems="center">
                     <InfoIconWrapperForBanner>
                       <InfoIcon />
                     </InfoIconWrapperForBanner>
