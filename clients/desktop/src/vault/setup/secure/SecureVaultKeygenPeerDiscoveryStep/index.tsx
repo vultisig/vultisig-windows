@@ -1,3 +1,4 @@
+import { recommendedPeers, requiredPeers } from '@core/mpc/peers/config'
 import { range } from '@lib/utils/array/range'
 import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo, useState } from 'react'
@@ -9,13 +10,16 @@ import { useBoolean } from '../../../../lib/ui/hooks/useBoolean'
 import { CloseIcon } from '../../../../lib/ui/icons/CloseIcon'
 import { CloudOffIcon } from '../../../../lib/ui/icons/CloudOffIcon'
 import { InfoIcon } from '../../../../lib/ui/icons/InfoIcon'
-import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
+import { VStack } from '../../../../lib/ui/layout/Stack'
 import { TakeWholeSpaceCenterContent } from '../../../../lib/ui/layout/TakeWholeSpaceCenterContent'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
 import { OnBackProp, OnForwardProp } from '../../../../lib/ui/props'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../../lib/ui/text'
+import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'
 import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryFormFooter'
+import { PeerPlaceholder } from '../../../../mpc/peers/PeerPlaceholder'
+import { PeersContainer } from '../../../../mpc/peers/PeersContainer'
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { PageHeader } from '../../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
@@ -25,7 +29,7 @@ import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled'
 import { CurrentPeersCorrector } from '../../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
 import { DownloadKeygenQrCode } from '../../../keygen/shared/peerDiscovery/DownloadKeygenQrCode'
 import { KeygenPeerDiscoveryQrCode } from '../../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryQrCode'
-import { useCurrentLocalPartyId } from '../../../keygen/state/currentLocalPartyId'
+import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
 import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
 import { useJoinKeygenUrlQuery } from '../../peers/queries/useJoinKeygenUrlQuery'
 import { SecureVaultKeygenOverlay } from '../components/SecureVaultKeygenOverlay'
@@ -43,9 +47,6 @@ import {
 const educationUrl =
   'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
 
-const requiredPeers = 1
-const recommendedPeers = 2
-
 export const SecureVaultKeygenPeerDiscoveryStep = ({
   onForward,
   onBack,
@@ -55,15 +56,8 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
   const [showWarning, { toggle }] = useBoolean(true)
   const { t } = useTranslation()
   const joinUrlQuery = useJoinKeygenUrlQuery()
-  const currentDevice = useCurrentLocalPartyId()
   const selectedPeers = useSelectedPeers()
-  const displayedDevices = [currentDevice, ...selectedPeers]
-  const shouldShowOptional = selectedPeers.length < recommendedPeers
-  if (shouldShowOptional) {
-    displayedDevices.push(
-      ...range(recommendedPeers - selectedPeers.length).map(() => '')
-    )
-  }
+  const peerOptionsQuery = usePeerOptionsQuery()
 
   const isDisabled = useMemo(() => {
     if (selectedPeers.length < requiredPeers) {
@@ -149,24 +143,42 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
                 )
               }
             />
-            <VStack gap={24}>
+            <VStack fullWidth gap={24}>
               <Text color="contrast" size={22} weight="500">
                 {t('devicesStatus', {
                   currentPeers: selectedPeers.length + 1,
                 })}
               </Text>
               <CurrentPeersCorrector />
-              <HStack gap={48} wrap="wrap">
-                {displayedDevices.map((device, index) => (
-                  <SecureVaultPeerOption
-                    shouldShowOptionalDevice={shouldShowOptional}
-                    deviceNumber={index}
-                    isCurrentDevice={index === 0}
-                    key={index}
-                    value={device}
-                  />
-                ))}
-              </HStack>
+              <PeersContainer>
+                <InitiatingDevice />
+                <MatchQuery
+                  value={peerOptionsQuery}
+                  success={peerOptions => {
+                    return (
+                      <>
+                        {peerOptions.map(value => (
+                          <SecureVaultPeerOption key={value} value={value} />
+                        ))}
+                        {range(recommendedPeers - peerOptions.length).map(
+                          index => (
+                            <PeerPlaceholder key={index}>
+                              {t('scanWithDevice', {
+                                deviceNumber: index + peerOptions.length + 1,
+                              })}
+                            </PeerPlaceholder>
+                          )
+                        )}
+                        {peerOptions.length >= recommendedPeers && (
+                          <PeerPlaceholder>
+                            {t('optionalDevice')}
+                          </PeerPlaceholder>
+                        )}
+                      </>
+                    )
+                  }}
+                />
+              </PeersContainer>
             </VStack>
           </ContentWrapper>
         </VStack>
