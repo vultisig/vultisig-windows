@@ -1,9 +1,11 @@
 import styled from 'styled-components'
 
 import { borderRadius } from '../../../../lib/ui/css/borderRadius'
-import { HStack, VStack, vStack } from '../../../../lib/ui/layout/Stack'
+import { centeredContentColumn } from '../../../../lib/ui/css/centeredContentColumn'
+import { verticalPadding } from '../../../../lib/ui/css/verticalPadding'
+import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
 import { getColor } from '../../../../lib/ui/theme/getters'
-import { PageContent } from '../../../../ui/page/PageContent'
+import { pageConfig } from '../../../../ui/page/config'
 
 export const InfoIconWrapperForBanner = styled(HStack)`
   align-items: center;
@@ -29,24 +31,11 @@ export const PillWrapper = styled(HStack)`
   border: 1px solid ${getColor('foregroundExtra')};
 `
 
-export const PageWrapper = styled(PageContent)`
-  max-width: 800px;
-  margin-inline: auto;
-
-  ${vStack({
-    gap: 32,
-  })};
-`
-
-export const LocalPillWrapper = styled(HStack)`
-  padding: 12px;
-  gap: 12px;
-  border: 1px solid #4879fd;
-  ${borderRadius.m};
-  align-self: stretch;
-`
-
-export const CloudOffWrapper = styled(HStack)`
-  align-items: center;
-  font-size: 17px;
+export const PageWrapper = styled.div`
+  ${centeredContentColumn({
+    contentMaxWidth: 720,
+    horizontalMinPadding: pageConfig.horizontalPadding,
+  })}
+  ${verticalPadding(pageConfig.verticalPadding)};
+  flex-grow: 1;
 `
