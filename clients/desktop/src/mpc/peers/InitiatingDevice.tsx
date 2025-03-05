@@ -8,9 +8,11 @@ import {
   formatKeygenDeviceName,
   parseLocalPartyId,
 } from '../../vault/keygen/utils/localPartyId'
-import { PeerOptionContainer } from './option/PeerOptionContainer'
+import { peerOption, peerOptionActive } from './option/PeerOptionContainer'
 
-const Container = styled(PeerOptionContainer)`
+const Container = styled.div`
+  ${peerOption}
+  ${peerOptionActive}
   border-color: rgba(19, 200, 157, 0.25);
 `
 
@@ -21,7 +23,7 @@ export const InitiatingDevice = () => {
   const { t } = useTranslation()
 
   return (
-    <Container isActive as="div">
+    <Container>
       <VStack>
         <Text color="contrast" size={14} weight="500">
           {formatKeygenDeviceName(deviceName)}

@@ -18,6 +18,7 @@ import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../../lib/ui/text'
 import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'
 import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryFormFooter'
+import { PeerPlaceholder } from '../../../../mpc/peers/PeerPlaceholder'
 import { PeersContainer } from '../../../../mpc/peers/PeersContainer'
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { PageHeader } from '../../../../ui/page/PageHeader'
@@ -28,6 +29,7 @@ import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled'
 import { CurrentPeersCorrector } from '../../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
 import { DownloadKeygenQrCode } from '../../../keygen/shared/peerDiscovery/DownloadKeygenQrCode'
 import { KeygenPeerDiscoveryQrCode } from '../../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryQrCode'
+import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
 import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
 import { useJoinKeygenUrlQuery } from '../../peers/queries/useJoinKeygenUrlQuery'
 import { SecureVaultKeygenOverlay } from '../components/SecureVaultKeygenOverlay'
@@ -55,13 +57,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
   const { t } = useTranslation()
   const joinUrlQuery = useJoinKeygenUrlQuery()
   const selectedPeers = useSelectedPeers()
-  const shouldShowOptional = selectedPeers.length < recommendedPeers
-  const displayedPeers = [...selectedPeers]
-  if (shouldShowOptional) {
-    displayedPeers.push(
-      ...range(recommendedPeers - selectedPeers.length).map(() => '')
-    )
-  }
+  const peerOptionsQuery = usePeerOptionsQuery()
 
   const isDisabled = useMemo(() => {
     if (selectedPeers.length < requiredPeers) {
@@ -156,14 +152,32 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
               <CurrentPeersCorrector />
               <PeersContainer>
                 <InitiatingDevice />
-                {displayedPeers.map((device, index) => (
-                  <SecureVaultPeerOption
-                    shouldShowOptionalDevice={shouldShowOptional}
-                    index={index}
-                    key={index}
-                    value={device}
-                  />
-                ))}
+                <MatchQuery
+                  value={peerOptionsQuery}
+                  success={peerOptions => {
+                    return (
+                      <>
+                        {peerOptions.map(value => (
+                          <SecureVaultPeerOption key={value} value={value} />
+                        ))}
+                        {range(recommendedPeers - peerOptions.length).map(
+                          index => (
+                            <PeerPlaceholder key={index}>
+                              {t('scanWithDevice', {
+                                index: index + peerOptions.length + 1,
+                              })}
+                            </PeerPlaceholder>
+                          )
+                        )}
+                        {peerOptions.length < recommendedPeers && (
+                          <PeerPlaceholder>
+                            {t('optionalDevice')}
+                          </PeerPlaceholder>
+                        )}
+                      </>
+                    )
+                  }}
+                />
               </PeersContainer>
             </VStack>
           </ContentWrapper>
