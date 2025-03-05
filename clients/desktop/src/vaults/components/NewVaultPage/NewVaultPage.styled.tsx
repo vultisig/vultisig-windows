@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility'
@@ -14,4 +15,8 @@ export const HorizontalLine = styled.div`
   width: 100%;
   height: 1px;
   background-color: ${getColor('foregroundSuper')};
+`
+
+export const ScanQRCodeLink = styled(Link)`
+  width: 100%;
 `
