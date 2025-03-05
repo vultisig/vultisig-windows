@@ -164,12 +164,12 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
                           index => (
                             <PeerPlaceholder key={index}>
                               {t('scanWithDevice', {
-                                index: index + peerOptions.length + 1,
+                                deviceNumber: index + peerOptions.length + 1,
                               })}
                             </PeerPlaceholder>
                           )
                         )}
-                        {peerOptions.length < recommendedPeers && (
+                        {peerOptions.length >= recommendedPeers && (
                           <PeerPlaceholder>
                             {t('optionalDevice')}
                           </PeerPlaceholder>

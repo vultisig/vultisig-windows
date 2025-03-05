@@ -4,8 +4,9 @@ import { uniformColumnGrid } from '../../lib/ui/css/uniformColumnGrid'
 
 export const PeersContainer = styled.div`
   ${uniformColumnGrid({
-    gap: 48,
-    minChildrenWidth: 150,
-    maxChildrenWidth: 200,
+    fullWidth: true,
+    gap: 40,
+    minChildrenWidth: 140,
+    maxChildrenWidth: 148,
   })}
 `
