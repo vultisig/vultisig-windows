@@ -143,7 +143,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
                 )
               }
             />
-            <VStack gap={24}>
+            <VStack fullWidth gap={24}>
               <Text color="contrast" size={22} weight="500">
                 {t('devicesStatus', {
                   currentPeers: selectedPeers.length + 1,
