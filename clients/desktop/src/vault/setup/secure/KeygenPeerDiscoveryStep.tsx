@@ -4,54 +4,46 @@ import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Match } from '../../../../lib/ui/base/Match'
-import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps'
-import { useBoolean } from '../../../../lib/ui/hooks/useBoolean'
-import { CloseIcon } from '../../../../lib/ui/icons/CloseIcon'
-import { InfoIcon } from '../../../../lib/ui/icons/InfoIcon'
-import { VStack } from '../../../../lib/ui/layout/Stack'
-import { TakeWholeSpaceCenterContent } from '../../../../lib/ui/layout/TakeWholeSpaceCenterContent'
-import { Spinner } from '../../../../lib/ui/loaders/Spinner'
-import { OnBackProp, OnForwardProp } from '../../../../lib/ui/props'
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
-import { Text } from '../../../../lib/ui/text'
-import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'
-import { PeerOption } from '../../../../mpc/peers/option/PeerOption'
-import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryFormFooter'
-import { PeerPlaceholder } from '../../../../mpc/peers/PeerPlaceholder'
-import { PeersContainer } from '../../../../mpc/peers/PeersContainer'
-import { MpcLocalServerIndicator } from '../../../../mpc/serverType/MpcLocalServerIndicator'
-import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
-import { PageHeader } from '../../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
-import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
-import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
-import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled'
-import { CurrentPeersCorrector } from '../../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
-import { DownloadKeygenQrCode } from '../../../keygen/shared/peerDiscovery/DownloadKeygenQrCode'
-import { KeygenPeerDiscoveryQrCode } from '../../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryQrCode'
-import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
-import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
-import { useJoinKeygenUrlQuery } from '../../peers/queries/useJoinKeygenUrlQuery'
-import { SecureVaultKeygenOverlay } from '../components/SecureVaultKeygenOverlay'
-import {
-  CloseIconWrapper,
-  ContentWrapper,
-  InfoIconWrapperForBanner,
-  PageWrapper,
-  PillWrapper,
-} from './SecureVaultKeygenPeerDiscoveryStep.styles'
+import { Match } from '../../../lib/ui/base/Match'
+import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
+import { InfoIcon } from '../../../lib/ui/icons/InfoIcon'
+import { VStack } from '../../../lib/ui/layout/Stack'
+import { TakeWholeSpaceCenterContent } from '../../../lib/ui/layout/TakeWholeSpaceCenterContent'
+import { Spinner } from '../../../lib/ui/loaders/Spinner'
+import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { Text } from '../../../lib/ui/text'
+import { InitiatingDevice } from '../../../mpc/peers/InitiatingDevice'
+import { PeerOption } from '../../../mpc/peers/option/PeerOption'
+import { PeerDiscoveryFormFooter } from '../../../mpc/peers/PeerDiscoveryFormFooter'
+import { PeerPlaceholder } from '../../../mpc/peers/PeerPlaceholder'
+import { PeerRequirementsInfo } from '../../../mpc/peers/PeerRequirementsInfo'
+import { PeersContainer } from '../../../mpc/peers/PeersContainer'
+import { MpcLocalServerIndicator } from '../../../mpc/serverType/MpcLocalServerIndicator'
+import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
+import { FitPageContent } from '../../../ui/page/PageContent'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { StrictText } from '../../deposit/DepositVerify/DepositVerify.styled'
+import { CurrentPeersCorrector } from '../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
+import { DownloadKeygenQrCode } from '../../keygen/shared/peerDiscovery/DownloadKeygenQrCode'
+import { KeygenPeerDiscoveryQrCode } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryQrCode'
+import { usePeerOptionsQuery } from '../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
+import { useSelectedPeers } from '../../keysign/shared/state/selectedPeers'
+import { useJoinKeygenUrlQuery } from '../peers/queries/useJoinKeygenUrlQuery'
+import { SecureVaultKeygenOverlay } from './components/SecureVaultKeygenOverlay'
 
 const educationUrl =
   'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
 
-export const SecureVaultKeygenPeerDiscoveryStep = ({
+export const KeygenPeerDiscoveryStep = ({
   onForward,
   onBack,
 }: OnForwardProp & OnBackProp) => {
   const [overlayShown, setHasShownOverlay] = useState(true)
   const [serverType] = useMpcServerType()
-  const [showWarning, { toggle }] = useBoolean(true)
   const { t } = useTranslation()
   const joinUrlQuery = useJoinKeygenUrlQuery()
   const selectedPeers = useSelectedPeers()
@@ -85,7 +77,7 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
           />
         }
       />
-      <PageWrapper
+      <FitPageContent
         as="form"
         {...getFormProps({
           onSubmit: onForward,
@@ -113,29 +105,11 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
                 </TakeWholeSpaceCenterContent>
               )}
             />
-            <ContentWrapper fullWidth gap={24} alignItems="center">
+            <VStack fullWidth gap={24} alignItems="center">
               <Match
                 value={serverType}
                 local={() => <MpcLocalServerIndicator />}
-                relay={() =>
-                  showWarning && (
-                    <PillWrapper gap={12} alignItems="center">
-                      <InfoIconWrapperForBanner>
-                        <InfoIcon />
-                      </InfoIconWrapperForBanner>
-                      <Text weight={500} color="shy" size={13}>
-                        {t('scanQrInstruction')}
-                      </Text>
-                      <CloseIconWrapper
-                        role="button"
-                        tabIndex={0}
-                        onClick={toggle}
-                      >
-                        <CloseIcon />
-                      </CloseIconWrapper>
-                    </PillWrapper>
-                  )
-                }
+                relay={() => <PeerRequirementsInfo />}
               />
               <VStack fullWidth gap={24}>
                 <Text color="contrast" size={22} weight="500">
@@ -174,11 +148,11 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
                   />
                 </PeersContainer>
               </VStack>
-            </ContentWrapper>
+            </VStack>
           </VStack>
           <PeerDiscoveryFormFooter isDisabled={isDisabled} />
         </VStack>
-      </PageWrapper>
+      </FitPageContent>
       {overlayShown && (
         <SecureVaultKeygenOverlay
           onCompleted={() => setHasShownOverlay(false)}
