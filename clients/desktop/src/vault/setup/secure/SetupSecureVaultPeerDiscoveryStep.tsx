@@ -22,6 +22,7 @@ import { PeersContainer } from '../../../mpc/peers/PeersContainer'
 import { MpcLocalServerIndicator } from '../../../mpc/serverType/MpcLocalServerIndicator'
 import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
 import { FitPageContent } from '../../../ui/page/PageContent'
+import { PageFormFrame } from '../../../ui/page/PageFormFrame'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton'
@@ -38,7 +39,7 @@ import { SecureVaultKeygenOverlay } from './components/SecureVaultKeygenOverlay'
 const educationUrl =
   'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
 
-export const KeygenPeerDiscoveryStep = ({
+export const SetupSecureVaultPeerDiscoveryStep = ({
   onForward,
   onBack,
 }: OnForwardProp & OnBackProp) => {
@@ -84,7 +85,7 @@ export const KeygenPeerDiscoveryStep = ({
           isDisabled,
         })}
       >
-        <VStack flexGrow justifyContent="space-between">
+        <PageFormFrame>
           <VStack
             fullWidth
             justifyContent="center"
@@ -151,7 +152,7 @@ export const KeygenPeerDiscoveryStep = ({
             </VStack>
           </VStack>
           <PeerDiscoveryFormFooter isDisabled={isDisabled} />
-        </VStack>
+        </PageFormFrame>
       </FitPageContent>
       {overlayShown && (
         <SecureVaultKeygenOverlay
