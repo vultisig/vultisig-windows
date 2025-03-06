@@ -759,7 +759,7 @@ export const de = {
   vault_password: 'Tresorkennwort',
   upload_qr_code_to_join_keysign:
     'Laden Sie den QR-Code hoch, um Keysign beizutreten',
-  upload_qr_code_image: 'QR-Code-Bild hochladen',
+  upload_qr_code_image: 'QR hochladen',
   getting_video_permission: 'Videoberechtigung einholen...',
   failed_to_get_video_permission:
     'Videoberechtigung konnte nicht eingeholt werden',

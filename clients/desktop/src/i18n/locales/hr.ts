@@ -735,7 +735,7 @@ export const hr = {
   vault_password: 'Lozinka trezora',
   upload_qr_code_to_join_keysign:
     'Učitajte QR kod da biste se pridružili Keysignu',
-  upload_qr_code_image: 'Prenesite sliku QR koda',
+  upload_qr_code_image: 'Töltse fel a QR-t',
   getting_video_permission: 'Dobivanje dozvole za video...',
   failed_to_get_video_permission:
     'Nije uspjelo dobivanje dozvole za videozapis',

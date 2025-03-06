@@ -756,7 +756,7 @@ export const it = {
   failed_to_save_vault: 'Impossibile salvare il vault',
   vault_password: 'Password del caveau',
   upload_qr_code_to_join_keysign: 'Carica il codice QR per unirti a Keysign',
-  upload_qr_code_image: "Carica l'immagine del codice QR",
+  upload_qr_code_image: 'Carica QR',
   getting_video_permission: "Ottenimento dell'autorizzazione video...",
   failed_to_get_video_permission: "Impossibile ottenere l'autorizzazione video",
   terms_required: 'Devi accettare i termini',

@@ -761,7 +761,7 @@ export const es = {
   failed_to_save_vault: 'No se pudo guardar la bóveda',
   vault_password: 'Contraseña de la bóveda',
   upload_qr_code_to_join_keysign: 'Sube el código QR para unirte a Keysign',
-  upload_qr_code_image: 'Subir imagen de código QR',
+  upload_qr_code_image: 'Subir código QR',
   getting_video_permission: 'Obteniendo permiso para grabar vídeo...',
   failed_to_get_video_permission: 'No se pudo obtener el permiso para el video',
   terms_required: 'Debes aceptar los términos',

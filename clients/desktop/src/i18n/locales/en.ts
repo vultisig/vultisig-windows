@@ -97,7 +97,7 @@ export const en = {
   scan_qr: 'Scan QR',
   deeplink: 'Deeplink',
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
-  upload_qr_code_image: 'Upload QR Code Image',
+  upload_qr_code_image: 'Upload QR',
   getting_video_permission: 'Getting video permission...',
   failed_to_get_video_permission: 'Failed to get video permission',
   processing_url: 'Processing URL...',
