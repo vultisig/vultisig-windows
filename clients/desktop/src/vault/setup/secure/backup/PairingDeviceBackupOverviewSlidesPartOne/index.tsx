@@ -12,7 +12,6 @@ import { PageContent } from '../../../../../ui/page/PageContent'
 import { useNewVault } from '../state/NewVaultProvider'
 import { AnimationDescription } from './AnimationDescription'
 import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
-import { getDeviceNumber } from './utils'
 import { RiveWrapper } from './VaultOverviewSlides.styles'
 
 export type SharedOnboardingScreensProps = {
