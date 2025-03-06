@@ -14,6 +14,7 @@ import VaultBackupPage from '../../shared/vaultBackupSettings/VaultBackupPage'
 import { BackupConfirmation } from './BackupConfirmation'
 import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne'
 import { BackupSuccessSlide } from './BackupSuccessSlides'
+import { PairingDeviceBackupOverviewSlidesPartOne } from './PairingDeviceBackupOverviewSlidesPartOne'
 import { NewVaultProvider } from './state/NewVaultProvider'
 
 const steps = [
@@ -25,9 +26,13 @@ const steps = [
 
 type BackupFastVaultProps = {
   vault: storage.Vault
+  isInitiatingDevice: boolean
 }
 
-export const BackupSecureVault: FC<BackupFastVaultProps> = ({ vault }) => {
+export const BackupSecureVault: FC<BackupFastVaultProps> = ({
+  vault,
+  isInitiatingDevice,
+}) => {
   const navigate = useNavigate()
   const { step, toNextStep } = useStepNavigation({
     steps,
@@ -40,9 +45,15 @@ export const BackupSecureVault: FC<BackupFastVaultProps> = ({ vault }) => {
     <NewVaultProvider initialValue={vault}>
       <Match
         value={step}
-        backupSlideshowPartOne={() => (
-          <BackupOverviewSlidesPartOne onCompleted={toNextStep} />
-        )}
+        backupSlideshowPartOne={() =>
+          isInitiatingDevice ? (
+            <BackupOverviewSlidesPartOne onCompleted={toNextStep} />
+          ) : (
+            <PairingDeviceBackupOverviewSlidesPartOne
+              onCompleted={toNextStep}
+            />
+          )
+        }
         backupConfirmation={() => (
           <BackupConfirmation onCompleted={toNextStep} />
         )}
