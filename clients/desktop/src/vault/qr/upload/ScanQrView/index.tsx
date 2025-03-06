@@ -64,7 +64,13 @@ export const ScanQrView = ({
     video.srcObject = stream
     video.play()
 
-    return () => stream.getTracks().forEach(track => track.stop())
+    return () => {
+      stream.getTracks().forEach(track => track.stop())
+
+      if (video) {
+        video.srcObject = null
+      }
+    }
   }, [video, stream])
 
   useEffect(getStream, [getStream])
