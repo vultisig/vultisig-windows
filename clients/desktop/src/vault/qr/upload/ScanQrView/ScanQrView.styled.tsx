@@ -3,17 +3,12 @@ import styled from 'styled-components'
 import { PageContent } from '../../../../ui/page/PageContent'
 
 export const Container = styled(PageContent)`
-  /* @tony: added for optical alignment  */
-  margin-top: -60px;
   position: relative;
-  justify-content: flex-end;
-  background-image: url('/assets/images/scanQRCodeBackground.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: 0% 40%;
+  justify-content: space-between;
 `
 
 export const VideoWrapper = styled.div`
+  align-self: center;
   position: relative;
   width: 365px;
   height: 365px;

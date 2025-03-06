@@ -5,7 +5,10 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '../../../../lib/ui/buttons/Button'
+import { UploadIcon } from '../../../../lib/ui/icons/UploadIcon'
+import { Image } from '../../../../lib/ui/image/Image'
 import { CenterAbsolutely } from '../../../../lib/ui/layout/CenterAbsolutely'
+import { VStack } from '../../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { FlowErrorPageContent } from '../../../../ui/flow/FlowErrorPageContent'
@@ -103,17 +106,16 @@ export const ScanQrView = ({
 
   return (
     <Container className={className}>
+      <div />
       <MatchQuery
         value={streamMutationState}
         success={() => (
-          <CenterAbsolutely>
-            <VideoWrapper>
-              <Video ref={setVideo} muted />
-              <BorderImageWrapper>
-                <img src="/assets/images/borderedWrapper.svg" alt="" />
-              </BorderImageWrapper>
-            </VideoWrapper>
-          </CenterAbsolutely>
+          <VideoWrapper>
+            <Video ref={setVideo} muted />
+            <BorderImageWrapper>
+              <Image src="/assets/images/borderedWrapper.svg" alt="" />
+            </BorderImageWrapper>
+          </VideoWrapper>
         )}
         pending={() => (
           <CenterAbsolutely>
@@ -139,6 +141,16 @@ export const ScanQrView = ({
       />
       {onUploadQrViewRequest && (
         <Button onClick={onUploadQrViewRequest}>
+          <VStack
+            alignItems="cetner"
+            style={{
+              fontSize: '20px',
+              display: 'inline-flex',
+              marginRight: 6,
+            }}
+          >
+            <UploadIcon />
+          </VStack>{' '}
           {t('upload_qr_code_image')}
         </Button>
       )}
