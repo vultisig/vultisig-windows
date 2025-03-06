@@ -21,8 +21,8 @@ import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey'
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType'
 import { SetupVaultNameProvider } from '../state/vaultName'
-import { SecureVaultKeygenPeerDiscoveryStep } from './SecureVaultKeygenPeerDiscoveryStep'
 import { SecureVaultKeygenStartSessionStep } from './SecureVaultKeygenStartSessionStep'
+import { SetupSecureVaultPeerDiscoveryStep } from './SetupSecureVaultPeerDiscoveryStep'
 
 const steps = [
   'name',
@@ -74,7 +74,7 @@ export const SetupSecureVaultPage = () => {
                                     />
                                   )}
                                   peers={() => (
-                                    <SecureVaultKeygenPeerDiscoveryStep
+                                    <SetupSecureVaultPeerDiscoveryStep
                                       onBack={() => setStep(steps[0])}
                                       onForward={toNextStep}
                                     />
