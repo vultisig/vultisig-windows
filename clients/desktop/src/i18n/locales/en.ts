@@ -12,6 +12,9 @@ export const en = {
   create_new_vault: 'Create a New Vault',
   missing_public_key_ecdsa: 'Missing Public Key ECDSA',
   missing_verification_code: 'Missing Verification Code',
+  waiting_for_devices_to_join: 'Waiting for other devices to join',
+  waiting_for_devices_to_join_description:
+    'Your vault will start generating from the moment you finalize setting up your vault on your main device',
   failed_to_confirm_email_code: 'Failed to confirm email verification code',
   import_existing_vault: 'Import an Existing Vault',
   import_vault: 'Import Vault',
@@ -97,7 +100,7 @@ export const en = {
   scan_qr: 'Scan QR',
   deeplink: 'Deeplink',
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
-  upload_qr_code_image: 'Upload QR Code Image',
+  upload_qr_code_image: 'Upload QR',
   getting_video_permission: 'Getting video permission...',
   failed_to_get_video_permission: 'Failed to get video permission',
   processing_url: 'Processing URL...',

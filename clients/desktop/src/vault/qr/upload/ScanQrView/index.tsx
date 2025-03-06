@@ -3,25 +3,22 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
-import { Button } from '../../../lib/ui/buttons/Button'
-import { takeWholeSpaceAbsolutely } from '../../../lib/ui/css/takeWholeSpaceAbsolutely'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
-import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent'
-import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent'
-import { PageContent } from '../../../ui/page/PageContent'
-import { readQrCode } from './utils/readQrCode'
-
-const Container = styled(PageContent)`
-  position: relative;
-  justify-content: flex-end;
-`
-
-const Video = styled.video`
-  ${takeWholeSpaceAbsolutely}
-  object-fit: cover;
-`
+import { Button } from '../../../../lib/ui/buttons/Button'
+import { UploadIcon } from '../../../../lib/ui/icons/UploadIcon'
+import { Image } from '../../../../lib/ui/image/Image'
+import { CenterAbsolutely } from '../../../../lib/ui/layout/CenterAbsolutely'
+import { VStack } from '../../../../lib/ui/layout/Stack'
+import { Spinner } from '../../../../lib/ui/loaders/Spinner'
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { FlowErrorPageContent } from '../../../../ui/flow/FlowErrorPageContent'
+import { readQrCode } from '../utils/readQrCode'
+import {
+  BorderImageWrapper,
+  Container,
+  Video,
+  VideoWrapper,
+} from './ScanQrView.styled'
 
 type ScanQrViewProps = {
   onUploadQrViewRequest?: () => void
@@ -67,7 +64,13 @@ export const ScanQrView = ({
     video.srcObject = stream
     video.play()
 
-    return () => stream.getTracks().forEach(track => track.stop())
+    return () => {
+      stream.getTracks().forEach(track => track.stop())
+
+      if (video) {
+        video.srcObject = null
+      }
+    }
   }, [video, stream])
 
   useEffect(getStream, [getStream])
@@ -109,11 +112,21 @@ export const ScanQrView = ({
 
   return (
     <Container className={className}>
+      <div />
       <MatchQuery
         value={streamMutationState}
-        success={() => <Video ref={setVideo} muted />}
+        success={() => (
+          <VideoWrapper>
+            <Video ref={setVideo} muted />
+            <BorderImageWrapper>
+              <Image src="/assets/images/borderedWrapper.svg" alt="" />
+            </BorderImageWrapper>
+          </VideoWrapper>
+        )}
         pending={() => (
-          <FlowPendingPageContent title={t('getting_video_permission')} />
+          <CenterAbsolutely>
+            <Spinner size="3em" />
+          </CenterAbsolutely>
         )}
         error={error => (
           <FlowErrorPageContent
@@ -134,6 +147,16 @@ export const ScanQrView = ({
       />
       {onUploadQrViewRequest && (
         <Button onClick={onUploadQrViewRequest}>
+          <VStack
+            alignItems="center"
+            style={{
+              fontSize: '20px',
+              display: 'inline-flex',
+              marginRight: 6,
+            }}
+          >
+            <UploadIcon />
+          </VStack>{' '}
           {t('upload_qr_code_image')}
         </Button>
       )}
