@@ -23,7 +23,7 @@ export const es = {
   fastVault: 'Fast Vault',
   scanQrInstruction:
     'Escanea el QR con otro dispositivo. Se recomienda configuración de 3 dispositivos, 2 son suficientes.',
-  devicesStatus: 'Dispositivos ({{currentPeers}}/3)',
+  devices: 'Dispositivos',
   waitingOnDevices: 'Esperando dispositivos...',
   switchToInternet: 'Volver al modo de internet',
   signPrivately: '¿Quieres firmar en privado?',

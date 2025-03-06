@@ -21,7 +21,7 @@ export const hr = {
   localMode: 'Helyi módban van',
   scanQrInstruction:
     'Olvassa be a QR-kódot egy másik eszközzel. 3 eszköz ajánlott, 2 elegendő.',
-  devicesStatus: 'Eszközök ({{currentPeers}}/3)',
+  devices: 'Eszközök',
   waitingOnDevices: 'Eszközökre várakozás...',
   switchToInternet: 'Váltás vissza az internetes módra',
   signPrivately: 'Szeretne privát módon aláírni?',

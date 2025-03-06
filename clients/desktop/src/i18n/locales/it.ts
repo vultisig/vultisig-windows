@@ -23,7 +23,7 @@ export const it = {
   localMode: 'Sei in modalità locale',
   scanQrInstruction:
     'Scansiona il QR con un altro dispositivo. Si consiglia un setup a 3 dispositivi, 2 sono sufficienti.',
-  devicesStatus: 'Dispositivi ({{currentPeers}}/3)',
+  devices: 'Dispositivi',
   waitingOnDevices: 'In attesa dei dispositivi...',
   switchToInternet: 'Torna alla modalità Internet',
   signPrivately: 'Vuoi firmare in privato?',
