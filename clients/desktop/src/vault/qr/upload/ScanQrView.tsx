@@ -7,9 +7,10 @@ import styled from 'styled-components'
 
 import { Button } from '../../../lib/ui/buttons/Button'
 import { takeWholeSpaceAbsolutely } from '../../../lib/ui/css/takeWholeSpaceAbsolutely'
+import { CenterAbsolutely } from '../../../lib/ui/layout/CenterAbsolutely'
+import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent'
-import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent'
 import { PageContent } from '../../../ui/page/PageContent'
 import { readQrCode } from './utils/readQrCode'
 
@@ -113,7 +114,9 @@ export const ScanQrView = ({
         value={streamMutationState}
         success={() => <Video ref={setVideo} muted />}
         pending={() => (
-          <FlowPendingPageContent title={t('getting_video_permission')} />
+          <CenterAbsolutely>
+            <Spinner size="3em" />
+          </CenterAbsolutely>
         )}
         error={error => (
           <FlowErrorPageContent
