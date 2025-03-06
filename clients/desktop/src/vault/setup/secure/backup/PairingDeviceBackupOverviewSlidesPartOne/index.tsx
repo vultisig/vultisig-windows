@@ -29,8 +29,7 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
 > = ({ onCompleted }) => {
   const { t } = useTranslation()
   const [vault] = useNewVault()
-  console.log('## vault', vault)
-  const deviceNumber = getDeviceNumber(vault)
+  const deviceNumber = vault.signers.length
   const { keyshares } = vault
   const is5PlusDevice = deviceNumber >= 5
   const {
