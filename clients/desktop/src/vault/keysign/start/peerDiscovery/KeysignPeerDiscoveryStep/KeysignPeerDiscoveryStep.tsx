@@ -47,6 +47,7 @@ export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
   const { signers } = useCurrentVault()
 
   const requiredSigners = getKeygenThreshold(signers.length)
+  const requiredPeers = requiredSigners - 1
 
   const peerOptionsQuery = usePeerOptionsQuery()
 
@@ -81,7 +82,7 @@ export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
                         {peerOptions.map(value => (
                           <PeerOption key={value} value={value} />
                         ))}
-                        {range(requiredSigners - 1 - peerOptions.length).map(
+                        {range(requiredPeers - peerOptions.length).map(
                           index => (
                             <PeerPlaceholder key={index}>
                               {t('scanWithDevice', {
