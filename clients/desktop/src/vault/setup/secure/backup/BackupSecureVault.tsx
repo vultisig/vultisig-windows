@@ -40,7 +40,6 @@ export const BackupSecureVault: FC<BackupFastVaultProps> = ({
   const vaults = useVaults()
   // @antonio: by design we only need to show the summary step if user has more than 2 vaults
   const shouldShowBackupSummary = vaults.length > 1
-  console.log('## isInitiatingDevice', isInitiatingDevice)
 
   return (
     <NewVaultProvider initialValue={vault}>
