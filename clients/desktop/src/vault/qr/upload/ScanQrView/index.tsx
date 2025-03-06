@@ -148,7 +148,7 @@ export const ScanQrView = ({
       {onUploadQrViewRequest && (
         <Button onClick={onUploadQrViewRequest}>
           <VStack
-            alignItems="cetner"
+            alignItems="center"
             style={{
               fontSize: '20px',
               display: 'inline-flex',
