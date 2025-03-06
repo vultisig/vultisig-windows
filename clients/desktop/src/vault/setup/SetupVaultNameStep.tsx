@@ -22,6 +22,8 @@ import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { useVaultNames } from '../hooks/useVaultNames'
 import { KeygenEducationPrompt } from '../keygen/shared/KeygenEducationPrompt'
 import { MAX_VAULT_NAME_LENGTH } from './shared/constants'
+import { useVaultType } from './shared/state/vaultType'
+import { getDefaultVaultName } from './shared/utils/getDefaultVaultName'
 import { useVaultName } from './state/vaultName'
 
 export const vaultNameSchema = (existingNames: string[]) =>
@@ -44,6 +46,8 @@ export const SetupVaultNameStep = ({
   const { t } = useTranslation()
   const [, setName] = useVaultName()
   const existingVaultNames = useVaultNames()
+  const vaultType = useVaultType()
+  const defaultVaultName = getDefaultVaultName(vaultType, existingVaultNames)
 
   const {
     control,
@@ -52,7 +56,7 @@ export const SetupVaultNameStep = ({
     formState: { errors },
   } = useForm<VaultNameSchemaType>({
     resolver: zodResolver(vaultNameSchema(existingVaultNames)),
-    defaultValues: { vaultName: '' },
+    defaultValues: { vaultName: defaultVaultName },
     mode: 'all',
   })
 

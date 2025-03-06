@@ -1,3 +1,4 @@
+import { recommendedPeers, requiredPeers } from '@core/mpc/peers/config'
 import { range } from '@lib/utils/array/range'
 import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo, useState } from 'react'
@@ -7,15 +8,19 @@ import { Match } from '../../../../lib/ui/base/Match'
 import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps'
 import { useBoolean } from '../../../../lib/ui/hooks/useBoolean'
 import { CloseIcon } from '../../../../lib/ui/icons/CloseIcon'
-import { CloudOffIcon } from '../../../../lib/ui/icons/CloudOffIcon'
 import { InfoIcon } from '../../../../lib/ui/icons/InfoIcon'
-import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
+import { VStack } from '../../../../lib/ui/layout/Stack'
 import { TakeWholeSpaceCenterContent } from '../../../../lib/ui/layout/TakeWholeSpaceCenterContent'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
 import { OnBackProp, OnForwardProp } from '../../../../lib/ui/props'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../../lib/ui/text'
+import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'
+import { PeerOption } from '../../../../mpc/peers/option/PeerOption'
 import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryFormFooter'
+import { PeerPlaceholder } from '../../../../mpc/peers/PeerPlaceholder'
+import { PeersContainer } from '../../../../mpc/peers/PeersContainer'
+import { MpcLocalServerIndicator } from '../../../../mpc/serverType/MpcLocalServerIndicator'
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { PageHeader } from '../../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
@@ -25,26 +30,20 @@ import { StrictText } from '../../../deposit/DepositVerify/DepositVerify.styled'
 import { CurrentPeersCorrector } from '../../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
 import { DownloadKeygenQrCode } from '../../../keygen/shared/peerDiscovery/DownloadKeygenQrCode'
 import { KeygenPeerDiscoveryQrCode } from '../../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryQrCode'
-import { useCurrentLocalPartyId } from '../../../keygen/state/currentLocalPartyId'
+import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
 import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
 import { useJoinKeygenUrlQuery } from '../../peers/queries/useJoinKeygenUrlQuery'
 import { SecureVaultKeygenOverlay } from '../components/SecureVaultKeygenOverlay'
-import { SecureVaultPeerOption } from '../components/SecureVaultPeerOption'
 import {
   CloseIconWrapper,
-  CloudOffWrapper,
   ContentWrapper,
   InfoIconWrapperForBanner,
-  LocalPillWrapper,
   PageWrapper,
   PillWrapper,
 } from './SecureVaultKeygenPeerDiscoveryStep.styles'
 
 const educationUrl =
   'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
-
-const requiredPeers = 1
-const recommendedPeers = 2
 
 export const SecureVaultKeygenPeerDiscoveryStep = ({
   onForward,
@@ -55,15 +54,8 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
   const [showWarning, { toggle }] = useBoolean(true)
   const { t } = useTranslation()
   const joinUrlQuery = useJoinKeygenUrlQuery()
-  const currentDevice = useCurrentLocalPartyId()
   const selectedPeers = useSelectedPeers()
-  const displayedDevices = [currentDevice, ...selectedPeers]
-  const shouldShowOptional = selectedPeers.length < recommendedPeers
-  if (shouldShowOptional) {
-    displayedDevices.push(
-      ...range(recommendedPeers - selectedPeers.length).map(() => '')
-    )
-  }
+  const peerOptionsQuery = usePeerOptionsQuery()
 
   const isDisabled = useMemo(() => {
     if (selectedPeers.length < requiredPeers) {
@@ -99,84 +91,99 @@ export const SecureVaultKeygenPeerDiscoveryStep = ({
           onSubmit: onForward,
           isDisabled,
         })}
-        justifyContent="space-between"
       >
-        <VStack justifyContent="center" alignItems="center" gap={40}>
-          <MatchQuery
-            value={joinUrlQuery}
-            success={value => <KeygenPeerDiscoveryQrCode value={value} />}
-            pending={() => (
-              <TakeWholeSpaceCenterContent>
-                <Spinner />
-              </TakeWholeSpaceCenterContent>
-            )}
-            error={() => (
-              <TakeWholeSpaceCenterContent>
-                <StrictText>{t('failed_to_generate_qr_code')}</StrictText>
-              </TakeWholeSpaceCenterContent>
-            )}
-          />
-          <ContentWrapper gap={24} alignItems="center">
-            <Match
-              value={serverType}
-              local={() => (
-                <LocalPillWrapper alignItems="baseline">
-                  <CloudOffWrapper>
-                    <CloudOffIcon />
-                  </CloudOffWrapper>
-                  <Text size={13} weight={500} color="shy">
-                    {t('localMode')}
-                  </Text>
-                </LocalPillWrapper>
+        <VStack flexGrow justifyContent="space-between">
+          <VStack
+            fullWidth
+            justifyContent="center"
+            alignItems="center"
+            gap={40}
+          >
+            <MatchQuery
+              value={joinUrlQuery}
+              success={value => <KeygenPeerDiscoveryQrCode value={value} />}
+              pending={() => (
+                <TakeWholeSpaceCenterContent>
+                  <Spinner />
+                </TakeWholeSpaceCenterContent>
               )}
-              relay={() =>
-                showWarning && (
-                  <PillWrapper gap={12} alignItems="baseline">
-                    <InfoIconWrapperForBanner>
-                      <InfoIcon />
-                    </InfoIconWrapperForBanner>
-                    <Text weight={500} color="shy" size={13}>
-                      {t('scanQrInstruction')}
-                    </Text>
-                    <CloseIconWrapper
-                      role="button"
-                      tabIndex={0}
-                      onClick={toggle}
-                    >
-                      <CloseIcon />
-                    </CloseIconWrapper>
-                  </PillWrapper>
-                )
-              }
+              error={() => (
+                <TakeWholeSpaceCenterContent>
+                  <StrictText>{t('failed_to_generate_qr_code')}</StrictText>
+                </TakeWholeSpaceCenterContent>
+              )}
             />
-            <VStack gap={24}>
-              <Text color="contrast" size={22} weight="500">
-                {t('devicesStatus', {
-                  currentPeers: selectedPeers.length + 1,
-                })}
-              </Text>
-              <CurrentPeersCorrector />
-              <HStack gap={48} wrap="wrap">
-                {displayedDevices.map((device, index) => (
-                  <SecureVaultPeerOption
-                    shouldShowOptionalDevice={shouldShowOptional}
-                    deviceNumber={index}
-                    isCurrentDevice={index === 0}
-                    key={index}
-                    value={device}
+            <ContentWrapper fullWidth gap={24} alignItems="center">
+              <Match
+                value={serverType}
+                local={() => <MpcLocalServerIndicator />}
+                relay={() =>
+                  showWarning && (
+                    <PillWrapper gap={12} alignItems="center">
+                      <InfoIconWrapperForBanner>
+                        <InfoIcon />
+                      </InfoIconWrapperForBanner>
+                      <Text weight={500} color="shy" size={13}>
+                        {t('scanQrInstruction')}
+                      </Text>
+                      <CloseIconWrapper
+                        role="button"
+                        tabIndex={0}
+                        onClick={toggle}
+                      >
+                        <CloseIcon />
+                      </CloseIconWrapper>
+                    </PillWrapper>
+                  )
+                }
+              />
+              <VStack fullWidth gap={24}>
+                <Text color="contrast" size={22} weight="500">
+                  {t('devicesStatus', {
+                    currentPeers: selectedPeers.length + 1,
+                  })}
+                </Text>
+                <CurrentPeersCorrector />
+                <PeersContainer>
+                  <InitiatingDevice />
+                  <MatchQuery
+                    value={peerOptionsQuery}
+                    success={peerOptions => {
+                      return (
+                        <>
+                          {peerOptions.map(value => (
+                            <PeerOption key={value} value={value} />
+                          ))}
+                          {range(recommendedPeers - peerOptions.length).map(
+                            index => (
+                              <PeerPlaceholder key={index}>
+                                {t('scanWithDevice', {
+                                  deviceNumber: index + peerOptions.length + 1,
+                                })}
+                              </PeerPlaceholder>
+                            )
+                          )}
+                          {peerOptions.length >= recommendedPeers && (
+                            <PeerPlaceholder>
+                              {t('optionalDevice')}
+                            </PeerPlaceholder>
+                          )}
+                        </>
+                      )
+                    }}
                   />
-                ))}
-              </HStack>
-            </VStack>
-          </ContentWrapper>
+                </PeersContainer>
+              </VStack>
+            </ContentWrapper>
+          </VStack>
+          <PeerDiscoveryFormFooter isDisabled={isDisabled} />
         </VStack>
-        <PeerDiscoveryFormFooter isDisabled={isDisabled} />
-        {overlayShown && (
-          <SecureVaultKeygenOverlay
-            onCompleted={() => setHasShownOverlay(false)}
-          />
-        )}
       </PageWrapper>
+      {overlayShown && (
+        <SecureVaultKeygenOverlay
+          onCompleted={() => setHasShownOverlay(false)}
+        />
+      )}
     </>
   )
 }
