@@ -10,6 +10,7 @@ import { getColor } from '../../lib/ui/theme/getters'
 const Container = styled.div`
   ${hStack({
     gap: 12,
+    fullWidth: true,
   })}
   padding: 12px;
   color: ${getColor('primaryAlt')};

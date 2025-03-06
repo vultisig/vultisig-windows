@@ -8,6 +8,9 @@ export const es = {
   onboarding_view3_description:
     'Vultisig es, por naturaleza, una aplicación multi-dispositivo. Requiere al menos dos dispositivos para crear una bóveda segura: un dispositivo iniciador y un dispositivo de emparejamiento.',
   moreInfo: 'Más información',
+  waiting_for_devices_to_join: 'Esperando a que otros dispositivos se unan',
+  waiting_for_devices_to_join_description:
+    'Su bóveda comenzará a generarse en cuanto finalice la configuración en su dispositivo principal',
   secureVaultSetupPasswordTooltipContent:
     'Esto ocurre porque la contraseña se usa para cifrar localmente el archivo de copia de seguridad, de manera similar a cómo se cifra un disco duro. En el siguiente paso, tienes la opción de añadir una pista.',
   onboarding_view4_description:
@@ -20,7 +23,7 @@ export const es = {
   fastVault: 'Fast Vault',
   scanQrInstruction:
     'Escanea el QR con otro dispositivo. Se recomienda configuración de 3 dispositivos, 2 son suficientes.',
-  devicesStatus: 'Dispositivos ({{currentPeers}}/3)',
+  devices: 'Dispositivos',
   waitingOnDevices: 'Esperando dispositivos...',
   switchToInternet: 'Volver al modo de internet',
   signPrivately: '¿Quieres firmar en privado?',
@@ -761,7 +764,7 @@ export const es = {
   failed_to_save_vault: 'No se pudo guardar la bóveda',
   vault_password: 'Contraseña de la bóveda',
   upload_qr_code_to_join_keysign: 'Sube el código QR para unirte a Keysign',
-  upload_qr_code_image: 'Subir imagen de código QR',
+  upload_qr_code_image: 'Subir código QR',
   getting_video_permission: 'Obteniendo permiso para grabar vídeo...',
   failed_to_get_video_permission: 'No se pudo obtener el permiso para el video',
   terms_required: 'Debes aceptar los términos',

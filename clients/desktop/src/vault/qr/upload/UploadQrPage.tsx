@@ -1,11 +1,13 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { Match } from '../../../lib/ui/base/Match'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
+import { PageContent } from '../../../ui/page/PageContent'
 import { ScanQrView } from './ScanQrView'
 import { UploadQrView } from './UploadQrView'
 
@@ -31,7 +33,7 @@ export const UploadQrPage = () => {
   )
 
   return (
-    <>
+    <StyledPageContent>
       <FlowPageHeader
         onBack={
           viewIndex === 0 ? goBack : () => setView(uploadQrViews[viewIndex - 1])
@@ -48,6 +50,13 @@ export const UploadQrPage = () => {
         )}
         upload={() => <UploadQrView />}
       />
-    </>
+    </StyledPageContent>
   )
 }
+
+const StyledPageContent = styled(PageContent)`
+  background-image: url('/assets/images/scanQRCodeBackground.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 0% 40%;
+`

@@ -8,7 +8,7 @@ import { CheckIcon } from '../../../lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '../../../lib/ui/icons/LightningGradientIcon'
 import { LightningIcon } from '../../../lib/ui/icons/LightningIcon'
 import ShieldCheckIcon from '../../../lib/ui/icons/ShieldCheckIcon'
-import { HStack } from '../../../lib/ui/layout/Stack'
+import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { GradientText, Text } from '../../../lib/ui/text'
 import { ToggleSwitch } from '../../../lib/ui/toggle-switch/ToggleSwitch'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
@@ -74,13 +74,18 @@ export const SetupVaultPage = () => {
                   label: 'Secure',
                   value: 'secure',
                   icon: (
-                    <ShieldCheckIcon
-                      color={
-                        value === 'fast'
-                          ? theme.colors.contrast.toCssValue()
-                          : theme.colors.success.toCssValue()
-                      }
-                    />
+                    <VStack
+                      alignItems="center"
+                      style={{
+                        fontSize: '24px',
+                        color:
+                          value === 'fast'
+                            ? theme.colors.contrast.toCssValue()
+                            : theme.colors.success.toCssValue(),
+                      }}
+                    >
+                      <ShieldCheckIcon />
+                    </VStack>
                   ),
                 },
                 {

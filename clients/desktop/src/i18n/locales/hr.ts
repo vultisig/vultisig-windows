@@ -12,13 +12,16 @@ export const hr = {
   email_confirmation_code_label:
     'Írja be a biztonsági másolattal e-mailben kapott kódot',
   email_confirmation_code_error: 'Érvénytelen kód',
+  waiting_for_devices_to_join: 'Čeka se povezivanje drugih uređaja',
+  waiting_for_devices_to_join_description:
+    'Generiranje pohrane počet će čim dovršite postavljanje na glavnom uređaju',
   thisDevice: 'Ez az eszköz',
   optionalDevice: 'Opcionális eszköz',
   scanWithDevice: 'Beolvasás a {{deviceNumber}}. eszközzel',
   localMode: 'Helyi módban van',
   scanQrInstruction:
     'Olvassa be a QR-kódot egy másik eszközzel. 3 eszköz ajánlott, 2 elegendő.',
-  devicesStatus: 'Eszközök ({{currentPeers}}/3)',
+  devices: 'Eszközök',
   waitingOnDevices: 'Eszközökre várakozás...',
   switchToInternet: 'Váltás vissza az internetes módra',
   signPrivately: 'Szeretne privát módon aláírni?',
@@ -735,7 +738,7 @@ export const hr = {
   vault_password: 'Lozinka trezora',
   upload_qr_code_to_join_keysign:
     'Učitajte QR kod da biste se pridružili Keysignu',
-  upload_qr_code_image: 'Prenesite sliku QR koda',
+  upload_qr_code_image: 'Prenesi QR',
   getting_video_permission: 'Dobivanje dozvole za video...',
   failed_to_get_video_permission:
     'Nije uspjelo dobivanje dozvole za videozapis',

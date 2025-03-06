@@ -38,7 +38,10 @@ export const SetupVaultCreationStep = ({
             vaultType === 'fast' ? (
               <BackupFastVault vault={shouldBePresent(vault)} />
             ) : (
-              <BackupSecureVault vault={shouldBePresent(vault)} />
+              <BackupSecureVault
+                isInitiatingDevice={true}
+                vault={shouldBePresent(vault)}
+              />
             )
           }
         />
