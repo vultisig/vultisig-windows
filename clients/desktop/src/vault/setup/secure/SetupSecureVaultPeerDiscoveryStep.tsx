@@ -56,6 +56,7 @@ export const SetupSecureVaultPeerDiscoveryStep = ({
 
   return (
     <>
+      <CurrentPeersCorrector />
       <PageHeader
         title={<PageHeaderTitle>{t('scan_qr')}</PageHeaderTitle>}
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
@@ -93,7 +94,6 @@ export const SetupSecureVaultPeerDiscoveryStep = ({
                 relay={() => <PeerRequirementsInfo />}
               />
               <PeersManagerTitle target={recommendedPeers + 1} />
-              <CurrentPeersCorrector />
               <PeersContainer>
                 <InitiatingDevice />
                 <MatchQuery
