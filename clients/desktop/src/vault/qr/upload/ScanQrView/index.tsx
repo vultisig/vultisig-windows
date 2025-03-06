@@ -3,26 +3,19 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
-import { Button } from '../../../lib/ui/buttons/Button'
-import { takeWholeSpaceAbsolutely } from '../../../lib/ui/css/takeWholeSpaceAbsolutely'
-import { CenterAbsolutely } from '../../../lib/ui/layout/CenterAbsolutely'
-import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
-import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent'
-import { PageContent } from '../../../ui/page/PageContent'
-import { readQrCode } from './utils/readQrCode'
-
-const Container = styled(PageContent)`
-  position: relative;
-  justify-content: flex-end;
-`
-
-const Video = styled.video`
-  ${takeWholeSpaceAbsolutely}
-  object-fit: cover;
-`
+import { Button } from '../../../../lib/ui/buttons/Button'
+import { CenterAbsolutely } from '../../../../lib/ui/layout/CenterAbsolutely'
+import { Spinner } from '../../../../lib/ui/loaders/Spinner'
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { FlowErrorPageContent } from '../../../../ui/flow/FlowErrorPageContent'
+import { readQrCode } from '../utils/readQrCode'
+import {
+  BorderImageWrapper,
+  Container,
+  Video,
+  VideoWrapper,
+} from './ScanQrView.styled'
 
 type ScanQrViewProps = {
   onUploadQrViewRequest?: () => void
@@ -112,7 +105,16 @@ export const ScanQrView = ({
     <Container className={className}>
       <MatchQuery
         value={streamMutationState}
-        success={() => <Video ref={setVideo} muted />}
+        success={() => (
+          <CenterAbsolutely>
+            <VideoWrapper>
+              <Video ref={setVideo} muted />
+              <BorderImageWrapper>
+                <img src="/assets/images/borderedWrapper.svg" alt="" />
+              </BorderImageWrapper>
+            </VideoWrapper>
+          </CenterAbsolutely>
+        )}
         pending={() => (
           <CenterAbsolutely>
             <Spinner size="3em" />
