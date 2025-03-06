@@ -13,6 +13,9 @@ export const it = {
   onboarding_view4_description:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   tokens: 'token',
+  waiting_for_devices_to_join: 'In attesa che altri dispositivi si uniscano',
+  waiting_for_devices_to_join_description:
+    'Il tuo caveau inizierà a generarsi non appena avrai completato la configurazione sul tuo dispositivo principale',
   thisDevice: 'Questo dispositivo',
   supported_file_types: 'Tipi di file supportati: .bak & .vult',
   optionalDevice: 'Dispositivo opzionale',

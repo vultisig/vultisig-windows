@@ -8,6 +8,9 @@ export const es = {
   onboarding_view3_description:
     'Vultisig es, por naturaleza, una aplicación multi-dispositivo. Requiere al menos dos dispositivos para crear una bóveda segura: un dispositivo iniciador y un dispositivo de emparejamiento.',
   moreInfo: 'Más información',
+  waiting_for_devices_to_join: 'Esperando a que otros dispositivos se unan',
+  waiting_for_devices_to_join_description:
+    'Su bóveda comenzará a generarse en cuanto finalice la configuración en su dispositivo principal',
   secureVaultSetupPasswordTooltipContent:
     'Esto ocurre porque la contraseña se usa para cifrar localmente el archivo de copia de seguridad, de manera similar a cómo se cifra un disco duro. En el siguiente paso, tienes la opción de añadir una pista.',
   onboarding_view4_description:

@@ -12,6 +12,9 @@ export const hr = {
   email_confirmation_code_label:
     'Írja be a biztonsági másolattal e-mailben kapott kódot',
   email_confirmation_code_error: 'Érvénytelen kód',
+  waiting_for_devices_to_join: 'Várakozás más eszközök csatlakozására',
+  waiting_for_devices_to_join_description:
+    'A tárhely generálása megkezdődik, amint befejezi a beállítást a fő eszközén',
   thisDevice: 'Ez az eszköz',
   optionalDevice: 'Opcionális eszköz',
   scanWithDevice: 'Beolvasás a {{deviceNumber}}. eszközzel',
