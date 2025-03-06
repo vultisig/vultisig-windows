@@ -32,7 +32,13 @@ export const QrImageDropZone = ({ onFinish }: QrImageDropZoneProps) => {
 
   return (
     <InteractiveDropZoneContainer {...getRootProps()}>
-      <DropZoneContent icon={<ComputerUploadIcon />}>
+      <DropZoneContent
+        icon={
+          <div style={{ color: '#2155DF' }}>
+            <ComputerUploadIcon />
+          </div>
+        }
+      >
         {t('upload_qr_code_image')}
       </DropZoneContent>
       <input {...getInputProps()} />
