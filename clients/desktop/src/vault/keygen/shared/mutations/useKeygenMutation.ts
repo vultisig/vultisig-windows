@@ -8,9 +8,9 @@ import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
 import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
+import { useCurrentVault } from '../../../state/currentVault'
 import { KeygenType } from '../../KeygenType'
 import { useCurrentKeygenType } from '../../state/currentKeygenType'
-import { useCurrentKeygenVault } from '../../state/currentKeygenVault'
 import { useCurrentServerUrl } from '../../state/currentServerUrl'
 import { useCurrentSessionId } from '../state/currentSessionId'
 
@@ -23,7 +23,7 @@ export const useKeygenMutation = () => {
 
   const sessionId = useCurrentSessionId()
 
-  const vault = useCurrentKeygenVault()
+  const vault = useCurrentVault()
 
   const { name, local_party_id, hex_chain_code } = vault
 

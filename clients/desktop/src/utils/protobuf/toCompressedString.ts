@@ -1,3 +1,4 @@
+import { attempt } from '@lib/utils/attempt'
 import { SevenZipModule } from '7z-wasm'
 
 type ToCompressedStringInput = {
@@ -10,9 +11,17 @@ export const toCompressedString = ({
   binary,
 }: ToCompressedStringInput) => {
   const archiveName = 'compressed.xz'
-  sevenZip.FS.writeFile('data.bin', binary)
-  sevenZip.callMain(['a', archiveName, 'data.bin'])
-  const compressedData = sevenZip.FS.readFile(archiveName)
+  const inputFileName = 'data.bin'
 
-  return Buffer.from(compressedData).toString('base64')
+  try {
+    sevenZip.FS.writeFile(inputFileName, binary)
+    sevenZip.callMain(['a', archiveName, inputFileName])
+    const compressedData = sevenZip.FS.readFile(archiveName)
+    return Buffer.from(compressedData).toString('base64')
+  } finally {
+    attempt(() => {
+      sevenZip.FS.unlink(inputFileName)
+      sevenZip.FS.unlink(archiveName)
+    }, undefined)
+  }
 }

@@ -16,7 +16,6 @@ import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/Keyge
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
-import { CurrentKeygenVaultProvider } from '../../keygen/state/currentKeygenVault'
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
@@ -72,62 +71,60 @@ export const FastReshareVaultPage = () => {
                               <CurrentKeygenTypeProvider
                                 value={KeygenType.Reshare}
                               >
-                                <CurrentKeygenVaultProvider value={vault}>
-                                  <MpcMediatorManager />
-                                  <Match
-                                    value={step}
-                                    email={() => (
-                                      <ServerEmailStep onForward={toNextStep} />
-                                    )}
-                                    password={() =>
-                                      hasServer && !isBackup ? (
-                                        <ServerPasswordStep
-                                          onForward={toNextStep}
-                                        />
-                                      ) : (
-                                        <SetServerPasswordStep
-                                          onForward={toNextStep}
-                                        />
-                                      )
-                                    }
-                                    server={() => (
-                                      <FastReshareServerStep
+                                <MpcMediatorManager />
+                                <Match
+                                  value={step}
+                                  email={() => (
+                                    <ServerEmailStep onForward={toNextStep} />
+                                  )}
+                                  password={() =>
+                                    hasServer && !isBackup ? (
+                                      <ServerPasswordStep
                                         onForward={toNextStep}
                                       />
-                                    )}
-                                    joinSession={() => (
-                                      <JoinKeygenSessionStep
+                                    ) : (
+                                      <SetServerPasswordStep
                                         onForward={toNextStep}
                                       />
-                                    )}
-                                    peers={() => (
-                                      <KeygenPeerDiscoveryStep
-                                        onForward={toNextStep}
-                                      />
-                                    )}
-                                    verify={() => (
-                                      <ReshareVerifyStep
-                                        onBack={toPreviousStep}
-                                        onForward={toNextStep}
-                                      />
-                                    )}
-                                    startSession={() => (
-                                      <KeygenStartSessionStep
-                                        onBack={toPreviousStep}
-                                        onForward={toNextStep}
-                                      />
-                                    )}
-                                    keygen={() => (
-                                      <KeygenStep
-                                        title={t('reshare')}
-                                        onTryAgain={() =>
-                                          setStep(reshareVaultSteps[0])
-                                        }
-                                        onBack={() => setStep('verify')}
-                                      />
-                                    )}
-                                  />
-                                </CurrentKeygenVaultProvider>
+                                    )
+                                  }
+                                  server={() => (
+                                    <FastReshareServerStep
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  joinSession={() => (
+                                    <JoinKeygenSessionStep
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  peers={() => (
+                                    <KeygenPeerDiscoveryStep
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  verify={() => (
+                                    <ReshareVerifyStep
+                                      onBack={toPreviousStep}
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  startSession={() => (
+                                    <KeygenStartSessionStep
+                                      onBack={toPreviousStep}
+                                      onForward={toNextStep}
+                                    />
+                                  )}
+                                  keygen={() => (
+                                    <KeygenStep
+                                      title={t('reshare')}
+                                      onTryAgain={() =>
+                                        setStep(reshareVaultSteps[0])
+                                      }
+                                      onBack={() => setStep('verify')}
+                                    />
+                                  )}
+                                />
                               </CurrentKeygenTypeProvider>
                             </CurrentLocalPartyIdProvider>
                           </ServerUrlDerivedFromServerTypeProvider>
