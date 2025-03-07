@@ -3,18 +3,16 @@ import { ComponentProps } from 'react'
 import QRCode from 'react-qr-code'
 
 import { ValueProp } from '../../../lib/ui/props'
+import { qrCodeDefaultSize } from './config'
 import { QRCodeWrapper, RiveWrapper, Wrapper } from './FramedQrCode.styled'
 import { useQRCodeScaleFactor } from './hooks/useQRCodeScaleFactor'
 
-const DEFAULT_QR_CODE_SIZE = 365
-
 type FramedQrCode = ValueProp<string> &
   Omit<ComponentProps<typeof Wrapper>, 'size' | 'scale'> & {
-    size?: number
     scaling?: boolean
   }
 
-export const FramedQrCode = ({ size, value, scaling = true }: FramedQrCode) => {
+export const FramedQrCode = ({ value, scaling = true }: FramedQrCode) => {
   const scale = useQRCodeScaleFactor(scaling)
   const { RiveComponent } = useRive({
     src: '/assets/animations/keygen-secure-vault/qr-scanned.riv',
@@ -22,7 +20,7 @@ export const FramedQrCode = ({ size, value, scaling = true }: FramedQrCode) => {
   })
 
   return (
-    <Wrapper scale={scale} size={size ?? DEFAULT_QR_CODE_SIZE}>
+    <Wrapper scale={scale}>
       <RiveWrapper>
         <RiveComponent />
       </RiveWrapper>
@@ -30,7 +28,7 @@ export const FramedQrCode = ({ size, value, scaling = true }: FramedQrCode) => {
         <QRCode
           fgColor="#FFFFFF"
           bgColor="#000000"
-          size={size ?? DEFAULT_QR_CODE_SIZE}
+          size={qrCodeDefaultSize}
           value={value}
         />
       </QRCodeWrapper>

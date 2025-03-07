@@ -1,13 +1,13 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { ReshareMessageSchema } from '@core/communication/vultisig/keygen/v1/reshare_message_pb'
+import { MpcServerType } from '@core/mpc/MpcServerType'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config'
 import { toCompressedString } from '../../../../utils/protobuf/toCompressedString'
-import { KeygenServerType } from '../../server/KeygenServerType'
 
 export type GetJoinReshareUrlInput = {
-  serverType: KeygenServerType
+  serverType: MpcServerType
   vaultName: string
   serviceName: string
   sessionId: string

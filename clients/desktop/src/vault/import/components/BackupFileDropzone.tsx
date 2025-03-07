@@ -29,7 +29,13 @@ export const BackupFileDropzone = ({ onFinish }: BackupFileDropzoneProps) => {
   return (
     <>
       <InteractiveDropZoneContainer {...getRootProps()}>
-        <DropZoneContent icon={<CloudUploadIcon />}>
+        <DropZoneContent
+          icon={
+            <div style={{ color: '#2155DF' }}>
+              <CloudUploadIcon />
+            </div>
+          }
+        >
           <Text color="supporting">{t('select_backup_file')}</Text>
         </DropZoneContent>
         <input {...getInputProps()} />

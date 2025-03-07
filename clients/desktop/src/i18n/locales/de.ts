@@ -8,6 +8,9 @@ export const de = {
   onboarding_view3_description:
     'Vultisig ist von Natur aus eine Mehrgeräte-Anwendung. Erfordert mindestens zwei Geräte, um einen sicheren Tresor zu erstellen: ein initiierendes Gerät und ein Paarungsgerät.',
   moreInfo: 'Mehr Info',
+  waiting_for_devices_to_join: 'Warten auf andere Geräte zum Beitreten',
+  waiting_for_devices_to_join_description:
+    'Ihr Tresor beginnt mit der Generierung, sobald Sie die Einrichtung auf Ihrem Hauptgerät abgeschlossen haben',
   secureVaultSetupPasswordTooltipContent:
     'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie eine Festplatte verschlüsselt wird. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
   onboarding_view4_description:
@@ -23,7 +26,7 @@ export const de = {
   localMode: 'Sie sind im lokalen Modus',
   scanQrInstruction:
     'QR mit einem anderen Gerät scannen. 3-Geräte-Setup empfohlen, 2 reichen aus.',
-  devicesStatus: 'Geräte ({{currentPeers}}/3)',
+  devices: 'Geräte',
   waitingOnDevices: 'Warten auf Geräte...',
   switchToInternet: 'Zurück in den Internetmodus wechseln',
   signPrivately: 'Möchten Sie privat signieren?',
@@ -759,7 +762,7 @@ export const de = {
   vault_password: 'Tresorkennwort',
   upload_qr_code_to_join_keysign:
     'Laden Sie den QR-Code hoch, um Keysign beizutreten',
-  upload_qr_code_image: 'QR-Code-Bild hochladen',
+  upload_qr_code_image: 'QR hochladen',
   getting_video_permission: 'Videoberechtigung einholen...',
   failed_to_get_video_permission:
     'Videoberechtigung konnte nicht eingeholt werden',

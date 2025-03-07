@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { storage } from '../../../../../wailsjs/go/models'
+import { FEATURE_FLAGS } from '../../../../constants'
 import { Match } from '../../../../lib/ui/base/Match'
 import { StepTransition } from '../../../../lib/ui/base/StepTransition'
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
@@ -9,6 +10,7 @@ import { appPaths } from '../../../../navigation'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { getStorageVaultId } from '../../../utils/storageVault'
 import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
+import { SetupVaultSummaryStepOld } from '../../shared/SetupVaultSummaryStepOld'
 import VaultBackupPage from '../../shared/vaultBackupSettings/VaultBackupPage'
 import { EmailConfirmation } from '.'
 import { BackupConfirmation } from './BackupConfirmation'
@@ -58,9 +60,16 @@ export const BackupFastVault: FC<BackupFastVaultProps> = ({ vault }) => {
       backupSuccessfulSlideshow={() =>
         shouldShowBackupSummary ? (
           <StepTransition
-            from={({ onForward }) => (
-              <SetupVaultSummaryStep onForward={onForward} vaultType="fast" />
-            )}
+            from={({ onForward }) =>
+              FEATURE_FLAGS.ENABLE_NEW_SUMMARY_PAGES ? (
+                <SetupVaultSummaryStep onForward={onForward} vaultType="fast" />
+              ) : (
+                <SetupVaultSummaryStepOld
+                  onForward={onForward}
+                  vaultType="fast"
+                />
+              )
+            }
             to={() => (
               <BackupSuccessSlide
                 onCompleted={() => navigate(appPaths.vault)}
