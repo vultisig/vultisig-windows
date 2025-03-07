@@ -5,9 +5,11 @@ import {
   ITransaction,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
-import { Chain } from '@core/chain/Chain'
+import { Chain, CosmosChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
+import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb'
@@ -30,20 +32,33 @@ export const getKeysignPayload = (
           id: transaction.transactionDetails.asset.ticker,
         })
 
-        if (!localCoin && transaction.chain.chain === Chain.Solana) {
-          if (!transaction.transactionDetails.asset.mint) {
-            throw new Error('Mint address not provided')
-          }
-          const splToken = await api.solana.fetchSolanaTokenInfo(
-            transaction.transactionDetails.asset.mint
-          )
-          localCoin = {
-            chain: transaction.chain.chain,
-            decimals: splToken.decimals,
-            id: transaction.transactionDetails.asset.mint,
-            logo: splToken.logoURI!,
-            ticker: splToken.symbol,
-            priceProviderId: splToken.extensions?.coingeckoId,
+        if (!localCoin) {
+          if (transaction.chain.chain === Chain.Solana) {
+            if (!transaction.transactionDetails.asset.mint) {
+              throw new Error('Mint address not provided')
+            }
+            const splToken = await api.solana.fetchSolanaTokenInfo(
+              transaction.transactionDetails.asset.mint
+            )
+            localCoin = {
+              chain: transaction.chain.chain,
+              decimals: splToken.decimals,
+              id: transaction.transactionDetails.asset.mint,
+              logo: splToken.logoURI || '',
+              ticker: splToken.symbol,
+              priceProviderId: splToken.extensions?.coingeckoId,
+            }
+          } else if (
+            Object.values(CosmosChain).includes(
+              transaction.chain.chain as CosmosChain
+            )
+          ) {
+            if (
+              cosmosFeeCoinDenom[transaction.chain.chain as CosmosChain] ===
+              transaction.transactionDetails.asset.ticker
+            ) {
+              localCoin = { ...chainFeeCoin[transaction.chain.chain] }
+            }
           }
         }
 

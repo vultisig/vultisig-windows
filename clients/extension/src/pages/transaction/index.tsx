@@ -622,7 +622,7 @@ const Component = () => {
                           <span className="extra">{`${formatUnits(
                             transaction.transactionDetails.amount.amount,
                             transaction.transactionDetails.amount.decimals
-                          )} ${transaction.transactionDetails.asset.ticker}`}</span>
+                          )} ${keysignPayload?.coin?.ticker}`}</span>
                         </div>
                       )}
                       {transaction.memo?.value &&
@@ -822,7 +822,7 @@ const Component = () => {
                           <span className="extra">{`${formatUnits(
                             transaction.transactionDetails.amount.amount,
                             transaction.transactionDetails.amount.decimals
-                          )} ${transaction.transactionDetails.asset.ticker}`}</span>
+                          )} ${keysignPayload?.coin?.ticker}`}</span>
                         </div>
                       )}
 

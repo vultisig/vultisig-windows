@@ -235,7 +235,7 @@ class XDEFIKeplrProvider extends Keplr {
       cosmosProvider
         .request({
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-          params: [_tx],
+          params: [{ ..._tx, txType: 'Keplr' }],
         })
         .then((result: SendTransactionResponse) => {
           const decoded = base58.decode(result.raw)
@@ -263,7 +263,7 @@ class XDEFIKeplrProvider extends Keplr {
       cosmosProvider
         .request({
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-          params: [txDetails[0]!],
+          params: [{ ...txDetails[0]!, txType: 'Keplr' }],
         })
         .then((result: SendTransactionResponse) => {
           resolve(result as any)
