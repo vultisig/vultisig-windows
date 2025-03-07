@@ -1,16 +1,14 @@
-import SevenZip from '7z-wasm'
+import { SevenZipModule } from '7z-wasm'
 
-export const toCompressedString = async (
+type ToCompressedStringInput = {
+  sevenZip: SevenZipModule
   binary: Uint8Array<ArrayBufferLike>
-) => {
-  let sevenZip
-  try {
-    sevenZip = await SevenZip({
-      locateFile: (file: any) => `/7z-wasm/${file}`,
-    })
-  } catch {
-    sevenZip = await SevenZip()
-  }
+}
+
+export const toCompressedString = ({
+  sevenZip,
+  binary,
+}: ToCompressedStringInput) => {
   const archiveName = 'compressed.xz'
   sevenZip.FS.writeFile('data.bin', binary)
   sevenZip.callMain(['a', archiveName, 'data.bin'])

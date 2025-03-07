@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
@@ -11,7 +12,7 @@ import { KeygenType } from '../../keygen/KeygenType'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenStep } from '../../keygen/shared/KeygenStep'
-import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager'
+import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
@@ -23,7 +24,6 @@ import { CurrentHexChainCodeProvider } from '../../setup/state/currentHexChainCo
 import { GeneratedHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey'
 import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/serverUrlDerivedFromServerType'
 import { useCurrentVault } from '../../state/currentVault'
-import { ReshareVaultPeerDiscoveryStep } from '../ReshareVaultPeerDiscoveryStep'
 import { ReshareVerifyStep } from '../shared/ReshareVerifyStep'
 
 const reshareVaultSteps = [
@@ -59,7 +59,7 @@ export const SecureReshareVaultPage = () => {
                         <CurrentLocalPartyIdProvider value={local_party_id}>
                           <CurrentKeygenTypeProvider value={KeygenType.Reshare}>
                             <CurrentKeygenVaultProvider value={vault}>
-                              <MediatorManager />
+                              <MpcMediatorManager />
                               <Match
                                 value={step}
                                 joinSession={() => (
@@ -68,7 +68,7 @@ export const SecureReshareVaultPage = () => {
                                   />
                                 )}
                                 peers={() => (
-                                  <ReshareVaultPeerDiscoveryStep
+                                  <KeygenPeerDiscoveryStep
                                     onForward={toNextStep}
                                   />
                                 )}
