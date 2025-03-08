@@ -668,7 +668,9 @@ namespace Provider {
               // The recipient should be in the ATA instruction's keys[0] (payer) or keys[2] (owner)
               recipient = ataInstruction.keys[2].pubkey.toString()
             } else {
-              throw new Error('Unable to determine recipient address. No direct token account or ATA instruction found.')
+              throw new Error(
+                'Unable to determine recipient address. No direct token account or ATA instruction found.'
+              )
             }
           }
 
