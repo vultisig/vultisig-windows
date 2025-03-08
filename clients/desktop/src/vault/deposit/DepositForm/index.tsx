@@ -175,6 +175,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                       `chainFunctions.${selectedChainAction}.labels.${field.name}`
                     )}{' '}
                     {field.name === 'amount' &&
+                      selectedChainAction === 'bond' &&
                       `(Balance: ${totalAmountAvailable.toFixed(2)} ${coin}) `}
                     {field.required ? (
                       <Text as="span" color="danger" size={14}>
