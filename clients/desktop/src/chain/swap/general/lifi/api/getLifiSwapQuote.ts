@@ -63,6 +63,8 @@ export const getLifiSwapQuote = async ({
         evm: () => ({
           from: shouldBePresent(from),
           to: shouldBePresent(to),
+          // TODO:  Extract swap fee from lifi quote response
+          swapFee: '0',
           data: shouldBePresent(data),
           value: BigInt(shouldBePresent(value)).toString(),
           gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),

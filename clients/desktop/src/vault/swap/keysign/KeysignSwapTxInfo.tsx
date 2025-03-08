@@ -1,5 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
+import { OneInchSwapPayload } from '@core/communication/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
@@ -50,7 +51,14 @@ export const KeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
     {
       thorchainSwapPayload: () => Chain.THORChain,
       mayachainSwapPayload: () => Chain.MayaChain,
-      oneinchSwapPayload: () => generalSwapProviderName.oneinch,
+      oneinchSwapPayload: () => {
+        const oneInchPayload = swapPayload?.value as OneInchSwapPayload
+        if (oneInchPayload?.quote?.tx?.swapFee) {
+          return generalSwapProviderName.lifi
+        } else {
+          return generalSwapProviderName.oneinch
+        }
+      },
     }
   )
 

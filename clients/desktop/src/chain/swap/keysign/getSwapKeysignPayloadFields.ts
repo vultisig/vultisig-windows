@@ -48,6 +48,7 @@ export const getSwapKeysignPayloadFields = ({
           tx: create(OneInchTransactionSchema, {
             ...quote.tx,
             gas: BigInt(quote.tx.gas),
+            swapFee: quote.tx.swapFee,
           }),
         }),
       })

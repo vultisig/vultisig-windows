@@ -10,5 +10,6 @@ export type GeneralSwapQuote = {
     value: string
     gasPrice: string
     gas: number
+    swapFee?: string
   }
 }
