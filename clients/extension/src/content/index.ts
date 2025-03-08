@@ -668,7 +668,7 @@ namespace Provider {
               // The recipient should be in the ATA instruction's keys[0] (payer) or keys[2] (owner)
               recipient = ataInstruction.keys[2].pubkey.toString()
             } else {
-              throw new Error('Unable to determine recipient address.')
+              throw new Error('Unable to determine recipient address. No direct token account or ATA instruction found.')
             }
           }
 
@@ -689,9 +689,6 @@ namespace Provider {
           }
         } else {
           continue
-        }
-        if (!modifiedTransfer) {
-          throw new Error('Could not parse transaction')
         }
         return await this.request({
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
