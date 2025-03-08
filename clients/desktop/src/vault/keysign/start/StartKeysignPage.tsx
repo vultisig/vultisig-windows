@@ -1,5 +1,6 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
@@ -9,7 +10,6 @@ import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManag
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId'
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
-import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType'
 import { GeneratedHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey'
 import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/serverUrlDerivedFromServerType'
 import { useCurrentVault } from '../../state/currentVault'
@@ -38,7 +38,7 @@ export const StartKeysignPage = () => {
             <PeersSelectionRecordProvider initialValue={{}}>
               <GeneratedSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>
-                  <CurrentServerTypeProvider initialValue="relay">
+                  <MpcServerTypeProvider initialValue="relay">
                     <ServerUrlDerivedFromServerTypeProvider>
                       <MediatorManager />
                       <Match
@@ -63,7 +63,7 @@ export const StartKeysignPage = () => {
                         )}
                       />
                     </ServerUrlDerivedFromServerTypeProvider>
-                  </CurrentServerTypeProvider>
+                  </MpcServerTypeProvider>
                 </GeneratedHexEncryptionKeyProvider>
               </GeneratedSessionIdProvider>
             </PeersSelectionRecordProvider>

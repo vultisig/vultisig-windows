@@ -11,10 +11,10 @@ export const useIsPeerDiscoveryStepDisabled = () => {
   const { signers } = useCurrentVault()
 
   return useMemo(() => {
-    const requiredPeersNumber = getKeygenThreshold(signers.length)
+    const requiredDevicesNumber = getKeygenThreshold(signers.length)
 
-    if (devices.length !== requiredPeersNumber) {
-      return t('select_n_devices', { count: requiredPeersNumber - 1 })
+    if (devices.length !== requiredDevicesNumber) {
+      return t('select_n_devices', { count: requiredDevicesNumber - 1 })
     }
   }, [devices.length, signers.length, t])
 }

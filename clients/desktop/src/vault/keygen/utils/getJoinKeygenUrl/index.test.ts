@@ -1,16 +1,16 @@
 import { mpcLibs } from '@core/mpc/mpcLib'
+import { MpcServerType } from '@core/mpc/MpcServerType'
 import * as queryUtils from '@lib/utils/query/addQueryParams'
 import { describe, expect, it, vi } from 'vitest'
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config'
 import * as protobufUtils from '../../../../utils/protobuf/toCompressedString'
-import { KeygenServerType } from '../../server/KeygenServerType'
 import { getJoinKeygenUrl } from '.'
 
 describe('getJoinKeygenUrl', () => {
   it('should construct a valid URL with the correct query parameters', async () => {
     const mockInput = {
-      serverType: 'relay' as KeygenServerType,
+      serverType: 'relay' as MpcServerType,
       vaultName: 'TestVault',
       serviceName: 'TestService',
       sessionId: '1234-session',

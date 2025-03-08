@@ -34,19 +34,20 @@ export const useKeygenMutation = () => {
   const isInitiatingDevice = useIsInitiatingDevice()
 
   return useMutation({
-    mutationFn: async () =>
-      match(keygenType, {
+    mutationFn: async () => {
+      const partialVault = match(keygenType, {
         [KeygenType.Keygen]: () => {
           return match(mpcLib, {
-            GG20: () =>
-              StartKeygen(
+            GG20: () => {
+              return StartKeygen(
                 name,
                 local_party_id,
                 sessionId,
                 hex_chain_code,
                 encryptionKeyHex,
                 serverUrl
-              ),
+              )
+            },
             DKLS: async () => {
               const mpcKeygen = new MPC(
                 KeygenType.Keygen,
@@ -84,7 +85,6 @@ export const useKeygenMutation = () => {
                 order: 0,
                 is_backed_up: false,
                 coins: [],
-                lib_type: 'DKLS',
               })
               return vault
             },
@@ -142,12 +142,17 @@ export const useKeygenMutation = () => {
                 order: 0,
                 is_backed_up: false,
                 coins: [],
-                lib_type: 'DKLS',
               })
               return vault
             },
           })
         },
-      }),
+      })
+
+      return {
+        ...partialVault,
+        lib_type: mpcLib,
+      }
+    },
   })
 }

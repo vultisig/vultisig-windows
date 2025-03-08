@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
@@ -16,7 +17,6 @@ import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSes
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 import { CurrentKeygenVaultProvider } from '../../keygen/state/currentKeygenVault'
 import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
-import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType'
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
 import { VaultTypeProvider } from '../../setup/shared/state/vaultType'
 import { CurrentHexChainCodeProvider } from '../../setup/state/currentHexChainCode'
@@ -54,7 +54,7 @@ export const SecureReshareVaultPage = () => {
               <GeneratedSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>
                   <CurrentHexChainCodeProvider value={hex_chain_code}>
-                    <CurrentServerTypeProvider initialValue="relay">
+                    <MpcServerTypeProvider initialValue="relay">
                       <ServerUrlDerivedFromServerTypeProvider>
                         <CurrentLocalPartyIdProvider value={local_party_id}>
                           <CurrentKeygenTypeProvider value={KeygenType.Reshare}>
@@ -98,7 +98,7 @@ export const SecureReshareVaultPage = () => {
                           </CurrentKeygenTypeProvider>
                         </CurrentLocalPartyIdProvider>
                       </ServerUrlDerivedFromServerTypeProvider>
-                    </CurrentServerTypeProvider>
+                    </MpcServerTypeProvider>
                   </CurrentHexChainCodeProvider>
                 </GeneratedHexEncryptionKeyProvider>
               </GeneratedSessionIdProvider>

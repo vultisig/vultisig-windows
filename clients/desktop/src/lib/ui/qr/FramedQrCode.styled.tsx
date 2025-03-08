@@ -1,12 +1,14 @@
 import styled from 'styled-components'
 
+import { toSizeUnit } from '../css/toSizeUnit'
+import { qrCodeDefaultSize } from './config'
+
 export const Wrapper = styled.div<{
-  size: number
   scale: number
 }>`
   position: relative;
   box-sizing: border-box;
-  width: ${({ size }) => size}px;
+  width: ${toSizeUnit(qrCodeDefaultSize)};
   padding: 24px;
   transition: transform 0.3s ease-in-out;
   transform: scale(${({ scale }) => scale});
