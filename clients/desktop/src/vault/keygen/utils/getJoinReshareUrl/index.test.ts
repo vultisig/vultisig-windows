@@ -1,15 +1,15 @@
+import { MpcServerType } from '@core/mpc/MpcServerType'
 import * as queryUtils from '@lib/utils/query/addQueryParams'
 import { describe, expect, it, vi } from 'vitest'
 
 import { deepLinkBaseUrl } from '../../../../deeplink/config'
 import * as protobufUtils from '../../../../utils/protobuf/toCompressedString'
-import { KeygenServerType } from '../../server/KeygenServerType'
 import { getJoinReshareUrl } from '.'
 
 describe('getJoinReshareUrl', () => {
   it('should construct a valid URL with the correct query parameters', async () => {
     const mockInput = {
-      serverType: 'relay' as KeygenServerType,
+      serverType: 'relay' as MpcServerType,
       vaultName: 'TestVault',
       serviceName: 'TestService',
       sessionId: '1234-session',
@@ -50,7 +50,7 @@ describe('getJoinReshareUrl', () => {
 
   it('should handle missing oldResharePrefix by defaulting to an empty string', async () => {
     const mockInput = {
-      serverType: 'relay' as KeygenServerType,
+      serverType: 'relay' as MpcServerType,
       vaultName: 'TestVault',
       serviceName: 'TestService',
       sessionId: '1234-session',

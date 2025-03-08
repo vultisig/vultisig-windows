@@ -1,15 +1,16 @@
+import { mpcServerUrl } from '@core/mpc/MpcServerType'
+
 import { ChildrenProp } from '../../../lib/ui/props'
-import { keygenServerUrl } from '../../keygen/server/KeygenServerType'
-import { useCurrentServerType } from '../../keygen/state/currentServerType'
+import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
 import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl'
 
 export const ServerUrlDerivedFromServerTypeProvider = ({
   children,
 }: ChildrenProp) => {
-  const [serverType] = useCurrentServerType()
+  const [serverType] = useMpcServerType()
 
   return (
-    <CurrentServerUrlProvider value={keygenServerUrl[serverType]}>
+    <CurrentServerUrlProvider value={mpcServerUrl[serverType]}>
       {children}
     </CurrentServerUrlProvider>
   )

@@ -1,13 +1,16 @@
-export const CloudOffIcon = () => (
+import { SvgProps } from '../props'
+
+export const CloudOffIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
     height="0.94em"
     viewBox="0 0 17 16"
     fill="none"
+    {...props}
   >
     <path
-      stroke="#4879FD"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}

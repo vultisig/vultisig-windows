@@ -13,21 +13,13 @@ export const ManageVaultCreation = () => {
     <VStack gap={20}>
       <Button
         onClick={() => {
-          navigate('setupVault', { params: {} })
+          navigate('newVault')
         }}
         kind="primary"
       >
         <HStack alignItems="center" gap={8}>
           <PlusIcon /> {t('add_new_vault')}
         </HStack>
-      </Button>
-      <Button
-        onClick={() => {
-          navigate('importVault')
-        }}
-        kind="outlined"
-      >
-        {t('import_existing_vault')}
       </Button>
     </VStack>
   )

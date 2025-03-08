@@ -11,6 +11,7 @@ import { IconWrapper } from '../../../lib/ui/icons/IconWrapper'
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
+import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
@@ -59,6 +60,8 @@ export const DepositForm: FC<DepositFormProps> = ({
     chain,
     selectedChainAction
   )
+  const [{ coin: chainCoinString }] = useAppPathParams<'deposit'>()
+  const coin = chainCoinString.split(':')[1]
 
   const schemaForChainAction = resolveSchema(
     chainActionSchema,
@@ -171,6 +174,9 @@ export const DepositForm: FC<DepositFormProps> = ({
                     {t(
                       `chainFunctions.${selectedChainAction}.labels.${field.name}`
                     )}{' '}
+                    {field.name === 'amount' &&
+                      selectedChainAction === 'bond' &&
+                      `(Balance: ${totalAmountAvailable.toFixed(2)} ${coin}) `}
                     {field.required ? (
                       <Text as="span" color="danger" size={14}>
                         *

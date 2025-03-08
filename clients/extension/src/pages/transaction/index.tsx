@@ -3,6 +3,15 @@ import '@clients/extension/src/pages/transaction/index.scss'
 import '@clients/extension/src/utils/prototypes'
 
 import { create } from '@bufbuild/protobuf'
+import { KeysignMessagePayload } from '@clients/desktop/src/chain/keysign/KeysignMessagePayload'
+import { getFeeAmount } from '@clients/desktop/src/chain/tx/fee/utils/getFeeAmount'
+import { hexEncode } from '@clients/desktop/src/chain/walletCore/hexEncode'
+import {
+  useWalletCore,
+  WalletCoreProvider,
+} from '@clients/desktop/src/providers/WalletCoreProvider'
+import { getJoinKeysignUrl } from '@clients/desktop/src/vault/keysign/shared/utils/getJoinKeysignUrl'
+import { tss } from '@clients/desktop/wailsjs/go/models'
 import ConfigProvider from '@clients/extension/src/components/config-provider'
 import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
 import VultiError from '@clients/extension/src/components/vulti-error'
@@ -16,18 +25,9 @@ import {
   SquareBehindSquare,
 } from '@clients/extension/src/icons'
 import api from '@clients/extension/src/utils/api'
-import { TssKeysignType } from '@clients/extension/src/utils/constants'
-import DataConverterProvider from '@clients/extension/src/utils/data-converter-provider'
-import {
-  formatDisplayNumber,
-  getTssKeysignType,
-  parseMemo,
-  splitString,
-} from '@clients/extension/src/utils/functions'
+import { splitString } from '@clients/extension/src/utils/functions'
 import {
   ITransaction,
-  ParsedMemo,
-  SignatureProps,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
 import messageKeys from '@clients/extension/src/utils/message-keys'
@@ -38,24 +38,29 @@ import {
   getStoredVaults,
   setStoredTransaction,
 } from '@clients/extension/src/utils/storage'
-import {
-  BaseTransactionProvider,
-  CosmosTransactionProvider,
-  EVMTransactionProvider,
-  MayaTransactionProvider,
-  ThorchainTransactionProvider,
-  TransactionProvider,
-} from '@clients/extension/src/utils/transaction-provider'
-import UTXOTransactionProvider from '@clients/extension/src/utils/transaction-provider/utxo'
-import WalletCoreProvider from '@clients/extension/src/utils/wallet-core-provider'
+import { getEncodedSignature } from '@clients/extension/src/utils/tx/getCustomMessageSignature'
+import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
+import { getSignedTransaction } from '@clients/extension/src/utils/tx/getSignedTx'
 import { getChainKind } from '@core/chain/ChainKind'
+import {
+  getParsedMemo,
+  ParsedMemoParams,
+} from '@core/chain/chains/evm/tx/getParsedMemo'
+import { getCoinType } from '@core/chain/coin/coinType'
+import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
-import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb'
+import { CustomMessagePayloadSchema } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
+import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
+import { getPreSignedInputData } from '@core/keysign/preSignedInputData'
 import { Button, Form, Input, message, QRCode } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
+import { keccak256 } from 'js-sha3'
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+
 interface FormProps {
   password: string
 }
@@ -63,19 +68,19 @@ interface FormProps {
 interface InitialState {
   fastSign?: boolean
   loading?: boolean
-  sendKey?: string
+  keySignUrl?: string
   step: number
   transaction?: ITransaction
-  txProvider?: BaseTransactionProvider
-  parsedMemo?: ParsedMemo
   vault?: VaultProps
   hasError?: boolean
   errorTitle?: string
   errorDescription?: string
+  keysignPayload?: KeysignPayload
 }
 
 const Component = () => {
   const { t } = useTranslation()
+  const walletCore = useWalletCore()
   const RETRY_TIMEOUT_MS = 120000
   const CLOSE_TIMEOUT_MS = 60000
   const initialState: InitialState = { step: 1, hasError: false }
@@ -85,21 +90,20 @@ const Component = () => {
   const {
     loading,
     fastSign,
-    sendKey,
+    keySignUrl,
     step,
     transaction,
-    txProvider,
     vault,
     hasError,
     errorTitle,
     errorDescription,
-    parsedMemo,
+    keysignPayload,
   } = state
   const [messageApi, contextHolder] = message.useMessage()
   const qrContainerRef = useRef<HTMLDivElement>(null)
 
   const handleApp = (): void => {
-    window.open(sendKey, '_self')
+    window.open(keySignUrl, '_self')
   }
 
   const handleClose = (): void => {
@@ -146,7 +150,7 @@ const Component = () => {
     preSignedImageHash: string,
     preSignedInputData: Uint8Array
   ): void => {
-    if (transaction && txProvider) {
+    if (transaction && walletCore) {
       const retryTimeout = setTimeout(() => {
         setStoredTransaction({ ...transaction, status: 'error' }).then(() => {
           setState({
@@ -163,25 +167,30 @@ const Component = () => {
           .getComplete(transaction.id, preSignedImageHash)
           .then(data => {
             clearTimeout(retryTimeout)
+            const singaturesRecord: Record<string, tss.KeysignResponse> = {
+              [preSignedImageHash]: {
+                ...data,
+              },
+            }
 
-            txProvider
-              .getSignedTransaction({
-                inputData: preSignedInputData,
-                signature: data as SignatureProps,
-                transaction,
-                vault,
-              })
-              .then(({ txHash, raw }) => {
+            getSignedTransaction({
+              inputData: preSignedInputData,
+              signatures: singaturesRecord,
+              transaction,
+              vault,
+              walletCore,
+            })
+              .then(({ txResponse, raw }) => {
                 setStoredTransaction({
                   ...transaction,
                   status: 'success',
-                  txHash,
+                  txHash: txResponse,
                   raw,
                 }).then(() => {
                   setState(prevState => ({
                     ...prevState,
                     step: 5,
-                    transaction: { ...transaction, txHash, raw },
+                    transaction: { ...transaction, txHash: txResponse, raw },
                   }))
 
                   initCloseTimer(CLOSE_TIMEOUT_MS)
@@ -212,7 +221,7 @@ const Component = () => {
   }
 
   const handleCustomMessagePending = (): void => {
-    if (!transaction || !txProvider) return
+    if (!transaction) return
     const retryTimeout = setTimeout(() => {
       setStoredTransaction({ ...transaction, status: 'error' }).then(() => {
         setState({
@@ -229,8 +238,9 @@ const Component = () => {
         .getComplete(transaction.id)
         .then(data => {
           clearTimeout(retryTimeout)
-          const customSignature = txProvider.getEncodedSignature(
-            data as SignatureProps
+          const customSignature = getEncodedSignature(
+            data as tss.KeysignResponse,
+            walletCore!
           )
           setStoredTransaction({
             ...transaction,
@@ -270,7 +280,7 @@ const Component = () => {
   }
 
   const handleStart = (): void => {
-    if (transaction && txProvider) {
+    if (transaction) {
       api.transaction
         .getDevices(transaction.id)
         .then(({ data }) => {
@@ -288,28 +298,27 @@ const Component = () => {
                       }))
                       handleCustomMessagePending()
                     } else {
-                      txProvider
-                        .getPreSignedInputData()
-                        .then(preSignedInputData => {
-                          txProvider
-                            .getPreSignedImageHash(preSignedInputData)
-                            .then(preSignedImageHash => {
-                              setState(prevState => ({
-                                ...prevState,
-                                step: 4,
-                              }))
-                              handlePending(
-                                preSignedImageHash,
-                                preSignedInputData
-                              )
-                            })
-                            .catch(err => {
-                              console.error(err)
-                            })
-                        })
-                        .catch(err => {
-                          console.error(err)
-                        })
+                      console.log('not custom')
+
+                      const preSignedInputData = getPreSignedInputData({
+                        chain: transaction.chain.chain,
+                        keysignPayload: keysignPayload!,
+                        walletCore: walletCore!,
+                      })
+                      const preSignedImageHashes = getPreSigningHashes({
+                        chain: transaction.chain.chain,
+                        txInputData: preSignedInputData,
+                        walletCore: walletCore!,
+                      })
+                      const imageHash = hexEncode({
+                        value: preSignedImageHashes[0],
+                        walletCore: walletCore!,
+                      })
+                      setState(prevState => ({
+                        ...prevState,
+                        step: 4,
+                      }))
+                      handlePending(imageHash, preSignedInputData)
                     }
                   })
                   .catch(err => {
@@ -339,70 +348,52 @@ const Component = () => {
   const handleStep = (step: number): void => {
     switch (step) {
       case 2: {
-        if (sendKey) {
+        if (keySignUrl) {
           setState(prevState => ({ ...prevState, step }))
-        } else if (transaction && txProvider && vault) {
+        } else if (transaction && vault) {
           setState(prevState => ({ ...prevState, loading: true }))
+          let payload: KeysignMessagePayload
           if (transaction.isCustomMessage) {
-            txProvider
-              .getTransactionKey(
-                vault.publicKeyEcdsa,
-                transaction,
-                vault.hexChainCode
-              )
-              .then(sendKey => {
-                api.fastVault
-                  .assertVaultExist(vault.publicKeyEcdsa)
-                  .then(exist => {
-                    setState(prevState => ({
-                      ...prevState,
-                      fastSign: exist,
-                      loading: false,
-                      sendKey,
-                      step,
-                    }))
-
-                    handleStart()
-                  })
-              })
-              .catch(() => {
-                setState(prevState => ({ ...prevState, loading: false }))
-              })
+            payload = {
+              custom: create(CustomMessagePayloadSchema, {
+                method: transaction.customMessage?.method,
+                message: transaction.customMessage?.message,
+              }),
+            }
           } else {
-            txProvider
-              .getKeysignPayload(transaction, vault)
-              .then(() => {
-                txProvider
-                  .getTransactionKey(
-                    vault.publicKeyEcdsa,
-                    transaction,
-                    vault.hexChainCode
-                  )
-                  .then(sendKey => {
-                    api.fastVault
-                      .assertVaultExist(vault.publicKeyEcdsa)
-                      .then(exist => {
-                        setState(prevState => ({
-                          ...prevState,
-                          fastSign: exist,
-                          loading: false,
-                          sendKey,
-                          step,
-                        }))
-
-                        handleStart()
-                      })
-                  })
-                  .catch(() => {
-                    setState(prevState => ({ ...prevState, loading: false }))
-                  })
-              })
-              .catch(() => {
-                setState(prevState => ({ ...prevState, loading: false }))
-              })
+            payload = {
+              keysign: keysignPayload!,
+            }
           }
-        }
 
+          getJoinKeysignUrl({
+            hexEncryptionKey: vault.hexChainCode,
+            serverType: 'relay',
+            serviceName: 'VultiConnect',
+            sessionId: transaction.id,
+            vaultId: vault.publicKeyEcdsa,
+            payload,
+            payloadId: '',
+          })
+            .then(keySignUrl => {
+              api.fastVault
+                .assertVaultExist(vault.publicKeyEcdsa)
+                .then(exist => {
+                  setState(prevState => ({
+                    ...prevState,
+                    fastSign: exist,
+                    loading: false,
+                    keySignUrl,
+                    step,
+                  }))
+
+                  handleStart()
+                })
+            })
+            .catch(() => {
+              setState(prevState => ({ ...prevState, loading: false }))
+            })
+        }
         break
       }
       default: {
@@ -422,58 +413,74 @@ const Component = () => {
   }
 
   const handleSubmitFastSignPassword = (): void => {
-    txProvider?.getPreSignedInputData().then(preSignedInputData => {
-      txProvider
-        .getPreSignedImageHash(preSignedInputData)
-        .then(preSignedImageHash => {
-          if (transaction) {
-            const tssType = getTssKeysignType(transaction.chain.chain)
-            form
-              .validateFields()
-              .then(({ password }: FormProps) => {
-                api.fastVault
-                  .signWithServer({
-                    vault_password: password,
-                    hex_encryption_key: vault?.hexChainCode ?? '',
-                    is_ecdsa:
-                      getTssKeysignType(transaction.chain.chain) ===
-                      TssKeysignType.ECDSA,
-                    derive_path: txProvider.getDerivePath(
-                      transaction.chain.chain
-                    ),
-                    messages: [preSignedImageHash],
-                    public_key:
-                      tssType === TssKeysignType.ECDSA
-                        ? (vault?.publicKeyEcdsa ?? '')
-                        : (vault?.publicKeyEddsa ?? ''),
-                    session: transaction.id,
-                  })
-                  .then(() => {
-                    setState(prevState => ({ ...prevState, step: 4 }))
-                    handlePending(preSignedImageHash, preSignedInputData)
-                  })
-                  .catch(err => {
-                    console.error(err)
-                    messageApi.open({
-                      type: 'error',
-                      content: t(messageKeys.SIGNING_ERROR),
-                    })
-                  })
-              })
-              .catch(error => {
-                if (error.errorFields) {
-                  messageApi.open({
-                    type: 'error',
-                    content: t(messageKeys.INVALID_PASSWORD),
-                  })
-                }
-              })
-          }
+    let imageHash = ''
+    let preSignedInputData: Uint8Array<ArrayBufferLike>
+    if (transaction && vault) {
+      if (transaction.isCustomMessage) {
+        const msg = transaction.customMessage!.message
+        const messageToHash = msg.startsWith('0x')
+          ? Buffer.from(msg.slice(2), 'hex')
+          : msg
+
+        imageHash = keccak256(messageToHash)
+      } else {
+        preSignedInputData = getPreSignedInputData({
+          chain: transaction!.chain.chain,
+          keysignPayload: keysignPayload!,
+          walletCore: walletCore!,
         })
-    })
+        const preSignedImageHashes = getPreSigningHashes({
+          chain: transaction!.chain.chain,
+          txInputData: preSignedInputData,
+          walletCore: walletCore!,
+        })
+        imageHash = hexEncode({
+          value: preSignedImageHashes[0],
+          walletCore: walletCore!,
+        })
+      }
+      const tssType = signatureAlgorithms[getChainKind(transaction.chain.chain)]
+      form
+        .validateFields()
+        .then(({ password }: FormProps) => {
+          api.fastVault
+            .signWithServer({
+              vault_password: password,
+              hex_encryption_key: vault?.hexChainCode ?? '',
+              is_ecdsa: tssType === 'ecdsa',
+              derive_path: walletCore!.CoinTypeExt.derivationPath(
+                getCoinType({
+                  walletCore: walletCore!,
+                  chain: transaction.chain.chain,
+                })
+              ),
+              messages: [imageHash],
+              public_key:
+                tssType === 'ecdsa'
+                  ? vault.publicKeyEcdsa
+                  : vault.publicKeyEddsa,
+              session: transaction.id,
+            })
+            .then(() => {
+              setState(prevState => ({ ...prevState, step: 4 }))
+              if (transaction.isCustomMessage) handleCustomMessagePending()
+              else handlePending(imageHash, preSignedInputData)
+            })
+            .catch(err => {
+              console.error(err)
+              messageApi.open({
+                type: 'error',
+                content: t(messageKeys.SIGNING_ERROR),
+              })
+            })
+        })
+        .catch(() => {})
+    }
   }
 
-  const componentDidMount = (): void => {
+  useEffect(() => {
+    if (!walletCore) return
+
     Promise.all([
       getStoredCurrency(),
       getStoredLanguage(),
@@ -484,120 +491,72 @@ const Component = () => {
 
       i18n.changeLanguage(language)
 
-      const vault = vaults.find(
-        ({ chains }) =>
-          chains.findIndex(
-            ({ address }) =>
-              address?.toLowerCase() ===
-              transaction?.transactionDetails.from.toLowerCase()
-          ) >= 0
+      const vault = vaults.find(({ chains }) =>
+        chains.some(
+          ({ address }) =>
+            address?.toLowerCase() ===
+            transaction?.transactionDetails.from.toLowerCase()
+        )
       )
 
       if (vault) {
-        const walletCore = new WalletCoreProvider()
-
-        walletCore
-          .getCore()
-          .then(({ chainRef, walletCore }) => {
-            const dataConverter = new DataConverterProvider()
-            const txProvider = TransactionProvider.createProvider(
-              transaction.chain.chain,
-              chainRef,
-              dataConverter.compactEncoder,
-              walletCore
+        getKeysignPayload(transaction, vault).then(keysignPayload => {
+          transaction.txFee = String(
+            formatUnits(
+              getFeeAmount(
+                keysignPayload.blockchainSpecific as KeysignChainSpecific
+              ),
+              transaction.transactionDetails.amount?.decimals
             )
+          )
 
-            // Improve
-            if (getChainKind(transaction.chain.chain) === 'evm') {
-              parseMemo(transaction.transactionDetails.data!)
-                .then(memo => {
-                  setState({ ...state, parsedMemo: memo })
-                })
-                .catch(err => {
-                  console.log('Could not parse memo:', err)
-                })
-              ;(txProvider as EVMTransactionProvider).getFeeData().then(() => {
-                ;(txProvider as EVMTransactionProvider)
-                  .getEstimateTransactionFee(transaction.chain.cmcId!, currency)
-                  .then(gasPrice => {
-                    transaction.gasPrice = gasPrice
-                    try {
-                      transaction.memo = toUtf8String(
-                        transaction.transactionDetails.data!
-                      )
-                    } catch {
-                      transaction.memo = transaction.transactionDetails.data
-                    }
-                    setStoredTransaction(transaction).then(() => {
-                      setState(prevState => ({
-                        ...prevState,
-                        currency,
-                        loaded: true,
-                        transaction,
-                        txProvider,
-                        vault,
-                      }))
-                    })
-                  })
-              })
-            } else {
-              const coin = create(CoinSchema, {
-                chain: transaction.chain.chain,
-                ticker: transaction.chain.ticker,
-                address: transaction.transactionDetails.from,
-                decimals: transaction.chain.decimals,
-                hexPublicKey: vault.hexChainCode,
-                isNativeToken: true,
-                logo: transaction.chain.ticker.toLowerCase(),
-              })
-
-              ;(
-                txProvider as
-                  | ThorchainTransactionProvider
-                  | MayaTransactionProvider
-                  | CosmosTransactionProvider
-                  | UTXOTransactionProvider
+          // Parse Memo
+          transaction.memo = { isParsed: false, value: undefined }
+          if (getChainKind(transaction.chain.chain) == 'evm') {
+            getParsedMemo(keysignPayload.memo).then(parsedMemo => {
+              if (parsedMemo) {
+                setState(prevState => ({
+                  ...prevState,
+                  transaction: {
+                    ...prevState.transaction!,
+                    memo: {
+                      isParsed: true,
+                      value: parsedMemo,
+                    },
+                  },
+                }))
+              }
+            })
+          }
+          if (!transaction.memo.isParsed) {
+            try {
+              transaction.memo.value = toUtf8String(
+                transaction.transactionDetails.data!
               )
-                .getSpecificTransactionInfo(coin)
-                .then(blockchainSpecific => {
-                  transaction.gasPrice = String(blockchainSpecific.gasPrice)
-                  try {
-                    transaction.memo = toUtf8String(
-                      transaction.transactionDetails.data!
-                    )
-                  } catch {
-                    if (!parsedMemo) {
-                      transaction.memo = transaction.transactionDetails.data
-                    }
-                  }
-                  setStoredTransaction(transaction).then(() => {
-                    setState(prevState => ({
-                      ...prevState,
-                      currency,
-                      loaded: true,
-                      transaction,
-                      txProvider,
-                      vault,
-                    }))
-                  })
-                })
+            } catch {
+              transaction.memo.value = transaction.transactionDetails.data
             }
-          })
-          .catch(error => {
-            console.log(error)
-          })
+          }
+
+          setState(prevState => ({
+            ...prevState,
+            currency,
+            loaded: true,
+            transaction,
+            keysignPayload,
+            vault,
+          }))
+        })
       } else {
-        setState({
-          ...state,
+        setState(prevState => ({
+          ...prevState,
           hasError: true,
           errorTitle: t(messageKeys.GET_VAULT_FAILED),
           errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
-        })
+        }))
       }
     })
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(componentDidMount, [])
+  }, [walletCore]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <ConfigProvider>
@@ -668,39 +627,41 @@ const Component = () => {
                           )} ${transaction.transactionDetails.asset.ticker}`}</span>
                         </div>
                       )}
-                      {transaction.memo && !parsedMemo && (
-                        <div className="memo-item">
-                          <span className="label">{t(messageKeys.MEMO)}</span>
-                          <span className="extra">
-                            <div>
-                              {splitString(transaction.memo, 32).map(
-                                (str, index) => (
+                      {transaction.memo?.value &&
+                        !transaction.memo.isParsed && (
+                          <div className="memo-item">
+                            <span className="label">{t(messageKeys.MEMO)}</span>
+                            <span className="extra">
+                              <div>
+                                {splitString(
+                                  transaction.memo.value as string,
+                                  32
+                                ).map((str, index) => (
                                   <div key={index}>{str}</div>
-                                )
-                              )}
-                            </div>
-                          </span>
-                        </div>
-                      )}
+                                ))}
+                              </div>
+                            </span>
+                          </div>
+                        )}
                       <div className="list-item">
                         <span className="label">
                           {t(messageKeys.NETWORK_FEE)}
                         </span>
                         <span className="extra">
-                          {formatDisplayNumber(
-                            transaction.gasPrice!,
-                            transaction.chain.ticker
-                          )}
+                          {`${transaction.txFee} ${transaction.chain.ticker}`}
                         </span>
                       </div>
-                      {parsedMemo && (
+                      {transaction.memo?.isParsed && (
                         <>
                           <div className="list-item">
                             <span className="label">
                               {t(messageKeys.FUNCTION_SIGNATURE)}
                             </span>
                             <div className="scrollable-x">
-                              {parsedMemo.signature}
+                              {
+                                (transaction.memo.value as ParsedMemoParams)
+                                  .functionSignature
+                              }
                             </div>
                           </div>
                           <div className="list-item">
@@ -710,7 +671,10 @@ const Component = () => {
                             <div className="scrollable-x monospace-text ">
                               <div style={{ width: 'max-content' }}>
                                 <div className="function-inputs">
-                                  {parsedMemo.inputs}
+                                  {
+                                    (transaction.memo.value as ParsedMemoParams)
+                                      .functionArguments
+                                  }
                                 </div>
                               </div>
                             </div>
@@ -760,7 +724,7 @@ const Component = () => {
                       <QRCode
                         bordered
                         size={1000}
-                        value={sendKey || ''}
+                        value={keySignUrl || ''}
                         color="white"
                       />
                     </div>
@@ -864,25 +828,27 @@ const Component = () => {
                         </div>
                       )}
 
-                      {transaction.memo && !parsedMemo && (
-                        <div className="memo-item">
-                          <span className="label">{t(messageKeys.MEMO)}</span>
-                          <span className="extra">
-                            <div>
-                              {splitString(transaction.memo, 32).map(
-                                (str, index) => (
+                      {transaction.memo?.value &&
+                        !transaction.memo?.isParsed && (
+                          <div className="memo-item">
+                            <span className="label">{t(messageKeys.MEMO)}</span>
+                            <span className="extra">
+                              <div>
+                                {splitString(
+                                  transaction.memo?.value as string,
+                                  32
+                                ).map((str, index) => (
                                   <div key={index}>{str}</div>
-                                )
-                              )}
-                            </div>
-                          </span>
-                        </div>
-                      )}
+                                ))}
+                              </div>
+                            </span>
+                          </div>
+                        )}
                       <div className="list-item">
                         <span className="label">
                           {t(messageKeys.NETWORK_FEE)}
                         </span>
-                        <span className="extra">{transaction.gasPrice}</span>
+                        <span className="extra">{`${transaction.txFee} ${transaction.chain.ticker}`}</span>
                       </div>
                     </div>
                   ) : (
@@ -923,6 +889,8 @@ export default Component
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Component />
+    <WalletCoreProvider>
+      <Component />
+    </WalletCoreProvider>
   </StrictMode>
 )

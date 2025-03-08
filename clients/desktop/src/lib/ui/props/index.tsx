@@ -1,4 +1,4 @@
-import { ElementType, ReactNode } from 'react'
+import { ElementType, ReactNode, SVGProps } from 'react'
 
 import { HSLA } from '../colors/HSLA'
 
@@ -163,3 +163,5 @@ export type KindProp<T> = {
 export type MessageProp = {
   message: ReactNode
 }
+
+export type SvgProps = SVGProps<SVGSVGElement>
