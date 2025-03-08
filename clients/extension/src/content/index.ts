@@ -757,7 +757,13 @@ namespace Provider {
 
       for (const transaction of transactions) {
         const result = await this.signTransaction(transaction)
-        results.push(result!)
+        if (result) {
+          results.push(result)
+        } else {
+          throw new Error(
+            'Failed to sign transaction: No matching instructions found'
+          )
+        }
       }
 
       return results
