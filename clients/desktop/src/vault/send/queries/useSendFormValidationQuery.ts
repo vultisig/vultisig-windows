@@ -1,4 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { Chain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -7,13 +9,11 @@ import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData'
 import { useAssertWalletCore } from '../../../providers/WalletCoreProvider'
 import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useSender } from '../sender/hooks/useSender'
 import { useSendAmount } from '../state/amount'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendChainSpecificQuery } from './useSendChainSpecificQuery'
-import { useSender } from '../sender/hooks/useSender'
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 export const useSendFormValidationQuery = () => {
   const [receiver] = useSendReceiver()
