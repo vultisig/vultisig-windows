@@ -3,12 +3,12 @@ import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { signatureFormats } from '@core/chain/signing/SignatureFormat'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
+import { assertSignature } from '@core/chain/utils/assertSignature'
+import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
+import { tss } from '@core/keysign/tss/models'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
-import { tss } from '@core/keysign/tss/models'
-import { assertSignature } from '@core/chain/utils/assertSignature'
-import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { generateSignature } from '../signature/generateSignature'
 
 type Input = {

@@ -1,5 +1,3 @@
-import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
-import { tss } from '@core/keysign/tss/models'
 import {
   ThornodeTxResponse,
   ThornodeTxResponseSuccess,
@@ -13,6 +11,8 @@ import {
   SignatureProps,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
+import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
+import { tss } from '@core/keysign/tss/models'
 import axios from 'axios'
 import { TransactionResponse } from 'ethers'
 namespace Derivation {

@@ -1,9 +1,9 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useEffect } from 'react'
 
-import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'

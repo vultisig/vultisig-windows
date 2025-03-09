@@ -1,10 +1,9 @@
 import { create, toBinary } from '@bufbuild/protobuf'
-import { ReshareMessageSchema } from '@core/communication/vultisig/keygen/v1/reshare_message_pb'
-import { addQueryParams } from '@lib/utils/query/addQueryParams'
-
-import { deepLinkBaseUrl } from '@core/config'
 import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
+import { ReshareMessageSchema } from '@core/communication/vultisig/keygen/v1/reshare_message_pb'
+import { deepLinkBaseUrl } from '@core/config'
 import { KeygenServerType } from '@core/keygen/server/KeygenServerType'
+import { addQueryParams } from '@lib/utils/query/addQueryParams'
 
 export type GetJoinReshareUrlInput = {
   serverType: KeygenServerType

@@ -1,3 +1,7 @@
+import {
+  KeygenServerType,
+  keygenServerTypes,
+} from '@core/keygen/server/KeygenServerType'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -9,10 +13,6 @@ import { IsActiveProp } from '../../../../lib/ui/props'
 import { text } from '../../../../lib/ui/text'
 import { matchColor } from '../../../../lib/ui/theme/getters'
 import { IconWrapper } from '../../../../pages/edItVault/EditVaultPage.styles'
-import {
-  KeygenServerType,
-  keygenServerTypes,
-} from '@core/keygen/server/KeygenServerType'
 import { useCurrentServerType } from '../../state/currentServerType'
 import { KeygenServerTypeIcon } from '../KeygenServerTypeIcon'
 

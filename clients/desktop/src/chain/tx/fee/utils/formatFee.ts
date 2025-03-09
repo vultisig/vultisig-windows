@@ -1,7 +1,9 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain, EvmChain } from '@core/chain/Chain'
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
+import { polkadotConfig } from '@core/chain/chains/polkadot/config'
 import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
+import { tonConfig } from '@core/chain/chains/ton/config'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { rippleTxFee } from '@core/chain/tx/fee/ripple'
 import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
@@ -9,8 +11,6 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 
-import { polkadotConfig } from '@core/chain/chains/polkadot/config'
-import { tonConfig } from '@core/chain/chains/ton/config'
 import { gwei } from './evm'
 import { getFeeUnit } from './feeUnit'
 

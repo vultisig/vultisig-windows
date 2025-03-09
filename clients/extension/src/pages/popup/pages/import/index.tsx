@@ -1,4 +1,3 @@
-import { useWalletCore } from '@core/chain/providers/WalletCoreProvider'
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
 import AddressProvider from '@clients/extension/src/utils/address-provider'
@@ -20,6 +19,7 @@ import {
 } from '@clients/extension/src/utils/storage'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { useWalletCore } from '@core/chain/providers/WalletCoreProvider'
 import { Button, Upload, UploadProps } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'

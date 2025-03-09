@@ -1,10 +1,10 @@
+import * as protobufUtils from '@core/chain/utils/protobuf/toCompressedString'
+import { deepLinkBaseUrl } from '@core/config'
+import { KeygenServerType } from '@core/keygen/server/KeygenServerType'
 import { mpcLibs } from '@core/mpc/mpcLib'
 import * as queryUtils from '@lib/utils/query/addQueryParams'
 import { describe, expect, it, vi } from 'vitest'
 
-import { deepLinkBaseUrl } from '@core/config'
-import * as protobufUtils from '@core/chain/utils/protobuf/toCompressedString'
-import { KeygenServerType } from '@core/keygen/server/KeygenServerType'
 import { getJoinKeygenUrl } from '.'
 
 describe('getJoinKeygenUrl', () => {

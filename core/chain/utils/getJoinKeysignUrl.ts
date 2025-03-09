@@ -1,19 +1,18 @@
 import { create, toBinary } from '@bufbuild/protobuf'
+import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
 import {
   KeysignMessageSchema,
   KeysignPayloadSchema,
 } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { addQueryParams } from '@lib/utils/query/addQueryParams'
-
-import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
 import { deepLinkBaseUrl } from '@core/config'
-import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
 import {
   KeygenServerType,
   keygenServerUrl,
 } from '@core/keygen/server/KeygenServerType'
 import { uploadPayloadToServer } from '@core/keygen/server/uploadPayloadToServer'
+import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { addQueryParams } from '@lib/utils/query/addQueryParams'
 
 export type GetJoinKeysignUrlInput = {
   serverType: KeygenServerType

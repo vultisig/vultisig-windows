@@ -1,4 +1,5 @@
 import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
+
 import { getValueProviderSetup } from '../../../../lib/ui/state/getValueProviderSetup'
 
 export const {

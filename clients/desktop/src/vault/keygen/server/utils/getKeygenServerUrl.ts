@@ -1,5 +1,9 @@
+import {
+  KeygenServerType,
+  keygenServerUrl,
+} from '@core/keygen/server/KeygenServerType'
+
 import { DiscoveryService } from '../../../../../wailsjs/go/mediator/Server'
-import { KeygenServerType, keygenServerUrl } from '@core/keygen/server/KeygenServerType'
 
 export type GetKeygenServerUrlInput = {
   serverType: KeygenServerType
