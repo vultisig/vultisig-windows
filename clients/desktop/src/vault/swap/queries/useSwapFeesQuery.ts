@@ -1,7 +1,7 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
-import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData'
 import { useCurrentVaultCoin } from '../../state/currentVault'
 import { useFromCoin } from '../state/fromCoin'

@@ -4,7 +4,7 @@ import { pick } from '@lib/utils/record/pick'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { WalletCore } from '@trustwallet/wallet-core'
 
-import { tss } from '../../../../wailsjs/go/models'
+import { tss } from '@core/keysign/tss/models'
 
 type Input = {
   walletCore: WalletCore

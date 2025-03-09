@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { SaveAddressBookItem } from '../../../wailsjs/go/storage/Store'
 import { isValidAddress } from '../../chain/utils/isValidAddress'
 import { AddressBookItem } from '../../lib/types/address-book'
-import { useAssertWalletCore } from '../../providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/chain/providers/WalletCoreProvider'
 import {
   addressBookItemsQueryKey,
   useAddressBookItemsQuery,

@@ -1,4 +1,4 @@
-import { useWalletCore } from '@clients/desktop/src/providers/WalletCoreProvider'
+import { useWalletCore } from '@core/chain/providers/WalletCoreProvider'
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
 import AddressProvider from '@clients/extension/src/utils/address-provider'

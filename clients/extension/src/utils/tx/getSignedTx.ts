@@ -1,4 +1,4 @@
-import { compileTx } from '@clients/desktop/src/chain/tx/compile/compileTx'
+import { compileTx } from '@core/chain/tx/compile/compileTx'
 import { getChainKind } from '@core/chain/ChainKind'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { match } from '@lib/utils/match'

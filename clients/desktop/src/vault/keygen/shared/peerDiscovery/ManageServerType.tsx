@@ -12,7 +12,7 @@ import { IconWrapper } from '../../../../pages/edItVault/EditVaultPage.styles'
 import {
   KeygenServerType,
   keygenServerTypes,
-} from '../../server/KeygenServerType'
+} from '@core/keygen/server/KeygenServerType'
 import { useCurrentServerType } from '../../state/currentServerType'
 import { KeygenServerTypeIcon } from '../KeygenServerTypeIcon'
 

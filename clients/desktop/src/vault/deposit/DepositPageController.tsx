@@ -2,7 +2,7 @@ import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 
-import { getFeeAmount } from '../../chain/tx/fee/utils/getFeeAmount'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { Match } from '../../lib/ui/base/Match'
 import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation'
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams'

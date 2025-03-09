@@ -2,7 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { formatAmount } from '@lib/utils/formatAmount'
 
-import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'

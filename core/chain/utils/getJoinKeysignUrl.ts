@@ -6,14 +6,14 @@ import {
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 
-import { KeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload'
-import { deepLinkBaseUrl } from '../../../../deeplink/config'
-import { toCompressedString } from '../../../../utils/protobuf/toCompressedString'
+import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
+import { deepLinkBaseUrl } from '@core/config'
+import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
 import {
   KeygenServerType,
   keygenServerUrl,
-} from '../../../keygen/server/KeygenServerType'
-import { uploadPayloadToServer } from '../../../server/utils/uploadPayloadToServer'
+} from '@core/keygen/server/KeygenServerType'
+import { uploadPayloadToServer } from '@core/keygen/server/uploadPayloadToServer'
 
 export type GetJoinKeysignUrlInput = {
   serverType: KeygenServerType

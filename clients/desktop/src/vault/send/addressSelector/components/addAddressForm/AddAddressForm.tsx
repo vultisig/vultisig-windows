@@ -8,7 +8,7 @@ import Select from 'react-select'
 import { z } from 'zod'
 
 import { Text } from '../../../../../lib/ui/text'
-import { useAssertWalletCore } from '../../../../../providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '../../../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../../../ui/page/PageHeaderTitle'
 import { useAddAddressBookItemMutation } from '../../../../mutations/useAddAddressBookItemMutation'

@@ -14,7 +14,7 @@ import { VStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
-import { useAssertWalletCore } from '../../../providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/chain/providers/WalletCoreProvider'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
 import {
   useCurrentVault,

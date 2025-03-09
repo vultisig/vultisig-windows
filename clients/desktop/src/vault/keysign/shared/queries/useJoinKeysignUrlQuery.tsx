@@ -11,7 +11,7 @@ import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
 import {
   getJoinKeysignUrl,
   GetJoinKeysignUrlInput,
-} from '../utils/getJoinKeysignUrl'
+} from '@core/chain/utils/getJoinKeysignUrl'
 
 export const useJoinKeysignUrlQuery = () => {
   const sessionId = useCurrentSessionId()

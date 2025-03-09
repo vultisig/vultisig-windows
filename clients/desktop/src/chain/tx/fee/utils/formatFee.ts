@@ -9,8 +9,8 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 
-import { polkadotConfig } from '../../../polkadot/config'
-import { tonConfig } from '../../../ton/config'
+import { polkadotConfig } from '@core/chain/chains/polkadot/config'
+import { tonConfig } from '@core/chain/chains/ton/config'
 import { gwei } from './evm'
 import { getFeeUnit } from './feeUnit'
 

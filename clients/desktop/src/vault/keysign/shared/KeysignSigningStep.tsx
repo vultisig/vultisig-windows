@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { KeysignMessagePayload } from '../../../chain/keysign/KeysignMessagePayload'
+import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
 import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash'
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow'

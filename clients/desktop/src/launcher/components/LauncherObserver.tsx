@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
 import { GetOSArgs } from '../../../wailsjs/go/main/App'
-import { deepLinkBaseUrl } from '../../deeplink/config'
+import { deepLinkBaseUrl } from '@core/config'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 
 export const LauncherObserver = () => {

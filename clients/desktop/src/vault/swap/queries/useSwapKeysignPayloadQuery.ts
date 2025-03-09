@@ -7,7 +7,7 @@ import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayl
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields'
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery'
-import { useAssertWalletCore } from '../../../providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/chain/providers/WalletCoreProvider'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault'
 import { useFromAmount } from '../state/fromAmount'

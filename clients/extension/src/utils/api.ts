@@ -1,5 +1,5 @@
-import { SolanaJupiterToken } from '@clients/desktop/src/coin/jupiter/token'
-import { tss } from '@clients/desktop/wailsjs/go/models'
+import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
+import { tss } from '@core/keysign/tss/models'
 import {
   ThornodeTxResponse,
   ThornodeTxResponseSuccess,

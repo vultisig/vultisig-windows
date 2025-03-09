@@ -1,9 +1,9 @@
 import * as queryUtils from '@lib/utils/query/addQueryParams'
 import { describe, expect, it, vi } from 'vitest'
 
-import { deepLinkBaseUrl } from '../../../../deeplink/config'
-import * as protobufUtils from '../../../../utils/protobuf/toCompressedString'
-import { KeygenServerType } from '../../server/KeygenServerType'
+import { deepLinkBaseUrl } from '@core/config'
+import * as protobufUtils from '@core/chain/utils/protobuf/toCompressedString'
+import { KeygenServerType } from '@core/keygen/server/KeygenServerType'
 import { getJoinReshareUrl } from '.'
 
 describe('getJoinReshareUrl', () => {

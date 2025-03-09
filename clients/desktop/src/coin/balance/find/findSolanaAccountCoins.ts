@@ -4,7 +4,7 @@ import { getSplAccounts } from '@core/chain/chains/solana/spl/getSplAccounts'
 import { Coin } from '@core/chain/coin/Coin'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { SolanaJupiterToken } from '../../jupiter/token'
+import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 
 export const findSolanaAccountCoins = async (account: ChainAccount) => {
   if (!account.address) {

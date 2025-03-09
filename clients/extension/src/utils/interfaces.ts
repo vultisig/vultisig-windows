@@ -1,4 +1,4 @@
-import { tss } from '@clients/desktop/wailsjs/go/models'
+import { tss } from '@core/keysign/tss/models'
 import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { Chain } from '@core/chain/Chain'

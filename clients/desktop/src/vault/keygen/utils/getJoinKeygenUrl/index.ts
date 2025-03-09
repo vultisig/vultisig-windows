@@ -3,9 +3,9 @@ import { KeygenMessageSchema } from '@core/communication/vultisig/keygen/v1/keyg
 import { MpcLib } from '@core/mpc/mpcLib'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 
-import { deepLinkBaseUrl } from '../../../../deeplink/config'
-import { toCompressedString } from '../../../../utils/protobuf/toCompressedString'
-import { KeygenServerType } from '../../server/KeygenServerType'
+import { deepLinkBaseUrl } from '@core/config'
+import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
+import { KeygenServerType } from '@core/keygen/server/KeygenServerType'
 
 export type GetJoinKeygenUrlInput = {
   serverType: KeygenServerType

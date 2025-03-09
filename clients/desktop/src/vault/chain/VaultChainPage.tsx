@@ -34,7 +34,7 @@ import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQuer
 import { Text } from '../../lib/ui/text'
 import { makeAppPath } from '../../navigation'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
-import { useAssertWalletCore } from '../../providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/chain/providers/WalletCoreProvider'
 import { toStorageCoin } from '../../storage/storageCoin'
 import { PageContent } from '../../ui/page/PageContent'
 import { PageHeader } from '../../ui/page/PageHeader'

@@ -6,9 +6,9 @@ import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
-import { tss } from '../../../../wailsjs/go/models'
-import { assertSignature } from '../../utils/assertSignature'
-import { hexEncode } from '../../walletCore/hexEncode'
+import { tss } from '@core/keysign/tss/models'
+import { assertSignature } from '@core/chain/utils/assertSignature'
+import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { generateSignature } from '../signature/generateSignature'
 
 type Input = {

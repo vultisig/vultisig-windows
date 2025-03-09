@@ -5,7 +5,7 @@ import { KeysignMessage } from '@core/communication/vultisig/keysign/v1/keysign_
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-import { KeysignMessagePayload } from '../chain/keysign/KeysignMessagePayload'
+import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenType } from '../vault/keygen/KeygenType'
 import { SetupVaultType } from '../vault/setup/type/SetupVaultType'
 

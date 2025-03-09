@@ -1,4 +1,4 @@
-import { tss } from '@clients/desktop/wailsjs/go/models'
+import { tss } from '@core/keysign/tss/models'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { isHex } from 'viem'
 

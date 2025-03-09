@@ -5,7 +5,7 @@ import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/ke
 import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload'
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery'
-import { useAssertWalletCore } from '../../../providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/chain/providers/WalletCoreProvider'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault'
 import { useSendCappedAmountQuery } from '../queries/useSendCappedAmountQuery'

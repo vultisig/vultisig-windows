@@ -1,5 +1,5 @@
 import { getStateProviderSetup } from '../../../lib/ui/state/getStateProviderSetup'
-import { KeygenServerType } from '../server/KeygenServerType'
+import { KeygenServerType } from '@core/keygen/server/KeygenServerType'
 
 export const {
   useState: useCurrentServerType,

@@ -3,15 +3,15 @@ import '@clients/extension/src/pages/transaction/index.scss'
 import '@clients/extension/src/utils/prototypes'
 
 import { create } from '@bufbuild/protobuf'
-import { KeysignMessagePayload } from '@clients/desktop/src/chain/keysign/KeysignMessagePayload'
-import { getFeeAmount } from '@clients/desktop/src/chain/tx/fee/utils/getFeeAmount'
-import { hexEncode } from '@clients/desktop/src/chain/walletCore/hexEncode'
+import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import {
   useWalletCore,
   WalletCoreProvider,
-} from '@clients/desktop/src/providers/WalletCoreProvider'
-import { getJoinKeysignUrl } from '@clients/desktop/src/vault/keysign/shared/utils/getJoinKeysignUrl'
-import { tss } from '@clients/desktop/wailsjs/go/models'
+} from '@core/chain/providers/WalletCoreProvider'
+import { getJoinKeysignUrl } from '@core/chain/utils/getJoinKeysignUrl'
+import { tss } from '@core/keysign/tss/models'
 import ConfigProvider from '@clients/extension/src/components/config-provider'
 import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
 import VultiError from '@clients/extension/src/components/vulti-error'
