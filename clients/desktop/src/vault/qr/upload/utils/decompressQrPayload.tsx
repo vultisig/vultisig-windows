@@ -1,4 +1,4 @@
-import { getSevenZip } from '../../../../compression/getSevenZip'
+import { getSevenZip } from '@core/keygen/compression/getSevenZip'
 
 export async function decompressQrPayload(value: string): Promise<Uint8Array> {
   const bufferData = Buffer.from(value, 'base64')

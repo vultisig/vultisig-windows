@@ -1,12 +1,11 @@
 import { Chain } from '@core/chain/Chain'
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
+import { polkadotConfig } from '@core/chain/chains/polkadot/config'
 import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
+import { tonConfig } from '@core/chain/chains/ton/config'
 import { rippleTxFee } from '@core/chain/tx/fee/ripple'
 import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
-
-import { polkadotConfig } from '../../../polkadot/config'
-import { tonConfig } from '../../../ton/config'
 
 export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
   matchDiscriminatedUnion(chainSpecific, 'case', 'value', {

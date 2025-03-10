@@ -1,10 +1,13 @@
 import { Chain, EvmChain } from '@core/chain/Chain'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
+import {
+  fromSolanaJupiterTokens,
+  SolanaJupiterToken,
+} from '@core/chain/coin/jupiter/token'
 import { rootApiUrl } from '@core/config'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
-import { fromSolanaJupiterTokens, SolanaJupiterToken } from '../jupiter/token'
 import { fromOneInchTokens, OneInchTokensResponse } from '../oneInch/token'
 
 export const useWhitelistedCoinsQuery = (chain: Chain) => {

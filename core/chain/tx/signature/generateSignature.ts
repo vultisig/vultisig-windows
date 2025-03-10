@@ -4,11 +4,17 @@ import { pick } from '@lib/utils/record/pick'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { WalletCore } from '@trustwallet/wallet-core'
 
-import { tss } from '../../../../wailsjs/go/models'
+export interface KeysignResponse {
+  msg: string
+  r: string
+  s: string
+  der_signature: string
+  recovery_id: string
+}
 
 type Input = {
   walletCore: WalletCore
-  signature: tss.KeysignResponse
+  signature: KeysignResponse
   signatureFormat: SignatureFormat
 }
 

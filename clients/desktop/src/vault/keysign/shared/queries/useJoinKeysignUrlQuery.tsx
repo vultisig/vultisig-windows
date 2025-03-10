@@ -1,3 +1,7 @@
+import {
+  getJoinKeysignUrl,
+  GetJoinKeysignUrlInput,
+} from '@core/chain/utils/getJoinKeysignUrl'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
@@ -8,10 +12,6 @@ import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncry
 import { useCurrentVault } from '../../../state/currentVault'
 import { getStorageVaultId } from '../../../utils/storageVault'
 import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
-import {
-  getJoinKeysignUrl,
-  GetJoinKeysignUrlInput,
-} from '../utils/getJoinKeysignUrl'
 
 export const useJoinKeysignUrlQuery = () => {
   const sessionId = useCurrentSessionId()

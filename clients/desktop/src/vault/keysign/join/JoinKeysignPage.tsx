@@ -1,6 +1,6 @@
+import { getKeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
 import { useMemo } from 'react'
 
-import { getKeysignMessagePayload } from '../../../chain/keysign/KeysignMessagePayload'
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
