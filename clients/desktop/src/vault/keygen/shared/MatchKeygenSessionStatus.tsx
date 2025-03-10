@@ -2,7 +2,9 @@ import { ReactNode, useEffect, useState } from 'react'
 
 import { EventsOff, EventsOn } from '../../../../wailsjs/runtime/runtime'
 
-export type KeygenStatus = 'prepareVault' | 'ecdsa' | 'eddsa'
+export const keygenStatuses = ['prepareVault', 'ecdsa', 'eddsa'] as const
+
+export type KeygenStatus = (typeof keygenStatuses)[number]
 
 type MatchKeygenSessionStatusProps = {
   pending: () => ReactNode

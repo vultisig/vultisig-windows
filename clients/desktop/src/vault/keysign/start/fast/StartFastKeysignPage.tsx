@@ -1,14 +1,14 @@
 import { Match } from '../../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
+import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'
+import { MpcServerTypeProvider } from '../../../../mpc/serverType/state/mpcServerType'
 import { IsInitiatingDeviceProvider } from '../../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack'
 import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep'
-import { MediatorManager } from '../../../keygen/shared/peerDiscovery/MediatorManager'
 import { GeneratedServiceNameProvider } from '../../../keygen/shared/state/currentServiceName'
 import { GeneratedSessionIdProvider } from '../../../keygen/shared/state/currentSessionId'
 import { CurrentLocalPartyIdProvider } from '../../../keygen/state/currentLocalPartyId'
-import { CurrentServerTypeProvider } from '../../../keygen/state/currentServerType'
 import { WaitForServerToJoinStep } from '../../../server/components/WaitForServerToJoinStep'
 import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep'
 import { PasswordProvider } from '../../../server/password/state/password'
@@ -47,9 +47,9 @@ export const StartFastKeysignPage = () => {
               <PeersSelectionRecordProvider initialValue={{}}>
                 <GeneratedSessionIdProvider>
                   <GeneratedHexEncryptionKeyProvider>
-                    <CurrentServerTypeProvider initialValue="relay">
+                    <MpcServerTypeProvider initialValue="relay">
                       <ServerUrlDerivedFromServerTypeProvider>
-                        <MediatorManager />
+                        <MpcMediatorManager />
                         <Match
                           value={step}
                           password={() => (
@@ -69,7 +69,7 @@ export const StartFastKeysignPage = () => {
                           )}
                         />
                       </ServerUrlDerivedFromServerTypeProvider>
-                    </CurrentServerTypeProvider>
+                    </MpcServerTypeProvider>
                   </GeneratedHexEncryptionKeyProvider>
                 </GeneratedSessionIdProvider>
               </PeersSelectionRecordProvider>

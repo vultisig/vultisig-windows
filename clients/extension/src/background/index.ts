@@ -77,17 +77,14 @@ const handleOpenPanel = (name: string): Promise<number> => {
   })
 }
 
-const handleProvider = (chain: Chain, update?: boolean): boolean => {
+const handleProvider = (chain: Chain, update?: boolean) => {
   const rpc = chainRpcUrl[chain]
-  if (rpc) {
-    if (update) {
-      if (rpcProvider) rpcProvider = new JsonRpcProvider(rpc)
-    } else {
-      rpcProvider = new JsonRpcProvider(rpc)
-    }
-    return true
+  if (!rpc) return
+  if (update && rpcProvider) {
+    rpcProvider = new JsonRpcProvider(rpc)
+    return
   }
-  return false
+  rpcProvider = new JsonRpcProvider(rpc)
 }
 
 const handleFindAccounts = (
@@ -578,10 +575,9 @@ const handleRequest = (
           const [param] = params
 
           if (param?.chainId) {
-            const supportedChain = isSupportedChain(
-              getChainByChainId(param.chainId)
-            )
-              ? getChainByChainId(param.chainId)
+            const chainFromId = getChainByChainId(param.chainId)
+            const supportedChain = isSupportedChain(chainFromId)
+              ? chainFromId
               : null
             if (supportedChain) {
               getStoredChains().then(storedChains => {

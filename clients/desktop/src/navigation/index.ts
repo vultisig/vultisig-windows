@@ -10,6 +10,7 @@ import { KeygenType } from '../vault/keygen/KeygenType'
 import { SetupVaultType } from '../vault/setup/type/SetupVaultType'
 
 export const appPaths = {
+  newVault: '/new-vault',
   importVault: '/vault/import',
   importVaultFromFile: '/vault/import/file',
   shareVault: '/vault/share',

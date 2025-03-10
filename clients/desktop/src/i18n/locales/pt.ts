@@ -8,6 +8,9 @@ export const pt = {
   onboarding_view3_description:
     'O Vultisig é, por natureza, um aplicativo multi-dispositivo. Exige pelo menos dois dispositivos para criar um cofre seguro: um dispositivo inicializador e um dispositivo de pareamento.',
   moreInfo: 'Mais informações',
+  waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem',
+  waiting_for_devices_to_join_description:
+    'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
   secureVaultSetupPasswordTooltipContent:
     'Isso ocorre porque a senha é usada para criptografar localmente o arquivo de backup, de forma semelhante à criptografia de um disco rígido. No próximo passo, você tem a opção de adicionar uma dica.',
   onboarding_view4_description:
@@ -19,7 +22,7 @@ export const pt = {
   localMode: 'Você está no modo local',
   scanQrInstruction:
     'Escaneie o QR com outro dispositivo. Configuração de 3 dispositivos recomendada, 2 são suficientes.',
-  devicesStatus: 'Dispositivos ({{currentPeers}}/3)',
+  devices: 'Dispositivos',
   waitingOnDevices: 'Aguardando dispositivos...',
   switchToInternet: 'Voltar ao modo internet',
   signPrivately: 'Quer assinar em privado?',
@@ -750,7 +753,7 @@ export const pt = {
   failed_to_save_vault: 'Falha ao salvar o cofre',
   vault_password: 'Senha do cofre',
   upload_qr_code_to_join_keysign: 'Carregue o código QR para aderir ao Keysign',
-  upload_qr_code_image: 'Carregar imagem do código QR',
+  upload_qr_code_image: 'Carregar QR',
   getting_video_permission: 'Obtendo permissão para vídeo...',
   failed_to_get_video_permission: 'Falha ao obter permissão de vídeo',
   terms_required: 'Você deve concordar com os termos',

@@ -1,7 +1,5 @@
-import {
-  KeygenServerType,
-  keygenServerTypes,
-} from '@core/keygen/server/KeygenServerType'
+import { mpcServerTypes } from '@core/mpc/MpcServerType'
+import { MpcServerType } from '@core/mpc/MpcServerType'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -12,8 +10,8 @@ import { HStack, hStack } from '../../../../lib/ui/layout/Stack'
 import { IsActiveProp } from '../../../../lib/ui/props'
 import { text } from '../../../../lib/ui/text'
 import { matchColor } from '../../../../lib/ui/theme/getters'
+import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { IconWrapper } from '../../../../pages/edItVault/EditVaultPage.styles'
-import { useCurrentServerType } from '../../state/currentServerType'
 import { KeygenServerTypeIcon } from '../KeygenServerTypeIcon'
 
 const Option = styled(UnstyledButton)<IsActiveProp>`
@@ -51,18 +49,18 @@ const IconContainer = styled(IconWrapper)`
 `
 
 export const ManageServerType = () => {
-  const [serverType, setServerType] = useCurrentServerType()
+  const [serverType, setServerType] = useMpcServerType()
 
   const { t } = useTranslation()
 
-  const textRecord: Record<KeygenServerType, string> = {
+  const textRecord: Record<MpcServerType, string> = {
     relay: t('internet'),
     local: t('local'),
   }
 
   return (
     <HStack gap={16}>
-      {keygenServerTypes.map(option => (
+      {mpcServerTypes.map(option => (
         <Option
           key={option}
           isActive={serverType === option}

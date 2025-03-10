@@ -1,0 +1,4 @@
+#!/bin/bash
+mkdir -p "$HOME/.vultisig"
+export VULTISIG_DB_PATH=$HOME/.vultisig/
+exec $APPDIR/usr/bin/vultisig "$@"

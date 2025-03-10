@@ -9,6 +9,7 @@ import { VStack } from '../../../../../lib/ui/layout/Stack'
 import { Text } from '../../../../../lib/ui/text'
 import { getColor } from '../../../../../lib/ui/theme/getters'
 import { PageContent } from '../../../../../ui/page/PageContent'
+import { useNewVault } from '../state/NewVaultProvider'
 import { AnimationDescription } from './AnimationDescription'
 import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
 import { RiveWrapper } from './VaultOverviewSlides.styles'
@@ -26,14 +27,15 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
   onCompleted,
 }) => {
   const { t } = useTranslation()
-
+  const [vault] = useNewVault()
+  const { keyshares } = vault
   const {
     animations,
     handleNextAnimation,
     currentAnimation,
     animationComponent: AnimationComponent,
     isLoading,
-  } = useBackupOverviewStepsAnimations()
+  } = useBackupOverviewStepsAnimations(keyshares.length)
 
   return (
     <PageContent>

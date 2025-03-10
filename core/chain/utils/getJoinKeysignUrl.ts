@@ -1,21 +1,19 @@
 import { create, toBinary } from '@bufbuild/protobuf'
+import { getSevenZip } from '@clients/desktop/src/compression/getSevenZip'
 import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
 import {
   KeysignMessageSchema,
   KeysignPayloadSchema,
 } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 import { deepLinkBaseUrl } from '@core/config'
-import {
-  KeygenServerType,
-  keygenServerUrl,
-} from '@core/keygen/server/KeygenServerType'
 import { uploadPayloadToServer } from '@core/keygen/server/uploadPayloadToServer'
 import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
+import { MpcServerType, mpcServerUrl } from '@core/mpc/MpcServerType'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 
 export type GetJoinKeysignUrlInput = {
-  serverType: KeygenServerType
+  serverType: MpcServerType
   serviceName: string
   sessionId: string
   hexEncryptionKey: string
@@ -56,7 +54,12 @@ export const getJoinKeysignUrl = async ({
 
   const binary = toBinary(KeysignMessageSchema, keysignMessage)
 
-  const jsonData = await toCompressedString(binary)
+  const sevenZip = await getSevenZip()
+
+  const jsonData = toCompressedString({
+    sevenZip,
+    binary,
+  })
 
   const urlWithPayload = addQueryParams(deepLinkBaseUrl, {
     type: 'SignTransaction',
@@ -66,10 +69,13 @@ export const getJoinKeysignUrl = async ({
 
   if (payload && 'keysign' in payload && urlWithPayload.length > urlMaxLength) {
     const binary = toBinary(KeysignPayloadSchema, payload.keysign)
-    const compressedPayload = await toCompressedString(binary)
+    const compressedPayload = toCompressedString({
+      sevenZip,
+      binary,
+    })
     const payloadId = await uploadPayloadToServer({
       payload: compressedPayload,
-      serverUrl: keygenServerUrl[serverType],
+      serverUrl: mpcServerUrl[serverType],
     })
 
     return getJoinKeysignUrl({

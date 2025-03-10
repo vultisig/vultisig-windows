@@ -1,4 +1,4 @@
-import { KeygenServerType } from '@core/keygen/server/KeygenServerType'
+import { MpcServerType } from '@core/mpc/MpcServerType'
 import { SVGProps } from 'react'
 
 import { Match } from '../../../lib/ui/base/Match'
@@ -9,7 +9,7 @@ import { ValueProp } from '../../../lib/ui/props'
 export const KeygenServerTypeIcon = ({
   value,
   ...props
-}: SVGProps<SVGSVGElement> & ValueProp<KeygenServerType>) => {
+}: SVGProps<SVGSVGElement> & ValueProp<MpcServerType>) => {
   return (
     <Match
       value={value}

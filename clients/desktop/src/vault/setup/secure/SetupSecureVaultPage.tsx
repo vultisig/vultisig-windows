@@ -1,19 +1,19 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
+import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { useDefaultMpcLib } from '../../../mpc/state/defaultMpcLib'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { KeygenType } from '../../keygen/KeygenType'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
-import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager'
+import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
-import { CurrentServerTypeProvider } from '../../keygen/state/currentServerType'
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
-import { SetupVaultPeerDiscoveryStep } from '../peers/SetupVaultPeerDiscoveryStep'
 import { SetupVaultNameStep } from '../SetupVaultNameStep'
 import { SetupVaultCreationStep } from '../shared/SetupVaultCreationStep'
 import { VaultTypeProvider } from '../shared/state/vaultType'
@@ -51,7 +51,7 @@ export const SetupSecureVaultPage = () => {
               <GeneratedSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>
                   <GeneratedHexChainCodeProvider>
-                    <CurrentServerTypeProvider initialValue="relay">
+                    <MpcServerTypeProvider initialValue="relay">
                       <ServerUrlDerivedFromServerTypeProvider>
                         <GeneratedLocalPartyIdProvider>
                           <SetupVaultNameProvider>
@@ -59,7 +59,7 @@ export const SetupSecureVaultPage = () => {
                               <CurrentKeygenTypeProvider
                                 value={KeygenType.Keygen}
                               >
-                                <MediatorManager />
+                                <MpcMediatorManager />
                                 <Match
                                   value={step}
                                   name={() => (
@@ -74,7 +74,7 @@ export const SetupSecureVaultPage = () => {
                                     />
                                   )}
                                   peers={() => (
-                                    <SetupVaultPeerDiscoveryStep
+                                    <KeygenPeerDiscoveryStep
                                       onBack={() => setStep(steps[0])}
                                       onForward={toNextStep}
                                     />
@@ -98,7 +98,7 @@ export const SetupSecureVaultPage = () => {
                           </SetupVaultNameProvider>
                         </GeneratedLocalPartyIdProvider>
                       </ServerUrlDerivedFromServerTypeProvider>
-                    </CurrentServerTypeProvider>
+                    </MpcServerTypeProvider>
                   </GeneratedHexChainCodeProvider>
                 </GeneratedHexEncryptionKeyProvider>
               </GeneratedSessionIdProvider>

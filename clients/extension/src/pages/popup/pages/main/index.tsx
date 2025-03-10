@@ -130,7 +130,7 @@ const Component = () => {
   const showReloadMessage = () => {
     messageApi.open({
       type: 'info',
-      content: t(t(messageKeys.RELOAD_MESSAGE)),
+      content: t(messageKeys.RELOAD_MESSAGE),
     })
   }
 
