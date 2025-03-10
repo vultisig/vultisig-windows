@@ -2,7 +2,9 @@
 
 The content of this file should be cleared on Pull Request submit.
 
-- [ ] getTxInputData -> getOneInchSwapTxInputData
+- [ ] getOneInchSwapTxInputData solana implementation
+
+SolanaSwaps -> getSignedTransaction
 
 - [ ] swapPayload & empty `toAddress` field
 - [ ] test a swap from an SPL token to SOL

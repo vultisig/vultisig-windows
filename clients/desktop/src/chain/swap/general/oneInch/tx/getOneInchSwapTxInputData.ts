@@ -1,12 +1,16 @@
+import { getChainKind } from '@core/chain/ChainKind'
 import { getSigningInputLegacyTxFields } from '@core/chain/chains/evm/tx/getSigningInputLegacyTxFields'
 import { OneInchSwapPayload } from '@core/communication/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { getBlockchainSpecificValue } from '@core/keysign/chainSpecific/KeysignChainSpecific'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
+import { match } from '@lib/utils/match'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
+import { LifiSwapEnabledChain } from '../../lifi/LifiSwapEnabledChains'
 import { OneInchSwapEnabledChain } from '../OneInchSwapEnabledChains'
 
 type Input = {
@@ -22,35 +26,57 @@ export const getOneInchSwapTxInputData = async ({
     .value as OneInchSwapPayload
 
   const fromCoin = shouldBePresent(swapPayload.fromCoin)
-  const fromChain = fromCoin.chain as OneInchSwapEnabledChain
+  const fromChain = fromCoin.chain as
+    | OneInchSwapEnabledChain
+    | LifiSwapEnabledChain
 
+  const chainKind = getChainKind(fromChain)
+  const { blockchainSpecific } = keysignPayload
   const tx = shouldBePresent(swapPayload.quote?.tx)
 
-  const amountHex = Buffer.from(
-    stripHexPrefix(bigIntToHex(BigInt(tx.value || 0))),
-    'hex'
-  )
+  return match(chainKind, {
+    evm: () => {
+      const amountHex = Buffer.from(
+        stripHexPrefix(bigIntToHex(BigInt(tx.value || 0))),
+        'hex'
+      )
 
-  const { blockchainSpecific } = keysignPayload
+      const { nonce } = getBlockchainSpecificValue(
+        blockchainSpecific,
+        'ethereumSpecific'
+      )
 
-  const { nonce } = blockchainSpecific.value as EthereumSpecific
+      const signingInput = TW.Ethereum.Proto.SigningInput.create({
+        toAddress: tx.to,
+        transaction: {
+          contractGeneric: {
+            amount: amountHex,
+            data: Buffer.from(stripHexPrefix(tx.data), 'hex'),
+          },
+        },
+        ...getSigningInputLegacyTxFields({
+          chain: fromChain,
+          walletCore,
+          nonce,
+          gasPrice: BigInt(tx.gasPrice || 0),
+          gasLimit: BigInt(tx.gas),
+        }),
+      })
 
-  const signingInput = TW.Ethereum.Proto.SigningInput.create({
-    toAddress: tx.to,
-    transaction: {
-      contractGeneric: {
-        amount: amountHex,
-        data: Buffer.from(stripHexPrefix(tx.data), 'hex'),
-      },
+      return TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()
     },
-    ...getSigningInputLegacyTxFields({
-      chain: fromChain,
-      walletCore,
-      nonce,
-      gasPrice: BigInt(tx.gasPrice || 0),
-      gasLimit: BigInt(tx.gas),
-    }),
-  })
+    solana: () => {
+      const { recentBlockHash } = getBlockchainSpecificValue(
+        blockchainSpecific,
+        'solanaSpecific'
+      )
 
-  return TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()
+      const signingInput = TW.Solana.Proto.SigningInput.create({
+        recentBlockhash: recentBlockHash,
+        rawMessage: null,
+      })
+
+      return TW.Solana.Proto.SigningInput.encode(signingInput).finish()
+    },
+  })
 }
