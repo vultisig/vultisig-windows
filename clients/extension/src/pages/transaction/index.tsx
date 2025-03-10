@@ -45,6 +45,7 @@ import {
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
+import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { getJoinKeysignUrl } from '@core/chain/utils/getJoinKeysignUrl'
 import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
@@ -53,7 +54,6 @@ import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_
 import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
 import { getPreSignedInputData } from '@core/keysign/preSignedInputData'
-import { tss } from '@core/keysign/tss/models'
 import { Button, Form, Input, message, QRCode } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'
@@ -167,7 +167,7 @@ const Component = () => {
           .getComplete(transaction.id, preSignedImageHash)
           .then(data => {
             clearTimeout(retryTimeout)
-            const singaturesRecord: Record<string, tss.KeysignResponse> = {
+            const singaturesRecord: Record<string, KeysignResponse> = {
               [preSignedImageHash]: {
                 ...data,
               },
@@ -239,7 +239,7 @@ const Component = () => {
         .then(data => {
           clearTimeout(retryTimeout)
           const customSignature = getEncodedSignature(
-            data as tss.KeysignResponse,
+            data as KeysignResponse,
             walletCore!
           )
           setStoredTransaction({

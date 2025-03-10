@@ -1,4 +1,4 @@
-import { tss } from '@core/keysign/tss/models'
+import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { isHex } from 'viem'
 
@@ -7,7 +7,7 @@ const ensureHexPrefix = (hex: string): string => {
 }
 
 const getCustomMessageSignature = (
-  signature: tss.KeysignResponse,
+  signature: KeysignResponse,
   walletCore: WalletCore
 ): Uint8Array => {
   const rData = walletCore.HexCoding.decode(signature.r)
@@ -23,7 +23,7 @@ const getCustomMessageSignature = (
 }
 
 export const getEncodedSignature = (
-  signature: tss.KeysignResponse,
+  signature: KeysignResponse,
   walletCore: WalletCore
 ): string => {
   return ensureHexPrefix(

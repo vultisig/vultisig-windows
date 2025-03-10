@@ -2,6 +2,7 @@ import { create, toBinary } from '@bufbuild/protobuf'
 import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
 import { KeygenMessageSchema } from '@core/communication/vultisig/keygen/v1/keygen_message_pb'
 import { deepLinkBaseUrl } from '@core/config'
+import { getSevenZip } from '@core/keygen/compression/getSevenZip'
 import { KeygenServerType } from '@core/keygen/server/KeygenServerType'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
@@ -34,10 +35,10 @@ export const getJoinKeygenUrl = async ({
     vaultName: vaultName,
     libType: mpcLibType === 'GG20' ? 0 : 1,
   })
-
+  const sevenZip = await getSevenZip()
   const binary = toBinary(KeygenMessageSchema, keygenMessage)
 
-  const jsonData = await toCompressedString(binary)
+  const jsonData = await toCompressedString({ sevenZip, binary })
 
   return addQueryParams(deepLinkBaseUrl, {
     type: 'NewVault',

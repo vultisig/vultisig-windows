@@ -12,7 +12,7 @@ import {
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
-import { tss } from '@core/keysign/tss/models'
+import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import axios from 'axios'
 import { TransactionResponse } from 'ethers'
 namespace Derivation {
@@ -155,7 +155,7 @@ export default {
     getComplete: async (
       uuid: string,
       message?: string
-    ): Promise<tss.KeysignResponse> => {
+    ): Promise<KeysignResponse> => {
       return new Promise((resolve, reject) => {
         api
           .get<SignatureProps>(
@@ -172,7 +172,7 @@ export default {
                 },
                 {} as { [key: string]: any }
               )
-              const response: tss.KeysignResponse = {
+              const response: KeysignResponse = {
                 der_signature: transformed.DerSignature,
                 msg: transformed.Msg,
                 r: transformed.R,

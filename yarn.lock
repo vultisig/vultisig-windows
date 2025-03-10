@@ -637,6 +637,8 @@ __metadata:
 "@core/keygen@workspace:core/keygen":
   version: 0.0.0-use.local
   resolution: "@core/keygen@workspace:core/keygen"
+  dependencies:
+    7z-wasm: "npm:^1.1.0"
   languageName: unknown
   linkType: soft
 

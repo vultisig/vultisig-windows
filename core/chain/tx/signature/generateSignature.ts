@@ -1,13 +1,20 @@
 import { SignatureFormat } from '@core/chain/signing/SignatureFormat'
-import { tss } from '@core/keysign/tss/models'
 import { match } from '@lib/utils/match'
 import { pick } from '@lib/utils/record/pick'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { WalletCore } from '@trustwallet/wallet-core'
 
+export interface KeysignResponse {
+  msg: string
+  r: string
+  s: string
+  der_signature: string
+  recovery_id: string
+}
+
 type Input = {
   walletCore: WalletCore
-  signature: tss.KeysignResponse
+  signature: KeysignResponse
   signatureFormat: SignatureFormat
 }
 

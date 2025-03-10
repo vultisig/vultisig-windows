@@ -2,7 +2,7 @@ import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
-import { tss } from '@core/keysign/tss/models'
+import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
 
@@ -333,7 +333,7 @@ export interface CosmosAccountDataResponse {
 
 export interface SignedTransaction {
   inputData?: Uint8Array
-  signatures: Record<string, tss.KeysignResponse>
+  signatures: Record<string, KeysignResponse>
   transaction?: ITransaction
   vault?: VaultProps
   walletCore: WalletCore

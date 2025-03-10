@@ -2,6 +2,7 @@ import { create, toBinary } from '@bufbuild/protobuf'
 import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
 import { ReshareMessageSchema } from '@core/communication/vultisig/keygen/v1/reshare_message_pb'
 import { deepLinkBaseUrl } from '@core/config'
+import { getSevenZip } from '@core/keygen/compression/getSevenZip'
 import { KeygenServerType } from '@core/keygen/server/KeygenServerType'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 
@@ -42,10 +43,10 @@ export const getJoinReshareUrl = async ({
     oldParties,
     libType: libType == 'DKLS' ? 1 : 0,
   })
-
+  const sevenZip = await getSevenZip()
   const binary = toBinary(ReshareMessageSchema, keygenMessage)
 
-  const jsonData = await toCompressedString(binary)
+  const jsonData = await toCompressedString({ sevenZip, binary })
 
   return addQueryParams(deepLinkBaseUrl, {
     type: 'NewVault',
