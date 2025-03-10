@@ -4,11 +4,11 @@ import { useEffect } from 'react'
 import {
   AdvertiseMediator,
   StopAdvertiseMediator,
-} from '../../../../../wailsjs/go/mediator/Server'
-import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
-import { useCurrentServiceName } from '../state/currentServiceName'
+} from '../../../wailsjs/go/mediator/Server'
+import { useCurrentServiceName } from '../../vault/keygen/shared/state/currentServiceName'
+import { useMpcServerType } from './state/mpcServerType'
 
-export const MediatorManager = () => {
+export const MpcMediatorManager = () => {
   const serviceName = useCurrentServiceName()
   const [serverType] = useMpcServerType()
 

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Match } from '../../../lib/ui/base/Match'
 import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
@@ -60,6 +61,7 @@ export const JoinKeygenPage = () => {
                 <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
                   <JoinKeygenVaultProvider>
                     <KeygenServerUrlProvider>
+                      <MpcMediatorManager />
                       <Match
                         value={step}
                         session={() => (
