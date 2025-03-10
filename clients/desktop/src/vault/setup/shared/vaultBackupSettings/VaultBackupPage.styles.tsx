@@ -9,14 +9,15 @@ import { getColor } from '../../../../lib/ui/theme/getters'
 export const InputFieldWrapper = styled.div`
   position: relative;
   background-color: ${getColor('foreground')};
-  padding: 12px;
   ${borderRadius.m};
 `
 
 export const InputField = styled.input`
+  padding: 12px;
   background-color: transparent;
   display: block;
   width: 100%;
+  color: ${getColor('text')};
 
   &::placeholder {
     font-size: 13px;
