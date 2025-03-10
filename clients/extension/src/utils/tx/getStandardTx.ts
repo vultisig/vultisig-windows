@@ -1,8 +1,10 @@
+import api from '@clients/extension/src/utils/api'
 import {
   ChainProps,
   TransactionDetails,
   TransactionType,
 } from '@clients/extension/src/utils/interfaces'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 const transactionHandlers = {
   Keplr: (
@@ -10,7 +12,7 @@ const transactionHandlers = {
     chain: ChainProps
   ): TransactionDetails => ({
     asset: {
-      chain: chain.ticker,
+      chain: chain.chain,
       ticker: tx.amount[0].denom,
     },
     amount: { amount: tx.amount[0].amount, decimals: chain.decimals },
@@ -18,18 +20,43 @@ const transactionHandlers = {
     to: tx.to_address,
   }),
 
-  Phantom: (
+  Phantom: async (
     tx: TransactionType.Phantom,
     chain: ChainProps
-  ): TransactionDetails => ({
-    asset: {
-      chain: chain.ticker,
-      ticker: chain.ticker,
-    },
-    amount: { amount: tx.value, decimals: chain.decimals },
-    from: tx.from,
-    to: tx.to,
-  }),
+  ): Promise<TransactionDetails> => {
+    if (tx.asset.ticker && tx.asset.ticker === chainFeeCoin.Solana.ticker) {
+      return {
+        asset: {
+          chain: chain.chain,
+          ticker: tx.asset.ticker,
+        },
+        amount: { amount: tx.amount, decimals: chain.decimals },
+        from: tx.from,
+        to: tx.to,
+      }
+    } else {
+      if (!tx.asset.mint) {
+        throw new Error('No mint address provided')
+      }
+      try {
+        const token = await api.solana.fetchSolanaTokenInfo(tx.asset.mint)
+
+        return {
+          asset: {
+            chain: chain.chain,
+            ticker: token.symbol,
+            symbol: token.name,
+            mint: tx.asset.mint,
+          },
+          amount: { amount: tx.amount, decimals: token.decimals },
+          from: tx.from,
+          to: tx.to,
+        }
+      } catch (err) {
+        throw Error(`Could not fetch solana token info: ${err}`)
+      }
+    }
+  },
 
   MetaMask: (
     tx: TransactionType.MetaMask,
@@ -38,7 +65,7 @@ const transactionHandlers = {
     from: tx.from,
     to: tx.to,
     asset: {
-      chain: chain.ticker,
+      chain: chain.chain,
       ticker: chain.ticker,
     },
     amount: tx.value
@@ -73,7 +100,7 @@ export const getStandardTransactionDetails = async (
     case 'Keplr':
       return transactionHandlers.Keplr(tx, chain)
     case 'Phantom':
-      return transactionHandlers.Phantom(tx, chain)
+      return await transactionHandlers.Phantom(tx, chain)
     case 'MetaMask':
       return transactionHandlers.MetaMask(tx, chain)
     case 'Ctrl':

@@ -405,12 +405,13 @@ const handleRequest = (
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
         getStandardTransactionDetails(
-          _transaction as TransactionType.WalletTransaction,
+          {
+            ..._transaction,
+            txType: _transaction.txType ?? 'Vultisig',
+          } as TransactionType.WalletTransaction,
           chain
         ).then(standardTx => {
-          let modifiedTransaction: ITransaction = {} as ITransaction
-
-          modifiedTransaction = {
+          const modifiedTransaction: ITransaction = {
             transactionDetails: standardTx as TransactionDetails,
             chain,
             id: '',
@@ -459,7 +460,7 @@ const handleRequest = (
           const [transaction] = params as TransactionType.Vultisig[]
           if (transaction) {
             getStandardTransactionDetails(
-              { ...transaction, txType: 'Vultisig' },
+              { ...transaction, txType: transaction.txType ?? 'Vultisig' },
               chain
             ).then(standardTx => {
               let modifiedTransaction: ITransaction = {} as ITransaction
@@ -809,7 +810,7 @@ const handleRequest = (
                   from: String(address),
                   to: '',
                   asset: {
-                    chain: 'ETH',
+                    chain: Chain.Ethereum,
                     ticker: 'ETH',
                   },
                 },
@@ -850,7 +851,7 @@ const handleRequest = (
                 from: String(address),
                 to: '',
                 asset: {
-                  chain: 'ETH',
+                  chain: Chain.Ethereum,
                   ticker: 'ETH',
                 },
               },
