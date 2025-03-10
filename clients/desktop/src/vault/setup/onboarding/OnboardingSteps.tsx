@@ -10,7 +10,6 @@ import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { PageContent } from '../../../ui/page/PageContent'
 import { AnimationDescription } from './AnimationDescriptions'
 import { useOnboardingStepsAnimations } from './hooks/useOnboardingStepsAnimations'
@@ -29,7 +28,6 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
   onCompleteSteps,
 }) => {
   const { t } = useTranslation()
-  const navigate = useAppNavigate()
 
   const {
     animations,
@@ -45,21 +43,17 @@ export const OnboardingSteps: FC<OnboardingStepsProps> = ({
       <ProgressWrapper gap={16}>
         <HStack justifyContent="space-between" alignItems="baseline">
           <HStack
-            as="button"
-            alignItems="center"
             gap={4}
-            onClick={() => navigate('setupVault', { params: {} })}
+            style={{
+              cursor: 'pointer',
+            }}
+            alignItems="center"
+            role="button"
+            tabIndex={0}
+            onClick={handlePrevAnimation}
           >
-            <HStack
-              gap={4}
-              alignItems="center"
-              role="button"
-              tabIndex={0}
-              onClick={handlePrevAnimation}
-            >
-              <ChevronLeftIcon width={24} height={24} />
-              <Text size={18}>{t('back')}</Text>
-            </HStack>
+            <ChevronLeftIcon width={24} height={24} />
+            <Text size={18}>{t('back')}</Text>
           </HStack>
           <UnstyledButton onClick={onCompleteSteps}>
             <Text color="shy" size={18}>

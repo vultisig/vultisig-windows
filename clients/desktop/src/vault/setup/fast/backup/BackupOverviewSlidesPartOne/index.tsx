@@ -8,7 +8,6 @@ import { ChevronRightIcon } from '../../../../../lib/ui/icons/ChevronRightIcon'
 import { VStack } from '../../../../../lib/ui/layout/Stack'
 import { Text } from '../../../../../lib/ui/text'
 import { getColor } from '../../../../../lib/ui/theme/getters'
-import { hideScrollbar } from '../../../../../lib/ui/utils/hideScrollbar'
 import { PageContent } from '../../../../../ui/page/PageContent'
 import { AnimationDescription } from './AnimationDescription'
 import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
@@ -99,5 +98,5 @@ const BottomItemsWrapper = styled(VStack)`
 `
 
 const Wrapper = styled(PageContent)`
-  ${hideScrollbar}
+  overflow-y: hidden;
 `

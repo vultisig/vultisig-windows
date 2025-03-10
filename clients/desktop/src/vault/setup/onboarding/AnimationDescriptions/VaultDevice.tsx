@@ -10,7 +10,7 @@ export const VaultDevice = () => {
   return (
     <AnimatedVisibility>
       <TextWrapper>
-        <Text as="span" size={48}>
+        <Text as="span" size={42}>
           <GradientText as="span">{t('eachDevice')}</GradientText>{' '}
           {t('inYourVaultHolds')}{' '}
           <GradientText as="span">{t('oneVaultShare')}</GradientText>
