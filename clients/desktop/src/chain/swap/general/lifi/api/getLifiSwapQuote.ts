@@ -11,7 +11,8 @@ import { lifiConfig } from '../config'
 import { lifiSwapChainId, LifiSwapEnabledChain } from '../LifiSwapEnabledChains'
 
 type Input = Record<TransferDirection, CoinKey<LifiSwapEnabledChain>> & {
-  address: string
+  fromAddress: string
+  toAddress: string
   amount: bigint
 }
 
@@ -23,7 +24,8 @@ const setupLifi = memoize(() => {
 
 export const getLifiSwapQuote = async ({
   amount,
-  address,
+  fromAddress,
+  toAddress,
   ...transfer
 }: Input): Promise<GeneralSwapQuote> => {
   setupLifi()
@@ -40,8 +42,9 @@ export const getLifiSwapQuote = async ({
     fromToken,
     toToken,
     fromAmount: amount.toString(),
-    fromAddress: address,
+    fromAddress: fromAddress,
     fee: lifiConfig.afffiliateFee,
+    toAddress: toAddress,
   })
 
   const { transactionRequest, estimate } = quote

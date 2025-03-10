@@ -84,7 +84,8 @@ export const findSwapQuote = ({
           chain: toLifiChain,
         },
         amount: toChainAmount(amount, from.decimals),
-        address: from.address,
+        fromAddress: from.address,
+        toAddress: to.address,
       })
 
       return { general }
