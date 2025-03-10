@@ -9,7 +9,7 @@ export const VaultBackup = () => {
   return (
     <AnimatedVisibility>
       <TextWrapper>
-        <Text as="span" size={48}>
+        <Text as="span" size={42}>
           <GradientText as="span">
             {t('alwaysBackUpEachVaultShare')}
           </GradientText>{' '}
