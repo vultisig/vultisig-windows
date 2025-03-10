@@ -1,58 +1,68 @@
 import { recommendedPeers, requiredPeers } from '@core/mpc/peers/config'
 import { range } from '@lib/utils/array/range'
 import { BrowserOpenURL } from '@wailsapp/runtime'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Match } from '../../../lib/ui/base/Match'
-import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
-import { InfoIcon } from '../../../lib/ui/icons/InfoIcon'
-import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
-import { QueryBasedQrCode } from '../../../lib/ui/qr/QueryBasedQrCode'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
-import { InitiatingDevice } from '../../../mpc/peers/InitiatingDevice'
-import { PeerOption } from '../../../mpc/peers/option/PeerOption'
-import { PeerDiscoveryFormFooter } from '../../../mpc/peers/PeerDiscoveryFormFooter'
-import { PeerPlaceholder } from '../../../mpc/peers/PeerPlaceholder'
-import { PeerRequirementsInfo } from '../../../mpc/peers/PeerRequirementsInfo'
-import { PeersContainer } from '../../../mpc/peers/PeersContainer'
-import { PeersManagerFrame } from '../../../mpc/peers/PeersManagerFrame'
-import { PeersManagerTitle } from '../../../mpc/peers/PeersManagerTitle'
-import { PeersPageContentFrame } from '../../../mpc/peers/PeersPageContentFrame'
-import { MpcLocalServerIndicator } from '../../../mpc/serverType/MpcLocalServerIndicator'
-import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
-import { FitPageContent } from '../../../ui/page/PageContent'
-import { PageFormFrame } from '../../../ui/page/PageFormFrame'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton'
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { CurrentPeersCorrector } from '../../keygen/shared/peerDiscovery/CurrentPeersCorrector'
-import { DownloadKeygenQrCode } from '../../keygen/shared/peerDiscovery/DownloadKeygenQrCode'
-import { usePeerOptionsQuery } from '../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
-import { useSelectedPeers } from '../../keysign/shared/state/selectedPeers'
-import { useJoinKeygenUrlQuery } from '../peers/queries/useJoinKeygenUrlQuery'
-import { SecureVaultKeygenOverlay } from './components/SecureVaultKeygenOverlay'
+import { Match } from '../../../../lib/ui/base/Match'
+import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps'
+import { InfoIcon } from '../../../../lib/ui/icons/InfoIcon'
+import { OnBackProp, OnForwardProp } from '../../../../lib/ui/props'
+import { QueryBasedQrCode } from '../../../../lib/ui/qr/QueryBasedQrCode'
+import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'
+import { PeerOption } from '../../../../mpc/peers/option/PeerOption'
+import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryFormFooter'
+import { PeerPlaceholder } from '../../../../mpc/peers/PeerPlaceholder'
+import { PeerRequirementsInfo } from '../../../../mpc/peers/PeerRequirementsInfo'
+import { PeersContainer } from '../../../../mpc/peers/PeersContainer'
+import { PeersManagerFrame } from '../../../../mpc/peers/PeersManagerFrame'
+import { PeersManagerTitle } from '../../../../mpc/peers/PeersManagerTitle'
+import { PeersPageContentFrame } from '../../../../mpc/peers/PeersPageContentFrame'
+import { MpcLocalServerIndicator } from '../../../../mpc/serverType/MpcLocalServerIndicator'
+import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
+import { FitPageContent } from '../../../../ui/page/PageContent'
+import { PageFormFrame } from '../../../../ui/page/PageFormFrame'
+import { PageHeader } from '../../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
+import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
+import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
+import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
+import { useJoinKeygenUrlQuery } from '../../../setup/peers/queries/useJoinKeygenUrlQuery'
+import { KeygenType } from '../../KeygenType'
+import { useCurrentKeygenType } from '../../state/currentKeygenType'
+import { CurrentPeersCorrector } from './CurrentPeersCorrector'
+import { DownloadKeygenQrCode } from './DownloadKeygenQrCode'
+import { KeygenPeerDiscoveryEducation } from './KeygenPeerDiscoveryEducation'
+import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery'
 
-const educationUrl =
-  'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault'
+type KeygenPeerDiscoveryStepProps = OnForwardProp & Partial<OnBackProp>
 
-export const SetupSecureVaultPeerDiscoveryStep = ({
+const educationUrl: Record<KeygenType, string> = {
+  [KeygenType.Keygen]:
+    'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
+  [KeygenType.Reshare]:
+    'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
+}
+
+export const KeygenPeerDiscoveryStep = ({
   onForward,
   onBack,
-}: OnForwardProp & OnBackProp) => {
-  const [overlayShown, setHasShownOverlay] = useState(true)
+}: KeygenPeerDiscoveryStepProps) => {
   const [serverType] = useMpcServerType()
   const { t } = useTranslation()
-  const joinUrlQuery = useJoinKeygenUrlQuery()
   const selectedPeers = useSelectedPeers()
   const peerOptionsQuery = usePeerOptionsQuery()
+
+  const joinUrlQuery = useJoinKeygenUrlQuery()
 
   const isDisabled = useMemo(() => {
     if (selectedPeers.length < requiredPeers) {
       return t('select_n_devices', { count: requiredPeers })
     }
   }, [selectedPeers.length, t])
+
+  const keygenType = useCurrentKeygenType()
 
   return (
     <>
@@ -67,7 +77,7 @@ export const SetupSecureVaultPeerDiscoveryStep = ({
               <>
                 <PageHeaderIconButton
                   onClick={() => {
-                    BrowserOpenURL(educationUrl)
+                    BrowserOpenURL(educationUrl[keygenType])
                   }}
                   icon={<InfoIcon />}
                 />
@@ -128,11 +138,7 @@ export const SetupSecureVaultPeerDiscoveryStep = ({
           <PeerDiscoveryFormFooter isDisabled={isDisabled} />
         </PageFormFrame>
       </FitPageContent>
-      {overlayShown && (
-        <SecureVaultKeygenOverlay
-          onCompleted={() => setHasShownOverlay(false)}
-        />
-      )}
+      <KeygenPeerDiscoveryEducation />
     </>
   )
 }

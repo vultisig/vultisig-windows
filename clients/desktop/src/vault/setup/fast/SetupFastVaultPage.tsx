@@ -1,5 +1,6 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { useDefaultMpcLib } from '../../../mpc/state/defaultMpcLib'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
@@ -66,6 +67,7 @@ export const SetupFastVaultPage = () => {
                                     value={KeygenType.Keygen}
                                   >
                                     <PasswordHintProvider initialValue="">
+                                      <MpcMediatorManager />
                                       <Match
                                         value={step}
                                         name={() => (

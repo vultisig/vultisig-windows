@@ -4,7 +4,7 @@ import { storage } from '../../../../wailsjs/go/models'
 import { ChildrenProp } from '../../../lib/ui/props'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useVaults } from '../../queries/useVaultsQuery'
-import { CurrentKeygenVaultProvider } from '../state/currentKeygenVault'
+import { CurrentVaultProvider } from '../../state/currentVault'
 import { CurrentLocalPartyIdProvider } from '../state/currentLocalPartyId'
 import { generateLocalPartyId } from '../utils/localPartyId'
 
@@ -50,10 +50,10 @@ export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
   }, [existingVault, hexChainCode, keygenMsg, vaultName])
 
   return (
-    <CurrentKeygenVaultProvider value={value}>
+    <CurrentVaultProvider value={value}>
       <CurrentLocalPartyIdProvider value={value.local_party_id}>
         {children}
       </CurrentLocalPartyIdProvider>
-    </CurrentKeygenVaultProvider>
+    </CurrentVaultProvider>
   )
 }

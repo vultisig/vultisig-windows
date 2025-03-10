@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 
 import { storage } from '../../../wailsjs/go/models'
 import { ChildrenProp } from '../../lib/ui/props'
-import { CurrentKeygenVaultProvider } from '../keygen/state/currentKeygenVault'
 import { useCurrentLocalPartyId } from '../keygen/state/currentLocalPartyId'
+import { CurrentVaultProvider } from '../state/currentVault'
 import { useVaultKeygenDevices } from './hooks/useVaultKegenDevices'
 import { useCurrentHexChainCode } from './state/currentHexChainCode'
 import { useVaultName } from './state/vaultName'
@@ -26,9 +26,5 @@ export const StartKeygenVaultProvider: React.FC<ChildrenProp> = ({
     return result
   }, [devices, hexChainCode, localPartyId, vaultName])
 
-  return (
-    <CurrentKeygenVaultProvider value={value}>
-      {children}
-    </CurrentKeygenVaultProvider>
-  )
+  return <CurrentVaultProvider value={value}>{children}</CurrentVaultProvider>
 }

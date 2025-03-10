@@ -6,10 +6,10 @@ import { SaveAsImage } from '../../../../ui/file/SaveAsImage'
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode'
 import { getVaultPublicKeyExport } from '../../../share/utils/getVaultPublicKeyExport'
-import { useCurrentKeygenVault } from '../../state/currentKeygenVault'
+import { useCurrentVault } from '../../../state/currentVault'
 
 export const DownloadKeygenQrCode = ({ value }: ValueProp<string>) => {
-  const vault = useCurrentKeygenVault()
+  const vault = useCurrentVault()
   const { name } = vault
   const { t } = useTranslation()
   const { uid } = getVaultPublicKeyExport(vault) ?? ''
