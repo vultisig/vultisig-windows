@@ -66,7 +66,7 @@ export const getTxInputData = async ({
     return [txInputData]
   }
 
-  const txInputData = await getPreSignedInputData({
+  const txInputData = getPreSignedInputData({
     keysignPayload,
     walletCore,
     chain,

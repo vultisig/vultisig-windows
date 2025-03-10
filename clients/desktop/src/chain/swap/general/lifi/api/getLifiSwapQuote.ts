@@ -44,6 +44,8 @@ export const getLifiSwapQuote = async ({
     fee: lifiConfig.afffiliateFee,
   })
 
+  console.log('quote', quote)
+
   const { transactionRequest, estimate } = quote
 
   const chainKind = getChainKind(transfer.from.chain)
@@ -57,16 +59,20 @@ export const getLifiSwapQuote = async ({
     tx: match<DeriveChainKind<LifiSwapEnabledChain>, GeneralSwapQuote['tx']>(
       chainKind,
       {
-        solana: () => {
-          throw new Error('Solana swaps are not supported yet')
-        },
+        solana: () => ({
+          solana: {
+            data: shouldBePresent(data),
+          },
+        }),
         evm: () => ({
-          from: shouldBePresent(from),
-          to: shouldBePresent(to),
-          data: shouldBePresent(data),
-          value: BigInt(shouldBePresent(value)).toString(),
-          gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
-          gas: Number(shouldBePresent(gasLimit)),
+          evm: {
+            from: shouldBePresent(from),
+            to: shouldBePresent(to),
+            data: shouldBePresent(data),
+            value: BigInt(shouldBePresent(value)).toString(),
+            gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
+            gas: Number(shouldBePresent(gasLimit)),
+          },
         }),
       }
     ),

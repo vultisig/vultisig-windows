@@ -7,6 +7,7 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
   OneInchQuoteSchema,
   OneInchSwapPayloadSchema,
+  OneInchTransaction,
   OneInchTransactionSchema,
 } from '@core/communication/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
@@ -14,6 +15,7 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
+import { GeneralSwapTx } from '../general/GeneralSwapQuote'
 import { thorchainSwapQuoteToSwapPayload } from '../native/thor/utils/thorchainSwapQuoteToSwapPayload'
 import { SwapQuote } from '../quote/SwapQuote'
 
@@ -35,6 +37,23 @@ export const getSwapKeysignPayloadFields = ({
 }: Input): Output => {
   return matchRecordUnion(quote, {
     general: quote => {
+      const txMsg = matchRecordUnion<
+        GeneralSwapTx,
+        Omit<OneInchTransaction, '$typeName' | 'swapFee'>
+      >(quote.tx, {
+        evm: ({ gas, ...tx }) => ({ ...tx, gas: BigInt(gas) }),
+        solana: ({ data }) => ({
+          from: '',
+          to: '',
+          data,
+          value: '',
+          gasPrice: '',
+          gas: BigInt(0),
+        }),
+      })
+
+      const tx = create(OneInchTransactionSchema, txMsg)
+
       const swapPayload = create(OneInchSwapPayloadSchema, {
         fromCoin,
         toCoin,
@@ -45,15 +64,12 @@ export const getSwapKeysignPayloadFields = ({
         ).toFixed(toCoin.decimals),
         quote: create(OneInchQuoteSchema, {
           dstAmount: quote.dstAmount,
-          tx: create(OneInchTransactionSchema, {
-            ...quote.tx,
-            gas: BigInt(quote.tx.gas),
-          }),
+          tx,
         }),
       })
 
       return {
-        toAddress: quote.tx.to,
+        toAddress: txMsg.to,
         swapPayload: {
           case: 'oneinchSwapPayload',
           value: swapPayload,

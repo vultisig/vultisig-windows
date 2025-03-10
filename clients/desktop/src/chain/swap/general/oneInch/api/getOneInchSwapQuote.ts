@@ -58,8 +58,10 @@ export const getOneInchSwapQuote = async ({
     dstAmount,
     provider: 'oneinch',
     tx: {
-      ...tx,
-      gas: tx.gas || defaultEvmSwapGasLimit,
+      evm: {
+        ...tx,
+        gas: tx.gas || defaultEvmSwapGasLimit,
+      },
     },
   }
 }
