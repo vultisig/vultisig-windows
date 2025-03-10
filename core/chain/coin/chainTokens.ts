@@ -786,6 +786,27 @@ const leanChainTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
       priceProviderId: 'terra-luna',
       id: 'ibc/119334C55720942481F458C9C462F5C0CD1F1E7EEAC4679D674AA67221916AEA',
     },
+    {
+      ticker: 'rKUJI',
+      logo: 'rKUJI.png',
+      decimals: 6,
+      priceProviderId: 'kujira',
+      id: 'factory/kujira1tsekaqv9vmem0zwskmf90gpf0twl6k57e8vdnq/urkuji',
+    },
+    {
+      ticker: 'NAMI',
+      logo: 'NAMI.png',
+      decimals: 6,
+      priceProviderId: 'nami-protocol',
+      id: 'factory/kujira13x2l25mpkhwnwcwdzzd34cr8fyht9jlj7xu9g4uffe36g3fmln8qkvm3qn/unami',
+    },
+    {
+      ticker: 'FUZN',
+      logo: 'FUZN.png',
+      decimals: 6,
+      priceProviderId: 'fuzion',
+      id: 'factory/kujira1sc6a0347cc5q3k890jj0pf3ylx2s38rh4sza4t/ufuzn',
+    },
   ],
   [Chain.Terra]: [
     {

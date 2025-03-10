@@ -8,6 +8,7 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 
 import { KeysignMessagePayload } from '../../../../chain/keysign/KeysignMessagePayload'
+import { getSevenZip } from '../../../../compression/getSevenZip'
 import { deepLinkBaseUrl } from '../../../../deeplink/config'
 import { toCompressedString } from '../../../../utils/protobuf/toCompressedString'
 import { uploadPayloadToServer } from '../../../server/utils/uploadPayloadToServer'
@@ -54,7 +55,12 @@ export const getJoinKeysignUrl = async ({
 
   const binary = toBinary(KeysignMessageSchema, keysignMessage)
 
-  const jsonData = await toCompressedString(binary)
+  const sevenZip = await getSevenZip()
+
+  const jsonData = toCompressedString({
+    sevenZip,
+    binary,
+  })
 
   const urlWithPayload = addQueryParams(deepLinkBaseUrl, {
     type: 'SignTransaction',
@@ -64,7 +70,10 @@ export const getJoinKeysignUrl = async ({
 
   if (payload && 'keysign' in payload && urlWithPayload.length > urlMaxLength) {
     const binary = toBinary(KeysignPayloadSchema, payload.keysign)
-    const compressedPayload = await toCompressedString(binary)
+    const compressedPayload = toCompressedString({
+      sevenZip,
+      binary,
+    })
     const payloadId = await uploadPayloadToServer({
       payload: compressedPayload,
       serverUrl: mpcServerUrl[serverType],

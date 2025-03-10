@@ -1,5 +1,6 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { useDefaultMpcLib } from '../../../mpc/state/defaultMpcLib'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
@@ -7,7 +8,7 @@ import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { KeygenType } from '../../keygen/KeygenType'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
-import { MediatorManager } from '../../keygen/shared/peerDiscovery/MediatorManager'
+import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
@@ -22,7 +23,6 @@ import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryption
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType'
 import { SetupVaultNameProvider } from '../state/vaultName'
 import { SecureVaultKeygenStartSessionStep } from './SecureVaultKeygenStartSessionStep'
-import { SetupSecureVaultPeerDiscoveryStep } from './SetupSecureVaultPeerDiscoveryStep'
 
 const steps = [
   'name',
@@ -59,7 +59,7 @@ export const SetupSecureVaultPage = () => {
                               <CurrentKeygenTypeProvider
                                 value={KeygenType.Keygen}
                               >
-                                <MediatorManager />
+                                <MpcMediatorManager />
                                 <Match
                                   value={step}
                                   name={() => (
@@ -74,7 +74,7 @@ export const SetupSecureVaultPage = () => {
                                     />
                                   )}
                                   peers={() => (
-                                    <SetupSecureVaultPeerDiscoveryStep
+                                    <KeygenPeerDiscoveryStep
                                       onBack={() => setStep(steps[0])}
                                       onForward={toNextStep}
                                     />
