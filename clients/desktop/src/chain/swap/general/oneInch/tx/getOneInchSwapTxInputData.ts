@@ -1,7 +1,7 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import { getSigningInputLegacyTxFields } from '@core/chain/chains/evm/tx/getSigningInputLegacyTxFields'
+import { getCoinType } from '@core/chain/coin/coinType'
 import { OneInchSwapPayload } from '@core/communication/vultisig/keysign/v1/1inch_swap_payload_pb'
-import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 import { getBlockchainSpecificValue } from '@core/keysign/chainSpecific/KeysignChainSpecific'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -33,6 +33,7 @@ export const getOneInchSwapTxInputData = async ({
   const chainKind = getChainKind(fromChain)
   const { blockchainSpecific } = keysignPayload
   const tx = shouldBePresent(swapPayload.quote?.tx)
+  const { data } = tx
 
   return match(chainKind, {
     evm: () => {
@@ -51,7 +52,7 @@ export const getOneInchSwapTxInputData = async ({
         transaction: {
           contractGeneric: {
             amount: amountHex,
-            data: Buffer.from(stripHexPrefix(tx.data), 'hex'),
+            data: Buffer.from(stripHexPrefix(data), 'hex'),
           },
         },
         ...getSigningInputLegacyTxFields({
@@ -71,9 +72,19 @@ export const getOneInchSwapTxInputData = async ({
         'solanaSpecific'
       )
 
+      const decodedData = walletCore.TransactionDecoder.decode(
+        getCoinType({
+          walletCore,
+          chain: fromChain,
+        }),
+        Buffer.from(data, 'base64')
+      )
+      const decodedOutput =
+        TW.Solana.Proto.DecodingTransactionOutput.decode(decodedData)
+
       const signingInput = TW.Solana.Proto.SigningInput.create({
         recentBlockhash: recentBlockHash,
-        rawMessage: null,
+        rawMessage: decodedOutput.transaction,
       })
 
       return TW.Solana.Proto.SigningInput.encode(signingInput).finish()
