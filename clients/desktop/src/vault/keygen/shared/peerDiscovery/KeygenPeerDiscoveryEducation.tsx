@@ -4,11 +4,11 @@ import { KeygenType } from '../../KeygenType'
 import { useCurrentKeygenType } from '../../state/currentKeygenType'
 
 export const KeygenPeerDiscoveryEducation = () => {
-  const [overlayShown, { unset: closeOverlay }] = useBoolean(false)
+  const [shouldShowOverlay, { unset: closeOverlay }] = useBoolean(true)
 
   const [keygenType] = useCurrentKeygenType()
 
-  if (keygenType === KeygenType.Keygen && !overlayShown) {
+  if (keygenType === KeygenType.Keygen && shouldShowOverlay) {
     return <SecureVaultKeygenOverlay onCompleted={closeOverlay} />
   }
 
