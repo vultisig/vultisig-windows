@@ -14,7 +14,11 @@ import { useCurrentKeygenType } from '../../state/currentKeygenType'
 import { useCurrentServerUrl } from '../../state/currentServerUrl'
 import { useCurrentSessionId } from '../state/currentSessionId'
 
-export const useKeygenMutation = () => {
+export const useKeygenMutation = ({
+  onSuccess,
+}: {
+  onSuccess?: (data: storage.Vault) => void
+} = {}) => {
   const keygenType = useCurrentKeygenType()
 
   const serverUrl = useCurrentServerUrl()
@@ -35,7 +39,7 @@ export const useKeygenMutation = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const partialVault = match(keygenType, {
+      const partialVault = await match(keygenType, {
         [KeygenType.Keygen]: () => {
           return match(mpcLib, {
             GG20: () => {
@@ -152,7 +156,9 @@ export const useKeygenMutation = () => {
       return {
         ...partialVault,
         lib_type: mpcLib,
+        convertValues: () => {},
       }
     },
+    onSuccess,
   })
 }
