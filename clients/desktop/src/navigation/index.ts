@@ -76,7 +76,7 @@ export type AppPathParams = {
   send: { coin: string }
   setupVault: { type?: SetupVaultType }
   swap: { coin: string }
-  deposit: { coin: string }
+  deposit: { coin: string; address?: string }
   vaultFolder: { id: string }
   manageVaultFolder: { id: string }
 }
