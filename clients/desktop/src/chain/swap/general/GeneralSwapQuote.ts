@@ -1,3 +1,4 @@
+import { SwapFee } from '../../../vault/swap/types/SwapFee'
 import { GeneralSwapProvider } from './GeneralSwapProvider'
 
 export type GeneralSwapTx =
@@ -14,6 +15,8 @@ export type GeneralSwapTx =
   | {
       solana: {
         data: string
+        networkFee: bigint
+        swapFee: SwapFee
       }
     }
 

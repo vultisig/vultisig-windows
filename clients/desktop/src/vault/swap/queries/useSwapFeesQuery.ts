@@ -41,7 +41,6 @@ export const useSwapFeesQuery = () => {
               ...fromFeeCoin,
               amount: feeAmount,
               decimals: fromFeeCoin.decimals,
-              chainSpecific,
             },
           }
 
@@ -57,13 +56,14 @@ export const useSwapFeesQuery = () => {
                 decimals: fromFeeCoin.decimals,
               },
             }),
-            solana: () => ({
-              swap: {
+            solana: ({ networkFee, swapFee }) => ({
+              network: {
                 chain: fromCoinKey.chain,
                 id: fromCoinKey.id,
-                amount: BigInt(0),
+                amount: BigInt(networkFee),
                 decimals: fromFeeCoin.decimals,
               },
+              swap: swapFee,
             }),
           })
         },

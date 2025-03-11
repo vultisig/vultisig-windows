@@ -1,8 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { areEqualCoins, coinKeyToString } from '@core/chain/coin/Coin'
 import { sum } from '@lib/utils/array/sum'
+import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { getRecordSize } from '@lib/utils/record/getRecordSize'
 import { useCallback, useMemo } from 'react'
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount'
@@ -18,13 +18,16 @@ export const SwapFeeFiatValue = ({ value }: ValueProp<SwapFee[]>) => {
   const vaultCoins = useCurrentVaultCoins()
   const coins = useMemo(
     () =>
-      value.map(key => {
-        const coin = shouldBePresent(
-          vaultCoins.find(coin => areEqualCoins(coin, key))
-        )
+      withoutDuplicates(
+        value.map(key => {
+          const coin = shouldBePresent(
+            vaultCoins.find(coin => areEqualCoins(coin, key))
+          )
 
-        return coin
-      }),
+          return coin
+        }),
+        areEqualCoins
+      ),
     [value, vaultCoins]
   )
 
@@ -34,7 +37,7 @@ export const SwapFeeFiatValue = ({ value }: ValueProp<SwapFee[]>) => {
     useCoinPricesQuery({ coins }),
     useCallback(
       prices => {
-        if (getRecordSize(prices) !== value.length) {
+        if (coins.length !== value.length) {
           throw new Error('Failed to load prices')
         }
 
@@ -49,7 +52,7 @@ export const SwapFeeFiatValue = ({ value }: ValueProp<SwapFee[]>) => {
 
         return formatAmount(total)
       },
-      [formatAmount, value]
+      [coins.length, formatAmount, value]
     )
   )
 
