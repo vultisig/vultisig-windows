@@ -1,8 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { getCoinType } from '@core/chain/coin/coinType'
+import { useWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
 import { useCallback } from 'react'
-
-import { useWalletCore } from '../../../providers/WalletCoreProvider'
 
 export const useDeriveChainFromWalletAddress = () => {
   const walletCore = useWalletCore()
