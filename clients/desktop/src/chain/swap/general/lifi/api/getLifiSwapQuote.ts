@@ -1,8 +1,10 @@
 import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { memoize } from '@lib/utils/memoize'
+import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 import { createConfig, getQuote } from '@lifi/sdk'
 
@@ -58,15 +60,40 @@ export const getLifiSwapQuote = async ({
       chainKind,
       {
         solana: () => {
-          throw new Error('Solana swaps are not supported yet')
+          const { gasCosts, feeCosts } = estimate
+          const [networkFee] = shouldBePresent(gasCosts)
+
+          const swapFee = shouldBePresent(
+            shouldBePresent(feeCosts).find(fee => fee.name === 'LIFI Fixed Fee')
+          )
+
+          const swapFeeAssetId =
+            [fromToken, toToken].find(
+              token => token === swapFee.token.address
+            ) || chainFeeCoin[transfer.from.chain].id
+
+          return {
+            solana: {
+              data: shouldBePresent(data),
+              networkFee: BigInt(networkFee.amount),
+              swapFee: {
+                amount: BigInt(swapFee.amount),
+                decimals: swapFee.token.decimals,
+                chain: mirrorRecord(lifiSwapChainId)[swapFee.token.chainId],
+                id: swapFeeAssetId,
+              },
+            },
+          }
         },
         evm: () => ({
-          from: shouldBePresent(from),
-          to: shouldBePresent(to),
-          data: shouldBePresent(data),
-          value: BigInt(shouldBePresent(value)).toString(),
-          gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
-          gas: Number(shouldBePresent(gasLimit)),
+          evm: {
+            from: shouldBePresent(from),
+            to: shouldBePresent(to),
+            data: shouldBePresent(data),
+            value: BigInt(shouldBePresent(value)).toString(),
+            gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
+            gas: Number(shouldBePresent(gasLimit)),
+          },
         }),
       }
     ),
