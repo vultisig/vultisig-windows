@@ -15,6 +15,7 @@ import {
   nativeSwapChains,
   nativeSwapEnabledChainsRecord,
 } from '../native/NativeSwapChain'
+import { NoSwapRoutesError } from '../NoSwapRoutesError'
 import { SwapQuote } from './SwapQuote'
 
 type FindSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
@@ -92,7 +93,7 @@ export const findSwapQuote = ({
   }
 
   if (isEmpty(fetchers)) {
-    throw new Error(`No swap routes found.`)
+    throw new NoSwapRoutesError()
   }
 
   return asyncFallbackChain(...fetchers)
