@@ -23,7 +23,6 @@ import { useCurrentVaultCoinKey } from './useCurrentVaultCoinKey'
 
 export const VaultChainCoinPage = () => {
   const coinKey = useCurrentVaultCoinKey()
-
   const coin = useCurrentVaultCoin(coinKey)
 
   const balanceQuery = useBalanceQuery({

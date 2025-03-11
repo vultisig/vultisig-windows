@@ -73,7 +73,7 @@ export type AppPathParams = {
   manageVaultChainCoins: { chain: Chain }
   vaultChainDetail: { chain: Chain }
   vaultChainCoinDetail: { chain: Chain; coin: string }
-  send: { coin: string }
+  send: { coin: string; address?: string }
   setupVault: { type?: SetupVaultType }
   swap: { coin: string }
   deposit: { coin: string }
