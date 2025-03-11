@@ -1,5 +1,5 @@
 import { Coin } from '@core/chain/coin/Coin'
-import { useAssertWalletCore } from '@core/chain/providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
 import { useMutation } from '@tanstack/react-query'
 
 import { SaveCoin } from '../../../wailsjs/go/storage/Store'

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { formatFee } from '../../../../chain/tx/fee/utils/formatFee'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { useSwapChainSpecificQuery } from '../../queries/useSwapChainSpecificQuery'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
@@ -15,6 +16,8 @@ export const SwapFees: React.FC<SwapFeesProps> = ({ RowComponent }) => {
   const { t } = useTranslation()
 
   const query = useSwapFeesQuery()
+
+  const chainSpecificQuery = useSwapChainSpecificQuery()
 
   return (
     <>
@@ -35,13 +38,20 @@ export const SwapFees: React.FC<SwapFeesProps> = ({ RowComponent }) => {
           if (!network) return null
 
           return (
-            <RowComponent>
-              <span>{t('network_fee')}</span>
-              <span>
-                {formatFee(network)} (~
-                <SwapFeeFiatValue value={[network]} />)
-              </span>
-            </RowComponent>
+            <MatchQuery
+              value={chainSpecificQuery}
+              success={chainSpecific => {
+                return (
+                  <RowComponent>
+                    <span>{t('network_fee')}</span>
+                    <span>
+                      {formatFee({ ...network, chainSpecific })} (~
+                      <SwapFeeFiatValue value={[network]} />)
+                    </span>
+                  </RowComponent>
+                )
+              }}
+            />
           )
         }}
       />

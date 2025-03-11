@@ -1,4 +1,4 @@
-import { useAssertWalletCore } from '@core/chain/providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 

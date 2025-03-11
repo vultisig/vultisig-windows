@@ -1,5 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-import { useAssertWalletCore } from '@core/chain/providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
 
 import { deriveAddress } from '../../chain/utils/deriveAddress'
 import { useStateDependentQuery } from '../../lib/ui/query/hooks/useStateDependentQuery'

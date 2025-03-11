@@ -1,6 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { useAssertWalletCore } from '@core/chain/providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
 import { toCommCoin } from '@core/communication/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 

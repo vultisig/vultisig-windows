@@ -1,5 +1,5 @@
 import { EvmChain } from '@core/chain/Chain'
-import { Coin, CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
+import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
 import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
@@ -28,7 +28,7 @@ export const getCoinPricesQueryKeys = (input: GetCoinPricesQueryKeysInput) => [
 ]
 
 type UseCoinPricesQueryInput = {
-  coins: Coin[]
+  coins: (CoinKey & { priceProviderId?: string })[]
   fiatCurrency?: FiatCurrency
 }
 

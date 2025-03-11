@@ -19,7 +19,7 @@ import {
 } from '@clients/extension/src/utils/storage'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { useWalletCore } from '@core/chain/providers/WalletCoreProvider'
+import { useWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
 import { Button, Upload, UploadProps } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'

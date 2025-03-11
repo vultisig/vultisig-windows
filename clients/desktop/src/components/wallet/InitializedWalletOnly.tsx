@@ -1,4 +1,4 @@
-import { useWalletCore } from '@core/chain/providers/WalletCoreProvider'
+import { useWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
 
 import { ProductLogoBlock } from '../../ui/logo/ProductLogoBlock'
 

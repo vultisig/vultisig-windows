@@ -11,13 +11,13 @@ const textVariantsRecord: Record<
   Pick<TextProps, 'size' | 'height' | 'weight' | 'cropped' | 'letterSpacing'>
 > = {
   h1Hero: {
-    size: 60,
+    size: 54,
     height: 'large',
     weight: 500,
     cropped: false,
   },
   h1Regular: {
-    size: 48,
+    size: 42,
     height: 'large',
     weight: 500,
     cropped: false,

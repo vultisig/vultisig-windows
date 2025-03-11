@@ -1,4 +1,4 @@
-import { getSevenZip } from '@core/keygen/compression/getSevenZip'
+import { getSevenZip } from '@core/mpc/compression/getSevenZip'
 import { useQuery } from '@tanstack/react-query'
 
 import { fixedDataQueryOptions } from '../../lib/ui/query/utils/options'

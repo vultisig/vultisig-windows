@@ -38,10 +38,6 @@ import {
   ParsedMemoParams,
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { getCoinType } from '@core/chain/coin/coinType'
-import {
-  useWalletCore,
-  WalletCoreProvider,
-} from '@core/chain/providers/WalletCoreProvider'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
@@ -49,6 +45,10 @@ import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { getJoinKeysignUrl } from '@core/chain/utils/getJoinKeysignUrl'
 import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
+import {
+  useWalletCore,
+  WalletCoreProvider,
+} from '@core/chain-ui/providers/WalletCoreProvider'
 import { CustomMessagePayloadSchema } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'

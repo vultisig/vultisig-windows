@@ -1,5 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { useAssertWalletCore } from '@core/chain/providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 

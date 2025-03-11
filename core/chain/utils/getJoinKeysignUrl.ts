@@ -5,7 +5,7 @@ import {
   KeysignPayloadSchema,
 } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 import { deepLinkBaseUrl } from '@core/config'
-import { getSevenZip } from '@core/keygen/compression/getSevenZip'
+import { getSevenZip } from '@core/mpc/compression/getSevenZip'
 import { uploadPayloadToServer } from '@core/keygen/server/uploadPayloadToServer'
 import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
 import { MpcServerType, mpcServerUrl } from '@core/mpc/MpcServerType'
