@@ -8,13 +8,17 @@ import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
 import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
+import { useCurrentVault } from '../../../state/currentVault'
 import { KeygenType } from '../../KeygenType'
 import { useCurrentKeygenType } from '../../state/currentKeygenType'
-import { useCurrentKeygenVault } from '../../state/currentKeygenVault'
 import { useCurrentServerUrl } from '../../state/currentServerUrl'
 import { useCurrentSessionId } from '../state/currentSessionId'
 
-export const useKeygenMutation = () => {
+export const useKeygenMutation = ({
+  onSuccess,
+}: {
+  onSuccess?: (data: storage.Vault) => void
+} = {}) => {
   const keygenType = useCurrentKeygenType()
 
   const serverUrl = useCurrentServerUrl()
@@ -23,7 +27,7 @@ export const useKeygenMutation = () => {
 
   const sessionId = useCurrentSessionId()
 
-  const vault = useCurrentKeygenVault()
+  const vault = useCurrentVault()
 
   const { name, local_party_id, hex_chain_code } = vault
 
@@ -35,7 +39,7 @@ export const useKeygenMutation = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const partialVault = match(keygenType, {
+      const partialVault = await match(keygenType, {
         [KeygenType.Keygen]: () => {
           return match(mpcLib, {
             GG20: () => {
@@ -152,7 +156,9 @@ export const useKeygenMutation = () => {
       return {
         ...partialVault,
         lib_type: mpcLib,
+        convertValues: () => {},
       }
     },
+    onSuccess,
   })
 }

@@ -16,13 +16,13 @@ export const VaultSharesIntro = () => {
   return (
     <AnimatedVisibility>
       <TextWrapper>
-        <Text as="span" size={48}>
+        <Text as="span" size={42}>
           {t('sayHelloTo')}{' '}
         </Text>
-        <GradientText as="span" size={48}>
+        <GradientText as="span" size={42}>
           {t('vaultShares')},{' '}
         </GradientText>
-        <Text as="span" size={48}>
+        <Text as="span" size={42}>
           {t('yourNewRecoveryMethod')}
         </Text>
       </TextWrapper>
