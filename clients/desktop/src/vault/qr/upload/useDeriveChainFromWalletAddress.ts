@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { getCoinType } from '@core/chain/coin/coinType'
 import { useCallback } from 'react'
 
 import { useWalletCore } from '../../../providers/WalletCoreProvider'
@@ -8,7 +9,6 @@ export const useDeriveChainFromWalletAddress = () => {
 
   return useCallback(
     (address: string) => {
-      if (!address) return null
       const lowerAddress = address.toLowerCase()
 
       if (lowerAddress.includes('maya')) {
@@ -16,10 +16,12 @@ export const useDeriveChainFromWalletAddress = () => {
       }
 
       for (const chain of Object.values(Chain)) {
-        const coinType =
-          walletCore?.CoinType[
-            chain.toLowerCase() as keyof typeof walletCore.CoinType
-          ]
+        if (!walletCore) break
+
+        const coinType = getCoinType({
+          chain,
+          walletCore,
+        })
 
         if (coinType && walletCore.AnyAddress.isValid(address, coinType)) {
           return chain
