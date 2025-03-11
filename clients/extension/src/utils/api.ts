@@ -1,4 +1,3 @@
-import { tss } from '@clients/desktop/wailsjs/go/models'
 import {
   ThornodeTxResponse,
   ThornodeTxResponseSuccess,
@@ -12,9 +11,10 @@ import {
   SignatureProps,
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
+import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
+import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import axios from 'axios'
 import { TransactionResponse } from 'ethers'
-
 namespace Derivation {
   export interface Params {
     publicKeyEcdsa: string
@@ -42,6 +42,9 @@ const apiRef = {
   vultisig: {
     airdrop: 'https://airdrop.vultisig.com/',
     api: 'https://api.vultisig.com/',
+  },
+  jupiter: {
+    token: 'https://tokens.jup.ag/token',
   },
 }
 
@@ -124,6 +127,13 @@ export default {
         .then(({ data }) => data.result)
     },
   },
+  solana: {
+    async fetchSolanaTokenInfo(address: string) {
+      return (
+        await api.get<SolanaJupiterToken>(`${apiRef.jupiter.token}/${address}`)
+      ).data
+    },
+  },
   thorchain: {
     getTransactionByHash(hash: string): Promise<ThornodeTxResponseSuccess> {
       return new Promise((resolve, reject) => {
@@ -145,7 +155,7 @@ export default {
     getComplete: async (
       uuid: string,
       message?: string
-    ): Promise<tss.KeysignResponse> => {
+    ): Promise<KeysignResponse> => {
       return new Promise((resolve, reject) => {
         api
           .get<SignatureProps>(
@@ -162,7 +172,7 @@ export default {
                 },
                 {} as { [key: string]: any }
               )
-              const response: tss.KeysignResponse = {
+              const response: KeysignResponse = {
                 der_signature: transformed.DerSignature,
                 msg: transformed.Msg,
                 r: transformed.R,

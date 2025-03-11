@@ -1,11 +1,11 @@
 import '@clients/extension/src/styles/index.scss'
 import '@clients/extension/src/pages/popup/index.scss'
 
-import { WalletCoreProvider } from '@clients/desktop/src/providers/WalletCoreProvider'
 import ConfigProvider from '@clients/extension/src/components/config-provider'
 import i18n from '@clients/extension/src/i18n/config'
 import Routing from '@clients/extension/src/pages/popup/routes'
 import { getStoredLanguage } from '@clients/extension/src/utils/storage'
+import { WalletCoreProvider } from '@core/chain-ui/providers/WalletCoreProvider'
 import { StrictMode, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 

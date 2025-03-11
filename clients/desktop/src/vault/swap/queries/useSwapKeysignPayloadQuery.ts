@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
+import { useAssertWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
 import { toCommCoin } from '@core/communication/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 
@@ -7,7 +8,6 @@ import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayl
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields'
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery'
-import { useAssertWalletCore } from '../../../providers/WalletCoreProvider'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
 import { useCurrentVault, useCurrentVaultCoin } from '../../state/currentVault'
 import { useFromAmount } from '../state/fromAmount'
