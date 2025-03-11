@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +28,7 @@ export const SwapCoinBalance = ({ value }: ValueProp<CoinKey>) => {
 
   const coin = useCurrentVaultCoin(value)
 
-  const query = useBalanceQuery(coin)
+  const query = useBalanceQuery(extractAccountCoinKey(coin))
 
   return (
     <Container>

@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { order } from '@lib/utils/array/order'
@@ -31,7 +32,7 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
     coins: coins,
   })
 
-  const balancesQuery = useBalancesQuery(coins)
+  const balancesQuery = useBalancesQuery(coins.map(extractAccountCoinKey))
 
   return useMemo(() => {
     const isPending = pricesQuery.isPending || balancesQuery.isPending

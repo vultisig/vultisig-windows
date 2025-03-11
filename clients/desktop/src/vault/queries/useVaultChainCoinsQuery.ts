@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { CoinAmount, CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -25,7 +26,7 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
     coins,
   })
 
-  const balancesQuery = useBalancesQuery(coins)
+  const balancesQuery = useBalancesQuery(coins.map(extractAccountCoinKey))
 
   return useMemo((): Query<VaultChainCoin[]> => {
     if (pricesQuery.isPending || balancesQuery.isPending) {
