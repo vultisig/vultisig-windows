@@ -10,6 +10,7 @@ import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../ui/page/PageContent'
 import { ScanQrView } from './ScanQrView'
 import { UploadQrView } from './UploadQrView'
+import { useDeriveChainFromWalletAddress } from './useDeriveChainFromWalletAddress'
 
 const uploadQrViews = ['scan', 'upload'] as const
 type UploadQrView = (typeof uploadQrViews)[number]
@@ -22,14 +23,26 @@ export const UploadQrPage = () => {
   const goBack = useNavigateBack()
 
   const [view, setView] = useState<UploadQrView>('scan')
+  const deriveChainFromWalletAddress = useDeriveChainFromWalletAddress()
 
   const viewIndex = uploadQrViews.indexOf(view)
 
   const onScanSuccess = useCallback(
-    (url: string) => {
-      navigate('deeplink', { state: { url } })
+    (value: string) => {
+      const isURL = value.startsWith('http')
+
+      if (isURL) {
+        navigate('deeplink', { state: { url: value } })
+        return
+      }
+
+      const chain = deriveChainFromWalletAddress(value)
+
+      if (chain) {
+        navigate('deposit', { params: { coin: chain, address: value } })
+      }
     },
-    [navigate]
+    [deriveChainFromWalletAddress, navigate]
   )
 
   return (
