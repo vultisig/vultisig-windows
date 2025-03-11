@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../../lib/ui/base/Match'
+import { useToast } from '../../../../lib/ui/toast/ToastProvider'
 import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
 import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack'
@@ -21,7 +22,7 @@ export const UploadQrPageWithExistingVault = () => {
   const navigate = useAppNavigate()
   const [{ title = t('keysign') }] = useAppPathParams<'uploadQr'>()
   const coins = useCurrentVaultCoins()
-
+  const { addToast } = useToast()
   const goBack = useNavigateBack()
 
   const [view, setView] = useState<UploadQrView>('scan')
@@ -45,9 +46,13 @@ export const UploadQrPageWithExistingVault = () => {
         navigate('send', {
           params: { coin: coinKeyToString(coin), address: value },
         })
+      } else {
+        addToast({
+          message: t('coin_not_found_in_current_vault'),
+        })
       }
     },
-    [coins, deriveChainFromWalletAddress, navigate]
+    [addToast, coins, deriveChainFromWalletAddress, navigate, t]
   )
 
   return (
