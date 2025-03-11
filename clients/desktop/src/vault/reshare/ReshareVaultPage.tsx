@@ -35,9 +35,6 @@ export const ReshareVaultPage = () => {
           <Button onClick={() => navigate('reshareVaultSecure')} kind="primary">
             {t('start_reshare')}
           </Button>
-          <Button onClick={() => navigate('reshareVaultFast')} kind="outlined">
-            {t('start_reshare_with_server')}
-          </Button>
           <Button
             onClick={() =>
               navigate('uploadQr', { params: { title: t('join_reshare') } })
