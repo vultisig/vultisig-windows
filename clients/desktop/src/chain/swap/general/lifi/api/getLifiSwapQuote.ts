@@ -8,6 +8,7 @@ import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 import { createConfig, getQuote } from '@lifi/sdk'
 
+import { NoSwapRoutesError } from '../../../NoSwapRoutesError'
 import { GeneralSwapQuote } from '../../GeneralSwapQuote'
 import { lifiConfig } from '../config'
 import { lifiSwapChainId, LifiSwapEnabledChain } from '../LifiSwapEnabledChains'
@@ -36,66 +37,72 @@ export const getLifiSwapQuote = async ({
 
   const [fromToken, toToken] = [transfer.from, transfer.to].map(({ id }) => id)
 
-  const quote = await getQuote({
-    fromChain,
-    toChain,
-    fromToken,
-    toToken,
-    fromAmount: amount.toString(),
-    fromAddress: address,
-    fee: lifiConfig.afffiliateFee,
-  })
+  try {
+    const quote = await getQuote({
+      fromChain,
+      toChain,
+      fromToken,
+      toToken,
+      fromAmount: amount.toString(),
+      fromAddress: address,
+      fee: lifiConfig.afffiliateFee,
+    })
 
-  const { transactionRequest, estimate } = quote
+    const { transactionRequest, estimate } = quote
 
-  const chainKind = getChainKind(transfer.from.chain)
+    const chainKind = getChainKind(transfer.from.chain)
 
-  const { value, gasPrice, gasLimit, data, from, to } =
-    shouldBePresent(transactionRequest)
+    const { value, gasPrice, gasLimit, data, from, to } =
+      shouldBePresent(transactionRequest)
 
-  return {
-    dstAmount: estimate.toAmount,
-    provider: 'lifi',
-    tx: match<DeriveChainKind<LifiSwapEnabledChain>, GeneralSwapQuote['tx']>(
-      chainKind,
-      {
-        solana: () => {
-          const { gasCosts, feeCosts } = estimate
-          const [networkFee] = shouldBePresent(gasCosts)
+    return {
+      dstAmount: estimate.toAmount,
+      provider: 'lifi',
+      tx: match<DeriveChainKind<LifiSwapEnabledChain>, GeneralSwapQuote['tx']>(
+        chainKind,
+        {
+          solana: () => {
+            const { gasCosts, feeCosts } = estimate
+            const [networkFee] = shouldBePresent(gasCosts)
 
-          const swapFee = shouldBePresent(
-            shouldBePresent(feeCosts).find(fee => fee.name === 'LIFI Fixed Fee')
-          )
+            const swapFee = shouldBePresent(
+              shouldBePresent(feeCosts).find(
+                fee => fee.name === 'LIFI Fixed Fee'
+              )
+            )
 
-          const swapFeeAssetId =
-            [fromToken, toToken].find(
-              token => token === swapFee.token.address
-            ) || chainFeeCoin[transfer.from.chain].id
+            const swapFeeAssetId =
+              [fromToken, toToken].find(
+                token => token === swapFee.token.address
+              ) || chainFeeCoin[transfer.from.chain].id
 
-          return {
-            solana: {
-              data: shouldBePresent(data),
-              networkFee: BigInt(networkFee.amount),
-              swapFee: {
-                amount: BigInt(swapFee.amount),
-                decimals: swapFee.token.decimals,
-                chain: mirrorRecord(lifiSwapChainId)[swapFee.token.chainId],
-                id: swapFeeAssetId,
+            return {
+              solana: {
+                data: shouldBePresent(data),
+                networkFee: BigInt(networkFee.amount),
+                swapFee: {
+                  amount: BigInt(swapFee.amount),
+                  decimals: swapFee.token.decimals,
+                  chain: mirrorRecord(lifiSwapChainId)[swapFee.token.chainId],
+                  id: swapFeeAssetId,
+                },
               },
-            },
-          }
-        },
-        evm: () => ({
-          evm: {
-            from: shouldBePresent(from),
-            to: shouldBePresent(to),
-            data: shouldBePresent(data),
-            value: BigInt(shouldBePresent(value)).toString(),
-            gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
-            gas: Number(shouldBePresent(gasLimit)),
+            }
           },
-        }),
-      }
-    ),
+          evm: () => ({
+            evm: {
+              from: shouldBePresent(from),
+              to: shouldBePresent(to),
+              data: shouldBePresent(data),
+              value: BigInt(shouldBePresent(value)).toString(),
+              gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
+              gas: Number(shouldBePresent(gasLimit)),
+            },
+          }),
+        }
+      ),
+    }
+  } catch {
+    throw new NoSwapRoutesError()
   }
 }
