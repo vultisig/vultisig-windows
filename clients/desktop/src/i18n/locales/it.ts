@@ -425,7 +425,6 @@ export const it = {
   reshare_disclaimer:
     'Per tutte le azioni di condivisione è sempre richiesta la soglia dei dispositivi.',
   start_reshare: 'Inizia la condivisione',
-  start_reshare_with_server: 'Avvia la condivisione con Vultiserver',
   fast: 'Veloce',
   secure: 'Sicuro',
   active: 'Attivo',

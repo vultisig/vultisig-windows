@@ -417,7 +417,6 @@ export const es = {
   reshare_disclaimer:
     'Para todas las acciones de Reshare siempre se requiere el umbral de dispositivos.',
   start_reshare: 'Empezar a compartir',
-  start_reshare_with_server: 'Iniciar reshare con Vultiserver',
   fast: 'Rápido',
   secure: 'Seguro',
   active: 'Activo',
