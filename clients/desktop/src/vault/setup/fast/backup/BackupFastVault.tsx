@@ -1,14 +1,11 @@
-import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { storage } from '../../../../../wailsjs/go/models'
 import { FEATURE_FLAGS } from '../../../../constants'
 import { Match } from '../../../../lib/ui/base/Match'
 import { StepTransition } from '../../../../lib/ui/base/StepTransition'
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
 import { appPaths } from '../../../../navigation'
 import { useVaults } from '../../../queries/useVaultsQuery'
-import { getStorageVaultId } from '../../../utils/storageVault'
 import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
 import { SetupVaultSummaryStepOld } from '../../shared/SetupVaultSummaryStepOld'
 import VaultBackupPage from '../../shared/vaultBackupSettings/VaultBackupPage'
@@ -27,13 +24,8 @@ const steps = [
   'backupSuccessfulSlideshow',
 ] as const
 
-type BackupFastVaultProps = {
-  vault: storage.Vault
-}
-
-export const BackupFastVault: FC<BackupFastVaultProps> = ({ vault }) => {
+export const BackupFastVault = () => {
   const navigate = useNavigate()
-  const vaultId = getStorageVaultId(vault)
   const { step, toNextStep } = useStepNavigation({
     steps,
   })
@@ -47,16 +39,12 @@ export const BackupFastVault: FC<BackupFastVaultProps> = ({ vault }) => {
       backupSlideshowPartOne={() => (
         <BackupOverviewSlidesPartOne onCompleted={toNextStep} />
       )}
-      emailVerification={() => (
-        <EmailConfirmation onCompleted={toNextStep} vaultId={vaultId} />
-      )}
+      emailVerification={() => <EmailConfirmation onFinish={toNextStep} />}
       backupSlideshowPartTwo={() => (
         <BackupOverviewSlidesPartTwo onCompleted={toNextStep} />
       )}
       backupConfirmation={() => <BackupConfirmation onCompleted={toNextStep} />}
-      backupPage={() => (
-        <VaultBackupPage onBackupCompleted={toNextStep} vault={vault} />
-      )}
+      backupPage={() => <VaultBackupPage onFinish={toNextStep} />}
       backupSuccessfulSlideshow={() =>
         shouldShowBackupSummary ? (
           <StepTransition

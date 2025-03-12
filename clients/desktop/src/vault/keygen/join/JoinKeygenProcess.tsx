@@ -1,6 +1,6 @@
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useEffect } from 'react'
 
+import { Match } from '../../../lib/ui/base/Match'
 import { StepTransition } from '../../../lib/ui/base/StepTransition'
 import { TitleProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
@@ -18,7 +18,6 @@ import { useKeygenMutation } from '../shared/mutations/useKeygenMutation'
 export const JoinKeygenProcess = ({ title }: TitleProp) => {
   const { mutate: joinKeygen, ...joinKeygenState } = useKeygenMutation()
   const { keygenType } = useAppPathState<'joinKeygen'>()
-  const isKeygen = keygenType.toLowerCase() === 'keygen'
 
   useEffect(joinKeygen, [joinKeygen])
 
@@ -27,23 +26,20 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
   return (
     <MatchQuery
       value={joinKeygenState}
-      success={vault =>
-        isKeygen ? (
-          <StepTransition
-            from={({ onForward }) => (
-              <SetupVaultSuccessScreen onForward={onForward} />
-            )}
-            to={() => (
-              <BackupSecureVault
-                isInitiatingDevice={false}
-                vault={shouldBePresent(vault)}
-              />
-            )}
-          />
-        ) : (
-          <KeygenSuccessStep value={vault} title={title} />
-        )
-      }
+      success={vault => (
+        <Match
+          value={keygenType}
+          Keygen={() => (
+            <StepTransition
+              from={({ onForward }) => (
+                <SetupVaultSuccessScreen onForward={onForward} />
+              )}
+              to={() => <BackupSecureVault isInitiatingDevice={false} />}
+            />
+          )}
+          Reshare={() => <KeygenSuccessStep value={vault} title={title} />}
+        />
+      )}
       error={error => (
         <>
           <KeygenPageHeader title={title} />
@@ -55,16 +51,18 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
           />
         </>
       )}
-      pending={() =>
-        isKeygen ? (
-          <SetupVaultEducationSlides />
-        ) : (
-          <>
-            <KeygenPageHeader title={title} />
-            <KeygenPendingState />
-          </>
-        )
-      }
+      pending={() => (
+        <Match
+          value={keygenType}
+          Keygen={() => <SetupVaultEducationSlides />}
+          Reshare={() => (
+            <>
+              <KeygenPageHeader title={title} />
+              <KeygenPendingState />
+            </>
+          )}
+        />
+      )}
     />
   )
 }
