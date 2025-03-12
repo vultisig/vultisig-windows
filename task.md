@@ -2,6 +2,7 @@
 
 The content of this file should be cleared on Pull Request submit.
 
-- [ ] Extract vault creation backup flow into vault/backup/...
-- [ ] Use the same flow on reshare
-- [ ] Delete the old backup flow
+- [x] Refactor useCreateVaultSetup
+- [ ] Test join keygen flow
+- [ ] Test start secure vault flow
+- [ ] Test start fast vault flow
