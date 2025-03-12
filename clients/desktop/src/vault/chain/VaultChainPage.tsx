@@ -1,7 +1,9 @@
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { chainTokens } from '@core/chain/coin/chainTokens'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsByBalance } from '@core/chain/coin/utils/sortCoinsByBalance'
+import { useAssertWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
 import { splitBy } from '@lib/utils/array/splitBy'
 import { sum } from '@lib/utils/array/sum'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
@@ -34,7 +36,6 @@ import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQuer
 import { Text } from '../../lib/ui/text'
 import { makeAppPath } from '../../navigation'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
-import { useAssertWalletCore } from '../../providers/WalletCoreProvider'
 import { toStorageCoin } from '../../storage/storageCoin'
 import { PageContent } from '../../ui/page/PageContent'
 import { PageHeader } from '../../ui/page/PageHeader'
@@ -62,7 +63,9 @@ export const VaultChainPage = () => {
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
   const nativeCoin = useCurrentVaultNativeCoin(chain)
   const copyAddress = useCopyAddress()
-  const invalidateQueryKey = getBalanceQueryKey(nativeCoin)
+  const invalidateQueryKey = getBalanceQueryKey(
+    extractAccountCoinKey(nativeCoin)
+  )
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
   const { mutate: saveCoins } = useSaveCoinsMutation()

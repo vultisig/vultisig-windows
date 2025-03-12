@@ -373,6 +373,7 @@ export const en = {
   send_invalid_receiver_address: 'Enter a valid receiver address',
   amount_required: 'Amount is required',
   send_amount_exceeds_balance: 'Amount exceeds balance',
+  coin_not_found_in_current_vault: 'Coin not found in current vault',
   same_sender_receiver_error:
     'Sender and receiver addresses should be different',
   send_terms_0: 'I’m sending to the right address',
@@ -392,7 +393,6 @@ export const en = {
   reshare_disclaimer:
     'For all Reshare actions the threshold of devices is always required.',
   start_reshare: 'Start Reshare',
-  start_reshare_with_server: 'Start Reshare with Vultiserver',
   failed_to_generate_qr_code: 'Failed to generate QR code',
   vault_already_exists: 'Vault already exists',
   vault_already_exists_message: 'Please select a different vault.',

@@ -8,6 +8,7 @@ export const es = {
   onboarding_view3_description:
     'Vultisig es, por naturaleza, una aplicación multi-dispositivo. Requiere al menos dos dispositivos para crear una bóveda segura: un dispositivo iniciador y un dispositivo de emparejamiento.',
   moreInfo: 'Más información',
+  coin_not_found_in_current_vault: 'Moneda no encontrada en la bóveda actual',
   waiting_for_devices_to_join: 'Esperando a que otros dispositivos se unan',
   waiting_for_devices_to_join_description:
     'Su bóveda comenzará a generarse en cuanto finalice la configuración en su dispositivo principal',
@@ -416,7 +417,6 @@ export const es = {
   reshare_disclaimer:
     'Para todas las acciones de Reshare siempre se requiere el umbral de dispositivos.',
   start_reshare: 'Empezar a compartir',
-  start_reshare_with_server: 'Iniciar reshare con Vultiserver',
   fast: 'Rápido',
   secure: 'Seguro',
   active: 'Activo',

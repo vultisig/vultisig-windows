@@ -1,0 +1,12 @@
+{
+  "name": "@core/chain-ui",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@trustwallet/wallet-core": "^4.2.10",
+    "react": "^18.3.1"
+  }
+}

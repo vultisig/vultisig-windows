@@ -579,7 +579,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^4.3.1"
     antd: "npm:^5.22.2"
     autoprefixer: "npm:^10.4.20"
-    axios: "npm:^1.7.7"
+    axios: "npm:^1.8.2"
     cross-env: "npm:^7.0.3"
     eslint: "npm:^9.20.0"
     eslint-plugin-react-hooks: "npm:^5.0.0"
@@ -600,6 +600,15 @@ __metadata:
     vite-plugin-node-polyfills: "npm:^0.22.0"
     vite-tsconfig-paths: "npm:^5.1.3"
     zxing-wasm: "npm:^1.3.4"
+  languageName: unknown
+  linkType: soft
+
+"@core/chain-ui@workspace:core/chain-ui":
+  version: 0.0.0-use.local
+  resolution: "@core/chain-ui@workspace:core/chain-ui"
+  dependencies:
+    "@trustwallet/wallet-core": "npm:^4.2.10"
+    react: "npm:^18.3.1"
   languageName: unknown
   linkType: soft
 
@@ -631,6 +640,14 @@ __metadata:
 "@core/config@workspace:core/config":
   version: 0.0.0-use.local
   resolution: "@core/config@workspace:core/config"
+  languageName: unknown
+  linkType: soft
+
+"@core/keygen@workspace:core/keygen":
+  version: 0.0.0-use.local
+  resolution: "@core/keygen@workspace:core/keygen"
+  dependencies:
+    7z-wasm: "npm:^1.1.0"
   languageName: unknown
   linkType: soft
 
@@ -5074,7 +5091,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.6.0, axios@npm:^1.7.7":
+"axios@npm:^1.6.0":
   version: 1.7.9
   resolution: "axios@npm:1.7.9"
   dependencies:
@@ -5082,6 +5099,17 @@ __metadata:
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
   checksum: 10c0/b7a41e24b59fee5f0f26c1fc844b45b17442832eb3a0fb42dd4f1430eb4abc571fe168e67913e8a1d91c993232bd1d1ab03e20e4d1fee8c6147649b576fc1b0b
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.8.2":
+  version: 1.8.2
+  resolution: "axios@npm:1.8.2"
+  dependencies:
+    follow-redirects: "npm:^1.15.6"
+    form-data: "npm:^4.0.0"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10c0/d8c2969e4642dc6d39555ac58effe06c051ba7aac2bd40cad7a9011c019fb2f16ee011c5a6906cb25b8a4f87258c359314eb981f852e60ad445ecaeb793c7aa2
   languageName: node
   linkType: hard
 

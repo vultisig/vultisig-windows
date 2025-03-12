@@ -1,3 +1,4 @@
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { useTranslation } from 'react-i18next'
 
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery'
@@ -15,7 +16,7 @@ export const SendCoinBalanceDependant: React.FC<
   const [coinKey] = useCurrentSendCoin()
   const coin = useCurrentVaultCoin(coinKey)
 
-  const query = useBalanceQuery(coin)
+  const query = useBalanceQuery(extractAccountCoinKey(coin))
 
   const { t } = useTranslation()
 

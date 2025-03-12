@@ -9,6 +9,7 @@ export const de = {
     'Vultisig ist von Natur aus eine Mehrgeräte-Anwendung. Erfordert mindestens zwei Geräte, um einen sicheren Tresor zu erstellen: ein initiierendes Gerät und ein Paarungsgerät.',
   moreInfo: 'Mehr Info',
   waiting_for_devices_to_join: 'Warten auf andere Geräte zum Beitreten',
+  coin_not_found_in_current_vault: 'Münze nicht im aktuellen Tresor gefunden',
   waiting_for_devices_to_join_description:
     'Ihr Tresor beginnt mit der Generierung, sobald Sie die Einrichtung auf Ihrem Hauptgerät abgeschlossen haben',
   secureVaultSetupPasswordTooltipContent:
@@ -423,7 +424,6 @@ export const de = {
   reshare_disclaimer:
     'Für alle Reshare-Aktionen ist immer der Geräteschwellenwert erforderlich.',
   start_reshare: 'Neu teilen starten',
-  start_reshare_with_server: 'Neue Freigabe mit Vultiserver starten',
   fast: 'Schnell',
   secure: 'Sicher',
   active: 'Aktiv',

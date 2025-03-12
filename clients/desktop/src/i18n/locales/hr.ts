@@ -16,6 +16,7 @@ export const hr = {
   waiting_for_devices_to_join_description:
     'Generiranje pohrane počet će čim dovršite postavljanje na glavnom uređaju',
   thisDevice: 'Ez az eszköz',
+  coin_not_found_in_current_vault: 'Novčić nije pronađen u trenutnom trezoru',
   optionalDevice: 'Opcionális eszköz',
   scanWithDevice: 'Beolvasás a {{deviceNumber}}. eszközzel',
   localMode: 'Helyi módban van',
@@ -405,7 +406,6 @@ export const hr = {
   reshare_disclaimer:
     'Za sve radnje ponovnog dijeljenja uvijek je potreban prag uređaja.',
   start_reshare: 'Počnite ponovno dijeliti',
-  start_reshare_with_server: 'Počni ponovno dijeliti s Vultiserverom',
   fast: 'Brzo',
   secure: 'Siguran',
   active: 'Aktivan',

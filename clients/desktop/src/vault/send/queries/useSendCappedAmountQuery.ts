@@ -1,8 +1,9 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCallback } from 'react'
 
-import { getFeeAmount } from '../../../chain/tx/fee/utils/getFeeAmount'
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
 import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData'
 import { useCurrentVaultCoin } from '../../state/currentVault'
@@ -17,7 +18,7 @@ export const useSendCappedAmountQuery = () => {
   const [amount] = useSendAmount()
 
   const chainSpecificQuery = useSendChainSpecificQuery()
-  const balanceQuery = useBalanceQuery(coin)
+  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
 
   return useTransformQueriesData(
     {

@@ -3,15 +3,6 @@ import '@clients/extension/src/pages/transaction/index.scss'
 import '@clients/extension/src/utils/prototypes'
 
 import { create } from '@bufbuild/protobuf'
-import { KeysignMessagePayload } from '@clients/desktop/src/chain/keysign/KeysignMessagePayload'
-import { getFeeAmount } from '@clients/desktop/src/chain/tx/fee/utils/getFeeAmount'
-import { hexEncode } from '@clients/desktop/src/chain/walletCore/hexEncode'
-import {
-  useWalletCore,
-  WalletCoreProvider,
-} from '@clients/desktop/src/providers/WalletCoreProvider'
-import { getJoinKeysignUrl } from '@clients/desktop/src/vault/keysign/shared/utils/getJoinKeysignUrl'
-import { tss } from '@clients/desktop/wailsjs/go/models'
 import ConfigProvider from '@clients/extension/src/components/config-provider'
 import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
 import VultiError from '@clients/extension/src/components/vulti-error'
@@ -48,11 +39,20 @@ import {
 } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
+import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
+import { getJoinKeysignUrl } from '@core/chain/utils/getJoinKeysignUrl'
+import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
+import {
+  useWalletCore,
+  WalletCoreProvider,
+} from '@core/chain-ui/providers/WalletCoreProvider'
 import { CustomMessagePayloadSchema } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
 import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
 import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
+import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
 import { getPreSignedInputData } from '@core/keysign/preSignedInputData'
 import { Button, Form, Input, message, QRCode } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
@@ -167,7 +167,7 @@ const Component = () => {
           .getComplete(transaction.id, preSignedImageHash)
           .then(data => {
             clearTimeout(retryTimeout)
-            const singaturesRecord: Record<string, tss.KeysignResponse> = {
+            const singaturesRecord: Record<string, KeysignResponse> = {
               [preSignedImageHash]: {
                 ...data,
               },
@@ -239,7 +239,7 @@ const Component = () => {
         .then(data => {
           clearTimeout(retryTimeout)
           const customSignature = getEncodedSignature(
-            data as tss.KeysignResponse,
+            data as KeysignResponse,
             walletCore!
           )
           setStoredTransaction({

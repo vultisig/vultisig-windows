@@ -1,3 +1,4 @@
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { sum } from '@lib/utils/array/sum'
@@ -16,7 +17,7 @@ export const useVaultTotalBalanceQuery = () => {
     coins,
   })
 
-  const balancesQuery = useBalancesQuery(coins)
+  const balancesQuery = useBalancesQuery(coins.map(extractAccountCoinKey))
 
   return useMemo((): Query<number> => {
     if (pricesQuery.isPending || balancesQuery.isPending) {
