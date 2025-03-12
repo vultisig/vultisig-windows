@@ -483,7 +483,7 @@ export const de = {
         'Speichern Sie Ihren Tresoranteil nicht auf dem Gerät selbst, um Verlust oder Beschädigung zu vermeiden',
       agreementText: 'Ich habe gelesen und verstanden, was zu tun ist',
       ctaText: 'Erstellen Sie Ihren Tresor',
-      start_using_vault_de: 'Beginnen Sie mit der Nutzung Ihres Tresors',
+      start_using_vault: 'Beginnen Sie mit der Nutzung Ihres Tresors',
     },
     preparingVault: 'Tresor wird vorbereitet',
     generatingECDSAKey: 'ECDSA-Schlüssel wird generiert',
