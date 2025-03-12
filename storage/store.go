@@ -224,8 +224,15 @@ func (s *Store) closeRows(rows *sql.Rows) {
 }
 
 func (s *Store) saveKeyshare(vaultPublicKeyECDSA string, keyShare KeyShare) error {
+	// delete existing keyshare first
+	deleteQuery := `DELETE FROM keyshares WHERE public_key_ecdsa = ? AND public_key = ?`
+	_, err := s.db.Exec(deleteQuery, vaultPublicKeyECDSA, keyShare.PublicKey)
+	if err != nil {
+		return fmt.Errorf("could not delete keyshare, err: %w", err)
+	}
+	// insert new keyshare
 	query := `INSERT OR REPLACE INTO keyshares (public_key_ecdsa, public_key, keyshare) VALUES (?, ?, ?)`
-	_, err := s.db.Exec(query, vaultPublicKeyECDSA, keyShare.PublicKey, keyShare.KeyShare)
+	_, err = s.db.Exec(query, vaultPublicKeyECDSA, keyShare.PublicKey, keyShare.KeyShare)
 	if err != nil {
 		return fmt.Errorf("could not upsert keyshare, err: %w", err)
 	}

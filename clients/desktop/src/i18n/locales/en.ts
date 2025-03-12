@@ -393,7 +393,6 @@ export const en = {
   reshare_disclaimer:
     'For all Reshare actions the threshold of devices is always required.',
   start_reshare: 'Start Reshare',
-  start_reshare_with_server: 'Start Reshare with Vultiserver',
   failed_to_generate_qr_code: 'Failed to generate QR code',
   vault_already_exists: 'Vault already exists',
   vault_already_exists_message: 'Please select a different vault.',
