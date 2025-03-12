@@ -52,7 +52,7 @@ export const SetupVaultSummaryStep: FC<SetupVaultSummaryStepProps> = ({
           </Text>
         </HStack>
         <Button isDisabled={!isChecked} onClick={onForward}>
-          {t('fastVaultSetup.summary.ctaText')}
+          {t('fastVaultSetup.summary.start_using_vault')}
         </Button>
       </VStack>
     </Wrapper>

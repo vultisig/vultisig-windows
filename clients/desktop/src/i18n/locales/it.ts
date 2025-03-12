@@ -489,6 +489,7 @@ export const it = {
         'Non memorizzare la tua quota del vault sul dispositivo stesso, in caso di perdita o danneggiamento',
       agreementText: 'Ho letto e capisco cosa fare',
       ctaText: 'Crea il tuo vault',
+      start_using_vault: 'Inizia a usare la tua cassaforte',
     },
     preparingVault: 'Preparazione della Cassaforte',
     generatingECDSAKey: 'Generazione della Chiave ECDSA',

@@ -470,6 +470,7 @@ export const hr = {
         'Ne tárolja a tároló megosztását magán az eszközön, elvesztés vagy sérülés esetén',
       agreementText: 'Elolvastam és megértettem, mit kell tenni',
       ctaText: 'Hozza létre a tárolóját',
+      start_using_vault: 'Počnite koristiti svoj trezor',
     },
     preparingVault: 'Tárca előkészítése',
     generatingECDSAKey: 'ECDSA kulcs generálása',

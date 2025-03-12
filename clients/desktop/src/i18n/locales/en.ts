@@ -473,6 +473,7 @@ export const en = {
         'Do not store your vault share on the device itself, in case of loss or damage',
       agreementText: 'I have read and understand what to do',
       ctaText: 'Create your vault',
+      start_using_vault: 'Start using your vault',
     },
     preparingVault: 'Preparing Vault',
     generatingECDSAKey: 'Generating ECDSA Key',
