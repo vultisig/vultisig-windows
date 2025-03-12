@@ -1,24 +1,26 @@
-import { useVaults } from '../../../queries/useVaultsQuery'
+import { MatchRecordUnion } from '../../../../lib/ui/base/MatchRecordUnion'
+import { ValueTransfer } from '../../../../lib/ui/base/ValueTransfer'
 import { CurrentVaultProvider } from '../../../state/currentVault'
-import { useCurrentVaultId } from '../../../state/currentVaultId'
-import { getStorageVaultId } from '../../../utils/storageVault'
+import { CheckVaultStep } from './CheckVaultStep'
+import { UploadQRPageResult } from './UploadQRPageResult'
 import { UploadQrPageWithExistingVault } from './UploadQrPageWithExistingVault'
 import { UploadQrPageWithoutVault } from './UploadQrPageWithoutVault'
 
-export const UploadQrPage = () => {
-  const [currentVaultId] = useCurrentVaultId()
-  const vaults = useVaults()
-  const vault = vaults.find(
-    vault => getStorageVaultId(vault) === currentVaultId
-  )
-
-  if (!vault) {
-    return <UploadQrPageWithoutVault />
-  }
-
-  return (
-    <CurrentVaultProvider value={vault}>
-      <UploadQrPageWithExistingVault />
-    </CurrentVaultProvider>
-  )
-}
+export const UploadQrPage = () => (
+  <ValueTransfer<UploadQRPageResult>
+    from={({ onFinish }) => <CheckVaultStep onFinish={onFinish} />}
+    to={({ value }) => (
+      <MatchRecordUnion
+        value={value}
+        handlers={{
+          vault: vault => (
+            <CurrentVaultProvider value={vault}>
+              <UploadQrPageWithExistingVault />
+            </CurrentVaultProvider>
+          ),
+          noVault: () => <UploadQrPageWithoutVault />,
+        }}
+      />
+    )}
+  />
+)
