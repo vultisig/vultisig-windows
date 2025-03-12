@@ -11,7 +11,7 @@ export const pt = {
   waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem',
   waiting_for_devices_to_join_description:
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
-  coin_not_found_in_current_vault: 'Moeda não encontrada no cofre atual',
+  chain_not_found_in_current_vault: 'Cadeia não encontrada no cofre atual',
   secureVaultSetupPasswordTooltipContent:
     'Isso ocorre porque a senha é usada para criptografar localmente o arquivo de backup, de forma semelhante à criptografia de um disco rígido. No próximo passo, você tem a opção de adicionar uma dica.',
   onboarding_view4_description:

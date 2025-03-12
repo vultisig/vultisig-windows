@@ -16,7 +16,7 @@ export const hr = {
   waiting_for_devices_to_join_description:
     'Generiranje pohrane počet će čim dovršite postavljanje na glavnom uređaju',
   thisDevice: 'Ez az eszköz',
-  coin_not_found_in_current_vault: 'Novčić nije pronađen u trenutnom trezoru',
+  chain_not_found_in_current_vault: 'Lanac nije pronađen u trenutnom trezoru',
   optionalDevice: 'Opcionális eszköz',
   scanWithDevice: 'Beolvasás a {{deviceNumber}}. eszközzel',
   localMode: 'Helyi módban van',

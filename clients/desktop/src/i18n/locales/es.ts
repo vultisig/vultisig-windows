@@ -8,7 +8,7 @@ export const es = {
   onboarding_view3_description:
     'Vultisig es, por naturaleza, una aplicación multi-dispositivo. Requiere al menos dos dispositivos para crear una bóveda segura: un dispositivo iniciador y un dispositivo de emparejamiento.',
   moreInfo: 'Más información',
-  coin_not_found_in_current_vault: 'Moneda no encontrada en la bóveda actual',
+  chain_not_found_in_current_vault: 'Cadena no encontrada en la bóveda actual',
   waiting_for_devices_to_join: 'Esperando a que otros dispositivos se unan',
   waiting_for_devices_to_join_description:
     'Su bóveda comenzará a generarse en cuanto finalice la configuración en su dispositivo principal',
