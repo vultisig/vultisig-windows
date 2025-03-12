@@ -1,4 +1,6 @@
 import { coinKeyToString } from '@core/chain/coin/Coin'
+import { match } from '@lib/utils/match'
+import { pipe } from '@lib/utils/pipe'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -32,25 +34,28 @@ export const UploadQrPageWithExistingVault = () => {
 
   const onScanSuccess = useCallback(
     (value: string) => {
-      const isURL = value.startsWith('http')
-
-      if (isURL) {
-        navigate('deeplink', { state: { url: value } })
-        return
-      }
-
-      const chain = deriveChainFromWalletAddress(value)
-      const coin = coins.find(coin => coin.chain === chain)
-
-      if (coin) {
-        navigate('send', {
-          params: { coin: coinKeyToString(coin), address: value },
-        })
-      } else {
-        addToast({
-          message: t('coin_not_found_in_current_vault'),
-        })
-      }
+      pipe(
+        value,
+        val => ({
+          isURL: val.startsWith('http'),
+          chain: deriveChainFromWalletAddress(val),
+          value: val,
+        }),
+        ({ isURL, chain, value }) =>
+          match(isURL ? 'url' : chain ? 'coin' : 'unknown', {
+            url: () => navigate('deeplink', { state: { url: value } }),
+            coin: () => {
+              const coin = coins.find(c => c.chain === chain)
+              return coin
+                ? navigate('send', {
+                    params: { coin: coinKeyToString(coin), address: value },
+                  })
+                : addToast({ message: t('chain_not_found_in_current_vault') })
+            },
+            unknown: () =>
+              addToast({ message: t('chain_not_found_in_current_vault') }),
+          })
+      )
     },
     [addToast, coins, deriveChainFromWalletAddress, navigate, t]
   )
