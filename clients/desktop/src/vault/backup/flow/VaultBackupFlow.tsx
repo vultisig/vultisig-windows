@@ -5,6 +5,7 @@ import { useCurrentVault } from '../../state/currentVault'
 
 export const VaultBackupFlow = () => {
   const vault = useCurrentVault()
+
   if (hasServerSigner(vault.signers)) {
     return <BackupFastVault />
   }

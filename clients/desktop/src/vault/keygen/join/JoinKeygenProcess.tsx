@@ -9,6 +9,7 @@ import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { BackupSecureVault } from '../../setup/secure/backup/BackupSecureVault'
 import { SetupVaultEducationSlides } from '../../setup/shared/SetupVaultCreationStep/SetupVaultEducationSlides'
 import { SetupVaultSuccessScreen } from '../../setup/shared/SetupVaultSuccessScreen'
+import { CurrentVaultProvider } from '../../state/currentVault'
 import { KeygenFailedState } from '../shared/KeygenFailedState'
 import { KeygenPageHeader } from '../shared/KeygenPageHeader'
 import { KeygenPendingState } from '../shared/KeygenPendingState'
@@ -27,18 +28,20 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
     <MatchQuery
       value={joinKeygenState}
       success={vault => (
-        <Match
-          value={keygenType}
-          Keygen={() => (
-            <StepTransition
-              from={({ onForward }) => (
-                <SetupVaultSuccessScreen onForward={onForward} />
-              )}
-              to={() => <BackupSecureVault isInitiatingDevice={false} />}
-            />
-          )}
-          Reshare={() => <KeygenSuccessStep value={vault} title={title} />}
-        />
+        <CurrentVaultProvider value={vault}>
+          <Match
+            value={keygenType}
+            Keygen={() => (
+              <StepTransition
+                from={({ onForward }) => (
+                  <SetupVaultSuccessScreen onForward={onForward} />
+                )}
+                to={() => <BackupSecureVault isInitiatingDevice={false} />}
+              />
+            )}
+            Reshare={() => <KeygenSuccessStep value={vault} title={title} />}
+          />
+        </CurrentVaultProvider>
       )}
       error={error => (
         <>
