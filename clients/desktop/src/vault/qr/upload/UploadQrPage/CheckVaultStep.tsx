@@ -21,7 +21,7 @@ export const CheckVaultStep = ({
     if (vault) {
       onFinish({ vault })
     } else {
-      onFinish({ noVault: true })
+      onFinish({ vault: null })
     }
   }, [vault, onFinish])
 

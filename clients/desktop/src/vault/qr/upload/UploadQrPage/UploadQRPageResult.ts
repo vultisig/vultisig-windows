@@ -1,3 +1,3 @@
 import { storage } from '../../../../../wailsjs/go/models'
 
-export type UploadQRPageResult = { vault: storage.Vault } | { noVault: true }
+export type UploadQRPageResult = { vault: storage.Vault | null }
