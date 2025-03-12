@@ -1,3 +1,4 @@
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { chainTokens } from '@core/chain/coin/chainTokens'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
@@ -62,7 +63,9 @@ export const VaultChainPage = () => {
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
   const nativeCoin = useCurrentVaultNativeCoin(chain)
   const copyAddress = useCopyAddress()
-  const invalidateQueryKey = getBalanceQueryKey(nativeCoin)
+  const invalidateQueryKey = getBalanceQueryKey(
+    extractAccountCoinKey(nativeCoin)
+  )
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
   const { mutate: saveCoins } = useSaveCoinsMutation()

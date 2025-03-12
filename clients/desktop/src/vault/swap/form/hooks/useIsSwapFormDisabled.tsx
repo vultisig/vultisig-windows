@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -14,7 +15,7 @@ export const useIsSwapFormDisabled = () => {
 
   const [coinKey] = useFromCoin()
   const coin = useCurrentVaultCoin(coinKey)
-  const balanceQuery = useBalanceQuery(coin)
+  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
 
   const { t } = useTranslation()
 

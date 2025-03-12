@@ -1,3 +1,4 @@
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { useMutation } from '@tanstack/react-query'
 
 import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery'
@@ -21,7 +22,7 @@ export const RefreshVaultBalance = () => {
           coins,
           fiatCurrency,
         }),
-        ...coins.map(getBalanceQueryKey)
+        ...coins.map(extractAccountCoinKey).map(getBalanceQueryKey)
       )
     },
   })
