@@ -481,6 +481,7 @@ export const pt = {
         'Não armazene sua participação do cofre no próprio dispositivo, em caso de perda ou dano',
       agreementText: 'Eu li e entendo o que fazer',
       ctaText: 'Crie seu cofre',
+      start_using_vault: 'Comece a usar seu cofre',
     },
     preparingVault: 'Preparando Cofre',
     generatingECDSAKey: 'Gerando Chave ECDSA',
