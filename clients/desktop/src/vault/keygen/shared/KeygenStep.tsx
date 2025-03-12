@@ -6,7 +6,7 @@ import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { VerifyEmailStep } from '../../fast/components/VerifyEmailStep'
-import { haveServerSigner } from '../../fast/utils/haveServerSigner'
+import { hasServerSigner } from '../../fast/utils/hasServerSigner'
 import { getStorageVaultId } from '../../utils/storageVault'
 import { KeygenFailedState } from './KeygenFailedState'
 import { KeygenPendingState } from './KeygenPendingState'
@@ -27,7 +27,7 @@ export const KeygenStep = ({ onTryAgain, title }: KeygenStepProps) => {
     <MatchQuery
       value={mutationState}
       success={vault => {
-        if (haveServerSigner(vault.signers)) {
+        if (hasServerSigner(vault.signers)) {
           return (
             <StepTransition
               from={({ onForward }) => (
