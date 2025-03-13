@@ -6,6 +6,7 @@ import i18n from '@clients/extension/src/i18n/config'
 import ImportPage from '@clients/extension/src/pages/popup/pages/import'
 import routerKeys from '@clients/extension/src/utils/route-keys'
 import { getStoredLanguage } from '@clients/extension/src/utils/storage'
+import { WalletCoreProvider } from '@core/chain-ui/providers/WalletCoreProvider'
 import { StrictMode, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom'
@@ -37,7 +38,9 @@ const Component = () => {
 
   return (
     <ConfigProvider>
-      <RouterProvider router={router} />
+      <WalletCoreProvider>
+        <RouterProvider router={router} />
+      </WalletCoreProvider>
     </ConfigProvider>
   )
 }

@@ -197,6 +197,9 @@ const Component = () => {
   }
 
   const componentDidMount = (): void => {
+    if (!walletCore) {
+      return
+    }
     const parser = new UAParser()
     const parserResult = parser.getResult()
 
@@ -234,8 +237,9 @@ const Component = () => {
       })
     }
   }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(componentDidMount, [])
+  useEffect(componentDidMount, [walletCore])
 
   const props: UploadProps = {
     multiple: false,
