@@ -82,3 +82,7 @@ yarn build:extension
 2. Enable "Developer mode" (top-right corner)
 3. Click "Load unpacked" and select the `dist` folder from the extension
 4. The extension should now be installed and ready to use
+
+## VultiConnect Integration Guide
+
+For details on integrating VultiConnect with your project, see the [Integration Guide](clients/extension/docs/integration-guide.md).
