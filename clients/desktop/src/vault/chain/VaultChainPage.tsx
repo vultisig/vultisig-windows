@@ -46,9 +46,11 @@ import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { VaultPrimaryActions } from '../components/VaultPrimaryActions'
 import { useVaultPublicKeyQuery } from '../publicKey/queries/useVaultPublicKeyQuery'
-import { useVaultAddressQuery } from '../queries/useVaultAddressQuery'
 import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery'
-import { useCurrentVaultNativeCoin } from '../state/currentVault'
+import {
+  useCurrentVaultAddress,
+  useCurrentVaultNativeCoin,
+} from '../state/currentVault'
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt'
 import { useCurrentVaultChain } from './useCurrentVaultChain'
 import { VaultAddressLink } from './VaultAddressLink'
@@ -59,7 +61,6 @@ export const VaultChainPage = () => {
   const invalidateQueries = useInvalidateQueries()
   const [fiatCurrency] = useFiatCurrency()
   const publicKeyQuery = useVaultPublicKeyQuery(chain)
-  const vaultAddressQuery = useVaultAddressQuery(chain)
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
   const nativeCoin = useCurrentVaultNativeCoin(chain)
   const copyAddress = useCopyAddress()
@@ -69,6 +70,7 @@ export const VaultChainPage = () => {
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
   const { mutate: saveCoins } = useSaveCoinsMutation()
+  const address = useCurrentVaultAddress(chain)
 
   const account = useMemo(
     () => ({
@@ -159,22 +161,15 @@ export const VaultChainPage = () => {
                   {chain}
                 </Text>
               </HStack>
-              <MatchQuery
-                value={vaultAddressQuery}
-                success={address => (
-                  <HStack>
-                    <IconButton
-                      onClick={() => copyAddress(address)}
-                      title="Copy address"
-                      icon={<CopyIcon />}
-                    />
-                    <AddressPageShyPrompt value={address} />
-                    <VaultAddressLink value={address} />
-                  </HStack>
-                )}
-                error={() => null}
-                pending={() => null}
-              />
+              <HStack>
+                <IconButton
+                  onClick={() => copyAddress(address)}
+                  title="Copy address"
+                  icon={<CopyIcon />}
+                />
+                <AddressPageShyPrompt value={address} />
+                <VaultAddressLink value={address} />
+              </HStack>
             </HStack>
             <MatchQuery
               value={vaultCoinsQuery}
@@ -205,18 +200,11 @@ export const VaultChainPage = () => {
                 )
               }}
             />
-            <MatchQuery
-              value={vaultAddressQuery}
-              error={() => t('failed_to_load')}
-              pending={() => t('loading')}
-              success={address => (
-                <Text size={14} weight="500" color="primary">
-                  <BalanceVisibilityAware size="xxxl">
-                    {address}
-                  </BalanceVisibilityAware>
-                </Text>
-              )}
-            />
+            <Text size={14} weight="500" color="primary">
+              <BalanceVisibilityAware size="xxxl">
+                {address}
+              </BalanceVisibilityAware>
+            </Text>
           </VStack>
           <MatchQuery
             value={vaultCoinsQuery}
