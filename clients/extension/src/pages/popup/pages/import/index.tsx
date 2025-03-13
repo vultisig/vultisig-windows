@@ -197,6 +197,7 @@ const Component = () => {
   }
 
   const componentDidMount = (): void => {
+      return
     const parser = new UAParser()
     const parserResult = parser.getResult()
 

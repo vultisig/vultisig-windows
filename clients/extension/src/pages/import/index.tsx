@@ -9,6 +9,7 @@ import { getStoredLanguage } from '@clients/extension/src/utils/storage'
 import { StrictMode, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom'
+import { WalletCoreProvider } from '@core/chain-ui/providers/WalletCoreProvider'
 
 const router = createHashRouter(
   [
@@ -37,7 +38,9 @@ const Component = () => {
 
   return (
     <ConfigProvider>
-      <RouterProvider router={router} />
+      <WalletCoreProvider>
+        <RouterProvider router={router} />
+      </WalletCoreProvider>
     </ConfigProvider>
   )
 }
