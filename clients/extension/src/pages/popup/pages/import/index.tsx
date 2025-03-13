@@ -239,9 +239,7 @@ const Component = () => {
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    componentDidMount()
-  }, [walletCore])
+  useEffect(componentDidMount, [walletCore])
 
   const props: UploadProps = {
     multiple: false,
