@@ -1,42 +1,38 @@
 import { useMutation } from '@tanstack/react-query'
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { OTPInput } from '../../../../lib/ui/inputs/OTPInput'
 import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
+import { OnFinishProp } from '../../../../lib/ui/props'
 import { Text } from '../../../../lib/ui/text'
 import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../../ui/page/PageContent'
 import { verifyVaultEmailCode } from '../../../fast/api/verifyVaultEmailCode'
+import { useCurrentVault } from '../../../state/currentVault'
+import { getStorageVaultId } from '../../../utils/storageVault'
 
 const ON_COMPLETE_DELAY = 1000
 
-type EmailConfirmationProps = {
-  vaultId: string
-  onCompleted: () => void
-}
-
-export const EmailConfirmation: FC<EmailConfirmationProps> = ({
-  vaultId,
-  onCompleted,
-}) => {
+export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
+  const vault = useCurrentVault()
   const { isPending, mutate, error, isSuccess } = useMutation({
     mutationFn: (code: string) =>
       verifyVaultEmailCode({
-        vaultId,
+        vaultId: getStorageVaultId(vault),
         code,
       }),
   })
 
   useEffect(() => {
     if (isSuccess) {
-      const timeoutId = setTimeout(() => onCompleted(), ON_COMPLETE_DELAY)
+      const timeoutId = setTimeout(onFinish, ON_COMPLETE_DELAY)
       return () => clearTimeout(timeoutId)
     }
-  }, [isSuccess, onCompleted])
+  }, [isSuccess, onFinish])
 
   return (
     <>

@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 import { storage } from '../../../wailsjs/go/models'
 import { getValueProviderSetup } from '../../lib/ui/state/getValueProviderSetup'
 import { fromStorageCoin } from '../../storage/storageCoin'
-import { haveServerSigner } from '../fast/utils/haveServerSigner'
+import { hasServerSigner } from '../fast/utils/hasServerSigner'
 
 export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
   getValueProviderSetup<storage.Vault>('CurrentVault')
@@ -97,13 +97,12 @@ export const useVaultServerStatus = () => {
   const { signers, local_party_id } = useCurrentVault()
 
   return useMemo(() => {
-    const hasServerSigner = haveServerSigner(signers)
     const isBackupServerShare = local_party_id
       ?.toLowerCase()
       .startsWith('server-')
 
     return {
-      hasServer: hasServerSigner && !isBackupServerShare,
+      hasServer: hasServerSigner(signers) && !isBackupServerShare,
       isBackup: isBackupServerShare,
     }
   }, [signers, local_party_id])

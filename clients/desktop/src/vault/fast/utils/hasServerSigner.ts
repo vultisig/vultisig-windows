@@ -3,7 +3,7 @@ import {
   parseLocalPartyId,
 } from '../../keygen/utils/localPartyId'
 
-export const haveServerSigner = (signers: string[]) =>
+export const hasServerSigner = (signers: string[]) =>
   signers.some(
     signer =>
       keygenDeviceFromDeviceName(parseLocalPartyId(signer).deviceName) ===

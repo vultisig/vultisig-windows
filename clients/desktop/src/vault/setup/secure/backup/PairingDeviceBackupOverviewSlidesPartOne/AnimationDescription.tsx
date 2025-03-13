@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { AnimatedVisibility } from '../../../../../lib/ui/layout/AnimatedVisibility'
 import { GradientText, Text } from '../../../../../lib/ui/text'
-import { useNewVault } from '../state/NewVaultProvider'
+import { useCurrentVault } from '../../../../state/currentVault'
 import { BACKUP_VAULT_ANIMATIONS } from './hooks/useBackupOverviewStepsAnimations'
 
 type AnimationDescriptionProps = {
@@ -14,7 +14,7 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
   animation,
 }) => {
   const { t } = useTranslation()
-  const [vault] = useNewVault()
+  const vault = useCurrentVault()
 
   const stepToAnimationDescription = [
     () => (

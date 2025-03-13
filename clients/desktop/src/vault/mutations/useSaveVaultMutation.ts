@@ -41,6 +41,8 @@ export const useSaveVaultMutation = (
       await invalidateQueries(vaultsQueryKey)
 
       setCurrentVaultId(getStorageVaultId(newVault))
+
+      return newVault
     },
     ...options,
   })
