@@ -14,11 +14,7 @@ import { useCurrentKeygenType } from '../../state/currentKeygenType'
 import { useCurrentServerUrl } from '../../state/currentServerUrl'
 import { useCurrentSessionId } from '../state/currentSessionId'
 
-export const useKeygenMutation = ({
-  onSuccess,
-}: {
-  onSuccess?: (data: storage.Vault) => void
-} = {}) => {
+export const useKeygenMutation = () => {
   const keygenType = useCurrentKeygenType()
 
   const serverUrl = useCurrentServerUrl()
@@ -159,6 +155,5 @@ export const useKeygenMutation = ({
         convertValues: () => {},
       }
     },
-    onSuccess,
   })
 }
