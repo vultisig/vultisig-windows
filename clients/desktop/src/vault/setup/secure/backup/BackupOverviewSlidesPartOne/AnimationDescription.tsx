@@ -20,7 +20,7 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
     () => (
       <Text size={32}>
         {t('secureVaultSetup.backup.shares', {
-          shares: vault.keyshares.length,
+          shares: vault.signers.length,
         })}{' '}
         <GradientText as="span">
           {t('secureVaultSetup.backup.eachDeviceNeedsBackup')}
