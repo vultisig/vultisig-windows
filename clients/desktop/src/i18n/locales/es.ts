@@ -482,6 +482,7 @@ export const es = {
         'No almacene su participación del bóveda en el propio dispositivo, en caso de pérdida o daño',
       agreementText: 'He leído y entiendo qué hacer',
       ctaText: 'Cree su bóveda',
+      start_using_vault: 'Comienza a usar tu bóveda',
     },
     preparingVault: 'Preparando Bóveda',
     generatingECDSAKey: 'Generando Clave ECDSA',
