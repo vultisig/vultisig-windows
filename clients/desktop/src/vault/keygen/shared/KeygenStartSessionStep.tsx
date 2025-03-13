@@ -39,16 +39,11 @@ export const KeygenStartSessionStep = ({
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         title={<PageHeaderTitle>{t('keygen')}</PageHeaderTitle>}
       />
-      <PageContent
-        justifyContent="center"
-        alignItems="center"
-        data-testid="KeygenStartStep-PageContent"
-      >
+      <PageContent justifyContent="center" alignItems="center">
         <MatchQuery
           value={status}
           pending={() => <Spinner size="3em" />}
           error={() => <Text>{t('failed_to_start_keygen')}</Text>}
-          success={() => null}
         />
       </PageContent>
     </>

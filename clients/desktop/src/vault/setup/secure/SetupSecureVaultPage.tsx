@@ -22,15 +22,8 @@ import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey'
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType'
 import { SetupVaultNameProvider } from '../state/vaultName'
-import { SecureVaultKeygenStartSessionStep } from './SecureVaultKeygenStartSessionStep'
 
-const steps = [
-  'name',
-  'joinSession',
-  'peers',
-  'startSession',
-  'keygen',
-] as const
+const steps = ['name', 'peers', 'startSession', 'keygen'] as const
 
 const lastEditableStep = steps[0]
 
@@ -64,12 +57,6 @@ export const SetupSecureVaultPage = () => {
                                   value={step}
                                   name={() => (
                                     <SetupVaultNameStep
-                                      onForward={toNextStep}
-                                    />
-                                  )}
-                                  joinSession={() => (
-                                    <SecureVaultKeygenStartSessionStep
-                                      onBack={toPreviousStep}
                                       onForward={toNextStep}
                                     />
                                   )}
