@@ -6,12 +6,12 @@ import { horizontalPadding } from '../../../../lib/ui/css/horizontalPadding'
 import { IndexProp, ValueProp } from '../../../../lib/ui/props'
 import { text } from '../../../../lib/ui/text'
 import { getColor } from '../../../../lib/ui/theme/getters'
-import { useVaultKeygenDevices } from '../../../setup/hooks/useVaultKegenDevices'
-import { useCurrentLocalPartyId } from '../../state/currentLocalPartyId'
 import {
-  formatKeygenDeviceName,
+  formatMpcDeviceName,
   parseLocalPartyId,
-} from '../../utils/localPartyId'
+} from '../../../../mpc/localPartyId'
+import { useMpcLocalPartyId } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { useVaultKeygenDevices } from '../../../setup/hooks/useVaultKegenDevices'
 
 const Container = styled.div`
   height: 64px;
@@ -32,7 +32,7 @@ export const VaultDeviceItem = ({
   value,
   index,
 }: ValueProp<string> & IndexProp) => {
-  const localPartyId = useCurrentLocalPartyId()
+  const localPartyId = useMpcLocalPartyId()
 
   const isCurrentDevice = localPartyId === value
 
@@ -45,7 +45,7 @@ export const VaultDeviceItem = ({
   return (
     <Container>
       {t('part')} {index + 1} {t('of')} {devices.length}:{' '}
-      {formatKeygenDeviceName(deviceName)}{' '}
+      {formatMpcDeviceName(deviceName)}{' '}
       {isCurrentDevice ? `(${t('this_device')})` : ''}
     </Container>
   )

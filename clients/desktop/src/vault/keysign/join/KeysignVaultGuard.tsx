@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 
 import { Button } from '../../../lib/ui/buttons/Button'
 import { ChildrenProp } from '../../../lib/ui/props'
+import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { makeAppPath } from '../../../navigation'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
-import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
 import { useVaults } from '../../queries/useVaultsQuery'
 import { useCurrentVaultId } from '../../state/currentVaultId'
 import { getStorageVaultId } from '../../utils/storageVault'
@@ -38,9 +38,9 @@ export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
 
   return (
     <CurrentKeysignVaultProvider value={vault}>
-      <CurrentLocalPartyIdProvider value={vault.local_party_id}>
+      <MpcLocalPartyIdProvider value={vault.local_party_id}>
         {children}
-      </CurrentLocalPartyIdProvider>
+      </MpcLocalPartyIdProvider>
     </CurrentKeysignVaultProvider>
   )
 }

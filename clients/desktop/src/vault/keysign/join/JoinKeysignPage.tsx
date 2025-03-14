@@ -3,12 +3,12 @@ import { useMemo } from 'react'
 
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
-import { CurrentSessionIdProvider } from '../../keygen/shared/state/currentSessionId'
-import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
 import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey'
 import { useCurrentVault } from '../../state/currentVault'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'
@@ -39,10 +39,10 @@ export const JoinKeysignPage = () => {
   return (
     <IsInitiatingDeviceProvider value={false}>
       <KeysignMessagePayloadProvider value={keysignMessagePayload}>
-        <CurrentLocalPartyIdProvider value={local_party_id}>
+        <MpcLocalPartyIdProvider value={local_party_id}>
           <KeysignVaultGuard>
             <KeysignServerUrlProvider>
-              <CurrentSessionIdProvider value={sessionId}>
+              <MpcSessionIdProvider value={sessionId}>
                 <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
                   <Match
                     value={step}
@@ -63,10 +63,10 @@ export const JoinKeysignPage = () => {
                     )}
                   />
                 </CurrentHexEncryptionKeyProvider>
-              </CurrentSessionIdProvider>
+              </MpcSessionIdProvider>
             </KeysignServerUrlProvider>
           </KeysignVaultGuard>
-        </CurrentLocalPartyIdProvider>
+        </MpcLocalPartyIdProvider>
       </KeysignMessagePayloadProvider>
     </IsInitiatingDeviceProvider>
   )

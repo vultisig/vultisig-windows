@@ -3,15 +3,15 @@ import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
-import { useCurrentSessionId } from '../../shared/state/currentSessionId'
-import { useCurrentServerUrl } from '../../state/currentServerUrl'
+import { useMpcServerUrl } from '../../serverType/state/mpcServerUrl'
+import { useMpcSessionId } from '../../session/state/mpcSession'
 
-export const useKeygenSignersQuery = () => {
-  const serverUrl = useCurrentServerUrl()
-  const sessionId = useCurrentSessionId()
+export const useMpcSignersQuery = () => {
+  const serverUrl = useMpcServerUrl()
+  const sessionId = useMpcSessionId()
 
   return useQuery({
-    queryKey: ['keygenSigners', sessionId],
+    queryKey: ['mpcSigners', sessionId],
     queryFn: async () => {
       const signers = await queryUrl<string[]>(
         `${serverUrl}/start/${sessionId}`

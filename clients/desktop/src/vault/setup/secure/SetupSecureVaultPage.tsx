@@ -1,7 +1,9 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { GeneratedMpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
+import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
 import { useDefaultMpcLib } from '../../../mpc/state/defaultMpcLib'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
@@ -10,9 +12,7 @@ import { KeygenType } from '../../keygen/KeygenType'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
-import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
-import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
 import { SetupVaultNameStep } from '../SetupVaultNameStep'
 import { SetupVaultCreationStep } from '../shared/SetupVaultCreationStep'
@@ -41,12 +41,12 @@ export const SetupSecureVaultPage = () => {
         <VaultTypeProvider value="secure">
           <GeneratedServiceNameProvider>
             <PeersSelectionRecordProvider initialValue={{}}>
-              <GeneratedSessionIdProvider>
+              <GeneratedMpcSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>
                   <GeneratedHexChainCodeProvider>
                     <MpcServerTypeProvider initialValue="relay">
                       <ServerUrlDerivedFromServerTypeProvider>
-                        <GeneratedLocalPartyIdProvider>
+                        <GeneratedMpcLocalPartyIdProvider>
                           <SetupVaultNameProvider>
                             <StartKeygenVaultProvider>
                               <CurrentKeygenTypeProvider
@@ -83,12 +83,12 @@ export const SetupSecureVaultPage = () => {
                               </CurrentKeygenTypeProvider>
                             </StartKeygenVaultProvider>
                           </SetupVaultNameProvider>
-                        </GeneratedLocalPartyIdProvider>
+                        </GeneratedMpcLocalPartyIdProvider>
                       </ServerUrlDerivedFromServerTypeProvider>
                     </MpcServerTypeProvider>
                   </GeneratedHexChainCodeProvider>
                 </GeneratedHexEncryptionKeyProvider>
-              </GeneratedSessionIdProvider>
+              </GeneratedMpcSessionIdProvider>
             </PeersSelectionRecordProvider>
           </GeneratedServiceNameProvider>
         </VaultTypeProvider>

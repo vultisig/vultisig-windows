@@ -4,16 +4,16 @@ import { useTranslation } from 'react-i18next'
 
 import { OnFinishProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { useMpcPeersQuery } from '../../../mpc/peers/queries/useMpcPeersQuery'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
 import { JoinSecureVaultKeygen } from '../shared/JoinSecureVaultKeygen'
 import { KeygenPageHeader } from '../shared/KeygenPageHeader'
 import { PendingKeygenMessage } from '../shared/PendingKeygenMessage'
-import { useKeygenPeersQuery } from './queries/useKeygenPeersQuery'
 
 export const JoinKeygenPeersStep = ({ onFinish }: OnFinishProp<string[]>) => {
-  const peersQuery = useKeygenPeersQuery()
+  const peersQuery = useMpcPeersQuery()
   const { keygenType } = useAppPathState<'joinKeygen'>()
   const isKeygen = keygenType.toLowerCase() === 'keygen'
 

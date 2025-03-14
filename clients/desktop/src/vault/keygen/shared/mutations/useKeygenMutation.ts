@@ -4,6 +4,8 @@ import { useMutation } from '@tanstack/react-query'
 
 import { storage } from '../../../../../wailsjs/go/models'
 import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService'
+import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
+import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
 import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
@@ -11,17 +13,15 @@ import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncry
 import { useCurrentVault } from '../../../state/currentVault'
 import { KeygenType } from '../../KeygenType'
 import { useCurrentKeygenType } from '../../state/currentKeygenType'
-import { useCurrentServerUrl } from '../../state/currentServerUrl'
-import { useCurrentSessionId } from '../state/currentSessionId'
 
 export const useKeygenMutation = () => {
   const keygenType = useCurrentKeygenType()
 
-  const serverUrl = useCurrentServerUrl()
+  const serverUrl = useMpcServerUrl()
 
   const encryptionKeyHex = useCurrentHexEncryptionKey()
 
-  const sessionId = useCurrentSessionId()
+  const sessionId = useMpcSessionId()
 
   const vault = useCurrentVault()
 

@@ -1,14 +1,14 @@
 import { Match } from '../../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
+import { MpcLocalPartyIdProvider } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../../mpc/serverType/state/mpcServerType'
+import { GeneratedMpcSessionIdProvider } from '../../../../mpc/session/state/mpcSession'
 import { IsInitiatingDeviceProvider } from '../../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack'
 import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep'
 import { GeneratedServiceNameProvider } from '../../../keygen/shared/state/currentServiceName'
-import { GeneratedSessionIdProvider } from '../../../keygen/shared/state/currentSessionId'
-import { CurrentLocalPartyIdProvider } from '../../../keygen/state/currentLocalPartyId'
 import { WaitForServerToJoinStep } from '../../../server/components/WaitForServerToJoinStep'
 import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep'
 import { PasswordProvider } from '../../../server/password/state/password'
@@ -42,10 +42,10 @@ export const StartFastKeysignPage = () => {
     <IsInitiatingDeviceProvider value={true}>
       <KeysignMessagePayloadProvider value={keysignPayload}>
         <PasswordProvider initialValue="">
-          <CurrentLocalPartyIdProvider value={local_party_id}>
+          <MpcLocalPartyIdProvider value={local_party_id}>
             <GeneratedServiceNameProvider>
               <PeersSelectionRecordProvider initialValue={{}}>
-                <GeneratedSessionIdProvider>
+                <GeneratedMpcSessionIdProvider>
                   <GeneratedHexEncryptionKeyProvider>
                     <MpcServerTypeProvider initialValue="relay">
                       <ServerUrlDerivedFromServerTypeProvider>
@@ -71,10 +71,10 @@ export const StartFastKeysignPage = () => {
                       </ServerUrlDerivedFromServerTypeProvider>
                     </MpcServerTypeProvider>
                   </GeneratedHexEncryptionKeyProvider>
-                </GeneratedSessionIdProvider>
+                </GeneratedMpcSessionIdProvider>
               </PeersSelectionRecordProvider>
             </GeneratedServiceNameProvider>
-          </CurrentLocalPartyIdProvider>
+          </MpcLocalPartyIdProvider>
         </PasswordProvider>
       </KeysignMessagePayloadProvider>
     </IsInitiatingDeviceProvider>

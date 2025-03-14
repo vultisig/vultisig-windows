@@ -14,12 +14,12 @@ import { useTranslation } from 'react-i18next'
 import { assertChainField } from '../../../../chain/utils/assertChainField'
 import { OnForwardProp } from '../../../../lib/ui/props'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { FullPageFlowErrorState } from '../../../../ui/flow/FullPageFlowErrorState'
 import { PageHeader } from '../../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
 import { signWithServer } from '../../../fast/api/signWithServer'
-import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId'
 import { WaitForServerLoader } from '../../../server/components/WaitForServerLoader'
 import { useVaultPassword } from '../../../server/password/state/password'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
@@ -35,7 +35,7 @@ export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
 
   const { public_key_ecdsa } = useCurrentVault()
 
-  const sessionId = useCurrentSessionId()
+  const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
 
   const payload = useKeysignMessagePayload()

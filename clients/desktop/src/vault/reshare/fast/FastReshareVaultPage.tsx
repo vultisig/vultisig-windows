@@ -3,8 +3,10 @@ import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
+import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
@@ -14,9 +16,7 @@ import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionSt
 import { KeygenStep } from '../../keygen/shared/KeygenStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
-import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
-import { CurrentLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
 import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
 import { EmailProvider } from '../../server/email/state/email'
@@ -62,12 +62,12 @@ export const FastReshareVaultPage = () => {
             <VaultTypeProvider value="secure">
               <GeneratedServiceNameProvider>
                 <PeersSelectionRecordProvider initialValue={{}}>
-                  <GeneratedSessionIdProvider>
+                  <GeneratedMpcSessionIdProvider>
                     <GeneratedHexEncryptionKeyProvider>
                       <CurrentHexChainCodeProvider value={hex_chain_code}>
                         <MpcServerTypeProvider initialValue="relay">
                           <ServerUrlDerivedFromServerTypeProvider>
-                            <CurrentLocalPartyIdProvider value={local_party_id}>
+                            <MpcLocalPartyIdProvider value={local_party_id}>
                               <CurrentKeygenTypeProvider
                                 value={KeygenType.Reshare}
                               >
@@ -126,12 +126,12 @@ export const FastReshareVaultPage = () => {
                                   )}
                                 />
                               </CurrentKeygenTypeProvider>
-                            </CurrentLocalPartyIdProvider>
+                            </MpcLocalPartyIdProvider>
                           </ServerUrlDerivedFromServerTypeProvider>
                         </MpcServerTypeProvider>
                       </CurrentHexChainCodeProvider>
                     </GeneratedHexEncryptionKeyProvider>
-                  </GeneratedSessionIdProvider>
+                  </GeneratedMpcSessionIdProvider>
                 </PeersSelectionRecordProvider>
               </GeneratedServiceNameProvider>
             </VaultTypeProvider>

@@ -5,27 +5,27 @@ import { useTranslation } from 'react-i18next'
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { useMpcLocalPartyId } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { useMpcServerUrl } from '../../../mpc/serverType/state/mpcServerUrl'
+import { useMpcSessionId } from '../../../mpc/session/state/mpcSession'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { useCurrentLocalPartyId } from '../state/currentLocalPartyId'
-import { useCurrentServerUrl } from '../state/currentServerUrl'
 import { joinSession } from '../utils/joinSession'
 import { KeygenNetworkReminder } from './KeygenNetworkReminder'
 import { PendingKeygenMessage } from './PendingKeygenMessage'
-import { useCurrentSessionId } from './state/currentSessionId'
 
 export const JoinKeygenSessionStep = ({
   onForward,
   onBack,
 }: OnForwardProp & Partial<OnBackProp>) => {
-  const sessionId = useCurrentSessionId()
+  const sessionId = useMpcSessionId()
 
-  const serverUrl = useCurrentServerUrl()
+  const serverUrl = useMpcServerUrl()
 
-  const localPartyId = useCurrentLocalPartyId()
+  const localPartyId = useMpcLocalPartyId()
 
   const { mutate: start, ...mutationStatus } = useMutation({
     mutationFn: async () => {

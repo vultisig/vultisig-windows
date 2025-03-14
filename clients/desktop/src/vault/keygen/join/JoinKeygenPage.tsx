@@ -8,6 +8,7 @@ import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
+import { MpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
@@ -17,7 +18,6 @@ import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEnc
 import { KeygenType } from '../KeygenType'
 import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep'
 import { CurrentServiceNameProvider } from '../shared/state/currentServiceName'
-import { CurrentSessionIdProvider } from '../shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../state/currentKeygenType'
 import { JoinKeygenPeersStep } from './JoinKeygenPeersStep'
 import { JoinKeygenProcess } from './JoinKeygenProcess'
@@ -56,7 +56,7 @@ export const JoinKeygenPage = () => {
       <MpcLibProvider value={fromLibType(libType)}>
         <CurrentServiceNameProvider value={serviceName}>
           <MpcServerTypeProvider initialValue={serverType}>
-            <CurrentSessionIdProvider value={sessionId}>
+            <MpcSessionIdProvider value={sessionId}>
               <CurrentKeygenTypeProvider value={keygenType}>
                 <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
                   <JoinKeygenVaultProvider>
@@ -86,7 +86,7 @@ export const JoinKeygenPage = () => {
                   </JoinKeygenVaultProvider>
                 </CurrentHexEncryptionKeyProvider>
               </CurrentKeygenTypeProvider>
-            </CurrentSessionIdProvider>
+            </MpcSessionIdProvider>
           </MpcServerTypeProvider>
         </CurrentServiceNameProvider>
       </MpcLibProvider>
