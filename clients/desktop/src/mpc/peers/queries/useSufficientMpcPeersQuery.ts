@@ -10,11 +10,12 @@ export const useSufficientMpcPeersQuery = (): Query<string[]> => {
 
   const vault = useCurrentVault()
   const threshold = getKeygenThreshold(vault.signers.length)
+  const sufficientPeers = threshold - 1
 
   return useMemo(() => {
     const { data, error, isLoading } = peersQuery
 
-    if (error || (data && data.length >= threshold)) {
+    if (error || (data && data.length >= sufficientPeers)) {
       return peersQuery
     }
 
@@ -24,5 +25,5 @@ export const useSufficientMpcPeersQuery = (): Query<string[]> => {
       isLoading,
       isPending: true,
     }
-  }, [peersQuery, threshold])
+  }, [peersQuery, sufficientPeers])
 }
