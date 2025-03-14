@@ -1,5 +1,4 @@
 import { MpcLib } from '@core/mpc/mpcLib'
-import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
@@ -13,8 +12,8 @@ import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { KeygenType } from '../../keygen/KeygenType'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
+import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
-import { KeygenStep } from '../../keygen/shared/KeygenStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
@@ -49,8 +48,6 @@ export const FastReshareVaultPage = () => {
     steps: reshareVaultSteps,
     onExit: useNavigateBack(),
   })
-
-  const { t } = useTranslation()
 
   const { hasServer, isBackup } = useVaultServerStatus()
 
@@ -116,11 +113,7 @@ export const FastReshareVaultPage = () => {
                                     />
                                   )}
                                   keygen={() => (
-                                    <KeygenStep
-                                      title={t('reshare')}
-                                      onTryAgain={() =>
-                                        setStep(reshareVaultSteps[0])
-                                      }
+                                    <KeygenFlow
                                       onBack={() => setStep('verify')}
                                     />
                                   )}
