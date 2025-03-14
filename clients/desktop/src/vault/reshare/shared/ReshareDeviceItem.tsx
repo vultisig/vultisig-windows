@@ -14,9 +14,9 @@ import {
 } from '../../../lib/ui/props'
 import { text } from '../../../lib/ui/text'
 import {
-  formatKeygenDeviceName,
+  formatMpcDeviceName,
   parseLocalPartyId,
-} from '../../keygen/utils/localPartyId'
+} from '../../../mpc/localPartyId'
 
 type ReshareDeviceStatus = 'add' | 'remove'
 
@@ -58,7 +58,7 @@ export const ReshareDeviceItem: React.FC<ReshareDeviceItemProps> = ({
 
   return (
     <Container status={status}>
-      {index + 1}. {formatKeygenDeviceName(deviceName)} (
+      {index + 1}. {formatMpcDeviceName(deviceName)} (
       {isActive
         ? t('this_device')
         : match(status, {

@@ -5,10 +5,10 @@ import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { Panel } from '../../../lib/ui/panel/Panel'
 import { ChildrenProp } from '../../../lib/ui/props'
 import { Text } from '../../../lib/ui/text'
-import { useCurrentLocalPartyId } from '../state/currentLocalPartyId'
+import { useMpcLocalPartyId } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 
 export const PendingKeygenMessage = ({ children }: ChildrenProp) => {
-  const localPartyId = useCurrentLocalPartyId()
+  const localPartyId = useMpcLocalPartyId()
 
   const { t } = useTranslation()
 

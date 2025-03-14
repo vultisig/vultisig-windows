@@ -784,4 +784,7 @@ export const pt = {
   report_error: 'Relatar erro',
   go_to_home_page: 'Ir para a página inicial',
   enable_dkls: 'Habilitar DKLS',
+  failed_to_join_keysign: 'Falha ao ingressar no Keysign',
+  function_arguments: 'Argumentos de função',
+  function_signature: 'Assinatura de função',
 }

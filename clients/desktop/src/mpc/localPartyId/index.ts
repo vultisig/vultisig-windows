@@ -1,7 +1,7 @@
 import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
 import { randomIntegerInRange } from '@lib/utils/randomInRange'
 
-export const keygenDevices = [
+export const mpcDevices = [
   'windows',
   'mac',
   'linux',
@@ -10,15 +10,13 @@ export const keygenDevices = [
   'android',
   'server',
 ] as const
-export type KeygenDevice = (typeof keygenDevices)[number]
+export type MpcDevice = (typeof mpcDevices)[number]
 
 const localPartyIdSeparator = '-'
 
-export const currentKeygenDevice: KeygenDevice = 'windows'
+export const currentMpcDevice: MpcDevice = 'windows'
 
-export const generateLocalPartyId = (
-  device: KeygenDevice = currentKeygenDevice
-) => {
+export const generateLocalPartyId = (device: MpcDevice = currentMpcDevice) => {
   const deviceName =
     device === 'server' ? capitalizeFirstLetter(device) : device
 
@@ -36,18 +34,18 @@ export const parseLocalPartyId = (localPartyId: string) => {
   return { deviceName, hash }
 }
 
-export const keygenDeviceFromDeviceName = (
+export const mpcDeviceFromDeviceName = (
   deviceName: string
-): KeygenDevice | null => {
+): MpcDevice | null => {
   const lowerCaseDeviceName = deviceName.toLowerCase()
-  if (lowerCaseDeviceName in keygenDeviceType) {
-    return lowerCaseDeviceName as KeygenDevice
+  if (lowerCaseDeviceName in mpcDeviceType) {
+    return lowerCaseDeviceName as MpcDevice
   }
 
   return null
 }
 
-const keygenDeviceName: Record<KeygenDevice, string> = {
+const mpcDeviceName: Record<MpcDevice, string> = {
   windows: 'Windows',
   mac: 'Mac',
   linux: 'Linux',
@@ -57,10 +55,10 @@ const keygenDeviceName: Record<KeygenDevice, string> = {
   server: 'Server',
 }
 
-export const formatKeygenDeviceName = (deviceName: string) => {
-  const keygenDevice = keygenDeviceFromDeviceName(deviceName)
-  if (keygenDevice) {
-    return keygenDeviceName[keygenDevice]
+export const formatMpcDeviceName = (deviceName: string) => {
+  const mpcDevice = mpcDeviceFromDeviceName(deviceName)
+  if (mpcDevice) {
+    return mpcDeviceName[mpcDevice]
   }
 
   return deviceName
@@ -69,7 +67,7 @@ export const formatKeygenDeviceName = (deviceName: string) => {
 export const deviceTypes = ['phone', 'tablet', 'desktop', 'server'] as const
 export type DeviceType = (typeof deviceTypes)[number]
 
-const keygenDeviceType: Record<KeygenDevice, DeviceType> = {
+const mpcDeviceType: Record<MpcDevice, DeviceType> = {
   windows: 'desktop',
   mac: 'desktop',
   linux: 'desktop',
@@ -79,10 +77,10 @@ const keygenDeviceType: Record<KeygenDevice, DeviceType> = {
   server: 'server',
 }
 
-export const getKeygenDeviceType = (deviceName: string): DeviceType => {
-  const keygenDevice = keygenDeviceFromDeviceName(deviceName)
-  if (keygenDevice) {
-    return keygenDeviceType[keygenDevice]
+export const getMpcDeviceType = (deviceName: string): DeviceType => {
+  const mpcDevice = mpcDeviceFromDeviceName(deviceName)
+  if (mpcDevice) {
+    return mpcDeviceType[mpcDevice]
   }
 
   return 'phone'

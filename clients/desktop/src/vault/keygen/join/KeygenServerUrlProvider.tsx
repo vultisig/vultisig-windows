@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { ChildrenProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
+import { MpcServerUrlProvider } from '../../../mpc/serverType/state/mpcServerUrl'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage'
-import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl'
 import { useKeygenServerUrlQuery } from '../server/queries/useKeygenServerUrlQuery'
 import { useCurrentServiceName } from '../shared/state/currentServiceName'
 
@@ -28,9 +28,7 @@ export const KeygenServerUrlProvider = ({ children }: ChildrenProp) => {
     <MatchQuery
       value={query}
       success={value => (
-        <CurrentServerUrlProvider value={value}>
-          {children}
-        </CurrentServerUrlProvider>
+        <MpcServerUrlProvider value={value}>{children}</MpcServerUrlProvider>
       )}
       error={() => (
         <FullPageFlowErrorState

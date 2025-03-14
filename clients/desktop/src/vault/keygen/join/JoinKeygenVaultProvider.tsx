@@ -2,11 +2,11 @@ import { useMemo } from 'react'
 
 import { storage } from '../../../../wailsjs/go/models'
 import { ChildrenProp } from '../../../lib/ui/props'
+import { generateLocalPartyId } from '../../../mpc/localPartyId'
+import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useVaults } from '../../queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../state/currentVault'
-import { CurrentLocalPartyIdProvider } from '../state/currentLocalPartyId'
-import { generateLocalPartyId } from '../utils/localPartyId'
 
 export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
   children,
@@ -51,9 +51,9 @@ export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
 
   return (
     <CurrentVaultProvider value={value}>
-      <CurrentLocalPartyIdProvider value={value.local_party_id}>
+      <MpcLocalPartyIdProvider value={value.local_party_id}>
         {children}
-      </CurrentLocalPartyIdProvider>
+      </MpcLocalPartyIdProvider>
     </CurrentVaultProvider>
   )
 }

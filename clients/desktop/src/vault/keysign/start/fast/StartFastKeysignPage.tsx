@@ -1,14 +1,17 @@
 import { Match } from '../../../../lib/ui/base/Match'
+import { StepTransition } from '../../../../lib/ui/base/StepTransition'
+import { ValueTransfer } from '../../../../lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
+import { MpcLocalPartyIdProvider } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcPeersProvider } from '../../../../mpc/peers/state/mpcPeers'
 import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../../mpc/serverType/state/mpcServerType'
+import { GeneratedMpcSessionIdProvider } from '../../../../mpc/session/state/mpcSession'
 import { IsInitiatingDeviceProvider } from '../../../../mpc/state/isInitiatingDevice'
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack'
 import { KeygenStartSessionStep } from '../../../keygen/shared/KeygenStartSessionStep'
 import { GeneratedServiceNameProvider } from '../../../keygen/shared/state/currentServiceName'
-import { GeneratedSessionIdProvider } from '../../../keygen/shared/state/currentSessionId'
-import { CurrentLocalPartyIdProvider } from '../../../keygen/state/currentLocalPartyId'
 import { WaitForServerToJoinStep } from '../../../server/components/WaitForServerToJoinStep'
 import { ServerPasswordStep } from '../../../server/password/ServerPasswordStep'
 import { PasswordProvider } from '../../../server/password/state/password'
@@ -17,16 +20,9 @@ import { ServerUrlDerivedFromServerTypeProvider } from '../../../setup/state/ser
 import { useCurrentVault } from '../../../state/currentVault'
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '../../shared/state/keysignMessagePayload'
-import { PeersSelectionRecordProvider } from '../../shared/state/selectedPeers'
 import { FastKeysignServerStep } from './FastKeysignServerStep'
 
-const keysignSteps = [
-  'password',
-  'server',
-  'waitServer',
-  'startSession',
-  'sign',
-] as const
+const keysignSteps = ['password', 'server', 'keysign'] as const
 
 export const StartFastKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'fastKeysign'>()
@@ -42,39 +38,51 @@ export const StartFastKeysignPage = () => {
     <IsInitiatingDeviceProvider value={true}>
       <KeysignMessagePayloadProvider value={keysignPayload}>
         <PasswordProvider initialValue="">
-          <CurrentLocalPartyIdProvider value={local_party_id}>
+          <MpcLocalPartyIdProvider value={local_party_id}>
             <GeneratedServiceNameProvider>
-              <PeersSelectionRecordProvider initialValue={{}}>
-                <GeneratedSessionIdProvider>
-                  <GeneratedHexEncryptionKeyProvider>
-                    <MpcServerTypeProvider initialValue="relay">
-                      <ServerUrlDerivedFromServerTypeProvider>
-                        <MpcMediatorManager />
-                        <Match
-                          value={step}
-                          password={() => (
-                            <ServerPasswordStep onForward={toNextStep} />
-                          )}
-                          startSession={() => (
-                            <KeygenStartSessionStep onForward={toNextStep} />
-                          )}
-                          waitServer={() => (
-                            <WaitForServerToJoinStep onForward={toNextStep} />
-                          )}
-                          server={() => (
-                            <FastKeysignServerStep onForward={toNextStep} />
-                          )}
-                          sign={() => (
-                            <KeysignSigningStep payload={keysignPayload} />
-                          )}
-                        />
-                      </ServerUrlDerivedFromServerTypeProvider>
-                    </MpcServerTypeProvider>
-                  </GeneratedHexEncryptionKeyProvider>
-                </GeneratedSessionIdProvider>
-              </PeersSelectionRecordProvider>
+              <GeneratedMpcSessionIdProvider>
+                <GeneratedHexEncryptionKeyProvider>
+                  <MpcServerTypeProvider initialValue="relay">
+                    <ServerUrlDerivedFromServerTypeProvider>
+                      <MpcMediatorManager />
+                      <Match
+                        value={step}
+                        password={() => (
+                          <ServerPasswordStep onForward={toNextStep} />
+                        )}
+                        server={() => (
+                          <FastKeysignServerStep onForward={toNextStep} />
+                        )}
+                        keysign={() => (
+                          <ValueTransfer<string[]>
+                            from={({ onFinish }) => (
+                              <WaitForServerToJoinStep onFinish={onFinish} />
+                            )}
+                            to={({ value }) => (
+                              <MpcPeersProvider value={value}>
+                                <StepTransition
+                                  from={({ onForward }) => (
+                                    <KeygenStartSessionStep
+                                      onForward={onForward}
+                                    />
+                                  )}
+                                  to={() => (
+                                    <KeysignSigningStep
+                                      payload={keysignPayload}
+                                    />
+                                  )}
+                                />
+                              </MpcPeersProvider>
+                            )}
+                          />
+                        )}
+                      />
+                    </ServerUrlDerivedFromServerTypeProvider>
+                  </MpcServerTypeProvider>
+                </GeneratedHexEncryptionKeyProvider>
+              </GeneratedMpcSessionIdProvider>
             </GeneratedServiceNameProvider>
-          </CurrentLocalPartyIdProvider>
+          </MpcLocalPartyIdProvider>
         </PasswordProvider>
       </KeysignMessagePayloadProvider>
     </IsInitiatingDeviceProvider>

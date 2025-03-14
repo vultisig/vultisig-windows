@@ -791,4 +791,7 @@ export const it = {
   report_error: 'Segnala errore',
   go_to_home_page: 'Vai alla Home Page',
   enable_dkls: 'Abilita DKLS',
+  failed_to_join_keysign: 'Impossibile unirsi a Keysign',
+  function_arguments: 'Argomenti della funzione',
+  function_signature: 'Firma della funzione',
 }

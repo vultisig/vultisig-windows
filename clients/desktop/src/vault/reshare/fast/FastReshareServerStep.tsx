@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next'
 
 import { OnForwardProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { generateLocalPartyId } from '../../../mpc/localPartyId'
+import { useMpcSessionId } from '../../../mpc/session/state/mpcSession'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { reshareWithServer } from '../../fast/api/reshareWithServer'
-import { useCurrentSessionId } from '../../keygen/shared/state/currentSessionId'
-import { generateLocalPartyId } from '../../keygen/utils/localPartyId'
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
 import { useVaultEmail } from '../../server/email/state/email'
 import { useVaultPassword } from '../../server/password/state/password'
@@ -22,7 +22,7 @@ export const FastReshareServerStep: React.FC<OnForwardProp> = ({
 }) => {
   const { t } = useTranslation()
 
-  const sessionId = useCurrentSessionId()
+  const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
 
   const [password] = useVaultPassword()

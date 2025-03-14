@@ -2,15 +2,15 @@ import { isEmpty } from '@lib/utils/array/isEmpty'
 import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
 import { useEffect } from 'react'
 
+import { useMpcPeersSelectionRecord } from '../../../../mpc/peers/state/mpcSelectedPeers'
 import { usePeerOptionsQuery } from '../../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
-import { usePeersSelectionRecord } from '../../../keysign/shared/state/selectedPeers'
 
 export const useVaultPeersSetup = (enabled: boolean) => {
   const peerOptionsQuery = usePeerOptionsQuery({
     enabled: enabled,
   })
 
-  const [peers, setPeers] = usePeersSelectionRecord()
+  const [peers, setPeers] = useMpcPeersSelectionRecord()
   const numberOfPeers = Object.values(peers).length
 
   useEffect(() => {

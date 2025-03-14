@@ -11,17 +11,17 @@ import { useCallback } from 'react'
 import { useSevenZipQuery } from '../../../../compression/queries/useSevenZipQuery'
 import { useTransformQueryData } from '../../../../lib/ui/query/hooks/useTransformQueryData'
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
+import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { KeygenType } from '../../../keygen/KeygenType'
 import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName'
-import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId'
 import { useCurrentKeygenType } from '../../../keygen/state/currentKeygenType'
 import { useCurrentVault } from '../../../state/currentVault'
 import { useCurrentHexChainCode } from '../../state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '../../state/currentHexEncryptionKey'
 
 export const useJoinKeygenUrlQuery = () => {
-  const sessionId = useCurrentSessionId()
+  const sessionId = useMpcSessionId()
   const [serverType] = useMpcServerType()
   const serviceName = useCurrentServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
