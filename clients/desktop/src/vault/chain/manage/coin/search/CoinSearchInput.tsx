@@ -35,6 +35,7 @@ const Input = styled.input`
   ${borderRadius.m};
   background: ${getColor('foreground')};
   ${takeWholeSpace};
+  color: ${getColor('white')};
 `
 
 export const CoinSearchInput = () => {
