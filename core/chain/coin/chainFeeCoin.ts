@@ -95,21 +95,21 @@ const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
     cmcId: 1839,
   },
   [Chain.Base]: {
-    ticker: 'BASE',
+    ticker: 'ETH',
     logo: 'base',
     decimals: 18,
     priceProviderId: 'ethereum',
     cmcId: 1027,
   },
   [Chain.Arbitrum]: {
-    ticker: 'ARB',
+    ticker: 'ETH',
     logo: 'arbitrum',
     decimals: 18,
     priceProviderId: 'ethereum',
     cmcId: 1027,
   },
   [Chain.Optimism]: {
-    ticker: 'OP',
+    ticker: 'ETH',
     logo: 'optimism',
     decimals: 18,
     priceProviderId: 'ethereum',
@@ -123,7 +123,7 @@ const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
     cmcId: 3890,
   },
   [Chain.Blast]: {
-    ticker: 'BLAST',
+    ticker: 'ETH',
     logo: 'blast',
     decimals: 18,
     priceProviderId: 'ethereum',
@@ -137,7 +137,7 @@ const leanChainFeeCoin: Record<Chain, Omit<Coin, 'chain' | 'id'>> = {
     cmcId: 3635,
   },
   [Chain.Zksync]: {
-    ticker: 'ZK',
+    ticker: 'ETH',
     logo: 'zksync',
     decimals: 18,
     priceProviderId: 'ethereum',
