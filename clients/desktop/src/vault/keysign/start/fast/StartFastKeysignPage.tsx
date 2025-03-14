@@ -3,6 +3,7 @@ import { StepTransition } from '../../../../lib/ui/base/StepTransition'
 import { ValueTransfer } from '../../../../lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
 import { MpcLocalPartyIdProvider } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcPeersProvider } from '../../../../mpc/peers/state/mpcPeers'
 import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../../mpc/serverType/state/mpcServerType'
 import { GeneratedMpcSessionIdProvider } from '../../../../mpc/session/state/mpcSession'
@@ -57,19 +58,21 @@ export const StartFastKeysignPage = () => {
                             from={({ onFinish }) => (
                               <WaitForServerToJoinStep onFinish={onFinish} />
                             )}
-                            to={() => (
-                              <StepTransition
-                                from={({ onForward }) => (
-                                  <KeygenStartSessionStep
-                                    onForward={onForward}
-                                  />
-                                )}
-                                to={() => (
-                                  <KeysignSigningStep
-                                    payload={keysignPayload}
-                                  />
-                                )}
-                              />
+                            to={({ value }) => (
+                              <MpcPeersProvider value={value}>
+                                <StepTransition
+                                  from={({ onForward }) => (
+                                    <KeygenStartSessionStep
+                                      onForward={onForward}
+                                    />
+                                  )}
+                                  to={() => (
+                                    <KeysignSigningStep
+                                      payload={keysignPayload}
+                                    />
+                                  )}
+                                />
+                              </MpcPeersProvider>
                             )}
                           />
                         )}
