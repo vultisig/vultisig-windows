@@ -1,17 +1,17 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { GeneratedMpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
+import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
 import { useDefaultMpcLib } from '../../../mpc/state/defaultMpcLib'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { KeygenType } from '../../keygen/KeygenType'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
-import { GeneratedSessionIdProvider } from '../../keygen/shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
-import { GeneratedLocalPartyIdProvider } from '../../keygen/state/currentLocalPartyId'
-import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
 import { EmailProvider } from '../../server/email/state/email'
 import { SetServerPasswordStep } from '../../server/password/SetServerPasswordStep'
@@ -54,13 +54,13 @@ export const SetupFastVaultPage = () => {
           <EmailProvider initialValue="">
             <PasswordProvider initialValue="">
               <GeneratedServiceNameProvider>
-                <PeersSelectionRecordProvider initialValue={{}}>
-                  <GeneratedSessionIdProvider>
+                <MpcPeersSelectionProvider>
+                  <GeneratedMpcSessionIdProvider>
                     <GeneratedHexEncryptionKeyProvider>
                       <GeneratedHexChainCodeProvider>
                         <MpcServerTypeProvider initialValue="relay">
                           <ServerUrlDerivedFromServerTypeProvider>
-                            <GeneratedLocalPartyIdProvider>
+                            <GeneratedMpcLocalPartyIdProvider>
                               <SetupVaultNameProvider>
                                 <StartKeygenVaultProvider>
                                   <CurrentKeygenTypeProvider
@@ -115,13 +115,13 @@ export const SetupFastVaultPage = () => {
                                   </CurrentKeygenTypeProvider>
                                 </StartKeygenVaultProvider>
                               </SetupVaultNameProvider>
-                            </GeneratedLocalPartyIdProvider>
+                            </GeneratedMpcLocalPartyIdProvider>
                           </ServerUrlDerivedFromServerTypeProvider>
                         </MpcServerTypeProvider>
                       </GeneratedHexChainCodeProvider>
                     </GeneratedHexEncryptionKeyProvider>
-                  </GeneratedSessionIdProvider>
-                </PeersSelectionRecordProvider>
+                  </GeneratedMpcSessionIdProvider>
+                </MpcPeersSelectionProvider>
               </GeneratedServiceNameProvider>
             </PasswordProvider>
           </EmailProvider>

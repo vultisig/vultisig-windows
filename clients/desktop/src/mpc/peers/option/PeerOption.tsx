@@ -8,11 +8,8 @@ import { HStack } from '../../../lib/ui/layout/Stack'
 import { ValueProp } from '../../../lib/ui/props'
 import { Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
-import {
-  formatKeygenDeviceName,
-  parseLocalPartyId,
-} from '../../../vault/keygen/utils/localPartyId'
-import { usePeersSelectionRecord } from '../../../vault/keysign/shared/state/selectedPeers'
+import { formatMpcDeviceName, parseLocalPartyId } from '../../localPartyId'
+import { useMpcPeersSelectionRecord } from '../state/mpcSelectedPeers'
 import { PeerOptionContainer } from './PeerOptionContainer'
 
 const IconContainer = styled.div`
@@ -25,10 +22,10 @@ const IconContainer = styled.div`
 `
 
 export const PeerOption = ({ value }: ValueProp<string>) => {
-  const [record, setRecord] = usePeersSelectionRecord()
+  const [record, setRecord] = useMpcPeersSelectionRecord()
   const isSelected = record[value]
   const { deviceName, hash } = parseLocalPartyId(value)
-  const formattedDeviceName = formatKeygenDeviceName(deviceName)
+  const formattedDeviceName = formatMpcDeviceName(deviceName)
 
   return (
     <PeerOptionContainer

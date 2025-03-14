@@ -772,4 +772,7 @@ export const hr = {
   chooseSetup: 'Odaberite Postavljanje',
   introOnboarding: 'uvod',
   enable_dkls: 'Omogući DKLS',
+  failed_to_join_keysign: 'Pridruživanje Keysignu nije uspjelo',
+  function_arguments: 'Argumenti funkcije',
+  function_signature: 'Potpis funkcije',
 }

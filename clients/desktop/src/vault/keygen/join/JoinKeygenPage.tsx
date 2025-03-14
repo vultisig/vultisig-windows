@@ -1,23 +1,22 @@
 import { fromLibType } from '@core/communication/utils/libType'
 import { match } from '@lib/utils/match'
-import { makeRecord } from '@lib/utils/record/makeRecord'
 import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../lib/ui/base/Match'
 import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { MpcPeersProvider } from '../../../mpc/peers/state/mpcPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
+import { MpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
-import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
 import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey'
 import { KeygenType } from '../KeygenType'
 import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep'
 import { CurrentServiceNameProvider } from '../shared/state/currentServiceName'
-import { CurrentSessionIdProvider } from '../shared/state/currentSessionId'
 import { CurrentKeygenTypeProvider } from '../state/currentKeygenType'
 import { JoinKeygenPeersStep } from './JoinKeygenPeersStep'
 import { JoinKeygenProcess } from './JoinKeygenProcess'
@@ -56,7 +55,7 @@ export const JoinKeygenPage = () => {
       <MpcLibProvider value={fromLibType(libType)}>
         <CurrentServiceNameProvider value={serviceName}>
           <MpcServerTypeProvider initialValue={serverType}>
-            <CurrentSessionIdProvider value={sessionId}>
+            <MpcSessionIdProvider value={sessionId}>
               <CurrentKeygenTypeProvider value={keygenType}>
                 <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
                   <JoinKeygenVaultProvider>
@@ -73,11 +72,9 @@ export const JoinKeygenPage = () => {
                               <JoinKeygenPeersStep onFinish={onFinish} />
                             )}
                             to={({ value }) => (
-                              <PeersSelectionRecordProvider
-                                initialValue={makeRecord(value, () => true)}
-                              >
+                              <MpcPeersProvider value={value}>
                                 <JoinKeygenProcess title={title} />
-                              </PeersSelectionRecordProvider>
+                              </MpcPeersProvider>
                             )}
                           />
                         )}
@@ -86,7 +83,7 @@ export const JoinKeygenPage = () => {
                   </JoinKeygenVaultProvider>
                 </CurrentHexEncryptionKeyProvider>
               </CurrentKeygenTypeProvider>
-            </CurrentSessionIdProvider>
+            </MpcSessionIdProvider>
           </MpcServerTypeProvider>
         </CurrentServiceNameProvider>
       </MpcLibProvider>

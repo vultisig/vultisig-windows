@@ -6,23 +6,23 @@ import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../lib/ui/text'
+import { useMpcServerUrl } from '../../../mpc/serverType/state/mpcServerUrl'
+import { useMpcSessionId } from '../../../mpc/session/state/mpcSession'
+import { useMpcSigners } from '../../../mpc/signers/state/mpcSigners'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { useVaultKeygenDevices } from '../../setup/hooks/useVaultKegenDevices'
-import { useCurrentServerUrl } from '../state/currentServerUrl'
 import { startSession } from '../utils/startSession'
-import { useCurrentSessionId } from './state/currentSessionId'
 
 export const KeygenStartSessionStep = ({
   onBack,
   onForward,
 }: Partial<OnBackProp> & OnForwardProp) => {
   const { t } = useTranslation()
-  const sessionId = useCurrentSessionId()
-  const serverUrl = useCurrentServerUrl()
-  const devices = useVaultKeygenDevices()
+  const sessionId = useMpcSessionId()
+  const serverUrl = useMpcServerUrl()
+  const devices = useMpcSigners()
 
   const { mutate: start, ...status } = useMutation({
     mutationFn: () => {

@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next'
 
 import { Text } from '../../lib/ui/text'
-import { useSelectedPeers } from '../../vault/keysign/shared/state/selectedPeers'
+import { useMpcPeers } from './state/mpcPeers'
 
 type PeersManagerTitleProps = {
   target: number
 }
 
 export const PeersManagerTitle = ({ target }: PeersManagerTitleProps) => {
-  const selectedPeers = useSelectedPeers()
+  const selectedPeers = useMpcPeers()
 
   const { t } = useTranslation()
 

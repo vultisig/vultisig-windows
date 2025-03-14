@@ -19,6 +19,7 @@ import { PeersContainer } from '../../../../mpc/peers/PeersContainer'
 import { PeersManagerFrame } from '../../../../mpc/peers/PeersManagerFrame'
 import { PeersManagerTitle } from '../../../../mpc/peers/PeersManagerTitle'
 import { PeersPageContentFrame } from '../../../../mpc/peers/PeersPageContentFrame'
+import { useMpcPeers } from '../../../../mpc/peers/state/mpcPeers'
 import { MpcLocalServerIndicator } from '../../../../mpc/serverType/MpcLocalServerIndicator'
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { FitPageContent } from '../../../../ui/page/PageContent'
@@ -27,7 +28,6 @@ import { PageHeader } from '../../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
-import { useSelectedPeers } from '../../../keysign/shared/state/selectedPeers'
 import { useJoinKeygenUrlQuery } from '../../../setup/peers/queries/useJoinKeygenUrlQuery'
 import { KeygenType } from '../../KeygenType'
 import { useCurrentKeygenType } from '../../state/currentKeygenType'
@@ -51,7 +51,7 @@ export const KeygenPeerDiscoveryStep = ({
 }: KeygenPeerDiscoveryStepProps) => {
   const [serverType] = useMpcServerType()
   const { t } = useTranslation()
-  const selectedPeers = useSelectedPeers()
+  const selectedPeers = useMpcPeers()
   const peerOptionsQuery = usePeerOptionsQuery()
 
   const joinUrlQuery = useJoinKeygenUrlQuery()

@@ -1,11 +1,11 @@
 import { omit } from '@lib/utils/record/omit'
 import { useEffect } from 'react'
 
-import { usePeersSelectionRecord } from '../../../keysign/shared/state/selectedPeers'
+import { useMpcPeersSelectionRecord } from '../../../../mpc/peers/state/mpcSelectedPeers'
 import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery'
 
 export const CurrentPeersCorrector = () => {
-  const [value, setValue] = usePeersSelectionRecord()
+  const [value, setValue] = useMpcPeersSelectionRecord()
 
   const peerOptionsQuery = usePeerOptionsQuery()
 

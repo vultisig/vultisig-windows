@@ -3,11 +3,8 @@ import styled from 'styled-components'
 
 import { VStack } from '../../lib/ui/layout/Stack'
 import { Text } from '../../lib/ui/text'
-import { useCurrentLocalPartyId } from '../../vault/keygen/state/currentLocalPartyId'
-import {
-  formatKeygenDeviceName,
-  parseLocalPartyId,
-} from '../../vault/keygen/utils/localPartyId'
+import { formatMpcDeviceName, parseLocalPartyId } from '../localPartyId'
+import { useMpcLocalPartyId } from '../localPartyId/state/mpcLocalPartyId'
 import { peerOption, peerOptionActive } from './option/PeerOptionContainer'
 
 const Container = styled.div`
@@ -17,7 +14,7 @@ const Container = styled.div`
 `
 
 export const InitiatingDevice = () => {
-  const localPartyId = useCurrentLocalPartyId()
+  const localPartyId = useMpcLocalPartyId()
   const { deviceName } = parseLocalPartyId(localPartyId)
 
   const { t } = useTranslation()
@@ -26,7 +23,7 @@ export const InitiatingDevice = () => {
     <Container>
       <VStack>
         <Text color="contrast" size={14} weight="500">
-          {formatKeygenDeviceName(deviceName)}
+          {formatMpcDeviceName(deviceName)}
           <Text color="shy" size={13} weight="500">
             {t('thisDevice')}
           </Text>

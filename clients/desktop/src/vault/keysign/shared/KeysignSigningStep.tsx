@@ -41,7 +41,7 @@ export const KeysignSigningStep = ({
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
 
-  useEffect(() => startKeysign(), [startKeysign])
+  useEffect(startKeysign, [startKeysign])
 
   return (
     <MatchQuery

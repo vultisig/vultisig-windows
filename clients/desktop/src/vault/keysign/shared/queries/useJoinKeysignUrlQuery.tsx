@@ -6,15 +6,15 @@ import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
+import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName'
-import { useCurrentSessionId } from '../../../keygen/shared/state/currentSessionId'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
 import { useCurrentVault } from '../../../state/currentVault'
 import { getStorageVaultId } from '../../../utils/storageVault'
 import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
 
 export const useJoinKeysignUrlQuery = () => {
-  const sessionId = useCurrentSessionId()
+  const sessionId = useMpcSessionId()
   const [serverType] = useMpcServerType()
   const serviceName = useCurrentServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()

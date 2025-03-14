@@ -2,7 +2,7 @@ import { mpcServerUrl } from '@core/mpc/MpcServerType'
 
 import { ChildrenProp } from '../../../lib/ui/props'
 import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
-import { CurrentServerUrlProvider } from '../../keygen/state/currentServerUrl'
+import { MpcServerUrlProvider } from '../../../mpc/serverType/state/mpcServerUrl'
 
 export const ServerUrlDerivedFromServerTypeProvider = ({
   children,
@@ -10,8 +10,8 @@ export const ServerUrlDerivedFromServerTypeProvider = ({
   const [serverType] = useMpcServerType()
 
   return (
-    <CurrentServerUrlProvider value={mpcServerUrl[serverType]}>
+    <MpcServerUrlProvider value={mpcServerUrl[serverType]}>
       {children}
-    </CurrentServerUrlProvider>
+    </MpcServerUrlProvider>
   )
 }

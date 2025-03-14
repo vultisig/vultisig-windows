@@ -1,11 +1,10 @@
 import {
-  keygenDeviceFromDeviceName,
+  mpcDeviceFromDeviceName,
   parseLocalPartyId,
-} from '../../keygen/utils/localPartyId'
+} from '../../../mpc/localPartyId'
 
 export const hasServerSigner = (signers: string[]) =>
   signers.some(
     signer =>
-      keygenDeviceFromDeviceName(parseLocalPartyId(signer).deviceName) ===
-      'server'
+      mpcDeviceFromDeviceName(parseLocalPartyId(signer).deviceName) === 'server'
   )

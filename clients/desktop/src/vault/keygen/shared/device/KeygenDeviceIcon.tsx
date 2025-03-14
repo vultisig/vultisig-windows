@@ -2,7 +2,7 @@ import { SVGProps } from 'react'
 
 import { Match } from '../../../../lib/ui/base/Match'
 import { ValueProp } from '../../../../lib/ui/props'
-import { DeviceType } from '../../utils/localPartyId'
+import { DeviceType } from '../../../../mpc/localPartyId'
 import { DesktopIcon } from './DesktopIcon'
 import { PhoneIcon } from './PhoneIcon'
 import { ServerIcon } from './ServerIcon'
