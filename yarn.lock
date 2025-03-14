@@ -1781,18 +1781,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lib/dkls@workspace:lib/dkls":
-  version: 0.0.0-use.local
-  resolution: "@lib/dkls@workspace:lib/dkls"
-  languageName: unknown
-  linkType: soft
-
-"@lib/schnorr@workspace:lib/schnorr":
-  version: 0.0.0-use.local
-  resolution: "@lib/schnorr@workspace:lib/schnorr"
-  languageName: unknown
-  linkType: soft
-
 "@lib/utils@workspace:lib/utils":
   version: 0.0.0-use.local
   resolution: "@lib/utils@workspace:lib/utils"
@@ -13085,6 +13073,18 @@ __metadata:
   checksum: 10c0/0b8686f9f9aa44012e9bd5eabf287ae0cde409b9a2854c5a2335cb83920c957668ac5876e3f0d158dd424744ac411a7270e64128556b451ed3bec875ef18534d
   languageName: node
   linkType: hard
+
+"vs-schnorr-wasm@workspace:lib/schnorr":
+  version: 0.0.0-use.local
+  resolution: "vs-schnorr-wasm@workspace:lib/schnorr"
+  languageName: unknown
+  linkType: soft
+
+"vs-wasm@workspace:lib/dkls":
+  version: 0.0.0-use.local
+  resolution: "vs-wasm@workspace:lib/dkls"
+  languageName: unknown
+  linkType: soft
 
 "vultisig-windows@workspace:.":
   version: 0.0.0-use.local
