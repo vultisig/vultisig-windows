@@ -2,6 +2,7 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Match } from '../../../lib/ui/base/Match'
 import { OnFinishProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { useMpcPeersQuery } from '../../../mpc/peers/queries/useMpcPeersQuery'
@@ -15,7 +16,6 @@ import { PendingKeygenMessage } from '../shared/PendingKeygenMessage'
 export const JoinKeygenPeersStep = ({ onFinish }: OnFinishProp<string[]>) => {
   const peersQuery = useMpcPeersQuery()
   const { keygenType } = useAppPathState<'joinKeygen'>()
-  const isKeygen = keygenType.toLowerCase() === 'keygen'
 
   const { t } = useTranslation()
   const title = t('join_keygen')
@@ -38,20 +38,22 @@ export const JoinKeygenPeersStep = ({ onFinish }: OnFinishProp<string[]>) => {
         />
       )}
       value={peersQuery}
-      pending={() =>
-        isKeygen ? (
-          <JoinSecureVaultKeygen />
-        ) : (
-          <>
-            <KeygenPageHeader title={title} />
-            <PageContent alignItems="center" justifyContent="center">
-              <PendingKeygenMessage>
-                {t('waiting_for_keygen_start')}
-              </PendingKeygenMessage>
-            </PageContent>
-          </>
-        )
-      }
+      pending={() => (
+        <Match
+          value={keygenType}
+          Keygen={() => <JoinSecureVaultKeygen />}
+          Reshare={() => (
+            <>
+              <KeygenPageHeader title={title} />
+              <PageContent alignItems="center" justifyContent="center">
+                <PendingKeygenMessage>
+                  {t('waiting_for_keygen_start')}
+                </PendingKeygenMessage>
+              </PageContent>
+            </>
+          )}
+        />
+      )}
     />
   )
 }
