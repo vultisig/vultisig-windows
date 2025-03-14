@@ -80,8 +80,6 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
     })
   }
 
-  console.log('## chain options', chainOptions)
-
   return (
     <>
       <AddressBookPageHeader
