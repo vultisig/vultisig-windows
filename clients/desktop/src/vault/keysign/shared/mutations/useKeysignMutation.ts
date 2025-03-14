@@ -20,6 +20,7 @@ import { keccak256 } from 'js-sha3'
 
 import { tss } from '../../../../../wailsjs/go/models'
 import { Keysign } from '../../../../../wailsjs/go/tss/TssService'
+import { useMpcPeers } from '../../../../mpc/peers/state/mpcPeers'
 import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
 import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
@@ -29,7 +30,6 @@ import { useCurrentVault } from '../../../state/currentVault'
 import { customMessageConfig } from '../../customMessage/config'
 import { getKeysignChain } from '../../utils/getKeysignChain'
 import { getTxInputData } from '../../utils/getTxInputData'
-import { useSelectedPeers } from '../state/selectedPeers'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
@@ -38,7 +38,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const encryptionKeyHex = useCurrentHexEncryptionKey()
   const serverUrl = useMpcServerUrl()
   const isInitiateDevice = useIsInitiatingDevice()
-  const peers = useSelectedPeers()
+  const peers = useMpcPeers()
 
   return useMutation({
     mutationFn: async () => {

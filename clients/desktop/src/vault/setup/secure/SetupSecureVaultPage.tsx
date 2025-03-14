@@ -1,6 +1,7 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { GeneratedMpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
@@ -13,7 +14,6 @@ import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionSt
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
-import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
 import { SetupVaultNameStep } from '../SetupVaultNameStep'
 import { SetupVaultCreationStep } from '../shared/SetupVaultCreationStep'
 import { VaultTypeProvider } from '../shared/state/vaultType'
@@ -40,7 +40,7 @@ export const SetupSecureVaultPage = () => {
       <MpcLibProvider value={mpcLib}>
         <VaultTypeProvider value="secure">
           <GeneratedServiceNameProvider>
-            <PeersSelectionRecordProvider initialValue={{}}>
+            <MpcPeersSelectionProvider>
               <GeneratedMpcSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>
                   <GeneratedHexChainCodeProvider>
@@ -89,7 +89,7 @@ export const SetupSecureVaultPage = () => {
                   </GeneratedHexChainCodeProvider>
                 </GeneratedHexEncryptionKeyProvider>
               </GeneratedMpcSessionIdProvider>
-            </PeersSelectionRecordProvider>
+            </MpcPeersSelectionProvider>
           </GeneratedServiceNameProvider>
         </VaultTypeProvider>
       </MpcLibProvider>

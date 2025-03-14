@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 
 import { useTransformQueryData } from '../../../lib/ui/query/hooks/useTransformQueryData'
 import { useMpcLocalPartyId } from '../../localPartyId/state/mpcLocalPartyId'
-import { useMpcSignersQuery } from './useMpcSignersQuery'
+import { useMpcSignersQuery } from '../../signers/queries/useMpcSignersQuery'
 
 export const useMpcPeersQuery = () => {
   const signersQuery = useMpcSignersQuery()

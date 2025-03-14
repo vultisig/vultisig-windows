@@ -11,7 +11,7 @@ import {
   parseLocalPartyId,
 } from '../../../../mpc/localPartyId'
 import { useMpcLocalPartyId } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
-import { useVaultKeygenDevices } from '../../../setup/hooks/useVaultKegenDevices'
+import { useMpcSigners } from '../../../../mpc/signers/state/mpcSigners'
 
 const Container = styled.div`
   height: 64px;
@@ -36,7 +36,7 @@ export const VaultDeviceItem = ({
 
   const isCurrentDevice = localPartyId === value
 
-  const devices = useVaultKeygenDevices()
+  const devices = useMpcSigners()
 
   const { deviceName } = parseLocalPartyId(value)
 

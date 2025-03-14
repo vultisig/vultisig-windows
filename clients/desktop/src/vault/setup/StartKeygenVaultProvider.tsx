@@ -3,8 +3,8 @@ import { useMemo } from 'react'
 import { storage } from '../../../wailsjs/go/models'
 import { ChildrenProp } from '../../lib/ui/props'
 import { useMpcLocalPartyId } from '../../mpc/localPartyId/state/mpcLocalPartyId'
+import { useMpcSigners } from '../../mpc/signers/state/mpcSigners'
 import { CurrentVaultProvider } from '../state/currentVault'
-import { useVaultKeygenDevices } from './hooks/useVaultKegenDevices'
 import { useCurrentHexChainCode } from './state/currentHexChainCode'
 import { useVaultName } from './state/vaultName'
 
@@ -13,7 +13,7 @@ export const StartKeygenVaultProvider: React.FC<ChildrenProp> = ({
 }) => {
   const localPartyId = useMpcLocalPartyId()
   const [vaultName] = useVaultName()
-  const devices = useVaultKeygenDevices()
+  const devices = useMpcSigners()
   const hexChainCode = useCurrentHexChainCode()
 
   const value = useMemo(() => {

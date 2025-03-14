@@ -1,6 +1,7 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
@@ -15,7 +16,6 @@ import { ServerUrlDerivedFromServerTypeProvider } from '../../setup/state/server
 import { useCurrentVault } from '../../state/currentVault'
 import { KeysignSigningStep } from '../shared/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '../shared/state/keysignMessagePayload'
-import { PeersSelectionRecordProvider } from '../shared/state/selectedPeers'
 import { KeysignPeerDiscoveryStep } from './peerDiscovery/KeysignPeerDiscoveryStep'
 
 const keysignSteps = ['joinSession', 'peers', 'session', 'sign'] as const
@@ -35,7 +35,7 @@ export const StartKeysignPage = () => {
       <KeysignMessagePayloadProvider value={keysignPayload}>
         <MpcLocalPartyIdProvider value={local_party_id}>
           <GeneratedServiceNameProvider>
-            <PeersSelectionRecordProvider initialValue={{}}>
+            <MpcPeersSelectionProvider>
               <GeneratedMpcSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>
                   <MpcServerTypeProvider initialValue="relay">
@@ -66,7 +66,7 @@ export const StartKeysignPage = () => {
                   </MpcServerTypeProvider>
                 </GeneratedHexEncryptionKeyProvider>
               </GeneratedMpcSessionIdProvider>
-            </PeersSelectionRecordProvider>
+            </MpcPeersSelectionProvider>
           </GeneratedServiceNameProvider>
         </MpcLocalPartyIdProvider>
       </KeysignMessagePayloadProvider>

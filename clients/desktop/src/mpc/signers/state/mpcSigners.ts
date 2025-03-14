@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 
 import { useMpcLocalPartyId } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
-import { useSelectedPeers } from '../../keysign/shared/state/selectedPeers'
+import { useMpcPeers } from '../../peers/state/mpcPeers'
 
-export const useVaultKeygenDevices = () => {
-  const peers = useSelectedPeers()
+export const useMpcSigners = () => {
+  const peers = useMpcPeers()
   const localPartyId = useMpcLocalPartyId()
 
   return useMemo(() => [localPartyId, ...peers], [localPartyId, peers])

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
@@ -17,7 +18,6 @@ import { KeygenStep } from '../../keygen/shared/KeygenStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
-import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
 import { EmailProvider } from '../../server/email/state/email'
 import { ServerPasswordStep } from '../../server/password/ServerPasswordStep'
@@ -61,7 +61,7 @@ export const FastReshareVaultPage = () => {
           <PasswordProvider initialValue="">
             <VaultTypeProvider value="secure">
               <GeneratedServiceNameProvider>
-                <PeersSelectionRecordProvider initialValue={{}}>
+                <MpcPeersSelectionProvider>
                   <GeneratedMpcSessionIdProvider>
                     <GeneratedHexEncryptionKeyProvider>
                       <CurrentHexChainCodeProvider value={hex_chain_code}>
@@ -132,7 +132,7 @@ export const FastReshareVaultPage = () => {
                       </CurrentHexChainCodeProvider>
                     </GeneratedHexEncryptionKeyProvider>
                   </GeneratedMpcSessionIdProvider>
-                </PeersSelectionRecordProvider>
+                </MpcPeersSelectionProvider>
               </GeneratedServiceNameProvider>
             </VaultTypeProvider>
           </PasswordProvider>

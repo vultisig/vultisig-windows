@@ -1,4 +1,6 @@
 import { Match } from '../../../../lib/ui/base/Match'
+import { StepTransition } from '../../../../lib/ui/base/StepTransition'
+import { ValueTransfer } from '../../../../lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
 import { MpcLocalPartyIdProvider } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'
@@ -17,16 +19,9 @@ import { ServerUrlDerivedFromServerTypeProvider } from '../../../setup/state/ser
 import { useCurrentVault } from '../../../state/currentVault'
 import { KeysignSigningStep } from '../../shared/KeysignSigningStep'
 import { KeysignMessagePayloadProvider } from '../../shared/state/keysignMessagePayload'
-import { PeersSelectionRecordProvider } from '../../shared/state/selectedPeers'
 import { FastKeysignServerStep } from './FastKeysignServerStep'
 
-const keysignSteps = [
-  'password',
-  'server',
-  'waitServer',
-  'startSession',
-  'sign',
-] as const
+const keysignSteps = ['password', 'server', 'keysign'] as const
 
 export const StartFastKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'fastKeysign'>()
@@ -44,35 +39,45 @@ export const StartFastKeysignPage = () => {
         <PasswordProvider initialValue="">
           <MpcLocalPartyIdProvider value={local_party_id}>
             <GeneratedServiceNameProvider>
-              <PeersSelectionRecordProvider initialValue={{}}>
-                <GeneratedMpcSessionIdProvider>
-                  <GeneratedHexEncryptionKeyProvider>
-                    <MpcServerTypeProvider initialValue="relay">
-                      <ServerUrlDerivedFromServerTypeProvider>
-                        <MpcMediatorManager />
-                        <Match
-                          value={step}
-                          password={() => (
-                            <ServerPasswordStep onForward={toNextStep} />
-                          )}
-                          startSession={() => (
-                            <KeygenStartSessionStep onForward={toNextStep} />
-                          )}
-                          waitServer={() => (
-                            <WaitForServerToJoinStep onForward={toNextStep} />
-                          )}
-                          server={() => (
-                            <FastKeysignServerStep onForward={toNextStep} />
-                          )}
-                          sign={() => (
-                            <KeysignSigningStep payload={keysignPayload} />
-                          )}
-                        />
-                      </ServerUrlDerivedFromServerTypeProvider>
-                    </MpcServerTypeProvider>
-                  </GeneratedHexEncryptionKeyProvider>
-                </GeneratedMpcSessionIdProvider>
-              </PeersSelectionRecordProvider>
+              <GeneratedMpcSessionIdProvider>
+                <GeneratedHexEncryptionKeyProvider>
+                  <MpcServerTypeProvider initialValue="relay">
+                    <ServerUrlDerivedFromServerTypeProvider>
+                      <MpcMediatorManager />
+                      <Match
+                        value={step}
+                        password={() => (
+                          <ServerPasswordStep onForward={toNextStep} />
+                        )}
+                        server={() => (
+                          <FastKeysignServerStep onForward={toNextStep} />
+                        )}
+                        keysign={() => (
+                          <ValueTransfer<string[]>
+                            from={({ onFinish }) => (
+                              <WaitForServerToJoinStep onFinish={onFinish} />
+                            )}
+                            to={() => (
+                              <StepTransition
+                                from={({ onForward }) => (
+                                  <KeygenStartSessionStep
+                                    onForward={onForward}
+                                  />
+                                )}
+                                to={() => (
+                                  <KeysignSigningStep
+                                    payload={keysignPayload}
+                                  />
+                                )}
+                              />
+                            )}
+                          />
+                        )}
+                      />
+                    </ServerUrlDerivedFromServerTypeProvider>
+                  </MpcServerTypeProvider>
+                </GeneratedHexEncryptionKeyProvider>
+              </GeneratedMpcSessionIdProvider>
             </GeneratedServiceNameProvider>
           </MpcLocalPartyIdProvider>
         </PasswordProvider>

@@ -1,6 +1,7 @@
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { GeneratedMpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
@@ -11,7 +12,6 @@ import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { KeygenType } from '../../keygen/KeygenType'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
-import { PeersSelectionRecordProvider } from '../../keysign/shared/state/selectedPeers'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
 import { EmailProvider } from '../../server/email/state/email'
 import { SetServerPasswordStep } from '../../server/password/SetServerPasswordStep'
@@ -54,7 +54,7 @@ export const SetupFastVaultPage = () => {
           <EmailProvider initialValue="">
             <PasswordProvider initialValue="">
               <GeneratedServiceNameProvider>
-                <PeersSelectionRecordProvider initialValue={{}}>
+                <MpcPeersSelectionProvider>
                   <GeneratedMpcSessionIdProvider>
                     <GeneratedHexEncryptionKeyProvider>
                       <GeneratedHexChainCodeProvider>
@@ -121,7 +121,7 @@ export const SetupFastVaultPage = () => {
                       </GeneratedHexChainCodeProvider>
                     </GeneratedHexEncryptionKeyProvider>
                   </GeneratedMpcSessionIdProvider>
-                </PeersSelectionRecordProvider>
+                </MpcPeersSelectionProvider>
               </GeneratedServiceNameProvider>
             </PasswordProvider>
           </EmailProvider>
