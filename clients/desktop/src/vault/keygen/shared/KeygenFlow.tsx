@@ -1,31 +1,34 @@
+import { match } from '@lib/utils/match'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { StepTransition } from '../../../../lib/ui/base/StepTransition'
-import { OnBackProp } from '../../../../lib/ui/props'
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
-import { PageHeader } from '../../../../ui/page/PageHeader'
-import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
-import { VaultBackupFlow } from '../../../backup/flow/VaultBackupFlow'
-import { hasServerSigner } from '../../../fast/utils/hasServerSigner'
-import { useKeygenMutation } from '../../../keygen/shared/mutations/useKeygenMutation'
-import { SaveVaultStep } from '../../../keygen/shared/SaveVaultStep'
-import { CurrentVaultProvider } from '../../../state/currentVault'
-import { SetupVaultType } from '../../type/SetupVaultType'
-import { FailedSetupVaultKeygenStep } from '../FailedSetupVaultKeygenStep'
-import { SetupVaultSuccessScreen } from '../SetupVaultSuccessScreen'
-import { SetupVaultEducationSlides } from './SetupVaultEducationSlides'
+import { StepTransition } from '../../../lib/ui/base/StepTransition'
+import { OnBackProp } from '../../../lib/ui/props'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
+import { VaultBackupFlow } from '../../backup/flow/VaultBackupFlow'
+import { hasServerSigner } from '../../fast/utils/hasServerSigner'
+import { FailedSetupVaultKeygenStep } from '../../setup/shared/FailedSetupVaultKeygenStep'
+import { SetupVaultEducationSlides } from '../../setup/shared/SetupVaultCreationStep/SetupVaultEducationSlides'
+import { SetupVaultSuccessScreen } from '../../setup/shared/SetupVaultSuccessScreen'
+import { CurrentVaultProvider } from '../../state/currentVault'
+import { useCurrentKeygenType } from '../state/currentKeygenType'
+import { useKeygenMutation } from './mutations/useKeygenMutation'
+import { SaveVaultStep } from './SaveVaultStep'
 
-type KeygenStepProps = OnBackProp & {
-  onTryAgain: () => void
-  vaultType: SetupVaultType
-}
-export const SetupVaultCreationStep = ({ onTryAgain }: KeygenStepProps) => {
+export const KeygenFlow = ({ onBack }: OnBackProp) => {
   const { mutate: startKeygen, ...keygenMutationState } = useKeygenMutation()
-  const { t } = useTranslation()
-  const title = t('creating_vault')
-
   useEffect(startKeygen, [startKeygen])
+
+  const { t } = useTranslation()
+
+  const keygenType = useCurrentKeygenType()
+
+  const title = match(keygenType, {
+    Keygen: () => t('creating_vault'),
+    Reshare: () => t('reshare'),
+  })
 
   return (
     <MatchQuery
@@ -60,7 +63,7 @@ export const SetupVaultCreationStep = ({ onTryAgain }: KeygenStepProps) => {
       error={() => (
         <>
           <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />
-          <FailedSetupVaultKeygenStep onBack={onTryAgain} />;
+          <FailedSetupVaultKeygenStep onBack={onBack} />
         </>
       )}
       pending={() => (
