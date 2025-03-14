@@ -43,23 +43,17 @@ const RegisterForAirdropPage = () => {
               <ProductLogo style={{ fontSize: 280 }} />
             </ProductLogoWrapper>
             <ListWrapper>
+              <ListItem>{t('vault_register_for_airdrop_list_item_1')}</ListItem>
               <ListItem>
-                1. {t('vault_register_for_airdrop_list_item_1')}
-              </ListItem>
-              <ListItem>
-                2. {t('vault_register_for_airdrop_list_item_2_part_1')}{' '}
+                {t('vault_register_for_airdrop_list_item_2_part_1')}{' '}
                 <OneOffButton
                   onClick={() => BrowserOpenURL(VULTISIG_WEBSITE_LINK)}
                 >
                   {t('vault_register_for_airdrop_list_item_2_part_2')}
                 </OneOffButton>
               </ListItem>
-              <ListItem>
-                3. {t('vault_register_for_airdrop_list_item_3')}
-              </ListItem>
-              <ListItem>
-                4. {t('vault_register_for_airdrop_list_item_4')}
-              </ListItem>
+              <ListItem>{t('vault_register_for_airdrop_list_item_3')}</ListItem>
+              <ListItem>{t('vault_register_for_airdrop_list_item_4')}</ListItem>
             </ListWrapper>
           </LogoAndListWrapper>
           <SaveAsImage
