@@ -162,6 +162,7 @@ export const en = {
   failed_to_discover_mediator: 'Failed to discover mediator service',
   joining_keygen: 'Joining Keygen',
   failed_to_join_keygen: 'Failed to join Keygen',
+  failed_to_join_keysign: 'Failed to join Keysign',
   join_keygen: 'Join Keygen',
   keysign_done: 'Done',
   joining_keysign: 'Joining Keysign',
