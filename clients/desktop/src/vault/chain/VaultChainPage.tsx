@@ -174,7 +174,7 @@ export const VaultChainPage = () => {
             <MatchQuery
               value={vaultCoinsQuery}
               error={() => t('failed_to_load')}
-              pending={() => t('loading')}
+              pending={() => <Spinner />}
               success={coins => {
                 const total = sum(
                   coins.map(({ amount, decimals, price = 0 }) =>
@@ -209,7 +209,11 @@ export const VaultChainPage = () => {
           <MatchQuery
             value={vaultCoinsQuery}
             error={() => t('failed_to_load')}
-            pending={() => t('loading')}
+            pending={() => (
+              <VStack fullWidth>
+                <Spinner />
+              </VStack>
+            )}
             success={coins => {
               const orderedCoins = withoutDuplicates(
                 splitBy(coins, coin => (isFeeCoin(coin) ? 0 : 1))
