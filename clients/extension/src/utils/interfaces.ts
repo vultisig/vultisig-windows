@@ -158,10 +158,14 @@ export interface ScreenProps {
 }
 
 export namespace TransactionType {
-  export interface MetaMask {
-    txType: 'MetaMask'
+  interface BaseTransaction {
     from: string
-    to: string
+    to?: string
+    txType: 'MetaMask' | 'Ctrl' | 'Vultisig' | 'Keplr' | 'Phantom'
+  }
+
+  export interface MetaMask extends BaseTransaction {
+    txType: 'MetaMask'
     value?: string
     data: string
     gas?: string
@@ -171,54 +175,33 @@ export namespace TransactionType {
     type?: string
   }
 
-  export interface Ctrl {
+  export interface Ctrl extends BaseTransaction {
     txType: 'Ctrl'
-    amount: {
-      amount: string
-      decimals: number
-    }
-    asset: {
-      chain: Chain
-      symbol: string
-      ticker: string
-    }
-    from: string
+    amount: { amount: string; decimals: number }
+    asset: { chain: Chain; symbol: string; ticker: string }
     gasLimit?: string
     memo: string
     recipient: string
   }
 
-  export interface Vultisig {
+  export interface Vultisig extends BaseTransaction {
     txType: 'Vultisig'
-    asset: {
-      chain: Chain
-      ticker: string
-      symbol?: string
-    }
-    from: string
-    to?: string
+    asset: { chain: Chain; ticker: string; symbol?: string }
     amount?: { amount: string; decimals: number }
     data?: string
     gasLimit?: string
   }
 
-  export interface Keplr {
+  export interface Keplr extends BaseTransaction {
     txType: 'Keplr'
     amount: { amount: string; denom: string }[]
     from_address: string
     to_address: string
   }
 
-  export interface Phantom {
+  export interface Phantom extends BaseTransaction {
     txType: 'Phantom'
-    asset: {
-      chain: Chain
-      ticker?: string
-      symbol?: string
-      mint?: string
-    }
-    from: string
-    to?: string
+    asset: { chain: Chain; ticker?: string; symbol?: string; mint?: string }
     amount: string
   }
 

@@ -128,7 +128,9 @@ export const processBackgroundResponse = (
     case RequestMethod.METAMASK.ETH_SEND_TRANSACTION:
     case RequestMethod.VULTISIG.SEND_TRANSACTION:
     case RequestMethod.CTRL.DEPOSIT:
-    case RequestMethod.VULTISIG.DEPOSIT_TRANSACTION: {
+    case RequestMethod.VULTISIG.DEPOSIT_TRANSACTION:
+    case RequestMethod.METAMASK.PERSONAL_SIGN:
+    case RequestMethod.METAMASK.ETH_SIGN_TYPED_DATA_V4: {
       if (messageKey === MessageKey.SOLANA_REQUEST)
         return (result as SendTransactionResponse).raw
       return (result as SendTransactionResponse).txResponse
