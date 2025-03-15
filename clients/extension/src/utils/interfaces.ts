@@ -158,14 +158,15 @@ export interface ScreenProps {
 }
 
 export namespace TransactionType {
-  interface BaseTransaction {
-    from: string
-    to?: string
-    txType: 'MetaMask' | 'Ctrl' | 'Vultisig' | 'Keplr' | 'Phantom'
+  export type TxType = 'MetaMask' | 'Ctrl' | 'Vultisig' | 'Keplr' | 'Phantom'
+
+  interface BaseTransaction<T extends TxType> {
+    txType: T
   }
 
-  export interface MetaMask extends BaseTransaction {
-    txType: 'MetaMask'
+  export interface MetaMask extends BaseTransaction<'MetaMask'> {
+    from: string
+    to: string
     value?: string
     data: string
     gas?: string
@@ -175,33 +176,50 @@ export namespace TransactionType {
     type?: string
   }
 
-  export interface Ctrl extends BaseTransaction {
-    txType: 'Ctrl'
-    amount: { amount: string; decimals: number }
-    asset: { chain: Chain; symbol: string; ticker: string }
+  export interface Ctrl extends BaseTransaction<'Ctrl'> {
+    amount: {
+      amount: string
+      decimals: number
+    }
+    asset: {
+      chain: Chain
+      symbol: string
+      ticker: string
+    }
+    from: string
     gasLimit?: string
     memo: string
     recipient: string
   }
 
-  export interface Vultisig extends BaseTransaction {
-    txType: 'Vultisig'
-    asset: { chain: Chain; ticker: string; symbol?: string }
+  export interface Vultisig extends BaseTransaction<'Vultisig'> {
+    asset: {
+      chain: Chain
+      ticker: string
+      symbol?: string
+    }
+    from: string
+    to?: string
     amount?: { amount: string; decimals: number }
     data?: string
     gasLimit?: string
   }
 
-  export interface Keplr extends BaseTransaction {
-    txType: 'Keplr'
+  export interface Keplr extends BaseTransaction<'Keplr'> {
     amount: { amount: string; denom: string }[]
     from_address: string
     to_address: string
   }
 
-  export interface Phantom extends BaseTransaction {
-    txType: 'Phantom'
-    asset: { chain: Chain; ticker?: string; symbol?: string; mint?: string }
+  export interface Phantom extends BaseTransaction<'Phantom'> {
+    asset: {
+      chain: Chain
+      ticker?: string
+      symbol?: string
+      mint?: string
+    }
+    from: string
+    to?: string
     amount: string
   }
 
