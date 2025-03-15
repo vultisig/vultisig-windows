@@ -158,8 +158,13 @@ export interface ScreenProps {
 }
 
 export namespace TransactionType {
-  export interface MetaMask {
-    txType: 'MetaMask'
+  export type TxType = 'MetaMask' | 'Ctrl' | 'Vultisig' | 'Keplr' | 'Phantom'
+
+  interface BaseTransaction<T extends TxType> {
+    txType: T
+  }
+
+  export interface MetaMask extends BaseTransaction<'MetaMask'> {
     from: string
     to: string
     value?: string
@@ -171,8 +176,7 @@ export namespace TransactionType {
     type?: string
   }
 
-  export interface Ctrl {
-    txType: 'Ctrl'
+  export interface Ctrl extends BaseTransaction<'Ctrl'> {
     amount: {
       amount: string
       decimals: number
@@ -188,8 +192,7 @@ export namespace TransactionType {
     recipient: string
   }
 
-  export interface Vultisig {
-    txType: 'Vultisig'
+  export interface Vultisig extends BaseTransaction<'Vultisig'> {
     asset: {
       chain: Chain
       ticker: string
@@ -202,15 +205,13 @@ export namespace TransactionType {
     gasLimit?: string
   }
 
-  export interface Keplr {
-    txType: 'Keplr'
+  export interface Keplr extends BaseTransaction<'Keplr'> {
     amount: { amount: string; denom: string }[]
     from_address: string
     to_address: string
   }
 
-  export interface Phantom {
-    txType: 'Phantom'
+  export interface Phantom extends BaseTransaction<'Phantom'> {
     asset: {
       chain: Chain
       ticker?: string
