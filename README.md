@@ -5,7 +5,6 @@ This monorepo contains two main components:
 2. The VultiConnect Browser Extension - A Chrome extension for bridging your Vultisig vaults to dApps
 
 ## Desktop Application
-
 ### Technical Requirements
 
 This project uses Wails. Please refer to https://wails.io/docs/gettingstarted/installation/ for installation instructions.
@@ -20,15 +19,14 @@ yarn dev:desktop
 ```
 
 **Important Note:** This will expose two dev servers: one on 34115 (the Wails development server) and a Vite development server on port 5173.
-Always use the former, as the Vite development server won't have the requited Wails-injected scripts.
+Always use the former, as the Vite development server won't have the required Wails-injected scripts.
 
 ### Building Linux
+These instructions handle both:
+- Ubuntu 24.04 (Noble) with libwebkit2gtk-4.1-dev
+- Older Ubuntu/Debian releases (e.g. 22.04) with libwebkit2gtk-4.0-dev
 
-### These instructions handle both:
-####  - Ubuntu 24.04 (Noble) with libwebkit2gtk-4.1-dev
-####  - Older Ubuntu/Debian releases (e.g. 22.04) with libwebkit2gtk-4.0-dev
-
-### STEP 1: Install Basic Deps + Go 1.24.1
+#### STEP 1: Install Basic Deps + Go 1.24.1
 ```bash
 sudo apt update && sudo apt upgrade -y
 # We install build-essential so cgo can compile dependencies like go-sqlite3.
@@ -48,7 +46,7 @@ go version  # Check that Go installed
 echo 'export PATH="$HOME/go/bin:$PATH"' >> ~/.bashrc
 export PATH="$HOME/go/bin:$PATH"
 ```
-### STEP 2: Install NVM + Node 22
+#### STEP 2: Install NVM + Node 22
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
 
@@ -59,12 +57,12 @@ export NVM_DIR="$HOME/.nvm" # Source NVM:
 nvm install 22
 nvm use 22
 ```
-### STEP 3: Clone Vultisig
+#### STEP 3: Clone Vultisig
 ```bash
 git clone https://github.com/vultisig/vultisig-windows.git vultisig
 ```
 
-### Step 4: Install WebKit + Wails Based on OS Version
+#### Step 4: Install WebKit + Wails Based on OS Version
 ```bash
 if [[ -f /etc/os-release ]]; then
   . /etc/os-release
@@ -94,7 +92,7 @@ sudo apt install -y libgtk-3-dev
 wails doctor || true
 ```
 
-### STEP 5: Install Yarn + Build Vultisig + Create .desktop file
+#### STEP 5: Install Yarn + Build Vultisig + Create .desktop file
 ```bash
 sudo apt remove -y cmdtest || true
 corepack enable
@@ -129,7 +127,7 @@ EOF
 chmod +x ~/.local/share/applications/vultisig.desktop
 update-desktop-database ~/.local/share/applications 2>/dev/null || true
 ```
-#### You may need to log out/in or restart your desktop session to see Vultisig in your application menu.
+You may need to log out/in or restart your desktop session to see Vultisig in your application menu.
 
 ### What is VultiConnect?
 
@@ -153,14 +151,14 @@ To run the Vulticonnect extension in development mode:
 yarn dev:extension
 ```
 
-### Building
+### Building VultiConnect
+If you installed Vultisig with the above steps, you'll have all necessary dependencies.
 
 ```bash
 git clone https://github.com/vultisig/vulticonnect.git vulticonnect
 cd vulticonnect
 pnpm install
 pnpm build
-cd
 ```
 ### Installing in Chrome
 
@@ -174,19 +172,25 @@ cd
 For details on integrating VultiConnect with your project, see the [Integration Guide](clients/extension/docs/integration-guide.md).
 
 ## Script for Installing Vultisig and VultiConnect:
-
+Create a file for your script:
+```bash
+touch vultisig.sh
+chmod +x vultisig.sh
+```
+Paste the following in vultisig.sh and run it: `./vultisig.sh`
+You will be prompted to confirm each step, including an option to exit before building Vultisig.
 ```
 #!/usr/bin/env bash
 set -e
 
 #############################################################################
-# Vultisig: Installation from Source
-#
-# This script checks /etc/os-release to see if VERSION_ID >= 24.04.
-#   - If >= 24.04, install libwebkit2gtk-4.1-dev, use `-tags webkit2_41`.
-#   - Else (< 24.04), install libwebkit2gtk-4.0-dev, use normal build.
-#
-# NOTE: Must have a desktop environment ($DISPLAY). We'll prompt for steps.
+# Vultisig: Installation from Source                                        #
+#                                                                           #
+# This script checks /etc/os-release to see if VERSION_ID >= 24.04.         #
+#   - If >= 24.04, install libwebkit2gtk-4.1-dev, use `-tags webkit2_41`.   #
+#   - Else (< 24.04), install libwebkit2gtk-4.0-dev, use normal build.      #
+#                                                                           #
+# NOTE: Must have a desktop environment ($DISPLAY). We'll prompt for steps. #
 #############################################################################
 
 confirm_step() {
@@ -198,9 +202,9 @@ confirm_step() {
   fi
 }
 
-########################################################
-# STEP 1: System Update + Basic Deps + Go 1.24.1
-########################################################
+#####################################################################
+# STEP 1: System Update + Basic Deps + Go 1.24.1                    #
+#####################################################################
 echo
 echo "=== Step 1: System Update + Basic Deps + Go 1.24.1 ==="
 confirm_step
@@ -217,21 +221,18 @@ sudo tar -C /usr/local -xzf go1.24.1.linux-amd64.tar.gz
 rm go1.24.1.linux-amd64.tar.gz
 
 # Make /usr/local/go/bin part of PATH
-# shellcheck disable=SC2016
 echo 'export PATH="/usr/local/go/bin:$PATH"' >> ~/.profile
 # Make sure we re-source .profile now
-# shellcheck disable=SC1090
 source ~/.profile
 go version
 
 # Ensure ~/go/bin is recognized (for wails)
-# shellcheck disable=SC2016
 echo 'export PATH="$HOME/go/bin:$PATH"' >> ~/.bashrc
 export PATH="$HOME/go/bin:$PATH"
 
-########################################################
-# STEP 2: NVM & Node 22
-########################################################
+#####################################################################
+# STEP 2: NVM & Node 22                                             #
+#####################################################################
 echo
 echo "=== Step 2: Install NVM + Node 22 ==="
 confirm_step
@@ -246,17 +247,17 @@ echo "Installing Node Version Manager (NVM)..."
 nvm install 22
 nvm use 22
 
-########################################################
-# STEP 3: Clone Vultisig
-########################################################
+#####################################################################
+# STEP 3: Clone Vultisig                                            #
+#####################################################################
 echo
 echo "=== Step 3: Clone Vultisig ==="
 confirm_step
 git clone https://github.com/vultisig/vultisig-windows.git vultisig
 
-########################################################
-# STEP 4: Numeric Comparison: If >= 24.04 => 4.1-dev, else 4.0-dev
-########################################################
+#####################################################################
+# STEP 4: Numeric Comparison: If >= 24.04 => 4.1-dev, else 4.0-dev  #
+#####################################################################
 echo
 echo "=== Step 4: Install WebKit + Wails Based on OS Version ==="
 confirm_step
@@ -293,16 +294,15 @@ wails doctor || true
 
 echo "We'll run: $BUILD_CMD"
 
-########################################################
-# STEP 5: Install Yarn + Build Vultisig + .desktop
-########################################################
+#####################################################################
+# STEP 5: Install Yarn + Build Vultisig + .desktop                  #
+#####################################################################
 echo
 echo "=== Step 5: Remove cmdtest, Install Yarn, Build Vultisig ==="
 confirm_step
 
 sudo apt remove -y cmdtest || true
 corepack enable
-# shellcheck disable=SC1090
 source ~/.bashrc
 corepack prepare yarn@4.6.0 --activate
 yarn --version
@@ -317,7 +317,6 @@ cd ~
 
 # Add the build/bin path to ~/.bashrc
 echo "export PATH=\"$VULTISIG_DIR/build/bin:\$PATH\"" >> ~/.bashrc
-# shellcheck disable=SC1090
 source ~/.bashrc
 
 # Create a .desktop file for Vultisig
@@ -339,9 +338,9 @@ echo
 echo "You may need to log out/in or restart your desktop environment"
 echo "to see 'Vultisig' in your application menu."
 
-########################################################
-# STEP 6: (Optional) Install VultiConnect
-########################################################
+#####################################################################
+# STEP 6: (Optional) Install VultiConnect                           #
+#####################################################################
 echo
 echo "=== Step 6: Install VultiConnect (optional) ==="
 echo "If you do not wish to also build VultiConnect, exit now."
@@ -352,18 +351,6 @@ cd vulticonnect
 pnpm install
 pnpm build
 cd
-
-echo
-echo "=== Step 7: Install Brave chromium browser (optional) ==="
-# Download and install the Brave GPG key
-sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg \
-    https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-
-# Add the Brave repository to your sources list
-echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg arch=$(dpkg --print-architecture)] https://brave-browser-apt-release.s3.brave.com/ stable main" \
-| sudo tee /etc/apt/sources.list.d/brave-browser-release.list
-sudo apt-get update
-sudo apt-get install -y brave-browser
 
 echo
 echo "================================================================"
