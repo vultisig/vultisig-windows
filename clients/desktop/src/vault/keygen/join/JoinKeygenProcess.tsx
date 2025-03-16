@@ -40,6 +40,7 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
               />
             )}
             Reshare={() => <KeygenSuccessStep value={vault} title={title} />}
+            Migrate={() => <KeygenSuccessStep value={vault} title={title} />}
           />
         </CurrentVaultProvider>
       )}
@@ -58,6 +59,7 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
         <Match
           value={keygenType}
           Keygen={() => <SetupVaultEducationSlides />}
+          Migrate={() => <SetupVaultEducationSlides />}
           Reshare={() => (
             <>
               <KeygenPageHeader title={title} />

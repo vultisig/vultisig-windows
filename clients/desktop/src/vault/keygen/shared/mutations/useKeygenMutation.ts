@@ -147,6 +147,10 @@ export const useKeygenMutation = () => {
             },
           })
         },
+        [KeygenType.Migrate]: () => {
+          // TODO: add migrate implementation
+          throw new Error('Migrate keygen not implemente')
+        },
       })
 
       return {

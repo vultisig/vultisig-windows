@@ -41,6 +41,8 @@ type KeygenPeerDiscoveryStepProps = OnForwardProp & Partial<OnBackProp>
 const educationUrl: Record<KeygenType, string> = {
   [KeygenType.Keygen]:
     'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
+  [KeygenType.Migrate]:
+    'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
   [KeygenType.Reshare]:
     'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
 }

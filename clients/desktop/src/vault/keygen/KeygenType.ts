@@ -4,9 +4,11 @@ import { ReshareMessageSchema } from '@core/communication/vultisig/keygen/v1/res
 export enum KeygenType {
   Keygen = 'Keygen',
   Reshare = 'Reshare',
+  Migrate = 'Migrate',
 }
 
 export const keygenMsgSchemaRecord = {
   Keygen: KeygenMessageSchema,
   Reshare: ReshareMessageSchema,
+  Migrate: ReshareMessageSchema,
 }

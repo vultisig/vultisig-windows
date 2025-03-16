@@ -66,6 +66,21 @@ export const useJoinKeygenUrlQuery = () => {
             })
             return toBinary(ReshareMessageSchema, message)
           },
+          [KeygenType.Migrate]: () => {
+            const message = create(ReshareMessageSchema, {
+              sessionId,
+              hexChainCode,
+              serviceName,
+              encryptionKeyHex: hexEncryptionKey,
+              useVultisigRelay,
+              vaultName: name,
+              publicKeyEcdsa: public_key_ecdsa,
+              oldResharePrefix: reshare_prefix,
+              oldParties: signers,
+              libType,
+            })
+            return toBinary(ReshareMessageSchema, message)
+          },
         })
 
         const jsonData = toCompressedString({

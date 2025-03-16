@@ -24,10 +24,12 @@ export const KeygenProgressIndicator = ({ value }: ValueProp<KeygenStatus>) => {
     prepareVault: t('prepareVault'),
     ecdsa: match(keygenType, {
       [KeygenType.Keygen]: () => t('generating_ecdsa_key'),
+      [KeygenType.Migrate]: () => t('generating_ecdsa_key'),
       [KeygenType.Reshare]: () => t('resharing_ecdsa_key'),
     }),
     eddsa: match(keygenType, {
       [KeygenType.Keygen]: () => t('generating_eddsa_key'),
+      [KeygenType.Migrate]: () => t('generating_eddsa_key'),
       [KeygenType.Reshare]: () => t('resharing_eddsa_key'),
     }),
   }

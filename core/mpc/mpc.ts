@@ -26,7 +26,7 @@ export class MPC {
     localPartyId: string,
     keygenCommittee: string[],
     oldKeygenCommittee: string[],
-    hexEncryptionKey: string
+    hexEncryptionKey: string,
   ) {
     this.tssType = tssType
     this.isInitiateDevice = isInitiateDevice
