@@ -126,6 +126,7 @@ export const it = {
   setup: 'Configura',
   import: 'Importa',
   keygen: 'Generazione chiavi',
+  migrate: 'Migrazione',
   name_your_vault: 'Dai un nome alla tua cassaforte',
   join: 'Unisciti',
   done: 'Fatto',

@@ -83,6 +83,7 @@ export const en = {
   setup: 'Setup',
   import: 'Import',
   keygen: 'Keygen',
+  migrate: 'Migrate',
   name_your_vault: 'Name your Vault',
   join: 'Join',
   done: 'Done',

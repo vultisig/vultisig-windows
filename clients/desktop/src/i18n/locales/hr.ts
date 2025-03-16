@@ -123,6 +123,7 @@ export const hr = {
   setup: 'Postavljanje',
   import: 'Uvezi',
   keygen: 'Generiranje ključa',
+  migrate: 'Migracija',
   name_your_vault: 'Imenujte svoj trezor',
   join: 'Pridruži se',
   done: 'Gotovo',

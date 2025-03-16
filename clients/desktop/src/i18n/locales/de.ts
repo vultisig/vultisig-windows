@@ -125,6 +125,7 @@ export const de = {
   setup: 'Einrichten',
   import: 'Importieren',
   keygen: 'Schlüsselgenerierung',
+  migrate: 'migrieren',
   name_your_vault: 'Nennen Sie Ihren Tresor',
   join: 'Beitreten',
   save_changes: 'Änderungen speichern',

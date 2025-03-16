@@ -126,6 +126,7 @@ export const es = {
   setup: 'Configurar',
   import: 'Importar',
   keygen: 'Generación de claves',
+  migrate: 'Migrar',
   name_your_vault: 'Nombre su bóveda',
   join: 'Unirse',
   done: 'Hecho',

@@ -125,6 +125,7 @@ export const pt = {
   setup: 'Configurar',
   import: 'Importar',
   keygen: 'Geração de chaves',
+  migrate: 'Migrar',
   name_your_vault: 'Nomeie o seu cofre',
   join: 'Entrar',
   done: 'Concluído',
