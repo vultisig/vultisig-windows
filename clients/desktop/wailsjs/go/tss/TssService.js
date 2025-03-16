@@ -6,6 +6,14 @@ export function GetDerivedPubKey(arg1, arg2, arg3, arg4) {
   return window['go']['tss']['TssService']['GetDerivedPubKey'](arg1, arg2, arg3, arg4);
 }
 
+export function GetLocalUIEcdsa(arg1) {
+  return window['go']['tss']['TssService']['GetLocalUIEcdsa'](arg1);
+}
+
+export function GetLocalUIEdDSA(arg1) {
+  return window['go']['tss']['TssService']['GetLocalUIEdDSA'](arg1);
+}
+
 export function Keysign(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) {
   return window['go']['tss']['TssService']['Keysign'](arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 }

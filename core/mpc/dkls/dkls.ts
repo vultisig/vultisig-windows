@@ -17,9 +17,11 @@ import { getMessageHash } from '../getMessageHash'
 import { combineReshareCommittee } from '../reshareCommittee'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
+import { KeygenType } from '../tssType'
 import { uploadSetupMessage } from '../uploadSetupMessage'
 
 export class DKLS {
+  private readonly tssType: KeygenType
   private readonly isInitiateDevice: boolean
   private readonly serverURL: string
   private readonly sessionId: string
@@ -31,15 +33,23 @@ export class DKLS {
   private sequenceNo: number = 0
   private cache: Record<string, string> = {}
   private setupMessage: Uint8Array = new Uint8Array()
+  private readonly localUI?: string
+  private readonly publicKey?: string
+  private readonly chainCode?: string
   constructor(
+    tssType: KeygenType,
     isInitiateDevice: boolean,
     serverURL: string,
     sessionId: string,
     localPartyId: string,
     keygenCommittee: string[],
     oldKeygenCommittee: string[],
-    hexEncryptionKey: string
+    hexEncryptionKey: string,
+    publicKey?: string,
+    chainCode?: string,
+    localUI?: string
   ) {
+    this.tssType = tssType
     this.isInitiateDevice = isInitiateDevice
     this.serverURL = serverURL
     this.sessionId = sessionId
@@ -47,6 +57,9 @@ export class DKLS {
     this.keygenCommittee = keygenCommittee
     this.oldKeygenCommittee = oldKeygenCommittee
     this.hexEncryptionKey = hexEncryptionKey
+    this.publicKey = publicKey
+    this.chainCode = chainCode
+    this.localUI = localUI
   }
 
   private async processOutbound(session: KeygenSession | QcSession) {
@@ -172,7 +185,21 @@ export class DKLS {
           this.hexEncryptionKey
         )
       }
-      const session = new KeygenSession(this.setupMessage, this.localPartyId)
+      let session: KeygenSession
+      if (this.tssType === KeygenType.Keygen) {
+        session = new KeygenSession(this.setupMessage, this.localPartyId)
+      } else if (this.tssType === KeygenType.Migrate) {
+        session = KeygenSession.migrate(
+          this.setupMessage,
+          this.localPartyId,
+          Buffer.from(this.localUI || '', 'hex'),
+          Buffer.from(this.publicKey || '', 'hex'),
+          Buffer.from(this.chainCode || '', 'hex')
+        )
+      } else {
+        throw new Error('invalid keygen type')
+      }
+
       const outbound = this.processOutbound(session)
       const inbound = this.processInbound(session)
       const [, inboundResult] = await Promise.all([outbound, inbound])

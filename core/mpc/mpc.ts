@@ -18,6 +18,7 @@ export class MPC {
   private readonly keygenCommittee: string[]
   private readonly oldKeygenCommittee: string[]
   private readonly hexEncryptionKey: string
+
   constructor(
     tssType: KeygenType,
     isInitiateDevice: boolean,
@@ -26,7 +27,7 @@ export class MPC {
     localPartyId: string,
     keygenCommittee: string[],
     oldKeygenCommittee: string[],
-    hexEncryptionKey: string,
+    hexEncryptionKey: string
   ) {
     this.tssType = tssType
     this.isInitiateDevice = isInitiateDevice
@@ -41,6 +42,7 @@ export class MPC {
   public async startKeygen() {
     EventsEmit('PrepareVault') // TODO: when doing in react-native , we need to find new way to emit the events
     const dklsKeygen = new DKLS(
+      this.tssType,
       this.isInitiateDevice,
       this.serverURL,
       this.sessionId,
@@ -56,6 +58,7 @@ export class MPC {
     }
     EventsEmit('EdDSA')
     const schnorrKeygen = new Schnorr(
+      this.tssType,
       this.isInitiateDevice,
       this.serverURL,
       this.sessionId,
@@ -87,6 +90,70 @@ export class MPC {
       schnorr: schnorrResult,
     }
   }
+  // startMigrate - start GG20->DKLS Migrate process
+  public async startMigrate(
+    publicKeyEcdsa: string,
+    publickeyEdDSA: string,
+    localUIEcdsa: string,
+    localUIEddsa: string,
+    hexChainCode: string
+  ) {
+    EventsEmit('PrepareVault')
+    const dklsKeygen = new DKLS(
+      this.tssType,
+      this.isInitiateDevice,
+      this.serverURL,
+      this.sessionId,
+      this.localPartyId,
+      this.keygenCommittee,
+      this.oldKeygenCommittee,
+      this.hexEncryptionKey,
+      publicKeyEcdsa,
+      hexChainCode,
+      localUIEcdsa
+    )
+    EventsEmit('ECDSA')
+    const dklsResult = await dklsKeygen.startKeygenWithRetry()
+    if (dklsResult === undefined) {
+      throw new Error('DKLS migrate failed')
+    }
+    EventsEmit('EdDSA')
+    const schnorrKeygen = new Schnorr(
+      this.tssType,
+      this.isInitiateDevice,
+      this.serverURL,
+      this.sessionId,
+      this.localPartyId,
+      this.keygenCommittee,
+      this.oldKeygenCommittee,
+      this.hexEncryptionKey,
+      dklsKeygen.getSetupMessage(),
+      publickeyEdDSA,
+      hexChainCode,
+      localUIEddsa
+    )
+    const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
+    if (schnorrResult === undefined) {
+      throw new Error('Schnorr migrate failed')
+    }
+    await setKeygenComplete({
+      serverURL: this.serverURL,
+      sessionId: this.sessionId,
+      localPartyId: this.localPartyId,
+    })
+    const isCompleteSuccessful = await waitForKeygenComplete({
+      serverURL: this.serverURL,
+      sessionId: this.sessionId,
+      peers: this.keygenCommittee,
+    })
+    if (!isCompleteSuccessful) {
+      throw new Error('not all peers complete migrate successfully')
+    }
+    return {
+      dkls: dklsResult,
+      schnorr: schnorrResult,
+    }
+  }
 
   // startReshare - start Reshare process
   public async startReshare(
@@ -98,6 +165,7 @@ export class MPC {
     )
     EventsEmit('PrepareVault')
     const dklsKeygen = new DKLS(
+      this.tssType,
       this.isInitiateDevice,
       this.serverURL,
       this.sessionId,
@@ -113,6 +181,7 @@ export class MPC {
     }
     EventsEmit('EdDSA')
     const schnorrKeygen = new Schnorr(
+      this.tssType,
       this.isInitiateDevice,
       this.serverURL,
       this.sessionId,
