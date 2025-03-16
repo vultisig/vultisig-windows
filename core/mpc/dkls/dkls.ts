@@ -59,7 +59,7 @@ export class DKLS {
     this.hexEncryptionKey = hexEncryptionKey
     this.publicKey = publicKey
     this.chainCode = chainCode
-    this.localUI = localUI
+    this.localUI = localUI?.padEnd(64, '0')
   }
 
   private async processOutbound(session: KeygenSession | QcSession) {

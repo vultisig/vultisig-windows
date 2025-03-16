@@ -59,7 +59,7 @@ export class Schnorr {
     this.oldKeygenCommittee = oldKeygenCommittee
     this.hexEncryptionKey = hexEncryptionKey
     this.setupMessage = setupMessage
-    this.localUI = localUI
+    this.localUI = localUI?.padEnd(64, '0')
     this.publicKey = publicKey
     this.chainCode = chainCode
   }
