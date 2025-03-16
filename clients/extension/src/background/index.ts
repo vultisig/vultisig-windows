@@ -404,10 +404,19 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
+        const isBasicTransaction =
+          typeof _transaction === 'object' &&
+          _transaction !== null &&
+          'from' in _transaction &&
+          'to' in _transaction &&
+          'value' in _transaction
+
         getStandardTransactionDetails(
           {
             ..._transaction,
-            txType: _transaction.txType ?? 'Vultisig',
+            txType: isBasicTransaction
+              ? 'MetaMask'
+              : (_transaction.txType ?? 'Vultisig'),
           } as TransactionType.WalletTransaction,
           chain
         ).then(standardTx => {
@@ -459,8 +468,19 @@ const handleRequest = (
         if (Array.isArray(params)) {
           const [transaction] = params as TransactionType.Vultisig[]
           if (transaction) {
+            const isBasicTransaction =
+              typeof transaction === 'object' &&
+              transaction !== null &&
+              'from' in transaction &&
+              'to' in transaction &&
+              'value' in transaction
             getStandardTransactionDetails(
-              { ...transaction, txType: transaction.txType ?? 'Vultisig' },
+              {
+                ...transaction,
+                txType: isBasicTransaction
+                  ? 'MetaMask'
+                  : (transaction.txType ?? 'Vultisig'),
+              } as TransactionType.WalletTransaction,
               chain
             ).then(standardTx => {
               let modifiedTransaction: ITransaction = {} as ITransaction
