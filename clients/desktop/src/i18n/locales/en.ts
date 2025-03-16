@@ -202,6 +202,8 @@ export const en = {
   vault_setting_edit_vault_rename_subtitle: 'Rename your vault',
   vault_setting_edit_vault_reshare_title: 'Reshare',
   vault_setting_edit_vault_reshare_subtitle: 'Reshare vault with new committee',
+  vault_setting_edit_vault_migrate_title: 'Migrate',
+  vault_setting_edit_vault_migrate_subtitle: 'Migrate vault to DKLS',
   vault_setting_edit_vault_delete_title: 'Delete',
   vault_setting_edit_vault_delete_subtitle: 'Delete your vault permanently',
   vault_settings_language_settings_title_en: 'English',

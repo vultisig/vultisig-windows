@@ -129,6 +129,7 @@ func (t *TssService) Reshare(vault storage.Vault,
 		Order:         0,
 		IsBackedUp:    false,
 		Coins:         vault.Coins,
+		LibType:       "GG20",
 	}
 
 	return newVault, nil

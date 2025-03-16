@@ -234,6 +234,8 @@ export const hr = {
   vault_setting_edit_vault_reshare_title: 'Ponovno podijeli',
   vault_setting_edit_vault_reshare_subtitle:
     'Ponovno podijelite trezor s novom grupom uređaja.',
+  vault_setting_edit_vault_migrate_title: 'Migriraj',
+  vault_setting_edit_vault_migrate_subtitle: 'Migriraj trezor u DKLS',
   vault_setting_edit_vault_delete_title: 'Izbriši',
   vault_setting_edit_vault_delete_subtitle: 'Trajno izbrišite svoj trezor',
   vault_settings_language_settings_title_en: 'Engleski',

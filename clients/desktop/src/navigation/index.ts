@@ -16,6 +16,7 @@ export const appPaths = {
   shareVault: '/vault/share',
   reshareVault: '/vault/reshare',
   reshareVaultSecure: '/vault/reshare/secure',
+  migrateVaultSecure: '/vault/migrate/secure',
   reshareVaultFast: '/vault/reshare/fast',
   keysign: '/vault/keysign',
   fastKeysign: '/vault/keysign/fast',

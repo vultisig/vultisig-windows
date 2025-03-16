@@ -108,9 +108,9 @@ export class MPC {
       this.keygenCommittee,
       this.oldKeygenCommittee,
       this.hexEncryptionKey,
+      localUIEcdsa,
       publicKeyEcdsa,
-      hexChainCode,
-      localUIEcdsa
+      hexChainCode
     )
     EventsEmit('ECDSA')
     const dklsResult = await dklsKeygen.startKeygenWithRetry()
@@ -128,9 +128,9 @@ export class MPC {
       this.oldKeygenCommittee,
       this.hexEncryptionKey,
       dklsKeygen.getSetupMessage(),
+      localUIEddsa,
       publickeyEdDSA,
-      hexChainCode,
-      localUIEddsa
+      hexChainCode
     )
     const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
     if (schnorrResult === undefined) {

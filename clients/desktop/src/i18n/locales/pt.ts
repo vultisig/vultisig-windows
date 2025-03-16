@@ -238,6 +238,8 @@ export const pt = {
   vault_setting_edit_vault_reshare_title: 'Recompartilhar',
   vault_setting_edit_vault_reshare_subtitle:
     'Recompartilhar o cofre com um novo grupo de dispositivos.',
+  vault_setting_edit_vault_migrate_title: 'Migrar',
+  vault_setting_edit_vault_migrate_subtitle: 'Migrar cofre para DKLS',
   vault_setting_edit_vault_delete_title: 'Excluir',
   vault_setting_edit_vault_delete_subtitle:
     'Exclua permanentemente o seu cofre',

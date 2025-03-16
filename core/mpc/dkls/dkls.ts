@@ -45,9 +45,9 @@ export class DKLS {
     keygenCommittee: string[],
     oldKeygenCommittee: string[],
     hexEncryptionKey: string,
+    localUI?: string,
     publicKey?: string,
-    chainCode?: string,
-    localUI?: string
+    chainCode?: string
   ) {
     this.tssType = tssType
     this.isInitiateDevice = isInitiateDevice
@@ -196,6 +196,7 @@ export class DKLS {
           Buffer.from(this.publicKey || '', 'hex'),
           Buffer.from(this.chainCode || '', 'hex')
         )
+        console.log('migrate session:', session)
       } else {
         throw new Error('invalid keygen type')
       }

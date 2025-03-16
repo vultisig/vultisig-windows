@@ -90,6 +90,7 @@ export const useKeygenMutation = () => {
                 order: 0,
                 is_backed_up: false,
                 coins: [],
+                lib_type: 'DKLS',
               })
               return vault
             },
@@ -147,6 +148,7 @@ export const useKeygenMutation = () => {
                 order: 0,
                 is_backed_up: false,
                 coins: [],
+                lib_type: 'DKLS',
               })
               return newVault
             },
@@ -208,6 +210,7 @@ export const useKeygenMutation = () => {
             order: 0,
             is_backed_up: false,
             coins: [],
+            lib_type: 'DKLS',
           })
           return newVault
         },
@@ -215,7 +218,6 @@ export const useKeygenMutation = () => {
 
       return {
         ...partialVault,
-        lib_type: mpcLib,
         convertValues: () => {},
       }
     },
