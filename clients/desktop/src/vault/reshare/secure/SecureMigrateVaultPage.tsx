@@ -82,7 +82,7 @@ export const SecureMigrateVaultPage = () => {
                               )}
                               keygen={() => (
                                 <KeygenStep
-                                  title={t('reshare')}
+                                  title={t('migrate')}
                                   onTryAgain={() =>
                                     setStep(reshareVaultSteps[0])
                                   }
