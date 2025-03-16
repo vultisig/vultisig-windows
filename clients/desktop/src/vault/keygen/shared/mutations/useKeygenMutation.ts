@@ -165,7 +165,7 @@ export const useKeygenMutation = () => {
           const oldKeygenCommittee = vault.signers
 
           const mpcKeygen = new MPC(
-            KeygenType.Keygen,
+            KeygenType.Migrate,
             isInitiatingDevice,
             serverUrl,
             sessionId,
