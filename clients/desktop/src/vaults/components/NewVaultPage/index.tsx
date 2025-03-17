@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '../../../lib/ui/buttons/Button'
-import { VStack } from '../../../lib/ui/layout/Stack'
+import { HStack, VStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
 import { makeAppPath } from '../../../navigation'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { ProductLogoBlock } from '../../../ui/logo/ProductLogoBlock'
@@ -27,7 +28,13 @@ export const NewVaultPage = ({ withBackButton = true }) => {
           <Button onClick={() => navigate('setupVault', { params: {} })}>
             {t('create_new_vault')}
           </Button>
-          <HorizontalLine />
+          <HStack gap={18} alignItems="center">
+            <HorizontalLine />
+            <Text size={12} color="contrast" weight="700">
+              {t('or').toUpperCase()}
+            </Text>
+            <HorizontalLine />
+          </HStack>
           <VStack gap={12}>
             <ScanQRCodeLink
               to={makeAppPath('uploadQr', {
