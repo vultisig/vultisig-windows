@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { Button } from '../../../lib/ui/buttons/Button'
 import { TextInput } from '../../../lib/ui/inputs/TextInput'
@@ -28,7 +29,7 @@ export const ManageVaultFolderPage = () => {
 
   return (
     <>
-      <PageHeader
+      <StyledHeader
         hasBorder
         primaryControls={
           <PageHeaderBackButton onClick={() => navigate('vaults')} />
@@ -36,7 +37,7 @@ export const ManageVaultFolderPage = () => {
         secondaryControls={<DeleteVaultFolder />}
         title={<PageHeaderTitle>{name}</PageHeaderTitle>}
       />
-      <PageContent data-testid="manage-vault-folder-page" scrollable gap={20}>
+      <PageContent data-testid="manage-vault-folder-page" gap={20}>
         <VStack gap={8}>
           <Text weight="500" color="supporting" size={14}>
             {t('folder_name')}
@@ -62,3 +63,7 @@ export const ManageVaultFolderPage = () => {
     </>
   )
 }
+
+const StyledHeader = styled(PageHeader)`
+  flex-shrink: 0;
+`
