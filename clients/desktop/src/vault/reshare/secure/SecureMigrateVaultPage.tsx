@@ -1,5 +1,4 @@
 import { MpcLib } from '@core/mpc/mpcLib'
-import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
@@ -41,8 +40,6 @@ export const SecureMigrateVaultPage = () => {
     steps: reshareVaultSteps,
     onExit: useNavigateBack(),
   })
-
-  const { t } = useTranslation()
 
   return (
     <IsInitiatingDeviceProvider value={true}>
