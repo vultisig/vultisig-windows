@@ -10,12 +10,12 @@ import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevic
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { KeygenType } from '../../keygen/KeygenType'
+import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 import { SetupVaultNameStep } from '../SetupVaultNameStep'
-import { SetupVaultCreationStep } from '../shared/SetupVaultCreationStep'
 import { VaultTypeProvider } from '../shared/state/vaultType'
 import { StartKeygenVaultProvider } from '../StartKeygenVaultProvider'
 import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
@@ -73,9 +73,7 @@ export const SetupSecureVaultPage = () => {
                                     />
                                   )}
                                   keygen={() => (
-                                    <SetupVaultCreationStep
-                                      vaultType="secure"
-                                      onTryAgain={() => setStep(steps[0])}
+                                    <KeygenFlow
                                       onBack={() => setStep(lastEditableStep)}
                                     />
                                   )}

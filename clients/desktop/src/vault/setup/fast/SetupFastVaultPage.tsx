@@ -10,6 +10,7 @@ import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevic
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { KeygenType } from '../../keygen/KeygenType'
+import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
@@ -19,7 +20,6 @@ import { PasswordProvider } from '../../server/password/state/password'
 import { ServerPasswordHintStep } from '../../server/password-hint/ServerPasswordHintStep'
 import { PasswordHintProvider } from '../../server/password-hint/state/password-hint'
 import { SetupVaultNameStep } from '../SetupVaultNameStep'
-import { SetupVaultCreationStep } from '../shared/SetupVaultCreationStep'
 import { VaultTypeProvider } from '../shared/state/vaultType'
 import { StartKeygenVaultProvider } from '../StartKeygenVaultProvider'
 import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
@@ -102,9 +102,7 @@ export const SetupFastVaultPage = () => {
                                           />
                                         )}
                                         createVault={() => (
-                                          <SetupVaultCreationStep
-                                            vaultType="fast"
-                                            onTryAgain={() => setStep(steps[0])}
+                                          <KeygenFlow
                                             onBack={() =>
                                               setStep(lastEditableStep)
                                             }
