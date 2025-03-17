@@ -21,7 +21,9 @@ export const getRipplePreSignedInputData: PreSignedInputDataResolver<
     opPayment: TW.Ripple.Proto.OperationPayment.create({
       destination: keysignPayload.toAddress,
       amount: Long.fromString(keysignPayload.toAmount),
-      destinationTag: keysignPayload.memo ? Number(keysignPayload.memo) : null,
+      destinationTag: keysignPayload.memo
+        ? Long.fromNumber(Number(keysignPayload.memo))
+        : null,
     }),
   })
 

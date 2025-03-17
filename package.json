@@ -2,7 +2,8 @@
   "name": "vultisig-windows",
   "packageManager": "yarn@4.6.0",
   "workspaces": [
-    "./**"
+    "./**",
+    "!vendor/**"
   ],
   "scripts": {
     "lint": "eslint 'clients/desktop/src/**/*.{js,jsx,ts,tsx}' 'clients/extension/src/**/*.{js,jsx,ts,tsx}' 'core/**/*.{js,jsx,ts,tsx}' 'lib/**/*.{js,jsx,ts,tsx}'",
