@@ -136,7 +136,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
           })
 
           const hashes = await chainPromises(
-            inputs.map(async txInputData => {
+            inputs.map(txInputData => async () => {
               const compiledTx = compileTx({
                 walletCore,
                 txInputData,

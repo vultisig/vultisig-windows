@@ -1,4 +1,4 @@
-import { attempt } from '@lib/utils/attempt'
+import { attempt, withFallback } from '@lib/utils/attempt'
 import { useQuery } from '@tanstack/react-query'
 
 import buildInfo from '../../../../build.json'
@@ -33,12 +33,15 @@ const useVersionCheck = () => {
 
   const latestVersion = latestVersionData?.version
 
-  const updateAvailable = attempt(() => {
-    return isVersionNewer({
-      remoteVersion: latestVersion,
-      localVersion,
-    })
-  }, false)
+  const updateAvailable = withFallback(
+    attempt(() => {
+      return isVersionNewer({
+        remoteVersion: latestVersion,
+        localVersion,
+      })
+    }),
+    false
+  )
 
   return {
     localVersion,

@@ -1,4 +1,4 @@
-import { attempt } from '@lib/utils/attempt'
+import { attempt, withFallback } from '@lib/utils/attempt'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
@@ -89,12 +89,13 @@ export const ScanQrView = ({
       canvas.width = video.videoWidth
       canvas.height = video.videoHeight
 
-      const scanData = attempt(
-        () =>
+      const scanData = withFallback(
+        attempt(() =>
           readQrCode({
             canvasContext: context,
             image: video,
-          }),
+          })
+        ),
         undefined
       )
 

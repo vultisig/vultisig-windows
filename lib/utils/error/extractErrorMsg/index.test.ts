@@ -1,16 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
 import { attempt } from '../../attempt'
-import * as attemptModule from '../../attempt'
 import { extractErrorMsg } from '.'
-
-vi.spyOn(attemptModule, 'attempt').mockImplementation((fn, fallback) => {
-  try {
-    return fn()
-  } catch {
-    return fallback
-  }
-})
 
 describe('extractErrorMsg', () => {
   it('should return the error message if the input is a string', () => {
