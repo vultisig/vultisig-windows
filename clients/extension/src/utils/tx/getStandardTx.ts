@@ -101,3 +101,15 @@ export const getStandardTransactionDetails = async (
 
   return handler(tx as any, chain) // TypeScript ensures correctness due to TransactionHandlers type
 }
+
+export const isBasicTransaction = (
+  transaction: Record<string, any> | null
+): boolean => {
+  return (
+    typeof transaction === 'object' &&
+    transaction !== null &&
+    'from' in transaction &&
+    'to' in transaction &&
+    'value' in transaction
+  )
+}

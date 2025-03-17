@@ -30,7 +30,10 @@ import {
   setStoredTransactions,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
-import { getStandardTransactionDetails } from '@clients/extension/src/utils/tx/getStandardTx'
+import {
+  getStandardTransactionDetails,
+  isBasicTransaction,
+} from '@clients/extension/src/utils/tx/getStandardTx'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
@@ -404,10 +407,12 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
+        const isBasic = isBasicTransaction(_transaction)
+
         getStandardTransactionDetails(
           {
             ..._transaction,
-            txType: _transaction.txType ?? 'Vultisig',
+            txType: isBasic ? 'MetaMask' : (_transaction.txType ?? 'Vultisig'),
           } as TransactionType.WalletTransaction,
           chain
         ).then(standardTx => {
@@ -459,8 +464,15 @@ const handleRequest = (
         if (Array.isArray(params)) {
           const [transaction] = params as TransactionType.Vultisig[]
           if (transaction) {
+            const isBasic = isBasicTransaction(transaction)
+
             getStandardTransactionDetails(
-              { ...transaction, txType: transaction.txType ?? 'Vultisig' },
+              {
+                ...transaction,
+                txType: isBasic
+                  ? 'MetaMask'
+                  : (transaction.txType ?? 'Vultisig'),
+              } as TransactionType.WalletTransaction,
               chain
             ).then(standardTx => {
               let modifiedTransaction: ITransaction = {} as ITransaction
