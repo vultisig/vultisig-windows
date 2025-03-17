@@ -126,6 +126,7 @@ export const it = {
   setup: 'Configura',
   import: 'Importa',
   keygen: 'Generazione chiavi',
+  migrate: 'Migrazione',
   name_your_vault: 'Dai un nome alla tua cassaforte',
   join: 'Unisciti',
   done: 'Fatto',
@@ -245,6 +246,8 @@ export const it = {
   vault_setting_edit_vault_reshare_title: 'Ricondividi',
   vault_setting_edit_vault_reshare_subtitle:
     'Ricondividi la cassaforte con un nuovo gruppo di dispositivi.',
+  vault_setting_edit_vault_migrate_title: 'Migra',
+  vault_setting_edit_vault_migrate_subtitle: 'Migra la tua cassaforte',
   vault_setting_edit_vault_delete_title: 'Elimina',
   vault_setting_edit_vault_delete_subtitle:
     'Elimina definitivamente la tua cassaforte',

@@ -40,6 +40,7 @@ import { StartKeysignPage } from './vault/keysign/start/StartKeysignPage'
 import { UploadQrPage } from './vault/qr/upload/UploadQrPage'
 import { FastReshareVaultPage } from './vault/reshare/fast/FastReshareVaultPage'
 import { ReshareVaultPage } from './vault/reshare/ReshareVaultPage'
+import { SecureMigrateVaultPage } from './vault/reshare/secure/SecureMigrateVaultPage'
 import { SecureReshareVaultPage } from './vault/reshare/secure/SecureReshareVaultPage'
 import { SendPage } from './vault/send/SendPage'
 import { SetupFastVaultPage } from './vault/setup/fast/SetupFastVaultPage'
@@ -250,6 +251,14 @@ export const router = createBrowserRouter([
         element: (
           <ActiveVaultGuard>
             <SecureReshareVaultPage />
+          </ActiveVaultGuard>
+        ),
+      },
+      {
+        path: appPaths.migrateVaultSecure,
+        element: (
+          <ActiveVaultGuard>
+            <SecureMigrateVaultPage />
           </ActiveVaultGuard>
         ),
       },

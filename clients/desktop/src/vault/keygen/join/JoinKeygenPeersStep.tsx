@@ -52,6 +52,7 @@ export const JoinKeygenPeersStep = ({ onFinish }: OnFinishProp<string[]>) => {
               </PageContent>
             </>
           )}
+          Migrate={() => <JoinSecureVaultKeygen />}
         />
       )}
     />

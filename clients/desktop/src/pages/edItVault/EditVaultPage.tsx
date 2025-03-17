@@ -29,6 +29,12 @@ const EditVaultPage = () => {
   }
 
   const { local_party_id } = currentVault
+  let items = editVaultSettingsItems
+  if (currentVault.lib_type === 'DKLS') {
+    items = editVaultSettingsItems.filter(
+      item => item.path !== 'migrateVaultSecure'
+    )
+  }
 
   return (
     <Container flexGrow gap={16}>
@@ -42,7 +48,7 @@ const EditVaultPage = () => {
           {local_party_id}
         </AutoCenteredTitle>
         <VStack flexGrow gap={12}>
-          {editVaultSettingsItems.map(
+          {items.map(
             ({ path, titleKey, subtitleKey, icon: Icon, textColor }, index) => (
               <UnstyledButton key={index} onClick={() => navigate(path)}>
                 <ListItemPanel>

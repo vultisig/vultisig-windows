@@ -125,6 +125,7 @@ export const de = {
   setup: 'Einrichten',
   import: 'Importieren',
   keygen: 'Schlüsselgenerierung',
+  migrate: 'migrieren',
   name_your_vault: 'Nennen Sie Ihren Tresor',
   join: 'Beitreten',
   save_changes: 'Änderungen speichern',
@@ -238,6 +239,8 @@ export const de = {
   vault_setting_edit_vault_reshare_title: 'Erneut teilen',
   vault_setting_edit_vault_reshare_subtitle:
     'Teilen Sie den Tresor mit einer neuen Gerätegruppe erneut.',
+  vault_setting_edit_vault_migrate_title: 'Migrieren',
+  vault_setting_edit_vault_migrate_subtitle: 'Tresor zu DKLS migrieren',
   vault_setting_edit_vault_delete_title: 'Löschen',
   vault_setting_edit_vault_delete_subtitle:
     'Löschen Sie Ihren Tresor dauerhaft',

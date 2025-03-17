@@ -126,6 +126,7 @@ export const es = {
   setup: 'Configurar',
   import: 'Importar',
   keygen: 'Generación de claves',
+  migrate: 'Migrar',
   name_your_vault: 'Nombre su bóveda',
   join: 'Unirse',
   done: 'Hecho',
@@ -239,6 +240,8 @@ export const es = {
   vault_setting_edit_vault_reshare_title: 'Recompartir',
   vault_setting_edit_vault_reshare_subtitle:
     'Recompartir la bóveda con un nuevo grupo de dispositivos.',
+  vault_setting_edit_vault_migrate_title: 'Migrar',
+  vault_setting_edit_vault_migrate_subtitle: 'Migrar bóveda a DKLS',
   vault_setting_edit_vault_delete_title: 'Eliminar',
   vault_setting_edit_vault_delete_subtitle:
     'Eliminar su bóveda permanentemente',

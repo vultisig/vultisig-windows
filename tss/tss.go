@@ -45,7 +45,12 @@ func (t *TssService) Startup(ctx context.Context) {
 func (t *TssService) GetDerivedPubKey(hexPubKey, hexChainCode, path string, isEdDSA bool) (string, error) {
 	return mtss.GetDerivedPubKey(hexPubKey, hexChainCode, path, isEdDSA)
 }
-
+func (t *TssService) GetLocalUIEcdsa(keyshare string) (string, error) {
+	return mtss.GetLocalUIEcdsa(keyshare)
+}
+func (t *TssService) GetLocalUIEdDSA(keyshare string) (string, error) {
+	return mtss.GetLocalUIEddsa(keyshare)
+}
 func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, hexEncryptionKey string, serverURL string) (*storage.Vault, error) {
 	if serverURL == "" {
 		return nil, fmt.Errorf("serverURL is empty")
@@ -143,6 +148,7 @@ func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, he
 		Order:         0,
 		IsBackedUp:    false,
 		Coins:         []storage.Coin{},
+		LibType:       "GG20",
 	}
 
 	return vault, nil

@@ -17,9 +17,11 @@ import { getMessageHash } from '../getMessageHash'
 import { combineReshareCommittee } from '../reshareCommittee'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
+import { KeygenType } from '../tssType'
 import { uploadSetupMessage } from '../uploadSetupMessage'
 
 export class Schnorr {
+  private readonly tssType: KeygenType
   private readonly isInitiateDevice: boolean
   private readonly serverURL: string
   private readonly sessionId: string
@@ -31,7 +33,11 @@ export class Schnorr {
   private sequenceNo: number = 0
   private cache: Record<string, string> = {}
   private setupMessage: Uint8Array = new Uint8Array()
+  private readonly localUI?: string
+  private readonly publicKey?: string
+  private readonly chainCode?: string
   constructor(
+    tssType: KeygenType,
     isInitiateDevice: boolean,
     serverURL: string,
     sessionId: string,
@@ -39,8 +45,12 @@ export class Schnorr {
     keygenCommittee: string[],
     oldKeygenCommittee: string[],
     hexEncryptionKey: string,
-    setupMessage: Uint8Array // DKLS/Schnorr keygen only need to setup message once, thus for EdDSA , we could reuse the setup message from DKLS
+    setupMessage: Uint8Array, // DKLS/Schnorr keygen only need to setup message once, thus for EdDSA , we could reuse the setup message from DKLS
+    localUI?: string,
+    publicKey?: string,
+    chainCode?: string
   ) {
+    this.tssType = tssType
     this.isInitiateDevice = isInitiateDevice
     this.serverURL = serverURL
     this.sessionId = sessionId
@@ -49,6 +59,9 @@ export class Schnorr {
     this.oldKeygenCommittee = oldKeygenCommittee
     this.hexEncryptionKey = hexEncryptionKey
     this.setupMessage = setupMessage
+    this.localUI = localUI?.padEnd(64, '0')
+    this.publicKey = publicKey
+    this.chainCode = chainCode
   }
 
   private async processOutbound(session: KeygenSession | QcSession) {
@@ -146,7 +159,20 @@ export class Schnorr {
     console.log('session id:', this.sessionId)
     this.isKeygenComplete = false
     try {
-      const session = new KeygenSession(this.setupMessage, this.localPartyId)
+      let session: KeygenSession
+      if (this.tssType === KeygenType.Keygen) {
+        session = new KeygenSession(this.setupMessage, this.localPartyId)
+      } else if (this.tssType === KeygenType.Migrate) {
+        session = KeygenSession.migrate(
+          this.setupMessage,
+          this.localPartyId,
+          Buffer.from(this.localUI || '', 'hex'),
+          Buffer.from(this.publicKey || '', 'hex'),
+          Buffer.from(this.chainCode || '', 'hex')
+        )
+      } else {
+        throw new Error('invalid keygen type')
+      }
       const outbound = this.processOutbound(session)
       const inbound = this.processInbound(session)
       const [, inboundResult] = await Promise.all([outbound, inbound])

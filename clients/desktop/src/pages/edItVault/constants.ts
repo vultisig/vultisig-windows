@@ -41,6 +41,12 @@ export const editVaultSettingsItems: SettingItem[] = [
     path: 'reshareVault',
   },
   {
+    titleKey: 'vault_setting_edit_vault_migrate_title',
+    subtitleKey: 'vault_setting_edit_vault_migrate_subtitle',
+    icon: ReshareIcon,
+    path: 'migrateVaultSecure',
+  },
+  {
     titleKey: 'sign',
     subtitleKey: 'sign_custom_message',
     icon: SignatureIcon,

@@ -26,6 +26,7 @@ export const KeygenFailedState = ({
 
   const title = match(keygenType, {
     [KeygenType.Keygen]: () => t('keygen'),
+    [KeygenType.Migrate]: () => t('migrate'),
     [KeygenType.Reshare]: () => t('reshare'),
   })
 
