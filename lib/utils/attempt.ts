@@ -5,14 +5,14 @@ export type Failure<E = unknown> = { data?: never; error: E }
 export type Result<T, E = unknown> = Success<T> | Failure<E>
 
 export function attempt<T, E = unknown>(
-  fn: () => Promise<T>,
+  fn: () => Promise<T>
 ): Promise<Result<T, E>>
 export function attempt<T, E = unknown>(fn: () => T): Result<T, E>
 export function attempt<T, E = unknown>(
-  promise: Promise<T>,
+  promise: Promise<T>
 ): Promise<Result<T, E>>
 export function attempt<T, E = unknown>(
-  input: Promise<T> | (() => T) | (() => Promise<T>),
+  input: Promise<T> | (() => T) | (() => Promise<T>)
 ): Result<T, E> | Promise<Result<T, E>> {
   if (typeof input === 'function') {
     try {
@@ -27,22 +27,22 @@ export function attempt<T, E = unknown>(
   } else {
     return input.then(
       (data): Result<T, E> => ({ data }),
-      (error): Result<T, E> => ({ error: error as E }),
+      (error): Result<T, E> => ({ error: error as E })
     )
   }
 }
 
 export function withFallback<T, E = unknown>(
   result: Result<T, E>,
-  fallback: T,
+  fallback: T
 ): T
 export function withFallback<T, E = unknown>(
   result: Promise<Result<T, E>>,
-  fallback: T,
+  fallback: T
 ): Promise<T>
 export function withFallback<T, E = unknown>(
   result: Result<T, E> | Promise<Result<T, E>>,
-  fallback: T,
+  fallback: T
 ): T | Promise<T> {
   if (isPromise<Result<T, E>>(result)) {
     return result.then((res): T => {
