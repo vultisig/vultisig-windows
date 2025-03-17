@@ -498,53 +498,63 @@ const Component = () => {
       )
 
       if (vault) {
-        getKeysignPayload(transaction, vault).then(keysignPayload => {
-          transaction.txFee = String(
-            formatUnits(
-              getFeeAmount(
-                keysignPayload.blockchainSpecific as KeysignChainSpecific
-              ),
-              transaction.transactionDetails.amount?.decimals
-            )
-          )
-
-          // Parse Memo
-          transaction.memo = { isParsed: false, value: undefined }
-          if (getChainKind(transaction.chain.chain) == 'evm') {
-            getParsedMemo(keysignPayload.memo).then(parsedMemo => {
-              if (parsedMemo) {
-                setState(prevState => ({
-                  ...prevState,
-                  transaction: {
-                    ...prevState.transaction!,
-                    memo: {
-                      isParsed: true,
-                      value: parsedMemo,
-                    },
-                  },
-                }))
-              }
-            })
-          }
-          if (!transaction.memo.isParsed) {
-            try {
-              transaction.memo.value = toUtf8String(
-                transaction.transactionDetails.data!
-              )
-            } catch {
-              transaction.memo.value = transaction.transactionDetails.data
-            }
-          }
-
+        if (transaction.isCustomMessage) {
           setState(prevState => ({
             ...prevState,
             currency,
             loaded: true,
             transaction,
-            keysignPayload,
             vault,
           }))
-        })
+        } else {
+          getKeysignPayload(transaction, vault).then(keysignPayload => {
+            transaction.txFee = String(
+              formatUnits(
+                getFeeAmount(
+                  keysignPayload.blockchainSpecific as KeysignChainSpecific
+                ),
+                transaction.transactionDetails.amount?.decimals
+              )
+            )
+
+            // Parse Memo
+            transaction.memo = { isParsed: false, value: undefined }
+            if (getChainKind(transaction.chain.chain) == 'evm') {
+              getParsedMemo(keysignPayload.memo).then(parsedMemo => {
+                if (parsedMemo) {
+                  setState(prevState => ({
+                    ...prevState,
+                    transaction: {
+                      ...prevState.transaction!,
+                      memo: {
+                        isParsed: true,
+                        value: parsedMemo,
+                      },
+                    },
+                  }))
+                }
+              })
+            }
+            if (!transaction.memo.isParsed) {
+              try {
+                transaction.memo.value = toUtf8String(
+                  transaction.transactionDetails.data!
+                )
+              } catch {
+                transaction.memo.value = transaction.transactionDetails.data
+              }
+            }
+
+            setState(prevState => ({
+              ...prevState,
+              currency,
+              loaded: true,
+              transaction,
+              keysignPayload,
+              vault,
+            }))
+          })
+        }
       } else {
         setState(prevState => ({
           ...prevState,

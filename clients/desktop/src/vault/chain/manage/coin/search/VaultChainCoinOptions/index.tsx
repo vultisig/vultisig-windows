@@ -11,6 +11,7 @@ import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitel
 import { NonEmptyOnly } from '../../../../../../lib/ui/base/NonEmptyOnly'
 import { useTransform } from '../../../../../../lib/ui/hooks/useTransform'
 import { VStack } from '../../../../../../lib/ui/layout/Stack'
+import { Spinner } from '../../../../../../lib/ui/loaders/Spinner'
 import { useCurrentSearch } from '../../../../../../lib/ui/search/CurrentSearchProvider'
 import { useSearchFilter } from '../../../../../../lib/ui/search/hooks/useSearchFilter'
 import { Text } from '../../../../../../lib/ui/text'
@@ -93,7 +94,7 @@ export const VaultChainCoinOptions = () => {
       />
       {searchQuery && query.isPending && (
         <VStack fullWidth alignItems="center">
-          <Text>Searching ...</Text>
+          <Spinner size="2em" />
         </VStack>
       )}
     </>
