@@ -22,6 +22,6 @@ export const toCompressedString = ({
     attempt(() => {
       sevenZip.FS.unlink(inputFileName)
       sevenZip.FS.unlink(archiveName)
-    }, undefined)
+    })
   }
 }

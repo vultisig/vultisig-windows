@@ -1,4 +1,4 @@
-import { asyncAttempt } from '@lib/utils/promise/asyncAttempt'
+import { attempt } from '@lib/utils/attempt'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -93,13 +93,10 @@ export const ManageReceiver = () => {
               <IconButton
                 icon={<PasteIcon />}
                 onClick={async () => {
-                  const newValue = await asyncAttempt(
-                    ClipboardGetText,
-                    undefined
-                  )
+                  const { data } = await attempt(ClipboardGetText)
 
-                  if (newValue) {
-                    setValue(newValue)
+                  if (data) {
+                    setValue(data)
                   }
                 }}
               />

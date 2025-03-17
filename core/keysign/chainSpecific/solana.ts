@@ -7,7 +7,7 @@ import {
   SolanaSpecificSchema,
 } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { asyncAttempt } from '@lib/utils/promise/asyncAttempt'
+import { attempt } from '@lib/utils/attempt'
 import { Address } from '@solana/web3.js'
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
@@ -41,17 +41,17 @@ export const getSolanaSpecific: ChainSpecificResolver<SolanaSpecific> = async ({
       account: coin.address,
       token: coin.id,
     })
-    const toAccount = await asyncAttempt(
-      () =>
-        getSplAssociatedAccount({
-          account: shouldBePresent(receiver),
-          token: coin.id,
-        }),
-      undefined
-    )
-    result.toTokenAssociatedAddress = toAccount?.address
     result.fromTokenAssociatedAddress = fromAccount.address
-    result.programId = toAccount?.isToken2022
+    const toAccount = await attempt(
+      getSplAssociatedAccount({
+        account: shouldBePresent(receiver),
+        token: coin.id,
+      })
+    )
+    if (toAccount.data) {
+      result.toTokenAssociatedAddress = toAccount.data.address
+      result.programId = toAccount.data.isToken2022
+    }
   }
 
   return result
