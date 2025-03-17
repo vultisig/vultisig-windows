@@ -30,7 +30,10 @@ import {
   setStoredTransactions,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
-import { getStandardTransactionDetails } from '@clients/extension/src/utils/tx/getStandardTx'
+import {
+  getStandardTransactionDetails,
+  isBasicTransaction,
+} from '@clients/extension/src/utils/tx/getStandardTx'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
@@ -404,19 +407,12 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
-        const isBasicTransaction =
-          typeof _transaction === 'object' &&
-          _transaction !== null &&
-          'from' in _transaction &&
-          'to' in _transaction &&
-          'value' in _transaction
+        const isBasic = isBasicTransaction(_transaction)
 
         getStandardTransactionDetails(
           {
             ..._transaction,
-            txType: isBasicTransaction
-              ? 'MetaMask'
-              : (_transaction.txType ?? 'Vultisig'),
+            txType: isBasic ? 'MetaMask' : (_transaction.txType ?? 'Vultisig'),
           } as TransactionType.WalletTransaction,
           chain
         ).then(standardTx => {
@@ -468,16 +464,12 @@ const handleRequest = (
         if (Array.isArray(params)) {
           const [transaction] = params as TransactionType.Vultisig[]
           if (transaction) {
-            const isBasicTransaction =
-              typeof transaction === 'object' &&
-              transaction !== null &&
-              'from' in transaction &&
-              'to' in transaction &&
-              'value' in transaction
+            const isBasic = isBasicTransaction(transaction)
+
             getStandardTransactionDetails(
               {
                 ...transaction,
-                txType: isBasicTransaction
+                txType: isBasic
                   ? 'MetaMask'
                   : (transaction.txType ?? 'Vultisig'),
               } as TransactionType.WalletTransaction,
