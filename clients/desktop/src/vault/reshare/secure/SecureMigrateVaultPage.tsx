@@ -13,8 +13,8 @@ import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { KeygenType } from '../../keygen/KeygenType'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
+import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
-import { KeygenStep } from '../../keygen/shared/KeygenStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
@@ -81,13 +81,7 @@ export const SecureMigrateVaultPage = () => {
                                 />
                               )}
                               keygen={() => (
-                                <KeygenStep
-                                  title={t('migrate')}
-                                  onTryAgain={() =>
-                                    setStep(reshareVaultSteps[0])
-                                  }
-                                  onBack={() => setStep('verify')}
-                                />
+                                <KeygenFlow onBack={() => setStep('verify')} />
                               )}
                             />
                           </CurrentKeygenTypeProvider>
