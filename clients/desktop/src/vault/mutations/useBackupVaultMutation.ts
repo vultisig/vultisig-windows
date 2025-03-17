@@ -5,6 +5,7 @@ import {
   VaultSchema,
 } from '@core/communication/vultisig/vault/v1/vault_pb'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
+import { match } from '@lib/utils/match'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { SaveFileBkp } from '../../../wailsjs/go/main/App'
@@ -15,10 +16,15 @@ import { fromStorageVault, getStorageVaultId } from '../utils/storageVault'
 
 const getExportName = (vault: storage.Vault) => {
   const totalSigners = vault.signers.length
-
   const localPartyIndex = vault.signers.indexOf(vault.local_party_id) + 1
-
-  return `${vault.name}-${vault.local_party_id}-part${localPartyIndex}of${totalSigners}.vult`
+  return match(vault.lib_type, {
+    GG20: () => {
+      return `${vault.name}-${vault.local_party_id}-part${localPartyIndex}of${totalSigners}.vult`
+    },
+    DKLS: () => {
+      return `${vault.name}-${vault.local_party_id}-share${localPartyIndex}of${totalSigners}.vult`
+    },
+  })
 }
 
 const createBackup = async (vault: Vault, password: string) => {
