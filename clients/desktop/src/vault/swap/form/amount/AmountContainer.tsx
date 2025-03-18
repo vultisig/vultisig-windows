@@ -1,10 +1,8 @@
 import styled from 'styled-components'
 
 import { textInputBorderRadius } from '../../../../lib/ui/css/textInput'
-import { getColor } from '../../../../lib/ui/theme/getters'
+import { VStack } from '../../../../lib/ui/layout/Stack'
 
-export const AmountContainer = styled.div`
-  position: relative;
+export const AmountContainer = styled(VStack)`
   ${textInputBorderRadius};
-  background: ${getColor('foreground')};
 `
