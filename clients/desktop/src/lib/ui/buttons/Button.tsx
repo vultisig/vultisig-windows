@@ -1,5 +1,5 @@
 import { match } from '@lib/utils/match'
-import React, { forwardRef } from 'react'
+import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { MergeRefs } from '../base/MergeRefs'
@@ -166,65 +166,61 @@ const Hide = styled.div`
   opacity: 0;
 `
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      children,
-      size = 'm',
-      isDisabled = false,
-      isLoading = false,
-      onClick,
-      kind = 'primary',
-      ...rest
-    },
-    ref
-  ) => {
-    const content = isLoading ? (
-      <>
-        <Hide>{children}</Hide>
-        <CenterAbsolutely>
-          <Spinner />
-        </CenterAbsolutely>
-      </>
-    ) : (
-      children
-    )
+export const Button = ({
+  children,
+  size = 'm',
+  isDisabled = false,
+  isLoading = false,
+  onClick,
+  kind = 'primary',
+  ref,
+  ...rest
+}: ButtonProps) => {
+  const content = isLoading ? (
+    <>
+      <Hide>{children}</Hide>
+      <CenterAbsolutely>
+        <Spinner />
+      </CenterAbsolutely>
+    </>
+  ) : (
+    children
+  )
 
-    const containerProps = {
-      kind,
-      size,
-      isDisabled: !!isDisabled,
-      isLoading,
-      onClick: isDisabled || isLoading ? undefined : onClick,
-      ...rest,
-    }
+  const containerProps = {
+    kind,
+    size,
+    isDisabled: !!isDisabled,
+    isLoading,
+    onClick: isDisabled || isLoading ? undefined : onClick,
+    ...rest,
+  }
 
-    if (typeof isDisabled === 'string') {
-      return (
-        <Tooltip
-          content={isDisabled}
-          renderOpener={({ ref: tooltipRef, ...rest }) => {
-            return (
-              <MergeRefs
-                refs={[ref, tooltipRef]}
-                render={ref => (
-                  <Container ref={ref} {...rest} {...containerProps}>
-                    {content}
-                  </Container>
-                )}
-              />
-            )
-          }}
-        />
-      )
-    }
-
+  if (typeof isDisabled === 'string') {
     return (
-      <Container ref={ref} {...containerProps}>
-        {content}
-      </Container>
+      <Tooltip
+        content={isDisabled}
+        renderOpener={({ ref: tooltipRef, ...rest }) => {
+          return (
+            <MergeRefs
+              refs={[ref, tooltipRef]}
+              render={ref => (
+                <Container ref={ref} {...rest} {...containerProps}>
+                  {content}
+                </Container>
+              )}
+            />
+          )
+        }}
+      />
     )
   }
-)
+
+  return (
+    <Container ref={ref} {...containerProps}>
+      {content}
+    </Container>
+  )
+}
 
 Button.displayName = 'Button'
