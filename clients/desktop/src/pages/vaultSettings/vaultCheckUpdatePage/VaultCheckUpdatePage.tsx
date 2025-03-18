@@ -9,7 +9,7 @@ import { ProductLogo } from '../../../ui/logo/ProductLogo'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageSlice } from '../../../ui/page/PageSlice'
-import { VULTISIG_GITHUB_RELEASES_LINK } from '../constants'
+import { DOWNLOAD_VULTISIG_LINK } from '../constants'
 import {
   CenteredText,
   Content,
@@ -44,9 +44,7 @@ const VaultCheckUpdatePage = () => {
     content = (
       <CenteredText>
         {t('vaultCheckUpdatePage.newVersionAvailable', { latestVersion })}
-        <DownloadButton
-          onClick={() => BrowserOpenURL(VULTISIG_GITHUB_RELEASES_LINK)}
-        >
+        <DownloadButton onClick={() => BrowserOpenURL(DOWNLOAD_VULTISIG_LINK)}>
           {t('vaultCheckUpdatePage.downloadButton')}
         </DownloadButton>
       </CenteredText>
