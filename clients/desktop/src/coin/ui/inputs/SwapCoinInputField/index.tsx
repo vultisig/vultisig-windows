@@ -4,6 +4,7 @@ import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import { ChainCoinIcon } from '../../../../chain/ui/ChainCoinIcon'
+import { ChainEntityIcon } from '../../../../chain/ui/ChainEntityIcon'
 import { getChainEntityIconSrc } from '../../../../chain/utils/getChainEntityIconSrc'
 import { ChevronDownIcon } from '../../../../lib/ui/icons/ChevronDownIcon'
 import { ChevronRightIcon } from '../../../../lib/ui/icons/ChevronRightIcon'
@@ -43,17 +44,8 @@ export const SwapCoinInputField = ({
             {t('from')}
           </Text>
           <HStack gap={4} alignItems="center">
-            <ChainCoinIcon
-              coinSrc={getCoinLogoSrc(value.logo)}
-              chainSrc={
-                shouldDisplayChainLogo({
-                  ticker,
-                  chain,
-                  isNative: isFeeCoin({ id, chain }),
-                })
-                  ? getChainEntityIconSrc(chain)
-                  : undefined
-              }
+            <ChainEntityIcon
+              value={getChainEntityIconSrc(chain)}
               style={{ fontSize: 16 }}
             />
             <HStack
