@@ -18,7 +18,7 @@ import {
 } from '@clients/extension/src/utils/storage'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Button, Empty, message, Modal, Select, Switch, Tooltip } from 'antd'
-import { type FC, useEffect, useState } from 'react'
+import { type FC, ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -26,7 +26,7 @@ import { isSupportedChain } from '../../../../utils/constants'
 
 interface SelectOption {
   value: string
-  label: JSX.Element
+  label: ReactNode
 }
 
 interface InitialState {

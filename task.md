@@ -4,3 +4,4 @@ The content of this file should be cleared on Pull Request submit.
 
 - [ ] forwardRef
 - [ ] defaultProps
+- [ ] check if AnimatedVisibility component works as expected
