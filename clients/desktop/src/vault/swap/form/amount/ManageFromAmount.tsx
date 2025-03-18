@@ -45,12 +45,9 @@ const Input = styled.input`
 
 export const ManageFromAmount = () => {
   const [value, setValue] = useFromAmount()
-
   const [fromCoin] = useFromCoin()
-
   const valueAsString = value?.toString() ?? ''
   const [inputValue, setInputValue] = useState<string>(valueAsString)
-
   const { t } = useTranslation()
 
   const handleInputValueChange = useCallback(
@@ -59,7 +56,7 @@ export const ManageFromAmount = () => {
 
       if (value === '') {
         setInputValue('')
-        setValue?.(null)
+        if (value !== inputValue) setValue?.(null)
         return
       }
 
@@ -73,7 +70,7 @@ export const ManageFromAmount = () => {
       )
       setValue?.(valueAsNumber)
     },
-    [setValue]
+    [inputValue, setValue]
   )
 
   return (

@@ -22,8 +22,7 @@ const Value = styled.div`
 
   ${text({
     weight: 700,
-    size: 20,
-    family: 'mono',
+    size: 22,
     color: 'supporting',
     centerVertically: true,
   })}
