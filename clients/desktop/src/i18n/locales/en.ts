@@ -12,6 +12,7 @@ export const en = {
   create_new_vault: 'Create a New Vault',
   missing_public_key_ecdsa: 'Missing Public Key ECDSA',
   missing_verification_code: 'Missing Verification Code',
+  select_network: 'Select Network',
   waiting_for_devices_to_join: 'Waiting for other devices to join',
   waiting_for_devices_to_join_description:
     'Your vault will start generating from the moment you finalize setting up your vault on your main device',

@@ -2,52 +2,34 @@ import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
-import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
-import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
-import { textInputBackground } from '../../../lib/ui/css/textInput'
-import { ChevronDownIcon } from '../../../lib/ui/icons/ChevronDownIcon'
-import { HStack, VStack } from '../../../lib/ui/layout/Stack'
-import { OnClickProp, ValueProp } from '../../../lib/ui/props'
-import { Text, text } from '../../../lib/ui/text'
-import { getColor } from '../../../lib/ui/theme/getters'
-import { shouldDisplayChainLogo } from '../../../vault/chain/utils'
-import { ManageFromAmount } from '../../../vault/swap/form/amount/ManageFromAmount'
-import { ToAmount } from '../../../vault/swap/form/amount/ToAmount'
-import { SwapCoinBalance } from '../../../vault/swap/form/SwapCoinBalance'
-import { SwapSide } from '../../../vault/swap/form/SwapCoinInput'
-import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
-
-const Container = styled(VStack)<{
-  side: SwapSide
-}>`
-  min-height: 112px;
-  ${textInputBackground};
-  ${text({
-    color: 'contrast',
-    size: 16,
-    weight: 700,
-  })}
-  padding: 16px;
-  border-radius: ${({ side }) =>
-    side === 'to' ? '12px 12px 24px 24px' : '24px 24px 12px 12px'};
-  border: 1px solid ${getColor('foregroundExtra')};
-  &:hover {
-    background: ${getColor('foregroundExtra')};
-  }
-`
+import { ChainCoinIcon } from '../../../../chain/ui/ChainCoinIcon'
+import { getChainEntityIconSrc } from '../../../../chain/utils/getChainEntityIconSrc'
+import { ChevronDownIcon } from '../../../../lib/ui/icons/ChevronDownIcon'
+import { ChevronRightIcon } from '../../../../lib/ui/icons/ChevronRightIcon'
+import { HStack } from '../../../../lib/ui/layout/Stack'
+import { ValueProp } from '../../../../lib/ui/props'
+import { Text } from '../../../../lib/ui/text'
+import { shouldDisplayChainLogo } from '../../../../vault/chain/utils'
+import { ManageFromAmount } from '../../../../vault/swap/form/amount/ManageFromAmount'
+import { ToAmount } from '../../../../vault/swap/form/amount/ToAmount'
+import { SwapCoinBalance } from '../../../../vault/swap/form/SwapCoinBalance'
+import { SwapSide } from '../../../../vault/swap/form/SwapCoinInput'
+import { getCoinLogoSrc } from '../../../logo/getCoinLogoSrc'
+import { CoinWrapper, Container } from './SwapCoinInputField.styled'
 
 type CoinInputContainerProps = ValueProp<
   Pick<Coin, 'id' | 'chain' | 'logo' | 'ticker'>
-> &
-  OnClickProp & {
-    side: SwapSide
-  }
+> & {
+  onChainClick: () => void
+  onCoinClick: () => void
+  side: SwapSide
+}
 
 export const SwapCoinInputField = ({
   value,
-  onClick,
+  onChainClick,
+  onCoinClick,
   side,
 }: CoinInputContainerProps) => {
   const { ticker, chain, id } = value
@@ -57,7 +39,7 @@ export const SwapCoinInputField = ({
     <Container side={side} justifyContent="center" gap={16}>
       <HStack justifyContent="space-between" alignItems="center">
         <HStack gap={6} alignItems="center">
-          <Text weight="700" size={12} color="shy">
+          <Text weight="500" size={12} color="shy">
             {t('from')}
           </Text>
           <HStack gap={4} alignItems="center">
@@ -76,7 +58,7 @@ export const SwapCoinInputField = ({
             />
             <HStack
               style={{ cursor: 'pointer' }}
-              onClick={onClick}
+              onClick={onChainClick}
               role="button"
               tabIndex={0}
               gap={2}
@@ -92,7 +74,13 @@ export const SwapCoinInputField = ({
         <SwapCoinBalance value={value} />
       </HStack>
       <HStack flexGrow justifyContent="space-between" alignItems="center">
-        <HStack alignItems="center" gap={8}>
+        <CoinWrapper
+          role="button"
+          tabIndex={0}
+          onClick={onCoinClick}
+          alignItems="center"
+          gap={8}
+        >
           <ChainCoinIcon
             coinSrc={getCoinLogoSrc(value.logo)}
             chainSrc={
@@ -106,10 +94,13 @@ export const SwapCoinInputField = ({
             }
             style={{ fontSize: 32 }}
           />
-          <Text weight="700" size={16} color="contrast">
-            {value.ticker}
-          </Text>
-        </HStack>
+          <HStack gap={4}>
+            <Text weight="500" size={16} color="contrast">
+              {value.ticker}
+            </Text>
+            <ChevronRightIcon />
+          </HStack>
+        </CoinWrapper>
         {match(side, {
           to: () => <ToAmount />,
           from: () => <ManageFromAmount />,
