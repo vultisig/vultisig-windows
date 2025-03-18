@@ -778,4 +778,6 @@ export const hr = {
   failed_to_join_keysign: 'Pridruživanje Keysignu nije uspjelo',
   function_arguments: 'Argumenti funkcije',
   function_signature: 'Potpis funkcije',
+  missing_devices_for_migration:
+    'Pridružite se sljedećim uređajima kako biste premjestili svoj trezor',
 }

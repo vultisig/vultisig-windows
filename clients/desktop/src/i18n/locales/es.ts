@@ -801,4 +801,6 @@ export const es = {
   failed_to_join_keysign: 'No se pudo unir a Keysign',
   function_arguments: 'Argumentos de función',
   function_signature: 'Firma de función',
+  missing_devices_for_migration:
+    'Únase a los siguientes dispositivos para migrar su bóveda',
 }

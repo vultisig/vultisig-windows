@@ -801,4 +801,6 @@ export const de = {
   failed_to_join_keysign: 'Beitritt zu Keysign fehlgeschlagen',
   function_arguments: 'Funktionsargumente',
   function_signature: 'Funktionssignatur',
+  missing_devices_for_migration:
+    'Verbinden Sie sich mit den folgenden Geräten, um Ihren Tresor zu migrieren',
 }

@@ -797,4 +797,6 @@ export const it = {
   failed_to_join_keysign: 'Impossibile unirsi a Keysign',
   function_arguments: 'Argomenti della funzione',
   function_signature: 'Firma della funzione',
+  missing_devices_for_migration:
+    'Unisciti ai seguenti dispositivi per migrare il tuo vault',
 }

@@ -790,4 +790,6 @@ export const pt = {
   failed_to_join_keysign: 'Falha ao ingressar no Keysign',
   function_arguments: 'Argumentos de função',
   function_signature: 'Assinatura de função',
+  missing_devices_for_migration:
+    'Junte-se aos seguintes dispositivos para migrar seu cofre',
 }
