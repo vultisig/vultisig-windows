@@ -6,7 +6,6 @@ import styled from 'styled-components'
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
-import { borderRadius } from '../../../lib/ui/css/borderRadius'
 import { textInputBackground } from '../../../lib/ui/css/textInput'
 import { ChevronDownIcon } from '../../../lib/ui/icons/ChevronDownIcon'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
@@ -20,7 +19,10 @@ import { SwapCoinBalance } from '../../../vault/swap/form/SwapCoinBalance'
 import { SwapSide } from '../../../vault/swap/form/SwapCoinInput'
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
 
-const Container = styled(VStack)`
+const Container = styled(VStack)<{
+  side: SwapSide
+}>`
+  min-height: 112px;
   ${textInputBackground};
   ${text({
     color: 'contrast',
@@ -28,8 +30,9 @@ const Container = styled(VStack)`
     weight: 700,
   })}
   padding: 16px;
-  ${borderRadius.l};
-
+  border-radius: ${({ side }) =>
+    side === 'to' ? '12px 12px 24px 24px' : '24px 24px 12px 12px'};
+  border: 1px solid ${getColor('foregroundExtra')};
   &:hover {
     background: ${getColor('foregroundExtra')};
   }
@@ -51,7 +54,7 @@ export const SwapCoinInputField = ({
   const { t } = useTranslation()
 
   return (
-    <Container justifyContent="center" gap={16}>
+    <Container side={side} justifyContent="center" gap={16}>
       <HStack justifyContent="space-between" alignItems="center">
         <HStack gap={6} alignItems="center">
           <Text weight="700" size={12} color="shy">
@@ -79,7 +82,7 @@ export const SwapCoinInputField = ({
               gap={2}
               alignItems="center"
             >
-              <Text weight="700" size={12} color="contrast">
+              <Text weight="500" size={12} color="contrast">
                 {chain}
               </Text>
               <ChevronDownIcon />
@@ -88,7 +91,7 @@ export const SwapCoinInputField = ({
         </HStack>
         <SwapCoinBalance value={value} />
       </HStack>
-      <HStack justifyContent="space-between" alignItems="center">
+      <HStack flexGrow justifyContent="space-between" alignItems="center">
         <HStack alignItems="center" gap={8}>
           <ChainCoinIcon
             coinSrc={getCoinLogoSrc(value.logo)}
