@@ -7,5 +7,4 @@ export const AmountContainer = styled.div`
   position: relative;
   ${textInputBorderRadius};
   background: ${getColor('foreground')};
-  height: 60px;
 `
