@@ -785,4 +785,5 @@ export const en = {
   function_arguments: 'Function Arguments',
   function_signature: 'Function Signature',
   enable_dkls: 'Enable DKLS',
+  missing_devices_for_migration: `Join with the following devices to migrate your vault`,
 }

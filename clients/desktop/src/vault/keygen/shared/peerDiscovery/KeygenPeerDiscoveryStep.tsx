@@ -1,5 +1,7 @@
 import { recommendedPeers, requiredPeers } from '@core/mpc/peers/config'
+import { KeygenType } from '@core/mpc/tssType'
 import { range } from '@lib/utils/array/range'
+import { without } from '@lib/utils/array/without'
 import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -10,6 +12,7 @@ import { InfoIcon } from '../../../../lib/ui/icons/InfoIcon'
 import { OnBackProp, OnForwardProp } from '../../../../lib/ui/props'
 import { QueryBasedQrCode } from '../../../../lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { useMpcLocalPartyId } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'
 import { PeerOption } from '../../../../mpc/peers/option/PeerOption'
 import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryFormFooter'
@@ -29,7 +32,7 @@ import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
 import { useJoinKeygenUrlQuery } from '../../../setup/peers/queries/useJoinKeygenUrlQuery'
-import { KeygenType } from '../../KeygenType'
+import { useCurrentVault } from '../../../state/currentVault'
 import { useCurrentKeygenType } from '../../state/currentKeygenType'
 import { CurrentPeersCorrector } from './CurrentPeersCorrector'
 import { DownloadKeygenQrCode } from './DownloadKeygenQrCode'
@@ -47,6 +50,8 @@ const educationUrl: Record<KeygenType, string> = {
     'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
 }
 
+const devicesTarget = recommendedPeers + 1
+
 export const KeygenPeerDiscoveryStep = ({
   onForward,
   onBack,
@@ -58,13 +63,29 @@ export const KeygenPeerDiscoveryStep = ({
 
   const joinUrlQuery = useJoinKeygenUrlQuery()
 
+  const currentVault = useCurrentVault()
+  const localPartyId = useMpcLocalPartyId()
+
+  const keygenType = useCurrentKeygenType()
+
+  const missingPeers = useMemo(() => {
+    if (keygenType === KeygenType.Migrate) {
+      const requiredPeers = without(currentVault.signers, localPartyId)
+      return without(requiredPeers, ...selectedPeers)
+    }
+
+    return []
+  }, [currentVault.signers, keygenType, localPartyId, selectedPeers])
+
   const isDisabled = useMemo(() => {
     if (selectedPeers.length < requiredPeers) {
       return t('select_n_devices', { count: requiredPeers })
     }
-  }, [selectedPeers.length, t])
 
-  const keygenType = useCurrentKeygenType()
+    if (keygenType === KeygenType.Migrate && missingPeers.length > 0) {
+      return `${t('missing_devices_for_migration')}: ${missingPeers.join(', ')}`
+    }
+  }, [keygenType, missingPeers, selectedPeers.length, t])
 
   return (
     <>
@@ -105,30 +126,46 @@ export const KeygenPeerDiscoveryStep = ({
                 local={() => <MpcLocalServerIndicator />}
                 relay={() => <PeerRequirementsInfo />}
               />
-              <PeersManagerTitle target={recommendedPeers + 1} />
+              <PeersManagerTitle
+                target={
+                  keygenType === KeygenType.Migrate
+                    ? Math.max(currentVault.signers.length, devicesTarget)
+                    : devicesTarget
+                }
+              />
               <PeersContainer>
                 <InitiatingDevice />
                 <MatchQuery
                   value={peerOptionsQuery}
                   success={peerOptions => {
+                    const missingRecommendedPeers =
+                      recommendedPeers - peerOptions.length
+
+                    const placeholderCount =
+                      keygenType === KeygenType.Migrate
+                        ? Math.max(missingPeers.length, missingRecommendedPeers)
+                        : missingRecommendedPeers
+
                     return (
                       <>
                         {peerOptions.map(value => (
                           <PeerOption key={value} value={value} />
                         ))}
-                        {range(recommendedPeers - peerOptions.length).map(
-                          index => (
-                            <PeerPlaceholder key={index}>
-                              {t('scanWithDevice', {
-                                deviceNumber: index + peerOptions.length + 1,
-                              })}
-                            </PeerPlaceholder>
-                          )
-                        )}
-                        {peerOptions.length >= recommendedPeers && (
-                          <PeerPlaceholder>
-                            {t('optionalDevice')}
+                        {range(placeholderCount).map(index => (
+                          <PeerPlaceholder key={index}>
+                            {t('scanWithDevice', {
+                              deviceNumber: index + peerOptions.length + 1,
+                            })}
                           </PeerPlaceholder>
+                        ))}
+                        {keygenType !== KeygenType.Migrate && (
+                          <>
+                            {peerOptions.length >= recommendedPeers && (
+                              <PeerPlaceholder>
+                                {t('optionalDevice')}
+                              </PeerPlaceholder>
+                            )}
+                          </>
                         )}
                       </>
                     )
