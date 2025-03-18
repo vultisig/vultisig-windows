@@ -25,7 +25,7 @@ const Container = styled('div')`
   }
 `
 
-export const CoinOption = ({
+export const ChainOption = ({
   value,
   onClick,
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
@@ -49,7 +49,7 @@ export const CoinOption = ({
         />
         <VStack alignItems="start">
           <Text color="contrast" size={14} weight="500">
-            {ticker}
+            {chain}
           </Text>
         </VStack>
       </HStack>

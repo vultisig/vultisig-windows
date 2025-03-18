@@ -12,6 +12,7 @@ export const hr = {
   email_confirmation_code_label:
     'Írja be a biztonsági másolattal e-mailben kapott kódot',
   email_confirmation_code_error: 'Érvénytelen kód',
+  select_network: 'Odaberite mrežu',
   waiting_for_devices_to_join: 'Čeka se povezivanje drugih uređaja',
   waiting_for_devices_to_join_description:
     'Generiranje pohrane počet će čim dovršite postavljanje na glavnom uređaju',

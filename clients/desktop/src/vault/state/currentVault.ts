@@ -36,7 +36,6 @@ export const useCurrentVaultChainIds = () => {
 
 export const useCurrentVaultCoins = () => {
   const chains = useCurrentVaultChainIds()
-
   const vault = useCurrentVault()
 
   return useMemo(
