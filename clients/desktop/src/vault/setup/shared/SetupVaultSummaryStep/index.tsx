@@ -9,27 +9,21 @@ import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
 import { OnForwardProp } from '../../../../lib/ui/props'
 import { Text } from '../../../../lib/ui/text'
 import { SetupVaultType } from '../../type/SetupVaultType'
+import { useVaultType } from '../state/vaultType'
 import { RiveWrapper, Wrapper } from './SetupVaultSummaryStep.styles'
 
-type SetupVaultSummaryStepProps = OnForwardProp & {
-  vaultType: SetupVaultType
-  vaultShares?: number
+const animationPath: Record<SetupVaultType, string> = {
+  fast: '/assets/animations/fast-vault-summary/fastvault-summary.riv',
+  secure: '/assets/animations/scure-vault-summary/securevault_summary.riv',
 }
 
-export const SetupVaultSummaryStep: FC<SetupVaultSummaryStepProps> = ({
-  vaultType,
-  onForward,
-  // TODO: @tony to ask how to use this value dynamically in the animation
-  // vaultShares,
-}) => {
+export const SetupVaultSummaryStep: FC<OnForwardProp> = ({ onForward }) => {
   const { t } = useTranslation()
   const [isChecked, { toggle }] = useBoolean(false)
-  const isFastVault = vaultType === 'fast'
+  const vaultType = useVaultType()
 
   const { RiveComponent: FastVaultSetupSummary } = useRive({
-    src: isFastVault
-      ? '/assets/animations/fast-vault-summary/fastvault-summary.riv'
-      : '/assets/animations/scure-vault-summary/securevault_summary.riv',
+    src: animationPath[vaultType],
     autoplay: true,
   })
 
