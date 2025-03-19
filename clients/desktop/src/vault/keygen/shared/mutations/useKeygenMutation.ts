@@ -1,3 +1,4 @@
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { MPC } from '@core/mpc/mpc'
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
@@ -16,7 +17,6 @@ import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
 import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
 import { useCurrentVault } from '../../../state/currentVault'
-import { KeygenType } from '../../KeygenType'
 import { useCurrentKeygenType } from '../../state/currentKeygenType'
 
 export const useKeygenMutation = () => {

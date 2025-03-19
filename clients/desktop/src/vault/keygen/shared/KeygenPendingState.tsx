@@ -1,9 +1,9 @@
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { PageContent } from '../../../ui/page/PageContent'
-import { KeygenType } from '../KeygenType'
 import { useCurrentKeygenType } from '../state/currentKeygenType'
 import { KeygenEducation } from './KeygenEducation'
 import { KeygenNetworkReminder } from './KeygenNetworkReminder'

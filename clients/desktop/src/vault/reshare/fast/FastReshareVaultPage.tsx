@@ -1,3 +1,4 @@
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { MpcLib } from '@core/mpc/mpcLib'
 
 import { Match } from '../../../lib/ui/base/Match'
@@ -10,7 +11,6 @@ import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSes
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
-import { KeygenType } from '../../keygen/KeygenType'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'

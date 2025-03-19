@@ -1,6 +1,7 @@
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
+
 import { useBoolean } from '../../../../lib/ui/hooks/useBoolean'
 import { SecureVaultKeygenOverlay } from '../../../setup/secure/components/SecureVaultKeygenOverlay'
-import { KeygenType } from '../../KeygenType'
 import { useCurrentKeygenType } from '../../state/currentKeygenType'
 
 export const KeygenPeerDiscoveryEducation = () => {

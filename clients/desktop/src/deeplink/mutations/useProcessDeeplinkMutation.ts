@@ -1,13 +1,10 @@
 import { fromBinary } from '@bufbuild/protobuf'
+import { keygenMsgSchemaRecord, KeygenType } from '@core/mpc/keygen/KeygenType'
 import { match } from '@lib/utils/match'
 import { getRawQueryParams } from '@lib/utils/query/getRawQueryParams'
 import { useMutation } from '@tanstack/react-query'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import {
-  keygenMsgSchemaRecord,
-  KeygenType,
-} from '../../vault/keygen/KeygenType'
 import { parseTransferredKeysignMsg } from '../../vault/keysign/shared/utils/parseTransfferedKeysignMsg'
 import { decompressQrPayload } from '../../vault/qr/upload/utils/decompressQrPayload'
 
