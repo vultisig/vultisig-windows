@@ -19,9 +19,7 @@ import { SendCoinBalanceDependant } from './balance/SendCoinBalanceDependant'
 export const ManageSendCoin = () => {
   const [value, setValue] = useCurrentSendCoin()
   const coin = useCurrentVaultCoin(value)
-
   const { t } = useTranslation()
-
   const options = useCurrentVaultCoins()
 
   return (
@@ -38,6 +36,9 @@ export const ManageSendCoin = () => {
           <SelectItemModal
             titleKey="choose_tokens"
             optionComponent={CoinOption}
+            filterFunction={(option, query) =>
+              option.ticker.toLowerCase().startsWith(query.toLowerCase())
+            }
             onFinish={newValue => {
               if (newValue) {
                 setValue(newValue)
