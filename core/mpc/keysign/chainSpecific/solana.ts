@@ -5,7 +5,7 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
   SolanaSpecific,
   SolanaSpecificSchema,
-} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import { Address } from '@solana/web3.js'

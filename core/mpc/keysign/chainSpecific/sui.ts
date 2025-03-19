@@ -4,7 +4,7 @@ import {
   SuiCoinSchema,
   SuiSpecific,
   SuiSpecificSchema,
-} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
 

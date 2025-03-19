@@ -3,10 +3,10 @@ import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedStrin
 import {
   KeysignMessageSchema,
   KeysignPayloadSchema,
-} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { deepLinkBaseUrl } from '@core/config'
-import { uploadPayloadToServer } from '@core/keygen/server/uploadPayloadToServer'
-import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
+import { uploadPayloadToServer } from '@core/mpc/keygen/server/uploadPayloadToServer'
+import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { getSevenZip } from '@core/mpc/compression/getSevenZip'
 import { MpcServerType, mpcServerUrl } from '@core/mpc/MpcServerType'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'

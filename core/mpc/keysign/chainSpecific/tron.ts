@@ -4,8 +4,8 @@ import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
 import {
   TronSpecific,
   TronSpecificSchema,
-} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
-import { CoinSchema } from '@core/communication/vultisig/keysign/v1/coin_pb' // Import the Coin schema
+} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { CoinSchema } from '@core/mpc/types/vultisig/keysign/v1/coin_pb' // Import the Coin schema
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
 

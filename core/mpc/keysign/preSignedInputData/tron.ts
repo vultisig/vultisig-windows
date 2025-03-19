@@ -1,4 +1,4 @@
-import { TronSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import { TronSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { TW } from '@trustwallet/wallet-core'

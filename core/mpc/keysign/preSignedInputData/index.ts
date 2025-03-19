@@ -1,9 +1,9 @@
 import { Chain } from '@core/chain/Chain'
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import {
   getBlockchainSpecificValue,
   KeysignChainSpecificKey,
-} from '@core/keysign/chainSpecific/KeysignChainSpecific'
+} from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { getCosmosPreSignedInputData } from './cosmos'

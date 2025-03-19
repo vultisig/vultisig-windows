@@ -4,7 +4,7 @@ import { polkadotConfig } from '@core/chain/chains/polkadot/config'
 import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
 import { tonConfig } from '@core/chain/chains/ton/config'
 import { rippleTxFee } from '@core/chain/tx/fee/ripple'
-import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
+import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 
 export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>

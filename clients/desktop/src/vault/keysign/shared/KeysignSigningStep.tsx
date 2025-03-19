@@ -1,4 +1,4 @@
-import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
+import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'

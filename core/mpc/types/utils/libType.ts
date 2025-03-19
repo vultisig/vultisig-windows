@@ -1,4 +1,4 @@
-import { LibType } from '@core/communication/vultisig/keygen/v1/lib_type_message_pb'
+import { LibType } from '@core/mpc/types/vultisig/keygen/v1/lib_type_message_pb'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 

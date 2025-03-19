@@ -1,9 +1,6 @@
 import { create, toBinary } from '@bufbuild/protobuf'
-import { VaultContainerSchema } from '@core/communication/vultisig/vault/v1/vault_container_pb'
-import {
-  Vault,
-  VaultSchema,
-} from '@core/communication/vultisig/vault/v1/vault_pb'
+import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
+import { Vault, VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import { match } from '@lib/utils/match'
 import { useMutation, useQueryClient } from '@tanstack/react-query'

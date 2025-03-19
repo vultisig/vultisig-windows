@@ -3,7 +3,7 @@ import { getTonAccountInfo } from '@core/chain/chains/ton/account/getTonAccountI
 import {
   TonSpecific,
   TonSpecificSchema,
-} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
 import { ChainSpecificResolver } from './ChainSpecificResolver'
 

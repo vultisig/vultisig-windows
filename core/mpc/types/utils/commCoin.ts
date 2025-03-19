@@ -5,7 +5,7 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
   Coin as CommCoin,
   CoinSchema,
-} from '@core/communication/vultisig/keysign/v1/coin_pb'
+} from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
 
 export const fromCommCoin = (coin: CommCoin): AccountCoin => {
   return {

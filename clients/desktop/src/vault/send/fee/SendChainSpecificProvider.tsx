@@ -1,4 +1,4 @@
-import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
+import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { useTranslation } from 'react-i18next'
 
 import { Spinner } from '../../../lib/ui/loaders/Spinner'

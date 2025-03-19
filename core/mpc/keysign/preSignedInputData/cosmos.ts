@@ -1,7 +1,7 @@
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 import { getCoinType } from '@core/chain/coin/coinType'
-import { TransactionType } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'

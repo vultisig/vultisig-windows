@@ -12,7 +12,7 @@ import { defaultFeePriority } from '@core/chain/tx/fee/FeePriority'
 import {
   EthereumSpecific,
   EthereumSpecificSchema,
-} from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { publicActionsL2 } from 'viem/zksync'
 

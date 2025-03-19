@@ -1,5 +1,5 @@
-import { getChainSpecific } from '@core/keysign/chainSpecific'
-import { ChainSpecificResolverInput } from '@core/keysign/chainSpecific/ChainSpecificResolver'
+import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
+import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/ChainSpecificResolver'
 
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery'
 import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery'

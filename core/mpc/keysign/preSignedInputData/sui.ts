@@ -1,4 +1,4 @@
-import { SuiCoin } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import { SuiCoin } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
