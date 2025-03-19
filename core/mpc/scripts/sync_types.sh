@@ -13,7 +13,7 @@ echo "Generating protobuf files..."
 npx buf generate $TEMP_DIR/proto
 
 echo "Formatting generated protobuf files..."
-yarn format
+yarn format:types
 
 echo "Cleaning up..."
 rm -rf $TEMP_DIR

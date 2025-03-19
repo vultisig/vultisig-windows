@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest"
+    "test": "vitest",
+    "format:types": "prettier --write 'types/**/*.ts'"
   },
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "^2.2.4",
