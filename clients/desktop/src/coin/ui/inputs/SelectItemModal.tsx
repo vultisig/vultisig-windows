@@ -1,4 +1,3 @@
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -8,13 +7,11 @@ import { Modal } from '../../../lib/ui/modal'
 import { OnFinishProp, OptionsProp } from '../../../lib/ui/props'
 import { SearchField } from '../../../lib/ui/search/SearchField'
 
-type SelectOverlayProps<T> = OnFinishProp<T, 'optional'> &
+type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
   OptionsProp<T> & {
     titleKey: string
-    optionComponent: FC<{
-      value: T
-      onClick: () => void
-    }>
+    optionComponent: FC<{ value: T; onClick: () => void }>
+    filterFunction: (option: T, query: string) => boolean
   }
 
 export const SelectItemModal = <T extends { id: string; chain?: string }>({
@@ -22,7 +19,8 @@ export const SelectItemModal = <T extends { id: string; chain?: string }>({
   options,
   titleKey,
   optionComponent: OptionComponent,
-}: SelectOverlayProps<T>) => {
+  filterFunction,
+}: SelectItemModalProps<T>) => {
   const [searchQuery, setSearchQuery] = useState('')
   const { t } = useTranslation()
 
@@ -36,18 +34,15 @@ export const SelectItemModal = <T extends { id: string; chain?: string }>({
       <VStack gap={20}>
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
         <ListWrapper>
-          {withoutDuplicates(
-            options.filter(option =>
-              option.chain?.toLowerCase().includes(searchQuery.toLowerCase())
-            ),
-            (a, b) => a.id === b.id
-          ).map(option => (
-            <OptionComponent
-              key={option.id}
-              value={option}
-              onClick={() => onFinish(option)}
-            />
-          ))}
+          {options
+            .filter(option => filterFunction(option, searchQuery))
+            .map(option => (
+              <OptionComponent
+                key={`${option.id}-${option.chain}`}
+                value={option}
+                onClick={() => onFinish(option)}
+              />
+            ))}
         </ListWrapper>
       </VStack>
     </Modal>
