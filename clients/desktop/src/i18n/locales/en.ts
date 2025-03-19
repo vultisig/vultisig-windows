@@ -334,7 +334,7 @@ export const en = {
   gas_limit: 'Gas limit',
   current_base_fee: 'Current Base Fee',
   gwei: 'Gwei',
-  total_fee: 'Total Fee',
+  total_fee: 'Total Fees',
   network_fee: 'Network fee',
   swap_fee: 'Swap fee',
   network_rate: 'Network rate',

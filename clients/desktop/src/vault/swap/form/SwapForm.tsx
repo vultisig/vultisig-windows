@@ -34,13 +34,15 @@ export const SwapForm: React.FC<OnForwardProp> = ({ onForward }) => {
           isDisabled,
         })}
       >
-        <VStack gap={8}>
-          <ManageFromCoin />
-          <ReverseSwapWrapper>
-            <ReverseSwap />
-          </ReverseSwapWrapper>
-          <ManageToCoin />
+        <VStack gap={16}>
           <VStack gap={8}>
+            <ManageFromCoin />
+            <ReverseSwapWrapper>
+              <ReverseSwap />
+            </ReverseSwapWrapper>
+            <ManageToCoin />
+          </VStack>
+          <VStack gap={10}>
             <SwapInfo />
           </VStack>
         </VStack>

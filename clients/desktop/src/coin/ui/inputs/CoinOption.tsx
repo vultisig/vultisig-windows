@@ -83,7 +83,7 @@ export const CoinOption = ({
         justifyContent="center"
         alignItems="flex-end"
         style={{
-          width: 100,
+          minWidth: 100,
           height: 50,
         }}
       >
@@ -102,7 +102,15 @@ export const CoinOption = ({
           success={balance => (
             <VStack gap={6}>
               <VStack flexGrow alignItems="flex-end">
-                <Text as="span" size={12} color="contrast" weight={500}>
+                <Text
+                  style={{
+                    textAlign: 'right',
+                  }}
+                  as="span"
+                  size={12}
+                  color="contrast"
+                  weight={500}
+                >
                   {formatTokenAmount(fromChainAmount(balance, decimals))}
                   {` ${ticker}`}
                 </Text>

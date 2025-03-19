@@ -25,4 +25,5 @@ export type NativeSwapFees = {
   asset: string
   outbound: string
   total: string
+  total_bps?: number
 }

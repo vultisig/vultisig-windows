@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount'
 import { useCoinPriceQuery } from '../../../../coin/query/useCoinPriceQuery'
-import { Spinner } from '../../../../lib/ui/loaders/Spinner'
+import { Skeleton } from '../../../../components/skeleton'
 import { ValueProp } from '../../../../lib/ui/props'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { text } from '../../../../lib/ui/text'
@@ -36,7 +36,7 @@ export const SwapFiatAmount = ({
       <MatchQuery
         value={query}
         error={() => null}
-        pending={() => <Spinner />}
+        pending={() => <Skeleton width="1em" height="1em" />}
         success={price => formatFiatAmount(value.amount * price)}
       />
     </Container>
