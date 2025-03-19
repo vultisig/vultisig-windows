@@ -8,9 +8,11 @@ import styled from 'styled-components'
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
+import { Skeleton } from '../../../components/skeleton'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { panel } from '../../../lib/ui/panel/Panel'
 import { IsActiveProp, OnClickProp, ValueProp } from '../../../lib/ui/props'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
 import { shouldDisplayChainLogo } from '../../../vault/chain/utils'
@@ -38,8 +40,8 @@ export const CoinOption = ({
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
   const { chain, logo, ticker, id, decimals } = value
   const coin = useCurrentVaultCoin(value)
-  const { data: balance } = useBalanceQuery(extractAccountCoinKey(coin))
-  const { data: price } = useCoinPriceQuery({
+  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
+  const priceQuery = useCoinPriceQuery({
     coin,
   })
   const formatFiatAmount = useFormatFiatAmount()
@@ -76,14 +78,49 @@ export const CoinOption = ({
           </Text>
         </VStack>
       </HStack>
-      <VStack gap={4} justifyContent="center" alignItems="flex-end">
-        <Text size={12} color="contrast" weight={500}>
-          {formatTokenAmount(fromChainAmount(balance ?? 0, decimals))}
-          {` ${ticker}`}
-        </Text>
-        <Text size={12} color="shy" weight={500}>
-          {formatFiatAmount(Number(balance) * (price ?? 0))}
-        </Text>
+      <VStack
+        gap={4}
+        justifyContent="center"
+        alignItems="flex-end"
+        style={{
+          width: 100,
+          height: 50,
+        }}
+      >
+        <MatchQuery
+          value={{ ...balanceQuery, isPending: true }}
+          pending={() => (
+            <VStack gap={6} fullHeight fullWidth>
+              <VStack flexGrow>
+                <Skeleton />
+              </VStack>
+              <VStack flexGrow>
+                <Skeleton />
+              </VStack>
+            </VStack>
+          )}
+          success={balance => (
+            <VStack gap={6}>
+              <VStack flexGrow alignItems="flex-end">
+                <Text as="span" size={12} color="contrast" weight={500}>
+                  {formatTokenAmount(fromChainAmount(balance, decimals))}
+                  {` ${ticker}`}
+                </Text>
+              </VStack>
+              <VStack flexGrow alignItems="flex-end">
+                <MatchQuery
+                  value={priceQuery}
+                  pending={() => <Skeleton />}
+                  success={price => (
+                    <Text as="span" size={12} color="shy" weight={500}>
+                      {formatFiatAmount(Number(balance) * price)}
+                    </Text>
+                  )}
+                />
+              </VStack>
+            </VStack>
+          )}
+        />
       </VStack>
     </Container>
   )
