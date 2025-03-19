@@ -6,6 +6,7 @@ import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
+import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { panel } from '../../../lib/ui/panel/Panel'
@@ -16,6 +17,7 @@ import { shouldDisplayChainLogo } from '../../../vault/chain/utils'
 import { useCurrentVaultCoin } from '../../../vault/state/currentVault'
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
 import { useBalanceQuery } from '../../query/useBalanceQuery'
+import { useCoinPriceQuery } from '../../query/useCoinPriceQuery'
 
 const Container = styled(HStack)`
   ${panel()};
@@ -37,6 +39,10 @@ export const CoinOption = ({
   const { chain, logo, ticker, id, decimals } = value
   const coin = useCurrentVaultCoin(value)
   const { data: balance } = useBalanceQuery(extractAccountCoinKey(coin))
+  const { data: price } = useCoinPriceQuery({
+    coin,
+  })
+  const formatFiatAmount = useFormatFiatAmount()
 
   return (
     <Container
@@ -70,10 +76,15 @@ export const CoinOption = ({
           </Text>
         </VStack>
       </HStack>
-      <Text size={12} color="contrast" weight={500}>
-        {formatTokenAmount(fromChainAmount(balance ?? 0, decimals))}
-        {` ${ticker}`}
-      </Text>
+      <VStack gap={4} justifyContent="center" alignItems="flex-end">
+        <Text size={12} color="contrast" weight={500}>
+          {formatTokenAmount(fromChainAmount(balance ?? 0, decimals))}
+          {` ${ticker}`}
+        </Text>
+        <Text size={12} color="shy" weight={500}>
+          {formatFiatAmount(Number(balance) * (price ?? 0))}
+        </Text>
+      </VStack>
     </Container>
   )
 }
