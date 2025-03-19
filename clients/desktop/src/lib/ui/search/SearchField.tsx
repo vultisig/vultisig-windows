@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SearchIcon } from '../icons/SearchIcon'
 import { getColor } from '../theme/getters'
 
 interface SearchFieldProps {
-  placeholder?: string
+  placeholderKey?: string
   onSearch?: (query: string) => void
 }
 
 export const SearchField: React.FC<SearchFieldProps> = ({
-  // TODO: translate
-  placeholder = 'Search...',
+  placeholderKey = 'search_field_placeholder',
   onSearch,
 }) => {
   const [query, setQuery] = useState('')
+  const [isFocused, setIsFocused] = useState(false)
+  const { t } = useTranslation()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value)
@@ -25,16 +27,18 @@ export const SearchField: React.FC<SearchFieldProps> = ({
 
   return (
     <Wrapper>
-      {!query && (
+      {!isFocused && (
         <SearchIconWrapper>
           <SearchIcon />
         </SearchIconWrapper>
       )}
       <StyledInput
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         type="text"
         value={query}
         onChange={handleChange}
-        placeholder={`  ${placeholder}`}
+        placeholder={!isFocused ? `  ${t(placeholderKey)}` : ''}
       />
     </Wrapper>
   )

@@ -8,6 +8,7 @@ export const de = {
   onboarding_view3_description:
     'Vultisig ist von Natur aus eine Mehrgeräte-Anwendung. Erfordert mindestens zwei Geräte, um einen sicheren Tresor zu erstellen: ein initiierendes Gerät und ein Paarungsgerät.',
   moreInfo: 'Mehr Info',
+  search_field_placeholder: 'Suchen..',
   waiting_for_devices_to_join: 'Warten auf andere Geräte zum Beitreten',
   coin_not_found_in_current_vault: 'Münze nicht im aktuellen Tresor gefunden',
   waiting_for_devices_to_join_description:

@@ -2,7 +2,7 @@ import { CoinKey } from '@core/chain/coin/Coin'
 import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { pick } from '@lib/utils/record/pick'
-import { FC, useMemo } from 'react'
+import { FC } from 'react'
 
 import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains'
 import { SelectItemModal } from '../../../coin/ui/inputs/SelectItemModal'
@@ -37,19 +37,6 @@ export const SwapCoinInput: FC<SwapCoinInputProps> = ({
   const coin = useCurrentVaultCoin(value)
   const coins = useCurrentVaultCoins()
 
-  const chainOptions = useMemo(
-    () =>
-      coins.filter(
-        coin => isOneOf(coin.chain, swapEnabledChains) && isNativeCoin(coin)
-      ),
-    [coins]
-  )
-
-  const coinOptions = useMemo(
-    () => coins.filter(c => c.chain === coin?.chain),
-    [coins, coin]
-  )
-
   return (
     <Opener
       renderOpener={({ onOpen }) => (
@@ -80,11 +67,20 @@ export const SwapCoinInput: FC<SwapCoinInputProps> = ({
                 }
                 setModalTypeOpen('none')
               }}
-              options={chainOptions}
+              options={coins.filter(
+                coin =>
+                  isOneOf(coin.chain, swapEnabledChains) && isNativeCoin(coin)
+              )}
+              filterFunction={(option, query) =>
+                option.chain.toLowerCase().startsWith(query.toLowerCase())
+              }
             />
           )}
           coin={() => (
             <SelectItemModal
+              filterFunction={(option, query) =>
+                option.ticker.toLowerCase().startsWith(query.toLowerCase())
+              }
               titleKey="choose_tokens"
               optionComponent={CoinOption}
               onFinish={(newValue: CoinKey | undefined) => {
@@ -93,7 +89,7 @@ export const SwapCoinInput: FC<SwapCoinInputProps> = ({
                 }
                 setModalTypeOpen('none')
               }}
-              options={coinOptions}
+              options={coins.filter(c => c.chain === coin?.chain)}
             />
           )}
         />
