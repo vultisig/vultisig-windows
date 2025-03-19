@@ -6,7 +6,7 @@ import { formatFee } from '../../../../chain/tx/fee/utils/formatFee'
 import { Skeleton } from '../../../../components/skeleton'
 import { VStack } from '../../../../lib/ui/layout/Stack'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
-import { Text } from '../../../../lib/ui/text'
+import { Text, TextColor } from '../../../../lib/ui/text'
 import { getColor } from '../../../../lib/ui/theme/getters'
 import { useSwapChainSpecificQuery } from '../../queries/useSwapChainSpecificQuery'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
@@ -21,7 +21,6 @@ export const SwapFees: React.FC<SwapFeesProps> = ({ RowComponent }) => {
   const { t } = useTranslation()
   const query = useSwapFeesQuery()
   const chainSpecificQuery = useSwapChainSpecificQuery()
-  // TODO: implement Price Impact by using swapquotequery
   const swapQuoteQuery = useSwapQuoteQuery()
 
   return (
@@ -77,6 +76,28 @@ export const SwapFees: React.FC<SwapFeesProps> = ({ RowComponent }) => {
           }}
         />
       </FeesWrapper>
+
+      <MatchQuery
+        value={swapQuoteQuery}
+        pending={() => <Skeleton width="48px" height="12px" />}
+        error={() => <Text color="danger">{t('failed_to_load')}</Text>}
+        success={data => {
+          const totalBps = 'native' in data ? data.native.fees.total_bps : 0
+          if (!totalBps) return null
+
+          const toalBpsPercentage = totalBps / 100
+          const { color, label } = getPriceImpactVariant(toalBpsPercentage)
+
+          return (
+            <RowComponent>
+              <span>Price Impact</span>
+              <Text color={color}>
+                {toalBpsPercentage}% ({t(label)})
+              </Text>
+            </RowComponent>
+          )
+        }}
+      />
     </>
   )
 }
@@ -96,3 +117,24 @@ const FeesWrapper = styled(VStack)`
     position: absolute;
   }
 `
+
+const getPriceImpactVariant = (
+  toalBpsPercentage: number
+): {
+  color: TextColor
+  label: string
+} =>
+  toalBpsPercentage < 2.5
+    ? {
+        color: 'primary',
+        label: 'price_impact_good',
+      }
+    : toalBpsPercentage < 5
+      ? {
+          color: 'idle',
+          label: 'price_impact_average',
+        }
+      : {
+          color: 'danger',
+          label: 'price_impact_high',
+        }

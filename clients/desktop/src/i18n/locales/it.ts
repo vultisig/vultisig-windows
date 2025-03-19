@@ -11,6 +11,10 @@ export const it = {
   search_field_placeholder: 'Cerca..',
   select_asset: 'Seleziona asset',
   chain: 'Catena',
+  price_impact_good: 'Buono',
+  price_impact_average: 'Medio',
+  price_impact_high: 'Impatto Alto',
+
   coin_not_found_in_current_vault:
     'Moneta non trovata nella cassaforte attuale',
   secureVaultSetupPasswordTooltipContent:

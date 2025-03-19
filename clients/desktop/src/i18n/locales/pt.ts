@@ -14,6 +14,9 @@ export const pt = {
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
   search_field_placeholder: 'Pesquisar..',
   select_asset: 'Selecionar ativo',
+  price_impact_good: 'Bom',
+  price_impact_average: 'Médio',
+  price_impact_high: 'Alto Impacto',
   select_network: 'Selecionar rede',
   coin_not_found_in_current_vault: 'Moeda não encontrada no cofre atual',
   secureVaultSetupPasswordTooltipContent:

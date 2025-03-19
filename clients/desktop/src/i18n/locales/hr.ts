@@ -12,6 +12,9 @@ export const hr = {
   search_field_placeholder: 'Pretraži..',
   select_asset: 'Odaberite imovinu',
   chain: 'Lanac',
+  price_impact_good: 'Dobro',
+  price_impact_average: 'Prosječno',
+  price_impact_high: 'Visok Utjecaj',
   email_confirmation_code_label:
     'Írja be a biztonsági másolattal e-mailben kapott kódot',
   email_confirmation_code_error: 'Érvénytelen kód',
