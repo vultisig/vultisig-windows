@@ -8,10 +8,12 @@ export const pt = {
   onboarding_view3_description:
     'O Vultisig é, por natureza, um aplicativo multi-dispositivo. Exige pelo menos dois dispositivos para criar um cofre seguro: um dispositivo inicializador e um dispositivo de pareamento.',
   moreInfo: 'Mais informações',
+  chain: 'Cadeia',
   waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem',
   waiting_for_devices_to_join_description:
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
   search_field_placeholder: 'Pesquisar..',
+  select_asset: 'Selecionar ativo',
   select_network: 'Selecionar rede',
   coin_not_found_in_current_vault: 'Moeda não encontrada no cofre atual',
   secureVaultSetupPasswordTooltipContent:

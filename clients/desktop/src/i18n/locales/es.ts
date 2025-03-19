@@ -7,7 +7,9 @@ export const es = {
     'Vultisig no rastrea sus actividades ni requiere ningún registro. Vultisig es de código abierto, garantizando transparencia y confianza.',
   onboarding_view3_description:
     'Vultisig es, por naturaleza, una aplicación multi-dispositivo. Requiere al menos dos dispositivos para crear una bóveda segura: un dispositivo iniciador y un dispositivo de emparejamiento.',
+  select_asset: 'Seleccionar activo',
   moreInfo: 'Más información',
+  chain: 'Cadena',
   search_field_placeholder: 'Buscar..',
   coin_not_found_in_current_vault: 'Moneda no encontrada en la bóveda actual',
   waiting_for_devices_to_join: 'Esperando a que otros dispositivos se unan',

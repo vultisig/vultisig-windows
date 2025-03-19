@@ -10,6 +10,8 @@ export const hr = {
   onboarding_view4_description:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
+  select_asset: 'Odaberite imovinu',
+  chain: 'Lanac',
   email_confirmation_code_label:
     'Írja be a biztonsági másolattal e-mailben kapott kódot',
   email_confirmation_code_error: 'Érvénytelen kód',

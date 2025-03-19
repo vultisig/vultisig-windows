@@ -387,6 +387,8 @@ export const en = {
   send_terms_2: 'I’m not sending to a scam or hacker',
   terms_required: 'You must agree with the terms',
   choose_tokens: 'Choose Tokens',
+  chain: 'Chain',
+  select_asset: 'Select asset',
   optional: 'optional',
   enter_memo: 'Enter Memo',
   complete: 'Complete',
