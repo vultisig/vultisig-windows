@@ -1,5 +1,8 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
@@ -10,9 +13,11 @@ import { IsActiveProp, OnClickProp, ValueProp } from '../../../lib/ui/props'
 import { Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
 import { shouldDisplayChainLogo } from '../../../vault/chain/utils'
+import { useCurrentVaultCoin } from '../../../vault/state/currentVault'
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
+import { useBalanceQuery } from '../../query/useBalanceQuery'
 
-const Container = styled('div')`
+const Container = styled(HStack)`
   ${panel()};
   padding: 12px 20px;
   border-radius: 0px;
@@ -29,11 +34,20 @@ export const CoinOption = ({
   value,
   onClick,
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
-  const { chain, logo, ticker, id } = value
+  const { chain, logo, ticker, id, decimals } = value
+  const coin = useCurrentVaultCoin(value)
+  const { data: balance } = useBalanceQuery(extractAccountCoinKey(coin))
 
   return (
-    <Container tabIndex={0} role="button" onClick={onClick}>
-      <HStack fullWidth alignItems="center" gap={12}>
+    <Container
+      fullWidth
+      tabIndex={0}
+      role="button"
+      onClick={onClick}
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      <HStack alignItems="center" gap={12}>
         <ChainCoinIcon
           coinSrc={getCoinLogoSrc(logo)}
           chainSrc={
@@ -47,12 +61,19 @@ export const CoinOption = ({
           }
           style={{ fontSize: 32 }}
         />
-        <VStack alignItems="start">
-          <Text color="contrast" size={14} weight="500">
+        <VStack gap={2}>
+          <Text color="contrast" size={13} weight="500">
             {ticker}
+          </Text>
+          <Text color="shy" size={11} weight="500">
+            {chain}
           </Text>
         </VStack>
       </HStack>
+      <Text size={12} color="contrast" weight={500}>
+        {formatTokenAmount(fromChainAmount(balance ?? 0, decimals))}
+        {` ${ticker}`}
+      </Text>
     </Container>
   )
 }
