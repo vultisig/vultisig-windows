@@ -1,5 +1,5 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { VaultSchema } from '@core/communication/vultisig/vault/v1/vault_pb'
+import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
 import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
 import { fromBase64 } from '@lib/utils/fromBase64'
 import { pipe } from '@lib/utils/pipe'

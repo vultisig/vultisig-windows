@@ -1,11 +1,11 @@
 import { create } from '@bufbuild/protobuf'
 import { EvmChain, UtxoChain } from '@core/chain/Chain'
 import { getErc20Allowance } from '@core/chain/chains/evm/erc20/getErc20Allowance'
-import { Erc20ApprovePayloadSchema } from '@core/communication/vultisig/keysign/v1/erc20_approve_payload_pb'
+import { Erc20ApprovePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/erc20_approve_payload_pb'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
-} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { assertField } from '@lib/utils/record/assertField'
 

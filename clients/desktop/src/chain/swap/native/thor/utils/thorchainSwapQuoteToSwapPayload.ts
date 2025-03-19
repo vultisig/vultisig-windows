@@ -2,7 +2,7 @@ import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
-import { THORChainSwapPayloadSchema } from '@core/communication/vultisig/keysign/v1/thorchain_swap_payload_pb'
+import { THORChainSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/thorchain_swap_payload_pb'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 import { addMinutes } from 'date-fns'
 

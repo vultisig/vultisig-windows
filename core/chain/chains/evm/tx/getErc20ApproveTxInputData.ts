@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
-import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { EthereumSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'

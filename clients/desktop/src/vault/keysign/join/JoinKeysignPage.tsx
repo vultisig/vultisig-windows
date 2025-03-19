@@ -1,4 +1,4 @@
-import { getKeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
+import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { useMemo } from 'react'
 
 import { Match } from '../../../lib/ui/base/Match'

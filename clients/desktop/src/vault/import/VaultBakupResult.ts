@@ -1,4 +1,4 @@
-import { VaultContainer } from '@core/communication/vultisig/vault/v1/vault_container_pb'
+import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 
 import { storage } from '../../../wailsjs/go/models'
 

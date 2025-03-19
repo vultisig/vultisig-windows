@@ -1,4 +1,4 @@
-import { fromLibType } from '@core/communication/utils/libType'
+import { fromLibType } from '@core/mpc/types/utils/libType'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 

@@ -1,9 +1,9 @@
 import { create } from '@bufbuild/protobuf'
-import { EthereumSpecific } from '@core/communication/vultisig/keysign/v1/blockchain_specific_pb'
+import { EthereumSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
-} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
 export const incrementKeysignPayloadNonce = (
   keysignPayload: KeysignPayload

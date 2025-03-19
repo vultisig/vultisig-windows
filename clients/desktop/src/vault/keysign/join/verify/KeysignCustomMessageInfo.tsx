@@ -1,4 +1,4 @@
-import { CustomMessagePayload } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
+import { CustomMessagePayload } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { useTranslation } from 'react-i18next'
 
 import {
