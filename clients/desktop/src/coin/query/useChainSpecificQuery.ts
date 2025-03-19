@@ -1,5 +1,5 @@
-import { getChainSpecific } from '@core/keysign/chainSpecific'
-import { ChainSpecificResolverInput } from '@core/keysign/chainSpecific/ChainSpecificResolver'
+import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
+import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/ChainSpecificResolver'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { useQuery } from '@tanstack/react-query'
 

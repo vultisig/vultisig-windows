@@ -49,11 +49,11 @@ import {
   useWalletCore,
   WalletCoreProvider,
 } from '@core/chain-ui/providers/WalletCoreProvider'
-import { CustomMessagePayloadSchema } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
-import { KeysignChainSpecific } from '@core/keysign/chainSpecific/KeysignChainSpecific'
-import { KeysignMessagePayload } from '@core/keysign/keysignPayload/KeysignMessagePayload'
-import { getPreSignedInputData } from '@core/keysign/preSignedInputData'
+import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData'
+import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { Button, Form, Input, message, QRCode } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'

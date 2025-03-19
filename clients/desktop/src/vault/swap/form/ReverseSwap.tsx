@@ -5,16 +5,48 @@ import { centerContent } from '../../../lib/ui/css/centerContent'
 import { round } from '../../../lib/ui/css/round'
 import { sameDimensions } from '../../../lib/ui/css/sameDimensions'
 import { ReverseIcon } from '../../../lib/ui/icons/ReverseIcon'
+import { HStack } from '../../../lib/ui/layout/Stack'
 import { getColor } from '../../../lib/ui/theme/getters'
 import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'
 
-const Container = styled(UnstyledButton)`
+const Wrapper = styled(HStack)`
+  background-color: ${getColor('background')};
+  border-radius: 25.5px;
+  padding: 7px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 
+  &::before {
+    content: '';
+    position: absolute;
+    width: 54px;
+    top: 0;
+    height: 19px;
+    border-radius: 50px;
+    border: 1px solid ${getColor('foregroundExtra')};
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 54px;
+    bottom: 0px;
+    height: 19px;
+    border-radius: 50px;
+    border: 1px solid ${getColor('foregroundExtra')};
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-top: none;
+  }
+`
+
+const Button = styled(UnstyledButton)`
   ${round};
   ${sameDimensions(40)};
   background: ${getColor('primaryAlt')};
@@ -22,6 +54,8 @@ const Container = styled(UnstyledButton)`
   ${centerContent};
   font-size: 16px;
   color: ${getColor('contrast')};
+  &:before {
+  }
 `
 
 export const ReverseSwap = () => {
@@ -29,13 +63,15 @@ export const ReverseSwap = () => {
   const [toCoin, setToCoin] = useToCoin()
 
   return (
-    <Container
-      onClick={() => {
-        setFromCoin(toCoin)
-        setToCoin(fromCoin)
-      }}
-    >
-      <ReverseIcon />
-    </Container>
+    <Wrapper justifyContent="center" alignItems="center">
+      <Button
+        onClick={() => {
+          setFromCoin(toCoin)
+          setToCoin(fromCoin)
+        }}
+      >
+        <ReverseIcon />
+      </Button>
+    </Wrapper>
   )
 }

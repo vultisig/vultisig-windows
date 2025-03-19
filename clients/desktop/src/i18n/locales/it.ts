@@ -8,10 +8,12 @@ export const it = {
   onboarding_view3_description:
     "Vultisig è, per natura, un'applicazione multi-dispositivo. Richiede almeno due dispositivi per creare una cassaforte sicura: un dispositivo iniziale e un dispositivo di accoppiamento.",
   moreInfo: 'Maggiori informazioni',
+  search_field_placeholder: 'Cerca..',
   coin_not_found_in_current_vault:
     'Moneta non trovata nella cassaforte attuale',
   secureVaultSetupPasswordTooltipContent:
     'Ciò avviene perché la password viene utilizzata per crittografare localmente il file di backup, in modo simile alla crittografia di un disco rigido. Nel passo successivo, hai la possibilità di aggiungere un suggerimento.',
+  select_network: 'Seleziona rete',
   onboarding_view4_description:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   tokens: 'token',

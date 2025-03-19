@@ -7,11 +7,13 @@ export const en = {
     'Vultisig does not track your activities or require any registrations. Vultisig is fully open-source, ensuring transparency and trust.',
   onboarding_view3_description:
     'Vultisig is natively a multi-device application. Requiring at least two devices to create a secure vault. One initiating and one pairing device.',
+  search_field_placeholder: 'Search..',
   onboarding_view4_description:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
   create_new_vault: 'Create a New Vault',
   missing_public_key_ecdsa: 'Missing Public Key ECDSA',
   missing_verification_code: 'Missing Verification Code',
+  select_network: 'Select Network',
   waiting_for_devices_to_join: 'Waiting for other devices to join',
   waiting_for_devices_to_join_description:
     'Your vault will start generating from the moment you finalize setting up your vault on your main device',

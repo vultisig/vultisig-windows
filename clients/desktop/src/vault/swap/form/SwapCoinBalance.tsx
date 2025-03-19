@@ -9,14 +9,14 @@ import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { ValueProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
-import { text } from '../../../lib/ui/text'
+import { Text, text } from '../../../lib/ui/text'
 import { useCurrentVaultCoin } from '../../state/currentVault'
 
 const Container = styled.div`
   ${text({
-    color: 'supporting',
+    color: 'shy',
     weight: '700',
-    size: 14,
+    size: 12,
     centerVertically: {
       gap: 8,
     },
@@ -25,26 +25,22 @@ const Container = styled.div`
 
 export const SwapCoinBalance = ({ value }: ValueProp<CoinKey>) => {
   const { t } = useTranslation()
-
   const coin = useCurrentVaultCoin(value)
-
   const query = useBalanceQuery(extractAccountCoinKey(coin))
 
   return (
     <Container>
-      <span>{t('balance')}:</span>
-      <span>
-        <MatchQuery
-          value={query}
-          pending={() => <Spinner />}
-          error={() => t('failed_to_load')}
-          success={amount => (
-            <span>
-              {formatTokenAmount(fromChainAmount(amount, coin.decimals))}
-            </span>
-          )}
-        />
-      </span>
+      <MatchQuery
+        value={query}
+        pending={() => <Spinner />}
+        error={() => t('failed_to_load')}
+        success={amount => (
+          <Text size={12} color="shy" weight={500}>
+            {formatTokenAmount(fromChainAmount(amount, coin.decimals))}
+            {` ${coin.ticker}`}
+          </Text>
+        )}
+      />
     </Container>
   )
 }

@@ -1,11 +1,11 @@
 import { create } from '@bufbuild/protobuf'
 import { getErc20ApproveTxInputData } from '@core/chain/chains/evm/tx/getErc20ApproveTxInputData'
 import { incrementKeysignPayloadNonce } from '@core/chain/chains/evm/tx/incrementKeysignPayloadNonce'
+import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData/index'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
-} from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
-import { getPreSignedInputData } from '@core/keysign/preSignedInputData/index'
+} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { WalletCore } from '@trustwallet/wallet-core'
 

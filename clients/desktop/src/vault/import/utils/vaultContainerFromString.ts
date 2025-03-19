@@ -1,5 +1,5 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { VaultContainerSchema } from '@core/communication/vultisig/vault/v1/vault_container_pb'
+import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { fromBase64 } from '@lib/utils/fromBase64'
 import { pipe } from '@lib/utils/pipe'
 

@@ -8,7 +8,6 @@ import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicator'
 import { RefreshSwap } from '../components/RefreshSwap'
 import { SwapAmount } from './amount/SwapAmount'
 import { useIsSwapFormDisabled } from './hooks/useIsSwapFormDisabled'
@@ -34,16 +33,14 @@ export const SwapForm: React.FC<OnForwardProp> = ({ onForward }) => {
           isDisabled,
         })}
       >
-        <WithProgressIndicator value={0.2}>
-          <VStack gap={16}>
-            <ManageFromCoin />
-            <SwapAmount />
-            <ManageToCoin />
-            <VStack gap={8}>
-              <SwapInfo />
-            </VStack>
+        <VStack gap={8}>
+          <ManageFromCoin />
+          <SwapAmount />
+          <ManageToCoin />
+          <VStack gap={8}>
+            <SwapInfo />
           </VStack>
-        </WithProgressIndicator>
+        </VStack>
         <Button isDisabled={isDisabled} type="submit">
           {t('continue')}
         </Button>

@@ -1,6 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'

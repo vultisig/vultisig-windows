@@ -9,8 +9,8 @@ import {
   OneInchSwapPayloadSchema,
   OneInchTransaction,
   OneInchTransactionSchema,
-} from '@core/communication/vultisig/keysign/v1/1inch_swap_payload_pb'
-import { KeysignPayload } from '@core/communication/vultisig/keysign/v1/keysign_message_pb'
+} from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'

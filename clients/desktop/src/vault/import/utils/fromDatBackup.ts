@@ -1,11 +1,11 @@
 import { create } from '@bufbuild/protobuf'
 import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt'
-import { toLibType } from '@core/communication/utils/libType'
+import { defaultMpcLib, MpcLib } from '@core/mpc/mpcLib'
+import { toLibType } from '@core/mpc/types/utils/libType'
 import {
   Vault_KeyShareSchema,
   VaultSchema,
-} from '@core/communication/vultisig/vault/v1/vault_pb'
-import { defaultMpcLib, MpcLib } from '@core/mpc/mpcLib'
+} from '@core/mpc/types/vultisig/vault/v1/vault_pb'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
 import { storage } from '../../../../wailsjs/go/models'

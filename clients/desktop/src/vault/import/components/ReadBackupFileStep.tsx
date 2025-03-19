@@ -1,4 +1,4 @@
-import { VaultContainer } from '@core/communication/vultisig/vault/v1/vault_container_pb'
+import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'

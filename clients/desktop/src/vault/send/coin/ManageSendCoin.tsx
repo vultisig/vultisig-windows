@@ -3,7 +3,8 @@ import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { CoinInputContainer } from '../../../coin/ui/inputs/CoinInputContainer'
-import { SelectCoinOverlay } from '../../../coin/ui/inputs/SelectCoinOverlay'
+import { CoinOption } from '../../../coin/ui/inputs/CoinOption'
+import { SelectItemModal } from '../../../coin/ui/inputs/SelectItemModal'
 import { Opener } from '../../../lib/ui/base/Opener'
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel'
@@ -18,9 +19,7 @@ import { SendCoinBalanceDependant } from './balance/SendCoinBalanceDependant'
 export const ManageSendCoin = () => {
   const [value, setValue] = useCurrentSendCoin()
   const coin = useCurrentVaultCoin(value)
-
   const { t } = useTranslation()
-
   const options = useCurrentVaultCoins()
 
   return (
@@ -34,7 +33,12 @@ export const ManageSendCoin = () => {
           />
         )}
         renderContent={({ onClose }) => (
-          <SelectCoinOverlay
+          <SelectItemModal
+            titleKey="choose_tokens"
+            optionComponent={CoinOption}
+            filterFunction={(option, query) =>
+              option.ticker.toLowerCase().startsWith(query.toLowerCase())
+            }
             onFinish={newValue => {
               if (newValue) {
                 setValue(newValue)

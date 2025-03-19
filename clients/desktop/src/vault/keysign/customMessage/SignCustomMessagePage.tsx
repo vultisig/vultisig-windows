@@ -1,5 +1,5 @@
 import { create } from '@bufbuild/protobuf'
-import { CustomMessagePayloadSchema } from '@core/communication/vultisig/keysign/v1/custom_message_payload_pb'
+import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

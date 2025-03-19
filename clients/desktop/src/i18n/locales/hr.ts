@@ -9,9 +9,11 @@ export const hr = {
     'Vultisig je po prirodi višeslojna aplikacija. Zahtijeva najmanje dva uređaja za stvaranje sigurnog trezora: inicijalni uređaj i uređaj za uparivanje.',
   onboarding_view4_description:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
+  search_field_placeholder: 'Pretraži..',
   email_confirmation_code_label:
     'Írja be a biztonsági másolattal e-mailben kapott kódot',
   email_confirmation_code_error: 'Érvénytelen kód',
+  select_network: 'Odaberite mrežu',
   waiting_for_devices_to_join: 'Čeka se povezivanje drugih uređaja',
   waiting_for_devices_to_join_description:
     'Generiranje pohrane počet će čim dovršite postavljanje na glavnom uređaju',
