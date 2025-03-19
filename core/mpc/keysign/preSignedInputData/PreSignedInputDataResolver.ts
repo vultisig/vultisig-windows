@@ -1,9 +1,9 @@
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import {
   ChainsBySpecific,
   KeysignChainSpecificKey,
   KeysignChainSpecificValueByKey,
 } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { WalletCore } from '@trustwallet/wallet-core'
 
 export type GetPreSignedInputDataInput<T extends KeysignChainSpecificKey> = {

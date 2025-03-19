@@ -1,5 +1,5 @@
-import { LibType } from '@core/mpc/types/vultisig/keygen/v1/lib_type_message_pb'
 import { MpcLib } from '@core/mpc/mpcLib'
+import { LibType } from '@core/mpc/types/vultisig/keygen/v1/lib_type_message_pb'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 
 const mpcLibToLibType: Record<MpcLib, LibType> = {

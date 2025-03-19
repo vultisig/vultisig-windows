@@ -12,12 +12,12 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getCoinFromCoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { CoinSchema } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { toUtf8String } from 'ethers'
 
 export const getKeysignPayload = (
