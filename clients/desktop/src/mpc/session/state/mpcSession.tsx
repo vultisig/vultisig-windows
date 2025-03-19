@@ -8,7 +8,7 @@ export const { useValue: useMpcSessionId, provider: MpcSessionIdProvider } =
   getValueProviderSetup<string>('MpcSessionId')
 
 export const GeneratedMpcSessionIdProvider = ({ children }: ChildrenProp) => {
-  const MpcSessionId = useMemo(uuidv4, [])
+  const MpcSessionId = useMemo(() => uuidv4(), [])
 
   return (
     <MpcSessionIdProvider value={MpcSessionId}>{children}</MpcSessionIdProvider>

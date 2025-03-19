@@ -8,6 +8,9 @@ import { CSSProperties, FC, ReactNode, useLayoutEffect, useState } from 'react'
 
 import { ConfigKey, configsMap, ConfigValue } from './animationConfigs'
 
+// Create an animated wrapper component
+const AnimatedDiv = animated('div')
+
 type AnimatedVisibilityProps = {
   customAnimationConfig?: ConfigValue
   children: ReactNode
@@ -64,7 +67,7 @@ export const AnimatedVisibility: FC<AnimatedVisibilityProps> = ({
   return transitions(
     (styles, item) =>
       item && (
-        <animated.div
+        <AnimatedDiv
           className={className}
           style={{
             ...styles,
@@ -72,7 +75,7 @@ export const AnimatedVisibility: FC<AnimatedVisibilityProps> = ({
           }}
         >
           {children}
-        </animated.div>
+        </AnimatedDiv>
       )
   )
 }

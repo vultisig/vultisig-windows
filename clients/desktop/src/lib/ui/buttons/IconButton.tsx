@@ -1,5 +1,5 @@
 import { match } from '@lib/utils/match'
-import { ComponentProps, forwardRef, Ref } from 'react'
+import { ComponentProps } from 'react'
 import styled, { css } from 'styled-components'
 
 import { borderRadius } from '../css/borderRadius'
@@ -81,19 +81,16 @@ export type IconButtonProps = Omit<
   isDisabled?: boolean | string
 }
 
-export const IconButton = forwardRef(function IconButton(
-  {
-    size = 'm',
-    kind = 'regular',
-    icon,
-    type = 'button',
-    isDisabled = false,
-    onClick,
+export const IconButton = ({
+  size = 'm',
+  kind = 'regular',
+  icon,
+  type = 'button',
+  isDisabled = false,
+  onClick,
 
-    ...rest
-  }: IconButtonProps,
-  ref: Ref<HTMLButtonElement> | null
-) {
+  ...rest
+}: IconButtonProps) => {
   const containerProps = {
     type,
     kind,
@@ -103,9 +100,5 @@ export const IconButton = forwardRef(function IconButton(
     ...rest,
   }
 
-  return (
-    <Container ref={ref} {...containerProps}>
-      {icon}
-    </Container>
-  )
-})
+  return <Container {...containerProps}>{icon}</Container>
+}

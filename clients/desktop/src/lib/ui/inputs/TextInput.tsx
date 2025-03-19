@@ -1,4 +1,4 @@
-import { ChangeEvent, ComponentProps, forwardRef, Ref } from 'react'
+import { ChangeEvent, ComponentProps } from 'react'
 import styled, { css } from 'styled-components'
 
 import { textInput } from '../css/textInput'
@@ -22,17 +22,15 @@ export interface TextInputProps
   inputOverlay?: React.ReactNode
 }
 
-export const TextInput = forwardRef(function TextInputInner(
-  {
-    onValueChange,
-    inputOverlay,
-    isLoading,
-    className,
-    label,
-    ...props
-  }: TextInputProps,
-  ref: Ref<HTMLInputElement> | null
-) {
+export const TextInput = ({
+  onValueChange,
+  inputOverlay,
+  isLoading,
+  className,
+  label,
+  ref,
+  ...props
+}: TextInputProps) => {
   return (
     <InputContainer>
       {label && <InputLabel>{label}</InputLabel>}
@@ -54,7 +52,7 @@ export const TextInput = forwardRef(function TextInputInner(
       </InputWr>
     </InputContainer>
   )
-})
+}
 
 const InputWr = styled.div`
   width: 100%;

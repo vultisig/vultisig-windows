@@ -15,32 +15,32 @@
     "translate": "npx tsx src/i18n/scripts/translate.ts"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.2.6",
-    "@eslint/eslintrc": "^3.2.0",
-    "@eslint/js": "^9.19.0",
-    "eslint": "^9.20.0",
-    "eslint-config-prettier": "^10.0.1",
+    "@eslint/compat": "^1.2.7",
+    "@eslint/eslintrc": "^3.3.0",
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react": "^7.37.4",
-    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "globals": "^15.14.0",
-    "prettier": "^3.4.2",
-    "typescript": "^5.7.3",
-    "vite": "^5.1.8",
-    "vite-plugin-node-polyfills": "^0.22.0",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.2",
+    "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-node-stdlib-browser": "^0.2.1",
-    "vite-plugin-static-copy": "0.17.0",
-    "vitest": "^2.1.9"
+    "vite-plugin-static-copy": "^2.3.0",
+    "vitest": "^3.0.9"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^2.2.3",
-    "@cosmjs/stargate": "^0.33.0",
-    "@mysten/sui": "^1.21.2",
-    "@polkadot/api": "^15.5.2",
+    "@bufbuild/protobuf": "^2.2.4",
+    "@cosmjs/stargate": "^0.33.1",
+    "@mysten/sui": "^1.24.0",
+    "@polkadot/api": "^15.8.1",
     "@solana/web3.js": "^2.0.0",
-    "styled-components": "^6.1.15",
-    "xrpl": "^4.1.0"
+    "styled-components": "^6.1.16",
+    "xrpl": "^4.2.0"
   }
 }

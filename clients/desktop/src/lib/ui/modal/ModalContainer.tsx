@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef, ElementType, forwardRef } from 'react'
+import { ComponentPropsWithoutRef, ElementType } from 'react'
 import FocusLock from 'react-focus-lock'
 import styled, { css } from 'styled-components'
 
@@ -43,30 +43,21 @@ const Container = styled(FocusLock)<ContainerProps>`
   overflow: hidden;
 `
 
-type ModalContainerProps<T extends ElementType = 'div'> = {
+type ModalContainerProps = {
   targetWidth?: number
   placement?: ModalPlacement
-  as?: T
+  as?: ElementType
 } & Omit<
-  ComponentPropsWithoutRef<T>,
+  ComponentPropsWithoutRef<ElementType>,
   keyof ContainerProps | 'as' | 'width' | 'placement'
 >
 
-type PolymorphicRef<C extends React.ElementType> =
-  React.ComponentPropsWithRef<C>['ref']
-
-// @ts-ignore
-export const ModalContainer = forwardRef(function ModalContainerInner<
-  T extends ElementType = 'div',
->(
-  {
-    targetWidth = 400,
-    placement = 'center',
-    as,
-    ...props
-  }: ModalContainerProps<T>,
-  ref: PolymorphicRef<T>
-) {
+export const ModalContainer = ({
+  targetWidth = 400,
+  placement = 'center',
+  as,
+  ...props
+}: ModalContainerProps) => {
   const isFullScreen = useIsScreenWidthLessThan(
     targetWidth + modalConfig.minHorizontalFreeSpaceForMist
   )
@@ -75,10 +66,9 @@ export const ModalContainer = forwardRef(function ModalContainerInner<
     <Container
       returnFocus
       as={as}
-      ref={ref}
       width={isFullScreen ? undefined : targetWidth}
       placement={placement}
       {...props}
     />
   )
-})
+}

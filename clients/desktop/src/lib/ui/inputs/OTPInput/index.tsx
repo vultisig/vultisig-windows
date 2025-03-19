@@ -42,7 +42,9 @@ export const OTPInput = ({
           onChange={e => handleChange(e, index)}
           onPaste={handlePaste}
           maxLength={1}
-          ref={el => (inputRefs.current[index] = el)}
+          ref={el => {
+            inputRefs.current[index] = el
+          }}
           {...props}
         />
       ))}

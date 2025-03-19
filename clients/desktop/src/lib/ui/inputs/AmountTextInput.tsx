@@ -1,4 +1,4 @@
-import { forwardRef, ReactNode, Ref, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
 import { borderRadius } from '../css/borderRadius'
@@ -32,21 +32,19 @@ const Input = styled(TextInput)`
   })}
 `
 
-export const AmountTextInput = forwardRef(function AmountInputInner(
-  {
-    onValueChange,
-    unit,
-    value,
-    shouldBePositive,
-    shouldBeInteger,
-    suggestion,
-    label,
-    placeholder,
-    type = 'number',
-    ...props
-  }: AmountTextInputProps,
-  ref: Ref<HTMLInputElement> | null
-) {
+export const AmountTextInput = ({
+  onValueChange,
+  unit,
+  value,
+  shouldBePositive,
+  shouldBeInteger,
+  suggestion,
+  label,
+  placeholder,
+  type = 'number',
+  ref,
+  ...props
+}: AmountTextInputProps) => {
   const valueAsString = value?.toString() ?? ''
   const [inputValue, setInputValue] = useState<string>(valueAsString)
 
@@ -99,4 +97,4 @@ export const AmountTextInput = forwardRef(function AmountInputInner(
       }}
     />
   )
-})
+}
