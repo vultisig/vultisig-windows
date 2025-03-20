@@ -18,10 +18,10 @@ export const RefreshSwap = () => {
   const [timeLeft, setTimeLeft] = useState(0)
 
   useEffect(() => {
-    if (swapQuoteData || isSwapQuotePending) {
+    if ((swapQuoteData || isSwapQuotePending) && !timeLeft) {
       setTimeLeft(COUNTDOWN_TIME)
     }
-  }, [isSwapQuotePending, swapQuoteData])
+  }, [isSwapQuotePending, swapQuoteData, timeLeft])
 
   useEffect(() => {
     if (timeLeft === 0) {
