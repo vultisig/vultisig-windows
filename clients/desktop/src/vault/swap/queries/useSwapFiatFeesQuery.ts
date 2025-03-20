@@ -1,21 +1,18 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { areEqualCoins, coinKeyToString } from '@core/chain/coin/Coin'
-import { ValueProp } from '@lib/ui/props'
 import { sum } from '@lib/utils/array/sum'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getRecordSize } from '@lib/utils/record/getRecordSize'
 import { useCallback, useMemo } from 'react'
 
-import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount'
-import { useCoinPricesQuery } from '../../../../coin/query/useCoinPricesQuery'
-import { Skeleton } from '../../../../components/skeleton'
-import { MatchEagerQuery } from '../../../../lib/ui/query/components/MatchEagerQuery'
-import { useTransformQueryData } from '../../../../lib/ui/query/hooks/useTransformQueryData'
-import { useCurrentVaultCoins } from '../../../state/currentVault'
-import { SwapFee } from '../../types/SwapFee'
+import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
+import { useCoinPricesQuery } from '../../../coin/query/useCoinPricesQuery'
+import { useTransformQueryData } from '../../../lib/ui/query/hooks/useTransformQueryData'
+import { useCurrentVaultCoins } from '../../state/currentVault'
+import { SwapFee } from '../types/SwapFee'
 
-export const SwapFeeFiatValue = ({ value }: ValueProp<SwapFee[]>) => {
+export const useSwapFiatFeesQuery = (value: SwapFee[]) => {
   const vaultCoins = useCurrentVaultCoins()
   const coins = useMemo(
     () =>
@@ -34,7 +31,7 @@ export const SwapFeeFiatValue = ({ value }: ValueProp<SwapFee[]>) => {
 
   const formatAmount = useFormatFiatAmount()
 
-  const pricesQuery = useTransformQueryData(
+  return useTransformQueryData(
     useCoinPricesQuery({ coins }),
     useCallback(
       prices => {
@@ -55,13 +52,5 @@ export const SwapFeeFiatValue = ({ value }: ValueProp<SwapFee[]>) => {
       },
       [coins.length, formatAmount, value]
     )
-  )
-
-  return (
-    <MatchEagerQuery
-      value={pricesQuery}
-      pending={() => <Skeleton as="span" width="44px" height="12px" />}
-      success={value => value}
-    />
   )
 }
