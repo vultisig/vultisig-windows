@@ -1,45 +1,68 @@
-import { QueryKey, useMutation } from '@tanstack/react-query'
+import 'react-circular-progressbar/dist/styles.css'
 
-import { getBalanceQueryKey } from '../../../coin/query/useBalancesQuery'
-import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries'
-import { PageHeaderRefresh } from '../../../ui/page/PageHeaderRefresh'
-import { useCurrentVaultAddress } from '../../state/currentVault'
-import { getSwapQuoteQueryKey } from '../queries/useSwapQuoteQuery'
-import { useFromAmount } from '../state/fromAmount'
-import { useFromCoin } from '../state/fromCoin'
-import { useToCoin } from '../state/toCoin'
+import { useEffect, useState } from 'react'
+import { buildStyles, CircularProgressbar } from 'react-circular-progressbar'
+import styled from 'styled-components'
+
+import { HStack } from '../../../lib/ui/layout/Stack'
+import { Text } from '../../../lib/ui/text'
+import { getColor } from '../../../lib/ui/theme/getters'
+import { useRefreshSwapQuoteMutation } from '../mutations/useRefreshSwapQuoteMutation'
+import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
+const COUNTDOWN_TIME = 60
 
 export const RefreshSwap = () => {
-  const invalidateQueries = useInvalidateQueries()
+  const { data: swapQuoteData, isPending: isSwapQuotePending } =
+    useSwapQuoteQuery()
+  const { mutate: refreshQuote } = useRefreshSwapQuoteMutation()
+  const [timeLeft, setTimeLeft] = useState(0)
 
-  const [fromCoinKey] = useFromCoin()
-  const [toCoinKey] = useToCoin()
-  const [fromAmount] = useFromAmount()
+  useEffect(() => {
+    if (swapQuoteData || isSwapQuotePending) {
+      setTimeLeft(COUNTDOWN_TIME)
+    }
+  }, [isSwapQuotePending, swapQuoteData])
 
-  const address = useCurrentVaultAddress(fromCoinKey.chain)
+  useEffect(() => {
+    if (timeLeft === 0) {
+      refreshQuote()
+      setTimeLeft(COUNTDOWN_TIME)
+    }
 
-  const { mutate: refresh, isPending } = useMutation({
-    mutationFn: () => {
-      const queryKeys: QueryKey[] = [
-        getBalanceQueryKey({
-          ...fromCoinKey,
-          address,
-        }),
-      ]
+    const timer = setInterval(() => {
+      setTimeLeft(prev => Math.max(prev - 1, 0))
+    }, 1000)
 
-      if (fromAmount) {
-        queryKeys.push(
-          getSwapQuoteQueryKey({
-            fromCoinKey,
-            toCoinKey,
-            fromAmount,
-          })
-        )
-      }
+    return () => clearInterval(timer)
+  }, [timeLeft, refreshQuote])
 
-      return invalidateQueries(queryKeys)
-    },
-  })
-
-  return <PageHeaderRefresh onClick={() => refresh()} isPending={isPending} />
+  return (
+    <Wrapper alignItems="center" gap={6}>
+      <Text
+        color="supporting"
+        size={12}
+      >{`0:${timeLeft < 10 ? '0' : ''}${timeLeft}`}</Text>
+      <Progress
+        strokeWidth={12}
+        styles={buildStyles({
+          pathColor: '#4879FD',
+          trailColor: '#1B3F73',
+        })}
+        value={timeLeft}
+        maxValue={60}
+        minValue={0}
+      />
+    </Wrapper>
+  )
 }
+
+const Wrapper = styled(HStack)`
+  padding: 8px;
+  background-color: ${getColor('foreground')};
+  border-radius: 99px;
+`
+
+const Progress = styled(CircularProgressbar)`
+  height: 16px;
+  width: 16px;
+`
