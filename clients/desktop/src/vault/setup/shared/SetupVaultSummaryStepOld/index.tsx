@@ -3,13 +3,18 @@ import { useTranslation } from 'react-i18next'
 
 import { Button } from '../../../../lib/ui/buttons/Button'
 import { useBoolean } from '../../../../lib/ui/hooks/useBoolean'
+import { ArrowSplitIcon } from '../../../../lib/ui/icons/ArrowSplitIcon'
+import { CircleInfoIcon } from '../../../../lib/ui/icons/CircleInfoIcon'
+import { CloudCheckIcon } from '../../../../lib/ui/icons/CloudCheckIcon'
+import { CloudStackIcon } from '../../../../lib/ui/icons/CloudStackIcon'
+import { EmailIcon } from '../../../../lib/ui/icons/EmailIcon'
 import { LightningIcon } from '../../../../lib/ui/icons/LightningIcon'
 import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
 import { OnForwardProp } from '../../../../lib/ui/props'
 import { Text } from '../../../../lib/ui/text'
-import { SetupVaultType } from '../../type/SetupVaultType'
-import { getBackupItemsForVaultType } from './constants'
+import { hasServerSigner } from '../../../fast/utils/hasServerSigner'
+import { useCurrentVault } from '../../../state/currentVault'
 import {
   ContentWrapper,
   IconWrapper,
@@ -20,20 +25,39 @@ import {
   Wrapper,
 } from './SetupVaultSummaryStep.styles'
 
-type SetupVaultSummaryStepProps = OnForwardProp & {
-  vaultType: SetupVaultType
-  vaultShares?: number
-}
+type SetupVaultSummaryStepProps = OnForwardProp
 
 export const SetupVaultSummaryStepOld: FC<SetupVaultSummaryStepProps> = ({
-  vaultType,
   onForward,
-  vaultShares,
 }) => {
   const { t } = useTranslation()
   const [isChecked, { toggle }] = useBoolean(false)
-  const summaryItems = getBackupItemsForVaultType(vaultType)
-  const isFastVault = vaultType === 'fast'
+  const { signers } = useCurrentVault()
+
+  const isFastVault = hasServerSigner(signers)
+
+  const summaryItems = [
+    {
+      title: isFastVault
+        ? t('receivedShare1Email')
+        : t('yourVaultShares', { shares: signers.length }),
+      icon: isFastVault ? <EmailIcon /> : <CircleInfoIcon />,
+    },
+    {
+      title: isFastVault
+        ? t('share2StoredByYou')
+        : t('fastVaultSetup.summary.summaryItemOneTitle'),
+      icon: <CloudCheckIcon />,
+    },
+    {
+      title: t('fastVaultSetup.summary.summaryItemTwoTitle'),
+      icon: <ArrowSplitIcon />,
+    },
+    {
+      title: t('fastVaultSetup.summary.summaryItemThreeTitle'),
+      icon: <CloudStackIcon />,
+    },
+  ]
 
   return (
     <AnimatedVisibility
@@ -61,16 +85,11 @@ export const SetupVaultSummaryStepOld: FC<SetupVaultSummaryStepProps> = ({
         <ContentWrapper>
           <Text variant="h1Regular">{t('backupGuide')}</Text>
           <VStack gap={24}>
-            {summaryItems.map(({ title, icon: Icon }) => (
+            {summaryItems.map(({ title, icon }) => (
               <SummaryListItem alignItems="center" key={title}>
-                <IconWrapper>
-                  <Icon />
-                </IconWrapper>
+                <IconWrapper>{icon}</IconWrapper>
                 <Text color="contrast" weight={500} size={13}>
-                  {t(
-                    title,
-                    title === 'yourVaultShares' ? { shares: vaultShares } : {}
-                  )}
+                  {title}
                 </Text>
               </SummaryListItem>
             ))}

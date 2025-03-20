@@ -1,5 +1,5 @@
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { recommendedPeers, requiredPeers } from '@core/mpc/peers/config'
-import { KeygenType } from '@core/mpc/tssType'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
 import { BrowserOpenURL } from '@wailsapp/runtime'

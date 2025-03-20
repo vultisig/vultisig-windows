@@ -36,7 +36,7 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
                 from={({ onForward }) => (
                   <SetupVaultSuccessScreen onForward={onForward} />
                 )}
-                to={() => <BackupSecureVault isInitiatingDevice={false} />}
+                to={() => <BackupSecureVault />}
               />
             )}
             Reshare={() => <KeygenSuccessStep value={vault} title={title} />}

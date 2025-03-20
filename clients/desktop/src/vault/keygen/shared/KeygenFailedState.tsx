@@ -1,3 +1,4 @@
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
@@ -8,7 +9,6 @@ import { WarningBlock } from '../../../lib/ui/status/WarningBlock'
 import { Text } from '../../../lib/ui/text'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { PageContent } from '../../../ui/page/PageContent'
-import { KeygenType } from '../KeygenType'
 import { useCurrentKeygenType } from '../state/currentKeygenType'
 
 type KeygenFailedStatePros = {

@@ -65,12 +65,9 @@ export const BackupFastVault = () => {
           <StepTransition
             from={({ onForward }) =>
               FEATURE_FLAGS.ENABLE_NEW_SUMMARY_PAGES ? (
-                <SetupVaultSummaryStep onForward={onForward} vaultType="fast" />
+                <SetupVaultSummaryStep onForward={onForward} />
               ) : (
-                <SetupVaultSummaryStepOld
-                  onForward={onForward}
-                  vaultType="fast"
-                />
+                <SetupVaultSummaryStepOld onForward={onForward} />
               )
             }
             to={() => (

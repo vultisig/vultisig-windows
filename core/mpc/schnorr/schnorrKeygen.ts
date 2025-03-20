@@ -14,10 +14,10 @@ import {
 } from '../encodingAndEncryption'
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
+import { KeygenType } from '../keygen/KeygenType'
 import { combineReshareCommittee } from '../reshareCommittee'
 import { sendRelayMessage } from '../sendRelayMessage'
 import { sleep } from '../sleep'
-import { KeygenType } from '../tssType'
 import { uploadSetupMessage } from '../uploadSetupMessage'
 
 export class Schnorr {

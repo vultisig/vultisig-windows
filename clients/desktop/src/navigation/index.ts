@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
@@ -6,7 +7,6 @@ import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
-import { KeygenType } from '../vault/keygen/KeygenType'
 import { SetupVaultType } from '../vault/setup/type/SetupVaultType'
 
 export const appPaths = {

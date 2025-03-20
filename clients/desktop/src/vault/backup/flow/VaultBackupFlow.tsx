@@ -10,5 +10,5 @@ export const VaultBackupFlow = () => {
     return <BackupFastVault />
   }
 
-  return <BackupSecureVault isInitiatingDevice={true} />
+  return <BackupSecureVault />
 }
