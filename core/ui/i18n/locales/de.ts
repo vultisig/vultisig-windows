@@ -11,6 +11,7 @@ export const de = {
   search_field_placeholder: 'Suchen..',
   chain: 'Kette',
   price_impact_good: 'Gut',
+  swap_overview: 'Tauschübersicht',
   price_impact_average: 'Durchschnittlich',
   price_impact_high: 'Hohe Auswirkung',
   select_asset: 'Asset auswählen',

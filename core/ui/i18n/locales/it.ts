@@ -14,6 +14,7 @@ export const it = {
   price_impact_good: 'Buono',
   price_impact_average: 'Medio',
   price_impact_high: 'Impatto Alto',
+  swap_overview: 'Panoramica dello scambio',
   coin_not_found_in_current_vault:
     'Moneta non trovata nella cassaforte attuale',
   secureVaultSetupPasswordTooltipContent:

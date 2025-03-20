@@ -11,6 +11,7 @@ export const hr = {
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
   select_asset: 'Odaberite imovinu',
+  swap_overview: 'Pregled zamjene',
   chain: 'Lanac',
   price_impact_good: 'Dobro',
   price_impact_average: 'Prosječno',

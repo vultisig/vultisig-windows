@@ -15,6 +15,7 @@ export const pt = {
   search_field_placeholder: 'Pesquisar..',
   select_asset: 'Selecionar ativo',
   price_impact_good: 'Bom',
+  swap_overview: 'Visão geral da troca',
   price_impact_average: 'Médio',
   price_impact_high: 'Alto Impacto',
   select_network: 'Selecionar rede',

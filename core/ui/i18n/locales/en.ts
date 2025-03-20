@@ -322,6 +322,7 @@ export const en = {
   read_msg: 'Reading keysign message...',
   read_msg_failed: 'Failed to read keysign message',
   join_keysign: 'Join Keysign',
+  swap_overview: 'Swap overview',
   verify: 'Verify',
   to: 'To',
   from: 'From',
