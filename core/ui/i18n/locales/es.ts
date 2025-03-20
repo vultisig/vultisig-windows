@@ -478,6 +478,7 @@ export const es = {
         'Haz una copia de seguridad de tu acción del monedero en línea',
       onlineStorageDescription:
         'El almacenamiento en línea es recomendado y seguro; las acciones del monedero están diseñadas para esto.',
+      backThemUpNow: 'respaldalos ahora',
     },
     summary: {
       title: 'Resumen Rápido',
@@ -653,19 +654,20 @@ export const es = {
   chainFunctions: {
     amountExceeded: 'El importe excede el saldo disponible',
     memo: 'Memo',
-    required_validation: 'Obligatorio',
-    option_validation: 'Opcional',
     bond: {
       labels: {
         nodeAddress: 'Dirección del Nodo',
         provider: 'Proveedor',
         operatorFee: 'Comisión del Operador',
         amount: 'Cantidad',
+        asset: 'Activo',
       },
       validations: {
         nodeAddressMinLength: 'La dirección del nodo es obligatoria',
         nodeAddressInvalid: 'La dirección del nodo no es válida',
         amount: 'La cantidad debe ser positiva',
+        operatorFee: 'Se requiere tarifa de operador',
+        lpUnits: 'Las unidades LP deben ser positivas',
       },
     },
     unbond: {
@@ -710,39 +712,55 @@ export const es = {
       },
     },
     leave: {
-      labels: { nodeAddress: 'Dirección del Nodo' },
+      labels: {
+        nodeAddress: 'Dirección del Nodo',
+      },
       validations: {
         nodeAddressMinLength: 'La dirección del nodo es obligatoria',
         nodeAddressInvalid: 'La dirección del nodo no es válida',
       },
     },
     custom: {
-      labels: { amount: 'Cantidad', customMemo: 'Memo Personalizado' },
+      labels: {
+        amount: 'Cantidad',
+        customMemo: 'Memo Personalizado',
+      },
       validations: {
         amount: 'La cantidad debe ser positiva',
         customMemo: 'El memo personalizado es obligatorio',
       },
     },
     vote: {
-      labels: { proposalId: 'ID de la propuesta', support: 'Soporte' },
+      labels: {
+        proposalId: 'ID de la propuesta',
+        support: 'Soporte',
+      },
       validations: {
         proposalId: 'ID de la propuesta es obligatorio',
         support: 'El campo de soporte es obligatorio',
       },
     },
     stake: {
-      labels: { amount: 'Monto', validatorAddress: 'Dirección del validador' },
+      labels: {
+        amount: 'Monto',
+        validatorAddress: 'Dirección del validador',
+      },
       validations: {
         amount: 'El monto debe ser positivo',
         validatorAddress: 'La dirección del validador es obligatoria',
       },
     },
     unstake: {
-      labels: { validatorAddress: 'Dirección del validador' },
+      labels: {
+        validatorAddress: 'Dirección del validador',
+      },
       validations: {
         validatorAddress: 'La dirección del validador es obligatoria',
       },
     },
+    requiredFieldMissing: 'Falta campo obligatorio',
+    optional_validation: 'Opcional',
+    default_validation: 'Entrada no válida',
   },
   scan_with_devices: 'Skeniraj s uređajima za pridruživanje generaciji trezora',
   scan_with_devices_to_sign:

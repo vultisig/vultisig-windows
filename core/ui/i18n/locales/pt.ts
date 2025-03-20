@@ -477,6 +477,7 @@ export const pt = {
       backupConfirmationDescription: 'Faça backup da sua ação do cofre online',
       onlineStorageDescription:
         'O armazenamento online é recomendado e seguro – as ações do cofre são projetadas para isso.',
+      backThemUpNow: 'faça backup deles agora',
     },
     summary: {
       title: 'Resumo Rápido',
@@ -651,12 +652,14 @@ export const pt = {
         provider: 'Provedor',
         operatorFee: 'Taxa do Operador',
         amount: 'Quantidade',
+        asset: 'Ativo',
       },
       validations: {
         nodeAddressMinLength: 'Endereço do nó é obrigatório',
         nodeAddressInvalid: 'Endereço do nó é inválido',
         operatorFee: 'Taxa do operador é obrigatória',
         amount: 'Quantidade deve ser positiva',
+        lpUnits: 'As unidades LP devem ser positivas',
       },
     },
     unbond: {
@@ -701,24 +704,32 @@ export const pt = {
       },
     },
     leave: {
-      labels: { nodeAddress: 'Endereço do Nó' },
+      labels: {
+        nodeAddress: 'Endereço do Nó',
+      },
       validations: {
         nodeAddressMinLength: 'Endereço do nó é obrigatório',
         nodeAddressInvalid: 'Endereço do nó é inválido',
       },
     },
     custom: {
-      labels: { amount: 'Quantidade', customMemo: 'Memo Personalizado' },
+      labels: {
+        amount: 'Quantidade',
+        customMemo: 'Memo Personalizado',
+      },
       validations: {
         amount: 'Quantidade deve ser positiva',
         customMemo: 'Memo personalizado é obrigatório',
       },
     },
     vote: {
-      labels: { proposalId: 'ID da proposta', support: 'Suporte' },
-      validates: {
-        proposalId: 'ID da proposta é obrigatório',
-        support: 'Campo de suporte é obrigatório',
+      labels: {
+        proposalId: 'ID da proposta',
+        support: 'Suporte',
+      },
+      validations: {
+        proposalId: 'O ID da proposta é obrigatório',
+        support: 'O campo de suporte é obrigatório',
       },
     },
     stake: {
@@ -726,15 +737,20 @@ export const pt = {
         amount: 'Quantidade',
         validatorAddress: 'Endereço do validador',
       },
-      validates: {
-        amount: 'Quantidade deve ser positiva',
+      validations: {
+        amount: 'O valor deve ser positivo',
         validatorAddress: 'Endereço do validador é obrigatório',
       },
     },
     unstake: {
-      labels: { validatorAddress: 'Endereço do validador' },
-      validates: { validatorAddress: 'Endereço do validador é obrigatório' },
+      labels: {
+        validatorAddress: 'Endereço do validador',
+      },
+      validations: {
+        validatorAddress: 'Endereço do validador é obrigatório',
+      },
     },
+    requiredFieldMissing: 'Campo obrigatório ausente',
   },
   sign: 'Assinar',
   part_n_of_m: 'Parte {{n}} de {{m}}',
