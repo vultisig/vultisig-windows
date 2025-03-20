@@ -1,40 +1,17 @@
 import 'react-circular-progressbar/dist/styles.css'
 
-import { useEffect, useState } from 'react'
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar'
 import styled from 'styled-components'
 
 import { HStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
-import { useRefreshSwapQuoteMutation } from '../mutations/useRefreshSwapQuoteMutation'
-import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
+import { useRefreshSwapQuoteInInterval } from '../form/hooks/useRefreshSwapQuoteInInterval'
+
 const COUNTDOWN_TIME = 60
 
 export const RefreshSwap = () => {
-  const { data: swapQuoteData, isPending: isSwapQuotePending } =
-    useSwapQuoteQuery()
-  const { mutate: refreshQuote } = useRefreshSwapQuoteMutation()
-  const [timeLeft, setTimeLeft] = useState(0)
-
-  useEffect(() => {
-    if ((swapQuoteData || isSwapQuotePending) && !timeLeft) {
-      setTimeLeft(COUNTDOWN_TIME)
-    }
-  }, [isSwapQuotePending, swapQuoteData, timeLeft])
-
-  useEffect(() => {
-    if (timeLeft === 0) {
-      refreshQuote()
-      setTimeLeft(COUNTDOWN_TIME)
-    }
-
-    const timer = setInterval(() => {
-      setTimeLeft(prev => Math.max(prev - 1, 0))
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [timeLeft, refreshQuote])
+  const timeLeft = useRefreshSwapQuoteInInterval(COUNTDOWN_TIME)
 
   return (
     <Wrapper alignItems="center" gap={6}>
