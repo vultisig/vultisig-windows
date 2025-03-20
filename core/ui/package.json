@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "translate": "npx tsx i18n/scripts/translate.ts"
   },
   "dependencies": {
     "@trustwallet/wallet-core": "^4.2.15",

@@ -79,7 +79,7 @@ vultisig-win
 
 frontend/vite.config.ts.timestamp-*
 
-set_env_vars.sh
+.envrc
 credentials.json
 
 .pnp.*
