@@ -48,8 +48,12 @@ export const SwapForm: FC<OnForwardProp> = ({ onForward }) => {
           </VStack>
         </VStack>
 
-        <Button isDisabled={isDisabled} type="submit">
-          {t('continue')}
+        <Button
+          isDisabled={isDisabled}
+          disabled={Boolean(isDisabled)}
+          type="submit"
+        >
+          {typeof isDisabled === 'string' ? isDisabled : t('continue')}
         </Button>
       </PageContent>
     </>
