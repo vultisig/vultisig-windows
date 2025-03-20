@@ -1,5 +1,6 @@
 import { OnForwardProp } from '@lib/ui/props'
 import { t } from 'i18next'
+import { FC } from 'react'
 import styled from 'styled-components'
 
 import { Button } from '../../../lib/ui/buttons/Button'
@@ -16,7 +17,7 @@ import { ManageFromCoin } from './ManageFromCoin'
 import { ManageToCoin } from './ManageToCoin'
 import { ReverseSwap } from './ReverseSwap'
 
-export const SwapForm: React.FC<OnForwardProp> = ({ onForward }) => {
+export const SwapForm: FC<OnForwardProp> = ({ onForward }) => {
   const isDisabled = useIsSwapFormDisabled()
 
   return (
@@ -46,6 +47,7 @@ export const SwapForm: React.FC<OnForwardProp> = ({ onForward }) => {
             <SwapInfo />
           </VStack>
         </VStack>
+
         <Button isDisabled={isDisabled} type="submit">
           {t('continue')}
         </Button>
