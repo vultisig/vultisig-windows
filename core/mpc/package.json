@@ -14,6 +14,7 @@
   "dependencies": {
     "7z-wasm": "^1.1.0",
     "@bufbuild/buf": "^1.50.1",
-    "@bufbuild/protobuf": "^2.2.4"
+    "@bufbuild/protobuf": "^2.2.4",
+    "@solana/web3.js": "^2.0.0"
   }
 }
