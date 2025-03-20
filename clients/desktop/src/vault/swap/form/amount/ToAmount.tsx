@@ -1,8 +1,9 @@
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
 
+import { Skeleton } from '../../../../components/skeleton'
 import { takeWholeSpace } from '../../../../lib/ui/css/takeWholeSpace'
-import { Spinner } from '../../../../lib/ui/loaders/Spinner'
+import { VStack } from '../../../../lib/ui/layout/Stack'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { text } from '../../../../lib/ui/text'
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
@@ -31,7 +32,12 @@ export const ToAmount = () => {
       <Value>
         <MatchQuery
           value={query}
-          pending={() => <Spinner />}
+          pending={() => (
+            <VStack gap={6} alignItems="flex-end">
+              <Skeleton width="100px" height="12px" />
+              <Skeleton width="50px" height="12px" />
+            </VStack>
+          )}
           error={() => formatTokenAmount(0)}
           inactive={() => formatTokenAmount(0)}
           success={value => formatTokenAmount(value)}

@@ -1,20 +1,36 @@
-import './skeleton.styled.css'
+import { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
-type SkeletonProps = {
-  height: string
+import { getColor } from '../../lib/ui/theme/getters'
+import { ThemeColors } from '../../lib/ui/theme/ThemeColors'
+
+const skeletonAnimation = keyframes`
+  0% {
+    opacity:1;
+  }
+  
+  50%{
+    opacity:0.4;
+  }
+  
+  100%{
+    opacity:1;
+  }
+`
+
+export const Skeleton = styled.div<{
+  fill?: keyof ThemeColors
+  variant?: 'rectangular' | 'circular'
+  height?: string
   width?: string
-}
-
-export default function Skeleton({ height, width = '100%' }: SkeletonProps) {
-  return (
-    <span
-      className={`skeleton after:animate-wave block bg-background-skeleton rounded-[8px] relative overflow-hidden`}
-      style={{
-        height,
-        width,
-        transformOrigin: '0 55%',
-        WebkitMaskImage: '-webkit-linear-gradient(white, white)',
-      }}
-    />
-  )
-}
+  borderRadius?: string
+}>`
+  background-color: ${({ fill }) =>
+    fill ? getColor(fill) : 'rgba(255, 255, 255, 0.05)'};
+  ${({ variant = 'rectangular' }) =>
+    variant === 'circular' ? 'border-radius: 50%' : ''};
+  animation: ${skeletonAnimation} 1.5s ease-in-out 0.5s infinite;
+  height: ${({ height }) => height ?? '100%'};
+  width: ${({ width }) => width ?? '100%'};
+  border-radius: ${({ borderRadius }) => borderRadius ?? '4px'};
+`

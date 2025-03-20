@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -12,6 +12,7 @@ type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
     titleKey: string
     optionComponent: FC<{ value: T; onClick: () => void }>
     filterFunction: (option: T, query: string) => boolean
+    renderListHeader?: () => ReactNode
   }
 
 export const SelectItemModal = <T extends { id: string; chain?: string }>({
@@ -20,6 +21,7 @@ export const SelectItemModal = <T extends { id: string; chain?: string }>({
   titleKey,
   optionComponent: OptionComponent,
   filterFunction,
+  renderListHeader,
 }: SelectItemModalProps<T>) => {
   const [searchQuery, setSearchQuery] = useState('')
   const { t } = useTranslation()
@@ -33,17 +35,20 @@ export const SelectItemModal = <T extends { id: string; chain?: string }>({
     >
       <VStack gap={20}>
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
-        <ListWrapper>
-          {options
-            .filter(option => filterFunction(option, searchQuery))
-            .map(option => (
-              <OptionComponent
-                key={`${option.id}-${option.chain}`}
-                value={option}
-                onClick={() => onFinish(option)}
-              />
-            ))}
-        </ListWrapper>
+        <VStack gap={16}>
+          {renderListHeader && renderListHeader()}
+          <ListWrapper>
+            {options
+              .filter(option => filterFunction(option, searchQuery))
+              .map(option => (
+                <OptionComponent
+                  key={`${option.id}-${option.chain}`}
+                  value={option}
+                  onClick={() => onFinish(option)}
+                />
+              ))}
+          </ListWrapper>
+        </VStack>
       </VStack>
     </Modal>
   )
