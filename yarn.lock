@@ -534,6 +534,7 @@ __metadata:
     eslint-plugin-simple-import-sort: "npm:^12.1.1"
     globals: "npm:^16.0.0"
     prettier: "npm:^3.5.3"
+    react-circular-progressbar: "npm:^2.2.0"
     styled-components: "npm:^6.1.16"
     typescript: "npm:^5.8.2"
     vite: "npm:^6.2.2"
@@ -10410,6 +10411,15 @@ __metadata:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
   checksum: 10c0/2566e98418b8072af4591488e028a1e8433d2a190716f47134ee63a506afec9cf472f8a8d3dda55bf2e82ccf1215d324abd280892db4fbf5999fc30184068f62
+  languageName: node
+  linkType: hard
+
+"react-circular-progressbar@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "react-circular-progressbar@npm:2.2.0"
+  peerDependencies:
+    react: ">=0.14.0"
+  checksum: 10c0/77655598d48a826fff9a6fd2f6b61349bb2e762d1774c0bcd5a374916347e1d03821e51cd7ff0f294843f5088e569b0c266064af0a229403c510c238b3390a3b
   languageName: node
   linkType: hard
 
