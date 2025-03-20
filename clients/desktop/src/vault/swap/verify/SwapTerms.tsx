@@ -14,6 +14,9 @@ import {
 
 const Item = styled(Checkbox)`
   ${verticalPadding(10)}
+
+  font-family: inherit;
+  font-size: 14px;
 `
 
 export const SwapTerms = () => {

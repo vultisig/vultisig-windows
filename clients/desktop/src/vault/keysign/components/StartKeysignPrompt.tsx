@@ -66,7 +66,7 @@ export const StartKeysignPrompt = ({
         })
       }}
     >
-      {t('continue')}
+      {t('start_transaction')}
     </Button>
   )
 }

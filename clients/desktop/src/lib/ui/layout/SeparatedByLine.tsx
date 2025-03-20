@@ -6,7 +6,7 @@ import { VStack } from './Stack'
 
 export const SeparatedByLine = styled(VStack)`
   > *:not(:last-child) {
-    border-bottom: 1px solid ${getColor('mistExtra')};
+    border-bottom: 1px solid ${getColor('foregroundExtra')};
     padding-bottom: ${({ gap = 0 }) => toSizeUnit(gap)};
   }
 `

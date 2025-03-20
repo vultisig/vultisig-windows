@@ -16,14 +16,7 @@ export const TxOverviewRow = styled.div`
     weight: 600,
     size: 16,
     color: 'contrast',
-    family: 'mono',
   })}
-
-  > *:last-child {
-    ${text({
-      family: 'mono',
-    })}
-  }
 `
 
 export const TxOverviewPrimaryRowTitle = styled.span`

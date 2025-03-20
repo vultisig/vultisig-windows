@@ -1,4 +1,4 @@
-import { ComponentType, PropsWithChildren } from 'react'
+import { ComponentType, FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -17,7 +17,7 @@ interface SwapFeesProps {
   RowComponent: ComponentType<PropsWithChildren>
 }
 
-export const SwapFees: React.FC<SwapFeesProps> = ({ RowComponent }) => {
+export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
   const { t } = useTranslation()
   const query = useSwapFeesQuery()
   const chainSpecificQuery = useSwapChainSpecificQuery()

@@ -13,9 +13,12 @@ export const pt = {
   waiting_for_devices_to_join_description:
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
   search_field_placeholder: 'Pesquisar..',
+  start_transaction: 'Iniciar transação',
+  youre_swapping: 'Você está trocando',
   select_asset: 'Selecionar ativo',
   price_impact_good: 'Bom',
   swap_overview: 'Visão geral da troca',
+  max_total_fees: 'Taxa Total Máx.',
   price_impact_average: 'Médio',
   price_impact_high: 'Alto Impacto',
   select_network: 'Selecionar rede',
