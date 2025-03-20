@@ -9,12 +9,15 @@ export const it = {
     "Vultisig è, per natura, un'applicazione multi-dispositivo. Richiede almeno due dispositivi per creare una cassaforte sicura: un dispositivo iniziale e un dispositivo di accoppiamento.",
   moreInfo: 'Maggiori informazioni',
   search_field_placeholder: 'Cerca..',
+  start_transaction: 'Avvia transazione',
+  youre_swapping: 'Stai scambiando',
   select_asset: 'Seleziona asset',
   chain: 'Catena',
   price_impact_good: 'Buono',
   price_impact_average: 'Medio',
   price_impact_high: 'Impatto Alto',
   swap_overview: 'Panoramica dello scambio',
+  max_total_fees: 'Tariffa Totale Max.',
   coin_not_found_in_current_vault:
     'Moneta non trovata nella cassaforte attuale',
   secureVaultSetupPasswordTooltipContent:
