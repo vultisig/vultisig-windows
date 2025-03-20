@@ -1,5 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-import { useAssertWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useQuery } from '@tanstack/react-query'
 
 import { useCurrentVault } from '../../state/currentVault'

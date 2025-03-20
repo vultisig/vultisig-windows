@@ -45,15 +45,15 @@ import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { getJoinKeysignUrl } from '@core/chain/utils/getJoinKeysignUrl'
 import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
-import {
-  useWalletCore,
-  WalletCoreProvider,
-} from '@core/chain-ui/providers/WalletCoreProvider'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import {
+  useWalletCore,
+  WalletCoreProvider,
+} from '@core/ui/chain/providers/WalletCoreProvider'
 import { Button, Form, Input, message, QRCode } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'

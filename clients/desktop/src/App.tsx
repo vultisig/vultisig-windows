@@ -1,4 +1,4 @@
-import { WalletCoreProvider } from '@core/chain-ui/providers/WalletCoreProvider'
+import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { RouterProvider } from 'react-router-dom'
 
