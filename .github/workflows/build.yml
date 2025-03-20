@@ -2,13 +2,13 @@ name: Vultisig build
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   pull_request:
-    branches: ["main"]
+    branches: ['main']
 
 env:
   # Necessary for most environments as build failure can occur due to OOM issues
-  NODE_OPTIONS: "--max-old-space-size=4096"
+  NODE_OPTIONS: '--max-old-space-size=4096'
 
 jobs:
   setup:
@@ -24,7 +24,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "23.7.0"
+          node-version: '23.7.0'
 
       - name: Enable Corepack
         run: corepack enable
@@ -58,11 +58,11 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: run unit test
-        run: yarn workspace @clients/desktop test
+        run: yarn test
       - name: run typecheck
         run: yarn typecheck
   extension:
-    needs: [setup,lint]
+    needs: [setup, lint]
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -80,12 +80,12 @@ jobs:
       fail-fast: true
       matrix:
         build:
-          - name: "App"
-            platform: "linux/amd64"
-            os: "ubuntu-22.04"
-          - name: "App"
-            platform: "windows/amd64"
-            os: "windows-latest"
+          - name: 'App'
+            platform: 'linux/amd64'
+            os: 'ubuntu-22.04'
+          - name: 'App'
+            platform: 'windows/amd64'
+            os: 'windows-latest'
 
     runs-on: ${{ matrix.build.os }}
     steps:
@@ -96,7 +96,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "23.7.0"
+          node-version: '23.7.0'
 
       - name: Enable Corepack
         run: corepack enable
@@ -114,5 +114,5 @@ jobs:
           build-name: ${{ matrix.build.name }}
           build-platform: ${{ matrix.build.platform }}
           package: false
-          go-version: "1.21"
-          node-version: "23.7.0"
+          go-version: '1.21'
+          node-version: '23.7.0'
