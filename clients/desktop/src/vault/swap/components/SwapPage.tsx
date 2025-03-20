@@ -1,26 +1,50 @@
+import { match } from '@lib/utils/match'
+import { useTranslation } from 'react-i18next'
+
 import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
+import { PageHeader } from '../../../ui/page/PageHeader'
+import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
+import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { SwapForm } from '../form/SwapForm'
 import { FromAmountProvider } from '../state/fromAmount'
 import { ToCoinProvider } from '../state/toCoin'
 import { SwapVerify } from '../verify/SwapVerify'
+import { RefreshSwap } from './RefreshSwap'
 
 const sendSteps = ['form', 'verify'] as const
 
 export const SwapPage = () => {
+  const { t } = useTranslation()
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps: sendSteps,
     onExit: useNavigateBack(),
   })
 
+  const { primaryControls, titleKey } = match(step, {
+    form: () => ({
+      primaryControls: <PageHeaderBackButton />,
+      titleKey: 'swap',
+    }),
+    verify: () => ({
+      primaryControls: <PageHeaderBackButton onClick={toPreviousStep} />,
+      titleKey: 'verify',
+    }),
+  })
+
   return (
     <FromAmountProvider initialValue={null}>
       <ToCoinProvider>
+        <PageHeader
+          primaryControls={primaryControls}
+          secondaryControls={<RefreshSwap />}
+          title={<PageHeaderTitle>{t(titleKey)}</PageHeaderTitle>}
+        />
         <Match
           value={step}
           form={() => <SwapForm onForward={toNextStep} />}
-          verify={() => <SwapVerify onBack={toPreviousStep} />}
+          verify={() => <SwapVerify />}
         />
       </ToCoinProvider>
     </FromAmountProvider>
