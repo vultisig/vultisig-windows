@@ -9,6 +9,7 @@ export const es = {
     'Vultisig es, por naturaleza, una aplicación multi-dispositivo. Requiere al menos dos dispositivos para crear una bóveda segura: un dispositivo iniciador y un dispositivo de emparejamiento.',
   select_asset: 'Seleccionar activo',
   moreInfo: 'Más información',
+  swap_overview: 'Resumen de intercambio',
   chain: 'Cadena',
   price_impact_good: 'Bueno',
   price_impact_average: 'Promedio',

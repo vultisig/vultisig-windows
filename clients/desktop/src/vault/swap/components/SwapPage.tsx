@@ -22,14 +22,14 @@ export const SwapPage = () => {
     onExit: useNavigateBack(),
   })
 
-  const { primaryControls, titleKey } = match(step, {
+  const { primaryControls, title } = match(step, {
     form: () => ({
       primaryControls: <PageHeaderBackButton />,
-      titleKey: 'swap',
+      title: t('swap'),
     }),
     verify: () => ({
       primaryControls: <PageHeaderBackButton onClick={toPreviousStep} />,
-      titleKey: 'verify',
+      title: t('swap_overview'),
     }),
   })
 
@@ -39,7 +39,7 @@ export const SwapPage = () => {
         <PageHeader
           primaryControls={primaryControls}
           secondaryControls={<RefreshSwap />}
-          title={<PageHeaderTitle>{t(titleKey)}</PageHeaderTitle>}
+          title={<PageHeaderTitle>{title}</PageHeaderTitle>}
         />
         <Match
           value={step}
