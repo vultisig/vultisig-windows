@@ -11,9 +11,7 @@ export const StrictInfoRow = styled.div`
   })}
 
   ${text({
-    color: 'contrast',
+    color: 'shy',
     size: 12,
-    weight: 700,
-    family: 'mono',
   })}
 `

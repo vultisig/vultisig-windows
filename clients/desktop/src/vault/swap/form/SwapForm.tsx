@@ -1,19 +1,20 @@
 import { t } from 'i18next'
+import styled from 'styled-components'
 
 import { Button } from '../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
-import { VStack } from '../../../lib/ui/layout/Stack'
+import { VStack, vStack } from '../../../lib/ui/layout/Stack'
 import { OnForwardProp } from '../../../lib/ui/props'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { RefreshSwap } from '../components/RefreshSwap'
-import { SwapAmount } from './amount/SwapAmount'
 import { useIsSwapFormDisabled } from './hooks/useIsSwapFormDisabled'
 import { SwapInfo } from './info/SwapInfo'
 import { ManageFromCoin } from './ManageFromCoin'
 import { ManageToCoin } from './ManageToCoin'
+import { ReverseSwap } from './ReverseSwap'
 
 export const SwapForm: React.FC<OnForwardProp> = ({ onForward }) => {
   const isDisabled = useIsSwapFormDisabled()
@@ -33,11 +34,15 @@ export const SwapForm: React.FC<OnForwardProp> = ({ onForward }) => {
           isDisabled,
         })}
       >
-        <VStack gap={8}>
-          <ManageFromCoin />
-          <SwapAmount />
-          <ManageToCoin />
+        <VStack gap={16}>
           <VStack gap={8}>
+            <ManageFromCoin />
+            <ReverseSwapWrapper>
+              <ReverseSwap />
+            </ReverseSwapWrapper>
+            <ManageToCoin />
+          </VStack>
+          <VStack gap={10}>
             <SwapInfo />
           </VStack>
         </VStack>
@@ -48,3 +53,8 @@ export const SwapForm: React.FC<OnForwardProp> = ({ onForward }) => {
     </>
   )
 }
+
+const ReverseSwapWrapper = styled.div`
+  ${vStack({ gap: 8 })}
+  position: relative;
+`

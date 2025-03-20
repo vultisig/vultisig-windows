@@ -8,7 +8,7 @@ import { useCallback, useMemo } from 'react'
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount'
 import { useCoinPricesQuery } from '../../../../coin/query/useCoinPricesQuery'
-import { Spinner } from '../../../../lib/ui/loaders/Spinner'
+import { Skeleton } from '../../../../components/skeleton'
 import { ValueProp } from '../../../../lib/ui/props'
 import { MatchEagerQuery } from '../../../../lib/ui/query/components/MatchEagerQuery'
 import { useTransformQueryData } from '../../../../lib/ui/query/hooks/useTransformQueryData'
@@ -60,7 +60,7 @@ export const SwapFeeFiatValue = ({ value }: ValueProp<SwapFee[]>) => {
   return (
     <MatchEagerQuery
       value={pricesQuery}
-      pending={() => <Spinner />}
+      pending={() => <Skeleton width="44px" height="12px" />}
       success={value => value}
     />
   )
