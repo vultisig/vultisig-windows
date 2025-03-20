@@ -46,109 +46,105 @@ export const SwapCoinInput: FC<SwapCoinInputProps> = ({
   const coin = useCurrentVaultCoin(value)
 
   if (!coin) return
-
   const { logo, chain, ticker, id } = coin
 
   return (
-    <>
-      <Opener
-        renderOpener={({ onOpen }) => (
-          <SwapCoinInputField
-            value={{ ...value, ...pick(coin, ['logo', 'ticker']) }}
-            onChainClick={() => {
-              onOpen()
-              setIsChainModalOpen(true)
-            }}
-            onCoinClick={() => {
-              onOpen()
-              setIsCoinModalOpen(true)
-            }}
-            side={side}
-          />
-        )}
-        renderContent={() => (
-          <>
-            {isCoinModalOpen && (
-              <SelectItemModal
-                renderListHeader={() => (
-                  <HStack alignItems="center" gap={6}>
-                    <Text color="shy" size={12} weight={500}>
-                      {t('chain')}
-                    </Text>
-
-                    <HStack
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                      tabIndex={0}
-                      role="button"
-                      onClick={() => {
-                        setIsChainModalOpen(true)
-                      }}
-                      gap={4}
-                    >
-                      <ChainCoinIcon
-                        coinSrc={getCoinLogoSrc(logo)}
-                        chainSrc={
-                          shouldDisplayChainLogo({
-                            ticker: ticker,
+    <Opener
+      renderOpener={({ onOpen }) => (
+        <SwapCoinInputField
+          value={{ ...value, ...pick(coin, ['logo', 'ticker']) }}
+          onChainClick={() => {
+            onOpen()
+            setIsChainModalOpen(true)
+          }}
+          onCoinClick={() => {
+            onOpen()
+            setIsCoinModalOpen(true)
+          }}
+          side={side}
+        />
+      )}
+      renderContent={() => (
+        <>
+          {isCoinModalOpen && (
+            <SelectItemModal
+              renderListHeader={() => (
+                <HStack alignItems="center" gap={6}>
+                  <Text color="shy" size={12} weight={500}>
+                    {t('chain')}
+                  </Text>
+                  <HStack
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    tabIndex={0}
+                    role="button"
+                    onClick={() => {
+                      setIsChainModalOpen(true)
+                    }}
+                    gap={4}
+                  >
+                    <ChainCoinIcon
+                      coinSrc={getCoinLogoSrc(logo)}
+                      chainSrc={
+                        shouldDisplayChainLogo({
+                          ticker: ticker,
+                          chain: chain,
+                          isNative: isFeeCoin({
+                            id: id,
                             chain: chain,
-                            isNative: isFeeCoin({
-                              id: id,
-                              chain: chain,
-                            }),
-                          })
-                            ? getChainEntityIconSrc(chain)
-                            : undefined
-                        }
-                        style={{ fontSize: 16 }}
-                      />
-                      <HStack alignItems="center">
-                        <Text size={12} weight={500}>
-                          {coin.chain}
-                        </Text>
-                        <ChevronDownIcon />
-                      </HStack>
+                          }),
+                        })
+                          ? getChainEntityIconSrc(chain)
+                          : undefined
+                      }
+                      style={{ fontSize: 16 }}
+                    />
+                    <HStack alignItems="center">
+                      <Text size={12} weight={500}>
+                        {coin.chain}
+                      </Text>
+                      <ChevronDownIcon />
                     </HStack>
                   </HStack>
-                )}
-                filterFunction={(option, query) =>
-                  option.ticker.toLowerCase().startsWith(query.toLowerCase())
+                </HStack>
+              )}
+              filterFunction={(option, query) =>
+                option.ticker.toLowerCase().startsWith(query.toLowerCase())
+              }
+              titleKey="select_asset"
+              optionComponent={CoinOption}
+              onFinish={(newValue: CoinKey | undefined) => {
+                if (newValue) {
+                  onChange(newValue)
                 }
-                titleKey="select_asset"
-                optionComponent={CoinOption}
-                onFinish={(newValue: CoinKey | undefined) => {
-                  if (newValue) {
-                    onChange(newValue)
-                  }
-                  setIsCoinModalOpen(false)
-                }}
-                options={coins.filter(c => c.chain === coin?.chain)}
-              />
-            )}
+                setIsCoinModalOpen(false)
+              }}
+              options={coins.filter(c => c.chain === coin?.chain)}
+            />
+          )}
 
-            {isChainModalOpen && (
-              <SelectItemModal
-                titleKey="select_network"
-                optionComponent={ChainOption}
-                onFinish={(newValue: CoinKey | undefined) => {
-                  if (newValue) {
-                    onChange(newValue)
-                  }
-                  setIsChainModalOpen(false)
-                }}
-                options={coins.filter(
-                  coin =>
-                    isOneOf(coin.chain, swapEnabledChains) && isNativeCoin(coin)
-                )}
-                filterFunction={(option, query) =>
-                  option.chain.toLowerCase().startsWith(query.toLowerCase())
+          {isChainModalOpen && (
+            <SelectItemModal
+              titleKey="select_network"
+              optionComponent={ChainOption}
+              onFinish={(newValue: CoinKey | undefined) => {
+                if (newValue) {
+                  onChange(newValue)
                 }
-              />
-            )}
-          </>
-        )}
-      />
-    </>
+                setIsChainModalOpen(false)
+              }}
+              options={coins.filter(
+                coin =>
+                  isOneOf(coin.chain, swapEnabledChains) && isNativeCoin(coin)
+              )}
+              filterFunction={(option, query) =>
+                option.chain.toLowerCase().startsWith(query.toLowerCase())
+              }
+            />
+          )}
+        </>
+      )}
+    />
   )
 }
