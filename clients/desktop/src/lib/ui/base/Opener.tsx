@@ -1,7 +1,7 @@
+import { OnCloseProp } from '@lib/ui/props'
 import { ReactNode } from 'react'
 
 import { useBoolean } from '../hooks/useBoolean'
-import { OnCloseProp } from '../props'
 
 interface RenderOpenerParams {
   isOpen: boolean

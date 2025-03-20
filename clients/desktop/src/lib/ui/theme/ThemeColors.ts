@@ -1,4 +1,4 @@
-import { HSLA } from '../colors/HSLA'
+import { HSLA } from '@lib/ui/colors/HSLA'
 
 export type ThemeColors = {
   text: HSLA

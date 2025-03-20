@@ -1,3 +1,4 @@
+import { Point } from '@lib/utils/entities/Point'
 import { ElementType, ReactNode, SVGProps } from 'react'
 
 import { HSLA } from '../colors/HSLA'
@@ -128,6 +129,10 @@ export type ProgressProps = {
   current: number
 }
 
+export type PositionProp = {
+  position: Point
+}
+
 export type ColorProp = {
   color: HSLA
 }
@@ -141,7 +146,11 @@ export type OnSubmitProp = {
 }
 
 export type ItemsProp<T> = {
-  items: T[]
+  items: readonly T[]
+}
+
+export type RenderItemProp<T> = {
+  renderItem: (item: T) => ReactNode
 }
 
 export type SizeProp<T = number> = {
@@ -160,8 +169,8 @@ export type KindProp<T> = {
   kind: T
 }
 
+export type SvgProps = SVGProps<SVGSVGElement>
+
 export type MessageProp = {
   message: ReactNode
 }
-
-export type SvgProps = SVGProps<SVGSVGElement>

@@ -1,10 +1,10 @@
+import { AsProp } from '@lib/ui/props'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
 
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
 import { IconWrapper } from '../../../lib/ui/icons/IconWrapper'
 import { PlusIcon } from '../../../lib/ui/icons/PlusIcon'
-import { AsProp } from '../props'
 import { getColor } from '../theme/getters'
 
 const Container = styled(UnstyledButton)`

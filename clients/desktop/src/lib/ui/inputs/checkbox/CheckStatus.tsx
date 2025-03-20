@@ -1,3 +1,4 @@
+import { ChildrenProp, UiProps } from '@lib/ui/props'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
@@ -5,7 +6,6 @@ import { centerContent } from '../../css/centerContent'
 import { interactive } from '../../css/interactive'
 import { CheckIcon } from '../../icons/CheckIcon'
 import { IconWrapper } from '../../icons/IconWrapper'
-import { ChildrenProp, UiProps } from '../../props'
 import { getColor } from '../../theme/getters'
 
 type CheckStatusProps = UiProps & {

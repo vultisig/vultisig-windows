@@ -1,5 +1,6 @@
 import { CoinKey } from '@core/chain/coin/Coin'
 import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
+import { InputProps } from '@lib/ui/props'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { pick } from '@lib/utils/record/pick'
 import { FC } from 'react'
@@ -8,7 +9,6 @@ import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains'
 import { SelectItemModal } from '../../../coin/ui/inputs/SelectItemModal'
 import { SwapCoinInputField } from '../../../coin/ui/inputs/SwapCoinInputField'
 import { Opener } from '../../../lib/ui/base/Opener'
-import { InputProps } from '../../../lib/ui/props'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,

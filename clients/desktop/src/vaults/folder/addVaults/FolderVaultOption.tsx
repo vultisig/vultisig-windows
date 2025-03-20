@@ -1,3 +1,4 @@
+import { InputProps } from '@lib/ui/props'
 import styled from 'styled-components'
 
 import { borderRadius } from '../../../lib/ui/css/borderRadius'
@@ -8,7 +9,6 @@ import { SwitchContainer } from '../../../lib/ui/inputs/switch/SwitchContainer'
 import { SwitchControl } from '../../../lib/ui/inputs/switch/SwitchControl'
 import { hStack } from '../../../lib/ui/layout/Stack'
 import { DnDItemContentPrefix } from '../../../lib/ui/list/item/DnDItemContentPrefix'
-import { InputProps } from '../../../lib/ui/props'
 import { text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
 import { VaultDescription } from '../../components/VaultDescription'

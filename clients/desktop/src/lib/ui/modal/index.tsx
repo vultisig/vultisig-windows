@@ -1,10 +1,10 @@
+import { AsProp, TitleProp } from '@lib/ui/props'
 import { ComponentProps, ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { toSizeUnit } from '../css/toSizeUnit'
 import { BodyPortal } from '../dom/BodyPortal'
 import { HStack, VStack } from '../layout/Stack'
-import { AsProp, TitleProp } from '../props'
 import { Backdrop } from './Backdrop'
 import { modalConfig } from './config'
 import { ModalCloseButton } from './ModalCloseButton'

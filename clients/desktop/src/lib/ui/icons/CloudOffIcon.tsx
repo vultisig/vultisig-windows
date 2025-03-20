@@ -1,4 +1,4 @@
-import { SvgProps } from '../props'
+import { SvgProps } from '@lib/ui/props'
 
 export const CloudOffIcon = (props: SvgProps) => (
   <svg

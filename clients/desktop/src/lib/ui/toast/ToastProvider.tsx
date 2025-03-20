@@ -1,6 +1,6 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { createContext, useCallback, useEffect, useState } from 'react'
 
-import { ChildrenProp } from '../props'
 import { createContextHook } from '../state/createContextHook'
 import { ToastItem } from './ToastItem'
 

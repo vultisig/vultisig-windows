@@ -1,7 +1,7 @@
+import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { useMutation } from '@tanstack/react-query'
 
 import { storage } from '../../../../wailsjs/go/models'
-import { OnFinishProp, ValueProp } from '../../../lib/ui/props'
 import { decryptDatBackup } from '../utils/decryptDatBackup'
 import { fromDatBackupString } from '../utils/fromDatBackupString'
 import { DecryptVaultView } from './DecryptVaultView'

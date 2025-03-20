@@ -1,8 +1,8 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { VStack } from '../../../lib/ui/layout/Stack'
-import { ChildrenProp } from '../../../lib/ui/props'
 import { Text } from '../../../lib/ui/text'
 
 export const AddVaultsToFolderContainer: FC<ChildrenProp> = ({ children }) => {

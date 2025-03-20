@@ -1,10 +1,10 @@
+import { createTsFile } from '@lib/codegen/utils/createTsFile'
 import { without } from '@lib/utils/array/without'
 import { omit } from '@lib/utils/record/omit'
 import path from 'path'
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
-import { createTsFile } from '../../lib/codegen/utils/createTsFile'
 import { Copy } from '../Copy'
 import { languages, primaryLanguage } from '../Language'
 import { translations } from '../translations'

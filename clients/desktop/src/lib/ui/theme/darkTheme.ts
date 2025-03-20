@@ -1,6 +1,6 @@
+import { HSLA } from '@lib/ui/colors/HSLA'
 import { DefaultTheme } from 'styled-components'
 
-import { HSLA } from '../colors/HSLA'
 import { sharedColors } from './shared'
 
 const backgroundHue = 217

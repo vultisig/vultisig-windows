@@ -1,7 +1,7 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { useRef } from 'react'
 
 import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton'
-import { ChildrenProp } from '../../lib/ui/props'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 
 export const NavigateToDklsPage = ({ children }: ChildrenProp) => {

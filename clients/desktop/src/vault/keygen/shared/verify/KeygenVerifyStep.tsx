@@ -1,10 +1,10 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '../../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps'
 import { VStack } from '../../../../lib/ui/layout/Stack'
-import { OnBackProp, OnForwardProp } from '../../../../lib/ui/props'
 import { InfoBlock } from '../../../../lib/ui/status/InfoBlock'
 import { Text } from '../../../../lib/ui/text'
 import { useMpcSigners } from '../../../../mpc/signers/state/mpcSigners'

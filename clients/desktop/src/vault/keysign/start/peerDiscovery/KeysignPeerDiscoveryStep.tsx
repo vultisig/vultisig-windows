@@ -1,10 +1,10 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
+import { OnForwardProp } from '@lib/ui/props'
 import { range } from '@lib/utils/array/range'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps'
-import { OnForwardProp } from '../../../../lib/ui/props'
 import { QueryBasedQrCode } from '../../../../lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'

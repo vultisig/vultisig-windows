@@ -1,12 +1,12 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'
 import styled from 'styled-components'
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { panel } from '../../../lib/ui/panel/Panel'
-import { IsActiveProp, OnClickProp, ValueProp } from '../../../lib/ui/props'
 import { Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
 import { shouldDisplayChainLogo } from '../../../vault/chain/utils'

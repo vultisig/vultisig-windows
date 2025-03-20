@@ -1,8 +1,8 @@
+import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { ProgressLine } from '../../../lib/ui/flow/ProgressLine'
 import { VStack } from '../../../lib/ui/layout/Stack'
-import { ValueProp } from '../../../lib/ui/props'
 import { Text } from '../../../lib/ui/text'
 import { FancyLoader } from '../../../ui/pending/FancyLoader'
 import { KeygenStatus } from '../../keygen/shared/MatchKeygenSessionStatus'

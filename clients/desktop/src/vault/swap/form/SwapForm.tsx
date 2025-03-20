@@ -1,10 +1,10 @@
+import { OnForwardProp } from '@lib/ui/props'
 import { t } from 'i18next'
 import styled from 'styled-components'
 
 import { Button } from '../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { VStack, vStack } from '../../../lib/ui/layout/Stack'
-import { OnForwardProp } from '../../../lib/ui/props'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'

@@ -1,7 +1,7 @@
+import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { ReactNode } from 'react'
 
 import { useBoolean } from '../hooks/useBoolean'
-import { OnBackProp, OnForwardProp } from '../props'
 
 type StepTransitionProps = {
   from: (props: OnForwardProp) => ReactNode

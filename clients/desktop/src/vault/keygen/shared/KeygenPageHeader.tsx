@@ -1,6 +1,6 @@
+import { TitleProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-import { TitleProp } from '../../../lib/ui/props'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'

@@ -1,6 +1,6 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
-import { ChildrenProp } from '../../lib/ui/props'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { useVaults } from '../queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../state/currentVault'

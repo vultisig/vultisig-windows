@@ -1,4 +1,5 @@
-import { OnBackProp, OnFinishProp } from '../../../lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { useSufficientMpcPeersQuery } from '../../../mpc/peers/queries/useSufficientMpcPeersQuery'
 import { WaitForServerStates } from './WaitForServerStates'

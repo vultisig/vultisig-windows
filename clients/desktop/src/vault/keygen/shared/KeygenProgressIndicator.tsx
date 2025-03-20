@@ -1,10 +1,10 @@
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { ValueProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import RingProgress from '../../../components/ringProgress/RingProgress'
 import { VStack } from '../../../lib/ui/layout/Stack'
-import { ValueProp } from '../../../lib/ui/props'
 import { Text } from '../../../lib/ui/text'
 import { useCurrentKeygenType } from '../state/currentKeygenType'
 import { KeygenStatus } from './MatchKeygenSessionStatus'

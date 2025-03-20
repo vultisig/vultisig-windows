@@ -1,8 +1,8 @@
+import { TitleProp } from '@lib/ui/props'
 import { ComponentProps } from 'react'
 import styled from 'styled-components'
 
 import { VStack } from '../layout/Stack'
-import { TitleProp } from '../props'
 import { Text } from '../text'
 
 const Container = styled(VStack)`

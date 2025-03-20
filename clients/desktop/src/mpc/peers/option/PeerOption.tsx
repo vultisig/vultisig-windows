@@ -1,3 +1,4 @@
+import { ValueProp } from '@lib/ui/props'
 import styled from 'styled-components'
 
 import { centerContent } from '../../../lib/ui/css/centerContent'
@@ -5,7 +6,6 @@ import { round } from '../../../lib/ui/css/round'
 import { sameDimensions } from '../../../lib/ui/css/sameDimensions'
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon'
 import { HStack } from '../../../lib/ui/layout/Stack'
-import { ValueProp } from '../../../lib/ui/props'
 import { Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
 import { formatMpcDeviceName, parseLocalPartyId } from '../../localPartyId'

@@ -1,7 +1,7 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 
 import { storage } from '../../../wailsjs/go/models'
-import { ChildrenProp } from '../../lib/ui/props'
 import { useMpcLocalPartyId } from '../../mpc/localPartyId/state/mpcLocalPartyId'
 import { useMpcSigners } from '../../mpc/signers/state/mpcSigners'
 import { CurrentVaultProvider } from '../state/currentVault'

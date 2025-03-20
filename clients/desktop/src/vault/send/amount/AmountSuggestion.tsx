@@ -1,10 +1,10 @@
+import { OnClickProp, ValueProp } from '@lib/ui/props'
 import { toPercents } from '@lib/utils/toPercents'
 import styled from 'styled-components'
 
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '../../../lib/ui/css/borderRadius'
 import { centerContent } from '../../../lib/ui/css/centerContent'
-import { OnClickProp, ValueProp } from '../../../lib/ui/props'
 import { text } from '../../../lib/ui/text'
 import { getHoverVariant } from '../../../lib/ui/theme/getHoverVariant'
 import { getColor } from '../../../lib/ui/theme/getters'

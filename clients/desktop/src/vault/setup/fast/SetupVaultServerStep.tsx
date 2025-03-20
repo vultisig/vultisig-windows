@@ -1,6 +1,6 @@
+import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { FC } from 'react'
 
-import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { WaitForServerStates } from '../../server/components/WaitForServerStates'
 import { useVaultCreationPreparation } from './hooks/useVaultCreationPreparation'

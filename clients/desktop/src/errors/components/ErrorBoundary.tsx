@@ -1,6 +1,5 @@
+import { ChildrenProp } from '@lib/ui/props'
 import React from 'react'
-
-import { ChildrenProp } from '../../lib/ui/props'
 
 export type ErrorState = {
   error: Error

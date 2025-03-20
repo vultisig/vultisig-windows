@@ -1,3 +1,4 @@
+import { ChildrenProp, OnClickProp } from '@lib/ui/props'
 import styled, { css } from 'styled-components'
 
 import { borderRadius } from '../../css/borderRadius'
@@ -5,7 +6,6 @@ import { horizontalPadding } from '../../css/horizontalPadding'
 import { interactive } from '../../css/interactive'
 import { ChevronRightIcon } from '../../icons/ChevronRightIcon'
 import { HStack, hStack } from '../../layout/Stack'
-import { ChildrenProp, OnClickProp } from '../../props'
 import { text } from '../../text'
 import { getHoverVariant } from '../../theme/getHoverVariant'
 import { getColor } from '../../theme/getters'

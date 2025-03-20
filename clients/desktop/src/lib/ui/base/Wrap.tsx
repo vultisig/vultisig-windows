@@ -1,6 +1,5 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { ReactNode } from 'react'
-
-import { ChildrenProp } from '../props'
 
 type WrapProps = ChildrenProp & {
   wrap?: (children: ReactNode) => ReactNode

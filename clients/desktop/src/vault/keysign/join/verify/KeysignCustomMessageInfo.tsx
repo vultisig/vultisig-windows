@@ -1,11 +1,11 @@
 import { CustomMessagePayload } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
+import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import {
   TxOverviewChainDataRow,
   TxOverviewRow,
 } from '../../../../chain/tx/components/TxOverviewRow'
-import { ValueProp } from '../../../../lib/ui/props'
 
 export const KeysignCustomMessageInfo = ({
   value,

@@ -1,10 +1,10 @@
+import { ValueProp } from '@lib/ui/props'
 import { toPercents } from '@lib/utils/toPercents'
 import { FC } from 'react'
 import styled from 'styled-components'
 
 import { round } from '../css/round'
 import { vStack } from '../layout/Stack'
-import { ValueProp } from '../props'
 import { getColor } from '../theme/getters'
 
 const Container = styled.div`
