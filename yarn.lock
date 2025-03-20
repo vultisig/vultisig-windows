@@ -633,6 +633,7 @@ __metadata:
     "@bufbuild/buf": "npm:^1.50.1"
     "@bufbuild/protobuf": "npm:^2.2.4"
     "@bufbuild/protoc-gen-es": "npm:^2.2.4"
+    "@solana/web3.js": "npm:^2.0.0"
     vitest: "npm:^3.0.9"
   languageName: unknown
   linkType: soft
