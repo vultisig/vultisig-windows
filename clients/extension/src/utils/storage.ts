@@ -1,5 +1,4 @@
-import i18n from '@clients/extension/src/i18n/config'
-import { Currency, Language } from '@clients/extension/src/utils/constants'
+import { Currency } from '@clients/extension/src/utils/constants'
 import {
   AccountsProps,
   ChainProps,
@@ -8,6 +7,7 @@ import {
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { Language, primaryLanguage } from '@core/ui/i18n/Language'
 
 interface EthProviderState {
   accounts: string[]
@@ -103,7 +103,7 @@ export const getStoredLanguage = (): Promise<Language> => {
 
   return new Promise(resolve => {
     chrome.storage.local.get(keys, (res: LocalStorage) => {
-      resolve(res.language ?? Language.ENGLISH)
+      resolve(res.language ?? primaryLanguage)
     })
   })
 }
@@ -113,8 +113,6 @@ export const setStoredLanguage = (language: Language): Promise<void> => {
 
   return new Promise(resolve => {
     chrome.storage.local.set(vals, () => {
-      i18n.changeLanguage(language ?? Language.ENGLISH)
-
       resolve()
     })
   })
