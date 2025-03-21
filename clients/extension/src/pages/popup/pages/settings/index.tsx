@@ -9,17 +9,13 @@ import {
   Translate,
   Vultisig,
 } from '@clients/extension/src/icons'
-import {
-  Currency,
-  Language,
-  languageName,
-} from '@clients/extension/src/utils/constants'
-import messageKeys from '@clients/extension/src/utils/message-keys'
+import { Currency } from '@clients/extension/src/utils/constants'
 import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredCurrency,
   getStoredLanguage,
 } from '@clients/extension/src/utils/storage'
+import { Language, languageName, primaryLanguage } from '@core/ui/i18n/Language'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -33,7 +29,7 @@ const Component = () => {
   const { t } = useTranslation()
   const initialState: InitialState = {
     currency: Currency.USD,
-    language: Language.ENGLISH,
+    language: primaryLanguage,
   }
   const [state, setState] = useState(initialState)
   const { currency, language } = state
@@ -54,7 +50,7 @@ const Component = () => {
   return (
     <div className="layout settings-page">
       <div className="header">
-        <span className="heading">{t(messageKeys.SETTINGS)}</span>
+        <span className="heading">{t('settings')}</span>
         <ArrowLeft
           className="icon icon-left"
           onClick={() => goBack(routeKeys.main)}
@@ -68,7 +64,7 @@ const Component = () => {
             className="list-item"
           >
             <SettingsOne className="icon" />
-            <span className="label">{t(messageKeys.VAULT_SETTINGS)}</span>
+            <span className="label">{t('vault_settings')}</span>
             <ArrowRight className="action" />
           </Link>
           <Link
@@ -77,7 +73,7 @@ const Component = () => {
             className="list-item"
           >
             <Translate className="icon" />
-            <span className="label">{t(messageKeys.LANGUAGE)}</span>
+            <span className="label">{t('language')}</span>
             <span className="extra">{languageName[language]}</span>
             <ArrowRight className="action" />
           </Link>
@@ -87,7 +83,7 @@ const Component = () => {
             className="list-item"
           >
             <CircleDollar className="icon" />
-            <span className="label">{t(messageKeys.CURRENCY)}</span>
+            <span className="label">{t('currency')}</span>
             <span className="extra">{currency}</span>
             <ArrowRight className="action" />
           </Link>
@@ -98,11 +94,11 @@ const Component = () => {
             className="list-item"
           >
             <CircleHelp className="icon" />
-            <span className="label">{t(messageKeys.FAQ)}</span>
+            <span className="label">{t('faq')}</span>
             <ArrowRight className="action" />
           </a>
         </div>
-        <span className="divider">{t(messageKeys.OTHER)}</span>
+        <span className="divider">{t('other')}</span>
         <div className="list list-action list-icon">
           <a
             href="https://vultisig.com/vult"
@@ -111,7 +107,7 @@ const Component = () => {
             className="list-item"
           >
             <Vultisig className="icon" />
-            <span className="label">{t(messageKeys.VULT_TOKEN)}</span>
+            <span className="label">{t('vult_token')}</span>
           </a>
         </div>
       </div>

@@ -1,4 +1,3 @@
-import messageKeys from '@clients/extension/src/utils/message-keys'
 import routeKeys from '@clients/extension/src/utils/route-keys'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -12,8 +11,8 @@ const Component = () => {
     <div className="layout landing-page">
       <div className="content">
         <img src="/images/landing.png" alt="logo" className="logo" />
-        <span className="title">{t(messageKeys.VULTISIG_CONNECT)}</span>
-        <span className="desc">{t(messageKeys.VULTISIG_SLOGAN)}</span>
+        <span className="title">{t('vultisig_connect')}</span>
+        <span className="desc">{t('vultisig_slogan')}</span>
       </div>
       <div className="footer">
         <Button
@@ -22,7 +21,7 @@ const Component = () => {
           shape="round"
           block
         >
-          {t(messageKeys.START)}
+          {t('start')}
         </Button>
       </div>
     </div>

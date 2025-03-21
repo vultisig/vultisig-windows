@@ -112,7 +112,7 @@ export const SwapCoinInput: FC<SwapCoinInputProps> = ({
               filterFunction={(option, query) =>
                 option.ticker.toLowerCase().startsWith(query.toLowerCase())
               }
-              titleKey="select_asset"
+              title={t('select_asset')}
               optionComponent={CoinOption}
               onFinish={(newValue: CoinKey | undefined) => {
                 if (newValue) {
@@ -126,7 +126,7 @@ export const SwapCoinInput: FC<SwapCoinInputProps> = ({
 
           {isChainModalOpen && (
             <SelectItemModal
-              titleKey="select_network"
+              title={t('select_network')}
               optionComponent={ChainOption}
               onFinish={(newValue: CoinKey | undefined) => {
                 if (newValue) {

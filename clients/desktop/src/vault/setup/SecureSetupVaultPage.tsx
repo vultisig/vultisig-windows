@@ -65,7 +65,7 @@ export const SecureSetupVaultPage = () => {
             />
           </ArtContainer>
           <VStack gap={8} alignItems="start">
-            {getSetupVaultProperties('secure').map(prop => (
+            {getSetupVaultProperties('secure', t).map(prop => (
               <HStack key={prop} alignItems="center" gap={6}>
                 <img
                   src="/assets/icons/green_checkmark.svg"
@@ -74,7 +74,7 @@ export const SecureSetupVaultPage = () => {
                   width={24}
                 />
                 <Text size={14} weight="500" color="contrast">
-                  {t(prop)}
+                  {prop}
                 </Text>
               </HStack>
             ))}

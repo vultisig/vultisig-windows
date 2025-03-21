@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
+import { Match } from '../../../lib/ui/base/Match'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '../../../lib/ui/icons/LightningGradientIcon'
@@ -117,24 +118,28 @@ export const SetupVaultPage = () => {
           </div>
           <DescriptionWrapper alignItems="flex-start">
             <DescriptionTitleWrapper>
-              {value === 'fast' ? (
-                <GradientText weight={500}>
-                  {t(`${value}_vault_setup_title`)}
-                </GradientText>
-              ) : (
-                <Text color="primary" weight={500}>
-                  {t(`${value}_vault_setup_title`)}
-                </Text>
-              )}
+              <Match
+                value={value}
+                fast={() => (
+                  <GradientText weight={500}>
+                    {t(`vault_setup_prop.fast.title`)}
+                  </GradientText>
+                )}
+                secure={() => (
+                  <Text color="primary" weight={500}>
+                    {t(`vault_setup_prop.secure.title`)}
+                  </Text>
+                )}
+              />
             </DescriptionTitleWrapper>
             <DescriptionContentWrapper>
-              {getSetupVaultProperties(value).map(prop => (
+              {getSetupVaultProperties(value, t).map(prop => (
                 <HStack key={prop} alignItems="center" gap={6}>
                   <IconWrapper>
                     <CheckIcon />
                   </IconWrapper>
                   <Text size={14} weight="600" color="contrast">
-                    {t(prop)}
+                    {prop}
                   </Text>
                 </HStack>
               ))}

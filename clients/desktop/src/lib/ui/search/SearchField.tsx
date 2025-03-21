@@ -10,10 +10,7 @@ interface SearchFieldProps {
   onSearch?: (query: string) => void
 }
 
-export const SearchField: React.FC<SearchFieldProps> = ({
-  placeholderKey = 'search_field_placeholder',
-  onSearch,
-}) => {
+export const SearchField: React.FC<SearchFieldProps> = ({ onSearch }) => {
   const [query, setQuery] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const { t } = useTranslation()
@@ -38,7 +35,7 @@ export const SearchField: React.FC<SearchFieldProps> = ({
         type="text"
         value={query}
         onChange={handleChange}
-        placeholder={!isFocused ? `  ${t(placeholderKey)}` : ''}
+        placeholder={!isFocused ? `  ${t('search_field_placeholder')}` : ''}
       />
     </Wrapper>
   )

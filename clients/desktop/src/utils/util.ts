@@ -1,3 +1,4 @@
+import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { TFunction } from 'i18next'
 
 export const isBase64Encoded = (str: string): boolean => {
@@ -13,18 +14,8 @@ export function generateRandomNumber(): number {
   return Math.floor(Math.random() * 900) + 100
 }
 
-export const getVaultTypeText = (
-  signersLength: number,
-  t: TFunction<'translation', undefined>
-) => {
-  let vaultTypeText
+export const getVaultTypeText = (signersLength: number, t: TFunction) => {
+  const threshold = getKeygenThreshold(signersLength)
 
-  const n = 2
-  if (signersLength > 3) {
-    vaultTypeText = t('m_of_n_vault', { n, signersLength })
-  } else {
-    vaultTypeText = t(`2_of_${signersLength}_vault`)
-  }
-
-  return vaultTypeText
+  return t('m_of_n_vault', { n: signersLength, m: threshold })
 }

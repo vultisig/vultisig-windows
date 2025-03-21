@@ -6,7 +6,7 @@ import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
 
-import { Currency, Language } from './constants'
+import { Currency } from './constants'
 
 export namespace Messaging {
   export namespace Chain {
@@ -139,17 +139,6 @@ export interface SignatureProps {
   S: string
   DerSignature: string
   RecoveryID: string
-}
-
-export interface LanguageRef {
-  [Language.CROATIA]: string
-  [Language.DUTCH]: string
-  [Language.ENGLISH]: string
-  [Language.GERMAN]: string
-  [Language.ITALIAN]: string
-  [Language.PORTUGUESE]: string
-  [Language.RUSSIAN]: string
-  [Language.SPANISH]: string
 }
 
 export interface ScreenProps {

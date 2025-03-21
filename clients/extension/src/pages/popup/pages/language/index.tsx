@@ -1,12 +1,12 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft } from '@clients/extension/src/icons'
-import { Language, languageName } from '@clients/extension/src/utils/constants'
-import messageKeys from '@clients/extension/src/utils/message-keys'
 import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredLanguage,
   setStoredLanguage,
 } from '@clients/extension/src/utils/storage'
+import { Language, primaryLanguage } from '@core/ui/i18n/Language'
+import { languageName, languages } from '@core/ui/i18n/Language'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -16,7 +16,7 @@ interface InitialState {
 
 const Component = () => {
   const { t } = useTranslation()
-  const initialState: InitialState = { language: Language.ENGLISH }
+  const initialState: InitialState = { language: primaryLanguage }
   const [state, setState] = useState(initialState)
   const { language } = state
   const goBack = useGoBack()
@@ -37,45 +37,10 @@ const Component = () => {
 
   useEffect(componentDidMount, [])
 
-  const data = [
-    {
-      key: Language.ENGLISH,
-      title: languageName[Language.ENGLISH],
-    },
-    {
-      key: Language.GERMAN,
-      title: languageName[Language.GERMAN],
-    },
-    {
-      key: Language.SPANISH,
-      title: languageName[Language.SPANISH],
-    },
-    {
-      key: Language.ITALIAN,
-      title: languageName[Language.ITALIAN],
-    },
-    {
-      key: Language.CROATIA,
-      title: languageName[Language.CROATIA],
-    },
-    {
-      key: Language.RUSSIAN,
-      title: languageName[Language.RUSSIAN],
-    },
-    {
-      key: Language.DUTCH,
-      title: languageName[Language.DUTCH],
-    },
-    {
-      key: Language.PORTUGUESE,
-      title: languageName[Language.PORTUGUESE],
-    },
-  ]
-
   return (
     <div className="layout language-page">
       <div className="header">
-        <span className="heading">{t(messageKeys.LANGUAGE)}</span>
+        <span className="heading">{t('language')}</span>
         <ArrowLeft
           className="icon icon-left"
           onClick={() => goBack(routeKeys.settings.root)}
@@ -83,13 +48,13 @@ const Component = () => {
       </div>
       <div className="content">
         <div className="list list-action">
-          {data.map(({ key, title }) => (
+          {languages.map(key => (
             <button
               key={key}
               className={`list-item${key === language ? ' active' : ''}`}
               onClick={() => changeLanguage(key)}
             >
-              {title}
+              {languageName[key]}
             </button>
           ))}
         </div>

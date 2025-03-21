@@ -1,7 +1,6 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft } from '@clients/extension/src/icons'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
-import messageKeys from '@clients/extension/src/utils/message-keys'
 import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredVaults,
@@ -44,7 +43,7 @@ const Component = () => {
   return (
     <div className="layout rename-vault-page">
       <div className="header">
-        <span className="heading">{t(messageKeys.RENAME_VAULT)}</span>
+        <span className="heading">{t('rename_vault')}</span>
         <ArrowLeft
           className="icon icon-left"
           onClick={() => goBack(routeKeys.settings.root)}
@@ -53,14 +52,14 @@ const Component = () => {
       <div className="content">
         <Form form={form} onFinish={handleSubmit}>
           <Form.Item<VaultProps> name="name" rules={[{ required: true }]}>
-            <Input placeholder={t(messageKeys.NAME)} />
+            <Input placeholder={t('name')} />
           </Form.Item>
           <Button htmlType="submit" />
         </Form>
       </div>
       <div className="footer">
         <Button onClick={handleSubmit} type="primary" shape="round" block>
-          {t(messageKeys.SAVE)}
+          {t('save')}
         </Button>
       </div>
     </div>

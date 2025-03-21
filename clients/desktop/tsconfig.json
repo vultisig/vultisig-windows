@@ -16,7 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "global.d.ts"],
+  "include": ["src", "global.d.ts", "../../core/ui/i18n/**/*.d.ts"],
   "exclude": ["node_modules", "dist"],
   "references": [
     {
