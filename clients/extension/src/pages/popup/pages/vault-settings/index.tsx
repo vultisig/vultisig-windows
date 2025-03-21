@@ -6,7 +6,6 @@ import {
   Trash,
 } from '@clients/extension/src/icons'
 import type { VaultProps } from '@clients/extension/src/utils/interfaces'
-import messageKeys from '@clients/extension/src/utils/message-keys'
 import routeKeys from '@clients/extension/src/utils/route-keys'
 import { getStoredVaults } from '@clients/extension/src/utils/storage'
 import { useEffect, useState } from 'react'
@@ -51,7 +50,7 @@ const Component = () => {
             className="list-item"
           >
             <NoteEdit className="icon" />
-            <span className="label">{t(messageKeys.RENAME_VAULT)}</span>
+            <span className="label">{t('rename_vault')}</span>
             <ArrowRight className="action" />
           </Link>
           <Link
@@ -60,7 +59,7 @@ const Component = () => {
             className="list-item warning"
           >
             <Trash className="icon" />
-            <span className="label">{t(messageKeys.REMOVE_VAULT)}</span>
+            <span className="label">{t('remove_vault')}</span>
             <ArrowRight className="action" />
           </Link>
         </div>

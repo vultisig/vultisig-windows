@@ -179,7 +179,7 @@ export const en = {
   this_device: 'This device',
   vault_edit_page_title: 'Edit Vault',
   settings: 'Settings',
-  vault_settings_language: 'Language',
+  language: 'Language',
   currency: 'Currency',
   vault_settings_address_book: 'Address Book',
   vault_settings_default_chains: 'Default Chains',
@@ -750,6 +750,7 @@ export const en = {
   scan_qr_with_two_devices: 'Scan QR code with two devices',
   open_desktop_app: 'Open Desktop App',
   signing: 'Signing',
+  choose_vault: 'Choose Vault',
   prioritize_vulticonnect_hint:
     'Enable to make VultiConnect your default browser wallet to interact with dapps. Make sure to reload your webpage after changing this option.',
 }
