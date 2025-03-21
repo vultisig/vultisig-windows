@@ -7,7 +7,6 @@ import ConfigProvider from '@clients/extension/src/components/config-provider'
 import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
-import i18n from '@clients/extension/src/i18n/config'
 import {
   ArrowLeft,
   LinkExternal,
@@ -117,13 +116,13 @@ const Component = () => {
         .then(() => {
           messageApi.open({
             type: 'success',
-            content: t(messageKeys.SUCCESSFUL_COPY_LINK),
+            content: t('link_copied'),
           })
         })
         .catch(() => {
           messageApi.open({
             type: 'error',
-            content: t(messageKeys.UNSUCCESSFUL_COPY_LINK),
+            content: t('failed_to_copy_link'),
           })
         })
     }
@@ -156,8 +155,8 @@ const Component = () => {
           setState({
             ...state,
             hasError: true,
-            errorTitle: t(messageKeys.TIMEOUT_ERROR),
-            errorDescription: t(messageKeys.SIGNING_TIMEOUT_DESCRIPTION),
+            errorTitle: t('timeout_error'),
+            errorDescription: t('signing_timeout_description'),
           })
         })
       }, RETRY_TIMEOUT_MS)

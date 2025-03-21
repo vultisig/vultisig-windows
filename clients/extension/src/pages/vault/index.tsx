@@ -4,10 +4,8 @@ import '@clients/extension/src/pages/vaults/index.scss'
 import ConfigProvider from '@clients/extension/src/components/config-provider'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
-import i18n from '@clients/extension/src/i18n/config'
 import { Vultisig } from '@clients/extension/src/icons'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
-import messageKeys from '@clients/extension/src/utils/message-keys'
 import {
   getStoredLanguage,
   getStoredRequest,
@@ -69,9 +67,7 @@ const Component = () => {
   }
 
   const componentDidMount = (): void => {
-    getStoredLanguage().then(language => {
-      i18n.changeLanguage(language)
-
+    getStoredLanguage().then(() => {
       getStoredRequest()
         .then(({ sender }) => {
           getStoredVaults().then(vaults => {
@@ -86,8 +82,8 @@ const Component = () => {
               console.error('Failed to load vaults or request data')
               setState(prevState => ({
                 ...prevState,
-                errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
-                errorTitle: t(messageKeys.GET_VAULT_FAILED),
+                errorDescription: t('get_vault_failed_description'),
+                errorTitle: t('get_vault_failed'),
                 hasError: true,
               }))
             }
@@ -97,8 +93,8 @@ const Component = () => {
           console.error('Failed to load vaults or request data')
           setState(prevState => ({
             ...prevState,
-            errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
-            errorTitle: t(messageKeys.GET_VAULT_FAILED),
+            errorDescription: t('get_vault_failed_description'),
+            errorTitle: t('get_vault_failed'),
             hasError: true,
           }))
         })
@@ -120,17 +116,13 @@ const Component = () => {
           <>
             <div className="header">
               <Vultisig className="logo" />
-              <span className="title">
-                {t(messageKeys.CONNECT_WITH_VULTISIG)}
-              </span>
+              <span className="title">{t('connect_with_vultisig')}</span>
             </div>
             <div className="content">
               <Form form={form} onFinish={handleSubmit}>
                 <Form.Item<FormProps>
                   name="uid"
-                  rules={[
-                    { required: true, message: t(messageKeys.SELECT_A_VAULT) },
-                  ]}
+                  rules={[{ required: true, message: t('select_vault') }]}
                 >
                   <Radio.Group>
                     {vaults.map(({ name, uid }) => (
@@ -145,10 +137,10 @@ const Component = () => {
             </div>
             <div className="footer">
               <Button onClick={handleClose} shape="round" block>
-                {t(messageKeys.CANCEL)}
+                {t('cancel')}
               </Button>
               <Button onClick={handleSubmit} type="primary" shape="round" block>
-                {t(messageKeys.CONNECT)}
+                {t('connect')}
               </Button>
             </div>
           </>
