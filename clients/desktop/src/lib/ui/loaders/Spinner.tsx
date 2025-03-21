@@ -1,8 +1,7 @@
+import { ClassNameProp } from '@lib/ui/props'
 import { useRive } from '@rive-app/react-canvas'
 import { FC } from 'react'
 import styled from 'styled-components'
-
-import { ClassNameProp } from '../props'
 
 type Props = ClassNameProp & {
   size?: string

@@ -1,4 +1,5 @@
-import { Language, primaryLanguage } from '../../i18n/Language'
+import { Language, primaryLanguage } from '@core/ui/i18n/Language'
+
 import {
   PersistentStateKey,
   usePersistentState,

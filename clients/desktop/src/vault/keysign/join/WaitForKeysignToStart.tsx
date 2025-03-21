@@ -1,8 +1,8 @@
+import { OnFinishProp } from '@lib/ui/props'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { OnFinishProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { useMpcPeersQuery } from '../../../mpc/peers/queries/useMpcPeersQuery'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'

@@ -1,3 +1,4 @@
+import { IndexProp, IsActiveProp, StatusProp, ValueProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -6,12 +7,6 @@ import { borderRadius } from '../../../lib/ui/css/borderRadius'
 import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding'
 import { toSizeUnit } from '../../../lib/ui/css/toSizeUnit'
 import { hStack } from '../../../lib/ui/layout/Stack'
-import {
-  IndexProp,
-  IsActiveProp,
-  StatusProp,
-  ValueProp,
-} from '../../../lib/ui/props'
 import { text } from '../../../lib/ui/text'
 import {
   formatMpcDeviceName,

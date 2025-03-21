@@ -1,6 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { useAssertWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 

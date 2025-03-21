@@ -1,5 +1,6 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { ValueProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
@@ -9,7 +10,6 @@ import { getChainEntityIconSrc } from '../../../../chain/utils/getChainEntityIco
 import { ChevronDownIcon } from '../../../../lib/ui/icons/ChevronDownIcon'
 import { ChevronRightIcon } from '../../../../lib/ui/icons/ChevronRightIcon'
 import { HStack } from '../../../../lib/ui/layout/Stack'
-import { ValueProp } from '../../../../lib/ui/props'
 import { Text } from '../../../../lib/ui/text'
 import { shouldDisplayChainLogo } from '../../../../vault/chain/utils'
 import { ManageFromAmount } from '../../../../vault/swap/form/amount/ManageFromAmount'

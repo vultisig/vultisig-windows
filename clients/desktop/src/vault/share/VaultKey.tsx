@@ -1,7 +1,7 @@
+import { TitleProp, ValueProp } from '@lib/ui/props'
 import styled from 'styled-components'
 
 import { HStack } from '../../lib/ui/layout/Stack'
-import { TitleProp, ValueProp } from '../../lib/ui/props'
 import { Text } from '../../lib/ui/text'
 
 const StyledText = styled(Text)`

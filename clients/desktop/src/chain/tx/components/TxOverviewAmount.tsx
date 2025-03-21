@@ -1,8 +1,8 @@
+import { ValueProp } from '@lib/ui/props'
 import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
-import { ValueProp } from '../../../lib/ui/props'
 import { TxOverviewRow } from './TxOverviewRow'
 
 export const TxOverviewAmount = ({

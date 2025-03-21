@@ -1,9 +1,9 @@
+import { ChildrenProp, UiProps } from '@lib/ui/props'
 import styled from 'styled-components'
 
 import { borderRadius } from '../css/borderRadius'
 import { InfoIcon } from '../icons/InfoIcon'
 import { hStack } from '../layout/Stack'
-import { ChildrenProp, UiProps } from '../props'
 import { text } from '../text'
 import { getColor } from '../theme/getters'
 

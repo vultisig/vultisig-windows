@@ -1,9 +1,9 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { Panel } from '../../../lib/ui/panel/Panel'
-import { ChildrenProp } from '../../../lib/ui/props'
 import { Text } from '../../../lib/ui/text'
 import { useMpcLocalPartyId } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 

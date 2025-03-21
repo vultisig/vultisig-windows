@@ -1,5 +1,6 @@
+import { OnClickProp } from '@lib/ui/props'
+
 import { ChevronLeftIcon } from '../../lib/ui/icons/ChevronLeftIcon'
-import { OnClickProp } from '../../lib/ui/props'
 import { useNavigateBack } from '../../navigation/hooks/useNavigationBack'
 import { PageHeaderIconButton } from './PageHeaderIconButton'
 

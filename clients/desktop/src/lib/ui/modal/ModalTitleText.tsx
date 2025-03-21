@@ -1,4 +1,5 @@
-import { ChildrenProp } from '../props'
+import { ChildrenProp } from '@lib/ui/props'
+
 import { Text, TextProps } from '../text'
 
 export const ModalTitleText = (props: TextProps & ChildrenProp) => (

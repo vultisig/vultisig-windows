@@ -1,6 +1,6 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
-import { ChildrenProp } from '../lib/ui/props'
 import { useAppNavigate } from '../navigation/hooks/useAppNavigate'
 import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding'
 

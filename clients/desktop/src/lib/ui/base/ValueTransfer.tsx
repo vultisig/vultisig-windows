@@ -1,6 +1,5 @@
+import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { ReactNode, useState } from 'react'
-
-import { OnFinishProp, ValueProp } from '../props'
 
 type ValueTransferProps<T> = {
   from: (props: OnFinishProp<T>) => ReactNode

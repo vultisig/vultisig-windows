@@ -1,6 +1,6 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-import { ChildrenProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
 import { MpcServerUrlProvider } from '../../../mpc/serverType/state/mpcServerUrl'

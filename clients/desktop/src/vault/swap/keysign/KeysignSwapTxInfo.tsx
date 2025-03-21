@@ -1,6 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { ValueProp } from '@lib/ui/props'
 import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
@@ -17,7 +18,6 @@ import {
   TxOverviewChainDataRow,
   TxOverviewRow,
 } from '../../../chain/tx/components/TxOverviewRow'
-import { ValueProp } from '../../../lib/ui/props'
 
 export const KeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
   const { erc20ApprovePayload, toAmount: fromAmount } = value

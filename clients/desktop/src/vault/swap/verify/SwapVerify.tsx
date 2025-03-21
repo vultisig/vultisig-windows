@@ -1,3 +1,4 @@
+import { OnBackProp } from '@lib/ui/props'
 import { range } from '@lib/utils/array/range'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
@@ -9,7 +10,6 @@ import {
   TxOverviewRow,
 } from '../../../chain/tx/components/TxOverviewRow'
 import { VStack } from '../../../lib/ui/layout/Stack'
-import { OnBackProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'

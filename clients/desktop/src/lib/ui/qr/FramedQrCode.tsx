@@ -1,8 +1,8 @@
+import { ValueProp } from '@lib/ui/props'
 import { useRive } from '@rive-app/react-canvas'
 import { ComponentProps } from 'react'
 import QRCode from 'react-qr-code'
 
-import { ValueProp } from '../../../lib/ui/props'
 import { qrCodeDefaultSize } from './config'
 import { QRCodeWrapper, RiveWrapper, Wrapper } from './FramedQrCode.styled'
 import { useQRCodeScaleFactor } from './hooks/useQRCodeScaleFactor'

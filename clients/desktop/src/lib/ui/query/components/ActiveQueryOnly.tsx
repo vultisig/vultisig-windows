@@ -1,4 +1,5 @@
-import { ChildrenProp, ValueProp } from '../../props'
+import { ChildrenProp, ValueProp } from '@lib/ui/props'
+
 import { Query } from '../Query'
 
 export const ActiveQueryOnly: React.FC<

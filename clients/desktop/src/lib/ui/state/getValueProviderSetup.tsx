@@ -1,7 +1,7 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
 import { createContext } from 'react'
 
-import { ChildrenProp } from '../props'
 import { createContextHook } from './createContextHook'
 
 export function getValueProviderSetup<T>(name: string) {

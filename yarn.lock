@@ -596,15 +596,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@core/chain-ui@workspace:core/chain-ui":
-  version: 0.0.0-use.local
-  resolution: "@core/chain-ui@workspace:core/chain-ui"
-  dependencies:
-    "@trustwallet/wallet-core": "npm:^4.2.15"
-    react: "npm:^19.0.0"
-  languageName: unknown
-  linkType: soft
-
 "@core/chain@workspace:core/chain":
   version: 0.0.0-use.local
   resolution: "@core/chain@workspace:core/chain"
@@ -635,6 +626,15 @@ __metadata:
     "@bufbuild/protoc-gen-es": "npm:^2.2.4"
     "@solana/web3.js": "npm:^2.0.0"
     vitest: "npm:^3.0.9"
+  languageName: unknown
+  linkType: soft
+
+"@core/ui@workspace:core/ui":
+  version: 0.0.0-use.local
+  resolution: "@core/ui@workspace:core/ui"
+  dependencies:
+    "@trustwallet/wallet-core": "npm:^4.2.15"
+    react: "npm:^19.0.0"
   languageName: unknown
   linkType: soft
 
@@ -1675,6 +1675,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lib/codegen@workspace:lib/codegen":
+  version: 0.0.0-use.local
+  resolution: "@lib/codegen@workspace:lib/codegen"
+  dependencies:
+    prettier: "npm:^3.5.2"
+  languageName: unknown
+  linkType: soft
+
 "@lib/dkls@workspace:lib/dkls":
   version: 0.0.0-use.local
   resolution: "@lib/dkls@workspace:lib/dkls"
@@ -1684,6 +1692,12 @@ __metadata:
 "@lib/schnorr@workspace:lib/schnorr":
   version: 0.0.0-use.local
   resolution: "@lib/schnorr@workspace:lib/schnorr"
+  languageName: unknown
+  linkType: soft
+
+"@lib/ui@workspace:lib/ui":
+  version: 0.0.0-use.local
+  resolution: "@lib/ui@workspace:lib/ui"
   languageName: unknown
   linkType: soft
 
@@ -9663,7 +9677,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.5.3":
+"prettier@npm:^3.5.2, prettier@npm:^3.5.3":
   version: 3.5.3
   resolution: "prettier@npm:3.5.3"
   bin:

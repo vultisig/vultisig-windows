@@ -1,6 +1,6 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 
-import { ChildrenProp } from '../../../lib/ui/props'
 import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup'
 import { generateLocalPartyId } from '..'
 

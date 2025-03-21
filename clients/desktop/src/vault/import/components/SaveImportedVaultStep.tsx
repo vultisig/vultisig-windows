@@ -1,7 +1,7 @@
+import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { storage } from '../../../../wailsjs/go/models'
-import { ValueProp } from '../../../lib/ui/props'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { SaveVaultStep } from '../../keygen/shared/SaveVaultStep'
 

@@ -1,8 +1,8 @@
+import { ActionProp } from '@lib/ui/props'
 import { Dimensions } from '@lib/utils/entities/Dimensions'
 import { ComponentProps, CSSProperties, ReactNode, Ref } from 'react'
 import styled from 'styled-components'
 
-import { ActionProp } from '../props'
 import { ElementSizeAware } from './ElementSizeAware'
 
 interface ActionInsideInteractiveElementRenderParams<

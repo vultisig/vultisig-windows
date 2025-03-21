@@ -1,7 +1,7 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 
 import { storage } from '../../../../wailsjs/go/models'
-import { ChildrenProp } from '../../../lib/ui/props'
 import { generateLocalPartyId } from '../../../mpc/localPartyId'
 import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'

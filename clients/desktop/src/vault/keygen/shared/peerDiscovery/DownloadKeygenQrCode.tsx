@@ -1,7 +1,7 @@
+import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { ShareIconNew } from '../../../../lib/ui/icons/ShareIconNew'
-import { ValueProp } from '../../../../lib/ui/props'
 import { SaveAsImage } from '../../../../ui/file/SaveAsImage'
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode'

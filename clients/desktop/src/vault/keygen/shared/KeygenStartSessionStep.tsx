@@ -1,9 +1,9 @@
+import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { OnBackProp, OnForwardProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../lib/ui/text'
 import { useMpcServerUrl } from '../../../mpc/serverType/state/mpcServerUrl'

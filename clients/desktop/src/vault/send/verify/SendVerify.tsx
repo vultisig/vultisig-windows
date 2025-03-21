@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { OnBackProp } from '@lib/ui/props'
 import { range } from '@lib/utils/array/range'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { FC } from 'react'
@@ -15,7 +16,6 @@ import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { OnBackProp } from '../../../lib/ui/props'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../lib/ui/text'
 import { PageContent } from '../../../ui/page/PageContent'

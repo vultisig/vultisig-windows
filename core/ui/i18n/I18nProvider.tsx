@@ -1,13 +1,14 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 import { I18nextProvider } from 'react-i18next'
 
-import { ChildrenProp } from '../lib/ui/props'
-import { useLanguage } from '../preferences/state/language'
 import i18nInstance from './config'
+import { Language } from './Language'
 
-export const I18nProvider = ({ children }: ChildrenProp) => {
-  const [language] = useLanguage()
-
+export const I18nProvider = ({
+  children,
+  language,
+}: ChildrenProp & { language: Language }) => {
   useEffect(() => {
     i18nInstance.changeLanguage(language)
   }, [language])

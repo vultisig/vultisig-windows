@@ -467,6 +467,7 @@ export const hr = {
         'Készíts biztonsági mentést a trezor megosztásodról online',
       onlineStorageDescription:
         'Az online tárolás ajánlott és biztonságos – a trezor megosztások erre vannak tervezve.',
+      backThemUpNow: 'poduprijeti ih sada',
     },
     summary: {
       title: 'Gyors Összefoglaló',
@@ -635,12 +636,14 @@ export const hr = {
         provider: 'Pružatelj',
         operatorFee: 'Naknada Operatera',
         amount: 'Iznos',
+        asset: 'Sredstvo',
       },
       validations: {
         nodeAddressMinLength: 'Potrebna je adresa čvora',
         nodeAddressInvalid: 'Adresa čvora je nevažeća',
         operatorFee: 'Naknada operatera je obavezna',
         amount: 'Iznos mora biti pozitivan',
+        lpUnits: 'LP jedinice moraju biti pozitivne',
       },
     },
     unbond: {
@@ -685,37 +688,53 @@ export const hr = {
       },
     },
     leave: {
-      labels: { nodeAddress: 'Adresa Čvora' },
+      labels: {
+        nodeAddress: 'Adresa Čvora',
+      },
       validations: {
         nodeAddressMinLength: 'Potrebna je adresa čvora',
         nodeAddressInvalid: 'Adresa čvora je nevažeća',
       },
     },
     custom: {
-      labels: { amount: 'Iznos', customMemo: 'Prilagođena Bilješka' },
+      labels: {
+        amount: 'Iznos',
+        customMemo: 'Prilagođena Bilješka',
+      },
       validations: {
         amount: 'Iznos mora biti pozitivan',
         customMemo: 'Prilagođena bilješka je obavezna',
       },
     },
     vote: {
-      labels: { proposalId: 'ID Prijedloga', support: 'Podrška' },
+      labels: {
+        proposalId: 'ID Prijedloga',
+        support: 'Podrška',
+      },
       validations: {
         proposalId: 'ID Prijedloga je obavezan',
         support: 'Polje Podrška je obavezno',
       },
     },
     stake: {
-      labels: { amount: 'Iznos', validatorAddress: 'Adresa Validatora' },
+      labels: {
+        amount: 'Iznos',
+        validatorAddress: 'Adresa Validatora',
+      },
       validations: {
         amount: 'Iznos mora biti pozitivan',
         validatorAddress: 'Adresa Validatora je obavezna',
       },
     },
     unstake: {
-      labels: { validatorAddress: 'Adresa Validatora' },
-      validations: { validatorAddress: 'Adresa Validatora je obavezna' },
+      labels: {
+        validatorAddress: 'Adresa Validatora',
+      },
+      validations: {
+        validatorAddress: 'Adresa Validatora je obavezna',
+      },
     },
+    requiredFieldMissing: 'Nedostaje obavezno polje',
   },
   scan_with_devices: 'Skeniraj s uređajima za pridruživanje generaciji trezora',
   scan_with_devices_to_sign:

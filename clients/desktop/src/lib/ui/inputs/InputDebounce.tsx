@@ -1,6 +1,5 @@
+import { InputProps } from '@lib/ui/props'
 import { ReactNode, useEffect, useState } from 'react'
-
-import { InputProps } from '../props'
 
 type InputDebounceProps<T> = InputProps<T> & {
   render: (props: InputProps<T>) => ReactNode

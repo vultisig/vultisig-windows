@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
-import { useAssertWalletCore } from '@core/chain-ui/providers/WalletCoreProvider'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 
 import { processKeysignPayload } from '../../../chain/keysign/processKeysignPayload'
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'

@@ -1,3 +1,4 @@
+import { UiProps, ValueProp } from '@lib/ui/props'
 import styled from 'styled-components'
 
 import { centerContent } from '../../lib/ui/css/centerContent'
@@ -6,7 +7,6 @@ import { sameDimensions } from '../../lib/ui/css/sameDimensions'
 import { PictureIcon } from '../../lib/ui/icons/PictureIcon'
 import { ContainImage } from '../../lib/ui/images/ContainImage'
 import { SafeImage } from '../../lib/ui/images/SafeImage'
-import { UiProps, ValueProp } from '../../lib/ui/props'
 import { getColor } from '../../lib/ui/theme/getters'
 
 const Icon = styled(ContainImage)`

@@ -14,7 +14,6 @@ export const it = {
   price_impact_good: 'Buono',
   price_impact_average: 'Medio',
   price_impact_high: 'Impatto Alto',
-
   coin_not_found_in_current_vault:
     'Moneta non trovata nella cassaforte attuale',
   secureVaultSetupPasswordTooltipContent:
@@ -487,6 +486,7 @@ export const it = {
         'Esegui il backup della tua quota del vault online',
       onlineStorageDescription:
         "L'archiviazione online è consigliata e sicura: le quote del vault sono progettate per questo.",
+      backThemUpNow: 'sostenerli ora',
     },
     summary: {
       title: 'Riepilogo Rapido',
@@ -659,12 +659,14 @@ export const it = {
         provider: 'Fornitore',
         operatorFee: "Tariffa dell'Operatore",
         amount: 'Importo',
+        asset: 'Risorsa',
       },
       validations: {
         nodeAddressMinLength: 'Indirizzo nodo obbligatorio',
         nodeAddressInvalid: 'Indirizzo nodo non valido',
         operatorFee: "Tariffa dell'operatore è obbligatoria",
         amount: "L'importo deve essere positivo",
+        lpUnits: 'Le unità LP devono essere positive',
       },
     },
     unbond: {
@@ -709,21 +711,29 @@ export const it = {
       },
     },
     leave: {
-      labels: { nodeAddress: 'Indirizzo del Nodo' },
+      labels: {
+        nodeAddress: 'Indirizzo del Nodo',
+      },
       validations: {
         nodeAddressMinLength: 'Indirizzo nodo obbligatorio',
         nodeAddressInvalid: 'Indirizzo nodo non valido',
       },
     },
     custom: {
-      labels: { amount: 'Importo', customMemo: 'Memo Personalizzato' },
+      labels: {
+        amount: 'Importo',
+        customMemo: 'Memo Personalizzato',
+      },
       validations: {
         amount: "L'importo deve essere positivo",
         customMemo: 'Memo personalizzato è obbligatorio',
       },
     },
     vote: {
-      labels: { proposalId: 'ID proposta', support: 'Supporto' },
+      labels: {
+        proposalId: 'ID proposta',
+        support: 'Supporto',
+      },
       validations: {
         proposalId: 'ID proposta obbligatorio',
         support: 'Il campo Supporto è obbligatorio',
@@ -740,9 +750,14 @@ export const it = {
       },
     },
     unstake: {
-      labels: { validatorAddress: 'Indirizzo convalidatore' },
-      validations: { validatorAddress: 'Indirizzo convalidatore obbligatorio' },
+      labels: {
+        validatorAddress: 'Indirizzo convalidatore',
+      },
+      validations: {
+        validatorAddress: 'Indirizzo convalidatore obbligatorio',
+      },
     },
+    requiredFieldMissing: 'Campo obbligatorio mancante',
   },
   sign: 'Firma',
   part_n_of_m: 'Parte {{n}} di {{m}}',

@@ -1,3 +1,4 @@
+import { OnForwardProp } from '@lib/ui/props'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -11,7 +12,6 @@ import { EmailIcon } from '../../../../lib/ui/icons/EmailIcon'
 import { LightningIcon } from '../../../../lib/ui/icons/LightningIcon'
 import { AnimatedVisibility } from '../../../../lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
-import { OnForwardProp } from '../../../../lib/ui/props'
 import { Text } from '../../../../lib/ui/text'
 import { hasServerSigner } from '../../../fast/utils/hasServerSigner'
 import { useCurrentVault } from '../../../state/currentVault'

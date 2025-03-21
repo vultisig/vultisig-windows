@@ -480,6 +480,7 @@ export const de = {
       backupConfirmationDescription: 'Sichern Sie Ihren Tresoranteil online',
       onlineStorageDescription:
         'Die Online-Speicherung wird empfohlen und ist sicher – Tresoranteile sind dafür ausgelegt.',
+      backThemUpNow: 'Sichern Sie sie jetzt',
     },
     summary: {
       title: 'Kurze Zusammenfassung',
@@ -659,12 +660,14 @@ export const de = {
         provider: 'Anbieter',
         operatorFee: 'Betreibergebühr',
         amount: 'Betrag',
+        asset: 'Vermögenswert',
       },
       validations: {
         nodeAddressMinLength: 'Knotenadresse ist erforderlich',
         nodeAddressInvalid: 'Knotenadresse ist ungültig',
         operatorFee: 'Betreibergebühr ist erforderlich',
         amount: 'Betrag muss positiv sein',
+        lpUnits: 'LP-Einheiten müssen positiv sein',
       },
     },
     unbond: {
@@ -709,37 +712,53 @@ export const de = {
       },
     },
     leave: {
-      labels: { nodeAddress: 'Knotenadresse' },
+      labels: {
+        nodeAddress: 'Knotenadresse',
+      },
       validations: {
         nodeAddressMinLength: 'Knotenadresse ist erforderlich',
         nodeAddressInvalid: 'Knotenadresse ist ungültig',
       },
     },
     custom: {
-      labels: { amount: 'Betrag', customMemo: 'Benutzerdefiniertes Memo' },
+      labels: {
+        amount: 'Betrag',
+        customMemo: 'Benutzerdefiniertes Memo',
+      },
       validations: {
         amount: 'Betrag muss positiv sein',
         customMemo: 'Benutzerdefiniertes Memo ist erforderlich',
       },
     },
     vote: {
-      labels: { proposalId: 'Vorschlags-ID', support: 'Support' },
+      labels: {
+        proposalId: 'Vorschlags-ID',
+        support: 'Support',
+      },
       validations: {
         proposalId: 'Vorschlags-ID ist erforderlich',
         support: 'Support-Feld ist erforderlich',
       },
     },
     stake: {
-      labels: { amount: 'Betrag', validatorAddress: 'Validator-Adresse' },
+      labels: {
+        amount: 'Betrag',
+        validatorAddress: 'Validator-Adresse',
+      },
       validations: {
         amount: 'Betrag muss positiv sein',
         validatorAddress: 'Validator-Adresse ist erforderlich',
       },
     },
     unstake: {
-      labels: { validatorAddress: 'Validator-Adresse' },
-      validations: { validatorAddress: 'Validator-Adresse ist erforderlich' },
+      labels: {
+        validatorAddress: 'Validator-Adresse',
+      },
+      validations: {
+        validatorAddress: 'Validator-Adresse ist erforderlich',
+      },
     },
+    requiredFieldMissing: 'Pflichtfeld fehlt',
   },
   scan_with_devices: 'Mit Geräten scannen, um der Tresorgeneration beizutreten',
   scan_with_devices_to_sign:

@@ -1,7 +1,7 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { useEffect } from 'react'
 
-import { ChildrenProp } from '../../lib/ui/props'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { useVaults } from '../queries/useVaultsQuery'
 

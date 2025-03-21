@@ -1,10 +1,10 @@
+import { OnFinishProp, OptionsProp } from '@lib/ui/props'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { Modal } from '../../../lib/ui/modal'
-import { OnFinishProp, OptionsProp } from '../../../lib/ui/props'
 import { SearchField } from '../../../lib/ui/search/SearchField'
 
 type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &

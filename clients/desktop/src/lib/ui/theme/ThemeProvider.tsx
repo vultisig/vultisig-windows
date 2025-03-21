@@ -1,9 +1,8 @@
 import isPropValid from '@emotion/is-prop-valid'
+import { ChildrenProp } from '@lib/ui/props'
 import { StyleSheetManager } from 'styled-components'
 import { ThemeProvider as StyledComponentsThemeProvider } from 'styled-components'
 import { DefaultTheme } from 'styled-components'
-
-import { ChildrenProp } from '../props'
 
 const shouldForwardProp = (propName: string, target: any) => {
   if (typeof target === 'string') {

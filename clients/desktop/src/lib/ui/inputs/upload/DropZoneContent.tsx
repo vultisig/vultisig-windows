@@ -1,8 +1,8 @@
+import { ChildrenProp, IconProp } from '@lib/ui/props'
 import styled from 'styled-components'
 
 import { IconWrapper } from '../../icons/IconWrapper'
 import { VStack } from '../../layout/Stack'
-import { ChildrenProp, IconProp } from '../../props'
 import { Text } from '../../text'
 import { getColor } from '../../theme/getters'
 

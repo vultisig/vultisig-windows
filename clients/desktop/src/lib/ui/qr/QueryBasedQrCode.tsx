@@ -1,10 +1,10 @@
+import { ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { centerContent } from '../css/centerContent'
 import { toSizeUnit } from '../css/toSizeUnit'
 import { Spinner } from '../loaders/Spinner'
-import { ValueProp } from '../props'
 import { MatchQuery } from '../query/components/MatchQuery'
 import { Query } from '../query/Query'
 import { StrictText } from '../text'

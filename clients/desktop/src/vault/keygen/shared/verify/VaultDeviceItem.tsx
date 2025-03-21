@@ -1,9 +1,9 @@
+import { IndexProp, ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { borderRadius } from '../../../../lib/ui/css/borderRadius'
 import { horizontalPadding } from '../../../../lib/ui/css/horizontalPadding'
-import { IndexProp, ValueProp } from '../../../../lib/ui/props'
 import { text } from '../../../../lib/ui/text'
 import { getColor } from '../../../../lib/ui/theme/getters'
 import {

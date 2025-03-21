@@ -1,6 +1,6 @@
+import { ChildrenProp } from '@lib/ui/props'
 import { ComponentProps } from 'react'
 
-import { ChildrenProp } from '../props'
 import { VStack } from './Stack'
 
 export const Center = ({

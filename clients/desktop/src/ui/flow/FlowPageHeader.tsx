@@ -1,4 +1,5 @@
-import { OnBackProp, TitleProp } from '../../lib/ui/props'
+import { OnBackProp, TitleProp } from '@lib/ui/props'
+
 import { PageHeader } from '../page/PageHeader'
 import { PageHeaderBackButton } from '../page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../page/PageHeaderTitle'
