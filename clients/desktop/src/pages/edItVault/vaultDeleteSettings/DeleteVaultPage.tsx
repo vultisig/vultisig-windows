@@ -69,7 +69,7 @@ const DeleteVaultPage = () => {
       value: vaultBalance + ' ' + currencySymbol,
     },
     {
-      label: t('vault_delete_page_vault_part'),
+      label: t('vault_part'),
       value: `${t('part')} ${localPartyIndex} ${t('of')} ${totalSigners}`,
     },
     { label: t('vault_delete_page_device_id'), value: local_party_id },
