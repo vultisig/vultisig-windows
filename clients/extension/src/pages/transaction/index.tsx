@@ -20,10 +20,8 @@ import {
   ITransaction,
   VaultProps,
 } from '@clients/extension/src/utils/interfaces'
-import messageKeys from '@clients/extension/src/utils/message-keys'
 import {
   getStoredCurrency,
-  getStoredLanguage,
   getStoredTransactions,
   getStoredVaults,
   setStoredTransaction,
@@ -207,7 +205,7 @@ const Component = () => {
                 () => {
                   messageApi.open({
                     type: 'error',
-                    content: t(messageKeys.RETRY_ERROR),
+                    content: t('retry_error'),
                   })
                 }
               )
@@ -226,8 +224,8 @@ const Component = () => {
         setState({
           ...state,
           hasError: true,
-          errorTitle: t(messageKeys.TIMEOUT_ERROR),
-          errorDescription: t(messageKeys.SIGNING_TIMEOUT_DESCRIPTION),
+          errorTitle: t('timeout_error'),
+          errorDescription: t('signing_timeout_description'),
         })
       })
     }, RETRY_TIMEOUT_MS)
@@ -268,7 +266,7 @@ const Component = () => {
               () => {
                 messageApi.open({
                   type: 'error',
-                  content: t(messageKeys.RETRY_ERROR),
+                  content: t('retry_error'),
                 })
               }
             )
@@ -335,7 +333,7 @@ const Component = () => {
           setStoredTransaction({ ...transaction, status: 'error' }).then(() => {
             messageApi.open({
               type: 'error',
-              content: t(messageKeys.RETRY_ERROR),
+              content: t('retry_error'),
             })
           })
         })
@@ -405,7 +403,7 @@ const Component = () => {
     else
       messageApi.open({
         type: 'warning',
-        content: t(messageKeys.SCAN_FIRST),
+        content: t('scan_first'),
       })
   }
 
@@ -467,7 +465,7 @@ const Component = () => {
               console.error(err)
               messageApi.open({
                 type: 'error',
-                content: t(messageKeys.SIGNING_ERROR),
+                content: t('signing_error'),
               })
             })
         })
@@ -480,13 +478,10 @@ const Component = () => {
 
     Promise.all([
       getStoredCurrency(),
-      getStoredLanguage(),
       getStoredTransactions(),
       getStoredVaults(),
-    ]).then(([currency, language, transactions, vaults]) => {
+    ]).then(([currency, transactions, vaults]) => {
       const [transaction] = transactions
-
-      i18n.changeLanguage(language)
 
       const vault = vaults.find(({ chains }) =>
         chains.some(
@@ -558,8 +553,8 @@ const Component = () => {
         setState(prevState => ({
           ...prevState,
           hasError: true,
-          errorTitle: t(messageKeys.GET_VAULT_FAILED),
-          errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
+          errorTitle: t('get_vault_failed'),
+          errorDescription: t('get_vault_failed_description'),
         }))
       }
     })
@@ -578,13 +573,11 @@ const Component = () => {
           <>
             <div className="header">
               <span className="heading">
-                {t(
-                  step === 1
-                    ? messageKeys.VERIFY_SEND
-                    : step === 5
-                      ? messageKeys.TRANSACTION_SUCCESSFUL
-                      : messageKeys.SIGN_TRANSACTION
-                )}
+                {step === 1
+                  ? t('verify_send')
+                  : step === 5
+                    ? t('transaction_successful')
+                    : t('sign_transaction')}
               </span>
               {step === 2 && (
                 <ArrowLeft
@@ -606,20 +599,18 @@ const Component = () => {
             {step === 1 ? (
               <>
                 <div className="content">
-                  <span className="divider">
-                    {t(messageKeys.TRANSACTION_DETAILS)}
-                  </span>
+                  <span className="divider">{t('transaction_details')}</span>
                   {!transaction.isCustomMessage && (
                     <div className="list">
                       <div className="list-item">
-                        <span className="label">{t(messageKeys.FROM)}</span>
+                        <span className="label">{t('from')}</span>
                         <MiddleTruncate
                           text={transaction.transactionDetails.from}
                         />
                       </div>
                       {transaction.transactionDetails.to && (
                         <div className="list-item">
-                          <span className="label">{t(messageKeys.TO)}</span>
+                          <span className="label">{t('to')}</span>
                           <MiddleTruncate
                             text={transaction.transactionDetails.to}
                           />
@@ -627,7 +618,7 @@ const Component = () => {
                       )}
                       {transaction.transactionDetails.amount?.amount && (
                         <div className="list-item">
-                          <span className="label">{t(messageKeys.AMOUNT)}</span>
+                          <span className="label">{t('amount')}</span>
                           <span className="extra">{`${formatUnits(
                             transaction.transactionDetails.amount.amount,
                             transaction.transactionDetails.amount.decimals
@@ -637,7 +628,7 @@ const Component = () => {
                       {transaction.memo?.value &&
                         !transaction.memo.isParsed && (
                           <div className="memo-item">
-                            <span className="label">{t(messageKeys.MEMO)}</span>
+                            <span className="label">{t('memo')}</span>
                             <span className="extra">
                               <div>
                                 {splitString(
@@ -651,9 +642,7 @@ const Component = () => {
                           </div>
                         )}
                       <div className="list-item">
-                        <span className="label">
-                          {t(messageKeys.NETWORK_FEE)}
-                        </span>
+                        <span className="label">{t('network_fee')}</span>
                         <span className="extra">
                           {`${transaction.txFee} ${transaction.chain.ticker}`}
                         </span>
@@ -662,7 +651,7 @@ const Component = () => {
                         <>
                           <div className="list-item">
                             <span className="label">
-                              {t(messageKeys.FUNCTION_SIGNATURE)}
+                              {t('function_signature')}
                             </span>
                             <div className="scrollable-x">
                               {
@@ -673,7 +662,7 @@ const Component = () => {
                           </div>
                           <div className="list-item">
                             <span className="label">
-                              {t(messageKeys.FUNCTION_INPUTS)}
+                              {t('function_inputs')}
                             </span>
                             <div className="scrollable-x monospace-text ">
                               <div style={{ width: 'max-content' }}>
@@ -693,13 +682,13 @@ const Component = () => {
                   {transaction.isCustomMessage && (
                     <div className="list">
                       <div className="list-item">
-                        <span className="label">{t(messageKeys.ADDRESS)}</span>
+                        <span className="label">{t('address')}</span>
                         <MiddleTruncate
                           text={transaction.transactionDetails.from}
                         />
                       </div>
                       <div className="list-item">
-                        <span className="label">{t(messageKeys.MESSAGE)}</span>
+                        <span className="label">{t('message')}</span>
                         <MiddleTruncate
                           text={transaction.customMessage!.message}
                         />
@@ -715,16 +704,14 @@ const Component = () => {
                     shape="round"
                     block
                   >
-                    {t(messageKeys.SIGN)}
+                    {t('sign')}
                   </Button>
                 </div>
               </>
             ) : step === 2 ? (
               <>
                 <div className="content">
-                  <span className="hint">
-                    {t(messageKeys.SCAN_QR_WITH_DEVICE)}
-                  </span>
+                  <span className="hint">{t('scan_qr_with_two_devices')}</span>
                   <div className="qrcode">
                     <QRCodeBorder className="border" />
                     <div className="qr-container" ref={qrContainerRef}>
@@ -745,7 +732,7 @@ const Component = () => {
                     disabled={!fastSign}
                     block
                   >
-                    {t(messageKeys.FAST_SIGN)}
+                    {t('fast_sign')}
                   </Button>
                   <Button
                     onClick={handleApp}
@@ -753,7 +740,7 @@ const Component = () => {
                     shape="round"
                     block
                   >
-                    {t(messageKeys.OPEN_DESKTOP_APP)}
+                    {t('open_desktop_app')}
                   </Button>
                 </div>
               </>
@@ -787,7 +774,7 @@ const Component = () => {
               <>
                 <div className="content">
                   <VultiLoading />
-                  <span className="message">{t(messageKeys.SIGNING)}</span>
+                  <span className="message">{t('signing')}</span>
                 </div>
               </>
             ) : (
@@ -796,9 +783,7 @@ const Component = () => {
                   {!transaction.isCustomMessage ? (
                     <div className="list">
                       <div className="list-item">
-                        <span className="label">
-                          {t(messageKeys.TRANSACTION)}
-                        </span>
+                        <span className="label">{t('transaction')}</span>
                         <MiddleTruncate text={transaction.txHash!} />
                         <div className="actions">
                           <a
@@ -808,17 +793,17 @@ const Component = () => {
                             className="btn"
                           >
                             <SquareArrow />
-                            {t(messageKeys.VIEW_TX)}
+                            {t('view_tx')}
                           </a>
                           <button className="btn" onClick={() => handleCopy()}>
                             <SquareBehindSquare />
-                            {t(messageKeys.COPY_TX)}
+                            {t('copy_tx')}
                           </button>
                         </div>
                       </div>
                       {transaction.transactionDetails.to && (
                         <div className="list-item">
-                          <span className="label">{t(messageKeys.TO)}</span>
+                          <span className="label">{t('to')}</span>
                           <MiddleTruncate
                             text={transaction.transactionDetails.to}
                           />
@@ -827,7 +812,7 @@ const Component = () => {
 
                       {transaction.transactionDetails.amount?.amount && (
                         <div className="list-item">
-                          <span className="label">{t(messageKeys.AMOUNT)}</span>
+                          <span className="label">{t('amount')}</span>
                           <span className="extra">{`${formatUnits(
                             transaction.transactionDetails.amount.amount,
                             transaction.transactionDetails.amount.decimals
@@ -838,7 +823,7 @@ const Component = () => {
                       {transaction.memo?.value &&
                         !transaction.memo?.isParsed && (
                           <div className="memo-item">
-                            <span className="label">{t(messageKeys.MEMO)}</span>
+                            <span className="label">{t('memo')}</span>
                             <span className="extra">
                               <div>
                                 {splitString(
@@ -852,18 +837,14 @@ const Component = () => {
                           </div>
                         )}
                       <div className="list-item">
-                        <span className="label">
-                          {t(messageKeys.NETWORK_FEE)}
-                        </span>
+                        <span className="label">{t('network_fee')}</span>
                         <span className="extra">{`${transaction.txFee} ${transaction.chain.ticker}`}</span>
                       </div>
                     </div>
                   ) : (
                     <div className="list">
                       <div className="list-item">
-                        <span className="label">
-                          {t(messageKeys.SIGNATURE)}
-                        </span>
+                        <span className="label">{t('signature')}</span>
                         <MiddleTruncate text={transaction.customSignature!} />
                       </div>
                     </div>
@@ -876,7 +857,7 @@ const Component = () => {
                     shape="round"
                     block
                   >
-                    {t(messageKeys.DONE)}
+                    {t('done')}
                   </Button>
                 </div>
               </>
