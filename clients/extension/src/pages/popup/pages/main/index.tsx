@@ -6,7 +6,6 @@ import {
   Vultisig,
 } from '@clients/extension/src/icons'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
-import messageKeys from '@clients/extension/src/utils/message-keys'
 import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getIsPriority,
@@ -48,7 +47,7 @@ const ConnectedApp: FC<{ domain: string; onUnlink: () => void }> = ({
       <span className="name">{`${sld}.${tld}`}</span>
       <button className="btn" onClick={onUnlink}>
         <BrokenLink />
-        {t(messageKeys.UNLINK)}
+        {t('unlink')}
       </button>
     </div>
   )
@@ -130,7 +129,7 @@ const Component = () => {
   const showReloadMessage = () => {
     messageApi.open({
       type: 'info',
-      content: t(messageKeys.RELOAD_MESSAGE),
+      content: t('reload_message'),
     })
   }
 
@@ -175,7 +174,7 @@ const Component = () => {
       <div className="layout main-page">
         <div className="header">
           <Vultisig className="logo" />
-          <span className="logo-type">{t(messageKeys.VULTISIG)}</span>
+          <span className="logo-type">{t('vultisig')}</span>
           <SettingsTwo
             className="icon icon-right"
             onClick={() => navigate(routeKeys.settings.root, { state: true })}
@@ -190,10 +189,10 @@ const Component = () => {
           </div>
           <div className="view">
             <Button onClick={handleViewinWeb} block>
-              {t(messageKeys.VIEW_IN_AIRDROP)}
+              {t('view_in_airdrop')}
             </Button>
           </div>
-          <span className="divider">{t(messageKeys.CURRENT_NETWORK)}</span>
+          <span className="divider">{t('current_network')}</span>
           <div>
             <Select
               className="select"
@@ -202,12 +201,12 @@ const Component = () => {
               onChange={value => handleChangeNetwork(value)}
             />
           </div>
-          <span className="divider">{t(messageKeys.CONNECTED_DAPPS)}</span>
+          <span className="divider">{t('connected_apps')}</span>
           <div className="apps">
             <div className="action">
               <div className="title">
-                {t(messageKeys.PRIORITIZE_VULTICONNECT)}
-                <Tooltip title={t(messageKeys.PRIORITIZE_VULTICONNECT_HINT)}>
+                {t('prioritize_vulticonnect')}
+                <Tooltip title={t('prioritize_vulticonnect_hint')}>
                   <CircleInfo className="icon" />
                 </Tooltip>
               </div>
@@ -225,7 +224,7 @@ const Component = () => {
                 />
               ))
             ) : (
-              <Empty description={t(messageKeys.NO_CONNECTED_APP)} />
+              <Empty description={t('no_connected_app')} />
             )}
           </div>
         </div>

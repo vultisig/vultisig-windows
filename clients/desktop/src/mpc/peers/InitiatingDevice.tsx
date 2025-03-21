@@ -25,7 +25,7 @@ export const InitiatingDevice = () => {
         <Text color="contrast" size={14} weight="500">
           {formatMpcDeviceName(deviceName)}
           <Text color="shy" size={13} weight="500">
-            {t('thisDevice')}
+            {t('this_device')}
           </Text>
         </Text>
       </VStack>
