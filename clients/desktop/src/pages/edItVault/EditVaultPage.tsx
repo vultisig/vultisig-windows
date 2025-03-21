@@ -10,7 +10,7 @@ import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
 import { PageSlice } from '../../ui/page/PageSlice'
 import { useCurrentVault } from '../../vault/state/currentVault'
-import { editVaultSettingsItems } from './constants'
+import { getEditVaultSettingsItems } from './constants'
 import {
   AutoCenteredTitle,
   Container,
@@ -29,11 +29,9 @@ const EditVaultPage = () => {
   }
 
   const { local_party_id } = currentVault
-  let items = editVaultSettingsItems
+  let items = getEditVaultSettingsItems(t)
   if (currentVault.lib_type === 'DKLS') {
-    items = editVaultSettingsItems.filter(
-      item => item.path !== 'migrateVaultSecure'
-    )
+    items = items.filter(item => item.path !== 'migrateVaultSecure')
   }
 
   return (
@@ -49,7 +47,7 @@ const EditVaultPage = () => {
         </AutoCenteredTitle>
         <VStack flexGrow gap={12}>
           {items.map(
-            ({ path, titleKey, subtitleKey, icon: Icon, textColor }, index) => (
+            ({ path, title, subtitle, icon: Icon, textColor }, index) => (
               <UnstyledButton key={index} onClick={() => navigate(path)}>
                 <ListItemPanel>
                   <HStack
@@ -67,10 +65,10 @@ const EditVaultPage = () => {
                           weight="600"
                           color={textColor || 'contrast'}
                         >
-                          {t(titleKey)}
+                          {title}
                         </Text>
                         <Text size={12} color={textColor || 'supporting'}>
-                          {t(subtitleKey)}
+                          {subtitle}
                         </Text>
                       </TextWrapper>
                     </HStack>
