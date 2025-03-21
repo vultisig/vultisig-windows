@@ -21,19 +21,6 @@ import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
 import { useBalanceQuery } from '../../query/useBalanceQuery'
 import { useCoinPriceQuery } from '../../query/useCoinPriceQuery'
 
-const Container = styled(HStack)`
-  ${panel()};
-  padding: 12px 20px;
-  border-radius: 0px;
-  position: relative;
-  cursor: pointer;
-  border-bottom: 1px solid ${getColor('foregroundExtra')};
-
-  &:hover {
-    background: ${getColor('foregroundExtra')};
-  }
-`
-
 export const CoinOption = ({
   value,
   onClick,
@@ -69,14 +56,16 @@ export const CoinOption = ({
           }
           style={{ fontSize: 32 }}
         />
-        <VStack gap={2}>
+        <HStack gap={8} alignItems="center">
           <Text color="contrast" size={13} weight="500">
             {ticker}
           </Text>
-          <Text color="shy" size={11} weight="500">
-            {chain}
-          </Text>
-        </VStack>
+          <PillWrapper>
+            <Text color="shy" size={11} weight="500">
+              {chain}
+            </Text>
+          </PillWrapper>
+        </HStack>
       </HStack>
       <VStack
         gap={4}
@@ -133,3 +122,20 @@ export const CoinOption = ({
     </Container>
   )
 }
+
+const Container = styled(HStack)`
+  ${panel()};
+  padding: 12px 20px;
+  border-radius: 0px;
+  position: relative;
+  cursor: pointer;
+  border-bottom: 1px solid ${getColor('foregroundExtra')};
+`
+
+const PillWrapper = styled.div`
+  display: grid;
+  place-items: center;
+  padding: 8px 12px;
+  border-radius: 99px;
+  border: 1px solid ${getColor('foregroundExtra')};
+`

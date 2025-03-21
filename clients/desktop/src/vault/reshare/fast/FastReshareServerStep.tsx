@@ -79,9 +79,7 @@ export const FastReshareServerStep: React.FC<OnForwardProp> = ({
             <WaitForServerLoader />
           </>
         )}
-        error={error => (
-          <FullPageFlowErrorState title={title} message={error.message} />
-        )}
+        error={error => <FullPageFlowErrorState message={error.message} />}
       />
     </>
   )

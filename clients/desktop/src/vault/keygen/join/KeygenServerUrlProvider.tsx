@@ -31,10 +31,7 @@ export const KeygenServerUrlProvider = ({ children }: ChildrenProp) => {
         <MpcServerUrlProvider value={value}>{children}</MpcServerUrlProvider>
       )}
       error={() => (
-        <FullPageFlowErrorState
-          title={t('join_keygen')}
-          message={t('failed_to_discover_mediator')}
-        />
+        <FullPageFlowErrorState message={t('failed_to_discover_mediator')} />
       )}
       pending={() => (
         <>

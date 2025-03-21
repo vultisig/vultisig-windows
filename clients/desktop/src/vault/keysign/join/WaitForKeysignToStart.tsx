@@ -29,7 +29,6 @@ export const WaitForKeysignToStart = ({ onFinish }: OnFinishProp<string[]>) => {
     <MatchQuery
       error={error => (
         <FullPageFlowErrorState
-          title={title}
           message={t('failed_to_join_keysign')}
           errorMessage={extractErrorMsg(error)}
         />

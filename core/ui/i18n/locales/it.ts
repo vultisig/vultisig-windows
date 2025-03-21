@@ -582,7 +582,7 @@ export const it = {
   insufficient_funds_to_pay_fee:
     'Saldo insufficiente per coprire la commissione di transazione.',
   swap_terms_0: "L'importo dello swap è corretto",
-  swap_terms_1: "Sono d'accordo con l'importo che riceverò dopo lo scambio",
+  swap_terms_1: "Accetto l'importo minimo che riceverò",
   swap_agree_terms: 'È necessario accettare i termini prima di procedere',
   swap_invalid_receiver:
     'È stato specificato un indirizzo del destinatario non valido. Probabilmente dovresti aggiungere la catena in entrata alla tua lista.',

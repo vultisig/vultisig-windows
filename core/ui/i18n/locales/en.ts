@@ -596,7 +596,7 @@ export const en = {
   allowance: 'Allowance',
   provider: 'Provider',
   swap_terms_0: 'The swap amount is correct',
-  swap_terms_1: 'I agree with the amount I will receive after the swap',
+  swap_terms_1: 'I agree with the min. amount I’ll receive',
   swap_agree_terms: 'You must agree with terms before proceeding',
   swap_invalid_receiver:
     'Invalid recipient address specified. Probably you should add inbound chain to your list.',
