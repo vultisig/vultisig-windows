@@ -1,46 +1,36 @@
 import { CoinKey } from '@core/chain/coin/Coin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
 import { InputProps } from '@lib/ui/props'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { pick } from '@lib/utils/record/pick'
 import { FC } from 'react'
-
-import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains'
-import { SelectItemModal } from '../../../coin/ui/inputs/SelectItemModal'
-import { SwapCoinInputField } from '../../../coin/ui/inputs/SwapCoinInputField'
-import { Opener } from '../../../lib/ui/base/Opener'
-import {
-  useCurrentVaultCoin,
-  useCurrentVaultCoins,
-} from '../../state/currentVault'
-
-export type SwapSide = 'from' | 'to'
-type SwapCoinInputProps = InputProps<CoinKey> & {
-  side: SwapSide
-}
-
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains'
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '../../../coin/logo/getCoinLogoSrc'
 import { ChainOption } from '../../../coin/ui/inputs/ChainOption'
 import { CoinOption } from '../../../coin/ui/inputs/CoinOption'
+import { SelectItemModal } from '../../../coin/ui/inputs/SelectItemModal'
+import { SwapCoinInputField } from '../../../coin/ui/inputs/SwapCoinInputField'
+import { Opener } from '../../../lib/ui/base/Opener'
 import { ChevronDownIcon } from '../../../lib/ui/icons/ChevronDownIcon'
 import { HStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
 import { shouldDisplayChainLogo } from '../../chain/utils'
+import {
+  useCurrentVaultCoin,
+  useCurrentVaultCoins,
+} from '../../state/currentVault'
+import { useSide } from '../providers/SideProvider'
 
-export const SwapCoinInput: FC<SwapCoinInputProps> = ({
-  value,
-  onChange,
-  side,
-}) => {
+export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const [isCoinModalOpen, setIsCoinModalOpen] = useState(false)
   const [isChainModalOpen, setIsChainModalOpen] = useState(false)
-
+  const side = useSide()
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const coin = useCurrentVaultCoin(value)

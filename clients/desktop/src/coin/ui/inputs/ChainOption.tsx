@@ -11,7 +11,9 @@ import { panel } from '../../../lib/ui/panel/Panel'
 import { Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
 import { shouldDisplayChainLogo } from '../../../vault/chain/utils'
+import { useSide } from '../../../vault/swap/providers/SideProvider'
 import { useFromCoin } from '../../../vault/swap/state/fromCoin'
+import { useToCoin } from '../../../vault/swap/state/toCoin'
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
 
 export const ChainOption = ({
@@ -20,8 +22,13 @@ export const ChainOption = ({
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
   const { chain, logo, ticker, id } = value
   const [currentFromCoin] = useFromCoin()
-  const { chain: fromCoinChain } = currentFromCoin
-  const isSelected = chain === fromCoinChain
+  const [currentToCoin] = useToCoin()
+  const side = useSide()
+
+  const isSelected =
+    side === 'from'
+      ? chain === currentFromCoin.chain
+      : chain === currentToCoin.chain
 
   return (
     <Container
