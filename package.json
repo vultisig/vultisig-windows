@@ -15,7 +15,8 @@
     "dev:extension": "yarn workspace @clients/extension dev",
     "build": "yarn workspace @clients/desktop build",
     "sync-packages": "syncpack fix-mismatches",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest"
   },
   "dependencies": {
     "7z-wasm": "^1.1.0",
