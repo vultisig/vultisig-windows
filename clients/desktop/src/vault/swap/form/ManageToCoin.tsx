@@ -1,8 +1,13 @@
+import { SideProvider } from '../providers/SideProvider'
 import { useToCoin } from '../state/toCoin'
 import { SwapCoinInput } from './SwapCoinInput'
 
 export const ManageToCoin = () => {
   const [value, setValue] = useToCoin()
 
-  return <SwapCoinInput side="to" value={value} onChange={setValue} />
+  return (
+    <SideProvider value="to">
+      <SwapCoinInput value={value} onChange={setValue} />
+    </SideProvider>
+  )
 }
