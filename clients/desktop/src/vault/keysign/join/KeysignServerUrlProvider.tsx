@@ -38,10 +38,7 @@ export const KeysignServerUrlProvider = ({ children }: ChildrenProp) => {
         </MpcServerUrlProvider>
       )}
       error={() => (
-        <FullPageFlowErrorState
-          title={t('join_keysign')}
-          message={t('failed_to_discover_mediator')}
-        />
+        <FullPageFlowErrorState message={t('failed_to_discover_mediator')} />
       )}
       pending={() => (
         <>

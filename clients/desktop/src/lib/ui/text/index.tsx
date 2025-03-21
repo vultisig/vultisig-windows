@@ -149,7 +149,6 @@ export const strictText = css`
     color: 'contrast',
     size: 14,
     weight: 400,
-    family: 'mono',
   })}
 `
 
