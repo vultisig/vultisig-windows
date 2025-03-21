@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react'
 import { useRefreshSwapQuoteMutation } from '../../mutations/useRefreshSwapQuoteMutation'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 
-export const useRefreshSwapQuoteInInterval = (countdownTime: number) => {
+export const useRefreshSwapQuoteInterval = (countdownTime: number) => {
+  const [timeLeft, setTimeLeft] = useState(0)
+
   const { data: swapQuoteData, isPending: isSwapQuotePending } =
     useSwapQuoteQuery()
   const { mutate: refreshQuote } = useRefreshSwapQuoteMutation()
-  const [timeLeft, setTimeLeft] = useState(0)
 
   useEffect(() => {
     if ((swapQuoteData || isSwapQuotePending) && !timeLeft) {
