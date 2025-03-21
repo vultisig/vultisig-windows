@@ -49,10 +49,7 @@ export const JoinKeygenSessionStep = ({
       value={mutationStatus}
       success={() => null}
       error={() => (
-        <FullPageFlowErrorState
-          title={title}
-          message={t('failed_to_join_session')}
-        />
+        <FullPageFlowErrorState message={t('failed_to_join_session')} />
       )}
       pending={() => (
         <>

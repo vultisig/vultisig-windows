@@ -25,12 +25,10 @@ import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
 } from '../../state/currentVault'
-import { useSide } from '../providers/SideProvider'
 
 export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const [isCoinModalOpen, setIsCoinModalOpen] = useState(false)
   const [isChainModalOpen, setIsChainModalOpen] = useState(false)
-  const side = useSide()
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const coin = useCurrentVaultCoin(value)
@@ -51,7 +49,6 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
             onOpen()
             setIsCoinModalOpen(true)
           }}
-          side={side}
         />
       )}
       renderContent={() => (
