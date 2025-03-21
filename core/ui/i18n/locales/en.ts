@@ -745,6 +745,11 @@ export const en = {
   view_tx: 'VIEW TX',
   view_in_airdrop: 'View in Airdrop',
   unbond_amount: 'Unbond Amount',
+  sign_transaction: 'Sign Transaction',
+  function_inputs: 'Function Inputs',
+  scan_qr_with_two_devices: 'Scan QR code with two devices',
+  open_desktop_app: 'Open Desktop App',
+  signing: 'Signing',
   prioritize_vulticonnect_hint:
     'Enable to make VultiConnect your default browser wallet to interact with dapps. Make sure to reload your webpage after changing this option.',
 }
