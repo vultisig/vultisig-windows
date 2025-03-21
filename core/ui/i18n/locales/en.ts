@@ -53,9 +53,7 @@ export const en = {
   devices_on_same_internet:
     'Connect all devices to the Internet with Vultisig open',
   select_the_pairing_devices: 'Select the pairing devices',
-  '2_of_2_vault': '2 of 2 Vault',
-  '2_of_3_vault': '2 of 3 Vault',
-  m_of_n_vault: 'M of N Vault',
+  m_of_n_vault: '{{m}} of {{n}} Vault',
   invalid_vault_parse_to_string: "Couldn't parse vault to string",
   invalid_vault_data: 'Invalid vault data',
   tokens: 'tokens',
@@ -229,7 +227,7 @@ export const en = {
   vault_delete_page_header_subtitle: 'You are permanently deleting your vault',
   details: 'Details',
   vault_value: 'Vault Value',
-  vault_delete_page_vault_part: 'Vault Part',
+  vault_part: 'Vault Part',
   vault_delete_page_device_id: 'Device ID',
   vault_delete_page_ecdsa_key: 'ECDSA Key',
   vault_delete_page_eddsa_key: 'EdDSA Key',
@@ -758,4 +756,6 @@ export const en = {
   choose_vault: 'Choose Vault',
   prioritize_vulticonnect_hint:
     'Enable to make VultiConnect your default browser wallet to interact with dapps. Make sure to reload your webpage after changing this option.',
+  vault_overview: 'Vault Overview',
+  tap: 'Tap',
 }

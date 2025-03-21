@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next'
+
 import BackupIcon from '../../lib/ui/icons/BackupIcon'
 import { QuestionMarkIcon } from '../../lib/ui/icons/QuestionMarkIcon'
 import ReshareIcon from '../../lib/ui/icons/ReshareIcon'
@@ -15,18 +17,16 @@ type SettingItem = {
   textColor?: TextColor
 }
 
-export function getEditVaultSettingsItems(
-  t: (key: string) => string
-): SettingItem[] {
+export function getEditVaultSettingsItems(t: TFunction): SettingItem[] {
   return [
     {
-      title: t('vault_settings_edit_vault_details_title'),
+      title: t('details'),
       subtitle: t('vault_setting_edit_vault_details_subtitle'),
       icon: QuestionMarkIcon,
       path: 'vaultDetails',
     },
     {
-      title: t('vault_setting_edit_vault_backup_title'),
+      title: t('backup'),
       subtitle: t('vault_setting_edit_vault_backup_subtitle'),
       icon: BackupIcon,
       path: 'vaultBackup',
@@ -38,13 +38,13 @@ export function getEditVaultSettingsItems(
       path: 'vaultRename',
     },
     {
-      title: t('vault_setting_edit_vault_reshare_title'),
+      title: t('reshare'),
       subtitle: t('vault_setting_edit_vault_reshare_subtitle'),
       icon: ReshareIcon,
       path: 'reshareVault',
     },
     {
-      title: t('vault_setting_edit_vault_migrate_title'),
+      title: t('migrate'),
       subtitle: t('vault_setting_edit_vault_migrate_subtitle'),
       icon: ReshareIcon,
       path: 'migrateVaultSecure',
@@ -56,7 +56,7 @@ export function getEditVaultSettingsItems(
       path: 'signCustomMessage',
     },
     {
-      title: t('vault_setting_edit_vault_delete_title'),
+      title: t('delete'),
       subtitle: t('vault_setting_edit_vault_delete_subtitle'),
       icon: TrashIcon,
       path: 'vaultDelete',
