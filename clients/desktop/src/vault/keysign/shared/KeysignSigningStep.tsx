@@ -44,7 +44,7 @@ export const KeysignSigningStep = ({
 
   return (
     <MatchQuery
-      value={{ ...mutationStatus, error: {} }}
+      value={mutationStatus}
       success={value => (
         <>
           <PageHeader title={<PageHeaderTitle>{t('done')}</PageHeaderTitle>} />
