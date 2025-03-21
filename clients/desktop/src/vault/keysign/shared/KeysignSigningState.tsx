@@ -1,41 +1,40 @@
-import { ValueProp } from '@lib/ui/props'
-import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-import { ProgressLine } from '../../../lib/ui/flow/ProgressLine'
 import { VStack } from '../../../lib/ui/layout/Stack'
+import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { Text } from '../../../lib/ui/text'
-import { FancyLoader } from '../../../ui/pending/FancyLoader'
-import { KeygenStatus } from '../../keygen/shared/MatchKeygenSessionStatus'
 
-const keysignCompletion: Record<KeygenStatus, number> = {
-  prepareVault: 0.8,
-  ecdsa: 0.85,
-  eddsa: 0.9,
-}
-
-export const KeysignSigningState = ({ value }: ValueProp<KeygenStatus>) => {
-  const { t } = useTranslation()
-
-  const keygenStageText: Record<KeygenStatus, string> = {
-    prepareVault: t('prepareVault'),
-    ecdsa: t('signing_ecdsa_key'),
-    eddsa: t('signing_eddsa_key'),
-  }
-
-  const completion = keysignCompletion[value]
-  const text = keygenStageText[value]
-
+export const KeysignSigningState = () => {
   return (
-    <>
-      <ProgressLine value={completion} />
-      <VStack flexGrow alignItems="center" justifyContent="center">
-        <VStack gap={8} alignItems="center">
-          <Text family="mono" color="contrast" size={16} weight="700">
-            {text}
-          </Text>
-          <FancyLoader />
-        </VStack>
-      </VStack>
-    </>
+    <VStack flexGrow alignItems="center" justifyContent="center">
+      <Wrapper gap={16} alignItems="center" justifyContent="center">
+        <Text color="regular" size={22} weight="500">
+          {/* TODO: translate when radzion is done with translation file */}
+          Signing Transaction
+        </Text>
+        <Spinner size="2em" />
+      </Wrapper>
+    </VStack>
   )
 }
+
+const Wrapper = styled(VStack)`
+  width: 1000px;
+  height: 500px;
+  border-radius: 50%;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      82deg,
+      rgba(51, 230, 191, 0.15) 8.02%,
+      rgba(4, 57, 199, 0.15) 133.75%
+    );
+    filter: blur(50px);
+    opacity: 0.5;
+    z-index: -1;
+  }
+`
