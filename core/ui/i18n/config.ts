@@ -15,6 +15,12 @@ i18nInstance.init({
   interpolation: {
     escapeValue: false,
   },
+  returnNull: false,
+  returnEmptyString: false,
+  parseMissingKeyHandler: key => {
+    console.warn(`Missing translation key: ${key}`)
+    return key
+  },
 })
 
 export default i18nInstance
