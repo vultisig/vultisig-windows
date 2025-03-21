@@ -1,4 +1,5 @@
 import { range } from '@lib/utils/array/range'
+import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { ChainCoinIcon } from '../../../../chain/ui/ChainCoinIcon'
@@ -35,7 +36,7 @@ export const SwapVerify = () => {
   const outAmountQuery = useSwapOutputAmountQuery()
 
   return (
-    <PageContent gap={40}>
+    <PageContent gap={40} justifyContent="space-between">
       <ContentWrapper gap={24}>
         <Text color="supporting" size={15}>
           {t('youre_swapping')}
@@ -70,7 +71,7 @@ export const SwapVerify = () => {
               pending={() => t('loading')}
               success={amount => (
                 <Text weight="500" size={17} color="contrast">
-                  {amount}{' '}
+                  {formatTokenAmount(amount)}{' '}
                   <Text as="span" color="shy" size={17}>
                     {toCoin.ticker.toUpperCase()}
                   </Text>

@@ -24,6 +24,7 @@ export const SwapForm: FC<OnForwardProp> = ({ onForward }) => {
         onSubmit: onForward,
         isDisabled,
       })}
+      justifyContent="space-between"
     >
       <VStack gap={16}>
         <VStack gap={8}>
