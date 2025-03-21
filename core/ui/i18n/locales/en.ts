@@ -563,8 +563,10 @@ export const en = {
   swap_tracking_link: 'Swap tracking link',
   allowance: 'Allowance',
   provider: 'Provider',
-  swap_terms_0: 'The swap amount is correct',
-  swap_terms_1: 'I agree with the amount I will receive after the swap',
+  swap_terms: {
+    input: 'The swap amount is correct',
+    output: 'I agree with the amount I will receive after the swap',
+  },
   swap_agree_terms: 'You must agree with terms before proceeding',
   swap_invalid_receiver:
     'Invalid recipient address specified. Probably you should add inbound chain to your list.',
