@@ -6,12 +6,12 @@ import styled from 'styled-components'
 import { HStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
-import { useRefreshSwapQuoteInInterval } from '../form/hooks/useRefreshSwapQuoteInInterval'
+import { useRefreshSwapQuoteInterval } from '../form/hooks/useRefreshSwapQuoteInterval'
 
 const COUNTDOWN_TIME = 60
 
 export const RefreshSwap = () => {
-  const timeLeft = useRefreshSwapQuoteInInterval(COUNTDOWN_TIME)
+  const timeLeft = useRefreshSwapQuoteInterval(COUNTDOWN_TIME)
 
   return (
     <Wrapper alignItems="center" gap={6}>
