@@ -1,4 +1,3 @@
-import { range } from '@lib/utils/array/range'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
@@ -15,7 +14,7 @@ import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery
 import { useFromAmount } from '../../state/fromAmount'
 import { useFromCoin } from '../../state/fromCoin'
 import { useToCoin } from '../../state/toCoin'
-import { swapTermsCount, SwapTermsProvider } from '../state/swapTerms'
+import { swapTerms, SwapTermsProvider } from '../state/swapTerms'
 import { SwapAllowance } from '../SwapAllowance'
 import { SwapConfirm } from '../SwapConfirm'
 import { SwapTerms } from '../SwapTerms'
@@ -83,7 +82,7 @@ export const SwapVerify = () => {
         <SwapAllowance />
         <VerifySwapFees RowComponent={SwapTxFeesOverviewRow} />
       </ContentWrapper>
-      <SwapTermsProvider initialValue={range(swapTermsCount).map(() => false)}>
+      <SwapTermsProvider initialValue={swapTerms.map(() => false)}>
         <VStack gap={20}>
           <SwapTerms />
           <SwapConfirm />
