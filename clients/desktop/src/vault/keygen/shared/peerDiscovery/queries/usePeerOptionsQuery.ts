@@ -17,7 +17,9 @@ export const usePeerOptionsQuery = ({ enabled = true } = {}) => {
     queryKey: ['peerOptions', sessionId, serverUrl],
     queryFn: async () => {
       const response = await queryUrl<string[]>(`${serverUrl}/${sessionId}`)
-
+      if (response.length === 0) {
+        throw new Error('No peers found')
+      }
       return without(withoutDuplicates(response), localPartyId)
     },
     enabled,
