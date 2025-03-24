@@ -9,6 +9,8 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom'
 
+import { I18nProvider } from '../../i18n/I18nProvider'
+
 const router = createHashRouter(
   [
     {
@@ -27,11 +29,13 @@ const router = createHashRouter(
 
 const Component = () => {
   return (
-    <ConfigProvider>
-      <WalletCoreProvider>
-        <RouterProvider router={router} />
-      </WalletCoreProvider>
-    </ConfigProvider>
+    <I18nProvider>
+      <ConfigProvider>
+        <WalletCoreProvider>
+          <RouterProvider router={router} />
+        </WalletCoreProvider>
+      </ConfigProvider>
+    </I18nProvider>
   )
 }
 

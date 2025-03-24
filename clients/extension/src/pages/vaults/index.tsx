@@ -7,7 +7,6 @@ import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import { Vultisig } from '@clients/extension/src/icons'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
-  getStoredLanguage,
   getStoredVaults,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
@@ -15,6 +14,8 @@ import { Button, Checkbox, Form } from 'antd'
 import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+
+import { I18nProvider } from '../../i18n/I18nProvider'
 
 interface FormProps {
   uids: string[]
@@ -57,19 +58,17 @@ const Component = () => {
   }
 
   const componentDidMount = (): void => {
-    getStoredLanguage().then(() => {
-      getStoredVaults().then(vaults => {
-        if (vaults.length) {
-          setState(prevState => ({ ...prevState, vaults, hasError: false }))
-        } else {
-          setState(prevState => ({
-            ...prevState,
-            errorDescription: t('get_vault_failed_description'),
-            errorTitle: t('get_vault_failed'),
-            hasError: true,
-          }))
-        }
-      })
+    getStoredVaults().then(vaults => {
+      if (vaults.length) {
+        setState(prevState => ({ ...prevState, vaults, hasError: false }))
+      } else {
+        setState(prevState => ({
+          ...prevState,
+          errorDescription: t('get_vault_failed_description'),
+          errorTitle: t('get_vault_failed'),
+          hasError: true,
+        }))
+      }
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,6 +125,8 @@ const Component = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Component />
+    <I18nProvider>
+      <Component />
+    </I18nProvider>
   </StrictMode>
 )

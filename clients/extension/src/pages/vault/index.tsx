@@ -7,7 +7,6 @@ import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import { Vultisig } from '@clients/extension/src/icons'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
-  getStoredLanguage,
   getStoredRequest,
   getStoredVaults,
   setStoredVaults,
@@ -17,6 +16,8 @@ import { Button, Form, Radio } from 'antd'
 import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+
+import { I18nProvider } from '../../i18n/I18nProvider'
 
 interface FormProps {
   uid: string
@@ -67,38 +68,36 @@ const Component = () => {
   }
 
   const componentDidMount = (): void => {
-    getStoredLanguage().then(() => {
-      getStoredRequest()
-        .then(({ sender }) => {
-          getStoredVaults().then(vaults => {
-            if (vaults.length) {
-              setState(prevState => ({
-                ...prevState,
-                sender,
-                vaults,
-                hasError: false,
-              }))
-            } else {
-              console.error('Failed to load vaults or request data')
-              setState(prevState => ({
-                ...prevState,
-                errorDescription: t('get_vault_failed_description'),
-                errorTitle: t('get_vault_failed'),
-                hasError: true,
-              }))
-            }
-          })
+    getStoredRequest()
+      .then(({ sender }) => {
+        getStoredVaults().then(vaults => {
+          if (vaults.length) {
+            setState(prevState => ({
+              ...prevState,
+              sender,
+              vaults,
+              hasError: false,
+            }))
+          } else {
+            console.error('Failed to load vaults or request data')
+            setState(prevState => ({
+              ...prevState,
+              errorDescription: t('get_vault_failed_description'),
+              errorTitle: t('get_vault_failed'),
+              hasError: true,
+            }))
+          }
         })
-        .catch(() => {
-          console.error('Failed to load vaults or request data')
-          setState(prevState => ({
-            ...prevState,
-            errorDescription: t('get_vault_failed_description'),
-            errorTitle: t('get_vault_failed'),
-            hasError: true,
-          }))
-        })
-    })
+      })
+      .catch(() => {
+        console.error('Failed to load vaults or request data')
+        setState(prevState => ({
+          ...prevState,
+          errorDescription: t('get_vault_failed_description'),
+          errorTitle: t('get_vault_failed'),
+          hasError: true,
+        }))
+      })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(componentDidMount, [])
@@ -154,6 +153,8 @@ const Component = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Component />
+    <I18nProvider>
+      <Component />
+    </I18nProvider>
   </StrictMode>
 )

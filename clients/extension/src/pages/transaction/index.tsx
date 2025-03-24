@@ -58,6 +58,8 @@ import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
+import { I18nProvider } from '../../i18n/I18nProvider'
+
 interface FormProps {
   password: string
 }
@@ -877,8 +879,10 @@ export default Component
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <WalletCoreProvider>
-      <Component />
-    </WalletCoreProvider>
+    <I18nProvider>
+      <WalletCoreProvider>
+        <Component />
+      </WalletCoreProvider>
+    </I18nProvider>
   </StrictMode>
 )

@@ -7,18 +7,24 @@ import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 
+import { I18nProvider } from '../../i18n/I18nProvider'
+
 const Component = () => {
   return (
     <ConfigProvider>
-      <Routing />
+      <I18nProvider>
+        <Routing />
+      </I18nProvider>
     </ConfigProvider>
   )
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <WalletCoreProvider>
-      <Component />
-    </WalletCoreProvider>
+    <I18nProvider>
+      <WalletCoreProvider>
+        <Component />
+      </WalletCoreProvider>
+    </I18nProvider>
   </StrictMode>
 )
