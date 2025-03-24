@@ -581,7 +581,8 @@ export const de = {
   insufficient_funds_to_pay_fee:
     'Das Guthaben reicht nicht aus, um die Transaktionsgebühr zu decken.',
   swap_terms_0: 'Der Tauschbetrag ist korrekt',
-  swap_terms_1: 'Ich stimme dem Mindestbetrag zu, den ich erhalten werde',
+  swap_terms_1:
+    'Ich bin mit dem Betrag einverstanden, den ich nach dem Tausch erhalte',
   swap_agree_terms:
     'Sie müssen den Bedingungen zustimmen, bevor Sie fortfahren',
   swap_invalid_receiver:

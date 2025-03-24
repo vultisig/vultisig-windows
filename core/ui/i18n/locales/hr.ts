@@ -561,7 +561,7 @@ export const hr = {
   insufficient_funds_to_pay_fee:
     'Nincs elegendő egyenleg a tranzakciós díj fedezésére.',
   swap_terms_0: 'A swap összeg helyes',
-  swap_terms_1: 'Slažem se s minimalnim iznosom koji ću primiti',
+  swap_terms_1: 'Egyetértek azzal az összeggel, amit a csere után kapok',
   swap_agree_terms: 'A folytatás előtt el kell fogadnia a feltételeket',
   swap_invalid_receiver:
     'Érvénytelen címzett megadva. Valószínűleg fel kell vennie a bejövő láncot a listára.',
