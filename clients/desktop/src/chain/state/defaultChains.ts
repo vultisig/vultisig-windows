@@ -3,7 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import {
   PersistentStateKey,
   usePersistentState,
-} from '../../state/persistentState'
+} from '@core/ui/state/persistentState'
 
 const defaultChains = [
   Chain.Bitcoin,

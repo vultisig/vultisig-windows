@@ -1,7 +1,7 @@
 import {
   PersistentStateKey,
   usePersistentState,
-} from '../../../state/persistentState'
+} from '@core/ui/state/persistentState'
 
 export const useIsVaultBalanceVisible = () => {
   return usePersistentState<boolean>(

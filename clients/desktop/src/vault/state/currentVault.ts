@@ -6,7 +6,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
 import { storage } from '../../../wailsjs/go/models'
-import { getValueProviderSetup } from '../../lib/ui/state/getValueProviderSetup'
+import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { fromStorageCoin } from '../../storage/storageCoin'
 import { hasServerSigner } from '../fast/utils/hasServerSigner'
 
