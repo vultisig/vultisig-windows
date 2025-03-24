@@ -8,11 +8,11 @@ export const KeysignSigningState = () => {
   return (
     <VStack flexGrow alignItems="center" justifyContent="center">
       <Wrapper gap={16} alignItems="center" justifyContent="center">
+        <Spinner size="2em" />
         <Text color="regular" size={22} weight="500">
           {/* TODO: translate when radzion is done with translation file */}
           Signing Transaction
         </Text>
-        <Spinner size="2em" />
       </Wrapper>
     </VStack>
   )
@@ -33,7 +33,7 @@ const Wrapper = styled(VStack)`
       rgba(51, 230, 191, 0.15) 8.02%,
       rgba(4, 57, 199, 0.15) 133.75%
     );
-    filter: blur(50px);
+    filter: blur(100px);
     opacity: 0.5;
     z-index: -1;
   }

@@ -16,11 +16,14 @@ import { PageHeaderToggleTitle } from '../../ui/page/PageHeaderToggleTitle'
 import { RefreshVaultBalance } from '../../vault/balance/RefreshVaultBalance'
 import { VaultOverview } from '../../vault/components/VaultOverview'
 import { ProvideQrPrompt } from '../../vault/qr/ProvideQrPrompt'
+import { KeysignSigningState } from '../keysign/shared/KeysignSigningState'
 import { useCurrentVault } from '../state/currentVault'
 
 export const VaultPage = () => {
   const navigate = useAppNavigate()
   const { name } = useCurrentVault()
+
+  return <KeysignSigningState />
 
   return (
     <>
