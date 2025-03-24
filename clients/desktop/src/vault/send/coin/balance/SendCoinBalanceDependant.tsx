@@ -6,7 +6,7 @@ import { Spinner } from '../../../../lib/ui/loaders/Spinner'
 import {
   MatchQuery,
   MatchQueryWrapperProps,
-} from '../../../../lib/ui/query/components/MatchQuery'
+} from '@lib/ui/query/components/MatchQuery'
 import { useCurrentVaultCoin } from '../../../state/currentVault'
 import { useCurrentSendCoin } from '../../state/sendCoin'
 

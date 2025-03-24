@@ -15,7 +15,7 @@ import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '../../../lib/ui/text'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'

@@ -1,7 +1,7 @@
 import { without } from '@lib/utils/array/without'
 import { useCallback } from 'react'
 
-import { useTransformQueryData } from '../../../lib/ui/query/hooks/useTransformQueryData'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useMpcLocalPartyId } from '../../localPartyId/state/mpcLocalPartyId'
 import { useMpcSignersQuery } from '../../signers/queries/useMpcSignersQuery'
 

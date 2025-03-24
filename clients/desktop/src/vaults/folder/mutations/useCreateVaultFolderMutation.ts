@@ -6,7 +6,7 @@ import {
   SaveVaultFolder,
   UpdateVaultFolderID,
 } from '../../../../wailsjs/go/storage/Store'
-import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { vaultsQueryKey } from '../../../vault/queries/useVaultsQuery'
 import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery'
 

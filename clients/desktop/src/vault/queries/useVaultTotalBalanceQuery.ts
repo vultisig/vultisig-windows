@@ -7,7 +7,7 @@ import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery'
-import { getResolvedQuery, pendingQuery, Query } from '../../lib/ui/query/Query'
+import { getResolvedQuery, pendingQuery, Query } from '@lib/ui/query/Query'
 import { useCurrentVaultCoins } from '../state/currentVault'
 
 export const useVaultTotalBalanceQuery = () => {

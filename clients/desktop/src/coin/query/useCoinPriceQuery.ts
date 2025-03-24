@@ -3,7 +3,7 @@ import { FiatCurrency } from '@core/config/FiatCurrency'
 import { pick } from '@lib/utils/record/pick'
 import { useMemo } from 'react'
 
-import { Query } from '../../lib/ui/query/Query'
+import { Query } from '@lib/ui/query/Query'
 import { useCoinPricesQuery } from './useCoinPricesQuery'
 
 type UseCoinPricesQueryInput = {

@@ -1,7 +1,7 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { useMemo } from 'react'
 
-import { Query } from '../../../lib/ui/query/Query'
+import { Query } from '@lib/ui/query/Query'
 import { useCurrentVault } from '../../../vault/state/currentVault'
 import { useMpcPeersQuery } from './useMpcPeersQuery'
 

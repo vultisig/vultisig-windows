@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps'
 import { QueryBasedQrCode } from '../../../../lib/ui/qr/QueryBasedQrCode'
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'
 import { PeerOption } from '../../../../mpc/peers/option/PeerOption'
 import { PeerDiscoveryFormFooter } from '../../../../mpc/peers/PeerDiscoveryFormFooter'

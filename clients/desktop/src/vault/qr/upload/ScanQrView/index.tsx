@@ -10,7 +10,7 @@ import { Image } from '../../../../lib/ui/image/Image'
 import { CenterAbsolutely } from '../../../../lib/ui/layout/CenterAbsolutely'
 import { VStack } from '../../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FlowErrorPageContent } from '../../../../ui/flow/FlowErrorPageContent'
 import { readQrCode } from '../utils/readQrCode'
 import {

@@ -10,7 +10,7 @@ import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery'
-import { EagerQuery } from '../../lib/ui/query/Query'
+import { EagerQuery } from '@lib/ui/query/Query'
 import {
   useCurrentVaultCoins,
   useCurrentVaultCoinsByChain,

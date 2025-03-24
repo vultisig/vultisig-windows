@@ -5,7 +5,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCallback } from 'react'
 
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
-import { useTransformQueriesData } from '../../../lib/ui/query/hooks/useTransformQueriesData'
+import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useCurrentVaultCoin } from '../../state/currentVault'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendAmount } from '../state/amount'

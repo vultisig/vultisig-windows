@@ -14,7 +14,7 @@ import { mergeRecords } from '@lib/utils/record/mergeRecords'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { useQueries } from '@tanstack/react-query'
 
-import { useQueriesToEagerQuery } from '../../lib/ui/query/hooks/useQueriesToEagerQuery'
+import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 
 type GetCoinPricesQueryKeysInput = {

@@ -4,7 +4,7 @@ import { CoinKey } from '@core/chain/coin/Coin'
 import { useMutation } from '@tanstack/react-query'
 
 import { DeleteCoin } from '../../../wailsjs/go/storage/Store'
-import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { vaultsQueryKey } from '../queries/useVaultsQuery'
 import { useCurrentVault, useCurrentVaultAddreses } from '../state/currentVault'
 import { getStorageVaultId } from '../utils/storageVault'

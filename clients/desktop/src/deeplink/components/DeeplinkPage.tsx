@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '../../lib/ui/buttons/Button'
-import { MatchQuery } from '../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useAppPathState } from '../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../navigation/hooks/useNavigationBack'
 import { FlowErrorPageContent } from '../../ui/flow/FlowErrorPageContent'

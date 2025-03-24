@@ -10,7 +10,7 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { useCallback } from 'react'
 
 import { useSevenZipQuery } from '../../../../compression/queries/useSevenZipQuery'
-import { useTransformQueryData } from '../../../../lib/ui/query/hooks/useTransformQueryData'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { useMpcLib } from '../../../../mpc/state/mpcLib'

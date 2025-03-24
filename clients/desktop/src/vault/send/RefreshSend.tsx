@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import { getBalanceQueryKey } from '../../coin/query/useBalancesQuery'
 import { chainSpecificQueryKeyPrefix } from '../../coin/query/useChainSpecificQuery'
-import { useInvalidateQueries } from '../../lib/ui/query/hooks/useInvalidateQueries'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { PageHeaderRefresh } from '../../ui/page/PageHeaderRefresh'
 import { useCurrentVaultAddress } from '../state/currentVault'
 import { useCurrentSendCoin } from './state/sendCoin'

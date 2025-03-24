@@ -1,7 +1,7 @@
 import { QueryKey, useMutation } from '@tanstack/react-query'
 
 import { getBalanceQueryKey } from '../../../coin/query/useBalancesQuery'
-import { useInvalidateQueries } from '../../../lib/ui/query/hooks/useInvalidateQueries'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useCurrentVaultAddress } from '../../state/currentVault'
 import { getSwapQuoteQueryKey } from '../queries/useSwapQuoteQuery'
 import { useFromAmount } from '../state/fromAmount'

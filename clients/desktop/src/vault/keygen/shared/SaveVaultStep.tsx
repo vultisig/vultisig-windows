@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { storage } from '../../../../wailsjs/go/models'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent'

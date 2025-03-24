@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { HStack } from '../../lib/ui/layout/Stack'
 import { Spinner } from '../../lib/ui/loaders/Spinner'
-import { MatchQuery } from '../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '../../lib/ui/text'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { useVaultTotalBalanceQuery } from '../queries/useVaultTotalBalanceQuery'

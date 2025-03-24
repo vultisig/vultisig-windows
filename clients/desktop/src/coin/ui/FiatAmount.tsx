@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useFormatFiatAmount } from '../../chain/ui/hooks/useFormatFiatAmount'
 import { Spinner } from '../../lib/ui/loaders/Spinner'
-import { MatchQuery } from '../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useCurrentVaultCoin } from '../../vault/state/currentVault'
 import { useCoinPriceQuery } from '../query/useCoinPriceQuery'
 

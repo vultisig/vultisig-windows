@@ -12,7 +12,7 @@ import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSr
 import { Skeleton } from '../../../components/skeleton'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { panel } from '../../../lib/ui/panel/Panel'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
 import { shouldDisplayChainLogo } from '../../../vault/chain/utils'

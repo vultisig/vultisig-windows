@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text, text } from '../../../lib/ui/text'
 import { useCurrentVaultCoin } from '../../state/currentVault'
 

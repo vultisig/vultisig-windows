@@ -3,7 +3,7 @@ import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
-import { pollingQueryOptions } from '../../../../../lib/ui/query/utils/options'
+import { pollingQueryOptions } from '@lib/ui/query/utils/options'
 import { useMpcLocalPartyId } from '../../../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '../../../../../mpc/serverType/state/mpcServerUrl'
 import { useMpcSessionId } from '../../../../../mpc/session/state/mpcSession'

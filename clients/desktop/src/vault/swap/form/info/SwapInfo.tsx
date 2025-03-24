@@ -1,5 +1,5 @@
 import { StrictInfoRow } from '../../../../lib/ui/layout/StrictInfoRow'
-import { ActiveQueryOnly } from '../../../../lib/ui/query/components/ActiveQueryOnly'
+import { ActiveQueryOnly } from '@lib/ui/query/components/ActiveQueryOnly'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 import { SwapFees } from './SwapFees'
 import { SwapProvider } from './SwapProvider'

@@ -13,7 +13,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { assertChainField } from '../../../../chain/utils/assertChainField'
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { FullPageFlowErrorState } from '../../../../ui/flow/FullPageFlowErrorState'
 import { PageHeader } from '../../../../ui/page/PageHeader'

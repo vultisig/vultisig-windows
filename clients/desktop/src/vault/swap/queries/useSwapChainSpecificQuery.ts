@@ -8,7 +8,7 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwapKeysignPayloadFields'
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery'
-import { useStateDependentQuery } from '../../../lib/ui/query/hooks/useStateDependentQuery'
+import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { useCurrentVaultCoin } from '../../state/currentVault'
 import { useFromAmount } from '../state/fromAmount'
 import { useFromCoin } from '../state/fromCoin'

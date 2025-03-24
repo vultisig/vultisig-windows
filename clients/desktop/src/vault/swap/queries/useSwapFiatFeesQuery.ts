@@ -8,7 +8,7 @@ import { useCallback, useMemo } from 'react'
 
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
 import { useCoinPricesQuery } from '../../../coin/query/useCoinPricesQuery'
-import { useTransformQueryData } from '../../../lib/ui/query/hooks/useTransformQueryData'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useCurrentVaultCoins } from '../../state/currentVault'
 import { SwapFee } from '../types/SwapFee'
 

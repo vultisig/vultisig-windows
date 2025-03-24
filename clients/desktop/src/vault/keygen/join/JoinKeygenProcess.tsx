@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 
 import { Match } from '../../../lib/ui/base/Match'
 import { StepTransition } from '../../../lib/ui/base/StepTransition'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { BackupSecureVault } from '../../setup/secure/backup/BackupSecureVault'

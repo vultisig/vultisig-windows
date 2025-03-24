@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { formatFee } from '../../../../chain/tx/fee/utils/formatFee'
 import { Skeleton } from '../../../../components/skeleton'
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '../../../../lib/ui/text'
 import { useSwapChainSpecificQuery } from '../../queries/useSwapChainSpecificQuery'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'

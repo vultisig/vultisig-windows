@@ -18,7 +18,7 @@ import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput'
 import { VStack } from '../../../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../../../lib/ui/loaders/Spinner'
 import { Modal } from '../../../../../lib/ui/modal'
-import { MatchQuery } from '../../../../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useSendChainSpecificQuery } from '../../../queries/useSendChainSpecificQuery'
 import {
   SendChainSpecificValueProvider,

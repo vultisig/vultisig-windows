@@ -1,7 +1,7 @@
 import { ValueProp } from '@lib/ui/props'
 
 import { Skeleton } from '../../../../components/skeleton'
-import { MatchEagerQuery } from '../../../../lib/ui/query/components/MatchEagerQuery'
+import { MatchEagerQuery } from '@lib/ui/query/components/MatchEagerQuery'
 import { useSwapFiatFeesQuery } from '../../queries/useSwapFiatFeesQuery'
 import { SwapFee } from '../../types/SwapFee'
 

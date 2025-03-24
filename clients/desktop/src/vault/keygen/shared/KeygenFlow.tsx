@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StepTransition } from '../../../lib/ui/base/StepTransition'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { VaultBackupFlow } from '../../backup/flow/VaultBackupFlow'
