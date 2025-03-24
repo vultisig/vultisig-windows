@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { Button } from '../../lib/ui/buttons/Button'
 import { CrossIcon } from '../../lib/ui/icons/CrossIcon'
 import { HStack, VStack } from '../../lib/ui/layout/Stack'
-import { StrictText, Text } from '../../lib/ui/text'
+import { Text } from '../../lib/ui/text'
 import { getColor } from '../../lib/ui/theme/getters'
 import { makeAppPath } from '../../navigation'
 import { PageContent } from '../page/PageContent'
@@ -29,13 +29,13 @@ export const FlowErrorPageContent = ({
             {title}
           </Text>
           {message && (
-            <StrictText
+            <Text
               style={{ wordBreak: 'break-word', maxWidth: '100%' }}
               centerHorizontally
-              color="shy"
+              color="supporting"
             >
               {message}
-            </StrictText>
+            </Text>
           )}
         </VStack>
       </VStack>
