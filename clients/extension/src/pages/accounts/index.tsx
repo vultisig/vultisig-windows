@@ -18,7 +18,7 @@ import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
-import { I18nProvider } from '../../i18n/I18nProvider'
+import { ExtensionProviders } from '../../state/ExtensionProviders'
 
 interface FormProps {
   uid: string
@@ -95,72 +95,65 @@ const Component = () => {
   }, [t])
 
   return (
-    <I18nProvider>
-      <ConfigProvider>
-        <div className="layout">
-          {hasError ? (
-            <VultiError
-              onClose={handleClose}
-              description={errorDescription ?? ''}
-              title={errorTitle ?? ''}
-            />
-          ) : vaults.length ? (
-            <>
-              <div className="header">
-                <Vultisig className="logo" />
-                <span className="title">{t('connect_with_vultisig')}</span>
-                <span className="origin">{sender}</span>
-              </div>
-              <div className="content">
-                <Form form={form} onFinish={handleSubmit}>
-                  <Form.Item<FormProps>
-                    name="uid"
-                    rules={[{ required: true, message: t('select_a_vault') }]}
-                  >
-                    <Radio.Group>
-                      {vaults.map(({ chains, name, uid }) => (
-                        <Radio key={uid} value={uid}>
-                          <span className="name">{name}</span>
-                          <MiddleTruncate
-                            text={
-                              chains.find(({ chain }) => chain === chainKey)
-                                ?.address ?? ''
-                            }
-                          />
-                        </Radio>
-                      ))}
-                    </Radio.Group>
-                  </Form.Item>
-                  <Button htmlType="submit" />
-                </Form>
-              </div>
-              <div className="footer">
-                <Button onClick={handleClose} shape="round" block>
-                  {t('cancel')}
-                </Button>
-                <Button
-                  onClick={handleSubmit}
-                  type="primary"
-                  shape="round"
-                  block
+    <ConfigProvider>
+      <div className="layout">
+        {hasError ? (
+          <VultiError
+            onClose={handleClose}
+            description={errorDescription ?? ''}
+            title={errorTitle ?? ''}
+          />
+        ) : vaults.length ? (
+          <>
+            <div className="header">
+              <Vultisig className="logo" />
+              <span className="title">{t('connect_with_vultisig')}</span>
+              <span className="origin">{sender}</span>
+            </div>
+            <div className="content">
+              <Form form={form} onFinish={handleSubmit}>
+                <Form.Item<FormProps>
+                  name="uid"
+                  rules={[{ required: true, message: t('select_a_vault') }]}
                 >
-                  {t('connect')}
-                </Button>
-              </div>
-            </>
-          ) : (
-            <VultiLoading />
-          )}
-        </div>
-      </ConfigProvider>
-    </I18nProvider>
+                  <Radio.Group>
+                    {vaults.map(({ chains, name, uid }) => (
+                      <Radio key={uid} value={uid}>
+                        <span className="name">{name}</span>
+                        <MiddleTruncate
+                          text={
+                            chains.find(({ chain }) => chain === chainKey)
+                              ?.address ?? ''
+                          }
+                        />
+                      </Radio>
+                    ))}
+                  </Radio.Group>
+                </Form.Item>
+                <Button htmlType="submit" />
+              </Form>
+            </div>
+            <div className="footer">
+              <Button onClick={handleClose} shape="round" block>
+                {t('cancel')}
+              </Button>
+              <Button onClick={handleSubmit} type="primary" shape="round" block>
+                {t('connect')}
+              </Button>
+            </div>
+          </>
+        ) : (
+          <VultiLoading />
+        )}
+      </div>
+    </ConfigProvider>
   )
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <I18nProvider>
+    <ExtensionProviders>
       <Component />
-    </I18nProvider>
+    </ExtensionProviders>
   </StrictMode>
 )
