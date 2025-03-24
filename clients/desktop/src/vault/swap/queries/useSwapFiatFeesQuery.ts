@@ -1,5 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { areEqualCoins, coinKeyToString } from '@core/chain/coin/Coin'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { sum } from '@lib/utils/array/sum'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -8,7 +9,6 @@ import { useCallback, useMemo } from 'react'
 
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
 import { useCoinPricesQuery } from '../../../coin/query/useCoinPricesQuery'
-import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useCurrentVaultCoins } from '../../state/currentVault'
 import { SwapFee } from '../types/SwapFee'
 

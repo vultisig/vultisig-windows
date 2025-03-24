@@ -1,12 +1,12 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { isValidAddress } from '../../../chain/utils/isValidAddress'
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useCurrentVaultCoin } from '../../state/currentVault'
 import { useSendAmount } from '../state/amount'
 import { useSendReceiver } from '../state/receiver'

@@ -5,6 +5,7 @@ import {
   FeePriority,
 } from '@core/chain/tx/fee/FeePriority'
 import { OnCloseProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +19,6 @@ import { RadioInput } from '../../../../../lib/ui/inputs/RadioInput'
 import { VStack } from '../../../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../../../lib/ui/loaders/Spinner'
 import { Modal } from '../../../../../lib/ui/modal'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useSendChainSpecificQuery } from '../../../queries/useSendChainSpecificQuery'
 import {
   SendChainSpecificValueProvider,

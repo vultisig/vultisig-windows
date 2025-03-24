@@ -1,10 +1,10 @@
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
 
 import { Skeleton } from '../../../../components/skeleton'
 import { takeWholeSpace } from '../../../../lib/ui/css/takeWholeSpace'
 import { VStack } from '../../../../lib/ui/layout/Stack'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { text } from '../../../../lib/ui/text'
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
 import { useToCoin } from '../../state/toCoin'

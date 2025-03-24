@@ -1,3 +1,4 @@
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -10,7 +11,6 @@ import {
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel'
 import { hStack } from '../../../lib/ui/layout/Stack'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { text } from '../../../lib/ui/text'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import { useCurrentVaultCoin } from '../../state/currentVault'

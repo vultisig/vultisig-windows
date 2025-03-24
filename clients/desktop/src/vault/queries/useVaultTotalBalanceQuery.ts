@@ -1,13 +1,13 @@
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
+import { getResolvedQuery, pendingQuery, Query } from '@lib/ui/query/Query'
 import { sum } from '@lib/utils/array/sum'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery'
-import { getResolvedQuery, pendingQuery, Query } from '@lib/ui/query/Query'
 import { useCurrentVaultCoins } from '../state/currentVault'
 
 export const useVaultTotalBalanceQuery = () => {
