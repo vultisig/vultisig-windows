@@ -11,39 +11,35 @@ import {
 } from '@clients/extension/src/icons'
 import { Currency } from '@clients/extension/src/utils/constants'
 import routeKeys from '@clients/extension/src/utils/route-keys'
-import {
-  getStoredCurrency,
-  getStoredLanguage,
-} from '@clients/extension/src/utils/storage'
-import { Language, languageName, primaryLanguage } from '@core/ui/i18n/Language'
+import { getStoredCurrency } from '@clients/extension/src/utils/storage'
+import { languageName } from '@core/ui/i18n/Language'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { useLanguageQuery } from '../../../../i18n/state/language'
+
 interface InitialState {
   currency: Currency
-  language: Language
 }
 
 const Component = () => {
   const { t } = useTranslation()
   const initialState: InitialState = {
     currency: Currency.USD,
-    language: primaryLanguage,
   }
   const [state, setState] = useState(initialState)
-  const { currency, language } = state
+  const { currency } = state
   const goBack = useGoBack()
 
   const componentDidMount = (): void => {
     getStoredCurrency().then(currency => {
       setState(prevState => ({ ...prevState, currency }))
     })
-
-    getStoredLanguage().then(language => {
-      setState(prevState => ({ ...prevState, language }))
-    })
   }
+
+  const languageQuery = useLanguageQuery()
 
   useEffect(componentDidMount, [])
 
@@ -67,16 +63,21 @@ const Component = () => {
             <span className="label">{t('vault_settings')}</span>
             <ArrowRight className="action" />
           </Link>
-          <Link
-            to={routeKeys.settings.language}
-            state={true}
-            className="list-item"
-          >
-            <Translate className="icon" />
-            <span className="label">{t('language')}</span>
-            <span className="extra">{languageName[language]}</span>
-            <ArrowRight className="action" />
-          </Link>
+          <MatchQuery
+            value={languageQuery}
+            success={language => (
+              <Link
+                to={routeKeys.settings.language}
+                state={true}
+                className="list-item"
+              >
+                <Translate className="icon" />
+                <span className="label">{t('language')}</span>
+                <span className="extra">{languageName[language]}</span>
+                <ArrowRight className="action" />
+              </Link>
+            )}
+          />
           <Link
             to={routeKeys.settings.currency}
             state={true}

@@ -7,7 +7,7 @@ import {
 } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { Language, primaryLanguage } from '@core/ui/i18n/Language'
+import { Language } from '@core/ui/i18n/Language'
 
 interface EthProviderState {
   accounts: string[]
@@ -94,16 +94,6 @@ export const setStoredCurrency = (currency: Currency): Promise<void> => {
   return new Promise(resolve => {
     chrome.storage.local.set(vals, () => {
       resolve()
-    })
-  })
-}
-
-export const getStoredLanguage = (): Promise<Language> => {
-  const keys: LocalStorageKeys[] = ['language']
-
-  return new Promise(resolve => {
-    chrome.storage.local.get(keys, (res: LocalStorage) => {
-      resolve(res.language ?? primaryLanguage)
     })
   })
 }
