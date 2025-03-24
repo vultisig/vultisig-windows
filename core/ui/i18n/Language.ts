@@ -5,8 +5,8 @@ export const primaryLanguage: Language = 'en'
 
 export const languageName: Record<Language, string> = {
   en: 'English',
-  de: 'Deutch',
-  es: 'Espanol',
+  de: 'Deutsch',
+  es: 'Español',
   it: 'Italiano',
   hr: 'Hrvatski',
   pt: 'Portuguese',
