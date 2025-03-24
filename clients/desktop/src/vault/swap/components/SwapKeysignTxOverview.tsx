@@ -4,15 +4,14 @@ import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { ValueProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime'
 import { useCurrentTxHash } from '../../../chain/state/currentTxHash'
 import { nativeSwapChains } from '../../../chain/swap/native/NativeSwapChain'
 import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount'
@@ -25,12 +24,13 @@ import { IconButton } from '../../../lib/ui/buttons/IconButton'
 import { CopyIcon } from '../../../lib/ui/icons/CopyIcon'
 import { LinkIcon } from '../../../lib/ui/icons/LinkIcon'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
+import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../lib/ui/text'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
-import { KeysignSwapTxInfo } from '../../swap/keysign/KeysignSwapTxInfo'
-import { SwapTrackingLink } from './SwapTrackingLink'
+import { SwapTrackingLink } from '../../keysign/shared/SwapTrackingLink'
+import { KeysignSwapTxInfo } from '../keysign/KeysignSwapTxInfo'
 
-export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
+export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const txHash = useCurrentTxHash()
   console.log('## value in KeysignTxOverview', value)
 
