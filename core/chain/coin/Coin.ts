@@ -1,5 +1,3 @@
-import { haveEqualFields } from '@lib/utils/record/haveEqualFields'
-
 import { Chain } from '../Chain'
 import { ChainEntity } from '../ChainEntity'
 import { chainFeeCoin } from './chainFeeCoin'
@@ -23,7 +21,8 @@ export type CoinAmount = {
 }
 
 export const areEqualCoins = (one: CoinKey, another: CoinKey): boolean =>
-  haveEqualFields(['chain', 'id'], one, another)
+  one.chain === another.chain &&
+  one.id.toLowerCase() === another.id.toLowerCase()
 
 export const coinKeyToString = (coin: CoinKey): string =>
   `${coin.chain}:${coin.id}`
