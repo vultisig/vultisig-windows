@@ -576,7 +576,7 @@ export const pt = {
   insufficient_funds_to_pay_fee:
     'Saldo insuficiente para cobrir a taxa de transação.',
   swap_terms_0: 'O valor do swap está correto',
-  swap_terms_1: 'Concordo com o valor mínimo que receberei',
+  swap_terms_1: 'Concordo com o valor que receberei após a troca',
   swap_agree_terms: 'Você deve concordar com os termos antes de prosseguir',
   swap_invalid_receiver:
     'Endereço de destinatário inválido especificado. Provavelmente você deveria adicionar uma cadeia de entrada à sua lista.',
