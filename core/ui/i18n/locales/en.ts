@@ -498,7 +498,7 @@ export const en = {
     hintDescription: 'This will be shown in case your forget your password',
     enterHint: 'Enter hint',
   },
-  passwordRequired: 'Password is required',
+  password_required: 'Password is required',
   fast_vault_setup_title: 'Quick, 1 device setup',
   vault_setup_prop: {
     fast: {
@@ -566,7 +566,7 @@ export const en = {
   provider: 'Provider',
   swap_terms: {
     input: 'The swap amount is correct',
-    output: 'I agree with the amount I will receive after the swap',
+    output: 'I agree with the min. amount I’ll receive',
   },
   swap_agree_terms: 'You must agree with terms before proceeding',
   swap_invalid_receiver:
@@ -643,14 +643,12 @@ export const en = {
   lp_units_must_be_positive: 'LP Units must be positive',
   invalid_node_address: 'Node Address is invalid',
   required_node_address: 'Node Address is required',
+  operator_fee: "Operator's Fee",
   chainFunctions: {
     amountExceeded: 'Amount exceeds available balance',
     optional_validation: 'Optional',
     default_validation: 'Invalid input',
     bond: {
-      labels: {
-        operatorFee: "Operator's Fee",
-      },
       validations: {
         operatorFee: "Operator's Fee is required",
       },
@@ -675,7 +673,7 @@ export const en = {
     },
   },
   amount_must_be_positive: 'Amount must be positive',
-  lpUnits: 'LP Units',
+  lp_units: 'LP Units',
   validator_address: 'Validator Address',
   validator_address_required: 'Validator Address is required',
   something_went_wrong: 'Something went wrong',
@@ -758,4 +756,5 @@ export const en = {
     'Enable to make VultiConnect your default browser wallet to interact with dapps. Make sure to reload your webpage after changing this option.',
   vault_overview: 'Vault Overview',
   tap: 'Tap',
+  took_too_long_to_respond: 'Took too long to respond',
 }

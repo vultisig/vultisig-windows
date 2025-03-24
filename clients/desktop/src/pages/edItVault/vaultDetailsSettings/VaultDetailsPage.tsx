@@ -58,7 +58,7 @@ const VaultDetailsPage = () => {
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_part')}</Text>
             <Text color="supporting" size={13}>
-              {t('part')} {localPartyIndex} {t('of')} {totalSigners}
+              {t('share')} {localPartyIndex} {t('of')} {totalSigners}
             </Text>
           </VStack>
         </ListItemPanel>

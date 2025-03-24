@@ -29,10 +29,8 @@ export const AnimationDescription: FC<AnimationDescriptionProps> = ({
     ),
     () => (
       <Text size={32}>
-        {t('fastVaultSetup.backup.backUp')}{' '}
-        <GradientText as="span">
-          {t('fastVaultSetup.backup.thisVault')}
-        </GradientText>{' '}
+        {t('backup')}{' '}
+        <GradientText as="span">{t('this_vault_share')}</GradientText>{' '}
         {t('fastVaultSetup.backup.shareSecurely')}{' '}
         <GradientText as="span">
           {t('fastVaultSetup.backup.shareOnlineBackup')}

@@ -90,7 +90,7 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
             <BackupButton onClick={onCompleted} size="m">
               <DownloadIcon />
               <Text as="span" size={14}>
-                {t('fastVaultSetup.backup.backUpNow')}
+                {t('backUpNow')}
               </Text>
             </BackupButton>
           </VStack>

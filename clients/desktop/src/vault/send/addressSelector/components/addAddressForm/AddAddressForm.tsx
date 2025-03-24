@@ -85,11 +85,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
       <AddressBookPageHeader
         data-testid="AddAddressForm-AddressBookPageHeader"
         primaryControls={<PageHeaderBackButton onClick={onClose} />}
-        title={
-          <PageHeaderTitle>
-            {t('vault_settings_address_book_add_addresses_title')}
-          </PageHeaderTitle>
-        }
+        title={<PageHeaderTitle>{t('add_address')}</PageHeaderTitle>}
       />
 
       <Container>

@@ -17,7 +17,7 @@ import { WithProgressIndicator } from '../../keysign/shared/WithProgressIndicato
 import { useCurrentVaultCoin } from '../../state/currentVault'
 import { ChainAction } from '../ChainAction'
 import { DepositConfirmButton } from '../DepositConfirmButton'
-import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
+import { getRequiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
 import { DepositFee } from '../fee/DepositFee'
 import { DepositFiatFee } from '../fee/DepositFiatFee'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
@@ -57,7 +57,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
   const sender = useSender()
   const { t } = useTranslation()
   const actionFields = selectedChainAction
-    ? requiredFieldsPerChainAction[selectedChainAction]?.fields
+    ? getRequiredFieldsPerChainAction(t)[selectedChainAction]?.fields
     : []
 
   return (
@@ -86,7 +86,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
               return field.type === 'number' || field.type === 'percentage' ? (
                 <TxOverviewRowDepositsFlow key={field.name}>
                   <Text size={18} weight={700}>
-                    {t(field.label)}
+                    {field.label}
                   </Text>
                   <StrictText>
                     {String(formattedDepositFormData[field.name])}{' '}
@@ -96,7 +96,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
               ) : (
                 <TxOverviewColumn key={field.name}>
                   <Text size={18} weight={700}>
-                    {t(field.label)}
+                    {field.label}
                   </Text>
                   <StrictTextContrast>
                     {String(formattedDepositFormData[field.name])}
@@ -114,7 +114,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
             )}
             <TxOverviewRow key="memo">
               <Text size={18} weight={700}>
-                {t('chainFunctions.memo')}
+                {t('memo')}
               </Text>
               <StrictTextContrast>
                 {String(formattedDepositFormData['memo'])}

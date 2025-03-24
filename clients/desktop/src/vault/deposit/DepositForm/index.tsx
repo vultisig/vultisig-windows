@@ -55,10 +55,11 @@ export const DepositForm: FC<DepositFormProps> = ({
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
   const totalAmountAvailable = useGetTotalAmountAvailableForChain(chain)
-  const chainActionSchema = getChainActionSchema(chain, selectedChainAction)
+  const chainActionSchema = getChainActionSchema(chain, selectedChainAction, t)
   const fieldsForChainAction = getFieldsForChainAction(
     chain,
-    selectedChainAction
+    selectedChainAction,
+    t
   )
   const [{ coin: chainCoinString }] = useAppPathParams<'deposit'>()
   const coin = chainCoinString.split(':')[1]
@@ -137,8 +138,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                   <Container onClick={onOpen}>
                     <HStack alignItems="center" gap={4}>
                       <Text weight="400" family="mono" size={16}>
-                        {selectedBondableAsset ||
-                          t('chainFunctions.bond_with_lp.labels.bondableAsset')}
+                        {selectedBondableAsset || t('asset')}
                       </Text>
                       {!selectedBondableAsset && (
                         <AssetRequiredLabel as="span" color="danger" size={14}>
@@ -171,9 +171,7 @@ export const DepositForm: FC<DepositFormProps> = ({
               {fieldsForChainAction.map(field => (
                 <InputContainer key={field.name}>
                   <Text size={15} weight="400">
-                    {t(
-                      `chainFunctions.${selectedChainAction}.labels.${field.name}`
-                    )}{' '}
+                    {field.label}{' '}
                     {field.name === 'amount' &&
                       selectedChainAction === 'bond' &&
                       `(Balance: ${totalAmountAvailable.toFixed(2)} ${coin}) `}

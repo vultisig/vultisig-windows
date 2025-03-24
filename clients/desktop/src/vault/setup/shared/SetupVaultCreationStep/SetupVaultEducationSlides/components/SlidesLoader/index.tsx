@@ -29,8 +29,8 @@ export const SlidesLoader = () => {
 
   const texts: Record<KeygenStatus, string> = {
     prepareVault: t('fastVaultSetup.preparingVault'),
-    ecdsa: t('fastVaultSetup.generatingECDSAKey'),
-    eddsa: t('fastVaultSetup.generatingEDDSAKey'),
+    ecdsa: t('generating_ecdsa_key'),
+    eddsa: t('generating_eddsa_key'),
   }
 
   const renderContent = (value?: KeygenStatus) => {

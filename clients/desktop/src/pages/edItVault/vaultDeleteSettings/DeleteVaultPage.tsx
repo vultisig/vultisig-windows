@@ -70,7 +70,7 @@ const DeleteVaultPage = () => {
     },
     {
       label: t('vault_part'),
-      value: `${t('part')} ${localPartyIndex} ${t('of')} ${totalSigners}`,
+      value: `${t('share')} ${localPartyIndex} ${t('of')} ${totalSigners}`,
     },
     { label: t('vault_delete_page_device_id'), value: local_party_id },
     { label: t('vault_delete_page_ecdsa_key'), value: public_key_ecdsa },

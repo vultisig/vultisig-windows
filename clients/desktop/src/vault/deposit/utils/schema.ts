@@ -1,9 +1,10 @@
 import { Chain } from '@core/chain/Chain'
 import { WalletCore } from '@trustwallet/wallet-core'
+import type { TFunction } from 'i18next'
 import { ZodObject } from 'zod'
 
 import { ChainAction } from '../ChainAction'
-import { requiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
+import { getRequiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
 
 export const isSchemaFunction = (
   schema: unknown
@@ -17,19 +18,25 @@ export const isSchemaFunction = (
 
 export const getFieldsForChainAction = (
   chain: Chain,
-  selectedChainAction: ChainAction | undefined
-) =>
-  chain && selectedChainAction
+  selectedChainAction: ChainAction | undefined,
+  t: TFunction
+) => {
+  const requiredFieldsPerChainAction = getRequiredFieldsPerChainAction(t)
+  return chain && selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.fields || []
     : []
+}
 
 export const getChainActionSchema = (
   chain: Chain,
-  selectedChainAction: ChainAction | undefined
-) =>
-  chain && selectedChainAction
+  selectedChainAction: ChainAction | undefined,
+  t: TFunction
+) => {
+  const requiredFieldsPerChainAction = getRequiredFieldsPerChainAction(t)
+  return chain && selectedChainAction
     ? requiredFieldsPerChainAction[selectedChainAction]?.schema
     : undefined
+}
 
 // @antonio: using any because Zod can't be configured
 export const resolveSchema = (

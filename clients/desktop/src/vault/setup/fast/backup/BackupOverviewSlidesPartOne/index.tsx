@@ -38,7 +38,7 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
   return (
     <Wrapper>
       <ProgressWrapper gap={16}>
-        <Text size={18}>{t('Vault Overview')}</Text>
+        <Text size={18}>{t('vault_overview')}</Text>
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted
           steps={animations.length}

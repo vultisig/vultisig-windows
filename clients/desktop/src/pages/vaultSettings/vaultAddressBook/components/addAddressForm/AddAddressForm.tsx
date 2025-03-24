@@ -35,13 +35,14 @@ type AddAddressFormProps = {
 }
 
 const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
-  const { data: addressBookItems } = useAddressBookItemsQuery()
+  const { data: addressBookItems = [] } = useAddressBookItemsQuery()
   const { t } = useTranslation()
   const chainOptions = useMemo(() => getCoinOptions(), [])
   const walletCore = useAssertWalletCore()
   const addressSchema = getAddressSchema({
     walletCore,
     addressBookItems,
+    t,
   })
 
   type AddressFormValues = z.infer<typeof addressSchema>
@@ -85,11 +86,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
       <AddressBookPageHeader
         data-testid="AddAddressForm-AddressBookPageHeader"
         primaryControls={<PageHeaderBackButton onClick={onClose} />}
-        title={
-          <PageHeaderTitle>
-            {t('vault_settings_address_book_add_addresses_title')}
-          </PageHeaderTitle>
-        }
+        title={<PageHeaderTitle>{t('add_address')}</PageHeaderTitle>}
       />
 
       <Container>
@@ -136,13 +133,13 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
             </FormField>
             {errors.title && (
               <Text color="danger" size={12}>
-                {t(errors.title.message || '')}
+                {errors.title.message}
               </Text>
             )}
           </div>
           <div>
             <FormFieldLabel htmlFor="address">
-              {t('vault_settings_address_book_address_address_field')}
+              {'vault_settings_address_book_address_address_field'}
             </FormFieldLabel>
             <FormField>
               <FormInput
@@ -155,7 +152,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
             </FormField>
             {errors.address && (
               <Text color="danger" size={12}>
-                {t(errors.address.message || '')}
+                {errors.address.message}
               </Text>
             )}
           </div>
@@ -172,7 +169,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
           </AddButton>
           {addAddressBookAddressError && (
             <Text color="danger" size={14}>
-              {t(extractErrorMsg(addAddressBookAddressError))}
+              {extractErrorMsg(addAddressBookAddressError)}
             </Text>
           )}
         </div>
