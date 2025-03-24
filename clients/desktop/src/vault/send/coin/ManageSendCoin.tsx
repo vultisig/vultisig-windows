@@ -34,7 +34,7 @@ export const ManageSendCoin = () => {
         )}
         renderContent={({ onClose }) => (
           <SelectItemModal
-            titleKey="choose_tokens"
+            title={t('choose_tokens')}
             optionComponent={CoinOption}
             filterFunction={(option, query) =>
               option.ticker.toLowerCase().startsWith(query.toLowerCase())

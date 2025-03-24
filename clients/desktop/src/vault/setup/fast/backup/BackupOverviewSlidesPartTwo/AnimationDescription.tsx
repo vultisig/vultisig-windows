@@ -12,10 +12,8 @@ export const AnimationDescription = () => {
       <AnimatedVisibility>
         <TextWrapper>
           <Text size={32}>
-            {t('fastVaultSetup.backup.backUp')}{' '}
-            <GradientText as="span">
-              {t('fastVaultSetup.backup.this_vault')}
-            </GradientText>{' '}
+            {t('backup')}{' '}
+            <GradientText as="span">{t('this_vault_share')}</GradientText>{' '}
             {t('fastVaultSetup.backup.securely')}{' '}
             <GradientText as="span">
               {t('fastVaultSetup.backup.shareOnlineBackup')}

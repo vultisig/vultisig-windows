@@ -1,6 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { OnBackProp } from '@lib/ui/props'
-import { range } from '@lib/utils/array/range'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -33,7 +32,7 @@ import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { SendConfirm } from './SendConfirm'
 import { SendTerms } from './SendTerms'
-import { sendTermsCount, SendTermsProvider } from './state/sendTerms'
+import { sendTerms, SendTermsProvider } from './state/sendTerms'
 
 export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
@@ -117,9 +116,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
             </TxOverviewRow>
           </TxOverviewPanel>
         </WithProgressIndicator>
-        <SendTermsProvider
-          initialValue={range(sendTermsCount).map(() => false)}
-        >
+        <SendTermsProvider initialValue={sendTerms.map(() => false)}>
           <VStack gap={20}>
             <SendTerms />
             <SendConfirm />

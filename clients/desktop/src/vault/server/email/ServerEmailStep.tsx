@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { validateEmail } from '@lib/utils/validation/validateEmail'
+import type { TFunction } from 'i18next'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
@@ -22,16 +23,17 @@ import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { useVaultEmail } from './state/email'
 
-const emailSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'fastVaultSetup.emailRequired' })
-    .refine(val => !validateEmail(val), {
-      message: 'fastVaultSetup.emailIncorrect',
-    }),
-})
+const getEmailSchema = (t: TFunction) =>
+  z.object({
+    email: z
+      .string()
+      .min(1, { message: t('fastVaultSetup.emailRequired') })
+      .refine(val => !validateEmail(val), {
+        message: t('fastVaultSetup.emailIncorrect'),
+      }),
+  })
 
-type EmailSchema = z.infer<typeof emailSchema>
+type EmailSchema = z.infer<ReturnType<typeof getEmailSchema>>
 
 export const ServerEmailStep = ({
   onForward,
@@ -46,7 +48,7 @@ export const ServerEmailStep = ({
     setValue,
     formState: { errors, isValid },
   } = useForm<EmailSchema>({
-    resolver: zodResolver(emailSchema),
+    resolver: zodResolver(getEmailSchema(t)),
     defaultValues: {
       email: storedEmail || '',
     },
@@ -95,7 +97,7 @@ export const ServerEmailStep = ({
 
             {errors.email && errors.email.message && (
               <Text color="danger" size={12}>
-                {t(errors.email.message)}
+                {errors.email.message}
               </Text>
             )}
           </VStack>

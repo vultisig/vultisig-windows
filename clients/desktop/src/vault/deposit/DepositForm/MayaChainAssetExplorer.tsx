@@ -35,7 +35,7 @@ export const MayaChainAssetExplorer: FC<MayaChainAssetExplorerProps> = ({
           return (
             <DepositActionOption
               key={index}
-              value={t(assetName)}
+              value={assetName}
               isActive={activeOption === assetName}
               onClick={() => {
                 onOptionClick(assetName)

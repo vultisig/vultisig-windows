@@ -40,7 +40,7 @@ type DepositFormProps = {
   onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void
   selectedChainAction: ChainAction
   onSelectChainAction: (action: ChainAction) => void
-  chainActionOptions: string[]
+  chainActionOptions: ChainAction[]
   chain: Chain
 }
 

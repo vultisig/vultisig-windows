@@ -374,6 +374,8 @@ export const en = {
   complete: 'Complete',
   auto: 'auto',
   join_reshare: 'Join Reshare',
+  join_migrate: 'Join Migration',
+  waiting_for_migrate_start: 'Waiting for migration to begin...',
   reshare: 'Reshare',
   reshare_your_vault: 'Reshare your vault',
   reshare_explanation:
@@ -416,7 +418,7 @@ export const en = {
   yourVaultShares: 'Your vault has {{shares}} Vault Shares',
   fastVault: 'Fast Vault',
   share2StoredByYou: 'Vault Share 2 stored by you',
-  backUpNow: 'Backup now',
+  backup_now: 'Backup now',
   secureVaultSetup: {
     backup: {
       shares: 'Your vault holds {{shares}} shares',
