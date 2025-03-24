@@ -218,7 +218,7 @@ export const hr = {
   vault_details_page_vault_name: 'Naziv trezora',
   vault_details_page_vault_ECDSA: 'ECDSA',
   vault_details_page_vault_EDDSA: 'EdDSA',
-  vault_details_page_part_of_vault: 'Dio',
+  vault_details_page_part_of_vault: 'Udio',
   vault_details_page_of_word: 'od',
   vault_details_page_signer_word: 'Potpisnik',
   vault_details_page_this_device: 'Ovaj uređaj',
@@ -744,7 +744,7 @@ export const hr = {
   scan_with_devices_to_sign:
     'Skeniraj s uređajima za sudjelovanje u potpisivanju transakcije',
   sign: 'Potpiši',
-  part_n_of_m: 'Dio {{n}} od {{m}}',
+  part_n_of_m: 'Udio {{n}} od {{m}}',
   bond: 'Veza',
   unbond: 'Odvezati se',
   leave: 'Otiđi',

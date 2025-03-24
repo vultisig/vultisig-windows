@@ -224,7 +224,7 @@ export const de = {
   vault_details_page_vault_name: 'Tresorname',
   vault_details_page_vault_ECDSA: 'ECDSA',
   vault_details_page_vault_EDDSA: 'EdDSA',
-  vault_details_page_part_of_vault: 'Teil',
+  vault_details_page_part_of_vault: 'Anteil',
   vault_details_page_of_word: 'von',
   vault_details_page_signer_word: 'Unterzeichner',
   vault_details_page_this_device: 'Dieses Gerät',
@@ -768,7 +768,7 @@ export const de = {
   scan_with_devices_to_sign:
     'Esegui la scansione con i dispositivi per partecipare alla firma della transazione',
   sign: 'Signieren',
-  part_n_of_m: 'Teil {{n}} von {{m}}',
+  part_n_of_m: 'Anteil {{n}} von {{m}}',
   bond: 'Bindung',
   unbond: 'Bindung lösen',
   leave: 'Verlassen',

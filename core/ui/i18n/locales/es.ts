@@ -225,7 +225,7 @@ export const es = {
   vault_details_page_vault_ECDSA: 'ECDSA',
   vault_details_page_vault_EDDSA: 'EdDSA',
   vault_edit_page_title: 'Editar bóveda',
-  vault_details_page_part_of_vault: 'Parte',
+  vault_details_page_part_of_vault: 'Participación',
   vault_details_page_of_word: 'de',
   vault_details_page_signer_word: 'Firmante',
   vault_details_page_this_device: 'Este dispositivo',
@@ -770,7 +770,7 @@ export const es = {
   scan_with_devices_to_sign:
     'Escanear con dispositivos para participar en la firma de la transacción',
   sign: 'Firmar',
-  part_n_of_m: 'Parte {{n}} de {{m}}',
+  part_n_of_m: 'Participación {{n}} de {{m}}',
   bond: 'Vínculo',
   unbond: 'Desatar',
   leave: 'Dejar',
