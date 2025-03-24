@@ -1,6 +1,6 @@
-import { createPersistentStateHook } from '@lib/ui/state/createPersistentStateHook'
-import { LocalStorage } from '@lib/ui/state/LocalStorage'
-import { TemporaryStorage } from '@lib/ui/state/TemporaryStorage'
+import { createPersistentStateHook } from '../lib/ui/state/createPersistentStateHook'
+import { LocalStorage } from '../lib/ui/state/LocalStorage'
+import { TemporaryStorage } from '../lib/ui/state/TemporaryStorage'
 
 export enum PersistentStateKey {
   CurrentVaultId = 'currentVaultId',

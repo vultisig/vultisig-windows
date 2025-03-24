@@ -1,5 +1,5 @@
-import { usePersistentState } from '@core/ui/state/persistentState'
-import { PersistentStateKey } from '@core/ui/state/persistentState'
+import { usePersistentState } from '../../state/persistentState'
+import { PersistentStateKey } from '../../state/persistentState'
 
 export const useIsDklsLibEnabled = () => {
   return usePersistentState(PersistentStateKey.IsDklsLibEnabled, true)

@@ -7,7 +7,7 @@ import {
 import {
   PersistentStateKey,
   usePersistentState,
-} from '@core/ui/state/persistentState'
+} from '../state/persistentState'
 
 const OnboardingResetter: FC<PropsWithChildren> = ({ children }) => {
   const [, setCompletedOnboarding] = usePersistentState(

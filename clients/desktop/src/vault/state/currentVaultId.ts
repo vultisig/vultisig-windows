@@ -1,11 +1,11 @@
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 
-import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
+import { useStateCorrector } from '../../lib/ui/state/useStateCorrector'
 import {
   PersistentStateKey,
   usePersistentState,
-} from '@core/ui/state/persistentState'
+} from '../../state/persistentState'
 import { useVaults } from '../queries/useVaultsQuery'
 import { getStorageVaultId } from '../utils/storageVault'
 

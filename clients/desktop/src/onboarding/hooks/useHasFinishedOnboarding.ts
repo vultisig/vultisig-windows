@@ -1,7 +1,7 @@
 import {
   PersistentStateKey,
   usePersistentState,
-} from '@core/ui/state/persistentState'
+} from '../../state/persistentState'
 
 export const useHasFinishedOnboarding = () => {
   return usePersistentState<boolean>(

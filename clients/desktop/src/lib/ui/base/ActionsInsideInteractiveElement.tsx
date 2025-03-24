@@ -7,7 +7,7 @@ import { toEntries } from '@lib/utils/record/toEntries'
 import { ComponentProps, CSSProperties, ReactNode, Ref, useState } from 'react'
 import styled from 'styled-components'
 
-import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
+import { useStateCorrector } from '../state/useStateCorrector'
 import { ElementSizeAware } from './ElementSizeAware'
 
 type RenderParams<K extends string> = {

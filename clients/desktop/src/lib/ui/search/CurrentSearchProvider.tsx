@@ -1,4 +1,4 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { getStateProviderSetup } from '../state/getStateProviderSetup'
 
 export const { useState: useCurrentSearch, provider: CurrentSearchProvider } =
   getStateProviderSetup<string>('CurrentSearch')

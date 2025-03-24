@@ -2,7 +2,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { useMemo } from 'react'
 
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { getStateProviderSetup } from '../../../lib/ui/state/getStateProviderSetup'
 import { MpcPeersProvider } from './mpcPeers'
 
 const {

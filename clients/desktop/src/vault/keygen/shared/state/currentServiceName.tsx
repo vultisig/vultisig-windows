@@ -1,7 +1,7 @@
 import { ChildrenProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { getValueProviderSetup } from '../../../../lib/ui/state/getValueProviderSetup'
 import { generateServiceName } from '../../utils/generateServiceName'
 
 export const {

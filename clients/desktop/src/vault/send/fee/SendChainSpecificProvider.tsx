@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup'
 import { StrictText } from '../../../lib/ui/text'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 
