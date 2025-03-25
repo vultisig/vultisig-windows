@@ -16,7 +16,8 @@
     "build": "yarn workspace @clients/desktop build",
     "sync-packages": "syncpack fix-mismatches",
     "typecheck": "tsc --noEmit",
-    "test": "vitest"
+    "test": "vitest",
+    "knip": "knip"
   },
   "dependencies": {
     "7z-wasm": "^1.1.0",
@@ -77,7 +78,7 @@
     "@eslint/eslintrc": "^3.3.0",
     "@eslint/js": "^9.22.0",
     "@google-cloud/translate": "^9.0.0",
-    "@types/node": "^22.13.10",
+    "@types/node": "^22.13.13",
     "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
     "@types/react-router-dom": "^5.3.3",
@@ -94,6 +95,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^16.0.0",
+    "knip": "^5.46.0",
     "prettier": "^3.5.3",
     "rollup": "^4.36.0",
     "syncpack": "^13.0.3",

@@ -9,10 +9,7 @@ export enum PersistentStateKey {
   HasFinishedOnboarding = 'HasFinishedOnboarding',
   Language = 'language',
   FiatCurrency = 'fiatCurrency',
-  AddressBook = 'addressBook',
-  FavouriteTokens = 'favouriteTokens',
   DefaultChains = 'defaultChains',
-  HasAutoDiscoveryBeenDoneForChain = 'HasAutoDiscoveryBeenDoneForChain',
   IsDklsLibEnabled = 'isDklsLibEnabled',
 }
 
