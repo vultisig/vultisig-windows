@@ -58,15 +58,16 @@ export const KeysignSigningStep = ({
                   <CurrentTxHashProvider value={value}>
                     <Match
                       value={payload.swapPayload.value ? 'swap' : 'default'}
-                      swap={() => (
-                        <TxOverviewPanel>
-                          <SwapKeysignTxOverview value={payload} />
-                        </TxOverviewPanel>
-                      )}
+                      swap={() => <SwapKeysignTxOverview value={payload} />}
                       default={() => (
-                        <TxOverviewPanel>
-                          <KeysignTxOverview value={payload} />
-                        </TxOverviewPanel>
+                        <>
+                          <TxOverviewPanel>
+                            <KeysignTxOverview value={payload} />
+                          </TxOverviewPanel>
+                          <Link to={makeAppPath('vault')}>
+                            <Button as="div">{t('complete')}</Button>
+                          </Link>
+                        </>
                       )}
                     />
                   </CurrentTxHashProvider>
@@ -82,9 +83,6 @@ export const KeysignSigningStep = ({
                 ),
               }}
             />
-            <Link to={makeAppPath('vault')}>
-              <Button as="div">{t('complete')}</Button>
-            </Link>
           </PageContent>
         </>
       )}
