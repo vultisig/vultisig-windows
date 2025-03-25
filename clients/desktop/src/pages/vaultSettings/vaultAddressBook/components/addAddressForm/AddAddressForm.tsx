@@ -138,9 +138,7 @@ const AddAddressForm = ({ onClose }: AddAddressFormProps) => {
             )}
           </div>
           <div>
-            <FormFieldLabel htmlFor="address">
-              {t('vault_settings_address_book_address_address_field')}
-            </FormFieldLabel>
+            <FormFieldLabel htmlFor="address">{t('address')}</FormFieldLabel>
             <FormField>
               <FormInput
                 id="address"
