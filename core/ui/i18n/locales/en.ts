@@ -360,6 +360,7 @@ export const en = {
   amount_required: 'Amount is required',
   send_amount_exceeds_balance: 'Amount exceeds balance',
   coin_not_found_in_current_vault: 'Coin not found in current vault',
+  track: 'Track',
   same_sender_receiver_error:
     'Sender and receiver addresses should be different',
   send_terms_0: "I'm sending to the right address",

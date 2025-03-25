@@ -8,11 +8,11 @@ import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
 import { getCoinLogoSrc } from '../../../coin/logo/getCoinLogoSrc'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { vStack } from '../../../lib/ui/layout/Stack'
+import { VStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
+import { getColor } from '../../../lib/ui/theme/getters'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import { shouldDisplayChainLogo } from '../../chain/utils'
-import { SwapStackItem } from './SwapKeysignTxOverview'
 
 export const SwapCoinItem = ({
   coin,
@@ -29,7 +29,7 @@ export const SwapCoinItem = ({
   const { chain, ticker } = coin
 
   return (
-    <SwapVStackItem>
+    <SwapVStackItem gap={12} alignItems="center">
       <ChainCoinIcon
         coinSrc={getCoinLogoSrc(coin.logo)}
         chainSrc={
@@ -69,10 +69,10 @@ export const SwapCoinItem = ({
   )
 }
 
-const SwapVStackItem = styled(SwapStackItem)`
+const SwapVStackItem = styled(VStack)`
   min-width: 169px;
-  ${vStack({
-    gap: 12,
-    alignItems: 'center',
-  })}
+  padding: 24px 16px;
+  border-radius: 16px;
+  border: 1px solid ${getColor('foregroundExtra')};
+  background-color: ${getColor('foreground')};
 `

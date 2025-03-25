@@ -327,6 +327,7 @@ export const it = {
     "L'indirizzo deve essere di almeno 1 carattere.",
   vault_settings_address_book_title_max_length_error:
     'Il titolo deve essere al massimo di 50 caratteri.',
+  track: 'Traccia',
   address_book_list_item_network: 'rete',
   session_init: 'Inizializzazione sessione...',
   session_init_failed: 'Impossibile inizializzare la sessione',
