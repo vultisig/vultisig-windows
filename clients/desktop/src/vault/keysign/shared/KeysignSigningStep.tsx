@@ -51,35 +51,37 @@ export const KeysignSigningStep = ({
         <>
           <PageHeader title={<PageHeaderTitle>{t('done')}</PageHeaderTitle>} />
           <PageContent>
-            <TxOverviewPanel>
-              <MatchRecordUnion
-                value={payload}
-                handlers={{
-                  keysign: payload => (
-                    <CurrentTxHashProvider value={value}>
-                      <Match
-                        value={
-                          payload.swapPayload.value ? 'swap' : 'depositSwap'
-                        }
-                        swap={() => <SwapKeysignTxOverview value={payload} />}
-                        depositSwap={() => (
+            <MatchRecordUnion
+              value={payload}
+              handlers={{
+                keysign: payload => (
+                  <CurrentTxHashProvider value={value}>
+                    <Match
+                      value={payload.swapPayload.value ? 'swap' : 'default'}
+                      swap={() => (
+                        <TxOverviewPanel>
+                          <SwapKeysignTxOverview value={payload} />
+                        </TxOverviewPanel>
+                      )}
+                      default={() => (
+                        <TxOverviewPanel>
                           <KeysignTxOverview value={payload} />
-                        )}
-                      />
-                    </CurrentTxHashProvider>
-                  ),
-                  custom: payload => (
-                    <>
-                      <KeysignCustomMessageInfo value={payload} />
-                      <TxOverviewChainDataRow>
-                        <span>{t('signature')}</span>
-                        <span>{value}</span>
-                      </TxOverviewChainDataRow>
-                    </>
-                  ),
-                }}
-              />
-            </TxOverviewPanel>
+                        </TxOverviewPanel>
+                      )}
+                    />
+                  </CurrentTxHashProvider>
+                ),
+                custom: payload => (
+                  <TxOverviewPanel>
+                    <KeysignCustomMessageInfo value={payload} />
+                    <TxOverviewChainDataRow>
+                      <span>{t('signature')}</span>
+                      <span>{value}</span>
+                    </TxOverviewChainDataRow>
+                  </TxOverviewPanel>
+                ),
+              }}
+            />
             <Link to={makeAppPath('vault')}>
               <Button as="div">{t('complete')}</Button>
             </Link>
