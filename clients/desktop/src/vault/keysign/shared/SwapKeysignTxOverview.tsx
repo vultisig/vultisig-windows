@@ -1,45 +1,49 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
+import {
+  OneInchSwapPayload,
+  OneInchSwapPayloadSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
+import { Coin } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { match } from '@lib/utils/match'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { useRive } from '@rive-app/react-canvas'
 import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { useCurrentTxHash } from '../../../chain/state/currentTxHash'
-import { nativeSwapChains } from '../../../chain/swap/native/NativeSwapChain'
-import { TxOverviewAmount } from '../../../chain/tx/components/TxOverviewAmount'
-import { TxOverviewMemo } from '../../../chain/tx/components/TxOverviewMemo'
-import { TxOverviewRow } from '../../../chain/tx/components/TxOverviewRow'
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee'
 import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash'
-import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { IconButton } from '../../../lib/ui/buttons/IconButton'
-import { CopyIcon } from '../../../lib/ui/icons/CopyIcon'
-import { LinkIcon } from '../../../lib/ui/icons/LinkIcon'
+import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
-import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
-import { KeysignSwapTxInfo } from '../../swap/keysign/KeysignSwapTxInfo'
-import { SwapTrackingLink } from './SwapTrackingLink'
+import { GradientText } from '../../../lib/ui/text'
+import { getColor } from '../../../lib/ui/theme/getters'
+import { SwapCoinItem } from './SwapCoinItem'
 
 export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   const txHash = useCurrentTxHash()
-  console.log('## value in KeysignTxOverview', value)
+  const { RiveComponent: SuccessAnimation } = useRive({
+    src: '/assets/animations/vault-creation-success/vault_created.riv',
+    autoplay: true,
+  })
 
   const { t } = useTranslation()
 
   const copyTxHash = useCopyTxHash()
-  const [fiatCurrency] = useFiatCurrency()
   const {
-    coin: potentialCoin,
+    coin: potentialFromCoin,
     toAddress,
     memo,
     toAmount,
@@ -47,24 +51,24 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     swapPayload,
   } = value
 
+  const {
+    fromAmount,
+    toAmountDecimal,
+    toCoin: potentialToCoin,
+  } = swapPayload.value as unknown as OneInchSwapPayload
+  const toCoin = potentialToCoin ? fromCommCoin(potentialToCoin) : null
+
   const isSwapTx =
     (swapPayload && swapPayload.value) ||
     memo?.startsWith('=') ||
     memo?.toLowerCase().startsWith('swap')
-  const coin = fromCommCoin(shouldBePresent(potentialCoin))
-  const { decimals } = coin
+  const fromCoin = fromCommCoin(shouldBePresent(potentialFromCoin))
 
-  const coinPriceQuery = useCoinPriceQuery({
-    coin,
-  })
+  const formattedFromAmount = useMemo(() => {
+    return fromChainAmount(BigInt(fromAmount), fromCoin.decimals)
+  }, [fromAmount, fromCoin.decimals])
 
-  const formattedToAmount = useMemo(() => {
-    if (!toAmount) return null
-
-    return fromChainAmount(BigInt(toAmount), decimals)
-  }, [toAmount, decimals])
-
-  const { chain } = shouldBePresent(coin)
+  const { chain } = shouldBePresent(toCoin)
 
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) return null
@@ -94,70 +98,52 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
   })
 
   return (
-    <>
-      <VStack gap={16}>
-        <HStack alignItems="center" gap={4}>
-          <Text weight="600" size={20} color="contrast">
-            {t('transaction')}
-          </Text>
-          <IconButton icon={<CopyIcon />} onClick={() => copyTxHash(txHash)} />
-          <IconButton
-            onClick={() => {
-              BrowserOpenURL(blockExplorerUrl)
-            }}
-            icon={<LinkIcon />}
-          />
-        </HStack>
-        <Text family="mono" color="primary" size={14} weight="400">
-          {txHash}
-        </Text>
-      </VStack>
-
-      {swapPayload.value ? (
-        <KeysignSwapTxInfo value={value} />
-      ) : (
-        <>
-          {toAddress && (
-            <TxOverviewRow>
-              <span>{t('to')}</span>
-              <span>{toAddress}</span>
-            </TxOverviewRow>
+    <Wrapper>
+      <AnimationWrapper>
+        <SuccessAnimation />
+        <AnimatedVisibility delay={300}>
+          <SuccessText centerHorizontally size={24}>
+            {t('transaction_successful')}
+          </SuccessText>
+        </AnimatedVisibility>
+      </AnimationWrapper>
+      <VStack alignItems="center" gap={8}>
+        <HStack gap={8}>
+          {fromCoin && (
+            <SwapCoinItem coin={fromCoin} tokenAmount={formattedFromAmount} />
           )}
-          <TxOverviewAmount
-            value={fromChainAmount(BigInt(toAmount), decimals)}
-            ticker={coin.ticker}
-          />
-        </>
-      )}
-      {memo && <TxOverviewMemo value={memo} />}
-      {formattedToAmount && (
-        <>
-          <MatchQuery
-            value={coinPriceQuery}
-            success={price =>
-              price ? (
-                <TxOverviewRow>
-                  <span>{t('value')}</span>
-                  <span>
-                    {formatAmount(formattedToAmount * price, fiatCurrency)}
-                  </span>
-                </TxOverviewRow>
-              ) : null
-            }
-            error={() => null}
-            pending={() => null}
-          />
-        </>
-      )}
-      {networkFeesFormatted && (
-        <TxOverviewRow>
-          <span>{t('network_fee')}</span>
-          <span>{networkFeesFormatted}</span>
-        </TxOverviewRow>
-      )}
-      {isSwapTx && isOneOf(blockExplorerChain, nativeSwapChains) && (
-        <SwapTrackingLink value={blockExplorerUrl} />
-      )}
-    </>
+          {toCoin && (
+            <SwapCoinItem
+              coin={toCoin}
+              tokenAmount={parseFloat(toAmountDecimal)}
+            />
+          )}
+        </HStack>
+      </VStack>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled(VStack)`
+  gap: 24px;
+`
+
+const AnimationWrapper = styled.div`
+  width: 800px;
+  height: 350px;
+  position: relative;
+`
+
+const SuccessText = styled(GradientText)`
+  position: absolute;
+  bottom: 80px;
+  left: 0;
+  right: 0;
+`
+
+export const SwapStackItem = styled.div`
+  padding: 24px 16px;
+  border-radius: 16px;
+  border: 1px solid ${getColor('foregroundExtra')};
+  background-color: ${getColor('foreground')};
+`

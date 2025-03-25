@@ -23,8 +23,6 @@ const keysignSteps = ['joinSession', 'peers', 'session', 'sign'] as const
 export const StartKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'keysign'>()
 
-  console.log('## keysign payload', keysignPayload)
-
   const { local_party_id } = useCurrentVault()
 
   const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
