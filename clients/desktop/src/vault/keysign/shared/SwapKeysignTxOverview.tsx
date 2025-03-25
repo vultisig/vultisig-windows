@@ -130,9 +130,9 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
             </Text>
 
             <HStack gap={4} alignItems="center">
-              <Text weight="500" size={14} color="contrast">
+              <TrimmedText width={100} weight="500" size={14} color="contrast">
                 {txHash}
-              </Text>
+              </TrimmedText>
               <IconButton
                 size="s"
                 onClick={trackTransaction}
@@ -234,6 +234,7 @@ const AnimationWrapper = styled.div`
   width: 800px;
   height: 250px;
   position: relative;
+  margin-inline: auto;
 `
 
 const SuccessText = styled(GradientText)`
