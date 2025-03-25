@@ -10,6 +10,7 @@ import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash'
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow'
 import useVersionCheck from '../../../lib/hooks/useVersionCheck'
+import { Match } from '../../../lib/ui/base/Match'
 import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion'
 import { Button } from '../../../lib/ui/buttons/Button'
 import { VStack } from '../../../lib/ui/layout/Stack'
@@ -25,6 +26,7 @@ import { KeysignCustomMessageInfo } from '../join/verify/KeysignCustomMessageInf
 import { KeysignSigningState } from './KeysignSigningState'
 import { KeysignTxOverview } from './KeysignTxOverview'
 import { useKeysignMutation } from './mutations/useKeysignMutation'
+import { SwapKeysignTxOverview } from './SwapKeysignTxOverview'
 
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload
@@ -55,7 +57,15 @@ export const KeysignSigningStep = ({
                 handlers={{
                   keysign: payload => (
                     <CurrentTxHashProvider value={value}>
-                      <KeysignTxOverview value={payload} />
+                      <Match
+                        value={
+                          payload.swapPayload.value ? 'swap' : 'depositSwap'
+                        }
+                        swap={() => <SwapKeysignTxOverview value={payload} />}
+                        depositSwap={() => (
+                          <KeysignTxOverview value={payload} />
+                        )}
+                      />
                     </CurrentTxHashProvider>
                   ),
                   custom: payload => (
