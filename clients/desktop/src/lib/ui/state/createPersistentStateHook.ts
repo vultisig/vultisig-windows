@@ -37,7 +37,6 @@ export function createPersistentStateHook<T extends string>(
           typeof initialValue === 'function'
             ? (initialValue as () => NonUndefined<V>)()
             : initialValue
-        console.log('setting snapshot item', key, resolvedInitialValue)
         storage.setItem(key, resolvedInitialValue)
         return resolvedInitialValue
       }
