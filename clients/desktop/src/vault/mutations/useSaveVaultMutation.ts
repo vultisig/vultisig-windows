@@ -34,23 +34,15 @@ export const useSaveVaultMutation = (
 
       await SaveVault(newVault)
 
-      console.log('creating default coins')
-
       await createVaultDefaultCoins({
         vault: newVault,
         defaultChains,
         walletCore,
       })
 
-      console.log('invalidating queries')
-
       await invalidateQueries(vaultsQueryKey)
 
-      console.log('setting current vault id')
-
       setCurrentVaultId(getStorageVaultId(newVault))
-
-      console.log('returning new vault')
 
       return newVault
     },
