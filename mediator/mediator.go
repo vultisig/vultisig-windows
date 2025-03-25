@@ -2,6 +2,7 @@ package mediator
 
 import (
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
@@ -40,7 +41,12 @@ func (r *Server) StopServer() error {
 }
 
 func (r *Server) AdvertiseMediator(name string) error {
-	mdns, err := m.NewMDNSService(name, "_http._tcp", "", "", MediatorPort, nil, []string{
+	hostName, err := os.Hostname()
+	if err != nil {
+		return fmt.Errorf("could not determine host: %v", err)
+	}
+	hostName = fmt.Sprintf("%s.local.", hostName)
+	mdns, err := m.NewMDNSService(name, "_http._tcp", "", hostName, MediatorPort, nil, []string{
 		name,
 	})
 	if err != nil {
