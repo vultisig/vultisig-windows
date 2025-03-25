@@ -6,7 +6,7 @@ export function CreateInstallMarker() {
   return window['go']['main']['InstallMarkerService']['CreateInstallMarker']();
 }
 
-function GetAppDataDir() {
+export function GetAppDataDir() {
   return window['go']['main']['InstallMarkerService']['GetAppDataDir']();
 }
 
