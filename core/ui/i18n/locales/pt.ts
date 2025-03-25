@@ -781,4 +781,5 @@ export const pt = {
   vault_overview: 'Visão geral do Vault',
   tap: 'Tocar',
   took_too_long_to_respond: 'Demorou muito para responder',
+  vultiserver_password: 'Senha do Vultiserver',
 }

@@ -16,10 +16,14 @@ export const SaveVaultStep: React.FC<
   const { t } = useTranslation()
 
   const { mutate, ...mutationState } = useSaveVaultMutation({
-    onSuccess: onForward,
+    onSuccess: () => {
+      console.log('onSuccess')
+      onForward()
+    },
   })
 
   useEffect(() => {
+    console.log('mutate: ', value)
     mutate(value)
   }, [mutate, value])
 

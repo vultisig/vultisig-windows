@@ -8,6 +8,7 @@ export const useStateCorrector = <T>(
 
   useEffect(() => {
     if (correctState !== state) {
+      console.log('correcting: ', correctState, state)
       setState(correctState)
     }
   }, [correctState, setState, state])
