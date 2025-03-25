@@ -792,4 +792,5 @@ export const es = {
   vault_overview: 'Descripción general de la bóveda',
   tap: 'Grifo',
   took_too_long_to_respond: 'Tardó demasiado en responder',
+  vultiserver_password: 'Contraseña de Vultiserver',
 }

@@ -30,6 +30,8 @@ export const useSaveVaultMutation = (
         convertValues: () => {},
       }
 
+      console.log('saving vault: ', newVault)
+
       await SaveVault(newVault)
 
       await createVaultDefaultCoins({

@@ -771,4 +771,5 @@ export const hr = {
   vault_overview: 'Pregled trezora',
   tap: 'Dodirnite',
   took_too_long_to_respond: 'Predugo je trebalo za odgovor',
+  vultiserver_password: 'Lozinka Vultiservera',
 }

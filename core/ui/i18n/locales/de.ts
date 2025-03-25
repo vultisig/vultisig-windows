@@ -793,4 +793,5 @@ export const de = {
   vault_overview: 'Vault-Übersicht',
   tap: 'Klopfen',
   took_too_long_to_respond: 'Die Antwort hat zu lange gedauert',
+  vultiserver_password: 'Vultiserver-Passwort',
 }

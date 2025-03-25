@@ -69,7 +69,7 @@ export const SetServerPasswordStep = ({
       <PageContent as="form" onSubmit={handleSubmit(onSubmit)}>
         <VStack flexGrow gap={16}>
           <VStack gap={8}>
-            <Text variant="h1Regular">{t('password')}</Text>
+            <Text variant="h1Regular">{t('vultiserver_password')}</Text>
             <PasswordWarningBlock
               iconTooltipContent={
                 <TooltipWrapper>
