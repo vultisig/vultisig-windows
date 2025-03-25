@@ -13,7 +13,7 @@ type DownloadSetupMessageInput = {
  * @param {DownloadSetupMessageInput} input - the input parameters
  * @throws {Error} - if the response status is not between 200 and 300
  */
-export const downloadSetupMessage = async ({
+const downloadSetupMessage = async ({
   serverURL,
   sessionId,
   messageId,

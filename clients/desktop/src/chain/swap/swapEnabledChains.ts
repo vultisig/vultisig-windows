@@ -7,5 +7,3 @@ export const swapEnabledChains = [
   ...oneInchSwapEnabledChains,
   ...lifiSwapEnabledChains,
 ] as const
-
-export type SwapEnabledChain = (typeof swapEnabledChains)[number]

@@ -7,17 +7,6 @@ import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus'
 import { Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
 
-export const ChainBox = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  font-weight: 400;
-  font-size: 16px;
-  color: ${getColor('contrast')};
-`
-
 export const ChainButton = styled(UnstyledButton)`
   display: grid;
   grid-template-columns: fit-content(200px) 1fr fit-content(200px);

@@ -44,7 +44,7 @@ const lineHeight: Record<TextHeight, number> = {
   large: 1.5,
 }
 
-export type TextFontFamily = 'regular' | 'mono'
+type TextFontFamily = 'regular' | 'mono'
 
 export type TextColor = keyof ReturnType<typeof getTextColorRecord>
 
@@ -144,7 +144,7 @@ export const Text = styled.p<TextProps>`
   ${text};
 `
 
-export const strictText = css`
+const strictText = css`
   ${text({
     color: 'contrast',
     size: 14,

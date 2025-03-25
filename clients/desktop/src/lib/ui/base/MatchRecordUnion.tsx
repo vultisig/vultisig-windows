@@ -4,7 +4,7 @@ type KeyOfUnion<U> = U extends any ? keyof U : never
 type ValueForKey<U, K extends string | number | symbol> =
   U extends Record<K, infer V> ? V : never
 
-export type MatchRecordUnionProps<U> = {
+type MatchRecordUnionProps<U> = {
   value: U
   handlers: {
     [K in KeyOfUnion<U>]: (payload: ValueForKey<U, K>) => React.ReactNode

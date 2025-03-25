@@ -9,7 +9,5 @@
   "devDependencies": {
     "vitest": "^3.0.9"
   },
-  "dependencies": {
-    "date-fns": "^4.1.0"
-  }
+  "dependencies": {}
 }

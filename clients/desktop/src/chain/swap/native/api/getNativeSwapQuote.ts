@@ -17,7 +17,7 @@ import {
 import { NativeSwapQuote } from '../NativeSwapQuote'
 import { getNativeSwapDecimals } from '../utils/getNativeSwapDecimals'
 
-export type GetNativeSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
+type GetNativeSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   swapChain: NativeSwapChain
   destination: string
   amount: number

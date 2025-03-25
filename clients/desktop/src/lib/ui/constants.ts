@@ -1,4 +1,4 @@
-export const BREAKPOINTS = {
+const BREAKPOINTS = {
   phone: 600,
   tablet: 950,
   laptop: 1300,

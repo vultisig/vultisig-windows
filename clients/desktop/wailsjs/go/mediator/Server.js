@@ -10,7 +10,7 @@ export function DiscoveryService(arg1) {
   return window['go']['mediator']['Server']['DiscoveryService'](arg1);
 }
 
-export function StartServer() {
+function StartServer() {
   return window['go']['mediator']['Server']['StartServer']();
 }
 
@@ -18,6 +18,6 @@ export function StopAdvertiseMediator() {
   return window['go']['mediator']['Server']['StopAdvertiseMediator']();
 }
 
-export function StopServer() {
+function StopServer() {
   return window['go']['mediator']['Server']['StopServer']();
 }

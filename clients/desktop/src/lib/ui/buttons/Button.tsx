@@ -13,19 +13,9 @@ import { getColor } from '../theme/getters'
 import { Tooltip } from '../tooltips/Tooltip'
 import { UnstyledButton } from './UnstyledButton'
 
-export const buttonSizes = ['xs', 's', 'm', 'l', 'xl'] as const
+export type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl'
 
-type ButtonSize = (typeof buttonSizes)[number]
-
-export const buttonKinds = [
-  'primary',
-  'secondary',
-  'outlined',
-  'ghost',
-  'idle',
-] as const
-
-export type ButtonKind = (typeof buttonKinds)[number]
+export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'ghost' | 'idle'
 
 interface ContainerProps {
   size: ButtonSize
@@ -149,7 +139,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
     `};
 `
 
-export type ButtonProps = Omit<
+type ButtonProps = Omit<
   React.ComponentProps<typeof Container>,
   'size' | 'kind' | 'isDisabled'
 > & {

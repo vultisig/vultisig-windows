@@ -33,7 +33,7 @@ type RenderItemParams<Item> = {
   status: DnDItemStatus
 }
 
-export type DnDListProps<ItemId extends UniqueIdentifier, Item> = {
+type DnDListProps<ItemId extends UniqueIdentifier, Item> = {
   items: Item[]
   getItemId: (item: Item) => ItemId
   onChange: (itemId: ItemId, params: ItemChangeParams) => void

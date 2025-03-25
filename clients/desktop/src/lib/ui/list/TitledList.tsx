@@ -9,7 +9,7 @@ const Container = styled(VStack)`
   gap: 12px;
 `
 
-export type TitledListProps = TitleProp &
+type TitledListProps = TitleProp &
   Omit<ComponentProps<typeof Container>, 'title'>
 
 export const TitledList = ({ children, title }: TitledListProps) => (

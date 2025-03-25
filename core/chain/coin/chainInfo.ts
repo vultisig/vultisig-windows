@@ -3,7 +3,7 @@ import { recordMap } from '@lib/utils/record/recordMap'
 import { Chain } from '../Chain'
 import { Coin } from './Coin'
 
-export const leanChainInfos: Record<Chain, Pick<Coin, 'ticker' | 'logo'>> = {
+const leanChainInfos: Record<Chain, Pick<Coin, 'ticker' | 'logo'>> = {
   [Chain.Bitcoin]: { ticker: 'BTC', logo: 'btc' },
   [Chain.BitcoinCash]: { ticker: 'BCH', logo: 'bch' },
   [Chain.Litecoin]: { ticker: 'LTC', logo: 'ltc' },
@@ -36,8 +36,6 @@ export const leanChainInfos: Record<Chain, Pick<Coin, 'ticker' | 'logo'>> = {
   [Chain.Osmosis]: { ticker: 'OSMO', logo: 'osmo' },
   [Chain.Tron]: { ticker: 'TRX', logo: 'tron' },
 }
-
-export const getChainInfo = (chain: Chain) => chainInfos[chain] || null
 
 export const chainInfos: Record<
   Chain,

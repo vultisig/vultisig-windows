@@ -8,7 +8,7 @@ import { DynamicEducationContent } from './components/DynamicEducationalContent'
 import { SlidesLoader } from './components/SlidesLoader'
 
 const SLIDE_DURATION_IN_MS = 6000
-export const steps = [
+const steps = [
   'multiFactor',
   'selfCustodial',
   'crossChain',

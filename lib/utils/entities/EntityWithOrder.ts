@@ -1,6 +1,6 @@
 import { order } from '../array/order'
 
-export type EntityWithOrder = {
+type EntityWithOrder = {
   order: number
 }
 

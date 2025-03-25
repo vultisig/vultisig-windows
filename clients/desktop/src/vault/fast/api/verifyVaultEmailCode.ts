@@ -2,7 +2,7 @@ import { assertFetchResponse } from '@lib/utils/fetch/assertFetchResponse'
 
 import { fastVaultServerUrl } from '../config'
 
-export type VerifyVaultEmailCodeInput = {
+type VerifyVaultEmailCodeInput = {
   vaultId: string
   code: string
 }

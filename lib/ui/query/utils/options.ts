@@ -1,6 +1,6 @@
 import { UseQueryOptions } from '@tanstack/react-query'
 
-export type UseQueryGenericOptions = Partial<
+type UseQueryGenericOptions = Partial<
   Pick<
     UseQueryOptions<any>,
     | 'refetchOnMount'
@@ -12,7 +12,7 @@ export type UseQueryGenericOptions = Partial<
   >
 >
 
-export const noRefetchQueryOptions: UseQueryGenericOptions = {
+const noRefetchQueryOptions: UseQueryGenericOptions = {
   refetchOnMount: false,
   refetchOnWindowFocus: false,
   refetchOnReconnect: false,
