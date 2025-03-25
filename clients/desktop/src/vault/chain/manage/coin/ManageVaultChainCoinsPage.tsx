@@ -20,7 +20,7 @@ export const ManageVaultChainCoinsPage = () => {
         <VStack gap={20}>
           <PageHeader
             primaryControls={<PageHeaderBackButton />}
-            title={<PageHeaderTitle>{t('choose_coins')}</PageHeaderTitle>}
+            title={<PageHeaderTitle>{t('choose_tokens')}</PageHeaderTitle>}
           />
           <PageSlice>
             <CoinSearch />
