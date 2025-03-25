@@ -1,52 +1,47 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
-import {
-  OneInchSwapPayload,
-  OneInchSwapPayloadSchema,
-} from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
-import { Coin } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
+import { OneInchSwapPayload } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { ValueProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { formatAmount } from '@lib/utils/formatAmount'
-import { match } from '@lib/utils/match'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { useRive } from '@rive-app/react-canvas'
 import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
+import styled, { css } from 'styled-components'
 
 import { useCurrentTxHash } from '../../../chain/state/currentTxHash'
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee'
-import { useCopyTxHash } from '../../../chain/ui/hooks/useCopyTxHash'
+import { Button } from '../../../lib/ui/buttons/Button'
+import { IconButton } from '../../../lib/ui/buttons/IconButton'
+import { SquareArrowTopIcon } from '../../../lib/ui/icons/SquareArrowTopIcon'
 import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility'
+import { SeparatedByLine } from '../../../lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
-import { GradientText } from '../../../lib/ui/text'
+import { GradientText, Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
+import { useCurrentVault } from '../../state/currentVault'
 import { SwapCoinItem } from './SwapCoinItem'
 
 export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
+  const navigate = useNavigate()
   const txHash = useCurrentTxHash()
   const { RiveComponent: SuccessAnimation } = useRive({
     src: '/assets/animations/vault-creation-success/vault_created.riv',
     autoplay: true,
   })
 
+  const vault = useCurrentVault()
+
   const { t } = useTranslation()
 
-  const copyTxHash = useCopyTxHash()
   const {
     coin: potentialFromCoin,
-    toAddress,
     memo,
-    toAmount,
     blockchainSpecific,
     swapPayload,
   } = value
@@ -97,6 +92,8 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
     value: txHash,
   })
 
+  const trackTransaction = () => BrowserOpenURL(blockExplorerUrl)
+
   return (
     <Wrapper>
       <AnimationWrapper>
@@ -107,7 +104,14 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
           </SuccessText>
         </AnimatedVisibility>
       </AnimationWrapper>
-      <VStack alignItems="center" gap={8}>
+      <VStack
+        style={{
+          width: 350,
+          marginInline: 'auto',
+        }}
+        alignItems="center"
+        gap={8}
+      >
         <HStack gap={8}>
           {fromCoin && (
             <SwapCoinItem coin={fromCoin} tokenAmount={formattedFromAmount} />
@@ -119,10 +123,108 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
             />
           )}
         </HStack>
+        <SwapInfoWrapper gap={16} fullWidth fullHeight flexGrow>
+          <HStack fullWidth justifyContent="space-between" alignItems="center">
+            <Text weight="500" size={14} color="shy">
+              {t('transaction')}
+            </Text>
+
+            <HStack gap={4} alignItems="center">
+              <Text weight="500" size={14} color="contrast">
+                {txHash}
+              </Text>
+              <IconButton
+                size="s"
+                onClick={trackTransaction}
+                icon={<SquareArrowTopIcon />}
+              />
+            </HStack>
+          </HStack>
+          <HStack fullWidth justifyContent="space-between" alignItems="center">
+            <Text weight="500" size={14} color="shy">
+              {t('from')}
+            </Text>
+
+            <TrimmedText
+              style={{
+                width: 170,
+              }}
+              weight={500}
+              size={14}
+              color="contrast"
+            >
+              {vault.name}{' '}
+              <TrimmedText width={100} as="span" weight={500} color="shy">
+                {fromCoin.address}
+              </TrimmedText>
+            </TrimmedText>
+          </HStack>
+          {toCoin && (
+            <HStack
+              fullWidth
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Text weight="500" size={14} color="shy">
+                {t('to')}
+              </Text>
+
+              <TrimmedText width={170} weight={500} size={14} color="contrast">
+                {toCoin.address}
+              </TrimmedText>
+            </HStack>
+          )}
+          {toCoin && (
+            <HStack
+              fullWidth
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Text weight="500" size={14} color="shy">
+                {t('network_fee')}
+              </Text>
+
+              <TrimmedText width={170} weight={500} size={14} color="contrast">
+                {networkFeesFormatted}
+              </TrimmedText>
+            </HStack>
+          )}
+        </SwapInfoWrapper>
+        <HStack gap={8} fullWidth justifyContent="space-between">
+          <Button
+            onClick={trackTransaction}
+            style={{
+              flex: 1,
+            }}
+            kind="secondary"
+          >
+            {t('track')}
+          </Button>
+          <StyledButton
+            onClick={() =>
+              navigate('vault', {
+                replace: true,
+              })
+            }
+          >
+            {t('done')}
+          </StyledButton>
+        </HStack>
       </VStack>
     </Wrapper>
   )
 }
+
+const StyledButton = styled(Button)`
+  background-color: hsl(224, 75%, 50%);
+  color: ${getColor('contrast')};
+  font-weight: 600;
+  flex: 1;
+
+  &:hover {
+    background-color: hsla(224, 75%, 50%, 0.9);
+  }
+`
 
 const Wrapper = styled(VStack)`
   gap: 24px;
@@ -130,20 +232,34 @@ const Wrapper = styled(VStack)`
 
 const AnimationWrapper = styled.div`
   width: 800px;
-  height: 350px;
+  height: 250px;
   position: relative;
 `
 
 const SuccessText = styled(GradientText)`
   position: absolute;
-  bottom: 80px;
+  bottom: 40px;
   left: 0;
   right: 0;
 `
 
-export const SwapStackItem = styled.div`
-  padding: 24px 16px;
+const TrimmedText = styled(Text)<{
+  width?: number
+}>`
+  display: inline-block;
+  max-width: ${({ width }) => (width ? `${width}px` : null)};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+const swapBoxStyles = () => css`
   border-radius: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
   background-color: ${getColor('foreground')};
+`
+
+const SwapInfoWrapper = styled(SeparatedByLine)`
+  padding: 24px;
+  ${swapBoxStyles()}
 `

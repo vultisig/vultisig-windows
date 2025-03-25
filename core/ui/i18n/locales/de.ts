@@ -81,6 +81,7 @@ export const de = {
   skip: 'Überspringen',
   choose_coins: 'Münzen auswählen',
   enter_password: 'Passwort eingeben',
+  track: 'Spur',
   invalid_vault_parse_to_string:
     'Tresor konnte nicht in Zeichenfolge analysiert werden',
   invalid_vault_data: 'Ungültige Tresordaten',

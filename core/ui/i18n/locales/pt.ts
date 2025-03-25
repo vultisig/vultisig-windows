@@ -347,6 +347,7 @@ export const pt = {
   failed_to_join_session: 'Falha ao entrar na sessão',
   waiting_for_keysign_start: 'Aguardando o início do processo de assinatura...',
   transaction: 'Transação',
+  track: 'Faixa',
   transaction_hash_copied: 'Hash da transação copiado',
   asset: 'Ativo',
   balance: 'Saldo',
