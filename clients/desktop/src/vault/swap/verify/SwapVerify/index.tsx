@@ -1,4 +1,4 @@
-import { range } from '@lib/utils/array/range'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
@@ -6,7 +6,6 @@ import { ChainCoinIcon } from '../../../../chain/ui/ChainCoinIcon'
 import { getCoinLogoSrc } from '../../../../coin/logo/getCoinLogoSrc'
 import { ArrowDownIcon } from '../../../../lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
-import { MatchQuery } from '../../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../../lib/ui/text'
 import { PageContent } from '../../../../ui/page/PageContent'
 import { useCurrentVaultCoin } from '../../../state/currentVault'
@@ -15,7 +14,7 @@ import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery
 import { useFromAmount } from '../../state/fromAmount'
 import { useFromCoin } from '../../state/fromCoin'
 import { useToCoin } from '../../state/toCoin'
-import { swapTermsCount, SwapTermsProvider } from '../state/swapTerms'
+import { swapTerms, SwapTermsProvider } from '../state/swapTerms'
 import { SwapAllowance } from '../SwapAllowance'
 import { SwapConfirm } from '../SwapConfirm'
 import { SwapTerms } from '../SwapTerms'
@@ -83,7 +82,7 @@ export const SwapVerify = () => {
         <SwapAllowance />
         <VerifySwapFees RowComponent={SwapTxFeesOverviewRow} />
       </ContentWrapper>
-      <SwapTermsProvider initialValue={range(swapTermsCount).map(() => false)}>
+      <SwapTermsProvider initialValue={swapTerms.map(() => false)}>
         <VStack gap={20}>
           <SwapTerms />
           <SwapConfirm />

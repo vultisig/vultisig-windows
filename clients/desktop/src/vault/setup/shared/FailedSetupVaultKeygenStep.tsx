@@ -22,7 +22,7 @@ export const FailedSetupVaultKeygenStep: FC<OnBackProp> = ({ onBack }) => {
               {t('serverTimedOut')}
             </Text>
             <Text centerHorizontally color="shy" size={14} weight={500}>
-              {t('tookTooLongToRespond')}
+              {t('took_too_long_to_respond')}
             </Text>
           </VStack>
           <TryAgainBtn kind="secondary" onClick={onBack}>
@@ -32,7 +32,7 @@ export const FailedSetupVaultKeygenStep: FC<OnBackProp> = ({ onBack }) => {
         <ErrorInfoBoxWrapper alignItems="center" gap={8}>
           <TriangleAlertIcon />
           <Text size={14} weight={500} color="danger">
-            {t('errorTimedOut')}
+            {t('timeout_error')}
           </Text>
         </ErrorInfoBoxWrapper>
       </VStack>

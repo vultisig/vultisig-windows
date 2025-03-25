@@ -215,7 +215,7 @@ const AddressesListView = ({
         </ListContext.Provider>
         <ButtonWrapper>
           <Button isLoading={isLoading} onClick={onOpenAddAddressView}>
-            {t('vault_settings_address_book_add_addresses_button')}
+            {t('add_address')}
           </Button>
           {error && (
             <Text color="danger" size={12}>

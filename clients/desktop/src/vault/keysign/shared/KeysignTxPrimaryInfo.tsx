@@ -3,6 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { ValueProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { assertField } from '@lib/utils/record/assertField'
@@ -18,7 +19,6 @@ import {
 } from '../../../chain/tx/components/TxOverviewRow'
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 
 export const KeysignTxPrimaryInfo = ({ value }: ValueProp<KeysignPayload>) => {

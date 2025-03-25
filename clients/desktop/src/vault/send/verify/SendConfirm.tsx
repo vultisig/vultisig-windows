@@ -1,8 +1,8 @@
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { Text } from '../../../lib/ui/text'
 import { StartKeysignPrompt } from '../../keysign/components/StartKeysignPrompt'
 import { useSendTxKeysignPayloadQuery } from '../state/useSendTxKeysignPayloadQuery'

@@ -1,7 +1,4 @@
-import type {
-  CurrencyRef,
-  LanguageRef,
-} from '@clients/extension/src/utils/interfaces'
+import type { CurrencyRef } from '@clients/extension/src/utils/interfaces'
 import { Chain } from '@core/chain/Chain'
 import keyMirror from 'keymirror'
 export enum CosmosMsgType {
@@ -47,17 +44,6 @@ export enum Instance {
   TRANSACTION = 'transaction',
   VAULT = 'vault',
   VAULTS = 'vaults',
-}
-
-export enum Language {
-  CROATIA = 'hr',
-  DUTCH = 'nl',
-  ENGLISH = 'en',
-  GERMAN = 'de',
-  ITALIAN = 'it',
-  RUSSIAN = 'ru',
-  PORTUGUESE = 'pt',
-  SPANISH = 'es',
 }
 
 export enum EventMethod {
@@ -194,17 +180,6 @@ export const currencySymbol: CurrencyRef = {
   [Currency.SEK]: 'kr',
   [Currency.SGD]: 'S$',
   [Currency.USD]: '$',
-}
-
-export const languageName: LanguageRef = {
-  [Language.CROATIA]: 'Hrvatski',
-  [Language.DUTCH]: 'Dutch',
-  [Language.ENGLISH]: 'English',
-  [Language.GERMAN]: 'Deutsch',
-  [Language.ITALIAN]: 'Italiano',
-  [Language.PORTUGUESE]: 'Português',
-  [Language.RUSSIAN]: 'Русский',
-  [Language.SPANISH]: 'Espanol',
 }
 
 export const supportedChains: Record<Chain, boolean> = {

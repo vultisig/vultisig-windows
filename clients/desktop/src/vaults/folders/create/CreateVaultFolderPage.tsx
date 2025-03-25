@@ -33,7 +33,7 @@ export const CreateVaultFolderPage = () => {
     }
 
     if (names.includes(name)) {
-      return t('folder_already_exists')
+      return t('folder_name_already_exists')
     }
   }, [name, t, names])
 

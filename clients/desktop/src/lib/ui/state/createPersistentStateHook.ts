@@ -1,78 +1,62 @@
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react'
+import { useCallback, useSyncExternalStore } from 'react'
 
-import { OnValueChangeListener } from './PersistentStorage'
 import { PersistentStorage } from './PersistentStorage'
+
+export type NonUndefined<T> = T extends undefined ? never : T
 
 export function createPersistentStateHook<T extends string>(
   storage: PersistentStorage<T>
 ) {
   function usePersistentState<V>(
     key: T,
-    initialValue: V | (() => V)
-  ): [V, Dispatch<SetStateAction<Exclude<V, undefined>>>] {
-    const [value, setValue] = useState<V>(() => {
-      const storedValue = storage.getItem<V>(key)
+    initialValue: NonUndefined<V> | (() => NonUndefined<V>)
+  ): [
+    NonUndefined<V>,
+    (
+      value: NonUndefined<V> | ((prevState: NonUndefined<V>) => NonUndefined<V>)
+    ) => void,
+  ] {
+    const subscribe = useCallback(
+      (onStoreChange: () => void) => {
+        const listener = () => {
+          onStoreChange()
+        }
+        storage.addValueChangeListener(key, listener)
+        return () => {
+          storage.removeValueChangeListener(key, listener)
+        }
+      },
+      [key]
+    )
 
-      if (storedValue === undefined) {
-        // If initialValue is a function, invoke it to get the value
+    const getSnapshot = useCallback(() => {
+      const value = storage.getItem<V>(key)
+      if (value === undefined) {
         const resolvedInitialValue =
           typeof initialValue === 'function'
-            ? (initialValue as () => V)()
+            ? (initialValue as () => NonUndefined<V>)()
             : initialValue
         storage.setItem(key, resolvedInitialValue)
-
         return resolvedInitialValue
       }
+      return value as NonUndefined<V>
+    }, [key, initialValue])
 
-      return storedValue
-    })
-
-    useEffect(() => {
-      const onValueChange: OnValueChangeListener<
-        Exclude<V, undefined>
-      > = newValue => {
-        setValue(newValue)
-      }
-
-      storage.addValueChangeListener(key, onValueChange)
-
-      const handleStorageChange = (event: StorageEvent) => {
-        if (event.key !== key) return
-
-        const newValue = storage.getItem<V>(key)
-        if (newValue !== undefined) {
-          setValue(newValue)
-        }
-      }
-
-      window.addEventListener('storage', handleStorageChange)
-
-      return () => {
-        storage.removeValueChangeListener(key, onValueChange)
-        window.removeEventListener('storage', handleStorageChange)
-      }
-    }, [key])
+    const value = useSyncExternalStore(subscribe, getSnapshot, getSnapshot)
 
     const setPersistentStorageValue = useCallback(
       (
         newValue:
-          | Exclude<V, undefined>
-          | ((prevState: Exclude<V, undefined>) => Exclude<V, undefined>)
+          | NonUndefined<V>
+          | ((prevState: NonUndefined<V>) => NonUndefined<V>)
       ) => {
+        const currentValue = shouldBeDefined(storage.getItem<V>(key))
         const resolvedValue =
           typeof newValue === 'function'
-            ? (
-                newValue as (
-                  prevState: Exclude<V, undefined>
-                ) => Exclude<V, undefined>
-              )(shouldBeDefined(storage.getItem<Exclude<V, undefined>>(key)))
+            ? (newValue as (prevState: NonUndefined<V>) => NonUndefined<V>)(
+                currentValue as NonUndefined<V>
+              )
             : newValue
         storage.setItem(key, resolvedValue)
       },

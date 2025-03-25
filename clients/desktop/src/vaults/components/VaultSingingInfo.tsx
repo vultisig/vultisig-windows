@@ -38,7 +38,7 @@ export const VaultSigningInfo = () => {
     <HStack alignItems="center" gap={8}>
       {index >= 0 && (
         <Text nowrap size={14} weight={'700'} color="supporting">
-          {t('part_n_of_m', { n: index + 1, m: signers.length })}
+          {t('share_n_of_m', { n: index + 1, m: signers.length })}
         </Text>
       )}
       {hasServer && !isBackup && <Tag>{t('fast_sign')}</Tag>}

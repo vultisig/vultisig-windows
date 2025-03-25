@@ -1,6 +1,6 @@
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { usePeerOptionsQuery } from '../../keygen/shared/peerDiscovery/queries/usePeerOptionsQuery'
 import { WaitForServerStates } from './WaitForServerStates'
 
