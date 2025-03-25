@@ -1,6 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { isInError } from '@lib/utils/error/isInError'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { queryUrl } from '@lib/utils/query/queryUrl'
@@ -65,6 +66,9 @@ export const getNativeSwapQuote = async ({
   >(url)
 
   if ('error' in result) {
+    if (isInError(result.error, 'not enough asset to pay for fees')) {
+      throw new Error('Not enough funds to cover gas')
+    }
     throw new Error(result.error)
   }
 

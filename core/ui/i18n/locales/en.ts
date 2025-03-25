@@ -759,4 +759,5 @@ export const en = {
   vault_overview: 'Vault Overview',
   tap: 'Tap',
   took_too_long_to_respond: 'Took too long to respond',
+  vultiserver_password: 'Vultiserver Password',
 }
