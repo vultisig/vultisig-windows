@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "typecheck": "tsc --noEmit",
     "translate": "npx tsx i18n/scripts/translate.ts"
   },
   "dependencies": {

@@ -37,7 +37,7 @@ export const chainIdRecord = {
   [OtherChain.Tron]: '0x2b6653dc',
 } as const
 
-export type ChainId = (typeof chainIdRecord)[Chain]
+type ChainId = (typeof chainIdRecord)[Chain]
 
 export type DeriveChainId<T> = T extends Chain
   ? (typeof chainIdRecord)[T]
