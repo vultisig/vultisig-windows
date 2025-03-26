@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { text } from '../../../lib/ui/text'
 
-export const strictText = css`
+const strictText = css`
   ${text({
     color: 'contrast',
     size: 14,

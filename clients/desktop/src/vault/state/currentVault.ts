@@ -25,7 +25,7 @@ export const useCurrentVaultNativeCoins = () => {
   )
 }
 
-export const useCurrentVaultChainIds = () => {
+const useCurrentVaultChainIds = () => {
   const coins = useCurrentVaultNativeCoins()
 
   return useMemo(

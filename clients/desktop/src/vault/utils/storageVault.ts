@@ -47,14 +47,14 @@ export const toStorageVault = ({
   convertValues: () => {},
 })
 
-export const protoTimestampToISOString = (timestamp: Timestamp): string => {
+const protoTimestampToISOString = (timestamp: Timestamp): string => {
   const date = new Date(convertDuration(Number(timestamp.seconds), 's', 'ms'))
   const isoWithoutNanos = date.toISOString().slice(0, -1) // Remove the Z
   const nanoStr = timestamp.nanos.toString().padStart(9, '0')
   return `${isoWithoutNanos}${nanoStr}Z`
 }
 
-export const isoStringToProtoTimestamp = (isoString: string): Timestamp => {
+const isoStringToProtoTimestamp = (isoString: string): Timestamp => {
   const date = new Date(isoString)
   const seconds = BigInt(Math.floor(convertDuration(date.getTime(), 'ms', 's')))
 

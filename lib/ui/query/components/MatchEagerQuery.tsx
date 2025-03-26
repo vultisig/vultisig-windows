@@ -3,9 +3,7 @@ import { ReactNode } from 'react'
 
 import { EagerQuery } from '../Query'
 
-export type MatchEagerQueryProps<T, E = unknown> = ValueProp<
-  EagerQuery<T, E>
-> & {
+type MatchEagerQueryProps<T, E = unknown> = ValueProp<EagerQuery<T, E>> & {
   pending?: () => ReactNode
   error?: (errors: E[]) => ReactNode
   success: (data: T) => ReactNode
@@ -37,9 +35,3 @@ export function MatchEagerQuery<T, E = unknown>({
 
   return null
 }
-
-export type MatchEagerQueryWrapperProps<T> = Pick<
-  MatchEagerQueryProps<T>,
-  'success'
-> &
-  Partial<Pick<MatchEagerQueryProps<T>, 'error' | 'pending' | 'inactive'>>

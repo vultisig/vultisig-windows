@@ -28,14 +28,14 @@ export const DOWNLOAD_VULTISIG_LINK = 'https://vultisig.com/download/vultisig'
 
 export const VULTISIG_SHARE_APP_LINK = 'https://vultisig.com/#store-section'
 
-export type TranslatedSettingItem = {
+type TranslatedSettingItem = {
   id: string
   title: string
   icon: ElementType
   path: AppPathsWithNoParamsOrState
 }
 
-export type TranslatedSettingSection = {
+type TranslatedSettingSection = {
   items: TranslatedSettingItem[]
   sectionTitle?: string
 }

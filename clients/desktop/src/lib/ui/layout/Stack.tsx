@@ -16,7 +16,7 @@ type FixedDirectionStackProps = {
   scrollable?: boolean
 }
 
-export type StackProps = FixedDirectionStackProps & {
+type StackProps = FixedDirectionStackProps & {
   direction: React.CSSProperties['flexDirection']
 }
 
@@ -32,7 +32,7 @@ const formatFlexAlignment = (
   return value
 }
 
-export const stack = ({
+const stack = ({
   gap,
   alignItems,
   justifyContent,

@@ -6,7 +6,7 @@ import { ZodObject } from 'zod'
 import { ChainAction } from '../ChainAction'
 import { getRequiredFieldsPerChainAction } from '../DepositForm/chainOptionsConfig'
 
-export const isSchemaFunction = (
+const isSchemaFunction = (
   schema: unknown
 ): schema is (
   chain: Chain,

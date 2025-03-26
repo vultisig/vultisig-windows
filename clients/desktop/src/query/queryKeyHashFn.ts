@@ -3,14 +3,7 @@ This code is from wagmi to support bigint in query keys
 https://github.com/wevm/wagmi/blob/5275810a0459e3cef742d02c8ab7234b9a12c084/packages/core/src/query/utils.ts#L10
 */
 
-import { type QueryKey, replaceEqualDeep } from '@tanstack/query-core'
-
-export function structuralSharing<data>(
-  oldData: data | undefined,
-  newData: data
-): data {
-  return replaceEqualDeep(oldData, newData)
-}
+import { type QueryKey } from '@tanstack/query-core'
 
 export function queryKeyHashFn(queryKey: QueryKey): string {
   return JSON.stringify(queryKey, (_, value) => {

@@ -7,7 +7,7 @@ import { GetVaults } from '../../../wailsjs/go/storage/Store'
 
 export const vaultsQueryKey = ['vaults']
 
-export const vaultsQueryFn = async () => {
+const vaultsQueryFn = async () => {
   const result = await GetVaults()
 
   if (result === null) {

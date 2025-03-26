@@ -53,7 +53,7 @@ const Wrapper = styled.div`
   align-self: center;
 `
 
-export const TextWrapper = styled.div`
+const TextWrapper = styled.div`
   margin-inline: auto;
   max-width: 1200px;
   text-align: center;

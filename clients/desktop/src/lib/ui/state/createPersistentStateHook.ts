@@ -3,7 +3,7 @@ import { useCallback, useSyncExternalStore } from 'react'
 
 import { PersistentStorage } from './PersistentStorage'
 
-export type NonUndefined<T> = T extends undefined ? never : T
+type NonUndefined<T> = T extends undefined ? never : T
 
 export function createPersistentStateHook<T extends string>(
   storage: PersistentStorage<T>

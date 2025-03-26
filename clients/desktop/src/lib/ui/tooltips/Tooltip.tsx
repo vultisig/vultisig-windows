@@ -20,7 +20,7 @@ import styled from 'styled-components'
 
 import { getColor } from '../theme/getters'
 
-export interface RenderOpenerProps extends Record<string, unknown> {
+interface RenderOpenerProps extends Record<string, unknown> {
   ref: (node: ReferenceType | null) => void
 }
 
