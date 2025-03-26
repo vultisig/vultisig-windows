@@ -6,7 +6,7 @@ export type SetupVaultType = 'fast' | 'secure'
 
 export const defaultSetupVaultType: SetupVaultType = 'secure'
 
-export const getSetupVaultArt = (type: SetupVaultType) =>
+const getSetupVaultArt = (type: SetupVaultType) =>
   `/assets/images/${type}VaultSetup.svg`
 
 type VaultPropKey = `prop_${0 | 1 | 2}`

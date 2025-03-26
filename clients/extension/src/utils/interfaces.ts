@@ -56,7 +56,7 @@ export interface SendTransactionResponse {
   txResponse: string
 }
 
-export interface ChainObjRef {
+interface ChainObjRef {
   [Chain.Arbitrum]: ChainProps
   [Chain.Avalanche]: ChainProps
   [Chain.Base]: ChainProps
@@ -80,7 +80,7 @@ export interface ChainObjRef {
   [Chain.THORChain]: ChainProps
 }
 
-export interface ChainStrRef {
+interface ChainStrRef {
   [Chain.Arbitrum]: string
   [Chain.Avalanche]: string
   [Chain.Base]: string
@@ -127,7 +127,7 @@ export interface CurrencyRef {
   [Currency.USD]: string
 }
 
-export interface CustomMessage {
+interface CustomMessage {
   method: string
   address: string
   message: string
@@ -141,7 +141,7 @@ export interface SignatureProps {
   RecoveryID: string
 }
 
-export interface ScreenProps {
+interface ScreenProps {
   height: number
   width: number
 }
@@ -266,7 +266,7 @@ export interface VaultProps {
   uid: string
 }
 
-export interface ThorchainAccountDataResponse {
+interface ThorchainAccountDataResponse {
   address: string
   publicKey: {
     type: string
@@ -276,7 +276,7 @@ export interface ThorchainAccountDataResponse {
   sequence: string
 }
 
-export interface MayaAccountDataResponse {
+interface MayaAccountDataResponse {
   address: string
   publicKey: {
     type: string
@@ -286,25 +286,25 @@ export interface MayaAccountDataResponse {
   sequence: string
 }
 
-export interface BaseSpecificTransactionInfo {
+interface BaseSpecificTransactionInfo {
   gasPrice: number
   fee: number
 }
 
-export interface SpecificThorchain extends BaseSpecificTransactionInfo {
+interface SpecificThorchain extends BaseSpecificTransactionInfo {
   accountNumber: number
   sequence: number
   isDeposit: boolean
 }
 
-export interface SpecificCosmos extends BaseSpecificTransactionInfo {
+interface SpecificCosmos extends BaseSpecificTransactionInfo {
   accountNumber: number
   sequence: number
   gas: number
   transactionType: number
 }
 
-export interface SpecificThorchain {
+interface SpecificThorchain {
   fee: number
   gasPrice: number
   accountNumber: number
@@ -312,16 +312,16 @@ export interface SpecificThorchain {
   isDeposit: boolean
 }
 
-export interface CosmosAccountData {
+interface CosmosAccountData {
   accountNumber: string
   sequence: string
 }
 
-export interface CosmosAccountDataResponse {
+interface CosmosAccountDataResponse {
   account: CosmosAccountData
 }
 
-export interface SignedTransaction {
+interface SignedTransaction {
   inputData?: Uint8Array
   signatures: Record<string, KeysignResponse>
   transaction?: ITransaction
@@ -329,19 +329,19 @@ export interface SignedTransaction {
   walletCore: WalletCore
 }
 
-export interface SpecificUtxoInfo {
+interface SpecificUtxoInfo {
   hash: string
   amount: bigint
   index: number
 }
 
-export interface SpecificUtxo extends BaseSpecificTransactionInfo {
+interface SpecificUtxo extends BaseSpecificTransactionInfo {
   byteFee: number
   sendMaxAmount: boolean
   utxos: SpecificUtxoInfo[]
 }
 
-export interface SpecificSolana extends BaseSpecificTransactionInfo {
+interface SpecificSolana extends BaseSpecificTransactionInfo {
   recentBlockHash: string
   priorityFee: number
   fromAddressPubKey: string | undefined

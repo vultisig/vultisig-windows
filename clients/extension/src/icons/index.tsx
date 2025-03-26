@@ -56,7 +56,7 @@ export const ArrowRight: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const ArrowRounded: FC<SVGProps<SVGSVGElement>> = ({
+const ArrowRounded: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,
   stroke = 'white',
@@ -219,7 +219,7 @@ export const CloseLG: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const Copy: FC<SVGProps<SVGSVGElement>> = ({
+const Copy: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,
   stroke = 'white',
@@ -247,7 +247,7 @@ export const Copy: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const Exit: FC<SVGProps<SVGSVGElement>> = ({
+const Exit: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,
   stroke = 'white',
@@ -275,7 +275,7 @@ export const Exit: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const Eye: FC<SVGProps<SVGSVGElement>> = ({
+const Eye: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,
   stroke = 'white',
@@ -303,7 +303,7 @@ export const Eye: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const LinkExternal: FC<SVGProps<SVGSVGElement>> = ({
+const LinkExternal: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,
   stroke = 'white',
@@ -359,7 +359,7 @@ export const NoteEdit: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const Plus: FC<SVGProps<SVGSVGElement>> = ({
+const Plus: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,
   stroke = 'white',
@@ -386,7 +386,7 @@ export const Plus: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const QRCode: FC<SVGProps<SVGSVGElement>> = ({
+const QRCode: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,
   stroke = 'white',
@@ -468,13 +468,13 @@ export const SettingsTwo: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const SquareArrow: FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
+const SquareArrow: FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
   <svg viewBox="0 0 24 24" {...props}>
     <path d="M17.05 21H6.95C5.75 21 5.09 21 4.5 20.7C3.98 20.43 3.56 20.02 3.3 19.5C3 18.91 3 18.25 3 17.05V6.95C3 5.75 3 5.09 3.3 4.5C3.57 3.98 3.98 3.57 4.5 3.3C5.09 3 5.75 3 6.95 3H9.25C9.66 3 10 3.34 10 3.75C10 4.16 9.66 4.5 9.25 4.5H6.95C5.98 4.5 5.45 4.5 5.18 4.64C4.94 4.76 4.76 4.95 4.63 5.19C4.49 5.46 4.49 5.99 4.49 6.96V17.06C4.49 18.03 4.49 18.56 4.63 18.83C4.75 19.07 4.94 19.25 5.18 19.38C5.45 19.52 5.98 19.52 6.95 19.52H17.05C18.02 19.52 18.55 19.52 18.82 19.38C19.06 19.26 19.24 19.07 19.37 18.83C19.51 18.56 19.51 18.03 19.51 17.06V14.76C19.51 14.35 19.85 14.01 20.26 14.01C20.67 14.01 21.01 14.35 21.01 14.76V17.06C21.01 18.26 21.01 18.92 20.71 19.51C20.44 20.03 20.03 20.45 19.51 20.71C18.92 21.01 18.26 21.01 17.06 21.01L17.05 21ZM11 13.75C10.81 13.75 10.62 13.68 10.47 13.53C10.18 13.24 10.18 12.76 10.47 12.47L18.44 4.5H13.75C13.34 4.5 13 4.16 13 3.75C13 3.34 13.34 3 13.75 3H20.25C20.35 3 20.45 3.02 20.54 3.06C20.63 3.1 20.71 3.15 20.78 3.22C20.85 3.29 20.91 3.37 20.94 3.46C20.98 3.55 21 3.65 21 3.75V10.25C21 10.66 20.66 11 20.25 11C19.84 11 19.5 10.66 19.5 10.25V5.56L11.53 13.53C11.38 13.68 11.19 13.75 11 13.75Z" />
   </svg>
 )
 
-export const SquareBehindSquare: FC<SVGProps<SVGSVGElement>> = ({
+const SquareBehindSquare: FC<SVGProps<SVGSVGElement>> = ({
   ...props
 }) => (
   <svg viewBox="0 0 24 24" {...props}>
@@ -482,7 +482,7 @@ export const SquareBehindSquare: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const Synchronize: FC<SVGProps<SVGSVGElement>> = ({
+const Synchronize: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,
   stroke = 'white',
@@ -702,7 +702,7 @@ export const Vultisig: FC<SVGProps<SVGSVGElement>> = ({
 
 //* -- custom svg -- * //
 
-export const QRCodeBorder: FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
+const QRCodeBorder: FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
   <svg viewBox="0 0 24 24" {...props}>
     <path d="M14.6154 0H9.38464V0.153846H14.6154V0Z" />
     <path d="M14.6154 23.8462H9.38464V24H14.6154V23.8462Z" />

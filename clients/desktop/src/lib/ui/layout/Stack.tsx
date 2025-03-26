@@ -103,6 +103,6 @@ export const HStack = styled.div<FixedDirectionStackProps>`
   ${hStack}
 `
 
-export const Stack = styled.div<StackProps>`
+const Stack = styled.div<StackProps>`
   ${stack}
 `

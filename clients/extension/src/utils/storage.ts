@@ -16,7 +16,7 @@ interface EthProviderState {
   isConnected: boolean
 }
 
-export interface LocalStorage {
+interface LocalStorage {
   accounts?: AccountsProps
   chains?: ChainProps[]
   currency?: Currency
@@ -26,9 +26,9 @@ export interface LocalStorage {
   ethProviderState?: EthProviderState
   transactions?: ITransaction[]
 }
-export type LocalStorageKeys = keyof LocalStorage
+type LocalStorageKeys = keyof LocalStorage
 
-export const getStoredRequest = (): Promise<AccountsProps> => {
+const getStoredRequest = (): Promise<AccountsProps> => {
   const keys: LocalStorageKeys[] = ['accounts']
 
   return new Promise((resolve, reject) => {
@@ -98,7 +98,7 @@ export const setStoredCurrency = (currency: Currency): Promise<void> => {
   })
 }
 
-export const setStoredLanguage = (language: Language): Promise<void> => {
+const setStoredLanguage = (language: Language): Promise<void> => {
   const vals: LocalStorage = { language }
 
   return new Promise(resolve => {
@@ -128,7 +128,7 @@ export const setStoredVaults = (vaults: VaultProps[]): Promise<void> => {
   })
 }
 
-export const setStoredTransaction = (
+const setStoredTransaction = (
   transaction: ITransaction
 ): Promise<void> => {
   return new Promise(resolve => {
@@ -159,7 +159,7 @@ export const setIsPriority = (isPriority: boolean): Promise<void> => {
   })
 }
 
-export const getStoredEthProviderState = (): Promise<EthProviderState> => {
+const getStoredEthProviderState = (): Promise<EthProviderState> => {
   const keys: LocalStorageKeys[] = ['ethProviderState']
 
   return new Promise(resolve => {
@@ -176,7 +176,7 @@ export const getStoredEthProviderState = (): Promise<EthProviderState> => {
   })
 }
 
-export const setStoredEthProviderState = (
+const setStoredEthProviderState = (
   ethProviderState: EthProviderState
 ): Promise<void> => {
   const vals: LocalStorage = { ethProviderState }

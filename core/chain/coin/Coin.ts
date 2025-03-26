@@ -32,7 +32,7 @@ export const coinKeyFromString = (coin: string): CoinKey => {
   return { chain: chain as Chain, id }
 }
 
-export const getCoinFromCoinKey = (coinKey: CoinKey): Coin | undefined => {
+const getCoinFromCoinKey = (coinKey: CoinKey): Coin | undefined => {
   const tokens = chainTokens[coinKey.chain]
   if (tokens) {
     const foundToken = tokens.find(token => token.id === coinKey.id)

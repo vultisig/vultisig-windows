@@ -1,6 +1,6 @@
 // THORNode types
 
-export type ThorchainChain =
+type ThorchainChain =
   | 'BTC'
   | 'DOGE'
   | 'LTC'
@@ -62,7 +62,7 @@ export type ThornodeTxResponse =
   | ThornodeTxResponseSuccess
   | ThornodeResponseError
 
-export type ThornodeNetworkResponse = {
+type ThornodeNetworkResponse = {
   bondRewardRune: string
   totalBondUnits: string
   effectiveSecurityBond: string
@@ -88,7 +88,7 @@ export type ThorchainProviderMethod =
   | 'deposit_transaction'
   | 'get_transaction_by_hash'
 
-export type ThorchainProviderMethodToParams = {
+type ThorchainProviderMethodToParams = {
   request_accounts: never[]
   get_accounts: never[]
   send_transaction: any[] // TODO: Request types for every method

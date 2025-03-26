@@ -26,7 +26,7 @@ const toSnake = (value: string): string => {
   return value.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`)
 }
 
-export const bigintToByteArray = (bigNumber: bigint): Uint8Array => {
+const bigintToByteArray = (bigNumber: bigint): Uint8Array => {
   if (typeof bigNumber !== 'bigint' || bigNumber < 0n)
     throw new Error('Input must be a non-negative BigInt.')
 
@@ -61,7 +61,7 @@ export const calculateWindowPosition = (
   return { height, left, top, width }
 }
 
-export const checkERC20Function = async (
+const checkERC20Function = async (
   inputHex: string
 ): Promise<boolean> => {
   if (!inputHex || inputHex === '0x')
@@ -72,7 +72,7 @@ export const checkERC20Function = async (
   return await api.getIsFunctionSelector(functionSelector)
 }
 
-export const splitString = (str: string, size: number): string[] => {
+const splitString = (str: string, size: number): string[] => {
   const result: string[] = []
 
   for (let i = 0; i < str.length; i += size) {
