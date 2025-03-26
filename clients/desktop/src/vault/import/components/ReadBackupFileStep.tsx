@@ -2,7 +2,6 @@ import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
-import path from 'path'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -25,7 +24,7 @@ export const ReadBackupFileStep = ({
   const { mutate, ...mutationState } = useMutation({
     mutationFn: async () => {
       const fileContent = await ReadTextFile(filePath)
-      const fileName = path.basename(filePath)
+      const fileName = filePath.split('/').pop() || filePath
 
       const vaultContainer = vaultContainerFromString(fileContent)
 
