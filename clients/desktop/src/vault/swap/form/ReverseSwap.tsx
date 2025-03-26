@@ -54,8 +54,6 @@ const Button = styled(UnstyledButton)`
   ${centerContent};
   font-size: 16px;
   color: ${getColor('contrast')};
-  &:before {
-  }
 `
 
 export const ReverseSwap = () => {

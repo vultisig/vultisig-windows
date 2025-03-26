@@ -10,6 +10,8 @@ export const es = {
   select_asset: 'Seleccionar activo',
   moreInfo: 'Más información',
   swap_overview: 'Resumen de intercambio',
+  overview: 'Visión general',
+  signing_transaction: 'Firma de la transacción',
   chain: 'Cadena',
   start_transaction: 'Iniciar transacción',
   youre_swapping: 'Estás intercambiando',

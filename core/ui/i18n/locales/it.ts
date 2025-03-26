@@ -329,6 +329,8 @@ export const it = {
     'Il titolo deve essere al massimo di 50 caratteri.',
   track: 'Traccia',
   address_book_list_item_network: 'rete',
+  overview: 'Panoramica',
+  signing_transaction: 'Firma della transazione',
   session_init: 'Inizializzazione sessione...',
   session_init_failed: 'Impossibile inizializzare la sessione',
   select_at_least_one_device: 'Seleziona almeno un dispositivo',
