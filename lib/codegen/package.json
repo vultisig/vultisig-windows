@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "@lib/utils": "workspace:*"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

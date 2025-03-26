@@ -12,6 +12,8 @@
     "@solana/web3.js": "^2.0.0",
     "@trustwallet/wallet-core": "^4.2.15",
     "viem": "^2.23.12",
-    "xrpl": "^4.2.0"
+    "xrpl": "^4.2.0",
+    "@lib/utils": "workspace:*",
+    "@core/config": "workspace:*"
   }
 }
