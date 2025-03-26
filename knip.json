@@ -5,7 +5,7 @@
   ],
   "entry": [
     "clients/extension/src/pages/popup/index.tsx",
-    "clients/extension/src/background/index.tsx",
+    "clients/extension/src/background/index.ts",
     "clients/extension/src/content/index.ts",
     "clients/extension/src/relay/index.ts"
   ]
