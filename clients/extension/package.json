@@ -23,11 +23,9 @@
   "dependencies": {
     "@core/chain": "workspace:*",
     "@keplr-wallet/provider": "^0.12.202",
-    "@solana/compat": "^2.1.0",
     "@solana/spl-token": "^0.4.13",
     "antd": "^5.24.4",
     "axios": "^1.8.3",
-    "html2canvas": "^1.4.1",
     "keymirror": "^0.1.1",
     "mipd": "^0.0.7",
     "ua-parser-js": "^2.0.3",
