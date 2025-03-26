@@ -20,7 +20,7 @@ export const ImportVaultFlow = ({
 }: ImportVaultFlowProps) => {
   return (
     <ValueTransfer<FileBasedVaultBackupResult>
-      from={({ onFinish }) => renderBackupAcquisitionStep({ onFinish })}
+      from={renderBackupAcquisitionStep}
       to={({ value }) => (
         <VaultBackupOverrideProvider value={value.override ?? null}>
           <MatchRecordUnion
