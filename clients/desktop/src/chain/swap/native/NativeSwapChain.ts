@@ -38,7 +38,7 @@ export const nativeSwapEnabledChainsRecord = {
   ],
 } as const
 
-export type NativeSwapEnabledChain =
+type NativeSwapEnabledChain =
   (typeof nativeSwapEnabledChainsRecord)[NativeSwapChain][number]
 
 export const nativeSwapEnabledChains = withoutDuplicates(
