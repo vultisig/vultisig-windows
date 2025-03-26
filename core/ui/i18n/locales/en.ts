@@ -369,6 +369,8 @@ export const en = {
   terms_required: 'You must agree with the terms',
   choose_tokens: 'Choose Tokens',
   chain: 'Chain',
+  overview: 'Overview',
+  signing_transaction: 'Signing Transaction',
   select_asset: 'Select asset',
   optional: 'optional',
   enter_memo: 'Enter Memo',

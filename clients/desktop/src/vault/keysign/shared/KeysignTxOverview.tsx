@@ -125,16 +125,14 @@ export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
         <>
           <MatchQuery
             value={coinPriceQuery}
-            success={price =>
-              price ? (
-                <TxOverviewRow>
-                  <span>{t('value')}</span>
-                  <span>
-                    {formatAmount(formattedToAmount * price, fiatCurrency)}
-                  </span>
-                </TxOverviewRow>
-              ) : null
-            }
+            success={price => (
+              <TxOverviewRow>
+                <span>{t('value')}</span>
+                <span>
+                  {formatAmount(formattedToAmount * price, fiatCurrency)}
+                </span>
+              </TxOverviewRow>
+            )}
             error={() => null}
             pending={() => null}
           />

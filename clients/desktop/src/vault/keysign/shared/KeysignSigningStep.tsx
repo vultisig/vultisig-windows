@@ -49,7 +49,9 @@ export const KeysignSigningStep = ({
       value={mutationStatus}
       success={value => (
         <>
-          <PageHeader title={<PageHeaderTitle>{t('done')}</PageHeaderTitle>} />
+          <PageHeader
+            title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
+          />
           <PageContent>
             <MatchRecordUnion
               value={payload}

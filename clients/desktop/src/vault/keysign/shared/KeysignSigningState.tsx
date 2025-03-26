@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { VStack } from '../../../lib/ui/layout/Stack'
@@ -5,13 +6,14 @@ import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { Text } from '../../../lib/ui/text'
 
 export const KeysignSigningState = () => {
+  const { t } = useTranslation()
+
   return (
     <VStack flexGrow alignItems="center" justifyContent="center">
       <Wrapper gap={16} alignItems="center" justifyContent="center">
         <Spinner size="2em" />
         <Text color="regular" size={22} weight="500">
-          {/* TODO: translate when radzion is done with translation file */}
-          Signing Transaction
+          {t('signing_transaction')}
         </Text>
       </Wrapper>
     </VStack>
