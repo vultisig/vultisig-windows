@@ -21,6 +21,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@core/chain": "workspace:*",
     "@keplr-wallet/provider": "^0.12.202",
     "@solana/compat": "^2.1.0",
     "@solana/spl-token": "^0.4.13",
@@ -36,11 +37,13 @@
     "@bufbuild/buf": "^1.50.1",
     "@bufbuild/protobuf": "^2.2.4",
     "@bufbuild/protoc-gen-es": "^2.2.4",
+    "@core/ui": "workspace:*",
     "@cosmjs/tendermint-rpc": "^0.33.1",
     "@eslint/js": "^9.22.0",
     "@fontsource/montserrat": "^5.2.5",
     "@fontsource/roboto-mono": "^5.2.5",
     "@keplr-wallet/types": "^0.12.202",
+    "@lib/ui": "workspace:*",
     "@solana/web3.js": "^1.98.0",
     "@trustwallet/wallet-core": "^4.2.15",
     "@types/chrome": "^0.0.309",
@@ -66,9 +69,7 @@
     "typescript-eslint": "^8.26.1",
     "vite": "^6.2.2",
     "vite-plugin-node-polyfills": "^0.23.0",
-    "vite-tsconfig-paths": "^5.1.4",
-    "@core/ui": "workspace:*",
-    "@lib/ui": "workspace:*"
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "manifest": {
     "accounts": "accounts.html",

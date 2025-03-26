@@ -562,12 +562,15 @@ __metadata:
     "@bufbuild/buf": "npm:^1.50.1"
     "@bufbuild/protobuf": "npm:^2.2.4"
     "@bufbuild/protoc-gen-es": "npm:^2.2.4"
+    "@core/chain": "workspace:*"
+    "@core/ui": "workspace:*"
     "@cosmjs/tendermint-rpc": "npm:^0.33.1"
     "@eslint/js": "npm:^9.22.0"
     "@fontsource/montserrat": "npm:^5.2.5"
     "@fontsource/roboto-mono": "npm:^5.2.5"
     "@keplr-wallet/provider": "npm:^0.12.202"
     "@keplr-wallet/types": "npm:^0.12.202"
+    "@lib/ui": "workspace:*"
     "@solana/compat": "npm:^2.1.0"
     "@solana/spl-token": "npm:^0.4.13"
     "@solana/web3.js": "npm:^1.98.0"
@@ -610,7 +613,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@core/chain@workspace:core/chain"
   dependencies:
+    "@bufbuild/protobuf": "npm:^2.2.4"
+    "@core/config": "workspace:*"
+    "@core/mpc": "workspace:*"
     "@cosmjs/stargate": "npm:^0.33.1"
+    "@lib/utils": "workspace:*"
     "@mysten/sui": "npm:^1.24.0"
     "@polkadot/api": "npm:^15.8.1"
     "@solana/web3.js": "npm:^2.0.0"
@@ -645,6 +652,8 @@ __metadata:
   resolution: "@core/ui@workspace:core/ui"
   dependencies:
     "@lib/codegen": "workspace:*"
+    "@lib/ui": "workspace:*"
+    "@lib/utils": "workspace:*"
     "@trustwallet/wallet-core": "npm:^4.2.15"
     react: "npm:^19.0.0"
   languageName: unknown
@@ -1641,6 +1650,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@lib/codegen@workspace:lib/codegen"
   dependencies:
+    "@lib/utils": "workspace:*"
     prettier: "npm:^3.5.3"
   languageName: unknown
   linkType: soft
