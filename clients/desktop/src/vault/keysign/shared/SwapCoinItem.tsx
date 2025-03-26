@@ -53,13 +53,11 @@ export const SwapCoinItem = ({
         {tokenAmount && (
           <MatchQuery
             value={coinPriceQuery}
-            success={price =>
-              price ? (
-                <Text centerHorizontally color="supporting" size={12}>
-                  {formatAmount(tokenAmount * price, fiatCurrency)}
-                </Text>
-              ) : null
-            }
+            success={price => (
+              <Text centerHorizontally color="supporting" size={12}>
+                {formatAmount(tokenAmount * price, fiatCurrency)}
+              </Text>
+            )}
             error={() => null}
             pending={() => null}
           />

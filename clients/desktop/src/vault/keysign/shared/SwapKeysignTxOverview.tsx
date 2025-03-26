@@ -18,6 +18,10 @@ import { useCurrentTxHash } from '../../../chain/state/currentTxHash'
 import { formatFee } from '../../../chain/tx/fee/utils/formatFee'
 import { Button } from '../../../lib/ui/buttons/Button'
 import { IconButton } from '../../../lib/ui/buttons/IconButton'
+import { centerContent } from '../../../lib/ui/css/centerContent'
+import { round } from '../../../lib/ui/css/round'
+import { sameDimensions } from '../../../lib/ui/css/sameDimensions'
+import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon'
 import { SquareArrowTopIcon } from '../../../lib/ui/icons/SquareArrowTopIcon'
 import { AnimatedVisibility } from '../../../lib/ui/layout/AnimatedVisibility'
 import { SeparatedByLine } from '../../../lib/ui/layout/SeparatedByLine'
@@ -112,10 +116,21 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
         alignItems="center"
         gap={8}
       >
-        <HStack gap={8}>
+        <HStack
+          style={{
+            position: 'relative',
+          }}
+          gap={8}
+        >
           {fromCoin && (
             <SwapCoinItem coin={fromCoin} tokenAmount={formattedFromAmount} />
           )}
+
+          <IconWrapper justifyContent="center" alignItems="center">
+            <IconInternalWrapper>
+              <ChevronRightIcon />
+            </IconInternalWrapper>
+          </IconWrapper>
           {toCoin && (
             <SwapCoinItem
               coin={toCoin}
@@ -128,11 +143,18 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
             <Text weight="500" size={14} color="shy">
               {t('transaction')}
             </Text>
-
             <HStack gap={4} alignItems="center">
-              <TrimmedText width={100} weight="500" size={14} color="contrast">
+              <Text
+                style={{
+                  width: 100,
+                }}
+                cropped
+                weight="500"
+                size={14}
+                color="contrast"
+              >
                 {txHash}
-              </TrimmedText>
+              </Text>
               <IconButton
                 size="s"
                 onClick={trackTransaction}
@@ -145,19 +167,20 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
               {t('from')}
             </Text>
 
-            <TrimmedText
+            <Text
               style={{
                 width: 170,
               }}
               weight={500}
               size={14}
               color="contrast"
+              cropped
             >
               {vault.name}{' '}
-              <TrimmedText width={100} as="span" weight={500} color="shy">
+              <Text cropped as="span" color="shy">
                 {fromCoin.address}
-              </TrimmedText>
-            </TrimmedText>
+              </Text>
+            </Text>
           </HStack>
           {toCoin && (
             <HStack
@@ -169,7 +192,13 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
                 {t('to')}
               </Text>
 
-              <TrimmedText width={170} weight={500} size={14} color="contrast">
+              <TrimmedText
+                cropped
+                width={170}
+                weight={500}
+                size={14}
+                color="contrast"
+              >
                 {toCoin.address}
               </TrimmedText>
             </HStack>
@@ -184,9 +213,9 @@ export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
                 {t('network_fee')}
               </Text>
 
-              <TrimmedText width={170} weight={500} size={14} color="contrast">
+              <Text cropped weight={500} size={14} color="contrast">
                 {networkFeesFormatted}
-              </TrimmedText>
+              </Text>
             </HStack>
           )}
         </SwapInfoWrapper>
@@ -263,4 +292,34 @@ const swapBoxStyles = () => css`
 const SwapInfoWrapper = styled(SeparatedByLine)`
   padding: 24px;
   ${swapBoxStyles()}
+`
+
+const IconWrapper = styled(HStack)`
+  border-radius: 25.5px;
+  padding: 7px;
+  position: absolute;
+  background-color: ${getColor('background')};
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  &::before {
+    content: '';
+    position: absolute;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+  }
+`
+
+const IconInternalWrapper = styled.div`
+  ${round};
+  ${sameDimensions(24)};
+  background: ${getColor('foregroundExtra')};
+  ${centerContent};
+  font-size: 16px;
+  color: #718096;
 `
