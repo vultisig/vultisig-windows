@@ -628,8 +628,19 @@ namespace Provider {
       return Solana.instance
     }
 
-    async signTransaction(transaction: Transaction) {
+    async signTransaction(transaction: any) {
+      console.log('sign tx:', transaction)
+      console.log('transaction.serialize():', Buffer.from(transaction.serialize()))
+
+      return await this.request({
+        method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+        params: [{ data: transaction.serialize() }],
+      }).then((result: SendTransactionResponse) => {
+        const rawData = base58.decode(result.raw)
+        return VersionedTransaction.deserialize(rawData)
+      })
       const connection = new Connection(`${rootApiUrl}/solana/`)
+
       for (const instruction of transaction.instructions) {
         let modifiedTransfer: TransactionType.Phantom
 
@@ -661,8 +672,9 @@ namespace Provider {
             console.warn(
               'Receiver token account not found. Checking for ATA...'
             )
-            const ataInstruction = transaction.instructions.find(instr =>
-              instr.programId.equals(ASSOCIATED_TOKEN_PROGRAM_ID)
+            const ataInstruction = transaction.instructions.find(
+              (instr: { programId: { equals: (arg0: PublicKey) => any } }) =>
+                instr.programId.equals(ASSOCIATED_TOKEN_PROGRAM_ID)
             )
             if (ataInstruction) {
               // The recipient should be in the ATA instruction's keys[0] (payer) or keys[2] (owner)
@@ -724,6 +736,8 @@ namespace Provider {
     }
 
     async request(data: Messaging.Chain.Request, callback?: Callback) {
+      console.log('solana req:', data)
+
       return await sendToBackgroundViaRelay<
         Messaging.Chain.Request,
         Messaging.Chain.Response
@@ -746,6 +760,8 @@ namespace Provider {
     }
 
     async signAllTransactions(transactions: Transaction[]) {
+      console.log('signall:', transactions)
+
       if (!transactions || !transactions.length) {
         return Promise.reject({
           code: -32000,
@@ -770,6 +786,8 @@ namespace Provider {
     }
 
     async signAndSendTransaction() {
+      console.log('signAndSendTransaction')
+
       return Promise.reject({
         code: -32603,
         message: 'This function is not supported by Vultisig',
@@ -777,6 +795,8 @@ namespace Provider {
     }
 
     async signAndSendAllTransactions() {
+      console.log('signAndSendAllTransactions')
+
       return Promise.reject({
         code: -32603,
         message: 'This function is not supported by Vultisig',
@@ -784,6 +804,8 @@ namespace Provider {
     }
 
     async signMessage() {
+      console.log('signMessage')
+
       return Promise.reject({
         code: -32603,
         message: 'This function is not supported by Vultisig',
@@ -791,6 +813,8 @@ namespace Provider {
     }
 
     async signIn() {
+      console.log('signIn')
+
       return Promise.reject({
         code: -32603,
         message: 'This function is not supported by Vultisig',
