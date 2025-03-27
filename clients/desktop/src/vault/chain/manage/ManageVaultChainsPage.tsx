@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ScrollableFlexboxFiller } from '../../../lib/ui/layout/ScrollableFlexboxFiller'
@@ -12,6 +13,10 @@ import ManageVaultChainsList from './ManageVaultChainsList'
 
 export const ManageVaultChainsPage = () => {
   const { t } = useTranslation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
 
   return (
     <CurrentSearchProvider initialValue="">
