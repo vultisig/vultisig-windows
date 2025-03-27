@@ -8,11 +8,10 @@ import { Button } from '../../../../lib/ui/buttons/Button'
 import { EyeIcon } from '../../../../lib/ui/icons/EyeIcon'
 import InfoGradientIcon from '../../../../lib/ui/icons/InfoGradientIcon'
 import { VStack } from '../../../../lib/ui/layout/Stack'
-import { GradientText, Text } from '../../../../lib/ui/text'
+import { Text } from '../../../../lib/ui/text'
 import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
 import { PageSlice } from '../../../../ui/page/PageSlice'
 import { useBackupVaultMutation } from '../../../mutations/useBackupVaultMutation'
-import { useCurrentVault } from '../../../state/currentVault'
 import {
   createVaultBackupSchema,
   VaultBackupSchema,
@@ -29,7 +28,6 @@ export const VaultBackupWithPassword = ({
   onFinish,
   onBack,
 }: OnFinishProp & OnBackProp) => {
-  const vault = useCurrentVault()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [isVerifiedPasswordVisible, setIsVerifiedPasswordVisible] =
     useState(false)
@@ -55,9 +53,7 @@ export const VaultBackupWithPassword = ({
   })
 
   const onSubmit = async (data?: FieldValues) => {
-    const password = data?.password
-
-    backupVault({ vault, password })
+    backupVault({ password: data?.password })
   }
 
   return (
@@ -138,16 +134,6 @@ export const VaultBackupWithPassword = ({
               {isPending
                 ? t('vault_backup_page_submit_loading_button_text')
                 : t('save')}
-            </Button>
-            <Button
-              disabled={isPending}
-              kind="outlined"
-              type="button"
-              onClick={onSubmit}
-            >
-              <GradientText>
-                {t('vault_backup_page_skip_button_text')}
-              </GradientText>
             </Button>
             {error && (
               <Text size={12} color="danger">

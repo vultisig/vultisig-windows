@@ -10,6 +10,7 @@ import { SaveFileBkp } from '../../../wailsjs/go/main/App'
 import { storage } from '../../../wailsjs/go/models'
 import { UpdateVaultIsBackedUp } from '../../../wailsjs/go/storage/Store'
 import { vaultsQueryKey } from '../queries/useVaultsQuery'
+import { useCurrentVault } from '../state/currentVault'
 import { fromStorageVault, getStorageVaultId } from '../utils/storageVault'
 
 const getExportName = (vault: storage.Vault) => {
@@ -25,7 +26,7 @@ const getExportName = (vault: storage.Vault) => {
   })
 }
 
-const createBackup = async (vault: Vault, password: string) => {
+const createBackup = async (vault: Vault, password?: string) => {
   const vaultData = toBinary(VaultSchema, vault)
 
   const vaultContainer = create(VaultContainerSchema, {
@@ -55,19 +56,11 @@ export const useBackupVaultMutation = ({
   onSuccess?: () => void
 } = {}) => {
   const invalidateQueries = useInvalidateQueries()
+  const vault = useCurrentVault()
 
   return useMutation({
-    mutationFn: async ({
-      vault,
-      password,
-    }: {
-      vault: storage.Vault
-      password?: string
-    }) => {
-      const base64Data = await createBackup(
-        fromStorageVault(vault),
-        password as string
-      )
+    mutationFn: async ({ password }: { password?: string }) => {
+      const base64Data = await createBackup(fromStorageVault(vault), password)
       await SaveFileBkp(getExportName(vault), base64Data)
       await UpdateVaultIsBackedUp(getStorageVaultId(vault), true)
       await invalidateQueries(vaultsQueryKey)
