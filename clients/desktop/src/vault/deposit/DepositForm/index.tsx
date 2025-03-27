@@ -54,7 +54,7 @@ export const DepositForm: FC<DepositFormProps> = ({
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
-  const totalAmountAvailable = useGetTotalAmountAvailableForChain(chain)
+  const { totalTokenAmount } = useGetTotalAmountAvailableForChain(chain)
   const chainActionSchema = getChainActionSchema(chain, selectedChainAction, t)
   const fieldsForChainAction = getFieldsForChainAction(
     chain,
@@ -68,7 +68,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     chainActionSchema,
     chain,
     walletCore,
-    totalAmountAvailable
+    totalTokenAmount
   )
 
   const {
@@ -174,7 +174,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                     {field.label}{' '}
                     {field.name === 'amount' &&
                       selectedChainAction === 'bond' &&
-                      `(Balance: ${totalAmountAvailable.toFixed(2)} ${coin}) `}
+                      `(Balance: ${totalTokenAmount.toFixed(2)} ${coin}) `}
                     {field.required ? (
                       <Text as="span" color="danger" size={14}>
                         *
