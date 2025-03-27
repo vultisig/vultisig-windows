@@ -23,7 +23,7 @@ export const useScrollTo = (
         el?.scrollIntoView({ behavior })
       },
       element: () => {
-        ;(target as HTMLElement).scrollIntoView({ behavior })
+        return (target as HTMLElement).scrollIntoView({ behavior })
       },
       options: () => {
         window.scrollTo(target as ScrollToOptions)
