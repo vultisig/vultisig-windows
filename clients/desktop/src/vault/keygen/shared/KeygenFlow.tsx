@@ -15,7 +15,7 @@ import { CurrentVaultProvider } from '../../state/currentVault'
 import { useCurrentKeygenType } from '../state/currentKeygenType'
 import { useKeygenMutation } from './mutations/useKeygenMutation'
 import { SaveVaultStep } from './SaveVaultStep'
-import { VaultBackupFlow } from './VaultKeygenBackupFlow'
+import { VaultKeygenBackupFlow } from './VaultKeygenBackupFlow'
 
 export const KeygenFlow = ({ onBack }: OnBackProp) => {
   const { mutate: startKeygen, ...keygenMutationState } = useKeygenMutation()
@@ -42,7 +42,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
             )}
             to={() => {
               if (hasServerSigner(vault.signers)) {
-                return <VaultBackupFlow />
+                return <VaultKeygenBackupFlow />
               }
 
               return (
@@ -54,7 +54,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
                       onForward={onForward}
                     />
                   )}
-                  to={() => <VaultBackupFlow />}
+                  to={() => <VaultKeygenBackupFlow />}
                 />
               )
             }}

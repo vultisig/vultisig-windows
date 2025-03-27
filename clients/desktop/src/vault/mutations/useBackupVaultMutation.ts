@@ -1,9 +1,10 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { Vault, VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import { match } from '@lib/utils/match'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { SaveFileBkp } from '../../../wailsjs/go/main/App'
 import { storage } from '../../../wailsjs/go/models'
@@ -48,8 +49,12 @@ const createBackup = async (vault: Vault, password: string) => {
   return Buffer.from(vaultContainerData).toString('base64')
 }
 
-export const useBackupVaultMutation = () => {
-  const queryClient = useQueryClient()
+export const useBackupVaultMutation = ({
+  onSuccess,
+}: {
+  onSuccess?: () => void
+} = {}) => {
+  const invalidateQueries = useInvalidateQueries()
 
   return useMutation({
     mutationFn: async ({
@@ -65,11 +70,8 @@ export const useBackupVaultMutation = () => {
       )
       await SaveFileBkp(getExportName(vault), base64Data)
       await UpdateVaultIsBackedUp(getStorageVaultId(vault), true)
+      await invalidateQueries(vaultsQueryKey)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [vaultsQueryKey],
-      })
-    },
+    onSuccess,
   })
 }

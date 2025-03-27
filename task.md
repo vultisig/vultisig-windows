@@ -8,3 +8,5 @@ https://www.figma.com/design/puB2fsVpPrBx3Sup7gaa3v/Vultisig-App?node-id=33437-8
 - [ ] VaultBackupPage -> VaultBackupFlow component
 - [ ] A step to choose if the user wants to skip the password step
 - [ ] No "skip password" option on VaultBackupFlow component's second step
+- [ ] Test backup by creating a new vault
+- [ ] Test backup from settings page
