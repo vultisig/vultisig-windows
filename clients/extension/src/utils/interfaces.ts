@@ -2,6 +2,8 @@ import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
+import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
+import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
 
 import { Currency } from './constants'
@@ -54,6 +56,64 @@ export interface SendTransactionResponse {
   txResponse: string
 }
 
+export interface ChainObjRef {
+  [Chain.Arbitrum]: ChainProps
+  [Chain.Avalanche]: ChainProps
+  [Chain.Base]: ChainProps
+  [Chain.Bitcoin]: ChainProps
+  [Chain.BitcoinCash]: ChainProps
+  [Chain.Blast]: ChainProps
+  [Chain.BSC]: ChainProps
+  [Chain.CronosChain]: ChainProps
+  [Chain.Dash]: ChainProps
+  [Chain.Dogecoin]: ChainProps
+  [Chain.Dydx]: ChainProps
+  [Chain.Ethereum]: ChainProps
+  [Chain.Cosmos]: ChainProps
+  [Chain.Kujira]: ChainProps
+  [Chain.Litecoin]: ChainProps
+  [Chain.MayaChain]: ChainProps
+  [Chain.Optimism]: ChainProps
+  [Chain.Osmosis]: ChainProps
+  [Chain.Polygon]: ChainProps
+  [Chain.Solana]: ChainProps
+  [Chain.THORChain]: ChainProps
+}
+
+export interface ChainStrRef {
+  [Chain.Arbitrum]: string
+  [Chain.Avalanche]: string
+  [Chain.Base]: string
+  [Chain.Bitcoin]: string
+  [Chain.BitcoinCash]: string
+  [Chain.Blast]: string
+  [Chain.BSC]: string
+  [Chain.CronosChain]: string
+  [Chain.Dash]: string
+  [Chain.Dogecoin]: string
+  [Chain.Dydx]: string
+  [Chain.Ethereum]: string
+  [Chain.Cosmos]: string
+  [Chain.Kujira]: string
+  [Chain.Litecoin]: string
+  [Chain.MayaChain]: string
+  [Chain.Optimism]: string
+  [Chain.Osmosis]: string
+  [Chain.Polkadot]: string
+  [Chain.Polygon]: string
+  [Chain.Solana]: string
+  [Chain.Sui]: string
+  [Chain.THORChain]: string
+  [Chain.Terra]: string
+  [Chain.TerraClassic]: string
+  [Chain.Ton]: string
+  [Chain.Ripple]: string
+  [Chain.Zksync]: string
+  [Chain.Noble]: string
+  [Chain.Akash]: string
+  [Chain.Tron]: string
+}
+
 export interface CurrencyRef {
   [Currency.AUD]: string
   [Currency.CAD]: string
@@ -67,7 +127,7 @@ export interface CurrencyRef {
   [Currency.USD]: string
 }
 
-interface CustomMessage {
+export interface CustomMessage {
   method: string
   address: string
   message: string
@@ -79,6 +139,11 @@ export interface SignatureProps {
   S: string
   DerSignature: string
   RecoveryID: string
+}
+
+export interface ScreenProps {
+  height: number
+  width: number
 }
 
 export namespace TransactionType {
@@ -199,6 +264,88 @@ export interface VaultProps {
   selected?: boolean
   transactions: ITransaction[]
   uid: string
+}
+
+export interface ThorchainAccountDataResponse {
+  address: string
+  publicKey: {
+    type: string
+    value: string
+  }
+  accountNumber: string
+  sequence: string
+}
+
+export interface MayaAccountDataResponse {
+  address: string
+  publicKey: {
+    type: string
+    value: string
+  }
+  accountNumber: string
+  sequence: string
+}
+
+export interface BaseSpecificTransactionInfo {
+  gasPrice: number
+  fee: number
+}
+
+export interface SpecificThorchain extends BaseSpecificTransactionInfo {
+  accountNumber: number
+  sequence: number
+  isDeposit: boolean
+}
+
+export interface SpecificCosmos extends BaseSpecificTransactionInfo {
+  accountNumber: number
+  sequence: number
+  gas: number
+  transactionType: number
+}
+
+export interface SpecificThorchain {
+  fee: number
+  gasPrice: number
+  accountNumber: number
+  sequence: number
+  isDeposit: boolean
+}
+
+export interface CosmosAccountData {
+  accountNumber: string
+  sequence: string
+}
+
+export interface CosmosAccountDataResponse {
+  account: CosmosAccountData
+}
+
+export interface SignedTransaction {
+  inputData?: Uint8Array
+  signatures: Record<string, KeysignResponse>
+  transaction?: ITransaction
+  vault?: VaultProps
+  walletCore: WalletCore
+}
+
+export interface SpecificUtxoInfo {
+  hash: string
+  amount: bigint
+  index: number
+}
+
+export interface SpecificUtxo extends BaseSpecificTransactionInfo {
+  byteFee: number
+  sendMaxAmount: boolean
+  utxos: SpecificUtxoInfo[]
+}
+
+export interface SpecificSolana extends BaseSpecificTransactionInfo {
+  recentBlockHash: string
+  priorityFee: number
+  fromAddressPubKey: string | undefined
+  toAddressPubKey: string | undefined
 }
 
 export interface FastSignInput {
