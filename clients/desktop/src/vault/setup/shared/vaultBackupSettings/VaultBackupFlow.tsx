@@ -10,7 +10,6 @@ import { EyeIcon } from '../../../../lib/ui/icons/EyeIcon'
 import InfoGradientIcon from '../../../../lib/ui/icons/InfoGradientIcon'
 import { VStack } from '../../../../lib/ui/layout/Stack'
 import { GradientText, Text } from '../../../../lib/ui/text'
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 import { PageHeader } from '../../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../../ui/page/PageHeaderTitle'
@@ -30,13 +29,12 @@ import {
   InputFieldWrapper,
 } from './VaultBackupPage.styles'
 
-const VaultBackupPage = ({ onFinish }: OnFinishProp) => {
+export const VaultBackupFlow = ({ onFinish }: OnFinishProp) => {
   const vault = useCurrentVault()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [isVerifiedPasswordVisible, setIsVerifiedPasswordVisible] =
     useState(false)
 
-  const navigate = useAppNavigate()
   const { t } = useTranslation()
   const invalidateQueries = useInvalidateQueries()
   const { mutate: backupVault, isPending, error } = useBackupVaultMutation()
@@ -60,11 +58,7 @@ const VaultBackupPage = ({ onFinish }: OnFinishProp) => {
       {
         onSuccess: () => {
           invalidateQueries(vaultsQueryKey)
-          if (onFinish) {
-            onFinish()
-            return
-          }
-          navigate('vault')
+          onFinish()
         },
       }
     )
@@ -173,5 +167,3 @@ const VaultBackupPage = ({ onFinish }: OnFinishProp) => {
     </VStack>
   )
 }
-
-export default VaultBackupPage
