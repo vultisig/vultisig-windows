@@ -54,7 +54,10 @@ export const DepositForm: FC<DepositFormProps> = ({
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
-  const { totalTokenAmount } = useGetTotalAmountAvailableForChain(chain)
+  const { data: totalAmountAvailableForChainData } =
+    useGetTotalAmountAvailableForChain(chain)
+  const totalTokenAmount =
+    totalAmountAvailableForChainData?.totalTokenAmount ?? 0
   const chainActionSchema = getChainActionSchema(chain, selectedChainAction, t)
   const fieldsForChainAction = getFieldsForChainAction(
     chain,
