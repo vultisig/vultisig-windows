@@ -563,6 +563,7 @@ __metadata:
     "@bufbuild/protobuf": "npm:^2.2.4"
     "@bufbuild/protoc-gen-es": "npm:^2.2.4"
     "@core/chain": "workspace:*"
+    "@core/config": "workspace:*"
     "@core/ui": "workspace:*"
     "@cosmjs/tendermint-rpc": "npm:^0.33.1"
     "@eslint/js": "npm:^9.22.0"
