@@ -5,9 +5,11 @@ import ConfigProvider from '@clients/extension/src/components/config-provider'
 import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
+import i18n from '@clients/extension/src/i18n/config'
 import { Vultisig } from '@clients/extension/src/icons'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
+  getStoredLanguage,
   getStoredRequest,
   getStoredVaults,
   setStoredVaults,
@@ -17,8 +19,6 @@ import { Button, Form, Radio } from 'antd'
 import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
-
-import { ExtensionProviders } from '../../state/ExtensionProviders'
 
 interface FormProps {
   uid: string
@@ -70,28 +70,32 @@ const Component = () => {
   }
 
   useEffect(() => {
-    getStoredRequest()
-      .then(({ chain, sender }) => {
-        getStoredVaults().then(vaults => {
-          if (vaults.length) {
-            setState(prevState => ({
-              ...prevState,
-              chain,
-              sender,
-              vaults,
-              hasError: false,
-            }))
-          } else {
-            setState(prevState => ({
-              ...prevState,
-              errorDescription: t('get_vault_failed_description'),
-              errorTitle: t('get_vault_failed'),
-              hasError: true,
-            }))
-          }
+    getStoredLanguage().then(language => {
+      i18n.changeLanguage(language)
+
+      getStoredRequest()
+        .then(({ chain, sender }) => {
+          getStoredVaults().then(vaults => {
+            if (vaults.length) {
+              setState(prevState => ({
+                ...prevState,
+                chain,
+                sender,
+                vaults,
+                hasError: false,
+              }))
+            } else {
+              setState(prevState => ({
+                ...prevState,
+                errorDescription: t(messageKeys.GET_VAULT_FAILED_DESCRIPTION),
+                errorTitle: t(messageKeys.GET_VAULT_FAILED),
+                hasError: true,
+              }))
+            }
+          })
         })
-      })
-      .catch(() => {})
+        .catch(() => {})
+    })
   }, [t])
 
   return (
@@ -152,8 +156,6 @@ const Component = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ExtensionProviders>
-      <Component />
-    </ExtensionProviders>
+    <Component />
   </StrictMode>
 )
