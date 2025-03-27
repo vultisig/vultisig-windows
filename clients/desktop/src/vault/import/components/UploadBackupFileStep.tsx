@@ -12,13 +12,13 @@ import { Text } from '../../../lib/ui/text'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../ui/page/PageContent'
 import { vaultBackupResultFromFile } from '../utils/vaultBackupResultFromFile'
-import { VaultBackupResult } from '../VaultBakupResult'
+import { FileBasedVaultBackupResult } from '../VaultBakupResult'
 import { BackupFileDropzone } from './BackupFileDropzone'
 import { UploadedBackupFile } from './UploadedBackupFile'
 
 export const UploadBackupFileStep = ({
   onFinish,
-}: OnFinishProp<VaultBackupResult>) => {
+}: OnFinishProp<FileBasedVaultBackupResult>) => {
   const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
 

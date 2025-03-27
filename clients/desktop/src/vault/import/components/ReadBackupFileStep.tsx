@@ -1,4 +1,3 @@
-import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -13,18 +12,36 @@ import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { FlowErrorPageContent } from '../../../ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { FlowPendingPageContent } from '../../../ui/flow/FlowPendingPageContent'
+import { isLikelyToBeDklsVaultBackup } from '../utils/isLikelyToBeDklsVaultBackup'
 import { vaultContainerFromString } from '../utils/vaultContainerFromString'
+import { FileBasedVaultBackupResult } from '../VaultBakupResult'
 
 export const ReadBackupFileStep = ({
   onFinish,
-}: OnFinishProp<VaultContainer>) => {
+}: OnFinishProp<FileBasedVaultBackupResult>) => {
   const { filePath } = useAppPathState<'importVaultFromFile'>()
 
   const { mutate, ...mutationState } = useMutation({
     mutationFn: async () => {
       const fileContent = await ReadTextFile(filePath)
+      const fileName = filePath.split('/').pop() || filePath
 
-      return vaultContainerFromString(fileContent)
+      const vaultContainer = vaultContainerFromString(fileContent)
+
+      const result: FileBasedVaultBackupResult = {
+        result: { vaultContainer },
+      }
+
+      if (
+        isLikelyToBeDklsVaultBackup({
+          size: fileContent.length,
+          fileName,
+        })
+      ) {
+        result.override = { lib_type: 'DKLS' }
+      }
+
+      return result
     },
     onSuccess: onFinish,
   })
