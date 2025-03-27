@@ -1,14 +1,16 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { Vault, VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import { match } from '@lib/utils/match'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { SaveFileBkp } from '../../../wailsjs/go/main/App'
 import { storage } from '../../../wailsjs/go/models'
 import { UpdateVaultIsBackedUp } from '../../../wailsjs/go/storage/Store'
 import { vaultsQueryKey } from '../queries/useVaultsQuery'
+import { useCurrentVault } from '../state/currentVault'
 import { fromStorageVault, getStorageVaultId } from '../utils/storageVault'
 
 const getExportName = (vault: storage.Vault) => {
@@ -24,7 +26,7 @@ const getExportName = (vault: storage.Vault) => {
   })
 }
 
-const createBackup = async (vault: Vault, password: string) => {
+const createBackup = async (vault: Vault, password?: string) => {
   const vaultData = toBinary(VaultSchema, vault)
 
   const vaultContainer = create(VaultContainerSchema, {
@@ -48,28 +50,21 @@ const createBackup = async (vault: Vault, password: string) => {
   return Buffer.from(vaultContainerData).toString('base64')
 }
 
-export const useBackupVaultMutation = () => {
-  const queryClient = useQueryClient()
+export const useBackupVaultMutation = ({
+  onSuccess,
+}: {
+  onSuccess?: () => void
+} = {}) => {
+  const invalidateQueries = useInvalidateQueries()
+  const vault = useCurrentVault()
 
   return useMutation({
-    mutationFn: async ({
-      vault,
-      password,
-    }: {
-      vault: storage.Vault
-      password?: string
-    }) => {
-      const base64Data = await createBackup(
-        fromStorageVault(vault),
-        password as string
-      )
+    mutationFn: async ({ password }: { password?: string }) => {
+      const base64Data = await createBackup(fromStorageVault(vault), password)
       await SaveFileBkp(getExportName(vault), base64Data)
       await UpdateVaultIsBackedUp(getStorageVaultId(vault), true)
+      await invalidateQueries(vaultsQueryKey)
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [vaultsQueryKey],
-      })
-    },
+    onSuccess,
   })
 }

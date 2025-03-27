@@ -247,7 +247,6 @@ export const hr = {
   vault_backup_page_verified_password_input_placeholder: 'Potvrdite lozinku',
   vault_backup_page_verified_password_error: 'Lozinke se moraju podudarati',
   vault_backup_page_submit_loading_button_text: 'Spremanje...',
-  vault_backup_page_skip_button_text: 'Jelszó kihagyása',
   vault_backup_page_password_info:
     'Nikada ne pohranjujte dijelove trezora s različitih uređaja na isto mjesto',
   vault_rename_page_name_error: 'Naziv trezora mora biti između 1 i 50 znakova',
@@ -775,4 +774,10 @@ export const hr = {
   tap: 'Dodirnite',
   took_too_long_to_respond: 'Predugo je trebalo za odgovor',
   vultiserver_password: 'Lozinka Vultiservera',
+  backup_without_password: 'Sigurnosna kopija bez lozinke',
+  use_password: 'Koristi lozinku',
+  backup_password_prompt:
+    'Želite li dodati lozinku dijeljenjima trezora uređaja?',
+  backup_password_info:
+    'Preporučujemo da ne postavljate sigurnosnu lozinku za dijeljenje trezora uređaja - vaši su podaci sigurni ako su sigurnosne kopije pravilno pohranjene na različitim lokacijama, što je već značajna zaštita. Upamtite, sigurnosne lozinke nije moguće vratiti ako ih zaboravite. Vaš izbor!',
 }

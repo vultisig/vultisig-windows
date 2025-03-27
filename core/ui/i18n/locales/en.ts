@@ -217,7 +217,6 @@ export const en = {
   vault_backup_page_verified_password_input_placeholder: 'Verify password',
   vault_backup_page_verified_password_error: 'Passwords must match',
   vault_backup_page_submit_loading_button_text: 'Saving...',
-  vault_backup_page_skip_button_text: 'Skip Password',
   vault_backup_page_password_info:
     'Never store Vault Shares from different devices in the same location',
   vault_rename_page_name_error:
@@ -763,4 +762,10 @@ export const en = {
   tap: 'Tap',
   took_too_long_to_respond: 'Took too long to respond',
   vultiserver_password: 'Vultiserver Password',
+  backup_without_password: 'Backup without password',
+  use_password: 'Use password',
+  backup_password_prompt:
+    'Do you want to add a password to your device vault shares?',
+  backup_password_info:
+    "We recommend that you do not set a backup password for device vault shares-your data is safe if the backups are properly stored in different locations, which is already a significant protection. Remember, backup passwords can't be recovered if you forget them. Your choice!",
 }

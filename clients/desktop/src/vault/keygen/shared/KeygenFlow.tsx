@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import { StepTransition } from '../../../lib/ui/base/StepTransition'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { VaultBackupFlow } from '../../backup/flow/VaultBackupFlow'
 import { hasServerSigner } from '../../fast/utils/hasServerSigner'
 import { FailedSetupVaultKeygenStep } from '../../setup/shared/FailedSetupVaultKeygenStep'
 import { SetupVaultEducationSlides } from '../../setup/shared/SetupVaultCreationStep/SetupVaultEducationSlides'
@@ -16,6 +15,7 @@ import { CurrentVaultProvider } from '../../state/currentVault'
 import { useCurrentKeygenType } from '../state/currentKeygenType'
 import { useKeygenMutation } from './mutations/useKeygenMutation'
 import { SaveVaultStep } from './SaveVaultStep'
+import { VaultKeygenBackupFlow } from './VaultKeygenBackupFlow'
 
 export const KeygenFlow = ({ onBack }: OnBackProp) => {
   const { mutate: startKeygen, ...keygenMutationState } = useKeygenMutation()
@@ -42,7 +42,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
             )}
             to={() => {
               if (hasServerSigner(vault.signers)) {
-                return <VaultBackupFlow />
+                return <VaultKeygenBackupFlow />
               }
 
               return (
@@ -54,7 +54,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
                       onForward={onForward}
                     />
                   )}
-                  to={() => <VaultBackupFlow />}
+                  to={() => <VaultKeygenBackupFlow />}
                 />
               )
             }}

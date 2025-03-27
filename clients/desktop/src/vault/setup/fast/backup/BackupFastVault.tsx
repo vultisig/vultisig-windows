@@ -9,7 +9,7 @@ import { SaveVaultStep } from '../../../keygen/shared/SaveVaultStep'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { useCurrentVault } from '../../../state/currentVault'
 import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
-import VaultBackupPage from '../../shared/vaultBackupSettings/VaultBackupPage'
+import { VaultBackupFlow } from '../../shared/vaultBackupSettings/VaultBackupFlow'
 import { EmailConfirmation } from '.'
 import { BackupConfirmation } from './BackupConfirmation'
 import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne'
@@ -57,7 +57,7 @@ export const BackupFastVault = () => {
         <BackupOverviewSlidesPartTwo onCompleted={toNextStep} />
       )}
       backupConfirmation={() => <BackupConfirmation onCompleted={toNextStep} />}
-      backupPage={() => <VaultBackupPage onFinish={toNextStep} />}
+      backupPage={() => <VaultBackupFlow onFinish={toNextStep} />}
       backupSuccessfulSlideshow={() =>
         shouldShowBackupSummary ? (
           <StepTransition
