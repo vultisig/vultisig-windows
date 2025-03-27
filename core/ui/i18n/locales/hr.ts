@@ -77,7 +77,10 @@ export const hr = {
   next: 'Dalje',
   failed_to_confirm_email_code: 'Nije uspjela potvrda koda za potvrdu e-pošte',
   skip: 'Preskoči',
+  track: 'Pjesma',
+  overview: 'Pregled',
   choose_coins: 'Odaberite novčiće',
+  signing_transaction: 'Potpisivanje transakcije',
   enter_password: 'Unesite lozinku',
   invalid_file_format: 'Neispravan format datoteke',
   invalid_file_format_message:

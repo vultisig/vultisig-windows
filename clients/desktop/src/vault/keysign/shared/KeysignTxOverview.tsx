@@ -27,7 +27,6 @@ import { LinkIcon } from '../../../lib/ui/icons/LinkIcon'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
-import { KeysignSwapTxInfo } from '../../swap/keysign/KeysignSwapTxInfo'
 import { SwapTrackingLink } from './SwapTrackingLink'
 
 export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
@@ -111,38 +110,29 @@ export const KeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
           {txHash}
         </Text>
       </VStack>
-
-      {swapPayload.value ? (
-        <KeysignSwapTxInfo value={value} />
-      ) : (
-        <>
-          {toAddress && (
-            <TxOverviewRow>
-              <span>{t('to')}</span>
-              <span>{toAddress}</span>
-            </TxOverviewRow>
-          )}
-          <TxOverviewAmount
-            value={fromChainAmount(BigInt(toAmount), decimals)}
-            ticker={coin.ticker}
-          />
-        </>
+      {toAddress && (
+        <TxOverviewRow>
+          <span>{t('to')}</span>
+          <span>{toAddress}</span>
+        </TxOverviewRow>
       )}
+      <TxOverviewAmount
+        value={fromChainAmount(BigInt(toAmount), decimals)}
+        ticker={coin.ticker}
+      />
       {memo && <TxOverviewMemo value={memo} />}
       {formattedToAmount && (
         <>
           <MatchQuery
             value={coinPriceQuery}
-            success={price =>
-              price ? (
-                <TxOverviewRow>
-                  <span>{t('value')}</span>
-                  <span>
-                    {formatAmount(formattedToAmount * price, fiatCurrency)}
-                  </span>
-                </TxOverviewRow>
-              ) : null
-            }
+            success={price => (
+              <TxOverviewRow>
+                <span>{t('value')}</span>
+                <span>
+                  {formatAmount(formattedToAmount * price, fiatCurrency)}
+                </span>
+              </TxOverviewRow>
+            )}
             error={() => null}
             pending={() => null}
           />

@@ -17,6 +17,7 @@ export const InputField = styled.input`
   background-color: transparent;
   display: block;
   width: 100%;
+  color: ${getColor('text')};
 
   &::placeholder {
     font-size: 13px;

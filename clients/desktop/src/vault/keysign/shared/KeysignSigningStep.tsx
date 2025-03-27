@@ -10,6 +10,7 @@ import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash'
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow'
 import useVersionCheck from '../../../lib/hooks/useVersionCheck'
+import { Match } from '../../../lib/ui/base/Match'
 import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion'
 import { Button } from '../../../lib/ui/buttons/Button'
 import { VStack } from '../../../lib/ui/layout/Stack'
@@ -25,6 +26,7 @@ import { KeysignCustomMessageInfo } from '../join/verify/KeysignCustomMessageInf
 import { KeysignSigningState } from './KeysignSigningState'
 import { KeysignTxOverview } from './KeysignTxOverview'
 import { useKeysignMutation } from './mutations/useKeysignMutation'
+import { SwapKeysignTxOverview } from './SwapKeysignTxOverview'
 
 type KeysignSigningStepProps = {
   payload: KeysignMessagePayload
@@ -47,32 +49,42 @@ export const KeysignSigningStep = ({
       value={mutationStatus}
       success={value => (
         <>
-          <PageHeader title={<PageHeaderTitle>{t('done')}</PageHeaderTitle>} />
+          <PageHeader
+            title={<PageHeaderTitle>{t('overview')}</PageHeaderTitle>}
+          />
           <PageContent>
-            <TxOverviewPanel>
-              <MatchRecordUnion
-                value={payload}
-                handlers={{
-                  keysign: payload => (
-                    <CurrentTxHashProvider value={value}>
-                      <KeysignTxOverview value={payload} />
-                    </CurrentTxHashProvider>
-                  ),
-                  custom: payload => (
-                    <>
-                      <KeysignCustomMessageInfo value={payload} />
-                      <TxOverviewChainDataRow>
-                        <span>{t('signature')}</span>
-                        <span>{value}</span>
-                      </TxOverviewChainDataRow>
-                    </>
-                  ),
-                }}
-              />
-            </TxOverviewPanel>
-            <Link to={makeAppPath('vault')}>
-              <Button as="div">{t('complete')}</Button>
-            </Link>
+            <MatchRecordUnion
+              value={payload}
+              handlers={{
+                keysign: payload => (
+                  <CurrentTxHashProvider value={value}>
+                    <Match
+                      value={payload.swapPayload.value ? 'swap' : 'default'}
+                      swap={() => <SwapKeysignTxOverview value={payload} />}
+                      default={() => (
+                        <>
+                          <TxOverviewPanel>
+                            <KeysignTxOverview value={payload} />
+                          </TxOverviewPanel>
+                          <Link to={makeAppPath('vault')}>
+                            <Button as="div">{t('complete')}</Button>
+                          </Link>
+                        </>
+                      )}
+                    />
+                  </CurrentTxHashProvider>
+                ),
+                custom: payload => (
+                  <TxOverviewPanel>
+                    <KeysignCustomMessageInfo value={payload} />
+                    <TxOverviewChainDataRow>
+                      <span>{t('signature')}</span>
+                      <span>{value}</span>
+                    </TxOverviewChainDataRow>
+                  </TxOverviewPanel>
+                ),
+              }}
+            />
           </PageContent>
         </>
       )}

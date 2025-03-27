@@ -77,7 +77,7 @@ export const CoinOption = ({
         }}
       >
         <MatchQuery
-          value={{ ...balanceQuery, isPending: true }}
+          value={balanceQuery}
           pending={() => (
             <VStack gap={6} fullHeight fullWidth>
               <VStack flexGrow>
@@ -110,7 +110,9 @@ export const CoinOption = ({
                   pending={() => <Skeleton />}
                   success={price => (
                     <Text as="span" size={12} color="shy" weight={500}>
-                      {formatFiatAmount(Number(balance) * price)}
+                      {formatFiatAmount(
+                        fromChainAmount(balance, decimals) * price
+                      )}
                     </Text>
                   )}
                 />
