@@ -28,20 +28,6 @@ interface LocalStorage {
 }
 type LocalStorageKeys = keyof LocalStorage
 
-const getStoredRequest = (): Promise<AccountsProps> => {
-  const keys: LocalStorageKeys[] = ['accounts']
-
-  return new Promise((resolve, reject) => {
-    chrome.storage.local.get(keys, (res: LocalStorage) => {
-      if (res.accounts) {
-        resolve(res.accounts)
-      } else {
-        reject(new Error('No accounts found'))
-      }
-    })
-  })
-}
-
 export const setStoredRequest = (accounts: AccountsProps): Promise<void> => {
   const vals: LocalStorage = { accounts }
 
@@ -98,16 +84,6 @@ export const setStoredCurrency = (currency: Currency): Promise<void> => {
   })
 }
 
-const setStoredLanguage = (language: Language): Promise<void> => {
-  const vals: LocalStorage = { language }
-
-  return new Promise(resolve => {
-    chrome.storage.local.set(vals, () => {
-      resolve()
-    })
-  })
-}
-
 export const getStoredVaults = (): Promise<VaultProps[]> => {
   const keys: LocalStorageKeys[] = ['vaults']
 
@@ -128,18 +104,6 @@ export const setStoredVaults = (vaults: VaultProps[]): Promise<void> => {
   })
 }
 
-const setStoredTransaction = (
-  transaction: ITransaction
-): Promise<void> => {
-  return new Promise(resolve => {
-    getStoredTransactions().then(transactions => {
-      setStoredTransactions(
-        transactions.map(tx => (tx.id === transaction.id ? transaction : tx))
-      ).then(resolve)
-    })
-  })
-}
-
 export const getIsPriority = (): Promise<boolean> => {
   const keys: LocalStorageKeys[] = ['isPriority']
   return new Promise(resolve => {
@@ -151,35 +115,6 @@ export const getIsPriority = (): Promise<boolean> => {
 
 export const setIsPriority = (isPriority: boolean): Promise<void> => {
   const vals: LocalStorage = { isPriority }
-
-  return new Promise(resolve => {
-    chrome.storage.local.set(vals, () => {
-      resolve()
-    })
-  })
-}
-
-const getStoredEthProviderState = (): Promise<EthProviderState> => {
-  const keys: LocalStorageKeys[] = ['ethProviderState']
-
-  return new Promise(resolve => {
-    chrome.storage.local.get(keys, (res: LocalStorage) => {
-      resolve(
-        res.ethProviderState ?? {
-          accounts: [],
-          chainId: '0x1',
-          chainKey: Chain.Ethereum,
-          isConnected: false,
-        }
-      )
-    })
-  })
-}
-
-const setStoredEthProviderState = (
-  ethProviderState: EthProviderState
-): Promise<void> => {
-  const vals: LocalStorage = { ethProviderState }
 
   return new Promise(resolve => {
     chrome.storage.local.set(vals, () => {

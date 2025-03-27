@@ -37,18 +37,10 @@ const chainIdRecord = {
   [OtherChain.Tron]: '0x2b6653dc',
 } as const
 
-type ChainId = (typeof chainIdRecord)[Chain]
-
-type DeriveChainId<T> = T extends Chain
-  ? (typeof chainIdRecord)[T]
-  : never
+type DeriveChainId<T> = T extends Chain ? (typeof chainIdRecord)[T] : never
 
 export function getChainId<T extends Chain>(chain: T): DeriveChainId<T> {
   return chainIdRecord[chain] as DeriveChainId<T>
-}
-
-function isSupportedChainId(chainId: string): chainId is ChainId {
-  return Object.values(chainIdRecord).includes(chainId as ChainId)
 }
 
 export function getChainByChainId(chainId: string): Chain | undefined {

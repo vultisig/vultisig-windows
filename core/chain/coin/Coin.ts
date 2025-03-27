@@ -1,7 +1,5 @@
 import { Chain } from '../Chain'
 import { ChainEntity } from '../ChainEntity'
-import { chainFeeCoin } from './chainFeeCoin'
-import { chainTokens } from './chainTokens'
 
 export type CoinKey<T extends Chain = Chain> = ChainEntity<T> & {
   id: string
@@ -30,19 +28,4 @@ export const coinKeyToString = (coin: CoinKey): string =>
 export const coinKeyFromString = (coin: string): CoinKey => {
   const [chain, id] = coin.split(':')
   return { chain: chain as Chain, id }
-}
-
-const getCoinFromCoinKey = (coinKey: CoinKey): Coin | undefined => {
-  const tokens = chainTokens[coinKey.chain]
-  if (tokens) {
-    const foundToken = tokens.find(token => token.id === coinKey.id)
-    if (foundToken) return foundToken
-  }
-
-  const feeCoin = chainFeeCoin[coinKey.chain]
-  if (feeCoin && feeCoin.id === coinKey.id) {
-    return feeCoin
-  }
-
-  return undefined
 }

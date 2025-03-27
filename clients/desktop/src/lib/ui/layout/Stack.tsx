@@ -102,7 +102,3 @@ export const VStack = styled.div<FixedDirectionStackProps>`
 export const HStack = styled.div<FixedDirectionStackProps>`
   ${hStack}
 `
-
-const Stack = styled.div<StackProps>`
-  ${stack}
-`

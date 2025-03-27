@@ -62,23 +62,6 @@ export type ThornodeTxResponse =
   | ThornodeTxResponseSuccess
   | ThornodeResponseError
 
-type ThornodeNetworkResponse = {
-  bondRewardRune: string
-  totalBondUnits: string
-  effectiveSecurityBond: string
-  totalReserve: string
-  vaultsMigrating: boolean
-  gasSpentRune: string
-  gasWithheldRune: string
-  outboundFeeMultiplier: string
-  nativeOutboundFeeRune: string
-  nativeTxFeeRune: string
-  tnsRegisterFeeRune: string
-  tnsFeePerBlockRune: string
-  runeRriceInTor: string
-  torPriceInRune: string
-}
-
 // Provider-specific types
 
 export type ThorchainProviderMethod =

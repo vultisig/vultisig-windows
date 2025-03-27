@@ -1,4 +1,3 @@
-import api from '@clients/extension/src/utils/api'
 import {
   MessageKey,
   RequestMethod,
@@ -26,20 +25,6 @@ const toSnake = (value: string): string => {
   return value.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`)
 }
 
-const bigintToByteArray = (bigNumber: bigint): Uint8Array => {
-  if (typeof bigNumber !== 'bigint' || bigNumber < 0n)
-    throw new Error('Input must be a non-negative BigInt.')
-
-  const bytes = []
-
-  while (bigNumber > 0n) {
-    bytes.unshift(Number(bigNumber & 0xffn))
-    bigNumber = bigNumber >> 8n
-  }
-
-  return new Uint8Array(bytes.length > 0 ? bytes : [0])
-}
-
 export const calculateWindowPosition = (
   currentWindow: chrome.windows.Window
 ) => {
@@ -59,27 +44,6 @@ export const calculateWindowPosition = (
   }
 
   return { height, left, top, width }
-}
-
-const checkERC20Function = async (
-  inputHex: string
-): Promise<boolean> => {
-  if (!inputHex || inputHex === '0x')
-    return new Promise(resolve => resolve(false))
-
-  const functionSelector = inputHex.slice(0, 10) // "0x" + 8 hex chars
-
-  return await api.getIsFunctionSelector(functionSelector)
-}
-
-const splitString = (str: string, size: number): string[] => {
-  const result: string[] = []
-
-  for (let i = 0; i < str.length; i += size) {
-    result.push(str.slice(i, i + size))
-  }
-
-  return result
 }
 
 export const toCamelCase = (obj: any): any => {
