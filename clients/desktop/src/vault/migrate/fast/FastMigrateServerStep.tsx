@@ -1,14 +1,12 @@
-import { OnForwardProp } from '@lib/ui/props'
+import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useMpcSessionId } from '../../../mpc/session/state/mpcSession'
+import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
-import { PageHeader } from '../../../ui/page/PageHeader'
-import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
-import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { migrateWithServer } from '../../fast/api/migrateWithServer'
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
 import { useVaultEmail } from '../../server/email/state/email'
@@ -16,9 +14,9 @@ import { useVaultPassword } from '../../server/password/state/password'
 import { useCurrentHexEncryptionKey } from '../../setup/state/currentHexEncryptionKey'
 import { useCurrentVault } from '../../state/currentVault'
 
-export const FastMigrateServerStep: React.FC<OnForwardProp> = ({
-  onForward,
-}) => {
+export const FastMigrateServerStep: React.FC<
+  OnForwardProp & Partial<OnBackProp>
+> = ({ onForward, onBack }) => {
   const { t } = useTranslation()
 
   const sessionId = useMpcSessionId()
@@ -44,12 +42,7 @@ export const FastMigrateServerStep: React.FC<OnForwardProp> = ({
 
   const title = t('migrate')
 
-  const header = (
-    <PageHeader
-      title={<PageHeaderTitle>{title}</PageHeaderTitle>}
-      primaryControls={<PageHeaderBackButton />}
-    />
-  )
+  const header = <FlowPageHeader title={title} onBack={onBack} />
 
   return (
     <>
