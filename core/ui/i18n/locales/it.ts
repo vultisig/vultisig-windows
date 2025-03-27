@@ -257,7 +257,6 @@ export const it = {
   vault_backup_page_verified_password_input_placeholder: 'Verifica la password',
   vault_backup_page_verified_password_error: 'Le password devono coincidere',
   vault_backup_page_submit_loading_button_text: 'Salvataggio...',
-  vault_backup_page_skip_button_text: 'Salta la password',
   vault_backup_page_password_info:
     'Non conservare mai i frammenti della tua cassaforte di dispositivi diversi nella stessa posizione',
   vault_rename_page_name_error:
@@ -792,4 +791,10 @@ export const it = {
   tap: 'Rubinetto',
   took_too_long_to_respond: 'Ci è voluto troppo tempo per rispondere',
   vultiserver_password: 'Password del server Vulti',
+  backup_without_password: 'Backup senza password',
+  use_password: 'Usa la password',
+  backup_password_prompt:
+    'Vuoi aggiungere una password alle condivisioni del vault del tuo dispositivo?',
+  backup_password_info:
+    'Ti consigliamo di non impostare una password di backup per le condivisioni del vault del dispositivo: i tuoi dati sono al sicuro se i backup sono correttamente archiviati in posizioni diverse, il che è già una protezione significativa. Ricorda, le password di backup non possono essere recuperate se le dimentichi. La scelta è tua!',
 }
