@@ -21,7 +21,7 @@ export const textInputBackground = css`
   background: ${getColor('foreground')};
 `
 
-export const interactiveTextInput = css`
+const interactiveTextInput = css`
   outline: 1px solid transparent;
   border: 1px solid transparent;
 

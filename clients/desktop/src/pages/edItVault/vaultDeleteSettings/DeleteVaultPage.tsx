@@ -1,4 +1,5 @@
 import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
+import { TFunction } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -30,10 +31,10 @@ type DeleteTerms = {
   thirdTermAccepted: boolean
 }
 
-const deleteTermsConfig: { key: keyof DeleteTerms; labelKey: string }[] = [
-  { key: 'firstTermAccepted', labelKey: 'vault_delete_page_term_1' },
-  { key: 'secondTermAccepted', labelKey: 'vault_delete_page_term_2' },
-  { key: 'thirdTermAccepted', labelKey: 'vault_delete_page_term_3' },
+const getDeleteTermsConfig = (t: TFunction) => [
+  { key: 'firstTermAccepted' as const, label: t('vault_delete_page_term_1') },
+  { key: 'secondTermAccepted' as const, label: t('vault_delete_page_term_2') },
+  { key: 'thirdTermAccepted' as const, label: t('vault_delete_page_term_3') },
 ]
 
 const DeleteVaultPage = () => {
@@ -62,19 +63,21 @@ const DeleteVaultPage = () => {
   const currencySymbol = fiatCurrencySymbolRecord[fiatCurrency]
 
   const vaultDetails = [
-    { label: t('vault_delete_page_vault_name'), value: name },
+    { label: t('vault_name'), value: name },
     {
-      label: t('vault_delete_page_vault_value'),
+      label: t('vault_value'),
       value: vaultBalance + ' ' + currencySymbol,
     },
     {
-      label: t('vault_delete_page_vault_part'),
-      value: `${t('vault_details_page_part_of_vault')} ${localPartyIndex} ${t('vault_details_page_of_word')} ${totalSigners}`,
+      label: t('vault_part'),
+      value: `${t('share')} ${localPartyIndex} ${t('of')} ${totalSigners}`,
     },
     { label: t('vault_delete_page_device_id'), value: local_party_id },
     { label: t('vault_delete_page_ecdsa_key'), value: public_key_ecdsa },
     { label: t('vault_delete_page_eddsa_key'), value: public_key_eddsa },
   ]
+
+  const deleteTermsConfig = getDeleteTermsConfig(t)
 
   const toggleDeleteTerm = (key: keyof DeleteTerms) => {
     setDeleteTerms(prev => ({
@@ -107,7 +110,7 @@ const DeleteVaultPage = () => {
           <ListItemPanel>
             <VStack gap={10}>
               <Text size={22} weight={600}>
-                {t('vault_delete_page_header_details')}:
+                {t('details')}:
               </Text>
               {vaultDetails.map(({ label, value }, index) => (
                 <HStack key={index} gap={8}>
@@ -130,7 +133,7 @@ const DeleteVaultPage = () => {
 
           <VStack>
             <ActionsWrapper gap={16}>
-              {deleteTermsConfig.map(({ key, labelKey }) => (
+              {deleteTermsConfig.map(({ key, label }) => (
                 <HStack
                   key={key}
                   onClick={() => toggleDeleteTerm(key)}
@@ -141,7 +144,7 @@ const DeleteVaultPage = () => {
                 >
                   <Check value={deleteTerms[key]} />
                   <Text as="span" color="contrast">
-                    {t(labelKey)}
+                    {label}
                   </Text>
                 </HStack>
               ))}
@@ -155,7 +158,7 @@ const DeleteVaultPage = () => {
               }}
               isDisabled={isDeleteDisabled}
             >
-              {t('vault_delete_button_text')}
+              {t('delete')}
             </DeleteButton>
             {error && (
               <Text size={12} color="danger">

@@ -19,9 +19,7 @@ const LanguageSettingsPage = () => {
     <VStack flexGrow gap={16}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={
-          <PageHeaderTitle>{t('vault_settings_language')}</PageHeaderTitle>
-        }
+        title={<PageHeaderTitle>{t('language')}</PageHeaderTitle>}
       />
       <PageSlice gap={16} flexGrow={true}>
         {languages.map((language, index) => {

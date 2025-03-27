@@ -24,11 +24,7 @@ const CurrencySettingsPage = () => {
       <VStack flexGrow gap={16}>
         <PageHeader
           primaryControls={<PageHeaderBackButton />}
-          title={
-            <PageHeaderTitle>
-              {t('vault_currency_settings_page_header_title')}
-            </PageHeaderTitle>
-          }
+          title={<PageHeaderTitle>{t('currency')}</PageHeaderTitle>}
         />
         <StyledPageSlice gap={16} flexGrow={true}>
           {fiatCurrencies.map((fiat, index) => (

@@ -44,7 +44,7 @@ export const VaultDeviceItem = ({
 
   return (
     <Container>
-      {t('part')} {index + 1} {t('of')} {devices.length}:{' '}
+      {t('share')} {index + 1} {t('of')} {devices.length}:{' '}
       {formatMpcDeviceName(deviceName)}{' '}
       {isCurrentDevice ? `(${t('this_device')})` : ''}
     </Container>

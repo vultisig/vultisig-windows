@@ -1,7 +1,6 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, TriangleWarning } from '@clients/extension/src/icons'
 import type { VaultProps } from '@clients/extension/src/utils/interfaces'
-import messageKeys from '@clients/extension/src/utils/message-keys'
 import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredVaults,
@@ -57,7 +56,7 @@ const Component = () => {
   return (
     <div className="layout delete-vault-page">
       <div className="header">
-        <span className="heading">{t(messageKeys.REMOVE_VAULT)}</span>
+        <span className="heading">{t('remove_vault')}</span>
         <ArrowLeft
           className="icon icon-left"
           onClick={() => goBack(routeKeys.settings.root)}
@@ -65,9 +64,7 @@ const Component = () => {
       </div>
       <div className="content">
         <TriangleWarning className="icon" />
-        <span className="text">{`${t(
-          messageKeys.REMOVING_VAULT_WARNING
-        )}:`}</span>
+        <span className="text">{`${t('removing_vault_warning')}:`}</span>
         <span className="name">{vault?.name}</span>
       </div>
       <div className="footer">
@@ -79,7 +76,7 @@ const Component = () => {
           }}
         >
           <Button onClick={handleSubmit} type="primary" shape="round" block>
-            {t(messageKeys.REMOVE_VAULT)}
+            {t('remove_vault')}
           </Button>
         </ConfigProvider>
       </div>

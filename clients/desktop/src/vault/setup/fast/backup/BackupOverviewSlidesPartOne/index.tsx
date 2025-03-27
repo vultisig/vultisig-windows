@@ -1,4 +1,4 @@
-import { ComponentProps, FC, ReactNode } from 'react'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -12,11 +12,6 @@ import { PageContent } from '../../../../../ui/page/PageContent'
 import { AnimationDescription } from './AnimationDescription'
 import { useBackupOverviewStepsAnimations } from './hooks/useBackupOverviewStepsAnimations'
 import { RiveWrapper } from './VaultOverviewSlides.styles'
-
-export type SharedOnboardingScreensProps = {
-  animationComponent: (props: ComponentProps<'canvas'>) => ReactNode
-  onNextAnimation: () => void
-}
 
 type OnboardingStepsProps = {
   onCompleted: () => void
@@ -38,7 +33,7 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
   return (
     <Wrapper>
       <ProgressWrapper gap={16}>
-        <Text size={18}>{t('Vault Overview')}</Text>
+        <Text size={18}>{t('vault_overview')}</Text>
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted
           steps={animations.length}

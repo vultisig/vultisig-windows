@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { toSizeUnit } from '../css/toSizeUnit'
 
-export type UniformColumnGridParams = {
+type UniformColumnGridParams = {
   gap: number
   minChildrenWidth?: number
   maxChildrenWidth?: number

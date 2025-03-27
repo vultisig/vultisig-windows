@@ -35,7 +35,7 @@ export const ShareVaultPage = () => {
           await navigator.share({
             files: [file],
             title: t('vault_qr_share_title'),
-            text: t('Check out this vault QR code!'),
+            text: t('vault_qr_share_text'),
           })
         } else {
           alert(t('vault_qr_share_not_supported'))

@@ -7,8 +7,7 @@ import { HStack } from '../../layout/Stack'
 import { getColor } from '../../theme/getters'
 import { useOtp } from './useOTP'
 
-export interface OTPInputProps
-  extends ComponentProps<typeof InputBoxContainer> {
+interface OTPInputProps extends ComponentProps<typeof InputBoxContainer> {
   length?: number
   onCompleted?: (value: string) => void
   onValueChange?: (value: string) => void

@@ -1,9 +1,9 @@
 import { OnForwardProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { generateLocalPartyId } from '../../../mpc/localPartyId'
 import { useMpcSessionId } from '../../../mpc/session/state/mpcSession'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
@@ -79,9 +79,7 @@ export const FastReshareServerStep: React.FC<OnForwardProp> = ({
             <WaitForServerLoader />
           </>
         )}
-        error={error => (
-          <FullPageFlowErrorState title={title} message={error.message} />
-        )}
+        error={error => <FullPageFlowErrorState message={error.message} />}
       />
     </>
   )

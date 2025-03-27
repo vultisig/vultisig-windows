@@ -15,7 +15,7 @@ import { shouldDisplayChainLogo } from '../../../../vault/chain/utils'
 import { ManageFromAmount } from '../../../../vault/swap/form/amount/ManageFromAmount'
 import { ToAmount } from '../../../../vault/swap/form/amount/ToAmount'
 import { SwapCoinBalance } from '../../../../vault/swap/form/SwapCoinBalance'
-import { SwapSide } from '../../../../vault/swap/form/SwapCoinInput'
+import { useSide } from '../../../../vault/swap/providers/SideProvider'
 import { getCoinLogoSrc } from '../../../logo/getCoinLogoSrc'
 import { CoinWrapper, Container } from './SwapCoinInputField.styled'
 
@@ -24,17 +24,16 @@ type CoinInputContainerProps = ValueProp<
 > & {
   onChainClick: () => void
   onCoinClick: () => void
-  side: SwapSide
 }
 
 export const SwapCoinInputField = ({
   value,
   onChainClick,
   onCoinClick,
-  side,
 }: CoinInputContainerProps) => {
   const { ticker, chain, id } = value
   const { t } = useTranslation()
+  const side = useSide()
 
   return (
     <Container side={side} justifyContent="center" gap={16}>

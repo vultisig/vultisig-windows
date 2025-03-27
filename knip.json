@@ -1,0 +1,6 @@
+{
+  "ignore": [
+    "core/mpc/types/**",
+    "clients/desktop/wailsjs/**"
+  ]
+}

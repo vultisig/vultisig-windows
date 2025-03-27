@@ -41,9 +41,7 @@ const EmptyAddressesView = ({
             {t('vault_settings_address_book_no_addresses_title')}
           </ResponsiveText>
         </CenteredBox>
-        <Button onClick={onOpenAddAddressView}>
-          {t('vault_settings_address_book_add_addresses_button')}
-        </Button>
+        <Button onClick={onOpenAddAddressView}>{t('add_address')}</Button>
       </Container>
     </>
   )

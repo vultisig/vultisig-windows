@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useBalanceQuery } from '../../../../coin/query/useBalanceQuery'
 import { useCurrentVaultCoin } from '../../../state/currentVault'
+import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 import { useFromAmount } from '../../state/fromAmount'
 import { useFromCoin } from '../../state/fromCoin'
@@ -16,6 +17,7 @@ export const useIsSwapFormDisabled = () => {
   const [coinKey] = useFromCoin()
   const coin = useCurrentVaultCoin(coinKey)
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
+  const swapFeesQuery = useSwapFeesQuery()
 
   const { t } = useTranslation()
 
@@ -26,7 +28,7 @@ export const useIsSwapFormDisabled = () => {
       return t('amount_required')
     }
 
-    if (balanceQuery.isPending) {
+    if (balanceQuery.isPending || swapFeesQuery.isPending) {
       return t('loading')
     }
 
@@ -54,6 +56,7 @@ export const useIsSwapFormDisabled = () => {
     balanceQuery.error,
     balanceQuery.isPending,
     coin.decimals,
+    swapFeesQuery.isPending,
     swapQuoteQuery.data,
     swapQuoteQuery.error,
     swapQuoteQuery.isPending,

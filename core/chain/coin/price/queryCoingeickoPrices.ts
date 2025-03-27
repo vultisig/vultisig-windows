@@ -1,7 +1,7 @@
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { recordMap } from '@lib/utils/record/recordMap'
-export type CoinPricesResponse = Record<string, Record<FiatCurrency, number>>
+type CoinPricesResponse = Record<string, Record<FiatCurrency, number>>
 
 type QueryCoingeickoPricesInput = {
   url: string

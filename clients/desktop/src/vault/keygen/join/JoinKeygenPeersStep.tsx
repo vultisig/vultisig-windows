@@ -1,10 +1,10 @@
 import { OnFinishProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Match } from '../../../lib/ui/base/Match'
-import { MatchQuery } from '../../../lib/ui/query/components/MatchQuery'
 import { useMpcPeersQuery } from '../../../mpc/peers/queries/useMpcPeersQuery'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
@@ -32,7 +32,6 @@ export const JoinKeygenPeersStep = ({ onFinish }: OnFinishProp<string[]>) => {
     <MatchQuery
       error={error => (
         <FullPageFlowErrorState
-          title={title}
           message={t('failed_to_join_keygen')}
           errorMessage={extractErrorMsg(error)}
         />

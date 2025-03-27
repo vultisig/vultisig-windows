@@ -1,11 +1,13 @@
 import { ActionProp, MessageProp, TitleProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { Button } from '../../lib/ui/buttons/Button'
-import { FilledAlertIcon } from '../../lib/ui/icons/FilledAlertIcon'
-import { VStack } from '../../lib/ui/layout/Stack'
-import { StrictText, Text } from '../../lib/ui/text'
+import { CrossIcon } from '../../lib/ui/icons/CrossIcon'
+import { HStack, VStack } from '../../lib/ui/layout/Stack'
+import { Text } from '../../lib/ui/text'
+import { getColor } from '../../lib/ui/theme/getters'
 import { makeAppPath } from '../../navigation'
 import { PageContent } from '../page/PageContent'
 
@@ -18,25 +20,22 @@ export const FlowErrorPageContent = ({
 
   return (
     <PageContent>
-      <VStack flexGrow gap={40} alignItems="center" justifyContent="center">
-        <FilledAlertIcon style={{ fontSize: 66 }} />
+      <VStack flexGrow gap={24} alignItems="center" justifyContent="center">
+        <IconWrapper justifyContent="center" alignItems="center">
+          <CrossIcon />
+        </IconWrapper>
         <VStack style={{ maxWidth: 320 }} alignItems="center" gap={8}>
-          <Text
-            family="mono"
-            weight="700"
-            size={16}
-            color="contrast"
-            centerHorizontally
-          >
+          <Text size={22} color="danger" centerHorizontally>
             {title}
           </Text>
           {message && (
-            <StrictText
+            <Text
               style={{ wordBreak: 'break-word', maxWidth: '100%' }}
               centerHorizontally
+              color="supporting"
             >
               {message}
-            </StrictText>
+            </Text>
           )}
         </VStack>
       </VStack>
@@ -48,3 +47,12 @@ export const FlowErrorPageContent = ({
     </PageContent>
   )
 }
+
+const IconWrapper = styled(HStack)`
+  font-size: 16px;
+  height: 24px;
+  width: 26px;
+  border-radius: 99px;
+  background-color: ${getColor('danger')};
+  color: ${getColor('foreground')};
+`

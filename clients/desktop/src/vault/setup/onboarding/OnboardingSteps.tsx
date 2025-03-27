@@ -1,4 +1,4 @@
-import { ComponentProps, FC, ReactNode } from 'react'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -14,11 +14,6 @@ import { PageContent } from '../../../ui/page/PageContent'
 import { AnimationDescription } from './AnimationDescriptions'
 import { useOnboardingStepsAnimations } from './hooks/useOnboardingStepsAnimations'
 import { RiveWrapper } from './Onobarding.styled'
-
-export type SharedOnboardingScreensProps = {
-  animationComponent: (props: ComponentProps<'canvas'>) => ReactNode
-  onNextAnimation: () => void
-}
 
 type OnboardingStepsProps = {
   onCompleteSteps: () => void

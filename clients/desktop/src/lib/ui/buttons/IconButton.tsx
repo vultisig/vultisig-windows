@@ -9,11 +9,9 @@ import { toSizeUnit } from '../css/toSizeUnit'
 import { getColor, matchColor } from '../theme/getters'
 import { UnstyledButton } from './UnstyledButton'
 
-export const iconButtonSizes = ['s', 'm', 'l'] as const
-export type IconButtonSize = (typeof iconButtonSizes)[number]
+export type IconButtonSize = 's' | 'm' | 'l'
 
-export const iconButtonKinds = ['regular'] as const
-export type IconButtonKind = (typeof iconButtonKinds)[number]
+export type IconButtonKind = 'regular'
 
 export const iconButtonSizeRecord: Record<IconButtonSize, number> = {
   s: 24,
@@ -69,7 +67,7 @@ const Container = styled(UnstyledButton)<ContainerProps>`
   opacity: ${({ isDisabled }) => (isDisabled ? 0.8 : 1)};
 `
 
-export type IconButtonProps = Omit<
+type IconButtonProps = Omit<
   ComponentProps<typeof Container>,
   'size' | 'kind' | 'isDisabled'
 > & {

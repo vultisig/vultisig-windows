@@ -12,3 +12,10 @@ export type VaultBackupResult =
   | {
       encryptedVault: ArrayBuffer
     }
+
+export type VaultBackupOverride = Pick<storage.Vault, 'lib_type'>
+
+export type FileBasedVaultBackupResult = {
+  result: VaultBackupResult
+  override?: VaultBackupOverride
+}

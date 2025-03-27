@@ -13,17 +13,6 @@ import { PageHeader } from '../../../../../ui/page/PageHeader'
 export const BACKUP_LINK =
   'https://docs.vultisig.com/vultisig-user-actions/managing-your-vault/vault-backup'
 
-export const steps = [
-  'multiFactor',
-  'selfCustodial',
-  'crossChain',
-  'over30Chains',
-  'availablePlatforms',
-  'seedlessWallet',
-] as const
-
-export type SetupFastVaultEducationSlidesStep = (typeof steps)[number]
-
 const Wrapper = styled(VStack)`
   max-width: 800px;
   align-self: center;
@@ -90,7 +79,7 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
             <BackupButton onClick={onCompleted} size="m">
               <DownloadIcon />
               <Text as="span" size={14}>
-                {t('fastVaultSetup.backup.backUpNow')}
+                {t('backup_now')}
               </Text>
             </BackupButton>
           </VStack>

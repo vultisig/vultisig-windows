@@ -1,16 +1,20 @@
-import { range } from '@lib/utils/array/range'
+// Define types and utilities for vault setup
 
-export const setupVaultTypes = ['fast', 'secure'] as const
+import { TFunction } from 'i18next'
 
-export type SetupVaultType = (typeof setupVaultTypes)[number]
+export type SetupVaultType = 'fast' | 'secure'
 
 export const defaultSetupVaultType: SetupVaultType = 'secure'
 
 export const getSetupVaultArt = (type: SetupVaultType) =>
   `/assets/images/${type}VaultSetup.svg`
 
-export const getSetupVaultProperties = (type: SetupVaultType) =>
-  range(3).map(index => `${type}_vault_setup_prop_${index}`)
+type VaultPropKey = `prop_${0 | 1 | 2}`
 
-export const getSetupVaultPurpose = (type: SetupVaultType) =>
-  `${type}_vault_purpose`
+const vaultPropKeys: VaultPropKey[] = ['prop_0', 'prop_1', 'prop_2']
+
+export const getSetupVaultProperties = (
+  type: SetupVaultType,
+  t: TFunction
+): string[] =>
+  vaultPropKeys.map(propKey => t(`vault_setup_prop.${type}.${propKey}`))

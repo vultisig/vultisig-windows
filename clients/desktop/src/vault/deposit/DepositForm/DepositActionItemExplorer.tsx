@@ -3,13 +3,14 @@ import { useTranslation } from 'react-i18next'
 
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { Modal } from '../../../lib/ui/modal'
+import { ChainAction } from '../ChainAction'
 import { DepositActionOption } from './DepositActionOption'
 
 type DepositActionItemExplorerProps = {
-  options: string[]
+  options: ChainAction[]
   onClose: () => void
-  onOptionClick: (option: string) => void
-  activeOption?: string
+  onOptionClick: (option: ChainAction) => void
+  activeOption?: ChainAction
 }
 
 export const DepositActionItemExplorer: FC<DepositActionItemExplorerProps> = ({

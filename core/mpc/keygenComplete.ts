@@ -27,7 +27,7 @@ type WaitKeygenCompleteInput = {
   peers: string[]
 }
 
-export const verifyKeygenComplete = async ({
+const verifyKeygenComplete = async ({
   serverURL,
   sessionId,
   peers,

@@ -13,7 +13,7 @@ import { ModalContent } from './ModalContent'
 import { ModalSubTitleText } from './ModalSubTitleText'
 import { ModalTitleText } from './ModalTitleText'
 
-export type ModalProps = AsProp &
+type ModalProps = AsProp &
   Omit<ComponentProps<typeof Container>, 'title'> &
   TitleProp & {
     onClose?: () => void

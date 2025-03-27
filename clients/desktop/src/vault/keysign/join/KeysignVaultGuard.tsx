@@ -25,7 +25,6 @@ export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
   if (!vault || vaultId !== currentVaultId) {
     return (
       <FullPageFlowErrorState
-        title={t('join_keysign')}
         message={t('wrong_vault_try_again')}
         action={
           <Link to={makeAppPath('vaults')}>

@@ -25,10 +25,3 @@ export type ThemeColors = {
   danger: HSLA
   buttonBackgroundDisabled: HSLA
 }
-
-export type ThemeGradients = {
-  primary: string
-  button: string
-  alert: string
-  overlay: string
-}

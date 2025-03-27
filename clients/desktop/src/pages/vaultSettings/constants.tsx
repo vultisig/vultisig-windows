@@ -1,4 +1,5 @@
 // settingsItems.ts
+import { TFunction } from 'i18next'
 import { ElementType } from 'react'
 
 import AddressBookIcon from '../../lib/ui/icons/AddressBookIcon'
@@ -27,97 +28,101 @@ export const DOWNLOAD_VULTISIG_LINK = 'https://vultisig.com/download/vultisig'
 
 export const VULTISIG_SHARE_APP_LINK = 'https://vultisig.com/#store-section'
 
-type SettingItem = {
+type TranslatedSettingItem = {
   id: string
-  titleKey: string
+  title: string
   icon: ElementType
   path: AppPathsWithNoParamsOrState
 }
 
-type SettingSection = {
-  items: SettingItem[]
-  sectionTitleKey?: string
+type TranslatedSettingSection = {
+  items: TranslatedSettingItem[]
+  sectionTitle?: string
 }
 
-export const settingsItems: SettingSection[] = [
-  {
-    items: [
-      {
-        id: 'vault-settings',
-        titleKey: 'vault_settings_settings',
-        icon: () => <SettingsIcon style={{ fontSize: 24 }} />,
-        path: 'editVault',
-      },
-      {
-        id: 'language',
-        titleKey: 'vault_settings_language',
-        icon: GlobeIcon,
-        path: 'languageSettings',
-      },
-      {
-        id: 'currency',
-        titleKey: 'vault_settings_currency',
-        icon: CurrencyCircleIcon,
-        path: 'currencySettings',
-      },
-      {
-        id: 'address-book',
-        titleKey: 'vault_settings_address_book',
-        icon: AddressBookIcon,
-        path: 'addressBook',
-      },
-      {
-        id: 'default-chains',
-        titleKey: 'vault_settings_default_chains',
-        icon: DefaultChainsIcon,
-        path: 'defaultChains',
-      },
-      {
-        id: 'faq',
-        titleKey: 'vault_settings_faq',
-        icon: FaqIcon,
-        path: 'faq',
-      },
-    ],
-  },
-  {
-    sectionTitleKey: 'vault_settings_section_other',
-    items: [
-      {
-        id: 'register-for-airdrop',
-        titleKey: 'vault_settings_register_for_airdrop',
-        icon: VultisigLogoIcon,
-        path: 'registerForAirdrop',
-      },
-      {
-        id: 'share-app',
-        titleKey: 'vault_settings_share_app',
-        icon: ShareIcon,
-        path: 'shareApp',
-      },
-      {
-        id: 'check-for-update',
-        titleKey: 'vault_settings_check_for_update',
-        icon: () => <DownloadIcon stroke="white" />,
-        path: 'checkUpdate',
-      },
-    ],
-  },
-  {
-    sectionTitleKey: 'vault_settings_section_legal',
-    items: [
-      {
-        id: 'privacy-policy',
-        titleKey: 'vault_settings_privacy_policy',
-        icon: ShieldCheckIcon,
-        path: 'privacyPolicy',
-      },
-      {
-        id: 'terms-of-service',
-        titleKey: 'vault_settings_terms_of_service',
-        icon: NoteIcon,
-        path: 'termsOfService',
-      },
-    ],
-  },
-]
+export const getTranslatedSettingsItems = (
+  t: TFunction
+): TranslatedSettingSection[] => {
+  return [
+    {
+      items: [
+        {
+          id: 'vault-settings',
+          title: t('settings'),
+          icon: () => <SettingsIcon style={{ fontSize: 24 }} />,
+          path: 'editVault',
+        },
+        {
+          id: 'language',
+          title: t('language'),
+          icon: GlobeIcon,
+          path: 'languageSettings',
+        },
+        {
+          id: 'currency',
+          title: t('currency'),
+          icon: CurrencyCircleIcon,
+          path: 'currencySettings',
+        },
+        {
+          id: 'address-book',
+          title: t('vault_settings_address_book'),
+          icon: AddressBookIcon,
+          path: 'addressBook',
+        },
+        {
+          id: 'default-chains',
+          title: t('vault_settings_default_chains'),
+          icon: DefaultChainsIcon,
+          path: 'defaultChains',
+        },
+        {
+          id: 'faq',
+          title: t('faq'),
+          icon: FaqIcon,
+          path: 'faq',
+        },
+      ],
+    },
+    {
+      sectionTitle: t('other'),
+      items: [
+        {
+          id: 'register-for-airdrop',
+          title: t('vault_settings_register_for_airdrop'),
+          icon: VultisigLogoIcon,
+          path: 'registerForAirdrop',
+        },
+        {
+          id: 'share-app',
+          title: t('vault_settings_share_app'),
+          icon: ShareIcon,
+          path: 'shareApp',
+        },
+        {
+          id: 'check-for-update',
+          title: t('vault_settings_check_for_update'),
+          icon: () => <DownloadIcon stroke="white" />,
+          path: 'checkUpdate',
+        },
+      ],
+    },
+    {
+      sectionTitle: t('vault_settings_section_legal'),
+      items: [
+        {
+          id: 'privacy-policy',
+          title: t('vault_settings_privacy_policy'),
+          icon: ShieldCheckIcon,
+          path: 'privacyPolicy',
+        },
+        {
+          id: 'terms-of-service',
+          title: t('vault_settings_terms_of_service'),
+          icon: NoteIcon,
+          path: 'termsOfService',
+        },
+      ],
+    },
+  ]
+}

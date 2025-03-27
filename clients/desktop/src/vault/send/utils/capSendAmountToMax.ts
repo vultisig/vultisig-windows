@@ -4,7 +4,7 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { minBigInt } from '@lib/utils/math/minBigInt'
 
-export type CapSendAmountToMaxInput = {
+type CapSendAmountToMaxInput = {
   coin: CoinKey
   amount: bigint
   fee: bigint

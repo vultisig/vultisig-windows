@@ -2,22 +2,14 @@ import '@clients/extension/src/styles/index.scss'
 import '@clients/extension/src/pages/popup/index.scss'
 
 import ConfigProvider from '@clients/extension/src/components/config-provider'
-import i18n from '@clients/extension/src/i18n/config'
 import Routing from '@clients/extension/src/pages/popup/routes'
-import { getStoredLanguage } from '@clients/extension/src/utils/storage'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
-import { StrictMode, useEffect } from 'react'
+import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 
+import { ExtensionProviders } from '../../state/ExtensionProviders'
+
 const Component = () => {
-  const componentDidMount = (): void => {
-    getStoredLanguage().then(language => {
-      i18n.changeLanguage(language)
-    })
-  }
-
-  useEffect(componentDidMount, [])
-
   return (
     <ConfigProvider>
       <Routing />
@@ -27,8 +19,10 @@ const Component = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <WalletCoreProvider>
-      <Component />
-    </WalletCoreProvider>
+    <ExtensionProviders>
+      <WalletCoreProvider>
+        <Component />
+      </WalletCoreProvider>
+    </ExtensionProviders>
   </StrictMode>
 )

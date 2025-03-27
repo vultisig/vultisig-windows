@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 
 import { Query } from '../Query'
 
-export type MatchQueryProps<T, E = unknown> = ValueProp<Query<T, E>> & {
+type MatchQueryProps<T, E = unknown> = ValueProp<Query<T, E>> & {
   error?: (error: E) => ReactNode
   pending?: () => ReactNode
   success?: (data: T) => ReactNode

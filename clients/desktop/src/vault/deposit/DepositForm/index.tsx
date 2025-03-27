@@ -40,7 +40,7 @@ type DepositFormProps = {
   onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void
   selectedChainAction: ChainAction
   onSelectChainAction: (action: ChainAction) => void
-  chainActionOptions: string[]
+  chainActionOptions: ChainAction[]
   chain: Chain
 }
 
@@ -54,11 +54,15 @@ export const DepositForm: FC<DepositFormProps> = ({
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
-  const totalAmountAvailable = useGetTotalAmountAvailableForChain(chain)
-  const chainActionSchema = getChainActionSchema(chain, selectedChainAction)
+  const { data: totalAmountAvailableForChainData } =
+    useGetTotalAmountAvailableForChain(chain)
+  const totalTokenAmount =
+    totalAmountAvailableForChainData?.totalTokenAmount ?? 0
+  const chainActionSchema = getChainActionSchema(chain, selectedChainAction, t)
   const fieldsForChainAction = getFieldsForChainAction(
     chain,
-    selectedChainAction
+    selectedChainAction,
+    t
   )
   const [{ coin: chainCoinString }] = useAppPathParams<'deposit'>()
   const coin = chainCoinString.split(':')[1]
@@ -67,7 +71,7 @@ export const DepositForm: FC<DepositFormProps> = ({
     chainActionSchema,
     chain,
     walletCore,
-    totalAmountAvailable
+    totalTokenAmount
   )
 
   const {
@@ -137,8 +141,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                   <Container onClick={onOpen}>
                     <HStack alignItems="center" gap={4}>
                       <Text weight="400" family="mono" size={16}>
-                        {selectedBondableAsset ||
-                          t('chainFunctions.bond_with_lp.labels.bondableAsset')}
+                        {selectedBondableAsset || t('asset')}
                       </Text>
                       {!selectedBondableAsset && (
                         <AssetRequiredLabel as="span" color="danger" size={14}>
@@ -171,12 +174,10 @@ export const DepositForm: FC<DepositFormProps> = ({
               {fieldsForChainAction.map(field => (
                 <InputContainer key={field.name}>
                   <Text size={15} weight="400">
-                    {t(
-                      `chainFunctions.${selectedChainAction}.labels.${field.name}`
-                    )}{' '}
+                    {field.label}{' '}
                     {field.name === 'amount' &&
                       selectedChainAction === 'bond' &&
-                      `(Balance: ${totalAmountAvailable.toFixed(2)} ${coin}) `}
+                      `(Balance: ${totalTokenAmount.toFixed(2)} ${coin}) `}
                     {field.required ? (
                       <Text as="span" color="danger" size={14}>
                         *

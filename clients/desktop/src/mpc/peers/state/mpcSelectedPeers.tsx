@@ -10,7 +10,7 @@ const {
   provider: MpcPeersSelectionRecordProvider,
 } = getStateProviderSetup<Record<string, boolean>>('MpcPeersSelectionRecord')
 
-export const MpcPeersBasedOnSelectionRecord = ({ children }: ChildrenProp) => {
+const MpcPeersBasedOnSelectionRecord = ({ children }: ChildrenProp) => {
   const [record] = useMpcPeersSelectionRecord()
 
   const value = useMemo(

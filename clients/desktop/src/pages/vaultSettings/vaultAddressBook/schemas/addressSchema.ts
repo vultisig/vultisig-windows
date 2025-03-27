@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { WalletCore } from '@trustwallet/wallet-core'
+import type { TFunction } from 'i18next'
 import { z } from 'zod'
 
 import { isValidAddress } from '../../../../chain/utils/isValidAddress'
@@ -8,19 +9,21 @@ import { AddressBookItem } from '../../../../lib/types/address-book'
 export const getAddressSchema = ({
   walletCore,
   addressBookItems,
+  t,
 }: {
   walletCore: WalletCore
   addressBookItems: AddressBookItem[]
+  t: TFunction
 }) =>
   z
     .object({
       title: z
         .string()
-        .min(1, 'vault_settings_address_book_title_min_length_error')
-        .max(50, 'vault_settings_address_book_title_max_length_error'),
+        .min(1, t('vault_settings_address_book_title_min_length_error'))
+        .max(50, t('vault_settings_address_book_title_max_length_error')),
       address: z
         .string()
-        .min(1, 'vault_settings_address_book_address_min_length_error'),
+        .min(1, t('vault_settings_address_book_address_min_length_error')),
       chain: z.string(),
     })
     .superRefine(async (data, ctx) => {
@@ -36,7 +39,7 @@ export const getAddressSchema = ({
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['address'],
-          message: 'vault_settings_address_book_invalid_address_error',
+          message: t('vault_settings_address_book_invalid_address_error'),
         })
       }
 
@@ -48,26 +51,27 @@ export const getAddressSchema = ({
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['address'],
-          message: 'vault_settings_address_book_repeated_address_error',
+          message: t('vault_settings_address_book_repeated_address_error'),
         })
       }
     })
 
 export const getModifyAddressSchema = ({
   walletCore,
+  t,
 }: {
   walletCore: WalletCore
-  addressBookItems: AddressBookItem[]
+  t: TFunction
 }) =>
   z
     .object({
       title: z
         .string()
-        .min(1, 'vault_settings_address_book_title_min_length_error')
-        .max(50, 'vault_settings_address_book_title_max_length_error'),
+        .min(1, t('vault_settings_address_book_title_min_length_error'))
+        .max(50, t('vault_settings_address_book_title_max_length_error')),
       address: z
         .string()
-        .min(1, 'vault_settings_address_book_address_min_length_error'),
+        .min(1, t('vault_settings_address_book_address_min_length_error')),
       chain: z.string(),
     })
     .superRefine(async (data, ctx) => {
@@ -83,7 +87,7 @@ export const getModifyAddressSchema = ({
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['address'],
-          message: 'vault_settings_address_book_invalid_address_error',
+          message: t('vault_settings_address_book_invalid_address_error'),
         })
       }
     })
