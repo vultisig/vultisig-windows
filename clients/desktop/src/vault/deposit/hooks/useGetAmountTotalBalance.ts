@@ -1,31 +1,28 @@
 import { Chain } from '@core/chain/Chain'
-import { useEffect, useState } from 'react'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { useCallback } from 'react'
 
 import { useVaultChainCoinsQuery } from '../../queries/useVaultChainCoinsQuery'
 
 export const useGetTotalAmountAvailableForChain = (chain: Chain) => {
-  const [totalTokenAmount, setTotalTokenAmount] = useState(0)
-  const [totalCurrencyAmount, setTotalCurrencyAmount] = useState(0)
-  const { data: coins } = useVaultChainCoinsQuery(chain)
+  const coinsQuery = useVaultChainCoinsQuery(chain)
 
-  useEffect(() => {
-    if (!coins || coins.length === 0) return
+  return useTransformQueryData(
+    coinsQuery,
+    useCallback(coins => {
+      let totalTokenAmount = 0
+      let totalCurrencyAmount = 0
 
-    let tokenSum = 0
-    let currencySum = 0
+      for (const { amount, decimals, price = 0 } of coins) {
+        const tokenAmount = Number(amount) / 10 ** decimals
+        totalTokenAmount += tokenAmount
+        totalCurrencyAmount += tokenAmount * price
+      }
 
-    for (const { amount, decimals, price = 0 } of coins) {
-      const tokenAmount = Number(amount) / 10 ** decimals
-      tokenSum += tokenAmount
-      currencySum += tokenAmount * price
-    }
-
-    setTotalTokenAmount(tokenSum)
-    setTotalCurrencyAmount(currencySum)
-  }, [coins])
-
-  return {
-    totalTokenAmount,
-    totalCurrencyAmount,
-  }
+      return {
+        totalTokenAmount,
+        totalCurrencyAmount,
+      }
+    }, [])
+  )
 }
