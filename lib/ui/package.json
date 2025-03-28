@@ -4,5 +4,8 @@
   "private": true,
   "scripts": {
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@lib/utils": "workspace:*"
   }
 }
