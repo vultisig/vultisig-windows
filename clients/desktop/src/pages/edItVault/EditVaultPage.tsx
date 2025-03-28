@@ -31,7 +31,7 @@ const EditVaultPage = () => {
   const { local_party_id } = currentVault
   let items = getEditVaultSettingsItems(t)
   if (currentVault.lib_type === 'DKLS') {
-    items = items.filter(item => item.path !== 'migrateVaultSecure')
+    items = items.filter(item => item.path !== 'migrateVault')
   }
 
   return (

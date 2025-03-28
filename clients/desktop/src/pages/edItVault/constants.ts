@@ -47,7 +47,7 @@ export function getEditVaultSettingsItems(t: TFunction): SettingItem[] {
       title: t('migrate'),
       subtitle: t('vault_setting_edit_vault_migrate_subtitle'),
       icon: ReshareIcon,
-      path: 'migrateVaultSecure',
+      path: 'migrateVault',
     },
     {
       title: t('sign'),

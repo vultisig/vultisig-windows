@@ -5,7 +5,7 @@ import { FC } from 'react'
 import { WaitForServerStates } from '../../server/components/WaitForServerStates'
 import { useVaultCreationPreparation } from './hooks/useVaultCreationPreparation'
 
-export const SetupVaultServerStep: FC<OnForwardProp & OnBackProp> = ({
+export const SetupVaultServerStep: FC<OnForwardProp & Partial<OnBackProp>> = ({
   onForward,
   onBack,
 }) => {
