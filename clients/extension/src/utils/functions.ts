@@ -26,7 +26,7 @@ const toSnake = (value: string): string => {
   return value.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`)
 }
 
-export const bigintToByteArray = (bigNumber: bigint): Uint8Array => {
+const bigintToByteArray = (bigNumber: bigint): Uint8Array => {
   if (typeof bigNumber !== 'bigint' || bigNumber < 0n)
     throw new Error('Input must be a non-negative BigInt.')
 
