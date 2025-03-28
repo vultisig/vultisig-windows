@@ -1,7 +1,7 @@
+import { getColor } from '@lib/ui/theme/getters'
 import { css } from 'styled-components'
 
 import { text } from '../text'
-import { getColor } from '../theme/getters'
 import { borderRadius } from './borderRadius'
 import { horizontalPadding } from './horizontalPadding'
 import { toSizeUnit } from './toSizeUnit'
