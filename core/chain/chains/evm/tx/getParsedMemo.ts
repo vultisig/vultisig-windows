@@ -1,5 +1,4 @@
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import axios from 'axios'
 import { Interface } from 'ethers'
 
 export interface ParsedMemoParams {
@@ -32,38 +31,46 @@ export const getParsedMemo = async (
   } else {
     const hexSignature = memo.slice(0, 10) // "0x" + 8 hex chars
 
-    return axios
-      .get<{ results: { text_signature: string }[] }>(
+    try {
+      const response = await fetch(
         `https://www.4byte.directory/api/v1/signatures/?format=json&hex_signature=${hexSignature}&ordering=created_at`
       )
-      .then(({ data }) => {
-        if (data.results?.length) {
-          const [result] = data.results
-          const textSignature = result.text_signature
 
-          if (textSignature) {
-            const abi = new Interface([`function ${textSignature}`])
-            const [fragment] = textSignature.split('(')
+      if (!response.ok) {
+        return undefined
+      }
 
-            try {
-              const decodedData = abi.decodeFunctionData(fragment, memo)
-              const processedData = processDecodedData(decodedData)
+      const data = await response.json()
 
-              return {
-                functionArguments: JSON.stringify(processedData, null, 2),
-                functionSignature: textSignature,
-              }
-            } catch (error) {
-              console.error(error)
-              return undefined
+      if (data.results?.length) {
+        const [result] = data.results
+        const textSignature = result.text_signature
+
+        if (textSignature) {
+          const abi = new Interface([`function ${textSignature}`])
+          const [fragment] = textSignature.split('(')
+
+          try {
+            const decodedData = abi.decodeFunctionData(fragment, memo)
+            const processedData = processDecodedData(decodedData)
+
+            return {
+              functionArguments: JSON.stringify(processedData, null, 2),
+              functionSignature: textSignature,
             }
-          } else {
+          } catch (error) {
+            console.error(error)
             return undefined
           }
         } else {
           return undefined
         }
-      })
-      .catch(() => undefined)
+      } else {
+        return undefined
+      }
+    } catch (error) {
+      console.error(error)
+      return undefined
+    }
   }
 }
