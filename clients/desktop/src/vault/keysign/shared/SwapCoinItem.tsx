@@ -1,6 +1,7 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
@@ -10,7 +11,6 @@ import { getCoinLogoSrc } from '../../../coin/logo/getCoinLogoSrc'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
-import { getColor } from '../../../lib/ui/theme/getters'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import { shouldDisplayChainLogo } from '../../chain/utils'
 

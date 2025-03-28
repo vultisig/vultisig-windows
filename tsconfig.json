@@ -21,6 +21,6 @@
     "**/*.ts",
     "**/*.tsx",
     "types.d.ts",
-    "./styled.d.ts"
+    "lib/ui/theme/styled.d.ts"
   ]
 }

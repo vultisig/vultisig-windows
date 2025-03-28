@@ -1,11 +1,11 @@
 import { IsActiveProp, ValueProp } from '@lib/ui/props'
+import { matchColor } from '@lib/ui/theme/getters'
 import { range } from '@lib/utils/array/range'
 import styled, { css } from 'styled-components'
 
 import { round } from '../css/round'
 import { sameDimensions } from '../css/sameDimensions'
 import { HStack } from '../layout/Stack'
-import { matchColor } from '../theme/getters'
 
 type MultistepProgressIndicatorProps = ValueProp<number> & {
   steps: number

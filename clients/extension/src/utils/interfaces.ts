@@ -56,64 +56,6 @@ export interface SendTransactionResponse {
   txResponse: string
 }
 
-interface ChainObjRef {
-  [Chain.Arbitrum]: ChainProps
-  [Chain.Avalanche]: ChainProps
-  [Chain.Base]: ChainProps
-  [Chain.Bitcoin]: ChainProps
-  [Chain.BitcoinCash]: ChainProps
-  [Chain.Blast]: ChainProps
-  [Chain.BSC]: ChainProps
-  [Chain.CronosChain]: ChainProps
-  [Chain.Dash]: ChainProps
-  [Chain.Dogecoin]: ChainProps
-  [Chain.Dydx]: ChainProps
-  [Chain.Ethereum]: ChainProps
-  [Chain.Cosmos]: ChainProps
-  [Chain.Kujira]: ChainProps
-  [Chain.Litecoin]: ChainProps
-  [Chain.MayaChain]: ChainProps
-  [Chain.Optimism]: ChainProps
-  [Chain.Osmosis]: ChainProps
-  [Chain.Polygon]: ChainProps
-  [Chain.Solana]: ChainProps
-  [Chain.THORChain]: ChainProps
-}
-
-interface ChainStrRef {
-  [Chain.Arbitrum]: string
-  [Chain.Avalanche]: string
-  [Chain.Base]: string
-  [Chain.Bitcoin]: string
-  [Chain.BitcoinCash]: string
-  [Chain.Blast]: string
-  [Chain.BSC]: string
-  [Chain.CronosChain]: string
-  [Chain.Dash]: string
-  [Chain.Dogecoin]: string
-  [Chain.Dydx]: string
-  [Chain.Ethereum]: string
-  [Chain.Cosmos]: string
-  [Chain.Kujira]: string
-  [Chain.Litecoin]: string
-  [Chain.MayaChain]: string
-  [Chain.Optimism]: string
-  [Chain.Osmosis]: string
-  [Chain.Polkadot]: string
-  [Chain.Polygon]: string
-  [Chain.Solana]: string
-  [Chain.Sui]: string
-  [Chain.THORChain]: string
-  [Chain.Terra]: string
-  [Chain.TerraClassic]: string
-  [Chain.Ton]: string
-  [Chain.Ripple]: string
-  [Chain.Zksync]: string
-  [Chain.Noble]: string
-  [Chain.Akash]: string
-  [Chain.Tron]: string
-}
-
 export interface CurrencyRef {
   [Currency.AUD]: string
   [Currency.CAD]: string
@@ -139,11 +81,6 @@ export interface SignatureProps {
   S: string
   DerSignature: string
   RecoveryID: string
-}
-
-interface ScreenProps {
-  height: number
-  width: number
 }
 
 export namespace TransactionType {
@@ -266,86 +203,12 @@ export interface VaultProps {
   uid: string
 }
 
-interface ThorchainAccountDataResponse {
-  address: string
-  publicKey: {
-    type: string
-    value: string
-  }
-  accountNumber: string
-  sequence: string
-}
-
-interface MayaAccountDataResponse {
-  address: string
-  publicKey: {
-    type: string
-    value: string
-  }
-  accountNumber: string
-  sequence: string
-}
-
-interface BaseSpecificTransactionInfo {
-  gasPrice: number
-  fee: number
-}
-
-interface SpecificThorchain extends BaseSpecificTransactionInfo {
-  accountNumber: number
-  sequence: number
-  isDeposit: boolean
-}
-
-interface SpecificCosmos extends BaseSpecificTransactionInfo {
-  accountNumber: number
-  sequence: number
-  gas: number
-  transactionType: number
-}
-
-interface SpecificThorchain {
-  fee: number
-  gasPrice: number
-  accountNumber: number
-  sequence: number
-  isDeposit: boolean
-}
-
-interface CosmosAccountData {
-  accountNumber: string
-  sequence: string
-}
-
-interface CosmosAccountDataResponse {
-  account: CosmosAccountData
-}
-
 export interface SignedTransaction {
   inputData?: Uint8Array
   signatures: Record<string, KeysignResponse>
   transaction?: ITransaction
   vault?: VaultProps
   walletCore: WalletCore
-}
-
-interface SpecificUtxoInfo {
-  hash: string
-  amount: bigint
-  index: number
-}
-
-interface SpecificUtxo extends BaseSpecificTransactionInfo {
-  byteFee: number
-  sendMaxAmount: boolean
-  utxos: SpecificUtxoInfo[]
-}
-
-interface SpecificSolana extends BaseSpecificTransactionInfo {
-  recentBlockHash: string
-  priorityFee: number
-  fromAddressPubKey: string | undefined
-  toAddressPubKey: string | undefined
 }
 
 export interface FastSignInput {

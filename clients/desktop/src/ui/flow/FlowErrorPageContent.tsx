@@ -1,4 +1,5 @@
 import { ActionProp, MessageProp, TitleProp } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -7,7 +8,6 @@ import { Button } from '../../lib/ui/buttons/Button'
 import { CrossIcon } from '../../lib/ui/icons/CrossIcon'
 import { HStack, VStack } from '../../lib/ui/layout/Stack'
 import { Text } from '../../lib/ui/text'
-import { getColor } from '../../lib/ui/theme/getters'
 import { makeAppPath } from '../../navigation'
 import { PageContent } from '../page/PageContent'
 

@@ -1,7 +1,7 @@
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { VStack } from '../../../../../lib/ui/layout/Stack'
-import { getColor } from '../../../../../lib/ui/theme/getters'
 
 export const OverlayContent = styled(VStack)`
   background-color: ${getColor('foregroundDark')};

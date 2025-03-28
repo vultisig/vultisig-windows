@@ -1,11 +1,11 @@
 import { ValueProp } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import { toPercents } from '@lib/utils/toPercents'
 import { FC } from 'react'
 import styled from 'styled-components'
 
 import { round } from '../css/round'
 import { vStack } from '../layout/Stack'
-import { getColor } from '../theme/getters'
 
 const Container = styled.div`
   width: 100%;
