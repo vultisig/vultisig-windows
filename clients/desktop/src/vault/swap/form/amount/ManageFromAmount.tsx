@@ -1,38 +1,27 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
-import { textInputBorderRadius } from '../../../../lib/ui/css/textInput'
-import { InputDebounce } from '../../../../lib/ui/inputs/InputDebounce'
-import { text } from '../../../../lib/ui/text'
+import { AmountTextInput } from '../../../../lib/ui/inputs/AmountTextInput'
+import { HStack } from '../../../../lib/ui/layout/Stack'
+import { AmountSuggestion } from '../../../send/amount/AmountSuggestion'
+import { useCurrentVaultCoin } from '../../../state/currentVault'
 import { useFromAmount } from '../../state/fromAmount'
 import { useFromCoin } from '../../state/fromCoin'
+import { SwapCoinBalanceDependant } from '../balance/SwapCoinBalanceDependant'
 import { AmountContainer } from './AmountContainer'
 import { SwapFiatAmount } from './SwapFiatAmount'
 
-const Input = styled.input`
-  outline: none;
-  background: transparent;
-  ${textInputBorderRadius};
-  text-align: right;
-
-  ${text({
-    weight: 500,
-    size: 22,
-    color: 'supporting',
-  })}
-
-  &::placeholder {
-    ${text({
-      color: 'shy',
-    })}
-  }
-`
+const suggestions = [0.25, 0.5]
 
 export const ManageFromAmount = () => {
   const [value, setValue] = useFromAmount()
   const [fromCoin] = useFromCoin()
   const valueAsString = value?.toString() ?? ''
   const [inputValue, setInputValue] = useState<string>(valueAsString)
+
+  const swapCoin = useCurrentVaultCoin(fromCoin)
+  const { decimals } = swapCoin
 
   const handleInputValueChange = useCallback(
     (value: string) => {
@@ -59,26 +48,49 @@ export const ManageFromAmount = () => {
 
   return (
     <AmountContainer gap={6} alignItems="flex-end">
-      <InputDebounce
-        value={
-          Number(valueAsString) === Number(inputValue)
-            ? inputValue
-            : valueAsString
-        }
-        onChange={handleInputValueChange}
-        render={({ value, onChange }) => (
-          <Input
-            type="number"
-            placeholder={'0'}
-            onWheel={event => event.currentTarget.blur()}
-            value={value}
-            onChange={({ currentTarget: { value } }) => onChange(value)}
+      <PositionedAmountInput
+        type="number"
+        placeholder={'0'}
+        onWheel={event => event.currentTarget.blur()}
+        value={Number(value)}
+        onChange={e => handleInputValueChange(e.target.value)}
+        suggestion={
+          <SwapCoinBalanceDependant
+            coin={swapCoin}
+            pending={() => null}
+            error={() => null}
+            success={amount => (
+              <HStack alignItems="center" gap={4}>
+                {suggestions.map(suggestion => (
+                  <AmountSuggestion
+                    onClick={() =>
+                      handleInputValueChange(
+                        String(fromChainAmount(amount, decimals) * suggestion)
+                      )
+                    }
+                    key={suggestion}
+                    value={suggestion}
+                  />
+                ))}
+              </HStack>
+            )}
           />
-        )}
+        }
       />
+
       {value !== null && (
         <SwapFiatAmount value={{ amount: value, ...fromCoin }} />
       )}
     </AmountContainer>
   )
 }
+
+const PositionedAmountInput = styled(AmountTextInput)`
+  text-align: right;
+
+  border: none;
+  font-family: inherit;
+  &:hover {
+    outline: none;
+  }
+`

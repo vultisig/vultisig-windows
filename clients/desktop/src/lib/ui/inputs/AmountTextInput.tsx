@@ -26,8 +26,8 @@ const UnitContainer = styled.div`
 
 const Input = styled(TextInput)`
   ${text({
-    family: 'mono',
     size: 16,
+    family: 'mono',
     weight: '400',
   })}
 `
@@ -57,7 +57,7 @@ export const AmountTextInput = ({
       label={
         <HStack
           alignItems="center"
-          justifyContent="space-between"
+          justifyContent="flex-end"
           gap={16}
           fullWidth
         >
