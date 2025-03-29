@@ -568,6 +568,13 @@ namespace Provider {
             response
           )
           switch (data.method) {
+            case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
+              if (result.length > 0) {
+                this.connected = true
+                this.emit(EventMethod.CONNECT, result)
+              }
+              break
+            }
             case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
             case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
               this.emitUpdateNetwork({ chainId: result as string })
@@ -575,6 +582,7 @@ namespace Provider {
               break
             }
             case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
+              this.connected = false
               this.emit(EventMethod.DISCONNECT, result)
 
               break
