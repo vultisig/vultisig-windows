@@ -2,14 +2,14 @@ import '@clients/extension/src/styles/index.scss'
 import '@clients/extension/src/pages/popup/index.scss'
 
 import ConfigProvider from '@clients/extension/src/components/config-provider'
+import i18n from '@clients/extension/src/i18n/config'
 import ImportPage from '@clients/extension/src/pages/popup/pages/import'
 import routerKeys from '@clients/extension/src/utils/route-keys'
-import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
-import { StrictMode } from 'react'
+import { getStoredLanguage } from '@clients/extension/src/utils/storage'
+import { WalletCoreProvider } from '@core/chain-ui/providers/WalletCoreProvider'
+import { StrictMode, useEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom'
-
-import { ExtensionProviders } from '../../state/ExtensionProviders'
 
 const router = createHashRouter(
   [
@@ -28,6 +28,14 @@ const router = createHashRouter(
 )
 
 const Component = () => {
+  const componentDidMount = (): void => {
+    getStoredLanguage().then(language => {
+      i18n.changeLanguage(language)
+    })
+  }
+
+  useEffect(componentDidMount, [])
+
   return (
     <ConfigProvider>
       <WalletCoreProvider>
@@ -39,8 +47,6 @@ const Component = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ExtensionProviders>
-      <Component />
-    </ExtensionProviders>
+    <Component />
   </StrictMode>
 )
