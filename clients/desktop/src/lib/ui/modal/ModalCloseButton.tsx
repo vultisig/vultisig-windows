@@ -1,11 +1,11 @@
 import { OnClickProp, UiProps } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { Hoverable } from '../base/Hoverable'
 import { centerContent } from '../css/centerContent'
 import { sameDimensions } from '../css/sameDimensions'
 import { CloseIcon } from '../icons/CloseIcon'
-import { getColor } from '../theme/getters'
 
 const IconWrapper = styled.div`
   font-size: 20px;

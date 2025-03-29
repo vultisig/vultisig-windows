@@ -1,8 +1,7 @@
+import { getColor } from '@lib/ui/theme/getters'
+import { ThemeColors } from '@lib/ui/theme/ThemeColors'
 import { keyframes } from 'styled-components'
 import styled from 'styled-components'
-
-import { getColor } from '../../lib/ui/theme/getters'
-import { ThemeColors } from '../../lib/ui/theme/ThemeColors'
 
 const skeletonAnimation = keyframes`
   0% {

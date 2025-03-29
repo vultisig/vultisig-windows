@@ -1,4 +1,5 @@
 import { ValueProp } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { centerContent } from '../../../lib/ui/css/centerContent'
@@ -7,7 +8,6 @@ import { sameDimensions } from '../../../lib/ui/css/sameDimensions'
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon'
 import { HStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
-import { getColor } from '../../../lib/ui/theme/getters'
 import { formatMpcDeviceName, parseLocalPartyId } from '../../localPartyId'
 import { useMpcPeersSelectionRecord } from '../state/mpcSelectedPeers'
 import { PeerOptionContainer } from './PeerOptionContainer'

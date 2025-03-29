@@ -26,20 +26,6 @@ const toSnake = (value: string): string => {
   return value.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`)
 }
 
-export const bigintToByteArray = (bigNumber: bigint): Uint8Array => {
-  if (typeof bigNumber !== 'bigint' || bigNumber < 0n)
-    throw new Error('Input must be a non-negative BigInt.')
-
-  const bytes = []
-
-  while (bigNumber > 0n) {
-    bytes.unshift(Number(bigNumber & 0xffn))
-    bigNumber = bigNumber >> 8n
-  }
-
-  return new Uint8Array(bytes.length > 0 ? bytes : [0])
-}
-
 export const calculateWindowPosition = (
   currentWindow: chrome.windows.Window
 ) => {

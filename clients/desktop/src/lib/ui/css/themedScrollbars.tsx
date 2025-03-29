@@ -1,6 +1,6 @@
+import { getColor } from '@lib/ui/theme/getters'
 import { css } from 'styled-components'
 
-import { getColor } from '../theme/getters'
 import { round } from './round'
 
 export const themedScrollbars = css`
