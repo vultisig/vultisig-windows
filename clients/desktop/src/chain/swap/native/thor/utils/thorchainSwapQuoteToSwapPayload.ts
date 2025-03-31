@@ -12,11 +12,9 @@ import { NativeSwapQuote } from '../../NativeSwapQuote'
 
 type Input = {
   quote: NativeSwapQuote
-  fromCoin: AccountCoin
+  fromCoin: AccountCoin & { hexPublicKey: string }
+  toCoin: AccountCoin & { hexPublicKey: string }
   amount: bigint
-  toCoin: AccountCoin
-  fromCoinHexPublicKey: string
-  toCoinHexPublicKey: string
 }
 
 export const thorchainSwapQuoteToSwapPayload = ({
@@ -24,8 +22,6 @@ export const thorchainSwapQuoteToSwapPayload = ({
   fromCoin,
   amount,
   toCoin,
-  fromCoinHexPublicKey,
-  toCoinHexPublicKey,
 }: Input): KeysignSwapPayload => {
   const isAffiliate = !!quote.fees.affiliate && Number(quote.fees.affiliate) > 0
 
@@ -35,14 +31,8 @@ export const thorchainSwapQuoteToSwapPayload = ({
     case: 'thorchainSwapPayload',
     value: create(THORChainSwapPayloadSchema, {
       fromAddress: fromCoin.address,
-      fromCoin: toCommCoin({
-        ...fromCoin,
-        hexPublicKey: fromCoinHexPublicKey,
-      }),
-      toCoin: toCommCoin({
-        ...toCoin,
-        hexPublicKey: toCoinHexPublicKey,
-      }),
+      fromCoin: toCommCoin(fromCoin),
+      toCoin: toCommCoin(toCoin),
       vaultAddress: quote.inbound_address ?? fromCoin.address,
       routerAddress: quote.router,
       fromAmount: amount.toString(),

@@ -45,16 +45,20 @@ export const useSwapChainSpecificQuery = () => {
       const { toAddress } = getSwapKeysignPayloadFields({
         amount: toChainAmount(fromAmount, fromCoin.decimals),
         quote: swapQuote,
-        fromCoin,
-        fromCoinHexPublicKey: toHexPublicKey({
-          publicKey: fromPublicKey,
-          walletCore,
-        }),
-        toCoin,
-        toCoinHexPublicKey: toHexPublicKey({
-          publicKey: toPublicKey,
-          walletCore,
-        }),
+        fromCoin: {
+          ...fromCoin,
+          hexPublicKey: toHexPublicKey({
+            publicKey: fromPublicKey,
+            walletCore,
+          }),
+        },
+        toCoin: {
+          ...toCoin,
+          hexPublicKey: toHexPublicKey({
+            publicKey: toPublicKey,
+            walletCore,
+          }),
+        },
       })
 
       const input: ChainSpecificResolverInput = {

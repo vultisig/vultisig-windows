@@ -68,10 +68,14 @@ export const useSwapKeysignPayloadQuery = () => {
         const swapSpecificFields = getSwapKeysignPayloadFields({
           amount,
           quote: swapQuote,
-          fromCoin,
-          fromCoinHexPublicKey,
-          toCoin,
-          toCoinHexPublicKey,
+          fromCoin: {
+            ...fromCoin,
+            hexPublicKey: fromCoinHexPublicKey,
+          },
+          toCoin: {
+            ...toCoin,
+            hexPublicKey: toCoinHexPublicKey,
+          },
         })
 
         const result = create(KeysignPayloadSchema, {

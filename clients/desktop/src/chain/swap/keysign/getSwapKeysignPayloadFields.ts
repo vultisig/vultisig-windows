@@ -22,10 +22,8 @@ import { SwapQuote } from '../quote/SwapQuote'
 type Input = {
   amount: bigint
   quote: SwapQuote
-  fromCoin: AccountCoin
-  fromCoinHexPublicKey: string
-  toCoin: AccountCoin
-  toCoinHexPublicKey: string
+  fromCoin: AccountCoin & { hexPublicKey: string }
+  toCoin: AccountCoin & { hexPublicKey: string }
 }
 
 type Output = Pick<KeysignPayload, 'toAddress' | 'memo'> &
@@ -36,8 +34,6 @@ export const getSwapKeysignPayloadFields = ({
   quote,
   fromCoin,
   toCoin,
-  fromCoinHexPublicKey,
-  toCoinHexPublicKey,
 }: Input): Output => {
   return matchRecordUnion(quote, {
     general: quote => {
@@ -59,14 +55,8 @@ export const getSwapKeysignPayloadFields = ({
       const tx = create(OneInchTransactionSchema, txMsg)
 
       const swapPayload = create(OneInchSwapPayloadSchema, {
-        fromCoin: toCommCoin({
-          ...fromCoin,
-          hexPublicKey: fromCoinHexPublicKey,
-        }),
-        toCoin: toCommCoin({
-          ...toCoin,
-          hexPublicKey: toCoinHexPublicKey,
-        }),
+        fromCoin: toCommCoin(fromCoin),
+        toCoin: toCommCoin(toCoin),
         fromAmount: amount.toString(),
         toAmountDecimal: fromChainAmount(
           quote.dstAmount,
@@ -97,8 +87,6 @@ export const getSwapKeysignPayloadFields = ({
           fromCoin,
           amount,
           toCoin,
-          fromCoinHexPublicKey,
-          toCoinHexPublicKey,
         })
 
         const toAddress = shouldBePresent(quote.router)
