@@ -490,7 +490,7 @@ export const es = {
     emailIncorrect: 'Correo electrónico incorrecto, por favor verifique',
     enterEmail: 'Ingrese su correo electrónico',
     emailSetupTitle:
-      'Este correo electrónico solo se usa para enviar la copia de seguridad del servidor',
+      'Este correo electrónico solo se usa para enviar la copia de seguridad del servidor.',
     passwordCannotBeRecovered:
       'La contraseña no se puede restablecer ni recuperar',
     confirmPasswordIsRequired: 'Se requiere confirmación de contraseña',

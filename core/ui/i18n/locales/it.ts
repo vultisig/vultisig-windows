@@ -493,7 +493,7 @@ export const it = {
     emailIncorrect: 'Email errata, si prega di controllare',
     enterEmail: 'Inserisci la tua email',
     emailSetupTitle:
-      'Questa email viene utilizzata solo per inviare il backup del server',
+      'Questa email viene utilizzata solo per inviare il backup del server.',
     passwordCannotBeRecovered:
       'La password non può essere reimpostata o recuperata',
     confirmPasswordIsRequired: 'Conferma password richiesta',
