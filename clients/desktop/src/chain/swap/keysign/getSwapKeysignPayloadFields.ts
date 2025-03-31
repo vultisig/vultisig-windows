@@ -2,8 +2,8 @@ import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { EvmChain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import {
   OneInchQuoteSchema,
   OneInchSwapPayloadSchema,
@@ -22,8 +22,8 @@ import { SwapQuote } from '../quote/SwapQuote'
 type Input = {
   amount: bigint
   quote: SwapQuote
-  fromCoin: AccountCoin
-  toCoin: Coin
+  fromCoin: AccountCoin & { hexPublicKey: string }
+  toCoin: AccountCoin & { hexPublicKey: string }
 }
 
 type Output = Pick<KeysignPayload, 'toAddress' | 'memo'> &
@@ -55,8 +55,8 @@ export const getSwapKeysignPayloadFields = ({
       const tx = create(OneInchTransactionSchema, txMsg)
 
       const swapPayload = create(OneInchSwapPayloadSchema, {
-        fromCoin,
-        toCoin,
+        fromCoin: toCommCoin(fromCoin),
+        toCoin: toCommCoin(toCoin),
         fromAmount: amount.toString(),
         toAmountDecimal: fromChainAmount(
           quote.dstAmount,

@@ -11,7 +11,6 @@ import { useRive } from '@rive-app/react-canvas'
 import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 import { useCurrentTxHash } from '../../../chain/state/currentTxHash'
@@ -28,12 +27,13 @@ import { SeparatedByLine } from '../../../lib/ui/layout/SeparatedByLine'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { GradientText, Text } from '../../../lib/ui/text'
 import { getColor } from '../../../lib/ui/theme/getters'
+import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useCurrentVault } from '../../state/currentVault'
 import { SwapCoinItem } from './SwapCoinItem'
 
 export const SwapKeysignTxOverview = ({ value }: ValueProp<KeysignPayload>) => {
-  const navigate = useNavigate()
   const txHash = useCurrentTxHash()
+  const navigate = useAppNavigate()
   const { RiveComponent: SuccessAnimation } = useRive({
     src: '/assets/animations/vault-creation-success/vault_created.riv',
     autoplay: true,
