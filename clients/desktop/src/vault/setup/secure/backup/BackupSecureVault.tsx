@@ -7,7 +7,7 @@ import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
 import { appPaths } from '../../../../navigation'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
-import VaultBackupPage from '../../shared/vaultBackupSettings/VaultBackupPage'
+import { VaultBackupFlow } from '../../shared/vaultBackupSettings/VaultBackupFlow'
 import { BackupConfirmation } from './BackupConfirmation'
 import { BackupOverviewSlidesPartOne } from './BackupOverviewSlidesPartOne'
 import { BackupSuccessSlide } from './BackupSuccessSlides'
@@ -41,7 +41,7 @@ export const BackupSecureVault = () => {
         )
       }
       backupConfirmation={() => <BackupConfirmation onCompleted={toNextStep} />}
-      backupPage={() => <VaultBackupPage onFinish={toNextStep} />}
+      backupPage={() => <VaultBackupFlow onFinish={toNextStep} />}
       backupSuccessfulSlideshow={() =>
         shouldShowBackupSummary ? (
           <StepTransition

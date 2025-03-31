@@ -259,7 +259,6 @@ export const es = {
   vault_backup_page_verified_password_input_placeholder: 'Verificar contraseña',
   vault_backup_page_verified_password_error: 'Las contraseñas deben coincidir',
   vault_backup_page_submit_loading_button_text: 'Guardando...',
-  vault_backup_page_skip_button_text: 'Omitir contraseña',
   vault_backup_page_password_info:
     'Nunca almacene los fragmentos de su bóveda de dispositivos diferentes en la misma ubicación',
   vault_rename_page_name_error:
@@ -796,4 +795,10 @@ export const es = {
   tap: 'Grifo',
   took_too_long_to_respond: 'Tardó demasiado en responder',
   vultiserver_password: 'Contraseña de Vultiserver',
+  backup_without_password: 'Copia de seguridad sin contraseña',
+  use_password: 'Usar contraseña',
+  backup_password_prompt:
+    '¿Quieres agregar una contraseña a los recursos compartidos de la bóveda de tu dispositivo?',
+  backup_password_info:
+    'Le recomendamos no establecer una contraseña de respaldo para los recursos compartidos de la bóveda del dispositivo. Sus datos estarán seguros si las copias de seguridad se almacenan correctamente en diferentes ubicaciones, lo cual ya constituye una protección considerable. Recuerde que las contraseñas de respaldo no se pueden recuperar si las olvida. ¡Usted decide!',
 }
