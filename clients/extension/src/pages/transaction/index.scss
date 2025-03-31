@@ -1,179 +1,105 @@
-@use "~variables" as *;
-#root {
-  width: 100vw !important;
-  max-width: 24rem;
+@use '~variables' as *;
+
+body {
+  background-color: $background-primary;
+  color: $text-primary;
+  min-height: rem(600) !important;
+  flex-direction: column;
+  font-family: $primary-font;
+  margin: 0 auto;
+  overflow: hidden;
+  width: rem(360) !important;
 }
-.layout {
-  > .header {
-    .progress {
-      background-image: linear-gradient(
-        100deg,
-        $cyan-base 15%,
-        $blue-sharp 140%
-      );
-      bottom: rem(-0.5);
-      height: rem(2);
-      left: 0;
-      position: absolute;
-    }
+
+.button-primary {
+  background-color: $button-primary;
+  border-radius: rem(42);
+  color: $button-text-light;
+  cursor: pointer;
+  display: flex;
+  font-size: rem(14);
+  font-weight: 600;
+  gap: rem(8);
+  justify-content: center;
+  line-height: rem(42);
+  transition: all 0.2s;
+  width: 100%;
+
+  &:hover {
+    background-color: $button-primary-hover;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: rem(12);
+
+  .label {
+    color: $text-extra-light;
+    font-weight: 500;
+    line-height: rem(16);
   }
 
-  &.step-1,
-  &.step-5 {
-    > .content {
-      .middle-truncate {
-        color: $cyan-base;
-        font-size: rem(13);
-      }
-
-      .extra {
-        color: $gray-1 !important;
-        font-size: rem(14);
-        font-weight: 600;
-      }
-
-      .label {
-        color: $gray-6 !important;
-        font-size: rem(12);
-        font-weight: 600;
-      }
-    }
+  .extra {
+    font-weight: 500;
+    line-height: rem(16);
   }
 
-  &.step-2 {
-    > .content {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      .hint {
-        font-size: rem(16);
-        font-weight: 700;
-        line-height: rem(24);
-        margin-bottom: rem(12);
-      }
+  .item {
+    display: flex;
+    flex-direction: column;
 
-      .border {
-        bottom: 0;
-        fill: $cyan-base;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-      }
-      .qr-container {
-        border: rem(2) solid white;
-        margin: rem(5);
-        height: 90% !important;
-        width: 90% !important;
-      }
-      .ant-qrcode {
-        padding: 0 !important;
-        border-radius: 0 !important;
-        border: rem(2) solid black !important;
-        width: 100% !important;
-        height: 100% !important;
-      }
-
-      .qrcode {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: rem(312);
-        width: 95vw !important;
-        overflow: hidden;
-        position: relative;
-        max-width: rem(312);
-      }
-    }
-
-    > .footer {
-      flex-direction: column;
-      gap: rem(12);
+    + .item {
+      border-top: solid rem(1) $border-light;
+      padding-top: rem(13);
     }
   }
+}
 
-  &.step-4 {
-    > .content {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+.card {
+  background-color: $background-secondary;
+  border-radius: rem(16);
+  display: flex;
+  flex-direction: column;
+  gap: rem(24);
+  padding: rem(24);
+  width: 100%;
 
-      .message {
-        font-family: $secondary-font;
-        font-size: rem(16);
-        font-weight: 700;
-        line-height: rem(24);
-        margin-top: rem(16);
-      }
-    }
-  }
+  .header {
+    display: flex;
+    justify-content: space-between;
 
-  &.step-5 {
-    .btn {
-      align-items: center;
-      background-color: $blue-light;
-      border-radius: rem(8);
-      color: $gray-1;
+    .action {
       cursor: pointer;
-      display: flex;
-      gap: rem(6);
-      height: rem(36);
-      justify-content: center;
-      transition: background-color 0.3s;
-      width: 100%;
+      height: rem(20);
+      padding: rem(2);
+      width: rem(20);
 
       svg {
-        height: rem(18);
-        stroke: $gray-6;
-        width: rem(18);
-      }
-
-      &:hover {
-        background-color: $blue-dark;
+        height: 100%;
+        width: 100%;
       }
     }
 
-    .actions {
-      display: flex;
-      gap: rem(8);
-      margin-top: rem(16);
+    .heading {
+      font-weight: 500;
+      font-size: rem(17);
+      line-height: rem(20);
     }
   }
-}
-.function-inputs {
-  height: max-content !important;
-  padding: rem(10) !important;
-  border-radius: rem(5) !important;
-  white-space: pre-wrap !important;
-}
 
-@media only screen and (max-height: 570px) {
-  .layout.step-2 > .content .qr-container {
-    width: unset !important;
-  }
-
-  .layout.step-2 > .content .border {
-    height: 100%;
-    margin-inline: auto;
+  .footer {
+    display: flex;
+    gap: rem(12);
   }
 }
 
-@media only screen and (max-width: 330px) {
-  .layout.step-2 > .content .qr-container {
-    height: unset !important;
-    position: absolute;
-    top: 0.4rem;
-  }
-}
-
-@media only screen and (max-height: 570px) and (max-width: 330px) {
-  .layout.step-2 > .content .qr-container {
-    width: 90% !important;
-    height: 90% !important;
-  }
-  .layout.step-2 > .content .border {
-    display: none;
-  }
+.layout {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  padding: rem(24);
 }
