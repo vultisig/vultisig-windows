@@ -485,7 +485,7 @@ export const pt = {
     emailIncorrect: 'E-mail incorreto, por favor verifique',
     enterEmail: 'Digite seu e-mail',
     emailSetupTitle:
-      'Este e-mail é usado apenas para enviar o backup do servidor',
+      'Este email é usado apenas para enviar o backup do servidor',
     passwordCannotBeRecovered: 'A senha não pode ser redefinida ou recuperada',
     confirmPasswordIsRequired: 'Confirmação de senha é obrigatória',
     passwordDoNotMatch: 'As senhas não coincidem',

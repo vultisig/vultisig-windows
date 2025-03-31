@@ -491,7 +491,7 @@ export const de = {
     emailIncorrect: 'Falsche E-Mail, bitte überprüfen',
     enterEmail: 'Geben Sie Ihre E-Mail ein',
     emailSetupTitle:
-      'Diese E-Mail wird nur verwendet, um das Backup des Servers zu senden',
+      'Diese E-Mail wird nur verwendet, um das Server-Backup zu senden',
     passwordCannotBeRecovered:
       'Passwort kann nicht zurückgesetzt oder wiederhergestellt werden',
     confirmPasswordIsRequired: 'Passwortbestätigung ist erforderlich',
