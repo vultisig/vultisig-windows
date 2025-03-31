@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { Coin } from '@core/chain/coin/Coin'
+import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { THORChainSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/thorchain_swap_payload_pb'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 import { addMinutes } from 'date-fns'
@@ -14,7 +14,9 @@ type Input = {
   quote: NativeSwapQuote
   fromCoin: AccountCoin
   amount: bigint
-  toCoin: Coin
+  toCoin: AccountCoin
+  fromCoinHexPublicKey: string
+  toCoinHexPublicKey: string
 }
 
 export const thorchainSwapQuoteToSwapPayload = ({
@@ -22,6 +24,8 @@ export const thorchainSwapQuoteToSwapPayload = ({
   fromCoin,
   amount,
   toCoin,
+  fromCoinHexPublicKey,
+  toCoinHexPublicKey,
 }: Input): KeysignSwapPayload => {
   const isAffiliate = !!quote.fees.affiliate && Number(quote.fees.affiliate) > 0
 
@@ -31,8 +35,14 @@ export const thorchainSwapQuoteToSwapPayload = ({
     case: 'thorchainSwapPayload',
     value: create(THORChainSwapPayloadSchema, {
       fromAddress: fromCoin.address,
-      fromCoin,
-      toCoin,
+      fromCoin: toCommCoin({
+        ...fromCoin,
+        hexPublicKey: fromCoinHexPublicKey,
+      }),
+      toCoin: toCommCoin({
+        ...toCoin,
+        hexPublicKey: toCoinHexPublicKey,
+      }),
       vaultAddress: quote.inbound_address ?? fromCoin.address,
       routerAddress: quote.router,
       fromAmount: amount.toString(),

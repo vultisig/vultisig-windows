@@ -2,8 +2,8 @@ import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { EvmChain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import {
   OneInchQuoteSchema,
   OneInchSwapPayloadSchema,
@@ -23,7 +23,9 @@ type Input = {
   amount: bigint
   quote: SwapQuote
   fromCoin: AccountCoin
-  toCoin: Coin
+  fromCoinHexPublicKey: string
+  toCoin: AccountCoin
+  toCoinHexPublicKey: string
 }
 
 type Output = Pick<KeysignPayload, 'toAddress' | 'memo'> &
@@ -34,6 +36,8 @@ export const getSwapKeysignPayloadFields = ({
   quote,
   fromCoin,
   toCoin,
+  fromCoinHexPublicKey,
+  toCoinHexPublicKey,
 }: Input): Output => {
   return matchRecordUnion(quote, {
     general: quote => {
@@ -55,8 +59,14 @@ export const getSwapKeysignPayloadFields = ({
       const tx = create(OneInchTransactionSchema, txMsg)
 
       const swapPayload = create(OneInchSwapPayloadSchema, {
-        fromCoin,
-        toCoin,
+        fromCoin: toCommCoin({
+          ...fromCoin,
+          hexPublicKey: fromCoinHexPublicKey,
+        }),
+        toCoin: toCommCoin({
+          ...toCoin,
+          hexPublicKey: toCoinHexPublicKey,
+        }),
         fromAmount: amount.toString(),
         toAmountDecimal: fromChainAmount(
           quote.dstAmount,
@@ -87,6 +97,8 @@ export const getSwapKeysignPayloadFields = ({
           fromCoin,
           amount,
           toCoin,
+          fromCoinHexPublicKey,
+          toCoinHexPublicKey,
         })
 
         const toAddress = shouldBePresent(quote.router)
