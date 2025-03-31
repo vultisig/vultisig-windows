@@ -51,8 +51,6 @@ export enum EventMethod {
   CHAIN_CHANGED = 'chainChanged',
   CONNECT = 'connect',
   DISCONNECT = 'diconnect',
-  ERROR = 'ERROR',
-  MESSAGE = 'MESSAGE',
   NETWORK_CHANGED = 'networkChanged',
 }
 
@@ -136,12 +134,6 @@ export namespace RequestMethod {
   }
 }
 
-export const storageKey = keyMirror({
-  CURRENCY: true,
-  LANGUAGE: true,
-  VAULTS: true,
-})
-
 export const errorKey = keyMirror({
   FAIL_TO_GET_ACCOUNTS: true,
   FAIL_TO_GET_ADDRESS: true,
@@ -167,19 +159,6 @@ export const currencyName: CurrencyRef = {
   [Currency.SEK]: 'Swedish Krona',
   [Currency.SGD]: 'Singapore Dollar',
   [Currency.USD]: 'United States Dollar',
-}
-
-export const currencySymbol: CurrencyRef = {
-  [Currency.AUD]: 'A$',
-  [Currency.CAD]: 'C$',
-  [Currency.CNY]: '¥',
-  [Currency.EUR]: '€',
-  [Currency.GBP]: '£',
-  [Currency.JPY]: '¥',
-  [Currency.RUB]: '₽',
-  [Currency.SEK]: 'kr',
-  [Currency.SGD]: 'S$',
-  [Currency.USD]: '$',
 }
 
 export const supportedChains: Record<Chain, boolean> = {

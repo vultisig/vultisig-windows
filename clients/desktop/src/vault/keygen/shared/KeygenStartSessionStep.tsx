@@ -1,5 +1,6 @@
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -43,7 +44,7 @@ export const KeygenStartSessionStep = ({
         <MatchQuery
           value={status}
           pending={() => <Spinner size="3em" />}
-          error={() => <Text>{t('failed_to_start_keygen')}</Text>}
+          error={error => <Text>{extractErrorMsg(error)}</Text>}
         />
       </PageContent>
     </>

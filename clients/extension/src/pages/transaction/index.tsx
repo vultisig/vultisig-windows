@@ -1,6 +1,5 @@
 import '@clients/extension/src/styles/index.scss'
 import '@clients/extension/src/pages/transaction/index.scss'
-import '@clients/extension/src/utils/prototypes'
 
 import { create } from '@bufbuild/protobuf'
 import ConfigProvider from '@clients/extension/src/components/config-provider'

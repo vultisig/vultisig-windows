@@ -9,9 +9,9 @@ import { toSizeUnit } from '../css/toSizeUnit'
 import { getColor, matchColor } from '../theme/getters'
 import { UnstyledButton } from './UnstyledButton'
 
-export type IconButtonSize = 's' | 'm' | 'l'
+type IconButtonSize = 's' | 'm' | 'l'
 
-export type IconButtonKind = 'regular'
+type IconButtonKind = 'regular'
 
 export const iconButtonSizeRecord: Record<IconButtonSize, number> = {
   s: 24,

@@ -62,7 +62,7 @@ export const formatMpcDeviceName = (deviceName: string) => {
   return deviceName
 }
 
-export type DeviceType = 'phone' | 'tablet' | 'desktop' | 'server'
+type DeviceType = 'phone' | 'tablet' | 'desktop' | 'server'
 
 const mpcDeviceType: Record<MpcDevice, DeviceType> = {
   windows: 'desktop',
