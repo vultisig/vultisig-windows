@@ -58,6 +58,8 @@ import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
 import { ExtensionProviders } from '../../state/ExtensionProviders'
+import { TW } from '@trustwallet/wallet-core'
+import { Chain } from '@core/chain/Chain'
 
 interface FormProps {
   password: string
@@ -473,6 +475,61 @@ const Component = () => {
         .catch(() => {})
     }
   }
+  const decodeSolanaSwap = (input: any) => {
+    const txInputDataArray = Object.values(input)
+    const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
+  
+    const buffer = Buffer.from(txInputDataBuffer)
+    const tx = walletCore?.TransactionDecoder.decode(
+      walletCore.CoinType.solana,
+      buffer
+    )
+    console.log("Decoded Transaction:", tx);
+    
+    const decodedOutput = TW.Solana.Proto.DecodingTransactionOutput.decode(tx!)
+    console.log("Decoded Output:", decodedOutput);
+    const final = TW.Solana.Proto.SigningInput.create({
+      rawMessage: decodedOutput.transaction,
+    })
+    console.log("final:",final);
+    
+    const returnData = TW.Solana.Proto.SigningInput.encode(final).finish()
+    console.log('returnData:', returnData);
+    
+    
+    const hash = getPreSigningHashes({
+      walletCore: walletCore!,
+      txInputData: returnData,
+      chain: Chain.Solana,
+    })
+    console.log('hash:', hash)
+
+    return TW.Solana.Proto.SigningInput.encode(final).finish()
+    // const decodedOutput =
+    //   TW.Solana.DecodingTransactionOutput.parseFrom(decodedData).checkError()
+    // const output = Solana.SigningInput.newBuilder().setRawMessage(
+    //   decodedOutput.transaction
+    // )
+    // const base64 = base64Decode(
+    //   'AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAHDKdMNPQM3nr75Ukqx/zFBFIHhNkCGoXIlsLwyeYKWoaMLk4k0DlDYk/cUeDxGfKHCPBUxlZZt7wQNtzIB61WyCcJVkz/z5oTbSHtqzHvsd5qvZsheLbPWtwqV8ZpNvEgQaPQZJ/2lwC7Adw/wm3euKEhQeY78RQepieuWoj1MiJYHMFgjV178T3e4b7Kz+mQDepPZgHPUurBU+kTmPEZaIkDBkZv5SEXMv/srbpyw5vnvIzlu8X3EmssQ5s6QAAAAIyXJY9OJInxuz0QKRSODYMLWhOZ2v8QhASOe9jb6fhZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqQR51VvyMcBu7nTFbs5oFQf9sbLeo/SOUQKxzaJWvBOPtD/6J/XX9kp0wJsfKVh53ksJqzbfyd1RSzIap7OM5eiZl5Gfp4rsTIQBq5igWgaPeLjL9kpfl4d4vlTjtJuQXTP7UKa5sApiAuXqJqWMXh6XVVIB5O1e52Ba8vtV615VCQUABQLAXBUABQAJA4/lAAAAAAAABgYAAQIRBwgABgYAAwATBwgBAQcCAAMMAgAAAICWmAAAAAAACAEDAREJFwgAAwQBEQkKCRQVDAADBA0ODxAIFhYXI+UXy5d6460qAQAAABlkAAGAlpgAAAAAAJi9EwAAAAAAZAAACAMDAAABCQsJAAACAQQREggHxgEgTCkMJ6KE21OkEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFPbtbLsntgew4qSFUamI8aGcibYeAAAAAAAAAAAAAAAAAJQBgalKNaRWnkUpo837dOOP2YYxeDAQDQAAAAAAAAAAAAAAABIGAAAAAAAAuAsAAAAAAADgwd5nAAAAAAAAAAAAAAAAAAAAAKWqbiFxtBbh0n7FPKjBPbP5GonNAAMBFuSWN7Vgox9k81XliXqSV/JnUsH2+qkHBkP1AzOb+sUCWk6DVOZO8lMFQg2r0dgfltD6tRL/B1hH3u00UzZdgqkAAhEgBv/czfmCbJdYOj/QF5NOea1Z2R0PgP37XDrZDVfkoMcFo6WipKgFNQCnHJ8='
+    // )
+    // console.log('base64:', base64)
+    // const tx = walletCore?.TransactionDecoder.decode(
+    //   walletCore.CoinType.solana,
+    //   base64
+    // )
+    // const decodedOutput = TW.Solana.Proto.DecodingTransactionOutput.decode(tx!)
+
+
+    // console.log('decodedoutput:', decodedOutput)
+
+    // const final = TW.Solana.Proto.SigningInput.create({
+    //   rawMessage: decodedOutput.transaction,
+    // })
+    // console.log('final', final)
+    // console.log('return :', TW.Solana.Proto.SigningInput.encode(final).finish())
+  }
+
 
   useEffect(() => {
     if (!walletCore) return
@@ -483,7 +540,9 @@ const Component = () => {
       getStoredVaults(),
     ]).then(([currency, transactions, vaults]) => {
       const [transaction] = transactions
-
+      console.log('stored transaction:', transaction)
+      decodeSolanaSwap((transaction as any).data)
+      
       const vault = vaults.find(({ chains }) =>
         chains.some(
           ({ address }) =>

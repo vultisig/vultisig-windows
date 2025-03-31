@@ -407,25 +407,27 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
-        const isBasic = isBasicTransaction(_transaction)
-
-        getStandardTransactionDetails(
-          {
-            ..._transaction,
-            txType: isBasic ? 'MetaMask' : (_transaction.txType ?? 'Vultisig'),
-          } as TransactionType.WalletTransaction,
-          chain
-        ).then(standardTx => {
-          const modifiedTransaction: ITransaction = {
-            transactionDetails: standardTx as TransactionDetails,
-            chain,
-            id: '',
-            status: 'default',
-          }
-          handleSendTransaction(modifiedTransaction, chain)
-            .then(result => resolve(result))
-            .catch(reject)
-        })
+        // const isBasic = isBasicTransaction(_transaction)
+        handleSendTransaction(_transaction as ITransaction, chain)
+          .then(result => resolve(result))
+          .catch(reject)
+        // getStandardTransactionDetails(
+        //   {
+        //     ..._transaction,
+        //     txType: isBasic ? 'MetaMask' : (_transaction.txType ?? 'Vultisig'),
+        //   } as TransactionType.WalletTransaction,
+        //   chain
+        // ).then(standardTx => {
+        //   const modifiedTransaction: ITransaction = {
+        //     transactionDetails: standardTx as TransactionDetails,
+        //     chain,
+        //     id: '',
+        //     status: 'default',
+        //   }
+        //   handleSendTransaction(modifiedTransaction, chain)
+        //     .then(result => resolve(result))
+        //     .catch(reject)
+        // })
 
         break
       }
