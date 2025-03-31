@@ -41,7 +41,7 @@ export class MPCKeysign {
   ) {
     const result = await match(algo, {
       ecdsa: async () => {
-        EventsEmit('PrepareVault')
+        EventsEmit('prepareVault')
         const dklsKeysign = new DKLSKeysign(
           this.serverURL,
           this.localPartyId,
@@ -53,7 +53,7 @@ export class MPCKeysign {
           this.isInitiateDevice,
           keyshare
         )
-        EventsEmit('ECDSA')
+        EventsEmit('ecdsa')
         return await dklsKeysign.startKeysign(messagesToSign)
       },
       eddsa: async () => {

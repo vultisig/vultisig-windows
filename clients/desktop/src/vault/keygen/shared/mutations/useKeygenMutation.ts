@@ -1,7 +1,10 @@
+import { KeygenStep, keygenSteps } from '@core/mpc/keygen/KeygenStep'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { MPC } from '@core/mpc/mpc'
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
+import { EventsOff, EventsOn } from '@wailsapp/runtime'
+import { useState } from 'react'
 
 import { storage } from '../../../../../wailsjs/go/models'
 import {
@@ -38,7 +41,9 @@ export const useKeygenMutation = () => {
 
   const isInitiatingDevice = useIsInitiatingDevice()
 
-  return useMutation({
+  const [step, setStep] = useState<KeygenStep | null>(null)
+
+  const mutation = useMutation({
     mutationFn: async () => {
       const partialVault = await match(keygenType, {
         [KeygenType.Keygen]: () => {
@@ -221,5 +226,20 @@ export const useKeygenMutation = () => {
         convertValues: () => {},
       }
     },
+    onMutate: () => {
+      keygenSteps.forEach(step => {
+        EventsOn(step, () => setStep(step))
+      })
+    },
+    onError: () => {
+      keygenSteps.forEach(step => {
+        EventsOff(step)
+      })
+    },
   })
+
+  return {
+    ...mutation,
+    step,
+  }
 }

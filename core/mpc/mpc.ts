@@ -40,7 +40,7 @@ export class MPC {
   }
   // startKeygen - start keygen process
   public async startKeygen() {
-    EventsEmit('PrepareVault') // TODO: when doing in react-native , we need to find new way to emit the events
+    EventsEmit('prepareVault') // TODO: when doing in react-native , we need to find new way to emit the events
     const dklsKeygen = new DKLS(
       this.tssType,
       this.isInitiateDevice,
@@ -51,12 +51,12 @@ export class MPC {
       this.oldKeygenCommittee,
       this.hexEncryptionKey
     )
-    EventsEmit('ECDSA')
+    EventsEmit('ecdsa')
     const dklsResult = await dklsKeygen.startKeygenWithRetry()
     if (dklsResult === undefined) {
       throw new Error('DKLS keygen failed')
     }
-    EventsEmit('EdDSA')
+    EventsEmit('eddsa')
     const schnorrKeygen = new Schnorr(
       this.tssType,
       this.isInitiateDevice,
@@ -98,7 +98,7 @@ export class MPC {
     localUIEddsa: string,
     hexChainCode: string
   ) {
-    EventsEmit('PrepareVault')
+    EventsEmit('prepareVault')
     const dklsKeygen = new DKLS(
       this.tssType,
       this.isInitiateDevice,
@@ -112,12 +112,12 @@ export class MPC {
       publicKeyEcdsa,
       hexChainCode
     )
-    EventsEmit('ECDSA')
+    EventsEmit('ecdsa')
     const dklsResult = await dklsKeygen.startKeygenWithRetry()
     if (dklsResult === undefined) {
       throw new Error('DKLS migrate failed')
     }
-    EventsEmit('EdDSA')
+    EventsEmit('eddsa')
     const schnorrKeygen = new Schnorr(
       this.tssType,
       this.isInitiateDevice,
@@ -163,7 +163,7 @@ export class MPC {
     const oldCommittee = this.oldKeygenCommittee.filter(party =>
       this.keygenCommittee.includes(party)
     )
-    EventsEmit('PrepareVault')
+    EventsEmit('prepareVault')
     const dklsKeygen = new DKLS(
       this.tssType,
       this.isInitiateDevice,
@@ -174,12 +174,12 @@ export class MPC {
       oldCommittee,
       this.hexEncryptionKey
     )
-    EventsEmit('ECDSA')
+    EventsEmit('ecdsa')
     const dklsResult = await dklsKeygen.startReshareWithRetry(ecdsaKeyshare)
     if (dklsResult === undefined) {
       throw new Error('DKLS reshare failed')
     }
-    EventsEmit('EdDSA')
+    EventsEmit('eddsa')
     const schnorrKeygen = new Schnorr(
       this.tssType,
       this.isInitiateDevice,
