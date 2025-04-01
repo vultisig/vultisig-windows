@@ -51,9 +51,7 @@ export class MPC {
       this.hexEncryptionKey
     )
     const dklsResult = await dklsKeygen.startKeygenWithRetry()
-    if (dklsResult === undefined) {
-      throw new Error('DKLS keygen failed')
-    }
+
     EventsEmit('eddsa')
     const schnorrKeygen = new Schnorr(
       this.tssType,
@@ -67,9 +65,7 @@ export class MPC {
       dklsKeygen.getSetupMessage()
     )
     const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
-    if (schnorrResult === undefined) {
-      throw new Error('Schnorr keygen failed')
-    }
+
     await setKeygenComplete({
       serverURL: this.serverURL,
       sessionId: this.sessionId,
@@ -110,9 +106,7 @@ export class MPC {
       hexChainCode
     )
     const dklsResult = await dklsKeygen.startKeygenWithRetry()
-    if (dklsResult === undefined) {
-      throw new Error('DKLS migrate failed')
-    }
+
     EventsEmit('eddsa')
     const schnorrKeygen = new Schnorr(
       this.tssType,
@@ -129,9 +123,7 @@ export class MPC {
       hexChainCode
     )
     const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
-    if (schnorrResult === undefined) {
-      throw new Error('Schnorr migrate failed')
-    }
+
     await setKeygenComplete({
       serverURL: this.serverURL,
       sessionId: this.sessionId,
@@ -170,9 +162,7 @@ export class MPC {
       this.hexEncryptionKey
     )
     const dklsResult = await dklsKeygen.startReshareWithRetry(ecdsaKeyshare)
-    if (dklsResult === undefined) {
-      throw new Error('DKLS reshare failed')
-    }
+
     EventsEmit('eddsa')
     const schnorrKeygen = new Schnorr(
       this.tssType,

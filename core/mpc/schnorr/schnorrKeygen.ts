@@ -184,6 +184,7 @@ export class Schnorr {
           chaincode: Buffer.from(keyShare.rootChainCode()).toString('hex'),
         }
       }
+      throw new Error('Schnorr keygen failed')
     } catch (error) {
       if (error instanceof Error) {
         console.error('Schnorr keygen error:', error)
@@ -198,13 +199,13 @@ export class Schnorr {
     for (let i = 0; i < 3; i++) {
       try {
         const result = await this.startKeygen(i)
-        if (result !== undefined) {
-          return result
-        }
+        return result
       } catch (error) {
         console.error('Schnorr keygen error:', error)
+        throw new Error('Schnorr keygen failed')
       }
     }
+    throw new Error('Schnorr keygen failed')
   }
 
   private async startReshare(

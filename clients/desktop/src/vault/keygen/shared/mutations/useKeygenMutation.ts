@@ -1,6 +1,7 @@
 import { KeygenStep, keygenSteps } from '@core/mpc/keygen/KeygenStep'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { MPC } from '@core/mpc/mpc'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 import { EventsOff, EventsOn } from '@wailsapp/runtime'
@@ -92,9 +93,7 @@ export const useKeygenMutation = () => {
                 encryptionKeyHex
               )
               const result = await mpcKeygen.startKeygen()
-              if (!result) {
-                throw new Error('DKLS keygen failed')
-              }
+
               const vault = storage.Vault.createFrom({
                 name,
                 public_key_ecdsa: result.dkls.publicKey,
@@ -145,9 +144,7 @@ export const useKeygenMutation = () => {
                 ecdsaKeyshare,
                 eddsaKeyshare
               )
-              if (!result) {
-                throw new Error('DKLS keygen failed')
-              }
+
               const newVault = storage.Vault.createFrom({
                 name,
                 public_key_ecdsa: result.dkls.publicKey,
@@ -175,15 +172,19 @@ export const useKeygenMutation = () => {
               return newVault
             },
             [KeygenType.Migrate]: async () => {
-              const ecdsaKeyshare = vault.keyshares.find(
-                keyshare => keyshare.public_key === vault.public_key_ecdsa
-              )?.keyshare
-              const eddsaKeyshare = vault.keyshares.find(
-                keyshare => keyshare.public_key === vault.public_key_eddsa
-              )?.keyshare
-              if (!ecdsaKeyshare || !eddsaKeyshare) {
-                throw new Error('Keyshare not found')
-              }
+              const ecdsaKeyshare = shouldBePresent(
+                vault.keyshares.find(
+                  keyshare => keyshare.public_key === vault.public_key_ecdsa
+                ),
+                'ecdsa keyshare'
+              ).keyshare
+              const eddsaKeyshare = shouldBePresent(
+                vault.keyshares.find(
+                  keyshare => keyshare.public_key === vault.public_key_eddsa
+                ),
+                'eddsa keyshare'
+              ).keyshare
+
               const oldKeygenCommittee = vault.signers
 
               const mpcKeygen = new MPC(
@@ -205,9 +206,7 @@ export const useKeygenMutation = () => {
                 localUIEddsa,
                 vault.hex_chain_code
               )
-              if (!result) {
-                throw new Error('DKLS keygen failed')
-              }
+
               const newVault = storage.Vault.createFrom({
                 name,
                 public_key_ecdsa: result.dkls.publicKey,
