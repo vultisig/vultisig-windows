@@ -7,27 +7,8 @@ body {
   flex-direction: column;
   font-family: $primary-font;
   margin: 0 auto;
-  overflow: hidden;
-  width: rem(360) !important;
-}
-
-.button-primary {
-  background-color: $button-primary;
-  border-radius: rem(42);
-  color: $button-text-light;
-  cursor: pointer;
-  display: flex;
-  font-size: rem(14);
-  font-weight: 600;
-  gap: rem(8);
-  justify-content: center;
-  line-height: rem(42);
-  transition: all 0.2s;
-  width: 100%;
-
-  &:hover {
-    background-color: $button-primary-hover;
-  }
+  overflow-x: hidden;
+  width: rem(400) !important;
 }
 
 .list {
@@ -44,15 +25,104 @@ body {
   .extra {
     font-weight: 500;
     line-height: rem(16);
+    max-width: 100%;
+    overflow-y: hidden;
+  }
+
+  .middle-truncate {
+    font-weight: 500;
+    line-height: rem(16);
+    width: rem(112);
   }
 
   .item {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    gap: rem(4);
+    justify-content: space-between;
 
     + .item {
       border-top: solid rem(1) $border-light;
       padding-top: rem(13);
+    }
+  }
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: rem(32);
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    padding-left: rem(40);
+    position: relative;
+
+    .icon {
+      background-color: $background-tertiary;
+      border-radius: 50%;
+      height: rem(24);
+      left: 0;
+      padding: rem(4);
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: rem(24);
+
+      svg {
+        height: 100%;
+        stroke: $alert-success;
+        width: 100%;
+      }
+    }
+
+    .title {
+      color: $text-light;
+      font-weight: 500;
+      font-size: rem(13);
+      line-height: rem(28);
+    }
+
+    .step {
+      color: $text-extra-light;
+      font-weight: 500;
+      font-size: rem(10);
+      line-height: rem(10);
+    }
+
+    &:last-child {
+      .icon {
+        background-color: transparent;
+        border: dashed rem(1) rgba($color: $neutral-50, $alpha: 0.1);
+      }
+
+      .title {
+        color: $text-primary;
+        line-height: rem(18);
+      }
+    }
+
+    + .item {
+      &::after {
+        background-color: $border-light;
+        content: '';
+        height: rem(28);
+        left: rem(12);
+        position: absolute;
+        top: rem(-30);
+        width: rem(1);
+      }
+
+      &::before {
+        background-color: $border-light;
+        content: '';
+        height: rem(1);
+        left: rem(40);
+        position: absolute;
+        right: 0;
+        top: rem(-16);
+      }
     }
   }
 }
@@ -67,13 +137,13 @@ body {
   width: 100%;
 
   .header {
+    align-items: center;
     display: flex;
     justify-content: space-between;
 
     .action {
       cursor: pointer;
       height: rem(20);
-      padding: rem(2);
       width: rem(20);
 
       svg {
@@ -89,6 +159,12 @@ body {
     }
   }
 
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: rem(16);
+  }
+
   .footer {
     display: flex;
     gap: rem(12);
@@ -99,7 +175,7 @@ body {
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   justify-content: center;
   padding: rem(24);
 }

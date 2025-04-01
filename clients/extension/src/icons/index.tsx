@@ -111,6 +111,33 @@ export const BrokenLink: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
+export const Check: FC<SVGProps<SVGSVGElement>> = ({
+  fill = 'none',
+  height = 24,
+  stroke = 'white',
+  strokeLinecap = 'round',
+  strokeLinejoin = 'round',
+  strokeWidth = 2,
+  width = 24,
+  ...props
+}) => (
+  <svg
+    viewBox="0 0 24 24"
+    {...{
+      ...props,
+      fill,
+      height,
+      stroke,
+      strokeLinecap,
+      strokeLinejoin,
+      strokeWidth,
+      width,
+    }}
+  >
+    <path d="M20 6L9 17L4 12" />
+  </svg>
+)
+
 export const CircleDollar: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,
@@ -192,7 +219,7 @@ export const CircleInfo: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const CloseLG: FC<SVGProps<SVGSVGElement>> = ({
+export const Close: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,
   stroke = 'white',
@@ -216,6 +243,33 @@ export const CloseLG: FC<SVGProps<SVGSVGElement>> = ({
     }}
   >
     <path d="M21 21L12 12M12 12L3 3M12 12L21.0001 3M12 12L3 21.0001" />
+  </svg>
+)
+
+export const CloseLG: FC<SVGProps<SVGSVGElement>> = ({
+  fill = 'none',
+  height = 24,
+  stroke = 'white',
+  strokeLinecap = 'round',
+  strokeLinejoin = 'round',
+  strokeWidth = 2,
+  width = 24,
+  ...props
+}) => (
+  <svg
+    viewBox="0 0 24 24"
+    {...{
+      ...props,
+      fill,
+      height,
+      stroke,
+      strokeLinecap,
+      strokeLinejoin,
+      strokeWidth,
+      width,
+    }}
+  >
+    <path d="M18 6L6 18M6 6L18 18" />
   </svg>
 )
 

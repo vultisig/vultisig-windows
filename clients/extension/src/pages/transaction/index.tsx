@@ -1,14 +1,29 @@
 import '@clients/extension/src/styles/pure.scss'
 import '@clients/extension/src/pages/transaction/index.scss'
 
-import { create } from '@bufbuild/protobuf'
-import ConfigProvider from '@clients/extension/src/components/config-provider'
+import ButtonPrimary from '@clients/extension/src/components/button-primary'
+import ButtonTertiary from '@clients/extension/src/components/button-tertiary'
 import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import {
-  CloseLG,
-  QRCodeBorder,
+  alertError,
+  alertInfo,
+  alertSuccess,
+  alertWarning,
+  backgroundPrimary,
+  backgroundSecondary,
+  borderLight,
+  borderNormal,
+  buttonSecondary,
+  primaryThree,
+  textExtraLight,
+  textPrimary,
+} from '@clients/extension/src/colors'
+import {
+  ArrowLeft,
+  Check,
+  Close,
   SquareArrow,
   SquareBehindSquare,
 } from '@clients/extension/src/icons'
@@ -38,18 +53,25 @@ import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
-import { getJoinKeysignUrl } from '@core/chain/utils/getJoinKeysignUrl'
 import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData'
-import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import {
   useWalletCore,
   WalletCoreProvider,
 } from '@core/ui/chain/providers/WalletCoreProvider'
-import { Button, Form, Input, message, QRCode } from 'antd'
+import {
+  Button,
+  ConfigProvider,
+  Divider,
+  Form,
+  Input,
+  message,
+  Spin,
+  theme,
+} from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'
 import { StrictMode, useEffect, useRef, useState } from 'react'
@@ -80,7 +102,7 @@ const Component = () => {
   const walletCore = useWalletCore()
   const RETRY_TIMEOUT_MS = 120000
   const CLOSE_TIMEOUT_MS = 60000
-  const initialState: InitialState = { step: 0, hasError: false }
+  const initialState: InitialState = { step: 1, hasError: false }
   const [connectedDevices, setConnectedDevices] = useState(0)
   const [form] = Form.useForm()
   const [state, setState] = useState(initialState)
@@ -341,57 +363,59 @@ const Component = () => {
   }
 
   const handleStep = (step: number): void => {
-    switch (step) {
-      case 2: {
-        if (keySignUrl) {
-          setState(prevState => ({ ...prevState, step }))
-        } else if (transaction && vault) {
-          setState(prevState => ({ ...prevState, loading: true }))
-          let payload: KeysignMessagePayload
-          if (transaction.isCustomMessage) {
-            payload = {
-              custom: create(CustomMessagePayloadSchema, {
-                method: transaction.customMessage?.method,
-                message: transaction.customMessage?.message,
-              }),
-            }
-          } else {
-            payload = {
-              keysign: keysignPayload!,
-            }
-          }
+    setState(prevState => ({ ...prevState, step }))
 
-          getJoinKeysignUrl({
-            hexEncryptionKey: vault.hexChainCode,
-            serverType: 'relay',
-            serviceName: 'VultiConnect',
-            sessionId: transaction.id,
-            vaultId: vault.publicKeyEcdsa,
-            payload,
-            payloadId: '',
-          })
-            .then(keySignUrl => {
-              setState(prevState => ({
-                ...prevState,
-                loading: false,
-                keySignUrl,
-                step,
-              }))
+    // switch (step) {
+    //   case 2: {
+    //     if (keySignUrl) {
+    //       setState(prevState => ({ ...prevState, step }))
+    //     } else if (transaction && vault) {
+    //       setState(prevState => ({ ...prevState, loading: true }))
+    //       let payload: KeysignMessagePayload
+    //       if (transaction.isCustomMessage) {
+    //         payload = {
+    //           custom: create(CustomMessagePayloadSchema, {
+    //             method: transaction.customMessage?.method,
+    //             message: transaction.customMessage?.message,
+    //           }),
+    //         }
+    //       } else {
+    //         payload = {
+    //           keysign: keysignPayload!,
+    //         }
+    //       }
 
-              handleStart()
-            })
-            .catch(() => {
-              setState(prevState => ({ ...prevState, loading: false }))
-            })
-        }
-        break
-      }
-      default: {
-        setState(prevState => ({ ...prevState, step }))
+    //       getJoinKeysignUrl({
+    //         hexEncryptionKey: vault.hexChainCode,
+    //         serverType: 'relay',
+    //         serviceName: 'VultiConnect',
+    //         sessionId: transaction.id,
+    //         vaultId: vault.publicKeyEcdsa,
+    //         payload,
+    //         payloadId: '',
+    //       })
+    //         .then(keySignUrl => {
+    //           setState(prevState => ({
+    //             ...prevState,
+    //             loading: false,
+    //             keySignUrl,
+    //             step,
+    //           }))
 
-        break
-      }
-    }
+    //           handleStart()
+    //         })
+    //         .catch(() => {
+    //           setState(prevState => ({ ...prevState, loading: false }))
+    //         })
+    //     }
+    //     break
+    //   }
+    //   default: {
+    //     setState(prevState => ({ ...prevState, step }))
+
+    //     break
+    //   }
+    // }
   }
 
   const handleFastSign = (): void => {
@@ -570,7 +594,43 @@ const Component = () => {
   console.log(step)
 
   return (
-    <ConfigProvider>
+    <ConfigProvider
+      theme={{
+        components: {
+          Button: {
+            colorBorder: 'transparent',
+            colorText: textPrimary,
+            controlHeight: 46,
+            fontWeight: 600,
+          },
+          Divider: {
+            colorSplit: borderLight,
+          },
+          Input: {
+            activeBorderColor: borderNormal,
+            activeShadow: 'transparent',
+            colorBgContainer: backgroundPrimary,
+            colorBorder: borderNormal,
+            colorErrorBorderHover: alertError,
+            colorTextPlaceholder: textExtraLight,
+            controlHeight: 52,
+            errorActiveShadow: 'transparent',
+            hoverBorderColor: borderNormal,
+            warningActiveShadow: 'transparent',
+          },
+        },
+        token: {
+          borderRadius: 12,
+          colorError: alertError,
+          colorInfo: alertInfo,
+          colorPrimary: primaryThree,
+          colorSuccess: alertSuccess,
+          colorTextBase: textPrimary,
+          colorWarning: alertWarning,
+          fontFamily: 'inherit',
+        },
+      }}
+    >
       <div className="layout">
         {hasError ? (
           <VultiError
@@ -580,351 +640,390 @@ const Component = () => {
           />
         ) : transaction ? (
           <>
-            {step === 1 ? (
-              <div className="content">
-                <span className="divider">{t('transaction_details')}</span>
-                {transaction.isCustomMessage ? (
-                  <div className="list">
-                    <div className="list-item">
-                      <span className="label">{t('address')}</span>
-                      <MiddleTruncate
-                        text={transaction.transactionDetails.from}
-                      />
-                    </div>
-                    <div className="list-item">
-                      <span className="label">{t('message')}</span>
-                      <MiddleTruncate
-                        text={transaction.customMessage!.message}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="list">
-                    <div className="list-item">
-                      <span className="label">{t('from')}</span>
-                      <MiddleTruncate
-                        text={transaction.transactionDetails.from}
-                      />
-                    </div>
-                    {transaction.transactionDetails.to && (
-                      <div className="list-item">
-                        <span className="label">{t('to')}</span>
-                        <MiddleTruncate
-                          text={transaction.transactionDetails.to}
-                        />
-                      </div>
-                    )}
-                    {transaction.transactionDetails.amount?.amount && (
-                      <div className="list-item">
-                        <span className="label">{t('amount')}</span>
-                        <span className="extra">{`${formatUnits(
-                          transaction.transactionDetails.amount.amount,
-                          transaction.transactionDetails.amount.decimals
-                        )} ${keysignPayload?.coin?.ticker}`}</span>
-                      </div>
-                    )}
-                    {transaction.memo?.value && !transaction.memo.isParsed && (
-                      <div className="memo-item">
-                        <span className="label">{t('memo')}</span>
-                        <span className="extra">
-                          <div>
-                            {splitString(
-                              transaction.memo.value as string,
-                              32
-                            ).map((str, index) => (
-                              <div key={index}>{str}</div>
-                            ))}
-                          </div>
-                        </span>
-                      </div>
-                    )}
-                    <div className="list-item">
-                      <span className="label">{t('network_fee')}</span>
-                      <span className="extra">
-                        {`${transaction.txFee} ${transaction.chain.ticker}`}
-                      </span>
-                    </div>
-                    {transaction.memo?.isParsed && (
-                      <>
-                        <div className="list-item">
-                          <span className="label">
-                            {t('function_signature')}
-                          </span>
-                          <div className="scrollable-x">
-                            {
-                              (transaction.memo.value as ParsedMemoParams)
-                                .functionSignature
-                            }
-                          </div>
-                        </div>
-                        <div className="list-item">
-                          <span className="label">{t('function_inputs')}</span>
-                          <div className="scrollable-x monospace-text ">
-                            <div style={{ width: 'max-content' }}>
-                              <div className="function-inputs">
-                                {
-                                  (transaction.memo.value as ParsedMemoParams)
-                                    .functionArguments
-                                }
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-            ) : step === 2 ? (
-              <>
-                <div className="content">
-                  <span className="hint">{t('scan_qr_with_two_devices')}</span>
-                  <div className="qrcode">
-                    <QRCodeBorder className="border" />
-                    <div className="qr-container" ref={qrContainerRef}>
-                      <QRCode
-                        bordered
-                        size={1000}
-                        value={keySignUrl || ''}
-                        color="white"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="footer">
-                  <Button
-                    onClick={handleFastSign}
-                    type="primary"
-                    shape="round"
-                    disabled={!fastSign}
-                    block
-                  >
-                    {t('fast_sign')}
-                  </Button>
-                  <Button
-                    onClick={handleApp}
-                    type="default"
-                    shape="round"
-                    block
-                  >
-                    {t('open_desktop_app')}
-                  </Button>
-                </div>
-              </>
-            ) : step === 3 ? (
-              <>
-                <div className="content">
-                  <div className="content">
-                    <Form form={form}>
-                      <Form.Item name="password" rules={[{ required: true }]}>
-                        <Input
-                          placeholder="FastSign Password"
-                          type="password"
-                        />
-                      </Form.Item>
-                      <Button htmlType="submit" />
-                    </Form>
-                  </div>
-                  <div className="footer">
-                    <Button
-                      onClick={handleSubmitFastSignPassword}
-                      type="primary"
-                      shape="round"
-                      block
-                    >
-                      Submit
-                    </Button>
-                  </div>
-                </div>
-              </>
-            ) : step === 4 ? (
-              <>
-                <div className="content">
-                  <VultiLoading />
-                  <span className="message">{t('signing')}</span>
-                </div>
-              </>
-            ) : step === 5 ? (
-              <>
-                <div className="card">
+            <Form form={form} className="card">
+              <Button htmlType="submit" style={{ display: 'none' }} />
+
+              {step === 1 ? (
+                <>
                   <div className="header">
-                    <span className="heading">{t('sign_transaction')}</span>
+                    <span className="heading">{`${t('sign_transaction')} (${step}/5)`}</span>
                     <span className="action">
-                      <CloseLG />
+                      <Close />
                     </span>
                   </div>
                   <div className="content">
-                    {transaction.isCustomMessage ? (
-                      <div className="list">
-                        <div className="list-item">
-                          <span className="label">{t('signature')}</span>
-                          <MiddleTruncate text={transaction.customSignature!} />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="list">
-                        <div className="list-item">
-                          <span className="label">{t('transaction')}</span>
-                          <MiddleTruncate text={transaction.txHash!} />
-                          <div className="actions">
-                            <a
-                              href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: transaction.txHash! })}`}
-                              rel="noopener noreferrer"
-                              target="_blank"
-                              className="btn"
-                            >
-                              <SquareArrow />
-                              {t('view_tx')}
-                            </a>
-                            <button
-                              className="btn"
-                              onClick={() => handleCopy()}
-                            >
-                              <SquareBehindSquare />
-                              {t('copy_tx')}
-                            </button>
-                          </div>
-                        </div>
-                        {transaction.transactionDetails.to && (
-                          <div className="list-item">
-                            <span className="label">{t('to')}</span>
+                    <div className="list">
+                      {transaction.isCustomMessage ? (
+                        <>
+                          <div className="item">
+                            <span className="label">{t('address')}</span>
                             <MiddleTruncate
-                              text={transaction.transactionDetails.to}
+                              text={transaction.transactionDetails.from}
                             />
                           </div>
-                        )}
-                        {transaction.transactionDetails.amount?.amount && (
-                          <div className="list-item">
-                            <span className="label">{t('amount')}</span>
-                            <span className="extra">{`${formatUnits(
-                              transaction.transactionDetails.amount.amount,
-                              transaction.transactionDetails.amount.decimals
-                            )} ${keysignPayload?.coin?.ticker}`}</span>
+                          <div className="item">
+                            <span className="label">{t('message')}</span>
+                            <MiddleTruncate
+                              text={transaction.customMessage!.message}
+                            />
                           </div>
-                        )}
-                        {transaction.memo?.value &&
-                          !transaction.memo?.isParsed && (
-                            <div className="memo-item">
-                              <span className="label">{t('memo')}</span>
-                              <span className="extra">
-                                <div>
-                                  {splitString(
-                                    transaction.memo?.value as string,
-                                    32
-                                  ).map((str, index) => (
-                                    <div key={index}>{str}</div>
-                                  ))}
-                                </div>
-                              </span>
+                        </>
+                      ) : (
+                        <>
+                          <div className="item">
+                            <span className="label">{t('from')}</span>
+                            <MiddleTruncate
+                              text={transaction.transactionDetails.from}
+                            />
+                          </div>
+                          {transaction.transactionDetails.to && (
+                            <div className="item">
+                              <span className="label">{t('to')}</span>
+                              <MiddleTruncate
+                                text={transaction.transactionDetails.to}
+                              />
                             </div>
                           )}
-                        <div className="list-item">
-                          <span className="label">{t('network_fee')}</span>
-                          <span className="extra">{`${transaction.txFee} ${transaction.chain.ticker}`}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </>
-            ) : transaction.isCustomMessage ? (
-              <div className="list">
-                <div className="list-item">
-                  <span className="label">{t('address')}</span>
-                  <MiddleTruncate text={transaction.transactionDetails.from} />
-                </div>
-                <div className="list-item">
-                  <span className="label">{t('message')}</span>
-                  <MiddleTruncate text={transaction.customMessage!.message} />
-                </div>
-              </div>
-            ) : (
-              <div className="card">
-                <div className="header">
-                  <span className="heading">{t('sign_transaction')}</span>
-                  <span className="action">
-                    <CloseLG />
-                  </span>
-                </div>
-                <div className="content">
-                  <div className="list">
-                    <div className="item">
-                      <span className="label">{t('from')}</span>
-                      <MiddleTruncate
-                        text={transaction.transactionDetails.from}
-                      />
+                          <div className="item">
+                            <span className="label">Network</span>
+                            <span className="extra">
+                              {transaction.chain.chain}
+                            </span>
+                          </div>
+                          {transaction.transactionDetails.amount?.amount && (
+                            <div className="item">
+                              <span className="label">{t('amount')}</span>
+                              <span className="extra">{`${formatUnits(
+                                transaction.transactionDetails.amount.amount,
+                                transaction.transactionDetails.amount.decimals
+                              )} ${keysignPayload?.coin?.ticker}`}</span>
+                            </div>
+                          )}
+                          <div className="item">
+                            <span className="label">{t('network_fee')}</span>
+                            <span className="extra">
+                              {`${transaction.txFee} ${transaction.chain.ticker}`}
+                            </span>
+                          </div>
+                          {transaction.memo?.isParsed ? (
+                            <>
+                              <div className="item">
+                                <span className="label">
+                                  {t('function_signature')}
+                                </span>
+                                <div className="scrollable-x">
+                                  {
+                                    (transaction.memo.value as ParsedMemoParams)
+                                      .functionSignature
+                                  }
+                                </div>
+                              </div>
+                              <div className="item">
+                                <span className="label">
+                                  {t('function_inputs')}
+                                </span>
+                                <div className="scrollable-x monospace-text ">
+                                  <div style={{ width: 'max-content' }}>
+                                    <div className="function-inputs">
+                                      {
+                                        (
+                                          transaction.memo
+                                            .value as ParsedMemoParams
+                                        ).functionArguments
+                                      }
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </>
+                          ) : transaction.memo?.value ? (
+                            <div className="item">
+                              <span className="label">{t('memo')}</span>
+                              <span className="extra">
+                                {splitString(
+                                  transaction.memo.value as string,
+                                  32
+                                ).map((str, index) => (
+                                  <div key={index}>{str}</div>
+                                ))}
+                              </span>
+                            </div>
+                          ) : null}
+                        </>
+                      )}
                     </div>
-                    {transaction.transactionDetails.to && (
+                  </div>
+                  <div className="footer">
+                    <ButtonPrimary onClick={() => handleStep(2)} block>
+                      {t('sign')}
+                    </ButtonPrimary>
+                  </div>
+                </>
+              ) : step === 2 ? (
+                <>
+                  <div className="header">
+                    <span className="heading">{`${t('sign_transaction')} (${step}/5)`}</span>
+                    <span className="action" onClick={() => handleStep(1)}>
+                      <ArrowLeft />
+                    </span>
+                  </div>
+                  <div className="content">
+                    <div className="steps">
                       <div className="item">
-                        <span className="label">{t('to')}</span>
-                        <MiddleTruncate
-                          text={transaction.transactionDetails.to}
-                        />
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">Starting transaction</span>
                       </div>
-                    )}
-                    {transaction.transactionDetails.amount?.amount && (
                       <div className="item">
-                        <span className="label">{t('amount')}</span>
-                        <span className="extra">{`${formatUnits(
-                          transaction.transactionDetails.amount.amount,
-                          transaction.transactionDetails.amount.decimals
-                        )} ${keysignPayload?.coin?.ticker}`}</span>
-                      </div>
-                    )}
-                    {transaction.memo?.value && !transaction.memo.isParsed && (
-                      <div className="item memo">
-                        <span className="label">{t('memo')}</span>
-                        <span className="extra">
-                          {splitString(
-                            transaction.memo.value as string,
-                            32
-                          ).map((str, index) => (
-                            <div key={index}>{str}</div>
-                          ))}
+                        <span className="icon" />
+                        <span className="step">Step 2 of 5</span>
+                        <span className="title">
+                          Scan QR with your mobile device
                         </span>
                       </div>
-                    )}
-                    <div className="item">
-                      <span className="label">{t('network_fee')}</span>
-                      <span className="extra">
-                        {`${transaction.txFee} ${transaction.chain.ticker}`}
+                    </div>
+                    <Divider>{t('or')}</Divider>
+                    <ButtonTertiary onClick={() => handleStep(3)} block>
+                      Sign with desktop app instead
+                    </ButtonTertiary>
+                  </div>
+                </>
+              ) : step === 3 ? (
+                <>
+                  <div className="header">
+                    <span className="heading">{`${t('sign_transaction')} (${step}/5)`}</span>
+                    <span className="action" onClick={() => handleStep(2)}>
+                      <ArrowLeft />
+                    </span>
+                  </div>
+                  <div className="content">
+                    <div className="steps">
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">Starting transaction</span>
+                      </div>
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">
+                          Scan QR with your other device
+                        </span>
+                      </div>
+                      <div className="item">
+                        <span className="icon" />
+                        <span className="step">Step 3 of 5</span>
+                        <span className="title">
+                          Confirm transaction by signing with server share
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="footer">
+                    <ButtonTertiary onClick={() => handleStep(4)} block>
+                      Confirm & signing with server
+                    </ButtonTertiary>
+                  </div>
+                </>
+              ) : step === 4 ? (
+                <>
+                  <div className="header">
+                    <span className="heading">{`${t('sign_transaction')} (${step}/5)`}</span>
+                    <span className="action" onClick={() => handleStep(3)}>
+                      <ArrowLeft />
+                    </span>
+                  </div>
+                  <div className="content">
+                    <div className="steps">
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">Starting transaction</span>
+                      </div>
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">
+                          Scan QR with your other device
+                        </span>
+                      </div>
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">Transaction confirmed</span>
+                      </div>
+                      <div className="item">
+                        <span className="icon" />
+                        <span className="step">Step 4 of 5</span>
+                        <span className="title">Enter your vault password</span>
+                      </div>
+                    </div>
+                    <Form.Item
+                      name="password"
+                      rules={[{ required: true }]}
+                      noStyle
+                    >
+                      <Input.Password placeholder="Enter password" />
+                    </Form.Item>
+                  </div>
+                  <div className="footer">
+                    <Form.Item
+                      shouldUpdate={(prevValues, curValues) =>
+                        prevValues.password !== curValues.password
+                      }
+                      noStyle
+                    >
+                      {({ getFieldValue }) => {
+                        const password: string = getFieldValue('password')
+
+                        return (
+                          <ButtonTertiary
+                            onClick={() => handleStep(5)}
+                            disabled={!password}
+                            block
+                          >
+                            Submit
+                          </ButtonTertiary>
+                        )
+                      }}
+                    </Form.Item>
+                  </div>
+                </>
+              ) : step === 5 ? (
+                <>
+                  <div className="header">
+                    <span className="heading">{`${t('sign_transaction')} (${step}/5)`}</span>
+                    <Spin size="small" />
+                  </div>
+                  <div className="content">
+                    <div className="steps">
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">Starting transaction</span>
+                      </div>
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">
+                          Scan QR with your other device
+                        </span>
+                      </div>
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">Transaction confirmed</span>
+                      </div>
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">Signed with server share</span>
+                      </div>
+                      <div className="item">
+                        <span className="icon" />
+                        <span className="step">Step 5 of 5</span>
+                        <span className="title">Finalizing transaction</span>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="card">
+                    <div className="header">
+                      <span className="heading">{t('sign_transaction')}</span>
+                      <span className="action">
+                        <Close />
                       </span>
                     </div>
-                    {transaction.memo?.isParsed && (
-                      <>
-                        <div className="item">
-                          <span className="label">
-                            {t('function_signature')}
-                          </span>
-                          <div className="scrollable-x">
-                            {
-                              (transaction.memo.value as ParsedMemoParams)
-                                .functionSignature
-                            }
+                    <div className="content">
+                      {transaction.isCustomMessage ? (
+                        <div className="list">
+                          <div className="list-item">
+                            <span className="label">{t('signature')}</span>
+                            <MiddleTruncate
+                              text={transaction.customSignature!}
+                            />
                           </div>
                         </div>
-                        <div className="item">
-                          <span className="label">{t('function_inputs')}</span>
-                          <div className="scrollable-x monospace-text ">
-                            <div style={{ width: 'max-content' }}>
-                              <div className="function-inputs">
-                                {
-                                  (transaction.memo.value as ParsedMemoParams)
-                                    .functionArguments
-                                }
-                              </div>
+                      ) : (
+                        <div className="list">
+                          <div className="list-item">
+                            <span className="label">{t('transaction')}</span>
+                            <MiddleTruncate text={transaction.txHash!} />
+                            <div className="actions">
+                              <a
+                                href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: transaction.txHash! })}`}
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                className="btn"
+                              >
+                                <SquareArrow />
+                                {t('view_tx')}
+                              </a>
+                              <button
+                                className="btn"
+                                onClick={() => handleCopy()}
+                              >
+                                <SquareBehindSquare />
+                                {t('copy_tx')}
+                              </button>
                             </div>
                           </div>
+                          {transaction.transactionDetails.to && (
+                            <div className="list-item">
+                              <span className="label">{t('to')}</span>
+                              <MiddleTruncate
+                                text={transaction.transactionDetails.to}
+                              />
+                            </div>
+                          )}
+                          {transaction.transactionDetails.amount?.amount && (
+                            <div className="list-item">
+                              <span className="label">{t('amount')}</span>
+                              <span className="extra">{`${formatUnits(
+                                transaction.transactionDetails.amount.amount,
+                                transaction.transactionDetails.amount.decimals
+                              )} ${keysignPayload?.coin?.ticker}`}</span>
+                            </div>
+                          )}
+                          {transaction.memo?.value &&
+                            !transaction.memo?.isParsed && (
+                              <div className="memo-item">
+                                <span className="label">{t('memo')}</span>
+                                <span className="extra">
+                                  <div>
+                                    {splitString(
+                                      transaction.memo?.value as string,
+                                      32
+                                    ).map((str, index) => (
+                                      <div key={index}>{str}</div>
+                                    ))}
+                                  </div>
+                                </span>
+                              </div>
+                            )}
+                          <div className="list-item">
+                            <span className="label">{t('network_fee')}</span>
+                            <span className="extra">{`${transaction.txFee} ${transaction.chain.ticker}`}</span>
+                          </div>
                         </div>
-                      </>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className="footer">
-                  <span className="button-primary">{t('sign')}</span>
-                </div>
-              </div>
-            )}
+                </>
+              )}
+            </Form>
 
             {contextHolder}
           </>
