@@ -763,6 +763,7 @@ export const en = {
   vultiserver_password: 'Vultiserver Password',
   backup_without_password: 'Backup without password',
   use_password: 'Use password',
+  upgrade_vault: 'Upgrade your vault',
   backup_password_prompt:
     'Do you want to add a password to your device vault shares?',
   backup_password_info:
