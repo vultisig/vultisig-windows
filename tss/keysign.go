@@ -113,7 +113,7 @@ func (t *TssService) keysignWithRetry(
 	endCh, wg := t.startMessageDownload(serverURL, sessionID, localPartyID, hexEncryptionKey, tssServerImp, messageID)
 	publicKey := vault.PublicKeyECDSA
 	if t.isEdDSA(tssType) {
-		runtime.EventsEmit(t.ctx, "EDDSA")
+		runtime.EventsEmit(t.ctx, "eddsa")
 		publicKey = vault.PublicKeyEdDSA
 	} else {
 		runtime.EventsEmit(t.ctx, "ecdsa")

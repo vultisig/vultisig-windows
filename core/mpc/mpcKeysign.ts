@@ -68,7 +68,7 @@ export class MPCKeysign {
           this.isInitiateDevice,
           keyshare
         )
-        EventsEmit('EDDSA')
+        EventsEmit('eddsa')
         return await schnorrKeysign.startKeysign(messagesToSign)
       },
     })

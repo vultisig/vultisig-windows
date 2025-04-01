@@ -172,7 +172,7 @@ func (t *TssService) reshareECDSAKey(tssService *mtss.ServiceImpl,
 	resharePrefix string,
 	partiesJoined []string,
 	oldParties []string) (*mtss.ReshareResponse, error) {
-	runtime.EventsEmit(t.ctx, "ECDSA")
+	runtime.EventsEmit(t.ctx, "ecdsa")
 	t.Logger.WithFields(logrus.Fields{
 		"public_key":         publicKey,
 		"localPartyID":       localPartyID,
