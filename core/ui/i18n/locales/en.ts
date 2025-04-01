@@ -764,6 +764,12 @@ export const en = {
   backup_without_password: 'Backup without password',
   use_password: 'Use password',
   upgrade_vault: 'Upgrade your vault',
+  upgrade_now: 'Upgrade now',
+  got_it: 'Got it',
+  upgrade_vault_description:
+    'Upgrade this vault to the <b>world’s fastest MPC protocol</b> and sign faster than ever before',
+  upgrade_all_devices:
+    'Make sure that <b>all initial devices</b> are present when upgrading',
   backup_password_prompt:
     'Do you want to add a password to your device vault shares?',
   backup_password_info:

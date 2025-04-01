@@ -1,10 +1,9 @@
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useNavigate } from 'react-router-dom'
 
 import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
-import { appPaths } from '../../../../navigation'
+import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
 import { VaultBackupFlow } from '../../shared/vaultBackupSettings/VaultBackupFlow'
@@ -21,7 +20,7 @@ const steps = [
 ] as const
 
 export const BackupSecureVault = () => {
-  const navigate = useNavigate()
+  const navigate = useAppNavigate()
   const { step, toNextStep } = useStepNavigation({
     steps,
   })
@@ -48,14 +47,10 @@ export const BackupSecureVault = () => {
             from={({ onForward }) => (
               <SetupVaultSummaryStep onForward={onForward} />
             )}
-            to={() => (
-              <BackupSuccessSlide
-                onCompleted={() => navigate(appPaths.vault)}
-              />
-            )}
+            to={() => <BackupSuccessSlide onFinish={() => navigate('vault')} />}
           />
         ) : (
-          <BackupSuccessSlide onCompleted={() => navigate(appPaths.vault)} />
+          <BackupSuccessSlide onFinish={() => navigate('vault')} />
         )
       }
     />

@@ -7,5 +7,5 @@ export const Animation = ({ value }: ValueProp<string>) => {
     autoplay: true,
   })
 
-  return <RiveComponent />
+  return <RiveComponent key={value} />
 }
