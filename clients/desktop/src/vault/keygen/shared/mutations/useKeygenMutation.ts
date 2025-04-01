@@ -45,20 +45,42 @@ export const useKeygenMutation = () => {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const partialVault = await match(keygenType, {
-        [KeygenType.Keygen]: () => {
-          return match(mpcLib, {
-            GG20: () => {
-              return StartKeygen(
-                name,
-                local_party_id,
-                sessionId,
-                hex_chain_code,
-                encryptionKeyHex,
-                serverUrl
-              )
-            },
-            DKLS: async () => {
+      const partialVault = await match(mpcLib, {
+        GG20: async () => {
+          keygenSteps.forEach(step => {
+            EventsOn(step, () => setStep(step))
+          })
+
+          try {
+            return await match(keygenType, {
+              [KeygenType.Keygen]: () => {
+                return StartKeygen(
+                  name,
+                  local_party_id,
+                  sessionId,
+                  hex_chain_code,
+                  encryptionKeyHex,
+                  serverUrl
+                )
+              },
+              [KeygenType.Reshare]: () => {
+                return Reshare(vault, sessionId, encryptionKeyHex, serverUrl)
+              },
+              [KeygenType.Migrate]: () => {
+                throw new Error('Migrate is not supported for GG20')
+              },
+            })
+          } finally {
+            keygenSteps.forEach(step => {
+              EventsOff(step)
+            })
+          }
+        },
+        DKLS: () => {
+          setStep('ecdsa')
+
+          return match(keygenType, {
+            [KeygenType.Keygen]: async () => {
               const mpcKeygen = new MPC(
                 KeygenType.Keygen,
                 isInitiatingDevice,
@@ -99,20 +121,15 @@ export const useKeygenMutation = () => {
               })
               return vault
             },
-          })
-        },
-        [KeygenType.Reshare]: () => {
-          const ecdsaKeyshare = vault.keyshares.find(
-            keyshare => keyshare.public_key === vault.public_key_ecdsa
-          )?.keyshare
-          const eddsaKeyshare = vault.keyshares.find(
-            keyshare => keyshare.public_key === vault.public_key_eddsa
-          )?.keyshare
+            [KeygenType.Reshare]: async () => {
+              const ecdsaKeyshare = vault.keyshares.find(
+                keyshare => keyshare.public_key === vault.public_key_ecdsa
+              )?.keyshare
+              const eddsaKeyshare = vault.keyshares.find(
+                keyshare => keyshare.public_key === vault.public_key_eddsa
+              )?.keyshare
 
-          const oldKeygenCommittee = vault.signers
-          return match(mpcLib, {
-            GG20: () => Reshare(vault, sessionId, encryptionKeyHex, serverUrl),
-            DKLS: async () => {
+              const oldKeygenCommittee = vault.signers
               const mpcKeygen = new MPC(
                 KeygenType.Keygen,
                 isInitiatingDevice,
@@ -157,67 +174,67 @@ export const useKeygenMutation = () => {
               })
               return newVault
             },
-          })
-        },
-        [KeygenType.Migrate]: async () => {
-          const ecdsaKeyshare = vault.keyshares.find(
-            keyshare => keyshare.public_key === vault.public_key_ecdsa
-          )?.keyshare
-          const eddsaKeyshare = vault.keyshares.find(
-            keyshare => keyshare.public_key === vault.public_key_eddsa
-          )?.keyshare
-          if (!ecdsaKeyshare || !eddsaKeyshare) {
-            throw new Error('Keyshare not found')
-          }
-          const oldKeygenCommittee = vault.signers
+            [KeygenType.Migrate]: async () => {
+              const ecdsaKeyshare = vault.keyshares.find(
+                keyshare => keyshare.public_key === vault.public_key_ecdsa
+              )?.keyshare
+              const eddsaKeyshare = vault.keyshares.find(
+                keyshare => keyshare.public_key === vault.public_key_eddsa
+              )?.keyshare
+              if (!ecdsaKeyshare || !eddsaKeyshare) {
+                throw new Error('Keyshare not found')
+              }
+              const oldKeygenCommittee = vault.signers
 
-          const mpcKeygen = new MPC(
-            KeygenType.Migrate,
-            isInitiatingDevice,
-            serverUrl,
-            sessionId,
-            local_party_id,
-            [local_party_id, ...peers],
-            oldKeygenCommittee,
-            encryptionKeyHex
-          )
-          const localUIEcdsa = await GetLocalUIEcdsa(ecdsaKeyshare)
-          const localUIEddsa = await GetLocalUIEdDSA(eddsaKeyshare)
-          const result = await mpcKeygen.startMigrate(
-            vault.public_key_ecdsa,
-            vault.public_key_eddsa,
-            localUIEcdsa,
-            localUIEddsa,
-            vault.hex_chain_code
-          )
-          if (!result) {
-            throw new Error('DKLS keygen failed')
-          }
-          const newVault = storage.Vault.createFrom({
-            name,
-            public_key_ecdsa: result.dkls.publicKey,
-            public_key_eddsa: result.schnorr.publicKey,
-            signers: [local_party_id, ...peers],
-            created_at: new Date().toISOString(),
-            hex_chain_code: result.dkls.chaincode,
-            keyshares: [
-              storage.KeyShare.createFrom({
-                public_key: result.dkls.publicKey,
-                keyshare: result.dkls.keyshare,
-              }),
-              storage.KeyShare.createFrom({
-                public_key: result.schnorr.publicKey,
-                keyshare: result.schnorr.keyshare,
-              }),
-            ],
-            local_party_id,
-            reshare_prefix: '',
-            order: 0,
-            is_backed_up: false,
-            coins: [],
-            lib_type: 'DKLS',
+              const mpcKeygen = new MPC(
+                KeygenType.Migrate,
+                isInitiatingDevice,
+                serverUrl,
+                sessionId,
+                local_party_id,
+                [local_party_id, ...peers],
+                oldKeygenCommittee,
+                encryptionKeyHex
+              )
+              const localUIEcdsa = await GetLocalUIEcdsa(ecdsaKeyshare)
+              const localUIEddsa = await GetLocalUIEdDSA(eddsaKeyshare)
+              const result = await mpcKeygen.startMigrate(
+                vault.public_key_ecdsa,
+                vault.public_key_eddsa,
+                localUIEcdsa,
+                localUIEddsa,
+                vault.hex_chain_code
+              )
+              if (!result) {
+                throw new Error('DKLS keygen failed')
+              }
+              const newVault = storage.Vault.createFrom({
+                name,
+                public_key_ecdsa: result.dkls.publicKey,
+                public_key_eddsa: result.schnorr.publicKey,
+                signers: [local_party_id, ...peers],
+                created_at: new Date().toISOString(),
+                hex_chain_code: result.dkls.chaincode,
+                keyshares: [
+                  storage.KeyShare.createFrom({
+                    public_key: result.dkls.publicKey,
+                    keyshare: result.dkls.keyshare,
+                  }),
+                  storage.KeyShare.createFrom({
+                    public_key: result.schnorr.publicKey,
+                    keyshare: result.schnorr.keyshare,
+                  }),
+                ],
+                local_party_id,
+                reshare_prefix: '',
+                order: 0,
+                is_backed_up: false,
+                coins: [],
+                lib_type: 'DKLS',
+              })
+              return newVault
+            },
           })
-          return newVault
         },
       })
 
@@ -225,16 +242,6 @@ export const useKeygenMutation = () => {
         ...partialVault,
         convertValues: () => {},
       }
-    },
-    onMutate: () => {
-      keygenSteps.forEach(step => {
-        EventsOn(step, () => setStep(step))
-      })
-    },
-    onSettled: () => {
-      keygenSteps.forEach(step => {
-        EventsOff(step)
-      })
     },
   })
 

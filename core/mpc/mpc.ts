@@ -40,7 +40,6 @@ export class MPC {
   }
   // startKeygen - start keygen process
   public async startKeygen() {
-    EventsEmit('prepareVault') // TODO: when doing in react-native , we need to find new way to emit the events
     const dklsKeygen = new DKLS(
       this.tssType,
       this.isInitiateDevice,
@@ -51,7 +50,6 @@ export class MPC {
       this.oldKeygenCommittee,
       this.hexEncryptionKey
     )
-    EventsEmit('ecdsa')
     const dklsResult = await dklsKeygen.startKeygenWithRetry()
     if (dklsResult === undefined) {
       throw new Error('DKLS keygen failed')
@@ -98,7 +96,6 @@ export class MPC {
     localUIEddsa: string,
     hexChainCode: string
   ) {
-    EventsEmit('prepareVault')
     const dklsKeygen = new DKLS(
       this.tssType,
       this.isInitiateDevice,
@@ -112,7 +109,6 @@ export class MPC {
       publicKeyEcdsa,
       hexChainCode
     )
-    EventsEmit('ecdsa')
     const dklsResult = await dklsKeygen.startKeygenWithRetry()
     if (dklsResult === undefined) {
       throw new Error('DKLS migrate failed')
@@ -163,7 +159,6 @@ export class MPC {
     const oldCommittee = this.oldKeygenCommittee.filter(party =>
       this.keygenCommittee.includes(party)
     )
-    EventsEmit('prepareVault')
     const dklsKeygen = new DKLS(
       this.tssType,
       this.isInitiateDevice,
@@ -174,7 +169,6 @@ export class MPC {
       oldCommittee,
       this.hexEncryptionKey
     )
-    EventsEmit('ecdsa')
     const dklsResult = await dklsKeygen.startReshareWithRetry(ecdsaKeyshare)
     if (dklsResult === undefined) {
       throw new Error('DKLS reshare failed')
