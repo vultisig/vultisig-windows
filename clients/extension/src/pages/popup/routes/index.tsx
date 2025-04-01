@@ -10,9 +10,9 @@ import SettingsPage from '@clients/extension/src/pages/popup/pages/settings'
 import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-settings'
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import routerKeys from '@clients/extension/src/utils/route-keys'
-import { createHashRouter, Navigate, type RouteObject } from 'react-router-dom'
+import { createHashRouter, Navigate } from 'react-router-dom'
 
-const routes: RouteObject[] = [
+const routes = [
   {
     path: routerKeys.landing,
     element: <LandingPage />,
