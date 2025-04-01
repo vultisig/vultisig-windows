@@ -1,4 +1,6 @@
 import { ChildrenProp, OnClickProp } from '@lib/ui/props'
+import { getHoverVariant } from '@lib/ui/theme/getHoverVariant'
+import { getColor } from '@lib/ui/theme/getters'
 import styled, { css } from 'styled-components'
 
 import { borderRadius } from '../../css/borderRadius'
@@ -7,8 +9,6 @@ import { interactive } from '../../css/interactive'
 import { ChevronRightIcon } from '../../icons/ChevronRightIcon'
 import { HStack, hStack } from '../../layout/Stack'
 import { text } from '../../text'
-import { getHoverVariant } from '../../theme/getHoverVariant'
-import { getColor } from '../../theme/getters'
 import { DnDItemContentPrefix } from './DnDItemContentPrefix'
 
 const Container = styled.div<{ isInteractive: boolean }>`

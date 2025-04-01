@@ -1,4 +1,5 @@
 import { OnFinishProp } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -7,7 +8,6 @@ import { centerContent } from '../../../../lib/ui/css/centerContent'
 import { UserLockIcon } from '../../../../lib/ui/icons/UserLockIcon'
 import { VStack } from '../../../../lib/ui/layout/Stack'
 import { Text } from '../../../../lib/ui/text'
-import { getColor } from '../../../../lib/ui/theme/getters'
 import { FlowPageHeader } from '../../../../ui/flow/FlowPageHeader'
 import { FitPageContent } from '../../../../ui/page/PageContent'
 import { useBackupVaultMutation } from '../../../mutations/useBackupVaultMutation'
