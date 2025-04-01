@@ -1,8 +1,8 @@
+import { NonEmptyOnly } from '@lib/ui/base/NonEmptyOnly'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { NonEmptyOnly } from '../../../lib/ui/base/NonEmptyOnly'
 import { Button } from '../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { TextInput } from '../../../lib/ui/inputs/TextInput'

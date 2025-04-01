@@ -1,7 +1,7 @@
+import { ElementSizeAware } from '@lib/ui/base/ElementSizeAware'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ElementSizeAware } from '../../../lib/ui/base/ElementSizeAware'
 import { VStack, vStack } from '../../../lib/ui/layout/Stack'
 import { FramedQrCode } from '../../../lib/ui/qr/FramedQrCode'
 import { Text } from '../../../lib/ui/text'

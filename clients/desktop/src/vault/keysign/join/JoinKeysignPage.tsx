@@ -1,8 +1,8 @@
 import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { Match } from '@lib/ui/base/Match'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useMemo } from 'react'
 
-import { Match } from '../../../lib/ui/base/Match'
-import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcPeersProvider } from '../../../mpc/peers/state/mpcPeers'

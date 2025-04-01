@@ -1,7 +1,7 @@
+import { Match } from '@lib/ui/base/Match'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
-import { Match } from '../../../lib/ui/base/Match'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { PageHeader } from '../../../ui/page/PageHeader'

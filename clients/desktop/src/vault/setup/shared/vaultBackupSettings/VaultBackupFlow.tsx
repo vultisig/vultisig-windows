@@ -1,6 +1,6 @@
+import { StepTransition } from '@lib/ui/base/StepTransition'
 import { OnFinishProp } from '@lib/ui/props'
 
-import { StepTransition } from '../../../../lib/ui/base/StepTransition'
 import { VaultBackupWithoutPassword } from './VaultBackupWithoutPassword'
 import { VaultBackupWithPassword } from './VaultBackupWithPassword'
 

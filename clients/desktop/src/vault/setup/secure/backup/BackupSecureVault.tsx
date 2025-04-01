@@ -1,7 +1,7 @@
+import { Match } from '@lib/ui/base/Match'
+import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useNavigate } from 'react-router-dom'
 
-import { Match } from '../../../../lib/ui/base/Match'
-import { StepTransition } from '../../../../lib/ui/base/StepTransition'
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
 import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
 import { appPaths } from '../../../../navigation'
