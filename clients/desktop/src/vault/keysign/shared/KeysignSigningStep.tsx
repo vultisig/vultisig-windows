@@ -21,7 +21,6 @@ import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { MatchKeygenSessionStatus } from '../../keygen/shared/MatchKeygenSessionStatus'
 import { KeysignCustomMessageInfo } from '../join/verify/KeysignCustomMessageInfo'
 import { KeysignSigningState } from './KeysignSigningState'
 import { KeysignTxOverview } from './KeysignTxOverview'
@@ -102,10 +101,7 @@ export const KeysignSigningStep = ({
           />
           <PageContent data-testid="KeysignVerifyStep-PageContent">
             <VStack flexGrow>
-              <MatchKeygenSessionStatus
-                pending={() => <KeysignSigningState />}
-                active={() => <KeysignSigningState />}
-              />
+              <KeysignSigningState />
             </VStack>
             <VStack alignItems="center">
               <Text color="shy" size={12}>

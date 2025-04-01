@@ -18,7 +18,11 @@ import { SaveVaultStep } from './SaveVaultStep'
 import { VaultKeygenBackupFlow } from './VaultKeygenBackupFlow'
 
 export const KeygenFlow = ({ onBack }: OnBackProp) => {
-  const { mutate: startKeygen, ...keygenMutationState } = useKeygenMutation()
+  const {
+    step,
+    mutate: startKeygen,
+    ...keygenMutationState
+  } = useKeygenMutation()
   useEffect(startKeygen, [startKeygen])
 
   const { t } = useTranslation()
@@ -70,7 +74,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       pending={() => (
         <>
           <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />
-          <SetupVaultEducationSlides />
+          <SetupVaultEducationSlides value={step} />
         </>
       )}
     />
