@@ -231,7 +231,7 @@ export const useKeygenMutation = () => {
         EventsOn(step, () => setStep(step))
       })
     },
-    onError: () => {
+    onSettled: () => {
       keygenSteps.forEach(step => {
         EventsOff(step)
       })
