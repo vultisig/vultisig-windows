@@ -233,7 +233,6 @@ export const it = {
   vault_setting_edit_vault_rename_subtitle: 'Rinomina la tua cassaforte',
   vault_setting_edit_vault_reshare_subtitle:
     'Ricondividi la cassaforte con un nuovo gruppo di dispositivi.',
-  vault_setting_edit_vault_migrate_subtitle: 'Migra la tua cassaforte',
   vault_setting_edit_vault_delete_subtitle:
     'Elimina definitivamente la tua cassaforte',
   vault_settings_language_settings_title_en: 'Inglese',
@@ -797,4 +796,5 @@ export const it = {
     'Vuoi aggiungere una password alle condivisioni del vault del tuo dispositivo?',
   backup_password_info:
     'Ti consigliamo di non impostare una password di backup per le condivisioni del vault del dispositivo: i tuoi dati sono al sicuro se i backup sono correttamente archiviati in posizioni diverse, il che è già una protezione significativa. Ricorda, le password di backup non possono essere recuperate se le dimentichi. La scelta è tua!',
+  upgrade_your_vault_now: 'Aggiorna il tuo caveau ora',
 }

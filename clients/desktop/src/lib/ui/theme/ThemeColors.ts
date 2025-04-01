@@ -18,7 +18,6 @@ export type ThemeColors = {
   overlay: HSLA
   contrast: HSLA
   success: HSLA
-  successBackground: HSLA
   mist: HSLA
   mistExtra: HSLA
   transparent: HSLA

@@ -224,7 +224,6 @@ export const hr = {
   vault_setting_edit_vault_rename_subtitle: 'Preimenujte svoj trezor',
   vault_setting_edit_vault_reshare_subtitle:
     'Ponovno podijelite trezor s novom grupom uređaja.',
-  vault_setting_edit_vault_migrate_subtitle: 'Migriraj trezor u DKLS',
   vault_setting_edit_vault_delete_subtitle: 'Trajno izbrišite svoj trezor',
   vault_settings_language_settings_title_en: 'Engleski',
   vault_settings_language_settings_title_de: 'Njemački',
@@ -780,4 +779,5 @@ export const hr = {
     'Želite li dodati lozinku dijeljenjima trezora uređaja?',
   backup_password_info:
     'Preporučujemo da ne postavljate sigurnosnu lozinku za dijeljenje trezora uređaja - vaši su podaci sigurni ako su sigurnosne kopije pravilno pohranjene na različitim lokacijama, što je već značajna zaštita. Upamtite, sigurnosne lozinke nije moguće vratiti ako ih zaboravite. Vaš izbor!',
+  upgrade_your_vault_now: 'Nadogradite svoj trezor sada',
 }

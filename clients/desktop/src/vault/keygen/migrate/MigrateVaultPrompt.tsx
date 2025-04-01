@@ -19,8 +19,10 @@ const Container = styled(Link)`
   ${borderRadius.m};
   color: ${getColor('success')};
   border: 1px solid
-    ${({ theme }) => theme.colors.success.getVariant({ a: () => 0.25 })};
-  background: ${getColor('successBackground')};
+    ${({ theme }) =>
+      theme.colors.success.getVariant({ a: () => 0.25 }).toCssValue()};
+  background: ${({ theme }) =>
+    theme.colors.success.getVariant({ a: () => 0.1 }).toCssValue()};
 `
 
 export const MigrateVaultPrompt = () => {
@@ -29,7 +31,9 @@ export const MigrateVaultPrompt = () => {
   return (
     <Container to={makeAppPath('migrateVault')}>
       <UpgradeIcon style={{ fontSize: 24 }} />
-      <Text size={13}>{t('upgrade_your_vault_now')}</Text>
+      <Text weight="500" size={13}>
+        {t('upgrade_your_vault_now')}
+      </Text>
     </Container>
   )
 }
