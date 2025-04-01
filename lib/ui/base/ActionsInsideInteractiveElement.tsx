@@ -1,3 +1,4 @@
+import { useStateCorrector } from '@clients/desktop/src/lib/ui/state/useStateCorrector'
 import { Dimensions } from '@lib/utils/entities/Dimensions'
 import { getRecordKeys } from '@lib/utils/record/getRecordKeys'
 import { getRecordSize } from '@lib/utils/record/getRecordSize'
@@ -7,7 +8,6 @@ import { toEntries } from '@lib/utils/record/toEntries'
 import { ComponentProps, CSSProperties, ReactNode, Ref, useState } from 'react'
 import styled from 'styled-components'
 
-import { useStateCorrector } from '../state/useStateCorrector'
 import { ElementSizeAware } from './ElementSizeAware'
 
 type RenderParams<K extends string> = {

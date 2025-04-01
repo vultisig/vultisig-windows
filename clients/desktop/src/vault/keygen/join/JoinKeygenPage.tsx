@@ -1,10 +1,10 @@
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { fromLibType } from '@core/mpc/types/utils/libType'
+import { Match } from '@lib/ui/base/Match'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
-import { Match } from '../../../lib/ui/base/Match'
-import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { MpcPeersProvider } from '../../../mpc/peers/state/mpcPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'

@@ -1,6 +1,7 @@
+import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+
 import { storage } from '../../../../wailsjs/go/models'
-import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion'
-import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer'
 import { VaultBackupOverrideProvider } from '../state/vaultBackupOverride'
 import { FileBasedVaultBackupResult } from '../VaultBakupResult'
 import { DecryptVaultStep } from './DecryptVaultStep'

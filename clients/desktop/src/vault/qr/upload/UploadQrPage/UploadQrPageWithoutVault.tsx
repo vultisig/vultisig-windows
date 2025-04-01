@@ -1,7 +1,7 @@
+import { Match } from '@lib/ui/base/Match'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Match } from '../../../../lib/ui/base/Match'
 import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
 import { useNavigateBack } from '../../../../navigation/hooks/useNavigationBack'

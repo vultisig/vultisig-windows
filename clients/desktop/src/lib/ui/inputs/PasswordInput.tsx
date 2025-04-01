@@ -1,6 +1,6 @@
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { ComponentPropsWithoutRef } from 'react'
 
-import { ActionInsideInteractiveElement } from '../base/ActionInsideInteractiveElement'
 import { IconButton, iconButtonSizeRecord } from '../buttons/IconButton'
 import { textInputHeight, textInputHorizontalPadding } from '../css/textInput'
 import { useBoolean } from '../hooks/useBoolean'

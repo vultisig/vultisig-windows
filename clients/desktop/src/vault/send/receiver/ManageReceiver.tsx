@@ -1,11 +1,11 @@
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { Match } from '@lib/ui/base/Match'
 import { attempt } from '@lib/utils/attempt'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ClipboardGetText } from '../../../../wailsjs/runtime/runtime'
-import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement'
-import { Match } from '../../../lib/ui/base/Match'
 import {
   IconButton,
   iconButtonSizeRecord,

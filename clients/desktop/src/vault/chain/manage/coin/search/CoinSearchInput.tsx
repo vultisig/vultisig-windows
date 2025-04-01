@@ -1,9 +1,9 @@
+import { ActionsInsideInteractiveElement } from '@lib/ui/base/ActionsInsideInteractiveElement'
 import { getColor } from '@lib/ui/theme/getters'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 import { useTranslation } from 'react-i18next'
 import styled, { CSSProperties } from 'styled-components'
 
-import { ActionsInsideInteractiveElement } from '../../../../../lib/ui/base/ActionsInsideInteractiveElement'
 import { IconButton } from '../../../../../lib/ui/buttons/IconButton'
 import { borderRadius } from '../../../../../lib/ui/css/borderRadius'
 import { takeWholeSpace } from '../../../../../lib/ui/css/takeWholeSpace'
