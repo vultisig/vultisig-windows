@@ -4,7 +4,7 @@ import {
   KeysignPayload,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
-export type KeysignMessagePayloadType = 'custom' | 'keysign'
+type KeysignMessagePayloadType = 'custom' | 'keysign'
 
 interface KeysignMessagePayloadMap {
   custom: CustomMessagePayload

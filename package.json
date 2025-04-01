@@ -18,7 +18,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "knip": "knip",
-    "knip:fix": "knip --fix"
+    "knip:fix": "knip --fix --allow-remove-files"
   },
   "dependencies": {
     "7z-wasm": "^1.1.0",

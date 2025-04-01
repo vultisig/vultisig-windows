@@ -13,9 +13,9 @@ import { getColor } from '../theme/getters'
 import { Tooltip } from '../tooltips/Tooltip'
 import { UnstyledButton } from './UnstyledButton'
 
-export type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl'
+type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl'
 
-export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'ghost' | 'idle'
+type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'ghost' | 'idle'
 
 interface ContainerProps {
   size: ButtonSize

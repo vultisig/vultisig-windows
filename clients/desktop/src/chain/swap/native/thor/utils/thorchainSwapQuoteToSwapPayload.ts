@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { Coin } from '@core/chain/coin/Coin'
+import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { THORChainSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/thorchain_swap_payload_pb'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 import { addMinutes } from 'date-fns'
@@ -12,9 +12,9 @@ import { NativeSwapQuote } from '../../NativeSwapQuote'
 
 type Input = {
   quote: NativeSwapQuote
-  fromCoin: AccountCoin
+  fromCoin: AccountCoin & { hexPublicKey: string }
+  toCoin: AccountCoin & { hexPublicKey: string }
   amount: bigint
-  toCoin: Coin
 }
 
 export const thorchainSwapQuoteToSwapPayload = ({
@@ -31,8 +31,8 @@ export const thorchainSwapQuoteToSwapPayload = ({
     case: 'thorchainSwapPayload',
     value: create(THORChainSwapPayloadSchema, {
       fromAddress: fromCoin.address,
-      fromCoin,
-      toCoin,
+      fromCoin: toCommCoin(fromCoin),
+      toCoin: toCommCoin(toCoin),
       vaultAddress: quote.inbound_address ?? fromCoin.address,
       routerAddress: quote.router,
       fromAmount: amount.toString(),

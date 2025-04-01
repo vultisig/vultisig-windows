@@ -249,7 +249,6 @@ export const pt = {
   vault_backup_page_verified_password_input_placeholder: 'Verificar senha',
   vault_backup_page_verified_password_error: 'As senhas devem ser iguais',
   vault_backup_page_submit_loading_button_text: 'Salvando...',
-  vault_backup_page_skip_button_text: 'Saltar senha',
   vault_backup_page_password_info:
     'Nunca armazene os fragmentos do seu cofre de dispositivos diferentes no mesmo local',
   vault_rename_page_name_error:
@@ -486,7 +485,7 @@ export const pt = {
     emailIncorrect: 'E-mail incorreto, por favor verifique',
     enterEmail: 'Digite seu e-mail',
     emailSetupTitle:
-      'Este e-mail é usado apenas para enviar o backup do servidor',
+      'Este email é usado apenas para enviar o backup do servidor',
     passwordCannotBeRecovered: 'A senha não pode ser redefinida ou recuperada',
     confirmPasswordIsRequired: 'Confirmação de senha é obrigatória',
     passwordDoNotMatch: 'As senhas não coincidem',
@@ -785,4 +784,10 @@ export const pt = {
   tap: 'Tocar',
   took_too_long_to_respond: 'Demorou muito para responder',
   vultiserver_password: 'Senha do Vultiserver',
+  backup_without_password: 'Backup sem senha',
+  use_password: 'Usar senha',
+  backup_password_prompt:
+    'Deseja adicionar uma senha aos compartilhamentos do cofre do seu dispositivo?',
+  backup_password_info:
+    'Recomendamos que você não defina uma senha de backup para compartilhamentos de cofre de dispositivos - seus dados estarão seguros se os backups forem armazenados adequadamente em locais diferentes, o que já é uma proteção significativa. Lembre-se, as senhas de backup não podem ser recuperadas se você as esquecer. A escolha é sua!',
 }

@@ -6,7 +6,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@bufbuild/protobuf": "^2.2.4",
+    "@core/config": "workspace:*",
+    "@core/mpc": "workspace:*",
     "@cosmjs/stargate": "^0.33.1",
+    "@lib/utils": "workspace:*",
     "@mysten/sui": "^1.24.0",
     "@polkadot/api": "^15.8.1",
     "@solana/web3.js": "^2.0.0",

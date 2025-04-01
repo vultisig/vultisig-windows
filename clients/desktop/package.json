@@ -32,6 +32,14 @@
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.2.4",
+    "@core/chain": "workspace:*",
+    "@core/config": "workspace:*",
+    "@core/mpc": "workspace:*",
+    "@core/ui": "workspace:*",
+    "@lib/ui": "workspace:*",
+    "@lib/utils": "workspace:*",
+    "@tanstack/query-core": "^5.69.0",
+    "@wailsapp/runtime": "workspace:^",
     "react-circular-progressbar": "^2.2.0",
     "styled-components": "^6.1.16"
   }

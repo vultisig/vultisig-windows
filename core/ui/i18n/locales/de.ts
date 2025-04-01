@@ -257,7 +257,6 @@ export const de = {
   vault_backup_page_verified_password_input_placeholder: 'Passwort bestätigen',
   vault_backup_page_verified_password_error: 'Passwörter müssen übereinstimmen',
   vault_backup_page_submit_loading_button_text: 'Speichern...',
-  vault_backup_page_skip_button_text: 'Passwort überspringen',
   vault_backup_page_password_info:
     'Bewahren Sie niemals Tresorfragmente von verschiedenen Geräten am selben Ort auf',
   vault_rename_page_name_error:
@@ -492,7 +491,7 @@ export const de = {
     emailIncorrect: 'Falsche E-Mail, bitte überprüfen',
     enterEmail: 'Geben Sie Ihre E-Mail ein',
     emailSetupTitle:
-      'Diese E-Mail wird nur verwendet, um das Backup des Servers zu senden',
+      'Diese E-Mail wird nur verwendet, um das Server-Backup zu senden',
     passwordCannotBeRecovered:
       'Passwort kann nicht zurückgesetzt oder wiederhergestellt werden',
     confirmPasswordIsRequired: 'Passwortbestätigung ist erforderlich',
@@ -796,4 +795,11 @@ export const de = {
   tap: 'Klopfen',
   took_too_long_to_respond: 'Die Antwort hat zu lange gedauert',
   vultiserver_password: 'Vultiserver-Passwort',
+  signing_transaction: 'Signieren einer Transaktion',
+  backup_without_password: 'Backup ohne Passwort',
+  use_password: 'Passwort verwenden',
+  backup_password_prompt:
+    'Möchten Sie den Tresorfreigaben Ihres Geräts ein Kennwort hinzufügen?',
+  backup_password_info:
+    'Wir empfehlen, für Geräte-Tresorfreigaben kein Backup-Passwort festzulegen. Ihre Daten sind sicher, wenn die Backups ordnungsgemäß an verschiedenen Orten gespeichert werden, was bereits einen erheblichen Schutz darstellt. Denken Sie daran: Backup-Passwörter können nicht wiederhergestellt werden, wenn Sie sie vergessen. Sie haben die Wahl!',
 }
