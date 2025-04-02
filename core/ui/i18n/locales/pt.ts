@@ -790,4 +790,13 @@ export const pt = {
   backup_password_info:
     'Recomendamos que você não defina uma senha de backup para compartilhamentos de cofre de dispositivos - seus dados estarão seguros se os backups forem armazenados adequadamente em locais diferentes, o que já é uma proteção significativa. Lembre-se, as senhas de backup não podem ser recuperadas se você as esquecer. A escolha é sua!',
   upgrade_your_vault_now: 'Atualize seu cofre agora',
+  upgrade_vault: 'Atualize seu cofre',
+  upgrade_now: 'Atualize agora',
+  got_it: 'Entendi',
+  upgrade_vault_description:
+    'Atualize este cofre para o <b>protocolo MPC mais rápido do mundo</b> e assine mais rápido do que nunca',
+  upgrade_all_devices:
+    'Certifique-se de que <b>todos os dispositivos iniciais</b> estejam presentes ao atualizar',
+  upgrade_success: 'O Vault foi atualizado <b>com sucesso</b>',
+  go_to_vault: 'Ir para o cofre',
 }

@@ -801,4 +801,13 @@ export const es = {
   backup_password_info:
     'Le recomendamos no establecer una contraseña de respaldo para los recursos compartidos de la bóveda del dispositivo. Sus datos estarán seguros si las copias de seguridad se almacenan correctamente en diferentes ubicaciones, lo cual ya constituye una protección considerable. Recuerde que las contraseñas de respaldo no se pueden recuperar si las olvida. ¡Usted decide!',
   upgrade_your_vault_now: 'Actualice su bóveda ahora',
+  upgrade_vault: 'Mejora tu bóveda',
+  upgrade_now: 'Actualice ahora',
+  got_it: 'Entiendo',
+  upgrade_vault_description:
+    'Actualice esta bóveda al <b>protocolo MPC más rápido del mundo</b> y firme más rápido que nunca.',
+  upgrade_all_devices:
+    'Asegúrese de que <b>todos los dispositivos iniciales</b> estén presentes al realizar la actualización',
+  upgrade_success: 'Bóveda actualizada correctamente',
+  go_to_vault: 'Ir a la bóveda',
 }

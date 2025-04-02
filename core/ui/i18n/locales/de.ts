@@ -802,4 +802,13 @@ export const de = {
   backup_password_info:
     'Wir empfehlen, für Geräte-Tresorfreigaben kein Backup-Passwort festzulegen. Ihre Daten sind sicher, wenn die Backups ordnungsgemäß an verschiedenen Orten gespeichert werden, was bereits einen erheblichen Schutz darstellt. Denken Sie daran: Backup-Passwörter können nicht wiederhergestellt werden, wenn Sie sie vergessen. Sie haben die Wahl!',
   upgrade_your_vault_now: 'Aktualisieren Sie Ihren Tresor jetzt',
+  upgrade_vault: 'Aktualisieren Sie Ihren Tresor',
+  upgrade_now: 'Jetzt upgraden',
+  got_it: 'Habe es',
+  upgrade_vault_description:
+    'Aktualisieren Sie diesen Tresor auf das <b>weltweit schnellste MPC-Protokoll</b> und unterschreiben Sie schneller als je zuvor',
+  upgrade_all_devices:
+    'Stellen Sie sicher, dass beim Upgrade <b>alle ursprünglichen Geräte</b> vorhanden sind',
+  upgrade_success: 'Vault wurde <b>erfolgreich</b> aktualisiert',
+  go_to_vault: 'Zum Tresor gehen',
 }

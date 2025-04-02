@@ -797,4 +797,13 @@ export const it = {
   backup_password_info:
     'Ti consigliamo di non impostare una password di backup per le condivisioni del vault del dispositivo: i tuoi dati sono al sicuro se i backup sono correttamente archiviati in posizioni diverse, il che è già una protezione significativa. Ricorda, le password di backup non possono essere recuperate se le dimentichi. La scelta è tua!',
   upgrade_your_vault_now: 'Aggiorna il tuo caveau ora',
+  upgrade_vault: 'Aggiorna il tuo caveau',
+  upgrade_now: 'Aggiorna ora',
+  got_it: 'Fatto',
+  upgrade_vault_description:
+    'Aggiorna questo vault al protocollo MPC più veloce al mondo e firma più velocemente che mai',
+  upgrade_all_devices:
+    "Assicurarsi che <b>tutti i dispositivi iniziali</b> siano presenti durante l'aggiornamento",
+  upgrade_success: 'Vault aggiornato <b>con successo</b>',
+  go_to_vault: 'Vai al caveau',
 }

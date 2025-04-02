@@ -780,4 +780,13 @@ export const hr = {
   backup_password_info:
     'Preporučujemo da ne postavljate sigurnosnu lozinku za dijeljenje trezora uređaja - vaši su podaci sigurni ako su sigurnosne kopije pravilno pohranjene na različitim lokacijama, što je već značajna zaštita. Upamtite, sigurnosne lozinke nije moguće vratiti ako ih zaboravite. Vaš izbor!',
   upgrade_your_vault_now: 'Nadogradite svoj trezor sada',
+  upgrade_vault: 'Nadogradite svoj trezor',
+  upgrade_now: 'Nadogradite sada',
+  got_it: 'shvaćam',
+  upgrade_vault_description:
+    'Nadogradite ovaj trezor na <b>najbrži MPC protokol na svijetu</b> i potpišite se brže nego ikada prije',
+  upgrade_all_devices:
+    'Provjerite jesu li <b>svi početni uređaji</b> prisutni prilikom nadogradnje',
+  upgrade_success: 'Vault je <b>uspješno</b> nadograđen',
+  go_to_vault: 'Idi u trezor',
 }
