@@ -234,7 +234,6 @@ export const es = {
   vault_setting_edit_vault_rename_subtitle: 'Renombre su bóveda',
   vault_setting_edit_vault_reshare_subtitle:
     'Recompartir la bóveda con un nuevo grupo de dispositivos.',
-  vault_setting_edit_vault_migrate_subtitle: 'Migrar bóveda a DKLS',
   vault_setting_edit_vault_delete_subtitle:
     'Eliminar su bóveda permanentemente',
   vault_settings_language_settings_title_en: 'Inglés',
@@ -801,4 +800,5 @@ export const es = {
     '¿Quieres agregar una contraseña a los recursos compartidos de la bóveda de tu dispositivo?',
   backup_password_info:
     'Le recomendamos no establecer una contraseña de respaldo para los recursos compartidos de la bóveda del dispositivo. Sus datos estarán seguros si las copias de seguridad se almacenan correctamente en diferentes ubicaciones, lo cual ya constituye una protección considerable. Recuerde que las contraseñas de respaldo no se pueden recuperar si las olvida. ¡Usted decide!',
+  upgrade_your_vault_now: 'Actualice su bóveda ahora',
 }

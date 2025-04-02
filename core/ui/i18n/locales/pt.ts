@@ -225,7 +225,6 @@ export const pt = {
   vault_setting_edit_vault_rename_subtitle: 'Renomeie o seu cofre',
   vault_setting_edit_vault_reshare_subtitle:
     'Recompartilhar o cofre com um novo grupo de dispositivos.',
-  vault_setting_edit_vault_migrate_subtitle: 'Migrar cofre para DKLS',
   vault_setting_edit_vault_delete_subtitle:
     'Exclua permanentemente o seu cofre',
   vault_settings_language_settings_title_en: 'Inglês',
@@ -790,4 +789,5 @@ export const pt = {
     'Deseja adicionar uma senha aos compartilhamentos do cofre do seu dispositivo?',
   backup_password_info:
     'Recomendamos que você não defina uma senha de backup para compartilhamentos de cofre de dispositivos - seus dados estarão seguros se os backups forem armazenados adequadamente em locais diferentes, o que já é uma proteção significativa. Lembre-se, as senhas de backup não podem ser recuperadas se você as esquecer. A escolha é sua!',
+  upgrade_your_vault_now: 'Atualize seu cofre agora',
 }

@@ -193,7 +193,6 @@ export const en = {
   vault_setting_edit_vault_rename_title: 'Rename',
   vault_setting_edit_vault_rename_subtitle: 'Rename your vault',
   vault_setting_edit_vault_reshare_subtitle: 'Reshare vault with new committee',
-  vault_setting_edit_vault_migrate_subtitle: 'Migrate vault to DKLS',
   delete: 'Delete',
   vault_setting_edit_vault_delete_subtitle: 'Delete your vault permanently',
   vault_settings_language_settings_title_en: 'English',
@@ -768,4 +767,5 @@ export const en = {
     'Do you want to add a password to your device vault shares?',
   backup_password_info:
     "We recommend that you do not set a backup password for device vault shares-your data is safe if the backups are properly stored in different locations, which is already a significant protection. Remember, backup passwords can't be recovered if you forget them. Your choice!",
+  upgrade_your_vault_now: 'Upgrade your vault now',
 }
