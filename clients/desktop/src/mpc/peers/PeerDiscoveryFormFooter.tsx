@@ -1,8 +1,8 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { IsDisabledProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { Button } from '../../lib/ui/buttons/Button'
 import { vStack } from '../../lib/ui/layout/Stack'
 import { MpcServerTypeManager } from '../serverType/MpcServerTypeManager'
 

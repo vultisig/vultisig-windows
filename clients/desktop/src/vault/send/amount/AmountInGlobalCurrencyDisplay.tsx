@@ -1,13 +1,10 @@
+import { textInputBackground, textInputFrame } from '@lib/ui/css/textInput'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import {
-  textInputBackground,
-  textInputFrame,
-} from '../../../lib/ui/css/textInput'
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel'
 import { hStack } from '../../../lib/ui/layout/Stack'

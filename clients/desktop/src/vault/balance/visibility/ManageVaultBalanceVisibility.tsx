@@ -1,6 +1,7 @@
-import { IconButton } from '../../../lib/ui/buttons/IconButton'
-import { EyeIcon } from '../../../lib/ui/icons/EyeIcon'
-import { EyeOffIcon } from '../../../lib/ui/icons/EyeOffIcon'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { EyeIcon } from '@lib/ui/icons/EyeIcon'
+import { EyeOffIcon } from '@lib/ui/icons/EyeOffIcon'
+
 import { useIsVaultBalanceVisible } from './useIsVaultBalanceVisible'
 
 export const ManageVaultBalanceVisibility = () => {

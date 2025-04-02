@@ -1,10 +1,10 @@
 import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
+import { interactive } from '@lib/ui/css/interactive'
+import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ValueProp } from '@lib/ui/props'
 import { ReactNode, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { interactive } from '../../../lib/ui/css/interactive'
-import { sameDimensions } from '../../../lib/ui/css/sameDimensions'
 import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { Panel } from '../../../lib/ui/panel/Panel'

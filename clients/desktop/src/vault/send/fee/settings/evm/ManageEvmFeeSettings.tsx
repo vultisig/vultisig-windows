@@ -4,13 +4,13 @@ import {
   feePriorities,
   FeePriority,
 } from '@core/chain/tx/fee/FeePriority'
+import { Button } from '@lib/ui/buttons/Button'
 import { OnCloseProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../../../lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '../../../../../lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '../../../../../lib/ui/inputs/InputContainer'

@@ -1,9 +1,9 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { InfoIcon } from '@lib/ui/icons/InfoIcon'
 import { ChildrenProp, UiProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { borderRadius } from '../css/borderRadius'
-import { InfoIcon } from '../icons/InfoIcon'
 import { hStack } from '../layout/Stack'
 import { text } from '../text'
 

@@ -1,8 +1,7 @@
+import { cropText } from '@lib/ui/css/cropText'
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { match } from '@lib/utils/match'
 import styled, { css, DefaultTheme } from 'styled-components'
-
-import { cropText } from '../css/cropText'
-import { toSizeUnit } from '../css/toSizeUnit'
 
 type TextVariant = 'h1Hero' | 'h1Regular'
 

@@ -1,8 +1,8 @@
+import { centeredContentColumn } from '@lib/ui/css/centeredContentColumn'
+import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
+import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import styled from 'styled-components'
 
-import { centeredContentColumn } from '../../lib/ui/css/centeredContentColumn'
-import { horizontalPadding } from '../../lib/ui/css/horizontalPadding'
-import { verticalPadding } from '../../lib/ui/css/verticalPadding'
 import { VStack } from '../../lib/ui/layout/Stack'
 import { pageConfig } from './config'
 

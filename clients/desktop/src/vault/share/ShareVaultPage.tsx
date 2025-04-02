@@ -1,9 +1,9 @@
+import { Button } from '@lib/ui/buttons/Button'
+import ShareIcon from '@lib/ui/icons/ShareIcon'
 import { toPng } from 'html-to-image'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../lib/ui/buttons/Button'
-import ShareIcon from '../../lib/ui/icons/ShareIcon'
 import { HStack, VStack } from '../../lib/ui/layout/Stack'
 import { SaveAsImage } from '../../ui/file/SaveAsImage'
 import { PageContent } from '../../ui/page/PageContent'

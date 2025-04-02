@@ -1,6 +1,6 @@
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import styled from 'styled-components'
 
-import { toSizeUnit } from '../../../../../lib/ui/css/toSizeUnit'
 import { hStack } from '../../../../../lib/ui/layout/Stack'
 import { CoinSearchInput } from './CoinSearchInput'
 import { coinSearchConfig } from './config'

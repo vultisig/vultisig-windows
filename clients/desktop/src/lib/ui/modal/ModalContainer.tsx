@@ -1,12 +1,12 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { takeWholeSpace } from '@lib/ui/css/takeWholeSpace'
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { useIsScreenWidthLessThan } from '@lib/ui/hooks/useIsScreenWidthLessThan'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentPropsWithoutRef, ElementType } from 'react'
 import FocusLock from 'react-focus-lock'
 import styled, { css } from 'styled-components'
 
-import { borderRadius } from '../css/borderRadius'
-import { takeWholeSpace } from '../css/takeWholeSpace'
-import { toSizeUnit } from '../css/toSizeUnit'
-import { useIsScreenWidthLessThan } from '../hooks/useIsScreenWidthLessThan'
 import { vStack } from '../layout/Stack'
 import { modalConfig } from './config'
 

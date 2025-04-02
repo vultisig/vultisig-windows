@@ -1,10 +1,10 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { centerContent } from '@lib/ui/css/centerContent'
+import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { borderRadius } from '../../lib/ui/css/borderRadius'
-import { centerContent } from '../../lib/ui/css/centerContent'
-import { horizontalPadding } from '../../lib/ui/css/horizontalPadding'
 import { HStack } from '../../lib/ui/layout/Stack'
 import { Text, text } from '../../lib/ui/text'
 import {

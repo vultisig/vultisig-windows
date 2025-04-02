@@ -1,5 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { Button } from '@lib/ui/buttons/Button'
+import { iconButtonIconSizeRecord } from '@lib/ui/buttons/IconButton'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import {
+  textInputHeight,
+  textInputHorizontalPadding,
+} from '@lib/ui/css/textInput'
+import { CircledCloseIcon } from '@lib/ui/icons/CircledCloseIcon'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import type { TFunction } from 'i18next'
 import { useForm } from 'react-hook-form'
@@ -7,14 +15,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
 
-import { Button } from '../../../lib/ui/buttons/Button'
-import { iconButtonIconSizeRecord } from '../../../lib/ui/buttons/IconButton'
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
-import {
-  textInputHeight,
-  textInputHorizontalPadding,
-} from '../../../lib/ui/css/textInput'
-import { CircledCloseIcon } from '../../../lib/ui/icons/CircledCloseIcon'
 import { TextInput } from '../../../lib/ui/inputs/TextInput'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'

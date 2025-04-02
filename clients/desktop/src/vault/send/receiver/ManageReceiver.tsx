@@ -1,22 +1,19 @@
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
+import { IconButton, iconButtonSizeRecord } from '@lib/ui/buttons/IconButton'
+import {
+  textInputHeight,
+  textInputHorizontalPadding,
+} from '@lib/ui/css/textInput'
+import AddressBookIcon from '@lib/ui/icons/AddressBookIcon'
+import { CameraIcon } from '@lib/ui/icons/CameraIcon'
+import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { attempt } from '@lib/utils/attempt'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ClipboardGetText } from '../../../../wailsjs/runtime/runtime'
-import {
-  IconButton,
-  iconButtonSizeRecord,
-} from '../../../lib/ui/buttons/IconButton'
-import {
-  textInputHeight,
-  textInputHorizontalPadding,
-} from '../../../lib/ui/css/textInput'
-import AddressBookIcon from '../../../lib/ui/icons/AddressBookIcon'
-import { CameraIcon } from '../../../lib/ui/icons/CameraIcon'
-import { PasteIcon } from '../../../lib/ui/icons/PasteIcon'
 import { TextInput } from '../../../lib/ui/inputs/TextInput'
 import { HStack } from '../../../lib/ui/layout/Stack'
 import { Modal } from '../../../lib/ui/modal'

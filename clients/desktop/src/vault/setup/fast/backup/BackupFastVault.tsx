@@ -1,9 +1,9 @@
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
 import { appPaths } from '../../../../navigation'
 import { SaveVaultStep } from '../../../keygen/shared/SaveVaultStep'
 import { useVaults } from '../../../queries/useVaultsQuery'

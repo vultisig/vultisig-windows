@@ -1,8 +1,8 @@
+import { AsteriskIcon } from '@lib/ui/icons/AsteriskIcon'
 import { ChildrenProp } from '@lib/ui/props'
 import { range } from '@lib/utils/array/range'
 import styled from 'styled-components'
 
-import { AsteriskIcon } from '../../../lib/ui/icons/AsteriskIcon'
 import { useIsVaultBalanceVisible } from './useIsVaultBalanceVisible'
 
 type BalanceSize = 'm' | 'l' | 'xxxl'

@@ -1,8 +1,8 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
-import { Button } from '../buttons/Button'
 import { HStack, hStack } from '../layout/Stack'
 
 type Option<T extends string | number> = {

@@ -1,7 +1,7 @@
+import { CloudUploadIcon } from '@lib/ui/icons/CloudUploadIcon'
 import { t } from 'i18next'
 import { useDropzone } from 'react-dropzone'
 
-import { CloudUploadIcon } from '../../../lib/ui/icons/CloudUploadIcon'
 import { InteractiveDropZoneContainer } from '../../../lib/ui/inputs/upload/DropZoneContainer'
 import { DropZoneContent } from '../../../lib/ui/inputs/upload/DropZoneContent'
 import { Text } from '../../../lib/ui/text'

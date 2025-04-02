@@ -1,7 +1,7 @@
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useInterval } from 'react-use'
 import styled from 'styled-components'
 
-import { useStepNavigation } from '../../../../../lib/ui/hooks/useStepNavigation'
 import { VStack } from '../../../../../lib/ui/layout/Stack'
 import { PageContent } from '../../../../../ui/page/PageContent'
 import { DynamicEducationContent } from './components/DynamicEducationalContent'

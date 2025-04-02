@@ -4,12 +4,12 @@ import { getCoinSearchString } from '@core/chain/coin/utils/getCoinSearchStrings
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { sortCoinsAlphabetically } from '@core/chain/coin/utils/sortCoinsAlphabetically'
 import { NonEmptyOnly } from '@lib/ui/base/NonEmptyOnly'
+import { useTransform } from '@lib/ui/hooks/useTransform'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { t } from 'i18next'
 import { useCallback, useMemo } from 'react'
 
 import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitelistedCoinsQuery'
-import { useTransform } from '../../../../../../lib/ui/hooks/useTransform'
 import { VStack } from '../../../../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../../../../lib/ui/loaders/Spinner'
 import { useCurrentSearch } from '../../../../../../lib/ui/search/CurrentSearchProvider'

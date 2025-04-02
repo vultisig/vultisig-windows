@@ -1,10 +1,10 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
+import { interactive } from '@lib/ui/css/interactive'
 import { InputProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { borderRadius } from '../../../lib/ui/css/borderRadius'
-import { horizontalPadding } from '../../../lib/ui/css/horizontalPadding'
-import { interactive } from '../../../lib/ui/css/interactive'
 import { InvisibleHTMLCheckbox } from '../../../lib/ui/inputs/checkbox/InvisibleHTMLCheckbox'
 import { SwitchContainer } from '../../../lib/ui/inputs/switch/SwitchContainer'
 import { SwitchControl } from '../../../lib/ui/inputs/switch/SwitchControl'

@@ -1,6 +1,6 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button'
 import { HStack, VStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'
 import { makeAppPath } from '../../../navigation'
