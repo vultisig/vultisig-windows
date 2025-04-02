@@ -31,7 +31,7 @@ const verifyKeygenComplete = async ({
   serverURL,
   sessionId,
   peers,
-}: WaitKeygenCompleteInput): Promise<boolean> => {
+}: WaitKeygenCompleteInput) => {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   }
@@ -51,19 +51,15 @@ const verifyKeygenComplete = async ({
   if (!allPeersComplete) {
     throw new Error('not all parties done keygen')
   }
-  return true
 }
 
 export const waitForKeygenComplete = async ({
   serverURL,
   sessionId,
   peers,
-}: WaitKeygenCompleteInput): Promise<boolean> => {
-  return await retry({
-    func: () => {
-      return verifyKeygenComplete({ serverURL, sessionId, peers })
-    },
+}: WaitKeygenCompleteInput) =>
+  retry({
+    func: () => verifyKeygenComplete({ serverURL, sessionId, peers }),
     attempts: 10,
     delay: 1000,
   })
-}

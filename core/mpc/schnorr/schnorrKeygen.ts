@@ -310,5 +310,6 @@ export class Schnorr {
         console.error('schnorr reshare error:', error)
       }
     }
+    throw new Error('schnorr reshare failed')
   }
 }

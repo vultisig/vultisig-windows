@@ -71,14 +71,13 @@ export class MPC {
       sessionId: this.sessionId,
       localPartyId: this.localPartyId,
     })
-    const isCompleteSuccessful = await waitForKeygenComplete({
+
+    await waitForKeygenComplete({
       serverURL: this.serverURL,
       sessionId: this.sessionId,
       peers: this.keygenCommittee,
     })
-    if (!isCompleteSuccessful) {
-      throw new Error('not all peers complete keygen successfully')
-    }
+
     return {
       dkls: dklsResult,
       schnorr: schnorrResult,
@@ -129,14 +128,12 @@ export class MPC {
       sessionId: this.sessionId,
       localPartyId: this.localPartyId,
     })
-    const isCompleteSuccessful = await waitForKeygenComplete({
+    await waitForKeygenComplete({
       serverURL: this.serverURL,
       sessionId: this.sessionId,
       peers: this.keygenCommittee,
     })
-    if (!isCompleteSuccessful) {
-      throw new Error('not all peers complete migrate successfully')
-    }
+
     return {
       dkls: dklsResult,
       schnorr: schnorrResult,
@@ -177,22 +174,18 @@ export class MPC {
     )
     const schnorrResult =
       await schnorrKeygen.startReshareWithRetry(eddsaKeyshare)
-    if (schnorrResult === undefined) {
-      throw new Error('Schnorr reshare failed')
-    }
+
     await setKeygenComplete({
       serverURL: this.serverURL,
       sessionId: this.sessionId,
       localPartyId: this.localPartyId,
     })
-    const isCompleteSuccessful = await waitForKeygenComplete({
+    await waitForKeygenComplete({
       serverURL: this.serverURL,
       sessionId: this.sessionId,
       peers: this.keygenCommittee,
     })
-    if (!isCompleteSuccessful) {
-      throw new Error('not all peers complete reshare successfully')
-    }
+
     return {
       dkls: dklsResult,
       schnorr: schnorrResult,
