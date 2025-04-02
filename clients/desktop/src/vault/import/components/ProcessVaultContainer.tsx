@@ -1,12 +1,12 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { ValueProp } from '@lib/ui/props'
 import { fromBase64 } from '@lib/utils/fromBase64'
 import { pipe } from '@lib/utils/pipe'
 
 import { storage } from '../../../../wailsjs/go/models'
-import { ValueTransfer } from '../../../lib/ui/base/ValueTransfer'
 import { toStorageVault } from '../../utils/storageVault'
 import { DecryptVaultContainerStep } from './DecryptVaultContainerStep'
 import { SaveImportedVaultStep } from './SaveImportedVaultStep'

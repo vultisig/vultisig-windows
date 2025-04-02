@@ -1,9 +1,9 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement'
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '../../../lib/ui/css/borderRadius'
 import { centerContent } from '../../../lib/ui/css/centerContent'

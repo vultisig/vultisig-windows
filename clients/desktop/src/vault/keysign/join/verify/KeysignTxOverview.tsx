@@ -1,4 +1,5 @@
-import { MatchRecordUnion } from '../../../../lib/ui/base/MatchRecordUnion'
+import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
+
 import { KeysignSwapTxInfo } from '../../../swap/keysign/KeysignSwapTxInfo'
 import { KeysignTxPrimaryInfo } from '../../shared/KeysignTxPrimaryInfo'
 import { useKeysignMessagePayload } from '../../shared/state/keysignMessagePayload'

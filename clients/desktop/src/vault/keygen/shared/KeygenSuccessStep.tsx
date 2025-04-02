@@ -1,8 +1,8 @@
+import { StepTransition } from '@lib/ui/base/StepTransition'
+import { Transition } from '@lib/ui/base/Transition'
 import { TitleProp, ValueProp } from '@lib/ui/props'
 
 import { storage } from '../../../../wailsjs/go/models'
-import { StepTransition } from '../../../lib/ui/base/StepTransition'
-import { Transition } from '../../../lib/ui/base/Transition'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { KeygenBackup } from './KeygenBackup'

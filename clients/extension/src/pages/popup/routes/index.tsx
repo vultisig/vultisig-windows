@@ -10,25 +10,9 @@ import SettingsPage from '@clients/extension/src/pages/popup/pages/settings'
 import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-settings'
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import routerKeys from '@clients/extension/src/utils/route-keys'
-import {
-  createHashRouter,
-  Navigate,
-  type RouteObject,
-  RouterProvider,
-} from 'react-router-dom'
+import { createHashRouter, Navigate } from 'react-router-dom'
 
-interface RouteConfig {
-  path: string
-  element?: React.ReactNode
-  children?: RouteConfig[]
-  redirect?: string
-}
-
-const routes: RouteConfig[] = [
-  {
-    path: routerKeys.root,
-    redirect: routerKeys.main,
-  },
+const routes = [
   {
     path: routerKeys.landing,
     element: <LandingPage />,
@@ -42,11 +26,7 @@ const routes: RouteConfig[] = [
     element: <Layout />,
     children: [
       {
-        path: routerKeys.root,
-        redirect: routerKeys.main,
-      },
-      {
-        path: routerKeys.main,
+        index: true,
         element: <MainPage />,
       },
       {
@@ -79,44 +59,16 @@ const routes: RouteConfig[] = [
       },
       {
         path: '*',
-        redirect: routerKeys.root,
+        element: <Navigate to={routerKeys.root} replace />,
       },
     ],
   },
   {
     path: '*',
-    redirect: routerKeys.root,
+    element: <Navigate to={routerKeys.root} replace />,
   },
 ]
 
-const processRoutes = (routes: RouteConfig[]): RouteObject[] => {
-  return routes.reduce<RouteObject[]>(
-    (acc, { children, element, path, redirect }) => {
-      if (redirect) {
-        const processedRoute: RouteObject = {
-          path,
-          element: <Navigate to={redirect} replace />,
-        }
-        acc.push(processedRoute)
-      } else if (element) {
-        const processedRoute: RouteObject = {
-          path,
-          element,
-          children: children ? processRoutes(children) : undefined,
-        }
-        acc.push(processedRoute)
-      }
-
-      return acc
-    },
-    []
-  )
-}
-
-const router = createHashRouter(processRoutes(routes), {
+export const router = createHashRouter(routes, {
   basename: routerKeys.basePath,
 })
-
-const Component = () => <RouterProvider router={router} />
-
-export default Component

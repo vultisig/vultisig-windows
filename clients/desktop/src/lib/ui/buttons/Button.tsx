@@ -1,10 +1,10 @@
+import { MergeRefs } from '@lib/ui/base/MergeRefs'
 import { getHoverVariant } from '@lib/ui/theme/getHoverVariant'
 import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-import { MergeRefs } from '../base/MergeRefs'
 import { centerContent } from '../css/centerContent'
 import { horizontalPadding } from '../css/horizontalPadding'
 import { round } from '../css/round'

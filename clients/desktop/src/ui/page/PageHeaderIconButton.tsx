@@ -1,8 +1,8 @@
+import { Hoverable } from '@lib/ui/base/Hoverable'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps, ReactNode } from 'react'
 import styled from 'styled-components'
 
-import { Hoverable } from '../../lib/ui/base/Hoverable'
 import { IconWrapper } from '../../lib/ui/icons/IconWrapper'
 import { pageConfig } from './config'
 

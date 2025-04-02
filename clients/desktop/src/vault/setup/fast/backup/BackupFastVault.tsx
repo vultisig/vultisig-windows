@@ -1,8 +1,8 @@
+import { Match } from '@lib/ui/base/Match'
+import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { Match } from '../../../../lib/ui/base/Match'
-import { StepTransition } from '../../../../lib/ui/base/StepTransition'
 import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
 import { appPaths } from '../../../../navigation'
 import { SaveVaultStep } from '../../../keygen/shared/SaveVaultStep'

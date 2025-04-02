@@ -1,7 +1,7 @@
+import { mergeRefs } from '@clients/desktop/src/lib/ui/utils/mergeRefs'
 import { ReactNode, useMemo } from 'react'
 
 import { useArrayMemo } from '../hooks/useArrayMemo'
-import { mergeRefs } from '../utils/mergeRefs'
 
 type MergeRefsProps<T> = {
   refs: (React.Ref<T> | undefined | null)[]

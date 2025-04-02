@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { validateEmail } from '@lib/utils/validation/validateEmail'
 import type { TFunction } from 'i18next'
@@ -6,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
-import { ActionInsideInteractiveElement } from '../../../lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '../../../lib/ui/buttons/Button'
 import { iconButtonIconSizeRecord } from '../../../lib/ui/buttons/IconButton'
 import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'

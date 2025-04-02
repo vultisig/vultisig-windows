@@ -1,9 +1,9 @@
 import { coinKeyFromString } from '@core/chain/coin/Coin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { Match } from '@lib/ui/base/Match'
 import { useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 
-import { Match } from '../../lib/ui/base/Match'
 import { useStepNavigation } from '../../lib/ui/hooks/useStepNavigation'
 import { useAppPathParams } from '../../navigation/hooks/useAppPathParams'
 import { useNavigateBack } from '../../navigation/hooks/useNavigationBack'

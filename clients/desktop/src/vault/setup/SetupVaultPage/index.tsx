@@ -1,9 +1,9 @@
+import { Match } from '@lib/ui/base/Match'
 import { match } from '@lib/utils/match'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
-import { Match } from '../../../lib/ui/base/Match'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { CheckIcon } from '../../../lib/ui/icons/CheckIcon'
 import { LightningGradientIcon } from '../../../lib/ui/icons/LightningGradientIcon'
