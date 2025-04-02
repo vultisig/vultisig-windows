@@ -33,7 +33,6 @@ export const de = {
   serverTookTooLong:
     'Der Server hat zu lange gebraucht, um zu antworten. Bitte überprüfe deine Internetverbindung und versuche es erneut.',
   optionalDevice: 'Optionales Gerät',
-  scanWithDevice: 'Scannen mit {{deviceNumber}}. Gerät',
   localMode: 'Sie sind im lokalen Modus',
   scanQrInstruction:
     'QR mit einem anderen Gerät scannen. 3-Geräte-Setup empfohlen, 2 reichen aus.',
@@ -135,7 +134,6 @@ export const de = {
   setup: 'Einrichten',
   import: 'Importieren',
   keygen: 'Schlüsselgenerierung',
-  migrate: 'migrieren',
   name_your_vault: 'Nennen Sie Ihren Tresor',
   join: 'Beitreten',
   save_changes: 'Änderungen speichern',
@@ -718,8 +716,6 @@ export const de = {
   vault_value: 'Tresorwert',
   vault_part: 'Tresorteil',
   share: 'Aktie',
-  join_migrate: 'Migration beitreten',
-  waiting_for_migrate_start: 'Warten auf den Beginn der Migration ...',
   backup_now: 'Jetzt sichern',
   share_n_of_m: 'Teilen Sie {{n}} von {{m}}',
   this_vault_share: 'diese Tresorfreigabe',
@@ -811,4 +807,9 @@ export const de = {
     'Stellen Sie sicher, dass beim Upgrade <b>alle ursprünglichen Geräte</b> vorhanden sind',
   upgrade_success: 'Vault wurde <b>erfolgreich</b> aktualisiert',
   go_to_vault: 'Zum Tresor gehen',
+  upgrade: 'Upgrade',
+  scan_with_device_index: 'Mit {{index}}-Gerät scannen',
+  scan_with_device_name: 'Scannen mit {{name}}',
+  join_upgrade: 'Upgrade beitreten',
+  waiting_for_upgrade_start: 'Warten auf den Beginn des Upgrades ...',
 }

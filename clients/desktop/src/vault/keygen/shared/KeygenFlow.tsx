@@ -32,7 +32,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
   const title = match(keygenType, {
     Keygen: () => t('creating_vault'),
     Reshare: () => t('reshare'),
-    Migrate: () => t('migrate'),
+    Migrate: () => t('upgrade'),
   })
 
   return (
