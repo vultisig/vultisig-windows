@@ -1,3 +1,4 @@
+import { getColor } from '@lib/ui/theme/getters'
 import { ComponentPropsWithoutRef, ElementType } from 'react'
 import FocusLock from 'react-focus-lock'
 import styled, { css } from 'styled-components'
@@ -7,7 +8,6 @@ import { takeWholeSpace } from '../css/takeWholeSpace'
 import { toSizeUnit } from '../css/toSizeUnit'
 import { useIsScreenWidthLessThan } from '../hooks/useIsScreenWidthLessThan'
 import { vStack } from '../layout/Stack'
-import { getColor } from '../theme/getters'
 import { modalConfig } from './config'
 
 export type ModalPlacement = 'top' | 'center'

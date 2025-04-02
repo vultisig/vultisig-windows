@@ -1,9 +1,9 @@
+import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
 import { Button } from '../buttons/Button'
 import { HStack, hStack } from '../layout/Stack'
-import { getColor } from '../theme/getters'
 
 type Option<T extends string | number> = {
   label: string

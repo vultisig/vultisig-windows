@@ -22,7 +22,9 @@
   },
   "dependencies": {
     "@core/chain": "workspace:*",
+    "@core/mpc": "workspace:*",
     "@keplr-wallet/provider": "^0.12.202",
+    "@lib/utils": "workspace:*",
     "@solana/spl-token": "^0.4.13",
     "antd": "^5.24.4",
     "axios": "^1.8.3",

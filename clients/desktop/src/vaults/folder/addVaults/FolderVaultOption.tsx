@@ -1,4 +1,5 @@
 import { InputProps } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 import { borderRadius } from '../../../lib/ui/css/borderRadius'
@@ -10,7 +11,6 @@ import { SwitchControl } from '../../../lib/ui/inputs/switch/SwitchControl'
 import { hStack } from '../../../lib/ui/layout/Stack'
 import { DnDItemContentPrefix } from '../../../lib/ui/list/item/DnDItemContentPrefix'
 import { text } from '../../../lib/ui/text'
-import { getColor } from '../../../lib/ui/theme/getters'
 import { VaultDescription } from '../../components/VaultDescription'
 
 const Container = styled.label`

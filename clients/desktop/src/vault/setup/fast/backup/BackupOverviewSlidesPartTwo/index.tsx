@@ -1,3 +1,4 @@
+import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -7,7 +8,6 @@ import { MultistepProgressIndicator } from '../../../../../lib/ui/flow/Multistep
 import { ChevronRightIcon } from '../../../../../lib/ui/icons/ChevronRightIcon'
 import { VStack } from '../../../../../lib/ui/layout/Stack'
 import { Text } from '../../../../../lib/ui/text'
-import { getColor } from '../../../../../lib/ui/theme/getters'
 import { PageContent } from '../../../../../ui/page/PageContent'
 import { AnimationDescription } from './AnimationDescription'
 import { useBackupOverviewStepsAnimationsPartTwo } from './hooks/useBackupOverviewStepsAnimationsPartTwo'

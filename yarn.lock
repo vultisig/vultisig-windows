@@ -564,6 +564,7 @@ __metadata:
     "@bufbuild/protoc-gen-es": "npm:^2.2.4"
     "@core/chain": "workspace:*"
     "@core/config": "workspace:*"
+    "@core/mpc": "workspace:*"
     "@core/ui": "workspace:*"
     "@cosmjs/tendermint-rpc": "npm:^0.33.1"
     "@eslint/js": "npm:^9.22.0"
@@ -572,6 +573,7 @@ __metadata:
     "@keplr-wallet/provider": "npm:^0.12.202"
     "@keplr-wallet/types": "npm:^0.12.202"
     "@lib/ui": "workspace:*"
+    "@lib/utils": "workspace:*"
     "@solana/spl-token": "npm:^0.4.13"
     "@solana/web3.js": "npm:^1.98.0"
     "@trustwallet/wallet-core": "npm:^4.2.15"
@@ -1671,6 +1673,7 @@ __metadata:
   resolution: "@lib/ui@workspace:lib/ui"
   dependencies:
     "@lib/utils": "workspace:*"
+    styled-components: "npm:^6.1.16"
   languageName: unknown
   linkType: soft
 
