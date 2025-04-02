@@ -1,6 +1,6 @@
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { useTranslation } from 'react-i18next'
 
-import { TriangleAlertIcon } from '../../../lib/ui/icons/TriangleAlertIcon'
 import { Text } from '../../../lib/ui/text'
 import { Content, FullWidthText } from './KeygenVaultBackupBanner.styles'
 

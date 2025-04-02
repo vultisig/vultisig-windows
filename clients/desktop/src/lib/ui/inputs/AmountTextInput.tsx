@@ -1,8 +1,8 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { centerContent } from '@lib/ui/css/centerContent'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
-import { borderRadius } from '../css/borderRadius'
-import { centerContent } from '../css/centerContent'
 import { HStack } from '../layout/Stack'
 import { text } from '../text'
 import { TextInput, TextInputProps } from './TextInput'
