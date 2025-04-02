@@ -1,9 +1,8 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { centerContent } from '@lib/ui/css/centerContent'
+import { interactive } from '@lib/ui/css/interactive'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { borderRadius } from '../../css/borderRadius'
-import { centerContent } from '../../css/centerContent'
-import { interactive } from '../../css/interactive'
 
 export const DropZoneContainer = styled.div`
   flex: 1;

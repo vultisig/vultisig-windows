@@ -1,10 +1,10 @@
+import { interactive } from '@lib/ui/css/interactive'
 import { InputProps, UiProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
-import { interactive } from '../../css/interactive'
 import { HStack } from '../../layout/Stack'
 import { Text } from '../../text'
 import { InvisibleHTMLCheckbox } from '../checkbox/InvisibleHTMLCheckbox'

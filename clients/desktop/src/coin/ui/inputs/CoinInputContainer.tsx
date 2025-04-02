@@ -1,5 +1,8 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { textInputBackground, textInputFrame } from '@lib/ui/css/textInput'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
@@ -7,12 +10,6 @@ import styled from 'styled-components'
 
 import { ChainCoinIcon } from '../../../chain/ui/ChainCoinIcon'
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
-import {
-  textInputBackground,
-  textInputFrame,
-} from '../../../lib/ui/css/textInput'
-import { ChevronRightIcon } from '../../../lib/ui/icons/ChevronRightIcon'
 import { HStack, hStack } from '../../../lib/ui/layout/Stack'
 import { Text, text } from '../../../lib/ui/text'
 import { IconWrapper } from '../../../pages/edItVault/EditVaultPage.styles'

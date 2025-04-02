@@ -1,7 +1,6 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { UiProps } from '@lib/ui/props'
-
-import { Button } from '../buttons/Button'
-import { UniformColumnGrid } from '../css/uniformColumnGrid'
 
 type RadioInputProps<T extends string> = UiProps & {
   value: T | null
