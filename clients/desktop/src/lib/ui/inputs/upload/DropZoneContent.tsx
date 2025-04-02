@@ -1,8 +1,8 @@
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { ChildrenProp, IconProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { IconWrapper } from '../../icons/IconWrapper'
 import { VStack } from '../../layout/Stack'
 import { Text } from '../../text'
 

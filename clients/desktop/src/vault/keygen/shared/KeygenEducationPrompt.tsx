@@ -1,5 +1,6 @@
+import { QuestionMarkIcon } from '@lib/ui/icons/QuestionMarkIcon'
+
 import { BrowserOpenURL } from '../../../../wailsjs/runtime/runtime'
-import { QuestionMarkIcon } from '../../../lib/ui/icons/QuestionMarkIcon'
 import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton'
 
 const resourceUrl =

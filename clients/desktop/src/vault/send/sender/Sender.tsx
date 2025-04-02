@@ -1,11 +1,8 @@
+import { textInputBackground, textInputFrame } from '@lib/ui/css/textInput'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import {
-  textInputBackground,
-  textInputFrame,
-} from '../../../lib/ui/css/textInput'
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel'
 import { vStack } from '../../../lib/ui/layout/Stack'

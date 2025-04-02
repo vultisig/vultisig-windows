@@ -1,4 +1,5 @@
-import { EditIcon } from '../../lib/ui/icons/EditIcon'
+import { EditIcon } from '@lib/ui/icons/EditIcon'
+
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt'
 import { PageContent } from '../../ui/page/PageContent'

@@ -1,6 +1,6 @@
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import styled from 'styled-components'
 
-import { toSizeUnit } from '../css/toSizeUnit'
 import { qrCodeDefaultSize } from './config'
 
 export const Wrapper = styled.div<{

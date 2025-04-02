@@ -1,9 +1,9 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { CloudOffIcon } from '@lib/ui/icons/CloudOffIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { borderRadius } from '../../lib/ui/css/borderRadius'
-import { CloudOffIcon } from '../../lib/ui/icons/CloudOffIcon'
 import { hStack } from '../../lib/ui/layout/Stack'
 import { Text } from '../../lib/ui/text'
 

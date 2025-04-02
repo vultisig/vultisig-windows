@@ -1,4 +1,5 @@
-import { EditIcon } from '../../lib/ui/icons/EditIcon'
+import { EditIcon } from '@lib/ui/icons/EditIcon'
+
 import { VStack } from '../../lib/ui/layout/Stack'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageContent } from '../../ui/page/PageContent'

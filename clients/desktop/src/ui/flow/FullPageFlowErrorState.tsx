@@ -1,8 +1,8 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { CloseIcon } from '@lib/ui/icons/CloseIcon'
 import { ActionProp, MessageProp } from '@lib/ui/props'
 import styled from 'styled-components'
 
-import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton'
-import { CloseIcon } from '../../lib/ui/icons/CloseIcon'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeader } from '../page/PageHeader'
 import { PageHeaderBackButton } from '../page/PageHeaderBackButton'

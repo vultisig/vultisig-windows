@@ -1,8 +1,8 @@
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useNavigate } from 'react-router-dom'
 
-import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
 import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
 import { appPaths } from '../../../../navigation'
 import { useVaults } from '../../../queries/useVaultsQuery'

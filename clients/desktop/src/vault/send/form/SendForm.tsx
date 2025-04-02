@@ -1,9 +1,9 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { OnForwardProp } from '@lib/ui/props'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { StrictInfoRow } from '../../../lib/ui/layout/StrictInfoRow'

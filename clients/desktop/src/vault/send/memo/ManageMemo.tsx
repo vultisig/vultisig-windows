@@ -1,8 +1,8 @@
+import { interactive } from '@lib/ui/css/interactive'
+import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { interactive } from '../../../lib/ui/css/interactive'
-import { useBoolean } from '../../../lib/ui/hooks/useBoolean'
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel'
 import { TextInput } from '../../../lib/ui/inputs/TextInput'

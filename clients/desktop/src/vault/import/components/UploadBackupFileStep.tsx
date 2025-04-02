@@ -1,3 +1,4 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { OnFinishProp } from '@lib/ui/props'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -5,7 +6,6 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { Text } from '../../../lib/ui/text'

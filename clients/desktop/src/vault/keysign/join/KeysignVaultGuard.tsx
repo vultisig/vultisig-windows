@@ -1,8 +1,8 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { ChildrenProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { Button } from '../../../lib/ui/buttons/Button'
 import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { makeAppPath } from '../../../navigation'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'

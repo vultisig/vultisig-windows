@@ -1,6 +1,6 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import styled from 'styled-components'
 
-import { UnstyledButton } from '../../../lib/ui/buttons/UnstyledButton'
 import { Text } from '../../../lib/ui/text'
 
 export const FixedWrapper = styled.div`

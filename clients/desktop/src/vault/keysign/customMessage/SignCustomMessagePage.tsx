@@ -1,9 +1,9 @@
 import { create } from '@bufbuild/protobuf'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
+import { Button } from '@lib/ui/buttons/Button'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { TextInput } from '../../../lib/ui/inputs/TextInput'
 import { VStack } from '../../../lib/ui/layout/Stack'

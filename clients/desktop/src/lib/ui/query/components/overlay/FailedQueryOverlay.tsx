@@ -1,6 +1,6 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { OnCloseProp, TitleProp } from '@lib/ui/props'
 
-import { Button } from '../../../buttons/Button'
 import { BodyPortal } from '../../../dom/BodyPortal'
 import { VStack } from '../../../layout/Stack'
 import { Backdrop } from '../../../modal/Backdrop'

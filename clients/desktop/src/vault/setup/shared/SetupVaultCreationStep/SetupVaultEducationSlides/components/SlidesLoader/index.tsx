@@ -1,6 +1,6 @@
+import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { useTranslation } from 'react-i18next'
 
-import { CheckIcon } from '../../../../../../../lib/ui/icons/CheckIcon'
 import { HStack } from '../../../../../../../lib/ui/layout/Stack'
 import { Text } from '../../../../../../../lib/ui/text'
 import {

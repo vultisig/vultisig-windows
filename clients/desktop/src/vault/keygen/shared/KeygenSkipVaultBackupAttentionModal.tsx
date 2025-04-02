@@ -1,8 +1,8 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { Button } from '../../../lib/ui/buttons/Button'
 import { Checkbox } from '../../../lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { Modal } from '../../../lib/ui/modal'

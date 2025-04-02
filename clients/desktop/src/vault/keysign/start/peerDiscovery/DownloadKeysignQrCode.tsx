@@ -1,7 +1,7 @@
+import { FileUpIcon } from '@lib/ui/icons/FileUpIcon'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { FileUpIcon } from '../../../../lib/ui/icons/FileUpIcon'
 import { SaveAsImage } from '../../../../ui/file/SaveAsImage'
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode'

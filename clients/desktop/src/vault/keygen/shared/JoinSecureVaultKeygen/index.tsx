@@ -1,6 +1,6 @@
+import ShieldCheckIcon from '@lib/ui/icons/ShieldCheckIcon'
 import { useTranslation } from 'react-i18next'
 
-import ShieldCheckIcon from '../../../../lib/ui/icons/ShieldCheckIcon'
 import { VStack } from '../../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../../lib/ui/loaders/Spinner'
 import { Text } from '../../../../lib/ui/text'

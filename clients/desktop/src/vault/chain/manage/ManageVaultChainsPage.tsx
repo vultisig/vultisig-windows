@@ -1,6 +1,6 @@
+import { useScrollTo } from '@lib/ui/hooks/useScrollTo'
 import { useTranslation } from 'react-i18next'
 
-import { useScrollTo } from '../../../lib/ui/hooks/useScrollTo'
 import { ScrollableFlexboxFiller } from '../../../lib/ui/layout/ScrollableFlexboxFiller'
 import { VStack } from '../../../lib/ui/layout/Stack'
 import { CurrentSearchProvider } from '../../../lib/ui/search/CurrentSearchProvider'

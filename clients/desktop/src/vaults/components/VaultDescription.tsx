@@ -1,6 +1,6 @@
+import { cropText } from '@lib/ui/css/cropText'
 import styled from 'styled-components'
 
-import { cropText } from '../../lib/ui/css/cropText'
 import { hStack } from '../../lib/ui/layout/Stack'
 import { Text } from '../../lib/ui/text'
 import { useCurrentVault } from '../../vault/state/currentVault'

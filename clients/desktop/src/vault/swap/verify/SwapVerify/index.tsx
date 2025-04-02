@@ -1,10 +1,10 @@
+import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 
 import { ChainCoinIcon } from '../../../../chain/ui/ChainCoinIcon'
 import { getCoinLogoSrc } from '../../../../coin/logo/getCoinLogoSrc'
-import { ArrowDownIcon } from '../../../../lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
 import { Text } from '../../../../lib/ui/text'
 import { PageContent } from '../../../../ui/page/PageContent'
