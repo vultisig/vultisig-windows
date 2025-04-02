@@ -1,7 +1,7 @@
+import { StepTransition } from '@lib/ui/base/StepTransition'
 import { OnFinishProp } from '@lib/ui/props'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { StepTransition } from '../../lib/ui/base/StepTransition'
 import { Button } from '../../lib/ui/buttons/Button'
 import { ChevronRightIcon } from '../../lib/ui/icons/ChevronRightIcon'
 import { HStack } from '../../lib/ui/layout/Stack'

@@ -1,4 +1,5 @@
-import { StepTransition } from '../../lib/ui/base/StepTransition'
+import { StepTransition } from '@lib/ui/base/StepTransition'
+
 import { hasServerSigner } from '../fast/utils/hasServerSigner'
 import { SecureMigrateVaultPage } from '../reshare/secure/SecureMigrateVaultPage'
 import { useCurrentVault } from '../state/currentVault'

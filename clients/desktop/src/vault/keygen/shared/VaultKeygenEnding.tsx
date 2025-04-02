@@ -1,6 +1,6 @@
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { StepTransition } from '@lib/ui/base/StepTransition'
 
-import { StepTransition } from '../../../lib/ui/base/StepTransition'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { MigrateSuccess } from '../../migrate/MigrateSuccess'
 import { useCurrentKeygenType } from '../state/currentKeygenType'
