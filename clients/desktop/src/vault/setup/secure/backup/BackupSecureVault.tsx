@@ -1,9 +1,9 @@
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { OnFinishProp } from '@lib/ui/props'
 
 import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
 import { VaultBackupFlow } from '../../shared/vaultBackupSettings/VaultBackupFlow'
@@ -19,8 +19,7 @@ const steps = [
   'backupSuccessfulSlideshow',
 ] as const
 
-export const BackupSecureVault = () => {
-  const navigate = useAppNavigate()
+export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
   const { step, toNextStep } = useStepNavigation({
     steps,
   })
@@ -47,10 +46,10 @@ export const BackupSecureVault = () => {
             from={({ onForward }) => (
               <SetupVaultSummaryStep onForward={onForward} />
             )}
-            to={() => <BackupSuccessSlide onFinish={() => navigate('vault')} />}
+            to={() => <BackupSuccessSlide onFinish={onFinish} />}
           />
         ) : (
-          <BackupSuccessSlide onFinish={() => navigate('vault')} />
+          <BackupSuccessSlide onFinish={onFinish} />
         )
       }
     />
