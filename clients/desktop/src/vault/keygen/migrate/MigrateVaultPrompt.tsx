@@ -1,4 +1,5 @@
 import { borderRadius } from '@lib/ui/css/borderRadius'
+import { UpgradeIcon } from '@lib/ui/icons/UpgradeIcon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
