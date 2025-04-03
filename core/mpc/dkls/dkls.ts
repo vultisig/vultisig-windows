@@ -230,7 +230,6 @@ export class DKLS {
         return result
       } catch (error) {
         console.error('DKLS keygen error:', error)
-        throw new Error('DKLS keygen failed')
       }
     }
     throw new Error('DKLS keygen failed')
