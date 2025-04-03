@@ -1,5 +1,5 @@
 import { borderRadius } from '@lib/ui/css/borderRadius'
-// import { UpgradeIcon } from '@lib/ui/icons/UpgradeIcon'
+import { UpgradeIcon } from '@lib/ui/icons/UpgradeIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -30,7 +30,7 @@ export const MigrateVaultPrompt = () => {
 
   return (
     <Container to={makeAppPath('migrateVault')}>
-      {/* <UpgradeIcon style={{ fontSize: 24 }} /> */}
+      <UpgradeIcon style={{ fontSize: 24 }} />
       <Text weight="500" size={13}>
         {t('upgrade_your_vault_now')}
       </Text>
