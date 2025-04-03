@@ -31,15 +31,12 @@
     "keymirror": "^0.1.1",
     "mipd": "^0.0.7",
     "ua-parser-js": "^2.0.3",
-    "zxing-wasm": "^2.1.0"
+    "zxing-wasm": "^2.1.0",
+    "@bufbuild/protobuf": "^2.2.4"
   },
   "devDependencies": {
-    "@bufbuild/buf": "^1.50.1",
-    "@bufbuild/protobuf": "^2.2.4",
-    "@bufbuild/protoc-gen-es": "^2.2.4",
     "@core/config": "workspace:*",
     "@core/ui": "workspace:*",
-    "@cosmjs/tendermint-rpc": "^0.33.1",
     "@eslint/js": "^9.22.0",
     "@fontsource/montserrat": "^5.2.5",
     "@fontsource/roboto-mono": "^5.2.5",
@@ -58,19 +55,13 @@
     "autoprefixer": "^10.4.21",
     "cross-env": "^7.0.3",
     "eslint": "^9.22.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
-    "globals": "^16.0.0",
     "nodemon": "^3.1.9",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.5.3",
     "sass": "^1.86.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.26.1",
     "vite": "^6.2.2",
-    "vite-plugin-node-polyfills": "^0.23.0",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-plugin-node-polyfills": "^0.23.0"
   },
   "manifest": {
     "accounts": "accounts.html",
