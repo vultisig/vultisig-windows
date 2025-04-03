@@ -13,6 +13,7 @@ import {
   alertSuccess,
   alertWarning,
   backgroundPrimary,
+  backgroundTertiary,
   borderLight,
   borderNormal,
   primaryThree,
@@ -24,7 +25,6 @@ import {
   Check,
   Close,
   SquareArrow,
-  SquareBehindSquare,
 } from '@clients/extension/src/icons'
 import api from '@clients/extension/src/utils/api'
 import { splitString } from '@clients/extension/src/utils/functions'
@@ -73,6 +73,7 @@ import {
   QRCode,
   Spin,
   theme,
+  Tooltip,
 } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'
@@ -104,7 +105,7 @@ const Component = () => {
   const walletCore = useWalletCore()
   const RETRY_TIMEOUT_MS = 120000
   const CLOSE_TIMEOUT_MS = 60000
-  const initialState: InitialState = { step: 1, hasError: false }
+  const initialState: InitialState = { step: 6, hasError: false }
   const [connectedDevices, setConnectedDevices] = useState([''])
   const [form] = Form.useForm()
   const [state, setState] = useState(initialState)
@@ -635,6 +636,9 @@ const Component = () => {
             hoverBorderColor: borderNormal,
             warningActiveShadow: 'transparent',
           },
+          Tooltip: {
+            colorBgSpotlight: backgroundTertiary,
+          },
         },
         token: {
           borderRadius: 12,
@@ -698,12 +702,6 @@ const Component = () => {
                             />
                           </div>
                         )}
-                        <div className="item">
-                          <span className="label">Network</span>
-                          <span className="extra">
-                            {transaction.chain.chain}
-                          </span>
-                        </div>
                         {transaction.transactionDetails.amount?.amount && (
                           <div className="item">
                             <span className="label">{t('amount')}</span>
@@ -713,6 +711,12 @@ const Component = () => {
                             )} ${keysignPayload?.coin?.ticker}`}</span>
                           </div>
                         )}
+                        <div className="item">
+                          <span className="label">Network</span>
+                          <span className="extra">
+                            {transaction.chain.chain}
+                          </span>
+                        </div>
                         <div className="item">
                           <span className="label">{t('network_fee')}</span>
                           <span className="extra">
@@ -1098,23 +1102,27 @@ const Component = () => {
                   ) : (
                     <div className="list">
                       <div className="item">
-                        <span className="label">{t('transaction')}</span>
-                        <MiddleTruncate text={transaction.txHash!} />
-                        <div className="actions">
+                        <span className="label">TX ID</span>
+                        <MiddleTruncate
+                          text={transaction.txHash!}
+                          onClick={() => handleCopy()}
+                        />
+                        <Tooltip title={t('view_tx')}>
                           <a
                             href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: transaction.txHash! })}`}
                             rel="noopener noreferrer"
                             target="_blank"
-                            className="btn"
+                            className="action"
                           >
                             <SquareArrow />
-                            {t('view_tx')}
                           </a>
-                          <span className="btn" onClick={() => handleCopy()}>
-                            <SquareBehindSquare />
-                            {t('copy_tx')}
-                          </span>
-                        </div>
+                        </Tooltip>
+                      </div>
+                      <div className="item">
+                        <span className="label">{t('from')}</span>
+                        <MiddleTruncate
+                          text={transaction.transactionDetails.from}
+                        />
                       </div>
                       {transaction.transactionDetails.to && (
                         <div className="item">
@@ -1124,7 +1132,6 @@ const Component = () => {
                           />
                         </div>
                       )}
-
                       {transaction.transactionDetails.amount?.amount && (
                         <div className="item">
                           <span className="label">{t('amount')}</span>
@@ -1134,7 +1141,14 @@ const Component = () => {
                           )} ${keysignPayload?.coin?.ticker}`}</span>
                         </div>
                       )}
-
+                      <div className="item">
+                        <span className="label">Network</span>
+                        <span className="extra">{transaction.chain.chain}</span>
+                      </div>
+                      <div className="item">
+                        <span className="label">{t('network_fee')}</span>
+                        <span className="extra">{`${transaction.txFee} ${transaction.chain.ticker}`}</span>
+                      </div>
                       {transaction.memo?.value &&
                         !transaction.memo?.isParsed && (
                           <div className="item">
@@ -1149,10 +1163,6 @@ const Component = () => {
                             </span>
                           </div>
                         )}
-                      <div className="item">
-                        <span className="label">{t('network_fee')}</span>
-                        <span className="extra">{`${transaction.txFee} ${transaction.chain.ticker}`}</span>
-                      </div>
                     </div>
                   )}
                 </div>

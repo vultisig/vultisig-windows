@@ -97,6 +97,7 @@ body {
     color: $text-extra-light;
     font-weight: 500;
     line-height: rem(16);
+    flex: 1;
   }
 
   .extra {
@@ -112,11 +113,23 @@ body {
     width: rem(112);
   }
 
+  .action {
+    cursor: pointer;
+    height: rem(20);
+    width: rem(20);
+
+    svg {
+      fill: $text-primary;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
   .item {
+    align-items: center;
     display: flex;
     flex-wrap: wrap;
     gap: rem(4);
-    justify-content: space-between;
 
     + .item {
       border-top: solid rem(1) $border-light;
@@ -217,11 +230,12 @@ body {
     align-items: center;
     display: flex;
     justify-content: space-between;
+    gap: rem(8);
 
     .action {
       cursor: pointer;
-      height: rem(20);
-      width: rem(20);
+      height: rem(16);
+      width: rem(16);
 
       svg {
         height: 100%;
@@ -233,6 +247,10 @@ body {
       font-weight: 500;
       font-size: rem(17);
       line-height: rem(20);
+    }
+
+    &.centered {
+      justify-content: center;
     }
   }
 
