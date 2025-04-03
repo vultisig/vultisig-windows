@@ -20,6 +20,7 @@ import {
   textExtraLight,
   textPrimary,
 } from '@clients/extension/src/colors'
+import { getJoinKeysignUrl } from '@core/chain/utils/getJoinKeysignUrl'
 import {
   ArrowLeft,
   Check,
@@ -43,6 +44,7 @@ import { getEncodedSignature } from '@clients/extension/src/utils/tx/getCustomMe
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSignedTransaction } from '@clients/extension/src/utils/tx/getSignedTx'
 import { getChainKind } from '@core/chain/ChainKind'
+import { create } from '@bufbuild/protobuf'
 import {
   getParsedMemo,
   ParsedMemoParams,
@@ -62,6 +64,7 @@ import {
   useWalletCore,
   WalletCoreProvider,
 } from '@core/ui/chain/providers/WalletCoreProvider'
+import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import {
   Button,
   ConfigProvider,
@@ -363,59 +366,76 @@ const Component = () => {
   }
 
   const handleStep = (step: number): void => {
-    setState(prevState => ({ ...prevState, step }))
+    switch (step) {
+      case 1: {
+        setState(prevState => ({ ...prevState, step }))
 
-    // switch (step) {
-    //   case 2: {
-    //     if (keySignUrl) {
-    //       setState(prevState => ({ ...prevState, step }))
-    //     } else if (transaction && vault) {
-    //       setState(prevState => ({ ...prevState, loading: true }))
-    //       let payload: KeysignMessagePayload
-    //       if (transaction.isCustomMessage) {
-    //         payload = {
-    //           custom: create(CustomMessagePayloadSchema, {
-    //             method: transaction.customMessage?.method,
-    //             message: transaction.customMessage?.message,
-    //           }),
-    //         }
-    //       } else {
-    //         payload = {
-    //           keysign: keysignPayload!,
-    //         }
-    //       }
+        break
+      }
+      case 2: {
+        if (fastSign) {
+          setState(prevState => ({ ...prevState, step }))
+        } else if (keySignUrl) {
+          setState(prevState => ({ ...prevState, step }))
+        } else if (transaction && vault) {
+          let payload: KeysignMessagePayload
 
-    //       getJoinKeysignUrl({
-    //         hexEncryptionKey: vault.hexChainCode,
-    //         serverType: 'relay',
-    //         serviceName: 'VultiConnect',
-    //         sessionId: transaction.id,
-    //         vaultId: vault.publicKeyEcdsa,
-    //         payload,
-    //         payloadId: '',
-    //       })
-    //         .then(keySignUrl => {
-    //           setState(prevState => ({
-    //             ...prevState,
-    //             loading: false,
-    //             keySignUrl,
-    //             step,
-    //           }))
+          setState(prevState => ({ ...prevState, loading: true }))
 
-    //           handleStart()
-    //         })
-    //         .catch(() => {
-    //           setState(prevState => ({ ...prevState, loading: false }))
-    //         })
-    //     }
-    //     break
-    //   }
-    //   default: {
-    //     setState(prevState => ({ ...prevState, step }))
+          if (transaction.isCustomMessage) {
+            payload = {
+              custom: create(CustomMessagePayloadSchema, {
+                method: transaction.customMessage?.method,
+                message: transaction.customMessage?.message,
+              }),
+            }
+          } else {
+            payload = {
+              keysign: keysignPayload!,
+            }
+          }
 
-    //     break
-    //   }
-    // }
+          getJoinKeysignUrl({
+            hexEncryptionKey: vault.hexChainCode,
+            serverType: 'relay',
+            serviceName: 'VultiConnect',
+            sessionId: transaction.id,
+            vaultId: vault.publicKeyEcdsa,
+            payload,
+            payloadId: '',
+          })
+            .then(keySignUrl => {
+              setState(prevState => ({
+                ...prevState,
+                loading: false,
+                keySignUrl,
+                step,
+              }))
+
+              handleStart()
+            })
+            .catch(() => {
+              setState(prevState => ({ ...prevState, loading: false }))
+            })
+        }
+
+        break
+      }
+      case 3: {
+        setState(prevState => ({ ...prevState, step }))
+
+        break
+      }
+      case 4: {
+        setState(prevState => ({ ...prevState, step }))
+
+        break
+      }
+      default: {
+        setState(prevState => ({ ...prevState, step }))
+        break
+      }
+    }
   }
 
   const handleFastSign = (): void => {
@@ -591,8 +611,6 @@ const Component = () => {
 
   useEffect(componentDidUpdate, [walletCore]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log(step)
-
   return (
     <ConfigProvider
       theme={{
@@ -640,134 +658,132 @@ const Component = () => {
           />
         ) : transaction ? (
           <>
-            <Form form={form} className="card">
-              <Button htmlType="submit" style={{ display: 'none' }} />
-
-              {step === 1 ? (
-                <>
-                  <div className="header">
-                    <span className="heading">{`${t('sign_transaction')} (${step}/5)`}</span>
-                    <span className="action">
-                      <Close />
-                    </span>
-                  </div>
-                  <div className="content">
-                    <div className="list">
-                      {transaction.isCustomMessage ? (
-                        <>
+            {step === 1 ? (
+              <div className="card">
+                <div className="header">
+                  <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
+                  <span className="action">
+                    <Close />
+                  </span>
+                </div>
+                <div className="content">
+                  <div className="list">
+                    {transaction.isCustomMessage ? (
+                      <>
+                        <div className="item">
+                          <span className="label">{t('address')}</span>
+                          <MiddleTruncate
+                            text={transaction.transactionDetails.from}
+                          />
+                        </div>
+                        <div className="item">
+                          <span className="label">{t('message')}</span>
+                          <MiddleTruncate
+                            text={transaction.customMessage!.message}
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="item">
+                          <span className="label">{t('from')}</span>
+                          <MiddleTruncate
+                            text={transaction.transactionDetails.from}
+                          />
+                        </div>
+                        {transaction.transactionDetails.to && (
                           <div className="item">
-                            <span className="label">{t('address')}</span>
+                            <span className="label">{t('to')}</span>
                             <MiddleTruncate
-                              text={transaction.transactionDetails.from}
+                              text={transaction.transactionDetails.to}
                             />
                           </div>
+                        )}
+                        <div className="item">
+                          <span className="label">Network</span>
+                          <span className="extra">
+                            {transaction.chain.chain}
+                          </span>
+                        </div>
+                        {transaction.transactionDetails.amount?.amount && (
                           <div className="item">
-                            <span className="label">{t('message')}</span>
-                            <MiddleTruncate
-                              text={transaction.customMessage!.message}
-                            />
+                            <span className="label">{t('amount')}</span>
+                            <span className="extra">{`${formatUnits(
+                              transaction.transactionDetails.amount.amount,
+                              transaction.transactionDetails.amount.decimals
+                            )} ${keysignPayload?.coin?.ticker}`}</span>
                           </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="item">
-                            <span className="label">{t('from')}</span>
-                            <MiddleTruncate
-                              text={transaction.transactionDetails.from}
-                            />
-                          </div>
-                          {transaction.transactionDetails.to && (
+                        )}
+                        <div className="item">
+                          <span className="label">{t('network_fee')}</span>
+                          <span className="extra">
+                            {`${transaction.txFee} ${transaction.chain.ticker}`}
+                          </span>
+                        </div>
+                        {transaction.memo?.isParsed ? (
+                          <>
                             <div className="item">
-                              <span className="label">{t('to')}</span>
-                              <MiddleTruncate
-                                text={transaction.transactionDetails.to}
-                              />
-                            </div>
-                          )}
-                          <div className="item">
-                            <span className="label">Network</span>
-                            <span className="extra">
-                              {transaction.chain.chain}
-                            </span>
-                          </div>
-                          {transaction.transactionDetails.amount?.amount && (
-                            <div className="item">
-                              <span className="label">{t('amount')}</span>
-                              <span className="extra">{`${formatUnits(
-                                transaction.transactionDetails.amount.amount,
-                                transaction.transactionDetails.amount.decimals
-                              )} ${keysignPayload?.coin?.ticker}`}</span>
-                            </div>
-                          )}
-                          <div className="item">
-                            <span className="label">{t('network_fee')}</span>
-                            <span className="extra">
-                              {`${transaction.txFee} ${transaction.chain.ticker}`}
-                            </span>
-                          </div>
-                          {transaction.memo?.isParsed ? (
-                            <>
-                              <div className="item">
-                                <span className="label">
-                                  {t('function_signature')}
-                                </span>
-                                <div className="scrollable-x">
-                                  {
-                                    (transaction.memo.value as ParsedMemoParams)
-                                      .functionSignature
-                                  }
-                                </div>
+                              <span className="label">
+                                {t('function_signature')}
+                              </span>
+                              <div className="scrollable-x">
+                                {
+                                  (transaction.memo.value as ParsedMemoParams)
+                                    .functionSignature
+                                }
                               </div>
-                              <div className="item">
-                                <span className="label">
-                                  {t('function_inputs')}
-                                </span>
-                                <div className="scrollable-x monospace-text ">
-                                  <div style={{ width: 'max-content' }}>
-                                    <div className="function-inputs">
-                                      {
-                                        (
-                                          transaction.memo
-                                            .value as ParsedMemoParams
-                                        ).functionArguments
-                                      }
-                                    </div>
+                            </div>
+                            <div className="item">
+                              <span className="label">
+                                {t('function_inputs')}
+                              </span>
+                              <div className="scrollable-x monospace-text ">
+                                <div style={{ width: 'max-content' }}>
+                                  <div className="function-inputs">
+                                    {
+                                      (
+                                        transaction.memo
+                                          .value as ParsedMemoParams
+                                      ).functionArguments
+                                    }
                                   </div>
                                 </div>
                               </div>
-                            </>
-                          ) : transaction.memo?.value ? (
-                            <div className="item">
-                              <span className="label">{t('memo')}</span>
-                              <span className="extra">
-                                {splitString(
-                                  transaction.memo.value as string,
-                                  32
-                                ).map((str, index) => (
-                                  <div key={index}>{str}</div>
-                                ))}
-                              </span>
                             </div>
-                          ) : null}
-                        </>
-                      )}
-                    </div>
+                          </>
+                        ) : transaction.memo?.value ? (
+                          <div className="item">
+                            <span className="label">{t('memo')}</span>
+                            <span className="extra">
+                              {splitString(
+                                transaction.memo.value as string,
+                                32
+                              ).map((str, index) => (
+                                <div key={index}>{str}</div>
+                              ))}
+                            </span>
+                          </div>
+                        ) : null}
+                      </>
+                    )}
                   </div>
-                  <div className="footer">
-                    <ButtonPrimary onClick={() => handleStep(2)} block>
-                      {t('sign')}
-                    </ButtonPrimary>
-                  </div>
-                </>
-              ) : step === 2 ? (
-                <>
-                  <div className="header">
-                    <span className="heading">{`${t('sign_transaction')} (${step}/5)`}</span>
-                    <span className="action" onClick={() => handleStep(1)}>
-                      <ArrowLeft />
-                    </span>
-                  </div>
-                  <div className="content">
+                </div>
+                <div className="footer">
+                  <ButtonPrimary onClick={() => handleStep(2)} block>
+                    {t('sign')}
+                  </ButtonPrimary>
+                </div>
+              </div>
+            ) : step === 2 ? (
+              <div className="card">
+                <div className="header">
+                  <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
+                  <span className="action" onClick={() => handleStep(1)}>
+                    <ArrowLeft />
+                  </span>
+                </div>
+                <div className="content">
+                  {fastSign ? (
                     <div className="steps">
                       <div className="item">
                         <span className="icon">
@@ -783,21 +799,39 @@ const Component = () => {
                         </span>
                       </div>
                     </div>
-                    <Divider>{t('or')}</Divider>
-                    <ButtonTertiary onClick={() => handleStep(3)} block>
-                      Sign with desktop app instead
-                    </ButtonTertiary>
-                  </div>
-                </>
-              ) : step === 3 ? (
-                <>
-                  <div className="header">
-                    <span className="heading">{`${t('sign_transaction')} (${step}/5)`}</span>
-                    <span className="action" onClick={() => handleStep(2)}>
-                      <ArrowLeft />
-                    </span>
-                  </div>
-                  <div className="content">
+                  ) : (
+                    <div className="steps">
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">Starting transaction</span>
+                      </div>
+                      <div className="item">
+                        <span className="icon" />
+                        <span className="step">Step 2 of 4</span>
+                        <span className="title">
+                          Scan QR with [#] others devices linked to this vault
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  <Divider>{t('or')}</Divider>
+                  <ButtonTertiary onClick={() => handleStep(3)} block>
+                    Sign with desktop app instead
+                  </ButtonTertiary>
+                </div>
+              </div>
+            ) : step === 3 ? (
+              <div className="card">
+                <div className="header">
+                  <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
+                  <span className="action" onClick={() => handleStep(2)}>
+                    <ArrowLeft />
+                  </span>
+                </div>
+                <div className="content">
+                  {fastSign ? (
                     <div className="steps">
                       <div className="item">
                         <span className="icon">
@@ -821,17 +855,47 @@ const Component = () => {
                         </span>
                       </div>
                     </div>
-                  </div>
-                  <div className="footer">
-                    <ButtonTertiary onClick={() => handleStep(4)} block>
-                      Confirm & signing with server
-                    </ButtonTertiary>
-                  </div>
-                </>
-              ) : step === 4 ? (
-                <>
+                  ) : (
+                    <div className="steps">
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">Starting transaction</span>
+                      </div>
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">
+                          Scan QR with your other device
+                        </span>
+                      </div>
+                      <div className="item">
+                        <span className="icon" />
+                        <span className="step">Step 3 of 4</span>
+                        <span className="title">
+                          Sign with this device and confirm transaction
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="footer">
+                  <ButtonTertiary onClick={() => handleStep(4)} block>
+                    {fastSign
+                      ? 'Confirm & signing with server'
+                      : 'Confirm & sign with device'}
+                  </ButtonTertiary>
+                </div>
+              </div>
+            ) : step === 4 ? (
+              fastSign ? (
+                <Form form={form} className="card">
+                  <Button htmlType="submit" style={{ display: 'none' }} />
+
                   <div className="header">
-                    <span className="heading">{`${t('sign_transaction')} (${step}/5)`}</span>
+                    <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
                     <span className="action" onClick={() => handleStep(3)}>
                       <ArrowLeft />
                     </span>
@@ -894,11 +958,49 @@ const Component = () => {
                       }}
                     </Form.Item>
                   </div>
-                </>
-              ) : step === 5 ? (
-                <>
+                </Form>
+              ) : (
+                <div className="card">
                   <div className="header">
-                    <span className="heading">{`${t('sign_transaction')} (${step}/5)`}</span>
+                    <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
+                    <Spin size="small" />
+                  </div>
+                  <div className="content">
+                    <div className="steps">
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">Starting transaction</span>
+                      </div>
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">
+                          Scan QR with your other device
+                        </span>
+                      </div>
+                      <div className="item">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="title">Signed with server share</span>
+                      </div>
+                      <div className="item">
+                        <span className="icon" />
+                        <span className="step">Step 4 of 4</span>
+                        <span className="title">Signing Transaction</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            ) : step === 5 ? (
+              fastSign ? (
+                <div className="card">
+                  <div className="header">
+                    <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
                     <Spin size="small" />
                   </div>
                   <div className="content">
@@ -936,94 +1038,9 @@ const Component = () => {
                       </div>
                     </div>
                   </div>
-                </>
-              ) : (
-                <>
-                  <div className="card">
-                    <div className="header">
-                      <span className="heading">{t('sign_transaction')}</span>
-                      <span className="action">
-                        <Close />
-                      </span>
-                    </div>
-                    <div className="content">
-                      {transaction.isCustomMessage ? (
-                        <div className="list">
-                          <div className="list-item">
-                            <span className="label">{t('signature')}</span>
-                            <MiddleTruncate
-                              text={transaction.customSignature!}
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="list">
-                          <div className="list-item">
-                            <span className="label">{t('transaction')}</span>
-                            <MiddleTruncate text={transaction.txHash!} />
-                            <div className="actions">
-                              <a
-                                href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: transaction.txHash! })}`}
-                                rel="noopener noreferrer"
-                                target="_blank"
-                                className="btn"
-                              >
-                                <SquareArrow />
-                                {t('view_tx')}
-                              </a>
-                              <button
-                                className="btn"
-                                onClick={() => handleCopy()}
-                              >
-                                <SquareBehindSquare />
-                                {t('copy_tx')}
-                              </button>
-                            </div>
-                          </div>
-                          {transaction.transactionDetails.to && (
-                            <div className="list-item">
-                              <span className="label">{t('to')}</span>
-                              <MiddleTruncate
-                                text={transaction.transactionDetails.to}
-                              />
-                            </div>
-                          )}
-                          {transaction.transactionDetails.amount?.amount && (
-                            <div className="list-item">
-                              <span className="label">{t('amount')}</span>
-                              <span className="extra">{`${formatUnits(
-                                transaction.transactionDetails.amount.amount,
-                                transaction.transactionDetails.amount.decimals
-                              )} ${keysignPayload?.coin?.ticker}`}</span>
-                            </div>
-                          )}
-                          {transaction.memo?.value &&
-                            !transaction.memo?.isParsed && (
-                              <div className="memo-item">
-                                <span className="label">{t('memo')}</span>
-                                <span className="extra">
-                                  <div>
-                                    {splitString(
-                                      transaction.memo?.value as string,
-                                      32
-                                    ).map((str, index) => (
-                                      <div key={index}>{str}</div>
-                                    ))}
-                                  </div>
-                                </span>
-                              </div>
-                            )}
-                          <div className="list-item">
-                            <span className="label">{t('network_fee')}</span>
-                            <span className="extra">{`${transaction.txFee} ${transaction.chain.ticker}`}</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
-            </Form>
+                </div>
+              ) : null
+            ) : null}
 
             {contextHolder}
           </>
