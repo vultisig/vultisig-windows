@@ -1,9 +1,9 @@
+import { VStack } from '@lib/ui/layout/Stack'
+import { GradientText, Text } from '@lib/ui/text'
 import type { TFunction } from 'i18next'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { VStack } from '../../../../../../lib/ui/layout/Stack'
-import { GradientText, Text } from '../../../../../../lib/ui/text'
 import { SetupFastVaultEducationSlidesStep } from '..'
 
 type DynamicEducationContentProps = {

@@ -1,9 +1,9 @@
+import { GradientText, Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { AnimatedVisibility } from '../../../../../lib/ui/layout/AnimatedVisibility'
-import { GradientText, Text } from '../../../../../lib/ui/text'
 import { useCurrentVault } from '../../../../state/currentVault'
 import { BACKUP_VAULT_ANIMATIONS } from './hooks/useBackupOverviewStepsAnimations'
 

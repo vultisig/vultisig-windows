@@ -1,3 +1,4 @@
+import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -8,7 +9,6 @@ import {
   TxOverviewRow,
   TxOverviewRowDepositsFlow,
 } from '../../../chain/tx/components/TxOverviewRow'
-import { Text } from '../../../lib/ui/text'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'

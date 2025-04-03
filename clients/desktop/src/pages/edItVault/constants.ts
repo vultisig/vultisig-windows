@@ -4,9 +4,9 @@ import ReshareIcon from '@lib/ui/icons/ReshareIcon'
 import { SignatureIcon } from '@lib/ui/icons/SignatureIcon'
 import SquareAndPencilIcon from '@lib/ui/icons/SquareAndPencilIcon'
 import TrashIcon from '@lib/ui/icons/TrashIcon'
+import { TextColor } from '@lib/ui/text'
 import { TFunction } from 'i18next'
 
-import { TextColor } from '../../lib/ui/text'
 import { AppPathsWithNoParamsOrState } from '../../navigation'
 
 type SettingItem = {

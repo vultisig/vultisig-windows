@@ -1,6 +1,5 @@
+import { vStack } from '@lib/ui/layout/Stack'
 import styled from 'styled-components'
-
-import { vStack } from '../../lib/ui/layout/Stack'
 
 export const PageFormFrame = styled.div`
   ${vStack({

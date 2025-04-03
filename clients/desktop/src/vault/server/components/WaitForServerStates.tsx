@@ -1,10 +1,10 @@
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { HStack, VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { PageContent } from '../../../ui/page/PageContent'
 import {
   ServerAnimationStates,

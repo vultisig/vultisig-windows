@@ -1,6 +1,6 @@
+import { VStack } from '@lib/ui/layout/Stack'
 import styled from 'styled-components'
 
-import { VStack } from '../../../lib/ui/layout/Stack'
 import { PageHeader } from '../../../ui/page/PageHeader'
 
 export const AddressBookPageHeader = styled(PageHeader)`

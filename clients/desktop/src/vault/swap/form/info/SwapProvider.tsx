@@ -1,10 +1,10 @@
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { getSwapQuoteProviderName } from '../../../../chain/swap/quote/getSwapQuoteProviderName'
 import { Skeleton } from '../../../../components/skeleton'
 import { StrictInfoRow } from '../../../../lib/ui/layout/StrictInfoRow'
-import { Text } from '../../../../lib/ui/text'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 
 export const SwapProvider = () => {
