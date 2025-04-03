@@ -26,7 +26,7 @@ export const MigrateIntro = ({ onFinish }: OnFinishProp) => {
       )}
       to={() => (
         <MigrateInfoScreen
-          animation="upgrade/all_devices"
+          animation="choose-vault/index"
           title={
             <Trans i18nKey="upgrade_all_devices" components={{ b: <b /> }} />
           }
