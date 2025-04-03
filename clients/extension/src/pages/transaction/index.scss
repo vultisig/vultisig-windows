@@ -93,6 +93,10 @@ body {
   flex-direction: column;
   gap: rem(12);
 
+  .ant-tooltip-open {
+    cursor: pointer;
+  }
+
   .label {
     color: $text-extra-light;
     font-weight: 500;

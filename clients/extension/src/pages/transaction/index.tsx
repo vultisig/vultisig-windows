@@ -105,7 +105,7 @@ const Component = () => {
   const walletCore = useWalletCore()
   const RETRY_TIMEOUT_MS = 120000
   const CLOSE_TIMEOUT_MS = 60000
-  const initialState: InitialState = { step: 6, hasError: false }
+  const initialState: InitialState = { step: 1, hasError: false }
   const [connectedDevices, setConnectedDevices] = useState([''])
   const [form] = Form.useForm()
   const [state, setState] = useState(initialState)
@@ -1089,7 +1089,7 @@ const Component = () => {
             ) : (
               <div className="card">
                 <div className="header">
-                  <span className="heading">Overview</span>
+                  <span className="heading centered">Overview</span>
                 </div>
                 <div className="content">
                   {transaction.isCustomMessage ? (
@@ -1103,10 +1103,12 @@ const Component = () => {
                     <div className="list">
                       <div className="item">
                         <span className="label">TX ID</span>
-                        <MiddleTruncate
-                          text={transaction.txHash!}
-                          onClick={() => handleCopy()}
-                        />
+                        <Tooltip title={t('copy_tx')}>
+                          <MiddleTruncate
+                            text={transaction.txHash!}
+                            onClick={() => handleCopy()}
+                          />
+                        </Tooltip>
                         <Tooltip title={t('view_tx')}>
                           <a
                             href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: transaction.txHash! })}`}
