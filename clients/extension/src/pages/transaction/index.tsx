@@ -571,6 +571,7 @@ const Component = () => {
                       }
                     })
                   }
+
                   if (!transaction.memo.isParsed) {
                     try {
                       transaction.memo.value = toUtf8String(
@@ -819,6 +820,23 @@ const Component = () => {
                     value={keySignUrl || ''}
                     color="white"
                   />
+                  {fastSign ? null : (
+                    <div className="devices">
+                      <div className="item signed">
+                        <span className="icon">
+                          <Check />
+                        </span>
+                        <span className="name">{`Device 1`}</span>
+                      </div>
+                      <div className="item">
+                        <span className="icon" />
+                        <span className="name">
+                          {`Scan with ${2}`}
+                          <sup>nd</sup> device
+                        </span>
+                      </div>
+                    </div>
+                  )}
                   <Divider>{t('or')}</Divider>
                   <ButtonTertiary onClick={() => handleStep(3)} block>
                     Sign with desktop app instead
