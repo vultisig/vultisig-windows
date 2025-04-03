@@ -74,7 +74,7 @@ func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, he
 	if err != nil {
 		return nil, fmt.Errorf("failed to create localStateAccessor: %w", err)
 	}
-	runtime.EventsEmit(t.ctx, "PrepareVault")
+	runtime.EventsEmit(t.ctx, "prepareVault")
 	tssServerImp, err := t.createTSSService(serverURL, sessionID, hexEncryptionKey, localStateAccessor, true)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create TSS service: %w", err)
@@ -338,7 +338,7 @@ func (t *TssService) keygenWithRetry(localPartyID, hexChainCode string, partiesJ
 }
 
 func (t *TssService) generateECDSAKey(tssService mtss.Service, key, hexChainCode string, partiesJoined []string) (*mtss.KeygenResponse, error) {
-	runtime.EventsEmit(t.ctx, "ECDSA")
+	runtime.EventsEmit(t.ctx, "ecdsa")
 	t.Logger.WithFields(logrus.Fields{
 		"key":            key,
 		"chain_code":     hexChainCode,
@@ -361,7 +361,7 @@ func (t *TssService) generateECDSAKey(tssService mtss.Service, key, hexChainCode
 }
 
 func (t *TssService) generateEDDSAKey(tssService mtss.Service, key, hexChainCode string, partiesJoined []string) (*mtss.KeygenResponse, error) {
-	runtime.EventsEmit(t.ctx, "EdDSA")
+	runtime.EventsEmit(t.ctx, "eddsa")
 	t.Logger.WithFields(logrus.Fields{
 		"key":            key,
 		"chain_code":     hexChainCode,

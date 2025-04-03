@@ -1,7 +1,14 @@
+import { DKLS } from '@core/mpc/dkls/dkls'
+import { KeygenStep, keygenSteps } from '@core/mpc/keygen/KeygenStep'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
-import { MPC } from '@core/mpc/mpc'
+import { waitForKeygenComplete } from '@core/mpc/keygenComplete'
+import { setKeygenComplete } from '@core/mpc/keygenComplete'
+import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
+import { EventsOff, EventsOn } from '@wailsapp/runtime'
+import { useState } from 'react'
 
 import { storage } from '../../../../../wailsjs/go/models'
 import {
@@ -38,51 +45,90 @@ export const useKeygenMutation = () => {
 
   const isInitiatingDevice = useIsInitiatingDevice()
 
-  return useMutation({
+  const [step, setStep] = useState<KeygenStep | null>(null)
+
+  const mutation = useMutation({
     mutationFn: async () => {
-      const partialVault = await match(keygenType, {
-        [KeygenType.Keygen]: () => {
-          return match(mpcLib, {
-            GG20: () => {
-              return StartKeygen(
-                name,
-                local_party_id,
-                sessionId,
-                hex_chain_code,
-                encryptionKeyHex,
-                serverUrl
-              )
-            },
-            DKLS: async () => {
-              const mpcKeygen = new MPC(
+      const partialVault = await match(mpcLib, {
+        GG20: async () => {
+          keygenSteps.forEach(step => {
+            EventsOn(step, () => setStep(step))
+          })
+
+          try {
+            return await match(keygenType, {
+              [KeygenType.Keygen]: () => {
+                return StartKeygen(
+                  name,
+                  local_party_id,
+                  sessionId,
+                  hex_chain_code,
+                  encryptionKeyHex,
+                  serverUrl
+                )
+              },
+              [KeygenType.Reshare]: () => {
+                return Reshare(vault, sessionId, encryptionKeyHex, serverUrl)
+              },
+              [KeygenType.Migrate]: () => {
+                throw new Error('Migrate is not supported for GG20')
+              },
+            })
+          } finally {
+            keygenSteps.forEach(step => {
+              EventsOff(step)
+            })
+          }
+        },
+        DKLS: async () => {
+          setStep('ecdsa')
+
+          const keygenCommittee = [local_party_id, ...peers]
+
+          const vault = await match(keygenType, {
+            [KeygenType.Keygen]: async () => {
+              const dklsKeygen = new DKLS(
                 KeygenType.Keygen,
                 isInitiatingDevice,
                 serverUrl,
                 sessionId,
                 local_party_id,
-                [local_party_id, ...peers],
+                keygenCommittee,
                 [],
                 encryptionKeyHex
               )
-              const result = await mpcKeygen.startKeygen()
-              if (!result) {
-                throw new Error('DKLS keygen failed')
-              }
-              const vault = storage.Vault.createFrom({
+              const dklsResult = await dklsKeygen.startKeygenWithRetry()
+
+              setStep('eddsa')
+
+              const schnorrKeygen = new Schnorr(
+                KeygenType.Keygen,
+                isInitiatingDevice,
+                serverUrl,
+                sessionId,
+                local_party_id,
+                keygenCommittee,
+                [],
+                encryptionKeyHex,
+                dklsKeygen.getSetupMessage()
+              )
+              const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
+
+              return storage.Vault.createFrom({
                 name,
-                public_key_ecdsa: result.dkls.publicKey,
-                public_key_eddsa: result.schnorr.publicKey,
+                public_key_ecdsa: dklsResult.publicKey,
+                public_key_eddsa: schnorrResult.publicKey,
                 signers: [local_party_id, ...peers],
                 created_at: new Date().toISOString(),
-                hex_chain_code: result.dkls.chaincode,
+                hex_chain_code: dklsResult.chaincode,
                 keyshares: [
                   storage.KeyShare.createFrom({
-                    public_key: result.dkls.publicKey,
-                    keyshare: result.dkls.keyshare,
+                    public_key: dklsResult.publicKey,
+                    keyshare: dklsResult.keyshare,
                   }),
                   storage.KeyShare.createFrom({
-                    public_key: result.schnorr.publicKey,
-                    keyshare: result.schnorr.keyshare,
+                    public_key: schnorrResult.publicKey,
+                    keyshare: schnorrResult.keyshare,
                   }),
                 ],
                 local_party_id,
@@ -92,55 +138,147 @@ export const useKeygenMutation = () => {
                 coins: [],
                 lib_type: 'DKLS',
               })
-              return vault
             },
-          })
-        },
-        [KeygenType.Reshare]: () => {
-          const ecdsaKeyshare = vault.keyshares.find(
-            keyshare => keyshare.public_key === vault.public_key_ecdsa
-          )?.keyshare
-          const eddsaKeyshare = vault.keyshares.find(
-            keyshare => keyshare.public_key === vault.public_key_eddsa
-          )?.keyshare
+            [KeygenType.Reshare]: async () => {
+              const ecdsaKeyshare = shouldBePresent(
+                vault.keyshares.find(
+                  keyshare => keyshare.public_key === vault.public_key_ecdsa
+                ),
+                'ecdsa keyshare'
+              ).keyshare
+              const eddsaKeyshare = shouldBePresent(
+                vault.keyshares.find(
+                  keyshare => keyshare.public_key === vault.public_key_eddsa
+                ),
+                'eddsa keyshare'
+              ).keyshare
 
-          const oldKeygenCommittee = vault.signers
-          return match(mpcLib, {
-            GG20: () => Reshare(vault, sessionId, encryptionKeyHex, serverUrl),
-            DKLS: async () => {
-              const mpcKeygen = new MPC(
-                KeygenType.Keygen,
+              const oldKeygenCommittee = vault.signers
+
+              const oldCommittee = oldKeygenCommittee.filter(party =>
+                keygenCommittee.includes(party)
+              )
+              const dklsKeygen = new DKLS(
+                KeygenType.Reshare,
                 isInitiatingDevice,
                 serverUrl,
                 sessionId,
                 local_party_id,
-                [local_party_id, ...peers],
-                oldKeygenCommittee,
+                keygenCommittee,
+                oldCommittee,
                 encryptionKeyHex
               )
+              const dklsResult =
+                await dklsKeygen.startReshareWithRetry(ecdsaKeyshare)
 
-              const result = await mpcKeygen.startReshare(
-                ecdsaKeyshare,
-                eddsaKeyshare
+              setStep('eddsa')
+
+              const schnorrKeygen = new Schnorr(
+                KeygenType.Reshare,
+                isInitiatingDevice,
+                serverUrl,
+                sessionId,
+                local_party_id,
+                keygenCommittee,
+                oldCommittee,
+                encryptionKeyHex,
+                new Uint8Array(0)
               )
-              if (!result) {
-                throw new Error('DKLS keygen failed')
-              }
+              const schnorrResult =
+                await schnorrKeygen.startReshareWithRetry(eddsaKeyshare)
+
               const newVault = storage.Vault.createFrom({
                 name,
-                public_key_ecdsa: result.dkls.publicKey,
-                public_key_eddsa: result.schnorr.publicKey,
+                public_key_ecdsa: dklsResult.publicKey,
+                public_key_eddsa: schnorrResult.publicKey,
                 signers: [local_party_id, ...peers],
                 created_at: new Date().toISOString(),
-                hex_chain_code: result.dkls.chaincode,
+                hex_chain_code: dklsResult.chaincode,
                 keyshares: [
                   storage.KeyShare.createFrom({
-                    public_key: result.dkls.publicKey,
-                    keyshare: result.dkls.keyshare,
+                    public_key: dklsResult.publicKey,
+                    keyshare: dklsResult.keyshare,
                   }),
                   storage.KeyShare.createFrom({
-                    public_key: result.schnorr.publicKey,
-                    keyshare: result.schnorr.keyshare,
+                    public_key: schnorrResult.publicKey,
+                    keyshare: schnorrResult.keyshare,
+                  }),
+                ],
+                local_party_id,
+                reshare_prefix: '',
+                order: 0,
+                is_backed_up: false,
+                coins: [],
+                lib_type: 'DKLS',
+              })
+
+              return newVault
+            },
+            [KeygenType.Migrate]: async () => {
+              const ecdsaKeyshare = shouldBePresent(
+                vault.keyshares.find(
+                  keyshare => keyshare.public_key === vault.public_key_ecdsa
+                ),
+                'ecdsa keyshare'
+              ).keyshare
+              const eddsaKeyshare = shouldBePresent(
+                vault.keyshares.find(
+                  keyshare => keyshare.public_key === vault.public_key_eddsa
+                ),
+                'eddsa keyshare'
+              ).keyshare
+
+              const oldKeygenCommittee = vault.signers
+
+              const localUIEcdsa = await GetLocalUIEcdsa(ecdsaKeyshare)
+              const localUIEddsa = await GetLocalUIEdDSA(eddsaKeyshare)
+              const dklsKeygen = new DKLS(
+                KeygenType.Migrate,
+                isInitiatingDevice,
+                serverUrl,
+                sessionId,
+                local_party_id,
+                keygenCommittee,
+                oldKeygenCommittee,
+                encryptionKeyHex,
+                localUIEcdsa,
+                vault.public_key_ecdsa,
+                hex_chain_code
+              )
+              const dklsResult = await dklsKeygen.startKeygenWithRetry()
+
+              setStep('eddsa')
+              const schnorrKeygen = new Schnorr(
+                KeygenType.Migrate,
+                isInitiatingDevice,
+                serverUrl,
+                sessionId,
+                local_party_id,
+                keygenCommittee,
+                oldKeygenCommittee,
+                encryptionKeyHex,
+                dklsKeygen.getSetupMessage(),
+                localUIEddsa,
+                vault.public_key_eddsa,
+                hex_chain_code
+              )
+              const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
+
+              const newVault = storage.Vault.createFrom({
+                name,
+                public_key_ecdsa: dklsResult.publicKey,
+                public_key_eddsa: schnorrResult.publicKey,
+                signers: [local_party_id, ...peers],
+                created_at: new Date().toISOString(),
+                hex_chain_code: dklsResult.chaincode,
+                keyshares: [
+                  storage.KeyShare.createFrom({
+                    public_key: dklsResult.publicKey,
+                    keyshare: dklsResult.keyshare,
+                  }),
+                  storage.KeyShare.createFrom({
+                    public_key: schnorrResult.publicKey,
+                    keyshare: schnorrResult.keyshare,
                   }),
                 ],
                 local_party_id,
@@ -153,66 +291,20 @@ export const useKeygenMutation = () => {
               return newVault
             },
           })
-        },
-        [KeygenType.Migrate]: async () => {
-          const ecdsaKeyshare = vault.keyshares.find(
-            keyshare => keyshare.public_key === vault.public_key_ecdsa
-          )?.keyshare
-          const eddsaKeyshare = vault.keyshares.find(
-            keyshare => keyshare.public_key === vault.public_key_eddsa
-          )?.keyshare
-          if (!ecdsaKeyshare || !eddsaKeyshare) {
-            throw new Error('Keyshare not found')
-          }
-          const oldKeygenCommittee = vault.signers
 
-          const mpcKeygen = new MPC(
-            KeygenType.Migrate,
-            isInitiatingDevice,
-            serverUrl,
-            sessionId,
-            local_party_id,
-            [local_party_id, ...peers],
-            oldKeygenCommittee,
-            encryptionKeyHex
-          )
-          const localUIEcdsa = await GetLocalUIEcdsa(ecdsaKeyshare)
-          const localUIEddsa = await GetLocalUIEdDSA(eddsaKeyshare)
-          const result = await mpcKeygen.startMigrate(
-            vault.public_key_ecdsa,
-            vault.public_key_eddsa,
-            localUIEcdsa,
-            localUIEddsa,
-            vault.hex_chain_code
-          )
-          if (!result) {
-            throw new Error('DKLS keygen failed')
-          }
-          const newVault = storage.Vault.createFrom({
-            name,
-            public_key_ecdsa: result.dkls.publicKey,
-            public_key_eddsa: result.schnorr.publicKey,
-            signers: [local_party_id, ...peers],
-            created_at: new Date().toISOString(),
-            hex_chain_code: result.dkls.chaincode,
-            keyshares: [
-              storage.KeyShare.createFrom({
-                public_key: result.dkls.publicKey,
-                keyshare: result.dkls.keyshare,
-              }),
-              storage.KeyShare.createFrom({
-                public_key: result.schnorr.publicKey,
-                keyshare: result.schnorr.keyshare,
-              }),
-            ],
-            local_party_id,
-            reshare_prefix: '',
-            order: 0,
-            is_backed_up: false,
-            coins: [],
-            lib_type: 'DKLS',
+          await setKeygenComplete({
+            serverURL: serverUrl,
+            sessionId: sessionId,
+            localPartyId: local_party_id,
           })
-          return newVault
+
+          await waitForKeygenComplete({
+            serverURL: serverUrl,
+            sessionId: sessionId,
+            peers,
+          })
+
+          return vault
         },
       })
 
@@ -222,4 +314,9 @@ export const useKeygenMutation = () => {
       }
     },
   })
+
+  return {
+    ...mutation,
+    step,
+  }
 }
