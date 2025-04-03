@@ -202,7 +202,6 @@ export class Schnorr {
         return result
       } catch (error) {
         console.error('Schnorr keygen error:', error)
-        throw new Error('Schnorr keygen failed')
       }
     }
     throw new Error('Schnorr keygen failed')
