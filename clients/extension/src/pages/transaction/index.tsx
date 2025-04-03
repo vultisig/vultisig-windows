@@ -1,6 +1,7 @@
 import '@clients/extension/src/styles/pure.scss'
 import '@clients/extension/src/pages/transaction/index.scss'
 
+import { create } from '@bufbuild/protobuf'
 import ButtonPrimary from '@clients/extension/src/components/button-primary'
 import ButtonTertiary from '@clients/extension/src/components/button-tertiary'
 import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
@@ -12,15 +13,12 @@ import {
   alertSuccess,
   alertWarning,
   backgroundPrimary,
-  backgroundSecondary,
   borderLight,
   borderNormal,
-  buttonSecondary,
   primaryThree,
   textExtraLight,
   textPrimary,
 } from '@clients/extension/src/colors'
-import { getJoinKeysignUrl } from '@core/chain/utils/getJoinKeysignUrl'
 import {
   ArrowLeft,
   Check,
@@ -44,7 +42,6 @@ import { getEncodedSignature } from '@clients/extension/src/utils/tx/getCustomMe
 import { getKeysignPayload } from '@clients/extension/src/utils/tx/getKeySignPayload'
 import { getSignedTransaction } from '@clients/extension/src/utils/tx/getSignedTx'
 import { getChainKind } from '@core/chain/ChainKind'
-import { create } from '@bufbuild/protobuf'
 import {
   getParsedMemo,
   ParsedMemoParams,
@@ -55,16 +52,17 @@ import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
+import { getJoinKeysignUrl } from '@core/chain/utils/getJoinKeysignUrl'
 import { hexEncode } from '@core/chain/utils/walletCore/hexEncode'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData'
+import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import {
   useWalletCore,
   WalletCoreProvider,
 } from '@core/ui/chain/providers/WalletCoreProvider'
-import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import {
   Button,
   ConfigProvider,
@@ -72,6 +70,7 @@ import {
   Form,
   Input,
   message,
+  QRCode,
   Spin,
   theme,
 } from 'antd'
@@ -373,9 +372,7 @@ const Component = () => {
         break
       }
       case 2: {
-        if (fastSign) {
-          setState(prevState => ({ ...prevState, step }))
-        } else if (keySignUrl) {
+        if (keySignUrl) {
           setState(prevState => ({ ...prevState, step }))
         } else if (transaction && vault) {
           let payload: KeysignMessagePayload
@@ -759,7 +756,7 @@ const Component = () => {
                                 transaction.memo.value as string,
                                 32
                               ).map((str, index) => (
-                                <div key={index}>{str}</div>
+                                <span key={index}>{str}</span>
                               ))}
                             </span>
                           </div>
@@ -816,6 +813,12 @@ const Component = () => {
                       </div>
                     </div>
                   )}
+                  <QRCode
+                    bordered
+                    size={1000}
+                    value={keySignUrl || ''}
+                    color="white"
+                  />
                   <Divider>{t('or')}</Divider>
                   <ButtonTertiary onClick={() => handleStep(3)} block>
                     Sign with desktop app instead
@@ -1040,7 +1043,87 @@ const Component = () => {
                   </div>
                 </div>
               ) : null
-            ) : null}
+            ) : (
+              <div className="card">
+                <div className="header">
+                  <span className="heading">Overview</span>
+                </div>
+                <div className="content">
+                  {transaction.isCustomMessage ? (
+                    <div className="list">
+                      <div className="item">
+                        <span className="label">{t('signature')}</span>
+                        <MiddleTruncate text={transaction.customSignature!} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="list">
+                      <div className="item">
+                        <span className="label">{t('transaction')}</span>
+                        <MiddleTruncate text={transaction.txHash!} />
+                        <div className="actions">
+                          <a
+                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: transaction.txHash! })}`}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            className="btn"
+                          >
+                            <SquareArrow />
+                            {t('view_tx')}
+                          </a>
+                          <span className="btn" onClick={() => handleCopy()}>
+                            <SquareBehindSquare />
+                            {t('copy_tx')}
+                          </span>
+                        </div>
+                      </div>
+                      {transaction.transactionDetails.to && (
+                        <div className="item">
+                          <span className="label">{t('to')}</span>
+                          <MiddleTruncate
+                            text={transaction.transactionDetails.to}
+                          />
+                        </div>
+                      )}
+
+                      {transaction.transactionDetails.amount?.amount && (
+                        <div className="item">
+                          <span className="label">{t('amount')}</span>
+                          <span className="extra">{`${formatUnits(
+                            transaction.transactionDetails.amount.amount,
+                            transaction.transactionDetails.amount.decimals
+                          )} ${keysignPayload?.coin?.ticker}`}</span>
+                        </div>
+                      )}
+
+                      {transaction.memo?.value &&
+                        !transaction.memo?.isParsed && (
+                          <div className="item">
+                            <span className="label">{t('memo')}</span>
+                            <span className="extra">
+                              {splitString(
+                                transaction.memo?.value as string,
+                                32
+                              ).map((str, index) => (
+                                <span key={index}>{str}</span>
+                              ))}
+                            </span>
+                          </div>
+                        )}
+                      <div className="item">
+                        <span className="label">{t('network_fee')}</span>
+                        <span className="extra">{`${transaction.txFee} ${transaction.chain.ticker}`}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="footer">
+                  <ButtonPrimary onClick={handleClose} block>
+                    {t('done')}
+                  </ButtonPrimary>
+                </div>
+              </div>
+            )}
 
             {contextHolder}
           </>
