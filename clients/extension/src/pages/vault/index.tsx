@@ -17,7 +17,7 @@ import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
-import { ExtensionProviders } from '../../state/ExtensionProviders'
+import { AppProviders } from '../../providers/AppProviders'
 
 interface FormProps {
   uid: string
@@ -153,8 +153,8 @@ const Component = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ExtensionProviders>
+    <AppProviders>
       <Component />
-    </ExtensionProviders>
+    </AppProviders>
   </StrictMode>
 )

@@ -1,7 +1,8 @@
-import routerKeys from '@clients/extension/src/utils/route-keys'
 import { getStoredVaults } from '@clients/extension/src/utils/storage'
 import { useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
+
+import { appPaths } from '../../../navigation'
 
 interface InitialState {
   loaded: boolean
@@ -18,7 +19,7 @@ const Component = () => {
       if (vaults.length) {
         setState(prevState => ({ ...prevState, loaded: true }))
       } else {
-        navigate(routerKeys.landing, { replace: true })
+        navigate(appPaths.landing, { replace: true })
       }
     })
   }

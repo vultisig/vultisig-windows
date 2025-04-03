@@ -6,7 +6,6 @@ import {
   Vultisig,
 } from '@clients/extension/src/icons'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getIsPriority,
   getStoredChains,
@@ -21,6 +20,7 @@ import { type FC, ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 
+import { appPaths } from '../../../../navigation'
 import { isSupportedChain } from '../../../../utils/constants'
 
 interface SelectOption {
@@ -177,12 +177,12 @@ const Component = () => {
           <span className="logo-type">{t('vultisig')}</span>
           <SettingsTwo
             className="icon icon-right"
-            onClick={() => navigate(routeKeys.settings.root, { state: true })}
+            onClick={() => navigate(appPaths.settings.root, { state: true })}
           />
         </div>
         <div className="content">
           <div className="list list-action list-arrow">
-            <Link to={routeKeys.vaults} state={true} className="list-item">
+            <Link to={appPaths.vaults} state={true} className="list-item">
               <span className="label">{vault.name}</span>
               <ArrowRight className="action" />
             </Link>
