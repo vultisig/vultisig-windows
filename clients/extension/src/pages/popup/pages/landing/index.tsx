@@ -61,13 +61,13 @@ export const NewVaultPage = ({ withBackButton = true }) => {
   )
 }
 
-export const Wrapper = styled(AnimatedVisibility)`
+const Wrapper = styled(AnimatedVisibility)`
   overflow-y: hidden;
   height: 100%;
   display: flex;
   flex-direction: column;
 `
 
-export const ScanQRCodeLink = styled(Link)`
+const ScanQRCodeLink = styled(Link)`
   width: 100%;
 `
