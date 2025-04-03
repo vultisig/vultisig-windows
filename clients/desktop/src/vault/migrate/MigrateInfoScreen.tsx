@@ -1,8 +1,8 @@
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { ActionProp, TitleProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { toSizeUnit } from '../../lib/ui/css/toSizeUnit'
 import { vStack } from '../../lib/ui/layout/Stack'
 import { gradientText, text } from '../../lib/ui/text'
 import { Animation } from '../../ui/animations/Animation'

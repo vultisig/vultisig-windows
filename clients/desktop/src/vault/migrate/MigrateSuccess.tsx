@@ -1,7 +1,7 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { t } from 'i18next'
 import { Trans } from 'react-i18next'
 
-import { Button } from '../../lib/ui/buttons/Button'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { MigrateInfoScreen } from './MigrateInfoScreen'
 
