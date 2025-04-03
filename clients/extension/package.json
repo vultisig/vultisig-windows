@@ -31,9 +31,9 @@
     "axios": "^1.8.3",
     "keymirror": "^0.1.1",
     "mipd": "^0.0.7",
+    "styled-components": "^6.1.16",
     "ua-parser-js": "^2.0.3",
-    "zxing-wasm": "^2.1.0",
-    "styled-components": "^6.1.16"
+    "zxing-wasm": "^2.1.0"
   },
   "devDependencies": {
     "@core/config": "workspace:*",
