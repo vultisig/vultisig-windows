@@ -1,5 +1,6 @@
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
+
 import { ListItem } from '../../lib/ui/list/item/ListItem'
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { useCurrentVault } from '../../vault/state/currentVault'
 import { useCurrentVaultId } from '../../vault/state/currentVaultId'
 import { getStorageVaultId } from '../../vault/utils/storageVault'

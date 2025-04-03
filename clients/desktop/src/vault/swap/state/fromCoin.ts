@@ -3,9 +3,8 @@ import {
   coinKeyFromString,
   coinKeyToString,
 } from '@core/chain/coin/Coin'
+import { useAppPathParams } from '@lib/ui/navigation/hooks/useAppPathParams'
 import { useCallback, useMemo } from 'react'
-
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 
 export const useFromCoin = () => {
   const [{ coin }, setParams] = useAppPathParams<'swap'>()

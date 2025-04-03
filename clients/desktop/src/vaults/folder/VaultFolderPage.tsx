@@ -1,7 +1,7 @@
 import { EditIcon } from '@lib/ui/icons/EditIcon'
 import { VStack } from '@lib/ui/layout/Stack'
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageContent } from '../../ui/page/PageContent'
 import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'

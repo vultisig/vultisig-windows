@@ -1,11 +1,11 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { makeAppPath } from '@lib/ui/navigation'
+import { useAppPathState } from '@lib/ui/navigation/hooks/useAppPathState'
 import { ChildrenProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
-import { makeAppPath } from '../../../navigation'
-import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { useVaults } from '../../queries/useVaultsQuery'
 import { useCurrentVaultId } from '../../state/currentVaultId'

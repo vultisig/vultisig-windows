@@ -1,10 +1,10 @@
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 import { IsDisabledProp, ValueProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useVaultServerStatus } from '../../state/currentVault'
 
 type StartKeysignPromptProps = ValueProp<KeysignPayload> & IsDisabledProp

@@ -10,10 +10,9 @@ import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import ShareIcon from '@lib/ui/icons/ShareIcon'
 import ShieldCheckIcon from '@lib/ui/icons/ShieldCheckIcon'
 import VultisigLogoIcon from '@lib/ui/icons/VultisigLogoIcon'
+import { AppPathsWithNoParamsOrState } from '@lib/ui/navigation'
 import { TFunction } from 'i18next'
 import { ElementType } from 'react'
-
-import { AppPathsWithNoParamsOrState } from '../../navigation'
 
 export const VULTISIG_WEBSITE_LINK = 'https://vultisig.com'
 export const VULTISIG_GITHUB_LINK =

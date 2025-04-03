@@ -22,5 +22,5 @@
     "**/*.tsx",
     "types.d.ts",
     "lib/ui/theme/styled.d.ts"
-  ]
+, "migrate.js"  ]
 }

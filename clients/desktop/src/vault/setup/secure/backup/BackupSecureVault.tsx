@@ -1,10 +1,10 @@
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { appPaths } from '@lib/ui/navigation'
 import { useNavigate } from 'react-router-dom'
 
 import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
-import { appPaths } from '../../../../navigation'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { SetupVaultSummaryStep } from '../../shared/SetupVaultSummaryStep'
 import { VaultBackupFlow } from '../../shared/vaultBackupSettings/VaultBackupFlow'

@@ -1,10 +1,10 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'

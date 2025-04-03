@@ -1,9 +1,9 @@
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import {
   ChevronIconWrapper,
   ContentWrapperButton,

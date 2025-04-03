@@ -1,8 +1,8 @@
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
+import { useAppPathParams } from '@lib/ui/navigation/hooks/useAppPathParams'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-import { useAppPathParams } from '../../navigation/hooks/useAppPathParams'
 import { useVaultFolder } from '../folders/queries/useVaultFoldersQuery'
 import { VaultFolderProvider } from './state/currentVaultFolder'
 

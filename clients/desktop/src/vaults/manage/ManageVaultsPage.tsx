@@ -1,7 +1,7 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeaderVaultSettingsPrompt } from '../../pages/vaultSettings/PageHeaderVaultSettingsPrompt'
 import { PageContent } from '../../ui/page/PageContent'
 import { PageFooter } from '../../ui/page/PageFooter'

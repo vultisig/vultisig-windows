@@ -1,9 +1,9 @@
 import { deepLinkBaseUrl } from '@core/config'
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
 import { GetOSArgs } from '../../../wailsjs/go/main/App'
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 
 export const LauncherObserver = () => {
   const navigate = useAppNavigate()

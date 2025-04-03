@@ -1,10 +1,10 @@
+import { useAppPathState } from '@lib/ui/navigation/hooks/useAppPathState'
 import { ChildrenProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 
 import { storage } from '../../../../wailsjs/go/models'
 import { generateLocalPartyId } from '../../../mpc/localPartyId'
 import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
-import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useVaults } from '../../queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../state/currentVault'
 

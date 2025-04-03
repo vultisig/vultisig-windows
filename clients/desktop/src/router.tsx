@@ -1,3 +1,4 @@
+import { appPaths } from '@lib/ui/navigation'
 import { createBrowserRouter, Outlet } from 'react-router-dom'
 
 import { AddressPage } from './chain/components/address/AddressPage'
@@ -6,7 +7,6 @@ import { ErrorBoundary } from './errors/components/ErrorBoundary'
 import { FullSizeErrorFallback } from './errors/components/FullSizeErrorFallback'
 import { LauncherObserver } from './launcher/components/LauncherObserver'
 import { ManageDklsPage } from './mpc/dkls/ManageDklsPage'
-import { appPaths } from './navigation'
 import { OnboardingPage } from './onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly'
 import EditVaultPage from './pages/edItVault/EditVaultPage'

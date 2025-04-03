@@ -1,11 +1,11 @@
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
+import { useAppPathState } from '@lib/ui/navigation/hooks/useAppPathState'
 import { TitleProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { BackupSecureVault } from '../../setup/secure/backup/BackupSecureVault'
 import { SetupVaultEducationSlides } from '../../setup/shared/SetupVaultCreationStep/SetupVaultEducationSlides'
 import { SetupVaultSuccessScreen } from '../../setup/shared/SetupVaultSuccessScreen'

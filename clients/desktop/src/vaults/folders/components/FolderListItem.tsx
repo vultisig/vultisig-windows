@@ -1,8 +1,8 @@
 import { FolderIcon } from '@lib/ui/icons/FolderIcon'
 import { HStack } from '@lib/ui/layout/Stack'
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 
 import { ListItem } from '../../../lib/ui/list/item/ListItem'
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 
 type FolderListItemProps = {
   isDraggable?: boolean

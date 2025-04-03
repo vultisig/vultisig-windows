@@ -1,6 +1,6 @@
+import { useAppPathParams } from '@lib/ui/navigation/hooks/useAppPathParams'
 import { useCallback } from 'react'
 
-import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'
 import { defaultSetupVaultType, SetupVaultType } from '../SetupVaultType'
 
 export const useSetupVaultType = () => {

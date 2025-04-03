@@ -1,11 +1,11 @@
 import { ElementSizeAware } from '@lib/ui/base/ElementSizeAware'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
+import { useAppPathParams } from '@lib/ui/navigation/hooks/useAppPathParams'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { FramedQrCode } from '../../../lib/ui/qr/FramedQrCode'
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'

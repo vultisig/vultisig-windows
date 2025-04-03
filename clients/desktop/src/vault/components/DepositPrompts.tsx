@@ -1,11 +1,11 @@
 import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
 import { Button } from '@lib/ui/buttons/Button'
+import { makeAppPath } from '@lib/ui/navigation'
 import { ValueProp } from '@lib/ui/props'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { makeAppPath } from '../../navigation'
 import { depositEnabledChains } from '../deposit/DepositEnabledChain'
 
 export const DepositPrompt = ({ value }: ValueProp<CoinKey>) => {

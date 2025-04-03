@@ -1,12 +1,12 @@
 import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
 import DangerSignRedIcon from '@lib/ui/icons/DangerSignRedIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 import { Text } from '@lib/ui/text'
 import { TFunction } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'

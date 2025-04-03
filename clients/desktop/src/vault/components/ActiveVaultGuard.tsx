@@ -1,7 +1,7 @@
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { useVaults } from '../queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../state/currentVault'
 import { useCurrentVaultId } from '../state/currentVaultId'

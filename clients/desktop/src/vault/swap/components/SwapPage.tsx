@@ -1,9 +1,9 @@
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigationBack'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
-import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'

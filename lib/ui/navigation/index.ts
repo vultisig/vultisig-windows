@@ -1,3 +1,4 @@
+import { SetupVaultType } from '@clients/desktop/src/vault/setup/type/SetupVaultType'
 import { Chain } from '@core/chain/Chain'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
@@ -6,8 +7,6 @@ import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_messa
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
-
-import { SetupVaultType } from '../vault/setup/type/SetupVaultType'
 
 export const appPaths = {
   newVault: '/new-vault',

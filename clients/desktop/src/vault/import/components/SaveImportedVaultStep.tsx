@@ -1,9 +1,9 @@
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 import { ValueProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { storage } from '../../../../wailsjs/go/models'
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { SaveVaultStep } from '../../keygen/shared/SaveVaultStep'
 import { useVaultBackupOverride } from '../state/vaultBackupOverride'
 

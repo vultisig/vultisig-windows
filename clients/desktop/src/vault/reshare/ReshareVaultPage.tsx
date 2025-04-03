@@ -1,10 +1,10 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { InfoBlock } from '../../lib/ui/status/InfoBlock'
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageContent } from '../../ui/page/PageContent'
 import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'

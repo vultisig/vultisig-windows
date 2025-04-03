@@ -1,7 +1,7 @@
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
-import { useAppNavigate } from '../navigation/hooks/useAppNavigate'
 import { useHasFinishedOnboarding } from './hooks/useHasFinishedOnboarding'
 
 export const IncompleteOnboardingOnly = ({ children }: ChildrenProp) => {

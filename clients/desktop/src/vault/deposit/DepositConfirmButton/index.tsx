@@ -7,14 +7,14 @@ import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysig
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
+import { useAppNavigate } from '@lib/ui/navigation/hooks/useAppNavigate'
+import { useAppPathParams } from '@lib/ui/navigation/hooks/useAppPathParams'
 import { Text } from '@lib/ui/text'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useTranslation } from 'react-i18next'
 
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
 import {
   useCurrentVault,
