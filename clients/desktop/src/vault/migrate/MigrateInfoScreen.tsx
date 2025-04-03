@@ -1,10 +1,10 @@
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { vStack } from '@lib/ui/layout/Stack'
 import { ActionProp, TitleProp } from '@lib/ui/props'
+import { gradientText, text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { vStack } from '../../lib/ui/layout/Stack'
-import { gradientText, text } from '../../lib/ui/text'
 import { Animation } from '../../ui/animations/Animation'
 import { FlowPageHeader } from '../../ui/flow/FlowPageHeader'
 import { FitPageContent } from '../../ui/page/PageContent'
