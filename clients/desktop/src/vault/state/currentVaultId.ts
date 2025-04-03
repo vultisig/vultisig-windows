@@ -1,7 +1,7 @@
+import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 
-import { useStateCorrector } from '../../lib/ui/state/useStateCorrector'
 import {
   PersistentStateKey,
   usePersistentState,

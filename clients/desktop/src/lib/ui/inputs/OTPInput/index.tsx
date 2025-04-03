@@ -1,10 +1,10 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
+import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps } from 'react'
 import styled, { css } from 'styled-components'
 
-import { HStack } from '../../layout/Stack'
 import { useOtp } from './useOTP'
 
 interface OTPInputProps extends ComponentProps<typeof InputBoxContainer> {

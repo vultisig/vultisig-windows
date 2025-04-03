@@ -1,7 +1,7 @@
+import { VStack } from '@lib/ui/layout/Stack'
 import { OnCloseProp, TitleProp } from '@lib/ui/props'
 
 import { BodyPortal } from '../../../dom/BodyPortal'
-import { VStack } from '../../../layout/Stack'
 import { Spinner } from '../../../loaders/Spinner'
 import { Backdrop } from '../../../modal/Backdrop'
 import { QueryOverlayContent } from './QueryOverlayContent'

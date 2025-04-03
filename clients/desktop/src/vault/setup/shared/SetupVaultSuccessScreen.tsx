@@ -1,12 +1,12 @@
+import { VStack } from '@lib/ui/layout/Stack'
 import { OnForwardProp } from '@lib/ui/props'
+import { GradientText, Text } from '@lib/ui/text'
 import { useRive } from '@rive-app/react-canvas'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { VStack } from '../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { GradientText, Text } from '../../../lib/ui/text'
 import { PageContent } from '../../../ui/page/PageContent'
 
 const SETUP_VAULT_SUCCESS_SCREEN_TIME_IN_MS = 2500

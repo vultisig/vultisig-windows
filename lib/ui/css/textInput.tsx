@@ -1,4 +1,4 @@
-import { text } from '@clients/desktop/src/lib/ui/text'
+import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { css } from 'styled-components'
 

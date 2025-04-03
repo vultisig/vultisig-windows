@@ -1,9 +1,9 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { HStack } from '@lib/ui/layout/Stack'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { AmountTextInput } from '../../../../lib/ui/inputs/AmountTextInput'
-import { HStack } from '../../../../lib/ui/layout/Stack'
 import { AmountSuggestion } from '../../../send/amount/AmountSuggestion'
 import { useCurrentVaultCoin } from '../../../state/currentVault'
 import { useFromAmount } from '../../state/fromAmount'
