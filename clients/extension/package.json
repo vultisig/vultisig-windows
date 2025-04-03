@@ -37,7 +37,6 @@
   "devDependencies": {
     "@core/config": "workspace:*",
     "@core/ui": "workspace:*",
-    "@eslint/js": "^9.22.0",
     "@fontsource/montserrat": "^5.2.5",
     "@fontsource/roboto-mono": "^5.2.5",
     "@keplr-wallet/types": "^0.12.202",
