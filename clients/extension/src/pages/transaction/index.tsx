@@ -105,7 +105,7 @@ const Component = () => {
   const RETRY_TIMEOUT_MS = 120000
   const CLOSE_TIMEOUT_MS = 60000
   const initialState: InitialState = { step: 1, hasError: false }
-  const [connectedDevices, setConnectedDevices] = useState(0)
+  const [connectedDevices, setConnectedDevices] = useState([''])
   const [form] = Form.useForm()
   const [state, setState] = useState(initialState)
   const {
@@ -210,7 +210,7 @@ const Component = () => {
                 }).then(() => {
                   setState(prevState => ({
                     ...prevState,
-                    step: 5,
+                    step: 6,
                     transaction: { ...transaction, txHash: txResponse, raw },
                   }))
 
@@ -270,7 +270,7 @@ const Component = () => {
           }).then(() => {
             setState(prevState => ({
               ...prevState,
-              step: 5,
+              step: 6,
               transaction: {
                 ...transaction,
                 customSignature,
@@ -300,56 +300,19 @@ const Component = () => {
     attemptTransaction()
   }
 
-  const handleStart = (): void => {
+  const handleCheckDevices = (): void => {
     if (transaction) {
       api.transaction
         .getDevices(transaction.id)
         .then(({ data }) => {
-          setConnectedDevices(data?.length)
-          if (data?.length > 1) {
-            api.transaction
-              .setStart(transaction.id, data)
-              .then(() => {
-                setStoredTransaction({ ...transaction, status: 'pending' })
-                  .then(() => {
-                    if (transaction.isCustomMessage) {
-                      setState(prevState => ({
-                        ...prevState,
-                        step: 4,
-                      }))
-                      handleCustomMessagePending()
-                    } else {
-                      const preSignedInputData = getPreSignedInputData({
-                        chain: transaction.chain.chain,
-                        keysignPayload: keysignPayload!,
-                        walletCore: walletCore!,
-                      })
-                      const preSignedImageHashes = getPreSigningHashes({
-                        chain: transaction.chain.chain,
-                        txInputData: preSignedInputData,
-                        walletCore: walletCore!,
-                      })
-                      const imageHash = hexEncode({
-                        value: preSignedImageHashes[0],
-                        walletCore: walletCore!,
-                      })
-                      setState(prevState => ({
-                        ...prevState,
-                        step: 4,
-                      }))
-                      handlePending(imageHash, preSignedInputData)
-                    }
-                  })
-                  .catch(err => {
-                    console.log(err)
-                  })
-              })
-              .catch(err => {
-                console.log(err)
-              })
+          setConnectedDevices(data)
+          if (fastSign && data.length > 0) {
+            handleStep(3)
+          } else if (data?.length > 1) {
+            handleStep(3)
           } else {
             setTimeout(() => {
-              handleStart()
+              handleCheckDevices()
             }, 1000)
           }
         })
@@ -361,6 +324,53 @@ const Component = () => {
             })
           })
         })
+    }
+  }
+
+  const handleStartSigning = () => {
+    if (transaction && !fastSign) {
+      api.transaction
+        .setStart(transaction.id, connectedDevices)
+        .then(() => {
+          setStoredTransaction({ ...transaction, status: 'pending' })
+            .then(() => {
+              if (transaction.isCustomMessage) {
+                setState(prevState => ({
+                  ...prevState,
+                  step: 4,
+                }))
+                handleCustomMessagePending()
+              } else {
+                const preSignedInputData = getPreSignedInputData({
+                  chain: transaction.chain.chain,
+                  keysignPayload: keysignPayload!,
+                  walletCore: walletCore!,
+                })
+                const preSignedImageHashes = getPreSigningHashes({
+                  chain: transaction.chain.chain,
+                  txInputData: preSignedInputData,
+                  walletCore: walletCore!,
+                })
+                const imageHash = hexEncode({
+                  value: preSignedImageHashes[0],
+                  walletCore: walletCore!,
+                })
+                setState(prevState => ({
+                  ...prevState,
+                  step: 4,
+                }))
+                handlePending(imageHash, preSignedInputData)
+              }
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    } else {
+      handleStep(4)
     }
   }
 
@@ -409,7 +419,7 @@ const Component = () => {
                 step,
               }))
 
-              handleStart()
+              handleCheckDevices()
             })
             .catch(() => {
               setState(prevState => ({ ...prevState, loading: false }))
@@ -433,15 +443,6 @@ const Component = () => {
         break
       }
     }
-  }
-
-  const handleFastSign = (): void => {
-    if (connectedDevices >= 1) handleStep(3)
-    else
-      messageApi.open({
-        type: 'warning',
-        content: t('scan_first'),
-      })
   }
 
   const handleSubmitFastSignPassword = (): void => {
@@ -494,7 +495,7 @@ const Component = () => {
               session: transaction.id,
             })
             .then(() => {
-              setState(prevState => ({ ...prevState, step: 4 }))
+              setState(prevState => ({ ...prevState, step: 5 }))
               if (transaction.isCustomMessage) handleCustomMessagePending()
               else handlePending(imageHash, preSignedInputData)
             })
@@ -809,7 +810,8 @@ const Component = () => {
                         <span className="icon" />
                         <span className="step">Step 2 of 4</span>
                         <span className="title">
-                          Scan QR with [#] others devices linked to this vault
+                          Scan QR with at least 2 other devices linked to this
+                          vault
                         </span>
                       </div>
                     </div>
@@ -822,17 +824,36 @@ const Component = () => {
                   />
                   {fastSign ? null : (
                     <div className="devices">
-                      <div className="item signed">
+                      <div
+                        className={`item ${connectedDevices.length > 0 ? 'signed' : ''}`}
+                      >
                         <span className="icon">
-                          <Check />
+                          {connectedDevices.length > 0 ? <Check /> : null}
                         </span>
-                        <span className="name">{`Device 1`}</span>
-                      </div>
-                      <div className="item">
-                        <span className="icon" />
                         <span className="name">
-                          {`Scan with ${2}`}
-                          <sup>nd</sup> device
+                          {connectedDevices.length > 0 ? (
+                            connectedDevices[0]
+                          ) : (
+                            <>
+                              Scan with 1<sup>st</sup> device
+                            </>
+                          )}
+                        </span>
+                      </div>
+                      <div
+                        className={`item ${connectedDevices.length > 1 ? 'signed' : ''}`}
+                      >
+                        <span className="icon">
+                          {connectedDevices.length > 1 ? <Check /> : null}
+                        </span>
+                        <span className="name">
+                          {connectedDevices.length > 1 ? (
+                            connectedDevices[1]
+                          ) : (
+                            <>
+                              Scan with 2<sup>nd</sup> device
+                            </>
+                          )}
                         </span>
                       </div>
                     </div>
@@ -903,7 +924,7 @@ const Component = () => {
                   )}
                 </div>
                 <div className="footer">
-                  <ButtonTertiary onClick={() => handleStep(4)} block>
+                  <ButtonTertiary onClick={handleStartSigning} block>
                     {fastSign
                       ? 'Confirm & signing with server'
                       : 'Confirm & sign with device'}
@@ -969,7 +990,7 @@ const Component = () => {
 
                         return (
                           <ButtonTertiary
-                            onClick={() => handleStep(5)}
+                            onClick={handleSubmitFastSignPassword}
                             disabled={!password}
                             block
                           >
