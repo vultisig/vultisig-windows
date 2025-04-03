@@ -10,7 +10,6 @@ import {
   Vultisig,
 } from '@clients/extension/src/icons'
 import { Currency } from '@clients/extension/src/utils/constants'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import { getStoredCurrency } from '@clients/extension/src/utils/storage'
 import { languageName } from '@core/ui/i18n/Language'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -19,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { useLanguageQuery } from '../../../../i18n/state/language'
+import { appPaths } from '../../../../navigation'
 
 interface InitialState {
   currency: Currency
@@ -49,16 +49,12 @@ const Component = () => {
         <span className="heading">{t('settings')}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(routeKeys.main)}
+          onClick={() => goBack(appPaths.main)}
         />
       </div>
       <div className="content">
         <div className="list list-arrow list-action list-icon">
-          <Link
-            to={routeKeys.settings.vault}
-            state={true}
-            className="list-item"
-          >
+          <Link to={appPaths.settings.vault} state={true} className="list-item">
             <SettingsOne className="icon" />
             <span className="label">{t('vault_settings')}</span>
             <ArrowRight className="action" />
@@ -67,7 +63,7 @@ const Component = () => {
             value={languageQuery}
             success={language => (
               <Link
-                to={routeKeys.settings.language}
+                to={appPaths.settings.language}
                 state={true}
                 className="list-item"
               >
@@ -79,7 +75,7 @@ const Component = () => {
             )}
           />
           <Link
-            to={routeKeys.settings.currency}
+            to={appPaths.settings.currency}
             state={true}
             className="list-item"
           >

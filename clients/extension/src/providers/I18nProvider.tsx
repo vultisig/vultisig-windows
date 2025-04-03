@@ -2,7 +2,7 @@ import { I18nProvider as CoreI18nProvider } from '@core/ui/i18n/I18nProvider'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 
-import { useLanguageQuery } from './state/language'
+import { useLanguageQuery } from '../i18n/state/language'
 
 export const I18nProvider = ({ children }: ChildrenProp) => {
   const query = useLanguageQuery()

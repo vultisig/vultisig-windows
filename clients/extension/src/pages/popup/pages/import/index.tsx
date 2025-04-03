@@ -11,7 +11,6 @@ import {
   toCamelCase,
 } from '@clients/extension/src/utils/functions'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -25,6 +24,8 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { UAParser } from 'ua-parser-js'
 import { readBarcodesFromImageFile, ReaderOptions } from 'zxing-wasm'
+
+import { appPaths } from '../../../../navigation'
 
 interface InitialState {
   file?: File
@@ -47,7 +48,7 @@ const Component = () => {
 
   const handleFinish = (): void => {
     if (isPopup) window.close()
-    else navigate(routeKeys.main, { state: true })
+    else navigate(appPaths.main, { state: true })
   }
 
   const handleStart = (): void => {
@@ -254,7 +255,7 @@ const Component = () => {
         {location.state && (
           <ArrowLeft
             className="icon icon-left"
-            onClick={() => goBack(routeKeys.main)}
+            onClick={() => goBack(appPaths.main)}
           />
         )}
       </div>
