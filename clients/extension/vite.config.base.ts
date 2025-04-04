@@ -8,14 +8,14 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "~variables" as *;`,
+        additionalData: `@use '~/variables' as *;`,
         api: 'modern-compiler',
       },
     },
   },
   resolve: {
     alias: {
-      '~variables': path.resolve(__dirname, 'src/styles/_variables'),
+      '~/variables': path.resolve(__dirname, 'src/styles/_variables'),
     },
   },
   server: { port: 3000 },
