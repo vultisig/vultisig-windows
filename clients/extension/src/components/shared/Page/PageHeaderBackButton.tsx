@@ -1,16 +1,16 @@
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { OnClickProp } from '@lib/ui/props'
-import { useNavigate } from 'react-router-dom'
 
+import useGoBack from '../../../hooks/go-back'
 import { PageHeaderIconButton } from './PageHeaderIconButton'
 
 export const PageHeaderBackButton = ({ onClick }: Partial<OnClickProp>) => {
-  const navigate = useNavigate()
+  const goBack = useGoBack()
 
   return (
     <PageHeaderIconButton
       icon={<ChevronLeftIcon />}
-      onClick={onClick ?? (() => navigate(-1))}
+      onClick={onClick ?? (() => goBack())}
     />
   )
 }

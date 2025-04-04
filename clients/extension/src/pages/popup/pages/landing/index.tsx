@@ -3,7 +3,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 
 import { AnimatedVisibility } from '../../../../components/shared/AnimatedVisibility'
 import { HorizontalLine } from '../../../../components/shared/HorizontalLine'
@@ -17,8 +17,6 @@ import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 export const NewVaultPage = ({ withBackButton = true }) => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
-  const theme = useTheme()
-  console.log('🚀 ~ NewVaultPage ~ theme:', theme)
 
   return (
     <Wrapper delay={200}>
@@ -30,7 +28,7 @@ export const NewVaultPage = ({ withBackButton = true }) => {
           <ProductLogoBlock />
         </VStack>
         <VStack gap={20}>
-          <Button onClick={() => navigate('setupVault', { params: {} })}>
+          <Button onClick={() => navigate('setupVault')}>
             {t('create_new_vault')}
           </Button>
           <HStack gap={18} alignItems="center">
@@ -51,7 +49,10 @@ export const NewVaultPage = ({ withBackButton = true }) => {
                 {t('scan_qr')}
               </Button>
             </ScanQRCodeLink>
-            <Button onClick={() => navigate('import')} kind="secondary">
+            <Button
+              onClick={() => navigate('import', { params: {} })}
+              kind="secondary"
+            >
               {t('import_vault')}
             </Button>
           </VStack>

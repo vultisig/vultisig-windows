@@ -8,9 +8,9 @@ import {
 import { Button } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
 import { appPaths } from '../../../../navigation'
+import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
 interface InitialState {
   vault?: VaultProps
@@ -22,7 +22,7 @@ const Component = () => {
   const initialState: InitialState = { vaults: [] }
   const [state, setState] = useState(initialState)
   const { vault, vaults } = state
-  const navigate = useNavigate()
+  const navigate = useAppNavigate()
   const goBack = useGoBack()
 
   const handleSelect = (uid: string) => {
@@ -87,7 +87,7 @@ const Component = () => {
       </div>
       <div className="footer">
         <Button
-          onClick={() => navigate(appPaths.import, { state: true })}
+          onClick={() => navigate('import', { params: { from: 'vaults' } })}
           shape="round"
           block
         >

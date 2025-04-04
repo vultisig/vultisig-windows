@@ -1,13 +1,8 @@
-import { Chain } from '@core/chain/Chain'
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
-import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
-import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
-import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 
 export const appPaths = {
+  setupVault: '/setup-vault',
   root: '/',
   import: '/import',
   landing: '/landing',
@@ -43,38 +38,11 @@ export type AppPath = DotNestedKeys<AppPaths>
 
 // TODO: to change as required in the extension
 export type AppPathParams = {
-  address: { address: string }
   uploadQr: { title?: string }
-  manageVaultChainCoins: { chain: Chain }
-  vaultChainDetail: { chain: Chain }
-  vaultChainCoinDetail: { chain: Chain; coin: string }
-  send: { coin: string; address?: string }
-  setupVault: { type?: 'secure' | 'fast' }
-  swap: { coin: string }
-  deposit: { coin: string }
-  vaultFolder: { id: string }
-  manageVaultFolder: { id: string }
+  import: { from?: string }
 }
 
-export type AppPathState = {
-  keysign: {
-    keysignPayload: KeysignMessagePayload
-  }
-  fastKeysign: {
-    keysignPayload: KeysignMessagePayload
-  }
-  joinKeysign: { vaultId: string; keysignMsg: KeysignMessage }
-  joinKeygen: {
-    keygenType: KeygenType
-    keygenMsg: KeygenMessage | ReshareMessage
-  }
-  deeplink: {
-    url: string
-  }
-  importVaultFromFile: {
-    filePath: string
-  }
-}
+export type AppPathState = {}
 
 type AppPathsWithParams = keyof AppPathParams
 
