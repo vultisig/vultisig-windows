@@ -2,11 +2,6 @@ import '@clients/extension/src/styles/pure.scss'
 import '@clients/extension/src/pages/transaction/index.scss'
 
 import { create } from '@bufbuild/protobuf'
-import ButtonPrimary from '@clients/extension/src/components/button-primary'
-import ButtonTertiary from '@clients/extension/src/components/button-tertiary'
-import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
-import VultiError from '@clients/extension/src/components/vulti-error'
-import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import {
   alertError,
   alertInfo,
@@ -20,12 +15,18 @@ import {
   textExtraLight,
   textPrimary,
 } from '@clients/extension/src/colors'
+import ButtonPrimary from '@clients/extension/src/components/button-primary'
+import ButtonTertiary from '@clients/extension/src/components/button-tertiary'
+import MiddleTruncate from '@clients/extension/src/components/middle-truncate'
+import VultiError from '@clients/extension/src/components/vulti-error'
+import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import {
   ArrowLeft,
   Check,
   Close,
   SquareArrow,
 } from '@clients/extension/src/icons'
+import { ExtensionProviders } from '@clients/extension/src/state/ExtensionProviders'
 import api from '@clients/extension/src/utils/api'
 import { splitString } from '@clients/extension/src/utils/functions'
 import {
@@ -72,16 +73,13 @@ import {
   message,
   QRCode,
   Spin,
-  theme,
   Tooltip,
 } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'
-import { StrictMode, useEffect, useRef, useState } from 'react'
+import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
-
-import { ExtensionProviders } from '@clients/extension/src/state/ExtensionProviders'
 
 interface FormProps {
   password: string
@@ -110,7 +108,6 @@ const Component = () => {
   const [form] = Form.useForm()
   const [state, setState] = useState(initialState)
   const {
-    loading,
     fastSign,
     keySignUrl,
     step,
@@ -122,7 +119,6 @@ const Component = () => {
     keysignPayload,
   } = state
   const [messageApi, contextHolder] = message.useMessage()
-  const qrContainerRef = useRef<HTMLDivElement>(null)
 
   const handleApp = (): void => {
     window.open(keySignUrl, '_self')
@@ -148,19 +144,6 @@ const Component = () => {
             content: t('failed_to_copy_link'),
           })
         })
-    }
-  }
-
-  const exportQRCode = () => {
-    if (qrContainerRef.current) {
-      const canvas = qrContainerRef.current.querySelector('canvas')
-      if (canvas) {
-        const dataURL = canvas.toDataURL('image/png')
-        const link = document.createElement('a')
-        link.href = dataURL
-        link.download = 'qrcode.png'
-        link.click()
-      }
     }
   }
 
@@ -781,7 +764,17 @@ const Component = () => {
               <div className="card">
                 <div className="header">
                   <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                  <span className="action" onClick={() => handleStep(1)}>
+                  <span
+                    className="action"
+                    onClick={() => handleStep(1)}
+                    onKeyDown={e => {
+                      if (e.key === 'Escape') {
+                        handleStep(1)
+                      }
+                    }}
+                    tabIndex={0}
+                    role="button"
+                  >
                     <ArrowLeft />
                   </span>
                 </div>
@@ -863,7 +856,7 @@ const Component = () => {
                     </div>
                   )}
                   <Divider>{t('or')}</Divider>
-                  <ButtonTertiary onClick={() => handleStep(3)} block>
+                  <ButtonTertiary onClick={handleApp} block>
                     Sign with desktop app instead
                   </ButtonTertiary>
                 </div>
@@ -872,7 +865,17 @@ const Component = () => {
               <div className="card">
                 <div className="header">
                   <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                  <span className="action" onClick={() => handleStep(2)}>
+                  <span
+                    className="action"
+                    onClick={() => handleStep(2)}
+                    onKeyDown={e => {
+                      if (e.key === 'Escape') {
+                        handleStep(2)
+                      }
+                    }}
+                    tabIndex={0}
+                    role="button"
+                  >
                     <ArrowLeft />
                   </span>
                 </div>
@@ -942,7 +945,17 @@ const Component = () => {
 
                   <div className="header">
                     <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                    <span className="action" onClick={() => handleStep(3)}>
+                    <span
+                      className="action"
+                      onClick={() => handleStep(3)}
+                      onKeyDown={e => {
+                        if (e.key === 'Escape') {
+                          handleStep(3)
+                        }
+                      }}
+                      tabIndex={0}
+                      role="button"
+                    >
                       <ArrowLeft />
                     </span>
                   </div>

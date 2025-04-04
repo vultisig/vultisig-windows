@@ -61,7 +61,18 @@ const Component: FC<ComponentProps> = ({ onClick, text }) => {
   useEffect(componentDidUpdate, [text])
 
   return (
-    <span ref={elmRef} onClick={handleClick} className="middle-truncate">
+    <span
+      ref={elmRef}
+      onClick={handleClick}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleClick()
+        }
+      }}
+      tabIndex={0}
+      role="button"
+      className="middle-truncate"
+    >
       {truncating ? <span>{ellipsis}</span> : ellipsis}
     </span>
   )

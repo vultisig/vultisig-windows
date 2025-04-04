@@ -1,10 +1,9 @@
-import { FC } from 'react'
-import { Button, ButtonProps, ConfigProvider } from 'antd'
-
 import {
   buttonSecondary,
   buttonSecondaryHover,
 } from '@clients/extension/src/colors'
+import { Button, ButtonProps, ConfigProvider } from 'antd'
+import { FC } from 'react'
 
 const Component: FC<ButtonProps> = ({
   children,
