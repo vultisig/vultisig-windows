@@ -1,7 +1,6 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft } from '@clients/extension/src/icons'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -9,6 +8,8 @@ import {
 import { Button, Form, Input } from 'antd'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { appPaths } from '../../../../navigation'
 
 const Component = () => {
   const { t } = useTranslation()
@@ -24,7 +25,7 @@ const Component = () => {
             vaults.map(item => (item.active ? { ...item, name } : item))
           )
 
-          goBack(routeKeys.settings.vault)
+          goBack(appPaths.settings.vault)
         })
       })
       .catch(() => {})
@@ -46,7 +47,7 @@ const Component = () => {
         <span className="heading">{t('rename_vault')}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(routeKeys.settings.root)}
+          onClick={() => goBack(appPaths.settings.root)}
         />
       </div>
       <div className="content">

@@ -1,13 +1,14 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft } from '@clients/extension/src/icons'
 import { Currency, currencyName } from '@clients/extension/src/utils/constants'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredCurrency,
   setStoredCurrency,
 } from '@clients/extension/src/utils/storage'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { appPaths } from '../../../../navigation'
 
 interface InitialState {
   currency: Currency
@@ -24,7 +25,7 @@ const Component = () => {
     setStoredCurrency(currency).then(() => {
       setState(prevState => ({ ...prevState, currency }))
 
-      goBack(routeKeys.settings.root)
+      goBack(appPaths.settings.root)
     })
   }
 
@@ -85,7 +86,7 @@ const Component = () => {
         <span className="heading">{t('currency')}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(routeKeys.settings.root)}
+          onClick={() => goBack(appPaths.settings.root)}
         />
       </div>
       <div className="content">

@@ -6,11 +6,12 @@ import {
   Trash,
 } from '@clients/extension/src/icons'
 import type { VaultProps } from '@clients/extension/src/utils/interfaces'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import { getStoredVaults } from '@clients/extension/src/utils/storage'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+
+import { appPaths } from '../../../../navigation'
 
 interface InitialState {
   vault?: VaultProps
@@ -39,13 +40,13 @@ const Component = () => {
         <span className="heading">{vault?.name}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(routeKeys.settings.root)}
+          onClick={() => goBack(appPaths.settings.root)}
         />
       </div>
       <div className="content">
         <div className="list list-arrow list-action list-icon">
           <Link
-            to={routeKeys.settings.rename}
+            to={appPaths.settings.rename}
             state={true}
             className="list-item"
           >
@@ -54,7 +55,7 @@ const Component = () => {
             <ArrowRight className="action" />
           </Link>
           <Link
-            to={routeKeys.settings.delete}
+            to={appPaths.settings.delete}
             state={true}
             className="list-item warning"
           >
