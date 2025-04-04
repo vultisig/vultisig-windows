@@ -7,8 +7,10 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { RefreshIcon } from '@lib/ui/icons/RefreshIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { Text } from '@lib/ui/text'
 import { splitBy } from '@lib/utils/array/splitBy'
 import { sum } from '@lib/utils/array/sum'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
@@ -30,10 +32,8 @@ import {
   getTokensAutoDiscoveryQueryKey,
   useTokensAutoDiscoveryQuery,
 } from '../../coin/query/useTokensAutoDiscoveryQuery'
-import { HStack, VStack } from '../../lib/ui/layout/Stack'
 import { Spinner } from '../../lib/ui/loaders/Spinner'
 import { Panel } from '../../lib/ui/panel/Panel'
-import { Text } from '../../lib/ui/text'
 import { makeAppPath } from '../../navigation'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { toStorageCoin } from '../../storage/storageCoin'

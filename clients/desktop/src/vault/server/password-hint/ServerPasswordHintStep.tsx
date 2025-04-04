@@ -8,7 +8,9 @@ import {
   textInputHorizontalPadding,
 } from '@lib/ui/css/textInput'
 import { CircledCloseIcon } from '@lib/ui/icons/CircledCloseIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import type { TFunction } from 'i18next'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -16,8 +18,6 @@ import styled from 'styled-components'
 import { z } from 'zod'
 
 import { TextInput } from '../../../lib/ui/inputs/TextInput'
-import { HStack, VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'

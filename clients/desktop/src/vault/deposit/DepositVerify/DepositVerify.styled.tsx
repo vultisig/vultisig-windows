@@ -1,6 +1,5 @@
+import { text } from '@lib/ui/text'
 import styled, { css } from 'styled-components'
-
-import { text } from '../../../lib/ui/text'
 
 const strictText = css`
   ${text({

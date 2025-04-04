@@ -1,10 +1,10 @@
 import { KeygenStep, keygenSteps } from '@core/mpc/keygen/KeygenStep'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
+import { HStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { HStack } from '../../../../../../../lib/ui/layout/Stack'
-import { Text } from '../../../../../../../lib/ui/text'
 import {
   IconWrapper,
   Loader,

@@ -2,12 +2,12 @@ import { centerContent } from '@lib/ui/css/centerContent'
 import { interactive } from '@lib/ui/css/interactive'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
+import { HStack } from '@lib/ui/layout/Stack'
+import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-import { HStack } from '../../layout/Stack'
-import { Text, text } from '../../text'
 import {
   InvisibleHTMLCheckbox,
   InvisibleHTMLCheckboxProps,

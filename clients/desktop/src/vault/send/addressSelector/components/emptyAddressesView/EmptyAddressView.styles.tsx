@@ -1,7 +1,7 @@
+import { Text } from '@lib/ui/text'
 import styled from 'styled-components'
 
 import { QUERIES } from '../../../../../lib/ui/constants'
-import { Text } from '../../../../../lib/ui/text'
 
 export const Container = styled.div`
   height: 100%;

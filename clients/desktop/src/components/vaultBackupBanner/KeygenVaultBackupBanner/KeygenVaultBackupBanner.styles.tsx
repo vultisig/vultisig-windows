@@ -1,6 +1,5 @@
+import { Text } from '@lib/ui/text'
 import styled from 'styled-components'
-
-import { Text } from '../../../lib/ui/text'
 
 export const Content = styled.div`
   width: 500px;

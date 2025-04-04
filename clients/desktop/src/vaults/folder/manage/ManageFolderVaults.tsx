@@ -1,3 +1,5 @@
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
@@ -6,12 +8,10 @@ import { useTranslation } from 'react-i18next'
 
 import { storage } from '../../../../wailsjs/go/models'
 import { DnDList, ItemChangeParams } from '../../../lib/dnd/DnDList'
-import { VStack } from '../../../lib/ui/layout/Stack'
 import {
   DnDItemContainer,
   DnDItemHighlight,
 } from '../../../lib/ui/list/item/DnDItemContainer'
-import { Text } from '../../../lib/ui/text'
 import { useUpdateVaultOrderMutation } from '../../../vault/mutations/useUpdateVaultOrderMutation'
 import { useFolderVaults } from '../../../vault/queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../../vault/state/currentVault'

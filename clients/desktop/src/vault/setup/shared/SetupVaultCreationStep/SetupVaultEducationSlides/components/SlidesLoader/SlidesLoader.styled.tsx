@@ -1,9 +1,9 @@
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { ProgressLine } from '@lib/ui/flow/ProgressLine'
+import { VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { VStack } from '../../../../../../../lib/ui/layout/Stack'
 import { Spinner } from '../../../../../../../lib/ui/loaders/Spinner'
 
 export const Wrapper = styled(VStack)`

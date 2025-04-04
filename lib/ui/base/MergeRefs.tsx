@@ -1,4 +1,4 @@
-import { mergeRefs } from '@clients/desktop/src/lib/ui/utils/mergeRefs'
+import { mergeRefs } from '@lib/ui/utils/mergeRefs'
 import { ReactNode, useMemo } from 'react'
 
 import { useArrayMemo } from '../hooks/useArrayMemo'

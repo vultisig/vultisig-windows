@@ -1,8 +1,8 @@
+import { VStack } from '@lib/ui/layout/Stack'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { MayaChainPool } from '../../../lib/types/deposit'
-import { VStack } from '../../../lib/ui/layout/Stack'
 import { Modal } from '../../../lib/ui/modal'
 import { DepositActionOption } from './DepositActionOption'
 

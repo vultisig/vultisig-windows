@@ -1,10 +1,10 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { useInterval } from 'react-use'
 import styled from 'styled-components'
 
-import { VStack } from '../../../../../lib/ui/layout/Stack'
 import { PageContent } from '../../../../../ui/page/PageContent'
 import { DynamicEducationContent } from './components/DynamicEducationalContent'
 import { SlidesLoader } from './components/SlidesLoader'

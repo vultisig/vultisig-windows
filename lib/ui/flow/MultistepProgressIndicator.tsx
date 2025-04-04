@@ -1,4 +1,4 @@
-import { HStack } from '@clients/desktop/src/lib/ui/layout/Stack'
+import { HStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, ValueProp } from '@lib/ui/props'
 import { matchColor } from '@lib/ui/theme/getters'
 import { range } from '@lib/utils/array/range'

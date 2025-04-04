@@ -1,13 +1,13 @@
 import { CoinKey } from '@core/chain/coin/Coin'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { text } from '@lib/ui/text'
 import { EntityWithAmount } from '@lib/utils/entities/EntityWithAmount'
 import styled from 'styled-components'
 
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount'
 import { useCoinPriceQuery } from '../../../../coin/query/useCoinPriceQuery'
 import { Skeleton } from '../../../../components/skeleton'
-import { text } from '../../../../lib/ui/text'
 import { useCurrentVaultCoin } from '../../../state/currentVault'
 
 const Container = styled.div`

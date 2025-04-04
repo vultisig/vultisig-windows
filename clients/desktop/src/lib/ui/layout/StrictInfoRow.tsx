@@ -1,7 +1,6 @@
+import { hStack } from '@lib/ui/layout/Stack'
+import { text } from '@lib/ui/text'
 import styled from 'styled-components'
-
-import { text } from '../text'
-import { hStack } from './Stack'
 
 export const StrictInfoRow = styled.div`
   ${hStack({

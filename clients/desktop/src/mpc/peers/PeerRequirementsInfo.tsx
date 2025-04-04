@@ -3,12 +3,11 @@ import { borderRadius } from '@lib/ui/css/borderRadius'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { CloseIcon } from '@lib/ui/icons/CloseIcon'
 import { InfoIcon } from '@lib/ui/icons/InfoIcon'
+import { hStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { hStack } from '../../lib/ui/layout/Stack'
-import { Text } from '../../lib/ui/text'
 
 const Container = styled.div`
   ${hStack({

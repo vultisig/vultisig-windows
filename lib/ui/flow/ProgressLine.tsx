@@ -1,4 +1,4 @@
-import { vStack } from '@clients/desktop/src/lib/ui/layout/Stack'
+import { vStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { toPercents } from '@lib/utils/toPercents'

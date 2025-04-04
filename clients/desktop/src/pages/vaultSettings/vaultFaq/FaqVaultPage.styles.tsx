@@ -1,9 +1,8 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
+import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { HStack } from '../../../lib/ui/layout/Stack'
 
 export const FaqButton = styled(UnstyledButton)`
   display: flex;
