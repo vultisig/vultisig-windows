@@ -28,11 +28,11 @@ const Tag = styled.div`
 
 export const VaultSigningInfo = () => {
   const { hasServer, isBackup } = useVaultServerStatus()
-  const { signers, local_party_id } = useCurrentVault()
+  const { signers, localPartyId } = useCurrentVault()
 
   const { t } = useTranslation()
 
-  const index = signers.indexOf(local_party_id)
+  const index = signers.indexOf(localPartyId)
 
   return (
     <HStack alignItems="center" gap={8}>

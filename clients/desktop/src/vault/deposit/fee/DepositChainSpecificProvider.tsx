@@ -5,7 +5,7 @@ import { StrictText } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup'
+import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { PageContent } from '../../../ui/page/PageContent'
 import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery'
 

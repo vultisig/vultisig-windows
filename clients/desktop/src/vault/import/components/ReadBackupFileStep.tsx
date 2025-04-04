@@ -38,7 +38,7 @@ export const ReadBackupFileStep = ({
           fileName,
         })
       ) {
-        result.override = { lib_type: 'DKLS' }
+        result.override = { libType: 'DKLS' }
       }
 
       return result

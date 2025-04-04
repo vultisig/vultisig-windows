@@ -10,7 +10,8 @@ import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
 import { useCurrentVault } from '../../../state/currentVault'
-import { getStorageVaultId } from '../../../utils/storageVault'
+import { getVaultId } from '@core/ui/vault/Vault'
+
 import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
 
 export const useJoinKeysignUrlQuery = () => {
@@ -28,7 +29,7 @@ export const useJoinKeysignUrlQuery = () => {
       sessionId,
       hexEncryptionKey,
       payload,
-      vaultId: getStorageVaultId(vault),
+      vaultId: getVaultId(vault),
     }),
     [serverType, serviceName, sessionId, hexEncryptionKey, payload, vault]
   )

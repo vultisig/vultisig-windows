@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnForwardProp } from '@lib/ui/props'
@@ -15,7 +16,6 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { getVaultFromServer } from '../../fast/api/getVaultFromServer'
 import { useCurrentVault } from '../../state/currentVault'
-import { getStorageVaultId } from '../../utils/storageVault'
 import { useVaultPassword } from './state/password'
 
 export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
@@ -28,7 +28,7 @@ export const ServerPasswordStep: React.FC<OnForwardProp> = ({ onForward }) => {
   const { mutate, error, isPending } = useMutation({
     mutationFn: async () =>
       getVaultFromServer({
-        vaultId: getStorageVaultId(vault),
+        vaultId: getVaultId(vault),
         password,
       }),
     onSuccess: onForward,

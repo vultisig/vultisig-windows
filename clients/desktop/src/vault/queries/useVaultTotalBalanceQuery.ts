@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery'
-import { useCurrentVaultCoins } from '../state/currentVault'
+import { useCurrentVaultCoins } from '../state/currentVaultCoins'
 
 export const useVaultTotalBalanceQuery = () => {
   const coins = useCurrentVaultCoins()

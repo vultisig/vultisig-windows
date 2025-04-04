@@ -12,7 +12,7 @@ import { getSwapKeysignPayloadFields } from '../../../chain/swap/keysign/getSwap
 import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { getChainSpecificQueryKey } from '../../../coin/query/useChainSpecificQuery'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
-import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useFromAmount } from '../state/fromAmount'
 import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'

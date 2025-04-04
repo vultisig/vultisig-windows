@@ -6,10 +6,11 @@ import {
   Vault_KeyShareSchema,
   VaultSchema,
 } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { Vault } from '@core/ui/vault/Vault'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
-import { storage } from '../../../../wailsjs/go/models'
 import { toStorageVault } from '../../utils/storageVault'
+
 export type DatBackup = {
   name: string
   pubKeyECDSA: string
@@ -33,7 +34,7 @@ const secondsTimestamptToProtoTimestamp = (seconds: number): Timestamp =>
     nanos: Math.floor(convertDuration(seconds % 1, 's', 'ns')),
   })
 
-export const fromDatBackup = (backup: DatBackup): storage.Vault => {
+export const fromDatBackup = (backup: DatBackup): Vault => {
   const keyShares = backup.keyshares.map(({ pubkey, keyshare }) =>
     create(Vault_KeyShareSchema, {
       publicKey: pubkey,

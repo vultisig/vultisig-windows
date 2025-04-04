@@ -24,7 +24,7 @@ import { shouldDisplayChainLogo } from '../../chain/utils'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
-} from '../../state/currentVault'
+} from '../../state/currentVaultCoins'
 
 export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const [isCoinModalOpen, setIsCoinModalOpen] = useState(false)

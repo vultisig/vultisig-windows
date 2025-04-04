@@ -9,7 +9,8 @@ import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton'
 import { PageHeaderTitle } from '../../ui/page/PageHeaderTitle'
 import { useFolderVaults } from '../../vault/queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../vault/state/currentVault'
-import { getStorageVaultId } from '../../vault/utils/storageVault'
+import { getVaultId } from '@core/ui/vault/Vault'
+
 import { VaultListItem } from '../components/VaultListItem'
 import { useCurrentVaultFolder } from './state/currentVaultFolder'
 
@@ -37,7 +38,7 @@ export const VaultFolderPage = () => {
       <PageContent scrollable>
         <VStack gap={8}>
           {vaults.map(vault => (
-            <CurrentVaultProvider value={vault} key={getStorageVaultId(vault)}>
+            <CurrentVaultProvider value={vault} key={getVaultId(vault)}>
               <VaultListItem />
             </CurrentVaultProvider>
           ))}
