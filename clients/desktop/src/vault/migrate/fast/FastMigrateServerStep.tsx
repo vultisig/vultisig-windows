@@ -40,7 +40,7 @@ export const FastMigrateServerStep: React.FC<
 
   useEffect(mutate, [mutate])
 
-  const title = t('migrate')
+  const title = t('upgrade')
 
   const header = <FlowPageHeader title={title} onBack={onBack} />
 

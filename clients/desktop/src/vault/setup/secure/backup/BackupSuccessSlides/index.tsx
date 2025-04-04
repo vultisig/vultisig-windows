@@ -1,4 +1,5 @@
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
 import { useRive } from '@rive-app/react-canvas'
 import { FC } from 'react'
@@ -10,20 +11,13 @@ import { PageContent } from '../../../../../ui/page/PageContent'
 
 const BACKUP_SUCCESS_WAIT_TIME_IN_MS = 6000
 
-type BackupSuccessSlideProps = {
-  onCompleted: () => void
-}
-
-export const BackupSuccessSlide: FC<BackupSuccessSlideProps> = ({
-  onCompleted,
-}) => {
+export const BackupSuccessSlide: FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()
   const { RiveComponent } = useRive({
     src: '/assets/animations/secure-vault-backup/secure-vault-backup-screen-part-3/index.riv',
     stateMachines: 'State Machine 1',
     autoplay: true,
-    onStateChange: () =>
-      setTimeout(onCompleted, BACKUP_SUCCESS_WAIT_TIME_IN_MS),
+    onStateChange: () => setTimeout(onFinish, BACKUP_SUCCESS_WAIT_TIME_IN_MS),
   })
 
   return (

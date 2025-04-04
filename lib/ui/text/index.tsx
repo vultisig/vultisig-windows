@@ -155,10 +155,14 @@ export const StrictText = styled(Text)`
   ${strictText}
 `
 
-export const GradientText = styled(Text)`
+export const gradientText = css`
   background: linear-gradient(90deg, #33e6bf, #0439c7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-fill-color: transparent;
+`
+
+export const GradientText = styled(Text)`
+  ${gradientText}
 `

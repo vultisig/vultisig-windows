@@ -31,7 +31,6 @@ export const it = {
     'Il tuo caveau inizierà a generarsi non appena avrai completato la configurazione sul tuo dispositivo principale',
   supported_file_types: 'Tipi di file supportati: .bak & .vult',
   optionalDevice: 'Dispositivo opzionale',
-  scanWithDevice: 'Scansiona con il {{deviceNumber}}° dispositivo',
   localMode: 'Sei in modalità locale',
   scanQrInstruction:
     'Scansiona il QR con un altro dispositivo. Si consiglia un setup a 3 dispositivi, 2 sono sufficienti.',
@@ -134,7 +133,6 @@ export const it = {
   setup: 'Configura',
   import: 'Importa',
   keygen: 'Generazione chiavi',
-  migrate: 'Migrazione',
   name_your_vault: 'Dai un nome alla tua cassaforte',
   join: 'Unisciti',
   done: 'Fatto',
@@ -714,8 +712,6 @@ export const it = {
   vault_value: 'Valore del caveau',
   vault_part: 'Parte del caveau',
   share: 'Condividere',
-  join_migrate: 'Unisciti alla migrazione',
-  waiting_for_migrate_start: "In attesa dell'inizio della migrazione...",
   backup_now: 'Esegui il backup ora',
   share_n_of_m: 'Condividi {{n}} di {{m}}',
   this_vault_share: 'questa condivisione del caveau',
@@ -797,4 +793,18 @@ export const it = {
   backup_password_info:
     'Ti consigliamo di non impostare una password di backup per le condivisioni del vault del dispositivo: i tuoi dati sono al sicuro se i backup sono correttamente archiviati in posizioni diverse, il che è già una protezione significativa. Ricorda, le password di backup non possono essere recuperate se le dimentichi. La scelta è tua!',
   upgrade_your_vault_now: 'Aggiorna il tuo caveau ora',
+  upgrade_vault: 'Aggiorna il tuo caveau',
+  upgrade_now: 'Aggiorna ora',
+  got_it: 'Fatto',
+  upgrade_vault_description:
+    'Aggiorna questo vault al protocollo MPC più veloce al mondo e firma più velocemente che mai',
+  upgrade_all_devices:
+    "Assicurarsi che <b>tutti i dispositivi iniziali</b> siano presenti durante l'aggiornamento",
+  upgrade_success: 'Vault aggiornato <b>con successo</b>',
+  go_to_vault: 'Vai al caveau',
+  upgrade: 'Aggiornamento',
+  scan_with_device_index: 'Scansiona con il dispositivo {{index}}',
+  scan_with_device_name: 'Scansiona con {{name}}',
+  join_upgrade: "Unisciti all'aggiornamento",
+  waiting_for_upgrade_start: "In attesa dell'inizio dell'aggiornamento...",
 }

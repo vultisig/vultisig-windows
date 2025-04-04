@@ -20,7 +20,7 @@ export const KeygenPendingState = ({ value }: ValueProp<KeygenStep | null>) => {
   if (!value) {
     const message = match(keygenType, {
       [KeygenType.Keygen]: () => t('waiting_for_keygen_start'),
-      [KeygenType.Migrate]: () => t('waiting_for_migrate_start'),
+      [KeygenType.Migrate]: () => t('waiting_for_upgrade_start'),
       [KeygenType.Reshare]: () => t('waiting_for_reshare_start'),
     })
 

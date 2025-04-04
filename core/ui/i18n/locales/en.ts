@@ -86,7 +86,7 @@ export const en = {
   setup: 'Setup',
   import: 'Import',
   keygen: 'Keygen',
-  migrate: 'Migrate',
+  upgrade: 'Upgrade',
   name_your_vault: 'Name your Vault',
   join: 'Join',
   done: 'Done',
@@ -330,7 +330,8 @@ export const en = {
   waiting_for_keysign_start: 'Waiting for the signing process to begin...',
   serverTimedOut: 'Server timed out',
   optionalDevice: 'Optional Device',
-  scanWithDevice: 'Scan with {{deviceNumber}} device',
+  scan_with_device_index: 'Scan with {{index}} device',
+  scan_with_device_name: 'Scan with {{name}}',
   localMode: "You're in local mode",
   scanQrInstruction:
     'Scan QR with other device. 3-device setup recommended, 2 is sufficient.',
@@ -375,8 +376,8 @@ export const en = {
   complete: 'Complete',
   auto: 'auto',
   join_reshare: 'Join Reshare',
-  join_migrate: 'Join Migration',
-  waiting_for_migrate_start: 'Waiting for migration to begin...',
+  join_upgrade: 'Join Upgrade',
+  waiting_for_upgrade_start: 'Waiting for upgrade to begin...',
   reshare: 'Reshare',
   reshare_your_vault: 'Reshare your vault',
   reshare_explanation:
@@ -763,6 +764,15 @@ export const en = {
   vultiserver_password: 'Vultiserver Password',
   backup_without_password: 'Backup without password',
   use_password: 'Use password',
+  upgrade_vault: 'Upgrade your vault',
+  upgrade_now: 'Upgrade now',
+  got_it: 'Got it',
+  upgrade_vault_description:
+    'Upgrade this vault to the <b>world’s fastest MPC protocol</b> and sign faster than ever before',
+  upgrade_all_devices:
+    'Make sure that <b>all initial devices</b> are present when upgrading',
+  upgrade_success: 'Vault upgraded <b>successfully</b>',
+  go_to_vault: 'Go to vault',
   backup_password_prompt:
     'Do you want to add a password to your device vault shares?',
   backup_password_info:

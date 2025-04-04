@@ -48,7 +48,7 @@ export const JoinKeygenPage = () => {
   const title = match(keygenType, {
     [KeygenType.Keygen]: () => t('join_keygen'),
     [KeygenType.Reshare]: () => t('join_reshare'),
-    [KeygenType.Migrate]: () => t('join_migrate'),
+    [KeygenType.Migrate]: () => t('join_upgrade'),
   })
 
   return (
