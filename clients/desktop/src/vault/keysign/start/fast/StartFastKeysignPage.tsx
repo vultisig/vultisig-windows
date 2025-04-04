@@ -1,7 +1,8 @@
-import { Match } from '../../../../lib/ui/base/Match'
-import { StepTransition } from '../../../../lib/ui/base/StepTransition'
-import { ValueTransfer } from '../../../../lib/ui/base/ValueTransfer'
-import { useStepNavigation } from '../../../../lib/ui/hooks/useStepNavigation'
+import { Match } from '@lib/ui/base/Match'
+import { StepTransition } from '@lib/ui/base/StepTransition'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+
 import { MpcLocalPartyIdProvider } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcPeersProvider } from '../../../../mpc/peers/state/mpcPeers'
 import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'

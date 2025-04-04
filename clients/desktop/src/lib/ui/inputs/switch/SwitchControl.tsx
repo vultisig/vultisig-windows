@@ -1,11 +1,11 @@
+import { centerContent } from '@lib/ui/css/centerContent'
+import { round } from '@lib/ui/css/round'
+import { sameDimensions } from '@lib/ui/css/sameDimensions'
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { IsActiveProp } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { centerContent } from '../../css/centerContent'
-import { round } from '../../css/round'
-import { sameDimensions } from '../../css/sameDimensions'
-import { toSizeUnit } from '../../css/toSizeUnit'
-import { getColor } from '../../theme/getters'
 import {
   getControlSize,
   getSwitchWidth,

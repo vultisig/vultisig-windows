@@ -1,8 +1,7 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { Button } from '../../../lib/ui/buttons/Button'
-import { borderRadius } from '../../../lib/ui/css/borderRadius'
-import { getColor } from '../../../lib/ui/theme/getters'
 
 export const InputFieldWrapper = styled.div`
   position: relative;

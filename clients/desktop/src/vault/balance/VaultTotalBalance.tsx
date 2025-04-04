@@ -1,11 +1,11 @@
 import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
+import { HStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
-import { HStack } from '../../lib/ui/layout/Stack'
 import { Spinner } from '../../lib/ui/loaders/Spinner'
-import { Text } from '../../lib/ui/text'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { useVaultTotalBalanceQuery } from '../queries/useVaultTotalBalanceQuery'
 import { BalanceVisibilityAware } from './visibility/BalanceVisibilityAware'

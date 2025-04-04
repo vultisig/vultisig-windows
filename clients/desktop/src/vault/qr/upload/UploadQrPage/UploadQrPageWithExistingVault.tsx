@@ -1,8 +1,8 @@
 import { coinKeyToString } from '@core/chain/coin/Coin'
+import { Match } from '@lib/ui/base/Match'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Match } from '../../../../lib/ui/base/Match'
 import { useToast } from '../../../../lib/ui/toast/ToastProvider'
 import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../../navigation/hooks/useAppPathParams'

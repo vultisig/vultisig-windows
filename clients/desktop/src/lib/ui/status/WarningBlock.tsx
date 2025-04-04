@@ -1,14 +1,13 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
+import { hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp, UiProps } from '@lib/ui/props'
+import { text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import React, { ElementType, ReactNode } from 'react'
 import styled from 'styled-components'
-
-import { borderRadius } from '../css/borderRadius'
-import { IconWrapper } from '../icons/IconWrapper'
-import { TriangleAlertIcon } from '../icons/TriangleAlertIcon'
-import { hStack } from '../layout/Stack'
-import { text } from '../text'
-import { getColor } from '../theme/getters'
-import { Tooltip } from '../tooltips/Tooltip'
 
 const Container = styled.div`
   ${borderRadius.m};

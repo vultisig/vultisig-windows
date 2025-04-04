@@ -1,10 +1,10 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { centerContent } from '@lib/ui/css/centerContent'
+import { HStack } from '@lib/ui/layout/Stack'
+import { text } from '@lib/ui/text'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
-import { borderRadius } from '../css/borderRadius'
-import { centerContent } from '../css/centerContent'
-import { HStack } from '../layout/Stack'
-import { text } from '../text'
 import { TextInput, TextInputProps } from './TextInput'
 
 type AmountTextInputProps = Omit<TextInputProps, 'value' | 'onValueChange'> & {

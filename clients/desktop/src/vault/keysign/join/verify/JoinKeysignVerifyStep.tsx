@@ -1,8 +1,8 @@
+import { Button } from '@lib/ui/buttons/Button'
 import { OnForwardProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { TxOverviewPanel } from '../../../../chain/tx/components/TxOverviewPanel'
-import { Button } from '../../../../lib/ui/buttons/Button'
 import { PageContent } from '../../../../ui/page/PageContent'
 import { PageHeader } from '../../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../../ui/page/PageHeaderBackButton'

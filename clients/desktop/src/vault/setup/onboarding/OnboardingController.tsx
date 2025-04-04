@@ -1,5 +1,6 @@
-import { Match } from '../../../lib/ui/base/Match'
-import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { Match } from '@lib/ui/base/Match'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+
 import { OnboardingGreeting } from './OnboardingGreeting'
 import { OnboardingSteps } from './OnboardingSteps'
 import { OnboardingSummary } from './OnboardingSummary'

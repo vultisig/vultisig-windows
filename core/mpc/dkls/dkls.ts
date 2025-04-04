@@ -212,6 +212,7 @@ export class DKLS {
           chaincode: Buffer.from(keyShare.rootChainCode()).toString('hex'),
         }
       }
+      throw new Error('DKLS keygen failed')
     } catch (error) {
       if (error instanceof Error) {
         console.error('DKLS keygen error:', error)
@@ -226,13 +227,12 @@ export class DKLS {
     for (let i = 0; i < 3; i++) {
       try {
         const result = await this.startKeygen(i)
-        if (result !== undefined) {
-          return result
-        }
+        return result
       } catch (error) {
         console.error('DKLS keygen error:', error)
       }
     }
+    throw new Error('DKLS keygen failed')
   }
   public getSetupMessage() {
     return this.setupMessage
@@ -315,6 +315,7 @@ export class DKLS {
             chaincode: Buffer.from(keyShare.rootChainCode()).toString('hex'),
           }
         }
+        throw new Error('DKLS reshare failed')
       } finally {
         session.free()
       }
@@ -332,12 +333,11 @@ export class DKLS {
     for (let i = 0; i < 3; i++) {
       try {
         const result = await this.startReshare(keyshare, i)
-        if (result !== undefined) {
-          return result
-        }
+        return result
       } catch (error) {
         console.error('DKLS reshare error:', error)
       }
     }
+    throw new Error('DKLS reshare failed')
   }
 }

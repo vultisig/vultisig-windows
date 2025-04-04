@@ -1,8 +1,8 @@
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { VStack } from '../../lib/ui/layout/Stack'
-import { Text } from '../../lib/ui/text'
 import { formatMpcDeviceName, parseLocalPartyId } from '../localPartyId'
 import { useMpcLocalPartyId } from '../localPartyId/state/mpcLocalPartyId'
 import { peerOption, peerOptionActive } from './option/PeerOptionContainer'

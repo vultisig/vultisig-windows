@@ -1,10 +1,10 @@
+import { StepTransition } from '@lib/ui/base/StepTransition'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { match } from '@lib/utils/match'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { StepTransition } from '../../../lib/ui/base/StepTransition'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { hasServerSigner } from '../../fast/utils/hasServerSigner'
@@ -15,10 +15,14 @@ import { CurrentVaultProvider } from '../../state/currentVault'
 import { useCurrentKeygenType } from '../state/currentKeygenType'
 import { useKeygenMutation } from './mutations/useKeygenMutation'
 import { SaveVaultStep } from './SaveVaultStep'
-import { VaultKeygenBackupFlow } from './VaultKeygenBackupFlow'
+import { VaultKeygenEnding } from './VaultKeygenEnding'
 
 export const KeygenFlow = ({ onBack }: OnBackProp) => {
-  const { mutate: startKeygen, ...keygenMutationState } = useKeygenMutation()
+  const {
+    step,
+    mutate: startKeygen,
+    ...keygenMutationState
+  } = useKeygenMutation()
   useEffect(startKeygen, [startKeygen])
 
   const { t } = useTranslation()
@@ -28,7 +32,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
   const title = match(keygenType, {
     Keygen: () => t('creating_vault'),
     Reshare: () => t('reshare'),
-    Migrate: () => t('migrate'),
+    Migrate: () => t('upgrade'),
   })
 
   return (
@@ -42,7 +46,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
             )}
             to={() => {
               if (hasServerSigner(vault.signers)) {
-                return <VaultKeygenBackupFlow />
+                return <VaultKeygenEnding />
               }
 
               return (
@@ -54,7 +58,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
                       onForward={onForward}
                     />
                   )}
-                  to={() => <VaultKeygenBackupFlow />}
+                  to={() => <VaultKeygenEnding />}
                 />
               )
             }}
@@ -70,7 +74,7 @@ export const KeygenFlow = ({ onBack }: OnBackProp) => {
       pending={() => (
         <>
           <PageHeader title={<PageHeaderTitle>{title}</PageHeaderTitle>} />
-          <SetupVaultEducationSlides />
+          <SetupVaultEducationSlides value={step} />
         </>
       )}
     />

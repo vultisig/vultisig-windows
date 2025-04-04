@@ -55,6 +55,8 @@ jobs:
           submodules: recursive
       - name: Install dependencies
         run: yarn install
+      - name: Check for unused code
+        run: yarn knip
       - name: Lint
         run: yarn lint
       - name: run unit test

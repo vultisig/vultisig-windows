@@ -50,7 +50,7 @@ func (t *TssService) Reshare(vault storage.Vault,
 	if err != nil {
 		return nil, fmt.Errorf("failed to create localStateAccessor: %w", err)
 	}
-	runtime.EventsEmit(t.ctx, "PrepareVault")
+	runtime.EventsEmit(t.ctx, "prepareVault")
 	tssServerImp, err := t.createTSSService(serverURL, sessionID, hexEncryptionKey, localStateAccessor, true)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create TSS service: %w", err)
@@ -172,7 +172,7 @@ func (t *TssService) reshareECDSAKey(tssService *mtss.ServiceImpl,
 	resharePrefix string,
 	partiesJoined []string,
 	oldParties []string) (*mtss.ReshareResponse, error) {
-	runtime.EventsEmit(t.ctx, "ECDSA")
+	runtime.EventsEmit(t.ctx, "ecdsa")
 	t.Logger.WithFields(logrus.Fields{
 		"public_key":         publicKey,
 		"localPartyID":       localPartyID,
@@ -210,7 +210,7 @@ func (t *TssService) reshareEDDSAKey(tssService *mtss.ServiceImpl,
 	partiesJoined []string,
 	oldParties []string,
 	newResharePrefix string) (*mtss.ReshareResponse, error) {
-	runtime.EventsEmit(t.ctx, "EdDSA")
+	runtime.EventsEmit(t.ctx, "eddsa")
 	t.Logger.WithFields(logrus.Fields{
 		"public_key":         publicKey,
 		"localPartyID":       localPartyID,

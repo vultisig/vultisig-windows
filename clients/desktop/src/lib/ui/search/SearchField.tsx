@@ -1,9 +1,8 @@
+import { SearchIcon } from '@lib/ui/icons/SearchIcon'
+import { getColor } from '@lib/ui/theme/getters'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { SearchIcon } from '../icons/SearchIcon'
-import { getColor } from '../theme/getters'
 
 interface SearchFieldProps {
   placeholderKey?: string

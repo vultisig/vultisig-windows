@@ -1,10 +1,9 @@
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { VStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp, IconProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { IconWrapper } from '../../icons/IconWrapper'
-import { VStack } from '../../layout/Stack'
-import { Text } from '../../text'
-import { getColor } from '../../theme/getters'
 
 const IconContainer = styled(IconWrapper)`
   color: ${getColor('primary')};

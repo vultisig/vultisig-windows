@@ -1,7 +1,7 @@
+import { Match } from '@lib/ui/base/Match'
+import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 
-import { Match } from '../../../lib/ui/base/Match'
-import { Text } from '../../../lib/ui/text'
 import { PageSlice } from '../../../ui/page/PageSlice'
 import { useAddressBookItemsQuery } from '../../queries/useAddressBookItemsQuery'
 import { Wrapper } from './AddressSelector.styles'

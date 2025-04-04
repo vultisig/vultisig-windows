@@ -31,7 +31,6 @@ export const es = {
     'Vultisig es una cartera sin frases semilla. En su lugar, utiliza fragmentos fáciles de gestionar. Cada dispositivo tiene su propio fragmento único que necesita una copia de seguridad separada.',
   create_new_vault: 'Crear nueva bóveda',
   optionalDevice: 'Dispositivo opcional',
-  scanWithDevice: 'Escanear con el {{deviceNumber}}º dispositivo',
   localMode: 'Estás en modo local',
   fastVault: 'Fast Vault',
   scanQrInstruction:
@@ -137,7 +136,6 @@ export const es = {
   setup: 'Configurar',
   import: 'Importar',
   keygen: 'Generación de claves',
-  migrate: 'Migrar',
   name_your_vault: 'Nombre su bóveda',
   join: 'Unirse',
   done: 'Hecho',
@@ -234,7 +232,6 @@ export const es = {
   vault_setting_edit_vault_rename_subtitle: 'Renombre su bóveda',
   vault_setting_edit_vault_reshare_subtitle:
     'Recompartir la bóveda con un nuevo grupo de dispositivos.',
-  vault_setting_edit_vault_migrate_subtitle: 'Migrar bóveda a DKLS',
   vault_setting_edit_vault_delete_subtitle:
     'Eliminar su bóveda permanentemente',
   vault_settings_language_settings_title_en: 'Inglés',
@@ -719,8 +716,6 @@ export const es = {
   vault_value: 'Valor de la bóveda',
   vault_part: 'Parte de la bóveda',
   share: 'Compartir',
-  join_migrate: 'Únase a la migración',
-  waiting_for_migrate_start: 'Esperando que comience la migración...',
   backup_now: 'Haz una copia de seguridad ahora',
   share_n_of_m: 'Compartir {{n}} de {{m}}',
   this_vault_share: 'Esta bóveda comparte',
@@ -801,4 +796,19 @@ export const es = {
     '¿Quieres agregar una contraseña a los recursos compartidos de la bóveda de tu dispositivo?',
   backup_password_info:
     'Le recomendamos no establecer una contraseña de respaldo para los recursos compartidos de la bóveda del dispositivo. Sus datos estarán seguros si las copias de seguridad se almacenan correctamente en diferentes ubicaciones, lo cual ya constituye una protección considerable. Recuerde que las contraseñas de respaldo no se pueden recuperar si las olvida. ¡Usted decide!',
+  upgrade_your_vault_now: 'Actualice su bóveda ahora',
+  upgrade_vault: 'Mejora tu bóveda',
+  upgrade_now: 'Actualice ahora',
+  got_it: 'Entiendo',
+  upgrade_vault_description:
+    'Actualice esta bóveda al <b>protocolo MPC más rápido del mundo</b> y firme más rápido que nunca.',
+  upgrade_all_devices:
+    'Asegúrese de que <b>todos los dispositivos iniciales</b> estén presentes al realizar la actualización',
+  upgrade_success: 'Bóveda actualizada correctamente',
+  go_to_vault: 'Ir a la bóveda',
+  upgrade: 'Mejora',
+  scan_with_device_index: 'Escanear con el dispositivo {{index}}',
+  scan_with_device_name: 'Escanear con {{name}}',
+  join_upgrade: 'Únase a Upgrade',
+  waiting_for_upgrade_start: 'Esperando que comience la actualización...',
 }

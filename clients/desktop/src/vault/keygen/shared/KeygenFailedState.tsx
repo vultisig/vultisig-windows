@@ -1,12 +1,12 @@
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { Button } from '@lib/ui/buttons/Button'
+import { FilledAlertIcon } from '@lib/ui/icons/FilledAlertIcon'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button'
-import { FilledAlertIcon } from '../../../lib/ui/icons/FilledAlertIcon'
-import { VStack } from '../../../lib/ui/layout/Stack'
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock'
-import { Text } from '../../../lib/ui/text'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { PageContent } from '../../../ui/page/PageContent'
 import { useCurrentKeygenType } from '../state/currentKeygenType'
@@ -26,7 +26,7 @@ export const KeygenFailedState = ({
 
   const title = match(keygenType, {
     [KeygenType.Keygen]: () => t('keygen'),
-    [KeygenType.Migrate]: () => t('migrate'),
+    [KeygenType.Migrate]: () => t('upgrade'),
     [KeygenType.Reshare]: () => t('reshare'),
   })
 

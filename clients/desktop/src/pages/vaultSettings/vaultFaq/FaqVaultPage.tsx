@@ -1,10 +1,10 @@
+import CaretDownIcon from '@lib/ui/icons/CaretDownIcon'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import CaretDownIcon from '../../../lib/ui/icons/CaretDownIcon'
-import { VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'

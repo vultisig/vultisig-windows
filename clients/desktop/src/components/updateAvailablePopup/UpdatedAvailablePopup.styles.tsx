@@ -1,6 +1,6 @@
+import { Button } from '@lib/ui/buttons/Button'
 import styled from 'styled-components'
 
-import { Button } from '../../lib/ui/buttons/Button'
 import { ModalCloseButton } from '../../lib/ui/modal/ModalCloseButton'
 
 export const FixedWrapper = styled.div`

@@ -1,6 +1,11 @@
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { Match } from '@lib/ui/base/Match'
+import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
+import { Button } from '@lib/ui/buttons/Button'
+import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -10,18 +15,12 @@ import { CurrentTxHashProvider } from '../../../chain/state/currentTxHash'
 import { TxOverviewPanel } from '../../../chain/tx/components/TxOverviewPanel'
 import { TxOverviewChainDataRow } from '../../../chain/tx/components/TxOverviewRow'
 import useVersionCheck from '../../../lib/hooks/useVersionCheck'
-import { Match } from '../../../lib/ui/base/Match'
-import { MatchRecordUnion } from '../../../lib/ui/base/MatchRecordUnion'
-import { Button } from '../../../lib/ui/buttons/Button'
-import { VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { makeAppPath } from '../../../navigation'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
-import { MatchKeygenSessionStatus } from '../../keygen/shared/MatchKeygenSessionStatus'
 import { KeysignCustomMessageInfo } from '../join/verify/KeysignCustomMessageInfo'
 import { KeysignSigningState } from './KeysignSigningState'
 import { KeysignTxOverview } from './KeysignTxOverview'
@@ -102,10 +101,7 @@ export const KeysignSigningStep = ({
           />
           <PageContent data-testid="KeysignVerifyStep-PageContent">
             <VStack flexGrow>
-              <MatchKeygenSessionStatus
-                pending={() => <KeysignSigningState />}
-                active={() => <KeysignSigningState />}
-              />
+              <KeysignSigningState />
             </VStack>
             <VStack alignItems="center">
               <Text color="shy" size={12}>

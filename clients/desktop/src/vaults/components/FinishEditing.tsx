@@ -1,8 +1,7 @@
+import { Hoverable } from '@lib/ui/base/Hoverable'
 import { OnClickProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
-
-import { Hoverable } from '../../lib/ui/base/Hoverable'
-import { Text } from '../../lib/ui/text'
 
 export const FinishEditing: React.FC<OnClickProp> = ({ onClick }) => {
   const { t } = useTranslation()

@@ -1,13 +1,13 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp } from '@lib/ui/props'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { Button } from '../../../lib/ui/buttons/Button'
-import { TriangleAlertIcon } from '../../../lib/ui/icons/TriangleAlertIcon'
-import { HStack, VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
-import { getColor } from '../../../lib/ui/theme/getters'
 import { PageContent } from '../../../ui/page/PageContent'
 
 export const FailedSetupVaultKeygenStep: FC<OnBackProp> = ({ onBack }) => {

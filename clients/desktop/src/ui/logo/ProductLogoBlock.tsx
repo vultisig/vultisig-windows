@@ -1,7 +1,7 @@
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { VStack } from '../../lib/ui/layout/Stack'
-import { Text } from '../../lib/ui/text'
 import { ProductEnhancedLogo } from '../../ui/logo/ProductEnhancedLogo'
 
 export const ProductLogoBlock = () => {

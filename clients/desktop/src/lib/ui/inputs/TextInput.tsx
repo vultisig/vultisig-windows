@@ -1,11 +1,11 @@
+import { textInput } from '@lib/ui/css/textInput'
+import { VStack } from '@lib/ui/layout/Stack'
 import { LabelProp, UiProps } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import { ChangeEvent, ComponentProps } from 'react'
 import styled, { css } from 'styled-components'
 
-import { textInput } from '../css/textInput'
-import { VStack } from '../layout/Stack'
 import { Spinner } from '../loaders/Spinner'
-import { getColor } from '../theme/getters'
 import { InputContainer } from './InputContainer'
 import { InputLabel } from './InputLabel'
 

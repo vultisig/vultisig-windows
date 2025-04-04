@@ -1,12 +1,11 @@
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { CloseIcon } from '@lib/ui/icons/CloseIcon'
+import { FileIcon } from '@lib/ui/icons/FileIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { HStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
-
-import { IconButton } from '../../buttons/IconButton'
-import { CloseIcon } from '../../icons/CloseIcon'
-import { FileIcon } from '../../icons/FileIcon'
-import { IconWrapper } from '../../icons/IconWrapper'
-import { HStack } from '../../layout/Stack'
-import { Text } from '../../text'
-import { getColor } from '../../theme/getters'
 
 const IconContainer = styled(IconWrapper)`
   color: ${getColor('primary')};

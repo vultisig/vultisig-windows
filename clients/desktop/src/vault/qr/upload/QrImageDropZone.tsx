@@ -1,7 +1,7 @@
+import { ComputerUploadIcon } from '@lib/ui/icons/ComputerUploadIcon'
 import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
 
-import { ComputerUploadIcon } from '../../../lib/ui/icons/ComputerUploadIcon'
 import { InteractiveDropZoneContainer } from '../../../lib/ui/inputs/upload/DropZoneContainer'
 import { DropZoneContent } from '../../../lib/ui/inputs/upload/DropZoneContent'
 

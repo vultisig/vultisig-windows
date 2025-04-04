@@ -1,9 +1,9 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { borderRadius } from '../../../../lib/ui/css/borderRadius'
 import { Checkbox } from '../../../../lib/ui/inputs/checkbox/Checkbox'
-import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
-import { getColor } from '../../../../lib/ui/theme/getters'
 import { PageContent } from '../../../../ui/page/PageContent'
 
 export const StyledCheckbox = styled(Checkbox)`

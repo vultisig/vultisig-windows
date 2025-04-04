@@ -1,9 +1,9 @@
+import { textInputBackground } from '@lib/ui/css/textInput'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { textInputBackground } from '../../../../lib/ui/css/textInput'
-import { HStack, VStack } from '../../../../lib/ui/layout/Stack'
-import { text } from '../../../../lib/ui/text'
-import { getColor } from '../../../../lib/ui/theme/getters'
 import { SwapSide } from '../../../../vault/swap/providers/SideProvider'
 
 export const Container = styled(VStack)<{

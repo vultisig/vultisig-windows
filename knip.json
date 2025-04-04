@@ -17,5 +17,10 @@
     "clients/extension/src/pages/transaction/index.tsx",
     "clients/extension/src/pages/vault/index.tsx",
     "clients/extension/src/pages/vaults/index.tsx"
+  ],
+  "ignoreDependencies": [
+    "@types/chrome",
+    "@fontsource/montserrat",
+    "@fontsource/roboto-mono"
   ]
 }

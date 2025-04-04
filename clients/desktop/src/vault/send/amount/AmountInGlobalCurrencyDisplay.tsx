@@ -1,17 +1,14 @@
+import { textInputBackground, textInputFrame } from '@lib/ui/css/textInput'
+import { hStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
-import {
-  textInputBackground,
-  textInputFrame,
-} from '../../../lib/ui/css/textInput'
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel'
-import { hStack } from '../../../lib/ui/layout/Stack'
-import { text } from '../../../lib/ui/text'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
 import { useCurrentVaultCoin } from '../../state/currentVault'
 import { useSendAmount } from '../state/amount'

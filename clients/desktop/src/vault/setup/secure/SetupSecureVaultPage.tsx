@@ -1,7 +1,7 @@
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { Match } from '@lib/ui/base/Match'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
-import { Match } from '../../../lib/ui/base/Match'
-import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
 import { GeneratedMpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'

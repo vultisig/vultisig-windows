@@ -1,11 +1,11 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../lib/ui/buttons/Button'
 import { getFormProps } from '../../../lib/ui/form/utils/getFormProps'
 import { PasswordInput } from '../../../lib/ui/inputs/PasswordInput'
-import { VStack } from '../../../lib/ui/layout/Stack'
-import { Text } from '../../../lib/ui/text'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { PageContent } from '../../../ui/page/PageContent'
 

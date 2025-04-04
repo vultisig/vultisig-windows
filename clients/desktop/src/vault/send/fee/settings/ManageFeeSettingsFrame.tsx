@@ -1,9 +1,9 @@
+import { Opener } from '@lib/ui/base/Opener'
+import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { OnCloseProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { t } from 'i18next'
 
-import { Opener } from '../../../../lib/ui/base/Opener'
-import { SettingsIcon } from '../../../../lib/ui/icons/SettingsIcon'
 import { FailedQueryOverlay } from '../../../../lib/ui/query/components/overlay/FailedQueryOverlay'
 import { PendingQueryOverlay } from '../../../../lib/ui/query/components/overlay/PendingQueryOverlay'
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'

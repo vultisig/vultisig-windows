@@ -85,8 +85,8 @@ export const KeysignPeerDiscoveryStep = ({ onForward }: OnForwardProp) => {
                         {range(requiredPeers - peerOptions.length).map(
                           index => (
                             <PeerPlaceholder key={index}>
-                              {t('scanWithDevice', {
-                                deviceNumber: index + peerOptions.length + 1,
+                              {t('scan_with_device_index', {
+                                index: index + peerOptions.length + 1,
                               })}
                             </PeerPlaceholder>
                           )

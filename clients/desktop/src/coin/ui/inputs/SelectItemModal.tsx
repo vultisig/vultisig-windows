@@ -1,8 +1,8 @@
+import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp, OptionsProp, TitleProp } from '@lib/ui/props'
 import { FC, ReactNode, useState } from 'react'
 import styled from 'styled-components'
 
-import { VStack } from '../../../lib/ui/layout/Stack'
 import { Modal } from '../../../lib/ui/modal'
 import { SearchField } from '../../../lib/ui/search/SearchField'
 

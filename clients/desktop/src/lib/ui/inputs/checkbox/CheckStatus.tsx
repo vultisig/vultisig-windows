@@ -1,12 +1,11 @@
+import { centerContent } from '@lib/ui/css/centerContent'
+import { interactive } from '@lib/ui/css/interactive'
+import { CheckIcon } from '@lib/ui/icons/CheckIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { ChildrenProp, UiProps } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import React from 'react'
 import styled, { css } from 'styled-components'
-
-import { centerContent } from '../../css/centerContent'
-import { interactive } from '../../css/interactive'
-import { CheckIcon } from '../../icons/CheckIcon'
-import { IconWrapper } from '../../icons/IconWrapper'
-import { getColor } from '../../theme/getters'
 
 type CheckStatusProps = UiProps & {
   value: boolean

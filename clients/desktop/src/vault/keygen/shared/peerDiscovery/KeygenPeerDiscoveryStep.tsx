@@ -1,5 +1,7 @@
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { recommendedPeers, requiredPeers } from '@core/mpc/peers/config'
+import { Match } from '@lib/ui/base/Match'
+import { InfoIcon } from '@lib/ui/icons/InfoIcon'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { range } from '@lib/utils/array/range'
@@ -8,10 +10,9 @@ import { BrowserOpenURL } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Match } from '../../../../lib/ui/base/Match'
 import { getFormProps } from '../../../../lib/ui/form/utils/getFormProps'
-import { InfoIcon } from '../../../../lib/ui/icons/InfoIcon'
 import { QueryBasedQrCode } from '../../../../lib/ui/qr/QueryBasedQrCode'
+import { parseLocalPartyId } from '../../../../mpc/localPartyId'
 import { useMpcLocalPartyId } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { InitiatingDevice } from '../../../../mpc/peers/InitiatingDevice'
 import { PeerOption } from '../../../../mpc/peers/option/PeerOption'
@@ -124,12 +125,19 @@ export const KeygenPeerDiscoveryStep = ({
               <Match
                 value={serverType}
                 local={() => <MpcLocalServerIndicator />}
-                relay={() => <PeerRequirementsInfo />}
+                relay={() =>
+                  keygenType === KeygenType.Migrate ? null : (
+                    <PeerRequirementsInfo />
+                  )
+                }
               />
               <PeersManagerTitle
                 target={
                   keygenType === KeygenType.Migrate
-                    ? Math.max(currentVault.signers.length, devicesTarget)
+                    ? Math.max(
+                        currentVault.signers.length,
+                        selectedPeers.length + 1
+                      )
                     : devicesTarget
                 }
               />
@@ -138,26 +146,30 @@ export const KeygenPeerDiscoveryStep = ({
                 <MatchQuery
                   value={peerOptionsQuery}
                   success={peerOptions => {
-                    const missingRecommendedPeers =
-                      recommendedPeers - peerOptions.length
-
                     const placeholderCount =
                       keygenType === KeygenType.Migrate
-                        ? Math.max(missingPeers.length, missingRecommendedPeers)
-                        : missingRecommendedPeers
+                        ? missingPeers.length
+                        : recommendedPeers - peerOptions.length
 
                     return (
                       <>
                         {peerOptions.map(value => (
                           <PeerOption key={value} value={value} />
                         ))}
-                        {range(placeholderCount).map(index => (
-                          <PeerPlaceholder key={index}>
-                            {t('scanWithDevice', {
-                              deviceNumber: index + peerOptions.length + 1,
-                            })}
-                          </PeerPlaceholder>
-                        ))}
+                        {range(placeholderCount).map(index => {
+                          return (
+                            <PeerPlaceholder key={index}>
+                              {keygenType === KeygenType.Migrate
+                                ? t('scan_with_device_name', {
+                                    name: parseLocalPartyId(missingPeers[index])
+                                      .deviceName,
+                                  })
+                                : t('scan_with_device_index', {
+                                    index: index + peerOptions.length + 1,
+                                  })}
+                            </PeerPlaceholder>
+                          )
+                        })}
                         {keygenType !== KeygenType.Migrate && (
                           <>
                             {peerOptions.length >= recommendedPeers && (

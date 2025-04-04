@@ -1,10 +1,10 @@
+import { verticalPadding } from '@lib/ui/css/verticalPadding'
+import { VStack } from '@lib/ui/layout/Stack'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { verticalPadding } from '../../../lib/ui/css/verticalPadding'
 import { Checkbox } from '../../../lib/ui/inputs/checkbox/Checkbox'
-import { VStack } from '../../../lib/ui/layout/Stack'
 import { swapTerms, useSwapTerms } from './state/swapTerms'
 
 const Item = styled(Checkbox)`

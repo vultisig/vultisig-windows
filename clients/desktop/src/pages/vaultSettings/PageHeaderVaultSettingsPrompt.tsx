@@ -1,4 +1,5 @@
-import { MenuIcon } from '../../lib/ui/icons/MenuIcon'
+import { MenuIcon } from '@lib/ui/icons/MenuIcon'
+
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeaderIconButton } from '../../ui/page/PageHeaderIconButton'
 

@@ -1,5 +1,6 @@
-import { Match } from '../../../lib/ui/base/Match'
-import { useStepNavigation } from '../../../lib/ui/hooks/useStepNavigation'
+import { Match } from '@lib/ui/base/Match'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+
 import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'

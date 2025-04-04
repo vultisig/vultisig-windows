@@ -33,7 +33,6 @@ export const de = {
   serverTookTooLong:
     'Der Server hat zu lange gebraucht, um zu antworten. Bitte überprüfe deine Internetverbindung und versuche es erneut.',
   optionalDevice: 'Optionales Gerät',
-  scanWithDevice: 'Scannen mit {{deviceNumber}}. Gerät',
   localMode: 'Sie sind im lokalen Modus',
   scanQrInstruction:
     'QR mit einem anderen Gerät scannen. 3-Geräte-Setup empfohlen, 2 reichen aus.',
@@ -135,7 +134,6 @@ export const de = {
   setup: 'Einrichten',
   import: 'Importieren',
   keygen: 'Schlüsselgenerierung',
-  migrate: 'migrieren',
   name_your_vault: 'Nennen Sie Ihren Tresor',
   join: 'Beitreten',
   save_changes: 'Änderungen speichern',
@@ -232,7 +230,6 @@ export const de = {
   vault_setting_edit_vault_rename_subtitle: 'Benennen Sie Ihren Tresor um',
   vault_setting_edit_vault_reshare_subtitle:
     'Teilen Sie den Tresor mit einer neuen Gerätegruppe erneut.',
-  vault_setting_edit_vault_migrate_subtitle: 'Tresor zu DKLS migrieren',
   vault_setting_edit_vault_delete_subtitle:
     'Löschen Sie Ihren Tresor dauerhaft',
   vault_settings_language_settings_title_en: 'Englisch',
@@ -719,8 +716,6 @@ export const de = {
   vault_value: 'Tresorwert',
   vault_part: 'Tresorteil',
   share: 'Aktie',
-  join_migrate: 'Migration beitreten',
-  waiting_for_migrate_start: 'Warten auf den Beginn der Migration ...',
   backup_now: 'Jetzt sichern',
   share_n_of_m: 'Teilen Sie {{n}} von {{m}}',
   this_vault_share: 'diese Tresorfreigabe',
@@ -802,4 +797,19 @@ export const de = {
     'Möchten Sie den Tresorfreigaben Ihres Geräts ein Kennwort hinzufügen?',
   backup_password_info:
     'Wir empfehlen, für Geräte-Tresorfreigaben kein Backup-Passwort festzulegen. Ihre Daten sind sicher, wenn die Backups ordnungsgemäß an verschiedenen Orten gespeichert werden, was bereits einen erheblichen Schutz darstellt. Denken Sie daran: Backup-Passwörter können nicht wiederhergestellt werden, wenn Sie sie vergessen. Sie haben die Wahl!',
+  upgrade_your_vault_now: 'Aktualisieren Sie Ihren Tresor jetzt',
+  upgrade_vault: 'Aktualisieren Sie Ihren Tresor',
+  upgrade_now: 'Jetzt upgraden',
+  got_it: 'Habe es',
+  upgrade_vault_description:
+    'Aktualisieren Sie diesen Tresor auf das <b>weltweit schnellste MPC-Protokoll</b> und unterschreiben Sie schneller als je zuvor',
+  upgrade_all_devices:
+    'Stellen Sie sicher, dass beim Upgrade <b>alle ursprünglichen Geräte</b> vorhanden sind',
+  upgrade_success: 'Vault wurde <b>erfolgreich</b> aktualisiert',
+  go_to_vault: 'Zum Tresor gehen',
+  upgrade: 'Upgrade',
+  scan_with_device_index: 'Mit {{index}}-Gerät scannen',
+  scan_with_device_name: 'Scannen mit {{name}}',
+  join_upgrade: 'Upgrade beitreten',
+  waiting_for_upgrade_start: 'Warten auf den Beginn des Upgrades ...',
 }

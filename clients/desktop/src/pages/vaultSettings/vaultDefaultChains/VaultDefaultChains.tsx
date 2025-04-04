@@ -1,11 +1,11 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { VStack } from '@lib/ui/layout/Stack'
 import { without } from '@lib/utils/array/without'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useDefaultChains } from '../../../chain/state/defaultChains'
 import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSrc'
-import { VStack } from '../../../lib/ui/layout/Stack'
 import { useCurrentSearch } from '../../../lib/ui/search/CurrentSearchProvider'
 import { PageHeader } from '../../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'

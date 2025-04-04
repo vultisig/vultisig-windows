@@ -1,8 +1,7 @@
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { getColor } from '@lib/ui/theme/getters'
 import styled, { css } from 'styled-components'
-
-import { borderRadius } from '../css/borderRadius'
-import { toSizeUnit } from '../css/toSizeUnit'
-import { getColor } from '../theme/getters'
 
 type PanelProps = {
   withSections?: boolean

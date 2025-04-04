@@ -1,10 +1,10 @@
+import { Button } from '@lib/ui/buttons/Button'
+import { VStack } from '@lib/ui/layout/Stack'
+import { GradientText, Text } from '@lib/ui/text'
 import { useRive } from '@rive-app/react-canvas'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '../../../../../lib/ui/buttons/Button'
-import { VStack } from '../../../../../lib/ui/layout/Stack'
-import { GradientText, Text } from '../../../../../lib/ui/text'
 import {
   OverlayContent,
   OverlayContentWrapper,

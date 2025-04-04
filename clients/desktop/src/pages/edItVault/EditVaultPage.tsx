@@ -1,9 +1,9 @@
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { UnstyledButton } from '../../lib/ui/buttons/UnstyledButton'
-import { ChevronRightIcon } from '../../lib/ui/icons/ChevronRightIcon'
-import { HStack, VStack } from '../../lib/ui/layout/Stack'
-import { Text } from '../../lib/ui/text'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
@@ -29,10 +29,7 @@ const EditVaultPage = () => {
   }
 
   const { local_party_id } = currentVault
-  let items = getEditVaultSettingsItems(t)
-  if (currentVault.lib_type === 'DKLS') {
-    items = items.filter(item => item.path !== 'migrateVaultSecure')
-  }
+  const items = getEditVaultSettingsItems(t)
 
   return (
     <Container flexGrow gap={16}>

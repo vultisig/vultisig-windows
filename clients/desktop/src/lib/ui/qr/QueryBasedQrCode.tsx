@@ -1,13 +1,13 @@
+import { centerContent } from '@lib/ui/css/centerContent'
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Query } from '@lib/ui/query/Query'
+import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { centerContent } from '../css/centerContent'
-import { toSizeUnit } from '../css/toSizeUnit'
 import { Spinner } from '../loaders/Spinner'
-import { StrictText } from '../text'
 import { qrCodeDefaultSize } from './config'
 import { FramedQrCode } from './FramedQrCode'
 

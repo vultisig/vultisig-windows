@@ -1,9 +1,9 @@
+import { VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { VStack } from '../../lib/ui/layout/Stack'
 import { FramedQrCode } from '../../lib/ui/qr/FramedQrCode'
-import { Text } from '../../lib/ui/text'
-import { getColor } from '../../lib/ui/theme/getters'
 import { ProductLogo } from '../logo/ProductLogo'
 
 const Container = styled(VStack)`

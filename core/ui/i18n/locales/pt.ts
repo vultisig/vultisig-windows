@@ -29,7 +29,6 @@ export const pt = {
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   create_new_vault: 'Criar novo cofre',
   optionalDevice: 'Dispositivo opcional',
-  scanWithDevice: 'Escanear com o {{deviceNumber}}º dispositivo',
   localMode: 'Você está no modo local',
   scanQrInstruction:
     'Escaneie o QR com outro dispositivo. Configuração de 3 dispositivos recomendada, 2 são suficientes.',
@@ -129,7 +128,6 @@ export const pt = {
   setup: 'Configurar',
   import: 'Importar',
   keygen: 'Geração de chaves',
-  migrate: 'Migrar',
   name_your_vault: 'Nomeie o seu cofre',
   join: 'Entrar',
   done: 'Concluído',
@@ -225,7 +223,6 @@ export const pt = {
   vault_setting_edit_vault_rename_subtitle: 'Renomeie o seu cofre',
   vault_setting_edit_vault_reshare_subtitle:
     'Recompartilhar o cofre com um novo grupo de dispositivos.',
-  vault_setting_edit_vault_migrate_subtitle: 'Migrar cofre para DKLS',
   vault_setting_edit_vault_delete_subtitle:
     'Exclua permanentemente o seu cofre',
   vault_settings_language_settings_title_en: 'Inglês',
@@ -708,8 +705,6 @@ export const pt = {
   vault_value: 'Valor do cofre',
   vault_part: 'Parte do cofre',
   share: 'Compartilhar',
-  join_migrate: 'Junte-se à migração',
-  waiting_for_migrate_start: 'Aguardando o início da migração...',
   backup_now: 'Faça backup agora',
   share_n_of_m: 'Compartilhar {{n}} de {{m}}',
   this_vault_share: 'este cofre compartilha',
@@ -790,4 +785,19 @@ export const pt = {
     'Deseja adicionar uma senha aos compartilhamentos do cofre do seu dispositivo?',
   backup_password_info:
     'Recomendamos que você não defina uma senha de backup para compartilhamentos de cofre de dispositivos - seus dados estarão seguros se os backups forem armazenados adequadamente em locais diferentes, o que já é uma proteção significativa. Lembre-se, as senhas de backup não podem ser recuperadas se você as esquecer. A escolha é sua!',
+  upgrade_your_vault_now: 'Atualize seu cofre agora',
+  upgrade_vault: 'Atualize seu cofre',
+  upgrade_now: 'Atualize agora',
+  got_it: 'Entendi',
+  upgrade_vault_description:
+    'Atualize este cofre para o <b>protocolo MPC mais rápido do mundo</b> e assine mais rápido do que nunca',
+  upgrade_all_devices:
+    'Certifique-se de que <b>todos os dispositivos iniciais</b> estejam presentes ao atualizar',
+  upgrade_success: 'O Vault foi atualizado <b>com sucesso</b>',
+  go_to_vault: 'Ir para o cofre',
+  upgrade: 'Atualizar',
+  scan_with_device_index: 'Digitalizar com dispositivo {{index}}',
+  scan_with_device_name: 'Digitalizar com {{name}}',
+  join_upgrade: 'Junte-se à atualização',
+  waiting_for_upgrade_start: 'Aguardando o início da atualização...',
 }

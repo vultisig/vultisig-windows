@@ -1,6 +1,6 @@
+import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { Text } from '../../../lib/ui/text'
 import { PageContent } from '../../../ui/page/PageContent'
 import { FancyLoader } from '../../../ui/pending/FancyLoader'
 
