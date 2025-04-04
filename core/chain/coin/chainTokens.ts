@@ -9,7 +9,6 @@ const leanChainNativeTokens: Partial<Record<Chain, Omit<Coin, 'chain'>[]>> = {
       ticker: 'MAYA',
       logo: 'maya',
       decimals: 4,
-      priceProviderId: 'maya',
       id: 'maya',
     },
   ],
