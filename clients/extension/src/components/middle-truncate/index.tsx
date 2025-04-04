@@ -1,6 +1,7 @@
 import { FC, useEffect, useRef, useState } from 'react'
 
 interface ComponentProps {
+  onClick?: () => void
   text: string
 }
 
@@ -10,7 +11,7 @@ interface InitialState {
   truncating: boolean
 }
 
-const Component: FC<ComponentProps> = ({ text }) => {
+const Component: FC<ComponentProps> = ({ onClick, text }) => {
   const initialState: InitialState = {
     counter: 0,
     ellipsis: '',
@@ -19,6 +20,10 @@ const Component: FC<ComponentProps> = ({ text }) => {
   const [state, setState] = useState(initialState)
   const { counter, ellipsis, truncating } = state
   const elmRef = useRef<HTMLSpanElement>(null)
+
+  const handleClick = () => {
+    if (onClick) onClick()
+  }
 
   const ellipsisDidUpdate = (): void => {
     if (elmRef.current) {
@@ -51,11 +56,23 @@ const Component: FC<ComponentProps> = ({ text }) => {
       truncating: true,
     }))
   }
+
   useEffect(ellipsisDidUpdate, [ellipsis, counter, text])
   useEffect(componentDidUpdate, [text])
 
   return (
-    <span ref={elmRef} className="middle-truncate">
+    <span
+      ref={elmRef}
+      onClick={handleClick}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleClick()
+        }
+      }}
+      tabIndex={0}
+      role="button"
+      className="middle-truncate"
+    >
       {truncating ? <span>{ellipsis}</span> : ellipsis}
     </span>
   )
