@@ -87,7 +87,7 @@ export const useKeygenMutation = () => {
 
             const keygenCommittee = [local_party_id, ...peers]
 
-            const vault = await match(keygenType, {
+            const newVault = await match(keygenType, {
               [KeygenType.Keygen]: async () => {
                 const dklsKeygen = new DKLS(
                   KeygenType.Keygen,
@@ -306,7 +306,7 @@ export const useKeygenMutation = () => {
               peers,
             })
 
-            return vault
+            return newVault
           },
         }
       )
