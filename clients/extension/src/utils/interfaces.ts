@@ -97,6 +97,8 @@ export namespace TransactionType {
     data: string
     gas?: string
     gasPrice?: string
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
     nonce?: string
     chainId?: string
     type?: string
@@ -163,7 +165,12 @@ export interface TransactionDetails {
   to?: string
   amount?: { amount: string; decimals: number }
   data?: string
-  gasLimit?: string
+  gasSettings?: {
+    gasLimit?: string
+    gasPrice?: string
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
+  }
 }
 
 export interface ITransaction {

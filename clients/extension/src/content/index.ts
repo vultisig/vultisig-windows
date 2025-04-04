@@ -567,26 +567,30 @@ namespace Provider {
             MessageKey.ETHEREUM_REQUEST,
             response
           )
-          switch (data.method) {
-            case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
-              if (result.length > 0) {
-                this.connected = true
-                this.emit(EventMethod.CONNECT, result)
+          try {
+            switch (data.method) {
+              case RequestMethod.METAMASK.ETH_REQUEST_ACCOUNTS: {
+                if (result.length > 0) {
+                  this.connected = true
+                  this.emit(EventMethod.CONNECT, result)
+                }
+                break
               }
-              break
-            }
-            case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
-            case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
-              this.emitUpdateNetwork({ chainId: result as string })
+              case RequestMethod.METAMASK.WALLET_ADD_ETHEREUM_CHAIN:
+              case RequestMethod.METAMASK.WALLET_SWITCH_ETHEREUM_CHAIN: {
+                this.emitUpdateNetwork({ chainId: result as string })
 
-              break
-            }
-            case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
-              this.connected = false
-              this.emit(EventMethod.DISCONNECT, result)
+                break
+              }
+              case RequestMethod.METAMASK.WALLET_REVOKE_PERMISSIONS: {
+                this.connected = false
+                this.emit(EventMethod.DISCONNECT, result)
 
-              break
+                break
+              }
             }
+          } catch (err) {
+            console.error(err)
           }
 
           if (callback) callback(null, result)

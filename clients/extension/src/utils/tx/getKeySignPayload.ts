@@ -73,6 +73,20 @@ export const getKeysignPayload = (
           isDeposit: transaction.isDeposit,
           receiver: transaction.transactionDetails.to,
         })
+        switch (chainSpecific.case) {
+          case 'ethereumSpecific': {
+            chainSpecific.value.maxFeePerGasWei =
+              transaction.transactionDetails.gasSettings?.maxFeePerGas ??
+              chainSpecific.value.maxFeePerGasWei
+            chainSpecific.value.priorityFee =
+              transaction.transactionDetails.gasSettings
+                ?.maxPriorityFeePerGas ?? chainSpecific.value.priorityFee
+            chainSpecific.value.gasLimit =
+              transaction.transactionDetails.gasSettings?.gasLimit ??
+              chainSpecific.value.gasLimit
+            break
+          }
+        }
 
         const coin = create(CoinSchema, {
           chain: transaction.chain.chain,
