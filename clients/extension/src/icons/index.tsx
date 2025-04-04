@@ -246,119 +246,6 @@ export const CloseLG: FC<SVGProps<SVGSVGElement>> = ({
   </svg>
 )
 
-export const Copy: FC<SVGProps<SVGSVGElement>> = ({
-  fill = 'none',
-  height = 24,
-  stroke = 'white',
-  strokeLinecap = 'round',
-  strokeLinejoin = 'round',
-  strokeWidth = 2,
-  width = 24,
-  ...props
-}) => (
-  <svg
-    viewBox="0 0 24 24"
-    {...{
-      ...props,
-      fill,
-      height,
-      stroke,
-      strokeLinecap,
-      strokeLinejoin,
-      strokeWidth,
-      width,
-    }}
-  >
-    <path d="M16 3H4V16" />
-    <path d="M8 7H20V19C20 20.1046 19.1046 21 18 21H10C8.89543 21 8 20.1046 8 19V7Z" />
-  </svg>
-)
-
-export const Exit: FC<SVGProps<SVGSVGElement>> = ({
-  fill = 'none',
-  height = 24,
-  stroke = 'white',
-  strokeLinecap = 'round',
-  strokeLinejoin = 'round',
-  strokeWidth = 2,
-  width = 24,
-  ...props
-}) => (
-  <svg
-    viewBox="0 0 24 24"
-    {...{
-      ...props,
-      fill,
-      height,
-      stroke,
-      strokeLinecap,
-      strokeLinejoin,
-      strokeWidth,
-      width,
-    }}
-  >
-    <path d="M15 4H5V18C5 19.1046 5.89543 20 7 20H15" />
-    <path d="M16 15L19 12M19 12L16 9M19 12H9" />
-  </svg>
-)
-
-export const Eye: FC<SVGProps<SVGSVGElement>> = ({
-  fill = 'none',
-  height = 24,
-  stroke = 'white',
-  strokeLinecap = 'round',
-  strokeLinejoin = 'round',
-  strokeWidth = 2,
-  width = 24,
-  ...props
-}) => (
-  <svg
-    viewBox="0 0 24 24"
-    {...{
-      ...props,
-      fill,
-      height,
-      stroke,
-      strokeLinecap,
-      strokeLinejoin,
-      strokeWidth,
-      width,
-    }}
-  >
-    <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" />
-    <path d="M2 12C3.60014 7.90264 7.33603 5 12 5C16.664 5 20.3999 7.90264 22 12C20.3999 16.0974 16.664 19 12 19C7.33603 19 3.60014 16.0974 2 12Z" />
-  </svg>
-)
-
-export const LinkExternal: FC<SVGProps<SVGSVGElement>> = ({
-  fill = 'none',
-  height = 24,
-  stroke = 'white',
-  strokeLinecap = 'round',
-  strokeLinejoin = 'round',
-  strokeWidth = 2,
-  width = 24,
-  ...props
-}) => (
-  <svg
-    viewBox="0 0 24 24"
-    {...{
-      ...props,
-      fill,
-      height,
-      stroke,
-      strokeLinecap,
-      strokeLinejoin,
-      strokeWidth,
-      width,
-    }}
-  >
-    <path d="M11 4H4V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V13" />
-    <path d="M9 15L20 4" />
-    <path d="M15 4H20V9" />
-  </svg>
-)
-
 export const NoteEdit: FC<SVGProps<SVGSVGElement>> = ({
   fill = 'none',
   height = 24,
@@ -444,14 +331,6 @@ export const SettingsTwo: FC<SVGProps<SVGSVGElement>> = ({
 export const SquareArrow: FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
   <svg viewBox="0 0 24 24" {...props}>
     <path d="M17.05 21H6.95C5.75 21 5.09 21 4.5 20.7C3.98 20.43 3.56 20.02 3.3 19.5C3 18.91 3 18.25 3 17.05V6.95C3 5.75 3 5.09 3.3 4.5C3.57 3.98 3.98 3.57 4.5 3.3C5.09 3 5.75 3 6.95 3H9.25C9.66 3 10 3.34 10 3.75C10 4.16 9.66 4.5 9.25 4.5H6.95C5.98 4.5 5.45 4.5 5.18 4.64C4.94 4.76 4.76 4.95 4.63 5.19C4.49 5.46 4.49 5.99 4.49 6.96V17.06C4.49 18.03 4.49 18.56 4.63 18.83C4.75 19.07 4.94 19.25 5.18 19.38C5.45 19.52 5.98 19.52 6.95 19.52H17.05C18.02 19.52 18.55 19.52 18.82 19.38C19.06 19.26 19.24 19.07 19.37 18.83C19.51 18.56 19.51 18.03 19.51 17.06V14.76C19.51 14.35 19.85 14.01 20.26 14.01C20.67 14.01 21.01 14.35 21.01 14.76V17.06C21.01 18.26 21.01 18.92 20.71 19.51C20.44 20.03 20.03 20.45 19.51 20.71C18.92 21.01 18.26 21.01 17.06 21.01L17.05 21ZM11 13.75C10.81 13.75 10.62 13.68 10.47 13.53C10.18 13.24 10.18 12.76 10.47 12.47L18.44 4.5H13.75C13.34 4.5 13 4.16 13 3.75C13 3.34 13.34 3 13.75 3H20.25C20.35 3 20.45 3.02 20.54 3.06C20.63 3.1 20.71 3.15 20.78 3.22C20.85 3.29 20.91 3.37 20.94 3.46C20.98 3.55 21 3.65 21 3.75V10.25C21 10.66 20.66 11 20.25 11C19.84 11 19.5 10.66 19.5 10.25V5.56L11.53 13.53C11.38 13.68 11.19 13.75 11 13.75Z" />
-  </svg>
-)
-
-export const SquareBehindSquare: FC<SVGProps<SVGSVGElement>> = ({
-  ...props
-}) => (
-  <svg viewBox="0 0 24 24" {...props}>
-    <path d="M14.25 21H5.75C4.23 21 3 19.77 3 18.25V9.75C3 8.23 4.23 7 5.75 7H7V5.75C7 4.23 8.23 3 9.75 3H18.25C19.77 3 21 4.23 21 5.75V14.26C21 15.78 19.77 17.01 18.25 17.01H17V18.25C17 19.77 15.77 21 14.25 21ZM5.75 8.5C5.06 8.5 4.5 9.06 4.5 9.75V18.25C4.5 18.94 5.06 19.5 5.75 19.5H14.25C14.94 19.5 15.5 18.94 15.5 18.25V9.75C15.5 9.06 14.94 8.5 14.25 8.5H5.75ZM17 15.51H18.25C18.94 15.51 19.5 14.95 19.5 14.26V5.75C19.5 5.06 18.94 4.5 18.25 4.5H9.75C9.06 4.5 8.5 5.06 8.5 5.75V7H14.25C15.77 7 17 8.23 17 9.75V15.51Z" />
   </svg>
 )
 
@@ -640,20 +519,5 @@ export const Vultisig: FC<SVGProps<SVGSVGElement>> = ({
       <stop stopColor="#33E6BF" />
       <stop offset="1" stopColor="#0439C7" />
     </linearGradient>
-  </svg>
-)
-
-//* -- custom svg -- * //
-
-export const QRCodeBorder: FC<SVGProps<SVGSVGElement>> = ({ ...props }) => (
-  <svg viewBox="0 0 24 24" {...props}>
-    <path d="M14.6154 0H9.38464V0.153846H14.6154V0Z" />
-    <path d="M14.6154 23.8462H9.38464V24H14.6154V23.8462Z" />
-    <path d="M23.8461 19.8462V22.4616C23.8461 23.2254 23.2254 23.8462 22.4615 23.8462H19.8461V24H22.4615C23.3115 24 24 23.3116 24 22.4616V19.8462H23.8461Z" />
-    <path d="M22.4615 0.153846C23.2254 0.153846 23.8461 0.774615 23.8461 1.53846V4.15385H24V1.53846C24 0.688462 23.3115 0 22.4615 0H19.8461V0.153846H22.4615Z" />
-    <path d="M1.20615 23.8039C0.603077 23.6547 0.153846 23.11 0.153846 22.4616V19.8462H0V22.4616C0 23.3116 0.688462 24 1.53846 24H4.15385V23.8839H1.69231C1.52231 23.8839 1.35923 23.8554 1.20615 23.8047V23.8039Z" />
-    <path d="M0.153846 4.15385V1.53846C0.153846 0.774615 0.774615 0.153846 1.53846 0.153846H4.15385V0H1.53846C0.688462 0 0 0.688462 0 1.53846V4.15385H0.153846Z" />
-    <path d="M24 9.38464H23.8461V14.6154H24V9.38464Z" />
-    <path d="M0.153846 9.38464H0V14.6154H0.153846V9.38464Z" />
   </svg>
 )
