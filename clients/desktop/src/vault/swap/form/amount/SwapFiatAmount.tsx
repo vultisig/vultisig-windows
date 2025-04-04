@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { useFormatFiatAmount } from '../../../../chain/ui/hooks/useFormatFiatAmount'
 import { useCoinPriceQuery } from '../../../../coin/query/useCoinPriceQuery'
 import { Skeleton } from '../../../../components/skeleton'
-import { useCurrentVaultCoin } from '../../../state/currentVault'
+import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
 
 const Container = styled.div`
   pointer-events: none;

@@ -28,7 +28,7 @@ const EditVaultPage = () => {
     return <></>
   }
 
-  const { local_party_id } = currentVault
+  const { localPartyId } = currentVault
   const items = getEditVaultSettingsItems(t)
 
   return (
@@ -40,7 +40,7 @@ const EditVaultPage = () => {
       />
       <PageSlice>
         <AutoCenteredTitle size={18} color="contrast" weight={500}>
-          {local_party_id}
+          {localPartyId}
         </AutoCenteredTitle>
         <VStack flexGrow gap={12}>
           {items.map(

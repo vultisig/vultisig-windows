@@ -6,7 +6,7 @@ import { useCallback } from 'react'
 import { GeneralSwapQuote } from '../../../chain/swap/general/GeneralSwapQuote'
 import { getNativeSwapDecimals } from '../../../chain/swap/native/utils/getNativeSwapDecimals'
 import { SwapQuote } from '../../../chain/swap/quote/SwapQuote'
-import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useToCoin } from '../state/toCoin'
 import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 

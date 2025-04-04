@@ -5,7 +5,7 @@ import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { getValueProviderSetup } from '../../../lib/ui/state/getValueProviderSetup'
+import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 
 export const {

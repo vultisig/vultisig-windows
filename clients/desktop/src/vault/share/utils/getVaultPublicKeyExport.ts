@@ -1,6 +1,5 @@
+import { Vault } from '@core/ui/vault/Vault'
 import { createHash } from 'crypto'
-
-import { storage } from '../../../../wailsjs/go/models'
 
 type VaultPublicKeyExport = {
   uid: string
@@ -12,21 +11,18 @@ type VaultPublicKeyExport = {
 
 export const getVaultPublicKeyExport = ({
   name,
-  public_key_ecdsa,
-  public_key_eddsa,
-  hex_chain_code,
-}: storage.Vault): VaultPublicKeyExport => {
+  publicKeys,
+  hexChainCode,
+}: Vault): VaultPublicKeyExport => {
   const uid = createHash('sha256')
-    .update(
-      [name, public_key_ecdsa, public_key_eddsa, hex_chain_code].join('-')
-    )
+    .update([name, publicKeys.ecdsa, publicKeys.eddsa, hexChainCode].join('-'))
     .digest('hex')
 
   return {
     uid,
     name: name,
-    public_key_ecdsa,
-    public_key_eddsa,
-    hex_chain_code,
+    public_key_ecdsa: publicKeys.ecdsa,
+    public_key_eddsa: publicKeys.eddsa,
+    hex_chain_code: hexChainCode,
   }
 }

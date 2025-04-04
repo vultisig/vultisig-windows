@@ -16,11 +16,8 @@ import { toHexPublicKey } from '../../../chain/utils/toHexPublicKey'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { useAppPathParams } from '../../../navigation/hooks/useAppPathParams'
 import { useVaultPublicKeyQuery } from '../../publicKey/queries/useVaultPublicKeyQuery'
-import {
-  useCurrentVault,
-  useCurrentVaultCoin,
-  useVaultServerStatus,
-} from '../../state/currentVault'
+import { useCurrentVault, useVaultServerStatus } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery'
@@ -75,8 +72,8 @@ export const DepositConfirmButton = ({
       }),
       memo,
       blockchainSpecific: shouldBePresent(chainSpecificQuery.data),
-      vaultLocalPartyId: vault.local_party_id,
-      vaultPublicKeyEcdsa: vault.public_key_ecdsa,
+      vaultLocalPartyId: vault.localPartyId,
+      vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
     })
 
     if (isOneOf(action, ['unstake', 'leave', 'unbound', 'stake', 'bond'])) {

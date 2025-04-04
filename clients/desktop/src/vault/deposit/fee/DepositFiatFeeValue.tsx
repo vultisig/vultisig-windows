@@ -7,7 +7,7 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
-import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useCurrentDepositCoin } from '../hooks/useCurrentDepositCoin'
 import { useDepositChainSpecific } from './DepositChainSpecificProvider'
 

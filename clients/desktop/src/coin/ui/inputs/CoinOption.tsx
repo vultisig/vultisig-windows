@@ -16,7 +16,7 @@ import { getChainEntityIconSrc } from '../../../chain/utils/getChainEntityIconSr
 import { Skeleton } from '../../../components/skeleton'
 import { panel } from '../../../lib/ui/panel/Panel'
 import { shouldDisplayChainLogo } from '../../../vault/chain/utils'
-import { useCurrentVaultCoin } from '../../../vault/state/currentVault'
+import { useCurrentVaultCoin } from '../../../vault/state/currentVaultCoins'
 import { getCoinLogoSrc } from '../../logo/getCoinLogoSrc'
 import { useBalanceQuery } from '../../query/useBalanceQuery'
 import { useCoinPriceQuery } from '../../query/useCoinPriceQuery'

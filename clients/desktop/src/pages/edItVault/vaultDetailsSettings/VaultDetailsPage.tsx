@@ -23,18 +23,11 @@ const VaultDetailsPage = () => {
     return <></>
   }
 
-  const {
-    name,
-    public_key_eddsa,
-    public_key_ecdsa,
-    signers,
-    local_party_id,
-    lib_type,
-  } = currentVault
+  const { name, publicKeys, signers, localPartyId, libType } = currentVault
   const { localPartyIndex, totalSigners } =
     getVaultParticipantInfoFormattedForUI({
       signers,
-      local_party_id,
+      localPartyId,
     })
 
   const vaultTypeText = getVaultTypeText(signers.length, t)
@@ -66,7 +59,7 @@ const VaultDetailsPage = () => {
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_type')}</Text>
             <Text color="supporting" size={13}>
-              {lib_type}
+              {libType}
             </Text>
           </VStack>
         </ListItemPanel>
@@ -74,7 +67,7 @@ const VaultDetailsPage = () => {
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_ECDSA')}</Text>
             <Text color="supporting" size={13}>
-              {public_key_ecdsa}
+              {publicKeys.ecdsa}
             </Text>
           </VStack>
         </ListItemPanel>
@@ -82,7 +75,7 @@ const VaultDetailsPage = () => {
           <VStack fullWidth alignItems="start" justifyContent="space-between">
             <Text weight={900}>{t('vault_details_page_vault_EDDSA')}</Text>
             <Text color="supporting" size={13}>
-              {public_key_eddsa}
+              {publicKeys.eddsa}
             </Text>
           </VStack>
         </ListItemPanel>
@@ -94,7 +87,7 @@ const VaultDetailsPage = () => {
             <VStack fullWidth alignItems="start" justifyContent="space-between">
               <Text color="supporting" weight={900} size={13}>
                 {t('vault_details_page_signer_word')} {index + 1}: {signer}{' '}
-                {signer === local_party_id && `(${t('this_device')})`}
+                {signer === localPartyId && `(${t('this_device')})`}
               </Text>
             </VStack>
           </ListItemPanel>

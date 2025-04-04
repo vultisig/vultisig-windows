@@ -24,7 +24,7 @@ const keysignSteps = ['joinSession', 'peers', 'session', 'sign'] as const
 export const StartKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'keysign'>()
 
-  const { local_party_id } = useCurrentVault()
+  const { localPartyId } = useCurrentVault()
 
   const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
     steps: keysignSteps,
@@ -34,7 +34,7 @@ export const StartKeysignPage = () => {
   return (
     <IsInitiatingDeviceProvider value={true}>
       <KeysignMessagePayloadProvider value={keysignPayload}>
-        <MpcLocalPartyIdProvider value={local_party_id}>
+        <MpcLocalPartyIdProvider value={localPartyId}>
           <GeneratedServiceNameProvider>
             <MpcPeersSelectionProvider>
               <GeneratedMpcSessionIdProvider>

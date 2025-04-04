@@ -3,7 +3,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { useMemo } from 'react'
 
 import { getStateProviderSetup } from '../../../lib/ui/state/getStateProviderSetup'
-import { useCurrentVaultNativeCoins } from '../../state/currentVault'
+import { useCurrentVaultNativeCoins } from '../../state/currentVaultCoins'
 import { useFromCoin } from './fromCoin'
 
 const { useState: useToCoin, provider: ToCoinInternalProvider } =

@@ -10,7 +10,7 @@ import { useCoinPriceQuery } from '../../../coin/query/useCoinPriceQuery'
 import { InputContainer } from '../../../lib/ui/inputs/InputContainer'
 import { InputLabel } from '../../../lib/ui/inputs/InputLabel'
 import { useFiatCurrency } from '../../../preferences/state/fiatCurrency'
-import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
 

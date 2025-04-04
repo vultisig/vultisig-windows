@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -51,7 +52,7 @@ const VaultRenamePage = () => {
 
   const onSubmit = (data: FieldValues) => {
     renameVault({
-      vault,
+      vaultId: getVaultId(vault),
       newName: data.vaultName,
     })
   }

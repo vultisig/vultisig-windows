@@ -1,3 +1,4 @@
+import { Vault } from '@core/ui/vault/Vault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
@@ -32,7 +33,7 @@ export const ImportVaultFlow = ({
               ),
               vault: vault => <SaveImportedVaultStep value={vault} />,
               encryptedVault: encryptedVault => (
-                <ValueTransfer<storage.Vault>
+                <ValueTransfer<Vault>
                   from={({ onFinish }) => (
                     <DecryptVaultStep
                       value={encryptedVault}

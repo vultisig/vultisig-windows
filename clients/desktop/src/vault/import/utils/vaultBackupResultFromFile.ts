@@ -23,7 +23,7 @@ export const vaultBackupResultFromFile = async (
   ) {
     return {
       result,
-      override: { lib_type: 'DKLS' },
+      override: { libType: 'DKLS' },
     }
   }
 

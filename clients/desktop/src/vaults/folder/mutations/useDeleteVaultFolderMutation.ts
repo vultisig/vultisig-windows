@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { Entry } from '@lib/utils/entities/Entry'
@@ -12,7 +13,6 @@ import {
   useVaults,
   vaultsQueryKey,
 } from '../../../vault/queries/useVaultsQuery'
-import { getStorageVaultId } from '../../../vault/utils/storageVault'
 import { vaultFoldersQueryKey } from '../../folders/queries/useVaultFoldersQuery'
 
 export const useDeleteVaultFolderMutation = () => {
@@ -22,8 +22,8 @@ export const useDeleteVaultFolderMutation = () => {
 
   return useMutation({
     mutationFn: async (folderId: string) => {
-      const folderVaults = vaults.filter(vault => vault.folder_id === folderId)
-      const folderlessVaults = vaults.filter(vault => !vault.folder_id)
+      const folderVaults = vaults.filter(vault => vault.folderId === folderId)
+      const folderlessVaults = vaults.filter(vault => !vault.folderId)
 
       await DeleteVaultFolder(folderId)
 
@@ -37,7 +37,7 @@ export const useDeleteVaultFolderMutation = () => {
 
           const order = getLastItemOrder(orders)
 
-          entries.push({ key: getStorageVaultId(vault), value: order })
+          entries.push({ key: getVaultId(vault), value: order })
         })
 
         await Promise.all(

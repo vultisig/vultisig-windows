@@ -1,6 +1,8 @@
 import { ChainKind } from '../ChainKind'
 
-export type SignatureAlgorithm = 'ecdsa' | 'eddsa'
+export const signingAlgorithms = ['ecdsa', 'eddsa'] as const
+
+export type SignatureAlgorithm = (typeof signingAlgorithms)[number]
 
 export const signatureAlgorithms: Record<ChainKind, SignatureAlgorithm> = {
   evm: 'ecdsa',

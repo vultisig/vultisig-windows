@@ -15,7 +15,7 @@ import { useWhitelistedCoinsQuery } from '../../../../../../coin/query/useWhitel
 import { Spinner } from '../../../../../../lib/ui/loaders/Spinner'
 import { useCurrentSearch } from '../../../../../../lib/ui/search/CurrentSearchProvider'
 import { useSearchFilter } from '../../../../../../lib/ui/search/hooks/useSearchFilter'
-import { useCurrentVaultChainCoins } from '../../../../../state/currentVault'
+import { useCurrentVaultChainCoins } from '../../../../../state/currentVaultCoins'
 import { useCurrentVaultChain } from '../../../../useCurrentVaultChain'
 import { ManageVaultChainCoin } from '../../ManageVaultChainCoin'
 

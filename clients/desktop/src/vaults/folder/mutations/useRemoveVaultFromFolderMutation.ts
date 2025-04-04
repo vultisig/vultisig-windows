@@ -23,7 +23,7 @@ export const useRemoveVaultFromFolderMutation = () => {
 
   return useMutation({
     mutationFn: async ({ vaultId }: RemoveVaultFromFolderInput) => {
-      const folderlessVaults = vaults.filter(vault => !vault.folder_id)
+      const folderlessVaults = vaults.filter(vault => !vault.folderId)
 
       await UpdateVaultFolderID(vaultId, null)
 

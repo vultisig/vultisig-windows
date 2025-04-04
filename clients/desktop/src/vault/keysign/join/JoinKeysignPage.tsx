@@ -32,7 +32,7 @@ export const JoinKeysignPage = () => {
 
   const { sessionId, encryptionKeyHex } = keysignMsg
 
-  const { local_party_id } = useCurrentVault()
+  const { localPartyId } = useCurrentVault()
 
   const keysignMessagePayload = useMemo(
     () => getKeysignMessagePayload(keysignMsg),
@@ -42,7 +42,7 @@ export const JoinKeysignPage = () => {
   return (
     <IsInitiatingDeviceProvider value={false}>
       <KeysignMessagePayloadProvider value={keysignMessagePayload}>
-        <MpcLocalPartyIdProvider value={local_party_id}>
+        <MpcLocalPartyIdProvider value={localPartyId}>
           <KeysignVaultGuard>
             <KeysignServerUrlProvider>
               <MpcSessionIdProvider value={sessionId}>

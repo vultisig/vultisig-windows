@@ -24,7 +24,7 @@ export const useAddVaultToFolderMutation = () => {
 
   return useMutation({
     mutationFn: async ({ vaultId, folderId }: AddVaultToFolderInput) => {
-      const folderVaults = vaults.filter(vault => vault.folder_id === folderId)
+      const folderVaults = vaults.filter(vault => vault.folderId === folderId)
 
       await UpdateVaultFolderID(vaultId, folderId)
 

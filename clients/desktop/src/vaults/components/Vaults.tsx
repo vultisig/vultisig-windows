@@ -2,7 +2,8 @@ import { NonEmptyOnly } from '@lib/ui/base/NonEmptyOnly'
 
 import { useFolderlessVaults } from '../../vault/queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../vault/state/currentVault'
-import { getStorageVaultId } from '../../vault/utils/storageVault'
+import { getVaultId } from '@core/ui/vault/Vault'
+
 import { VaultListItem } from './VaultListItem'
 import { VaultsContainer } from './VaultsContainer'
 
@@ -15,7 +16,7 @@ export const Vaults = () => {
       render={items => (
         <VaultsContainer>
           {items.map(vault => (
-            <CurrentVaultProvider value={vault} key={getStorageVaultId(vault)}>
+            <CurrentVaultProvider value={vault} key={getVaultId(vault)}>
               <VaultListItem />
             </CurrentVaultProvider>
           ))}

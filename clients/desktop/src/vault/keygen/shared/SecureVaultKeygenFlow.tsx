@@ -32,7 +32,7 @@ const reshareVaultSteps = [
 
 export const SecureVaultKeygenFlow = () => {
   const vault = useCurrentVault()
-  const { local_party_id, hex_chain_code, lib_type } = vault
+  const { localPartyId, hexChainCode, libType } = vault
 
   const { step, setStep, toPreviousStep, toNextStep } = useStepNavigation({
     steps: reshareVaultSteps,
@@ -41,16 +41,16 @@ export const SecureVaultKeygenFlow = () => {
 
   return (
     <IsInitiatingDeviceProvider value={true}>
-      <MpcLibProvider value={lib_type as MpcLib}>
+      <MpcLibProvider value={libType}>
         <VaultTypeProvider value="secure">
           <GeneratedServiceNameProvider>
             <MpcPeersSelectionProvider>
               <GeneratedMpcSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>
-                  <CurrentHexChainCodeProvider value={hex_chain_code}>
+                  <CurrentHexChainCodeProvider value={hexChainCode}>
                     <MpcServerTypeProvider initialValue="relay">
                       <ServerUrlDerivedFromServerTypeProvider>
-                        <MpcLocalPartyIdProvider value={local_party_id}>
+                        <MpcLocalPartyIdProvider value={localPartyId}>
                           <MpcMediatorManager />
                           <Match
                             value={step}

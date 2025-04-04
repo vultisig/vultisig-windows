@@ -1,4 +1,3 @@
-import { MpcLib } from '@core/mpc/mpcLib'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
@@ -23,7 +22,7 @@ const PromptsContainer = styled.div`
 
 export const VaultOverview = () => {
   const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
-  const { is_backed_up, lib_type } = useCurrentVault()
+  const { isBackedUp, libType } = useCurrentVault()
 
   return (
     <ScrollableFlexboxFiller>
@@ -34,8 +33,8 @@ export const VaultOverview = () => {
           )
         }
       >
-        {!is_backed_up && <VaultBackupBanner />}
-        {(lib_type as MpcLib) !== 'DKLS' && <MigrateVaultPrompt />}
+        {!isBackedUp && <VaultBackupBanner />}
+        {libType !== 'DKLS' && <MigrateVaultPrompt />}
       </Wrap>
       <PageContent>
         <VStack gap={32}>

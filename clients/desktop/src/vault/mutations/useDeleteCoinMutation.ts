@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query'
 import { DeleteCoin } from '../../../wailsjs/go/storage/Store'
 import { vaultsQueryKey } from '../queries/useVaultsQuery'
 import { useCurrentVault, useCurrentVaultAddreses } from '../state/currentVault'
-import { getStorageVaultId } from '../utils/storageVault'
+import { getVaultId } from '@core/ui/vault/Vault'
 
 export const useDeleteCoinMutation = () => {
   const vault = useCurrentVault()
@@ -21,7 +21,7 @@ export const useDeleteCoinMutation = () => {
       const address = addresses[key.chain as Chain]
 
       await DeleteCoin(
-        getStorageVaultId(vault),
+        getVaultId(vault),
         accountCoinKeyToString({
           ...key,
           address,

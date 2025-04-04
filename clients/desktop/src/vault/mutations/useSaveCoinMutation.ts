@@ -10,7 +10,7 @@ import { toStorageCoin } from '../../storage/storageCoin'
 import { getVaultPublicKey } from '../publicKey/getVaultPublicKey'
 import { vaultsQueryKey } from '../queries/useVaultsQuery'
 import { useCurrentVault } from '../state/currentVault'
-import { getStorageVaultId } from '../utils/storageVault'
+import { getVaultId } from '@core/ui/vault/Vault'
 
 export const useSaveCoinMutation = () => {
   const vault = useCurrentVault()
@@ -47,7 +47,7 @@ export const useSaveCoinMutation = () => {
         hexPublicKey,
       })
 
-      await SaveCoin(getStorageVaultId(vault), storageCoin)
+      await SaveCoin(getVaultId(vault), storageCoin)
 
       await invalidate(vaultsQueryKey)
     },

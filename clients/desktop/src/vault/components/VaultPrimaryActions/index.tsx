@@ -6,7 +6,7 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { swapEnabledChains } from '../../../chain/swap/swapEnabledChains'
 import { SendPrompt } from '../../send/SendPrompt'
-import { useCurrentVaultNativeCoins } from '../../state/currentVault'
+import { useCurrentVaultNativeCoins } from '../../state/currentVaultCoins'
 import { SwapPrompt } from '../../swap/components/SwapPrompt'
 import { DepositPrompt } from '../DepositPrompts'
 

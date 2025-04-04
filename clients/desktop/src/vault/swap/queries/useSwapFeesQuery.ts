@@ -3,7 +3,7 @@ import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
-import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'
 import { SwapFees } from '../types/SwapFee'
