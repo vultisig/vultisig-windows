@@ -26,7 +26,6 @@ import {
   Close,
   SquareArrow,
 } from '@clients/extension/src/icons'
-import { ExtensionProviders } from '@clients/extension/src/state/ExtensionProviders'
 import api from '@clients/extension/src/utils/api'
 import { splitString } from '@clients/extension/src/utils/functions'
 import {
@@ -60,10 +59,7 @@ import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignM
 import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import {
-  useWalletCore,
-  WalletCoreProvider,
-} from '@core/ui/chain/providers/WalletCoreProvider'
+import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   Button,
   ConfigProvider,
@@ -80,6 +76,8 @@ import { keccak256 } from 'js-sha3'
 import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
+
+import { AppProviders } from '../../providers/AppProviders'
 
 interface FormProps {
   password: string
@@ -1203,10 +1201,8 @@ export default Component
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ExtensionProviders>
-      <WalletCoreProvider>
-        <Component />
-      </WalletCoreProvider>
-    </ExtensionProviders>
+    <AppProviders>
+      <Component />
+    </AppProviders>
   </StrictMode>
 )

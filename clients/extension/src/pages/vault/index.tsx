@@ -1,7 +1,6 @@
 import '@clients/extension/src/styles/index.scss'
 import '@clients/extension/src/pages/vaults/index.scss'
 
-import ConfigProvider from '@clients/extension/src/components/config-provider'
 import VultiError from '@clients/extension/src/components/vulti-error'
 import VultiLoading from '@clients/extension/src/components/vulti-loading'
 import { Vultisig } from '@clients/extension/src/icons'
@@ -17,7 +16,8 @@ import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
-import { ExtensionProviders } from '../../state/ExtensionProviders'
+import { AppProviders } from '../../providers/AppProviders'
+import ConfigProvider from '../../providers/config-provider'
 
 interface FormProps {
   uid: string
@@ -153,8 +153,8 @@ const Component = () => {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ExtensionProviders>
+    <AppProviders>
       <Component />
-    </ExtensionProviders>
+    </AppProviders>
   </StrictMode>
 )

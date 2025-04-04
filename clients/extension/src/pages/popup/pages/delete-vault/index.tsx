@@ -1,7 +1,6 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, TriangleWarning } from '@clients/extension/src/icons'
 import type { VaultProps } from '@clients/extension/src/utils/interfaces'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getStoredVaults,
   setStoredVaults,
@@ -9,7 +8,9 @@ import {
 import { Button, ConfigProvider } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+
+import { appPaths } from '../../../../navigation'
+import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
 interface InitialState {
   vault?: VaultProps
@@ -20,7 +21,7 @@ const Component = () => {
   const initialState: InitialState = {}
   const [state, setState] = useState(initialState)
   const { vault } = state
-  const navigate = useNavigate()
+  const navigate = useAppNavigate()
   const goBack = useGoBack()
 
   const handleSubmit = (): void => {
@@ -34,11 +35,11 @@ const Component = () => {
           )
         )
 
-        navigate(routeKeys.main, { replace: true })
+        navigate('main', { replace: true })
       } else {
         setStoredVaults([])
 
-        navigate(routeKeys.landing, { replace: true })
+        navigate('landing', { replace: true })
       }
     })
   }
@@ -59,7 +60,7 @@ const Component = () => {
         <span className="heading">{t('remove_vault')}</span>
         <ArrowLeft
           className="icon icon-left"
-          onClick={() => goBack(routeKeys.settings.root)}
+          onClick={() => goBack(appPaths.settings.root)}
         />
       </div>
       <div className="content">

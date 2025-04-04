@@ -6,7 +6,6 @@ import {
   Vultisig,
 } from '@clients/extension/src/icons'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
-import routeKeys from '@clients/extension/src/utils/route-keys'
 import {
   getIsPriority,
   getStoredChains,
@@ -19,8 +18,10 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Button, Empty, message, Modal, Select, Switch, Tooltip } from 'antd'
 import { type FC, ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
+import { appPaths } from '../../../../navigation'
+import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 import { isSupportedChain } from '../../../../utils/constants'
 
 interface SelectOption {
@@ -59,7 +60,7 @@ const Component = () => {
   const [state, setState] = useState(initialState)
   const { isPriority, networkOptions, selectedNetwork, vault } = state
   const [modal, contextHolder] = Modal.useModal()
-  const navigate = useNavigate()
+  const navigate = useAppNavigate()
   const [messageApi, messageContextHolder] = message.useMessage()
 
   const handleUnlink = (app: string): void => {
@@ -177,12 +178,12 @@ const Component = () => {
           <span className="logo-type">{t('vultisig')}</span>
           <SettingsTwo
             className="icon icon-right"
-            onClick={() => navigate(routeKeys.settings.root, { state: true })}
+            onClick={() => navigate('settings.root')}
           />
         </div>
         <div className="content">
           <div className="list list-action list-arrow">
-            <Link to={routeKeys.vaults} state={true} className="list-item">
+            <Link to={appPaths.vaults} state={true} className="list-item">
               <span className="label">{vault.name}</span>
               <ArrowRight className="action" />
             </Link>
