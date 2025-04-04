@@ -11,6 +11,7 @@ import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-se
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
+import { SetupVaultPage } from '../../pages/popup/pages/setup-vault'
 import { appPaths } from '..'
 
 const routes = [
@@ -29,6 +30,10 @@ const routes = [
       {
         index: true,
         element: <MainPage />,
+      },
+      {
+        path: appPaths.setupVault,
+        element: <SetupVaultPage />,
       },
       {
         path: appPaths.vaults,

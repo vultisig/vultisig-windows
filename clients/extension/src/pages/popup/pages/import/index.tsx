@@ -21,11 +21,12 @@ import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { Button, Upload, UploadProps } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { UAParser } from 'ua-parser-js'
 import { readBarcodesFromImageFile, ReaderOptions } from 'zxing-wasm'
 
 import { appPaths } from '../../../../navigation'
+import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
 interface InitialState {
   file?: File
@@ -41,14 +42,14 @@ const Component = () => {
   const [state, setState] = useState(initialState)
   const { file, isWindows, loading, status, vault } = state
   const location = useLocation()
-  const navigate = useNavigate()
+  const navigate = useAppNavigate()
   const goBack = useGoBack()
   const walletCore = useWalletCore()
   const isPopup = new URLSearchParams(window.location.search).get('isPopup')
 
   const handleFinish = (): void => {
     if (isPopup) window.close()
-    else navigate(appPaths.main, { state: true })
+    else navigate('main')
   }
 
   const handleStart = (): void => {
