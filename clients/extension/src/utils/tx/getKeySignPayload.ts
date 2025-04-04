@@ -88,8 +88,6 @@ export const getKeysignPayload = (
           }
         }
 
-        console.log('chain Specific after : ', chainSpecific)
-
         const coin = create(CoinSchema, {
           chain: transaction.chain.chain,
           ticker: accountCoin.ticker,
