@@ -9,13 +9,13 @@ import {
   getStoredVaults,
   setStoredVaults,
 } from '@clients/extension/src/utils/storage'
+import { Text } from '@lib/ui/text'
 import { Button, Checkbox, Form } from 'antd'
 import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
 import { AppProviders } from '../../providers/AppProviders'
-import ConfigProvider from '../../providers/config-provider'
 
 interface FormProps {
   uids: string[]
@@ -75,51 +75,51 @@ const Component = () => {
   useEffect(componentDidMount, [])
 
   return (
-    <ConfigProvider>
-      <div className="layout">
-        {hasError ? (
-          <VultiError
-            onClose={handleClose}
-            description={errorDescription ?? ''}
-            title={errorTitle ?? ''}
-          />
-        ) : vaults.length ? (
-          <>
-            <div className="header">
-              <Vultisig className="logo" />
-              <span className="title">{t('connect_with_vultisig')}</span>
-            </div>
-            <div className="content">
-              <Form form={form} onFinish={handleSubmit}>
-                <Form.Item<FormProps>
-                  name="uids"
-                  rules={[{ required: true, message: t('select_vault') }]}
-                >
-                  <Checkbox.Group>
-                    {vaults.map(({ name, uid }) => (
-                      <Checkbox key={uid} value={uid}>
-                        <span className="name">{name}</span>
-                      </Checkbox>
-                    ))}
-                  </Checkbox.Group>
-                </Form.Item>
-                <Button htmlType="submit" />
-              </Form>
-            </div>
-            <div className="footer">
-              <Button onClick={handleClose} shape="round" block>
-                {t('cancel')}
-              </Button>
-              <Button onClick={handleSubmit} type="primary" shape="round" block>
-                {t('connect')}
-              </Button>
-            </div>
-          </>
-        ) : (
-          <VultiLoading />
-        )}
-      </div>
-    </ConfigProvider>
+    <div className="layout">
+      {hasError ? (
+        <VultiError
+          onClose={handleClose}
+          description={errorDescription ?? ''}
+          title={errorTitle ?? ''}
+        />
+      ) : vaults.length ? (
+        <>
+          <div className="header">
+            <Vultisig className="logo" />
+            <Text color="contrast" weight={700}>
+              {t('connect_with_vultisig')}
+            </Text>
+          </div>
+          <div className="content">
+            <Form form={form} onFinish={handleSubmit}>
+              <Form.Item<FormProps>
+                name="uids"
+                rules={[{ required: true, message: t('select_vault') }]}
+              >
+                <Checkbox.Group>
+                  {vaults.map(({ name, uid }) => (
+                    <Checkbox key={uid} value={uid}>
+                      <span className="name">{name}</span>
+                    </Checkbox>
+                  ))}
+                </Checkbox.Group>
+              </Form.Item>
+              <Button htmlType="submit" />
+            </Form>
+          </div>
+          <div className="footer">
+            <Button onClick={handleClose} shape="round" block>
+              {t('cancel')}
+            </Button>
+            <Button onClick={handleSubmit} type="primary" shape="round" block>
+              {t('connect')}
+            </Button>
+          </div>
+        </>
+      ) : (
+        <VultiLoading />
+      )}
+    </div>
   )
 }
 
