@@ -57,7 +57,6 @@
     "postcss": "^8.5.3",
     "sass": "^1.86.0",
     "typescript": "^5.8.2",
-    "vite": "6.2.2",
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-web-extension": "^4.4.3"
   },
