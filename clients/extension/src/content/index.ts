@@ -545,10 +545,7 @@ namespace Provider {
 
     async send(x: any, y: any) {
       if (typeof x === 'string') {
-        return await this.request({
-          method: x,
-          params: y ?? [],
-        })
+        return await this.request({ method: x, params: y ?? [] })
       } else if (typeof y === 'function') {
         this.request(x, y)
       } else {
@@ -1016,265 +1013,299 @@ const vultisigProvider = {
   },
 }
 
-window.vultisig = vultisigProvider
-window.xfi = xfiProvider
-window.xfi.kepler = keplrProvider
+if (shouldInjectProvider()) {
+  window.vultisig = vultisigProvider
+  window.xfi = xfiProvider
+  window.xfi.kepler = keplrProvider
 
-announceProvider({
-  info: {
-    icon: VULTI_ICON_RAW_PNG,
-    name: 'Vultisig',
-    rdns: 'me.vultisig',
-    uuid: uuidv4(),
-  },
-  provider: ethereumProvider as Provider.Ethereum as EIP1193Provider,
-})
+  announceProvider({
+    info: {
+      icon: VULTI_ICON_RAW_PNG,
+      name: 'Vultisig',
+      rdns: 'me.vultisig',
+      uuid: uuidv4(),
+    },
+    provider: ethereumProvider as Provider.Ethereum as EIP1193Provider,
+  })
 
-let prioritize: boolean = true
+  let prioritize: boolean = true
 
-const intervalRef = setInterval(() => {
-  if ((window.ethereum && window.vultisig) || prioritize == false)
-    clearInterval(intervalRef)
+  const intervalRef = setInterval(() => {
+    if ((window.ethereum && window.vultisig) || prioritize == false)
+      clearInterval(intervalRef)
 
-  sendToBackgroundViaRelay<
-    Messaging.SetPriority.Request,
-    Messaging.SetPriority.Response
-  >(MessageKey.PRIORITY, {})
-    .then(res => {
-      if (res) {
-        const providerCopy = Object.create(
-          Object.getPrototypeOf(ethereumProvider),
-          Object.getOwnPropertyDescriptors(ethereumProvider)
-        )
-
-        providerCopy.isMetaMask = false
-        window.isCtrl = true
-        window.xfi.installed = true
-        announceProvider({
-          info: {
-            icon: VULTI_ICON_RAW_PNG,
-            name: 'Vultisig',
-            rdns: 'me.vultisig',
-            uuid: uuidv4(),
-          },
-          provider: providerCopy as Provider.Ethereum as EIP1193Provider,
-        })
-        announceProvider({
-          info: {
-            icon: VULTI_ICON_RAW_PNG,
-            name: 'Ctrl Wallet',
-            rdns: 'io.xdefi',
-            uuid: uuidv4(),
-          },
-          provider: providerCopy as Provider.Ethereum as EIP1193Provider,
-        })
-
-        if (document.readyState === 'complete') {
-          Object.defineProperties(window, {
-            vultisig: {
-              value: vultisigProvider,
-              configurable: false,
-              writable: false,
-            },
-            ethereum: {
-              get() {
-                return window.vultiConnectRouter.currentProvider
-              },
-              set(newProvider) {
-                window.vultiConnectRouter?.addProvider(newProvider)
-              },
-              configurable: false,
-            },
-            vultiConnectRouter: {
-              value: {
-                ethereumProvider,
-                lastInjectedProvider: window.ethereum,
-                currentProvider: ethereumProvider,
-                providers: [
-                  ethereumProvider,
-                  ...(window.ethereum ? [window.ethereum] : []),
-                ],
-                setDefaultProvider(vultiAsDefault: boolean) {
-                  if (vultiAsDefault) {
-                    window.vultiConnectRouter.currentProvider = window.vultisig
-                  } else {
-                    const nonDefaultProvider =
-                      window.vultiConnectRouter?.lastInjectedProvider ??
-                      window.ethereum
-                    window.vultiConnectRouter.currentProvider =
-                      nonDefaultProvider
-                  }
-                },
-                addProvider(provider: Provider.Ethereum) {
-                  if (
-                    !window.vultiConnectRouter?.providers?.includes(provider)
-                  ) {
-                    window.vultiConnectRouter?.providers?.push(provider)
-                  }
-                  if (ethereumProvider !== provider) {
-                    window.vultiConnectRouter.lastInjectedProvider = provider
-                  }
-                },
-              },
-              configurable: false,
-              writable: false,
-            },
-            bitcoin: {
-              value: { ...bitcoinProvider },
-              configurable: false,
-              writable: false,
-            },
-            bitcoincash: {
-              value: { ...bitcoinCashProvider },
-              configurable: false,
-              writable: false,
-            },
-            cosmos: {
-              value: { ...cosmosProvider },
-              configurable: false,
-              writable: false,
-            },
-            dash: {
-              value: { ...dashProvider },
-              configurable: false,
-              writable: false,
-            },
-            dogecoin: {
-              value: { ...dogecoinProvider },
-              configurable: false,
-              writable: false,
-            },
-            litecoin: {
-              value: { ...litecoinProvider },
-              configurable: false,
-              writable: false,
-            },
-            maya: {
-              value: { ...mayachainProvider },
-              configurable: false,
-              writable: false,
-            },
-            thorchain: {
-              value: { ...thorchainProvider },
-              configurable: false,
-              writable: false,
-            },
-            phantom: {
-              value: { ...phantomProvider },
-              configurable: false,
-              writable: false,
-            },
-          })
-        } else {
-          window.addEventListener(
-            'load',
-            () => {
-              Object.defineProperties(window, {
-                vultisig: {
-                  value: vultisigProvider,
-                  configurable: false,
-                  writable: false,
-                },
-                ethereum: {
-                  get() {
-                    return window.vultiConnectRouter.currentProvider
-                  },
-                  set(newProvider) {
-                    window.vultiConnectRouter?.addProvider(newProvider)
-                  },
-                  configurable: false,
-                },
-                vultiConnectRouter: {
-                  value: {
-                    ethereumProvider,
-                    lastInjectedProvider: window.ethereum,
-                    currentProvider: ethereumProvider,
-                    providers: [
-                      ethereumProvider,
-                      ...(window.ethereum ? [window.ethereum] : []),
-                    ],
-                    setDefaultProvider(vultiAsDefault: boolean) {
-                      if (vultiAsDefault) {
-                        window.vultiConnectRouter.currentProvider =
-                          window.vultisig
-                      } else {
-                        const nonDefaultProvider =
-                          window.vultiConnectRouter?.lastInjectedProvider ??
-                          window.ethereum
-                        window.vultiConnectRouter.currentProvider =
-                          nonDefaultProvider
-                      }
-                    },
-                    addProvider(provider: Provider.Ethereum) {
-                      if (
-                        !window.vultiConnectRouter?.providers?.includes(
-                          provider
-                        )
-                      ) {
-                        window.vultiConnectRouter?.providers?.push(provider)
-                      }
-                      if (ethereumProvider !== provider) {
-                        window.vultiConnectRouter.lastInjectedProvider =
-                          provider
-                      }
-                    },
-                  },
-                  configurable: false,
-                  writable: false,
-                },
-                bitcoin: {
-                  value: { ...bitcoinProvider },
-                  configurable: false,
-                  writable: false,
-                },
-                bitcoincash: {
-                  value: { ...bitcoinCashProvider },
-                  configurable: false,
-                  writable: false,
-                },
-                cosmos: {
-                  value: { ...cosmosProvider },
-                  configurable: false,
-                  writable: false,
-                },
-                dash: {
-                  value: { ...dashProvider },
-                  configurable: false,
-                  writable: false,
-                },
-                dogecoin: {
-                  value: { ...dogecoinProvider },
-                  configurable: false,
-                  writable: false,
-                },
-                litecoin: {
-                  value: { ...litecoinProvider },
-                  configurable: false,
-                  writable: false,
-                },
-                maya: {
-                  value: { ...mayachainProvider },
-                  configurable: false,
-                  writable: false,
-                },
-                thorchain: {
-                  value: { ...thorchainProvider },
-                  configurable: false,
-                  writable: false,
-                },
-                phantom: {
-                  value: { ...phantomProvider },
-                  configurable: false,
-                  writable: false,
-                },
-              })
-            },
-            { once: true }
+    sendToBackgroundViaRelay<
+      Messaging.SetPriority.Request,
+      Messaging.SetPriority.Response
+    >(MessageKey.PRIORITY, {})
+      .then(res => {
+        if (res) {
+          const providerCopy = Object.create(
+            Object.getPrototypeOf(ethereumProvider),
+            Object.getOwnPropertyDescriptors(ethereumProvider)
           )
+
+          providerCopy.isMetaMask = false
+          window.isCtrl = true
+          window.xfi.installed = true
+          announceProvider({
+            info: {
+              icon: VULTI_ICON_RAW_PNG,
+              name: 'Vultisig',
+              rdns: 'me.vultisig',
+              uuid: uuidv4(),
+            },
+            provider: providerCopy as Provider.Ethereum as EIP1193Provider,
+          })
+          announceProvider({
+            info: {
+              icon: VULTI_ICON_RAW_PNG,
+              name: 'Ctrl Wallet',
+              rdns: 'io.xdefi',
+              uuid: uuidv4(),
+            },
+            provider: providerCopy as Provider.Ethereum as EIP1193Provider,
+          })
+
+          if (document.readyState === 'complete') {
+            Object.defineProperties(window, {
+              vultisig: {
+                value: vultisigProvider,
+                configurable: false,
+                writable: false,
+              },
+              ethereum: {
+                get() {
+                  return window.vultiConnectRouter.currentProvider
+                },
+                set(newProvider) {
+                  window.vultiConnectRouter?.addProvider(newProvider)
+                },
+                configurable: false,
+              },
+              vultiConnectRouter: {
+                value: {
+                  ethereumProvider,
+                  lastInjectedProvider: window.ethereum,
+                  currentProvider: ethereumProvider,
+                  providers: [
+                    ethereumProvider,
+                    ...(window.ethereum ? [window.ethereum] : []),
+                  ],
+                  setDefaultProvider(vultiAsDefault: boolean) {
+                    if (vultiAsDefault) {
+                      window.vultiConnectRouter.currentProvider =
+                        window.vultisig
+                    } else {
+                      const nonDefaultProvider =
+                        window.vultiConnectRouter?.lastInjectedProvider ??
+                        window.ethereum
+                      window.vultiConnectRouter.currentProvider =
+                        nonDefaultProvider
+                    }
+                  },
+                  addProvider(provider: Provider.Ethereum) {
+                    if (
+                      !window.vultiConnectRouter?.providers?.includes(provider)
+                    ) {
+                      window.vultiConnectRouter?.providers?.push(provider)
+                    }
+                    if (ethereumProvider !== provider) {
+                      window.vultiConnectRouter.lastInjectedProvider = provider
+                    }
+                  },
+                },
+                configurable: false,
+                writable: false,
+              },
+              bitcoin: {
+                value: { ...bitcoinProvider },
+                configurable: false,
+                writable: false,
+              },
+              bitcoincash: {
+                value: { ...bitcoinCashProvider },
+                configurable: false,
+                writable: false,
+              },
+              cosmos: {
+                value: { ...cosmosProvider },
+                configurable: false,
+                writable: false,
+              },
+              dash: {
+                value: { ...dashProvider },
+                configurable: false,
+                writable: false,
+              },
+              dogecoin: {
+                value: { ...dogecoinProvider },
+                configurable: false,
+                writable: false,
+              },
+              litecoin: {
+                value: { ...litecoinProvider },
+                configurable: false,
+                writable: false,
+              },
+              maya: {
+                value: { ...mayachainProvider },
+                configurable: false,
+                writable: false,
+              },
+              thorchain: {
+                value: { ...thorchainProvider },
+                configurable: false,
+                writable: false,
+              },
+              phantom: {
+                value: { ...phantomProvider },
+                configurable: false,
+                writable: false,
+              },
+            })
+          } else {
+            window.addEventListener(
+              'load',
+              () => {
+                Object.defineProperties(window, {
+                  vultisig: {
+                    value: vultisigProvider,
+                    configurable: false,
+                    writable: false,
+                  },
+                  ethereum: {
+                    get() {
+                      return window.vultiConnectRouter.currentProvider
+                    },
+                    set(newProvider) {
+                      window.vultiConnectRouter?.addProvider(newProvider)
+                    },
+                    configurable: false,
+                  },
+                  vultiConnectRouter: {
+                    value: {
+                      ethereumProvider,
+                      lastInjectedProvider: window.ethereum,
+                      currentProvider: ethereumProvider,
+                      providers: [
+                        ethereumProvider,
+                        ...(window.ethereum ? [window.ethereum] : []),
+                      ],
+                      setDefaultProvider(vultiAsDefault: boolean) {
+                        if (vultiAsDefault) {
+                          window.vultiConnectRouter.currentProvider =
+                            window.vultisig
+                        } else {
+                          const nonDefaultProvider =
+                            window.vultiConnectRouter?.lastInjectedProvider ??
+                            window.ethereum
+                          window.vultiConnectRouter.currentProvider =
+                            nonDefaultProvider
+                        }
+                      },
+                      addProvider(provider: Provider.Ethereum) {
+                        if (
+                          !window.vultiConnectRouter?.providers?.includes(
+                            provider
+                          )
+                        ) {
+                          window.vultiConnectRouter?.providers?.push(provider)
+                        }
+                        if (ethereumProvider !== provider) {
+                          window.vultiConnectRouter.lastInjectedProvider =
+                            provider
+                        }
+                      },
+                    },
+                    configurable: false,
+                    writable: false,
+                  },
+                  bitcoin: {
+                    value: { ...bitcoinProvider },
+                    configurable: false,
+                    writable: false,
+                  },
+                  bitcoincash: {
+                    value: { ...bitcoinCashProvider },
+                    configurable: false,
+                    writable: false,
+                  },
+                  cosmos: {
+                    value: { ...cosmosProvider },
+                    configurable: false,
+                    writable: false,
+                  },
+                  dash: {
+                    value: { ...dashProvider },
+                    configurable: false,
+                    writable: false,
+                  },
+                  dogecoin: {
+                    value: { ...dogecoinProvider },
+                    configurable: false,
+                    writable: false,
+                  },
+                  litecoin: {
+                    value: { ...litecoinProvider },
+                    configurable: false,
+                    writable: false,
+                  },
+                  maya: {
+                    value: { ...mayachainProvider },
+                    configurable: false,
+                    writable: false,
+                  },
+                  thorchain: {
+                    value: { ...thorchainProvider },
+                    configurable: false,
+                    writable: false,
+                  },
+                  phantom: {
+                    value: { ...phantomProvider },
+                    configurable: false,
+                    writable: false,
+                  },
+                })
+              },
+              { once: true }
+            )
+          }
+        } else {
+          prioritize = false
         }
-      } else {
-        prioritize = false
-      }
-    })
-    .catch(() => {})
-}, 500)
+      })
+      .catch(() => {})
+  }, 500)
+}
+
+function shouldInjectProvider() {
+  return doctypeCheck() && suffixCheck() && documentElementCheck()
+}
+
+function doctypeCheck() {
+  const { doctype } = window.document
+  if (doctype) {
+    return doctype.name === 'html'
+  }
+  return true
+}
+
+function documentElementCheck() {
+  const documentElement = document.documentElement.nodeName
+  if (documentElement) {
+    return documentElement.toLowerCase() === 'html'
+  }
+  return true
+}
+
+function suffixCheck() {
+  const prohibitedTypes = [/\.xml$/u, /\.pdf$/u]
+  const currentUrl = window.location.pathname
+  for (let i = 0; i < prohibitedTypes.length; i++) {
+    if (prohibitedTypes[i].test(currentUrl)) {
+      return false
+    }
+  }
+  return true
+}
