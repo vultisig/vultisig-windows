@@ -1,3 +1,5 @@
+import './index.scss'
+
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
 import AddressProvider from '@clients/extension/src/utils/address-provider'
@@ -18,6 +20,7 @@ import {
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { Text } from '@lib/ui/text'
 import { Button, Upload, UploadProps } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -264,14 +267,18 @@ const Component = () => {
         <Upload.Dragger {...props} className={status}>
           <div className="state state-default">
             <img src="/images/qr-code.png" className="icon" alt="QR" />
-            <span className="title">{t('add_vault_qrcode')}</span>
+            <Text color="contrast" weight={700}>
+              {t('add_vault_qrcode')}
+            </Text>
             <span className="desc">
               {t('drop_file_here_or')} <u>{t('upload_it')}</u>
             </span>
           </div>
           <div className="state state-hover">
             <img src="/images/upload.png" className="icon" alt="upload" />
-            <span className="title">{t('drop_file_here')}</span>
+            <Text color="contrast" weight={700}>
+              {t('drop_file_here')}
+            </Text>
           </div>
           <div className="state state-done">
             <span className="msg">
