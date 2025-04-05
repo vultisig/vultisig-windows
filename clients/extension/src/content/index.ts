@@ -562,6 +562,8 @@ namespace Provider {
         Messaging.Chain.Response
       >(MessageKey.ETHEREUM_REQUEST, data)
         .then(response => {
+          console.log('response:', response)
+
           const result = processBackgroundResponse(
             data,
             MessageKey.ETHEREUM_REQUEST,

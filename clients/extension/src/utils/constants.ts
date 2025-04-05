@@ -111,6 +111,7 @@ export namespace RequestMethod {
     ETH_UNSUBSCRIBE = 'eth_unsubscribe',
     NET_VERSION = 'net_version',
     PERSONAL_SIGN = 'personal_sign',
+    PERSONAL_ECRECOVER = 'personal_ecRecover',
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
     WALLET_GET_PERMISSIONS = 'wallet_getPermissions',
     WALLET_REGISTER_ONBOARDING = 'wallet_registerOnboarding',

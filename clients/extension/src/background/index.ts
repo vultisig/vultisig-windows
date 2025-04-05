@@ -42,10 +42,12 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getChainByChainId, getChainId } from '@core/chain/coin/ChainId'
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import {
+  getBytes,
   JsonRpcProvider,
   toUtf8String,
   TransactionRequest,
   TypedDataEncoder,
+  verifyMessage,
 } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 let rpcProvider: JsonRpcProvider
@@ -105,7 +107,7 @@ const handleFindAccounts = (
                     (selectedChain: ChainProps) =>
                       selectedChain.chain === chain && apps.indexOf(sender) >= 0
                   )
-                  .map(({ address }) => address ?? '')
+                  .map(({ address }) => address?.toLowerCase() ?? '')
               : []
           )
         )
@@ -149,10 +151,7 @@ const handleGetAccounts = (chain: Chain, sender: string): Promise<string[]> => {
 
           resolve(accounts)
         } else {
-          setStoredRequest({
-            chain,
-            sender,
-          }).then(() => {
+          setStoredRequest({ chain, sender }).then(() => {
             handleOpenPanel(Instance.ACCOUNTS).then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
@@ -190,10 +189,7 @@ const handleGetVault = (
 
           resolve(vault)
         } else {
-          setStoredRequest({
-            chain: Chain.Ethereum,
-            sender,
-          }).then(() => {
+          setStoredRequest({ chain: Chain.Ethereum, sender }).then(() => {
             handleOpenPanel(Instance.VAULT).then(createdWindowId => {
               chrome.windows.onRemoved.addListener(closedWindowId => {
                 if (closedWindowId === createdWindowId) {
@@ -259,12 +255,7 @@ const handleSendTransaction = (
       const uuid = uuidv4()
 
       setStoredTransactions([
-        {
-          ...transaction,
-          chain,
-          id: uuid,
-          status: 'default',
-        },
+        { ...transaction, chain, id: uuid, status: 'default' },
         ...transactions,
       ]).then(() => {
         handleOpenPanel('transaction').then(createdWindowId => {
@@ -821,10 +812,7 @@ const handleRequest = (
                   amount: { amount: '0', decimals: 0 },
                   from: String(address),
                   to: '',
-                  asset: {
-                    chain: Chain.Ethereum,
-                    ticker: 'ETH',
-                  },
+                  asset: { chain: Chain.Ethereum, ticker: 'ETH' },
                 },
                 id: '',
                 status: 'default',
@@ -862,10 +850,7 @@ const handleRequest = (
                 amount: { amount: '0', decimals: 0 },
                 from: String(address),
                 to: '',
-                asset: {
-                  chain: Chain.Ethereum,
-                  ticker: 'ETH',
-                },
+                asset: { chain: Chain.Ethereum, ticker: 'ETH' },
               },
               id: '',
               status: 'default',
@@ -881,6 +866,25 @@ const handleRequest = (
 
         break
       }
+      case RequestMethod.METAMASK.PERSONAL_ECRECOVER: {
+        if (Array.isArray(params)) {
+          const [message, signature] = params
+
+          try {
+            const msg =
+              typeof message === 'string' && String(message).startsWith('0x')
+                ? getBytes(message)
+                : String(message)
+
+            const recoveredAddress = verifyMessage(msg, String(signature))
+            resolve(recoveredAddress.toLowerCase())
+          } catch (err) {
+            reject(err)
+          }
+        }
+        break
+      }
+
       case RequestMethod.METAMASK.NET_VERSION: {
         resolve(String(parseInt(getChainId(chain.chain), 16)))
         break
