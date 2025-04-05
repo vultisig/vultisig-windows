@@ -1,4 +1,4 @@
-@use "~variables" as *;
+@use '~/variables' as *;
 
 @keyframes loading-after {
   0% {
@@ -52,7 +52,7 @@
     animation-iteration-count: infinite;
     animation-timing-function: linear;
     border-radius: 50%;
-    content: "";
+    content: '';
     height: rem(20);
     position: absolute;
     transition: all 0.3s;
