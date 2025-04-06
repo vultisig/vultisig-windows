@@ -46,6 +46,7 @@ import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { Button, Form, Input, message, QRCode } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'
@@ -55,7 +56,6 @@ import { useTranslation } from 'react-i18next'
 
 import { AppProviders } from '../../providers/AppProviders'
 import ConfigProvider from '../../providers/config-provider'
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 
 interface FormProps {
   password: string
