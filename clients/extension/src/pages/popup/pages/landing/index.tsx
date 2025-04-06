@@ -14,7 +14,7 @@ import { PageHeaderBackButton } from '../../../../components/shared/Page/PageHea
 import { makeAppPath } from '../../../../navigation'
 import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
-export const NewVaultPage = ({ withBackButton = true }) => {
+export const NewVaultPage = ({ withBackButton = false }) => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
 
