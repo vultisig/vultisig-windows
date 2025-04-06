@@ -1027,7 +1027,7 @@ chrome.runtime.onMessage.addListener(
 
                       const account = [
                         {
-                          pubkey: Array.from(keyBytes),
+                          pubKey: Array.from(keyBytes),
                           address: response,
                           algo: 'secp256k1',
                           bech32Address: response,
@@ -1086,7 +1086,7 @@ chrome.runtime.onMessage.addListener(
                             {
                               address: response,
                               algo: 'secp256k1',
-                              pubkey: Array.from(keyBytes),
+                              pubKey: Array.from(keyBytes),
                             },
                           ]
 
