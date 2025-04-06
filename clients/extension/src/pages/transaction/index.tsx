@@ -1133,7 +1133,7 @@ const Component = () => {
                         </Tooltip>
                         <Tooltip title={t('view_tx')}>
                           <a
-                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: transaction.txHash! })}`}
+                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: getFormattedTxHash(transaction) })}`}
                             rel="noopener noreferrer"
                             target="_blank"
                             className="action"
