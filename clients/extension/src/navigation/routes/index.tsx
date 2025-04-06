@@ -11,7 +11,9 @@ import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-se
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { createHashRouter, Navigate } from 'react-router-dom'
 
-import { SetupVaultPage } from '../../pages/popup/pages/setup-vault'
+import { IncompleteOnboardingOnly } from '../../components/onboarding/components/IncompleteOnboardingOnly'
+import { OnboardingPage } from '../../components/onboarding/components/OnboardingPage'
+import { SetupVaultPageController } from '../../pages/popup/pages/setup-vault/SetupVaultPageController'
 import { appPaths } from '..'
 
 const routes = [
@@ -24,6 +26,10 @@ const routes = [
     element: <ImportPage />,
   },
   {
+    path: appPaths.setupVault,
+    element: <SetupVaultPageController />,
+  },
+  {
     path: appPaths.root,
     element: <Layout />,
     children: [
@@ -32,9 +38,14 @@ const routes = [
         element: <MainPage />,
       },
       {
-        path: appPaths.setupVault,
-        element: <SetupVaultPage />,
+        path: appPaths.onboarding,
+        element: (
+          <IncompleteOnboardingOnly>
+            <OnboardingPage />
+          </IncompleteOnboardingOnly>
+        ),
       },
+
       {
         path: appPaths.vaults,
         element: <VaultsPage />,
