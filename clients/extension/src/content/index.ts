@@ -1048,8 +1048,6 @@ setTimeout(() => {
         providerCopy.isMetaMask = false
         window.xfi = xfiProvider
         window.keplr = keplrProvider
-        window.isCtrl = true
-        window.xfi.installed = true
 
         announceProvider({
           info: {
@@ -1176,6 +1174,9 @@ setTimeout(() => {
               writable: false,
             },
           })
+
+          window.isCtrl = true
+          window.xfi.installed = true
         } else {
           window.addEventListener(
             'load',
