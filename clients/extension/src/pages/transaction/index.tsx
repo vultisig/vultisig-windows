@@ -46,6 +46,7 @@ import { getPreSignedInputData } from '@core/mpc/keysign/preSignedInputData'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { Button, Form, Input, message, QRCode } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'
@@ -470,6 +471,16 @@ const Component = () => {
     }
   }
 
+  const getFormattedTxHash = (transaction: ITransaction): string => {
+    if (!transaction.txHash) return ''
+    const chainKind = getChainKind(transaction.chain.chain)
+    const hash =
+      chainKind === 'evm'
+        ? transaction.txHash
+        : stripHexPrefix(transaction.txHash)
+    return chainKind === 'cosmos' ? hash.toUpperCase() : hash
+  }
+
   useEffect(() => {
     if (!walletCore) return
 
@@ -772,7 +783,7 @@ const Component = () => {
                       <MiddleTruncate text={transaction.txHash!} />
                       <div className="actions">
                         <a
-                          href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: transaction.txHash! })}`}
+                          href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: getFormattedTxHash(transaction) })}`}
                           rel="noopener noreferrer"
                           target="_blank"
                           className="btn"
