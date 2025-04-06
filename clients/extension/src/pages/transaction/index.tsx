@@ -472,6 +472,16 @@ const Component = () => {
     }
   }
 
+  const getFormattedTxHash = (transaction: ITransaction): string => {
+    if (!transaction.txHash) return ''
+    const chainKind = getChainKind(transaction.chain.chain)
+    const hash =
+      chainKind === 'evm'
+        ? transaction.txHash
+        : stripHexPrefix(transaction.txHash)
+    return chainKind === 'cosmos' ? hash.toUpperCase() : hash
+  }
+
   useEffect(() => {
     if (!walletCore) return
 
@@ -786,7 +796,7 @@ const Component = () => {
                         <MiddleTruncate text={transaction.txHash!} />
                         <div className="actions">
                           <a
-                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: getChainKind(transaction.chain.chain) === 'evm' ? transaction.txHash! : stripHexPrefix(transaction.txHash!) })}`}
+                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: getFormattedTxHash(transaction) })}`}
                             rel="noopener noreferrer"
                             target="_blank"
                             className="btn"
