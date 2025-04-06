@@ -28,6 +28,7 @@ import {
 import {
   AminoSignResponse,
   BroadcastMode,
+  DirectSignResponse,
   KeplrMode,
   KeplrSignOptions,
   Key,
@@ -51,9 +52,12 @@ import {
 } from '@solana/web3.js'
 import base58 from 'bs58'
 import EventEmitter from 'events'
+import Long from 'long'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
-
+import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
+import { AuthInfo } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 enum NetworkKey {
   MAINNET = 'mainnet',
   TESTNET = 'testnet',
@@ -225,7 +229,46 @@ class XDEFIKeplrProvider extends Keplr {
 
     return cosmSigner as OfflineAminoSigner
   }
+  signDirect(
+    chainId: string,
+    signer: string,
+    signDoc: {
+      bodyBytes?: Uint8Array | null
+      authInfoBytes?: Uint8Array | null
+      chainId?: string | null
+      accountNumber?: Long | null
+    },
+    signOptions?: KeplrSignOptions
+  ): Promise<DirectSignResponse> {
+    console.log('signDirect')
+    console.log({
+      chainId: chainId,
+      signer: signer,
+      signDoc: signDoc,
+      signOptions: signOptions,
+    })
 
+    const txBody = TxBody.decode(signDoc.bodyBytes!)
+
+    console.log('Messages:', txBody.messages)
+    console.log('Memo:', txBody.memo)
+    console.log('Timeout height:', txBody.timeoutHeight.toString())
+
+    const msg0 = MsgSend.decode(txBody.messages[0].value)
+    console.log('msg0,', msg0)
+
+    console.log('From:', msg0.fromAddress)
+    console.log('To:', msg0.toAddress)
+    console.log('Amount:', msg0.amount)
+
+    const authInfo = AuthInfo.decode(signDoc.authInfoBytes!)
+
+    console.log('Signer Infos:', authInfo.signerInfos)
+    console.log('Fee:', authInfo.fee)
+    return new Promise((resolve, reject) => {
+      resolve({} as DirectSignResponse)
+    })
+  }
   sendTx(
     _chainId: string,
     _tx: StdTx | Uint8Array,
@@ -279,7 +322,9 @@ class XDEFIKeplrProvider extends Keplr {
     _method: string,
     _payload: any
   ): Promise<any> {
-    return
+    console.log('simpleMessage')
+
+    console.log(_type, _method, _payload)
   }
 
   async getKey(chainId: string): Promise<Key> {
