@@ -69,6 +69,7 @@ const Component = () => {
         <span className="name">{vault?.name}</span>
       </div>
       <div className="footer">
+        {/* TODO: Deprecate Ant Design and start using styled-components instead to be consistent with the desktop client. All the base components should be in @lib/ui. If you need a new compnent, first check in the desktop client if it's not already created, move it to the @lib/ui and reuse it. */}
         <ConfigProvider
           theme={{
             token: {
