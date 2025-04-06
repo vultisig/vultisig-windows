@@ -9,7 +9,7 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { AnimatedVisibility } from '../../../shared/AnimatedVisibility'
-import { useHasFinishedOnboardingMutationMutation } from '../../hooks/useHasFinishedOnboarading'
+import { useHasFinishedOnboardingMutation } from '../../hooks/useHasFinishedOnboarading'
 import {
   ContentWrapper,
   IconWrapper,
@@ -21,8 +21,7 @@ import {
 
 export const OnboardingSummary = () => {
   const { t } = useTranslation()
-  const hasFinishedOnboardingMutation =
-    useHasFinishedOnboardingMutationMutation()
+  const hasFinishedOnboardingMutation = useHasFinishedOnboardingMutation()
   const [isChecked, { toggle }] = useBoolean(false)
 
   const items = [

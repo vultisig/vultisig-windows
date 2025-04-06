@@ -2,10 +2,10 @@ import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-import { useHasFinishedOnboardingQuery } from '../hooks/useHasFinishedOnboarading'
+import { useHasFinishedOnboarding } from '../hooks/useHasFinishedOnboarading'
 
 export const IncompleteOnboardingOnly = ({ children }: ChildrenProp) => {
-  const { data: hasFinishedOnboarding } = useHasFinishedOnboardingQuery()
+  const { data: hasFinishedOnboarding } = useHasFinishedOnboarding()
 
   const navigate = useAppNavigate()
 

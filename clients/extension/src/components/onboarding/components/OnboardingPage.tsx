@@ -10,7 +10,7 @@ import styled from 'styled-components'
 
 import { ProductEnhancedLogo } from '../../shared/Logo/ProductEnhancedLogo'
 import { PageContent } from '../../shared/Page/PageContent'
-import { useHasFinishedOnboardingMutationMutation } from '../hooks/useHasFinishedOnboarading'
+import { useHasFinishedOnboardingMutation } from '../hooks/useHasFinishedOnboarading'
 
 type OnboardingStep = {
   artUrl: string
@@ -46,8 +46,7 @@ export const OnboardingPage = () => {
 
   const [stepIndex, setStepIndex] = useState(0)
 
-  const hasFinishedOnboardingMutation =
-    useHasFinishedOnboardingMutationMutation()
+  const hasFinishedOnboardingMutation = useHasFinishedOnboardingMutation()
 
   const completeOnboarding = () => {
     hasFinishedOnboardingMutation.mutate(true)

@@ -1,9 +1,9 @@
-import { useHasFinishedOnboardingQuery } from '../../../../components/onboarding/hooks/useHasFinishedOnboarading'
+import { useHasFinishedOnboarding } from '../../../../components/onboarding/hooks/useHasFinishedOnboarading'
 import { OnboardingController } from '../../../../components/onboarding/OnboardingController'
 import { SetupVaultPage } from '.'
 
 export const SetupVaultPageController = () => {
-  const { data: hasFinishedOnboarding } = useHasFinishedOnboardingQuery()
+  const { data: hasFinishedOnboarding } = useHasFinishedOnboarding()
 
   return hasFinishedOnboarding ? <SetupVaultPage /> : <OnboardingController />
 }

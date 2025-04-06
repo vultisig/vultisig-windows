@@ -2,7 +2,7 @@ import { InputProps } from '@lib/ui/props'
 import React from 'react'
 import styled from 'styled-components'
 
-export const InvisibleInput = styled.input`
+const InvisibleInput = styled.input`
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;
