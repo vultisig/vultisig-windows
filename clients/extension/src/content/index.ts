@@ -118,6 +118,13 @@ class XDEFIKeplrProvider extends Keplr {
   isXDEFI: boolean
   isVulticonnect: boolean
 
+  constructor(version: string, mode: KeplrMode, requester: any) {
+    super(version, mode, requester)
+    this.isXDEFI = true
+    this.isVulticonnect = true
+    window.ctrlKeplrProviders['Ctrl Wallet'] = this
+  }
+
   public static getInstance(): XDEFIKeplrProvider {
     if (!XDEFIKeplrProvider.instance) {
       XDEFIKeplrProvider.instance = new XDEFIKeplrProvider(
@@ -126,6 +133,7 @@ class XDEFIKeplrProvider extends Keplr {
         new XDEFIMessageRequester()
       )
     }
+
     return XDEFIKeplrProvider.instance
   }
 
@@ -133,12 +141,6 @@ class XDEFIKeplrProvider extends Keplr {
     window.dispatchEvent(new Event('keplr_keystorechange'))
   }
 
-  constructor(version: string, mode: KeplrMode, requester: any) {
-    super(version, mode, requester)
-    this.isXDEFI = true
-    this.isVulticonnect = true
-    window.ctrlKeplrProviders['Ctrl Wallet'] = this
-  }
   enable(_chainIds: string | string[]): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       cosmosProvider
@@ -146,10 +148,11 @@ class XDEFIKeplrProvider extends Keplr {
           method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
           params: [],
         })
-        .then(resolve)
+        .then(() => resolve())
         .catch(reject)
     })
   }
+
   getOfflineSigner(
     chainId: string,
     _signOptions?: KeplrSignOptions
@@ -245,7 +248,6 @@ class XDEFIKeplrProvider extends Keplr {
         .catch(reject)
     })
   }
-  async sendMessage() {}
 
   signAmino(
     _chainId: string,
@@ -271,9 +273,12 @@ class XDEFIKeplrProvider extends Keplr {
     })
   }
 
+  async sendMessage() {}
+
   async experimentalSuggestChain(_chainInfo: any) {
     return
   }
+
   async sendSimpleMessage(
     _type: string,
     _method: string,
@@ -1017,8 +1022,6 @@ const vultisigProvider = {
 }
 
 window.vultisig = vultisigProvider
-window.xfi = xfiProvider
-window.xfi.kepler = keplrProvider
 
 announceProvider({
   info: {
@@ -1032,15 +1035,14 @@ announceProvider({
 
 let prioritize: boolean = true
 
-const intervalRef = setInterval(() => {
-  if ((window.ethereum && window.vultisig) || prioritize == false)
-    clearInterval(intervalRef)
-
+setTimeout(() => {
   sendToBackgroundViaRelay<
     Messaging.SetPriority.Request,
     Messaging.SetPriority.Response
   >(MessageKey.PRIORITY, {})
     .then(res => {
+      prioritize = false
+
       if (res) {
         const providerCopy = Object.create(
           Object.getPrototypeOf(ethereumProvider),
@@ -1048,8 +1050,7 @@ const intervalRef = setInterval(() => {
         )
 
         providerCopy.isMetaMask = false
-        window.isCtrl = true
-        window.xfi.installed = true
+
         announceProvider({
           info: {
             icon: VULTI_ICON_RAW_PNG,
@@ -1164,7 +1165,20 @@ const intervalRef = setInterval(() => {
               configurable: false,
               writable: false,
             },
+            xfi: {
+              value: { ...xfiProvider },
+              configurable: false,
+              writable: false,
+            },
+            keplr: {
+              value: { ...keplrProvider },
+              configurable: false,
+              writable: false,
+            },
           })
+
+          window.isCtrl = true
+          window.xfi.installed = true
         } else {
           window.addEventListener(
             'load',
@@ -1267,13 +1281,24 @@ const intervalRef = setInterval(() => {
                   configurable: false,
                   writable: false,
                 },
+                xfi: {
+                  value: { ...xfiProvider },
+                  configurable: false,
+                  writable: false,
+                },
+                keplr: {
+                  value: { ...keplrProvider },
+                  configurable: false,
+                  writable: false,
+                },
               })
+
+              window.isCtrl = true
+              window.xfi.installed = true
             },
             { once: true }
           )
         }
-      } else {
-        prioritize = false
       }
     })
     .catch(() => {})
