@@ -55,6 +55,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AppProviders } from '../../providers/AppProviders'
 import ConfigProvider from '../../providers/config-provider'
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 
 interface FormProps {
   password: string
@@ -785,7 +786,7 @@ const Component = () => {
                         <MiddleTruncate text={transaction.txHash!} />
                         <div className="actions">
                           <a
-                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: transaction.txHash! })}`}
+                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: getChainKind(transaction.chain.chain) === 'evm' ? transaction.txHash! : stripHexPrefix(transaction.txHash!).toUpperCase() })}`}
                             rel="noopener noreferrer"
                             target="_blank"
                             className="btn"
