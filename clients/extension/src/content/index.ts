@@ -1033,16 +1033,12 @@ announceProvider({
   provider: ethereumProvider as Provider.Ethereum as EIP1193Provider,
 })
 
-let prioritize: boolean = true
-
 setTimeout(() => {
   sendToBackgroundViaRelay<
     Messaging.SetPriority.Request,
     Messaging.SetPriority.Response
   >(MessageKey.PRIORITY, {})
     .then(res => {
-      prioritize = false
-
       if (res) {
         const providerCopy = Object.create(
           Object.getPrototypeOf(ethereumProvider),
