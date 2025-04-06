@@ -66,11 +66,12 @@ import {
   Divider,
   Form,
   Input,
-  message,
   QRCode,
   Spin,
   Tooltip,
+  message,
 } from 'antd'
+import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'
 import { StrictMode, useEffect, useState } from 'react'
@@ -491,6 +492,16 @@ const Component = () => {
         })
         .catch(() => {})
     }
+  }
+
+  const getFormattedTxHash = (transaction: ITransaction): string => {
+    if (!transaction.txHash) return ''
+    const chainKind = getChainKind(transaction.chain.chain)
+    const hash =
+      chainKind === 'evm'
+        ? transaction.txHash
+        : stripHexPrefix(transaction.txHash)
+    return chainKind === 'cosmos' ? hash.toUpperCase() : hash
   }
 
   const componentDidUpdate = () => {
