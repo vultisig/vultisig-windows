@@ -786,7 +786,7 @@ const Component = () => {
                         <MiddleTruncate text={transaction.txHash!} />
                         <div className="actions">
                           <a
-                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: getChainKind(transaction.chain.chain) === 'evm' ? transaction.txHash! : stripHexPrefix(transaction.txHash!).toUpperCase() })}`}
+                            href={`${getBlockExplorerUrl({ chain: transaction.chain.chain, entity: 'tx', value: getChainKind(transaction.chain.chain) === 'evm' ? transaction.txHash! : stripHexPrefix(transaction.txHash!) })}`}
                             rel="noopener noreferrer"
                             target="_blank"
                             className="btn"
