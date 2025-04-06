@@ -1017,8 +1017,6 @@ const vultisigProvider = {
 }
 
 window.vultisig = vultisigProvider
-window.xfi = xfiProvider
-window.xfi.kepler = keplrProvider
 
 announceProvider({
   info: {
@@ -1048,6 +1046,8 @@ const intervalRef = setInterval(() => {
         )
 
         providerCopy.isMetaMask = false
+        window.xfi = xfiProvider
+        window.keplr = keplrProvider
         window.isCtrl = true
         window.xfi.installed = true
         announceProvider({

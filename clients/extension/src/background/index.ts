@@ -995,6 +995,9 @@ chrome.runtime.onMessage.addListener(
           if (chain) {
             handleRequest(message, chain, origin)
               .then(response => {
+                if (Array.isArray(response)) {
+                  response = response[0]
+                }
                 if (
                   message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
                 ) {
