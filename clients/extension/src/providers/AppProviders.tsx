@@ -3,8 +3,8 @@ import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
-import { ConfigProvider } from 'antd'
 
+import { AntDesignThemeProvider } from './AntDesignThemeProvider'
 import { I18nProvider } from './I18nProvider'
 import { QueryProvider } from './QueryClientProvider'
 
@@ -14,10 +14,10 @@ export const AppProviders = ({ children }: ChildrenProp) => {
       <QueryProvider>
         <I18nProvider>
           <WalletCoreProvider>
-            <ConfigProvider>
+            <AntDesignThemeProvider>
               {children}
               <GlobalStyle />
-            </ConfigProvider>
+            </AntDesignThemeProvider>
           </WalletCoreProvider>
         </I18nProvider>
       </QueryProvider>
