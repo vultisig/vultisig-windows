@@ -18,7 +18,6 @@ import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService'
 import { useMpcLocalPartyId } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
 import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
-import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
@@ -41,19 +40,24 @@ export const useGg20Keygen = (): KeygenResolver => {
   const localPartyId = useMpcLocalPartyId()
   const hexChainCode = useCurrentHexChainCode()
 
-  const mpcLib = useMpcLib()
-
   const vaults = useVaults()
 
   const vaultOrders = useMemo(() => vaults.map(vault => vault.order), [vaults])
-
-  const targetMpcLib = keygenType === KeygenType.Migrate ? 'DKLS' : mpcLib
 
   return useCallback(
     async ({ onStepChange }) => {
       keygenSteps.forEach(step => {
         EventsOn(step, () => onStepChange(step))
       })
+
+      const sharedFinalVaultFields: Pick<
+        Vault,
+        'libType' | 'isBackedUp' | 'localPartyId'
+      > = {
+        localPartyId,
+        libType: 'GG20',
+        isBackedUp: false,
+      }
 
       try {
         return match<KeygenType, Promise<Vault>>(keygenType, {
@@ -71,8 +75,7 @@ export const useGg20Keygen = (): KeygenResolver => {
 
             return {
               ...fromStorageVault(storageVault),
-              libType: targetMpcLib,
-              isBackedUp: false,
+              ...sharedFinalVaultFields,
               order: getLastItemOrder(vaultOrders),
             }
           },
@@ -89,8 +92,7 @@ export const useGg20Keygen = (): KeygenResolver => {
                 return {
                   ...existingVault,
                   ...fromStorageVault(storageVault),
-                  libType: targetMpcLib,
-                  isBackedUp: false,
+                  ...sharedFinalVaultFields,
                 }
               },
               newReshareVault: async ({
@@ -115,8 +117,7 @@ export const useGg20Keygen = (): KeygenResolver => {
 
                 return {
                   ...fromStorageVault(storageVault),
-                  libType: targetMpcLib,
-                  isBackedUp: false,
+                  ...sharedFinalVaultFields,
                   order: getLastItemOrder(vaultOrders),
                 }
               },
@@ -143,7 +144,6 @@ export const useGg20Keygen = (): KeygenResolver => {
       localPartyId,
       serverUrl,
       sessionId,
-      targetMpcLib,
       vaultName,
       vaultOrders,
     ]

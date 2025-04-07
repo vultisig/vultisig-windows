@@ -23,7 +23,6 @@ import { useMpcPeers } from '../../../../mpc/peers/state/mpcPeers'
 import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
 import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
-import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
@@ -45,8 +44,6 @@ export const useDklsKeygen = (): KeygenResolver => {
   const localPartyId = useMpcLocalPartyId()
   const hexChainCode = useCurrentHexChainCode()
 
-  const mpcLib = useMpcLib()
-
   const peers = useMpcPeers()
 
   const isInitiatingDevice = useIsInitiatingDevice()
@@ -55,13 +52,21 @@ export const useDklsKeygen = (): KeygenResolver => {
 
   const vaultOrders = useMemo(() => vaults.map(vault => vault.order), [vaults])
 
-  const targetMpcLib = keygenType === KeygenType.Migrate ? 'DKLS' : mpcLib
-
   return useCallback(
     async ({ onStepChange }) => {
       onStepChange('ecdsa')
 
       const signers = [localPartyId, ...peers]
+
+      const sharedFinalVaultFields: Pick<
+        Vault,
+        'signers' | 'libType' | 'isBackedUp' | 'localPartyId'
+      > = {
+        signers,
+        localPartyId,
+        libType: 'DKLS',
+        isBackedUp: false,
+      }
 
       const vault = await match<KeygenType, Promise<Vault>>(keygenType, {
         [KeygenType.Keygen]: async () => {
@@ -105,14 +110,11 @@ export const useDklsKeygen = (): KeygenResolver => {
           return {
             name: vaultName,
             publicKeys,
-            signers,
             createdAt: Date.now(),
             hexChainCode: dklsResult.chaincode,
             keyShares,
-            localPartyId,
             order: getLastItemOrder(vaultOrders),
-            isBackedUp: false,
-            libType: targetMpcLib,
+            ...sharedFinalVaultFields,
             resharePrefix: '',
           }
         },
@@ -178,9 +180,7 @@ export const useDklsKeygen = (): KeygenResolver => {
             publicKeys,
             keyShares,
             hexChainCode: dklsResult.chaincode,
-            isBackedUp: false,
-            libType: targetMpcLib,
-            signers,
+            ...sharedFinalVaultFields,
             resharePrefix: '',
           }
 
@@ -194,7 +194,6 @@ export const useDklsKeygen = (): KeygenResolver => {
           return {
             ...newVaultFields,
             name: vaultName,
-            localPartyId,
             order: getLastItemOrder(vaultOrders),
           }
         },
@@ -256,9 +255,9 @@ export const useDklsKeygen = (): KeygenResolver => {
           return {
             ...existingVault,
             publicKeys,
-            signers,
             hexChainCode: dklsResult.chaincode,
             keyShares,
+            ...sharedFinalVaultFields,
           }
         },
       })
@@ -287,7 +286,6 @@ export const useDklsKeygen = (): KeygenResolver => {
       peers,
       serverUrl,
       sessionId,
-      targetMpcLib,
       vaultName,
       vaultOrders,
     ]
