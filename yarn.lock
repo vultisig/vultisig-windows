@@ -532,6 +532,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@core/ui@workspace:core/ui"
   dependencies:
+    "@core/chain": "workspace:*"
+    "@core/mpc": "workspace:*"
     "@lib/codegen": "workspace:*"
     "@lib/ui": "workspace:*"
     "@lib/utils": "workspace:*"
