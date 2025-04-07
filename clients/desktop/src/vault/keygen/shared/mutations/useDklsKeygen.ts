@@ -61,9 +61,9 @@ export const useDklsKeygen = (): KeygenResolver => {
     async ({ onStepChange }) => {
       onStepChange('ecdsa')
 
-      const keygenCommittee = [localPartyId, ...peers]
+      const signers = [localPartyId, ...peers]
 
-      const vault = await match(keygenType, {
+      const vault = await match<KeygenType, Promise<Vault>>(keygenType, {
         [KeygenType.Keygen]: async () => {
           const dklsKeygen = new DKLS(
             KeygenType.Keygen,
@@ -71,7 +71,7 @@ export const useDklsKeygen = (): KeygenResolver => {
             serverUrl,
             sessionId,
             localPartyId,
-            keygenCommittee,
+            signers,
             [],
             encryptionKeyHex
           )
@@ -85,7 +85,7 @@ export const useDklsKeygen = (): KeygenResolver => {
             serverUrl,
             sessionId,
             localPartyId,
-            keygenCommittee,
+            signers,
             [],
             encryptionKeyHex,
             dklsKeygen.getSetupMessage()
@@ -102,10 +102,10 @@ export const useDklsKeygen = (): KeygenResolver => {
             eddsa: schnorrResult.keyshare,
           }
 
-          const vault: Vault = {
+          return {
             name: vaultName,
             publicKeys,
-            signers: [localPartyId, ...peers],
+            signers,
             createdAt: Date.now(),
             hexChainCode: dklsResult.chaincode,
             keyShares,
@@ -115,14 +115,12 @@ export const useDklsKeygen = (): KeygenResolver => {
             libType: targetMpcLib,
             resharePrefix: '',
           }
-
-          return vault
         },
         [KeygenType.Reshare]: async () => {
           const { oldParties } = assertKeygenReshareFields(keygenVault)
 
           const oldCommittee = oldParties.filter(party =>
-            keygenCommittee.includes(party)
+            signers.includes(party)
           )
 
           const dklsKeygen = new DKLS(
@@ -131,7 +129,7 @@ export const useDklsKeygen = (): KeygenResolver => {
             serverUrl,
             sessionId,
             localPartyId,
-            keygenCommittee,
+            signers,
             oldCommittee,
             encryptionKeyHex
           )
@@ -152,7 +150,7 @@ export const useDklsKeygen = (): KeygenResolver => {
             serverUrl,
             sessionId,
             localPartyId,
-            keygenCommittee,
+            signers,
             oldCommittee,
             encryptionKeyHex,
             new Uint8Array(0)
@@ -182,6 +180,7 @@ export const useDklsKeygen = (): KeygenResolver => {
             hexChainCode: dklsResult.chaincode,
             isBackedUp: false,
             libType: targetMpcLib,
+            signers,
             resharePrefix: '',
           }
 
@@ -192,15 +191,12 @@ export const useDklsKeygen = (): KeygenResolver => {
             }
           }
 
-          const result: Vault = {
+          return {
             ...newVaultFields,
             name: vaultName,
-            signers: [localPartyId, ...peers],
             localPartyId,
             order: getLastItemOrder(vaultOrders),
           }
-
-          return result
         },
         [KeygenType.Migrate]: async () => {
           const existingVault = getRecordUnionValue(
@@ -221,7 +217,7 @@ export const useDklsKeygen = (): KeygenResolver => {
             serverUrl,
             sessionId,
             localPartyId,
-            keygenCommittee,
+            signers,
             existingVault.signers,
             encryptionKeyHex,
             localUIEcdsa,
@@ -237,7 +233,7 @@ export const useDklsKeygen = (): KeygenResolver => {
             serverUrl,
             sessionId,
             localPartyId,
-            keygenCommittee,
+            signers,
             existingVault.signers,
             encryptionKeyHex,
             dklsKeygen.getSetupMessage(),
@@ -257,15 +253,13 @@ export const useDklsKeygen = (): KeygenResolver => {
             eddsa: schnorrResult.keyshare,
           }
 
-          const vault: Vault = {
+          return {
             ...existingVault,
             publicKeys,
-            signers: [localPartyId, ...peers],
+            signers,
             hexChainCode: dklsResult.chaincode,
             keyShares,
           }
-
-          return vault
         },
       })
 
