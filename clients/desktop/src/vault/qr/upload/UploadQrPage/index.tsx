@@ -1,8 +1,8 @@
+import { getVaultId } from '@core/ui/vault/Vault'
+
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../../state/currentVault'
 import { useCurrentVaultId } from '../../../state/currentVaultId'
-import { getVaultId } from '@core/ui/vault/Vault'
-
 import { UploadQrPageWithExistingVault } from './UploadQrPageWithExistingVault'
 import { UploadQrPageWithoutVault } from './UploadQrPageWithoutVault'
 

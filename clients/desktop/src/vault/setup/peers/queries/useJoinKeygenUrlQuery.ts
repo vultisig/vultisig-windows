@@ -5,6 +5,11 @@ import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
+import {
+  assertKeygenReshareFields,
+  useKeygenVault,
+  useKeygenVaultName,
+} from '@core/ui/mpc/keygen/state/keygenVault'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { match } from '@lib/utils/match'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
@@ -16,7 +21,6 @@ import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName'
 import { useCurrentKeygenType } from '../../../keygen/state/currentKeygenType'
-import { useCurrentVault } from '../../../state/currentVault'
 import { useCurrentHexChainCode } from '../../state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '../../state/currentHexEncryptionKey'
 
@@ -30,7 +34,9 @@ export const useJoinKeygenUrlQuery = () => {
 
   const keygenType = useCurrentKeygenType()
 
-  const { signers, resharePrefix, publicKeys, name } = useCurrentVault()
+  const vaultName = useKeygenVaultName()
+
+  const keygenVault = useKeygenVault()
 
   return useTransformQueryData(
     useSevenZipQuery(),
@@ -46,7 +52,7 @@ export const useJoinKeygenUrlQuery = () => {
               serviceName,
               encryptionKeyHex: hexEncryptionKey,
               useVultisigRelay,
-              vaultName: name,
+              vaultName,
               libType,
             })
             return toBinary(KeygenMessageSchema, message)
@@ -58,10 +64,8 @@ export const useJoinKeygenUrlQuery = () => {
               serviceName,
               encryptionKeyHex: hexEncryptionKey,
               useVultisigRelay,
-              vaultName: name,
-              publicKeyEcdsa: publicKeys.ecdsa,
-              oldResharePrefix: resharePrefix,
-              oldParties: signers,
+              vaultName,
+              ...assertKeygenReshareFields(keygenVault),
               libType,
             })
             return toBinary(ReshareMessageSchema, message)
@@ -73,10 +77,8 @@ export const useJoinKeygenUrlQuery = () => {
               serviceName,
               encryptionKeyHex: hexEncryptionKey,
               useVultisigRelay,
-              vaultName: name,
-              publicKeyEcdsa: publicKeys.ecdsa,
-              oldResharePrefix: resharePrefix,
-              oldParties: signers,
+              vaultName,
+              ...assertKeygenReshareFields(keygenVault),
               libType,
             })
             return toBinary(ReshareMessageSchema, message)
@@ -98,14 +100,12 @@ export const useJoinKeygenUrlQuery = () => {
         hexChainCode,
         hexEncryptionKey,
         keygenType,
+        keygenVault,
         mpcLibType,
-        name,
-        publicKeys,
-        resharePrefix,
         serverType,
         serviceName,
         sessionId,
-        signers,
+        vaultName,
       ]
     )
   )

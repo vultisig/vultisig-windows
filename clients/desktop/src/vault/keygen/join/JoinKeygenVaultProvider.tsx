@@ -25,21 +25,29 @@ export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
     }
   }, [keygenMsg, vaults])
 
-  const keygenVault: KeygenVault | null = useMemo(() => {
+  const keygenVault: KeygenVault = useMemo(() => {
     if (existingVault) {
       return { existingVault }
+    }
+
+    const vault = {
+      name: keygenMsg.vaultName,
     }
 
     if ('oldResharePrefix' in keygenMsg) {
       return {
         newReshareVault: {
+          ...vault,
           oldResharePrefix: keygenMsg.oldResharePrefix,
           oldParties: keygenMsg.oldParties,
+          publicKeyEcdsa: keygenMsg.publicKeyEcdsa,
         },
       }
     }
 
-    return null
+    return {
+      newVault: vault,
+    }
   }, [existingVault, keygenMsg])
 
   const localPartyId = useMemo(

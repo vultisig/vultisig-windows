@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { useVaults } from '../queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../state/currentVault'
+import { CurrentVaultCoinsProvider } from '../state/currentVaultCoins'
 import { useCurrentVaultId } from '../state/currentVaultId'
 
 export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
@@ -27,5 +28,11 @@ export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
     return null
   }
 
-  return <CurrentVaultProvider value={vault}>{children}</CurrentVaultProvider>
+  return (
+    <CurrentVaultProvider value={vault}>
+      <CurrentVaultCoinsProvider value={vault.coins}>
+        {children}
+      </CurrentVaultCoinsProvider>
+    </CurrentVaultProvider>
+  )
 }

@@ -1,7 +1,7 @@
 import { ChildrenProp } from '@lib/ui/props'
+import { createContextHook } from '@lib/ui/state/createContextHook'
 import { createContext, useCallback, useEffect, useState } from 'react'
 
-import { createContextHook } from '@lib/ui/state/createContextHook'
 import { ToastItem } from './ToastItem'
 
 type Toast = {

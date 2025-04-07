@@ -10,6 +10,7 @@ import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { useVaults } from '../../queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../state/currentVault'
+import { CurrentVaultCoinsProvider } from '../../state/currentVaultCoins'
 import { useCurrentVaultId } from '../../state/currentVaultId'
 
 export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
@@ -37,9 +38,11 @@ export const KeysignVaultGuard = ({ children }: ChildrenProp) => {
 
   return (
     <CurrentVaultProvider value={vault}>
-      <MpcLocalPartyIdProvider value={vault.localPartyId}>
-        {children}
-      </MpcLocalPartyIdProvider>
+      <CurrentVaultCoinsProvider value={vault.coins}>
+        <MpcLocalPartyIdProvider value={vault.localPartyId}>
+          {children}
+        </MpcLocalPartyIdProvider>
+      </CurrentVaultCoinsProvider>
     </CurrentVaultProvider>
   )
 }

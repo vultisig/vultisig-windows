@@ -1,9 +1,8 @@
+import { getVaultId } from '@core/ui/vault/Vault'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 
 import { useFolderlessVaults } from '../../vault/queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../vault/state/currentVault'
-import { getVaultId } from '@core/ui/vault/Vault'
-
 import { AddVaultsToFolderContainer } from '../folder/addVaults/AddVaultsToFolderContainer'
 import { FolderVaultOption } from '../folder/addVaults/FolderVaultOption'
 import { useAddVaultToFolderMutation } from '../folder/mutations/useAddVaultToFolderMutation'
