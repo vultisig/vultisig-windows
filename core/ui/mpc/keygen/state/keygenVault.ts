@@ -7,6 +7,7 @@ type KeygenReshareFields = {
   oldResharePrefix: string
   oldParties: string[]
   publicKeyEcdsa: string
+  hexChainCode: string
 }
 
 export type KeygenVault =
@@ -45,8 +46,14 @@ export const assertKeygenReshareFields = (
       publicKeyEcdsa: vault.publicKeys.ecdsa,
       oldResharePrefix: vault.resharePrefix,
       oldParties: vault.signers,
+      hexChainCode: vault.hexChainCode,
     }),
     newReshareVault: vault =>
-      pick(vault, ['oldResharePrefix', 'oldParties', 'publicKeyEcdsa']),
+      pick(vault, [
+        'oldResharePrefix',
+        'oldParties',
+        'publicKeyEcdsa',
+        'hexChainCode',
+      ]),
   })
 }

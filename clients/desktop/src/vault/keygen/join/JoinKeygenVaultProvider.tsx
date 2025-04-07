@@ -41,6 +41,7 @@ export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
           oldResharePrefix: keygenMsg.oldResharePrefix,
           oldParties: keygenMsg.oldParties,
           publicKeyEcdsa: keygenMsg.publicKeyEcdsa,
+          hexChainCode: keygenMsg.hexChainCode,
         },
       }
     }

@@ -60,7 +60,6 @@ export const useJoinKeygenUrlQuery = () => {
           [KeygenType.Reshare]: () => {
             const message = create(ReshareMessageSchema, {
               sessionId,
-              hexChainCode,
               serviceName,
               encryptionKeyHex: hexEncryptionKey,
               useVultisigRelay,
@@ -73,7 +72,6 @@ export const useJoinKeygenUrlQuery = () => {
           [KeygenType.Migrate]: () => {
             const message = create(ReshareMessageSchema, {
               sessionId,
-              hexChainCode,
               serviceName,
               encryptionKeyHex: hexEncryptionKey,
               useVultisigRelay,
