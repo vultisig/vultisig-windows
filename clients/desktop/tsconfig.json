@@ -16,13 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src",
-    "global.d.ts",
-    "../../core/ui/i18n/**/*.d.ts",
-    "../../lib/ui/state/createContextHook.ts",
-    "../../lib/ui/state/getValueProviderSetup.tsx"
-  ],
+  "include": ["src", "global.d.ts"],
   "exclude": ["node_modules", "dist"],
   "references": [
     {

@@ -4,7 +4,6 @@ import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
 import { isNativeCoin } from '@core/chain/coin/utils/isNativeCoin'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { groupItems } from '@lib/utils/array/groupItems'
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
@@ -17,15 +16,6 @@ export const useCurrentVaultNativeCoins = () => {
   const coins = useCurrentVaultCoins()
 
   return useMemo(() => coins.filter(isNativeCoin), [coins])
-}
-
-export const useCurrentVaultChainIds = () => {
-  const coins = useCurrentVaultNativeCoins()
-
-  return useMemo(
-    () => withoutDuplicates(coins.map(coin => coin.chain)),
-    [coins]
-  )
 }
 
 export const useCurrentVaultCoinsByChain = () => {

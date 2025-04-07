@@ -1,11 +1,6 @@
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { MpcLib } from '@core/mpc/mpcLib'
 
-export type VaultKeyShare = {
-  publicKey: string
-  keyshare: string
-}
-
 export type Vault = {
   name: string
   publicKeys: Record<SignatureAlgorithm, string>

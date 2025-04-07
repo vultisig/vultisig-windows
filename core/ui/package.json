@@ -9,6 +9,8 @@
     "@lib/codegen": "workspace:*",
     "@lib/ui": "workspace:*",
     "@lib/utils": "workspace:*",
+    "@core/chain": "workspace:*",
+    "@core/mpc": "workspace:*",
     "@trustwallet/wallet-core": "^4.2.15",
     "react": "^19.0.0"
   }
