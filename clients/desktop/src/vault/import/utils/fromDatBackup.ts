@@ -1,15 +1,9 @@
-import { create } from '@bufbuild/protobuf'
-import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt'
+import { signingAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { defaultMpcLib, MpcLib } from '@core/mpc/mpcLib'
-import { toLibType } from '@core/mpc/types/utils/libType'
-import {
-  Vault_KeyShareSchema,
-  VaultSchema,
-} from '@core/mpc/types/vultisig/vault/v1/vault_pb'
 import { Vault } from '@core/ui/vault/Vault'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
 import { convertDuration } from '@lib/utils/time/convertDuration'
-
-import { toStorageVault } from '../../utils/storageVault'
 
 export type DatBackup = {
   name: string
@@ -28,31 +22,35 @@ type DatBackupKeyshare = {
   keyshare: string
 }
 
-const secondsTimestamptToProtoTimestamp = (seconds: number): Timestamp =>
-  create(TimestampSchema, {
-    seconds: BigInt(Math.floor(seconds)),
-    nanos: Math.floor(convertDuration(seconds % 1, 's', 'ns')),
-  })
-
 export const fromDatBackup = (backup: DatBackup): Vault => {
-  const keyShares = backup.keyshares.map(({ pubkey, keyshare }) =>
-    create(Vault_KeyShareSchema, {
-      publicKey: pubkey,
-      keyshare,
-    })
+  const publicKeys = {
+    ecdsa: backup.pubKeyECDSA,
+    eddsa: backup.pubKeyEdDSA,
+  }
+
+  const keyShares = recordFromKeys(
+    signingAlgorithms,
+    algorithm =>
+      shouldBePresent(
+        backup.keyshares.find(
+          keyShare => keyShare.pubkey === publicKeys[algorithm]
+        )
+      ).keyshare
   )
 
-  const vault = create(VaultSchema, {
+  return {
     name: backup.name,
-    publicKeyEcdsa: backup.pubKeyECDSA,
-    publicKeyEddsa: backup.pubKeyEdDSA,
+    publicKeys,
     signers: backup.signers,
-    createdAt: secondsTimestamptToProtoTimestamp(backup.createdAt),
+    createdAt: backup.createdAt
+      ? convertDuration(backup.createdAt, 's', 'ms')
+      : undefined,
     hexChainCode: backup.hexChainCode,
     localPartyId: backup.localPartyID,
     keyShares,
-    libType: toLibType(backup.libType ?? defaultMpcLib),
-  })
-
-  return toStorageVault(vault)
+    libType: backup.libType ?? defaultMpcLib,
+    resharePrefix: '',
+    isBackedUp: true,
+    order: 0,
+  }
 }

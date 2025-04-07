@@ -22,13 +22,13 @@ export const FastMigrateServerStep: React.FC<
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const [password] = useVaultPassword()
-  const { public_key_ecdsa } = useCurrentVault()
+  const { publicKeys } = useCurrentVault()
   const [email] = useVaultEmail()
 
   const { mutate, ...state } = useMutation({
     mutationFn: () => {
       return migrateWithServer({
-        public_key: public_key_ecdsa,
+        public_key: publicKeys.ecdsa,
         session_id: sessionId,
         hex_encryption_key: hexEncryptionKey,
         encryption_password: password,

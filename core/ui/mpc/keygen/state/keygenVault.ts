@@ -11,6 +11,11 @@ export type KeygenVault =
         oldParties: string[]
       }
     }
+  | {
+      newVault: {
+        name: string
+      }
+    }
 
 export const { useValue: useKeygenVault, provider: KeygenVaultProvider } =
   getValueProviderSetup<KeygenVault | null>('KeygenVault')

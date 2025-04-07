@@ -30,7 +30,7 @@ export const useJoinKeygenUrlQuery = () => {
 
   const keygenType = useCurrentKeygenType()
 
-  const { signers, reshare_prefix, public_key_ecdsa, name } = useCurrentVault()
+  const { signers, resharePrefix, publicKeys, name } = useCurrentVault()
 
   return useTransformQueryData(
     useSevenZipQuery(),
@@ -59,8 +59,8 @@ export const useJoinKeygenUrlQuery = () => {
               encryptionKeyHex: hexEncryptionKey,
               useVultisigRelay,
               vaultName: name,
-              publicKeyEcdsa: public_key_ecdsa,
-              oldResharePrefix: reshare_prefix,
+              publicKeyEcdsa: publicKeys.ecdsa,
+              oldResharePrefix: resharePrefix,
               oldParties: signers,
               libType,
             })
@@ -74,8 +74,8 @@ export const useJoinKeygenUrlQuery = () => {
               encryptionKeyHex: hexEncryptionKey,
               useVultisigRelay,
               vaultName: name,
-              publicKeyEcdsa: public_key_ecdsa,
-              oldResharePrefix: reshare_prefix,
+              publicKeyEcdsa: publicKeys.ecdsa,
+              oldResharePrefix: resharePrefix,
               oldParties: signers,
               libType,
             })
@@ -100,8 +100,8 @@ export const useJoinKeygenUrlQuery = () => {
         keygenType,
         mpcLibType,
         name,
-        public_key_ecdsa,
-        reshare_prefix,
+        publicKeys,
+        resharePrefix,
         serverType,
         serviceName,
         sessionId,
