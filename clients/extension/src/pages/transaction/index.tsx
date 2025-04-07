@@ -152,11 +152,18 @@ const Component = () => {
       const canvas = qrContainerRef.current.querySelector('canvas')
 
       if (canvas) {
-        const dataURL = canvas.toDataURL('image/png')
-        const link = document.createElement('a')
-        link.href = dataURL
-        link.download = 'qrcode.png'
-        link.click()
+        try {
+          const dataURL = canvas.toDataURL('image/png')
+          const link = document.createElement('a')
+          link.href = dataURL
+          link.download = 'qrcode.png'
+          link.click()
+        } catch {
+          messageApi.open({
+            type: 'error',
+            content: 'failed to export qr', // t('failed_to_export_qr'),
+          })
+        }
       }
     }
   }
@@ -674,9 +681,19 @@ const Component = () => {
               <div className="card">
                 <div className="header">
                   <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                  <span className="action" onClick={handleClose}>
-                    <Close />
-                  </span>
+                  <Tooltip title={t('close')}>
+                    <span
+                      className="action"
+                      onClick={handleClose}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') handleClose()
+                      }}
+                      tabIndex={0}
+                      role="button"
+                    >
+                      <Close />
+                    </span>
+                  </Tooltip>
                 </div>
                 <div className="content">
                   <div className="list">
@@ -1230,7 +1247,7 @@ const Component = () => {
 
 export default Component
 
-ReactDOM.createRoot(document.body).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AppProviders>
       <Component />
