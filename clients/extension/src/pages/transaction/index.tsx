@@ -74,7 +74,7 @@ import {
 } from 'antd'
 import { formatUnits, toUtf8String } from 'ethers'
 import { keccak256 } from 'js-sha3'
-import { StrictMode, useEffect, useState } from 'react'
+import { StrictMode, useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
@@ -118,6 +118,7 @@ const Component = () => {
     keysignPayload,
   } = state
   const [messageApi, contextHolder] = message.useMessage()
+  const qrContainerRef = useRef<HTMLDivElement>(null)
 
   const handleApp = (): void => {
     window.open(keySignUrl, '_self')
@@ -143,6 +144,20 @@ const Component = () => {
             content: t('failed_to_copy_link'),
           })
         })
+    }
+  }
+
+  const exportQRCode = () => {
+    if (qrContainerRef.current) {
+      const canvas = qrContainerRef.current.querySelector('canvas')
+
+      if (canvas) {
+        const dataURL = canvas.toDataURL('image/png')
+        const link = document.createElement('a')
+        link.href = dataURL
+        link.download = 'qrcode.png'
+        link.click()
+      }
     }
   }
 
@@ -609,6 +624,7 @@ const Component = () => {
         components: {
           Button: {
             colorBorder: 'transparent',
+            primaryColor: textPrimary,
             colorText: textPrimary,
             controlHeight: 46,
             fontWeight: 600,
@@ -630,6 +646,7 @@ const Component = () => {
           },
           Tooltip: {
             colorBgSpotlight: backgroundTertiary,
+            colorTextLightSolid: textPrimary,
           },
         },
         token: {
@@ -657,7 +674,7 @@ const Component = () => {
               <div className="card">
                 <div className="header">
                   <span className="heading">{`${t('sign_transaction')} (${step}/${fastSign ? 5 : 4})`}</span>
-                  <span className="action">
+                  <span className="action" onClick={handleClose}>
                     <Close />
                   </span>
                 </div>
@@ -787,7 +804,7 @@ const Component = () => {
                     <ArrowLeft />
                   </span>
                 </div>
-                <div className="content">
+                <div className="content" ref={qrContainerRef}>
                   {fastSign ? (
                     <div className="steps">
                       <div className="item">
@@ -822,12 +839,15 @@ const Component = () => {
                       </div>
                     </div>
                   )}
-                  <QRCode
-                    bordered
-                    size={1000}
-                    value={keySignUrl || ''}
-                    color="white"
-                  />
+                  <Tooltip title={t('download_qr_code')}>
+                    <QRCode
+                      bordered
+                      size={1000}
+                      value={keySignUrl || ''}
+                      color="white"
+                      onClick={exportQRCode}
+                    />
+                  </Tooltip>
                   {fastSign ? null : (
                     <div className="devices">
                       <div
@@ -1210,7 +1230,7 @@ const Component = () => {
 
 export default Component
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.body).render(
   <StrictMode>
     <AppProviders>
       <Component />
