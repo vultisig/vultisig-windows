@@ -1,0 +1,301 @@
+import { DKLS } from '@core/mpc/dkls/dkls'
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { waitForKeygenComplete } from '@core/mpc/keygenComplete'
+import { setKeygenComplete } from '@core/mpc/keygenComplete'
+import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
+import {
+  assertKeygenReshareFields,
+  useKeygenVault,
+  useKeygenVaultName,
+} from '@core/ui/mpc/keygen/state/keygenVault'
+import { Vault } from '@core/ui/vault/Vault'
+import { match } from '@lib/utils/match'
+import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { useCallback, useMemo } from 'react'
+
+import {
+  GetLocalUIEcdsa,
+  GetLocalUIEdDSA,
+} from '../../../../../wailsjs/go/tss/TssService'
+import { useMpcLocalPartyId } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { useMpcPeers } from '../../../../mpc/peers/state/mpcPeers'
+import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
+import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
+import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
+import { useMpcLib } from '../../../../mpc/state/mpcLib'
+import { useVaults } from '../../../queries/useVaultsQuery'
+import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode'
+import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
+import { useCurrentKeygenType } from '../../state/currentKeygenType'
+import { KeygenResolver } from './KeygenResolver'
+
+export const useDklsKeygen = (): KeygenResolver => {
+  const keygenType = useCurrentKeygenType()
+
+  const serverUrl = useMpcServerUrl()
+
+  const encryptionKeyHex = useCurrentHexEncryptionKey()
+
+  const sessionId = useMpcSessionId()
+
+  const keygenVault = useKeygenVault()
+  const vaultName = useKeygenVaultName()
+
+  const localPartyId = useMpcLocalPartyId()
+  const hexChainCode = useCurrentHexChainCode()
+
+  const mpcLib = useMpcLib()
+
+  const peers = useMpcPeers()
+
+  const isInitiatingDevice = useIsInitiatingDevice()
+
+  const vaults = useVaults()
+
+  const vaultOrders = useMemo(() => vaults.map(vault => vault.order), [vaults])
+
+  const targetMpcLib = keygenType === KeygenType.Migrate ? 'DKLS' : mpcLib
+
+  return useCallback(
+    async ({ onStepChange }) => {
+      onStepChange('ecdsa')
+
+      const keygenCommittee = [localPartyId, ...peers]
+
+      const vault = await match(keygenType, {
+        [KeygenType.Keygen]: async () => {
+          const dklsKeygen = new DKLS(
+            KeygenType.Keygen,
+            isInitiatingDevice,
+            serverUrl,
+            sessionId,
+            localPartyId,
+            keygenCommittee,
+            [],
+            encryptionKeyHex
+          )
+          const dklsResult = await dklsKeygen.startKeygenWithRetry()
+
+          onStepChange('eddsa')
+
+          const schnorrKeygen = new Schnorr(
+            KeygenType.Keygen,
+            isInitiatingDevice,
+            serverUrl,
+            sessionId,
+            localPartyId,
+            keygenCommittee,
+            [],
+            encryptionKeyHex,
+            dklsKeygen.getSetupMessage()
+          )
+          const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
+
+          const publicKeys = {
+            ecdsa: dklsResult.publicKey,
+            eddsa: schnorrResult.publicKey,
+          }
+
+          const keyShares = {
+            ecdsa: dklsResult.keyshare,
+            eddsa: schnorrResult.keyshare,
+          }
+
+          const vault: Vault = {
+            name: vaultName,
+            publicKeys,
+            signers: [localPartyId, ...peers],
+            createdAt: Date.now(),
+            hexChainCode: dklsResult.chaincode,
+            keyShares,
+            localPartyId,
+            order: getLastItemOrder(vaultOrders),
+            isBackedUp: false,
+            libType: targetMpcLib,
+            resharePrefix: '',
+          }
+
+          return vault
+        },
+        [KeygenType.Reshare]: async () => {
+          const { oldParties } = assertKeygenReshareFields(keygenVault)
+
+          const oldCommittee = oldParties.filter(party =>
+            keygenCommittee.includes(party)
+          )
+
+          const dklsKeygen = new DKLS(
+            KeygenType.Reshare,
+            isInitiatingDevice,
+            serverUrl,
+            sessionId,
+            localPartyId,
+            keygenCommittee,
+            oldCommittee,
+            encryptionKeyHex
+          )
+
+          const oldEcdsaKeyshare =
+            'existingVault' in keygenVault
+              ? keygenVault.existingVault.keyShares.ecdsa
+              : undefined
+
+          const dklsResult =
+            await dklsKeygen.startReshareWithRetry(oldEcdsaKeyshare)
+
+          onStepChange('eddsa')
+
+          const schnorrKeygen = new Schnorr(
+            KeygenType.Reshare,
+            isInitiatingDevice,
+            serverUrl,
+            sessionId,
+            localPartyId,
+            keygenCommittee,
+            oldCommittee,
+            encryptionKeyHex,
+            new Uint8Array(0)
+          )
+
+          const oldEddsaKeyshare =
+            'existingVault' in keygenVault
+              ? keygenVault.existingVault.keyShares.eddsa
+              : undefined
+
+          const schnorrResult =
+            await schnorrKeygen.startReshareWithRetry(oldEddsaKeyshare)
+
+          const publicKeys = {
+            ecdsa: dklsResult.publicKey,
+            eddsa: schnorrResult.publicKey,
+          }
+
+          const keyShares = {
+            ecdsa: dklsResult.keyshare,
+            eddsa: schnorrResult.keyshare,
+          }
+
+          const newVaultFields = {
+            publicKeys,
+            keyShares,
+            hexChainCode: dklsResult.chaincode,
+            isBackedUp: false,
+            libType: targetMpcLib,
+            resharePrefix: '',
+          }
+
+          if ('existingVault' in keygenVault) {
+            return {
+              ...keygenVault.existingVault,
+              ...newVaultFields,
+            }
+          }
+
+          const result: Vault = {
+            ...newVaultFields,
+            name: vaultName,
+            signers: [localPartyId, ...peers],
+            localPartyId,
+            order: getLastItemOrder(vaultOrders),
+          }
+
+          return result
+        },
+        [KeygenType.Migrate]: async () => {
+          const existingVault = getRecordUnionValue(
+            keygenVault,
+            'existingVault'
+          )
+
+          const localUIEcdsa = await GetLocalUIEcdsa(
+            existingVault.keyShares.ecdsa
+          )
+          const localUIEddsa = await GetLocalUIEdDSA(
+            existingVault.keyShares.eddsa
+          )
+
+          const dklsKeygen = new DKLS(
+            KeygenType.Migrate,
+            isInitiatingDevice,
+            serverUrl,
+            sessionId,
+            localPartyId,
+            keygenCommittee,
+            existingVault.signers,
+            encryptionKeyHex,
+            localUIEcdsa,
+            existingVault.publicKeys.ecdsa,
+            hexChainCode
+          )
+          const dklsResult = await dklsKeygen.startKeygenWithRetry()
+
+          onStepChange('eddsa')
+          const schnorrKeygen = new Schnorr(
+            KeygenType.Migrate,
+            isInitiatingDevice,
+            serverUrl,
+            sessionId,
+            localPartyId,
+            keygenCommittee,
+            existingVault.signers,
+            encryptionKeyHex,
+            dklsKeygen.getSetupMessage(),
+            localUIEddsa,
+            existingVault.publicKeys.eddsa,
+            hexChainCode
+          )
+          const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
+
+          const publicKeys = {
+            ecdsa: dklsResult.publicKey,
+            eddsa: schnorrResult.publicKey,
+          }
+
+          const keyShares = {
+            ecdsa: dklsResult.keyshare,
+            eddsa: schnorrResult.keyshare,
+          }
+
+          const vault: Vault = {
+            ...existingVault,
+            publicKeys,
+            signers: [localPartyId, ...peers],
+            hexChainCode: dklsResult.chaincode,
+            keyShares,
+          }
+
+          return vault
+        },
+      })
+
+      await setKeygenComplete({
+        serverURL: serverUrl,
+        sessionId: sessionId,
+        localPartyId,
+      })
+
+      await waitForKeygenComplete({
+        serverURL: serverUrl,
+        sessionId: sessionId,
+        peers,
+      })
+
+      return vault
+    },
+    [
+      encryptionKeyHex,
+      hexChainCode,
+      isInitiatingDevice,
+      keygenType,
+      keygenVault,
+      localPartyId,
+      peers,
+      serverUrl,
+      sessionId,
+      targetMpcLib,
+      vaultName,
+      vaultOrders,
+    ]
+  )
+}
