@@ -90,15 +90,9 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               [vault.localPartyId, ...peers],
               encryptionKeyHex
             )
-            let keyShare = ''
-            let keysignPublicKey = ''
-            if (tssType == 'ecdsa') {
-              keysignPublicKey = vault.publicKeys.ecdsa
-              keyShare = vault.keyShares.ecdsa
-            } else if (tssType == 'eddsa') {
-              keysignPublicKey = vault.publicKeys.eddsa
-              keyShare = vault.keyShares.eddsa
-            }
+            const keysignPublicKey = vault.publicKeys[tssType]
+            const keyShare = vault.keyShares[tssType]
+
             const result = await mpc.startKeysign(
               keyShare,
               tssType,
