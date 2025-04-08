@@ -11,7 +11,10 @@ import {
   RequestMethod,
   SenderKey,
 } from '@clients/extension/src/utils/constants'
-import { processBackgroundResponse } from '@clients/extension/src/utils/functions'
+import {
+  isVersionedTransaction,
+  processBackgroundResponse,
+} from '@clients/extension/src/utils/functions'
 import {
   Messaging,
   SendTransactionResponse,
@@ -645,77 +648,92 @@ namespace Provider {
       return Solana.instance
     }
 
-    async signTransaction(transaction: Transaction) {
-      const connection = new Connection(`${rootApiUrl}/solana/`)
-      for (const instruction of transaction.instructions) {
-        let modifiedTransfer: TransactionType.Phantom
-
-        if (instruction.programId.equals(SystemProgram.programId)) {
-          // Handle Native SOL Transfers
-          const decodedTransfer = SystemInstruction.decodeTransfer(instruction)
-          modifiedTransfer = {
-            txType: 'Phantom',
-            asset: { chain: Chain.Solana, ticker: 'SOL' },
-            amount: decodedTransfer.lamports.toString(),
-            from: decodedTransfer.fromPubkey.toString(),
-            to: decodedTransfer.toPubkey.toString(),
-          }
-        } else if (instruction.programId.equals(TOKEN_PROGRAM_ID)) {
-          //  Handle SPL Token Transfers
-          const senderTokenAccountInfo = await getAccount(
-            connection,
-            new PublicKey(instruction.keys[0].pubkey)
-          )
-          let recipient: string
-          try {
-            // Try fetching receiver account
-            const receiverTokenAccountInfo = await getAccount(
-              connection,
-              new PublicKey(instruction.keys[2].pubkey)
-            )
-            recipient = receiverTokenAccountInfo.owner.toString()
-          } catch {
-            console.warn(
-              'Receiver token account not found. Checking for ATA...'
-            )
-            const ataInstruction = transaction.instructions.find(instr =>
-              instr.programId.equals(ASSOCIATED_TOKEN_PROGRAM_ID)
-            )
-            if (ataInstruction) {
-              // The recipient should be in the ATA instruction's keys[0] (payer) or keys[2] (owner)
-              recipient = ataInstruction.keys[2].pubkey.toString()
-            } else {
-              throw new Error(
-                'Unable to determine recipient address. No direct token account or ATA instruction found.'
-              )
-            }
-          }
-
-          const amountBytes = instruction.data.slice(1, 9)
-          const amount = new DataView(
-            Uint8Array.from(amountBytes).buffer
-          ).getBigUint64(0, true)
-
-          modifiedTransfer = {
-            txType: 'Phantom',
-            amount: amount.toString(),
-            asset: {
-              chain: Chain.Solana,
-              mint: senderTokenAccountInfo.mint.toString(),
-            },
-            from: senderTokenAccountInfo.owner.toString(),
-            to: recipient,
-          }
-        } else {
-          continue
-        }
+    async signTransaction(transaction: Transaction | VersionedTransaction) {
+      if (isVersionedTransaction(transaction)) {
         return await this.request({
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
-          params: [modifiedTransfer],
+          params: [
+            {
+              serializedTx: transaction.serialize(),
+            },
+          ],
         }).then((result: SendTransactionResponse) => {
           const rawData = base58.decode(result.raw)
           return VersionedTransaction.deserialize(rawData)
         })
+      } else {
+        const connection = new Connection(`${rootApiUrl}/solana/`)
+        for (const instruction of transaction.instructions) {
+          let modifiedTransfer: TransactionType.Phantom
+
+          if (instruction.programId.equals(SystemProgram.programId)) {
+            // Handle Native SOL Transfers
+            const decodedTransfer =
+              SystemInstruction.decodeTransfer(instruction)
+            modifiedTransfer = {
+              txType: 'Phantom',
+              asset: { chain: Chain.Solana, ticker: 'SOL' },
+              amount: decodedTransfer.lamports.toString(),
+              from: decodedTransfer.fromPubkey.toString(),
+              to: decodedTransfer.toPubkey.toString(),
+            }
+          } else if (instruction.programId.equals(TOKEN_PROGRAM_ID)) {
+            //  Handle SPL Token Transfers
+            const senderTokenAccountInfo = await getAccount(
+              connection,
+              new PublicKey(instruction.keys[0].pubkey)
+            )
+            let recipient: string
+            try {
+              // Try fetching receiver account
+              const receiverTokenAccountInfo = await getAccount(
+                connection,
+                new PublicKey(instruction.keys[2].pubkey)
+              )
+              recipient = receiverTokenAccountInfo.owner.toString()
+            } catch {
+              console.warn(
+                'Receiver token account not found. Checking for ATA...'
+              )
+              const ataInstruction = transaction.instructions.find(instr =>
+                instr.programId.equals(ASSOCIATED_TOKEN_PROGRAM_ID)
+              )
+              if (ataInstruction) {
+                // The recipient should be in the ATA instruction's keys[0] (payer) or keys[2] (owner)
+                recipient = ataInstruction.keys[2].pubkey.toString()
+              } else {
+                throw new Error(
+                  'Unable to determine recipient address. No direct token account or ATA instruction found.'
+                )
+              }
+            }
+
+            const amountBytes = instruction.data.slice(1, 9)
+            const amount = new DataView(
+              Uint8Array.from(amountBytes).buffer
+            ).getBigUint64(0, true)
+
+            modifiedTransfer = {
+              txType: 'Phantom',
+              amount: amount.toString(),
+              asset: {
+                chain: Chain.Solana,
+                mint: senderTokenAccountInfo.mint.toString(),
+              },
+              from: senderTokenAccountInfo.owner.toString(),
+              to: recipient,
+            }
+          } else {
+            continue
+          }
+          return await this.request({
+            method: RequestMethod.VULTISIG.SEND_TRANSACTION,
+            params: [modifiedTransfer],
+          }).then((result: SendTransactionResponse) => {
+            const rawData = base58.decode(result.raw)
+            return VersionedTransaction.deserialize(rawData)
+          })
+        }
       }
     }
 
@@ -1046,8 +1064,6 @@ setTimeout(() => {
         )
 
         providerCopy.isMetaMask = false
-        window.xfi = xfiProvider
-        window.keplr = keplrProvider
 
         announceProvider({
           info: {

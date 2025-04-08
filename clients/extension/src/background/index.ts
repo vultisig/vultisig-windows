@@ -408,26 +408,34 @@ const handleRequest = (
       }
       case RequestMethod.VULTISIG.SEND_TRANSACTION: {
         const [_transaction] = params
-        const isBasic = isBasicTransaction(_transaction)
-
-        getStandardTransactionDetails(
-          {
-            ..._transaction,
-            txType: isBasic ? 'MetaMask' : (_transaction.txType ?? 'Vultisig'),
-          } as TransactionType.WalletTransaction,
-          chain
-        ).then(standardTx => {
-          const modifiedTransaction: ITransaction = {
-            transactionDetails: standardTx as TransactionDetails,
-            chain,
-            id: '',
-            status: 'default',
-          }
-          handleSendTransaction(modifiedTransaction, chain)
+        console.log(_transaction.serializedTx)
+        if (chain.chain === Chain.Solana && _transaction.serializedTx) {
+          handleSendTransaction(_transaction as ITransaction, chain)
             .then(result => resolve(result))
             .catch(reject)
-        })
+        } else {
+          const isBasic = isBasicTransaction(_transaction)
 
+          getStandardTransactionDetails(
+            {
+              ..._transaction,
+              txType: isBasic
+                ? 'MetaMask'
+                : (_transaction.txType ?? 'Vultisig'),
+            } as TransactionType.WalletTransaction,
+            chain
+          ).then(standardTx => {
+            const modifiedTransaction: ITransaction = {
+              transactionDetails: standardTx as TransactionDetails,
+              chain,
+              id: '',
+              status: 'default',
+            }
+            handleSendTransaction(modifiedTransaction, chain)
+              .then(result => resolve(result))
+              .catch(reject)
+          })
+        }
         break
       }
       case RequestMethod.METAMASK.ETH_SEND_TRANSACTION: {
@@ -996,9 +1004,6 @@ chrome.runtime.onMessage.addListener(
           if (chain) {
             handleRequest(message, chain, origin)
               .then(response => {
-                if (Array.isArray(response)) {
-                  response = response[0]
-                }
                 if (
                   message.method === RequestMethod.VULTISIG.REQUEST_ACCOUNTS
                 ) {
@@ -1028,7 +1033,7 @@ chrome.runtime.onMessage.addListener(
 
                       const account = [
                         {
-                          pubKey: Array.from(keyBytes),
+                          pubkey: Array.from(keyBytes),
                           address: response,
                           algo: 'secp256k1',
                           bech32Address: response,
@@ -1087,7 +1092,7 @@ chrome.runtime.onMessage.addListener(
                             {
                               address: response,
                               algo: 'secp256k1',
-                              pubKey: Array.from(keyBytes),
+                              pubkey: Array.from(keyBytes),
                             },
                           ]
 

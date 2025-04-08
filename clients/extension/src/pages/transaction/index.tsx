@@ -79,6 +79,7 @@ import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
 
 import { AppProviders } from '../../providers/AppProviders'
+import { getParsedSolanaSwap } from '../../utils/tx/solana/solanaSwap'
 
 interface FormProps {
   password: string
@@ -533,7 +534,10 @@ const Component = () => {
         getStoredTransactions(),
         getStoredVaults(),
       ]).then(([currency, transactions, vaults]) => {
-        const [transaction] = transactions
+        let [transaction] = transactions
+        if ((transaction as any).serializedTx) {
+          getParsedSolanaSwap(walletCore, (transaction as any).serializedTx)
+        }
 
         const vault = vaults.find(({ chains }) =>
           chains.some(
