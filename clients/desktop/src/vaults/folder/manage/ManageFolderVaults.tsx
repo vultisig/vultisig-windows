@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/ui/vault/Vault'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { isEmpty } from '@lib/utils/array/isEmpty'
@@ -6,7 +7,6 @@ import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { storage } from '../../../../wailsjs/go/models'
 import { DnDList, ItemChangeParams } from '../../../lib/dnd/DnDList'
 import {
   DnDItemContainer,
@@ -15,7 +15,6 @@ import {
 import { useUpdateVaultOrderMutation } from '../../../vault/mutations/useUpdateVaultOrderMutation'
 import { useFolderVaults } from '../../../vault/queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../../vault/state/currentVault'
-import { getStorageVaultId } from '../../../vault/utils/storageVault'
 import { FolderVaultOption } from '../addVaults/FolderVaultOption'
 import { useRemoveVaultFromFolderMutation } from '../mutations/useRemoveVaultFromFolderMutation'
 import { useCurrentVaultFolder } from '../state/currentVaultFolder'
@@ -35,7 +34,7 @@ export const ManageFolderVaults = () => {
   const handleOnItemChange = (id: string, { index }: ItemChangeParams) => {
     const order = getNewOrder({
       orders: items.map(item => item.order),
-      sourceIndex: items.findIndex(item => getStorageVaultId(item) === id),
+      sourceIndex: items.findIndex(item => getVaultId(item) === id),
       destinationIndex: index,
     })
 
@@ -46,12 +45,7 @@ export const ManageFolderVaults = () => {
 
     setItems(prev =>
       sortEntitiesWithOrder(
-        prev.map(
-          item =>
-            (getStorageVaultId(item) === id
-              ? { ...item, order }
-              : item) as storage.Vault
-        )
+        prev.map(item => (getVaultId(item) === id ? { ...item, order } : item))
       )
     )
   }
@@ -65,11 +59,11 @@ export const ManageFolderVaults = () => {
       </Text>
       <DnDList
         items={items}
-        getItemId={getStorageVaultId}
+        getItemId={getVaultId}
         onChange={handleOnItemChange}
         renderList={({ props }) => <VStack gap={8} {...props} />}
         renderItem={({ item, draggableProps, dragHandleProps, status }) => {
-          const vaultId = getStorageVaultId(item)
+          const vaultId = getVaultId(item)
 
           return (
             <DnDItemContainer

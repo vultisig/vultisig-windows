@@ -28,7 +28,7 @@ const keysignSteps = ['password', 'server', 'keysign'] as const
 export const StartFastKeysignPage = () => {
   const { keysignPayload } = useAppPathState<'fastKeysign'>()
 
-  const { local_party_id } = useCurrentVault()
+  const { localPartyId } = useCurrentVault()
 
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
@@ -39,7 +39,7 @@ export const StartFastKeysignPage = () => {
     <IsInitiatingDeviceProvider value={true}>
       <KeysignMessagePayloadProvider value={keysignPayload}>
         <PasswordProvider initialValue="">
-          <MpcLocalPartyIdProvider value={local_party_id}>
+          <MpcLocalPartyIdProvider value={localPartyId}>
             <GeneratedServiceNameProvider>
               <GeneratedMpcSessionIdProvider>
                 <GeneratedHexEncryptionKeyProvider>

@@ -1,11 +1,12 @@
+import { getVaultId } from '@core/ui/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { useVaults } from '../queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../state/currentVault'
+import { CurrentVaultCoinsProvider } from '../state/currentVaultCoins'
 import { useCurrentVaultId } from '../state/currentVaultId'
-import { getStorageVaultId } from '../utils/storageVault'
 
 export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
   const [currentVaultId] = useCurrentVaultId()
@@ -13,9 +14,7 @@ export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
 
   const navigate = useAppNavigate()
 
-  const vault = vaults.find(
-    vault => getStorageVaultId(vault) === currentVaultId
-  )
+  const vault = vaults.find(vault => getVaultId(vault) === currentVaultId)
 
   const isDisabled = !vault
 
@@ -29,5 +28,11 @@ export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
     return null
   }
 
-  return <CurrentVaultProvider value={vault}>{children}</CurrentVaultProvider>
+  return (
+    <CurrentVaultProvider value={vault}>
+      <CurrentVaultCoinsProvider value={vault.coins}>
+        {children}
+      </CurrentVaultCoinsProvider>
+    </CurrentVaultProvider>
+  )
 }

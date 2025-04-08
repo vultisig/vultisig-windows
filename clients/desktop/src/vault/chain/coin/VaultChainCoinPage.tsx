@@ -17,7 +17,7 @@ import { PageHeaderIconButton } from '../../../ui/page/PageHeaderIconButton'
 import { PageHeaderIconButtons } from '../../../ui/page/PageHeaderIconButtons'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { VaultPrimaryActions } from '../../components/VaultPrimaryActions'
-import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { VaultChainCoinItem } from '../VaultChainCoinItem'
 import { useCurrentVaultCoinKey } from './useCurrentVaultCoinKey'
 

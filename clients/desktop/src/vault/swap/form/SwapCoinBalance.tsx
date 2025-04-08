@@ -10,7 +10,7 @@ import styled from 'styled-components'
 
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 
 const Container = styled.div`
   ${text({

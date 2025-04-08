@@ -9,7 +9,7 @@ import { useCallback, useMemo } from 'react'
 
 import { useFormatFiatAmount } from '../../../chain/ui/hooks/useFormatFiatAmount'
 import { useCoinPricesQuery } from '../../../coin/query/useCoinPricesQuery'
-import { useCurrentVaultCoins } from '../../state/currentVault'
+import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { SwapFee } from '../types/SwapFee'
 
 export const useSwapFiatFeesQuery = (value: SwapFee[]) => {

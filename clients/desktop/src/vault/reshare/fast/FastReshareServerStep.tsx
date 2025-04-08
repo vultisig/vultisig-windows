@@ -29,7 +29,7 @@ export const FastReshareServerStep: React.FC<OnForwardProp> = ({
 
   const { hasServer } = useVaultServerStatus()
 
-  const { name, signers, hex_chain_code, public_key_ecdsa, reshare_prefix } =
+  const { name, signers, hexChainCode, publicKeys, resharePrefix } =
     useCurrentVault()
 
   const [email] = useVaultEmail()
@@ -37,16 +37,16 @@ export const FastReshareServerStep: React.FC<OnForwardProp> = ({
   const { mutate, ...state } = useMutation({
     mutationFn: () => {
       return reshareWithServer({
-        public_key: hasServer ? public_key_ecdsa : undefined,
+        public_key: hasServer ? publicKeys.ecdsa : undefined,
         session_id: sessionId,
         hex_encryption_key: hexEncryptionKey,
         encryption_password: password,
         email,
         name,
         old_parties: signers,
-        hex_chain_code,
+        hex_chain_code: hexChainCode,
         local_party_id: generateLocalPartyId('server'),
-        old_reshare_prefix: reshare_prefix,
+        old_reshare_prefix: resharePrefix ?? '',
       })
     },
     onSuccess: onForward,

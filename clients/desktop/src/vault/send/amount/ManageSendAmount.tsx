@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { AmountTextInput } from '../../../lib/ui/inputs/AmountTextInput'
-import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { SendCoinBalanceDependant } from '../coin/balance/SendCoinBalanceDependant'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
