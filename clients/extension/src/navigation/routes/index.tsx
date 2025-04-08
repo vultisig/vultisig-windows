@@ -1,14 +1,16 @@
+import { SetupFastVaultPage } from '@clients/desktop/src/vault/setup/fast/SetupFastVaultPage'
+import { SetupSecureVaultPage } from '@clients/desktop/src/vault/setup/secure/SetupSecureVaultPage'
+import { SetupVaultPageController } from '@clients/desktop/src/vault/setup/SetupVaultPageController'
+import { NewVaultPage } from '@clients/desktop/src/vaults/components/NewVaultPage'
 import { appPaths } from '@clients/extension/src/navigation'
 import Layout from '@clients/extension/src/pages/popup/layout'
 import CurrencyPage from '@clients/extension/src/pages/popup/pages/currency'
 import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vault'
 import ImportPage from '@clients/extension/src/pages/popup/pages/import'
-import { NewVaultPage } from '@clients/extension/src/pages/popup/pages/landing'
 import LanguagePage from '@clients/extension/src/pages/popup/pages/language'
 import MainPage from '@clients/extension/src/pages/popup/pages/main'
 import RenameVaultPage from '@clients/extension/src/pages/popup/pages/rename-vault'
 import SettingsPage from '@clients/extension/src/pages/popup/pages/settings'
-import { SetupVaultPage } from '@clients/extension/src/pages/popup/pages/setup-vault'
 import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-settings'
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { createHashRouter, Navigate } from 'react-router-dom'
@@ -17,6 +19,18 @@ const routes = [
   {
     path: appPaths.landing,
     element: <NewVaultPage />,
+  },
+  {
+    path: appPaths.setupVault,
+    element: <SetupVaultPageController />,
+  },
+  {
+    path: appPaths.setupFastVault,
+    element: <SetupFastVaultPage />,
+  },
+  {
+    path: appPaths.setupSecureVault,
+    element: <SetupSecureVaultPage />,
   },
   {
     path: appPaths.import,
@@ -29,10 +43,6 @@ const routes = [
       {
         index: true,
         element: <MainPage />,
-      },
-      {
-        path: appPaths.setupVault,
-        element: <SetupVaultPage />,
       },
       {
         path: appPaths.vaults,

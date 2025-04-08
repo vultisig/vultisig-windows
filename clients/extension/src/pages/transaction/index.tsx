@@ -26,6 +26,7 @@ import {
   Close,
   SquareArrow,
 } from '@clients/extension/src/icons'
+import { AppProviders } from '@clients/extension/src/providers/AppProviders'
 import api from '@clients/extension/src/utils/api'
 import { splitString } from '@clients/extension/src/utils/functions'
 import {
@@ -77,8 +78,6 @@ import { keccak256 } from 'js-sha3'
 import { StrictMode, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { useTranslation } from 'react-i18next'
-
-import { AppProviders } from '../../providers/AppProviders'
 
 interface FormProps {
   password: string
