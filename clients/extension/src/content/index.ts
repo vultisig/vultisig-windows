@@ -1046,6 +1046,8 @@ setTimeout(() => {
         )
 
         providerCopy.isMetaMask = false
+        window.xfi = xfiProvider
+        window.keplr = keplrProvider
 
         announceProvider({
           info: {
