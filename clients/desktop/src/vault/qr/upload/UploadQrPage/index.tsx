@@ -2,6 +2,7 @@ import { getVaultId } from '@core/ui/vault/Vault'
 
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { CurrentVaultProvider } from '../../../state/currentVault'
+import { CurrentVaultCoinsProvider } from '../../../state/currentVaultCoins'
 import { useCurrentVaultId } from '../../../state/currentVaultId'
 import { UploadQrPageWithExistingVault } from './UploadQrPageWithExistingVault'
 import { UploadQrPageWithoutVault } from './UploadQrPageWithoutVault'
@@ -17,7 +18,9 @@ export const UploadQrPage = () => {
 
   return (
     <CurrentVaultProvider value={vault}>
-      <UploadQrPageWithExistingVault />
+      <CurrentVaultCoinsProvider value={vault.coins}>
+        <UploadQrPageWithExistingVault />
+      </CurrentVaultCoinsProvider>
     </CurrentVaultProvider>
   )
 }
