@@ -1,4 +1,3 @@
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
@@ -11,7 +10,7 @@ export const VaultKeygenEnding = () => {
 
   const navigate = useAppNavigate()
 
-  if (keygenType === KeygenType.Migrate) {
+  if (keygenType === 'migrate') {
     return (
       <StepTransition
         from={({ onForward }) => <VaultKeygenBackupFlow onFinish={onForward} />}

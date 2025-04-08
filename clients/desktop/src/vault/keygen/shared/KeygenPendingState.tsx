@@ -1,5 +1,4 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
@@ -19,9 +18,9 @@ export const KeygenPendingState = ({ value }: ValueProp<KeygenStep | null>) => {
 
   if (!value) {
     const message = match(keygenType, {
-      [KeygenType.Keygen]: () => t('waiting_for_keygen_start'),
-      [KeygenType.Migrate]: () => t('waiting_for_upgrade_start'),
-      [KeygenType.Reshare]: () => t('waiting_for_reshare_start'),
+      create: () => t('waiting_for_keygen_start'),
+      migrate: () => t('waiting_for_upgrade_start'),
+      reshare: () => t('waiting_for_reshare_start'),
     })
 
     return (

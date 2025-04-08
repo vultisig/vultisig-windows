@@ -1,7 +1,6 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
 import { deepLinkBaseUrl } from '@core/config'
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { defaultMpcLib } from '@core/mpc/mpcLib'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
@@ -49,7 +48,7 @@ export const useJoinKeygenUrlQuery = () => {
 
         const useVultisigRelay = serverType === 'relay'
         const binary = match(keygenType, {
-          [KeygenType.Keygen]: () => {
+          create: () => {
             const message = create(KeygenMessageSchema, {
               sessionId,
               hexChainCode,
@@ -61,7 +60,7 @@ export const useJoinKeygenUrlQuery = () => {
             })
             return toBinary(KeygenMessageSchema, message)
           },
-          [KeygenType.Reshare]: () => {
+          reshare: () => {
             const message = create(ReshareMessageSchema, {
               sessionId,
               serviceName,
@@ -73,7 +72,7 @@ export const useJoinKeygenUrlQuery = () => {
             })
             return toBinary(ReshareMessageSchema, message)
           },
-          [KeygenType.Migrate]: () => {
+          migrate: () => {
             const message = create(ReshareMessageSchema, {
               sessionId,
               serviceName,

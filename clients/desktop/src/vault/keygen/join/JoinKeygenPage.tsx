@@ -1,4 +1,3 @@
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
@@ -39,9 +38,9 @@ export const JoinKeygenPage = () => {
   const { t } = useTranslation()
 
   const title = match(keygenType, {
-    [KeygenType.Keygen]: () => t('join_keygen'),
-    [KeygenType.Reshare]: () => t('join_reshare'),
-    [KeygenType.Migrate]: () => t('join_upgrade'),
+    create: () => t('join_keygen'),
+    reshare: () => t('join_reshare'),
+    migrate: () => t('join_upgrade'),
   })
 
   return (

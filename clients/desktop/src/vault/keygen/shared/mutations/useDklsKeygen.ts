@@ -69,9 +69,9 @@ export const useDklsKeygen = (): KeygenResolver => {
       }
 
       const vault = await match<KeygenType, Promise<Vault>>(keygenType, {
-        [KeygenType.Keygen]: async () => {
+        create: async () => {
           const dklsKeygen = new DKLS(
-            KeygenType.Keygen,
+            'create',
             isInitiatingDevice,
             serverUrl,
             sessionId,
@@ -85,7 +85,7 @@ export const useDklsKeygen = (): KeygenResolver => {
           onStepChange('eddsa')
 
           const schnorrKeygen = new Schnorr(
-            KeygenType.Keygen,
+            'create',
             isInitiatingDevice,
             serverUrl,
             sessionId,
@@ -117,7 +117,7 @@ export const useDklsKeygen = (): KeygenResolver => {
             ...sharedFinalVaultFields,
           }
         },
-        [KeygenType.Reshare]: async () => {
+        reshare: async () => {
           const { oldParties } = assertKeygenReshareFields(keygenVault)
 
           const oldCommittee = oldParties.filter(party =>
@@ -125,7 +125,7 @@ export const useDklsKeygen = (): KeygenResolver => {
           )
 
           const dklsKeygen = new DKLS(
-            KeygenType.Reshare,
+            'reshare',
             isInitiatingDevice,
             serverUrl,
             sessionId,
@@ -146,7 +146,7 @@ export const useDklsKeygen = (): KeygenResolver => {
           onStepChange('eddsa')
 
           const schnorrKeygen = new Schnorr(
-            KeygenType.Reshare,
+            'reshare',
             isInitiatingDevice,
             serverUrl,
             sessionId,
@@ -195,7 +195,7 @@ export const useDklsKeygen = (): KeygenResolver => {
             order: getLastItemOrder(vaultOrders),
           }
         },
-        [KeygenType.Migrate]: async () => {
+        migrate: async () => {
           const existingVault = getRecordUnionValue(
             keygenVault,
             'existingVault'
@@ -209,7 +209,7 @@ export const useDklsKeygen = (): KeygenResolver => {
           )
 
           const dklsKeygen = new DKLS(
-            KeygenType.Migrate,
+            'migrate',
             isInitiatingDevice,
             serverUrl,
             sessionId,
@@ -225,7 +225,7 @@ export const useDklsKeygen = (): KeygenResolver => {
 
           onStepChange('eddsa')
           const schnorrKeygen = new Schnorr(
-            KeygenType.Migrate,
+            'migrate',
             isInitiatingDevice,
             serverUrl,
             sessionId,

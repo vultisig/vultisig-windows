@@ -44,11 +44,9 @@ import { usePeerOptionsQuery } from './queries/usePeerOptionsQuery'
 type KeygenPeerDiscoveryStepProps = OnForwardProp & Partial<OnBackProp>
 
 const educationUrl: Record<KeygenType, string> = {
-  [KeygenType.Keygen]:
-    'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
-  [KeygenType.Migrate]:
-    'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
-  [KeygenType.Reshare]:
+  create: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
+  migrate: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
+  reshare:
     'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
 }
 
@@ -71,7 +69,7 @@ export const KeygenPeerDiscoveryStep = ({
   const keygenType = useCurrentKeygenType()
 
   const missingPeers = useMemo(() => {
-    if (keygenType === KeygenType.Migrate) {
+    if (keygenType === 'migrate') {
       const { signers } = getRecordUnionValue(keygenVault, 'existingVault')
       const requiredPeers = without(signers, localPartyId)
       return without(requiredPeers, ...selectedPeers)
@@ -81,7 +79,7 @@ export const KeygenPeerDiscoveryStep = ({
   }, [keygenVault, keygenType, localPartyId, selectedPeers])
 
   const devicesTarget = useMemo(() => {
-    if (keygenType === KeygenType.Migrate) {
+    if (keygenType === 'migrate') {
       const { signers } = getRecordUnionValue(keygenVault, 'existingVault')
 
       return Math.max(signers.length, selectedPeers.length + 1)
@@ -95,7 +93,7 @@ export const KeygenPeerDiscoveryStep = ({
       return t('select_n_devices', { count: requiredPeers })
     }
 
-    if (keygenType === KeygenType.Migrate && missingPeers.length > 0) {
+    if (keygenType === 'migrate' && missingPeers.length > 0) {
       return `${t('missing_devices_for_migration')}: ${missingPeers.join(', ')}`
     }
   }, [keygenType, missingPeers, selectedPeers.length, t])
@@ -138,9 +136,7 @@ export const KeygenPeerDiscoveryStep = ({
                 value={serverType}
                 local={() => <MpcLocalServerIndicator />}
                 relay={() =>
-                  keygenType === KeygenType.Migrate ? null : (
-                    <PeerRequirementsInfo />
-                  )
+                  keygenType === 'migrate' ? null : <PeerRequirementsInfo />
                 }
               />
               <PeersManagerTitle target={devicesTarget} />
@@ -150,7 +146,7 @@ export const KeygenPeerDiscoveryStep = ({
                   value={peerOptionsQuery}
                   success={peerOptions => {
                     const placeholderCount =
-                      keygenType === KeygenType.Migrate
+                      keygenType === 'migrate'
                         ? missingPeers.length
                         : recommendedPeers - peerOptions.length
 
@@ -162,7 +158,7 @@ export const KeygenPeerDiscoveryStep = ({
                         {range(placeholderCount).map(index => {
                           return (
                             <PeerPlaceholder key={index}>
-                              {keygenType === KeygenType.Migrate
+                              {keygenType === 'migrate'
                                 ? t('scan_with_device_name', {
                                     name: parseLocalPartyId(missingPeers[index])
                                       .deviceName,
@@ -173,7 +169,7 @@ export const KeygenPeerDiscoveryStep = ({
                             </PeerPlaceholder>
                           )
                         })}
-                        {keygenType !== KeygenType.Migrate && (
+                        {keygenType !== 'migrate' && (
                           <>
                             {peerOptions.length >= recommendedPeers && (
                               <PeerPlaceholder>

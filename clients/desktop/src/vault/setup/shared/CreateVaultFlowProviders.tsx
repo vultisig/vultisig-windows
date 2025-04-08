@@ -1,4 +1,3 @@
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { ChildrenProp } from '@lib/ui/props'
 
 import { GeneratedMpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
@@ -24,7 +23,7 @@ export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
               <MpcServerTypeProvider initialValue="relay">
                 <GeneratedMpcLocalPartyIdProvider>
                   <ServerUrlDerivedFromServerTypeProvider>
-                    <CurrentKeygenTypeProvider value={KeygenType.Keygen}>
+                    <CurrentKeygenTypeProvider value={'create'}>
                       <SetupVaultNameProvider>
                         <CreateKeygenVaultProvider>
                           <MpcPeersSelectionProvider>

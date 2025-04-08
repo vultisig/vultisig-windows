@@ -61,7 +61,7 @@ export const useGg20Keygen = (): KeygenResolver => {
 
       try {
         return match<KeygenType, Promise<Vault>>(keygenType, {
-          [KeygenType.Keygen]: async () => {
+          create: async () => {
             const { name } = getRecordUnionValue(keygenVault, 'newVault')
 
             const storageVault = await StartKeygen(
@@ -79,7 +79,7 @@ export const useGg20Keygen = (): KeygenResolver => {
               order: getLastItemOrder(vaultOrders),
             }
           },
-          [KeygenType.Reshare]: async () => {
+          reshare: async () => {
             return matchRecordUnion<KeygenVault, Promise<Vault>>(keygenVault, {
               existingVault: async existingVault => {
                 const storageVault = await Reshare(
@@ -126,7 +126,7 @@ export const useGg20Keygen = (): KeygenResolver => {
               },
             })
           },
-          [KeygenType.Migrate]: () => {
+          migrate: () => {
             throw new Error('Migrate is not supported for GG20')
           },
         })

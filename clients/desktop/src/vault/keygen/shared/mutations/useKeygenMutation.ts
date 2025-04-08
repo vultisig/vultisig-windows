@@ -1,5 +1,4 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { defaultMpcLib, MpcLib } from '@core/mpc/mpcLib'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useMutation } from '@tanstack/react-query'
@@ -18,7 +17,7 @@ export const useKeygenMutation = () => {
   const keygenVault = useKeygenVault()
 
   const mpcLib = useMemo(() => {
-    if (keygenType === KeygenType.Migrate) {
+    if (keygenType === 'migrate') {
       return 'DKLS'
     }
 

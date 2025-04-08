@@ -15,9 +15,9 @@ export const KeygenServerStep = ({
   return (
     <Match
       value={keygenType}
-      Reshare={() => <FastReshareServerStep onForward={onFinish} />}
-      Migrate={() => <FastMigrateServerStep onForward={onFinish} />}
-      Keygen={() => (
+      reshare={() => <FastReshareServerStep onForward={onFinish} />}
+      migrate={() => <FastMigrateServerStep onForward={onFinish} />}
+      create={() => (
         <SetupVaultServerStep onBack={onBack} onForward={onFinish} />
       )}
     />

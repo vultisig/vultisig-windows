@@ -1,4 +1,3 @@
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 
 import { SecureVaultKeygenOverlay } from '../../../setup/secure/components/SecureVaultKeygenOverlay'
@@ -9,7 +8,7 @@ export const KeygenPeerDiscoveryEducation = () => {
 
   const keygenType = useCurrentKeygenType()
 
-  if (keygenType === KeygenType.Keygen && shouldShowOverlay) {
+  if (keygenType === 'create' && shouldShowOverlay) {
     return <SecureVaultKeygenOverlay onCompleted={closeOverlay} />
   }
 
