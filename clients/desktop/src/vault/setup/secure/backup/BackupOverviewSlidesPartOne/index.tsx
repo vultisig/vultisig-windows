@@ -23,14 +23,14 @@ export const BackupOverviewSlidesPartOne: FC<OnboardingStepsProps> = ({
 }) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
-  const { keyshares } = vault
+  const { signers } = vault
   const {
     animations,
     handleNextAnimation,
     currentAnimation,
     animationComponent: AnimationComponent,
     isLoading,
-  } = useBackupOverviewStepsAnimations(keyshares.length)
+  } = useBackupOverviewStepsAnimations(signers.length)
 
   return (
     <PageContent>

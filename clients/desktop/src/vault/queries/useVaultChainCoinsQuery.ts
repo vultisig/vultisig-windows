@@ -11,7 +11,7 @@ import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../coin/query/useBalancesQuery'
 import { useCoinPricesQuery } from '../../coin/query/useCoinPricesQuery'
-import { useCurrentVaultChainCoins } from '../state/currentVault'
+import { useCurrentVaultChainCoins } from '../state/currentVaultCoins'
 
 export type VaultChainCoin = CoinKey &
   CoinAmount &

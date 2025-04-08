@@ -1,14 +1,13 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
-import { ArrowLeft } from '@clients/extension/src/icons'
-import { languageName, languages } from '@core/ui/i18n/Language'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useTranslation } from 'react-i18next'
-
 import {
   useLanguageMutation,
   useLanguageQuery,
-} from '../../../../i18n/state/language'
-import { appPaths } from '../../../../navigation'
+} from '@clients/extension/src/i18n/state/language'
+import { ArrowLeft } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
+import { languageName, languages } from '@core/ui/i18n/Language'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { useTranslation } from 'react-i18next'
 
 const Component = () => {
   const { t } = useTranslation()

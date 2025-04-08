@@ -17,7 +17,7 @@ import { Panel } from '../../lib/ui/panel/Panel'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { BalanceVisibilityAware } from '../balance/visibility/BalanceVisibilityAware'
 import { VaultChainBalance } from '../queries/useVaultChainsBalancesQuery'
-import { useCurrentVaultAddreses } from '../state/currentVault'
+import { useCurrentVaultAddreses } from '../state/currentVaultCoins'
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress'
 
 const Pill = styled.div`

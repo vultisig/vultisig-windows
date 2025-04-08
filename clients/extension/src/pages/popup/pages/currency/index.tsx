@@ -1,5 +1,6 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
 import { Currency, currencyName } from '@clients/extension/src/utils/constants'
 import {
   getStoredCurrency,
@@ -7,8 +8,6 @@ import {
 } from '@clients/extension/src/utils/storage'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { appPaths } from '../../../../navigation'
 
 interface InitialState {
   currency: Currency

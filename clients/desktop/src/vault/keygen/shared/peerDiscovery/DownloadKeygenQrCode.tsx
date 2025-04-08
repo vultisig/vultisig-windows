@@ -1,23 +1,32 @@
+import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { ShareIconNew } from '@lib/ui/icons/ShareIconNew'
 import { ValueProp } from '@lib/ui/props'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SaveAsImage } from '../../../../ui/file/SaveAsImage'
 import { PageHeaderIconButton } from '../../../../ui/page/PageHeaderIconButton'
 import { PrintableQrCode } from '../../../../ui/qr/PrintableQrCode'
 import { getVaultPublicKeyExport } from '../../../share/utils/getVaultPublicKeyExport'
-import { useCurrentVault } from '../../../state/currentVault'
+
+const prefix = 'VayltKeygenQR'
 
 export const DownloadKeygenQrCode = ({ value }: ValueProp<string>) => {
-  const vault = useCurrentVault()
-  const { name } = vault
   const { t } = useTranslation()
-  const { uid } = getVaultPublicKeyExport(vault) ?? ''
-  const lastThreeUID = uid.slice(-3)
+  const keygenVault = useKeygenVault()
+
+  const fileName = useMemo(() => {
+    if ('existingVault' in keygenVault) {
+      const { uid } = getVaultPublicKeyExport(keygenVault.existingVault)
+      return [prefix, keygenVault.existingVault.name, uid.slice(-3)].join('-')
+    }
+
+    return prefix
+  }, [keygenVault])
 
   return (
     <SaveAsImage
-      fileName={`VayltKeygenQR-${name}-${lastThreeUID}`}
+      fileName={fileName}
       renderTrigger={({ onClick }) => (
         <PageHeaderIconButton icon={<ShareIconNew />} onClick={onClick} />
       )}
