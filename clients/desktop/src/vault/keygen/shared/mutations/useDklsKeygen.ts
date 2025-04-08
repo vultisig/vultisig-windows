@@ -115,7 +115,6 @@ export const useDklsKeygen = (): KeygenResolver => {
             keyShares,
             order: getLastItemOrder(vaultOrders),
             ...sharedFinalVaultFields,
-            resharePrefix: '',
           }
         },
         [KeygenType.Reshare]: async () => {
@@ -181,7 +180,6 @@ export const useDklsKeygen = (): KeygenResolver => {
             keyShares,
             hexChainCode: dklsResult.chaincode,
             ...sharedFinalVaultFields,
-            resharePrefix: '',
           }
 
           if ('existingVault' in keygenVault) {

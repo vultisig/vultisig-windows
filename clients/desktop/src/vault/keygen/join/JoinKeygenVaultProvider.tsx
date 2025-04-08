@@ -3,6 +3,7 @@ import {
   KeygenVaultProvider,
 } from '@core/ui/mpc/keygen/state/keygenVault'
 import { ChildrenProp } from '@lib/ui/props'
+import { pick } from '@lib/utils/record/pick'
 import { useMemo } from 'react'
 
 import { generateLocalPartyId } from '../../../mpc/localPartyId'
@@ -38,10 +39,12 @@ export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
       return {
         newReshareVault: {
           ...vault,
-          oldResharePrefix: keygenMsg.oldResharePrefix,
-          oldParties: keygenMsg.oldParties,
-          publicKeyEcdsa: keygenMsg.publicKeyEcdsa,
-          hexChainCode: keygenMsg.hexChainCode,
+          ...pick(keygenMsg, [
+            'oldResharePrefix',
+            'oldParties',
+            'publicKeyEcdsa',
+            'hexChainCode',
+          ]),
         },
       }
     }

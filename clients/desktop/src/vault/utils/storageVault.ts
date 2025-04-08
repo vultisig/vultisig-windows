@@ -32,7 +32,7 @@ export const toStorageVault = ({
     keyshare: value,
   })),
   local_party_id: localPartyId,
-  reshare_prefix: resharePrefix,
+  reshare_prefix: resharePrefix ?? '',
   order,
   is_backed_up: isBackedUp,
   coins: [],

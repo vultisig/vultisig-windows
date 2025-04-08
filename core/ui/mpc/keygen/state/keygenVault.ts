@@ -44,7 +44,7 @@ export const assertKeygenReshareFields = (
   return matchRecordUnion(keygenVault, {
     existingVault: vault => ({
       publicKeyEcdsa: vault.publicKeys.ecdsa,
-      oldResharePrefix: vault.resharePrefix,
+      oldResharePrefix: vault.resharePrefix ?? '',
       oldParties: vault.signers,
       hexChainCode: vault.hexChainCode,
     }),

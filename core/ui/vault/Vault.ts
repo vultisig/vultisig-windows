@@ -9,7 +9,8 @@ export type Vault = {
   hexChainCode: string
   keyShares: Record<SignatureAlgorithm, string>
   localPartyId: string
-  resharePrefix: string
+  // should only be present in legacy GG20 vaults
+  resharePrefix?: string
   libType: MpcLib
   isBackedUp: boolean
   order: number

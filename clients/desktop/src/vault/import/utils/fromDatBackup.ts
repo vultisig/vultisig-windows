@@ -49,7 +49,6 @@ export const fromDatBackup = (backup: DatBackup): Vault => {
     localPartyId: backup.localPartyID,
     keyShares,
     libType: backup.libType ?? defaultMpcLib,
-    resharePrefix: '',
     isBackedUp: true,
     order: 0,
   }

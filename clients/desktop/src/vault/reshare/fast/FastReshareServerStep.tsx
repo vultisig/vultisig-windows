@@ -46,7 +46,7 @@ export const FastReshareServerStep: React.FC<OnForwardProp> = ({
         old_parties: signers,
         hex_chain_code: hexChainCode,
         local_party_id: generateLocalPartyId('server'),
-        old_reshare_prefix: resharePrefix,
+        old_reshare_prefix: resharePrefix ?? '',
       })
     },
     onSuccess: onForward,
