@@ -1,10 +1,9 @@
+import { getSignedCosmosTx } from '@clients/extension/src/utils/tx/sign/cosmos'
+import { getSignedEvmTx } from '@clients/extension/src/utils/tx/sign/evm'
 import { GetSignedTxResolver } from '@clients/extension/src/utils/tx/sign/GetSignedTxResolver'
+import { getSignedSolanaTx } from '@clients/extension/src/utils/tx/sign/solana'
+import { getSignedUtxoTx } from '@clients/extension/src/utils/tx/sign/utxo'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
-
-import { getSignedCosmosTx } from './cosmos'
-import { getSignedEvmTx } from './evm'
-import { getSignedSolanaTx } from './solana'
-import { getSignedUtxoTx } from './utxo'
 
 const handlers: Record<ChainKind, GetSignedTxResolver<any>> = {
   cosmos: getSignedCosmosTx,

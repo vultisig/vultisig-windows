@@ -1,18 +1,17 @@
+import { AnimatedVisibility } from '@clients/extension/src/components/shared/AnimatedVisibility'
+import { HorizontalLine } from '@clients/extension/src/components/shared/HorizontalLine'
+import { ProductLogoBlock } from '@clients/extension/src/components/shared/Logo/ProductLogoBlock'
+import { PageContent } from '@clients/extension/src/components/shared/Page/PageContent'
+import { PageHeader } from '@clients/extension/src/components/shared/Page/PageHeader'
+import { PageHeaderBackButton } from '@clients/extension/src/components/shared/Page/PageHeaderBackButton'
+import { makeAppPath } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-
-import { AnimatedVisibility } from '../../../../components/shared/AnimatedVisibility'
-import { HorizontalLine } from '../../../../components/shared/HorizontalLine'
-import { ProductLogoBlock } from '../../../../components/shared/Logo/ProductLogoBlock'
-import { PageContent } from '../../../../components/shared/Page/PageContent'
-import { PageHeader } from '../../../../components/shared/Page/PageHeader'
-import { PageHeaderBackButton } from '../../../../components/shared/Page/PageHeaderBackButton'
-import { makeAppPath } from '../../../../navigation'
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
 export const NewVaultPage = ({ withBackButton = true }) => {
   const { t } = useTranslation()

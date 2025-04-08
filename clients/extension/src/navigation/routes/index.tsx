@@ -1,3 +1,4 @@
+import { appPaths } from '@clients/extension/src/navigation'
 import Layout from '@clients/extension/src/pages/popup/layout'
 import CurrencyPage from '@clients/extension/src/pages/popup/pages/currency'
 import DeleteVaultPage from '@clients/extension/src/pages/popup/pages/delete-vault'
@@ -7,12 +8,10 @@ import LanguagePage from '@clients/extension/src/pages/popup/pages/language'
 import MainPage from '@clients/extension/src/pages/popup/pages/main'
 import RenameVaultPage from '@clients/extension/src/pages/popup/pages/rename-vault'
 import SettingsPage from '@clients/extension/src/pages/popup/pages/settings'
+import { SetupVaultPage } from '@clients/extension/src/pages/popup/pages/setup-vault'
 import VaultSettingsPage from '@clients/extension/src/pages/popup/pages/vault-settings'
 import VaultsPage from '@clients/extension/src/pages/popup/pages/vaults'
 import { createHashRouter, Navigate } from 'react-router-dom'
-
-import { SetupVaultPage } from '../../pages/popup/pages/setup-vault'
-import { appPaths } from '..'
 
 const routes = [
   {

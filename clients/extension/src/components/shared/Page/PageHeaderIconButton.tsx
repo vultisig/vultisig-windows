@@ -1,10 +1,9 @@
+import { pageConfig } from '@clients/extension/src/components/shared/Page/config'
 import { Hoverable } from '@lib/ui/base/Hoverable'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { getColor } from '@lib/ui/theme/getters'
 import { ComponentProps, ReactNode } from 'react'
 import styled from 'styled-components'
-
-import { pageConfig } from './config'
 
 const Container = styled(Hoverable)`
   font-size: 20px;

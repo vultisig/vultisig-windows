@@ -1,12 +1,11 @@
 import { ThorchainProviderMethod } from '@clients/extension/src/types/thorchain'
 import { ThorchainProviderResponse } from '@clients/extension/src/types/thorchain'
+import { Currency } from '@clients/extension/src/utils/constants'
 import { Chain } from '@core/chain/Chain'
 import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 import { KeysignResponse } from '@core/chain/tx/signature/generateSignature'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { TransactionResponse } from 'ethers'
-
-import { Currency } from './constants'
 
 export namespace Messaging {
   export namespace Chain {

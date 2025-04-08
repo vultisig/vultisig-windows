@@ -1,12 +1,11 @@
+import { AntDesignThemeProvider } from '@clients/extension/src/providers/AntDesignThemeProvider'
+import { I18nProvider } from '@clients/extension/src/providers/I18nProvider'
+import { QueryProvider } from '@clients/extension/src/providers/QueryClientProvider'
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { ChildrenProp } from '@lib/ui/props'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
 import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
-
-import { AntDesignThemeProvider } from './AntDesignThemeProvider'
-import { I18nProvider } from './I18nProvider'
-import { QueryProvider } from './QueryClientProvider'
 
 export const AppProviders = ({ children }: ChildrenProp) => {
   return (

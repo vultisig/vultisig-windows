@@ -1,5 +1,6 @@
 import packageJson from '@clients/extension/package.json'
 import useGoBack from '@clients/extension/src/hooks/go-back'
+import { useLanguageQuery } from '@clients/extension/src/i18n/state/language'
 import {
   ArrowLeft,
   ArrowRight,
@@ -9,6 +10,7 @@ import {
   Translate,
   Vultisig,
 } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
 import { Currency } from '@clients/extension/src/utils/constants'
 import { getStoredCurrency } from '@clients/extension/src/utils/storage'
 import { languageName } from '@core/ui/i18n/Language'
@@ -16,9 +18,6 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-
-import { useLanguageQuery } from '../../../../i18n/state/language'
-import { appPaths } from '../../../../navigation'
 
 interface InitialState {
   currency: Currency

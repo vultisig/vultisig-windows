@@ -65,9 +65,7 @@ const Component: FC<ComponentProps> = ({ onClick, text }) => {
       ref={elmRef}
       onClick={handleClick}
       onKeyDown={e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          handleClick()
-        }
+        if (e.key === 'Enter' || e.key === ' ') handleClick()
       }}
       tabIndex={0}
       role="button"
