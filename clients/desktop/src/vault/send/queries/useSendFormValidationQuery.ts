@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import { isValidAddress } from '../../../chain/utils/isValidAddress'
 import { useBalanceQuery } from '../../../coin/query/useBalanceQuery'
-import { useCurrentVaultCoin } from '../../state/currentVault'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useSendAmount } from '../state/amount'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'

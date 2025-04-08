@@ -33,7 +33,7 @@ export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
 }) => {
   const { t } = useTranslation()
 
-  const { public_key_ecdsa } = useCurrentVault()
+  const { publicKeys } = useCurrentVault()
 
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
@@ -70,7 +70,7 @@ export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
           )
 
           return signWithServer({
-            public_key: public_key_ecdsa,
+            public_key: publicKeys.ecdsa,
             messages,
             session: sessionId,
             hex_encryption_key: hexEncryptionKey,
@@ -83,7 +83,7 @@ export const FastKeysignServerStep: React.FC<OnForwardProp> = ({
         },
         custom: ({ message }) => {
           return signWithServer({
-            public_key: public_key_ecdsa,
+            public_key: publicKeys.ecdsa,
             messages: [keccak256(message)],
             session: sessionId,
             hex_encryption_key: hexEncryptionKey,

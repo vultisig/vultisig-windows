@@ -1,5 +1,6 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { getVaultId } from '@core/ui/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useMutation } from '@tanstack/react-query'
 
@@ -10,7 +11,6 @@ import { toStorageCoin } from '../../storage/storageCoin'
 import { getVaultPublicKey } from '../publicKey/getVaultPublicKey'
 import { vaultsQueryKey } from '../queries/useVaultsQuery'
 import { useCurrentVault } from '../state/currentVault'
-import { getStorageVaultId } from '../utils/storageVault'
 
 export const useSaveCoinMutation = () => {
   const vault = useCurrentVault()
@@ -47,7 +47,7 @@ export const useSaveCoinMutation = () => {
         hexPublicKey,
       })
 
-      await SaveCoin(getStorageVaultId(vault), storageCoin)
+      await SaveCoin(getVaultId(vault), storageCoin)
 
       await invalidate(vaultsQueryKey)
     },

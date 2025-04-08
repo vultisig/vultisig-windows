@@ -12,7 +12,7 @@ import { InputLabel } from '../../../lib/ui/inputs/InputLabel'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
-} from '../../state/currentVault'
+} from '../../state/currentVaultCoins'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { SendCoinBalanceDependant } from './balance/SendCoinBalanceDependant'
 

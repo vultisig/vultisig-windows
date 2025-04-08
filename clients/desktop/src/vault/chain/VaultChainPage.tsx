@@ -50,7 +50,7 @@ import { useVaultChainCoinsQuery } from '../queries/useVaultChainCoinsQuery'
 import {
   useCurrentVaultAddress,
   useCurrentVaultNativeCoin,
-} from '../state/currentVault'
+} from '../state/currentVaultCoins'
 import { ManageVaultChainCoinsPrompt } from './manage/coin/ManageVaultChainCoinsPrompt'
 import { useCurrentVaultChain } from './useCurrentVaultChain'
 import { VaultAddressLink } from './VaultAddressLink'
