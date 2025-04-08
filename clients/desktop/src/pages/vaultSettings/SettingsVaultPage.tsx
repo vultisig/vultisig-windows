@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next'
 
 import { BrowserOpenURL } from '../../../wailsjs/runtime/runtime'
 import { ScrollableFlexboxFiller } from '../../lib/ui/layout/ScrollableFlexboxFiller'
-import { NavigateToDklsPage } from '../../mpc/dkls/NavigateToDklsPage'
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
 import { useFiatCurrency } from '../../preferences/state/fiatCurrency'
 import { useLanguage } from '../../preferences/state/language'
@@ -129,17 +128,15 @@ const SettingsVaultPage = () => {
                 <DiscordIcon />
               </UnstyledButton>
             </HStack>
-            <NavigateToDklsPage>
-              <VStack alignItems="center">
-                <Text size={14} color="primary" weight="600">
-                  {t('settings_vault_page_footer')}
-                  {__APP_VERSION__}
-                </Text>
-                <Text size={14} color="primary" weight="600">
-                  (BUILD {__APP_BUILD__})
-                </Text>
-              </VStack>
-            </NavigateToDklsPage>
+            <VStack alignItems="center">
+              <Text size={14} color="primary" weight="600">
+                {t('settings_vault_page_footer')}
+                {__APP_VERSION__}
+              </Text>
+              <Text size={14} color="primary" weight="600">
+                (BUILD {__APP_BUILD__})
+              </Text>
+            </VStack>
           </Footer>
         </StyledPageSlice>
       </ScrollableFlexboxFiller>

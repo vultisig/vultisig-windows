@@ -1,5 +1,4 @@
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
-import { fromLibType } from '@core/mpc/types/utils/libType'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
@@ -11,7 +10,6 @@ import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { MpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
-import { MpcLibProvider } from '../../../mpc/state/mpcLib'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey'
@@ -28,13 +26,8 @@ const keygenSteps = ['session', 'keygen'] as const
 export const JoinKeygenPage = () => {
   const { keygenType, keygenMsg } = useAppPathState<'joinKeygen'>()
 
-  const {
-    sessionId,
-    useVultisigRelay,
-    serviceName,
-    encryptionKeyHex,
-    libType,
-  } = keygenMsg
+  const { sessionId, useVultisigRelay, serviceName, encryptionKeyHex } =
+    keygenMsg
 
   const serverType = useVultisigRelay ? 'relay' : 'local'
 
@@ -53,41 +46,39 @@ export const JoinKeygenPage = () => {
 
   return (
     <IsInitiatingDeviceProvider value={false}>
-      <MpcLibProvider value={fromLibType(libType)}>
-        <CurrentServiceNameProvider value={serviceName}>
-          <MpcServerTypeProvider initialValue={serverType}>
-            <MpcSessionIdProvider value={sessionId}>
-              <CurrentKeygenTypeProvider value={keygenType}>
-                <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
-                  <JoinKeygenVaultProvider>
-                    <KeygenServerUrlProvider>
-                      <MpcMediatorManager />
-                      <Match
-                        value={step}
-                        session={() => (
-                          <JoinKeygenSessionStep onForward={toNextStep} />
-                        )}
-                        keygen={() => (
-                          <ValueTransfer<string[]>
-                            from={({ onFinish }) => (
-                              <JoinKeygenPeersStep onFinish={onFinish} />
-                            )}
-                            to={({ value }) => (
-                              <MpcPeersProvider value={value}>
-                                <JoinKeygenProcess title={title} />
-                              </MpcPeersProvider>
-                            )}
-                          />
-                        )}
-                      />
-                    </KeygenServerUrlProvider>
-                  </JoinKeygenVaultProvider>
-                </CurrentHexEncryptionKeyProvider>
-              </CurrentKeygenTypeProvider>
-            </MpcSessionIdProvider>
-          </MpcServerTypeProvider>
-        </CurrentServiceNameProvider>
-      </MpcLibProvider>
+      <CurrentServiceNameProvider value={serviceName}>
+        <MpcServerTypeProvider initialValue={serverType}>
+          <MpcSessionIdProvider value={sessionId}>
+            <CurrentKeygenTypeProvider value={keygenType}>
+              <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
+                <JoinKeygenVaultProvider>
+                  <KeygenServerUrlProvider>
+                    <MpcMediatorManager />
+                    <Match
+                      value={step}
+                      session={() => (
+                        <JoinKeygenSessionStep onForward={toNextStep} />
+                      )}
+                      keygen={() => (
+                        <ValueTransfer<string[]>
+                          from={({ onFinish }) => (
+                            <JoinKeygenPeersStep onFinish={onFinish} />
+                          )}
+                          to={({ value }) => (
+                            <MpcPeersProvider value={value}>
+                              <JoinKeygenProcess title={title} />
+                            </MpcPeersProvider>
+                          )}
+                        />
+                      )}
+                    />
+                  </KeygenServerUrlProvider>
+                </JoinKeygenVaultProvider>
+              </CurrentHexEncryptionKeyProvider>
+            </CurrentKeygenTypeProvider>
+          </MpcSessionIdProvider>
+        </MpcServerTypeProvider>
+      </CurrentServiceNameProvider>
     </IsInitiatingDeviceProvider>
   )
 }

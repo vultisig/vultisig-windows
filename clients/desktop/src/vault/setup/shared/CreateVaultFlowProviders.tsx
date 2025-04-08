@@ -1,0 +1,42 @@
+import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { ChildrenProp } from '@lib/ui/props'
+
+import { GeneratedMpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
+import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
+import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
+import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
+import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
+import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
+import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey'
+import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType'
+import { SetupVaultNameProvider } from '../state/vaultName'
+import { CreateKeygenVaultProvider } from './CreateKeygenVaultProvider'
+
+export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
+  return (
+    <IsInitiatingDeviceProvider value={true}>
+      <GeneratedMpcSessionIdProvider>
+        <GeneratedHexEncryptionKeyProvider>
+          <GeneratedHexChainCodeProvider>
+            <GeneratedServiceNameProvider>
+              <MpcServerTypeProvider initialValue="relay">
+                <GeneratedMpcLocalPartyIdProvider>
+                  <ServerUrlDerivedFromServerTypeProvider>
+                    <CurrentKeygenTypeProvider value={KeygenType.Keygen}>
+                      <SetupVaultNameProvider>
+                        <CreateKeygenVaultProvider>
+                          {children}
+                        </CreateKeygenVaultProvider>
+                      </SetupVaultNameProvider>
+                    </CurrentKeygenTypeProvider>
+                  </ServerUrlDerivedFromServerTypeProvider>
+                </GeneratedMpcLocalPartyIdProvider>
+              </MpcServerTypeProvider>
+            </GeneratedServiceNameProvider>
+          </GeneratedHexChainCodeProvider>
+        </GeneratedHexEncryptionKeyProvider>
+      </GeneratedMpcSessionIdProvider>
+    </IsInitiatingDeviceProvider>
+  )
+}

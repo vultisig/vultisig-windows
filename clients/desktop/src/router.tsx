@@ -5,7 +5,6 @@ import { DeeplinkPage } from './deeplink/components/DeeplinkPage'
 import { ErrorBoundary } from './errors/components/ErrorBoundary'
 import { FullSizeErrorFallback } from './errors/components/FullSizeErrorFallback'
 import { LauncherObserver } from './launcher/components/LauncherObserver'
-import { ManageDklsPage } from './mpc/dkls/ManageDklsPage'
 import { appPaths } from './navigation'
 import { OnboardingPage } from './onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from './onboarding/IncompleteOnboardingOnly'
@@ -377,10 +376,6 @@ export const router = createBrowserRouter([
       {
         path: appPaths.signCustomMessage,
         element: <SignCustomMessagePage />,
-      },
-      {
-        path: appPaths.dkls,
-        element: <ManageDklsPage />,
       },
     ],
   },

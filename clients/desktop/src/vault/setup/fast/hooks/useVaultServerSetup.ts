@@ -1,9 +1,10 @@
+import { defaultMpcLib } from '@core/mpc/mpcLib'
+import { toLibType } from '@core/mpc/types/utils/libType'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
 import { generateLocalPartyId } from '../../../../mpc/localPartyId'
 import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
-import { useMpcLib } from '../../../../mpc/state/mpcLib'
 import { setupVaultWithServer } from '../../../fast/api/setupVaultWithServer'
 import { useVaultEmail } from '../../../server/email/state/email'
 import { useVaultPassword } from '../../../server/password/state/password'
@@ -18,7 +19,6 @@ export const useVaultServerSetup = () => {
   const sessionId = useMpcSessionId()
   const hexChainCode = useCurrentHexChainCode()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
-  const mpcLib = useMpcLib()
 
   const { mutate, ...state } = useMutation({
     mutationFn: () =>
@@ -30,7 +30,7 @@ export const useVaultServerSetup = () => {
         local_party_id: generateLocalPartyId('server'),
         email,
         hex_encryption_key: hexEncryptionKey,
-        lib_type: mpcLib === 'GG20' ? 0 : 1,
+        lib_type: toLibType(defaultMpcLib),
       }),
   })
 
