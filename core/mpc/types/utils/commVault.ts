@@ -33,7 +33,6 @@ export const toCommVault = (vault: Vault): CommVault =>
       'hexChainCode',
       'localPartyId',
       'resharePrefix',
-      'libType',
     ]),
     createdAt: vault.createdAt
       ? isoStringToProtoTimestamp(vault.createdAt)
