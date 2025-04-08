@@ -1,88 +1,78 @@
-import { create } from '@bufbuild/protobuf'
-import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt'
-import { defaultMpcLib, MpcLib } from '@core/mpc/mpcLib'
-import { fromLibType, toLibType } from '@core/mpc/types/utils/libType'
-import {
-  Vault,
-  Vault_KeyShareSchema,
-  VaultSchema,
-} from '@core/mpc/types/vultisig/vault/v1/vault_pb'
-import { convertDuration } from '@lib/utils/time/convertDuration'
+import { signingAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { MpcLib } from '@core/mpc/mpcLib'
+import { Vault } from '@core/ui/vault/Vault'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
+import { toEntries } from '@lib/utils/record/toEntries'
 
 import { storage } from '../../../wailsjs/go/models'
 
-export const getStorageVaultId = (vault: storage.Vault): string =>
-  vault.public_key_ecdsa
-
 export const toStorageVault = ({
   name,
-  publicKeyEcdsa,
-  publicKeyEddsa,
+  publicKeys,
   signers,
   createdAt,
   hexChainCode,
   keyShares,
   localPartyId,
   resharePrefix,
-  libType = toLibType(defaultMpcLib),
+  libType,
+  order,
+  folderId,
+  isBackedUp,
 }: Vault): storage.Vault => ({
   name: name,
-  public_key_ecdsa: publicKeyEcdsa,
-  public_key_eddsa: publicKeyEddsa,
+  public_key_ecdsa: publicKeys.ecdsa,
+  public_key_eddsa: publicKeys.eddsa,
   signers: signers,
-  created_at: createdAt
-    ? protoTimestampToISOString(createdAt)
-    : new Date().toISOString(),
+  created_at: (createdAt ? new Date(createdAt) : new Date()).toISOString(),
   hex_chain_code: hexChainCode,
-  keyshares: keyShares.map(share => ({
-    public_key: share.publicKey,
-    keyshare: share.keyshare,
+  keyshares: toEntries(keyShares).map(({ key, value }) => ({
+    public_key: publicKeys[key],
+    keyshare: value,
   })),
   local_party_id: localPartyId,
-  reshare_prefix: resharePrefix,
-  order: 0,
-  is_backed_up: true,
+  reshare_prefix: resharePrefix ?? '',
+  order,
+  is_backed_up: isBackedUp,
   coins: [],
-  lib_type: fromLibType(libType),
+  lib_type: libType,
+  folder_id: folderId,
   convertValues: () => {},
 })
 
-const protoTimestampToISOString = (timestamp: Timestamp): string => {
-  const date = new Date(convertDuration(Number(timestamp.seconds), 's', 'ms'))
-  const isoWithoutNanos = date.toISOString().slice(0, -1) // Remove the Z
-  const nanoStr = timestamp.nanos.toString().padStart(9, '0')
-  return `${isoWithoutNanos}${nanoStr}Z`
-}
+export const fromStorageVault = (
+  vault: Omit<storage.Vault, 'coins' | 'convertValues'>
+): Vault => {
+  const publicKeys = {
+    ecdsa: vault.public_key_ecdsa,
+    eddsa: vault.public_key_eddsa,
+  }
 
-const isoStringToProtoTimestamp = (isoString: string): Timestamp => {
-  const date = new Date(isoString)
-  const seconds = BigInt(Math.floor(convertDuration(date.getTime(), 'ms', 's')))
-
-  const nanos = Number(
-    isoString
-      .split('.')[1]
-      ?.split(/Z|[+-]/)[0]
-      .padEnd(9, '0') || 0
+  const keyShares = recordFromKeys(
+    signingAlgorithms,
+    algorithm =>
+      shouldBePresent(
+        vault.keyshares.find(
+          keyShare => keyShare.public_key === publicKeys[algorithm]
+        )
+      ).keyshare
   )
-
-  return create(TimestampSchema, { seconds, nanos })
-}
-
-export const fromStorageVault = (vault: storage.Vault): Vault =>
-  create(VaultSchema, {
+  return {
     name: vault.name,
-    publicKeyEcdsa: vault.public_key_ecdsa,
-    publicKeyEddsa: vault.public_key_eddsa,
+    publicKeys: {
+      ecdsa: vault.public_key_ecdsa,
+      eddsa: vault.public_key_eddsa,
+    },
     signers: vault.signers,
-    createdAt: isoStringToProtoTimestamp(vault.created_at),
+    createdAt: new Date(vault.created_at).getTime(),
     hexChainCode: vault.hex_chain_code,
     localPartyId: vault.local_party_id,
-    keyShares: vault.keyshares.map(({ public_key, keyshare }) =>
-      create(Vault_KeyShareSchema, {
-        publicKey: public_key,
-        keyshare,
-      })
-    ),
+    keyShares,
     resharePrefix: vault.reshare_prefix,
-    libType: toLibType(vault.lib_type as MpcLib),
-  })
+    libType: vault.lib_type as MpcLib,
+    order: vault.order,
+    folderId: vault.folder_id,
+    isBackedUp: vault.is_backed_up,
+  }
+}

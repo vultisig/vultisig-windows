@@ -1,7 +1,6 @@
+import { PersistentStateKey } from '@clients/extension/src/state/persistent/PersistentStateKey'
+import { getPersistentStateQueryKey } from '@clients/extension/src/state/persistent/usePersistentStateQuery'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-
-import { PersistentStateKey } from './PersistentStateKey'
-import { getPersistentStateQueryKey } from './usePersistentStateQuery'
 
 export function usePersistentStateMutation<T>(key: PersistentStateKey) {
   const queryClient = useQueryClient()

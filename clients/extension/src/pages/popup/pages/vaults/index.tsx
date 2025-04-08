@@ -1,5 +1,7 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, ArrowRight } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import type { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
@@ -8,9 +10,6 @@ import {
 import { Button } from 'antd'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { appPaths } from '../../../../navigation'
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
 interface InitialState {
   vault?: VaultProps

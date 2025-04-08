@@ -24,7 +24,7 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
   const { t } = useTranslation()
   const vault = useCurrentVault()
   const deviceNumber = vault.signers.length
-  const { keyshares } = vault
+  const { signers } = vault
   const is5PlusDevice = deviceNumber >= 5
   const {
     animations,
@@ -32,7 +32,7 @@ export const PairingDeviceBackupOverviewSlidesPartOne: FC<
     currentAnimation,
     animationComponent: AnimationComponent,
     isLoading,
-  } = useBackupOverviewStepsAnimations(keyshares.length, deviceNumber)
+  } = useBackupOverviewStepsAnimations(signers.length, deviceNumber)
 
   return (
     <PageContent>

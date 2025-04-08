@@ -11,7 +11,7 @@ import { CheckStatus } from '../../../lib/ui/inputs/checkbox/CheckStatus'
 import { Panel } from '../../../lib/ui/panel/Panel'
 import { useDeleteCoinMutation } from '../../mutations/useDeleteCoinMutation'
 import { useSaveCoinMutation } from '../../mutations/useSaveCoinMutation'
-import { useCurrentVaultCoins } from '../../state/currentVault'
+import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 
 const Container = styled(Panel)`
   ${interactive};
