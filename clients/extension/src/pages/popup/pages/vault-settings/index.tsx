@@ -5,13 +5,12 @@ import {
   NoteEdit,
   Trash,
 } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
 import type { VaultProps } from '@clients/extension/src/utils/interfaces'
 import { getStoredVaults } from '@clients/extension/src/utils/storage'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-
-import { appPaths } from '../../../../navigation'
 
 interface InitialState {
   vault?: VaultProps

@@ -5,6 +5,9 @@ import {
   SettingsTwo,
   Vultisig,
 } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
+import { isSupportedChain } from '@clients/extension/src/utils/constants'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getIsPriority,
@@ -19,10 +22,6 @@ import { Button, Empty, message, Modal, Select, Switch, Tooltip } from 'antd'
 import { type FC, ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-
-import { appPaths } from '../../../../navigation'
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
-import { isSupportedChain } from '../../../../utils/constants'
 
 interface SelectOption {
   value: string

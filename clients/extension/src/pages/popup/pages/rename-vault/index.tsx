@@ -1,5 +1,6 @@
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
 import { VaultProps } from '@clients/extension/src/utils/interfaces'
 import {
   getStoredVaults,
@@ -8,8 +9,6 @@ import {
 import { Button, Form, Input } from 'antd'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { appPaths } from '../../../../navigation'
 
 const Component = () => {
   const { t } = useTranslation()

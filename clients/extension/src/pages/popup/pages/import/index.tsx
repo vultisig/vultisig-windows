@@ -2,6 +2,8 @@ import './index.scss'
 
 import useGoBack from '@clients/extension/src/hooks/go-back'
 import { ArrowLeft, CloseLG } from '@clients/extension/src/icons'
+import { appPaths } from '@clients/extension/src/navigation'
+import { useAppNavigate } from '@clients/extension/src/navigation/hooks/useAppNavigate'
 import AddressProvider from '@clients/extension/src/utils/address-provider'
 import {
   errorKey,
@@ -27,9 +29,6 @@ import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import { UAParser } from 'ua-parser-js'
 import { readBarcodesFromImageFile, ReaderOptions } from 'zxing-wasm'
-
-import { appPaths } from '../../../../navigation'
-import { useAppNavigate } from '../../../../navigation/hooks/useAppNavigate'
 
 interface InitialState {
   file?: File

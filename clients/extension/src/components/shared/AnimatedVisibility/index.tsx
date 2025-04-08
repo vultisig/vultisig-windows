@@ -1,12 +1,15 @@
 import {
+  ConfigKey,
+  configsMap,
+  ConfigValue,
+} from '@clients/extension/src/components/shared/AnimatedVisibility/animationConfigs'
+import {
   animated,
   AnimationConfig,
   AnimationResult,
   useTransition,
 } from '@react-spring/web'
 import { CSSProperties, FC, ReactNode, useLayoutEffect, useState } from 'react'
-
-import { ConfigKey, configsMap, ConfigValue } from './animationConfigs'
 
 // Create an animated wrapper component
 const AnimatedDiv = animated('div')

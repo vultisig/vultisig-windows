@@ -22,6 +22,7 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { toUtf8String } from 'ethers'
+
 export const getKeysignPayload = (
   transaction: ITransaction,
   vault: VaultProps
