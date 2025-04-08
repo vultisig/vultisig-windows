@@ -1,7 +1,6 @@
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
-import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
@@ -24,28 +23,24 @@ export const SetupSecureVaultPage = () => {
   return (
     <VaultTypeProvider value="secure">
       <CreateVaultFlowProviders>
-        <MpcPeersSelectionProvider>
-          <MpcMediatorManager />
-          <Match
-            value={step}
-            name={() => <SetupVaultNameStep onForward={toNextStep} />}
-            peers={() => (
-              <KeygenPeerDiscoveryStep
-                onBack={() => setStep(steps[0])}
-                onForward={toNextStep}
-              />
-            )}
-            startSession={() => (
-              <KeygenStartSessionStep
-                onBack={toPreviousStep}
-                onForward={toNextStep}
-              />
-            )}
-            keygen={() => (
-              <KeygenFlow onBack={() => setStep(lastEditableStep)} />
-            )}
-          />
-        </MpcPeersSelectionProvider>
+        <MpcMediatorManager />
+        <Match
+          value={step}
+          name={() => <SetupVaultNameStep onForward={toNextStep} />}
+          peers={() => (
+            <KeygenPeerDiscoveryStep
+              onBack={() => setStep(steps[0])}
+              onForward={toNextStep}
+            />
+          )}
+          startSession={() => (
+            <KeygenStartSessionStep
+              onBack={toPreviousStep}
+              onForward={toNextStep}
+            />
+          )}
+          keygen={() => <KeygenFlow onBack={() => setStep(lastEditableStep)} />}
+        />
       </CreateVaultFlowProviders>
     </VaultTypeProvider>
   )

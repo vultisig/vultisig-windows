@@ -2,6 +2,7 @@ import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { ChildrenProp } from '@lib/ui/props'
 
 import { GeneratedMpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
 import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
@@ -26,7 +27,9 @@ export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
                     <CurrentKeygenTypeProvider value={KeygenType.Keygen}>
                       <SetupVaultNameProvider>
                         <CreateKeygenVaultProvider>
-                          {children}
+                          <MpcPeersSelectionProvider>
+                            {children}
+                          </MpcPeersSelectionProvider>
                         </CreateKeygenVaultProvider>
                       </SetupVaultNameProvider>
                     </CurrentKeygenTypeProvider>
