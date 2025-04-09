@@ -1,8 +1,7 @@
+import { generateHexEncryptionKey } from '@core/mpc/utils/generateHexEncryptionKey'
 import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMemo } from 'react'
-
-import { generateHexEncryptionKey } from '../../keygen/utils/generateHexEncryptionKey'
 
 export const {
   useValue: useCurrentHexEncryptionKey,

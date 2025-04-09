@@ -1,10 +1,9 @@
+import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
-
-import { useMpcServerUrl } from '../../serverType/state/mpcServerUrl'
 
 export const useMpcSignersQuery = () => {
   const serverUrl = useMpcServerUrl()

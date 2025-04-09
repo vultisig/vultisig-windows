@@ -1,3 +1,4 @@
+import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -8,7 +9,6 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
-import { useMpcServerUrl } from '../../../mpc/serverType/state/mpcServerUrl'
 import { useMpcSigners } from '../../../mpc/signers/state/mpcSigners'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'

@@ -1,3 +1,4 @@
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { Button } from '@lib/ui/buttons/Button'
 import { FilledAlertIcon } from '@lib/ui/icons/FilledAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -8,7 +9,6 @@ import { useTranslation } from 'react-i18next'
 import { WarningBlock } from '../../../lib/ui/status/WarningBlock'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { PageContent } from '../../../ui/page/PageContent'
-import { useCurrentKeygenType } from '../state/currentKeygenType'
 
 type KeygenFailedStatePros = {
   message: string

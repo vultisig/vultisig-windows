@@ -1,6 +1,6 @@
-import { getStateProviderSetup } from '@clients/desktop/src/lib/ui/state/getStateProviderSetup'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { ChildrenProp } from '@lib/ui/props'
+import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { useMemo } from 'react'
 

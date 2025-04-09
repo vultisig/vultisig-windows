@@ -1,7 +1,7 @@
 import { ChildrenProp } from '@lib/ui/props'
+import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 import { useMemo } from 'react'
 
-import { getStateProviderSetup } from '../../../lib/ui/state/getStateProviderSetup'
 import { useGenerateVaultName } from '../../hooks/useGenerateVaultName'
 import { useVaultType } from '../shared/state/vaultType'
 

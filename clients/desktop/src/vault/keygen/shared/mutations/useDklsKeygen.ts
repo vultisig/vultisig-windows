@@ -3,6 +3,7 @@ import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { waitForKeygenComplete } from '@core/mpc/keygenComplete'
 import { setKeygenComplete } from '@core/mpc/keygenComplete'
 import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import {
   assertKeygenReshareFields,
   useKeygenVault,
@@ -11,6 +12,7 @@ import {
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
+import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { Vault } from '@core/ui/vault/Vault'
 import { match } from '@lib/utils/match'
@@ -22,11 +24,9 @@ import {
   GetLocalUIEcdsa,
   GetLocalUIEdDSA,
 } from '../../../../../wailsjs/go/tss/TssService'
-import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
-import { useCurrentKeygenType } from '../../state/currentKeygenType'
 import { KeygenResolver } from './KeygenResolver'
 
 export const useDklsKeygen = (): KeygenResolver => {

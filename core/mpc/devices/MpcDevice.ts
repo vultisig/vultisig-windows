@@ -8,7 +8,7 @@ export type MpcDevice =
   | 'server'
   | 'extension'
 
-export const mpcDeviceName: Record<MpcDevice, string> = {
+const mpcDeviceName: Record<MpcDevice, string> = {
   windows: 'Windows',
   mac: 'Mac',
   linux: 'Linux',
@@ -21,7 +21,7 @@ export const mpcDeviceName: Record<MpcDevice, string> = {
 
 type DeviceType = 'phone' | 'tablet' | 'desktop' | 'server' | 'browser'
 
-export const mpcDeviceType: Record<MpcDevice, DeviceType> = {
+const mpcDeviceType: Record<MpcDevice, DeviceType> = {
   windows: 'desktop',
   mac: 'desktop',
   linux: 'desktop',

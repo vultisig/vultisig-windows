@@ -1,10 +1,10 @@
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { Match } from '@lib/ui/base/Match'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 
 import { FastMigrateServerStep } from '../../migrate/fast/FastMigrateServerStep'
 import { FastReshareServerStep } from '../../reshare/fast/FastReshareServerStep'
 import { SetupVaultServerStep } from '../../setup/fast/SetupVaultServerStep'
-import { useCurrentKeygenType } from '../state/currentKeygenType'
 
 export const KeygenServerStep = ({
   onFinish,

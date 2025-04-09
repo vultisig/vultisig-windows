@@ -1,3 +1,4 @@
+import { CurrentKeygenTypeProvider } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { GeneratedMpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
@@ -6,7 +7,6 @@ import { GeneratedMpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceNa
 import { GeneratedMpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
 
-import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey'
 import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType'

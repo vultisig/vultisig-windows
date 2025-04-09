@@ -1,11 +1,13 @@
 import { keygenSteps } from '@core/mpc/keygen/KeygenStep'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import {
   KeygenVault,
   useKeygenVault,
   useKeygenVaultName,
 } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { Vault } from '@core/ui/vault/Vault'
 import { match } from '@lib/utils/match'
@@ -17,12 +19,10 @@ import { useCallback, useMemo } from 'react'
 
 import { storage } from '../../../../../wailsjs/go/models'
 import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService'
-import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
 import { fromStorageVault, toStorageVault } from '../../../utils/storageVault'
-import { useCurrentKeygenType } from '../../state/currentKeygenType'
 import { KeygenResolver } from './KeygenResolver'
 
 export const useGg20Keygen = (): KeygenResolver => {

@@ -1,4 +1,5 @@
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
@@ -7,7 +8,6 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useMpcServerUrl } from '../../../mpc/serverType/state/mpcServerUrl'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'

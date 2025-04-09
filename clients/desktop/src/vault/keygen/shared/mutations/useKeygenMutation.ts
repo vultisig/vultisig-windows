@@ -1,11 +1,11 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
 import { MpcLib } from '@core/mpc/mpcLib'
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useMutation } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 
 import { useVaultCreationMpcLib } from '../../../../mpc/state/vaultCreationMpcLib'
-import { useCurrentKeygenType } from '../../state/currentKeygenType'
 import { KeygenResolver } from './KeygenResolver'
 import { useDklsKeygen } from './useDklsKeygen'
 import { useGg20Keygen } from './useGg20Keygen'

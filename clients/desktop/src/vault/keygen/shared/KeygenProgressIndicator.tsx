@@ -1,4 +1,5 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -6,7 +7,6 @@ import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import RingProgress from '../../../components/ringProgress/RingProgress'
-import { useCurrentKeygenType } from '../state/currentKeygenType'
 
 const keygenCompletion: Record<KeygenStep, number> = {
   prepareVault: 25,

@@ -1,10 +1,10 @@
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
+import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { MpcServerUrlProvider } from '../../../mpc/serverType/state/mpcServerUrl'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
 import { PageHeader } from '../../../ui/page/PageHeader'

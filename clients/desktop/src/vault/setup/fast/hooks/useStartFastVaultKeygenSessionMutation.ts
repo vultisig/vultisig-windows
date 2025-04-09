@@ -1,10 +1,10 @@
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
+import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
 import { startSession } from '../../../keygen/utils/startSession'
 
 export const useStartFastVaultKeygenSessionMutation = (enabled: boolean) => {

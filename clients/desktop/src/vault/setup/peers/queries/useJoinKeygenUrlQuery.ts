@@ -4,6 +4,7 @@ import { deepLinkBaseUrl } from '@core/config'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import {
   assertKeygenReshareFields,
   useKeygenVault,
@@ -19,7 +20,6 @@ import { useCallback } from 'react'
 
 import { useSevenZipQuery } from '../../../../compression/queries/useSevenZipQuery'
 import { useVaultCreationMpcLib } from '../../../../mpc/state/vaultCreationMpcLib'
-import { useCurrentKeygenType } from '../../../keygen/state/currentKeygenType'
 import { useCurrentHexChainCode } from '../../state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '../../state/currentHexEncryptionKey'
 
