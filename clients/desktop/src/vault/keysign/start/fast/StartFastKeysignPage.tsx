@@ -1,12 +1,12 @@
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { GeneratedMpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
-import { MpcPeersProvider } from '../../../../mpc/peers/state/mpcPeers'
 import { MpcMediatorManager } from '../../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../../mpc/serverType/state/mpcServerType'
 import { useAppPathState } from '../../../../navigation/hooks/useAppPathState'

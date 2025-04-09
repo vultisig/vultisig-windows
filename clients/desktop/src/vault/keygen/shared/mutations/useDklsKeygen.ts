@@ -10,6 +10,7 @@ import {
 } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { Vault } from '@core/ui/vault/Vault'
 import { match } from '@lib/utils/match'
@@ -21,7 +22,6 @@ import {
   GetLocalUIEcdsa,
   GetLocalUIEdDSA,
 } from '../../../../../wailsjs/go/tss/TssService'
-import { useMpcPeers } from '../../../../mpc/peers/state/mpcPeers'
 import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode'

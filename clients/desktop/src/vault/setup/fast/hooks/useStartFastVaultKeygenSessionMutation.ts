@@ -1,9 +1,9 @@
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-import { useMpcPeers } from '../../../../mpc/peers/state/mpcPeers'
 import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
 import { startSession } from '../../../keygen/utils/startSession'
 

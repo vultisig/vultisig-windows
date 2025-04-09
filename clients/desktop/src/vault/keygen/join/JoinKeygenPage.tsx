@@ -1,4 +1,5 @@
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
+import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
@@ -6,7 +7,6 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
-import { MpcPeersProvider } from '../../../mpc/peers/state/mpcPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'

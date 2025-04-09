@@ -1,9 +1,9 @@
+import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { ChildrenProp } from '@lib/ui/props'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { useMemo } from 'react'
 
 import { getStateProviderSetup } from '../../../lib/ui/state/getStateProviderSetup'
-import { MpcPeersProvider } from './mpcPeers'
 
 const {
   useState: useMpcPeersSelectionRecord,
