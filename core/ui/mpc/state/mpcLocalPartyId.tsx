@@ -1,8 +1,7 @@
+import { generateLocalPartyId } from '@core/mpc/signers/localPartyId'
 import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMemo } from 'react'
-
-import { generateLocalPartyId } from '..'
 
 export const {
   useValue: useMpcLocalPartyId,

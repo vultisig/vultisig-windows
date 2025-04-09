@@ -1,7 +1,7 @@
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
+import { GeneratedMpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { ChildrenProp } from '@lib/ui/props'
 
-import { GeneratedMpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'

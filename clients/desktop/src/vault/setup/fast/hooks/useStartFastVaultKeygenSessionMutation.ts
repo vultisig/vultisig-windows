@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-import { useMpcLocalPartyId } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcPeers } from '../../../../mpc/peers/state/mpcPeers'
 import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
 import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'

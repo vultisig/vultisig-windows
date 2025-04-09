@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { useMpcLocalPartyId } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcPeers } from '../../peers/state/mpcPeers'
 
 export const useMpcSigners = () => {

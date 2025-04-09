@@ -2,7 +2,7 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { without } from '@lib/utils/array/without'
 import { useCallback } from 'react'
 
-import { useMpcLocalPartyId } from '../../localPartyId/state/mpcLocalPartyId'
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcSignersQuery } from '../../signers/queries/useMpcSignersQuery'
 
 export const useMpcPeersQuery = () => {

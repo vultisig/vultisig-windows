@@ -4,7 +4,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { makeAppPath } from '../../../navigation'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'

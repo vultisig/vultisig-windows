@@ -1,10 +1,13 @@
+import {
+  formatMpcDeviceName,
+  parseLocalPartyId,
+} from '@core/mpc/signers/localPartyId'
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { formatMpcDeviceName, parseLocalPartyId } from '../localPartyId'
-import { useMpcLocalPartyId } from '../localPartyId/state/mpcLocalPartyId'
 import { peerOption, peerOptionActive } from './option/PeerOptionContainer'
 
 const Container = styled.div`

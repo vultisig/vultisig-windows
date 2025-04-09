@@ -1,7 +1,7 @@
 import {
   mpcDeviceFromDeviceName,
   parseLocalPartyId,
-} from '../../../mpc/localPartyId'
+} from '@core/mpc/signers/localPartyId'
 
 export const hasServerSigner = (signers: string[]) =>
   signers.some(

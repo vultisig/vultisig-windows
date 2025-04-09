@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Spinner } from '../../../lib/ui/loaders/Spinner'
 import { Panel } from '../../../lib/ui/panel/Panel'
-import { useMpcLocalPartyId } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 
 export const PendingKeygenMessage = ({ children }: ChildrenProp) => {
   const localPartyId = useMpcLocalPartyId()

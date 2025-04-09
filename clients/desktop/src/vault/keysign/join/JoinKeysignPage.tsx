@@ -5,7 +5,7 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useMemo } from 'react'
 
-import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { MpcPeersProvider } from '../../../mpc/peers/state/mpcPeers'
 import { MpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'

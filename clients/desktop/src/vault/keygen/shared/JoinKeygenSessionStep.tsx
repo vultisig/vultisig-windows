@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useMpcLocalPartyId } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '../../../mpc/serverType/state/mpcServerUrl'
 import { useMpcSessionId } from '../../../mpc/session/state/mpcSession'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'

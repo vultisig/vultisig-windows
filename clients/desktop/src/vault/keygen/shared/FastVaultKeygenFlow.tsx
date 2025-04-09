@@ -3,7 +3,7 @@ import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevic
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
-import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'

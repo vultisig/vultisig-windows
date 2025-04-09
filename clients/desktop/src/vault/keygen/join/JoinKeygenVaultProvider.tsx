@@ -1,14 +1,14 @@
+import { generateLocalPartyId } from '@core/mpc/signers/localPartyId'
 import {
   KeygenVault,
   KeygenVaultProvider,
 } from '@core/ui/mpc/keygen/state/keygenVault'
+import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { ChildrenProp } from '@lib/ui/props'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { pick } from '@lib/utils/record/pick'
 import { useMemo } from 'react'
 
-import { generateLocalPartyId } from '../../../mpc/localPartyId'
-import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useVaults } from '../../queries/useVaultsQuery'
 import { CurrentHexChainCodeProvider } from '../../setup/state/currentHexChainCode'

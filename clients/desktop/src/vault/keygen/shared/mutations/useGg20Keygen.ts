@@ -15,7 +15,7 @@ import { useCallback, useMemo } from 'react'
 
 import { storage } from '../../../../../wailsjs/go/models'
 import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService'
-import { useMpcLocalPartyId } from '../../../../mpc/localPartyId/state/mpcLocalPartyId'
+import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
 import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { useVaults } from '../../../queries/useVaultsQuery'
