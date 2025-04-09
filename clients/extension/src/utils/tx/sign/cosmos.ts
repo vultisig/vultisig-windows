@@ -17,14 +17,16 @@ export const getSignedCosmosTx: GetSignedTxResolver<CosmosChain> = async ({
     assertErrorMessage(output.errorMessage)
 
     const rawTx = output.serialized
-
     const parsedData = JSON.parse(rawTx)
+
     if (!parsedData.tx_bytes) {
       throw new Error('Missing tx_bytes in the serialized transaction')
     }
+
     const txBytes = parsedData.tx_bytes
     const decodedTxBytes = Buffer.from(txBytes, 'base64')
     const hash = sha256(decodedTxBytes)
+
     return { raw: rawTx, txResponse: hash }
   } catch (error) {
     throw new Error(`Failed to process Cosmos transaction: ${error}`)

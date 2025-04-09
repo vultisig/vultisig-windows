@@ -11,7 +11,8 @@ export const getSignedUtxoTx: GetSignedTxResolver<UtxoChain> = async ({
   }
   try {
     const output = TW.Bitcoin.Proto.SigningOutput.decode(compiledTx)
-    return { raw: output.encoded, txResponse: output.transactionId }
+
+    return { raw: output.encoded.toString(), txResponse: output.transactionId }
   } catch (error) {
     throw new Error(`Failed to decode UTXO transaction: ${error}`)
   }

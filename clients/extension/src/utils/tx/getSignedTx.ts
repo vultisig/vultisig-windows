@@ -20,39 +20,41 @@ export const getSignedTransaction = ({
       const derivationKey = vault.chains.find(
         chain => chain.chain === transaction.chain.chain
       )?.derivationKey
-      if (!derivationKey) {
-        return reject('Derivation key not found for the specified chain')
-      }
-      const keysignType =
-        signatureAlgorithms[getChainKind(transaction.chain.chain)]
 
-      const publicKeyType = match(keysignType, {
-        ecdsa: () => walletCore.PublicKeyType.secp256k1,
-        eddsa: () => walletCore.PublicKeyType.ed25519,
-      })
+      if (derivationKey) {
+        const keysignType =
+          signatureAlgorithms[getChainKind(transaction.chain.chain)]
 
-      const pubkey = walletCore.PublicKey.createWithData(
-        Buffer.from(derivationKey, 'hex'),
-        publicKeyType
-      )
-
-      if (pubkey) {
-        const compiledTx = compileTx({
-          txInputData: inputData,
-          chain: transaction?.chain.chain,
-          publicKey: pubkey,
-          signatures,
-          walletCore: walletCore,
+        const publicKeyType = match(keysignType, {
+          ecdsa: () => walletCore.PublicKeyType.secp256k1,
+          eddsa: () => walletCore.PublicKeyType.ed25519,
         })
 
-        getSignedTx({
-          chain: transaction.chain.chain,
-          compiledTx,
-        })
-          .then(result => resolve(result as SendTransactionResponse))
-          .catch(reject)
+        const pubkey = walletCore.PublicKey.createWithData(
+          Buffer.from(derivationKey, 'hex'),
+          publicKeyType
+        )
+
+        if (pubkey) {
+          const compiledTx = compileTx({
+            txInputData: inputData,
+            chain: transaction?.chain.chain,
+            publicKey: pubkey,
+            signatures,
+            walletCore: walletCore,
+          })
+
+          getSignedTx({
+            chain: transaction.chain.chain,
+            compiledTx,
+          })
+            .then(result => resolve(result as SendTransactionResponse))
+            .catch(reject)
+        } else {
+          reject('Chain Not Supported')
+        }
       } else {
-        reject('Chain Not Supported')
+        reject('Derivation key not found for the specified chain')
       }
     } else {
       reject('Missing required parameters: inputData, vault, or transaction')

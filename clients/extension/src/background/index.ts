@@ -424,7 +424,7 @@ const handleRequest = (
             status: 'default',
           }
           handleSendTransaction(modifiedTransaction, chain)
-            .then(result => resolve(result))
+            .then(resolve)
             .catch(reject)
         })
 
@@ -449,7 +449,7 @@ const handleRequest = (
                 status: 'default',
               }
               handleSendTransaction(modifiedTransaction, chain)
-                .then(result => resolve(result))
+                .then(resolve)
                 .catch(reject)
             })
           } else {
@@ -485,7 +485,7 @@ const handleRequest = (
                 status: 'default',
               }
               handleSendTransaction(modifiedTransaction, chain)
-                .then(result => resolve(result))
+                .then(resolve)
                 .catch(reject)
             })
           } else {
@@ -833,10 +833,8 @@ const handleRequest = (
               },
               chain
             )
-              .then(result => resolve(result))
-              .catch(error => {
-                reject(error)
-              })
+              .then(resolve)
+              .catch(reject)
           } catch (error) {
             reject(error)
           }
@@ -874,7 +872,7 @@ const handleRequest = (
             },
             chain
           )
-            .then(result => resolve(result))
+            .then(resolve)
             .catch(reject)
         } else {
           reject()
@@ -902,9 +900,7 @@ const handleRequest = (
                 id: '',
                 status: 'default',
               }
-              handleSendTransaction(tx, chain)
-                .then(result => resolve(result))
-                .catch(reject)
+              handleSendTransaction(tx, chain).then(resolve).catch(reject)
             })
           } else {
             reject()
@@ -930,9 +926,7 @@ const handleRequest = (
                 id: '',
                 status: 'default',
               }
-              handleSendTransaction(tx, chain)
-                .then(result => resolve(result))
-                .catch(reject)
+              handleSendTransaction(tx, chain).then(resolve).catch(reject)
             })
           } else {
             reject()
