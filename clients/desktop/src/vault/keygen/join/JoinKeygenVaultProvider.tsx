@@ -4,6 +4,7 @@ import {
   KeygenVault,
   KeygenVaultProvider,
 } from '@core/ui/mpc/keygen/state/keygenVault'
+import { CurrentHexChainCodeProvider } from '@core/ui/mpc/state/currentHexChainCode'
 import { useMpcDevice } from '@core/ui/mpc/state/mpcDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { ChildrenProp } from '@lib/ui/props'
@@ -13,7 +14,6 @@ import { useMemo } from 'react'
 
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useVaults } from '../../queries/useVaultsQuery'
-import { CurrentHexChainCodeProvider } from '../../setup/state/currentHexChainCode'
 
 export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
   children,

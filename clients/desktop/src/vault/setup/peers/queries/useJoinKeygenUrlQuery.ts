@@ -10,6 +10,8 @@ import {
   useKeygenVault,
   useKeygenVaultName,
 } from '@core/ui/mpc/keygen/state/keygenVault'
+import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
+import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -20,8 +22,6 @@ import { useCallback } from 'react'
 
 import { useSevenZipQuery } from '../../../../compression/queries/useSevenZipQuery'
 import { useVaultCreationMpcLib } from '../../../../mpc/state/vaultCreationMpcLib'
-import { useCurrentHexChainCode } from '../../state/currentHexChainCode'
-import { useCurrentHexEncryptionKey } from '../../state/currentHexEncryptionKey'
 
 export const useJoinKeygenUrlQuery = () => {
   const sessionId = useMpcSessionId()

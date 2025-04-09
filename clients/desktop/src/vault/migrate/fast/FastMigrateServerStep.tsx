@@ -1,4 +1,5 @@
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
+import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -13,7 +14,6 @@ import { migrateWithServer } from '../../fast/api/migrateWithServer'
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
 import { useVaultEmail } from '../../server/email/state/email'
 import { useVaultPassword } from '../../server/password/state/password'
-import { useCurrentHexEncryptionKey } from '../../setup/state/currentHexEncryptionKey'
 
 export const FastMigrateServerStep: React.FC<
   OnForwardProp & Partial<OnBackProp>

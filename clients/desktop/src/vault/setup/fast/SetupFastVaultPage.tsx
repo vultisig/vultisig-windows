@@ -1,3 +1,4 @@
+import { VaultSecurityTypeProvider } from '@core/ui/mpc/keygen/create/state/vaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
@@ -12,7 +13,6 @@ import { ServerPasswordHintStep } from '../../server/password-hint/ServerPasswor
 import { PasswordHintProvider } from '../../server/password-hint/state/password-hint'
 import { SetupVaultNameStep } from '../SetupVaultNameStep'
 import { CreateVaultFlowProviders } from '../shared/CreateVaultFlowProviders'
-import { VaultTypeProvider } from '../shared/state/vaultType'
 import { SetupVaultServerStep } from './SetupVaultServerStep'
 
 const steps = [
@@ -33,7 +33,7 @@ export const SetupFastVaultPage = () => {
   })
 
   return (
-    <VaultTypeProvider value="fast">
+    <VaultSecurityTypeProvider value="fast">
       <EmailProvider initialValue="">
         <PasswordProvider initialValue="">
           <PasswordHintProvider initialValue="">
@@ -74,6 +74,6 @@ export const SetupFastVaultPage = () => {
           </PasswordHintProvider>
         </PasswordProvider>
       </EmailProvider>
-    </VaultTypeProvider>
+    </VaultSecurityTypeProvider>
   )
 }

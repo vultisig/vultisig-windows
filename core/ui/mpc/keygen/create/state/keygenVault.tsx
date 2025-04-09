@@ -1,9 +1,8 @@
+import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { KeygenVaultProvider } from '@core/ui/mpc/keygen/state/keygenVault'
 import { ChildrenProp } from '@lib/ui/props'
 
-import { useVaultName } from '../state/vaultName'
-
-export const CreateKeygenVaultProvider = ({ children }: ChildrenProp) => {
+export const CreateFlowKeygenVaultProvider = ({ children }: ChildrenProp) => {
   const [name] = useVaultName()
 
   return (

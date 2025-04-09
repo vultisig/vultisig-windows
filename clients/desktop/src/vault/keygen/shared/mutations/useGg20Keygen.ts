@@ -6,6 +6,8 @@ import {
   useKeygenVault,
   useKeygenVaultName,
 } from '@core/ui/mpc/keygen/state/keygenVault'
+import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
+import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -20,8 +22,6 @@ import { useCallback, useMemo } from 'react'
 import { storage } from '../../../../../wailsjs/go/models'
 import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService'
 import { useVaults } from '../../../queries/useVaultsQuery'
-import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode'
-import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
 import { fromStorageVault, toStorageVault } from '../../../utils/storageVault'
 import { KeygenResolver } from './KeygenResolver'
 

@@ -1,0 +1,44 @@
+import { ChildrenProp } from '@lib/ui/props'
+import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { withoutUndefined } from '@lib/utils/array/withoutUndefined'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { useVaultSecurityType } from './vaultSecurityType'
+
+export const { useState: useVaultName, provider: VaultNameProvider } =
+  getStateProviderSetup<string>('VaultName')
+
+type GeneratedVaultNameProviderProps = ChildrenProp & {
+  existingNames: string[]
+}
+
+export const GeneratedVaultNameProvider = ({
+  children,
+  existingNames,
+}: GeneratedVaultNameProviderProps) => {
+  const vaultSecurityType = useVaultSecurityType()
+  const { t } = useTranslation()
+
+  const intitialValue = useMemo(() => {
+    const prefix = `${t(vaultSecurityType)} ${t('vault')} #`
+
+    const vaultNamePattern = new RegExp(`^${prefix}(\\d+)$`)
+    const vaultNumbers = withoutUndefined(
+      existingNames.map(name => {
+        const match = name.match(vaultNamePattern)
+        return match ? parseInt(match[1], 10) : undefined
+      })
+    )
+
+    const nextNumber = Math.max(...vaultNumbers, 0) + 1
+
+    return `${prefix}${nextNumber}`
+  }, [existingNames, t, vaultSecurityType])
+
+  return (
+    <VaultNameProvider initialValue={intitialValue}>
+      {children}
+    </VaultNameProvider>
+  )
+}

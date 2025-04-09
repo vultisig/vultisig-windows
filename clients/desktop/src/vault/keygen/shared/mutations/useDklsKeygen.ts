@@ -9,6 +9,8 @@ import {
   useKeygenVault,
   useKeygenVaultName,
 } from '@core/ui/mpc/keygen/state/keygenVault'
+import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
+import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
@@ -25,8 +27,6 @@ import {
   GetLocalUIEdDSA,
 } from '../../../../../wailsjs/go/tss/TssService'
 import { useVaults } from '../../../queries/useVaultsQuery'
-import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode'
-import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
 import { KeygenResolver } from './KeygenResolver'
 
 export const useDklsKeygen = (): KeygenResolver => {

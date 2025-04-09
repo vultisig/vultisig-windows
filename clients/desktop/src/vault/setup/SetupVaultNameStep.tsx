@@ -1,3 +1,4 @@
+import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
@@ -23,9 +24,6 @@ import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
 import { useVaultNames } from '../hooks/useVaultNames'
 import { KeygenEducationPrompt } from '../keygen/shared/KeygenEducationPrompt'
 import { MAX_VAULT_NAME_LENGTH } from './shared/constants'
-import { useVaultType } from './shared/state/vaultType'
-import { getDefaultVaultName } from './shared/utils/getDefaultVaultName'
-import { useVaultName } from './state/vaultName'
 
 export const SetupVaultNameStep = ({
   onForward,
@@ -47,9 +45,7 @@ export const SetupVaultNameStep = ({
       }),
     [existingVaultNames, t]
   )
-  const [, setName] = useVaultName()
-  const vaultType = useVaultType()
-  const defaultVaultName = getDefaultVaultName(vaultType, existingVaultNames)
+  const [name, setName] = useVaultName()
 
   const {
     control,
@@ -58,7 +54,7 @@ export const SetupVaultNameStep = ({
     formState: { errors },
   } = useForm<z.infer<typeof vaultNameSchema>>({
     resolver: zodResolver(vaultNameSchema),
-    defaultValues: { vaultName: defaultVaultName },
+    defaultValues: { vaultName: name },
     mode: 'all',
   })
 

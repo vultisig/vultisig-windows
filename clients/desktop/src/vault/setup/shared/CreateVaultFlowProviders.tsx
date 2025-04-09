@@ -1,19 +1,22 @@
+import { CreateFlowKeygenVaultProvider } from '@core/ui/mpc/keygen/create/state/keygenVault'
+import { GeneratedVaultNameProvider } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { CurrentKeygenTypeProvider } from '@core/ui/mpc/keygen/state/currentKeygenType'
+import { GeneratedHexChainCodeProvider } from '@core/ui/mpc/state/currentHexChainCode'
+import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { GeneratedMpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
 import { GeneratedMpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
 import { GeneratedMpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
+import { ServerUrlDerivedFromServerTypeProvider } from '@core/ui/mpc/state/serverUrlDerivedFromServerType'
 import { ChildrenProp } from '@lib/ui/props'
 
-import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
-import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey'
-import { ServerUrlDerivedFromServerTypeProvider } from '../state/serverUrlDerivedFromServerType'
-import { SetupVaultNameProvider } from '../state/vaultName'
-import { CreateKeygenVaultProvider } from './CreateKeygenVaultProvider'
+import { useVaultNames } from '../../hooks/useVaultNames'
 
 export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
+  const vaultNames = useVaultNames()
+
   return (
     <IsInitiatingDeviceProvider value={true}>
       <GeneratedMpcSessionIdProvider>
@@ -24,13 +27,13 @@ export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
                 <GeneratedMpcLocalPartyIdProvider>
                   <ServerUrlDerivedFromServerTypeProvider>
                     <CurrentKeygenTypeProvider value={'create'}>
-                      <SetupVaultNameProvider>
-                        <CreateKeygenVaultProvider>
+                      <GeneratedVaultNameProvider existingNames={vaultNames}>
+                        <CreateFlowKeygenVaultProvider>
                           <MpcPeersSelectionProvider>
                             {children}
                           </MpcPeersSelectionProvider>
-                        </CreateKeygenVaultProvider>
-                      </SetupVaultNameProvider>
+                        </CreateFlowKeygenVaultProvider>
+                      </GeneratedVaultNameProvider>
                     </CurrentKeygenTypeProvider>
                   </ServerUrlDerivedFromServerTypeProvider>
                 </GeneratedMpcLocalPartyIdProvider>

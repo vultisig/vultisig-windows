@@ -1,4 +1,5 @@
 import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
+import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -14,7 +15,6 @@ import { reshareWithServer } from '../../fast/api/reshareWithServer'
 import { WaitForServerLoader } from '../../server/components/WaitForServerLoader'
 import { useVaultEmail } from '../../server/email/state/email'
 import { useVaultPassword } from '../../server/password/state/password'
-import { useCurrentHexEncryptionKey } from '../../setup/state/currentHexEncryptionKey'
 import { useCurrentVault, useVaultServerStatus } from '../../state/currentVault'
 
 export const FastReshareServerStep: React.FC<OnForwardProp> = ({
