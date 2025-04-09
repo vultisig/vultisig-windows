@@ -755,29 +755,33 @@ const Component = () => {
                               <span className="label">
                                 {t('function_signature')}
                               </span>
-                              <div className="scrollable-x">
-                                {
-                                  (transaction.memo.value as ParsedMemoParams)
-                                    .functionSignature
-                                }
-                              </div>
+                              <pre
+                                className="extra"
+                                style={{ paddingBottom: 8 }}
+                              >
+                                <code style={{ fontFamily: 'monospace' }}>
+                                  {
+                                    (transaction.memo.value as ParsedMemoParams)
+                                      .functionSignature
+                                  }
+                                </code>
+                              </pre>
                             </div>
                             <div className="item">
                               <span className="label">
                                 {t('function_inputs')}
                               </span>
-                              <div className="scrollable-x monospace-text ">
-                                <div style={{ width: 'max-content' }}>
-                                  <div className="function-inputs">
-                                    {
-                                      (
-                                        transaction.memo
-                                          .value as ParsedMemoParams
-                                      ).functionArguments
-                                    }
-                                  </div>
-                                </div>
-                              </div>
+                              <pre
+                                className="extra"
+                                style={{ paddingBottom: 8 }}
+                              >
+                                <code style={{ fontFamily: 'monospace' }}>
+                                  {
+                                    (transaction.memo.value as ParsedMemoParams)
+                                      .functionArguments
+                                  }
+                                </code>
+                              </pre>
                             </div>
                           </>
                         ) : transaction.memo?.value ? (
