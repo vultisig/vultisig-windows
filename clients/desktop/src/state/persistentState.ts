@@ -10,6 +10,7 @@ export enum PersistentStateKey {
   Language = 'language',
   FiatCurrency = 'fiatCurrency',
   DefaultChains = 'defaultChains',
+  IsDklsLibEnabled = 'isDklsLibEnabled',
 }
 
 const persistentStorage =
