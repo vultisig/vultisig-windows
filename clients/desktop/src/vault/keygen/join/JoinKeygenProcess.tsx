@@ -31,7 +31,7 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
         <CurrentVaultProvider value={vault}>
           <Match
             value={keygenType}
-            Keygen={() => (
+            create={() => (
               <StepTransition
                 from={({ onForward }) => (
                   <SetupVaultSuccessScreen onForward={onForward} />
@@ -41,8 +41,8 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
                 )}
               />
             )}
-            Reshare={() => <KeygenSuccessStep value={vault} title={title} />}
-            Migrate={() => <KeygenSuccessStep value={vault} title={title} />}
+            reshare={() => <KeygenSuccessStep value={vault} title={title} />}
+            migrate={() => <KeygenSuccessStep value={vault} title={title} />}
           />
         </CurrentVaultProvider>
       )}
@@ -60,9 +60,9 @@ export const JoinKeygenProcess = ({ title }: TitleProp) => {
       pending={() => (
         <Match
           value={keygenType}
-          Keygen={() => <SetupVaultEducationSlides value={step} />}
-          Migrate={() => <SetupVaultEducationSlides value={step} />}
-          Reshare={() => (
+          create={() => <SetupVaultEducationSlides value={step} />}
+          migrate={() => <SetupVaultEducationSlides value={step} />}
+          reshare={() => (
             <>
               <KeygenPageHeader title={title} />
               <KeygenPendingState value={step} />

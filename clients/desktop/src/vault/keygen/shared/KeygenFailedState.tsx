@@ -1,4 +1,3 @@
-import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { Button } from '@lib/ui/buttons/Button'
 import { FilledAlertIcon } from '@lib/ui/icons/FilledAlertIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -25,9 +24,9 @@ export const KeygenFailedState = ({
   const keygenType = useCurrentKeygenType()
 
   const title = match(keygenType, {
-    [KeygenType.Keygen]: () => t('keygen'),
-    [KeygenType.Migrate]: () => t('upgrade'),
-    [KeygenType.Reshare]: () => t('reshare'),
+    create: () => t('keygen'),
+    migrate: () => t('upgrade'),
+    reshare: () => t('reshare'),
   })
 
   const goBack = useNavigateBack()
