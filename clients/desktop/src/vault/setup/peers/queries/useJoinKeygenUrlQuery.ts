@@ -1,7 +1,6 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
 import { deepLinkBaseUrl } from '@core/config'
-import { defaultMpcLib } from '@core/mpc/mpcLib'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
@@ -18,6 +17,7 @@ import { useCallback } from 'react'
 import { useSevenZipQuery } from '../../../../compression/queries/useSevenZipQuery'
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
 import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
+import { useVaultCreationMpcLib } from '../../../../mpc/state/vaultCreationMpcLib'
 import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName'
 import { useCurrentKeygenType } from '../../../keygen/state/currentKeygenType'
 import { useCurrentHexChainCode } from '../../state/currentHexChainCode'
@@ -36,6 +36,8 @@ export const useJoinKeygenUrlQuery = () => {
 
   const keygenVault = useKeygenVault()
 
+  const [vaultCreationMpcLib] = useVaultCreationMpcLib()
+
   return useTransformQueryData(
     useSevenZipQuery(),
     useCallback(
@@ -43,7 +45,7 @@ export const useJoinKeygenUrlQuery = () => {
         const libType = toLibType(
           'existingVault' in keygenVault
             ? keygenVault.existingVault.libType
-            : defaultMpcLib
+            : vaultCreationMpcLib
         )
 
         const useVultisigRelay = serverType === 'relay'
@@ -105,6 +107,7 @@ export const useJoinKeygenUrlQuery = () => {
         serverType,
         serviceName,
         sessionId,
+        vaultCreationMpcLib,
         vaultName,
       ]
     )
