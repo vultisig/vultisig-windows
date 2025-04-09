@@ -80,6 +80,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AppProviders } from '../../providers/AppProviders'
 import { getParsedSolanaSwap } from '../../utils/tx/solana/solanaSwap'
+import { getSolanaSwapKeysignPayload } from '../../utils/tx/solana/solanaKeysignPayload'
 
 interface FormProps {
   password: string
@@ -533,10 +534,15 @@ const Component = () => {
         getStoredCurrency(),
         getStoredTransactions(),
         getStoredVaults(),
-      ]).then(([currency, transactions, vaults]) => {
+      ]).then(async ([currency, transactions, vaults]) => {
+        let parsedSolanaSwap = undefined
         let [transaction] = transactions
         if ((transaction as any).serializedTx) {
-          getParsedSolanaSwap(walletCore, (transaction as any).serializedTx)
+          parsedSolanaSwap = await getParsedSolanaSwap(
+            walletCore,
+            (transaction as any).serializedTx
+          )
+          transaction.transactionDetails.from = parsedSolanaSwap.authority!
         }
 
         const vault = vaults.find(({ chains }) =>
@@ -560,6 +566,22 @@ const Component = () => {
                   transaction,
                   vault,
                 }))
+              } else if ((transaction as any).serializedTx) {
+                getSolanaSwapKeysignPayload(
+                  parsedSolanaSwap!,
+                  transaction,
+                  vault
+                ).then(keysignPayload => {
+                  setState(prevState => ({
+                    ...prevState,
+                    currency,
+                    fastSign,
+                    loaded: true,
+                    transaction,
+                    keysignPayload,
+                    vault,
+                  }))
+                })
               } else {
                 getKeysignPayload(transaction, vault).then(keysignPayload => {
                   transaction.txFee = String(

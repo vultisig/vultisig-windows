@@ -1,11 +1,20 @@
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
-import { Connection, PublicKey } from '@solana/web3.js'
+import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 import { InstructionParser } from './instruction-parser'
 import { JUPITER_V6_PROGRAM_ID } from './constants'
 import { PartialInstruction } from './types/types'
-
-interface AddressTableLookup {
+import { NATIVE_MINT } from '@solana/spl-token'
+import api from '../../api'
+import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
+export interface ParsedSolanaSwapParams {
+  authority: string | undefined
+  inputToken: SolanaJupiterToken
+  outputToken: SolanaJupiterToken
+  inAmount: number
+  outAmount: number
+}
+export interface AddressTableLookup {
   accountKey: string
   writableIndexes: number[]
   readonlyIndexes: number[]
@@ -15,7 +24,6 @@ export async function getParsedSolanaSwap(
   walletCore: WalletCore,
   inputTx: Uint8Array
 ) {
-  let fromAddress = ''
   const txInputDataArray = Object.values(inputTx)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
 
@@ -31,48 +39,28 @@ export async function getParsedSolanaSwap(
 
   console.log('account Key', tx.accountKeys)
   let staticAccountsPubkey = tx.accountKeys?.map(key => new PublicKey(key))
-  const resolvedAddresses = await resolveAddressTableKeys(
-    tx.addressTableLookups! as AddressTableLookup[]
-  )
-  staticAccountsPubkey = staticAccountsPubkey?.concat(resolvedAddresses)
-  console.log('resolved addresses:', resolvedAddresses)
-  console.log('staticAccountsPubkey:', staticAccountsPubkey)
-  const connection = new Connection(chainRpcUrl.Solana)
-  const accountInfos = await connection.getMultipleParsedAccounts(
-    staticAccountsPubkey!
-  )
-  console.log('accountInfos:', accountInfos)
-  console.log(
-    'strings:',
-    staticAccountsPubkey?.map(account => account.toString())
-  )
-
-  const filteredAccounts = accountInfos.value.filter(
-    info =>
-      info?.data &&
-      (info.data as any).program === 'spl-token' &&
-      (info?.data as any).parsed.info.mint
-  )
-  console.log('filtered:', filteredAccounts)
-  const filterSet = new Set(
-    filteredAccounts.map(account => (account?.data as any).parsed.info.mint)
-  )
-  console.log('filterSet:', filterSet)
 
   const parser = new InstructionParser(JUPITER_V6_PROGRAM_ID)
-  parser.getInstructionNameAndData(
-    tx.instructions as PartialInstruction[],
-    staticAccountsPubkey!
-  )
-  return
+  const { authority, inputMint, outputMint, inAmount, outAmount } =
+    await parser.getInstructionParsedData(
+      tx.instructions as PartialInstruction[],
+      staticAccountsPubkey!,
+      tx.addressTableLookups! as AddressTableLookup[]
+    )
+  console.log({ authority, inputMint, outputMint, inAmount, outAmount })
+
+  const inputToken = await api.solana.fetchSolanaTokenInfo(inputMint)
+  const outputToken = await api.solana.fetchSolanaTokenInfo(outputMint!)
+
+  return { authority, inputToken, outputToken, inAmount, outAmount }
 }
 
-async function resolveAddressTableKeys(
+export async function resolveAddressTableKeys(
   lookups: AddressTableLookup[]
 ): Promise<PublicKey[]> {
   const allResolvedKeys: PublicKey[] = []
   const connection = new Connection(chainRpcUrl.Solana)
-  for (const lookup of lookups) {
+  for (const [index, lookup] of lookups.entries()) {
     const tableAccountResult = await connection.getAddressLookupTable(
       new PublicKey(lookup.accountKey)
     )
@@ -84,9 +72,19 @@ async function resolveAddressTableKeys(
       ...lookup.writableIndexes.map(idx => table.state.addresses[idx]),
       ...lookup.readonlyIndexes.map(idx => table.state.addresses[idx]),
     ]
+    console.log(
+      'resolved:',
+      'index:',
+      index,
+      resolved.map(res => res.toString())
+    )
 
     allResolvedKeys.push(...resolved)
   }
+  console.log(
+    'allResolvedKeys:',
+    allResolvedKeys.map(key => key.toString())
+  )
 
   return allResolvedKeys
 }

@@ -649,6 +649,8 @@ namespace Provider {
     }
 
     async signTransaction(transaction: Transaction | VersionedTransaction) {
+      console.log('transaction:', transaction)
+
       if (isVersionedTransaction(transaction)) {
         return await this.request({
           method: RequestMethod.VULTISIG.SEND_TRANSACTION,
