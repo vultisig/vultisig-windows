@@ -1,0 +1,32 @@
+---
+description: USE absolute path imports WHEN importing from different packages TO maintain consistency
+globs: **/*.{ts,tsx}
+alwaysApply: true
+---
+
+# Cross-Package Imports
+
+## Context
+- When importing files from a different package
+- Applies to all TypeScript and TypeScript React files
+
+## Requirements
+- Always use absolute path imports (not relative paths) when importing from a different package
+- Use the appropriate module aliases (e.g., '@module/feature') for importing from different packages
+- Do not use relative paths like '../../../otherPackage/file' for cross-package imports
+
+## Examples
+<example>
+// Good: Using absolute path with module alias
+import { ComponentName } from '@module/feature/component'
+</example>
+
+<example type="invalid">
+// Bad: Using relative path to another package
+import { ComponentName } from '../../../otherPackage/feature/component'
+</example>
+
+<example type="invalid">
+// Bad: Using incorrect module alias
+import { ComponentName } from '@wrong-module/feature/component'
+</example> 

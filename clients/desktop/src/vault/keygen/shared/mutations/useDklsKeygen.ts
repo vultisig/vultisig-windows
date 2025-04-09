@@ -8,6 +8,7 @@ import {
   useKeygenVault,
   useKeygenVaultName,
 } from '@core/ui/mpc/keygen/state/keygenVault'
+import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { Vault } from '@core/ui/vault/Vault'
 import { match } from '@lib/utils/match'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
@@ -22,7 +23,6 @@ import { useMpcLocalPartyId } from '../../../../mpc/localPartyId/state/mpcLocalP
 import { useMpcPeers } from '../../../../mpc/peers/state/mpcPeers'
 import { useMpcServerUrl } from '../../../../mpc/serverType/state/mpcServerUrl'
 import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
-import { useIsInitiatingDevice } from '../../../../mpc/state/isInitiatingDevice'
 import { useVaults } from '../../../queries/useVaultsQuery'
 import { useCurrentHexChainCode } from '../../../setup/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'

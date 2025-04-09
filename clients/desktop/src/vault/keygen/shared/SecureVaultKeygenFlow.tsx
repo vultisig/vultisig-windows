@@ -1,4 +1,5 @@
 import { KeygenVaultProvider } from '@core/ui/mpc/keygen/state/keygenVault'
+import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
@@ -6,7 +7,6 @@ import { MpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLoca
 import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
-import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'

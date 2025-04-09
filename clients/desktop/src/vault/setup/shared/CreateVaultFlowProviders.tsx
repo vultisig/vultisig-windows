@@ -1,10 +1,10 @@
+import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { ChildrenProp } from '@lib/ui/props'
 
 import { GeneratedMpcLocalPartyIdProvider } from '../../../mpc/localPartyId/state/mpcLocalPartyId'
 import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { GeneratedMpcSessionIdProvider } from '../../../mpc/session/state/mpcSession'
-import { IsInitiatingDeviceProvider } from '../../../mpc/state/isInitiatingDevice'
 import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
