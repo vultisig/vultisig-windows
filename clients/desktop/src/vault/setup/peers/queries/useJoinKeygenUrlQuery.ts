@@ -9,6 +9,7 @@ import {
   useKeygenVault,
   useKeygenVaultName,
 } from '@core/ui/mpc/keygen/state/keygenVault'
+import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { match } from '@lib/utils/match'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
@@ -16,7 +17,6 @@ import { useCallback } from 'react'
 
 import { useSevenZipQuery } from '../../../../compression/queries/useSevenZipQuery'
 import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
-import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { useVaultCreationMpcLib } from '../../../../mpc/state/vaultCreationMpcLib'
 import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName'
 import { useCurrentKeygenType } from '../../../keygen/state/currentKeygenType'

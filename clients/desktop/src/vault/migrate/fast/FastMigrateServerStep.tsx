@@ -1,4 +1,5 @@
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
+import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { OnBackProp, OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
@@ -6,7 +7,6 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useMpcSessionId } from '../../../mpc/session/state/mpcSession'
 import { FlowPageHeader } from '../../../ui/flow/FlowPageHeader'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { migrateWithServer } from '../../fast/api/migrateWithServer'

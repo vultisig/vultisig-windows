@@ -1,9 +1,9 @@
 import { generateLocalPartyId } from '@core/mpc/signers/localPartyId'
 import { toLibType } from '@core/mpc/types/utils/libType'
+import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-import { useMpcSessionId } from '../../../../mpc/session/state/mpcSession'
 import { useVaultCreationMpcLib } from '../../../../mpc/state/vaultCreationMpcLib'
 import { setupVaultWithServer } from '../../../fast/api/setupVaultWithServer'
 import { useVaultEmail } from '../../../server/email/state/email'
