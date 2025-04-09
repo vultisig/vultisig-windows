@@ -1,3 +1,4 @@
+import { CreateVaultFlowProviders } from '@core/ui/mpc/keygen/create/CreateVaultFlowProviders'
 import { VaultSecurityTypeProvider } from '@core/ui/mpc/keygen/create/state/vaultSecurityType'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
@@ -8,7 +9,6 @@ import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
 import { SetupVaultNameStep } from '../SetupVaultNameStep'
-import { CreateVaultFlowProviders } from '../shared/CreateVaultFlowProviders'
 
 const steps = ['name', 'peers', 'startSession', 'keygen'] as const
 

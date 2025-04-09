@@ -12,11 +12,7 @@ import { GeneratedMpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { ServerUrlDerivedFromServerTypeProvider } from '@core/ui/mpc/state/serverUrlDerivedFromServerType'
 import { ChildrenProp } from '@lib/ui/props'
 
-import { useVaultNames } from '../../hooks/useVaultNames'
-
 export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
-  const vaultNames = useVaultNames()
-
   return (
     <IsInitiatingDeviceProvider value={true}>
       <GeneratedMpcSessionIdProvider>
@@ -27,7 +23,7 @@ export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
                 <GeneratedMpcLocalPartyIdProvider>
                   <ServerUrlDerivedFromServerTypeProvider>
                     <CurrentKeygenTypeProvider value={'create'}>
-                      <GeneratedVaultNameProvider existingNames={vaultNames}>
+                      <GeneratedVaultNameProvider>
                         <CreateFlowKeygenVaultProvider>
                           <MpcPeersSelectionProvider>
                             {children}

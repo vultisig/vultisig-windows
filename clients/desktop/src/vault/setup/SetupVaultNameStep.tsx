@@ -1,4 +1,5 @@
 import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
+import { useVaultNames } from '@core/ui/vault/state/vaults'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
@@ -21,7 +22,6 @@ import { TextInput } from '../../lib/ui/inputs/TextInput'
 import { PageContent } from '../../ui/page/PageContent'
 import { PageHeader } from '../../ui/page/PageHeader'
 import { PageHeaderBackButton } from '../../ui/page/PageHeaderBackButton'
-import { useVaultNames } from '../hooks/useVaultNames'
 import { KeygenEducationPrompt } from '../keygen/shared/KeygenEducationPrompt'
 import { MAX_VAULT_NAME_LENGTH } from './shared/constants'
 

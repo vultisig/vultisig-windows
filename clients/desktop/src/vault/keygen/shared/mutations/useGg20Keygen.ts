@@ -11,6 +11,7 @@ import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncrypt
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { Vault } from '@core/ui/vault/Vault'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -21,7 +22,6 @@ import { useCallback, useMemo } from 'react'
 
 import { storage } from '../../../../../wailsjs/go/models'
 import { Reshare, StartKeygen } from '../../../../../wailsjs/go/tss/TssService'
-import { useVaults } from '../../../queries/useVaultsQuery'
 import { fromStorageVault, toStorageVault } from '../../../utils/storageVault'
 import { KeygenResolver } from './KeygenResolver'
 
