@@ -2,13 +2,13 @@ import {
   getJoinKeysignUrl,
   GetJoinKeysignUrlInput,
 } from '@core/chain/utils/getJoinKeysignUrl'
+import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
+import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { useMpcServerType } from '../../../../mpc/serverType/state/mpcServerType'
-import { useCurrentServiceName } from '../../../keygen/shared/state/currentServiceName'
 import { useCurrentHexEncryptionKey } from '../../../setup/state/currentHexEncryptionKey'
 import { useCurrentVault } from '../../../state/currentVault'
 import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
@@ -16,7 +16,7 @@ import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
 export const useJoinKeysignUrlQuery = () => {
   const sessionId = useMpcSessionId()
   const [serverType] = useMpcServerType()
-  const serviceName = useCurrentServiceName()
+  const serviceName = useMpcServiceName()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const payload = useKeysignMessagePayload()
   const currentVault = useCurrentVault()

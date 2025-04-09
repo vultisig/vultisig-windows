@@ -1,5 +1,6 @@
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { I18nProvider } from '@core/ui/i18n/I18nProvider'
+import { MpcDeviceProvider } from '@core/ui/mpc/state/mpcDevice'
 import { GlobalStyle } from '@lib/ui/css/GlobalStyle'
 import { VStack } from '@lib/ui/layout/Stack'
 import { darkTheme } from '@lib/ui/theme/darkTheme'
@@ -21,26 +22,28 @@ const App = () => {
   const [language] = useLanguage()
 
   return (
-    <WalletCoreProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={darkTheme}>
-          <I18nProvider language={language}>
-            <GlobalStyle />
-            <VStack fullSize>
-              <RemoteStateDependant>
-                <InitializedWalletOnly>
-                  <OnboardingResetter>
-                    <ToastProvider>
-                      <RouterProvider router={router} />
-                    </ToastProvider>
-                  </OnboardingResetter>
-                </InitializedWalletOnly>
-              </RemoteStateDependant>
-            </VStack>
-          </I18nProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </WalletCoreProvider>
+    <MpcDeviceProvider value="windows">
+      <WalletCoreProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={darkTheme}>
+            <I18nProvider language={language}>
+              <GlobalStyle />
+              <VStack fullSize>
+                <RemoteStateDependant>
+                  <InitializedWalletOnly>
+                    <OnboardingResetter>
+                      <ToastProvider>
+                        <RouterProvider router={router} />
+                      </ToastProvider>
+                    </OnboardingResetter>
+                  </InitializedWalletOnly>
+                </RemoteStateDependant>
+              </VStack>
+            </I18nProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </WalletCoreProvider>
+    </MpcDeviceProvider>
   )
 }
 

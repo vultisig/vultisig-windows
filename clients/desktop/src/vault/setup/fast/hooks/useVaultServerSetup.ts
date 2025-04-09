@@ -1,4 +1,4 @@
-import { generateLocalPartyId } from '@core/mpc/signers/localPartyId'
+import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useMutation } from '@tanstack/react-query'

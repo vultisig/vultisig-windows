@@ -1,7 +1,5 @@
-import {
-  formatMpcDeviceName,
-  parseLocalPartyId,
-} from '@core/mpc/signers/localPartyId'
+import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
+import { formatMpcDeviceName } from '@core/mpc/devices/MpcDevice'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'

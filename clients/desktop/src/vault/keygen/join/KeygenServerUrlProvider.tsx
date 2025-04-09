@@ -1,8 +1,9 @@
+import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
+import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { useMpcServerType } from '../../../mpc/serverType/state/mpcServerType'
 import { MpcServerUrlProvider } from '../../../mpc/serverType/state/mpcServerUrl'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
 import { PageContent } from '../../../ui/page/PageContent'
@@ -11,11 +12,10 @@ import { PageHeaderBackButton } from '../../../ui/page/PageHeaderBackButton'
 import { PageHeaderTitle } from '../../../ui/page/PageHeaderTitle'
 import { PendingKeygenMessage } from '../../keygen/shared/PendingKeygenMessage'
 import { useKeygenServerUrlQuery } from '../server/queries/useKeygenServerUrlQuery'
-import { useCurrentServiceName } from '../shared/state/currentServiceName'
 
 export const KeygenServerUrlProvider = ({ children }: ChildrenProp) => {
   const [serverType] = useMpcServerType()
-  const [serviceName] = useCurrentServiceName()
+  const [serviceName] = useMpcServiceName()
 
   const { t } = useTranslation()
 

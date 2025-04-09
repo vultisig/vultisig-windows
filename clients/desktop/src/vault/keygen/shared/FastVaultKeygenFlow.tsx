@@ -1,19 +1,19 @@
 import { KeygenVaultProvider } from '@core/ui/mpc/keygen/state/keygenVault'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
+import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
+import { GeneratedMpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
 import { GeneratedMpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
-import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
-import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { ReshareVerifyStep } from '../../reshare/shared/ReshareVerifyStep'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
 import { EmailProvider } from '../../server/email/state/email'
@@ -54,7 +54,7 @@ export const FastVaultKeygenFlow = () => {
       <EmailProvider initialValue="">
         <PasswordProvider initialValue="">
           <VaultTypeProvider value="secure">
-            <GeneratedServiceNameProvider>
+            <GeneratedMpcServiceNameProvider>
               <MpcPeersSelectionProvider>
                 <GeneratedMpcSessionIdProvider>
                   <GeneratedHexEncryptionKeyProvider>
@@ -121,7 +121,7 @@ export const FastVaultKeygenFlow = () => {
                   </GeneratedHexEncryptionKeyProvider>
                 </GeneratedMpcSessionIdProvider>
               </MpcPeersSelectionProvider>
-            </GeneratedServiceNameProvider>
+            </GeneratedMpcServiceNameProvider>
           </VaultTypeProvider>
         </PasswordProvider>
       </EmailProvider>

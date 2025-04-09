@@ -1,4 +1,4 @@
-import { generateLocalPartyId } from '@core/mpc/signers/localPartyId'
+import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { OnForwardProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'

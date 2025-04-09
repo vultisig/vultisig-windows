@@ -1,5 +1,7 @@
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
+import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
+import { MpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
 import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
@@ -8,12 +10,10 @@ import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { CurrentHexEncryptionKeyProvider } from '../../setup/state/currentHexEncryptionKey'
 import { JoinKeygenSessionStep } from '../shared/JoinKeygenSessionStep'
-import { CurrentServiceNameProvider } from '../shared/state/currentServiceName'
 import { CurrentKeygenTypeProvider } from '../state/currentKeygenType'
 import { JoinKeygenPeersStep } from './JoinKeygenPeersStep'
 import { JoinKeygenProcess } from './JoinKeygenProcess'
@@ -45,7 +45,7 @@ export const JoinKeygenPage = () => {
 
   return (
     <IsInitiatingDeviceProvider value={false}>
-      <CurrentServiceNameProvider value={serviceName}>
+      <MpcServiceNameProvider value={serviceName}>
         <MpcServerTypeProvider initialValue={serverType}>
           <MpcSessionIdProvider value={sessionId}>
             <CurrentKeygenTypeProvider value={keygenType}>
@@ -77,7 +77,7 @@ export const JoinKeygenPage = () => {
             </CurrentKeygenTypeProvider>
           </MpcSessionIdProvider>
         </MpcServerTypeProvider>
-      </CurrentServiceNameProvider>
+      </MpcServiceNameProvider>
     </IsInitiatingDeviceProvider>
   )
 }

@@ -1,7 +1,5 @@
-import {
-  formatMpcDeviceName,
-  parseLocalPartyId,
-} from '@core/mpc/signers/localPartyId'
+import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
+import { formatMpcDeviceName } from '@core/mpc/devices/MpcDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'

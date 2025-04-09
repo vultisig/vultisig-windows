@@ -1,4 +1,5 @@
-import { generateLocalPartyId } from '@core/mpc/signers/localPartyId'
+import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
+import { useMpcDevice } from '@core/ui/mpc/state/mpcDevice'
 import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMemo } from 'react'
@@ -11,7 +12,11 @@ export const {
 export const GeneratedMpcLocalPartyIdProvider = ({
   children,
 }: ChildrenProp) => {
-  const MpcLocalPartyId = useMemo(generateLocalPartyId, [])
+  const mpcDevice = useMpcDevice()
+  const MpcLocalPartyId = useMemo(
+    () => generateLocalPartyId(mpcDevice),
+    [mpcDevice]
+  )
 
   return (
     <MpcLocalPartyIdProvider value={MpcLocalPartyId}>

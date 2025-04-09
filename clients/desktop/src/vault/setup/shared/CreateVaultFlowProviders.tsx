@@ -1,11 +1,11 @@
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { GeneratedMpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
+import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
+import { GeneratedMpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
 import { GeneratedMpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
 
-import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
-import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
-import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 import { GeneratedHexChainCodeProvider } from '../state/currentHexChainCode'
 import { GeneratedHexEncryptionKeyProvider } from '../state/currentHexEncryptionKey'
@@ -19,7 +19,7 @@ export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
       <GeneratedMpcSessionIdProvider>
         <GeneratedHexEncryptionKeyProvider>
           <GeneratedHexChainCodeProvider>
-            <GeneratedServiceNameProvider>
+            <GeneratedMpcServiceNameProvider>
               <MpcServerTypeProvider initialValue="relay">
                 <GeneratedMpcLocalPartyIdProvider>
                   <ServerUrlDerivedFromServerTypeProvider>
@@ -35,7 +35,7 @@ export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
                   </ServerUrlDerivedFromServerTypeProvider>
                 </GeneratedMpcLocalPartyIdProvider>
               </MpcServerTypeProvider>
-            </GeneratedServiceNameProvider>
+            </GeneratedMpcServiceNameProvider>
           </GeneratedHexChainCodeProvider>
         </GeneratedHexEncryptionKeyProvider>
       </GeneratedMpcSessionIdProvider>

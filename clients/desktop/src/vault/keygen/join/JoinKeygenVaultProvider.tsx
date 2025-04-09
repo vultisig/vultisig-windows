@@ -1,8 +1,9 @@
-import { generateLocalPartyId } from '@core/mpc/signers/localPartyId'
+import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
 import {
   KeygenVault,
   KeygenVaultProvider,
 } from '@core/ui/mpc/keygen/state/keygenVault'
+import { useMpcDevice } from '@core/ui/mpc/state/mpcDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { ChildrenProp } from '@lib/ui/props'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -57,9 +58,14 @@ export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
     }
   }, [existingVault, keygenMsg])
 
+  const mpcDevice = useMpcDevice()
+
   const localPartyId = useMemo(
-    () => (existingVault ? existingVault.localPartyId : generateLocalPartyId()),
-    [existingVault]
+    () =>
+      existingVault
+        ? existingVault.localPartyId
+        : generateLocalPartyId(mpcDevice),
+    [existingVault, mpcDevice]
   )
 
   const hexChainCode = useMemo(

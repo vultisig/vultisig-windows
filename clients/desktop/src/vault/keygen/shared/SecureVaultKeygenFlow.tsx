@@ -1,18 +1,18 @@
 import { KeygenVaultProvider } from '@core/ui/mpc/keygen/state/keygenVault'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
+import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
+import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
+import { GeneratedMpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
-import { MpcPeersSelectionProvider } from '../../../mpc/peers/state/mpcSelectedPeers'
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
-import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { useNavigateBack } from '../../../navigation/hooks/useNavigationBack'
 import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep'
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
-import { GeneratedServiceNameProvider } from '../../keygen/shared/state/currentServiceName'
 import { ReshareVerifyStep } from '../../reshare/shared/ReshareVerifyStep'
 import { VaultTypeProvider } from '../../setup/shared/state/vaultType'
 import { CurrentHexChainCodeProvider } from '../../setup/state/currentHexChainCode'
@@ -39,7 +39,7 @@ export const SecureVaultKeygenFlow = () => {
   return (
     <IsInitiatingDeviceProvider value={true}>
       <VaultTypeProvider value="secure">
-        <GeneratedServiceNameProvider>
+        <GeneratedMpcServiceNameProvider>
           <MpcPeersSelectionProvider>
             <CurrentHexChainCodeProvider value={hexChainCode}>
               <MpcServerTypeProvider initialValue="relay">
@@ -77,7 +77,7 @@ export const SecureVaultKeygenFlow = () => {
               </MpcServerTypeProvider>
             </CurrentHexChainCodeProvider>
           </MpcPeersSelectionProvider>
-        </GeneratedServiceNameProvider>
+        </GeneratedMpcServiceNameProvider>
       </VaultTypeProvider>
     </IsInitiatingDeviceProvider>
   )

@@ -1,8 +1,8 @@
+import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
 
-import { MpcServerTypeProvider } from '../../../mpc/serverType/state/mpcServerType'
 import { MpcServerUrlProvider } from '../../../mpc/serverType/state/mpcServerUrl'
 import { useAppPathState } from '../../../navigation/hooks/useAppPathState'
 import { FullPageFlowErrorState } from '../../../ui/flow/FullPageFlowErrorState'
