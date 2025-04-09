@@ -1,6 +1,9 @@
 import { chainRpcUrl } from '@core/chain/utils/getChainRpcUrl'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
+import { InstructionParser } from './instruction-parser'
+import { JUPITER_V6_PROGRAM_ID } from './constants'
+import { PartialInstruction } from './types/types'
 
 interface AddressTableLookup {
   accountKey: string
@@ -56,6 +59,11 @@ export async function getParsedSolanaSwap(
   )
   console.log('filterSet:', filterSet)
 
+  const parser = new InstructionParser(JUPITER_V6_PROGRAM_ID)
+  parser.getInstructionNameAndData(
+    tx.instructions as PartialInstruction[],
+    staticAccountsPubkey!
+  )
   return
 }
 
