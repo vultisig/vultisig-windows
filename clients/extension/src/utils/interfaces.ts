@@ -74,14 +74,6 @@ interface CustomMessage {
   message: string
 }
 
-export interface SignatureProps {
-  Msg: string
-  R: string
-  S: string
-  DerSignature: string
-  RecoveryID: string
-}
-
 export namespace TransactionType {
   export type TxType = 'MetaMask' | 'Ctrl' | 'Vultisig' | 'Keplr' | 'Phantom'
 
