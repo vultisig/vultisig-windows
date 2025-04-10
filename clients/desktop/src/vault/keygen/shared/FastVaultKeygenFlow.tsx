@@ -17,7 +17,6 @@ import { JoinKeygenSessionStep } from '../../keygen/shared/JoinKeygenSessionStep
 import { KeygenFlow } from '../../keygen/shared/KeygenFlow'
 import { KeygenStartSessionStep } from '../../keygen/shared/KeygenStartSessionStep'
 import { KeygenPeerDiscoveryStep } from '../../keygen/shared/peerDiscovery/KeygenPeerDiscoveryStep'
-import { MigrateVaultKeygenActionProvider } from '../../migrate/MigrateVaultKeygenActionProvider'
 import { ReshareVerifyStep } from '../../reshare/shared/ReshareVerifyStep'
 import { ServerEmailStep } from '../../server/email/ServerEmailStep'
 import { EmailProvider } from '../../server/email/state/email'
@@ -62,56 +61,48 @@ export const FastVaultKeygenFlow = () => {
                       <ServerUrlDerivedFromServerTypeProvider>
                         <MpcLocalPartyIdProvider value={localPartyId}>
                           <KeygenVaultProvider value={{ existingVault: vault }}>
-                            <MigrateVaultKeygenActionProvider>
-                              <MpcMediatorManager />
-                              <Match
-                                value={step}
-                                email={() => (
-                                  <ServerEmailStep onForward={toNextStep} />
-                                )}
-                                password={() =>
-                                  hasServer && !isBackup ? (
-                                    <ServerPasswordStep
-                                      onForward={toNextStep}
-                                    />
-                                  ) : (
-                                    <SetServerPasswordStep
-                                      onForward={toNextStep}
-                                    />
-                                  )
-                                }
-                                server={() => (
-                                  <KeygenServerStep onFinish={toNextStep} />
-                                )}
-                                joinSession={() => (
-                                  <JoinKeygenSessionStep
+                            <MpcMediatorManager />
+                            <Match
+                              value={step}
+                              email={() => (
+                                <ServerEmailStep onForward={toNextStep} />
+                              )}
+                              password={() =>
+                                hasServer && !isBackup ? (
+                                  <ServerPasswordStep onForward={toNextStep} />
+                                ) : (
+                                  <SetServerPasswordStep
                                     onForward={toNextStep}
                                   />
-                                )}
-                                peers={() => (
-                                  <KeygenPeerDiscoveryStep
-                                    onForward={toNextStep}
-                                  />
-                                )}
-                                verify={() => (
-                                  <ReshareVerifyStep
-                                    onBack={toPreviousStep}
-                                    onForward={toNextStep}
-                                  />
-                                )}
-                                startSession={() => (
-                                  <KeygenStartSessionStep
-                                    onBack={toPreviousStep}
-                                    onForward={toNextStep}
-                                  />
-                                )}
-                                keygen={() => (
-                                  <KeygenFlow
-                                    onBack={() => setStep('verify')}
-                                  />
-                                )}
-                              />
-                            </MigrateVaultKeygenActionProvider>
+                                )
+                              }
+                              server={() => (
+                                <KeygenServerStep onFinish={toNextStep} />
+                              )}
+                              joinSession={() => (
+                                <JoinKeygenSessionStep onForward={toNextStep} />
+                              )}
+                              peers={() => (
+                                <KeygenPeerDiscoveryStep
+                                  onForward={toNextStep}
+                                />
+                              )}
+                              verify={() => (
+                                <ReshareVerifyStep
+                                  onBack={toPreviousStep}
+                                  onForward={toNextStep}
+                                />
+                              )}
+                              startSession={() => (
+                                <KeygenStartSessionStep
+                                  onBack={toPreviousStep}
+                                  onForward={toNextStep}
+                                />
+                              )}
+                              keygen={() => (
+                                <KeygenFlow onBack={() => setStep('verify')} />
+                              )}
+                            />
                           </KeygenVaultProvider>
                         </MpcLocalPartyIdProvider>
                       </ServerUrlDerivedFromServerTypeProvider>
