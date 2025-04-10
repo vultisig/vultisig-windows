@@ -1,8 +1,8 @@
+import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { MigrateSuccess } from '../../migrate/MigrateSuccess'
-import { useCurrentKeygenType } from '../state/currentKeygenType'
 import { VaultKeygenBackupFlow } from './VaultKeygenBackupFlow'
 
 export const VaultKeygenEnding = () => {

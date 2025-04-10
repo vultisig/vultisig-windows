@@ -1,5 +1,6 @@
+import { CurrentKeygenTypeProvider } from '@core/ui/mpc/keygen/state/currentKeygenType'
+
 import { FastVaultKeygenFlow } from '../../keygen/shared/FastVaultKeygenFlow'
-import { CurrentKeygenTypeProvider } from '../../keygen/state/currentKeygenType'
 
 export const FastReshareVaultPage = () => {
   return (

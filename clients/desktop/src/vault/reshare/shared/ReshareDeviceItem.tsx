@@ -1,3 +1,5 @@
+import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
+import { formatMpcDeviceName } from '@core/mpc/devices/MpcDevice'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
@@ -7,11 +9,6 @@ import { text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import {
-  formatMpcDeviceName,
-  parseLocalPartyId,
-} from '../../../mpc/localPartyId'
 
 type ReshareDeviceStatus = 'add' | 'remove'
 

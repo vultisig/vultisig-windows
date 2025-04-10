@@ -1,3 +1,4 @@
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { isEmpty } from '@lib/utils/array/isEmpty'
@@ -7,7 +8,6 @@ import {
   PersistentStateKey,
   usePersistentState,
 } from '../../state/persistentState'
-import { useVaults } from '../queries/useVaultsQuery'
 
 export const useCurrentVaultId = (): [
   string | null,

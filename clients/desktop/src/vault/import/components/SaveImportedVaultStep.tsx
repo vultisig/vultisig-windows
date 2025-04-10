@@ -1,3 +1,4 @@
+import { useVaults } from '@core/ui/vault/state/vaults'
 import { Vault } from '@core/ui/vault/Vault'
 import { ValueProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
@@ -6,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 import { SaveVaultStep } from '../../keygen/shared/SaveVaultStep'
-import { useVaults } from '../../queries/useVaultsQuery'
 import { useVaultBackupOverride } from '../state/vaultBackupOverride'
 
 export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {

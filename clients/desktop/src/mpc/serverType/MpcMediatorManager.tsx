@@ -1,3 +1,5 @@
+import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
+import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
@@ -5,11 +7,9 @@ import {
   AdvertiseMediator,
   StopAdvertiseMediator,
 } from '../../../wailsjs/go/mediator/Server'
-import { useCurrentServiceName } from '../../vault/keygen/shared/state/currentServiceName'
-import { useMpcServerType } from './state/mpcServerType'
 
 export const MpcMediatorManager = () => {
-  const serviceName = useCurrentServiceName()
+  const serviceName = useMpcServiceName()
   const [serverType] = useMpcServerType()
 
   const { mutate: start } = useMutation({
