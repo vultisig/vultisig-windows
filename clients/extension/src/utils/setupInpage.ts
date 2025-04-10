@@ -3,8 +3,6 @@ const INPAGE_ID = 'inpage'
 export async function handleSetupInpage() {
   const registeredContentScripts =
     await chrome.scripting.getRegisteredContentScripts()
-  console.log('registeredContentScripts:', registeredContentScripts)
-
   const inpageRegisteredContentScript = registeredContentScripts.find(
     cs => cs.id === INPAGE_ID
   )
