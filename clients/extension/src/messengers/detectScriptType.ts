@@ -20,5 +20,3 @@ export function detectScriptType() {
   if (!hasChromeRuntime && hasWindow) return 'inpage'
   throw new Error('Undetected script.')
 }
-
-export type ScriptType = ReturnType<typeof detectScriptType>
