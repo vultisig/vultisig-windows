@@ -1,3 +1,4 @@
+import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { useCurrentKeygenType } from '@core/ui/mpc/keygen/state/currentKeygenType'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { OnBackProp } from '@lib/ui/props'
@@ -13,7 +14,6 @@ import { FailedSetupVaultKeygenStep } from '../../setup/shared/FailedSetupVaultK
 import { SetupVaultEducationSlides } from '../../setup/shared/SetupVaultCreationStep/SetupVaultEducationSlides'
 import { SetupVaultSuccessScreen } from '../../setup/shared/SetupVaultSuccessScreen'
 import { CurrentVaultProvider } from '../../state/currentVault'
-import { useKeygenMutation } from './mutations/useKeygenMutation'
 import { SaveVaultStep } from './SaveVaultStep'
 import { VaultKeygenEnding } from './VaultKeygenEnding'
 

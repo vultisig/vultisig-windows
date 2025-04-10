@@ -1,3 +1,4 @@
+import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { TitleProp } from '@lib/ui/props'
@@ -14,7 +15,6 @@ import { KeygenFailedState } from '../shared/KeygenFailedState'
 import { KeygenPageHeader } from '../shared/KeygenPageHeader'
 import { KeygenPendingState } from '../shared/KeygenPendingState'
 import { KeygenSuccessStep } from '../shared/KeygenSuccessStep'
-import { useKeygenMutation } from '../shared/mutations/useKeygenMutation'
 
 export const JoinKeygenProcess = ({ title }: TitleProp) => {
   const { mutate: joinKeygen, step, ...joinKeygenState } = useKeygenMutation()
