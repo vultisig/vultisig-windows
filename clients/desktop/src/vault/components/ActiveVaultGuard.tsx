@@ -4,6 +4,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { useEffect } from 'react'
 
 import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
+import { CoinFinder } from '../chain/coin/finder/CoinFinder'
 import { CurrentVaultProvider } from '../state/currentVault'
 import { CurrentVaultCoinsProvider } from '../state/currentVaultCoins'
 import { useCurrentVaultId } from '../state/currentVaultId'
@@ -31,6 +32,7 @@ export const ActiveVaultGuard: React.FC<ChildrenProp> = ({ children }) => {
   return (
     <CurrentVaultProvider value={vault}>
       <CurrentVaultCoinsProvider value={vault.coins}>
+        <CoinFinder />
         {children}
       </CurrentVaultCoinsProvider>
     </CurrentVaultProvider>

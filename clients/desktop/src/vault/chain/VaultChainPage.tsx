@@ -90,7 +90,7 @@ export const VaultChainPage = () => {
         keys.push(getCoinFinderQueryKey({ address, chain }))
       }
 
-      return invalidateQueries(keys)
+      return invalidateQueries(...keys)
     },
   })
 
