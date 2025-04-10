@@ -19,18 +19,15 @@ export const fromStorageCoin = (coin: storage.Coin): AccountCoin => {
   }
 }
 
-type ToStorageCoinInput = AccountCoin & {
-  hexPublicKey: string
-}
-
-export const toStorageCoin = (coin: ToStorageCoinInput): storage.Coin => {
+export const toStorageCoin = (coin: AccountCoin): storage.Coin => {
   const isNativeToken = isFeeCoin(coin)
 
   return {
     id: accountCoinKeyToString(coin),
     chain: coin.chain,
     address: coin.address,
-    hex_public_key: coin.hexPublicKey,
+    // TODO: remove this field since we are not using it
+    hex_public_key: '',
     ticker: coin.ticker,
     contract_address: isNativeToken ? '' : coin.id,
     is_native_token: isNativeToken,

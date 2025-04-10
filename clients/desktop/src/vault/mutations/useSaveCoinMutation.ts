@@ -6,7 +6,6 @@ import { useMutation } from '@tanstack/react-query'
 
 import { SaveCoin } from '../../../wailsjs/go/storage/Store'
 import { deriveAddress } from '../../chain/utils/deriveAddress'
-import { toHexPublicKey } from '../../chain/utils/toHexPublicKey'
 import { toStorageCoin } from '../../storage/storageCoin'
 import { getVaultPublicKey } from '../publicKey/getVaultPublicKey'
 import { vaultsQueryKey } from '../queries/useVaultsQuery'
@@ -36,15 +35,9 @@ export const useSaveCoinMutation = () => {
         walletCore,
       })
 
-      const hexPublicKey = toHexPublicKey({
-        publicKey,
-        walletCore,
-      })
-
       const storageCoin = toStorageCoin({
         ...coin,
         address,
-        hexPublicKey,
       })
 
       await SaveCoin(getVaultId(vault), storageCoin)

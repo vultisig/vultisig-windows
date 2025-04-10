@@ -5,7 +5,6 @@ import { WalletCore } from '@trustwallet/wallet-core'
 
 import { SaveCoins } from '../../../wailsjs/go/storage/Store'
 import { deriveAddress } from '../../chain/utils/deriveAddress'
-import { toHexPublicKey } from '../../chain/utils/toHexPublicKey'
 import { toStorageCoin } from '../../storage/storageCoin'
 import { getVaultPublicKey } from '../publicKey/getVaultPublicKey'
 
@@ -34,15 +33,9 @@ export const createVaultDefaultCoins = async ({
         walletCore,
       })
 
-      const hexPublicKey = toHexPublicKey({
-        publicKey,
-        walletCore,
-      })
-
       return toStorageCoin({
         ...chainFeeCoin[chain],
         address,
-        hexPublicKey,
       })
     })
   )

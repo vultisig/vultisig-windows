@@ -15,6 +15,7 @@ import { useLanguage } from './preferences/state/language'
 import { getQueryClient } from './query/queryClient'
 import { router } from './router'
 import { RemoteStateDependant } from './state/RemoteStateDependant'
+import { CoinFinder } from './vault/chain/coin/finder/CoinFinder'
 
 const queryClient = getQueryClient()
 
@@ -33,6 +34,7 @@ const App = () => {
                   <InitializedWalletOnly>
                     <OnboardingResetter>
                       <ToastProvider>
+                        <CoinFinder />
                         <RouterProvider router={router} />
                       </ToastProvider>
                     </OnboardingResetter>
