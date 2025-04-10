@@ -12,7 +12,6 @@ export const CoinFinder = () => {
   const { mutate: saveCoins, isPending } = useSaveCoinsMutation()
 
   const coins = useCurrentVaultCoins()
-  console.log('coins', coins)
 
   useEffect(() => {
     const foundCoins = queries.flatMap(query => query.data ?? [])
