@@ -79,18 +79,38 @@ export class InstructionParser {
             accountKeys[instruction.accounts[dstMintIndex!]].toString()
           console.log('output Mint:', outputMint)
           const sourceTokenAccountIndex = currentIns?.accounts.findIndex(
-            account => account.name === 'sourceTokenAccount'
+            account =>
+              account.name === 'sourceMint' ||
+              account.name === 'userSourceTokenAccount' ||
+              account.name === 'sourceTokenAccount'
           )
-
-          const connection = new Connection(chainRpcUrl.Solana)
-          const inputAccountInfo = await connection.getParsedAccountInfo(
-            accountKeys[instruction.accounts[sourceTokenAccountIndex!]]
+          console.log('sourceTokenAccountIndex:', sourceTokenAccountIndex)
+          console.log(
+            '  accountKeys[instruction.accounts[sourceTokenAccountIndex!]]:',
+            accountKeys[
+              instruction.accounts[sourceTokenAccountIndex!]
+            ].toString()
           )
+          if (
+            accountKeys[
+              instruction.accounts[sourceTokenAccountIndex!]
+            ].toString() === authority
+          ) {
+            inputMint = NATIVE_MINT.toString()
+          } else {
+            const connection = new Connection(chainRpcUrl.Solana)
+            const inputAccountInfo = await connection.getParsedAccountInfo(
+              accountKeys[instruction.accounts[sourceTokenAccountIndex!]]
+            )
+            if (inputAccountInfo.value === null) {
+              inputMint = NATIVE_MINT.toString()
+            } else {
+              inputMint = (inputAccountInfo.value!.data as any).parsed.info.mint
+            }
+            console.log('inputaccoutInfo', inputAccountInfo)
 
-          console.log('inputaccoutInfo', inputAccountInfo)
-
-          inputMint = (inputAccountInfo.value!.data as any).parsed.info.mint
-          console.log('input:', inputMint)
+            console.log('input:', inputMint)
+          }
         }
       }
     }
